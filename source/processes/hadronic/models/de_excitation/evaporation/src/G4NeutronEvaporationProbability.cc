@@ -35,9 +35,10 @@
 
 #include "G4NeutronEvaporationProbability.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Pow.hh"
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
-    G4EvaporationProbability(1,0,2.0,&theCoulombBarrier)
+    G4EvaporationProbability(1,0,2.0)
 {}
 
 G4NeutronEvaporationProbability::~G4NeutronEvaporationProbability()
@@ -45,12 +46,11 @@ G4NeutronEvaporationProbability::~G4NeutronEvaporationProbability()
 
 G4double G4NeutronEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment)
 { 
-  return 0.76+2.2/fG4pow->Z13(fragment.GetA_asInt() - 1);
+  return 0.76+2.2/pG4pow->Z13(fragment.GetA_asInt() - 1);
 }
 	
 G4double G4NeutronEvaporationProbability::CalcBetaParam(const G4Fragment& fragment) 
 { 
-  return (2.12/fG4pow->Z23(fragment.GetA_asInt() - 1) - 0.05)*CLHEP::MeV/
+  return (2.12/pG4pow->Z23(fragment.GetA_asInt() - 1) - 0.05)*CLHEP::MeV/
     CalcAlphaParam(fragment); 
 }
-

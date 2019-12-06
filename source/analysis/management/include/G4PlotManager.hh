@@ -112,7 +112,36 @@ inline G4bool G4PlotManager::PlotAndWrite(const std::vector<T*>& htVector,
     tools::sg::plotter& plotter = fViewer->plots().current_plotter();
     // set plot properties (use info object to get these)
     plotter.bins_style(0).color = tools::colorf_blue();
-    
+
+    // get axis titles from base_histo (base of all T)
+    G4String title;
+    if ( ht->annotation(tools::histo::key_axis_x_title(), title) ) {
+      plotter.x_axis().title = title;
+    }
+    if ( ht->annotation(tools::histo::key_axis_y_title(), title) ) {
+      plotter.y_axis().title = title;
+    }
+    if ( ht->annotation(tools::histo::key_axis_z_title(), title) ) {
+      plotter.z_axis().title = title;
+    }
+
+#ifndef TOOLS_USE_FREETYPE
+    plotter.set_encoding_none();
+#endif
+
+    // get log axis parameters from G4HnInformation
+    if ( info->GetIsLogAxis(G4Analysis::kX) ) {
+      plotter.x_axis().labels_style().encoding = "PAW";
+      plotter.x_axis_is_log = true;
+    }
+    if ( info->GetIsLogAxis(G4Analysis::kY) ) {
+      plotter.y_axis().labels_style().encoding = "PAW";
+      plotter.y_axis_is_log = true;
+    }
+    if ( info->GetIsLogAxis(G4Analysis::kZ) ) {
+      plotter.z_axis().labels_style().encoding = "PAW";
+      plotter.z_axis_is_log = true;
+    }
     isWriteNeeded = true;
 
 #ifdef G4VERBOSE

@@ -57,10 +57,6 @@
 #include "globals.hh"
 #include "G4ThreadLocalSingleton.hh"
 #include "G4VEnergyLossProcess.hh"
-#include "G4EmCorrections.hh"
-#include "G4LossTableBuilder.hh"
-#include "G4VAtomDeexcitation.hh"
-#include "G4VSubCutProducer.hh"
 
 class G4PhysicsTable;
 class G4MaterialCutsCouple;
@@ -72,6 +68,10 @@ class G4ElectronIonPair;
 class G4NIELCalculator;
 class G4VMultipleScattering;
 class G4VEmProcess;
+class G4EmCorrections;
+class G4LossTableBuilder;
+class G4VAtomDeexcitation;
+class G4VSubCutProducer;
 
 class G4LossTableManager
 {

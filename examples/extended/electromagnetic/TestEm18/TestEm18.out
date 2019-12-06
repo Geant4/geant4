@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -62,7 +66,9 @@ Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
 Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
 Use Mott correction for e- scattering              0
 Factor used for dynamic computation of angular 
   limit between single and multiple scattering     1
@@ -71,6 +77,7 @@ Fixed angular limit between single
 Upper energy limit for e+- multiple scattering     100 MeV
 Type of nuclear form-factor                        1
 Screening factor                                   1
+=======================================================================
 /run/verbose 2
 #
 /testem/det/setMat Water
@@ -153,7 +160,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.600000s Real=0.598971s Sys=0.000000s
+  User=0.540000s Real=0.551257s Sys=0.000000s
 
  ======================== run summary ======================
 

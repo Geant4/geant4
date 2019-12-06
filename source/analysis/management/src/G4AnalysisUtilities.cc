@@ -188,18 +188,22 @@ void  Tokenize(const G4String& line, std::vector<G4String>& tokens)
 }
 
 //_____________________________________________________________________________
-G4AnalysisOutput GetOutput(const G4String& outputName) {
+G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn) {
   if      ( outputName == "csv"  )  { return G4AnalysisOutput::kCsv;  }
+#ifdef TOOLS_USE_HDF5
+  else if ( outputName == "hdf5" )  { return G4AnalysisOutput::kHdf5; }
+#endif
   else if ( outputName == "root" )  { return G4AnalysisOutput::kRoot; }
   else if ( outputName == "xml"  )  { return G4AnalysisOutput::kXml;  }
   else if ( outputName == "none" )  { return G4AnalysisOutput::kNone; }
   else {
-    G4ExceptionDescription description;
-    description 
-      << "    \"" << outputName << "\" output type is not supported." << G4endl
-      << "    " << "Root type will be used.";
-    G4Exception("G4Analysis::GetOutputType",
-                "Analysis_W013", JustWarning, description);
+    if (warn) {
+      G4ExceptionDescription description;
+      description 
+        << "    \"" << outputName << "\" output type is not supported." << G4endl;
+      G4Exception("G4Analysis::GetOutputType",
+                  "Analysis_W013", JustWarning, description);
+    }
     return G4AnalysisOutput::kNone; 
   }
 }
@@ -210,6 +214,11 @@ G4String GetOutputName(G4AnalysisOutput output) {
     case G4AnalysisOutput::kCsv:
       return "csv";
       break;
+#ifdef TOOLS_USE_HDF5
+    case G4AnalysisOutput::kHdf5: 
+      return "hdf5";
+      break;
+#endif
     case G4AnalysisOutput::kRoot: 
       return "root";
       break;

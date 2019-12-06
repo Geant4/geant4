@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4ImplicitEuler implementation
 //
 //  Implicit Euler:
 //
@@ -35,8 +34,7 @@
 // Take the output and its derivative. Add the mean of both derivatives
 // to form the final output.
 //
-// W.Wander <wwc@mit.edu> 12/09/97
-//
+// Author: W. Wander <wwc@mit.edu>, 12.09.1997
 // --------------------------------------------------------------------
 
 #include "G4ImplicitEuler.hh"
@@ -46,11 +44,11 @@
 //
 // Constructor
 
-G4ImplicitEuler::G4ImplicitEuler(G4EquationOfMotion *EqRhs, 
-                                 G4int numberOfVariables): 
-G4MagErrorStepper(EqRhs, numberOfVariables)
+G4ImplicitEuler::G4ImplicitEuler(G4EquationOfMotion* EqRhs, 
+                                 G4int numberOfVariables)
+  : G4MagErrorStepper(EqRhs, numberOfVariables)
 {
-  unsigned int noVariables= std::max(numberOfVariables,8); // For Time .. 7+1
+  unsigned int noVariables = std::max(numberOfVariables,8); // For Time .. 7+1
   dydxTemp = new G4double[noVariables] ;
   yTemp    = new G4double[noVariables] ;
 }
@@ -59,40 +57,40 @@ G4MagErrorStepper(EqRhs, numberOfVariables)
 ////////////////////////////////////////////////////////////////////////
 //
 // Destructor
-
+//
 G4ImplicitEuler::~G4ImplicitEuler()
 {
-  delete[] dydxTemp;
-  delete[] yTemp;
+  delete [] dydxTemp;
+  delete [] yTemp;
 }
 
 //////////////////////////////////////////////////////////////////////
 //
+// DumbStepper
 //
-
 void
-G4ImplicitEuler::DumbStepper( const G4double  yIn[],
-			      const G4double  dydx[],
-			            G4double  h,
-			 	    G4double  yOut[])
+G4ImplicitEuler::DumbStepper( const G4double yIn[],
+                              const G4double dydx[],
+                                    G4double h,
+                                    G4double yOut[] )
 {
-  G4int i;
-  const G4int numberOfVariables= GetNumberOfVariables();
+  const G4int numberOfVariables = GetNumberOfVariables();
 
   // Initialise time to t0, needed when it is not updated by the integration.
+  //
   yTemp[7] = yOut[7] = yIn[7];   //  Better to set it to NaN;  // TODO
 
-  for( i = 0; i < numberOfVariables; i++ ) 
+  for( G4int i = 0; i < numberOfVariables; ++i ) 
   {
     yTemp[i] = yIn[i] + h*dydx[i] ;          
   }
   
   RightHandSide(yTemp,dydxTemp);
   
-  for( i = 0; i < numberOfVariables; i++ ) 
+  for( G4int i = 0; i < numberOfVariables; ++i ) 
   {
     yOut[i] = yIn[i] + 0.5 * h * ( dydx[i] + dydxTemp[i] );
   }
 
-  return ;
+  return;
 }  

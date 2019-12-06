@@ -23,31 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4Trap
-//
 // Implementation for G4Trap class
 //
-// History:
-//
-// 18.04.17 E.Tcherniaev: complete revision, speed-up
-// 23.09.16 E.Tcherniaev: use G4BoundingEnvelope for CalculateExtent(),
-//                      removed CreateRotatedVertices()
-// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
-// 26.04.05 V.Grichine: new SurfaceNormal is default 
-// 19.04.05 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
-// 12.12.04 V.Grichine: SurfaceNormal with edges/vertices 
-// 15.11.04 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
-// 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
-// 19.11.99 V.Grichine: kUndef was added to Eside enum
-// 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
-// 08.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
-// 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
-// 09.09.96 V.Grichine: Final modifications before to commit
 // 21.03.95 P.Kent: Modified for `tolerant' geometry
-//
-///////////////////////////////////////////////////////////////////////////////
+// 09.09.96 V.Grichine: Final modifications before to commit
+// 08.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters
+// 28.04.05 V.Grichine: new SurfaceNormal according to J.Apostolakis proposal 
+// 18.04.17 E.Tcherniaev: complete revision, speed-up
+// --------------------------------------------------------------------
 
 #include "G4Trap.hh"
 
@@ -586,7 +569,7 @@ G4bool G4Trap::CalculateExtent( const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -951,7 +934,7 @@ G4double G4Trap::DistanceToIn( const G4ThreeVector& p ) const
 
 G4double G4Trap::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
                                const G4bool calcNorm,
-                                     G4bool *validNorm, G4ThreeVector *n) const
+                                     G4bool* validNorm, G4ThreeVector* n) const
 {
   // Z intersections
   //

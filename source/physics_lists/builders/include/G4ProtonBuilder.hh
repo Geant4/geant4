@@ -65,7 +65,5 @@ class G4ProtonBuilder : public G4PhysicsBuilderInterface
     G4bool wasActivated;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

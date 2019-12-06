@@ -98,7 +98,7 @@ class G4DecayTable
 inline     
  G4int G4DecayTable::entries() const
 {
-  return channels->size();
+  return G4int(channels->size());
 }
 
 inline     

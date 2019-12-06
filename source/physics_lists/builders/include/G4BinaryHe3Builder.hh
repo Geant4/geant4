@@ -70,7 +70,5 @@ class G4BinaryHe3Builder : public G4VHe3Builder
     G4double theMax;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

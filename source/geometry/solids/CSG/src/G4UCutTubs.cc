@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // Implementation for G4UCutTubs wrapper class
+//
+// 07.07.17 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 
 #include "G4CutTubs.hh"
@@ -492,12 +491,12 @@ G4Polyhedron* G4UCutTubs::CreatePolyhedron() const
   G4int4*  faces = new G4int4[nf] ;    // number of faces
   G4double fDz = GetZHalfLength();
 
-  for(G4int i=0;i<nn;++i)
+  for(G4int i=0; i<nn; ++i)
   {
     xyz[i][0]=ph1->GetVertex(i+1).x();
     xyz[i][1]=ph1->GetVertex(i+1).y();
     G4double tmpZ=ph1->GetVertex(i+1).z();
-    if(tmpZ>=fDz-kCarTolerance)
+    if (tmpZ>=fDz-kCarTolerance)
     {
       xyz[i][2]=GetCutZ(G4ThreeVector(xyz[i][0],xyz[i][1],fDz));
     }
@@ -513,14 +512,14 @@ G4Polyhedron* G4UCutTubs::CreatePolyhedron() const
   G4int iNodes[4];
   G4int *iEdge=0;
   G4int n;
-  for(G4int i=0;i<nf;++i)
+  for(G4int i=0; i<nf; ++i)
   {
     ph1->GetFacet(i+1,n,iNodes,iEdge);
-    for(G4int k=0;k<n;++k)
+    for(G4int k=0; k<n; ++k)
     {
       faces[i][k]=iNodes[k];
     }
-    for(G4int k=n;k<4;++k)
+    for(G4int k=n; k<4; ++k)
     {
       faces[i][k]=0;
     }

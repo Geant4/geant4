@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4ScaleTransform
+// G4ScaleTransform
 //
 // Class description:
 //
@@ -47,10 +44,8 @@
 //    G4double flFactor;     // factor for conversion to local frame
 //    G4double fgFactor;     // factor for conversion to global frame
 
-// History:
-// E.Tcherniaev 11 Mar 2016 - added transformations for normal
-// G.Cosmo      18 Feb 2016 - initial version
-//
+// E.Tcherniaev, 11 Mar 2016 - added transformations for normal
+// G.Cosmo,      18 Feb 2016 - initial version
 // --------------------------------------------------------------------
 #ifndef G4SCALETRANSFORM_HH
 #define G4SCALETRANSFORM_HH
@@ -136,7 +131,8 @@ class G4ScaleTransform
 
     G4ThreeVector fScale;  // scale transformation 
     G4ThreeVector fIScale; // inverse scale (avoid divisions)
-    G4double flFactor, fgFactor;  // conversion factors to local/global frames
+    G4double flFactor = 1.0, fgFactor = 1.0;
+      // conversion factors to local/global frames
 
 }; // End class G4ScaleTransform
 

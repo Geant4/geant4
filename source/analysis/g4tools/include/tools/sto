@@ -29,9 +29,7 @@ inline bool to(const std::string& a_string,bool& a_value,bool a_def = false){
   }
 }
 
-inline bool tob(const std::string& a_string,bool& a_value,bool a_def = false){
-  return to(a_string,a_value,a_def);
-}
+inline bool tob(const std::string& a_string,bool& a_value,bool a_def = false) {return to(a_string,a_value,a_def);}
 
 }
 
@@ -82,6 +80,27 @@ inline bool to(std::ostream& a_out,const std::string& a_string,bool& a_value){
     return false;
   }
   return true;
+}
+
+}
+
+#include "typedefs"
+#include <cstddef> //size_t
+
+namespace tools {
+
+inline bool to_size_t(const std::string& a_string,size_t& a_value,const size_t& a_def = 0){
+  if(sizeof(size_t)==8) {
+    uint64 v;
+    bool status = to<uint64>(a_string,v,a_def);
+    a_value = v;
+    return status;
+  } else { //assume 4 :
+    uint32 v;
+    bool status = to<uint32>(a_string,v,(uint32)a_def);
+    a_value = v;
+    return status;
+  }
 }
 
 }

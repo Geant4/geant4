@@ -581,7 +581,7 @@ void G4CrossSectionDataStore::DumpHtml(const G4ParticleDefinition& /* pD */,
 
   G4double ehi = 0;
   G4double elo = 0;
-  G4String physListName(getenv("G4PhysListName"));
+  G4String physListName(std::getenv("G4PhysListName"));
   for (G4int i = nDataSetList-1; i > 0; i--) {
     elo = dataSetList[i]->GetMinKinEnergy()/GeV;
     ehi = dataSetList[i]->GetMaxKinEnergy()/GeV;
@@ -607,8 +607,8 @@ void G4CrossSectionDataStore::DumpHtml(const G4ParticleDefinition& /* pD */,
 
 void G4CrossSectionDataStore::PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const
 {
-   G4String dirName(getenv("G4PhysListDocDir"));
-	G4String physListName(getenv("G4PhysListName"));
+  G4String dirName(std::getenv("G4PhysListDocDir"));
+  G4String physListName(std::getenv("G4PhysListName"));
 
 	G4String pathName = dirName + "/" + physListName + "_" + HtmlFileName(cs->GetName());
 	std::ofstream outCS;

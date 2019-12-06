@@ -15,12 +15,17 @@
 
 #include "../lina/vec3f"
 
+#include <cstdio> //sscanf
+//#include <sstream>
+//#include <cmath>
+
 namespace tools {
 namespace sg {
 
 inline void add_string(
  separator& a_sep
 ,const std::string& a_font
+,font_modeling& a_font_modeling
 ,const std::string& a_encoding
 ,bool //a_smoothing
 ,const std::string& a_string  
@@ -73,16 +78,17 @@ inline void add_string(
     text->strings.add(a_string);
     text->hjust.value(a_hjust);
     text->vjust.value(a_vjust);
-  //text->modeling = font_outline;
+    text->modeling = a_font_modeling;
     a_sep.add(text);
 
   }
 
 }
 
-inline void add_string_opt(
+inline matrix* add_string_opt(
  separator& a_sep
 ,const std::string& a_font
+,font_modeling a_font_modeling
 ,const std::string& a_encoding
 ,bool //a_smoothing
 ,const std::string& a_string  
@@ -93,7 +99,7 @@ inline void add_string_opt(
 ,const base_freetype& a_ttf
 ){
   //used in axis::update_sg()
-  if(a_string.empty()) return;
+  if(a_string.empty()) return 0;
 
   matrix* tsf = new matrix;
   tsf->mul_translate(a_x,a_y,a_z);
@@ -111,6 +117,18 @@ inline void add_string_opt(
 
   } else {
 
+    std::string _s = a_string;
+    if(a_encoding==encoding_PAW()) {
+      int mag;
+      if(::sscanf(a_string.c_str(),"10^%d?",&mag)==1) {
+        _s[2] = 'e';
+        _s = _s.substr(0,_s.size()-1);
+        //std::ostringstream oss;
+        //oss << ::pow(10.0,mag);
+        //_s = oss.str();
+      }
+    }
+    
     base_freetype* text = base_freetype::create(a_ttf);
     
     text->font = a_font;
@@ -118,46 +136,15 @@ inline void add_string_opt(
     //text->modeling.value(font_outline);
     //text->encoding.value(a_encoding);
     //text->smooting.value(a_smoothing);
-    text->strings.add(a_string);
+    text->strings.add(_s);
     text->hjust.value(a_hjust);
     text->vjust.value(a_vjust);
+    text->modeling = a_font_modeling;
     a_sep.add(text);
-
+    
   }
 
-}
-
-inline void add_markers(separator& a_sep,size_t a_num,vec3f* a_points,marker_style a_style,float a_size) {
-  if(a_num<=0) return;
-/*if(a_style==marker_dot) {
-    vertices* vtxs = new vertices;
-    vtxs->mode = gl::points();
-    for(size_t index=0;index<a_num;index++) vtxs->add(a_points[index]);
-    a_sep.add(vtxs);
-  } else {*/
-    markers* vtxs = new markers;
-    vtxs->size = a_size;
-    vtxs->style = a_style; 
-    for(size_t index=0;index<a_num;index++) vtxs->add(a_points[index]);
-    a_sep.add(vtxs);
-  //}
-}
-
-inline void add_markers(separator& a_sep,const std::vector<float>& a_xyzs,marker_style a_style,float a_size) {
-  size_t num = a_xyzs.size()/3;
-  if(!num) return;
-/*if(a_style==marker_dot) {
-    vertices* vtxs = new vertices;
-    vtxs->mode = gl::points();
-    vtxs->xyzs = a_xyzs;
-    a_sep.add(vtxs);
-  } else {*/
-    markers* vtxs = new markers;
-    vtxs->size = a_size;
-    vtxs->style = a_style;
-    vtxs->xyzs = a_xyzs;
-    a_sep.add(vtxs);
-//  }
+  return tsf;
 }
 
 }}

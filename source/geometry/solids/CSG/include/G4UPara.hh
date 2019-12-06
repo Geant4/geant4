@@ -23,22 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4UPara
 //
 // Class description:
 //
-//   Wrapper class for G4Para to make use of VecGeom Parallelepiped.
+// Wrapper class for G4Para to make use of VecGeom Parallelepiped.
 
-// History:
 // 13.09.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
-
 #ifndef G4UPARA_HH
 #define G4UPARA_HH
 

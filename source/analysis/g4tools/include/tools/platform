@@ -79,7 +79,7 @@ inline unsigned int tex_mem_limit() {
   } else {
     //limit = 4096*4096*3; //=8192*2048 //permit to pass ATLAS big image.
     //permit to pass fete_science_2010/power2/image_0.jpg
-    return 8192*4096*3;
+    return 8192*4096*3; //100663296
   }
 }
 
@@ -114,6 +114,14 @@ inline const char* os() {
   static const char s_s[] = "unknown";
 #endif
   return s_s;
+}
+
+inline bool _WIN32_defined() {
+#ifdef _WIN32
+  return true;
+#else
+  return false;
+#endif
 }
 
 inline const char* processor() {
@@ -175,9 +183,8 @@ inline const char* compiler_name() {
 
 namespace tools {
 
-inline char* compiler() {
-  static char s_s[128];
-  char* pos = s_s;
+inline void compiler(char a_s[128]) {
+  char* pos = a_s;
   unsigned int l;
   toss(compiler_name(),pos,l);pos += l;
 
@@ -200,7 +207,6 @@ inline char* compiler() {
 #else
 #endif
   *pos = 0;
-  return s_s;
 }
 
 }

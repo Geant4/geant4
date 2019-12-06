@@ -10,7 +10,8 @@ namespace tools {
 namespace wroot {
 
 inline uint32 mpi_protocol_basket() {return 1;}
-inline uint32 mpi_protocol_end_fill() {return 2;}
+inline uint32 mpi_protocol_baskets() {return 2;}
+inline uint32 mpi_protocol_end_fill() {return 3;}
 
 }}
 

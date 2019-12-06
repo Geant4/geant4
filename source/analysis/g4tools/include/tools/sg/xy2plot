@@ -1,0 +1,136 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_xy2plot
+#define tools_sg_xy2plot
+
+#include "plottables"
+
+#include "../words"
+#include "../num2s"
+#include "../vmanip"
+#include "../mnmx"
+#include "../forit"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace sg {
+
+template <class T>
+class xy2plot : public virtual points2D {
+  static const std::string& s_empty() {
+    static const std::string s_v("");
+    return s_v;
+  }
+public: //plottable
+  virtual plottable* copy() const {return new xy2plot(*this);}
+  virtual bool is_valid() const {return true;}
+  virtual const std::string& name() const {return m_name;}
+  virtual void set_name(const std::string& a_s) {m_name = a_s;}
+  virtual const std::string& title() const {return s_empty();}
+  virtual const std::string& legend() const {return m_legend;}
+  virtual void set_legend(const std::string& a_s) {m_legend = a_s;}
+
+  virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
+    a_sinfos.clear();
+    std::string f_lf("\n");
+    std::vector<std::string> ws;
+    words(a_opts," ",false,ws);
+    tools_vforcit(std::string,ws,it) {
+      if(((*it)=="name") && m_name.size()) {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Name\n";
+        a_sinfos += m_name;
+  
+      } else if((*it)=="entries") {
+        if(a_sinfos.size()) a_sinfos += f_lf;
+        a_sinfos += "Entries\n";
+        if(!numas<unsigned int>(mn<unsigned int>(m_x.size(),m_y.size()),a_sinfos)){}
+  
+      }
+    }
+  }  
+public: //points2D
+  virtual float x_axis_min() const {return float(m_x_min);}
+  virtual float x_axis_max() const {return float(m_x_max);}
+  virtual float y_axis_min() const {return float(m_y_min);}
+  virtual float y_axis_max() const {return float(m_y_max);}
+
+  virtual unsigned int points() const {
+    return mn<unsigned int>(m_x.size(),m_y.size());
+  }
+  virtual bool ith_point(unsigned int a_index,float& a_x,float& a_y) const {
+    if(a_index>=m_x.size()) {a_x = T();a_y = T();return false;}
+    if(a_index>=m_y.size()) {a_x = T();a_y = T();return false;}
+    a_x = m_x[a_index];
+    a_y = m_y[a_index];
+    return true;
+  }
+public:
+  typedef typename std::vector<T> data_t;
+public:
+  xy2plot(const data_t& a_x,const data_t& a_y)
+  :m_x(a_x)
+  ,m_y(a_y)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    minimum<T>(a_x,m_x_min);
+    maximum<T>(a_x,m_x_max);
+
+    minimum<T>(a_y,m_y_min);
+    maximum<T>(a_y,m_y_max);
+  }
+  virtual ~xy2plot(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  xy2plot(const xy2plot& a_from)
+  :plottable(a_from),points2D(a_from)
+  ,m_x(a_from.m_x)
+  ,m_y(a_from.m_y)
+  ,m_name(a_from.m_name)
+  ,m_legend(a_from.m_legend)
+  ,m_x_min(a_from.m_x_min)
+  ,m_x_max(a_from.m_x_max)
+  ,m_y_min(a_from.m_y_min)
+  ,m_y_max(a_from.m_y_max)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }  
+  xy2plot& operator=(const xy2plot& a_from){
+    m_name = a_from.m_name;
+    m_legend = a_from.m_legend;
+    m_x_min = a_from.m_x_min;
+    m_x_max = a_from.m_x_max;
+    m_y_min = a_from.m_y_min;
+    m_y_max = a_from.m_y_max;
+    return *this;
+  }
+protected:
+  const data_t& m_x;
+  const data_t& m_y;
+  std::string m_name;
+  std::string m_legend;
+  T m_x_min;
+  T m_x_max;
+  T m_y_min;
+  T m_y_max;
+
+private: static void check_instantiation() {
+    std::vector<float> data;
+    xy2plot<float> dummy(data,data);
+  }
+};
+
+}}
+
+#endif

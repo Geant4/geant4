@@ -23,104 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DormandPrince745 implementation
 //
-// Class description:
+// DormandPrince7 - 5(4) non-FSAL
+// definition of the stepper() method that evaluates one step in
+// field propagation.
+// The coefficients and the algorithm have been adapted from
 //
-//  DormandPrince7 - 5(4) non-FSAL
+// J. R. Dormand and P. J. Prince, "A family of embedded Runge-Kutta formulae"
+// Journal of computational and applied Math., vol.6, no.1, pp.19-26, 1980.
 //
-//    This is the source file of G4DormandPrince745 class containing the
-//    definition of the stepper() method that evaluates one step in
-//    field propagation.
-//	  The coefficients and the algorithm have been adapted from
-//
-//    Table 2 : Coefficients of RK5(4)7M
-//	  ---Ref---
-//    J. R. Dormand and P. J. Prince, “A family of embedded Runge-Kutta formulae,”
-//		Journal of computational and applied …, vol. 6, no. 1, pp. 19–26, 1980.
-//		------------------
-//
-//    The Butcher table of the Dormand-Prince-7-4-5 method is as follows :
+// The Butcher table of the Dormand-Prince-7-4-5 method is as follows :
 //
 //    0   |
 //    1/5 | 1/5
-//    3/10| 3/40        9/40
-//    4/5 | 44/45      −56/15      32/9
-//    8/9 | 19372/6561 −25360/2187 64448/6561 −212/729
-//    1   | 9017/3168  −355/33    46732/5247  49/176  −5103/18656
-//    1   | 35/384      0         500/1113    125/192 −2187/6784    11/84
+//    3/10| 3/40       9/40
+//    4/5 | 44/45      56/15      32/9
+//    8/9 | 19372/6561 25360/2187 64448/6561  212/729
+//    1   | 9017/3168  355/33     46732/5247  49/176  5103/18656
+//    1   | 35/384     0          500/1113    125/192 2187/6784    11/84
 //    ------------------------------------------------------------------------
-//          35/384       0        500/1113    125/192  −2187/6784    11/84   0
-//          5179/57600   0       7571/16695  393/640  −92097/339200 187/2100 1/40
+//          35/384     0          500/1113    125/192 2187/6784    11/84    0
+//          5179/57600 0          7571/16695  393/640 92097/339200 187/2100 1/40
 //
-//
-//    Implementation by Somnath Banerjee - GSoC 2015
-//       Work supported by Google as part of Google Summer of Code 2015.
-//    Supervision / code review: John Apostolakis
-//
-//  First version: 25 May 2015 - Somnath Banerjee
-//
+// Created: Somnath Banerjee, Google Summer of Code 2015, 25 May 2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+
 #include "G4DormandPrince745.hh"
 #include "G4LineSection.hh"
+
+#include <cstring>
 
 using namespace field_utils;
 
 G4DormandPrince745::G4DormandPrince745(G4EquationOfMotion* equation,
                                        G4int noIntegrationVariables)
     : G4MagIntegratorStepper(equation, noIntegrationVariables)
-{}
+{
+}
 
 void G4DormandPrince745::Stepper(const G4double yInput[],
                                  const G4double dydx[],
-                                 G4double hstep,
-                                 G4double yOutput[],
-                                 G4double yError[],
-                                 G4double dydxOutput[])
+                                       G4double hstep,
+                                       G4double yOutput[],
+                                       G4double yError[],
+                                       G4double dydxOutput[])
 {
-    Stepper(yInput, dydx, hstep, yOutput, yError);
-    copy(dydxOutput, ak7);
+  Stepper(yInput, dydx, hstep, yOutput, yError);
+  copy(dydxOutput, ak7);
 }
 
-
-//	  The coefficients and the algorithm have been adapted from
-//    Table 2 : Coefficients of RK5(4)7M
-//	  ---Ref---
-//    J. R. Dormand and P. J. Prince, “A family of embedded Runge-Kutta formulae,”
-//		Journal of computational and applied …, vol. 6, no. 1, pp. 19–26, 1980.
-//		------------------
-
-//    The Butcher table of the Dormand-Prince-7-4-5 method is as follows :
+// Stepper
 //
-//    0   |
-//    1/5 | 1/5
-//    3/10| 3/40        9/40
-//    4/5 | 44/45      −56/15      32/9
-//    8/9 | 19372/6561 −25360/2187 64448/6561 −212/729
-//    1   | 9017/3168  −355/33    46732/5247  49/176  −5103/18656
-//    1   | 35/384      0         500/1113    125/192 −2187/6784    11/84
-//    ------------------------------------------------------------------------
-//          35/384       0        500/1113    125/192  −2187/6784    11/84   0
-//          5179/57600   0       7571/16695  393/640  −92097/339200 187/2100 1/40
-
-
-//Stepper :
-
 // Passing in the value of yInput[],the first time dydx[] and Step length
 // Giving back yOut and yErr arrays for output and error respectively
-
+//
 void G4DormandPrince745::Stepper(const G4double yInput[],
                                  const G4double dydx[],
                                        G4double hstep,
                                        G4double yOut[],
                                        G4double yErr[])
 {
-    //The various constants defined on the basis of butcher tableu
-    const G4double
-        b21 = 0.2,
-        
-        b31 = 3.0 / 40.0, b32 = 9.0 / 40.0,
-        
-        b41 = 44.0 / 45.0, b42 = -56.0 / 15.0, b43 = 32.0/9.0,
-        
+    // The various constants defined on the basis of butcher tableu
+    //
+    const G4double b21 = 0.2,
+                   b31 = 3.0 / 40.0, b32 = 9.0 / 40.0,
+                   b41 = 44.0 / 45.0, b42 = -56.0 / 15.0, b43 = 32.0/9.0,
+
         b51 = 19372.0 / 6561.0, b52 = -25360.0 / 2187.0, b53 = 64448.0 / 6561.0,
         b54 = -212.0 / 729.0,
         
@@ -152,18 +122,20 @@ void G4DormandPrince745::Stepper(const G4double yInput[],
         dc6 = -(b76 - 187.0 / 2100.0),
         dc7 = -(- 1.0 / 40.0);
     
-    const G4int numberOfVariables= this->GetNumberOfVariables();
+    const G4int numberOfVariables = GetNumberOfVariables();
     State yTemp;
     
     // The number of variables to be integrated over
+    //
     yOut[7] = yTemp[7]  = yInput[7];
+
     //  Saving yInput because yInput and yOut can be aliases for same array
-    
+    //
     for(G4int i = 0; i < numberOfVariables; ++i)
     {
         fyIn[i] = yInput[i];
     }
-    // RightHandSide(yIn, dydx);
+    // RightHandSide(yIn, dydx);    // Not done! 1st stage
     
     for(G4int i = 0; i < numberOfVariables; ++i)
     {
@@ -179,7 +151,8 @@ void G4DormandPrince745::Stepper(const G4double yInput[],
     
     for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = fyIn[i] + hstep * (b41 * dydx[i] + b42 * ak2[i] + b43 * ak3[i]);
+        yTemp[i] = fyIn[i] + hstep * (
+            b41 * dydx[i] + b42 * ak2[i] + b43 * ak3[i]);
     }
     RightHandSide(yTemp, ak4);              // 4th stage
     
@@ -204,7 +177,7 @@ void G4DormandPrince745::Stepper(const G4double yInput[],
             b71 * dydx[i] + b72 * ak2[i] + b73 * ak3[i] +
             b74 * ak4[i] + b75 * ak5[i] + b76 * ak6[i]);
     }
-    RightHandSide(yOut, ak7);				//7th and Final stage
+    RightHandSide(yOut, ak7);               // 7th and Final stage
     
     for(G4int i = 0; i < numberOfVariables; ++i)
     {
@@ -215,6 +188,7 @@ void G4DormandPrince745::Stepper(const G4double yInput[],
         ) + 1.5e-18;
 
         // Store Input and Final values, for possible use in calculating chord
+        //
         fyOut[i] = yOut[i];
         fdydxIn[i] = dydx[i];        
     }
@@ -224,14 +198,15 @@ void G4DormandPrince745::Stepper(const G4double yInput[],
 
 G4double G4DormandPrince745::DistChord() const
 {
-    // Coefficients were taken from Some Practical Runge-Kutta Formulas by Lawrence F. Shampine, page 149, c*
-    const G4double
-        hf1 = 6025192743.0 / 30085553152.0,
-        hf3 = 51252292925.0 / 65400821598.0,
-        hf4 = - 2691868925.0 / 45128329728.0,
-        hf5 = 187940372067.0 / 1594534317056.0,
-        hf6 = - 1776094331.0 / 19743644256.0,
-        hf7 = 11237099.0 / 235043384.0;
+    // Coefficients were taken from Some Practical Runge-Kutta Formulas
+    // by Lawrence F. Shampine, page 149, c*
+    //
+    const G4double hf1 = 6025192743.0 / 30085553152.0,
+                   hf3 = 51252292925.0 / 65400821598.0,
+                   hf4 = - 2691868925.0 / 45128329728.0,
+                   hf5 = 187940372067.0 / 1594534317056.0,
+                   hf6 = - 1776094331.0 / 19743644256.0,
+                   hf7 = 11237099.0 / 235043384.0;
 
     G4ThreeVector mid;
 
@@ -248,21 +223,19 @@ G4double G4DormandPrince745::DistChord() const
     return G4LineSection::Distline(mid, begin, end);
 }
 
-// The lower (4th) order interpolant given by Dormand and prince
-//	"An RK 5(4) triple"
-//---Ref---
-//	J. R. Dormand and P. J. Prince, “Runge-Kutta triples,”
-//	Computers & Mathematics with Applications, vol. 12, no. 9,
-//	pp. 1007–1017, 1986.
-//---------------------------
-void G4DormandPrince745::Interpolate4thOrder(G4double yOut[], G4double tau) const
+// The lower (4th) order interpolant given by Dormand and Prince:
+//        J. R. Dormand and P. J. Prince, "Runge-Kutta triples"
+//        Computers & Mathematics with Applications, vol. 12, no. 9,
+//        pp. 1007-1017, 1986.
+//
+void G4DormandPrince745::
+Interpolate4thOrder(G4double yOut[], G4double tau) const
 {
-    const G4int numberOfVariables = this->GetNumberOfVariables();
+    const G4int numberOfVariables = GetNumberOfVariables();
     
-    const G4double
-      tau2 = tau * tau,
-      tau3 = tau * tau2,
-      tau4 = tau2 * tau2;
+    const G4double tau2 = tau * tau,
+                   tau3 = tau * tau2,
+                   tau4 = tau2 * tau2;
 
     const G4double bf1 = 1.0 / 11282082432.0 * (
         157015080.0 * tau4 - 13107642775.0 * tau3 + 34969693132.0 * tau2 - 
@@ -295,180 +268,164 @@ void G4DormandPrince745::Interpolate4thOrder(G4double yOut[], G4double tau) cons
     }
 }
 
-
 // Following interpolant of order 5 was given by Baker,Dormand,Gilmore, Prince :
-//---Ref---
-//	T. S. Baker, J. R. Dormand, J. P. Gilmore, and P. J. Prince,
-//	“Continuous approximation with embedded Runge-Kutta methods,”
-//	Applied Numerical Mathematics, vol. 22, no. 1, pp. 51–62, 1996.
-//---------------------
-
-// Calculating the extra stages for the interpolant :
-void G4DormandPrince745::SetupInterpolation_high()
+//        T. S. Baker, J. R. Dormand, J. P. Gilmore, and P. J. Prince,
+//        "Continuous approximation with embedded Runge-Kutta methods"
+//        Applied Numerical Mathematics, vol. 22, no. 1, pp. 51-62, 1996.
+//
+// Calculating the extra stages for the interpolant
+//
+void G4DormandPrince745::SetupInterpolation5thOrder()
 {
-    //Coefficients for the additional stages :
-    const G4double
-    b81 =  6245.0/62208.0 ,
-    b82 =  0.0 ,
-    b83 =  8875.0/103032.0 ,
-    b84 = -125.0/1728.0 ,
-    b85 =  801.0/13568.0 ,
-    b86 = -13519.0/368064.0 ,
-    b87 =  11105.0/368064.0 ,
+    // Coefficients for the additional stages
+    //
+    const G4double b81 = 6245.0 / 62208.0,
+                   b82 = 0.0,
+                   b83 = 8875.0 / 103032.0,
+                   b84 = -125.0 / 1728.0,
+                   b85 = 801.0 / 13568.0,
+                   b86 = -13519.0 / 368064.0,
+                   b87 = 11105.0 / 368064.0,
+        
+                   b91 = 632855.0 / 4478976.0,
+                   b92 = 0.0,
+                   b93 = 4146875.0 / 6491016.0,
+                   b94 = 5490625.0 /14183424.0,
+                   b95 = -15975.0 / 108544.0,
+                   b96 = 8295925.0 / 220286304.0,
+                   b97 = -1779595.0 / 62938944.0,
+                   b98 = -805.0 / 4104.0;
     
-    b91 =  632855.0/4478976.0 ,
-    b92 =  0.0 ,
-    b93 =  4146875.0/6491016.0 ,
-    b94 =  5490625.0/14183424.0 ,
-    b95 = -15975.0/108544.0 ,
-    b96 =  8295925.0/220286304.0 ,
-    b97 = -1779595.0/62938944.0 ,
-    b98 = -805.0/4104.0 ;
-    
-    const G4int numberOfVariables= this->GetNumberOfVariables();
-    const G4double *dydx = fdydxIn;
-    const G4double  Step = fLastStepLength;
+    const G4int numberOfVariables = GetNumberOfVariables();
     State yTemp;
-    
-    //  Saving yInput because yInput and yOut can be aliases for same array
-    // for(int i=0;i<numberOfVariables;i++) { yIn[i]=yInput[i]; }
-    // yTemp[7]  = yIn[7];
 
-    //Evaluate the extra stages :
-    for(int i=0;i<numberOfVariables;i++)
+    // Evaluate the extra stages
+    //
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = fyIn[i] + Step*(b81*dydx[i] + b82*ak2[i] + b83*ak3[i] +
-                                  b84*ak4[i] + b85*ak5[i] + b86*ak6[i] +
-                                  b87*ak7[i]);
+        yTemp[i] = fyIn[i] + fLastStepLength * (
+            b81 * fdydxIn[i] + b82 * ak2[i] + b83 * ak3[i] +
+            b84 * ak4[i] + b85 * ak5[i] + b86 * ak6[i] +
+            b87 * ak7[i]
+        );
     }
-    RightHandSide(yTemp, ak8);				//8th Stage
+    RightHandSide(yTemp, ak8);          // 8th Stage
     
-    for(int i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = fyIn[i] + Step*(b91*dydx[i] + b92*ak2[i] + b93*ak3[i] +
-                                 b94*ak4[i] + b95*ak5[i] + b96*ak6[i] +
-                                 b97*ak7[i] + b98*ak8[i] );
+        yTemp[i] = fyIn[i] + fLastStepLength * (
+            b91 * fdydxIn[i] + b92 * ak2[i] + b93 * ak3[i] +
+            b94 * ak4[i] + b95 * ak5[i] + b96 * ak6[i] +
+            b97 * ak7[i] + b98 * ak8[i]
+        );
     }
-    RightHandSide(yTemp, ak9);          //9th Stage
+    RightHandSide(yTemp, ak9);          // 9th Stage
 }
 
-
 // Calculating the interpolated result yOut with the coefficients
-void G4DormandPrince745::Interpolate_high(G4double yOut[], G4double tau )
+//
+void G4DormandPrince745::
+Interpolate5thOrder(G4double yOut[], G4double tau) const
 {
-    //Define the coefficients for the polynomials
-    G4double bi[10][5], b[10];
-    const G4int numberOfVariables = this->GetNumberOfVariables();
-    // const G4double fullStep = fLastStepLength;
-
-    // If given requestedStep in argument:
-    // G4double tau = requestedStep / fLastStepLength;
+    // Define the coefficients for the polynomials
+    //
+    G4double bi[10][5];
     
     //  COEFFICIENTS OF   bi[1]
-    bi[1][0] =  1.0 ,
-    bi[1][1] = -38039.0/7040.0 ,
-    bi[1][2] =  125923.0/10560.0 ,
-    bi[1][3] = -19683.0/1760.0 ,
-    bi[1][4] =  3303.0/880.0 ,
+    bi[1][0] = 1.0,
+    bi[1][1] = -38039.0 / 7040.0,
+    bi[1][2] = 125923.0 / 10560.0,
+    bi[1][3] = -19683.0 / 1760.0,
+    bi[1][4] = 3303.0 / 880.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[2]
-    bi[2][0] =  0.0 ,
-    bi[2][1] =  0.0 ,
-    bi[2][2] =  0.0 ,
-    bi[2][3] =  0.0 ,
-    bi[2][4] =  0.0 ,
+    bi[2][0] = 0.0,
+    bi[2][1] = 0.0,
+    bi[2][2] = 0.0,
+    bi[2][3] = 0.0,
+    bi[2][4] = 0.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[3]
-    bi[3][0] =  0.0 ,
-    bi[3][1] = -12500.0/4081.0 ,
-    bi[3][2] =  205000.0/12243.0 ,
-    bi[3][3] = -90000.0/4081.0 ,
-    bi[3][4] =  36000.0/4081.0 ,
+    bi[3][0] = 0.0,
+    bi[3][1] = -12500.0 / 4081.0,
+    bi[3][2] = 205000.0 / 12243.0,
+    bi[3][3] = -90000.0 / 4081.0,
+    bi[3][4] = 36000.0 / 4081.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[4]
-    bi[4][0] =  0.0 ,
-    bi[4][1] = -3125.0/704.0 ,
-    bi[4][2] =  25625.0/1056.0 ,
-    bi[4][3] = -5625.0/176.0 ,
-    bi[4][4] =  1125.0/88.0 ,
+    bi[4][0] = 0.0,
+    bi[4][1] = -3125.0 / 704.0,
+    bi[4][2] = 25625.0 / 1056.0,
+    bi[4][3] = -5625.0 / 176.0,
+    bi[4][4] = 1125.0 / 88.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[5]
-    bi[5][0] =  0.0 ,
-    bi[5][1] =  164025.0/74624.0 ,
-    bi[5][2] = -448335.0/37312.0 ,
-    bi[5][3] =  295245.0/18656.0 ,
-    bi[5][4] = -59049.0/9328.0 ,
+    bi[5][0] = 0.0,
+    bi[5][1] = 164025.0 / 74624.0,
+    bi[5][2] = -448335.0 / 37312.0,
+    bi[5][3] = 295245.0 / 18656.0,
+    bi[5][4] = -59049.0 / 9328.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[6]
-    bi[6][0] =  0.0 ,
-    bi[6][1] = -25.0/28.0 ,
-    bi[6][2] =  205.0/42.0 ,
-    bi[6][3] = -45.0/7.0 ,
-    bi[6][4] =  18.0/7.0 ,
+    bi[6][0] = 0.0,
+    bi[6][1] = -25.0 / 28.0,
+    bi[6][2] = 205.0 / 42.0,
+    bi[6][3] = -45.0 / 7.0,
+    bi[6][4] = 18.0 / 7.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[7]
-    bi[7][0] =  0.0 ,
-    bi[7][1] = -2.0/11.0 ,
-    bi[7][2] =  73.0/55.0 ,
-    bi[7][3] = -171.0/55.0 ,
-    bi[7][4] =  108.0/55.0 ,
+    bi[7][0] = 0.0,
+    bi[7][1] = -2.0 / 11.0,
+    bi[7][2] = 73.0 / 55.0,
+    bi[7][3] = -171.0 / 55.0,
+    bi[7][4] = 108.0 / 55.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[8]
-    bi[8][0] =  0.0 ,
-    bi[8][1] =  189.0/22.0 ,
-    bi[8][2] = -1593.0/55.0 ,
-    bi[8][3] =  3537.0/110.0 ,
-    bi[8][4] = -648.0/55.0 ,
+    bi[8][0] = 0.0,
+    bi[8][1] = 189.0 / 22.0,
+    bi[8][2] = -1593.0 / 55.0,
+    bi[8][3] = 3537.0 / 110.0,
+    bi[8][4] = -648.0 / 55.0,
     //  --------------------------------------------------------
     //
     //  COEFFICIENTS OF  bi[9]
-    bi[9][0] =  0.0 ,
-    bi[9][1] =  351.0/110.0 ,
-    bi[9][2] = -999.0/55.0 ,
-    bi[9][3] =  2943.0/110.0 ,
-    bi[9][4] = -648.0/55.0 ;
+    bi[9][0] = 0.0,
+    bi[9][1] = 351.0 / 110.0,
+    bi[9][2] = -999.0 / 55.0,
+    bi[9][3] = 2943.0 / 110.0,
+    bi[9][4] = -648.0 / 55.0;
     //  --------------------------------------------------------
-    
-    // for(G4int i = 0; i< numberOfVariables; i++) { yIn[i] = yInput[i]; }
-    
-    //    Calculating the polynomials :
-#if 1    
-    for(int iStage=1; iStage<=9; iStage++){
-        b[iStage] = 0;
-    }
+        
+    // Calculating the polynomials
+ 
+    G4double b[10];
+    std::memset(b, 0.0, sizeof(b));
 
-    for(int j=0; j<=4; j++){
-       G4double tauPower = 1.0;       
-       for(int iStage=1; iStage<=9; iStage++){
-            b[iStage] += bi[iStage][j]*tauPower;
+    G4double tauPower = 1.0;
+    for(G4int j = 0; j <= 4; ++j)
+    {       
+       for(G4int iStage = 1; iStage <= 9; ++iStage)
+       {
+          b[iStage] += bi[iStage][j] * tauPower;
        }
        tauPower *= tau;       
     }
-#else    
-    G4double tau0 = tau;
     
-    for(int i=1; i<=9; i++){	//Here i is NOT the coordinate no. , it's stage no.
-        b[i] = 0;
-        tau = 1.0;
-        for(int j=0; j<=4; j++){
-            b[i] += bi[i][j]*tau;
-            tau*=tau0;
-        }
-    }    
-#endif
-    
-    G4double stepLen = fLastStepLength * tau;
-    for(int i=0; i<numberOfVariables; i++){		//Here i IS the cooridnate no.
-        yOut[i] = fyIn[i] + stepLen *(b[1]*fdydxIn[i] + b[2]*ak2[i] + b[3]*ak3[i] +
-                                     b[4]*ak4[i] + b[5]*ak5[i] + b[6]*ak6[i] +
-                                     b[7]*ak7[i] + b[8]*ak8[i] + b[9]*ak9[i] );
+    const G4int numberOfVariables = GetNumberOfVariables();
+    const G4double stepLen = fLastStepLength * tau;
+    for(G4int i = 0; i < numberOfVariables; ++i)
+    {
+        yOut[i] = fyIn[i] + stepLen * (
+            b[1] * fdydxIn[i] + b[2] * ak2[i] + b[3] * ak3[i] +
+            b[4] * ak4[i] + b[5] * ak5[i] + b[6] * ak6[i] +
+            b[7] * ak7[i] + b[8] * ak8[i] + b[9] * ak9[i]
+        );
     }
-
 }

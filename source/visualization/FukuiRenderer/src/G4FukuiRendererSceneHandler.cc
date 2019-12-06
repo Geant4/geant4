@@ -91,13 +91,13 @@ fPrec (9), fPrec2 (16)
 		//----- Connection to FukuiRenderer is set in the first scene
 	if( !fSystem.IsConnected() ) 
 	{
-		if ( getenv( FR_ENV_NAMED_PIPE_CONNECTION ) != NULL &&\
-		     strcmp( getenv( FR_ENV_NAMED_PIPE_CONNECTION ), "0" ) )
+		if ( std::getenv( FR_ENV_NAMED_PIPE_CONNECTION ) != NULL &&\
+		     strcmp( std::getenv( FR_ENV_NAMED_PIPE_CONNECTION ), "0" ) )
 		{ 
 				// Invoke DAWN locally and make connection
 				// via named pipe (not supported in AIX etc)
 			fSystem.UseBSDUnixDomainAuto();
-		} else if( getenv( FR_ENV_SERVER_HOST_NAME ) == NULL  ) 
+		} else if( std::getenv( FR_ENV_SERVER_HOST_NAME ) == NULL  ) 
 		{
 				// Invoke DAWN locally and make connection
 				// via socket
@@ -109,8 +109,8 @@ fPrec (9), fPrec2 (16)
 	}
 
 		//----- precision control
-	if( getenv( "G4DAWN_PRECISION" ) != NULL ) {
-		sscanf( getenv("G4DAWN_PRECISION"), "%d", &fPrec ) ;
+	if( std::getenv( "G4DAWN_PRECISION" ) != NULL ) {
+		sscanf( std::getenv("G4DAWN_PRECISION"), "%d", &fPrec ) ;
 	} else {
                 fPrec = 9 ;
 	}
@@ -149,8 +149,8 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 	  //----- drawing device
 	  // !Device 
 	  // (Note: Not saved in g4.prim) 
-	  if( ( getenv( FR_ENV_MULTI_WINDOW ) != NULL      )   && \
-	      ( strcmp( getenv( FR_ENV_MULTI_WINDOW ),"0"  )      )  )
+	  if( ( std::getenv( FR_ENV_MULTI_WINDOW ) != NULL      )   && \
+	      ( strcmp( std::getenv( FR_ENV_MULTI_WINDOW ),"0"  )      )  )
 	    {
 	      ((G4FukuiRendererViewer*)fpViewer)->SendDevice( G4FukuiRendererViewer::FRDEV_XWIN ) ; 
 	    } else {

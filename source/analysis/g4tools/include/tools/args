@@ -15,6 +15,7 @@
 #include "sto"
 #include "forit"
 #include "mnmx"
+//#include "squote"
 
 #include <ostream>
 
@@ -49,18 +50,17 @@ public:
       }     
     }
   }
-  args(const std::vector<std::string>& a_args){
+  args(const std::vector<std::string>& a_args,bool a_strip = false){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-    add(a_args);
+    add(a_args,a_strip);
   }
   args(const std::vector<arg>& a_args):m_args(a_args){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
   }
-  //args(const std::string& a_args,const std::string& a_sep = " ",bool a_strip = false){
   args(const std::string& a_args,const std::string& a_sep,bool a_strip){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -86,6 +86,7 @@ public:
   }
 public:
   const std::vector<arg>& get_args() const {return m_args;}
+  //std::vector<arg>& get_args() {return m_args;}
 
   bool is_arg(const std::string& a_string) const {
     tools_vforcit(arg,m_args,it) {
@@ -96,7 +97,7 @@ public:
   bool is_empty() const {return m_args.size()?false:true;}
   size_t size() const {return m_args.size();}
   size_t number() const {return m_args.size();} //back comp.
-  bool find(const std::string& a_key,std::string& a_value,const std::string& a_def = "") const {
+  bool find(const std::string& a_key,std::string& a_value,const std::string& a_def = std::string()) const {
     tools_vforcit(arg,m_args,it) {
       if((*it).first==a_key) {
         a_value = (*it).second;
@@ -115,8 +116,8 @@ public:
     return vals;
   }
 #endif
-  void find(const std::string& a_key,std::vector<std::string>& a_vals) const {
-    a_vals.clear();
+  void find(const std::string& a_key,std::vector<std::string>& a_vals,bool a_clear=true) const {
+    if(a_clear) a_vals.clear();
     tools_vforcit(arg,m_args,it) {
       if((*it).first==a_key) a_vals.push_back((*it).second);
     }
@@ -166,7 +167,7 @@ public:
     }
   }
 
-  bool add(const std::string& a_key,const std::string& a_value = "",bool a_override = true){
+  bool add(const std::string& a_key,const std::string& a_value = std::string(),bool a_override = true){
     if(a_override) {
       tools_vforit(arg,m_args,it) {
         if((*it).first==a_key) {
@@ -180,19 +181,40 @@ public:
     return true;
   }
 
+  bool insert_begin(const std::string& a_key,const std::string& a_value = std::string(),bool a_override = true){
+    if(a_override) {
+      tools_vforit(arg,m_args,it) {
+        if((*it).first==a_key) {
+          (*it).second = a_value;
+          return true;
+        }
+      }
+    }
+    if(a_key.empty()) return false;
+    m_args.insert(m_args.begin(),arg(a_key,a_value));
+    return true;
+  }
+
   void add(const std::vector<std::string>& a_args,bool a_strip = false) {
     tools_vforcit(std::string,a_args,it) {
-      std::vector<std::string> ws;
-      words((*it),"=",false,ws);
-      if(ws.size()==1) {
-        if(a_strip) strip(ws[0],both,' ');
-        m_args.push_back(arg(ws[0],"")); 
-      } else if(ws.size()>=2) {
+      const std::string& sarg = *it;
+      std::string::size_type pos = sarg.find('=');
+      if(pos==std::string::npos) {
         if(a_strip) {
-          strip(ws[0],both,' ');
-          strip(ws[1],both,' ');
+          std::string left = sarg;
+          strip(left,both,' ');
+          m_args.push_back(arg(left,""));
+        } else {
+          m_args.push_back(arg(sarg,""));
         }
-        m_args.push_back(arg(ws[0],ws[1])); 
+      } else {
+        std::string left = sarg.substr(0,pos);
+        std::string right = sarg.substr((pos+1),sarg.size()-(pos+1));
+        if(a_strip) {
+          strip(left,both,' ');
+          strip(right,both,' ');
+        }
+        m_args.push_back(arg(left,right)); 
       }
     }
   }
@@ -217,6 +239,11 @@ public:
   void add(const std::vector<arg>& a_args){
     tools_vforcit(arg,a_args,it) m_args.push_back(*it);
   }
+
+  void add(const args& a_from){
+    tools_vforcit(arg,a_from.m_args,it) m_args.push_back(*it);
+  }
+
 
   int remove(const std::string& a_key){
     size_t nbeg = m_args.size();
@@ -262,9 +289,25 @@ public:
       return false;
     }
   }
+
+  bool file(std::string& a_file,bool a_remove) {
+    std::string slast;
+    std::string s;
+    if((m_args.size()>1) //first arg is the program name !
+       && last(slast,s) 
+       && (slast.find('-')!=0) 
+       && (s.empty()) ) {
+      a_file = slast; //Last argument is not an option.
+      if(a_remove) m_args.erase(m_args.end()-1);
+      return true;
+    } else {
+      a_file.clear();
+      return false;
+    }
+  }
     
-  void files(std::vector<std::string>& a_files,bool a_skip_first = true) const {
-    a_files.clear();
+  void not_hyphens(std::vector<std::string>& a_not_hyphens,bool a_skip_first = false) const {
+    a_not_hyphens.clear();
     // Get the serie of trailing args not beginning with '-'
     // and without a value (not of the form [-]xxx=yyy). 
     // Note that an argument like that in between arguments
@@ -274,12 +317,26 @@ public:
     if(a_skip_first) it++;
     for(;it!=m_args.end();++it) {
       if( ((*it).first.find('-')==0) || (*it).second.size() ) {
-        a_files.clear();
+        a_not_hyphens.clear();
       } else {
-        a_files.push_back((*it).first);
+        a_not_hyphens.push_back((*it).first);
       }
     }
-  }  
+  }
+
+  void files(std::vector<std::string>& a_files,bool a_skip_first = true) const {  //true and not false as in the upper.
+    return not_hyphens(a_files,a_skip_first);
+  }
+  
+  bool first_not_hyphen(std::string& a_first,bool a_skip_first = false) const {
+    std::vector<std::string> _ss;
+    not_hyphens(_ss,a_skip_first);
+    if(_ss.empty()) {a_first.clear();return false;}
+    a_first = _ss[0];
+    return true;
+  }
+
+//bool first_of_files(std::string& a_file,bool a_skip_first) const {return first_of_hyphen(a_file,a_skip_first);}
 
   bool argcv(int& a_argc,char**& a_argv) const {
     // If using with :
@@ -319,21 +376,43 @@ public:
     a_argc = 0;
     a_argv = 0;
   }
-  bool known_options(const std::vector<std::string>& a_opts) const {
+
+  bool known_options(const std::vector<std::string>& a_knowns) const {
     tools_vforcit(arg,m_args,it) {
       if((*it).first.find('-')==0) { //find '-' at first pos.
         bool found = false;
-        tools_vforcit(std::string,a_opts,it2) {
+        tools_vforcit(std::string,a_knowns,it2) {
           if((*it).first==(*it2)) {
             found = true;
             break;        
           }
         }
-        if(!found) return false;
+        if(!found) return false; //one option not in a_knowns.
       }
     }
-    return true;
+    return true; //all options are in a_knowns.
   }
+
+  bool known_options(const std::string& a_known) const {
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first.find('-')==0) { //find '-' at first pos.
+        if((*it).first!=a_known) return false; //one option not a_known.
+      }
+    }
+    return true; //all options are a_known.
+  }
+
+//void remove_string_delimiters_in_keys() {
+//  tools_vforit(arg,m_args,it) {
+//    if(!rm_quotes((*it).first)) rm_double_quotes((*it).first);
+//  }
+//}
+
+//void remove_string_delimiters_in_values() {
+//  tools_vforit(arg,m_args,it) {
+//    if(!rm_quotes((*it).second)) rm_double_quotes((*it).second);
+//  }
+//}
 
   void files_at_end(bool a_skip_first = true) {
     // reorder to have "file" arguments at end.
@@ -361,7 +440,7 @@ public:
   }
 
   //NOTE : print is a Python keyword.
-  void dump(std::ostream& a_out,const std::string& a_comment = "",const std::string& a_prefix = "") const {
+  void dump(std::ostream& a_out,const std::string& a_comment = std::string(),const std::string& a_prefix = std::string()) const {
     if(a_comment.size()) a_out << a_comment << std::endl;
     tools_vforcit(arg,m_args,it) {
       a_out << a_prefix << "key = " << sout((*it).first) << ", value = " << sout((*it).second) << std::endl;

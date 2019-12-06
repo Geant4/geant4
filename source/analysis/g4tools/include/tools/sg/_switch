@@ -17,13 +17,11 @@ class _switch : public group {
 public:
   sf<int> which;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::_switch)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(which)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(which)
+    );
     return s_v;
   }
 private:

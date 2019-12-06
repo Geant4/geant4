@@ -29,11 +29,11 @@
 
 #include "B5RunAction.hh"
 #include "B5EventAction.hh"
-#include "B5Analysis.hh"
 
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "g4analysis.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,10 +41,9 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
  : G4UserRunAction(),
    fEventAction(eventAction)
 { 
-  // Create analysis manager
-  // The choice of analysis technology is done via selectin of a namespace
-  // in B5Analysis.hh
-  auto analysisManager = G4AnalysisManager::Instance();
+  // Create the analysis manager using a new factory method.
+  // The choice of analysis technology is done via the function argument.
+  auto analysisManager = G4Analysis::ManagerInstance("root");
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   // Default settings

@@ -16,6 +16,148 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 29, 2019 - J.Apostolakis  (geomnav-V10-05-19)
+---------------------------------
+- Added method to PropagatorInField to Get/Set new parameter that
+  controls after how many integration substeps (in one physics step)
+  the Increase of Chord Distance is trigerred.
+  The new method
+       SetIterationsToIncreaseChordDistance()
+  provides control of 'increase' feature introduced in geomnav-V10-05-10.
+  This control is necessary to allow the user to either
+    - disable this change (setting to 0 or large value) or to
+    - change the parameter's value, for earlier/later increase of delta chord.
+
+  This parameter allows the temporary 'relaxation' of the constraint 
+  which ensure that each 'chords' is close enough to the section of the
+  curved trajectory that it is approximating.
+
+  ( See further explanation of feature & parameter in note for
+    geomnav-V10-05-10. )
+
+November 19, 2019 - G.Cosmo  (geomnav-V10-05-18) 
+---------------------------
+- Fixed more cases of implicit type conversions.
+
+November 15, 2019 - G.Cosmo  (geomnav-V10-05-17) 
+---------------------------
+- Attempt to fix cases of implicit type conversions from size_t to G4int...
+
+November 14, 2019 - J.Apostolakis  (geomnav-V10-05-16)
+---------------------------------
+- G4MultiLevelLocator: Avoid re-estimating endpoint if driver does not
+     ReIntegrate when AccurateAdvance is called.
+  Requires field-V10-05-17
+
+November 5, 2019 - J.Apostolakis  (geomnav-V10-05-15)
+--------------------------------
+- G4TransportationManager: Enable worker threads to clone G4Navigator if needed.
+  * Keep first Navigator created for a TM object. By convention that will be
+    the Navigator object of the Master thread (or the only thread).
+  * Other (worker) threads will clone first Navigator, if it has an external
+    sub-navigator registered. This ensures that they clone the ability to 
+    navigate in 'external' volume description.
+- G4VExternalNavigation: added new method for relocation within volume.
+  G4Navigator will call it in LocateGlobalPointWithinVolume().
+
+November 1, 2019 - P.Arce  (geomnav-V10-05-14)
+--------------------------------
+- G4PhantomParameterisation: Reverted precision checks to the code in
+  geant4.10.02.p02 to address problem report.
+  Fixes bug #2192
+  
+October 29, 2019 - J.Apostolakis  (geomnav-V10-05-13)
+--------------------------------
+- Fixed G4Navigator::CharacteriseDaughters:
+  * Use only logical volume's CharacteriseDaughters.
+    Do not check/use whether External Navigator is present.
+- Added 'direction' back to External Navigation's Inside method.
+
+October 28, 2019 - G.Cosmo (geomnav-V10-05-12)
+--------------------------
+- G4Navigator: define Clone() function to be used instead of copy-constructor
+  (which is kept deleted) for use of explicit cloning.
+
+October 25, 2019 - J.Apostolakis, G.Cosmo, V.Vlachoudis (geomnav-V10-05-11)
+-------------------------------------------------------
+- Added hooks for capability to navigate in 'external' geometry:
+  * base class for external 'sub'-navigator;
+  * new type of 'External' physical volume, to flag volumes for
+    external sub-navigator;
+  * an 'external' sub-navigator can be registered with G4Navigator;
+  * revisions to G4Navigator to dispatch logical volumes with
+    daughters which are of 'external' PV type to that object of
+    type G4VExternalNavigation.
+  Note: 'placement' and 'external' physical volumes cannot be currently mixed
+        inside the same logical volume.
+- New copy constructor of G4Navigator
+  * needed to 'clone' navigator for G4VIntersectionLocator's 'helper',
+    and potentially for worker threads.
+
+August 23, 2019 - D.Sorokin (geomnav-V10-05-10)
+---------------------------
+- Try to relax delta chord condition to solve looping particle issue.
+
+  Introduces temporary 'relaxation' (increase) of the value of delta-chord,
+  to enable larger steps, after a threshold number of iterations (parameter).
+  
+  Delta chord ensures that the set of 'chords' approximate the curved trajectory
+  adequately.  Each integration step is broken up into segments or substeps
+  for which the sagitta is smaller than 'delta chord.'
+
+  For some tracks this constraint can force a large number of short integration
+  steps, and once the number of steps exceed the 'maximum' they are classed
+  as looping tracks.  ( This can occur when the radius of curvature is just
+  larger than  delta_chord and a particle is hardly interacting, e.g. if
+  travelling in vacuum or is a muon in a large gas volume. )
+
+  To address this, we increase the value of delta-chord temporarily,
+  after the number of iterations substeps reach a multiple of this threshold.
+  In particular the value of 'delta chord' is doubled when the iterations 
+  reach twice this threshold number, and it is doubled again every time the
+  iteration count reaches every other multiple of this value.
+  ( Note that delta chord is not changed when the iteration count reaches
+  the threshold number, only its multiples. )
+
+  The initial value of the parameter IterationsChordDistanceThreshold is 100.
+
+  Note: delta-chord is reset to its original value at the end of
+        each call to G4PropagatorInField's ComputeStep method.
+
+August 22, 2019 - G.Cosmo (geomnav-V10-05-09)
+-------------------------
+- Use pre-increment wherever possible.
+
+July 9, 2019 - G.Cosmo (geomnav-V10-05-08)
+----------------------
+- Enable UI command "/geometry/navigator/push_notify" which was not
+  setup properly. Addressing problem report #2173.
+
+July 8, 2019 - G.Cosmo (geomnav-V10-05-07)
+----------------------
+- Use constant iterator when possible in G4TransportationManager and
+  G4PartialPhantomParameterisation.
+
+July 4, 2019 - G.Cosmo (geomnav-V10-05-06)
+----------------------
+- Implemented c++11 revision: nullptr, auto, inline data initialisation,
+  alias using statements.
+- Made G4RegularNavigationHelper a G4ThreadLocalSingleton.
+- Fixed builds with debug flags.
+- Code formatting and cleanup.
+
+July 2, 2019 - J.Apostolakis (geomnav-V10-05-05)
+----------------------------
+- G4Navigator: further fix to avoid creating ostringstream object.
+  Now it is created for each step only when the G4DEBUG_NAVIGATION flag
+  is set.
+  ( To clarify: the warning was created in ostringstream object if 
+    G4VERBOSE was set, but only printed if  G4DEBUG_NAVIGATION was set.
+    Now the latter flag is used for both creating and printing. )
+
+  Created to address memory churn reported by memory profiling 
+  (Julia/Soon @FNAL).
+
 June 19, 2019 - G.Cosmo (geomnav-V10-05-04)
 -----------------------
 - Fixed compilation warning for unused variable when G4VERBOSE is not set.

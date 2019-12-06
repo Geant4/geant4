@@ -41,13 +41,15 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4BinaryTritonBuilder::
 G4BinaryTritonBuilder() 
 {
   theModel = new G4BinaryCascade();
-  theMin = 0;
-  theMax = 9.9*GeV;
+  theMin = 0.0;
+  theMax = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
 }
 
 void G4BinaryTritonBuilder::
@@ -58,4 +60,3 @@ Build(G4TritonInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-// 2002 by J.P. Wellisch

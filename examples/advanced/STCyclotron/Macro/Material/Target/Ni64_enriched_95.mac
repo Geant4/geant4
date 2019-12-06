@@ -1,0 +1,33 @@
+# Example 2 : defining the following : 2.6% of Ni58, 1.72% of Ni60, 0.15% of Ni61, 0.53% of Ni62, 95% of Ni64
+/changeTarget/designedMaterial/materialDensity 8.9 g/cm3
+/changeTarget/designedMaterial/MaterialNComponents 1
+/changeTarget/designedMaterial/ElementName enrichedNi64
+/changeTarget/designedMaterial/MaterialFractionMass 1.
+/changeTarget/designedMaterial/ElementSymbole enrichedNi64
+/changeTarget/designedMaterial/ElementNComponents 5
+/changeTarget/designedMaterial/isotopeName Ni64			
+/changeTarget/designedMaterial/IsotopeAbundanceInElement 0.95
+/changeTarget/designedMaterial/isotopeZ 28.
+/changeTarget/designedMaterial/isotopeN 64
+/changeTarget/designedMaterial/isotopeA 64.
+/changeTarget/designedMaterial/isotopeName Ni58
+/changeTarget/designedMaterial/IsotopeAbundanceInElement 0.026
+/changeTarget/designedMaterial/isotopeZ 28.
+/changeTarget/designedMaterial/isotopeN 58
+/changeTarget/designedMaterial/isotopeA 58.
+/changeTarget/designedMaterial/isotopeName Ni60			
+/changeTarget/designedMaterial/IsotopeAbundanceInElement 0.0172
+/changeTarget/designedMaterial/isotopeZ 28.
+/changeTarget/designedMaterial/isotopeN 60
+/changeTarget/designedMaterial/isotopeA 60.
+/changeTarget/designedMaterial/isotopeName Ni61		
+/changeTarget/designedMaterial/IsotopeAbundanceInElement 0.0015
+/changeTarget/designedMaterial/isotopeZ 28.
+/changeTarget/designedMaterial/isotopeN 61
+/changeTarget/designedMaterial/isotopeA 61.
+/changeTarget/designedMaterial/isotopeName Ni62		
+/changeTarget/designedMaterial/IsotopeAbundanceInElement 0.0053
+/changeTarget/designedMaterial/isotopeZ 28.
+/changeTarget/designedMaterial/isotopeN 62
+/changeTarget/designedMaterial/isotopeA 62.
+/changeTarget/designedMaterial/update

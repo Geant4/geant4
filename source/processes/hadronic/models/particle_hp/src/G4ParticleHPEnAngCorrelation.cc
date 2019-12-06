@@ -31,6 +31,8 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
+// June-2019 - E. Mendoza --> Part of the code trying to preserve the baryonic number has been deleted. One has to assume that it is not preserved when using ENDF-6 data and it caused problems.
+
 #include "G4ParticleHPEnAngCorrelation.hh"
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
@@ -111,88 +113,12 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
   }
   fCache.Get().theTotalMeanEnergy=0;
   G4LorentzRotation toLab(toZ.inverse()); //toLab only change axis NOT to LAB system
-  //- get first number of particles, to check if sum of Z and N is not bigger than target values
-  std::vector<int> nParticles;
-  bool bNPOK = true;
-//TKDB_PHP_150507
-#ifdef PHP_AS_HP
-#endif
-//TKDB_PHP_161107
-  G4int iTry(0);
-//TKDB_PHP_161107
-//TKDB_PHP_150507
-  do {
-    G4int sumZ = 0;
-    G4int sumA = 0;
-    nParticles.clear();
-    for(i=0; i<nProducts; i++) 
-      {
-	G4int massCode = G4int(theProducts[i].GetMassCode());
-	G4int nPart;
-	nPart = theProducts[i].GetMultiplicity(anEnergy);
-	sumZ += massCode/1000 * nPart;
-	sumA += massCode % 1000 * nPart;
-#ifdef G4PHPDEBUG
-	if( getenv("G4ParticleHPDebug") ) G4cout << i << " G4ParticleHPEnAngCorrelation::MULTIPLICITY " << massCode << " sumZ " << sumZ << " sumA " << sumA << " NPART " << nPart << G4endl;
-#endif
-	nParticles.push_back( nPart );
-      }
-    bNPOK = true;
-    double targetZ = fCache.Get().theTarget->GetDefinition()->GetAtomicNumber();
-    double targetA = fCache.Get().theTarget->GetDefinition()->GetAtomicMass();
-    targetZ += fCache.Get().theProjectileRP->GetDefinition()->GetAtomicNumber();
-    targetA += fCache.Get().theProjectileRP->GetDefinition()->GetAtomicMass();
-    if ( bAdjustFinalState ) {
-/*
-G4cout << "TKDB G4ParticleHPEnAngCorrelation::Sample 1" << G4endl;
-G4cout << "TKDB "
-<< "targetZ = " << targetZ
-<< ", targetA = " << targetA
-<< ", sumZ = " << sumZ
-<< ", sumA = " << sumA
-<< ", int( targetZ-sumZ ) = " << int( targetZ-sumZ )
-<< ", int( targetA-sumA ) = " << int( targetA-sumA )
-//<< ", G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) = " << G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 )
-<< G4endl;
-*/
-      //if ( (sumZ != targetZ || sumA != targetA ) && 
-      //   (sumZ > targetZ || sumA > targetA  
-      //    || ! G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) ) ){  // e.g. Z=3, A=2
-      if ( ( sumZ != targetZ || sumA != targetA ) 
-        && ( sumZ  > targetZ || sumA  > targetA || (targetZ-sumZ) >= (targetA-sumA) ) ) {  
-                                                        // e.g. Z=3, A=2
-	 bNPOK = false;
-	 //nParticles.clear();
-#ifdef G4PHPDEBUG
-	  if ( getenv("G4ParticleHPDebug") ) 
-	     G4cerr << " WRONG MULTIPLICITY Z= " << sumZ 
-		 << " > " << targetZ
-		 << " A= " <<  sumA 
-		 << " > " << targetA << G4endl;
-#endif
-      }
-    }
-//TKDB_PHP_150507
-#ifdef PHP_AS_HP
-#endif
-//TKDB_PHP_161107
-   iTry++;
-   if ( iTry > 1024 ) {
-      G4Exception("G4ParticleHPEnAngCorrelation::Sample",
-                  "Warning",
-                  JustWarning,
-                  "Too many trials were done. Exiting current loop by force. You may have Probably, the result violating (baryon number) conservation law will be obtained.");
-      bNPOK=true;
-   }
-//TKDB_PHP_161107
-//TKDB_PHP_150507
-
-  }while(!bNPOK); // Loop checking, 11.05.2015, T. Koi
 
   for(i=0; i<nProducts; i++)
   {
+    G4int nPart = theProducts[i].GetMultiplicity(anEnergy);
     //-    if( nParticles[i] == 0 ) continue;
-    it = theProducts[i].Sample(anEnergy,nParticles[i]); 
+    it = theProducts[i].Sample(anEnergy,nPart); 
     G4double aMeanEnergy = theProducts[i].MeanEnergyOfThisInteraction();
     //    if( getenv("G4PHPTEST") ) G4cout << " EnAnG energy sampled " << it->operator[](0)->GetKineticEnergy() << " aMeanEnergy " << aMeanEnergy << G4endl; // GDEB
     //if(aMeanEnergy>0)
@@ -210,14 +136,14 @@ G4cout << "TKDB "
     {
       for(unsigned int ii=0; ii<it->size(); ii++)
       {
-	//if(!getenv("G4PHP_NO_LORENTZ_BOOST")) {
+	//if(!std::getenv("G4PHP_NO_LORENTZ_BOOST")) {
 	G4LorentzVector pTmp1 (it->operator[](ii)->GetMomentum(),
 			       it->operator[](ii)->GetTotalEnergy());
 	pTmp1 = toLab*pTmp1;
-    if( getenv("G4PHPTEST") )	G4cout << " G4particleHPEnAngCorrelation COS THETA " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
+    if( std::getenv("G4PHPTEST") )	G4cout << " G4particleHPEnAngCorrelation COS THETA " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 	it->operator[](ii)->SetMomentum(pTmp1.vect());
 	it->operator[](ii)->SetTotalEnergy(pTmp1.e());
-	if( getenv("G4PHPTEST") ) G4cout << " G4particleHPEnAngCorrelation COS THETA after toLab " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
+	if( std::getenv("G4PHPTEST") ) G4cout << " G4particleHPEnAngCorrelation COS THETA after toLab " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 
 	if(frameFlag==1) // target rest //TK 100413 should be LAB?
 	{
@@ -226,14 +152,14 @@ G4cout << "TKDB "
 	else if(frameFlag==2 ) // CMS
         {
 #ifdef G4PHPDEBUG
-	  if( getenv("G4ParticleHPDebug") ) 
+	  if( std::getenv("G4ParticleHPDebug") ) 
 	    G4cout <<"G4ParticleHPEnAngCorrelation: before Lorentz boost "<<
 	      it->at(ii)->GetKineticEnergy()<<" "<<
 	      it->at(ii)->GetMomentum()<<G4endl;
 #endif
 	  it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theCMS);
 #ifdef G4PHPDEBUG
-	  if( getenv("G4ParticleHPDebug") ) 
+	  if( std::getenv("G4ParticleHPDebug") ) 
 	    G4cout <<"G4ParticleHPEnAngCorrelation: after Lorentz boost "<<
 		it->at(ii)->GetKineticEnergy()<<" "<<
 	      it->at(ii)->GetMomentum()<<G4endl;
@@ -242,12 +168,12 @@ G4cout << "TKDB "
         //TK120515 migrate frameFlag (MF6 LCT) = 3 
 	else if(frameFlag==3) // CMS A<=4 other LAB
         {
-           if ( theProducts[i].GetMassCode() > 4 ) //Alpha AWP 3.96713
+           if ( theProducts[i].GetMassCode() > 2004.5 ) //Alpha AWP 3.96713
            {
               //LAB
               it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*(*fCache.Get().theTarget)); //TK 100413 Is this really need?
 #ifdef G4PHPDEBUG
-	  if( getenv("G4ParticleHPDebug") ) 
+	  if( std::getenv("G4ParticleHPDebug") ) 
 	    G4cout <<"G4ParticleHPEnAngCorrelation: after Lorentz boost "<<
 		it->at(ii)->GetKineticEnergy()<<" "<<
 	      it->at(ii)->GetMomentum()<<G4endl;
@@ -258,7 +184,7 @@ G4cout << "TKDB "
               //CMS
               it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theCMS);
 #ifdef G4PHPDEBUG
-	  if( getenv("G4ParticleHPDebug") ) 
+	  if( std::getenv("G4ParticleHPDebug") ) 
 	    G4cout <<"G4ParticleHPEnAngCorrelation: after Lorentz boost "<<
 		it->at(ii)->GetKineticEnergy()<<" "<<
 	      it->at(ii)->GetMomentum()<<G4endl;
@@ -269,7 +195,7 @@ G4cout << "TKDB "
 	{
 	  throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPEnAngCorrelation::Sample: The frame of the finalstate is not specified");
 	}
-	      if( getenv("G4PHPTEST") ) G4cout << frameFlag << " G4particleHPEnAngCorrelation COS THETA after Lorentz " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
+	      if( std::getenv("G4PHPTEST") ) G4cout << frameFlag << " G4particleHPEnAngCorrelation COS THETA after Lorentz " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 
 	// }//getenv("G4PHP_NO_LORENTZ_BOOST")) 
 	//	G4cout <<  ii << " EnAnG energy after boost " << it->operator[](ii)->GetKineticEnergy() << G4endl; //GDEB

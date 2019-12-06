@@ -55,9 +55,7 @@
 #include "G4FTFParameters.hh"
 #include "G4ElasticHNScattering.hh"
 
-#include "G4LorentzRotation.hh"
 #include "G4RotationMatrix.hh"
-#include "G4ThreeVector.hh"
 #include "G4ParticleDefinition.hh" 
 #include "G4ParticleTable.hh"
 #include "G4SampleResonance.hh"
@@ -104,14 +102,14 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   if ( common.Pprojectile.z() < 0.0 ) return false;
   common.ProjectilePDGcode = projectile->GetDefinition()->GetPDGEncoding();
   common.absProjectilePDGcode = std::abs( common.ProjectilePDGcode );
-  common.M0projectile = common.Pprojectile.mag();
+  common.M0projectile = projectile->GetDefinition()->GetPDGMass();  //Uzhi Aug.2019  common.Pprojectile.mag();
   G4double ProjectileRapidity = common.Pprojectile.rapidity();
 
   // Target parameters
   common.Ptarget = target->Get4Momentum();
   common.TargetPDGcode = target->GetDefinition()->GetPDGEncoding();
   common.absTargetPDGcode = std::abs( common.TargetPDGcode );
-  common.M0target = common.Ptarget.mag();
+  common.M0target = target->GetDefinition()->GetPDGMass();  //Uzhi Aug.2019  common.Ptarget.mag();
   G4double TargetRapidity = common.Ptarget.rapidity();
 
   // Kinematical properties of the interactions
@@ -120,38 +118,42 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   common.SqrtS = std::sqrt( common.S ); 
 
   // Check off-shellness of the participants
-  G4bool toBePutOnMassShell = false;
+  G4bool toBePutOnMassShell = true;  //Uzhi Aug.2019  false;
   common.MminProjectile = common.BrW.GetMinimumMass( projectile->GetDefinition() );
+  /* Uzhi Aug.2019
   if ( common.M0projectile < common.MminProjectile ) {
     toBePutOnMassShell = true;
     common.M0projectile = common.BrW.SampleMass( projectile->GetDefinition(), 
                                                  projectile->GetDefinition()->GetPDGMass() 
                                                  + 5.0*projectile->GetDefinition()->GetPDGWidth() );
   }
+  */
   common.M0projectile2 = common.M0projectile * common.M0projectile;
   common.ProjectileDiffStateMinMass    = theParameters->GetProjMinDiffMass();
   common.ProjectileNonDiffStateMinMass = theParameters->GetProjMinNonDiffMass();
   if ( common.M0projectile > common.ProjectileDiffStateMinMass ) {
-    common.ProjectileDiffStateMinMass    = common.M0projectile + 220.0*MeV;
-    common.ProjectileNonDiffStateMinMass = common.M0projectile + 220.0*MeV;
+    common.ProjectileDiffStateMinMass    = common.MminProjectile + 220.0*MeV;  //Uzhi Aug.2019  common.M0projectile + 220.0*MeV;
+    common.ProjectileNonDiffStateMinMass = common.MminProjectile + 220.0*MeV;  //Uzhi Aug.2019  common.M0projectile + 220.0*MeV;
     if ( common.absProjectilePDGcode > 3000 ) {  // Strange baryon
       common.ProjectileDiffStateMinMass    += 140.0*MeV;
       common.ProjectileNonDiffStateMinMass += 140.0*MeV;
     }
   }
   common.MminTarget = common.BrW.GetMinimumMass( target->GetDefinition() );
+  /* Uzhi Aug.2019
   if ( common.M0target < common.MminTarget ) {
     toBePutOnMassShell = true;
     common.M0target = common.BrW.SampleMass( target->GetDefinition(),
                                              target->GetDefinition()->GetPDGMass() 
                                              + 5.0*target->GetDefinition()->GetPDGWidth() );
   }
+  */
   common.M0target2 = common.M0target * common.M0target;
   common.TargetDiffStateMinMass    = theParameters->GetTarMinDiffMass();
   common.TargetNonDiffStateMinMass = theParameters->GetTarMinNonDiffMass();
   if ( common.M0target > common.TargetDiffStateMinMass ) {
-    common.TargetDiffStateMinMass    = common.M0target + 220.0*MeV;
-    common.TargetNonDiffStateMinMass = common.M0target + 220.0*MeV;
+    common.TargetDiffStateMinMass    = common.MminTarget + 220.0*MeV;  //Uzhi Aug.2019  common.M0target + 220.0*MeV;
+    common.TargetNonDiffStateMinMass = common.MminTarget + 220.0*MeV;  //Uzhi Aug.2019  common.M0target + 220.0*MeV;
     if ( common.absTargetPDGcode > 3000 ) {  // Strange baryon
       common.TargetDiffStateMinMass    += 140.0*MeV;
       common.TargetNonDiffStateMinMass += 140.0*MeV;
@@ -159,8 +161,10 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   };
   #ifdef debugFTFexictation
   G4cout << "Proj Targ PDGcodes " << common.ProjectilePDGcode << " " << common.TargetPDGcode << G4endl
+         << "Mprojectile  Y " << common.Pprojectile.mag() << " " << ProjectileRapidity << G4endl        // Uzhi Aug.2019
          << "M0projectile Y " << common.M0projectile << " " << ProjectileRapidity << G4endl;
-  //G4cout << "M0target     Y " << common.M0target << " " << TargetRapidity << G4endl;
+  G4cout << "Mtarget      Y " << common.Ptarget.mag() << " " << TargetRapidity << G4endl                // Uzhi Aug.2019
+         << "M0target     Y " << common.M0target << " " << TargetRapidity << G4endl;
   G4cout << "Pproj " << common.Pprojectile << G4endl << "Ptarget " << common.Ptarget << G4endl;
   #endif
 
@@ -232,6 +236,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
          << common.ProbProjectileDiffraction << " " << common.ProbTargetDiffraction << G4endl 
          << "ProjectileRapidity " << ProjectileRapidity << G4endl;
   #endif
+
   if ( QeNoExc + QeExc + common.ProbProjectileDiffraction + common.ProbTargetDiffraction > 1.0 ) {
     QeNoExc = 1.0 - QeExc - common.ProbProjectileDiffraction - common.ProbTargetDiffraction;
   }
@@ -1031,8 +1036,6 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
   }
 
   G4double W = hadron->Get4Momentum().mag();
-  //G4cout << "Wmin W " << Wmin << " " << W << G4endl;
-  //G4int Uzhi; G4cin >> Uzhi;
   G4double W2 = W*W;
   G4double Pt( 0.0 ), x1( 0.0 ), x3( 0.0 );  // x2( 0.0 ) 
   G4bool Kink = false;
@@ -1135,12 +1138,6 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
       }  // End of if ( Pt > 500.0*MeV )
     } // End of if ( W > Wmin ) : check for a kink
   }  // end of qq-q string selection
-
-  //G4cout << "Kink " << Kink << " " << start->GetDefinition()->GetParticleSubType() << " "
-  //       << end->GetDefinition()->GetParticleSubType() << G4endl;
-  //G4cout << "Kink " << Kink << " " << start->GetDefinition()->GetPDGEncoding() << " "
-  //       << end->GetDefinition()->GetPDGEncoding() << G4endl;
-  //G4int Uzhi; G4cin >> Uzhi;
 
   if ( Kink ) {  // Kink is possible
 

@@ -38,7 +38,6 @@
 // on top of existing Physics List
 
 #include "G4NeutronCrossSectionXS.hh"
-#include "G4DataQuestionaire.hh"
 
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
@@ -59,9 +58,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronCrossSectionXS);
 
 G4NeutronCrossSectionXS::G4NeutronCrossSectionXS(G4int ver) :
   G4VPhysicsConstructor("NeutronXS"), verbose(ver) 
-{
-  G4DataQuestionaire q(no,no,no,no,no,neutronxs);
-}
+{}
 
 G4NeutronCrossSectionXS::~G4NeutronCrossSectionXS() 
 {}
@@ -96,3 +93,4 @@ void G4NeutronCrossSectionXS::ConstructProcess()
     }
   }
 }
+

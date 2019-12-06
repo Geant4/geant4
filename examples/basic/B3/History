@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21/11/19 G. Cosmo (exampleB3-V10-05-02)
+- Use default MixMax random engine.
+
+30/09/19 I. Hrivnacova (exampleB3-V10-05-01)
+- Updated comments in main() for modified score ntuple writer UI commands.
+
+08/07/19 I. Hrivnacova (exampleB3-V10-05-00)
+- Added score ntuple writer.
+
 30/11/18 I. Hrivnacova (exampleB3-V10-04-05)
 - Moved the previous update from B3b in B3 documentation
   and removed obsolete README files from B3a and B3b. 

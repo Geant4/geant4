@@ -84,8 +84,10 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_stopping
     HEADERS
         G4StoppingPhysics.hh
+        G4StoppingPhysicsFritiofWithBinaryCascade.hh
     SOURCES
         G4StoppingPhysics.cc
+        G4StoppingPhysicsFritiofWithBinaryCascade.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

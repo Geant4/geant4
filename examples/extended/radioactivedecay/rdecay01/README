@@ -56,7 +56,16 @@
  /grdm/setPhotoEvaporationFile 
  Examples of such files are given in subdirectory UserData. 
  Formats are described in readme
- Examples in macros Cf238.mac and No252.mac 
+ Examples in macros Cf238.mac and No252.mac
+ 
+ 4-b example of biasing
+ ----------------------
+ macro timeWindowBiased.mac illustrates one of the biasing capabilities of the 
+ radioactiveDecay package. Ca47 is "forced" to decay within 20 days
+ (eg. 1728000 seconds in data file).
+ It is instructive to plot time of life (histo 8) with and without the weight of the track:
+ see lines 189/190 of TrackingAction.cc
+ And also to compare with analog decay mode : comment out /grdm/ commands in the macro. 
   	
  5- Visualisation
     -------------

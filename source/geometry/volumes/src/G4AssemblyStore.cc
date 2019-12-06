@@ -41,8 +41,8 @@
 // Static class variables
 // ***************************************************************************
 //
-G4AssemblyStore* G4AssemblyStore::fgInstance = 0;
-G4ThreadLocal G4VStoreNotifier* G4AssemblyStore::fgNotifier = 0;
+G4AssemblyStore* G4AssemblyStore::fgInstance = nullptr;
+G4ThreadLocal G4VStoreNotifier* G4AssemblyStore::fgNotifier = nullptr;
 G4ThreadLocal G4bool G4AssemblyStore::locked = false;
 
 // ***************************************************************************
@@ -92,11 +92,11 @@ void G4AssemblyStore::Clean()
   G4cout << "Deleting Assemblies ... ";
 #endif
 
-  for(iterator pos=store->begin(); pos!=store->end(); pos++)
+  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
     if (*pos) { delete *pos; }
-    i++;
+    ++i;
   }
 
 #ifdef G4DEBUG_NAVIGATION
@@ -127,7 +127,7 @@ void G4AssemblyStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4AssemblyStore::Register(G4AssemblyVolume* pAssembly)
 {
   GetInstance()->push_back(pAssembly);
-  if (fgNotifier)  { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr)  { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -138,8 +138,8 @@ void G4AssemblyStore::DeRegister(G4AssemblyVolume* pAssembly)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier)  { fgNotifier->NotifyDeRegistration(); }
-    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+    if (fgNotifier != nullptr)  { fgNotifier->NotifyDeRegistration(); }
+    for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
     {
       if (*i==pAssembly)
       {
@@ -157,7 +157,7 @@ void G4AssemblyStore::DeRegister(G4AssemblyVolume* pAssembly)
 G4AssemblyStore* G4AssemblyStore::GetInstance()
 {
   static G4AssemblyStore assemblyStore;
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = &assemblyStore;
   }
@@ -169,17 +169,17 @@ G4AssemblyStore* G4AssemblyStore::GetInstance()
 // ***************************************************************************
 //
 G4AssemblyVolume*
-G4AssemblyStore::GetAssembly(unsigned int Id, G4bool verbose) const
+G4AssemblyStore::GetAssembly(unsigned int id, G4bool verbose) const
 {
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
   {
-    if ((*i)->GetAssemblyID() == Id) { return *i; }
+    if ((*i)->GetAssemblyID() == id) { return *i; }
   }
   if (verbose)
   {
     std::ostringstream message;
     message << "Assembly NOT found in store !" << G4endl
-            << "        Assembly " << Id << " NOT found in store !" << G4endl
+            << "        Assembly " << id << " NOT found in store !" << G4endl
             << "        Returning NULL pointer.";
     G4Exception("G4AssemblyStore::GetAssembly()",
                 "GeomVol1001", JustWarning, message);

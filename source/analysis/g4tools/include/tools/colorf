@@ -10,7 +10,7 @@ namespace tools {
 
 class colorf : public vec4f {  
   typedef vec4f parent;
-public: //for swig
+public: //for SWIG
   typedef unsigned char uchar;
 public:
   TOOLS_SCLASS(tools::colorf) //for stype()
@@ -155,7 +155,7 @@ struct cmp_colorf {
   }
 };
 
-#ifdef TOOLS_MEM
+#if defined(TOOLS_MEM) && !defined(TOOLS_MEM_ATEXIT)
 inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1,false);return s_v;}
 #else
 inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1);return s_v;}

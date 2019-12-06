@@ -41,12 +41,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4BinaryNeutronBuilder::
 G4BinaryNeutronBuilder() 
  {
-   theMin = 0;
-   theMax = 9.9*GeV;
+   theMin = 0.0;
+   theMax = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
    theModel = new G4BinaryCascade();
  }
 
@@ -58,4 +60,3 @@ G4BinaryNeutronBuilder()
    aP->RegisterMe(theModel);
  }
 
- // 2002 by J.P. Wellisch

@@ -30,6 +30,8 @@ public:
  
   sf_vec<colorf,float> color;
   sf_string font;
+  sf_enum<sg::font_modeling> font_modeling;
+  
   sf_string encoding; 
   sf<float> line_width; // for text_hershey.
   sf_enum<winding_type> front_face; //no more used.
@@ -38,46 +40,68 @@ public:
 
   sf<bool> enforce_front_height;
   sf<float> front_height;
+  sf<bool> enforce_front_width;
+  sf<float> front_width;
+  
   sf<float> wmargin_factor;
   sf<float> hmargin_factor;
   sf_enum<sg::hjust> hjust;
+  sf_enum<sg::vjust> vjust;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::text)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(strings)
-      TOOLS_ADD_FIELD_DESC(confine)
+    static const desc_fields s_v(parent::node_desc_fields(),17, //WARNING : have the right count.
+      TOOLS_ARG_FIELD_DESC(strings),
+      TOOLS_ARG_FIELD_DESC(confine),
 
-      TOOLS_ADD_FIELD_DESC(color)
-      TOOLS_ADD_FIELD_DESC(font)
-      TOOLS_ADD_FIELD_DESC_OPT(font_hershey())
-      TOOLS_ADD_FIELD_DESC_OPT(font_arial_ttf())
-      TOOLS_ADD_FIELD_DESC_OPT(font_arialbd_ttf())
-      TOOLS_ADD_FIELD_DESC_OPT(font_timesbd_ttf())
-      TOOLS_ADD_FIELD_DESC_OPT(font_symbol_ttf())
-      TOOLS_ADD_FIELD_DESC_OPT(font_stixgeneral_otf())
-      TOOLS_ADD_FIELD_DESC_OPT(font_helvetica_ttf())
-      TOOLS_ADD_FIELD_DESC_OPT(font_times_roman_ttf())
+      TOOLS_ARG_FIELD_DESC(color),
 
-      TOOLS_ADD_FIELD_DESC(encoding);
-      TOOLS_ADD_FIELD_DESC(line_width)
-      TOOLS_ADD_FIELD_DESC(front_face)
-      TOOLS_ADD_FIELD_DESC_ENUM(winding_ccw)
-      TOOLS_ADD_FIELD_DESC_ENUM(winding_cw)
+      TOOLS_ARG_FIELD_DESC_OPTS_BEG(font,8)
+        font_hershey().c_str(),
+        font_arial_ttf().c_str(),
+        font_arialbd_ttf().c_str(),
+        font_timesbd_ttf().c_str(),
+        font_symbol_ttf().c_str(),
+        font_stixgeneral_otf().c_str(),
+        font_helvetica_ttf().c_str(),
+        font_times_roman_ttf().c_str()
+      TOOLS_ARG_FIELD_DESC_OPTS_END,
+      
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(font_modeling,3)
+        TOOLS_ARG_ENUM(font_outline),
+        TOOLS_ARG_ENUM(font_filled),
+        TOOLS_ARG_ENUM(font_pixmap)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+      
+      TOOLS_ARG_FIELD_DESC(encoding),
+      TOOLS_ARG_FIELD_DESC(line_width),
+      
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(front_face,2)
+        TOOLS_ARG_ENUM(winding_ccw),
+        TOOLS_ARG_ENUM(winding_cw)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
 
-      TOOLS_ADD_FIELD_DESC(back_visible)
+      TOOLS_ARG_FIELD_DESC(back_visible),
 
-      TOOLS_ADD_FIELD_DESC(enforce_front_height)
-      TOOLS_ADD_FIELD_DESC(front_height)
-      TOOLS_ADD_FIELD_DESC(wmargin_factor)
-      TOOLS_ADD_FIELD_DESC(hmargin_factor)
-      TOOLS_ADD_FIELD_DESC(hjust)
-      TOOLS_ADD_FIELD_DESC_ENUM(left)
-      TOOLS_ADD_FIELD_DESC_ENUM(center)
-      TOOLS_ADD_FIELD_DESC_ENUM(right)
-    }
+      TOOLS_ARG_FIELD_DESC(enforce_front_height),
+      TOOLS_ARG_FIELD_DESC(front_height),
+      TOOLS_ARG_FIELD_DESC(enforce_front_width),
+      TOOLS_ARG_FIELD_DESC(front_width),
+      TOOLS_ARG_FIELD_DESC(wmargin_factor),
+      TOOLS_ARG_FIELD_DESC(hmargin_factor),
+      
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(hjust,3)
+        TOOLS_ARG_ENUM(left),
+        TOOLS_ARG_ENUM(center),
+        TOOLS_ARG_ENUM(right)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+      
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(vjust,3)
+        TOOLS_ARG_ENUM(bottom),
+        TOOLS_ARG_ENUM(middle),
+        TOOLS_ARG_ENUM(top)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END
+    );
     return s_v;
   }
 private:
@@ -87,6 +111,7 @@ private:
 
     add_field(&color);
     add_field(&font);
+    add_field(&font_modeling);
     add_field(&encoding); 
     add_field(&line_width);
     add_field(&front_face);
@@ -95,9 +120,13 @@ private:
 
     add_field(&enforce_front_height);
     add_field(&front_height);
+    add_field(&enforce_front_width);
+    add_field(&front_width);
+
     add_field(&wmargin_factor);
     add_field(&hmargin_factor);
     add_field(&hjust);
+    add_field(&vjust);
   }
 public:
   virtual void render(render_action& a_action) {
@@ -150,6 +179,7 @@ public:
 
   ,color(colorf_black())
   ,font(font_hershey())
+  ,font_modeling(font_filled)
   ,encoding(encoding_PAW())
   ,line_width(1)
   ,front_face(winding_ccw)
@@ -158,9 +188,14 @@ public:
 
   ,enforce_front_height(false)
   ,front_height(1)
+  ,enforce_front_width(false)
+  ,front_width(1)
+
   ,wmargin_factor(0.9f)
   ,hmargin_factor(0.9f)
-  ,hjust(left)
+  ,hjust(left)    // same default as base_text.
+  ,vjust(middle)  // not same default as base_text (which is bottom). We take middle for backcomp of confined text.
+                  // Note that text_hershey, text_freetype is (left,bottom) justified.
 
   ,m_base_text(0)
   ,m_TT_text(base_freetype::create(a_ttf))
@@ -178,6 +213,7 @@ public:
 
   ,color(a_from.color)
   ,font(a_from.font)
+  ,font_modeling(a_from.font_modeling)
   ,encoding(a_from.encoding)
   ,line_width(a_from.line_width)
   ,front_face(a_from.front_face)
@@ -186,9 +222,13 @@ public:
 
   ,enforce_front_height(a_from.enforce_front_height)
   ,front_height(a_from.front_height)
+  ,enforce_front_width(a_from.enforce_front_width)
+  ,front_width(a_from.front_width)
+
   ,wmargin_factor(a_from.wmargin_factor)
   ,hmargin_factor(a_from.hmargin_factor)
   ,hjust(a_from.hjust)
+  ,vjust(a_from.vjust)
 
   ,m_base_text(0)
   ,m_TT_text(base_freetype::create(*a_from.m_TT_text))
@@ -204,6 +244,7 @@ public:
 
     color = a_from.color;
     font = a_from.font;
+    font_modeling = a_from.font_modeling;
     encoding = a_from.encoding;
     line_width = a_from.line_width;
     front_face = a_from.front_face;
@@ -212,9 +253,13 @@ public:
 
     enforce_front_height = a_from.enforce_front_height;
     front_height = a_from.front_height;
+    enforce_front_width = a_from.enforce_front_width;
+    front_width = a_from.front_width;
+
     wmargin_factor = a_from.wmargin_factor;
     hmargin_factor = a_from.hmargin_factor;
     hjust = a_from.hjust;
+    vjust = a_from.vjust;
 
     m_base_text = 0;
 
@@ -228,20 +273,27 @@ public:
     if(!m_base_text) return 0;
     return m_base_text->height;
   }
+/*bool get_bounds(float a_height,
+                  float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                  float& a_mx_x,float& a_mx_y,float& a_mx_z) const {
+    if(!m_base_text) {
+      a_mn_x = 0;
+      a_mn_y = 0;
+      a_mn_z = 0;
+      a_mx_x = 0;
+      a_mx_y = 0;
+      a_mx_z = 0;
+      return false;
+    }
+    m_base_text->get_bounds(m_base_text->height,a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
+    return true;
+  }*/
   bool is_empty() const {
     tools_vforcit(std::string,strings.values(),it) {
       const std::string& line = *it;
       if(line.size()) return false;
     }
     return true;
-  }
-
-  void set_arconf(const std::string& a_s){
-    strings.clear();
-    strings.add(a_s);
-    font = gui_font();
-    confine = true;
-    hjust = center;
   }
 
   const separator& container() const {return m_back_sep;} //must be consistent with pick().
@@ -264,6 +316,7 @@ public:
     m_sep.add(tsf);
 
     float fw = width * wmargin_factor;
+    float fh = height * hmargin_factor;
 
     //sf<float> zfront ?
     float zz = back_visible.value()?0.01f:0;
@@ -271,7 +324,7 @@ public:
     if(font==font_hershey()) {
 
       draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_width = line_width;
       m_sep.add(ds);
 
@@ -288,6 +341,7 @@ public:
       //01234567890
       m_TT_text->font = font;
       m_TT_text->strings = strings;
+      m_TT_text->modeling = font_modeling;
 
       //_text->modeling.value(font_outline);
 
@@ -296,6 +350,7 @@ public:
     }
 
     if(enforce_front_height) {
+
       m_base_text->height = front_height;
 
       float mn_x,mn_y,mn_z;
@@ -303,16 +358,73 @@ public:
       m_base_text->get_bounds(front_height,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
 
       float bxw = mx_x-mn_x;
-      float xtrans = -fw*0.5f+bxw*0.5f; //left justified
+      float xtrans = 0;
       if(hjust==center) {
         xtrans = 0;
+      } else if(hjust==left) {
+        xtrans = -fw*0.5f+bxw*0.5f;
       } else if(hjust==right) {
         xtrans = fw*0.5f-bxw*0.5f;
       }
+
+      float bxh = mx_y-mn_y;
+      float ytrans = 0;
+      if(vjust==middle) {
+        ytrans = 0;
+      } else if(vjust==bottom) {
+        ytrans = -fh*0.5f+bxh*0.5f;
+      } else if(vjust==top) {
+        ytrans = fh*0.5f-bxh*0.5f;
+      }
+
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
-      float yy = -(mn_y+mx_y)*0.5F;
+      float yy = -(mn_y+mx_y)*0.5F+ytrans;
       tsf->set_translate(xx,yy,zz);
 
+      return;
+    } 
+
+    if(enforce_front_width) {
+    
+      float th = fh;
+      float mn_x,mn_y,mn_z;
+      float mx_x,mx_y,mx_z;
+      m_base_text->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      float bxw = mx_x-mn_x;
+
+      // adjust box width :
+      // th -> bxw then to have front_width:
+      if(bxw>0) {
+        th = th*front_width/bxw;
+        m_base_text->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      }
+	  
+      bxw = mx_x-mn_x;
+      float xtrans = 0;
+      if(hjust==center) {
+        xtrans = 0;
+      } else if(hjust==left) {
+        xtrans = -fw*0.5f+bxw*0.5f;
+      } else if(hjust==right) {
+        xtrans = fw*0.5f-bxw*0.5f;
+      }
+
+      float bxh = mx_y-mn_y;
+      float ytrans = 0;
+      if(vjust==middle) {
+        ytrans = 0;
+      } else if(vjust==bottom) {
+        ytrans = -fh*0.5f+bxh*0.5f;
+      } else if(vjust==top) {
+        ytrans = fh*0.5f-bxw*0.5f;
+      }
+
+      float xx = -(mn_x+mx_x)*0.5F+xtrans;
+      float yy = -(mn_y+mx_y)*0.5F+ytrans;
+      tsf->set_translate(xx,yy,zz);
+
+      m_base_text->height = bxh; //=th?
+      
       return;
     } 
 
@@ -320,8 +432,6 @@ public:
 
     if(confine) {
       // code common to freetype and hershey :
-
-      float fh = height * hmargin_factor;
 
       // try to adjust text within fw x fh (by attempting to be smart !).
       // the below assumes that text bounds are linear according
@@ -360,20 +470,33 @@ public:
 
       //bxw = box.mx()[0]-box.mn()[0];
       bxw = mx_x-mn_x;
-      float xtrans = -fw*0.5f+bxw*0.5f; //left justified
+      float xtrans = 0;
       if(hjust==center) {
         xtrans = 0;
+      } else if(hjust==left) {
+        xtrans = -fw*0.5f+bxw*0.5f;
       } else if(hjust==right) {
         xtrans = fw*0.5f-bxw*0.5f;
       }
+
+      bxh = mx_y-mn_y;
+      float ytrans = 0;
+      if(vjust==middle) {
+        ytrans = 0;
+      } else if(vjust==bottom) {
+        ytrans = -fh*0.5f+bxh*0.5f;
+      } else if(vjust==top) {
+        ytrans = fh*0.5f-bxw*0.5f;
+      }
+
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
-      float yy = -(mn_y+mx_y)*0.5F;
+      float yy = -(mn_y+mx_y)*0.5F+ytrans;
+
       tsf->set_translate(xx,yy,zz);
 
       }
 
    } else {
-      float fh = height * hmargin_factor;
 
       // we arrange yy so that two aside texts
       // with same height will have their text base lines aligned.
@@ -405,13 +528,27 @@ public:
      {float mn_x,mn_y,mn_z;
       float mx_x,mx_y,mx_z;
       m_base_text->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
+      
       float bxw = mx_x-mn_x;
-      float xtrans = -fw*0.5f+bxw*0.5f; //left justified
+      float xtrans = 0;
       if(hjust==center) {
         xtrans = 0;
+      } else if(hjust==left) {
+        xtrans = -fw*0.5f+bxw*0.5f;
       } else if(hjust==right) {
         xtrans = fw*0.5f-bxw*0.5f;
       }
+/*
+      float bxh = mx_y-mn_y;
+      float ytrans = 0;
+      if(vjust==middle) {
+        ytrans = 0;
+      } else if(vjust==bottom) {
+        ytrans = -fh*0.5f+bxh*0.5f;
+      } else if(vjust==top) {
+        ytrans = fh*0.5f-bxw*0.5f;
+      }
+*/
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
       tsf->set_translate(xx,yy,zz);}
 
@@ -424,7 +561,6 @@ public:
       }
       m_base_text->strings = labcut;}
     }
-
   }
 
 protected:

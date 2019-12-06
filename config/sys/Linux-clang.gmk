@@ -66,21 +66,24 @@ ifeq ($(G4SYSTEM),Linux-clang)
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11R6/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
-    XMFLAGS   := -I/usr/X11R6/include
+    XMFLAGS   := -I/usr/include
   endif
   ifndef XMLIBS
     XMLIBS    := -lXm -lXpm
   endif
   ifndef XAWFLAGS
-    XAWFLAGS   := -I/usr/X11R6/include
+    XAWFLAGS   := -I/usr/include
   endif
   ifndef XAWLIBS
     XAWLIBS    := -lXaw
   endif
   DLDLIBS   := -ldl
+  ifndef OGLHOME
+    OGLHOME     := /usr
+  endif
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif

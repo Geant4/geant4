@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4RepleteEofM
+// G4RepleteEofM
 //
 // Class description:
 //
@@ -34,12 +31,10 @@
 // field, including: magnetic, electric, gravity, and gradient B field,
 // as well as spin tracking
 
-// History:
-// - Created. P.Gumplinger, 08.04.2013
+// Created: P.Gumplinger, 08.04.2013
 // -------------------------------------------------------------------
-
-#ifndef G4EOFM_hh
-#define G4EOFM_hh
+#ifndef G4EOFM_HH
+#define G4EOFM_HH
 
 #include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
@@ -60,31 +55,31 @@ class G4RepleteEofM : public G4EquationOfMotion
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
                                  G4double dydx[] ) const;
-    // Given the value of the field, this function 
-    // calculates the value of the derivative dydx.
+      // Given the value of the field, this function 
+      // calculates the value of the derivative dydx.
 
     inline void SetAnomaly(G4double a) { anomaly = a; }
     inline G4double GetAnomaly() const { return anomaly; }
-    // set/get magnetic anomaly
+      // set/get magnetic anomaly
 
-    inline void SetBField() {fBfield = true;}
-    inline void SetEField() {fEfield = true;}
-    inline void SetgradB()  {fgradB  = true;}
-    inline void SetSpin()   {fSpin   = true;}
+    inline void SetBField() { fBfield = true; }
+    inline void SetEField() { fEfield = true; }
+    inline void SetgradB()  { fgradB  = true; }
+    inline void SetSpin()   { fSpin   = true; }
 
   private:
 
-    G4int fNvar;
+    G4int fNvar = 0;
 
-    G4bool fBfield, fEfield, fGfield, fgradB, fSpin;
+    G4bool fBfield=false, fEfield=false,
+           fGfield=false, fgradB=false, fSpin=false;
 
-    G4double charge, mass, magMoment, spin;
+    G4double charge=0.0, mass=0.0, magMoment=0.0, spin=0.0;
 
-    G4double ElectroMagCof;
+    G4double ElectroMagCof=0.0;
 
-    G4double omegac, anomaly;
-    G4double beta, gamma;
-
+    G4double omegac=0.0, anomaly=0.0;
+    G4double beta=0.0, gamma=0.0;
 };
 
-#endif /* G4EOFM */
+#endif

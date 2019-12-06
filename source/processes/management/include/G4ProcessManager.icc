@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
+// G4ProcessManager inline function members implementation
+// --------------------------------------------------------------------
 
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
 inline  
  void G4ProcessManager::SetParticleType(const G4ParticleDefinition* aParticle)
 {
@@ -51,7 +47,7 @@ inline
 inline 
  G4int  G4ProcessManager::GetProcessIndex(G4VProcess* aProcess) const
 {
-  G4int idx = theProcessList->index(aProcess);
+  G4int idx = G4int(theProcessList->index(aProcess));
   if (idx>=numberOfProcesses) idx = -1;
   return idx;
 }
@@ -81,32 +77,38 @@ inline
                                       ) const
 {
   G4int ivec = GetProcessVectorId(idx, typ);
-  if ( ivec >=0 ) {
+  if ( ivec >=0 )
+  {
     return theProcVector[ivec];
-  } else {
-    return 0;
+  }
+  else
+  {
+    return nullptr;
   }
 }
 
 inline 
- G4ProcessVector* G4ProcessManager::GetAtRestProcessVector(G4ProcessVectorTypeIndex typ) const
+ G4ProcessVector*
+ G4ProcessManager::GetAtRestProcessVector(G4ProcessVectorTypeIndex typ) const
 {
   if (typ == typeGPIL) { return theProcVector[0]; }
-  else                { return theProcVector[1]; }
+  else                 { return theProcVector[1]; }
 }
 
 inline 
- G4ProcessVector* G4ProcessManager::GetAlongStepProcessVector(G4ProcessVectorTypeIndex typ) const
+ G4ProcessVector*
+ G4ProcessManager::GetAlongStepProcessVector(G4ProcessVectorTypeIndex typ) const
 {
   if (typ == typeGPIL) { return theProcVector[2]; }
-  else                { return theProcVector[3]; }
+  else                 { return theProcVector[3]; }
 }
 
 inline 
- G4ProcessVector* G4ProcessManager::GetPostStepProcessVector(G4ProcessVectorTypeIndex typ) const
+ G4ProcessVector*
+ G4ProcessManager::GetPostStepProcessVector(G4ProcessVectorTypeIndex typ) const
 {
   if (typ == typeGPIL) { return theProcVector[4]; }
-  else                { return theProcVector[5]; }
+  else                 { return theProcVector[5]; }
 }
 
 inline
@@ -137,19 +139,19 @@ inline
 }
 
 inline 
- G4int G4ProcessManager::AddRestProcess(G4VProcess *aProcess,G4int ord)
+ G4int G4ProcessManager::AddRestProcess(G4VProcess* aProcess, G4int ord)
 {
   return AddProcess(aProcess, ord, ordInActive, ordInActive);
 }
 
 inline 
- G4int G4ProcessManager::AddContinuousProcess(G4VProcess *aProcess,G4int ord)
+ G4int G4ProcessManager::AddContinuousProcess(G4VProcess* aProcess, G4int ord)
 {
   return AddProcess(aProcess, ordInActive, ord, ordInActive);
 }
 
 inline 
- G4int G4ProcessManager::AddDiscreteProcess(G4VProcess *aProcess,G4int ord)
+ G4int G4ProcessManager::AddDiscreteProcess(G4VProcess* aProcess, G4int ord)
 {
   return AddProcess(aProcess, ordInActive, ordInActive, ord);
 }
@@ -159,7 +161,6 @@ inline
 { 
   return (G4ParticleDefinition* )theParticleType; 
 }
-
 
 inline 
  void G4ProcessManager::SetVerboseLevel(G4int value)
@@ -172,4 +173,3 @@ inline
 {
   return  verboseLevel;
 }
-

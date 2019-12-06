@@ -14,7 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20-Nov2018 A. Ribon       hadr-partonstring-mgt-V10-04-03
+28-Nov-2019 A. Ribon       hadr-partonstring-mgt-V10-05-02
+-  G4VPartonStringModel : fixed bug (use of "=" instead of "==" in
+   if-statement, found by Coverity) in the Scatter method.
+
+19-Nov-2019 A. Ribon       hadr-partonstring-mgt-V10-05-01
+-  G4EventGenerator, G4InteractionCode, G4VertexCode : deleted unused classes.
+
+14-Nov-2019 A. Ribon       hadr-partonstring-mgt-V10-05-00
+-  G4VPartonStringModel : re-sample the string formation in the case that
+   the (either target or projectile) nuclear residual is an unphysical
+   combination of nucleons (i.e. more than three protons with no neutron,
+   or more than one neutron with no proton).
+
+20-Nov-2018 A. Ribon       hadr-partonstring-mgt-V10-04-03
 -  Minor clean-up: no changes in the random sequence.
 
 05-Nov-2018 G. V. Uzhinsky      hadr-partonstring-mgt-V10-04-02

@@ -75,7 +75,7 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
   }
   ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
 
-  
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   // retrieve the map
   MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
   
@@ -174,6 +174,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
   ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
 
   // retrieve the map
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
   MeshScoreMap::const_iterator msMapItr = fSMap.begin();
   std::map<G4int, G4StatDouble*> * score;

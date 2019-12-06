@@ -40,6 +40,8 @@
 // 07.11.2013 T.Koi: Add IonElasticPhysics, Set proton cut to 0 to generate
 //                   low energy recoils and activate production of fission
 //                   fragments 
+// 06.08.2019 A.Ribon: Replacing explicit values for the energy transition
+//                     region with values from G4HadronicParameters
 //
 //----------------------------------------------------------------------------
 //
@@ -60,9 +62,9 @@
 #include "G4HadronElasticPhysicsLEND.hh"
 #include "G4ParticleHPManager.hh"
 
-#include "G4DataQuestionaire.hh"
 #include "G4HadronPhysicsShielding.hh"
 #include "G4HadronPhysicsShieldingLEND.hh"
+#include "G4HadronicParameters.hh"
 #include <CLHEP/Units/SystemOfUnits.h>
 
 Shielding::Shielding(G4int verbose, const G4String& n_model, 
@@ -78,7 +80,6 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
      LEN_model="LEND";
   }
 
-  G4DataQuestionaire it(photon, neutron, radioactive);
   G4cout << "<<< Geant4 Physics List simulation engine: Shielding"
          << HadrPhysVariant << G4endl;
   if ( LEN_model=="LEND" ) G4cout << 
@@ -112,13 +113,12 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   else if ( LEN_model == "LEND" ) 
   {
      RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation));
-     G4DataQuestionaire itt(lend);
   }
   else 
   {
      G4cout << "Shielding Physics List: Warning!" <<G4endl;
      G4cout << "\"" << LEN_model 
-            << "\" is not valid for the low energy neutorn model." <<G4endl;
+            << "\" is not valid for the low energy neutron model." <<G4endl;
      G4cout << "Neutron HP package will be used." <<G4endl;
      RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
   } 
@@ -126,21 +126,29 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   G4VPhysicsConstructor* hpc;
   // Hadron Physics HP or LEND 
   if (HadrPhysVariant == "M") {
+     // The variant "M" has a special, dedicated energy transition region
+     // between the string model and cascade model, therefore the recommended
+     // values from G4HadronicParameters are intentionally not used. 
      hpc = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 
                                         9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
   } else {
-     hpc = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 
-                                        4.0*CLHEP::GeV, 5.0*CLHEP::GeV);
+     hpc = new G4HadronPhysicsShielding("hInelastic Shielding", verbose,
+                                        G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
+                                        G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
   }
 
   if ( LEN_model == "LEND" ) {
      delete hpc;
      if (HadrPhysVariant == "M") {
-        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", 
-                                 verbose, 9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
+        // The variant "M" has a special, dedicated energy transition region
+        // between the string model and cascade model, therefore the recommended
+        // values from G4HadronicParameters are intentionally not used. 
+        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose,
+                                               9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
      } else {
-        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", 
-                                 verbose, 4.0*CLHEP::GeV, 5.0*CLHEP::GeV);
+        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose, 
+                                               G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
+                                               G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
      }
   } else {
      //G4cout << "Shielding Physics List: Warning." <<G4endl;
@@ -159,9 +167,6 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   RegisterPhysics( new G4StoppingPhysics(verbose) );
 
   // Ion Physics
-  RegisterPhysics( new G4IonElasticPhysics(verbose));
-  RegisterPhysics( new G4IonQMDPhysics(verbose));  
+  RegisterPhysics( new G4IonElasticPhysics(verbose) );
+  RegisterPhysics( new G4IonQMDPhysics(verbose) );
 }
-
-Shielding::~Shielding()
-{}

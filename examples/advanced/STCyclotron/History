@@ -1,0 +1,18 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - radiprotection example
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+19.11.2019 - G. Cosmo tag STCyclotron-V10-05-01
+- Fixed compilation warnings for cases of implicit type conversions.
+
+08.11.2019 - S. Guatelli tag STCyclotron-V10-05-00
+             new example modelling a solid target of the cyclotron to study to 
+             production of the radioisotope of interest for proton irradiation.
+             
+

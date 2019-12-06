@@ -72,7 +72,7 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep)
   timeDeposit[TSliceID] += fde;
 
   G4ThreeVector HitPoint = 0.5*(PostStepPoint->GetPosition()+
-				PreStepPoint->GetPosition());	
+                                PreStepPoint->GetPosition());        
   // Because the beam axis has been defined as the x-axis, 
   // the lateral displacement is given in terms of the y and z positions. 
   G4double perp = 
@@ -103,7 +103,7 @@ void CCalSteppingAction::endOfEvent(){
  
 #ifdef debug
   G4cout << "CCalAnalysis::InsertLateralProfile: Total filled Profile Hcal"
-	 << " histo " << totalFilledProfileHcal << G4endl;
+         << " histo " << totalFilledProfileHcal << G4endl;
 #endif
     
   static G4int IDTimeHist = -1;
@@ -125,12 +125,12 @@ void CCalSteppingAction::endOfEvent(){
     G4double t = j + 0.5;
     man->FillH1(IDTimeProfile+1,t,timeDeposit[j]);
 #ifdef debug
-      G4cout << "Fill Time profile histo 1 with " << t << " " << x << G4endl;
+      G4cout << "Fill Time profile histo 1 with " << t << " " << timeDeposit[j] << G4endl;
 #endif    
   }
 #ifdef debug
   G4cout << "CCalAnalysis::InsertTime: Total filled Time profile histo " 
-	 << totalFilledTimeProfile << G4endl;
+         << totalFilledTimeProfile << G4endl;
 #endif
 
   for (G4int i=0; i<70; i++){LateralProfile[i] = 0.f;}

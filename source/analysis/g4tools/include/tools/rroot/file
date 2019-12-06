@@ -10,6 +10,10 @@
 
 #include "../platform"
 
+#include "obj_list"
+#include "info"
+#include "streamer_fac"
+
 #include <string>
 #include <fcntl.h>
 #include <errno.h>
@@ -105,7 +109,7 @@ public: //ifile
     return true;
   }
 
-  virtual key& sinfos_key() {return m_streamer_info_key;}
+  virtual key& sinfos_key() {return m_streamer_infos_key;}
 
 public:
   file(std::ostream& a_out,const std::string& a_path,bool a_verbose = false)
@@ -115,7 +119,9 @@ public:
   ,m_file(not_open())
   ,m_bytes_read(0)
   ,m_root_directory(get_me())
-  ,m_streamer_info_key(a_out)
+  ,m_streamer_infos_key(a_out)
+  ,m_streamer_fac(a_out)
+  ,m_streamer_infos(m_streamer_fac)
   // begin of record :
   ,m_version(0)
   ,m_BEGIN(0)
@@ -156,7 +162,9 @@ protected:
   :ifile(a_from)
   ,m_out(a_from.m_out)
   ,m_root_directory(get_me())
-  ,m_streamer_info_key(a_from.m_out)
+  ,m_streamer_infos_key(a_from.m_out)
+  ,m_streamer_fac(a_from.m_out)
+  ,m_streamer_infos(m_streamer_fac)
   { 
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -188,6 +196,28 @@ public:
       m_unzipers[a_key] = a_func;
       return true;
     }
+  }
+
+  bool dump_streamer_infos() {
+    // read_streamer_infos_data() done here (and not in initialize) since it may need to have unziper declared.
+    if(m_streamer_infos.empty()) {if(!read_streamer_infos_data()) return false;}
+    tools_vforcit(iro*,m_streamer_infos,it) {
+      streamer_info* info = safe_cast<iro,streamer_info>(*(*it));
+      if(!info) return false;
+      info->out(m_out);
+    }
+    return true;
+  }
+  streamer_info* find_streamer_info(const std::string& a_class) {
+    // read_streamer_infos_data() done here (and not in initialize) since it may need to have unziper declared.
+    if(m_streamer_infos.empty()) {if(!read_streamer_infos_data()) return 0;}
+    tools_vforcit(iro*,m_streamer_infos,it) {
+      streamer_info* info = safe_cast<iro,streamer_info>(*(*it));
+      if(info) {
+        if(info->name()==a_class) return info;
+      }
+    }
+    return 0;
   }
 
 protected:
@@ -328,9 +358,9 @@ protected:
 
     // Create StreamerInfo index
     if(m_seek_info > m_BEGIN) {
-      if(!read_streamer_infos()) {
+      if(!read_streamer_infos_key()) {
         m_out << "tools::rroot::file::initialize :"
-              << " read_streamer_infos() failed."
+              << " read_streamer_infos_key() failed."
               << std::endl;
         return false;
       }
@@ -412,7 +442,7 @@ protected:
     return true;
   }
 
-  bool read_streamer_infos() {
+  bool read_streamer_infos_key() {
     // Read the list of StreamerInfo from this file
     // The key with name holding the list of TStreamerInfo objects is read.
     // The corresponding TClass objects are updated.
@@ -422,7 +452,7 @@ protected:
     char* buffer = new char[m_nbytes_info+1];
     if(!read_buffer(buffer,m_nbytes_info)) {delete [] buffer;return false;}
     char* buf = buffer;
-    if(!m_streamer_info_key.from_buffer(byte_swap(),buffer+m_nbytes_info,buf,m_verbose)) {
+    if(!m_streamer_infos_key.from_buffer(byte_swap(),buffer+m_nbytes_info,buf,m_verbose)) {
       delete [] buffer;
       return false;
     }
@@ -430,7 +460,24 @@ protected:
     return true;
   }
 
-
+  bool read_streamer_infos_data() {
+    key& k = m_streamer_infos_key;
+    if(k.object_class()!="TList") {
+      m_out << "tools::rroot::file::read_streamer_infos_data : key not a TList." << std::endl;
+      return false;
+    }
+    unsigned int sz;
+    char* buf = k.get_object_buffer(*this,sz); //we don't have ownership of buf.
+    if(!buf) {
+      m_out << "tools::rroot::file::read_streamer_infos :"
+          << " can't get data buffer of " << k.object_name() << "."
+          << std::endl;
+      return false;
+    }
+    buffer b(m_out,byte_swap(),sz,buf,k.key_length(),false);
+    return m_streamer_infos.stream(b);
+  }
+  
 #if defined(__sun) && !defined(__linux__) && (__SUNPRO_CC > 0x420)
   int error_number() {return ::errno;}
   void reset_error_number() {::errno = 0;}
@@ -446,7 +493,9 @@ protected:
   int m_file;
   uint64 m_bytes_read; //Number of bytes read from this file
   directory m_root_directory;
-  key m_streamer_info_key;
+  key m_streamer_infos_key;
+  streamer_fac m_streamer_fac;
+  obj_list m_streamer_infos;
   std::map<char,decompress_func> m_unzipers;
   std::string m_title;
   // begin of record :

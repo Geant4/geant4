@@ -23,6 +23,70 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+04 November 2019  John Allison  (vis-V10-05-26)
+- opengl-V10-05-11: Extend glFlush scaling to all circumstances.
+- visman-V10-05-14: G4VisCommandsViewer.cc (Gabriele Cosmo):
+  o Replaced use of std::experimental::filesystem with std::filesystem
+    for WIN32 target. Forcing c++17 default builds on Windows and allow for
+    porting on Visual Studio 2019.
+
+22 October 2019  Gabriele Cosmo
+- opengl-V10-05-10:
+  o Rationalise headers inclusion in G4OpenGLQtViewer.cc.
+
+20 September 2019  John Allison  (vis-V10-05-25)
+- visman-V10-05-13: Several small improvements and fixes.
+- opengl-V10-05-09 (Laurent Garnier): Remove default font size.
+
+19 September 2019  Makoto Asai
+- visman-V10-05-12: G4VSceneHandler.cc:
+  o Namespace scope is added to MeshScoreMap
+  o Co-working with detutils-V10-05-01
+
+17 September 2019 Laurent Garnier
+- visexternalgl2ps-V10-05-02:
+  o gl2ps.cc: fix Continous warnings
+- visexternalgl2ps-V10-05-01:
+  o gl2ps.cc gl2ps.h: Update library to 1.4.0 applying Geant4 patches
+
+29 August 2019  John Allison  (vis-V10-05-24)
+- Part of greps-V10-05-04.
+- visman-V10-05-11, DAWN-V10-05-00, gMocren-V10-05-01, VRML-V10-05-00,
+  vis-HepRep-V10-05-00, visXXX-V10-05-03, modeling-V10-05-08:
+  o Add G4TessellatedSolid to list of solids that may be specially treated
+
+22 August 2019  John Allison  (vis-V10-05-23)
+- visman-V10-05-10:
+  o Rework /vis/scene/add/eventID:
+    . Just writes a summary at end of run.
+    . Except when reviewing kept events one by one, in which case it
+      writes run and event no for each event.
+  o Ensure /vis/drawTree works even if vis is disabled.
+
+17 August 2019  John Allison
+- visman-V10-05-09:
+  o Clear if scene contains no run duration models.
+    . E.g., after geometry has changed.
+
+16 July 2019  John Allison  (vis-V10-05-22)
+- modeling-V10-05-07:
+  o G4CallbackModel: Include modeling parameters in passed arguments.
+- visman-V10-05-08:
+  o Follow changes in modeling-V10-05-07.
+  o Augment G4VUserVisAction to give access to:
+    G4VGraphicsScene* fpSceneHandler;
+    const G4Transform3D* fpTransform;
+    const G4ModelingParameters* fpMP;
+- opengl-V10-05-08:
+  o Revert fix in OpenGL-V10-05-05. The fix in OpenGL-V10-05-07 is better.
+
+
+06 July 2019  John Allison  (vis-V10-05-21)
+- modeling-V10-05-06: Fix setLineVisible in /vis/modeling.
+- visman-V10-05-07: Fix bug in cloud drawing.
+- OpenGL-V10-05-07: Improve X window opening (Guy Barrand).
+- vistree-V10-05-01: Fix typo in output message.
+
 13 June 2019  John Allison  (vis-V10-05-20)
 - modeling-V10-05-04: Add cloud parameters.
 - visman-V10-05-06: Final changes for introduction of cloud drawing.

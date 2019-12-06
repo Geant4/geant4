@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// GEANT4 tag $ Name:  $
-// 
 // class G4PropagatorInField Implementation
 // 
 //  This class implements an algorithm to track a particle in a
@@ -34,9 +31,8 @@
 //  until the particle has traveled a set distance or it enters a new 
 //  volume.
 //                                                                     
-// 14.10.96 John Apostolakis,   design and implementation
-// 17.03.97 John Apostolakis,   renaming new set functions being added
-//
+// 14.10.96 John Apostolakis, design and implementation
+// 17.03.97 John Apostolakis, renaming new set functions being added
 // ---------------------------------------------------------------------------
 
 #include <iomanip>
@@ -45,6 +41,7 @@
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
+#include "G4Material.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
 #include "G4GeometryTolerance.hh"
@@ -52,83 +49,62 @@
 #include "G4ChordFinder.hh"
 #include "G4MultiLevelLocator.hh"
 
-///////////////////////////////////////////////////////////////////////////
-//
+// ---------------------------------------------------------------------------
 // Constructors and destructor
-
-G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator, 
-                                          G4FieldManager *detectorFieldMgr,
-                                          G4VIntersectionLocator *vLocator  )
-  : 
-    fMax_loop_count(1000),
-    fUseSafetyForOptimisation(true),   // (false) is less sensitive to incorrect safety
-    fZeroStepThreshold( 0.0 ),         // length of what is recognised as 'zero' step
-    fDetectorFieldMgr(detectorFieldMgr), 
-    fpTrajectoryFilter( 0 ),
+//
+G4PropagatorInField::G4PropagatorInField( G4Navigator* theNavigator, 
+                                          G4FieldManager* detectorFieldMgr,
+                                          G4VIntersectionLocator* vLocator  )
+  : fDetectorFieldMgr(detectorFieldMgr), 
     fNavigator(theNavigator),
     fCurrentFieldMgr(detectorFieldMgr),
-    fSetFieldMgr(false),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
-                        G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
-    fParticleIsLooping(false),
-    fNoZeroStep(0), 
-    fVerboseLevel(0),
-    fVerbTracePiF(false),
-    fFirstStepInVolume(true),
-    fLastStepInVolume(true),
-    fNewTrack(true)
+                        G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0)
 {
-  if(fDetectorFieldMgr) { fEpsilonStep = fDetectorFieldMgr->GetMaximumEpsilonStep();}
-  else                  { fEpsilonStep= 1.0e-5; } 
-  fActionThreshold_NoZeroSteps = 2; 
-  fSevereActionThreshold_NoZeroSteps = 10; 
-  fAbandonThreshold_NoZeroSteps = 50; 
-  fFull_CurveLen_of_LastAttempt = -1; 
-  fLast_ProposedStepLength = -1;
+  fEpsilonStep = (fDetectorFieldMgr != nullptr)
+               ? fDetectorFieldMgr->GetMaximumEpsilonStep() : 1.0e-5;
   fLargestAcceptableStep = 1000.0 * meter;
 
-  fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
-  fPreviousSafety= 0.0;
+  fPreviousSftOrigin = G4ThreeVector(0.,0.,0.);
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fZeroStepThreshold= std::max( 1.0e5 * kCarTolerance, 1.0e-1 * micrometer );
+  fZeroStepThreshold = std::max( 1.0e5 * kCarTolerance, 1.0e-1 * micrometer );
 
 #ifdef G4DEBUG_FIELD
   G4cout << " PiF: Zero Step Threshold set to "
          << fZeroStepThreshold / millimeter
-	 << " mm." << G4endl;
+         << " mm." << G4endl;
   G4cout << " PiF:   Value of kCarTolerance = "
          << kCarTolerance / millimeter 
-	 << " mm. " << G4endl;
+         << " mm. " << G4endl;
   fVerboseLevel = 2;
   fVerbTracePiF = true;   
 #endif 
 
   // Defining Intersection Locator and his parameters
-  if (vLocator==0)
+  if ( vLocator == nullptr )
   {
-    fIntersectionLocator= new G4MultiLevelLocator(theNavigator);
-    fAllocatedLocator= true;
+    fIntersectionLocator = new G4MultiLevelLocator(theNavigator);
+    fAllocatedLocator = true;
   }
   else
   {
-    fIntersectionLocator= vLocator;
-    fAllocatedLocator= false;
+    fIntersectionLocator = vLocator;
+    fAllocatedLocator = false;
   }
   RefreshIntersectionLocator();  //  Copy all relevant parameters
 }
 
-///////////////////////////////////////////////////////////////////////////
+// ---------------------------------------------------------------------------
 //
 G4PropagatorInField::~G4PropagatorInField()
 {
   if(fAllocatedLocator)  { delete  fIntersectionLocator; }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
+// ---------------------------------------------------------------------------
 // Update the IntersectionLocator with current parameters
-void
-G4PropagatorInField::RefreshIntersectionLocator()
+//
+void G4PropagatorInField::RefreshIntersectionLocator()
 {
   fIntersectionLocator->SetEpsilonStepFor(fEpsilonStep);
   fIntersectionLocator->SetDeltaIntersectionFor(fCurrentFieldMgr->GetDeltaIntersection());
@@ -136,24 +112,24 @@ G4PropagatorInField::RefreshIntersectionLocator()
   fIntersectionLocator->SetSafetyParametersFor( fUseSafetyForOptimisation);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
+// ---------------------------------------------------------------------------
 // Compute the next geometric Step
-
-G4double
-G4PropagatorInField::ComputeStep(
+//
+G4double G4PropagatorInField::ComputeStep(
                 G4FieldTrack&      pFieldTrack,
                 G4double           CurrentProposedStepLength,
                 G4double&          currentSafety,                // IN/OUT
-                G4VPhysicalVolume* pPhysVol)
+                G4VPhysicalVolume* pPhysVol,
+                G4bool             canRelaxDeltaChord)
 {  
   GetChordFinder()->OnComputeStep();
+  const G4double deltaChord = GetChordFinder()->GetDeltaChord();
 
   // If CurrentProposedStepLength is too small for finding Chords
   // then return with no action (for now - TODO: some action)
   //
-  const char* methodName="G4PropagatorInField::ComputeStep";
-  if(CurrentProposedStepLength<kCarTolerance)
+  const char* methodName = "G4PropagatorInField::ComputeStep";
+  if (CurrentProposedStepLength<kCarTolerance)
   {
     return kInfinity;
   }
@@ -166,8 +142,8 @@ G4PropagatorInField::ComputeStep(
   }
 
   fFirstStepInVolume = fNewTrack ? true : fLastStepInVolume;
-  fLastStepInVolume= false;
-  fNewTrack= false; 
+  fLastStepInVolume = false;
+  fNewTrack = false; 
 
   if( fVerboseLevel > 2 )
   {
@@ -184,29 +160,31 @@ G4PropagatorInField::ComputeStep(
   
   // Parameters for adaptive Runge-Kutta integration
   
-  G4double      h_TrialStepSize;        // 1st Step Size 
-  G4double      TruePathLength = CurrentProposedStepLength;
-  G4double      StepTaken = 0.0; 
-  G4double      s_length_taken, epsilon ; 
-  G4bool        intersects;
-  G4bool        first_substep = true;
+  G4double h_TrialStepSize;        // 1st Step Size 
+  G4double TruePathLength = CurrentProposedStepLength;
+  G4double StepTaken = 0.0; 
+  G4double s_length_taken, epsilon; 
+  G4bool   intersects;
+  G4bool   first_substep = true;
 
-  G4double      NewSafety;
+  G4double NewSafety;
   fParticleIsLooping = false;
 
   // If not yet done, 
   //   Set the field manager to the local  one if the volume has one, 
   //                      or to the global one if not
   //
-  if( !fSetFieldMgr ) fCurrentFieldMgr= FindAndSetFieldManager( pPhysVol ); 
-  // For the next call, the field manager must again be set
-  fSetFieldMgr= false;
+  if( !fSetFieldMgr )
+  {
+    fCurrentFieldMgr = FindAndSetFieldManager( pPhysVol );
+  }
+  fSetFieldMgr = false; // For next call, the field manager must be set again
 
-  G4FieldTrack  CurrentState(pFieldTrack);
-  G4FieldTrack  OriginalState = CurrentState;
+  G4FieldTrack CurrentState(pFieldTrack);
+  G4FieldTrack OriginalState = CurrentState;
 
   // If the Step length is "infinite", then an approximate-maximum Step
-  // length (used to calculate the relative accuracy) must be guessed.
+  // length (used to calculate the relative accuracy) must be guessed
   //
   if( CurrentProposedStepLength >= fLargestAcceptableStep )
   {
@@ -217,35 +195,31 @@ G4PropagatorInField::ComputeStep(
     G4double trialProposedStep = 1.e2 * ( 10.0 * cm + 
       fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) );
-    CurrentProposedStepLength= std::min( trialProposedStep,
-                                           fLargestAcceptableStep ); 
+    CurrentProposedStepLength = std::min( trialProposedStep,
+                                          fLargestAcceptableStep ); 
   }
   epsilon = fCurrentFieldMgr->GetDeltaOneStep() / CurrentProposedStepLength;
-  // G4double raw_epsilon= epsilon;
   G4double epsilonMin= fCurrentFieldMgr->GetMinimumEpsilonStep();
   G4double epsilonMax= fCurrentFieldMgr->GetMaximumEpsilonStep();
-  if( epsilon < epsilonMin ) epsilon = epsilonMin;
-  if( epsilon > epsilonMax ) epsilon = epsilonMax;
+  if( epsilon < epsilonMin )  { epsilon = epsilonMin; }
+  if( epsilon > epsilonMax )  { epsilon = epsilonMax; }
   SetEpsilonStep( epsilon );
-
 
   // Values for Intersection Locator has to be updated on each call for the
   // case that CurrentFieldManager has changed from the one of previous step
+  //
   RefreshIntersectionLocator();
 
-  // G4cout << "G4PiF: Epsilon of current step - raw= " << raw_epsilon
-  //        << " final= " << epsilon << G4endl;
-
-  //  Shorten the proposed step in case of earlier problems (zero steps)
+  // Shorten the proposed step in case of earlier problems (zero steps)
   // 
   if( fNoZeroStep > fActionThreshold_NoZeroSteps )
   {
     G4double stepTrial;
 
-    stepTrial= fFull_CurveLen_of_LastAttempt; 
+    stepTrial = fFull_CurveLen_of_LastAttempt; 
     if( (stepTrial <= 0.0) && (fLast_ProposedStepLength > 0.0) )
     {
-      stepTrial= fLast_ProposedStepLength; 
+      stepTrial = fLast_ProposedStepLength; 
     }
 
     G4double decreaseFactor = 0.9; // Unused default
@@ -260,7 +234,7 @@ G4PropagatorInField::ComputeStep(
     {
       // We are in significant difficulties, probably at a boundary that
       // is either geometrically sharp or between very different materials.
-      // Careful decreases to cope with tolerance are required.
+      // Careful decreases to cope with tolerance are required
       //
       if( stepTrial > 100.0*fZeroStepThreshold )
         decreaseFactor = 0.35;     // Try decreasing slower
@@ -275,8 +249,7 @@ G4PropagatorInField::ComputeStep(
 
 #ifdef G4DEBUG_FIELD
      if( fVerboseLevel > 2
-         || (fNoZeroStep >= fSevereActionThreshold_NoZeroSteps)
-        )
+      || (fNoZeroStep >= fSevereActionThreshold_NoZeroSteps) )
      {
         G4cerr << " " << methodName
                << "  Decreasing step after " << fNoZeroStep << " zero steps "
@@ -300,7 +273,7 @@ G4PropagatorInField::ComputeStep(
                << "  while attempting to progress after " << fNoZeroStep
                << " trial steps. Will abandon step.";
        G4Exception(methodName, "GeomNav1002", JustWarning, message);
-       fParticleIsLooping= true;
+       fParticleIsLooping = true;
        return 0;  // = stepTrial;
      }
      if( stepTrial < CurrentProposedStepLength )
@@ -311,7 +284,7 @@ G4PropagatorInField::ComputeStep(
   fLast_ProposedStepLength = CurrentProposedStepLength;
 
   G4int do_loop_count = 0; 
-  do  // Loop checking, 07.10.2016, J.Apostolakis
+  do  // Loop checking, 07.10.2016, JA
   { 
     G4FieldTrack SubStepStartState = CurrentState;
     G4ThreeVector SubStartPoint = CurrentState.GetPosition(); 
@@ -330,6 +303,16 @@ G4PropagatorInField::ComputeStep(
     //
     h_TrialStepSize = CurrentProposedStepLength - StepTaken;
 
+    if (canRelaxDeltaChord &&
+        fIncreaseChordDistanceThreshold > 0  &&
+        do_loop_count > fIncreaseChordDistanceThreshold && 
+        do_loop_count % fIncreaseChordDistanceThreshold == 0)
+    {
+        GetChordFinder()->SetDeltaChord(
+          GetChordFinder()->GetDeltaChord() * 2.0
+        );
+    }
+
     // Integrate as far as "chord miss" rule allows.
     //
     s_length_taken = GetChordFinder()->AdvanceChordLimited( 
@@ -337,22 +320,22 @@ G4PropagatorInField::ComputeStep(
                              h_TrialStepSize,
                              fEpsilonStep,
                              fPreviousSftOrigin,
-                             fPreviousSafety
-                             );
-    //  CurrentState is now updated with the final position and velocity. 
+                             fPreviousSafety );
+      // CurrentState is now updated with the final position and velocity
 
     fFull_CurveLen_of_LastAttempt = s_length_taken;
 
-    G4ThreeVector  EndPointB = CurrentState.GetPosition(); 
-    G4ThreeVector  InterSectionPointE;
-    G4double       LinearStepLength;
+    G4ThreeVector EndPointB = CurrentState.GetPosition(); 
+    G4ThreeVector InterSectionPointE;
+    G4double      LinearStepLength;
  
     // Intersect chord AB with geometry
+    //
     intersects= IntersectChord( SubStartPoint, EndPointB, 
-                                NewSafety,     LinearStepLength, 
+                                NewSafety, LinearStepLength, 
                                 InterSectionPointE );
-    // E <- Intersection Point of chord AB and either volume A's surface 
-    //                                  or a daughter volume's surface ..
+      // E <- Intersection Point of chord AB and either volume A's surface 
+      //                                  or a daughter volume's surface ..
 
     if( first_substep )
     { 
@@ -365,7 +348,7 @@ G4PropagatorInField::ComputeStep(
 
        // Find the intersection point of AB true path with the surface
        //   of vol(A), if it exists. Start with point E as first "estimate".
-       G4bool recalculatedEndPt= false;
+       G4bool recalculatedEndPt = false;
        
        G4bool found_intersection = fIntersectionLocator->
          EstimateIntersectionPoint( SubStepStartState, CurrentState, 
@@ -377,7 +360,7 @@ G4PropagatorInField::ComputeStep(
        {        
           End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
           StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
-                                      - OriginalState.GetCurveLength();
+                                     - OriginalState.GetCurveLength();
        }
        else
        {
@@ -399,7 +382,7 @@ G4PropagatorInField::ComputeStep(
              // Update remaining state - must work for 'full' step or
              // abandonned intersection
              //
-             CurrentState= IntersectPointVelct_G;
+             CurrentState = IntersectPointVelct_G;
              s_length_taken = stepAchieved;
              if( shortEnd )
              {
@@ -428,8 +411,8 @@ G4PropagatorInField::ComputeStep(
         G4cout << " Above 'action' threshold -- for Zero steps.  ";         
       G4cout << " Number of zero steps = " << fNoZeroStep << G4endl;
       printStatus( SubStepStartState,  // or OriginalState,
-                   CurrentState,  CurrentProposedStepLength, 
-                   NewSafety,     do_loop_count,  pPhysVol );
+                   CurrentState, CurrentProposedStepLength, 
+                   NewSafety, do_loop_count, pPhysVol );
     }
     if( (fVerboseLevel > 1) && (do_loop_count > fMax_loop_count-10 ))
     {
@@ -445,7 +428,7 @@ G4PropagatorInField::ComputeStep(
     }
 #endif
 
-    do_loop_count++;
+    ++do_loop_count;
 
   } while( (!intersects )
         && (!fParticleIsLooping)
@@ -453,8 +436,7 @@ G4PropagatorInField::ComputeStep(
         && ( do_loop_count < fMax_loop_count ) );
 
   if(  do_loop_count >= fMax_loop_count
-      && (StepTaken + kCarTolerance < CurrentProposedStepLength)
-     )
+    && (StepTaken + kCarTolerance < CurrentProposedStepLength) )
   {
     fParticleIsLooping = true;
   }
@@ -472,6 +454,7 @@ G4PropagatorInField::ComputeStep(
     //
     End_PointAndTangent = CurrentState; 
     TruePathLength = StepTaken;   //  Original code
+ 
     // Tried the following to avoid potential issue with round-off error
     // - but has issues... Suppressing this change JA 2015/05/02
     // TruePathLength = CurrentProposedStepLength;
@@ -515,7 +498,7 @@ G4PropagatorInField::ComputeStep(
      // 
      if( TruePathLength < std::max( fZeroStepThreshold, 0.5*kCarTolerance ) )
      {
-        fNoZeroStep++;
+        ++fNoZeroStep;
      }
      else
      {
@@ -525,27 +508,27 @@ G4PropagatorInField::ComputeStep(
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps )
   { 
      fParticleIsLooping = true;
-     ReportStuckParticle( fNoZeroStep, CurrentProposedStepLength, fFull_CurveLen_of_LastAttempt,
-                               pPhysVol );
+     ReportStuckParticle( fNoZeroStep, CurrentProposedStepLength,
+                          fFull_CurveLen_of_LastAttempt, pPhysVol );
      fNoZeroStep = 0; 
   }
  
+  GetChordFinder()->SetDeltaChord(deltaChord);
   return TruePathLength;
 }
 
-///////////////////////////////////////////////////////////////////////////
+// ---------------------------------------------------------------------------
+// Dumps status of propagator
 //
-// Dumps status of propagator.
-
 void
-G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
-                                  const G4FieldTrack&        CurrentFT, 
-                                        G4double             requestStep, 
-                                        G4double             safety,
-                                        G4int                stepNo, 
-                                        G4VPhysicalVolume*   startVolume)
+G4PropagatorInField::printStatus( const G4FieldTrack&      StartFT,
+                                  const G4FieldTrack&      CurrentFT, 
+                                        G4double           requestStep, 
+                                        G4double           safety,
+                                        G4int              stepNo, 
+                                        G4VPhysicalVolume* startVolume)
 {
-  const G4int verboseLevel=fVerboseLevel;
+  const G4int verboseLevel = fVerboseLevel;
   const G4ThreeVector StartPosition       = StartFT.GetPosition();
   const G4ThreeVector StartUnitVelocity   = StartFT.GetMomentumDir();
   const G4ThreeVector CurrentPosition     = CurrentFT.GetPosition();
@@ -558,9 +541,6 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
   if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
     oldprec = G4cout.precision(4);
-//    G4cout << std::setw( 6)  << " " 
-//           << std::setw( 25) << " Current Position  and  Direction" << " "
-//           << G4endl; 
     G4cout << std::setw( 5) << "Step#" 
            << std::setw(10) << "  s  " << " "
            << std::setw(10) << "X(mm)" << " "
@@ -573,7 +553,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
            << std::setw( 9) << "StepLen" << " "  
            << std::setw(12) << "StartSafety" << " "  
            << std::setw( 9) << "PhsStep" << " ";  
-    if( startVolume )
+    if( startVolume != nullptr )
       { G4cout << std::setw(18) << "NextVolume" << " "; }
     G4cout.precision(oldprec);
     G4cout << G4endl;
@@ -627,10 +607,9 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
   }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
+// ---------------------------------------------------------------------------
 // Prints Step diagnostics
-
+//
 void 
 G4PropagatorInField::PrintStepLengthDiagnostic(
                           G4double CurrentProposedStepLength,
@@ -654,8 +633,7 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
          << " " << std::setw(18) << decreaseFactor
          << " " << std::setw(15) << stepTrial
          << G4endl;
-  G4cout.precision( iprec ); 
-
+  G4cout.precision( iprec );
 }
 
 // Access the points which have passed through the filter. The
@@ -673,17 +651,17 @@ G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const
   // NB, GimmeThePointsAndForgetThem really forgets them, so it can
   // only be called (exactly) once for each step.
 
-  if (fpTrajectoryFilter)
+  if (fpTrajectoryFilter != nullptr)
   {
     return fpTrajectoryFilter->GimmeThePointsAndForgetThem();
   }
   else
   {
-    return 0;
+    return nullptr;
   }
 }
 
-///////////////////////////////////////////////////////////////////////////
+// ---------------------------------------------------------------------------
 //
 void 
 G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter)
@@ -691,12 +669,14 @@ G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter)
   fpTrajectoryFilter = filter;
 }
 
+// ---------------------------------------------------------------------------
+//
 void G4PropagatorInField::ClearPropagatorState()
 {
   // Goal: Clear all memory of previous steps,  cached information
 
-  fParticleIsLooping= false;
-  fNoZeroStep= 0;
+  fParticleIsLooping = false;
+  fNoZeroStep = 0;
 
   End_PointAndTangent= G4FieldTrack( G4ThreeVector(0.,0.,0.),
                                      G4ThreeVector(0.,0.,0.),
@@ -708,91 +688,106 @@ void G4PropagatorInField::ClearPropagatorState()
   fPreviousSafety= 0.0;
 }
 
+// ---------------------------------------------------------------------------
+//
 G4FieldManager* G4PropagatorInField::
-FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
+FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume )
 {
   G4FieldManager* currentFieldMgr;
 
   currentFieldMgr = fDetectorFieldMgr;
-  if( pCurrentPhysicalVolume)
+  if( pCurrentPhysicalVolume != nullptr )
   {
-     G4FieldManager *pRegionFieldMgr= 0, *localFieldMgr = 0;
-     G4LogicalVolume* pLogicalVol= pCurrentPhysicalVolume->GetLogicalVolume();
+     G4FieldManager *pRegionFieldMgr = nullptr, *localFieldMgr = nullptr;
+     G4LogicalVolume* pLogicalVol = pCurrentPhysicalVolume->GetLogicalVolume();
 
-     if( pLogicalVol ) { 
-	// Value for Region, if any, Overrides 
-	G4Region*  pRegion= pLogicalVol->GetRegion();
-	if( pRegion ) { 
-	   pRegionFieldMgr= pRegion->GetFieldManager();
-	   if( pRegionFieldMgr ) 
-	     currentFieldMgr= pRegionFieldMgr;
-	}
+     if( pLogicalVol != nullptr )
+     { 
+        // Value for Region, if any, overrides
+        //
+        G4Region*  pRegion = pLogicalVol->GetRegion();
+        if( pRegion != nullptr )
+        { 
+           pRegionFieldMgr = pRegion->GetFieldManager();
+           if( pRegionFieldMgr != nullptr )
+           {
+              currentFieldMgr= pRegionFieldMgr;
+           }
+        }
 
-	// 'Local' Value from logical volume, if any, Overrides 
-	localFieldMgr= pLogicalVol->GetFieldManager();
-	if ( localFieldMgr ) 
-	   currentFieldMgr = localFieldMgr;
+        // 'Local' Value from logical volume, if any, overrides
+        //
+        localFieldMgr = pLogicalVol->GetFieldManager();
+        if ( localFieldMgr != nullptr )
+        {
+           currentFieldMgr = localFieldMgr;
+        }
      }
   }
-  fCurrentFieldMgr= currentFieldMgr;
+  fCurrentFieldMgr = currentFieldMgr;
 
   // Flag that field manager has been set
   //
-  fSetFieldMgr= true;
+  fSetFieldMgr = true;
 
   return currentFieldMgr;
 }
 
+// ---------------------------------------------------------------------------
+//
 G4int G4PropagatorInField::SetVerboseLevel( G4int level )
 {
-  G4int oldval= fVerboseLevel;
-  fVerboseLevel= level;
+  G4int oldval = fVerboseLevel;
+  fVerboseLevel = level;
 
   // Forward the verbose level 'reduced' to ChordFinder,
   // MagIntegratorDriver ... ? 
   //
-  auto integrDriver= GetChordFinder()->GetIntegrationDriver(); 
+  auto integrDriver = GetChordFinder()->GetIntegrationDriver(); 
   integrDriver->SetVerboseLevel( fVerboseLevel - 2 );
   G4cout << "Set Driver verbosity to " << fVerboseLevel - 2 << G4endl;
 
   return oldval;
 }
 
-#include "G4Material.hh"
-
-void G4PropagatorInField::ReportLoopingParticle( G4int              count,
-                                                 G4double           StepTaken,
-                                                 G4double           StepRequested,
-                                                 const char*        methodName,
-                                                 G4ThreeVector      momentumVec,
-                                                 G4VPhysicalVolume* pPhysVol)
+// ---------------------------------------------------------------------------
+//
+void G4PropagatorInField::ReportLoopingParticle( G4int count,
+                                                 G4double StepTaken,
+                                                 G4double StepRequested,
+                                                 const char* methodName,
+                                                 G4ThreeVector momentumVec,
+                                                 G4VPhysicalVolume* pPhysVol )
 {
    std::ostringstream message;
    G4double fraction = StepTaken / StepRequested;
    message << " Unfinished integration of track (likely looping particle)  "
-           << " of momentum " << momentumVec << " ( magnitude = " << momentumVec.mag() << " ) "
-           << G4endl
+           << " of momentum " << momentumVec << " ( magnitude = "
+           << momentumVec.mag() << " ) " << G4endl
            << " after " << count << " field substeps "
            << " totaling " << std::setprecision(12) << StepTaken / mm << " mm "
-           << " out of requested step " << std::setprecision(12) << StepRequested / mm << " mm ";
+           << " out of requested step " << std::setprecision(12)
+           << StepRequested / mm << " mm ";
    message << " a fraction of ";
-   int prec= 4;
-   if( fraction > 0.99 ) 
-     prec= 7;
+   G4int prec = 4;
+   if( fraction > 0.99 )
+   {
+     prec = 7;
+   }
    else
-     if (fraction > 0.97 )
-       prec= 5;
+   {
+     if (fraction > 0.97 )  { prec = 5; }
+   }
    message << std::setprecision(prec) 
            << 100. * StepTaken / StepRequested << " % " << G4endl ;
    if( pPhysVol )
    {
       message << " in volume " << pPhysVol->GetName() ;
-      auto material= pPhysVol->GetLogicalVolume()->GetMaterial();
-      if( material )
+      auto material = pPhysVol->GetLogicalVolume()->GetMaterial();
+      if( material != nullptr )
          message << " with material " << material->GetName()
                  << " ( density = "
-                 << material->GetDensity() / ( gram / ( centimeter * centimeter * centimeter ) )
-                 << " g / cm^3 ) "; 
+                 << material->GetDensity() / ( g/(cm*cm*cm) ) << " g / cm^3 ) ";
    }
    else
    {
@@ -801,18 +796,20 @@ void G4PropagatorInField::ReportLoopingParticle( G4int              count,
    G4Exception(methodName, "GeomNav1002", JustWarning, message);   
 }
 
-void G4PropagatorInField::ReportStuckParticle( G4int      noZeroSteps,
-                                               G4double   proposedStep,
-                                               G4double   lastTriedStep,
+// ---------------------------------------------------------------------------
+//
+void G4PropagatorInField::ReportStuckParticle( G4int    noZeroSteps,
+                                               G4double proposedStep,
+                                               G4double lastTriedStep,
                                                G4VPhysicalVolume* physVol )
 {
    std::ostringstream message;
    message << "Particle is stuck; it will be killed." << G4endl
-           << "  Zero progress for "  << noZeroSteps << " attempted steps." 
+           << "  Zero progress for " << noZeroSteps << " attempted steps." 
            << G4endl
            << "  Proposed Step is " << proposedStep
            << " but Step Taken is "<< lastTriedStep << G4endl;
-   if( physVol )
+   if( physVol != nullptr )
       message << " in volume " << physVol->GetName() ; 
    else
       message << " in unknown or null volume. " ; 

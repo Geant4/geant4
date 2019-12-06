@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28th, 2019 I.Hrivnacova - ParN04-V10-05-00
+-------------------------
+- Fixed Doxygen warnings
+
 August 27th, 2013 G.Cosmo - ParN04-V09-06-00
 -------------------------
 - Added G4Ellipsoid among solids enabled for parameterisation.

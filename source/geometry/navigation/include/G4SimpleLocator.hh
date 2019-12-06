@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Class G4SimpleLocator 
 //
 // class description:
@@ -37,8 +34,6 @@
 // no 'depth' algorithm is used in case of slow progress for finding the
 // intersection point.
 
-// History:
-// -------
 // 27.10.08 - Tatiana Nikitina: Derived from LocateIntersectionPoint() from 
 //                              G4PropagatorInField class
 // ---------------------------------------------------------------------------
@@ -52,10 +47,10 @@ class G4SimpleLocator : public G4VIntersectionLocator
 {
    public:  // with description 
  
-     G4SimpleLocator(G4Navigator *theNavigator);
-        // Constructor
+     G4SimpleLocator(G4Navigator* aNavigator);
+       // Constructor
      ~G4SimpleLocator();
-        // Default destructor
+       // Default destructor
 
      G4bool EstimateIntersectionPoint( 
          const  G4FieldTrack&       curveStartPointTangent,  // A

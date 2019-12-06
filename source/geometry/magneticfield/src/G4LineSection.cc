@@ -23,11 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4LineSection implementation
 //
-//
+// Created: J.Apostolakis, 1999
 // --------------------------------------------------------------------
 
 #include "G4LineSection.hh" 
+
+G4LineSection::G4LineSection( const G4ThreeVector& PntA, 
+                              const G4ThreeVector& PntB )
+  : EndpointA(PntA), VecAtoB(PntB-PntA)
+{ 
+  fABdistanceSq = VecAtoB.mag2();  
+}
 
 G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
 {
@@ -62,7 +70,7 @@ G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
       }
       else                       // B is the closest point
       {
-	G4ThreeVector   EndpointB = EndpointA + VecAtoB;
+        G4ThreeVector   EndpointB = EndpointA + VecAtoB;
         G4ThreeVector   VecBZ =     OtherPnt - EndpointB;
         dist_sq =  VecBZ.mag2();
       }

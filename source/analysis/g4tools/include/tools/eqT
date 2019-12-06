@@ -19,6 +19,40 @@ inline bool is_zero(const NUMBER& a_left,const PREC& a_prec,PREC(*a_fabs)(const 
   return true;
 }
 
+template <class VEC,class PREC>
+inline bool vectors_are_equal(const VEC& a_1,const VEC& a_2,const PREC& a_prec,PREC(*a_fabs)(const PREC&)) {
+  if(a_1.size()!=a_2.size()) return false;
+  typedef typename VEC::size_type sz_t;
+  sz_t sz = a_1.size();
+  //bool status = true;
+  for(sz_t index=0;index<sz;index++) {
+    if(!numbers_are_equal(a_1[index],a_2[index],a_prec,a_fabs))
+    //{ ::printf("debug : vectors_are_equals : %lu : %g %g\n",index,a_1[index],a_2[index]);
+      return false;
+      //status = false;
+    //}
+  }
+  return true;
+  //return status;
+}
+
+template <class VECVEC,class PREC>
+inline bool vecvecs_are_equal(const VECVEC& a_1,const VECVEC& a_2,const PREC& a_prec,PREC(*a_fabs)(const PREC&)) {
+  if(a_1.size()!=a_2.size()) return false;
+  typedef typename VECVEC::size_type sz_t;
+  sz_t sz = a_1.size();
+  for(sz_t index=0;index<sz;index++) {
+    if(!vectors_are_equal(a_1[index],a_2[index],a_prec,a_fabs)) return false;
+  }
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// PREC(*a_fabs)(PREC) : /////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// for histo equals functions.
+
 template <class NUMBER,class PREC>
 inline bool numbers_are_equal(const NUMBER& a_left,const NUMBER& a_right,const PREC& a_prec,PREC(*a_fabs)(NUMBER)) {
   NUMBER diff = a_left - a_right;
@@ -53,6 +87,10 @@ inline bool vecvecs_are_equal(const VECVEC& a_1,const VECVEC& a_2,const PREC& a_
   }
   return true;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 

@@ -23,17 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4EllipticalCone.icc
-//
 // Implementation of inline methods of G4EllipticalCone
-// --------------------------------------------------------------------
-// Author: Dionysios Anninos
+//
+// Author: Dionysios Anninos, 8.9.2005
 // --------------------------------------------------------------------
 
 inline

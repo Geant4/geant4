@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -10,7 +14,7 @@
 
 ##### Hadr00 started in sequential mode #####
 G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
-<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
 
 <<< Reference Physics List FTFP_BERT is built
 
@@ -47,10 +51,10 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /process/em/workerVerbose 0
@@ -79,8 +83,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -191,9 +194,9 @@ ionIoni:  for GenericIon  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
-=======================================================================
-======       Radioactive Decay Physics Parameters              ========
-=======================================================================
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
 Max life time                                     1.4427e+06 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
@@ -204,7 +207,7 @@ Auger electron emission enabled                   1
 Auger cascade enabled                             1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
-=======================================================================
+======================================================================
 
 msc:  for alpha  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 0
@@ -457,7 +460,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
   Process: nCapture
@@ -470,11 +473,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
-  Process: RadioactiveDecay
+  Process: RadioactiveDecayBase
 
 ---------------------------------------------------
                            Hadronic Processes for He3
@@ -484,8 +487,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -496,8 +499,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -546,8 +549,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -591,14 +595,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -613,7 +617,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -626,9 +630,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -639,9 +642,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -654,8 +656,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -677,26 +679,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -710,7 +710,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -721,8 +721,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -731,21 +731,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1442.7
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ==============================
@@ -773,228 +776,228 @@ EventAction: Event # 0 started
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.030000s Real=0.059452s Sys=0.000000s
+  User=0.010000s Real=0.024898s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al
 -------------------------------------------------------------
     N     E(MeV)   Elastic(b)   Inelastic(b)   Total(b)
 -------------------------------------------------------------
-    0      0.1012    0.001942    4.382e-07     0.001942
-    1      0.1035    0.002093    4.723e-07     0.002093
-    2      0.1059    0.002256     5.09e-07     0.002256
-    3      0.1084    0.002431    5.486e-07     0.002432
-    4      0.1109     0.00262    5.912e-07     0.002621
-    5      0.1135    0.002824    6.372e-07     0.002824
-    6      0.1161    0.003043    6.867e-07     0.003044
-    7      0.1189     0.00328    7.401e-07     0.003281
-    8      0.1216    0.003535    7.977e-07     0.003536
-    9      0.1245     0.00381    8.597e-07     0.003811
-   10      0.1274    0.004106    9.266e-07     0.004107
-   11      0.1303    0.004425    9.986e-07     0.004426
-   12      0.1334    0.004769    1.076e-06      0.00477
-   13      0.1365     0.00514     1.16e-06     0.005141
-   14      0.1396     0.00554     1.25e-06     0.005541
-   15      0.1429     0.00597    1.347e-06     0.005972
-   16      0.1462    0.006435    1.452e-06     0.006436
-   17      0.1496    0.006935    1.565e-06     0.006936
-   18      0.1531    0.007474    1.687e-06     0.007476
-   19      0.1567    0.008055    1.818e-06     0.008057
-   20      0.1603    0.008681    1.959e-06     0.008683
-   21      0.1641    0.009356    2.111e-06     0.009359
-   22      0.1679     0.01008    2.276e-06      0.01009
-   23      0.1718     0.01087    2.453e-06      0.01087
-   24      0.1758     0.01171    2.643e-06      0.01172
-   25      0.1799     0.01262    2.849e-06      0.01263
-   26      0.1841     0.01361     3.07e-06      0.01361
-   27      0.1884     0.01466    3.309e-06      0.01467
-   28      0.1928      0.0158    3.566e-06      0.01581
-   29      0.1972     0.01703    3.843e-06      0.01704
-   30      0.2018     0.01836    4.142e-06      0.01836
-   31      0.2065     0.01978    4.464e-06      0.01979
-   32      0.2113     0.02132    4.811e-06      0.02133
-   33      0.2163     0.02298    5.186e-06      0.02298
-   34      0.2213     0.02477    5.589e-06      0.02477
-   35      0.2265     0.02669    6.023e-06       0.0267
-   36      0.2317     0.02877    6.492e-06      0.02877
-   37      0.2371       0.031    6.996e-06      0.03101
-   38      0.2427     0.03341     7.54e-06      0.03342
-   39      0.2483     0.03601    8.127e-06      0.03602
-   40      0.2541     0.03881    8.758e-06      0.03882
-   41        0.26     0.04183    9.439e-06      0.04184
-   42      0.2661     0.04508    1.017e-05      0.04509
-   43      0.2723     0.04859    1.096e-05       0.0486
-   44      0.2786     0.05236    1.182e-05      0.05238
-   45      0.2851     0.05644    1.274e-05      0.05645
-   46      0.2917     0.06082    1.373e-05      0.06084
-   47      0.2985     0.06555    1.479e-05      0.06557
-   48      0.3055     0.07065    1.594e-05      0.07066
-   49      0.3126     0.07614    1.718e-05      0.07616
-   50      0.3199     0.08206    1.852e-05      0.08208
-   51      0.3273     0.08844    1.996e-05      0.08846
-   52       0.335     0.09532    2.151e-05      0.09534
-   53      0.3428      0.1027    2.318e-05       0.1028
-   54      0.3508      0.1107    2.498e-05       0.1107
-   55      0.3589      0.1193    2.693e-05       0.1194
-   56      0.3673      0.1286    2.902e-05       0.1286
-   57      0.3758      0.1386    3.128e-05       0.1386
-   58      0.3846      0.1494    3.371e-05       0.1494
-   59      0.3936       0.161    3.633e-05        0.161
-   60      0.4027      0.1735    3.915e-05       0.1735
-   61      0.4121       0.187     4.22e-05        0.187
-   62      0.4217      0.2015    4.548e-05       0.2016
-   63      0.4315      0.2172    4.901e-05       0.2173
-   64      0.4416      0.2341    5.283e-05       0.2341
-   65      0.4519      0.2523    5.693e-05       0.2523
-   66      0.4624      0.2719    6.136e-05        0.272
-   67      0.4732       0.293    6.613e-05       0.2931
-   68      0.4842      0.3158    7.127e-05       0.3159
-   69      0.4955      0.3404    7.681e-05       0.3405
-   70       0.507      0.3668    8.278e-05       0.3669
-   71      0.5188      0.3954    8.922e-05       0.3954
-   72      0.5309      0.4261    9.615e-05       0.4262
-   73      0.5433      0.4592    0.0001036       0.4593
-   74      0.5559      0.4949    0.0001117        0.495
-   75      0.5689      0.5334    0.0001204       0.5335
-   76      0.5821      0.5748    0.0001297        0.575
-   77      0.5957      0.6195    0.0001398       0.6197
-   78      0.6095      0.6677    0.0001507       0.6678
-   79      0.6237      0.7196    0.0001624       0.7198
-   80      0.6383      0.7755     0.000175       0.7757
-   81      0.6531      0.8358    0.0001886        0.836
-   82      0.6683      0.9008    0.0002033        0.901
-   83      0.6839      0.9708    0.0002191        0.971
-   84      0.6998       1.046    0.0002361        1.046
-   85      0.7161       1.128    0.0002545        1.128
-   86      0.7328       1.215    0.0002742        1.215
-   87      0.7499        1.31    0.0002955         1.31
-   88      0.7674        1.31    0.0003185         1.31
-   89      0.7852        1.31    0.0003433         1.31
-   90      0.8035       1.309    0.0003699         1.31
-   91      0.8222       1.309    0.0003987        1.309
-   92      0.8414       1.309    0.0004297        1.309
-   93       0.861       1.308     0.000463        1.309
-   94       0.881       1.308     0.000499        1.309
-   95      0.9016       1.308    0.0005378        1.308
-   96      0.9226       1.307    0.0005796        1.308
-   97      0.9441       1.307    0.0006246        1.308
-   98      0.9661       1.307    0.0006731        1.307
-   99      0.9886       1.306    0.0007254        1.307
-  100       1.012       1.306    0.0007818        1.307
-  101       1.035       1.305    0.0008425        1.306
-  102       1.059       1.305    0.0009079        1.306
-  103       1.084       1.305    0.0009784        1.306
-  104       1.109       1.304     0.001054        1.305
-  105       1.135       1.304     0.001136        1.305
-  106       1.161       1.303     0.001224        1.304
-  107       1.189       1.303     0.001319        1.304
-  108       1.216       1.302     0.001422        1.304
-  109       1.245       1.302     0.001532        1.303
-  110       1.274       1.301     0.001651        1.303
-  111       1.303       1.301     0.001779        1.303
-  112       1.334         1.3     0.001917        1.302
-  113       1.365         1.3     0.002066        1.302
-  114       1.396       1.299     0.002226        1.301
-  115       1.429       1.299     0.002398        1.301
-  116       1.462       1.298     0.002584        1.301
-  117       1.496       1.298     0.002784          1.3
-  118       1.531       1.297        0.003          1.3
-  119       1.567       1.296     0.003232          1.3
-  120       1.603       1.296     0.003483        1.299
-  121       1.641       1.295     0.003752        1.299
-  122       1.679       1.294     0.004042        1.299
-  123       1.718       1.294     0.004355        1.298
-  124       1.758       1.293     0.004691        1.298
-  125       1.799       1.292     0.005054        1.297
-  126       1.841       1.292     0.005444        1.297
-  127       1.884       1.291     0.005864        1.297
-  128       1.928        1.29     0.006316        1.297
-  129       1.972       1.289     0.006803        1.296
-  130       2.018       1.289     0.007327        1.296
-  131       2.065       1.288     0.007891        1.296
-  132       2.113       1.287     0.008498        1.296
-  133       2.163       1.286     0.009151        1.295
-  134       2.213       1.285     0.009853        1.295
-  135       2.265       1.285      0.01061        1.295
-  136       2.317       1.284      0.01142        1.295
-  137       2.371       1.283       0.0123        1.295
-  138       2.427       1.282      0.01324        1.295
-  139       2.483       1.281      0.01425        1.295
-  140       2.541        1.28      0.01533        1.295
-  141         2.6       1.279       0.0165        1.295
-  142       2.661       1.278      0.01775        1.296
-  143       2.723       1.277       0.0191        1.296
-  144       2.786       1.276      0.02055        1.296
-  145       2.851       1.275       0.0221        1.297
-  146       2.917       1.273      0.02377        1.297
-  147       2.985       1.272      0.02556        1.298
-  148       3.055       1.271      0.02747        1.299
-  149       3.126        1.27      0.02953        1.299
-  150       3.199       1.269      0.03174          1.3
-  151       3.273       1.267       0.0341        1.301
-  152        3.35       1.266      0.03663        1.303
-  153       3.428       1.265      0.03934        1.304
-  154       3.508       1.263      0.04223        1.306
-  155       3.589       1.262      0.04533        1.307
-  156       3.673       1.261      0.04864        1.309
-  157       3.758       1.259      0.05217        1.311
-  158       3.846       1.258      0.05595        1.314
-  159       3.936       1.256      0.05997        1.316
-  160       4.027       1.255      0.06426        1.319
-  161       4.121       1.253      0.06883        1.322
-  162       4.217       1.251      0.07369        1.325
-  163       4.315        1.25      0.07885        1.328
-  164       4.416       1.248      0.08434        1.332
-  165       4.519       1.246      0.09016        1.336
-  166       4.624       1.244      0.09633        1.341
-  167       4.732       1.243       0.1029        1.345
-  168       4.842       1.241       0.1098         1.35
-  169       4.955       1.239       0.1171        1.356
-  170        5.07       1.237       0.1247        1.362
-  171       5.188       1.235       0.1328        1.368
-  172       5.309       1.233       0.1413        1.374
-  173       5.433       1.231       0.1503        1.381
-  174       5.559       1.228       0.1596        1.388
-  175       5.689       1.226       0.1694        1.396
-  176       5.821       1.224       0.1797        1.404
-  177       5.957       1.222       0.1903        1.412
-  178       6.095       1.219       0.2014        1.421
-  179       6.237       1.217       0.2129         1.43
-  180       6.383       1.214       0.2248        1.439
-  181       6.531       1.212       0.2371        1.449
-  182       6.683       1.209       0.2498        1.459
-  183       6.839       1.207       0.2628         1.47
-  184       6.998       1.204       0.2762         1.48
-  185       7.161       1.201       0.2899        1.491
-  186       7.328       1.198       0.3039        1.502
-  187       7.499       1.196       0.3181        1.514
-  188       7.674       1.193       0.3325        1.525
-  189       7.852        1.19       0.3471        1.537
-  190       8.035       1.186       0.3618        1.548
-  191       8.222       1.183       0.3766         1.56
-  192       8.414        1.18       0.3915        1.571
-  193        8.61       1.177       0.4063        1.583
-  194        8.81       1.173       0.4211        1.594
-  195       9.016        1.17       0.4358        1.606
-  196       9.226       1.166       0.4504        1.617
-  197       9.441       1.163       0.4647        1.627
-  198       9.661       1.159       0.4789        1.638
-  199       9.886       1.155       0.4928        1.648
-  200       10.12       1.151       0.5063        1.657
-  201       10.35       1.147       0.5196        1.667
-  202       10.59       1.143       0.5324        1.675
-  203       10.84       1.139       0.5449        1.684
-  204       11.09       1.134       0.5569        1.691
-  205       11.35        1.13       0.5684        1.698
-  206       11.61       1.126       0.5795        1.705
-  207       11.89       1.121         0.59        1.711
-  208       12.16       1.116       0.6001        1.716
-  209       12.45       1.111       0.6096        1.721
-  210       12.74       1.107       0.6186        1.725
-  211       13.03       1.101       0.6271        1.729
-  212       13.34       1.096        0.635        1.731
-  213       13.65       1.091       0.6424        1.733
-  214       13.96       1.086       0.6493        1.735
+    0      0.1012           0            0            0
+    1      0.1035           0            0            0
+    2      0.1059           0            0            0
+    3      0.1084           0            0            0
+    4      0.1109           0            0            0
+    5      0.1135           0            0            0
+    6      0.1161           0            0            0
+    7      0.1189           0            0            0
+    8      0.1216           0            0            0
+    9      0.1245           0            0            0
+   10      0.1274           0            0            0
+   11      0.1303           0            0            0
+   12      0.1334           0            0            0
+   13      0.1365           0            0            0
+   14      0.1396           0            0            0
+   15      0.1429           0            0            0
+   16      0.1462           0            0            0
+   17      0.1496           0            0            0
+   18      0.1531           0            0            0
+   19      0.1567           0            0            0
+   20      0.1603           0            0            0
+   21      0.1641           0            0            0
+   22      0.1679           0            0            0
+   23      0.1718           0            0            0
+   24      0.1758           0            0            0
+   25      0.1799           0            0            0
+   26      0.1841           0            0            0
+   27      0.1884           0            0            0
+   28      0.1928           0            0            0
+   29      0.1972           0            0            0
+   30      0.2018           0            0            0
+   31      0.2065           0            0            0
+   32      0.2113           0            0            0
+   33      0.2163           0            0            0
+   34      0.2213           0            0            0
+   35      0.2265           0            0            0
+   36      0.2317           0            0            0
+   37      0.2371           0            0            0
+   38      0.2427           0            0            0
+   39      0.2483           0            0            0
+   40      0.2541           0            0            0
+   41        0.26           0            0            0
+   42      0.2661           0            0            0
+   43      0.2723           0            0            0
+   44      0.2786           0            0            0
+   45      0.2851           0            0            0
+   46      0.2917           0            0            0
+   47      0.2985           0            0            0
+   48      0.3055           0            0            0
+   49      0.3126           0            0            0
+   50      0.3199           0            0            0
+   51      0.3273           0            0            0
+   52       0.335           0            0            0
+   53      0.3428           0            0            0
+   54      0.3508           0            0            0
+   55      0.3589           0            0            0
+   56      0.3673           0            0            0
+   57      0.3758           0            0            0
+   58      0.3846           0            0            0
+   59      0.3936           0            0            0
+   60      0.4027           0            0            0
+   61      0.4121           0            0            0
+   62      0.4217           0            0            0
+   63      0.4315           0            0            0
+   64      0.4416           0            0            0
+   65      0.4519           0            0            0
+   66      0.4624           0            0            0
+   67      0.4732           0            0            0
+   68      0.4842           0            0            0
+   69      0.4955           0            0            0
+   70       0.507           0            0            0
+   71      0.5188           0            0            0
+   72      0.5309           0            0            0
+   73      0.5433           0            0            0
+   74      0.5559           0            0            0
+   75      0.5689           0            0            0
+   76      0.5821           0            0            0
+   77      0.5957           0            0            0
+   78      0.6095           0            0            0
+   79      0.6237           0            0            0
+   80      0.6383           0            0            0
+   81      0.6531           0            0            0
+   82      0.6683           0            0            0
+   83      0.6839           0            0            0
+   84      0.6998           0            0            0
+   85      0.7161           0            0            0
+   86      0.7328           0            0            0
+   87      0.7499           0            0            0
+   88      0.7674           0            0            0
+   89      0.7852           0            0            0
+   90      0.8035           0            0            0
+   91      0.8222           0            0            0
+   92      0.8414           0            0            0
+   93       0.861           0            0            0
+   94       0.881           0            0            0
+   95      0.9016           0            0            0
+   96      0.9226           0            0            0
+   97      0.9441           0            0            0
+   98      0.9661           0            0            0
+   99      0.9886           0            0            0
+  100       1.012           0            0            0
+  101       1.035           0            0            0
+  102       1.059           0            0            0
+  103       1.084           0            0            0
+  104       1.109           0            0            0
+  105       1.135           0            0            0
+  106       1.161           0            0            0
+  107       1.189           0            0            0
+  108       1.216           0            0            0
+  109       1.245           0            0            0
+  110       1.274           0            0            0
+  111       1.303           0            0            0
+  112       1.334           0            0            0
+  113       1.365           0            0            0
+  114       1.396           0            0            0
+  115       1.429           0            0            0
+  116       1.462           0            0            0
+  117       1.496           0            0            0
+  118       1.531           0            0            0
+  119       1.567           0            0            0
+  120       1.603           0            0            0
+  121       1.641           0            0            0
+  122       1.679           0            0            0
+  123       1.718           0            0            0
+  124       1.758           0            0            0
+  125       1.799     0.01979    9.217e-05      0.01988
+  126       1.841     0.04761    0.0002389      0.04785
+  127       1.884      0.0748    0.0004043       0.0752
+  128       1.928      0.1014    0.0005901        0.102
+  129       1.972      0.1273    0.0007984       0.1281
+  130       2.018      0.1527     0.001031       0.1537
+  131       2.065      0.1775     0.001291       0.1788
+  132       2.113      0.2017      0.00158       0.2033
+  133       2.163      0.2254     0.001901       0.2273
+  134       2.213      0.2486     0.002257       0.2508
+  135       2.265      0.2712     0.002651       0.2738
+  136       2.317      0.2933     0.003087       0.2964
+  137       2.371      0.3149     0.003568       0.3184
+  138       2.427       0.336     0.004099       0.3401
+  139       2.483      0.3566     0.004682       0.3613
+  140       2.541      0.3768     0.005324       0.3821
+  141         2.6      0.3965     0.006029       0.4025
+  142       2.661      0.4157     0.006802       0.4225
+  143       2.723      0.4345     0.007649       0.4422
+  144       2.786      0.4529     0.008577       0.4615
+  145       2.851      0.4709     0.009591       0.4804
+  146       2.917      0.4884       0.0107       0.4991
+  147       2.985      0.5056      0.01191       0.5175
+  148       3.055      0.5223      0.01323       0.5356
+  149       3.126      0.5387      0.01466       0.5534
+  150       3.199      0.5547      0.01623       0.5709
+  151       3.273      0.5704      0.01793       0.5883
+  152        3.35      0.5857      0.01977       0.6054
+  153       3.428      0.6006      0.02177       0.6224
+  154       3.508      0.6152      0.02395       0.6391
+  155       3.589      0.6295       0.0263       0.6558
+  156       3.673      0.6434      0.02884       0.6723
+  157       3.758       0.657       0.0316       0.6886
+  158       3.846      0.6704      0.03457       0.7049
+  159       3.936      0.6834      0.03777       0.7211
+  160       4.027      0.6961      0.04123       0.7373
+  161       4.121      0.7085      0.04495       0.7535
+  162       4.217      0.7207      0.04894       0.7696
+  163       4.315      0.7325      0.05324       0.7858
+  164       4.416      0.7441      0.05784        0.802
+  165       4.519      0.7555      0.06278       0.8182
+  166       4.624      0.7665      0.06806       0.8346
+  167       4.732      0.7774      0.07369       0.8511
+  168       4.842      0.7879      0.07971       0.8676
+  169       4.955      0.7983      0.08612       0.8844
+  170        5.07      0.8084      0.09294       0.9013
+  171       5.188      0.8182       0.1002       0.9184
+  172       5.309      0.8279       0.1079       0.9357
+  173       5.433      0.8373        0.116       0.9533
+  174       5.559      0.8465       0.1246       0.9711
+  175       5.689      0.8555       0.1336       0.9891
+  176       5.821      0.8643       0.1431        1.007
+  177       5.957      0.8729       0.1531        1.026
+  178       6.095      0.8813       0.1636        1.045
+  179       6.237      0.8895       0.1745        1.064
+  180       6.383      0.8976        0.186        1.084
+  181       6.531      0.9054       0.1979        1.103
+  182       6.683      0.9131       0.2102        1.123
+  183       6.839      0.9206        0.223        1.144
+  184       6.998      0.9279       0.2362        1.164
+  185       7.161       0.935       0.2498        1.185
+  186       7.328       0.942       0.2638        1.206
+  187       7.499      0.9488       0.2782        1.227
+  188       7.674      0.9555       0.2928        1.248
+  189       7.852       0.962       0.3078         1.27
+  190       8.035      0.9684       0.3229        1.291
+  191       8.222      0.9746       0.3383        1.313
+  192       8.414      0.9807       0.3538        1.335
+  193        8.61      0.9867       0.3695        1.356
+  194        8.81      0.9925       0.3852        1.378
+  195       9.016      0.9982       0.4009        1.399
+  196       9.226       1.004       0.4166         1.42
+  197       9.441       1.009       0.4322        1.441
+  198       9.661       1.014       0.4477        1.462
+  199       9.886        1.02       0.4631        1.483
+  200       10.12       1.025       0.4782        1.503
+  201       10.35        1.03       0.4931        1.523
+  202       10.59       1.034       0.5076        1.542
+  203       10.84       1.039       0.5219        1.561
+  204       11.09       1.044       0.5357         1.58
+  205       11.35       1.048       0.5492        1.598
+  206       11.61       1.053       0.5622        1.615
+  207       11.89       1.057       0.5748        1.632
+  208       12.16       1.061        0.587        1.648
+  209       12.45       1.065       0.5986        1.664
+  210       12.74       1.069       0.6097        1.679
+  211       13.03       1.073       0.6204        1.694
+  212       13.34       1.077       0.6304        1.708
+  213       13.65       1.081         0.64        1.721
+  214       13.96       1.085        0.649        1.734
   215       14.29        1.08       0.6592        1.739
   216       14.62       1.074       0.6699        1.744
   217       14.96       1.069       0.6808        1.749
@@ -1585,6 +1588,6 @@ HistoManager: End of run actions are started
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.029 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.032 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

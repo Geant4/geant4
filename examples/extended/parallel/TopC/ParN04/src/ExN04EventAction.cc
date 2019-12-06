@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04EventAction.cc
+/// \file ExN04EventAction.cc
 /// \brief Implementation of the ExN04EventAction class
 //
 

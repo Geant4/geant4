@@ -112,6 +112,7 @@
 #include "G4BetaPlusDecay.hh"
 #include "G4ECDecay.hh"
 #include "G4AlphaDecay.hh"
+#include "G4TritonDecay.hh"
 #include "G4ProtonDecay.hh"
 #include "G4NeutronDecay.hh"
 #include "G4SFDecay.hh"
@@ -134,6 +135,7 @@
 #include "G4Neutron.hh"
 #include "G4Gamma.hh"
 #include "G4Alpha.hh"
+#include "G4Triton.hh"
 #include "G4Proton.hh"
 
 #include "G4HadronicProcessType.hh"
@@ -187,7 +189,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   photonEvaporation->SetICM(true);
 
   // Check data directory
-  char* path_var = getenv("G4RADIOACTIVEDATA");
+  char* path_var = std::getenv("G4RADIOACTIVEDATA");
   if (!path_var) {
     G4Exception("G4RadioactiveDecay()","HAD_RDM_200",FatalException,
                 "Environment variable G4RADIOACTIVEDATA is not set");
@@ -827,7 +829,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
   if (DecaySchemeFile.good()) {
     // Initialize variables used for reading in radioactive decay data
     G4bool floatMatch(false);
-    const G4int nMode = 11;
+    const G4int nMode = 12;
     G4double modeTotalBR[nMode] = {0.0};
     G4double modeSumBR[nMode];
     for (G4int i = 0; i < nMode; i++) {
@@ -937,6 +939,8 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 break;
               case SpFission:
                 modeTotalBR[10] = decayModeTotal;  break;
+              case Triton:
+                modeTotalBR[11] = decayModeTotal;  break;
               case RDM_ERROR:
 
               default:
@@ -1106,6 +1110,17 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 modeSumBR[10] += b;
               }
               break;
+              case Triton:
+              {
+                 G4TritonDecay* aTritonChannel =
+                     new G4TritonDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                     daughterFloatLevel);
+                    //              anTritonChannel->DumpNuclearInfo();
+                 aTritonChannel->SetHLThreshold(halflifethreshold);
+                 theDecayTable->Insert(aTritonChannel);
+                 modeSumBR[11] += b;
+                }
+                    break;
 
               case RDM_ERROR:
 
@@ -1241,6 +1256,7 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
   G4BetaPlusDecay* theBetaPlusChannel = 0;
   G4AlphaDecay* theAlphaChannel = 0;
   G4ProtonDecay* theProtonChannel = 0;
+  G4TritonDecay* theTritonChannel = 0;
   G4NeutronDecay* theNeutronChannel = 0;
   G4SFDecay* theFissionChannel = 0;
 
@@ -1264,8 +1280,9 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
   G4double TaoPlus;
   G4int nS = 0;        // Running index of first decay in a given generation
   G4int nT = nEntry;   // Total number of decays accumulated over entire history
-  const G4int nMode = 11;
+  const G4int nMode = 12;
   G4double brs[nMode];
+
   //
   theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
@@ -1401,7 +1418,13 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
                                               0.*MeV, noFloat);
             summedDecayTable->Insert(theFissionChannel);
             break;
-
+          case 11:
+            // Decay mode is triton.
+            theTritonChannel = new G4TritonDecay(aParentNucleus, brs[11], 0.*MeV,
+                                                0.*MeV, noFloat);
+            summedDecayTable->Insert(theTritonChannel);
+            break;
+            
           default:
             break;
           }
@@ -1772,6 +1795,17 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       for (index=0; index < numberOfSecondaries; index++) {
         G4Track* secondary = new G4Track(products->PopProducts(),
                                          finalGlobalTime, currentPosition);
+
+        secondary->SetCreatorModelIndex(theRadDecayMode);
+        //Change for atomics relaxation
+        if (theRadDecayMode == IT  && index>0){
+        if (index == numberOfSecondaries-1) secondary->SetCreatorModelIndex(IT);
+                else secondary->SetCreatorModelIndex(30);
+         }
+        else if (theRadDecayMode >= KshellEC && theRadDecayMode <= NshellEC
+                     			                             && index <numberOfSecondaries-1){
+             secondary->SetCreatorModelIndex(30);
+        }
         secondary->SetGoodForTrackingFlag();
         secondary->SetTouchableHandle(theTrack.GetTouchableHandle());
         fParticleChangeForRadDecay.AddSecondary(secondary);
@@ -2041,7 +2075,7 @@ G4RadioactiveDecay::DoDecay(const G4ParticleDefinition& theParticleDef)
   // for difference in mass defect.
   G4double parentPlusQ = theParticleDef.GetPDGMass() + 30.*MeV;
   G4VDecayChannel* theDecayChannel = theDecayTable->SelectADecayChannel(parentPlusQ);
-
+  theRadDecayMode = (static_cast<G4NuclearDecay*>(theDecayChannel))->GetDecayMode();
   if (theDecayChannel == 0) {
     // Decay channel not found.
     G4ExceptionDescription ed;
@@ -2083,6 +2117,7 @@ void G4RadioactiveDecay::CollimateDecay(G4DecayProducts* products) {
   static const G4ParticleDefinition* neutron  = G4Neutron::Definition();
   static const G4ParticleDefinition* gamma    = G4Gamma::Definition();
   static const G4ParticleDefinition* alpha    = G4Alpha::Definition();
+  static const G4ParticleDefinition* triton    = G4Triton::Definition();
   static const G4ParticleDefinition* proton   = G4Proton::Definition();
 
   G4ThreeVector newDirection;		// Re-use to avoid memory churn
@@ -2092,7 +2127,7 @@ void G4RadioactiveDecay::CollimateDecay(G4DecayProducts* products) {
                                   daughter->GetParticleDefinition();
     if (daughterType == electron || daughterType == positron ||
 	daughterType == neutron || daughterType == gamma ||
-	daughterType == alpha || daughterType == proton) CollimateDecayProduct(daughter);
+	daughterType == alpha || daughterType == triton || daughterType == proton) CollimateDecayProduct(daughter);
   }
 }
 

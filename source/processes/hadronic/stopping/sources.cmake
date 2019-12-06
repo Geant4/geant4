@@ -42,6 +42,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
@@ -66,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4ElementSelector.hh
         G4EmCaptureCascade.hh
         G4HadronicAbsorptionFritiof.hh
+        G4HadronicAbsorptionFritiofWithBinaryCascade.hh
         G4HadronStoppingProcess.hh
         G4MuMinusCapturePrecompound.hh
         G4MuonMinusBoundDecay.hh
@@ -81,6 +83,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4ElementSelector.cc
         G4EmCaptureCascade.cc
         G4HadronicAbsorptionFritiof.cc
+        G4HadronicAbsorptionFritiofWithBinaryCascade.cc
         G4HadronStoppingProcess.cc
         G4MuMinusCapturePrecompound.cc
         G4MuonMinusBoundDecay.cc

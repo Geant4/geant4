@@ -6,6 +6,9 @@
                        Package History file
                        --------------------
 
+26 Nov 2019 I. Hrivnacova - tag neuron-V10-05-00
+- Fixed Doxygen warnings
+
 27 Nov 2018 V. Ivanchenko - tag neuron-V10-04-03
 - Fixed nightly problem in PhysicsList
 

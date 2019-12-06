@@ -35,7 +35,8 @@
 #include "CCalHit.hh"
 
 
-class CCalG4Hit : public G4VHit, public CCalHit {
+class CCalG4Hit : public G4VHit, public CCalHit
+{
 
   friend std::ostream& operator<< (std::ostream& os, const CCalG4Hit& hit);
 
@@ -52,19 +53,19 @@ public:
   void Draw(){}
   void Print();
 
-  double getEM() const;
+  G4double getEM() const;
   void   setEM (double e);
   
-  double getHadr() const;
-  void   setHadr (double e);
+  G4double getHadr() const;
+  void   setHadr (G4double e);
   
   void  addEnergyDeposit(const CCalG4Hit& aHit);
-  void  addEnergyDeposit(double em, double hd);
+  void  addEnergyDeposit(G4double em, G4double hd);
 
 private:
 
-  double elem; // EnergyDeposit of EM particles
-  double hadr; // EnergyDeposit of HD particles
+  G4double elem; // EnergyDeposit of EM particles
+  G4double hadr; // EnergyDeposit of HD particles
 
 };
 #endif

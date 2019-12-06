@@ -1,10 +1,5 @@
 #-----------------------------------------------------------------------
 # - Top Level CMakeLists.txt for Geant4 Build
-#
-# 21st September 2010 Ben Morgan
-#
-#
-
 #-----------------------------------------------------------------------
 # - Enforce an out-of-source builds before anything else
 #
@@ -21,7 +16,7 @@ endif()
 #-----------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
 # - Any policy requirements should go here
 

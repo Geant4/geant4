@@ -82,3 +82,4 @@ G4HadronicInteraction* G4FTFBuilder::BuildModel()
 
   return theFTFModel;
 }
+

@@ -74,7 +74,5 @@ class G4BinaryPiKBuilder : public G4VPiKBuilder
     G4double theMax;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

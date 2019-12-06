@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // class G4TransportationManager
 //
 // Class description:
@@ -39,7 +37,6 @@
 // Created:  10 March 1997, J. Apostolakis
 // Reviewed: 26 April 2006, G. Cosmo
 // --------------------------------------------------------------------
-
 #ifndef  G4TransportationManager_hh
 #define  G4TransportationManager_hh
 
@@ -63,7 +60,7 @@ class G4TransportationManager
        // Retrieve singleton instance pointer.
 
      inline G4PropagatorInField* GetPropagatorInField() const;
-     inline void SetPropagatorInField( G4PropagatorInField* newFieldPropagator );
+     inline void SetPropagatorInField(G4PropagatorInField* newFieldPropagator);
      inline G4FieldManager* GetFieldManager() const;
      void SetFieldManager( G4FieldManager* newFieldManager );
        // Accessors for field handling
@@ -109,6 +106,13 @@ class G4TransportationManager
        // Methods for handling navigators. Navigator for tracking is always the
        // first, i.e. position 0 in the collection and cannot be de-registered
 
+     static G4Navigator* GetFirstTrackingNavigator();
+     static void SetFirstTrackingNavigator(G4Navigator *nav);   
+       // Retrieve/set first navigator pointer for 'mass' geometry
+       //
+       // It will be used as a template for cloning the tracking 
+       //     navigator of additional threads.
+
   public:  // without description
 
      void ClearParallelWorlds();
@@ -141,12 +145,14 @@ class G4TransportationManager
      std::vector<G4VPhysicalVolume*> fWorlds;
        // The collection of worlds associated to the registered navigators
 
-     G4PropagatorInField*    fPropagatorInField;
-     G4FieldManager*         fFieldManager;
-     G4GeometryMessenger*    fGeomMessenger;
-     G4SafetyHelper*         fSafetyHelper;
+     G4PropagatorInField* fPropagatorInField;
+     G4FieldManager*      fFieldManager;
+     G4GeometryMessenger* fGeomMessenger;
+     G4SafetyHelper*      fSafetyHelper;
 
-     static G4ThreadLocal G4TransportationManager*  fTransportationManager;
+     static G4ThreadLocal G4TransportationManager* fTransportationManager;
+
+     static G4Navigator* fFirstTrackingNavigator;
 };
 
 #include "G4TransportationManager.icc"

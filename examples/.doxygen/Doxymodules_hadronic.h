@@ -65,7 +65,16 @@
 
 /** @defgroup extended_hadronic_Hadr07 Hadr07
  *  The Hadr07 hadronic classes have their
- *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
+ *  <a href="../html_Hadr07/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_Hadr08 Hadr08
+ *  The Hadr08 hadronic classes have their
+ *  <a href="../html_Hadr08/html/index.html">standalone documentation </a>
  *  @ingroup extended_hadronic
  *  @{
  */

@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -9,7 +13,7 @@
 **************************************************************
 
       ********** Run Manager constructed in sequential mode ************ 
-<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
 
       ********************************************************* 
       ********** processes are wrapped for biasing ************ 
@@ -17,10 +21,10 @@
  Attaching biasing operator TestManyForceCollision to logical volume test.logical
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
@@ -83,8 +87,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -447,7 +450,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
   Process: nCapture
@@ -460,8 +463,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -472,8 +475,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -484,8 +487,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -534,8 +537,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -579,14 +583,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -601,7 +605,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -614,9 +618,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -627,9 +630,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -642,8 +644,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -665,26 +667,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -698,7 +698,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -709,8 +709,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -719,21 +719,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -756,7 +759,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0         1        0        0       500   test.phys initStep
     1        0        0     17.9     0.216        0     17.9       518   test.phys biasWrapper(compt)
-    2    -7.42     7.85 -3.55e-15     0.216        0     20.9       539       World Transportation
+    2    -7.42     7.85 -7.11e-15     0.216        0     20.9       539       World Transportation
     3 -4.15e+03 4.39e+03   -1e+04     0.216        0 1.17e+04  1.22e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -825,7 +828,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0         1        0        0       500   test.phys initStep
     1        0        0     15.9     0.263        0     15.9       516   test.phys biasWrapper(compt)
-    2     32.9     4.73        0     0.263        0     36.8       553       World Transportation
+    2     32.9     4.73 5.33e-15     0.263        0     36.8       553       World Transportation
     3    1e+04 1.44e+03 -4.8e+03     0.263        0 1.12e+04  1.17e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -1124,7 +1127,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0         1        0        0       500   test.phys initStep
     1        0        0     10.4     0.249        0     10.4       510   test.phys biasWrapper(compt)
-    2     11.4    -11.3 -5.33e-15     0.249        0     19.2       530       World Transportation
+    2     11.4    -11.3        0     0.249        0     19.2       530       World Transportation
     3    1e+04 -9.9e+03 -9.12e+03     0.249        0 1.68e+04  1.73e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -2010,7 +2013,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     6     83.8      -85      106     0.107        0      3.7       273   test.phys biasWrapper(compt)
     7     81.9    -85.1      102       0.1        0     4.82       278   test.phys biasWrapper(compt)
     8    -17.3    -22.4       50     0.081        0      128       406   test.phys biasWrapper(compt)
-    9     27.8    -19.1 7.11e-15     0.081        0     67.4       473       World Transportation
+    9     27.8    -19.1        0     0.081        0     67.4       473       World Transportation
    10 9.05e+03      655   -1e+04     0.081        0 1.35e+04   1.4e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3009,7 +3012,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0         1        0        0       500   test.phys initStep
     1        0        0     22.8     0.818        0     22.8       523   test.phys biasWrapper(hadElastic)
-    2    -46.9     27.2 -7.11e-15     0.818        0     58.8       582       World Transportation
+    2    -46.9     27.2        0     0.818        0     58.8       582       World Transportation
     3   -1e+04 5.79e+03 -4.83e+03     0.818        0 1.25e+04  1.31e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3539,7 +3542,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      116     0.193        0        0         0   test.phys initStep
     1    -89.3     70.4     27.4     0.164        0      144       144   test.phys biasWrapper(compt)
-    2      -78     86.8 -3.55e-15     0.164        0     33.8       178       World Transportation
+    2      -78     86.8        0     0.164        0     33.8       178       World Transportation
     3 4.06e+03 6.06e+03   -1e+04     0.164        0 1.24e+04  1.25e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3779,7 +3782,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     65.6     -112      179     0.156        0        0         0   test.phys initStep
-    1       61     -112      200     0.156        0     21.4      21.4       World Transportation
+    1     60.9     -112      200     0.156        0     21.4      21.4       World Transportation
     2 -2.13e+03      153    1e+04     0.156        0    1e+04  1.01e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3788,7 +3791,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     65.6     -112      179     0.357        0        0         0   test.phys initStep
-    1    -29.9    -79.9        0     0.357        0      206       206       World Transportation
+    1    -29.9    -79.8        0     0.357        0      206       206       World Transportation
     2 -5.36e+03 1.73e+03   -1e+04     0.357        0 1.15e+04  1.17e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3797,7 +3800,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     65.6     -112      179      4.02        0        0         0   test.phys initStep
-    1     52.9     -107      200      4.02        0     24.9      24.9       World Transportation
+    1     52.8     -107      200      4.02        0       25        25       World Transportation
     2 -5.94e+03  2.2e+03    1e+04      4.02        0 1.17e+04  1.17e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3806,7 +3809,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     65.6     -112      179      11.6        0        0         0   test.phys initStep
-    1     61.6     -135      200      11.6        0     30.9      30.9       World Transportation
+    1     61.6     -135      200      11.6        0       31        31       World Transportation
     2 -1.69e+03   -1e+04 9.36e+03      11.6        0 1.36e+04  1.36e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3823,7 +3826,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -19.5     74.1      162     0.907        0        0         0   test.phys initStep
-    1    -19.5     74.1      162         0    0.907  0.00294   0.00294   test.phys ionIoni
+    1    -19.6     74.1      163         0    0.907  0.00294   0.00294   test.phys ionIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 20,   Parent ID = 3
@@ -3837,7 +3840,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     -126     24.8     99.8    0.0965        0     6.19       141   test.phys biasWrapper(compt)
     5    -74.7      229      117     0.091        0      211       352   test.phys biasWrapper(compt)
     6     8.02      302     56.9    0.0708        0      126       478   test.phys biasWrapper(compt)
-    7    -21.4      288       44    0.0643        0     34.9       513   test.phys biasWrapper(compt)
+    7    -21.4      288     44.1    0.0643        0     34.9       513   test.phys biasWrapper(compt)
     8    -42.8      316     37.4    0.0621        0     35.6       548   test.phys biasWrapper(compt)
     9      -43      319     34.7    0.0525        0     3.89       552   test.phys biasWrapper(compt)
    10    -50.8      315     38.6    0.0506        0     9.34       561   test.phys biasWrapper(compt)
@@ -3889,8 +3892,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -21.4      288       44   0.00648        0        0         0   test.phys initStep
-    1    -21.4      288       44         0  0.00648  0.00168   0.00168   test.phys eIoni
+    0    -21.4      288     44.1   0.00648        0        0         0   test.phys initStep
+    1    -21.4      288     44.1         0  0.00648  0.00168   0.00168   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 27,   Parent ID = 20
@@ -3898,7 +3901,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     8.02      302     56.9    0.0203        0        0         0   test.phys initStep
-    1     8.03      302     56.9         0   0.0203   0.0123    0.0123   test.phys eIoni
+    1     8.02      302     56.9         0   0.0203   0.0123    0.0123   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 26,   Parent ID = 20
@@ -3949,12 +3952,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    -21.1     75.7      181     0.182        0     18.7      18.7   test.phys biasWrapper(compt)
     2      -13     69.8      157     0.177        0     26.1      44.8   test.phys biasWrapper(compt)
     3      -10     75.3     77.3     0.114        0     79.9       125   test.phys biasWrapper(compt)
-    4     12.3     61.7     95.4     0.111        0     31.7       156   test.phys biasWrapper(compt)
+    4     12.3     61.8     95.4     0.111        0     31.7       156   test.phys biasWrapper(compt)
     5     21.5       45      124     0.109        0     34.6       191   test.phys biasWrapper(compt)
     6     29.5     36.1      133    0.0963        0     14.8       206   test.phys biasWrapper(compt)
-    7     93.5    -8.59     84.3    0.0721        0     91.9       298   test.phys biasWrapper(compt)
+    7     93.5    -8.58     84.3    0.0721        0     91.9       298   test.phys biasWrapper(compt)
     8     13.9    -24.8      180    0.0677        0      126       423   test.phys biasWrapper(compt)
-    9     11.9    -35.3      185    0.0677        0     11.7       435   test.phys biasWrapper(Rayl)
+    9     11.9    -35.2      185    0.0677        0     11.7       435   test.phys biasWrapper(Rayl)
    10     9.58    -44.8      188    0.0646        0     10.2       445   test.phys biasWrapper(compt)
    11     15.8    -72.1      173    0.0558        0     31.6       477   test.phys biasWrapper(compt)
    12       15    -78.7      200    0.0558        0     27.8       504       World Transportation
@@ -3989,8 +3992,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     93.5    -8.59     84.3    0.0242        0        0         0   test.phys initStep
-    1     93.5     -8.6     84.3         0   0.0242   0.0168    0.0168   test.phys eIoni
+    0     93.5    -8.58     84.3    0.0242        0        0         0   test.phys initStep
+    1     93.5    -8.58     84.3         0   0.0242   0.0168    0.0168   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 39,   Parent ID = 19
@@ -4013,8 +4016,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     12.3     61.7     95.4   0.00328        0        0         0   test.phys initStep
-    1     12.3     61.7     95.4         0  0.00328 0.000531  0.000531   test.phys eIoni
+    0     12.3     61.8     95.4   0.00328        0        0         0   test.phys initStep
+    1     12.3     61.8     95.4         0  0.00328 0.000531  0.000531   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 36,   Parent ID = 19
@@ -4047,7 +4050,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -19.5     74.1      162       2.6        0        0         0   test.phys initStep
-    1    -20.2     73.7      163      2.59   0.0116     1.09      1.09   test.phys biasWrapper(hadElastic)
+    1    -20.2     73.8      163      2.59   0.0116     1.09      1.09   test.phys biasWrapper(hadElastic)
     2    -65.5     54.8      200      2.59        0     61.3      62.4       World Transportation
     3   -1e+04 -4.09e+03 8.24e+03      2.59        0 1.34e+04  1.35e+04  OutOfWorld Transportation
 
@@ -4092,12 +4095,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     38.2      401      154      0.47        0        0         0   test.phys initStep
     1     34.3      343     88.1     0.172        0     87.7      87.7   test.phys biasWrapper(compt)
-    2     22.5      446      130     0.167        0      111       199   test.phys biasWrapper(compt)
+    2     22.4      446      130     0.167        0      111       199   test.phys biasWrapper(compt)
     3     24.5      459      142     0.155        0       18       217   test.phys biasWrapper(compt)
     4     34.8      499      143    0.0989        0     41.1       258   test.phys biasWrapper(compt)
     5     33.6      473      155    0.0981        0     28.4       286   test.phys biasWrapper(compt)
     6     37.1      460      160    0.0942        0     14.6       301   test.phys biasWrapper(compt)
-    7       16      414      200    0.0942        0     64.3       365       World Transportation
+    7     16.1      414      200    0.0942        0     64.3       365       World Transportation
     8 -4.77e+03   -1e+04 9.28e+03    0.0942        0 1.46e+04   1.5e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -4137,8 +4140,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     22.5      446      130   0.00495        0        0         0   test.phys initStep
-    1     22.5      446      130         0  0.00495  0.00106   0.00106   test.phys eIoni
+    0     22.4      446      130   0.00495        0        0         0   test.phys initStep
+    1     22.4      446      130         0  0.00495  0.00106   0.00106   test.phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 48,   Parent ID = 46
@@ -4158,7 +4161,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1       54      525      101     0.948        0      136       136   test.phys biasWrapper(hadElastic)
     2     53.9      486     62.4     0.875        0     54.6       191   test.phys biasWrapper(hadElastic)
     3     29.8      452     70.4     0.771        0     42.5       233   test.phys biasWrapper(hadElastic)
-    4     77.2      427      200     0.771        0      140       374       World Transportation
+    4     77.2      427      200     0.771        0      140       373       World Transportation
     5 3.66e+03 -1.45e+03    1e+04     0.771        0 1.06e+04   1.1e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -4259,7 +4262,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    -30.9    -24.8     46.8     0.202        0     54.9      54.9   test.phys biasWrapper(compt)
     2    -15.1    -29.5     3.22      0.15        0     46.6       101   test.phys biasWrapper(compt)
     3    -1.46    -24.6     5.84    0.0989        0     14.7       116   test.phys biasWrapper(compt)
-    4    -5.53    -29.2 1.78e-15    0.0989        0     8.45       125       World Transportation
+    4    -5.53    -29.2 4.44e-15    0.0989        0     8.45       125       World Transportation
     5 -6.98e+03 -7.83e+03   -1e+04    0.0989        0 1.45e+04  1.46e+04  OutOfWorld Transportation
 
 *********************************************************************************************************

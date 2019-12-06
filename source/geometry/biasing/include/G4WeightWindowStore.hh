@@ -23,31 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4WeightWindowStore
+// G4WeightWindowStore
 //
 // Class description:
 //
 // Implementation of a weight window store according to the
 // G4VWeightWindowStore interface.
-// See G4VWeightWindowStore.
+// See also G4VWeightWindowStore.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-//
-// Alex Howard (alexander.howard@cern.ch):
-// Changed class to a `singleton', with access via the static method
-// G4WeightWindowStore::GetInstance().
-//
-// Member data:
-//
-//   static G4WeightWindowStore* fInstance
-//     - Ptr to the unique instance of class
-//
+// Author: Michael Dressel (CERN), 2003
+// Modified: Alex Howard (CERN), 2013 - Changed class to a 'singleton'
 // ----------------------------------------------------------------------
-#ifndef G4WeightWindowStore_hh
-#define G4WeightWindowStore_hh G4WeightWindowStore_hh 
+#ifndef G4WEIGHTWINDOWSTORE_HH
+#define G4WEIGHTWINDOWSTORE_HH 1
 
 #include "G4VWeightWindowStore.hh"
 #include "G4GeometryCellWeight.hh"
@@ -56,81 +44,69 @@
 
 class G4WeightWindowStore: public G4VWeightWindowStore
 {
+  public:  // with description
 
-public:  // with description
+    static G4WeightWindowStore* GetInstance();
+      // return ptr to singleton instance of the class
 
-  static G4WeightWindowStore* GetInstance();
-  // Return ptr to singleton instance of the class.
+    static G4WeightWindowStore* GetInstance(const G4String& ParallelWorldName);
+      // return ptr to singleton instance of the class
 
-  static G4WeightWindowStore* GetInstance(const G4String& ParallelWorldName);
-  // Return ptr to singleton instance of the class.
+    virtual G4double GetLowerWeight(const G4GeometryCell& gCell, 
+                                          G4double partEnergy) const;
+      // derive a lower weight bound value of a "cell" addressed by a 
+      // G4GeometryCell and the corresponding energy from the store
 
-protected:
+    virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
+      // returns true if the gCell is in the store, else false 
 
-  explicit G4WeightWindowStore();
-    // initialise the weight window store for the given geometry
-  explicit G4WeightWindowStore(const G4String& ParallelWorldName);
-    // initialise the weight window store for the given geometry
+    void Clear();
 
-  ~G4WeightWindowStore();
-    // destructor
+    void SetWorldVolume();
+      // set a pointer to the world volume of the weightwindow geometry
+    void SetParallelWorldVolume(const G4String& paraName);
+      // set a pointer to parallel world volume of the weightwindow geometry
 
-public:  // with description
+    virtual const G4VPhysicalVolume& GetWorldVolume() const;
+      // return a reference to the world volume of the weightwindow geometry
+    virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
+      // return a pointer to parallel world volume of the weightwindow geometry
 
-  virtual G4double GetLowerWeight(const G4GeometryCell &gCell, 
-			                G4double partEnergy) const;
-    // derive a lower weight bound value of a "cell" addresed by a 
-    // G4GeometryCell and the coresponding energy from the store.
+    void AddLowerWeights(const G4GeometryCell& gCell,
+                         const std::vector<G4double>& lowerWeights);
+      // add lower weights. Only if general upper energy bounds have been set
 
-  virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
-    // returns true if the gCell is in the store, else false 
+    void AddUpperEboundLowerWeightPairs(const G4GeometryCell& gCell,
+                                  const G4UpperEnergyToLowerWeightMap& enWeMap);
+      // set upper energy - lower weight pairs for a cell
 
-  void Clear();
+    void SetGeneralUpperEnergyBounds(const std::set<G4double,
+                                          std::less<G4double> >& enBounds);
+  protected:
 
-  void SetWorldVolume();
-    // set a pointer to the world volume of the 
-    // weightwindow geometry
-  void SetParallelWorldVolume(G4String paraName);
-    // set a pointer to the parallel world volume of the 
-    // weightwindow geometry
+    explicit G4WeightWindowStore();
+      // initialise the weight window store for the given geometry
+    explicit G4WeightWindowStore(const G4String& ParallelWorldName);
+      // initialise the weight window store for the given geometry
 
+   ~G4WeightWindowStore();
+      // destructor
 
-  virtual const G4VPhysicalVolume &GetWorldVolume() const;
-    // return a reference to the world volume of the 
-    // weightwindow geometry
-  virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
-    // return a pointer to the parallel world volume of the 
-    // weightwindow geometry
+  private:
 
-  void AddLowerWeights(const G4GeometryCell &gCell,
-		       const std::vector<G4double> &lowerWeights);
-    // add lower weights. Only if general upper energy bounds have 
-    // been set
- 
-  void AddUpperEboundLowerWeightPairs(const G4GeometryCell &gCell,
-				      const G4UpperEnergyToLowerWeightMap&
-				      enWeMap);
-    // set upper energy - lower weight pairs for a cell
+    G4bool IsInWorld(const G4VPhysicalVolume&) const;
+    void Error(const G4String& m) const;
+    void SetInternalIterator(const G4GeometryCell& gCell) const;
 
-  void SetGeneralUpperEnergyBounds(const std::set<G4double, std::less<G4double> > &enBounds);
-  
-private:
+  private:
 
-  G4bool IsInWorld(const G4VPhysicalVolume &) const;
-  void Error(const G4String &m) const;
-  void SetInternalIterator(const G4GeometryCell &gCell) const;
-  
-private:
+    const G4VPhysicalVolume* fWorldVolume = nullptr;  
 
-  const G4VPhysicalVolume* fWorldVolume;  
-  //  G4bool fParaFlag;
+    std::set<G4double, std::less<G4double> > fGeneralUpperEnergyBounds;
+    G4GeometryCellWeight fCellToUpEnBoundLoWePairsMap;
+    mutable G4GeometryCellWeight::const_iterator fCurrentIterator;
 
-  std::set<G4double, std::less<G4double> > fGeneralUpperEnergyBounds;
-  G4GeometryCellWeight fCellToUpEnBoundLoWePairsMap;
-  mutable G4GeometryCellWeight::const_iterator fCurrentIterator;
-
-  static G4ThreadLocal G4WeightWindowStore* fInstance;
-  
+    static G4ThreadLocal G4WeightWindowStore* fInstance;
 };
 
 #endif

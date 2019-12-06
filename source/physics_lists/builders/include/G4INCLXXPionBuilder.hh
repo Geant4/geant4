@@ -73,7 +73,5 @@ class G4INCLXXPionBuilder : public G4VPionBuilder
     G4double theMax;
 };
 
-// 2011 by P. Kaitaniemi
-
 #endif
 

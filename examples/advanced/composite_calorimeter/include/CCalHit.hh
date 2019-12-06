@@ -45,7 +45,7 @@
 #define CCalHit_h 1
 
 #include <iostream>
-#include "CLHEP/Vector/ThreeVector.h"
+#include <CLHEP/Vector/ThreeVector.h>
 #include "globals.hh"
 
 
@@ -59,7 +59,7 @@ public:
   ~CCalHit();
   CCalHit(const CCalHit &right);
   const CCalHit& operator=(const CCalHit &right);
-  G4bool operator==(const CCalHit &){return 0;}
+  G4bool operator==(const CCalHit &){return false;}
   
   void print();
   
@@ -68,32 +68,32 @@ public:
   CLHEP::Hep3Vector   getEntry() const;
   void         setEntry(CLHEP::Hep3Vector xyz);
   
-  double       getIncidentEnergy() const;
-  void         setIncidentEnergy (double e);
+  G4double     getIncidentEnergy() const;
+  void         setIncidentEnergy (G4double e);
   
-  int          getTrackID() const;
-  void         setTrackID (int i);
+  G4int        getTrackID() const;
+  void         setTrackID (G4int i);
   
   unsigned int getUnitID() const;
   void         setUnitID (unsigned int i);
   
-  double       getTimeSlice() const;     
-  void         setTimeSlice(double d);
-  int          getTimeSliceID() const;     
+  G4double       getTimeSlice() const;     
+  void         setTimeSlice(G4double d);
+  G4int          getTimeSliceID() const;     
   
-  double       getEnergyDeposit() const;
-  void         setEnergyDeposit(const double e);
+  G4double     getEnergyDeposit() const;
+  void         setEnergyDeposit(const G4double e);
   void         addEnergyDeposit(const CCalHit& aHit);
-  void         addEnergyDeposit(const double e);
+  void         addEnergyDeposit(const G4double e);
   
 private:
   
-  CLHEP::Hep3Vector   entry;             // Entry point
-  double       theIncidentEnergy; // Energy of the primary particle
-  int          theTrackID;        // Identification number of the primary particle
-  unsigned int theUnitID;         // Calorimeter Unit Number
-  double       theTimeSlice;      // Time Slice Identification
-  double       theEnergyDeposit;  // Cumulated Energy deposit
+  CLHEP::Hep3Vector   entry;        // Entry point
+  G4double       theIncidentEnergy; // Energy of the primary particle
+  G4int          theTrackID;        // Identification number of the primary particle
+  unsigned int theUnitID;           // Calorimeter Unit Number
+  G4double       theTimeSlice;      // Time Slice Identification
+  G4double       theEnergyDeposit;  // Cumulated Energy deposit
 
 };
 

@@ -22,11 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // Implementation of G4UExtrudedSolid wrapper class
+//
+// 17.11.17 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4ExtrudedSolid.hh"
@@ -296,7 +295,7 @@ G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -381,23 +380,28 @@ G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
 G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
 {
   unsigned int nFacets = Base_t::GetStruct().fTslHelper.fFacets.size();
-  unsigned int fVertices = 3*nFacets;
+  unsigned int nVertices = Base_t::GetStruct().fTslHelper.fVertices.size();
 
-  G4PolyhedronArbitrary *polyhedron =
-    new G4PolyhedronArbitrary (fVertices,nFacets);
+  G4PolyhedronArbitrary* polyhedron =
+    new G4PolyhedronArbitrary (nVertices, nFacets);
 
+  // Copy vertices
+  for (unsigned int i = 0; i < nVertices; ++i)
+  {
+    U3Vector v = Base_t::GetStruct().fTslHelper.fVertices[i];
+    polyhedron->AddVertex(G4ThreeVector(v.x(), v.y(), v.z()));
+  }
+
+  // Copy facets
   for (unsigned int i = 0; i < nFacets; ++i)
   {
-    G4int v[3];  // Facets are only triangular in VecGeom
-    for (unsigned int j = 0; j < 3; ++j)
-    {
-      U3Vector vtx = Base_t::GetStruct().fTslHelper.fFacets[i]->fVertices[j];
-      polyhedron->AddVertex(G4ThreeVector(vtx.x(), vtx.y(), vtx.z()));
-      v[j] = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[j]+1;
-    }
-    polyhedron->AddFacet(v[0],v[1],v[2],0);
+    // Facets are only triangular in VecGeom
+    G4int i1 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[0] + 1;
+    G4int i2 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[1] + 1;
+    G4int i3 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[2] + 1;
+    polyhedron->AddFacet(i1, i2, i3);
   }
-  polyhedron->SetReferences();  
+  polyhedron->SetReferences();
 
   return (G4Polyhedron*) polyhedron;
 }

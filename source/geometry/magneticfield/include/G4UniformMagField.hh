@@ -23,21 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// class G4UniformMagField
+// G4UniformMagField
 //
 // Class description:
 //
 // Class for creation of Uniform Magnetic Field.
 
-// History:
-// - 30.01.97 V.Grichine, Created.
-// - 01.08.97 J.Apostolakis, cleanup, new 3-vector constructor, 
-//            and removal of helix-stepper (to separate file).
-// - 05.11.97 G.Cosmo, added copy constructor and assignment operator.
-
+// Created: V.Grichine, 30.01.1997
+// -------------------------------------------------------------------
 #ifndef G4UNIFORMMAGFIELD_HH
 #define G4UNIFORMMAGFIELD_HH
 
@@ -58,12 +51,12 @@ class G4UniformMagField : public G4MagneticField
 
     virtual ~G4UniformMagField() override;
 
-    G4UniformMagField(const G4UniformMagField &p);
-    G4UniformMagField& operator = (const G4UniformMagField &p);
+    G4UniformMagField(const G4UniformMagField& p);
+    G4UniformMagField& operator = (const G4UniformMagField& p);
       // Copy constructor and assignment operator.
 
     virtual void GetFieldValue(const G4double yTrack[4],
-                               G4double *MagField) const override final;
+                               G4double* MagField) const override final;
 
     void SetFieldValue(const G4ThreeVector& newFieldValue);
 

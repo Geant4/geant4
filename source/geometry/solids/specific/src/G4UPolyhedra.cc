@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation of G4UPolycone wrapper class
+//
+// 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Polyhedra.hh"
@@ -66,7 +66,7 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
     wrStart += twopi;
   }
   wrDelta = phiTotal;
-  if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
+  if (wrDelta <= 0. || wrDelta >= twopi*(1-DBL_EPSILON))
   {
     wrDelta = twopi;
   }
@@ -106,12 +106,12 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
   fGenericPgon = true;
   SetOriginalParameters();
   wrStart = phiStart;
-  while (wrStart < 0)
+  while (wrStart < 0.)
   {
     wrStart += twopi;
   }
   wrDelta = phiTotal;
-  if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
+  if (wrDelta <= 0. || wrDelta >= twopi*(1-DBL_EPSILON))
   {
     wrDelta = twopi;
   }
@@ -151,7 +151,7 @@ G4UPolyhedra::~G4UPolyhedra()
 //
 // Copy constructor
 //
-G4UPolyhedra::G4UPolyhedra( const G4UPolyhedra &source )
+G4UPolyhedra::G4UPolyhedra( const G4UPolyhedra& source )
   : Base_t( source )
 {
   fGenericPgon = source.fGenericPgon;
@@ -167,7 +167,7 @@ G4UPolyhedra::G4UPolyhedra( const G4UPolyhedra &source )
 //
 // Assignment operator
 //
-G4UPolyhedra& G4UPolyhedra::operator=( const G4UPolyhedra &source )
+G4UPolyhedra& G4UPolyhedra::operator=( const G4UPolyhedra& source )
 {
   if (this == &source) return *this;
 
@@ -292,12 +292,12 @@ G4bool G4UPolyhedra::Reset()
   // Rebuild polyhedra based on original parameters
   //
   wrStart = fOriginalParameters.Start_angle;
-  while (wrStart < 0)
+  while (wrStart < 0.)
   {
     wrStart += twopi;
   }
   wrDelta = fOriginalParameters.Opening_angle;
-  if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
+  if (wrDelta <= 0. || wrDelta >= twopi*(1-DBL_EPSILON))
   {
     wrDelta = twopi;
   }
@@ -376,7 +376,7 @@ void G4UPolyhedra::BoundingLimits(G4ThreeVector& pMin,
 
   G4double sinCur = GetSinStartPhi();
   G4double cosCur = GetCosStartPhi();
-  if (!IsOpen()) rmin = 0;
+  if (!IsOpen()) rmin = 0.;
   G4double xmin = rmin*cosCur, xmax = xmin;
   G4double ymin = rmin*sinCur, ymax = ymin;
   for (G4int k=0; k<ksteps+1; ++k)
@@ -387,7 +387,7 @@ void G4UPolyhedra::BoundingLimits(G4ThreeVector& pMin,
     G4double y = rmax*sinCur;
     if (y < ymin) ymin = y;
     if (y > ymax) ymax = y;
-    if (rmin > 0)
+    if (rmin > 0.)
     {
       G4double xx = rmin*cosCur;
       if (xx < xmin) xmin = xx;
@@ -540,7 +540,8 @@ G4UPolyhedra::CalculateExtent(const EAxis pAxis,
   // allocate vector lists
   std::vector<const G4ThreeVectorList *> polygons;
   polygons.resize(ksteps+1);
-  for (G4int k=0; k<ksteps+1; ++k) {
+  for (G4int k=0; k<ksteps+1; ++k)
+  {
     polygons[k] = new G4ThreeVectorList(3);
   }
 
@@ -839,7 +840,7 @@ G4Polyhedron* G4UPolyhedra::CreatePolyhedron() const
       G4Exception("G4Polyhedra::CreatePolyhedron()", "GeomSolids1002",
                   JustWarning, message);
       delete polyhedron;
-      return 0;
+      return nullptr;
     }
     else
     {

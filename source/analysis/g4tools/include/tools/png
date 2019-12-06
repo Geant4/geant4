@@ -1,0 +1,490 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_png
+#define tools_png
+
+#include <cstdio> //FILE,size_t
+
+#include <string>
+
+#include <tools/sout>
+#include <tools/mnmx>
+
+#ifdef TOOLS_USE_NATIVE_PNG
+#include <png.h>
+#else
+#include <ourex_png.h> //enforce ourex png
+#endif
+
+namespace tools {
+namespace png {
+
+inline bool is(const std::string& a_file){
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) return false; //if file does not exist, then it is not a png !
+  png_byte header[8];	// 8 is the maximum size that can be checked
+  size_t nitem = ::fread(header,1,8,file);
+  ::fclose(file);
+  if(nitem!=8) return false;
+  return ::png_sig_cmp(header,0,8)?false:true;
+}
+
+}}
+
+#include <ostream>
+
+namespace tools {
+namespace png {
+
+inline unsigned char* read_FILE(FILE* a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+
+  png_byte header[8];	// 8 is the maximum size that can be checked
+  if(::fread(header,1,8,a_file)!=8) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+  if(::png_sig_cmp(header,0,8)) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  png_structp png_ptr = 
+    ::png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
+  if(!png_ptr) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  png_infop info_ptr = ::png_create_info_struct(png_ptr);
+  if(!info_ptr) {
+    ::png_destroy_read_struct(&png_ptr,NULL,NULL);
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  if(::setjmp(png_jmpbuf(png_ptr))) {
+    ::png_destroy_read_struct(&png_ptr,&info_ptr,NULL);
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  ::png_init_io(png_ptr,a_file);
+  ::png_set_sig_bytes(png_ptr,8);
+
+  ::png_read_info(png_ptr,info_ptr);
+
+  int width = info_ptr->width;
+  int height = info_ptr->height;
+  int bpp = info_ptr->width?info_ptr->rowbytes/info_ptr->width:0;
+
+  if((width<=0)||(height<=0)||(bpp<=0)) {
+    ::png_destroy_read_struct(&png_ptr,&info_ptr,NULL);
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  a_bpp = bpp; //avoid the clobbered -W warning.
+
+  //png_byte color_type = info_ptr->color_type;
+  //info_ptr->bit_depth;
+
+  //int number_of_passes = ::png_set_interlace_handling(png_ptr);
+  ::png_read_update_info(png_ptr,info_ptr);
+
+  if(::setjmp(png_jmpbuf(png_ptr))) {
+    ::png_destroy_read_struct(&png_ptr,&info_ptr,NULL);
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  unsigned char* buffer = new unsigned char[info_ptr->rowbytes * height];
+  if(!buffer) {
+    ::png_destroy_read_struct(&png_ptr,&info_ptr,NULL);
+    a_height = 0;
+    a_width = 0;
+    a_bpp = 0;
+    return 0;
+  }  
+  
+ {png_bytep* row_pointers = new png_bytep[height];
+  png_byte* pos = buffer+info_ptr->rowbytes*(height-1);
+  for(int y=0;y<height;y++) {
+    row_pointers[y] = pos;
+    pos -= info_ptr->rowbytes;
+  }
+  ::png_read_image(png_ptr,row_pointers);
+  delete [] row_pointers;}
+
+  ::png_read_end(png_ptr,info_ptr);
+
+  ::png_destroy_read_struct(&png_ptr,&info_ptr,NULL);
+
+  a_width = width;
+  a_height = height;
+  //a_bpp = bpp; //avoid the clobbered -W warning.
+
+  return buffer;
+}
+
+inline unsigned char* read(std::ostream& a_out,const std::string& a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+  //a_bpp = number of bytes per pixel.
+  FILE* file = fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_out << "tools::png::read :"
+          << " can't open file " << tools::sout(a_file) << "."
+          << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+  unsigned char* buffer = read_FILE(file,a_width,a_height,a_bpp);
+  if(!buffer) {
+    ::fclose(file);
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    a_out << "tools::png::read :"
+          << " read_FILE " << tools::sout(a_file) << " failed."
+          << std::endl;
+    return 0;
+  }
+  ::fclose(file);
+  return buffer;
+}
+
+inline unsigned char* read_part(std::ostream& a_out,
+                                const std::string& a_file,
+                                unsigned int a_sx,unsigned int a_sy,
+                                unsigned int a_sw,unsigned int a_sh,
+                                unsigned int& a_rw,unsigned int& a_rh,
+                                unsigned int& a_rbpp) {
+  a_out << "tools::png::read_part :"
+        << " not yet implemented."
+        << std::endl;
+  a_rw = 0;
+  a_rh = 0;
+  a_rbpp = 0;
+  return 0;
+
+  unsigned int w,h,bpp;
+  unsigned char* buffer = read(a_out,a_file,w,h,bpp);
+  if(!buffer){
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }
+
+  if((a_sx>=w)||(a_sy>=h)){
+    delete [] buffer;
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }
+
+  // 012345
+  a_rw = tools::mn<unsigned int>(w-a_sx,a_sw); 
+  a_rh = tools::mn<unsigned int>(h-a_sy,a_sh); 
+  a_rbpp = bpp;
+
+  if(!a_rw||!a_rh||!a_rbpp){
+    delete [] buffer;
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }
+
+  unsigned char* rb = new unsigned char[a_rw*a_rh*a_rbpp];
+  if(!rb) {
+    delete [] buffer;
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }  
+
+  unsigned int rstride = a_rw * a_rbpp;
+  unsigned char* rpos = rb;
+
+  unsigned int stride = w * bpp;
+  unsigned char* pos = buffer+a_sy*stride+a_sx*bpp;
+
+  for(unsigned int j=0;j<a_rh;j++,rpos+=rstride,pos+=stride) {//j=0 -> bottom.
+    ::memcpy(rpos,pos,rstride);
+  }
+
+  delete [] buffer;
+
+  return rb;  
+}
+
+inline bool write_FILE(FILE* a_file,unsigned char* a_buffer,unsigned int a_width,unsigned int a_height,unsigned int a_bpp) {
+  //from gl2ps.c.
+  if((a_bpp!=3)&&(a_bpp!=4)) {
+    return false;
+  }
+
+  png_structp png_ptr;
+  if(!(png_ptr = ::png_create_write_struct
+                    (PNG_LIBPNG_VER_STRING,NULL,NULL,NULL))) return false;
+  
+  png_infop info_ptr;
+  if(!(info_ptr = ::png_create_info_struct(png_ptr))){
+    ::png_destroy_write_struct(&png_ptr,NULL);
+    return false;
+  }
+  
+  if(::setjmp(png_ptr->jmpbuf)) {
+    ::png_destroy_write_struct(&png_ptr,&info_ptr);
+    return false;
+  }
+  
+  ::png_init_io(png_ptr,a_file);
+  ::png_set_compression_level(png_ptr,Z_DEFAULT_COMPRESSION);
+  ::png_set_IHDR(png_ptr,info_ptr,a_width,a_height,8, 
+                 a_bpp==3?PNG_COLOR_TYPE_RGB:PNG_COLOR_TYPE_RGBA,
+                 PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_BASE,PNG_FILTER_TYPE_BASE);
+  ::png_write_info(png_ptr,info_ptr);
+
+  for(unsigned int row=0;row<a_height;row++){
+    unsigned char* pos = a_buffer+(a_height-1-row)*(a_width*a_bpp);
+    ::png_write_row(png_ptr,(png_bytep)pos);
+  }
+
+  ::png_write_end(png_ptr,info_ptr);
+  ::png_destroy_write_struct(&png_ptr,&info_ptr);
+  return true;
+}
+
+inline bool write(std::ostream& a_out,
+                  const std::string& a_file,                      
+                  unsigned char* a_buffer,
+                  unsigned int a_width,
+                  unsigned int a_height,
+                  unsigned int a_bpp) {
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) {
+    a_out << "tools::png::write :"
+          << " can't open file " << tools::sout(a_file) << "."
+          << std::endl;
+    return false;
+  }
+  if(!write_FILE(file,a_buffer,a_width,a_height,a_bpp)) {
+    ::fclose(file);
+    a_out << "tools::png::write :"
+          << " can't write file " << tools::sout(a_file) << "."
+          << std::endl;
+    return false;
+  }
+  ::fclose(file);
+  return true;
+}
+
+inline bool infos_file(FILE* a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+  //a_bpp = number of bytes per pixel.
+  png_byte header[8];	// 8 is the maximum size that can be checked
+  if(::fread(header,1,8,a_file)!=8) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+  if(::png_sig_cmp(header,0,8)) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  png_structp png_ptr = 
+    ::png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
+  if(!png_ptr) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  png_infop info_ptr = ::png_create_info_struct(png_ptr);
+  if(!info_ptr) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  if(::setjmp(png_jmpbuf(png_ptr))) {
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  ::png_init_io(png_ptr,a_file);
+  ::png_set_sig_bytes(png_ptr,8);
+  ::png_read_info(png_ptr,info_ptr);
+
+  int width = info_ptr->width;
+  int height = info_ptr->height;
+  a_bpp = info_ptr->width?info_ptr->rowbytes/info_ptr->width:0;
+
+  ::png_destroy_read_struct(&png_ptr,&info_ptr,NULL);
+
+  a_width = width;
+  a_height = height;
+  //a_bpp = bpp; //avoid the clobbered -W warning.
+
+  return true;
+}
+
+inline bool infos(std::ostream& a_out,const std::string& a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+  if(!is(a_file)) {
+    a_out << "tools::png::infos :"
+          << " file " << a_file << " is not png."
+          << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  } 
+
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_out << "tools::png::infos :"
+          << " can't open " << a_file
+          << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  unsigned int w,h,bpp;
+  bool status = infos_file(file,w,h,bpp);
+
+  ::fclose(file);
+
+  if(!status) {
+    a_out << "tools::png::infos :"
+              << " problem reading " << a_file
+              << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  a_width = w;
+  a_height = h;
+  a_bpp = bpp;
+  return true;
+}
+
+}}
+
+#include <tools/xpm>
+
+namespace tools {
+namespace png {
+
+inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::string& a_name,bool a_verbose = false) {
+  return tools::xpm::to_xpm(a_out,a_file,a_name,read,a_verbose);
+}
+
+}}
+
+#include <tools/image>
+#include <vector>
+
+namespace tools {
+namespace png {
+
+inline bool concatenate(std::ostream& a_out,
+                        const std::vector<std::string>& a_files,
+                        unsigned int a_cols,unsigned int a_rows,
+                        unsigned int a_bw,unsigned int a_bh,
+                        unsigned char a_bc,
+                        const std::string& a_file) {
+  unsigned int wa,ha,bppa;
+  unsigned char* ba = 
+    tools::image::concatenate
+      (a_out,a_files,a_cols,a_rows,a_bw,a_bh,a_bc,read,wa,ha,bppa);
+  if(!ba) {
+    a_out << "tools::png::concatenate :"
+          << " failed to concatenate all buffers."
+          << std::endl;
+    delete [] ba;
+    return false;
+  } 
+
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) {
+    a_out << "tools::png::concatenate :"
+          << " can't open " << file << " for writing."
+          << std::endl;
+    delete [] ba;
+    return false;
+  }
+
+  if(!write_FILE(file,ba,wa,ha,bppa)) {
+    a_out << "tools::png::concatenate :"
+          << " can't write " << a_file << "."
+          << std::endl;
+    delete [] ba;
+    ::fclose(file);
+    return false;
+  }
+
+  delete [] ba;
+  ::fclose(file);
+  return true;
+}
+
+class reader : public virtual tools::image::ireader {
+public:
+  virtual tools::image::ireader* copy() const {return new reader(*this);}
+  virtual bool is(const std::string& a_file) const {return tools::png::is(a_file);}
+  virtual bool infos(std::ostream& a_out,const std::string& a_file,
+                     unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) const {
+    return tools::png::infos(a_out,a_file,a_width,a_height,a_bpp);
+  }
+  virtual unsigned char* read(std::ostream& a_out,const std::string& a_file,
+                              unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) const {
+    return tools::png::read(a_out,a_file,a_width,a_height,a_bpp);
+  }
+  virtual unsigned char* read_part(std::ostream& a_out,const std::string& a_file,
+                                   unsigned int a_sx,unsigned int a_sy,
+                                   unsigned int a_sw,unsigned int a_sh,
+                                   unsigned int& a_rw,unsigned int& a_rh,unsigned int& a_rbpp) const {
+    return tools::png::read_part(a_out,a_file,a_sx,a_sy,a_sw,a_sh,a_rw,a_rh,a_rbpp);
+  }
+public:
+  reader(){}
+  virtual ~reader(){}
+public:
+  reader(const reader&):ireader(){}
+  reader& operator=(const reader&){return *this;}
+};
+
+}}
+
+#endif

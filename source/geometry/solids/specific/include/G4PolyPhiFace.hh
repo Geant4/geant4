@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4PolyPhiFace
 //
 // Class description:
@@ -37,7 +30,7 @@
 //   Definition of a face that bounds a polycone or polyhedra when
 //   it has a phi opening:
 //
-//   G4PolyPhiFace( const G4ReduciblePolygon *rz,
+//   G4PolyPhiFace( const G4ReduciblePolygon* rz,
 //                        G4double phi,
 //                        G4double deltaPhi,
 //                        G4double phiOther )
@@ -47,12 +40,10 @@
 //   length and direction, but with corners aways on the same side of
 //   the z axis.
 
-// Author: 
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
-#ifndef G4PolyPhiFace_hh
-#define G4PolyPhiFace_hh
+#ifndef G4POLYPHIFACE_HH
+#define G4POLYPHIFACE_HH
 
 #include "G4VCSGface.hh"
 #include "G4TwoVector.hh"
@@ -86,7 +77,7 @@ class G4PolyPhiFace : public G4VCSGface
 
   public:  // with description
 
-    G4PolyPhiFace( const G4ReduciblePolygon *rz,
+    G4PolyPhiFace( const G4ReduciblePolygon* rz,
                          G4double phi, G4double deltaPhi, G4double phiOther );
       // Constructor.
       // Points r,z should be supplied in clockwise order in r,z.
@@ -103,26 +94,26 @@ class G4PolyPhiFace : public G4VCSGface
     G4PolyPhiFace& operator=( const G4PolyPhiFace &source );
       // Copy constructor and assgnment operator.
 
-    G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
+    G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,
                             G4bool outgoing, G4double surfTolerance,
-                            G4double &distance, G4double &distFromSurface,
-                            G4ThreeVector &normal, G4bool &allBehind );
+                            G4double& distance, G4double& distFromSurface,
+                            G4ThreeVector& normal, G4bool& allBehind );
 
-    G4double Distance( const G4ThreeVector &p, G4bool outgoing );
+    G4double Distance( const G4ThreeVector& p, G4bool outgoing );
   
-    EInside Inside( const G4ThreeVector &p, G4double tolerance, 
-                          G4double *bestDistance );
+    EInside Inside( const G4ThreeVector& p, G4double tolerance, 
+                          G4double* bestDistance );
     
-    G4ThreeVector Normal( const G4ThreeVector &p, G4double *bestDistance );
+    G4ThreeVector Normal( const G4ThreeVector& p, G4double* bestDistance );
 
     G4double Extent( const G4ThreeVector axis );
   
     void CalculateExtent( const EAxis axis, 
                           const G4VoxelLimits &voxelLimit,
-                          const G4AffineTransform &tranform,
-                                G4SolidExtentList &extentList );
+                          const G4AffineTransform& tranform,
+                                G4SolidExtentList& extentList );
 
-    inline G4VCSGface *Clone();
+    inline G4VCSGface* Clone();
       // Allocates on the heap a clone of this face.
 
     G4double SurfaceArea();
@@ -138,32 +129,32 @@ class G4PolyPhiFace : public G4VCSGface
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    void Diagnose( G4VSolid *solid );
+    void Diagnose( G4VSolid* solid );
       // Throw an exception if something is found inconsistent with
       // the solid. For debugging purposes only
 
   protected:
 
     G4bool InsideEdgesExact( G4double r, G4double z, G4double normSign,
-                             const G4ThreeVector &p, const G4ThreeVector &v );
+                             const G4ThreeVector& p, const G4ThreeVector& v );
       // Decide if the point in r,z is inside the edges of our face,
       // **but** do so consistently with other faces.
 
     G4bool InsideEdges( G4double r, G4double z );
-    G4bool InsideEdges( G4double r, G4double z, G4double *distRZ2,
-                        G4PolyPhiFaceVertex **base3Dnorm=0,
-                        G4ThreeVector **head3Dnorm=0 );
+    G4bool InsideEdges( G4double r, G4double z, G4double* distRZ2,
+                        G4PolyPhiFaceVertex** base3Dnorm = nullptr,
+                        G4ThreeVector** head3Dnorm = nullptr );
       // Decide if the point in r,z is inside the edges of our face.
 
     inline G4double ExactZOrder( G4double z, 
                                  G4double qx, G4double qy, G4double qz, 
-                           const G4ThreeVector &v, 
+                           const G4ThreeVector& v, 
                                  G4double normSign,
-                           const G4PolyPhiFaceVertex *vert ) const;
+                           const G4PolyPhiFaceVertex* vert ) const;
       // Decide precisely whether a trajectory passes to the left, right,
       // or exactly passes through the z position of a vertex point in face.
 
-    void CopyStuff( const G4PolyPhiFace &source );
+    void CopyStuff( const G4PolyPhiFace& source );
 
   protected:
 
@@ -192,7 +183,7 @@ class G4PolyPhiFace : public G4VCSGface
       // Boolean function for finding proper intersection or not
       // of two line segments (a,b) and (c,d).
 
-    G4bool Diagonalie( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b );
+    G4bool Diagonalie( G4PolyPhiFaceVertex* a, G4PolyPhiFaceVertex* b );
       // Boolean Diagonalie help to determine if diagonal s
       // of segment (a,b) is convex or reflex.
 
@@ -200,7 +191,7 @@ class G4PolyPhiFace : public G4VCSGface
       // Boolean function for determining if b is inside the cone (a0,a,a1)
       // where a is the center of the cone.
 
-    G4bool Diagonal( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b );
+    G4bool Diagonal( G4PolyPhiFaceVertex* a, G4PolyPhiFaceVertex* b );
       // Boolean function for determining if Diagonal is possible
       // inside Polycone or PolyHedra.
 
@@ -217,23 +208,23 @@ class G4PolyPhiFace : public G4VCSGface
 
   protected:
 
-    G4int      numEdges;            // Number of edges
-    G4PolyPhiFaceEdge   *edges;     // The edges of the face
-    G4PolyPhiFaceVertex *corners;   // And the corners
-    G4ThreeVector    normal;        // Normal unit vector
-    G4ThreeVector    radial;        // Unit vector along radial direction
-    G4ThreeVector    surface;       // Point on surface
-    G4ThreeVector    surface_point; // Auxiliary point on surface used for
-                                    // method GetPointOnFace() 
-    G4double   rMin, rMax, // Extent in r
-               zMin, zMax; // Extent in z
-    G4bool      allBehind; // True if the polycone/polyhedra
-                           // is behind the place of this face
-    G4double   kCarTolerance;// Surface thickness
-    G4double   fSurfaceArea; // Surface Area of PolyPhiFace 
-    G4PolyPhiFaceVertex *triangles; // Auxiliary pointer to 'corners' used for
-                                    // triangulation. Copy structure, changing
-                                    // the structure of 'corners' (ear removal)
+    G4int numEdges;              // Number of edges
+    G4PolyPhiFaceEdge* edges = nullptr;       // The edges of the face
+    G4PolyPhiFaceVertex* corners = nullptr;   // And the corners
+    G4ThreeVector normal;        // Normal unit vector
+    G4ThreeVector radial;        // Unit vector along radial direction
+    G4ThreeVector surface;       // Point on surface
+    G4ThreeVector surface_point; // Auxiliary point on surface used for
+                                 // method GetPointOnFace() 
+    G4double rMin, rMax, // Extent in r
+             zMin, zMax; // Extent in z
+    G4bool allBehind = false; // True if the polycone/polyhedra
+                              // is behind the place of this face
+    G4double kCarTolerance;      // Surface thickness
+    G4double fSurfaceArea = 0.0; // Surface Area of PolyPhiFace 
+    G4PolyPhiFaceVertex* triangles = nullptr;
+      // Auxiliary pointer to 'corners' used for triangulation.
+      // Copy structure, changing the structure of 'corners' (ear removal)
 };
 
 #include "G4PolyPhiFace.icc"

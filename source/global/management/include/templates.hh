@@ -203,8 +203,8 @@ inline int G4rint(double ad)
 //              G4ConsumeParameters(val);
 //          }
 //
-template <typename _Tp, typename... _Args>
-inline void G4ConsumeParameters(_Tp, _Args...)
+template <typename... _Args>
+inline void G4ConsumeParameters(_Args&&...)
 { }
 
 #endif // templates_h

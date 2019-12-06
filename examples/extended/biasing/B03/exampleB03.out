@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -88,8 +92,7 @@ B03PhysicsList::SetCuts:CutLength : 1 (mm)
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
@@ -469,42 +472,48 @@ hIoni:  for pi-  SubType=2
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 =======================================================================
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 ++ ConcreteSD/Collisions id 0
 ++ ConcreteSD/CollWeight id 1
@@ -521,40 +530,7 @@ Max 2J for sampling of angular correlations         10
 *** G4Exception : GeomBias1001
       issued by : G4ImportanceAlgorithm::Warning()
 Calculate() - ipre_over_ipost ! in [0.25, 4].
-ipre_over_ipost = 256.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : hadEla002
-      issued by : G4HadronElastic::ApplyYourself
- LARGE cost ! cost=-1.00031 for neutron ekin=3.63798e-12 MeV  on (Z,A)=(1,1)
-	 Projectile stops and its energy is deposited locally:
-	 neglected recoil of the target nucleus!
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : hadEla002
-      issued by : G4HadronElastic::ApplyYourself
- LARGE cost ! cost=-1.00027 for neutron ekin=3.41061e-12 MeV  on (Z,A)=(1,1)
-	 Projectile stops and its energy is deposited locally:
-	 neglected recoil of the target nucleus!
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : hadEla002
-      issued by : G4HadronElastic::ApplyYourself
- LARGE cost ! cost=-1.00186 for neutron ekin=1.02318e-12 MeV  on (Z,A)=(1,1)
-	 Projectile stops and its energy is deposited locally:
-	 neglected recoil of the target nucleus!
-
+ipre_over_ipost = 4096.
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
@@ -574,24 +550,24 @@ ipre_over_ipost = 256.
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            44 |           139 |             0 |             0 |      0.234037 |       2.68394 |             1 |       7914.66 |       7914.66 |       3566.34 |       21242.5 |       834.655 |
-       cell_01 |           135 |           178 |           450 |           450 |    0.00094155 |         5.048 |             1 |       20334.9 |       20334.9 |   3.03871e+06 |        102650 |        2861.1 |
-       cell_02 |           140 |           253 |          1156 |           578 |   0.000638682 |       3.42327 |           0.5 |       39679.7 |       19839.8 |   3.36661e+06 |       67917.2 |       2150.19 |
-       cell_03 |           217 |           347 |          2271 |        567.75 |   0.000289313 |       2.70197 |          0.25 |       60208.8 |       15052.2 |   4.71079e+06 |       40670.6 |       1362.89 |
-       cell_04 |           272 |           464 |          3107 |       388.375 |   0.000200185 |       2.23037 |         0.125 |       73814.2 |       9226.78 |   3.70805e+06 |       20579.1 |       742.297 |
-       cell_05 |           338 |           535 |          3801 |       237.562 |   0.000235991 |       1.87676 |        0.0625 |       98214.7 |       6138.42 |   1.92331e+06 |       11520.3 |       453.884 |
-       cell_06 |           400 |           651 |          4883 |       152.594 |   0.000176266 |       1.77645 |       0.03125 |        111158 |       3473.68 |   1.38341e+06 |       6170.83 |       243.848 |
-       cell_07 |           466 |           737 |          6031 |       94.2344 |   0.000121202 |       1.29774 |      0.015625 |        128675 |       2010.55 |        945266 |       2609.16 |       114.568 |
-       cell_08 |           530 |           806 |          6958 |       54.3594 |    0.00010946 |       1.18723 |     0.0078125 |        137737 |       1076.07 |        542186 |       1277.55 |       59.3475 |
-       cell_09 |           524 |           814 |          6762 |       26.4141 |    0.00013252 |       1.16058 |    0.00390625 |        145597 |       568.736 |        237830 |       660.062 |       31.5172 |
-       cell_10 |           538 |           831 |          7469 |       14.5879 |   0.000105777 |       1.13829 |    0.00195312 |        144288 |       281.812 |        142957 |       320.783 |       15.1216 |
-       cell_11 |           577 |           864 |          6796 |       6.63672 |   0.000160704 |       1.16087 |   0.000976562 |        152108 |       148.543 |       51917.7 |       172.439 |       8.34338 |
-       cell_12 |           640 |           973 |          8281 |       4.04346 |   0.000115073 |       1.03145 |   0.000488281 |        171261 |       83.6237 |       38480.1 |       86.2535 |       4.42803 |
-       cell_13 |           655 |           981 |          9184 |       2.24219 |   9.57698e-05 |      0.891564 |   0.000244141 |        180545 |       44.0783 |       21937.2 |       39.2987 |       2.10093 |
-       cell_14 |           623 |           925 |          8206 |       1.00171 |   0.000100752 |       0.90972 |    0.00012207 |        161029 |       19.6568 |        9427.9 |       17.8822 |      0.949884 |
-       cell_15 |           571 |           895 |          7912 |       0.48291 |   0.000101392 |      0.871022 |   6.10352e-05 |        156502 |        9.5521 |       4513.39 |        8.3201 |       0.45762 |
-       cell_16 |           550 |           865 |          8185 |      0.249786 |   8.67476e-05 |      0.874982 |   3.05176e-05 |        151820 |       4.63318 |       2484.41 |       4.05394 |      0.215516 |
-       cell_17 |           545 |           834 |          7861 |      0.119949 |   9.19813e-05 |      0.898443 |   1.52588e-05 |        148046 |         2.259 |       1147.92 |       2.02958 |      0.105588 |
-       cell_18 |           411 |           776 |          6337 |     0.0483475 |    0.00011683 |       1.05095 |   7.62939e-06 |        128931 |      0.983665 |       446.641 |       1.03378 |     0.0521813 |
-       cell_19 |           352 |           352 |             0 |             0 |    0.00798011 |       1.41104 |   7.62939e-06 |       56698.9 |      0.432578 |       3.66224 |      0.610383 |     0.0292251 |
+       cell_00 |            50 |           146 |             0 |             0 |    0.00319093 |       2.00053 |             1 |       9722.02 |       9722.02 |        248460 |       19449.2 |       792.818 |
+       cell_01 |           155 |           185 |           344 |           344 |    0.00264072 |       4.59259 |             1 |       23133.9 |       23133.9 |   1.10101e+06 |        106244 |       2907.47 |
+       cell_02 |           211 |           312 |           930 |           465 |    0.00147315 |       2.68164 |           0.5 |       53899.2 |       26949.6 |   1.50225e+06 |       72269.1 |       2213.04 |
+       cell_03 |           340 |           469 |          1870 |         467.5 |   0.000616873 |       1.84075 |          0.25 |       98450.8 |       24612.7 |   2.46927e+06 |       45305.9 |       1523.23 |
+       cell_04 |           490 |           694 |          2690 |        336.25 |    0.00042532 |       1.60621 |         0.125 |        142583 |       17822.9 |   2.37992e+06 |       28627.2 |       1012.23 |
+       cell_05 |           709 |           985 |          4090 |       255.625 |   0.000218307 |        1.1685 |        0.0625 |        197711 |         12357 |   2.45978e+06 |       14439.1 |       536.986 |
+       cell_06 |           913 |          1283 |          5568 |           174 |   0.000173509 |       1.00192 |       0.03125 |        266219 |       8319.33 |   1.88704e+06 |        8335.3 |       327.419 |
+       cell_07 |          1120 |          1559 |          7167 |       111.984 |   0.000134772 |      0.840444 |      0.015625 |        325598 |       5087.46 |    1.2869e+06 |       4275.73 |       173.439 |
+       cell_08 |          1352 |          1918 |          8773 |       68.5391 |   0.000119651 |      0.768721 |     0.0078125 |        392416 |       3065.75 |        809020 |       2356.71 |       96.7999 |
+       cell_09 |          1535 |          2182 |          9612 |       37.5469 |    0.00013398 |      0.720182 |    0.00390625 |        438275 |       1712.01 |        388723 |       1232.96 |        52.081 |
+       cell_10 |          1830 |          2554 |         11628 |       22.7109 |   0.000107492 |      0.638685 |    0.00195312 |        527561 |       1030.39 |        267633 |       658.096 |       28.7684 |
+       cell_11 |          2090 |          2891 |         13063 |       12.7568 |   9.48003e-05 |      0.599595 |   0.000976562 |        589868 |       576.043 |        162462 |       345.392 |       15.4014 |
+       cell_12 |          2317 |          3243 |         14514 |       7.08691 |   9.21156e-05 |      0.528929 |   0.000488281 |        645865 |       315.364 |       84300.2 |       166.805 |       7.76536 |
+       cell_13 |          2466 |          3481 |         16181 |       3.95044 |   8.50404e-05 |      0.522347 |   0.000244141 |        705016 |       172.123 |       48800.1 |       89.9081 |       4.14998 |
+       cell_14 |          2620 |          3699 |         17451 |       2.13025 |   7.09415e-05 |      0.450548 |    0.00012207 |        761660 |        92.976 |       28243.4 |       41.8901 |       2.00363 |
+       cell_15 |          2873 |          3991 |         18932 |       1.15552 |   6.52928e-05 |      0.423175 |   6.10352e-05 |        827972 |       50.5354 |       16145.5 |       21.3853 |       1.05418 |
+       cell_16 |          3020 |          4235 |         20608 |      0.628906 |   5.73649e-05 |      0.377364 |   3.05176e-05 |        882196 |       26.9225 |       9007.85 |       10.1596 |      0.516735 |
+       cell_17 |          2931 |          4261 |         20112 |      0.306885 |   5.93378e-05 |      0.401422 |   1.52588e-05 |        864237 |       13.1872 |       4352.77 |       5.29364 |      0.258284 |
+       cell_18 |          2113 |          3916 |         16269 |      0.124123 |   6.57013e-05 |      0.409799 |   7.62939e-06 |        712528 |       5.43616 |       1641.59 |       2.22773 |      0.107855 |
+       cell_19 |          1770 |          1770 |             0 |             0 |   8.97342e-05 |      0.622037 |   7.62939e-06 |        287909 |       2.19657 |       679.813 |       1.36635 |     0.0610024 |
 =============================================

@@ -38,6 +38,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4CrystalLatticeSystems.h
 			G4CrystalExtension.hh
 			G4CrystalUnitCell.hh
+			G4DensityEffectCalculator.hh
 			G4DensityEffectData.hh
 			G4ElementData.hh
 			G4Element.hh
@@ -78,6 +79,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4AtomicShells_XDB_EADL.cc 
 			G4CrystalExtension.cc
 			G4CrystalUnitCell.cc
+			G4DensityEffectCalculator.cc
 			G4DensityEffectData.cc
 			G4Element.cc
 			G4ElementData.cc

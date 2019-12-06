@@ -53,7 +53,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_frag
         G4HadronBuilder.hh
         G4LundStringFragmentation.hh
         G4QGSMFragmentation.hh
-        G4VKinkyStringDecay.hh
         G4VLongitudinalStringDecay.hh
     SOURCES
         G4ExcitedStringDecay.cc
@@ -61,7 +60,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_frag
         G4HadronBuilder.cc
         G4LundStringFragmentation.cc
         G4QGSMFragmentation.cc
-        G4VKinkyStringDecay.cc
         G4VLongitudinalStringDecay.cc
     GRANULAR_DEPENDENCIES
         G4baryons

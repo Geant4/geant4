@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -11,10 +15,10 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.010 g/mole
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
@@ -59,19 +63,19 @@
           ElmMassFraction:  47.96 %  ElmAbundance  60.00 % 
 
 
- Material:   Carbon    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm 
+ Material:   Carbon    density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.388 cm 
                        Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.010 g/mole
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
+ Material:     Iron    density:  7.870 g/cm3   RadL:   1.758 cm   Nucl.Int.Length:  16.999 cm 
                        Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.850 g/mole
+   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
          --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance: 91.754 %
          --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:  2.119 %
@@ -82,7 +86,7 @@
  Material:      Tin    density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.531 cm 
                        Imean: 488.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Sn (Sn)   Z = 50.0   N =   119   A = 118.700 g/mole
+   --->  Element: Sn (Sn)   Z = 50.0   N =   119   A = 118.710 g/mole
          --->  Isotope: Sn112   Z = 50   N = 112   A = 111.90 g/mole   abundance:  0.970 %
          --->  Isotope: Sn114   Z = 50   N = 114   A = 113.90 g/mole   abundance:  0.660 %
          --->  Isotope: Sn115   Z = 50   N = 115   A = 114.90 g/mole   abundance:  0.340 %
@@ -185,14 +189,14 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.670000s Real=1.675538s Sys=0.000000s
+  User=1.600000s Real=1.605165s Sys=0.000000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5704	muIoni : 463430	muPairProd : 63325	muBrems : 675
+ Number of process calls --->	CoulombScat : 5637	muIoni : 463169	muPairProd : 63696	muBrems : 686
 
- Simulation: total CrossSection = 0.53313 /cm	 MeanFreePath = 1.8757 cm 	 massicCrossSection = 0.067743 cm2/g
- Theory:     total CrossSection = 0.52673 /cm	 MeanFreePath = 1.8985 cm 	 massicCrossSection = 0.066928 cm2/g
+ Simulation: total CrossSection = 0.53319 /cm	 MeanFreePath = 1.8755 cm 	 massicCrossSection = 0.067749 cm2/g
+ Theory:     total CrossSection = 0.52677 /cm	 MeanFreePath = 1.8984 cm 	 massicCrossSection = 0.066934 cm2/g
 #
 /gun/particle pi+
 /run/beamOn 10000
@@ -227,7 +231,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1836146824433546620, 950382853238645698, 2094018365169294982, 2049087344852607113, 1917530755571867102, 1217520297191286722, 1826947212591349430, 1876146072880251596, 220343395841813647, 1533539852786663375, 666541535008072943, 366974464646549659, 366932929726804827, 1969082536459027925, 1936051335817397104, 1097274089910695440, 2273907905499670430} counter= 4sumtot= 1139997679488605103
+N=17 V[N]={286475725969272019, 102930219447347412, 811054343764696615, 1645236148422832177, 1989238840623353833, 1300811652629545263, 2012196837198456601, 2081972589142225365, 2125883450321098133, 154064277965946484, 1777121520591069277, 1397826500363430455, 902611495495052584, 568437144217424129, 2164965097913215483, 1733765236301484883, 1255443343308308539} counter= 6sumtot= 1557447340751513693
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -242,13 +246,13 @@ N=17 V[N]={1836146824433546620, 950382853238645698, 2094018365169294982, 2049087
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.540000s Real=1.540321s Sys=0.000000s
+  User=1.490000s Real=1.492561s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 427158	hPairProd : 59432	CoulombScat : 5535	hBrems : 375
+ Number of process calls --->	hIoni : 426768	CoulombScat : 5424	hPairProd : 59381	hBrems : 400
 
- Simulation: total CrossSection = 0.4925 /cm	 MeanFreePath = 2.0305 cm 	 massicCrossSection = 0.062579 cm2/g
+ Simulation: total CrossSection = 0.49197 /cm	 MeanFreePath = 2.0326 cm 	 massicCrossSection = 0.062512 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -283,7 +287,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={86651234175384203, 106102879081428136, 1286100341176940579, 1902059702220643736, 1020666474972928708, 911872111381615693, 2302874691462746848, 670006653248785965, 1891095621247521631, 821295092539106705, 26059527148486563, 1948759662344548752, 1391369605036002721, 1101943770424097486, 222798383255355367, 1206227794782025790, 601255295509814994} counter= 4sumtot= 1356237775511576220
+N=17 V[N]={1938593007681043377, 1555514513714236691, 194451399239091519, 1240852744840717737, 1546719543380191519, 2116290825913677644, 1824003640756711090, 1650162292452746947, 1471338114677083127, 375315570191794771, 1264401598808605678, 1966856290100522124, 1923220178536510153, 428427422970345114, 383701837404623859, 2301185379056914790, 1767446344441436700} counter= 4sumtot= 890050612029313330
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -298,13 +302,13 @@ N=17 V[N]={86651234175384203, 106102879081428136, 1286100341176940579, 190205970
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.440000s Real=1.449632s Sys=0.000000s
+  User=1.410000s Real=1.422179s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5688	hIoni : 426050	hPairProd : 34409	hBrems : 7
+ Number of process calls --->	hIoni : 426054	hPairProd : 34130	CoulombScat : 5683	hBrems : 11
 
- Simulation: total CrossSection = 0.46615 /cm	 MeanFreePath = 2.1452 cm 	 massicCrossSection = 0.059232 cm2/g
+ Simulation: total CrossSection = 0.46588 /cm	 MeanFreePath = 2.1465 cm 	 massicCrossSection = 0.059197 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

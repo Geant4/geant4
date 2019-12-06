@@ -48,16 +48,12 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_qgstring
     HEADERS
-        G4ASCCrossSection.hh
-        G4AnnihilationCrossSection.hh
         G4BaryonSplitter.hh
         G4DiffractiveStringBuilder.hh
-        G4GammaAnnCrossSection.hh
         G4GammaParticipants.hh
         G4MesonSplitter.hh
         G4PartonPair.hh
         G4QGSDiffractiveExcitation.hh
-        G4QGSMParameters.hh
         G4QGSMSplitableHadron.hh
         G4QGSModel.hh
         G4QGSModel.icc
@@ -69,18 +65,13 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_qgstring
         G4SingleDiffractiveExcitation.hh
         G4SoftStringBuilder.hh
         G4SPPartonInfo.hh
-        G4VAnnihilationCrossSection.hh
     SOURCES
-        G4ASCCrossSection.cc
-        G4AnnihilationCrossSection.cc
         G4BaryonSplitter.cc
         G4DiffractiveStringBuilder.cc
-        G4GammaAnnCrossSection.cc
         G4GammaParticipants.cc
         G4MesonSplitter.cc
         G4PartonPair.cc
         G4QGSDiffractiveExcitation.cc
-        G4QGSMParameters.cc
         G4QGSMSplitableHadron.cc
         G4QGSParticipants.cc
         G4QuarkExchange.cc

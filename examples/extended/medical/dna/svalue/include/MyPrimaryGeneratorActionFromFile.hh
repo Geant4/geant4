@@ -34,7 +34,7 @@
 // Phys. Med. 31 (2015) 861-874
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file medical/dna/svalue2/include/MyPrimaryGeneratorActionFromFile.hh
+/// \file medical/dna/svalue/include/MyPrimaryGeneratorActionFromFile.hh
 /// \brief Declaration of the MyPrimaryGeneratorActionFromFile class
 
 #include "G4VUserPrimaryGeneratorAction.hh"

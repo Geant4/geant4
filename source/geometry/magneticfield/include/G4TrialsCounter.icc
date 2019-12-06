@@ -23,25 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TrialCounts inline methods implementation
 //
-// class G4TrialCounts
-//
-// Class inline implementation
-//
+// Author: John Apostolakis, CERN - 08.12.2006   
 // -------------------------------------------------------------------
 
 inline void G4TrialsCounter::AccumulateCounts( G4int noTrials )
 {
   fTotalNoTrials += noTrials;
-  fNumberCalls++;
+  ++fNumberCalls;
 
-  if( noTrials >= fmaxTrials ){
-     if (noTrials > fmaxTrials ) { 
-        fmaxTrials=noTrials; 
-        fNoTimesMaxTrials=1; 
-     } else { 
-        fNoTimesMaxTrials++; 
+  if( noTrials >= fmaxTrials )
+  {
+     if (noTrials > fmaxTrials )
+     { 
+        fmaxTrials = noTrials; 
+        fNoTimesMaxTrials = 1; 
+     }
+     else
+     { 
+        ++fNoTimesMaxTrials; 
      } 
   } 
-  fPrinted= false;  // New statistics
+  fPrinted = false;  // New statistics
 }

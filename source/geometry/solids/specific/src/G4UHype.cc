@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation for G4UHype wrapper class
 //
 // 16-10-2017 G.Cosmo, CERN
-//
 // --------------------------------------------------------------------
 
 #include "G4Hype.hh"

@@ -23,24 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4EquationOfMotion
+// G4EquationOfMotion
 //
 // Class description:
 //
 // Abstract Base Class for the right hand size of the equation of
 // motion of a particle in a field.
 
-// History:
-// - Created. J.Apostolakis
+// Created: J.Apostolakis, 1998
 // -------------------------------------------------------------------
+#ifndef G4EQUATIONOFMOTION_HH
+#define G4EQUATIONOFMOTION_HH
 
-#ifndef G4_EquationOfMotion_DEF
-#define G4_EquationOfMotion_DEF
-
-#include "G4Types.hh"      // "globals.hh"
+#include "G4Types.hh"
 #include "G4Field.hh"   // required in inline method implementations
 
 #include "G4ChargeState.hh"
@@ -49,12 +44,12 @@ class G4EquationOfMotion
 {
   public:  // with description
 
-     G4EquationOfMotion( G4Field *Field );
+     G4EquationOfMotion( G4Field* Field );
      virtual ~G4EquationOfMotion();
        // Constructor and virtual destructor. No operations.
 
-     virtual void EvaluateRhsGivenB( const  G4double y[],
-                                     const  G4double B[3],
+     virtual void EvaluateRhsGivenB( const G4double y[],
+                                     const G4double B[3],
                                      G4double dydx[] ) const = 0;
        // Given the value of the  field "B", this function 
        // calculates the value of the derivative dydx.
@@ -68,34 +63,33 @@ class G4EquationOfMotion
        // Set the charge, momentum and mass of the current particle
        // --> used to set the equation's coefficients ...
 
-     inline
-     void RightHandSide( const  G4double y[],
-                                G4double dydx[] ) const;
+     inline void RightHandSide( const G4double y[],
+                                      G4double dydx[] ) const;
        // This calculates the value of the derivative dydx at y.
        // It is the usual enquiry function.
        // ---------------------------
        // (It is not virtual, but calls the virtual function above.)
 
-     void EvaluateRhsReturnB( const  G4double y[],
-                              G4double dydx[],
-                              G4double Field[]  ) const;
+     inline void EvaluateRhsReturnB( const G4double y[],
+                                           G4double dydx[],
+                                           G4double Field[] ) const;
        // Same as RHS above, but also returns the value of B.
        // Should be made the new default ? after putting dydx & B in a class.
 
-     void GetFieldValue( const  G4double Point[4],
-                                G4double Field[] )  const;
+     inline void GetFieldValue( const G4double Point[4],
+                                      G4double Field[] ) const;
        // Obtain only the field - the stepper assumes it is pure Magnetic.
        // Not protected, because G4RKG3_Stepper uses it directly.
 
-     const G4Field* GetFieldObj() const;
-     G4Field* GetFieldObj();
-     void           SetFieldObj(G4Field* pField);
+     inline const G4Field* GetFieldObj() const;
+     inline G4Field* GetFieldObj();
+     inline void SetFieldObj(G4Field* pField);
 
   private:
-     G4Field *itsField;
 
+     G4Field* itsField = nullptr;
 };
 
 #include "G4EquationOfMotion.icc"
 
-#endif /* G4_EquationOfMotion_DEF */
+#endif

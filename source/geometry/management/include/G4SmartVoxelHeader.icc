@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // G4SmartVoxelHeader Inline implementation
 //
 // --------------------------------------------------------------------
@@ -39,7 +36,7 @@ G4int G4SmartVoxelHeader::GetMaxEquivalentSliceNo() const
 inline
 void G4SmartVoxelHeader::SetMaxEquivalentSliceNo(G4int pMax)
 {
-  fmaxEquivalent=pMax;
+  fmaxEquivalent = pMax;
 }
 
 inline
@@ -51,7 +48,7 @@ G4int G4SmartVoxelHeader::GetMinEquivalentSliceNo() const
 inline
 void G4SmartVoxelHeader::SetMinEquivalentSliceNo(G4int pMin)
 {
-  fminEquivalent=pMin;
+  fminEquivalent = pMin;
 }
 
 inline
@@ -79,7 +76,7 @@ G4double G4SmartVoxelHeader::GetMinExtent() const
 }
 
 inline
-G4int G4SmartVoxelHeader::GetNoSlices() const
+size_t G4SmartVoxelHeader::GetNoSlices() const
 {
   return fslices.size();
 }

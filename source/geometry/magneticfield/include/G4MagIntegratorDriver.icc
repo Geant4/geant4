@@ -23,86 +23,102 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MagInt_Driver inline methods implementation
 //
-//
+// V.Grichine, 07.10.1996 - Created
 // --------------------------------------------------------------------
+
+inline
+G4double G4MagInt_Driver::
+AdvanceChordLimited(G4FieldTrack& track, G4double stepMax, 
+                    G4double epsStep, G4double chordDistance)
+{
+  return ChordFinderDelegate::AdvanceChordLimitedImpl(track, stepMax,
+                                                      epsStep, chordDistance);
+}
+
+inline
+void G4MagInt_Driver::OnStartTracking()
+{
+  ChordFinderDelegate::ResetStepEstimate();
+}
 
 inline
 G4double G4MagInt_Driver::GetHmin() const
 {
-      return fMinimumStep;
+  return fMinimumStep;
 } 
 
 inline
 G4double G4MagInt_Driver::Hmin() const
 {
-      return fMinimumStep;
+  return fMinimumStep;
 }
 
 inline
 G4double G4MagInt_Driver::GetSafety() const
 {
-      return safety;
+  return safety;
 }
 
 inline
 G4double G4MagInt_Driver::GetPshrnk() const
 {
-      return pshrnk;
+  return pshrnk;
 } 
 
 inline
 G4double G4MagInt_Driver::GetPgrow() const
 {
-      return pgrow;
+  return pgrow;
 }
  
 inline
 G4double G4MagInt_Driver::GetErrcon() const
 {
-      return errcon;
+  return errcon;
 }
 
 inline
 void G4MagInt_Driver::SetHmin(G4double newval)
 {
-      fMinimumStep = newval;
+  fMinimumStep = newval;
 } 
 
 inline
 G4double G4MagInt_Driver::ComputeAndSetErrcon()
 {
-      errcon = std::pow(max_stepping_increase/GetSafety(),1.0/GetPgrow());
-      return errcon;
+  errcon = std::pow(max_stepping_increase/GetSafety(),1.0/GetPgrow());
+  return errcon;
 } 
 
 inline
 void G4MagInt_Driver::ReSetParameters(G4double new_safety)
 {
-      safety = new_safety;
-      pshrnk = -1.0 / pIntStepper->IntegratorOrder();
-      pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
-      ComputeAndSetErrcon();
+  safety = new_safety;
+  pshrnk = -1.0 / pIntStepper->IntegratorOrder();
+  pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
+  ComputeAndSetErrcon();
 }
 
 inline
 void G4MagInt_Driver::SetSafety(G4double val)
 { 
-      safety=val;
-      ComputeAndSetErrcon();
+  safety = val;
+  ComputeAndSetErrcon();
 }
 
 inline
 void G4MagInt_Driver::SetPgrow(G4double  val)
 { 
-      pgrow=val;
-      ComputeAndSetErrcon(); 
+  pgrow = val;
+  ComputeAndSetErrcon(); 
 }
 
 inline
 void G4MagInt_Driver::SetErrcon(G4double val)
 { 
-      errcon=val;
+  errcon = val;
 }
 
 inline
@@ -114,24 +130,23 @@ G4int G4MagInt_Driver::GetMaxNoSteps() const
 inline
 void G4MagInt_Driver::SetMaxNoSteps(G4int val)
 {
-  fMaxNoSteps= val;
+  fMaxNoSteps = val;
 }
 
 inline
 G4int G4MagInt_Driver::GetVerboseLevel() const
 {
-      return fVerboseLevel;
+  return fVerboseLevel;
 } 
 
 inline 
 void G4MagInt_Driver::SetVerboseLevel(G4int newLevel)
 {
-      fVerboseLevel= newLevel;
+  fVerboseLevel = newLevel;
 }
 
 inline
 G4double G4MagInt_Driver::GetSmallestFraction() const
 {
-      return fSmallestFraction; 
+  return fSmallestFraction; 
 }
-

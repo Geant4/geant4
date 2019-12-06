@@ -23,20 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-//
 // Implementation for G4Box class
 //
-//  24.06.98 - V.Grichine: insideEdge in DistanceToIn(p,v)
+//  30.06.95 - P.Kent: First version
 //  20.09.98 - V.Grichine: new algorithm of DistanceToIn(p,v)
-//  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
-//  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
-//             and information before exception in DistanceToOut(p,v,...)
-//  15.11.00 - D.Williams, V.Grichine: bug fixed in CalculateExtent - change
-//                                     algorithm for rotated vertices
-//  23.08.16 - E.Tcherniaev: use G4BoundingEnvelope for CalculateExtent()
 //  18.04.17 - E.Tcherniaev: complete revision, speed-up
 // --------------------------------------------------------------------
 
@@ -83,7 +73,7 @@ G4Box::G4Box(const G4String& pName,
 //                            for usage restricted to object persistency
 
 G4Box::G4Box( __void__& a )
-  : G4CSGSolid(a), fDx(0.), fDy(0.), fDz(0.), delta(0.)
+  : G4CSGSolid(a), delta(0.)
 {
 }
 
@@ -371,10 +361,9 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,
 
 G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double dist = std::max(std::max(
-                  std::abs(p.x())-fDx,
-                  std::abs(p.y())-fDy),
-                  std::abs(p.z())-fDz);
+  G4double dist = std::max(std::max(std::abs(p.x())-fDx,
+                                    std::abs(p.y())-fDy),
+                           std::abs(p.z())-fDz);
   return (dist > 0) ? dist : 0.;
 }
 
@@ -387,7 +376,7 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
 G4double G4Box::DistanceToOut( const G4ThreeVector& p,
                                const G4ThreeVector& v,
                                const G4bool calcNorm,
-                               G4bool *validNorm, G4ThreeVector *n) const
+                               G4bool* validNorm, G4ThreeVector* n) const
 {
   // Check if point is on the surface and traveling away
   //
@@ -467,10 +456,9 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
     DumpInfo();
   }
 #endif
-  G4double dist = std::min(std::min(
-                  fDx-std::abs(p.x()),
-                  fDy-std::abs(p.y())),
-                  fDz-std::abs(p.z()));
+  G4double dist = std::min(std::min(fDx-std::abs(p.x()),
+                                    fDy-std::abs(p.y())),
+                           fDz-std::abs(p.z()));
   return (dist > 0) ? dist : 0.;
 }
 

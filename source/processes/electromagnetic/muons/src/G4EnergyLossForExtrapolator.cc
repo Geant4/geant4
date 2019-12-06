@@ -338,7 +338,6 @@ void G4EnergyLossForExtrapolator::Initialisation()
   muonPlus = G4MuonPlus::MuonPlus();
   muonMinus= G4MuonMinus::MuonMinus();
 
-  nmat = G4Material::GetNumberOfMaterials();
   currentParticleName = "";
   BuildTables(); 
 }
@@ -347,22 +346,25 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
 void G4EnergyLossForExtrapolator::BuildTables()
 {
-  if(!tables) {
 #ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&extrapolatorMutex);
-    if (!tables) {
+  G4MUTEXLOCK(&extrapolatorMutex);
 #endif
-      if(verbose > 0) {
-	G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
-	       << nmat << " materials Nbins= " << nbins 
-	       << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax << G4endl;
-      }
-      tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&extrapolatorMutex);
-#endif
+  if(verbose > 0) {
+    G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
+	   << G4Material::GetNumberOfMaterials() << " materials Nbins= " 
+           << nbins << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax 
+           << G4endl;
   }
+  G4int newmat = G4Material::GetNumberOfMaterials();
+  if(!tables) {
+    tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
+  } else if(nmat != newmat) {
+    tables->Initialisation();
+  }
+  nmat = newmat;
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&extrapolatorMutex);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

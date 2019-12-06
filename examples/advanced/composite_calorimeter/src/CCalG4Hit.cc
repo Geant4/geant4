@@ -54,17 +54,17 @@ const CCalG4Hit& CCalG4Hit::operator=(const CCalG4Hit &right) {
 }
 
 
-double CCalG4Hit::getEM() const      { return elem; }
-void   CCalG4Hit::setEM (double e)   { elem = e; }
+G4double CCalG4Hit::getEM() const      { return elem; }
+void   CCalG4Hit::setEM (G4double e)   { elem = e; }
       
-double CCalG4Hit::getHadr() const    { return hadr; }
-void   CCalG4Hit::setHadr (double e) { hadr = e; }
+G4double CCalG4Hit::getHadr() const    { return hadr; }
+void   CCalG4Hit::setHadr (G4double e) { hadr = e; }
       
 void CCalG4Hit::addEnergyDeposit(const CCalG4Hit& aHit) {
   addEnergyDeposit( aHit.getEM(), aHit.getHadr() );
 }
 
-void CCalG4Hit::addEnergyDeposit(double em, double hd) {
+void CCalG4Hit::addEnergyDeposit(G4double em, G4double hd) {
   elem  += em; 
   hadr += hd;
   CCalHit::addEnergyDeposit(em+hd);

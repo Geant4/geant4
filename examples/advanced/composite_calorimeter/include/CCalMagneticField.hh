@@ -29,21 +29,22 @@
 //              The field is assumed to be uniform.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalMagneticField_H
-#define CCalMagneticField_H
+#define CCalMagneticField_H 1
 
 #include "G4UniformMagField.hh"
 #include "G4ThreeVector.hh"
 class G4FieldManager;
 
-class CCalMagneticField: public G4MagneticField {
+class CCalMagneticField: public G4MagneticField
+{
 public:
   CCalMagneticField(const G4String &name);
   ~CCalMagneticField();  
       
   // Access functions
-  void MagneticField(const double Point[3], double Bfield[3]) const;
+  void MagneticField(const G4double Point[3], G4double Bfield[3]) const;
   CLHEP::Hep3Vector MagneticField(const CLHEP::Hep3Vector Point) const;
-  virtual void GetFieldValue(const double Point[3], double* Bfield) const;
+  virtual void GetFieldValue(const G4double Point[3], G4double* Bfield) const;
   G4double GetConstantFieldvalue() const {return fval;}
 
 protected:

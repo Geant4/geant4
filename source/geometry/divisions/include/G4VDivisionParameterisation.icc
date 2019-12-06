@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VDivisionParameterisation inline methods implementation
 //
-//
-// class G4VDivisionParameterisation Inline Implementation file
-//
+// 09.05.01 - P.Arce, Initial version
 // --------------------------------------------------------------------
 
 inline
@@ -80,11 +79,11 @@ G4int G4VDivisionParameterisation::VolumeFirstCopyNo() const
 inline
 void G4VDivisionParameterisation::SetHalfGap(G4double hg)
 {
-   fhgap = hg;
+  fhgap = hg;
 }
 
 inline
 G4double G4VDivisionParameterisation::GetHalfGap() const
 {
-   return fhgap;
+  return fhgap;
 }

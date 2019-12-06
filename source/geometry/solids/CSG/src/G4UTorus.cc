@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation for G4UTorus wrapper class
 //
-// 19-08-2015 Guilherme Lima, FNAL
-//
+// 19.08.15 Guilherme Lima, FNAL
 // --------------------------------------------------------------------
 
 #include "G4Torus.hh"

@@ -161,6 +161,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InteractionCase.hh
         G4IntraNucleiCascader.hh
         G4InuclCollider.hh
+        G4LightTargetCollider.hh
         G4InuclElementaryParticle.hh
         G4InuclEvaporation.hh
         G4InuclNuclei.hh
@@ -274,6 +275,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InteractionCase.cc
         G4IntraNucleiCascader.cc
         G4InuclCollider.cc
+        G4LightTargetCollider.cc
         G4InuclElementaryParticle.cc
         G4InuclEvaporation.cc
         G4InuclNuclei.cc

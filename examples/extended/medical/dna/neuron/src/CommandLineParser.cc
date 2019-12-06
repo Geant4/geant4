@@ -33,7 +33,7 @@
 // Author: Mathieu Karamitros
 //
 //
-/// \file CommandLineParser
+/// \file CommandLineParser.cc
 /// \brief Implementation of the CommandLineParser class
 
 #include <iomanip>

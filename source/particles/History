@@ -16,6 +16,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 05 November 2019 Vladimir Ivanchenko (particles-V10-05-10)
+  G4NucleiProperties - in some hadronic models a fragment may be
+  produced consisting of only neutrons or only protons; 
+  parameterisation used inside this class provides too high mass 
+  value, which not allow decay such fragment; a simplified
+  variant is proposed; also light ion masses computation is more
+  thread safe after change of the order of mass computation
+
+- 29 October 2019 Vladimir Ivanchenko (particles-V10-05-09)
+  fixed History
+- 17 October 2019 Vladimir Ivanchenko (particles-V10-05-08)
+  G4DynamicParticle: changed SetMass method - it is now inlined and 
+    allow setting mass of a particle to PDG value, which is needed
+    in order to recover secondary hadrons to the mass shell;
+    marked "inline" all inline methods in the header
+
+- 09 October 2019 Alberto Ribon (particles-V10-05-07)
+  G4ShortLivedConstructor : the method ConstructQuarks() has been extended
+  by Vladimir Uzhinsky to include diquarks made of charm and/or bottom
+  quarks. The new, heavy diquarks and anti-diquarks have been defined with
+  basic, rough properties (just those currently needed by the hadronic
+  string models): future refinements are expected.
+
+- 03 July 2019 Vladimir Ivanchenko (particles-V10-05-06)
+  G4DynamicParticle: restore 10.5 definition and use of PDG code variable
+  in order to preserve handling of exotic particles; keep formatting
+  of the class in one style, removed extra empty lines
+
 - 24 May 2019 Vladimir Ivanchenko (particles-V10-05-05)
   G4DynamicParticle: make members of the class private; removed boolean
     flag; alined class members 3-vectors, doubles, integer; added

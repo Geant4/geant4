@@ -36,7 +36,7 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-/// \file Runc.cc 
+/// \file Run.cc 
 /// \brief Implementation of the Run class
 
 #include "Run.hh"

@@ -84,7 +84,12 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
                                       G4double edep,
                                       G4double niel) const
 {
+  // no energy deposition
   if(edep <= 0.0) { return 0.0; }
+
+  // zero step length may happens only if step limiter process
+  // is applied, in that case saturation should not be applied
+  if(length <= 0.0) { return edep; }
 
   G4double evis = edep;
   G4double bfactor = couple->GetMaterial()->GetIonisation()->GetBirksConstant();
@@ -105,7 +110,7 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       G4double eloss = edep - nloss;
 
       // neutrons and neutral hadrons
-      if(0.0 == p->GetPDGCharge() || eloss < 0.0 || length <= 0.0) {
+      if(0.0 == p->GetPDGCharge() || eloss < 0.0) {
         nloss = edep;
         eloss = 0.0;
       } else {

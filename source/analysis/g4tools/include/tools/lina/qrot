@@ -123,6 +123,8 @@ public:
 
   bool set_value(const VEC3& a_from,const VEC3& a_to,T(*a_sqrt)(T),T(*a_fabs)(T)) {
     // code taken from coin3d/SbRotation.
+    //NOTE : coin3d/SbMatrix logic is transposed relative to us.
+    
     VEC3 from(a_from);
     if(from.normalize()==T()) return false;
     VEC3 to(a_to);
@@ -163,16 +165,16 @@ public:
 
   bool value(VEC3& a_axis,T& a_radians,T(*a_sin)(T),T(*a_acos)(T)) const { //WARNING a_acos and NOT a_cos
     //WARNING : can fail.
-    if( (m_quat.v3()<minus_one()) || (m_quat.v3()> one()) ){ ////???
+    if( (m_quat.v3()<minus_one()) || (m_quat.v3()> one()) ) {
       a_axis.set_value(0,0,1);
       a_radians = 0;
       return false;
     }
 
-    a_radians = a_acos(m_quat.v3()) * 2;
+    a_radians = a_acos(m_quat.v3()) * 2; //in [0,2*pi]
     T sineval = a_sin(a_radians/2);
 
-    if(sineval==T()) { //???
+    if(sineval==T()) { //a_radian = 0 or 2*pi.
       a_axis.set_value(0,0,1);
       a_radians = 0;
       return false;
@@ -183,10 +185,10 @@ public:
     return true;
   }
 
-/*
   template <class MAT4>
   void set_value(const MAT4& a_m,T(*a_sqrt)(T)) {
-    //WARNING : not tested.
+    // See tests/qrot.icc.
+    // code taken from coin3d/SbRotation.
 
     //Set the rotation from the components of the given matrix.
 
@@ -196,9 +198,9 @@ public:
       m_quat.v3(_s * half());
       _s = half() / _s;
 
-      m_quat.v0((a_m.v12() - a_m.v21()) * _s);
-      m_quat.v1((a_m.v20() - a_m.v02()) * _s);
-      m_quat.v2((a_m.v01() - a_m.v10()) * _s);
+      m_quat.v0((a_m.v21() - a_m.v12()) * _s);
+      m_quat.v1((a_m.v02() - a_m.v20()) * _s);
+      m_quat.v2((a_m.v10() - a_m.v01()) * _s);
     } else {
       unsigned int i = 0;
       if (a_m.v11() > a_m.v00()) i = 1;
@@ -212,26 +214,27 @@ public:
       m_quat.set_value(i,_s * half());
       _s = half() / _s;
   
-      m_quat.v3((a_m.value(j,k) - a_m.value(k,j)) * _s);
-      m_quat.set_value(j,(a_m.value(i,j) + a_m.value(j,i)) * _s);
-      m_quat.set_value(k,(a_m.value(i,k) + a_m.value(k,i)) * _s);
+      m_quat.v3((a_m.value(k,j) - a_m.value(j,k)) * _s);
+      m_quat.set_value(j,(a_m.value(j,i) + a_m.value(i,j)) * _s);
+      m_quat.set_value(k,(a_m.value(k,i) + a_m.value(i,k)) * _s);
     }
 
     if (a_m.v33()!=one()) {
       m_quat.multiply(one()/a_sqrt(a_m.v33()));
     }
   }
-*/
 
   template <class MAT4>
   void value(MAT4& a_m) const {
     //Return this rotation in the form of a matrix.
+    //NOTE : in coin3d/SbRotation, it looks as if "w <-> -w", but coin3d/SbMatrix logic is transposed relative to us.
+    
     const T x = m_quat.v0();
     const T y = m_quat.v1();
     const T z = m_quat.v2();
     const T w = m_quat.v3();
-    // z = w + x * i + y * j + z * k
-  
+    // q = w + x * i + y * j + z * k
+
     // first row :
     a_m.v00(w*w + x*x - y*y - z*z);
     a_m.v01(2*x*y - 2*w*z);

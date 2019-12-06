@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ConstRK4 implementation
 //
-//
-//
-// - 18.09.2008 - J.Apostolakis, T.Nikitina - Created
+// Created: J.Apostolakis, T.Nikitina - 18.09.2008
 // -------------------------------------------------------------------
 
 #include "G4ConstRK4.hh"
@@ -37,7 +36,7 @@
 //
 // Constructor sets the number of *State* variables (default = 8)
 //   The number of variables integrated is always 6
-
+//
 G4ConstRK4::G4ConstRK4(G4Mag_EqRhs* EqRhs, G4int numStateVariables)
   : G4MagErrorStepper(EqRhs, 6, numStateVariables)
 {
@@ -87,11 +86,11 @@ G4ConstRK4::~G4ConstRK4()
 // array from y. The user supplies the routine RightHandSide(x,y,dydx),
 // which returns derivatives dydx at x. The source is routine rk4 from
 // NRC p. 712-713 .
-
-void G4ConstRK4::DumbStepper( const G4double  yIn[],
-                              const G4double  dydx[],
-                                    G4double  h,
-                                    G4double  yOut[])
+//
+void G4ConstRK4::DumbStepper( const G4double yIn[],
+                              const G4double dydx[],
+                                    G4double h,
+                                    G4double yOut[])
 {
    G4double  hh = h*0.5 , h6 = h/6.0  ;
    
@@ -151,7 +150,7 @@ G4ConstRK4::Stepper( const G4double yInput[],
                            G4double yError [] )
 {
    const G4int nvar = 6;  // number of variables integrated
-   const G4int maxvar= GetNumberOfStateVariables();
+   const G4int maxvar = GetNumberOfStateVariables();
 
    // Correction for Richardson extrapolation
    G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
@@ -159,10 +158,10 @@ G4ConstRK4::Stepper( const G4double yInput[],
    G4int i;
    
    // Saving yInput because yInput and yOutput can be aliases for same array
-   for (i=0;    i<maxvar; i++) { yInitial[i]= yInput[i]; }
+   for (i=0;    i<maxvar; ++i) { yInitial[i]= yInput[i]; }
  
    // Must copy the part of the state *not* integrated to the output
-   for (i=nvar; i<maxvar; i++) { yOutput[i]=  yInput[i]; }
+   for (i=nvar; i<maxvar; ++i) { yOutput[i]=  yInput[i]; }
 
    // yInitial[7]= yInput[7];  //  The time is typically needed
    yMiddle[7]  = yInput[7];   // Copy the time from initial value 
@@ -186,7 +185,7 @@ G4ConstRK4::Stepper( const G4double yInput[],
    // Do a full Step
    //
    DumbStepper(yInitial, dydx, hstep, yOneStep);
-   for(i=0;i<nvar;i++)
+   for(i=0; i<nvar; ++i)
    {
       yError [i] = yOutput[i] - yOneStep[i] ;
       yOutput[i] += yError[i]*correction ;
@@ -208,7 +207,7 @@ G4ConstRK4::Stepper( const G4double yInput[],
 // The method below is good only for angle deviations < 2 pi;
 // this restriction should not be a problem for the Runge Kutta methods, 
 // which generally cannot integrate accurately for large angle deviations
-
+//
 G4double G4ConstRK4::DistChord() const 
 {
   G4double distLine, distChord; 

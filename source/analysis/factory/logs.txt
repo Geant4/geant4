@@ -1,0 +1,15 @@
+Added new factory function which allows to create analysis manager
+of the type selected via a string argument; the user code:
+  #include "g4analysis.hh"
+  G4AnalysisManager* analysisManager = G4Analysis::ManagerInstance("root");
+
+  Note that G4AnalysisManager is in this case G4ToolsAnalysisManager, and not
+  the output type specific manager (eg. G4RootAnalysisManager), as it is
+  in case of using a type specific include, eg. "g4root.hh"
+
+Details:
+- Added new analysis sub-category "factory"
+- Clean-up analysis type definitions:
+  G4Hn*, G4Pn* types moved out of type specific namespace
+- Added methods for setting ntuple merge mode in G4VAnalysisManager
+  with a default implementatation (issuing a warning if merging is not available)

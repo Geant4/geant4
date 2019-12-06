@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04MuonHit.hh
+/// \file ExN04MuonHit.hh
 /// \brief Definition of the ExN04MuonHit class
 //
 

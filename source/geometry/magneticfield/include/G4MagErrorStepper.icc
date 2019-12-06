@@ -23,19 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MagErrorStepper inline methods implementation
 //
-//
+// Author: W.Wander <wwc@mit.edu>, 09.12.1997
 // --------------------------------------------------------------------
 
 inline
-G4MagErrorStepper::G4MagErrorStepper(G4EquationOfMotion *EquationRhs,
+G4MagErrorStepper::G4MagErrorStepper(G4EquationOfMotion* EquationRhs,
                                      G4int numberOfVariables, 
 				     G4int numStateVariables)
      : G4MagIntegratorStepper(EquationRhs,numberOfVariables,numStateVariables)
   {
-      G4int nvar = std::max(this->GetNumberOfVariables(), 8);
-      yMiddle=     new G4double[nvar]; 
-      dydxMid=     new G4double[nvar];
-      yInitial=    new G4double[nvar];
-      yOneStep= new G4double[nvar];
+      G4int nvar = std::max(GetNumberOfVariables(), 8);
+      yMiddle  = new G4double[nvar]; 
+      dydxMid  = new G4double[nvar];
+      yInitial = new G4double[nvar];
+      yOneStep = new G4double[nvar];
   }

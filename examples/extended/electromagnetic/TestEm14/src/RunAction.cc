@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 //
 // 

@@ -54,8 +54,6 @@
 #include "G4NistManager.hh"
 #include <iostream>
 
-using namespace std;
-
 HadrontherapyModulator::HadrontherapyModulator(): physiMotherMod(0),
 						 solidMod1(0),         logicMod1(0),          physiMod1(0),
 						 solidMod2(0),         logicMod2(0),          physiMod2(0),
@@ -63,7 +61,7 @@ HadrontherapyModulator::HadrontherapyModulator(): physiMotherMod(0),
 						 solidMod4(0),         logicMod4(0),          physiMod4(0),
 						 FileName("Modulators/Modulator010.txt")
 { 
-   pi=4*atan(1.);
+   pi=4*std::atan(1.);
    StepNumbers=22;
    Weight=new G4double[StepNumbers];
    StepThickness=new G4double[StepNumbers];

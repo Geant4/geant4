@@ -35,15 +35,16 @@
 
 #include "G4Element.hh"
 
-class CCalAMaterial : public CCalMaterial {
+class CCalAMaterial : public CCalMaterial
+{
   friend std::ostream& operator<<(std::ostream&, const CCalAMaterial&);
 
 public:
   //Construct from list of constituents
-  CCalAMaterial(G4String mat, double dens, int nelem, 
-		CCalAMaterial** constituents, double* weights);
+  CCalAMaterial(G4String mat, G4double dens, G4int nelem, 
+                CCalAMaterial** constituents, G4double* weights);
   //Construct from one element
-  CCalAMaterial(G4String elemat, double Aeff, double dens);
+  CCalAMaterial(G4String elemat, G4double Aeff, G4double dens);
   //Copy constructor
   CCalAMaterial(const CCalAMaterial&);
   virtual ~CCalAMaterial();
@@ -53,7 +54,8 @@ public:
   CCalAMaterial& operator= (const CCalAMaterial&);       //Assignment
 
 protected:
-  void computeAeff(G4int nconst, CCalAMaterial** constituents, double* weights);
+  void computeAeff(G4int nconst, CCalAMaterial** constituents,
+                   G4double* weights);
 
 protected:
   double aEff;  //Effective mass

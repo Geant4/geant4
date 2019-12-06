@@ -1,0 +1,155 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_saui
+#define tools_saui
+
+#include "args"
+
+namespace tools {
+
+inline std::string gui_toolkit(args& a_args,bool a_rm_in_args){
+  std::string driver;
+  a_args.find("-toolkit",driver);
+  if(a_rm_in_args) a_args.remove("-toolkit");
+  if(driver.empty()) {
+    if(a_args.is_arg("-Xt")||
+       a_args.is_arg("-xt")||
+       a_args.is_arg("-Xm")||
+       a_args.is_arg("-xm")||
+       a_args.is_arg("-Motif")||
+       a_args.is_arg("-motif")) {
+      driver = "Xt";
+      if(a_rm_in_args) {
+        a_args.remove("-Xt");
+        a_args.remove("-xt");
+        a_args.remove("-Xm");
+        a_args.remove("-xm");
+        a_args.remove("-Motif");
+        a_args.remove("-motif");
+      }
+    } else if(a_args.is_arg("-Win")||
+              a_args.is_arg("-win")||
+              a_args.is_arg("-Win32")||
+              a_args.is_arg("-win32")) {
+      driver = "Win";
+      if(a_rm_in_args) {
+        a_args.remove("-Win");
+        a_args.remove("-win");
+        a_args.remove("-Win32");
+        a_args.remove("-win32");
+      }
+    } else if(a_args.is_arg("-NextStep")||
+              a_args.is_arg("-nextstep")) {
+      driver = "NextStep";
+      if(a_rm_in_args) {
+        a_args.remove("-NextStep");
+        a_args.remove("-nextstep");
+      }
+    } else if(a_args.is_arg("-Gtk")||
+              a_args.is_arg("-gtk")) {
+      driver = "Gtk";
+      if(a_rm_in_args) {
+        a_args.remove("-Gtk");
+        a_args.remove("-gtk");
+      }
+    } else if(a_args.is_arg("-Qt")||
+              a_args.is_arg("-qt")) {
+      driver = "Qt";
+      if(a_rm_in_args) {
+        a_args.remove("-Qt");
+        a_args.remove("-qt");
+      }
+    } else if(a_args.is_arg("-SDL")||
+              a_args.is_arg("-sdl")) {
+      driver = "SDL";
+      if(a_rm_in_args) {
+        a_args.remove("-SDL");
+        a_args.remove("-sdl");
+      }
+    } else if(a_args.is_arg("-Net")||
+              a_args.is_arg("-net")) {
+      driver = "Net";
+      if(a_rm_in_args) {
+        a_args.remove("-Net");
+        a_args.remove("-net");
+      }
+    } else if(a_args.is_arg("-inex")) {
+      driver = "inex";
+      if(a_rm_in_args) {
+        a_args.remove("-inex");
+      }
+    }
+  }
+
+  return driver;
+}
+
+inline bool window_size_from_args(const args& a_args,unsigned int& a_ww,unsigned int& a_wh) {
+  // set a_ww,a_wh to some common window size (in pixels).
+  // return true if a_ww,a_wh set from a_args, false if not.
+  bool status = true;
+  if(a_args.is_arg("-iPod")||a_args.is_arg("-iPhone")) {
+    a_ww = 320;
+    a_wh = 480;
+  } else if(a_args.is_arg("-iPad")) {
+    a_ww = 768;
+    a_wh = 1024;
+  } else if(a_args.is_arg("-iPhone4")) {
+    a_ww = 640;
+    a_wh = 960;
+  } else if(a_args.is_arg("-wallino")) { //emulate LAL/wallino aspect ratio.
+    a_ww = 1024;
+    a_wh = 512;
+  } else if(a_args.is_arg("-SGS")) { //Samsung Galaxy S
+    //a_ww = 320;
+    //a_wh = 533;
+    a_ww = 480;
+    a_wh = 800;
+  } else {
+    if(a_args.find<unsigned int>("-ww",a_ww)) {
+      if(a_args.find<unsigned int>("-wh",a_wh)) return true;
+      //A4 : we have ww but not wh. Have wh in order to have A4 landscape :
+      a_wh = (unsigned int)(a_ww*(21.0f/29.7f)); //29.7/21 = 0.707
+    } else { //we don't have ww.
+      if(a_args.find<unsigned int>("-wh",a_wh)) {
+        //A4 : we have wh but not ww. Have ww in order to have A4 landscape :
+        a_ww = (unsigned int)(a_wh*(29.7f/21.0f));
+      } else {
+        //we have nothing. Take a ww of 1000 and wh (707) so that to have A4 landscape :
+        a_ww = 1000;
+        a_wh = (unsigned int)(a_ww*(21.0f/29.7f)); // have A4 landscape.
+	status = false;
+      }
+    }
+  }
+  if(a_args.is_arg("-land")){
+    unsigned int _ww = a_ww;
+    unsigned int _wh = a_wh;
+    a_ww = mx(_ww,_wh);
+    a_wh = mn(_ww,_wh);
+  }
+  if(a_args.is_arg("-portrait")){
+    unsigned int _ww = a_ww;
+    unsigned int _wh = a_wh;
+    a_ww = mn(_ww,_wh);
+    a_wh = mx(_ww,_wh);
+  }
+  return status;
+}
+
+inline void remove_window_size_args(args& a_args) {
+  //use with Wt apps.
+  a_args.remove("-iPod");
+  a_args.remove("-iPhone");
+  a_args.remove("-iPad");
+  a_args.remove("-iPhone4");
+  a_args.remove("-SGS");
+  a_args.remove("-ww");
+  a_args.remove("-wh");
+  a_args.remove("-land");
+}
+
+}
+
+#endif

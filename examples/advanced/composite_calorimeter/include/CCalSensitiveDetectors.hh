@@ -38,20 +38,20 @@
 
 typedef std::multimap< G4String, G4LogicalVolume*, std::less<G4String> > mmslv;
 
-class CCalSensitiveDetectors {
-
+class CCalSensitiveDetectors
+{
 public:    
   ~CCalSensitiveDetectors(){};
-  std::vector<G4LogicalVolume*> getVolumes (const G4String& name, bool exists = 0);
+  std::vector<G4LogicalVolume*> getVolumes (const G4String& name,
+                                            G4bool exists = false);
   void registerVolume (const G4String& name, G4LogicalVolume*);
-  bool setSensitive(const G4String& string, G4VSensitiveDetector* sens);
+  G4bool setSensitive(const G4String& string, G4VSensitiveDetector* sens);
   static CCalSensitiveDetectors* getInstance();
 private:
   CCalSensitiveDetectors(){};
   static CCalSensitiveDetectors* theInstance;
   // logical volume container: name, G4LogicalVolume*
   mmslv theLVs;
-
 };
 
 #endif

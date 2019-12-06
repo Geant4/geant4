@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // Class G4AssemblyTriplet
 //
 // Class description:
@@ -39,13 +36,9 @@
 // The pointer to the logical or assembly volume is copied so this class 
 // does not take its ownership and does not delete the object behind.
 
-// Author:      Radovan Chytracek
-// Version:     1.0
-// Date:        November 2000
-//
-// History:
-// March 2006, I.Hrivnacova - Extended to support assembly of assemblies
-//             of volumes and reflections
+// Radovan Chytracek: created - November 2000
+// Ivana Hrivnacova: extended to support assembly of assemblies
+//                   of volumes and reflections, March 2006
 // ----------------------------------------------------------------------
 #ifndef G4_ASSEMBLYTRIPLET_H
 #define G4_ASSEMBLYTRIPLET_H 
@@ -66,13 +59,13 @@ class G4AssemblyTriplet
     G4AssemblyTriplet( G4LogicalVolume* pVolume,
                        G4ThreeVector& translation,
                        G4RotationMatrix* pRotation,
-                       G4bool isReflection = false);
+                       G4bool isReflection = false );
       // An explicit constructor for a logical volume
     
     G4AssemblyTriplet( G4AssemblyVolume* pAssembly,
                        G4ThreeVector& translation,
                        G4RotationMatrix* pRotation,
-                       G4bool isReflection = false);
+                       G4bool isReflection = false );
       // An explicit constructor for an assembly volume
     
     G4AssemblyTriplet( const G4AssemblyTriplet& second );
@@ -113,23 +106,23 @@ class G4AssemblyTriplet
 
  private:
 
-    G4LogicalVolume*  fVolume;
+    G4LogicalVolume*  fVolume = nullptr;
       // A logical volume
 
     G4ThreeVector     fTranslation;
       // A logical volume translation
 
-    G4RotationMatrix* fRotation;
+    G4RotationMatrix* fRotation = nullptr;
       // A logical volume rotation
 
  private:
 
     // Member data for handling assemblies of assemblies and reflections
 
-    G4AssemblyVolume* fAssembly;
+    G4AssemblyVolume* fAssembly = nullptr;
       // An assembly volume
 
-    G4bool            fIsReflection;
+    G4bool            fIsReflection = false;
       // True if the logical or assembly volume has reflection  
 };
 

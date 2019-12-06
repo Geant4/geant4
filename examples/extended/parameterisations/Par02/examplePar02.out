@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -21,13 +25,7 @@ G4GDML: Reading 'Par02FullDetector.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 Geometry loaded from  file .......Par02FullDetector.gdml 
 
-ecal !!!
-
-ecal !!!
-
-ecal !!!
-
-ecal !!!
+hcal !!!
 
 hcal !!!
 
@@ -37,11 +35,29 @@ tracker !!!
 
 ecal !!!
 
-hcal !!!
+ecal !!!
+
+ecal !!!
+
+ecal !!!
+
+ecal !!!
 
 hcal !!!
 
 hcal !!!
+Warning : Region <MuonEndCap_1> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Warning : Region <MuonEndCap_2> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Warning : Region <MuonEndCap_3> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Warning : Region <MuonEndCap_4> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
 Warning : Region <MuonEndCap_5> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
@@ -64,18 +80,6 @@ Warning : Region <MuonForward_5> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
 Warning : Region <MuonForward_6> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
-Warning : Region <MuonEndCap_1> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
-Warning : Region <MuonEndCap_2> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
-Warning : Region <MuonEndCap_3> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
-Warning : Region <MuonEndCap_4> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
 Instantiating Visualization Manager.......
@@ -1132,7 +1136,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 ... close Root file : DefaultOutput.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
-G4Integration Driver Stats: #QuickAdvance 9000 - #AccurateAdvance 6000 #good steps 6000 #bad steps 0
+G4Integration Driver Stats: #QuickAdvance 0 - #AccurateAdvance 0 #good steps 0 #bad steps 0
 G4ChordFinder statistics report: 
-  No trials: 8000  No Calls: 4000  Max-trial: 3
+  No trials: 0  No Calls: 0  Max-trial: 0
   Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
+G4ChordFinder statistics report: 
+  No trials: 7000  No Calls: 4000  Max-trial: 2

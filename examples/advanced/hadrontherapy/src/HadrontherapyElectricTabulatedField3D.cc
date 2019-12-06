@@ -32,6 +32,8 @@
 
 namespace{  G4Mutex MyHadrontherapyLockEField=G4MUTEX_INITIALIZER;  }
 
+using namespace std;
+
 HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( const char* filename, G4double exOffset, G4double eyOffset, G4double ezOffset)
   :feXoffset(exOffset),feYoffset(eyOffset),feZoffset(ezOffset),einvertX(false),einvertY(false),einvertZ(false)
 {
@@ -43,7 +45,7 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
 	     << "\n      Electric field"
          << "\n-----------------------------------------------------------";
 
-  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl;
+  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << G4endl;
   G4AutoLock lock(&MyHadrontherapyLockEField);
 
   ifstream file( filename ); // Open the file for reading.
@@ -57,7 +59,7 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
 
   G4cout << "  [ Number of values x,y,z: "
 	 << Enx << " " << Eny << " " << Enz << " ] "
-	 << endl;
+	 << G4endl;
 
   // Set up storage space for table
   xEField.resize( Enx );
@@ -105,9 +107,9 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
   Emaxy = Eyval * ElenUnit;
   Emaxz = Ezval * ElenUnit;
 
-  G4cout << "\n ---> ... done reading " << endl;
+  G4cout << "\n ---> ... done reading " << G4endl;
 
-  // G4cout << " Read values of field from file " << filename << endl;
+  // G4cout << " Read values of field from file " << filename << G4endl;
   G4cout << " ---> assumed the order:  x, y, z, Ex, Ey, Ez "
 	 << "\n ---> Min values x,y,z: "
 	 << Eminx/cm << " " << Eminy/cm << " " << Eminz/cm << " cm "
@@ -115,7 +117,7 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
 	 << Emaxx/cm << " " << Emaxy/cm << " " << Emaxz/cm << " cm "
 	 << "\n ---> The field will be offset in x by " << exOffset/cm << " cm "
          << "\n ---> The field will be offset in y by " << eyOffset/cm << " cm "
-         << "\n ---> The field will be offset in z by " << ezOffset/cm << " cm " << endl;
+         << "\n ---> The field will be offset in z by " << ezOffset/cm << " cm " << G4endl;
 
   // Should really check that the limits are not the wrong way around.
   if (Emaxx < Eminx) {swap(Emaxx,Eminx); einvertX = true;}
@@ -132,7 +134,7 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
   dz1 = Emaxz - Eminz;
   G4cout << "\n ---> Dif values x,y,z (range): "
 	 << dx1/cm << " " << dy1/cm << " " << dz1/cm << " cm  "
-	 << "\n-----------------------------------------------------------" << endl;
+	 << "\n-----------------------------------------------------------" << G4endl;
 }
 
 void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[4],
@@ -184,8 +186,8 @@ void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[
 
 /*
 #ifdef DEBUG_G4intERPOLATING_FIELD
-    G4cout << "Local x,y,z: " << exlocal << " " << eylocal << " " << ezlocal << endl;
-    G4cout << "Index x,y,z: " << exindex << " " << eyindex << " " << ezindex << endl;
+    G4cout << "Local x,y,z: " << exlocal << " " << eylocal << " " << ezlocal << G4endl;
+    G4cout << "Index x,y,z: " << exindex << " " << eyindex << " " << ezindex << G4endl;
     G4double valx0z0, mulx0z0, valx1z0, mulx1z0;
     G4double valx0z1, mulx0z1, valx1z1, mulx1z1;
     valx0z0= table[exindex  ][0][ezindex];  mulx0z0=  (1-exlocal) * (1-ezlocal);
@@ -228,7 +230,7 @@ void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[
           zEField[exindex+1][eyindex+1][ezindex  ] *    exlocal  *    eylocal  * (1-ezlocal) +
           zEField[exindex+1][eyindex+1][ezindex+1] *    exlocal  *    eylocal  *    ezlocal ;
   }
-//G4cout << "Getting electric field " << Efield[3]/(volt/m) << " " << Efield[4]/(volt/m) << " " << Efield[5]/(volt/m) << endl;
+//G4cout << "Getting electric field " << Efield[3]/(volt/m) << " " << Efield[4]/(volt/m) << " " << Efield[5]/(volt/m) << G4endl;
 //G4cout << "For coordinates: " << Epoint[0] << " " << Epoint[1] << " " << Epoint[2] << G4endl;
 
 /*std::ofstream WriteDataIn("ElectricFieldFC.out", std::ios::app);
@@ -238,5 +240,5 @@ void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[
 			<<   Efield[3]/(volt/m)            << '\t' << "   "
 			<<   Efield[4]/(volt/m)           << '\t' << "   "
 			<<   Efield[5]/(volt/m)           << '\t' << "   "
-			<< G4endl;    */
+			<< std::endl;    */
 }

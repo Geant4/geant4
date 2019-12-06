@@ -32,6 +32,8 @@
 #include "G4ios.hh"
 #include <sstream>
 
+#include "G4UItokenNum.hh"
+using namespace G4UItokenNum;
 
 G4UIparameter::G4UIparameter():paramERR(0)
 {

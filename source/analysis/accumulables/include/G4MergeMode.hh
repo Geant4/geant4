@@ -70,6 +70,9 @@ G4MergeFunction<T> GetMergeFunction(G4MergeMode mergeMode)
     case G4MergeMode::kMinimum:
       // return std::bind([](const T& x, const T& y) { return std::min(x,y);});
       return [](const T& x, const T& y) { return std::min(x,y); };
+
+    default:
+      return [](const T&, const T&) { return 0.0; };
   }
 }
 

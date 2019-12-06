@@ -196,7 +196,7 @@ void G4RDFluoData::LoadData(G4int Z)
   }
   G4String name(ost.str());
   
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4LEDATA environment variable not set!");

@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23rd October 2019 Ben Morgan (visexternalgl2ps-V10-05-03)
+- Only link to imported targets for OpenGL
+- Explicitly link to G4globman/G4global to use/propagate usage requirements.
+
+17 September 2019 Laurent Garnier (visexternalgl2ps-V10-05-02)
+- gl2ps.cc: fix Continous warnings 
+
+17 September 2019 Laurent Garnier (visexternalgl2ps-V10-05-01)
+- gl2ps.cc gl2ps.h: Update library to 1.4.0 applying Geant4 patches
+
 20 February 2019 Ben Morgan (visexternalgl2ps-V10-05-00)
 - Add include path for generated G4GlobalConfig.hh
 

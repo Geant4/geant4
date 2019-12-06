@@ -23,15 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Implementation of G4BoundingEnvelope
 //
-// Author: evgueni.tcherniaev@cern.ch
-//
-// 2016.05.25 E.Tcherniaev - initial version
-// 
+// 2016.05.25, E.Tcherniaev - initial version
 // --------------------------------------------------------------------
 
 #include <cmath>
@@ -49,7 +43,7 @@ const G4double kCarTolerance =
 //
 G4BoundingEnvelope::G4BoundingEnvelope(const G4ThreeVector& pMin,
                                        const G4ThreeVector& pMax)
-  : fMin(pMin), fMax(pMax), fPolygons(0)
+  : fMin(pMin), fMax(pMax)
 {
   // Check correctness of bounding box
   //
@@ -72,11 +66,9 @@ G4BoundingEnvelope(const std::vector<const G4ThreeVectorList*>& polygons)
   //
   G4double xmin =  kInfinity, ymin =  kInfinity, zmin =  kInfinity;
   G4double xmax = -kInfinity, ymax = -kInfinity, zmax = -kInfinity;
-  std::vector<const G4ThreeVectorList*>::const_iterator ibase;
-  for (ibase = fPolygons->begin(); ibase != fPolygons->end(); ibase++)
+  for (auto ibase = fPolygons->cbegin(); ibase != fPolygons->cend(); ++ibase)
   { 
-    std::vector<G4ThreeVector>::const_iterator ipoint;
-    for (ipoint = (*ibase)->begin(); ipoint != (*ibase)->end(); ipoint++)
+    for (auto ipoint = (*ibase)->cbegin(); ipoint != (*ibase)->cend(); ++ipoint)
     {
       G4double x = ipoint->x(); 
       if (x < xmin) xmin = x;
@@ -311,7 +303,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
     if (zmin-kCarTolerance > zmaxlim) return false;
     if (zmax+kCarTolerance < zminlim) return false;
 
-    if (fPolygons == 0)
+    if (fPolygons == nullptr)
     {
       if (pAxis == kXAxis)
       {
@@ -379,7 +371,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
       cx = cy = cz = cd = kInfinity;
     }
     G4double emin = kInfinity, emax = -kInfinity;
-    if (fPolygons == 0)
+    if (fPolygons == nullptr)
     {
       G4double coor;
       coor = cx*fMin.x() + cy*fMin.y() + cz*fMin.z() + cd;
@@ -409,11 +401,9 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
     }
     else
     {
-      std::vector<const G4ThreeVectorList*>::const_iterator ibase;
-      for (ibase = fPolygons->begin(); ibase != fPolygons->end(); ibase++)
+      for (auto ibase=fPolygons->cbegin(); ibase!=fPolygons->cend(); ++ibase)
       { 
-        G4ThreeVectorList::const_iterator ipoint;
-        for (ipoint = (*ibase)->begin(); ipoint != (*ibase)->end(); ipoint++)
+        for (auto ipoint=(*ibase)->cbegin(); ipoint!=(*ibase)->cend(); ++ipoint)
         {
           G4double coor = ipoint->x()*cx + ipoint->y()*cy + ipoint->z()*cz + cd;
           if (coor < emin) emin = coor;
@@ -440,7 +430,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   //
   G4int nbases = (fPolygons == 0) ? 2 : fPolygons->size();
   std::vector<G4Polygon3D*> bases(nbases);
-  if (fPolygons == 0)
+  if (fPolygons == nullptr)
   {
     bases[0] = new G4Polygon3D(4); 
     bases[1] = new G4Polygon3D(4);
@@ -463,7 +453,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   //
   EAxis axis[] = { kXAxis,kYAxis,kZAxis };
   G4VoxelLimits limits; // default is unlimited 
-  for (G4int i=0; i<3; ++i)
+  for (auto i=0; i<3; ++i)
   {
     if (pVoxelLimits.IsLimited(axis[i]))
     {
@@ -607,7 +597,7 @@ G4BoundingEnvelope::TransformVertices(const G4Transform3D& pTransform3D,
   G4ThreeVectorList baseA(4), baseB(4);
   std::vector<const G4ThreeVectorList*> aabb(2);
   aabb[0] = &baseA; aabb[1] = &baseB;
-  if (fPolygons == 0)
+  if (fPolygons == nullptr)
   {
     baseA[0].set(fMin.x(),fMin.y(),fMin.z());
     baseA[1].set(fMax.x(),fMin.y(),fMin.z());
@@ -626,20 +616,20 @@ G4BoundingEnvelope::TransformVertices(const G4Transform3D& pTransform3D,
   if (pTransform3D.xx()==1 && pTransform3D.yy()==1 && pTransform3D.zz()==1)
   {
     G4ThreeVector offset = pTransform3D.getTranslation();
-    for ( ; ia != iaend; ia++, ib++)
+    for ( ; ia != iaend; ++ia, ++ib)
     { 
       G4ThreeVectorList::const_iterator ka = (*ia)->begin();
       G4Polygon3D::iterator             kb = (*ib)->begin();
-      for ( ; ka != (*ia)->end(); ka++, kb++) { (*kb) = (*ka) + offset; }
+      for ( ; ka != (*ia)->end(); ++ka, ++kb) { (*kb) = (*ka) + offset; }
     }
   }
   else
   {
-    for ( ; ia != iaend; ia++, ib++)
+    for ( ; ia != iaend; ++ia, ++ib)
     { 
       G4ThreeVectorList::const_iterator ka = (*ia)->begin();
       G4Polygon3D::iterator             kb = (*ib)->begin();
-      for ( ; ka != (*ia)->end(); ka++, kb++)
+      for ( ; ka != (*ia)->end(); ++ka, ++kb)
       {
         (*kb) = pTransform3D*G4Point3D(*ka);
       }
@@ -658,34 +648,33 @@ G4BoundingEnvelope::GetPrismAABB(const G4Polygon3D& pBaseA,
 {
   G4double xmin =  kInfinity, ymin =  kInfinity, zmin =  kInfinity;
   G4double xmax = -kInfinity, ymax = -kInfinity, zmax = -kInfinity;
-  G4Polygon3D::const_iterator it;
 
   // First base
   //
-  for (it = pBaseA.begin(); it != pBaseA.end(); it++)
+  for (auto it1 = pBaseA.cbegin(); it1 != pBaseA.cend(); ++it1)
   { 
-    G4double x = it->x();
+    G4double x = it1->x();
     if (x < xmin) xmin = x;
     if (x > xmax) xmax = x;
-    G4double y = it->y(); 
+    G4double y = it1->y(); 
     if (y < ymin) ymin = y;
     if (y > ymax) ymax = y;
-    G4double z = it->z(); 
+    G4double z = it1->z(); 
     if (z < zmin) zmin = z;
     if (z > zmax) zmax = z;
   }
 
   // Second base
   //
-  for (it = pBaseB.begin(); it != pBaseB.end(); it++)
+  for (auto it2 = pBaseB.cbegin(); it2 != pBaseB.cend(); ++it2)
   { 
-    G4double x = it->x(); 
+    G4double x = it2->x(); 
     if (x < xmin) xmin = x;
     if (x > xmax) xmax = x;
-    G4double y = it->y(); 
+    G4double y = it2->y(); 
     if (y < ymin) ymin = y;
     if (y > ymax) ymax = y;
-    G4double z = it->z(); 
+    G4double z = it2->z(); 
     if (z < zmin) zmin = z;
     if (z > zmax) zmax = z;
   }
@@ -1054,14 +1043,12 @@ G4BoundingEnvelope::ClipVoxelByPlanes(G4int pBits,
 
   // Clip the edges by the planes
   //
-  std::vector<G4Segment3D>::const_iterator iedge;  
-  for (iedge = edges.begin(); iedge != edges.end(); iedge++)
+  for (auto iedge = edges.cbegin(); iedge != edges.cend(); ++iedge)
   {
     G4bool    exist = true;
     G4Point3D p1    = iedge->first;
     G4Point3D p2    = iedge->second;
-    std::vector<G4Plane3D>::const_iterator iplane;  
-    for (iplane = pPlanes.begin(); iplane != pPlanes.end(); iplane++)
+    for (auto iplane = pPlanes.cbegin(); iplane != pPlanes.cend(); ++iplane)
     {
       // Clip current edge
       G4double d1 = iplane->distance(p1); 

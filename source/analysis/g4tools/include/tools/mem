@@ -94,6 +94,7 @@ public:
   }
   
 protected:
+public: //for MT disconnection (see test/mt_root_ntuple.cpp).
   static int& counter() {
     static int s_count = 0;
     return s_count;
@@ -103,6 +104,7 @@ protected:
     static bool s_check_by_class = false;
     return s_check_by_class;
   }
+protected:
 
   typedef std::list< std::pair<std::string,int> > mem_list;
 

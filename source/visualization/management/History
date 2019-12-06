@@ -25,6 +25,73 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+29 October 2019  Gabriele Cosmo (visman-V10-05-14)
+- G4VisCommandsViewer.cc:
+  o Replaced use of std::experimental::filesystem with std::filesystem
+    for WIN32 target. Forcing c++17 default builds on Windows and allow for
+    porting on Visual Studio 2019.
+
+20 September 2019  John Allison (visman-V10-05-13)
+- G4ViewParameters.cc:
+  o Catmull-Rom cubic spline interpolation:
+    . Use log interpolation for explode factor and zoom factor.
+- G4VisCommandsSceneAdd.cc:
+  o Enhance global description of some models to avoid ambiguities in
+    scene list.
+  o Improve some message printing.
+- G4VisCommandsSet.cc:
+  o Improve guidance for /vis/set/volumeForField.
+- G4VisCommandsViewerDefault.cc:
+  o Improve code readability.
+- G4VisCommandsViewerSet.cc:
+  o Fix bug in /vis/viewer/set/style:
+    . Bug was: could not return from cloud to wireframe or solid.
+  o Improve code readability.
+
+19 September 2019  Makoto Asai (visman-V10-05-12)
+- G4VSceneHandler.cc
+  o Namespace scope is added to MeshScoreMap
+  o Co-working with detutils-V10-05-01
+
+29 August 2019  John Allison (visman-V10-05-11)
+- Part of vis-V10-05-24.
+- Add G4TessellatedSolid to list of solids that may be specially treated
+
+22 August 2019  John Allison (visman-V10-05-10)
+- Part of vis-V10-05-23.
+- G4VisManager:
+  o Add flag for reviewing kept events.
+  o Improve a message.
+- G4VisCommandsSceneAdd.hh/.cc, G4VisCommands.cc:
+  o Rework /vis/scene/add/eventID:
+    . Just writes a summary at end of run.
+    . Except when reviewing kept events one by one, in which case it
+      writes run and event no for each event.
+- G4VisCommandsCompound.cc: /vis/drawTree:
+  o Ensure vis is enabled (and restore ableness after). This is so that
+    the command works even if vis is disabled.
+
+17 August 2019  John Allison (visman-V10-05-09)
+- G4VisManager.cc:
+  o Clear graphics stores and viewer screen if scene contains no
+    run duration models. E.g., after geometry has changed.
+
+16 July 2019  John Allison (visman-V10-05-08)
+- Part of vis-V10-05-22.
+- Co-works with modeling-V10-05-07.
+- G4VisCommandsSceneAdd:
+  o Follow changes in modeling-V10-05-07.
+- G4VUserVisAction:
+  o Store for use by the derived class:
+    G4VGraphicsScene* fpSceneHandler;
+    const G4Transform3D* fpTransform;
+    const G4ModelingParameters* fpMP;
+
+06 July 2019  John Allison (visman-V10-05-07)
+- Part of vis-V10-05-21.
+- G4VGraphicsSystem.cc: Improve output message.
+- G4VSceneHandler::GetDrawingStyle: Fix bug for cloud drawing.
+
 13 June 2019  John Allison (visman-V10-05-06)
 - Part of vis-V10-05-20.
 - G4VSceneHandler:

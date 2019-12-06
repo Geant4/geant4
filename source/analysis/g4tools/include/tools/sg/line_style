@@ -22,16 +22,14 @@ public:
   sf<float> width;
   sf<lpat> pattern;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::line_style)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(visible)
-      TOOLS_ADD_FIELD_DESC(color)
-      TOOLS_ADD_FIELD_DESC(width)
-      TOOLS_ADD_FIELD_DESC(pattern)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),4, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(visible),
+      TOOLS_ARG_FIELD_DESC(color),
+      TOOLS_ARG_FIELD_DESC(width),
+      TOOLS_ARG_FIELD_DESC(pattern)
+    );
     return s_v;
   }
 private:
@@ -78,8 +76,8 @@ public:
     sp.visible(visible.value());
     sp.color(color.value());
   //sp.transparency(transparency.value());
-    sp.line_width(width.value());
-    sp.line_pattern(pattern.value());
+    sp.width(width.value());
+    sp.pattern(pattern.value());
 
     if(!sp.parse(a_out,a_cmaps,a_s)) {
       a_out << "tools::sg::line_style::from_string :"
@@ -91,8 +89,8 @@ public:
     visible.value(sp.visible());
     color.value(sp.color());
   //transparency.value(sp.transparency());
-    width.value(sp.line_width());
-    pattern.value(sp.line_pattern());
+    width.value(sp.width());
+    pattern.value(sp.pattern());
 
     return true;
   }

@@ -9,7 +9,7 @@
 namespace tools {
 
 //////////////////////////////////////////////////////////
-/// manipulations that induces no intermediate vector : //
+/// T* : /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
 template <class T>
@@ -65,17 +65,16 @@ inline void vcopy(std::vector<T*>& a_to,const std::vector<T*>& a_from) {return c
 template <class T>
 inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
   typedef typename std::vector<T>::size_type sz_t;
-  sz_t vsize = a_vec.size();
   sz_t number = a_from.size();
-  a_vec.resize(vsize+number);
-  sz_t offset = vsize; 
+  sz_t offset = a_vec.size();
+  a_vec.resize(offset+number);
   for(sz_t index=0;index<number;index++,offset++) {
     a_vec[offset] = a_from[index];
   }
 }
 
 template <class T>
-inline void append(std::vector<T>& a_vec,unsigned int a_num,const T* a_from) {
+inline void append(std::vector<T>& a_vec,typename std::vector<T>::size_type a_num,const T* a_from) {
   typedef typename std::vector<T>::size_type sz_t;
   sz_t vsize = a_vec.size();
   a_vec.resize(vsize+a_num);
@@ -98,6 +97,19 @@ inline void removep(std::vector<T*>& a_vec,const T* a_elem) {
   }
 }
 
+template <class T>
+inline bool is_inp(const std::vector<T*>& a_vec,const T* a_item){
+  typedef typename std::vector<T*>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if(*it==a_item) return true;
+  }
+  return false;
+}
+
+////////////////////////////////////////////////////////////////////////////
+/// T : ////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 template <class T>
 inline void push_back_unique(std::vector<T>& a_vec,const T& a_v) {
   typedef typename std::vector<T>::const_iterator it_t;
@@ -155,6 +167,16 @@ inline void unique(std::vector<T>& a_vec) {
       }
     }
   }
+}
+
+template <class T>
+inline bool is_in(const std::vector<T>& a_vec,const T& a_item){
+  typedef typename std::vector<T>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if(*it==a_item) return true;
+  }
+  return false;
 }
 
 template <class T>

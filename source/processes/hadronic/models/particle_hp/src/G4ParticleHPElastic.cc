@@ -46,9 +46,9 @@
     overrideSuspension = false;
 /*
     G4ParticleHPElasticFS * theFS = new G4ParticleHPElasticFS;
-    if(!getenv("G4NEUTRONHPDATA")) 
+    if(!std::getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-    dirName = getenv("G4NEUTRONHPDATA");
+    dirName = std::getenv("G4NEUTRONHPDATA");
     G4String tString = "/Elastic";
     dirName = dirName + tString;
 //    G4cout <<"G4ParticleHPElastic::G4ParticleHPElastic testit "<<dirName<<G4endl;
@@ -199,9 +199,9 @@ void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
       }
 
       G4ParticleHPElasticFS * theFS = new G4ParticleHPElasticFS;
-      if(!getenv("G4NEUTRONHPDATA")) 
+      if(!std::getenv("G4NEUTRONHPDATA")) 
          throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-      dirName = getenv("G4NEUTRONHPDATA");
+      dirName = std::getenv("G4NEUTRONHPDATA");
       G4String tString = "/Elastic";
       dirName = dirName + tString;
       for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) {

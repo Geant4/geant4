@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 November, 2019  G. Cosmo (intercoms-V10-05-09)
+- Fixed more cases of implicit type conversions from size_t to G4int.
+
+19 November, 2019  G. Cosmo (intercoms-V10-05-08)
+- Fixed more cases of implicit type conversions.
+
+15 November, 2019  G. Cosmo (intercoms-V10-05-07)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+30 September, 2019  M. Asai (intercoms-V10-05-06)
+- Eliminating global-scope enum in G4UItokenNum.hh.
+
 17 April, 2019  M. Asai (intercoms-V10-05-05)
 - Following UI commands now return proper return code when they are
   not successful. Addressing to bug report #2159.

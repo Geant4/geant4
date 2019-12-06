@@ -40,6 +40,8 @@
 #include "G4Types.hh"
 
 #include "F06PhysicsList.hh"
+#include "G4Transportation.hh"
+
 #include "F06DetectorConstruction.hh"
 #include "F06ActionInitialization.hh"
 
@@ -129,6 +131,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new F06DetectorConstruction());
   // Physics list
   runManager->SetUserInitialization(new F06PhysicsList());
+
+  // Ensure that Transportation considers gravity fields.
+  G4Transportation::EnableGravity(true);
+
   // User action initialization
   runManager->SetUserInitialization(new F06ActionInitialization());
 

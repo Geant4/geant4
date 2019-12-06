@@ -48,8 +48,7 @@ class G4ExcitedString;
 
 class G4FragmentingString 
 {
-  public:
-     
+  public:     
       G4FragmentingString(const G4FragmentingString &right);
       G4FragmentingString(const G4ExcitedString &excited);
       G4FragmentingString(const G4FragmentingString &old,
@@ -64,7 +63,6 @@ class G4FragmentingString
       G4bool operator==(const G4FragmentingString &right) const;
 
       G4bool operator!=(const G4FragmentingString &right) const;
-
       
       G4LorentzVector Get4Momentum() const;
 
@@ -92,7 +90,7 @@ class G4FragmentingString
             
       G4bool    DecayIsQuark();
       G4bool    StableIsQuark();
-      G4bool    FourQuarkString(void) const;
+      G4bool    IsAFourQuarkString(void) const;
 
       G4LorentzVector   GetPstring();
       G4LorentzVector   GetPleft();
@@ -105,7 +103,6 @@ class G4FragmentingString
       void              Boost(G4ThreeVector& Velocity);
 
   private:
-
       G4ParticleDefinition *LeftParton, *RightParton; 
       G4ThreeVector Ptleft,Ptright;    // Pt (px,py) for partons (pz ignored!)
       G4double Pplus, Pminus;        // p-, p+ of string, Plus ass. to Left!
@@ -144,15 +141,15 @@ G4ParticleDefinition * G4FragmentingString::GetDecayParton() const
 
 inline
 G4ParticleDefinition* G4FragmentingString::GetLeftParton(void) const
-    {
+{
     return LeftParton; 
-    }
+}
 
 inline
 G4ParticleDefinition* G4FragmentingString::GetRightParton(void) const
-    {
+{
     return RightParton; 
-    }
+}
 
 //+++++++++++++++++++++++++++
 inline
@@ -207,11 +204,15 @@ G4LorentzRotation G4FragmentingString::TransformToAlignedCms()
 
 inline
 void G4FragmentingString::SetPleft(G4LorentzVector a4momentum)
-{    Pleft = a4momentum;}
+{    
+     Pleft = a4momentum;
+}
 
 inline
 void G4FragmentingString::SetPright(G4LorentzVector a4momentum)
-{    Pright = a4momentum;}
-#endif
+{    
+     Pright = a4momentum;
+}
 
+#endif
 

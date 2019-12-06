@@ -66,7 +66,7 @@ DetectorConstruction::DetectorConstruction()
   fSurface->SetFinish(ground);
   fSurface->SetModel(unified);
   fSurface->SetMaterialPropertiesTable(fSurfaceMPT);
-  
+
   fTank_LV  = nullptr;
   fWorld_LV = nullptr;
 
@@ -137,9 +137,17 @@ void DetectorConstruction::SetSurfaceSigmaAlpha(G4double v) {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DetectorConstruction::SetSurfacePolish(G4double v) {
+  fSurface->SetPolish(v);
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+
+  G4cout << "Surface polish set to: " << fSurface->GetPolish()
+         << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DetectorConstruction::AddTankMPV(const char* c,
                                      G4MaterialPropertyVector* mpv) {
-  mpv->SetSpline(true);
   fTankMPT->AddProperty(c, mpv);
   G4cout << "The MPT for the box is now: " << G4endl;
   fTankMPT->DumpTable();
@@ -149,7 +157,6 @@ void DetectorConstruction::AddTankMPV(const char* c,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DetectorConstruction::AddWorldMPV(const char* c,
                                        G4MaterialPropertyVector* mpv) {
-  mpv->SetSpline(true);
   fWorldMPT->AddProperty(c, mpv);
   G4cout << "The MPT for the world is now: " << G4endl;
   fWorldMPT->DumpTable();
@@ -159,7 +166,6 @@ void DetectorConstruction::AddWorldMPV(const char* c,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DetectorConstruction::AddSurfaceMPV(const char* c,
                                          G4MaterialPropertyVector* mpv) {
-  mpv->SetSpline(true);
   fSurfaceMPT->AddProperty(c, mpv);
   G4cout << "The MPT for the surface is now: " << G4endl;
   fSurfaceMPT->DumpTable();
@@ -167,7 +173,7 @@ void DetectorConstruction::AddSurfaceMPV(const char* c,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DetectorConstruction::AddTankMPCV(const char* c, G4double v) {
+void DetectorConstruction::AddTankMPC(const char* c, G4double v) {
   fTankMPT->AddConstProperty(c, v);
   G4cout << "The MPT for the box is now: " << G4endl;
   fTankMPT->DumpTable();
@@ -175,10 +181,17 @@ void DetectorConstruction::AddTankMPCV(const char* c, G4double v) {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DetectorConstruction::AddWorldMPCV(const char* c, G4double v) {
+void DetectorConstruction::AddWorldMPC(const char* c, G4double v) {
   fWorldMPT->AddConstProperty(c, v);
   G4cout << "The MPT for the world is now: " << G4endl;
   fWorldMPT->DumpTable();
+  G4cout << "............." << G4endl;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DetectorConstruction::AddSurfaceMPC(const char* c, G4double v) {
+  fSurfaceMPT->AddConstProperty(c, v);
+  G4cout << "The MPT for the surface is now: " << G4endl;
+  fSurfaceMPT->DumpTable();
   G4cout << "............." << G4endl;
 }
 

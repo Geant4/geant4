@@ -762,7 +762,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
              << " modelIdx= " << regModels->ModelIndex(k)
              << G4endl;
     }
-    if(cross < 0.0) { cross = 0.0; }
+    cross = std::max(cross, 0.0);
     aVector->PutValue(j, cross);
   }
 }

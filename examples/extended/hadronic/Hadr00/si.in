@@ -27,6 +27,6 @@
 /testhadr/particle kaon0L
 /testhadr/particle neutron
 /testhadr/particle anti_sigma0
-/testhadr/verbose 0
+/testhadr/verbose 1
 /run/beamOn 1
 #

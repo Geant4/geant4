@@ -34,34 +34,22 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQGSP_BERT_h
-#define TQGSP_BERT_h 1
-
-#include <CLHEP/Units/SystemOfUnits.h>
+#ifndef QGSP_BERT_h
+#define QGSP_BERT_h 1
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TQGSP_BERT: public T
+class QGSP_BERT: public G4VModularPhysicsList
 {
 public:
-  TQGSP_BERT(G4int ver = 1);
-  virtual ~TQGSP_BERT();
+  QGSP_BERT(G4int ver = 1);
+  virtual ~QGSP_BERT()=default;
+
+  QGSP_BERT(const QGSP_BERT &) = delete;
+  QGSP_BERT & operator=(const QGSP_BERT &)=delete;
   
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
-
-#include "QGSP_BERT.icc"
-typedef TQGSP_BERT<G4VModularPhysicsList> QGSP_BERT;
-
-// 2002 by J.P. Wellisch
 
 #endif
 

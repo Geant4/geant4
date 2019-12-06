@@ -81,7 +81,6 @@ if(MSVC)
   # Extra modes
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-MDd -Zi -G4DEBUG_VERBOSE")
   set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-MDd -Zi")
-
 endif()
 
 #-----------------------------------------------------------------------

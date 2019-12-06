@@ -68,14 +68,14 @@ int main(int argc,char** argv)
         ui = new G4UIExecutive(argc, argv);
 
     new G4tgrMessenger;
-    char* part = getenv("DICOM_PARTIAL_PARAM");
+    char* part = std::getenv("DICOM_PARTIAL_PARAM");
     G4bool bPartial = (part && G4String(part) == "1") ? true : false;
 
     CLHEP::HepRandom::setTheEngine(new CLHEP::MixMaxRng);
-    CLHEP::HepRandom::setTheSeed(24534575684783);
-    long seeds[2];
-    seeds[0] = 534524575674523;
-    seeds[1] = 526345623452457;
+    CLHEP::HepRandom::setTheSeed(G4long(24534575684783));
+    G4long seeds[2];
+    seeds[0] = G4long(534524575674523);
+    seeds[1] = G4long(526345623452457);
     CLHEP::HepRandom::setTheSeeds(seeds);
 
     // Construct the default run manager
@@ -104,7 +104,7 @@ int main(int argc,char** argv)
     {
 #ifdef G4_DCMTK
         G4String inpfile = "Data.dat";
-        char* env_inpfile = getenv("DICOM_INPUT_FILE");
+        char* env_inpfile = std::getenv("DICOM_INPUT_FILE");
         if(env_inpfile)
             inpfile = env_inpfile;
 
@@ -112,12 +112,12 @@ int main(int argc,char** argv)
         theFileMgr->Convert(inpfile);
 #else
         // Treatment of DICOM images before creating the G4runManager
-        dcmHandler = new DicomHandler;
+        dcmHandler = DicomHandler::Instance();
         dcmHandler->CheckFileFormat();
 #endif
 
         // Initialisation of physics, geometry, primary particles ...
-        char* nest = getenv( "DICOM_NESTED_PARAM" );
+        char* nest = std::getenv( "DICOM_NESTED_PARAM" );
         if( nest && G4String(nest) == "1" ) {
             theGeometry = new DicomNestedParamDetectorConstruction();
         } else {
@@ -184,8 +184,6 @@ int main(int argc,char** argv)
     {
 #ifdef G4_DCMTK
         delete theFileMgr;
-#else
-        delete dcmHandler;
 #endif
     }
 

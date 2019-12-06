@@ -94,6 +94,14 @@ inline const G4Event* G4VisManager::GetRequestedEvent() const {
   return fpRequestedEvent;
 }
 
+inline G4int G4VisManager::GetNKeepRequests () const {
+  return fNKeepRequests;
+}
+
+inline G4bool G4VisManager::GetReviewingKeptEvents() const {
+  return fReviewingKeptEvents;
+}
+
 inline G4bool G4VisManager::GetAbortReviewKeptEvents() const {
   return fAbortReviewKeptEvents;
 }
@@ -151,6 +159,9 @@ inline void G4VisManager::SetRequestedEvent (const G4Event* event) {
   fpRequestedEvent = event;
 }
 
+inline void G4VisManager::SetReviewingKeptEvents (G4bool reveiwing) {
+  fReviewingKeptEvents = reveiwing;
+}
 inline void G4VisManager::SetAbortReviewKeptEvents (G4bool abort) {
   fAbortReviewKeptEvents = abort;
 }

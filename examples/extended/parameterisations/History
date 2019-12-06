@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 28th, 2019  I. Hrivnacova (exParameterisations-V10-05-01)
+--------------------
+- Updated category README files for reorganization of gflash examples.
+
 Jan 31st, 2019  I. Hrivnacova (exParameterisations-V10-05-00)
 --------------------
 - Merged GitHub PR #4: all Boolean operators now return G4bool.

@@ -23,18 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4ProcessVector
 //
 // 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
 // Class Description
-//  This class is a container for pointers to physics process objects.
-// ------------------------------------------------------------
+//
+// This class is a container for pointers to physics process objects.
 
-#ifndef G4ProcessVector_h
-#define G4ProcessVector_h 1
+// --------------------------------------------------------------------
+#ifndef G4ProcessVector_hh
+#define G4ProcessVector_hh 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -45,6 +43,7 @@ class G4VProcess;
 class G4ProcessVector 
 {
   public:
+
     //  Constructors
     G4ProcessVector();
     explicit G4ProcessVector(size_t);
@@ -53,20 +52,21 @@ class G4ProcessVector
     //  Destructor.
     virtual ~G4ProcessVector();
 
-    //assignment operator
+    // assignment operator
     G4ProcessVector & operator=(const G4ProcessVector &right);
  
-    // equal operator
+    // equality operator
     G4bool operator==(const G4ProcessVector &right) const;
 
   public: // With Description
+
     // Returns the number of items
-    G4int entries() const;
-    G4int length() const;
-    G4int size() const;
+    size_t entries() const;
+    size_t length() const;
+    size_t size() const;
     
     // Returns the position of the element
-    G4int index(G4VProcess* aProcess) const;
+    size_t index(G4VProcess* aProcess) const;
  
     // Returns "true" if the element exists
     G4bool contains(G4VProcess* aProcess) const;
@@ -95,7 +95,7 @@ class G4ProcessVector
     G4VProcess* & operator()(G4int i);
 
   protected:
-    // Use STL Vector 
+
     typedef std::vector<G4VProcess*> G4ProcVector;
 
     G4ProcVector * pProcVector;
@@ -104,20 +104,3 @@ class G4ProcessVector
 #include "G4ProcessVector.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04StackingAction.hh
+/// \file ExN04StackingAction.hh
 /// \brief Definition of the ExN04StackingAction class
 //
 

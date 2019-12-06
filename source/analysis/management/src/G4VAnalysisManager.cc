@@ -42,6 +42,21 @@
 
 using namespace G4Analysis;
 
+namespace {
+
+void NtupleMergingWarning(const G4String& functionName, 
+                          const G4String& outputType)
+{
+  G4ExceptionDescription description;
+  description
+    << "      " << "Ntuple merging is not available with "
+    << outputType << " output." << G4endl
+    << "      " << "Setting is ignored.";
+  G4Exception(functionName, "Analysis_W041", JustWarning, description);  
+}
+
+}
+
 //_____________________________________________________________________________
 G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
  : fState(type, isMaster),
@@ -805,7 +820,45 @@ void G4VAnalysisManager::FinishNtuple()
 { 
   return fVNtupleManager->FinishNtuple();
 }
-   
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetNtupleMerging(G4bool /*mergeNtuples*/, 
+                   G4int /*nofReducedNtupleFiles*/)
+{
+// The function is overridden in the managers which supports ntuple merging
+// Here we give just a warning that the feature is not available.
+
+  NtupleMergingWarning("G4VAnalysisManager::SetNtupleMerging", GetType());
+}
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetNtupleRowWise(G4bool /*rowWise*/, 
+                                          G4bool /*rowMode*/)
+{
+// The function is overridden in the managers which supports ntuple merging
+// Here we give just a warning that the feature is not available.
+
+  NtupleMergingWarning("G4VAnalysisManager::SetNtupleRowWise", GetType());
+}
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetBasketSize(unsigned int /*basketSize*/)
+{
+// The function is overridden in the managers which supports ntuple merging
+// Here we give just a warning that the feature is not available.
+
+  NtupleMergingWarning("G4VAnalysisManager::SetBasketSize", GetType());
+}
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetBasketEntries(unsigned int /*basketEntries*/)
+{
+// The function is overridden in the managers which supports ntuple merging
+// Here we give just a warning that the feature is not available.
+
+  NtupleMergingWarning("G4VAnalysisManager::SetBasketEntries", GetType());
+}
+
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtupleIColumn(G4int ntupleId, 
                                               const G4String& name)

@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-08-19  V.Ivanchenko (exhadr00-V10-05-01)
+- cleaned-up macro files
+
+23-08-19  V.Ivanchenko (exhadr00-V10-05-00)
+- cleaned-up macro files
+
 03-05-18  J.Allison (exhadr00-V10-04-03)
 - RunAction.cc:
   o Remove G4VIS_USE.

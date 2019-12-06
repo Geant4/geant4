@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4Trd
 //
 // Class description:
@@ -45,14 +38,10 @@
 //     fDy2    Half-length along y at the surface positioned at +dz
 //     fDz     Half-length along z axis
 
-// History:
 // 12.01.95 P.Kent: Old prototype code converted to thick geometry
-// 17.02.95 P.Kent: Exiting normal return
-// 19.08.96 P.Kent, V.Grichine: Fs in accordance with G4Box
 // 21.04.97 J.Apostolakis: Added Set Methods
 // 19.11.99 V.Grichine: kUndefined was added to Eside enum
 // --------------------------------------------------------------------
-
 #ifndef G4TRD_HH
 #define G4TRD_HH
 
@@ -132,9 +121,9 @@ class G4Trd : public G4CSGSolid
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
-                            const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0 ) const;
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 

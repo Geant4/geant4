@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4PolyconeSide, the face representing
+// one conical side of a polycone
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4PolyconeSide.cc
-//
-// Implementation of the face representing one conical side of a polycone
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4PolyconeSide.hh"
@@ -66,27 +59,23 @@ const G4PlSideManager& G4PolyconeSide::GetSubInstanceManager()
   return subInstanceManager;
 }
 
-//
 // Constructor
 //
 // Values for r1,z1 and r2,z2 should be specified in clockwise
 // order in (r,z).
 //
-G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
-                                const G4PolyconeSideRZ *tail,
-                                const G4PolyconeSideRZ *head,
-                                const G4PolyconeSideRZ *nextRZ,
+G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ* prevRZ,
+                                const G4PolyconeSideRZ* tail,
+                                const G4PolyconeSideRZ* head,
+                                const G4PolyconeSideRZ* nextRZ,
                                       G4double thePhiStart, 
                                       G4double theDeltaPhi, 
                                       G4bool thePhiIsOpen, 
                                       G4bool isAllBehind )
-  : ncorners(0), corners(0)
 {
-
   instanceID = subInstanceManager.CreateSubInstance();
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fSurfaceArea = 0.0;
   G4MT_pcphix = 0.0; G4MT_pcphiy = 0.0; G4MT_pcphiz = 0.0; G4MT_pcphik = 0.0;
 
   //
@@ -174,16 +163,14 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   zNormEdge[1] /= lAdj;
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4PolyconeSide::G4PolyconeSide( __void__& )
-  : startPhi(0.), deltaPhi(0.), phiIsOpen(false), allBehind(false),
+  : startPhi(0.), deltaPhi(0.),
     cone(0), rNorm(0.), zNorm(0.), rS(0.), zS(0.), length(0.),
-    prevRS(0.), prevZS(0.), nextRS(0.), nextZS(0.), ncorners(0), corners(0),
-    kCarTolerance(0.), fSurfaceArea(0.), instanceID(0)
+    prevRS(0.), prevZS(0.), nextRS(0.), nextZS(0.),
+    kCarTolerance(0.), instanceID(0)
 {
   r[0] = r[1] = 0.;
   z[0] = z[1] = 0.;
@@ -191,8 +178,6 @@ G4PolyconeSide::G4PolyconeSide( __void__& )
   zNormEdge[0]= zNormEdge[1] = 0.;
 }
 
-
-//
 // Destructor
 //  
 G4PolyconeSide::~G4PolyconeSide()
@@ -201,23 +186,19 @@ G4PolyconeSide::~G4PolyconeSide()
   if (phiIsOpen)  { delete [] corners; }
 }
 
-
-//
 // Copy constructor
 //
-G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
-  : G4VCSGface(), ncorners(0), corners(0)
+G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide& source )
+  : G4VCSGface()
 {
   instanceID = subInstanceManager.CreateSubInstance();
 
   CopyStuff( source );
 }
 
-
-//
 // Assignment operator
 //
-G4PolyconeSide& G4PolyconeSide::operator=( const G4PolyconeSide &source )
+G4PolyconeSide& G4PolyconeSide::operator=( const G4PolyconeSide& source )
 {
   if (this == &source)  { return *this; }
 
@@ -229,11 +210,9 @@ G4PolyconeSide& G4PolyconeSide::operator=( const G4PolyconeSide &source )
   return *this;
 }
 
-
-//
 // CopyStuff
 //
-void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
+void G4PolyconeSide::CopyStuff( const G4PolyconeSide& source )
 {
   r[0]    = source.r[0];
   r[1]    = source.r[1];
@@ -277,18 +256,16 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
   }
 }
 
-
-//
 // Intersect
 //
-G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p,
-                                  const G4ThreeVector &v,  
+G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
+                                  const G4ThreeVector& v,  
                                         G4bool outgoing,
                                         G4double surfTolerance,
-                                        G4double &distance,
-                                        G4double &distFromSurface,
-                                        G4ThreeVector &normal,
-                                        G4bool &isAllBehind )
+                                        G4double& distance,
+                                        G4double& distFromSurface,
+                                        G4ThreeVector& normal,
+                                        G4bool& isAllBehind )
 {
   G4double s1, s2;
   G4double normSign = outgoing ? +1 : -1;
@@ -409,11 +386,9 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p,
   return false;
 }
 
-
-//
 // Distance
 //
-G4double G4PolyconeSide::Distance( const G4ThreeVector &p, G4bool outgoing )
+G4double G4PolyconeSide::Distance( const G4ThreeVector& p, G4bool outgoing )
 {
   G4double normSign = outgoing ? -1 : +1;
   G4double distFrom, distOut2;
@@ -449,13 +424,11 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, G4bool outgoing )
   return kInfinity;
 }
 
-
-//
 // Inside
 //
-EInside G4PolyconeSide::Inside( const G4ThreeVector &p,
+EInside G4PolyconeSide::Inside( const G4ThreeVector& p,
                                       G4double tolerance, 
-                                      G4double *bestDistance )
+                                      G4double* bestDistance )
 {
   G4double distFrom, distOut2, dist2;
   G4double edgeRZnorm;
@@ -476,12 +449,10 @@ EInside G4PolyconeSide::Inside( const G4ThreeVector &p,
     return kOutside;
 }
 
-
-//
 // Normal
 //
-G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,
-                                            G4double *bestDistance )
+G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector& p,
+                                            G4double* bestDistance )
 {
   if (p == G4ThreeVector(0.,0.,0.))  { return p; }
 
@@ -496,8 +467,6 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,
   return G4ThreeVector( 0.,0., zNorm ).unit();
 }
 
-
-//
 // Extent
 //
 G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
@@ -533,9 +502,9 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
       G4ThreeVector d( r[1]*cosP, r[1]*sinP, z[1] );
       
       G4double ad = axis.dot(a),
-         bd = axis.dot(b),
-         cd = axis.dot(c),
-         dd = axis.dot(d);
+               bd = axis.dot(b),
+               cd = axis.dot(c),
+               dd = axis.dot(d);
       
       if (bd > ad) ad = bd;
       if (cd > ad) ad = cd;
@@ -558,16 +527,14 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   return a;
 }
 
-
-//
 // CalculateExtent
 //
 // See notes in G4VCSGface
 //
 void G4PolyconeSide::CalculateExtent( const EAxis axis, 
-                                      const G4VoxelLimits &voxelLimit,
-                                      const G4AffineTransform &transform,
-                                            G4SolidExtentList &extentList )
+                                      const G4VoxelLimits& voxelLimit,
+                                      const G4AffineTransform& transform,
+                                            G4SolidExtentList& extentList )
 {
   G4ClippablePolygon polygon;
   
@@ -876,8 +843,6 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   return;
 }
 
-
-//
 // GetPhi
 //
 // Calculate Phi for a given 3-vector (point), if not already cached for the
@@ -902,8 +867,6 @@ G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
   return val;
 }
 
-
-//
 // DistanceAway
 //
 // Calculate distance of a point from our conical surface, including the effect
@@ -921,10 +884,10 @@ G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
 // Notes:
 //  * There are two answers, depending on which hemisphere is considered.
 //
-G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
+G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
                                              G4bool opposite,
-                                             G4double &distOutside2,
-                                             G4double *edgeRZnorm  )
+                                             G4double& distOutside2,
+                                             G4double* edgeRZnorm  )
 {
   //
   // Convert our point to r and z
@@ -949,12 +912,13 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   if (q < 0)
   {
     distOutside2 = q*q;
-    if (edgeRZnorm) *edgeRZnorm = deltaR*rNormEdge[0] + deltaZ*zNormEdge[0];
+    if (edgeRZnorm != nullptr)
+      *edgeRZnorm = deltaR*rNormEdge[0] + deltaZ*zNormEdge[0];
   }
   else if (q > length)
   {
     distOutside2 = sqr( q-length );
-    if (edgeRZnorm)
+    if (edgeRZnorm != nullptr)
     {
       deltaR = rx - r[1];
       deltaZ = zx - z[1];
@@ -963,8 +927,8 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   }
   else
   {
-    distOutside2 = 0;
-    if (edgeRZnorm) *edgeRZnorm = answer;
+    distOutside2 = 0.;
+    if (edgeRZnorm != nullptr) *edgeRZnorm = answer;
   }
 
   if (phiIsOpen)
@@ -994,7 +958,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       G4double dist = d1*rx;
       
       distOutside2 += dist*dist;
-      if (edgeRZnorm)
+      if (edgeRZnorm != nullptr)
       {
         *edgeRZnorm = std::max(std::fabs(*edgeRZnorm),std::fabs(dist));
       }
@@ -1004,16 +968,14 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   return answer;
 }
 
-
-//
 // DistanceAway
 //
 // Special version of DistanceAway for Inside.
 // Opposite parameter is not used, instead use sign of rx for choosing the side
 //
-G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
-                                             G4double &distOutside2,
-                                             G4double *edgeRZnorm  )
+G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
+                                             G4double& distOutside2,
+                                             G4double* edgeRZnorm  )
 {
   //
   // Convert our point to r and z
@@ -1029,7 +991,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   //
   // Calculate return value
   //
-  G4double deltaR  = rx - r[0]*part, deltaZ = zx - z[0];
+  G4double deltaR = rx - r[0]*part, deltaZ = zx - z[0];
   G4double answer = deltaR*rNorm*part + deltaZ*zNorm;
   
   //
@@ -1039,7 +1001,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   if (q < 0)
   {
     distOutside2 = q*q;
-    if (edgeRZnorm)
+    if (edgeRZnorm != nullptr)
     {
       *edgeRZnorm = deltaR*rNormEdge[0]*part + deltaZ*zNormEdge[0];
     }
@@ -1047,7 +1009,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   else if (q > length)
   {
     distOutside2 = sqr( q-length );
-    if (edgeRZnorm)
+    if (edgeRZnorm != nullptr)
     {
       deltaR = rx - r[1]*part;
       deltaZ = zx - z[1];
@@ -1056,8 +1018,8 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   }
   else
   {
-    distOutside2 = 0;
-    if (edgeRZnorm) *edgeRZnorm = answer;
+    distOutside2 = 0.;
+    if (edgeRZnorm != nullptr) *edgeRZnorm = answer;
   }
 
   if (phiIsOpen)
@@ -1087,7 +1049,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       G4double dist = d1*rx*part;
       
       distOutside2 += dist*dist;
-      if (edgeRZnorm)
+      if (edgeRZnorm != nullptr)
       {
         *edgeRZnorm = std::max(std::fabs(*edgeRZnorm),std::fabs(dist));
       }
@@ -1097,17 +1059,15 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
   return answer;
 }
 
-
-//
 // PointOnCone
 //
 // Decide if a point is on a cone and return normal if it is
 //
-G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit,
+G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector& hit,
                                           G4double normSign,
-                                    const G4ThreeVector &p,
-                                    const G4ThreeVector &v,
-                                          G4ThreeVector &normal )
+                                    const G4ThreeVector& p,
+                                    const G4ThreeVector& v,
+                                          G4ThreeVector& normal )
 {
   G4double rx = hit.perp();
   //
@@ -1162,8 +1122,6 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit,
   return true;
 }
 
-
-//
 // FindLineIntersect
 //
 // Decide the point at which two 2-dimensional lines intersect
@@ -1177,7 +1135,7 @@ void G4PolyconeSide::FindLineIntersect( G4double x1,  G4double y1,
                                         G4double tx1, G4double ty1,
                                         G4double x2,  G4double y2,
                                         G4double tx2, G4double ty2,
-                                        G4double &x,  G4double &y )
+                                        G4double& x,  G4double& y )
 {
   //
   // The solution is a simple linear equation
@@ -1195,13 +1153,11 @@ void G4PolyconeSide::FindLineIntersect( G4double x1,  G4double y1,
   y = 0.5*( y1+s1*ty1 + y2+s2*ty2 );
 }
 
-
-//
 // Calculate surface area for GetPointOnSurface()
 //
 G4double G4PolyconeSide::SurfaceArea() 
 { 
-  if(fSurfaceArea==0)
+  if(fSurfaceArea==0.)
   {
     fSurfaceArea = (r[0]+r[1])* std::sqrt(sqr(r[0]-r[1])+sqr(z[0]-z[1]));
     fSurfaceArea *= 0.5*(deltaPhi);
@@ -1209,8 +1165,6 @@ G4double G4PolyconeSide::SurfaceArea()
   return fSurfaceArea;
 }
 
-
-//
 // GetPointOnFace
 //
 G4ThreeVector G4PolyconeSide::GetPointOnFace()

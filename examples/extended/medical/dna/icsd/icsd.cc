@@ -31,8 +31,8 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
-/// \file icds.cc
-/// \brief icds example
+/// \file icsd.cc
+/// \brief icsd example
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "G4Types.hh"

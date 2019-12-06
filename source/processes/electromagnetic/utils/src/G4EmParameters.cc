@@ -142,6 +142,7 @@ void G4EmParameters::Initialise()
   minKinEnergy = 0.1*CLHEP::keV;
   maxKinEnergy = 100.0*CLHEP::TeV;
   maxKinEnergyCSDA = 1.0*CLHEP::GeV;
+  max5DEnergyForMuPair = 0.0;
   lowestElectronEnergy = 1.0*CLHEP::keV;
   lowestMuHadEnergy = 1.0*CLHEP::keV;
   lowestTripletEnergy = 1.0*CLHEP::MeV;
@@ -156,6 +157,8 @@ void G4EmParameters::Initialise()
   rangeFactorMuHad = 0.2;
   geomFactor = 2.5;
   skin = 1.0;
+  safetyFactor = 0.6;
+  lambdaLimit  = 1.0*CLHEP::mm;
   factorScreen = 1.0;
 
   nbins  = 84;
@@ -631,6 +634,17 @@ G4double G4EmParameters::MaxNIELEnergy() const
   return maxNIELEnergy;
 }
 
+void G4EmParameters::SetMaxEnergyFor5DMuPair(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val > 0.0) { max5DEnergyForMuPair = val; }
+}
+
+G4double G4EmParameters::MaxEnergyFor5DMuPair() const
+{
+  return max5DEnergyForMuPair;
+}
+
 void G4EmParameters::SetLinearLossLimit(G4double val)
 {
   if(IsLocked()) { return; }
@@ -791,6 +805,42 @@ void G4EmParameters::SetMscGeomFactor(G4double val)
 G4double G4EmParameters::MscGeomFactor() const 
 {
   return geomFactor;
+}
+
+void G4EmParameters::SetMscSafetyFactor(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val >= 0.1) {
+    safetyFactor = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of safetyFactor is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::MscSafetyFactor() const 
+{
+  return safetyFactor;
+}
+
+void G4EmParameters::SetMscLambdaLimit(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val >= 0.0) {
+    lambdaLimit = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of lambdaLimit is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::MscLambdaLimit() const 
+{
+  return lambdaLimit;
 }
 
 void G4EmParameters::SetMscSkin(G4double val)
@@ -1186,6 +1236,10 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Enable sampling of gamma linear polarisation       " <<fPolarisation << "\n";
   os << "5D gamma conversion model type                     " <<tripletConv << "\n";
   os << "5D gamma conversion model on isolated ion          " <<onIsolated << "\n";
+  if(max5DEnergyForMuPair>0.0) {
+  os << "5D gamma conversion limit for muon pair            " 
+     << max5DEnergyForMuPair/CLHEP::GeV << " GeV\n";
+  }
 
   os << "=======================================================================" << "\n";
   os << "======                 Ionisation Parameters                   ========" << "\n";
@@ -1226,20 +1280,22 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Range factor for msc step limit for e+-            " <<rangeFactor << "\n";
   os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
   os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";
+  os << "Safety factor for msc step limit for e+-           " <<safetyFactor << "\n";
   os << "Skin parameter for msc step limitation of e+-      " <<skin << "\n";
+  os << "Lambda limit for msc step limit for e+-            " <<lambdaLimit/CLHEP::mm << " mm\n";
   os << "Use Mott correction for e- scattering              " << useMottCorrection << "\n";
   os << "Factor used for dynamic computation of angular \n" 
      << "  limit between single and multiple scattering     " << factorForAngleLimit << "\n";
   os << "Fixed angular limit between single \n"
      << "  and multiple scattering                          " 
-     << thetaLimit/CLHEP::rad << " rad" << "\n";
+     << thetaLimit/CLHEP::rad << " rad\n";
   os << "Upper energy limit for e+- multiple scattering     " 
-     << energyLimit/CLHEP::MeV << " MeV" << "\n";
+     << energyLimit/CLHEP::MeV << " MeV\n";
   os << "Type of nuclear form-factor                        " <<nucFormfactor << "\n";
   os << "Screening factor                                   " <<factorScreen << "\n";
+  os << "=======================================================================" << "\n";
 
   if(fCParameters->Fluo()) {
-  os << "=======================================================================" << "\n";
   os << "======                 Atomic Deexcitation Parameters          ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "Fluorescence enabled                               " <<fCParameters->Fluo() << "\n";
@@ -1254,9 +1310,9 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      <<fCParameters->PIXECrossSectionModel() << "\n";
   os << "Type of PIXE cross section for e+-                 " 
      <<fCParameters->PIXEElectronCrossSectionModel() << "\n";
+  os << "=======================================================================" << "\n";
   }
   if(fDNA) {
-  os << "=======================================================================" << "\n";
   os << "======                 DNA Physics Parameters                  ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "Use fast sampling in DNA models                    " 

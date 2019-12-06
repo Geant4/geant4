@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4ParameterisationCons Implementation file
+// G4ParameterisationCons[Rho/Phi/Z] implementation
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
@@ -172,8 +170,8 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
 {
   G4Cons* msol = (G4Cons*)(fmotherSolid);
 
-  G4double pRMin1 = msol->GetInnerRadiusMinusZ() + foffset + fwidth * copyNo;
-  G4double pRMax1 = msol->GetInnerRadiusMinusZ() + foffset + fwidth * (copyNo+1);
+  G4double pRMin1 = msol->GetInnerRadiusMinusZ() + foffset + fwidth*copyNo;
+  G4double pRMax1 = msol->GetInnerRadiusMinusZ() + foffset + fwidth*(copyNo+1);
  
   //width at Z Plus
   //- G4double fwidthPlus =

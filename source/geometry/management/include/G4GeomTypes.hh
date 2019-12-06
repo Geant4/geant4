@@ -25,7 +25,7 @@
 //
 // GEANT4 geomtetry/solid types
 //
-
+// --------------------------------------------------------------------
 #ifndef G4GEOMTYPES_HH
 #define G4GEOMTYPES_HH
 

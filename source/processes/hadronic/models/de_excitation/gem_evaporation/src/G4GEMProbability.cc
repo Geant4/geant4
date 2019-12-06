@@ -51,7 +51,6 @@
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NuclearLevelData.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
@@ -63,7 +62,7 @@ G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin)
   theEvapLDPptr = new G4EvaporationLevelDensityParameter;
   fG4pow = G4Pow::GetInstance(); 
   fPlanck= CLHEP::hbar_Planck*fG4pow->logZ(2);
-  fPairCorr = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
+  fNucData = G4NuclearLevelData::GetInstance();
 }
     
 G4GEMProbability::~G4GEMProbability()
@@ -129,7 +128,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   //                       ***RESIDUAL***
   //JMQ (September 2009) the following quantities refer to the RESIDUAL:
   
-  G4double delta0 = fPairCorr->GetPairingCorrection(ResidualA, ResidualZ);  
+  G4double delta0 = fNucData->GetPairingCorrection(ResidualZ, ResidualA);  
   
   G4double a = theEvapLDPptr->
     LevelDensityParameter(ResidualA,ResidualZ,MaximalKineticEnergy+V-delta0);
@@ -143,7 +142,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   //                       ***PARENT***
   //JMQ (September 2009) the following quantities refer to the PARENT:
      
-  G4double deltaCN = fPairCorr->GetPairingCorrection(A, Z); 
+  G4double deltaCN = fNucData->GetPairingCorrection(Z, A); 
   G4double aCN     = theEvapLDPptr->LevelDensityParameter(A, Z, U-deltaCN);
   G4double UxCN    = (2.5 + 150.0/G4double(A))*MeV;
   G4double ExCN    = UxCN + deltaCN;

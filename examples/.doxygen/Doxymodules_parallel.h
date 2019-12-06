@@ -43,6 +43,15 @@
 
 /** @} */
 
+/** @defgroup extended_parallel_MPI_exMPI04 exMPI04
+ *  Parallel MPI exMPI04 example has its 
+ *  <a href="../html_exMPI04/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_MPI
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_parallel_MPI_libG4mpi libG4mpi
  *  Library libG4mpi
  *  @ingroup extended_parallel_MPI

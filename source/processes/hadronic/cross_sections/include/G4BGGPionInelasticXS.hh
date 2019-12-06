@@ -91,13 +91,16 @@ public:
 
 private:
 
-  G4double CoulombFactor(G4double kinEnergy, G4int Z);
+  G4double CoulombFactorPiPlus(G4double kinEnergy, G4int Z);
+
+  G4double FactorPiMinus(G4double kinEnergy);
 
   G4BGGPionInelasticXS & operator=(const G4BGGPionInelasticXS &right);
   G4BGGPionInelasticXS(const G4BGGPionInelasticXS&);
 
-  G4double fGlauberEnergy;  
-  G4double fLowEnergy;  
+  G4double fGlauberEnergy;
+  G4double fLowEnergy; 
+  G4double fLowestEnergy; 
 
   static G4double theGlauberFacPiPlus[93];
   static G4double theGlauberFacPiMinus[93];
@@ -105,8 +108,8 @@ private:
   static G4double theLowEPiMinus[93];
   static G4int    theA[93];
 
-  const G4ParticleDefinition*     particle;
   const G4ParticleDefinition*     theProton;
+  const G4ParticleDefinition*     thePiPlus;
 
   G4Pow*                          fG4pow;
 

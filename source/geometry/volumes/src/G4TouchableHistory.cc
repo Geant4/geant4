@@ -22,20 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // class G4TouchableHistory Implementation
 //
+// Created: Paul Kent, August 1996
 // ----------------------------------------------------------------------
 
 #include "G4TouchableHistory.hh"
 
 G4Allocator<G4TouchableHistory>*& aTouchableHistoryAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4TouchableHistory>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4TouchableHistory>* _instance = nullptr;
+  return _instance;
 }
 
 G4TouchableHistory::G4TouchableHistory()
@@ -43,11 +41,10 @@ G4TouchableHistory::G4TouchableHistory()
     ftlate(G4ThreeVector(0.,0.,0.)),
     fhistory()
 { 
-   G4VPhysicalVolume* pPhysVol=0;
-   fhistory.SetFirstEntry(pPhysVol);
+  fhistory.SetFirstEntry(nullptr);
 }
 
-G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
+G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory& history )
   : fhistory(history)
 {
   const G4AffineTransform& tf = fhistory.GetTopTransform();
@@ -65,8 +62,8 @@ G4TouchableHistory::GetTranslation(G4int depth) const
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4ThreadLocal G4ThreeVector* ctrans = 0;
-  if ( !ctrans )  { ctrans = new G4ThreeVector; }
+  static G4ThreadLocal G4ThreeVector* ctrans = nullptr;
+  if ( ctrans == nullptr )  { ctrans = new G4ThreeVector; }
   if(depth==0.0)
   {
     return ftlate;
@@ -85,10 +82,10 @@ G4TouchableHistory::GetRotation(G4int depth) const
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4ThreadLocal G4RotationMatrix* rotM = 0;
-  if (!rotM )  { rotM = new G4RotationMatrix(); }
+  static G4ThreadLocal G4RotationMatrix* rotM = nullptr;
+  if ( rotM == nullptr )  { rotM = new G4RotationMatrix; }
 
-  if(depth==0)
+  if(depth==0.0)
   {
     return &frot;
   }

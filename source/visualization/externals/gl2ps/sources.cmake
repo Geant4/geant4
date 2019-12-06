@@ -25,9 +25,6 @@ include_directories(${PROJECT_SOURCE_DIR}/source/global/management/include)
 # is merged into the main global one!
 include_directories(${PROJECT_BINARY_DIR}/source/global/include)
 
-# Must have GL headers available
-include_directories(${OPENGL_INCLUDE_DIR})
-
 # We need to add definitions depending on what GL drivers are built
 #
 if(GEANT4_USE_OPENGL)
@@ -36,6 +33,11 @@ endif()
 
 if(GEANT4_USE_INVENTOR)
   add_definitions(-DG4VIS_BUILD_OI_DRIVER)
+endif()
+
+set(G4GL2PS_GL_LIBRARIES OpenGL::GL OpenGL::GLU)
+if(APPLE AND GEANT4_USE_OPENGL_X11)
+  list(APPEND G4GL2PS_GL_LIBRARIES XQuartzGL::GL XQuartzGL::GLU)
 endif()
 
 # Define the Geant4 Module.
@@ -50,10 +52,14 @@ GEANT4_DEFINE_MODULE(NAME G4gl2ps
     G4OpenGL2PSAction.cc
     gl2ps.cc
   GRANULAR_DEPENDENCIES
+    G4globman
   GLOBAL_DEPENDENCIES
+    G4global
   LINK_LIBRARIES
     ${ZLIB_LIBRARIES}
-    ${OPENGL_LIBRARIES}
+    ${G4GL2PS_GL_LIBRARIES}
+  SOURCES_EXCLUDE_FORMAT
+    gl2ps.h
   )
 
 # List any source specific properties here

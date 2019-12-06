@@ -185,10 +185,5 @@ std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::GetChannel()
   theChannel->push_back( new G4Mg27GEMChannel() );     // Mg27
   theChannel->push_back( new G4Mg28GEMChannel() );     // Mg28
 
-  size_t nn = theChannel->size();
-  for(size_t i=2; i<nn; ++i) { 
-    (*theChannel)[i]->SetPhotonEvaporation(thePhotonEvaporation);
-  }
-
   return theChannel;
 }

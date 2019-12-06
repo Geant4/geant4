@@ -31,19 +31,20 @@
 
 #include <fstream>
 #include "CCalutils.hh"
+#include "G4SystemOfUnits.hh"
 
 //#define debug
 
 CCalEcal::~CCalEcal() {}
 
-int CCalEcal::readFile() {
+G4int CCalEcal::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
   G4cout << " ==> Opening file " << File() << " to read elements..."
        << G4endl;
 
   std::ifstream is;
-  bool ok = openGeomFile(is, pathName, File());
+  G4bool ok = openGeomFile(is, pathName, File());
   if (!ok)
     return 0;
 
@@ -63,7 +64,7 @@ int CCalEcal::readFile() {
 #endif
 
   //Then the layer positions
-  int i=0;
+  G4int i=0;
   readName(is,layMat);
   is >> layNum >> layRadius >> layAngle >> lengFront;
   for (i=0; i<5; i++) 

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28th, 2019 I. Hrivnacova G03-V10-05-00
+- Fixed Doxygen warning in .README.txt
+
 May 19th, 2018  Gabriele Cosmo G03-V10-04-00
 - G03RunAction.cc: Removed vis command.
 

@@ -76,6 +76,7 @@ public:
   void AddSolid(const G4Polyhedra&);
   void AddSolid(const G4Orb&);
   void AddSolid(const G4Ellipsoid&);
+  void AddSolid(const G4TessellatedSolid&);
   void AddSolid(const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
   void InitTrajectory();

@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -112,8 +116,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      BetheHeitler5D : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
@@ -494,9 +497,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
-End of tracking primary particle, its final energy is :3.47547 GeV
+End of tracking primary particle, its final energy is :3.47531 GeV
 Physics stage ends
-End of tracking primary particle, its final energy is :3.47536 GeV
+End of tracking primary particle, its final energy is :3.47568 GeV
 Physics stage ends
 
  ======= The summary of simulation results 'neuron' ========
@@ -505,20 +508,23 @@ Physics stage ends
   Kinetic energy of beam         = 3480 A*MeV
   Particle traversals the neuron = 0 of 2
   Full LET of beam as formulas   = 12.865 keV/um
-  Mean LET of beam as simulation = 10.615 +- 0.2425 keV/um
-  Mean track length of beam      = 426.36 +- 0.030209 um
+  Mean LET of beam as simulation = 10.616 +- 0.79048 keV/um
+  Mean track length of beam      = 386.51 +- 0.0096979 um
   Particle fluence               = 383.66 particles/cm^2
   Fluence dose (full)            = 7.9081e-06 Gy
   Fluence dose ber beam          = 3.954e-06 Gy
 
  List of generated physical process:
-                eIoni=   4129
-              ionIoni=   2694
-                  msc=   6888
+                eBrem=      1
+                eIoni=   3717
+              ionIoni=   2399
+                  msc=   4488
+                 phot=      1
 
 
  List of generated particles outside neuron structure:
-             e- :    3191  Emean =  1.3128 keV	( 242.77 eV  --> 236.42 keV) 	Eflow/event = 2.0946 MeV
+             e- :    2855  Emean =  1.5733 keV	( 92.323 eV  --> 464.62 keV) 	Eflow/event = 2.2458 MeV
+          gamma :       1  Emean =   629.6 eV 	( 629.6 eV  --> 629.6 eV ) 	Eflow/event = 314.8 eV 
 
  Number of secondary particles inside neuron structure:
 
@@ -526,8 +532,8 @@ Physics stage ends
     time: 1 ps - 10 ps 
 
  Total energy (MeV) deposition :
-  All volume:    9.052
-   Bounding slice:  4.4801
+  All volume:   8.2062
+   Bounding slice:  1.9114
       Neuron:         0
         Soma:         0
     Dendrites:        0
@@ -545,7 +551,7 @@ Physics stage ends
  Outputs of energy deposition per event written in data file:
  OutputPerEvent.out
  
- Calculation time                      = 3.18688 s 
+ Calculation time                      = 3.09124 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

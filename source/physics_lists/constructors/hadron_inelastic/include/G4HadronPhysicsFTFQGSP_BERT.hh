@@ -87,8 +87,6 @@
 #include "G4AntiHe3InelasticProcess.hh"
 #include "G4AntiAlphaInelasticProcess.hh"
 
-#include "G4ChipsHyperonInelasticXS.hh"
-
 
 class G4HadronPhysicsFTFQGSP_BERT : public G4VPhysicsConstructor
 {
@@ -151,8 +149,7 @@ class G4HadronPhysicsFTFQGSP_BERT : public G4VPhysicsConstructor
     G4AntiAlphaInelasticProcess*    theAntiAlphaInelastic;
 
     G4VCrossSectionDataSet* thePiXS;
-    G4VCrossSectionDataSet* theKaonXS;
-    G4VCrossSectionDataSet* theChipsHyperonInelasticXS;
+    G4VCrossSectionDataSet* theKaonAndHyperonXS;
     G4VCrossSectionDataSet* theAntiNucleonXS;
     G4VCrossSectionDataSet* theNeutronInelasticXS;
     G4VCrossSectionDataSet* theNeutronCaptureXS;

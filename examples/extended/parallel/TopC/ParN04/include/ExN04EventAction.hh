@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04EventAction.hh
+/// \file ExN04EventAction.hh
 /// \brief Definition of the ExN04EventAction class
 //
 

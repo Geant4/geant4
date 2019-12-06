@@ -95,7 +95,7 @@ G4RunManager::G4RunManager()
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
  numberOfEventProcessed(0),selectMacro(""),fakeRun(false),
- isScoreNtupleWriter(false)
+ isScoreNtupleWriter(false),geometryDirectlyUpdated(false)
 {
   if(fRunManager)
   {
@@ -111,14 +111,13 @@ G4RunManager::G4RunManager()
   runMessenger = new G4RunMessenger(this);
   previousEvents = new std::list<G4Event*>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
-  G4ProcessTable::GetProcessTable()->CreateMessenger();
+  G4ProcessTable::GetProcessTable();
   randomNumberStatusDir = "./";
   std::ostringstream oss;
   G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
   runManagerType = sequentialRM;
-  InitializeTiMemory();
 }
 
 G4RunManager::G4RunManager( RMType rmType )
@@ -136,7 +135,7 @@ G4RunManager::G4RunManager( RMType rmType )
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
  numberOfEventProcessed(0),selectMacro(""),fakeRun(false),
- isScoreNtupleWriter(false)
+ isScoreNtupleWriter(false),geometryDirectlyUpdated(false)
 {
   //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -176,13 +175,12 @@ G4RunManager::G4RunManager( RMType rmType )
   runMessenger = new G4RunMessenger(this);
   previousEvents = new std::list<G4Event*>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
-  G4ProcessTable::GetProcessTable()->CreateMessenger();
+  G4ProcessTable::GetProcessTable();
   randomNumberStatusDir = "./";
   std::ostringstream oss;
   G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
-  InitializeTiMemory();
 }
 
 G4RunManager::~G4RunManager()
@@ -200,7 +198,6 @@ G4RunManager::~G4RunManager()
   delete timer;
   delete runMessenger;
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
-  G4ProcessTable::GetProcessTable()->DeleteMessenger();
   delete previousEvents;
 
   //The following will work for all RunManager types
@@ -609,11 +606,22 @@ void G4RunManager::InitializeGeometry()
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState==G4State_PreInit || currentState==G4State_Idle)
   { stateManager->SetNewState(G4State_Init); }
-  kernel->DefineWorldVolume(userDetector->Construct(),false);
-  userDetector->ConstructSDandField();
-  nParallelWorlds = userDetector->ConstructParallelGeometries();
-  userDetector->ConstructParallelSD();
-  kernel->SetNumberOfParallelWorld(nParallelWorlds);
+  if(!geometryDirectlyUpdated)
+  {
+    kernel->DefineWorldVolume(userDetector->Construct(),false);
+    userDetector->ConstructSDandField();
+    nParallelWorlds = userDetector->ConstructParallelGeometries();
+    userDetector->ConstructParallelSD();
+    kernel->SetNumberOfParallelWorld(nParallelWorlds);
+  }
+  // Notify the VisManager as well
+  if(G4Threading::IsMasterThread())
+  {
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if(pVVisManager) pVVisManager->GeometryHasChanged();
+  }
+
+  geometryDirectlyUpdated = false;
   geometryInitialized = true;
   stateManager->SetNewState(currentState); 
 }
@@ -762,6 +770,8 @@ void G4RunManager::DumpRegion(G4Region* region) const
 
 void G4RunManager::ConstructScoringWorlds()
 {
+  using MeshShape = G4VScoringMesh::MeshShape;
+
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(!ScM) return;
 
@@ -774,43 +784,41 @@ void G4RunManager::ConstructScoringWorlds()
   for(G4int iw=0;iw<nPar;iw++)
   {
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
-    if(fGeometryHasBeenDestroyed) mesh->GeometryHasBeenDestroyed();
-
-    G4VPhysicalVolume* pWorld
-       = G4TransportationManager::GetTransportationManager()
-         ->IsWorldExisting(ScM->GetWorldName(iw));
-    if(!pWorld)
+    if(fGeometryHasBeenDestroyed) mesh->GeometryHasBeenDestroyed(); 
+    G4VPhysicalVolume* pWorld = nullptr;
+    if(mesh->GetShape()!=MeshShape::realWorldLogVol)
     {
-      pWorld = G4TransportationManager::GetTransportationManager()
-           ->GetParallelWorld(ScM->GetWorldName(iw));
-      pWorld->SetName(ScM->GetWorldName(iw));
-
-      G4ParallelWorldProcess* theParallelWorldProcess
-        = mesh->GetParallelWorldProcess();
-      if(theParallelWorldProcess)
-      { theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw)); }
-      else
+      pWorld = G4TransportationManager::GetTransportationManager()->IsWorldExisting(ScM->GetWorldName(iw));
+      if(!pWorld)
       {
-        theParallelWorldProcess = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
-        mesh->SetParallelWorldProcess(theParallelWorldProcess);
-        theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
+        pWorld = G4TransportationManager::GetTransportationManager()->GetParallelWorld(ScM->GetWorldName(iw));
+        pWorld->SetName(ScM->GetWorldName(iw));
 
-        theParticleIterator->reset();
-        while( (*theParticleIterator)() ){
-          G4ParticleDefinition* particle = theParticleIterator->value();
-          G4ProcessManager* pmanager = particle->GetProcessManager();
-          if(pmanager)
-          {
-            pmanager->AddProcess(theParallelWorldProcess);
-            if(theParallelWorldProcess->IsAtRestRequired(particle))
-            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900); }
-            pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
+        G4ParallelWorldProcess* theParallelWorldProcess = mesh->GetParallelWorldProcess();
+        if(theParallelWorldProcess)
+        { theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw)); }
+        else
+        {
+          theParallelWorldProcess = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
+          mesh->SetParallelWorldProcess(theParallelWorldProcess);
+          theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
+
+          theParticleIterator->reset();
+          while( (*theParticleIterator)() ){
+            G4ParticleDefinition* particle = theParticleIterator->value();
+            G4ProcessManager* pmanager = particle->GetProcessManager();
+            if(pmanager)
+            {
+              pmanager->AddProcess(theParallelWorldProcess);
+              if(theParallelWorldProcess->IsAtRestRequired(particle))
+              { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900); }
+              pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
+              pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
+            }
           }
         }
       }
     }
-
     mesh->Construct(pWorld);
   }
 

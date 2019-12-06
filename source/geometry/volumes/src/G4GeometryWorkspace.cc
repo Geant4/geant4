@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // Class G4GeometryWorkspace - implementation
 //
@@ -51,13 +48,16 @@ namespace
   G4GeometryWorkspace::pool_type thePool;
 }
 
-G4GeometryWorkspace::pool_type*
-G4GeometryWorkspace::GetPool() { return &thePool; }
+// ----------------------------------------------------------------------
+//
+G4GeometryWorkspace::pool_type* G4GeometryWorkspace::GetPool()
+{
+  return &thePool;
+}
 
 // ----------------------------------------------------------------------
 //
 G4GeometryWorkspace::G4GeometryWorkspace()
-  : fVerbose(false)
 {
   fpLogicalVolumeSIM=
       &const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager());
@@ -72,13 +72,13 @@ G4GeometryWorkspace::G4GeometryWorkspace()
   // then capture its address
   InitialiseWorkspace();
   
-  fLogicalVolumeOffset= fpLogicalVolumeSIM->GetOffset();
+  fLogicalVolumeOffset = fpLogicalVolumeSIM->GetOffset();
 
-  fPhysicalVolumeOffset= fpPhysicalVolumeSIM->GetOffset();
+  fPhysicalVolumeOffset = fpPhysicalVolumeSIM->GetOffset();
 
-  fReplicaOffset= fpReplicaSIM->GetOffset();
+  fReplicaOffset = fpReplicaSIM->GetOffset();
 
-  fRegionOffset= fpRegionSIM->GetOffset();
+  fRegionOffset = fpRegionSIM->GetOffset();
 }
 
 // ----------------------------------------------------------------------
@@ -136,17 +136,17 @@ void G4GeometryWorkspace::ReleaseWorkspace()
 void G4GeometryWorkspace::InitialisePhysicalVolumes()
 {
   G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
-  for (size_t ip=0; ip<physVolStore->size(); ip++)
+  for (size_t ip=0; ip<physVolStore->size(); ++ip)
   {
     G4VPhysicalVolume* physVol = (*physVolStore)[ip];
     G4LogicalVolume *logicalVol = physVol->GetLogicalVolume();
  
     // Use shadow pointer
     //
-    G4VSolid *solid = logicalVol->GetMasterSolid();
-    G4PVReplica *g4PVReplica = 0;
+    G4VSolid* solid = logicalVol->GetMasterSolid();
+    G4PVReplica* g4PVReplica = nullptr;
     g4PVReplica = dynamic_cast<G4PVReplica*>(physVol);
-    if (!g4PVReplica)
+    if (g4PVReplica == nullptr)
     {
       // Placement volume
       logicalVol->InitialiseWorker(logicalVol,solid,0);
@@ -154,7 +154,7 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
     else
     {          
       g4PVReplica->InitialiseWorker(g4PVReplica);
-      if( ! g4PVReplica->IsParameterised() )
+      if( !g4PVReplica->IsParameterised() )
       {
         logicalVol->InitialiseWorker(logicalVol,solid,0);
 
@@ -166,7 +166,7 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
       else
       {
         G4PVParameterised *paramVol = dynamic_cast<G4PVParameterised*>(physVol);
-        if (!paramVol)
+        if (paramVol == nullptr)
         {
           G4Exception("G4GeometryWorkspace::CreateAndUseWorkspace()",
                       "GeomVol0003", FatalException,
@@ -190,14 +190,14 @@ G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica *replicaPV )
 {
   // The solid Ptr is in the Logical Volume
   //
-  G4LogicalVolume *logicalV= replicaPV ->GetLogicalVolume();
-  G4VSolid *solid= logicalV->GetSolid();
+  G4LogicalVolume* logicalV = replicaPV->GetLogicalVolume();
+  G4VSolid* solid = logicalV->GetSolid();
 
   G4AutoLock aLock(&solidclone);
-  G4VSolid *workerSolid = solid->Clone();
+  G4VSolid* workerSolid = solid->Clone();
   aLock.unlock();
 
-  if( workerSolid )
+  if( workerSolid != nullptr )
   {
     logicalV->InitialiseWorker(logicalV,workerSolid,0);
   }
@@ -229,7 +229,7 @@ G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica *replicaPV )
 // as all solids support the Clone() method.
 //
 G4bool G4GeometryWorkspace::
-CloneParameterisedSolids( G4PVParameterised *paramVol )
+CloneParameterisedSolids( G4PVParameterised* paramVol )
 {
   // Check whether it is a simple parameterisation or not
   //
@@ -237,15 +237,15 @@ CloneParameterisedSolids( G4PVParameterised *paramVol )
   // unsigned int numCopies= paramVol->GetMultiplicity();
   // unsigned int numDifferent= 0;
 
-  G4LogicalVolume *logicalV= paramVol->GetLogicalVolume();
-  G4VSolid *solid= logicalV->GetSolid();
+  G4LogicalVolume* logicalV= paramVol->GetLogicalVolume();
+  G4VSolid* solid= logicalV->GetSolid();
   
-  //  for( unsigned int i=0; i< numCopies; i++)
+  //  for( unsigned int i=0; i< numCopies; ++i)
   //  {
   //    G4VSolid *solidChk= param->ComputeSolid(i, paramVol);
   //    if( solidChk != solid)
   //    {
-  //      numDifferent++;
+  //      ++numDifferent;
   //    }
   //  }
   //  if( numDifferent>0 )
@@ -266,7 +266,7 @@ CloneParameterisedSolids( G4PVParameterised *paramVol )
   G4AutoLock aLock(&solidclone);
   G4VSolid *workerSolid = solid->Clone();
   aLock.unlock();
-  if( workerSolid )
+  if( workerSolid != nullptr )
   {
     logicalV->InitialiseWorker(logicalV,workerSolid,0);
   }
@@ -323,20 +323,20 @@ void G4GeometryWorkspace::InitialiseWorkspace()
 void G4GeometryWorkspace::DestroyWorkspace()
 {
   G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
-  for (size_t ip=0; ip<physVolStore->size(); ip++)
+  for (size_t ip=0; ip<physVolStore->size(); ++ip)
   {
     G4VPhysicalVolume* physVol = (*physVolStore)[ip];
-    G4LogicalVolume *logicalVol = physVol->GetLogicalVolume();
-    G4PVReplica *g4PVReplica = 0;
+    G4LogicalVolume* logicalVol = physVol->GetLogicalVolume();
+    G4PVReplica* g4PVReplica = nullptr;
     g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
-    if (g4PVReplica)
+    if (g4PVReplica != nullptr)
     {
       g4PVReplica->TerminateWorker(g4PVReplica);
-      G4PVParameterised *paramVol = 0;
-      paramVol =  dynamic_cast<G4PVParameterised*>(physVol);
-      if (paramVol)
+      G4PVParameterised* paramVol = nullptr;
+      paramVol = dynamic_cast<G4PVParameterised*>(physVol);
+      if (paramVol != nullptr)
       {
-        // G4VSolid *solid = logicalVol->fSolid;
+        // G4VSolid* solid = logicalVol->fSolid;
         logicalVol->TerminateWorker(logicalVol);
         // if( solid->IsClone() ) delete solid;
       }

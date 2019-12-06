@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04CalorimeterSD.cc
+/// \file ExN04CalorimeterSD.cc
 /// \brief Implementation of the ExN04CalorimeterSD class
 //
 

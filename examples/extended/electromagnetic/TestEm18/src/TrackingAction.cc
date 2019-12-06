@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm12/src/TrackingAction.cc
+/// \file electromagnetic/TestEm18/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
 //

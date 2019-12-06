@@ -23,18 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VTwistedFaceted implementation
 //
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4VTwistedFaceted.cc
-//
-// Author:
-//
-//   04-Nov-2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 04-Nov-2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
 
 #include "G4VTwistedFaceted.hh"
@@ -67,7 +58,7 @@ namespace
 //* constructors ------------------------------------------------------
 
 G4VTwistedFaceted::
-G4VTwistedFaceted( const G4String &pname,     // Name of instance
+G4VTwistedFaceted( const G4String& pname,     // Name of instance
                          G4double  PhiTwist,  // twist angle
                          G4double  pDz,       // half z length
                          G4double  pTheta, // direction between end planes
@@ -78,12 +69,10 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
                          G4double  pDy2,   // half y length at +pDz
                          G4double  pDx3,   // half x length at +pDz,-pDy
                          G4double  pDx4,   // half x length at +pDz,+pDy
-                         G4double  pAlph   // tilt angle 
-                 )
-  : G4VSolid(pname), fRebuildPolyhedron(false), fpPolyhedron(0),
+                         G4double  pAlph ) // tilt angle 
+  : G4VSolid(pname),
     fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-    fSide90(0), fSide180(0), fSide270(0),
-    fSurfaceArea(0.)
+    fSide90(0), fSide180(0), fSide270(0)
 {
 
   G4double pDytmp ;
@@ -200,13 +189,13 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
 //* Fake default constructor ------------------------------------------
 
 G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
-  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0),
+  : G4VSolid(a),
     fTheta(0.), fPhi(0.), fDy1(0.),
     fDx1(0.), fDx2(0.), fDy2(0.), fDx3(0.), fDx4(0.),
     fDz(0.), fDx(0.), fDy(0.), fAlph(0.),
     fTAlph(0.), fdeltaX(0.), fdeltaY(0.), fPhiTwist(0.),
     fLowerEndcap(0), fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0),
-    fSide270(0), fCubicVolume(0.), fSurfaceArea(0.)
+    fSide270(0)
 {
 }
 
@@ -223,7 +212,7 @@ G4VTwistedFaceted::~G4VTwistedFaceted()
   if (fSide90)      { delete fSide90  ; }
   if (fSide180)     { delete fSide180 ; }
   if (fSide270)     { delete fSide270 ; }
-  if (fpPolyhedron) { delete fpPolyhedron; fpPolyhedron = 0; }
+  if (fpPolyhedron) { delete fpPolyhedron; fpPolyhedron = nullptr; }
 }
 
 
@@ -231,7 +220,7 @@ G4VTwistedFaceted::~G4VTwistedFaceted()
 //* Copy constructor --------------------------------------------------
 
 G4VTwistedFaceted::G4VTwistedFaceted(const G4VTwistedFaceted& rhs)
-  : G4VSolid(rhs), fRebuildPolyhedron(false), fpPolyhedron(0),
+  : G4VSolid(rhs),
     fTheta(rhs.fTheta), fPhi(rhs.fPhi),
     fDy1(rhs.fDy1), fDx1(rhs.fDx1), fDx2(rhs.fDx2), fDy2(rhs.fDy2),
     fDx3(rhs.fDx3), fDx4(rhs.fDx4), fDz(rhs.fDz), fDx(rhs.fDx), fDy(rhs.fDy),
@@ -272,7 +261,7 @@ G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs)
    fUpperEndcap= 0; fSide0= 0; fSide90= 0; fSide180= 0; fSide270= 0;
    fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron= 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
    fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
    fLastDistanceToIn= rhs.fLastDistanceToIn;
    fLastDistanceToOut= rhs.fLastDistanceToOut;
@@ -301,8 +290,8 @@ void G4VTwistedFaceted::ComputeDimensions(G4VPVParameterisation* ,
 //=====================================================================
 //* Extent ------------------------------------------------------------
 
-void G4VTwistedFaceted::BoundingLimits(G4ThreeVector &pMin,
-                                       G4ThreeVector &pMax) const
+void G4VTwistedFaceted::BoundingLimits(G4ThreeVector& pMin,
+                                       G4ThreeVector& pMax) const
 {
   G4double maxRad = std::sqrt(fDx*fDx + fDy*fDy);
   pMin.set(-maxRad,-maxRad,-fDz);
@@ -315,10 +304,10 @@ void G4VTwistedFaceted::BoundingLimits(G4ThreeVector &pMin,
 
 G4bool
 G4VTwistedFaceted::CalculateExtent( const EAxis              pAxis,
-                                    const G4VoxelLimits     &pVoxelLimit,
-                                    const G4AffineTransform &pTransform,
-                                          G4double          &pMin,
-                                          G4double          &pMax ) const
+                                    const G4VoxelLimits&     pVoxelLimit,
+                                    const G4AffineTransform& pTransform,
+                                          G4double&          pMin,
+                                          G4double&          pMax ) const
 {
   G4ThreeVector bmin, bmax;
 
@@ -339,9 +328,12 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
 
    G4ThreeVector *tmpp;
    EInside       *tmpin;
-   if (fLastInside.p == p) {
+   if (fLastInside.p == p)
+   {
      return fLastInside.inside;
-   } else {
+   }
+   else
+   {
       tmpp      = const_cast<G4ThreeVector*>(&(fLastInside.p));
       tmpin     = const_cast<EInside*>(&(fLastInside.inside));
       tmpp->set(p.x(), p.y(), p.z());
@@ -446,14 +438,15 @@ G4ThreeVector G4VTwistedFaceted::SurfaceNormal(const G4ThreeVector& p) const
      return fLastNormal.vec;
    } 
    
-   G4ThreeVector *tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
-   G4ThreeVector *tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
-   G4VTwistSurface    **tmpsurface = const_cast<G4VTwistSurface**>(fLastNormal.surface);
+   G4ThreeVector* tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
+   G4ThreeVector* tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
+   G4VTwistSurface** tmpsurface
+                     = const_cast<G4VTwistSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
 
-   G4double      distance = kInfinity;
+   G4double distance = kInfinity;
 
-   G4VTwistSurface *surfaces[6];
+   G4VTwistSurface* surfaces[6];
 
    surfaces[0] = fSide0 ;
    surfaces[1] = fSide90 ;
@@ -501,9 +494,9 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    // checking last value
    //
    
-   G4ThreeVector *tmpp;
-   G4ThreeVector *tmpv;
-   G4double      *tmpdist;
+   G4ThreeVector* tmpp;
+   G4ThreeVector* tmpv;
+   G4double* tmpdist;
    if (fLastDistanceToInWithV.p == p && fLastDistanceToInWithV.vec == v)
    {
       return fLastDistanceToIn.value;
@@ -534,7 +527,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
      G4ThreeVector normal = SurfaceNormal(p);
      if (normal*v < 0)
      {
-       *tmpdist = 0;
+       *tmpdist = 0.;
        return fLastDistanceToInWithV.value;
      } 
    }
@@ -543,7 +536,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    
    // Initialize
    //
-   G4double      distance = kInfinity;   
+   G4double distance = kInfinity;   
 
    // Find intersections and choose nearest one
    //
@@ -558,8 +551,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   G4int i;
-   for (i=0; i < 6 ; i++)
+   for (auto i=0; i < 6 ; ++i)
    {
 #ifdef G4TWISTDEBUG
       G4cout << G4endl << "surface " << i << ": " << G4endl << G4endl ;
@@ -599,9 +591,9 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
    //
    // checking last value
    //
-   
-   G4ThreeVector *tmpp;
-   G4double      *tmpdist;
+
+   G4ThreeVector* tmpp;
+   G4double* tmpdist;
    if (fLastDistanceToIn.p == p)
    {
       return fLastDistanceToIn.value;
@@ -635,11 +627,11 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
       {
          // Initialize
          //
-         G4double      distance = kInfinity;   
+         G4double distance = kInfinity;   
 
          // Find intersections and choose nearest one
          //
-         G4VTwistSurface *surfaces[6];
+         G4VTwistSurface* surfaces[6];
 
          surfaces[0] = fSide0;
          surfaces[1] = fSide90 ;
@@ -648,10 +640,9 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
          surfaces[4] = fLowerEndcap;
          surfaces[5] = fUpperEndcap;
 
-         G4int i;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 6; i++)
+         for (auto i=0; i< 6; ++i)
          {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
             if (tmpdistance < distance)
@@ -664,14 +655,14 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
          return fLastDistanceToIn.value;
       }
 
-      default :
+      default:
       {
          G4Exception("G4VTwistedFaceted::DistanceToIn(p)", "GeomSolids0003",
                      FatalException, "Unknown point location!");
       }
    } // switch end
 
-   return 0;
+   return 0.;
 }
 
 
@@ -682,8 +673,8 @@ G4double
 G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
                                   const G4ThreeVector& v,
                                   const G4bool calcNorm,
-                                        G4bool *validNorm,
-                                        G4ThreeVector *norm ) const
+                                        G4bool* validNorm,
+                                        G4ThreeVector* norm ) const
 {
    // DistanceToOut (p, v):
    // Calculate distance to surface of shape from `inside'
@@ -695,9 +686,9 @@ G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    // checking last value
    //
    
-   G4ThreeVector *tmpp;
-   G4ThreeVector *tmpv;
-   G4double      *tmpdist;
+   G4ThreeVector* tmpp;
+   G4ThreeVector* tmpv;
+   G4double* tmpdist;
    if (fLastDistanceToOutWithV.p == p && fLastDistanceToOutWithV.vec == v  )
    {
       return fLastDistanceToOutWithV.value;
@@ -743,7 +734,7 @@ G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    // now, we can take smallest positive distance.
    
    // Initialize
-   G4double      distance = kInfinity;
+   G4double distance = kInfinity;
        
    // find intersections and choose nearest one.
    G4VTwistSurface *surfaces[6];
@@ -755,11 +746,11 @@ G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    surfaces[4] = fLowerEndcap;
    surfaces[5] = fUpperEndcap;
 
-   G4int i;
    G4int besti = -1;
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   for (i=0; i< 6 ; i++) {
+   for (auto i=0; i<6 ; ++i)
+   {
       G4double tmpdistance = surfaces[i]->DistanceToOut(p, v, xx);
       if (tmpdistance < distance)
       {
@@ -779,7 +770,6 @@ G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    }
 
    *tmpdist = distance;
-   // timer.Stop();
    return fLastDistanceToOutWithV.value;
 }
 
@@ -797,8 +787,8 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    // checking last value
    //
 
-   G4ThreeVector *tmpp;
-   G4double      *tmpdist;
+   G4ThreeVector* tmpp;
+   G4double* tmpdist;
 
    if (fLastDistanceToOut.p == p)
    {
@@ -847,11 +837,11 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
       {
         // Initialize
         //
-        G4double      distance = kInfinity;
+        G4double distance = kInfinity;
    
         // find intersections and choose nearest one
         //
-        G4VTwistSurface *surfaces[6];
+        G4VTwistSurface* surfaces[6];
 
         surfaces[0] = fSide0;
         surfaces[1] = fSide90 ;
@@ -860,10 +850,9 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
         surfaces[4] = fLowerEndcap;
         surfaces[5] = fUpperEndcap;
 
-        G4int i;
         G4ThreeVector xx;
         G4ThreeVector bestxx;
-        for (i=0; i< 6; i++)
+        for (auto i=0; i<6; ++i)
         {
           G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
           if (tmpdistance < distance)
@@ -959,10 +948,10 @@ void G4VTwistedFaceted::CreateSurfaces()
 
   if ( fDx1 == fDx2 && fDx3 == fDx4 )    // special case : Box
   {
-    fSide0   = new G4TwistBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,
-                                        fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 0.*deg);
+    fSide0   = new G4TwistBoxSide("0deg", fPhiTwist, fDz, fTheta, fPhi,
+                          fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 0.*deg);
     fSide180 = new G4TwistBoxSide("180deg", fPhiTwist, fDz, fTheta, fPhi+pi,
-                                        fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 180.*deg);
+                          fDy1, fDx1, fDx1, fDy2, fDx3, fDx3, fAlph, 180.*deg);
   }
   else   // default general case
   {
@@ -1012,7 +1001,7 @@ G4GeometryType G4VTwistedFaceted::GetEntityType() const
 
 G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
@@ -1053,7 +1042,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 {
 
-  G4double  phi = G4RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
+  G4double phi = G4RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
   G4double u , umin, umax ;  //  variable for twisted surfaces
   G4double y  ;              //  variable for flat surface (top and bottom)
 
@@ -1062,12 +1051,12 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   // the computed surface area is more difficult. However this simplification
   // does not affect the tracking through the solid. 
  
-  G4double a1   = fSide0->GetSurfaceArea();
-  G4double a2   = fSide90->GetSurfaceArea();
-  G4double a3   = fSide180->GetSurfaceArea() ;
-  G4double a4   = fSide270->GetSurfaceArea() ;
-  G4double a5   = fLowerEndcap->GetSurfaceArea() ;
-  G4double a6   = fUpperEndcap->GetSurfaceArea() ;
+  G4double a1 = fSide0->GetSurfaceArea();
+  G4double a2 = fSide90->GetSurfaceArea();
+  G4double a3 = fSide180->GetSurfaceArea() ;
+  G4double a4 = fSide270->GetSurfaceArea() ;
+  G4double a5 = fLowerEndcap->GetSurfaceArea() ;
+  G4double a6 = fUpperEndcap->GetSurfaceArea() ;
 
 #ifdef G4TWISTDEBUG
   G4cout << "Surface 0   deg = " << a1 << G4endl ;
@@ -1082,7 +1071,6 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
   if(chose < a1)
   {
-
     umin = fSide0->GetBoundaryMin(phi) ;
     umax = fSide0->GetBoundaryMax(phi) ;
     u = G4RandFlat::shoot(umin,umax) ;
@@ -1092,7 +1080,6 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
   else if( (chose >= a1) && (chose < a1 + a2 ) )
   {
-
     umin = fSide90->GetBoundaryMin(phi) ;
     umax = fSide90->GetBoundaryMax(phi) ;
     
@@ -1100,30 +1087,23 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     return fSide90->SurfacePoint(phi, u, true);   // point on 90deg surface
   }
-
   else if( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) )
   {
-
     umin = fSide180->GetBoundaryMin(phi) ;
     umax = fSide180->GetBoundaryMax(phi) ;
     u = G4RandFlat::shoot(umin,umax) ;
 
-     return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
+    return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
   }
-
   else if( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
   {
-
     umin = fSide270->GetBoundaryMin(phi) ;
     umax = fSide270->GetBoundaryMax(phi) ;
     u = G4RandFlat::shoot(umin,umax) ;
-
     return fSide270->SurfacePoint(phi, u, true); // point on 270 deg surface
   }
-
   else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
   {
-
     y = G4RandFlat::shoot(-fDy1,fDy1) ;
     umin = fLowerEndcap->GetBoundaryMin(y) ;
     umax = fLowerEndcap->GetBoundaryMax(y) ;
@@ -1131,8 +1111,8 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     return fLowerEndcap->SurfacePoint(u,y,true); // point on lower endcap
   }
-  else {
-
+  else
+  {
     y = G4RandFlat::shoot(-fDy2,fDy2) ;
     umin = fUpperEndcap->GetBoundaryMin(y) ;
     umax = fUpperEndcap->GetBoundaryMax(y) ;
@@ -1158,7 +1138,7 @@ G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const
   const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
   const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;
 
-  G4Polyhedron *ph=new G4Polyhedron;
+  G4Polyhedron* ph = new G4Polyhedron;
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
   G4double3* xyz = new G4double3[nnodes];  // number of nodes 

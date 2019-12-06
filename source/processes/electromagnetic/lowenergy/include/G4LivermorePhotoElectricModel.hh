@@ -40,6 +40,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4ElementData.hh"
+#include "G4Threading.hh"
 #include <vector>
 
 class G4ParticleChangeForGamma;
@@ -81,7 +82,7 @@ public:
     virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
     
     inline void SetLimitNumberOfShells(G4int);
-    G4double GetBindingEnergy (G4double ZZ, G4int shell);
+    G4double GetBindingEnergy (G4int Z, G4int shell);
     
     G4LivermorePhotoElectricModel & operator=
     (const G4LivermorePhotoElectricModel &right) = delete;
@@ -93,10 +94,12 @@ protected:
     
 private:
     
-    void ReadData(G4int Z, const char* path = nullptr);
+    void ReadData(G4int Z);
+
+    const G4String& FindDirectoryPath();
         
-    G4ParticleDefinition*   theGamma;
-    G4ParticleDefinition*   theElectron;
+    const G4ParticleDefinition*   theGamma;
+    const G4ParticleDefinition*   theElectron;
     
     G4int                   verboseLevel;
     G4int                   maxZ;
@@ -113,6 +116,11 @@ private:
     static G4ElementData*          fShellCrossSection;
     static G4Material*             fWater;
     static G4double                fWaterEnergyLimit;
+    static G4String                fDataDirectory;
+
+#ifdef G4MULTITHREADED
+    static G4Mutex livPhotoeffMutex;
+#endif
     
     G4VAtomDeexcitation*    fAtomDeexcitation;
     

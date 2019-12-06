@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4SmartVoxelProxy implementation
 //
-//
-// Class G4SmartVoxelProxy
-//
-// Implementation
-//
+// 12.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 
 #include "G4SmartVoxelProxy.hh"

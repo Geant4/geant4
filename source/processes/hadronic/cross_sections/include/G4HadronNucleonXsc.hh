@@ -55,6 +55,10 @@ public:
   ~G4HadronNucleonXsc ();
    
   // Xsc parametrisations return total x-section
+  
+  G4double HadronNucleonXsc(const G4ParticleDefinition* theParticle, 
+			       const G4ParticleDefinition* nucleon, G4double ekin);
+  
   G4double HadronNucleonXscPDG(const G4ParticleDefinition* theParticle, 
 			       const G4ParticleDefinition* nucleon, G4double ekin);
 

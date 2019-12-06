@@ -16,6 +16,84 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 3, 2019 Hrivnacova (analysis-V10-05-13)
+- Use consistently the same default value of rowMode 
+  in G4RootAnalysisManager::SetNtupleRowWise() as defined in the 
+  G4VAnalysisManager base class.
+
+November 19, 2019 G. Cosmo (analysis-V10-05-12)
+- Fixed more cases of implicit type conversions.
+
+November 17, 2019 Hrivnacova (analysis-V10-05-11)
+- Updated to g4tools 5.0.5 (Guy Barrand):
+  Fixed compilation warning from gl2ps showing up on gcc-9.2.
+  See History_tools for the complete list of modifications.
+
+November 15, 2019 G. Cosmo (analysis-V10-05-10)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+November 11, 2019 B. Morgan (analysis-V10-05-09)
+- Link directly to FreeType and HDF5 impormted targets
+
+November 8, 2019 I. Hrivnacova (analysis-V10-05-08)
+- In G4PlotManager: Disabled PAW encoding 
+  (this fixes a problem with unwanted axis labels in Greek)
+- Updated to g4tools 5.0.4 (Guy Barrand):
+  - sg/plotter: added function set_encoding(), set_encoding_none() which allow 
+    to disable (unwanted) paw specific encoding
+  - Fixed Coverity warnings
+
+October 21, 2019 I. Hrivnacova (analysis-V10-05-07)
+- Added fRowWise data member in G4RootNtupleManager to make the parameter
+  available in MPI
+
+October 17, 2019 I. Hrivnacova (analysis-V10-05-06)
+- Updated to g4tools 5.0.2 (Guy Barrand):
+  Handle axis label of format "10^%d?" in case of freetype font.
+
+October 14, 2019 I. Hrivnacova (analysis-V10-05-05)
+- Enhanced the G4VAnalysisManager interface:
+  - Added new option for ntuple merging and updated/added functions for merging:
+    - SetNtupleMerging(): removed rowWise and basketSize optional paremeters
+    - SetNtupleRowWise(): added parameter 'rowMode' with a default value
+    - SetBasketSize(), SetBasketEntries(): new methods
+  - Added functions and UI commands for setting axis log scale for plotting:
+    - Set[H,P][1,2,3][X,Y.Z]AxisIsLog()
+      and analoguos getters
+    - New UI commands
+      /analysis/[h,p][1,2,3]/set[X,Y,Z]axisLog true|false
+- Fix in g4tools for axis labels with log scale 
+
+October 9, 2019 I. Hrivnacova (analysis-V10-05-04)
+- Updated to g4tools 5.0.1 (Guy Barrand):
+  - ROOT format : restore a "per event/row view" for the ntuple column-wise in MT and MPI.
+  - batch plotting : fixes to avoid labels overlap when having a grid of plotters.
+  - MPI : fix a memory leak.
+  - scene graph : have material for interactive plotting.
+  - include modifications coming from other usage of inlib/exlib, for example, in rroot, to be able to read TClonesArray.
+  See History_tools for the complete list of modifications.
+
+September 24, 2019 I. Hrivnacova (analysis-V10-05-03)
+- Fix in g4tools:
+  - mpi_create_basket: fixed memory leak (Guy Barrand)
+
+September 10, 2019 I. Hrivnacova (analysis-V10-05-02)
+- Added new factory function G4Analysis::ManagerInstance():
+  which allows to create the analysis manager of the type selected via a string argument; example of the user code:
+  #include "g4analysis.hh"
+  G4AnalysisManager* analysisManager = G4Analysis::ManagerInstance("root");
+
+  Note that G4AnalysisManager is in this case G4ToolsAnalysisManager, and not
+  the output type specific manager (eg. G4RootAnalysisManager), as it is
+  in case of using a type specific include, eg. "g4root.hh"
+
+  Details:
+  - Added new analysis sub-category "factory"
+  - Clean-up analysis type definitions:
+    G4Hn*, G4Pn* types moved out of type specific namespace
+  - Added methods for setting ntuple merge mode in G4VAnalysisManager
+    with a default implementatation (issuing a warning if merging is not available)
+
 June 12, 2019 I. Hrivnacova (analysis-V10-05-01)
 - Fixed CSV, XML ntuple file names
 

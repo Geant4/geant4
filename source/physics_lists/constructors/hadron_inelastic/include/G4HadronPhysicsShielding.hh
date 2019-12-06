@@ -31,6 +31,8 @@
 // Author: 2007  tatsumi Koi, Gunter Folger
 //   created from G4HadronPhysicsFTFP_BERT
 // Modified:
+// 2019.08.01 A.Ribon replaced explicit numbers for the energy transition
+//                    region with values taken from G4HadronicParameters
 // 2014.08.05 K.L.Genser added provisions for modifing the Bertini to
 //            FTF transition energy region
 //
@@ -44,6 +46,7 @@
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4HadronicParameters.hh"
 
 
 class G4HadronPhysicsShielding : public G4VPhysicsConstructor
@@ -52,7 +55,9 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
     explicit G4HadronPhysicsShielding(G4int verbose=1);
     explicit G4HadronPhysicsShielding(const G4String& name, G4bool );
     explicit G4HadronPhysicsShielding(const G4String& name, G4int verbose=1,
-                                      G4double minFTFPEnergy=9.5*CLHEP::GeV, G4double maxBertiniEnergy=9.9*CLHEP::GeV);
+      G4double minFTFPEnergy=G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
+      G4double maxBertiniEnergy=G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
+
     virtual ~G4HadronPhysicsShielding();
 
   public: 

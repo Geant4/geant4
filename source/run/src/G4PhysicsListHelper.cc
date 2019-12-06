@@ -45,14 +45,14 @@
 #include <fstream>
 
 ////////////////////////////////////////////////////////
-G4ThreadLocal G4PhysicsListHelper* G4PhysicsListHelper::pPLHelper = 0;
+G4ThreadLocal G4PhysicsListHelper* G4PhysicsListHelper::pPLHelper = nullptr;
  
 ////////////////////////////////////////////////////////
 G4PhysicsListHelper::G4PhysicsListHelper()
   :  useCoupledTransportation(false),
-     theTransportationProcess(0),
+     theTransportationProcess(nullptr),
      verboseLevel(1),
-     theTable(0),
+     theTable(nullptr),
      sizeOfTable(0),
      ordParamFileName("")
 {
@@ -78,10 +78,12 @@ G4PhysicsListHelper::~G4PhysicsListHelper()
     theTable=0;
     sizeOfTable=0;
   }
+  /*
   if (theTransportationProcess!=0) {
     delete theTransportationProcess;
     theTransportationProcess=0;
   }
+  */
 }
 
 ////////////////////////////////////////////////////////
@@ -89,7 +91,8 @@ G4PhysicsListHelper* G4PhysicsListHelper::GetPhysicsListHelper()
 {
   if (!pPLHelper)
   {
-    pPLHelper = new G4PhysicsListHelper;
+    static G4ThreadLocalSingleton<G4PhysicsListHelper> inst;
+    pPLHelper = inst.Instance();
   }
   return pPLHelper;
 }
@@ -97,14 +100,14 @@ G4PhysicsListHelper* G4PhysicsListHelper::GetPhysicsListHelper()
 ////////////////////////////////////////////////////////
 void G4PhysicsListHelper::CheckParticleList() const
 {
-  bool isElectron = false;
-  bool isPositron = false;
-  bool isGamma    = false;
-  bool isProton   = false;
-  bool isGenericIon = false;
-  bool isAnyIon   = false;
-  bool isAnyChargedBaryon   = false;
-  bool isEmProc   = false;
+  G4bool isElectron = false;
+  G4bool isPositron = false;
+  G4bool isGamma    = false;
+  G4bool isProton   = false;
+  G4bool isGenericIon = false;
+  G4bool isAnyIon   = false;
+  G4bool isAnyChargedBaryon   = false;
+  G4bool isEmProc   = false;
 
   // loop over all particles in G4ParticleTable
   aParticleIterator->reset();
@@ -114,7 +117,7 @@ void G4PhysicsListHelper::CheckParticleList() const
     // check if any EM process exists
     if (!isEmProc) {
       G4ProcessVector* list = particle->GetProcessManager()->GetProcessList();
-      for (int idx=0; idx<list->size(); idx++){
+      for (std::size_t idx=0; idx<list->size(); ++idx){
 	isEmProc = ((*list)[idx])->GetProcessType() == fElectromagnetic;
 	if (isEmProc) break;
       }
@@ -136,8 +139,8 @@ void G4PhysicsListHelper::CheckParticleList() const
   // RULE 1
   //  e+, e- and gamma should exist 
   //   if one of them exist
-  bool isEmBasic =  isElectron || isPositron || isGamma;
-  bool isMissingEmBasic =  !isElectron || !isPositron || !isGamma;
+  G4bool isEmBasic =  isElectron || isPositron || isGamma;
+  G4bool isMissingEmBasic =  !isElectron || !isPositron || !isGamma;
   if (isEmBasic && isMissingEmBasic) {
     G4String missingName="";
     if (!isElectron) missingName += "e- ";
@@ -273,8 +276,8 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
   G4bool readInFile = false;
   std::ifstream fIn;  
 
-  if( getenv("G4ORDPARAMTABLE") ){
-    ordParamFileName = getenv("G4ORDPARAMTABLE");
+  if( std::getenv("G4ORDPARAMTABLE") ){
+    ordParamFileName = std::getenv("G4ORDPARAMTABLE");
 #ifdef G4VERBOSE
     if (verboseLevel >1){
       G4cout << "G4PhysicsListHelper::ReadOrdingParameterTable  :"
@@ -339,7 +342,6 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
 		"The ordering parameter table is empty ");
     delete theTable;
     theTable=0;
-    sizeOfTable=0;
   }
   return;  
 }
@@ -347,7 +349,7 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
 ////////////////////////////////////////////////////////
 void G4PhysicsListHelper::DumpOrdingParameterTable(G4int subType) const
 {
- if (theTable==0) {
+  if (theTable==0) {
 #ifdef G4VERBOSE
     if (verboseLevel >0) {
       G4cout << "G4PhysicsListHelper::DumpOrdingParameterTable   "
@@ -363,7 +365,7 @@ void G4PhysicsListHelper::DumpOrdingParameterTable(G4int subType) const
 	 << "    ProcessType" <<  "        SubType"
 	 << "         AtRest" <<  "      AlongStep" <<  "        PostStep"
 	 << "     Duplicable" << G4endl;
-  for (int i=0; i<sizeOfTable ; i++){
+  for (G4int i=0; i<sizeOfTable ; ++i){
     G4PhysicsListOrderingParameter* tmp=&(theTable->at(i));
     if ((subType>=0) && (subType!=tmp->processSubType)) continue;
     G4cout << std::setw(18)     << tmp->processTypeName 
@@ -397,7 +399,7 @@ G4PhysicsListOrderingParameter G4PhysicsListHelper::GetOrdingParameter(G4int sub
     return value;
   }
 
-  for (int i=0; i<sizeOfTable ; i++){
+  for (G4int i=0; i<sizeOfTable ; ++i){
     G4PhysicsListOrderingParameter* tmp=&(theTable->at(i));
     if (subType == tmp->processSubType){
       value.processTypeName = tmp->processTypeName; 
@@ -424,7 +426,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
 	     << G4endl;
     }
 #endif
-    G4Exception("G4PhysicsListHelper::RegisterPorcess",
+    G4Exception("G4PhysicsListHelper::RegisterProcess",
 		"Run0107", FatalException, 
 		"No Ordering Parameter Table");
     return false;
@@ -454,7 +456,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
 	     << " SubType = "<< pSubType << G4endl;
     }
 #endif
-    G4Exception("G4PhysicsListHelper::RegisterPorcess",
+    G4Exception("G4PhysicsListHelper::RegisterProcess",
 		"Run0108", FatalException, 
 		"No Matching process Type/SubType");
     return false;
@@ -463,7 +465,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
   G4bool isFound = false;
   G4int  ord[3];
   G4bool duplicable = false;
-  for (int i=0; i<sizeOfTable ; i++){
+  for (G4int i=0; i<sizeOfTable ; ++i){
     G4PhysicsListOrderingParameter* tmp=&(theTable->at(i));
     if ((tmp->processType==pType)&&(tmp->processSubType==pSubType)){
       ord[0] = tmp->ordering[0]; 
@@ -485,7 +487,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
 	     << G4endl;
     }
 #endif
-    G4Exception("G4PhysicsListHelper::RegisterPorcess",
+    G4Exception("G4PhysicsListHelper::RegisterProcess",
 		"Run0109", FatalException, 
 		"No Matching process Type/SubType");
     return false;
@@ -512,7 +514,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
   if (!duplicable){
     G4bool duplicated = false;
     G4ProcessVector* pList = pManager->GetProcessList();
-    for (G4int idx=0; idx<pList->size(); idx++) {
+    for (std::size_t idx=0; idx<pList->size(); ++idx) {
       const G4VProcess* p = (*pList)[idx];
       if ((p->GetProcessType()== pType)  && 
 	  (p->GetProcessSubType()== pSubType)){
@@ -530,7 +532,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
 	  G4cout << "It will not be added !!" << G4endl;
 	}
 #endif
-	G4Exception("G4PhysicsListHelper::RegisterPorcess",
+	G4Exception("G4PhysicsListHelper::RegisterProcess",
 		    "Run0111", JustWarning, 
 		    "Duplication of processes");
       }
@@ -543,7 +545,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
   if (code <0) return false;
 
   // Set Ordering Parameter
-  for(G4int idx=0; idx<3; idx++){
+  for(G4int idx=0; idx<3; ++idx){
     G4ProcessVectorDoItIndex idxOrd = static_cast<G4ProcessVectorDoItIndex>(idx);
     if (ord[idx]<0) {
       // Do Nothing because NO DOIT

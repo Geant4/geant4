@@ -42,6 +42,8 @@
 #include "G4FTFParameters.hh"
 #include "G4ElasticHNScattering.hh"
 #include "G4ThreeVector.hh"
+#include "G4LorentzVector.hh"
+#include "G4LorentzRotation.hh"
 
 class G4VSplitableHadron;
 class G4ExcitedString;

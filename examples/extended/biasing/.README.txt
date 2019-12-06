@@ -114,6 +114,10 @@ technique using absorption cross-section to control the neutron population.
 
 Illustrates the usage of parallel geometries with generic biasing.
 
+\link ExampleGB07 Example GB07 \endlink
+
+Illustrates the usage of leading particle biasing with generic biasing.
+
 \section biasing_s3 Reverse MonteCarlo Technique example
 
 \link ExampleReverseMC01 Example ReverseMC01 \endlink

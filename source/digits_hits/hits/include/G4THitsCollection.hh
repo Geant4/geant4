@@ -94,7 +94,7 @@ template <class T> class G4THitsCollection : public G4HitsCollection
           if (!anHCAllocator_G4MT_TLS_()) anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
           return (std::vector<T*>*)theCollection; }
       //  Returns a collection vector.
-      inline G4int insert(T* aHit)
+      inline size_t insert(T* aHit)
       {
           if (!anHCAllocator_G4MT_TLS_()) anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
           std::vector<T*>*theHitsCollection = (std::vector<T*>*)theCollection;
@@ -103,7 +103,7 @@ template <class T> class G4THitsCollection : public G4HitsCollection
       }
       //  Insert a hit object. Total number of hit objects stored in this
       // collection is returned.
-      inline G4int entries() const
+      inline size_t entries() const
       {
           if (!anHCAllocator_G4MT_TLS_()) anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
           std::vector<T*>*theHitsCollection = (std::vector<T*>*)theCollection;
@@ -120,8 +120,8 @@ template <class T> class G4THitsCollection : public G4HitsCollection
       virtual size_t GetSize() const
       {
           if (!anHCAllocator_G4MT_TLS_()) anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
-          return ((std::vector<T*>*)theCollection)->size(); }
-
+          return ((std::vector<T*>*)theCollection)->size();
+      }
 };
 
 template <class T> inline void* G4THitsCollection<T>::operator new(size_t)

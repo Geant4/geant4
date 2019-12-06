@@ -410,10 +410,10 @@ public:
   public:
     virtual ~iadd_basket() {}
   public:
-    virtual bool add_basket(basket&) = 0;
+    virtual bool add_basket(basket*) = 0;
   };
 
-  bool pfill(iadd_basket& a_badd) {
+  bool pfill(iadd_basket& a_badd,uint32 a_nev) {
     //done on a pntuple/branch.
 
     //a_nbytes = 0;
@@ -445,33 +445,33 @@ public:
             << std::endl;
       return false;
     }
-  
+
     uint32 lnew   = buf.length();
     uint32 nbytes = lnew - lold;
-
-    //uint32 add_bytes  = 0;
-    //uint32 nout  = 0;
-
+    
     // Should we create a new basket?
-    // Compare expected next size with m_basket_size.
-    if((lnew+nbytes)>=m_basket_size) { 
-      if(!a_badd.add_basket(*bk)) {
+    bool store_basket = false;
+    if(a_nev) {
+      store_basket = (bk->nev()>=a_nev);              // trigger add_basket per number of entries reached.
+    } else {
+      store_basket = ((lnew+nbytes)>=m_basket_size);  // trigger add_basket when reaching m_basket_size.
+    }
+
+    if(store_basket) {
+      if(!a_badd.add_basket(bk)) {  //we give ownership of bk.
         m_out << "tools::wroot::branch::parallel_fill :"
               << " main_branch.add_basket() failed."
               << std::endl;
         return false;
       }
-      delete bk;
+      //delete bk; //no, it is deleted by the a_badd.add_basket().
       bool main_branch_byte_swap = m_byte_swap; //NOTE : it assumes that pntuple/branch and main/branch have same byte_swap.
       bool main_branch_verbose = m_verbose;
       m_baskets[m_write_basket] = new basket(m_out,main_branch_byte_swap,
                                              m_seek_directory,m_name,m_title,"TBasket",m_basket_size,
                                              main_branch_verbose);
-      //a_mutex.unlock();
     }
-    //a_nbytes = nbytes;
-    //a_add_bytes = add_bytes;
-    //a_nout = nout;
+    
     return true;
   }
 
@@ -490,15 +490,16 @@ public:
     uint32 lold = buf.length();
 
     if(lold) {
-      if(!a_badd.add_basket(*bk)) {
+      if(!a_badd.add_basket(bk)) {  //we give ownership of bk.
         m_out << "tools::wroot::branch::parallel_fill :"
               << " main_branch.add_basket() failed."
               << std::endl;
         return false;
       }
+    } else {
+      delete bk;
     }
     
-    delete bk;
     m_baskets[m_write_basket] = 0; // no need to recreate a basket since it is end of fill.
 
     return true;
@@ -562,6 +563,9 @@ protected:
   bool m_verbose;
   seek m_seek_directory;
   obj_array<basket> m_baskets;
+  /// for parallelization :
+public:  
+  std::vector<basket*> m_parallel_baskets;
 protected:
   //Object
   //uint32 m_bits;

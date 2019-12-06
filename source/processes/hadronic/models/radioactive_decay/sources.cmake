@@ -76,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4RadioactiveDecayChainsFromParent.hh
         G4RadioactiveDecaymessenger.hh
         G4RadioactivityTable.hh
+        G4TritonDecay.hh
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
@@ -102,6 +103,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4RadioactiveDecayChainsFromParent.cc
         G4RadioactiveDecaymessenger.cc
         G4RadioactivityTable.cc
+        G4TritonDecay.cc
         G4UIcmdWithNucleusLimits.cc
     GRANULAR_DEPENDENCIES
         G4baryons

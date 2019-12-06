@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+30.10.2019, S.Guatelli eRosita-V10-05-02
+            "using namespace std" deleted
+
+29.08.2019, S.Guatelli eRosita-V10-05-01
+           G4VIS_USE and G4UI_USE deleted
 
 31.01.2019, I.Hrivnacova eRosita-V10-05-00
             Merged GitHub PR #4: all Boolean operators now return G4bool.

@@ -16,9 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 23, 2019 G.Cosmo geom-csg-V10-05-05
+- Minor c++11 revision and headers cleanup.
+- Use pre-increment wherever possible.
+
+July 1, 2019 G.Cosmo geom-csg-V10-05-04
+- G4CutTubs: fixed minor Coverity defects for non initialised data in
+  constructors.
+
 May 31, 2019 J.Apostolakis geom-csg-V10-05-03
 - G4Tubs: Fixed normal from DistanceToOut (to be unit vector) for abnormal
-    exit points.  Added  inverse-Rmax and -Rmin as data members.
+  exit points. Added inverse-Rmax and -Rmin as data members.
 
 May 31, 2019 G.Cosmo geom-csg-V10-05-02
 - More reuse of pre-calculated values for sin() and cos() in G4Tubs,

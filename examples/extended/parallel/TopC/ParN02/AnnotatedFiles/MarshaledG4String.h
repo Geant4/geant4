@@ -1,6 +1,6 @@
 // This file was generated automatically by marshalgen.
 //
-/// \file parallel/ParN02/AnnotatedFiles/MarshaledG4String.h
+/// \file MarshaledG4String.h
 /// \brief Definition of the MaraledG4String class
 
 #ifndef MarshaledG4String_H

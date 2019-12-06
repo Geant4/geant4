@@ -71,5 +71,6 @@ class G4BertiniPionBuilder : public G4VPionBuilder
     G4double theMax;
 
 };
+
 #endif
 

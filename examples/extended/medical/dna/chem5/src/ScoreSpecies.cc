@@ -42,7 +42,6 @@
 #include <G4SystemOfUnits.hh>
 #include <globals.hh>
 #include <G4EventManager.hh>
-#include "g4analysis_defs.hh"
 #include <iomanip>
 
 /**

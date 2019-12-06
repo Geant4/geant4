@@ -31,12 +31,12 @@
 // 05.03.07 V.Ivanchenko - add IfZAApplicable
 //
 
-
 #ifndef G4UPiNuclearCrossSection_h
 #define G4UPiNuclearCrossSection_h
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4Threading.hh"
 
@@ -53,9 +53,11 @@ public:
   G4bool IsElementApplicable(const G4DynamicParticle* aParticle, 
 			     G4int Z, const G4Material*) final;
 
+  inline
   G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
 				  G4int Z, G4int A) const;
 
+  inline
   G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
 				    G4int Z, G4int A) const;
 
@@ -67,7 +69,8 @@ public:
   
 private:
 
-  G4double Interpolate(G4int Z, G4int A, G4double ekin, G4PhysicsTable*) const;
+  G4double Interpolate(G4int Z, G4int A, G4double ekin, 
+                       const G4PhysicsTable*) const;
 
   void AddDataSet(const G4String& p, const G4double* tot, 
 		  const G4double* in, const G4double* e, G4int n); 
@@ -79,6 +82,7 @@ private:
 
   static const G4int NZ = 16;
   static G4int theZ[NZ];
+  static G4int idxZ[93];
 
   static G4double theA[NZ];
   static G4double APower[93];
@@ -90,7 +94,6 @@ private:
 
   G4double aPower;
   G4double elow;
-  G4double elowest;
 
   G4bool isMaster;
 
@@ -98,5 +101,23 @@ private:
   static G4Mutex pionUXSMutex;
 #endif
 };
+
+inline G4double 
+G4UPiNuclearCrossSection::GetElasticCrossSection(
+       const G4DynamicParticle* dp, G4int Z, G4int A) const
+{
+  const G4PhysicsTable* table = 
+    (dp->GetDefinition() == piPlus) ? piPlusElastic : piMinusElastic; 
+  return Interpolate(Z, A, dp->GetKineticEnergy(), table);
+}
+
+inline G4double 
+G4UPiNuclearCrossSection::GetInelasticCrossSection(
+       const G4DynamicParticle* dp, G4int Z, G4int A) const
+{
+  const G4PhysicsTable* table = 
+    (dp->GetDefinition() == piPlus) ? piPlusInelastic : piMinusInelastic; 
+  return Interpolate(Z, A, dp->GetKineticEnergy(), table);
+}
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/include/Run.hh
+/// \file exoticphysics/monopole/include/Run.hh
 /// \brief Definition of the Run class
 //
 //

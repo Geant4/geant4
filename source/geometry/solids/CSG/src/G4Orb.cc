@@ -22,18 +22,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// class G4Orb
-//
 // Implementation for G4Orb class
 //
-// History:
-//
-// 08.08.17 E.Tcherniaev - complete revision, speed-up
-// 27.10.16 E.Tcherniaev - reimplemented CalculateExtent()
-// 05.04.12 M.Kelsey   - GetPointOnSurface() throw flat in cos(theta)
-// 30.06.04 V.Grichine - bug fixed in DistanceToIn(p,v) on Rmax surface
 // 20.08.03 V.Grichine - created
+// 08.08.17 E.Tcherniaev - complete revision, speed-up
 // --------------------------------------------------------------------
 
 #include "G4Orb.hh"
@@ -72,8 +64,7 @@ G4Orb::G4Orb( const G4String& pName, G4double pRmax )
 //                            for usage restricted to object persistency
 
 G4Orb::G4Orb( __void__& a )
-  : G4CSGSolid(a), fRmax(0.), halfRmaxTol(0.),
-    sqrRmaxPlusTol(0.), sqrRmaxMinusTol(0.)
+  : G4CSGSolid(a)
 {
 }
 
@@ -196,7 +187,7 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -234,7 +225,7 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
   
   // set bounding circles
   G4ThreeVectorList circles[NTHETA];
-  for (G4int i=0; i<NTHETA; ++i) circles[i].resize(NPHI);
+  for (G4int i=0; i<NTHETA; ++i) { circles[i].resize(NPHI); }
 
   G4double sinCurTheta = sinHalfTheta;
   G4double cosCurTheta = cosHalfTheta;
@@ -254,7 +245,7 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
   // set envelope and calculate extent
   std::vector<const G4ThreeVectorList *> polygons;
   polygons.resize(NTHETA);
-  for (G4int i=0; i<NTHETA; ++i) polygons[i] = &circles[i];
+  for (G4int i=0; i<NTHETA; ++i) { polygons[i] = &circles[i]; }
 
   G4BoundingEnvelope benv(bmin,bmax,polygons);
   exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
@@ -345,8 +336,8 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
                                const G4ThreeVector& v,
                                const G4bool calcNorm,
-                                     G4bool *validNorm,
-                                     G4ThreeVector *n   ) const
+                                     G4bool* validNorm,
+                                     G4ThreeVector* n ) const
 {
   // Check if point is on the surface and traveling away
   //

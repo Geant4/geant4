@@ -69,18 +69,19 @@ inline bool find_with_env(std::ostream& a_out,
   std::string PATH;
   if(!get_env(a_env,PATH)) {
     //look for a a_file in current directory.
-    a_path = a_file;
-    if(file::exists(a_path)) return true;
-    a_out << "tools::find_with_path :"
-          << " env variable " << sout(a_env) << " not defined."
-          << std::endl;
+    if(file::exists(a_file)) {
+      //a_out << "tools::find_with_env :"
+      //      << " env variable " << sout(a_env) << " not defined, but file " << sout(a_file) << " exists."
+      //      << std::endl;
+      a_path = a_file;
+      return true;
+    }      
+    a_out << "tools::find_with_env : env variable " << sout(a_env) << " not defined." << std::endl;
     a_path.clear();
     return false;
   }
   if(a_verbose) {
-    a_out << "find_with_path :"
-          << " PATH is " << sout(PATH)
-          << std::endl;
+    a_out << "find_with_env : env " << sout(a_env) << " is " << sout(PATH) << std::endl;
   }
 
   std::vector<std::string> dirs;

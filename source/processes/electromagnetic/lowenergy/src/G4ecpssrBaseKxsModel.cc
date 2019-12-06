@@ -61,7 +61,7 @@ G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()
     // Storing FK data needed for medium velocities region
     char *path = 0;
 
-    path = getenv("G4LEDATA");
+    path = std::getenv("G4LEDATA");
 
     if (!path) {
       G4Exception("G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()", "em0006", FatalException,"G4LEDATA environment variable not set" );

@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-// class G4ReplicatedSlice
+// G4ReplicatedSlice
 //
 // Class description:
 //
@@ -53,12 +51,10 @@
 //   They have phi of offset+n*width to offset+(n+1)*width where
 //   n=0..nReplicas-1
 
-// History:
-// -------
-// Apr/20/2010 - Initial version extended from G4PVDivision
+// Author: M.Asai (SLAC), 20/04/2010 - Extended from G4PVDivision
 // ----------------------------------------------------------------------
-#ifndef G4ReplicatedSlice_HH 
-#define G4ReplicatedSlice_HH 1
+#ifndef G4REPLICATEDSLICE_HH 
+#define G4REPLICATEDSLICE_HH 1
 
 #include "geomdefs.hh"
 #include "G4VPhysicalVolume.hh"
@@ -99,8 +95,6 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
                       const G4double offset );
       // Constructor with width
 
-  public:  // without description
-
     G4ReplicatedSlice(const G4String& pName,
                             G4LogicalVolume* pLogical,
                             G4VPhysicalVolume* pMotherPhysical,
@@ -129,9 +123,10 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
                       const G4double offset );
       // Constructor with width
 
-  public:  // with description
-
     virtual ~G4ReplicatedSlice();
+
+    G4ReplicatedSlice(const G4ReplicatedSlice&) = delete;
+    G4ReplicatedSlice& operator=(const G4ReplicatedSlice&) = delete;
 
     virtual G4bool IsMany() const;
     virtual G4int GetCopyNo() const;
@@ -146,8 +141,9 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
                                      G4bool& consuming ) const;
     EAxis  GetDivisionAxis() const;
     G4bool IsParameterised() const;
-
-  public:  // without description
+   
+    EVolume VolumeType() const final;
+      // Characterise the type of volume - normal/replicated/parameterised.
 
     G4bool IsRegularStructure() const; 
     G4int  GetRegularStructureId() const; 
@@ -175,20 +171,14 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
 
     void ErrorInAxis( EAxis axis, G4VSolid* solid );
 
-  private:
-
-    G4ReplicatedSlice(const G4ReplicatedSlice&);
-    const G4ReplicatedSlice& operator=(const G4ReplicatedSlice&);
-      // Private copy constructor and assignment operator.
-
   protected:
 
     EAxis faxis;             // axis of optimisation
     EAxis fdivAxis;          // axis of division
-    G4int fnReplicas;
-    G4double fwidth,foffset;
-    G4int    fcopyNo;
-    G4VDivisionParameterisation *fparam; 
+    G4int fnReplicas = 0;
+    G4double fwidth = 0.0, foffset = 0.0;
+    G4int fcopyNo = -1;
+    G4VDivisionParameterisation* fparam = nullptr; 
 };
 
 #endif

@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Sphere
 //
 // Class description:
@@ -60,13 +54,11 @@
 //      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
 //      made with (say) Phi of a point.
 
-// History:
 // 28.3.94 P.Kent: old C++ code converted to tolerant geometry
 // 17.9.96 V.Grichine: final modifications to commit
 // --------------------------------------------------------------------
-
-#ifndef G4Sphere_HH
-#define G4Sphere_HH
+#ifndef G4SPHERE_HH
+#define G4SPHERE_HH
 
 #include "G4GeomTypes.hh"
 
@@ -122,7 +114,7 @@ class G4Sphere : public G4CSGSolid
 
     inline void SetInnerRadius    (G4double newRMin);
     inline void SetOuterRadius    (G4double newRmax);
-    inline void SetStartPhiAngle  (G4double newSphi, G4bool trig=true);
+    inline void SetStartPhiAngle  (G4double newSphi, G4bool trig = true);
     inline void SetDeltaPhiAngle  (G4double newDphi);
     inline void SetStartThetaAngle(G4double newSTheta);
     inline void SetDeltaThetaAngle(G4double newDTheta);
@@ -154,9 +146,9 @@ class G4Sphere : public G4CSGSolid
 
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
@@ -231,7 +223,7 @@ class G4Sphere : public G4CSGSolid
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
     G4double fRminTolerance, fRmaxTolerance, kAngTolerance,
-             kRadTolerance, fEpsilon;
+             kRadTolerance, fEpsilon = 2.e-11;
       //
       // Radial and angular tolerances
 
@@ -249,7 +241,7 @@ class G4Sphere : public G4CSGSolid
       //
       // Cached trigonometric values for Theta angle
 
-    G4bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
+    G4bool fFullPhiSphere=false, fFullThetaSphere=false, fFullSphere=true;
       //
       // Flags for identification of section, shell or full sphere
 

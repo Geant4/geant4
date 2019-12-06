@@ -23,23 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//
-// History:
-// -------
-// - First implementation   20th August 2004  by H.Kurashige
-//-------------------------------------
+// First implementation - 20th August 2004, H.Kurashige
+//---------------------------------------------------------------------
 
 #include  "G4MCCIndexConversionTable.hh"
 
-
 G4MCCIndexConversionTable::G4MCCIndexConversionTable()
 {
-
 } 
 
 G4MCCIndexConversionTable::~G4MCCIndexConversionTable()
@@ -54,4 +44,3 @@ void G4MCCIndexConversionTable::Reset(size_t siz)
   vecNewIndex.resize(siz, -1);
 }
  
-

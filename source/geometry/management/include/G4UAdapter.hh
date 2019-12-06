@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4UAdapter
+// G4UAdapter
 //
 // Class description:
 //
@@ -70,7 +67,7 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
 {
   public:
 
-    typedef vecgeom::Vector3D<G4double> U3Vector;
+    using U3Vector = vecgeom::Vector3D<G4double>;
 
     using UnplacedVolume_t::operator delete;
     using UnplacedVolume_t::operator new;
@@ -78,13 +75,12 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
       // and we need to make these functions public again
 
     G4UAdapter(const G4String& name)
-      : G4VSolid(name), fRebuildPolyhedron(false), fPolyhedron(0)
+      : G4VSolid(name)
         { kHalfTolerance = 0.5*kCarTolerance; }
 
     template <typename... T>
     G4UAdapter(const G4String& name, const T &... params)
-      : G4VSolid(name), UnplacedVolume_t(params...),
-        fRebuildPolyhedron(false), fPolyhedron(0)
+      : G4VSolid(name), UnplacedVolume_t(params...)
         { kHalfTolerance = 0.5*kCarTolerance; }
 
     virtual ~G4UAdapter();
@@ -207,31 +203,31 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
   public:  // VecGeom overridden methods
 
     vecgeom::Precision
-    DistanceToOut(U3Vector const &position, U3Vector const &direction,
+    DistanceToOut(U3Vector const& position, U3Vector const& direction,
                   vecgeom::Precision stepMax = kInfinity) const override
     {
       return UnplacedVolume_t::DistanceToOut(position, direction, stepMax);
     }
 
     vecgeom::EnumInside
-    Inside(U3Vector const &aPoint) const override
+    Inside(U3Vector const& aPoint) const override
     {
       return UnplacedVolume_t::Inside(aPoint);
     }
 
     vecgeom::Precision
-    DistanceToIn(U3Vector const &position, U3Vector const &direction,
+    DistanceToIn(U3Vector const& position, U3Vector const& direction,
                  const vecgeom::Precision step_max = kInfinity) const override
     {
       return UnplacedVolume_t::DistanceToIn(position, direction, step_max);
     }
 
-    G4bool Normal(U3Vector const &aPoint, U3Vector &aNormal) const override
+    G4bool Normal(U3Vector const& aPoint, U3Vector& aNormal) const override
     {
       return UnplacedVolume_t::Normal(aPoint, aNormal);
     }
 
-    void Extent(U3Vector &aMin, U3Vector &aMax) const override
+    void Extent(U3Vector& aMin, U3Vector& aMax) const override
     {
       return UnplacedVolume_t::Extent(aMin, aMax);
     }
@@ -243,8 +239,8 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
 
   protected:  // data
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fPolyhedron = nullptr;
 
     G4double kHalfTolerance;      // Cached geometrical tolerance
 
@@ -257,7 +253,6 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
 template <class UnplacedVolume_t>
 G4UAdapter<UnplacedVolume_t>::G4UAdapter(__void__& a)
   : G4VSolid(a), UnplacedVolume_t(*this),
-    fRebuildPolyhedron(false), fPolyhedron(0),
     kHalfTolerance(0.5*kCarTolerance)
 {
 }
@@ -265,7 +260,7 @@ G4UAdapter<UnplacedVolume_t>::G4UAdapter(__void__& a)
 template <class UnplacedVolume_t>
 G4UAdapter<UnplacedVolume_t>::~G4UAdapter()
 {
-  delete fPolyhedron; fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = nullptr;
 }
 
 template <class UnplacedVolume_t>
@@ -278,8 +273,7 @@ operator==(const G4UAdapter& rhs) const
 template <class UnplacedVolume_t>
 G4UAdapter<UnplacedVolume_t>::
 G4UAdapter(const G4UAdapter& rhs)
-  : G4VSolid(rhs), UnplacedVolume_t(rhs),
-    fRebuildPolyhedron(false), fPolyhedron(0)
+  : G4VSolid(rhs), UnplacedVolume_t(rhs)
 {
   kHalfTolerance = 0.5*kCarTolerance;
 }
@@ -303,7 +297,7 @@ operator=(const G4UAdapter& rhs)
   // Copy data
   //
   fRebuildPolyhedron = false;
-  delete fPolyhedron; fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = nullptr;
   kHalfTolerance = 0.5*kCarTolerance;
 
   return *this;
@@ -421,7 +415,7 @@ G4double G4UAdapter<UnplacedVolume_t>::GetSurfaceArea()
 template <class UnplacedVolume_t>
 G4ThreeVector G4UAdapter<UnplacedVolume_t>::GetPointOnSurface() const
 {
-  U3Vector p = UnplacedVolume_t::SamplePointOnSurface();;
+  U3Vector p = UnplacedVolume_t::SamplePointOnSurface();
   return G4ThreeVector(p.x(), p.y(), p.z());
 }
 
@@ -476,7 +470,7 @@ G4VSolid* G4UAdapter<UnplacedVolume_t>::Clone() const
           << GetEntityType() << "!" << G4endl
           << "Returning NULL pointer!";
   G4Exception("G4UAdapter::Clone()", "GeomSolids1001", JustWarning, message);
-  return 0;
+  return nullptr;
 }
 
 template <class UnplacedVolume_t>
@@ -518,7 +512,7 @@ G4Polyhedron* G4UAdapter<UnplacedVolume_t>::CreatePolyhedron() const
           << GetEntityType() << "... Sorry!" << G4endl;
   G4Exception("G4UAdapter::CreatePolyhedron()", "GeomSolids0003",
               FatalException, message);
-  return 0;
+  return nullptr;
 }
 
 template <class UnplacedVolume_t>

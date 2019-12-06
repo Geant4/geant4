@@ -23,26 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
+// G4EllipticalTube implementation
 //
-//
-// G4EllipticalTube.cc
-//
-// Implementation of a CSG volume representing a tube with elliptical
-// cross section (geant3 solid 'ELTU')
-//
-
-// First implementation:
-//   David C. Williams (davidw@scipp.ucsc.edu)
-//
-// Complete revision, speed-up:
-//   Evgueni Tcherniaev (evgueni.tcherniaev@cern.ch), 23.12.2019
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Revision: Evgueni Tcherniaev (evgueni.tcherniaev@cern.ch), 23.12.2019
 // --------------------------------------------------------------------
 
 #include "G4EllipticalTube.hh"
+
+#if !(defined(G4GEOM_USE_UELLIPTICALTUBE) && defined(G4GEOM_USE_SYS_USOLIDS))
 
 #include "G4GeomTools.hh"
 #include "G4RandomTools.hh"
@@ -73,9 +62,7 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
                                           G4double Dx,
                                           G4double Dy,
                                           G4double Dz )
-  : G4VSolid(name), fDx(Dx), fDy(Dy), fDz(Dz),
-    fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(name), fDx(Dx), fDy(Dy), fDz(Dz)
 {
   CheckParameters();
 }
@@ -87,10 +74,8 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
 
 G4EllipticalTube::G4EllipticalTube( __void__& a )
   : G4VSolid(a), halfTolerance(0.), fDx(0.), fDy(0.), fDz(0.),
-    fCubicVolume(0.), fSurfaceArea(0.),
     fRsph(0.), fDDx(0.), fDDy(0.), fSx(0.), fSy(0.), fR(0.),
-    fQ1(0.), fQ2(0.), fScratch(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+    fQ1(0.), fQ2(0.), fScratch(0.)
 {
 }
 
@@ -100,7 +85,7 @@ G4EllipticalTube::G4EllipticalTube( __void__& a )
 
 G4EllipticalTube::~G4EllipticalTube()
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -113,8 +98,7 @@ G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     fRsph(rhs.fRsph), fDDx(rhs.fDDx), fDDy(rhs.fDDy),
     fSx(rhs.fSx), fSy(rhs.fSy), fR(rhs.fR),
-    fQ1(rhs.fQ1), fQ2(rhs.fQ2), fScratch(rhs.fScratch),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+    fQ1(rhs.fQ1), fQ2(rhs.fQ2), fScratch(rhs.fScratch)
 {
 }
 
@@ -152,7 +136,7 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
    fScratch = rhs.fScratch;
 
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
@@ -225,7 +209,7 @@ G4EllipticalTube::CalculateExtent( const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit, pTransform, pMin, pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit, pTransform, pMin, pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis, pVoxelLimit, pTransform, pMin, pMax))
   {
@@ -299,14 +283,16 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
   G4double x = p.x() * fSx;
   G4double y = p.y() * fSy;
   G4double distR = fQ1 * (x * x + y * y) - fQ2;
-  if (std::abs(distR) <= halfTolerance) {
+  if (std::abs(distR) <= halfTolerance)
+  {
     norm = G4ThreeVector(p.x() * fDDy, p.y() * fDDx, 0.).unit();
     ++nsurf;
   }
 
   // check lateral bases
   G4double distZ = std::abs(p.z()) - fDz;
-  if (std::abs(distZ) <= halfTolerance) {
+  if (std::abs(distZ) <= halfTolerance)
+  {
     norm.setZ(p.z() < 0 ? -1. : 1.);
     ++nsurf;
   }
@@ -421,7 +407,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   //   1) trajectory parallel to Z axis (A = 0, B = 0, C - any, D = 0)
   //   2) touch (D = 0) or no intersection (D < 0) with lateral surface
   //
-  if (parallelToZ) return (tzmin < halfTolerance) ? offset : tzmin + offset; // 1)
+  if (parallelToZ) return (tzmin<halfTolerance) ? offset : tzmin + offset; // 1)
   if (D <= A * A * fScratch) return kInfinity; // 2)
 
   // Find roots of quadratic equation
@@ -436,7 +422,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   G4double tout = std::min(tzmax, trmax);
 
   if (tout <= tin + halfTolerance) return kInfinity; // touch or no hit
-  return (tin < halfTolerance) ? offset : tin + offset;
+  return (tin<halfTolerance) ? offset : tin + offset;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -472,8 +458,8 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
                                           const G4ThreeVector& v,
                                           const G4bool calcNorm,
-                                                G4bool *validNorm,
-                                                G4ThreeVector *n ) const
+                                                G4bool* validNorm,
+                                                G4ThreeVector* n ) const
 {
   // Check if point flying away relative to Z planes
   //
@@ -515,7 +501,8 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
 
   // Just in case check if point is outside, normally it should never be
   //
-  if (std::max(distZ, distR) > halfTolerance) {
+  if (std::max(distZ, distR) > halfTolerance)
+  {
 #ifdef G4SPECDEBUG
     std::ostringstream message;
     G4int oldprc = message.precision(16);
@@ -650,7 +637,8 @@ G4VSolid* G4EllipticalTube::Clone() const
 
 G4double G4EllipticalTube::GetCubicVolume()
 {
-  if (fCubicVolume == 0.) {
+  if (fCubicVolume == 0.)
+  {
     fCubicVolume = twopi * fDx * fDy * fDz;
   }
   return fCubicVolume;
@@ -671,7 +659,7 @@ G4double G4EllipticalTube::GetCachedSurfaceArea() const
     cached_Dx = fDx;
     cached_Dy = fDy;
     cached_Dz = fDz;
-    cached_area = 2. * (pi * fDx * fDy + G4GeomTools::EllipsePerimeter(fDx, fDy) * fDz);
+    cached_area = 2.*(pi*fDx*fDy + G4GeomTools::EllipsePerimeter(fDx, fDy)*fDz);
   }
   return cached_area;
 }
@@ -682,7 +670,8 @@ G4double G4EllipticalTube::GetCachedSurfaceArea() const
 
 G4double G4EllipticalTube::GetSurfaceArea()
 {
-  if(fSurfaceArea == 0.) {
+  if(fSurfaceArea == 0.)
+  {
     fSurfaceArea = GetCachedSurfaceArea();
   }
   return fSurfaceArea;
@@ -775,7 +764,7 @@ G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
 
 G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
@@ -806,3 +795,5 @@ G4VisExtent G4EllipticalTube::GetExtent() const
 {
   return G4VisExtent( -fDx, fDx, -fDy, fDy, -fDz, fDz );
 }
+
+#endif // !defined(G4GEOM_USE_UELLIPTICALTUBE) || !defined(G4GEOM_USE_SYS_USOLIDS)

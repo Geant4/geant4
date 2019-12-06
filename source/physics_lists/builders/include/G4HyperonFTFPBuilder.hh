@@ -60,7 +60,9 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4CascadeInterface.hh"
-#include "G4ChipsHyperonInelasticXS.hh"
+
+
+class G4VCrossSectionDataSet;
 
 
 class G4HyperonFTFPBuilder : public G4PhysicsBuilderInterface
@@ -91,10 +93,11 @@ class G4HyperonFTFPBuilder : public G4PhysicsBuilderInterface
     G4XiMinusInelasticProcess*  theXiMinusInelastic;
     G4AntiXiMinusInelasticProcess*  theAntiXiMinusInelastic;
     G4OmegaMinusInelasticProcess*  theOmegaMinusInelastic;
-  G4AntiOmegaMinusInelasticProcess*  theAntiOmegaMinusInelastic;
+    G4AntiOmegaMinusInelasticProcess*  theAntiOmegaMinusInelastic;
   
-  //  G4QHadronInelasticDataSet * theCHIPSInelastic;
-  G4VCrossSectionDataSet* theCHIPSInelastic;
+    G4VCrossSectionDataSet* theInelasticCrossSection;
     G4bool wasActivated;
 };
+
 #endif
+

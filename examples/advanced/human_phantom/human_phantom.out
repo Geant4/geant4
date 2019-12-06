@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -75,22 +79,22 @@ Some /vis commands (optionally) take a string to specify colour.
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct Head with mother physicalWorld
-Checking overlaps for volume physicalHead ... OK! 
-Volume of Head = 4656.48 cm^3
+Checking overlaps for volume physicalHead (G4UnionSolid) ... OK! 
+Volume of Head = 4657.34 cm^3
 Material of Head = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of Head = 4595.48 g
+Mass of Head = 4596.33 g
 MotherVolume: physicalHead
 sensitivity : 0
 Construct Skull with mother volume physicalHead
-Checking overlaps for volume physicalSkull ... OK! 
+Checking overlaps for volume physicalSkull (G4SubtractionSolid) ... OK! 
 Skull created !!!!!!
-Volume of Skull = 842.441 cm^3
+Volume of Skull = 845.927 cm^3
 Material of Skull = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of Skull = 1252.04 g
+Mass of Skull = 1257.22 g
 Construct Brain with mother physicalHead
-Checking overlaps for volume physicalBrain ... OK! 
+Checking overlaps for volume physicalBrain (G4Ellipsoid) ... OK! 
 Volume of Brain = 1470.27 cm^3
 Material of Brain = soft_tissue
 Density of Material = 0.9869 g/cm^3
@@ -98,7 +102,7 @@ Mass of Brain = 1451 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct Trunk with mother volume physicalWorld
-Checking overlaps for volume physicalTrunk ... OK! 
+Checking overlaps for volume physicalTrunk (G4EllipticalTube) ... OK! 
 Trunk created !!!!!!
 Volume of Trunk = 43982.3 cm^3
 Material of Trunk = soft_tissue
@@ -107,7 +111,7 @@ Mass of Trunk = 43406.1 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct LeftLeg with mother volume physicalWorld
-Checking overlaps for volume physicalLeftLeg ... OK! 
+Checking overlaps for volume physicalLeftLeg (G4Cons) ... OK! 
 LeftLeg created !!!!!!
 Volume of LeftLeg = 10388.2 cm^3
 Material of LeftLeg = soft_tissue
@@ -116,7 +120,7 @@ Mass of LeftLeg = 10252.1 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct RightLeg with mother volume physicalWorld
-Checking overlaps for volume physicalRightLeg ... OK! 
+Checking overlaps for volume physicalRightLeg (G4Cons) ... OK! 
 RightLeg created !!!!!!
 Volume of RightLeg = 10388.2 cm^3
 Material of RightLeg = soft_tissue
@@ -125,7 +129,7 @@ Mass of RightLeg = 10252.1 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct LeftArmBone with mother physicalTrunk
-Checking overlaps for volume physicalLeftArmBone ... OK! 
+Checking overlaps for volume physicalLeftArmBone (G4EllipticalTube) ... OK! 
 LeftArmBone created !!!!!!
 Volume of LeftArmBone = 819.39 cm^3
 Material of LeftArmBone = skeleton
@@ -134,7 +138,7 @@ Mass of LeftArmBone = 1217.78 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct RightArmBone with mother volume physicalTrunk
-Checking overlaps for volume physicalRightArmBone ... OK! 
+Checking overlaps for volume physicalRightArmBone (G4EllipticalTube) ... OK! 
 RightArmBone created !!!!!!
 Volume of RightArmBone = 819.39 cm^3
 Material of RightArmBone = skeleton
@@ -143,7 +147,7 @@ Mass of RightArmBone = 1217.78 g
 MotherVolume: physicalLeftLeg
 sensitivity : 0
 Construct LeftLegBone with mother volume physicalLeftLeg
-Checking overlaps for volume physicalLeftLegBone ... OK! 
+Checking overlaps for volume physicalLeftLegBone (G4Cons) ... OK! 
 LeftLegBone created !!!!!!
 Volume of LeftLegBone = 1399.74 cm^3
 Material of LeftLegBone = skeleton
@@ -152,7 +156,7 @@ Mass of LeftLegBone = 2080.29 g
 MotherVolume: physicalRightLeg
 sensitivity : 0
 Construct RightLegBone with mother volume physicalRightLeg
-Checking overlaps for volume physicalRightLegBone ... OK! 
+Checking overlaps for volume physicalRightLegBone (G4Cons) ... OK! 
 RightLegBone created !!!!!!
 Volume of RightLegBone = 1399.74 cm^3
 Material of RightLegBone = skeleton
@@ -161,46 +165,46 @@ Mass of RightLegBone = 2080.29 g
 MotherVolume: physicalHead
 sensitivity : 0
 Construct UpperSpine with mother volume physicalHead
-Checking overlaps for volume physicalUpperSpine ... OK! 
+Checking overlaps for volume physicalUpperSpine (G4SubtractionSolid) ... OK! 
 UpperSpine created !!!!!!
-Volume of UpperSpine = 126.355 cm^3
+Volume of UpperSpine = 126.361 cm^3
 Material of UpperSpine = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of UpperSpine = 187.789 g
+Mass of UpperSpine = 187.798 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct LeftScapula with mother volume physicalTrunk
-Checking overlaps for volume physicalLeftScapula ... OK! 
+Checking overlaps for volume physicalLeftScapula (G4SubtractionSolid) ... OK! 
 LeftScapula created !!!!!!
-Volume of LeftScapula = 100.406 cm^3
+Volume of LeftScapula = 100.174 cm^3
 Material of LeftScapula = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of LeftScapula = 149.224 g
+Mass of LeftScapula = 148.879 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct RightScapula with mother volume physicalTrunk
-Checking overlaps for volume physicalRightScapula ... OK! 
+Checking overlaps for volume physicalRightScapula (G4SubtractionSolid) ... OK! 
 RightScapula created !!!!!!
-Volume of RightScapula = 103.045 cm^3
+Volume of RightScapula = 101.994 cm^3
 Material of RightScapula = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of RightScapula = 153.145 g
+Mass of RightScapula = 151.584 g
 Construct LeftAdrenal with mother physicalTrunk
-Checking overlaps for volume physicalLeftAdrenal ... OK! 
+Checking overlaps for volume physicalLeftAdrenal (G4Ellipsoid) ... OK! 
 Left LeftAdrenal created !!!!!!
 Volume of LeftAdrenal = 7.85398 cm^3
 Material of LeftAdrenal = soft_tissue
 Density of Material = 0.9869 g/cm^3
 Mass of LeftAdrenal = 7.75109 g
 Construct RightAdrenal with mother volume physicalTrunk
-Checking overlaps for volume physicalRightAdrenal ... OK! 
+Checking overlaps for volume physicalRightAdrenal (G4Ellipsoid) ... OK! 
 Right RightAdrenal created !!!!!!
 Volume of RightAdrenal = 7.85398 cm^3
 Material of RightAdrenal = soft_tissue
 Density of Material = 0.9869 g/cm^3
 Mass of RightAdrenal = 7.75109 g
 Construct Thymus with mother volume physicalTrunk
-Checking overlaps for volume physicalThymus ... OK! 
+Checking overlaps for volume physicalThymus (G4Ellipsoid) ... OK! 
 Thymus created !!!!!!
 Volume of Thymus = 25.1327 cm^3
 Material of Thymus = soft_tissue
@@ -209,7 +213,7 @@ Mass of Thymus = 24.8035 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct LeftClavicle with mother volume physicalTrunk
-Checking overlaps for volume physicalLeftClavicle ... OK! 
+Checking overlaps for volume physicalLeftClavicle (G4Torus) ... OK! 
 LeftClavicle created !!!!!!
 Volume of LeftClavicle = 13.6657 cm^3
 Material of LeftClavicle = skeleton
@@ -218,123 +222,123 @@ Mass of LeftClavicle = 20.3099 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct RightClavicle with mother volume physicalTrunk
-Checking overlaps for volume physicalRightClavicle ... OK! 
+Checking overlaps for volume physicalRightClavicle (G4Torus) ... OK! 
 RightClavicle created !!!!!!
 Volume of RightClavicle = 13.6657 cm^3
 Material of RightClavicle = skeleton
 Density of Material = 1.4862 g/cm^3
 Mass of RightClavicle = 20.3099 g
 Construct SmallIntestine with mother volume physicalTrunk
-Checking overlaps for volume physicalSmallIntestine ... OK! 
+Checking overlaps for volume physicalSmallIntestine (G4SubtractionSolid) ... OK! 
 SmallIntestine created !!!!!!
-Volume of SmallIntestine = 1019.54 cm^3
+Volume of SmallIntestine = 1018.95 cm^3
 Material of SmallIntestine = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of SmallIntestine = 1006.19 g
+Mass of SmallIntestine = 1005.6 g
 Construct RibCage with mother volume physicalTrunk
-Checking overlaps for volume physicalRibCage ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
-Checking overlaps for volume physicalRib ... OK! 
+Checking overlaps for volume physicalRibCage (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume physicalRib (G4SubtractionSolid) ... OK! 
 RibCage created !!!!!!
-Volume of RibCage = 691.222 cm^3
+Volume of RibCage = 692.856 cm^3
 Material of RibCage = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of RibCage = 1027.29 g
+Mass of RibCage = 1029.72 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct MiddleLowerSpine with mother volume physicalTrunk
-Checking overlaps for volume physicalMiddleLowerSpine ... OK! 
+Checking overlaps for volume physicalMiddleLowerSpine (G4EllipticalTube) ... OK! 
 MiddleLowerSpine created !!!!!!
 Volume of MiddleLowerSpine = 753.982 cm^3
 Material of MiddleLowerSpine = skeleton
 Density of Material = 1.4862 g/cm^3
 Mass of MiddleLowerSpine = 1120.57 g
 Construct Pelvis with mother volume physicalTrunk
-Checking overlaps for volume physicalPelvis ... OK! 
+Checking overlaps for volume physicalPelvis (G4SubtractionSolid) ... OK! 
 Pelvis created !!!!!!
-Volume of Pelvis = 608.226 cm^3
+Volume of Pelvis = 605.413 cm^3
 Material of Pelvis = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of Pelvis = 903.945 g
+Mass of Pelvis = 899.764 g
 Construct Stomach with mother volume physicalTrunk
-Checking overlaps for volume physicalStomach ... OK! 
+Checking overlaps for volume physicalStomach (G4Ellipsoid) ... OK! 
 Stomach created !!!!!!
 Volume of Stomach = 402.124 cm^3
 Material of Stomach = soft_tissue
 Density of Material = 0.9869 g/cm^3
 Mass of Stomach = 396.856 g
 Construct UpperLargeIntestine with mother volume physicalTrunk
-Checking overlaps for volume physicalUpperLargeIntestine ... OK! 
+Checking overlaps for volume physicalUpperLargeIntestine (G4UnionSolid) ... OK! 
 UpperLargeIntestine created !!!!!!
-Volume of UpperLargeIntestine = 434.826 cm^3
+Volume of UpperLargeIntestine = 434.434 cm^3
 Material of UpperLargeIntestine = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of UpperLargeIntestine = 429.129 g
+Mass of UpperLargeIntestine = 428.743 g
 Construct LowerLargeIntestine with mother volume physicalTrunk
-Checking overlaps for volume physicalLowerLargeIntestine ... OK! 
+Checking overlaps for volume physicalLowerLargeIntestine (G4UnionSolid) ... OK! 
 LowerLargeIntestine created !!!!!!
-Volume of LowerLargeIntestine = 343.591 cm^3
+Volume of LowerLargeIntestine = 344.701 cm^3
 Material of LowerLargeIntestine = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of LowerLargeIntestine = 339.09 g
+Mass of LowerLargeIntestine = 340.186 g
 Construct Spleen with mother volume physicalTrunk
-Checking overlaps for volume physicalSpleen ... OK! 
+Checking overlaps for volume physicalSpleen (G4Ellipsoid) ... OK! 
 Spleen created !!!!!!
 Volume of Spleen = 175.929 cm^3
 Material of Spleen = soft_tissue
 Density of Material = 0.9869 g/cm^3
 Mass of Spleen = 173.625 g
 Construct Pancreas with mother volume physicalTrunk
-Checking overlaps for volume physicalPancreas ... OK! 
+Checking overlaps for volume physicalPancreas (G4SubtractionSolid) ... OK! 
 Pancreas created !!!!!!
-Volume of Pancreas = 61.0423 cm^3
+Volume of Pancreas = 60.9048 cm^3
 Material of Pancreas = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of Pancreas = 60.2426 g
+Mass of Pancreas = 60.1069 g
 Construct LeftKidney with mother volume physicalTrunk
-Checking overlaps for volume physicalLeftKidney ... OK! 
+Checking overlaps for volume physicalLeftKidney (G4SubtractionSolid) ... OK! 
 Left LeftKidney created !!!!!!
-Volume of LeftKidney = 143.931 cm^3
+Volume of LeftKidney = 144.103 cm^3
 Material of LeftKidney = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of LeftKidney = 142.045 g
+Mass of LeftKidney = 142.215 g
 Construct RightKidney with mother volume physicalTrunk
-Checking overlaps for volume physicalRightKidney ... OK! 
+Checking overlaps for volume physicalRightKidney (G4SubtractionSolid) ... OK! 
 RightKidney created !!!!!!
-Volume of RightKidney = 144.296 cm^3
+Volume of RightKidney = 144.185 cm^3
 Material of RightKidney = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of RightKidney = 142.406 g
+Mass of RightKidney = 142.297 g
 Construct UrinaryBladder with mother volume physicalTrunk
-Checking overlaps for volume physicalUrinaryBladder ... OK! 
+Checking overlaps for volume physicalUrinaryBladder (G4SubtractionSolid) ... OK! 
 UrinaryBladder created !!!!!!
-Volume of UrinaryBladder = 45.6809 cm^3
+Volume of UrinaryBladder = 45.7174 cm^3
 Material of UrinaryBladder = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of UrinaryBladder = 45.0825 g
+Mass of UrinaryBladder = 45.1185 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct MaleGenitalia with mother volume physicalWorld
-Checking overlaps for volume physicalMaleGenitalia ... OK! 
+Checking overlaps for volume physicalMaleGenitalia (G4SubtractionSolid) ... OK! 
 MaleGenitalia created !!!!!!
-Volume of MaleGenitalia = 229.68 cm^3
+Volume of MaleGenitalia = 229.61 cm^3
 Material of MaleGenitalia = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of MaleGenitalia = 226.671 g
+Mass of MaleGenitalia = 226.603 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct LeftTeste with mother volume physicalMaleGenitalia
-Checking overlaps for volume physicalLeftTeste ... OK! 
+Checking overlaps for volume physicalLeftTeste (G4Ellipsoid) ... OK! 
 LeftTeste created !!!!!!
 Volume of LeftTeste = 18.7867 cm^3
 Material of LeftTeste = soft_tissue
@@ -343,7 +347,7 @@ Mass of LeftTeste = 18.5406 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct RightTeste with mother volume physicalMaleGenitalia
-Checking overlaps for volume physicalRightTeste ... OK! 
+Checking overlaps for volume physicalRightTeste (G4Ellipsoid) ... OK! 
 RightTeste created !!!!!!
 Volume of RightTeste = 18.7867 cm^3
 Material of RightTeste = soft_tissue
@@ -395,9 +399,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PenConversion : Emin=    0 eV  Emax=   20 MeV
-        BetheHeitler : Emin=   20 MeV Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
@@ -808,31 +810,31 @@ See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 start.
 Number of events = 100
 Energy Total in Run:logicalBrain, ID: 0, Energy Deposition (MeV): 0
-Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 3.83714
+Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 4.69457
 Energy Total in Run:logicalHeart, ID: 2, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftAdrenal, ID: 3, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftArmBone, ID: 4, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftBreast, ID: 5, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftClavicle, ID: 6, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftKidney, ID: 7, Energy Deposition (MeV): 0
-Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 11.3155
+Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 7.51151
 Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftLung, ID: 10, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftOvary, ID: 11, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftScapula, ID: 12, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftTeste, ID: 13, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLowerLargeIntestine, ID: 14, Energy Deposition (MeV): 0
-Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 1.92391
+Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 1.9476
 Energy Total in Run:logicalMiddleLowerSpine, ID: 16, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPancreas, ID: 17, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPelvis, ID: 18, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0.507668
+Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0.0129018
 Energy Total in Run:logicalRightAdrenal, ID: 20, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightArmBone, ID: 21, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightBreast, ID: 22, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightClavicle, ID: 23, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightKidney, ID: 24, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 8.62089
+Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 10.4601
 Energy Total in Run:logicalRightLegBone, ID: 26, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightLung, ID: 27, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightOvary, ID: 28, Energy Deposition (MeV): 0
@@ -844,11 +846,11 @@ Energy Total in Run:logicalSpleen, ID: 33, Energy Deposition (MeV): 0
 Energy Total in Run:logicalStomach, ID: 34, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThymus, ID: 35, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThyroid, ID: 36, Energy Deposition (MeV): 0
-Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 26.2638
+Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 25.6211
 Energy Total in Run:logicalUpperLargeIntestine, ID: 38, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUpperSpine, ID: 39, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUrinaryBladder, ID: 40, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUterus, ID: 41, Energy Deposition (MeV): 0
-Total Energy deposit in the body is: 52.4689 MeV
+Total Energy deposit in the body is: 50.2477 MeV
 Graphics systems deleted.
 Visualization Manager deleting...

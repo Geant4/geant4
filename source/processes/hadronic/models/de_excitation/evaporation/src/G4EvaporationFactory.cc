@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 //
@@ -66,14 +64,6 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationFactory::GetChannel()
   theChannel->push_back( new G4He3EvaporationChannel() );      // He3
   theChannel->push_back( new G4AlphaEvaporationChannel() );    // Alpha
 
-  size_t nn = theChannel->size();
-  for(size_t i=1; i<nn; ++i) { 
-    (*theChannel)[i]->SetPhotonEvaporation(thePhotonEvaporation);
-  }
-
   return theChannel;
 
 }
-
-
-

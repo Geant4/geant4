@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // Implementation of G4UGenericPolycone wrapper class
+//
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4GenericPolycone.hh"
@@ -96,7 +95,7 @@ G4UGenericPolycone::~G4UGenericPolycone()
 //
 // Copy constructor
 //
-G4UGenericPolycone::G4UGenericPolycone(const G4UGenericPolycone &source)
+G4UGenericPolycone::G4UGenericPolycone(const G4UGenericPolycone& source)
   : Base_t(source)
 {
   wrStart   = source.wrStart;
@@ -110,7 +109,7 @@ G4UGenericPolycone::G4UGenericPolycone(const G4UGenericPolycone &source)
 // Assignment operator
 //
 G4UGenericPolycone&
-G4UGenericPolycone::operator=(const G4UGenericPolycone &source)
+G4UGenericPolycone::operator=(const G4UGenericPolycone& source)
 {
   if (this == &source) return *this;
   
@@ -132,25 +131,25 @@ G4double G4UGenericPolycone::GetEndPhi() const
 }
 G4double G4UGenericPolycone::GetSinStartPhi() const
 {
-  if (IsOpen()) return 0;
+  if (IsOpen()) return 0.;
   G4double phi = GetStartPhi();
   return std::sin(phi);
 }
 G4double G4UGenericPolycone::GetCosStartPhi() const
 {
-  if (IsOpen()) return 1;
+  if (IsOpen()) return 1.;
   G4double phi = GetStartPhi();
   return std::cos(phi);
 }
 G4double G4UGenericPolycone::GetSinEndPhi() const
 {
-  if (IsOpen()) return 0;
+  if (IsOpen()) return 0.;
   G4double phi = GetEndPhi();
   return std::sin(phi);
 }
 G4double G4UGenericPolycone::GetCosEndPhi() const
 {
-  if (IsOpen()) return 1;
+  if (IsOpen()) return 1.;
   G4double phi = GetEndPhi();
   return std::cos(phi);
 }
@@ -248,7 +247,7 @@ G4UGenericPolycone::CalculateExtent(const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -648,7 +647,7 @@ G4Polyhedron* G4UGenericPolycone::CreatePolyhedron() const
       G4Exception("G4GenericPolycone::CreatePolyhedron()", "GeomSolids1002",
                   JustWarning, message);
       delete polyhedron;
-      return 0;
+      return nullptr;
     }
     else
     {

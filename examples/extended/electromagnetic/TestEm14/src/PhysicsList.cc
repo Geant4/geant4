@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
 // 
@@ -60,7 +60,6 @@ PhysicsList::PhysicsList()
   fMessenger(0)
 {
   G4LossTableManager::Instance();  
-  SetDefaultCutValue(1.0*mm);
 
   fMessenger = new PhysicsListMessenger(this);
 
@@ -159,3 +158,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
+void PhysicsList::SetCuts()
+{ 
+ // fixe lower limit for cut
+ G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
+
+ // call base class method to set cuts which default value can be
+ // modified via /run/setCut/* commands
+ G4VUserPhysicsList::SetCuts();
+
+ DumpCutValuesTable();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

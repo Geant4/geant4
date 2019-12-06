@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,10 +49,10 @@
           ElmMassFraction:  85.60 %  ElmAbundance  33.33 % 
 
 
- Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.950 m  
+ Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.949 m  
                        Imean: 352.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.800 g/mole
+   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
          --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:  2.280 %
          --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance: 11.580 %
@@ -108,10 +112,10 @@
           ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
 
 
- Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.666 m  
+ Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.668 m  
                        Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.290 g/mole
+   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:  0.090 %
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
@@ -139,10 +143,10 @@
           ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
 
 
- Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.032 m  
-                       Imean: 412.598 eV   temperature: 293.15 K  pressure:   1.00 atm
+ Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.034 m  
+                       Imean: 412.597 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.290 g/mole
+   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:  0.090 %
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
@@ -166,10 +170,10 @@
           ElmMassFraction:   5.67 %  ElmAbundance  28.73 % 
 
 
- Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.555 m  
+ Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.157 m    Nucl.Int.Length: 391.554 m  
                        Imean: 296.926 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.800 g/mole
+   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
          --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:  2.280 %
          --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance: 11.580 %
@@ -191,7 +195,7 @@
 
 
 
-<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
 
 
  The  WORLD   is made of 44000mm of Air, the transverse size (R) of the world is 22000 mm. 
@@ -203,20 +207,20 @@ radThick = 401 mm
 fFoilNumber = 2
 fRadiatorMat = Air
 WorldMaterial = Air
-Checking overlaps for volume Radiator ... OK! 
--99.5 mm	Checking overlaps for volume RadSlice ... OK! 
-100.5 mm	Checking overlaps for volume RadSlice ... OK! 
+Checking overlaps for volume Radiator (G4Tubs) ... OK! 
+-99.5 mm	Checking overlaps for volume RadSlice (G4Tubs) ... OK! 
+100.5 mm	Checking overlaps for volume RadSlice (G4Tubs) ... OK! 
 
-Checking overlaps for volume Absorber ... OK! 
+Checking overlaps for volume Absorber (G4Tubs) ... OK! 
 F03FieldSetup::UpdateField> The minimal step is equal to 0.25 mm
                             Stepper Type chosen = 4
 G4ClassicalRK4 (default) is called
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
@@ -290,8 +294,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -654,7 +657,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
   Process: nCapture
@@ -667,8 +670,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -679,8 +682,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -691,8 +694,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -741,8 +744,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -786,14 +790,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -808,7 +812,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -821,9 +825,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -834,9 +837,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -849,8 +851,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -872,26 +874,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -905,7 +905,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -916,8 +916,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -926,21 +926,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ==============================
@@ -980,7 +983,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001805s Sys=0.000000s
+  User=0.000000s Real=0.001146s Sys=0.000000s
 
 ========= Table of registered couples ==============================
 
@@ -999,7 +1002,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.010699s Sys=0.000000s
+  User=0.010000s Real=0.010395s Sys=0.000000s
 Set global field value to (0,0,1000) Gauss 
 
 ========= Table of registered couples ==============================
@@ -1018,7 +1021,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001992s Sys=0.000000s
+  User=0.000000s Real=0.001357s Sys=0.000000s
 Set global field value to (33000,0,0) Gauss 
 G4Integration Driver Stats: #QuickAdvance 4741 - #AccurateAdvance 636 #good steps 636 #bad steps 0
 G4ChordFinder statistics report: 
@@ -1069,7 +1072,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000355s Sys=0.000000s
+  User=0.000000s Real=0.000350s Sys=0.000000s
 /tracking/verbose 0
 #
 /calor/setAbsMat Xe20CO2
@@ -1106,11 +1109,11 @@ radThick = 401 mm
 fFoilNumber = 2
 fRadiatorMat = Air
 WorldMaterial = Kr20CO2
-Checking overlaps for volume Radiator ... OK! 
--99.5 mm	Checking overlaps for volume RadSlice ... OK! 
-100.5 mm	Checking overlaps for volume RadSlice ... OK! 
+Checking overlaps for volume Radiator (G4Tubs) ... OK! 
+-99.5 mm	Checking overlaps for volume RadSlice (G4Tubs) ... OK! 
+100.5 mm	Checking overlaps for volume RadSlice (G4Tubs) ... OK! 
 
-Checking overlaps for volume Absorber ... OK! 
+Checking overlaps for volume Absorber (G4Tubs) ... OK! 
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
@@ -1126,8 +1129,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -1508,16 +1510,16 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.150000s Real=0.144363s Sys=0.000000s
+  User=0.330000s Real=0.330828s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.73 MB
+Dynamic pools deleted: 12 / Total memory freed: 1.5 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-G4Integration Driver Stats: #QuickAdvance 153190 - #AccurateAdvance 43383 #good steps 86774 #bad steps 156
+G4Integration Driver Stats: #QuickAdvance 358763 - #AccurateAdvance 100318 #good steps 200708 #bad steps 350
 G4ChordFinder statistics report: 
-  No trials: 66260  No Calls: 62606  Max-trial: 21
+  No trials: 157705  No Calls: 149629  Max-trial: 22
   Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

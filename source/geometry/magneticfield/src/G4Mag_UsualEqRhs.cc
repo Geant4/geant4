@@ -23,30 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Mag_UsualEqRhs implementation
 //
-//
-//
-//  This is the 'standard' right-hand side for the equation of motion
-//  of a charged particle in a magnetic field.
-//
-//  Initial version: J. Apostolakis, January 13th, 1997
-//
+// Created: J.Apostolakis, CERN - 13.01.1997
 // --------------------------------------------------------------------
 
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4MagneticField.hh"
 
-#include "globals.hh"    // For DBL_MAX
+#include "globals.hh"
 
 G4Mag_UsualEqRhs::G4Mag_UsualEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ) {}
+  : G4Mag_EqRhs( MagField )
+{
+}
 
-G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs() {}
+G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs()
+{
+}
 
 void
 G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
-			             const G4double B[3],
-				           G4double dydx[] ) const
+                                     const G4double B[3],
+                                           G4double dydx[] ) const
 {
    G4double momentum_mag_square = y[3]*y[3] + y[4]*y[4] + y[5]*y[5];
    G4double inv_momentum_magnitude = 1.0 / std::sqrt( momentum_mag_square );
@@ -61,14 +60,13 @@ G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
    dydx[4] = cof*(y[5]*B[0] - y[3]*B[2]) ;   // Ay = a*(Vz*Bx - Vx*Bz)
    dydx[5] = cof*(y[3]*B[1] - y[4]*B[0]) ;   // Az = a*(Vx*By - Vy*Bx)
 
-   return ;
+   return;
 }
 
 void
-G4Mag_UsualEqRhs::
- SetChargeMomentumMass( G4ChargeState particleCharge,
-                        G4double MomentumXc,
-			G4double mass)
+G4Mag_UsualEqRhs::SetChargeMomentumMass( G4ChargeState particleCharge,
+                                         G4double MomentumXc,
+                                         G4double mass )
 
 {
    G4Mag_EqRhs::SetChargeMomentumMass( particleCharge, MomentumXc, mass);

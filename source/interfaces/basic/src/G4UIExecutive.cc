@@ -49,6 +49,7 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "G4UIcsh.hh"
+#include "G4TiMemory.hh"
 
 // --------------------------------------------------------------------------
 // build flags as variables
@@ -142,6 +143,7 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     DISCARD_PARAMETER(argc);
     DISCARD_PARAMETER(argv);
     session = new G4UIWin32();
+    isGUI = true;
 #endif
     break;
   case kWt:
@@ -188,6 +190,8 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     shell = new G4UIcsh;
     session = new G4UIterminal(shell);
   }
+
+  TIMEMORY_INIT(argc, argv);
 }
 
 // --------------------------------------------------------------------------
@@ -211,18 +215,18 @@ void G4UIExecutive::SelectSessionByArg(const G4String& stype)
 // --------------------------------------------------------------------------
 void G4UIExecutive::SelectSessionByEnv()
 {
-  if ( qt_build && getenv("G4UI_USE_QT") ) selected = kQt;
-  else if ( xm_build && getenv("G4UI_USE_XM") ) selected = kXm;
-  else if ( win32_build && getenv("G4UI_USE_WIN32") ) selected = kWin32;
-  else if ( wt_build && getenv("G4UI_USE_WT") ) selected = kWt;
-  else if ( getenv("G4UI_USE_GAG") ) selected = kGag;
-  else if ( tcsh_build && getenv("G4UI_USE_TCSH") ) selected = kTcsh;
+  if ( qt_build && std::getenv("G4UI_USE_QT") ) selected = kQt;
+  else if ( xm_build && std::getenv("G4UI_USE_XM") ) selected = kXm;
+  else if ( win32_build && std::getenv("G4UI_USE_WIN32") ) selected = kWin32;
+  else if ( wt_build && std::getenv("G4UI_USE_WT") ) selected = kWt;
+  else if ( std::getenv("G4UI_USE_GAG") ) selected = kGag;
+  else if ( tcsh_build && std::getenv("G4UI_USE_TCSH") ) selected = kTcsh;
 }
 
 // --------------------------------------------------------------------------
 void G4UIExecutive::SelectSessionByFile(const G4String& appname)
 {
-  const char* path = getenv("HOME");
+  const char* path = std::getenv("HOME");
   if( path == NULL ) return;
   G4String homedir = path;
 

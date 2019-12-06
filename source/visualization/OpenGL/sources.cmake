@@ -81,10 +81,10 @@ set(G4VIS_MODULE_OPENGL_SOURCES
 )
 
 #
-# May need OpenGL include here
+# Core OpenGL settings
 #
-include_directories(${OPENGL_INCLUDE_DIR})
-set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${OPENGL_LIBRARIES})
+set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES OpenGL::GL OpenGL::GLU)
+
 
 #
 # All files must have the G4VIS_BUILD_OPENGL_DRIVER definition
@@ -114,13 +114,16 @@ if(GEANT4_USE_OPENGL_X11)
         G4OpenGLXViewer.cc)
 
     # Add the includes for X11
-    include_directories(${X11_INCLUDE_DIR} ${X11_Xmu_INCLUDE_PATH})
+    #include_directories(${X11_INCLUDE_DIR} ${X11_Xmu_INCLUDE_PATH})
 
     # Add the compile definitions needed for the X11 component
     add_definitions(-DG4VIS_BUILD_OPENGLX_DRIVER)
 
     # Add in X11 libraries, plus Xmu library
-    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${X11_LIBRARIES} ${X11_Xmu_LIBRARY})
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
+    if(APPLE)
+      list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES XQuartzGL::GL XQuartzGL::GLU)
+    endif()
 endif()
 
 
@@ -191,24 +194,12 @@ if(GEANT4_USE_XM)
       add_definitions(-DG4VIS_BUILD_OPENGLX_DRIVER)
     endif()
 
-    # Add the includes for X11, Xmu and Motif
-    include_directories(
-        ${X11_INCLUDE_DIR}
-        ${X11_Xmu_INCLUDE_PATH}
-        ${MOTIF_INCLUDE_DIR}
-    )
-
     # Add the compile definitions needed for the Xm component, remembering
     # to add those for the UI part as well!!!
     add_definitions(-DG4VIS_BUILD_OPENGLXM_DRIVER -DG4INTY_BUILD_XT -DG4UI_BUILD_XM_SESSION)
 
     # Add in Xm, X11 libraries, plus Xmu library
-    set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${MOTIF_LIBRARIES} ${X11_LIBRARIES} ${X11_Xmu_LIBRARY} ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES})
-    #list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES
-    #       ${MOTIF_LIBRARIES}
-    #       ${X11_LIBRARIES}
-    #       ${X11_Xmu_LIBRARY}
-    #)
+    set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES Motif::Xm X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES})
 endif()
 
 
@@ -243,9 +234,6 @@ if(GEANT4_USE_QT)
         G4OpenGLStoredQtSceneHandler.cc
         G4OpenGLStoredQtViewer.cc)
 
-
-    # Include the UseQt file to build the moc wrappers
-    include(${QT_USE_FILE})
 
     # Add the moc sources - must use absolute path to the files
     QT4_WRAP_CPP(G4OPENGL_MOC_SOURCES
@@ -285,10 +273,6 @@ if(GEANT4_USE_WT)
         G4OpenGLVboDrawer.cc
         G4OpenGLWtViewer.cc)
 
-    # Must have Wt includes...
-    include_directories(${Wt_INCLUDE_DIR})
-    include_directories(${Boost_INCLUDE_DIRS})
-
     # Add the definitions - these will also be used to compile the moc sources
     # Argh.. Have to remember about INTY and UI because of their use...
     # Use the compile definitions to avoid "signal/slot" keyword
@@ -298,7 +282,7 @@ if(GEANT4_USE_WT)
         -DG4UI_BUILD_WT_SESSION)
 
     # Add in Wt libraries
-    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${Wt_LIBRARY})
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES Wt::Wt Wt::HTTP)
 endif()
 
 
@@ -331,7 +315,8 @@ if(GEANT4_USE_OPENGL_WIN32)
     # That should be it for Win32...
 endif()
 
-
+# May have duplicates in link list, so remove
+list(REMOVE_DUPLICATES G4VIS_MODULE_OPENGL_LINK_LIBRARIES)
 
 #----------------------------------------------------------------------------
 # Define the Geant4 Module.

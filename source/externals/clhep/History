@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 November 2019 - G.Cosmo
+- Fixed warnings for cases of implicit type conversions in
+  Rand*Ziggurat classes.
+
+14 October 2019 - E.Tcherniaev
+- Synchronised with CLHEP-2.4.1.3:
+  CLHEP/Geometry: Use std::enable_if and std::is_same to explicitly
+  define constructor for BasicVector<double> from BasicVector<float>.
+  Added move constructor and move assignment in all classes.
+
+11 October 2019 - E.Tcherniaev
+- CLHEP/Vector: added move constructor and move assignment in all classes.
+- CLHEP/Geometry: added move constructor and move assignment in Transform3D.
+
 20 June 2019 - G.Cosmo
 - Synchronised with CLHEP-2.4.1.2:
   MixMaxRng: throw if seed is zero. Use throw instead of exit() elsewhere.

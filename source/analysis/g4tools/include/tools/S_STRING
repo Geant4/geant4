@@ -66,4 +66,11 @@ static const std::string& s_class() {\
 }\
 static void check_class_name() {a_name<a_T1,a_T2,a_T3>::s_class();}
 
+// to transform the value of a cpp macro to a string :
+#define TOOLS_CPP_TO__STRING(a_cpp) #a_cpp
+#define TOOLS_CPP_TO_STRING(a_cpp) std::string(TOOLS_CPP_TO__STRING(a_cpp))
+// for example :
+// #define FOO foo
+//    std::cout << TOOLS_CPP_TO_STRING(FOO) << std::endl;
+
 #endif

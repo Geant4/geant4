@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -8,7 +12,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0xd47fb0
+##### Create analysis manager   0x179edb0
 Using Root analysis manager
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -140,8 +144,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 1 GeV, 31 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PenConversion : Emin=    0 eV  Emax=   20 MeV
-        BetheHeitler : Emin=   20 MeV Emax=    1 GeV  ModifiedTsai
+      BetheHeitler5D : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
@@ -692,7 +695,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=5.180000s Real=5.255519s Sys=0.030000s
+  User=5.570000s Real=5.627477s Sys=0.030000s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.

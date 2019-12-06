@@ -44,15 +44,19 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh" 
 #include "G4PhysicsListOrderingParameter.hh" 
+#include "G4ThreadLocalSingleton.hh"
 
 class G4VProcess;
 
 class G4PhysicsListHelper
 {
+
+friend class G4ThreadLocalSingleton<G4PhysicsListHelper>;
+
   private:
    // Hide constructor and destructor 
    G4PhysicsListHelper();
-   virtual ~G4PhysicsListHelper();
+   ~G4PhysicsListHelper();
 
   public:  // with description
    // This method gives the ponter to the physics list helper 

@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4PolyhedraSide, the face representing
+// one segmented side of a Polyhedra
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4PolyhedraSide.cc
-//
-// Implementation of the face representing one segmented side of a Polyhedra
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4PolyhedraSide.hh"
@@ -65,16 +58,15 @@ const G4PhSideManager& G4PolyhedraSide::GetSubInstanceManager()
   return subInstanceManager;
 }
 
-//
 // Constructor
 //
 // Values for r1,z1 and r2,z2 should be specified in clockwise
 // order in (r,z).
 //
-G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
-                                  const G4PolyhedraSideRZ *tail,
-                                  const G4PolyhedraSideRZ *head,
-                                  const G4PolyhedraSideRZ *nextRZ,
+G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ* prevRZ,
+                                  const G4PolyhedraSideRZ* tail,
+                                  const G4PolyhedraSideRZ* head,
+                                  const G4PolyhedraSideRZ* nextRZ,
                                         G4int theNumSide, 
                                         G4double thePhiStart, 
                                         G4double thePhiTotal, 
@@ -85,7 +77,6 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   instanceID = subInstanceManager.CreateSubInstance();
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fSurfaceArea = 0.0;
   G4MT_phphix = 0.0; G4MT_phphiy = 0.0; G4MT_phphiz = 0.0;
   G4MT_phphik = 0.0;
 
@@ -310,15 +301,12 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   edgeNorm = 1.0/std::sqrt( 1.0 + lenPhi[1]*lenPhi[1] );
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4PolyhedraSide::G4PolyhedraSide( __void__&)
-  : numSide(0), startPhi(0.), deltaPhi(0.), endPhi(0.),
-    phiIsOpen(false), allBehind(false), cone(0), vecs(0), edges(0),
-    lenRZ(0.), edgeNorm(0.), kCarTolerance(0.), fSurfaceArea(0.), instanceID(0)
+  : startPhi(0.), deltaPhi(0.), endPhi(0.),
+    lenRZ(0.), edgeNorm(0.), kCarTolerance(0.), instanceID(0)
 {
   r[0] = r[1] = 0.;
   z[0] = z[1] = 0.;
@@ -326,7 +314,6 @@ G4PolyhedraSide::G4PolyhedraSide( __void__&)
 }
 
 
-//
 // Destructor
 //  
 G4PolyhedraSide::~G4PolyhedraSide()
@@ -336,11 +323,9 @@ G4PolyhedraSide::~G4PolyhedraSide()
   delete [] edges;
 }
 
-
-//
 // Copy constructor
 //
-G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
+G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide& source )
   : G4VCSGface()
 {
   instanceID = subInstanceManager.CreateSubInstance();
@@ -352,7 +337,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
 //
 // Assignment operator
 //
-G4PolyhedraSide& G4PolyhedraSide::operator=( const G4PolyhedraSide &source )
+G4PolyhedraSide& G4PolyhedraSide::operator=( const G4PolyhedraSide& source )
 {
   if (this == &source) return *this;
   
@@ -365,11 +350,9 @@ G4PolyhedraSide& G4PolyhedraSide::operator=( const G4PolyhedraSide &source )
   return *this;
 }
 
-
-//
 // CopyStuff
 //
-void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
+void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide& source )
 {
   //
   // The simple stuff
@@ -423,8 +406,6 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
   } while( ++sourceVec, ++vec < vecs + numSide );
 }
   
-
-//
 // Intersect
 //
 // Decide if a line intersects the face.
@@ -465,14 +446,14 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
 //   This is simply because the sides do not have infinite extent.
 //      
 //
-G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p,
-                                   const G4ThreeVector &v,  
+G4bool G4PolyhedraSide::Intersect( const G4ThreeVector& p,
+                                   const G4ThreeVector& v,  
                                          G4bool outgoing,
                                          G4double surfTolerance,
-                                         G4double &distance,
-                                         G4double &distFromSurface,
-                                         G4ThreeVector &normal,
-                                         G4bool &isAllBehind )
+                                         G4double& distance,
+                                         G4double& distFromSurface,
+                                         G4ThreeVector& normal,
+                                         G4bool& isAllBehind )
 {
   G4double normSign = outgoing ? +1 : -1;
   
@@ -507,7 +488,7 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p,
   G4ThreeVector q = p + v;
   
   G4int face = 0;
-  G4PolyhedraSideVec *vec = vecs;
+  G4PolyhedraSideVec* vec = vecs;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     //
@@ -564,7 +545,7 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p,
       if (std::fabs(rz) > lenRZ+surfTolerance) return false; 
 
       G4double pp = ps.dot(vec->surfPhi);
-      if (std::fabs(pp) > lenPhi[0] + lenPhi[1]*rz + surfTolerance) return false;
+      if (std::fabs(pp) > lenPhi[0]+lenPhi[1]*rz+surfTolerance) return false;
     }
       
 
@@ -583,8 +564,9 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p,
   return false;
 }
 
-
-G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, G4bool outgoing )
+// Distance
+//
+G4double G4PolyhedraSide::Distance( const G4ThreeVector& p, G4bool outgoing )
 {
   G4double normSign = outgoing ? -1 : +1;
   
@@ -613,13 +595,11 @@ G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, G4bool outgoing )
   return kInfinity;
 }
 
-
-//
 // Inside
 //
-EInside G4PolyhedraSide::Inside( const G4ThreeVector &p,
+EInside G4PolyhedraSide::Inside( const G4ThreeVector& p,
                                        G4double tolerance, 
-                                       G4double *bestDistance )
+                                       G4double* bestDistance )
 {
   //
   // Which phi segment is closest to this point?
@@ -644,12 +624,10 @@ EInside G4PolyhedraSide::Inside( const G4ThreeVector &p,
     return kOutside;
 }
 
-
-//
 // Normal
 //
-G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector &p,
-                                             G4double *bestDistance )
+G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector& p,
+                                             G4double* bestDistance )
 {
   //
   // Which phi segment is closest to this point?
@@ -665,8 +643,6 @@ G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector &p,
   return vecs[iPhi].normal;
 }
 
-
-//
 // Extent
 //
 G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
@@ -681,7 +657,7 @@ G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
 
   G4int iPhi, i1, i2;
   G4double best;
-  G4ThreeVector *list[4];
+  G4ThreeVector* list[4];
   
   //
   // Which phi segment, if any, does the axis belong to
@@ -713,7 +689,7 @@ G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
   // Who's biggest?
   //
   best = -kInfinity;
-  G4ThreeVector **vec = list;
+  G4ThreeVector** vec = list;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double answer = (*vec)->dot(axis);
@@ -723,16 +699,14 @@ G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
   return best;
 }
 
-
-//
 // CalculateExtent
 //
 // See notes in G4VCSGface
 //
 void G4PolyhedraSide::CalculateExtent( const EAxis axis, 
-                                       const G4VoxelLimits &voxelLimit,
-                                       const G4AffineTransform &transform,
-                                             G4SolidExtentList &extentList )
+                                       const G4VoxelLimits& voxelLimit,
+                                       const G4AffineTransform& transform,
+                                             G4SolidExtentList& extentList )
 {
   //
   // Loop over all sides
@@ -772,8 +746,6 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
   return;
 }
 
-
-//
 // IntersectSidePlane
 //
 // Decide if a line correctly intersects one side plane of our segment.
@@ -800,13 +772,13 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 //        if the point is within the r/z bounds + surfTolerance
 //        of the segment.
 //
-G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p,
-                                            const G4ThreeVector &v,
+G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector& p,
+                                            const G4ThreeVector& v,
                                             const G4PolyhedraSideVec& vec,
                                                   G4double normSign, 
                                                   G4double surfTolerance,
-                                                  G4double &distance,
-                                                  G4double &distFromSurface )
+                                                  G4double& distance,
+                                                  G4double& distFromSurface )
 {
   //
   // Correct normal? Here we have straight sides, and can safely ignore
@@ -887,17 +859,15 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p,
   return true;
 }
 
-
-//
 // LineHitsSegments
 //
 // Calculate which phi segments a line intersects in three dimensions.
 // No check is made as to whether the intersections are within the z bounds of
 // the segment.
 //
-G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector &p,
-                                         const G4ThreeVector &v,
-                                               G4int *i1, G4int *i2 )
+G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector& p,
+                                         const G4ThreeVector& v,
+                                               G4int* i1, G4int* i2 )
 {
   G4double s1, s2;
   //
@@ -934,8 +904,6 @@ G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector &p,
   return 2;
 }
 
-
-//
 // ClosestPhiSegment
 //
 // Decide which phi segment is closest in phi to the point.
@@ -963,8 +931,6 @@ G4int G4PolyhedraSide::ClosestPhiSegment( G4double phi0 )
   return (d2 < d1) ? 0 : numSide-1;
 }
 
-
-//
 // PhiSegment
 //
 // Decide which phi segment an angle belongs to, counting from zero.
@@ -1003,8 +969,6 @@ G4int G4PolyhedraSide::PhiSegment( G4double phi0 )
   return answer;
 }
 
-
-//
 // GetPhi
 //
 // Calculate Phi for a given 3-vector (point), if not already cached for the
@@ -1029,8 +993,6 @@ G4double G4PolyhedraSide::GetPhi( const G4ThreeVector& p )
   return val;
 }
 
-
-//
 // DistanceToOneSide
 //
 // Arguments:
@@ -1039,9 +1001,9 @@ G4double G4PolyhedraSide::GetPhi( const G4ThreeVector& p )
 //  normDist - (out) distance normal to the side or edge, as appropriate, signed
 // Return value = total distance from the side
 //
-G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector &p,
-                                             const G4PolyhedraSideVec &vec,
-                                                   G4double *normDist )
+G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector& p,
+                                             const G4PolyhedraSideVec& vec,
+                                                   G4double* normDist )
 {
   G4ThreeVector pct = p - vec.center;
   
@@ -1056,16 +1018,14 @@ G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector &p,
   return DistanceAway( p, vec, normDist );
 }
 
-
-//
 // DistanceAway
 //
-// Add distance from side edges, if necesssary, to total distance,
+// Add distance from side edges, if necessary, to total distance,
 // and updates normDist appropriate depending on edge normals.
 //
-G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
-                                        const G4PolyhedraSideVec &vec,
-                                              G4double *normDist )
+G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector& p,
+                                        const G4PolyhedraSideVec& vec,
+                                              G4double* normDist )
 {
   G4double distOut2;
   G4ThreeVector pct = p - vec.center;
@@ -1204,15 +1164,13 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
   return std::sqrt( distFaceNorm*distFaceNorm + distOut2 );
 }
 
-
-//
 // Calculation of surface area of a triangle. 
 // At the same time a random point in the triangle is given
 //
 G4double G4PolyhedraSide::SurfaceTriangle( G4ThreeVector p1,
                                            G4ThreeVector p2,
                                            G4ThreeVector p3,
-                                           G4ThreeVector *p4 )
+                                           G4ThreeVector* p4 )
 {
   G4ThreeVector v, w;
   
@@ -1225,8 +1183,6 @@ G4double G4PolyhedraSide::SurfaceTriangle( G4ThreeVector p1,
   return 0.5*(v.cross(w)).mag();
 }
 
-
-//
 // GetPointOnPlane
 //
 // Auxiliary method for GetPointOnSurface()
@@ -1234,7 +1190,7 @@ G4double G4PolyhedraSide::SurfaceTriangle( G4ThreeVector p1,
 G4ThreeVector
 G4PolyhedraSide::GetPointOnPlane( G4ThreeVector p0, G4ThreeVector p1, 
                                   G4ThreeVector p2, G4ThreeVector p3,
-                                  G4double *Area )
+                                  G4double* Area )
 {
   G4double chose,aOne,aTwo;
   G4ThreeVector point1,point2;
@@ -1250,8 +1206,6 @@ G4PolyhedraSide::GetPointOnPlane( G4ThreeVector p0, G4ThreeVector p1,
   return (point2);
 }
 
-
-//
 // SurfaceArea()
 //
 G4double G4PolyhedraSide::SurfaceArea()
@@ -1263,7 +1217,7 @@ G4double G4PolyhedraSide::SurfaceArea()
     G4double area,areas;
     G4ThreeVector point1;
     G4ThreeVector v1,v2,v3,v4; 
-    G4PolyhedraSideVec *vec = vecs;
+    G4PolyhedraSideVec* vec = vecs;
     areas=0.;
 
     // Do a loop on all SideEdge
@@ -1285,8 +1239,6 @@ G4double G4PolyhedraSide::SurfaceArea()
   return fSurfaceArea;
 }
 
-
-//
 // GetPointOnFace()
 //
 G4ThreeVector G4PolyhedraSide::GetPointOnFace()
@@ -1295,11 +1247,11 @@ G4ThreeVector G4PolyhedraSide::GetPointOnFace()
   //
   std::vector<G4double>areas;
   std::vector<G4ThreeVector>points;
-  G4double area=0;
+  G4double area=0.;
   G4double result1;
   G4ThreeVector point1;
   G4ThreeVector v1,v2,v3,v4; 
-  G4PolyhedraSideVec *vec = vecs;
+  G4PolyhedraSideVec* vec = vecs;
 
   // Do a loop on all SideEdge
   //
@@ -1320,8 +1272,7 @@ G4ThreeVector G4PolyhedraSide::GetPointOnFace()
   // Choose randomly one of the surfaces and point on it
   //
   G4double chose = area*G4UniformRand();
-  G4double Achose1,Achose2;
-  Achose1=0;Achose2=0.; 
+  G4double Achose1=0., Achose2=0.;
   G4int i=0;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
@@ -1330,7 +1281,7 @@ G4ThreeVector G4PolyhedraSide::GetPointOnFace()
     {
       point1=points[i] ; break;     
     }
-    i++; Achose1=Achose2;
+    ++i; Achose1=Achose2;
   } while( i<numSide );
  
   return point1;

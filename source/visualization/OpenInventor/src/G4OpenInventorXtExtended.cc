@@ -74,7 +74,7 @@ void G4OpenInventorXtExtended::Initialize()
   Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
   G4cout << "TOP LEVEL WIDGET FOR SoXt::init() = " << top << G4endl;
 
-  if(getenv("XENVIRONMENT")==NULL) {
+  if(std::getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
     if(database!=NULL) {
       XrmPutLineResource(&database,"*topShadowColor:white");

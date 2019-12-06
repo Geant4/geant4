@@ -36,6 +36,7 @@
 #include "G4VLevelDensityParameter.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4NucleiProperties.hh"
+#include "G4NuclearLevelData.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 
@@ -86,8 +87,19 @@ private:
   // Charge
   G4int Z;
 
+  // Residual Atomic Number
+  G4int ResidualA;
+
+  // Residual Charge
+  G4int ResidualZ;
+
   G4double EvaporatedMass;
   G4double ResidualMass;
+  G4double CoulombBarrier;
+  G4double EmissionProbability;
+
+  // Maximal Kinetic Energy that can be carried by fragment
+  G4double MaximalKineticEnergy;
 
   G4Pow* fG4pow;
     
@@ -100,27 +112,8 @@ private:
     
   // For Coulomb Barrier calculation
   G4VCoulombBarrier * theCoulombBarrierPtr;
-  G4double CoulombBarrier;
 
-  G4PairingCorrection* pairingCorrection;
-    
-  //---------------------------------------------------
-    
-  // These values depend on the nucleus that is being evaporated.
-  // They are calculated through the Initialize method which takes as parameters 
-  // the atomic number, charge and excitation energy of nucleus.
-    
-  // Residual Atomic Number
-  G4int ResidualA;
-
-  // Residual Charge
-  G4int ResidualZ;
-    
-  // Emission Probability
-  G4double EmissionProbability;
-
-  // Maximal Kinetic Energy that can be carried by fragment
-  G4double MaximalKineticEnergy;
+  G4NuclearLevelData* fNucData;
 };
 
 

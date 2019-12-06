@@ -18,9 +18,6 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${USOLIDS_INCLUDE_DIRS})
 
-# Need XercesC
-include_directories(${XERCESC_INCLUDE_DIRS})
-
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/digits/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
@@ -137,7 +134,7 @@ GEANT4_DEFINE_MODULE(NAME G4gdml
         G4track
         G4tracking
     LINK_LIBRARIES
-        ${XERCESC_LIBRARIES}
+        XercesC::XercesC
 )
 
 # List any source specific properties here

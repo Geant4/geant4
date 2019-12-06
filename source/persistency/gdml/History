@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 November 2019 Makoto Asai (gdml-V10-05-09)
+- G4GDMLRead.cc : avoid double-definition of units.
+
+25th September 2019 Ben Morgan (gdml-V10-05-08)
+- sources.cmake: Replace use of XercesC include/library by imported 
+  XercesC::XercesC target
+
+18,19 July 2019 Makoto Asai (gdml-V10-05-06, -07)
+- G4GDMLMessenger.cc : avoid UI commands from being broadcasted to worker
+  threads.
+
 17 May 2019 Witek Pokorski (gdml-V10-05-05)
 - Adding support for writing out assemblies.
 

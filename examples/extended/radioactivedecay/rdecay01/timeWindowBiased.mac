@@ -1,3 +1,5 @@
+# force Ca47 to decay within a window specified in data file
+#
 /control/verbose 2
 /run/verbose 1
 #

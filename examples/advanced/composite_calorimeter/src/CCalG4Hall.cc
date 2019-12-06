@@ -73,7 +73,7 @@ G4VPhysicalVolume* CCalG4Hall::constructIn(G4VPhysicalVolume* mother) {
 #endif
 
   G4Box* solid = new G4Box(Name(), getDx_2Hall()*mm, getDy_2Hall()*mm,
-			   getDy_2Hall()*mm);
+                           getDy_2Hall()*mm);
 #ifdef debug
   G4cout << solid->GetName() << " made of " << getMaterial() << " of dimension " 
        << getDx_2Hall()*mm << " " << getDy_2Hall()*mm << " " 

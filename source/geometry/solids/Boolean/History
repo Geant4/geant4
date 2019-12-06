@@ -19,6 +19,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ November 26, 2019 G.Cosmo               geom-bool-V10-05-04
+ - G4MultiUnion: fixed cases of implicit type conversions from size_t to G4int.
+
+ September 14, 2019 E.Tcherniaev         geom-bool-V10-05-03
+ - G4BooleanSolid::GetPointOnSurface(): Use G4QuickRand(), reduced
+   max number of tries to generate a point to 100k.
+
+ September 2, 2019 G.Cosmo               geom-bool-V10-05-02
+ - Fixed defect in G4ScaledSolid detected by Coverity.
+
+ August 22, 2019 G.Cosmo                 geom-bool-V10-05-01
+ - Use pre-increment wherever possible.
+
+ August 16, 2019 G.Cosmo                 geom-bool-V10-05-00
+ - Implemented minor c++11 revision: nullptr, auto, inline data
+   initialisation...
+
  October 4, 2018 E.Tcherniaev            geom-bool-V10-04-08
  - G4ScaledSolid: return back using EstimateSurfaceArea() from G4VSolid,
    as it was originally, but now adopting the more precise algorithm

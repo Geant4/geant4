@@ -49,9 +49,9 @@
     SetMaxEnergy( 20.*MeV );
 /*
 //    G4cout << "Capture : start of construction!!!!!!!!"<<G4endl;
-    if(!getenv("G4NEUTRONHPDATA")) 
+    if(!std::getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-    dirName = getenv("G4NEUTRONHPDATA");
+    dirName = std::getenv("G4NEUTRONHPDATA");
     G4String tString = "/Capture";
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();
@@ -100,7 +100,7 @@
     //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
 
     G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
-    if(getenv("NeutronHPCapture")) G4cout <<" ####### G4ParticleHPCapture called"<<G4endl;
+    if(std::getenv("NeutronHPCapture")) G4cout <<" ####### G4ParticleHPCapture called"<<G4endl;
     const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
     G4int index = theMaterial->GetElement(0)->GetIndex();
@@ -207,9 +207,9 @@ void G4ParticleHPCapture::BuildPhysicsTable(const G4ParticleDefinition&)
          return;
       }
 
-      if ( !getenv("G4NEUTRONHPDATA") ) 
+      if ( !std::getenv("G4NEUTRONHPDATA") ) 
           throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-      dirName = getenv("G4NEUTRONHPDATA");
+      dirName = std::getenv("G4NEUTRONHPDATA");
       G4String tString = "/Capture";
       dirName = dirName + tString;
 

@@ -135,8 +135,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   }
   
   // write html documentation, if requested
-  char* htmlDocName = getenv("G4PhysListName");   // file name 
-  char* htmlDocDir  = getenv("G4PhysListDocDir"); // directory
+  char* htmlDocName = std::getenv("G4PhysListName");   // file name 
+  char* htmlDocDir  = std::getenv("G4PhysListDocDir"); // directory
   if (htmlDocName && htmlDocDir) {
     G4LossTableManager::Instance()->DumpHtml();
   }

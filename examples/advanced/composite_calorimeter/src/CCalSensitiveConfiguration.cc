@@ -40,67 +40,70 @@
 
 CCalSensitiveConfiguration * CCalSensitiveConfiguration::instance = 0;
 
-CCalSensitiveConfiguration* CCalSensitiveConfiguration::getInstance(){
+CCalSensitiveConfiguration* CCalSensitiveConfiguration::getInstance()
+{
   if (!instance) 
     instance = new CCalSensitiveConfiguration;
   return instance;
 }
 
 
-int CCalSensitiveConfiguration::getSensitiveFlag(const G4String& n) /*const*/ {
-  int flag = -1;
-  CCalSensitiveConfIterator it = theConfiguration.find(n);
+G4int CCalSensitiveConfiguration::getSensitiveFlag(const G4String& n) /*const*/
+{
+  G4int flag = -1;
+  auto it = theConfiguration.find(n);
 
-  if (it != theConfiguration.end())
+  if (it != theConfiguration.cend())
     flag = (*it).second.SensitiveFlag;
   else {
     G4cerr << "ERROR: In CCalSensitiveConfiguration::getSensitiveFlag(const "
-	   << "G4String& n)" << G4endl 
-	   << "       " << n << " not found in configuration file" << G4endl;
+           << "G4String& n)" << G4endl 
+           << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return flag;
 }
 
-G4String CCalSensitiveConfiguration::getFileName(const G4String& n) /*const*/ {
+G4String CCalSensitiveConfiguration::getFileName(const G4String& n) /*const*/
+{
   G4String fn;
-  CCalSensitiveConfIterator it = theConfiguration.find(n);
+  auto it = theConfiguration.find(n);
 
-  if (it != theConfiguration.end())
+  if (it != theConfiguration.cend())
     fn = (*it).second.FileName;
   else {
     G4cerr << "ERROR: In CCalSensitiveConfiguration::getFileName(const "
-	   << "G4String& n)" << G4endl 
-	   << "       " << n << " not found in configuration file" << G4endl;
+           << "G4String& n)" << G4endl 
+           << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return fn;
 }
 
-CCalSensitiveConfiguration::CCalSensitiveConfiguration(): theConfiguration() {
-  
+CCalSensitiveConfiguration::CCalSensitiveConfiguration(): theConfiguration()
+{  
   ///////////////////////////////////////////////////////////////
   // Open the file
-  G4String pathName = getenv("CCAL_CONFPATH");
-  G4String fileenv  = getenv("CCAL_SENSITIVECONF");
+  G4String pathName = std::getenv("CCAL_CONFPATH");
+  G4String fileenv  = std::getenv("CCAL_SENSITIVECONF");
   if (!pathName || !fileenv) {
     G4ExceptionDescription ed;
     ed << "ERROR: CCAL_SENSITIVECONF and/or CCAL_CONFPATH not set" << G4endl
        << "       Set them to the sensitive configuration file/path" << G4endl;
     G4Exception("CCalSensitiveConfiguration::CCalSensitiveConfiguration()",
-		"ccal005",
-		FatalException,ed);
+                "ccal005",
+                FatalException,ed);
   }
 
   G4cout << " ==> Opening file " << fileenv << "..." << G4endl;
   std::ifstream is;
-  bool ok = openGeomFile(is, pathName, fileenv);
+  G4bool ok = openGeomFile(is, pathName, fileenv);
   if (!ok)
     {
       G4Exception("CCalSensitiveConfiguration::CCalSensitiveConfiguration()",
-		  "ccal006",
-		  FatalException,
-		  "Unable to open sensitive input file");
+                  "ccal006",
+                  FatalException,
+                  "Unable to open sensitive input file");
     }
 
 
@@ -114,8 +117,8 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration(): theConfiguration() {
     is >> gcinfo.SensitiveFlag >> jump;
 #ifdef debug
     G4cout << "CCalSensitiveConfiguration constructor: Read \"" << name 
-	   << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.SensitiveFlag
-	   << G4endl;
+           << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.SensitiveFlag
+           << G4endl;
 #endif
     theConfiguration[name] = gcinfo;
   }

@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28th, 2019 I. Hrivnacova (exampleP01-V10-05-01)
+- Fixed Doxygen warning in .README.txt
+
 April 24th, 2019 G.Cosmo (exampleP01-V10-05-00)
 - Fixed thread-safety issue in definition of allocator in ExP01TrackerHit.
 

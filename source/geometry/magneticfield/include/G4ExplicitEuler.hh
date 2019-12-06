@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4ExplicitEuler
+// G4ExplicitEuler
 //
 // Class description:
 //
@@ -34,11 +31,8 @@
 // The most simple approach for solving linear differential equations.
 // Take the current derivative and add it to the current position.
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// - Adjusted for new Equation classes, J.Apostolakis 5/11/03
+// Created: W.Wander <wwc@mit.edu>, 12.09.1997
 // -------------------------------------------------------------------
-
 #ifndef G4EXPLICITEULER_HH
 #define G4EXPLICITEULER_HH
 
@@ -52,10 +46,10 @@ class G4ExplicitEuler : public G4MagErrorStepper
     G4ExplicitEuler(G4EquationOfMotion* EqRhs, G4int numberOfVariables = 6) ;
    ~G4ExplicitEuler();
 
-    void  DumbStepper(  const G4double y[],
-                        const G4double dydx[],
-                              G4double h,
-                              G4double yout[]);
+    void  DumbStepper( const G4double y[],
+                       const G4double dydx[],
+                             G4double h,
+                             G4double yout[] );
 
   public:  // without description
 
@@ -63,4 +57,4 @@ class G4ExplicitEuler : public G4MagErrorStepper
 
 };
 
-#endif /* G4EXPLICITEULER_HH */
+#endif

@@ -70,7 +70,5 @@ class G4BinaryDeuteronBuilder : public G4VDeuteronBuilder
     G4double theMax;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

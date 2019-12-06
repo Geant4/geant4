@@ -39,6 +39,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
             -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
+            -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \

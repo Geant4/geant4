@@ -51,7 +51,7 @@ class G4HadronPhysicsQGSP_FTFP_BERT : public G4HadronPhysicsQGSP_BERT
     G4HadronPhysicsQGSP_FTFP_BERT(G4int verbose =1);
     G4HadronPhysicsQGSP_FTFP_BERT(const G4String& name, G4bool quasiElastic=true);
   protected:
-    virtual void DumpBanner() override;    
+    //virtual void DumpBanner() override;    
     G4bool QuasiElastic;
 };
 

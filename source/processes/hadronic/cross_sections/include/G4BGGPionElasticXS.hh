@@ -59,6 +59,7 @@ class G4HadronNucleonXsc;
 class G4Material;
 class G4Element;
 class G4Isotope;
+class G4Pow;
 
 class G4BGGPionElasticXS : public G4VCrossSectionDataSet
 {
@@ -89,11 +90,16 @@ public:
 
 private:
 
+  G4double CoulombFactorPiPlus(G4double kinEnergy, G4int Z);
+
+  G4double FactorPiMinus(G4double kinEnergy);
+
   G4BGGPionElasticXS & operator=(const G4BGGPionElasticXS &right);
   G4BGGPionElasticXS(const G4BGGPionElasticXS&);
 
   G4double fGlauberEnergy;  
   G4double fLowEnergy;
+  G4double fLowestEnergy;
 
   static G4double theGlauberFacPiPlus[93];
   static G4double theCoulombFacPiPlus[93];
@@ -101,8 +107,11 @@ private:
   static G4double theCoulombFacPiMinus[93];
   static G4int    theA[93];
 
-  const G4ParticleDefinition*     particle;
   const G4ParticleDefinition*     theProton;
+  const G4ParticleDefinition*     thePiPlus;
+
+  G4Pow*                          fG4pow;
+
   G4ComponentGGHadronNucleusXsc*  fGlauber;
   G4UPiNuclearCrossSection*       fPion;
   G4HadronNucleonXsc*             fHadron;

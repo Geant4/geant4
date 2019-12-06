@@ -23,18 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// class G4DrawVoxels
-//
-// Implementation
+// class G4DrawVoxels implementation
 //
 // Define G4DrawVoxelsDebug for debugging information on G4cout
 //
-// History:
-// 03/08/1999 The G4VisAttributes have been made member data for
-//            lifetime reasons / visualisation  L.G
 // 29/07/1999 first comitted version L.G.
 // --------------------------------------------------------------------
 
@@ -72,17 +64,17 @@ void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,
                                           G4VisAttributes& VA_voxelY,
                                           G4VisAttributes& VA_voxelZ)
 {
-  fVoxelsVisAttributes[0]=VA_voxelX;
-  fVoxelsVisAttributes[1]=VA_voxelY;
-  fVoxelsVisAttributes[2]=VA_voxelZ;
+  fVoxelsVisAttributes[0] = VA_voxelX;
+  fVoxelsVisAttributes[1] = VA_voxelY;
+  fVoxelsVisAttributes[2] = VA_voxelZ;
 }
 
 void G4DrawVoxels::SetBoundingBoxVisAttributes(G4VisAttributes& VA_boundingbox)
 {
-  fBoundingBoxVisAttributes=VA_boundingbox;
+  fBoundingBoxVisAttributes = VA_boundingbox;
 }
 
-// ***************************************************************
+// --------------------------------------------------------------------
 
 void
 G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
@@ -92,10 +84,10 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 {
   // Let's draw the selected voxelisation now !
  
-   G4VSolid* solid=lv->GetSolid();
+   G4VSolid* solid = lv->GetSolid();
   
-   G4double dx=kInfinity,dy=kInfinity,dz=kInfinity;
-   G4double xmax=0,xmin=0,ymax=0,ymin=0,zmax=0,zmin=0;
+   G4double dx=kInfinity, dy=kInfinity, dz=kInfinity;
+   G4double xmax=0, xmin=0, ymax=0, ymin=0, zmax=0, zmin=0;
    
    if (lv->GetNoDaughters()<=0)
    {
@@ -109,9 +101,9 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    solid->CalculateExtent(kYAxis,limit,G4AffineTransform(),ymin,ymax);
      // extents according to the axis of the local frame
    solid->CalculateExtent(kZAxis,limit,G4AffineTransform(),zmin,zmax);
-   dx=xmax-xmin;
-   dy=ymax-ymin;
-   dz=zmax-zmin;
+   dx = xmax-xmin;
+   dy = ymax-ymin;
+   dz = zmax-zmin;
 
    // Preparing the colored bounding polyhedronBox for the pVolume
    //
@@ -125,7 +117,7 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
                                      G4Translate3D(t_centerofBoundingBox)));
    
    G4ThreeVector t_FirstCenterofVoxelPlane;
-   const G4VisAttributes* voxelsVisAttributes=0;
+   const G4VisAttributes* voxelsVisAttributes = nullptr;
 
    G4ThreeVector unit_translation_vector;
    G4ThreeVector current_translation_vector;
@@ -160,43 +152,45 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    G4PolyhedronBox voxel_plane(dx*0.5,dy*0.5,dz*0.5);
    voxel_plane.SetVisAttributes(voxelsVisAttributes);
    
-   G4SmartVoxelProxy* slice=header->GetSlice(0);
-   G4int slice_no=0,no_slices=header->GetNoSlices();
-   G4double beginning=header->GetMinExtent(),
-            step=(header->GetMaxExtent()-beginning)/no_slices;
+   G4SmartVoxelProxy* slice = header->GetSlice(0);
+   G4int slice_no = 0, no_slices = header->GetNoSlices();
+   G4double beginning = header->GetMinExtent(),
+            step = (header->GetMaxExtent()-beginning)/no_slices;
 
    while (slice_no<no_slices)
    {    
      if (slice->IsHeader())
      {
        G4VoxelLimits newlimit(limit);
-       newlimit.AddLimit(header->GetAxis(),beginning+step*slice_no,
-       beginning+step*(slice->GetHeader()->GetMaxEquivalentSliceNo()+1));
-       ComputeVoxelPolyhedra(lv,slice->GetHeader(),newlimit,ppl);
+       newlimit.AddLimit(header->GetAxis(), beginning+step*slice_no,
+         beginning+step*(slice->GetHeader()->GetMaxEquivalentSliceNo()+1));
+       ComputeVoxelPolyhedra(lv,slice->GetHeader(), newlimit, ppl);
      }
-     current_translation_vector=unit_translation_vector;
-     current_translation_vector*=step*slice_no;
+     current_translation_vector = unit_translation_vector;
+     current_translation_vector *= step*slice_no;
    
      ppl->push_back(G4PlacedPolyhedron(voxel_plane,
                     G4Translate3D(current_translation_vector
-                                 +t_FirstCenterofVoxelPlane)));
-     slice_no=(slice->IsHeader()
+                                 + t_FirstCenterofVoxelPlane)));
+     slice_no = (slice->IsHeader()
                ? slice->GetHeader()->GetMaxEquivalentSliceNo()+1
                : slice->GetNode()->GetMaxEquivalentSliceNo()+1);
      if (slice_no<no_slices) { slice=header->GetSlice(slice_no); }
    }
 }
 
-// ########################################################################
+// --------------------------------------------------------------------
 
 G4PlacedPolyhedronList*
 G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolume* lv) const
 {
-  G4PlacedPolyhedronList* pplist=new G4PlacedPolyhedronList;
+  G4PlacedPolyhedronList* pplist = new G4PlacedPolyhedronList;
   G4VoxelLimits limits;  // Working object for recursive call.
   ComputeVoxelPolyhedra(lv,lv->GetVoxelHeader(),limits,pplist);
   return pplist; //it s up to the calling program to destroy it then!
 }
+
+// --------------------------------------------------------------------
 
 void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const
 {   
@@ -219,12 +213,12 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const
    G4Transform3D transf3D(globTransform.NetRotation(),
                           globTransform.NetTranslation());
 
-   G4PlacedPolyhedronList* pplist=CreatePlacedPolyhedra(lv);
-   if(pVVisManager)
+   G4PlacedPolyhedronList* pplist = CreatePlacedPolyhedra(lv);
+   if(pVVisManager != nullptr)
    {
      // Drawing the bounding and voxel polyhedra for the pVolume
      //
-     for (size_t i=0;i<pplist->size();i++)
+     for (size_t i=0; i<pplist->size(); ++i)
      {
        pVVisManager->Draw((*pplist)[i].GetPolyhedron(),
                           (*pplist)[i].GetTransform()*transf3D);

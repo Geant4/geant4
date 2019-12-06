@@ -34,7 +34,7 @@
 </materials>
 
 <solids>
-  <box  name="WorldBox" x="1.0" y="1.0" z="1.0" lunit="m"/>
+  <box  name="WorldBox" x="1.1" y="1.1" z="1.1" lunit="m"/>
   <tube name="TubeSol" rmin="0.1075" rmax="0.1875" z="0.1875" deltaphi="TWOPI" startphi="0" aunit="rad" lunit="m"/>
 </solids>
 

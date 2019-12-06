@@ -97,8 +97,6 @@ public:
 
   inline G4int FloatingLevel(size_t i) const;
 
-  inline G4double PairingCorrection() const;
-
   inline G4double ShellCorrection() const;
 
   inline G4double LevelDensity(G4double U) const;
@@ -122,7 +120,6 @@ private:
   std::vector<G4int>     fSpin;
   std::vector<const G4NucLevel*> fLevels;
   
-  G4double fPairingCorrection;
   G4double fShellCorrection;
   G4double fLevelDensity;
 
@@ -216,11 +213,6 @@ inline G4int G4LevelManager::FloatingLevel(size_t i) const
   if(i > nTransitions) { PrintError(i, "Floating"); }
 #endif
   return fSpin[i]/100000; 
-}
-
-inline G4double G4LevelManager::PairingCorrection() const
-{
-  return fPairingCorrection;
 }
 
 inline G4double G4LevelManager::ShellCorrection() const

@@ -54,7 +54,8 @@ public:
   // The constructor.  
 
   inline Hep3Vector(const Hep3Vector &);
-  // The copy constructor.
+  inline Hep3Vector(Hep3Vector &&) = default;
+  // The copy and move constructors.
 
   inline ~Hep3Vector();
   // The destructor.  Not virtual - inheritance from this class is dangerous.
@@ -130,7 +131,8 @@ public:
   // The transverse component w.r.t. given axis.
 
   inline Hep3Vector & operator = (const Hep3Vector &);
-  // Assignment.
+  inline Hep3Vector & operator = (Hep3Vector &&) = default;
+  // The copy and move assignment operators.
 
   inline bool operator == (const Hep3Vector &) const;
   inline bool operator != (const Hep3Vector &) const;

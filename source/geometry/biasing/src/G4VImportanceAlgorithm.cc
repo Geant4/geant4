@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VImportanceAlgortihm implementation
 //
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4VImportanceAlgortihm.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4VImportanceAlgorithm.hh"
 
 G4VImportanceAlgorithm::G4VImportanceAlgorithm()
-{}
+{
+}
 
 G4VImportanceAlgorithm::~G4VImportanceAlgorithm()
-{}
+{
+}

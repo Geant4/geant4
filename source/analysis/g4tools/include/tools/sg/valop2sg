@@ -687,9 +687,9 @@ protected:
   }
 
   void unichar2sg(unichar a_unichar,sg::base_freetype& a_node){
-
-    a_node.modeling.value(m_wf?sg::font_outline:sg::font_filled);
-    a_node.font.value(sg::font_stixgeneral_otf());
+    if(m_wf) a_node.modeling = sg::font_outline;  //else font_filled, font_pixmap.
+    
+    a_node.font = sg::font_stixgeneral_otf();
 
     std::vector<unichar> line;
     line.push_back(a_unichar);
@@ -698,8 +698,9 @@ protected:
   }
 
   void s2sg(const std::string& a_s,sg::base_freetype& a_node){
-    a_node.modeling.value(m_wf?sg::font_outline:sg::font_filled);
-    a_node.font.value(sg::font_stixgeneral_otf());
+    if(m_wf) a_node.modeling = sg::font_outline;  //else font_filled, font_pixmap.
+
+    a_node.font = sg::font_stixgeneral_otf();
 
     std::vector<unichar> line;
     tools_sforcit(a_s,it) line.push_back(char2stix(*it));

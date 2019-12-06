@@ -9,7 +9,11 @@
 //NOTE : zlib contains deflate/inflate and also the gz functions to write/read a .gz file.
 //       The gz functions use also deflate/inflate.
 
+#ifndef TOOLS_USE_OUREX_ZLIB
 #include <zlib.h>
+#else
+#include <ourex_zlib.h> //enforce ourex zlib
+#endif
 
 #include <ostream>
 

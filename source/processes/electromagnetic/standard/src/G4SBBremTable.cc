@@ -333,7 +333,7 @@ void G4SBBremTable::InitSamplingTables() {
 
 // should be called only from LoadSamplingTables(G4int) and once
 void G4SBBremTable::LoadSTGrid() {
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path) {
     G4Exception("G4SBBremTable::LoadSTGrid()","em0006",
                 FatalException, "Environment variable G4LEDATA not defined");
@@ -391,7 +391,7 @@ void G4SBBremTable::LoadSamplingTables(G4int iz) {
   }
   // load data for a given Z only once
   iz = std::max(std::min(fMaxZet, iz),1);
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path) {
     G4Exception("G4SBBremTable::LoadSamplingTables()","em0006",
                 FatalException, "Environment variable G4LEDATA not defined");

@@ -246,7 +246,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     output.removeRecoilFragment();
 
     //*** TEMPORARY, USE ENVVAR TO ENABLE/DISABLE THIS TEST ***
-    if (getenv("G4CASCADE_CHECK_PHOTONUCLEAR"))
+    if (std::getenv("G4CASCADE_CHECK_PHOTONUCLEAR"))
       if (!photonuclearOkay(output)) continue;
 
     if (verboseLevel > 2)

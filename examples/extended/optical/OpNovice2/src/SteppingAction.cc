@@ -306,14 +306,17 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
           G4double en = sec->GetKineticEnergy();
           run->AddCerenkovEnergy(en);
           run->AddCerenkov();
-          G4AnalysisManager::Instance()->FillH1(1, en);
+          G4AnalysisManager::Instance()->FillH1(1, en/eV);
         }
         else if (sec->GetCreatorProcess()
                     ->GetProcessName().compare("Scintillation") == 0) {
           G4double en = sec->GetKineticEnergy();
           run->AddScintillationEnergy(en);
           run->AddScintillation();
-          G4AnalysisManager::Instance()->FillH1(2, en);
+          G4AnalysisManager::Instance()->FillH1(2, en/eV);
+
+          G4double time = sec->GetGlobalTime();
+          analysisMan->FillH1(13, time/ns);
         }
       }
     }

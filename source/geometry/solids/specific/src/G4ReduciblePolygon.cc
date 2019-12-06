@@ -23,33 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4ReduciblePolygon.cc
-//
-// Implementation of a utility class used to specify, test, reduce,
-// and/or otherwise manipulate a 2D polygon.
-//
+// G4ReduciblePolygon implementation; a utility class used to specify,
+// test, reduce, and/or otherwise manipulate a 2D polygon.
 // See G4ReduciblePolygon.hh for more info.
 //
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4ReduciblePolygon.hh"
 #include "globals.hh"
 
-//
 // Constructor: with simple arrays
 //
 G4ReduciblePolygon::G4ReduciblePolygon( const G4double a[],
                                         const G4double b[],
                                               G4int n )
-  : aMin(0.), aMax(0.), bMin(0.), bMax(0.),
-    vertexHead(0)
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.)
 {
   //
   // Do all of the real work in Create
@@ -57,15 +46,12 @@ G4ReduciblePolygon::G4ReduciblePolygon( const G4double a[],
   Create( a, b, n );
 }
 
-
-//
 // Constructor: special PGON/PCON case
 //
 G4ReduciblePolygon::G4ReduciblePolygon( const G4double rmin[],
                                         const G4double rmax[], 
                                         const G4double z[], G4int n )
-  : aMin(0.), aMax(0.), bMin(0.), bMax(0.),
-    vertexHead(0)
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.)
 {
   //
   // Translate
@@ -78,8 +64,7 @@ G4ReduciblePolygon::G4ReduciblePolygon( const G4double rmin[],
             *rIn = rOut-1,
             *zIn = zOut-1;
   
-  G4int i;   
-  for( i=0; i < n; i++, rOut++, zOut++, rIn--, zIn-- )
+  for( G4int i=0; i < n; ++i, ++rOut, ++zOut, --rIn, --zIn )
   {
     *rOut = rmax[i];
     *rIn  = rmin[i];
@@ -92,8 +77,6 @@ G4ReduciblePolygon::G4ReduciblePolygon( const G4double rmin[],
   delete [] b;
 }
 
-
-//
 // Create
 //
 // To be called by constructors, fill in the list and statistics for a new
@@ -107,14 +90,14 @@ void G4ReduciblePolygon::Create( const G4double a[],
                FatalErrorInArgument, "Less than 3 vertices specified.");
   
   const G4double *anext = a, *bnext = b;
-  ABVertex *prev = 0;
+  ABVertex* prev = nullptr;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     ABVertex *newVertex = new ABVertex;
     newVertex->a = *anext;
     newVertex->b = *bnext;
-    newVertex->next = 0;
-    if (prev==0)
+    newVertex->next = nullptr;
+    if (prev==nullptr)
     {
       vertexHead = newVertex;
     }
@@ -131,13 +114,11 @@ void G4ReduciblePolygon::Create( const G4double a[],
   CalculateMaxMin();
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4ReduciblePolygon::G4ReduciblePolygon( __void__& )
-  : aMin(0.), aMax(0.), bMin(0.), bMax(0.), numVertices(0), vertexHead(0)
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.)
 {
 }
 
@@ -147,17 +128,15 @@ G4ReduciblePolygon::G4ReduciblePolygon( __void__& )
 //
 G4ReduciblePolygon::~G4ReduciblePolygon()
 {
-  ABVertex *curr = vertexHead;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+  ABVertex* curr = vertexHead;
+  while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
-    ABVertex *toDelete = curr;
+    ABVertex* toDelete = curr;
     curr = curr->next;
     delete toDelete;
   }
 }
 
-
-//
 // CopyVertices
 //
 // Copy contents into simple linear arrays.
@@ -168,7 +147,7 @@ void G4ReduciblePolygon::CopyVertices( G4double a[], G4double b[] ) const
 {
   G4double *anext = a, *bnext = b;
   ABVertex *curr = vertexHead;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+  while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     *anext++ = curr->a;
     *bnext++ = curr->b;
@@ -176,40 +155,34 @@ void G4ReduciblePolygon::CopyVertices( G4double a[], G4double b[] ) const
   }
 }
 
-
-//
 // ScaleA
 //
 // Multiply all a values by a common scale
 //
 void G4ReduciblePolygon::ScaleA( G4double scale )
 {
-  ABVertex *curr = vertexHead;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+  ABVertex* curr = vertexHead;
+  while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     curr->a *= scale;
     curr = curr->next;
   }
 }  
 
-
-//
 // ScaleB
 //
 // Multiply all b values by a common scale
 //
 void G4ReduciblePolygon::ScaleB( G4double scale )
 {
-  ABVertex *curr = vertexHead;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+  ABVertex* curr = vertexHead;
+  while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     curr->b *= scale;
     curr = curr->next;
   }
 }  
 
-
-//
 // RemoveDuplicateVertices
 //
 // Remove adjacent vertices that are equal. Returns "false" if there
@@ -218,11 +191,11 @@ void G4ReduciblePolygon::ScaleB( G4double scale )
 G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
 {
   ABVertex *curr = vertexHead, 
-           *prev = 0, *next = 0;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+           *prev = nullptr, *next = nullptr;
+  while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
-    if (next == 0) next = vertexHead;
+    if (next == nullptr) next = vertexHead;
     
     if (std::fabs(curr->a-next->a) < tolerance &&
         std::fabs(curr->b-next->b) < tolerance     )
@@ -239,13 +212,16 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
       //
       // Delete
       //
-      ABVertex *toDelete = curr;
+      ABVertex* toDelete = curr;
       curr = curr->next;
       delete toDelete;
       
       numVertices--;
       
-      if (prev) prev->next = curr; else vertexHead = curr;
+      if (prev != nullptr)
+        prev->next = curr;
+      else 
+        vertexHead = curr;
     }
     else
     {
@@ -262,8 +238,6 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
   return true;
 }
 
-
-//
 // RemoveRedundantVertices
 //
 // Remove any unneeded vertices, i.e. those vertices which
@@ -281,11 +255,11 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
   //
   // Loop over all vertices
   //
-  ABVertex *curr = vertexHead, *next = 0;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+  ABVertex *curr = vertexHead, *next = nullptr;
+  while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
-    if (next == 0) next = vertexHead;
+    if (next == nullptr) next = vertexHead;
     
     G4double da = next->a - curr->a,
              db = next->b - curr->b;
@@ -298,8 +272,8 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       //
       // Get vertex after next
       //
-      ABVertex *test = next->next;
-      if (test == 0) test = vertexHead;
+      ABVertex* test = next->next;
+      if (test == nullptr) test = vertexHead;
       
       //
       // If we are back to the original vertex, stop
@@ -326,19 +300,19 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       //
       // Delete vertex pointed to by next. Carefully!
       //
-      if (curr->next)
+      if (curr->next != nullptr)
       {    // next is not head
-        if (next->next)
+        if (next->next != nullptr)
           curr->next = test;  // next is not tail
         else
-          curr->next = 0;    // New tail
+          curr->next = nullptr;    // New tail
       }
       else
         vertexHead = test;  // New head
         
       if ((curr != next) && (next != test)) delete next;
       
-      numVertices--;
+      --numVertices;
       
       //
       // Replace next by the vertex we just tested,
@@ -358,8 +332,6 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
   return true;
 }
 
-
-//
 // ReverseOrder
 //
 // Reverse the order of the vertices
@@ -369,16 +341,16 @@ void G4ReduciblePolygon::ReverseOrder()
   //
   // Loop over all vertices
   //
-  ABVertex *prev = vertexHead;
-  if (prev==0) return;    // No vertices
+  ABVertex* prev = vertexHead;
+  if (prev==nullptr) return;    // No vertices
   
-  ABVertex *curr = prev->next;
-  if (curr==0) return;    // Just one vertex
+  ABVertex* curr = prev->next;
+  if (curr==nullptr) return;    // Just one vertex
   
   //
   // Our new tail
   //
-  vertexHead->next = 0;
+  vertexHead->next = nullptr;
   
   for(;;)
   {
@@ -396,7 +368,7 @@ void G4ReduciblePolygon::ReverseOrder()
     //
     // Last vertex?
     //
-    if (save == 0) break;
+    if (save == nullptr) break;
     
     //
     // Next vertex
@@ -419,30 +391,28 @@ void G4ReduciblePolygon::ReverseOrder()
 //
 void G4ReduciblePolygon::StartWithZMin()
 { 
-  ABVertex *curr = vertexHead;
+  ABVertex* curr = vertexHead;
   G4double bcurr = curr->b;
-  ABVertex *prev = curr;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+  ABVertex* prev = curr;
+  while( curr != nullptr)    // Loop checking, 13.08.2015, G.Cosmo
   { 
     if(curr->b < bcurr)
     { 
       bcurr = curr->b;
-      ABVertex *curr1 = curr;   
-      while( curr1 )    // Loop checking, 13.08.2015, G.Cosmo
+      ABVertex* curr1 = curr;   
+      while( curr1 != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
       {
-        if(curr1->next == 0) { curr1->next = vertexHead; break; }
+        if(curr1->next == nullptr) { curr1->next = vertexHead; break; }
         curr1 = curr1->next;
       }
       vertexHead = curr;         
-      prev->next = 0;
+      prev->next = nullptr;
     }
     prev = curr;
     curr = curr->next;
   }
 }
 
-
-//
 // CrossesItself
 //
 // Return "true" if the polygon crosses itself
@@ -458,8 +428,8 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
   // Top loop over line segments. By the time we finish
   // with the second to last segment, we're done.
   //
-  ABVertex *curr1 = vertexHead, *next1=0;
-  while (curr1->next)    // Loop checking, 13.08.2015, G.Cosmo
+  ABVertex *curr1 = vertexHead, *next1 = nullptr;
+  while (curr1->next != nullptr)    // Loop checking, 13.08.2015, G.Cosmo
   {
     next1 = curr1->next;
     G4double da1 = next1->a-curr1->a,
@@ -468,11 +438,11 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
     //
     // Inner loop over subsequent line segments
     //
-    ABVertex *curr2 = next1->next;
-    while( curr2 )    // Loop checking, 13.08.2015, G.Cosmo
+    ABVertex* curr2 = next1->next;
+    while( curr2 != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
     {
-      ABVertex *next2 = curr2->next;
-      if (next2==0) next2 = vertexHead;
+      ABVertex* next2 = curr2->next;
+      if (next2==nullptr) next2 = vertexHead;
       G4double da2 = next2->a-curr2->a,
                db2 = next2->b-curr2->b;
       G4double a12 = curr2->a-curr1->a,
@@ -500,9 +470,6 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
   return false;
 }
 
-
-
-//
 // BisectedBy
 //
 // Decide if a line through two points crosses the polygon, within tolerance
@@ -517,33 +484,30 @@ G4bool G4ReduciblePolygon::BisectedBy( G4double a1, G4double b1,
   G4double len12 = std::sqrt( a12*a12 + b12*b12 );
   a12 /= len12; b12 /= len12;
   
-  ABVertex *curr = vertexHead;
+  ABVertex* curr = vertexHead;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double av = curr->a - a1,
-       bv = curr->b - b1;
+             bv = curr->b - b1;
        
     G4double cross = av*b12 - bv*a12;
     
     if (cross < -tolerance)
     {
       if (nPos) return true;
-      nNeg++;
+      ++nNeg;
     }
     else if (cross > tolerance)
     {
       if (nNeg) return true;
-      nPos++;
+      ++nPos;
     }
     curr = curr->next;
-  } while( curr );
+  } while( curr != nullptr );
     
   return false;
 }
 
-
-
-//
 // Area
 //
 // Calculated signed polygon area, where polygons specified in a
@@ -556,7 +520,7 @@ G4double G4ReduciblePolygon::Area()
 {
   G4double answer = 0;
   
-  ABVertex *curr = vertexHead, *next;
+  ABVertex *curr = vertexHead, *next = nullptr;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
@@ -564,27 +528,23 @@ G4double G4ReduciblePolygon::Area()
     
     answer += curr->a*next->b - curr->b*next->a;
     curr = curr->next;
-  } while( curr );
+  } while( curr != nullptr );
   
   return 0.5*answer;
 }
 
-
-//
 // Print
 //
 void G4ReduciblePolygon::Print()
 {
-  ABVertex *curr = vertexHead;
+  ABVertex* curr = vertexHead;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4cerr << curr->a << " " << curr->b << G4endl;
     curr = curr->next;
-  } while( curr );
+  } while( curr != nullptr );
 }
 
-
-//
 // CalculateMaxMin
 //
 // To be called when the vertices are changed, this
@@ -592,11 +552,11 @@ void G4ReduciblePolygon::Print()
 //
 void G4ReduciblePolygon::CalculateMaxMin()
 {
-  ABVertex *curr = vertexHead;
+  ABVertex* curr = vertexHead;
   aMin = aMax = curr->a;
   bMin = bMax = curr->b;
   curr = curr->next;
-  while( curr )    // Loop checking, 13.08.2015, G.Cosmo
+  while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     if (curr->a < aMin)
       aMin = curr->a;

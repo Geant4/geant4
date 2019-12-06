@@ -37,7 +37,7 @@
 
 
 G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles,
-                                     G4bool rowWise)
+                                     G4bool rowWise, G4bool rowMode)
 {
   // Configure MPI using  G4MPImanager
 
@@ -59,7 +59,8 @@ G4MPIntupleMerger::G4MPIntupleMerger(G4int nofReducedNtupleFiles,
   fWrmpi = new tools::mpi::wrmpi(G4cout, *comm);
 
   analysisManager->SetMpiNtupleMerging(
-    fWrmpi, mpiRank, mpiSize, nofReducedNtupleFiles, rowWise);
+    fWrmpi, mpiRank, mpiSize, nofReducedNtupleFiles);
+  analysisManager->SetNtupleRowWise(rowWise, rowMode);
 
   // G4cout << "End configure ntuple MPI merging" << G4endl;
 }

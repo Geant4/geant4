@@ -17,38 +17,37 @@
 #
 /gun/particle proton
 /gun/energy 100. MeV
-##/testhadr/histo/fileName  p_al
-/testhadr/verbose 0
-/process/eLoss/verbose 0
-/run/beamOn 0
+##/testhadr/fileName  p_al
+/testhadr/verbose 1
+/run/beamOn 1
 #
 /testhadr/targetElm  Pb
-##/testhadr/histo/fileName  p_pb
+/testhadr/fileName  p_pb
 /run/beamOn 0
 /testhadr/targetElm  Fe
-##/testhadr/histo/fileName  p_fe
-/run/beamOn 0
+##/testhadr/fileName  p_fe
+/run/beamOn 1
 /testhadr/targetElm  C
-##/testhadr/histo/fileName  p_c
-/run/beamOn 0
+##/testhadr/fileName  p_c
+/run/beamOn 1
 /testhadr/targetElm  H
-##/testhadr/histo/fileName  p_h
-/run/beamOn 0
+##/testhadr/fileName  p_h
+/run/beamOn 1
 #
 /testhadr/particle   neutron
-##/testhadr/histo/fileName  n_h
-/run/beamOn 0
+##/testhadr/fileName  n_h
+/run/beamOn 1
 /testhadr/targetElm  Pb
-##/testhadr/histo/fileName  n_pb
-/run/beamOn 0
+##/testhadr/fileName  n_pb
+/run/beamOn 1
 /testhadr/targetElm  Fe
-##/testhadr/histo/fileName  n_fe
-/run/beamOn 0
+##/testhadr/fileName  n_fe
+/run/beamOn 1
 /testhadr/targetElm  C
-##/testhadr/histo/fileName  n_c
-/run/beamOn 0
+##/testhadr/fileName  n_c
+/run/beamOn 1
 /testhadr/verbose 0
 /testhadr/targetElm  Al
-##/testhadr/histo/fileName  n_al
-/run/beamOn 0
+##/testhadr/fileName  n_al
+/run/beamOn 1
 #

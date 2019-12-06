@@ -23,19 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// 
 // G4UTorus
 //
 // Class description:
 //
-// Wrapper class for UTorus to make use of UTorus from USolids module.
+// Wrapper class for G4Torus to make use of VecGeom Torus.
 
-// History:
 // 19.08.15 Guilherme Lima, FNAL
 // --------------------------------------------------------------------
 #ifndef G4UTORUS_HH

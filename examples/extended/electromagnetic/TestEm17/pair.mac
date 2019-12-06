@@ -17,7 +17,6 @@
 #
 /process/inactivate muIoni
 /process/inactivate muBrems
-/process/inactivate muNucl
 #
 /gun/particle mu+
 /gun/energy 10 TeV

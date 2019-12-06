@@ -69,7 +69,8 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   FirstTime1   = true;
   genAngle     = nullptr;
   SetAngularGenerator(new G4DipBustGenerator());
-  G4LossTableManager::Instance()->Register(this);
+  theManager = G4LossTableManager::Instance();
+  theManager->Register(this);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -80,7 +81,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
 G4SynchrotronRadiation::~G4SynchrotronRadiation()
 {
   delete genAngle;
-  G4LossTableManager::Instance()->DeRegister(this);
+  theManager->DeRegister(this);
 }
 
 /////////////////////////////// METHODS /////////////////////////////////

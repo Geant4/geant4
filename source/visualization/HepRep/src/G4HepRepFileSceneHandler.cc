@@ -501,6 +501,18 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Ellipsoid& ellipsoid) {
 }
 
 
+void G4HepRepFileSceneHandler::AddSolid(const G4TessellatedSolid& tess) {
+#ifdef G4HEPREPFILEDEBUG
+  G4cout <<
+  "G4HepRepFileSceneHandler::AddSolid(const G4TessellatedSolid& ) called for "
+  << tess.GetName()
+  << G4endl;
+  PrintThings();
+#endif
+  G4VSceneHandler::AddSolid(tess);  // Invoke default action.
+}
+
+
 void G4HepRepFileSceneHandler::AddSolid(const G4VSolid& solid) {
 #ifdef G4HEPREPFILEDEBUG
 	G4cout <<

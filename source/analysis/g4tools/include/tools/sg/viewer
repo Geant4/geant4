@@ -10,13 +10,10 @@
 #include "../mem"
 #endif
 
+#include "cursor_shape"
+
 namespace tools {
 namespace sg {
-
-enum cursor_shape {
-  cursor_default = 0,
-  cursor_target
-};  
 
 class viewer {
 public:
@@ -47,16 +44,17 @@ public:
   ,m_ww(a_width)
   ,m_wh(a_height)
   ,m_use_gsto(false)
-  ,m_produce_out_jpg(false)
+  ,m_produce_out_jpeg(false)
   ,m_produce_out_png(false)
   ,m_produce_out_file()
+  ,m_produce_out_bpp(4)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
   }
   virtual ~viewer(){
-    m_sg.clear(); //we must delete node before m_zb_mgr (and any gl_manager).
+    m_sg.clear(); //we must delete node before m_zb_mgr (and any render_manager).
 #ifdef TOOLS_MEM
     mem::decrement(s_class().c_str());
 #endif
@@ -69,9 +67,10 @@ public:
   ,m_wh(a_from.m_wh)
   ,m_sg(a_from.m_sg)
   ,m_use_gsto(a_from.m_use_gsto)
-  ,m_produce_out_jpg(a_from.m_produce_out_jpg)
+  ,m_produce_out_jpeg(a_from.m_produce_out_jpeg)
   ,m_produce_out_png(a_from.m_produce_out_png)
   ,m_produce_out_file(a_from.m_produce_out_file)
+  ,m_produce_out_bpp(a_from.m_produce_out_bpp)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -83,9 +82,10 @@ public:
     m_wh = a_from.m_wh;
     m_sg = a_from.m_sg;
     m_use_gsto = a_from.m_use_gsto;
-    m_produce_out_jpg = a_from.m_produce_out_jpg;
+    m_produce_out_jpeg = a_from.m_produce_out_jpeg;
     m_produce_out_png = a_from.m_produce_out_png;
     m_produce_out_file = a_from.m_produce_out_file;
+    m_produce_out_bpp = a_from.m_produce_out_bpp;
     return *this;
   }
 public:  
@@ -115,6 +115,12 @@ public:
   void set_clear_color(const colorf& a_color) {
     m_clear_color = a_color;
   }
+  void get_clear_color(float& a_r,float& a_g,float& a_b,float& a_a) {
+    a_r = m_clear_color.r();
+    a_g = m_clear_color.g();
+    a_b = m_clear_color.b();
+    a_a = m_clear_color.a();
+  }
 
   const colorf& background() const {return m_clear_color;}
 
@@ -123,14 +129,17 @@ public:
   const std::string& out_dir() const {return m_out_dir;}
 
 
-  void set_produce_out_jpg(bool a_value) {m_produce_out_jpg = a_value;}
-  bool produce_out_jpg() const {return m_produce_out_jpg;}
+  void set_produce_out_jpeg(bool a_value) {m_produce_out_jpeg = a_value;}
+  bool produce_out_jpeg() const {return m_produce_out_jpeg;}
 
   void set_produce_out_png(bool a_value) {m_produce_out_png = a_value;}
   bool produce_out_png() const {return m_produce_out_png;}
 
   void set_produce_out_file(const std::string& a_file) {m_produce_out_file = a_file;}
   const std::string& produce_out_file() const {return m_produce_out_file;}
+
+  void set_produce_out_bpp(unsigned int a_bpp) {m_produce_out_bpp = a_bpp;}
+  unsigned int produce_out_bpp() const {return m_produce_out_bpp;}
 protected:
   // iPod : 320 x 480
   // iPad : 768 x 1024
@@ -164,9 +173,10 @@ protected:
   group m_sg;
   std::string m_out_dir;
   bool m_use_gsto;
-  bool m_produce_out_jpg;
+  bool m_produce_out_jpeg;
   bool m_produce_out_png;
   std::string m_produce_out_file;
+  unsigned int m_produce_out_bpp;
 };
 
 }}
@@ -179,8 +189,7 @@ namespace sg {
 // used with Python and lua :
 inline viewer* cast_viewer(const std::string& a_s) {
   void* p;
-  // Read with %lx and, if failure, with %lu.
-  if(!to_pointer(a_s,p)) return 0;
+  if(!to_pointer(a_s,p)) return 0; //read with %lx and, if failure, with %lu.
   return (viewer*)p;
 }
 

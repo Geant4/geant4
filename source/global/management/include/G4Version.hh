@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Version information
 //
-// History:
 // 26.09.05 K.Murakami  - Created
-//
-
+// --------------------------------------------------------------------
 #ifndef G4VERSION_HH
 #define G4VERSION_HH
 
@@ -48,7 +44,7 @@
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-06-beta-01 $"
+#define G4VERSION_TAG "$Name: geant4-10-06 $"
 #endif
 
 // as variables
@@ -57,10 +53,10 @@
 #include "G4String.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-06-beta-01 [MT]$";
+static const G4String G4Version = "$Name: geant4-10-06 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-10-06-beta-01 $";
+static const G4String G4Version = "$Name: geant4-10-06 $";
 #endif
-static const G4String G4Date    = "(28-June-2019)";
+static const G4String G4Date    = "(6-December-2019)";
 
 #endif

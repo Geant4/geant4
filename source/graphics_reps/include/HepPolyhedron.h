@@ -241,11 +241,17 @@ class HepPolyhedron {
   // Copy constructor
   HepPolyhedron(const HepPolyhedron & from);
 
+  // Move constructor
+  HepPolyhedron(HepPolyhedron && from);
+
   // Destructor
   virtual ~HepPolyhedron() { delete [] pV; delete [] pF; }
 
   // Assignment
   HepPolyhedron & operator=(const HepPolyhedron & from);
+
+  // Move assignment
+  HepPolyhedron & operator=(HepPolyhedron && from);
 
   // Get number of vertices
   G4int GetNoVertices() const { return nvert; }

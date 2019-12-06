@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04TrackerHit.hh
+/// \file ExN04TrackerHit.hh
 /// \brief Definition of the ExN04TrackerHit class
 //
 //

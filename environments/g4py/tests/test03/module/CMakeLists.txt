@@ -20,8 +20,7 @@ set_target_properties(${_TARGET} PROPERTIES OUTPUT_NAME "test03")
 set_target_properties(${_TARGET} PROPERTIES SUFFIX ".so")
 
 
-target_link_libraries (${_TARGET} boost_python ${PYTHON_LIBRARIES})
+target_link_libraries (${_TARGET} ${BOOST_PYTHON_LIB} ${PYTHON_LIBRARIES})
 
 # install
 install(TARGETS ${_TARGET} LIBRARY DESTINATION ${TEST_MODULES_INSTALL_DIR})
-

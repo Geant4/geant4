@@ -15,6 +15,8 @@ namespace tools {
 namespace rroot {
 
 class iros : public virtual iro,public std::vector<iro*> {
+  typedef std::vector<iro*> parent;
+public:  
   static const std::string& s_store_class() {
     static const std::string s_v("TObjArray");
     return s_v;
@@ -44,10 +46,8 @@ public:
     return stream(a_buffer,args,accept_null);
   }
 public:
-  iros(ifac& a_fac,bool a_owner,bool a_warn /*= true*/) //a_warn used if a_owner=false.
+  iros(ifac& a_fac)
   :m_fac(a_fac)
-  ,m_owner(a_owner)
-  ,m_warn(a_warn)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -62,18 +62,15 @@ public:
 public:
   iros(const iros& a_from)
   :iro(a_from)
-  ,std::vector<iro*>()
+  ,parent()
   ,m_fac(a_from.m_fac)
-  ,m_owner(a_from.m_owner)
-  ,m_warn(a_from.m_warn)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-    if(a_from.m_owner) {
-      tools_vforcit(iro*,a_from,it) push_back((*it)->copy()); 
-    } else {
-      tools_vforcit(iro*,a_from,it) push_back((*it)); 
+    tools_vforcit(iro*,a_from,it) {
+      parent::push_back((*it)->copy());
+      m_owns.push_back(true);
     }
   }
   iros& operator=(const iros& a_from){
@@ -81,13 +78,9 @@ public:
 
     _clear();
 
-    m_owner = a_from.m_owner;
-    m_warn = a_from.m_warn;
-
-    if(a_from.m_owner) {
-      tools_vforcit(iro*,a_from,it) push_back((*it)->copy()); 
-    } else {
-      tools_vforcit(iro*,a_from,it) push_back((*it)); 
+    tools_vforcit(iro*,a_from,it) {
+      parent::push_back((*it)->copy());
+      m_owns.push_back(true);
     }
 
     return *this;
@@ -134,27 +127,18 @@ public:
       //::printf("debug : iros :    n=%d i=%d : ok\n",nobjects,i);
       if(obj) {
         if(created) {
-	  if(m_owner) {
-            push_back(obj);
-	  } else { // Who manage this object ?
-            if(m_warn) {
-	      a_buffer.out() << "tools::rroot::iros::stream :"
-                             << " warning : created object of class " << sout(obj->s_cls()) << " not managed."
-                             << std::endl;
-            }
-            push_back(obj);
-	  }
-	} else { //someone else may manage this object.
-	  if(m_owner) {
-            a_buffer.out() << "tools::rroot::iros::stream : warning : not created object can't be manage here." << std::endl;
-            return false;
-	  } else {
-            push_back(obj);
-	  }
+          parent::push_back(obj);
+          m_owns.push_back(true);
+	} else { //someone else manage this object.
+          parent::push_back(obj);
+          m_owns.push_back(false);
 	}
       } else {
         //a_accept_null for branch::stream m_baskets.
-        if(a_accept_null) push_back(0);
+        if(a_accept_null) {
+          parent::push_back(0);
+          m_owns.push_back(false);
+        }
       }
     }
 
@@ -162,23 +146,31 @@ public:
   }
 protected:
   void _clear() {
-    if(m_owner) {
-      safe_clear<iro>(*this);
-    } else {
-      std::vector<iro*>::clear();
+    typedef parent::iterator it_t;
+    typedef std::vector<bool>::iterator itb_t;
+    while(!parent::empty()) {
+      it_t it = parent::begin();
+      itb_t itb = m_owns.begin();
+      iro* entry  = (*it);
+      bool own = (*itb);
+      parent::erase(it);
+      m_owns.erase(itb);
+      if(own) delete entry;    
     }
   }
 protected:
   ifac& m_fac;
-  bool m_owner;
-  bool m_warn;
+  std::vector<bool> m_owns;
 };
 
+/*
 inline bool dummy_TObjArray_pointer_stream(buffer& a_buffer,ifac& a_fac,bool a_owner,bool a_warn) {
   iros oa(a_fac,a_owner,a_warn);
+  iros oa(a_fac,true,true);
   ifac::args args;
   return oa.stream(a_buffer,args);
 }
+*/
 
 }}
 

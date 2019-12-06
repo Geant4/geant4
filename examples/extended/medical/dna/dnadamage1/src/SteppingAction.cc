@@ -74,6 +74,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     const G4VProcess* pProcess = step->GetPostStepPoint()->
     GetProcessDefinedStep();
     
+    //get all processes except G4DNAElectronSolvation
     if((0 > dE) || 
     (nullptr != dynamic_cast<const G4DNAElectronSolvation*>(pProcess)))
     {

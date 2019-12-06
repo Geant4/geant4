@@ -88,8 +88,8 @@ public:
   // Current convention: each call should return the materials
   // of all instances with the same mother/ancestor volume
 
-  unsigned int GetMaterialIndex( unsigned int nx, unsigned int ny,
-                                 unsigned int nz) const;
+  //unsigned int GetMaterialIndex( unsigned int nx, unsigned int ny,
+  //                               unsigned int nz) const;
   unsigned int GetMaterialIndex( unsigned int copyNo) const;
   void SetMaterialIndices( size_t* matInd ) { fMaterialIndices = matInd; }
   void SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz );

@@ -212,9 +212,14 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       G4cout <<  "G4Decay::DoIt  : decay table not defined  for ";
       G4cout << aParticle->GetDefinition()->GetParticleName()<< G4endl;
     }
+    G4ExceptionDescription ed;
+    ed << "For " << aParticle->GetDefinition()->GetParticleName()
+       << " decay probability exist but decay table is not defined "
+       << "- the particle will be killed;\n"
+       << "    isExtDecayer: " << isExtDecayer
+       << "; isPreAssigned: " << isPreAssigned;    
     G4Exception( "G4Decay::DecayIt ",
-                 "DECAY101",JustWarning, 
-                 "Decay table is not defined");
+                 "DECAY101",JustWarning, ed);
 
     fParticleChangeForDecay.SetNumberOfSecondaries(0);
     // Kill the parent particle
@@ -304,16 +309,13 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   G4double   ParentEnergy  = aParticle->GetTotalEnergy();
   G4double   ParentMass    = aParticle->GetMass();
   if (ParentEnergy < ParentMass) {
-    if (GetVerboseLevel()>0) {
-      G4cout << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
-      G4cout << " Particle: " << aParticle->GetDefinition()->GetParticleName();
-      G4cout << " Energy:"    << ParentEnergy/MeV << "[MeV]";
-      G4cout << " Mass:"    << ParentMass/MeV << "[MeV]";
-      G4cout << G4endl;
-    }
+    G4ExceptionDescription ed;
+    ed << "Total Energy is less than its mass - increased the energy"
+       << "\n Particle: " << aParticle->GetDefinition()->GetParticleName()
+       << "\n Energy:"    << ParentEnergy/MeV << "[MeV]"
+       << "\n Mass:"      << ParentMass/MeV << "[MeV]";
     G4Exception( "G4Decay::DecayIt ",
-                 "DECAY102",JustWarning, 
-                 "Total Energy is less than its mass");
+                 "DECAY102",JustWarning, ed);
     ParentEnergy = ParentMass;
   }
 

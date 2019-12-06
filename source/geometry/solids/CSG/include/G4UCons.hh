@@ -23,22 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4UCons
 //
 // Class description:
 //
-//   Wrapper class for UCons to make use of UCons from USolids module.
+// Wrapper class for G4Cons to make use of VecGeom Cone.
 
-// History:
 // 30.10.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
-
 #ifndef G4UCONS_HH
 #define G4UCONS_HH
 

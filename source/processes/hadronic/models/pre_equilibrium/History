@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22-August-2019 V.Ivanchenko hadr-pre-V10-05-03
+- G4PreCompoundModel: remove added warning instead send highly excited
+    fragment to de-excitation module, where similar warning exists;
+    code clean-up
+
+14-August-2019 V.Ivanchenko hadr-pre-V10-05-02
+- G4PreCompoundModel: added check on excitation energy per nucleon
+    for initial fragment (30 MeV) and issue warning 
+
 16-May-2019 V.Ivanchenko hadr-pre-V10-05-01
 - G4LowEGammaNuclearModel - new model based on pre-compound de-excitation
 

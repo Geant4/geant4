@@ -140,7 +140,7 @@ public:
     as well as the template functions
     inverse_integrated_density_function().
  
- For a discussion of memory management, see \ref memory_management
+ For a discussion of memory management, see ref memory_management
  
  */
 template <typename float_type=double> class c2_function {
@@ -226,7 +226,7 @@ public:
   /// return second derivative of 
   /// function at root
   /// \return the position of the root.
-  /// \see \ref rootfinder_subsec "Root finding sample" 
+  /// \see ref rootfinder_subsec "Root finding sample" 
   float_type find_root(float_type lower_bracket, float_type upper_bracket, 
                        float_type start, 
                        float_type value, int *error=0, 
@@ -359,7 +359,7 @@ public:
   ///
   /// \note the \a sampling_grid of the returned function matches the 
   /// \a sampling_grid of its parent.
-  /// \see \ref sample_function_for_plotting "Adaptive Sampling Examples"
+  /// \see ref sample_function_for_plotting "Adaptive Sampling Examples"
   /// \param amin lower bound of the domain for sampling
   /// \param amax upper bound of the domain for sampling
   /// \param abs_tol the absolute error bound for each segment
@@ -1623,7 +1623,7 @@ public:
   /// uniform random variate on [0,1] returns 
   /// random numbers
   /// distributed as the input function.
-  /// \see  \ref random_subsec "Arbitrary random generation"
+  /// \see  ref random_subsec "Arbitrary random generation"
   /// inverse_integrated_density starts with a probability density  
   /// std::vector, 
   /// generates the integral, 
@@ -2094,7 +2094,7 @@ protected:
  derivatives, too, unlike the case of a simple root-finding inverse.  This means
  it can be integrated (for example) quite efficiently.
 
- \see \ref combined_inversion_hinting_sampling
+ \see ref combined_inversion_hinting_sampling
 
 */
 template <typename float_type=double> class c2_inverse_function_p 
@@ -2135,7 +2135,7 @@ public:
   /// is just to create a version of the parent with the x & y 
   /// coordinates reversed.
   /// 
-  /// \see \ref combined_inversion_hinting_sampling
+  /// \see ref combined_inversion_hinting_sampling
   ///
   /// \param hint_func the function that is an approximate inverse 
   /// of the parent of 
@@ -2208,7 +2208,7 @@ public:
 /// with c2_piecewise_function_p to assemble an 
 /// apparently seamless 
 /// function from a series of segments. 
-/// \see \ref piecewise_applications_subsec "Sample Applications" 
+/// \see ref piecewise_applications_subsec "Sample Applications" 
 /// and \ref c2_function::adaptively_sample() "Adaptive sampling"
 ///
 template <typename float_type=double> class c2_connector_function_p 
@@ -2294,7 +2294,7 @@ protected:
 /// it could eat a lot of memory.  Do not abuse this by using functions which 
 /// can generate gigantic grids.
 /// 
-/// \see \ref piecewise_applications_subsec "Sample Applications" \n
+/// \see ref piecewise_applications_subsec "Sample Applications" \n
 /// c2_plugin_function_p page \n
 /// c2_connector_function_p page \n
 /// \ref c2_function::adaptively_sample() "Adaptive sampling"

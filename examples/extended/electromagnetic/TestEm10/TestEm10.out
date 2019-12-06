@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -46,8 +50,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -135,7 +138,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.156
 9.283e+04	3.157
 
-total time for build X-ray TR energy loss tables = 0.13 s
+total time for build X-ray TR energy loss tables = 0.14 s
 Build angle for energy distribution according the current radiator
 
 Lorentz Factor	XTR photon number
@@ -233,7 +236,7 @@ Build angle for energy distribution according the current radiator
 Lorentz Factor	XTR photon number
 
 
-total time for build XTR angle for given energy tables = 0.12 s
+total time for build XTR angle for given energy tables = 0.13 s
 
 msc:  for proton  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 0
@@ -557,22 +560,22 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.260000s Real=0.270783s Sys=0.000000s
+  User=0.250000s Real=0.252695s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
- Mean energy deposit in absorber = 0.0485693 +-0.0191948  MeV 
- Total number of XTR gammas = 2701
- Total number of all gammas = 2807
+ Mean energy deposit in absorber = 0.0480988 +-0.0184346  MeV 
+ Total number of XTR gammas = 2694
+ Total number of all gammas = 2800
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 774604579, 16663174
+ Current couple of seeds = 1216350760, 1997571281
 ----------------------------------------
 ... write Root file : testem10.root - done
 ... close Root file : testem10.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.042 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.04 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

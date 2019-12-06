@@ -46,13 +46,11 @@ public:
 
   explicit QBBC(G4int ver = 1, const G4String& type = "QBBC");
 
-  virtual ~QBBC();
-
-private:
+  virtual ~QBBC()=default;
 
   // copy constructor and hide assignment operator
-  QBBC(QBBC &);
-  QBBC & operator=(const QBBC &right);
+  QBBC(const QBBC &)=delete;
+  QBBC & operator=(const QBBC &right)=delete;
 
 };
 

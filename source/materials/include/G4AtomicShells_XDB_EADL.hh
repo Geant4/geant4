@@ -51,6 +51,7 @@ class G4AtomicShells_XDB_EADL
 
     static G4int    GetNumberOfShells    (G4int Z);
     static G4int    GetNumberOfElectrons (G4int Z, G4int SubshellNb);
+    static G4int    GetNumberOfFreeElectrons(G4int Z, G4double th);
     static G4double GetBindingEnergy     (G4int Z, G4int SubshellNb);
     static G4double GetTotalBindingEnergy(G4int Z);
 

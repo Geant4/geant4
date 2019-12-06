@@ -23,24 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4ClassicalRK4
+// G4ClassicalRK4
 //
 // Class description:
 //
 // Integrate the equations of the motion of a particle in a magnetic field
 // using the classical 4th Runge-Kutta method.
 
-// History:
-// - Created: J.Apostolakis, V.Grichine - 30.1.97
-// - Moved into G4MagErrorStepper: W.Wander <wwc@mit.edu> - 12/09/97
-// - Fix:  D.Sorokin add header guard
+// Created: J.Apostolakis, V.Grichine - 30.01.1997
 // -------------------------------------------------------------------
-
-#ifndef G4ClassicalRK4_HH
-#define G4ClassicalRK4_HH
+#ifndef G4CLASSICALRK4_HH
+#define G4CLASSICALRK4_HH
 
 #include "G4MagErrorStepper.hh"
 
@@ -48,17 +41,22 @@ class G4ClassicalRK4 : public G4MagErrorStepper
 {
   public:  // with description
 
-    G4ClassicalRK4(G4EquationOfMotion *EquationMotion, G4int numberOfVariables = 6) ;
+    G4ClassicalRK4(G4EquationOfMotion* EquationMotion,
+                   G4int numberOfVariables = 6) ;
 
     ~G4ClassicalRK4() ;
+
+    G4ClassicalRK4(const G4ClassicalRK4&) = delete;
+    G4ClassicalRK4& operator=(const G4ClassicalRK4&) = delete;
+      // Copy constructor and assignment operator not allowed.
 
     // A stepper that does not know about errors.
     // It is used by the MagErrorStepper stepper.
    
-    void DumbStepper( const G4double  yIn[],
-                      const G4double  dydx[],
-                            G4double  h,
-                            G4double  yOut[] ) ;
+    void DumbStepper( const G4double yIn[],
+                      const G4double dydx[],
+                            G4double h,
+                            G4double yOut[] ) ;
       // Given values for the variables y[0,..,n-1] and their derivatives
       // dydx[0,...,n-1] known at x, use the classical 4th Runge-Kutta
       // method to advance the solution over an interval h and return the
@@ -82,10 +80,6 @@ class G4ClassicalRK4 : public G4MagErrorStepper
                       const G4double B1[],
                             G4double B2[] );
       // No longer used. Obsolete.
-
-    G4ClassicalRK4(const G4ClassicalRK4&);
-    G4ClassicalRK4& operator=(const G4ClassicalRK4&);
-      // Private copy constructor and assignment operator.
 
   private:
 

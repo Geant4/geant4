@@ -40,9 +40,10 @@ void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container);
 
 RunAction::RunAction()
 {
-	fpTrackingAction = 0;
-	fInitialized = 0;
-	fDebug = false;
+ fFileName = "microelectronics";
+ fpTrackingAction = 0;
+ fInitialized = 0;
+ fDebug = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -220,9 +221,8 @@ void RunAction::CreateHistogram()
 	analysisManager->SetVerboseLevel(1);
 
 	// Open an output file
-
-	G4String fileName = "microelectronics";
-	analysisManager->OpenFile(fileName);
+	
+	analysisManager->OpenFile(fFileName);
 
 	// Creating ntuple
 

@@ -28,12 +28,12 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
-// 17-11-2010 V.Ivanchenko moved constructor and destructor to source and cleanup
+// 17-11-2010 V.Ivanchenko cleanup
 
 #include "G4TritonEvaporationChannel.hh"
 
 G4TritonEvaporationChannel::G4TritonEvaporationChannel() 
-: G4EvaporationChannel(3,1,"triton",&theEvaporationProbability,&theCoulombBarrier) 
+  : G4EvaporationChannel(3,1,&pr) 
 {}
 
 G4TritonEvaporationChannel::~G4TritonEvaporationChannel() 

@@ -14,6 +14,64 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28-Nov-2019 A. Ribon          (hadr-string-diff-V10-05-10)
+- G4FTFParameters: set parameters of a string kink in the constructor
+  (instead of setting it at each interaction, causing memory leaks).
+  Notice that string kinks are currently switched off, so this fix does
+  not affect any physics result.
+
+26-Nov-2019 V. Ivanchenko     (hadr-string-diff-V10-05-09)
+- G4FTFParameters:
+  o  Added protection for division by zero due to zero elastic x-section
+
+19-Nov-2019 A. Ribon          (hadr-string-diff-V10-05-08)
+- G4FTFParameters:
+  o  Diffraction minimal mass is now correctly set in GeV (instead of MeV),
+     for hadron projectiles different from pions, kaons, nucleons and
+     anti-nucleons, in the method InitForInteraction.
+  o  In the method GetMinMass, fixed a bug in the computation of the
+     quark type (which affects the estimated minimal string mass produced
+     in diffraction); added also protections to make sure that the quark
+     type is always one of the five considered (u, d, s, c, b).
+  o  Absolute (rather than signed) charge for antibaryon is now correctly
+     taken in the method InitForInteraction.
+
+15-Nov-2019 V. Ivanchenko     (hadr-string-diff-V10-05-07)
+- G4FTFParameters: fixed creation/destruction/use of Glauber-Gribov 
+    cross section
+
+14-Nov-2019 A. Ribon          (hadr-string-diff-V10-05-06)
+- G4FTFParameters: fixed memory leak.
+- G4ElasticHNScattering: added a few protections to avoid rare cases of
+  floating point exceptions.
+
+07-Nov-2019 A. Ribon          (hadr-string-diff-V10-05-05)
+- G4FTFParameters: Vladimir Uzhinsky replaced the Chips hadron-nucleon
+  (total and elastic) cross sections with the Barashenkov-Glauber-Gribov (BGG)
+  cross sections for ordinary (i.e. non-heavy) hadrons.
+  Note: for heavy hadrons, only BGG cross section are available and used.
+
+17-Sep-2019 A. Ribon          (hadr-string-diff-V10-05-04)
+- Vladimir Uzhinsky improvements of FTF model for nucleus-nucleus
+  interactions (with negligible effects for hadron-nucleus).
+- G4DiffractiveExcitation: the range of excited hadron masses has been
+  extended, starting from ground-state values (before it was starting
+  from current hadron masses). This is the main improvement.
+- G4ElasticHNScattering: improvement and simplification of the algorithm
+  of elastic scattering (before the masses of resonances were sampled,
+  now it is not needed any longer).
+- G4FTFModel: improvement of the algorithm of string creation.       
+- Deleted G4DiffractiveHHScatterer : not used anywhere.
+
+01-Aug-2019 A. Ribon          (hadr-string-diff-V10-05-03)
+- G4FTFModel: minor improvement in the annihilation at rest of light
+  anti-ions to avoid the unphysical production of (target and projectile)
+  fragments at rest.
+
+08 July 2019 J. Yarba         (hadr-string-diff-V10-05-02)
+- G4FTFParameters: extend FTF configuration interface to include parameters
+                   for pion projectile
+
 06-Mar-2019 A. Ribon          (hadr-string-diff-V10-05-01)
 - G4FTFModel: fixed a memory leak in G4FTFModel::GetStrings() reported as
   bug #2138.

@@ -26,6 +26,7 @@ public:
     static const std::string s_v("tools::sg::bmf");
     return s_v;
   }
+//static bool is_a(const std::string& a_class) {return rcmp(a_class,s_class());}
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast< bmf<T> >(this,a_class)) {return p;}
     return parent::cast(a_class);
@@ -79,6 +80,13 @@ public:
     for(const_it_t it=a_vals.begin();it!=a_vals.end();++it){
       m_values.push_back(*it);
     }
+    m_touched = true;
+  }
+  void add_allocated(size_t& a_pos,const T& a_1,const T& a_2,const T& a_3) { //used in sg::plotter.
+    std::vector<T>& v = m_values;
+    v[a_pos] = a_1;a_pos++;
+    v[a_pos] = a_2;a_pos++;
+    v[a_pos] = a_3;a_pos++;
     m_touched = true;
   }
   typedef typename std::vector<T>::iterator it_t;

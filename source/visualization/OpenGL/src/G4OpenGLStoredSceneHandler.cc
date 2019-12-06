@@ -353,7 +353,7 @@ end_of_display_list_reuse_test:
       "********************* WARNING! ********************"
       "\n*  Display list limit reached in OpenGL."
       "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
-      "\n*  Current limit: " << fDisplayListLimit <<
+      "\n*  Current limit: " << fDisplayListLimit << " primitives"
       ".  Change with \"/vis/ogl/set/displayListLimit\"."
       "\n***************************************************"
       << G4endl;

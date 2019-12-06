@@ -23,20 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4InterpolationDriver
+// G4InterpolationDriver
 //
 // Class description:
 //
 // Driver class which uses Runge-Kutta stepper with interpolation property
 // to integrate track with error control 
 
-// History:
-// - Created. D.Sorokin
+// Created: D.Sorokin, 2018
 // --------------------------------------------------------------------
-
 #ifndef G4INTERPOLATION_DRIVER_HH
 #define G4INTERPOLATION_DRIVER_HH
 
@@ -48,50 +43,47 @@
 #include <vector>
 #include <memory>
 
-
 template <class T>
-class G4InterpolationDriver : public G4RKIntegrationDriver<T> {
-public:
+class G4InterpolationDriver : public G4RKIntegrationDriver<T>
+{
+  public:
+
     G4InterpolationDriver(G4double hminimum,
                           T* stepper,
                           G4int numberOfComponents = 6,
                           G4int statisticsVerbosity = 1);
 
-    G4InterpolationDriver(const G4InterpolationDriver &) = delete;
-    const G4InterpolationDriver& operator =(const G4InterpolationDriver &) = delete;
+    virtual ~G4InterpolationDriver() override;
+
+    G4InterpolationDriver(const G4InterpolationDriver&)= delete;
+    const G4InterpolationDriver& operator=(const G4InterpolationDriver&)= delete;
 
     virtual G4double AdvanceChordLimited(G4FieldTrack& track,
                                          G4double hstep,
                                          G4double eps,
                                          G4double chordDistance) override;
 
-    virtual void OnStartTracking() override
-    {
-        fChordStepEstimate = DBL_MAX;
-        fhnext = DBL_MAX;
-        fTotalStepsForTrack = 0;
-    }
-
-    // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
-    // On output track is replaced by value at end of interval.
-    // The concept is similar to the odeint routine from NRC p.721-722.
+    virtual void OnStartTracking() override;
+    virtual void OnComputeStep() override;
+    virtual G4bool DoesReIntegrate() override { return false; }
+     // Interpolation driver does not recalculate when AccurateAdvance is called
+     //  -- reintegration would require other calls
+   
     virtual G4bool AccurateAdvance(G4FieldTrack& track,
                                    G4double hstep,
-                                   G4double eps,                     // Requested y_err/hstep
-                                   G4double hinitial = 0) override;  // Suggested 1st interval
+                                   G4double eps,    // Requested y_err/hstep
+                                   G4double hinitial = 0) override;
+      // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
+      // On output track is replaced by value at end of interval.
+      // The concept is similar to the odeint routine from NRC p.721-722.
 
-    virtual void OnComputeStep() override 
-    { 
-        fKeepLastStepper = false;
-        fFirstStep = true;
-        fLastStepper = fSteppers.end();
-    }
+    virtual void SetVerboseLevel(G4int level) override;
+    virtual G4int GetVerboseLevel() const override;
 
-    virtual void SetVerboseLevel(G4int level) override { fVerboseLevel = level; }
-    virtual G4int GetVerboseLevel() const override { return fVerboseLevel; }
+  private:
 
-private:
-    struct InterpStepper {
+    struct InterpStepper
+    {
         std::unique_ptr<T> stepper;
         G4double begin;
         G4double end;
@@ -101,16 +93,16 @@ private:
     using StepperIterator = typename std::vector<InterpStepper>::iterator;
     using ConstStepperIterator = typename std::vector<InterpStepper>::const_iterator;
 
-    // This takes one Step that is of size htry, or as large 
-    // as possible while satisfying the accuracy criterion of:
-    //     yerr < eps * |y_end-y_start|
-    // return hdid
     G4double OneGoodStep(StepperIterator it,
                          field_utils::State& y,
                          field_utils::State& dydx,
                          G4double& hstep,
                          G4double eps,
                          G4double curveLength);
+      // This takes one Step that is of size htry, or as large 
+      // as possible while satisfying the accuracy criterion of:
+      //     yerr < eps * |y_end-y_start|
+      // return hdid
 
     void Interpolate(G4double curveLength, field_utils::State& y) const;
 
@@ -138,26 +130,35 @@ private:
 
     void CheckState() const;
 
+    void AccumulateStatistics(G4int noTrials);
+
+  private:
+
     std::vector<InterpStepper> fSteppers;
-    typename std::vector<InterpStepper>::iterator fLastStepper;
+    StepperIterator fLastStepper;
     G4bool fKeepLastStepper = false;
 
-    G4double fhnext = DBL_MAX;
+    G4double fhnext = DBL_MAX;  // Memory of last good step size for integration
 
-    // Minimum Step allowed in a Step (in absolute units)
+    // Minimum Step allowed in a Step (in units of length)   // Parameter
     G4double fMinimumStep;
 
     G4double fChordStepEstimate = DBL_MAX;
-    const G4double fFractionNextEstimate = 0.98;
-    const G4double fSmallestCurveFraction = 0.01;
+    const G4double fFractionNextEstimate = 0.98;             // Constant
+    const G4double fSmallestCurveFraction = 0.01;            // Constant
 
-    G4int fVerboseLevel;
+    G4int fVerboseLevel;                                     // Parameter
 
     field_utils::State fdydx;
     G4bool fFirstStep = true;
 
-    const G4int fMaxTrials = 100; 
+    const G4int fMaxTrials = 100;                            // Constant
     G4int fTotalStepsForTrack = 0;
+
+    // statistics
+    G4int fTotalNoTrials = 0;
+    G4int fNoCalls = 0;
+    G4int fmaxTrials = 0;
 
     using Base = G4RKIntegrationDriver<T>;
 };

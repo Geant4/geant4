@@ -54,7 +54,7 @@ TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
  //    
  G4UIparameter* t1Prm = new G4UIparameter("t1",'d',false);
  t1Prm->SetGuidance("time_1");
- t1Prm->SetParameterRange("t1>0.");
+ t1Prm->SetParameterRange("t1>=0.");
  fTimeWindowCmd->SetParameter(t1Prm);
  //
  G4UIparameter* unit1Prm = new G4UIparameter("unit1",'s',false);

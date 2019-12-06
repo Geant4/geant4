@@ -113,6 +113,7 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fKeptLastEvent            (false),
   fDrawEventOnlyIfToBeKept  (false),
   fpRequestedEvent          (0),
+  fReviewingKeptEvents      (false),
   fAbortReviewKeptEvents    (false),
   fIsDrawGroup              (false),
   fDrawGroupNestingDepth    (0),
@@ -690,7 +691,7 @@ void G4VisManager::Disable() {
       "\n  \"/tracking/storeTrajectory 0\""
       "\nbut don't forget to re-enable with"
       "\n  \"/vis/enable\""
-      "\n  \"/tracking/storeTrajectory " << currentTrajectoryType << "\" (for your case)."
+      "\n  \"/tracking/storeTrajectory " << currentTrajectoryType << '\"'
       << G4endl;
     }
   }
@@ -1307,9 +1308,16 @@ void G4VisManager::GeometryHasChanged () {
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: The current scene \""
 	     << fpScene -> GetName ()
-	     << "\" has no models."
+	     << "\" has no run duration models."
+             << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
 	     << G4endl;
     }
+    fpSceneHandler->ClearTransientStore();
+    fpSceneHandler->ClearStore();
+    fpViewer->NeedKernelVisit();
+    fpViewer->SetView();
+    fpViewer->ClearView();
+    fpViewer->FinishView();
   }
 }
 
@@ -1338,9 +1346,16 @@ void G4VisManager::NotifyHandlers () {
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: The current scene \""
 	     << fpScene -> GetName ()
-	     << "\" has no models."
+	     << "\" has no run duration models."
+             << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
 	     << G4endl;
     }
+    fpSceneHandler->ClearTransientStore();
+    fpSceneHandler->ClearStore();
+    fpViewer->NeedKernelVisit();
+    fpViewer->SetView();
+    fpViewer->ClearView();
+    fpViewer->FinishView();
   }
 }
 

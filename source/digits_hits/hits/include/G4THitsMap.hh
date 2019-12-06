@@ -152,7 +152,7 @@ public: // with description
     { return (Map_t*)theCollection; }
     //  Overwrite a hit object. Total number of hit objects stored in this
     // map is returned.
-    inline G4int entries() const
+    inline size_t entries() const
     { return ((Map_t*)theCollection)->size(); }
     //  Returns the number of hit objects stored in this map
     inline void clear();
@@ -174,7 +174,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<is_same_t(U, T) && ! is_mmap_t(MapU_t), int> = 0>
-    G4int add(const G4int& key, U*& aHit) const
+    size_t add(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
         if(theHitsMap->find(key) == theHitsMap->end())
@@ -189,7 +189,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    G4int add(const G4int& key, U*& aHit) const
+    size_t add(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
         theHitsMap->insert(pair_t(key, aHit));
@@ -202,7 +202,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    G4int add(const G4int& key, U*& aHit) const
+    size_t add(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
         T* hit = allocate();
@@ -221,7 +221,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
-    G4int add(const G4int& key, U& aHit) const
+    size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         if(theHitsMap->find(key) == theHitsMap->end())
@@ -237,7 +237,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(! is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
-    G4int add(const G4int& key, U& aHit) const
+    size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         if(theHitsMap->find(key) == theHitsMap->end())
@@ -251,7 +251,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    G4int add(const G4int& key, U& aHit) const
+    size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         theHitsMap->insert(pair_t(key, new T(aHit)));
@@ -264,7 +264,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    G4int add(const G4int& key, U& aHit) const
+    size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         T* hit = allocate();
@@ -284,7 +284,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int& key, U*& aHit) const
+    inline size_t set(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
         if(theHitsMap->find(key) != theHitsMap->end())
@@ -298,7 +298,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int& key, U*& aHit) const
+    inline size_t set(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
         if(theHitsMap->find(key) != theHitsMap->end())
@@ -316,7 +316,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(!is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int & key, U*& aHit) const
+    inline size_t set(const G4int & key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
         T* hit = nullptr;
@@ -333,7 +333,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int& key, U*& aHit) const
+    inline size_t set(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
         T* hit = allocate();
@@ -359,7 +359,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int& key, U& aHit) const
+    inline size_t set(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         T* hit = nullptr;
@@ -376,7 +376,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int& key, U& aHit) const
+    inline size_t set(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         if(theHitsMap->find(key) != theHitsMap->end())
@@ -391,7 +391,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(!is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int & key, U& aHit) const
+    inline size_t set(const G4int & key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         T* hit = nullptr;
@@ -408,7 +408,7 @@ public:
     template <typename U = T,
               typename MapU_t = Map_t,
               enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
-    inline G4int set(const G4int& key, U& aHit) const
+    inline size_t set(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
         T* hit = allocate();

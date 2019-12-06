@@ -577,7 +577,7 @@ void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part)
   if(buildTableStart && part == particle[n_part - 1]) {
     buildTableStart = false;
     Dump(verbose);
-    if (getenv("G4PhysListDocDir") ) DumpHtml();
+    if (std::getenv("G4PhysListDocDir") ) DumpHtml();
     G4HadronicInteractionRegistry::Instance()->InitialiseModels();
   }
 }
@@ -590,8 +590,8 @@ void G4HadronicProcessStore::DumpHtml()
   // List processes, models and cross sections for the most important
   // particles in descending order of importance
 
-  char* dirName = getenv("G4PhysListDocDir");
-  char* physListName = getenv("G4PhysListName");
+  char* dirName = std::getenv("G4PhysListDocDir");
+  char* physListName = std::getenv("G4PhysListName");
   if (dirName && physListName) {
 
     // Open output file with path name
@@ -668,7 +668,7 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
                         m_map.equal_range(theProcess);
 
     outFile << "    <ul>\n";
-	 G4String physListName(getenv("G4PhysListName"));
+	 G4String physListName(std::getenv("G4PhysListName"));
 
     for (HPHImap::iterator jt = itmod.first; jt != itmod.second; ++jt) {
       outFile << "    <li><b><a href=\"" << physListName << "_" 
@@ -720,8 +720,8 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
 void 
 G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 {
-	G4String dirName(getenv("G4PhysListDocDir"));
-	G4String physListName(getenv("G4PhysListName"));
+	G4String dirName(std::getenv("G4PhysListDocDir"));
+	G4String physListName(std::getenv("G4PhysListName"));
 	G4String pathName = dirName + "/" + physListName + "_" + HtmlFileName(mod->GetModelName());
 	std::ofstream outModel;
 	outModel.open(pathName);

@@ -24,10 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// Class G4TriangularFacet
+// G4TriangularFacet
 //
 // Class description:
 //
@@ -47,15 +44,11 @@
 //         the second vertex is Pt0+vt1 and the third vertex is Pt0+vt2, all  
 //         in anti-clockwise order when looking from the outsider.
 
-// CHANGE HISTORY
-// --------------
-//
 // 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
 // 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
-//
-///////////////////////////////////////////////////////////////////////////////
-#ifndef G4TriangularFacet_hh
-#define G4TriangularFacet_hh 1
+// --------------------------------------------------------------------
+#ifndef G4TRIANGULARFACET_HH
+#define G4TRIANGULARFACET_HH 1
 
 #include "G4VFacet.hh"
 #include "G4Types.hh"
@@ -71,25 +64,25 @@ class G4TriangularFacet : public G4VFacet
     G4TriangularFacet ();
    ~G4TriangularFacet ();
 
-    G4TriangularFacet (const G4ThreeVector &vt0, const G4ThreeVector &vt1,
-                       const G4ThreeVector &vt2, G4FacetVertexType);
-    G4TriangularFacet (const G4TriangularFacet &right);
-    G4TriangularFacet (      G4TriangularFacet &&right);
+    G4TriangularFacet (const G4ThreeVector& vt0, const G4ThreeVector& vt1,
+                       const G4ThreeVector& vt2, G4FacetVertexType);
+    G4TriangularFacet (const G4TriangularFacet& right);
+    G4TriangularFacet (      G4TriangularFacet&& right);
 
-    G4TriangularFacet &operator=(const G4TriangularFacet &right);    
-    G4TriangularFacet &operator=(      G4TriangularFacet &&right);    
+    G4TriangularFacet& operator=(const G4TriangularFacet& right);    
+    G4TriangularFacet& operator=(      G4TriangularFacet&& right);    
 
-    G4VFacet *GetClone ();
-    G4TriangularFacet *GetFlippedFacet ();
+    G4VFacet* GetClone ();
+    G4TriangularFacet* GetFlippedFacet ();
 
-    G4ThreeVector Distance (const G4ThreeVector &p);
-    G4double Distance (const G4ThreeVector &p, G4double minDist);
-    G4double Distance (const G4ThreeVector &p, G4double minDist,
+    G4ThreeVector Distance (const G4ThreeVector& p);
+    G4double Distance (const G4ThreeVector& p, G4double minDist);
+    G4double Distance (const G4ThreeVector& p, G4double minDist,
                        const G4bool outgoing);
     G4double Extent   (const G4ThreeVector axis);
-    G4bool Intersect  (const G4ThreeVector &p, const G4ThreeVector &v,
-                       const G4bool outgoing, G4double &distance,
-                             G4double &distFromSurface, G4ThreeVector &normal);
+    G4bool Intersect  (const G4ThreeVector& p, const G4ThreeVector& v,
+                       const G4bool outgoing, G4double& distance,
+                             G4double& distFromSurface, G4ThreeVector& normal);
     G4double GetArea () const;
     G4ThreeVector GetPointOnFace () const;
 
@@ -101,7 +94,7 @@ class G4TriangularFacet : public G4VFacet
     inline G4bool IsDefined () const;
     inline G4int GetNumberOfVertices () const;
     inline G4ThreeVector GetVertex (G4int i) const;
-    inline void SetVertex (G4int i, const G4ThreeVector &val);
+    inline void SetVertex (G4int i, const G4ThreeVector& val);
 
     inline G4ThreeVector GetCircumcentre () const;
     inline G4double GetRadius () const;
@@ -110,30 +103,30 @@ class G4TriangularFacet : public G4VFacet
 
     inline G4int GetVertexIndex (G4int i) const;
     inline void SetVertexIndex (G4int i, G4int j);
-    inline void SetVertices(std::vector<G4ThreeVector> *v);
+    inline void SetVertices(std::vector<G4ThreeVector>* v);
 
   private:
 
-    void CopyFrom(const G4TriangularFacet &rhs);
-    void MoveFrom(G4TriangularFacet &rhs);
+    void CopyFrom(const G4TriangularFacet& rhs);
+    void MoveFrom(G4TriangularFacet& rhs);
 
     G4ThreeVector fSurfaceNormal;
-    G4double fArea;
+    G4double fArea = 0.0;
     G4ThreeVector fCircumcentre;
-    G4double fRadius;
+    G4double fRadius = 0.0;
     std::array<G4int, 3> fIndices;
-    std::vector<G4ThreeVector> *fVertices;
+    std::vector<G4ThreeVector>* fVertices = nullptr;
 
     G4double fA, fB, fC;
     G4double fDet;
-    G4double fSqrDist;
+    G4double fSqrDist = 0.0;
     G4ThreeVector fE1, fE2;
-    G4bool fIsDefined;
+    G4bool fIsDefined = false;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 // Inlined Methods
-///////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 
 inline G4bool G4TriangularFacet::IsDefined () const
 {
@@ -151,7 +144,7 @@ inline G4ThreeVector G4TriangularFacet::GetVertex (G4int i) const
   return indice < 0 ? (*fVertices)[i] : (*fVertices)[indice];
 }
 
-inline void G4TriangularFacet::SetVertex (G4int i, const G4ThreeVector &val)
+inline void G4TriangularFacet::SetVertex (G4int i, const G4ThreeVector& val)
 {
   (*fVertices)[i] = val;
 }
@@ -184,12 +177,12 @@ inline void G4TriangularFacet::SetVertexIndex (G4int i, G4int j)
   fIndices[i] = j;
 }
 
-inline void G4TriangularFacet::SetVertices(std::vector<G4ThreeVector> *v)
+inline void G4TriangularFacet::SetVertices(std::vector<G4ThreeVector>* v)
 {
   if (fIndices[0] < 0 && fVertices)
   {
     delete fVertices;
-    fVertices = 0;
+    fVertices = nullptr;
   }
   fVertices = v;
 }

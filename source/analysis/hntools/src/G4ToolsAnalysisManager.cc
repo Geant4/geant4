@@ -35,6 +35,20 @@
 #include "G4PlotManager.hh"
 #include "G4MPIToolsManager.hh"
 
+G4ThreadLocal G4ToolsAnalysisManager* G4ToolsAnalysisManager::fgToolsInstance = nullptr;
+
+//_____________________________________________________________________________
+G4ToolsAnalysisManager* G4ToolsAnalysisManager::Instance()
+{
+  return fgToolsInstance;
+}    
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::IsInstance()
+{
+  return ( fgToolsInstance != 0 );
+}    
+
 //_____________________________________________________________________________
 G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type, G4bool isMaster)
  : G4VAnalysisManager(type, isMaster),
@@ -44,6 +58,9 @@ G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type, G4bool isMa
    fP1Manager(nullptr),
    fP2Manager(nullptr)
 {
+  // Set instance pointer
+  fgToolsInstance = this;
+
   // Create managers
   fH1Manager = new G4H1ToolsManager(fState);
   fH2Manager = new G4H2ToolsManager(fState);
@@ -65,7 +82,9 @@ G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type, G4bool isMa
 
 //_____________________________________________________________________________
 G4ToolsAnalysisManager::~G4ToolsAnalysisManager()
-{}
+{
+  fgToolsInstance = nullptr;
+}
 
 //
 // protected methods

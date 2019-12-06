@@ -23,57 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4WeightWindowAlgorithm
+// G4WeightWindowAlgorithm
 // 
 // Class description:
+//
 // Implementation of a weight window algorithm. 
 // The arguments in the constructor configure the algorithm:
-//   - upperLimitFaktor: the factor defining the upper weight limit 
-//      W_u = upperLimitFaktor * W_l (W_l lower weight bound)
-//   - survivalFaktor: used in calculating  the survival weight
-//      W_s = survivalFaktor * W_l
+//   - upperLimitFactor: the factor defining the upper weight limit 
+//      W_u = upperLimitFactor * W_l (W_l lower weight bound)
+//   - survivalFactor: used in calculating the survival weight
+//      W_s = survivalFactor * W_l
 //   - maxNumberOfSplits: the maximal number of splits allowed
 //     to be created in one go, and the reciprocal of the minimal
 //     survival probability in case of Russian roulette
 //
-// In case of upperLimitFaktor=survivalFaktor=1 the algorithm
-// becomes the expected weight algorithm of the importance sampling 
-// technique.
+// In case of upperLimitFactor=survivalFactor=1 the algorithm becomes
+// the expected weight algorithm of the importance sampling technique.
 //
-// see also G4VWeightWindowAlgorithm.
-//
+// See also G4VWeightWindowAlgorithm.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2003
 // ----------------------------------------------------------------------
-#ifndef G4WeightWindowAlgorithm_hh
-#define G4WeightWindowAlgorithm_hh G4WeightWindowAlgorithm_hh 
+#ifndef G4WEIGHTWINDOWALGORITHM_HH
+#define G4WEIGHTWINDOWALGORITHM_HH 1
 
 #include "G4Nsplit_Weight.hh"
 #include "G4VWeightWindowAlgorithm.hh"
 
 class G4WeightWindowAlgorithm : public G4VWeightWindowAlgorithm
 {
-
-public:  // with description
+  public:  // with description
   
-  G4WeightWindowAlgorithm(G4double upperLimitFaktor = 5,
-			  G4double survivalFaktor = 3,
-			  G4int maxNumberOfSplits = 5);
+    G4WeightWindowAlgorithm(G4double upperLimitFactor = 5,
+                            G4double survivalFactor = 3,
+                            G4int maxNumberOfSplits = 5);
   
-  virtual ~G4WeightWindowAlgorithm();
+    virtual ~G4WeightWindowAlgorithm();
 
-  virtual G4Nsplit_Weight Calculate(G4double init_w,
-				    G4double lowerWeightBound) const;
-    // calculate number of tracks and their weight according
-    // to the initial track weight and the lower energy bound
+    virtual G4Nsplit_Weight Calculate(G4double init_w,
+                                      G4double lowerWeightBound) const;
+      // calculate number of tracks and their weight according
+      // to the initial track weight and the lower energy bound
 
-private:
-  G4double fUpperLimitFaktor;
-  G4double fSurvivalFaktor;
-  G4int fMaxNumberOfSplits;
+  private:
+
+    G4double fUpperLimitFactor = 0.0;
+    G4double fSurvivalFactor = 0.0;
+    G4int fMaxNumberOfSplits = 0;
 };
 
 #endif

@@ -111,18 +111,18 @@ G4VPhysicalVolume* CCalG4Ecal::constructIn(G4VPhysicalVolume* mother) {
     if (!cmrot) {
 #ifdef ddebug
       G4cout << "Creating a new rotation: " << rotstr << tab 
-	   << getThetaX()*deg << "," << getPhiX()*deg << "," 
-	   << getThetaY()*deg << "," << getPhiY()*deg << "," 
-	   << getThetaZ()*deg << "," << getPhiZ()*deg << G4endl;
+           << getThetaX()*deg << "," << getPhiX()*deg << "," 
+           << getThetaY()*deg << "," << getPhiY()*deg << "," 
+           << getThetaZ()*deg << "," << getPhiZ()*deg << G4endl;
 #endif
       cmrot = rotfact->AddMatrix(rotstr, getThetaX()*deg, getPhiX()*deg, 
-				 getThetaY()*deg, getPhiY()*deg,
-				 getThetaZ()*deg, getPhiZ()*deg);
+                                 getThetaY()*deg, getPhiY()*deg,
+                                 getThetaZ()*deg, getPhiZ()*deg);
     } // if !cmrot
 #ifdef pdebug
     G4cout << " rotation by (" <<  getThetaX() << ", " << getPhiX() << ", " 
-	 << getThetaY() << "," << getPhiY() << ", "  << getThetaZ() << ", " 
-	 << getPhiZ() << ")" << G4endl;
+         << getThetaY() << "," << getPhiY() << ", "  << getThetaZ() << ", " 
+         << getPhiZ() << ")" << G4endl;
 #endif
   } else {
 #ifdef pdebug
@@ -133,12 +133,12 @@ G4VPhysicalVolume* CCalG4Ecal::constructIn(G4VPhysicalVolume* mother) {
   G4PVPlacement* crystalmatrix;
   if (mother != 0) {
     crystalmatrix = new G4PVPlacement(cmrot, G4ThreeVector(x,y,z),
-				      crystalmatrixLog, idName,
-				      mother->GetLogicalVolume(), false, num);
+                                      crystalmatrixLog, idName,
+                                      mother->GetLogicalVolume(), false, num);
   } else {
     crystalmatrix = new G4PVPlacement(cmrot, G4ThreeVector(x,y,z),
-				      idName, crystalmatrixLog,
-				      mother, false, num);
+                                      idName, crystalmatrixLog,
+                                      mother, false, num);
   }
   G4cout << "<<== End of CCalG4Ecal construction ..." << G4endl;
 
@@ -154,7 +154,7 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   
   G4Material* matter = matfact->findMaterial(getGenMat());
   G4VSolid* solid = new G4Box (idName, 0.5*getWidBox()*mm, 0.5*getWidBox()*mm,
-			       0.5*getLengBox()*mm);
+                               0.5*getLengBox()*mm);
 #ifdef debug
   G4cout << tab << idName << " Box made of " << getGenMat() << " of dimension " 
        << 0.5*getWidBox()*mm << ", " << 0.5*getWidBox()*mm << ", "
@@ -167,7 +167,7 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   G4String name = idName + "Layer";
   matter = matfact->findMaterial(getLayMat());
   solid  = new G4Trd(name, getLayPar(0)*mm, getLayPar(1)*mm, getLayPar(2)*mm, 
-		     getLayPar(3)*mm, getLayPar(4)*mm);
+                     getLayPar(3)*mm, getLayPar(4)*mm);
 #ifdef debug
   G4cout << tab << name << " Trd made of " << getLayMat() << " of dimension " 
        << getLayPar(0)*mm << ", " << getLayPar(1)*mm << ", " << getLayPar(2)*mm
@@ -190,18 +190,18 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
     if (!rot) {
 #ifdef ddebug
       G4cout << "Creating a new rotation: " << rotstr << tab 
-	   << (90.0*deg+angle) << "," << 0.0*deg << "," << 90.0*deg << "," 
-	   << 90.0*deg << "," << angle << "," << 0.0*deg << G4endl;
+           << (90.0*deg+angle) << "," << 0.0*deg << "," << 90.0*deg << "," 
+           << 90.0*deg << "," << angle << "," << 0.0*deg << G4endl;
 #endif
       rot = rotfact->AddMatrix(rotstr, (90.0*deg+angle), 0.0*deg, 90.0*deg,
-			       90.0*deg, angle, 0.0*deg);
+                               90.0*deg, angle, 0.0*deg);
     }
     new G4PVPlacement(rot, G4ThreeVector(xp,0.,zp), laylog, name, glog,
-		      false, i+1);
+                      false, i+1);
 #ifdef pdebug
     G4cout << laylog->GetName() << " number " << i+1 << " positioned in " 
          << glog->GetName()  << " at (" << xp << ", 0," << zp
-	 << ") with rotation angle " << angle/deg << G4endl;
+         << ") with rotation angle " << angle/deg << G4endl;
 #endif
   }
 
@@ -209,7 +209,7 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   name   = idName + "Crystal";
   matter = matfact->findMaterial(getCrystMat());
   solid  = new G4Trd(name, getCrystPar(0)*mm, getCrystPar(1)*mm, 
-		     getCrystPar(2)*mm, getCrystPar(3)*mm, getCrystPar(4)*mm);
+                     getCrystPar(2)*mm, getCrystPar(3)*mm, getCrystPar(4)*mm);
 #ifdef debug
   G4cout << tab << name << " Trd made of " << getCrystMat() << " of dimension " 
        << getCrystPar(0)*mm << ", " << getCrystPar(1)*mm << ", " 
@@ -229,18 +229,18 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
     if (!rot) {
 #ifdef ddebug
       G4cout << "Creating a new rotation: " << rotstr << tab << 90.0*deg << ","
-	   << 0.0*deg << "," << (90.0*deg+angle) << "," << 0.0*deg << "," 
-	   << angle << "," << 90.0*deg << G4endl;
+           << 0.0*deg << "," << (90.0*deg+angle) << "," << 0.0*deg << "," 
+           << angle << "," << 90.0*deg << G4endl;
 #endif
       rot = rotfact->AddMatrix(rotstr, 90.0*deg, 0.0*deg, (90.0*deg+angle),
-			       90.0*deg, angle, 90.0*deg);
+                               90.0*deg, angle, 90.0*deg);
     }
     new G4PVPlacement(rot, G4ThreeVector(0,yp,zp), detLog, name, laylog,
-		      false, i+1);
+                      false, i+1);
 #ifdef pdebug
     G4cout << detLog->GetName() << " number " << i+1 << " positioned in " 
          << laylog->GetName()  << " at (0," << yp << "," << zp
-	 << ") with rotation angle " << angle/deg << G4endl;
+         << ") with rotation angle " << angle/deg << G4endl;
 #endif
   }
 
@@ -248,7 +248,7 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   name   = idName + "Support";
   matter = matfact->findMaterial(getSuppMat());
   solid  = new G4Box (name, 0.5*getDxSupp()*mm, 0.5*getDySupp()*mm, 
-		      0.5*getDzSupp()*mm);
+                      0.5*getDzSupp()*mm);
 #ifdef debug
   G4cout << tab << name << " Box made of " << getSuppMat() << " of dimension " 
        << 0.5*getDxSupp()*mm << ", " << 0.5*getDySupp()*mm << ", "
@@ -258,15 +258,15 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   setVisType(CCalVisualisable::Support,slog);
 
   zp   = (-0.5 * getLengBox() + getCrystLength() + getLengFront() +
-	  0.5 * getDzSupp() + getDistSupp()) * mm;
+          0.5 * getDzSupp() + getDistSupp()) * mm;
   for (i = 0; i < getCrystNum(); i++) {
     yp   = getLayPar(1) * (2*i + 1 - getCrystNum()) * mm;
     new G4PVPlacement(0, G4ThreeVector(0,yp,zp), slog, name, glog,
-		      false, i+1);
+                      false, i+1);
 #ifdef pdebug
     G4cout << slog->GetName() << " number " << i+1 << " positioned in " 
          << glog->GetName()  << " at (0," << yp << "," << zp
-	 << ") with no rotation" << G4endl;
+         << ") with no rotation" << G4endl;
 #endif
   }
 
@@ -282,15 +282,14 @@ void CCalG4Ecal::constructSensitive() {
     CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
     G4String SDname = idName;
     for(std::vector<ptrG4Log>::iterator iter=sensitiveLogs.begin(); 
-	                           iter<sensitiveLogs.end(); iter++) {
+                                   iter<sensitiveLogs.end(); iter++) {
       sensDets->registerVolume(SDname, (*iter));
 #ifdef sdebug
       G4cout << "Register volume " << (*iter)->GetName() << " for" << SDname 
-	   << G4endl;
+           << G4endl;
 #endif
     }
   }
 
 }
-
-			  
+  

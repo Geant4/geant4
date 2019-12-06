@@ -1,0 +1,36 @@
+#
+# Macro file gflasha example
+# when runing in batch mode
+#
+/control/verbose 2
+/run/verbose 2
+#
+/exgflash/det/setLbin 60 0.25
+/exgflash/det/setRbin 100 0.05
+#
+/run/setCut 100 um
+#
+/gps/pos/centre 0 0 0
+/gps/particle  e-
+/gps/energy    50 GeV
+/gps/direction  0. 0. 1.0
+
+# Paramatrisation on 
+/GFlash/flag 1
+
+# Histograms
+/analysis/setFileName run01
+
+/analysis/h1/set 0 110 0. 110.     none # total energy deposit(percent of Einc) 
+/analysis/h1/set 1 100 0. 1.0e6    none # The number of Hits per event
+/analysis/h1/set 2 100 0. 20.      MeV  # The energy of Hit
+#
+
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+#/tracking/storeTrajectory 1
+
+#/vis/scene/endOfEventAction accumulate
+/tracking/verbose 0
+
+/run/beamOn 100

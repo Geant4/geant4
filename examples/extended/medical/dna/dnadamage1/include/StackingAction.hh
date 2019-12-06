@@ -30,8 +30,8 @@
 #pragma once
 #include "G4UserStackingAction.hh"
 
-class StackingAction : 
-public G4UserStackingAction
+class StackingAction 
+    : public G4UserStackingAction
 {    
 public:
     StackingAction();

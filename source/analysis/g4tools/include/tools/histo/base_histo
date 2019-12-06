@@ -207,6 +207,25 @@ public: //histo_data
   TW get_in_range_Sw() const {return parent::m_in_range_Sw;}   //for CERN-ROOT file writing.
   TW get_in_range_Sw2() const {return parent::m_in_range_Sw2;} //for CERN-ROOT file writing.
 
+  void get_Sw_Sw2(TW& a_sw,TW& a_sw2) const {
+    a_sw = 0;
+    a_sw2 = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        a_sw += parent::m_bin_Sw[ibin];
+        a_sw2 += parent::m_bin_Sw2[ibin];
+      }
+    }
+  }
+  void get_all_Sw_Sw2(TW& a_sw,TW& a_sw2) const {
+    a_sw = 0;
+    a_sw2 = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      a_sw += parent::m_bin_Sw[ibin];
+      a_sw2 += parent::m_bin_Sw2[ibin];
+    }
+  }
+  
 /*
   TW get_all_Sw() const {
     TW sw = 0;
@@ -377,7 +396,7 @@ public:
   const std::vector<TC>& in_range_planes_xyw() const {return parent::m_in_range_plane_Sxyw;}
 
 public:
-  const axis_t& get_axis(int aIndex) const {return parent::m_axes[aIndex];}
+  const axis_t& get_axis(int a_index) const {return parent::m_axes[a_index];}
   offset_t get_bins() const {return parent::m_bin_number;}
   const std::string& get_title() const {return parent::m_title;}
   dim_t get_dimension() const {return parent::m_dimension;}

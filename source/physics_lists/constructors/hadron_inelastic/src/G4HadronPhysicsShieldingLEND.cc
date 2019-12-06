@@ -104,8 +104,8 @@ G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND( G4int )
     :  G4VPhysicsConstructor("hInelastic ShieldingLEND")
     , useLEND_(false)
     , evaluation_()
-    , minFTFPEnergy_(9.5*GeV)
-    , maxBertiniEnergy_(9.9*GeV)
+    , minFTFPEnergy_(G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade())
+    , maxBertiniEnergy_(G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade())
     , minNonHPNeutronEnergy_(19.9*MeV)
 {}
 
@@ -113,8 +113,8 @@ G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(const G4String& name,
     :  G4VPhysicsConstructor(name) 
     , useLEND_(false)
     , evaluation_()
-    , minFTFPEnergy_(9.5*GeV)
-    , maxBertiniEnergy_(9.9*GeV)
+    , minFTFPEnergy_(G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade())
+    , maxBertiniEnergy_(G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade())
     , minNonHPNeutronEnergy_(19.9*MeV)
 {}
 

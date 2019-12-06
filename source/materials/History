@@ -16,6 +16,48 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-11-19 G.Cosmo (materials-V10-05-11)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+04-11-19 J.Apostolakis (materials-V10-05-10)
+- G4UCNMicroRoughnessHelper: Corrected out-of-date URL for thesis and
+   added DOI for paper
+
+28-10-19 V.Ivanchenko (materials-V10-05-09)
+- G4IonStoppingData - fixed typo in ICRU90 material names
+
+08-10-19 V.Ivanchenko (materials-V10-05-08)
+- G4IonisParamMat - set mass limit of a single element 90%
+- G4IonStoppingData - added ICRU90 data option
+
+07-10-19 V.Ivanchenko (materials-V10-05-07)
+- G4NistManager, G4NistMessenger - added two new public methods
+    and two new UI commands allowing to enable/disable calculation
+    of density effect on-fly using G4DensityEffectCalculator 
+
+29-08-19 V.Ivanchenko (materials-V10-05-06)
+- G4DensityEffectCalculator - Matthew Strait propose an alternative 
+    computation of the Density effect (problem #2121)
+- G4Material, G4IonisParamMat - added possibility to enable
+    on-fly computation of the density effect correction using
+    "exact" formulas, for that ComputeDensityEffectOnFly() method
+    is added; but default the old approach is used
+- G4IonisParamMat - logic of selection of density effect 
+    parameterisation is changed - if > 70% of mass of a compound
+    corresponds to a particular element, then density effect
+    parameterisation for this element is used with mass correction
+
+20-08-19 V.Ivanchenko (materials-V10-05-04)
+- G4Material - reorder class members, added free electron density,
+    use NistManager to instantiate element in constructor with
+    effective Z and A
+- G4SandiaTable, G4IonisParamMat - use const material pointer
+- G4AtomicShells, G4AtomicShells_XDB_EADL - added method 
+    GetNumberOfFreeElectrons(..)
+
+13-08-19 V.Ivanchenko (materials-V10-05-03)
+- G4NistManager - fixed potential thread unsafety 
+
 11-03-19 M.Novak (materials-V10-05-02)
 - G4NistMaterialBuilder - fixed atomic number value in simple material printout
 

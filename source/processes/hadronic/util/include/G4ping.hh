@@ -42,7 +42,7 @@
     
     void dump()
     {
-      if(getenv(theName))
+      if(std::getenv(theName))
       {
         size_t i(0);
 	for(i=0; i<theS.size(); i++)

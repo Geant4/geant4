@@ -51,7 +51,7 @@ CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(const G4String
     return getInstance();
   } else {
     G4cerr << "ERROR: Trying to get Rotation Matrices from " << rotfile 
-	 << " when previously were retrieved from " << file <<"." << G4endl;
+         << " when previously were retrieved from " << file <<"." << G4endl;
     return 0;
   }
 }
@@ -60,7 +60,7 @@ CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(const G4String
 CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(){
   if (file=="") {
     G4cerr << "ERROR: You haven't defined which file to use for materials in "
-	 << "CCalRotationMatrixFactory::getInstance(G4String)" << G4endl;
+         << "CCalRotationMatrixFactory::getInstance(G4String)" << G4endl;
     return 0;
   }
 
@@ -75,7 +75,7 @@ CCalRotationMatrixFactory* CCalRotationMatrixFactory::getInstance(){
 void CCalRotationMatrixFactory::setFileName(const G4String& rotfile) {
   if (rotfile!=file && file!="") {
     G4cerr << "ERROR: Trying to change Rotation Matrices file name to " 
-	 << rotfile << "." << G4endl;
+         << rotfile << "." << G4endl;
     G4cerr << "       Using previous file: " << file << G4endl;
   }
   file=rotfile;
@@ -103,17 +103,17 @@ G4RotationMatrix* CCalRotationMatrixFactory::findMatrix(const G4String & rot) {
 }
 
 G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name, 
-						       G4double th1, 
-						       G4double phi1, 
-						       G4double th2, 
-						       G4double phi2, 
-						       G4double th3, 
-						       G4double phi3){
+                                                       G4double th1, 
+                                                       G4double phi1, 
+                                                       G4double th2, 
+                                                       G4double phi2, 
+                                                       G4double th3, 
+                                                       G4double phi3){
   G4double sinth1, sinth2,  sinth3, costh1, costh2, costh3;
   G4double sinph1, sinph2, sinph3, cosph1, cosph2, cosph3;
   G4double TH1 = th1/deg, TH2 = th2/deg, TH3 = th3/deg;
   G4double PH1 = phi1/deg, PH2 = phi2/deg, PH3 = phi3/deg;
-		
+                
   if (TH1 == 0.0 || TH1 == 360) {
     sinth1 = 0.0; costh1 = 1.0;
   } else if (TH1 == 90.0 || TH1 == -270) {
@@ -137,7 +137,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else {
     sinth2 = std::sin(th2); costh2 = std::cos(th2);
   }
-		
+                
   if (TH3 == 0.0 || TH3 == 360) {
     sinth3 = 0.0; costh3 = 1.0;
   } else if (TH3 == 90.0 || TH2 == -270) {
@@ -173,7 +173,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else {
     sinph2 = std::sin(phi2); cosph2 = std::cos(phi2);
   }
-		
+                
   if (PH3 == 0.0 || PH3 == 360) {
     sinph3 = 0.0; cosph3 = 1.0;
   } else if (PH3 == 90.0 || PH3 == -270) {
@@ -185,7 +185,7 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   } else {
     sinph3 = std::sin(phi3); cosph3 = std::cos(phi3);
   }
-				    
+                                    
   //xprime axis coordinates
   CLHEP::Hep3Vector xprime(sinth1*cosph1,sinth1*sinph1,costh1);
   //yprime axis coordinates
@@ -217,18 +217,18 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
 CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
 
   G4String path = "NULL";
-  if (getenv("CCAL_GLOBALPATH"))
-    path = getenv("CCAL_GLOBALPATH");
+  if (std::getenv("CCAL_GLOBALPATH"))
+    path = std::getenv("CCAL_GLOBALPATH");
 
   G4cout << " ==> Opening file " << file << "..." << G4endl;
   std::ifstream is;
-  bool ok = openGeomFile(is, path, file);
+  G4bool ok = openGeomFile(is, path, file);
   if (!ok) {
     G4ExceptionDescription ed;
     ed << "Could not open file " << file << " ... Exiting!" << G4endl;
     G4Exception("CCalRotationMatrixFactory::CCalRotationMatrixFactory()",
-		"ccal002",
-		FatalException,ed);
+                "ccal002",
+                FatalException,ed);
   }
 
   //////////////////////////////////////////////////

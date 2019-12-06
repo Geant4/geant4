@@ -23,20 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4MagErrorStepper
+// G4MagErrorStepper
 //
 // Class description:
 //
 // Abstract base class for integrator of particle's equation of motion,
 // used in tracking in space dependent magnetic field.
 
-// History:
-// 09.12.97  W.Wander <wwc@mit.edu>  Created G4MagErrorStepper
+// Author: W.Wander <wwc@mit.edu>, 09.12.1997
 // --------------------------------------------------------------------
-
 #ifndef G4MAGERRORSTEPPER_HH
 #define G4MAGERRORSTEPPER_HH
 
@@ -49,14 +44,19 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 {
   public:  // with description
 
-    G4MagErrorStepper(G4EquationOfMotion *EqRhs, G4int numberOfVariables, G4int numStateVariables=12);
+    G4MagErrorStepper(G4EquationOfMotion*EqRhs,
+                      G4int numberOfVariables,
+                      G4int numStateVariables = 12);
     virtual ~G4MagErrorStepper();
   
+    G4MagErrorStepper(const G4MagErrorStepper&) = delete;
+    G4MagErrorStepper& operator=(const G4MagErrorStepper&) = delete;
+
     void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[]  );
+                        G4double yerr[] );
       // The stepper for the Runge Kutta integration. The stepsize 
       // is fixed, with the Step size given by h.
       // Integrates ODE starting values y[0 to 6].
@@ -69,12 +69,6 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
       // Performs a 'dump' Step without error calculation.
 
     G4double DistChord() const;
-
-  private:
-
-    G4MagErrorStepper(const G4MagErrorStepper&);
-    G4MagErrorStepper& operator=(const G4MagErrorStepper&);
-      // Private copy constructor and assignment operator.
 
   private:
 
@@ -91,4 +85,4 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 
 #include  "G4MagErrorStepper.icc"
 
-#endif  /* G4MAGERRORSTEPPER_HH */
+#endif

@@ -203,7 +203,7 @@ G4double RunAction::ComputeTheory(const G4String& process, G4int NbOfMu)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     
-  G4AnaH1* histoTh = 0;
+  G4H1* histoTh = 0;
   if (fHistoManager->HistoExist(id)) {
     histoTh  = analysisManager->GetH1(fHistoManager->GetHistoID(id));  
     nbOfBins = fHistoManager->GetNbins(id);

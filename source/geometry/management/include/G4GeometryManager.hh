@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4GeometryManager
+// G4GeometryManager
 //
 // Class description:
 //
@@ -39,8 +37,7 @@
 //   - fgInstance
 //     Ptr to the unique instance of class
 
-// Author:
-// 26.07.95 P.Kent Initial version, including optimisation Build
+// 26.07.95, P.Kent - Initial version, including optimisation build
 // --------------------------------------------------------------------
 #ifndef G4GEOMETRYMANAGER_HH
 #define G4GEOMETRYMANAGER_HH
@@ -55,13 +52,13 @@ class G4GeometryManager
 {
   public: // with description
   
-    G4bool CloseGeometry(G4bool pOptimise=true, G4bool verbose=false,
-                         G4VPhysicalVolume* vol=0);
+    G4bool CloseGeometry(G4bool pOptimise = true, G4bool verbose = false,
+                         G4VPhysicalVolume* vol = nullptr);
       // Close (`lock') the geometry: perform sanity and `completion' checks
       // and optionally [default=yes] build optimisation information.
       // Applies to just a specific subtree if a physical volume is specified.
 
-    void OpenGeometry(G4VPhysicalVolume* vol=0);
+    void OpenGeometry(G4VPhysicalVolume* vol = nullptr);
       // Open (`unlock') the geometry and remove optimisation information if
       // present. Applies to just a specific subtree if a physical volume is
       // specified.
@@ -92,11 +89,11 @@ class G4GeometryManager
 
   private:
 
-    void BuildOptimisations(G4bool allOpt, G4bool verbose=false);
+    void BuildOptimisations(G4bool allOpt, G4bool verbose = false);
     void BuildOptimisations(G4bool allOpt, G4VPhysicalVolume* vol);
     void DeleteOptimisations();
     void DeleteOptimisations(G4VPhysicalVolume* vol);
-    static void ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
+    static void ReportVoxelStats( std::vector<G4SmartVoxelStat>& stats,
                                   G4double totalCpuTime );
     static G4ThreadLocal G4GeometryManager* fgInstance;
     static G4ThreadLocal G4bool fIsClosed;

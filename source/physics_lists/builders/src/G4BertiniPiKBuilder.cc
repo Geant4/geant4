@@ -42,13 +42,17 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGPionInelasticXS.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionInelastic.hh"
+#include "G4HadronicParameters.hh"
 
 
 G4BertiniPiKBuilder::
 G4BertiniPiKBuilder() 
  {
-   theMin = 0*GeV;
-   theMax = 9.9*GeV;
+   kaonxs = new G4CrossSectionInelastic( new G4ComponentGGHadronNucleusXsc );
+   theMin = 0.0;
+   theMax = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
    theModel = new G4CascadeInterface;
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax); 
@@ -78,6 +82,7 @@ Build(G4KaonPlusInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(kaonxs);
  }
 
 void G4BertiniPiKBuilder::
@@ -86,6 +91,7 @@ Build(G4KaonMinusInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(kaonxs);
  }
 
 void G4BertiniPiKBuilder::
@@ -94,6 +100,7 @@ Build(G4KaonZeroLInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(kaonxs);
  }
 
 void G4BertiniPiKBuilder::
@@ -102,6 +109,6 @@ Build(G4KaonZeroSInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(kaonxs);
  }
 
- // 2002 by J.P. Wellisch

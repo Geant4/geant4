@@ -18,8 +18,8 @@ main()
 
  ==> define Random Number Engine and initial seed
 
-G4VUserPhysicsList
-------------------
+G4Optical Physics
+-----------------
 
  ==> define particles; including *** G4OpticalPhoton     ***
      define processes; including *** G4Cerenkov          ***
@@ -28,7 +28,7 @@ G4VUserPhysicsList
                                  *** G4OpRayleigh        ***
                                  *** G4OpBoundaryProcess ***
 
- ==> A messenger command allows to define interactivly the 
+ ==> A messenger command allows to define interactively the 
      verbose level and the maximum number of Cerenkov photons per step
      (see for instance OpNovice.in)
 
@@ -76,8 +76,6 @@ Visualisation
  ------------
  
  - compile and link to generate an executable
- 	% cd OpNovice
- 	% gmake
 
    This example handles the program arguments in a new way.
    It can be run with the following optional arguments:

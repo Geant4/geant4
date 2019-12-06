@@ -464,7 +464,8 @@ void DicomDetectorConstruction::ReadPhantomDataNew()
   fin >> nMaterials;
   G4String mateName;
   G4int nmate;
-  for( G4int ii = 0; ii < nMaterials; ii++ ){
+  for( G4int ii = 0; ii < nMaterials; ++ii )
+  {
     fin >> nmate;
     fin >> mateName;
     if( mateName[0] == '"' && mateName[mateName.length()-1] == '"' ) {
@@ -480,8 +481,8 @@ void DicomDetectorConstruction::ReadPhantomDataNew()
 
     G4Material* mate = 0;
     const G4MaterialTable* matTab = G4Material::GetMaterialTable();
-    std::vector<G4Material*>::const_iterator matite;
-    for( matite = matTab->begin(); matite != matTab->end(); ++matite ) {
+    for( auto matite = matTab->cbegin(); matite != matTab->cend(); ++matite )
+    {
       if( (*matite)->GetName() == mateName ) {
         mate = *matite;
       }
@@ -513,9 +514,9 @@ void DicomDetectorConstruction::ReadPhantomDataNew()
 #endif
 
   fMateIDs = new size_t[fNVoxelX*fNVoxelY*fNVoxelZ];
-  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
-    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
-      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+  for( G4int iz = 0; iz < fNVoxelZ; ++iz ) {
+    for( G4int iy = 0; iy < fNVoxelY; ++iy ) {
+      for( G4int ix = 0; ix < fNVoxelX; ++ix ) {
         G4int mateID;
         fin >> mateID; 
         G4int nnew = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
@@ -539,21 +540,25 @@ void DicomDetectorConstruction::ReadPhantomDataNew()
 #endif
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
 {
   G4String stemp;
   std::map<G4int, std::pair<G4double,G4double> > densiMinMax;
   std::map<G4int, std::pair<G4double,G4double> >::iterator mpite;
-  for( size_t ii = 0; ii < thePhantomMaterialsOriginal.size(); ii++ ){
+  for( G4int ii = 0; ii < G4int(thePhantomMaterialsOriginal.size()); ++ii )
+  {
     densiMinMax[ii] = std::pair<G4double,G4double>(DBL_MAX,-DBL_MAX);
   }
 
-  char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
+  char* part = std::getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
   G4double densityDiff = -1.;
   if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
 
   std::map<G4int,G4double> densityDiffs;
-  for( size_t ii = 0; ii < thePhantomMaterialsOriginal.size(); ii++ ){
+  for( G4int ii = 0; ii < G4int(thePhantomMaterialsOriginal.size()); ++ii )
+  {
     densityDiffs[ii] = densityDiff; //currently all materials with same step
   }
   //  densityDiffs[0] = 0.0001; //air
@@ -563,20 +568,20 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
 
   //---- Read the material densities
   G4double dens;
-  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
-    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
-      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+  for( G4int iz = 0; iz < fNVoxelZ; ++iz ) {
+    for( G4int iy = 0; iy < fNVoxelY; ++iy ) {
+      for( G4int ix = 0; ix < fNVoxelX; ++ix ) {
         fin >> dens; 
         G4int copyNo = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
 
         if( densityDiff != -1. ) continue; 
 
         //--- store the minimum and maximum density for each material
-        mpite = densiMinMax.find( fMateIDs[copyNo] );
+        mpite = densiMinMax.find( G4int(fMateIDs[copyNo]) );
         if( dens < (*mpite).second.first ) (*mpite).second.first = dens;
         if( dens > (*mpite).second.second ) (*mpite).second.second = dens;
         //--- Get material from original list of material in file
-        G4int mateID = fMateIDs[copyNo];
+        G4int mateID = G4int(fMateIDs[copyNo]);
         std::map<G4int,G4Material*>::const_iterator imite = 
          thePhantomMaterialsOriginal.find(mateID);
 
@@ -592,9 +597,8 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
         //--- Look if it is the first voxel with this material/densityBin
         std::pair<G4Material*,G4int> matdens((*imite).second, densityBin );
 
-        std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite = 
-         newMateDens.find( matdens );
-        if( mppite != newMateDens.end() ){
+        auto mppite = newMateDens.find( matdens );
+        if( mppite != newMateDens.cend() ){
           matInfo* mi = (*mppite).second;
           mi->fSumdens += dens;
           mi->fNvoxels++;
@@ -603,7 +607,7 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
           matInfo* mi = new matInfo;
           mi->fSumdens = dens;
           mi->fNvoxels = 1;
-          mi->fId = newMateDens.size()+1;
+          mi->fId = G4int(newMateDens.size()+1);
           newMateDens[matdens] = mi;
           fMateIDs[copyNo] = thePhantomMaterialsOriginal.size()-1 + mi->fId;
         }
@@ -612,7 +616,8 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
   }
 
   if( densityDiff != -1. ) { 
-    for( mpite = densiMinMax.begin(); mpite != densiMinMax.end(); mpite++ ){
+    for( mpite = densiMinMax.begin(); mpite != densiMinMax.end(); ++mpite )
+    {
 #ifdef G4VERBOSE
       G4cout << "DicomDetectorConstruction::ReadVoxelDensities"
              << " ORIG MATERIALS DENSITY " 
@@ -624,15 +629,15 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
 
   //----- Build the list of phantom materials that go to Parameterisation
   //--- Add original materials
-  std::map<G4int,G4Material*>::const_iterator mimite;
-  for( mimite = thePhantomMaterialsOriginal.begin();
-       mimite != thePhantomMaterialsOriginal.end(); mimite++ ){
+  for( auto mimite = thePhantomMaterialsOriginal.cbegin();
+       mimite != thePhantomMaterialsOriginal.cend(); ++mimite )
+  {
     fMaterials.push_back( (*mimite).second );
   }
   // 
   //---- Build and add new materials
-std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite;
-  for( mppite= newMateDens.begin(); mppite != newMateDens.end(); mppite++ ){
+  for( auto mppite= newMateDens.cbegin(); mppite!=newMateDens.cend(); ++mppite )
+  {
     G4double averdens = (*mppite).second->fSumdens/(*mppite).second->fNvoxels;
     G4double saverdens = G4int(1000.001*averdens)/1000.;
 #ifndef G4VERBOSE
@@ -643,18 +648,17 @@ std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite;
            << " " <<  G4int(1000*averdens)/1000. << G4endl;
 #endif
 
-      G4String mateName = ((*mppite).first).first->GetName() + "_"
+    G4String mateName = ((*mppite).first).first->GetName() + "_"
        + G4UIcommand::ConvertToString(saverdens);
     fMaterials.push_back( BuildMaterialWithChangingDensity( 
-     (*mppite).first.first, averdens, mateName ) );
+     (*mppite).first.first, G4float(averdens), mateName ) );
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
 void DicomDetectorConstruction::ReadPhantomData()
 {
-    G4String dataFile = DicomHandler::GetDicomDataFile();
+  G4String dataFile = DicomHandler::GetDicomDataFile();
   std::ifstream finDF(dataFile.c_str());
   G4String fname;
 
@@ -669,21 +673,22 @@ if(finDF.good() != 1 )
   finDF >> compression; // not used here
   finDF >> fNoFiles;
 
-  for(G4int i = 0; i < fNoFiles; i++ ) {
+  for(G4int i = 0; i < fNoFiles; ++i )
+  {
 
-  finDF >> fname;
+    finDF >> fname;
 
-  //--- Read one data file
-  fname += ".g4dcm";
+    //--- Read one data file
+    fname += ".g4dcm";
 
-  ReadPhantomDataFile(fname);
+    ReadPhantomDataFile(fname);
+  }
 
+  //----- Merge data headers
+  MergeZSliceHeaders();
+  finDF.close();
 }
 
-//----- Merge data headers
-MergeZSliceHeaders();
-finDF.close();
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........
 void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 {
@@ -704,17 +709,22 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   }
   //----- Define density differences (maximum density difference to create
   // a new material)
-  char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
+  char* part = std::getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
   G4double densityDiff = -1.;
   if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
-  if( densityDiff != -1. ) {
-    for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+  if( densityDiff != -1. )
+  {
+    for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ++ii )
+    {
       fDensityDiffs[ii] = densityDiff; //currently all materials with 
       // same difference
     }
-  }else {
+  }
+  else
+  {
     if( fMaterials.size() == 0 ) { // do it only for first slice
-      for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+      for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ++ii )
+      {
         fMaterials.push_back( fOriginalMaterials[ii] );
       }
     }
@@ -736,8 +746,9 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   
   unsigned int mateID;
   // number of voxels from previously read slices
-  G4int voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels;
-  for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
+  G4int voxelCopyNo = G4int((fZSliceHeaders.size()-1)*nVoxels);
+  for( G4int ii = 0; ii < nVoxels; ++ii, voxelCopyNo++ )
+  {
     fin >> mateID;
     fMateIDs[voxelCopyNo] = mateID;
   }
@@ -747,21 +758,22 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   // (size of density intervals defined by densityDiff)
   G4double density;
   // number of voxels from previously read slices
-  voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels;
-  for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
+  voxelCopyNo = G4int((fZSliceHeaders.size()-1)*nVoxels);
+  for( G4int ii = 0; ii < nVoxels; ++ii, voxelCopyNo++ )
+  {
     fin >> density;
     
     //-- Get material from list of original materials
-    mateID = fMateIDs[voxelCopyNo];
+    mateID = unsigned(fMateIDs[voxelCopyNo]);
     G4Material* mateOrig  = fOriginalMaterials[mateID];
     
     //-- Get density bin: middle point of the bin in which the current
     // density is included
     G4String newMateName = mateOrig->GetName();
-    float densityBin = 0.;
+    G4float densityBin = 0.;
     if( densityDiff != -1.) {
-      densityBin = fDensityDiffs[mateID] * 
-        (G4int(density/fDensityDiffs[mateID])+0.5);
+      densityBin = G4float(fDensityDiffs[mateID]) * 
+                   (G4int(density/fDensityDiffs[mateID])+0.5);
       //-- Build the new material name
       newMateName += G4UIcommand::ConvertToString(densityBin);
     }
@@ -769,7 +781,8 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
     //-- Look if a material with this name is already created
     //  (because a previous voxel was already in this density bin)
     unsigned int im;
-    for( im = 0; im < fMaterials.size(); im++ ){
+    for( im = 0; im < fMaterials.size(); ++im )
+    {
       if( fMaterials[im]->GetName() == newMateName ) {
         break;
       }
@@ -793,7 +806,6 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
       }
     }
   }
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -801,22 +813,23 @@ void DicomDetectorConstruction::MergeZSliceHeaders()
 {
   //----- Images must have the same dimension ...
   fZSliceHeaderMerged = new DicomPhantomZSliceHeader( *fZSliceHeaders[0] );
-  for( unsigned int ii = 1; ii < fZSliceHeaders.size(); ii++ ) {
+  for( unsigned int ii = 1; ii < fZSliceHeaders.size(); ++ii )
+  {
     *fZSliceHeaderMerged += *fZSliceHeaders[ii];
-  };
-  
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity(
-           const G4Material* origMate, float density, G4String newMateName )
+           const G4Material* origMate, G4float density, G4String newMateName )
 {
   //----- Copy original material, but with new density
-  G4int nelem = origMate->GetNumberOfElements();
+  G4int nelem = G4int(origMate->GetNumberOfElements());
   G4Material* mate = new G4Material( newMateName, density*g/cm3, nelem,
                                      kStateUndefined, STP_Temperature );
   
-  for( G4int ii = 0; ii < nelem; ii++ ){
+  for( G4int ii = 0; ii < nelem; ++ii )
+  {
     G4double frac = origMate->GetFractionVector()[ii];
     G4Element* elem = const_cast<G4Element*>(origMate->GetElement(ii));
     mate->AddElement( elem, frac );
@@ -875,8 +888,6 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
                       fWorld_logic,  // Mother
                       false,           // No op. bool.
                       1);              // Copy number
-  
-  //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -936,7 +947,6 @@ void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 #endif
   
   fScorers.insert(voxel_logic);
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -971,8 +981,8 @@ void DicomDetectorConstruction::ConstructSDandField()
     new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, fNVoxelZ);
   MFDet->RegisterPrimitive(dosedep);
   
-  for(std::set<G4LogicalVolume*>::iterator ite = fScorers.begin(); 
-      ite != fScorers.end(); ++ite) {
+  for(auto ite = fScorers.cbegin(); ite != fScorers.cend(); ++ite)
+  {
     SetSensitiveDetector(*ite, MFDet);
   }
 }

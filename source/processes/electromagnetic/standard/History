@@ -17,6 +17,72 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+06 November 19:  V.Ivanchenko (emstand-V10-05-26)
+- G4ESTARStopping, G4GSMottCorrection, G4GSPWACorrections,
+  G4GoudsmitSaundersonTable, G4SBBremTable, G4SeltzerBergerModel
+    minor cleanup: getenv -> std::getenv, use G4Element::GetZasInt()
+
+05 November 19:  V.Ivanchenko (emstand-V10-05-25)
+- G4UrbanMscModel - fixed problem introduced in emstand-V10-05-22
+    which affect Opt3 EM physics
+
+31 October 19:  V.Ivanchenko (emstand-V10-05-24)
+- G4SeltzerBergerModel, G4ICRU49NuclearStoppingModel - cosmetic 
+    modifications - more safe initialisation in the MT mode
+
+24 October 19:  I.Semeniouk (emstand-V10-05-23)
+- G4BetheHeitler5DModel - new parameters set for muon (30% speed up),
+    nuclear threshold calculation.
+
+23 October 19:  V.Ivanchenko (emstand-V10-05-22)
+- G4UrbanMscModel - (L.Urban) minor cleanup, should not affect results
+
+18 October 19: I.Semeniouk (emstand-V10-05-21)
+- G4BetheHeitler5DModel Add gamma conversion to mu+ mu- mode
+
+16 October 19: D.Sawkey (emstand-V10-05-20)
+- G4eplusAnnihilation: set secondary weight correctly using bias manager.
+
+1 October 19:  V.Ivanchenko (emstand-V10-05-19)
+- G4UrbanMscModel, G4GoudsmitSaundersonMscModel, G4WentzelVIModel - 
+    use lambdalimit and facsafety from the base class G4VMscModel   
+
+2 September 19:  M.Novak (emstand-V10-05-18)
+- G4PairProductionRelModel, G4GammaConversion - The high energy model for e-/e+ 
+    pair production has been extended down to threshold (2mc^2) such that it 
+    gives results (both x-section and final state) identical to those produced 
+    by the low energy (G4BetheHeitlerModel). Since this new version of the 
+    high energy model can describe e-/e+ pair production from threshold up to
+    PeV (LPM effects are included) the G4BetheHeitlerModel was removed from the 
+    G4GammaConversion process. 
+
+29 August 19:  V.Ivanchenko (emstand-V10-05-17)
+- G4UrbanMscModel - L.Urban modified step limit parameters: 
+    lambdalimit to 0.5 mm; facsafety to 0.67.
+
+24 August 19:  V.Ivanchenko (emstand-V10-05-16)
+- G4UrbanMscModel - L.Urban modified step limit parameters: 
+    lambdalimit from 1 mm to 0.4 mm; facsafety from 0.6 to 0.7.
+- G4WentzelOKadriVIxSection, G4WentzelVIModel - return previous 
+    parameterisation of screening parameter
+
+14 August 19:  V.Ivanchenko (emstand-V10-05-15)
+- G4hCoulombScatteringModel, G4hCoulombScatteringModel - removed
+    unused headers
+
+25 July 19:  V.Ivanchenko (emstand-V10-05-14)
+- G4SeltzerBergerModel - during initialisation data files uploaded
+    only data for elements used in geometry, lazy initialisation
+    of the data is also available (may be used in unit tests) 
+
+20 July 19:  V.Ivanchenko (emstand-V10-05-13)
+- G4WentzelOKandVIxSection - modified parameterisation of screening
+    parameter for e+-, which affect backscattering at low energies
+    making results closer to data
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel 
+    optimized code and data structure; fixed floating point exception 
+    for low energy; use C++11 patterns
+
 28 May 19:  V.Ivanchenko (emstand-V10-05-12)
 - G4UrbanMscModel - L.Urban modified lateral displacement sampling
 

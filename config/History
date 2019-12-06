@@ -15,6 +15,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20th Nov 2019 Gabriele Cosmo (config-V10-05-08)
+- interactivity.gmk: added -DQT_NO_DEPRECATED_WARNINGS to Qt compilation
+  settings, to silence warnings from Qt for use of deprecated features.
+
+22nd Oct 2019 Gabriele Cosmo (config-V10-05-07)
+- Force use of c++17 in WIN32 targets.
+
+9th Oct 2019 Gabriele Cosmo (config-V10-05-06)
+- Corrected default path for XM in Darwin targets.
+
+13th Sep 2019 Ivana Hrivnacova (config-V10-05-05)
+- Added new analysis/factory subdirectory in includes in  binmake.gmk;
+  removed analysis/parameters which does not exist anymore.
+
+4th Sep 2019 Gabriele Cosmo (config-V10-05-04)
+- Fixed compilation warning on gcc-9.2 for liblist.c; replaced use
+  of strncat() with strcat().
+
+13th Aug 2019 Gabriele Cosmo (config-V10-05-03)
+- geomconf.gmk: added VecGeom wrappers flags for G4EllipticalTube,
+  G4EllipticalCone and G4Ellipsoid.
+
+28th Jun 2019 Gabriele Cosmo (config-V10-05-02)
+- Fixed default paths for Linux architectures.
+
 16th May 2019 Gabriele Cosmo (config-V10-05-01)
 - Hard-code Qt version through QT_VERSION flag.
   Corrected Qt5 setup for Linux-g++ and Linux-clang.

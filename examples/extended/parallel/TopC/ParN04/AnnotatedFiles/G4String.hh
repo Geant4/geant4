@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/AnnotatedFiles/G4String.hh
+/// \file G4String.hh
 /// \brief Definition of the place-holder for the G4String class
 //
 /*

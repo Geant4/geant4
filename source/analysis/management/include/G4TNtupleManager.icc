@@ -130,7 +130,7 @@ G4int G4TNtupleManager<TNTUPLE>::CreateNtupleTColumn(
   }  
 #endif
 
-  return index + fFirstNtupleColumnId;       
+  return G4int(index + fFirstNtupleColumnId);       
 
 }
 
@@ -283,7 +283,7 @@ G4int G4TNtupleManager<TNTUPLE>::CreateNtuple(
   } 
 #endif
 
-  return index + fFirstId;
+  return G4int(index + fFirstId);
 }                                         
 
 //_____________________________________________________________________________
@@ -511,12 +511,12 @@ G4TNtupleManager<TNTUPLE>::EndConstNtuple() const
 template <typename TNTUPLE>
 G4int G4TNtupleManager<TNTUPLE>::GetNofNtuples() const
 { 
-  return fNtupleVector.size();
+  return G4int(fNtupleVector.size());
 }
 
 //_____________________________________________________________________________
 template <typename TNTUPLE>
 G4int G4TNtupleManager<TNTUPLE>::GetNofNtupleBookings() const
 { 
-  return fNtupleDescriptionVector.size();
+  return G4int(fNtupleDescriptionVector.size());
 }

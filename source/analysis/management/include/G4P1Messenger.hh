@@ -66,6 +66,8 @@ class G4P1Messenger : public G4UImessenger
     std::unique_ptr<G4UIcommand>  fSetP1TitleCmd;   
     std::unique_ptr<G4UIcommand>  fSetP1XAxisCmd;   
     std::unique_ptr<G4UIcommand>  fSetP1YAxisCmd;  
+    std::unique_ptr<G4UIcommand>  fSetP1XAxisLogCmd;
+    std::unique_ptr<G4UIcommand>  fSetP1YAxisLogCmd;
 
     G4int  fXId;
     G4AnalysisMessengerHelper::BinData fXData; 

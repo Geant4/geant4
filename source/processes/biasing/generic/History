@@ -16,6 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+November 15th, 2019 M. Verderi
+- Introduce leading particle biasing proc-biasgen-V10-05-00
+  This is made implementing the new biasing operation:
+  include/G4BOptnLeadingParticle.hh
+  src/G4BOptnLeadingParticle.cc
+- G4BOptnChangeCrossSection:
+  add argument to:
+      void     SetBiasedCrossSection(G4double xst);
+  as option to update the interaction length when
+  setting a new cross-section value:
+      void     SetBiasedCrossSection(G4double xst, bool updateInteractionLength = false);
+  default value makes the change backward compatible.
+  
+
 November 24th, 2017 M. Verderi
 - Fix G4BiasingProcessInterface for wrong setting of first/last
   GPIL/DoIt flags in case charged particles. As the msc became

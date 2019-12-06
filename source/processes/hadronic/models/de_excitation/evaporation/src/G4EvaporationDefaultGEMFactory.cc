@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by J. M. Quesada (July 2009) on base of V. Lara code
 // V.Ivanchenko cleanup
@@ -196,10 +194,6 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationDefaultGEMFactory::GetChannel(
   theChannel->push_back( new G4Mg27GEMChannel() );     // Mg27
   theChannel->push_back( new G4Mg28GEMChannel() );     // Mg28
 
-  size_t nn = theChannel->size();
-  for(size_t i=1; i<nn; ++i) { 
-    (*theChannel)[i]->SetPhotonEvaporation(thePhotonEvaporation);
-  }
   return theChannel;
 }
 

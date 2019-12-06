@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ExN02DetectorMessenger.hh
+/// \file ExN02DetectorMessenger.hh
 /// \brief Definition of the ExN02DetectorMessenger class
 //
 //

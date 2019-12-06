@@ -176,6 +176,15 @@
 
 /** @} */
 
+/** @defgroup extended_medical_dna_dnadamage1 dnadamage1
+ *  Medical dna dnadamage1 example has its
+ *  <a href="../html_dnadamage1/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_medical_dna_dnaphysics dnaphysics
  *  Medical dna dnaphysics example has its
  *  <a href="../html_dnaphysics/html/index.html">standalone documentation </a>
@@ -206,6 +215,15 @@
 /** @defgroup extended_medical_dna_microdosimetry microdosimetry
  *  Medical dna microdosimetry example has its
  *  <a href="../html_microdosimetry/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_microprox microprox
+ *  Medical dna microprox example has its
+ *  <a href="../html_microprox/html/index.html">standalone documentation </a>
  *  @ingroup extended_medical_dna
  *  @{
  */
@@ -251,6 +269,15 @@
 /** @defgroup extended_medical_dna_slowing slowing
  *  Medical dna slowing example has its
  *  <a href="../html_slowing/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_splitting splitting
+ *  Medical dna splitting example has its
+ *  <a href="../html_splitting/html/index.html">standalone documentation </a>
  *  @ingroup extended_medical_dna
  *  @{
  */

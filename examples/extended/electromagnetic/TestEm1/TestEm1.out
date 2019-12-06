@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -73,38 +77,38 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
+ Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.076 cm 
                        Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.950 g/mole
+   --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
          --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:  0.063 %
          --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance: 99.600 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
+ Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.880 cm 
                        Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
+   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm 
+ Material:  Silicon    density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.660 cm 
                        Imean: 173.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.090 g/mole
+   --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
          --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:  4.683 %
          --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:  3.087 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Chromium    density:  7.140 g/cm3   RadL:   2.093 cm   Nucl.Int.Length:  18.295 cm 
+ Material: Chromium    density:  7.140 g/cm3   RadL:   2.093 cm   Nucl.Int.Length:  18.296 cm 
                        Imean: 257.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Cr (Cr)   Z = 24.0   N =    52   A = 51.990 g/mole
+   --->  Element: Cr (Cr)   Z = 24.0   N =    52   A = 51.996 g/mole
          --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:  4.345 %
          --->  Isotope:  Cr52   Z = 24   N =  52   A =  51.94 g/mole   abundance: 83.789 %
          --->  Isotope:  Cr53   Z = 24   N =  53   A =  52.94 g/mole   abundance:  9.501 %
@@ -115,7 +119,7 @@
  Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm 
                        Imean: 350.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.610 g/mole
+   --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.613 g/mole
          --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance: 20.840 %
          --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance: 27.540 %
          --->  Isotope:  Ge73   Z = 32   N =  73   A =  72.92 g/mole   abundance:  7.730 %
@@ -146,10 +150,10 @@
           ElmMassFraction:  67.10 %  ElmAbundance  21.05 % 
 
 
- Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
+ Material:     Iron    density:  7.870 g/cm3   RadL:   1.758 cm   Nucl.Int.Length:  16.999 cm 
                        Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.850 g/mole
+   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
          --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance: 91.754 %
          --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:  2.119 %
@@ -160,7 +164,7 @@
  Material: Tungsten    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm 
                        Imean: 727.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: W (W)   Z = 74.0   N =   184   A = 183.850 g/mole
+   --->  Element: W (W)   Z = 74.0   N =   184   A = 183.842 g/mole
          --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:  0.120 %
          --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance: 26.500 %
          --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance: 14.310 %
@@ -172,15 +176,15 @@
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm 
                        Imean: 790.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Au (Au)   Z = 79.0   N =   197   A = 196.970 g/mole
+   --->  Element: Au (Au)   Z = 79.0   N =   197   A = 196.967 g/mole
          --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.000 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm 
+ Material:     Lead    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm 
                        Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.190 g/mole
+   --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.217 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
          --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance: 24.100 %
          --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance: 22.100 %
@@ -191,14 +195,14 @@
  Material:  Uranium    density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.446 cm 
                        Imean: 890.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: U (U)   Z = 92.0   N =   238   A = 238.030 g/mole
+   --->  Element: U (U)   Z = 92.0   N =   238   A = 238.029 g/mole
          --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:  0.005 %
          --->  Isotope:  U235   Z = 92   N = 235   A = 235.04 g/mole   abundance:  0.720 %
          --->  Isotope:  U238   Z = 92   N = 238   A = 238.05 g/mole   abundance: 99.275 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: ArgonGas    density:  1.782 mg/cm3  RadL: 109.702 m    Nucl.Int.Length: 671.417 m  
+ Material: ArgonGas    density:  1.782 mg/cm3  RadL: 109.701 m    Nucl.Int.Length: 671.415 m  
                        Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
@@ -222,7 +226,7 @@
           ElmMassFraction:  17.38 %  ElmAbundance  71.43 % 
 
 
- Material: ArgonButane    density:  1.835 mg/cm3  RadL: 128.398 m    Nucl.Int.Length: 522.307 m  
+ Material: ArgonButane    density:  1.835 mg/cm3  RadL: 128.397 m    Nucl.Int.Length: 522.306 m  
                        Imean: 119.578 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
@@ -242,7 +246,7 @@
           ElmMassFraction:   5.22 %  ElmAbundance  57.49 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -259,7 +263,7 @@
          --->  Isotope: Lu176   Z = 71   N = 176   A = 175.94 g/mole   abundance:  2.590 %
           ElmMassFraction:  76.40 %  ElmAbundance  25.00 % 
 
-   --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.090 g/mole
+   --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
          --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:  4.683 %
          --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:  3.087 %
@@ -273,6 +277,7 @@
 
 
 
+PhysicsList::AddPhysicsList: <emstandard_opt3>
 G4NIELCalculator: is created with the model <ICRU49NucStopping>
 /control/cout/ignoreThreadsExcept 0
 /run/numberOfThreads 2
@@ -284,10 +289,76 @@ Command is ignored.
 /testem/det/setSize 10 m
 #
 /testem/phys/addPhysics emstandard_opt0
+PhysicsList::AddPhysicsList: <emstandard_opt0>
 ###/testem/phys/addPhysics  local
+/process/em/printParameters
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Spline of EM tables enabled                        1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use integral approach for tracking                 1
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins in tables                           84
+Number of bins per decade of a table               7
+Verbose level                                      0
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary is added to the list of secondary        100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           1
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Factor of cut reduction for sub-cutoff method      1
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit 0.01
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Msc lateral displacement beyond geometry safety    0
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
 #
 /run/setCut 1 mm
-/process/eLoss/CSDARange true
 #
 /run/initialize
 
@@ -350,43 +421,42 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.390000s Real=1.402145s Sys=0.000000s
+  User=1.360000s Real=1.364241s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit:   99.8 MeV
+ Total energy deposit:   99.781 MeV
  NIEL energy calculated: 0 eV 
 
- Nb tracks/event   neutral:  25.375   charged:  138.49
- Nb  steps/event   neutral:  140.72   charged:  204.99
+ Nb tracks/event   neutral:   25.26   charged:  136.98
+ Nb  steps/event   neutral:  138.99   charged:  202.92
 
  Process calls frequency :
-          CoulombScat=      1                  Rayl=  17919        Transportation=   1893
-              annihil=   2928                 compt= 212779                  conv=   2922
-                eBrem=  46011                 eIoni= 360643                   msc=    386
-                 phot=  45939 
+          CoulombScat=      1                  Rayl=  17566        Transportation=   1806
+              annihil=   2870                 compt= 209885                  conv=   2849
+                eBrem=  45904                 eIoni= 356673                   msc=    393
+                 phot=  45872 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 10.965 cm    rms = 3.8375 cm 
- proj Range = 9.5384 cm    rms = 3.568 cm 
- proj/true  = 0.86989
- transverse dispersion at end = 1.6112 cm 
-      mass true Range from simulation = 29.606 g/cm2 
-       from PhysicsTable (csda range) = 32.1 g/cm2 
+ true Range = 11.028 cm    rms = 3.8268 cm 
+ proj Range = 9.5963 cm    rms = 3.5427 cm 
+ proj/true  = 0.87014
+ transverse dispersion at end = 1.6082 cm 
+      mass true Range from simulation = 29.777 g/cm2 
+       from PhysicsTable (csda range) = 32.101 g/cm2 
 ---------------------------------------------------------
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2031873584265960620, 622507089045045433, 22422546016843345, 495435721881672961, 206001911099862491, 770722890597424911, 1066394520851527311, 880415356861482673, 1742530766070595907, 1657507365339702529, 1926583258781533475, 812616883571229806, 1022991302094510677, 554724334253111068, 2070248109427892588, 535330816359514199, 1042845930388460343} counter= 6sumtot= 1320251322410512680
+N=17 V[N]={2090744789413038816, 475879386275182165, 924531448196777844, 92377436340311393, 601456480160915675, 9686027926653626, 767742483283484663, 536406349517635873, 1354210716166253206, 1479278801726113282, 77339136822577430, 1196822274643004463, 622119559967609975, 360524712356395728, 882337799694944936, 1172945503122491279, 1030203382258304970} counter= 8sumtot= 2145391241803225569
 ---------------------------------------
 #
 /gun/particle proton
-#
 /run/beamOn 2000
 
 ========= Table of registered couples ==============================
@@ -405,7 +475,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2031873584265960620, 622507089045045433, 22422546016843345, 495435721881672961, 206001911099862491, 770722890597424911, 1066394520851527311, 880415356861482673, 1742530766070595907, 1657507365339702529, 1926583258781533475, 812616883571229806, 1022991302094510677, 554724334253111068, 2070248109427892588, 535330816359514199, 1042845930388460343} counter= 6sumtot= 1320251322410512680
+N=17 V[N]={2090744789413038816, 475879386275182165, 924531448196777844, 92377436340311393, 601456480160915675, 9686027926653626, 767742483283484663, 536406349517635873, 1354210716166253206, 1479278801726113282, 77339136822577430, 1196822274643004463, 622119559967609975, 360524712356395728, 882337799694944936, 1172945503122491279, 1030203382258304970} counter= 8sumtot= 2145391241803225569
 ---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
@@ -420,42 +490,42 @@ N=17 V[N]={2031873584265960620, 622507089045045433, 22422546016843345, 495435721
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.080000s Real=0.074285s Sys=0.000000s
+  User=0.080000s Real=0.080563s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
  Total energy deposit:   100 MeV
- NIEL energy calculated: 231.28 eV 
+ NIEL energy calculated: 232.77 eV 
 
- Nb tracks/event   neutral:       0   charged:   1.007
- Nb  steps/event   neutral:       0   charged:  19.282
+ Nb tracks/event   neutral:       0   charged:  1.0065
+ Nb  steps/event   neutral:       0   charged:  19.291
 
  Process calls frequency :
-          CoulombScat=     39      RadioactiveDecay=     14                 hIoni=  38498
-              ionIoni=     14 
+          CoulombScat=     40      RadioactiveDecay=     13                 hIoni=  38517
+              ionIoni=     13 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.7116 cm    rms = 402.76 um 
- proj Range = 3.7031 cm    rms = 430.51 um 
- proj/true  = 0.99771
- transverse dispersion at end = 1.1551 mm 
-      mass true Range from simulation = 10.021 g/cm2 
-       from PhysicsTable (csda range) = 10.012 g/cm2 
+ true Range = 3.7123 cm    rms = 415.06 um 
+ proj Range = 3.704 cm    rms = 433.14 um 
+ proj/true  = 0.99778
+ transverse dispersion at end = 1.1193 mm 
+      mass true Range from simulation = 10.023 g/cm2 
+       from PhysicsTable (csda range) = 10.013 g/cm2 
 ---------------------------------------------------------
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1974224681893168029, 1965629350189180792, 2149446006452828190, 836335630534088439, 1835111934799833733, 2285826079354604722, 1901053091689188819, 653388806531699075, 186055322664990869, 171399043059235721, 788477970145032726, 253565281565090958, 439145741967805911, 1018099360741507957, 2151496725065425995, 1592975707546752145, 229850192346479570} counter= 14sumtot= 1985336852837362043
+N=17 V[N]={296756897984105786, 1164811784697120503, 1171919472061075883, 421455147284807038, 1207912060203907402, 444694195851482312, 1380924689904180074, 311060254420373099, 1250571243352452049, 707429322479082321, 430172947419961621, 1538635309822350742, 208161032916273555, 1062535583841882684, 578006669208780032, 69005964079513711, 176339073698693468} counter= 10sumtot= 891176603157572525
 ---------------------------------------
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.038 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.036 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

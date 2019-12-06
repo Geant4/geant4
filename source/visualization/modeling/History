@@ -19,6 +19,43 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+19 November 2019 Gabriele Cosmo (modeling-V10-05-11)
+- Fixed more cases of implicit type conversions.
+
+15 November 2019 Gabriele Cosmo (modeling-V10-05-10)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+19 September 2019  Makoto Asai (modeling-V10-05-09)
+- G4PSHitsModel.cc
+  o Namespace scope is added to MeshScoreMap
+  o Co-working with detutils-V10-05-01
+
+29 August 2019  John Allison (modeling-V10-05-08)
+- Part of vis-V10-05-24.
+- Add G4TessellatedSolid to list of solids that may be specially treated
+
+16 July 2019  John Allison  (modeling-V10-05-07)
+- Part of vis-V10-05-22.
+- G4CallbackModel.hh:
+  o Include modelling parameters in passed arguments.
+
+05 July 2019  John Allison  (modeling-V10-05-06)
+- Part of vis-V10-05-21.
+- Rationalise trajectory line drawing.
+  o There is a flag - DrawLine - which controls whether a trajectory
+    should be drawn at all:
+      /vis/modeling/trajectories/drawByCharge-0/default/setDrawLine 
+    but there is also a lineVisible command, which should do the same.:
+      /vis/modeling/trajectories/drawByCharge-0/default/setLineVisible
+    This is fixed in this tag.
+  o I think there was some confusion between "visible" as used by filtering
+    and "visible" as used in drawing. For example in
+      G4TrajectoryDrawByCharge::Draw
+      (const G4VTrajectory& traj, const G4bool& /*visible*/)
+    the argument visible is the former sense but it is (was) interpreted as
+    visible in the latter sense. As you see, I have suppressed its use in
+    this and similar functions.
+
 13 June 2019  John Allison  (modeling-V10-05-04)
 - Part of vis-V10-05-20.
 - G4ModelingParameters:

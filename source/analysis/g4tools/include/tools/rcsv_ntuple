@@ -40,6 +40,7 @@ namespace tools {
 namespace rcsv {
 
 class ntuple : public virtual read::intuple {
+  typedef read::intuple parent;
 public: //read::intuple
   virtual void start() {
     m_reader.clear();
@@ -78,6 +79,20 @@ public: //read::intuple
   }
 
   virtual const std::vector<read::icol*>& columns() const {return m_cols;}
+
+  virtual const std::string& title() const {return m_title;}
+
+  virtual bool number_of_entries(tools::uint64 & a_value) const {
+    if(!m_sep) {a_value = 0;return false;} //not inited.
+    ntuple& self = const_cast<ntuple&>(*this);
+    if(m_rows==(-1)) {
+      self.m_rows = 0;
+      self.start();
+      while(self.next()) {self.m_rows++;}
+    }
+    a_value = (uint64)m_rows;
+    return true;
+  }
 public:
   template <class T>
   class column : public virtual read::icolumn<T> {
@@ -113,7 +128,8 @@ public:
     virtual ~column(){}
   protected:
     column(const column& a_from)
-    :read::intuple(a_from),parent(a_from)
+    :read::icol(a_from)
+    ,parent(a_from)
     ,m_name(a_from.m_name) 
     ,m_tmp(a_from.m_tmp)
     ,m_user_var(a_from.m_user_var)
@@ -147,6 +163,7 @@ public:
   ,m_sep(0)
   ,m_vec_sep(';')
   ,m_sz(0)
+  ,m_rows(-1)
   ,m_hippo(false)
   {
 #ifdef TOOLS_MEM
@@ -161,12 +178,13 @@ public:
   }
 protected:
   ntuple(const ntuple& a_from)
-  :read::intuple(a_from)
+  :parent(a_from)
   ,m_reader(a_from.m_reader)
   ,m_title(a_from.m_title)
   ,m_sep(a_from.m_sep)
   ,m_vec_sep(a_from.m_vec_sep)
   ,m_sz(a_from.m_sz)
+  ,m_rows(-1)
   ,m_hippo(a_from.m_hippo)
   {
 #ifdef TOOLS_MEM
@@ -178,6 +196,7 @@ protected:
     m_sep = a_from.m_sep;
     m_vec_sep = a_from.m_vec_sep;
     m_hippo = a_from.m_hippo;
+    m_rows = a_from.m_rows;
     return *this;
   }
 public:
@@ -202,8 +221,8 @@ public:
       return false;
     } //file empty.
 
-    std::string title;
-    if(!read_line(a_reader,sz,title)) return false;
+    std::string _title;
+    if(!read_line(a_reader,sz,_title)) return false;
     std::string s;
     if(!read_line(a_reader,sz,s)) return false;
     if(s.find('\t')==std::string::npos) return false;
@@ -297,6 +316,7 @@ public:
     safe_clear<read::icol>(m_cols);
     m_sep = 0;
     m_sz = 0;
+    m_rows = -1;
 
     if(a_suffix.empty()) {
       a_out << "tools::rcsv::ntuple::initialize : expect a column suffix." << std::endl;
@@ -317,16 +337,18 @@ public:
 
     std::vector<std::string> labels;
     if(m_hippo) { //skip first two lines :
-      std::string title;
-      if(!read_line(m_reader,m_sz,title)) {
+      std::string _title;
+      if(!read_line(m_reader,m_sz,_title)) {
         a_out << "tools::rcsv::ntuple::initialize : read_line() failed." << std::endl;
         m_sz = 0;
+        m_rows = -1;
         return false;
       }
       std::string s;
       if(!read_line(m_reader,m_sz,s)) {
         a_out << "tools::rcsv::ntuple::initialize : (2) read_line() failed." << std::endl;
         m_sz = 0;
+        m_rows = -1;
 	return false;
       }
       words(s,"\t",false,labels); //false for glast.tnt that has a trailing \t.
@@ -335,7 +357,8 @@ public:
     }
     if(m_reader.tellg()>=m_sz) {
       a_out << "tools::rcsv::ntuple::initialize : tellg() >= sz." << std::endl;
-      m_sz=0;
+      m_sz = 0;
+      m_rows = -1;
       return false;
     }
 
@@ -353,6 +376,7 @@ public:
             << " first datat line is empty."
             << std::endl;
       m_sz = 0;
+      m_rows = -1;
       return false;
     }}
     if(a_verbose) a_out << "first data line \"" << sfirst << "\"" << std::endl;
@@ -370,6 +394,7 @@ public:
               << " first line does not start with a number."
               << std::endl;
         m_sz = 0;
+        m_rows = -1;
         return false;
       }
       if(a_verbose) a_out << "first number " << d << " ending at pos " << pos << std::endl;
@@ -378,6 +403,7 @@ public:
               << " no separator found in first line."
               << std::endl;
         m_sz = 0;
+        m_rows = -1;
         return false;
       }
       strm.get(m_sep);
@@ -414,6 +440,7 @@ public:
           safe_clear<read::icol>(m_cols);
           m_sep = 0;
           m_sz = 0;
+          m_rows = -1;
           return false;
         }      
       }      
@@ -455,6 +482,7 @@ public:
             << std::endl;
       m_sep = 0;
       m_sz = 0;
+      m_rows = -1;
       return false;
     }
 
@@ -550,6 +578,7 @@ public:
     safe_clear<read::icol>(m_cols);
     m_sep = 0;
     m_sz = 0;
+    m_rows = -1;
     m_hippo = false;
 
     m_reader.clear();
@@ -619,6 +648,7 @@ public:
         safe_clear<read::icol>(m_cols);
         m_sep = 0;
         m_sz = 0;
+        m_rows = -1;
         m_hippo = false;
         return false;
       }
@@ -1020,6 +1050,7 @@ protected:
   char m_vec_sep;
   std::vector<read::icol*> m_cols;
   std::streampos m_sz;
+  int m_rows; //to optimize number_of_entries().
   bool m_hippo;
 };
 

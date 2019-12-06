@@ -15,7 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+Oct 30st, 2019, A. Zaborowska (gflash-V10-05-01)
+- Add possibility to use sensitive detector from parallel world.
+
 Jan 31st, 2019, I.Hrivnacova (gflash-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 

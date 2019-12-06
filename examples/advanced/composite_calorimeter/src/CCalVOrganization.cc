@@ -31,7 +31,7 @@
 #include "G4TouchableHistory.hh"
 #include "globals.hh"
 
-int CCalVOrganization::Levels(const G4Step* aStep) const {
+G4int CCalVOrganization::Levels(const G4Step* aStep) const {
 
   //Find number of levels
   G4TouchableHistory* theTouchable = 
@@ -40,13 +40,13 @@ int CCalVOrganization::Levels(const G4Step* aStep) const {
 }
 
 
-void CCalVOrganization::DetectorLevel(const G4Step* aStep, int& level,
-				     int* copyno, G4String* name) const {
+void CCalVOrganization::DetectorLevel(const G4Step* aStep, G4int& level,
+                                     G4int* copyno, G4String* name) const {
 
   //Get name and copy numbers
   G4TouchableHistory* theTouchable = 
     (G4TouchableHistory*)( aStep->GetPreStepPoint()->GetTouchable() );
-  for ( int ii = 0; ii < level; ii++ ) {
+  for ( G4int ii = 0; ii < level; ++ii ) {
     name[ level - ii - 1 ]   = theTouchable->GetVolume(ii)->GetName();
     copyno[ level - ii - 1 ] = theTouchable->GetReplicaNumber(ii);
   }

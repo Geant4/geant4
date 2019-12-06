@@ -23,15 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VDigitizerModule implementation
 //
-//
+// Author: M.Asai
+// --------------------------------------------------------------------
 
 #include "G4VDigitizerModule.hh"
 #include "G4VDigiCollection.hh"
 #include "G4DigiManager.hh"
 
-G4VDigitizerModule::G4VDigitizerModule(G4String modName)
-:verboseLevel(0)
+G4VDigitizerModule::G4VDigitizerModule(const G4String& modName)
+ : verboseLevel(0)
 {
   moduleName = modName;
   DigiManager = G4DigiManager::GetDMpointer();
@@ -40,11 +42,15 @@ G4VDigitizerModule::G4VDigitizerModule(G4String modName)
 G4VDigitizerModule::~G4VDigitizerModule()
 {;}
 
-G4bool G4VDigitizerModule::operator==(const G4VDigitizerModule &right) const
-{ return (moduleName==right.moduleName); }
+G4bool G4VDigitizerModule::operator==(const G4VDigitizerModule& right) const
+{
+  return (moduleName==right.moduleName);
+}
 
-G4bool G4VDigitizerModule::operator!=(const G4VDigitizerModule &right) const
-{ return (moduleName!=right.moduleName); }
+G4bool G4VDigitizerModule::operator!=(const G4VDigitizerModule& right) const
+{
+  return (moduleName!=right.moduleName);
+}
 
 void G4VDigitizerModule::StoreDigiCollection(G4VDigiCollection* aDC)
 {

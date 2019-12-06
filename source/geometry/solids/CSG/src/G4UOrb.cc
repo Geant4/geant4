@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
 // Implementation for G4UOrb wrapper class
+//
+// 30.10.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 
 #include "G4Orb.hh"

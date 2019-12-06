@@ -1264,6 +1264,22 @@ G4AtomicShells_XDB_EADL::GetNumberOfElectrons(G4int Z, G4int ShellNb)
   return fNumberOfElectrons[fIndexOfShells[Z] + ShellNb];
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4int    
+G4AtomicShells_XDB_EADL::GetNumberOfFreeElectrons(G4int Z, G4double th)
+{
+#ifdef G4VERBOSE
+  if(Z<0 || Z>120) { Z = PrintErrorZ(Z, "GetNumberOfFreeElectrons"); }
+#endif
+  G4int idx = fIndexOfShells[Z];
+  G4int idxmax = idx +  fNumberOfShells[Z];
+  G4int n = 0;
+  for (G4int i=idx; i<idxmax; ++i) {
+    if(fBindingEnergies[i] <= th) { n += fNumberOfElectrons[i]; } 
+  }
+  return n;
+}
 
 G4double G4AtomicShells_XDB_EADL::GetTotalBindingEnergy(G4int Z)
 {

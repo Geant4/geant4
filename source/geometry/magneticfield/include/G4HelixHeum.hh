@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4HelixHeum
+// G4HelixHeum
 //
 // Class description:
 //
@@ -36,10 +33,8 @@
 //               3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
 // Third order solver.
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 03/11/98
+// Author: W.Wander <wwc@mit.edu>, 03/11/1998
 // -------------------------------------------------------------------
-
 #ifndef G4HELIXHEUM_HH
 #define G4HELIXHEUM_HH
 
@@ -48,21 +43,19 @@
 class G4HelixHeum : public G4MagHelicalStepper
 {
 
-  public:  // with description
+  public: // with description
 
-    G4HelixHeum(G4Mag_EqRhs *EqRhs)
-      : G4MagHelicalStepper(EqRhs) {}
-
-    ~G4HelixHeum() {}
+    G4HelixHeum(G4Mag_EqRhs *EqRhs);
+    ~G4HelixHeum();
   
     void DumbStepper( const G4double y[],
-                            G4ThreeVector  Bfld,
-                            G4double       h,
-                            G4double       yout[]);
+                            G4ThreeVector Bfld,
+                            G4double      h,
+                            G4double      yout[] );
 
   public: // without description
   
-    G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const { return 2; }
 };
 
-#endif /* G4HELIXHEUM_HH */
+#endif

@@ -215,34 +215,33 @@ namespace G4TrajectoryDrawerUtils {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if (0 == pVVisManager) return;
     
-    if (myContext.GetDrawLine()) {
+    if (myContext.GetDrawLine() && myContext.GetLineVisible()) {
       G4VisAttributes trajectoryLineAttribs(myContext.GetLineColour());
       trajectoryLineAttribs.SetLineWidth(myContext.GetLineWidth());
-      trajectoryLineAttribs.SetVisibility(myContext.GetLineVisible());
       trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
 
       pVVisManager->Draw(trajectoryLine);
     }
   
-    if (myContext.GetDrawAuxPts() && (auxiliaryPoints.size() > 0)) {
+    if (myContext.GetDrawAuxPts() && myContext.GetAuxPtsVisible()
+        && (auxiliaryPoints.size() > 0)) {
       auxiliaryPoints.SetMarkerType(myContext.GetAuxPtsType());
       auxiliaryPoints.SetSize(myContext.GetAuxPtsSizeType(), myContext.GetAuxPtsSize());
       auxiliaryPoints.SetFillStyle(myContext.GetAuxPtsFillStyle());
 
       G4VisAttributes auxiliaryPointsAttribs(myContext.GetAuxPtsColour());  
-      auxiliaryPointsAttribs.SetVisibility(myContext.GetAuxPtsVisible());
       auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
 
       pVVisManager->Draw(auxiliaryPoints);
     }
   
-    if (myContext.GetDrawStepPts() && (stepPoints.size() > 0)) {
+    if (myContext.GetDrawStepPts() && myContext.GetStepPtsVisible()
+        && (stepPoints.size() > 0)) {
       stepPoints.SetMarkerType(myContext.GetStepPtsType());
       stepPoints.SetSize(myContext.GetStepPtsSizeType(), myContext.GetStepPtsSize());
       stepPoints.SetFillStyle(myContext.GetStepPtsFillStyle());
 
       G4VisAttributes stepPointsAttribs(myContext.GetStepPtsColour()); 
-      stepPointsAttribs.SetVisibility(myContext.GetStepPtsVisible());
       stepPoints.SetVisAttributes(&stepPointsAttribs);
 
       pVVisManager->Draw(stepPoints);
@@ -262,10 +261,9 @@ namespace G4TrajectoryDrawerUtils {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if (0 == pVVisManager) return;
 
-    if (myContext.GetDrawLine()) {
+    if (myContext.GetDrawLine() && myContext.GetLineVisible()) {
       G4VisAttributes trajectoryLineAttribs(myContext.GetLineColour());
       trajectoryLineAttribs.SetLineWidth(myContext.GetLineWidth());
-      trajectoryLineAttribs.SetVisibility(myContext.GetLineVisible());
 
       for (size_t i = 1; i < trajectoryLine.size(); ++i ) {
 	G4Polyline slice;
@@ -278,9 +276,9 @@ namespace G4TrajectoryDrawerUtils {
       }
     }
 
-    if (myContext.GetDrawAuxPts() && (auxiliaryPoints.size() > 0)) {
+    if (myContext.GetDrawAuxPts() && myContext.GetAuxPtsVisible()
+        && (auxiliaryPoints.size() > 0)) {
       G4VisAttributes auxiliaryPointsAttribs(myContext.GetAuxPtsColour());  
-      auxiliaryPointsAttribs.SetVisibility(myContext.GetAuxPtsVisible());
 
       for (size_t i = 0; i < auxiliaryPoints.size(); ++i ) {
 	G4Polymarker point;
@@ -295,9 +293,9 @@ namespace G4TrajectoryDrawerUtils {
       }
     }
 
-    if (myContext.GetDrawStepPts() && (stepPoints.size() > 0)) {
+    if (myContext.GetDrawStepPts() && myContext.GetStepPtsVisible()
+        && (stepPoints.size() > 0)) {
       G4VisAttributes stepPointsAttribs(myContext.GetStepPtsColour()); 
-      stepPointsAttribs.SetVisibility(myContext.GetStepPtsVisible());
 
       for (size_t i = 0; i < stepPoints.size(); ++i ) {
 	G4Polymarker point;

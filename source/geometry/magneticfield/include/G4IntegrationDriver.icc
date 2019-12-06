@@ -23,22 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4IntegrationDriver inline implementation
 //
-//
-//
-// class G4IntegrationDriver
-//
-// Class description:
-//
-// Driver class which controls the integration error of a 
-// Runge-Kutta stepper 
-
-// History:
-// - Created. D.Sorokin
+// Author: Dmitry Sorokin, Google Summer of Code 2017
+// Supervision: John Apostolakis, CERN
 // --------------------------------------------------------------------
 
 #include "G4FieldUtils.hh"
-
 
 template <class T>
 G4IntegrationDriver<T>::
@@ -70,12 +61,30 @@ G4IntegrationDriver<T>::~G4IntegrationDriver()
 {
 #ifdef G4VERBOSE
     if (fVerboseLevel > 0)
+    {
        G4cout << "G4Integration Driver Stats: "
               << "#QuickAdvance " << fNoQuickAvanceCalls
               << " - #AccurateAdvance " << fNoAccurateAdvanceCalls << " "
               << "#good steps " << fNoAccurateAdvanceGoodSteps << " "
               << "#bad steps " << fNoAccurateAdvanceBadSteps << G4endl;
+    }
 #endif
+}
+
+template <class T>
+G4double G4IntegrationDriver<T>::AdvanceChordLimited(G4FieldTrack& track, 
+                                                     G4double stepMax, 
+                                                     G4double epsStep,
+                                                     G4double chordDistance)
+{
+    return ChordFinderDelegate::AdvanceChordLimitedImpl(track, stepMax, epsStep,
+                                                        chordDistance);
+}
+
+template <class T>
+void G4IntegrationDriver<T>::OnStartTracking()
+{
+    ChordFinderDelegate::ResetStepEstimate();
 }
 
 // Runge-Kutta driver with adaptive stepsize control. Integrate starting
@@ -83,6 +92,7 @@ G4IntegrationDriver<T>::~G4IntegrationDriver()
 // On output ystart is replaced by values at the end of the integration 
 // interval. RightHandSide is the right-hand side of ODE system. 
 // The source is similar to odeint routine from NRC p.721-722 .
+//
 template <class T>
 G4bool G4IntegrationDriver<T>::
 AccurateAdvance(G4FieldTrack& track, G4double hstep,
@@ -103,7 +113,8 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
     {
         std::ostringstream message;
         message << "Invalid run condition." << G4endl
-                << "Proposed step is negative; hstep = " << hstep << "." << G4endl
+                << "Proposed step is negative; hstep = " << hstep << "."
+                << G4endl
                 << "Requested step cannot be negative! Aborting event.";
         G4Exception("G4IntegrationDriver::AccurateAdvance()", 
                     "GeomField0003", EventMustBeAborted, message);
@@ -149,10 +160,10 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
         {
             G4FieldTrack yFldTrk('0');
             G4double dchord_step, dyerr, dyerr_len;
-            yFldTrk.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables()); 
+            yFldTrk.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables());
             yFldTrk.SetCurveLength(curveLength);
 
-            QuickAdvance(yFldTrk, dydx, h, Base::UNKNOWN_CURVATURE_RADIUS, dchord_step, dyerr_len);
+            QuickAdvance(yFldTrk, dydx, h, dchord_step, dyerr_len);
 
             yFldTrk.DumpToArray(y);
          
@@ -169,8 +180,8 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
             lastStepSucceeded = (dyerr <= eps);
         }
 
-        if (lastStepSucceeded)  { noFullIntegr++; }
-        else                    { noSmallIntegr++; }
+        if (lastStepSucceeded)  { ++noFullIntegr; }
+        else                    { ++noSmallIntegr; }
 
         const G4ThreeVector EndPos =
             field_utils::makeVector(y, field_utils::Value3D::Position);
@@ -191,7 +202,8 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
     }
     // Have we reached the end ?
     // --> a better test might be x-endCurveLength > an_epsilon
-    succeeded = (curveLength >= endCurveLength);  // If it was a "forced" last step
+    succeeded = (curveLength >= endCurveLength);
+      // If it was a "forced" last step
 
     track.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables());
     track.SetCurveLength(curveLength);
@@ -211,6 +223,7 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
 // Edition, by William H. Press, Saul A. Teukolsky, William T.
 // Vetterling, and Brian P. Flannery (Cambridge University Press 1992),
 // 16.2 Adaptive StepSize Control for Runge-Kutta, p. 719
+//
 template <class T>
 void G4IntegrationDriver<T>::OneGoodStep(G4double y[],           // InOut
                                          const G4double dydx[],
@@ -235,8 +248,8 @@ void G4IntegrationDriver<T>::OneGoodStep(G4double y[],           // InOut
         tot_no_trials++;
 
         Base::GetStepper()->Stepper(y, dydx, h, ytemp, yerr); 
-        error2 = field_utils::relativeError2(y, yerr, std::max(h, fMinimumStep), eps_rel_max);
-    
+        error2 = field_utils::relativeError2(y, yerr, std::max(h, fMinimumStep),
+                                             eps_rel_max);
         if (error2 <= 1.0)
         {
             break; 
@@ -249,7 +262,8 @@ void G4IntegrationDriver<T>::OneGoodStep(G4double y[],           // InOut
         {
             std::ostringstream message;
             message << "Stepsize underflow in Stepper !" << G4endl
-                    << "- Step's start x=" << curveLength << " and end x= " << xnew 
+                    << "- Step's start x=" << curveLength
+                    << " and end x= " << xnew 
                     << " are equal !! " << G4endl
                     << "  Due to step-size= " << h 
                     << ". Note that input step was " << htry;
@@ -266,13 +280,11 @@ void G4IntegrationDriver<T>::OneGoodStep(G4double y[],           // InOut
 }
 
 template <class T>
-G4bool G4IntegrationDriver<T>::
-QuickAdvance(G4FieldTrack& track,         // INOUT
-             const G4double dydx[],  
-             G4double hstep,
-             G4double /*inverseCurvatureRadius*/,
-             G4double& dchord_step,
-             G4double& dyerr)
+G4bool G4IntegrationDriver<T>::QuickAdvance(G4FieldTrack& track,    // INOUT
+                                      const G4double dydx[],  
+                                            G4double hstep,
+                                            G4double& dchord_step,
+                                            G4double& dyerr)
 {
     ++fNoQuickAvanceCalls;
 
@@ -311,9 +323,9 @@ void G4IntegrationDriver<T>::SetSmallestFraction(G4double newFraction)
 }
 
 template <class T>
-void G4IntegrationDriver<T>::
-CheckStep( const G4ThreeVector& posIn,
-           const G4ThreeVector& posOut, G4double hdid)
+void G4IntegrationDriver<T>::CheckStep(const G4ThreeVector& posIn,
+                                       const G4ThreeVector& posOut,
+                                             G4double hdid)
 {
     const G4double endPointDist = (posOut - posIn).mag();
     if (endPointDist >= hdid * (1. + CLHEP::perMillion))

@@ -23,23 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4CutTubs
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
+// Class description:
 //
 // G4CutTubs is a tube with possible cuts in +-Z.
-//           Implementation adapted from G4Tubs (subclass of G4Tubs) and
-//           from TGEo Ctube implementation (by A.Gheata, CERN)
+// Implementation adapted from G4Tubs (subclass of G4Tubs) and
+// from TGEo Ctube implementation (by A.Gheata, CERN)
 //
 // G4CutTubs(pName,pRMin,pRMax,pDZ,pSPhi,pEPhi,pLowNorm,pHighNorm)
 //           pName,pRMin,pRMax,pDZ,pSPhi,pEPhi are the same as for G4Tubs,
 //           pLowNorm=Outside Normal at -Z
 //           pHighNorm=Outsie Normal at +Z.
 
-// Author:   Tatiana Nikitina, CERN
+// Author: Tatiana Nikitina, CERN
 // --------------------------------------------------------------------
 
 #ifndef G4CUTTUBS_HH
@@ -119,8 +116,9 @@ class G4CutTubs : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
@@ -203,7 +201,7 @@ class G4CutTubs : public G4CSGSolid
       //
       // Cached trigonometric values
 
-    G4bool fPhiFullCutTube;
+    G4bool fPhiFullCutTube = false;
       //
       // Flag for identification of section or full tube
 

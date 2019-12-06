@@ -23,20 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UPolycone
 //
 // Class description:
 //
-//   Wrapper class for G4Polycone to make use of VecGeom Polycone.
+// Wrapper class for G4Polycone to make use of VecGeom Polycone.
 
-// History:
 // 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UPOLYCONE_HH
@@ -107,8 +99,8 @@ class G4UPolycone : public G4UAdapter<vecgeom::GenericUnplacedPolycone>
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4UPolycone( const G4UPolycone &source );
-    G4UPolycone &operator=( const G4UPolycone &source );
+    G4UPolycone( const G4UPolycone& source );
+    G4UPolycone& operator=( const G4UPolycone& source );
       // Copy constructor and assignment operator.
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;

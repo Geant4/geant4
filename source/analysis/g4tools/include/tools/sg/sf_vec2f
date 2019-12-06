@@ -25,6 +25,8 @@ public:
     parent::operator=(a_from);
     return *this;
   }
+public:
+  sf_vec2f& operator+=(const vec2f& a_value) {parent::operator+=(a_value);return *this;}
 public: //for iv2sg
   void setValue(const vec2f& a_v) {value(a_v);}
   void setValue(float a_0,float a_1) {value(vec2f(a_0,a_1));}

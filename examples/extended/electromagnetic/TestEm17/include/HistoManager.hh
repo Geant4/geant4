@@ -78,7 +78,7 @@ private:
 
   G4int            fNbHist;
   G4int            fHistId[kMaxHisto];
-  G4AnaH1*         fHistPt[kMaxHisto];
+  G4H1*            fHistPt[kMaxHisto];
   G4bool           fExist[kMaxHisto];
   G4String         fLabel[kMaxHisto];
   G4String         fTitle[kMaxHisto];

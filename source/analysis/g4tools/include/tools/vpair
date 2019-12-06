@@ -104,6 +104,19 @@ inline void sort_by_second(std::vector< std::pair<K,V> >& a_vec){
 }
 
 template <class K,class V>
+inline bool remove(std::vector< std::pair<K,V> >& a_vec,const K& a_key) {
+  typedef typename std::vector< std::pair<K,V> >::iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if((*it).first==a_key) {
+      a_vec.erase(it);
+      return true;
+    }
+  }
+  return false;
+}
+
+template <class K,class V>
 inline bool remove(std::vector< std::pair<K,V> >& a_vec,const K& a_key,bool a_delete) {
   typedef typename std::vector< std::pair<K,V> >::iterator it_t;
   it_t it;

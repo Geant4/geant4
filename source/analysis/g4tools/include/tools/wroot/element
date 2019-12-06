@@ -11,7 +11,7 @@
 namespace tools {
 namespace wroot {
 
-namespace streamer_info {
+namespace streamer__info {
 
   enum Type {              // sizeof :
     BASE = 0,              //  x
@@ -128,7 +128,7 @@ protected:
 public:
   virtual void setArrayDimension(int aDimension){
     fArrayDim = aDimension;
-    if(aDimension) fType += streamer_info::ARRAY;
+    if(aDimension) fType += streamer__info::ARRAY;
     //fNewType = fType;
   }
   virtual void setMaxIndex(int aDimension,int aMaximum){
@@ -179,11 +179,11 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_base(*this);}
 public:
   streamer_base(const std::string& aName,const std::string& aTitle,int aOffset,int aBaseVersion)
-  :streamer_element(aName,aTitle,aOffset,streamer_info::BASE,"BASE")
+  :streamer_element(aName,aTitle,aOffset,streamer__info::BASE,"BASE")
   ,fBaseVersion(aBaseVersion)
   {
-    if (aName=="TObject") fType = streamer_info::TOBJECT;
-    if (aName=="TNamed") fType = streamer_info::TNAMED;
+    if (aName=="TObject") fType = streamer__info::TOBJECT;
+    if (aName=="TNamed") fType = streamer__info::TNAMED;
   }
   virtual ~streamer_base(){}
 public:
@@ -237,12 +237,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_short(*this);}
 public:
   streamer_short(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::SHORT,"Short_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::SHORT,"Short_t")
   {}
   streamer_short(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::SHORT,"Short_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::SHORT,"Short_t")
   {
-    aOffset += streamer_info::size_SHORT;
+    aOffset += streamer__info::size_SHORT;
   }
   virtual ~streamer_short(){}
 public:
@@ -255,12 +255,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_int(*this);}
 public:
   streamer_int(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::INT,"Int_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::INT,"Int_t")
   {}
   streamer_int(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::INT,"Int_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::INT,"Int_t")
   {
-    aOffset += streamer_info::size_INT;
+    aOffset += streamer__info::size_INT;
   }
   virtual ~streamer_int(){}
 public:
@@ -273,12 +273,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_uint(*this);}
 public:
   streamer_uint(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_INT,"UInt_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::UNSIGNED_INT,"UInt_t")
   {}
   streamer_uint(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_INT,"UInt_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::UNSIGNED_INT,"UInt_t")
   {
-    aOffset += streamer_info::size_UINT;
+    aOffset += streamer__info::size_UINT;
   }
   virtual ~streamer_uint(){}
 public:
@@ -291,12 +291,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_float(*this);}
 public:
   streamer_float(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::FLOAT,"Float_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::FLOAT,"Float_t")
   {}
   streamer_float(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::FLOAT,"Float_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::FLOAT,"Float_t")
   {
-    aOffset += streamer_info::size_FLOAT;
+    aOffset += streamer__info::size_FLOAT;
   }
   virtual ~streamer_float(){}
 public:
@@ -309,12 +309,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_double(*this);}
 public:
   streamer_double(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Double_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::DOUBLE,"Double_t")
   {}
   streamer_double(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Double_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::DOUBLE,"Double_t")
   {
-    aOffset += streamer_info::size_DOUBLE;
+    aOffset += streamer__info::size_DOUBLE;
   }
   virtual ~streamer_double(){}
 public:
@@ -327,12 +327,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_stat_t(*this);}
 public:
   streamer_stat_t(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Stat_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::DOUBLE,"Stat_t")
   {}
   streamer_stat_t(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::DOUBLE,"Stat_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::DOUBLE,"Stat_t")
   {
-    aOffset += streamer_info::size_DOUBLE;
+    aOffset += streamer__info::size_DOUBLE;
   }
   virtual ~streamer_stat_t(){}
 public:
@@ -345,12 +345,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_bool(*this);}
 public:
   streamer_bool(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_CHAR,"Bool_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::UNSIGNED_CHAR,"Bool_t")
   {}
   streamer_bool(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_basic_type(aName,aTitle,aOffset,streamer_info::UNSIGNED_CHAR,"Bool_t")
+  :streamer_basic_type(aName,aTitle,aOffset,streamer__info::UNSIGNED_CHAR,"Bool_t")
   {
-    aOffset += streamer_info::size_BOOL;
+    aOffset += streamer__info::size_BOOL;
   }
   virtual ~streamer_bool(){}
 public:
@@ -383,7 +383,7 @@ public:
                          const std::string& aCountClass,
                          int aCountVersion,
                          const std::string& aTypeName)
-  :streamer_element(aName,aTitle,aOffset,aType+streamer_info::POINTER,aTypeName)
+  :streamer_element(aName,aTitle,aOffset,aType+streamer__info::POINTER,aTypeName)
   ,fCountVersion(aCountVersion)
   ,fCountName(aCountName)
   ,fCountClass(aCountClass)
@@ -426,12 +426,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_string(*this);}
 public:
   streamer_string(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_element(aName,aTitle,aOffset,streamer_info::_TSTRING,"TString")
+  :streamer_element(aName,aTitle,aOffset,streamer__info::_TSTRING,"TString")
   {}
   streamer_string(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_element(aName,aTitle,aOffset,streamer_info::_TSTRING,"TString")
+  :streamer_element(aName,aTitle,aOffset,streamer__info::_TSTRING,"TString")
   {
-    aOffset += streamer_info::size_TString;
+    aOffset += streamer__info::size_TString;
   }
   virtual ~streamer_string(){}
 public:
@@ -458,9 +458,9 @@ public: //streamer_element
 public:
   streamer_object(const std::string& aName,const std::string& aTitle,int aOffset,const std::string& aTypeName)
   :streamer_element(aName,aTitle,aOffset,0,aTypeName){
-    fType = streamer_info::OBJECT;
-    if (aName=="TObject") fType = streamer_info::TOBJECT;
-    if (aName=="TNamed") fType = streamer_info::TNAMED;
+    fType = streamer__info::OBJECT;
+    if (aName=="TObject") fType = streamer__info::TOBJECT;
+    if (aName=="TNamed") fType = streamer__info::TNAMED;
   }
   virtual ~streamer_object(){}
 public:
@@ -489,8 +489,8 @@ public: //streamer_element
 public:
   streamer_object_pointer(const std::string& aName,const std::string& aTitle,
                           int aOffset,const std::string& aTypeName)
-  :streamer_element(aName,aTitle,aOffset,streamer_info::OBJECT_POINTER,aTypeName){
-    if(aTitle.substr(0,2)=="->") fType = streamer_info::OBJECT_ARROW;
+  :streamer_element(aName,aTitle,aOffset,streamer__info::OBJECT_POINTER,aTypeName){
+    if(aTitle.substr(0,2)=="->") fType = streamer__info::OBJECT_ARROW;
   }
   virtual ~streamer_object_pointer(){}
 public:
@@ -519,7 +519,7 @@ public: //streamer_element
 public:
   streamer_object_any(const std::string& aName,const std::string& aTitle,
                       int aOffset,const std::string& aTypeName)
-  :streamer_element(aName,aTitle,aOffset,streamer_info::OBJECT_ANY,aTypeName)
+  :streamer_element(aName,aTitle,aOffset,streamer__info::OBJECT_ANY,aTypeName)
   {}
   virtual ~streamer_object_any(){}
 public:
@@ -553,7 +553,7 @@ protected:
                   kSTLlist   =  2,  kSTLdeque   =  3,   kSTLmap    = 4,
                   kSTLset    =  5,  kSTLmultimap=6,     kSTLmultiset=7};
 
-  // Instead of EDataType, we use the Streamer_Info::Type.
+  // Instead of EDataType, we use the streamer__info::Type.
   //enum EDataType {
   //   kChar_t  = 1, kUChar_t  = 11, kShort_t = 2,  kUShort_t = 12,
   //   kInt_t   = 3, kUInt_t   = 13, kLong_t  = 4,  kULong_t  = 14,
@@ -562,7 +562,7 @@ protected:
 public:
   streamer_STL(const std::string& aName,const std::string& aTitle,
                int aOffset,
-               streamer_info::Type aType, //Must match TDataType/EDataType
+               streamer__info::Type aType, //Must match TDataType/EDataType
                const std::string& aTypeName)
   :streamer_element(aName,aTitle,aOffset,kSTL,aTypeName){
     fSTLtype = kSTLvector;

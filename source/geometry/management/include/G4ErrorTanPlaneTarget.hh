@@ -23,21 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
+// G4ErrorTanPlaneTarget
 //
 // Class Description:
 //
 // Base class for G4ErrorTarget classes for which a tangent plane is defined.
 
-// History:
-// - Created. P. Arce, September 2004
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-
 #ifndef G4ErrorTanPlaneTarget_hh
 #define G4ErrorTanPlaneTarget_hh
 

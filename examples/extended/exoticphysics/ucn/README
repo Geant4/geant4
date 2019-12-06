@@ -67,9 +67,10 @@ This example exhibits the functionality of UCN physics
 
  3- AN EVENT : THE PRIMARY GENERATOR
 
-     The primary kinematic consists of a single ultra-colde neutron 
-     (uniform between 1neV and 100neV from the origin uniform into 4pi
-
+     The primary kinematic consists of a single ultra-cold neutron,
+     uniform between 1neV and 100neV, from the origin and uniform
+     into 4pi solid angle.
+      
      A RUN is a set of events.
 
 

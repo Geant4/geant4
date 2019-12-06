@@ -85,13 +85,11 @@ G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
   SetProcessSubType(TRANSPORTATION);  
 
 
-#ifdef G4MULTITHREADED
   // Do not finalize the G4MonopoleTransportation class 
-  if (G4Threading::IsMasterThread())
+  if (G4Threading::IsMasterThread() && G4Threading::IsMultithreadedApplication() )
     {
       return;
     }
-#endif
 
   const DetectorConstruction* detector = 
     static_cast<const DetectorConstruction*>

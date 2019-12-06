@@ -4,9 +4,8 @@
 #ifndef tools_wroot_mpi_basket_add
 #define tools_wroot_mpi_basket_add
 
+#include "mpi_send_basket"
 #include "branch"
-#include "mpi_protocol"
-#include "../impi"
 
 namespace tools {
 namespace wroot {
@@ -14,38 +13,10 @@ namespace wroot {
 class mpi_basket_add : public virtual branch::iadd_basket {
   typedef branch::iadd_basket parent;
 public:
-  virtual bool add_basket(basket& a_basket) {
-    m_mpi.pack_reset();
-    if(!m_mpi.pack(mpi_protocol_basket())) return false;
-    if(!m_mpi.pack(m_id)) return false;
-    if(!m_mpi.pack(m_icol)) return false;
-    
-    if(!m_mpi.spack(a_basket.object_name())) return false;
-    if(!m_mpi.spack(a_basket.object_title())) return false;
-
-    if(!m_mpi.pack(a_basket.last())) return false;
-    if(!m_mpi.pack(a_basket.nev_buf_size())) return false;
-    if(!m_mpi.pack(a_basket.nev())) return false;
-      
-    if(a_basket.entry_offset()) {
-      if(!m_mpi.bpack(true)) return false;
-      if(!m_mpi.pack(a_basket.nev_buf_size(),a_basket.entry_offset())) return false;
-    } else {
-      if(!m_mpi.bpack(false)) return false;
-    }
-
-    if(a_basket.displacement()) {
-      if(!m_mpi.bpack(true)) return false;
-      if(!m_mpi.pack(a_basket.nev_buf_size(),a_basket.displacement())) return false;
-    } else {
-      if(!m_mpi.bpack(false)) return false;
-    }
-
-    if(!m_mpi.pack(a_basket.datbuf().length(),a_basket.datbuf().buf())) return false;
-
-    if(!m_mpi.send_buffer(m_dest,m_tag)) return false;
-      
-    return true;
+  virtual bool add_basket(basket* a_basket) {
+    bool status = mpi_send_basket(m_mpi,m_dest,m_tag,m_id,m_icol,*a_basket);
+    delete a_basket;
+    return status;
   }
 public:
   mpi_basket_add(impi& a_mpi,int a_dest,int a_tag,uint32 a_id,uint32 a_icol)

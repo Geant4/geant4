@@ -541,7 +541,7 @@ protected:
   }
 
   bool write_streamer_infos() {
-    obj_list<StreamerInfo> sinfos;
+    obj_list<streamer_info> sinfos;
     fill_infos(sinfos,m_out);
 
     if(sinfos.empty()) return false;
@@ -550,7 +550,7 @@ protected:
 
     if(!sinfos.stream(bref)) {
       m_out << "tools::wroot::file::write_streamer_infos :" 
-            << " cannot stream obj_list<StreamerInfo>."
+            << " cannot stream obj_list<streamer_info>."
             << std::endl;
       return false;
     }

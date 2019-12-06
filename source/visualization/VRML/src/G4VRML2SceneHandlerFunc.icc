@@ -712,11 +712,11 @@ G4double      G4VRML2SCENEHANDLER::SetPVTransparency ()
 
 	G4double	TRANSPARENCY = 0.7   ;	// initialization
 						
-	if( getenv( "G4VRML_TRANSPARENCY" ) != NULL ) {
+	if( std::getenv( "G4VRML_TRANSPARENCY" ) != NULL ) {
 
 		// get a value from the env value
 //		sscanf( getenv("G4VRML_TRANSPARENCY"), "%lg", &TRANSPARENCY ) ;
-          std::istringstream iss( getenv("G4VRML_TRANSPARENCY") );
+          std::istringstream iss( std::getenv("G4VRML_TRANSPARENCY") );
           iss >> TRANSPARENCY;
 
 		// truncation

@@ -44,9 +44,6 @@
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
 
-using namespace std;
-using namespace CLHEP;
-
 class G4ParticleDefinition;
 class G4PhysicsLogVector;
 class G4PhysicsTable;
@@ -106,7 +103,7 @@ inline  G4double G4NeutronElectronElModel::CalculateAm( G4double Tkin)
   fee      = (Tkin+fM)*fme/fM;
     // G4cout<<"fee = "<<fee<<" MeV"<<G4endl;
   fee2     = fee*fee;
-  G4double   momentum = sqrt( fee2 - fme2 );
+  G4double   momentum = std::sqrt( fee2 - fme2 );
   G4double k   = momentum/CLHEP::hbarc;
   G4double ch  = 1.13;
   G4double zn  = 1.77*k*CLHEP::Bohr_radius;

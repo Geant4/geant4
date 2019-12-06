@@ -979,8 +979,8 @@ G4bool G4FRSCENEHANDLER::IsVisible()
 	  fpViewer->GetApplicableVisAttributes( fpVisAttribs );
 
 	//----- 
-	if( ( getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ) != NULL      )   && \
-	    ( strcmp( getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ),"0"  ) ) && \
+	if( ( std::getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ) != NULL      )   && \
+	    ( strcmp( std::getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ),"0"  ) ) && \
 	    ( pVisAttribs )                                             ) 
 	{
 		visibility = pVisAttribs->IsVisible();

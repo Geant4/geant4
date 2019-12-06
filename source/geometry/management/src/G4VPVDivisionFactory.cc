@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // class G4VPVDivisionFactory Implementation file
 //
-// Author: Ivana Hrivnacova, 4.5.2004  (Ivana.Hrivnacova@cern.ch)
+// Author: Ivana Hrivnacova, 4.5.2004
 // ------------------------------------------------------------------------
 
 #include "G4VPVDivisionFactory.hh"
 
-G4ThreadLocal G4VPVDivisionFactory* G4VPVDivisionFactory::fgInstance = 0;
+G4ThreadLocal G4VPVDivisionFactory* G4VPVDivisionFactory::fgInstance = nullptr;
 
 //_____________________________________________________________________________
 

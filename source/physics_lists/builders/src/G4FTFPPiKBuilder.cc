@@ -50,7 +50,7 @@
 G4FTFPPiKBuilder::
 G4FTFPPiKBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
@@ -131,4 +131,3 @@ Build(G4KaonZeroSInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
- // 2002 by J.P. Wellisch

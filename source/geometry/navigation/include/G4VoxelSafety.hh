@@ -64,10 +64,10 @@ class G4VoxelSafety
 
     G4double ComputeSafety( const G4ThreeVector&     localPoint,
                             const G4VPhysicalVolume& currentPhysical, 
-                                  G4double           maxLength=DBL_MAX );
+                                  G4double           maxLength = DBL_MAX );
 
     inline G4int GetVerboseLevel() const { return fVerbose; } 
-    inline void  SetVerboseLevel(G4int level) { fVerbose= level; } 
+    inline void  SetVerboseLevel(G4int level) { fVerbose = level; } 
       //
       // If level>0 && G4VERBOSE, printout can occur
 
@@ -77,15 +77,15 @@ class G4VoxelSafety
                                     const G4ThreeVector& localPoint,
                                     G4double maxLength,
                                     const G4VPhysicalVolume& currentPhysical,
-                                    G4double  distUpperDepth = 0.0,
-                                    G4double  previousMinSafety= DBL_MAX
+                                    G4double distUpperDepth = 0.0,
+                                    G4double previousMinSafety = DBL_MAX
                                    );
 
-    G4double  SafetyForVoxelNode(   const G4SmartVoxelNode *curVoxelNode,
-                              const G4ThreeVector& localPoint ); 
+    G4double  SafetyForVoxelNode( const G4SmartVoxelNode *curVoxelNode,
+                                  const G4ThreeVector& localPoint ); 
 
     G4SmartVoxelNode* VoxelLocateLight( G4SmartVoxelHeader* pHead,
-                                        const G4ThreeVector& localPoint ) const;
+                                  const G4ThreeVector& localPoint ) const;
   private:
 
     // BEGIN State - values used during computation of Safety 
@@ -93,11 +93,11 @@ class G4VoxelSafety
     G4BlockingList fBlockList;
       // Blocked volumes
 
-    G4LogicalVolume* fpMotherLogical;
+    G4LogicalVolume* fpMotherLogical = nullptr;
 
     //  BEGIN Voxel Stack information
     //
-    G4int fVoxelDepth;
+    G4int fVoxelDepth = -1;
       // Note: fVoxelDepth==0+ => fVoxelAxisStack(0+) contains axes of voxel
       //       fVoxelDepth==-1 -> not in voxel
 
@@ -116,14 +116,14 @@ class G4VoxelSafety
     std::vector<const G4SmartVoxelHeader*> fVoxelHeaderStack;
       // Voxel headers at each level
 
-    G4SmartVoxelNode* fVoxelNode;
+    G4SmartVoxelNode* fVoxelNode = nullptr;
       // Node containing last located point
 
     //
     //  END Voxel Stack information
 
-    G4bool fCheck;
-    G4int  fVerbose;
+    G4bool fCheck = false;
+    G4int fVerbose = 0;
     G4double kCarTolerance;
 };
 

@@ -45,7 +45,7 @@
 #include "G4UIcommand.hh"
 #include "G4VVisManager.hh"
 
-G4TheMTRayTracer* G4TheMTRayTracer::theInstance = 0;
+G4TheMTRayTracer* G4TheMTRayTracer::theInstance = nullptr;
 
 G4TheMTRayTracer::G4TheMTRayTracer(G4VFigureFileMaker* figMaker,
 			       G4VRTScanner* scanner)
@@ -103,10 +103,10 @@ void G4TheMTRayTracer::Trace(const G4String& fileName)
   colorR = new unsigned char[nPixel];
   colorG = new unsigned char[nPixel];
   colorB = new unsigned char[nPixel];
-  unsigned char defR = (unsigned char)(int(255*backgroundColour.GetRed()));
-  unsigned char defG = (unsigned char)(int(255*backgroundColour.GetGreen()));
-  unsigned char defB = (unsigned char)(int(255*backgroundColour.GetBlue()));
-  for(G4int ii=0;ii<nPixel;ii++)
+  unsigned char defR = (unsigned char)(G4int(255*backgroundColour.GetRed()));
+  unsigned char defG = (unsigned char)(G4int(255*backgroundColour.GetGreen()));
+  unsigned char defB = (unsigned char)(G4int(255*backgroundColour.GetBlue()));
+  for(G4int ii=0;ii<nPixel;++ii)
   {
     colorR[ii] = defR;
     colorG[ii] = defG;
@@ -169,14 +169,14 @@ G4bool G4TheMTRayTracer::CreateBitMap()
   if(!theRun) return false;
 
   G4THitsMap<G4Colour>* colMap = theRun->GetMap(); 
-  std::map<G4int,G4Colour*>::iterator itr = colMap->GetMap()->begin();
-  for(;itr!=colMap->GetMap()->end();itr++)
+  auto itr = colMap->GetMap()->cbegin();
+  for(;itr!=colMap->GetMap()->cend();++itr)
   {
     G4int key = itr->first;
     G4Colour* col = itr->second;
-    colorR[key] = (unsigned char)(int(255*col->GetRed()));
-    colorG[key] = (unsigned char)(int(255*col->GetGreen()));
-    colorB[key] = (unsigned char)(int(255*col->GetBlue()));
+    colorR[key] = (unsigned char)(G4int(255*col->GetRed()));
+    colorG[key] = (unsigned char)(G4int(255*col->GetGreen()));
+    colorB[key] = (unsigned char)(G4int(255*col->GetBlue()));
   }  
 
   theScanner->Initialize(nRow,nColumn);

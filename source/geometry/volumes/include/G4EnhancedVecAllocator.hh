@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-// GEANT 4 class header file 
-//
 // Class Description:
 //
 // A class for fast allocation of STL vectors through a static pool.
@@ -44,8 +38,6 @@
 #define G4EnhancedVecAllocator_h 1
 
 #include "G4Types.hh"
-
-// #include <cstdlib>
 
 typedef struct
 {
@@ -118,7 +110,7 @@ void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, size_t _Count)
   G4int found = -1;
   if (G4AllocStats::allocStat != 0)
   {
-    for (G4int j = 0 ; j < G4AllocStats::numCat ; j++)
+    for (auto j = 0 ; j < G4AllocStats::numCat ; ++j)
     {
       if (G4AllocStats::allocStat[j].size == (_Count * sizeof(_Tp)))
       {
@@ -131,7 +123,7 @@ void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, size_t _Count)
 
   G4ChunkIndexType& chunk = G4AllocStats::allocStat[found];
 
-  for (G4int k = 0; k < chunk.totalspace; k++)
+  for (auto k = 0; k < chunk.totalspace; ++k)
   {
     if ( (chunk.preAllocated[k]).address == ((char *) _Ptr))
     {
@@ -159,7 +151,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
   G4int found = -1;
   if (G4AllocStats::allocStat != 0)
   {
-    for (G4int j = 0 ; j < G4AllocStats::numCat ; j++)
+    for (auto j = 0 ; j < G4AllocStats::numCat ; ++j)
     {
       if (G4AllocStats::allocStat[j].size == totalsize)
       {
@@ -171,7 +163,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
 
   if (found == -1)  // Find the new size
   {
-    G4AllocStats::numCat++;
+    ++G4AllocStats::numCat;
     if (G4AllocStats::numCat > G4AllocStats::totSpace)
     {
       G4AllocStats::totSpace = G4AllocStats::totSpace + 128;
@@ -206,7 +198,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
       // failure in allocating extra space for instances !
     // assert(newSpace1 != 0);
 
-    for (G4int k = 0; k < 512 ; k++)
+    for (auto k = 0; k < 512 ; ++k)
     {
       (chunk.preAllocated[k]).isAllocated = 0;
       (chunk.preAllocated[k]).address = newSpace1+totalsize*k;
@@ -220,7 +212,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
 
   // assert(chunk.size == totalsize);
 
-  for (G4int k = 0; k < chunk.totalspace; k++)
+  for (auto k = 0; k < chunk.totalspace; ++k)
   {
     if ((chunk.preAllocated[k]).isAllocated == 0)
     { 
@@ -244,7 +236,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
     // failure in allocating extra space for instances !
   // assert(newSpace != 0);
 
-  for (G4int k = 0; k < 512 ; k++)
+  for (auto k = 0; k < 512 ; ++k)
   {
     (chunk.preAllocated[originalchunknumber+k]).isAllocated = 0;
     (chunk.preAllocated[originalchunknumber+k]).address = newSpace+totalsize*k;
@@ -261,7 +253,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
 //
 template<typename _T1, typename _T2>
 inline G4bool operator==(const G4EnhancedVecAllocator<_T1>&,
-                       const G4EnhancedVecAllocator<_T2>&)
+                         const G4EnhancedVecAllocator<_T2>&)
 { return true; }
 
 // ************************************************************
@@ -270,7 +262,7 @@ inline G4bool operator==(const G4EnhancedVecAllocator<_T1>&,
 //
 template<typename _T1, typename _T2>
 inline G4bool operator!=(const G4EnhancedVecAllocator<_T1>&,
-                       const G4EnhancedVecAllocator<_T2>&)
+                         const G4EnhancedVecAllocator<_T2>&)
 { return false; }
 
 #endif

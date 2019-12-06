@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EquationOfMotion inline methods implementation 
 //
-//
-//
-//  Inline implementation 
-//
+// Created: J.Apostolakis, 1998
 // -------------------------------------------------------------------
-
-inline
-G4EquationOfMotion::G4EquationOfMotion(G4Field* pField) 
-    : itsField(pField)
-{}
 
 inline
 const G4Field* G4EquationOfMotion::GetFieldObj() const
@@ -54,13 +47,15 @@ void G4EquationOfMotion::SetFieldObj(G4Field* pField)
 }
 
 inline
-void G4EquationOfMotion::GetFieldValue(const G4double Point[4], G4double Field[]) const
+void G4EquationOfMotion::GetFieldValue(const G4double Point[4],
+                                             G4double Field[]) const
 {
     itsField->GetFieldValue(Point, Field);
 }
 
 inline
-void G4EquationOfMotion::RightHandSide(const G4double y[], G4double dydx[]) const
+void G4EquationOfMotion::RightHandSide(const G4double y[],
+                                             G4double dydx[]) const
 {
     G4double Field[G4Field::MAX_NUMBER_OF_COMPONENTS];
     G4double PositionAndTime[4];
@@ -76,3 +71,20 @@ void G4EquationOfMotion::RightHandSide(const G4double y[], G4double dydx[]) cons
     EvaluateRhsGivenB(y, Field, dydx);
 }
 
+inline
+void G4EquationOfMotion::EvaluateRhsReturnB( const G4double y[],
+                                                   G4double dydx[],
+                                                   G4double Field[] ) const
+{
+     G4double  PositionAndTime[4];
+
+     // Position
+     PositionAndTime[0] = y[0];
+     PositionAndTime[1] = y[1];
+     PositionAndTime[2] = y[2];
+     // Global Time
+     PositionAndTime[3] = y[7];  // See G4FieldTrack::LoadFromArray
+
+     GetFieldValue(PositionAndTime, Field) ;
+     EvaluateRhsGivenB( y, Field, dydx );
+}

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
@@ -37,55 +36,57 @@
 #include "G4PairingCorrection.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4NuclearLevelData.hh"
+#include "G4VFissionBarrier.hh"
+#include "G4FissionBarrier.hh"
+#include "G4FissionProbability.hh"
+#include "G4VLevelDensityParameter.hh"
+#include "G4FissionLevelDensityParameter.hh"
 #include "G4Pow.hh"
-#include "G4Exp.hh"
+#include "Randomize.hh"
 #include "G4RandomDirection.hh"
 #include "G4PhysicalConstants.hh"
 
 G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
 {
   theFissionBarrierPtr = new G4FissionBarrier;
-  MyOwnFissionBarrier = true;
+  myOwnFissionBarrier = true;
 
   theFissionProbabilityPtr = new G4FissionProbability;
-  MyOwnFissionProbability = true;
+  myOwnFissionProbability = true;
   
   theLevelDensityPtr = new G4FissionLevelDensityParameter;
-  MyOwnLevelDensity = true;
+  myOwnLevelDensity = true;
 
-  MaximalKineticEnergy = 0.0;
-  FissionBarrier = 0.0;
-  FissionProbability = 0.0;
+  maxKineticEnergy = fissionBarrier = fissionProbability = 0.0;
   pairingCorrection = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
 }
 
 G4CompetitiveFission::~G4CompetitiveFission()
 {
-  if (MyOwnFissionBarrier) delete theFissionBarrierPtr;
-  if (MyOwnFissionProbability) delete theFissionProbabilityPtr;
-  if (MyOwnLevelDensity) delete theLevelDensityPtr;
+  if (myOwnFissionBarrier) delete theFissionBarrierPtr;
+  if (myOwnFissionProbability) delete theFissionProbabilityPtr;
+  if (myOwnLevelDensity) delete theLevelDensityPtr;
 }
 
 G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
 {
-  G4int anA = fragment->GetA_asInt();
-  FissionProbability = 0.0;
-  if (anA >= 65) {
-    G4int aZ  = fragment->GetZ_asInt();
-    G4double ExEnergy = fragment->GetExcitationEnergy() - 
-      pairingCorrection->GetFissionPairingCorrection(anA,aZ);
+  G4int Z = fragment->GetZ_asInt();
+  G4int A = fragment->GetA_asInt();
+  fissionProbability = 0.0;
+  // Saddle point excitation energy ---> A = 65
+  if (A >= 65 && Z > 16) {
+    G4double exEnergy = fragment->GetExcitationEnergy() - 
+      pairingCorrection->GetFissionPairingCorrection(A, Z);
   
-    // Saddle point excitation energy ---> A = 65
-    // Fission is excluded for A < 65
-    if (ExEnergy > 0.0) {
-      FissionBarrier = theFissionBarrierPtr->FissionBarrier(anA,aZ,ExEnergy);
-      MaximalKineticEnergy = ExEnergy - FissionBarrier;
-      FissionProbability = 
+    if (exEnergy > 0.0) {
+      fissionBarrier = theFissionBarrierPtr->FissionBarrier(A, Z, exEnergy);
+      maxKineticEnergy = exEnergy - fissionBarrier;
+      fissionProbability = 
 	theFissionProbabilityPtr->EmissionProbability(*fragment,
-						      MaximalKineticEnergy);
+						      maxKineticEnergy);
     }
   }
-  return FissionProbability;
+  return fissionProbability;
 }
 
 G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)
@@ -108,7 +109,7 @@ G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)
   G4LorentzVector theNucleusMomentum = theNucleus->GetMomentum();
 
   // Calculate fission parameters
-  theParam.DefineParameters(A, Z, U-pcorr, FissionBarrier);
+  theParam.DefineParameters(A, Z, U-pcorr, fissionBarrier);
   
   // First fragment
   G4int A1 = 0;
@@ -253,14 +254,14 @@ G4CompetitiveFission::MassDistribution(G4double x, G4int A)
   // which consist of symmetric and asymmetric sum of gaussians components.
 {
   G4double y0 = (x-theParam.GetAs())/theParam.GetSigmaS();
-  G4double Xsym = G4Exp(-0.5*y0*y0);
+  G4double Xsym = LocalExp(y0);
 
   G4double y1 = (x - theParam.GetA1())/theParam.GetSigma1();
   G4double y2 = (x - theParam.GetA2())/theParam.GetSigma2();
   G4double z1 = (x - A + theParam.GetA1())/theParam.GetSigma1();
   G4double z2 = (x - A + theParam.GetA2())/theParam.GetSigma2();
-  G4double Xasym = G4Exp(-0.5*y1*y1) + G4Exp(-0.5*y2*y2) 
-    + 0.5*( G4Exp(-0.5*z1*z1) + G4Exp(-0.5*z2*z2));
+  G4double Xasym = LocalExp(y1) + LocalExp(y2) 
+    + 0.5*(LocalExp(z1) + LocalExp(z2));
 
   G4double res;
   G4double w = theParam.GetW();
@@ -305,21 +306,21 @@ G4CompetitiveFission::FissionKineticEnergy(G4int A, G4int Z,
   if (theParam.GetW() <= 1000) { 
     G4double x1 = (AfMax-theParam.GetA1())/theParam.GetSigma1();
     G4double x2 = (AfMax-theParam.GetA2())/theParam.GetSigma2();
-    Pas = 0.5*G4Exp(-0.5*x1*x1) + G4Exp(-0.5*x2*x2);
+    Pas = 0.5*LocalExp(x1) + LocalExp(x2);
   }
 
   G4double Ps = 0.0;
   if (theParam.GetW() >= 0.001) {
     G4double xs = (AfMax-theParam.GetAs())/theParam.GetSigmaS();
-    Ps = theParam.GetW()*G4Exp(-0.5*xs*xs);
+    Ps = theParam.GetW()*LocalExp(xs);
   }
-  G4double Psy = Ps/(Pas+Ps);
+  G4double Psy = (Pas + Ps > 0.0) ? Ps/(Pas+Ps) : 0.5;
 
   // Fission fractions Xsy and Xas formed in symmetric and asymmetric modes
   G4double PPas = theParam.GetSigma1() + 2.0 * theParam.GetSigma2();
   G4double PPsy = theParam.GetW() * theParam.GetSigmaS();
-  G4double Xas = PPas / (PPas+PPsy);
-  G4double Xsy = PPsy / (PPas+PPsy);
+  G4double Xas = (PPas + PPsy > 0.0) ? PPas/(PPas+PPsy) : 0.5;
+  G4double Xsy = 1.0 - Xas;
 
   // Average kinetic energy for symmetric and asymmetric components
   G4double Eaverage = (0.1071*(Z*Z)/G4Pow::GetInstance()->Z13(A) + 22.2)*CLHEP::MeV;
@@ -364,4 +365,26 @@ G4CompetitiveFission::FissionKineticEnergy(G4int A, G4int Z,
   return KineticEnergy;
 }
 
+void G4CompetitiveFission::SetFissionBarrier(G4VFissionBarrier * aBarrier)
+{
+  if (myOwnFissionBarrier) delete theFissionBarrierPtr;
+  theFissionBarrierPtr = aBarrier;
+  myOwnFissionBarrier = false;
+}
+
+void 
+G4CompetitiveFission::SetEmissionStrategy(G4VEmissionProbability * aFissionProb)
+{
+  if (myOwnFissionProbability) delete theFissionProbabilityPtr;
+  theFissionProbabilityPtr = aFissionProb;
+  myOwnFissionProbability = false;
+}
+
+void 
+G4CompetitiveFission::SetLevelDensityParameter(G4VLevelDensityParameter* aLevelDensity)
+{ 
+  if (myOwnLevelDensity) delete theLevelDensityPtr;
+  theLevelDensityPtr = aLevelDensity;
+  myOwnLevelDensity = false;
+}
 

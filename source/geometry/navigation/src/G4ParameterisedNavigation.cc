@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // class G4ParameterisedNavigation Implementation
 //
 // Initial Author: P.Kent, 1996
@@ -57,8 +54,6 @@
 // ********************************************************************
 //
 G4ParameterisedNavigation::G4ParameterisedNavigation()
-  : fVoxelAxis(kUndefined), fVoxelNoSlices(0), fVoxelSliceWidth(0.),
-    fVoxelNodeNo(0), fVoxelHeader(0)
 {
 }
 
@@ -93,8 +88,8 @@ G4double G4ParameterisedNavigation::
   G4VSolid *motherSolid, *sampleSolid;
   G4ThreeVector sampleDirection;
   G4double ourStep=currentProposedStepLength, ourSafety;
-  G4double motherSafety, motherStep=DBL_MAX;
-  G4bool motherValidExitNormal=false;
+  G4double motherSafety, motherStep = DBL_MAX;
+  G4bool motherValidExitNormal = false;
   G4ThreeVector motherExitNormal;
   
   G4int sampleNo;
@@ -136,14 +131,14 @@ G4double G4ParameterisedNavigation::
       G4Exception("G4ParameterisedNavigation::ComputeStep()",
                   "GeomNav0003", FatalException, message); 
     }
-    if( motherSolid->Inside(localPoint)==kOutside )
+    if( motherSolid->Inside(localPoint) == kOutside )
     { 
       std::ostringstream message;
       message << "Point is outside Current Volume !" << G4endl
               << "          Point " << localPoint
               << " is outside current volume " << motherPhysical->GetName()
               << G4endl;
-      G4double  estDistToSolid= motherSolid->DistanceToIn(localPoint); 
+      G4double estDistToSolid = motherSolid->DistanceToIn(localPoint); 
       G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
              << estDistToSolid;
       if( estDistToSolid > 100.0 * motherSolid->GetTolerance() )
@@ -154,9 +149,11 @@ G4double G4ParameterisedNavigation::
                     "Point is far outside Current Volume !"); 
       }
       else
+      {
         G4Exception("G4ParameterisedNavigation::ComputeStep()",
                     "GeomNav1002", JustWarning, message,
-                    "Point is a little outside Current Volume."); 
+                    "Point is a little outside Current Volume.");
+      }
     }
 
     // Compute early:
@@ -184,10 +181,10 @@ G4double G4ParameterisedNavigation::
       validExitNormal = motherValidExitNormal;
       exitNormal = motherExitNormal;
     
-      *pBlockedPhysical= 0; // or motherPhysical ?
-      blockedReplicaNo= 0;  // or motherReplicaNumber ?
+      *pBlockedPhysical = nullptr; // or motherPhysical ?
+      blockedReplicaNo = 0;  // or motherReplicaNumber ?
     
-      newSafety= 0.0;
+      newSafety = 0.0;
       return ourStep;
     }
   }
@@ -269,8 +266,8 @@ G4double G4ParameterisedNavigation::
               if ( ( fCheck ) && ( sampleStep < kInfinity ) )
               {
                 G4ThreeVector intersectionPoint;
-                intersectionPoint= samplePoint + sampleStep * sampleDirection;
-                EInside insideIntPt= sampleSolid->Inside(intersectionPoint); 
+                intersectionPoint = samplePoint + sampleStep * sampleDirection;
+                EInside insideIntPt = sampleSolid->Inside(intersectionPoint); 
                 if( insideIntPt != kSurface )
                 {
                   G4int oldcoutPrec = G4cout.precision(16); 
@@ -322,7 +319,7 @@ G4double G4ParameterisedNavigation::
         noStep = false;
         entering = false;
         exiting = false;
-        *pBlockedPhysical = 0;
+        *pBlockedPhysical = nullptr;
         ourStep = kInfinity;
       }
       else
@@ -343,7 +340,8 @@ G4double G4ParameterisedNavigation::
           if( ( motherStep < 0.0 ) || ( motherStep >= kInfinity) )
           {
 #ifdef G4VERBOSE
-            fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
+            fLogger->ReportOutsideMother(localPoint, localDirection,
+                                         motherPhysical);
 #endif
             ourStep = motherStep = 0.0;
             // Rely on the code below to set the remaining state, i.e.
@@ -366,7 +364,7 @@ G4double G4ParameterisedNavigation::
             entering = false;
             if ( validExitNormal )
             {
-              const G4RotationMatrix *rot = motherPhysical->GetRotation();
+              const G4RotationMatrix* rot = motherPhysical->GetRotation();
               if (rot)
               {
                 exitNormal *= rot->inverse();
@@ -379,7 +377,7 @@ G4double G4ParameterisedNavigation::
           }
         }
       }
-      newSafety=ourSafety;
+      newSafety = ourSafety;
     }
     if (noStep)
     {
@@ -571,7 +569,7 @@ LocateNextVoxel( const G4ThreeVector& localPoint,
     if ( maxVal<curCoord )
     {
       newNodeNo = fVoxelNode->GetMaxEquivalentSliceNo()+1;
-      if ( newNodeNo<fVoxelHeader->GetNoSlices() )
+      if ( newNodeNo<G4int(fVoxelHeader->GetNoSlices()) )
       {
         fVoxelNodeNo = newNodeNo;
         fVoxelNode = fVoxelHeader->GetSlice(newNodeNo)->GetNode();
@@ -639,7 +637,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
 
   // Search replicated daughter volume
   //
-  for ( G4int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
+  for ( auto sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     replicaNo = motherVoxelNode->GetVolume(sampleNo);
     if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )

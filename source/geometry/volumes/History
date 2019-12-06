@@ -9,12 +9,45 @@
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+It DOES NOT substitute the log-message one should put at every
+commit in the repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 26th, 2019 G.Cosmo                - geomvol-V10-05-10
+- Fixed more cases of implicit type conversions from size_t to G4int.
+
+November 19th, 2019 G.Cosmo                - geomvol-V10-05-09
+- Fixed more cases of implicit type conversions.
+
+November 15th, 2019 G.Cosmo                - geomvol-V10-05-08
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+October 25th, 2019 J.Apostolakis & G.Cosmo - geomvol-V10-05-07
+- Fixed registration of G4PVParameterised daughter in mother
+  volume: to enable its true type to be recognised.
+  Needed to revise G4PVReplica (as it derives from it.)
+
+October 24th, 2019 J.Apostolakis & V.Vlachoudis - geomvol-V10-05-06
+- Added enablers for external navigation capability.
+  Added new virtual base class G4VExternalPhysicalVolume.
+
+October 23rd, 2019 J.Apostolakis           - geomvol-V10-05-05
+- Added new virtual VolumeType() method in Physical Volume types.
+  Requires and co-works with geommng-V10-05-11 and geomdiv-V10-05-02.
+
+August 22nd, 2019 G.Cosmo                  - geomvol-V10-05-04
+- Use pre-increment wherever possible.
+
+August 16th, 2019 E.Tcherniaev             - geomvol-V10-05-03
+- G4PVPlacement::CheckOverlaps(): complete revision, speed up,
+  improved warning messages.
+
+July 8th, 2019 G.Cosmo                     - geomvol-V10-05-02
+- Implemented c++11 revision: nullptr, auto, inline data initialisation,
+  const iterators, alias using statements.
 
 May 17th, 2019 W.Pokorski                  - geomvol-V10-05-01
 - Adding to G4AssemblyVolume a map of imprintID to G4Transform3D needed

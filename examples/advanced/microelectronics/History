@@ -7,6 +7,10 @@
 
                        Package History file
                        --------------------
+30.08.2019 - S. Guatelli - microelectronics-V10-05-00
+-G4VIS_USE cleaned. WARNING deleted when executing microelectronic.in.
+
+
 10 May 2018 - B. Morgan - microelectronics-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

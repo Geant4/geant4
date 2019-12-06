@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov  28, 2019 I. Hrivnacova   - fieldex01-V10-05-00
+- Fixed formatting in .README.txt
+
 Dec   4, 2018 J.Apostolakis   - fieldex01-V10-04-06
 - Corrections to use arguments of methods in F01RunAction. 
   Fixes compilation warnings.

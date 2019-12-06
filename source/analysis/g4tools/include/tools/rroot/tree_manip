@@ -11,7 +11,7 @@
 namespace tools {
 namespace rroot {
 
-inline tree* find_tree(file& a_file,ifac& a_fac,const std::string& a_name) {
+inline tree* find_tree(file& a_file,ifac& a_fac,const std::string& a_name,bool a_map_objs = false) {
   std::ostream& out = a_file.out();
   //out << "tools::rroot::find_tree : name : " << file << std::endl;
 
@@ -37,8 +37,6 @@ inline tree* find_tree(file& a_file,ifac& a_fac,const std::string& a_name) {
   //    << " get data buffer size " << sz << "."
   //    << std::endl;
 
-  buffer b(out,a_file.byte_swap(),sz,buf,key->key_length(),false);
-  
   if(key->object_class()!=TTree_cls()) {
     out << "tools::rroot::find_tree :"
         << " key object class "
@@ -48,6 +46,9 @@ inline tree* find_tree(file& a_file,ifac& a_fac,const std::string& a_name) {
     return 0;     
   }
      
+  buffer b(out,a_file.byte_swap(),sz,buf,key->key_length(),false);
+  b.set_map_objs(a_map_objs);
+  
   tree* _tree = new tree(a_file,a_fac);
   if(!_tree->stream(b)) {
     out << "tools::rroot::find_tree :"
@@ -88,18 +89,14 @@ inline stl_vector<T>* find_vec(ifile& a_file,branch_element& a_be,uint64 a_event
 
   unsigned int n;
   if(!a_be.find_entry(a_file,a_event,n)) {
-    out << "tools::rroot::find_vec :"
-        << " find event failed."
-        << std::endl;
+    out << "tools::rroot::find_vec : branch_element.find_entry() failed." << std::endl;
     return 0;     
   }
 
   iro* o = a_be.object();
   stl_vector<T>* od = id_cast<iro, stl_vector<T> >(*o);
   if(!od) {
-    out << "tools::rroot::find_vec :"
-        << " object not a tools::rroot::stl_vector<T>."
-        << std::endl;
+    out << "tools::rroot::find_vec : object not a tools::rroot::stl_vector<T>." << std::endl;
     return 0;     
   }
 
@@ -116,21 +113,21 @@ namespace rroot {
 template <class LEAF>
 inline bool find_leaf(tree& a_tree,const std::string& a_name,branch*& a_branch,LEAF*& a_leaf) {
   //used in MEMPHYS sim.
-  base_leaf* base_leaf = a_tree.find_leaf(a_name);
-  if(!base_leaf) {
+  base_leaf* _base_leaf = a_tree.find_leaf(a_name);
+  if(!_base_leaf) {
     a_tree.out() << "tools::rroot::find_leaf : base_leaf " << sout(a_name) << " not found." << std::endl;
     a_branch = 0;
     a_leaf = 0;
     return false;
   }
-  a_branch = a_tree.find_leaf_branch(*base_leaf);
+  a_branch = a_tree.find_leaf_branch(*_base_leaf);
   if(!a_branch) {
     a_tree.out() << "tools::rroot::find_leaf : branch of base_leaf " << sout(a_name) << " not found." << std::endl;
     a_branch = 0;
     a_leaf = 0;
     return false;
   }
-  a_leaf = safe_cast<rroot::base_leaf,LEAF>(*base_leaf); //rroot:: is needed, why ?
+  a_leaf = safe_cast<base_leaf,LEAF>(*_base_leaf);
   if(!a_leaf) {
     a_tree.out() << "tools::rroot::find_leaf : base_leaf " << sout(a_name) << " is not a LEAF." << std::endl;
     a_branch = 0;

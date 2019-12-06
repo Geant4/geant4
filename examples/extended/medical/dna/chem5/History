@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.11.2019 -  I. Hrivnacova       - chem5-V10-05-03
+- Fixed formatting in .README.txt
+
+11.09.2019 -  I. Hrivnacova       - chem5-V10-05-02
+- Removed unused include g4analysis_defs.hh from ScoreSpecies.cc
+
 10.03.2019 MK                     - chem5-V10-05-01
 - Fix: species hides a pointer
 

@@ -119,6 +119,7 @@ public: // With description
   virtual void AddSolid (const G4Ellipsoid&);
   virtual void AddSolid (const G4Polycone&);
   virtual void AddSolid (const G4Polyhedra&);
+  virtual void AddSolid (const G4TessellatedSolid&);
 
   // For solids not above.
   virtual void AddSolid (const G4VSolid&);

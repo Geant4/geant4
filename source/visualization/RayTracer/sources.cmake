@@ -114,17 +114,13 @@ if(GEANT4_USE_RAYTRACER_X11)
     #
     # Add source properties and additional LINK_LIBRARIES here
     #
-    # Need X11 includes!
-    include_directories(${X11_INCLUDE_DIR})
-
     # Must use G4VIS_BUILD_RAYTRACERX_DRIVER define
     GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_RAYTRACER_MODULE_SOURCES}
         COMPILE_DEFINITIONS G4VIS_BUILD_RAYTRACERX_DRIVER)
 
     # The X11 Libraries
-    list(APPEND G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES ${X11_LIBRARIES})
+    list(APPEND G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
 endif()
-    
 
 #
 # Define the Geant4 Module.

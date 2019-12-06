@@ -14,6 +14,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-2019 I. Hrivnacova (exdna-V10-05-03)
+- Fixed links and formatting in .README.txt
+- Added missing examples in CMakelists.txt
+
+20-11-2019 I. Hrivnacova (exdna-V10-05-02)
+- Updated README for newly added examples (S. Incerti)
+
+05-11-2019 H. Tran (exdna-V10-05-01)
+- Added check for no products reactions and 
+  fixed sequential mode in example dnadamage1
+
 26-12-2018 H. Tran (exdna-V10-05-00)
 - New example dnadamage1
 

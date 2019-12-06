@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessVector implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//  This class is a container for pointers to physics process objects.
 // ------------------------------------------------------------
 
 #include "G4VProcess.hh"
@@ -48,14 +43,14 @@ G4ProcessVector::G4ProcessVector(size_t siz)
 }
 
 G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
-  :pProcVector(nullptr)
+  : pProcVector(nullptr)
 {
   pProcVector = new G4ProcVector();
   
   // copy all contents in  pProcVector
   //
-  G4ProcVector::iterator i;
-  for (i = right.pProcVector->begin(); i!= right.pProcVector->end(); ++i){
+  for (auto i = right.pProcVector->begin(); i!= right.pProcVector->end(); ++i)
+  {
     pProcVector->push_back(*i);
   }
 }
@@ -66,7 +61,8 @@ G4ProcessVector::~G4ProcessVector()
 {
   // delete pProcVector
   //
-  if (pProcVector != nullptr ){
+  if (pProcVector != nullptr )
+  {
     pProcVector->clear();
     delete pProcVector;
   }
@@ -76,9 +72,11 @@ G4ProcessVector::~G4ProcessVector()
 //
 G4ProcessVector & G4ProcessVector::operator=(const G4ProcessVector & right)
 {
-  if (this != &right){
+  if (this != &right)
+  {
     // delete pProcVector
-    if (pProcVector != nullptr ){
+    if (pProcVector != nullptr )
+    {
       pProcVector->clear();
       delete pProcVector;
     }
@@ -87,8 +85,8 @@ G4ProcessVector & G4ProcessVector::operator=(const G4ProcessVector & right)
     
     // copy all contents in  pProcVector
     //
-    G4ProcVector::iterator i;
-    for (i = right.pProcVector->begin(); i!= right.pProcVector->end(); ++i){
+    for (auto i = right.pProcVector->begin(); i!= right.pProcVector->end(); ++i)
+    {
       pProcVector->push_back(*i);
     }
   }

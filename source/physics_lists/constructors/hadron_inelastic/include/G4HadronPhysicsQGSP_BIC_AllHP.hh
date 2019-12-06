@@ -55,6 +55,8 @@
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
 
+#include "G4HadronicParameters.hh"
+
 
 class G4ComponentGGHadronNucleusXsc;
 
@@ -72,10 +74,10 @@ class G4HadronPhysicsQGSP_BIC_AllHP : public G4VPhysicsConstructor
   private:
     void CreateModels();
 
-    const G4double maxFTFP = 25.0*CLHEP::GeV;
-    const G4double minFTFP =  9.5*CLHEP::GeV;
-    const G4double maxBIC  =  9.9*CLHEP::GeV;
-    const G4double maxBERT =  5.0*CLHEP::GeV;
+    const G4double maxFTFP = G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF();
+    const G4double minFTFP = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+    const G4double maxBIC  = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+    const G4double maxBERT = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
     const G4double minBIC_neutron = 19.9*CLHEP::MeV;
     const G4double maxHP_neutron =  20.0*CLHEP::MeV;
     const G4double minBIC_proton = 199.0*CLHEP::MeV;

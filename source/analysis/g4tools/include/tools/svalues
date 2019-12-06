@@ -1,0 +1,64 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_svalues
+#define tools_svalues
+
+// See also snums.
+
+#include "sto"
+#include <vector>
+
+namespace tools {
+
+template <class T>
+inline bool values(const std::string& a_string,const std::string& a_sep,bool a_take_empty,std::vector<T>& a_values){
+  // same logic as words() function.
+
+  a_values.clear();
+  if(a_string.empty()) return true;
+  std::string::size_type lim = (a_take_empty?0:1);
+  if(a_sep.empty()) {
+    T value;
+    if(!to<T>(a_string,value)) {
+      a_values.clear();
+      return false;
+    }
+    a_values.push_back(value);
+  } else {
+    std::string::size_type l = a_string.length();
+    std::string::size_type llimiter = a_sep.length();
+    std::string::size_type pos = 0;
+    while(true) {
+      std::string::size_type index = a_string.find(a_sep,pos);
+      if(index==std::string::npos){ // Last word.
+        if((l-pos)>=lim) {
+          T value;
+          if(!to<T>(a_string.substr(pos,l-pos),value)) {
+            a_values.clear();
+            return false;
+          }
+          a_values.push_back(value);
+        }
+        break;
+      } else {
+        //     abcxxxef
+        //     0  3  67
+        if((index-pos)>=lim) {
+          T value;
+          if(!to<T>(a_string.substr(pos,index-pos),value)) {
+            a_values.clear();
+            return false;
+          }
+          a_values.push_back(value);
+        }
+        pos = index + llimiter;
+      }
+    }
+  }
+  return true;
+}
+
+}
+
+#endif

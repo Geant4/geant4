@@ -51,12 +51,12 @@ G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4Str
     G4ParticleHPManager::GetInstance()->GetDataStream(filename,theChannel);
 
 #ifdef G4PHPDEBUG
-    if(getenv("G4ParticleHPDebug")) G4cout << "G4ParticleHPIsoData::Init = "<< filename <<" "<< A << " " << Z <<G4endl;
+    if(std::getenv("G4ParticleHPDebug")) G4cout << "G4ParticleHPIsoData::Init = "<< filename <<" "<< A << " " << Z <<G4endl;
 #endif
     
     if(Z==1 && (aFile.GetZ()!=Z || std::abs(aFile.GetA()-A)>0.0001) )
     {
-      if(getenv("G4ParticleHPDebug")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
+      if(std::getenv("G4ParticleHPDebug")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
       //080901 TKDB No more necessary below protection, cross sections set to 0 in G4ParticleHPNames
       //And below two lines causes trouble with G4PhysicsVector
       //theChannel.close();
@@ -109,10 +109,10 @@ void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M,G4double abun, G4Partic
   }
 
   G4String baseName;
-  if ( getenv( dataDirVariable ) ) {
-     baseName = getenv( dataDirVariable );
+  if ( std::getenv( dataDirVariable ) ) {
+     baseName = std::getenv( dataDirVariable );
   } else {
-     baseName = getenv( "G4PARTICLEHPDATA" );
+     baseName = std::getenv( "G4PARTICLEHPDATA" );
      baseName += "/" + particleName;
   }
     

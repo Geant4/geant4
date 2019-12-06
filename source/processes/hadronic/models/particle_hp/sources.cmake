@@ -456,6 +456,15 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
     G4track
   LINK_LIBRARIES
     ${ZLIB_LIBRARIES}
+  SOURCES_EXCLUDE_FORMAT
+    G4ParticleHPFastLegendre.cc
+    G4ParticleHPFastLegendre_14.cc
+    G4ParticleHPFastLegendre_18.cc
+    G4ParticleHPFastLegendre_21.cc
+    G4ParticleHPFastLegendre_24.cc
+    G4ParticleHPFastLegendre_26.cc
+    G4ParticleHPFastLegendre_28.cc
+    G4ParticleHPFastLegendre_30.cc
   )
 
 # List any source specific properties here

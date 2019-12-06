@@ -43,13 +43,14 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGPionInelasticXS.hh"
+#include "G4HadronicParameters.hh"
 
 
 G4BertiniPionBuilder::
 G4BertiniPionBuilder() 
  {
-   theMin = 0*GeV;
-   theMax = 9.9*GeV;
+   theMin = 0.0;
+   theMax = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
    theModel = new G4CascadeInterface;
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax); 
@@ -73,5 +74,3 @@ Build(G4PionMinusInelasticProcess * aP)
    aP->RegisterMe(theModel);
  }
 
-
-         

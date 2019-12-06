@@ -45,9 +45,10 @@ const G4VBiasingInteractionLaw* G4BOptnChangeCrossSection::ProvideOccurenceBiasi
   return fBiasedExponentialLaw;
 }
 
-void G4BOptnChangeCrossSection::SetBiasedCrossSection(G4double xst)
+void G4BOptnChangeCrossSection::SetBiasedCrossSection( G4double xst, bool updateInteractionLength )
 {
   fBiasedExponentialLaw->SetPhysicalCrossSection( xst );
+  if ( updateInteractionLength ) UpdateForStep( 0.0 );
 }
 
 G4double G4BOptnChangeCrossSection::GetBiasedCrossSection() const

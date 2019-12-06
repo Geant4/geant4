@@ -124,7 +124,7 @@ void B4cCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
        << G4endl 
        << "-------->Hits Collection: in this event they are " << nofHits 
        << " hits in the tracker chambers: " << G4endl;
-     for ( G4int i=0; i<nofHits; i++ ) (*fHitsCollection)[i]->Print();
+     for ( std::size_t i=0; i<nofHits; ++i ) (*fHitsCollection)[i]->Print();
   }
 }
 

@@ -9,20 +9,71 @@
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+It DOES NOT substitute the log-message one should put in every
+commit in the repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 29, G. Cosmo (geommng-V10-05-07)
+November 15, 2019 Gabriele Cosmo (geommng-V10-05-15)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+November 11, 2019 J.Apostolakis (geommng-V10-05-14)
+- G4LogicalVolume: Added method 'ChangeDaughtersType' to change the
+  volume type for CharacterisedDaughters.  It enables the user to turn
+  over responsibility for navigation in that volume to an external navigator.
+  ( This is for use when one or more daughter volumes are created as an
+    existing physical volume types (typically G4PVPlacement). )
+  It can also be used enable to create a (logical) volume which containts a
+  mixture of existing G4-toolkit physical volume types, and user-created
+  'external' physical volume (with type code 'kExternal').
+  G4 types must be created first, and then ChangeDaughtersType must be called
+  to change the mother's attribute to 'kExternal'.
+  Note: only one type of sub-navigator will be called to find a track's
+  intersection (or the location of a point) in all daughters of one mother
+  volume. The sub-navigator chosen will correspond to the volume type assigned.
+
+October 29, 2019 J.Apostolakis (geommng-V10-05-13)
+- Use stored volume type for G4LogicalVolume::CharacterisedDaughters,
+  after fix to correctly store type of G4PVParameterised volume.
+  Requires geomvol-V10-05-07.
+
+October 23, 2019 J.Apostolakis, G.Cosmo (geommng-V10-05-12)
+- Revised G4LogicalVolume to cope with 'external' type of physical volumes.
+  Note: these revisions are independent and backward compatible.
+- Co-works with geomnav-V10-05-11 (external navigation).
+
+October 23, 2019 J.Apostolakis (geommng-V10-05-11)
+- Changed G4VPhysicalVolume::VolumeType() to be virtual.
+  Preparing for addition of External Navigation, which adds an 'external'
+  physical volume type (for use with an External sub-Navigator).
+  Note: This is used by G4Navigator's CharacteriseDaughters() method.
+  The old method derived this value from response of IsReplicated() 
+  virtual method and, in the case of replica/division/parameterised volumes,
+  information from a call to the 2nd virtual method ReplicationData.
+- G4VPhysicalVolume copy constructor and assignment operator are now 'deleted'.
+- Requires and co-works with geomvol-V10-05-05, geomdiv-V10-05-02.
+
+September 14, 2019 E.Tcherniaev (geommng-V10-05-10)
+- Use G4QuickRand() in G4VSolid::EstimateCubicVolume() and
+  G4VSolid::EstimateSurfaceArea()
+
+August 22, 2019 G.Cosmo (geommng-V10-05-09)
+- Use pre-increment wherever possible.
+
+July 11, 2019 G.Cosmo (geommng-V10-05-08)
+- Implemented c++11 revision: nullptr, auto, inline data initialisation,
+  const iterators, alias using statements.
+- Code cleanup and formatting.
+
+May 29, 2019 G.Cosmo (geommng-V10-05-07)
 - Fixed minor Coverity defects.
 
-May 20, G. Cosmo (geommng-V10-05-06)
+May 20, 2019 G.Cosmo (geommng-V10-05-06)
 - Defined move constructor and move assignment operator for G4AffineTransform.
 
-May 14, B. Morgan (geommng-V10-05-05)
+May 14, 2019 B.Morgan (geommng-V10-05-05)
 - Use header-based #define/undef symbols to configure VecGeom replacements
 - G4GeomConfig.hh: Generated header configuring #defines using CMake settings
 - G4GeomTypes.hh: "Interface" header to support old GNUmake system. All Geant4

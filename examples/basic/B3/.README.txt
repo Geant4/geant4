@@ -85,7 +85,7 @@
 
    The scorers hits are saved in form of ntuples in a Root file using Geant4 
    analysis tools. This feature is activated in the main () function with instantiating
-   G4ScoreNtupleWriter. 
+   G4TScoreNtupleWriter.
 
    Two variants of accumulation event statistics in a run are demonstrated 
    in this example:

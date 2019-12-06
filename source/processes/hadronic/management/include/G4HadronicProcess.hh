@@ -204,8 +204,8 @@ private:
   G4double XBiasSecondaryWeight();
 
   // hide assignment operator as private 
-  G4HadronicProcess& operator=(const G4HadronicProcess& right) = delete;
-  G4HadronicProcess(const G4HadronicProcess&) = delete;
+  G4HadronicProcess& operator=(const G4HadronicProcess& right);
+  G4HadronicProcess(const G4HadronicProcess&);
 
   // Set E/p conservation check levels from environment variables
   void GetEnergyMomentumCheckEnvvars();

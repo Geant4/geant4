@@ -15,6 +15,13 @@ track of all tags.
  
      ----------------------------------------------------------
 
+October 29, 2019 D. Sawkey (WLS-V10-05-01)
+- Use G4OpticalPhysics
+- Use G4SteppingVerbose
+
+October 21, 2019 D.Sawkey (WLS-V10-05-00)
+- Don't store random number seeds
+
 May 17, 2018 J. Allison (WLS-V10-04-01)
 - Remove G4UI_USE and G4VIS_USE.
 - Move instantiation of G4UIExecutive to start of main.

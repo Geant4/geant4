@@ -61,13 +61,7 @@ G4OpenGLImmediateXViewer::~G4OpenGLImmediateXViewer () {}
 
 void G4OpenGLImmediateXViewer::Initialise () {
 
-  //  CreateGLXContext (vi_immediate);
-  // Force double buffer context. (This can happen anyway when the display
-  // list limit is reached in stored mode. Seems to be no problem. We were
-  // finding that the single buffer visual gave an X Error (BadMatch) on
-  // some systems, so let us force the use if a double buffer. All systems
-  // have double buffers nowadays.
-  CreateGLXContext (vi_stored);
+  CreateGLXContext (vi_immediate);
   CreateMainWindow ();
   CreateFontLists ();
 

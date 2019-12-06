@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 20, 2019 M. Asai (exampleRE03-V10-05-00)
+- Add G4VScoringMesh:: scope identifier to RE03UserScoreWriter.cc.
+- Co-working with detutils-V10-05-01
+
 May 23, 2018 M. Asai (exampleRE03-V10-04-01)
 - Add batchrun1.mac for batch job and update CMakelists.txt
   accordingly.

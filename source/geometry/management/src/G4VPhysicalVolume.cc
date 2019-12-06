@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // class G4VPhysicalVolume Implementation
 //
+// 15.01.13, G.Cosmo, A.Dotti: Modified for thread-safety for MT
+// 28.08.96, P.Kent: Replaced transform by rotmat + vector
+// 25.07.96, P.Kent: Modified interface for new `Replica' capable geometry 
+// 24.07.95, P.Kent: First non-stub version
 // --------------------------------------------------------------------
 
 #include "G4VPhysicalVolume.hh"
@@ -50,13 +51,12 @@ G4PVManager G4VPhysicalVolume::subInstanceManager;
 
 // Constructor: init parameters and register in Store
 //
-G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
-                                const G4ThreeVector &tlate,
+G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix* pRot,
+                                const G4ThreeVector& tlate,
                                 const G4String& pName,
                                       G4LogicalVolume* pLogical,
                                       G4VPhysicalVolume* )
-  : flogical(pLogical),
-    fname(pName), flmother(0)
+  : flogical(pLogical), fname(pName)
 {
   instanceID = subInstanceManager.CreateSubInstance();
 
@@ -77,7 +77,7 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
 //                            for usage restricted to object persistency.
 //
 G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
-  : flogical(0), fname(""), flmother(0), pvdata(0)
+  : fname("")
 {
   // Register to store
   //
@@ -161,7 +161,7 @@ G4RotationMatrix* G4VPhysicalVolume::GetRotation()
 
 void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
 {
-  G4MT_rot=pRot;
+  G4MT_rot = pRot;
 }
 
 G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
@@ -182,12 +182,12 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 
 G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 {
-  G4RotationMatrix  aRotM;   // Initialised to identity
+  G4RotationMatrix aRotM;   // Initialised to identity
 
   // Insure against G4MT_rot being a null pointer
   if(G4MT_rot)
   {
-     aRotM= G4MT_rot->inverse();
+     aRotM = G4MT_rot->inverse();
   }
   return aRotM;
 }

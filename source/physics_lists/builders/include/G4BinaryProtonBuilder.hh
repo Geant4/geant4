@@ -69,7 +69,5 @@ class G4BinaryProtonBuilder : public G4VProtonBuilder
     G4double theMax;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

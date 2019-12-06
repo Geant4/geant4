@@ -45,13 +45,11 @@ class ShieldingLEND : public Shielding
 {
 public:
   explicit ShieldingLEND(G4int ver = 1) : Shielding(ver,"LEND","") {};
-  virtual ~ShieldingLEND() {};
-  
-private:
+  virtual ~ShieldingLEND()=default;
 
   // copy constructor and hide assignment operator
-  ShieldingLEND(ShieldingLEND &);
-  ShieldingLEND & operator=(const ShieldingLEND &right);
+  ShieldingLEND(const ShieldingLEND &)=delete;
+  ShieldingLEND & operator=(const ShieldingLEND &right)=delete;
 };
 
 #endif

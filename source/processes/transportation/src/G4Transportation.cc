@@ -59,6 +59,8 @@
 class G4VSensitiveDetector;
 
 G4bool G4Transportation::fUseMagneticMoment=false;
+G4bool G4Transportation::fUseGravity= false;
+G4bool G4Transportation::fSilenceLooperWarnings= false;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -66,18 +68,6 @@ G4bool G4Transportation::fUseMagneticMoment=false;
 
 G4Transportation::G4Transportation( G4int verbosity )
   : G4VProcess( G4String("Transportation"), fTransportation ),
-    // fTransportEndPosition( 0.0, 0.0, 0.0 ),
-    // fTransportEndMomentumDir( 0.0, 0.0, 0.0 ),
-    // fTransportEndKineticEnergy( 0.0 ),
-    // fTransportEndSpin( 0.0, 0.0, 0.0 ),
-    // fMomentumChanged(true),
-    // fEndGlobalTimeComputed(false), 
-    // fCandidateEndGlobalTime(0.0),
-    // fParticleIsLooping( false ),
-    // fNewTrack( true ),
-    // fFirstStepInVolume( true ),
-    // fLastStepInVolume( false ), 
-    // fGeometryLimitedStep(true),
     fFieldExertedForce( false ),
     fPreviousSftOrigin( 0.,0.,0. ),
     fPreviousSafety( 0.0 ),
@@ -109,8 +99,10 @@ G4Transportation::G4Transportation( G4int verbosity )
   // Cannot determine whether a field exists here, as it would 
   //  depend on the relative order of creating the detector's 
   //  field and this process. That order is not guaranted.
-  // Instead later the method DoesGlobalFieldExist() is called
-
+  fAnyFieldExists= DoesAnyFieldExist();
+  //  This value must be updated using DoesAnyFieldExist() at least at the
+  //    start of each Run -- for now this is at the Start of every Track. TODO
+  
   static G4ThreadLocal G4TouchableHandle* pNullTouchableHandle = 0;
   if ( !pNullTouchableHandle)
   {
@@ -119,6 +111,7 @@ G4Transportation::G4Transportation( G4int verbosity )
   fCurrentTouchableHandle = *pNullTouchableHandle;
     // Points to (G4VTouchable*) 0
 
+  
 #ifdef G4VERBOSE
   if( verboseLevel > 0) 
   { 
@@ -251,34 +244,28 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4FieldManager* fieldMgr=0;
   G4bool          fieldExertsForce = false ;
 
-  G4bool gravityOn = false;
-  G4bool fieldExists = false;  // Field is not 0 (null pointer)
-
   fieldMgr = fFieldPropagator->FindAndSetFieldManager( track.GetVolume() );
-  if( fieldMgr != 0 )
+  G4bool eligibleEM = (particleCharge != 0.0)
+                   || ( fUseMagneticMoment && (magneticMoment != 0.0) );
+  G4bool eligibleGrav =  fUseGravity && (restMass != 0.0) ;
+
+  if( (fieldMgr!=nullptr) && (eligibleEM||eligibleGrav) )
   {
-     // Message the field Manager, to configure it for this track
-     //
+     // User can configure the field Manager for this track
      fieldMgr->ConfigureForTrack( &track );
-
-     // Is here to allow a transition from no-field pointer 
+     // Called here to allow a transition from no-field pointer 
      // to finite field (non-zero pointer).
+     
      // If the field manager has no field ptr, the field is zero 
-     // by definition ( = there is no field ! )
-     //
-     const G4Field* ptrField= fieldMgr->GetDetectorField();
-     fieldExists = (ptrField!=0) ;
-     if( fieldExists ) 
+     //   by definition ( = there is no field ! )
+     const  G4Field* ptrField= fieldMgr->GetDetectorField();
+     if( ptrField ) 
      {
-        gravityOn= ptrField->IsGravityActive();
-
-        if( (particleCharge != 0.0) 
-            || (fUseMagneticMoment && (magneticMoment != 0.0) )
-            || (gravityOn          && (restMass != 0.0) ) )
-        {
-          fieldExertsForce = fieldExists; 
-        }
+        fieldExertsForce = eligibleEM
+              || ( eligibleGrav && ptrField->IsGravityActive() );
      }
+     //  || (gravityOn && (restMass != 0.0))  )        
+     
   }
   fFieldExertedForce = fieldExertsForce; 
   
@@ -371,7 +358,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         lengthAlongCurve = fFieldPropagator->ComputeStep( aFieldTrack,
                                                           currentMinimumStep, 
                                                           currentSafety,
-                                                          track.GetVolume() );
+                                                          track.GetVolume(),
+                                                          track.GetKineticEnergy() < fThreshold_Important_Energy );
 
         fGeometryLimitedStep= fFieldPropagator->IsLastStepInVolume();
         //
@@ -397,6 +385,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      fTransportEndPosition = aFieldTrack.GetPosition() ;
 
+     fTransportEndSpin = aFieldTrack.GetSpin();
+     fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
+     fEndPointDistance   = (fTransportEndPosition - startPosition).mag() ;
+     
      // Momentum:  Magnitude and direction can be changed too now ...
      //
      fMomentumChanged         = true ; 
@@ -484,9 +476,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         fTransportEndKineticEnergy= track.GetKineticEnergy(); 
      }
 
-     fTransportEndSpin = aFieldTrack.GetSpin();
-     fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
-     fEndPointDistance   = (fTransportEndPosition - startPosition).mag() ;
   }
 
   // If we are asked to go a step length of 0, and we are on a boundary
@@ -643,7 +632,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
            }
         }
 
-        if( endEnergy > fThreshold_Warning_Energy )
+        if( endEnergy > fThreshold_Warning_Energy && ! fSilenceLooperWarnings )
         {
           fpLogger->ReportLoopingTrack( track, stepData, fNoLooperTrials,
                                         noCallsASDI, methodName );
@@ -659,7 +648,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
              fSumEnergyUnstableSaved += endEnergy;
         }
 #ifdef G4VERBOSE
-        if( verboseLevel > 2 )
+        if( verboseLevel > 2 && ! fSilenceLooperWarnings )
         {
           G4cout << "   " << methodName  
                  << " Particle is looping but is saved ..."  << G4endl             
@@ -828,6 +817,9 @@ G4Transportation::StartTracking(G4Track* aTrack)
   // The actions here are those that were taken in AlongStepGPIL
   // when track.GetCurrentStepNumber()==1
 
+  // Whether field exists should be determined at run level -- TODO
+  fAnyFieldExists= DoesAnyFieldExist(); 
+  
   // reset safety value and center
   //
   fPreviousSafety    = 0.0 ; 
@@ -841,7 +833,7 @@ G4Transportation::StartTracking(G4Track* aTrack)
 
   // ChordFinder reset internal state
   //
-  if( DoesGlobalFieldExist() )
+  if( fFieldPropagator && fAnyFieldExists )     
   {
      fFieldPropagator->ClearPropagatorState();   
        // Resets all state of field propagator class (ONLY) including safety
@@ -865,13 +857,42 @@ G4Transportation::StartTracking(G4Track* aTrack)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-G4bool G4Transportation::EnableUseMagneticMoment(G4bool useMoment)
+G4bool G4Transportation::EnableMagneticMoment(G4bool useMoment)
 {
   G4bool lastValue= fUseMagneticMoment;
   fUseMagneticMoment= useMoment;
   G4CoupledTransportation::fUseMagneticMoment= useMoment;
   return lastValue;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+G4bool G4Transportation::EnableGravity(G4bool useGravity)
+{
+  G4bool lastValue= fUseGravity;
+  fUseGravity= useGravity;
+  G4CoupledTransportation::fUseGravity= useGravity;
+  return lastValue;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//  Supress (or not) warnings about 'looping' particles
+
+void G4Transportation::SetSilenceLooperWarnings( G4bool val)
+{
+  fSilenceLooperWarnings= val;  // Flag to *Supress* all 'looper' warnings  
+  // G4CoupledTransportation::fSilenceLooperWarnings= val;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+G4bool G4Transportation::GetSilenceLooperWarnings()
+{
+  return fSilenceLooperWarnings; 
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

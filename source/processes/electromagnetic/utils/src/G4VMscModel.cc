@@ -62,10 +62,10 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   ionisation(nullptr),
   facrange(0.04),
   facgeom(2.5),
-  facsafety(0.3),
+  facsafety(0.6),
   skin(1.0),
   dtrl(0.05),
-  lambdalimit(mm),
+  lambdalimit(1.*CLHEP::mm),
   geomMin(1.e-6*CLHEP::mm),
   geomMax(1.e50*CLHEP::mm),
   fDisplacement(0.,0.,0.),
@@ -77,6 +77,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   localrange = DBL_MAX;
   localtkin  = 0.0;
   currentPart = nullptr;
+  SetUseBaseMaterials(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,8 +129,6 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
                                                       emin, emax, true);
         }
       }
-      theDensityFactor = builder->GetDensityFactors();
-      theDensityIdx = builder->GetCoupleIndexes();
     }
   }
   return change;
@@ -137,31 +136,23 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreeVector& 
-G4VMscModel::SampleScattering(const G4ThreeVector&, G4double)
+void G4VMscModel::InitialiseParameters(const G4ParticleDefinition* part)
 {
-  return fDisplacement;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::ComputeTruePathLengthLimit(const G4Track&, G4double&)
-{
-  return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::ComputeGeomPathLength(G4double truePathLength)
-{
-  return truePathLength;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::ComputeTrueStepLength(G4double geomPathLength)
-{
-  return geomPathLength;
+  if(IsLocked()) { return; }
+  G4EmParameters* param = G4EmParameters::Instance();
+  if(std::abs(part->GetPDGEncoding()) == 11) {
+    steppingAlgorithm = param->MscStepLimitType(); 
+    facrange = param->MscRangeFactor(); 
+    latDisplasment = param->LateralDisplacement();
+  } else {
+    steppingAlgorithm = param->MscMuHadStepLimitType(); 
+    facrange = param->MscMuHadRangeFactor(); 
+    latDisplasment = param->MuHadLateralDisplacement();
+  }
+  skin = param->MscSkin();
+  facgeom = param->MscGeomFactor();
+  facsafety = param->MscSafetyFactor();
+  lambdalimit = param->MscLambdaLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

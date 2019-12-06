@@ -23,26 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4Polyhedra.cc
-//
-// Implementation of a CSG polyhedra, as an inherited class of G4VCSGfaceted.
-//
-// To be done:
-//    * Cracks: there are probably small cracks in the seams between the
-//      phi face (G4PolyPhiFace) and sides (G4PolyhedraSide) that are not
-//      entirely leakproof. Also, I am not sure all vertices are leak proof.
-//    * Many optimizations are possible, but not implemented.
-//    * Visualization needs to be updated outside of this routine.
+// Implementation of G4Polyhedra, a CSG polyhedra,
+// as an inherited class of G4VCSGfaceted.
 //
 // Utility classes:
-//    * G4EnclosingCylinder: I decided a quick check of geometry would be a
+//    * G4EnclosingCylinder: decided a quick check of geometry would be a
 //      good idea (for CPU speed). If the quick check fails, the regular
 //      full-blown G4VCSGfaceted version is invoked.
 //    * G4ReduciblePolygon: Really meant as a check of input parameters,
@@ -51,6 +36,7 @@
 // Both these classes are implemented outside this file because they are
 // shared with G4Polycone.
 //
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4Polyhedra.hh"
@@ -75,7 +61,6 @@
 
 using namespace CLHEP;
 
-//
 // Constructor (GEANT3 style parameters)
 //
 // GEANT3 PGON radii are specified in the distance to the norm of each face.
@@ -88,7 +73,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
                           const G4double zPlane[],
                           const G4double rInner[],
                           const G4double rOuter[]  )
-  : G4VCSGfaceted( name ), genericPgon(false)
+  : G4VCSGfaceted( name )
 {
   if (theNumSide <= 0)
   {
@@ -120,8 +105,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   original_parameters->Rmin = new G4double[numZPlanes];
   original_parameters->Rmax = new G4double[numZPlanes];
 
-  G4int i;
-  for (i=0; i<numZPlanes; i++)
+  for (G4int i=0; i<numZPlanes; ++i)
   {
     if (( i < numZPlanes-1) && ( zPlane[i] == zPlane[i+1] ))
     {
@@ -150,7 +134,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   //
   // Build RZ polygon using special PCON/PGON GEANT3 constructor
   //
-  G4ReduciblePolygon *rz =
+  G4ReduciblePolygon* rz =
     new G4ReduciblePolygon( rInner, rOuter, zPlane, numZPlanes );
   rz->ScaleA( 1/convertRad );
   
@@ -162,8 +146,6 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   delete rz;
 }
 
-
-//
 // Constructor (generic parameters)
 //
 G4Polyhedra::G4Polyhedra( const G4String& name, 
@@ -184,7 +166,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
                 FatalErrorInArgument, message);
   }
 
-  G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
+  G4ReduciblePolygon* rz = new G4ReduciblePolygon( r, z, numRZ );
   
   Create( phiStart, phiTotal, theNumSide, rz );
   
@@ -195,8 +177,6 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   delete rz;
 }
 
-
-//
 // Create
 //
 // Generic create routine, called by each constructor
@@ -205,7 +185,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
 void G4Polyhedra::Create( G4double phiStart,
                           G4double phiTotal,
                           G4int    theNumSide,  
-                          G4ReduciblePolygon *rz  )
+                          G4ReduciblePolygon* rz  )
 {
   //
   // Perform checks of rz values
@@ -316,10 +296,10 @@ void G4Polyhedra::Create( G4double phiStart,
   //
   // But! Don't construct a face if both points are at zero radius!
   //
-  G4PolyhedraSideRZ *corner = corners,
-                    *prev = corners + numCorner-1,
-                    *nextNext;
-  G4VCSGface   **face = faces;
+  G4PolyhedraSideRZ* corner = corners,
+                   * prev = corners + numCorner-1,
+                   * nextNext;
+  G4VCSGface** face = faces;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = corner+1;
@@ -375,53 +355,41 @@ void G4Polyhedra::Create( G4double phiStart,
     new G4EnclosingCylinder( rz, phiIsOpen, phiStart, phiTotal );
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4Polyhedra::G4Polyhedra( __void__& a )
-  : G4VCSGfaceted(a), numSide(0), startPhi(0.), endPhi(0.),
-    phiIsOpen(false), genericPgon(false), numCorner(0), corners(0),
-    original_parameters(0), enclosingCylinder(0)
+  : G4VCSGfaceted(a), startPhi(0.), endPhi(0.)
 {
 }
 
-
-//
 // Destructor
 //
 G4Polyhedra::~G4Polyhedra()
 {
   delete [] corners;
-  if (original_parameters) delete original_parameters;
-  
+  delete original_parameters;
   delete enclosingCylinder;
 }
 
-
-//
 // Copy constructor
 //
-G4Polyhedra::G4Polyhedra( const G4Polyhedra &source )
+G4Polyhedra::G4Polyhedra( const G4Polyhedra& source )
   : G4VCSGfaceted( source )
 {
   CopyStuff( source );
 }
 
-
-//
 // Assignment operator
 //
-G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra &source )
+G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra& source )
 {
   if (this == &source) return *this;
 
   G4VCSGfaceted::operator=( source );
   
   delete [] corners;
-  if (original_parameters) delete original_parameters;
-  
+  delete original_parameters;
   delete enclosingCylinder;
   
   CopyStuff( source );
@@ -429,11 +397,9 @@ G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra &source )
   return *this;
 }
 
-
-//
 // CopyStuff
 //
-void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
+void G4Polyhedra::CopyStuff( const G4Polyhedra& source )
 {
   //
   // Simple stuff
@@ -450,8 +416,8 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   //
   corners = new G4PolyhedraSideRZ[numCorner];
   
-  G4PolyhedraSideRZ  *corn = corners,
-        *sourceCorn = source.corners;
+  G4PolyhedraSideRZ* corn = corners,
+                   * sourceCorn = source.corners;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *corn = *sourceCorn;
@@ -472,11 +438,9 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 
   fRebuildPolyhedron = false;
-  fpPolyhedron = 0;
+  fpPolyhedron = nullptr;
 }
 
-
-//
 // Reset
 //
 // Recalculates and reshapes the solid, given pre-assigned scaled
@@ -491,7 +455,7 @@ G4bool G4Polyhedra::Reset()
             << G4endl << "Not applicable to the generic construct !";
     G4Exception("G4Polyhedra::Reset()", "GeomSolids1001",
                 JustWarning, message, "Parameters NOT resetted.");
-    return 1;
+    return true;
   }
 
   //
@@ -504,7 +468,7 @@ G4bool G4Polyhedra::Reset()
   //
   // Rebuild polyhedra
   //
-  G4ReduciblePolygon *rz =
+  G4ReduciblePolygon* rz =
     new G4ReduciblePolygon( original_parameters->Rmin,
                             original_parameters->Rmax,
                             original_parameters->Z_values,
@@ -514,17 +478,15 @@ G4bool G4Polyhedra::Reset()
           original_parameters->numSide, rz );
   delete rz;
 
-  return 0;
+  return false;
 }
 
-
-//
 // Inside
 //
 // This is an override of G4VCSGfaceted::Inside, created in order
 // to speed things up by first checking with G4EnclosingCylinder.
 //
-EInside G4Polyhedra::Inside( const G4ThreeVector &p ) const
+EInside G4Polyhedra::Inside( const G4ThreeVector& p ) const
 {
   //
   // Quick test
@@ -537,15 +499,13 @@ EInside G4Polyhedra::Inside( const G4ThreeVector &p ) const
   return G4VCSGfaceted::Inside(p);
 }
 
-
-//
 // DistanceToIn
 //
 // This is an override of G4VCSGfaceted::Inside, created in order
 // to speed things up by first checking with G4EnclosingCylinder.
 //
-G4double G4Polyhedra::DistanceToIn( const G4ThreeVector &p,
-                                    const G4ThreeVector &v ) const
+G4double G4Polyhedra::DistanceToIn( const G4ThreeVector& p,
+                                    const G4ThreeVector& v ) const
 {
   //
   // Quick test
@@ -559,19 +519,15 @@ G4double G4Polyhedra::DistanceToIn( const G4ThreeVector &p,
   return G4VCSGfaceted::DistanceToIn( p, v );
 }
 
-
-//
 // DistanceToIn
 //
-G4double G4Polyhedra::DistanceToIn( const G4ThreeVector &p ) const
+G4double G4Polyhedra::DistanceToIn( const G4ThreeVector& p ) const
 {
   return G4VCSGfaceted::DistanceToIn(p);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 // Get bounding box
-
+//
 void G4Polyhedra::BoundingLimits(G4ThreeVector& pMin,
                                  G4ThreeVector& pMax) const
 {
@@ -596,7 +552,7 @@ void G4Polyhedra::BoundingLimits(G4ThreeVector& pMin,
 
   G4double sinCur = GetSinStartPhi();
   G4double cosCur = GetCosStartPhi();
-  if (!IsOpen()) rmin = 0;
+  if (!IsOpen()) rmin = 0.;
   G4double xmin = rmin*cosCur, xmax = xmin;
   G4double ymin = rmin*sinCur, ymax = ymin;
   for (G4int k=0; k<ksteps+1; ++k)
@@ -638,10 +594,8 @@ void G4Polyhedra::BoundingLimits(G4ThreeVector& pMin,
   }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 // Calculate extent under transform and specified limit
-
+//
 G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
                                     const G4VoxelLimits& pVoxelLimit,
                                     const G4AffineTransform& pTransform,
@@ -655,7 +609,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -708,7 +662,8 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
   // allocate vector lists
   std::vector<const G4ThreeVectorList *> polygons;
   polygons.resize(ksteps+1);
-  for (G4int k=0; k<ksteps+1; ++k) {
+  for (G4int k=0; k<ksteps+1; ++k)
+  {
     polygons[k] = new G4ThreeVectorList(3);
   }
 
@@ -755,7 +710,6 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
   return (pMin < pMax);
 }
 
-//
 // ComputeDimensions
 //
 void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation* p,
@@ -765,8 +719,6 @@ void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep);
 }
 
-
-//
 // GetEntityType
 //
 G4GeometryType G4Polyhedra::GetEntityType() const
@@ -774,8 +726,6 @@ G4GeometryType G4Polyhedra::GetEntityType() const
   return G4String("G4Polyhedra");
 }
 
-
-//
 // Make a clone of the object
 //
 G4VSolid* G4Polyhedra::Clone() const
@@ -783,8 +733,6 @@ G4VSolid* G4Polyhedra::Clone() const
   return new G4Polyhedra(*this);
 }
 
-
-//
 // Stream object contents to an output stream
 //
 std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
@@ -804,19 +752,19 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
     G4int numPlanes = original_parameters->Num_z_planes;
     os << "    number of Z planes: " << numPlanes << "\n"
        << "              Z values: \n";
-    for (i=0; i<numPlanes; i++)
+    for (i=0; i<numPlanes; ++i)
     {
       os << "              Z plane " << i << ": "
          << original_parameters->Z_values[i] << "\n";
     }
     os << "              Tangent distances to inner surface (Rmin): \n";
-    for (i=0; i<numPlanes; i++)
+    for (i=0; i<numPlanes; ++i)
     {
       os << "              Z plane " << i << ": "
          << original_parameters->Rmin[i] << "\n";
     }
     os << "              Tangent distances to outer surface (Rmax): \n";
-    for (i=0; i<numPlanes; i++)
+    for (i=0; i<numPlanes; ++i)
     {
       os << "              Z plane " << i << ": "
          << original_parameters->Rmax[i] << "\n";
@@ -824,7 +772,7 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
   }
   os << "    number of RZ points: " << numCorner << "\n"
      << "              RZ values (corners): \n";
-     for (i=0; i<numCorner; i++)
+     for (i=0; i<numCorner; ++i)
      {
        os << "                         "
           << corners[i].r << ", " << corners[i].z << "\n";
@@ -835,8 +783,6 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-
-//
 // GetPointOnPlane
 //
 // Auxiliary method for get point on surface
@@ -868,8 +814,6 @@ G4Polyhedra::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
   return (p0+lambda1*t+lambda2*u);
 }
 
-
-//
 // GetPointOnTriangle
 //
 // Auxiliary method for get point on surface
@@ -887,8 +831,6 @@ G4ThreeVector G4Polyhedra::GetPointOnTriangle(G4ThreeVector p1,
   return (p2 + lambda1*w + lambda2*v);
 }
 
-
-//
 // GetPointOnSurface
 //
 G4ThreeVector G4Polyhedra::GetPointOnSurface() const
@@ -912,7 +854,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
 
     // Below we generate the areas relevant to our solid
     //
-    for(j=0; j<numPlanes-1; j++)
+    for(j=0; j<numPlanes-1; ++j)
     {
       a = original_parameters->Rmax[j+1];
       b = original_parameters->Rmax[j];
@@ -922,7 +864,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
       aVector1.push_back(area);
     }
 
-    for(j=0; j<numPlanes-1; j++)
+    for(j=0; j<numPlanes-1; ++j)
     {
       a = original_parameters->Rmin[j+1];//*cosksi;
       b = original_parameters->Rmin[j];//*cosksi;
@@ -932,7 +874,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
       aVector2.push_back(area);
     }
   
-    for(j=0; j<numPlanes-1; j++)
+    for(j=0; j<numPlanes-1; ++j)
     {
       if(phiIsOpen == true)
       {
@@ -946,7 +888,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
       else { aVector3.push_back(0.); } 
     }
   
-    for(j=0; j<numPlanes-1; j++)
+    for(j=0; j<numPlanes-1; ++j)
     {
       totArea += numSide*(aVector1[j]+aVector2[j])+2.*aVector3[j];
     }
@@ -1004,7 +946,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     }
     else
     {
-      for (j=0; j<numPlanes-1; j++)
+      for (j=0; j<numPlanes-1; ++j)
       {
         if( ((chose >= Achose1) && (chose < Achose2)) || (j == numPlanes-2) )
         { 
@@ -1105,7 +1047,6 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
   }
 }
 
-//
 // CreatePolyhedron
 //
 G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
@@ -1355,7 +1296,7 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
       G4Exception("G4Polyhedra::CreatePolyhedron()", "GeomSolids1002",
                   JustWarning, message);
       delete polyhedron;
-      return 0;
+      return nullptr;
     }
     else
     {
@@ -1364,11 +1305,12 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
   }
 }
 
-
-void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
+// SetOriginalParameters
+//
+void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
 {
-  G4int numPlanes = (G4int)numCorner;  
-  G4bool isConvertible=true;
+  G4int numPlanes = numCorner;  
+  G4bool isConvertible = true;
   G4double Zmax=rz->Bmax();
   rz->StartWithZMin();
 
@@ -1406,7 +1348,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
   // next planes until last
   //
   G4int inextr=0, inextl=0; 
-  for (G4int i=0; i < numPlanes-2; i++)
+  for (G4int i=0; i < numPlanes-2; ++i)
   {
     inextr=1+icurr;
     inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
@@ -1459,8 +1401,8 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
     else if(std::fabs(Zright-Zleft)<kCarTolerance)  // Zright=Zleft
     {
       Z.push_back(Zleft);  
-      countPlanes++;
-      icurr++;
+      ++countPlanes;
+      ++icurr;
 
       icurl=(icurl == 0)? numPlanes-1 : icurl-1;
 
@@ -1470,7 +1412,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
     else  // Zright<Zleft
     {
       Z.push_back(Zright);  
-      countPlanes++;
+      ++countPlanes;
 
       G4double difZr=corners[inextr].z - corners[icurr].z;
       G4double difZl=corners[inextl].z - corners[icurl].z;
@@ -1487,7 +1429,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
                                 * (corners[inextl].r - corners[icurl].r));
           Rmax.push_back(corners[inextr].r);
         }
-        icurr++;
+        ++icurr;
       }           // plate
       else if (difZr >= kCarTolerance)
       {
@@ -1502,7 +1444,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
           Rmin.push_back (corners[icurl].r+(Zright-corners[icurl].z)/difZl
                                   * (corners[inextl].r - corners[icurl].r));
         }
-        icurr++;
+        ++icurr;
       }
       else
       {
@@ -1514,7 +1456,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
   // last plane Z=Zmax
   //
   Z.push_back(Zmax);
-  countPlanes++;
+  ++countPlanes;
   inextr=1+icurr;
   inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
  
@@ -1531,7 +1473,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
    original_parameters->Rmin = new G4double[countPlanes];
    original_parameters->Rmax = new G4double[countPlanes];
   
-   for(G4int j=0; j < countPlanes; j++)
+   for(G4int j=0; j < countPlanes; ++j)
    {
      original_parameters->Z_values[j] = Z[j];
      original_parameters->Rmax[j] = Rmax[j];
@@ -1557,7 +1499,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
     original_parameters->Rmin = new G4double[numPlanes];
     original_parameters->Rmax = new G4double[numPlanes];
   
-    for(G4int j=0; j < numPlanes; j++)
+    for(G4int j=0; j < numPlanes; ++j)
     {
       original_parameters->Z_values[j] = corners[j].z;
       original_parameters->Rmax[j] = corners[j].r;
@@ -1567,7 +1509,6 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
     original_parameters->Opening_angle = endPhi-startPhi;
     original_parameters->Num_z_planes = numPlanes;
   }
-  //return isConvertible;
 }
 
 #endif

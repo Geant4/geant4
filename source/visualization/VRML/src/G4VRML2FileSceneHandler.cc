@@ -82,18 +82,18 @@ G4VRML2FileSceneHandler::G4VRML2FileSceneHandler(G4VRML2File& system, const G4St
 	strcpy(fVRMLFileName, "");
 
 	// destination directory
-	if ( getenv( VRMLFILE_DEST_DIR ) == NULL ) {
+	if ( std::getenv( VRMLFILE_DEST_DIR ) == NULL ) {
 		strcpy( fVRMLFileDestDir, "" );
 	} else {
-		strcpy( fVRMLFileDestDir, getenv( VRMLFILE_DEST_DIR ) );
+		strcpy( fVRMLFileDestDir, std::getenv( VRMLFILE_DEST_DIR ) );
 	}
 
 
 	// maximum number of g4.prim files in the dest directory
 	fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ; // initialization
-	if ( getenv( "G4VRMLFILE_MAX_FILE_NUM" ) != NULL ) {	
+	if ( std::getenv( "G4VRMLFILE_MAX_FILE_NUM" ) != NULL ) {	
 		
-		sscanf( getenv("G4VRMLFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
+		sscanf( std::getenv("G4VRMLFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
 
 	} else {
 		fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ;
@@ -102,10 +102,10 @@ G4VRML2FileSceneHandler::G4VRML2FileSceneHandler(G4VRML2File& system, const G4St
 
 
 	// PV name pickability 	
-	if( getenv( "G4VRML_PV_PICKABLE" ) != NULL ) {
+	if( std::getenv( "G4VRML_PV_PICKABLE" ) != NULL ) {
 
 		int is_pickable ;
-		sscanf( getenv("G4VRML_PV_PICKABLE"), "%d", &is_pickable ) ;
+		sscanf( std::getenv("G4VRML_PV_PICKABLE"), "%d", &is_pickable ) ;
 
 		if ( is_pickable ) { SetPVPickability ( true ) ; }
 	} 
@@ -200,8 +200,8 @@ void G4VRML2FileSceneHandler::closePort()
 	char command[256] ;
 	char viewer [256] ; 
 	strcpy( viewer, NO_VRML_VIEWER ); // initialization
-	if( getenv( ENV_VRML_VIEWER ) ) {
-		strcpy( viewer, getenv( ENV_VRML_VIEWER ) ) ;
+	if( std::getenv( ENV_VRML_VIEWER ) ) {
+		strcpy( viewer, std::getenv( ENV_VRML_VIEWER ) ) ;
 	}
 
 	// close VRML file	

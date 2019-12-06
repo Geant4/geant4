@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ChordFinder implementation
 //
-//
-//
-// 25.02.97 - John Apostolakis - Design and implementation 
+// Author: J.Apostolakis - Design and implementation - 25.02.1997
 // -------------------------------------------------------------------
 
 #include <iomanip>
@@ -55,21 +54,19 @@
 #include "G4InterpolationDriver.hh"
 // #include "G4FSALBogackiShampine45.hh"
 // #include "G4FSALDormandPrince745.hh"
+#include "G4HelixHeum.hh"
+#include "G4BFieldIntegrationDriver.hh"
 
 #include <cassert>
-
 
 // ..........................................................................
 
 G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
-  : fDefaultDeltaChord( 0.25 * mm ),      // Parameters
-    fDeltaChord( fDefaultDeltaChord ),    //   Internal parameters
-    fStatsVerbose(0),
-    fRegularStepperOwned(nullptr),                    // Dependent objects 
-    fEquation(0)    
+  : fDefaultDeltaChord(0.25 * mm), fIntgrDriver(pIntegrationDriver)
 {
   // Simple constructor -- it does not create equation
-  fIntgrDriver= pIntegrationDriver; 
+
+  fDeltaChord = fDefaultDeltaChord;       // Parameters
 }
 
 
@@ -77,22 +74,20 @@ G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
 
 G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
                               G4double                stepMinimum, 
-                              G4MagIntegratorStepper* pItsStepper,     // nullptr is default
-                              G4bool                  useFSALstepper ) // false by default
-  : fDefaultDeltaChord( 0.25 * mm ),     // Constants 
-    fDeltaChord( fDefaultDeltaChord ),   // Parameters
-    fStatsVerbose(0),
-    // fRegularStepperOwned(nullptr),                    // Dependent objects     
-    fEquation(0)
+                              G4MagIntegratorStepper* pItsStepper,
+                              G4bool                  useFSALstepper )
+  : fDefaultDeltaChord(0.25 * mm)
 {
-  //  Construct the Chord Finder
-  //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
+  // Construct the Chord Finder
+  // by creating in inverse order the Driver, the Stepper and EqRhs ...
+
+  fDeltaChord = fDefaultDeltaChord;       // Parameters
 
   using NewFsalStepperType = G4RK547FEq1; // or 2 or 3
   const char* NewFSALStepperName =
       "G4RK574FEq1> FSAL 4th/5th order 7-stage 'Equilibrium-type' #1.";
   using RegularStepperType =
-         G4DormandPrince745; // DOPRI5 (MatLab) 5th order embedded method. High efficiency.
+         G4DormandPrince745; // 5th order embedded method. High efficiency.
          // G4ClassicalRK4;        // The old default
          // G4CashKarpRKF45;       // First embedded method in G4
          // G4BogackiShampine45;   // High efficiency 5th order embedded method
@@ -104,7 +99,7 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
       // "Nystrom stepper 4th order";
 
   // Configurable
-  G4bool forceFSALstepper= false; //  Choice - true to enable !!
+  G4bool forceFSALstepper = false; //  Choice - true to enable !!
   G4bool recallFSALflag  = useFSALstepper;
   useFSALstepper   = forceFSALstepper || useFSALstepper;
 
@@ -118,12 +113,11 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
   // useHigherStepper = forceHigherEffiencyStepper || useHigherStepper;
   
-  G4Mag_EqRhs *pEquation = new G4Mag_UsualEqRhs(theMagField);
+  G4Mag_EqRhs* pEquation = new G4Mag_UsualEqRhs(theMagField);
   fEquation = pEquation;                            
 
   // G4MagIntegratorStepper* regularStepper = nullptr;
-  // G4VFSALIntegrationStepper*  fsalSepper = nullptr; // for new-type FSAL steppers only
-  // NewFsalStepperType*        fsalStepper = nullptr;
+  // G4VFSALIntegrationStepper* fsalStepper = nullptr; // for FSAL steppers only
   // G4MagIntegratorStepper* oldFSALStepper = nullptr;
 
   G4bool errorInStepperCreation = false;
@@ -138,12 +132,12 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   }
   else if ( !useFSALstepper )
   {
-     // RegularStepperType* regularStepper =nullptr;  // To check the exception
+     // RegularStepperType* regularStepper = nullptr; // To check the exception
      auto regularStepper = new RegularStepperType(pEquation);
-     //                   *** ******************
+     //                    *** ******************
      //
      // Alternative - for G4NystromRK4:
-     // = new G4NystromRK4(pEquation, 0.1*millimeter ); // *clhep::millimeter );
+     // = new G4NystromRK4(pEquation, 0.1*mm );
      fRegularStepperOwned = regularStepper;
 
      if( regularStepper == nullptr )
@@ -157,12 +151,20 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      }
      else
      {
-        fIntgrDriver = new G4IntegrationDriver<RegularStepperType>(
-              stepMinimum, regularStepper, regularStepper->GetNumberOfVariables());
+        using SmallStepDriver = G4InterpolationDriver<G4DormandPrince745>;
+        using LargeStepDriver = G4IntegrationDriver<G4HelixHeum>;
+
+        fLongStepper = std::unique_ptr<G4HelixHeum>(new G4HelixHeum(pEquation));
         
-        if( fIntgrDriver==nullptr)
+        fIntgrDriver = new G4BFieldIntegrationDriver(
+          std::unique_ptr<SmallStepDriver>(new SmallStepDriver(stepMinimum,
+              regularStepper, regularStepper->GetNumberOfVariables())),
+          std::unique_ptr<LargeStepDriver>(new LargeStepDriver(stepMinimum,
+              fLongStepper.get(), regularStepper->GetNumberOfVariables())) );
+        
+        if( fIntgrDriver == nullptr)
         {        
-           message << "Using G4IntegrationDriver with "
+           message << "Using G4BFieldIntegrationDriver with "
                    << RegularStepperName << " type stepper " << G4endl;
            message << "Driver instantiation FAILED." << G4endl;
            G4Exception("G4ChordFinder::G4ChordFinder()",
@@ -173,7 +175,7 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   else
   {
      auto fsalStepper=  new NewFsalStepperType(pEquation);
-     //                     ******************
+     //                 *** ******************
      fNewFSALStepperOwned = fsalStepper;
 
      if( fsalStepper == nullptr )
@@ -188,12 +190,11 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      else
      {
         fIntgrDriver = new
-           G4FSALIntegrationDriver<NewFsalStepperType>(stepMinimum,
-                                                       fsalStepper,
-                                                       fsalStepper->GetNumberOfVariables() );
+           G4FSALIntegrationDriver<NewFsalStepperType>(stepMinimum, fsalStepper,
+                                          fsalStepper->GetNumberOfVariables() );
            //  ====  Create the driver which knows the class type
         
-        if( fIntgrDriver==nullptr )
+        if( fIntgrDriver == nullptr )
         {
            message << "Using G4FSALIntegrationDriver with stepper type: "
                    << NewFSALStepperName << G4endl;
@@ -210,9 +211,10 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   
   // To test failure to create driver
   // delete fIntgrDriver;
-  // fIntgrDriver= nullptr;
+  // fIntgrDriver = nullptr;
 
   // Detect and report Error conditions
+  //
   if( errorInStepperCreation || (fIntgrDriver == nullptr ))
   {
      std::ostringstream errmsg;
@@ -224,24 +226,27 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      }
      if (fIntgrDriver == nullptr )
      {
-        errmsg  << "ERROR> Failure to create Integration-Driver object." << G4endl
-                << "       -------------------------------------------" << G4endl;
+        errmsg  << "ERROR> Failure to create Integration-Driver object."
+                << G4endl
+                << "       -------------------------------------------"
+                << G4endl;
      }
      const std::string BoolName[2]= { "False", "True" }; 
      errmsg << "  Configuration:  (constructor arguments) " << G4endl        
             << "    provided Stepper = " << pItsStepper << G4endl
             << "    use FSAL stepper = " << BoolName[useFSALstepper]
             << " (request = " << BoolName[recallFSALflag]
-            << " force FSAL = " << BoolName[forceFSALstepper] << " )" << G4endl;
+            << " force FSAL = " << BoolName[forceFSALstepper] << " )"
+            << G4endl;
      errmsg << message.str(); 
      errmsg << "Aborting.";
      G4Exception("G4ChordFinder::G4ChordFinder() - constructor 2",
                  "GeomField0003", FatalException, errmsg);     
   }
 
-  assert(    ( pItsStepper    != nullptr ) 
+  assert(    ( pItsStepper != nullptr ) 
           || ( fRegularStepperOwned != nullptr )
-          || ( fNewFSALStepperOwned  != nullptr )
+          || ( fNewFSALStepperOwned != nullptr )
      );
   assert( fIntgrDriver != nullptr );
 }
@@ -251,11 +256,11 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
 G4ChordFinder::~G4ChordFinder()
 {
-  delete   fEquation;
-  delete   fRegularStepperOwned;
-  delete   fNewFSALStepperOwned;
-  delete   fCachedField;
-  delete   fIntgrDriver;
+  delete fEquation;
+  delete fRegularStepperOwned;
+  delete fNewFSALStepperOwned;
+  delete fCachedField;
+  delete fIntgrDriver;
 }
 
 // ...........................................................................
@@ -267,7 +272,7 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
                                   const G4ThreeVector& CurrentE_Point,
                                   const G4ThreeVector& CurrentF_Point,
                                   const G4ThreeVector& PointG,
-                                       G4bool first, G4double eps_step)
+                                        G4bool first, G4double eps_step)
 {
   // ApproxCurvePointS is 2nd implementation of ApproxCurvePoint.
   // Use Brent Algorithm (or InvParabolic) when possible.
@@ -279,7 +284,7 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
   // relative accuracy of each Step.
 
   G4FieldTrack EndPoint(CurveA_PointVelocity);
-  if(!first){EndPoint= ApproxCurveV;}
+  if(!first) { EndPoint = ApproxCurveV; }
 
   G4ThreeVector Point_A,Point_B;
   Point_A=CurveA_PointVelocity.GetPosition();
@@ -308,14 +313,13 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
     yc=-(Point_B-PointG).mag();
     if(xb==0.)
     {
-      EndPoint=
-      ApproxCurvePointV(CurveA_PointVelocity, CurveB_PointVelocity,
-                        CurrentE_Point, eps_step);
+      EndPoint = ApproxCurvePointV(CurveA_PointVelocity, CurveB_PointVelocity,
+                                   CurrentE_Point, eps_step);
       return EndPoint;
     }
   }
 
-  const G4double tolerance= 1.e-12;
+  const G4double tolerance = 1.e-12;
   if(std::abs(ya)<=tolerance||std::abs(yc)<=tolerance)
   {
     ; // What to do for the moment: return the same point as at start
@@ -332,10 +336,10 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
     }
     else
     {
-      test_step=(test_step-xb);
+      test_step = test_step - xb;
       curve=std::abs(EndPoint.GetCurveLength()
                     -CurveB_PointVelocity.GetCurveLength());
-      xb=(CurrentF_Point-Point_B).mag();
+      xb = (CurrentF_Point-Point_B).mag();
     }
       
     if(test_step<=0)    { test_step=0.1*xb; }
@@ -396,7 +400,7 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   curve_length= CurveB_PointVelocity.GetCurveLength()
               - CurveA_PointVelocity.GetCurveLength();  
  
-  G4double  integrationInaccuracyLimit= std::max( perMillion, 0.5*eps_step ); 
+  G4double integrationInaccuracyLimit= std::max( perMillion, 0.5*eps_step ); 
   if( curve_length < ABdist * (1. - integrationInaccuracyLimit) )
   { 
 #ifdef G4DEBUG_FIELD
@@ -424,7 +428,7 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
     // curve_length = ABdist; 
   }
 
-  G4double  new_st_length; 
+  G4double new_st_length; 
 
   if ( ABdist > 0.0 )
   {
@@ -460,7 +464,7 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
      AE_fraction = 0.5;                         // Default value
   }
 
-  new_st_length= AE_fraction * curve_length; 
+  new_st_length = AE_fraction * curve_length; 
 
   if ( AE_fraction > 0.0 )
   { 
@@ -478,7 +482,4 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   return Current_PointVelocity;
 }
 
-
 // ...........................................................................
-
-

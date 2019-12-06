@@ -23,23 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Implementation for G4Trd class
 //
-// History:
-//
+// 12.01.95 P.Kent: First version
+// 28.04.05 V.Grichine: new SurfaceNormal according to J.Apostolakis proposal 
 // 25.05.17 E.Tcherniaev: complete revision, speed-up
-// 23.09.16 E.Tcherniaev: use G4BoundingEnvelope for CalculateExtent(),
-//                      removed CreateRotatedVertices()
-// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
-// 26.04.05, V.Grichine, new SurfaceNoramal is default
-// 07.12.04, V.Grichine, SurfaceNoramal with edges/vertices.
-// 07.05.00, V.Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
-//    ~1996, V.Grichine, 1st implementation based on old code of P.Kent
-//
-//////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 
 #include "G4Trd.hh"
 
@@ -138,8 +127,8 @@ void G4Trd::SetAllParameters(G4double pdx1, G4double pdx2,
                              G4double pdy1, G4double pdy2, G4double pdz)
 {
   // Reset data of the base class
-  fCubicVolume = 0;
-  fSurfaceArea = 0;
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
 
   // Set parameters
@@ -216,7 +205,7 @@ void G4Trd::MakePlanes()
 
 G4double G4Trd::GetCubicVolume()
 {
-  if (fCubicVolume == 0)
+  if (fCubicVolume == 0.)
   {
     fCubicVolume = 2*fDz*( (fDx1+fDx2)*(fDy1+fDy2) +
                            (fDx2-fDx1)*(fDy2-fDy1)/3 );
@@ -230,7 +219,7 @@ G4double G4Trd::GetCubicVolume()
 
 G4double G4Trd::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0)
+  if (fSurfaceArea == 0.)
   {
     fSurfaceArea =
       4*(fDx1*fDy1+fDx2*fDy2) +
@@ -300,7 +289,7 @@ G4bool G4Trd::CalculateExtent( const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -573,7 +562,7 @@ G4double G4Trd::DistanceToIn( const G4ThreeVector& p ) const
 
 G4double G4Trd::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
                               const G4bool calcNorm,
-                                    G4bool *validNorm, G4ThreeVector *n) const
+                                    G4bool* validNorm, G4ThreeVector* n) const
 {
   // Z intersections
   //

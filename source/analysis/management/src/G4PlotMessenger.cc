@@ -156,7 +156,7 @@ void G4PlotMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   std::vector<G4String> parameters;
   G4Analysis::Tokenize(newValues, parameters);
   // check consistency
-  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+  if ( parameters.size() != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
     fHelper->WarnAboutParameters(command, parameters.size());
     return;

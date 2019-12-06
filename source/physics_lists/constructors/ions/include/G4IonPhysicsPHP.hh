@@ -31,8 +31,7 @@
 // Author:    A.Ribon  24-May-2016
 //
 // Ion physics with ParticleHP, used below 200 MeV/n for d, t, He3, alpha;
-// Binary Cascade used below 4 GeV/n (down to 190 MeV/n for d, t, He3, alpha,
-// and 0 for the other ions); FTFP used above 2 GeV/n.
+// Binary Cascade used above to 190 MeV/n and then FTFP at higher energies.
 // This is as G4IonPhysics, except that ParticleHP is used below 200 MeV/n
 // for d, t, He3, alpha. 
 // 

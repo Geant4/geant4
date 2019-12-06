@@ -23,17 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ErrorPlaneSurfaceTarget class implementation
 //
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file 
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
 
 #include "G4ErrorPlaneSurfaceTarget.hh"
 
 #ifdef G4VERBOSE
-#include "G4ErrorPropagatorData.hh" //for verbosity checking
+#include "G4ErrorPropagatorData.hh" // for verbosity checking
 #endif
 
 #include "G4Point3D.hh"
@@ -169,6 +167,7 @@ GetTangentPlane( const G4ThreeVector& ) const
   return *this;
 }
 
+//---------------------------------------------------------------------
 
 void G4ErrorPlaneSurfaceTarget::Dump( const G4String& msg ) const
 {

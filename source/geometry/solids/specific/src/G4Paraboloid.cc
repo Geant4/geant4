@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// class G4Paraboloid
-//
 // Implementation for G4Paraboloid class
 //
 // Author : Lukas Lindroos (CERN), July 2007
@@ -61,14 +58,12 @@ using namespace CLHEP;
 ///////////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters
-
+//
 G4Paraboloid::G4Paraboloid(const G4String& pName,
                                  G4double pDz,
                                  G4double pR1,
                                  G4double pR2)
- : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
-   fSurfaceArea(0.), fCubicVolume(0.) 
-
+ : G4VSolid(pName)
 {
   if( (pDz <= 0.) || (pR2 <= pR1) || (pR1 < 0.) )
   {
@@ -99,37 +94,34 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Paraboloid::G4Paraboloid( __void__& a )
-  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0),
-    fSurfaceArea(0.), fCubicVolume(0.),
-    dz(0.), r1(0.), r2(0.), k1(0.), k2(0.)
+  : G4VSolid(a), dz(0.), r1(0.), r2(0.), k1(0.), k2(0.)
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Destructor
-
+//
 G4Paraboloid::~G4Paraboloid()
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
-
+//
 G4Paraboloid::G4Paraboloid(const G4Paraboloid& rhs)
-  : G4VSolid(rhs), fRebuildPolyhedron(false), fpPolyhedron(0),
+  : G4VSolid(rhs),
     fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume),
     dz(rhs.dz), r1(rhs.r1), r2(rhs.r2), k1(rhs.k1), k2(rhs.k2)
 {
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
-
+//
 G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs) 
 {
    // Check assignment to self
@@ -145,27 +137,15 @@ G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs)
    fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
    dz = rhs.dz; r1 = rhs.r1; r2 = rhs.r2; k1 = rhs.k1; k2 = rhs.k2;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Dispatch to parameterisation for replication mechanism dimension
-// computation & modification.
-
-//void ComputeDimensions(       G4VPVParamerisation p,
-//                        const G4Int               n,
-//                        const G4VPhysicalVolume*  pRep )
-//{
-//  p->ComputeDimensions(*this,n,pRep) ;
-//}
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Get bounding box
-
+//
 void G4Paraboloid::BoundingLimits(G4ThreeVector& pMin,
                                   G4ThreeVector& pMax) const
 {
@@ -190,12 +170,12 @@ void G4Paraboloid::BoundingLimits(G4ThreeVector& pMin,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
-
+//
 G4bool
 G4Paraboloid::CalculateExtent(const EAxis pAxis,
-                             const G4VoxelLimits& pVoxelLimit,
-                             const G4AffineTransform& pTransform,
-                                   G4double& pMin, G4double& pMax) const
+                              const G4VoxelLimits& pVoxelLimit,
+                              const G4AffineTransform& pTransform,
+                                    G4double& pMin, G4double& pMax) const
 {
   G4ThreeVector bmin, bmax;
 
@@ -210,7 +190,7 @@ G4Paraboloid::CalculateExtent(const EAxis pAxis,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Return whether point inside/outside/on surface
-
+//
 EInside G4Paraboloid::Inside(const G4ThreeVector& p) const
 {
   // First check is  the point is above or below the solid.
@@ -252,7 +232,8 @@ EInside G4Paraboloid::Inside(const G4ThreeVector& p) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-
+// SurfaceNormal
+//
 G4ThreeVector G4Paraboloid::SurfaceNormal( const G4ThreeVector& p) const
 {
   G4ThreeVector n(0, 0, 0);
@@ -346,9 +327,9 @@ G4ThreeVector G4Paraboloid::SurfaceNormal( const G4ThreeVector& p) const
 // Calculate distance to shape from outside, along normalised vector
 // - return kInfinity if no intersection
 //
-
+//
 G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
-                                    const G4ThreeVector& v  ) const
+                                     const G4ThreeVector& v  ) const
 {
   G4double rho2 = p.perp2(), paraRho2 = std::fabs(k1 * p.z() + k2);
   G4double tol2 = kCarTolerance*kCarTolerance;
@@ -478,19 +459,19 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance (<= actual) to closest surface of shape from outside
-// - Return 0 if point inside
-
+// - Return zero if point inside
+//
 G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 {
   G4double safz = -dz+std::fabs(p.z());
-  if(safz<0) { safz=0; }
+  if(safz<0.) { safz=0.; }
   G4double safr = kInfinity;
 
   G4double rho = p.x()*p.x()+p.y()*p.y();
   G4double paraRho = (p.z()-k2)/k1;
   G4double sqrho = std::sqrt(rho);
 
-  if(paraRho<0)
+  if(paraRho<0.)
   {
     safr=sqrho-r2;
     if(safr>safz) { safz=safr; }
@@ -499,7 +480,7 @@ G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 
   G4double sqprho = std::sqrt(paraRho);
   G4double dRho = sqrho-sqprho;
-  if(dRho<0) { return safz; }
+  if(dRho<0.) { return safz; }
 
   G4double talf = -2.*k1*sqprho;
   G4double tmp  = 1+talf*talf;
@@ -515,12 +496,12 @@ G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to surface of shape from 'inside'
-
+//
 G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
                                     const G4ThreeVector& v,
                                     const G4bool calcNorm,
-                                          G4bool *validNorm,
-                                          G4ThreeVector *n  ) const
+                                          G4bool* validNorm,
+                                          G4ThreeVector* n ) const
 {
   G4double rho2 = p.perp2(), paraRho2 = std::fabs(k1 * p.z() + k2);
   G4double vRho2 = v.perp2(), intersection;
@@ -826,7 +807,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance (<=actual) to closest surface of shape from inside
-
+//
 G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 {
   G4double safe=0.0,rho,safeR,safeZ ;
@@ -867,7 +848,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 //////////////////////////////////////////////////////////////////////////
 //
 // G4EntityType
-
+//
 G4GeometryType G4Paraboloid::GetEntityType() const
 {
   return G4String("G4Paraboloid");
@@ -876,7 +857,7 @@ G4GeometryType G4Paraboloid::GetEntityType() const
 //////////////////////////////////////////////////////////////////////////
 //
 // Make a clone of the object
-
+//
 G4VSolid* G4Paraboloid::Clone() const
 {
   return new G4Paraboloid(*this);
@@ -885,7 +866,7 @@ G4VSolid* G4Paraboloid::Clone() const
 //////////////////////////////////////////////////////////////////////////
 //
 // Stream object contents to an output stream
-
+//
 std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 {
   G4int oldprc = os.precision(16);
@@ -906,7 +887,7 @@ std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 ////////////////////////////////////////////////////////////////////
 //
 // GetPointOnSurface
-
+//
 G4ThreeVector G4Paraboloid::GetPointOnSurface() const
 {
   G4double A = (fSurfaceArea == 0)? CalculateSurfaceArea(): fSurfaceArea;
@@ -937,7 +918,7 @@ G4ThreeVector G4Paraboloid::GetPointOnSurface() const
 /////////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
-
+//
 void G4Paraboloid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddSolid(*this);
@@ -948,10 +929,9 @@ G4Polyhedron* G4Paraboloid::CreatePolyhedron () const
   return new G4PolyhedronParaboloid(r1, r2, dz, 0., twopi);
 }
 
-
 G4Polyhedron* G4Paraboloid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

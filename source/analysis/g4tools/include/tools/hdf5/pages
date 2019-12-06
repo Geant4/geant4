@@ -102,9 +102,9 @@ public:
   void reset_pos() {m_pos = 0;}
   
   template <class TYPE>
-  bool write_page(size_t a_size,void* a_array) {
+  bool write_page(size_t a_size,const TYPE* a_array) {
     if(!m_pos) {
-      if(!write_array<TYPE>(m_group,s_pages(),a_size,(TYPE*)a_array,a_size,m_compress)) {
+      if(!write_array<TYPE>(m_group,s_pages(),a_size,a_array,a_size?a_size:32,m_compress)) {
         m_out << "pages::write_page : write_array<TYPE>() failed. Pos " << m_pos << std::endl;
         return false;
       }
@@ -114,8 +114,8 @@ public:
         return false;
       }
     } else {
-      if(!write_append_array_dataset<TYPE>(m_dataset,a_size,(TYPE*)a_array)) {
-        m_out << "pages::write_page : write_append_array<TYPE>() failed. Pos " << m_pos << std::endl;
+      if(!write_append_array_dataset<TYPE>(m_dataset,a_size,a_array)) {
+        m_out << "pages::write_page : write_append_array_dataset<TYPE>() failed. Pos " << m_pos << std::endl;
         return false;
       }
     }
@@ -125,7 +125,7 @@ public:
   }
   
   template <class TYPE>
-  bool read_page(size_t a_size,void* a_array) {
+  bool read_page(size_t a_size,TYPE* a_array) {
     //it is assumed that a_array can contain a_size*sizeof(TYPE) bytes.
     unsigned int _size = a_size;
     unsigned int n = 0;
@@ -151,6 +151,91 @@ public:
     return true;
   }
 
+  template <class TYPE>
+  bool write_vlen(size_t a_size,const TYPE* a_array) {
+    if(!m_pos) {
+      if(!hdf5::write_vlen<TYPE>(m_group,s_pages(),a_size,a_array,a_size?a_size:32,m_compress)) {
+        m_out << "pages::write_vlen : write_vlen<TYPE>() failed. Pos " << m_pos << std::endl;
+        return false;
+      }
+      m_dataset = tools_H5Dopen(m_group,s_pages().c_str());
+      if(m_dataset<0) {
+        m_out << "pages::write_vlen : H5Dopen failed. Pos " << m_pos << std::endl;
+        return false;
+      }
+    } else {
+      if(!write_append_vlen_dataset<TYPE>(m_dataset,a_size,a_array)) {
+        m_out << "pages::write_vlen : write_append_vlen_dataset<TYPE>() failed. Pos " << m_pos << std::endl;
+        return false;
+      }
+    }
+    m_pos++;
+    m_entries++;
+    return true;
+  }
+
+  template <class TYPE>
+  bool read_vlen(size_t& a_size,TYPE*& a_array) {
+    //it is assumed that a_array can contain a_size*sizeof(TYPE) bytes.
+    unsigned int sz;
+    if(!read_sub_vlen<TYPE>(m_group,s_pages(),(unsigned int)m_pos,sz,a_array)) {
+      m_out << "pages::read_vlen : read_sub_vlen<TYPE>() failed." << std::endl;
+      a_size = 0;
+      a_array = 0;
+      return false;
+    }
+    a_size = sz;
+    m_pos++;
+    m_entries++;
+    return true;
+  }
+
+  bool write_string(const std::string& a_string) {
+    if(!m_pos) {
+      if(!hdf5::write_string_dataset(m_group,s_pages(),a_string,128,m_compress)) { //32=>enforce extendable.
+        m_out << "pages::write_string : hdf5::write_string() failed. Pos " << m_pos << std::endl;
+        return false;
+      }
+      m_dataset = tools_H5Dopen(m_group,s_pages().c_str());
+      if(m_dataset<0) {
+        m_out << "pages::write_string : H5Dopen failed. Pos " << m_pos << std::endl;
+        return false;
+      }
+    } else {
+      if(!write_append_string_dataset(m_dataset,a_string)) {
+        m_out << "pages::write_string : write_append_string_dataset() failed. Pos " << m_pos << std::endl;
+        return false;
+      }
+    }
+    m_pos++;
+    m_entries++;
+    return true;
+  }
+
+  bool read_string(std::string& a_string) {
+    if(!read_sub_string(m_group,s_pages(),(unsigned int)m_pos,a_string)) {
+      m_out << "pages::read_string : read_sub_string() failed." << std::endl;
+      a_string.clear();
+      return false;
+    }
+    m_pos++;
+    m_entries++;
+    return true;
+  }
+  
+/*
+  bool write_string(const std::string& a_string) {return write_vlen<char>(a_string.size(),a_string.c_str());}
+
+  bool read_string(std::string& a_string) {
+    size_t sz;char* _data;
+    if(!read_vlen<char>(sz,_data)) {a_string.clear();return false;}
+    a_string.resize(sz);
+    for(size_t index=0;index<sz;index++) a_string[index] = _data[index];
+    delete [] _data;
+    return true;
+  }
+*/  
+  
 /*
   bool write_strings(size_t a_number,void* a_array) {
     size_t sz = m_size*a_number;
@@ -191,7 +276,7 @@ public:
     return true;
   }
 
-  bool read_strings(size_t a_size,void* a_array) {
+  bool read_strings(size_t a_size,char* a_array) {
     unsigned int _size = a_size*m_size;
     unsigned int n = 0;
     char* array = 0;

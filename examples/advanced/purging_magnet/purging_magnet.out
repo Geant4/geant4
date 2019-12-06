@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -57,10 +61,10 @@ Some /vis commands (optionally) take a string to specify colour.
 
 ***** Table : Nb of materials = 8 *****
 
- Material:     Iron    density:  7.870 g/cm3   RadL:   1.758 cm   Nucl.Int.Length:  16.998 cm 
+ Material:     Iron    density:  7.870 g/cm3   RadL:   1.758 cm   Nucl.Int.Length:  16.999 cm 
                        Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.840 g/mole
+   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
          --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance: 91.754 %
          --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:  2.119 %
@@ -215,8 +219,7 @@ PurgMagPhysicsList::SetCuts:CutLength : 1 um
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
@@ -318,11 +321,13 @@ Total number of event = 5000
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1450407308, 1749470055
+ Current couple of seeds = 849779768, 1687882417
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
-G4Integration Driver Stats: #QuickAdvance 15000 - #AccurateAdvance 30000 #good steps 80000 #bad steps 10000
+G4Integration Driver Stats: #QuickAdvance 0 - #AccurateAdvance 0 #good steps 0 #bad steps 0
+G4ChordFinder statistics report: 
+  No trials: 0  No Calls: 0  Max-trial: 0
+  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
 G4ChordFinder statistics report: 
   No trials: 15000  No Calls: 15000  Max-trial: 1
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

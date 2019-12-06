@@ -23,23 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4VDivisionParameterisation
+// G4VDivisionParameterisation
 //
 // Class description:
 //
 // Base class for parameterisations defining divisions of volumes
 // for different kind of CSG and specific solids.
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
 // 21.04.10 - M.Asai, Added gaps
 //---------------------------------------------------------------------
-#ifndef G4VDivisionParameterisation_H
-#define G4VDivisionParameterisation_H 1
+#ifndef G4VDIVISIONPARAMETERISATION_HH
+#define G4VDIVISIONPARAMETERISATION_HH 1
 
 #include "G4Types.hh"
 #include "geomdefs.hh"
@@ -57,10 +53,10 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
   
     G4VDivisionParameterisation( EAxis axis, G4int nDiv, G4double width,
                                  G4double offset, DivisionType divType,
-                                 G4VSolid* motherSolid = 0);
+                                 G4VSolid* motherSolid = nullptr);
     virtual ~G4VDivisionParameterisation();
   
-    virtual G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume *);
+    virtual G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume*);
 
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume *physVol) const = 0;
@@ -79,7 +75,7 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
   protected:  // with description
 
     void ChangeRotMatrix( G4VPhysicalVolume* physVol,
-                          G4double rotZ = 0. ) const;
+                          G4double rotZ = 0.0 ) const;
   
     G4int CalculateNDiv( G4double motherDim, G4double width,
                          G4double offset ) const;
@@ -96,22 +92,22 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
   
     G4String ftype;
     EAxis faxis;
-    G4int fnDiv;
-    G4double fwidth;
-    G4double foffset;
+    G4int fnDiv = 0;
+    G4double fwidth = 0.0;
+    G4double foffset = 0.0;
     DivisionType fDivisionType;
-    G4VSolid* fmotherSolid;
-    G4bool fReflectedSolid;
-    G4bool fDeleteSolid;
+    G4VSolid* fmotherSolid = nullptr;
+    G4bool fReflectedSolid = false;
+    G4bool fDeleteSolid = false;
 
     static G4ThreadLocal G4RotationMatrix* fRot;
 
     static const G4int verbose;
-    G4int theVoluFirstCopyNo;
+    G4int theVoluFirstCopyNo = 1;
 
     G4double kCarTolerance;
 
-    G4double fhgap;
+    G4double fhgap = 0.0;
 };
 
 #include "G4VDivisionParameterisation.icc"

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -47,7 +46,6 @@
 #include "G4ElementData.hh"
 #include "G4Threading.hh"
 #include <vector>
-#include <iostream>
 
 const G4int MAXZINEL = 93;
 
@@ -75,8 +73,7 @@ public:
 			 const G4Element*, const G4Material*) final;
 
   G4double GetElementCrossSection(const G4DynamicParticle*, 
-				  G4int Z, 
-                                  const G4Material* mat=nullptr) final;
+				  G4int Z, const G4Material*) final;
 
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
                               const G4Isotope* iso,
@@ -92,7 +89,13 @@ public:
 
 private: 
 
-  void Initialise(G4int Z, const char*);
+  void Initialise(G4int Z);
+
+  void InitialiseOnFly(G4int Z);
+
+  const G4String& FindDirectoryPath();
+
+  const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
@@ -106,17 +109,16 @@ private:
 
   const G4ParticleDefinition* neutron;
 
-  G4double emax;
   std::vector<G4double> temp;
 
-  size_t  fIdxXSTable;
   G4bool  isMaster;
 
   static G4ElementData* data;
-
   static G4double   coeff[MAXZINEL];
+  static G4double    aeff[MAXZINEL];
   static const G4int amin[MAXZINEL];
   static const G4int amax[MAXZINEL];
+  static G4String gDataDirectory;
 
 #ifdef G4MULTITHREADED
   static G4Mutex neutronInelasticXSMutex;

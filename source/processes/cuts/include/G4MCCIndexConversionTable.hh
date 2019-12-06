@@ -23,28 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
+// G4MCCIndexConversionTable
 //
 // Class description:
 //
 // G4MCCIndexConversionTable is used by G4ProductionTable 
 // when the cut table is retrieved from the file. 
-// An index pointing a Material-Cut-Couple can be different 
-// from the index pointing the same MCC in the file. This class
+// An index pointing to a Material-Cut-Couple can be different 
+// from the index pointing to the same MCC in the file. This class
 // has a map between them.
-//
-// ------------------------------------------------------------
-//
-// History:
-// -------
-// - First implementation   20th August 2004  by H.Kurashige
-//-------------------------------------
 
-#ifndef G4MCCIndexConversionTable_h
-#define G4MCCIndexConversionTable_h 1
+// First implementation - 20th August 2004, H.Kurashige
+//-------------------------------------------------------------
+
+#ifndef G4MCCIndexConversionTable_hh
+#define G4MCCIndexConversionTable_hh 1
 
 #include <vector>
 #include "globals.hh"
@@ -77,9 +70,9 @@ class G4MCCIndexConversionTable
  
   size_t size() const;
 
-  protected:
-   typedef std::vector<G4int> G4IntVector;
-   G4IntVector vecNewIndex;
+ protected:
+
+   std::vector<G4int> vecNewIndex;
 };
 
 inline
@@ -98,7 +91,7 @@ inline
   if (index >= vecNewIndex.size()) return;
   // set the index in the current production cut table
   // for the indicated MCC in the file
-  vecNewIndex[index]=new_value;  
+  vecNewIndex[index]=G4int(new_value);  
 }  
 
 inline

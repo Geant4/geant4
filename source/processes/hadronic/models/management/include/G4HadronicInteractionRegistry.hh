@@ -75,9 +75,7 @@ private:
 
   static G4ThreadLocal G4HadronicInteractionRegistry* instance;
 
-  std::vector <G4HadronicInteraction*>  allModels;
-  G4bool isInitialized;
-
+  std::vector<G4HadronicInteraction*> allModels;
 };
 
 #endif

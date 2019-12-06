@@ -15,7 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+October 30, 2019, A. Zaborowska (param-v10-05-00)
+- Register G4FastSimulationManagerProcess with highest ordering in
+  G4FastSimulationManagerHelper to ensure it is the only process
+  invoked for a given step (ExclusivelyForced) and no other
+  StronglyForced processes will be considered.
+
 December 19, 2017, G. Cosmo (param-V10-04-00)
 - Fixed self-consistency in G4FastSimulationVector header (missing #include).
   Thanks to Raphael Isemann for reporting this.

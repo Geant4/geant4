@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file medical/DICOM/include/Dicom2RunAction.hh
+/// \file Dicom2RunAction.hh
 /// \brief Definition of the Dicom2RunAction class
 //
 

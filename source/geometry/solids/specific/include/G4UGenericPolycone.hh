@@ -23,24 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UGenericPolycone
 //
 // Class description:
 //
-//   Wrapper class for G4GenericPolycone to make use of VecGeom GenericPolycone.
+// Wrapper class for G4GenericPolycone to make use of VecGeom GenericPolycone.
 
-// History:
 // 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
-#ifndef G4UGENERICPOLYCONE_hh
-#define G4UGENERICPOLYCONE_hh
+#ifndef G4UGENERICPOLYCONE_HH
+#define G4UGENERICPOLYCONE_HH
 
 #include "G4UAdapter.hh"
 
@@ -89,7 +81,7 @@ class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
       // persistifiable objects.
 
     G4UGenericPolycone( const G4UGenericPolycone& source );
-    G4UGenericPolycone &operator=(const G4UGenericPolycone& source);
+    G4UGenericPolycone& operator=(const G4UGenericPolycone& source);
       // Copy constructor and assignment operator.
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;

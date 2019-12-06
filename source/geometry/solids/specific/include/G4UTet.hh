@@ -23,19 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4UTet
 //
 // Class description:
 //
-//   Wrapper class for G4Tet to make use of VecGeom Tet.
+// Wrapper class for G4Tet to make use of VecGeom Tet.
 
-// History:
 // 1.11.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UTET_HH
@@ -62,7 +55,7 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
                  G4ThreeVector p2,
                  G4ThreeVector p3,
                  G4ThreeVector p4, 
-                 G4bool *degeneracyFlag=0);
+                 G4bool* degeneracyFlag = nullptr);
 
    ~G4UTet();
 

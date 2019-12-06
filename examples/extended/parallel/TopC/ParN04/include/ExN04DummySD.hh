@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04DummySD.hh
+/// \file ExN04DummySD.hh
 /// \brief Definition of the ExN04DummySD class
 //
 //

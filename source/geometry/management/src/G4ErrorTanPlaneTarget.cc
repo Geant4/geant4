@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ErrorTanPlaneTarget class implementation 
 //
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
 
 #include "G4ErrorTanPlaneTarget.hh"

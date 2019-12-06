@@ -40,10 +40,7 @@
 
 #include "G4UIExecutive.hh"
 
-#ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
-#endif
-
+#include "G4VisExecutive.hh"
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"

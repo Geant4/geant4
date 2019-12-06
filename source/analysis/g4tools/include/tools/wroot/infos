@@ -18,9 +18,9 @@ inline void acs(unsigned int& a_cs,int a_n,int* a_dims) {
   for(int i=0;i<a_n;i++) a_cs = a_cs*3+(unsigned int)a_dims[i];
 }
 
-inline void fill_vec(obj_list<StreamerInfo>& a_infos,const std::string& a_type,streamer_info::Type a_si_type) {
+inline void fill_vec(obj_list<streamer_info>& a_infos,const std::string& a_type,streamer__info::Type a_si_type) {
   unsigned int check = 196608;
-  StreamerInfo* info = new StreamerInfo(std::string("vector<")+a_type+">",4,check);
+  streamer_info* info = new streamer_info(std::string("vector<")+a_type+">",4,check);
   a_infos.push_back(info);
   info->add(new streamer_STL("This","Used to call the proper TStreamerInfo case",0,a_si_type,std::string("vector<")+a_type+">"));
 }
@@ -30,7 +30,7 @@ inline int size_VIRTUAL() {return 4;}
 inline int size_TObject() {return 12;}
 inline int size_TNamed() {return 28;}
 
-inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out) {
+inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out) {
 
   // sizeof(TString) = 8   (4 (virtual ~) + 1 + 3 (align))
   // sizeof(TObject) = 12
@@ -60,7 +60,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fBits");
   scs(check,"UInt_t");
 
-  StreamerInfo* info = new StreamerInfo("TObject",1,check);
+  streamer_info* info = new streamer_info("TObject",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = size_VIRTUAL();
@@ -85,7 +85,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fTitle");
   scs(check,"TString");
 
-  StreamerInfo* info = new StreamerInfo("TNamed",1,check);
+  streamer_info* info = new streamer_info("TNamed",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
@@ -113,7 +113,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fElements");
   scs(check,"TObjArray*");
 
-  StreamerInfo* info = new StreamerInfo("TStreamerInfo",2,check);
+  streamer_info* info = new streamer_info("TStreamerInfo",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TNamed","The basis for a named object (name, title)",0,TNamed_version));//28
@@ -153,7 +153,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"TString");
   //Should be : 2369818458U
 
-  StreamerInfo* info = new StreamerInfo("TStreamerElement",2,check);
+  streamer_info* info = new streamer_info("TStreamerElement",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TNamed","The basis for a named object (name, title)",0,TNamed_version));
@@ -179,7 +179,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"Int_t");
   //Should be : 2671078514U
 
-  StreamerInfo* info = new StreamerInfo("TStreamerBase",3,check);
+  streamer_info* info = new streamer_info("TStreamerBase",3,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));
@@ -192,7 +192,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"TStreamerElement");
   //Should be : 2525579865U
 
-  StreamerInfo* info = new StreamerInfo("TStreamerString",2,check);
+  streamer_info* info = new streamer_info("TStreamerString",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
@@ -204,7 +204,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"TStreamerElement");
   //Should be : 3001875966U;
 
-  StreamerInfo* info = new StreamerInfo("TStreamerBasicType",2,check);
+  streamer_info* info = new streamer_info("TStreamerBasicType",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
@@ -225,7 +225,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"TString");
   //Should be : 1587298059U
 
-  StreamerInfo* info = new StreamerInfo("TStreamerBasicPointer",2,check);
+  streamer_info* info = new streamer_info("TStreamerBasicPointer",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));
@@ -240,7 +240,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"TStreamerElement");
   //Should be : 2177456715U
 
-  StreamerInfo* info = new StreamerInfo("TStreamerObject",2,check);
+  streamer_info* info = new streamer_info("TStreamerObject",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
@@ -252,7 +252,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"TStreamerElement");
   //Should be : 720556968U
 
-  StreamerInfo* info = new StreamerInfo("TStreamerObjectPointer",2,check);
+  streamer_info* info = new streamer_info("TStreamerObjectPointer",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
@@ -264,7 +264,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"TStreamerElement");
   //Should be : 3108880127U
 
-  StreamerInfo* info = new StreamerInfo("TStreamerObjectAny",2,check);
+  streamer_info* info = new streamer_info("TStreamerObjectAny",2,check);
   a_infos.push_back(info);
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
@@ -276,7 +276,7 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fN");
   scs(check,"Int_t");
 
-  StreamerInfo* info = new StreamerInfo("TArray",1,check);
+  streamer_info* info = new streamer_info("TArray",1,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -295,13 +295,13 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fArray");
   scs(check,"Int_t*");
 
-  StreamerInfo* info = new StreamerInfo("TArrayI",1,check);
+  streamer_info* info = new streamer_info("TArrayI",1,check);
   a_infos.push_back(info);
 
   // Elements :
   int offset = 0;
   info->add(new streamer_base("TArray","Abstract array base class",offset,TArray_version));offset += size_TArray;
-  info->add(new streamer_basic_pointer("fArray","[fN] Array of fN integers",offset,streamer_info::INT,"fN","TArray",1,"Int_t*"));offset += size_POINTER;
+  info->add(new streamer_basic_pointer("fArray","[fN] Array of fN integers",offset,streamer__info::INT,"fN","TArray",1,"Int_t*"));offset += size_POINTER;
 
   //12
   }
@@ -315,13 +315,13 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fArray");
   scs(check,"Double_t*");
 
-  StreamerInfo* info = new StreamerInfo("TArrayD",1,check);
+  streamer_info* info = new streamer_info("TArrayD",1,check);
   a_infos.push_back(info);
 
   // Elements :
   int offset = 0;
   info->add(new streamer_base("TArray","Abstract array base class",offset,TArray_version));offset += size_TArray; //8
-  info->add(new streamer_basic_pointer("fArray","[fN] Array of fN integers",offset,streamer_info::DOUBLE,"fN","TArray",1,"Double_t*"));offset += size_POINTER;
+  info->add(new streamer_basic_pointer("fArray","[fN] Array of fN integers",offset,streamer__info::DOUBLE,"fN","TArray",1,"Double_t*"));offset += size_POINTER;
 
   //12
   }
@@ -335,30 +335,30 @@ inline void fill_infos_core(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fArray");
   scs(check,"Float_t*");
 
-  StreamerInfo* info = new StreamerInfo("TArrayF",1,check);
+  streamer_info* info = new streamer_info("TArrayF",1,check);
   a_infos.push_back(info);
 
   // Elements :
   int offset = 0;
   info->add(new streamer_base("TArray","Abstract array base class",offset,TArray_version));offset += size_TArray;
-  info->add(new streamer_basic_pointer("fArray","[fN] Array of fN integers",offset,streamer_info::FLOAT,"fN","TArray",1,"Float_t*"));offset += size_POINTER;
+  info->add(new streamer_basic_pointer("fArray","[fN] Array of fN integers",offset,streamer__info::FLOAT,"fN","TArray",1,"Float_t*"));offset += size_POINTER;
 
   //12
   }
 
-  fill_vec(a_infos,"char",streamer_info::CHAR);
-  fill_vec(a_infos,"short",streamer_info::SHORT);
-  fill_vec(a_infos,"int",streamer_info::INT);
-  fill_vec(a_infos,"unsigned char",streamer_info::UNSIGNED_CHAR);
-  fill_vec(a_infos,"unsigned short",streamer_info::UNSIGNED_SHORT);
-  fill_vec(a_infos,"unsigned int",streamer_info::UNSIGNED_INT);
-  fill_vec(a_infos,"float",streamer_info::FLOAT);
-  fill_vec(a_infos,"double",streamer_info::DOUBLE);
-  fill_vec(a_infos,"bool",streamer_info::BOOL);
+  fill_vec(a_infos,"char",streamer__info::CHAR);
+  fill_vec(a_infos,"short",streamer__info::SHORT);
+  fill_vec(a_infos,"int",streamer__info::INT);
+  fill_vec(a_infos,"unsigned char",streamer__info::UNSIGNED_CHAR);
+  fill_vec(a_infos,"unsigned short",streamer__info::UNSIGNED_SHORT);
+  fill_vec(a_infos,"unsigned int",streamer__info::UNSIGNED_INT);
+  fill_vec(a_infos,"float",streamer__info::FLOAT);
+  fill_vec(a_infos,"double",streamer__info::DOUBLE);
+  fill_vec(a_infos,"bool",streamer__info::BOOL);
 
 }
 
-inline void fill_infos_cont(obj_list<StreamerInfo>& a_infos,std::ostream&) {
+inline void fill_infos_cont(obj_list<streamer_info>& a_infos,std::ostream&) {
 
   // sizeof(TString) = 8   (4 (virtual ~) + 1 + 3 (align))
   // sizeof(TObject) = 12
@@ -382,7 +382,7 @@ inline void fill_infos_cont(obj_list<StreamerInfo>& a_infos,std::ostream&) {
   scs(check,"fSize");
   scs(check,"Int_t");
 
-  StreamerInfo* info = new StreamerInfo("TCollection",TCollection_version,check);
+  streamer_info* info = new streamer_info("TCollection",TCollection_version,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
@@ -403,7 +403,7 @@ inline void fill_infos_cont(obj_list<StreamerInfo>& a_infos,std::ostream&) {
   scs(check,"fSorted");
   scs(check,"Bool_t");
 
-  StreamerInfo* info = new StreamerInfo("TSeqCollection",TSeqCollection_version,check);
+  streamer_info* info = new streamer_info("TSeqCollection",TSeqCollection_version,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
@@ -421,7 +421,7 @@ inline void fill_infos_cont(obj_list<StreamerInfo>& a_infos,std::ostream&) {
   scs(check,"TSeqCollection");
   //members :
 
-  StreamerInfo* info = new StreamerInfo("TList",TList_version,check);
+  streamer_info* info = new streamer_info("TList",TList_version,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
@@ -438,7 +438,7 @@ inline int size_TAttLine() {return 10;} //12?
 inline int size_TAttFill() {return 8;}
 inline int size_TAttMarker() {return 12;}
 
-inline void fill_infos_graf(obj_list<StreamerInfo>& a_infos,std::ostream& a_out) {
+inline void fill_infos_graf(obj_list<streamer_info>& a_infos,std::ostream& a_out) {
 
   //sizeof(Font_t) = 2
   //sizeof(Style_t) = 2
@@ -465,13 +465,13 @@ inline void fill_infos_graf(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   //Should be : 1369587346U
 
   // Beurk ; but the ROOT TTree compells indirectly the below.
-  StreamerInfo* info = new StreamerInfo("TAttLine",1,check);
+  streamer_info* info = new streamer_info("TAttLine",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = size_VIRTUAL();
-  info->add(new streamer_basic_type("fLineColor","line color",ofs,streamer_info::SHORT,"Color_t"));ofs += size_SHORT;
-  info->add(new streamer_basic_type("fLineStyle","line style",ofs,streamer_info::SHORT,"Style_t"));ofs += size_SHORT;
-  info->add(new streamer_basic_type("fLineWidth","line width",ofs,streamer_info::SHORT,"Width_t"));ofs += size_SHORT;
+  info->add(new streamer_basic_type("fLineColor","line color",ofs,streamer__info::SHORT,"Color_t"));ofs += size_SHORT;
+  info->add(new streamer_basic_type("fLineStyle","line style",ofs,streamer__info::SHORT,"Style_t"));ofs += size_SHORT;
+  info->add(new streamer_basic_type("fLineWidth","line width",ofs,streamer__info::SHORT,"Width_t"));ofs += size_SHORT;
   //2 (alignement ???)
   if(ofs!=size_TAttLine()) {
     a_out << "tools::wroot::fill_infos :"
@@ -490,12 +490,12 @@ inline void fill_infos_graf(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"Style_t");
 
     //Should be : 1204118360U
-  StreamerInfo* info = new StreamerInfo("TAttFill",1,check);
+  streamer_info* info = new streamer_info("TAttFill",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = size_VIRTUAL();
-  info->add(new streamer_basic_type("fFillColor","fill area color",ofs,streamer_info::SHORT,"Color_t"));ofs += size_SHORT;
-  info->add(new streamer_basic_type("fFillStyle","fill area style",ofs,streamer_info::SHORT,"Style_t"));ofs += size_SHORT;
+  info->add(new streamer_basic_type("fFillColor","fill area color",ofs,streamer__info::SHORT,"Color_t"));ofs += size_SHORT;
+  info->add(new streamer_basic_type("fFillStyle","fill area style",ofs,streamer__info::SHORT,"Style_t"));ofs += size_SHORT;
   if(ofs!=size_TAttFill()) {
     a_out << "tools::wroot::fill_infos :"
           << " TAttFill " << ofs << " (" << size_TAttFill() << " expected.)"
@@ -517,13 +517,13 @@ inline void fill_infos_graf(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be 4207747460U
 
-  StreamerInfo* info = new StreamerInfo("TAttMarker",1,check);
+  streamer_info* info = new streamer_info("TAttMarker",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = size_VIRTUAL();
-  info->add(new streamer_basic_type("fMarkerColor","Marker color index",ofs,streamer_info::SHORT,"Color_t"));ofs += size_SHORT;
-  info->add(new streamer_basic_type("fMarkerStyle","Marker style",ofs,streamer_info::SHORT,"Style_t"));ofs += size_SHORT;
-  info->add(new streamer_basic_type("fMarkerSize","Marker size",ofs,streamer_info::FLOAT,"Size_t"));ofs += size_FLOAT;
+  info->add(new streamer_basic_type("fMarkerColor","Marker color index",ofs,streamer__info::SHORT,"Color_t"));ofs += size_SHORT;
+  info->add(new streamer_basic_type("fMarkerStyle","Marker style",ofs,streamer__info::SHORT,"Style_t"));ofs += size_SHORT;
+  info->add(new streamer_basic_type("fMarkerSize","Marker size",ofs,streamer__info::FLOAT,"Size_t"));ofs += size_FLOAT;
   if(ofs!=size_TAttMarker()) {
     a_out << "tools::wroot::fill_infos :"
           << " TAttMarker " << ofs << " (" << size_TAttMarker() << " expected.)"
@@ -536,7 +536,7 @@ inline int size_TBranch() {return 264;} //256?
 inline int size_TLeaf() {return 60;} //52?
 inline int size_TTree() {return 254;} //240?
 
-inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out) {
+inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out) {
 
   const int size_CHAR = 1;
   const int size_INT = 4;
@@ -617,7 +617,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   //Should be : 3245044844U //3.00.06
   //Should be : FIXME //3.10.02
 
-  StreamerInfo* info = new StreamerInfo("TTree",5,check);
+  streamer_info* info = new streamer_info("TTree",5,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -726,7 +726,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   //Should be : 2056727376U (6 3.00.06)
   //Should be : FIXME (7 3.03.01)
 
-  StreamerInfo* info = new StreamerInfo("TBranch",8,check);
+  streamer_info* info = new streamer_info("TBranch",8,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
@@ -738,7 +738,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   info->add(new streamer_int(ofs,"fWriteBasket","Last basket number written"));
   info->add(new streamer_int(ofs,"fEntryNumber","Current entry number (last one filled in this branch)"));
   info->add(new streamer_int(ofs,"fOffset","Offset of this branch"));
-  info->add(new streamer_basic_type("fMaxBaskets","Maximum number of Baskets so far",ofs,streamer_info::COUNTER,"Int_t"));ofs += size_COUNTER;
+  info->add(new streamer_basic_type("fMaxBaskets","Maximum number of Baskets so far",ofs,streamer__info::COUNTER,"Int_t"));ofs += size_COUNTER;
   info->add(new streamer_int(ofs,"fSplitLevel","Branch split level")); //3.03.01
   ofs += size_INT; //!fNLeaves
   ofs += size_INT; //!fReadBasket
@@ -751,9 +751,9 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   info->add(new streamer_object("fBaskets","-> List of baskets of this branch",ofs,"TObjArray"));ofs += size_TObjArray;
   ofs += size_INT; //!fNBasketRAM
   ofs += size_POINTER; //!*fBasketRAM
-  info->add(new streamer_basic_pointer("fBasketBytes","[fMaxBaskets] Lenght of baskets on file",ofs,streamer_info::INT,"fMaxBaskets","TBranch",6,"Int_t*"));ofs += size_POINTER;
-  info->add(new streamer_basic_pointer("fBasketEntry","[fMaxBaskets] Table of first entry in eack basket",ofs,streamer_info::INT,"fMaxBaskets","TBranch",6,"Int_t*"));ofs += size_POINTER;
-  info->add(new streamer_basic_pointer("fBasketSeek","[fMaxBaskets] Addresses of baskets on file",ofs,streamer_info::INT,"fMaxBaskets","TBranch",6,"Seek_t*"));ofs += size_POINTER;
+  info->add(new streamer_basic_pointer("fBasketBytes","[fMaxBaskets] Lenght of baskets on file",ofs,streamer__info::INT,"fMaxBaskets","TBranch",6,"Int_t*"));ofs += size_POINTER;
+  info->add(new streamer_basic_pointer("fBasketEntry","[fMaxBaskets] Table of first entry in eack basket",ofs,streamer__info::INT,"fMaxBaskets","TBranch",6,"Int_t*"));ofs += size_POINTER;
+  info->add(new streamer_basic_pointer("fBasketSeek","[fMaxBaskets] Addresses of baskets on file",ofs,streamer__info::INT,"fMaxBaskets","TBranch",6,"Seek_t*"));ofs += size_POINTER;
   ofs += size_POINTER; //!*fTree
   ofs += size_POINTER; //!*fAddress
   ofs += size_POINTER; //!*fDirectory
@@ -775,7 +775,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be : 2857878535U
 
-  StreamerInfo* info = new StreamerInfo("TBranchObject",1,check);
+  streamer_info* info = new streamer_info("TBranchObject",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
@@ -805,7 +805,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fStreamerType");
   scs(check,"Int_t");
 
-  StreamerInfo* info = new StreamerInfo("TBranchElement",1,check);
+  streamer_info* info = new streamer_info("TBranchElement",1,check);
   a_infos.push_back(info);
   // Elements :
   int offset = 0;
@@ -844,7 +844,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be : 727988519U
 
-  StreamerInfo* info = new StreamerInfo("TLeaf",2,check);
+  streamer_info* info = new streamer_info("TLeaf",2,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -878,7 +878,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be : FIXME
 
-  StreamerInfo* info = new StreamerInfo("TLeafS",1,check);
+  streamer_info* info = new streamer_info("TLeafS",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
@@ -902,7 +902,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
     //Should be : 3495201397U
 
-  StreamerInfo* info = new StreamerInfo("TLeafI",1,check);
+  streamer_info* info = new streamer_info("TLeafI",1,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -927,7 +927,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be 1366318032U
 
-  StreamerInfo* info = new StreamerInfo("TLeafF",1,check);
+  streamer_info* info = new streamer_info("TLeafF",1,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -952,7 +952,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be
 
-  StreamerInfo* info = new StreamerInfo("TLeafD",1,check);
+  streamer_info* info = new streamer_info("TLeafD",1,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -977,13 +977,13 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be : FIXME
 
-  StreamerInfo* info = new StreamerInfo("TLeafB",1,check);
+  streamer_info* info = new streamer_info("TLeafB",1,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = 0;
   info->add(new streamer_base("TLeaf","Leaf: description of a Branch data type",ofs,TLeaf_version));ofs += size_TLeaf();
-  info->add(new streamer_basic_type("fMinimum","Minimum value if leaf range is specified",ofs,streamer_info::CHAR,"Char_t"));ofs += size_CHAR;
-  info->add(new streamer_basic_type("fMaximum","Maximum value if leaf range is specified",ofs,streamer_info::CHAR,"Char_t"));ofs += size_CHAR;
+  info->add(new streamer_basic_type("fMinimum","Minimum value if leaf range is specified",ofs,streamer__info::CHAR,"Char_t"));ofs += size_CHAR;
+  info->add(new streamer_basic_type("fMaximum","Maximum value if leaf range is specified",ofs,streamer__info::CHAR,"Char_t"));ofs += size_CHAR;
  
   }
 
@@ -1001,7 +1001,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be : FIXME
 
-  StreamerInfo* info = new StreamerInfo("TLeafC",1,check);
+  streamer_info* info = new streamer_info("TLeafC",1,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -1021,7 +1021,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
 
   //Should be 2312661809U
 
-  StreamerInfo* info = new StreamerInfo("TLeafObject",4,check);
+  streamer_info* info = new streamer_info("TLeafObject",4,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -1041,7 +1041,7 @@ inline void fill_infos_tree(obj_list<StreamerInfo>& a_infos,std::ostream& a_out)
   scs(check,"fType");
   scs(check,"Int_t");
 
-  StreamerInfo* info = new StreamerInfo("TLeafElement",1,check);
+  streamer_info* info = new streamer_info("TLeafElement",1,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -1061,7 +1061,7 @@ inline int size_TH1() {return 560;} //568?
 inline int size_TH2() {return 592;} //600?
 inline int size_TH2D() {return 604;} //612?
 
-inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out) {
+inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_out) {
 
   typedef streamer_basic_type sbt;
 
@@ -1123,21 +1123,21 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"fTitleFont");
   scs(check,"Style_t");
 
-  StreamerInfo* info = new StreamerInfo("TAttAxis",4,check);
+  streamer_info* info = new streamer_info("TAttAxis",4,check);
   a_infos.push_back(info);
   // Elements :
   int ofs = size_VIRTUAL();
   info->add(new streamer_int(ofs,"fNdivisions","Number of divisions(10000*n3 + 100*n2 + n1)"));
-  info->add(new sbt("fAxisColor","color of the line axis",ofs,streamer_info::SHORT,"Color_t"));ofs += size_SHORT;
-  info->add(new sbt("fLabelColor","color of labels",ofs,streamer_info::SHORT,"Color_t"));ofs += size_SHORT;
-  info->add(new sbt("fLabelFont","font for labels",ofs,streamer_info::SHORT,"Style_t"));ofs += size_SHORT;
+  info->add(new sbt("fAxisColor","color of the line axis",ofs,streamer__info::SHORT,"Color_t"));ofs += size_SHORT;
+  info->add(new sbt("fLabelColor","color of labels",ofs,streamer__info::SHORT,"Color_t"));ofs += size_SHORT;
+  info->add(new sbt("fLabelFont","font for labels",ofs,streamer__info::SHORT,"Style_t"));ofs += size_SHORT;
   info->add(new streamer_float(ofs,"fLabelOffset","offset of labels"));
   info->add(new streamer_float(ofs,"fLabelSize","size of labels"));
   info->add(new streamer_float(ofs,"fTickLength","length of tick marks"));
   info->add(new streamer_float(ofs,"fTitleOffset","offset of axis title"));
   info->add(new streamer_float(ofs,"fTitleSize","size of axis title"));
-  info->add(new sbt("fTitleColor","color of axis title",ofs,streamer_info::SHORT,"Color_t"));ofs += size_SHORT;
-  info->add(new sbt("fTitleFont","font for axis title",ofs,streamer_info::SHORT,"Style_t"));ofs += size_SHORT;
+  info->add(new sbt("fTitleColor","color of axis title",ofs,streamer__info::SHORT,"Color_t"));ofs += size_SHORT;
+  info->add(new sbt("fTitleFont","font for axis title",ofs,streamer__info::SHORT,"Style_t"));ofs += size_SHORT;
   //uuuu ofs += 2; //alignement ???
   if(ofs!=size_TAttAxis()) {
     a_out << "tools::wroot::fill_infos :"
@@ -1176,7 +1176,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"fTimeFormat");
   scs(check,"TString");
 
-  StreamerInfo* info = new StreamerInfo("TAxis",6,check);
+  streamer_info* info = new streamer_info("TAxis",6,check);
   a_infos.push_back(info);
 
   // Elements :
@@ -1184,8 +1184,8 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   info->add(new streamer_base("TNamed","The basis for a named object (name, title)",ofs,TNamed_version));ofs += size_TNamed();
   info->add(new streamer_base("TAttAxis","Axis attributes",ofs,TAttAxis_version));ofs += size_TAttAxis();
   info->add(new streamer_int(ofs,"fNbins","Number of bins"));
-  info->add(new sbt("fXmin","low edge of first bin",ofs,streamer_info::DOUBLE,"Axis_t"));ofs += size_DOUBLE;
-  info->add(new sbt("fXmax","upper edge of last bin",ofs,streamer_info::DOUBLE,"Axis_t"));ofs += size_DOUBLE;
+  info->add(new sbt("fXmin","low edge of first bin",ofs,streamer__info::DOUBLE,"Axis_t"));ofs += size_DOUBLE;
+  info->add(new sbt("fXmax","upper edge of last bin",ofs,streamer__info::DOUBLE,"Axis_t"));ofs += size_DOUBLE;
   info->add(new streamer_object_any("fXbins","Bin edges array in X",ofs,"TArrayD"));ofs += size_TArrayD;
   ofs += size_POINTER; //!*fXlabels
   info->add(new streamer_int(ofs,"fFirst","first bin to display"));
@@ -1258,7 +1258,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"fFunctions");
   scs(check,"TList*");
 
-  StreamerInfo* info = new StreamerInfo("TH1",TH1_version,check);
+  streamer_info* info = new streamer_info("TH1",TH1_version,check);
   a_infos.push_back(info);
 
   int ofs = 0;
@@ -1302,7 +1302,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"TH1");
   scs(check,"TArrayF");
 
-  StreamerInfo* info = new StreamerInfo("TH1F",1,check);
+  streamer_info* info = new streamer_info("TH1F",1,check);
   a_infos.push_back(info);
   int ofs = 0;
   info->add(new streamer_base("TH1","1-Dim histogram base class",ofs,TH1_version));ofs += size_TH1();
@@ -1318,7 +1318,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"TH1");
   scs(check,"TArrayD");
 
-  StreamerInfo* info = new StreamerInfo("TH1D",TH1D_version,check);
+  streamer_info* info = new streamer_info("TH1D",TH1D_version,check);
   a_infos.push_back(info);
   int ofs = 0;
   info->add(new streamer_base("TH1","1-Dim histogram base class",ofs,TH1_version));ofs += size_TH1();
@@ -1352,13 +1352,13 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"fTsumwy2");
   scs(check,"Double_t");
 
-  StreamerInfo* info = new StreamerInfo("TProfile",4,check);
+  streamer_info* info = new streamer_info("TProfile",4,check);
   a_infos.push_back(info);
 
   int ofs = 0;
   info->add(new streamer_base("TH1D","1-Dim histograms (one double per channel)",ofs,TH1D_version));ofs += size_TH1D;
   info->add(new streamer_object_any("fBinEntries","number of entries per bin",ofs,"TArrayD"));ofs += size_TArrayD;
-  info->add(new streamer_basic_type("fErrorMode","Option to compute errors",ofs,streamer_info::INT,"EErrorType"));ofs += size_INT;
+  info->add(new streamer_basic_type("fErrorMode","Option to compute errors",ofs,streamer__info::INT,"EErrorType"));ofs += size_INT;
   info->add(new streamer_double(ofs,"fYmin","Lower limit in Y (if set)"));
   info->add(new streamer_double(ofs,"fYmax","Upper limit in Y (if set)"));
   info->add(new streamer_double(ofs,"fTsumwy","Total Sum of weight*Y"));
@@ -1387,7 +1387,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"fTsumwxy");
   scs(check,"Stat_t");
 
-  StreamerInfo* info = new StreamerInfo("TH2",TH2_version,check);
+  streamer_info* info = new streamer_info("TH2",TH2_version,check);
   a_infos.push_back(info);
 
   int ofs = 0;
@@ -1410,7 +1410,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"TH2");
   scs(check,"TArrayF");
 
-  StreamerInfo* info = new StreamerInfo("TH2F",3,check);
+  streamer_info* info = new streamer_info("TH2F",3,check);
   a_infos.push_back(info);
 
   int ofs = 0;
@@ -1428,7 +1428,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"TH2");
   scs(check,"TArrayD");
 
-  StreamerInfo* info = new StreamerInfo("TH2D",TH2D_version,check);
+  streamer_info* info = new streamer_info("TH2D",TH2D_version,check);
   a_infos.push_back(info);
 
   int ofs = 0;
@@ -1464,13 +1464,13 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"fTsumwz2");
   scs(check,"Double_t");
 
-  StreamerInfo* info = new StreamerInfo("TProfile2D",5,check);
+  streamer_info* info = new streamer_info("TProfile2D",5,check);
   a_infos.push_back(info);
 
   int ofs = 0;
   info->add(new streamer_base("TH2D","2-Dim histograms (one double per channel)",ofs,TH2D_version));ofs += size_TH2D();
   info->add(new streamer_object_any("fBinEntries","number of entries per bin",ofs,"TArrayD"));ofs += size_TArrayD;
-  info->add(new sbt("fErrorMode","Option to compute errors",ofs,streamer_info::INT,"EErrorType"));ofs += size_INT;
+  info->add(new sbt("fErrorMode","Option to compute errors",ofs,streamer__info::INT,"EErrorType"));ofs += size_INT;
   info->add(new streamer_double(ofs,"fZmin","Lower limit in Z (if set)"));
   info->add(new streamer_double(ofs,"fZmax","Upper limit in Z (if set)"));
   info->add(new streamer_double(ofs,"fTsumwz","Total Sum of weight*Z"));
@@ -1505,7 +1505,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"fTsumwyz");
   scs(check,"Double_t");
 
-  StreamerInfo* info = new StreamerInfo("TH3",TH3_version,check);
+  streamer_info* info = new streamer_info("TH3",TH3_version,check);
   a_infos.push_back(info);
 
   int ofs = 0;
@@ -1531,7 +1531,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"TH3");
   scs(check,"TArrayF");
 
-  StreamerInfo* info = new StreamerInfo("TH3F",3,check);
+  streamer_info* info = new streamer_info("TH3F",3,check);
   a_infos.push_back(info);
 
   int ofs = 0;
@@ -1548,7 +1548,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
   scs(check,"TH3");
   scs(check,"TArrayD");
 
-  StreamerInfo* info = new StreamerInfo("TH3D",3,check);
+  streamer_info* info = new streamer_info("TH3D",3,check);
   a_infos.push_back(info);
 
   int ofs = 0;
@@ -1561,7 +1561,7 @@ inline void fill_infos_histo(obj_list<StreamerInfo>& a_infos,std::ostream& a_out
 
 }
 
-inline void fill_infos(obj_list<StreamerInfo>& a_infos,std::ostream& a_out) {
+inline void fill_infos(obj_list<streamer_info>& a_infos,std::ostream& a_out) {
 
   fill_infos_core(a_infos,a_out);
   fill_infos_cont(a_infos,a_out);

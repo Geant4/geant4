@@ -41,6 +41,7 @@
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4HadronicParameters.hh"
 
 
 class G4HadronPhysicsShieldingLEND : public G4VPhysicsConstructor
@@ -49,7 +50,8 @@ class G4HadronPhysicsShieldingLEND : public G4VPhysicsConstructor
     explicit G4HadronPhysicsShieldingLEND(G4int verbose=1);
     explicit G4HadronPhysicsShieldingLEND(const G4String& name, G4bool );
     explicit G4HadronPhysicsShieldingLEND(const G4String& name, G4int verbose=1,
-                                          G4double minFTFPEnergy=9.5*CLHEP::GeV, G4double maxBertiniEnergy=9.9*CLHEP::GeV);
+      G4double minFTFPEnergy=G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
+      G4double maxBertiniEnergy=G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
     virtual ~G4HadronPhysicsShieldingLEND();
 
   public: 

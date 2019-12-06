@@ -67,14 +67,15 @@ class G4BertiniKaonBuilder : public G4VKaonBuilder
 
     using G4VKaonBuilder::Build; //Prevent compier warning
   private:
-    G4VCrossSectionDataSet * ChipsKaonMinus;
-    G4VCrossSectionDataSet * ChipsKaonPlus;
-    G4VCrossSectionDataSet * ChipsKaonZero;
+    G4VCrossSectionDataSet * KaonMinusCrossSection;
+    G4VCrossSectionDataSet * KaonPlusCrossSection;
+    G4VCrossSectionDataSet * KaonZeroCrossSection;
 
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;
 
 };
+
 #endif
 

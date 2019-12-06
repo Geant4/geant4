@@ -113,7 +113,7 @@ function(geant4_add_test test)
     "COMMAND;PRECMD;POSTCMD;ENVIRONMENT;DEPENDS;LABELS"
     ${ARGN})
 
-  if(NOT CMAKE_GENERATOR MATCHES Makefiles)
+  if(CMAKE_CONFIGURATION_TYPES)
     set(_cfg $<CONFIGURATION>/)
   endif()
 

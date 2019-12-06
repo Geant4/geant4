@@ -45,11 +45,12 @@ public:
   bool set_value(const vec3f& a_from,float a_a){
     return parent::set_value(a_from,a_a,::sinf,::cosf);
   }
-  bool value(vec3f& a_from,float a_a) const {
+  bool value(vec3f& a_from,float& a_a) const {
     return parent::value(a_from,a_a,::sinf,::acosf); //WARNING acos and not cos
   }
-  //void set_value(const mat4f& a_m) {parent::set_value(a_m,::sqrtf);}
+
   void value(mat4f& a_m) const {parent::value(a_m);}
+  void set_value(const mat4f& a_m) {parent::set_value(a_m,::sqrtf);}
 
   //NOTE : don't handle a static object because of mem balance.
   //static const rotf& identity() {

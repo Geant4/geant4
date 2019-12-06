@@ -102,6 +102,9 @@ public:
   void AddSolid ( const G4Ellipsoid& ellipsoid) {
     G4VSceneHandler::AddSolid (ellipsoid);
   }
+  void AddSolid ( const G4TessellatedSolid& tess) {
+    G4VSceneHandler::AddSolid (tess);
+  }
   void AddSolid ( const G4VSolid& solid  );
   void AddCompound ( const G4VTrajectory& traj);
   void AddCompound ( const G4VHit& hit);

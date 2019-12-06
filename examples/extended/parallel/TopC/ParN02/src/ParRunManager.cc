@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN02/src/ParRunManager.cc
+/// \file ParRunManager.cc
 /// \brief Implementation of the ParRunManager class
 //
 #ifdef G4USE_TOPC

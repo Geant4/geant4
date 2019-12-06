@@ -71,22 +71,17 @@ G4LevelManager::G4LevelManager(G4int Z, G4int A, size_t ntrans,
   // J. Nucl. Sci. Tech. 31(2): 151-162 (1994)
   fShellCorrection = G4NuclearLevelData::GetInstance()->
     GetShellCorrection()->GetShellCorrection(A,Z);
-  G4double del = 12./std::sqrt((G4double)A);
   G4int N = A - Z;
   G4int In = N - (N/2)*2; 
   G4int Iz = Z - (Z/2)*2;
   G4double a13 = 1.0/G4Pow::GetInstance()->Z13(A);
   if(In == 0 && Iz == 0) {
-    fPairingCorrection = 2*del;
     fLevelDensity = 0.067946*A*(1.0 + 4.1277*a13);
   } else if(In == 0 && Iz == 1) {
-    fPairingCorrection = del;
     fLevelDensity = 0.053061*A*(1.0 + 7.1862*a13);
   } else if(In == 1 && Iz == 0) {
-    fPairingCorrection = del;
     fLevelDensity = 0.060920*A*(1.0 + 3.8767*a13);
   } else {
-    fPairingCorrection = 0.0;
     fLevelDensity = 0.065291*A*(1.0 + 4.4505*a13);
   }
 }

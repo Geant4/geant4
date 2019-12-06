@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NavigationLevelRep inline implementation
 //
-//
-//  1 October 1997 J.Apostolakis Initial version. 
-//                        
+// 1 October 1997, J.Apostolakis Initial version
 // ----------------------------------------------------------------------
 
 extern G4GEOM_DLL G4Allocator<G4NavigationLevelRep>*& aNavigLevelRepAllocator();
@@ -42,18 +41,14 @@ G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
    :  sTransform(afTransform),
       sPhysicalVolumePtr(pPhysVol),
       sReplicaNo(repNo),
-      sVolumeType(volTp),
-      fCountRef(1) 
+      sVolumeType(volTp)
 {
 }
 
 inline
 G4NavigationLevelRep::G4NavigationLevelRep()
    :  sTransform(),
-      sPhysicalVolumePtr(0),
-      sReplicaNo(-1),
-      sVolumeType(kReplica),
-      fCountRef(1) 
+      sVolumeType(kReplica)
 {
 }
 
@@ -65,8 +60,7 @@ G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
                                             G4int              repNo )
    :  sPhysicalVolumePtr(pPhysVol),
       sReplicaNo(repNo),
-      sVolumeType(volTp),
-      fCountRef(1) 
+      sVolumeType(volTp)
 {
   sTransform.InverseProduct( levelAbove, relativeCurrent );
 }
@@ -76,8 +70,7 @@ G4NavigationLevelRep::G4NavigationLevelRep( G4NavigationLevelRep& right )
    :  sTransform(right.sTransform), 
       sPhysicalVolumePtr(right.sPhysicalVolumePtr),
       sReplicaNo(right.sReplicaNo),
-      sVolumeType(right.sVolumeType),
-      fCountRef(1) 
+      sVolumeType(right.sVolumeType)
 {
 }
 
@@ -102,11 +95,11 @@ G4NavigationLevelRep::~G4NavigationLevelRep()
 
 inline
 G4NavigationLevelRep& 
-G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
+G4NavigationLevelRep::operator=( const G4NavigationLevelRep& right )
 {
   if ( &right != this )
   {
-    sTransform =  right.sTransform;  
+    sTransform = right.sTransform;  
     sPhysicalVolumePtr = right.sPhysicalVolumePtr;
     sVolumeType = right.sVolumeType;
     sReplicaNo =  right.sReplicaNo;
@@ -170,7 +163,7 @@ G4bool G4NavigationLevelRep::RemoveAReference()
 inline
 void* G4NavigationLevelRep::operator new(size_t)
 {
-  if (!aNavigLevelRepAllocator())
+  if (aNavigLevelRepAllocator() == nullptr)
   {
     aNavigLevelRepAllocator() = new G4Allocator<G4NavigationLevelRep>;
   }
@@ -178,7 +171,7 @@ void* G4NavigationLevelRep::operator new(size_t)
 }
 
 inline
-void G4NavigationLevelRep::operator delete(void *aLevelRep)
+void G4NavigationLevelRep::operator delete(void* aLevelRep)
 {
   aNavigLevelRepAllocator()->FreeSingle((G4NavigationLevelRep *) aLevelRep);
 }

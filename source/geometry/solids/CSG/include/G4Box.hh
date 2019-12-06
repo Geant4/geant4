@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4Box
 //
 // Class description:
@@ -36,14 +30,10 @@
 //   A Box is a cuboid of given half lengths dx,dy,dz. The Box is
 //   centred on the origin with sides parallel to the x/y/z axes.
 
-// History:
 // 30.06.95 P.Kent: Converted from source code developed end 94
 // 27.03.96 J.Allison: Added virtual functions DescribeYourselfTo() and
 //                     SendWireframeTo(G4VGraphicsModel&)
-// 22.07.96 J.Allison: Changed G4VGraphicsModel to G4VGraphicsScene
-//                     and SendPolyhedronTo() to CreatePolyhedron()
 // 27.03.98 J.Apostolakis: Inherit from G4CSGSolid (not G4VSolid)
-// 18.11.99 J.Apostolakis, V.Grichine: kUndefined was added to ESide
 // --------------------------------------------------------------------
 #ifndef G4BOX_HH
 #define G4BOX_HH
@@ -70,7 +60,6 @@ class G4Box : public G4CSGSolid
       // Construct a box with name, and half lengths pX,pY,pZ
 
     virtual ~G4Box();
-
 
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
@@ -103,8 +92,9 @@ class G4Box : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=false,
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
@@ -139,7 +129,7 @@ class G4Box : public G4CSGSolid
 
   private:
 
-    G4double fDx,fDy,fDz;
+    G4double fDx = 0.0, fDy = 0.0, fDz = 0.0;
     G4double delta;  // Cached half Cartesian tolerance
 };
 

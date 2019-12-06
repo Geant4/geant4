@@ -139,12 +139,15 @@ public:
       m_basket = new T[m_basket_size];
       if(m_write) {
       } else { //read.
-        size_t n = tools::mn<size_t>((size_t)m_branch.entries(),m_basket_size);
-        if(!m_branch.read_page<T>(n,m_basket)) {
-          m_store.out() << "tools::hdf5::ntuple::column_ref:column_ref : read_page() failed." << std::endl;
-          m_basket_pos = 0;
-	  m_basket_end = 0;
-          return;
+        tools::uint64 _entries = m_branch.entries();
+        size_t n = tools::mn<size_t>((size_t)_entries,m_basket_size);
+        if(_entries) {
+          if(!m_branch.read_page<T>(n,m_basket)) {
+            m_store.out() << "tools::hdf5::ntuple::column_ref:column_ref : read_page() failed." << std::endl;
+            m_basket_pos = 0;
+            m_basket_end = 0;
+            return;
+          }
         }
   	m_basket_pos = 0;
 	m_basket_end = n;
@@ -262,7 +265,93 @@ public:
   TOOLS_CLASS_STRING_VALUE(vector_ushort,vector<tools::ushort>)
   TOOLS_CLASS_STRING_VALUE(vector_uint32,vector<tools::uint32>)
   TOOLS_CLASS_STRING_VALUE(vector_uint64,vector<tools::uint64>)
-  
+
+//
+#define TOOLS_HDF5_NTUPLE_VLEN
+//
+#define TOOLS_HDF5_NTUPLE_STRING
+
+#ifdef TOOLS_HDF5_NTUPLE_VLEN
+  template <class T>
+  class std_vector_column_ref : public virtual icol {
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::hdf5::ntuple::std_vector_column_ref<"+tools::stype(T())+">");
+      return s_v;
+    }
+#endif
+  public:
+    static tools::cid id_class() {return tools::_cid_std_vector<T>()+10000;}
+    virtual void* cast(tools::cid a_class) const {
+      if(void* p = tools::cmp_cast<std_vector_column_ref>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual tools::cid id_cls() const {return id_class();}
+  public: //icol
+    virtual bool add() { //write.
+      if(!m_write) return false;
+      const T* _data = tools::vec_data(m_ref);
+      return m_branch.write_vlen<T>(m_ref.size(),_data);
+    }
+    virtual bool fetch_entry() { //read.
+      if(m_write) return false;
+      size_t n;
+      T* _data;
+      if(!m_branch.read_vlen<T>(n,_data)) {
+        m_store.out() << "tools::hdf5::ntuple::std_vector_column_ref:fetch_entry : read_page() failed." << std::endl;
+        return false;
+      }
+      m_ref.resize(n);
+      T* dpos = _data;
+      T* pos = tools::vec_data(m_ref);
+      for(size_t index=0;index<n;index++,pos++,dpos++) *pos = *dpos;
+      delete [] _data;
+      return true;
+    }
+    virtual void reset() {m_branch.reset_pos();}
+    virtual const std::string& name() const {return m_name;}
+    virtual bool set_basket_size(size_t) {return true;}
+  public:
+    std_vector_column_ref(store& a_store,pages& a_pages,bool a_write,const std::string& a_name,
+                          size_t /*a_basket_size*/,
+                          std::vector<T>& a_ref)
+    :m_store(a_store)
+    ,m_branch(a_pages)
+    ,m_write(a_write)
+    ,m_name(a_name)
+    ,m_ref(a_ref)
+    {
+#ifdef TOOLS_MEM
+      tools::mem::increment(s_class().c_str());
+#endif
+    }
+    virtual ~std_vector_column_ref(){
+#ifdef TOOLS_MEM
+      tools::mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    std_vector_column_ref(const std_vector_column_ref& a_from)
+    :icol(a_from)
+    ,m_store(a_from.m_store)
+    ,m_branch(a_from.m_branch)
+    ,m_write(a_from.m_write)
+    ,m_name(a_from.m_name)
+    ,m_ref(a_from.m_ref)
+    {}
+    std_vector_column_ref& operator=(const std_vector_column_ref& a_from){
+      if(&a_from==this) return *this;
+      m_name = a_from.m_name;
+      return *this;
+    }
+  protected:
+    store& m_store;
+    pages& m_branch;
+    bool m_write;
+    std::string m_name;
+    std::vector<T>& m_ref;
+  };
+#else  //!TOOLS_HDF5_NTUPLE_VLEN
   template <class T>
   class std_vector_column_ref : public column<unsigned int> {
     typedef column<unsigned int> parent;
@@ -288,7 +377,7 @@ public:
       if(!m_write) return false;
       if(m_ref.size()) {
         const T* _data = tools::vec_data(m_ref);
-        if(!m_data_pages.write_page<T>(m_ref.size(),(void*)_data)) return false;
+        if(!m_data_pages.write_page<T>(m_ref.size(),_data)) return false;
       }
       if(!parent::fill((unsigned int)m_ref.size())) return false;
       if(!parent::add()) return false;
@@ -351,7 +440,8 @@ public:
     std::vector<T>& m_ref;
     pages m_data_pages;
   };
-  
+#endif //TOOLS_HDF5_NTUPLE_VLEN
+
   template <class T>
   class std_vector_column : public std_vector_column_ref<T> {
     typedef std_vector_column_ref<T> parent;
@@ -392,6 +482,78 @@ public:
     std::vector<T> m_tmp;
   };
 
+#ifdef TOOLS_HDF5_NTUPLE_STRING
+  class column_string_ref : public virtual icol {
+#ifdef TOOLS_MEM
+    TOOLS_SCLASS(tools::hdf5::ntuple::column_string_ref)
+#endif
+  public:
+    static tools::cid id_class() {
+      static const std::string s_v;
+      return tools::_cid(s_v)+10000;
+    }
+    virtual void* cast(tools::cid a_class) const {
+      if(void* p = tools::cmp_cast<column_string_ref>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual tools::cid id_cls() const {return id_class();}
+  public: //icol
+    virtual bool add() { //write.
+      if(!m_write) return false;
+      return m_branch.write_string(m_ref);
+    }
+    virtual bool fetch_entry() { //read.
+      if(m_write) return false;
+      if(!m_branch.read_string(m_ref)) {
+        m_store.out() << "tools::hdf5::ntuple::column_string_ref:fetch_entry : read_page() failed." << std::endl;
+        return false;
+      }
+      return true;
+    }
+    virtual void reset() {m_branch.reset_pos();}
+    virtual const std::string& name() const {return m_name;}
+    virtual bool set_basket_size(size_t) {return true;}
+  public:
+    column_string_ref(store& a_store,pages& a_pages,bool a_write,const std::string& a_name,
+                      size_t /*a_basket_size*/,
+                      std::string& a_ref)
+    :m_store(a_store)
+    ,m_branch(a_pages)
+    ,m_write(a_write)
+    ,m_name(a_name)
+    ,m_ref(a_ref)
+    {
+#ifdef TOOLS_MEM
+      tools::mem::increment(s_class().c_str());
+#endif
+    }
+    virtual ~column_string_ref(){
+#ifdef TOOLS_MEM
+      tools::mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    column_string_ref(const column_string_ref& a_from)
+    :icol(a_from)
+    ,m_store(a_from.m_store)
+    ,m_branch(a_from.m_branch)
+    ,m_write(a_from.m_write)
+    ,m_name(a_from.m_name)
+    ,m_ref(a_from.m_ref)
+    {}
+    column_string_ref& operator=(const column_string_ref& a_from){
+      if(&a_from==this) return *this;
+      m_name = a_from.m_name;
+      return *this;
+    }
+  protected:
+    store& m_store;
+    pages& m_branch;
+    bool m_write;
+    std::string m_name;
+    std::string& m_ref;
+  };
+#else //!TOOLS_HDF5_NTUPLE_STRING
   class column_string_ref : public column<unsigned int> {
     typedef column<unsigned int> parent;
 #ifdef TOOLS_MEM
@@ -416,7 +578,7 @@ public:
       if(!m_write) return false;
       if(m_ref.size()) {
         const char* _data = m_ref.c_str();
-        if(!m_data_pages.write_page<char>(m_ref.size(),(void*)_data)) return false;
+        if(!m_data_pages.write_page<char>(m_ref.size(),_data)) return false;
       }
       if(!parent::fill((unsigned int)m_ref.size())) return false;
       if(!parent::add()) return false;
@@ -479,6 +641,7 @@ public:
     std::string& m_ref;
     pages m_data_pages;
   };
+#endif //TOOLS_HDF5_NTUPLE_STRING
 
   class column_string : public column_string_ref {
     typedef column_string_ref parent;
@@ -813,15 +976,17 @@ public:
     return true;
   }
   
+  const std::string& title() const {return m_title;}
+  
   const std::vector<icol*>& columns() const {return m_cols;}
   std::vector<icol*>& columns() {return m_cols;}
 
   template <class T>
-  column_ref<T>* create_column_ref(const std::string& a_name,size_t a_basket_size,T& a_user_var) {
+  column_ref<T>* create_column_ref(const std::string& a_name,size_t a_basket_size,T& a_ref) {
     if(tools::find_named<icol>(m_cols,a_name)) return 0;
     pages* _pages = create_pages(a_name,tools::stype(T()));
     if(!_pages) return 0;
-    column_ref<T>* col = new column_ref<T>(*this,*_pages,true,a_name,a_basket_size,a_user_var);
+    column_ref<T>* col = new column_ref<T>(*this,*_pages,true,a_name,a_basket_size,a_ref);
     if(!col) return 0;
     m_cols.push_back(col);
     return col;
@@ -849,12 +1014,12 @@ public:
   }
 
   template <class T>
-  std_vector_column_ref<T>* create_std_column_ref(const std::string& a_name,size_t a_basket_size,std::vector<T>& a_user_vec) {
+  std_vector_column_ref<T>* create_std_column_ref(const std::string& a_name,size_t a_basket_size,std::vector<T>& a_ref) {
     //NOTE : to optimize, we do not handle a default std::vector value logic.
     if(tools::find_named<icol>(m_cols,a_name)) return 0;
     pages* _pages = create_pages(a_name,"vector<"+tools::stype(T())+">");
     if(!_pages) return 0;
-    std_vector_column_ref<T>* col = new std_vector_column_ref<T>(*this,*_pages,true,a_name,a_basket_size,a_user_vec);
+    std_vector_column_ref<T>* col = new std_vector_column_ref<T>(*this,*_pages,true,a_name,a_basket_size,a_ref);
     if(!col) return 0;
     m_cols.push_back(col);
     return col;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // Implementation of G4EllipticalCone class
 //
 // This code implements an Elliptical Cone given explicitly by the
@@ -34,8 +33,9 @@
 //
 // Author: Dionysios Anninos
 // Revised: Evgueni Tcherniaev
-//
 // --------------------------------------------------------------------
+
+#if !(defined(G4GEOM_USE_UELLIPTICALCONE) && defined(G4GEOM_USE_SYS_USOLIDS))
 
 #include "globals.hh"
 
@@ -74,8 +74,7 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
                                          G4double  pySemiAxis,
                                          G4double  pzMax,
                                          G4double  pzTopCut)
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
-    fCubicVolume(0.), fSurfaceArea(0.), zTopCut(0.)
+  : G4VSolid(pName), zTopCut(0.)
 {
   halfCarTol = 0.5*kCarTolerance;
 
@@ -110,8 +109,7 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4EllipticalCone::G4EllipticalCone( __void__& a )
-  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0),
-    halfCarTol(0.), fCubicVolume(0.), fSurfaceArea(0.),
+  : G4VSolid(a), halfCarTol(0.),
     xSemiAxis(0.), ySemiAxis(0.), zheight(0.), zTopCut(0.),
     cosAxisMin(0.), invXX(0.), invYY(0.)
 {
@@ -123,7 +121,7 @@ G4EllipticalCone::G4EllipticalCone( __void__& a )
 
 G4EllipticalCone::~G4EllipticalCone()
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -131,8 +129,7 @@ G4EllipticalCone::~G4EllipticalCone()
 // Copy constructor
 
 G4EllipticalCone::G4EllipticalCone(const G4EllipticalCone& rhs)
-  : G4VSolid(rhs), fRebuildPolyhedron(false), fpPolyhedron(0),
-    halfCarTol(rhs.halfCarTol),
+  : G4VSolid(rhs), halfCarTol(rhs.halfCarTol),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     xSemiAxis(rhs.xSemiAxis), ySemiAxis(rhs.ySemiAxis),
     zheight(rhs.zheight), zTopCut(rhs.zTopCut),
@@ -163,7 +160,7 @@ G4EllipticalCone& G4EllipticalCone::operator = (const G4EllipticalCone& rhs)
    cosAxisMin = rhs.cosAxisMin; invXX = rhs.invXX; invYY = rhs.invYY;
 
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
@@ -215,7 +212,7 @@ G4EllipticalCone::CalculateExtent(const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -612,8 +609,8 @@ G4double G4EllipticalCone::DistanceToIn(const G4ThreeVector& p) const
 G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
                                          const G4ThreeVector& v,
                                          const G4bool calcNorm,
-                                               G4bool *validNorm,
-                                               G4ThreeVector *n  ) const
+                                               G4bool* validNorm,
+                                               G4ThreeVector* n  ) const
 {
   G4double distMin, lambda;
   enum surface_e {kPlaneSurf, kCurvedSurf, kNoSurf} surface;
@@ -855,7 +852,7 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   G4double szmax =  pi*x0*y0*kmin*kmin;
   G4double sside =  s0*(kmax*kmax - kmin*kmin);
   G4double ssurf[3] = { szmin, sside, szmax };
-  for (G4int i=1; i<3; ++i) { ssurf[i] += ssurf[i-1]; }
+  for (auto i=1; i<3; ++i) { ssurf[i] += ssurf[i-1]; }
 
   // Select surface
   //
@@ -889,7 +886,7 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
       G4double mu_max = R*std::sqrt(hh + R*R);
 
       G4double x,y;
-      for (G4int i=0; i<1000; ++i)
+      for (auto i=0; i<1000; ++i)
       {
 	G4double phi = CLHEP::twopi*G4UniformRand();
         x = std::cos(phi);
@@ -922,7 +919,7 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
 
 G4double G4EllipticalCone::GetCubicVolume()
 {
-  if (fCubicVolume == 0)
+  if (fCubicVolume == 0.0)
   {
     G4double x0 = xSemiAxis*zheight; // x semi axis at z=0
     G4double y0 = ySemiAxis*zheight; // y semi axis at z=0
@@ -940,7 +937,7 @@ G4double G4EllipticalCone::GetCubicVolume()
 
 G4double G4EllipticalCone::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0)
+  if (fSurfaceArea == 0.0)
   {
     G4double x0 = xSemiAxis*zheight; // x semi axis at z=0
     G4double y0 = ySemiAxis*zheight; // y semi axis at z=0
@@ -980,7 +977,7 @@ G4Polyhedron* G4EllipticalCone::CreatePolyhedron () const
 
 G4Polyhedron* G4EllipticalCone::GetPolyhedron () const
 {
-  if ( (!fpPolyhedron)
+  if ( (fpPolyhedron == nullptr)
     || fRebuildPolyhedron
     || (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
         fpPolyhedron->GetNumberOfRotationSteps()) )
@@ -993,3 +990,5 @@ G4Polyhedron* G4EllipticalCone::GetPolyhedron () const
     }
   return fpPolyhedron;
 }
+
+#endif // !defined(G4GEOM_USE_UELLIPTICALCONE) || !defined(G4GEOM_USE_SYS_USOLIDS)

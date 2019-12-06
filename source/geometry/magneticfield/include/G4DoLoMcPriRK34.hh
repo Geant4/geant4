@@ -23,43 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//  DoLoMcPri4(3) RK method - header
-//  Implements the 6-3-4 non-FSAL method   ( 6 stage, 3rd & 4th order embedded RK method )
+// G4DoLoMcPriRK34
 //
-//  RK tableau / method develoed by 
-//    Dormand Lockyer McGorrigan Prince
-//     RK4(3)6FD - forced Non-FSAL
+// Class description:
 //
-//  Header, design, implementation by Somnath Banerjee
-//     Supported by Google in Google Summer of Code 2015.
-//  Supervision / code review: John Apostolakis
-//
-// First version: 7 July 2015
-//
-// This code is made available subject to the Geant4 license, a copy of
-// which is available at
-//   http://geant4.org/license
-//  G4DoLoMcPriRK34.hh
-//  Geant4
-//
-//  History
-// -----------------------------
-//  Created by Somnath on 7 July 2015
+//  Dormand-Lockyer-McGorrigan-Prince-6-3-4 non-FSAL method
+//  ( 6 stage, 3rd & 4th order embedded RK method )
 
-
-#ifndef DoLo_McPri_34
-#define DoLo_McPri_34
+// Created: Somnath Banerjee, Google Summer of Code 2015, 7 July 2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+#ifndef DOLO_MCPRI_RK34_HH
+#define DOLO_MCPRI_RK34_HH
 
 #include "G4MagIntegratorStepper.hh"
 
 class G4DoLoMcPriRK34 : public G4MagIntegratorStepper
 {
-public:
-    //Constructor using Equation
-	G4DoLoMcPriRK34(G4EquationOfMotion *EqRhs,
-					 G4int numberOfVariables = 6,
-					 G4bool primary =  true);
-	~G4DoLoMcPriRK34();
+  public:
+
+    G4DoLoMcPriRK34( G4EquationOfMotion* EqRhs,
+                     G4int numberOfVariables = 6,
+                     G4bool primary = true );
+      // Constructor using Equation
+
+    ~G4DoLoMcPriRK34();
+
+    G4DoLoMcPriRK34(const G4DoLoMcPriRK34&) = delete;
+    G4DoLoMcPriRK34& operator=(const G4DoLoMcPriRK34&) = delete; 
+      // Copy constructor and assignment operator not allowed
 
     void Stepper( const G4double y[],
                   const G4double dydx[],
@@ -67,18 +59,18 @@ public:
                         G4double yout[],
                         G4double yerr[] ) ;
     
-    //For Preparing the Interpolant and calculating the extra stages
     void SetupInterpolation();
     void SetupInterpolate( const G4double yInput[],
                               const G4double dydx[],
                               const G4double Step );
+      // For Preparing the interpolation and calculating the extra stages
     
-    //For calculating the output at the tau fraction of Step
     void Interpolate( const G4double yInput[],
                       const G4double dydx[],
                       const G4double Step,
                             G4double yOut[],
                             G4double tau );
+      // For calculating the output at the tau fraction of Step
 
     void Interpolate( G4double tau,
                       G4double yOut[]);
@@ -89,24 +81,19 @@ public:
                            G4double Step,
                            G4double tau ) ;
 
-    G4double  DistChord()   const;
-    G4int IntegratorOrder() const {return 3; }
+    G4double DistChord() const;
+    G4int IntegratorOrder() const { return 3; }
     
-private :
-    
-    G4DoLoMcPriRK34(const G4DoLoMcPriRK34&);
-        //Copy constructor kept private
-    G4DoLoMcPriRK34& operator=(const G4DoLoMcPriRK34&); 
-        //assignment operator overloaded
+  private :
     
     G4double *ak2, *ak3, *ak4, *ak5, *ak6, *yTemp, *yIn;
     
-    G4double fLastStepLength;
+    G4double fLastStepLength = -1.0;
     G4double *fLastInitialVector, *fLastFinalVector,
-    *fLastDyDx, *fMidVector, *fMidError;
-    // for DistChord calculations
+             *fLastDyDx, *fMidVector, *fMidError;
+      // for DistChord calculations
     
-    G4DoLoMcPriRK34* fAuxStepper;
+    G4DoLoMcPriRK34* fAuxStepper = nullptr;
 };
 
-#endif /* defined(__Geant4__G4DoLoMcPriRK34__) */
+#endif

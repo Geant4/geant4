@@ -70,7 +70,5 @@ class G4NeutronBuilder : public G4PhysicsBuilderInterface
     G4bool isFissionActivated;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

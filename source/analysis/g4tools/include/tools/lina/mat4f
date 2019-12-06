@@ -37,6 +37,7 @@ public:
   }
 public:
   void set_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
+    //WARNING : (a_x,a_y,a_z) must be a normalized vector.
     parent::set_rotate(a_x,a_y,a_z,a_angle,::sinf,::cosf);
   }
   void mul_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
@@ -45,6 +46,13 @@ public:
   void left_mul_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
     parent::left_mul_rotate(a_x,a_y,a_z,a_angle,::sinf,::cosf);
   }
+
+  template <class VEC>
+  void set_rotate(const VEC& a_dir,float a_angle) {
+    //WARNING : a_dir must be a normalized vector.
+    parent::set_rotate(a_dir[0],a_dir[1],a_dir[2],a_angle,::sinf,::cosf);
+  }
+
 public: //backward compatibility
   void mul_2f(float& a_x,float& a_y) const {parent::mul_2(a_x,a_y);}
   void mul_3f(float& a_x,float& a_y,float& a_z) const {parent::mul_3(a_x,a_y,a_z);}

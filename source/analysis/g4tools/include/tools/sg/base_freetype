@@ -24,17 +24,21 @@ public:
   mf_std_vec<unichar> unitext;
   //mf_string font_dirs; //do we want that ? It is costly. We should have a sg::font node.
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::base_freetype)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(font)
-      TOOLS_ADD_FIELD_DESC(front_face)
-      TOOLS_ADD_FIELD_DESC(modeling)
-      TOOLS_ADD_FIELD_DESC(unitext)
+    static const desc_fields s_v(parent::node_desc_fields(),4, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(font),
+      TOOLS_ARG_FIELD_DESC(front_face),
+      
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(modeling,3)
+        TOOLS_ARG_ENUM(font_outline),
+        TOOLS_ARG_ENUM(font_filled),
+        TOOLS_ARG_ENUM(font_pixmap)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+      
+      TOOLS_ARG_FIELD_DESC(unitext)
       //TOOLS_ADD_FIELD_DESC(font_dirs)
-    }
+    );
     return s_v;
   }
 private:
@@ -54,6 +58,7 @@ public:
   ,front_face(winding_ccw)
   ,modeling(font_filled) //font_outline
   //,modeling(font_outline)
+  //,modeling(font_pixmap)
   ,unitext()
   //,font_dirs()
   {

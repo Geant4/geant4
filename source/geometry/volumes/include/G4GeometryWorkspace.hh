@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// ------------------------------------------------------------
-// GEANT 4 class header file 
+// G4GeometryWorkspace
 //
 // Class Description:
 //
@@ -63,7 +59,8 @@ class G4GeometryWorkspace
 {
   public:
  
-    typedef G4TWorkspacePool<G4GeometryWorkspace> pool_type;
+    using pool_type = G4TWorkspacePool<G4GeometryWorkspace>;
+
     G4GeometryWorkspace();
    ~G4GeometryWorkspace();
 
@@ -74,34 +71,34 @@ class G4GeometryWorkspace
     void InitialiseWorkspace();
       // To be called at start of each run (especially 2nd and further runs)
 
-    inline void   SetVerbose(G4bool v) { fVerbose=v; } 
-    inline G4bool GetVerbose()  { return fVerbose;   } 
+    inline void   SetVerbose(G4bool v) { fVerbose = v; } 
+    inline G4bool GetVerbose()  { return fVerbose; } 
 
     static pool_type* GetPool();
   
   protected:  // Implementation methods
 
-    void   InitialisePhysicalVolumes();
-    G4bool CloneParameterisedSolids( G4PVParameterised *paramVol );
-    G4bool CloneReplicaSolid( G4PVReplica *);
+    void InitialisePhysicalVolumes();
+    G4bool CloneParameterisedSolids( G4PVParameterised* paramVol );
+    G4bool CloneReplicaSolid( G4PVReplica* );
   
   private:    // Helper pointers - can be per instance or shared
 
-    G4LVManager     *fpLogicalVolumeSIM;
-    G4PVManager     *fpPhysicalVolumeSIM;
-    G4PVRManager    *fpReplicaSIM;
-    G4RegionManager *fpRegionSIM;
+    G4LVManager*     fpLogicalVolumeSIM;
+    G4PVManager*     fpPhysicalVolumeSIM;
+    G4PVRManager*    fpReplicaSIM;
+    G4RegionManager* fpRegionSIM;
   
     // Per Instance variables
     // NOTE: the ownership of the Data Arrays is IN this object
     // Store SubInstanceManager object pointers (SIM pointers)
 
-    G4LVData      *fLogicalVolumeOffset; // (G4LVolume::GetSubInstanceManager())
-    G4PVData      *fPhysicalVolumeOffset;
-    G4ReplicaData *fReplicaOffset;       
-    G4RegionData  *fRegionOffset;        
+    G4LVData*      fLogicalVolumeOffset;
+    G4PVData*      fPhysicalVolumeOffset;
+    G4ReplicaData* fReplicaOffset;       
+    G4RegionData*  fRegionOffset;        
 
-    G4bool         fVerbose;
+    G4bool         fVerbose = false;
 };
 
 #endif

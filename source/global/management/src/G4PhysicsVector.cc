@@ -61,7 +61,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool val)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
    useSpline(val), 
-   dBin(0.), baseBin(0.),
+   invdBin(0.), baseBin(0.),
    verboseLevel(0)
 {}
 
@@ -74,7 +74,7 @@ G4PhysicsVector::~G4PhysicsVector()
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  dBin         = right.dBin;
+  invdBin      = right.invdBin;
   baseBin      = right.baseBin;
   verboseLevel = right.verboseLevel;
 
@@ -87,7 +87,7 @@ G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 {
   if (&right==this)  { return *this; }
-  dBin         = right.dBin;
+  invdBin      = right.invdBin;
   baseBin      = right.baseBin;
   verboseLevel = right.verboseLevel;
 
@@ -505,25 +505,6 @@ G4double G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
     y = dataVector[lastIdx]; 
   } else {
     lastIdx = FindBin(theEnergy, lastIdx);
-    y = Interpolation(lastIdx, theEnergy);
-  }
-  return y;
-}
-
-//---------------------------------------------------------------
-
-G4double G4PhysicsVector::Value(G4double theEnergy, G4double theLogEnergy,
-                                size_t& lastIdx) const
-{
-  G4double y;
-  if(theEnergy <= edgeMin) {
-    lastIdx = 0;
-    y = dataVector[0];
-  } else if(theEnergy >= edgeMax) {
-    lastIdx = numberOfNodes-1;
-    y = dataVector[lastIdx];
-  } else {
-    lastIdx = FindBin(theEnergy, theLogEnergy, lastIdx);
     y = Interpolation(lastIdx, theEnergy);
   }
   return y;

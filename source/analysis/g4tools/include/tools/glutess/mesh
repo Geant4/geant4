@@ -359,7 +359,7 @@ inline/*static*/ void static_MakeFace( GLUface *newFace, GLUhalfEdge *eOrig, GLU
   fNew->anEdge = eOrig;
   fNew->data = NULL;
   fNew->trail = NULL;
-  fNew->marked = GLU_FALSE;
+  fNew->marked = TOOLS_GLU_FALSE;
 
   /* The new face is marked "inside" if the old one was.  This is a
    * convenience for the common case where a face has been split in two.
@@ -503,19 +503,19 @@ inline GLUhalfEdge *__gl_meshMakeEdge( GLUmesh *mesh )
  */
 inline int __gl_meshSplice( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
 {
-  int joiningLoops = GLU_FALSE;
-  int joiningVertices = GLU_FALSE;
+  int joiningLoops = TOOLS_GLU_FALSE;
+  int joiningVertices = TOOLS_GLU_FALSE;
 
   if( eOrg == eDst ) return 1;
 
   if( eDst->Org != eOrg->Org ) {
     /* We are merging two disjoint vertices -- destroy eDst->Org */
-    joiningVertices = GLU_TRUE;
+    joiningVertices = TOOLS_GLU_TRUE;
     static_KillVertex( eDst->Org, eOrg->Org );
   }
   if( eDst->Lface != eOrg->Lface ) {
     /* We are connecting two disjoint loops -- destroy eDst->Lface */
-    joiningLoops = GLU_TRUE;
+    joiningLoops = TOOLS_GLU_TRUE;
     static_KillFace( eDst->Lface, eOrg->Lface );
   }
 
@@ -560,14 +560,14 @@ inline int __gl_meshSplice( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
 inline int __gl_meshDelete( GLUhalfEdge *eDel )
 {
   GLUhalfEdge *eDelSym = eDel->Sym;
-  int joiningLoops = GLU_FALSE;
+  int joiningLoops = TOOLS_GLU_FALSE;
 
   /* First step: disconnect the origin vertex eDel->Org.  We make all
    * changes to get a consistent mesh in this "intermediate" state.
    */
   if( eDel->Lface != eDel->Rface ) {
     /* We are joining two loops into one -- remove the left face */
-    joiningLoops = GLU_TRUE;
+    joiningLoops = TOOLS_GLU_TRUE;
     static_KillFace( eDel->Lface, eDel->Rface );
     /* G.Barrand : note : Coverity says that there is a problem using eDel->Lface->anEdge in the below,
        but it appears that at the out of the upper static_KillFace() call (then here), eDel->Lface before
@@ -687,7 +687,7 @@ inline GLUhalfEdge *__gl_meshSplitEdge( GLUhalfEdge *eOrg )
 inline GLUhalfEdge *__gl_meshConnect( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
 {
   GLUhalfEdge *eNewSym;
-  int joiningLoops = GLU_FALSE;  
+  int joiningLoops = TOOLS_GLU_FALSE;  
   GLUhalfEdge *eNew = static_MakeEdge( eOrg );
   if (eNew == NULL) return NULL;
 
@@ -695,7 +695,7 @@ inline GLUhalfEdge *__gl_meshConnect( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
 
   if( eDst->Lface != eOrg->Lface ) {
     /* We are connecting two disjoint loops -- destroy eDst->Lface */
-    joiningLoops = GLU_TRUE;
+    joiningLoops = TOOLS_GLU_TRUE;
     static_KillFace( eDst->Lface, eOrg->Lface );
   }
 
@@ -803,8 +803,8 @@ inline GLUmesh *__gl_meshNewMesh( void )
   f->anEdge = NULL;
   f->data = NULL;
   f->trail = NULL;
-  f->marked = GLU_FALSE;
-  f->inside = GLU_FALSE;
+  f->marked = TOOLS_GLU_FALSE;
+  f->inside = TOOLS_GLU_FALSE;
 
   e->next = e;
   e->Sym = eSym;

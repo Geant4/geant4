@@ -73,7 +73,5 @@ class G4PrecoNeutronBuilder : public G4VNeutronBuilder
 
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

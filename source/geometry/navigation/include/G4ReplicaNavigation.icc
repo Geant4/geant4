@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // class G4ReplicaNavigation Inline implementation
 //
@@ -41,13 +38,13 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
                                   const G4int blocked ) const
 {
   EAxis targetHeaderAxis;
-  G4double coord=0.;
+  G4double coord = 0.;
   G4double targetHeaderMin, targetHeaderMax;
   G4double targetHeaderNodeWidth, targetNodePos;
   G4int targetHeaderNoSlices, targetNodeNo;
   
   targetHeaderAxis = pHead->GetAxis();
-  targetHeaderNoSlices = pHead->GetNoSlices();
+  targetHeaderNoSlices = G4int(pHead->GetNoSlices());
   targetHeaderMin = pHead->GetMinExtent();
   targetHeaderMax = pHead->GetMaxExtent();
   targetHeaderNodeWidth = ( targetHeaderMax-targetHeaderMin )
@@ -189,8 +186,10 @@ G4ReplicaNavigation::SetPhiTransformation( const G4double ang,
 {
   G4RotationMatrix rm;
   rm.rotateZ(ang);
-  if ( pVol )
+  if ( pVol != nullptr )
+  {
     *pVol->GetRotation() = rm;
+  }
 }
 
 // ********************************************************************
@@ -208,7 +207,7 @@ G4int G4ReplicaNavigation::GetVerboseLevel() const
 // ********************************************************************
 //
 inline
-void  G4ReplicaNavigation::SetVerboseLevel(G4int level)
+void G4ReplicaNavigation::SetVerboseLevel(G4int level)
 {
   fVerbose = level;
 }
@@ -218,7 +217,7 @@ void  G4ReplicaNavigation::SetVerboseLevel(G4int level)
 // ********************************************************************
 //
 inline
-void  G4ReplicaNavigation::CheckMode(G4bool mode)
+void G4ReplicaNavigation::CheckMode(G4bool mode)
 {
   fCheck = mode;
 }

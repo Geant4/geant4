@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4QuadrupoleMagField
+// G4QuadrupoleMagField
 //
 // Class description:
 //
@@ -38,11 +35,9 @@
 //   Bz = B[2] = 0 .
 // Here X,Y,Z are the coordinates of a space point of interest.
 
-// History:
-//  3.2.97 - V.Grichine, created.
-// 11.5.12 - B. Riese allow displaced origin and rotation (Björn Riese)
+// 03.02.1997, V.Grichine - Created
+// 11.05.2012, B.Riese  - Allow displaced origin and rotation
 // -------------------------------------------------------------------
-
 #ifndef G4QUADRUPOLEMAGFIELD_HH
 #define G4QUADRUPOLEMAGFIELD_HH
 
@@ -66,9 +61,10 @@ class G4QuadrupoleMagField : public G4MagneticField
 
   private:
 
-    G4double          fGradient;
-    G4ThreeVector     fOrigin;
-    G4RotationMatrix* fpMatrix;
+    G4double          fGradient = 0.0;
+    G4ThreeVector     fOrigin = G4ThreeVector(0.0, 0.0, 0.0);
+    G4RotationMatrix* fpMatrix = nullptr;
 };
+
 #endif
 

@@ -47,10 +47,9 @@ public:
 
 private:
 
-  G4float        LateralProfile[70];	
+  G4float        LateralProfile[70];
   G4float        timeDeposit[200];
-  G4int          timeHistoMaxBin;	    
-      
+  G4int          timeHistoMaxBin;
 };
 
 #endif

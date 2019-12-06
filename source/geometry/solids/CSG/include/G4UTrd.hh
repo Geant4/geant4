@@ -23,19 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// 
 // G4UTrd
 //
 // Class description:
 //
-//   Wrapper class for G4Trd to make use of VecGeom Trd.
+// Wrapper class for G4Trd to make use of VecGeom Trd.
 
-// History:
 // 13.09.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 #ifndef G4UTRD_HH

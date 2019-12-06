@@ -23,51 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4ImportanceAlgorithm
+// G4ImportanceAlgorithm
 //
 // Class description:
 //
 // An implementation of a G4VImportanceAlgorithm (see description in
-// G4VImportanceAlgorithm.hh).
+// G4VImportanceAlgorithm header).
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4ImportanceAlgorithm_hh
-#define G4ImportanceAlgorithm_hh G4ImportanceAlgorithm_hh
+#ifndef G4IMPORTANCEALGORITHM_HH
+#define G4IMPORTANCEALGORITHM_HH 1
 
 #include "G4VImportanceAlgorithm.hh"
 
 class G4ImportanceAlgorithm : public G4VImportanceAlgorithm
 {
+  public:  // with description
 
-public:  // with description
+    G4ImportanceAlgorithm();
+      // simple construction
 
-  G4ImportanceAlgorithm();
-    // simple construction
+    virtual ~G4ImportanceAlgorithm();
+      // repeate warning if triggered
 
-  virtual ~G4ImportanceAlgorithm();
-    // repeate warning if triggered
+    virtual G4Nsplit_Weight Calculate(G4double ipre, 
+                                      G4double ipost, 
+                                      G4double init_w) const;
+      // calculate the number of tracks and their weight according to the
+      // pre and post importance value and the weight of the mother track
 
-  virtual G4Nsplit_Weight Calculate(G4double ipre, 
-				    G4double ipost, 
-				    G4double init_w) const;
-    // calculate the number of tracks and their weight according 
-    // to the pre and post importance value and the weight of
-    // the mother track.  
-private:
+  private:
 
-  void Error(const G4String &m) const;
-  void Warning(const G4String &m) const;
+    void Error(const G4String& m) const;
+    void Warning(const G4String& m) const;
 
-private:
+  private:
 
-  mutable G4bool fWorned;
+    mutable G4bool fWarned = false;
 
 #ifdef G4MULTITHREADED
-  static G4Mutex ImportanceMutex;
+    static G4Mutex ImportanceMutex;
 #endif
 
 };

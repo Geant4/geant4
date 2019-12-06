@@ -70,7 +70,5 @@ class G4BinaryAlphaBuilder : public G4VAlphaBuilder
     G4double theMax;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

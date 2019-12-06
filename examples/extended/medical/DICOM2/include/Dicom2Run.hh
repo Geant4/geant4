@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file medical/DICOM/include/Dicom2Run.hh
+/// \file Dicom2Run.hh
 /// \brief Definition of the Dicom2Run class
 //
 
@@ -51,17 +51,16 @@
 
 class Dicom2Run : public DicomRun
 {
-public:
+  public:
+
     typedef G4VTHitsVector<G4StatAnalysis, std::vector<G4StatAnalysis>> Dicom2RunVector;
 
-public:
     // constructor and destructor.
     //  vector of multifunctionaldetector name has to given to constructor.
     Dicom2Run();
     Dicom2Run(const std::vector<G4String> mfdName);
     virtual ~Dicom2Run();
 
-public:
     // virtual method from G4Run.
     // The method is overriden in this class for scoring.
     virtual void RecordEvent(const G4Event*);
@@ -69,7 +68,7 @@ public:
     // Access methods for scoring information.
     // - Number of HitsMap for this RUN.
     //   This is equal to number of collections.
-    G4int GetNumberOfHitsMap() const { return fRunMap.size(); }
+    size_t GetNumberOfHitsMap() const { return fRunMap.size(); }
     // - Get HitsMap of this RUN.
     //   by sequential number, by multifucntional name and collection name,
     //   and by collection name with full path.
@@ -82,11 +81,11 @@ public:
 
     virtual void Merge(const G4Run*);
 
-private:
+  private:
+
     std::vector<G4String> fCollName;
     std::vector<G4int> fCollID;
     std::vector<Dicom2RunVector*> fRunMap;
-
 };
 
 #endif

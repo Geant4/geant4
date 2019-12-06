@@ -23,34 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BogackiShampine23
+//
+// Class description:
+//
 //  Bogacki-Shampine - 4 - 3(2) non-FSAL implementation 
 //
 //  An implementation of the embedded RK method from the paper 
-// [1] P. Bogacki and L. F. Shampine, “A 3(2) pair of Runge - Kutta formulas,” 
-// Appl. Math. Lett., vol. 2, no. 4, pp. 321–325, Jan. 1989.
+//  [1] P. Bogacki and L. F. Shampine,
+//     "A 3(2) pair of Runge - Kutta formulas"
+//     Appl. Math. Lett., vol. 2, no. 4, pp. 321-325, Jan. 1989.
 //
 //  This version does not utilise the FSAL property of the method,
 //  which would allow the reuse of the last derivative in the next step.
 //  (Alternative FSAL implementation created with revised interface)
-//
-//  Implemented by Somnath Banerjee
-// Work supported by the Google Summer of Code 2015.
-//  Supervision / code review: John Apostolakis
-//
-// First version: 20 May 2015
-//
-///////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef G4BOGACKI_SHAMPINE23_H
-#define G4BOGACKI_SHAMPINE23_H
+// Created: Somnath Banerjee, Google Summer of Code 2015, 20 May 2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+#ifndef G4BOGACKI_SHAMPINE23_HH
+#define G4BOGACKI_SHAMPINE23_HH
 
 #include "G4MagIntegratorStepper.hh"
 #include "G4FieldTrack.hh"
 
-class G4BogackiShampine23 : public G4MagIntegratorStepper{
+class G4BogackiShampine23 : public G4MagIntegratorStepper
+{
   public:
- 	  G4BogackiShampine23(G4EquationOfMotion* EqRhs,
+
+    G4BogackiShampine23(G4EquationOfMotion* EqRhs,
                         G4int numberOfVariables = 6);
 
     virtual void Stepper(const G4double yInput[],
@@ -73,6 +74,7 @@ class G4BogackiShampine23 : public G4MagIntegratorStepper{
     virtual G4int IntegratorOrder() const  override { return 3; }
 
   private:
+
     void makeStep(const G4double yInput[],
                   const G4double dydx[],
                   const G4double hstep,
@@ -85,7 +87,6 @@ class G4BogackiShampine23 : public G4MagIntegratorStepper{
              fyOut[G4FieldTrack::ncompSVEC],
              fdydxOut[G4FieldTrack::ncompSVEC];
     G4double fhstep = -1.0;
-
 };
 
 #endif

@@ -55,10 +55,10 @@ public:
   void DumpFragment(const G4FermiFragment*) const;
 
   void Dump() const;
- 
-  G4bool IsApplicable(G4int Z, G4int A, G4double etot) const;
 
   G4bool IsPhysical(G4int Z, G4int A) const;
+
+  G4bool HasChannels(G4int Z, G4int A, G4double exc) const;
 
   inline const G4FermiDecayProbability* FermiDecayProbability() const;
 
@@ -92,24 +92,13 @@ private:
 
   // pool 
   std::vector<const G4FermiFragment*> fragment_pool;
-  std::vector<const G4FermiFragment*> funstable;
 
   // lists of configurations sorted by A 
-
-  // "stable" fragments
   std::vector<const G4FermiFragment*> list_f[maxA]; 
   // list of channels for "stable" fragments
   std::vector<G4FermiChannels*>       list_c[maxA];
   // pairs of stable fragments 
   std::vector<const G4FermiPair*>     list_p[maxA]; 
-
-  // "unstable" fragments
-  std::vector<const G4FermiFragment*> list_g[maxA]; 
-  // list of channels of stable and unstable fragments 
-  std::vector<G4FermiChannels*>       list_d[maxA];
-  // pairs of stable and unstable fragments 
-  std::vector<const G4FermiPair*>     list_u[maxA]; 
-
 };
 
 inline G4int G4FermiFragmentsPoolVI::GetMaxZ() const

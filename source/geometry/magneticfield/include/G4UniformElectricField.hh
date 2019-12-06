@@ -23,19 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// class G4UniformElectricField
+// G4UniformElectricField
 //
 // Class description:
 //
 // Class for creation of Uniform electric Magnetic Field.
 
-// History:
-// - 30.01.97 V.Grichine, Created.
+// Created: V.Grichine, 30.01.1997
 // -------------------------------------------------------------------
-
 #ifndef G4UNIFORMELECTRICFIELD_HH
 #define G4UNIFORMELECTRICFIELD_HH
 
@@ -47,26 +42,26 @@ class G4UniformElectricField : public G4ElectricField
 {
   public:  // with description
 
-    G4UniformElectricField(const G4ThreeVector FieldVector );
+    G4UniformElectricField(const G4ThreeVector& FieldVector);
       // A field with value equal to FieldVector.
 
     G4UniformElectricField(G4double vField,
                            G4double vTheta,
-                           G4double vPhi     ) ;
+                           G4double vPhi);
        
-    virtual ~G4UniformElectricField() ;
+    virtual ~G4UniformElectricField();
 
     G4UniformElectricField(const G4UniformElectricField &p);
     G4UniformElectricField& operator = (const G4UniformElectricField &p);
       // Copy constructor and assignment operator
 
-    virtual void GetFieldValue(const G4double pos[4], G4double *field) const;
+    virtual void GetFieldValue(const G4double pos[4], G4double* field) const;
 
     virtual G4Field* Clone() const;
 
   private:
   
-    G4double fFieldComponents[6] ;
+    G4double fFieldComponents[6];
 };
 
 #endif

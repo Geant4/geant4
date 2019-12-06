@@ -52,7 +52,6 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4StoppingPhysics.hh"
 
-#include "G4DataQuestionaire.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronElasticPhysicsXS.hh"
@@ -64,7 +63,6 @@
 
 QBBC::QBBC( G4int ver, const G4String&)
 {
-  G4DataQuestionaire it(photon, neutronxs);
   G4cout << "<<< Reference Physics List QBBC " <<G4endl;	
 
   defaultCutValue = 0.7*mm;  
@@ -93,7 +91,4 @@ QBBC::QBBC( G4int ver, const G4String&)
   // Neutron tracking cut
   RegisterPhysics( new G4NeutronTrackingCut(ver) );
 }		 
-
-QBBC::~QBBC() 
-{}
 

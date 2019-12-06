@@ -13,6 +13,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+30-10-2019 IgS (testem15-V10-05-01)
+- SteppingAction, PhysList5DStandard : added G4GammaConversionToMuons process
 
 01-02-2019 IgS (testem15-V10-05-00)
 - SteppingAction.cc : not fill hist #11,#12 when no recoil returned

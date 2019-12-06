@@ -50,7 +50,7 @@ CCalG4Able::CCalG4Able(G4String name):
   detPhysicalVolume(0), g4ableName(name), sensitivity(false),
   visProperties(CCalSensitiveConfiguration::getInstance()->getFileName(name)+".vis") {
   //Initialize g4VisAtt pointers
-  for (int i=0; i<CCalVisualisable::TotalVisTypes; i++) {
+  for (G4int i=0; i<CCalVisualisable::TotalVisTypes; ++i) {
     g4VisAtt[i]=0;
   }
   sensitivity = 
@@ -74,25 +74,25 @@ G4VPhysicalVolume* CCalG4Able::PhysicalVolume(G4VPhysicalVolume* pv) {
     if (!detPhysicalVolume) {
       detPhysicalVolume = constructIn(pv);
       for (unsigned int i = 0; i < theG4DetectorsInside.size(); i++) {
-	theG4DetectorsInside[i]->PhysicalVolume(detPhysicalVolume);
+        theG4DetectorsInside[i]->PhysicalVolume(detPhysicalVolume);
       }
       if (sensitivity) {
 #ifdef debug
-	G4cout << "==> Making " << detPhysicalVolume->GetName() << " sensitive..." 
-	       << G4endl;
+        G4cout << "==> Making " << detPhysicalVolume->GetName() << " sensitive..." 
+               << G4endl;
 #endif
-	constructSensitive();
+        constructSensitive();
       } //if sensitivity
     } //if sensitive
   } //if construct
   else {
     G4cout << "NOTE: You decided to skip the construction of " 
-	   << G4Name() << G4endl;
+           << G4Name() << G4endl;
   }
 #ifdef ddebug
   timer.Stop();
   G4cout << tab << "CCalG4Able::PhysicalVolume(...) --> time spent: " 
-	 << timer << G4endl;
+         << timer << G4endl;
 #endif
   return detPhysicalVolume;
 }
@@ -105,21 +105,21 @@ void CCalG4Able::setVisType(CCalVisualisable::visType vt, G4LogicalVolume* log) 
   if (!g4VisAtt[vt]) {
 #ifdef debug
     G4cout << "CCalG4Able::setVisType: Constructing G4VisAttributes for " 
-	   << log->GetName() << " as " << vt << G4endl;
+           << log->GetName() << " as " << vt << G4endl;
 #endif
     G4Color col(visProperties.colorRed(vt),
-		visProperties.colorGreen(vt),
-		visProperties.colorBlue(vt));
+                visProperties.colorGreen(vt),
+                visProperties.colorBlue(vt));
     G4bool wf      = visProperties.isWireFrame(vt);
     G4bool visible = visProperties.isVisible(vt);
     
 #ifdef debug
     G4cout << "Color: " 
-	   << visProperties.colorRed(vt)   << ", " 
-	   << visProperties.colorGreen(vt) << ", "
-	   << visProperties.colorBlue(vt)  << tab
-	   << "Wireframe: " << wf << tab
-	   << "Visible: " << visible << G4endl;
+           << visProperties.colorRed(vt)   << ", " 
+           << visProperties.colorGreen(vt) << ", "
+           << visProperties.colorBlue(vt)  << tab
+           << "Wireframe: " << wf << tab
+           << "Visible: " << visible << G4endl;
 #endif
     g4VisAtt[vt] = new G4VisAttributes(col);
     g4VisAtt[vt]->SetForceWireframe(wf);

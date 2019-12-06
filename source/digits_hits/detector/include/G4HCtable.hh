@@ -63,7 +63,7 @@ class G4HCtable
 
   public:
     inline G4int entries() const
-    { return HClist.size(); }
+    { return G4int(HClist.size()); }
     inline G4String GetSDname(G4int i) const
     {
       if(i<0||i>entries()) return "***Not Defined***";

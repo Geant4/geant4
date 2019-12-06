@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21/11/19 G. Cosmo (exampleB2-V10-05-00)
+- Use default MixMax random engine.
+
 13/03/18 I. Hrivnacova  (exampleB2-V10-04-00)
 - Modified exampleB2.in test to reduce the output
 

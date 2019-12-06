@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4GenericPolycone.icc
-//
 // Implementation of inline methods of G4GenericPolycone
 // --------------------------------------------------------------------
 
@@ -86,4 +79,3 @@ G4PolyconeSideRZ G4GenericPolycone::GetCorner(G4int index) const
 {
   return corners[index];
 }
-

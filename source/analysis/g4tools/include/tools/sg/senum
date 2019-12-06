@@ -1,0 +1,333 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_senum
+#define tools_sg_senum
+
+#include "enums"
+#include "lpat"
+
+#include <string>
+#include <vector>
+
+namespace tools {
+namespace sg {
+
+typedef struct {char string[32];hjust value;} hjust_rec;
+inline const hjust_rec* hjust_recs(unsigned int& a_num){
+  static const hjust_rec list[] = { //read only static, then ok.
+    {"left",     left},
+    {"center",   center},
+    {"right",    right}
+  };  
+  a_num = sizeof(list)/sizeof(list[0]);
+  return list;
+}
+inline bool shjust(const std::string& a_s,hjust& a_v){
+  unsigned int number;
+  const hjust_rec* list = hjust_recs(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_s==list[count].string) {
+      a_v = list[count].value;
+      return true;
+    }
+  }
+  a_v = left;
+  return false;
+}
+inline const char* shjust(hjust a_v){
+  unsigned int number;
+  const hjust_rec* list = hjust_recs(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_v==list[count].value) return list[count].string;
+  }
+  return 0;
+}
+
+typedef struct {char string[32];vjust value;} vjust_rec;
+inline const vjust_rec* vjust_recs(unsigned int& a_num){
+  static const vjust_rec list[] = { //read only static, then ok.
+    {"bottom",   bottom},
+    {"middle",   middle},
+    {"top",      top}
+  };  
+  a_num = sizeof(list)/sizeof(list[0]);
+  return list;
+}
+inline bool svjust(const std::string& a_s,vjust& a_v){
+  unsigned int number;
+  const vjust_rec* list = vjust_recs(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_s==list[count].string) {
+      a_v = list[count].value;
+      return true;
+    }
+  }
+  a_v = bottom;
+  return false;
+}
+inline const char* svjust(vjust a_v){
+  unsigned int number;
+  const vjust_rec* list = vjust_recs(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_v==list[count].value) return list[count].string;
+  }
+  return 0;
+}
+
+typedef struct {char string[32];marker_style value;} marker_style_rec;
+inline const marker_style_rec* marker_style_recs(unsigned int& a_num){
+  static const marker_style_rec list[] = { //read only static, then ok.
+    {"dot",         marker_dot},
+    {"plus",        marker_plus},
+    {"asterisk",    marker_asterisk},
+    {"cross",       marker_cross},
+    {"star",        marker_star},
+    {"circle_line",         marker_circle_line},
+    {"circle_filled",       marker_circle_filled},
+    {"triangle_up_line",    marker_triangle_up_line},
+    {"triangle_up_filled",  marker_triangle_up_filled},
+    {"triangle_down_line",  marker_triangle_down_line},
+    {"triangle_down_filled",marker_triangle_down_filled},
+    {"david_star_line",     marker_david_star_line},
+    {"david_star_filled",   marker_david_star_filled},
+    {"swiss_cross_line",    marker_swiss_cross_line},
+    {"swiss_cross_filled",  marker_swiss_cross_filled},
+    {"diamond_line",        marker_diamond_line},
+    {"diamond_filled",      marker_diamond_filled},
+    {"square_line",         marker_square_line},
+    {"square_filled",       marker_square_filled},
+    {"penta_star_line",     marker_penta_star_line},
+    {"penta_star_filled",   marker_penta_star_filled},
+    {"minus",               marker_minus}
+  };  
+  a_num = sizeof(list)/sizeof(list[0]);
+  return list;
+}
+inline bool smarker_style(const std::string& a_s,marker_style& a_v){
+  unsigned int number;
+  const marker_style_rec* list = marker_style_recs(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_s==list[count].string) {
+      a_v = list[count].value;
+      return true;
+    }
+  }
+  a_v = marker_dot;
+  return false;
+}
+inline const char* smarker_style(marker_style a_v){
+  unsigned int number;
+  const marker_style_rec* list = marker_style_recs(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_v==list[count].value) return list[count].string;
+  }
+  return 0;
+}
+
+typedef struct {char string[16];area_style value;} area_style_rec;
+inline const area_style_rec* area_style_recsList(unsigned int& a_num){
+  static const area_style_rec list[] = { //read only static, then ok.
+    {"solid",         area_solid},
+    {"hatched",       area_hatched},
+    {"checker",       area_checker},
+    {"edged",         area_edged}
+  };  
+  a_num = sizeof(list)/sizeof(list[0]);
+  return list;
+}
+inline bool sarea_style(const std::string& a_s,area_style& a_v){
+  unsigned int number;
+  const area_style_rec* list = area_style_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_s==list[count].string) {
+      a_v = list[count].value;
+      return true;  
+    }
+  }
+  a_v = area_solid;
+  return false;
+}
+inline const char* sarea_style(area_style a_v){
+  unsigned int number;
+  const area_style_rec* list = area_style_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_v==list[count].value) return list[count].string;
+  }
+  return 0;
+}
+
+typedef struct {char string[20];painting_policy value;} painting_policy_rec;
+inline const painting_policy_rec* painting_policy_recsList(unsigned int& a_num){
+  static const painting_policy_rec list[] = { //read only static, then ok.
+    {"uniform",      painting_uniform},
+    {"by_value",     painting_by_value},
+    {"by_level",     painting_by_level},
+    {"grey_scale",   painting_grey_scale},
+    {"violet_to_red",painting_violet_to_red},
+    {"grey_scale_inverse",painting_grey_scale_inverse}
+  };  
+  a_num = sizeof(list)/sizeof(list[0]);
+  return list;
+}  
+inline void spainting_policies(std::vector<std::string>& a_v){
+  a_v.clear();
+  unsigned int number;
+  const painting_policy_rec* list = painting_policy_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    a_v.push_back(list[count].string);
+  }
+}
+inline bool spainting_policy(const std::string& a_s,painting_policy& a_v){
+  unsigned int number;
+  const painting_policy_rec* list = painting_policy_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_s==list[count].string) {
+      a_v = list[count].value;
+      return true;
+    }
+  }
+  a_v = painting_uniform;
+  return false;
+}
+inline const char* spainting_policy(painting_policy a_v){
+  unsigned int number;
+  const painting_policy_rec* list = painting_policy_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_v==list[count].value) return list[count].string;
+  }
+  return 0;
+}
+
+
+typedef struct {char string[16];hatching_policy value;} hatching_policy_rec;
+inline const hatching_policy_rec* hatching_policy_recsList(unsigned int& a_num){
+  static const hatching_policy_rec list[] = { //read only static, then ok.
+    {"none",           hatching_none},
+    {"right",          hatching_right},
+    {"left",           hatching_left},
+    {"left_and_right", hatching_left_and_right}
+  };  
+  a_num = sizeof(list)/sizeof(list[0]);
+  return list;
+}
+inline bool shatching_policy(const std::string& a_s,hatching_policy& a_v){
+  unsigned int number;
+  const hatching_policy_rec* list = hatching_policy_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_s==list[count].string) {
+      a_v = list[count].value;
+      return true;
+    }
+  }
+  a_v = hatching_none;
+  return false;
+}
+inline const char* shatching_policy(hatching_policy a_v){
+  unsigned int number;
+  const hatching_policy_rec* list = hatching_policy_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_v==list[count].value) return list[count].string;
+  }
+  return 0;
+}
+
+typedef struct {char string[16];projection_type value;} projection_type_rec;
+inline const projection_type_rec* projection_type_recsList(unsigned int& a_num){
+  static const projection_type_rec list[] = { //read only static, then ok.
+    {"none",     projection_none},
+    {"rz",       projection_rz},
+    {"phiz",     projection_phiz},
+    {"zr",       projection_zr},
+    {"zphi",     projection_zphi}
+  };  
+  a_num = sizeof(list)/sizeof(list[0]);
+  return list;
+}
+inline bool sprojection_type(const std::string& a_s,projection_type& a_v){
+  unsigned int number;
+  const projection_type_rec* list = projection_type_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_s==list[count].string) {
+      a_v = list[count].value;
+      return true;
+    }
+  }
+  a_v = projection_none;
+  return false;
+}
+inline const char* sprojection_type(projection_type a_v){
+  unsigned int number;
+  const projection_type_rec* list = projection_type_recsList(number);
+  for(unsigned int count=0;count<number;count++) {
+    if(a_v==list[count].value) return list[count].string;
+  }
+  return 0;
+}
+
+inline bool sline_pattern(const std::string& a_s,lpat& aPattern){
+  if(a_s=="solid") {
+    aPattern = line_solid;
+  } else if(a_s=="dashed") {
+    aPattern = line_dashed;
+  } else if(a_s=="dotted") {
+    aPattern = line_dotted;
+  } else if(a_s=="dash_dotted") {
+    aPattern = line_dash_dotted;
+  } else {
+    aPattern = line_solid;
+    return false;
+  }
+  return true;
+}
+  
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline bool smove_type(const std::string& a_s,move_type& a_move) {
+  if(a_s=="move_rotate_right") {a_move = move_rotate_right;return true;}
+  if(a_s=="move_rotate_left") {a_move = move_rotate_left;return true;}
+  if(a_s=="move_rotate_up") {a_move = move_rotate_up;return true;}
+  if(a_s=="move_rotate_down") {a_move = move_rotate_down;return true;}
+  if(a_s=="move_roll_plus") {a_move = move_roll_plus;return true;}
+  if(a_s=="move_roll_minus") {a_move = move_roll_minus;return true;}
+  if(a_s=="move_translate_right") {a_move = move_translate_right;return true;}
+  if(a_s=="move_translate_left") {a_move = move_translate_left;return true;}
+  if(a_s=="move_up") {a_move = move_up;return true;}
+  if(a_s=="move_down") {a_move = move_down;return true;}
+  if(a_s=="move_forward") {a_move = move_forward;return true;}
+  if(a_s=="move_backward") {a_move = move_backward;return true;}
+  if(a_s=="move_zoom_in") {a_move = move_zoom_in;return true;}
+  if(a_s=="move_zoom_out") {a_move = move_zoom_out;return true;}
+  if(a_s=="move_rotate_around_focal_right") {a_move = move_rotate_around_focal_right;return true;}
+  if(a_s=="move_rotate_around_focal_left") {a_move = move_rotate_around_focal_left;return true;}
+  if(a_s=="move_rotate_around_focal_up") {a_move = move_rotate_around_focal_up;return true;}
+  if(a_s=="move_rotate_around_focal_down") {a_move = move_rotate_around_focal_down;return true;}
+  if(a_s=="move_roll_around_focal_plus") {a_move = move_roll_around_focal_plus;return true;}
+  if(a_s=="move_roll_around_focal_minus") {a_move = move_roll_around_focal_minus;return true;}
+  if(a_s=="move_zoom_in_out") {a_move = move_zoom_in_out;return true;}
+  if(a_s=="move_zoom_in_out_rot") {a_move = move_zoom_in_out_rot;return true;}
+  if(a_s=="move_curve") {a_move = move_curve;return true;}
+  a_move = move_rotate_left;
+  return false;    
+}
+
+}}
+/*
+#include "../snpf"
+#include "../colorf"
+
+namespace tools {
+namespace sg {
+
+inline bool scolor(const colorf& a_col,std::string& a_s){
+  char s[256];
+  snpf(s,sizeof(s),"%g %g %g",a_col[0],a_col[1],a_col[2]);
+  a_s = s;
+  return true;
+}
+
+}}
+*/
+
+#endif

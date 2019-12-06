@@ -6,19 +6,16 @@
 ##
 #################
 
-/run/initialize
 /control/verbose 1
 /tracking/verbose 0
 /run/verbose 1
-/LXe/eventVerbose 0
+/process/optical/processActivation Scintillation false
 
+/run/initialize
+
+/LXe/eventVerbose 0
 /LXe/detector/defaults
 /LXe/oneStepPrimaries false
-
-#This currently causes the program to crash due to a bug in geant4
-#Uncomment it once that bug has been fixed. Until then, to use this,
-#modify LXePhysicsList to disable scintillation.
-#/process/inactivate Scintillation
 
 /LXe/detector/MainScintYield 0
 
@@ -41,6 +38,7 @@
 #reset from a random seed that shows a good cone
 #/random/resetEngineFrom random/goodCerenkov.rndm
 
+/analysis/setFileName cerenkov
 /analysis/h1/set 1 100 -1 50 
 /analysis/h1/set 2 100 -1 50 
 /analysis/h1/set 4 100 -1 200
@@ -49,4 +47,4 @@
 /analysis/h1/set 7 100 0 20 MeV
 
 /run/printProgress 1000
-/run/beamOn 100000
+/run/beamOn 10000

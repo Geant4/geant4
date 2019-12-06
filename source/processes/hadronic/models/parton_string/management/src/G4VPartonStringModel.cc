@@ -196,9 +196,11 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 
     G4V3DNucleus * ProjResNucleus=theThis->GetProjectileNucleus();
 
+    G4int numberProtonProjectileResidual( 0 ), numberNeutronProjectileResidual( 0 );
     if(ProjResNucleus != 0)
     {
       theNuclNucleon = ProjResNucleus->StartLoop() ? ProjResNucleus->GetNextNucleon() : NULL;
+      G4int numberProtonProjectileHits( 0 ), numberNeutronProjectileHits( 0 );
       while( theNuclNucleon )
       {
         if(theNuclNucleon->AreYouHit())
@@ -211,6 +213,8 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
           ExcitationEp +=theNuclNucleon->GetBindingEnergy();
           #endif
           theNuclNucleon->SetMomentum(tmp);
+          if ( theNuclNucleon->GetDefinition() == G4Proton::Proton() )   ++numberProtonProjectileHits;
+          if ( theNuclNucleon->GetDefinition() == G4Neutron::Neutron() ) ++numberNeutronProjectileHits;
         }
         theNuclNucleon = ProjResNucleus->GetNextNucleon();
       }
@@ -221,12 +225,16 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
             <<ExcitationEp<<G4endl;
       G4cout<<"Projectile residual 4 momentum  "<<ProjectileResidual4Momentum<<G4endl;
       #endif
+      numberProtonProjectileResidual = thePrimary.GetDefinition()->GetPDGCharge() - numberProtonProjectileHits;
+      numberNeutronProjectileResidual = thePrimary.GetDefinition()->GetBaryonNumber() 
+                                        - thePrimary.GetDefinition()->GetPDGCharge() - numberNeutronProjectileHits;
     }
 
     G4V3DNucleus * ResNucleus=theThis->GetWoundedNucleus(); 
 
     // loop over wounded nucleus
     theNuclNucleon = ResNucleus->StartLoop() ? ResNucleus->GetNextNucleon() : NULL;
+    G4int numberProtonTargetHits( 0 ), numberNeutronTargetHits( 0 );
     while( theNuclNucleon )
     {
       if(theNuclNucleon->AreYouHit())
@@ -239,6 +247,8 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
         ExcitationEt +=theNuclNucleon->GetBindingEnergy();
         #endif
         theNuclNucleon->SetMomentum(tmp);
+        if ( theNuclNucleon->GetDefinition() == G4Proton::Proton() )   ++numberProtonTargetHits;
+        if ( theNuclNucleon->GetDefinition() == G4Neutron::Neutron() ) ++numberNeutronTargetHits;
       }
       theNuclNucleon = ResNucleus->GetNextNucleon();
     }
@@ -256,6 +266,30 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
           <<charged_hitsP<<" "<<charged_hitsT<<G4endl<<G4endl;
     G4cout<<"Bsum Qsum "<<Bsum<<" "<<Qsum<<G4endl<<G4endl;
     #endif
+
+    // Re-sample in the case of unphysical nuclear residual:
+    // 1 (H), 2 (2He), and 3 (3Li) protons alone without neutrons can exist, but not more;
+    // no bound states of 2 or more neutrons without protons can exist.
+    G4int numberProtonTargetResidual = theNucleus.GetZ_asInt() - numberProtonTargetHits;
+    G4int numberNeutronTargetResidual = theNucleus.GetA_asInt() - theNucleus.GetZ_asInt() - numberNeutronTargetHits;
+    G4bool unphysicalResidual = false;
+    if ( ( numberProtonTargetResidual > 3   &&  numberNeutronTargetResidual == 0 ) ||
+         ( numberProtonTargetResidual == 0  &&  numberNeutronTargetResidual > 1  ) ) {
+      unphysicalResidual = true;
+      //G4cout << "***UNPHYSICAL TARGET RESIDUAL*** Z=" << numberProtonTargetResidual 
+      //       << " ; N=" << numberNeutronTargetResidual;
+    }
+    if ( ( numberProtonProjectileResidual > 3   &&  numberNeutronProjectileResidual == 0 ) ||
+         ( numberProtonProjectileResidual == 0  &&  numberNeutronProjectileResidual > 1  ) ) {
+      unphysicalResidual = true;
+      //G4cout << "***UNPHYSICAL PROJECTILE RESIDUAL*** Z=" << numberProtonProjectileResidual
+      //       << " ; N=" << numberNeutronProjectileResidual;
+    }
+    if ( unphysicalResidual ) {
+      //G4cout << " -> REJECTING COLLISION because of unphysical residual !" << G4endl;
+      Success = false;
+      continue;
+    }
 
     //=========================================================================================
     //                              Fragment strings

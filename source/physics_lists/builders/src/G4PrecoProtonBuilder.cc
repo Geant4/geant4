@@ -61,4 +61,3 @@ Build(G4ProtonInelasticProcess * aP)
   aP->AddDataSet(new G4ProtonInelasticCrossSection);  
 }
 
-// 2002 by J.P. Wellisch

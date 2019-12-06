@@ -66,11 +66,11 @@ G4FissLib::G4FissLib()
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(20.*MeV);
-  if(!getenv("G4NEUTRONHPDATA")) {
+  if(!std::getenv("G4NEUTRONHPDATA")) {
      G4cout << "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files." << G4endl;
      throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
   }
-  dirName = getenv("G4NEUTRONHPDATA");
+  dirName = std::getenv("G4NEUTRONHPDATA");
   G4String tString = "/Fission/";
   dirName = dirName + tString;
   numEle = G4Element::GetNumberOfElements();

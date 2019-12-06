@@ -23,23 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// the GEANT4 collaboration.
+// G4VCSGfaceted implementation; a virtual class of a CSG type shape
+// that is built entirely out of G4VCSGface faces.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4VCSGfaceted.cc
-//
-// Implementation of the virtual class of a CSG type shape that is built
-// entirely out of G4VCSGface faces.
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4VCSGfaceted.hh"
@@ -67,8 +54,6 @@ namespace
 //
 G4VCSGfaceted::G4VCSGfaceted( const G4String& name )
   : G4VSolid(name),
-    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0),
     fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
@@ -80,8 +65,6 @@ G4VCSGfaceted::G4VCSGfaceted( const G4String& name )
 //
 G4VCSGfaceted::G4VCSGfaceted( __void__& a )
   : G4VSolid(a),
-    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0),
     fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
@@ -92,14 +75,14 @@ G4VCSGfaceted::G4VCSGfaceted( __void__& a )
 G4VCSGfaceted::~G4VCSGfaceted()
 {
   DeleteStuff();
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 
 //
 // Copy constructor
 //
-G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source )
+G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted& source )
   : G4VSolid( source )
 {
   fStatistics = source.fStatistics;
@@ -113,7 +96,7 @@ G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source )
 //
 // Assignment operator
 //
-G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
+G4VCSGfaceted& G4VCSGfaceted::operator=( const G4VCSGfaceted& source )
 {
   if (&source == this) { return *this; }
   
@@ -139,7 +122,7 @@ G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 //
 // Copy the contents of source
 //
-void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
+void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted& source )
 {
   numFace = source.numFace;
   if (numFace == 0) { return; }    // odd, but permissable?
@@ -155,7 +138,7 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
   fCubicVolume = source.fCubicVolume;
   fSurfaceArea = source.fSurfaceArea;
   fRebuildPolyhedron = false;
-  fpPolyhedron = 0;
+  fpPolyhedron = nullptr;
 }
 
 
@@ -176,7 +159,7 @@ void G4VCSGfaceted::DeleteStuff()
 
     delete [] faces;
   }
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 
@@ -184,10 +167,10 @@ void G4VCSGfaceted::DeleteStuff()
 // CalculateExtent
 //
 G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
-                                       const G4VoxelLimits &voxelLimit,
-                                       const G4AffineTransform &transform,
-                                             G4double &min,
-                                             G4double &max ) const
+                                       const G4VoxelLimits& voxelLimit,
+                                       const G4AffineTransform& transform,
+                                             G4double& min,
+                                             G4double& max ) const
 {
   G4SolidExtentList  extentList( axis, voxelLimit );
 
@@ -215,7 +198,7 @@ G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
 // test or whatnot) and to call this version only if
 // the simplier test fails.
 //
-EInside G4VCSGfaceted::Inside( const G4ThreeVector &p ) const
+EInside G4VCSGfaceted::Inside( const G4ThreeVector& p ) const
 {
   EInside answer=kOutside;
   G4VCSGface **face = faces;
@@ -262,8 +245,8 @@ G4ThreeVector G4VCSGfaceted::SurfaceNormal( const G4ThreeVector& p ) const
 //
 // DistanceToIn(p,v)
 //
-G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p,
-                                      const G4ThreeVector &v ) const
+G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector& p,
+                                      const G4ThreeVector& v ) const
 {
   G4double distance = kInfinity;
   G4double distFromSurface = kInfinity;
@@ -304,7 +287,7 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p,
 //
 // DistanceToIn(p)
 //
-G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p ) const
+G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector& p ) const
 {
   return DistanceTo( p, false );
 }
@@ -313,11 +296,11 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p ) const
 //
 // DistanceToOut(p,v)
 //
-G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
-                                       const G4ThreeVector &v,
+G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector& p,
+                                       const G4ThreeVector& v,
                                        const G4bool calcNorm,
-                                             G4bool *validNorm,
-                                             G4ThreeVector *n ) const
+                                             G4bool* validNorm,
+                                             G4ThreeVector* n ) const
 {
   G4bool allBehind = true;
   G4double distance = kInfinity;
@@ -346,20 +329,20 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
         distFromSurface = faceDistFromSurface;
         normal = faceNormal;
         bestFace = *face;
-        if (distFromSurface <= 0)  { break; }
+        if (distFromSurface <= 0.)  { break; }
       }
     }
   } while( ++face < faces + numFace );
   
   if (distance < kInfinity)
   {
-    if (distFromSurface <= 0)
+    if (distFromSurface <= 0.)
     {
-      distance = 0;
+      distance = 0.;
     }
     else if (distFromSurface<kCarTolerance/2)
     {
-      if (bestFace->Distance(p,true) < kCarTolerance/2)  { distance = 0; }
+      if (bestFace->Distance(p,true) < kCarTolerance/2)  { distance = 0.; }
     }
 
     if (calcNorm)
@@ -370,7 +353,7 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
   }
   else
   { 
-    if (Inside(p) == kSurface)  { distance = 0; }
+    if (Inside(p) == kSurface)  { distance = 0.; }
     if (calcNorm)  { *validNorm = false; }
   }
 
@@ -381,7 +364,7 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
 //
 // DistanceToOut(p)
 //
-G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p ) const
+G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector& p ) const
 {
   return DistanceTo( p, true );
 }
@@ -392,7 +375,7 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p ) const
 //
 // Protected routine called by DistanceToIn and DistanceToOut
 //
-G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p,
+G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector& p,
                                     const G4bool outgoing ) const
 {
   G4VCSGface **face = faces;
@@ -403,7 +386,7 @@ G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p,
     if (distance < best)  { best = distance; }
   } while( ++face < faces + numFace );
 
-  return (best < 0.5*kCarTolerance) ? 0 : best;
+  return (best < 0.5*kCarTolerance) ? 0. : best;
 }
 
 
@@ -436,7 +419,7 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
   do    // Loop checking, 13.08.2015, G.Cosmo
   {    
     const G4ThreeVector **axis = axes+5 ;
-    G4double *answer = answers+5;
+    G4double* answer = answers+5;
     do    // Loop checking, 13.08.2015, G.Cosmo
     {
       G4double testFace = (*face)->Extent( **axis );
@@ -581,7 +564,7 @@ G4double G4VCSGfaceted::GetSurfaceArea()
 //
 G4Polyhedron* G4VCSGfaceted::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
@@ -606,7 +589,7 @@ G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
   //
   G4ThreeVector answer=G4ThreeVector(0.,0.,0.);
   G4VCSGface **face = faces;
-  G4double area = 0;
+  G4double area = 0.;
   G4int i;
   std::vector<G4double> areas; 
 
@@ -624,7 +607,7 @@ G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
   G4VCSGface **face1 = faces;
   G4double chose = area*G4UniformRand();
   G4double Achose1, Achose2;
-  Achose1=0; Achose2=0.; 
+  Achose1=0.; Achose2=0.; 
   i=0;
 
   do
@@ -636,7 +619,7 @@ G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
       point= (*face1)->GetPointOnFace();
       return point;
     }
-    i++;
+    ++i;
     Achose1=Achose2;
   } while( ++face1 < faces + numFace );
 

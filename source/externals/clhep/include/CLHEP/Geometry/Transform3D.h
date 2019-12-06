@@ -60,7 +60,7 @@
 // Scalings:
 //   Scale3D(sx,sy,sz)        - general scaling with factors "sx","sy","sz"
 //                                 along X, Y and Z;
-//   Scale3D(s)               - scaling with constant factor "s" along all 
+//   Scale3D(s)               - scaling with constant factor "s" along all
 //                                 directions;
 //   ScaleX3D(sx)             - scale X;
 //   ScaleY3D(sy)             - scale Y;
@@ -84,7 +84,7 @@
 //
 // The following table explains how different transformations affect
 // point, vector and normal. "+" means affect, "-" means do not affect,
-// "*" meas affect but in different way than "+" 
+// "*" meas affect but in different way than "+"
 //
 //                     Point  Vector  Normal
 //      -------------+-------+-------+-------
@@ -109,9 +109,9 @@
 // 24.09.96 E.Chernyaev - initial version
 //
 // 26.02.97 E.Chernyaev
-// - added global Identity by request of John Allison 
-//   (to avoid problems with compilation on HP) 
-// - added getRotation and getTranslation 
+// - added global Identity by request of John Allison
+//   (to avoid problems with compilation on HP)
+// - added getRotation and getTranslation
 //
 // 29.01.01 E.Chernyaev - added subscripting
 // 11.06.01 E.Chernyaev - added getDecomposition
@@ -195,7 +195,7 @@ namespace HepGeom {
      * Global identity transformation. */
     DLL_API static const Transform3D Identity;
 
-    // Helper class for implemention of C-style subscripting r[i][j] 
+    // Helper class for implemention of C-style subscripting r[i][j]
     class Transform3D_row {
     public:
       inline Transform3D_row(const Transform3D &, int);
@@ -211,7 +211,7 @@ namespace HepGeom {
       : xx_(1), xy_(0), xz_(0), dx_(0),
 	yx_(0), yy_(1), yz_(0), dy_(0),
 	zx_(0), zy_(0), zz_(1), dz_(0) {}
-  
+
     /**
      * Constructor: rotation and then translation. */
     inline Transform3D(const CLHEP::HepRotation & mt, const CLHEP::Hep3Vector & v);
@@ -227,21 +227,27 @@ namespace HepGeom {
 
     /**
      * Copy constructor. */
-    Transform3D(const Transform3D & mt)
-      : xx_(mt.xx_), xy_(mt.xy_), xz_(mt.xz_), dx_(mt.dx_),
-	yx_(mt.yx_), yy_(mt.yy_), yz_(mt.yz_), dy_(mt.dy_),
-	zx_(mt.zx_), zy_(mt.zy_), zz_(mt.zz_), dz_(mt.dz_) {}
+    Transform3D(const Transform3D & mt) = default;
 
     /**
-     * Destructor. 
-     * Virtual for now as some persistency mechanism needs that,
-     * in future releases this might go away again.
-     */
-    ~Transform3D() { /* nop */ }
+     * Move constructor. */
+    Transform3D(Transform3D && mt) = default;
+
+    /**
+     * Destructor. */
+    ~Transform3D() = default;
+
+    /**
+     * Assignment. */
+    Transform3D & operator=(const Transform3D & mt) = default;
+
+    /**
+     * Move assignment. */
+    Transform3D & operator=(Transform3D && mt) = default;
 
     /**
      * Returns object of the helper class for C-style subscripting r[i][j] */
-    inline const Transform3D_row operator [] (int) const; 
+    inline const Transform3D_row operator [] (int) const;
 
     /** Fortran-style subscripting: returns (i,j) element of the matrix. */
     double operator () (int, int) const;
@@ -264,7 +270,7 @@ namespace HepGeom {
     /**
      * Gets yz-element of the transformation matrix. */
     double yz() const { return yz_; }
-    /** 
+    /**
      * Gets zx-element of the transformation matrix. */
     double zx() const { return zx_; }
     /**
@@ -282,30 +288,21 @@ namespace HepGeom {
     /**
      * Gets dz-element of the transformation matrix. */
     double dz() const { return dz_; }
-    
-    /**
-     * Assignment. */
-    Transform3D & operator=(const Transform3D &mt) {
-      xx_= mt.xx_; xy_= mt.xy_; xz_= mt.xz_; dx_= mt.dx_;
-      yx_= mt.yx_; yy_= mt.yy_; yz_= mt.yz_; dy_= mt.dy_;
-      zx_= mt.zx_; zy_= mt.zy_; zz_= mt.zz_; dz_= mt.dz_;
-      return *this;
-    }
 
     /**
      * Sets the Identity transformation. */
-    void setIdentity() { 
+    void setIdentity() {
       xy_= xz_= dx_= yx_= yz_= dy_= zx_= zy_= dz_= 0; xx_= yy_= zz_= 1;
     }
-    
+
     /**
      * Returns the inverse transformation. */
     Transform3D inverse() const;
-    
+
     /**
      * Transformation by another Transform3D. */
     Transform3D operator*(const Transform3D & b) const;
-    
+
     /**
      * Decomposition of general transformation.
      * This function gets decomposition of the transformation
@@ -336,17 +333,17 @@ namespace HepGeom {
      * This functions is obsolete - use getDecomposition() instead.
      */
     inline CLHEP::HepRotation getRotation() const;
-    
+
     /**
      * Extracts the translation vector.
      * This functions is obsolete - use getDecomposition() instead.
      */
     inline CLHEP::Hep3Vector getTranslation() const;
-    
+
     /**
      * Test for equality. */
     bool operator == (const Transform3D & transform) const;
-    
+
     /**
      * Test for inequality. */
     bool operator != (const Transform3D & transform) const {
@@ -360,7 +357,7 @@ namespace HepGeom {
    * Constructs a rotation transformation.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -375,7 +372,7 @@ namespace HepGeom {
     /**
      * Default constructor: sets the Identity transformation. */
     Rotate3D() : Transform3D() {}
-    
+
     /**
      * Constructor from CLHEP::HepRotation. */
     inline Rotate3D(const CLHEP::HepRotation &mt);
@@ -389,7 +386,7 @@ namespace HepGeom {
     Rotate3D(double a,
 	     const Point3D<double> & p1,
 	     const Point3D<double> & p2);
-    
+
     /**
      * Constructor from angle and axis.
      * @param a angle of rotation
@@ -415,7 +412,7 @@ namespace HepGeom {
    * Constructs a rotation around x-axis.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -430,11 +427,11 @@ namespace HepGeom {
     /**
      * Default constructor: sets the Identity transformation. */
     RotateX3D() : Rotate3D() {}
-    
+
     /**
      * Constructs a rotation around x-axis by angle a. */
     RotateX3D(double a) {
-      double cosa = std::cos(a), sina = std::sin(a); 
+      double cosa = std::cos(a), sina = std::sin(a);
       setTransform(1,0,0,0,  0,cosa,-sina,0,  0,sina,cosa,0);
     }
   };
@@ -443,7 +440,7 @@ namespace HepGeom {
    * Constructs a rotation around y-axis.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -458,11 +455,11 @@ namespace HepGeom {
     /**
      * Default constructor: sets the Identity transformation. */
     RotateY3D() : Rotate3D() {}
-    
+
     /**
      * Constructs a rotation around y-axis by angle a. */
     RotateY3D(double a) {
-      double cosa = std::cos(a), sina = std::sin(a); 
+      double cosa = std::cos(a), sina = std::sin(a);
       setTransform(cosa,0,sina,0,  0,1,0,0,  -sina,0,cosa,0);
     }
   };
@@ -471,7 +468,7 @@ namespace HepGeom {
    * Constructs a rotation around z-axis.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -486,22 +483,22 @@ namespace HepGeom {
     /**
      * Default constructor: sets the Identity transformation. */
     RotateZ3D() : Rotate3D() {}
-    
+
     /**
      * Constructs a rotation around z-axis by angle a. */
     RotateZ3D(double a) {
-      double cosa = std::cos(a), sina = std::sin(a); 
+      double cosa = std::cos(a), sina = std::sin(a);
       setTransform(cosa,-sina,0,0,  sina,cosa,0,0,  0,0,1,0);
     }
   };
 
   //   T R A N S L A T I O N S
-  
+
   /**
    * Constructs a translation transformation.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -516,11 +513,11 @@ namespace HepGeom {
     /**
      * Default constructor: sets the Identity transformation. */
     Translate3D() : Transform3D() {}
-    
+
     /**
      * Constructor from CLHEP::Hep3Vector. */
     inline Translate3D(const CLHEP::Hep3Vector &v);
-    
+
     /**
      * Constructor from three numbers. */
     Translate3D(double x, double y, double z)
@@ -531,7 +528,7 @@ namespace HepGeom {
    * Constructs a translation along x-axis.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -546,7 +543,7 @@ namespace HepGeom {
     /**
      * Default constructor: sets the Identity transformation. */
     TranslateX3D() : Translate3D() {}
-    
+
     /**
      * Constructor from a number. */
     TranslateX3D(double x) : Translate3D(x, 0, 0) {}
@@ -556,7 +553,7 @@ namespace HepGeom {
    * Constructs a translation along y-axis.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -581,7 +578,7 @@ namespace HepGeom {
    * Constructs a translation along z-axis.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -608,7 +605,7 @@ namespace HepGeom {
    * Constructs a reflection transformation.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -646,7 +643,7 @@ namespace HepGeom {
    * Constructs reflection in a plane x=const.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -662,12 +659,12 @@ namespace HepGeom {
      * Constructor from a number. */
     ReflectX3D(double x=0) : Reflect3D(-1,0,0,x+x, 0,1,0,0, 0,0,1,0) {}
   };
- 
+
   /**
    * Constructs reflection in a plane y=const.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -683,12 +680,12 @@ namespace HepGeom {
      * Constructor from a number. */
     ReflectY3D(double y=0) : Reflect3D(1,0,0,0, 0,-1,0,y+y, 0,0,1,0) {}
   };
- 
+
   /**
    * Constructs reflection in a plane z=const.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -704,14 +701,14 @@ namespace HepGeom {
      *  Constructor from a number. */
     ReflectZ3D(double z=0) : Reflect3D(1,0,0,0, 0,1,0,0, 0,0,-1,z+z) {}
   };
- 
+
   //   S C A L I N G S
 
   /**
    * Constructs a scaling transformation.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -743,7 +740,7 @@ namespace HepGeom {
    * Constructs a scaling transformation in x-direction.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;
@@ -768,7 +765,7 @@ namespace HepGeom {
    * Constructs a scaling transformation in y-direction.
    * This class provides additional constructors for Transform3D
    * and should not be used as a separate class.
-   * 
+   *
    * Example of use:
    * @code
    *   Transform3D m;

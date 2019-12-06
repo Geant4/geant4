@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file optical/LXe/include/Run.hh
-/// \brief Definition of the Run class
+/// \file optical/LXe/include/LXeRun.hh
+/// \brief Definition of the LXeRun class
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

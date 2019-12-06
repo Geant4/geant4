@@ -23,29 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4FieldManagerStore
+// G4FieldManagerStore
 //
 // Class description:
 //
-// Container for all FieldManagers, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// Container for all FieldManagers, with functionality derived
+// from std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static function
-// G4FieldManagerStore::GetInstance()
+// G4FieldManagerStore::GetInstance().
 //
 // All FieldManagers should be registered with G4FieldManagerStore,
 // and removed on their destruction. 
 // Intended principally to enable resetting of 'state' at start of event.
 // The underlying container initially has a capacity of 100.
-//
-// Member data:
-//
-// static G4FieldManagerStore* fgInstance
-//   - Ptr to the single G4FieldManagerStore.
 
-// History:
-// 07.12.07 J.Apostolakis  Initial version
+// Author: J.Apostolakis, 07.12.2007 - Initial version
 // --------------------------------------------------------------------
 #ifndef G4FIELDMANAGERSTORE_HH
 #define G4FIELDMANAGERSTORE_HH

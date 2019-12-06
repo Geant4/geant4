@@ -58,6 +58,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_gem_evaporation
         G4GEMChannelVI.hh
         G4B11GEMChannel.hh
         G4GEMProbability.hh
+        G4GEMProbabilityVI.hh
         G4He3GEMChannel.hh
         G4B11GEMProbability.hh
         G4He6GEMChannel.hh
@@ -219,6 +220,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_gem_evaporation
         G4GEMChannelVI.cc
         G4GEMCoulombBarrier.cc
         G4GEMProbability.cc
+        G4GEMProbabilityVI.cc
         G4He3GEMChannel.cc
         G4He3GEMProbability.cc
         G4He6GEMProbability.cc

@@ -72,7 +72,7 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
   public:
     explicit G4RootNtupleManager(const G4AnalysisManagerState& state,
                                  G4int nofMainManagers,
-                                 G4bool rowWise);
+                                 G4bool rowWise, G4bool rowMode);
     virtual ~G4RootNtupleManager();
 
    private:
@@ -108,10 +108,12 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
     const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() const;
     G4RootMainNtupleManager* GetMainNtupleManager(G4int index) const;
     unsigned int GetBasketSize() const;
+    unsigned int GetBasketEntries() const;
 
     // Utility functions
     //
     void SetCreateMode();
+    void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
 
     // data members
     //
@@ -120,6 +122,7 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
     tools::wroot::directory*  fNtupleDirectory;
     std::vector<G4RootMainNtupleManager*>  fMainNtupleManagers;
     G4bool fRowWise;
+    G4bool fRowMode;
 };    
 
 // inline functions

@@ -14,6 +14,118 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 November 2019 Vladimir Ivanchenko (hadr-deex-V10-05-21)
+- G4PhotonEvaporation - fixed Coverity problem
+
+16 November 2019 Vladimir Ivanchenko (hadr-deex-V10-05-20)
+- G4PhotonEvaporation - access G4NuclearPolarizationStore only
+    if correlated gamma decay is enabled 
+
+11 November 2019 Vladimir Ivanchenko (hadr-deex-V10-05-19)
+- G4CompetitiveFission, G4FissionBarrier, G4FissionParameters - added
+    numerical protections; cleanup C++11 keywords; move headers to
+    source code
+
+05 November 2019 Vladimir Ivanchenko (hadr-deex-V10-05-18)
+- G4NuclearLevelData, G4LevelManager, G4GEMChannel, G4GEMProbability,
+  G4GEMProbabilityVI, G4EvaporationChannel, G4EvaporationProbability
+    use consistently pairing correction from G4NuclearLevelData and
+    verbosity level for debigging
+- G4FermiBreakUpVI - use consistently verbosity from de-excitation
+    module, simplified decay kinematics
+- G4VEmissionProbability, G4Evaporation, G4UnstableFragmentBreakUp
+    consistently used decay channels in all components of the
+    de-excitation module
+- G4ExcitationHandler - fixed problem seen in medical test of 
+    fragmentation - provide full de-excitation of excited light 
+    fragments
+- G4PhotonEvaporation - fixed gamma de-excitation when initial 
+    excitation energy is between ground and 1st levels
+     
+19 October 2019 Vladimir Ivanchenko (hadr-deex-V10-05-17)
+- G4ExcitationHandler, G4Evaporation - attempt to reduce CPU   
+
+16 October 2019 Vladimir Ivanchenko (hadr-deex-V10-05-16)
+- G4ExcitationHandler, G4Evaporation - improved debug printout  
+- G4UnstableFragmentBreakUp - allowed only residual fragments, which 
+    are present in the nuclear level DB; those fragments which are not 
+    in the DB are forced to decay on fragments from the DB;
+    improved debug printout
+
+02 October 2019 Vladimir Ivanchenko (hadr-deex-V10-05-15)
+- G4ExcitationHandler - removed warning on high excitation
+- G4NuclearLevelData - added new public interface to enable
+    upload of nuclear level data before 1st event with the signature:
+    UploadNuclearLevelData(G4int maxZ)
+- G4LevelReader - small reduction of memory churn
+- G4DeexPrecoParameters - added two new parameters
+- G4DeexParametersMessenger - added UI command
+- G4VEmissionProbability - implemented option to force a residual
+    nucleus to be at one of known discrete levels
+- G4FermiFragmentsPoolVI - removed unphysical fragments and corresponding 
+    data structures
+- G4FermiFragment - removed unused boolean members
+- G4FermiBreakUpVI - clean internal data after decay loop and not before
+
+18 September 2019 Vladimir Ivanchenko (hadr-deex-V10-05-14)
+- G4ExcitationHandler - removed second photon evaporation loop, 
+    because since long all gamma decay are already happens in the 
+    1st loop; use more C++11 constructions
+- G4FermiFragmentsPoolVI - implement new method HasChannels(..)
+- G4FermiBreakUpVI - use new HasChannels(..) inside IsAPplicable(..)
+- G4Evaporation - make coherent use of IsApplicable(..) 
+    from FermiBreakUp and force simplified decay of exotic fragments 
+    with G4UnstableFragmentBreakUp
+- G4UnstableFragmentBreakUp - change logic allowing decay of an
+    exotic fragment (fragment is not known in gamma level DB) and 
+    never release it
+
+11 September 2019 Vladimir Ivanchenko (hadr-deex-V10-05-13)
+- G4ExcitationHandler - added limit on number of warnings on high 
+    excitation of input fragment; fixed Coverity warnings
+
+14 August 2019 Vladimir Ivanchenko (hadr-deex-V10-05-12)
+- G4ExcitationHandler - added check on upper limit of excitations
+- G4DeexPrecoParameters - added upper limit 30 MeV on excitation 
+    per nucleon 
+
+08 August 2019 Vladimir Ivanchenko (hadr-deex-V10-05-11)
+- G4ExcitationHandler - fixed initialisation sequence
+
+23 July 2019 Vladimir Ivanchenko (hadr-deex-V10-05-10)
+- G4ExcitationHandler, G4Evaporation - optimise initialisation reducing
+    memory churn
+- G4VEvaporationChannel, G4VEmissionProbability, G4EvaporationChannel,
+  G4EvaporationProbability - clean-up private and protected members and 
+    methods
+- G4AlphaEvaporationChannel, G4AlphaEvaporationProbability, 
+  G4DeuteronEvaporationChannel, G4DeuteronEvaporationProbability, 
+  G4He3EvaporationChannel, G4He3EvaporationProbability, 
+  G4NeutronEvaporationChannel, G4NeutronEvaporationProbability, 
+  G4ProtonEvaporationChannel, G4ProtonEvaporationProbability, 
+  G4TritonEvaporationChannel, G4TritonEvaporationProbability - clean-up
+- G4GEMChannelVI, G4GEMProbabilityVI - new GEM model
+
+
+17 July 2019 Vladimir Ivanchenko (hadr-deex-V10-05-09)
+- G4VEvaporationChannel, G4VEmissionProbability, G4VEvaporationFactory,
+  G4EvaporationGEMFactory, G4EvaporationGEMFactoryVI, G4GEMChannelVI,
+  G4EvaporationDefaultGEMFactory, G4EvaporationFactory, 
+  G4EvaporationChannel, G4EvaporationProbability, 
+  G4EvaporationProbabilityVI - a modification of internal interfaces 
+    allowing reuse code established for evaporation in the new GEM 
+    evaporation model, use more C++11 patterns 
+- G4FermiFragmentsPoolVI, G4NuclearLevelData - reduce number of locks
+    at initialisation, use more C++11 patterns
+
+10 July 2019 Vladimir Ivanchenko (hadr-deex-V10-05-08)
+- G4EvaporationChannel, G4EvaporationProbability,
+  G4NeutronEvaporationProbability, G4VEmissionProbability,
+  G4VEvaporationChannel - preparation for development of new GEM model,
+    for evaporation improved selection of final excitation level for
+    residual fragment
+- G4LevelReader - attempt to reduce memory churn at initialisation 
+
 04 June 2019 Vladimir Ivanchenko (hadr-deex-V10-05-07)
 - G4ExcitationHandler - removed debug cout 
 

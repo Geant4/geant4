@@ -29,8 +29,8 @@
 #define G4StringModel_h 1
 
 #include "G4VHighEnergyGenerator.hh"
-#include "G4EventGenerator.hh"
 #include "G4KineticTrackVector.hh"
+
 class G4V3DNucleus;
 class G4VStringFragmentation;
 
@@ -50,17 +50,14 @@ class G4StringModel : public G4VHighEnergyGenerator
   public:
     void Set3DNucleus(G4V3DNucleus *const  value);
     void SetStringFragmentationModel(G4VStringFragmentation *const  value);
-    void SetGenerator(G4EventGenerator *const  value);
 
   private:
     const G4V3DNucleus * Get3DNucleus() const;
     const G4VStringFragmentation * GetStringFragmentationModel() const;
-    const G4EventGenerator * GetGenerator() const;
 
   private: 
     G4V3DNucleus *the3DNucleus;
     G4VStringFragmentation *theStringFragmentationModel;
-    G4EventGenerator *theGenerator;
 };
 
 inline const G4V3DNucleus * G4StringModel::Get3DNucleus() const
@@ -81,16 +78,6 @@ inline const G4VStringFragmentation * G4StringModel::GetStringFragmentationModel
 inline void G4StringModel::SetStringFragmentationModel(G4VStringFragmentation *const  value)
 {
   theStringFragmentationModel = value;
-}
-
-inline const G4EventGenerator * G4StringModel::GetGenerator() const
-{
-  return theGenerator;
-}
-
-inline void G4StringModel::SetGenerator(G4EventGenerator *const  value)
-{
-  theGenerator = value;
 }
 
 #endif

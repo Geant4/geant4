@@ -435,7 +435,7 @@ G4GoudsmitSaundersonTable::GSMSCAngularDtr* G4GoudsmitSaundersonTable::GetGSAngu
 
 
 void G4GoudsmitSaundersonTable::LoadMSCData() {
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path) {
     G4Exception("G4GoudsmitSaundersonTable::LoadMSCData()","em0006",
 		FatalException,

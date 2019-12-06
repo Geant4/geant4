@@ -121,7 +121,7 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
            << moleculeDef->GetParticleName() << G4endl;
     G4cout << " ProcessManager : " << pManager
            << " ProcessManagerShadow : " << pManagerShadow << G4endl;
-    for(G4int iv1=0;iv1<pVector->size();iv1++)
+    for(std::size_t iv1=0;iv1<pVector->size();++iv1)
     {
       G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName()
           << G4endl;
@@ -130,14 +130,14 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
         << G4endl;
     G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
-    for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
+    for(std::size_t iv2=0;iv2<pVectorShadow->size();++iv2)
     {
       G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName()
       << G4endl;
     }
   }
 #endif
-  for (G4int j = 0; j < pVector->size(); ++j)
+  for (std::size_t j = 0; j < pVector->size(); ++j)
   {
     //Andrea July 16th 2013 : migration to new interface...
     //Infer if we are in a worker thread or master thread

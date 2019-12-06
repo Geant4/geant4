@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4BooleanSolid inline implementation
 //
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4BooleanSolid.icc
-//
-// Implementation of inline methods of G4BooleanSolid
 // --------------------------------------------------------------------
 
 inline

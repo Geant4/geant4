@@ -52,14 +52,12 @@
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
-#include "G4DataQuestionaire.hh"
 #include "HadronPhysicsUrQMD.hh"
 
 #include "G4SystemOfUnits.hh"
 
 template<class T> TUrQMD<T>::TUrQMD(G4int ver):  T()
 {
-  G4DataQuestionaire it(photon);
   G4cout << "<<< Geant4 Physics List simulation engine: UrQMD 0.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*CLHEP::mm;  

@@ -64,8 +64,8 @@ void G4VisCommandViewerDefaultHiddenEdge::SetNewValue(G4UIcommand*, G4String new
   G4ViewParameters vp = fpVisManager->GetDefaultViewParameters();
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
 
-  if (G4UIcommand::ConvertToBool(newValue)) {
-    switch (existingStyle) {  // true
+  if (G4UIcommand::ConvertToBool(newValue)) {  // true
+    switch (existingStyle) {
       case G4ViewParameters::wireframe:
         vp.SetDrawingStyle(G4ViewParameters::hlr);
         break;
@@ -77,12 +77,11 @@ void G4VisCommandViewerDefaultHiddenEdge::SetNewValue(G4UIcommand*, G4String new
       case G4ViewParameters::hlhsr:
         break;
       case G4ViewParameters::cloud:
-        G4cout << "No effect in cloud style" << G4endl;
         break;
     }
   }
-  else {
-    switch (existingStyle) {  // false
+  else {  // false
+    switch (existingStyle) {
       case G4ViewParameters::wireframe:
         break;
       case G4ViewParameters::hlr:
@@ -94,7 +93,6 @@ void G4VisCommandViewerDefaultHiddenEdge::SetNewValue(G4UIcommand*, G4String new
         vp.SetDrawingStyle(G4ViewParameters::hsr);
         break;
       case G4ViewParameters::cloud:
-        G4cout << "No effect in cloud style" << G4endl;
         break;
     }
   }

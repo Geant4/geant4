@@ -23,24 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BulirschStoer driver inline methods implementation
+
+// Author: Dmitry Sorokin, Google Summer of Code 2016
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+
 #include "G4LineSection.hh"
 #include "G4FieldUtils.hh"
 
-G4IntegrationDriver<G4BulirschStoer>::G4IntegrationDriver(
-    G4double hminimum,
-    G4BulirschStoer* stepper,
-    G4int numberOfComponents,
-    G4int statisticsVerbosity)
-        : fMinimumStep(hminimum)
-        , fVerbosity(statisticsVerbosity)
-        , fMidpointMethod(
-              stepper->GetEquationOfMotion(), stepper->GetNumberOfVariables())
-        , bulirschStoer(stepper)
-        , interval_sequence{2,4}
+G4IntegrationDriver<G4BulirschStoer>::
+G4IntegrationDriver( G4double hminimum, G4BulirschStoer* stepper,
+                     G4int numberOfComponents, G4int statisticsVerbosity )
+  : fMinimumStep(hminimum),
+    fVerbosity(statisticsVerbosity),
+    fMidpointMethod(stepper->GetEquationOfMotion(),
+                    stepper->GetNumberOfVariables()),
+    bulirschStoer(stepper),
+    interval_sequence{2,4}
 {
     assert(stepper->GetNumberOfVariables() == numberOfComponents);
     
-    if( stepper->GetNumberOfVariables() != numberOfComponents){
+    if(stepper->GetNumberOfVariables() != numberOfComponents)
+    {
       std::ostringstream msg;
       msg << "Disagreement in number of variables = "
           << stepper->GetNumberOfVariables()
@@ -50,15 +55,13 @@ G4IntegrationDriver<G4BulirschStoer>::G4IntegrationDriver(
     }
 }
 
-G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
-    G4FieldTrack& track,
-    G4double hstep,
-    G4double eps,
-    G4double hinitial)
+G4bool G4IntegrationDriver<G4BulirschStoer>::
+AccurateAdvance( G4FieldTrack& track, G4double hstep,
+                 G4double eps, G4double hinitial)
 {
     G4int fNoTotalSteps = 0;
     G4int fMaxNoSteps = 10000;
-    G4double fNoBadSteps = 0;
+    G4double fNoBadSteps = 0.0;
     G4double fSmallestFraction = 1.0e-12;
 
     // Driver with adaptive stepsize control. Integrate starting
@@ -66,7 +69,6 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
     // On output ystart is replaced by values at the end of the integration
     // interval. RightHandSide is the right-hand side of ODE system.
     // The source is similar to odeint routine from NRC p.721-722 .
-
 
     //  Ensure that hstep > 0
     if(hstep == 0)
@@ -82,7 +84,8 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
     {
         std::ostringstream message;
         message << "Invalid run condition." << G4endl
-                << "Proposed step is negative; hstep = " << hstep << "." << G4endl
+                << "Proposed step is negative; hstep = "
+                << hstep << "." << G4endl
                 << "Requested step cannot be negative! Aborting event.";
         G4Exception("G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance()",
                     "GeomField0003", EventMustBeAborted, message);
@@ -90,9 +93,8 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
         return false;
     }
 
-
-
-    //init first step size
+    // init first step size
+    //
     G4double h;
     if ( (hinitial > 0) && (hinitial < hstep)
       && (hinitial > perMillion * hstep) )
@@ -104,21 +106,24 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
        h = hstep;
     }
 
-    //integration variables
+    // integration variables
+    //
     track.DumpToArray(yCurrent);
-    //copy non-integration variables to out array
-    memcpy(yOut + GetNumberOfVarialbles(),
-           yCurrent + GetNumberOfVarialbles(),
-           sizeof(G4double) * (G4FieldTrack::ncompSVEC - GetNumberOfVarialbles()));
+
+    // copy non-integration variables to out array
+    //
+    std::memcpy(yOut + GetNumberOfVarialbles(),
+                yCurrent + GetNumberOfVarialbles(),
+         sizeof(G4double)*(G4FieldTrack::ncompSVEC-GetNumberOfVarialbles()));
 
     G4double startCurveLength = track.GetCurveLength();
     G4double curveLength = startCurveLength;
     G4double endCurveLength = startCurveLength + hstep;
 
-    //loop variables
+    // loop variables
+    //
     G4int nstp = 1, no_warnings = 0;
     G4double hnext, hdid;
-
 
     G4bool succeeded = true, lastStepSucceeded;
 
@@ -127,7 +132,7 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
 
     G4bool lastStep = false;
 
-    //BulirschStoer->reset();
+    // BulirschStoer->reset();
 
     G4FieldTrack yFldTrk(track);
 
@@ -138,24 +143,27 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
         fNoTotalSteps++;
 
         // Perform the Integration
-        if(h == 0){
-            G4Exception("G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance()",
-                        "GeomField0003", FatalException,
-                        "Integration Step became Zero!");
+        //
+        if(h == 0)
+        {
+          G4Exception("G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance()",
+                      "GeomField0003", FatalException,
+                      "Integration Step became Zero!");
         }
-        else if(h > fMinimumStep){
-            //step size if Ok
+        else if(h > fMinimumStep)
+        {
+            // step size if Ok
+            //
             OneGoodStep(yCurrent,dydxCurrent,curveLength,h,eps,hdid,hnext);
             lastStepSucceeded = (hdid == h);
         }
-        else{
-            // for small steps call QuickAdvance for speed
-
-            G4double dchord_step, dyerr, dyerr_len;   // What to do with these ?
+        else  // for small steps call QuickAdvance for speed
+        {
+            G4double dchord_step, dyerr, dyerr_len;  // What to do with these ?
             yFldTrk.LoadFromArray(yCurrent, G4FieldTrack::ncompSVEC);
             yFldTrk.SetCurveLength(curveLength);
 
-            QuickAdvance(yFldTrk, dydxCurrent, h, -1, dchord_step, dyerr_len);
+            QuickAdvance(yFldTrk, dydxCurrent, h, dchord_step, dyerr_len);
 
             yFldTrk.DumpToArray(yCurrent);
 
@@ -165,20 +173,19 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
             curveLength += hdid;
 
             // Compute suggested new step
-            //hnext = ComputeNewStepSize(dyerr/eps, h);
+            // hnext = ComputeNewStepSize(dyerr/eps, h);
             hnext = h;
 
-            //hnext= ComputeNewStepSize_WithinLimits( dyerr/eps, h);
+            // hnext= ComputeNewStepSize_WithinLimits( dyerr/eps, h);
             lastStepSucceeded = (dyerr <= eps);
         }
 
-
         lastStepSucceeded ? ++noFullIntegr : ++noSmallIntegr;
-
 
         G4ThreeVector EndPos(yCurrent[0], yCurrent[1], yCurrent[2]);
 
         // Check the endpoint
+        //
         G4double endPointDist = (EndPos - StartPos).mag();
         if (endPointDist >= hdid*(1. + perMillion))
         {
@@ -186,6 +193,7 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
 
             // Issue a warning only for gross differences -
             // we understand how small difference occur.
+            //
             if (endPointDist >= hdid*(1.+perThousand))
             {
                 ++no_warnings;
@@ -197,17 +205,21 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
         }
 
         //  Avoid numerous small last steps
+        //
         if((h < eps * hstep) || (h < fSmallestFraction * startCurveLength))
         {
             // No more integration -- the next step will not happen
+            //
             lastStep = true;
         }
         else
         {
             // Check the proposed next stepsize
+            //
             if(std::fabs(hnext) < fMinimumStep)
             {
-              // Make sure that the next step is at least Hmin.
+              // Make sure that the next step is at least Hmin
+              //
               h = fMinimumStep;
             }
             else
@@ -216,6 +228,7 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
             }
 
             //  Ensure that the next step does not overshoot
+            //
             if (curveLength + h > endCurveLength)
             {
               h = endCurveLength - curveLength;
@@ -224,23 +237,29 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
             if (h == 0)
             {
               // Cannot progress - accept this as last step - by default
+              //
               lastStep = true;
             }
         }
-    } while (((nstp++) <= fMaxNoSteps) && (curveLength < endCurveLength) && (!lastStep));
+    } while (((nstp++) <= fMaxNoSteps)
+           && (curveLength < endCurveLength) && (!lastStep));
+       //
        // Have we reached the end ?
        // --> a better test might be x-x2 > an_epsilon
 
-    succeeded = (curveLength >= endCurveLength);  // If it was a "forced" last step
+    succeeded = (curveLength >= endCurveLength);
+      // If it was a "forced" last step
 
-    //copy integrated vars to output array
-    memcpy(yOut, yCurrent, sizeof(G4double) * GetNumberOfVarialbles());
+    // Copy integrated vars to output array
+    //
+    std::memcpy(yOut, yCurrent, sizeof(G4double) * GetNumberOfVarialbles());
 
     // upload new state
     track.LoadFromArray(yOut, G4FieldTrack::ncompSVEC);
     track.SetCurveLength(curveLength);
 
-    if(nstp > fMaxNoSteps) {
+    if(nstp > fMaxNoSteps)
+    {
       ++no_warnings;
       succeeded = false;
     }
@@ -248,13 +267,9 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
     return succeeded;
 }
 
-G4bool G4IntegrationDriver<G4BulirschStoer>::QuickAdvance(
-    G4FieldTrack& track,
-    const G4double dydx[],
-    G4double hstep,
-    G4double /*inverseCurvatureRadius*/,
-    G4double& missDist,
-    G4double& dyerr)
+G4bool G4IntegrationDriver<G4BulirschStoer>::
+QuickAdvance( G4FieldTrack& track, const G4double dydx[],
+              G4double hstep, G4double& missDist, G4double& dyerr)
 {
     const auto nvar = fMidpointMethod.GetNumberOfVariables();
 
@@ -267,82 +282,86 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::QuickAdvance(
     fMidpointMethod.SetSteps(interval_sequence[1]);
     fMidpointMethod.DoStep(yIn, dydx, yOut2, hstep, yMid2, derivs[1]);
 
-    //extrapolation
+    // extrapolation
+    //
     static const G4double coeff =
         1. / (sqr(static_cast<G4double>(interval_sequence[1]) /
                      static_cast<G4double>(interval_sequence[0])) - 1.);
 
-    for (G4int i = 0; i < nvar; ++i) {
+    for (G4int i = 0; i < nvar; ++i)
+    {
         yOut[i] = yOut2[i] + (yOut2[i] - yOut[i]) * coeff;
         yMid[i] = yMid2[i] + (yMid2[i] - yMid[i]) * coeff;
     }
 
-    //calc chord lenght
-    const auto mid = field_utils::makeVector(yMid, field_utils::Value3D::Position);
-    const auto in = field_utils::makeVector(yIn, field_utils::Value3D::Position);
-    const auto out = field_utils::makeVector(yOut, field_utils::Value3D::Position);
+    // calculate chord length
+    //
+    const auto mid = field_utils::makeVector(yMid,
+                     field_utils::Value3D::Position);
+    const auto in  = field_utils::makeVector(yIn,
+                     field_utils::Value3D::Position);
+    const auto out = field_utils::makeVector(yOut,
+                     field_utils::Value3D::Position);
 
     missDist = G4LineSection::Distline(mid, in, out);
 
-    //calc error
-    for (G4int i = 0; i < nvar; ++i){
+    // calculate error
+    //
+    for (G4int i = 0; i < nvar; ++i)
+    {
         yError[i] = yOut[i] - yOut2[i];
     }
 
     dyerr = field_utils::absoluteError(yOut, yError, hstep);
 
+    // copy non-integrated variables to output array
+    //
+    std::memcpy(yOut + nvar, yIn + nvar,
+                sizeof(G4double) * (G4FieldTrack::ncompSVEC - nvar));
 
-    //copy non-integrated variables to output array
-    memcpy(yOut + nvar,
-           yIn + nvar,
-           sizeof(G4double) * (G4FieldTrack::ncompSVEC - nvar));
-
-    //set new state
+    // set new state
+    //
     track.LoadFromArray(yOut, G4FieldTrack::ncompSVEC);
     track.SetCurveLength(curveLength + hstep);
 
     return true;
 }
 
-void G4IntegrationDriver<G4BulirschStoer>::OneGoodStep(
-    G4double y[],
-    const G4double dydx[],
-    G4double& curveLength,
-    G4double htry,
-    G4double eps,
-    G4double& hdid,
-    G4double& hnext)
+void G4IntegrationDriver<G4BulirschStoer>::
+OneGoodStep( G4double y[], const G4double dydx[], G4double& curveLength,
+             G4double htry, G4double eps, G4double& hdid, G4double& hnext)
 {
     hnext = htry;
     G4double curveLengthBegin = curveLength;
 
     // set maximum allowed error
+    //
     bulirschStoer->set_max_relative_error(eps);
 
-    while (true) {
+    while (true)
+    {
         auto res = bulirschStoer->try_step(y, dydx, curveLength, yOut, hnext);
-        if (res == G4BulirschStoer::step_result::success) {
+        if (res == G4BulirschStoer::step_result::success)
+        {
             break;
         }
     }
 
-    memcpy(y, yOut, sizeof(G4double) * GetNumberOfVarialbles());
+    std::memcpy(y, yOut, sizeof(G4double) * GetNumberOfVarialbles());
     hdid = curveLength - curveLengthBegin;
 }
 
-void G4IntegrationDriver<G4BulirschStoer>::GetDerivatives(
-    const G4FieldTrack& track,
-    G4double dydx[]) const
+void G4IntegrationDriver<G4BulirschStoer>::
+GetDerivatives( const G4FieldTrack& track, G4double dydx[]) const
 {
     G4double y[G4FieldTrack::ncompSVEC];
     track.DumpToArray(y);
     GetEquationOfMotion()->RightHandSide(y, dydx);
 }
 
-void G4IntegrationDriver<G4BulirschStoer>::GetDerivatives(
-    const G4FieldTrack& track,
-    G4double dydx[],
-    G4double field[]) const
+void G4IntegrationDriver<G4BulirschStoer>::
+GetDerivatives( const G4FieldTrack& track, G4double dydx[],
+                G4double field[]) const
 {
     G4double y[G4FieldTrack::ncompSVEC];
     track.DumpToArray(y);
@@ -359,9 +378,8 @@ G4int G4IntegrationDriver<G4BulirschStoer>::GetVerboseLevel() const
     return fVerbosity;
 }
 
-G4double G4IntegrationDriver<G4BulirschStoer>::ComputeNewStepSize(
-    G4double /* errMaxNorm*/,
-    G4double  hstepCurrent)
+G4double G4IntegrationDriver<G4BulirschStoer>::
+ComputeNewStepSize( G4double /* errMaxNorm*/, G4double  hstepCurrent)
 {
     return hstepCurrent;
 }
@@ -374,14 +392,15 @@ G4EquationOfMotion* G4IntegrationDriver<G4BulirschStoer>::GetEquationOfMotion()
     return bulirschStoer->GetEquationOfMotion();
 }
 
-const G4EquationOfMotion* G4IntegrationDriver<G4BulirschStoer>::GetEquationOfMotion() const
+const G4EquationOfMotion*
+G4IntegrationDriver<G4BulirschStoer>::GetEquationOfMotion() const
 {
     return const_cast<G4IntegrationDriver<G4BulirschStoer>*>(this)->
             GetEquationOfMotion();
 }
 
-void G4IntegrationDriver<G4BulirschStoer>::SetEquationOfMotion(
-    G4EquationOfMotion* equation)
+void G4IntegrationDriver<G4BulirschStoer>::
+SetEquationOfMotion( G4EquationOfMotion* equation )
 {
     bulirschStoer->SetEquationOfMotion(equation);
     fMidpointMethod.SetEquationOfMotion(equation);
@@ -395,12 +414,14 @@ G4int G4IntegrationDriver<G4BulirschStoer>::GetNumberOfVarialbles() const
     return bulirschStoer->GetNumberOfVariables();
 }
 
-const G4MagIntegratorStepper* G4IntegrationDriver<G4BulirschStoer>::GetStepper() const
+const G4MagIntegratorStepper*
+G4IntegrationDriver<G4BulirschStoer>::GetStepper() const
 {
     return nullptr;
 }
 
-G4MagIntegratorStepper* G4IntegrationDriver<G4BulirschStoer>::GetStepper()
+G4MagIntegratorStepper*
+G4IntegrationDriver<G4BulirschStoer>::GetStepper()
 {
     return nullptr;
 }

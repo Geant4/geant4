@@ -23,26 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//        ----------------  G4ProcessManager  -----------------
 //
+// Class Description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-//   ----------------  G4ProcessManager  -----------------
-// Class Description 
-//  It collects all physics a particle can undertake as seven vectors.
-//  These vectors are 
+//  G4ProcessManager collects all physics a particle can undertake as
+//  vectors. These vectors are:
 //   one vector for all processes (called as "process List")
-//   two vectors for processes with AtRestGetPhysicalInteractionLength
-//                                    and AtRestDoIt
-//   two vectors for processes with AlongStepGetPhysicalInteractionLength
-//                                    and AlongStepDoIt
-//   two vectors for processes with PostStepGetPhysicalInteractionLength
-//                                    and PostStepDoIt
-//  The tracking will message three types of GetPhysicalInteractionLength
+//   two vectors for processes with AtRestGetPhysicalInteractionLength()
+//                                    and AtRestDoIt()
+//   two vectors for processes with AlongStepGetPhysicalInteractionLength()
+//                                    and AlongStepDoIt()
+//   two vectors for processes with PostStepGetPhysicalInteractionLength()
+//                                    and PostStepDoIt()
+//  The tracking will message three types of GetPhysicalInteractionLength()
 //  in order to limit the Step and select the occurrence of processes. 
 //  It will message the corresponding DoIt() to apply the selected 
 //  processes. In addition, the Tracking will limit the Step
@@ -51,26 +45,22 @@
 //  processes at rest, for which the Tracking will select the
 //  occurrence of the process which returns the shortest mean
 //  life-time from the GetPhysicalInteractionLength()).
-//
-// History:
-// revised by G.Cosmo, 06 May 1996
-//    Added vector of processes at rest, 06 May 1996
-// ------------------------------------------------------------
-//   New Physics scheme           8 Jan. 1997  H.Kurahige
-//   Add SetProcessOrdering methods     27 Mar 1998  H.Kurahige
-//   Add copy constructor (deep copy)   28 June 1998 H.Kurashige
-//   Add GetProcessActivation     3 May. 1999 H.Kurashige
-//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
-//   Modify G4ProcessVectorOrdering to fix FindInsedrtPosition 15 Feb. 2005
-//   Add  
-// ------------------------------------------------------------
 
-#ifndef G4ProcessManager_h
-#define G4ProcessManager_h 1
+// - First implementation, based on object model of
+//   2nd December 1995, G.Cosmo
+// - Revised; added vector of processes at rest
+//   06 May 1996, G.Cosmo
+// --------------------------------------------------------------------
+// - New Physics scheme - 08.01.1997, H.Kurashige
+// - Use STL vector instead of RW vector - 01.03.2000, H.Kurashige
+// --------------------------------------------------------------------
+#ifndef G4ProcessManager_hh
+#define G4ProcessManager_hh 1
+
+#include <vector>
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
 
 #include "G4VProcess.hh"
 #include "G4ProcessVector.hh"
@@ -82,29 +72,28 @@ class G4ProcessAttribute;
 //  Indexes for ProcessVector
 enum G4ProcessVectorTypeIndex
 { 
-  	typeGPIL = 0,	// for GetPhysicalInteractionLength 
-	typeDoIt =1		// for DoIt
+        typeGPIL = 0,        // for GetPhysicalInteractionLength 
+        typeDoIt =1          // for DoIt
 };
 enum G4ProcessVectorDoItIndex
 {
-  	idxAll = -1,		// for all DoIt/GPIL 
-  	idxAtRest = 0, 		// for AtRestDoIt/GPIL
-	idxAlongStep = 1, 	// for AlongStepDoIt/GPIL
-	idxPostStep =2,		// for AlongSTepDoIt/GPIL
-	NDoit =3
+        idxAll = -1,         // for all DoIt/GPIL 
+        idxAtRest = 0,       // for AtRestDoIt/GPIL
+        idxAlongStep = 1,    // for AlongStepDoIt/GPIL
+        idxPostStep =2,      // for AlongSTepDoIt/GPIL
+        NDoit =3
 };
 
 //  enumeration for Ordering Parameter      
 enum G4ProcessVectorOrdering
 { 
-   	ordInActive = -1,	// ordering parameter to indicate InActive DoIt
-   	ordDefault = 1000,	// default ordering parameter
-   	ordLast    = 9999 	// ordering parameter to indicate the last DoIt
+        ordInActive = -1,    // ordering parameter to indicate InActive DoIt
+        ordDefault = 1000,   // default ordering parameter
+        ordLast    = 9999    // ordering parameter to indicate the last DoIt
 };
 
 class G4ProcessManager 
 {
- 
   public: 
       // copy constructor
       G4ProcessManager(G4ProcessManager &right);
@@ -138,26 +127,26 @@ class G4ProcessManager
       // --------------------------------------
 
       G4ProcessVector* GetProcessVector( 
-			       G4ProcessVectorDoItIndex idx,
-			       G4ProcessVectorTypeIndex typ = typeGPIL
-			      ) const;
+                               G4ProcessVectorDoItIndex idx,
+                               G4ProcessVectorTypeIndex typ = typeGPIL
+                              ) const;
       //  Returns the address of the vector of processes 
 
       G4ProcessVector* GetAtRestProcessVector(
-			       G4ProcessVectorTypeIndex typ = typeGPIL
+                               G4ProcessVectorTypeIndex typ = typeGPIL
                               ) const; 
       //  Returns the address of the vector of processes for
       //    AtRestGetPhysicalInteractionLength      idx =0
       //    AtRestGetPhysicalDoIt                   idx =1
       G4ProcessVector* GetAlongStepProcessVector(
-			       G4ProcessVectorTypeIndex typ = typeGPIL
+                               G4ProcessVectorTypeIndex typ = typeGPIL
                               ) const;
       //  Returns the address of the vector of processes for
       //    AlongStepGetPhysicalInteractionLength      idx =0
       //    AlongStepGetPhysicalDoIt                   idx =1
 
       G4ProcessVector* GetPostStepProcessVector(
-			       G4ProcessVectorTypeIndex typ = typeGPIL
+                               G4ProcessVectorTypeIndex typ = typeGPIL
                               ) const;
       //  Returns the address of the vector of processes for
       //    PostStepGetPhysicalInteractionLength      idx =0
@@ -165,21 +154,21 @@ class G4ProcessManager
 
       G4int GetProcessVectorIndex(
                            G4VProcess* aProcess,
-			   G4ProcessVectorDoItIndex idx,
-			   G4ProcessVectorTypeIndex typ  = typeGPIL
-			   ) const;
+                           G4ProcessVectorDoItIndex idx,
+                           G4ProcessVectorTypeIndex typ  = typeGPIL
+                           ) const;
       G4int GetAtRestIndex(
                            G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ  = typeGPIL
-			   ) const;
+                           G4ProcessVectorTypeIndex typ  = typeGPIL
+                           ) const;
       G4int GetAlongStepIndex(
                            G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ  = typeGPIL
-			   ) const;
+                           G4ProcessVectorTypeIndex typ  = typeGPIL
+                           ) const;
       G4int GetPostStepIndex(
-			   G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ = typeGPIL
-			   ) const;
+                           G4VProcess* aProcess,
+                           G4ProcessVectorTypeIndex typ = typeGPIL
+                           ) const;
       //  Returns the index for GPIL/DoIt process vector of the process  
 
       G4int AddProcess(
@@ -220,14 +209,14 @@ class G4ProcessManager
       //   Note: AddProcess method should precede these methods
 
       G4int GetProcessOrdering(
-			       G4VProcess *aProcess,
-			       G4ProcessVectorDoItIndex idDoIt
+                               G4VProcess *aProcess,
+                               G4ProcessVectorDoItIndex idDoIt
                                );
 
       void SetProcessOrdering(
-			       G4VProcess *aProcess,
-			       G4ProcessVectorDoItIndex idDoIt,
-			       G4int      ordDoIt = ordDefault
+                               G4VProcess *aProcess,
+                               G4ProcessVectorDoItIndex idDoIt,
+                               G4int      ordDoIt = ordDefault
                                );
       // Set ordering parameter for DoIt specified by typeDoIt.
       // If a process with same ordering parameter exists, 
@@ -237,18 +226,18 @@ class G4ProcessManager
       //       even if you set  ordDoIt = 0
             
      void SetProcessOrderingToFirst(
-			       G4VProcess *aProcess,
-			       G4ProcessVectorDoItIndex idDoIt
-			       );
+                               G4VProcess *aProcess,
+                               G4ProcessVectorDoItIndex idDoIt
+                               );
       // Set ordering parameter to the first of all processes 
       // for DoIt specified by idDoIt.
       //  Note: If you use this method for two processes,
       //        a process called later will be first.
 
       void SetProcessOrderingToSecond(
-			       G4VProcess *aProcess,
-			       G4ProcessVectorDoItIndex idDoIt
-			       );
+                               G4VProcess *aProcess,
+                               G4ProcessVectorDoItIndex idDoIt
+                               );
       // Set ordering parameter to 1 for DoIt specified by idDoIt
       // and the rpocess will be added just after 
       // the processes with ordering parameter equal to zero
@@ -256,9 +245,9 @@ class G4ProcessManager
       //        a process called later will be .
 
         void SetProcessOrderingToLast(
-			       G4VProcess *aProcess,
-			       G4ProcessVectorDoItIndex idDoIt
-			       );
+                               G4VProcess *aProcess,
+                               G4ProcessVectorDoItIndex idDoIt
+                               );
       // Set ordering parameter to the last of all processes 
       // for DoIt specified by idDoIt.
       //  Note: If you use this method for two processes,
@@ -317,7 +306,7 @@ class G4ProcessManager
       // in theProcVector[ivec]
 
       G4int GetProcessVectorId(G4ProcessVectorDoItIndex idx,
-			       G4ProcessVectorTypeIndex typ  = typeGPIL) const;
+                               G4ProcessVectorTypeIndex typ = typeGPIL) const;
 
   void CheckOrderingParameters(G4VProcess*) const;
        // check consistencies between ordering parameters and 
@@ -365,7 +354,7 @@ class G4ProcessManager
    static G4ThreadLocal G4ProcessManagerMessenger* fProcessManagerMessenger;
    static G4ThreadLocal G4int                      counterOfObjects;
 };
+
 #include "G4ProcessManager.icc"
 
 #endif
-

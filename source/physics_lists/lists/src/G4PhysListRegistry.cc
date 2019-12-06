@@ -204,7 +204,7 @@ G4PhysListRegistry::GetModularPhysicsListFromEnv()
   // instantiate PhysList by environment variable "PHYSLIST"
   // if not set use default
   G4String name = "";
-  char* path = getenv("PHYSLIST");
+  char* path = std::getenv("PHYSLIST");
   if (path) {
     name = G4String(path);
   } else {

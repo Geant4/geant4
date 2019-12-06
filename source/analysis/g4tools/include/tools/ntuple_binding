@@ -69,6 +69,12 @@ public:
     m_columns.push_back(column_binding(a_name,_cid_std_vector<T>(),(void*)&a_user_var));
   }
 
+  // to have consistent naming than in ntuple_booking :
+  template <class T>
+  void add_column_vec(const std::string& a_name,std::vector<T>& a_user_var) {
+    m_columns.push_back(column_binding(a_name,_cid_std_vector<T>(),(void*)&a_user_var));
+  }
+
   template <class T>
   void add_column_cid(const std::string& a_name,T& a_user_var) {
     m_columns.push_back(column_binding(a_name,T::id_class(),(void*)&a_user_var));

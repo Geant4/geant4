@@ -67,7 +67,7 @@ void G4OpenInventorXt::Initialize()
 
   Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
 
-  if(getenv("XENVIRONMENT")==NULL) {
+  if(std::getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
     if(database!=NULL) {
       XrmPutLineResource(&database,"*topShadowColor:white");

@@ -56,7 +56,8 @@ public:
   // The constructor.
 
   inline Hep2Vector(const Hep2Vector & p);
-  // The copy constructor.
+  inline Hep2Vector(Hep2Vector && p) = default;
+  // The copy and move constructors.
 
   explicit Hep2Vector( const Hep3Vector & );
   // "demotion" constructor"
@@ -108,7 +109,8 @@ public:
   // Set by polar coordinates.
 
   inline Hep2Vector & operator = (const Hep2Vector & p);
-  // Assignment.
+  inline Hep2Vector & operator = (Hep2Vector && p) = default;
+  // The copy and move assignment operators.
 
   inline bool operator == (const Hep2Vector & v) const;
   inline bool operator != (const Hep2Vector & v) const;

@@ -37,7 +37,8 @@
 
 typedef G4String nameType;
 
-class CCalSDList{
+class CCalSDList
+{
 private: 
   CCalSDList();
   ~CCalSDList();
@@ -50,11 +51,11 @@ public:
   void addCalo(nameType name);
   void addTracker(nameType name);
   
-  nameType getCaloSDName(int i);
-  nameType getTrackerSDName(int i);
+  nameType getCaloSDName(G4int i);
+  nameType getTrackerSDName(G4int i);
       
-  int getNumberOfCaloSD();
-  int getNumberOfTrackerSD();
+  G4int getNumberOfCaloSD();
+  G4int getNumberOfTrackerSD();
   
 private:
   static CCalSDList* theList;

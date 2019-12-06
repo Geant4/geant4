@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 //
@@ -42,7 +40,7 @@ class G4VEvaporationFactory
 {
 public:
 
-  explicit G4VEvaporationFactory(G4VEvaporationChannel* photoEvaporation);
+  explicit G4VEvaporationFactory(G4VEvaporationChannel* ptr);
 
   virtual ~G4VEvaporationFactory();
 
@@ -50,10 +48,10 @@ public:
 
 private:
 
-  G4VEvaporationFactory(const G4VEvaporationFactory & ) = delete;
-  const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val) = delete;
-  G4bool operator==(const G4VEvaporationFactory & val) const = delete;
-  G4bool operator!=(const G4VEvaporationFactory & val) const = delete;
+  G4VEvaporationFactory(const G4VEvaporationFactory & );
+  const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
+  G4bool operator==(const G4VEvaporationFactory & val) const;
+  G4bool operator!=(const G4VEvaporationFactory & val) const;
 
 protected:
 

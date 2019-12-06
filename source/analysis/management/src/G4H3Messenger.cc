@@ -72,6 +72,9 @@ G4H3Messenger::G4H3Messenger(G4VAnalysisManager* manager)
   fSetH3XAxisCmd = fHelper->CreateSetAxisCommand("x", this);
   fSetH3YAxisCmd = fHelper->CreateSetAxisCommand("y", this);
   fSetH3ZAxisCmd = fHelper->CreateSetAxisCommand("z", this);
+  fSetH3XAxisLogCmd = fHelper->CreateSetAxisLogCommand("x", this);
+  fSetH3YAxisLogCmd = fHelper->CreateSetAxisLogCommand("y", this);
+  fSetH3ZAxisLogCmd = fHelper->CreateSetAxisLogCommand("z", this);
 }
 
 //_____________________________________________________________________________
@@ -331,7 +334,7 @@ void G4H3Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
   std::vector<G4String> parameters;
   G4Analysis::Tokenize(newValues, parameters);
   // check consistency
-  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+  if ( parameters.size() != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
     fHelper->WarnAboutParameters(command, parameters.size());
     return;
@@ -438,4 +441,22 @@ void G4H3Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     auto zaxis = parameters[counter++];
     fManager->SetH3ZAxisTitle(id, zaxis);     
   }
-}  
+  else if ( command == fSetH3XAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto xaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH3XAxisIsLog(id, xaxisLog);
+  }
+  else if ( command == fSetH3YAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto yaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH3YAxisIsLog(id, yaxisLog);
+  }
+  else if ( command == fSetH3ZAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto zaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH3ZAxisIsLog(id, zaxisLog);
+  }
+}

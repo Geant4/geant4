@@ -14,10 +14,43 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2019 G. Folger   (hadr-lepnuc-V10-05-09)
+----------------------------------------------
+- remove using namespace std and using namespace CLHEP from header files:
+     G4NeutrinoNucleusModel.hh, G4NuMuNucleusCcModel.hh and G4NuMuNucleusNcModel.hh
+
+13 November 2019 V. Grichine (hadr-lepnuc-V10-05-08)  
+----------------------------------------------
+- G4NuMuNucleusCcModel, G4NuMuNucleusNcModel, G4NeutrinoNucleusModel, G4NeutrinoElectronCcModel, re-arrangement and clean-up, s-channel in nu-e-cc model
+
+07 November 2019 V. Grichine (hadr-lepnuc-V10-05-07)  
+----------------------------------------------
+- G4NuMuNucleusCcModel, G4NuMuNucleusNcModel, G4NeutrinoNucleusModel, coverity fixes and clean-up
+
+04 November 2019 V. Grichine (hadr-lepnuc-V10-05-06)  
+----------------------------------------------
+- G4NuMuNucleusCcModel, off-shell kintmatics, fixes in ApplyYourself, SampleLVkr and CoherenPion, new method RecoilDeexcitation to deexcite recoin nucleus
+
+15 October 2019 V. Grichine (hadr-lepnuc-V10-05-05)  
+----------------------------------------------
+- G4NuMuNucleusCcModel, 1p1h momentum sampling according to AS model, precompound interface was added
+
+11 October 2019 V. Grichine (hadr-lepnuc-V10-05-04)  
+----------------------------------------------
+- G4NeutrinoNucleusModel, two methods added for excitation energy and nucleon momentum sampling
+
+25 August 2019 V. Grichine (hadr-lepnuc-V10-05-03)
+----------------------------------------------
+- bug fixed in G4NuMuNucelusCc(Nc)Model, m->e in nucleon 4-vectors, when nucleon move, iTeMax->100
+
+03 July 2019 V. Grichine (hadr-lepnuc-V10-05-02)
+----------------------------------------------
+- bug fixed in G4NuMuNucelusCc(Nc)Model, indexes of x-, Q- arrays out of boundaries
+
 20 June 2019 V. Grichine (hadr-lepnuc-V10-05-01)
 ----------------------------------------------
 - bug fixed in G4NuMuNucelusCc(Nc)Model, kinematics of quasi-elastic neutrino scattering
-     ---------------------------------------------------------------
+     
 
 03 May 2019 V. Grichine (hadr-lepnuc-V10-05-00)
 ----------------------------------------------

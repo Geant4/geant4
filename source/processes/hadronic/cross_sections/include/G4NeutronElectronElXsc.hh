@@ -38,9 +38,6 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
 
-using namespace std;
-using namespace CLHEP;
-
 // class G4ParticleDefinition;
 class G4PhysicsLogVector;
 class G4PhysicsTable;
@@ -119,10 +116,10 @@ GetElementNonRelXsc(const G4DynamicParticle* aPart, G4int ZZ,
   G4double result(0.), te(0.), momentum(0.);
 
   te = aPart->GetKineticEnergy()*fme/fM;
-  momentum = sqrt( te*(te + 2.*fme) );
+  momentum = std::sqrt( te*(te + 2.*fme) );
   fAm = CalculateAm(momentum);
 
-  result = 1. + log(1. +1./fAm);
+  result = 1. + std::log(1. +1./fAm);
   result *= fCofXsc; //*energy;
   result *= ZZ;  // incoherent sum over  all element electrons
 

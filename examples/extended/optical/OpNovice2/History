@@ -13,6 +13,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 26, 2019 I. Hrivnacova (OpNovice2-V10-05-02)
+- Fixed formatting in .README.txt
+
+October 29, 2019 D.Sawkey (OpNovice2-V10-05-01)
+ - macros: give unique analysis filenames
+
+August 30, 2019 D.Sawkey (OpNovice2-V10-05-00)
+ - add surface roughness and polish commands
+ - record scintillation photon creation time
+ - updated macros
+
 October 26, 2018 D.Sawkey (OpNovice2-V10-04-07)
  - SteppingAction.cc: fix Histo in multithreaded
  - HistoManager.hh: add commented g4csv include

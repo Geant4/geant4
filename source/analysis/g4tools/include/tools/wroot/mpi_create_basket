@@ -31,15 +31,20 @@ inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swa
 
   int* displacement = 0;
  {bool not_null;
-  if(!a_mpi.bunpack(not_null)) return 0;
+  if(!a_mpi.bunpack(not_null)) {delete [] entry_offset;return 0;}
   if(not_null) {
     uint32 n;
-    if(!a_mpi.unpack(n,displacement)) return 0;
+    if(!a_mpi.unpack(n,displacement)) {delete [] entry_offset;return 0;}
   }} 
 
   uint32 _size;
   char* _buffer;
-  if(!a_mpi.unpack(_size,_buffer)) {a_out << "unpack(buffer) failed."<< std::endl;return 0;}
+  if(!a_mpi.unpack(_size,_buffer)) {
+    a_out << "unpack(buffer) failed."<< std::endl;
+    delete [] entry_offset;
+    delete [] displacement;
+    return 0;
+  }
 
   // wbasket fields set at file writing :
   //m_buf_size,m_buffer,m_nbytes,m_object_size,m_date,m_cycle,m_seek_key
@@ -52,6 +57,9 @@ inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swa
                                false/*verbose*/);
   _basket->datbuf().write_fast_array(_buffer,_size);
   _basket->set_nev(last,nev_buf_size,nev,entry_offset,displacement);
+
+  delete [] entry_offset;
+  delete [] displacement;
 
   delete [] _buffer;
 

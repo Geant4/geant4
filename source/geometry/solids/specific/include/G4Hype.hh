@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4Hype
 //
 // Class description:
@@ -51,7 +43,6 @@
 //      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
 //      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
 //      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
-//
 // --------------------------------------------------------------------
 #ifndef G4HYPE_HH
 #define G4HYPE_HH
@@ -117,8 +108,9 @@ class G4Hype : public G4VSolid
   G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
   G4double DistanceToIn(const G4ThreeVector& p) const;
   G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                         const G4bool calcNorm=G4bool(false),
-                         G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                         const G4bool calcNorm = false,
+                               G4bool* validNorm = nullptr,
+                               G4ThreeVector* n = nullptr) const;
   G4double DistanceToOut(const G4ThreeVector& p) const;
 
   G4GeometryType  GetEntityType() const;
@@ -198,13 +190,13 @@ class G4Hype : public G4VSolid
 
  private:
 
-  G4double fCubicVolume;
-  G4double fSurfaceArea;
+  G4double fCubicVolume = 0.0;
+  G4double fSurfaceArea = 0.0;
 
   G4double fHalfTol;
 
-  mutable G4bool fRebuildPolyhedron;
-  mutable G4Polyhedron* fpPolyhedron;
+  mutable G4bool fRebuildPolyhedron = false;
+  mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 #include "G4Hype.icc"

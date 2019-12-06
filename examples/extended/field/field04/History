@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 19, 2019 G.Cosmo - fieldex04-V10-05-00
+- Removed useless double-definition of copy-ctr for F04StepMax and deleted.
+
 July 27, 2018 I.Hrivnacova - fieldex04-V10-04-02
 - Macro review and code clean-up:
   - Modify handling program according to basic examples

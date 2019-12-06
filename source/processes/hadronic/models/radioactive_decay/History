@@ -14,6 +14,38 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 November 2019  Laurent Desorgher  radioactive_decay-V10-05-09
+----------------------------------------------------------
+-Add passing of type of sub-models to secondary particles generated in
+G4RadioctiveDecay.cc   and G4RadioctiveDecayBase.cc
+
+-Add radioactive decay mode with emission of Triton, in  
+G4RadioctiveDecay.cc, G4RadioctiveDecayBase.cc, and G4Radioactivation.
+Code received from Anselmo Meregaglia.
+
+20 August 2019  Dennis Wright  radioactive_decay-V10-05-08
+----------------------------------------------------------
+- G4RadioactiveDecayBase, G4Radioactivation : remove spurious debug messages
+- G4Radioactivation : remove verboseLevel member and SetVerboseLevel() 
+    and GetVerboseLevel() methods as they are already in the base classa
+- remove G4cerr from G4Radioactivation and G4RadioactiveDecayBase.  Replace
+    with G4cout. 
+   
+29 July 2019  Dennis Wright  radioactive_decay-V10-05-07
+--------------------------------------------------------
+- G4RadioactiveDecayBase: split off unbiased decay part of DecayIt()
+  and make it protected method called DecayAnalog().  Move dkmap to
+  protected.
+
+- G4Radioactivation: correct bug in which AtRestDoIt() and PostStepDoIt()
+  both incorrectly call base class method DecayIt() 
+
+15 July 2019  Dennis Wright  radioactive_decay-V10-05-06
+--------------------------------------------------------
+- G4RadioactiveDecayBase::LoadDecayTable: line 675 - add line b /= 100.;
+  which was accidentally deleted when creating G4RadioactiveDecayBase
+  from G4RadioactiveDecay.  This gives correct decay branching ratios.
+
 21 June 2019  Makoto Asai  radioactive_decay-V10-05-05
 --------------------------------------------------------
 - G4RadioactiveDecay, G4RadioactiveDecayBase : make sure decay table maps

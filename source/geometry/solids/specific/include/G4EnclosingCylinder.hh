@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4EnclosingCylinder
 //
 // Class description:
@@ -37,11 +31,10 @@
 //   is clearly outside a polyhedra or polycone or deciding if
 //   a trajectory is clearly going to miss those shapes.
 
-// Author: 
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-#ifndef G4EnclosingCylinder_hh
-#define G4EnclosingCylinder_hh
+#ifndef G4ENCLOSINGCYLINDER_HH
+#define G4ENCLOSINGCYLINDER_HH
 
 #include "G4Types.hh"
 #include "geomdefs.hh"
@@ -53,16 +46,16 @@ class G4EnclosingCylinder
 {
   public:  // with description
 
-    G4EnclosingCylinder( const G4ReduciblePolygon *rz,
+    G4EnclosingCylinder( const G4ReduciblePolygon* rz,
                                G4bool phiIsOpen, 
                                G4double startPhi, G4double totalPhi );
     ~G4EnclosingCylinder();
   
-    G4bool MustBeOutside( const G4ThreeVector &p ) const;
+    G4bool MustBeOutside( const G4ThreeVector& p ) const;
       // Decide very rapidly if the point is outside the cylinder.
       // If one is not certain, return false.
 
-    G4bool ShouldMiss( const G4ThreeVector &p, const G4ThreeVector &v ) const;
+    G4bool ShouldMiss( const G4ThreeVector& p, const G4ThreeVector& v ) const;
       // Decide very rapidly if the trajectory is going to miss the cylinder.
       // If one is not sure, return false.
 
@@ -82,13 +75,12 @@ class G4EnclosingCylinder
     G4double  startPhi,  // for isPhiOpen==true, starting of phi segment
               totalPhi;  // for isPhiOpen==true, size of phi segment
 
-    G4double rx1, ry1,
-             dx1, dy1;
-    G4double rx2, ry2,
-             dx2, dy2;
+    G4double rx1=0.0, ry1=0.0,
+             dx1=0.0, dy1=0.0;
+    G4double rx2=0.0, ry2=0.0,
+             dx2=0.0, dy2=0.0;
      
     G4bool   concave;  // true, if x/y cross section is concave
-    
 };
 
 #endif

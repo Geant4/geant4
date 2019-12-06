@@ -116,7 +116,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       phiCorrel = (yend*ydir + zend*zdir)/lateralDisplacement;
     fRunAction->SumPhiCorrel(phiCorrel);
     analysisManager->FillH1(9,phiCorrel);
-  } else if (procName == "conv" ) {
+  } else if (procName == "conv" || procName == "GammaToMuPair" ) {
 
     // gamma conversion
     
@@ -136,13 +136,17 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     if (Nsecondaries == 0) return;
   
     for (size_t lp=0; lp< std::min(Nsecondaries,size_t(2) ); lp++) {
-      if ((*secondary)[lp]->GetDefinition()==G4Electron::ElectronDefinition()) {
-        Pminus = (*secondary)[lp]->GetMomentum();
-      }
-      if ((*secondary)[lp]->GetDefinition()==G4Positron::PositronDefinition()) {
-        Eplus  = (*secondary)[lp]->GetTotalEnergy();
-        Pplus  = (*secondary)[lp]->GetMomentum();
-      }
+      if  (((*secondary)[lp]->GetDefinition()==G4Electron::Definition())
+           || ((*secondary)[lp]->GetDefinition()==G4MuonMinus::Definition()) )
+	{
+	  Pminus = (*secondary)[lp]->GetMomentum();
+	}
+      if (((*secondary)[lp]->GetDefinition()==G4Positron::Definition())
+          || ((*secondary)[lp]->GetDefinition()==G4MuonPlus::Definition()) )
+	{
+	  Eplus  = (*secondary)[lp]->GetTotalEnergy();
+	  Pplus  = (*secondary)[lp]->GetMomentum();
+	}
     }
 
     if ( Nsecondaries >= 3 ) {

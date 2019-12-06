@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RepleteEofM implementation
 //
-//
-//
-//  This is the standard right-hand side for equation of motion.
-//
-//  08.04.2013 Peter Gumplinger
-//
+// Created: P.Gumplinger, 08.04.2013
 // -------------------------------------------------------------------
 
 #include "G4RepleteEofM.hh"
@@ -42,12 +38,7 @@
 
 
 G4RepleteEofM::G4RepleteEofM( G4Field* field, G4int nvar )
-          : G4EquationOfMotion( field ), fNvar(nvar),
-            fBfield(false), fEfield(false), fGfield(false), 
-            fgradB(false), fSpin(false),
-            charge(0.), mass(0.), magMoment(0.), spin(0.),
-            ElectroMagCof(0.), omegac(0.), anomaly(0.),
-            beta(0.), gamma(0.)
+          : G4EquationOfMotion( field ), fNvar(nvar)
 {
    fGfield = field->IsGravityActive();
 }
@@ -83,9 +74,9 @@ G4RepleteEofM::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units
 }
 
 void
-G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
-                          const G4double Field[],
-                          G4double dydx[] ) const
+G4RepleteEofM::EvaluateRhsGivenB( const G4double y[],
+                                  const G4double Field[],
+                                        G4double dydx[] ) const
 {
 
    // Components of y:
@@ -139,8 +130,10 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
 
    // Force due to B field - Field[0,1,2]
 
-   if (fBfield) {
-      if (charge != 0.) {
+   if (fBfield)
+   {
+      if (charge != 0.)
+      {
          dydx[3] += cof1*(y[4]*field[2] - y[5]*field[1]);
          dydx[4] += cof1*(y[5]*field[0] - y[3]*field[2]);
          dydx[5] += cof1*(y[3]*field[1] - y[4]*field[0]);
@@ -149,18 +142,23 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
 
    // add force due to E field - Field[3,4,5]
 
-   if (!fBfield) {
+   if (!fBfield)
+   {
       field[3] = Field[0];
       field[4] = Field[1];
       field[5] = Field[2];
-   } else {
+   }
+   else
+   {
       field[3] = Field[3];
       field[4] = Field[4];
       field[5] = Field[5];
    }
 
-   if (fEfield) {
-      if (charge != 0.) {
+   if (fEfield)
+   {
+      if (charge != 0.)
+      {
          dydx[3] += cof1*cof2*field[3];
          dydx[4] += cof1*cof2*field[4];
          dydx[5] += cof1*cof2*field[5];
@@ -169,27 +167,33 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
 
    // add force due to gravity field - Field[6,7,8]
 
-   if (!fBfield && !fEfield) {
+   if (!fBfield && !fEfield)
+   {
       field[6] = Field[0];
       field[7] = Field[1];
       field[8] = Field[2];
-   } else {
+   }
+   else
+   {
       field[6] = Field[6];
       field[7] = Field[7];
       field[8] = Field[8];
    }
 
-   if (fGfield) {
-      if (mass > 0.) {
+   if (fGfield)
+   {
+      if (mass > 0.)
+      {
          dydx[3] += field[6]*cof2*cof3/c_light;
          dydx[4] += field[7]*cof2*cof3/c_light;
          dydx[5] += field[8]*cof2*cof3/c_light;
       }
    }
 
-   // add force due to ∇(µ⋅B) == (µ⋅∇)B when (∇xB) = 0
+   // add force
 
-   if (!fBfield && !fEfield && !fGfield) {
+   if (!fBfield && !fEfield && !fGfield)
+   {
       field[9]  = Field[0];
       field[10] = Field[1];
       field[11] = Field[2];
@@ -199,7 +203,9 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
       field[15] = Field[6];
       field[16] = Field[7];
       field[17] = Field[8];
-   } else {
+   }
+   else
+   {
       field[9]  = Field[9];
       field[10] = Field[10];
       field[11] = Field[11];
@@ -211,36 +217,27 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
       field[17] = Field[17];
    }
 
-   if (fgradB) {
-      if (magMoment != 0.) {
-
-         // field[ 9] == dB_x/dx; field[10] == dB_y/dx; field[11] == dB_z/dx
-         // field[12] == dB_x/dy; field[13] == dB_y/dy; field[14] == dB_z/dy
-         // field[15] == dB_x/dz; field[16] == dB_y/dz; field[17] == dB_z/dz
-
-//         G4cout << "y[9]:  " << y[9] << " y[10]: " << y[10] << " y[11]: " << y[11] << G4endl;
-//         G4cout << "field[9]:  " << field[9]  << " field[10]: " << field[10] << " field[11]: " << field[11] << G4endl;
-//         G4cout << "field[12]: " << field[12] << " field[13]: " << field[13] << " field[14]: " << field[14] << G4endl;
-//         G4cout << "field[15]: " << field[15] << " field[16]: " << field[16] << " field[17]: " << field[17] << G4endl;
-//         G4cout << "inv_momentum_magnitdue: " << inv_momentum_magnitude << " Energy: " << Energy << G4endl;
-
+   if (fgradB)
+   {
+      if (magMoment != 0.)
+      {
          dydx[3] += magMoment*(y[9]*field[ 9]+y[10]*field[10]+y[11]*field[11])
                                                 *inv_momentum_magnitude*Energy;
          dydx[4] += magMoment*(y[9]*field[12]+y[10]*field[13]+y[11]*field[14])
                                                 *inv_momentum_magnitude*Energy;
          dydx[5] += magMoment*(y[9]*field[15]+y[10]*field[16]+y[11]*field[17])
                                                 *inv_momentum_magnitude*Energy;
-
-//         G4cout << "dydx[3,4,5] " << dydx[3] << " " << dydx[4] << " " << dydx[5] << G4endl;
       }
    }
 
-   dydx[6] = 0.; //not used
+   dydx[6] = 0.; // not used
 
    // Lab Time of flight
+   //
    dydx[7] = inverse_velocity;
 
-   if (fNvar == 12) {
+   if (fNvar == 12)
+   {
       dydx[ 8] = 0.; //not used
 
       dydx[ 9] = 0.;
@@ -248,16 +245,18 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
       dydx[11] = 0.;
    }
 
-   if (fSpin) {
-//      G4cout << "y[9,10,11]  " << y[9] << " " << y[10] << " " << y[11] << G4endl;
+   if (fSpin)
+   {
       G4ThreeVector BField(0.,0.,0.);
-      if (fBfield) {
+      if (fBfield)
+      {
          G4ThreeVector F(field[0],field[1],field[2]);
          BField = F;
       }
 
       G4ThreeVector EField(0.,0.,0.);
-      if (fEfield) {
+      if (fEfield)
+      {
          G4ThreeVector F(field[3],field[4],field[5]);
          EField = F;
       }
@@ -278,26 +277,26 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
       else pcharge = charge;
 
       G4ThreeVector dSpin(0.,0.,0);
-      if (Spin.mag2() != 0.) {
-         if (fBfield) {
+      if (Spin.mag2() != 0.)
+      {
+         if (fBfield)
+         {
            dSpin =
              pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u)) );
          }
-         if (fEfield) {
-            dSpin -=
-                                     // from Jackson
-                                     // -uce*Spin.cross(u.cross(EField)) );
-                                     // but this form has one less operation
-             pcharge*omegac*( uce*(u*(Spin*EField) - EField*(Spin*u)) );
+         if (fEfield)
+         {
+            dSpin -= pcharge*omegac*( uce*(u*(Spin*EField) - EField*(Spin*u)) );
+              // from Jackson
+              // -uce*Spin.cross(u.cross(EField)) );
+              // but this form has one less operation
          }
       }
 
       dydx[ 9] = dSpin.x();
       dydx[10] = dSpin.y();
       dydx[11] = dSpin.z();
-
-//      G4cout << "dydx[9,10,11] " << dydx[9] << " " << dydx[10] << " " << dydx[11] << G4endl;
    }
 
-   return ;
+   return;
 }

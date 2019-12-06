@@ -14,6 +14,47 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19-Nov-2019 A. Ribon         (had-hadronization-V10-05-04)
+-  G4ExcitedStringDecay : protection in the sampling of resonance masses
+   against values below threshold.
+-  G4LundStringFragmentation, G4QGSMFragmentation : in the method SplitEandP,
+   added a check that a string can be converted to an existing hadron 
+   (else a null momentum is returned).
+
+14-Nov-2019 A. Ribon         (had-hadronization-V10-05-03)
+-  G4VLongitudinalStringDecay : forgotten initialization of c-cbar and b-bbar
+   pair production for kinks or gluons. 
+
+07-Nov-2019 A. Ribon         (had-hadronization-V10-05-02)
+-  Implementation, made by Vladimir Uzhinsky, of the fragmentation functions
+   of heavy (charm and bottom) quarks and diquarks for the QGS string
+   fragmentation, based on a review of the available theoretical papers.
+-  The same set of mixing meson parameters (for both scalar and vector
+   mesons), as defined in the base class G4VLongitudinalStringDecay, are
+   now used on both FTF and QGS.
+-  Minor changes and clean-up for the Lund string fragmentation.
+
+06-Nov-2019 A. Ribon         (had-hadronization-V10-05-01)
+-  Correction by Vladimir Uzhinsky in the Lund string fragmentation regarding
+   the search for final-state in the last string decay.
+   Note: this bug was responsible of both the bad hadronic showers and the
+         slow CPU performances observed in 10.5.ref10.
+-  Switch off the probability of charm and bottom hadron production
+   in both Lund and QGS string fragmentations.
+   Note: this is a temporary protection, to be removed after the release.
+
+09-Oct-2019 A. Ribon         (had-hadronization-V10-05-00)
+-  Extension, made by Vladimir Uzhinsky, of both Lund and QGS string
+   fragmentation to allow the possibility to have charm and/or bottom quarks
+   and diquarks in the strings. As a result of the hadronization of strings
+   having heavy (c, b) quarks, charmed and bottom hadrons can be produced:
+   only heavy mesons and baryons that can fly macroscopic distances are
+   considered as candidate final states.
+   (Note: this extension has required also to extend the list of diquarks
+          available in Geant4, to add those made with charm and bottom quarks
+          in the method G4ShortLivedConstructor::ConstructQuarks.)
+-  Unused class G4VKinkyStringDecay has been removed.
+
 20-Nov-2018 A. Ribon         (had-hadronization-V10-04-07)
 -  Corrected only the History file (no other changes).
 

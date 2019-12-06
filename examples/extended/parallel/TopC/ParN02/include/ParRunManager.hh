@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ParRunManager.hh
+/// \file ParRunManager.hh
 /// \brief Definition of the ParRunManager class
 //
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04TrackingAction.hh
+/// \file ExN04TrackingAction.hh
 /// \brief Definition of the ExN04TrackingAction class
 //
 

@@ -67,7 +67,7 @@ enum G4RadioactiveDecayMode
   {RDM_ERROR=-1, IT=0, BetaMinus=1, BetaPlus=2, KshellEC=3, LshellEC=4,
    MshellEC=5, NshellEC=6, Alpha=7, Proton=8, Neutron=9, SpFission=10,
    BDProton=11, BDNeutron=12, Beta2Minus=13, Beta2Plus=14, Proton2=15,
-   Neutron2=16};
+   Neutron2=16, Triton=17};
 
 std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q);
 

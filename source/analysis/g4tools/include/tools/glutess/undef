@@ -63,8 +63,8 @@
 #undef GLU_MIN
 #undef GLU_MAX
 #undef GLU_ABS
-#undef GLU_FALSE
-#undef GLU_TRUE
+#undef TOOLS_GLU_FALSE
+#undef TOOLS_GLU_TRUE
 #undef GLU_LINE_LOOP
 #undef GLU_TRIANGLES
 #undef GLU_TRIANGLE_STRIP

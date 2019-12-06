@@ -275,8 +275,7 @@ G4String G4VisCommandReviewKeptEvents::GetCurrentValue (G4UIcommand*)
 
 void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 {
-  static bool reviewing = false;
-  if (reviewing) {
+  if (fpVisManager->GetReviewingKeptEvents()) {
     G4cout <<
       "\"/vis/reviewKeptEvents\" not allowed within an already started review."
       "\n  No action taken."
@@ -333,9 +332,12 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   
   G4VVisManager* keepConcreteInstance = fpVisManager->GetConcreteInstance();
   fpVisManager->Enable();
-  
+
+  // Start on clean view
+  UImanager->ApplyCommand("/vis/viewer/rebuild");
+
   // Event by event refreshing...
-  reviewing  = true;
+  fpVisManager->SetReviewingKeptEvents(true);
   G4bool currentRefreshAtEndOfEvent = pScene->GetRefreshAtEndOfEvent();
   pScene->SetRefreshAtEndOfEvent(true);
   if (macroFileName.empty()) {
@@ -400,7 +402,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   pScene->SetRefreshAtEndOfEvent(currentRefreshAtEndOfEvent);
-  reviewing  = false;
+  fpVisManager->SetReviewingKeptEvents(false);
 
   if (keepConcreteInstance) fpVisManager->Enable();
   else fpVisManager->Disable();

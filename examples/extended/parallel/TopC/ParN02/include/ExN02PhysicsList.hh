@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ExN02PhysicsList.hh
+/// \file ExN02PhysicsList.hh
 /// \brief Definition of the ExN02PhysicsList class
 //
 //

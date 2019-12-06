@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // Implementation of G4UTessellatedSolid wrapper class
+//
+// 11.01.18 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4TessellatedSolid.hh"
@@ -52,7 +51,6 @@ G4UTessellatedSolid::G4UTessellatedSolid()
 {
 }
 
-
 G4UTessellatedSolid::G4UTessellatedSolid(const G4String& name)
  : Base_t(name)
 {
@@ -68,7 +66,6 @@ G4UTessellatedSolid::G4UTessellatedSolid(__void__& a)
 {
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Destructor
@@ -80,7 +77,6 @@ G4UTessellatedSolid::~G4UTessellatedSolid()
   fFacets.clear();
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
@@ -89,7 +85,6 @@ G4UTessellatedSolid::G4UTessellatedSolid(const G4UTessellatedSolid& source)
   : Base_t(source)
 {
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -104,7 +99,6 @@ G4UTessellatedSolid::operator=(const G4UTessellatedSolid& source)
   
   return *this;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -264,7 +258,7 @@ G4int G4UTessellatedSolid::AllocatedMemoryWithoutVoxels()
   base += fVertexList.capacity() * sizeof(G4ThreeVector);
 
   G4int limit = fFacets.size();
-  for (G4int i = 0; i < limit; i++)
+  for (G4int i = 0; i < limit; ++i)
   {
     G4VFacet &facet = *fFacets[i];
     base += facet.AllocatedMemory();

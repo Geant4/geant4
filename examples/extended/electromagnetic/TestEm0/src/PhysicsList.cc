@@ -46,40 +46,7 @@
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList(),
-  fEmPhysicsList(0),fEmName("local"),fMessenger(0)
-{    
-  G4LossTableManager::Instance();
-  
-  // set default cut value
-  SetDefaultCutValue(1.0*mm); 
-
-  fMessenger = new PhysicsListMessenger(this);
-
-  SetVerboseLevel(1);
-
-  // EM physics
-  fEmName = G4String("local");
-  fEmPhysicsList = new PhysListEmStandard(fEmName);
-  
-  //add new units for cross sections
-  // 
-  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
-  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{
-  delete fMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4EmParameters.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -123,6 +90,34 @@ PhysicsList::~PhysicsList()
 #include "G4Triton.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysicsList::PhysicsList() : G4VModularPhysicsList(),
+  fEmPhysicsList(nullptr), fEmName(""),
+  fMessenger(new PhysicsListMessenger(this))
+{    
+  // set default cut value
+  SetDefaultCutValue(1.0*mm); 
+
+  SetVerboseLevel(1);
+
+  AddPhysicsList("emstandard_opt0");
+  
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV,1*GeV);
+
+  //add new units for cross sections
+  // 
+  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
+  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysicsList::~PhysicsList()
+{
+  delete fMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -185,7 +180,7 @@ void PhysicsList::ConstructProcess()
 
   // Electromagnetic physics list
   //
-  fEmPhysicsList->ConstructProcess();  
+  fEmPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -245,24 +240,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-void PhysicsList::SetCuts()
-{ 
- // fixe lower limit for cut
- G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
-
- // call base class method to set cuts which default value can be
- // modified via /run/setCut/* commands
- G4VUserPhysicsList::SetCuts();
-
- DumpCutValuesTable();
+  
+  // Em options
+  //
+  G4EmParameters::Instance()->SetBuildCSDARange(true);    
+  G4EmParameters::Instance()->SetGeneralProcessActive(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

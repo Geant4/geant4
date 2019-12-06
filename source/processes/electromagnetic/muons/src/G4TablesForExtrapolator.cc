@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:    G4TablesForExtrapolator
@@ -72,8 +71,17 @@
 
 G4TablesForExtrapolator::G4TablesForExtrapolator(G4int verb, G4int bins, 
                                                  G4double e1, G4double e2)
-  : verbose(verb), nbins(bins), emin(e1), emax(e2)
+  : builder(nullptr), verbose(verb), nbins(bins), nmat(0), emin(e1), emax(e2)
 {
+  electron = G4Electron::Electron();
+  positron = G4Positron::Positron();
+  proton   = G4Proton::Proton();
+  muonPlus = G4MuonPlus::MuonPlus();
+  muonMinus= G4MuonMinus::MuonMinus();
+  dedxElectron = dedxPositron = dedxProton = dedxMuon = rangeElectron =
+    rangePositron = rangeProton = rangeMuon = invRangeElectron =
+    invRangePositron = invRangeProton = invRangeMuon = mscElectron = nullptr;
+  pcuts = nullptr;
   Initialisation();
 }
 
@@ -81,7 +89,7 @@ G4TablesForExtrapolator::G4TablesForExtrapolator(G4int verb, G4int bins,
 
 G4TablesForExtrapolator::~G4TablesForExtrapolator()
 {
-  for(G4int i=0; i<nmat; i++) {delete couples[i];}
+  for(G4int i=0; i<nmat; i++) { delete couples[i]; }
 
   dedxElectron->clearAndDestroy();
   dedxPositron->clearAndDestroy();
@@ -111,6 +119,7 @@ G4TablesForExtrapolator::~G4TablesForExtrapolator()
   delete invRangeMuon;
   delete mscElectron;
   delete pcuts;
+  delete builder;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -171,66 +180,63 @@ void G4TablesForExtrapolator::Initialisation()
     G4cout << "### G4TablesForExtrapolator::Initialisation" << G4endl;
   }
   currentParticle = nullptr;
-
-  electron = G4Electron::Electron();
-  positron = G4Positron::Positron();
-  proton   = G4Proton::Proton();
-  muonPlus = G4MuonPlus::MuonPlus();
-  muonMinus= G4MuonMinus::MuonMinus();
-
   mass = charge2 = 0.0;
 
   nmat = G4Material::GetNumberOfMaterials();
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
-  pcuts = new G4ProductionCuts();
+  if(!pcuts) { pcuts = new G4ProductionCuts(); }
 
-  couples.resize(nmat,0);
-  cuts.resize(nmat,DBL_MAX);
-
-  for(G4int i=0; i<nmat; ++i) {
-    couples[i] = new G4MaterialCutsCouple((*mtable)[i],pcuts);  
+  G4int i0 = couples.size();
+  if(0 == i0) {
+    couples.reserve(nmat);
+    cuts.reserve(nmat);
+  }
+  for(G4int i=i0; i<nmat; ++i) {
+    couples.push_back(new G4MaterialCutsCouple((*mtable)[i],pcuts));
+    cuts.push_back(DBL_MAX);
   }
 
   splineFlag = G4EmParameters::Instance()->Spline();
 
-  dedxElectron     = PrepareTable();
-  dedxPositron     = PrepareTable();
-  dedxMuon         = PrepareTable();
-  dedxProton       = PrepareTable();
-  rangeElectron    = PrepareTable();
-  rangePositron    = PrepareTable();
-  rangeMuon        = PrepareTable();
-  rangeProton      = PrepareTable();
-  invRangeElectron = PrepareTable();
-  invRangePositron = PrepareTable();
-  invRangeMuon     = PrepareTable();
-  invRangeProton   = PrepareTable();
-  mscElectron      = PrepareTable();
+  dedxElectron     = PrepareTable(dedxElectron);
+  dedxPositron     = PrepareTable(dedxPositron);
+  dedxMuon         = PrepareTable(dedxMuon);
+  dedxProton       = PrepareTable(dedxProton);
+  rangeElectron    = PrepareTable(rangeElectron);
+  rangePositron    = PrepareTable(rangePositron);
+  rangeMuon        = PrepareTable(rangeMuon);
+  rangeProton      = PrepareTable(rangeProton);
+  invRangeElectron = PrepareTable(invRangeElectron);
+  invRangePositron = PrepareTable(invRangePositron);
+  invRangeMuon     = PrepareTable(invRangeMuon);
+  invRangeProton   = PrepareTable(invRangeProton);
+  mscElectron      = PrepareTable(mscElectron);
 
-  G4LossTableBuilder builder; 
+  if(!builder) { builder = new G4LossTableBuilder(); }
+  builder->InitialiseBaseMaterials();
 
   if(verbose>1) {
     G4cout << "### G4TablesForExtrapolator Builds electron tables" 
 	   << G4endl;
   }
   ComputeElectronDEDX(electron, dedxElectron);
-  builder.BuildRangeTable(dedxElectron,rangeElectron);  
-  builder.BuildInverseRangeTable(rangeElectron, invRangeElectron);  
+  builder->BuildRangeTable(dedxElectron,rangeElectron);  
+  builder->BuildInverseRangeTable(rangeElectron, invRangeElectron);  
 
   if(verbose>1) {
     G4cout << "### G4TablesForExtrapolator Builds positron tables" 
 	   << G4endl;
   }
   ComputeElectronDEDX(positron, dedxPositron);
-  builder.BuildRangeTable(dedxPositron, rangePositron);  
-  builder.BuildInverseRangeTable(rangePositron, invRangePositron);  
+  builder->BuildRangeTable(dedxPositron, rangePositron);  
+  builder->BuildInverseRangeTable(rangePositron, invRangePositron);  
 
   if(verbose>1) {
     G4cout << "### G4TablesForExtrapolator Builds muon tables" << G4endl;
   }
   ComputeMuonDEDX(muonPlus, dedxMuon);
-  builder.BuildRangeTable(dedxMuon, rangeMuon);  
-  builder.BuildInverseRangeTable(rangeMuon, invRangeMuon);  
+  builder->BuildRangeTable(dedxMuon, rangeMuon);  
+  builder->BuildInverseRangeTable(rangeMuon, invRangeMuon);  
   /*
   G4cout << "DEDX MUON" << G4endl
   G4cout << *dedxMuon << G4endl;
@@ -244,20 +250,25 @@ void G4TablesForExtrapolator::Initialisation()
 	   << G4endl;
   }
   ComputeProtonDEDX(proton, dedxProton);
-  builder.BuildRangeTable(dedxProton, rangeProton);  
-  builder.BuildInverseRangeTable(rangeProton, invRangeProton);  
+  builder->BuildRangeTable(dedxProton, rangeProton);  
+  builder->BuildInverseRangeTable(rangeProton, invRangeProton);  
 
   ComputeTrasportXS(electron, mscElectron);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4TablesForExtrapolator::PrepareTable()
+G4PhysicsTable* G4TablesForExtrapolator::PrepareTable(G4PhysicsTable* ptr)
 {
-  G4PhysicsTable* table = new G4PhysicsTable();
-
-  for(G4int i=0; i<nmat; ++i) {  
-
+  G4PhysicsTable* table;
+  G4int i0 = 0;
+  if(ptr) {
+    table = ptr;
+    i0 = ptr->size();
+  } else {
+    table = new G4PhysicsTable();
+  }
+  for(G4int i=i0; i<nmat; ++i) {  
     G4PhysicsVector* v = new G4PhysicsLogVector(emin, emax, nbins);
     v->SetSpline(splineFlag);
     table->push_back(v);
@@ -275,6 +286,8 @@ void G4TablesForExtrapolator::ComputeElectronDEDX(
   G4eBremsstrahlungRelModel* brem = new G4eBremsstrahlungRelModel();
   ioni->Initialise(part, cuts);
   brem->Initialise(part, cuts);
+  ioni->SetUseBaseMaterials(false);
+  brem->SetUseBaseMaterials(false);
 
   mass    = electron_mass_c2;
   charge2 = 1.0;
@@ -328,6 +341,9 @@ G4TablesForExtrapolator::ComputeMuonDEDX(const G4ParticleDefinition* part,
   ioni->Initialise(part, cuts);
   pair->Initialise(part, cuts);
   brem->Initialise(part, cuts);
+  ioni->SetUseBaseMaterials(false);
+  pair->SetUseBaseMaterials(false);
+  brem->SetUseBaseMaterials(false);
 
   mass    = part->GetPDGMass();
   charge2 = 1.0;
@@ -378,6 +394,7 @@ G4TablesForExtrapolator::ComputeProtonDEDX(const G4ParticleDefinition* part,
 {
   G4BetheBlochModel* ioni = new G4BetheBlochModel();
   ioni->Initialise(part, cuts);
+  ioni->SetUseBaseMaterials(false);
 
   mass    = part->GetPDGMass();
   charge2 = 1.0;
@@ -425,6 +442,7 @@ G4TablesForExtrapolator::ComputeTrasportXS(const G4ParticleDefinition* part,
   G4WentzelVIModel* msc = new G4WentzelVIModel();
   msc->SetPolarAngleLimit(CLHEP::pi);
   msc->Initialise(part, cuts);
+  msc->SetUseBaseMaterials(false);
 
   mass    = part->GetPDGMass();
   charge2 = 1.0;

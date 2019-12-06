@@ -88,6 +88,12 @@ G4DeexParametersMessenger::G4DeexParametersMessenger(G4DeexPrecoParameters* ptr)
   maxjCmd->SetDefaultValue(10);
   maxjCmd->AvailableForStates(G4State_PreInit);
 
+  upCmd = new G4UIcmdWithAnInteger("/process/deex/uploadZ",this);
+  upCmd->SetGuidance("Set max value for Z to be uploaded before 1st event");
+  upCmd->SetParameterName("uploadZ",true);
+  upCmd->SetDefaultValue(30);
+  upCmd->AvailableForStates(G4State_PreInit);
+
   verbCmd = new G4UIcmdWithAnInteger("/process/deex/verbose",this);
   verbCmd->SetGuidance("Set verbosity level.");
   verbCmd->SetParameterName("verb",true);
@@ -105,6 +111,7 @@ G4DeexParametersMessenger::~G4DeexParametersMessenger()
   delete icCmd;
   delete corgCmd;
   delete maxjCmd;
+  delete upCmd;
   delete verbCmd;
 }
 
@@ -121,6 +128,8 @@ void G4DeexParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetCorrelatedGamma(corgCmd->GetNewBoolValue(newValue));
   } else if (command == maxjCmd) { 
     theParameters->SetTwoJMAX(maxjCmd->GetNewIntValue(newValue));
+  } else if (command == upCmd) { 
+    theParameters->SetUploadZ(maxjCmd->GetNewIntValue(newValue));
   } else if (command == verbCmd) { 
     theParameters->SetVerbose(verbCmd->GetNewIntValue(newValue));
   }

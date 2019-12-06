@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SolidStore implementation for singleton container
 //
-//
-// G4SolidStore
-//
-// Implementation for singleton container
-//
-// History:
-// 10.07.95 P.Kent Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
+// 10.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 
 #include "globals.hh"
@@ -41,8 +37,8 @@
 // Static class variables
 // ***************************************************************************
 //
-G4SolidStore* G4SolidStore::fgInstance = 0;
-G4ThreadLocal G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
+G4SolidStore* G4SolidStore::fgInstance = nullptr;
+G4ThreadLocal G4VStoreNotifier* G4SolidStore::fgNotifier = nullptr;
 G4ThreadLocal G4bool G4SolidStore::locked = false;
 
 // ***************************************************************************
@@ -85,18 +81,17 @@ void G4SolidStore::Clean()
   //
   locked = true;  
 
-  size_t i=0;
+  size_t i = 0;
   G4SolidStore* store = GetInstance();
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Solids ... ";
 #endif
 
-  for(iterator pos=store->begin(); pos!=store->end(); pos++)
+  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    if (*pos) { delete *pos; }
-    i++;
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
+    delete *pos; ++i;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -127,7 +122,7 @@ void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4SolidStore::Register(G4VSolid* pSolid)
 {
   GetInstance()->push_back(pSolid);
-  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -138,9 +133,8 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    for (reverse_iterator i=GetInstance()->rbegin();
-                          i!=GetInstance()->rend(); i++)
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
+    for (auto i=GetInstance()->crbegin(); i!=GetInstance()->crend(); ++i)
     {
       if (**i==*pSolid)
       {
@@ -157,7 +151,7 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 //
 G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
 {
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
   {
     if ((*i)->GetName() == name) { return *i; }
   }
@@ -169,7 +163,7 @@ G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
      G4Exception("G4SolidStore::GetSolid()",
                  "GeomMgt1001", JustWarning, message);
   }
-  return 0;
+  return nullptr;
 }
 
 // ***************************************************************************
@@ -179,7 +173,7 @@ G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
 G4SolidStore* G4SolidStore::GetInstance()
 {
   static G4SolidStore worldStore;
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = &worldStore;
   }

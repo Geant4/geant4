@@ -918,14 +918,14 @@ G4bool G4BiasingProcessInterface::IsFirstPostStepGPILInterface(G4bool physOnly) 
   G4bool isFirst = true;
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeGPIL);
   G4int thisIdx(-1);
-  for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  for (std::size_t i = 0; i < pv->size(); ++i ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
   if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
-  for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
+  for ( std::size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); ++i )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
+	  for (std::size_t j = 0; j < pv->size(); ++j ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
 	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
 	      if ( thisIdx >  thatIdx )
@@ -945,14 +945,14 @@ G4bool G4BiasingProcessInterface::IsLastPostStepGPILInterface(G4bool physOnly) c
   G4bool isLast = true;
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeGPIL);
   G4int thisIdx(-1);
-  for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  for (std::size_t i = 0; i < pv->size(); ++i ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
   if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
-  for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
+  for ( std::size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); ++i )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
+	  for (std::size_t j = 0; j < pv->size(); ++j ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
 	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
 	      if ( thisIdx <  thatIdx )
@@ -972,14 +972,14 @@ G4bool G4BiasingProcessInterface::IsFirstPostStepDoItInterface(G4bool physOnly) 
   G4bool isFirst = true;
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeDoIt);
   G4int thisIdx(-1);
-  for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  for (std::size_t i = 0; i < pv->size(); ++i ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
   if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
-  for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
+  for ( std::size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); ++i )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
+	  for (std::size_t j = 0; j < pv->size(); ++j ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
 	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
 	      if ( thisIdx >  thatIdx )
@@ -999,14 +999,14 @@ G4bool G4BiasingProcessInterface::IsLastPostStepDoItInterface(G4bool physOnly) c
   G4bool isLast = true;
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeDoIt);
   G4int thisIdx(-1);
-  for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  for (std::size_t i = 0; i < pv->size(); ++i ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
   if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
-  for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
+  for ( std::size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); ++i )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
+	  for (std::size_t j = 0; j < pv->size(); ++j ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
 	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
 	      if ( thisIdx <  thatIdx )
@@ -1084,9 +1084,9 @@ void G4BiasingProcessInterface::ReorderBiasingVectorAsGPIL()
   ( fSharedData -> fPublicNonPhysicsBiasingProcessInterfaces ) . clear();
   
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeGPIL);
-  for (G4int i = 0; i < pv->size(); i++ ) 
+  for (std::size_t i = 0; i < pv->size(); ++i ) 
     {
-      for ( size_t j = 0; j < tmpProcess.size(); j++ )
+      for ( std::size_t j = 0; j < tmpProcess.size(); ++j )
 	{
 	  if ( (*pv)(i) == tmpProcess[j] )
 	    { 

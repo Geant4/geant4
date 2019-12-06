@@ -229,7 +229,7 @@ void SetSeed()
     {
       noice = labs((long) noise());
       
-      const char * env = getenv("PBS_JOBID");
+      const char * env = std::getenv("PBS_JOBID");
 
       if(env)
       {
@@ -243,7 +243,7 @@ void SetSeed()
       }
       else
       {
-        env = getenv("SGE_TASK_ID");
+        env = std::getenv("SGE_TASK_ID");
         if(env) jobID_int = atoi(env);
       }
     } // end cluster

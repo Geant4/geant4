@@ -76,6 +76,10 @@ inline void G4OpenGLSceneHandler::AddSolid (const G4Ellipsoid& ellipsoid) {
   G4VSceneHandler::AddSolid (ellipsoid);
 }
 
+inline void G4OpenGLSceneHandler::AddSolid (const G4TessellatedSolid& tess) {
+  G4VSceneHandler::AddSolid (tess);
+}
+
 inline void G4OpenGLSceneHandler::AddSolid (const G4VSolid& vsolid) {
   G4VSceneHandler::AddSolid (vsolid);
 }

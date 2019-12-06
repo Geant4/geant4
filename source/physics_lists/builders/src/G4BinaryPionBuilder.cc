@@ -41,13 +41,14 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGPionInelasticXS.hh"
+#include "G4HadronicParameters.hh"
 
 
 G4BinaryPionBuilder::
 G4BinaryPionBuilder()
 {
-  theMin = 0*GeV;
-  theMax = 1.3*GeV;
+  theMin = 0.0;
+  theMax = 1.5*GeV;
   theModel = new G4BinaryCascade;
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax); 
@@ -70,3 +71,4 @@ Build(G4PionMinusInelasticProcess * aP)
   aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
   aP->RegisterMe(theModel);
 }
+

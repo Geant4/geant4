@@ -58,6 +58,7 @@
 //                                 instead of G4Pow G4Log is used
 //    15 Mar. 2019  M.Novak : added Value method with the known log-energy value
 //                            that can avoid the log call in case of log-vectors
+//    16 July 2019  M.Novak : special LogVectorValue method for log-vectors
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVector_h
@@ -93,11 +94,11 @@ class G4PhysicsVector
          // the value. Consumer code got changed index and may reuse it
          // for the next call to save CPU for bin location. 
 
-    G4double Value(G4double theEnergy, G4double theLogEnergy,
-                   size_t& lastidx) const;
-         // Same as Value() above, with the additional log-kinetic energy input
-         // argument that can be used for faster index computation in case of
-         // log-vectors.
+    inline G4double LogVectorValue(const G4double theEnergy,
+                                   const G4double theLogEnergy) const;
+         // Same as the Value method above but specialised for log-vector type.
+         // Note, unlike the general Value method above, this method will work
+         // properly only in case of G4PhysicsLogVector-s.
 
     inline G4double Value(G4double theEnergy) const; 
          // Get the cross-section/energy-loss value corresponding to the
@@ -105,11 +106,6 @@ class G4PhysicsVector
          // the value. This method is kept for backward compatibility reason,
          // it should be used instead of the previous method if bin location 
          // cannot be kept thread safe
-
-    inline G4double Value(G4double theEnergy, G4double theLogEnergy) const;
-         // Same as Value() above with the additional log-kinetic energy input
-         // argument that can be used for faster index computation in case of
-         // log-vectors.
 
     inline G4double GetValue(G4double theEnergy, G4bool& isOutRange) const;
          // Obsolete method to get value, isOutRange is not used anymore. 
@@ -163,9 +159,9 @@ class G4PhysicsVector
          // min value 0, max value VectorLength-1
          // idx is suggested bin number from user code
 
-    inline size_t FindBin(G4double energy, G4double logener, size_t idx) const;
-         // Same as FindBin() above with the additional logenergy input argument
-         // that can be used for faster index computation in case of log-vectors.
+    inline size_t ComputeLogVectorBin(const G4double logenergy) const;
+         // Computes the lower index the energy bin in case of log-vector i.e.
+         // in case of vectors with equal bin widths on log-scale.
 
     void FillSecondDerivatives();
          // Initialise second derivatives for spline keeping 
@@ -246,17 +242,11 @@ class G4PhysicsVector
          // find low edge index of a bin for given energy
          // min value 0, max value VectorLength-1
 
-    inline size_t FindBinLocation(G4double theEnergy,
-                                  G4double theLogEnergy) const;
-         // same as FindBinLocation() above with the additional log-energy input
-         // argument that can be used for faster index computations in case of
-         // log-vectors.
-
     G4bool     useSpline;
 
   protected:
 
-    G4double dBin;          // Bin width - useful only for fixed binning
+    G4double invdBin;       // 1/Bin width - useful only for fixed binning
     G4double baseBin;       // Set this in constructor for performance
 
     G4int verboseLevel;

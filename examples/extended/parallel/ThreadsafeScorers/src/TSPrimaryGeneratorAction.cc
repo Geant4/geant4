@@ -76,7 +76,7 @@ TSPrimaryGeneratorAction::~TSPrimaryGeneratorAction()
 
 void TSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    TIMEMORY_AUTO_TIMER();
+    TIMEMORY_AUTO_TIMER("");
     static TSDetectorConstruction* detector
             = TSDetectorConstruction::Instance();
 

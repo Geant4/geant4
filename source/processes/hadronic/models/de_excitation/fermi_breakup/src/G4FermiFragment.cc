@@ -32,18 +32,11 @@
 #include "G4NucleiProperties.hh"
 #include "G4PhysicalConstants.hh"
 
-G4FermiFragment::G4FermiFragment(G4int anA, G4int aZ, G4int sp, 
-				 G4double exc, G4bool stable, G4bool phys):
-  A(anA), Z(aZ), spin(sp), isStable(stable), isPhysical(phys),
-  excitEnergy(exc)
+G4FermiFragment::G4FermiFragment(G4int anA, G4int aZ, G4int sp, G4double exc)
+  : excitEnergy(exc), A(anA), Z(aZ), spin(sp)
 {
-  cBarrier = nullptr;
-  if(phys) {
-    fragmentMass = G4NucleiProperties::GetNuclearMass(A, Z); 
-    if(!stable) { cBarrier = new G4CoulombBarrier(A, Z); }
-  } else {
-    fragmentMass = Z*proton_mass_c2 + (A-Z)*neutron_mass_c2;
-  }
+  cBarrier = new G4CoulombBarrier(A, Z);
+  fragmentMass = G4NucleiProperties::GetNuclearMass(A, Z); 
 }
 
 G4FermiFragment::~G4FermiFragment()

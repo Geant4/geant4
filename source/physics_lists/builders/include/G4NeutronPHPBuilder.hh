@@ -94,7 +94,5 @@ class G4NeutronPHPBuilder : public G4VNeutronBuilder
 
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

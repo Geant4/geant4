@@ -106,6 +106,7 @@ make parclean - Start over with clean set of files.
 <hr>
 
 New or modified files:
+\verbatim
 - ParN04.cc -     Adds one line:  #include "ParN04.icc"
 		  ParExample.icc inserts:  #include "topc.h"
 		  and causes main to calls TOPC_init, TOPC_finalize,
@@ -134,7 +135,7 @@ New or modified files:
                   Generated each time parallel ParN04 is executed.
                   These files are specified in the file procgroup.
 
-<hr>
+\endverbatim
 
 This version passes an event number to the slave and lets the
 slave generate the event.  The slave passes back marshaled hits to

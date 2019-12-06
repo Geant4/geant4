@@ -26,11 +26,13 @@ namespace tools {
 namespace rroot {
 
 class ntuple : public virtual read::intuple {
+  typedef read::intuple parent;
 public:
   static const std::string& s_class() {
     static const std::string s_v("tools::rroot::ntuple");
     return s_v;
   }
+  virtual const std::string& s_cls() const {return s_class();}
 public: //intuple
   virtual void start() {m_index = -1;}
   virtual bool next() { 
@@ -42,9 +44,11 @@ public: //intuple
     return find_named<read::icol>(m_cols,a_name);
   }
   virtual const std::vector<read::icol*>& columns() const {return m_cols;}
+  virtual const std::string& title() const {return m_tree.title();}
+  virtual bool number_of_entries(uint64 & a_value) const {a_value = m_tree.entries();return true;}
 public:
 
-  template <class T>
+  template <class T,class LEAF>
   class column_ref : public virtual read::icolumn<T> {
     typedef read::icolumn<T> parent;
   public:
@@ -65,7 +69,7 @@ public:
       return true;
     }
   public:
-    column_ref(ifile& a_file,branch& a_branch,leaf<T>& a_leaf,int64& a_index,T& a_ref)
+    column_ref(ifile& a_file,branch& a_branch,LEAF& a_leaf,int64& a_index,T& a_ref)
     :m_file(a_file)
     ,m_branch(a_branch)
     ,m_leaf(a_leaf)
@@ -75,7 +79,7 @@ public:
     virtual ~column_ref(){}
   protected:
     column_ref(const column_ref& a_from)
-    :read::intuple(a_from)
+    :read::icol(a_from)
     ,parent(a_from)
     ,m_file(a_from.m_file)
     ,m_branch(a_from.m_branch) 
@@ -88,23 +92,28 @@ public:
       return *this;
     }
   protected:    
+    //typedef typename LEAF::value_t value_t;
     bool _fetch_entry() const {
       unsigned int n;
       if(!m_branch.find_entry(m_file,uint32(m_index),n)) {m_ref = T();return false;}
       if(!m_leaf.num_elem()) {m_ref = T();return true;} //it is ok. It may be a vector from a row_wise ntuple column.
-      return m_leaf.value(0,m_ref);
+      typename LEAF::value_t _tmp;
+      if(!m_leaf.value(0,_tmp)) return false;
+      m_ref = T(_tmp);
+      return true;
     }
   protected:
     ifile& m_file;
     branch& m_branch;
-    leaf<T>& m_leaf;
+    LEAF& m_leaf;
     int64& m_index; //WARNING : a ref.
     T& m_ref;
+    //value_t m_tmp;
   };
 
-  template <class T>
-  class column : public column_ref<T> {
-    typedef column_ref<T> parent;
+  template <class T,class LEAF>
+  class column : public column_ref<T,LEAF> {
+    typedef column_ref<T,LEAF> parent;
   public:
     static cid id_class() {return 200+_cid(T());}
   public: //icol
@@ -114,14 +123,15 @@ public:
     }
     virtual cid id_cls() const {return id_class();}
   public:
-    column(ifile& a_file,branch& a_branch,leaf<T>& a_leaf,int64& a_index)
+    column(ifile& a_file,branch& a_branch,LEAF& a_leaf,int64& a_index)
     :parent(a_file,a_branch,a_leaf,a_index,m_value)
     ,m_value(T())
     {}
     virtual ~column(){}
   protected:
     column(const column& a_from)
-    :read::intuple(a_from)
+    :read::icol(a_from)
+    ,read::icolumn<T>(a_from)
     ,parent(a_from)
     ,m_value(a_from.m_value)
     {}
@@ -137,6 +147,7 @@ public:
   };
 
   class column_string_ref : public virtual read::icol {
+    typedef read::icol parent;
   public:
     static cid id_class() {
       static const std::string s_v;
@@ -162,7 +173,7 @@ public:
     virtual ~column_string_ref(){}
   protected:
     column_string_ref(const column_string_ref& a_from)
-    :read::icol(a_from)
+    :parent(a_from)
     ,m_file(a_from.m_file)
     ,m_branch(a_from.m_branch)
     ,m_leaf(a_from.m_leaf) 
@@ -206,7 +217,7 @@ public:
   public: //icol
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast<column_string>(this,a_class)) return p;
-      return 0;
+      return parent::cast(a_class);
     }
     virtual cid id_cls() const {return id_class();}
     virtual const std::string& name() const {return m_leaf.name();}
@@ -239,7 +250,7 @@ public:
   public: //icol
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast<column_vector_string_ref>(this,a_class)) return p;
-      return 0;
+      return parent::cast(a_class);
     }
     virtual cid id_cls() const {return id_class();}
     virtual const std::string& name() const {return m_leaf.name();}
@@ -290,7 +301,7 @@ public:
   public: //icol
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast<column_vector_string>(this,a_class)) return p;
-      return 0;
+      return parent::cast(a_class);
     }
     virtual cid id_cls() const {return id_class();}
     virtual const std::string& name() const {return m_leaf.name();}
@@ -349,7 +360,7 @@ public:
     virtual ~std_vector_column_ref(){}
   protected:
     std_vector_column_ref(const std_vector_column_ref& a_from)
-    :read::intuple(a_from)
+    :read::icol(a_from)
     ,parent(a_from)
     ,m_file(a_from.m_file)
     ,m_branch(a_from.m_branch) 
@@ -408,7 +419,7 @@ public:
     virtual ~column_element_ref(){}
   protected:
     column_element_ref(const column_element_ref& a_from)
-    :read::intuple(a_from),parent(a_from)
+    :read::icol(a_from),parent(a_from)
     ,m_file(a_from.m_file)
     ,m_be(a_from.m_be)
     ,m_leaf(a_from.m_leaf) 
@@ -457,7 +468,8 @@ public:
     virtual ~column_element(){}
   protected:
     column_element(const column_element& a_from)
-    :read::intuple(a_from)
+    :read::icol(a_from)
+    ,read::icolumn<T>(a_from)
     ,parent(a_from)
     ,m_value(a_from.m_value)
     {}
@@ -486,14 +498,14 @@ public:
   }
 protected:
   ntuple(const ntuple& a_from)
-  :read::intuple(a_from),m_tree(a_from.m_tree){
+  :parent(a_from),m_tree(a_from.m_tree){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
   }
   ntuple& operator=(const ntuple&){return *this;}
 public:
-  bool initialize(std::ostream& a_out,const ntuple_binding& a_bd = ntuple_binding()) {
+  bool initialize(std::ostream& a_out,const ntuple_binding& a_bd = ntuple_binding(),bool a_enforce_double = false) {
     safe_clear<read::icol>(m_cols);
 
     std::vector<base_leaf*> leaves;
@@ -518,16 +530,23 @@ public:
       }
 
       //a_out << "tools::rroot::ntuple::initialize :"
-      //      << " entries " << bl->branch().entry_number() << "."
+      //      << " branch " << _branch->name()
+      //      << ", entries " << _branch->entry_number() << "."
       //      << std::endl;
 
 #define TOOLS_RROOT_NTUPLE_CREATE_COL(a__type) \
       if(leaf<a__type>* lf_##a__type = safe_cast<base_leaf, leaf<a__type> >(*bl) ){\
         cid user_cid;void* user_obj;\
         a_bd.find_user_obj(bl->name(),user_cid,user_obj);\
+        typedef leaf<a__type> leaf_t;\
         if(!user_obj) {\
-	  column<a__type>* col = new column<a__type>(m_tree.file(),*_branch,*lf_##a__type,m_index);\
-          m_cols.push_back(col);\
+          if(a_enforce_double) {\
+            column<double,leaf_t>* col = new column<double,leaf_t>(m_tree.file(),*_branch,*lf_##a__type,m_index);\
+            m_cols.push_back(col);\
+          } else {\
+            column<a__type,leaf_t>* col = new column<a__type,leaf_t>(m_tree.file(),*_branch,*lf_##a__type,m_index);\
+            m_cols.push_back(col);\
+          }\
         } else {\
           const base_leaf* lfc = bl->leaf_count();\
           if(lfc) {\
@@ -555,7 +574,8 @@ public:
               return false;\
             }\
             a__type* user_var = (a__type*)user_obj;\
-            column_ref<a__type>* col = new column_ref<a__type>(m_tree.file(),*_branch,*lf_##a__type,m_index,*user_var);\
+            column_ref<a__type,leaf_t>* col =\
+              new column_ref<a__type,leaf_t>(m_tree.file(),*_branch,*lf_##a__type,m_index,*user_var);\
             m_cols.push_back(col);\
           }\
 	}\
@@ -682,6 +702,14 @@ public:
       return false;
     }
 
+   {tools_vforcit(column_binding,a_bd.columns(),it) {
+      if(!find_named<read::icol>(m_cols,(*it).name())) {
+        a_out << "tools::rroot::ntuple::initialize :"
+              << " warning : for column binding with name " << sout((*it).name()) << ", no ntuple column found."
+              << std::endl;
+      }
+    }}
+
     //a_out << "tools::rroot::ntuple::initialize :"
     //      << " number of columns " << num << "."
     //      << std::endl;
@@ -703,6 +731,39 @@ protected:
   tree& m_tree;
   std::vector<read::icol*> m_cols;
   int64 m_index;
+};
+
+// for gopaw :
+
+class fac_tree_holder {
+public:  
+  fac_tree_holder(ifac* a_fac,tree* a_tree):m_fac(a_fac),m_tree(a_tree){}  //own a_fac,a_tree.
+  virtual ~fac_tree_holder() {delete m_tree;delete m_fac;}
+protected:
+  fac_tree_holder(const fac_tree_holder&){}
+  fac_tree_holder& operator=(const fac_tree_holder&){return *this;}
+protected:
+  ifac* m_fac;
+  tree* m_tree;
+};
+
+class fac_tree_ntuple : public fac_tree_holder, public ntuple { //fac_tree_holder must be first.
+  typedef ntuple parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::fac_tree_ntuple");
+    return s_v;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:  
+  fac_tree_ntuple(ifac* a_fac,tree* a_tree) //own these.
+  :fac_tree_holder(a_fac,a_tree)
+  ,parent(*a_tree)  //deleted first.
+  {}
+  virtual ~fac_tree_ntuple() {}
+protected:
+  fac_tree_ntuple(const fac_tree_ntuple& a_from):read::intuple(a_from),fac_tree_holder(a_from),parent(a_from){}
+  fac_tree_ntuple& operator=(const fac_tree_ntuple&){return *this;}
 };
 
 }}

@@ -59,7 +59,6 @@ const G4int MAXDEPOINT = 10;
 const G4int MAXGRDATA  = 300;
 
 class G4GammaTransition;
-class G4NuclearPolarizationStore;
 
 class G4PhotonEvaporation : public G4VEvaporationChannel {
 
@@ -98,6 +97,10 @@ public:
   inline void SetVerboseLevel(G4int verbose);
 
   inline G4int GetVacantShellNumber() const;
+
+  G4PhotonEvaporation(const G4PhotonEvaporation & right) = delete;
+  const G4PhotonEvaporation & operator = 
+    (const G4PhotonEvaporation & right) = delete;
  
 private:
 
@@ -107,13 +110,9 @@ private:
 
   inline void InitialiseLevelManager(G4int Z, G4int A);
 
-  G4PhotonEvaporation(const G4PhotonEvaporation & right) = delete;
-  const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right) = delete;
-
   G4NuclearLevelData*   fNuclearLevelData;
   const G4LevelManager* fLevelManager;
   G4GammaTransition*    fTransition;
-  G4NuclearPolarizationStore* fNucPStore;
 
   // fPolarization stores polarization tensor for consecutive
   // decays of a nucleus 

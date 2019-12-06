@@ -156,7 +156,7 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
   // maximum number of g4.gdd files in the dest directory
   kMaxFileNum = FR_MAX_FILE_NUM ; // initialization
   if ( std::getenv( "G4GMocrenFile_MAX_FILE_NUM" ) != NULL ) {	
-    char * pcFileNum = getenv("G4GMocrenFile_MAX_FILE_NUM");
+    char * pcFileNum = std::getenv("G4GMocrenFile_MAX_FILE_NUM");
     char c10FileNum[10];
     std::strncpy(c10FileNum, pcFileNum, 9);
     c10FileNum[9] = '\0';

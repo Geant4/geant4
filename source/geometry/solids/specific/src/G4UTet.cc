@@ -22,10 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
 // 
 // Implementation for G4UTet wrapper class
+//
+// 1.11.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
@@ -81,7 +81,7 @@ G4UTet::G4UTet(const G4String& pName,
   G4double signed_vol=fV21.cross(fV31).dot(fV41);
   G4bool degenerate=std::fabs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
 
-  if(degeneracyFlag) *degeneracyFlag=degenerate;
+  if(degeneracyFlag) *degeneracyFlag = degenerate;
   else if (degenerate)
   {
     G4Exception("G4UTet::G4UTet()", "GeomSolids0002", FatalException,
@@ -246,7 +246,7 @@ G4Polyhedron* G4UTet::CreatePolyhedron() const
     xyz[i][2] = vec[i].z();
   }
 
-  G4Polyhedron *ph = new G4Polyhedron;
+  G4Polyhedron* ph = new G4Polyhedron;
   ph->createPolyhedron(4,4,xyz,faces);
   return ph;
 }

@@ -7,8 +7,8 @@
  generic ion projectiles), with Glauber-Gribov cross section and
  Binary Light Ion (BIC, with Precompound/de-excitation) and Fritiof (FTF)
  string model (with Precompound/de-excitation) for the final state.
- BIC is used for projectiles of kinetic energies below 4 GeV/nucleon, and
- FTF above 2 GeV/nucleon.
+ BIC is used for projectiles of kinetic energies below 6 GeV/nucleon, and
+ FTF above 3 GeV/nucleon.
  
  G4IonINCLXXPhysics
  ------------------

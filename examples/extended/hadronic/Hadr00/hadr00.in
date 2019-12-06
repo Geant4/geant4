@@ -19,8 +19,7 @@
 #
 /gun/particle proton
 /gun/energy 20. GeV
-#/testhadr/HistoType  root
-#/testhadr/HistoName  p_al
+#/testhadr/fileName  p_al
 /testhadr/verbose 1
 /run/beamOn 10
 #

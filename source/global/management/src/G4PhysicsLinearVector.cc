@@ -51,8 +51,8 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin,
 {
   type = T_G4PhysicsLinearVector;
 
-  dBin    = (theEmax-theEmin)/(G4double)theNbin;
-  baseBin = theEmin/dBin;
+  invdBin = 1./((theEmax-theEmin)/(G4double)theNbin);
+  baseBin = theEmin*invdBin;
 
   numberOfNodes = theNbin + 1;
   dataVector.reserve(numberOfNodes);
@@ -63,7 +63,7 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin,
 
   for (size_t i=1; i<numberOfNodes-1; ++i)
     {
-      binVector.push_back( theEmin + i*dBin );
+      binVector.push_back( theEmin + i/invdBin );
       dataVector.push_back(0.0);
     }
   binVector.push_back(theEmax);
@@ -82,8 +82,8 @@ G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success)
   {
-    dBin = binVector[1]-edgeMin;
-    baseBin = edgeMin/dBin;
+    invdBin = 1./(binVector[1]-edgeMin);
+    baseBin = edgeMin*invdBin;
   }
   return success;
 }
@@ -91,7 +91,7 @@ G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 void G4PhysicsLinearVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
-  dBin = binVector[1]-edgeMin;
-  baseBin = edgeMin/dBin;
+  invdBin = 1./(binVector[1]-edgeMin);
+  baseBin = edgeMin*invdBin;
 }
 

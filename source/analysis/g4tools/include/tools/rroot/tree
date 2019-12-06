@@ -23,6 +23,7 @@ public:
     static const std::string s_v("tools::rroot::tree");
     return s_v;
   }
+  virtual const std::string& s_cls() const {return s_class();}
 public: //iobject
   virtual const std::string& name() const {return m_name;}
   virtual const std::string& title() const {return m_title;}
@@ -37,7 +38,7 @@ public:
   ,m_out(a_file.out())
   ,m_name("")
   ,m_title("")
-  ,m_branches(a_fac,true,true)
+  ,m_branches(a_fac)
   ,m_entries(0)
   {
 #ifdef TOOLS_MEM
@@ -55,7 +56,7 @@ protected:
   ,m_file(a_from.m_file)
   ,m_fac(a_from.m_fac)
   ,m_out(a_from.m_out)
-  ,m_branches(m_fac,false,true)
+  ,m_branches(m_fac)
   {}
   tree& operator=(const tree&){return *this;}
 public:
@@ -92,6 +93,12 @@ public:
  
   branch* find_branch(const std::string& a_name,bool a_recursive = false) const {
     return _find_branch(m_branches,a_name,a_recursive);
+  }
+
+  branch_element* find_branch_element(const std::string& a_name,bool a_recursive = false) const {
+    branch* b = _find_branch(m_branches,a_name,a_recursive);
+    if(!b) return 0;
+    return id_cast<branch,branch_element>(*b);
   }
 
   base_leaf* find_leaf(const std::string& a_name,bool a_recursive = false) const {
@@ -263,6 +270,10 @@ public:
       if(vers>=18) {
         if(!a_buffer.read(dummy_int)) return false; //fDefaultEntryOffsetLen
       }
+      int fNClusterRange;
+      if(vers>=20) {
+        if(!a_buffer.read(fNClusterRange)) return false; //fNClusterRange
+      }
 
       if(!a_buffer.read(dummy_int64)) return false; //fMaxEntries
       if(!a_buffer.read(dummy_int64)) return false; //fMaxEntryLoop
@@ -274,6 +285,19 @@ public:
         if(!a_buffer.read(dummy_int64)) return false; //fAutoFlush
       }
       if(!a_buffer.read(dummy_int64)) return false; //fEstimate
+      if(vers>=20) {
+        int64* fClusterRangeEnd = 0;       ///<[fNClusterRange] Last entry of a cluster range.
+        if(!fixed_array_stream<int64>(a_buffer,fNClusterRange,fClusterRangeEnd)) return false;
+        delete [] fClusterRangeEnd;
+        int64* fClusterSize = 0;           ///<[fNClusterRange] Number of entries in each cluster for a given range.
+        if(!fixed_array_stream<int64>(a_buffer,fNClusterRange,fClusterSize)) return false;
+        delete [] fClusterSize;
+        dummy _dummy;
+        if(!_dummy.stream(a_buffer)) { //TIOFeatures fIOFeatures
+          m_out << "tools::rroot::tree::stream : can't read (dummy) TIOFeatures." << std::endl;
+          return false;
+        }
+      }
     }
 
     //FIXME if (fEstimate <= 10000) fEstimate = 1000000;
@@ -295,7 +319,7 @@ public:
     // In fact m_leaves are references to existing leaves read by 
     // the branches in the upper line of code.
     //::printf("debug : tree : read leaves : begin\n");    
-   {obj_array<base_leaf> m_leaves(m_fac,a_buffer.map_objs()?false:true,true);
+   {obj_array<base_leaf> m_leaves(m_fac);
     //branch b(m_out,m_fac);
     ifac::args args;
     //args[ifac::arg_branch()] = &b;

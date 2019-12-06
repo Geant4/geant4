@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4UnionSolid
+// G4UnionSolid
 //
 // Class description:
 //
-// Class for description of union of two CSG solids.
+// Class for description of union of two solids.
 
-// History: 
-//
-// 12.09.98 V.Grichine: created
-//
+// 12.09.98 V.Grichine - created
 // --------------------------------------------------------------------
 #ifndef G4UNIONSOLID_HH
 #define G4UNIONSOLID_HH
@@ -102,9 +96,9 @@ class G4UnionSolid : public G4BooleanSolid
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
-                            const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0 ) const ;
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 

@@ -15,7 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+30.08.2019  S. Guatelli, tag xraytel-V10-05-00
+            G4VIS_USE and G4UI_USE deleted
+ 
 10.05.2018   B.Morgan,  tag xraytel-V10-04-00
              Include G4Types before use of G4MULTITHREADED. For forward
              compatibility with move to #defines over -D for G4 preprocessor

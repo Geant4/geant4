@@ -23,82 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//  DormandPrince7 - 5(4) FSAL implementation by Somnath Banerjee
-//  Supervision / code review: John Apostolakis
+// G4FSALDormandPrince745
 //
-// Sponsored by Google in Google Summer of Code 2015.
+// Class description:
 //
-// First version: 25 May 2015
-//
-//
-//  History
-// ----------------------------------------------------
-//  Created : 25 May 2015.              - Somnath
-//
-//  Added interpolate() method:         - Somnath
-//      29 June 2015
+// DormandPrince7 - 5(4) FSAL stepper
 
-
-#ifndef FFDormand_Prince_745
-#define FFDormand_Prince_745
+// Created: Somnath Banerjee, Google Summer of Code 2015, 25 May 2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+#ifndef G4FSALDORMANDPRINCE745_HH
+#define G4FSALDORMANDPRINCE745_HH
 
 #include "G4VFSALIntegrationStepper.hh"
 
 class G4FSALDormandPrince745 : public G4VFSALIntegrationStepper
 {
   public:
-	G4FSALDormandPrince745(G4EquationOfMotion *EqRhs,
-					 G4int numberOfVariables = 6,
-					 G4bool primary =  true);
-	~G4FSALDormandPrince745();
 
-	void Stepper( const G4double y[],
+    G4FSALDormandPrince745(G4EquationOfMotion* EqRhs,
+                           G4int numberOfVariables = 6,
+                           G4bool primary = true);
+   ~G4FSALDormandPrince745();
+
+    G4FSALDormandPrince745(const G4FSALDormandPrince745&) = delete;
+    G4FSALDormandPrince745& operator=(const G4FSALDormandPrince745&) = delete;
+
+    void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
                         G4double yerr[],
                         G4double nextDydx[]) ;
     void interpolate( const G4double yInput[],
-                     const G4double dydx[],
-                     G4double yOut[],
-                     G4double Step,
-                     G4double tau ) ;
-    //For higher order Interpolant
+                      const G4double dydx[],
+                            G4double yOut[],
+                            G4double Step,
+                            G4double tau ) ;
+
     void SetupInterpolate( const G4double yInput[],
                            const G4double dydx[],
                            const G4double Step );
+      // For higher order Interpolant
     
-    //For calculating the output at the tau fraction of Step
     void Interpolate( const G4double yInput[],
                       const G4double dydx[],
                       const G4double Step,
-                      G4double yOut[],
-                      G4double tau );
+                            G4double yOut[],
+                            G4double tau );
+      // For calculating the output at the tau fraction of Step
     
 
     G4double  DistChord()   const;
-    G4int IntegratorOrder() const {return 4; }
-     G4bool isFSAL() const{ return true; }
-//    G4double *getLastDydx();
+    inline G4int IntegratorOrder() const {return 4; }
+    inline G4bool isFSAL() const { return true; }
     
-private :
-    
-    G4FSALDormandPrince745(const G4FSALDormandPrince745&);
-    G4FSALDormandPrince745& operator=(const G4FSALDormandPrince745&);
+  private:
     
     G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7,
-       *ak8, *ak9, 	//For additional stages in the interpolant
-       *yTemp, *yIn;
+             *ak8, *ak9,         // For additional stages in the interpolant
+             *yTemp, *yIn;
     
-    //Only for use with DistChord :-
-    G4double *pseudoDydx_for_DistChord;
+    G4double* pseudoDydx_for_DistChord;
+      // Only for use with DistChord()
     
-    G4double fLastStepLength;
+    G4double fLastStepLength = -1.0;
     G4double *fLastInitialVector, *fLastFinalVector,
-       *fInitialDyDx, *fLastDyDx, *fMidVector, *fMidError;
-    // for DistChord calculations
+             *fInitialDyDx, *fLastDyDx, *fMidVector, *fMidError;
+      // For DistChord() calculations
     
-    G4FSALDormandPrince745* fAuxStepper;
+    G4FSALDormandPrince745* fAuxStepper = nullptr;
 };
 
-#endif /* defined(__Geant4__FSALDormandPrince745__) */
+#endif

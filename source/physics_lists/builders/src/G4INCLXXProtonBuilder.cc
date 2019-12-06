@@ -59,5 +59,3 @@ Build(G4ProtonInelasticProcess * aP)
   aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
 }
 
-// 2011 by P. Kaitaniemi
-

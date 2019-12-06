@@ -23,18 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ChordFinderDelegate inline methods implementation
 //
-//
-//
-// class G4ChordFinderDelegate
-//
-// Class description:
-//
-// Implementation of common algorithm of finding step size 
-// with distance to chord less then provided value. 
-
-// History:
-// - Created. D.Sorokin
+// Created: D.Sorokin
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -71,23 +62,29 @@ AdvanceChordLimitedImpl(G4FieldTrack& yCurrent, G4double stepMax,
     G4FieldTrack yEnd = yCurrent;
     G4double nextStep;
 
-    const G4double stepPossible = FindNextChord(yCurrent, stepMax, epsStep, chordDistance, yEnd, dyErr, nextStep);
-
+    const G4double stepPossible = FindNextChord(yCurrent, stepMax,
+                                                epsStep, chordDistance,
+                                                yEnd, dyErr, nextStep);
     if (dyErr < epsStep * stepPossible)
     {
          // Accept this accuracy.
+         //
          yCurrent = yEnd;
          return stepPossible;
     }
 
     // Advance more accurately to "end of chord"
+    //
     const G4double startCurveLen = yCurrent.GetCurveLength();
-    const G4bool goodAdvance = GetDriver().AccurateAdvance(yCurrent, stepPossible, epsStep, nextStep);
+    const G4bool goodAdvance =
+          GetDriver().AccurateAdvance(yCurrent,stepPossible,epsStep,nextStep);
 
-    return goodAdvance ? stepPossible : yCurrent.GetCurveLength() - startCurveLen;
+    return goodAdvance ? stepPossible
+                       : yCurrent.GetCurveLength() - startCurveLen;
 }
 
 // Returns Length of Step taken
+//
 template <class T>
 G4double G4ChordFinderDelegate<T>::
 FindNextChord(const G4FieldTrack& yStart,
@@ -103,17 +100,16 @@ FindNextChord(const G4FieldTrack& yStart,
     // 2a.)  If d_chord is not good enough, find one that is.
 
     G4double dydx[G4FieldTrack::ncompSVEC];
-    G4double field[G4Field::MAX_NUMBER_OF_COMPONENTS];
   
     G4bool validEndPoint = false;
     G4double dChordStep, lastStepLength;
 
-    GetDriver().GetDerivatives(yStart, dydx, field);
-    const G4double inverseRadius = GetDriver().GetInverseCurvatureRadius(yStart, field);
+    GetDriver().GetDerivatives(yStart, dydx);
 
     const G4double safetyFactor = fFirstFraction; //  0.975 or 0.99 ? was 0.999
 
-    G4double stepTrial = std::min(stepMax, safetyFactor * fLastStepEstimate_Unconstrained);
+    G4double stepTrial = std::min(stepMax,
+                                  safetyFactor*fLastStepEstimate_Unconstrained);
 
     G4double newStepEst_Uncons = 0.0; 
     G4double stepForChord;
@@ -123,12 +119,12 @@ FindNextChord(const G4FieldTrack& yStart,
     for (; noTrials < maxTrials; ++noTrials)
     {
         yEnd = yStart; // Always start from initial point  
-        GetDriver().QuickAdvance(yEnd, dydx, stepTrial, inverseRadius, dChordStep, dyErrPos);
+        GetDriver().QuickAdvance(yEnd, dydx, stepTrial, dChordStep, dyErrPos);
         lastStepLength = stepTrial; 
 
         validEndPoint = dChordStep < chordDistance;
-        stepForChord = NewStep(stepTrial, dChordStep, chordDistance, newStepEst_Uncons);
-
+        stepForChord = NewStep(stepTrial, dChordStep,
+                               chordDistance, newStepEst_Uncons);
         if (validEndPoint)
         {
             break;
@@ -182,6 +178,7 @@ FindNextChord(const G4FieldTrack& yStart,
 // Is called to estimate the next step size, even for successful steps,
 // in order to predict an accurate 'chord-sensitive' first step
 // which is likely to assist in more performant 'stepping'.
+//
 template <class T>
 G4double G4ChordFinderDelegate<T>::
 NewStep(G4double stepTrialOld, 
@@ -296,7 +293,7 @@ void G4ChordFinderDelegate<T>::SetFractions_Last_Next(G4double fractLast,
     if (fractLast == -1.0) fractLast = 1.0;   // 0.9;
     if (fractNext == -1.0) fractNext = 0.98;  // 0.9; 
 
-    // fFirstFraction  = 0.999; // Orig 0.999 A safe value, range: ~ 0.95 - 0.999
+    // fFirstFraction  = 0.999; // Safe value, range: ~ 0.95 - 0.999
     if (GetDriver().GetVerboseLevel() > 0)
     { 
         G4cout << " ChordFnd> Trying to set fractions: "
@@ -373,7 +370,7 @@ void G4ChordFinderDelegate<T>::TestChordPrint(G4int noTrials,
                                               G4double fDeltaChord,
                                               G4double nextStepTrial)
 {
-     G4int oldprec= G4cout.precision(5);
+     G4int oldprec = G4cout.precision(5);
      G4cout << " ChF/fnc: notrial " << std::setw( 3) << noTrials 
             << " this_step= "       << std::setw(10) << lastStepTrial;
      if( std::fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 )

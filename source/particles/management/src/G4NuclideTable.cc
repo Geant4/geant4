@@ -174,7 +174,7 @@ void G4NuclideTable::GenerateNuclide()
 {
    if ( threshold_of_half_life < minimum_threshold_of_half_life ) {
       // Need to update full list
-      char* path = getenv("G4ENSDFSTATEDATA");
+      char* path = std::getenv("G4ENSDFSTATEDATA");
 
       if ( !path ) {
          G4Exception("G4NuclideTable", "PART70000",

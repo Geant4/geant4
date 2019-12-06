@@ -61,8 +61,9 @@ public:
   inline HepLorentzRotation();
   // Default constructor. Gives a unit matrix.
 
-  inline  HepLorentzRotation       (const HepLorentzRotation & r);
-  // Copy constructor.
+  inline  HepLorentzRotation (const HepLorentzRotation & r);
+  inline  HepLorentzRotation (HepLorentzRotation && r) = default;
+  // Copy and move constructors.
 
   inline           HepLorentzRotation (const HepRotation  & r);
   inline  explicit HepLorentzRotation (const HepRotationX & r);
@@ -74,6 +75,7 @@ public:
   inline  explicit HepLorentzRotation (const HepBoostZ &    b);
   // Constructors from special cases.  
 
+  inline HepLorentzRotation & operator = (HepLorentzRotation && m) = default;
   inline HepLorentzRotation & operator = (const HepLorentzRotation & m);
   inline HepLorentzRotation & operator = (const HepRotation        & m);
   inline HepLorentzRotation & operator = (const HepBoost           & m);

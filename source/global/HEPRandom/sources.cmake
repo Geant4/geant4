@@ -28,10 +28,11 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4heprandom 
     HEADERS
         G4Poisson.hh
+        G4QuickRand.hh
         G4RandomDirection.hh
         G4RandomTools.hh
-        Randomize.hh
 	G4UniformRandPool.hh
+        Randomize.hh
     SOURCES
         G4Poisson.cc
 	G4UniformRandPool.cc

@@ -31,16 +31,14 @@ public:
   sf_enum<sg::hjust> hjust;
   sf_enum<sg::vjust> vjust;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::base_text)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(strings)
-      TOOLS_ADD_FIELD_DESC(height)
-      TOOLS_ADD_FIELD_DESC(hjust)
-      TOOLS_ADD_FIELD_DESC(vjust)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),4, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(strings),
+      TOOLS_ARG_FIELD_DESC(height),
+      TOOLS_ARG_FIELD_DESC(hjust),
+      TOOLS_ARG_FIELD_DESC(vjust)
+    );
     return s_v;
   }
 private:

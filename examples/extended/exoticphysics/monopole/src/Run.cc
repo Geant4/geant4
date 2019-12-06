@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/Run.cc
+/// \file exoticphysics/monopole/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // 
@@ -77,9 +77,9 @@ void Run::Merge(const G4Run* run)
 void Run::EndOfRun(double binLength)
 {
 
-#ifndef G4MULTITHREADED
-  fNevt += this->GetNumberOfEvent();
-#endif
+  if ( ! G4Threading::IsMultithreadedApplication() ) {
+    fNevt += this->GetNumberOfEvent();
+  }
 
   G4int nEvents = fNevt;
   if (nEvents == 0) { return; }

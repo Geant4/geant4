@@ -93,19 +93,19 @@ COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX),
 fPrec (9), fPrec2 (16)
 {
 	// g4.prim filename and its directory
-	if ( getenv( "G4DAWNFILE_DEST_DIR" ) == NULL ) {
+	if ( std::getenv( "G4DAWNFILE_DEST_DIR" ) == NULL ) {
 		strcpy( fG4PrimDestDir , "" )                      ;  // output dir
 		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME );  // filename
 	} else {
-		strcpy( fG4PrimDestDir , getenv( "G4DAWNFILE_DEST_DIR" ) ); // output dir
+		strcpy( fG4PrimDestDir , std::getenv( "G4DAWNFILE_DEST_DIR" ) ); // output dir
 		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME        ); // filename 
 	}
 		
 	// maximum number of g4.prim files in the dest directory
 	fMaxFileNum = FR_MAX_FILE_NUM ; // initialization
-	if ( getenv( "G4DAWNFILE_MAX_FILE_NUM" ) != NULL ) {	
+	if ( std::getenv( "G4DAWNFILE_MAX_FILE_NUM" ) != NULL ) {	
 		
-		sscanf( getenv("G4DAWNFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
+		sscanf( std::getenv("G4DAWNFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
 
 	} else {
 		fMaxFileNum = FR_MAX_FILE_NUM ;
@@ -114,8 +114,8 @@ fPrec (9), fPrec2 (16)
 
 
 		//----- precision control
-	if( getenv( "G4DAWNFILE_PRECISION" ) != NULL ) {
-		sscanf( getenv("G4DAWNFILE_PRECISION"), "%d", &fPrec ) ;
+	if( std::getenv( "G4DAWNFILE_PRECISION" ) != NULL ) {
+		sscanf( std::getenv("G4DAWNFILE_PRECISION"), "%d", &fPrec ) ;
 	} else {
                 fPrec = 9 ;
 	}

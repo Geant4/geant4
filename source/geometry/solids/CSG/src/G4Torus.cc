@@ -23,38 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Torus implementation
 //
-//
-// 
-// class G4Torus
-//
-// Implementation
-//
-// 16.12.16 H.Burkhardt: use radius differences and hypot to improve precision
-// 28.10.16 E.Tcherniaev: reimplemented CalculateExtent(),
-//                      removed CreateRotatedVertices()
-// 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
-// 02.10.07 T.Nikitina: Bug fixed in SolveNumericJT(), b.969:segmentation fault.
-//                      rootsrefined is used only if the number of refined roots
-//                      is the same as for primary roots. 
-// 02.10.07 T.Nikitina: Bug fixed in CalculateExtent() for case of non-rotated
-//                      full-phi torus:protect against negative value for sqrt,
-//                      correct  formula for delta.  
-// 20.11.05 V.Grichine: Bug fixed in Inside(p) for phi sections, b.810 
-// 25.08.05 O.Link: new methods for DistanceToIn/Out using JTPolynomialSolver
-// 07.06.05 V.Grichine: SurfaceNormal(p) for rho=0, Constructor as G4Cons 
-// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 18.03.04 V.Grichine: bug fixed in DistanceToIn(p)
-// 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
-// 03.10.00 E.Medernach: SafeNewton added
-// 31.08.00 E.Medernach: numerical computation of roots wuth bounding
-//                       volume technique
-// 26.05.00 V.Grichine: new fuctions developed by O.Cremonesi were added
-// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 19.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
 // 30.10.96 V.Grichine: first implementation with G4Tubs elements in Fs
-//
+// 26.05.00 V.Grichine: added new fuctions developed by O.Cremonesi
+// 31.08.00 E.Medernach: numerical computation of roots with bounding volume
+// 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
+// 25.08.05 O.Link: new methods for DistanceToIn/Out using JTPolynomialSolver
+// 28.10.16 E.Tcherniaev: new CalculateExtent(); removed CreateRotatedVertices()
+// 16.12.16 H.Burkhardt: use radius differences and hypot to improve precision
+// --------------------------------------------------------------------
 
 #include "G4Torus.hh"
 
@@ -205,7 +184,7 @@ G4Torus::~G4Torus()
 
 G4Torus::G4Torus(const G4Torus& rhs)
   : G4CSGSolid(rhs), fRmin(rhs.fRmin),fRmax(rhs.fRmax),
-    fRtor(rhs.fRtor),fSPhi(rhs.fSPhi),fDPhi(rhs.fDPhi),
+    fRtor(rhs.fRtor), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
     fRminTolerance(rhs.fRminTolerance), fRmaxTolerance(rhs.fRmaxTolerance),
     kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
     halfCarTolerance(rhs.halfCarTolerance),
@@ -283,7 +262,7 @@ void G4Torus::TorusRootsJT( const G4ThreeVector& p,
 
   num = torusEq.FindRoots( c, 4, srd, si );
   
-  for ( i = 0; i < num; i++ ) 
+  for ( i = 0; i < num; ++i ) 
   {
     if( si[i] == 0. )  { roots.push_back(srd[i]) ; }  // store real roots
   }  
@@ -318,7 +297,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
 
   // determine the smallest non-negative solution
   //
-  for ( size_t k = 0 ; k<roots.size() ; k++ )
+  for ( size_t k = 0 ; k<roots.size() ; ++k )
   {
     t = roots[k] ;
 
@@ -472,7 +451,7 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -755,12 +734,12 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   } 
   if( distRMax <= delta )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   else if( fRmin && (distRMin <= delta) ) // Must not be on both Outer and Inner
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm -= nR;
   }
 
@@ -771,12 +750,12 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   {
     if (distSPhi <= dAngle)
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= dAngle) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
@@ -971,7 +950,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4double safe = std::max(std::max(distX,distY),distZ);
   if (safe > Dmax)
   {
-    G4double dist = safe - 1.e-8*safe - boxMin; // to stay outside after the move
+    G4double dist = safe - 1.e-8*safe - boxMin; // stay outside after the move
     dist += DistanceToIn(p + dist*v, v);
     return (dist >= kInfinity) ? kInfinity : dist;
   }
@@ -1170,8 +1149,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
                                  const G4ThreeVector& v,
                                  const G4bool calcNorm,
-                                       G4bool *validNorm,
-                                       G4ThreeVector  *n  ) const
+                                       G4bool* validNorm,
+                                       G4ThreeVector* n ) const
 {
   ESide    side = kNull, sidephi = kNull ;
   G4double snxt = kInfinity, sphi, sd[4] ;
@@ -1549,7 +1528,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 
   // Check if phi divided, Calc distances closest phi plane
   //
-  if (fDPhi<twopi) // Above/below central phi of Torus?
+  if (fDPhi < twopi) // Above/below central phi of Torus?
   {
     phiC    = fSPhi + fDPhi*0.5 ;
     cosPhiC = std::cos(phiC) ;

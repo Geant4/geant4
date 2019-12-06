@@ -96,17 +96,17 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
     if (field == 0) {
       ccalField = NULL;
       G4cout << "***************************" << G4endl
-	     << "*                         *" << G4endl
-	     << "*  Magnetic Field is off  *" << G4endl
-	     << "*                         *" << G4endl
-	     << "***************************" << G4endl;
+             << "*                         *" << G4endl
+             << "*  Magnetic Field is off  *" << G4endl
+             << "*                         *" << G4endl
+             << "***************************" << G4endl;
     } else {
       G4cout << "***************************" << G4endl
-	     << "*                         *" << G4endl
-	     << "*  Magnetic Field is on   *" << G4endl
-	     << "*                         *" << G4endl
-	     << "***************************" << G4endl << G4endl
-	     << " Field Value " << tab << field << G4endl;
+             << "*                         *" << G4endl
+             << "*  Magnetic Field is on   *" << G4endl
+             << "*                         *" << G4endl
+             << "***************************" << G4endl << G4endl
+             << " Field Value " << tab << field << G4endl;
     }
     G4FieldManager* fieldMgr
       = G4TransportationManager::GetTransportationManager()->GetFieldManager();
@@ -161,11 +161,11 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
   sensitive = CCalSensitiveConfiguration::getInstance()->
     getSensitiveFlag("HadronCalorimeter");
   if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
-		     addCaloSD("HadronCalorimeter", new CCalHcalOrganization);
+                     addCaloSD("HadronCalorimeter", new CCalHcalOrganization);
   sensitive = CCalSensitiveConfiguration::getInstance()->
     getSensitiveFlag("CrystalMatrixModule");
   if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
-		     addCaloSD("CrystalMatrix", new CCalEcalOrganization);
+                     addCaloSD("CrystalMatrix", new CCalEcalOrganization);
 
   //Assign the sensitive detectors
   /*result =*/ CCalSensAssign::getInstance()->assign();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/include/ExN04EMPhysics.hh
+/// \file ExN04EMPhysics.hh
 /// \brief Definition of the ExN04EMPhysics class
 //
 //

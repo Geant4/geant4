@@ -197,6 +197,12 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   cenCmd->SetUnitCategory("Energy");
   cenCmd->AvailableForStates(G4State_PreInit);
 
+  max5DCmd = new G4UIcmdWithADoubleAndUnit("/process/em/max5DMuPairEnergy",this);
+  max5DCmd->SetGuidance("Set the max kinetic energy for 5D muon pair production");
+  max5DCmd->SetParameterName("emax5D",true);
+  max5DCmd->SetUnitCategory("Energy");
+  max5DCmd->AvailableForStates(G4State_PreInit);
+
   lowEnCmd = new G4UIcmdWithADoubleAndUnit("/process/em/lowestElectronEnergy",this);
   lowEnCmd->SetGuidance("Set the lowest kinetic energy for e+-");
   lowEnCmd->SetParameterName("elow",true);
@@ -285,7 +291,18 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   screCmd = new G4UIcmdWithADouble("/process/msc/ScreeningFactor",this);
   screCmd->SetGuidance("Set screening factor");
   screCmd->SetParameterName("screen",true);
-  screCmd->AvailableForStates(G4State_Idle);
+  screCmd->AvailableForStates(G4State_PreInit);
+
+  safCmd = new G4UIcmdWithADouble("/process/msc/SafetyFactor",this);
+  safCmd->SetGuidance("Set safety factor");
+  safCmd->SetParameterName("fsafe",true);
+  safCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  llimCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/LambdaLimit",this);
+  llimCmd->SetGuidance("Set the upper energy limit for NIEL");
+  llimCmd->SetParameterName("ll",true);
+  llimCmd->SetUnitCategory("Length");
+  llimCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for EM tables");
@@ -395,6 +412,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete minSubSecCmd;
   delete minEnCmd;
   delete maxEnCmd;
+  delete max5DCmd;
   delete cenCmd;
   delete lowEnCmd;
   delete lowhEnCmd;
@@ -410,6 +428,8 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete fr1Cmd;
   delete fgCmd;
   delete skinCmd;
+  delete safCmd;
+  delete llimCmd;
   delete screCmd;
 
   delete dedxCmd;
@@ -483,6 +503,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));
   } else if (command == maxEnCmd) { 
     theParameters->SetMaxEnergy(maxEnCmd->GetNewDoubleValue(newValue));
+  } else if (command == max5DCmd) { 
+    theParameters->SetMaxEnergyFor5DMuPair(max5DCmd->GetNewDoubleValue(newValue));
   } else if (command == cenCmd) { 
     theParameters->SetMaxEnergyForCSDARange(cenCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
@@ -524,6 +546,12 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == skinCmd) { 
     theParameters->SetMscSkin(skinCmd->GetNewDoubleValue(newValue));
+    physicsModified = true;
+  } else if (command == safCmd) { 
+    theParameters->SetMscSafetyFactor(safCmd->GetNewDoubleValue(newValue));
+    physicsModified = true;
+  } else if (command == llimCmd) { 
+    theParameters->SetMscLambdaLimit(llimCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
   } else if (command == screCmd) { 
     theParameters->SetScreeningFactor(screCmd->GetNewDoubleValue(newValue));

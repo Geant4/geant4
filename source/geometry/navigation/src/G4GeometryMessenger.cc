@@ -23,15 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// class G4GeometryMessenger implementation
 //
-//
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GeometryMessenger
-//
-// Author: G.Cosmo, CERN.
-//
+// Author: G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -56,7 +50,7 @@
 // Constructor
 //
 G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
-  : tol(0.0), recLevel(0), recDepth(-1), tmanager(tman), tvolume(0)
+  : tmanager(tman)
 {
   geodir = new G4UIdirectory( "/geometry/" );
   geodir->SetGuidance( "Geometry control commands." );
@@ -193,7 +187,7 @@ G4GeometryMessenger::Init()
 {
   // Create checker...
   //
-  if (!tvolume)
+  if (tvolume == nullptr)
   {
     // Get the world volume
     //
@@ -220,6 +214,9 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   }
   else if (command == chkCmd) {
     SetCheckMode( newValues );
+  }
+  else if (command == pchkCmd) {
+    SetPushFlag( newValues );
   }
   else if (command == tolCmd) {
     Init();
@@ -257,10 +254,11 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
 // GetCurrentValue
 //
 G4String
-G4GeometryMessenger::GetCurrentValue(G4UIcommand* command )
+G4GeometryMessenger::GetCurrentValue( G4UIcommand* command )
 {
   G4String cv = "";
-  if (command == tolCmd) {
+  if (command == tolCmd)
+  {
     cv = tolCmd->ConvertToString( tol, "mm" );
   }
   return cv;
@@ -275,7 +273,8 @@ G4GeometryMessenger::CheckGeometry()
   // Verify that the geometry is closed
   //
   G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-  if (!geomManager->IsGeometryClosed()) {
+  if (!geomManager->IsGeometryClosed())
+  {
     geomManager->OpenGeometry();
     geomManager->CloseGeometry(true);
   }	

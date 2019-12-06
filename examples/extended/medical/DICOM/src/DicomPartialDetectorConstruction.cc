@@ -264,24 +264,30 @@ ReadVoxelDensitiesPartial( std::ifstream& fin )
 {
     std::map<G4int, std::pair<G4double,G4double> > densiMinMax;
     std::map<G4int, std::pair<G4double,G4double> >::iterator mpite;
-    for( size_t ii = 0; ii < fOriginalMaterials.size(); ii++ ){
-        densiMinMax[ii] = std::pair<G4double,G4double>(DBL_MAX,-DBL_MAX);
+    for( G4int ii = 0; ii < G4int(fOriginalMaterials.size()); ++ii )
+    {
+       densiMinMax[ii] = std::pair<G4double,G4double>(DBL_MAX,-DBL_MAX);
     }
 
     //----- Define density differences (maximum density difference to create
     // a new material)
-    char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
+    char* part = std::getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
     G4double densityDiff = -1.;
     if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
     std::map<G4int,G4double> densityDiffs;
-    if( densityDiff != -1. ) {
-        for( size_t ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+    if( densityDiff != -1. )
+    {
+        for( G4int ii = 0; ii < G4int(fOriginalMaterials.size()); ++ii )
+        {
             densityDiffs[ii] = densityDiff; //currently all materials
             //with same step
         }
-    }else {
+    }
+    else
+    {
         if( fMaterials.size() == 0 ) { // do it only for first slice
-            for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+            for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ++ii )
+            {
                 fMaterials.push_back( fOriginalMaterials[ii] );
             }
         }
@@ -296,23 +302,26 @@ ReadVoxelDensitiesPartial( std::ifstream& fin )
 
   //---- Read the material densities
   G4int copyNo = 0;
-  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
+  for( G4int iz = 0; iz < fNVoxelZ; ++iz )
+  {
     std::map< G4int, G4int > ifmin = fFilledMins[iz];
     std::map< G4int, G4int > ifmax = fFilledMaxs[iz];
-    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
+    for( G4int iy = 0; iy < fNVoxelY; ++iy )
+    {
       ifxmin1 = ifmin[iy];
       ifxmax1 = ifmax[iy];
-      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+      for( G4int ix = 0; ix < fNVoxelX; ++ix )
+      {
         if( ix >= G4int(ifxmin1) && ix <= G4int(ifxmax1) ) {
           fin >> dens1;
         //--- store the minimum and maximum density for each material
           //(just for printing)
-          mpite = densiMinMax.find( fMateIDs[copyNo] );
+          mpite = densiMinMax.find( G4int(fMateIDs[copyNo]) );
           if( dens1 < (*mpite).second.first ) (*mpite).second.first = dens1;
           if( dens1 > (*mpite).second.second ) (*mpite).second.second = dens1;
 
           //--- Get material from original list of material in file
-          G4int mateID = fMateIDs[copyNo];
+          G4int mateID = G4int(fMateIDs[copyNo]);
           G4Material* mate = fOriginalMaterials[mateID];
           //        G4cout << copyNo << " mateID " << mateID << G4endl;
           //--- Check if density is equal to the original material density
@@ -336,9 +345,8 @@ ReadVoxelDensitiesPartial( std::ifstream& fin )
           //--- Look if it is the first voxel with this material/densityBin
           std::pair<G4Material*,G4int> matdens(mate, densityBin );
 
-          std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite
-          = newMateDens.find( matdens );
-          if( mppite != newMateDens.end() ){
+          auto mppite = newMateDens.find( matdens );
+          if( mppite != newMateDens.cend() ){
             matInfo* mi = (*mppite).second;
             mi->fSumdens += dens1;
             mi->fNvoxels++;
@@ -349,7 +357,7 @@ ReadVoxelDensitiesPartial( std::ifstream& fin )
             matInfo* mi = new matInfo;
             mi->fSumdens = dens1;
             mi->fNvoxels = 1;
-            mi->fId = newMateDens.size()+1;
+            mi->fId = G4int(newMateDens.size()+1);
             newMateDens[matdens] = mi;
             fMateIDs[copyNo] = fOriginalMaterials.size()-1 + mi->fId;
             //          G4cout << copyNo << " mat new first "
@@ -366,15 +374,16 @@ ReadVoxelDensitiesPartial( std::ifstream& fin )
 
   //----- Build the list of phantom materials that go to Parameterisation
   //--- Add original materials
-  std::vector<G4Material*>::const_iterator mimite;
-  for( mimite = fOriginalMaterials.begin(); mimite != fOriginalMaterials.end();
-       mimite++ ){
+  for( auto mimite = fOriginalMaterials.cbegin();
+            mimite != fOriginalMaterials.cend(); ++mimite )
+  {
     fPhantomMaterials.push_back( (*mimite) );
   }
   //
   //---- Build and add new materials
-  std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite;
-  for( mppite= newMateDens.begin(); mppite != newMateDens.end(); mppite++ ){
+  for( auto mppite= newMateDens.cbegin();
+            mppite != newMateDens.cend(); ++mppite )
+  {
     G4double averdens = (*mppite).second->fSumdens/(*mppite).second->fNvoxels;
     G4double saverdens = G4int(1000.001*averdens)/1000.;
     G4cout << "GmReadPhantomGeometry::ReadVoxelDensities AVER DENS "
@@ -390,9 +399,8 @@ ReadVoxelDensitiesPartial( std::ifstream& fin )
     G4UIcommand::ConvertToString(saverdens);
     fPhantomMaterials.push_back( BuildMaterialWithChangingDensity(
                                   (*mppite).first.first,
-    averdens, mateName ) );
+                                 G4float(averdens), mateName ) );
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

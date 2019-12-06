@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:   PhysListEm5DStandard
@@ -99,11 +98,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEm5DStandard::PhysListEm5DStandard(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmStandard_5D"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandard_5D"), fVerbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(fVerbose);
   param->SetNumberOfBinsPerDecade(10);
   param->SetMscStepLimitType(fUseSafetyPlus);
   param->SetLateralDisplacementAlg96(false);
@@ -151,7 +150,7 @@ void PhysListEm5DStandard::ConstructParticle()
 
 void PhysListEm5DStandard::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(fVerbose > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();

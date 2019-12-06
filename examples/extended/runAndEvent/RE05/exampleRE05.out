@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -74,8 +78,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -438,7 +441,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 1 GeV ---> 5 GeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
         Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
@@ -452,8 +455,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: ionElastic
@@ -468,8 +471,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -480,8 +483,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -530,8 +533,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -575,14 +579,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -597,7 +601,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -610,7 +614,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -622,7 +626,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -636,8 +640,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -659,26 +663,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -692,9 +694,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 1 GeV ---> 5 GeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
         Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -704,8 +706,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -714,21 +716,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 
 Region <DefaultRegionForTheWorld> --  -- appears in <expHall_P> world volume
@@ -813,9 +818,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 start.
 G4HEPEvtInterface - reading 484 HEPEvt particles from pythia_event.data.
 >>> Event 0
-     64 hits are stored in RE05TrackerHitsCollection.
-     43 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.384649562283 (GeV)
+     59 hits are stored in RE05TrackerHitsCollection.
+     55 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.0292944107239 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 755 HEPEvt particles from pythia_event.data.
 >>> Event 1
@@ -833,19 +838,19 @@ G4HEPEvtInterface - reading 448 HEPEvt particles from pythia_event.data.
 >>> Event 3
      0 hits are stored in RE05TrackerHitsCollection.
      3 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.5213123953386 (GeV)
+     Total energy deposition in calorimeter : 0.52761370039897 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 945 HEPEvt particles from pythia_event.data.
 >>> Event 4
-     91 hits are stored in RE05TrackerHitsCollection.
-     66 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.55169773381 (GeV)
+     96 hits are stored in RE05TrackerHitsCollection.
+     69 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 13.392121975075 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 837 HEPEvt particles from pythia_event.data.
 >>> Event 5
-     34 hits are stored in RE05TrackerHitsCollection.
-     8 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.893553689354 (GeV)
+     42 hits are stored in RE05TrackerHitsCollection.
+     7 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.9037253278377 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
 >>> Event 6
@@ -855,26 +860,26 @@ G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 627 HEPEvt particles from pythia_event.data.
 >>> Event 7
-     40 hits are stored in RE05TrackerHitsCollection.
-     31 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.5260217765565 (GeV)
+     35 hits are stored in RE05TrackerHitsCollection.
+     30 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.712897793788 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 682 HEPEvt particles from pythia_event.data.
 >>> Event 8
-     63 hits are stored in RE05TrackerHitsCollection.
-     46 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.0701691792948 (GeV)
+     49 hits are stored in RE05TrackerHitsCollection.
+     49 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.6164979229249 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 330 HEPEvt particles from pythia_event.data.
 >>> Event 9
-     61 hits are stored in RE05TrackerHitsCollection.
-     22 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.4707435362998 (GeV)
+     12 hits are stored in RE05TrackerHitsCollection.
+     24 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.2232230686275 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.210000s Real=3.342846s Sys=0.020000s
+  User=2.310000s Real=2.479823s Sys=0.030000s
 #
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -888,14 +893,16 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
-G4Integration Driver Stats: #QuickAdvance 37363 - #AccurateAdvance 3078 #good steps 3298 #bad steps 49
+G4Integration Driver Stats: #QuickAdvance 50 - #AccurateAdvance 0 #good steps 0 #bad steps 0
 G4ChordFinder statistics report: 
-  No trials: 37236  No Calls: 37134  Max-trial: 2
+  No trials: 50  No Calls: 50  Max-trial: 1
   Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
+G4ChordFinder statistics report: 
+  No trials: 45342  No Calls: 44637  Max-trial: 6
 TransportationManager deleted.
-Total navigation history collections cleaned: 426
+Total navigation history collections cleaned: 414
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.697 MB
+Pool ID '20G4NavigationLevelRep', size : 0.678 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.13 MB
@@ -903,18 +910,18 @@ Pool ID '16G4HEPEvtParticle', size : 0.0221 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.7 MB
-Pool ID '7G4Track', size : 1.2 MB
-Pool ID '18G4TouchableHistory', size : 0.0509 MB
+Pool ID '17G4DynamicParticle', size : 0.689 MB
+Pool ID '7G4Track', size : 1.17 MB
+Pool ID '18G4TouchableHistory', size : 0.05 MB
 Pool ID '15G4CountedObjectIvE', size : 0.00673 MB
 Pool ID '12G4Trajectory', size : 0.0279 MB
-Pool ID '17G4TrajectoryPoint', size : 0.159 MB
+Pool ID '17G4TrajectoryPoint', size : 0.158 MB
 Pool ID '14RE05TrackerHit', size : 0.00385 MB
 Pool ID '18RE05CalorimeterHit', size : 0.00961 MB
 Pool ID '11RE05MuonHit', size : 0.000961 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
-Pool ID '10G4Fragment', size : 0.00577 MB
-Pool ID '17G4ReactionProduct', size : 0.0115 MB
+Pool ID '10G4Fragment', size : 0.00673 MB
+Pool ID '17G4ReactionProduct', size : 0.00961 MB
 Number of memory pools allocated: 20 of which, static: 0
 Dynamic pools deleted: 20 / Total memory freed: 3 MB
 ============================================================

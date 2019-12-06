@@ -61,6 +61,7 @@
 
 #include "G4ClassicalRK4.hh"
 #include "G4MagIntegratorStepper.hh"
+#include "G4IntegrationDriver.hh"
 #include "G4ChordFinder.hh"
 #include "G4PropagatorInField.hh"
 
@@ -142,6 +143,8 @@ G4ThreadLocal G4UniformGravityField* F06DetectorConstruction::fField = 0;
 
 void F06DetectorConstruction::ConstructSDandField()
 {
+  using StepperType = G4ClassicalRK4;
+   
   if (!fField) {
 
      fField = new G4UniformGravityField();
@@ -149,40 +152,49 @@ void F06DetectorConstruction::ConstructSDandField()
      G4RepleteEofM* equation = new G4RepleteEofM(fField);
 //     G4EqGravityField* equation = new G4EqGravityField(fField);
 
-     G4FieldManager* fieldManager
-      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+     G4TransportationManager* transportMgr =
+                           G4TransportationManager::GetTransportationManager();
+
+     G4FieldManager* fieldManager= transportMgr->GetFieldManager();
      fieldManager->SetDetectorField(fField);
 
-//     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,12);
-     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,8);
+     const int nVar= 8;  // 12 for RepleteEofM
+     StepperType* stepper = new StepperType(equation,nVar);
 
      G4double minStep           = 0.01*mm;
+     G4ChordFinder* chordFinder = nullptr;     
+     if( stepper )
+     {
+        auto intgrDriver = new G4IntegrationDriver<StepperType>(minStep,
+                                          stepper,
+                                          stepper->GetNumberOfVariables());
+        if( intgrDriver ){
+           chordFinder = new G4ChordFinder(intgrDriver);
+        }
+     }
 
-     G4ChordFinder* chordFinder = 
-                   new G4ChordFinder((G4MagneticField*)fField,minStep,stepper);
-
+     // OLD -- and wrong
+     // new G4ChordFinder((G4MagneticField*)fField,minStep,stepper);
+     
      // Set accuracy parameters
      G4double deltaChord        = 3.0*mm;
      chordFinder->SetDeltaChord( deltaChord );
 
-     G4double deltaOneStep      = 0.01*mm;
-     fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
-
      G4double deltaIntersection = 0.1*mm;
      fieldManager->SetDeltaIntersection(deltaIntersection);
 
-     G4TransportationManager* transportManager =
-                           G4TransportationManager::GetTransportationManager();
-
-     G4PropagatorInField* fieldPropagator =
-                                      transportManager->GetPropagatorInField();
-
-     G4double epsMin            = 2.5e-7*mm;
-     G4double epsMax            = 0.05*mm;
-
-     fieldPropagator->SetMinimumEpsilonStep(epsMin);
-     fieldPropagator->SetMaximumEpsilonStep(epsMax);
-
+     //  Control accuracy of integration
+     //
+     G4double deltaOneStep = 0.01*mm;
+     fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+     //  
+     G4double epsMax       = 1.0e-4;  // Pure number -- maximum relative integration error
+     G4double epsMin       = 2.5e-7;  // 
+     fieldManager->SetMinimumEpsilonStep(epsMin);
+     fieldManager->SetMaximumEpsilonStep(epsMax);
+     // The acceptable relative accuracy is calculated  as  deltaOneStep / stepsize
+     //    but bounded to the interval between these values!
+     
      fieldManager->SetChordFinder(chordFinder);
   }
 }

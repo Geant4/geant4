@@ -8,6 +8,10 @@
                       Example History file
                       ---------------------
 
+18.11.2019 - G.Cosmo (ccal-V10-05-01)
+- Fixed cases of type conversions from size_t to G4int in CCaloSD.
+- Some code cleanup.
+
 31.01.2019 - I.Hrivnacova (ccal-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 

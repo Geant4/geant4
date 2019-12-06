@@ -739,6 +739,20 @@ G4bool G4VAnalysisManager::SetH1YAxisTitle(G4int id, const G4String& title)
 
 //_____________________________________________________________________________
 inline 
+G4bool G4VAnalysisManager::SetH1XAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH1HnManager->SetXAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH1YAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH1HnManager->SetYAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
 G4bool G4VAnalysisManager::SetH2Title(G4int id, const G4String& title)
 {
   return fVH2Manager->SetH2Title(id, title);
@@ -764,6 +778,27 @@ G4bool G4VAnalysisManager::SetH2ZAxisTitle(G4int id, const G4String& title)
 {
   return fVH2Manager->SetH2ZAxisTitle(id, title);
 }  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH2XAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH2HnManager->SetXAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH2YAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH2HnManager->SetYAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH2ZAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH2HnManager->SetZAxisIsLog(id, isLog);
+}
 
 //_____________________________________________________________________________
 inline 
@@ -795,6 +830,27 @@ G4bool G4VAnalysisManager::SetH3ZAxisTitle(G4int id, const G4String& title)
 
 //_____________________________________________________________________________
 inline 
+G4bool G4VAnalysisManager::SetH3XAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH3HnManager->SetXAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH3YAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH3HnManager->SetYAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetH3ZAxisIsLog(G4int id, G4bool isLog)
+{
+  return fH3HnManager->SetZAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
 G4bool G4VAnalysisManager::SetP1Title(G4int id, const G4String& title)
 {
   return fVP1Manager->SetP1Title(id, title);
@@ -813,6 +869,20 @@ G4bool G4VAnalysisManager::SetP1YAxisTitle(G4int id, const G4String& title)
 {
   return fVP1Manager->SetP1YAxisTitle(id, title);
 }  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetP1XAxisIsLog(G4int id, G4bool isLog)
+{
+  return fP1HnManager->SetXAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetP1YAxisIsLog(G4int id, G4bool isLog)
+{
+  return fP1HnManager->SetYAxisIsLog(id, isLog);
+}
 
 //_____________________________________________________________________________
 inline 
@@ -844,6 +914,27 @@ G4bool G4VAnalysisManager::SetP2ZAxisTitle(G4int id, const G4String& title)
 
 //_____________________________________________________________________________
 inline 
+G4bool G4VAnalysisManager::SetP2XAxisIsLog(G4int id, G4bool isLog)
+{
+  return fP2HnManager->SetXAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetP2YAxisIsLog(G4int id, G4bool isLog)
+{
+  return fP2HnManager->SetYAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::SetP2ZAxisIsLog(G4int id, G4bool isLog)
+{
+  return fP2HnManager->SetZAxisIsLog(id, isLog);
+}
+
+//_____________________________________________________________________________
+inline 
 G4String G4VAnalysisManager::GetH1Title(G4int id) const
 {
   return fVH1Manager->GetH1Title(id);
@@ -862,6 +953,20 @@ G4String G4VAnalysisManager::GetH1YAxisTitle(G4int id) const
 {
   return fVH1Manager->GetH1YAxisTitle(id);
 }  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH1XAxisIsLog(G4int id) const
+{
+  return fH1HnManager->GetXAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH1YAxisIsLog(G4int id) const
+{
+  return fH1HnManager->GetYAxisIsLog(id);
+}
 
 //_____________________________________________________________________________
 inline 
@@ -893,6 +998,27 @@ G4String G4VAnalysisManager::GetH2ZAxisTitle(G4int id) const
 
 //_____________________________________________________________________________
 inline 
+G4bool G4VAnalysisManager::GetH2XAxisIsLog(G4int id) const
+{
+  return fH2HnManager->GetXAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH2YAxisIsLog(G4int id) const
+{
+  return fH2HnManager->GetYAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH2ZAxisIsLog(G4int id) const
+{
+  return fH2HnManager->GetZAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
 G4String G4VAnalysisManager::GetH3Title(G4int id) const
 {
   return fVH3Manager->GetH3Title(id);
@@ -921,6 +1047,27 @@ G4String G4VAnalysisManager::GetH3ZAxisTitle(G4int id) const
 
 //_____________________________________________________________________________
 inline 
+G4bool G4VAnalysisManager::GetH3XAxisIsLog(G4int id) const
+{
+  return fH3HnManager->GetXAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH3YAxisIsLog(G4int id) const
+{
+  return fH3HnManager->GetYAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetH3ZAxisIsLog(G4int id) const
+{
+  return fH3HnManager->GetZAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
 G4String G4VAnalysisManager::GetP1Title(G4int id) const
 {
   return fVP1Manager->GetP1Title(id);
@@ -939,6 +1086,20 @@ G4String G4VAnalysisManager::GetP1YAxisTitle(G4int id) const
 {
   return fVP1Manager->GetP1YAxisTitle(id);
 }  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetP1XAxisIsLog(G4int id) const
+{
+  return fP1HnManager->GetXAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetP1YAxisIsLog(G4int id) const
+{
+  return fP1HnManager->GetYAxisIsLog(id);
+}
 
 //_____________________________________________________________________________
 inline 
@@ -967,6 +1128,28 @@ G4String G4VAnalysisManager::GetP2ZAxisTitle(G4int id) const
 {
   return fVP2Manager->GetP2ZAxisTitle(id);
 }  
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetP2XAxisIsLog(G4int id) const
+{
+  return fP2HnManager->GetXAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetP2YAxisIsLog(G4int id) const
+{
+  return fP2HnManager->GetYAxisIsLog(id);
+}
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::GetP2ZAxisIsLog(G4int id) const
+{
+  return fP2HnManager->GetZAxisIsLog(id);
+}
+
 
 //_____________________________________________________________________________
 inline 

@@ -19,6 +19,10 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+23rd October 2019 Ben Morgan (openinventor-V10-05-07)
+- Remove inclusion of QT_USE_FILE from CMake scripts.
+  All usage is now through the qtX_ macros and imported targets
+
 14 June 2019  Gabriele Cosmo (openinventor-V10-05-06)
 - Fixed compilation error in G4OpenInventorViewer::CompareForKernelVisit()
   for typo introduced in previous tag...

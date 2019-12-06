@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04MuonSD.hh
+/// \file ExN04MuonSD.hh
 /// \brief Definition of the ExN04MuonSD class
 //
 

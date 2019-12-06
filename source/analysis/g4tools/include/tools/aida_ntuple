@@ -150,8 +150,12 @@ protected:
   }
 public:
   std::ostream& out() const {return m_out;}
-  const std::vector<base_col*>& cols() const {return m_cols;}
-  size_t columns() const {return m_cols.size();}
+  const std::vector<base_col*>& columns() const {return m_cols;}
+  size_t number_of_columns() const {return m_cols.size();}
+
+#ifdef tools_aida_ntuple
+  const std::vector<base_col*>& cols() const {return m_cols;} //deprecated : use columns().
+#endif
 
   void column_names(std::vector<std::string>& a_names) const {
     a_names.clear();
@@ -164,6 +168,11 @@ public:
   uint64 rows() const {
     if(m_cols.empty()) return 0;
     return m_cols.front()->num_elems();
+  }
+  bool number_of_entries(uint64& a_value) const {
+    if(m_cols.empty()) {a_value = 0;return false;}
+    a_value = m_cols.front()->num_elems();
+    return true;
   }
 
   void clear() { //must not be confused with reset().
@@ -214,6 +223,7 @@ public:
   void add_column(base_col* a_col) { //we take ownership.
     m_cols.push_back(a_col);
   }
+
 protected:
   void set_columns_index(uint64 a_index) {
     tools_vforit(base_col*,m_cols,it) {
@@ -582,6 +592,52 @@ public:
     return true;
   }
 
+  template <class T>
+  bool column_min(unsigned int a_col,T& a_value) {
+    a_value = T();
+    if(m_cols.empty()) return false;
+    if(a_col>=m_cols.size()) return false;
+    base_col* _base_col = m_cols[a_col];
+    aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
+    if(!_col) return false;
+    start();
+    uint64 _rows = rows();
+    T v;
+   {for(uint64 row=0;row<_rows;row++) {
+      if(!next()) {a_value = T();return false;}
+      if(!_col->get_entry(v)) {}
+      if(!row) {
+        a_value = v;
+      } else {
+        a_value = mn<T>(a_value,v);
+      }
+    }}
+    return true;
+  }
+  
+  template <class T>
+  bool column_max(unsigned int a_col,T& a_value) {
+    a_value = T();
+    if(m_cols.empty()) return false;
+    if(a_col>=m_cols.size()) return false;
+    base_col* _base_col = m_cols[a_col];
+    aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
+    if(!_col) return false;
+    start();
+    uint64 _rows = rows();
+    T v;
+   {for(uint64 row=0;row<_rows;row++) {
+      if(!next()) {a_value = T();return false;}
+      if(!_col->get_entry(v)) {}
+      if(!row) {
+        a_value = v;
+      } else {
+        a_value = mx<T>(a_value,v);
+      }
+    }}
+    return true;
+  }
+  
 };
 
 ////////////////////////////////////////////////////////////
@@ -1064,7 +1120,7 @@ inline bool create_cols_from_string(ntuple& a_ntu,
 }
 
 inline aida_col_ntu* find_col_ntu(ntuple& a_ntu,const std::string& a_name){
-  base_col* col = find_named<base_col>(a_ntu.cols(),a_name);
+  base_col* col = find_named<base_col>(a_ntu.columns(),a_name);
   if(!col) return 0;
   return safe_cast<base_col, aida_col_ntu >(*col);
 }
@@ -1138,7 +1194,7 @@ protected:
     // Note : it is assumed that a_is is empty and a_found = false before
     //        calling with function.
   
-    const std::vector<base_col*>& cols = a_ntu.cols();
+    const std::vector<base_col*>& cols = a_ntu.columns();
   
     // look if a_col is a leaf col of a_ntu :
    {unsigned int index = 0;
@@ -1175,7 +1231,7 @@ protected:
     if(a_depth>=a_is.size()) return false;
 
     unsigned int coli = a_is[a_depth];  
-    const std::vector<base_col*>& cols = a_sub.cols();
+    const std::vector<base_col*>& cols = a_sub.columns();
     if(coli>=cols.size()) return false;
 
     if(a_depth==(a_is.size()-1)) { //we reach the leaf.
@@ -1312,7 +1368,7 @@ inline bool column_infos(base_ntu& a_ntu,
 }
 
 inline base_col* find_leaf_column(const base_ntu& a_ntu,const std::string& a_name){
-  const std::vector<base_col*>& cols = a_ntu.cols();
+  const std::vector<base_col*>& cols = a_ntu.columns();
   tools_vforcit(base_col*,cols,it) {
     aida_col_ntu* col = safe_cast<base_col,aida_col_ntu>(*(*it));
     if(col) {
@@ -1330,7 +1386,7 @@ inline base_col* find_leaf_column(const base_ntu& a_ntu,const std::string& a_nam
 template <class T>
 inline bool to_vector(base_ntu& a_ntu,std::vector<double>& a_vec,unsigned int a_col = 0) {
   a_vec.clear();
-  const std::vector<base_col*>& cols = a_ntu.cols();
+  const std::vector<base_col*>& cols = a_ntu.columns();
   if(cols.empty()) return false;
   if(a_col>=cols.size()) return false;
   base_col* _base_col = cols[a_col];
@@ -1349,51 +1405,13 @@ inline bool to_vector(base_ntu& a_ntu,std::vector<double>& a_vec,unsigned int a_
 }
 
 template <class T>
-inline bool column_min(base_ntu& a_ntu,unsigned int a_col,T& a_value) {
-  a_value = T();
-  const std::vector<base_col*>& cols = a_ntu.cols();
-  if(cols.empty()) return false;
-  if(a_col>=cols.size()) return false;
-  base_col* _base_col = cols[a_col];
-  aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
-  if(!_col) return false;
-  a_ntu.start();
-  uint64 _rows = a_ntu.rows();
-  T v;
- {for(uint64 row=0;row<_rows;row++) {
-    if(!a_ntu.next()) {a_value = T();return false;}
-    if(!_col->get_entry(v)) {}
-    if(!row) {
-      a_value = v;
-    } else {
-      a_value = mn<T>(a_value,v);
-    }
-  }}
-  return true;
+inline bool column_min(ntuple& a_ntu,unsigned int a_col,T& a_value) {
+  return a_ntu.column_min(a_col,a_value);
 }
 
 template <class T>
-inline bool column_max(base_ntu& a_ntu,unsigned int a_col,T& a_value) {
-  a_value = T();
-  const std::vector<base_col*>& cols = a_ntu.cols();
-  if(cols.empty()) return false;
-  if(a_col>=cols.size()) return false;
-  base_col* _base_col = cols[a_col];
-  aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
-  if(!_col) return false;
-  a_ntu.start();
-  uint64 _rows = a_ntu.rows();
-  T v;
- {for(uint64 row=0;row<_rows;row++) {
-    if(!a_ntu.next()) {a_value = T();return false;}
-    if(!_col->get_entry(v)) {}
-    if(!row) {
-      a_value = v;
-    } else {
-      a_value = mx<T>(a_value,v);
-    }
-  }}
-  return true;
+inline bool column_max(ntuple& a_ntu,unsigned int a_col,T& a_value) {
+  return a_ntu.column_max(a_col,a_value);
 }
 
 }}

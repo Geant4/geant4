@@ -95,6 +95,13 @@ else
   geant4_tls_model=""
 fi
 
+# - smart stacking
+have_smartstack="@G4_BUILTWITH_SMARTSTACK@"
+feature_list="${feature_list} smartstack[${have_smartstack}]"
+if test "x${have_smartstack}" = "xyes" ; then
+  cflags="-DG4_USESMARTSTACK ${cflags}"
+fi
+
 # - Includes and Libs
 for g4incdir in ${includedirs} ; do
   cflags="${cflags} -I${g4incdir}"
@@ -551,6 +558,9 @@ while test $# -gt 0 ; do
           ;;
         multithreading)
           echo ${have_multithreading}
+          ;;
+        smartstack)
+          echo ${have_smartstack}
           ;;
         clhep)
           echo ${have_clhep}

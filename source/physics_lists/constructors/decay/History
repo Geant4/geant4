@@ -13,6 +13,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 June 2019  Dennis Wright (phys-ctor-decay-V10-05-00)
+-------------------------------------------------------
+- G4RadioactiveDecayPhysics: replace G4RadioactiveDecay with
+  G4RadioactiveDecayBase.  This removes the biasing functionality which
+  is generally not used in the physics lists.
+
 07-July-2018 Vladimir Ivanchenko        (phys-ctor-decay-V10-04-00)
 - G4RadioactiveDecayPhysics - fixed bug reported by M.Kelsey, which
     resolves initialisation ordering of messages to EM physics 

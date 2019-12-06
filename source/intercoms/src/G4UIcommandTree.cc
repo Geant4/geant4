@@ -441,16 +441,16 @@ void G4UIcommandTree::CreateHTML()
   oF << "<html><head><title>Commands in " << ModStr(pathName) << "</title></head>" << G4endl;
   oF << "<body bgcolor=\"#ffffff\"><h2>" << ModStr(pathName) << "</h2><p>" << G4endl;
 
-  if( guidance != NULL ) 
+  if( guidance != nullptr ) 
   {
-    for(G4int i=0;i<guidance->GetGuidanceEntries();i++)
+    for(size_t i=0;i<guidance->GetGuidanceEntries();++i)
     { oF << ModStr(guidance->GetGuidanceLine(i)) << "<br>" << G4endl; }
   }
 
   oF << "<p><hr><p>" << G4endl;
   
   oF << "<h2>Sub-directories : </h2><dl>" << G4endl;
-  for( G4int i_thTree = 0; i_thTree < G4int(tree.size()); i_thTree++ )
+  for( size_t i_thTree = 0; i_thTree < tree.size(); ++i_thTree )
   {
     oF << "<p><br><p><dt><a href=\"" << CreateFileName(tree[i_thTree]->GetPathName())
        << "\">" << ModStr(tree[i_thTree]->GetPathName()) << "</a>" << G4endl;
@@ -461,18 +461,18 @@ void G4UIcommandTree::CreateHTML()
   oF << "</dl><p><hr><p>" << G4endl;
   
   oF << "<h2>Commands : </h2><dl>" << G4endl;
-  for( G4int i_thCommand = 0; i_thCommand < G4int(command.size()); i_thCommand++ )
+  for( size_t i_thCommand = 0; i_thCommand < command.size(); ++i_thCommand )
   {
     G4UIcommand* cmd = command[i_thCommand];
     oF << "<p><br><p><dt><b>" << ModStr(cmd->GetCommandName());
     if(cmd->GetParameterEntries()>0)
     {
-      for(G4int i_thParam=0;i_thParam<cmd->GetParameterEntries();i_thParam++)
+      for(size_t i_thParam=0;i_thParam<cmd->GetParameterEntries();++i_thParam)
       { oF << " [<i>" << ModStr(cmd->GetParameter(i_thParam)->GetParameterName()) << "</i>]"; }
     }
     oF << "</b>" << G4endl;
     oF << "<p><dd>" << G4endl;
-    for(G4int i=0;i<cmd->GetGuidanceEntries();i++)
+    for(size_t i=0;i<cmd->GetGuidanceEntries();++i)
     { oF << ModStr(cmd->GetGuidanceLine(i)) << "<br>" << G4endl; }
     if(!(cmd->GetRange()).isNull())
     { oF << "<p><dd>Range : " << ModStr(cmd->GetRange()) << G4endl; }
@@ -482,13 +482,13 @@ void G4UIcommandTree::CreateHTML()
     else
     {
       oF << "<p><dd>Available Geant4 state(s) : ";
-      for(G4int ias=0;ias<G4int(availabelStateList->size());ias++)
+      for(size_t ias=0;ias<availabelStateList->size();++ias)
       { oF << G4StateManager::GetStateManager()->GetStateString((*availabelStateList)[ias]) << " " << G4endl; }
     }
     if(cmd->GetParameterEntries()>0)
     {
       oF << "<p><dd>Parameters<table border=1>" << G4endl;
-      for(G4int i_thParam=0;i_thParam<cmd->GetParameterEntries();i_thParam++)
+      for(size_t i_thParam=0;i_thParam<cmd->GetParameterEntries();++i_thParam)
       {
         G4UIparameter* prm = cmd->GetParameter(i_thParam);
         oF << "<tr><td>" << ModStr(prm->GetParameterName()) << G4endl;

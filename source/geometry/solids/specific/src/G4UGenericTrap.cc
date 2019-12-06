@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // Implementation of G4UGenericTrap wrapper class
+//
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4GenericTrap.hh"
@@ -80,7 +79,7 @@ G4UGenericTrap::~G4UGenericTrap()
 //
 // Copy constructor
 //
-G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap &source)
+G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap& source)
   : Base_t(source), fVisSubdivisions(source.fVisSubdivisions),
     fVertices(source.fVertices)
     
@@ -93,7 +92,7 @@ G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap &source)
 // Assignment operator
 //
 G4UGenericTrap&
-G4UGenericTrap::operator=(const G4UGenericTrap &source)
+G4UGenericTrap::operator=(const G4UGenericTrap& source)
 {
   if (this == &source) return *this;
   
@@ -204,7 +203,7 @@ G4UGenericTrap::CalculateExtent(const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -265,7 +264,7 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
   G4int i;
   if(IsTwisted())
   {
-    if ( GetVisSubdivisions()!= 0 )
+    if ( GetVisSubdivisions() != 0 )
     {
       subdivisions=GetVisSubdivisions();
     }
@@ -274,7 +273,7 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
       // Estimation of Number of Subdivisions for smooth visualisation
       //
       G4double maxTwist=0.;
-      for(i=0; i<4; i++)
+      for(i=0; i<4; ++i)
       {
         if(GetTwistAngle(i)>maxTwist) { maxTwist=GetTwistAngle(i); }
       }
@@ -301,20 +300,20 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
 
   // Add Vertex
   //
-  for (i=0;i<4;i++)
+  for (i=0; i<4; ++i)
   {
     polyhedron->AddVertex(G4ThreeVector(GetVertex(i).x(),
                                         GetVertex(i).y(),-fDz));
   }
-  for( i=0;i<subdivisions;i++)
+  for(i=0; i<subdivisions; ++i)
   {
-    for(G4int j=0;j<4;j++)
+    for(G4int j=0; j<4 ; ++j)
     {
       G4TwoVector u=GetVertex(j)+cf*(i+1)*( GetVertex(j+4)-GetVertex(j));
       polyhedron->AddVertex(G4ThreeVector(u.x(),u.y(),-fDz+cf*2*fDz*(i+1)));
     }    
   }
-  for (i=4;i<8;i++)
+  for (i=4; i<8; ++i)
   {
     polyhedron->AddVertex(G4ThreeVector(GetVertex(i).x(),
                                         GetVertex(i).y(),fDz));
@@ -323,7 +322,7 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
   // Add Facets
   //
   polyhedron->AddFacet(1,4,3,2);  //Z-plane
-  for (i=0;i<subdivisions+1;i++)
+  for (i=0; i<subdivisions+1; ++i)
   {
     G4int is=i*4;
     polyhedron->AddFacet(5+is,8+is,4+is,1+is);

@@ -50,7 +50,7 @@
 G4FTFBinaryPiKBuilder::
 G4FTFBinaryPiKBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -121,3 +121,4 @@ Build(G4KaonZeroSInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   aP->RegisterMe(theModel);
 }
+

@@ -71,7 +71,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       max_SecA = std::max ( max_SecA , theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() );
       if ( theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA ) imaxA = i;
 #ifdef G4PHPDEBUG
-      if( getenv("G4ParticleHPDebug"))    G4cout << "G4ParticleHPFinalState::adjust_final_stat SECO " << i << " " <<theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
+      if( std::getenv("G4ParticleHPDebug"))    G4cout << "G4ParticleHPFinalState::adjust_final_stat SECO " << i << " " <<theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
 #endif
 
    }
@@ -100,7 +100,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    }
 
 #ifdef G4PHPDEBUG
-   if( getenv("G4ParticleHPDebug")) G4cout  << "G4ParticleHPFinalState::adjust_final_stat  BaseZ " << baseZNew << " BaseA " << baseANew << " sum_Z " << sum_Z << " sum_A " << sum_A << G4endl;
+   if( std::getenv("G4ParticleHPDebug")) G4cout  << "G4ParticleHPFinalState::adjust_final_stat  BaseZ " << baseZNew << " BaseA " << baseANew << " sum_Z " << sum_Z << " sum_A " << sum_A << G4endl;
 #endif
 
    G4bool needOneMoreSec = false;
@@ -135,7 +135,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          else 
          {
 #ifdef G4PHPDEBUG
-	   if( getenv("G4ParticleHPDebug")) G4cout << this << "G4ParticleHPFinalState oneMoreSec_pd Z " << baseZNew << " - " << sum_Z << " A " << baseANew << " - " << sum_A << " projectile " << theProjectile->GetParticleName() << G4endl;
+	   if( std::getenv("G4ParticleHPDebug")) G4cout << this << "G4ParticleHPFinalState oneMoreSec_pd Z " << baseZNew << " - " << sum_Z << " A " << baseANew << " - " << sum_A << " projectile " << theProjectile->GetParticleName() << G4endl;
 #endif
 	   oneMoreSec_pd = G4IonTable::GetIonTable()->GetIon ( int(baseZNew - sum_Z) , (int)(baseANew - sum_A) , 0.0 );
 	   if( !oneMoreSec_pd ) {

@@ -47,7 +47,8 @@ G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
    fNofNtupleFiles(0),
    fNtupleFiles(),
    fMainNtupleDirectories(),
-   fBasketSize(0)
+   fBasketSize(0),
+   fBasketEntries(0)
 {}
 
 //_____________________________________________________________________________

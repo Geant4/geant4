@@ -38,7 +38,6 @@
 
 # Compiler flags (because user apps are a bit dependent on them...)
 set(GEANT4_COMPILER_FLAG_HINTS "#
-set(CMAKE_CXX_EXTENSIONS OFF)
 set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS} ${GEANT4_CXXSTD_FLAGS}\")
 set(Geant4_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS}\")")
 
@@ -83,45 +82,26 @@ if(NOT GEANT4_USE_SYSTEM_ZLIB)
   list(APPEND GEANT4_EXTERNALS_TARGETS G4zlib)
 endif()
 
-# - GDML
-# Need to include Xerces-C headers becuase these do appear in the public
-# interface of GDML. The library should then be in the LINK_INTERFACE of
-# persistency...
-if(GEANT4_USE_GDML)
-  list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${XERCESC_INCLUDE_DIRS})
-endif()
-
 # - USolids
 # Compile definitions
 if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   set(GEANT4_USE_USOLIDS_EITHER ON)
-
-  # System USolids headers, because these do appear in Geant4's
-  # public interface. The library should be in the link interface
-  # of G4geometry (may need refinding)
-  list(APPEND GEANT4_CORE_DEFINITIONS ${VECGEOM_DEFINITIONS})
-  list(APPEND GEANT4_THIRD_PARTY_INCLUDES "${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES}")
 endif()
 
 # - Stuff from Geant4InterfaceOptions.cmake
-if(GEANT4_USE_QT)
-  list(APPEND GEANT4_THIRD_PARTY_INCLUDES
-    ${QT_INCLUDE_DIR}
-    ${QT_QTCORE_INCLUDE_DIR}
-    ${QT_QTGUI_INCLUDE_DIR}
-    ${QT_QTOPENGL_INCLUDE_DIR}
-    )
 
-  # On WIN32, re-import the Qt targets.
-  if(WIN32)
-    set(GEANT4_QT4_IMPORT_SETUP "
-# Qt reimport on WIN32
-set(QT_QMAKE_EXECUTABLE ${QT_QMAKE_EXECUTABLE})
-set(QT_USE_IMPORTED_TARGETS ON)
-find_package(Qt4 REQUIRED)
-    ")
-  endif()
-endif()
+#-----------------------------------------------------------------------
+# - Common Build/Install Tree Configuration files
+#-----------------------------------------------------------------------
+# External package variables
+geant4_export_package_variables(${PROJECT_BINARY_DIR}/Geant4PackageCache.cmake)
+
+# Versioning file
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.in
+  ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
+  @ONLY
+  )
 
 #-----------------------------------------------------------------------
 # - Generate Build Tree Configuration Files
@@ -133,6 +113,8 @@ set(GEANT4_CMAKE_DIR "${PROJECT_BINARY_DIR}")
 # rather paths. We extract the paths from the global
 # GEANT4_BUILDTREE_INCLUDE_DIRS property and use this to create the
 # header setup
+# This is *ONLY* required in case clients use ROOT dictionaries, whose
+# generation mechanism is blind to usage requirements
 #
 get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY
   GEANT4_BUILDTREE_INCLUDE_DIRS
@@ -140,20 +122,15 @@ get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY
 
 set(GEANT4_INCLUDE_DIR_SETUP "
 # Geant4 configured for use from the build tree - absolute paths are used.
-set(Geant4_INCLUDE_DIR ${__geant4_buildtree_include_dirs})
-")
-
-set(GEANT4_MODULE_PATH_SETUP "
-# Geant4 configured for use CMake modules from source tree
-set(CMAKE_MODULE_PATH \${CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
+set(Geant4_INCLUDE_DIR \"${__geant4_buildtree_include_dirs}\")
 ")
 
 # Geant4 data used in build tree
 geant4_export_datasets(BUILD GEANT4_DATASET_DESCRIPTIONS)
 
 # Export targets in the Geant4LibraryDepends export set from the build tree
-# No longer need GEANT4_EXPORTED_TARGETS global property to list these for us.
 export(EXPORT Geant4LibraryDepends
+  NAMESPACE Geant4::
   FILE ${PROJECT_BINARY_DIR}/Geant4LibraryDepends.cmake
   )
 
@@ -164,13 +141,6 @@ configure_file(
   @ONLY
   )
 
-# Configure the build tree versioning file
-configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.in
-  ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
-  @ONLY
-  )
-
 # Copy the custom modules into the build tree
 configure_file(
   ${PROJECT_SOURCE_DIR}/cmake/Modules/IntelCompileFeatures.cmake
@@ -178,7 +148,50 @@ configure_file(
   COPYONLY
   )
 
-foreach(_mod AIDA HepMC Pythia6 StatTest TBB)
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/MSVCCompileFeatures.cmake
+  ${PROJECT_BINARY_DIR}/Modules/MSVCCompileFeatures.cmake
+  COPYONLY
+  )
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4EXPATShim.cmake
+  ${PROJECT_BINARY_DIR}/G4EXPATShim.cmake
+  COPYONLY
+  )
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4FreetypeShim.cmake
+  ${PROJECT_BINARY_DIR}/G4FreetypeShim.cmake
+  COPYONLY
+  )
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4HDF5Shim.cmake
+  ${PROJECT_BINARY_DIR}/G4HDF5Shim.cmake
+  COPYONLY
+  )
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4MotifShim.cmake
+  ${PROJECT_BINARY_DIR}/G4MotifShim.cmake
+  COPYONLY
+)
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4VecGeomShim.cmake
+  ${PROJECT_BINARY_DIR}/G4VecGeomShim.cmake
+  COPYONLY
+  )
+
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4X11Shim.cmake
+  ${PROJECT_BINARY_DIR}/G4X11Shim.cmake
+  COPYONLY
+)
+
+
+foreach(_mod AIDA HepMC Pythia6 StatTest TBB XQuartzGL)
   configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake
@@ -226,14 +239,13 @@ get_filename_component(Geant4_INCLUDE_DIR \"\${_geant4_thisdir}/${GEANT4_RELATIV
   ")
 endif()
 
-set(GEANT4_MODULE_PATH_SETUP)
-
 # Geant4 data used in install tree
 geant4_export_datasets(INSTALL GEANT4_DATASET_DESCRIPTIONS)
 
 # Install exported targets file for the install tree - we just install
 # the named export
 install(EXPORT Geant4LibraryDepends
+  NAMESPACE Geant4::
   DESTINATION ${GEANT4_CMAKE_DIR}
   COMPONENT Development
   )
@@ -245,23 +257,32 @@ configure_file(
   @ONLY
   )
 
-# Configure the install tree config versioning file...
-configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.in
-  ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4ConfigVersion.cmake
-  @ONLY
-  )
-
 # Install the config, config versioning and use files
 install(FILES
   ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4Config.cmake
-  ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4ConfigVersion.cmake
+  ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
+  ${PROJECT_BINARY_DIR}/G4EXPATShim.cmake
+  ${PROJECT_BINARY_DIR}/G4FreetypeShim.cmake
+  ${PROJECT_BINARY_DIR}/G4HDF5Shim.cmake
+  ${PROJECT_BINARY_DIR}/G4VecGeomShim.cmake
+  ${PROJECT_BINARY_DIR}/G4MotifShim.cmake
+  ${PROJECT_BINARY_DIR}/G4X11Shim.cmake
   ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
   DESTINATION ${GEANT4_CMAKE_DIR}
   COMPONENT Development
   )
 
-# Install the custom modules for the examples
+# Install the package settings file if required (always for now)
+option(GEANT4_INSTALL_PACKAGE_CACHE "Install file recording build-time locations of required packages" ON)
+mark_as_advanced(GEANT4_INSTALL_PACKAGE_CACHE)
+if(GEANT4_INSTALL_PACKAGE_CACHE)
+  install(FILES ${PROJECT_BINARY_DIR}/Geant4PackageCache.cmake
+    DESTINATION ${GEANT4_CMAKE_DIR}
+    COMPONENT Development
+    )
+endif()
+
+# Install the custom modules for dependencies/examples
 install(DIRECTORY
   ${PROJECT_BINARY_DIR}/Modules
   DESTINATION ${GEANT4_CMAKE_DIR}

@@ -23,38 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TwistedTrap implementation
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4TwistedTrap.cc
-//
-// Author:
-//
-//   10/11/2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 10/11/2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrap.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
 
-G4TwistedTrap::G4TwistedTrap( const G4String &pName,
+//=====================================================================
+//* Constructors ------------------------------------------------------
+
+G4TwistedTrap::G4TwistedTrap( const G4String& pName,
                                     G4double  pPhiTwist,
                                     G4double  pDx1,
                                     G4double  pDx2,
                                     G4double  pDy,
-                                    G4double  pDz)
+                                    G4double  pDz )
   : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
                        pDy, pDx1, pDx2, pDy, pDx1, pDx2,0. )
 {
 }
 
 G4TwistedTrap::
-G4TwistedTrap(const G4String &pName,      // Name of instance
+G4TwistedTrap(const G4String& pName,      // Name of instance
                     G4double  pPhiTwist,  // twist angle
                     G4double  pDz,        // half z length
                     G4double  pTheta,  // direction between end planes
@@ -65,35 +58,40 @@ G4TwistedTrap(const G4String &pName,      // Name of instance
                     G4double  pDy2,    // half y length at +pDz
                     G4double  pDx3,    // half x length at +pDz,-pDy
                     G4double  pDx4,    // half x length at +pDz,+pDy
-                    G4double  pAlph    // tilt angle
-              )
+                    G4double  pAlph )  // tilt angle
   : G4VTwistedFaceted( pName, pPhiTwist, pDz, pTheta,
                        pPhi, pDy1, pDx1, pDx2, pDy2, pDx3, pDx4, pAlph )
 {
 }
 
+//=====================================================================
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
-//
+
 G4TwistedTrap::G4TwistedTrap( __void__& a )
   : G4VTwistedFaceted(a)
 {
 }
 
+//=====================================================================
+//* Destructor --------------------------------------------------------
+
 G4TwistedTrap::~G4TwistedTrap()
 {
 }
 
-// Copy constructor
-//
+//=====================================================================
+//* Copy constructor --------------------------------------------------
+
 G4TwistedTrap::G4TwistedTrap(const G4TwistedTrap& rhs)
   : G4VTwistedFaceted(rhs)
 {
   fpPolyhedron = GetPolyhedron();
 }
 
-// Assignment operator
-//
+//=====================================================================
+//* Assignment operator -----------------------------------------------
+
 G4TwistedTrap& G4TwistedTrap::operator = (const G4TwistedTrap& rhs) 
 {
    // Check assignment to self
@@ -107,6 +105,9 @@ G4TwistedTrap& G4TwistedTrap::operator = (const G4TwistedTrap& rhs)
 
    return *this;
 }
+
+//=====================================================================
+//* StreamInfo --------------------------------------------------------
 
 std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 {
@@ -137,7 +138,6 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 
   return os;
 }
-
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

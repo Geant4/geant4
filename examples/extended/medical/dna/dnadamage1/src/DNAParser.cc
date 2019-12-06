@@ -92,12 +92,11 @@ DNAParser::~DNAParser() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LogicalVolume* DNAParser::CreateLogicVolume(const std::string& fileName)
+G4LogicalVolume* DNAParser::CreateLogicVolume()
 {
     G4NistManager * pMan = G4NistManager::Instance();
     fpWater = pMan->FindOrBuildMaterial("G4_WATER");
 
-    ParseFile(fileName);
     G4String boxNameSolid = fGeoName + "_solid";
     
     G4Box* pBoxSolid = new G4Box(boxNameSolid,
@@ -621,9 +620,9 @@ G4VSolid* DNAParser::CreateCutSolid(G4Orb *pSolidOrbRef,
                                         2*radiusTar,
                                         2*radiusTar);
             G4ThreeVector diff = posTar - posRef;
-            G4double d = (pow(radiusRef,2) -
-                          pow(radiusTar,2) +
-                          pow(distance,2) )/(2*distance) +
+            G4double d = (std::pow(radiusRef,2) -
+                          std::pow(radiusTar,2) +
+                          std::pow(distance,2) )/(2*distance) +
                           solidBox->GetZHalfLength() -
                           tinySpace;
             if(in) 

@@ -23,13 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//---------------------------------------------------------------
-//
-//-----------------------------------------------------------------
-//  In-line definitions
+// G4Step inline definitions
 //-----------------------------------------------------------------
 
 // Get/Set functions 
@@ -150,7 +144,7 @@ inline
 inline 
  void G4Step::CopyPostToPreStepPoint( )
  {
-   //This method is called at the beggining of each step 
+   // This method is called at the beginning of each step 
    *(fpPreStepPoint) = *(fpPostStepPoint);
    fpPostStepPoint->SetStepStatus(fUndefined);
 
@@ -214,7 +208,7 @@ inline
    fpPreStepPoint->SetWeight(fpTrack->GetWeight());
 
    // Set Velocity
-   //  should be placed after SetMaterial for preStep point	
+   // should be placed after SetMaterial for preStep point	
     fpPreStepPoint->SetVelocity(fpTrack->CalculateVelocity());
   
    (*fpPostStepPoint) = (*fpPreStepPoint);
@@ -225,7 +219,7 @@ inline
  { 
    // To avoid the circular dependency between G4Track, G4Step
    // and G4StepPoint, G4Step has to manage the update actions.
-   //  position, time
+   // position, time
    fpTrack->SetPosition(fpPostStepPoint->GetPosition());
    fpTrack->SetGlobalTime(fpPostStepPoint->GetGlobalTime());
    fpTrack->SetLocalTime(fpPostStepPoint->GetLocalTime());
@@ -245,16 +239,14 @@ inline
    fpTrack->SetNextTouchableHandle(fpPostStepPoint->GetTouchableHandle());
    fpTrack->SetWeight(fpPostStepPoint->GetWeight());
 
-
    // set velocity 
    fpTrack->SetVelocity(fpPostStepPoint->GetVelocity());
 }
 
-inline  G4int G4Step::GetNumberOfSecondariesInCurrentStep() const
+inline size_t G4Step::GetNumberOfSecondariesInCurrentStep() const
 {
   return  fSecondary->size() - nSecondaryByLastStep; 
 }  
-
 
 inline const G4TrackVector* G4Step::GetSecondary() const  
 {
@@ -280,7 +272,8 @@ inline
 
 inline void G4Step::DeleteSecondaryVector()  
 {
-   if (fSecondary !=0) {
+   if (fSecondary !=0)
+   {
      fSecondary->clear();
      delete fSecondary;
      fSecondary = 0;
@@ -297,24 +290,22 @@ inline G4bool G4Step::IsLastStepInVolume() const
    return fLastStepInVolume;
 }
 
-
- inline  void G4Step::SetFirstStepFlag()
+inline  void G4Step::SetFirstStepFlag()
 {
    fFirstStepInVolume = true;
 }
   
- inline  void G4Step::ClearFirstStepFlag()
+inline  void G4Step::ClearFirstStepFlag()
 {
    fFirstStepInVolume = false;
 }
 
- inline  void G4Step::SetLastStepFlag()
+inline  void G4Step::SetLastStepFlag()
 {
    fLastStepInVolume = true;
 }
   
- inline  void G4Step::ClearLastStepFlag()
+inline  void G4Step::ClearLastStepFlag()
 {
    fLastStepInVolume = false;
 }
-

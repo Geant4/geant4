@@ -58,6 +58,13 @@ Meesungnoen2002::gCoeff[13] =
 // fit from Meesungnoen, 2002
 
 const double
+Meesungnoen2002_amorphous::gCoeff[7] =
+{ 7.3144e-05,	-2.2474e-03,	3.4555e-02,
+  -4.3574e-01,	2.8954e+00,	-1.0381e+00,
+  1.4300e+00 };
+// fit from Meesungnoen, 2002
+
+const double
 Terrisol1990::gEnergies_T1990[11] =
 { 0.2, 0.5, 1, 2, 3, 4, 5, 6, 7,
   // The two last are not in the dataset
@@ -99,6 +106,20 @@ double Meesungnoen2002::GetRmean(double k){
   return 0;
 }
 
+double Meesungnoen2002_amorphous::GetRmean(double k){
+  G4double k_eV = k/eV;
+
+  if(k_eV>0.1){ // data until 0.2 eV
+	G4double r_mean = 0;
+	for(int8_t i=6; i!=-1 ; --i){
+	  r_mean+=gCoeff[6-i]*std::pow(k_eV,i);
+	}
+	r_mean*=CLHEP::nanometer;
+	return r_mean;
+  }
+  return 0;
+}
+
 void GetGaussianPenetrationFromRmean3D(G4double r_mean,
                                        G4ThreeVector& displacement)
 {
@@ -126,6 +147,30 @@ void Meesungnoen2002::GetPenetration(G4double k,
   GetGaussianPenetrationFromRmean3D(GetRmean(k), displacement);
 }
 
+void Meesungnoen2002_amorphous::GetPenetration(G4double k,
+                                     G4ThreeVector& displacement)
+{
+  GetGaussianPenetrationFromRmean3D(GetRmean(k), displacement);
+}
+
+
+void Kreipl2009::GetPenetration(G4double k,
+                                     G4ThreeVector& displacement)
+{
+	G4double r_mean = Meesungnoen2002::GetRmean(k);
+
+  if(r_mean == 0)
+  {
+	// rare events:
+	// prevent H2O and secondary electron from being placed at the same position
+	displacement = G4RandomDirection() * (1e-3*CLHEP::nanometer);
+	return;
+  }
+
+  double r = G4RandGamma::shoot(2,2);
+
+  displacement = G4RandomDirection() * r * r_mean;
+}
 //----------------------------------------------------------------------------
 
 void Ritchie1994::GetPenetration(G4double k,
@@ -220,6 +265,14 @@ G4VEmModel* G4DNASolvationModelFactory::Create(const G4String& penetrationModel)
   {
     return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
   }
+  else if(penetrationModel == "Meesungnoen2002_amorphous")
+  {
+	return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002_amorphous>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
+  }
+  else if(penetrationModel == "Kreipl2009")
+  {
+	return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Kreipl2009>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
+  }
   else if(penetrationModel == "Ritchie1994")
   {
     return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Ritchie1994>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
@@ -248,6 +301,10 @@ G4VEmModel* G4DNASolvationModelFactory::GetMacroDefinedModel()
     return Create("Ritchie1994");
   case fTerrisol1990eSolvation:
     return Create("Terrisol1990");
+  case fKreipl2009eSolvation:
+	return Create("Kreipl2009");
+  case fMeesungnoensolid2002eSolvation:
+	return Create("Meesungnoen2002_amorphous");
   case fMeesungnoen2002eSolvation:
   case fDNAUnknownModel:
     return Create("Meesungnoen2002");

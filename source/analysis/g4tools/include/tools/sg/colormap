@@ -16,19 +16,37 @@ namespace tools {
 namespace sg {
 
 class base_colormap {
+#ifdef TOOLS_MEM
+  static const std::string& s_class() {
+    static const std::string s_v("tools::sg::base_colormap");
+    return s_v;
+  }
+#endif
 public:
   virtual void get_color(float,colorf&) const = 0;
   virtual void* cast(const std::string&) const = 0;
 public:
-  base_colormap(){}
+  base_colormap(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
   base_colormap(const base_colormap& aFrom)
-  :m_values(aFrom.m_values),m_colors(aFrom.m_colors){}
+  :m_values(aFrom.m_values),m_colors(aFrom.m_colors){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
   base_colormap& operator=(const base_colormap& aFrom){ 
     m_values = aFrom.m_values;
     m_colors = aFrom.m_colors;
     return *this;
   }
-  virtual ~base_colormap(){}
+  virtual ~base_colormap(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
 public:
   size_t colorn() const {return m_colors.size();}
   size_t valn() const {return m_values.size();}
@@ -283,7 +301,9 @@ public:
     else return 0;
   }
 public:
+  grey_scale_colormap() {}  //if not drawn in sg::plotter.
   grey_scale_colormap(float a_min,float a_max,size_t a_ncell){
+    //note : a_min, a_max, a_ncell (and then m_colors, m_values) are used by sg::plotter::update_cmap().
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;
@@ -315,7 +335,9 @@ public:
     else return 0;
   }
 public:
+  grey_scale_inverse_colormap() {}  //if not drawn in sg::plotter.
   grey_scale_inverse_colormap(float a_min,float a_max,size_t a_ncell){
+    //note : a_min, a_max, a_ncell (and then m_colors, m_values) are used by sg::plotter::update_cmap().
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;
@@ -348,7 +370,9 @@ public:
     else return 0;
   }
 public:
+  violet_to_red_colormap() {}  //if not drawn in sg::plotter.
   violet_to_red_colormap(float a_min,float a_max,size_t a_ncell){
+    //note : a_min, a_max, a_ncell (and then m_colors, m_values) are used by sg::plotter::update_cmap().
     set(a_min,a_max,a_ncell);
   }
   violet_to_red_colormap(const violet_to_red_colormap& aFrom):base_colormap(aFrom){}

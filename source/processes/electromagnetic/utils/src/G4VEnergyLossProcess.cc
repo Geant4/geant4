@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -102,8 +101,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   theInverseRangeTable(nullptr),
   theLambdaTable(nullptr),
   theSubLambdaTable(nullptr),
-  theDensityFactor(nullptr),
-  theDensityIdx(nullptr),
   baseParticle(nullptr),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
@@ -165,6 +162,10 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   // initialise model
   lManager = G4LossTableManager::Instance();
   lManager->Register(this);
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
+  theDensityFactor = bld->GetDensityFactors();
+  theDensityIdx = bld->GetCoupleIndexes();
+
   fluctModel = nullptr;
   currentModel = nullptr;
   atomDeexcitation = nullptr;
@@ -628,21 +629,13 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(&part == particle) {
 
-    G4LossTableBuilder* bld = lManager->GetTableBuilder();
     if(isMaster) {
-      theDensityFactor = bld->GetDensityFactors();
-      theDensityIdx = bld->GetCoupleIndexes();
       lManager->BuildPhysicsTable(particle, this);
 
     } else {
 
       const G4VEnergyLossProcess* masterProcess = 
         static_cast<const G4VEnergyLossProcess*>(GetMasterProcess());
-
-      // define density factors for worker thread
-      bld->InitialiseBaseMaterials(masterProcess->DEDXTable()); 
-      theDensityFactor = bld->GetDensityFactors();
-      theDensityIdx = bld->GetCoupleIndexes();
 
       // copy table pointers from master thread
       SetDEDXTable(masterProcess->DEDXTable(),fRestricted);

@@ -38,7 +38,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-#include "G4OpBoundaryProcess.hh"
+#include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
 

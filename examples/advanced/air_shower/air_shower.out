@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +30,10 @@
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
+ Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.880 cm 
                        Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
+   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
@@ -240,8 +244,8 @@ See commands in /vis/modeling/trajectories/ for other options.
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1561509691
- float_seed_table[] = 0.390448 0.516582 0.718621 0.902451 0.80715 0.303156 0.569336 0.419386 0.4811 0.847958 0.223924 0.111116 0.408568 0.492225 0.0618125 0.391615 0.0868812 0.649005 0.462748 0.537417 0.387408 0.84246 0.334233 0.0452129 
+ Initial seed = 1575548249
+ float_seed_table[] = 0.636971 0.80368 0.477473 0.77956 0.386704 0.678484 0.893229 0.819829 0.749979 0.779605 0.210427 0.0392667 0.297203 0.429559 0.550057 0.0868152 0.840908 0.125298 0.800472 0.247863 0.0465301 0.967462 0.0514111 0.299733 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -252,7 +256,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.020000s Real=2.022162s Sys=0.000000s
+  User=1.900000s Real=1.911033s Sys=0.000000s
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -276,13 +280,13 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.024 MB
-Pool ID '7G4Track', size : 0.0471 MB
+Pool ID '17G4DynamicParticle', size : 0.025 MB
+Pool ID '7G4Track', size : 0.049 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '15UltraOpticalHit', size : 0.00385 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.094 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.097 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

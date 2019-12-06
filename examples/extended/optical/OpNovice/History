@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29, 2019 D. Sawkey (OpNovice-V10-05-00)
+- Use G4OpticalPhysics and G4SteppingVerbose
+- remove unused surface parameters
+
 July 31, 2018 I. Hrivnacova (OpNovice-V10-04-02)
 - Macro review: 
   - Added test for /OpNovice/phys/cerenkovMaxPhotons command at the end 

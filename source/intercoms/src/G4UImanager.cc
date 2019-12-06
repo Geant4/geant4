@@ -99,8 +99,8 @@ G4UImanager::G4UImanager()
   savedParameters = nullString;
   verboseLevel = 0;
   saveHistory = false;
-  session = NULL;
-  g4UIWindow = NULL;
+  session = nullptr;
+  g4UIWindow = nullptr;
   SetCoutDestination(session);
   pauseAtBeginOfEvent = false;
   pauseAtEndOfEvent = false;
@@ -125,7 +125,7 @@ G4UImanager::~G4UImanager()
     { delete *itr; }
     delete bridges;
   }
-  SetCoutDestination(NULL);
+  SetCoutDestination(nullptr);
   histVec.clear();
   if(saveHistory) historyFile.close();
   delete CoutMessenger;
@@ -134,7 +134,7 @@ G4UImanager::~G4UImanager()
   delete treeTop;
   delete aliasList;
   fUImanagerHasBeenKilled() = true;
-  fUImanager() = NULL;
+  fUImanager() = nullptr;
   if(commandStack)
   {
     commandStack->clear();
@@ -190,7 +190,7 @@ G4String G4UImanager::GetCurrentValues(const char * aCommand)
 {
   G4String theCommand = aCommand;
   savedCommand = treeTop->FindPath( theCommand );
-  if( savedCommand == NULL )
+  if( savedCommand == nullptr )
   {
     G4cerr << "command not found" << G4endl;
     return G4String();
@@ -201,7 +201,7 @@ G4String G4UImanager::GetCurrentValues(const char * aCommand)
 G4String G4UImanager::GetCurrentStringValue(const char * aCommand,
 G4int parameterNumber, G4bool reGet)
 {
-  if(reGet || savedCommand == NULL)
+  if(reGet || savedCommand == nullptr)
   {
     savedParameters = GetCurrentValues( aCommand );
   }
@@ -223,11 +223,11 @@ G4int parameterNumber, G4bool reGet)
 G4String G4UImanager::GetCurrentStringValue(const char * aCommand,
 const char * aParameterName, G4bool reGet)
 {
-  if(reGet || savedCommand == NULL)
+  if(reGet || savedCommand == nullptr)
   {
     G4String parameterValues = GetCurrentValues( aCommand );
   }
-  for(G4int i=0;i<savedCommand->GetParameterEntries();i++)
+  for(size_t i=0;i<savedCommand->GetParameterEntries();++i)
   {
     if( aParameterName ==
       savedCommand->GetParameter(i)->GetParameterName() )
@@ -480,8 +480,8 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   G4String commandString;
   G4String commandParameter;
 
-  G4int i = aCommand.index(" ");
-  if( i != G4int(std::string::npos) )
+  size_t i = aCommand.index(" ");
+  if( i != std::string::npos )
   {
     commandString = aCommand(0,i);
     commandParameter = aCommand(i+1,aCommand.length()-(i+1));
@@ -526,7 +526,7 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   }
 
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );
-  if( targetCommand == NULL )
+  if( targetCommand == nullptr )
   {
     if(ignoreCmdNotFound)
     {
@@ -616,8 +616,8 @@ G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
     G4int i = targetDir.index("/",idx);
     G4String targetDirString = targetDir(0,i+1);
     comTree = comTree->GetTree(targetDirString);
-    if( comTree == NULL )
-    { return NULL; }
+    if( comTree == nullptr )
+    { return nullptr; }
     idx = i+1;
   }
   return comTree;

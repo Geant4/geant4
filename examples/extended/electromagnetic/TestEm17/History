@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-11-19 V.Ivanchenko (testem17-V10-05-02)
+- HistoManager - fixed histo title and index; fixed macro 
+    files (A.Bogdanov)
+
+11-09-19 I. Hrivnacova  (testem17-V10-05-01)
+- Updated for clean-up in analysis typedefs:
+  G4AnaHn types replaced with G4Hn
+
 21-05-19 V.Ivanchenko (testem17-V10-05-00)
 - code clean-up, switch to MixMax random generator
 

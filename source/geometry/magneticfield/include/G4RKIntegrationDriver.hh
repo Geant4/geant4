@@ -23,46 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4RKIntegrationDriver
+// G4RKIntegrationDriver
 //
 // Class description:
 //
 // Driver class which controls the integration error of a 
 // Runge-Kutta stepper 
 
-// History:
-// - Created. D.Sorokin
+// Created: D.Sorokin, 2017
 // --------------------------------------------------------------------
-
-#ifndef G4RKIntegrationDriver_HH
-#define G4RKIntegrationDriver_HH
+#ifndef G4RKINTEGRATIONDRIVER_HH
+#define G4RKINTEGRATIONDRIVER_HH
 
 #include "G4VIntegrationDriver.hh"
 
 template <class T>
-class G4RKIntegrationDriver : public G4VIntegrationDriver {
-public:
+class G4RKIntegrationDriver : public G4VIntegrationDriver
+{
+  public:
+
     G4RKIntegrationDriver(T* stepper);
 
-    G4RKIntegrationDriver(const G4RKIntegrationDriver &) = delete;
-    const G4RKIntegrationDriver& operator =(const G4RKIntegrationDriver &) = delete;
+    G4RKIntegrationDriver(const G4RKIntegrationDriver&) = delete;
+    G4RKIntegrationDriver& operator=(const G4RKIntegrationDriver&) = delete;
 
     virtual void GetDerivatives(const G4FieldTrack& track,
-                                G4double dydx[]) const override;
+                                      G4double dydx[]) const override;
 
     virtual void GetDerivatives(const G4FieldTrack& track,
-                                G4double dydx[],
-                                G4double field[]) const override;
+                                      G4double dydx[],
+                                      G4double field[]) const override;
 
-    // Taking the last step's normalised error, calculate
-    // a step size for the next step.
-    // Do not limit the next step's size within a factor of the
-    // current one.
-    virtual G4double ComputeNewStepSize(G4double errMaxNorm,             // normalised error
-                                        G4double hstepCurrent) override; // current step size
+    virtual G4double ComputeNewStepSize(G4double errMaxNorm, // normalised error
+                                        G4double hstepCurrent) override;
+      // Taking the last step's normalised error, calculate
+      // a step size for the next step.
+      // Do not limit the next step's size within a factor of the current one.
 
     virtual G4EquationOfMotion* GetEquationOfMotion() override;
     virtual void SetEquationOfMotion(G4EquationOfMotion* equation) override;
@@ -77,22 +73,23 @@ public:
 
     virtual void RenewStepperAndAdjust(G4MagIntegratorStepper* stepper) override;
 
-    //  i) sets the exponents (pgrow & pshrnk),
-    //     using the current Stepper's order,
-    // ii) sets the safety
     void ReSetParameters(G4double safety = 0.9);
     void SetSafety(G4double valS);
+      //  i) sets the exponents (pgrow & pshrnk),
+      //     using the current Stepper's order,
+      // ii) sets the safety
 
-     // Modify and Get the Maximum number of Steps that can be
-     // taken for the integration of a single segment -
-     // (ie a single call to AccurateAdvance).
      G4int GetMaxNoSteps() const;
      void SetMaxNoSteps(G4int val);
+       // Modify and Get the Maximum number of Steps that can be
+       // taken for the integration of a single segment -
+       // (ie a single call to AccurateAdvance).
 
      G4double GetSmallestFraction() const;
      void SetSmallestFraction(G4double val);
 
-protected:
+  protected:
+
     G4double ShrinkStepSize(G4double h, G4double error) const;
     G4double GrowStepSize(G4double h, G4double error) const;
 
@@ -101,25 +98,28 @@ protected:
 
     void UpdateErrorConstraints();
 
-private:
+  private:
+
     inline void RenewStepperAndAdjustImpl(T* stepper);
 
     G4int fMaxNoSteps;
 
-    // The (default) maximum number of steps is Base
-    // divided by the order of Stepper
     G4int fMaxStepBase;
+      // The (default) maximum number of steps is Base
+      // divided by the order of Stepper
 
     // Parameters used to grow and shrink trial stepsize.
+    //
     G4double safety;
     G4double pshrnk;   //  exponent for shrinking
     G4double pgrow;    //  exponent for growth
 
     // muximum error values for shrinking / growing (optimisation).
+    //
     G4double errorConstraintShrink;
     G4double errorConstraintGrow;
 
-    T* pIntStepper;
+    T* pIntStepper = nullptr;
 };
 
 #include "G4RKIntegrationDriver.icc"

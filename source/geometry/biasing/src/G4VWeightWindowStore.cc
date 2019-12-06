@@ -23,17 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VWeightWindowStore implementation
 //
-//
+// Author: Michael Dressel (CERN), 2003
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4VWeightWindowStore
-//
-// ----------------------------------------------------------------------
-
 
 #include "G4VWeightWindowStore.hh"
 
-G4VWeightWindowStore::G4VWeightWindowStore(){}
-G4VWeightWindowStore::~G4VWeightWindowStore(){}
+G4VWeightWindowStore::G4VWeightWindowStore()
+{
+}
+
+G4VWeightWindowStore::~G4VWeightWindowStore()
+{
+}

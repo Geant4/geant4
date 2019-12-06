@@ -96,7 +96,6 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4physlist_util
     HEADERS
 	CompileTimeConstraints.hh
-	G4DataQuestionaire.hh
 	G4PhysListUtil.hh
 	G4WarnPLStatus.hh
     SOURCES

@@ -42,18 +42,13 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-
-#include "G4ChipsKaonMinusInelasticXS.hh"
-#include "G4ChipsKaonPlusInelasticXS.hh"
-#include "G4ChipsKaonZeroInelasticXS.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
-
 #include "G4HadronicParameters.hh"
+
 
 G4FTFBinaryKaonBuilder::
 G4FTFBinaryKaonBuilder(G4bool quasiElastic)
 {    
-  theMin = 4*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFB");
 
@@ -92,7 +87,6 @@ Build(G4KaonPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
 
@@ -101,7 +95,6 @@ Build(G4KaonMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
 
@@ -110,7 +103,6 @@ Build(G4KaonZeroLInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
 
@@ -119,6 +111,6 @@ Build(G4KaonZeroSInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);    
-  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
+

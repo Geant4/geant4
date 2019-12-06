@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4HelixExplicitEuler
+// G4HelixExplicitEuler
 //
 // Class description:
 //
@@ -35,10 +32,8 @@
 // A simple approach for solving linear differential equations.
 // Take the current derivative and add it to the current position.
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
+// Author: W.Wander <wwc@mit.edu>, 12.09.1997
 // -------------------------------------------------------------------
-
 #ifndef G4HELIXEXPLICITEULER_HH
 #define G4HELIXEXPLICITEULER_HH
 
@@ -48,29 +43,25 @@ class G4HelixExplicitEuler : public G4MagHelicalStepper
 {
   public:  // with description
 
-    G4HelixExplicitEuler(G4Mag_EqRhs *EqRhs)
-      : G4MagHelicalStepper(EqRhs) {}
- 
-    ~G4HelixExplicitEuler() {}
-   void Stepper( const G4double y[],
+    G4HelixExplicitEuler(G4Mag_EqRhs* EqRhs);
+    ~G4HelixExplicitEuler();
+
+    void Stepper( const G4double y[],
                   const G4double*,
                         G4double h,
                         G4double yout[],
                         G4double yerr[]  ); 
 
-   void DumbStepper( const G4double y[],
-                           G4ThreeVector  Bfld,
-                           G4double       h,
-                           G4double       yout[]);
+    void DumbStepper( const G4double y[],
+                            G4ThreeVector  Bfld,
+                            G4double       h,
+                            G4double       yout[]);
    
-  G4double DistChord() const;
+    G4double DistChord() const;
+
   public:  // without description
 
-    // DELETED  RightHandSide( ) !!!!  
-    // Replaced by MagFieldEvaluate( const G4double y[], G4double B[] )   
-    // in G4HelicalStepper
-  
-    G4int IntegratorOrder() const { return 1; }
+    inline G4int IntegratorOrder() const { return 1; }
 };
 
-#endif /* G4EXPLICITEULER_HH */
+#endif

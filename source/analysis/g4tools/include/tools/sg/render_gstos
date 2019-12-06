@@ -1,0 +1,142 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_render_gstos
+#define tools_sg_render_gstos
+
+#include "gstos"
+#include "render_action"
+
+#include "gstos_add"
+
+namespace tools {
+namespace sg {
+
+class render_gstos : public gstos {
+  typedef gstos parent;
+public:
+  virtual void visit(gstos_add& a_visitor,draw_type a_style) = 0;
+protected: //gstos
+  virtual unsigned int create_gsto(std::ostream&,sg::render_manager& a_mgr) {
+    std::vector<float> gsto_data;
+
+    gstos_add _add;
+    visit(_add,draw_points);
+    append(gsto_data,_add.m_xyzs);
+    m_gstos_points_sz = _add.m_xyzs.size();
+
+    _add.clear();
+    visit(_add,draw_lines);
+    append(gsto_data,_add.m_xyzs);
+    m_gstos_lines_sz = _add.m_xyzs.size();
+
+    _add.clear();
+    visit(_add,draw_filled);
+    append(gsto_data,_add.m_xyzs);
+    m_gstos_tris_sz = _add.m_xyzs.size();
+    append(gsto_data,_add.m_nms);
+    m_gstos_nms_sz = _add.m_nms.size();
+
+    if(gsto_data.empty()) return 0;
+    
+    return a_mgr.create_gsto_from_data(gsto_data);
+  }
+public: //node
+  bool gstos_render(render_action& a_action) {
+    const state& state = a_action.state();
+
+    bool draw_edges = false;
+    if(state.m_draw_type==draw_filled) draw_edges = state.m_GL_LIGHTING?false:true;
+
+    if(state.m_use_gsto) {
+      unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
+      if(_id) {        
+        bufpos pxyzs = 0;
+        bufpos plines = pxyzs+m_gstos_points_sz*sizeof(float);
+        bufpos ptris = plines+m_gstos_lines_sz*sizeof(float);
+        bufpos pnms  = ptris+m_gstos_tris_sz*sizeof(float);
+
+        a_action.begin_gsto(_id);
+        if(draw_edges) {
+          //a_action.set_lighting(false); //NOTE : we should do that if style==draw_fill !
+          a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
+          a_action.line_width(1);
+
+          a_action.draw_gsto_v(gl::lines(),m_gstos_lines_sz/3,plines);
+
+          //pushes back the filled polygons to avoid z-fighting with lines
+          a_action.set_polygon_offset(true);
+
+          a_action.color4f(state.m_color);
+          a_action.line_width(state.m_line_width);
+          //a_action.set_lighting(state.m_GL_LIGHTING);
+        }
+        if(state.m_draw_type==draw_points) {
+          a_action.draw_gsto_v(gl::points(),m_gstos_points_sz/3,pxyzs);
+        } else if(state.m_draw_type==draw_lines) {
+          a_action.draw_gsto_v(gl::lines(),m_gstos_lines_sz/3,plines);
+	} else {
+          a_action.draw_gsto_vn(gl::triangles(),m_gstos_tris_sz/3,ptris,pnms);
+        }
+        if(draw_edges) a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+        a_action.end_gsto();
+        return true;
+  
+      } else { //!_id
+        // use immediate rendering.
+      }
+
+    } else {
+      clean_gstos(&a_action.render_manager());
+    }
+    return false;
+  }
+  bool gstos_render_no_style(render_action& a_action) { //for sg::markers.
+    const state& state = a_action.state();
+    if(state.m_use_gsto) {
+      unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
+      if(_id) {        
+        bufpos pxyzs = 0;
+        bufpos plines = pxyzs+m_gstos_points_sz*sizeof(float);
+        bufpos ptris = plines+m_gstos_lines_sz*sizeof(float);
+        bufpos pnms  = ptris+m_gstos_tris_sz*sizeof(float);
+
+        a_action.begin_gsto(_id);
+        a_action.draw_gsto_v(gl::points(),m_gstos_points_sz/3,pxyzs);
+        a_action.draw_gsto_v(gl::lines(),m_gstos_lines_sz/3,plines);
+        a_action.draw_gsto_vn(gl::triangles(),m_gstos_tris_sz/3,ptris,pnms);
+        a_action.end_gsto();
+        return true;
+  
+      } else { //!_id
+        // use immediate rendering.
+      }
+
+    } else {
+      clean_gstos(&a_action.render_manager());
+    }
+    return false;
+  }
+public:
+  render_gstos():parent(),m_gstos_points_sz(0),m_gstos_lines_sz(0),m_gstos_tris_sz(0),m_gstos_nms_sz(0) {}
+  virtual ~render_gstos() {}
+public:
+  render_gstos(const render_gstos& a_from):parent(a_from),m_gstos_points_sz(0),m_gstos_lines_sz(0),m_gstos_tris_sz(0),m_gstos_nms_sz(0) {}
+  render_gstos& operator=(const render_gstos& a_from){
+    parent::operator=(a_from);
+    m_gstos_points_sz = 0;
+    m_gstos_lines_sz = 0;
+    m_gstos_tris_sz = 0;
+    m_gstos_nms_sz = 0;
+    return *this;
+  }
+protected:
+  size_t m_gstos_points_sz;
+  size_t m_gstos_lines_sz;
+  size_t m_gstos_tris_sz;
+  size_t m_gstos_nms_sz;
+};
+
+}}
+
+#endif

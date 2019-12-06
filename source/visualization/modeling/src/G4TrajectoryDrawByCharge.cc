@@ -54,7 +54,7 @@ G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name,
 G4TrajectoryDrawByCharge::~G4TrajectoryDrawByCharge() {}
 
 void
-G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4bool& visible) const
+G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4bool& /*visible*/) const
 {
   G4Colour colour;
 
@@ -65,10 +65,9 @@ G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4bool& visible)
   else               fMap.GetColour(Neutral, colour); 
 
   G4VisTrajContext myContext(GetContext());
-  
+
   myContext.SetLineColour(colour);
-  myContext.SetVisible(visible);
-  
+
   if (GetVerbose()) {
     G4cout<<"G4TrajectoryDrawByCharge drawer named "<<Name();
     G4cout<<", drawing trajectory with charge, "<<charge<<G4endl;

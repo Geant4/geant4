@@ -42,7 +42,6 @@
 #include "G4RotationMatrix.hh"
 #include "HadrontherapyModulatorMessenger.hh"
 
-// using namespace std;
 class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;

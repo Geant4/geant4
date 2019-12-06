@@ -23,22 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GeometryCellImportance implementation
 //
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GeometryCellImportance.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCellImportance.hh"
 #include "G4GeometryCellStepStream.hh"
 
-std::ostream& operator<<(std::ostream &out, const G4GeometryCellImportance &gCelli)
+std::ostream& operator<<(std::ostream& out,
+                         const G4GeometryCellImportance& gCelli)
 {
-  for (G4GeometryCellImportance::const_iterator it = gCelli.begin();
-       it != gCelli.end(); ++it) {
+  for (auto it = gCelli.cbegin(); it != gCelli.cend(); ++it)
+  {
     out << (*it).first << ", importance = ";
     out << (*it).second << "\n";
   }

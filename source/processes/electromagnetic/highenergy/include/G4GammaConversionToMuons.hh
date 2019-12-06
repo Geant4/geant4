@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
 // -----------------------------------------------------------------------------
@@ -49,16 +48,16 @@
 #include "G4VDiscreteProcess.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4Element.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4Step.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4GammaConversionToMuons : public G4VDiscreteProcess
+class G4LossTableManager;
+class G4BetheHeitler5DModel;
 
+class G4GammaConversionToMuons : public G4VDiscreteProcess
 {
 public:  // with description
 
@@ -124,13 +123,20 @@ private:
 
   G4double Mmuon;
   G4double Rc;
-  G4double LimitEnergy;            // energy limit for accurate x-section
-  G4double LowestEnergyLimit ;     // low  energy limit of the tables
-  G4double HighestEnergyLimit ;    // high energy limit of the tables
+  G4double LimitEnergy;          // energy limit for accurate x-section
+  G4double LowestEnergyLimit;    // low  energy limit of the model
+  G4double HighestEnergyLimit;   // high energy limit of the model
+  G4double Energy5DLimit;        // high energy limit for 5D final state sampling
 
-  G4double MeanFreePath;           // actual MeanFreePath (current medium)
-  G4double CrossSecFactor;         // factor to artificially increase
-                                   // the cross section
+  G4double MeanFreePath;         // actual MeanFreePath (current medium)
+  G4double CrossSecFactor;       // factor to artificially increase
+                                 // the cross section
+
+  G4LossTableManager* fManager;
+  G4BetheHeitler5DModel* f5Dmodel;
+  const G4ParticleDefinition* theGamma;
+  const G4ParticleDefinition* theMuonPlus;
+  const G4ParticleDefinition* theMuonMinus;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

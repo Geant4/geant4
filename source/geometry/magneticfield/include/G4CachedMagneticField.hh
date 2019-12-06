@@ -23,22 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $ Id: G4CachedMagneticField.hh,v 1.0 2009/07/20 18:53:00 japost Exp $
-//
-//
-// class G4CachedMagneticField
+// G4CachedMagneticField
 //
 // Class description:
 //
 // Caches Magnetic Field value, for field whose evaluation is expensive.
 
-// History:
-// - Created. JA, July 20th, 2009.
+// Author: J.Apostolakis, 20 July 2009.
 // --------------------------------------------------------------------
-
-#ifndef G4CACHED_MAGNETIC_FIELD_DEF
-#define G4CACHED_MAGNETIC_FIELD_DEF
+#ifndef G4CACHED_MAGNETIC_FIELD_HH
+#define G4CACHED_MAGNETIC_FIELD_HH
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
@@ -48,16 +42,16 @@ class G4CachedMagneticField : public G4MagneticField
 {
   public:  // with description
 
-     G4CachedMagneticField(G4MagneticField *, G4double distanceConst);
+     G4CachedMagneticField(G4MagneticField*, G4double distanceConst);
      virtual ~G4CachedMagneticField();
        // Constructor and destructor. No actions.
 
-     G4CachedMagneticField(const G4CachedMagneticField &r);
-     G4CachedMagneticField& operator = (const G4CachedMagneticField &p);
+     G4CachedMagneticField(const G4CachedMagneticField& r);
+     G4CachedMagneticField& operator = (const G4CachedMagneticField& p);
        // Copy constructor & assignment operator.
 
      virtual void  GetFieldValue( const G4double Point[4],
-                                        G4double *Bfield ) const;
+                                        G4double* Bfield ) const;
      
      G4double GetConstDistance() const         { return fDistanceConst; } 
      void     SetConstDistance( G4double dist ){ fDistanceConst= dist;}
@@ -69,16 +63,20 @@ class G4CachedMagneticField : public G4MagneticField
     
     virtual G4Field* Clone() const;
 
-  private: 
-     G4MagneticField *fpMagneticField;
-     // When the field is evaluated within this distance it will not change
-     G4double      fDistanceConst;
+  protected:
+
+     mutable G4int fCountCalls = 0, fCountEvaluations = 0;  
+
+  private:
+
+     G4MagneticField* fpMagneticField = nullptr;
+     G4double fDistanceConst;
+       // When the field is evaluated within this distance it will not change
+
      // Caching state
+     //
      mutable G4ThreeVector fLastLocation;
      mutable G4ThreeVector fLastValue;
-
-  protected:
-     mutable G4int fCountCalls, fCountEvaluations;  
 };
 
 #endif /* G4CACHED_MAGNETIC_FIELD_DEF */

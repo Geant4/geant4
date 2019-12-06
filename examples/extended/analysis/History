@@ -8,6 +8,11 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th July 2019 I. Hrivnacova (analysisExample-V10-05-00)
+- Removed B3aScoreWriter, B4dScoreWriter examples
+  The score ntuple writer is now provided with Geant4 source
+  and demonstrated in basic B3 abd B4d examples.
+
 9th November 2018 I. Hrivnacova (analysisExample-V10-04-00)
 - Added new B3aScoreWriter, B4dScoreWriter examples
   in CMake and README's

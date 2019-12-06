@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // class G4AssemblyStore
 //
 // Class description:
@@ -72,7 +71,7 @@ class G4AssemblyStore : public std::vector<G4AssemblyVolume*>
     static void Clean();
       // Delete all assemblies from the store.
 
-    G4AssemblyVolume* GetAssembly(unsigned int Id, G4bool verbose=true) const;
+    G4AssemblyVolume* GetAssembly(unsigned int id, G4bool verbose=true) const;
       // Returns an assembly through its Id number specification.
 
   protected:

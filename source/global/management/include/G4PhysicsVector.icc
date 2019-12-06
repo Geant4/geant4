@@ -194,11 +194,11 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
 {
    size_t bin;
    if(type == T_G4PhysicsLogVector) {
-     bin = size_t(G4Log(theEnergy)/dBin - baseBin);
+     bin = size_t(G4Log(theEnergy)*invdBin - baseBin);
      if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
      else if(theEnergy > binVector[bin+1]) { ++bin; }
    } else if(type == T_G4PhysicsLinearVector) {
-     bin = size_t( theEnergy/dBin - baseBin ); 
+     bin = size_t( theEnergy*invdBin - baseBin ); 
      if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
      else if(theEnergy > binVector[bin+1]) { ++bin; }
    } else {
@@ -209,26 +209,6 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
    return std::min(bin, numberOfNodes-2);
 }
 
-
-//---------------------------------------------------------------
-
-inline
-size_t G4PhysicsVector::FindBinLocation(G4double theEnergy,
-                                        G4double theLogEnergy) const
-{
-   size_t bin;
-   const G4double ex = (type==T_G4PhysicsLogVector) ? theLogEnergy : theEnergy;
-   if(type == T_G4PhysicsLogVector || type == T_G4PhysicsLinearVector) {
-     bin = size_t(ex/dBin - baseBin);
-     if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
-     else if(theEnergy > binVector[bin+1]) { ++bin; }
-   } else {
-     // Bin location proposed by K.Genser (FNAL)
-     bin = std::lower_bound(binVector.begin(), binVector.end(), theEnergy)
-         - binVector.begin() - 1;
-   }
-   return std::min(bin, numberOfNodes-2);
-}
 
 //---------------------------------------------------------------
 
@@ -246,22 +226,15 @@ inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
   return id;
 }
 
+
 //---------------------------------------------------------------
 
 inline
-size_t G4PhysicsVector::FindBin(G4double e, G4double loge, size_t idx) const
+size_t G4PhysicsVector::ComputeLogVectorBin(const G4double loge) const
 {
-  size_t id = idx;
-  if(e < binVector[1]) {
-    id = 0;
-  } else if(e >= binVector[numberOfNodes-2]) {
-    id = numberOfNodes - 2;
-  } else if(idx >= numberOfNodes || e < binVector[idx]
-            || e > binVector[idx+1]) {
-    id = FindBinLocation(e, loge);
-  }
-  return id;
+  return size_t(std::max(0., std::min(loge*invdBin-baseBin, numberOfNodes-2.)));
 }
+
 
 //---------------------------------------------------------------
 
@@ -272,13 +245,6 @@ inline
   return Value(theEnergy, idx);
 }
 
-//---------------------------------------------------------------
-inline
-G4double G4PhysicsVector::Value(G4double theEnergy, G4double theLogEnergy) const
-{
-  size_t idx=0;
-  return Value(theEnergy, theLogEnergy, idx);
-}
 
 //---------------------------------------------------------------
 
@@ -290,3 +256,34 @@ inline
 }
 
 //---------------------------------------------------------------
+inline 
+G4double G4PhysicsVector::LogVectorValue(const G4double theEnergy,
+                                         const G4double theLogEnergy) const
+{
+  // handle cases below/above the enrgy grid (by ek, idx that gives b=0/1)
+  // ek = x[0]   if e<=x[0]   and idx will be   0 ^ b=0 => so y=y0
+  // ek = x[N-1] if e>=x[N-1] and idx will be N-2 ^ b=1 => so y=y_{N-1}
+  const G4double ek = std::max(binVector[0],
+                               std::min(binVector[numberOfNodes-1], theEnergy));
+  // compute the lowerindex of the bin (idx \in [0,N-2] will be guaranted)
+  const size_t  idx = ComputeLogVectorBin(theLogEnergy);
+  // perform the interpolation
+  const G4double x1 = binVector[idx];
+  const G4double x2 = binVector[idx+1];
+  const G4double dl = x2-x1;
+  // note: all corner cases of the previous methods are covered and eventually
+  //       gives b=0/1 that results in y=y0\y_{N-1} if e<=x[0]/e>=x[N-1] or
+  //       y=y_i/y_{i+1} if e<x[i]/e>=x[i+1] due to small numerical errors
+  const G4double  b = std::max(0., std::min(1., (ek - x1)/dl));
+  if (useSpline) { // spline interpolation
+    const G4double os = 0.166666666667; // 1./6.
+    const G4double  a = 1.0 - b;
+    const G4double c0 = (a*a*a-a)*secDerivative[idx];
+    const G4double c1 = (b*b*b-b)*secDerivative[idx+1];
+    return a*dataVector[idx] + b*dataVector[idx+1] + (c0+c1)*dl*dl*os;
+  } else {         // linear interpolation
+    const G4double y1 = dataVector[idx];
+    const G4double y2 = dataVector[idx+1];
+    return y1 + b*(y2-y1);
+  }
+}

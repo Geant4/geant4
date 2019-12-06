@@ -54,7 +54,7 @@
 G4ScoringBox::G4ScoringBox(G4String wName)
   :G4VScoringMesh(wName), fSegmentDirection(-1)
 {
-  fShape = boxMesh;
+  fShape = MeshShape::box;
   fDivisionAxisNames[0] = "X";
   fDivisionAxisNames[1] = "Y";
   fDivisionAxisNames[2] = "Z";

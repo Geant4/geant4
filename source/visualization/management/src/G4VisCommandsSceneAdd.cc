@@ -247,7 +247,7 @@ G4VisCommandSceneAddArrow2D::Arrow2D::Arrow2D
 }
 
 void G4VisCommandSceneAddArrow2D::Arrow2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
 {
   sceneHandler.BeginPrimitives2D();
   sceneHandler.AddPrimitive(fShaftPolyline);
@@ -444,7 +444,7 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
     new G4CallbackModel<G4VisCommandSceneAddDate::Date>(date);
   model->SetType("Date");
   model->SetGlobalTag("Date");
-  model->SetGlobalDescription("Date");
+  model->SetGlobalDescription("Date: " + newValue);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -460,7 +460,7 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddDate::Date::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
 {
   G4String time;
   if (fDate == "-") {
@@ -681,19 +681,32 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
   else if (layoutString(0) == 'c') layout = G4Text::centre;
   else if (layoutString(0) == 'r') layout = G4Text::right;
 
-  EventID* eventID = new EventID(fpVisManager, size, x, y, layout);
-  G4VModel* model =
-    new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eventID);
-  model->SetType("EventID");
-  model->SetGlobalTag("EventID");
-  model->SetGlobalDescription("EventID");
-  const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
-  if (successful) {
+  // For End of Event (only for reviewing kept events one by one)
+  EventID* eoeEventID
+  = new EventID(forEndOfEvent, fpVisManager, size, x, y, layout);
+  G4VModel* eoeModel =
+    new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eoeEventID);
+  eoeModel->SetType("EoEEventID");
+  eoeModel->SetGlobalTag("EoEEventID");
+  eoeModel->SetGlobalDescription("EoEEventID: " + newValue);
+  G4bool successfulEoE = pScene -> AddEndOfEventModel (eoeModel, warn);
+
+  // For End of Run
+  EventID* eorEventID
+  = new EventID(forEndOfRun, fpVisManager, size, x, y, layout);
+  G4VModel* eorModel =
+  new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eorEventID);
+  eorModel->SetType("EoREventID");
+  eorModel->SetGlobalTag("EoREventID");
+  eorModel->SetGlobalDescription("EoREventID: " + newValue);
+  G4bool successfulEoR = pScene -> AddEndOfRunModel (eorModel, warn);
+
+  if (successfulEoE && successfulEoR) {
     if (verbosity >= G4VisManager::confirmations) {
+      const G4String& currentSceneName = pScene -> GetName ();
       G4cout << "EventID has been added to scene \""
-	     << currentSceneName << "\"."
-	     << G4endl;
+      << currentSceneName << "\"."
+      << G4endl;
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
@@ -702,75 +715,57 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddEventID::EventID::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+(G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters* mp)
 {
-  const G4Run* currentRun = 0;
   G4RunManager* runManager = G4RunManager::GetRunManager();
 #ifdef G4MULTITHREADED
   if (G4Threading::IsMultithreadedApplication()) {
     runManager = G4MTRunManager::GetMasterRunManager();
   }
 #endif
-  if (runManager) currentRun = runManager->GetCurrentRun();
+  if (!runManager) return;
 
-  G4VModel* model = fpVisManager->GetCurrentSceneHandler()->GetModel();
-  const G4ModelingParameters* mp = 0;
-  const G4Event* currentEvent = 0;
-  if (model) {
-   mp = model->GetModelingParameters();
-   currentEvent = mp->GetEvent();
-  } else {
-    G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No model defined for this SceneHandler : "
-	     << fpVisManager->GetCurrentSceneHandler()->GetName()
-	     << G4endl;
+  const G4Run* currentRun = runManager->GetCurrentRun();
+  if (!currentRun) return;
+
+  const G4int currentRunID = currentRun->GetRunID();
+
+  std::ostringstream oss;
+  switch (fForWhat) {
+    case forEndOfEvent:
+    {
+      // Only use if reviewing kept events
+      if (!fpVisManager->GetReviewingKeptEvents()) return;
+      const G4Event* currentEvent = mp->GetEvent();
+      if (!currentEvent) return;
+      G4int eventID = currentEvent->GetEventID();
+      oss << "Run " << currentRunID << " Event " << eventID;
+      break;
     }
-  }
-  if (currentRun && currentEvent) {
-    G4int runID = currentRun->GetRunID();
-    G4int eventID = currentEvent->GetEventID();
-    std::ostringstream oss;
-    if (fpVisManager->GetCurrentScene()->GetRefreshAtEndOfEvent()) {
-      oss << "Run " << runID << " Event " << eventID;
-    } else {
-      G4int nEvents = 0;
-#ifdef G4MULTITHREADED
-      if (G4Threading::G4GetThreadId() != G4Threading::MASTER_ID) {
-        // Vis sub-thread - run in progress
-#else
-      G4StateManager* stateManager = G4StateManager::GetStateManager();
-      G4ApplicationState state = stateManager->GetCurrentState();
-      if (state == G4State_EventProc) {
-        // Run in progress
-#endif
-        nEvents = currentRun->GetNumberOfEventToBeProcessed();
-      } else {
-        // Rebuilding from kept events
-        const std::vector<const G4Event*>* events =
-        currentRun->GetEventVector();
-        if (events) nEvents = events->size();
-      }
-#ifndef G4MULTITHREADED
-      // In sequential mode we can recognise the last event and avoid
-      // drawing the event ID.  But for MT mode there is no way of
-      // knowing so we have to accept that the event ID will be drawn
-      // at each event, the same characters over and over - but hey!
-      if (eventID < nEvents - 1) return;  // Not last event.
-#endif
-      oss << "Run " << runID << " (" << nEvents << " event";
+    case forEndOfRun:
+    {
+      // Only use if NOT reviewing kept events
+      if (fpVisManager->GetReviewingKeptEvents()) return;
+      const G4int nEvents = currentRun->GetNumberOfEventToBeProcessed();
+      const auto* events = currentRun->GetEventVector();
+      size_t nKeptEvents = events? events->size(): 0;
+      oss << "Run " << currentRunID << " (" << nEvents << " event";
       if (nEvents != 1) oss << 's';
-      oss << ')';
+      oss << ", " << nKeptEvents << " kept)";
+      break;
     }
-    G4Text text(oss.str(), G4Point3D(fX, fY, 0.));
-    text.SetScreenSize(fSize);
-    text.SetLayout(fLayout);
-    G4VisAttributes textAtts(G4Colour(0.,1.,1));
-    text.SetVisAttributes(textAtts);
-    sceneHandler.BeginPrimitives2D();
-    sceneHandler.AddPrimitive(text);
-    sceneHandler.EndPrimitives2D();
+    default:
+      return;
   }
+
+  G4Text text(oss.str(), G4Point3D(fX, fY, 0.));
+  text.SetScreenSize(fSize);
+  text.SetLayout(fLayout);
+  G4VisAttributes textAtts(G4Colour(0.,1.,1));
+  text.SetVisAttributes(textAtts);
+  sceneHandler.BeginPrimitives2D();
+  sceneHandler.AddPrimitive(text);
+  sceneHandler.EndPrimitives2D();
 }
 
 ////////////// /vis/scene/add/extent ///////////////////////////////////////
@@ -874,7 +869,7 @@ fExtent(xmin,xmax,ymin,ymax,zmin,zmax)
 {}
 
 void G4VisCommandSceneAddExtent::Extent::operator()
-(G4VGraphicsScene&, const G4Transform3D&)
+(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*)
 {}
 
 ////////////// /vis/scene/add/frame ///////////////////////////////////////
@@ -937,7 +932,7 @@ void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddFrame::Frame::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
 {
   G4Polyline frame;
   frame.push_back(G4Point3D( fSize,  fSize, 0.));
@@ -1159,7 +1154,7 @@ G4VisCommandSceneAddLine::Line::Line
 }
 
 void G4VisCommandSceneAddLine::Line::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
 {
   sceneHandler.BeginPrimitives();
   sceneHandler.AddPrimitive(fPolyline);
@@ -1244,7 +1239,7 @@ G4VisCommandSceneAddLine2D::Line2D::Line2D
 }
 
 void G4VisCommandSceneAddLine2D::Line2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
 {
   sceneHandler.BeginPrimitives2D();
   sceneHandler.AddPrimitive(fPolyline);
@@ -1814,7 +1809,7 @@ G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
 }
 
 void G4VisCommandSceneAddLogo::G4Logo::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform) {
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform, const G4ModelingParameters*) {
   sceneHandler.BeginPrimitives(transform);
   sceneHandler.AddPrimitive(*fpG);
   sceneHandler.AddPrimitive(*fp4);
@@ -1898,7 +1893,7 @@ void G4VisCommandSceneAddLogo2D::SetNewValue (G4UIcommand*, G4String newValue)
 }
 
 void G4VisCommandSceneAddLogo2D::Logo2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters*)
 {
   G4Text text("Geant4", G4Point3D(fX, fY, 0.));
   text.SetScreenSize(fSize);
@@ -2612,7 +2607,7 @@ G4VisCommandSceneAddText2D::G4Text2D::G4Text2D(const G4Text& text):
 {}
 
 void G4VisCommandSceneAddText2D::G4Text2D::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform) {
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform, const G4ModelingParameters*) {
   sceneHandler.BeginPrimitives2D(transform);
   sceneHandler.AddPrimitive(fText);
   sceneHandler.EndPrimitives2D();
@@ -2858,7 +2853,9 @@ void G4VisCommandSceneAddUserAction::AddVisAction
   if (i != visExtentMap.end()) extent = i->second;
   if (warn) {
     if (extent.GetExtentRadius() <= 0.) {
-      G4cout <<	"WARNING: User Vis Action extent is null." << G4endl;
+      G4cout
+      << "WARNING: User Vis Action \"" << name << "\" extent is null."
+      << G4endl;
     }
   }
 

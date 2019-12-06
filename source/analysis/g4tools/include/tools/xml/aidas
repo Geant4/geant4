@@ -1109,7 +1109,7 @@ protected:
   
     } else if(tag_name==s_row()) {
    
-      const std::vector<aida::base_col*>& cols = a_ntu.cols();
+      const std::vector<aida::base_col*>& cols = a_ntu.columns();
 
       std::vector<unsigned int> intus;
       std::vector<unsigned int> inot_ntus;
@@ -1276,7 +1276,7 @@ protected:
       }
     }}
 
-    if(!ntu->cols().size()) { //??? we could have an empty ntu !
+    if(!ntu->columns().size()) { //??? we could have an empty ntu !
       a_out << "tools::xml::aidas::read_ntu :" 
             << " for ntuple name " << sout(sname)
             << " unable to create a aida::ntuple." << std::endl;

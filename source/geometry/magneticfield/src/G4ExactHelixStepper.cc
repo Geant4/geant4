@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ExactHelixStepper implementation
 //
-//
-//  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
-//   with helix(h) being a helix piece of length h
-//   simplest approach for solving linear differential equations.
-//  Take the current derivative and add it to the current position.
-//
-//  As the field is assumed constant, an error is not calculated.
-// 
-//  Author: J. Apostolakis, 28 Jan 2005
-//     Implementation adapted from ExplicitEuler of W.Wander 
+// Author: J.Apostolakis, 28.01.2005.
+//         Implementation adapted from ExplicitEuler by W.Wander 
 // -------------------------------------------------------------------
 
 #include "G4ExactHelixStepper.hh"
@@ -41,46 +34,50 @@
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 
-G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs *EqRhs)
+G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs* EqRhs)
   : G4MagHelicalStepper(EqRhs),
-    fBfieldValue(DBL_MAX, DBL_MAX, DBL_MAX),
-    fPtrMagEqOfMot(EqRhs)
+    fBfieldValue(DBL_MAX, DBL_MAX, DBL_MAX)
 {
-  ;
 }
 
-G4ExactHelixStepper::~G4ExactHelixStepper() {} 
+G4ExactHelixStepper::~G4ExactHelixStepper()
+{
+} 
+
+// ---------------------------------------------------------------------------
 
 void
 G4ExactHelixStepper::Stepper( const G4double yInput[],
                               const G4double*,
                                     G4double hstep,
                                     G4double yOut[],
-                                    G4double yErr[]      )
+                                    G4double yErr[] )
 {  
-   const G4int nvar = 6;
+  const G4int nvar = 6;
 
-   G4int i;
-   G4ThreeVector Bfld_value;
+  G4int i;
+  G4ThreeVector Bfld_value;
 
-   MagFieldEvaluate(yInput, Bfld_value);        
-   AdvanceHelix(yInput, Bfld_value, hstep, yOut);
+  MagFieldEvaluate(yInput, Bfld_value);        
+  AdvanceHelix(yInput, Bfld_value, hstep, yOut);
 
   // We are assuming a constant field: helix is exact
   //
-  for(i=0;i<nvar;i++)
+  for(i=0; i<nvar; ++i)
   {
     yErr[i] = 0.0 ;
   }
 
-  fBfieldValue=Bfld_value;
+  fBfieldValue = Bfld_value;
 }
 
+// ---------------------------------------------------------------------------
+
 void
-G4ExactHelixStepper::DumbStepper( const G4double  yIn[],
-                                        G4ThreeVector   Bfld,
-                                        G4double  h,
-                                        G4double  yOut[])
+G4ExactHelixStepper::DumbStepper( const G4double yIn[],
+                                        G4ThreeVector Bfld,
+                                        G4double h,
+                                        G4double yOut[])
 {
   // Assuming a constant field: solution is a helix
 
@@ -119,6 +116,8 @@ G4ExactHelixStepper::DistChord() const
 
   return distChord;
 }   
+
+// ---------------------------------------------------------------------------
 
 G4int
 G4ExactHelixStepper::IntegratorOrder() const 

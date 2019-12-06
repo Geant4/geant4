@@ -23,20 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UPolyhedra
 //
 // Class description:
 //
-//   Wrapper class for G4Polyhedra to make use of VecGeom Polyhedron.
+// Wrapper class for G4Polyhedra to make use of VecGeom Polyhedron.
 
-// History:
 // 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UPOLYHEDRA_HH
@@ -113,8 +105,8 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4UPolyhedra( const G4UPolyhedra &source );
-    G4UPolyhedra &operator=( const G4UPolyhedra &source );
+    G4UPolyhedra( const G4UPolyhedra& source );
+    G4UPolyhedra& operator=( const G4UPolyhedra& source );
       // Copy constructor and assignment operator.
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;

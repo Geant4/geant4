@@ -79,7 +79,7 @@ G4VPhysicalVolume* G4MIRDLeftClavicle::Construct(const G4String& volumeName, G4V
   
   
   G4VPhysicalVolume* physLeftClavicle = new G4PVPlacement(0,
-							  G4ThreeVector(0.*cm,0.*cm,33.25*cm),
+							  G4ThreeVector(0.*cm,2. *cm,33.25*cm),
 							  "physicalLeftClavicle",
 							  logicLeftClavicle,
 							  mother,

@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/11/19 I. Hrivnacova (extFactory-V10-05-00)
+- Fixed Doxygen warnings
+
 18/1/18  G.Folger       (extFactory-V10-04-02)
 -  Re-tag using corrected procedure.
 

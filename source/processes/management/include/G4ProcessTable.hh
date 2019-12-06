@@ -52,11 +52,16 @@
 
 #include "G4ProcTblElement.hh"
 #include "G4ProcessVector.hh"
+#include "G4ThreadLocalSingleton.hh"
+
 class G4UImessenger;
 class G4ProcessTableMessenger;
 
 class G4ProcessTable
 {
+
+friend class G4ThreadLocalSingleton<G4ProcessTable>;
+
  public:
   G4ProcessTable();
   //  Constructors
@@ -153,13 +158,7 @@ class G4ProcessTable
   void DumpInfo(G4VProcess* process, G4ParticleDefinition* particle=0);
   // dump out information of the process table
   //  second argument is used to specify processes designated by a particle 
-  
- public: // with description
-   G4UImessenger* CreateMessenger();
-   void           DeleteMessenger();
-   // These methods are used by RunManager to let the process table
-   // know the timing of creation/destructuion of  messengers
-  
+    
  public: // with description
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;

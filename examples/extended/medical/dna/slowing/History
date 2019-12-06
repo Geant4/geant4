@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+26 Nov 19 - tag slowing-V10-05-00 - I. Hrivnacova
+- Fixed Doxygen warnings
+
 22 Jul 18 - tag slowing-V10-04-02 - S. Incerti 
 - removed obsolete RanecuEngine
 

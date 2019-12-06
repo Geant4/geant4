@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // class G4TouchableHistory
 //
@@ -33,8 +30,7 @@
 // Object representing a touchable detector element, and its history in the
 // geometrical hierarchy, including its net resultant local->global transform.
 
-// History:
-// - Created. Paul Kent, August 1996
+// Created: Paul Kent, August 1996
 // ----------------------------------------------------------------------
 #ifndef G4TOUCHABLEHISTORY_HH
 #define G4TOUCHABLEHISTORY_HH
@@ -65,18 +61,18 @@ class G4TouchableHistory : public G4VTouchable
   ~G4TouchableHistory();
     // Destructor
 
-  inline G4VPhysicalVolume* GetVolume( G4int depth=0 ) const;
-  inline G4VSolid* GetSolid( G4int depth=0 ) const;
-  const G4ThreeVector& GetTranslation( G4int depth=0 ) const;
-  const G4RotationMatrix* GetRotation( G4int depth=0 ) const;
+  inline G4VPhysicalVolume* GetVolume( G4int depth = 0 ) const;
+  inline G4VSolid* GetSolid( G4int depth = 0 ) const;
+  const G4ThreeVector& GetTranslation( G4int depth = 0 ) const;
+  const G4RotationMatrix* GetRotation( G4int depth = 0 ) const;
 
-  inline G4int GetReplicaNumber( G4int depth=0 ) const;
+  inline G4int GetReplicaNumber( G4int depth = 0 ) const;
   inline G4int GetHistoryDepth()  const;
   G4int MoveUpHistory( G4int num_levels = 1 );
     // Access methods for touchables with history
 
   void  UpdateYourself( G4VPhysicalVolume*   pPhysVol,
-                        const G4NavigationHistory* history=0 ); 
+                        const G4NavigationHistory* history = nullptr ); 
     // Update methods for touchables with history
 
  public:  // without description
@@ -85,8 +81,8 @@ class G4TouchableHistory : public G4VTouchable
     // Should this method be "deprecated" ?
     // it is used now in G4Navigator::LocateGlobalPointAndSetup
 
-  inline void *operator new(size_t);
-  inline void operator delete(void *aTH);
+  inline void* operator new(size_t);
+  inline void operator delete(void* aTH);
     // Override "new" and "delete" to use "G4Allocator".
 
  private:

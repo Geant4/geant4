@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// class G4LogicalVolume
+// G4LogicalVolume
 //
 // Class description:
 //
@@ -94,21 +91,16 @@
 //    G4bool fIsEnvelope
 //    - Flags if the Logical Volume is an envelope for a FastSimulationManager.
 
-// History:
-// 19.10.16 M.Asai: Added virtual keyword to the destructor
 // 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
 // 12.11.04 G.Cosmo: Added GetMass() method for computing mass of the tree
 // 24.09.02 G.Cosmo: Added flags and accessors for region cuts handling
 // 17.05.02 G.Cosmo: Added IsToOptimise() method and related flag
 // 18.04.01 G.Cosmo: Migrated to STL vector
 // 12.02.99 S.Giani: Added user defined optimisation quality
-// 09.11.98 J.Apostolakis:  Changed G4MagneticField to G4FieldManager
 // 09.11.98 M.Verderi, J.Apostolakis: Added BiasWeight member and accessors
 // 10.20.97 P.M.DeFreitas: Added pointer to a FastSimulation
 //          J.Apostolakis: & flag to indicate if it is an Envelope for it
-// 19.11.96 J.Allison: Replaced G4Visible with explicit const G4VisAttributes*
-// 19.08.96 P.Kent: Split -> hh/icc/cc files; G4VSensitiveDetector change
-// 11.07.95 P.Kent: Initial version.
+// 11.07.95 P.Kent: Initial version
 // ------------------------------------------------------------------------
 #ifndef G4LOGICALVOLUME_HH
 #define G4LOGICALVOLUME_HH
@@ -139,31 +131,32 @@ class G4LVData
   // G4LogicalVolume that may not be read-only. 
 
   public:
+
     G4LVData();
     void initialize()
     {
-      fSolid = 0;
-      fSensitiveDetector = 0;
-      fFieldManager = 0;
-      fMaterial = 0;
+      fSolid = nullptr;
+      fSensitiveDetector = nullptr;
+      fFieldManager = nullptr;
+      fMaterial = nullptr;
       fMass = 0.0;
-      fCutsCouple = 0;
+      fCutsCouple = nullptr;
     }
 
   public:
 
-    G4VSolid* fSolid;
+    G4VSolid* fSolid = nullptr;
       // Pointer to solid.
-    G4VSensitiveDetector* fSensitiveDetector;
+    G4VSensitiveDetector* fSensitiveDetector = nullptr;
       // Pointer to sensitive detector.
-    G4FieldManager* fFieldManager;
-      // Pointer (possibly 0) to (magnetic or other) field manager object.
-    G4Material* fMaterial;
+    G4FieldManager* fFieldManager = nullptr;
+      // Pointer (possibly nullptr) to (magnetic or other) field manager object.
+    G4Material* fMaterial = nullptr;
       // Pointer to material at this node.
-    G4double fMass;
+    G4double fMass = 0.0;
       // Mass of the logical volume tree.
-    G4MaterialCutsCouple* fCutsCouple;
-      // Pointer (possibly 0) to associated production cuts.
+    G4MaterialCutsCouple* fCutsCouple = nullptr;
+      // Pointer (possibly nullptr) to associated production cuts.
 };
 
 // The type G4LVManager is introduced to encapsulate the methods used by
@@ -184,7 +177,7 @@ class G4LVData
 // In addition, it invokes a method similiar to the constructor explicitly
 // to achieve the partial effect for each instance in the array.
 //
-typedef G4GeomSplitter<G4LVData>  G4LVManager;
+typedef G4GeomSplitter<G4LVData> G4LVManager;
 
 class G4LogicalVolume
 {
@@ -195,10 +188,10 @@ class G4LogicalVolume
     G4LogicalVolume(G4VSolid* pSolid,
                     G4Material* pMaterial,
               const G4String& name,
-                    G4FieldManager* pFieldMgr=0,
-                    G4VSensitiveDetector* pSDetector=0,
-                    G4UserLimits* pULimits=0,
-                    G4bool optimise=true);
+                    G4FieldManager* pFieldMgr = nullptr,
+                    G4VSensitiveDetector* pSDetector = nullptr,
+                    G4UserLimits* pULimits = nullptr,
+                    G4bool optimise = true);
       // Constructor. The solid and material pointer must be non null.
       // The parameters for field, detector and user limits are optional.
       // The volume also enters itself into the logical volume Store.
@@ -211,11 +204,15 @@ class G4LogicalVolume
       // This class is NOT meant to act as base class, except for exceptional
       // circumstances of extended types used in the kernel.
 
+    G4LogicalVolume(const G4LogicalVolume&) = delete;
+    G4LogicalVolume& operator=(const G4LogicalVolume&) = delete;
+      // Copy-constructor and assignment operator not allowed.
+
     inline const G4String& GetName() const;
     inline void SetName(const G4String& pName);
       // Returns and sets the name of the logical volume.
 
-    inline G4int GetNoDaughters() const;
+    inline size_t GetNoDaughters() const;
       // Returns the number of daughters (0 to n).
     inline G4VPhysicalVolume* GetDaughter(const G4int i) const;
       // Returns the ith daughter. Note numbering starts from 0,
@@ -240,20 +237,22 @@ class G4LogicalVolume
       // in the tree represented by the current logical volume.
     inline EVolume CharacteriseDaughters() const;
       // Characterise the daughters of this logical volume.
-
+    inline EVolume DeduceDaughtersType() const;
+      // Used by CharacteriseDaughters().
+   
     G4VSolid* GetSolid() const;
-    void SetSolid(G4VSolid *pSolid);
+    void SetSolid(G4VSolid* pSolid);
       // Gets and sets the current solid.
 
     G4Material* GetMaterial() const;
-    void SetMaterial(G4Material *pMaterial);
+    void SetMaterial(G4Material* pMaterial);
       // Gets and sets the current material.
-    void UpdateMaterial(G4Material *pMaterial);
+    void UpdateMaterial(G4Material* pMaterial);
       // Sets material and corresponding MaterialCutsCouple.
       // This method is invoked by G4Navigator while it is navigating through 
       // material parameterization.
-    G4double GetMass(G4bool forced=false, G4bool propagate=true,
-                     G4Material* parMaterial=0);
+    G4double GetMass(G4bool forced = false, G4bool propagate = true,
+                     G4Material* parMaterial = nullptr);
       // Returns the mass of the logical volume tree computed from the
       // estimated geometrical volume of each solid and material associated
       // to the logical volume and (by default) to its daughters.
@@ -274,17 +273,17 @@ class G4LogicalVolume
  
     G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.
-    void SetFieldManager(G4FieldManager *pFieldMgr, G4bool forceToAllDaughters); 
+    void SetFieldManager(G4FieldManager* pFieldMgr, G4bool forceToAllDaughters); 
       // Sets FieldManager and propagates it:
-      //  i) only to daughters with G4FieldManager = 0
+      //  i) only to daughters with G4FieldManager = nullptr
       //     if forceToAllDaughters=false
       // ii) to all daughters
       //     if forceToAllDaughters=true
 
     G4VSensitiveDetector* GetSensitiveDetector() const;
       // Gets current SensitiveDetector.
-    void SetSensitiveDetector(G4VSensitiveDetector *pSDetector);
-      // Sets SensitiveDetector (can be 0).
+    void SetSensitiveDetector(G4VSensitiveDetector* pSDetector);
+      // Sets SensitiveDetector (can be nullptr).
 
     inline G4UserLimits* GetUserLimits() const;
     inline void SetUserLimits(G4UserLimits *pULimits);
@@ -328,7 +327,7 @@ class G4LogicalVolume
       // Returns true if objects are at same address, else false.
 
     inline const G4VisAttributes* GetVisAttributes () const;
-    inline void  SetVisAttributes (const G4VisAttributes* pVA);
+    inline void SetVisAttributes (const G4VisAttributes* pVA);
     void  SetVisAttributes (const G4VisAttributes& VA);
       // Gets and sets visualization attributes. A copy of 'VA' on the heap
       // will be made in the case the call with a const reference is used.
@@ -369,27 +368,27 @@ class G4LogicalVolume
     inline void Lock();
       // Set lock identifier for final deletion of entity.
 
-    void InitialiseWorker(G4LogicalVolume *ptrMasterObject,
+    void InitialiseWorker(G4LogicalVolume* ptrMasterObject,
                           G4VSolid* pSolid, G4VSensitiveDetector* pSDetector);
       // This method is similar to the constructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
-    void TerminateWorker(G4LogicalVolume *ptrMasterObject);
+    void TerminateWorker(G4LogicalVolume* ptrMasterObject);
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
-    void AssignFieldManager( G4FieldManager *fldMgr);
+    void AssignFieldManager(G4FieldManager* fldMgr);
       // Set the FieldManager - only at this level (do not push down hierarchy)
   
-    static G4VSolid* GetSolid(G4LVData &instLVdata) ; // const;
-    static void SetSolid(G4LVData &instLVdata, G4VSolid *pSolid);
+    static G4VSolid* GetSolid(G4LVData& instLVdata) ; // const;
+    static void SetSolid(G4LVData& instLVdata, G4VSolid* pSolid);
       // Optimised Methods - passing thread instance of worker data
 
-  private:
-
-    G4LogicalVolume(const G4LogicalVolume&);
-    G4LogicalVolume& operator=(const G4LogicalVolume&);
-      // Private copy-constructor and assignment operator.
+    G4bool ChangeDaughtersType(EVolume atype);
+      // Change the type of the daughters volume to be of type atype.
+      // Meant for the user who wants to use the external navigator for 
+      // the contents of a volume.
+      // Returns: success (true) or failure (false).
 
   private:
 
@@ -399,26 +398,27 @@ class G4LogicalVolume
       // Vector of daughters. Given initial size of 0.
     G4String fName;
       // Name of logical volume.
-      // Pointer (possibly 0) to `Hit' object.
+    EVolume fDaughtersVolumeType;
+      // Are contents of volume placements, replica, parameterised or external?
 
-    G4UserLimits* fUserLimits;
-      // Pointer (possibly 0) to user Step limit object for this node.
-    G4SmartVoxelHeader* fVoxel;
-      // Pointer (possibly 0) to optimisation info objects.
-    G4bool fOptimise;
+    G4UserLimits* fUserLimits = nullptr;
+      // Pointer (possibly nullptr) to user Step limit object for this node.
+    G4SmartVoxelHeader* fVoxel = nullptr;
+      // Pointer (possibly nullptr) to optimisation info objects.
+    G4bool fOptimise = true;
       // Flag to identify if optimisation should be applied or not.
-    G4bool fRootRegion;
+    G4bool fRootRegion = false;
       // Flag to identify if the logical volume is a root region.
-    G4bool fLock;
+    G4bool fLock = false;
       // Flag to identify if entity is locked for final deletion.
-    G4double fSmartless;
+    G4double fSmartless = 2.0;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
-    const G4VisAttributes* fVisAttributes;
-      // Pointer (possibly 0) to visualization attributes.
-    G4Region* fRegion;
+    const G4VisAttributes* fVisAttributes = nullptr;
+      // Pointer (possibly nullptr) to visualization attributes.
+    G4Region* fRegion = nullptr;
       // Pointer to the cuts region (if any)
-    G4double fBiasWeight;
+    G4double fBiasWeight = 1.0;
       // Weight used in the event biasing technique.
   
     G4int instanceID;
@@ -430,10 +430,10 @@ class G4LogicalVolume
     // Each worker thread can access this field from the master thread
     // through these pointers.
     //
-    G4VSolid* fSolid;
-    G4VSensitiveDetector* fSensitiveDetector;
-    G4FieldManager* fFieldManager;
-    G4LVData* lvdata;  // For use of object persistency
+    G4VSolid* fSolid = nullptr;
+    G4VSensitiveDetector* fSensitiveDetector = nullptr;
+    G4FieldManager* fFieldManager = nullptr;
+    G4LVData* lvdata = nullptr;  // For use of object persistency
 };
 
 #include "G4LogicalVolume.icc"

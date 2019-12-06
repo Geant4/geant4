@@ -43,35 +43,31 @@
 // PhysicsList header
 // --------------------------------------------------------------
 
-#ifndef TLBE_h
-#define TLBE_h 1
-
-#include <CLHEP/Units/SystemOfUnits.h>
+#ifndef LBE_h
+#define LBE_h 1
 
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 #include "G4VModularPhysicsList.hh"
 
 class G4StoppingPhysics;	// This builder encapsulate stopping processes
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-template<class T>
-class TLBE: public T
+
+class LBE: public G4VModularPhysicsList
 {
 public:
-  TLBE(G4int ver = 1);
-  ~TLBE();
-  //  virtual ~TLBE();
+  LBE(G4int ver = 1);
+  virtual ~LBE();
 
+  //delete copy constructor and assignment operator
+  LBE(const LBE &)=delete;
+  LBE& operator=(const LBE &right)=delete;
 
 public:
   virtual void SetCuts();
 
-
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 
 protected:
   // Construct particle and physics
@@ -104,9 +100,10 @@ private:
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
-  G4double cutForProton;
-  G4double cutForAlpha;
-  G4double cutForGenericIon;
+// uncomment if the code if corresponding code in LBE.cc is un-commented
+//  G4double cutForProton;
+//  G4double cutForAlpha;
+//  G4double cutForGenericIon;
 
   G4StoppingPhysics* stoppingPhysics;
 
@@ -119,7 +116,5 @@ private:
   void ConstructMyShortLiveds();
 
 };
-#include "LBE.icc"
-typedef TLBE<G4VModularPhysicsList> LBE;
 
 #endif

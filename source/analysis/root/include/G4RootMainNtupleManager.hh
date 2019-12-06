@@ -69,9 +69,10 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
     G4bool Merge();
     G4bool Reset(G4bool deleteNtuple);
 
-    // Set methods
+    // Set/get methods
     void SetNtupleFile(std::shared_ptr<tools::wroot::file> rfile);
     void SetNtupleDirectory(tools::wroot::directory*  directory);
+    void SetRowWise(G4bool rowWise);
     std::shared_ptr<tools::wroot::file> GetNtupleFile() const;
     tools::wroot::directory*  GetNtupleDirectory() const;
 
@@ -80,7 +81,7 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
       { return fNtupleBuilder->GetNtupleDescriptionVector(); }
     const std::vector<tools::wroot::ntuple*>& GetNtupleVector() 
       { return fNtupleVector; }
-    unsigned int GetBasketSize() const;
+    unsigned int GetBasketEntries() const;
 
   private:
     // Data members
@@ -97,11 +98,17 @@ inline void G4RootMainNtupleManager::SetNtupleFile(std::shared_ptr<tools::wroot:
 inline void G4RootMainNtupleManager::SetNtupleDirectory(tools::wroot::directory*  directory)
 { fNtupleDirectory = directory; }
 
+inline void G4RootMainNtupleManager::SetRowWise(G4bool rowWise)
+{ fRowWise = rowWise; }
+
 inline std::shared_ptr<tools::wroot::file> G4RootMainNtupleManager::GetNtupleFile() const 
 { return fNtupleFile; }
 
 inline tools::wroot::directory*  G4RootMainNtupleManager::GetNtupleDirectory() const
 { return fNtupleDirectory; }
+
+inline unsigned int G4RootMainNtupleManager::GetBasketEntries() const
+{ return fNtupleBuilder->GetBasketEntries(); }
 
 #endif
 

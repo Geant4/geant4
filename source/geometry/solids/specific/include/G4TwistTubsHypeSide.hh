@@ -23,28 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4TwistTubsHypeSide
 //
 // Class description:
 //
-//  Class describing a hyperbolic boundary surface for a cylinder.
+// Class describing a hyperbolic boundary surface for a cylinder.
 
-// Author: 
-//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
-//
-// History:
-//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//                 from original version in Jupiter-2.5.02 application.
+// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
+// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
-#ifndef __G4TWISTTUBSHYPESIDE__
-#define __G4TWISTTUBSHYPESIDE__
+#ifndef G4TWISTTUBSHYPESIDE_HH
+#define G4TWISTTUBSHYPESIDE_HH
 
 #include "G4VTwistSurface.hh"
 #include "G4Integrator.hh"
@@ -54,9 +44,9 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
 {
   public:  // with description
                        
-   G4TwistTubsHypeSide(const G4String         &name,
-                       const G4RotationMatrix &rot,  // 0.5*(phi-width segment)
-                       const G4ThreeVector    &tlate,
+   G4TwistTubsHypeSide(const G4String&         name,
+                       const G4RotationMatrix& rot,  // 0.5*(phi-width segment)
+                       const G4ThreeVector&    tlate,
                        const G4int     handedness,// R-hand = 1, L-hand = -1
                        const G4double  kappa,     // tan(TwistAngle/2)/fZHalfLen
                        const G4double  tanstereo, // tan(stereo angle)
@@ -68,7 +58,7 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
                              G4double  axis0max = kInfinity,
                              G4double  axis1max = kInfinity); 
                              
-  G4TwistTubsHypeSide(const G4String  &name,
+  G4TwistTubsHypeSide(const G4String&  name,
                             G4double   EndInnerRadius[2],
                             G4double   EndOuterRadius[2],
                             G4double   DPhi,
@@ -83,24 +73,24 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
 
    virtual ~G4TwistTubsHypeSide();
 
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-                                   const G4ThreeVector &gv,
+   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
+                                   const G4ThreeVector& gv,
                                          G4ThreeVector  gxx[],
                                          G4double       distance[],
                                          G4int          areacode[],
                                          G4bool         isvalid[],
                                    EValidate validate = kValidateWithTol);
                                                    
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
                                          G4ThreeVector  gxx[],
                                          G4double       distance[],
                                          G4int          areacode[]);
  
-   virtual G4ThreeVector GetNormal(const G4ThreeVector &xx,
+   virtual G4ThreeVector GetNormal(const G4ThreeVector& xx,
                                          G4bool isGlobal = false) ;
-   virtual EInside Inside(const G4ThreeVector &gp) ;
+   virtual EInside Inside(const G4ThreeVector& gp) ;
    
-   virtual G4double GetRhoAtPZ(const G4ThreeVector &p,
+   virtual G4double GetRhoAtPZ(const G4ThreeVector& p,
                                      G4bool isglobal = false) const ;
    
    virtual G4ThreeVector SurfacePoint(G4double, G4double,
@@ -120,17 +110,17 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
 
   private:
 
-   virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+   virtual G4int GetAreaCode(const G4ThreeVector& xx, 
                                    G4bool withTol = true);
-   virtual G4int GetAreaCodeInPhi(const G4ThreeVector &xx, 
+   virtual G4int GetAreaCodeInPhi(const G4ThreeVector& xx, 
                                         G4bool withTol = true);
    virtual void SetCorners();
 
-   virtual void SetCorners(G4double         EndInnerRadius[2],
-                           G4double         EndOuterRadius[2],
-                           G4double         DPhi,
-                           G4double         EndPhi[2],
-                           G4double         EndZ[2]);
+   virtual void SetCorners(G4double EndInnerRadius[2],
+                           G4double EndOuterRadius[2],
+                           G4double DPhi,
+                           G4double EndPhi[2],
+                           G4double EndZ[2]);
    virtual void SetBoundaries();
 
   private:
@@ -156,16 +146,14 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
 //========================================================
 
 inline
-G4double G4TwistTubsHypeSide::GetRhoAtPZ(const G4ThreeVector &p,
+G4double G4TwistTubsHypeSide::GetRhoAtPZ(const G4ThreeVector& p,
                                                G4bool isglobal) const 
 {
   // Get Rho at p.z() on Hyperbolic Surface.
   G4ThreeVector tmpp;
-  if (isglobal) {
-     tmpp = fRot.inverse()*p - fTrans;
-  } else {
-     tmpp = p;
-  }
+  if (isglobal) { tmpp = fRot.inverse()*p - fTrans; }
+  else          { tmpp = p; }
+
   return std::sqrt(fR02 + tmpp.z() * tmpp.z() * fTan2Stereo); 
 }
 

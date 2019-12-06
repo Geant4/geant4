@@ -522,7 +522,10 @@ G4VisCommandSetVolumeForField::G4VisCommandSetVolumeForField ()
   G4UIparameter* parameter;
   fpCommand = new G4UIcommand("/vis/set/volumeForField", this);
   fpCommand->SetGuidance
-  ("Sets a volume and optional copy number \"/vis/scene/add/*Field\" commands.");
+  ("Sets a volume for \"/vis/scene/add/*Field\" commands.");
+  fpCommand->SetGuidance
+  ("Takes a volume name or a /regular expression/ -- see guidance for"
+   "\n\"/vis/drawVolume\"");
   parameter = new G4UIparameter ("physical-volume-name", 's', omitable = true);
   parameter -> SetDefaultValue ("none");
   fpCommand -> SetParameter (parameter);

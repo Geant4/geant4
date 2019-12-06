@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19-Nov-2019 A. Ribon                     (hadr-qgsm-V10-05-02)
+-  G4VAnnihilationCrossSection, G4AnnihilationCrossSection, 
+   G4GammaAnnCrossSection, G4ASCCrossSection, G4QGSMParameters :
+   deleted unused classes.
+
+24-Oct-2019 A. Ribon                     (hadr-qgsm-V10-05-01)
+-  G4Reggeons: Vladimir Uzhinsky extension of the class for charmed and
+   bottom hadrons following ideas of Grichine's implementation of 
+   Glauber-Gribov heavy hadron - nucleon cross sections.
+
 02-Apr-2019 A. Ribon                     (hadr-qgsm-V10-05-00)
 -  G4QGSParticipants : bug-fix (made by Vladimir Uzhinsky) in the 
    computation of the transverse mass in the method 

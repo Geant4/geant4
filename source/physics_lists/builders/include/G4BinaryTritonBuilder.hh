@@ -70,7 +70,5 @@ class G4BinaryTritonBuilder : public G4VTritonBuilder
     G4double theMax;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

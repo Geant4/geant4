@@ -56,6 +56,8 @@ inline const std::string& leaf_bool_cls() {
 template <class T>
 class leaf : public base_leaf {
 public:
+  typedef T value_t;
+public:
   static const std::string& s_class() {
     static const std::string s_v("tools::rroot::leaf<"+stype(T())+">");
     return s_v;
@@ -345,9 +347,7 @@ public:
   }
 public: //base_leaf
   virtual bool read_buffer(buffer&) {
-    m_out << "tools::rroot::leaf_element::read_buffer :"
-          << " dummy."
-          << std::endl;
+    m_out << "tools::rroot::leaf_element::read_buffer : dummy." << std::endl;
     return false;
   }
   virtual bool print_value(std::ostream&,uint32) const {return true;}

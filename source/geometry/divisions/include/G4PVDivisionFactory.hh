@@ -23,17 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4PVDivisionFactory
+// G4PVDivisionFactory
 //
 // Class description:
 //
-// Implementation of the interfaces for creating volumes divisions
+// Implementation of the interfaces for creating volume divisions
 // (defined in G4VPVDivisionFactory) for G4PVDivision type.   
 
-// Author: Ivana Hrivnacova, 4.5.2004  (Ivana.Hrivnacova@cern.ch)
+// Author: Ivana Hrivnacova, 04.05.2004  (Ivana.Hrivnacova@cern.ch)
 // ------------------------------------------------------------------------
 #ifndef G4PVDIVISION_FACTORY_HH
 #define G4PVDIVISION_FACTORY_HH
@@ -93,7 +90,6 @@ class G4PVDivisionFactory : public G4VPVDivisionFactory
   protected:
 
     G4PVDivisionFactory();
-     
 };
 
 #endif

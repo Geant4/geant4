@@ -23,24 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TwistedTrd
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4TwistedTrd.cc
-//
-// Author:
-//
-//   18/03/2005 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 18/03/2005 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrd.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
+
+//=====================================================================
+//* Constructor -------------------------------------------------------
 
 G4TwistedTrd::G4TwistedTrd( const G4String& pName,
                                   G4double  pDx1, 
@@ -54,28 +47,34 @@ G4TwistedTrd::G4TwistedTrd( const G4String& pName,
 {
 }
 
+//=====================================================================
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
-//
+
 G4TwistedTrd::G4TwistedTrd( __void__& a )
   : G4VTwistedFaceted(a)
 {
 }
 
+//=====================================================================
+//* Destructor --------------------------------------------------------
+
 G4TwistedTrd::~G4TwistedTrd()
 {
 }
 
-// Copy constructor
-//
+//=====================================================================
+//* Copy constructor --------------------------------------------------
+
 G4TwistedTrd::G4TwistedTrd(const G4TwistedTrd& rhs)
   : G4VTwistedFaceted(rhs)
 {
   fpPolyhedron = GetPolyhedron();
 }
 
-// Assignment operator
-//
+//=====================================================================
+//* Assignment operator -----------------------------------------------
+
 G4TwistedTrd& G4TwistedTrd::operator = (const G4TwistedTrd& rhs) 
 {
    // Check assignment to self
@@ -89,6 +88,9 @@ G4TwistedTrd& G4TwistedTrd::operator = (const G4TwistedTrd& rhs)
 
    return *this;
 }
+
+//=====================================================================
+//* StreamInfo --------------------------------------------------------
 
 std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 {
@@ -110,7 +112,6 @@ std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 
   return os;
 }
-
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

@@ -142,11 +142,9 @@ public:
   
     float scale;
     if(m_deviceWidth<=m_deviceHeight) {
-      scale =
-        (a_height<=a_width?m_deviceWidth/a_width:m_deviceWidth/a_height);
+      scale = (a_height<=a_width?m_deviceWidth/a_width:m_deviceWidth/a_height);
     } else {
-      scale =
-        (a_height<=a_width?m_deviceHeight/a_width:m_deviceHeight/a_height);
+      scale = (a_height<=a_width?m_deviceHeight/a_width:m_deviceHeight/a_height);
     }
   
    {float xtra,ytra;
@@ -216,16 +214,16 @@ public:
         for ( col = 0; col < a_width; col++) {
           status = a_proc(a_tag,col,row,dr,dg,db)?status:false;
           VCol fgrey = rgb2grey(dr,dg,db);
-          Uchar grey = (Uchar) ( 255. * fgrey);
+          Uchar grey = (Uchar) ( 255.0F * fgrey);
           WriteByte(grey);
         }
       }
       int nbhex = a_width * a_height * 2; 
       PrintFLN ("%%%% nbhex digit          :%d ",nbhex); 
       PrintFLN ("%%%% nbhex/record_length  :%d ",
-                nbhex/METAFILE_RECORD_LENGTH()); 
+                int(nbhex/METAFILE_RECORD_LENGTH())); 
       PrintFLN ("%%%% nbhex%%record_length :%d ",
-                nbhex%METAFILE_RECORD_LENGTH()); 
+                int(nbhex%METAFILE_RECORD_LENGTH())); 
 
     } else if(a_nbit==rgb_2) {
       int nbyte2 = (a_width   *  3)/4;
@@ -243,17 +241,17 @@ public:
       for ( row = 0; row < a_height; row++ ) {
         for ( col = 0; col < col_max; col+=4) {
           status  = a_proc(a_tag,col,row,dr,dg,db)?status:false;
-          red     = (Uchar) ( 3. * dr);
-          green   = (Uchar) ( 3. * dg);
-          blue    = (Uchar) ( 3. * db);
+          red     = (Uchar) ( 3.0F * dr);
+          green   = (Uchar) ( 3.0F * dg);
+          blue    = (Uchar) ( 3.0F * db);
           b       = red;
           b       = (b<<2)+green;
           b       = (b<<2)+blue;
 
           status  = a_proc(a_tag,col+1,row,dr,dg,db)?status:false;
-          red     = (Uchar) ( 3. * dr);
-          green   = (Uchar) ( 3. * dg);
-          blue    = (Uchar) ( 3. * db);
+          red     = (Uchar) ( 3.0F * dr);
+          green   = (Uchar) ( 3.0F * dg);
+          blue    = (Uchar) ( 3.0F * db);
           b       = (b<<2)+red;
           WriteByte(b);
 
@@ -261,18 +259,18 @@ public:
           b       = (b<<2)+blue;
 
           status  = a_proc(a_tag,col+2,row,dr,dg,db)?status:false;
-          red     = (Uchar) ( 3. * dr);
-          green   = (Uchar) ( 3. * dg);
-          blue    = (Uchar) ( 3. * db);
+          red     = (Uchar) ( 3.0F * dr);
+          green   = (Uchar) ( 3.0F * dg);
+          blue    = (Uchar) ( 3.0F * db);
           b     = (b<<2)+red;
           b     = (b<<2)+green;
           WriteByte(b);
           b       = blue;
 
           status  = a_proc(a_tag,col+3,row,dr,dg,db)?status:false;
-          red     = (Uchar) ( 3. * dr);
-          green   = (Uchar) ( 3. * dg);
-          blue    = (Uchar) ( 3. * db);
+          red     = (Uchar) ( 3.0F * dr);
+          green   = (Uchar) ( 3.0F * dg);
+          blue    = (Uchar) ( 3.0F * db);
           b     = (b<<2)+red;
           b     = (b<<2)+green;
           b     = (b<<2)+blue;
@@ -296,16 +294,16 @@ public:
       for ( row = 0; row < a_height; row++ ) {
         for ( col = 0; col < col_max; col+=2) {
           status  = a_proc(a_tag,col,row,dr,dg,db)?status:false;
-          red     = (Uchar) ( 15. * dr);
-          green   = (Uchar) ( 15. * dg);
+          red     = (Uchar) ( 15.0F * dr);
+          green   = (Uchar) ( 15.0F * dg);
           in_buffer ("%x%x",red,green);
-          blue    = (Uchar) ( 15. * db);
+          blue    = (Uchar) ( 15.0F * db);
 
           status  = a_proc(a_tag,col+1,row,dr,dg,db)?status:false;
-          red     = (Uchar) ( 15. * dr);
+          red     = (Uchar) ( 15.0F * dr);
           in_buffer ("%x%x",blue,red);
-          green   = (Uchar) ( 15. * dg);
-          blue    = (Uchar) ( 15. * db);
+          green   = (Uchar) ( 15.0F * dg);
+          blue    = (Uchar) ( 15.0F * db);
           in_buffer ("%x%x",green,blue);
         }
       }
@@ -322,11 +320,11 @@ public:
       for ( row = 0; row < a_height; row++ ) {
         for ( col = 0; col < a_width; col++) {
           status     = a_proc(a_tag,col,row,dr,dg,db)?status:false;
-          red        = (Uchar) ( 255. * dr);
+          red        = (Uchar) ( 255.0F * dr);
           WriteByte (red);
-          green      = (Uchar) ( 255. * dg);
+          green      = (Uchar) ( 255.0F * dg);
           WriteByte (green);
-          blue       = (Uchar) ( 255. * db);
+          blue       = (Uchar) ( 255.0F * db);
           WriteByte (blue);
         }
       }

@@ -60,4 +60,3 @@ Build(G4NeutronInelasticProcess * aP)
   aP->AddDataSet(new G4NeutronInelasticCrossSection);  
 }
 
-// 2002 by J.P. Wellisch

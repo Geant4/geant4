@@ -39,11 +39,10 @@ const int kTAG_NTUPLE = 1004;   // This constant is defined in G4MPImanager
 
 //_____________________________________________________________________________
 G4RootMpiPNtupleManager::G4RootMpiPNtupleManager(
-                           const G4AnalysisManagerState& state, G4bool rowWise,
+                           const G4AnalysisManagerState& state, 
                            tools::impi* impi, G4int mpiRank, G4int destinationRank)
  : G4BaseNtupleManager(state),
    fNtupleVector(),
-   fRowWise(rowWise),
    fImpi(impi),
    fMpiRank(mpiRank),
    fDestinationRank(destinationRank)
@@ -129,11 +128,14 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
   G4cout << "After wait_buffer with " << fImpi << G4endl;
 
   tools::uint32 mainNtupleId;
+  bool rowWise;
   bool byteSwap;
   unsigned int compression;
   tools::wroot::seek seekDirectory;
   tools::uint32 basketSize;
+  bool rowMode;
   std::vector<tools::uint32> basketSizes;
+  unsigned int basketEntries;
 
   if ( ! fImpi->unpack(mainNtupleId) ) {
     G4cerr << "bunpack(byteSwap) failed."<< G4endl;
@@ -141,6 +143,12 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
   }
   // G4cout << "unpack 1" << G4endl;
   
+  if ( ! fImpi->bunpack(rowWise) ) {
+    G4cerr << "bunpack(rowWise) failed."<< G4endl;
+    return;
+  }
+  // G4cout << "unpack 1/2" << G4endl;
+
   if ( ! fImpi->bunpack(byteSwap) ) {
     G4cerr << "bunpack(byteSwap) failed."<< G4endl;
     return;
@@ -159,14 +167,22 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
   }
   // G4cout << "unpack 4" << G4endl;
   
-  if(fRowWise) {
+  if (rowWise) {
     if ( ! fImpi->unpack(basketSize) ) {
       G4cerr << "unpack(basketSize) failed."<< G4endl;
       return;
     }
   } else {
+    if ( ! fImpi->bunpack(rowMode) ) {
+      G4cerr << "bpack(rowMode) failed." << G4endl;
+      return;
+    }      
     if ( ! fImpi->vunpack(basketSizes) ) {
       G4cerr << "vunpack(basketSizes) failed."<< G4endl;
+      return;
+    }
+    if( ! fImpi->unpack(basketEntries) ) {
+      G4cerr << "unpack(basketEntries) failed." << G4endl;
       return;
     }
   }
@@ -182,7 +198,7 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
   //           << G4endl;
 
   // Create MPI pntuple
-  if ( fRowWise ) {
+  if ( rowWise ) {
     tools::wroot::mpi_ntuple_row_wise* ntuple
       = new tools::wroot::mpi_ntuple_row_wise(
               mainNtupleId, G4cout, byteSwap, compression, seekDirectory,
@@ -193,7 +209,8 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
     tools::wroot::mpi_ntuple_column_wise* ntuple
       = new tools::wroot::mpi_ntuple_column_wise(
               mainNtupleId, G4cout, byteSwap, compression, seekDirectory,
-              basketSizes, ntupleDescription->fNtupleBooking, verbose);
+              basketSizes, ntupleDescription->fNtupleBooking, 
+              rowMode, basketEntries, verbose);
     ntupleDescription->fNtuple = ntuple;
     ntupleDescription->fBasePNtuple = ntuple; 
   }
@@ -522,4 +539,3 @@ unsigned int G4RootMpiPNtupleManager::GetBasketSize() const
 
   return fFileManager->GetBasketSize(); 
 }
-

@@ -71,7 +71,6 @@ inline bool is_root(const std::string& a_file,bool& a_is){
   if(head[1]!='o') {a_is = false;return true;}
   if(head[2]!='o') {a_is = false;return true;}
   if(head[3]!='t') {a_is = false;return true;}
-  // Aie, we are in a mess.
   a_is = true;  
   return true;
 }

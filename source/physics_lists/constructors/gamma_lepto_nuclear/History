@@ -13,6 +13,17 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 November 2019, A.Ribon (phys-ctor-glnuclear-V10-05-03)
+- Update of the only README file.
+
+19 November 2019, V.Ivanchenko (phys-ctor-glnuclear-V10-05-02)
+- G4EmExtraPhysics - simplified and clean-up model creation;
+    do not use extra builder classes; used std::getenv; use 
+    transition from the cascade to string model 3 - 6 GeV (according
+    to values in G4HadronicParameters class), before there were
+    3 - 3.5 GeV transition; should reduce memory leak at destruction
+- G4BertiniElectroNuclearBuilder - used std::getenv
+
 07 May 2019, V. Grichine (phys-ctor-glnuclear-V10-05-01)
 - G4EmExtraPhysics - add muon-neutrino nucleus interactions
 

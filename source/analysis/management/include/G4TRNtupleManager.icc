@@ -289,7 +289,7 @@ template <typename TNTUPLE>
 G4int 
 G4TRNtupleManager<TNTUPLE>::GetNofNtuples() const
 { 
-  return fNtupleDescriptionVector.size(); 
+  return G4int(fNtupleDescriptionVector.size()); 
 }
 
 

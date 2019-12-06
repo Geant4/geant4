@@ -23,7 +23,8 @@
 
 \section TestEm16_s2 PHYSICS LIST
 
- The particle list is the one of novice/exampleN03 and \ref ExampleTestEm6
+ The particle list is the one of novice/exampleN03 and
+ <a href="../../html_TestEm6/html/ExampleTestEm6.html"> TestEm6 </a>
  with in addition synchrotron radiation.
  To make the synchrotron radiation easily visible, a very low
  pressure "vaccuum" and a magnetic field of by default 1 Tesla

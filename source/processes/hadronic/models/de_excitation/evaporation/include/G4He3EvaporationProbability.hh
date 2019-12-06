@@ -35,33 +35,29 @@
 #ifndef G4He3EvaporationProbability_h
 #define G4He3EvaporationProbability_h 1
 
-
 #include "G4EvaporationProbability.hh"
-#include "G4He3CoulombBarrier.hh"
 
 class G4He3EvaporationProbability : public G4EvaporationProbability
 {
 public:
 
-  G4He3EvaporationProbability();
+  explicit G4He3EvaporationProbability();
 
-  virtual ~G4He3EvaporationProbability();
+  ~G4He3EvaporationProbability() override;
 
 protected:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+  G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+  G4double CalcBetaParam(const G4Fragment & fragment) override;
 
 private:  
 
   G4He3EvaporationProbability(const G4He3EvaporationProbability &right);
-
-  const G4He3EvaporationProbability & operator=(const G4He3EvaporationProbability &right);
+  const G4He3EvaporationProbability & operator=
+  (const G4He3EvaporationProbability &right);
   G4bool operator==(const G4He3EvaporationProbability &right) const;
   G4bool operator!=(const G4He3EvaporationProbability &right) const;
-
-  G4He3CoulombBarrier theCoulombBarrier;
 };
 
 

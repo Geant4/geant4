@@ -46,7 +46,7 @@
 #include "G4VLevelDensityParameter.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4VCoulombBarrier.hh"
-#include "G4PairingCorrection.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4Pow.hh"
 #include "G4Exp.hh"
 
@@ -96,7 +96,7 @@ private:
     
   // Data Members
   G4Pow*   fG4pow;
-  G4PairingCorrection* fPairCorr;
+  G4NuclearLevelData* fNucData;
     
   G4VLevelDensityParameter * theEvapLDPptr;
     
@@ -141,7 +141,7 @@ G4GEMProbability::GetCoulombBarrier(const G4Fragment& fragment) const
     G4int Zcomp = fragment.GetZ_asInt();
     res = theCoulombBarrierPtr->GetCoulombBarrier(Acomp-theA, Zcomp-theZ,
 				fragment.GetExcitationEnergy() -
-				fPairCorr->GetPairingCorrection(Acomp,Zcomp));
+				fNucData->GetPairingCorrection(Zcomp,Acomp));
   }
   return res;
 }

@@ -75,6 +75,7 @@
 #include "G4VHit.hh"
 #include "G4VDigi.hh"
 #include "G4ScoringManager.hh"
+#include "G4VScoringMesh.hh"
 #include "G4DefaultLinearColorMap.hh"
 #include "Randomize.hh"
 #include "G4StateManager.hh"
@@ -308,6 +309,10 @@ void G4VSceneHandler::AddSolid (const G4Polyhedra& polyhedra) {
   AddSolidT (polyhedra);
 }
 
+void G4VSceneHandler::AddSolid (const G4TessellatedSolid& tess) {
+  AddSolidT (tess);
+}
+
 void G4VSceneHandler::AddSolid (const G4VSolid& solid) {
   AddSolidT (solid);
 }
@@ -335,6 +340,7 @@ void G4VSceneHandler::AddCompound (const G4VDigi& digi) {
 }
 
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   //G4cout << "AddCompound: hits: " << &hits << G4endl;
   G4bool scoreMapHits = false;
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
@@ -377,6 +383,7 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
 }
 
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4StatDouble>& hits) {
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   //G4cout << "AddCompound: hits: " << &hits << G4endl;
   G4bool scoreMapHits = false;
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
@@ -1041,7 +1048,8 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   // it can be overriddden by the ForceDrawingStyle flag in the vis
   // attributes.
   const G4ViewParameters& vp = fpViewer->GetViewParameters();
-  G4ViewParameters::DrawingStyle style = vp.GetDrawingStyle();
+  const G4ViewParameters::DrawingStyle viewerStyle = vp.GetDrawingStyle();
+  G4ViewParameters::DrawingStyle resultantStyle = viewerStyle;
   if (pVisAttribs -> IsForceDrawingStyle ()) {
     G4VisAttributes::ForcedDrawingStyle forcedStyle =
     pVisAttribs -> GetForcedDrawingStyle ();
@@ -1049,15 +1057,15 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
     // has been requested we wish to preserve this sometimes.
     switch (forcedStyle) {
       case (G4VisAttributes::solid):
-        switch (style) {
+        switch (viewerStyle) {
           case (G4ViewParameters::hlr):
-            style = G4ViewParameters::hlhsr;
+            resultantStyle = G4ViewParameters::hlhsr;
             break;
           case (G4ViewParameters::wireframe):
-            style = G4ViewParameters::hsr;
+            resultantStyle = G4ViewParameters::hsr;
             break;
           case (G4ViewParameters::cloud):
-            style = G4ViewParameters::hsr;
+            resultantStyle = G4ViewParameters::hsr;
             break;
           case (G4ViewParameters::hlhsr):
           case (G4ViewParameters::hsr):
@@ -1065,7 +1073,7 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
         }
         break;
       case (G4VisAttributes::cloud):
-        style = G4ViewParameters::cloud;
+        resultantStyle = G4ViewParameters::cloud;
         break;
       case (G4VisAttributes::wireframe):
       default:
@@ -1073,11 +1081,11 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
         // main uses is in displaying the consituent solids of a Boolean
         // solid and their surfaces overlap with the resulting Booean
         // solid, making a mess if hlr is specified.
-        style = G4ViewParameters::wireframe;
+        resultantStyle = G4ViewParameters::wireframe;
         break;
     }
   }
-  return style;
+  return resultantStyle;
 }
 
 G4int G4VSceneHandler::GetNumberOfCloudPoints
@@ -1086,7 +1094,9 @@ G4int G4VSceneHandler::GetNumberOfCloudPoints
   // has forced through the vis attributes, thereby over-riding the
   // current view parameter.
   G4int numberOfCloudPoints = fpViewer->GetViewParameters().GetNumberOfCloudPoints();
-  if (pVisAttribs -> GetForcedNumberOfCloudPoints() > 0) {
+  if (pVisAttribs -> IsForceDrawingStyle() &&
+      pVisAttribs -> GetForcedDrawingStyle() == G4VisAttributes::cloud &&
+      pVisAttribs -> GetForcedNumberOfCloudPoints() > 0) {
     numberOfCloudPoints = pVisAttribs -> GetForcedNumberOfCloudPoints();
   }
   return numberOfCloudPoints;

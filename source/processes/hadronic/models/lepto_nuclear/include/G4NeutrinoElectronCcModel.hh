@@ -75,6 +75,11 @@ private:
 
   G4ParticleDefinition* theNeutrinoE;
   G4ParticleDefinition* theAntiNeutrinoE;
+  G4ParticleDefinition* theNeutrinoMu;
+  G4ParticleDefinition* theAntiNeutrinoMu;
+  G4ParticleDefinition* theNeutrinoTau;
+  G4ParticleDefinition* theAntiNeutrinoTau;
+  
   G4ParticleDefinition* theMuonMinus;
   G4ParticleDefinition* theTauMinus;
  

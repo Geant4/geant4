@@ -1,6 +1,8 @@
 
 Analysis_F001: Fatal exception when trying to create a singleton manager twice
 
+Analysis_F002: Fatal exception when selecting non-existing output type.
+
 Analysis_W001: Cannot create file or directory for output
 
 Analysis_W002: Cannot create an object for output

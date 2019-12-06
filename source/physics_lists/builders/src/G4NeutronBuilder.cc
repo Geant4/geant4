@@ -79,4 +79,4 @@ void G4NeutronBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
       G4PhysicsBuilderInterface::RegisterMe(aB);
   }
 }
-// 2002 by J.P. Wellisch
+

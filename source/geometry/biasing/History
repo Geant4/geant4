@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 19th, 2019 G.Cosmo (geombias-V10-05-00)
+- Implemented minor c++11 revision and code cleanup.
+
 March 7th, 2017 A.Howard (geombias-V10-03-00)
 - Added mutex locks to methods within G4IStore and G4ImportanceAlgorithm
   should fix bug#1945 (created by me) - erratic behaviour in MT-mode and

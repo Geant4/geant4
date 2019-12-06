@@ -32,35 +32,24 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TNuBeam_h
-#define TNuBeam_h 1
-
-#include <CLHEP/Units/SystemOfUnits.h>
+#ifndef NuBeam_h
+#define NuBeam_h 1
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TNuBeam : public T
+class NuBeam : public G4VModularPhysicsList
 {
 
 public:
 
-  TNuBeam(G4int ver = 1);
-  virtual ~TNuBeam();
+  NuBeam(G4int ver = 1);
+  virtual ~NuBeam()=default;
   
-public:
-
-  // SetCuts() 
-  virtual void SetCuts();
-
-private:
-  enum { ok = CompileTimeConstraints::IsA< T, G4VModularPhysicsList >::ok };
+  NuBeam(const NuBeam &) = delete;
+  NuBeam & operator=(const NuBeam &)=delete;
+    
 };
-
-#include "NuBeam.icc"
-typedef TNuBeam<G4VModularPhysicsList> NuBeam;
 
 #endif
 

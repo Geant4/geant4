@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
 
 #include "G4TrackStack.hh"
 #include "G4SmartTrackStack.hh"
@@ -38,30 +38,37 @@ G4TrackStack::~G4TrackStack()
 
 void G4TrackStack::clearAndDestroy()
 {
-  for( iterator i = begin(); i != end(); i++ ) {
+  for( auto i = begin(); i != end(); ++i )
+  {
     delete (*i).GetTrack();
     delete (*i).GetTrajectory();
   }
   clear();
 }
 
-void G4TrackStack::TransferTo(G4TrackStack* aStack) {
-  for(iterator i = begin(); i != end(); i++) aStack->push_back(*i);
+void G4TrackStack::TransferTo(G4TrackStack* aStack)
+{
+  for(auto i = begin(); i != end(); ++i)
+  {
+    aStack->push_back(*i);
+  }
   clear();
 }
 
-
 void G4TrackStack::TransferTo(G4SmartTrackStack * aStack)
 {
-  while(size()) { aStack->PushToStack(PopFromStack()); }
+  while (size())
+  {
+    aStack->PushToStack(PopFromStack());
+  }
 }
-
 
 G4double G4TrackStack::getTotalEnergy(void) const
 {
-	G4double totalEnergy = 0.0;
-	for (const_iterator i = begin(); i != end(); i++) {
-		totalEnergy += (*i).GetTrack()->GetDynamicParticle()->GetTotalEnergy();
-	}
-	return totalEnergy;
+  G4double totalEnergy = 0.0;
+  for ( auto i = cbegin(); i != cend(); ++i )
+  {
+    totalEnergy += (*i).GetTrack()->GetDynamicParticle()->GetTotalEnergy();
+  }
+  return totalEnergy;
 }

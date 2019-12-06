@@ -1,0 +1,191 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_xpm
+#define tools_xpm
+
+#include <cstdio> //FILE,size_t
+#include <string>
+#include <vector>
+#include <ostream>
+
+#include "charmanip"
+
+namespace tools {
+namespace xpm {
+
+typedef unsigned char* (*file_reader)(std::ostream&,const std::string&,unsigned int&,unsigned int&,unsigned int&);
+
+inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::string& a_name,file_reader a_file_reader,bool a_verbose) {
+  // a_name is the xpm name. Then a string without a path and without
+  // the .xpm suffix.
+
+  unsigned int w,h,bpp;
+  unsigned char* buffer = a_file_reader(a_out,a_file,w,h,bpp);
+  if(!buffer) {
+    a_out << "tools::xpm::to_xpm :"
+          << " read_file failed."
+          << std::endl;
+    return false;
+  }
+
+  // get colormap :
+  
+  typedef unsigned int color;
+  std::vector<color> colors;
+
+ {unsigned char r,g,b;
+  for(unsigned int j=0;j<h;j++) {
+    unsigned char* pos = buffer + j * (w * 3);
+    for(unsigned int i=0;i<w;i++) {
+      r = *pos;pos++;
+      g = *pos;pos++;
+      b = *pos;pos++;
+
+      color c = 0;
+      unsigned char* ca = (unsigned char*)&c;
+      ca[0] = r;
+      ca[1] = g;
+      ca[2] = b;
+      ca[3] = 0;
+     
+      //printf("debug : get : %d %d %d : %lu\n",r,g,b,colors.size());
+
+      bool found = false;
+      std::vector<color>::iterator it;
+      for(it=colors.begin();it!=colors.end();++it) {
+        if(*it==c) {
+          found = true;
+          break;
+        }
+      }
+      if(!found) colors.push_back(c);
+
+    }
+  }}
+
+  unsigned int colorn = (unsigned int)colors.size();
+
+  //get a set of non problematic characters (for exa avoid \).
+  std::vector<unsigned char> chars;
+ {for(unsigned char c=0;c<255;c++) {
+    if(is_letter(c)||is_digit(c)) {
+      chars.push_back(c);
+    }    
+  }}
+
+  unsigned int base = (unsigned int)chars.size();
+
+  unsigned int nchar = 1;
+ {unsigned int i = colorn;
+  while(i>=base) {
+    //unsigned int r = i%base;
+    i /= base;
+    nchar++;
+  }}
+
+  if(a_verbose) {
+    a_out << "colors " << colorn
+          << " base " << base
+          << " nchar " << nchar
+          << std::endl;
+  }
+
+  std::string xpm = a_name+".xpm";
+
+  FILE* out = ::fopen(xpm.c_str(),"wb");
+  if(!out) {
+    a_out << "tools::xpm::to_xpm :"
+          << " can't open " << xpm
+          << std::endl;
+    delete [] buffer;
+    return false;
+  }
+
+  ::fprintf(out,"%s","/* XPM */\n");
+  ::fprintf(out,"static const char *%s[] = {\n",a_name.c_str());
+  ::fprintf(out,"\"%u %u %u %u\",\n",w,h,colorn,nchar);
+
+  // write colormap :
+ {for(unsigned int index=0;index<colorn;index++) {
+    ::fprintf(out,"%s","\"");
+
+   {unsigned int ix = index;
+    for(unsigned int ic=0;ic<nchar;ic++) {
+      ::fprintf(out,"%c",chars[ix%base]);
+      ix /= base;
+    }}
+
+    ::fprintf(out,"%s","\tc #");
+
+    color c = colors[index];
+    unsigned char* ca = (unsigned char*)&c;
+    ::fprintf(out,"%02x%02x%02x",ca[0],ca[1],ca[2]);
+
+    ::fprintf(out,"%s","\",\n");
+  }}
+
+  //pixmap :
+ {unsigned char r,g,b;
+  for(unsigned int j=0;j<h;j++) {
+    unsigned char* pos = buffer + j * (w * 3);
+    ::fprintf(out,"%s","\"");
+    for(unsigned int i=0;i<w;i++) {
+      r = *pos;pos++;
+      g = *pos;pos++;
+      b = *pos;pos++;
+
+      color c;
+      unsigned char* ca = (unsigned char*)&c;
+      ca[0] = r;
+      ca[1] = g;
+      ca[2] = b;
+      ca[3] = 0;
+     
+      bool found = false;
+     {for(unsigned int index=0;index<colorn;index++) {
+        //unsigned char c1 = index%base;
+        //unsigned char c2 = index/base;
+        if(c==colors[index]) {
+
+         {unsigned int ix = index;
+          for(unsigned int ic=0;ic<nchar;ic++) {
+            ::fprintf(out,"%c",chars[ix%base]);
+            ix /= base;
+          }}
+
+          //::fprintf(out,"%c%c",chars[c1],chars[c2]);
+
+          found = true;
+          break;
+        }
+      }}
+      if(!found) {
+        a_out << "tools::xpm::to_xpm :"
+              << " color not found in the colormap."
+              << std::endl;
+        ::fclose(out);
+        ::remove(xpm.c_str());
+        delete [] buffer;
+        return false;
+      }
+
+    }
+    if(j==(h-1)) 
+      ::fprintf(out,"%s\n","\"");
+    else
+      ::fprintf(out,"%s\n","\",");
+  }}
+  
+  ::fprintf(out,"%s","};");
+
+  ::fclose(out);
+  delete [] buffer;
+
+  return true;
+}
+
+
+}}
+
+#endif

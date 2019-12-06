@@ -76,9 +76,8 @@ void G4HadronicInteractionRegistry::Clean()
 
 void G4HadronicInteractionRegistry::InitialiseModels()
 {
-  size_t nModels = allModels.size();
-  for (size_t i=0; i<nModels; ++i) {
-    if( allModels[i] ) { allModels[i]->InitialiseModel(); }
+  for (auto & mod : allModels) {
+    if( mod ) { mod->InitialiseModel(); }
   }
 }
 
@@ -86,9 +85,8 @@ void
 G4HadronicInteractionRegistry::RegisterMe(G4HadronicInteraction * aModel)
 {
   if(!aModel) { return; }
-  size_t nModels = allModels.size();
-  for (size_t i=0; i<nModels; ++i) {
-    if( aModel == allModels[i] ) { return; }
+  for (auto & mod : allModels) {
+    if( aModel == mod ) { return; }
   }
   //G4cout << "Register model <" << aModel->GetModelName() 
   //	 << ">  " << nModels+1 << "  " << aModel << G4endl;
@@ -99,12 +97,11 @@ void
 G4HadronicInteractionRegistry::RemoveMe(G4HadronicInteraction * aModel)
 {
   if(!aModel) { return; }
-  size_t nModels = allModels.size();
-  for (size_t i=0; i<nModels; ++i) {
+  for (size_t i=0; i<allModels.size(); ++i) {
     if( aModel == allModels[i] ) {
       //G4cout << "DeRegister model <" << aModel 
       //	<< ">  " << i << G4endl;
-      allModels[i] = 0;
+      allModels[i] = nullptr;
       return;
     }
   }
@@ -113,16 +110,11 @@ G4HadronicInteractionRegistry::RemoveMe(G4HadronicInteraction * aModel)
 G4HadronicInteraction* 
 G4HadronicInteractionRegistry::FindModel(const G4String& name)
 {
-  G4HadronicInteraction* model = 0; 
-
-  size_t nModels = allModels.size(); 
-  for (size_t i=0; i<nModels; ++i) {
-    G4HadronicInteraction* p = allModels[i]; 
-    if(p) {
-      if (p->GetModelName() == name) { 
-	model = p;
-	break; 
-      }
+  G4HadronicInteraction* model = nullptr; 
+  for (auto & mod : allModels) {
+    if(mod && mod->GetModelName() == name) { 
+      model = mod;
+      break; 
     }
   }
   return model;
@@ -132,14 +124,9 @@ std::vector<G4HadronicInteraction*>
 G4HadronicInteractionRegistry::FindAllModels(const G4String& name)
 {
   std::vector<G4HadronicInteraction*> models;
-
-  size_t nModels = allModels.size(); 
-  for (size_t i=0; i<nModels; ++i) {
-    G4HadronicInteraction* p = allModels[i]; 
-    if(p) {
-      if (p->GetModelName() == name) { 
-        models.push_back(p);
-      }
+  for (auto & mod : allModels) {
+    if(mod && mod->GetModelName() == name) { 
+      models.push_back(mod);
     }
   }
   return models;

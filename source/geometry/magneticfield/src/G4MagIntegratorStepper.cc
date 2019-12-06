@@ -23,28 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MagIntegratorStepper implementation
 //
-//
+// Author: J.Apostolakis, CERN - 15.01.1997
 // --------------------------------------------------------------------
 
 #include "G4MagIntegratorStepper.hh"
 
 // Constructor for stepper abstract base class. 
 // 
-
-G4MagIntegratorStepper::G4MagIntegratorStepper(G4EquationOfMotion* Equation,
-					       G4int       num_integration_vars,
-					       G4int       num_state_vars,
-                                               bool        isFSAL
-                                               // , G4int       methodOrder
-   )
+//
+G4MagIntegratorStepper::
+G4MagIntegratorStepper( G4EquationOfMotion* Equation,
+                        G4int               num_integration_vars,
+                        G4int               num_state_vars,
+                        G4bool              isFSAL )
   : fEquation_Rhs(Equation),
     fNoIntegrationVariables(num_integration_vars),
     fNoStateVariables(std::max(num_state_vars,8)),
-    fNoRHSCalls( 0UL ),
-    fIntegrationOrder( -1 ), // Invalid value -- must be set by stepper !!!
     fIsFSAL(isFSAL)
 {
 }
-
-

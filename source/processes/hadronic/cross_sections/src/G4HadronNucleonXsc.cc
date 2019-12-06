@@ -40,6 +40,7 @@
 #include "G4Log.hh"
 #include "G4Exp.hh"
 #include "G4Pow.hh"
+#include "G4NuclearRadii.hh"
 
 #include "G4LambdacPlus.hh"
 #include "G4AntiLambdacPlus.hh"
@@ -119,6 +120,7 @@ static const G4double cofLogE = .0557;  // elastic (lnP-minLogP)^2
 static const G4double cofLogT = .3;     // total (lnP-minLogP)^2 
 static const G4double pMin = .1;        // fast LE calculation 
 static const G4double pMax = 1000.;     // fast HE calculation 
+static const G4double ekinmin = 0.1*CLHEP::MeV; // protection against zero ekin 
 
 G4HadronNucleonXsc::G4HadronNucleonXsc() 
   : fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0)
@@ -221,6 +223,48 @@ void G4HadronNucleonXsc::CrossSectionDescription(std::ostream& outFile) const
           << "energies above 30 keV.  This is a cross section component which\n"
           << "is to be used to build a cross section data set.\n"; 
 }
+
+
+
+G4double G4HadronNucleonXsc::HadronNucleonXsc(  const G4ParticleDefinition* theParticle,
+                               const G4ParticleDefinition* nucleon, G4double ekin)
+{
+  G4double xsc(0.);
+  G4int    pdg = std::abs( theParticle->GetPDGEncoding() );
+  
+  if ( pdg == 2212 || pdg == 2112 || pdg == 211 ) // p, n, pi+-
+  {
+    xsc = HadronNucleonXscNS( theParticle, nucleon, ekin);
+  }
+  else if ( pdg == 321 || pdg == 310 || pdg == 130 ) // K+-, K0, Ks
+  {
+    xsc = KaonNucleonXscNS( theParticle, nucleon, ekin);
+  }
+  else if ( pdg == 3122 || pdg == 3222 || pdg == 3112 || pdg == 3212 || pdg == 3322 || pdg == 3312 || pdg == 3324 ||
+
+	    pdg == 4122 || pdg == 4332 || pdg == 4122 || pdg == 4212 || pdg == 4222 || pdg == 4112 || pdg == 4232 || pdg == 4132  || 
+
+            pdg == 5122 || pdg == 5332 || pdg == 5122 || pdg == 5112 || pdg == 5222 || pdg == 5212 || pdg == 5132 || pdg == 5232  
+	    
+	  ) // heavy s-,c-,b-hyperons
+  {
+    xsc = HyperonNucleonXscNS( theParticle, nucleon, ekin);
+  }
+  else if ( pdg == 511 || pdg == 421 || pdg == 531 || pdg == 541 || pdg == 431 || pdg == 411 || pdg == 521 ||
+
+	    pdg == 221 || pdg == 331 || pdg == 441 || pdg == 443 || pdg == 543 
+
+	    ) // s-,c-,b-mesons
+  {
+    xsc = SCBMesonNucleonXscNS( theParticle, nucleon, ekin);
+  }
+  else
+  {
+    xsc = HadronNucleonXscNS( theParticle, nucleon, ekin);
+  }
+  return xsc;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -415,8 +459,9 @@ G4double G4HadronNucleonXsc::HadronNucleonXscPDG(
 
 G4double G4HadronNucleonXsc::HadronNucleonXscNS(
                              const G4ParticleDefinition* theParticle, 
-			     const G4ParticleDefinition* nucleon, G4double ekin)
+			     const G4ParticleDefinition* nucleon, G4double ekin0)
 {  
+  const G4double ekin = std::max(ekin0, ekinmin);
   /*  
   G4cout<< "HadronNucleonXscNS: Ekin(GeV)= " << ekin/GeV << "  "
         << theParticle->GetParticleName() << " + " 
@@ -426,57 +471,7 @@ G4double G4HadronNucleonXsc::HadronNucleonXscNS(
     return HadronNucleonXscPDG(theParticle, nucleon, ekin);
   }
 
-  G4double pM = theParticle->GetPDGMass();
-
-  ///////////////////////////// strange hyperons
-  if(pM > CLHEP::GeV) {
-    if( theParticle == theL || theParticle == theSPlus || 
-	theParticle == theSMinus || theParticle == theS0) {
-      fTotalXsc      = HadronNucleonXscNS( theProton, nucleon, ekin);
-      fTotalXsc     *= fHypTotXscCof;
-      fInelasticXsc *= fHypTotXscCof;
-      fElasticXsc   *= fHypTotXscCof;
-      return fTotalXsc;
-    } else if( theParticle == theAntiL || theParticle == theASPlus || 
-	       theParticle == theASMinus || theParticle == theAS0) {
-      fTotalXsc      = HadronNucleonXscNS( theProton, nucleon, ekin);
-      fTotalXsc     *= fHypTotXscCof;
-      fInelasticXsc *= fHypTotXscCof;
-      fElasticXsc   *= fHypTotXscCof;
-      return fTotalXsc;
-    } else if( theParticle == theXiMinus || theParticle == theXi0) { 
-      fTotalXsc      = HadronNucleonXscNS( theProton, nucleon, ekin);
-      G4double cof2  = fHypTotXscCof*fHypTotXscCof;
-      fTotalXsc     *= cof2;
-      fInelasticXsc *= cof2;
-      fElasticXsc   *= cof2;
-      return fTotalXsc;
-    } else if( theParticle == theAXiMinus || theParticle == theAXi0) {
-      fTotalXsc      = HadronNucleonXscNS( theProton, nucleon, ekin);
-      G4double cof2  = fHypTotXscCof*fHypTotXscCof;
-      fTotalXsc     *= cof2;
-      fInelasticXsc *= cof2;
-      fElasticXsc   *= cof2;
-      return fTotalXsc;
-    } else if( theParticle == theOmega ) {
-      fTotalXsc      = HadronNucleonXscNS( theProton, nucleon, ekin);
-      G4double cof3  = fHypTotXscCof*fHypTotXscCof*fHypTotXscCof;
-      fTotalXsc     *= cof3;
-      fInelasticXsc *= cof3;
-      fElasticXsc   *= cof3;
-      return fTotalXsc;
-    } else if( theParticle == theAOmega ) {
-      fTotalXsc      = HadronNucleonXscNS( theProton, nucleon, ekin);
-      G4double cof3  = fHypTotXscCof*fHypTotXscCof*fHypTotXscCof;
-      fTotalXsc     *= cof3;
-      fInelasticXsc *= cof3;
-      fElasticXsc   *= cof3;
-      return fTotalXsc;
-    } else {
-      return HadronNucleonXscPDG( theProton, nucleon, ekin);
-    }
-  }
-
+  G4double pM   = theParticle->GetPDGMass();
   G4double tM   = nucleon->GetPDGMass();
   G4double pE   = ekin + pM; 
   G4double pLab = std::sqrt(ekin*(ekin + 2*pM));
@@ -489,6 +484,7 @@ G4double G4HadronNucleonXsc::HadronNucleonXscNS(
   if(pLab >= 10.) {
     fTotalXsc = HadronNucleonXscPDG(theParticle, nucleon, ekin)/CLHEP::millibarn;
   } else { fTotalXsc = 0.0; }
+  fElasticXsc = 0.0;
   //G4cout << "Stot(mb)= " << fTotalXsc << " pLab= " << pLab 
   //	 << " Smand= " << sMand <<G4endl;
   G4double logP = G4Log(pLab);
@@ -643,7 +639,7 @@ G4double G4HadronNucleonXsc::HadronNucleonXscNS(
     }
     else if( pLab < 0.68 )
     {
-      fTotalXsc = 14./( (logP + 1.273)*(logP + 1.273) + 0.07);
+      fTotalXsc = 14./((logP + 1.273)*(logP + 1.273) + 0.07);
       fElasticXsc = fTotalXsc;
     }
     else if( pLab < 0.85 )
@@ -880,16 +876,15 @@ G4double G4HadronNucleonXsc::HadronNucleonXscNS(
   }
   fTotalXsc   *= CLHEP::millibarn; 
   fElasticXsc *= CLHEP::millibarn;
-  fElasticXsc = std::min(fElasticXsc, fTotalXsc);
-  fInelasticXsc = std::max(fTotalXsc - fElasticXsc,0.0);
+  fElasticXsc  = std::min(fElasticXsc, fTotalXsc);
 
   if( proton && theParticle->GetPDGCharge() > 0. && ekin < 100*MeV)
   {
-    G4double cB = CoulombBarrier(theParticle, nucleon, ekin);
+    G4double cB = G4NuclearRadii::CoulombFactor(theParticle, nucleon, ekin);
     fTotalXsc   *= cB;
     fElasticXsc *= cB; 
-    fInelasticXsc *= cB;
   }
+  fInelasticXsc = std::max(fTotalXsc - fElasticXsc,0.0);
   /*
   G4cout<< "HNXsc: Ekin(GeV)= " << ekin/GeV << "; tot(mb)= " << fTotalXsc/millibarn
         <<"; el(mb)= " <<fElasticXsc/millibarn
@@ -1075,11 +1070,10 @@ G4double G4HadronNucleonXsc::KaonNucleonXscVG(
       G4double sp  = std::sqrt(pLab);
       G4double p2  = pLab*pLab;
       G4double p4  = p2*p2;
-      G4double lm  = pLab - 0.8;     // vg version
-      G4double md  = lm*lm + .652;   // vg version
+      G4double lm  = pLab - 0.94;
+      G4double md  = lm*lm + .392; 
       fElasticXsc  = (cofLogE*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
-      fTotalXsc    = (cofLogT*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) 
-	+ 7.6/md; // vg version
+      fTotalXsc    = (cofLogT*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 4.6/md;
     }
   }
 
@@ -1088,7 +1082,7 @@ G4double G4HadronNucleonXsc::KaonNucleonXscVG(
 
   if( proton && theParticle->GetPDGCharge() > 0. )
   {
-    G4double cB = CoulombBarrier(theParticle, nucleon, ekin);
+    G4double cB = G4NuclearRadii::CoulombFactor(theParticle, nucleon, ekin);
     fTotalXsc   *= cB;
     fElasticXsc *= cB; 
   }
@@ -1108,18 +1102,18 @@ G4double G4HadronNucleonXsc::KaonNucleonXscVG(
 // Returns hyperon-nucleon cross-section using NS x-section for protons
 
 G4double G4HadronNucleonXsc::HyperonNucleonXscNS(
-                             const G4ParticleDefinition* theParticle, 
-			     const G4ParticleDefinition* nucleon, G4double ekin)
+         const G4ParticleDefinition* theParticle, 
+	 const G4ParticleDefinition* nucleon, G4double ekin)
 {
   G4double coeff = 1.0;
   
-  static const G4double lBarCof1S  = 0.88;
+  static const G4double  lBarCof1S  = 0.88;
   static const G4double  lBarCof2S  = 0.76;
   static const G4double  lBarCof3S  = 0.64;
   static const G4double  lBarCof1C  = 0.784378;
   static const G4double  lBarCofSC  = 0.664378;
   static const G4double  lBarCof2SC = 0.544378;
-  static const G4double  lBarCof1B = 0.740659;
+  static const G4double  lBarCof1B  = 0.740659;
   static const G4double  lBarCofSB  = 0.620659;
   static const G4double  lBarCof2SB = 0.500659;
   
@@ -1184,8 +1178,9 @@ G4double G4HadronNucleonXsc::HyperonNucleonXscNS(
 //
 // Returns hyperon-nucleon cross-section using NS x-section for protons
 
-G4double G4HadronNucleonXsc::SCBMesonNucleonXscNS( const G4ParticleDefinition* theParticle, 
-                               const G4ParticleDefinition* nucleon, G4double ekin )
+G4double G4HadronNucleonXsc::SCBMesonNucleonXscNS( 
+         const G4ParticleDefinition* theParticle, 
+         const G4ParticleDefinition* nucleon, G4double ekin )
 {
   G4double coeff(1.0);
   // static const G4double lMesCof1S = 0.82; // Kp/piP

@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28th, 2019 I. Hrivnacova (exampleP02-V10-05-00)
+- Fixed Doxygen warning in .README.txt
+
 June 15th 2018 W.Pokorski (exampleP02-V10-04-01)
 - updating selection.xml file with new members of G4MaterialPropertiesTable
 - fixing the crash on reading due to duplication of materials in .root file

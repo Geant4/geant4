@@ -35,6 +35,7 @@
 #include <map>
 
 #include "G4ScoringManager.hh"
+#include "G4VScoringMesh.hh"
 
 #include "GammaKnifeDetectorConstruction.hh"
 #include "GammaKnifeMessenger.hh"
@@ -73,6 +74,7 @@ private:
 
     GammaKnifeMessenger* messenger;
 
+    using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
     MeshScoreMap* scoreMaps;
 };
 

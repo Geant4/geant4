@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04Field.hh
+/// \file ExN04Field.hh
 /// \brief Definition of the ExN04Field class
 //
 

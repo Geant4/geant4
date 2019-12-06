@@ -23,16 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MonopoleEq implementation
 //
-//
-//
-//  This is the right-hand side for equation of motion for a 
-//   magnetic charge in a combined Electro-Magnetic field
-//
-//  d(p_c)/ds=g{c-energyB_ - p_c x E}/pc
-//
-//  17.11.09   V.Grichine
-//
+// Created: V.Grichine, 17.11.2009
 // -------------------------------------------------------------------
 
 #include "G4MonopoleEq.hh"
@@ -40,9 +33,18 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+G4MonopoleEq::G4MonopoleEq(G4ElectroMagneticField* emField )
+  : G4EquationOfMotion( emField )
+{
+}
+
+G4MonopoleEq::~G4MonopoleEq()
+{
+} 
+
 void  
 G4MonopoleEq::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units
-		                    G4double,
+                                    G4double,
                                     G4double particleMass)
 {
   G4double pcharge = particleCharge.GetCharge();
@@ -52,12 +54,10 @@ G4MonopoleEq::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units
   fMassCof = particleMass*particleMass ; 
 }
 
-
-
 void
 G4MonopoleEq::EvaluateRhsGivenB(const G4double y[],
-			                const G4double Field[],
-				              G4double dydx[] ) const
+                                const G4double Field[],
+                                      G4double dydx[] ) const
 {
 
    // Components of y:
@@ -71,12 +71,9 @@ G4MonopoleEq::EvaluateRhsGivenB(const G4double y[],
 
    G4double pModuleInverse  = 1.0/std::sqrt(pSquared) ;
 
-   //  G4double inverse_velocity = Energy * c_light * pModuleInverse;
    G4double inverse_velocity = Energy * pModuleInverse / c_light;
 
    G4double cof1     = fElectroMagCof*pModuleInverse ;
-
-   //  G4double vDotE = y[3]*Field[3] + y[4]*Field[4] + y[5]*Field[5] ;
 
    dydx[0] = y[3]*pModuleInverse ;                         
    dydx[1] = y[4]*pModuleInverse ;                         
@@ -88,9 +85,11 @@ G4MonopoleEq::EvaluateRhsGivenB(const G4double y[],
  
    dydx[5] = cof1*(cof2*Field[2] - (y[3]*Field[4] - y[4]*Field[3])) ;  
 
-   dydx[6] = 0.;//not used
+   dydx[6] = 0.; //not used
 
    // Lab Time of flight
+   //
    dydx[7] = inverse_velocity;
-   return ;
+
+   return;
 }

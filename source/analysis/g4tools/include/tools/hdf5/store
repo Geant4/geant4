@@ -37,13 +37,19 @@ public:
         m_group = -1;
         return;
       }
+      if(!write_atb(m_group,"type","object")) {
+        m_out << "tools::hdf5::store::store : write_atb(type) failed." << std::endl;
+        ::H5Gclose(m_group);
+        m_group = -1;
+        return;
+      }
       if(!write_atb(m_group,"class",s_class())) {
         m_out << "tools::hdf5::store::store : write_atb(class) failed." << std::endl;
         ::H5Gclose(m_group);
         m_group = -1;
         return;
       }
-      int v = 1;
+      int v = 2; //1->2 add "type" atb.
       if(!write_scalar_atb<int>(m_group,"version",v)) {
         m_out << "tools::hdf5::store::store : write_scalar_atb(version) failed." << std::endl;
         ::H5Gclose(m_group);
@@ -99,29 +105,35 @@ public:
       if(!entries(_entries)) {
         m_out << "tools::hdf5::store::~store : not same entries on all columns. Write 0." << std::endl;
       }
-      if(!write_scalar<tools::uint64>(m_group,s_entries(),_entries)) {
-        m_out << "tools::hdf5::store::~store : write_scalar(entries) failed." << std::endl;
+      if(m_group<0) { //constructor may have failed.
+      } else {
+        if(!write_scalar<tools::uint64>(m_group,s_entries(),_entries)) {
+          m_out << "tools::hdf5::store::~store : write_scalar(entries) failed." << std::endl;
+        }
+        if(!write_scalar<unsigned int>(m_group,s_columns(),m_pagess.size())) {
+          m_out << "tools::hdf5::store::~store : write_scalar(columns) failed." << std::endl;
+        }
+       {std::vector<std::string> names;
+        tools_vforcit(pages*,m_pagess,it) names.push_back((*it)->name());
+     //{m_out << "debug : write : names :" << std::endl;
+     // tools_vforcit(std::string,names,it) m_out << *it << std::endl;}
+        if(!write_array_string(m_group,s_names(),names)) {
+          m_out << "tools::hdf5::store::~store : write_array_string(names) failed." << std::endl;
+        }}
+       {std::vector<std::string> TFORMs;
+        tools_vforcit(pages*,m_pagess,it) TFORMs.push_back((*it)->form());
+     //{m_out << "debug : write : TFORMs :" << std::endl;
+     // tools_vforcit(std::string,TFORMs,it) m_out << *it << std::endl;}
+        if(!write_array_string(m_group,s_forms(),TFORMs)) {
+          m_out << "tools::hdf5::store::~store : write_array_string(tforms) failed." << std::endl;
+        }}
       }
-      if(!write_scalar<unsigned int>(m_group,s_columns(),m_pagess.size())) {
-        m_out << "tools::hdf5::store::~store : write_scalar(columns) failed." << std::endl;
-      }
-     {std::vector<std::string> names;
-      tools_vforcit(pages*,m_pagess,it) names.push_back((*it)->name());
-   //{m_out << "debug : write : names :" << std::endl;
-   // tools_vforcit(std::string,names,it) m_out << *it << std::endl;}
-      if(!write_array_string(m_group,s_names(),names)) {
-        m_out << "tools::hdf5::store::~store : write_array_string(names) failed." << std::endl;
-      }}
-     {std::vector<std::string> TFORMs;
-      tools_vforcit(pages*,m_pagess,it) TFORMs.push_back((*it)->form());
-   //{m_out << "debug : write : TFORMs :" << std::endl;
-   // tools_vforcit(std::string,TFORMs,it) m_out << *it << std::endl;}
-      if(!write_array_string(m_group,s_forms(),TFORMs)) {
-        m_out << "tools::hdf5::store::~store : write_array_string(tforms) failed." << std::endl;
-      }}
     }
     tools::safe_clear(m_pagess);
-    ::H5Gclose(m_group);
+    if(m_group<0) { //constructor may have failed.
+    } else {
+      ::H5Gclose(m_group);
+    }
 #ifdef TOOLS_MEM
     tools::mem::decrement(s_class().c_str());
 #endif

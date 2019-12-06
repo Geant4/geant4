@@ -1,0 +1,92 @@
+# Macro file for the visualization setting in the initialization phase 
+# of the example when running in interactive mode
+#
+#/vis/disable
+# Use these open statements to open selected visualization
+#
+# Use this open statement to create an OpenGL view:
+#/vis/open OGLI 
+/vis/open OGL 600x600-0+0
+#
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose 1
+#
+# Draw geometry:
+/vis/drawVolume
+#
+# Specify view angle:
+/vis/viewer/set/viewpointVector -1 0 0
+/vis/viewer/set/lightsVector -1 0 0
+#zoom the whole target part
+#/vis/viewer/set/targetPoint 0 0 0.1 m
+#/vis/viewer/zoomTo 10
+#zoom just the target element
+/vis/viewer/set/targetPoint 0 0 0 mm
+/vis/viewer/zoomTo 1
+#
+#
+# Specify style (surface, wireframe, auxiliary edges,...)
+/vis/viewer/set/style surface
+#/vis/viewer/set/auxiliaryEdge true
+#/vis/viewer/set/lineSegmentsPerCircle 500
+#
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+# Draw hits at end of event:
+/vis/scene/add/hits
+#
+# Many other options are available with /vis/modeling and /vis/filtering.
+# For example, to select colour by particle ID:
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+# To select or override default colours (note: e+ is blue by default):
+/vis/modeling/trajectories/list
+/vis/modeling/trajectories/drawByParticleID-0/set e+ yellow
+#
+# To superimpose all of the events from a given run:
+#/vis/scene/endOfEventAction accumulate
+#
+# Decorations
+# Name
+/vis/set/textColour green
+/vis/set/textLayout right
+/vis/scene/add/text2D 0.9 -.9 24 ! ! sahmri_Simulation
+#/vis/scene/add/axes 0 0 0 186.14 mm
+#
+#
+# Set geometry attributes
+/vis/geometry/set/visibility World 0 0
+/vis/geometry/set/colour Layer_PART1  0 1.  0.1 0.5 0.3        #Al
+/vis/geometry/set/colour Layer_PART2  0 1.  0.1 0.5 0.3        #Al
+/vis/geometry/set/colour Layer_PART3  0 1.  0.2 0.4 0.3        #Al
+/vis/geometry/set/colour Layer_PART4  0 0.  0.2 0.7 0.3        #Al
+/vis/geometry/set/colour Layer1_PART4 0 1.  0.  0.  0.3        #Pt
+/vis/geometry/set/colour Layer1_PART5 0 0.  0.2 0.7 0.3        #Pt
+/vis/geometry/set/colour Layer2_PART5 0 1.  0.  0.  0.3        #Al
+/vis/geometry/set/colour Layer3_PART5 0 1.  0.  0.  0.3        #Al
+/vis/geometry/set/colour Foil         0 1.  0.8 0.4 0.3        #foil
+/vis/geometry/set/colour Target       0 0.1 0.8 0.4 0.6        #target
+/vis/geometry/set/colour Tube_PART1   0 1.  1.  0.  0.3        #beam
+/vis/geometry/set/colour Tube_PART2   0 1.  1.  0.  0.3       #beam
+/vis/geometry/set/colour Tube_PART3   0 1.  1.  0.  0.3       #beam
+/vis/geometry/set/colour Tube_PART4   0 1.  1.  0.  0.3       #beam
+/vis/geometry/set/colour Grid         0 0.1 0.5 1.  0.9        #Al
+#
+#/run/verbose 0
+#/tracking/verbose 1
+#/control/verbose 0
+
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+#
+# For file-based drivers, use this to create an empty detector view:
+#/vis/viewer/flush

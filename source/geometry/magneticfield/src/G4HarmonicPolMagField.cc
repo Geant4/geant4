@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4HarmonicPolMagField implementation
 //
-//
+// Author: V.Grichine, 03.02.1997
 // -------------------------------------------------------------------
 
 #include "G4HarmonicPolMagField.hh"
@@ -36,21 +37,20 @@ G4HarmonicPolMagField::G4HarmonicPolMagField()
 
 G4HarmonicPolMagField* G4HarmonicPolMagField::Clone() const
 {
-    return new G4HarmonicPolMagField;
+  return new G4HarmonicPolMagField;
 }
-/////////////////////////////////////////////////////////////////////////  
+
+// -------------------------------------------------------------------
 
 G4HarmonicPolMagField::~G4HarmonicPolMagField()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////
-
+// -------------------------------------------------------------------
 
 void G4HarmonicPolMagField::GetFieldValue(const G4double yTrack[7],
                                                 G4double B[3]     ) const  
 {
-   G4int i ;
    G4double a = 1.00 ;   // mm -> m 
    G4double x = a*yTrack[0], y = a*yTrack[1], z = a*yTrack[2] ;
    G4double x2 = x*x, y2 = y*y, z2 = z*z ;
@@ -59,13 +59,13 @@ void G4HarmonicPolMagField::GetFieldValue(const G4double yTrack[7],
    static G4ThreadLocal G4double
    c[24] = {
              .010, .010, .010,                                       // 3(0)
-	     .0001, .0001, .0001, .0001, .0001,                      // 5(1)
-	     .00001, .00001, .00001, .00001, .00001, .00001, .00001, // 7(2)
-	     .000001, .000001, .000001, .000001, .000001, .000001,
-	     .0000001, .0000001, .0000001                            // 9(3)
+             .0001, .0001, .0001, .0001, .0001,                      // 5(1)
+             .00001, .00001, .00001, .00001, .00001, .00001, .00001, // 7(2)
+             .000001, .000001, .000001, .000001, .000001, .000001,
+             .0000001, .0000001, .0000001                            // 9(3)
             } ;                                            // total :   24
    
-   //   for(i=0;i<24;i++)
+   //   for(auto i=0;i<24; ++i)
    //   {
    //      c[i] = 1.0*c[i] ;
    //   }
@@ -80,7 +80,7 @@ void G4HarmonicPolMagField::GetFieldValue(const G4double yTrack[7],
    B[1] =  c[2]
           +c[5]*z + c[6]*x + 2*c[7]*y
           +c[10]*(z2-x2) + c[11]*xz +2*c[12]*yz +2*c[13]*xy + 3*c[14]*(y2-x2)
-	  +c[17]*(z3-3*x2*z) + c[18]*(x*z2-x3/3) +2*c[19]*y*(z2-x2)
+          +c[17]*(z3-3*x2*z) + c[18]*(x*z2-x3/3) +2*c[19]*y*(z2-x2)
           +2*c[20]*xyz
           +3*c[21]*z*(y2-x2) + c[22]*(3*x*y2-x3) + 4*c[23]*(y3-3*x2*y) ;
    
@@ -90,7 +90,7 @@ void G4HarmonicPolMagField::GetFieldValue(const G4double yTrack[7],
           +4*c[15]*(z3-3*x2*z) + c[16]*(3*x*z2-x3) + 3*c[17]*(y*z2-x2*y)
           +2*c[18]*xyz
           +2*c[19]*z*(y2-x2) + c[20]*(x*y2-x3/3) + c[21]*(y3-3*x2*y) ;
-   for(i=0;i<3;i++)
+   for(auto i=0; i<3 ; ++i)
    {
       B[i] = 0.1*B[i] ;
    }

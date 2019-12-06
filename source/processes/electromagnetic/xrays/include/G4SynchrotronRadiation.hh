@@ -59,6 +59,7 @@
 #include "G4Positron.hh"
 
 class G4VEmAngularDistribution;
+class G4LossTableManager;
 
 class G4SynchrotronRadiation : public G4VDiscreteProcess
 {
@@ -94,9 +95,10 @@ public:
 private:
 
   G4SynchrotronRadiation & 
-    operator=(const G4SynchrotronRadiation &right) = delete;
-  G4SynchrotronRadiation(const G4SynchrotronRadiation&) = delete;
+    operator=(const G4SynchrotronRadiation &right);
+  G4SynchrotronRadiation(const G4SynchrotronRadiation&);
 
+  G4LossTableManager*         theManager;
   G4VEmAngularDistribution*   genAngle;
 
   G4ParticleDefinition*       theGamma;

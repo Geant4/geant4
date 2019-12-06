@@ -14,6 +14,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+21/11/19 G. Cosmo (exampleB4-V10-05-04)
+- Use default MixMax random engine.
+
+18/11/19 G. Cosmo (exampleB4-V10-05-03)
+- Fixed cases of type conversions from size_t to G4int in B4cCalorimeterSD.
+
+30/09/19 I. Hrivnacova (exampleB4-V10-05-02)
+- Updated B4d/run2.mac and comments in exampleB4d.cc for modified
+  score ntuple writer UI commands.
+
+08/07/19 I. Hrivnacova (exampleB4-V10-05-01)
+- Added score ntuple writer in B4d.
+
 24/03/19 J. Allison (exampleB4-V10-05-00)
 - Corrected name of include file: csv.hh.
 

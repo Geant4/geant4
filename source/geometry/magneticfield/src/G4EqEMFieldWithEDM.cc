@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// G4EqEMFieldWithEDM implementation
 //
 //  This is the standard right-hand side for equation of motion.
 //
-//  19.02.2009 Kevin Lynch, based on G4EqEMFieldWithSpin
-//  06.11.2009 Hiromi Iinuma see:
-//  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
-//
+// Created: Kevin Lynch, 19.02.2009 - Based on G4EqEMFieldWithSpin
+// Modified: Hiromi Iinuma, 06.11.2009 - see:
+//   http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
 // -------------------------------------------------------------------
 
 #include "G4EqEMFieldWithEDM.hh"
@@ -41,7 +39,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-G4EqEMFieldWithEDM::G4EqEMFieldWithEDM(G4ElectroMagneticField *emField )
+G4EqEMFieldWithEDM::G4EqEMFieldWithEDM(G4ElectroMagneticField* emField )
   : G4EquationOfMotion( emField ), charge(0.), mass(0.), magMoment(0.),
     spin(0.), fElectroMagCof(0.), fMassCof(0.), omegac(0.),
     anomaly(0.0011659208), eta(0.), beta(0.), gamma(0.)
@@ -57,7 +55,7 @@ G4EqEMFieldWithEDM::SetChargeMomentumMass(G4ChargeState particleCharge,
                                           G4double MomentumXc,
                                           G4double particleMass)
 {
-   charge   = particleCharge.GetCharge();
+   charge    = particleCharge.GetCharge();
    mass      = particleMass;
    magMoment = particleCharge.GetMagneticDipoleMoment();
    spin      = particleCharge.GetSpin();
@@ -82,8 +80,8 @@ G4EqEMFieldWithEDM::SetChargeMomentumMass(G4ChargeState particleCharge,
 
 void
 G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
-                                       const G4double Field[],
-                                             G4double dydx[] ) const
+                                      const G4double Field[],
+                                            G4double dydx[] ) const
 {
 
    // Components of y:
@@ -158,9 +156,9 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
    else pcharge = charge;
 
    G4ThreeVector dSpin(0.,0.,0.);
-   if (Spin.mag2() != 0.) {
-      dSpin =
-         pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
+   if (Spin.mag2() != 0.)
+   {
+      dSpin = pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
                                  // from Jackson
                                  // -uce*Spin.cross(u.cross(EField)) )
                                  // but this form has one less operation
@@ -174,5 +172,5 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
    dydx[10] = dSpin.y();
    dydx[11] = dSpin.z();
 
-   return ;
+   return;
 }

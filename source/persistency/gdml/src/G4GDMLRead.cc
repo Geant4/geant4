@@ -44,7 +44,8 @@
 G4GDMLRead::G4GDMLRead()
   : validate(true), check(false), dostrip(true), inLoop(0), loopCount(0)
 {
-   G4UnitDefinition::BuildUnitsTable();
+   // Make sure units are defined.
+   G4UnitDefinition::GetUnitsTable();
 }
 
 G4GDMLRead::~G4GDMLRead()

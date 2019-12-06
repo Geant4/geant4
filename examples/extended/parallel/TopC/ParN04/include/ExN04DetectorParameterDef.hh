@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04DetectorParameterDef.hh
+/// \file ExN04DetectorParameterDef.hh
 /// \brief Definition of the ExN04DetectorParameterDef class
 //
 

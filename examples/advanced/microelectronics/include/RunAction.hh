@@ -78,6 +78,7 @@ private:
   // Attributes
   //
   TrackingAction* fpTrackingAction;
+  G4String fFileName; 
   bool fInitialized;
   bool fDebug;
   

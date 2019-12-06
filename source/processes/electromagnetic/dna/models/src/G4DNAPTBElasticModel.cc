@@ -203,7 +203,7 @@ void G4DNAPTBElasticModel::ReadDiffCSFile(const G4String& materialName,
     // This method is not yet standard.
 
     // get the path of the G4LEDATA data folder
-    char *path = getenv("G4LEDATA");
+    char *path = std::getenv("G4LEDATA");
     // if it is not found then quit and print error message
     if(!path)
     {

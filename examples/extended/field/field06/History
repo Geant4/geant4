@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov   1, 2019 J.Apostolakis - fieldex06-V10-05-01
+- Adjusted for change in G4Transportation (need to inform of use of gravity)
+    and corrected creation of G4ChordFinder.  
+
 July 27, 2018 I.Hrivnacova - fieldex06-V10-04-01
 - Macro review and code clean-up:
   - Separated other than visualization settings from vis.mac in a 

@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4NavigationHistory
+// G4NavigationHistory
 //
 // Class description:
 //
@@ -33,10 +31,8 @@
 // the geometrical hierarchy. Principally a utility class for use by the
 // G4Navigator.
 
-// History:
-//
-// 25.07.96 P.Kent Initial version. Services derived from
-//                 requirements of G4Navigator.
+// 25.07.96 - P.Kent Initial version. Services derived from
+//                   requirements of G4Navigator.
 // ----------------------------------------------------------------------
 #ifndef G4NAVIGATIONHISTORY_HH
 #define G4NAVIGATIONHISTORY_HH
@@ -59,7 +55,7 @@ class G4NavigationHistory
  public:  // with description
 
   friend std::ostream&
-  operator << (std::ostream &os, const G4NavigationHistory &h);
+  operator << (std::ostream& os, const G4NavigationHistory& h);
 
   G4NavigationHistory();
     // Constructor: sizes history lists & resets histories.
@@ -67,10 +63,10 @@ class G4NavigationHistory
   ~G4NavigationHistory();
     // Destructor.
 
-  G4NavigationHistory(const G4NavigationHistory &h);
+  G4NavigationHistory(const G4NavigationHistory& h);
     // Copy constructor.
 
-  inline G4NavigationHistory& operator=(const G4NavigationHistory &h);
+  inline G4NavigationHistory& operator=(const G4NavigationHistory& h);
     // Assignment operator.
 
   inline void Reset();
@@ -100,10 +96,10 @@ class G4NavigationHistory
   inline G4VPhysicalVolume* GetTopVolume() const;
     // Returns topmost physical volume pointer.
 
-  inline G4int GetDepth() const;
+  inline size_t GetDepth() const;
     // Returns current history depth.
 
-  inline G4int GetMaxDepth() const;
+  inline size_t GetMaxDepth() const;
     // Returns current maximum size of history.
     // Note: MaxDepth of 16 mean history entries [0..15] inclusive.
 
@@ -119,9 +115,9 @@ class G4NavigationHistory
   inline G4VPhysicalVolume* GetVolume(G4int n) const;
     // Returns specified physical volume pointer.
 
-  inline void NewLevel(G4VPhysicalVolume *pNewMother,
-                       EVolume vType=kNormal,
-                       G4int nReplica=-1);
+  inline void NewLevel(G4VPhysicalVolume* pNewMother,
+                       EVolume vType = kNormal,
+                       G4int nReplica = -1);
     // Changes navigation level to that of the new mother.
 
   inline void BackLevel();
@@ -145,10 +141,10 @@ class G4NavigationHistory
 
  private:
 
-  std::vector<G4NavigationLevel> *fNavHistory;
+  std::vector<G4NavigationLevel>* fNavHistory;
     // Pointer to the vector of navigation levels.
 
-  G4int fStackDepth;
+  size_t fStackDepth;
     // Depth of stack: effectively depth in geometrical tree.
 };
 

@@ -87,7 +87,7 @@ int main(int argc,char** argv) {
 
   // Physics List name defined via environment variable
   if("" == physName) {
-    char* path = getenv("PHYSLIST");
+    char* path = std::getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
 

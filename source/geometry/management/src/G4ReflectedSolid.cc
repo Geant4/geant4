@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Implementation for G4ReflectedSolid class
 //
 // Author: Vladimir Grichine, 23.07.01  (Vladimir.Grichine@cern.ch)
-//
 // --------------------------------------------------------------------
 
 #include "G4ReflectedSolid.hh"
@@ -55,7 +51,7 @@
 G4ReflectedSolid::G4ReflectedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform )
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(pName)
 {
   fPtrSolid = pSolid;
   fDirectTransform3D = new G4Transform3D(transform);
@@ -66,16 +62,15 @@ G4ReflectedSolid::G4ReflectedSolid( const G4String& pName,
 
 G4ReflectedSolid::~G4ReflectedSolid() 
 {
-  delete fDirectTransform3D; fDirectTransform3D=0;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fDirectTransform3D; fDirectTransform3D = nullptr;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 
 G4ReflectedSolid::G4ReflectedSolid(const G4ReflectedSolid& rhs)
-  : G4VSolid(rhs), fPtrSolid(rhs.fPtrSolid),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(rhs), fPtrSolid(rhs.fPtrSolid)
 {
   fDirectTransform3D = new G4Transform3D(*rhs.fDirectTransform3D);
 }
@@ -95,11 +90,11 @@ G4ReflectedSolid& G4ReflectedSolid::operator=(const G4ReflectedSolid& rhs)
 
   // Copy data
   //
-  fPtrSolid= rhs.fPtrSolid;
+  fPtrSolid = rhs.fPtrSolid;
   delete fDirectTransform3D;
-  fDirectTransform3D= new G4Transform3D(*rhs.fDirectTransform3D);
+  fDirectTransform3D = new G4Transform3D(*rhs.fDirectTransform3D);
   fRebuildPolyhedron = false;
-  delete fpPolyhedron; fpPolyhedron= 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 
   return *this;
 }
@@ -137,7 +132,7 @@ G4Transform3D  G4ReflectedSolid::GetTransform3D() const
 
 G4Transform3D  G4ReflectedSolid::GetDirectTransform3D() const
 {
-  G4Transform3D aTransform= *fDirectTransform3D;
+  G4Transform3D aTransform = *fDirectTransform3D;
   return aTransform;
 }
 
@@ -310,8 +305,8 @@ G4double
 G4ReflectedSolid::DistanceToOut( const G4ThreeVector& p,
                                  const G4ThreeVector& v,
                                  const G4bool calcNorm,
-                                       G4bool *validNorm,
-                                       G4ThreeVector *n ) const 
+                                       G4bool* validNorm,
+                                       G4ThreeVector* n ) const 
 {
   G4ThreeVector solNorm; 
 
@@ -360,7 +355,7 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
 
 G4ThreeVector G4ReflectedSolid::GetPointOnSurface() const
 {
-  G4ThreeVector p        =  fPtrSolid->GetPointOnSurface();
+  G4ThreeVector p  =  fPtrSolid->GetPointOnSurface();
   return (*fDirectTransform3D)*G4Point3D(p);
 }
 
@@ -418,7 +413,7 @@ G4Polyhedron*
 G4ReflectedSolid::CreatePolyhedron () const 
 {
   G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
-  if (polyhedron)
+  if (polyhedron != nullptr)
   {
     polyhedron->Transform(*fDirectTransform3D);
     return polyhedron;
@@ -431,7 +426,7 @@ G4ReflectedSolid::CreatePolyhedron () const
             << "corresponding polyhedron. Returning NULL!";
     G4Exception("G4ReflectedSolid::CreatePolyhedron()",
                 "GeomMgt1001", JustWarning, message);
-    return 0;
+    return nullptr;
   }
 }
 
@@ -442,10 +437,9 @@ G4ReflectedSolid::CreatePolyhedron () const
 G4Polyhedron*
 G4ReflectedSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
-      fRebuildPolyhedron ||
-      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
-      fpPolyhedron->GetNumberOfRotationSteps())
+  if ((fpPolyhedron == nullptr) || fRebuildPolyhedron ||
+      (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+       fpPolyhedron->GetNumberOfRotationSteps()))
     {
       fpPolyhedron = CreatePolyhedron();
       fRebuildPolyhedron = false;

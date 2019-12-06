@@ -120,16 +120,16 @@ void G4IonPhysics::ConstructProcess()
   // Binary Cascade
   G4HadronicInteraction* theIonBC = 
     new G4BinaryLightIonReaction(thePreCompound);
-  theIonBC->SetMinEnergy(0.0);
-  theIonBC->SetMaxEnergy(4*GeV);
+  theIonBC->SetMinEnergy( 0.0 );
+  theIonBC->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade() );
 
   // FTFP
   G4HadronicInteraction* theFTFP = nullptr;
   if(emax > theIonBC->GetMaxEnergy()) {
     theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
     theFTFP = theBuilder->GetModel();
-    theFTFP->SetMinEnergy(2*GeV);
-    theFTFP->SetMaxEnergy(emax);
+    theFTFP->SetMinEnergy( G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade() );
+    theFTFP->SetMaxEnergy( emax );
   }
 
   G4CrossSectionInelastic* theNuclNuclData = 

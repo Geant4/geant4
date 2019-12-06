@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13,12 +17,9 @@
 	--> Running in serial mode
 
 
-/cvmfs/geant4.cern.ch/share/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.6
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -92,9 +93,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PenConversion : Emin=    0 eV  Emax=   20 MeV
-        BetheHeitler : Emin=   20 MeV Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
@@ -223,9 +222,9 @@ ionIoni:  for GenericIon  SubType=2
 nuclearStopping:  for GenericIon SubType=8 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
-=======================================================================
-======       Radioactive Decay Physics Parameters              ========
-=======================================================================
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
 Max life time                                     1.4427e+06 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
@@ -236,7 +235,7 @@ Auger electron emission enabled                   1
 Auger cascade enabled                             1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
-=======================================================================
+======================================================================
 
 msc:  for alpha  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 1
@@ -416,12 +415,7 @@ CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
 
 msc:  for pi+  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 1
@@ -498,11 +492,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
-  Process: RadioactiveDecay
+  Process: RadioactiveDecayBase
 
 ---------------------------------------------------
                            Hadronic Processes for He3
@@ -512,8 +506,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -524,8 +518,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -572,8 +566,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_proton
@@ -607,8 +602,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -616,10 +611,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
@@ -630,10 +624,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
@@ -644,8 +637,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
@@ -656,8 +649,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            BertiniCascade: 19.9 MeV ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 19.9 MeV ---> 6 GeV
         Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
@@ -685,13 +678,12 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: pi+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -699,13 +691,12 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: pi-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -713,8 +704,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hadElastic
@@ -729,8 +720,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -739,21 +730,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1442.7
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ==============================
@@ -892,776 +886,770 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=25.490000s Real=111.585624s Sys=0.880000s
+  User=25.390000s Real=99.157855s Sys=1.160000s
  ###### EndOfTSRunAction ###### 
 ============================================================
  opened file mfd_tl_EnergyDeposit.out for output
 ============================================================
-             0         934.077272 keV
-             1        1543.934210 keV
-             2          34.595500 keV
-             3           6.685285 keV
-             4         189.191041 keV
-             5         384.520428 keV
-             6          64.103432 keV
-             7         358.580567 keV
-             8        2653.696887 keV
-             9        3247.973032 keV
-            10         175.229568 keV
-            11          87.984902 keV
-            12         648.326063 keV
-            13         451.344900 keV
-            14         546.218912 keV
-            15        1419.915060 keV
-            16         312.857050 keV
-            17         126.426269 keV
-            18         103.411949 keV
-            19         359.091343 keV
-            20        1930.824797 keV
-            21          18.955669 keV
-            22        1718.986021 keV
-            23         648.321739 keV
-            24         853.497482 keV
-            25         824.180722 keV
-            26        1046.217055 keV
-            27        1656.357891 keV
-            28        4451.409490 keV
-            29        5461.074240 keV
-            30        2023.124908 keV
-            31        7389.903405 keV
-            32        6080.545816 keV
-            33        6010.134941 keV
-            34        3740.871383 keV
-            35         595.003659 keV
-            36        5801.981042 keV
-            37        1664.427620 keV
-            38        4256.537506 keV
-            39         895.967637 keV
-            40        4392.830968 keV
-            41        3411.631989 keV
-            42        9543.190656 keV
-            43        5615.615270 keV
-            44        1034.072243 keV
-            45          62.966274 keV
-            46        1730.695059 keV
-            47        1040.686401 keV
-            48        3170.075741 keV
-            49        1603.611349 keV
-            50        4028.765055 keV
-            51        5859.936234 keV
-            52        8199.696287 keV
-            53        5676.038603 keV
-            54        9010.913383 keV
-            55        9331.766280 keV
-            56       22798.266267 keV
-            57       22122.337166 keV
-            58       13900.540686 keV
-            59       10628.308420 keV
-            60        6159.796199 keV
-            61       15619.557317 keV
-            62       22834.345501 keV
-            63       21483.724819 keV
-            64        7238.820445 keV
-            65        3321.483031 keV
-            66       28593.595615 keV
-            67       18968.814070 keV
-            68       24746.473297 keV
-            69        4304.489921 keV
-            70        5707.168687 keV
-            71        5096.025157 keV
-            72       12185.607020 keV
-            73        8299.653955 keV
-            74        4256.388609 keV
-            75       18385.081988 keV
-            76       34149.851668 keV
-            77       46744.477808 keV
-            78       26391.191362 keV
-            79       27286.054692 keV
-            80       18932.014463 keV
-            81      373785.103456 keV
-            82      313801.427135 keV
-            83      401045.586960 keV
-            84       35076.858689 keV
-            85       43846.395982 keV
-            86      314084.782327 keV
-            87      302892.688590 keV
-            88      373184.315663 keV
-            89       30477.192522 keV
-            90       36530.933075 keV
-            91      350553.486798 keV
-            92      317970.237704 keV
-            93      378846.864213 keV
-            94       30685.382628 keV
-            95       34732.235991 keV
-            96       35423.239049 keV
-            97       27246.115102 keV
-            98       34951.438700 keV
-            99       29294.032667 keV
-           100      320629.861999 keV
-           101      358373.019618 keV
-           102      369227.196993 keV
-           103      346620.205106 keV
-           104      354477.190333 keV
-           105      364386.731607 keV
-           106      395016.519387 keV
-           107      394119.683771 keV
-           108      410815.466281 keV
-           109      382271.336585 keV
-           110      317273.543118 keV
-           111      399396.155292 keV
-           112      392021.808860 keV
-           113      383656.425796 keV
-           114      351823.682600 keV
-           115      341286.560510 keV
-           116      389395.088911 keV
-           117      382726.818293 keV
-           118      351260.945403 keV
-           119      333954.510157 keV
-           120      337069.420548 keV
-           121      370855.110309 keV
-           122      348880.757213 keV
-           123      339881.821283 keV
-           124      340885.585614 keV
-             0    934.077 [sigma: 327.885 | error: 0.859832 | coeff: 0.859832 | eff: 1 | fom: 0.0520234 | r2int: 0.616093 | r2eff: 0 | hits: 6 ] keV
-             1    1543.93 [sigma: 553.755 | error: 0.878546 | coeff: 0.878546 | eff: 1 | fom: 0.0498308 | r2int: 0.643202 | r2eff: 0 | hits: 6 ] keV
-             2    34.5955 [sigma: 21.014 | error: 0.859023 | coeff: 0.859023 | eff: 1 | fom: 0.0521215 | r2int: 0.36896 | r2eff: 0 | hits: 2 ] keV
-             3    6.68528 [sigma: 0 | error: 0 | coeff: 0 | eff: 1 | fom: 1 | r2int: 2.22045e-16 | r2eff: 0 | hits: 1 ] keV
-             4    189.191 [sigma: 29.3036 | error: 0.268275 | coeff: 0.268275 | eff: 1 | fom: 0.534398 | r2int: 0.0479811 | r2eff: 0 | hits: 3 ] keV
-             5    384.52 [sigma: 103.261 | error: 0.537091 | coeff: 0.537091 | eff: 1 | fom: 0.133331 | r2int: 0.21635 | r2eff: 0 | hits: 4 ] keV
-             6    64.1034 [sigma: 10.7058 | error: 0.373443 | coeff: 0.373443 | eff: 1 | fom: 0.27579 | r2int: 0.111567 | r2eff: 0 | hits: 5 ] keV
-             7    358.581 [sigma: 161.741 | error: 0.902117 | coeff: 0.902117 | eff: 1 | fom: 0.0472608 | r2int: 0.610361 | r2eff: 0 | hits: 4 ] keV
-             8    2653.7 [sigma: 514.144 | error: 0.47458 | coeff: 0.47458 | eff: 1 | fom: 0.170769 | r2int: 0.187688 | r2eff: 0 | hits: 6 ] keV
-             9    3247.97 [sigma: 768.599 | error: 0.579646 | coeff: 0.579646 | eff: 1 | fom: 0.114472 | r2int: 0.279991 | r2eff: 0 | hits: 6 ] keV
-            10    175.23 [sigma: 33.9837 | error: 0.433659 | coeff: 0.433659 | eff: 1 | fom: 0.204517 | r2int: 0.150448 | r2eff: 0 | hits: 5 ] keV
-            11    87.9849 [sigma: 23.5234 | error: 0.463077 | coeff: 0.463077 | eff: 1 | fom: 0.179358 | r2int: 0.14296 | r2eff: 0 | hits: 3 ] keV
-            12    648.326 [sigma: 128.789 | error: 0.397297 | coeff: 0.397297 | eff: 1 | fom: 0.243667 | r2int: 0.118384 | r2eff: 0 | hits: 4 ] keV
-            13    451.345 [sigma: 238.675 | error: 0.915922 | coeff: 0.915922 | eff: 1 | fom: 0.0458469 | r2int: 0.559276 | r2eff: 0 | hits: 3 ] keV
-            14    546.219 [sigma: 5.88373 | error: 0.0152336 | coeff: 0.0152336 | eff: 1 | fom: 165.739 | r2int: 0.000116031 | r2eff: 0 | hits: 2 ] keV
-            15    1419.92 [sigma: 528.744 | error: 0.912133 | coeff: 0.912133 | eff: 1 | fom: 0.0462285 | r2int: 0.693323 | r2eff: 0 | hits: 6 ] keV
-            16    312.857 [sigma: 52.1213 | error: 0.372524 | coeff: 0.372524 | eff: 1 | fom: 0.277152 | r2int: 0.11102 | r2eff: 0 | hits: 5 ] keV
-            17    126.426 [sigma: 35.4218 | error: 0.626495 | coeff: 0.626495 | eff: 1 | fom: 0.0979921 | r2int: 0.313997 | r2eff: 0 | hits: 5 ] keV
-            18    103.412 [sigma: 28.7676 | error: 0.393412 | coeff: 0.393412 | eff: 1 | fom: 0.248503 | r2int: 0.0773864 | r2eff: 0 | hits: 2 ] keV
-            19    359.091 [sigma: 146.792 | error: 0.578114 | coeff: 0.578114 | eff: 1 | fom: 0.11508 | r2int: 0.167108 | r2eff: 0 | hits: 2 ] keV
-            20    1930.82 [sigma: 908.146 | error: 0.940682 | coeff: 0.940682 | eff: 1 | fom: 0.0434651 | r2int: 0.663662 | r2eff: 0 | hits: 4 ] keV
-            21    18.9557 [sigma: 2.5954 | error: 0.237152 | coeff: 0.237152 | eff: 1 | fom: 0.68387 | r2int: 0.037494 | r2eff: 0 | hits: 3 ] keV
-            22    1718.99 [sigma: 672.538 | error: 0.874842 | coeff: 0.874842 | eff: 1 | fom: 0.0502537 | r2int: 0.612278 | r2eff: 0 | hits: 5 ] keV
-            23    648.322 [sigma: 92.9753 | error: 0.202811 | coeff: 0.202811 | eff: 1 | fom: 0.935066 | r2int: 0.0205662 | r2eff: 0 | hits: 2 ] keV
-            24    853.497 [sigma: 280.526 | error: 0.657356 | coeff: 0.657356 | eff: 1 | fom: 0.0890073 | r2int: 0.324088 | r2eff: 0 | hits: 4 ] keV
-            25    824.181 [sigma: 116.974 | error: 0.425783 | coeff: 0.425783 | eff: 1 | fom: 0.212154 | r2int: 0.161148 | r2eff: 0 | hits: 9 ] keV
-            26    1046.22 [sigma: 93.62 | error: 0.282974 | coeff: 0.282974 | eff: 1 | fom: 0.480322 | r2int: 0.072067 | r2eff: 0 | hits: 10 ] keV
-            27    1656.36 [sigma: 228.44 | error: 0.457418 | coeff: 0.457418 | eff: 1 | fom: 0.183823 | r2int: 0.19021 | r2eff: 0 | hits: 11 ] keV
-            28    4451.41 [sigma: 561.445 | error: 0.454759 | coeff: 0.454759 | eff: 1 | fom: 0.185979 | r2int: 0.190898 | r2eff: 0 | hits: 13 ] keV
-            29    5461.07 [sigma: 610.087 | error: 0.418001 | coeff: 0.418001 | eff: 1 | fom: 0.220126 | r2int: 0.162245 | r2eff: 0 | hits: 14 ] keV
-            30    2023.12 [sigma: 176.266 | error: 0.348502 | coeff: 0.348502 | eff: 1 | fom: 0.316676 | r2int: 0.113863 | r2eff: 0 | hits: 16 ] keV
-            31    7389.9 [sigma: 861.913 | error: 0.494836 | coeff: 0.494836 | eff: 1 | fom: 0.157074 | r2int: 0.231259 | r2eff: 0 | hits: 18 ] keV
-            32    6080.55 [sigma: 553.551 | error: 0.436595 | coeff: 0.436595 | eff: 1 | fom: 0.201775 | r2int: 0.182328 | r2eff: 0 | hits: 23 ] keV
-            33    6010.13 [sigma: 586.518 | error: 0.447205 | coeff: 0.447205 | eff: 1 | fom: 0.192315 | r2int: 0.190469 | r2eff: 0 | hits: 21 ] keV
-            34    3740.87 [sigma: 358.111 | error: 0.428114 | coeff: 0.428114 | eff: 1 | fom: 0.209849 | r2int: 0.174117 | r2eff: 0 | hits: 20 ] keV
-            35    595.004 [sigma: 93.9115 | error: 0.499113 | coeff: 0.499113 | eff: 1 | fom: 0.154393 | r2int: 0.224203 | r2eff: 0 | hits: 10 ] keV
-            36    5801.98 [sigma: 645.062 | error: 0.471695 | coeff: 0.471695 | eff: 1 | fom: 0.172863 | r2int: 0.210136 | r2eff: 0 | hits: 18 ] keV
-            37    1664.43 [sigma: 196.68 | error: 0.528459 | coeff: 0.528459 | eff: 1 | fom: 0.137722 | r2int: 0.265305 | r2eff: 0 | hits: 20 ] keV
-            38    4256.54 [sigma: 298.136 | error: 0.383635 | coeff: 0.383635 | eff: 1 | fom: 0.261331 | r2int: 0.14227 | r2eff: 0 | hits: 30 ] keV
-            39    895.968 [sigma: 68.6035 | error: 0.276074 | coeff: 0.276074 | eff: 1 | fom: 0.504632 | r2int: 0.0703542 | r2eff: 0 | hits: 13 ] keV
-            40    4392.83 [sigma: 919.542 | error: 0.55383 | coeff: 0.55383 | eff: 1 | fom: 0.125393 | r2int: 0.262909 | r2eff: 0 | hits: 7 ] keV
-            41    3411.63 [sigma: 461.705 | error: 0.574167 | coeff: 0.574167 | eff: 1 | fom: 0.116668 | r2int: 0.311353 | r2eff: 0 | hits: 18 ] keV
-            42    9543.19 [sigma: 726.259 | error: 0.364974 | coeff: 0.364974 | eff: 1 | fom: 0.288737 | r2int: 0.127415 | r2eff: 0 | hits: 23 ] keV
-            43    5615.62 [sigma: 535.811 | error: 0.457592 | coeff: 0.457592 | eff: 1 | fom: 0.183683 | r2int: 0.200286 | r2eff: 0 | hits: 23 ] keV
-            44    1034.07 [sigma: 295.639 | error: 0.756415 | coeff: 0.756415 | eff: 1 | fom: 0.0672212 | r2int: 0.490426 | r2eff: 0 | hits: 7 ] keV
-            45    62.9663 [sigma: 11.473 | error: 0.364418 | coeff: 0.364418 | eff: 1 | fom: 0.289619 | r2int: 0.0996003 | r2eff: 0 | hits: 4 ] keV
-            46    1730.7 [sigma: 564.975 | error: 0.652888 | coeff: 0.652888 | eff: 1 | fom: 0.0902298 | r2int: 0.319697 | r2eff: 0 | hits: 4 ] keV
-            47    1040.69 [sigma: 126.988 | error: 0.345134 | coeff: 0.345134 | eff: 1 | fom: 0.322888 | r2int: 0.104228 | r2eff: 0 | hits: 8 ] keV
-            48    3170.08 [sigma: 450.326 | error: 0.492094 | coeff: 0.492094 | eff: 1 | fom: 0.158829 | r2int: 0.221977 | r2eff: 0 | hits: 12 ] keV
-            49    1603.61 [sigma: 297.105 | error: 0.490184 | coeff: 0.490184 | eff: 1 | fom: 0.160069 | r2int: 0.205955 | r2eff: 0 | hits: 7 ] keV
-            50    4028.77 [sigma: 366.443 | error: 0.46379 | coeff: 0.46379 | eff: 1 | fom: 0.178807 | r2int: 0.206828 | r2eff: 0 | hits: 26 ] keV
-            51    5859.94 [sigma: 475.444 | error: 0.451738 | coeff: 0.451738 | eff: 1 | fom: 0.188475 | r2int: 0.197485 | r2eff: 0 | hits: 31 ] keV
-            52    8199.7 [sigma: 508.859 | error: 0.37235 | coeff: 0.37235 | eff: 1 | fom: 0.277411 | r2int: 0.134793 | r2eff: 0 | hits: 36 ] keV
-            53    5676.04 [sigma: 392.825 | error: 0.385332 | coeff: 0.385332 | eff: 1 | fom: 0.259034 | r2int: 0.143691 | r2eff: 0 | hits: 31 ] keV
-            54    9010.91 [sigma: 446.027 | error: 0.301088 | coeff: 0.301088 | eff: 1 | fom: 0.424269 | r2int: 0.0882036 | r2eff: 0 | hits: 37 ] keV
-            55    9331.77 [sigma: 552.911 | error: 0.335171 | coeff: 0.335171 | eff: 1 | fom: 0.342369 | r2int: 0.108829 | r2eff: 0 | hits: 32 ] keV
-            56    22798.3 [sigma: 653.83 | error: 0.234747 | coeff: 0.234747 | eff: 1 | fom: 0.697953 | r2int: 0.0542837 | r2eff: 0 | hits: 67 ] keV
-            57    22122.3 [sigma: 616.424 | error: 0.239698 | coeff: 0.239698 | eff: 1 | fom: 0.669419 | r2int: 0.0566787 | r2eff: 0 | hits: 74 ] keV
-            58    13900.5 [sigma: 669.295 | error: 0.350529 | coeff: 0.350529 | eff: 1 | fom: 0.313025 | r2int: 0.120552 | r2eff: 0 | hits: 53 ] keV
-            59    10628.3 [sigma: 497.175 | error: 0.299528 | coeff: 0.299528 | eff: 1 | fom: 0.428699 | r2int: 0.0875286 | r2eff: 0 | hits: 41 ] keV
-            60    6159.8 [sigma: 339.321 | error: 0.335078 | coeff: 0.335078 | eff: 1 | fom: 0.342559 | r2int: 0.109243 | r2eff: 0 | hits: 37 ] keV
-            61    15619.6 [sigma: 512.015 | error: 0.289508 | coeff: 0.289508 | eff: 1 | fom: 0.458886 | r2int: 0.0827405 | r2eff: 0 | hits: 78 ] keV
-            62    22834.3 [sigma: 626.1 | error: 0.240603 | coeff: 0.240603 | eff: 1 | fom: 0.664393 | r2int: 0.0571379 | r2eff: 0 | hits: 77 ] keV
-            63    21483.7 [sigma: 712.659 | error: 0.25695 | coeff: 0.25695 | eff: 1 | fom: 0.582547 | r2int: 0.0649227 | r2eff: 0 | hits: 60 ] keV
-            64    7238.82 [sigma: 492.647 | error: 0.378921 | coeff: 0.378921 | eff: 1 | fom: 0.267873 | r2int: 0.138949 | r2eff: 0 | hits: 31 ] keV
-            65    3321.48 [sigma: 171.098 | error: 0.337789 | coeff: 0.337789 | eff: 1 | fom: 0.337082 | r2int: 0.111448 | r2eff: 0 | hits: 43 ] keV
-            66    28593.6 [sigma: 764.098 | error: 0.220361 | coeff: 0.220361 | eff: 1 | fom: 0.792057 | r2int: 0.0478449 | r2eff: 0 | hits: 68 ] keV
-            67    18968.8 [sigma: 567.533 | error: 0.252104 | coeff: 0.252104 | eff: 1 | fom: 0.605156 | r2int: 0.0626613 | r2eff: 0 | hits: 71 ] keV
-            68    24746.5 [sigma: 707.966 | error: 0.244433 | coeff: 0.244433 | eff: 1 | fom: 0.643733 | r2int: 0.0589292 | r2eff: 0 | hits: 73 ] keV
-            69    4304.49 [sigma: 204.57 | error: 0.27301 | coeff: 0.27301 | eff: 1 | fom: 0.516025 | r2int: 0.0722756 | r2eff: 0 | hits: 33 ] keV
-            70    5707.17 [sigma: 442.083 | error: 0.438186 | coeff: 0.438186 | eff: 1 | fom: 0.200313 | r2int: 0.186007 | r2eff: 0 | hits: 32 ] keV
-            71    5096.03 [sigma: 350.578 | error: 0.401137 | coeff: 0.401137 | eff: 1 | fom: 0.239024 | r2int: 0.156178 | r2eff: 0 | hits: 34 ] keV
-            72    12185.6 [sigma: 538.098 | error: 0.279283 | coeff: 0.279283 | eff: 1 | fom: 0.493103 | r2int: 0.076049 | r2eff: 0 | hits: 40 ] keV
-            73    8299.65 [sigma: 492.666 | error: 0.375424 | coeff: 0.375424 | eff: 1 | fom: 0.272886 | r2int: 0.13742 | r2eff: 0 | hits: 40 ] keV
-            74    4256.39 [sigma: 309.291 | error: 0.370521 | coeff: 0.370521 | eff: 1 | fom: 0.280157 | r2int: 0.132006 | r2eff: 0 | hits: 26 ] keV
-            75    18385.1 [sigma: 341.234 | error: 0.196424 | coeff: 0.196424 | eff: 1 | fom: 0.996863 | r2int: 0.0382381 | r2eff: 0 | hits: 112 ] keV
-            76    34149.9 [sigma: 411.167 | error: 0.14844 | coeff: 0.14844 | eff: 1 | fom: 1.74552 | r2int: 0.0218895 | r2eff: 0 | hits: 152 ] keV
-            77    46744.5 [sigma: 520.917 | error: 0.143146 | coeff: 0.143146 | eff: 1 | fom: 1.87701 | r2int: 0.0203667 | r2eff: 0 | hits: 165 ] keV
-            78    26391.2 [sigma: 322.092 | error: 0.157717 | coeff: 0.157717 | eff: 1 | fom: 1.54621 | r2int: 0.0247258 | r2eff: 0 | hits: 167 ] keV
-            79    27286.1 [sigma: 445.587 | error: 0.178889 | coeff: 0.178889 | eff: 1 | fom: 1.20188 | r2int: 0.0317344 | r2eff: 0 | hits: 120 ] keV
-            80    18932 [sigma: 234.588 | error: 0.16156 | coeff: 0.16156 | eff: 1 | fom: 1.47354 | r2int: 0.025948 | r2eff: 0 | hits: 170 ] keV
-            81    373785 [sigma: 1124.82 | error: 0.0487094 | coeff: 0.0487094 | eff: 1 | fom: 16.2107 | r2int: 0.00236355 | r2eff: 0 | hits: 262 ] keV
-            82    313801 [sigma: 1161.4 | error: 0.0594478 | coeff: 0.0594478 | eff: 1 | fom: 10.8832 | r2int: 0.00352034 | r2eff: 0 | hits: 258 ] keV
-            83    401046 [sigma: 1138.89 | error: 0.0475189 | coeff: 0.0475189 | eff: 1 | fom: 17.0331 | r2int: 0.00224998 | r2eff: 0 | hits: 280 ] keV
-            84    35076.9 [sigma: 459.563 | error: 0.165724 | coeff: 0.165724 | eff: 1 | fom: 1.40042 | r2int: 0.0272927 | r2eff: 0 | hits: 160 ] keV
-            85    43846.4 [sigma: 504.316 | error: 0.15172 | coeff: 0.15172 | eff: 1 | fom: 1.67086 | r2int: 0.0228867 | r2eff: 0 | hits: 174 ] keV
-            86    314085 [sigma: 1147.54 | error: 0.0591384 | coeff: 0.0591384 | eff: 1 | fom: 10.9973 | r2int: 0.00348401 | r2eff: 0 | hits: 262 ] keV
-            87    302893 [sigma: 1169.54 | error: 0.0652997 | coeff: 0.0652997 | eff: 1 | fom: 9.01996 | r2int: 0.00424914 | r2eff: 0 | hits: 286 ] keV
-            88    373184 [sigma: 1174.27 | error: 0.0534 | coeff: 0.0534 | eff: 1 | fom: 13.4879 | r2int: 0.00284166 | r2eff: 0 | hits: 288 ] keV
-            89    30477.2 [sigma: 396.798 | error: 0.165199 | coeff: 0.165199 | eff: 1 | fom: 1.40932 | r2int: 0.0271213 | r2eff: 0 | hits: 161 ] keV
-            90    36530.9 [sigma: 470.208 | error: 0.164332 | coeff: 0.164332 | eff: 1 | fom: 1.42423 | r2int: 0.0268394 | r2eff: 0 | hits: 163 ] keV
-            91    350553 [sigma: 1143.62 | error: 0.0526033 | coeff: 0.0526033 | eff: 1 | fom: 13.8996 | r2int: 0.00275646 | r2eff: 0 | hits: 260 ] keV
-            92    317970 [sigma: 1142.83 | error: 0.0587286 | coeff: 0.0587286 | eff: 1 | fom: 11.1514 | r2int: 0.00343613 | r2eff: 0 | hits: 267 ] keV
-            93    378847 [sigma: 1134.65 | error: 0.0481999 | coeff: 0.0481999 | eff: 1 | fom: 16.5552 | r2int: 0.00231426 | r2eff: 0 | hits: 259 ] keV
-            94    30685.4 [sigma: 407.204 | error: 0.164144 | coeff: 0.164144 | eff: 1 | fom: 1.42749 | r2int: 0.0267673 | r2eff: 0 | hits: 153 ] keV
-            95    34732.2 [sigma: 529.487 | error: 0.172476 | coeff: 0.172476 | eff: 1 | fom: 1.29292 | r2int: 0.0295154 | r2eff: 0 | hits: 128 ] keV
-            96    35423.2 [sigma: 465.314 | error: 0.164592 | coeff: 0.164592 | eff: 1 | fom: 1.41975 | r2int: 0.0269178 | r2eff: 0 | hits: 157 ] keV
-            97    27246.1 [sigma: 359.073 | error: 0.168772 | coeff: 0.168772 | eff: 1 | fom: 1.35029 | r2int: 0.0283102 | r2eff: 0 | hits: 164 ] keV
-            98    34951.4 [sigma: 427.365 | error: 0.153209 | coeff: 0.153209 | eff: 1 | fom: 1.63855 | r2int: 0.0233234 | r2eff: 0 | hits: 157 ] keV
-            99    29294 [sigma: 539.081 | error: 0.197344 | coeff: 0.197344 | eff: 1 | fom: 0.987595 | r2int: 0.038606 | r2eff: 0 | hits: 115 ] keV
-           100    320630 [sigma: 459.932 | error: 0.035137 | coeff: 0.035137 | eff: 1 | fom: 31.1527 | r2int: 0.00123255 | r2eff: 0 | hits: 600 ] keV
-           101    358373 [sigma: 484.064 | error: 0.0353519 | coeff: 0.0353519 | eff: 1 | fom: 30.7752 | r2int: 0.00124793 | r2eff: 0 | hits: 685 ] keV
-           102    369227 [sigma: 509.247 | error: 0.0371111 | coeff: 0.0371111 | eff: 1 | fom: 27.9266 | r2int: 0.00137533 | r2eff: 0 | hits: 724 ] keV
-           103    346620 [sigma: 438.236 | error: 0.0350148 | coeff: 0.0350148 | eff: 1 | fom: 31.3706 | r2int: 0.00122444 | r2eff: 0 | hits: 767 ] keV
-           104    354477 [sigma: 466.729 | error: 0.0331006 | coeff: 0.0331006 | eff: 1 | fom: 35.104 | r2int: 0.00109391 | r2eff: 0 | hits: 632 ] keV
-           105    364387 [sigma: 509.73 | error: 0.0367453 | coeff: 0.0367453 | eff: 1 | fom: 28.4854 | r2int: 0.00134826 | r2eff: 0 | hits: 690 ] keV
-           106    395017 [sigma: 495.587 | error: 0.0365129 | coeff: 0.0365129 | eff: 1 | fom: 28.8492 | r2int: 0.00133162 | r2eff: 0 | hits: 847 ] keV
-           107    394120 [sigma: 474.845 | error: 0.0350229 | coeff: 0.0350229 | eff: 1 | fom: 31.3562 | r2int: 0.00122515 | r2eff: 0 | hits: 845 ] keV
-           108    410815 [sigma: 466.583 | error: 0.0338636 | coeff: 0.0338636 | eff: 1 | fom: 33.5399 | r2int: 0.00114545 | r2eff: 0 | hits: 889 ] keV
-           109    382271 [sigma: 492.669 | error: 0.0341956 | coeff: 0.0341956 | eff: 1 | fom: 32.8918 | r2int: 0.00116768 | r2eff: 0 | hits: 704 ] keV
-           110    317274 [sigma: 448.519 | error: 0.0363177 | coeff: 0.0363177 | eff: 1 | fom: 29.1601 | r2int: 0.00131698 | r2eff: 0 | hits: 660 ] keV
-           111    399396 [sigma: 477.713 | error: 0.0351576 | coeff: 0.0351576 | eff: 1 | fom: 31.1162 | r2int: 0.00123463 | r2eff: 0 | hits: 864 ] keV
-           112    392022 [sigma: 489.057 | error: 0.0372591 | coeff: 0.0372591 | eff: 1 | fom: 27.7053 | r2int: 0.00138668 | r2eff: 0 | hits: 892 ] keV
-           113    383656 [sigma: 478.669 | error: 0.0362678 | coeff: 0.0362678 | eff: 1 | fom: 29.2405 | r2int: 0.0013138 | r2eff: 0 | hits: 845 ] keV
-           114    351824 [sigma: 489.487 | error: 0.037098 | coeff: 0.037098 | eff: 1 | fom: 27.9464 | r2int: 0.00137433 | r2eff: 0 | hits: 711 ] keV
-           115    341287 [sigma: 473.316 | error: 0.0359515 | coeff: 0.0359515 | eff: 1 | fom: 29.7573 | r2int: 0.00129058 | r2eff: 0 | hits: 672 ] keV
-           116    389395 [sigma: 487.851 | error: 0.0364403 | coeff: 0.0364403 | eff: 1 | fom: 28.9642 | r2int: 0.00132633 | r2eff: 0 | hits: 846 ] keV
-           117    382727 [sigma: 505.499 | error: 0.038371 | coeff: 0.038371 | eff: 1 | fom: 25.1554 | r2int: 0.00147059 | r2eff: 0 | hits: 844 ] keV
-           118    351261 [sigma: 460.383 | error: 0.0374628 | coeff: 0.0374628 | eff: 1 | fom: 26.3897 | r2int: 0.00140175 | r2eff: 0 | hits: 817 ] keV
-           119    333955 [sigma: 491.516 | error: 0.0383235 | coeff: 0.0383235 | eff: 1 | fom: 25.2178 | r2int: 0.00146652 | r2eff: 0 | hits: 678 ] keV
-           120    337069 [sigma: 460.048 | error: 0.0333481 | coeff: 0.0333481 | eff: 1 | fom: 33.3038 | r2int: 0.00111023 | r2eff: 0 | hits: 597 ] keV
-           121    370855 [sigma: 486.324 | error: 0.0353581 | coeff: 0.0353581 | eff: 1 | fom: 29.625 | r2int: 0.00124848 | r2eff: 0 | hits: 727 ] keV
-           122    348881 [sigma: 466.718 | error: 0.0353938 | coeff: 0.0353938 | eff: 1 | fom: 29.5653 | r2int: 0.00125093 | r2eff: 0 | hits: 700 ] keV
-           123    339882 [sigma: 493.357 | error: 0.0378519 | coeff: 0.0378519 | eff: 1 | fom: 25.85 | r2int: 0.00143066 | r2eff: 0 | hits: 680 ] keV
-           124    340886 [sigma: 472.126 | error: 0.0335272 | coeff: 0.0335272 | eff: 1 | fom: 32.9489 | r2int: 0.00112216 | r2eff: 0 | hits: 586 ] keV
+             0         692.337121 keV
+             1         689.844845 keV
+             2        1773.875254 keV
+             3         406.100785 keV
+             5         123.755347 keV
+             7         556.435972 keV
+             8         426.489015 keV
+             9        1644.227232 keV
+            10        3026.322498 keV
+            11        3422.958891 keV
+            12         422.084428 keV
+            13          35.393964 keV
+            14        1755.436442 keV
+            15          39.493754 keV
+            16         442.828880 keV
+            17         404.587464 keV
+            18          36.453482 keV
+            19         272.100885 keV
+            20        2363.192407 keV
+            21         356.338215 keV
+            22          51.633839 keV
+            23          63.220658 keV
+            24        1357.514883 keV
+            25        2539.904754 keV
+            26        1189.698879 keV
+            27        3624.624078 keV
+            28        3370.364842 keV
+            29        2797.740720 keV
+            30         728.062076 keV
+            31        8486.493783 keV
+            32        6147.881121 keV
+            33        2584.075670 keV
+            34        4643.764042 keV
+            35        2209.481063 keV
+            36        6433.749988 keV
+            37        3699.675311 keV
+            38        3338.555590 keV
+            39        3273.052865 keV
+            40        5025.701952 keV
+            41        1933.013941 keV
+            42        7331.933550 keV
+            43         709.925655 keV
+            44        4168.007272 keV
+            45        6316.893379 keV
+            46        2762.410229 keV
+            47        2183.021261 keV
+            48        2737.428844 keV
+            49        4746.500593 keV
+            50        3162.594786 keV
+            51        1302.103794 keV
+            52        5416.275938 keV
+            53        8348.850607 keV
+            54        4448.354546 keV
+            55        5453.314380 keV
+            56       18619.610501 keV
+            57       22029.619632 keV
+            58       26436.887127 keV
+            59        5587.816453 keV
+            60        9256.203623 keV
+            61       26036.027442 keV
+            62       13119.390500 keV
+            63       11919.719562 keV
+            64        6819.529000 keV
+            65        8312.581612 keV
+            66       30261.487656 keV
+            67       17338.537838 keV
+            68       23263.245796 keV
+            69       10715.706807 keV
+            70        1232.293930 keV
+            71        7211.588185 keV
+            72        5876.334864 keV
+            73        5745.329301 keV
+            74        3992.214696 keV
+            75       20054.565673 keV
+            76       20435.815421 keV
+            77       28014.241483 keV
+            78       30370.375621 keV
+            79       20748.763195 keV
+            80       29037.981064 keV
+            81      387496.471908 keV
+            82      326568.531853 keV
+            83      345962.521564 keV
+            84       27777.483093 keV
+            85       41809.495824 keV
+            86      329403.070419 keV
+            87      261058.415194 keV
+            88      301316.083495 keV
+            89       24315.427693 keV
+            90       37098.423801 keV
+            91      375578.294672 keV
+            92      359051.034918 keV
+            93      458145.969511 keV
+            94       29723.280162 keV
+            95       22147.594954 keV
+            96       29733.080578 keV
+            97       31162.946875 keV
+            98       39344.939044 keV
+            99       29549.085457 keV
+           100      294488.823354 keV
+           101      336509.247131 keV
+           102      366815.765969 keV
+           103      366494.685375 keV
+           104      298897.668798 keV
+           105      375118.482181 keV
+           106      383166.025539 keV
+           107      419256.610546 keV
+           108      383739.787603 keV
+           109      353159.796417 keV
+           110      355081.015183 keV
+           111      407895.449801 keV
+           112      378817.284370 keV
+           113      371888.668785 keV
+           114      362065.456461 keV
+           115      366862.536746 keV
+           116      423858.334569 keV
+           117      429988.031884 keV
+           118      393772.463920 keV
+           119      359086.500521 keV
+           120      285374.704082 keV
+           121      363410.097653 keV
+           122      384503.793156 keV
+           123      383392.714605 keV
+           124      302752.909748 keV
+             0    692.337 [sigma: 314.592 | error: 0.908782 | coeff: 0.908782 | eff: 1 | fom: 0.0465701 | r2int: 0.619413 | r2eff: 0 | hits: 4 ] keV
+             1    689.845 [sigma: 319.043 | error: 0.801047 | coeff: 0.801047 | eff: 1 | fom: 0.0599392 | r2int: 0.427784 | r2eff: 0 | hits: 3 ] keV
+             2    1773.88 [sigma: 582.273 | error: 0.656499 | coeff: 0.656499 | eff: 1 | fom: 0.0892399 | r2int: 0.323243 | r2eff: 0 | hits: 4 ] keV
+             3    406.101 [sigma: 139.152 | error: 0.685309 | coeff: 0.685309 | eff: 1 | fom: 0.0818944 | r2int: 0.352236 | r2eff: 0 | hits: 4 ] keV
+             5    123.755 [sigma: 49.9296 | error: 0.57057 | coeff: 0.57057 | eff: 1 | fom: 0.118143 | r2int: 0.162775 | r2eff: 0 | hits: 2 ] keV
+             7    556.436 [sigma: 155.415 | error: 0.624543 | coeff: 0.624543 | eff: 1 | fom: 0.0986056 | r2int: 0.312043 | r2eff: 0 | hits: 5 ] keV
+             8    426.489 [sigma: 142.977 | error: 0.474105 | coeff: 0.474105 | eff: 1 | fom: 0.171111 | r2int: 0.112388 | r2eff: 0 | hits: 2 ] keV
+             9    1644.23 [sigma: 922.483 | error: 0.971756 | coeff: 0.971756 | eff: 1 | fom: 0.0407298 | r2int: 0.629539 | r2eff: 0 | hits: 3 ] keV
+            10    3026.32 [sigma: 409.004 | error: 0.427378 | coeff: 0.427378 | eff: 1 | fom: 0.210572 | r2int: 0.164387 | r2eff: 0 | hits: 10 ] keV
+            11    3422.96 [sigma: 708.794 | error: 0.507217 | coeff: 0.507217 | eff: 1 | fom: 0.149499 | r2int: 0.214391 | r2eff: 0 | hits: 6 ] keV
+            12    422.084 [sigma: 129.246 | error: 0.684704 | coeff: 0.684704 | eff: 1 | fom: 0.0820391 | r2int: 0.375056 | r2eff: 0 | hits: 5 ] keV
+            13    35.394 [sigma: 13.016 | error: 0.520072 | coeff: 0.520072 | eff: 1 | fom: 0.1422 | r2int: 0.135237 | r2eff: 0 | hits: 2 ] keV
+            14    1755.44 [sigma: 970.057 | error: 0.957134 | coeff: 0.957134 | eff: 1 | fom: 0.0419838 | r2int: 0.610736 | r2eff: 0 | hits: 3 ] keV
+            15    39.4938 [sigma: 13.7256 | error: 0.601956 | coeff: 0.601956 | eff: 1 | fom: 0.106144 | r2int: 0.241568 | r2eff: 0 | hits: 3 ] keV
+            16    442.829 [sigma: 160.713 | error: 0.725847 | coeff: 0.725847 | eff: 1 | fom: 0.0730022 | r2int: 0.395141 | r2eff: 0 | hits: 4 ] keV
+            17    404.587 [sigma: 85.4303 | error: 0.51722 | coeff: 0.51722 | eff: 1 | fom: 0.143773 | r2int: 0.22293 | r2eff: 0 | hits: 6 ] keV
+            18    36.4535 [sigma: 0 | error: 0 | coeff: 0 | eff: 1 | fom: 1 | r2int: 2.22045e-16 | r2eff: 0 | hits: 1 ] keV
+            19    272.101 [sigma: 66.4607 | error: 0.4885 | coeff: 0.4885 | eff: 1 | fom: 0.161175 | r2int: 0.178974 | r2eff: 0 | hits: 4 ] keV
+            20    2363.19 [sigma: 845.729 | error: 0.800234 | coeff: 0.800234 | eff: 1 | fom: 0.060061 | r2int: 0.5123 | r2eff: 0 | hits: 5 ] keV
+            21    356.338 [sigma: 121.407 | error: 0.681412 | coeff: 0.681412 | eff: 1 | fom: 0.0828337 | r2int: 0.348242 | r2eff: 0 | hits: 4 ] keV
+            22    51.6338 [sigma: 4.40469 | error: 0.147755 | coeff: 0.147755 | eff: 1 | fom: 1.76175 | r2int: 0.0145543 | r2eff: 0 | hits: 3 ] keV
+            23    63.2207 [sigma: 8.9611 | error: 0.245507 | coeff: 0.245507 | eff: 1 | fom: 0.638117 | r2int: 0.0401823 | r2eff: 0 | hits: 3 ] keV
+            24    1357.51 [sigma: 509.619 | error: 0.750812 | coeff: 0.750812 | eff: 1 | fom: 0.0682283 | r2int: 0.422789 | r2eff: 0 | hits: 4 ] keV
+            25    2539.9 [sigma: 641.146 | error: 0.757288 | coeff: 0.757288 | eff: 1 | fom: 0.0670664 | r2int: 0.509764 | r2eff: 0 | hits: 9 ] keV
+            26    1189.7 [sigma: 267.212 | error: 0.635278 | coeff: 0.635278 | eff: 1 | fom: 0.0953012 | r2int: 0.353131 | r2eff: 0 | hits: 8 ] keV
+            27    3624.62 [sigma: 760.565 | error: 0.593497 | coeff: 0.593497 | eff: 1 | fom: 0.109192 | r2int: 0.308209 | r2eff: 0 | hits: 8 ] keV
+            28    3370.36 [sigma: 583.022 | error: 0.573725 | coeff: 0.573725 | eff: 1 | fom: 0.116847 | r2int: 0.299237 | r2eff: 0 | hits: 11 ] keV
+            29    2797.74 [sigma: 456.424 | error: 0.46143 | coeff: 0.46143 | eff: 1 | fom: 0.18064 | r2int: 0.186303 | r2eff: 0 | hits: 8 ] keV
+            30    728.062 [sigma: 105.053 | error: 0.408119 | coeff: 0.408119 | eff: 1 | fom: 0.230915 | r2int: 0.145741 | r2eff: 0 | hits: 8 ] keV
+            31    8486.49 [sigma: 710.38 | error: 0.418535 | coeff: 0.418535 | eff: 1 | fom: 0.219564 | r2int: 0.168165 | r2eff: 0 | hits: 25 ] keV
+            32    6147.88 [sigma: 705.179 | error: 0.538004 | coeff: 0.538004 | eff: 1 | fom: 0.132879 | r2int: 0.276292 | r2eff: 0 | hits: 22 ] keV
+            33    2584.08 [sigma: 150.511 | error: 0.253887 | coeff: 0.253887 | eff: 1 | fom: 0.596687 | r2int: 0.0610659 | r2eff: 0 | hits: 19 ] keV
+            34    4643.76 [sigma: 665.187 | error: 0.496209 | coeff: 0.496209 | eff: 1 | fom: 0.156206 | r2int: 0.225704 | r2eff: 0 | hits: 12 ] keV
+            35    2209.48 [sigma: 352.688 | error: 0.575536 | coeff: 0.575536 | eff: 1 | fom: 0.116113 | r2int: 0.305761 | r2eff: 0 | hits: 13 ] keV
+            36    6433.75 [sigma: 552.759 | error: 0.402979 | coeff: 0.402979 | eff: 1 | fom: 0.236843 | r2int: 0.155011 | r2eff: 0 | hits: 22 ] keV
+            37    3699.68 [sigma: 355.475 | error: 0.480414 | coeff: 0.480414 | eff: 1 | fom: 0.166646 | r2int: 0.221566 | r2eff: 0 | hits: 25 ] keV
+            38    3338.56 [sigma: 450.595 | error: 0.505001 | coeff: 0.505001 | eff: 1 | fom: 0.150814 | r2int: 0.23681 | r2eff: 0 | hits: 14 ] keV
+            39    3273.05 [sigma: 567.02 | error: 0.54783 | coeff: 0.54783 | eff: 1 | fom: 0.128155 | r2int: 0.270106 | r2eff: 0 | hits: 10 ] keV
+            40    5025.7 [sigma: 434.988 | error: 0.356865 | coeff: 0.356865 | eff: 1 | fom: 0.302007 | r2int: 0.119862 | r2eff: 0 | hits: 17 ] keV
+            41    1933.01 [sigma: 328.153 | error: 0.536836 | coeff: 0.536836 | eff: 1 | fom: 0.133458 | r2int: 0.259373 | r2eff: 0 | hits: 10 ] keV
+            42    7331.93 [sigma: 716.29 | error: 0.425841 | coeff: 0.425841 | eff: 1 | fom: 0.212096 | r2int: 0.171796 | r2eff: 0 | hits: 19 ] keV
+            43    709.926 [sigma: 44.8693 | error: 0.252811 | coeff: 0.252811 | eff: 1 | fom: 0.601774 | r2int: 0.059919 | r2eff: 0 | hits: 16 ] keV
+            44    4168.01 [sigma: 630.535 | error: 0.478389 | coeff: 0.478389 | eff: 1 | fom: 0.16806 | r2int: 0.20597 | r2eff: 0 | hits: 10 ] keV
+            45    6316.89 [sigma: 874.154 | error: 0.41515 | coeff: 0.41515 | eff: 1 | fom: 0.22316 | r2int: 0.1532 | r2eff: 0 | hits: 9 ] keV
+            46    2762.41 [sigma: 436.059 | error: 0.523544 | coeff: 0.523544 | eff: 1 | fom: 0.14032 | r2int: 0.24918 | r2eff: 0 | hits: 11 ] keV
+            47    2183.02 [sigma: 503.64 | error: 0.565116 | coeff: 0.565116 | eff: 1 | fom: 0.120435 | r2int: 0.26613 | r2eff: 0 | hits: 6 ] keV
+            48    2737.43 [sigma: 645.818 | error: 0.577887 | coeff: 0.577887 | eff: 1 | fom: 0.11517 | r2int: 0.278294 | r2eff: 0 | hits: 6 ] keV
+            49    4746.5 [sigma: 747.777 | error: 0.445598 | coeff: 0.445598 | eff: 1 | fom: 0.193705 | r2int: 0.173738 | r2eff: 0 | hits: 8 ] keV
+            50    3162.59 [sigma: 441.117 | error: 0.483171 | coeff: 0.483171 | eff: 1 | fom: 0.16475 | r2int: 0.213999 | r2eff: 0 | hits: 12 ] keV
+            51    1302.1 [sigma: 89.3292 | error: 0.299037 | coeff: 0.299037 | eff: 1 | fom: 0.430108 | r2int: 0.0847166 | r2eff: 0 | hits: 19 ] keV
+            52    5416.28 [sigma: 310.937 | error: 0.334743 | coeff: 0.334743 | eff: 1 | fom: 0.343245 | r2int: 0.108757 | r2eff: 0 | hits: 34 ] keV
+            53    8348.85 [sigma: 410.563 | error: 0.303141 | coeff: 0.303141 | eff: 1 | fom: 0.41854 | r2int: 0.0894762 | r2eff: 0 | hits: 38 ] keV
+            54    4448.35 [sigma: 479.734 | error: 0.505839 | coeff: 0.505839 | eff: 1 | fom: 0.150315 | r2int: 0.244243 | r2eff: 0 | hits: 22 ] keV
+            55    5453.31 [sigma: 373.831 | error: 0.381677 | coeff: 0.381677 | eff: 1 | fom: 0.264019 | r2int: 0.140978 | r2eff: 0 | hits: 31 ] keV
+            56    18619.6 [sigma: 624.242 | error: 0.244073 | coeff: 0.244073 | eff: 1 | fom: 0.645633 | r2int: 0.0584479 | r2eff: 0 | hits: 53 ] keV
+            57    22029.6 [sigma: 642.714 | error: 0.245833 | coeff: 0.245833 | eff: 1 | fom: 0.636425 | r2int: 0.0595825 | r2eff: 0 | hits: 71 ] keV
+            58    26436.9 [sigma: 755.211 | error: 0.233828 | coeff: 0.233828 | eff: 1 | fom: 0.703453 | r2int: 0.0538593 | r2eff: 0 | hits: 67 ] keV
+            59    5587.82 [sigma: 358.403 | error: 0.35131 | coeff: 0.35131 | eff: 1 | fom: 0.311635 | r2int: 0.119304 | r2eff: 0 | hits: 30 ] keV
+            60    9256.2 [sigma: 485.257 | error: 0.351678 | coeff: 0.351678 | eff: 1 | fom: 0.310983 | r2int: 0.120929 | r2eff: 0 | hits: 45 ] keV
+            61    26036 [sigma: 707.445 | error: 0.225706 | coeff: 0.225706 | eff: 1 | fom: 0.75499 | r2int: 0.0502048 | r2eff: 0 | hits: 69 ] keV
+            62    13119.4 [sigma: 377.174 | error: 0.250631 | coeff: 0.250631 | eff: 1 | fom: 0.612289 | r2int: 0.0619895 | r2eff: 0 | hits: 76 ] keV
+            63    11919.7 [sigma: 453.217 | error: 0.292056 | coeff: 0.292056 | eff: 1 | fom: 0.450915 | r2int: 0.083851 | r2eff: 0 | hits: 59 ] keV
+            64    6819.53 [sigma: 384.161 | error: 0.351796 | coeff: 0.351796 | eff: 1 | fom: 0.310774 | r2int: 0.120587 | r2eff: 0 | hits: 39 ] keV
+            65    8312.58 [sigma: 431.828 | error: 0.328552 | coeff: 0.328552 | eff: 1 | fom: 0.356302 | r2int: 0.105248 | r2eff: 0 | hits: 40 ] keV
+            66    30261.5 [sigma: 800.869 | error: 0.213367 | coeff: 0.213367 | eff: 1 | fom: 0.844833 | r2int: 0.0448252 | r2eff: 0 | hits: 65 ] keV
+            67    17338.5 [sigma: 620.036 | error: 0.292713 | coeff: 0.292713 | eff: 1 | fom: 0.448894 | r2int: 0.0844019 | r2eff: 0 | hits: 67 ] keV
+            68    23263.2 [sigma: 879.519 | error: 0.275241 | coeff: 0.275241 | eff: 1 | fom: 0.507692 | r2int: 0.0743282 | r2eff: 0 | hits: 53 ] keV
+            69    10715.7 [sigma: 580.244 | error: 0.329375 | coeff: 0.329375 | eff: 1 | fom: 0.354524 | r2int: 0.105556 | r2eff: 0 | hits: 37 ] keV
+            70    1232.29 [sigma: 91.5007 | error: 0.323658 | coeff: 0.323658 | eff: 1 | fom: 0.367158 | r2int: 0.0992414 | r2eff: 0 | hits: 19 ] keV
+            71    7211.59 [sigma: 429.477 | error: 0.34211 | coeff: 0.34211 | eff: 1 | fom: 0.328621 | r2int: 0.113493 | r2eff: 0 | hits: 33 ] keV
+            72    5876.33 [sigma: 409.381 | error: 0.39409 | coeff: 0.39409 | eff: 1 | fom: 0.247648 | r2int: 0.150454 | r2eff: 0 | hits: 32 ] keV
+            73    5745.33 [sigma: 315.752 | error: 0.305993 | coeff: 0.305993 | eff: 1 | fom: 0.410774 | r2int: 0.0906115 | r2eff: 0 | hits: 31 ] keV
+            74    3992.21 [sigma: 431.278 | error: 0.432119 | coeff: 0.432119 | eff: 1 | fom: 0.205977 | r2int: 0.175057 | r2eff: 0 | hits: 16 ] keV
+            75    20054.6 [sigma: 412.233 | error: 0.198231 | coeff: 0.198231 | eff: 1 | fom: 0.97878 | r2int: 0.0388729 | r2eff: 0 | hits: 93 ] keV
+            76    20435.8 [sigma: 317.846 | error: 0.180714 | coeff: 0.180714 | eff: 1 | fom: 1.17773 | r2int: 0.0324156 | r2eff: 0 | hits: 135 ] keV
+            77    28014.2 [sigma: 441.957 | error: 0.192573 | coeff: 0.192573 | eff: 1 | fom: 1.03714 | r2int: 0.0368353 | r2eff: 0 | hits: 149 ] keV
+            78    30370.4 [sigma: 400.017 | error: 0.170719 | coeff: 0.170719 | eff: 1 | fom: 1.31966 | r2int: 0.0289716 | r2eff: 0 | hits: 168 ] keV
+            79    20748.8 [sigma: 462.961 | error: 0.225347 | coeff: 0.225347 | eff: 1 | fom: 0.757395 | r2int: 0.0502835 | r2eff: 0 | hits: 102 ] keV
+            80    29038 [sigma: 377.262 | error: 0.160176 | coeff: 0.160176 | eff: 1 | fom: 1.4991 | r2int: 0.0254877 | r2eff: 0 | hits: 152 ] keV
+            81    387496 [sigma: 1095.33 | error: 0.0446938 | coeff: 0.0446938 | eff: 1 | fom: 19.2545 | r2int: 0.00198954 | r2eff: 0 | hits: 250 ] keV
+            82    326569 [sigma: 1131.09 | error: 0.0552001 | coeff: 0.0552001 | eff: 1 | fom: 12.6226 | r2int: 0.00303505 | r2eff: 0 | hits: 254 ] keV
+            83    345963 [sigma: 1160.62 | error: 0.0535711 | coeff: 0.0535711 | eff: 1 | fom: 13.4019 | r2int: 0.00285861 | r2eff: 0 | hits: 255 ] keV
+            84    27777.5 [sigma: 428.297 | error: 0.181786 | coeff: 0.181786 | eff: 1 | fom: 1.16388 | r2int: 0.0328083 | r2eff: 0 | hits: 139 ] keV
+            85    41809.5 [sigma: 422.873 | error: 0.140148 | coeff: 0.140148 | eff: 1 | fom: 1.95819 | r2int: 0.0195391 | r2eff: 0 | hits: 192 ] keV
+            86    329403 [sigma: 1149.31 | error: 0.0562596 | coeff: 0.0562596 | eff: 1 | fom: 12.1516 | r2int: 0.00315296 | r2eff: 0 | hits: 260 ] keV
+            87    261058 [sigma: 1089.77 | error: 0.0684658 | coeff: 0.0684658 | eff: 1 | fom: 8.20501 | r2int: 0.00467014 | r2eff: 0 | hits: 269 ] keV
+            88    301316 [sigma: 1155.35 | error: 0.0605051 | coeff: 0.0605051 | eff: 1 | fom: 10.5061 | r2int: 0.00364616 | r2eff: 0 | hits: 249 ] keV
+            89    24315.4 [sigma: 320.332 | error: 0.158088 | coeff: 0.158088 | eff: 1 | fom: 1.53896 | r2int: 0.0248184 | r2eff: 0 | hits: 144 ] keV
+            90    37098.4 [sigma: 428.105 | error: 0.150459 | coeff: 0.150459 | eff: 1 | fom: 1.69898 | r2int: 0.0225048 | r2eff: 0 | hits: 170 ] keV
+            91    375578 [sigma: 1173.5 | error: 0.0509594 | coeff: 0.0509594 | eff: 1 | fom: 14.8108 | r2int: 0.00258709 | r2eff: 0 | hits: 266 ] keV
+            92    359051 [sigma: 1157.93 | error: 0.0524987 | coeff: 0.0524987 | eff: 1 | fom: 13.955 | r2int: 0.00274572 | r2eff: 0 | hits: 265 ] keV
+            93    458146 [sigma: 1115.47 | error: 0.0420301 | coeff: 0.0420301 | eff: 1 | fom: 21.7723 | r2int: 0.0017606 | r2eff: 0 | hits: 298 ] keV
+            94    29723.3 [sigma: 362.8 | error: 0.160544 | coeff: 0.160544 | eff: 1 | fom: 1.49225 | r2int: 0.0256253 | r2eff: 0 | hits: 173 ] keV
+            95    22147.6 [sigma: 468.079 | error: 0.213448 | coeff: 0.213448 | eff: 1 | fom: 0.844191 | r2int: 0.0451136 | r2eff: 0 | hits: 102 ] keV
+            96    29733.1 [sigma: 429.707 | error: 0.173426 | coeff: 0.173426 | eff: 1 | fom: 1.27879 | r2int: 0.0298677 | r2eff: 0 | hits: 144 ] keV
+            97    31162.9 [sigma: 370.034 | error: 0.157528 | coeff: 0.157528 | eff: 1 | fom: 1.54992 | r2int: 0.0246742 | r2eff: 0 | hits: 176 ] keV
+            98    39344.9 [sigma: 472.086 | error: 0.157818 | coeff: 0.157818 | eff: 1 | fom: 1.54424 | r2int: 0.0247624 | r2eff: 0 | hits: 173 ] keV
+            99    29549.1 [sigma: 500.052 | error: 0.180685 | coeff: 0.180685 | eff: 1 | fom: 1.17809 | r2int: 0.0323609 | r2eff: 0 | hits: 114 ] keV
+           100    294489 [sigma: 447.055 | error: 0.0360202 | coeff: 0.0360202 | eff: 1 | fom: 29.6439 | r2int: 0.00129515 | r2eff: 0 | hits: 563 ] keV
+           101    336509 [sigma: 472.634 | error: 0.0364905 | coeff: 0.0364905 | eff: 1 | fom: 28.8846 | r2int: 0.00132958 | r2eff: 0 | hits: 675 ] keV
+           102    366816 [sigma: 489.286 | error: 0.0355672 | coeff: 0.0355672 | eff: 1 | fom: 30.4037 | r2int: 0.00126325 | r2eff: 0 | hits: 711 ] keV
+           103    366495 [sigma: 477.187 | error: 0.0353711 | coeff: 0.0353711 | eff: 1 | fom: 30.7418 | r2int: 0.00124942 | r2eff: 0 | hits: 738 ] keV
+           104    298898 [sigma: 446.185 | error: 0.0356081 | coeff: 0.0356081 | eff: 1 | fom: 30.334 | r2int: 0.00126571 | r2eff: 0 | hits: 569 ] keV
+           105    375118 [sigma: 505.128 | error: 0.0357796 | coeff: 0.0357796 | eff: 1 | fom: 30.0438 | r2int: 0.00127837 | r2eff: 0 | hits: 706 ] keV
+           106    383166 [sigma: 464.37 | error: 0.0359516 | coeff: 0.0359516 | eff: 1 | fom: 29.7571 | r2int: 0.00129105 | r2eff: 0 | hits: 880 ] keV
+           107    419257 [sigma: 488.874 | error: 0.0344527 | coeff: 0.0344527 | eff: 1 | fom: 32.4025 | r2int: 0.00118563 | r2eff: 0 | hits: 873 ] keV
+           108    383740 [sigma: 491.712 | error: 0.0370491 | coeff: 0.0370491 | eff: 1 | fom: 26.9824 | r2int: 0.00137099 | r2eff: 0 | hits: 836 ] keV
+           109    353160 [sigma: 520.041 | error: 0.0379447 | coeff: 0.0379447 | eff: 1 | fom: 25.7238 | r2int: 0.00143763 | r2eff: 0 | hits: 664 ] keV
+           110    355081 [sigma: 482.15 | error: 0.0364605 | coeff: 0.0364605 | eff: 1 | fom: 27.8607 | r2int: 0.00132752 | r2eff: 0 | hits: 721 ] keV
+           111    407895 [sigma: 503.533 | error: 0.0359058 | coeff: 0.0359058 | eff: 1 | fom: 28.7282 | r2int: 0.0012877 | r2eff: 0 | hits: 846 ] keV
+           112    378817 [sigma: 464.693 | error: 0.0355953 | coeff: 0.0355953 | eff: 1 | fom: 29.2315 | r2int: 0.00126552 | r2eff: 0 | hits: 842 ] keV
+           113    371889 [sigma: 484.356 | error: 0.0377478 | coeff: 0.0377478 | eff: 1 | fom: 25.9928 | r2int: 0.0014232 | r2eff: 0 | hits: 840 ] keV
+           114    362065 [sigma: 480.694 | error: 0.0356986 | coeff: 0.0356986 | eff: 1 | fom: 29.0626 | r2int: 0.00127262 | r2eff: 0 | hits: 723 ] keV
+           115    366863 [sigma: 462.513 | error: 0.0336403 | coeff: 0.0336403 | eff: 1 | fom: 32.7277 | r2int: 0.00113008 | r2eff: 0 | hits: 712 ] keV
+           116    423858 [sigma: 482.184 | error: 0.0341472 | coeff: 0.0341472 | eff: 1 | fom: 31.7634 | r2int: 0.00116473 | r2eff: 0 | hits: 901 ] keV
+           117    429988 [sigma: 492.581 | error: 0.0344243 | coeff: 0.0344243 | eff: 1 | fom: 31.2541 | r2int: 0.00118372 | r2eff: 0 | hits: 903 ] keV
+           118    393772 [sigma: 474.211 | error: 0.0353368 | coeff: 0.0353368 | eff: 1 | fom: 29.6607 | r2int: 0.00124724 | r2eff: 0 | hits: 861 ] keV
+           119    359087 [sigma: 473.626 | error: 0.0351452 | coeff: 0.0351452 | eff: 1 | fom: 29.985 | r2int: 0.00123344 | r2eff: 0 | hits: 710 ] keV
+           120    285375 [sigma: 479.695 | error: 0.0391335 | coeff: 0.0391335 | eff: 1 | fom: 24.1846 | r2int: 0.00152861 | r2eff: 0 | hits: 542 ] keV
+           121    363410 [sigma: 487.352 | error: 0.0351499 | coeff: 0.0351499 | eff: 1 | fom: 29.977 | r2int: 0.00123372 | r2eff: 0 | hits: 687 ] keV
+           122    384504 [sigma: 475.249 | error: 0.0338494 | coeff: 0.0338494 | eff: 1 | fom: 32.3246 | r2int: 0.00114426 | r2eff: 0 | hits: 750 ] keV
+           123    383393 [sigma: 496.404 | error: 0.035435 | coeff: 0.035435 | eff: 1 | fom: 29.4966 | r2int: 0.00125396 | r2eff: 0 | hits: 749 ] keV
+           124    302753 [sigma: 467.763 | error: 0.0365295 | coeff: 0.0365295 | eff: 1 | fom: 27.7555 | r2int: 0.00133202 | r2eff: 0 | hits: 559 ] keV
 ============================================================
  closed file mfd_tl_EnergyDeposit.out for output
 ============================================================
  opened file mfd_tg_EnergyDeposit.out for output
 ============================================================
-             0         934.077272 keV
-             1        1543.934210 keV
-             2          34.595500 keV
-             3           6.685285 keV
-             4         189.191041 keV
-             5         384.520428 keV
-             6          64.103432 keV
-             7         358.580567 keV
-             8        2653.696887 keV
-             9        3247.973032 keV
-            10         175.229568 keV
-            11          87.984902 keV
-            12         648.326063 keV
-            13         451.344900 keV
-            14         546.218912 keV
-            15        1419.915060 keV
-            16         312.857050 keV
-            17         126.426269 keV
-            18         103.411949 keV
-            19         359.091343 keV
-            20        1930.824797 keV
-            21          18.955669 keV
-            22        1718.986021 keV
-            23         648.321739 keV
-            24         853.497482 keV
-            25         824.180722 keV
-            26        1046.217055 keV
-            27        1656.357891 keV
-            28        4451.409490 keV
-            29        5461.074240 keV
-            30        2023.124908 keV
-            31        7389.903405 keV
-            32        6080.545816 keV
-            33        6010.134941 keV
-            34        3740.871383 keV
-            35         595.003659 keV
-            36        5801.981042 keV
-            37        1664.427620 keV
-            38        4256.537506 keV
-            39         895.967637 keV
-            40        4392.830968 keV
-            41        3411.631989 keV
-            42        9543.190656 keV
-            43        5615.615270 keV
-            44        1034.072243 keV
-            45          62.966274 keV
-            46        1730.695059 keV
-            47        1040.686401 keV
-            48        3170.075741 keV
-            49        1603.611349 keV
-            50        4028.765055 keV
-            51        5859.936234 keV
-            52        8199.696287 keV
-            53        5676.038603 keV
-            54        9010.913383 keV
-            55        9331.766280 keV
-            56       22798.266267 keV
-            57       22122.337166 keV
-            58       13900.540686 keV
-            59       10628.308420 keV
-            60        6159.796199 keV
-            61       15619.557317 keV
-            62       22834.345501 keV
-            63       21483.724819 keV
-            64        7238.820445 keV
-            65        3321.483031 keV
-            66       28593.595615 keV
-            67       18968.814070 keV
-            68       24746.473297 keV
-            69        4304.489921 keV
-            70        5707.168687 keV
-            71        5096.025157 keV
-            72       12185.607020 keV
-            73        8299.653955 keV
-            74        4256.388609 keV
-            75       18385.081988 keV
-            76       34149.851668 keV
-            77       46744.477808 keV
-            78       26391.191362 keV
-            79       27286.054692 keV
-            80       18932.014463 keV
-            81      373785.103456 keV
-            82      313801.427135 keV
-            83      401045.586960 keV
-            84       35076.858689 keV
-            85       43846.395982 keV
-            86      314084.782327 keV
-            87      302892.688590 keV
-            88      373184.315663 keV
-            89       30477.192522 keV
-            90       36530.933075 keV
-            91      350553.486798 keV
-            92      317970.237704 keV
-            93      378846.864213 keV
-            94       30685.382628 keV
-            95       34732.235991 keV
-            96       35423.239049 keV
-            97       27246.115102 keV
-            98       34951.438700 keV
-            99       29294.032667 keV
-           100      320629.861999 keV
-           101      358373.019618 keV
-           102      369227.196993 keV
-           103      346620.205106 keV
-           104      354477.190333 keV
-           105      364386.731607 keV
-           106      395016.519387 keV
-           107      394119.683771 keV
-           108      410815.466281 keV
-           109      382271.336585 keV
-           110      317273.543118 keV
-           111      399396.155292 keV
-           112      392021.808860 keV
-           113      383656.425796 keV
-           114      351823.682600 keV
-           115      341286.560510 keV
-           116      389395.088911 keV
-           117      382726.818293 keV
-           118      351260.945403 keV
-           119      333954.510157 keV
-           120      337069.420548 keV
-           121      370855.110309 keV
-           122      348880.757213 keV
-           123      339881.821283 keV
-           124      340885.585614 keV
+             0         692.337121 keV
+             1         689.844845 keV
+             2        1773.875254 keV
+             3         406.100785 keV
+             5         123.755347 keV
+             7         556.435972 keV
+             8         426.489015 keV
+             9        1644.227232 keV
+            10        3026.322498 keV
+            11        3422.958891 keV
+            12         422.084428 keV
+            13          35.393964 keV
+            14        1755.436442 keV
+            15          39.493754 keV
+            16         442.828880 keV
+            17         404.587464 keV
+            18          36.453482 keV
+            19         272.100885 keV
+            20        2363.192407 keV
+            21         356.338215 keV
+            22          51.633839 keV
+            23          63.220658 keV
+            24        1357.514883 keV
+            25        2539.904754 keV
+            26        1189.698879 keV
+            27        3624.624078 keV
+            28        3370.364842 keV
+            29        2797.740720 keV
+            30         728.062076 keV
+            31        8486.493783 keV
+            32        6147.881121 keV
+            33        2584.075670 keV
+            34        4643.764042 keV
+            35        2209.481063 keV
+            36        6433.749988 keV
+            37        3699.675311 keV
+            38        3338.555590 keV
+            39        3273.052865 keV
+            40        5025.701952 keV
+            41        1933.013941 keV
+            42        7331.933550 keV
+            43         709.925655 keV
+            44        4168.007272 keV
+            45        6316.893379 keV
+            46        2762.410229 keV
+            47        2183.021261 keV
+            48        2737.428844 keV
+            49        4746.500593 keV
+            50        3162.594786 keV
+            51        1302.103794 keV
+            52        5416.275938 keV
+            53        8348.850607 keV
+            54        4448.354546 keV
+            55        5453.314380 keV
+            56       18619.610501 keV
+            57       22029.619632 keV
+            58       26436.887127 keV
+            59        5587.816453 keV
+            60        9256.203623 keV
+            61       26036.027442 keV
+            62       13119.390500 keV
+            63       11919.719562 keV
+            64        6819.529000 keV
+            65        8312.581612 keV
+            66       30261.487656 keV
+            67       17338.537838 keV
+            68       23263.245796 keV
+            69       10715.706807 keV
+            70        1232.293930 keV
+            71        7211.588185 keV
+            72        5876.334864 keV
+            73        5745.329301 keV
+            74        3992.214696 keV
+            75       20054.565673 keV
+            76       20435.815421 keV
+            77       28014.241483 keV
+            78       30370.375621 keV
+            79       20748.763195 keV
+            80       29037.981064 keV
+            81      387496.471908 keV
+            82      326568.531853 keV
+            83      345962.521564 keV
+            84       27777.483093 keV
+            85       41809.495824 keV
+            86      329403.070419 keV
+            87      261058.415194 keV
+            88      301316.083495 keV
+            89       24315.427693 keV
+            90       37098.423801 keV
+            91      375578.294672 keV
+            92      359051.034918 keV
+            93      458145.969511 keV
+            94       29723.280162 keV
+            95       22147.594954 keV
+            96       29733.080578 keV
+            97       31162.946875 keV
+            98       39344.939044 keV
+            99       29549.085457 keV
+           100      294488.823354 keV
+           101      336509.247131 keV
+           102      366815.765969 keV
+           103      366494.685375 keV
+           104      298897.668798 keV
+           105      375118.482181 keV
+           106      383166.025539 keV
+           107      419256.610546 keV
+           108      383739.787603 keV
+           109      353159.796417 keV
+           110      355081.015183 keV
+           111      407895.449801 keV
+           112      378817.284370 keV
+           113      371888.668785 keV
+           114      362065.456461 keV
+           115      366862.536746 keV
+           116      423858.334569 keV
+           117      429988.031884 keV
+           118      393772.463920 keV
+           119      359086.500521 keV
+           120      285374.704082 keV
+           121      363410.097653 keV
+           122      384503.793156 keV
+           123      383392.714605 keV
+           124      302752.909748 keV
 ============================================================
  closed file mfd_tg_EnergyDeposit.out for output
 ============================================================
  opened file mfd_tl_NumberOfSteps.out for output
 ============================================================
-             0          84.000000 steps
-             1          89.000000 steps
-             2          19.000000 steps
-             3          16.000000 steps
-             4          39.000000 steps
-             5          45.000000 steps
-             6          28.000000 steps
-             7          55.000000 steps
-             8         140.000000 steps
-             9         193.000000 steps
-            10          48.000000 steps
-            11          34.000000 steps
-            12          66.000000 steps
-            13          28.000000 steps
-            14          36.000000 steps
-            15          95.000000 steps
-            16          45.000000 steps
-            17          36.000000 steps
-            18          24.000000 steps
-            19          26.000000 steps
-            20          61.000000 steps
-            21          18.000000 steps
-            22          64.000000 steps
-            23          39.000000 steps
-            24          71.000000 steps
-            25         138.000000 steps
-            26         122.000000 steps
-            27         173.000000 steps
-            28         276.000000 steps
-            29         251.000000 steps
-            30         235.000000 steps
-            31         331.000000 steps
-            32         320.000000 steps
-            33         351.000000 steps
-            34         289.000000 steps
-            35          99.000000 steps
-            36         288.000000 steps
-            37         308.000000 steps
-            38         443.000000 steps
-            39         146.000000 steps
-            40         192.000000 steps
-            41         223.000000 steps
-            42         456.000000 steps
-            43         266.000000 steps
-            44         118.000000 steps
-            45          28.000000 steps
-            46          73.000000 steps
-            47         151.000000 steps
-            48         174.000000 steps
-            49         143.000000 steps
-            50         640.000000 steps
-            51         569.000000 steps
-            52         621.000000 steps
-            53         593.000000 steps
-            54         609.000000 steps
-            55         483.000000 steps
-            56        1122.000000 steps
-            57        1307.000000 steps
-            58         802.000000 steps
-            59         722.000000 steps
-            60         619.000000 steps
-            61        1225.000000 steps
-            62        1364.000000 steps
-            63        1071.000000 steps
-            64         465.000000 steps
-            65         615.000000 steps
-            66        1183.000000 steps
-            67        1090.000000 steps
-            68        1170.000000 steps
-            69         582.000000 steps
-            70         641.000000 steps
-            71         610.000000 steps
-            72        1045.000000 steps
-            73         742.000000 steps
-            74         377.000000 steps
-            75        2887.000000 steps
-            76        3580.000000 steps
-            77        4077.000000 steps
-            78        4303.000000 steps
-            79        3005.000000 steps
-            80        3794.000000 steps
-            81        4663.000000 steps
-            82        3976.000000 steps
-            83        4425.000000 steps
-            84        3919.000000 steps
-            85        4387.000000 steps
-            86        3862.000000 steps
-            87        4260.000000 steps
-            88        4866.000000 steps
-            89        4030.000000 steps
-            90        4273.000000 steps
-            91        3685.000000 steps
-            92        4210.000000 steps
-            93        4114.000000 steps
-            94        4235.000000 steps
-            95        3759.000000 steps
-            96        4245.000000 steps
-            97        3832.000000 steps
-            98        4159.000000 steps
-            99        3106.000000 steps
-           100       14108.000000 steps
-           101       16961.000000 steps
-           102       18612.000000 steps
-           103       18679.000000 steps
-           104       14911.000000 steps
-           105       17878.000000 steps
-           106       23061.000000 steps
-           107       23682.000000 steps
-           108       24020.000000 steps
-           109       19470.000000 steps
-           110       16169.000000 steps
-           111       23199.000000 steps
-           112       22530.000000 steps
-           113       22017.000000 steps
-           114       17680.000000 steps
-           115       17090.000000 steps
-           116       22374.000000 steps
-           117       22902.000000 steps
-           118       20505.000000 steps
-           119       17440.000000 steps
-           120       14312.000000 steps
-           121       18831.000000 steps
-           122       17735.000000 steps
-           123       19342.000000 steps
-           124       14819.000000 steps
-             0    84 [sigma: 10.5097 | error: 0.414963 | coeff: 0.414963 | eff: 1 | fom: 0.215089 | r2int: 0.15654 | r2eff: 0 | hits: 11 ] steps
-             1    89 [sigma: 10.0161 | error: 0.355884 | coeff: 0.355884 | eff: 1 | fom: 0.292428 | r2int: 0.113988 | r2eff: 0 | hits: 10 ] steps
-             2    19 [sigma: 2.20479 | error: 0.348125 | coeff: 0.348125 | eff: 1 | fom: 0.305608 | r2int: 0.107725 | r2eff: 0 | hits: 9 ] steps
-             3    16 [sigma: 4.91935 | error: 0.6875 | coeff: 0.6875 | eff: 1 | fom: 0.0783594 | r2int: 0.378125 | r2eff: 0 | hits: 5 ] steps
-             4    39 [sigma: 8.30161 | error: 0.425723 | coeff: 0.425723 | eff: 1 | fom: 0.204353 | r2int: 0.13593 | r2eff: 0 | hits: 4 ] steps
-             5    45 [sigma: 5.12348 | error: 0.341565 | coeff: 0.341565 | eff: 1 | fom: 0.31746 | r2int: 0.103704 | r2eff: 0 | hits: 9 ] steps
-             6    28 [sigma: 2.20389 | error: 0.222627 | coeff: 0.222627 | eff: 1 | fom: 0.747277 | r2int: 0.0433673 | r2eff: 0 | hits: 8 ] steps
-             7    55 [sigma: 9.02004 | error: 0.492002 | coeff: 0.492002 | eff: 1 | fom: 0.153004 | r2int: 0.21517 | r2eff: 0 | hits: 9 ] steps
-             8    140 [sigma: 23.8537 | error: 0.450793 | coeff: 0.450793 | eff: 1 | fom: 0.182256 | r2int: 0.174184 | r2eff: 0 | hits: 7 ] steps
-             9    193 [sigma: 22.1129 | error: 0.324067 | coeff: 0.324067 | eff: 1 | fom: 0.352669 | r2int: 0.0918917 | r2eff: 0 | hits: 8 ] steps
-            10    48 [sigma: 5.90399 | error: 0.347896 | coeff: 0.347896 | eff: 1 | fom: 0.306011 | r2int: 0.105903 | r2eff: 0 | hits: 8 ] steps
-            11    34 [sigma: 4.22164 | error: 0.392647 | coeff: 0.392647 | eff: 1 | fom: 0.240233 | r2int: 0.138754 | r2eff: 0 | hits: 10 ] steps
-            12    66 [sigma: 7.13676 | error: 0.341946 | coeff: 0.341946 | eff: 1 | fom: 0.316754 | r2int: 0.105234 | r2eff: 0 | hits: 10 ] steps
-            13    28 [sigma: 7.09225 | error: 0.566384 | coeff: 0.566384 | eff: 1 | fom: 0.115455 | r2int: 0.256633 | r2eff: 0 | hits: 5 ] steps
-            14    36 [sigma: 8.84308 | error: 0.54927 | coeff: 0.54927 | eff: 1 | fom: 0.122762 | r2int: 0.241358 | r2eff: 0 | hits: 5 ] steps
-            15    95 [sigma: 9.81094 | error: 0.342518 | coeff: 0.342518 | eff: 1 | fom: 0.315696 | r2int: 0.106653 | r2eff: 0 | hits: 11 ] steps
-            16    45 [sigma: 3.96187 | error: 0.249019 | coeff: 0.249019 | eff: 1 | fom: 0.59727 | r2int: 0.0542593 | r2eff: 0 | hits: 8 ] steps
-            17    36 [sigma: 3.53217 | error: 0.25959 | coeff: 0.25959 | eff: 1 | fom: 0.549618 | r2int: 0.0577601 | r2eff: 0 | hits: 7 ] steps
-            18    24 [sigma: 6.49615 | error: 0.605243 | coeff: 0.605243 | eff: 1 | fom: 0.101106 | r2int: 0.293056 | r2eff: 0 | hits: 5 ] steps
-            19    26 [sigma: 7.50555 | error: 0.5 | coeff: 0.5 | eff: 1 | fom: 0.148148 | r2int: 0.166667 | r2eff: 0 | hits: 3 ] steps
-            20    61 [sigma: 8.25227 | error: 0.427803 | coeff: 0.427803 | eff: 1 | fom: 0.202371 | r2int: 0.164714 | r2eff: 0 | hits: 10 ] steps
-            21    18 [sigma: 2.44949 | error: 0.333333 | coeff: 0.333333 | eff: 1 | fom: 0.333333 | r2int: 0.0925926 | r2eff: 0 | hits: 6 ] steps
-            22    64 [sigma: 6.68906 | error: 0.37684 | coeff: 0.37684 | eff: 1 | fom: 0.260809 | r2int: 0.131085 | r2eff: 0 | hits: 13 ] steps
-            23    39 [sigma: 8.98332 | error: 0.564219 | coeff: 0.564219 | eff: 1 | fom: 0.116343 | r2int: 0.265286 | r2eff: 0 | hits: 6 ] steps
-            24    71 [sigma: 12.2379 | error: 0.422206 | coeff: 0.422206 | eff: 1 | fom: 0.207772 | r2int: 0.148549 | r2eff: 0 | hits: 6 ] steps
-            25    138 [sigma: 9.35634 | error: 0.318008 | coeff: 0.318008 | eff: 1 | fom: 0.366235 | r2int: 0.0965324 | r2eff: 0 | hits: 22 ] steps
-            26    122 [sigma: 8.2858 | error: 0.280026 | coeff: 0.280026 | eff: 1 | fom: 0.472322 | r2int: 0.0738021 | r2eff: 0 | hits: 17 ] steps
-            27    173 [sigma: 13.6689 | error: 0.335216 | coeff: 0.335216 | eff: 1 | fom: 0.329599 | r2int: 0.106127 | r2eff: 0 | hits: 18 ] steps
-            28    276 [sigma: 17.8417 | error: 0.32962 | coeff: 0.32962 | eff: 1 | fom: 0.340886 | r2int: 0.104471 | r2eff: 0 | hits: 26 ] steps
-            29    251 [sigma: 10.742 | error: 0.20966 | coeff: 0.20966 | eff: 1 | fom: 0.84257 | r2int: 0.0421257 | r2eff: 0 | hits: 24 ] steps
-            30    235 [sigma: 8.71511 | error: 0.199712 | coeff: 0.199712 | eff: 1 | fom: 0.928598 | r2int: 0.0385095 | r2eff: 0 | hits: 29 ] steps
-            31    331 [sigma: 19.5898 | error: 0.277596 | coeff: 0.277596 | eff: 1 | fom: 0.480629 | r2int: 0.0735568 | r2eff: 0 | hits: 22 ] steps
-            32    320 [sigma: 11.0469 | error: 0.185905 | coeff: 0.185905 | eff: 1 | fom: 1.07166 | r2int: 0.0333688 | r2eff: 0 | hits: 29 ] steps
-            33    351 [sigma: 13.7317 | error: 0.21782 | coeff: 0.21782 | eff: 1 | fom: 0.780623 | r2int: 0.045915 | r2eff: 0 | hits: 31 ] steps
-            34    289 [sigma: 10.1861 | error: 0.193051 | coeff: 0.193051 | eff: 1 | fom: 0.993782 | r2int: 0.0360265 | r2eff: 0 | hits: 30 ] steps
-            35    99 [sigma: 5.40425 | error: 0.231599 | coeff: 0.231599 | eff: 1 | fom: 0.6905 | r2int: 0.0506581 | r2eff: 0 | hits: 18 ] steps
-            36    288 [sigma: 9.95456 | error: 0.172822 | coeff: 0.172822 | eff: 1 | fom: 1.24004 | r2int: 0.0286728 | r2eff: 0 | hits: 25 ] steps
-            37    308 [sigma: 10.853 | error: 0.193002 | coeff: 0.193002 | eff: 1 | fom: 0.994291 | r2int: 0.036008 | r2eff: 0 | hits: 30 ] steps
-            38    443 [sigma: 10.3366 | error: 0.131993 | coeff: 0.131993 | eff: 1 | fom: 2.12587 | r2int: 0.0168776 | r2eff: 0 | hits: 32 ] steps
-            39    146 [sigma: 6.74148 | error: 0.211598 | coeff: 0.211598 | eff: 1 | fom: 0.827202 | r2int: 0.0426418 | r2eff: 0 | hits: 21 ] steps
-            40    192 [sigma: 20.5394 | error: 0.427904 | coeff: 0.427904 | eff: 1 | fom: 0.202276 | r2int: 0.171658 | r2eff: 0 | hits: 16 ] steps
-            41    223 [sigma: 9.5605 | error: 0.205608 | coeff: 0.205608 | eff: 1 | fom: 0.876107 | r2int: 0.0404366 | r2eff: 0 | hits: 23 ] steps
-            42    456 [sigma: 17.414 | error: 0.202075 | coeff: 0.202075 | eff: 1 | fom: 0.907004 | r2int: 0.0393761 | r2eff: 0 | hits: 28 ] steps
-            43    266 [sigma: 8.78766 | error: 0.180947 | coeff: 0.180947 | eff: 1 | fom: 1.13118 | r2int: 0.0316506 | r2eff: 0 | hits: 30 ] steps
-            44    118 [sigma: 10.1527 | error: 0.31022 | coeff: 0.31022 | eff: 1 | fom: 0.384854 | r2int: 0.0888339 | r2eff: 0 | hits: 13 ] steps
-            45    28 [sigma: 1.87487 | error: 0.231955 | coeff: 0.231955 | eff: 1 | fom: 0.688378 | r2int: 0.0493197 | r2eff: 0 | hits: 12 ] steps
-            46    73 [sigma: 11.9262 | error: 0.516628 | coeff: 0.516628 | eff: 1 | fom: 0.138765 | r2int: 0.240214 | r2eff: 0 | hits: 10 ] steps
-            47    151 [sigma: 11.1578 | error: 0.322092 | coeff: 0.322092 | eff: 1 | fom: 0.357008 | r2int: 0.0982829 | r2eff: 0 | hits: 19 ] steps
-            48    174 [sigma: 9.78848 | error: 0.257796 | coeff: 0.257796 | eff: 1 | fom: 0.557295 | r2int: 0.0632939 | r2eff: 0 | hits: 21 ] steps
-            49    143 [sigma: 12.5406 | error: 0.339647 | coeff: 0.339647 | eff: 1 | fom: 0.321056 | r2int: 0.107669 | r2eff: 0 | hits: 15 ] steps
-            50    640 [sigma: 23.8885 | error: 0.253155 | coeff: 0.253155 | eff: 1 | fom: 0.577912 | r2int: 0.0626945 | r2eff: 0 | hits: 46 ] steps
-            51    569 [sigma: 14.7787 | error: 0.181811 | coeff: 0.181811 | eff: 1 | fom: 1.12045 | r2int: 0.0323808 | r2eff: 0 | hits: 49 ] steps
-            52    621 [sigma: 11.5117 | error: 0.136221 | coeff: 0.136221 | eff: 1 | fom: 1.99594 | r2int: 0.0182125 | r2eff: 0 | hits: 54 ] steps
-            53    593 [sigma: 17.0325 | error: 0.233344 | coeff: 0.233344 | eff: 1 | fom: 0.68021 | r2int: 0.0536245 | r2eff: 0 | hits: 66 ] steps
-            54    609 [sigma: 14.0785 | error: 0.189224 | coeff: 0.189224 | eff: 1 | fom: 1.03439 | r2int: 0.0352713 | r2eff: 0 | hits: 67 ] steps
-            55    483 [sigma: 11.5901 | error: 0.182748 | coeff: 0.182748 | eff: 1 | fom: 1.109 | r2int: 0.032821 | r2eff: 0 | hits: 58 ] steps
-            56    1122 [sigma: 12.5198 | error: 0.104079 | coeff: 0.104079 | eff: 1 | fom: 3.41908 | r2int: 0.010708 | r2eff: 0 | hits: 87 ] steps
-            57    1307 [sigma: 15.7794 | error: 0.113897 | coeff: 0.113897 | eff: 1 | fom: 2.85505 | r2int: 0.0128267 | r2eff: 0 | hits: 89 ] steps
-            58    802 [sigma: 11.2932 | error: 0.123562 | coeff: 0.123562 | eff: 1 | fom: 2.42584 | r2int: 0.0150694 | r2eff: 0 | hits: 77 ] steps
-            59    722 [sigma: 15.6825 | error: 0.179115 | coeff: 0.179115 | eff: 1 | fom: 1.15444 | r2int: 0.0316105 | r2eff: 0 | hits: 68 ] steps
-            60    619 [sigma: 15.3558 | error: 0.187292 | coeff: 0.187292 | eff: 1 | fom: 1.05584 | r2int: 0.034463 | r2eff: 0 | hits: 57 ] steps
-            61    1225 [sigma: 12.5327 | error: 0.100762 | coeff: 0.100762 | eff: 1 | fom: 3.64792 | r2int: 0.0100482 | r2eff: 0 | hits: 97 ] steps
-            62    1364 [sigma: 19.4394 | error: 0.142517 | coeff: 0.142517 | eff: 1 | fom: 1.82348 | r2int: 0.0201081 | r2eff: 0 | hits: 100 ] steps
-            63    1071 [sigma: 13.24 | error: 0.113302 | coeff: 0.113302 | eff: 1 | fom: 2.88508 | r2int: 0.0126846 | r2eff: 0 | hits: 84 ] steps
-            64    465 [sigma: 13.8652 | error: 0.225117 | coeff: 0.225117 | eff: 1 | fom: 0.730833 | r2int: 0.0497888 | r2eff: 0 | hits: 57 ] steps
-            65    615 [sigma: 11.5548 | error: 0.152636 | coeff: 0.152636 | eff: 1 | fom: 1.58972 | r2int: 0.0229449 | r2eff: 0 | hits: 66 ] steps
-            66    1183 [sigma: 12.6392 | error: 0.102477 | coeff: 0.102477 | eff: 1 | fom: 3.52679 | r2int: 0.0103875 | r2eff: 0 | hits: 92 ] steps
-            67    1090 [sigma: 11.4788 | error: 0.106358 | coeff: 0.106358 | eff: 1 | fom: 3.27415 | r2int: 0.011201 | r2eff: 0 | hits: 102 ] steps
-            68    1170 [sigma: 12.1939 | error: 0.0972115 | coeff: 0.0972115 | eff: 1 | fom: 3.91923 | r2int: 0.00934145 | r2eff: 0 | hits: 87 ] steps
-            69    582 [sigma: 14.8602 | error: 0.184121 | coeff: 0.184121 | eff: 1 | fom: 1.09252 | r2int: 0.0332485 | r2eff: 0 | hits: 52 ] steps
-            70    641 [sigma: 17.264 | error: 0.19974 | coeff: 0.19974 | eff: 1 | fom: 0.928341 | r2int: 0.0391706 | r2eff: 0 | hits: 55 ] steps
-            71    610 [sigma: 13.9262 | error: 0.173867 | coeff: 0.173867 | eff: 1 | fom: 1.22519 | r2int: 0.0297084 | r2eff: 0 | hits: 58 ] steps
-            72    1045 [sigma: 27.3962 | error: 0.206429 | coeff: 0.206429 | eff: 1 | fom: 0.869153 | r2int: 0.0419255 | r2eff: 0 | hits: 62 ] steps
-            73    742 [sigma: 15.2468 | error: 0.165665 | coeff: 0.165665 | eff: 1 | fom: 1.3495 | r2int: 0.0270228 | r2eff: 0 | hits: 65 ] steps
-            74    377 [sigma: 9.36606 | error: 0.177419 | coeff: 0.177419 | eff: 1 | fom: 1.17662 | r2int: 0.0308604 | r2eff: 0 | hits: 51 ] steps
-            75    2887 [sigma: 26.4595 | error: 0.117012 | coeff: 0.117012 | eff: 1 | fom: 2.70506 | r2int: 0.0136077 | r2eff: 0 | hits: 163 ] steps
-            76    3580 [sigma: 24.1465 | error: 0.0979742 | coeff: 0.0979742 | eff: 1 | fom: 3.85845 | r2int: 0.00955344 | r2eff: 0 | hits: 211 ] steps
-            77    4077 [sigma: 24.7417 | error: 0.0893959 | coeff: 0.0893959 | eff: 1 | fom: 4.63448 | r2int: 0.00795481 | r2eff: 0 | hits: 217 ] steps
-            78    4303 [sigma: 26.2798 | error: 0.0936233 | coeff: 0.0936233 | eff: 1 | fom: 4.22541 | r2int: 0.00872802 | r2eff: 0 | hits: 235 ] steps
-            79    3005 [sigma: 20.4616 | error: 0.0895608 | coeff: 0.0895608 | eff: 1 | fom: 4.61743 | r2int: 0.00797476 | r2eff: 0 | hits: 173 ] steps
-            80    3794 [sigma: 19.527 | error: 0.0783938 | coeff: 0.0783938 | eff: 1 | fom: 6.0266 | r2int: 0.0061191 | r2eff: 0 | hits: 232 ] steps
-            81    4663 [sigma: 13.9864 | error: 0.0524687 | coeff: 0.0524687 | eff: 1 | fom: 13.4535 | r2int: 0.00274396 | r2eff: 0 | hits: 306 ] steps
-            82    3976 [sigma: 12.9477 | error: 0.0577966 | coeff: 0.0577966 | eff: 1 | fom: 11.0875 | r2int: 0.00332984 | r2eff: 0 | hits: 315 ] steps
-            83    4425 [sigma: 13.0802 | error: 0.0543451 | coeff: 0.0543451 | eff: 1 | fom: 12.5405 | r2int: 0.00294465 | r2eff: 0 | hits: 338 ] steps
-            84    3919 [sigma: 22.096 | error: 0.0830554 | coeff: 0.0830554 | eff: 1 | fom: 5.36909 | r2int: 0.00686641 | r2eff: 0 | hits: 217 ] steps
-            85    4387 [sigma: 23.2009 | error: 0.0779053 | coeff: 0.0779053 | eff: 1 | fom: 6.10242 | r2int: 0.00604127 | r2eff: 0 | hits: 217 ] steps
-            86    3862 [sigma: 11.7718 | error: 0.0540986 | coeff: 0.0540986 | eff: 1 | fom: 12.6551 | r2int: 0.00291737 | r2eff: 0 | hits: 315 ] steps
-            87    4260 [sigma: 11.2995 | error: 0.0499761 | coeff: 0.0499761 | eff: 1 | fom: 14.829 | r2int: 0.00249058 | r2eff: 0 | hits: 355 ] steps
-            88    4866 [sigma: 13.791 | error: 0.0522592 | coeff: 0.0522592 | eff: 1 | fom: 13.5616 | r2int: 0.00272299 | r2eff: 0 | hits: 340 ] steps
-            89    4030 [sigma: 24.9161 | error: 0.0927399 | coeff: 0.0927399 | eff: 1 | fom: 4.30628 | r2int: 0.00856247 | r2eff: 0 | hits: 225 ] steps
-            90    4273 [sigma: 29.5245 | error: 0.100367 | coeff: 0.100367 | eff: 1 | fom: 3.67668 | r2int: 0.0100258 | r2eff: 0 | hits: 211 ] steps
-            91    3685 [sigma: 11.227 | error: 0.0540732 | coeff: 0.0540732 | eff: 1 | fom: 12.667 | r2int: 0.00291463 | r2eff: 0 | hits: 315 ] steps
-            92    4210 [sigma: 11.912 | error: 0.0505355 | coeff: 0.0505355 | eff: 1 | fom: 14.5025 | r2int: 0.00254583 | r2eff: 0 | hits: 319 ] steps
-            93    4114 [sigma: 13.0528 | error: 0.0551369 | coeff: 0.0551369 | eff: 1 | fom: 12.1829 | r2int: 0.00303001 | r2eff: 0 | hits: 302 ] steps
-            94    4235 [sigma: 29.6891 | error: 0.10327 | coeff: 0.10327 | eff: 1 | fom: 3.47287 | r2int: 0.0106155 | r2eff: 0 | hits: 217 ] steps
-            95    3759 [sigma: 31.9308 | error: 0.109444 | coeff: 0.109444 | eff: 1 | fom: 3.0921 | r2int: 0.0119058 | r2eff: 0 | hits: 166 ] steps
-            96    4245 [sigma: 26.0127 | error: 0.0898517 | coeff: 0.0898517 | eff: 1 | fom: 4.58758 | r2int: 0.00803578 | r2eff: 0 | hits: 215 ] steps
-            97    3832 [sigma: 22.758 | error: 0.0892818 | coeff: 0.0892818 | eff: 1 | fom: 4.64633 | r2int: 0.00793597 | r2eff: 0 | hits: 226 ] steps
-            98    4159 [sigma: 24.5447 | error: 0.0857257 | coeff: 0.0857257 | eff: 1 | fom: 5.03981 | r2int: 0.00731406 | r2eff: 0 | hits: 211 ] steps
-            99    3106 [sigma: 25.7154 | error: 0.1014 | coeff: 0.1014 | eff: 1 | fom: 3.60214 | r2int: 0.0102134 | r2eff: 0 | hits: 150 ] steps
-           100    14108 [sigma: 23.5637 | error: 0.0424845 | coeff: 0.0424845 | eff: 1 | fom: 20.5199 | r2int: 0.00180215 | r2eff: 0 | hits: 647 ] steps
-           101    16961 [sigma: 27.1164 | error: 0.0438419 | coeff: 0.0438419 | eff: 1 | fom: 19.2689 | r2int: 0.00191956 | r2eff: 0 | hits: 752 ] steps
-           102    18612 [sigma: 27.008 | error: 0.0411204 | coeff: 0.0411204 | eff: 1 | fom: 21.9039 | r2int: 0.00168878 | r2eff: 0 | hits: 803 ] steps
-           103    18679 [sigma: 25.685 | error: 0.0399482 | coeff: 0.0399482 | eff: 1 | fom: 23.2083 | r2int: 0.00159396 | r2eff: 0 | hits: 844 ] steps
-           104    14911 [sigma: 25.0289 | error: 0.0438035 | coeff: 0.0438035 | eff: 1 | fom: 19.3027 | r2int: 0.00191593 | r2eff: 0 | hits: 681 ] steps
-           105    17878 [sigma: 26.9499 | error: 0.0418568 | coeff: 0.0418568 | eff: 1 | fom: 21.14 | r2int: 0.00174972 | r2eff: 0 | hits: 771 ] steps
-           106    23061 [sigma: 28.9789 | error: 0.0386908 | coeff: 0.0386908 | eff: 1 | fom: 24.7412 | r2int: 0.0014954 | r2eff: 0 | hits: 948 ] steps
-           107    23682 [sigma: 28.6681 | error: 0.0377216 | coeff: 0.0377216 | eff: 1 | fom: 25.0993 | r2int: 0.00142145 | r2eff: 0 | hits: 971 ] steps
-           108    24020 [sigma: 28.5938 | error: 0.0377195 | coeff: 0.0377195 | eff: 1 | fom: 25.1021 | r2int: 0.00142134 | r2eff: 0 | hits: 1004 ] steps
-           109    19470 [sigma: 29.1921 | error: 0.0417937 | coeff: 0.0417937 | eff: 1 | fom: 20.4466 | r2int: 0.00174446 | r2eff: 0 | hits: 777 ] steps
-           110    16169 [sigma: 25.9217 | error: 0.0437874 | coeff: 0.0437874 | eff: 1 | fom: 18.627 | r2int: 0.00191477 | r2eff: 0 | hits: 746 ] steps
-           111    23199 [sigma: 27.6675 | error: 0.0373157 | coeff: 0.0373157 | eff: 1 | fom: 25.6483 | r2int: 0.00139104 | r2eff: 0 | hits: 979 ] steps
-           112    22530 [sigma: 25.0757 | error: 0.0356504 | coeff: 0.0356504 | eff: 1 | fom: 28.1004 | r2int: 0.00126971 | r2eff: 0 | hits: 1026 ] steps
-           113    22017 [sigma: 26.9235 | error: 0.0379675 | coeff: 0.0379675 | eff: 1 | fom: 24.7753 | r2int: 0.00144003 | r2eff: 0 | hits: 964 ] steps
-           114    17680 [sigma: 26.3645 | error: 0.0418866 | coeff: 0.0418866 | eff: 1 | fom: 20.356 | r2int: 0.00175226 | r2eff: 0 | hits: 789 ] steps
-           115    17090 [sigma: 27.1 | error: 0.0433978 | coeff: 0.0433978 | eff: 1 | fom: 18.963 | r2int: 0.00188086 | r2eff: 0 | hits: 749 ] steps
-           116    22374 [sigma: 26.5021 | error: 0.0361807 | coeff: 0.0361807 | eff: 1 | fom: 27.2827 | r2int: 0.00130764 | r2eff: 0 | hits: 933 ] steps
-           117    22902 [sigma: 28.3104 | error: 0.038161 | coeff: 0.038161 | eff: 1 | fom: 24.5247 | r2int: 0.00145473 | r2eff: 0 | hits: 953 ] steps
-           118    20505 [sigma: 26.3232 | error: 0.0389379 | coeff: 0.0389379 | eff: 1 | fom: 23.5558 | r2int: 0.00151451 | r2eff: 0 | hits: 920 ] steps
-           119    17440 [sigma: 27.3942 | error: 0.042816 | coeff: 0.042816 | eff: 1 | fom: 19.4818 | r2int: 0.00183074 | r2eff: 0 | hits: 743 ] steps
-           120    14312 [sigma: 26.0804 | error: 0.0464233 | coeff: 0.0464233 | eff: 1 | fom: 16.5718 | r2int: 0.0021518 | r2eff: 0 | hits: 649 ] steps
-           121    18831 [sigma: 26.9732 | error: 0.0403871 | coeff: 0.0403871 | eff: 1 | fom: 21.1406 | r2int: 0.00162906 | r2eff: 0 | hits: 795 ] steps
-           122    17735 [sigma: 24.8521 | error: 0.038834 | coeff: 0.038834 | eff: 1 | fom: 22.8654 | r2int: 0.00150611 | r2eff: 0 | hits: 768 ] steps
-           123    19342 [sigma: 30.8562 | error: 0.0432792 | coeff: 0.0432792 | eff: 1 | fom: 18.4095 | r2int: 0.00187055 | r2eff: 0 | hits: 736 ] steps
-           124    14819 [sigma: 28.1906 | error: 0.0476342 | coeff: 0.0476342 | eff: 1 | fom: 15.1972 | r2int: 0.0022654 | r2eff: 0 | hits: 627 ] steps
+             0          55.000000 steps
+             1          51.000000 steps
+             2          60.000000 steps
+             3          33.000000 steps
+             4           3.000000 steps
+             5          22.000000 steps
+             6           4.000000 steps
+             7          56.000000 steps
+             8          44.000000 steps
+             9          38.000000 steps
+            10         160.000000 steps
+            11         111.000000 steps
+            12          50.000000 steps
+            13          20.000000 steps
+            14          70.000000 steps
+            15          18.000000 steps
+            16          42.000000 steps
+            17          60.000000 steps
+            18          12.000000 steps
+            19          62.000000 steps
+            20          89.000000 steps
+            21          51.000000 steps
+            22          21.000000 steps
+            23          41.000000 steps
+            24          88.000000 steps
+            25         123.000000 steps
+            26          81.000000 steps
+            27         141.000000 steps
+            28         153.000000 steps
+            29         132.000000 steps
+            30         107.000000 steps
+            31         357.000000 steps
+            32         266.000000 steps
+            33         294.000000 steps
+            34         223.000000 steps
+            35         173.000000 steps
+            36         278.000000 steps
+            37         383.000000 steps
+            38         200.000000 steps
+            39         168.000000 steps
+            40         263.000000 steps
+            41         155.000000 steps
+            42         288.000000 steps
+            43         205.000000 steps
+            44         153.000000 steps
+            45         177.000000 steps
+            46         184.000000 steps
+            47         112.000000 steps
+            48         112.000000 steps
+            49         175.000000 steps
+            50         254.000000 steps
+            51         283.000000 steps
+            52         518.000000 steps
+            53         610.000000 steps
+            54         323.000000 steps
+            55         462.000000 steps
+            56         801.000000 steps
+            57        1103.000000 steps
+            58        1158.000000 steps
+            59         437.000000 steps
+            60         923.000000 steps
+            61        1194.000000 steps
+            62        1203.000000 steps
+            63         949.000000 steps
+            64         591.000000 steps
+            65         690.000000 steps
+            66         921.000000 steps
+            67        1019.000000 steps
+            68         682.000000 steps
+            69         586.000000 steps
+            70         222.000000 steps
+            71         602.000000 steps
+            72         622.000000 steps
+            73         433.000000 steps
+            74         286.000000 steps
+            75        2655.000000 steps
+            76        3060.000000 steps
+            77        3753.000000 steps
+            78        4531.000000 steps
+            79        2716.000000 steps
+            80        3817.000000 steps
+            81        3989.000000 steps
+            82        3936.000000 steps
+            83        3728.000000 steps
+            84        4072.000000 steps
+            85        4692.000000 steps
+            86        4402.000000 steps
+            87        4477.000000 steps
+            88        3822.000000 steps
+            89        3227.000000 steps
+            90        4663.000000 steps
+            91        3950.000000 steps
+            92        4155.000000 steps
+            93        4551.000000 steps
+            94        4329.000000 steps
+            95        2948.000000 steps
+            96        3757.000000 steps
+            97        4754.000000 steps
+            98        4163.000000 steps
+            99        2844.000000 steps
+           100       13997.000000 steps
+           101       17086.000000 steps
+           102       18468.000000 steps
+           103       18981.000000 steps
+           104       13613.000000 steps
+           105       18950.000000 steps
+           106       23426.000000 steps
+           107       22470.000000 steps
+           108       24487.000000 steps
+           109       17883.000000 steps
+           110       18063.000000 steps
+           111       22146.000000 steps
+           112       22879.000000 steps
+           113       22440.000000 steps
+           114       18826.000000 steps
+           115       18855.000000 steps
+           116       23237.000000 steps
+           117       23547.000000 steps
+           118       23816.000000 steps
+           119       17848.000000 steps
+           120       14109.000000 steps
+           121       18215.000000 steps
+           122       19728.000000 steps
+           123       19005.000000 steps
+           124       13676.000000 steps
+             0    55 [sigma: 10.8817 | error: 0.5596 | coeff: 0.5596 | eff: 1 | fom: 0.118272 | r2int: 0.274008 | r2eff: 0 | hits: 8 ] steps
+             1    51 [sigma: 8.66025 | error: 0.294118 | coeff: 0.294118 | eff: 1 | fom: 0.428148 | r2int: 0.0576701 | r2eff: 0 | hits: 3 ] steps
+             2    60 [sigma: 8.48528 | error: 0.447214 | coeff: 0.447214 | eff: 1 | fom: 0.185185 | r2int: 0.18 | r2eff: 0 | hits: 10 ] steps
+             3    33 [sigma: 3.50714 | error: 0.237642 | coeff: 0.237642 | eff: 1 | fom: 0.655827 | r2int: 0.0451791 | r2eff: 0 | hits: 5 ] steps
+             4    3 [sigma: 0 | error: 0 | coeff: 0 | eff: 1 | fom: 1 | r2int: 0 | r2eff: 0 | hits: 3 ] steps
+             5    22 [sigma: 2.69979 | error: 0.388068 | coeff: 0.388068 | eff: 1 | fom: 0.245935 | r2int: 0.135537 | r2eff: 0 | hits: 10 ] steps
+             6    4 [sigma: 0 | error: 0 | coeff: 0 | eff: 1 | fom: 1 | r2int: 0 | r2eff: 0 | hits: 4 ] steps
+             7    56 [sigma: 6.07728 | error: 0.343179 | coeff: 0.343179 | eff: 1 | fom: 0.314481 | r2int: 0.105995 | r2eff: 0 | hits: 10 ] steps
+             8    44 [sigma: 11.0393 | error: 0.614562 | coeff: 0.614562 | eff: 1 | fom: 0.0980631 | r2int: 0.314738 | r2eff: 0 | hits: 6 ] steps
+             9    38 [sigma: 7.20725 | error: 0.568993 | coeff: 0.568993 | eff: 1 | fom: 0.114399 | r2int: 0.287781 | r2eff: 0 | hits: 9 ] steps
+            10    160 [sigma: 9.36207 | error: 0.218935 | coeff: 0.218935 | eff: 1 | fom: 0.772688 | r2int: 0.0445089 | r2eff: 0 | hits: 14 ] steps
+            11    111 [sigma: 10.8397 | error: 0.292966 | coeff: 0.292966 | eff: 1 | fom: 0.431521 | r2int: 0.0762925 | r2eff: 0 | hits: 9 ] steps
+            12    50 [sigma: 5.29837 | error: 0.351454 | coeff: 0.351454 | eff: 1 | fom: 0.299846 | r2int: 0.112291 | r2eff: 0 | hits: 11 ] steps
+            13    20 [sigma: 2.82843 | error: 0.4 | coeff: 0.4 | eff: 1 | fom: 0.231481 | r2int: 0.14 | r2eff: 0 | hits: 8 ] steps
+            14    70 [sigma: 19.6638 | error: 0.688091 | coeff: 0.688091 | eff: 1 | fom: 0.0782248 | r2int: 0.394558 | r2eff: 0 | hits: 6 ] steps
+            15    18 [sigma: 2.0702 | error: 0.30429 | coeff: 0.30429 | eff: 1 | fom: 0.4 | r2int: 0.0793651 | r2eff: 0 | hits: 7 ] steps
+            16    42 [sigma: 6.84105 | error: 0.398978 | coeff: 0.398978 | eff: 1 | fom: 0.232669 | r2int: 0.132653 | r2eff: 0 | hits: 6 ] steps
+            17    60 [sigma: 5.47723 | error: 0.288675 | coeff: 0.288675 | eff: 1 | fom: 0.444444 | r2int: 0.075 | r2eff: 0 | hits: 10 ] steps
+            18    12 [sigma: 4 | error: 0.666667 | coeff: 0.666667 | eff: 1 | fom: 0.0833333 | r2int: 0.333333 | r2eff: 0 | hits: 4 ] steps
+            19    62 [sigma: 9.17683 | error: 0.418645 | coeff: 0.418645 | eff: 1 | fom: 0.211322 | r2int: 0.153356 | r2eff: 0 | hits: 8 ] steps
+            20    89 [sigma: 13.0601 | error: 0.359445 | coeff: 0.359445 | eff: 1 | fom: 0.286662 | r2int: 0.107667 | r2eff: 0 | hits: 6 ] steps
+            21    51 [sigma: 7.72364 | error: 0.502282 | coeff: 0.502282 | eff: 1 | fom: 0.146805 | r2int: 0.229352 | r2eff: 0 | hits: 11 ] steps
+            22    21 [sigma: 3.49285 | error: 0.371917 | coeff: 0.371917 | eff: 1 | fom: 0.26776 | r2int: 0.110658 | r2eff: 0 | hits: 5 ] steps
+            23    41 [sigma: 6.49175 | error: 0.418916 | coeff: 0.418916 | eff: 1 | fom: 0.211048 | r2int: 0.150421 | r2eff: 0 | hits: 7 ] steps
+            24    88 [sigma: 17.5005 | error: 0.487128 | coeff: 0.487128 | eff: 1 | fom: 0.156081 | r2int: 0.197744 | r2eff: 0 | hits: 6 ] steps
+            25    123 [sigma: 8.94069 | error: 0.262082 | coeff: 0.262082 | eff: 1 | fom: 0.539214 | r2int: 0.0634034 | r2eff: 0 | hits: 13 ] steps
+            26    81 [sigma: 4.91063 | error: 0.2348 | coeff: 0.2348 | eff: 1 | fom: 0.671801 | r2int: 0.0514556 | r2eff: 0 | hits: 15 ] steps
+            27    141 [sigma: 12.0153 | error: 0.371444 | coeff: 0.371444 | eff: 1 | fom: 0.268441 | r2int: 0.130709 | r2eff: 0 | hits: 19 ] steps
+            28    153 [sigma: 8.94592 | error: 0.248067 | coeff: 0.248067 | eff: 1 | fom: 0.601862 | r2int: 0.0581187 | r2eff: 0 | hits: 18 ] steps
+            29    132 [sigma: 12.0605 | error: 0.316505 | coeff: 0.316505 | eff: 1 | fom: 0.369722 | r2int: 0.0918274 | r2eff: 0 | hits: 12 ] steps
+            30    107 [sigma: 6.9351 | error: 0.267235 | coeff: 0.267235 | eff: 1 | fom: 0.51862 | r2int: 0.0672137 | r2eff: 0 | hits: 17 ] steps
+            31    357 [sigma: 11.3046 | error: 0.170524 | coeff: 0.170524 | eff: 1 | fom: 1.2737 | r2int: 0.0280756 | r2eff: 0 | hits: 29 ] steps
+            32    266 [sigma: 10.0856 | error: 0.204183 | coeff: 0.204183 | eff: 1 | fom: 0.888379 | r2int: 0.040253 | r2eff: 0 | hits: 29 ] steps
+            33    294 [sigma: 11.9584 | error: 0.190783 | coeff: 0.190783 | eff: 1 | fom: 1.01756 | r2int: 0.0347435 | r2eff: 0 | hits: 22 ] steps
+            34    223 [sigma: 12.6579 | error: 0.27222 | coeff: 0.27222 | eff: 1 | fom: 0.499802 | r2int: 0.0708816 | r2eff: 0 | hits: 23 ] steps
+            35    173 [sigma: 9.61735 | error: 0.277958 | coeff: 0.277958 | eff: 1 | fom: 0.479378 | r2int: 0.0741702 | r2eff: 0 | hits: 25 ] steps
+            36    278 [sigma: 9.81882 | error: 0.193453 | coeff: 0.193453 | eff: 1 | fom: 0.98966 | r2int: 0.0361765 | r2eff: 0 | hits: 30 ] steps
+            37    383 [sigma: 12.5736 | error: 0.18571 | coeff: 0.18571 | eff: 1 | fom: 1.0739 | r2int: 0.0334106 | r2eff: 0 | hits: 32 ] steps
+            38    200 [sigma: 12.9929 | error: 0.267856 | coeff: 0.267856 | eff: 1 | fom: 0.516218 | r2int: 0.0675265 | r2eff: 0 | hits: 17 ] steps
+            39    168 [sigma: 12.061 | error: 0.287166 | coeff: 0.287166 | eff: 1 | fom: 0.449129 | r2int: 0.0773101 | r2eff: 0 | hits: 16 ] steps
+            40    263 [sigma: 10.3614 | error: 0.208469 | coeff: 0.208469 | eff: 1 | fom: 0.852223 | r2int: 0.0419072 | r2eff: 0 | hits: 28 ] steps
+            41    155 [sigma: 8.32175 | error: 0.234024 | coeff: 0.234024 | eff: 1 | fom: 0.676265 | r2int: 0.0518846 | r2eff: 0 | hits: 19 ] steps
+            42    288 [sigma: 12.3832 | error: 0.214986 | coeff: 0.214986 | eff: 1 | fom: 0.801339 | r2int: 0.0443702 | r2eff: 0 | hits: 25 ] steps
+            43    205 [sigma: 8.686 | error: 0.203203 | coeff: 0.203203 | eff: 1 | fom: 0.896966 | r2int: 0.0394962 | r2eff: 0 | hits: 23 ] steps
+            44    153 [sigma: 10.4105 | error: 0.254592 | coeff: 0.254592 | eff: 1 | fom: 0.571407 | r2int: 0.0601875 | r2eff: 0 | hits: 14 ] steps
+            45    177 [sigma: 12.6419 | error: 0.319415 | coeff: 0.319415 | eff: 1 | fom: 0.363016 | r2int: 0.0969246 | r2eff: 0 | hits: 20 ] steps
+            46    184 [sigma: 10.6953 | error: 0.266371 | coeff: 0.266371 | eff: 1 | fom: 0.521991 | r2int: 0.0675747 | r2eff: 0 | hits: 21 ] steps
+            47    112 [sigma: 9.68929 | error: 0.356696 | coeff: 0.356696 | eff: 1 | fom: 0.291098 | r2int: 0.119748 | r2eff: 0 | hits: 17 ] steps
+            48    112 [sigma: 8.47545 | error: 0.34678 | coeff: 0.34678 | eff: 1 | fom: 0.307983 | r2int: 0.11453 | r2eff: 0 | hits: 21 ] steps
+            49    175 [sigma: 14.9555 | error: 0.330985 | coeff: 0.330985 | eff: 1 | fom: 0.33808 | r2int: 0.102248 | r2eff: 0 | hits: 15 ] steps
+            50    254 [sigma: 18.5564 | error: 0.357904 | coeff: 0.357904 | eff: 1 | fom: 0.289137 | r2int: 0.122758 | r2eff: 0 | hits: 24 ] steps
+            51    283 [sigma: 10.7885 | error: 0.249982 | coeff: 0.249982 | eff: 1 | fom: 0.592676 | r2int: 0.0610379 | r2eff: 0 | hits: 43 ] steps
+            52    518 [sigma: 10.39 | error: 0.148753 | coeff: 0.148753 | eff: 1 | fom: 1.6738 | r2int: 0.0217252 | r2eff: 0 | hits: 55 ] steps
+            53    610 [sigma: 12.7841 | error: 0.163684 | coeff: 0.163684 | eff: 1 | fom: 1.38237 | r2int: 0.0263531 | r2eff: 0 | hits: 61 ] steps
+            54    323 [sigma: 10.3916 | error: 0.184814 | coeff: 0.184814 | eff: 1 | fom: 1.08434 | r2int: 0.0331213 | r2eff: 0 | hits: 33 ] steps
+            55    462 [sigma: 9.88001 | error: 0.151217 | coeff: 0.151217 | eff: 1 | fom: 1.6197 | r2int: 0.0224093 | r2eff: 0 | hits: 50 ] steps
+            56    801 [sigma: 11.8039 | error: 0.117892 | coeff: 0.117892 | eff: 1 | fom: 2.66481 | r2int: 0.0136814 | r2eff: 0 | hits: 64 ] steps
+            57    1103 [sigma: 11.4943 | error: 0.0960762 | coeff: 0.0960762 | eff: 1 | fom: 4.0124 | r2int: 0.00912204 | r2eff: 0 | hits: 85 ] steps
+            58    1158 [sigma: 14.2939 | error: 0.112455 | coeff: 0.112455 | eff: 1 | fom: 2.9287 | r2int: 0.0124939 | r2eff: 0 | hits: 83 ] steps
+            59    437 [sigma: 9.40531 | error: 0.159615 | coeff: 0.159615 | eff: 1 | fom: 1.45375 | r2int: 0.0250137 | r2eff: 0 | hits: 55 ] steps
+            60    923 [sigma: 23.1486 | error: 0.208328 | coeff: 0.208328 | eff: 1 | fom: 0.85338 | r2int: 0.0427714 | r2eff: 0 | hits: 69 ] steps
+            61    1194 [sigma: 14.012 | error: 0.110711 | coeff: 0.110711 | eff: 1 | fom: 3.02172 | r2int: 0.0121192 | r2eff: 0 | hits: 89 ] steps
+            62    1203 [sigma: 11.8556 | error: 0.0970608 | coeff: 0.0970608 | eff: 1 | fom: 3.93141 | r2int: 0.00932368 | r2eff: 0 | hits: 97 ] steps
+            63    949 [sigma: 11.0484 | error: 0.100824 | coeff: 0.100824 | eff: 1 | fom: 3.64341 | r2int: 0.01003 | r2eff: 0 | hits: 75 ] steps
+            64    591 [sigma: 10.7094 | error: 0.143829 | coeff: 0.143829 | eff: 1 | fom: 1.79036 | r2int: 0.0203586 | r2eff: 0 | hits: 63 ] steps
+            65    690 [sigma: 14.8104 | error: 0.180862 | coeff: 0.180862 | eff: 1 | fom: 1.13225 | r2int: 0.0322503 | r2eff: 0 | hits: 71 ] steps
+            66    921 [sigma: 9.9314 | error: 0.0964486 | coeff: 0.0964486 | eff: 1 | fom: 3.98148 | r2int: 0.00918605 | r2eff: 0 | hits: 80 ] steps
+            67    1019 [sigma: 11.2623 | error: 0.10601 | coeff: 0.10601 | eff: 1 | fom: 3.29564 | r2int: 0.011116 | r2eff: 0 | hits: 92 ] steps
+            68    682 [sigma: 10.1752 | error: 0.127473 | coeff: 0.127473 | eff: 1 | fom: 2.27929 | r2int: 0.0160268 | r2eff: 0 | hits: 73 ] steps
+            69    586 [sigma: 11.8835 | error: 0.15444 | coeff: 0.15444 | eff: 1 | fom: 1.5528 | r2int: 0.0234405 | r2eff: 0 | hits: 58 ] steps
+            70    222 [sigma: 6.45279 | error: 0.183833 | coeff: 0.183833 | eff: 1 | fom: 1.09594 | r2int: 0.0329498 | r2eff: 0 | hits: 40 ] steps
+            71    602 [sigma: 13.1383 | error: 0.170455 | coeff: 0.170455 | eff: 1 | fom: 1.27473 | r2int: 0.0285785 | r2eff: 0 | hits: 61 ] steps
+            72    622 [sigma: 17.9126 | error: 0.215507 | coeff: 0.215507 | eff: 1 | fom: 0.797466 | r2int: 0.0456141 | r2eff: 0 | hits: 56 ] steps
+            73    433 [sigma: 8.82448 | error: 0.146961 | coeff: 0.146961 | eff: 1 | fom: 1.71487 | r2int: 0.0211823 | r2eff: 0 | hits: 52 ] steps
+            74    286 [sigma: 12.6083 | error: 0.264509 | coeff: 0.264509 | eff: 1 | fom: 0.529365 | r2int: 0.0680215 | r2eff: 0 | hits: 36 ] steps
+            75    2655 [sigma: 24.3983 | error: 0.10558 | coeff: 0.10558 | eff: 1 | fom: 3.32256 | r2int: 0.0110627 | r2eff: 0 | hits: 132 ] steps
+            76    3060 [sigma: 22.6005 | error: 0.0996397 | coeff: 0.0996397 | eff: 1 | fom: 3.73054 | r2int: 0.00987352 | r2eff: 0 | hits: 182 ] steps
+            77    3753 [sigma: 25.843 | error: 0.096894 | coeff: 0.096894 | eff: 1 | fom: 3.94496 | r2int: 0.00934104 | r2eff: 0 | hits: 198 ] steps
+            78    4531 [sigma: 30.6261 | error: 0.102286 | coeff: 0.102286 | eff: 1 | fom: 3.54002 | r2int: 0.0104167 | r2eff: 0 | hits: 229 ] steps
+            79    2716 [sigma: 21.7783 | error: 0.0938542 | coeff: 0.0938542 | eff: 1 | fom: 4.20464 | r2int: 0.00874431 | r2eff: 0 | hits: 137 ] steps
+            80    3817 [sigma: 20.9216 | error: 0.0792403 | coeff: 0.0792403 | eff: 1 | fom: 5.89853 | r2int: 0.00624899 | r2eff: 0 | hits: 209 ] steps
+            81    3989 [sigma: 12.3244 | error: 0.0524321 | coeff: 0.0524321 | eff: 1 | fom: 13.4723 | r2int: 0.00273958 | r2eff: 0 | hits: 288 ] steps
+            82    3936 [sigma: 13.0455 | error: 0.0589182 | coeff: 0.0589182 | eff: 1 | fom: 10.6693 | r2int: 0.00346037 | r2eff: 0 | hits: 316 ] steps
+            83    3728 [sigma: 11.9304 | error: 0.0572472 | coeff: 0.0572472 | eff: 1 | fom: 11.3013 | r2int: 0.00326701 | r2eff: 0 | hits: 320 ] steps
+            84    4072 [sigma: 26.8102 | error: 0.0917051 | coeff: 0.0917051 | eff: 1 | fom: 4.40402 | r2int: 0.00836647 | r2eff: 0 | hits: 194 ] steps
+            85    4692 [sigma: 21.0785 | error: 0.0717385 | coeff: 0.0717385 | eff: 1 | fom: 7.19668 | r2int: 0.00512623 | r2eff: 0 | hits: 255 ] steps
+            86    4402 [sigma: 13.4877 | error: 0.0548959 | coeff: 0.0548959 | eff: 1 | fom: 12.2901 | r2int: 0.00300417 | r2eff: 0 | hits: 321 ] steps
+            87    4477 [sigma: 12.8589 | error: 0.0524128 | coeff: 0.0524128 | eff: 1 | fom: 13.4822 | r2int: 0.00273885 | r2eff: 0 | hits: 333 ] steps
+            88    3822 [sigma: 12.148 | error: 0.055691 | coeff: 0.055691 | eff: 1 | fom: 11.9417 | r2int: 0.00309138 | r2eff: 0 | hits: 307 ] steps
+            89    3227 [sigma: 23.4831 | error: 0.100834 | coeff: 0.100834 | eff: 1 | fom: 3.6427 | r2int: 0.0101145 | r2eff: 0 | hits: 192 ] steps
+            90    4663 [sigma: 30.4037 | error: 0.0926695 | coeff: 0.0926695 | eff: 1 | fom: 4.31283 | r2int: 0.00854513 | r2eff: 0 | hits: 202 ] steps
+            91    3950 [sigma: 12.5934 | error: 0.0573878 | coeff: 0.0573878 | eff: 1 | fom: 11.246 | r2int: 0.0032832 | r2eff: 0 | hits: 324 ] steps
+            92    4155 [sigma: 13.0521 | error: 0.0575811 | coeff: 0.0575811 | eff: 1 | fom: 11.1706 | r2int: 0.00330572 | r2eff: 0 | hits: 336 ] steps
+            93    4551 [sigma: 12.1931 | error: 0.0511865 | coeff: 0.0511865 | eff: 1 | fom: 14.136 | r2int: 0.00261288 | r2eff: 0 | hits: 365 ] steps
+            94    4329 [sigma: 23.9447 | error: 0.0849725 | coeff: 0.0849725 | eff: 1 | fom: 5.12956 | r2int: 0.00718973 | r2eff: 0 | hits: 236 ] steps
+            95    2948 [sigma: 27.7628 | error: 0.110631 | coeff: 0.110631 | eff: 1 | fom: 3.02612 | r2int: 0.0121504 | r2eff: 0 | hits: 138 ] steps
+            96    3757 [sigma: 28.3705 | error: 0.108645 | coeff: 0.108645 | eff: 1 | fom: 3.13772 | r2int: 0.0117468 | r2eff: 0 | hits: 207 ] steps
+            97    4754 [sigma: 25.8235 | error: 0.0875876 | coeff: 0.0875876 | eff: 1 | fom: 4.82782 | r2int: 0.00764208 | r2eff: 0 | hits: 260 ] steps
+            98    4163 [sigma: 27.2083 | error: 0.100616 | coeff: 0.100616 | eff: 1 | fom: 3.65847 | r2int: 0.0100809 | r2eff: 0 | hits: 237 ] steps
+            99    2844 [sigma: 22.5376 | error: 0.0986606 | coeff: 0.0986606 | eff: 1 | fom: 3.80495 | r2int: 0.00967111 | r2eff: 0 | hits: 155 ] steps
+           100    13997 [sigma: 27.0579 | error: 0.0477837 | coeff: 0.0477837 | eff: 1 | fom: 16.221 | r2int: 0.00227954 | r2eff: 0 | hits: 611 ] steps
+           101    17086 [sigma: 26.4188 | error: 0.0424861 | coeff: 0.0424861 | eff: 1 | fom: 20.5184 | r2int: 0.00180268 | r2eff: 0 | hits: 755 ] steps
+           102    18468 [sigma: 27.0967 | error: 0.0411869 | coeff: 0.0411869 | eff: 1 | fom: 21.8332 | r2int: 0.00169421 | r2eff: 0 | hits: 788 ] steps
+           103    18981 [sigma: 26.8279 | error: 0.0402512 | coeff: 0.0402512 | eff: 1 | fom: 22.8602 | r2int: 0.00161816 | r2eff: 0 | hits: 811 ] steps
+           104    13613 [sigma: 28.3923 | error: 0.0519748 | coeff: 0.0519748 | eff: 1 | fom: 13.7104 | r2int: 0.00269703 | r2eff: 0 | hits: 621 ] steps
+           105    18950 [sigma: 29.9208 | error: 0.0440124 | coeff: 0.0440124 | eff: 1 | fom: 18.4371 | r2int: 0.0019346 | r2eff: 0 | hits: 777 ] steps
+           106    23426 [sigma: 28.2457 | error: 0.0375526 | coeff: 0.0375526 | eff: 1 | fom: 25.3257 | r2int: 0.00140875 | r2eff: 0 | hits: 970 ] steps
+           107    22470 [sigma: 25.3877 | error: 0.0355679 | coeff: 0.0355679 | eff: 1 | fom: 28.231 | r2int: 0.0012638 | r2eff: 0 | hits: 991 ] steps
+           108    24487 [sigma: 30.7851 | error: 0.0384629 | coeff: 0.0384629 | eff: 1 | fom: 24.1411 | r2int: 0.00147782 | r2eff: 0 | hits: 936 ] steps
+           109    17883 [sigma: 28.2503 | error: 0.0427404 | coeff: 0.0427404 | eff: 1 | fom: 19.5508 | r2int: 0.00182425 | r2eff: 0 | hits: 732 ] steps
+           110    18063 [sigma: 26.6692 | error: 0.0416297 | coeff: 0.0416297 | eff: 1 | fom: 20.608 | r2int: 0.00173085 | r2eff: 0 | hits: 795 ] steps
+           111    22146 [sigma: 26.0832 | error: 0.036206 | coeff: 0.036206 | eff: 1 | fom: 27.2446 | r2int: 0.00130949 | r2eff: 0 | hits: 945 ] steps
+           112    22879 [sigma: 25.9986 | error: 0.0349694 | coeff: 0.0349694 | eff: 1 | fom: 29.2055 | r2int: 0.00122157 | r2eff: 0 | hits: 947 ] steps
+           113    22440 [sigma: 26.8139 | error: 0.0368492 | coeff: 0.0368492 | eff: 1 | fom: 26.3019 | r2int: 0.00135643 | r2eff: 0 | hits: 951 ] steps
+           114    18826 [sigma: 28.063 | error: 0.0420564 | coeff: 0.0420564 | eff: 1 | fom: 20.1919 | r2int: 0.00176652 | r2eff: 0 | hits: 796 ] steps
+           115    18855 [sigma: 28.0932 | error: 0.0421687 | coeff: 0.0421687 | eff: 1 | fom: 20.0845 | r2int: 0.00177598 | r2eff: 0 | hits: 801 ] steps
+           116    23237 [sigma: 26.8413 | error: 0.0366372 | coeff: 0.0366372 | eff: 1 | fom: 26.6071 | r2int: 0.00134095 | r2eff: 0 | hits: 1006 ] steps
+           117    23547 [sigma: 26.0885 | error: 0.0354018 | coeff: 0.0354018 | eff: 1 | fom: 28.4964 | r2int: 0.00125206 | r2eff: 0 | hits: 1021 ] steps
+           118    23816 [sigma: 29.7534 | error: 0.0387888 | coeff: 0.0387888 | eff: 1 | fom: 23.7372 | r2int: 0.00150301 | r2eff: 0 | hits: 964 ] steps
+           119    17848 [sigma: 24.9493 | error: 0.0392901 | coeff: 0.0392901 | eff: 1 | fom: 22.3376 | r2int: 0.00154176 | r2eff: 0 | hits: 790 ] steps
+           120    14109 [sigma: 29.8744 | error: 0.0521671 | coeff: 0.0521671 | eff: 1 | fom: 12.6709 | r2int: 0.00271693 | r2eff: 0 | hits: 607 ] steps
+           121    18215 [sigma: 28.6109 | error: 0.0435011 | coeff: 0.0435011 | eff: 1 | fom: 18.2222 | r2int: 0.00188988 | r2eff: 0 | hits: 767 ] steps
+           122    19728 [sigma: 27.7207 | error: 0.0403598 | coeff: 0.0403598 | eff: 1 | fom: 21.1692 | r2int: 0.00162694 | r2eff: 0 | hits: 825 ] steps
+           123    19005 [sigma: 26.6895 | error: 0.0404831 | coeff: 0.0404831 | eff: 1 | fom: 21.0405 | r2int: 0.00163691 | r2eff: 0 | hits: 831 ] steps
+           124    13676 [sigma: 27.9097 | error: 0.0508151 | coeff: 0.0508151 | eff: 1 | fom: 13.3542 | r2int: 0.002578 | r2eff: 0 | hits: 620 ] steps
 ============================================================
  closed file mfd_tl_NumberOfSteps.out for output
 ============================================================
  opened file mfd_tg_NumberOfSteps.out for output
 ============================================================
-             0          84.000000 steps
-             1          89.000000 steps
-             2          19.000000 steps
-             3          16.000000 steps
-             4          39.000000 steps
-             5          45.000000 steps
-             6          28.000000 steps
-             7          55.000000 steps
-             8         140.000000 steps
-             9         193.000000 steps
-            10          48.000000 steps
-            11          34.000000 steps
-            12          66.000000 steps
-            13          28.000000 steps
-            14          36.000000 steps
-            15          95.000000 steps
-            16          45.000000 steps
-            17          36.000000 steps
-            18          24.000000 steps
-            19          26.000000 steps
-            20          61.000000 steps
-            21          18.000000 steps
-            22          64.000000 steps
-            23          39.000000 steps
-            24          71.000000 steps
-            25         138.000000 steps
-            26         122.000000 steps
-            27         173.000000 steps
-            28         276.000000 steps
-            29         251.000000 steps
-            30         235.000000 steps
-            31         331.000000 steps
-            32         320.000000 steps
-            33         351.000000 steps
-            34         289.000000 steps
-            35          99.000000 steps
-            36         288.000000 steps
-            37         308.000000 steps
-            38         443.000000 steps
-            39         146.000000 steps
-            40         192.000000 steps
-            41         223.000000 steps
-            42         456.000000 steps
-            43         266.000000 steps
-            44         118.000000 steps
-            45          28.000000 steps
-            46          73.000000 steps
-            47         151.000000 steps
-            48         174.000000 steps
-            49         143.000000 steps
-            50         640.000000 steps
-            51         569.000000 steps
-            52         621.000000 steps
-            53         593.000000 steps
-            54         609.000000 steps
-            55         483.000000 steps
-            56        1122.000000 steps
-            57        1307.000000 steps
-            58         802.000000 steps
-            59         722.000000 steps
-            60         619.000000 steps
-            61        1225.000000 steps
-            62        1364.000000 steps
-            63        1071.000000 steps
-            64         465.000000 steps
-            65         615.000000 steps
-            66        1183.000000 steps
-            67        1090.000000 steps
-            68        1170.000000 steps
-            69         582.000000 steps
-            70         641.000000 steps
-            71         610.000000 steps
-            72        1045.000000 steps
-            73         742.000000 steps
-            74         377.000000 steps
-            75        2887.000000 steps
-            76        3580.000000 steps
-            77        4077.000000 steps
-            78        4303.000000 steps
-            79        3005.000000 steps
-            80        3794.000000 steps
-            81        4663.000000 steps
-            82        3976.000000 steps
-            83        4425.000000 steps
-            84        3919.000000 steps
-            85        4387.000000 steps
-            86        3862.000000 steps
-            87        4260.000000 steps
-            88        4866.000000 steps
-            89        4030.000000 steps
-            90        4273.000000 steps
-            91        3685.000000 steps
-            92        4210.000000 steps
-            93        4114.000000 steps
-            94        4235.000000 steps
-            95        3759.000000 steps
-            96        4245.000000 steps
-            97        3832.000000 steps
-            98        4159.000000 steps
-            99        3106.000000 steps
-           100       14108.000000 steps
-           101       16961.000000 steps
-           102       18612.000000 steps
-           103       18679.000000 steps
-           104       14911.000000 steps
-           105       17878.000000 steps
-           106       23061.000000 steps
-           107       23682.000000 steps
-           108       24020.000000 steps
-           109       19470.000000 steps
-           110       16169.000000 steps
-           111       23199.000000 steps
-           112       22530.000000 steps
-           113       22017.000000 steps
-           114       17680.000000 steps
-           115       17090.000000 steps
-           116       22374.000000 steps
-           117       22902.000000 steps
-           118       20505.000000 steps
-           119       17440.000000 steps
-           120       14312.000000 steps
-           121       18831.000000 steps
-           122       17735.000000 steps
-           123       19342.000000 steps
-           124       14819.000000 steps
+             0          55.000000 steps
+             1          51.000000 steps
+             2          60.000000 steps
+             3          33.000000 steps
+             4           3.000000 steps
+             5          22.000000 steps
+             6           4.000000 steps
+             7          56.000000 steps
+             8          44.000000 steps
+             9          38.000000 steps
+            10         160.000000 steps
+            11         111.000000 steps
+            12          50.000000 steps
+            13          20.000000 steps
+            14          70.000000 steps
+            15          18.000000 steps
+            16          42.000000 steps
+            17          60.000000 steps
+            18          12.000000 steps
+            19          62.000000 steps
+            20          89.000000 steps
+            21          51.000000 steps
+            22          21.000000 steps
+            23          41.000000 steps
+            24          88.000000 steps
+            25         123.000000 steps
+            26          81.000000 steps
+            27         141.000000 steps
+            28         153.000000 steps
+            29         132.000000 steps
+            30         107.000000 steps
+            31         357.000000 steps
+            32         266.000000 steps
+            33         294.000000 steps
+            34         223.000000 steps
+            35         173.000000 steps
+            36         278.000000 steps
+            37         383.000000 steps
+            38         200.000000 steps
+            39         168.000000 steps
+            40         263.000000 steps
+            41         155.000000 steps
+            42         288.000000 steps
+            43         205.000000 steps
+            44         153.000000 steps
+            45         177.000000 steps
+            46         184.000000 steps
+            47         112.000000 steps
+            48         112.000000 steps
+            49         175.000000 steps
+            50         254.000000 steps
+            51         283.000000 steps
+            52         518.000000 steps
+            53         610.000000 steps
+            54         323.000000 steps
+            55         462.000000 steps
+            56         801.000000 steps
+            57        1103.000000 steps
+            58        1158.000000 steps
+            59         437.000000 steps
+            60         923.000000 steps
+            61        1194.000000 steps
+            62        1203.000000 steps
+            63         949.000000 steps
+            64         591.000000 steps
+            65         690.000000 steps
+            66         921.000000 steps
+            67        1019.000000 steps
+            68         682.000000 steps
+            69         586.000000 steps
+            70         222.000000 steps
+            71         602.000000 steps
+            72         622.000000 steps
+            73         433.000000 steps
+            74         286.000000 steps
+            75        2655.000000 steps
+            76        3060.000000 steps
+            77        3753.000000 steps
+            78        4531.000000 steps
+            79        2716.000000 steps
+            80        3817.000000 steps
+            81        3989.000000 steps
+            82        3936.000000 steps
+            83        3728.000000 steps
+            84        4072.000000 steps
+            85        4692.000000 steps
+            86        4402.000000 steps
+            87        4477.000000 steps
+            88        3822.000000 steps
+            89        3227.000000 steps
+            90        4663.000000 steps
+            91        3950.000000 steps
+            92        4155.000000 steps
+            93        4551.000000 steps
+            94        4329.000000 steps
+            95        2948.000000 steps
+            96        3757.000000 steps
+            97        4754.000000 steps
+            98        4163.000000 steps
+            99        2844.000000 steps
+           100       13997.000000 steps
+           101       17086.000000 steps
+           102       18468.000000 steps
+           103       18981.000000 steps
+           104       13613.000000 steps
+           105       18950.000000 steps
+           106       23426.000000 steps
+           107       22470.000000 steps
+           108       24487.000000 steps
+           109       17883.000000 steps
+           110       18063.000000 steps
+           111       22146.000000 steps
+           112       22879.000000 steps
+           113       22440.000000 steps
+           114       18826.000000 steps
+           115       18855.000000 steps
+           116       23237.000000 steps
+           117       23547.000000 steps
+           118       23816.000000 steps
+           119       17848.000000 steps
+           120       14109.000000 steps
+           121       18215.000000 steps
+           122       19728.000000 steps
+           123       19005.000000 steps
+           124       13676.000000 steps
 ============================================================
  closed file mfd_tg_NumberOfSteps.out for output
 ============================================================
@@ -1674,6 +1662,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.072 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.063 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

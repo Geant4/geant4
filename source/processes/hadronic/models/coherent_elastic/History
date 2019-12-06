@@ -14,6 +14,41 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 November 2019 - V.Ivanchenko  (hadr-cohe-V10-05-10)
+---------------------------------------------------------------
+- G4HadronElastic : Added limit on number of warning printouts 
+
+19 November 2019 - G. Folger   (hadr-cohe-V10-05-09)
+---------------------------------------------------------------
+- remove using namespace std and using namespace CLHEP from header file
+   G4NeutronElectronElModel.hh
+
+15 November 2019 - V.Ivanchenko  (hadr-cohe-V10-05-08)
+---------------------------------------------------------------
+- G4HadronElastic : Change warning printout, in the case if sampled 
+    t>tmax resample using simple algorithm, protect this warning 
+    by G4VERBOSE, this is a partial fix of #2204
+
+06 November 2019 - A.Ribon       (hadr-cohe-V10-05-07)
+---------------------------------------------------------------
+- G4HadronElastic : Coverity fix in the unused method GetSlopeCof.
+
+31 October 2019 - V.Ivanchenko   (hadr-cohe-V10-05-06)
+--------------------------------------------------------
+- G4ElasticHadrNucleusHE - reduction of size of data structure and
+    time for initialisation ~2 times; general code clean-up; addition
+    of protections
+
+07 October 2019 - V.Grichine     (hadr-cohe-V10-05-05)
+     ---------------------------------------------------------------
+- G4hadronElstic - new method for s-,c-,b-particle
+- ds/dt slope modifications in preparation
+
+03 July 2019 - V.Ivanchenko     (hadr-cohe-V10-05-04)
+--------------------------------------------------------
+- G4ElasticHadrNucleusHE - general clean-up of the code
+- G4HadronElastic - added new parameterisation of A.Yeltokov
+
 14 May 2019 - A.Ribon           (hadr-cohe-V10-05-03)
 --------------------------------------------------------
 - G4HadronElastic : numerically safer treatment of the very rare cases

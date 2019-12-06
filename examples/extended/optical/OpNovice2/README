@@ -92,6 +92,7 @@
    10 :  X momentum dir of Fresnel-refracted photons
    11 :  Y momentum dir of Fresnel-refracted photons
    12 :  Z momentum dir of Fresnel-refracted photons
+   13 :  creation time of scintillation photons
 
  Histograms 4-12 are recorded for photons scattered from the +X
  surface of the cube. Only the first interaction is recorded.  

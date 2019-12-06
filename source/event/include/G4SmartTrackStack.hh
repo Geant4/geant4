@@ -23,72 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//  Last Modification : 04/Oct/12 S. Kamperis
-//
-
-
-#ifndef G4SmartTrackStack_h
-#define G4SmartTrackStack_h 1
-
-#include "G4StackedTrack.hh"
-#include "G4TrackStack.hh"
-#include "globals.hh"
-
 // class description:
 //
 // This is a 'smart' stack class used by G4StackManager. This class object
 // stores G4StackedTrack class objects in various dedicated stacks
 
+// Author: S.Kamperis - 04/Oct/12
+// --------------------------------------------------------------------
+#ifndef G4SmartTrackStack_hh
+#define G4SmartTrackStack_hh 1
+
+#include "G4StackedTrack.hh"
+#include "G4TrackStack.hh"
+#include "globals.hh"
+
 class G4SmartTrackStack
 {
   public:
-      G4SmartTrackStack();
-      ~G4SmartTrackStack();
+
+    G4SmartTrackStack();
+   ~G4SmartTrackStack();
+
+    G4SmartTrackStack & operator=(const G4SmartTrackStack&) = delete;
+    G4bool operator==(const G4SmartTrackStack&) const = delete;
+    G4bool operator!=(const G4SmartTrackStack&) const = delete;
+
+    void PushToStack(const G4StackedTrack& aStackedTrack);
+    G4StackedTrack PopFromStack();
+    void clear();
+    void clearAndDestroy();
+    void TransferTo(G4TrackStack* aStack);
+    G4double getEnergyOfStack(G4TrackStack* aTrackStack);
+    void dumpStatistics();
+
+    inline G4int GetNTrack() const { return nTracks; }
+    inline G4int GetMaxNTrack() const { return maxNTracks; }
 
   private:
-      const G4SmartTrackStack & operator=
-                          (const G4SmartTrackStack &right);
-      G4bool operator==(const G4SmartTrackStack &right) const;
-      G4bool operator!=(const G4SmartTrackStack &right) const;
 
-  public:
-      void PushToStack(const G4StackedTrack& aStackedTrack);
-      G4StackedTrack PopFromStack();
-      void clear();
-      void clearAndDestroy();
-      void TransferTo(G4TrackStack* aStack);
-      G4double getEnergyOfStack(G4TrackStack* aTrackStack);
-      void dumpStatistics();
+    inline G4int n_stackedTrack() const
+    {
+      return G4int(stacks[0]->GetNTrack() +
+                   stacks[1]->GetNTrack() +
+                   stacks[2]->GetNTrack() +
+                   stacks[3]->GetNTrack() +
+                   stacks[4]->GetNTrack());
+    }
 
   private:
-      G4int fTurn;
-      G4int nTurn; // should be 5
-      G4double energies[5];
-      G4TrackStack* stacks[5];
-      // = 0 : all primaries and secondaries except followings
-      // = 1 : secondary neutrons
-      // = 2 : secondary electrons
-      // = 3 : secondary gammas
-      // = 4 : secondary positrons
-      G4int maxNTracks;
-      G4int nTracks;
 
-  public:
-      G4int GetNTrack() const { return nTracks; }
-      G4int GetMaxNTrack() const { return maxNTracks; }
-
-  private:
-      inline G4int n_stackedTrack() const
-      {
-	      return stacks[0]->GetNTrack() +
-		     stacks[1]->GetNTrack() +
-		     stacks[2]->GetNTrack() +
-		     stacks[3]->GetNTrack() +
-		     stacks[4]->GetNTrack();
-      }
+    G4int fTurn;
+    G4int nTurn; // should be 5
+    G4double energies[5];
+    G4TrackStack* stacks[5];
+    // = 0 : all primaries and secondaries except followings
+    // = 1 : secondary neutrons
+    // = 2 : secondary electrons
+    // = 3 : secondary gammas
+    // = 4 : secondary positrons
+    G4int maxNTracks;
+    G4int nTracks;
 };
 
 #endif

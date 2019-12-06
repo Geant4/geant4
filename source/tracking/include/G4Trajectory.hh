@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//---------------------------------------------------------------
-//
-// G4Trajectory.hh
+// G4Trajectory
 //
 // class description:
 //   This class represents the trajectory of a particle tracked.
@@ -36,19 +32,16 @@
 //     2) static information of particle which generated the 
 //        trajectory, 
 //     3) trackID and parent particle ID of the trajectory,
-//
+
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
 //     Makoto  Asai   (e-mail: asai@kekvax.kek.jp)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
 //
-// ---------------------------------------------------------------
-
-class G4Trajectory;
-
-#ifndef G4Trajectory_h
-#define G4Trajectory_h 1
+// --------------------------------------------------------------------
+#ifndef G4Trajectory_hh
+#define G4Trajectory_hh 1
 
 #include <stdlib.h>                 // Include from 'system'
 #include <vector>
@@ -63,34 +56,34 @@ class G4Trajectory;
 #include "G4Track.hh"
 #include "G4Step.hh"
 
-class G4Polyline;                   // Forward declaration
-
-typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
+class G4Polyline;
 
 ///////////////////
 class G4Trajectory : public G4VTrajectory
 ///////////////////
 {
 
-//--------
-public: // with description
-//--------
+   using TrajectoryPointContainer = std::vector<G4VTrajectoryPoint*>;
 
-// Constructor/Destrcutor
+  //--------
+  public: // with description
+  //--------
+
+  // Constructor/Destructor
 
    G4Trajectory();
-
    G4Trajectory(const G4Track* aTrack);
    G4Trajectory(G4Trajectory &);
    virtual ~G4Trajectory();
 
-// Operators
+  // Operators
+
    inline void* operator new(size_t);
    inline void  operator delete(void*);
-   inline int operator == (const G4Trajectory& right) const
-   {return (this==&right);} 
+   G4int operator == (const G4Trajectory& r) const {return (this==&r);} 
 
-// Get/Set functions 
+  // Get/Set functions 
+
    inline G4int GetTrackID() const
    { return fTrackID; }
    inline G4int GetParentID() const
@@ -106,13 +99,13 @@ public: // with description
    inline G4ThreeVector GetInitialMomentum() const
    { return initialMomentum; }
 
-// Other member functions
+  // Other member functions
+
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
    virtual void DrawTrajectory() const;
    virtual void AppendStep(const G4Step* aStep);
-   virtual int GetPointEntries() const { return positionRecord->size(); }
-   virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
-   { return (*positionRecord)[i]; }
+   virtual G4int GetPointEntries() const {return G4int(positionRecord->size());}
+   virtual G4VTrajectoryPoint* GetPoint(G4int i) const { return (*positionRecord)[i]; }
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
    G4ParticleDefinition* GetParticleDefinition();
@@ -120,9 +113,9 @@ public: // with description
    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
    virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-//---------
-   private:
-//---------
+  //---------
+  private:
+  //---------
 
   TrajectoryPointContainer* positionRecord;
   G4int                     fTrackID;

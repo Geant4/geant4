@@ -214,10 +214,12 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
              // --------------- Sampling mass of unstable hadronic resonances ----------------
              TrackDefinition = (*generatedKineticTracks)[aTrack]->GetDefinition();
 
-	     if(TrackDefinition->IsShortLived())
+	     if (TrackDefinition->IsShortLived())
              {
-               G4double NewTrackMass = BrW.SampleMass( TrackDefinition,
-                        TrackDefinition->GetPDGMass() + 5.0*TrackDefinition->GetPDGWidth() );
+               G4double NewTrackMass = 
+                 BrW.SampleMass( TrackDefinition->GetPDGMass(), TrackDefinition->GetPDGWidth(),
+                                 BrW.GetMinimumMass( TrackDefinition ) + 10.0*MeV, 
+                                 TrackDefinition->GetPDGMass() + 5.0*TrackDefinition->GetPDGWidth() );
                G4LorentzVector Tmp=G4LorentzVector((*generatedKineticTracks)[aTrack]->Get4Momentum());
                Tmp.setE(std::sqrt(sqr(NewTrackMass) + Tmp.vect().mag2()));
 
@@ -243,7 +245,8 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
                  <<"Final hadrons momentum: "<< KTsum1 << G4endl;
           #endif
 
-	  if  ( KTsum1.e() > 0 && std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion )
+	  if  ( KTsum1.e() > 0 && 
+                std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion )
 	  {
 	    NeedEnergyCorrector=true;
  	  }
@@ -287,9 +290,9 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
   G4cout<<"End of the Hadronization (G4ExcitedStringDecay)"<<G4endl;
   #endif
 
-  if(!success)
+  if (!success)
   {
-    if(theResult->size() != 0)
+    if (theResult->size() != 0)
     {
       std::for_each(theResult->begin() , theResult->end() , DeleteKineticTrack());
       theResult->clear();
@@ -320,8 +323,8 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 }
 
 
-G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
-		(G4KineticTrackVector* Output, G4LorentzVector& TotalCollisionMom)   
+G4bool G4ExcitedStringDecay::
+EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalCollisionMom)   
 {
     const int    nAttemptScale = 500;
     const double ErrLimit = 1.E-5;
@@ -337,7 +340,7 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     #endif
     // Calculate sum hadron 4-momenta and summing hadron mass
     unsigned int cHadron;
-    for(cHadron = 0; cHadron < Output->size(); cHadron++)
+    for (cHadron = 0; cHadron < Output->size(); cHadron++)
     {
         SumMom  += Output->operator[](cHadron)->Get4Momentum();
         HadronM=Output->operator[](cHadron)->Get4Momentum().mag(); HadronMass.push_back(HadronM);
@@ -369,10 +372,10 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     G4int cAttempt = 0;
     G4double Sum = 0;
     G4bool success = false;
-    for(cAttempt = 0; cAttempt < nAttemptScale; cAttempt++)
+    for (cAttempt = 0; cAttempt < nAttemptScale; cAttempt++)
     {
       Sum = 0;
-      for(cHadron = 0; cHadron < Output->size(); cHadron++)
+      for (cHadron = 0; cHadron < Output->size(); cHadron++)
       {
         HadronM = HadronMass.at(cHadron);
         G4LorentzVector HadronMom = Output->operator[](cHadron)->Get4Momentum();
@@ -398,7 +401,7 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     }
 
     #ifdef debug_G4ExcitedStringCorr
-    if(!success)
+    if (!success)
     {
       G4cout << "G4ExcitedStringDecay::EnergyAndMomentumCorrector - Warning"<<G4endl;
       G4cout << "   Scale not unity at end of iteration loop: "<<TotalCollisionMass<<" "<<Sum<<" "<<Scale<<G4endl;
@@ -415,3 +418,4 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
 
     return success;
 }
+

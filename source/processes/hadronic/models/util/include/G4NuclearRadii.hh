@@ -37,6 +37,9 @@
 
 #include "globals.hh"
 
+class G4Pow;
+class G4ParticleDefinition;
+
 class G4NuclearRadii 
 {
 public:
@@ -53,6 +56,9 @@ public:
   // algorithm from Glauber-Gribov nucluear-nuclear model (V.Grichine)
   static G4double RadiusNNGG(G4int Z, G4int A);
 
+  // algorithm of Edward Simpsons & Dousatsu Sakata
+  static G4double RadiusECS(G4int Z, G4int A);
+
   // algorithm from Glauber-Gribov hadron-nuclear model (V.Grichine)
   static G4double RadiusHNGG(G4int A);
 
@@ -66,6 +72,22 @@ public:
   // de-excitation module
   static G4double RadiusCB(G4int Z, G4int A);
 
+  // algorithm from computation of Coulomb barrier  
+  static G4double ParticleRadius(const G4ParticleDefinition*);
+
+  // algorithm for hadron-nucleon x-section
+  static G4double CoulombFactor(
+         const G4ParticleDefinition* theParticle, 
+	 const G4ParticleDefinition* nucleon, 
+	 G4double ekin);
+
+  // algorithm for hadron-nucleus x-section
+  static G4double CoulombFactor(
+	 G4int Z, G4int A,
+         const G4ParticleDefinition* theParticle, 
+	 G4double ekin);
+
+  static G4Pow* fG4pow;
   static const G4double r0[93];
 
 };

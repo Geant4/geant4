@@ -22,21 +22,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//    Implementation by Dmitry Sorokin - GSoC 2017
-//       Work supported by Google as part of Google Summer of Code 2017.
-//    Supervision / code review: John Apostolakis
+// Helper namespace field_utils inline implementation
+
+// Author: Dmitry Sorokin, Google Summer of Code 2017
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 
 namespace field_utils {
 
-namespace internal {
-
-template<class T>
-size_t getFirstIndex(const T& value) {
+namespace internal
+{
+  template<class T>
+  size_t getFirstIndex(const T& value)
+  {
     return static_cast<size_t>(value);
+  }
 }
-
-} // internal
 
 template <typename ArrayType>
 inline G4double getValue(const ArrayType& array, Value1D value)
@@ -79,7 +80,8 @@ void setValue(const SourceArray& src, Value1D value, TargetArray& trg)
 }
 
 template <typename SourceArray, typename TargetArray, typename ...TargetArrays>
-void setValue(const SourceArray& src, Value1D value, TargetArray& trg, TargetArrays&... trgs)
+void setValue(const SourceArray& src, Value1D value,
+              TargetArray& trg, TargetArrays&... trgs)
 {
     const auto begin = internal::getFirstIndex(value);
     trg[begin] = src[begin];

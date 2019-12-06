@@ -65,7 +65,7 @@ private:
   PhysicsListMessenger* fMessenger;
 
   G4double fMaxChargedStep;
-  G4bool isInitialised;
+  G4bool fInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

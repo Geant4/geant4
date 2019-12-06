@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ExN02ChamberParameterisation.hh
+/// \file ExN02ChamberParameterisation.hh
 /// \brief Definition of the ExN02ChamberParameterisation class
 //
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/src/ExN02SteppingVerbose.cc
+/// \file ExN02SteppingVerbose.cc
 /// \brief Implementation of the ExN02SteppingVerbose class
 //
 //

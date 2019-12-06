@@ -53,8 +53,9 @@ RunActionMaster::RunActionMaster(G4bool useNtuple, G4bool mergeNtuple)
     // and deleted only at the end of program
     G4int nofReducedNtupleFiles = 0;  
        // Multiple reduced ntuple files are not yet supported 
-    G4bool rowWise = true;
-    fMPIntupleMerger = new G4MPIntupleMerger(nofReducedNtupleFiles, rowWise);
+    G4bool rowWise = false;
+    G4bool rowMode = true;
+    fMPIntupleMerger = new G4MPIntupleMerger(nofReducedNtupleFiles, rowWise, rowMode);
   }
 #endif
 
@@ -152,9 +153,9 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
         auto debugme = [&scor](){
           for ( size_t idx = 0 ; idx < scor->GetNumberOfMesh() ; ++idx) {
               const auto m = scor->GetMesh(idx);
-              const MeshScoreMap& map = m->GetScoreMap();
+              const auto map = m->GetScoreMap();
               std::for_each(map.begin(),map.end(),
-                [](const MeshScoreMap::value_type& e) {
+                [](const G4VScoringMesh::MeshScoreMap::value_type& e) {
                   G4cout<<e.first<<"("<<e.second<<"):"<<G4endl;
                   const auto data = e.second->GetMap();
                   for( auto it = data->begin() ; it != data->end() ; ++it ) {

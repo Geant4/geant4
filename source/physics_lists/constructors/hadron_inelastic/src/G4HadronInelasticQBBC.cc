@@ -62,7 +62,6 @@
 #include "G4FTFBuilder.hh"
 
 #include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4ChipsHyperonInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4CascadeInterface.hh"
@@ -110,22 +109,25 @@ void G4HadronInelasticQBBC::ConstructProcess()
   if(!thePreCompound) { thePreCompound = new G4PreCompoundModel(); }
  
   // configure models
+  const G4double eminFtf =  G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  const G4double emaxBert = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+
   //G4HadronicInteraction* theQGSP = 
   //  BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,emax);
   G4HadronicInteraction* theFTFP = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),3.0*GeV,emax);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),eminFtf,emax);
   G4HadronicInteraction* theFTFP1 = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),3.0*GeV,emax);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),eminFtf,emax);
   G4HadronicInteraction* theFTFP2 = 
     BuildModel(new G4FTFBuilder("FTFP",thePreCompound),0.0,emax);
 
   G4CascadeInterface* casc = new G4CascadeInterface();
   casc->usePreCompoundDeexcitation();
-  G4HadronicInteraction* theBERT = NewModel(casc,1.0*GeV,5.0*GeV);
+  G4HadronicInteraction* theBERT = NewModel(casc,1.0*GeV,emaxBert);
 
   casc = new G4CascadeInterface();
   casc->usePreCompoundDeexcitation();
-  G4HadronicInteraction* theBERT1 = NewModel(casc,0.0*GeV,5.0*GeV);
+  G4HadronicInteraction* theBERT1 = NewModel(casc,0.0*GeV,emaxBert);
 
   //G4cout << "G4HadronInelasticQBBC::ConstructProcess new Binary"<< G4endl;
   G4BinaryCascade* bic = new G4BinaryCascade(thePreCompound);
@@ -141,6 +143,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   if(!kaonxs) { 
     kaonxs = new G4CrossSectionInelastic(new G4ComponentGGHadronNucleusXsc());
   }
+
   G4HadronicProcess* hp;
   // loop over particles
   auto myParticleIterator=GetParticleIterator();
@@ -157,8 +160,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
     //
     if(pname == "proton") {
       hp = FindInelasticProcess(particle);
-      //hp->AddDataSet(new G4ParticleInelasticXS(particle));
-      hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
+      hp->AddDataSet(new G4ParticleInelasticXS(particle));
+      //hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
       
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT);
@@ -209,20 +212,26 @@ void G4HadronInelasticQBBC::ConstructProcess()
       hp = FindInelasticProcess(particle);
       hp->RegisterMe(theFTFP1);
       hp->RegisterMe(theBERT1);
-      hp->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name()));
+      hp->AddDataSet(kaonxs);
+
+    } else if(pname == "anti_lambda"  ||
+              pname == "anti_omega-"  || 
+              pname == "anti_sigma-"  || 
+              pname == "anti_sigma+"  ||
+              pname == "anti_sigma0"  || 
+              pname == "anti_xi-"     || 
+              pname == "anti_xi0"     
+	      ) {
+      hp = FindInelasticProcess(particle);
+      hp->RegisterMe(theFTFP2);
+      hp->AddDataSet(kaonxs);
 
     } else if(pname == "anti_alpha"   ||
 	      pname == "anti_deuteron"||
               pname == "anti_He3"     ||
 	      pname == "anti_proton"  || 
-              pname == "anti_triton"  ||  
-	      pname == "anti_lambda"  ||
-              pname == "anti_neutron" ||
-              pname == "anti_omega-"  || 
-              pname == "anti_sigma-"  || 
-              pname == "anti_sigma+"  || 
-              pname == "anti_xi-"     || 
-              pname == "anti_xi0"     
+              pname == "anti_triton"  ||
+              pname == "anti_neutron"
 	      ) {
       hp = FindInelasticProcess(particle);
       hp->RegisterMe(theFTFP2);

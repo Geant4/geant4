@@ -50,6 +50,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
         G4BOptnCloning.hh
         G4BOptnForceCommonTruncatedExp.hh
         G4BOptnForceFreeFlight.hh
+	G4BOptnLeadingParticle.hh
         G4BOptrForceCollision.hh
         G4BOptrForceCollisionTrackData.hh
         G4ILawCommonTruncatedExp.hh
@@ -67,6 +68,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
         G4BOptnCloning.cc
         G4BOptnForceCommonTruncatedExp.cc
         G4BOptnForceFreeFlight.cc
+	G4BOptnLeadingParticle.cc
         G4BOptrForceCollision.cc
 	G4BOptrForceCollisionTrackData.cc
         G4ILawCommonTruncatedExp.cc

@@ -1,8 +1,11 @@
-####   Starting: /mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc63/LABEL/centos7/THREAD/Seq/build/examples/extended/hadronic/FissionFragment/FissionFragment    ####
-MT RNG Seed: 62737819
+####   Starting: /mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc9/LABEL/centos7/THREAD/Seq/build/examples/extended/hadronic/FissionFragment/FissionFragment    ####
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,340 +15,325 @@ MT RNG Seed: 62737819
 
 <<< Geant4 Physics List simulation engine: QGSP_BIC_HP
 
-Checking overlaps for volume Floor ... OK! 
-Checking overlaps for volume Tank_Wall ... OK! 
-Checking overlaps for volume Tank_Air ... OK! 
-Checking overlaps for volume Tank_H2O ... OK! 
-Checking overlaps for volume Plate_Meat ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:6.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-6.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:7.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-7.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:7.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-7.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:7.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-7.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:8.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-8.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:8.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-8.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:8.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-8.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:9.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-9.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:10.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-10.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:10.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-10.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:10.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-10.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:11.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-11.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:11.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-11.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:11.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:0.00    Y:-11.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:6.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-6.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:6.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:7.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-7.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:7.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:7.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-7.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:7.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:7.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-7.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:7.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:8.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-8.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:8.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:8.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-8.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:8.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:8.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-8.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:8.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:9.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-9.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:9.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:10.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-10.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:10.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:10.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-10.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:10.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:10.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:5.00    Y:-10.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:10.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.90 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.20 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.50 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.80 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.10 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.40 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.70 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.00 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.30 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:10.00    Y:-6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:6.60 ... OK! 
-Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.60 ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:6.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-6.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:7.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-7.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:7.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-7.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:7.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-7.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:8.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-8.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:8.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-8.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:8.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-8.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:9.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-9.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:10.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-10.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:10.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-10.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:10.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-10.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:11.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-11.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:11.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-11.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:11.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:0.00    Y:-11.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:6.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-6.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:6.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-6.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:7.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-7.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:7.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:7.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-7.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:7.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:7.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-7.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:7.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-7.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:8.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-8.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:8.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:8.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-8.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:8.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:8.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-8.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:8.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-8.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:9.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-9.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:9.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-9.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:10.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-10.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:10.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:10.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-10.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:10.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:10.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:5.00    Y:-10.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:10.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-5.00    Y:-10.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-0.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-1.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-2.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-3.90 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.20 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.50 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-4.80 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.10 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.40 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-5.70 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.00 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.30 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:10.00    Y:-6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:6.60 (G4Box) ... OK! 
+Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.60 (G4Box) ... OK! 
 312 plates were added to the subcritical assembly
-Checking overlaps for volume NeutronSource ... OK! 
-Checking overlaps for volume Poly ... OK! 
-Checking overlaps for volume Detector_Shell ... OK! 
-Checking overlaps for volume Detector_BF3_Core ... OK! 
-/cvmfs/geant4.cern.ch/share/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.6
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -412,9 +400,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PenConversion : Emin=    0 eV  Emax=   20 MeV
-        BetheHeitler : Emin=   20 MeV Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
@@ -543,9 +529,9 @@ ionIoni:  for GenericIon  SubType=2
 nuclearStopping:  for GenericIon SubType=8 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
-=======================================================================
-======       Radioactive Decay Physics Parameters              ========
-=======================================================================
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
 Max life time                                     1.4427e+06 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
@@ -556,7 +542,7 @@ Auger electron emission enabled                   1
 Auger cascade enabled                             1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
-=======================================================================
+======================================================================
 
 msc:  for alpha  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 1
@@ -736,22 +722,12 @@ CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 Fission fragment production is now activated in HP package for Z = 92, A = 235
 As currently modeled this option precludes production of delayed neutrons from fission fragments.
 Fission fragment production is now activated in HP package for Z = 92, A = 238
@@ -832,11 +808,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
-  Process: RadioactiveDecay
+  Process: RadioactiveDecayBase
 
 ---------------------------------------------------
                            Hadronic Processes for He3
@@ -846,8 +822,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -858,8 +834,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -908,8 +884,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -953,14 +930,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -975,7 +952,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -988,10 +965,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -1002,10 +978,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -1018,8 +993,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -1048,8 +1023,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            Binary Cascade: 19.9 MeV ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            Binary Cascade: 19.9 MeV ---> 6 GeV
         Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
@@ -1070,28 +1045,26 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 4 GeV ---> 25 GeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -1105,8 +1078,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:            Binary Cascade: 0 eV  ---> 9.9 GeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            Binary Cascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -1117,8 +1090,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -1127,173 +1100,26 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1442.7
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
-Shooting event 1
-Emission Location: r: (4.45494,0,466.79)
-Emission Direction: r: (-0.97197,-0.108229,-0.208711)
-Shooting event 2
-Emission Location: r: (2.36164,0,477.194)
-Emission Direction: r: (-0.100843,-0.516101,0.85057)
-Shooting event 3
-Emission Location: r: (0.890798,0,440.085)
-Emission Direction: r: (0.287808,-0.884203,-0.367901)
-Shooting event 4
-Emission Location: r: (0.920099,0,464.401)
-Emission Direction: r: (0.722288,-0.403353,-0.561788)
-Shooting event 5
-Emission Location: r: (3.27656,0,457.763)
-Emission Direction: r: (-0.266719,-0.926872,-0.264138)
-Shooting event 6
-Emission Location: r: (4.29458,0,474.323)
-Emission Direction: r: (0.00586196,-0.714349,0.699765)
-Shooting event 7
-Emission Location: r: (1.10885,0,465.592)
-Emission Direction: r: (-0.315289,0.923861,-0.216965)
-Shooting event 8
-Emission Location: r: (1.07861,0,446.078)
-Emission Direction: r: (-0.327846,-0.896666,-0.297501)
-Shooting event 9
-Emission Location: r: (4.30455,0,470.123)
-Emission Direction: r: (-0.050773,-0.196796,-0.979129)
-Shooting event 10
-Emission Location: r: (0.410956,0,465.906)
-Emission Direction: r: (0.768328,-0.425415,-0.47822)
-Shooting event 11
-Emission Location: r: (0.801606,0,481.955)
-Emission Direction: r: (0.110546,-0.061292,-0.991979)
-Shooting event 12
-Emission Location: r: (2.29937,0,467.982)
-Emission Direction: r: (0.908614,0.135872,-0.394916)
-Shooting event 13
-Emission Location: r: (0.707271,0,473.732)
-Emission Direction: r: (-0.258675,-0.965934,-0.00768503)
-Shooting event 14
-Emission Location: r: (3.30003,0,464.645)
-Emission Direction: r: (0.0979959,0.421368,-0.901579)
-Shooting event 15
-Emission Location: r: (3.65998,0,457.144)
-Emission Direction: r: (-0.944672,0.0344785,-0.326199)
-Shooting event 16
-Emission Location: r: (2.29258,0,463.7)
-Emission Direction: r: (-0.850162,0.0390434,0.525071)
-Shooting event 17
-Emission Location: r: (0.369399,0,440.563)
-Emission Direction: r: (0.540623,0.0716724,-0.838206)
-Shooting event 18
-Emission Location: r: (1.03269,0,438.477)
-Emission Direction: r: (-0.277435,-0.769173,0.575675)
-Shooting event 19
-Emission Location: r: (1.75376,0,467.401)
-Emission Direction: r: (0.374084,0.662678,0.648783)
-Shooting event 20
-Emission Location: r: (3.27018,0,453.562)
-Emission Direction: r: (-0.338724,0.814824,0.470456)
-Shooting event 21
-Emission Location: r: (0.267381,0,475.284)
-Emission Direction: r: (0.394793,0.897765,0.195337)
-Shooting event 22
-Emission Location: r: (4.57193,0,464.768)
-Emission Direction: r: (-0.85263,-0.507146,-0.125795)
-Shooting event 23
-Emission Location: r: (2.3157,0,461.212)
-Emission Direction: r: (0.619132,-0.258909,-0.741378)
-Shooting event 24
-Emission Location: r: (1.93621,0,441.106)
-Emission Direction: r: (0.919367,-0.0518974,0.389963)
-Shooting event 25
-Emission Location: r: (0.331995,0,440.62)
-Emission Direction: r: (-0.530312,-0.835604,0.143301)
-Shooting event 26
-Emission Location: r: (3.61922,0,460.438)
-Emission Direction: r: (-0.418967,0.900819,0.11398)
-Shooting event 27
-Emission Location: r: (4.2878,0,441.347)
-Emission Direction: r: (-0.868973,-0.401069,-0.28988)
-Shooting event 28
-Emission Location: r: (1.99202,0,457.495)
-Emission Direction: r: (0.090589,0.730527,0.676849)
-Shooting event 29
-Emission Location: r: (4.36285,0,442.706)
-Emission Direction: r: (0.0606364,-0.992488,-0.106258)
-Shooting event 30
-Emission Location: r: (3.84496,0,460.939)
-Emission Direction: r: (0.246979,0.554821,-0.794465)
-Shooting event 31
-Emission Location: r: (4.2408,0,441.787)
-Emission Direction: r: (-0.103391,-0.14659,0.983779)
-Shooting event 32
-Emission Location: r: (0.868125,0,460.598)
-Emission Direction: r: (0.851824,-0.115657,-0.510901)
-Shooting event 33
-Emission Location: r: (3.58369,0,477.376)
-Emission Direction: r: (-0.382174,-0.874606,-0.298341)
-Shooting event 34
-Emission Location: r: (3.46873,0,457.991)
-Emission Direction: r: (-0.39209,-0.442701,-0.8064)
-Shooting event 35
-Emission Location: r: (4.2215,0,459.15)
-Emission Direction: r: (0.552028,0.0546402,0.832033)
-Shooting event 36
-Emission Location: r: (1.69803,0,442.542)
-Emission Direction: r: (0.600036,-0.777989,0.186256)
-Shooting event 37
-Emission Location: r: (1.30517,0,438.965)
-Emission Direction: r: (-0.707109,-0.555293,-0.437775)
-Shooting event 38
-Emission Location: r: (2.98114,0,457.974)
-Emission Direction: r: (-0.658113,-0.605489,-0.447516)
-Shooting event 39
-Emission Location: r: (4.64847,0,465.088)
-Emission Direction: r: (-0.139759,0.0588578,0.988435)
-Shooting event 40
-Emission Location: r: (0.881855,0,464.205)
-Emission Direction: r: (-0.61706,-0.7407,-0.265707)
-Shooting event 41
-Emission Location: r: (0.145784,0,455.489)
-Emission Direction: r: (0.929451,-0.36088,-0.0767211)
-Shooting event 42
-Emission Location: r: (1.35148,0,439.556)
-Emission Direction: r: (-0.674284,-0.718162,0.172001)
-Shooting event 43
-Emission Location: r: (3.72651,0,468.479)
-Emission Direction: r: (-0.814895,-0.546662,0.192631)
-Shooting event 44
-Emission Location: r: (3.03098,0,445.218)
-Emission Direction: r: (0.855204,-0.165461,0.491171)
-Shooting event 45
-Emission Location: r: (0.875145,0,453.903)
-Emission Direction: r: (0.977394,0.0812108,0.195205)
-Shooting event 46
-Emission Location: r: (0.934192,0,443.666)
-Emission Direction: r: (-0.615095,0.157286,0.772605)
-Shooting event 47
-Emission Location: r: (3.77513,0,479.147)
-Emission Direction: r: (-0.368847,0.685312,0.627933)
-Shooting event 48
-Emission Location: r: (1.07963,0,462.519)
-Emission Direction: r: (0.993489,-0.0145042,-0.112999)
-Shooting event 49
-Emission Location: r: (2.40312,0,476.169)
-Emission Direction: r: (-0.663839,-0.4147,-0.622368)
-Shooting event 50
-Emission Location: r: (3.74077,0,449.271)
-Emission Direction: r: (0.780655,0.380276,0.495952)
 Graphics systems deleted.
 Visualization Manager deleting...

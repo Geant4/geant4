@@ -7,7 +7,7 @@
 // directional light
 
 #include "node"
-#include "sf_vec"
+#include "sf_vec3f"
 #include "render_action"
 
 #include "../colorfs"
@@ -19,18 +19,16 @@ class torche : public node {
   TOOLS_NODE(torche,tools::sg::torche,node)
 public:
   sf_vec<colorf,float> color;
-  sf_vec<vec3f,float> direction;
+  sf_vec3f direction;
   sf<bool> on;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::torche)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(color)
-      TOOLS_ADD_FIELD_DESC(direction)
-      TOOLS_ADD_FIELD_DESC(on)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),3, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(color),
+      TOOLS_ARG_FIELD_DESC(direction),
+      TOOLS_ARG_FIELD_DESC(on)
+    );
     return s_v;
   }
 private:

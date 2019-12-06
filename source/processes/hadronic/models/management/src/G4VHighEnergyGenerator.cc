@@ -29,29 +29,20 @@
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
-#include "G4HadronicException.hh"
 
 G4VHighEnergyGenerator::G4VHighEnergyGenerator(const G4String& modelName)
-:   epCheckLevels(DBL_MAX,DBL_MAX)
+  : G4HadronicInteraction(modelName)
 {
-	theGeneratorModelName=modelName;
 }
-
 
 G4VHighEnergyGenerator::~G4VHighEnergyGenerator()
 {
 }
 
-std::pair<G4double, G4double> G4VHighEnergyGenerator::GetEnergyMomentumCheckLevels() const
+G4HadFinalState* 
+G4VHighEnergyGenerator::ApplyYourself(const G4HadProjectile&, G4Nucleus&)
 {
-   return epCheckLevels;
-}
-
-void G4VHighEnergyGenerator::SetEnergyMomentumCheckLevels(
-									G4double relativeLevel, G4double absoluteLevel)
-{
-	epCheckLevels.first=relativeLevel;
-	epCheckLevels.second=absoluteLevel;
+  return nullptr;
 }
 
 void G4VHighEnergyGenerator::ModelDescription(std::ostream& outFile) const
@@ -59,15 +50,10 @@ void G4VHighEnergyGenerator::ModelDescription(std::ostream& outFile) const
   outFile << " Parton-string models description not written yet \n";
 }
 
-G4String G4VHighEnergyGenerator::GetModelName() const
-{
-	return theGeneratorModelName;
-}
-
 G4V3DNucleus * G4VHighEnergyGenerator::GetProjectileNucleus() const   // Uzhi Nov. 2012
 {                                                                     // Uzhi Nov. 2012
   G4ExceptionDescription ed;
-  ed << "The used HighEnergyGenerator "<<GetModelName()<<" cannot manage with a residual projectile nucleus" << G4endl;
+  ed << "The used HighEnergyGenerator "<<GetModelName()<<" cannot manage with a residual projectile nucleus";
   G4Exception("G4VHighEnergyGenerator::GetProjectileNucleus ", "G4had_mod_man",
                 FatalException, ed); 
   return 0;

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // class G4ParameterisedNavigation
 //
 // Class description:
@@ -114,11 +111,11 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
 
     //  Voxel Stack information (for 1D optimisation only)
     //
-    EAxis fVoxelAxis;
-    G4int fVoxelNoSlices;
-    G4double fVoxelSliceWidth; 
-    G4int fVoxelNodeNo;  
-    G4SmartVoxelHeader* fVoxelHeader;
+    EAxis fVoxelAxis = kUndefined;
+    G4int fVoxelNoSlices = 0;
+    G4double fVoxelSliceWidth = 0.0; 
+    size_t fVoxelNodeNo = 0;  
+    G4SmartVoxelHeader* fVoxelHeader = nullptr;
 };
 
 #include "G4ParameterisedNavigation.icc"

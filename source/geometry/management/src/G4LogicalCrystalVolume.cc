@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Implementation of G4LogicalCrystalVolume
 //
-// 21-04-16, created by E.Bagli
-// 
+// 21-04-16, created by E.Bagli 
 // --------------------------------------------------------------------
 
 #include "G4LogicalCrystalVolume.hh"
@@ -47,19 +43,18 @@ G4LogicalCrystalVolume(G4VSolid* pSolid, G4ExtendedMaterial* pMaterial,
                        G4VSensitiveDetector* pSDetector,
                        G4UserLimits* pULimits, G4bool optimise,
                        G4int h, G4int k, G4int l, G4double rot)
-: G4LogicalVolume(pSolid,pMaterial,name,pFieldMgr,pSDetector,pULimits,optimise),
-  hMiller(1), kMiller(0), lMiller(0), fRot(0), verboseLevel(0)
+: G4LogicalVolume(pSolid,pMaterial,name,pFieldMgr,pSDetector,pULimits,optimise)
 {
-   SetMillerOrientation(h, k, l, rot);
-   fLCVvec.push_back(this);
+  SetMillerOrientation(h, k, l, rot);
+  fLCVvec.push_back(this);
 }
 
 // --------------------------------------------------------------------
 
 G4LogicalCrystalVolume::~G4LogicalCrystalVolume()
 {
-   fLCVvec.erase( std::remove(fLCVvec.begin(),fLCVvec.end(), this ),
-                  fLCVvec.end() );
+  fLCVvec.erase( std::remove(fLCVvec.begin(),fLCVvec.end(), this ),
+                 fLCVvec.end() );
 }
 
 // --------------------------------------------------------------------
@@ -73,7 +68,8 @@ G4bool G4LogicalCrystalVolume::IsLattice(G4LogicalVolume* aLV)
 
 const G4CrystalExtension* G4LogicalCrystalVolume::GetCrystal() const
 {
-  return dynamic_cast<G4CrystalExtension*>(dynamic_cast<G4ExtendedMaterial*>(GetMaterial())
+  return dynamic_cast<G4CrystalExtension*>(
+         dynamic_cast<G4ExtendedMaterial*>(GetMaterial() )
                                 ->RetrieveExtension("crystal"));
 }				
 

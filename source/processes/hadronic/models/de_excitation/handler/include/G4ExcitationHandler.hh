@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
 //
@@ -53,12 +52,12 @@
 #include "G4ReactionProductVector.hh"
 #include "G4IonTable.hh"
 #include "G4DeexPrecoParameters.hh"
+#include "G4NistManager.hh"
 
 class G4VMultiFragmentation;
 class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
-class G4NistManager;
 
 class G4ExcitationHandler 
 {
@@ -91,10 +90,10 @@ public:
   inline void SetMinEForMultiFrag(G4double anE);
 
   // access methods
-  inline G4VEvaporation* GetEvaporation();
-  inline G4VMultiFragmentation* GetMultiFragmentation();
-  inline G4VFermiBreakUp* GetFermiModel();
-  inline G4VEvaporationChannel* GetPhotonEvaporation();
+  G4VEvaporation* GetEvaporation();
+  G4VMultiFragmentation* GetMultiFragmentation();
+  G4VFermiBreakUp* GetFermiModel();
+  G4VEvaporationChannel* GetPhotonEvaporation();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt);
@@ -107,6 +106,8 @@ private:
 
   void SetParameters();
 
+  inline void SortSecondaryFragment(G4Fragment*);
+
   G4ExcitationHandler(const G4ExcitationHandler &right);
   const G4ExcitationHandler & operator
   =(const G4ExcitationHandler &right);
@@ -117,19 +118,29 @@ private:
   G4VMultiFragmentation* theMultiFragmentation;
   G4VFermiBreakUp* theFermiModel;
   G4VEvaporationChannel* thePhotonEvaporation;
+  G4IonTable* theTableOfIons;
+  G4NistManager* nist;
 
-  const G4ParticleDefinition* electron;
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* theNeutron;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theDeuteron;
+  const G4ParticleDefinition* theTriton;
+  const G4ParticleDefinition* theHe3;
+  const G4ParticleDefinition* theAlpha;
+
   G4int icID;
 
   G4int maxZForFermiBreakUp;
   G4int maxAForFermiBreakUp;
-  G4double minEForMultiFrag;
-  G4double minExcitation;
-
-  G4IonTable* theTableOfIons;
-  G4NistManager* nist;
 
   G4int  fVerbose;
+  G4int  fWarnings;
+
+  G4double minEForMultiFrag;
+  G4double minExcitation;
+  G4double maxExcitation;
+
   G4bool isInitialised;
   G4bool isEvapLocal;
   G4bool isActive;
@@ -139,9 +150,6 @@ private:
 
   // list of fragments to store intermediate result   
   std::vector<G4Fragment*> results;
-
-  // list of fragments to apply PhotonEvaporation 
-  std::vector<G4Fragment*> thePhotoEvapList;
 
   // list of fragments to apply Evaporation or Fermi Break-Up
   std::vector<G4Fragment*> theEvapList;          
@@ -168,30 +176,33 @@ inline void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
   minEForMultiFrag = anE;
 }
 
-inline G4VEvaporation* G4ExcitationHandler::GetEvaporation()
-{
-  return theEvaporation;
-}
-
-inline G4VMultiFragmentation* G4ExcitationHandler::GetMultiFragmentation()
-{
-  return theMultiFragmentation;
-}
-
-inline G4VFermiBreakUp* G4ExcitationHandler::GetFermiModel()
-{
-  return theFermiModel;
-}
-
-inline G4VEvaporationChannel* G4ExcitationHandler::GetPhotonEvaporation()
-{
-  return thePhotonEvaporation;
-}
-
 inline void G4ExcitationHandler::SetOPTxs(G4int) 
 {}
 
 inline void G4ExcitationHandler::UseSICB()
 {}
+
+inline void G4ExcitationHandler::SortSecondaryFragment(G4Fragment* frag)
+{ 
+  G4int A = frag->GetA_asInt();  
+
+  // gamma, e-, p, n
+  if(A <= 1) { 
+    theResults.push_back(frag); 
+  } else if(frag->GetExcitationEnergy() < minExcitation) {
+    // cold fragments
+    G4int Z = frag->GetZ_asInt(); 
+       
+    // is stable or d, t, He3, He4
+    if(nist->GetIsotopeAbundance(Z, A) > 0.0 || (A == 3 && (Z == 1 || Z == 2)) ) {
+      theResults.push_back(frag); // stable fragment 
+    } else {
+      theEvapList.push_back(frag);
+    }
+    // hot fragments are unstable
+  } else { 
+    theEvapList.push_back(frag);  
+  }
+}
 
 #endif

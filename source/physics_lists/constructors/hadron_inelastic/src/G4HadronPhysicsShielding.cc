@@ -33,6 +33,8 @@
 //
 // Modified:
 //
+// 2019.08.01 A.Ribon replaced explicit numbers for the energy transition
+//                    region with values taken from G4HadronicParameters
 // 2014.08.05 K.L.Genser added provisions for modifing the Bertini to
 //            FTF transition energy region
 //
@@ -107,8 +109,8 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     :  G4VPhysicsConstructor("hInelastic Shielding")
     , useLEND_(false)
     , evaluation_()
-    , minFTFPEnergy_(9.5*GeV)
-    , maxBertiniEnergy_(9.9*GeV)
+    , minFTFPEnergy_(G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade())
+    , maxBertiniEnergy_(G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade())
     , minNonHPNeutronEnergy_(19.9*MeV)
 {}
 
@@ -116,8 +118,8 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
     :  G4VPhysicsConstructor(name) 
     , useLEND_(false)
     , evaluation_()
-    , minFTFPEnergy_(9.5*GeV)
-    , maxBertiniEnergy_(9.9*GeV)
+    , minFTFPEnergy_(G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade())
+    , maxBertiniEnergy_(G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade())
     , minNonHPNeutronEnergy_(19.9*MeV)
 {}
 

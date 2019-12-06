@@ -41,8 +41,6 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
@@ -156,14 +154,6 @@ void G4HadronPhysicsQGSP_BIC_AllHP::ConstructProcess()
   tpdata->theNeutrons->Build();
   tpdata->thePro->Build();
   tpdata->thePiK->Build();
-
-  // --- Kaons ---
-  G4VCrossSectionDataSet * kaonxs = 
-    new G4CrossSectionInelastic(new G4ComponentGGHadronNucleusXsc());
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
 
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();

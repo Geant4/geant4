@@ -23,11 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4EllipticalTube
 //
 // Class description:
@@ -42,16 +37,22 @@
 //
 //   The equation of the lateral surface : (x/dx)^2 + (y/dy)^2 = 1
 
-// First implementation:
-//   David C. Williams (davidw@scipp.ucsc.edu)
-//
-// Revision:
-//   Evgueni Tcherniaev (evgueni.tcherniaev@cern.ch), 23.12.2019
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Revision: Evgueni Tcherniaev (evgueni.tcherniaev@cern.ch), 23.12.2019
 // --------------------------------------------------------------------
+#ifndef G4ELLIPTICALTUBE_HH
+#define G4ELLIPTICALTUBE_HH
 
-#ifndef G4EllipticalTube_hh
-#define G4EllipticalTube_hh
+#include "G4GeomTypes.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UELLIPTICALTUBE 1
+#endif
+
+#if (defined(G4GEOM_USE_UELLIPTICALTUBE) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UEllipticalTube G4EllipticalTube
+  #include "G4UEllipticalTube.hh"
+#else
 
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
@@ -60,7 +61,7 @@ class G4EllipticalTube : public G4VSolid
 {
   public:  // with description
 
-    G4EllipticalTube( const G4String &name,
+    G4EllipticalTube( const G4String& name,
                             G4double Dx,
                             G4double Dy,
                             G4double Dz );
@@ -87,9 +88,9 @@ class G4EllipticalTube : public G4VSolid
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
-                            const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0 ) const;
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
@@ -152,8 +153,8 @@ class G4EllipticalTube : public G4VSolid
     G4double fDy; // semi-axis in Y
     G4double fDz; // half length in Z
 
-    G4double fCubicVolume; // volume
-    G4double fSurfaceArea; // surface area  
+    G4double fCubicVolume = 0.0; // volume
+    G4double fSurfaceArea = 0.0; // surface area  
 
     // Cached pre-calculated values
     G4double fRsph;    // R of bounding sphere
@@ -166,10 +167,12 @@ class G4EllipticalTube : public G4VSolid
     G4double fQ2;      // distance approximation : dist = Q1*(x^2 + y^2) - Q2
     G4double fScratch; // half length of scratching segment squared
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 #include "G4EllipticalTube.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UELLIPTICALTUBE) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+#endif // G4ELLIPTICALTUBE_HH

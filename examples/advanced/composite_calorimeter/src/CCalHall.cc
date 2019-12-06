@@ -41,14 +41,14 @@ CCalHall::CCalHall(const G4String &name): CCalDetector(name) {}
 
 CCalHall::~CCalHall() {}
 
-int CCalHall::readFile() {
+G4int CCalHall::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
   G4cout << " ==> Opening file " << File() << " to read elements..."
        << G4endl;
 
   std::ifstream is;
-  bool ok = openGeomFile(is, pathName, File());
+  G4bool ok = openGeomFile(is, pathName, File());
   if (!ok)
     return 0;
 

@@ -40,15 +40,12 @@
 #define G4NuMuNucleusNcModel_h 1
  
 #include "globals.hh"
-#include "G4HadronicInteraction.hh"
+#include "G4NeutrinoNucleusModel.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
 #include "G4LorentzVector.hh"
 #include "G4Threading.hh"
-
-using namespace std;
-using namespace CLHEP;
 
 class G4ParticleDefinition;
 class G4VPreCompoundModel;
@@ -60,7 +57,7 @@ class G4ExcitedStringDecay;
 class G4INCLXXInterface;
 class G4Nucleus;
 
-class G4NuMuNucleusNcModel : public G4HadronicInteraction
+class G4NuMuNucleusNcModel : public G4NeutrinoNucleusModel
 {
 public:
 
@@ -86,103 +83,23 @@ public:
   G4double SampleQkr(G4double energy, G4double xx);
   G4double GetQkr(G4int iE, G4int jX, G4double prob);
 
-
-  //////// fragmentation functions /////////////////////////
-
-  void ClusterDecay( G4LorentzVector & lvX, G4int qX);
-
-  void MesonDecay( G4LorentzVector & lvX, G4int qX);
-
-  void FinalBarion( G4LorentzVector & lvB, G4int qB, G4int pdgB);
-
-  void FinalMeson( G4LorentzVector & lvM, G4int qM, G4int pdgM);
-
-  void CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4Nucleus & targetNucleus);
-
-
-  // set/get class fields
-
-  void SetCutEnergy(G4double ec){fCutEnergy=ec;};
-  G4double GetCutEnergy(){return fCutEnergy;};
-
-  G4double GetNuEnergy(){return fNuEnergy;};
-  G4double GetQtransfer(){return fQtransfer;};
-  G4double GetQ2(){return fQ2;};
-  G4double GetXsample(){return fXsample;};
-
-  G4int    GetPDGencoding(){return fPDGencoding;};
-  G4bool   GetCascade(){return fCascade;};
-  G4bool   GetString(){return fString;};
-
-  G4double GetCosTheta(){return fCosTheta;};
-  G4double GetEmu(){return fEmu;};
-  G4double GetEx(){return fEx;};
-  G4double GetNuMuMass(){return fMnumu;};
-  G4double GetW2(){return fW2;};
-  G4double GetM1(){return fM1;};
-  G4double GetMr(){return fMr;};
-  G4double GetTr(){return fTr;};
-  G4double GetDp(){return fDp;};
-
-  G4LorentzVector GetLVl(){return fLVl;};
-  G4LorentzVector GetLVh(){return fLVh;};
-  G4LorentzVector GetLVt(){return fLVt;};
-  G4LorentzVector GetLVcpi(){return fLVcpi;};
-
-  G4double GetMinNuMuEnergy(){ return fMnumu + 0.5*fMnumu*fMnumu/fM1 + 4.*keV; }; // kinematics + accuracy for sqrts
+  G4double GetMinNuMuEnergy(){ return fMnumu + 0.5*fMnumu*fMnumu/fM1 + 4.*CLHEP::keV; }; // kinematics + accuracy for sqrts
 
   G4double ThresholdEnergy(G4double mI, G4double mF, G4double mP) // for cluster decay
   { 
-    G4double w = sqrt(fW2);
+    G4double w = std::sqrt(fW2);
     return w + 0.5*( (mP+mF)*(mP+mF)-(w+mI)*(w+mI) )/mI;
   };
-  G4double FinalMomentum(G4double mI, G4double mF, G4double mP, G4LorentzVector lvX); // for cluster decay
-
-  // nucleon binding
-
-  G4double FermiMomentum( G4Nucleus & targetNucleus);
-  G4double NucleonMomentum( G4Nucleus & targetNucleus);
-
-  G4int    GetEnergyIndex(G4double energy);
-  G4double GetNuMuQeTotRat(G4int index, G4double energy);
-
-  G4int    GetOnePionIndex(G4double energy);
-  G4double GetNuMuOnePionProb(G4int index, G4double energy);
-  
+ 
   virtual void ModelDescription(std::ostream&) const;
 
 private:
 
   G4ParticleDefinition* theNuMu;
   G4ParticleDefinition* theANuMu;
- 
-  G4double fSin2tW;    // sin^2theta_Weinberg
-  G4double fCutEnergy; // minimal recoil electron energy detected
 
-  G4int fNbin, fIndex, fEindex, fXindex, fOnePionIndex, fPDGencoding;
-  G4bool fCascade, fString, fProton, f2p2h, fBreak;
+  G4double  fMnumu; // = 0 for <f|-state
 
-  G4double fNuEnergy, fQ2, fQtransfer, fXsample;
-
-  G4double fM1, fM2, fMt, fMnumu, fW2,  fMpi, fW2pi, fMinNuEnergy, fDp, fTr;
-
-  G4double fEmu, fEmuPi, fEx, fMr, fCosTheta, fCosThetaPi; // final lepton
-
-  G4LorentzVector fLVh, fLVl, fLVt, fLVcpi;
-  /*
-  G4VPreCompoundModel* fPrecoModel;
-
-  G4TheoFSGenerator*         theFTFP;
-  G4TheoFSGenerator*         theQGSP;
-
-  G4LundStringFragmentation* theFragmentation;
-  G4ExcitedStringDecay*      theStringDecay;
-
-  G4CascadeInterface*        theBertini;
-  G4BinaryCascade*           theBinary;
-  G4INCLXXInterface*         theINCLXX;
-*/
-  G4Nucleus* fRecoil;
 
   static const G4int fResNumber;
   static const G4double fResMass[6]; // [fResNumber];
@@ -207,12 +124,7 @@ private:
 
   static const G4double fNuMuResQ[50][50];
   
-
-  static const G4double fNuMuEnergy[50];
-  static const G4double fNuMuQeTotRat[50];
-  static const G4double fOnePionEnergy[58];
-  static const G4double fOnePionProb[58];
-  
+ 
   G4bool fData, fMaster; // for one initialisation only
 
 #ifdef G4MULTITHREADED

@@ -2,7 +2,6 @@
 /testem/det/setMat Copper
 #
 /process/eLoss/verbose 0
-/process/eLoss/CSDARange true
 /process/eLoss/maxKinEnergyCSDA 100 TeV
 /process/em/printParameters
 #

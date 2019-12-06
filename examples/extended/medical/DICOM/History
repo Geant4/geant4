@@ -6,6 +6,17 @@
 
                       Category History file
 
+19.11.2019 - Gabriele Cosmo (DICOM-V10-05-03)
+             Fixed more cases of implicit type conversions.
+             Some minor code cleanup.
+
+15.11.2019 - Gabriele Cosmo (DICOM-V10-05-02)
+             Fixed cases of implicit type conversions from size_t to G4int.
+
+12.11.2019 - Gunter Folger (DICOM-V10-05-01)
+             Correct DicomHandler singleton for use on Windows.
+	     DICOM2 was crashing 
+	     
 08.06.2019 - Gabriele Cosmo (DICOM-V10-05-00)
              Defaulted copy-ctr in DicomPhantomZSliceHeader, to fix deprecation
              compilation warnings on gcc-9.1.

@@ -23,23 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// 
 // G4UCutTubs
 //
 // Class description:
 //
-//   Wrapper class for G4CutTubs to make use of VecGeom CutTube.
+// Wrapper class for G4CutTubs to make use of VecGeom CutTube.
 
-// History:
 // 07.07.17 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
-
 #ifndef G4UCUTTUBS_HH
 #define G4UCUTTUBS_HH
 

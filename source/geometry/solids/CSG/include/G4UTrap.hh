@@ -23,23 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// 
 // G4UTrap
 //
 // Class description:
 //
-//   Wrapper class for G4Trap to make use of VecGeom Trapezoid.
+// Wrapper class for G4Trap to make use of VecGeom Trapezoid.
 
-// History:
 // 13.09.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
-#ifndef G4UTrap_HH
-#define G4UTrap_HH
+#ifndef G4UTRAP_HH
+#define G4UTRAP_HH
 
 #include "G4UAdapter.hh"
 

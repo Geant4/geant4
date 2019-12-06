@@ -4,9 +4,8 @@
 #ifndef tools_sg_style_parser
 #define tools_sg_style_parser
 
-#include "lpat"
+#include "senum"
 #include "strings"
-#include "enums"
 #include "style_colormap"
 
 #include "../mathf"
@@ -27,9 +26,13 @@ public:
   :m_color(0,0,0)
   ,m_highlight_color(0,0,0)
   ,m_back_color(1,1,1)
+  ,m_width(1)
   ,m_line_width(1)
   ,m_marker_size(1)
+  ,m_point_size(1)
   ,m_font_size(10)
+  ,m_font_modeling(font_filled)
+  ,m_pattern(line_solid)
   ,m_line_pattern(line_solid)
   ,m_marker_style(marker_dot)
   ,m_area_style(area_solid)
@@ -39,7 +42,7 @@ public:
   ,m_encoding(encoding_none())
   ,m_smoothing(false)
   ,m_hinting(false)
-  ,m_cut("")
+  ,m_cut()
   ,m_painting(painting_uniform)
   ,m_hatching(hatching_none)
   ,m_projection(projection_none)
@@ -58,13 +61,17 @@ public:
   ,m_bar_width(0.5F)
   ,m_editable(false)
   ,m_automated(true)
-  ,m_options("")
-  ,m_color_mapping("")
+  ,m_options()
+  ,m_color_mapping()
   ,m_enforced(false)
   ,m_translation(0,0,0)
   ,m_front_face(winding_ccw)  
   ,m_hjust(left)
   ,m_vjust(bottom)
+  ,m_coloring()
+  ,m_filling()
+  ,m_title()
+  ,m_pickable(false)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -81,9 +88,13 @@ public:
   :m_color(a_from.m_color)
   ,m_highlight_color(a_from.m_highlight_color)
   ,m_back_color(a_from.m_back_color)
+  ,m_width(a_from.m_width)
   ,m_line_width(a_from.m_line_width)
   ,m_marker_size(a_from.m_marker_size)
+  ,m_point_size(a_from.m_point_size)
   ,m_font_size(a_from.m_font_size)
+  ,m_font_modeling(a_from.m_font_modeling)
+  ,m_pattern(a_from.m_pattern)
   ,m_line_pattern(a_from.m_line_pattern)
   ,m_marker_style(a_from.m_marker_style)
   ,m_area_style(a_from.m_area_style)
@@ -119,6 +130,10 @@ public:
   ,m_front_face(a_from.m_front_face)
   ,m_hjust(a_from.m_hjust)
   ,m_vjust(a_from.m_vjust)
+  ,m_coloring(a_from.m_coloring)
+  ,m_filling(a_from.m_filling)
+  ,m_title(a_from.m_title)
+  ,m_pickable(a_from.m_pickable)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -136,13 +151,17 @@ public:
     m_color = a_from.m_color;
     m_highlight_color = a_from.m_highlight_color;
     m_back_color = a_from.m_back_color;
+    m_width = a_from.m_width;
     m_line_width = a_from.m_line_width;
     m_marker_size = a_from.m_marker_size;
+    m_point_size = a_from.m_point_size;
     m_font_size = a_from.m_font_size;
+    m_font_modeling = a_from.m_font_modeling;
+    m_pattern = a_from.m_pattern;
     m_line_pattern = a_from.m_line_pattern;
     m_marker_style = a_from.m_marker_style;
     m_area_style = a_from.m_area_style;
-    m_modeling  = a_from.m_modeling ;
+    m_modeling  = a_from.m_modeling;
     m_light_model = a_from.m_light_model;
     m_tick_modeling = a_from.m_tick_modeling;
     m_encoding = a_from.m_encoding;
@@ -174,12 +193,20 @@ public:
     m_front_face = a_from.m_front_face;
     m_hjust = a_from.m_hjust;
     m_vjust = a_from.m_vjust;
+    m_coloring  = a_from.m_coloring;
+    m_filling  = a_from.m_filling;
+    m_title  = a_from.m_title;
+    m_pickable  = a_from.m_pickable;
   }
 
   bool equal(const style_parser& a_from){
+    if(m_width!=a_from.m_width) return false;
     if(m_line_width!=a_from.m_line_width) return false;
     if(m_marker_size!=a_from.m_marker_size) return false;
+    if(m_point_size!=a_from.m_point_size) return false;
     if(m_font_size!=a_from.m_font_size) return false;
+    if(m_font_modeling!=a_from.m_font_modeling) return false;
+    if(m_pattern!=a_from.m_pattern) return false;
     if(m_line_pattern!=a_from.m_line_pattern) return false;
     if(m_marker_style!=a_from.m_marker_style) return false;
     if(m_area_style!=a_from.m_area_style) return false;
@@ -210,7 +237,7 @@ public:
     if(m_back_color!=a_from.m_back_color) return false;
   
     //std::string
-    if(m_modeling !=a_from.m_modeling ) return false;
+    if(m_modeling!=a_from.m_modeling) return false;
     if(m_light_model!=a_from.m_light_model) return false;
     if(m_tick_modeling!=a_from.m_tick_modeling) return false;
     if(m_encoding!=a_from.m_encoding) return false;
@@ -226,6 +253,11 @@ public:
     if(m_hjust!=a_from.m_hjust) return false;
     if(m_vjust!=a_from.m_vjust) return false;
 
+    if(m_coloring!=a_from.m_coloring) return false;
+    if(m_filling!=a_from.m_filling) return false;
+    if(m_title!=a_from.m_title) return false;
+    if(m_pickable!=a_from.m_pickable) return false;
+    
     return true;
   }
 
@@ -233,9 +265,13 @@ public:
     m_color = colorf_black();
     m_highlight_color = colorf_lightgrey();
     m_back_color = colorf_white();
+    m_width = 1;
     m_line_width = 1;
     m_marker_size = 1;
+    m_point_size = 1;
     m_font_size = 10;
+    m_font_modeling = font_filled;
+    m_pattern = line_solid;
     m_line_pattern = line_solid;
     m_marker_style = marker_dot;
     m_area_style = area_solid;
@@ -271,17 +307,24 @@ public:
     m_front_face = winding_ccw;
     m_hjust = left;
     m_vjust = bottom;
+    m_coloring = "";
+    m_filling = "";
+    m_title = "";
+    m_pickable = false;
   }
 
   std::string tos() const{
-    char ss[23 * 32];
+    char ss[40 * 32];
     snpf(ss,sizeof(ss),
 "color %g %g %g\n\
 highlight_color %g %g %g\n\
 back_color %g %g %g\n\
+width %g\n\
 line_width %g\n\
 marker_size %g\n\
+point_size %g\n\
 font_size %g\n\
+pattern %x\n\
 line_pattern %x\n\
 multi_node_limit %d\n\
 back_shadow %g\n\
@@ -298,9 +341,12 @@ translation %g %g %g"
     ,m_color[0],m_color[1],m_color[2]
     ,m_highlight_color[0],m_highlight_color[1],m_highlight_color[2]
     ,m_back_color[0],m_back_color[1],m_back_color[2]
+    ,m_width
     ,m_line_width
     ,m_marker_size
+    ,m_point_size
     ,m_font_size
+    ,m_pattern
     ,m_line_pattern
     ,m_multi_node_limit
     ,m_back_shadow
@@ -343,6 +389,10 @@ translation %g %g %g"
     s += (m_automated?"true":"false");
 
     s += lf;  
+    s += "pickable ";
+    s += (m_pickable?"true":"false");
+
+    s += lf;  
     s += "marker_style ";
     s += smarker_style(m_marker_style);
 
@@ -352,7 +402,19 @@ translation %g %g %g"
 
     s += lf;
     s += "modeling ";
-    s += m_modeling ;
+    s += m_modeling;
+
+    s += lf;
+    s += "coloring ";
+    s += m_coloring;
+
+    s += lf;
+    s += "filling ";
+    s += m_filling;
+
+    s += lf;
+    s += "title ";
+    s += m_title;
 
     s += lf;
     s += "light_model ";
@@ -386,6 +448,20 @@ translation %g %g %g"
     s += "font ";
     s += m_font;
 
+    if(m_font_modeling==font_outline) {
+      s += lf;
+      s += "font_modeling ";
+      s += s_font_outline();
+    } else if(m_font_modeling==font_filled)  {
+      s += lf;
+      s += "font_modeling ";
+      s += s_font_filled();
+    } else if(m_font_modeling==font_pixmap)  {
+      s += lf;
+      s += "font_modeling ";
+      s += s_font_pixmap();
+    }
+
     s += lf;
     s += "options ";
     s += m_options;
@@ -418,6 +494,9 @@ translation %g %g %g"
   void back_color(const colorf& a_v){m_back_color = a_v;}
   colorf back_color() const {return m_back_color;}
 
+  void width(float a_v){m_width = a_v;}
+  float width() const {return m_width;}
+
   void line_width(float a_v){m_line_width = a_v;}
   float line_width() const {return m_line_width;}
 
@@ -430,8 +509,14 @@ translation %g %g %g"
   void marker_size(float a_v){m_marker_size = a_v;}
   float marker_size() const {return m_marker_size;}
 
+  void point_size(float a_v){m_point_size = a_v;}
+  float point_size() const {return m_point_size;}
+
   void font_size(float a_v){m_font_size = a_v;}
   float font_size() const {return m_font_size;}
+
+  void font_modeling(sg::font_modeling a_v){m_font_modeling = a_v;}
+  sg::font_modeling font_modeling() const {return m_font_modeling;}
 
   void area_style(sg::area_style a_v){m_area_style = a_v;}
   sg::area_style area_style() const {return m_area_style;}
@@ -462,6 +547,9 @@ translation %g %g %g"
 
   sg::projection_type projection() const {return m_projection;}
   void projection(sg::projection_type a_v){m_projection = a_v;}
+
+  void pattern(lpat a_v){m_pattern = a_v;}
+  lpat pattern() const {return m_pattern;}
 
   void line_pattern(lpat a_v){m_line_pattern = a_v;}
   lpat line_pattern() const {return m_line_pattern;}
@@ -531,331 +619,21 @@ translation %g %g %g"
 
   void vjust(sg::vjust a_v){m_vjust = a_v;}
   sg::vjust vjust() const {return m_vjust;}
-public:
-  static bool scolor(const colorf& a_col,std::string& a_s){
-    char s[256];
-    snpf(s,sizeof(s),"%g %g %g",a_col[0],a_col[1],a_col[2]);
-    a_s = s;
-    return true;
-  }
 
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-private:
-  typedef struct {char string[32];sg::hjust value;} hjust_rec;
-  static const hjust_rec* hjust_recs(unsigned int& a_num){
-    static const hjust_rec list[] = { //read only static, then ok.
-      {"left",     sg::left},
-      {"center",   sg::center},
-      {"right",    sg::right}
-    };  
-    a_num = sizeof(list)/sizeof(list[0]);
-    return list;
-  }
-public:
-  static bool shjust(const std::string& a_s,sg::hjust& a_v){
-    unsigned int number;
-    const hjust_rec* list = hjust_recs(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_s==list[count].string) {
-        a_v = list[count].value;
-        return true;
-      }
-    }
-    a_v = sg::left;
-    return false;
-  }
-  static const char* shjust(sg::hjust a_v){
-    unsigned int number;
-    const hjust_rec* list = hjust_recs(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_v==list[count].value) return list[count].string;
-    }
-    return 0;
-  }
+  void coloring(const std::string& a_v){m_coloring  = a_v;}
+  const std::string& coloring() const {return m_coloring;}
 
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-private:
-  typedef struct {char string[32];sg::vjust value;} vjust_rec;
-  static const vjust_rec* vjust_recs(unsigned int& a_num){
-    static const vjust_rec list[] = { //read only static, then ok.
-      {"bottom",   sg::bottom},
-      {"middle",   sg::middle},
-      {"top",      sg::top}
-    };  
-    a_num = sizeof(list)/sizeof(list[0]);
-    return list;
-  }
-public:
-  static bool svjust(const std::string& a_s,sg::vjust& a_v){
-    unsigned int number;
-    const vjust_rec* list = vjust_recs(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_s==list[count].string) {
-        a_v = list[count].value;
-        return true;
-      }
-    }
-    a_v = sg::bottom;
-    return false;
-  }
-  static const char* svjust(sg::vjust a_v){
-    unsigned int number;
-    const vjust_rec* list = vjust_recs(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_v==list[count].value) return list[count].string;
-    }
-    return 0;
-  }
+  void filling(const std::string& a_v){m_filling  = a_v;}
+  const std::string& filling() const {return m_filling;}
 
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-private:
-  typedef struct {char string[32];sg::marker_style value;} MarkerStyle;
-  static const MarkerStyle* getMarkerStyleList(unsigned int& a_num){
-    static const MarkerStyle list[] = { //read only static, then ok.
-      {"dot",         marker_dot},
-      {"plus",        marker_plus},
-      {"asterisk",    marker_asterisk},
-      {"cross",       marker_cross},
-      {"star",        marker_star},
-      {"circle_line",         marker_circle_line},
-      {"circle_filled",       marker_circle_filled},
-      {"triangle_up_line",    marker_triangle_up_line},
-      {"triangle_up_filled",  marker_triangle_up_filled},
-      {"triangle_down_line",  marker_triangle_down_line},
-      {"triangle_down_filled",marker_triangle_down_filled},
-      {"david_star_line",     marker_david_star_line},
-      {"david_star_filled",   marker_david_star_filled},
-      {"swiss_cross_line",    marker_swiss_cross_line},
-      {"swiss_cross_filled",  marker_swiss_cross_filled},
-      {"diamond_line",        marker_diamond_line},
-      {"diamond_filled",      marker_diamond_filled},
-      {"square_line",         marker_square_line},
-      {"square_filled",       marker_square_filled},
-      {"penta_star_line",     marker_penta_star_line},
-      {"penta_star_filled",   marker_penta_star_filled},
-      {"minus",               marker_minus}
-    };  
-    a_num = sizeof(list)/sizeof(list[0]);
-    return list;
-  }
-public:
-  static bool smarker_style(const std::string& a_s,sg::marker_style& a_v){
-    unsigned int number;
-    const MarkerStyle* list = getMarkerStyleList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_s==list[count].string) {
-        a_v = list[count].value;
-        return true;
-      }
-    }
-    a_v = marker_dot;
-    return false;
-  }
-  static const char* smarker_style(sg::marker_style a_v){
-    unsigned int number;
-    const MarkerStyle* list = getMarkerStyleList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_v==list[count].value) return list[count].string;
-    }
-    return 0;
-  }
+  void title(const std::string& a_v){m_title  = a_v;}
+  const std::string& title() const {return m_title;}
 
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-private:
-  typedef struct {char string[16];sg::area_style value;} AreaStyle;
-  static const AreaStyle* getAreaStyleList(unsigned int& a_num){
-    static const AreaStyle list[] = { //read only static, then ok.
-      {"solid",         area_solid},
-      {"hatched",       area_hatched},
-      {"checker",       area_checker},
-      {"edged",         area_edged}
-    };  
-    a_num = sizeof(list)/sizeof(list[0]);
-    return list;
-  }
-public:
-  static bool sarea_style(const std::string& a_s,sg::area_style& a_v){
-    unsigned int number;
-    const AreaStyle* list = getAreaStyleList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_s==list[count].string) {
-        a_v = list[count].value;
-        return true;  
-      }
-    }
-    a_v = area_solid;
-    return false;
-  }
-  static const char* sarea_style(sg::area_style a_v){
-    unsigned int number;
-    const AreaStyle* list = getAreaStyleList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_v==list[count].value) return list[count].string;
-    }
-    return 0;
-  }
+  void pickable(bool a_v){m_pickable  = a_v;}
+  bool pickable() const {return m_pickable;}
 
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-private:
-  typedef struct {char string[20];sg::painting_policy value;} PaintingPolicy;
-  static const PaintingPolicy* getPaintingPolicyList(unsigned int& a_num){
-    static const PaintingPolicy list[] = { //read only static, then ok.
-      {"uniform",      painting_uniform},
-      {"by_value",     painting_by_value},
-      {"by_level",     painting_by_level},
-      {"grey_scale",   painting_grey_scale},
-      {"violet_to_red",painting_violet_to_red},
-      {"grey_scale_inverse",painting_grey_scale_inverse}
-    };  
-    a_num = sizeof(list)/sizeof(list[0]);
-    return list;
-  }  
-public:
-  static void spainting_policies(std::vector<std::string>& a_v){
-    a_v.clear();
-    unsigned int number;
-    const PaintingPolicy* list = getPaintingPolicyList(number);
-    for(unsigned int count=0;count<number;count++) {
-      a_v.push_back(list[count].string);
-    }
-  }
-
-  static bool spainting_policy(const std::string& a_s,
-                                      sg::painting_policy& a_v){
-    unsigned int number;
-    const PaintingPolicy* list = getPaintingPolicyList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_s==list[count].string) {
-        a_v = list[count].value;
-        return true;
-      }
-    }
-    a_v = painting_uniform;
-    return false;
-  }
-  static const char* spainting_policy(sg::painting_policy a_v){
-    unsigned int number;
-    const PaintingPolicy* list = getPaintingPolicyList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_v==list[count].value) return list[count].string;
-    }
-    return 0;
-  }
-
-
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-private:
-  typedef struct {char string[16];sg::hatching_policy value;} HatchingPolicy;
-  static const HatchingPolicy* getHatchingPolicyList(unsigned int& a_num){
-    static const HatchingPolicy list[] = { //read only static, then ok.
-      {"none",           hatching_none},
-      {"right",          hatching_right},
-      {"left",           hatching_left},
-      {"left_and_right", hatching_left_and_right}
-    };  
-    a_num = sizeof(list)/sizeof(list[0]);
-    return list;
-  }
-public:
-  static bool shatching_policy(const std::string& a_s,
-                                      sg::hatching_policy& a_v){
-    unsigned int number;
-    const HatchingPolicy* list = getHatchingPolicyList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_s==list[count].string) {
-        a_v = list[count].value;
-        return true;
-      }
-    }
-    a_v = hatching_none;
-    return false;
-  }
-
-  static const char* shatching_policy(sg::hatching_policy a_v){
-    unsigned int number;
-    const HatchingPolicy* list = getHatchingPolicyList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_v==list[count].value) return list[count].string;
-    }
-    return 0;
-  }
-
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-private:
-  typedef struct {char string[16];sg::projection_type value;} ProjectionType;
-  static const ProjectionType* getProjectionTypeList(unsigned int& a_num){
-    static const ProjectionType list[] = { //read only static, then ok.
-      {"none",     projection_none},
-      {"rz",       projection_rz},
-      {"phiz",     projection_phiz},
-      {"zr",       projection_zr},
-      {"zphi",     projection_zphi}
-    };  
-    a_num = sizeof(list)/sizeof(list[0]);
-    return list;
-  }
-public:
-  static bool sprojection_type(const std::string& a_s,
-                                      sg::projection_type& a_v){
-    unsigned int number;
-    const ProjectionType* list = getProjectionTypeList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_s==list[count].string) {
-        a_v = list[count].value;
-        return true;
-      }
-    }
-    a_v = projection_none;
-    return false;
-  }
-  static const char* sprojection_type(sg::projection_type a_v){
-    unsigned int number;
-    const ProjectionType* list = getProjectionTypeList(number);
-    for(unsigned int count=0;count<number;count++) {
-      if(a_v==list[count].value) return list[count].string;
-    }
-    return 0;
-  }
-
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////
-  static bool sline_pattern(const std::string& a_s,lpat& aPattern){
-    if(a_s=="solid") {
-      aPattern = line_solid;
-    } else if(a_s=="dashed") {
-      aPattern = line_dashed;
-    } else if(a_s=="dotted") {
-      aPattern = line_dotted;
-    } else if(a_s=="dash_dotted") {
-      aPattern = line_dash_dotted;
-    } else {
-      aPattern = line_solid;
-      return false;
-    }
-    return true;
-  }
-
-  
-  ///////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////
-  bool parse(std::ostream& a_out,const cmaps_t& a_cmaps,
-                    const std::string& a_s){
+public:  
+  bool parse(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s){
     // a_s = list of "name value" separated by \n
     //::printf("debug : style_parser::parse : \"%s\"\n",a_s.c_str());
     std::vector<std::string> lines;
@@ -1168,7 +946,23 @@ public:
           return false;
         }
 
-      } else if( (word0=="line_pattern") || (word0=="line_pattern") ) {
+      } else if(word0=="pattern") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        const std::string& word1 = ws[1];
+        unsigned long ul;
+        if(!sline_pattern(word1,m_pattern)) {
+          if(!to_ulong(word1,ul)) {
+            a_out << "style_parser::parse :"
+                  << " in " << sout(a_s)
+                  << " : " << sout(word1)
+                  << " not a line pattern."
+                  << std::endl;
+            return false;
+          }
+          m_pattern = (lpat)ul;
+        }
+	
+      } else if(word0=="line_pattern") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         const std::string& word1 = ws[1];
         unsigned long ul;
@@ -1283,6 +1077,11 @@ public:
       } else if(word0=="font") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         font(ws[1]);
+      } else if(word0=="width") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_width = value;
       } else if(word0=="line_width") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         float value;
@@ -1293,11 +1092,29 @@ public:
         float value;
         if(!check_float(ws[1],a_s,a_out,value)) return false;
         m_marker_size = value;
+      } else if(word0=="point_size") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        float value;
+        if(!check_float(ws[1],a_s,a_out,value)) return false;
+        m_point_size = value;
       } else if(word0=="font_size") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         float value;
         if(!check_float(ws[1],a_s,a_out,value)) return false;
         m_font_size = value;
+      } else if(word0=="font_modeling") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+             if(ws[1]==s_font_outline()) m_font_modeling = font_outline;
+        else if(ws[1]==s_font_filled())  m_font_modeling = font_filled;
+        else if(ws[1]==s_font_pixmap())  m_font_modeling = font_pixmap;
+        else {
+          a_out << "style_parser::parse :"
+                << " in " << sout(a_s)
+                << " : " << sout(ws[1])
+                << " not a font_modeling."
+                << std::endl;
+          return false;
+        }
       } else if(word0=="back_shadow") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         float value;
@@ -1354,6 +1171,11 @@ public:
         bool value;
         if(!check_bool(ws[1],a_s,a_out,value)) return false;
         m_editable = value;
+      } else if(word0=="pickable") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        bool value;
+        if(!check_bool(ws[1],a_s,a_out,value)) return false;
+        m_pickable = value;
       } else if(word0=="automated") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         bool value;
@@ -1451,6 +1273,18 @@ public:
           return false;
         }
 
+      } else if(word0=="coloring") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_coloring  = ws[1];
+	
+      } else if(word0=="filling") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_filling  = ws[1];
+	
+      } else if(word0=="title") {
+        if(!check_2(wordn,a_s,line,a_out)) return false;
+        m_title  = ws[1];
+	
       } else {
         a_out << "style_parser::parse :"
               << " in " << sout(a_s)
@@ -1534,13 +1368,17 @@ protected:
   colorf m_color;
   colorf m_highlight_color;
   colorf m_back_color;
+  float m_width;
   float m_line_width;
   float m_marker_size;
+  float m_point_size;
   float m_font_size;
+  sg::font_modeling m_font_modeling;
+  lpat m_pattern;
   lpat m_line_pattern;
   sg::marker_style m_marker_style;
   sg::area_style m_area_style;
-  std::string m_modeling ; 
+  std::string m_modeling; 
   std::string m_light_model; 
   std::string m_tick_modeling; 
   std::string m_encoding; 
@@ -1572,6 +1410,10 @@ protected:
   winding_type m_front_face;
   sg::hjust m_hjust;
   sg::vjust m_vjust;
+  std::string m_coloring; 
+  std::string m_filling; 
+  std::string m_title; 
+  bool m_pickable; 
 };
 
 }}

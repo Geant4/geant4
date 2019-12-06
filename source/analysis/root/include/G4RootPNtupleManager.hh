@@ -81,7 +81,8 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
 
   public:
     explicit G4RootPNtupleManager(G4RootMainNtupleManager* main,
-                                  const G4AnalysisManagerState& state);
+                                  const G4AnalysisManagerState& state,
+                                  G4bool rowWise, G4bool rowMode);
     ~G4RootPNtupleManager();
 
   private:
@@ -147,6 +148,9 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     virtual G4int GetNofNtuples() const final;
     virtual G4int GetNofNtupleBookings() const final;
 
+    // Set methods
+    void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
+
   private:
     G4RootPNtupleDescription*  
       GetNtupleDescriptionInFunction(G4int id, G4String function, G4bool warn = true) const;
@@ -174,6 +178,8 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     G4RootMainNtupleManager*  fMainNtupleManager;
     std::vector<G4RootPNtupleDescription*> fNtupleDescriptionVector;
     std::vector<tools::wroot::imt_ntuple*> fNtupleVector;
+    G4bool fRowWise;
+    G4bool fRowMode;
 };
 
 // inline functions
@@ -349,4 +355,3 @@ G4bool G4RootPNtupleManager::FillNtupleTColumn(G4int columnId, const T& value) {
 }
 
 #endif
-

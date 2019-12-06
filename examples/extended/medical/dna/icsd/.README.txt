@@ -19,7 +19,9 @@ In addition, for this example using DNA-materials cross-sections, please cite: \
                                                                        
 The icsd name of this example stands for: Ionisation Cluster Size Distribution.
 This example allows the calculation of the distribution concerning the number of ionisations per event in an small cylinder of 2.3 nanometers diameter and 3.4 nanometers heigh, typical dimensions of a 10 base pairs piece of chromatin.
+
 It constitutes the first use of new DNA-like material's cross-sections that were experimentally obtained at PTB (Rad. Phys and Chem. 130 (2017) 459-479) for electrons and calculated for protons on THF, TMP, PY and PU materials.
+
 The new physical models corresponding to the DNA materials have recently been implemented in Geant4-DNA thaks to new classes, that allow the use of other materials different from liquid water: G4VDNAModel, G4DNAModelInterface,G4DNADummyModel and other associated classes.  
 
 These new models are further described at:
@@ -28,7 +30,9 @@ http://geant4-dna.org
 \section icsd_s2 GEOMETRY SET-UP AND PRIMARY PARTICLES
  
 As indicated in the introduction, the geometry used in this exercise is very simple: a cylinder of 2.3 nanometers diameter and 3.4 nanometers heigh, typical dimensions of a 10 base pairs piece of chromatin that is centered in a cubic world of 10 nanometers side length filled with liquid water.
+
 This cylinder is filled with THF material. The definition of the THF material must be done using the G4String="THF". Currently, other materials are available than also use the G4Strings to be recognized by the model classes "TMP", "PY" or "PU" for the DNA-like materials and "deoxyribose","adenine", "guanine", "thymine" or "cytosine" for the derived DNA materials. 
+
 Primary particles are electrons starting at (-1.15 nanometers, 0,0) (at the cylinder's edge) and initial momentum (1,0,0)
 
 \section icsd_s3 PHYSICS LIST

@@ -94,7 +94,8 @@ public:
   // Constructor giving a 3-Vector and a time component.
 
   inline HepLorentzVector(const HepLorentzVector &);
-  // Copy constructor.
+  inline HepLorentzVector(HepLorentzVector &&) = default;
+  // Copy and move constructors.
 
   inline ~HepLorentzVector();
   // The destructor.
@@ -153,7 +154,8 @@ public:
   // Set components by index.
 
   inline HepLorentzVector & operator = (const HepLorentzVector &);
-  // Assignment. 
+  inline HepLorentzVector & operator = (HepLorentzVector &&) = default;
+  // Copy and move assignment operators. 
 
   inline HepLorentzVector   operator +  (const HepLorentzVector &) const;
   inline HepLorentzVector & operator += (const HepLorentzVector &);

@@ -23,66 +23,69 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VDigitizerModule
 //
+// class description:
 //
+// This is the abstract base class of the digitizer module. The user's
+// digitizer module which generates digits must be derived from this
+// class.
+// In the derived class constructor, name(s) of digi collection(s) which
+// are made by the digitizer module must be set to "collectionName" string
+// vector.
 
-#ifndef G4VDigitizerModule_H
-#define G4VDigitizerModule_H 1
+// Author: M.Asai
+// --------------------------------------------------------------------
+#ifndef G4VDigitizerModule_hh
+#define G4VDigitizerModule_hh 1
+
+#include "globals.hh"
+#include <vector>
 
 class G4DigiManager;
 class G4VDigiCollection;
-#include "globals.hh"
-//#include "g4rw/tvordvec.h"
-#include <vector>
-
-// class description:
-//
-//  This is the abstract base class of the digitizer module. The user's
-// digitizer module which generates digits must be derived from this
-// class.
-//  In the derived class constructor, name(s) of digi collection(s) which
-// are made by the digitizer module must be set to "collectionName" string
-// vector.
 
 class G4VDigitizerModule
 {
   public: // with description
-    G4VDigitizerModule(G4String modName);
-    //  Constructor. The user's concrete class must use this constructor
+
+    G4VDigitizerModule(const G4String& modName);
+    // Constructor. The user's concrete class must use this constructor
     // by the constructor initializer of the derived class. The name of
     // the detector module must be unique.
-  public:
-    virtual ~G4VDigitizerModule();
-    G4bool operator==(const G4VDigitizerModule &right) const;
-    G4bool operator!=(const G4VDigitizerModule &right) const;
 
-  public: // with description
+    virtual ~G4VDigitizerModule();
+    G4bool operator==(const G4VDigitizerModule& right) const;
+    G4bool operator!=(const G4VDigitizerModule& right) const;
+
     virtual void Digitize() = 0;
     //  The pure virtual method that the derived class must implement.
     // In the concrete implementation of this method, necessary digi
     // collection object must be constructed and set to G4DCofThisEvent
     // by StoreDigiCollection protected method.
 
-  protected:
-    void StoreDigiCollection(G4VDigiCollection* aDC);
-    void StoreDigiCollection(G4int DCID,G4VDigiCollection* aDC);
-
-  protected:
-    G4DigiManager* DigiManager;
-    G4String moduleName;
-    std::vector<G4String> collectionName;
-    G4int verboseLevel;
-
   public:
+
     inline G4int GetNumberOfCollections() const
-    { return collectionName.size(); }
+    { return G4int(collectionName.size()); }
     inline G4String GetCollectionName(G4int i) const
     { return collectionName[i]; }
     inline G4String GetName() const
     { return moduleName; }
     inline void SetVerboseLevel(G4int val)
     { verboseLevel = val; }
+
+  protected:
+
+    void StoreDigiCollection(G4VDigiCollection* aDC);
+    void StoreDigiCollection(G4int DCID,G4VDigiCollection* aDC);
+
+  protected:
+
+    G4DigiManager* DigiManager;
+    G4String moduleName;
+    std::vector<G4String> collectionName;
+    G4int verboseLevel;
 };
 
 #endif
-

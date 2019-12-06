@@ -39,10 +39,11 @@
 #include "G4BGGPionInelasticXS.hh"
 #include "G4HadronicParameters.hh"
 
+
 G4FTFPPionBuilder::
 G4FTFPPionBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 

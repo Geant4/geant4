@@ -438,7 +438,7 @@ G4bool G4MicroElecCrossSectionDataSet::SaveData(const G4String & argFileName) co
 
 G4String G4MicroElecCrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
   {
       G4Exception("G4MicroElecCrossSectionDataSet::FullFileName","em0006",

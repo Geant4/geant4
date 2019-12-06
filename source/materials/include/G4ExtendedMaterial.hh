@@ -118,7 +118,7 @@ public:  // with description
   G4VMaterialExtension* RetrieveExtension(const G4String& name);
 
   inline G4int GetNumberOfExtensions() const
-  { return fExtensionMap.size(); } 
+  { return G4int(fExtensionMap.size()); } 
 
   // Retrieve iterators, proxyes to c++ methods. These are const for read-only
   // access. Use Register/RetreiveExtension to modify map

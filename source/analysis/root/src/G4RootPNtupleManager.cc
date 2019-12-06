@@ -41,11 +41,14 @@ namespace {
 
 //_____________________________________________________________________________
 G4RootPNtupleManager::G4RootPNtupleManager(G4RootMainNtupleManager* main,
-                                           const G4AnalysisManagerState& state)
+                                           const G4AnalysisManagerState& state,
+                                           G4bool rowWise, G4bool rowMode)
  : G4BaseNtupleManager(state),
    fCreateMode(G4PNtupleCreateMode::kUndefined),
    fMainNtupleManager(main),
-   fNtupleVector()
+   fNtupleVector(),
+   fRowWise(rowWise),
+   fRowMode(rowMode)
 {}
 
 //_____________________________________________________________________________
@@ -142,15 +145,13 @@ void G4RootPNtupleManager::CreateNtuple(G4RootPNtupleDescription* ntupleDescript
   auto rfile = fMainNtupleManager->GetNtupleFile();
   // auto directory = fMainNtupleManager->GetNtupleDirectory();
 
-  // Get parameters from main ntuple
-  auto mainBranch = mainNtuple->get_row_wise_branch();
-  auto rowWise = mainBranch ? true : false;
-
+  // Get parameters from ntupleDescription
   ntupleDescription->fFile = rfile.get();
   mainNtuple->get_branches(ntupleDescription->fMainBranches);
 
   G4bool verbose = true;
-  if ( rowWise ) {
+  if ( fRowWise ) {
+    auto mainBranch = mainNtuple->get_row_wise_branch();
     tools::wroot::mt_ntuple_row_wise* mtNtuple 
       = new tools::wroot::mt_ntuple_row_wise(
               G4cout, rfile->byte_swap(), rfile->compression(),
@@ -168,13 +169,15 @@ void G4RootPNtupleManager::CreateNtuple(G4RootPNtupleDescription* ntupleDescript
     tools_vforcit(tools::wroot::branch*, ntupleDescription->fMainBranches, it) {
       basketSizes.push_back((*it)->basket_size());
     }
+    auto basketEntries = fMainNtupleManager->GetBasketEntries();
    
     tools::wroot::mt_ntuple_column_wise* mtNtuple =
       new tools::wroot::mt_ntuple_column_wise(
             G4cout, rfile->byte_swap(), rfile->compression(),
             mainNtuple->dir().seek_directory(),
             ntupleDescription->fMainBranches, basketSizes,
-            ntupleDescription->fNtupleBooking, verbose);
+            ntupleDescription->fNtupleBooking, 
+            fRowMode, basketEntries, verbose);
     
     ntupleDescription->fNtuple
       = static_cast<tools::wroot::imt_ntuple*>(mtNtuple);
@@ -498,3 +501,9 @@ G4bool G4RootPNtupleManager::IsEmpty() const
   return ! fNtupleDescriptionVector.size();
 }  
 
+//_____________________________________________________________________________
+void G4RootPNtupleManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode)
+{ 
+  fRowWise = rowWise;
+  fRowMode = rowMode;
+}

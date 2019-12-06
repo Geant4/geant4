@@ -229,6 +229,12 @@ public:
   void SetMscGeomFactor(G4double val);
   G4double MscGeomFactor() const;
 
+  void SetMscSafetyFactor(G4double val);
+  G4double MscSafetyFactor() const;
+
+  void SetMscLambdaLimit(G4double val);
+  G4double MscLambdaLimit() const;
+
   void SetMscSkin(G4double val);
   G4double MscSkin() const;
 
@@ -237,6 +243,9 @@ public:
 
   void SetMaxNIELEnergy(G4double val);
   G4double MaxNIELEnergy() const;
+
+  void SetMaxEnergyFor5DMuPair(G4double val);
+  G4double MaxEnergyFor5DMuPair() const;
 
   void SetStepFunction(G4double v1, G4double v2);
 
@@ -376,6 +385,7 @@ private:
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyCSDA;
+  G4double max5DEnergyForMuPair;
   G4double lowestElectronEnergy;
   G4double lowestMuHadEnergy;
   G4double lowestTripletEnergy;
@@ -389,6 +399,8 @@ private:
   G4double rangeFactor;
   G4double rangeFactorMuHad;
   G4double geomFactor;
+  G4double safetyFactor;
+  G4double lambdaLimit;
   G4double skin;
   G4double factorScreen;
 

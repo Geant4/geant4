@@ -1,0 +1,74 @@
+/control/verbose 2
+/tracking/verbose 0
+/control/cout/ignoreThreadsExcept 0
+
+/opnovice2/boxMaterial G4_BGO
+/opnovice2/worldMaterial G4_AIR
+
+/opnovice2/boxProperty RINDEX    0.000002 1.3 0.000008 1.4
+/opnovice2/boxProperty ABSLENGTH 0.000002 1   0.000005 2   0.000008 3
+/opnovice2/boxProperty FASTCOMPONENT 0.000002 1.0 0.000008 1.3
+/opnovice2/boxConstProperty FASTTIMECONSTANT 20   ## ns
+/opnovice2/boxConstProperty RESOLUTIONSCALE 1
+/opnovice2/boxProperty SCINTILLATIONYIELD     5000.
+/opnovice2/boxProperty PROTONSCINTILLATIONYIELD   0 50 10  5000
+/opnovice2/boxProperty DEUTERONSCINTILLATIONYIELD 0 50 10  5000
+/opnovice2/boxProperty TRITONSCINTILLATIONYIELD   0 50 10  5000
+/opnovice2/boxProperty ALPHASCINTILLATIONYIELD    0 50 10  50000
+/opnovice2/boxProperty IONSCINTILLATIONYIELD      0 50 10  5000
+/opnovice2/boxProperty ELECTRONSCINTILLATIONYIELD 0 5000 10  500000
+
+/opnovice2/worldProperty RINDEX    0.000002 1.01 0.000008 1.01
+/opnovice2/worldProperty ABSLENGTH 0.000002 100  0.000005 100  0.000008 100
+
+/process/optical/processActivation Cerenkov      false
+/process/optical/processActivation OpAbsorption  true
+/process/optical/processActivation OpBoundary    false
+/process/optical/processActivation Scintillation true
+/process/optical/processActivation OpRayleigh    false
+/process/optical/processActivation OpMieHG       false
+/process/optical/processActivation OpWLS         false
+
+/process/optical/verbose 0
+
+/process/optical/scintillation/setYieldFactor 10
+/process/optical/scintillation/setExcitationRatio .5
+/process/optical/scintillation/setByParticleType true
+/process/optical/scintillation/setTrackInfo      false
+/process/optical/scintillation/setFiniteRiseTime false
+/process/optical/scintillation/setStackPhotons   true
+
+/process/optical/scintillation/setTrackSecondariesFirst true
+
+/run/initialize
+
+/process/optical/scintillation/verbose 0
+
+/analysis/setFileName scint_by_particle
+/analysis/h1/set      2  100 0 10
+/analysis/h1/setXaxis 2  "Energy [eV]"
+/analysis/h1/setYaxis 2  "Number of photons"
+/analysis/h1/set      13 400 0 200
+/analysis/h1/setXaxis 13 "Creation time [ns]"
+/analysis/h1/setYaxis 13 "Number of photons"
+
+#
+/gun/particle e-
+/gun/energy 1 MeV
+/gun/position -1 0 0 m
+/gun/direction 1 0 0
+#
+/run/beamOn 100
+
+/gun/particle proton
+/run/beamOn 100
+
+/gun/particle alpha
+/run/beamOn 100
+
+/gun/particle deuteron
+/run/beamOn 100
+
+/gun/particle ion
+/gun/ion 6 12 6
+/run/beamOn 100

@@ -50,8 +50,8 @@ ifndef INCFLAGS
               -I$(G4BASE)/analysis/csv/include \
               -I$(G4BASE)/analysis/root/include \
               -I$(G4BASE)/analysis/xml/include \
-              -I$(G4BASE)/analysis/parameters/include \
-	      -I$(G4BASE)/analysis/accumulables/include \
+              -I$(G4BASE)/analysis/factory/include \
+              -I$(G4BASE)/analysis/accumulables/include \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \

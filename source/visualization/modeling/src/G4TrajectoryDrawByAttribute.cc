@@ -59,7 +59,7 @@ G4TrajectoryDrawByAttribute::~G4TrajectoryDrawByAttribute()
 
 void
 G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object, 
-				  const G4bool& visible) const
+				  const G4bool& /*visible*/) const
 {
   // Return if attribute name has not been set. Just print one warning
   if (fAttName.isNull()) {
@@ -161,8 +161,6 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 
     assert (gotContext);
   }
-
-  myContext.SetVisible(visible);
   
   if (GetVerbose()) {
     G4cout<<"G4TrajectoryDrawByAttribute drawer named "<<Name();

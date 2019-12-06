@@ -32,6 +32,8 @@
 
 namespace{  G4Mutex MyHadrontherapyLock=G4MUTEX_INITIALIZER;  }
 
+using namespace std;
+
 HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename, double xOffset )
   :fXoffset(xOffset),invertX(false),invertY(false),invertZ(false)
 {
@@ -44,7 +46,7 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
 	 << "\n-----------------------------------------------------------";
 
 
-  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl;
+  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << G4endl;
   G4AutoLock lock(&MyHadrontherapyLock);
 
   ifstream file( filename ); // Open the file for reading.
@@ -58,7 +60,7 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
 
   G4cout << "  [ Number of values x,y,z: "
 	 << nx << " " << ny << " " << nz << " ] "
-	 << endl;
+	 << G4endl;
 
   // Set up storage space for table
   xField.resize( nx );
@@ -106,15 +108,15 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
   maxy = yval * lenUnit;
   maxz = zval * lenUnit;
 
-  G4cout << "\n ---> ... done reading " << endl;
+  G4cout << "\n ---> ... done reading " << G4endl;
 
-  // G4cout << " Read values of field from file " << filename << endl;
+  // G4cout << " Read values of field from file " << filename << G4endl;
   G4cout << " ---> assumed the order:  x, y, z, Bx, By, Bz "
 	 << "\n ---> Min values x,y,z: "
 	 << minx/cm << " " << miny/cm << " " << minz/cm << " cm "
 	 << "\n ---> Max values x,y,z: "
 	 << maxx/cm << " " << maxy/cm << " " << maxz/cm << " cm "
-	 << "\n ---> The field will be offset by " << xOffset/cm << " cm " << endl;
+	 << "\n ---> The field will be offset by " << xOffset/cm << " cm " << G4endl;
 
   // Should really check that the limits are not the wrong way around.
   if (maxx < minx) {swap(maxx,minx); invertX = true;}
@@ -131,7 +133,7 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
   dz = maxz - minz;
   G4cout << "\n ---> Dif values x,y,z (range): "
 	 << dx/cm << " " << dy/cm << " " << dz/cm << " cm in z "
-	 << "\n-----------------------------------------------------------" << endl;
+	 << "\n-----------------------------------------------------------" << G4endl;
 }
 
 void HadrontherapyMagneticField3D::GetFieldValue(const double point[4],
@@ -180,8 +182,8 @@ void HadrontherapyMagneticField3D::GetFieldValue(const double point[4],
     {
 
 #ifdef DEBUG_INTERPOLATING_FIELD
-        G4cout << "Local x,y,z: " << xlocal << " " << ylocal << " " << zlocal << endl;
-        G4cout << "Index x,y,z: " << xindex << " " << yindex << " " << zindex << endl;
+        G4cout << "Local x,y,z: " << xlocal << " " << ylocal << " " << zlocal << G4endl;
+        G4cout << "Index x,y,z: " << xindex << " " << yindex << " " << zindex << G4endl;
         double valx0z0, mulx0z0, valx1z0, mulx1z0;
         double valx0z1, mulx0z1, valx1z1, mulx1z1;
         valx0z0= table[xindex  ][0][zindex];  mulx0z0=  (1-xlocal) * (1-zlocal);
@@ -230,6 +232,6 @@ void HadrontherapyMagneticField3D::GetFieldValue(const double point[4],
 			<<   point[0] << '\t' << "   "
 			<<   point[1] << '\t' << "    "
 			<<   point[2] << '\t' << "   "
-			<< G4endl;*/
+			<< std::endl;*/
 
 }

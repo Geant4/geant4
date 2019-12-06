@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // Implementation for G4UBox wrapper class
+//
+// 13.09.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 
 #include "G4Box.hh"

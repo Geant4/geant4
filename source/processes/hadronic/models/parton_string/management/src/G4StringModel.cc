@@ -29,7 +29,7 @@
 #include "G4StringModel.hh"
 
 G4StringModel::G4StringModel() :  G4VHighEnergyGenerator(),
-the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
+the3DNucleus(0), theStringFragmentationModel(0)
 {
 }
 
@@ -39,7 +39,7 @@ G4StringModel::~G4StringModel()
 
   // private:
 G4StringModel::G4StringModel(const G4StringModel &) : G4VHighEnergyGenerator(),
-the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
+the3DNucleus(0), theStringFragmentationModel(0)
 {
 }
 

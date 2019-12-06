@@ -23,24 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UTesselladedSolid
 //
 // Class description:
 //
-//   Wrapper class for G4TessellatedSolid to make use of VecGeom TessellatedSolid.
+// Wrapper class for G4TessellatedSolid to make use of VecGeom TessellatedSolid.
 
-// History:
 // 11.01.18 G.Cosmo, CERN
 // --------------------------------------------------------------------
-#ifndef G4UTESSELLATEDSOLID_hh
-#define G4UTESSELLATEDSOLID_hh
+#ifndef G4UTESSELLATEDSOLID_HH
+#define G4UTESSELLATEDSOLID_HH
 
 #include "G4UAdapter.hh"
 
@@ -49,8 +41,7 @@
 #include <volumes/UnplacedTessellated.h>
 
 #include "G4Polyhedron.hh"
-
-class G4VFacet;
+#include "G4VFacet.hh"
 
 class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
 {
@@ -93,7 +84,7 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
       // persistifiable objects.
 
     G4UTessellatedSolid( const G4UTessellatedSolid& source );
-    G4UTessellatedSolid &operator=(const G4UTessellatedSolid& source);
+    G4UTessellatedSolid& operator=(const G4UTessellatedSolid& source);
       // Copy constructor and assignment operator.
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
@@ -106,8 +97,8 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
 
   private:
 
-    std::vector<G4VFacet *>  fFacets;
-    std::vector<G4ThreeVector>  fVertexList;
+    std::vector<G4VFacet*> fFacets;
+    std::vector<G4ThreeVector> fVertexList;
 };
 
 // --------------------------------------------------------------------

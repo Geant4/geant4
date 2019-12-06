@@ -23,23 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // class G4Ellipsoid
 //
 // Implementation for G4Ellipsoid class
 //
-// History:
-//
 // 10.11.99 G.Horton-Smith: first writing, based on G4Sphere class
-// 25.02.05 G.Guerrieri: Modified for future Geant4 release
-// 26.10.16 E.Tcherniaev: reimplemented CalculateExtent() using
-//                        G4BoundingEnvelope, removed CreateRotatedVertices()
-//
+// 25.02.05 G.Guerrieri: Revised
 // --------------------------------------------------------------------
 
-#include "globals.hh"
-
 #include "G4Ellipsoid.hh"
+
+#if !(defined(G4GEOM_USE_UELLIPSOID) && defined(G4GEOM_USE_SYS_USOLIDS))
+
+#include "globals.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -74,8 +70,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
                                G4double pzSemiAxis,
                                G4double pzBottomCut,
                                G4double pzTopCut)
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
-    fCubicVolume(0.), fSurfaceArea(0.), zBottomCut(0.), zTopCut(0.)
+  : G4VSolid(pName), zBottomCut(0.), zTopCut(0.)
 {
   // note: for users that want to use the full ellipsoid it is useful
   // to include a default for the cuts 
@@ -119,9 +114,8 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Ellipsoid::G4Ellipsoid( __void__& a )
-  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0), kRadTolerance(0.),
-    halfCarTolerance(0.), halfRadTolerance(0.), fCubicVolume(0.),
-    fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
+  : G4VSolid(a), kRadTolerance(0.), halfCarTolerance(0.), halfRadTolerance(0.),
+    xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
     semiAxisMax(0.), zBottomCut(0.), zTopCut(0.)
 {
 }
@@ -132,7 +126,7 @@ G4Ellipsoid::G4Ellipsoid( __void__& a )
 
 G4Ellipsoid::~G4Ellipsoid()
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,7 +135,6 @@ G4Ellipsoid::~G4Ellipsoid()
 
 G4Ellipsoid::G4Ellipsoid(const G4Ellipsoid& rhs)
   : G4VSolid(rhs),
-    fRebuildPolyhedron(false), fpPolyhedron(0),
     kRadTolerance(rhs.kRadTolerance),
     halfCarTolerance(rhs.halfCarTolerance),
     halfRadTolerance(rhs.halfRadTolerance),
@@ -176,7 +169,7 @@ G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
    zSemiAxis = rhs.zSemiAxis; semiAxisMax = rhs.semiAxisMax;
    zBottomCut = rhs.zBottomCut; zTopCut = rhs.zTopCut;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
@@ -199,9 +192,9 @@ void G4Ellipsoid::ComputeDimensions(G4VPVParameterisation* p,
 
 void G4Ellipsoid::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
-  G4double dx = GetSemiAxisMax(0);
-  G4double dy = GetSemiAxisMax(1);
-  G4double dz = GetSemiAxisMax(2);
+  G4double dx = GetDx();
+  G4double dy = GetDy();
+  G4double dz = GetDz();
   G4double zmin = std::max(-dz,GetZBottomCut());
   G4double zmax = std::min( dz,GetZTopCut());
   pMin.set(-dx,-dy,zmin);
@@ -463,8 +456,8 @@ G4double G4Ellipsoid::DistanceToIn(const G4ThreeVector& p) const
 G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
                                     const G4ThreeVector& v,
                                     const G4bool calcNorm,
-                                          G4bool *validNorm,
-                                          G4ThreeVector *n  ) const
+                                          G4bool* validNorm,
+                                          G4ThreeVector* n  ) const
 {
   G4double distMin;
   enum surface_e {kPlaneSurf, kCurvedSurf, kNoSurf} surface;
@@ -695,7 +688,7 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   else if (max1 == ySemiAxis) { max2 = xSemiAxis; max3 = zSemiAxis; }
   else                        { max2 = xSemiAxis; max3 = ySemiAxis; }
 
-  phi   = G4RandFlat::shoot(0.,twopi);
+  phi = G4RandFlat::shoot(0.,twopi);
   
   cosphi = std::cos(phi);   sinphi = std::sin(phi);
   costheta = G4RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;
@@ -774,7 +767,7 @@ G4Polyhedron* G4Ellipsoid::CreatePolyhedron () const
 
 G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
@@ -787,3 +780,5 @@ G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
     }
   return fpPolyhedron;
 }
+
+#endif // !defined(G4GEOM_USE_UELLIPSOID) || !defined(G4GEOM_USE_SYS_USOLIDS)

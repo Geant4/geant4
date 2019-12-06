@@ -40,11 +40,8 @@
 #include "G4Event.hh"
 #include <G4SystemOfUnits.hh>
 #include <globals.hh>
-#include <G4VAnalysisManager.hh>
-#include <G4RootAnalysisManager.hh>
-#include <G4XmlAnalysisManager.hh>
 #include <G4EventManager.hh>
-#include "g4analysis_defs.hh"
+#include "g4analysis.hh"
 
 /**
  \file ScoreSpecies.cc
@@ -349,16 +346,16 @@ void ScoreSpecies::OutputAndClear()
 
   if(fOutputToCsv)
   {
-    analysisManager = G4CsvAnalysisManager::Instance(); // TODO?
+    analysisManager = G4Analysis::ManagerInstance("csv");
     // this->ASCII(); // useful ?
   }
   else  if (fOutputToRoot)
   {
-    analysisManager = G4Root::G4AnalysisManager::Instance();
+    analysisManager = G4Analysis::ManagerInstance("root");
   }
   else if(fOutputToXml)
   {
-    analysisManager = G4Xml::G4AnalysisManager::Instance();
+    analysisManager = G4Analysis::ManagerInstance("xml");
 
   }
   if(analysisManager)

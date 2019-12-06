@@ -55,7 +55,6 @@ public:
   :parent(a_out,a_seek_directory,a_name,a_title)
   ,m_file(a_out,a_byte_swap,a_compression,a_verbose)
   {}
-  
   base_pntuple_column_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
                            const std::vector<uint32>& a_basket_sizes,
 	                   const ntuple_booking& a_bkg,bool a_verbose)

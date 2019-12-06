@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4HelixImplicitEuler
+// G4HelixImplicitEuler
 //
 // Class description:
 //
@@ -38,10 +35,8 @@
 //  Take the output and its derivative. Add the mean of both derivatives
 //  to form the final output.
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 03/11/98
+// Author: W.Wander <wwc@mit.edu>, 03/11/1998
 // -------------------------------------------------------------------
-
 #ifndef G4HELIXIMPLICITEULER_HH
 #define G4HELIXIMPLICITEULER_HH
 
@@ -52,19 +47,17 @@ class G4HelixImplicitEuler : public G4MagHelicalStepper
 
   public:  // with description
 
-    G4HelixImplicitEuler(G4Mag_EqRhs *EqRhs)
-      : G4MagHelicalStepper(EqRhs) {}
-
-    ~G4HelixImplicitEuler() {}
+    G4HelixImplicitEuler(G4Mag_EqRhs *EqRhs);
+    ~G4HelixImplicitEuler();
   
     void DumbStepper( const G4double y[],
-                            G4ThreeVector  Bfld,
-                            G4double       h,
-                            G4double       yout[]);
+                            G4ThreeVector Bfld,
+                            G4double      h,
+                            G4double      yout[] );
   
   public:  // without description
 
-    G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const { return 2; }
 };
 
-#endif /* G4HELIXIMPLICITEULER_HH */
+#endif

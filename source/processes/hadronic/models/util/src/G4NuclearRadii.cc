@@ -33,13 +33,19 @@
 #include "G4NuclearRadii.hh"
 #include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4NucleiProperties.hh"
+
+G4Pow* G4NuclearRadii::fG4pow = G4Pow::GetInstance();
+const G4double fAlpha = 0.5*CLHEP::fine_structure_const*CLHEP::hbarc;
+const G4double fInvep = 1.0/CLHEP::eplus;
 
 G4double G4NuclearRadii::ExplicitRadius(G4int Z, G4int A)
 {
   G4double R = 0.0;
   // Special rms radii for light nucleii
   if(Z <= 4) {
-    if(A == 1)                { R = 0.89*CLHEP::fermi; }// p
+    if(A == 1)                { R = 0.895*CLHEP::fermi; }// p
     else if(A == 2)           { R = 2.13*CLHEP::fermi; }// d
     else if(Z == 1 && A == 3) { R = 1.80*CLHEP::fermi; }// t
     else if(Z == 2 && A == 3) { R = 1.96*CLHEP::fermi; }// He3
@@ -59,10 +65,10 @@ G4double G4NuclearRadii::Radius(G4int Z, G4int A)
       if( A <= 15)      { y = 1.26; }
       else if( A <= 20) { y = 1.19; }
       else if( A <= 30) { y = 1.12; }
-      G4double x = G4Pow::GetInstance()->Z13(A);
+      G4double x = fG4pow->Z13(A);
       R = y*(x - 1./x);
     } else {
-      R = G4Pow::GetInstance()->powZ(A, 0.27);
+      R = fG4pow->powZ(A, 0.27);
     }
     R *= CLHEP::fermi;
   }
@@ -73,7 +79,7 @@ G4double G4NuclearRadii::RadiusRMS(G4int Z, G4int A)
 {
   G4double R = ExplicitRadius(Z, A);
   if(0.0 == R) {
-    R = 1.24*G4Pow::GetInstance()->powZ(A, 0.28)*CLHEP::fermi;
+    R = 1.24*fG4pow->powZ(A, 0.28)*CLHEP::fermi;
   }
   return R;
 }
@@ -83,45 +89,59 @@ G4double G4NuclearRadii::RadiusNNGG(G4int Z, G4int A)
   G4double R = ExplicitRadius(Z, A);
   if(0.0 == R) {
     if(A > 20) {
-      R = 1.08*G4Pow::GetInstance()->Z13(A)
-	*(0.85 + 0.15*G4Exp(-(G4double)(A - 21)/40.));
+      R = 1.08*fG4pow->Z13(A)*(0.85 + 0.15*G4Exp(-(G4double)(A - 21)/40.));
     } else {
-      R = 1.08*G4Pow::GetInstance()->Z13(A)
-	*(1.0 + 0.3*G4Exp(-(G4double)(A - 21)/10.));
+      R = 1.08*fG4pow->Z13(A)*(1.0 + 0.3*G4Exp(-(G4double)(A - 21)/10.));
     }
     R *= CLHEP::fermi;
   }
   return R;
 }
 
+G4double G4NuclearRadii::RadiusECS(G4int Z, G4int A)
+{
+  G4double R=0.;
+  const G4double c[3]={0.77329745, 1.38206072, 30.28295235};
+  const G4double c1=c[0];
+  const G4double c2=c[1];
+  const G4double c3=c[2];
+
+  // Special rms radii for light nuclei
+  if (A <= 30) {
+    G4double vn = 0.5*A + fG4pow->powN(0.028*A,2) - fG4pow->powN(0.011*A,3);
+    G4double dev = vn - (A-Z);
+    R = c1*fG4pow->Z13(A) + c2/fG4pow->Z13(A) + c3*dev*dev/(A*A);
+  } else if (A<=50){
+    G4double y = 1.1; 
+    G4double x = fG4pow->Z13(A);
+    R = y*(x - 1./x);
+  }
+  return R*CLHEP::fermi;
+}
+
 G4double G4NuclearRadii::RadiusHNGG(G4int A)
 {
   G4double R = CLHEP::fermi;
   if(A > 20) {
-    R *= 1.08*G4Pow::GetInstance()->Z13(A)
-      *(0.8 + 0.2*G4Exp(-(G4double)(A - 20)/20.));
+    R *= 1.08*fG4pow->Z13(A)*(0.8 + 0.2*G4Exp(-(G4double)(A - 20)/20.));
   } else {
-    R *= 1.08*G4Pow::GetInstance()->Z13(A)
-      *(1.0 + 0.1*G4Exp(-(G4double)(A - 20)/20.));
+    R *= 1.08*fG4pow->Z13(A)*(1.0 + 0.1*G4Exp(-(G4double)(A - 20)/20.));
   }
   return R;
 }
 
 G4double G4NuclearRadii::RadiusKNGG(G4int A)
 {
-  return 1.3*CLHEP::fermi*G4Pow::GetInstance()->Z13(A);
+  return 1.3*CLHEP::fermi*fG4pow->Z13(A);
 }
 
 G4double G4NuclearRadii::RadiusND(G4int A)
 {
   G4double R = CLHEP::fermi;
-  if(1 == A) { R *= 0.89; }
-  else {
-    G4double x = G4Pow::GetInstance()->Z13(A);
-    if(A <= 3.) { x *= 0.8; }
-    else { x *= 1.7; }
-    R *= x;
-  } 
+  if(1 == A) { return R*0.895; }
+  G4double x = R*fG4pow->Z13(A);
+  if(A <= 3.) { x *= 0.8; }
+  else { x *= 1.7; }
   return R;
 }
 
@@ -130,9 +150,61 @@ G4double G4NuclearRadii::RadiusCB(G4int Z, G4int A)
   G4double R = ExplicitRadius(Z, A);
   if(0.0 == R) {
     G4int z = std::min(Z, 92);
-    R = r0[z]*G4Pow::GetInstance()->Z13(A)*CLHEP::fermi;
+    R = r0[z]*fG4pow->Z13(A)*CLHEP::fermi;
   }
   return R;
+}
+
+G4double G4NuclearRadii::ParticleRadius(const G4ParticleDefinition* p)
+{
+  G4double R = CLHEP::fermi;
+  G4int pdg = std::abs(p->GetPDGEncoding());
+  if(pdg == 2112 || pdg == 2212)   { R *= 0.895; }
+  else if(pdg == 211)  { R *= 0.663; }
+  else if(pdg == 321)  { R *= 0.340; }
+  else { R *= 0.5; }
+  return R;
+}
+
+G4double G4NuclearRadii::CoulombFactor(
+         const G4ParticleDefinition* theParticle, 
+	 const G4ParticleDefinition* nucleon, 
+	 G4double ekin)
+{
+  G4double tR = 0.895*CLHEP::fermi;
+  G4double pR = ParticleRadius(theParticle);
+
+  G4double pZ = theParticle->GetPDGCharge()*fInvep;
+  G4double tZ = nucleon->GetPDGCharge()*fInvep;
+
+  G4double pM = theParticle->GetPDGMass(); 
+  G4double tM = nucleon->GetPDGMass();
+
+  G4double pElab = ekin + pM;
+  G4double totTcm  = std::sqrt(pM*pM + tM*tM + 2.*pElab*tM) - pM -tM;
+  
+  G4double bC = fAlpha*pZ*tZ/(pR + tR);
+  return (totTcm > bC) ? 1. - bC/totTcm : 0.0;
+}
+
+G4double G4NuclearRadii::CoulombFactor(
+         G4int Z, G4int A,
+	 const G4ParticleDefinition* theParticle, 
+	 G4double ekin)
+{
+  G4double tR = RadiusCB(Z, A);
+  G4double pR = ParticleRadius(theParticle);
+
+  G4double pZ = theParticle->GetPDGCharge()*fInvep;
+
+  G4double pM = theParticle->GetPDGMass(); 
+  G4double tM = G4NucleiProperties::GetNuclearMass(A, Z);
+
+  G4double pElab = ekin + pM;
+  G4double totTcm  = std::sqrt(pM*pM + tM*tM + 2.*pElab*tM) - pM -tM;
+  
+  G4double bC = fAlpha*pZ*Z/(pR + tR);
+  return (totTcm > bC) ? 1. - bC/totTcm : 0.0;
 }
 
 const G4double G4NuclearRadii::r0[] = {

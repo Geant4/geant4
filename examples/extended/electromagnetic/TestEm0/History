@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-10-19 V.Ivant (testem0-V10-05-02)
+- PhysicsList : define options, specific for this example after
+    new EM physics is selected; clean-up constructor; Opt0 is the 
+    default
+     
+20-09-19 mma (testem0-V10-05-01)
+- PhysicsList : BuildCSDARange(true)
+
+13-08-19 V.Ivant (testem0-V10-05-00)
+- PhysicsList - disable GeneralProcess for all EM physics
 	 
 11-03-18 mma (testem0-V10-04-00)
 - Testem0.cc : remove G4UI_USE

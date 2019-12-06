@@ -23,19 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4ReflectedSolid
+// G4ReflectedSolid
 //
 // Class description:
 //
 // A Reflected solid is a solid that has been shifted from its original
 // frame of reference to a new one.
 
-// History:
-//
-// 23.07.01 V.Grichine: created
+// 23.07.01, V.Grichine - created
 // --------------------------------------------------------------------
 #ifndef G4ReflectedSolid_HH
 #define G4ReflectedSolid_HH
@@ -78,9 +73,9 @@ class G4ReflectedSolid : public G4VSolid
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
-                            const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0 ) const;
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
@@ -99,7 +94,7 @@ class G4ReflectedSolid : public G4VSolid
     virtual const G4ReflectedSolid* GetReflectedSolidPtr() const;
     virtual       G4ReflectedSolid* GetReflectedSolidPtr();
       // If the Solid is a "G4ReflectedSolid",
-      // return a self pointer else return 0.
+      // return a self pointer else return nullptr.
 
     G4VSolid* GetConstituentMovedSolid() const;
 
@@ -123,11 +118,12 @@ class G4ReflectedSolid : public G4VSolid
 
   protected:
 
-    G4VSolid*          fPtrSolid;
-    G4Transform3D*     fDirectTransform3D;
+    G4VSolid*          fPtrSolid = nullptr;
+    G4Transform3D*     fDirectTransform3D = nullptr;
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;  // Caches reflected G4Polyhedron.
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
+      // Caches reflected G4Polyhedron.
 };
 
 #endif

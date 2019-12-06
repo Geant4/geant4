@@ -84,7 +84,5 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
     G4double theMin;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

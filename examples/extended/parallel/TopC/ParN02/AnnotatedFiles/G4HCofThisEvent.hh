@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/AnnotatedFiles/G4HCofThisEvent.hh
+/// \file G4HCofThisEvent.hh
 /// \brief Definition of the G4HCofThisEvent class
 //
 //

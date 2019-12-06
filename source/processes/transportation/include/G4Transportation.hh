@@ -115,7 +115,7 @@ class G4Transportation : public G4VProcess
      void SetLowLooperThresholds(); // Set low thresholds - for low-E applications
      void PushThresholdsToLogger(); // Inform logger of current thresholds
      void ReportLooperThresholds(); // Print values of looper thresholds
-   
+
      inline G4double GetMaxEnergyKilled() const; 
      inline G4double GetSumEnergyKilled() const;
      inline void ResetKilledStatistics( G4int report = 1);      
@@ -124,9 +124,20 @@ class G4Transportation : public G4VProcess
      inline void EnableShortStepOptimisation(G4bool optimise=true); 
      // Whether short steps < safety will avoid to call Navigator (if field=0)
 
-     static G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
-     // Whether to deflect particles with force due to magnetic moment
+     static G4bool EnableMagneticMoment(G4bool useMoment=true); 
+     // Whether to enable particles to be deflected with force due to magnetic moment
 
+     static G4bool EnableGravity(G4bool useGravity=true); 
+     // Whether to enable particles to be deflected with force due to gravity
+
+     static void   SetSilenceLooperWarnings( G4bool val);
+     // Do not warn (or throw exception) about 'looping' particles
+     static G4bool GetSilenceLooperWarnings();
+   
+  public: // without description    
+     static G4bool EnableUseMagneticMoment(G4bool useMoment=true)
+     { return EnableMagneticMoment(useMoment); }  // Old name - will be deprecated
+   
   public:  // without description
 
      G4double AtRestGetPhysicalInteractionLength( const G4Track&,
@@ -144,9 +155,10 @@ class G4Transportation : public G4VProcess
    
   protected:
 
-     G4bool DoesGlobalFieldExist();
-       // Checks whether a field exists for the "global" field manager
-
+     G4bool DoesAnyFieldExist();
+       // Check whether any field exists in the geometry
+       //  - replaces method that checked only whether a field for the world volume
+   
      void ReportMissingLogger(const char * methodName);
    
   private:
@@ -164,6 +176,8 @@ class G4Transportation : public G4VProcess
      G4double      fCandidateEndGlobalTime= 0.0;
        // The particle's state after this Step, Store for DoIt
 
+     G4bool        fAnyFieldExists= false; 
+   
      G4bool fParticleIsLooping = false;
      G4bool fNewTrack= true;          // Flag from StartTracking 
      G4bool fFirstStepInVolume= true;
@@ -194,7 +208,6 @@ class G4Transportation : public G4VProcess
        // *NOT* be abandoned, except after fThresholdTrials attempts.
      G4int    fAbandonUnstableTrials = 0;  //  Number of trials after which to abandon
                                            //   unstable loopers ( 0 = never )
-
      // Counter for steps in which particle reports 'looping',
      //  ( Used if it is above 'Important' Energy. )
      G4int    fNoLooperTrials= 0; 
@@ -226,6 +239,9 @@ class G4Transportation : public G4VProcess
 
      friend class G4CoupledTransportation;
      static G4bool fUseMagneticMoment;
+     static G4bool fUseGravity;
+     static G4bool fSilenceLooperWarnings;  // Flag to *Supress* all 'looper' warnings
+   
 };
 
 #include "G4Transportation.icc"

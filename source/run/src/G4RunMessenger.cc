@@ -320,7 +320,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randEvtCmd->SetGuidance("for the case of simplest geometry and small number of tracks per event.");
   randEvtCmd->SetParameterName("flag",true);
   randEvtCmd->SetDefaultValue(0);
-  randEvtCmd->SetRange("flag>=0 && flag<3");
+  randEvtCmd->SetRange("flag>=0 && flag<=3");
   randEvtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
   procUICmds = new G4UIcmdWithoutParameter("/run/workersProcessCmds",this);

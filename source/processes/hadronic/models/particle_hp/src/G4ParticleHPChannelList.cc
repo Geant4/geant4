@@ -171,7 +171,7 @@ G4ThreadLocal G4int G4ParticleHPChannelList::trycounter = 0;
     }
     delete [] running;
 #ifdef G4PHPDEBUG
-    if( getenv("G4ParticleHPDebug") ) G4cout << " G4ParticleHPChannelList SELECTED ISOTOPE " << isotope << " SELECTED CHANNEL " << lChan << G4endl;
+    if( std::getenv("G4ParticleHPDebug") ) G4cout << " G4ParticleHPChannelList SELECTED ISOTOPE " << isotope << " SELECTED CHANNEL " << lChan << G4endl;
 #endif
     return theChannels[lChan]->ApplyYourself(aTrack, isotope);
   }

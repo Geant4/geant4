@@ -23,17 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GenericPolycone implementation
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4GenericPolycone.cc
-//
-// Implementation of a CSG polycone
-//
+// Authors: T.Nikitina, G.Cosmo - CERN
 // --------------------------------------------------------------------
 
 #include "G4GenericPolycone.hh"
@@ -57,7 +49,6 @@
 
 using namespace CLHEP;
 
-//
 // Constructor (generic parameters)
 //
 G4GenericPolycone::G4GenericPolycone( const G4String& name, 
@@ -80,7 +71,6 @@ G4GenericPolycone::G4GenericPolycone( const G4String& name,
   delete rz;
 }
 
-//
 // Create
 //
 // Generic create routine, called by each constructor after
@@ -173,7 +163,7 @@ void G4GenericPolycone::Create( G4double phiStart,
   //
   G4ReduciblePolygonIterator iterRZ(rz);
   
-  G4PolyconeSideRZ *next = corners;
+  G4PolyconeSideRZ* next = corners;
   iterRZ.Begin();
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
@@ -195,7 +185,7 @@ void G4GenericPolycone::Create( G4double phiStart,
   G4PolyconeSideRZ *corner = corners,
                    *prev = corners + numCorner-1,
                    *nextNext;
-  G4VCSGface  **face = faces;
+  G4VCSGface** face = faces;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = corner+1;
@@ -251,19 +241,14 @@ void G4GenericPolycone::Create( G4double phiStart,
     new G4EnclosingCylinder( rz, phiIsOpen, phiStart, phiTotal );
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4GenericPolycone::G4GenericPolycone( __void__& a )
-  : G4VCSGfaceted(a), startPhi(0.),  endPhi(0.), phiIsOpen(false),
-     numCorner(0), corners(0), enclosingCylinder(0)
+  : G4VCSGfaceted(a), startPhi(0.), endPhi(0.), numCorner(0)
 {
 }
 
-
-//
 // Destructor
 //
 G4GenericPolycone::~G4GenericPolycone()
@@ -272,22 +257,18 @@ G4GenericPolycone::~G4GenericPolycone()
   delete enclosingCylinder;
 }
 
-
-//
 // Copy constructor
 //
-G4GenericPolycone::G4GenericPolycone( const G4GenericPolycone &source )
+G4GenericPolycone::G4GenericPolycone( const G4GenericPolycone& source )
   : G4VCSGfaceted( source )
 {
   CopyStuff( source );
 }
 
-
-//
 // Assignment operator
 //
 G4GenericPolycone&
-G4GenericPolycone::operator=( const G4GenericPolycone &source )
+G4GenericPolycone::operator=( const G4GenericPolycone& source )
 {
   if (this == &source) return *this;
   
@@ -303,19 +284,17 @@ G4GenericPolycone::operator=( const G4GenericPolycone &source )
   return *this;
 }
 
-
-//
 // CopyStuff
 //
-void G4GenericPolycone::CopyStuff( const G4GenericPolycone &source )
+void G4GenericPolycone::CopyStuff( const G4GenericPolycone& source )
 {
   //
   // Simple stuff
   //
   startPhi  = source.startPhi;
   endPhi    = source.endPhi;
-  phiIsOpen  = source.phiIsOpen;
-  numCorner  = source.numCorner;
+  phiIsOpen = source.phiIsOpen;
+  numCorner = source.numCorner;
 
   //
   // The corner array
@@ -335,33 +314,27 @@ void G4GenericPolycone::CopyStuff( const G4GenericPolycone &source )
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 
   fRebuildPolyhedron = false;
-  fpPolyhedron = 0;
+  fpPolyhedron = nullptr;
 }
 
-
-//
 // Reset
 //
 G4bool G4GenericPolycone::Reset()
 {
- 
-    std::ostringstream message;
-    message << "Solid " << GetName() << " built using generic construct."
-            << G4endl << "Not applicable to the generic construct !";
-    G4Exception("G4GenericPolycone::Reset()", "GeomSolids1001",
-                JustWarning, message, "Parameters NOT resetted.");
-    return 1;
- 
+  std::ostringstream message;
+  message << "Solid " << GetName() << " built using generic construct."
+          << G4endl << "Not applicable to the generic construct !";
+  G4Exception("G4GenericPolycone::Reset()", "GeomSolids1001",
+              JustWarning, message, "Parameters NOT resetted.");
+  return true;
 }
 
-
-//
 // Inside
 //
 // This is an override of G4VCSGfaceted::Inside, created in order
 // to speed things up by first checking with G4EnclosingCylinder.
 //
-EInside G4GenericPolycone::Inside( const G4ThreeVector &p ) const
+EInside G4GenericPolycone::Inside( const G4ThreeVector& p ) const
 {
   //
   // Quick test
@@ -374,15 +347,13 @@ EInside G4GenericPolycone::Inside( const G4ThreeVector &p ) const
   return G4VCSGfaceted::Inside(p);
 }
 
-
-//
 // DistanceToIn
 //
 // This is an override of G4VCSGfaceted::Inside, created in order
 // to speed things up by first checking with G4EnclosingCylinder.
 //
-G4double G4GenericPolycone::DistanceToIn( const G4ThreeVector &p,
-                                   const G4ThreeVector &v ) const
+G4double G4GenericPolycone::DistanceToIn( const G4ThreeVector& p,
+                                          const G4ThreeVector& v ) const
 {
   //
   // Quick test
@@ -396,19 +367,17 @@ G4double G4GenericPolycone::DistanceToIn( const G4ThreeVector &p,
   return G4VCSGfaceted::DistanceToIn( p, v );
 }
 
-
-//
 // DistanceToIn
 //
-G4double G4GenericPolycone::DistanceToIn( const G4ThreeVector &p ) const
+G4double G4GenericPolycone::DistanceToIn( const G4ThreeVector& p ) const
 {
   return G4VCSGfaceted::DistanceToIn(p);
 }
 
-//////////////////////////////////////////////////////////////////////////
+// BoundingLimits
 //
 // Get bounding box
-
+//
 void
 G4GenericPolycone::BoundingLimits(G4ThreeVector& pMin,
                                   G4ThreeVector& pMax) const
@@ -456,10 +425,10 @@ G4GenericPolycone::BoundingLimits(G4ThreeVector& pMin,
   }
 }
 
-//////////////////////////////////////////////////////////////////////////
+// CalculateExtent
 //
 // Calculate extent under transform and specified limit
-
+//
 G4bool
 G4GenericPolycone::CalculateExtent(const EAxis pAxis,
                                    const G4VoxelLimits& pVoxelLimit,
@@ -474,7 +443,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -595,8 +564,6 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
   return (pMin < pMax);
 }
 
-
-//
 // GetEntityType
 //
 G4GeometryType  G4GenericPolycone::GetEntityType() const
@@ -604,7 +571,7 @@ G4GeometryType  G4GenericPolycone::GetEntityType() const
   return G4String("G4GenericPolycone");
 }
 
-
+// Clone
 //
 // Make a clone of the object
 //
@@ -613,6 +580,7 @@ G4VSolid* G4GenericPolycone::Clone() const
   return new G4GenericPolycone(*this);
 }
 
+// StreamInfo
 //
 // Stream object contents to an output stream
 //
@@ -641,9 +609,6 @@ std::ostream& G4GenericPolycone::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-
-
-//
 // GetPointOnSurface
 //
 G4ThreeVector G4GenericPolycone::GetPointOnSurface() const
@@ -652,7 +617,6 @@ G4ThreeVector G4GenericPolycone::GetPointOnSurface() const
 
 }
 
-//
 // CreatePolyhedron
 //
 G4Polyhedron* G4GenericPolycone::CreatePolyhedron() const
@@ -928,7 +892,7 @@ G4Polyhedron* G4GenericPolycone::CreatePolyhedron() const
       G4Exception("G4GenericPolycone::CreatePolyhedron()", "GeomSolids1002",
                   JustWarning, message);
       delete polyhedron;
-      return 0;
+      return nullptr;
     }
     else
     {

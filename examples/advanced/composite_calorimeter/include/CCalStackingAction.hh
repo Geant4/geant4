@@ -37,8 +37,8 @@
 
 class CCaloSD;
 
-class CCalStackingAction : public G4UserStackingAction {
-
+class CCalStackingAction : public G4UserStackingAction
+{
   friend class CCalSensAssign;
   
 public:

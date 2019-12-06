@@ -513,7 +513,7 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     # Backward compatibility requires XERCESCROOT to be set
     # As this is a 'rootdir' determine it from the XERCESC_INCLUDE_DIR
     # variable...
-    get_filename_component(_xercesc_root ${XERCESC_INCLUDE_DIR} PATH)
+    get_filename_component(_xercesc_root ${XercesC_INCLUDE_DIR} PATH)
     _g4tc_setenv_command(GEANT4_TC_GDML_PATH_SETUP ${SHELL_FAMILY} XERCESCROOT ${_xercesc_root})
   else()
     set(GEANT4_TC_G4LIB_USE_GDML "# NOT BUILT WITH GDML SUPPORT")
@@ -914,8 +914,8 @@ foreach(_shell bourne;cshell)
   # - XercesC
   set(GEANT4_TC_XERCESC_LIB_PATH_SETUP "# GDML SUPPORT NOT AVAILABLE")
   if(GEANT4_USE_GDML)
-    get_filename_component(_XERCESC_LIB_DIR "${XERCESC_LIBRARY}" REALPATH)
-    get_filename_component(_XERCESC_LIB_DIR "${XERCESC_LIBRARY}" DIRECTORY)
+    get_filename_component(_XERCESC_LIB_DIR "${XercesC_LIBRARY}" REALPATH)
+    get_filename_component(_XERCESC_LIB_DIR "${XercesC_LIBRARY}" DIRECTORY)
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
       _g4tc_append_path(GEANT4_TC_XERCESC_LIB_PATH_SETUP
         ${_shell}

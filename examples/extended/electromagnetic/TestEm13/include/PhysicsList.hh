@@ -55,7 +55,8 @@ class PhysicsList: public G4VModularPhysicsList
     virtual void ConstructParticle();
     virtual void ConstructProcess();
     void AddPhysicsList(const G4String& name);
-      
+    virtual void SetCuts();
+         
   private:
     G4VPhysicsConstructor* fEmPhysicsList;
     G4String               fEmName;

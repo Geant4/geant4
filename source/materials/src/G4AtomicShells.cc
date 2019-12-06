@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 // 24-04-98, implementation of the first version, V. Grichine
@@ -777,6 +775,23 @@ G4AtomicShells::GetNumberOfElectrons(G4int Z, G4int ShellNb)
   }
 #endif
   return fNumberOfElectrons[fIndexOfShells[Z] + ShellNb];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4int    
+G4AtomicShells::GetNumberOfFreeElectrons(G4int Z, G4double th)
+{
+#ifdef G4VERBOSE
+  if(Z<0 || Z>100) { Z = PrintErrorZ(Z, "GetNumberOfFreeElectrons"); }
+#endif
+  G4int idx = fIndexOfShells[Z];
+  G4int idxmax = idx +  fNumberOfShells[Z];
+  G4int n = 0;
+  for (G4int i=idx; i<idxmax; ++i) {
+    if(fBindingEnergies[i] <= th) { n += fNumberOfElectrons[i]; } 
+  }
+  return n;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

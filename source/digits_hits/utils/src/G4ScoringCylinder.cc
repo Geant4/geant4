@@ -55,7 +55,7 @@
 G4ScoringCylinder::G4ScoringCylinder(G4String wName)
   :G4VScoringMesh(wName)
 {
-  fShape = cylinderMesh;
+  fShape = MeshShape::cylinder;
 
   fDivisionAxisNames[0] = "Z";
   fDivisionAxisNames[1] = "PHI";

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Class G4MultiLevelLocator 
 //
 // class description:
@@ -52,9 +49,9 @@ class G4MultiLevelLocator : public G4VIntersectionLocator
    public:  // with description 
  
      G4MultiLevelLocator(G4Navigator *theNavigator);
-        // Constructor
+       // Constructor
      ~G4MultiLevelLocator();
-        // Default destructor
+       // Default destructor
      
      G4bool EstimateIntersectionPoint( 
          const  G4FieldTrack&       curveStartPointTangent,  // A
@@ -82,18 +79,20 @@ class G4MultiLevelLocator : public G4VIntersectionLocator
 
      // Invariants -- parameters
      // ====================================   
-     static const G4int max_depth=10;
-     unsigned int fMaxSteps;   // Effort abandoned; signal particle is looping 
-     unsigned int fWarnSteps;  // Warn about many steps (but it has succeeded)
+     static const G4int max_depth = 10;
+     unsigned int fMaxSteps = 10000; // Effort abandoned; signal is looping 
+     unsigned int fWarnSteps = 1000; // Warn about many steps (but succeeded)
 
      // State - varies during simulation
      // ====================================
      G4FieldTrack* ptrInterMedFT[max_depth+1];
        // Used to store intermediate tracks values in case of too slow progress
 
-     unsigned long int fNumCalls; 
-     unsigned long int fNumAdvanceFull, fNumAdvanceGood, fNumAdvanceTrials;
-      //  Counters for statistics & debugging
+     unsigned long int fNumCalls = 0; 
+     unsigned long int fNumAdvanceFull = 0,
+                       fNumAdvanceGood = 0,
+                       fNumAdvanceTrials = 0;
+       // Counters for statistics & debugging
 };
 
 #endif

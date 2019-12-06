@@ -23,30 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4VoxelLimits
+// G4VoxelLimits
 //
 // Class description:
 //
 // Represents limitation/restrictions of space, where restrictions
 // are only made perpendicular to the cartesian axes.
 //
-//
 // Member data:
 //
 // G4double fxAxisMin,fxAxisMax
 // G4double fyAxisMin,fyAxisMax
 // G4double fzAxisMin,fzAxisMax
-//   - The min and max values along each axis. +-kInfinity if not restricted.
-//
-//
-// Notes:
-//
-// Beware no break statements after returns in switch(pAxis)s.
+// - The min and max values along each axis. +-kInfinity if not restricted.
 
-// History:
-// 13.07.95 P.Kent Initial version.
+// 13.07.95, P.Kent - Initial version.
 // --------------------------------------------------------------------
 #ifndef G4VOXELLIMITS_HH
 #define G4VOXELLIMITS_HH
@@ -68,7 +59,7 @@ class G4VoxelLimits
     ~G4VoxelLimits();
       // Destructor. No actions.
 
-    void AddLimit(const EAxis pAxis, const G4double pMin,const G4double pMax);
+    void AddLimit(const EAxis pAxis, const G4double pMin, const G4double pMax);
       // Restrict the volume to between specified min and max along the
       // given axis. Cartesian axes only, pMin<=pMax.
 
@@ -103,7 +94,7 @@ class G4VoxelLimits
     G4bool IsLimited(const EAxis pAxis) const;
       // Return true if the specified axis is restricted/limited.
 
-    G4bool ClipToLimits(G4ThreeVector& pStart,G4ThreeVector& pEnd) const;
+    G4bool ClipToLimits(G4ThreeVector& pStart, G4ThreeVector& pEnd) const;
       // Clip the line segment pStart->pEnd to the volume described by the
       // current limits. Return true if the line remains after clipping,
       // else false, and leave the vectors in an undefined state.
@@ -124,9 +115,9 @@ class G4VoxelLimits
 
   private:
 
-    G4double fxAxisMin,fxAxisMax;
-    G4double fyAxisMin,fyAxisMax;
-    G4double fzAxisMin,fzAxisMax;
+    G4double fxAxisMin = -kInfinity, fxAxisMax = kInfinity;
+    G4double fyAxisMin = -kInfinity, fyAxisMax = kInfinity;
+    G4double fzAxisMin = -kInfinity, fzAxisMax = kInfinity;
 };
 
 #include "G4VoxelLimits.icc"

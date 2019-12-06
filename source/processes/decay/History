@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 01 November 2019 Vladimir Ivanchenko (decay-V10-05-01)
+- G4Decay.cc : Extended printout in the case of G4Exception DECAY101
+    and DECAY102
+
 - 14 December 2018 Makoto Asai (decay-V10-05-00)
 - G4Decay.cc, G4UnknownDecay : Allowing absolute zero proper decay time.
   Co-working with event-V10-05-00 and particles-V10-05-00

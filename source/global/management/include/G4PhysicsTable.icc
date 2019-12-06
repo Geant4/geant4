@@ -77,6 +77,15 @@ inline
 inline
  void  G4PhysicsTable::insertAt (size_t idx, G4PhysicsVector* pvec)
 {
+  if(idx > entries())
+  { 
+    G4ExceptionDescription ed;
+    ed << "Sprcified index (" << idx << ") is larger than the size of the vector ("
+       << entries() << ").";
+    G4Exception("G4PhysicsTable::insertAt()","Global_PhysTbl0001",
+                FatalException,ed);
+  }
+
   G4PhysicsTableIterator itr=begin();
   for (size_t i=0; i<idx; ++i) { itr++; }
   G4PhysCollection::insert(itr, pvec);

@@ -1110,7 +1110,7 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
                   G4double x0=0;
                   try {
                     x0=x0_solution(2*q-q*q);
-                  } catch(c2_exception& e) {
+                  } catch(c2_exception&) {
                     G4Exception("G4ScreenedNuclearRecoil::LoadData",
                       "em0003",FatalException,
                       "failure in inverse solution to generate MFP tables");

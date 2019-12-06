@@ -406,6 +406,8 @@ public: // With description
   G4bool                       GetTransientsDrawnThisEvent () const;
   G4bool                       GetDrawEventOnlyIfToBeKept  () const;
   const G4Event*               GetRequestedEvent           () const;
+  G4int                        GetNKeepRequests            () const;
+  G4bool                       GetReviewingKeptEvents      () const;
   G4bool                       GetAbortReviewKeptEvents    () const;
   const G4ViewParameters&      GetDefaultViewParameters    () const;
 #ifdef G4MULTITHREADED
@@ -429,6 +431,7 @@ public: // With description
   void              SetDrawEventOnlyIfToBeKept  (G4bool);
   // If non-zero, requested event is used in G4VSceneHandler::ProcessScene.
   void              SetRequestedEvent           (const G4Event*);
+  void              SetReviewingKeptEvents      (G4bool);
   void              SetAbortReviewKeptEvents    (G4bool);
   void              SetDefaultViewParameters    (const G4ViewParameters&);
 #ifdef G4MULTITHREADED
@@ -525,6 +528,7 @@ private:
   G4bool                fKeptLastEvent;
   G4bool                fDrawEventOnlyIfToBeKept;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
+  G4bool                fReviewingKeptEvents;
   G4bool                fAbortReviewKeptEvents;
   G4ViewParameters      fDefaultViewParameters;
   G4bool                fIsDrawGroup;

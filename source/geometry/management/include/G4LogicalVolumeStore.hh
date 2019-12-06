@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4LogicalVolumeStore
+// G4LogicalVolumeStore
 //
 // Class description:
 //
@@ -46,9 +44,8 @@
 // static G4LogicalVolumeStore* fgInstance
 //   - Ptr to the single G4LogicalVolumeStore.
 
-// History:
-// 18.04.01 G.Cosmo Migrated to STL vector
-// 10.07.95 P.Kent  Initial version
+// 18.04.01 - G.Cosmo, Migrated to STL vector
+// 10.07.95 - P.Kent, Initial version
 // --------------------------------------------------------------------
 #ifndef G4LOGICALVOLUMESTORE_HH
 #define G4LOGICALVOLUMESTORE_HH

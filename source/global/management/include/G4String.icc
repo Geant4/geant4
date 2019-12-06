@@ -219,12 +219,12 @@ inline G4String& G4String::remove(str_size pos, str_size N)
   return *this;
 }
 
-inline G4int G4String::first(char ch) const
+inline std::size_t G4String::first(char ch) const
 {
   return find(ch);
 }
 
-inline G4int G4String::last(char ch) const
+inline std::size_t G4String::last(char ch) const
 {
   return rfind(ch);
 }
@@ -247,7 +247,7 @@ inline G4String G4String::strip (G4int strip_Type, char ch)
   switch ( strip_Type ) {
   case leading: 
     {
-      for(i=0;i<length();i++)
+      for(i=0;i<length();++i)
 	{ if (std_string::operator[](i) != ch) { break; } }
       retVal = substr(i,length()-i);
     }
@@ -255,18 +255,18 @@ inline G4String G4String::strip (G4int strip_Type, char ch)
   case trailing:
     {
       G4int j=0;
-      for(j=length()-1;j>=0;j--)
+      for(j=G4int(length()-1);j>=0;--j)
 	{ if (std_string::operator[](j) != ch) { break; } }
       retVal = substr(0,j+1);
     }
     break;
   case both:
     { 
-      for(i=0;i<length();i++)
+      for(i=0;i<length();++i)
 	{ if (std_string::operator[](i) != ch) { break; } }
       G4String tmp(substr(i,length()-i));
       G4int k=0;
-      for(k=tmp.length()-1;k>=0;k--)
+      for(k=G4int(tmp.length()-1);k>=0;--k)
 	{ if (tmp.std_string::operator[](k) != ch) { break; } }
       retVal = tmp.substr(0,k+1);
     }

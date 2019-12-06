@@ -23,19 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation of methods for the class G4UnionSolid
 //
-// History:
-//
-// 12.09.98 V.Grichine: first implementation
-// 28.11.98 V.Grichine: fix while loops in DistToIn/Out 
-// 27.07.99 V.Grichine: modifications in DistToOut(p,v,...), while -> do-while
-// 16.03.01 V.Grichine: modifications in CalculateExtent()
-// 17.03.17 E.Tcherniaev: revision of SurfaceNormal()
 // 23.04.18 E.Tcherniaev: added extended BBox, yearly return in Inside()
-//
+// 17.03.17 E.Tcherniaev: revision of SurfaceNormal()
+// 12.09.98 V.Grichine: first implementation
 // --------------------------------------------------------------------
 
 #include <sstream>
@@ -355,7 +347,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 {
   G4double  dist = 0.0, disTmp = 0.0 ;
   G4ThreeVector normTmp;
-  G4ThreeVector* nTmp= &normTmp;
+  G4ThreeVector* nTmp = &normTmp;
 
   if( Inside(p) == kOutside )
   {
@@ -383,7 +375,6 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
   else
   {
     EInside positionA = fPtrSolidA->Inside(p) ;
-    // EInside positionB = fPtrSolidB->Inside(p) ;
 
     if( positionA != kOutside )
     { 
@@ -483,7 +474,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// GetEntityType
 
 G4GeometryType G4UnionSolid::GetEntityType() const 
 {
@@ -501,7 +492,7 @@ G4VSolid* G4UnionSolid::Clone() const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// ComputeDimensions
 
 void 
 G4UnionSolid::ComputeDimensions(       G4VPVParameterisation*,
@@ -512,7 +503,7 @@ G4UnionSolid::ComputeDimensions(       G4VPVParameterisation*,
 
 /////////////////////////////////////////////////
 //
-//                    
+// DescribeYourselfTo
 
 void 
 G4UnionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
@@ -522,7 +513,7 @@ G4UnionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 ////////////////////////////////////////////////////
 //
-//
+// CreatePolyhedron
 
 G4Polyhedron* 
 G4UnionSolid::CreatePolyhedron () const 
@@ -533,5 +524,5 @@ G4UnionSolid::CreatePolyhedron () const
   G4Polyhedron* top = StackPolyhedron(processor, this);
   G4Polyhedron* result = new G4Polyhedron(*top);
   if (processor.execute(*result)) { return result; }
-  else { return 0; }
+  else { return nullptr; }
 }

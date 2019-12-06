@@ -22,6 +22,7 @@ endif()
 
 add_subdirectory(accumulables)
 add_subdirectory(csv)
+add_subdirectory(factory)
 add_subdirectory(g4tools)
 add_subdirectory(hntools)
 add_subdirectory(management)
@@ -38,6 +39,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
           COMPONENTS
               accumulables/sources.cmake
               csv/sources.cmake
+              factory/sources.cmake
               g4tools/sources.cmake
               hdf5/sources.cmake
               hntools/sources.cmake
@@ -50,6 +52,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
           COMPONENTS
               accumulables/sources.cmake
               csv/sources.cmake
+              factory/sources.cmake
               g4tools/sources.cmake
               hntools/sources.cmake
               management/sources.cmake

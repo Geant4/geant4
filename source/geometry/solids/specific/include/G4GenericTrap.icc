@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4GenericTrap.icc
-//
 // Implementation of inline methods of G4GenericTrap
 // --------------------------------------------------------------------
 
@@ -44,7 +37,7 @@ G4double G4GenericTrap::GetZHalfLength() const
 inline 
 G4int G4GenericTrap::GetNofVertices() const
 {
-  return fVertices.size();
+  return G4int(fVertices.size());
 }  
 
 // --------------------------------------------------------------------

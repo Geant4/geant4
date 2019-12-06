@@ -271,7 +271,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
         G4Nucleus & aNucleus)
 //----------------------------------------------------------------------------
 {
-    if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction starts ######### "<< G4endl;
+    if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction starts ######### "<< G4endl;
 
     G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
     const G4ParticleDefinition * definition = aTrack.GetDefinition();
@@ -290,7 +290,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     G4KineticTrackVector * secondaries;// = new G4KineticTrackVector;
     G4ThreeVector initialPosition(0., 0., 0.); // will be set later
 
-    if(!getenv("I_Am_G4BinaryCascade_Developer") )
+    if(!std::getenv("I_Am_G4BinaryCascade_Developer") )
     {
         if(definition!=G4Neutron::NeutronDefinition() &&
                 definition!=G4Proton::ProtonDefinition() &&
@@ -380,7 +380,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
 
     } else {  // no interaction, return primary
-        if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return intial state ######### "<< G4endl;
+        if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return intial state ######### "<< G4endl;
         theParticleChange.SetStatusChange(isAlive);
         theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
         theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
@@ -395,7 +395,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     delete the3DNucleus;
     the3DNucleus = NULL;
 
-    if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction ends ######### "<< G4endl;
+    if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction ends ######### "<< G4endl;
 
     return &theParticleChange;
 }

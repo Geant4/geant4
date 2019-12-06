@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04CalorimeterParametrisation.hh
+/// \file ExN04CalorimeterParametrisation.hh
 /// \brief Definition of the ExN04CalorimeterParametrisation class
 //
 

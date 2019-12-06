@@ -35,27 +35,27 @@ class CCalDataSet
 {
 public:
 
-  void insert(double anEnergy, double aXsection)
+  void insert(G4double anEnergy, G4double aXsection)
   {
-    pair<double, double> aPoint(anEnergy, aXsection);
+    pair<G4double, G4double> aPoint(anEnergy, aXsection);
     theData.push_back(aPoint);
   }
   
-  double getCrossSection(double anEnergy)
+  double getCrossSection(G4double anEnergy)
   {
-    double result;
+    G4double result;
     if(anEnergy < theData[0].first)
     {
       result = 0;
     }
     else
     {
-      double x1,x2;
-      double y1,y2;
+      G4double x1,x2;
+      G4double y1,y2;
       if(anEnergy > theData[theData.size()-1].second)
       {
         // extrapolation
-        int n=theData.size();
+        G4int n=theData.size();
         x1 = theData[n-1].first;
         y1 = theData[n-1].second;
         x2 = theData[n-2].first;
@@ -65,7 +65,7 @@ public:
       {
         // linear search and interpolation
         unsigned int i;
-        for(i=0; i<theData.size(); i++)
+        for(i=0; i<theData.size(); ++i)
         {
           if(theData[i].first>anEnergy) break;
         }
@@ -86,6 +86,6 @@ private:
   
 private:
 
-  vector<pair<double, double> > theData;
+  vector<pair<G4double, G4double> > theData;
 };
 #endif

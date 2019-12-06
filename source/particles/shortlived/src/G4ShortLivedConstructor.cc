@@ -33,6 +33,7 @@
 //      Fix spin/isospin number for quarks 06  Apr. 2001 H.Kurashige
 //      update quark mass                  11  Oct. 2006 H.Kurashige
 //      update meson/baryon masses         11  Oct. 2006 H.Kurashige
+//      Added charm and bottom diquarks    09  Oct. 2019 V.Uzhinsky
 
 #include "G4ShortLivedConstructor.hh"
 
@@ -309,6 +310,273 @@ void G4ShortLivedConstructor::ConstructQuarks()
                     0,               0,             0,             
            "diquarks",               0,             0,        -3303,
 		 true,            -1.0,          NULL);
+
+  // ----------- V. Uzhinsky October 2019: Add di-quarks having c and b quarks ----------------
+  //                                       They have to be improved.
+
+    // cd0-Diquark
+  particle = new G4DiQuarks(            
+        "cd0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,         4101,
+                 true,            -1.0,          NULL);
+
+    // cd1-Diquark
+  particle = new G4DiQuarks(            
+         "cd1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         4103,
+                 true,            -1.0,          NULL);
+
+    // cu0-Diquark
+  particle = new G4DiQuarks(            
+        "cu0_diquark",         7.1*MeV,       0.0*MeV,   4./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,         4201,
+                 true,            -1.0,          NULL);
+
+    // cu1-Diquark
+  particle = new G4DiQuarks(            
+         "cu1_diquark",        7.0*MeV,       0.0*MeV,   4./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         4203,
+                 true,            -1.0,          NULL);
+
+    // cs0-Diquark
+  particle = new G4DiQuarks(            
+        "cs0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,         4301,
+                 true,            -1.0,          NULL);
+
+    // cs1-Diquark
+  particle = new G4DiQuarks(            
+         "cs1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         4303,
+                 true,            -1.0,          NULL);
+
+    // cc1-Diquark
+  particle = new G4DiQuarks(            
+         "cc1_diquark",        7.0*MeV,       0.0*MeV,   4./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         4403,
+                 true,            -1.0,          NULL);
+
+  //---------------------------------------------
+
+    // bd0-Diquark
+  particle = new G4DiQuarks(            
+        "bd0_diquark",         7.1*MeV,       0.0*MeV,  -2./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,         5101,
+                 true,            -1.0,          NULL);
+
+    // bd1-Diquark
+  particle = new G4DiQuarks(            
+         "bd1_diquark",        7.0*MeV,       0.0*MeV,  -2./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         5103,
+                 true,            -1.0,          NULL);
+
+    // bu0-Diquark
+  particle = new G4DiQuarks(            
+        "bu0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,         5201,
+                 true,            -1.0,          NULL);
+
+    // bu1-Diquark
+  particle = new G4DiQuarks(            
+         "bu1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         5203,
+                 true,            -1.0,          NULL);
+
+    // bs0-Diquark
+  particle = new G4DiQuarks(            
+        "bs0_diquark",         7.1*MeV,       0.0*MeV,  -2./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,         5301,
+                 true,            -1.0,          NULL);
+
+    // bs1-Diquark
+  particle = new G4DiQuarks(            
+         "bs1_diquark",        7.0*MeV,       0.0*MeV,  -2./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         5303,
+                 true,            -1.0,          NULL);
+
+    // bc0-Diquark
+  particle = new G4DiQuarks(            
+        "bc0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,         5401,
+                 true,            -1.0,          NULL);
+
+    // bc1-Diquark
+  particle = new G4DiQuarks(            
+         "bc1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         5403,
+                 true,            -1.0,          NULL);
+
+    // bb1-Diquark
+  particle = new G4DiQuarks(            
+         "bb1_diquark",        7.0*MeV,       0.0*MeV,   2./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,         5503,
+                 true,            -1.0,          NULL);
+
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    // anti cd0-Diquark
+  particle = new G4DiQuarks(            
+   "anti_cd0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,        -4101,
+                 true,            -1.0,          NULL);
+
+    // anti cd1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_cd1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -4103,
+                 true,            -1.0,          NULL);
+
+    // anti cu0-Diquark
+  particle = new G4DiQuarks(            
+   "anti_cu0_diquark",         7.1*MeV,       0.0*MeV,  -4./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,        -4201,
+                 true,            -1.0,          NULL);
+
+    // anti cu1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_cu1_diquark",        7.0*MeV,       0.0*MeV,  -4./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -4203,
+                 true,            -1.0,          NULL);
+
+    // anti cs0-Diquark
+  particle = new G4DiQuarks(            
+   "anti_cs0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,        -4301,
+                 true,            -1.0,          NULL);
+
+    // anti cs1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_cs1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -4303,
+                 true,            -1.0,          NULL);
+
+    // anti cc1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_cc1_diquark",        7.0*MeV,       0.0*MeV,  -4./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -4403,
+                 true,            -1.0,          NULL);
+
+  //---------------------------------------------
+
+    // anti bd0-Diquark
+  particle = new G4DiQuarks(            
+   "anti_bd0_diquark",         7.1*MeV,       0.0*MeV,  +2./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,        -5101,
+                 true,            -1.0,          NULL);
+
+    // anti bd1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_bd1_diquark",        7.0*MeV,       0.0*MeV,  +2./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -5103,
+                 true,            -1.0,          NULL);
+
+    // anti bu0-Diquark
+  particle = new G4DiQuarks(            
+   "anti_bu0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,        -5201,
+                 true,            -1.0,          NULL);
+
+    // anti bu1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_bu1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -5203,
+                 true,            -1.0,          NULL);
+
+    // anti bs0-Diquark
+  particle = new G4DiQuarks(            
+   "anti_bs0_diquark",         7.1*MeV,       0.0*MeV,  +2./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,        -5301,
+                 true,            -1.0,          NULL);
+
+    // anti bs1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_bs1_diquark",        7.0*MeV,       0.0*MeV,  +2./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -5303,
+                 true,            -1.0,          NULL);
+
+    // anti bc0-Diquark
+  particle = new G4DiQuarks(            
+   "anti_bc0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    0,              +1,             0,          
+                    0,              +0,             0,             
+           "diquarks",               0,             0,        -5401,
+                 true,            -1.0,          NULL);
+
+    // anti bc1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_bc1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -5403,
+                 true,            -1.0,          NULL);
+
+    // anti bb1-Diquark
+  particle = new G4DiQuarks(            
+    "anti_bb1_diquark",        7.0*MeV,       0.0*MeV,  -2./3.*eplus, 
+                    2,              +1,             0,          
+                    2,              +0,             0,             
+           "diquarks",               0,             0,        -5503,
+                 true,            -1.0,          NULL);
+
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   particle = NULL;      
 }

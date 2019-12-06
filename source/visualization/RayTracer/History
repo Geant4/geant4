@@ -23,6 +23,12 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+15th November 2019, Gabriele Cosmo (raytracer-V10-05-01)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+25th October 2019 Ben Morgan (raytracer-V10-05-00)
+- Link to X11 imported targets when building X11 driver
+
 9th November 2018  Gabriele Cosmo (raytracer-V10-04-04)
 - G4RTMessenger: fixed printout typos.
 

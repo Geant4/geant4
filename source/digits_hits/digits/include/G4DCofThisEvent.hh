@@ -79,7 +79,7 @@ class G4DCofThisEvent
       //  Returns the number of digi collections which are stored in this class
       // object.
   public:
-      inline G4int GetCapacity() const
+      inline size_t GetCapacity() const
       {
         return DC->size();
       }

@@ -190,7 +190,6 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
 // New stab at getting a colormap
 
   Status status;
-  XStandardColormap *standardCmaps = XAllocStandardColormap ();
   int i, numCmaps;
 
   status = XmuLookupStandardColormap (dpy, 
@@ -203,36 +202,48 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
 
   if (status == 1) {
     cmap = 0;
+    XStandardColormap* standardCmaps = XAllocStandardColormap ();
     status = XGetRGBColormaps (dpy, 
 			       XRootWindow (dpy, vi -> screen),
 			       &standardCmaps, 
 			       &numCmaps, 
 			       XA_RGB_BEST_MAP);
-    if (status == 1)
+    if (status == 1) {
       for (i = 0; i < numCmaps; i++) {
 	if (standardCmaps[i].visualid == vi -> visualid) {
 	  cmap = standardCmaps[i].colormap;
-	  XFree (standardCmaps);
 	  break;
 	}
       }
-    if (!cmap) {
-      fViewId = -1;  // This flags an error.
-      if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cerr <<
-  "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a standard colormap."
-	       << G4endl;
-      return;
     }
-    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
-      G4cout << "Got standard cmap" << G4endl;
+    XFree (standardCmaps);
+    if(cmap) {
+      if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+        G4cout << "Got standard cmap" << G4endl;
+    } else {
+      //if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      //	G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a standard colormap."
+      //	       << G4endl;
+      cmap = XCreateColormap (dpy, 
+                              XRootWindow(dpy, vi -> screen), 
+                              vi -> visual, 
+                              AllocNone);
+      if(cmap) {
+        if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+          G4cout << "Created own cmap" << G4endl;
+      }
+      //G.Barrand : at end, we should do a XFreeColormap(dpy,cmap) when cmap is no more used.
+    }
   } else {
     cmap = XCreateColormap (dpy, 
 			    XRootWindow(dpy, vi -> screen), 
 			    vi -> visual, 
 			    AllocNone);
-    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
-      G4cout << "Created own cmap" << G4endl;
+    if(cmap) {
+      if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+        G4cout << "Created own cmap" << G4endl;
+    }
+    //G.Barrand : at end, we should do a XFreeColormap(dpy,cmap) when cmap is no more used.
   }
 
   if (!cmap) {
@@ -467,10 +478,12 @@ cmap (0)
   if (!vi_single_buffer) {
     vi_single_buffer =
       glXChooseVisual (dpy, XDefaultScreen (dpy), snglBuf_RGBA);
+    //G.Barrand : we should do a XFree(vi_single_buffer) at end;
   }
   if (!vi_double_buffer) {
     vi_double_buffer =
       glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA);
+    //G.Barrand : we should do a XFree(vi_double_buffer) at end;
   }
 
   if (vi_single_buffer || vi_double_buffer) {
@@ -531,6 +544,7 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
     glXDestroyContext (dpy, cxMaster);
     if (win) XDestroyWindow (dpy, win); // ...if already deleted in
     // sub-class G4OpenGLXmViewer.
+    // We should do a XFreeColormap(dpy,cmap); if cmap had been get with XCreateColormap.
     XFlush (dpy);
   }
 }

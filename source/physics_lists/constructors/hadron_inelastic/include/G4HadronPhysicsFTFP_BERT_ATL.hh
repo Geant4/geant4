@@ -32,10 +32,10 @@
 // This is a modified version of the FTFP_BERT hadron physics for ATLAS.
 // The hadron physics of FTFP_BERT_ATL has the transition between Bertini
 // (BERT) intra-nuclear cascade model and Fritiof (FTF) string model in the
-// energy region [9, 12] GeV (instead of [4, 5] GeV as in FTFP_BERT).
+// energy region [9, 12] GeV.
 //
 // Modified:
-// 18.07.2017 A.Dotti: refactor forllowin new code
+// 18.07.2017 A.Dotti: refactor for allowing new code
 //---------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsFTFP_BERT_ATL_h
@@ -52,6 +52,8 @@ class G4HadronPhysicsFTFP_BERT_ATL : public G4HadronPhysicsFTFP_BERT
 
   private:
     //Modify the minimum needed
+    virtual void Neutron() override;
+    virtual void Proton() override;
     virtual void Pion() override;
     virtual void Kaon() override;
     virtual void DumpBanner() override;

@@ -94,3 +94,4 @@ G4HadronicInteraction* G4QGSBuilder::BuildModel()
 
   return theQGSModel;
 }
+

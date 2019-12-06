@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -91,7 +90,13 @@ public:
 
 private: 
 
-  void Initialise(G4int Z, const char*);
+  void Initialise(G4int Z);
+
+  void InitialiseOnFly(G4int Z);
+
+  const G4String& FindDirectoryPath();
+
+  const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
@@ -104,14 +109,14 @@ private:
   G4double elimit;
   G4double logElimit;
 
-  size_t   fIdxXSTable;
+  std::vector<G4double> temp;
+
   G4bool   isMaster;
 
   static G4ElementData* data;
-  std::vector<G4double> temp;
-
   static const G4int amin[MAXZCAPTURE];
   static const G4int amax[MAXZCAPTURE];
+  static G4String gDataDirectory;
 
 #ifdef G4MULTITHREADED
   static G4Mutex neutronCaptureXSMutex;

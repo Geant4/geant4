@@ -6,6 +6,7 @@
 
 #include <string>
 #include <map>
+#include <ostream>
 
 namespace tools {
 namespace rroot {
@@ -21,8 +22,8 @@ public:
 public:
   virtual ~ifac(){}
 public:
+  virtual std::ostream& out() const = 0;
   virtual iro* create(const std::string& a_class,const args&) = 0;
-  virtual void destroy(iro*&) = 0;
 public:
   static void* find_args(const args& a_args,char a_key) {
     std::map<char,void*>::const_iterator it = a_args.find(a_key);

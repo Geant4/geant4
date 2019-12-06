@@ -43,9 +43,10 @@
 
 #include "G4UImanager.hh"
 
-#include "Randomize.hh"
+#include "FTFP_BERT.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 
-#include "WLSPhysicsList.hh"
 #include "WLSDetectorConstruction.hh"
 
 #include "WLSActionInitialization.hh"
@@ -82,44 +83,24 @@ int main(int argc,char** argv)
   G4RunManager * runManager = new G4RunManager;
 #endif
 
-  G4String physName = "QGSP_BERT_HP";
-
-#ifndef WIN32
-  G4int c = 0;
-  while ((c=getopt(argc,argv,"p")) != -1)
-  {
-     switch (c)
-     {
-       case 'p':
-         physName = optarg;
-         G4cout << "Physics List used is " <<  physName << G4endl;
-         break;
-       case ':':       /* -p without operand */
-         fprintf(stderr,
-                         "Option -%c requires an operand\n", optopt);
-         break;
-       case '?':
-         fprintf(stderr,
-                         "Unrecognised option: -%c\n", optopt);
-     }
-  }
-#endif
-
   // Set mandatory initialization classes
   //
   // Detector construction
   WLSDetectorConstruction* detector = new WLSDetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
-  runManager->SetUserInitialization(new WLSPhysicsList(physName));
+
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  physicsList->RegisterPhysics(opticalPhysics);
+  runManager->SetUserInitialization(physicsList);
+
   // User action initialization
   runManager->SetUserInitialization(new WLSActionInitialization(detector));
 
   // Initialize visualization
-  //
   G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager

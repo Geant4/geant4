@@ -23,19 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4GeometryCellComp
+// G4GeometryCellComp
 //
 // Class description:
 //
-// A class needed for comparing G4GeometryCell e.g. in stl containers.
+// A class needed for comparing G4GeometryCell e.g. in STL containers.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4GeometryCellComp_hh
-#define G4GeometryCellComp_hh G4GeometryCellComp_hh 
+#ifndef G4GEOMETRYCELLCOMP_HH
+#define G4GEOMETRYCELLCOMP_HH 1
 
 #include "globals.hh"
 
@@ -43,14 +40,13 @@ class G4GeometryCell;
 
 class G4GeometryCellComp
 {
+  public:
 
-public:  // without description
-  G4GeometryCellComp();
+    G4GeometryCellComp();
 
-  G4bool operator() (const G4GeometryCell &g1,
-                     const G4GeometryCell &g2) const;
-    // returns true if g1 < g2
+    G4bool operator() (const G4GeometryCell& g1,
+                       const G4GeometryCell& g2) const;
+      // returns true if g1 < g2
 };
-
 
 #endif

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
@@ -33,7 +31,7 @@
 #include "G4AlphaEvaporationChannel.hh"
 
 G4AlphaEvaporationChannel::G4AlphaEvaporationChannel() 
-: G4EvaporationChannel(4,2,"alpha",&theEvaporationProbability,&theCoulombBarrier) 
+  : G4EvaporationChannel(4,2,&pr) 
 {}
 
 G4AlphaEvaporationChannel::~G4AlphaEvaporationChannel() 

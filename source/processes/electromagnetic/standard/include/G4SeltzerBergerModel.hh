@@ -38,11 +38,12 @@
 // Modifications:
 //
 // 24.07.2018 Introduced possibility to use sampling tables to sample the
-//            emitted photon energy (instead of using rejectio) from the Seltzer-
-//            Berger scalled DCS for bremsstrahlung photon emission. Using these
-//            sampling tables option gives faster(30-70%) final state generation
-//            than the original rejection but takes some extra memory (+ ~6MB in
-//            the case of the full CMS detector). (M Novak)
+//            emitted photon energy (instead of using rejectio) from the 
+//            Seltzer-Berger scalled DCS for bremsstrahlung photon emission. 
+//            Using these sampling tables option gives faster(30-70%) final 
+//            state generation than the original rejection but takes some 
+//            extra memory (+ ~6MB in the case of the full CMS detector). 
+//            (M Novak)
 //
 // Class Description:
 //
@@ -60,6 +61,7 @@
 
 #include "G4eBremsstrahlungRelModel.hh"
 #include "globals.hh"
+#include "G4Threading.hh"
 
 class G4Physics2DVector;
 class G4SBBremTable;
@@ -72,34 +74,34 @@ public:
   explicit G4SeltzerBergerModel(const G4ParticleDefinition* p = nullptr,
                                 const G4String& nam = "eBremSB");
 
-  virtual ~G4SeltzerBergerModel();
+  ~G4SeltzerBergerModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*,
-                          const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseForElement(const G4ParticleDefinition*,
-                                    G4int Z) override;
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-				                         G4double cutEnergy,
-                                 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+                         const G4MaterialCutsCouple*,
+                         const G4DynamicParticle*,
+			 G4double cutEnergy,
+                         G4double maxEnergy) override;
 
-  virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*,G4double) override;
+  void SetupForMaterial(const G4ParticleDefinition*,
+                        const G4Material*, G4double) override;
 
-  inline void  SetBicubicInterpolationFlag(G4bool val) { fIsUseBicubicInterpolation = val; }
+  inline void SetBicubicInterpolationFlag(G4bool val) 
+  { fIsUseBicubicInterpolation = val; };
 
 protected:
 
-  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy) override;
-
-  virtual G4String DirectoryPath() const;
+  G4double ComputeDXSectionPerAtom(G4double gammaEnergy) override;
 
 private:
 
-  void ReadData(G4int izet, const char* path = nullptr);
+  //
+  void ReadData(G4int Z);
+
+  const G4String& FindDirectoryPath();
 
   G4double SampleEnergyTransfer(const G4double kineticEnergy, 
                                 const G4double logKineticEnergy, 
@@ -107,16 +109,15 @@ private:
                                 const G4double emax);
 
   // hide assignment operator and cctr
-  G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right) = delete;
-  G4SeltzerBergerModel(const  G4SeltzerBergerModel&) = delete;
-
-private:
+  G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);
+  G4SeltzerBergerModel(const  G4SeltzerBergerModel&);
 
   static constexpr G4int    gMaxZet       = 101;
   static constexpr G4double gExpNumLimit  = -12.;
   static G4double           gYLimitData[gMaxZet];
   static G4Physics2DVector* gSBDCSData[gMaxZet];
   static G4SBBremTable*     gSBSamplingTable;
+  static G4String           gDataDirectory;
 
   G4bool                    fIsUseBicubicInterpolation;
   G4bool                    fIsUseSamplingTables;
@@ -125,6 +126,11 @@ private:
 
   size_t                    fIndx;
   size_t                    fIndy;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex theSBMutex;
+#endif
+
 };
 
 #endif

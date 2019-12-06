@@ -23,42 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4IntegrationDriver
+// G4IntegrationDriver
 //
 // Class description:
 //
-//   Templated driver class which controls the integration error of a 
+// Templated driver class which controls the integration error of a 
 // Runge-Kutta stepper.
-//   It's purpose is to provide a replacement of G4MagIntegratorDriver
+// It's purpose is to provide a replacement of G4MagIntegratorDriver
 // and work for all types of steppers.  
-//   It will serve as the driver of choice for steppers which do not 
+// It will serve as the driver of choice for steppers which do not 
 // have extra capabilities, in particular First Same As Last (FSAL)
 // and/or interpolation.
-//
-//    Implementation by Dmitry Sorokin - GSoC 2017
-//       Work supported by Google as part of Google Summer of Code 2017.
-//    Supervision / code review: John Apostolakis
-//
-// History:
-// - Created. D.Sorokin
-// --------------------------------------------------------------------
 
-#ifndef G4IntegrationDriver_HH
-#define G4IntegrationDriver_HH
+// Author: Dmitry Sorokin, Google Summer of Code 2017
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+#ifndef G4INTEGRATIONDRIVER_HH
+#define G4INTEGRATIONDRIVER_HH
 
 #include "G4RKIntegrationDriver.hh"
 #include "G4ChordFinderDelegate.hh"
 
 template <class T>
 class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
-                            public G4ChordFinderDelegate<G4IntegrationDriver<T>> {
-public:
-    G4IntegrationDriver(  G4double hminimum,
-                          T*       stepper,
-                          G4int    numberOfComponents = 6,
-                          G4int    statisticsVerbosity = 1);
+                            public G4ChordFinderDelegate<G4IntegrationDriver<T>>
+{
+  public:
+
+    G4IntegrationDriver( G4double hminimum,
+                         T*       stepper,
+                         G4int    numberOfComponents = 6,
+                         G4int    statisticsVerbosity = 1 );
 
     virtual ~G4IntegrationDriver() override;
 
@@ -66,49 +61,37 @@ public:
     const G4IntegrationDriver& operator =(const G4IntegrationDriver &) = delete;
 
     virtual G4double AdvanceChordLimited(G4FieldTrack& track, 
-                                        G4double stepMax, 
-                                        G4double epsStep,
-                                        G4double chordDistance) override
-    {
-        return ChordFinderDelegate::AdvanceChordLimitedImpl(
-            track, stepMax, epsStep, chordDistance);
-    }
+                                         G4double stepMax, 
+                                         G4double epsStep,
+                                         G4double chordDistance) override;
 
-    virtual void OnStartTracking() override
-    {
-        ChordFinderDelegate::ResetStepEstimate();
-    }
+    virtual void OnStartTracking() override;
+    virtual void OnComputeStep() override {}
+    virtual G4bool DoesReIntegrate() override { return true; } 
 
-    virtual void OnComputeStep() override {};
+    virtual G4bool AccurateAdvance(G4FieldTrack& track,
+                                   G4double hstep,
+                                   G4double eps, // Requested y_err/hstep
+                                   G4double hinitial = 0) override;
+      // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
+      // On output track is replaced by value at end of interval.
+      // The concept is similar to the odeint routine from NRC p.721-722.
 
-    // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
-    // On output track is replaced by value at end of interval.
-    // The concept is similar to the odeint routine from NRC p.721-722.
-    virtual G4bool AccurateAdvance(
-        G4FieldTrack& track,
-        G4double hstep,
-        G4double eps,                     // Requested y_err/hstep
-        G4double hinitial = 0) override;  // Suggested 1st interval
-
-    // QuickAdvance just tries one Step - it does not ensure accuracy.
-    virtual G4bool QuickAdvance(
-        G4FieldTrack& fieldTrack,
-        const G4double dydx[],
-        G4double hstep,
-        G4double inverseCurvatureRadius,
-        G4double& dchord_step,
-        G4double& dyerr) override;
+    virtual G4bool QuickAdvance(      G4FieldTrack& fieldTrack,
+                                const G4double dydx[],
+                                      G4double hstep,
+                                      G4double& dchord_step,
+                                      G4double& dyerr) override;
+      // QuickAdvance just tries one Step - it does not ensure accuracy.
 
     virtual void SetVerboseLevel(G4int newLevel) override;
     virtual G4int GetVerboseLevel() const override;
 
-    // Accessors.
+    // Accessors
+    //
     G4double GetMinimumStep() const;
     void SetMinimumStep(G4double newval);
 
-    // This takes one Step that is of size htry, or as large 
-    // as possible while satisfying the accuracy criterion of:
-    //     yerr < eps * |y_end-y_start|
     void OneGoodStep(      G4double  yVar[],  // InOut
                      const G4double  dydx[],
                            G4double& curveLength,
@@ -116,30 +99,35 @@ public:
                            G4double  eps,
                            G4double& hdid,
                            G4double& hnext);
+      // This takes one Step that is of size htry, or as large 
+      // as possible while satisfying the accuracy criterion of:
+      //     yerr < eps * |y_end-y_start|
 
      G4double GetSmallestFraction() const;
      void SetSmallestFraction(G4double val);
 
-protected:
+  protected:
+
     void IncrementQuickAdvanceCalls();
 
-private:
+  private:
+
     void CheckStep(const G4ThreeVector& posIn, 
                    const G4ThreeVector& posOut, 
-                   G4double hdid);
+                         G4double hdid);
 
-    // Minimum Step allowed in a Step (in absolute units)
     G4double fMinimumStep;
+      // Minimum Step allowed in a Step (in absolute units)
 
-    // Smallest fraction of (existing) curve length - in relative units
-    // below this fraction the current step will be the last
     G4double fSmallestFraction;
-    //  Expected range: smaller than 0.1 * epsilon and bigger than 5e-13
-    //    ( Note: this range is not enforced. )
+      // Smallest fraction of (existing) curve length - in relative units
+      // below this fraction the current step will be the last
+      // Expected range: smaller than 0.1 * epsilon and bigger than 5e-13
+      // Note: this range is not enforced.
 
-    // Verbosity level for printing (debug, ..)
-    // Could be varied during tracking - to help identify issues
     G4int fVerboseLevel;
+      // Verbosity level for printing (debug, ..)
+      // Could be varied during tracking - to help identify issues
 
     G4int fNoQuickAvanceCalls;
     G4int fNoAccurateAdvanceCalls;

@@ -228,7 +228,7 @@ class G4UImanager : public G4VStateDependent
       inline G4int GetVerboseLevel() const
       { return verboseLevel; }
       inline G4int GetNumberOfHistory() const
-      { return histVec.size(); }
+      { return G4int(histVec.size()); }
       inline G4String GetPreviousCommand(G4int i) const
       {
         G4String st;

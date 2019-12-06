@@ -39,12 +39,16 @@ public:
   ,m_GL_TEXTURE_2D(false)
   ,m_GL_POINT_SMOOTH(false)
   ,m_GL_LINE_SMOOTH(false)
+  ,m_GL_BLEND(false)
 
   ,m_use_gsto(false)
 
   ,m_winding(winding_ccw)
 
   ,m_light(0)
+
+  ,m_draw_type(sg::draw_filled)
+  ,m_shade_model(sg::shade_flat)
 
   ,m_line_width(1)
   ,m_line_pattern(sg::line_solid)
@@ -84,6 +88,7 @@ public:
   ,m_GL_TEXTURE_2D(a_from.m_GL_TEXTURE_2D)
   ,m_GL_POINT_SMOOTH(a_from.m_GL_POINT_SMOOTH)
   ,m_GL_LINE_SMOOTH(a_from.m_GL_LINE_SMOOTH)
+  ,m_GL_BLEND(a_from.m_GL_BLEND)
 
   ,m_use_gsto(a_from.m_use_gsto)
 
@@ -92,6 +97,9 @@ public:
 
   ,m_light(a_from.m_light)
 
+  ,m_draw_type(a_from.m_draw_type)
+  ,m_shade_model(a_from.m_shade_model)
+  
   ,m_line_width(a_from.m_line_width)
   ,m_line_pattern(a_from.m_line_pattern)
   ,m_point_size(a_from.m_point_size)
@@ -122,6 +130,7 @@ public:
     m_GL_TEXTURE_2D = a_from.m_GL_TEXTURE_2D;
     m_GL_POINT_SMOOTH = a_from.m_GL_POINT_SMOOTH;
     m_GL_LINE_SMOOTH = a_from.m_GL_LINE_SMOOTH;
+    m_GL_BLEND = a_from.m_GL_BLEND;
 
     m_use_gsto = a_from.m_use_gsto;
 
@@ -129,6 +138,9 @@ public:
     m_color = a_from.m_color;
 
     m_light = a_from.m_light;
+
+    m_draw_type = a_from.m_draw_type;
+    m_shade_model = a_from.m_shade_model;
 
     m_line_width = a_from.m_line_width;
     m_line_pattern = a_from.m_line_pattern;
@@ -145,6 +157,17 @@ public:
     return *this;
   }
 public:
+  bool project_point(float& a_x,float& a_y,float& a_z,float& a_w) const {
+    a_w = 1;
+    m_model.mul_4f(a_x,a_y,a_z,a_w);
+    m_proj.mul_4f(a_x,a_y,a_z,a_w);
+    if(a_w==0.0F) return false;
+    a_x /= a_w;
+    a_y /= a_w;
+    a_z /= a_w;
+    return true;
+  }
+  
   void screen2ndc(int a_x,int a_y, //signed because of wall.
                   float& a_wcx,float& a_wcy,float& a_wcz,float& a_wcw) const {
     // a proj point in near plane has (z,w) :
@@ -224,6 +247,7 @@ public:
   bool m_GL_TEXTURE_2D;
   bool m_GL_POINT_SMOOTH;
   bool m_GL_LINE_SMOOTH;
+  bool m_GL_BLEND;
 
   bool m_use_gsto;
 
@@ -231,6 +255,9 @@ public:
   colorf m_color;
 
   unsigned int m_light;
+
+  draw_type m_draw_type;
+  shade_type m_shade_model;
 
   float m_line_width;
   unsigned short m_line_pattern;

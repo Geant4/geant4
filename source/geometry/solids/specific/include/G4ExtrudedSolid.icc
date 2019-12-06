@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4ExtrudedSolid.icc
-//
 // Implementation of inline methods of G4ExtrudedSolid
 // --------------------------------------------------------------------
 
@@ -85,7 +78,7 @@ G4bool G4ExtrudedSolid::PointInPolygon(const G4ThreeVector& p) const
 {
   G4bool in = 0;
   G4int icur = (fPolygon[fNv-1].y() > p.y()), iprev = 0;
-  for (G4int i = 0; i < fNv; i++)
+  for (G4int i = 0; i < fNv; ++i)
   {
     iprev = icur;
     if ((icur = (fPolygon[i].y() > p.y())) != iprev)

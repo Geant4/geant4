@@ -23,20 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VFSALIntegrationStepper inline methods implementation
 //
+// Author: Somnath Banerjee, Google Summer of Code 2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 
 inline
 G4EquationOfMotion* G4VFSALIntegrationStepper::GetEquationOfMotion()
 {
-  return  fEquation_Rhs;
+  return fEquation_Rhs;
 } 
 
 inline void
  G4VFSALIntegrationStepper::SetEquationOfMotion(G4EquationOfMotion* newEquation)
 {
-  if( newEquation != 0 )
+  if( newEquation != nullptr )
   {
-    fEquation_Rhs= newEquation;
+    fEquation_Rhs = newEquation;
   }
 } 
 
@@ -46,13 +50,11 @@ G4int G4VFSALIntegrationStepper::GetNumberOfVariables() const
   return fNoIntegrationVariables;
 }
 
-
 inline
 G4int G4VFSALIntegrationStepper::GetNumberOfStateVariables() const
 {
   return fNoStateVariables;
 }
-
 
 inline
 void G4VFSALIntegrationStepper::NormaliseTangentVector( G4double vec[6] )
@@ -62,7 +64,7 @@ void G4VFSALIntegrationStepper::NormaliseTangentVector( G4double vec[6] )
   if( std::fabs(drds2 - 1.0) > 1.e-14 )
   {
     G4double normx = 1.0 / std::sqrt(drds2);
-    for(G4int i=3;i<6;i++) { vec[i] *= normx; }
+    for(auto i=3; i<6; ++i) { vec[i] *= normx; }
   }
 }
 
@@ -76,7 +78,7 @@ void G4VFSALIntegrationStepper::NormalisePolarizationVector( G4double vec[12] )
     if( std::fabs(drds2 - 1.0) > 1.e-14 )
     {
       G4double normx = 1.0 / std::sqrt(drds2);
-      for(G4int i=9;i<12;i++)  { vec[i] *= normx; }
+      for(auto i=9; i<12; ++i)  { vec[i] *= normx; }
     }
   }
 }

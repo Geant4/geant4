@@ -32,7 +32,7 @@
 //
 // $Id$
 //
-/// \file medical/dna/slowing/src/DetectorMessenger.cc
+/// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"

@@ -69,5 +69,6 @@ class G4BinaryPionBuilder : public G4VPionBuilder
     G4double theMax;
 
 };
+
 #endif
 

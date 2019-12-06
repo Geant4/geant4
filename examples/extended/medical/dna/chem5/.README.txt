@@ -83,7 +83,7 @@ The default geometry is constructed in DetectorConstruction class.
   The information about G-value as a function of the time for each
   molecular specie is scored in ASCII format.
   
-\subsection CHEM4_s5_sub2 Primary Killer
+\subsection CHEM5_s5_sub2 Primary Killer
   The G-values are computing for a range of deposited energy. 
   An infinite volume is assumed as the geometrical scenario. Therefore the energy lost by the 
   primary particle equals the deposited energy from all secondary particles.
@@ -119,7 +119,7 @@ The default geometry is constructed in DetectorConstruction class.
   A verification on whether physical tracks remain to be processed is done.
   If no tracks remain to be processed, the chemical module is then triggered.
 
-\section CHEM4_s7 VISUALISATION
+\section CHEM5_s7 VISUALISATION
 
   The visualization manager is set via the G4VisExecutive class
   in the main() function in chem5.cc.
@@ -129,7 +129,7 @@ The default geometry is constructed in DetectorConstruction class.
 ./chem5 -vis
 \endverbatim
 
-\section CHEM4_s8 OUTPUT
+\section CHEM5_s8 OUTPUT
 
   Physics initialization and the defined reaction table are printed.
   G4Scheduler processes the chemical stage time step after time step.

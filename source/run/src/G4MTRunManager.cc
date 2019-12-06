@@ -120,7 +120,7 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     numberOfEventToBeProcessed = 0;
     randDbl = new double[nSeedsPerEvent*nSeedsMax];
 
-    char* env = getenv("G4FORCENUMBEROFTHREADS");
+    char* env = std::getenv("G4FORCENUMBEROFTHREADS");
     if(env)
     {
       G4String envS = env;

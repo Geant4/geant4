@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/11/19 I. Hrivnacova  (factory-V10-05-00)
+- Fixed Doxygen warnings
+
 18/1/18  G.Folger       (factory-V10-04-01)
 -  Re-tag using procedure to remove svn:externals from tag.
 

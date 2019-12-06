@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
 //
@@ -40,10 +39,16 @@
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4EmParameters.hh"
 #include "G4LossTableManager.hh"
+#include "G4BetheHeitler5DModel.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4NistManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -60,34 +65,47 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
     LimitEnergy (5.*Mmuon), 
     LowestEnergyLimit (2.*Mmuon), 
     HighestEnergyLimit(1e12*GeV), // ok to 1e12GeV, then LPM suppression
-    CrossSecFactor(1.)
+    Energy5DLimit(0.0),
+    CrossSecFactor(1.),
+    f5Dmodel(nullptr),
+    theGamma(G4Gamma::Gamma()),
+    theMuonPlus(G4MuonPlus::MuonPlus()),
+    theMuonMinus(G4MuonMinus::MuonMinus())
 { 
   SetProcessSubType(fGammaConversionToMuMu);
   MeanFreePath = DBL_MAX;
-  G4LossTableManager::Instance()->Register(this);
+  fManager = G4LossTableManager::Instance();
+  fManager->Register(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4GammaConversionToMuons::~G4GammaConversionToMuons() 
 {
-  G4LossTableManager::Instance()->DeRegister(this);
+  fManager->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4bool G4GammaConversionToMuons::IsApplicable(
-                                        const G4ParticleDefinition& particle)
+G4bool G4GammaConversionToMuons::IsApplicable(const G4ParticleDefinition& part)
 {
-   return ( &particle == G4Gamma::Gamma() );
+  return (&part == theGamma);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition&)
+void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition& p)
 // Build cross section and mean free path tables
 {  //here no tables, just calling PrintInfoDefinition
-   PrintInfoDefinition();
+  Energy5DLimit = G4EmParameters::Instance()->MaxEnergyFor5DMuPair();
+  if(Energy5DLimit > 0.0 && !f5Dmodel) { 
+    f5Dmodel = new G4BetheHeitler5DModel();
+    f5Dmodel->SetLeptonPair(theMuonPlus, theMuonMinus);
+    const size_t numElems = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
+    const G4DataVector cuts(numElems);
+    f5Dmodel->Initialise(&p, cuts);
+  }
+  PrintInfoDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,6 +135,7 @@ G4GammaConversionToMuons::ComputeMeanFreePath(G4double GammaEnergy,
 
 // computes and returns the photon mean free path in GEANT4 internal units
 {
+  if(GammaEnergy <= LowestEnergyLimit) { return DBL_MAX; }
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
   const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
 
@@ -159,9 +178,8 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
 // Total cross section parametrisation from H.Burkhardt
 // It gives a good description at any energy (from 0 to 10**21 eV)
 { 
-  if(Egam < LimitEnergy) return 0.0; // below threshold return 0
+  if(Egam <= LowestEnergyLimit) { return 0.0; }
 
-  G4double CrossSection = 0.0;
   G4NistManager* nist = G4NistManager::Instance();
 
   G4double PowThres,Ecor,B,Dn,Zthird,Winfty,WMedAppr,
@@ -188,7 +206,7 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
   //            pow(Egam,PowSat),1./PowSat); // threshold and saturation
   G4double Eg=G4Exp(G4Log(1.-4.*Mmuon/Egam)*PowThres)*
     G4Exp(G4Log( G4Exp(G4Log(Wsatur)*PowSat)+G4Exp(G4Log(Egam)*PowSat))/PowSat);
-  CrossSection=7./9.*sigfac*G4Log(1.+WMedAppr*CorFuc*Eg);
+  G4double CrossSection=7./9.*sigfac*G4Log(1.+WMedAppr*CorFuc*Eg);
   CrossSection*=CrossSecFactor; // increase the CrossSection by  (by default 1)
   return CrossSection;
 }
@@ -221,6 +239,22 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   if (Egam <= LowestEnergyLimit) {
     return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
   }
+  //
+  // Kill the incident photon
+  //
+  aParticleChange.ProposeMomentumDirection( 0., 0., 0. ) ;
+  aParticleChange.ProposeEnergy( 0. ) ;
+  aParticleChange.ProposeTrackStatus( fStopAndKill ) ;
+
+  if (Egam <= Energy5DLimit) {
+    std::vector<G4DynamicParticle*> fvect;
+    f5Dmodel->SampleSecondaries(&fvect, aTrack.GetMaterialCutsCouple(), 
+				aTrack.GetDynamicParticle(), 0.0, DBL_MAX);
+    aParticleChange.SetNumberOfSecondaries(fvect.size());
+    for(auto dp : fvect) { aParticleChange.AddSecondary(dp); }
+    return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+  }  
+
   G4ParticleMomentum GammaDirection = aDynamicGamma->GetMomentumDirection();
 
   // select randomly one element constituting the material
@@ -381,19 +415,13 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   MuMinusDirection.rotateUz(GammaDirection);
   aParticleChange.SetNumberOfSecondaries(2);
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1= new G4DynamicParticle(
-                           G4MuonPlus::MuonPlus(),MuPlusDirection,EPlus-Mmuon);
+  G4DynamicParticle* aParticle1 = 
+    new G4DynamicParticle(theMuonPlus,MuPlusDirection,EPlus-Mmuon);
   aParticleChange.AddSecondary(aParticle1);
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle(
-                       G4MuonMinus::MuonMinus(),MuMinusDirection,EMinus-Mmuon);
+  G4DynamicParticle* aParticle2 = 
+    new G4DynamicParticle(theMuonMinus,MuMinusDirection,EMinus-Mmuon);
   aParticleChange.AddSecondary(aParticle2);
-  //
-  // Kill the incident photon
-  //
-  aParticleChange.ProposeMomentumDirection( 0., 0., 0. ) ;
-  aParticleChange.ProposeEnergy( 0. ) ;
-  aParticleChange.ProposeTrackStatus( fStopAndKill ) ;
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }

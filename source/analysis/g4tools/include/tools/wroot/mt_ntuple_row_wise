@@ -7,7 +7,7 @@
 // pntuple = for parallel ntupling.
 
 #include "base_pntuple_row_wise"
-#include "basket_add"
+#include "mt_basket_add"
 #include "imt_ntuple"
 
 namespace tools {
@@ -19,15 +19,13 @@ public:
   virtual bool add_row(imutex& a_mutex,ifile& a_main_file) {
     if(m_cols.empty()) return false;
     tools_vforit(icol*,m_cols,it) (*it)->add();
-    basket_add _badd(a_mutex,a_main_file);
-    _badd.set_main_branch(&m_main_branch);
-    if(!m_row_wise_branch.pfill(_badd)) return false;
+    mt_basket_add _badd(a_mutex,a_main_file,m_main_branch);
+    if(!m_row_wise_branch.pfill(_badd,0)) return false;
     tools_vforit(icol*,m_cols,it) (*it)->set_def();
     return true;
   }
   virtual bool end_fill(imutex& a_mutex,ifile& a_main_file) {
-    basket_add _badd(a_mutex,a_main_file);    
-    _badd.set_main_branch(&m_main_branch);
+    mt_basket_add _badd(a_mutex,a_main_file,m_main_branch);    
     if(!m_row_wise_branch.end_pfill(_badd)) return false;
     return end_leaves(a_mutex);
   }

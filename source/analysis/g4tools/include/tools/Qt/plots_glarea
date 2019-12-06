@@ -1,0 +1,58 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_Qt_plots_glarea
+#define tools_Qt_plots_glarea
+
+#include <QtOpenGL/qgl.h>
+
+#include "../sg/GL_plots_viewer"
+
+namespace tools {
+namespace Qt {
+
+class plots_glarea : public QGLWidget {
+  typedef QGLWidget parent;
+  Q_OBJECT
+public:
+  virtual void initialieGL() {}
+  virtual void resizeGL(int a_w,int a_h){
+    //::printf("debug : resize : %d %d\n",a_w,a_h);
+#if QT_VERSION < 0x050000
+#else    
+    m_width = a_w;
+    m_height = a_h;
+#endif    
+  }
+  //virtual void paintGL();
+  virtual void paintGL() {
+#if QT_VERSION < 0x050000
+    //::printf("debug : exlib::Qt::plots_glarea::paintGL %d %d\n",width(),height());
+    m_viewer.set_size(width(),height());
+#else  
+    //::printf("debug : exlib::Qt::plots_glarea::paintGL %d %d\n",m_width,m_height);
+    m_viewer.set_size(m_width,m_height);
+#endif  
+    m_viewer.render();
+  }
+
+  virtual void mousePressEvent(QMouseEvent*){}
+  virtual void mouseReleaseEvent(QMouseEvent*){}
+  virtual void mouseMoveEvent(QMouseEvent*){}
+public:
+  plots_glarea(QWidget* a_parent,tools::sg::GL_plots_viewer& a_viewer):parent(a_parent),m_viewer(a_viewer){}
+  virtual ~plots_glarea(){}
+protected:
+  tools::sg::GL_plots_viewer& m_viewer;
+#if QT_VERSION < 0x050000
+#else  
+protected:
+  int m_width;
+  int m_height;
+#endif  
+};
+
+}}
+
+#endif
+

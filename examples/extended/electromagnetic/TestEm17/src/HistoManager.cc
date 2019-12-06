@@ -148,23 +148,23 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                 "10", "11", "12", "13", "14", "15"};
-  const G4String title[] = 
-                { "log10(Etransfert/Emu) muIonization",              //1
-                  "log10(Etransfert/Emu) muPair",                    //2
-                  "log10(Etransfert/Emu) muBrems",                   //3
-                  "log10(Etransfert/Emu) muNuclear",                 //4
-                  "log10(Etransfert/Emu) hIonization",               //5
-                  "log10(Etransfert/Emu) hPair",                     //6
-                  "log10(Etransfert/Emu) hBrems",                    //7
-                  "dummy",                                           //8
-                  "dummy",                                           //9
-                  "dummy",                                           //10
-                  "log10(Etransfert/Emu) muIonization",              //11
-                  "log10(Etransfert/Emu) muPair",                    //12
-                  "log10(Etransfert/Emu) muBrems",                   //13
-                  "log10(Etransfert/Emu) muNuclear"                  //14
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                 "10", "11", "12", "13", "14"};
+  const G4String title[] = { "dummy", // 0
+                  "log10(Eloss/Emu) muIonization",              //1
+                  "log10(Eloss/Emu) muPair",                    //2
+                  "log10(Eloss/Emu) muBrems",                   //3
+                  "log10(Eloss/Emu) muNuclear",                 //4
+                  "log10(Eloss/Emu) hIonization",               //5
+                  "log10(Eloss/Emu) hPair",                     //6
+                  "log10(Eloss/Emu) hBrems",                    //7
+                  "dummy",                                      //8
+                  "dummy",                                      //9
+                  "dummy",                                      //10
+                  "log10(Eloss/Emu) muIonization",              //11
+                  "log10(Eloss/Emu) muPair",                    //12
+                  "log10(Eloss/Emu) muBrems",                   //13
+                  "log10(Eloss/Emu) muNuclear"                  //14
                  };
 
   G4String titl = title[ih];

@@ -23,71 +23,73 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TsitourasRK45
 //
-//  G4TsitourasRK45.hh
-//  Geant4
+// Class description:
 //
-//  Created by hackabot on 11/06/15.
-//
-//
+// Tsitouras - 5(4) RK stepper (non-FSAL version)
+// Implements RK tableau from 'Table 1' of:
+//    C. Tsitouras, "Runge-Kutta pairs of order 5(4) satisfying only
+//    the first column simplifying assumption"
+//    Computers & Mathematics with Applications,
+//    vol. 62, no. 2, pp. 770-775, 2011.
 
-#ifndef Tsitouras_RK45
-#define Tsitouras_RK45
+// Author: Somnath Banerjee, Google Summer of Code 2015, 11.06.2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+#ifndef TSITOURAS_RK45_HH
+#define TSITOURAS_RK45_HH
 
 #include "G4MagIntegratorStepper.hh"
 
 class G4TsitourasRK45 : public G4MagIntegratorStepper
 {
-public:
-	G4TsitourasRK45(G4EquationOfMotion *EqRhs,
-					 G4int numberOfVariables = 6,
-					 G4bool primary =  true);
-	~G4TsitourasRK45();
+  public:
 
-	void Stepper( const G4double y[],
+    G4TsitourasRK45(G4EquationOfMotion* EqRhs,
+                    G4int numberOfVariables = 6,
+                    G4bool primary =  true);
+   ~G4TsitourasRK45();
+
+    G4TsitourasRK45(const G4TsitourasRK45&) = delete;
+    G4TsitourasRK45& operator=(const G4TsitourasRK45&) = delete;
+    
+    void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] ) ;
+                        G4double yerr[] );
     
     void SetupInterpolation( /* const G4double yInput[],
                               const G4double dydx[],
                               const G4double Step */  );
     
-    //For calculating the output at the tau fraction of Step
     void Interpolate( const G4double yInput[],
-                         const G4double dydx[],
-                         const G4double Step,
-                         G4double yOut[],
-                         G4double tau );
-    
-    
+                      const G4double dydx[],
+                      const G4double Step,
+                            G4double yOut[],
+                            G4double tau );
+      // For calculating the output at the tau fraction of Step
+
     void interpolate( const G4double yInput[],
                       const G4double dydx[],
                             G4double yOut[],
                             G4double Step,
                             G4double tau);
 
-    G4double  DistChord()   const;
-    G4int IntegratorOrder() const {return 4; }
+    G4double DistChord() const;
+    inline G4int IntegratorOrder() const { return 4; }
     
-//    G4double *getLastDydx();
-    
-private :
-    
-    G4TsitourasRK45(const G4TsitourasRK45&);
-    G4TsitourasRK45& operator=(const G4TsitourasRK45&);
+  private :
     
     G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *ak8, *yTemp, *yIn;
     
-    G4double fLastStepLength;
+    G4double fLastStepLength = 0.0;
     G4double *fLastInitialVector, *fLastFinalVector,
-    *fLastDyDx, *fMidVector, *fMidError;
-    // for DistChord calculations
+             *fLastDyDx, *fMidVector, *fMidError;
+      // For DistChord calculations
     
-    G4TsitourasRK45* fAuxStepper;
+    G4TsitourasRK45* fAuxStepper = nullptr;
 };
 
-
-
-#endif /* defined(__Geant4__G4TsitourasRK45__) */
+#endif

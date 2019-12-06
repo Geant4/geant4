@@ -285,7 +285,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
     }
     G4String name(ost.str());
   
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
     if (!path)
       { 
 	G4String excep = "G4AugerData::LoadData";

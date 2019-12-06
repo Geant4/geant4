@@ -36,6 +36,7 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Event.hh"
 #include "G4ScoringManager.hh"
+#include "G4VScoringMesh.hh"
 
 G4PSHitsModel::~G4PSHitsModel () {}
 
@@ -49,6 +50,8 @@ G4PSHitsModel::G4PSHitsModel (const G4String& requestedMapName):
 
 void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
+  using RunScore = G4VScoringMesh::RunScore;
   G4ScoringManager* scoringManager =
     G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {

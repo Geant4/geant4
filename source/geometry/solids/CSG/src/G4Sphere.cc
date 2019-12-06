@@ -23,37 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4Sphere
-//
 // Implementation for G4Sphere class
 //
-// History:
-//
-// 26.10.16 E.Tcherniaev: re-implemented CalculateExtent() using
-//                      G4BoundingEnvelope, removed CreateRotatedVertices()
-// 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in cos(theta), sqrt(r)
-// 14.09.09 T.Nikitina: fix for phi section in DistanceToOut(p,v,..),as for
-//                      G4Tubs,G4Cons 
-// 26.03.09 G.Cosmo   : optimisations and uniform use of local radial tolerance
-// 12.06.08 V.Grichine: fix for theta intersections in DistanceToOut(p,v,...)
-// 22.07.05 O.Link    : Added check for intersection with double cone
-// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
-// 16.07.04 V.Grichine: bug fixed in DistanceToOut(p,v), Rmin go outside
-// 02.06.04 V.Grichine: bug fixed in DistanceToIn(p,v), on Rmax,Rmin go inside
-// 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
-// 29.10.03 J.Apostolakis: fix in Inside for SPhi-0.5*kAngTol < phi<SPhi, SPhi<0
-// 19.06.02 V.Grichine: bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
-// 30.01.02 V.Grichine: bug fixed in Inside(p), && -> || at l.451
-// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 18.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
-// 25.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), phi intersections
-// 12.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), theta intersections
-// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
-// 17.09.96 V.Grichine: final modifications to commit
 // 28.03.94 P.Kent: old C++ code converted to tolerant geometry
+// 17.09.96 V.Grichine: final modifications to commit
+// 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
+// 22.07.05 O.Link: Added check for intersection with double cone
+// 26.03.09 G.Cosmo: optimisations and uniform use of local radial tolerance
+// 26.10.16 E.Tcherniaev: re-implemented CalculateExtent() using
+//                        G4BoundingEnvelope, removed CreateRotatedVertices()
 // --------------------------------------------------------------------
 
 #include "G4Sphere.hh"
@@ -94,8 +73,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName), fEpsilon(2.e-11), fSPhi(0.0),
-    fFullPhiSphere(true), fFullThetaSphere(true)
+  : G4CSGSolid(pName), fSPhi(0.0), fFullPhiSphere(true), fFullThetaSphere(true)
 {
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
@@ -130,14 +108,13 @@ G4Sphere::G4Sphere( const G4String& pName,
 //
 G4Sphere::G4Sphere( __void__& a )
   : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.),
-    kAngTolerance(0.), kRadTolerance(0.), fEpsilon(0.),
+    kAngTolerance(0.), kRadTolerance(0.),
     fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
     fDTheta(0.), sinCPhi(0.), cosCPhi(0.),
     cosHDPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
     ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
     tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
-    fFullPhiSphere(false), fFullThetaSphere(false), fFullSphere(true),
     halfCarTolerance(0.), halfAngTolerance(0.)
 {
 }
@@ -495,24 +472,24 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 
   if( distRMax <= halfCarTolerance )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   if( fRmin && (distRMin <= halfCarTolerance) )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm -= nR;
   }
   if( !fFullPhiSphere )   
   {
     if (distSPhi <= halfAngTolerance)
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= halfAngTolerance) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
@@ -520,13 +497,13 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   {
     if ((distSTheta <= halfAngTolerance) && (fSTheta > 0.))
     {
-      noSurfaces ++;
+      ++noSurfaces;
       if ((radius <= halfCarTolerance) && fFullPhiSphere)  { sumnorm += nZ;  }
       else                                                 { sumnorm += nTs; }
     }
     if ((distETheta <= halfAngTolerance) && (eTheta < pi)) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       if ((radius <= halfCarTolerance) && fFullPhiSphere)  { sumnorm -= nZ;  }
       else                                                 { sumnorm += nTe; }
       if(sumnorm.z() == 0.)  { sumnorm += nZ; }
@@ -616,16 +593,16 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     {
       if (distSPhi<distMin)
       {
-        distMin=distSPhi;
-        side=kNSPhi;
+        distMin = distSPhi;
+        side = kNSPhi;
       }
     }
     else
     {
       if (distEPhi<distMin)
       {
-        distMin=distEPhi;
-        side=kNEPhi;
+        distMin = distEPhi;
+        side = kNEPhi;
       }
     }
   }
@@ -1772,8 +1749,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                                   const G4ThreeVector& v,
                                   const G4bool calcNorm,
-                                        G4bool *validNorm,
-                                        G4ThreeVector *n   ) const
+                                        G4bool* validNorm,
+                                        G4ThreeVector* n ) const
 {
   G4double snxt = kInfinity;     // snxt is default return value
   G4double sphi= kInfinity,stheta= kInfinity;

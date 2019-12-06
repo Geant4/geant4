@@ -62,7 +62,6 @@ private:
   G4bool operator==(const G4TritonEvaporationProbability &right) const;
   G4bool operator!=(const G4TritonEvaporationProbability &right) const;
 
-  G4TritonCoulombBarrier theCoulombBarrier;
 };
 
 #endif

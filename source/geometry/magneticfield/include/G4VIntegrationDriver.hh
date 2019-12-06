@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// class G4VIntegrationDriver
+// G4VIntegrationDriver
 //
 // Class description:
 //
@@ -32,17 +31,16 @@
 // undertaking integration of an state given an equation of motion and
 // within acceptable error bound(s).
 //
-//  Different integration methods are meant to be provided via this
+// Different integration methods are meant to be provided via this
 // common interface, and can span the original type (explicit Runge Kutta
 // methods), enhanced RK methods and alternatives such as the
 // Bulirsch-Stoer and multi-step methods.
 //
-//  The drivers' key mission is to insure that the error is below set values. 
-//
-//    Implementation by Dmitry Sorokin - GSoC 2017
-//       Work supported by Google as part of Google Summer of Code 2017.
-//    Supervision / code review: John Apostolakis
+// The drivers' key mission is to insure that the error is below set values. 
 
+// Author: Dmitry Sorokin, Google Summer of Code 2017
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 #ifndef G4VINTEGRATION_DRIVER_HH
 #define G4VINTEGRATION_DRIVER_HH
 
@@ -50,8 +48,10 @@
 #include "G4FieldTrack.hh"
 #include "G4MagIntegratorStepper.hh"
 
-class G4VIntegrationDriver {
-public:
+class G4VIntegrationDriver
+{
+  public:
+
     virtual ~G4VIntegrationDriver() = default;
 
     virtual G4double AdvanceChordLimited(G4FieldTrack& track,
@@ -59,21 +59,32 @@ public:
                                          G4double eps,
                                          G4double chordDistance) = 0;
 
+    virtual G4bool AccurateAdvance(G4FieldTrack& track,
+                                   G4double hstep,
+                                   G4double eps, // Requested y_err/hstep
+                                   G4double hinitial = 0) = 0;
+
+    virtual void SetEquationOfMotion(G4EquationOfMotion* equation) = 0;
+    virtual G4EquationOfMotion* GetEquationOfMotion() = 0;
+
+    virtual void RenewStepperAndAdjust(G4MagIntegratorStepper* pItsStepper);
+      // Method for compatibility -- relevant only for G4MagIntegratorDriver
+   
+    virtual void SetVerboseLevel(G4int level) = 0;
+    virtual G4int GetVerboseLevel() const = 0;
+
+    virtual void OnComputeStep() = 0;
+
+    virtual void OnStartTracking() = 0;
+
+  public:  // without description
+
     //[[deprecated("will be removed")]]
     virtual G4bool QuickAdvance(G4FieldTrack& /*track*/,   // INOUT
                                 const G4double /*dydx*/[],
                                 G4double /*hstep*/,
-                                G4double /*inverseCurvatureRadius*/,
                                 G4double& /*dchord_step*/,
-                                G4double& /*dyerr*/) 
-    {
-        return false;
-    };
-
-    virtual G4bool AccurateAdvance(G4FieldTrack& track,
-                                   G4double hstep,
-                                   G4double eps,               // Requested y_err/hstep
-                                   G4double hinitial = 0) = 0; // Suggested 1st interval
+                                G4double& /*dyerr*/) { return false; }
 
     //[[deprecated("will be removed")]]
     virtual void GetDerivatives(const G4FieldTrack& track,
@@ -84,41 +95,26 @@ public:
                                 G4double dydx[],
                                 G4double field[]) const = 0;
 
-    virtual void SetEquationOfMotion(G4EquationOfMotion* equation) = 0;
-    virtual G4EquationOfMotion* GetEquationOfMotion() = 0;
-
     //[[deprecated("use GetEquationOfMotion() instead of GetStepper()->GetEquationOfMotion()")]]
     virtual const G4MagIntegratorStepper* GetStepper() const = 0;
     virtual G4MagIntegratorStepper* GetStepper() = 0;
 
-    // Method for compatibility -- relevant only for G4MagIntegratorDriver
-    virtual void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper);
-   
-    // Taking the last step's normalised error, calculate
-    // a step size for the next step.
-    // Do not limit the next step's size within a factor of the
-    // current one.
     //[[deprecated("will be removed")]]
-    virtual G4double ComputeNewStepSize(G4double errMaxNorm,    // normalised error
-                                        G4double hstepCurrent) = 0; // current step size
+    virtual G4double ComputeNewStepSize(G4double errMaxNorm, // normalised error
+                                        G4double hstepCurrent) = 0;
+      // Taking the last step's normalised error, calculate
+      // a step size for the next step.
+      // Do not limit the next step's size within a factor of the current one.
 
-    virtual void SetVerboseLevel(G4int level) = 0;
-    virtual G4int GetVerboseLevel() const = 0;
+    virtual G4bool DoesReIntegrate() = 0;
+      // Whether the driver implementates re-integration
+      //  - original Integration driver will re-start and re-calculate interval => yes
+      //  - Interpolation Driver does not recalculate (it interpolates)
+      // Basically answer: does this driver *Recalculate* when AccurateAdvance is called ?
+  protected:
 
-    virtual G4double GetInverseCurvatureRadius(const G4FieldTrack& track,
-                                               G4double field[]) const;
-
-    virtual void OnComputeStep() = 0;
-
-    virtual void OnStartTracking() = 0;
-
-protected:
-    using State = G4double[G4FieldTrack::ncompSVEC];
-
-    static constexpr G4double UNKNOWN_CURVATURE_RADIUS = -1;
     static constexpr G4double max_stepping_increase = 5;
     static constexpr G4double max_stepping_decrease = 0.1;
 };
-
 
 #endif

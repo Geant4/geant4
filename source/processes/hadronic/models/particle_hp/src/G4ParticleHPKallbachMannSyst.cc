@@ -31,6 +31,8 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
+// June-2019 - E. Mendoza --> perform some corrections
+
 #include "G4ParticleHPKallbachMannSyst.hh" 
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh" 
@@ -76,10 +78,8 @@ G4double G4ParticleHPKallbachMannSyst::Kallbach(G4double cosTh, G4double anEnerg
   // Kallbach-Mann systematics without normalization.
   G4double result;
   G4double theX = A(anEnergy)*cosTh;
-  // We need to use here std::exp (and not G4Exp) to avoid underflow/overflow problems
-  // (observed with the physics list QGSP_BIC_AllHP in the version G4 10.5).
-  result = 0.5*(std::exp( theX)*(1+theCompoundFraction)
-               +std::exp(-theX)*(1-theCompoundFraction));
+  result = 0.5*(G4Exp( theX)*(1+theCompoundFraction)
+               +G4Exp(-theX)*(1-theCompoundFraction));
   return result;
 }
 
@@ -104,69 +104,60 @@ G4double G4ParticleHPKallbachMannSyst::A(G4double anEnergy)
   G4double C2 = 1.8E-6/(MeV*MeV*MeV);
   G4double C3 = 6.7E-7/(MeV*MeV*MeV*MeV);
   
-    G4double epsa = anEnergy*theTargetMass/(theTargetMass+theIncidentMass);
-    G4int Ac = theTargetA+1; 
-    G4int Nc = Ac - theTargetZ;
-    G4int AA = theTargetA;
-    G4int ZA = theTargetZ;
-    G4double ea = epsa+SeparationEnergy(Ac, Nc, AA, ZA);
-    G4double Et1 = 130*MeV;
-    G4double R1 = std::min(ea, Et1);
-    // theProductEnergy is still in CMS!!!
-    G4double epsb = theProductEnergy*(theProductMass+theResidualMass)/theResidualMass;
-    G4int AB = theResidualA;
-    G4int ZB = theResidualZ;
-    G4double eb = epsb+SeparationEnergy(Ac, Nc, AB, ZB );
-  G4double X1 = R1*eb/ea; 
-    G4double Et3 = 41*MeV;
-    G4double R3 = std::min(ea, Et3);
+  G4double epsa = anEnergy*theTargetMass/(theTargetMass+theIncidentMass);
+  G4int Ac = theTargetA+theProjectileA; 
+  G4int Nc = Ac - theTargetZ-theProjectileZ;
+  G4int AA = theTargetA;
+  G4int ZA = theTargetZ;
+  G4double ea = epsa+SeparationEnergy(Ac, Nc, AA, ZA,theProjectileA,theProjectileZ);
+  G4double Et1 = 130*MeV;
+  G4double R1 = std::min(ea, Et1);
+  // theProductEnergy is still in CMS!!!
+  G4double epsb = theProductEnergy*(theProductMass+theResidualMass)/theResidualMass;
+  G4int AB = theResidualA;
+  G4int ZB = theResidualZ;
+  G4double eb = epsb+SeparationEnergy(Ac, Nc, AB, ZB,theProductA, theProductZ);
+  G4double X1 = R1*eb/ea;
+  G4double Et3 = 41*MeV;
+  G4double R3 = std::min(ea, Et3);
   G4double X3 = R3*eb/ea;
-  G4double Ma = 1;
-  G4double mb(0);
-  G4int productA = theTargetA+1-theResidualA;
-  G4int productZ = theTargetZ-theResidualZ;
-  if(productZ==0)
-  {
-    mb = 0.5;
-  }
-  else if(productZ==1)
-  {
-    mb = 1;
-  }
-  else if(productZ==2)
-  {
-    mb = 2;
-    if(productA==3) mb=1;
-  }
+
+  G4double Ma=1;
+  G4double mb=1;
+  if(theProjectileA==1 || (theProjectileZ==1 && theProjectileA==2)){Ma=1;}//neutron,proton,deuteron
+  else if(theProjectileA==4 && theProjectileZ==2){Ma=0;}//alpha
+  else if(theProjectileA==3 && (theProjectileZ==1 || theProjectileZ==2)){Ma=0.5;}//tritum,He3 : set intermediate value
   else
   {
     throw G4HadronicException(__FILE__, __LINE__, "Severe error in the sampling of Kallbach-Mann Systematics");
   }
-  
+  if(theProductA==1 && theProductZ==0){mb=1./2.;}//neutron
+  else if(theProductA==4 && theProductZ==2){mb=2;}//alpha
+  else{mb=1;}
+
   result = C1*X1 + C2*G4Pow::GetInstance()->powN(X1, 3) + C3*Ma*mb*G4Pow::GetInstance()->powN(X3, 4);
   return result;
+
 }
 
-G4double G4ParticleHPKallbachMannSyst::SeparationEnergy(G4int Ac, G4int Nc, G4int AA, G4int ZA)
+G4double G4ParticleHPKallbachMannSyst::SeparationEnergy(G4int Ac, G4int Nc, G4int AA, G4int ZA,G4int Abinding,G4int Zbinding)
 {
   G4double result;
   G4int NA = AA-ZA;
   G4int Zc = Ac-Nc;
   result = 15.68*(Ac-AA);
-  result += -28.07*((Nc-Zc)*(Nc-Zc)/Ac - (NA-ZA)*(NA-ZA)/AA);
+  result += -28.07*((Nc-Zc)*(Nc-Zc)/(G4double)Ac - (NA-ZA)*(NA-ZA)/(G4double)AA);
   result += -18.56*(G4Pow::GetInstance()->A23(G4double(Ac)) - G4Pow::GetInstance()->A23(G4double(AA)));
   result +=  33.22*((Nc-Zc)*(Nc-Zc)/G4Pow::GetInstance()->powA(G4double(Ac), 4./3.) - (NA-ZA)*(NA-ZA)/G4Pow::GetInstance()->powA(G4double(AA), 4./3.));
   result += -0.717*(Zc*Zc/G4Pow::GetInstance()->A13(G4double(Ac))-ZA*ZA/G4Pow::GetInstance()->A13(G4double(AA)));
-  result +=  1.211*(Zc*Zc/Ac-ZA*ZA/AA);
+  result +=  1.211*(Zc*Zc/(G4double)Ac-ZA*ZA/(G4double)AA);
   G4double totalBinding(0);
-  G4int productA = theTargetA+1-theResidualA;
-  G4int productZ = theTargetZ-theResidualZ;
-  if(productZ==0&&productA==1) totalBinding=0;
-  if(productZ==1&&productA==1) totalBinding=0;
-  if(productZ==1&&productA==2) totalBinding=2.22;
-  if(productZ==1&&productA==3) totalBinding=8.48;
-  if(productZ==2&&productA==3) totalBinding=7.72;
-  if(productZ==2&&productA==4) totalBinding=28.3;
+  if(Zbinding==0&&Abinding==1) totalBinding=0;
+  if(Zbinding==1&&Abinding==1) totalBinding=0;
+  if(Zbinding==1&&Abinding==2) totalBinding=2.224596;
+  if(Zbinding==1&&Abinding==3) totalBinding=8.481798;
+  if(Zbinding==2&&Abinding==3) totalBinding=7.718043;
+  if(Zbinding==2&&Abinding==4) totalBinding=28.29566;
   result += -totalBinding;
   result *= MeV;
   return result;

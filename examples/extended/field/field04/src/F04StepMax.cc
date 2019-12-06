@@ -49,10 +49,6 @@ F04StepMax::~F04StepMax() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04StepMax::F04StepMax(F04StepMax& right) : G4VDiscreteProcess(right) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4bool F04StepMax::IsApplicable(const G4ParticleDefinition& particle)
 {
   return (particle.GetPDGCharge() != 0.);

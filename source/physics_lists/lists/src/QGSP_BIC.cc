@@ -46,7 +46,6 @@
 //
 //----------------------------------------------------------------------------
 //
-#include "QGSP_BIC.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -59,12 +58,11 @@
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
-#include "G4DataQuestionaire.hh"
+#include "QGSP_BIC.hh"
 #include "G4HadronPhysicsQGSP_BIC.hh"
 
 QGSP_BIC::QGSP_BIC(G4int ver)
 {
-  G4DataQuestionaire it(photon);
   G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC"<<G4endl;
   G4cout <<G4endl;
 
@@ -97,7 +95,4 @@ QGSP_BIC::QGSP_BIC(G4int ver)
   RegisterPhysics( new G4NeutronTrackingCut(ver));
 
 }
-
-QGSP_BIC::~QGSP_BIC()
-{}
 

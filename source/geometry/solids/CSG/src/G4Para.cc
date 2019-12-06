@@ -23,26 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4Para
-//
 // Implementation for G4Para class
 //
-// History:
-//
-// 29.05.17 E.Tcherniaev: complete revision, speed-up
-// 23.09.16 E.Tcherniaev: use G4BoundingEnvelope for CalculateExtent(),
-//                      removed CreateRotatedVertices()
-// 23.10.05 V.Grichine: bug fixed in DistanceToOut(p,v,...) for the v.x()<0 case
-// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal
-// 30.11.04 V.Grichine: modifications in SurfaceNormal for edges/vertices and
-//                      in constructor with vertices
-// 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
-// 18.11.99 V.Grichine: kUndef was added to ESide
-// 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
 // 21.03.95 P.Kent: Modified for `tolerant' geom
-//
+// 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
+// 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal
+// 29.05.17 E.Tcherniaev: complete revision, speed-up
 ////////////////////////////////////////////////////////////////////////////
 
 #include "G4Para.hh"
@@ -383,7 +369,7 @@ G4bool G4Para::CalculateExtent( const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -663,7 +649,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p ) const
 
 G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
                                const G4bool calcNorm,
-                                     G4bool *validNorm, G4ThreeVector *n) const
+                                     G4bool* validNorm, G4ThreeVector* n) const
 {
   // Z intersections
   //

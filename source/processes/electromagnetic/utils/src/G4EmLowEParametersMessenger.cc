@@ -128,7 +128,7 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dnaSolCmd = new G4UIcmdWithAString("/process/dna/e-SolvationSubType",this);
   dnaSolCmd->SetGuidance("The name of e- solvation DNA model");
   dnaSolCmd->SetParameterName("dnaSol",true);
-  dnaSolCmd->SetCandidates("Ritchie1994 Terrisol1990 Meesungnoen2002");
+  dnaSolCmd->SetCandidates("Ritchie1994 Terrisol1990 Meesungnoen2002 Kreipl2009 Meesungnoen2002_amorphous");
   dnaSolCmd->AvailableForStates(G4State_PreInit);
 
   meCmd = new G4UIcmdWithAString("/process/em/AddMicroElecRegion",this);
@@ -229,6 +229,10 @@ void G4EmLowEParametersMessenger::SetNewValue(G4UIcommand* command,
       ttt = fTerrisol1990eSolvation; 
     } else if (newValue == "Meesungnoen2002") { 
       ttt = fMeesungnoen2002eSolvation;
+    } else if (newValue == "Meesungnoen2002_amorphous") {
+      ttt = fMeesungnoensolid2002eSolvation;
+    } else if (newValue == "Kreipl2009") {
+      ttt = fKreipl2009eSolvation;
     }
     theParameters->SetDNAeSolvationSubType(ttt);
   } else if (command == pixeXsCmd) {

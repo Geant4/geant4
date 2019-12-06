@@ -47,6 +47,7 @@
 #include "G4PionBuilder.hh"
 #include "G4KaonBuilder.hh"
 #include "G4BinaryPionBuilder.hh"
+#include "G4BertiniPionBuilder.hh"
 #include "G4BertiniKaonBuilder.hh"
 #include "G4FTFBinaryPionBuilder.hh"
 #include "G4FTFBinaryKaonBuilder.hh"
@@ -61,14 +62,13 @@
 #include "G4FTFPAntiBarionBuilder.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4PhysListUtil.hh"
+#include "G4HadronicParameters.hh"
 #include "G4PhysicsConstructorFactory.hh"
 
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTF_BIC);
@@ -80,10 +80,10 @@ G4HadronPhysicsFTF_BIC::G4HadronPhysicsFTF_BIC(const G4String& name, G4bool quas
     :  G4VPhysicsConstructor(name)
     , QuasiElastic(quasiElastic)
 {
-    maxBIC_neutron = 5.*GeV;
-    maxBIC_proton = 5.*GeV;
-    maxBERT_kaon = 5.*GeV;
-    maxBIC_pion = 5.*GeV;
+    maxBIC_neutron = maxBIC_proton = maxBERT_kaon = maxBERT_pion =
+       G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+    maxBIC_pion =  1.5*GeV;
+    minBERT_pion = 1.0*GeV;
 }
 
 G4HadronPhysicsFTF_BIC::~G4HadronPhysicsFTF_BIC()
@@ -113,7 +113,7 @@ void G4HadronPhysicsFTF_BIC::Neutron()
   auto bicn = new G4BinaryNeutronBuilder;
   AddBuilder(bicn);
   neu->RegisterMe(bicn);
-  bicn->SetMinEnergy(0.*GeV);
+  bicn->SetMinEnergy(0.0);
   bicn->SetMaxEnergy(maxBIC_neutron);
   neu->Build();
 }
@@ -139,6 +139,11 @@ void G4HadronPhysicsFTF_BIC::Pion()
   auto ftfpi = new G4FTFBinaryPionBuilder(QuasiElastic);
   AddBuilder(ftfpi);
   pi->RegisterMe(ftfpi);
+  auto bertpi = new G4BertiniPionBuilder;
+  AddBuilder(bertpi);
+  bertpi->SetMinEnergy(minBERT_pion);
+  bertpi->SetMaxEnergy(maxBERT_pion);
+  pi->RegisterMe(bertpi);
   auto bicpi = new G4BinaryPionBuilder;
   AddBuilder(bicpi);
   pi->RegisterMe(bicpi);
@@ -199,14 +204,6 @@ void G4HadronPhysicsFTF_BIC::ConstructProcess()
 #include "G4PhysListUtil.hh"
 void G4HadronPhysicsFTF_BIC::ExtraConfiguration() 
 {
-  // --- Kaons ---
-  auto xsk = new G4ComponentGGHadronNucleusXsc();
-  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(xsk);
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
-
   // --- Neutrons ---
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);

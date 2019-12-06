@@ -726,7 +726,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
          delete theDynamicParticle;
         }
      delete theDecayProducts;
-     if(getenv("DecayEnergyBalanceCheck"))
+     if(std::getenv("DecayEnergyBalanceCheck"))
        std::cout << "DEBUGGING energy balance in cms and lab, charge baryon balance : "
        	         << momentumBalanceCMS << " " 
   	         <<energyMomentumBalance << " " 

@@ -672,16 +672,16 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
     if (verboseLevel>2){
       G4cout << "G4VUserPhysicsList::BuildPhysicsTable %%%%%% " << particle->GetParticleName() << G4endl;
       G4cout << " ProcessManager : " << pManager << " ProcessManagerShadow : " << pManagerShadow << G4endl;
-      for(G4int iv1=0;iv1<pVector->size();iv1++)
+      for(std::size_t iv1=0;iv1<pVector->size();++iv1)
       { G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl; }
       G4cout << "--------------------------------------------------------------" << G4endl;
       G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
-      for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
+      for(std::size_t iv2=0;iv2<pVectorShadow->size();++iv2)
       { G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl; }
     }
 #endif
-    for (G4int j=0; j < pVector->size(); ++j) {
+    for (std::size_t j=0; j < pVector->size(); ++j) {
         //Andrea July 16th 2013 : migration to new interface...
         //Infer if we are in a worker thread or master thread
         //Master thread is the one in which the process manager
@@ -746,7 +746,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
 		  "No process Vector");
       return;
     }
-    for (G4int j=0; j < pVector->size(); ++j) {
+    for (std::size_t j=0; j < pVector->size(); ++j) {
 
         //Andrea July 16th 2013 : migration to new interface...
         //Infer if we are in a worker thread or master thread
@@ -857,8 +857,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     G4ParticleDefinition* particle = theParticleIterator->value();
     // Store physics tables for every process for this particle type
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-    G4int  j;
-    for ( j=0; j < pVector->size(); ++j) {
+    for (std::size_t j=0; j < pVector->size(); ++j) {
       if (!(*pVector)[j]->StorePhysicsTable(particle,dir,ascii)){   
 	G4String comment =  "Fail to store physics table for "; 
 	comment += (*pVector)[j]->GetProcessName();
@@ -893,11 +892,10 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
 					      const G4String& directory,
 					      G4bool          ascii)
 {
-  G4int  j;
   G4bool success[100];  
   // Retrieve physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->size(); ++j) {
+  for (std::size_t j=0; j < pVector->size(); ++j) {
     success[j] = 
        (*pVector)[j]->RetrievePhysicsTable(particle,directory,ascii);
 
@@ -914,7 +912,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
       (*pVector)[j]->BuildPhysicsTable(*particle);
     }
   }
-  for ( j=0; j < pVector->size(); ++j) {
+  for (std::size_t j=0; j < pVector->size(); ++j) {
     // temporary addition to make the integral schema
     if (!success[j]) BuildIntegralPhysicsTable((*pVector)[j], particle); 
   }

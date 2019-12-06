@@ -77,7 +77,7 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   
   // check if this finger already has a hit
   auto ix = -1;
-  for (auto i=0;i<fHitsCollection->entries();i++) {
+  for (std::size_t i=0;i<fHitsCollection->entries();++i) {
     if ((*fHitsCollection)[i]->GetID()==copyNo) {
       ix = i;
       break;

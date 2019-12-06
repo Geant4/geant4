@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4SmartVoxelStat
 //
 // Class description:
@@ -36,7 +32,6 @@
 
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4SmartVoxelStat_hh
 #define G4SmartVoxelStat_hh
 
@@ -49,16 +44,16 @@ class G4SmartVoxelStat
 {
   public:  // with description
   
-    G4SmartVoxelStat( const G4LogicalVolume *theVolume,
-                      const G4SmartVoxelHeader *theVoxel,
+    G4SmartVoxelStat( const G4LogicalVolume* theVolume,
+                      const G4SmartVoxelHeader* theVoxel,
                             G4double theSysTime,
                             G4double theUserTime );
       // Construct information on one volume's voxels
 
-    const G4LogicalVolume *GetVolume() const;
+    const G4LogicalVolume* GetVolume() const;
       // Return a pointer to the logical volume
   
-    const G4SmartVoxelHeader *GetVoxel() const;
+    const G4SmartVoxelHeader* GetVoxel() const;
       // Return a pointer to the voxel header
   
     G4double GetSysTime() const;
@@ -85,18 +80,17 @@ class G4SmartVoxelStat
 
   protected:
   
-    void CountHeadsAndNodes( const G4SmartVoxelHeader *head );
+    void CountHeadsAndNodes( const G4SmartVoxelHeader* head );
   
-    const G4LogicalVolume *volume;
-    const G4SmartVoxelHeader *voxel;
+    const G4LogicalVolume* volume;
+    const G4SmartVoxelHeader* voxel;
   
     G4double sysTime;
     G4double userTime;
   
-    G4long heads;
-    G4long nodes;
-    G4long pointers;
-
+    G4long heads = 1;
+    G4long nodes = 0;
+    G4long pointers = 0;
 };
 
 #endif

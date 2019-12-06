@@ -212,11 +212,11 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
   }
   else
   {
-    sigma = Z*hnXsc->HadronNucleonXscNS(aParticle, theProton, kinEnergy);
+    sigma = Z*hnXsc->HadronNucleonXsc(aParticle, theProton, kinEnergy);
     hpInXsc = hnXsc->GetInelasticHadronNucleonXsc();
 
     if(N > 0) { 
-      sigma += N*hnXsc->HadronNucleonXscNS(aParticle, theNeutron, kinEnergy);
+      sigma += N*hnXsc->HadronNucleonXsc(aParticle, theNeutron, kinEnergy);
       hnInXsc = hnXsc->GetInelasticHadronNucleonXsc();
     }
     R = G4NuclearRadii::RadiusHNGG(A);
@@ -250,9 +250,11 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
     fTotalXsc = sigma;
     fInelasticXsc = hpInXsc;
     fElasticXsc   = std::max(fTotalXsc - fInelasticXsc, 0.);
-    G4double xratio = hpInXsc/nucleusSquare;
-    fProductionXsc = nucleusSquare*G4Log(1. + cofInelastic*xratio)/cofInelastic;
-    fProductionXsc = std::min(fProductionXsc, fInelasticXsc);
+    fProductionXsc = fInelasticXsc;
+    fDiffractionXsc = 0.2*fInelasticXsc;
+    // G4double xratio = hpInXsc/nucleusSquare;
+    // fProductionXsc = nucleusSquare*G4Log(1. + cofInelastic*xratio)/cofInelastic;
+    // fProductionXsc = std::min(fProductionXsc, fInelasticXsc);
   }
   /*  
   G4cout << "GGXsc: Z= " << Z << " A= " << A << " E= " << kinEnergy 

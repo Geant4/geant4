@@ -29,44 +29,13 @@
 #ifndef g4hdf5_defs_h
 #define g4hdf5_defs_h
 
-#include "tools/histo/h1d"
-#include "tools/histo/h2d"
-#include "tools/histo/h3d"
-#include "tools/histo/p1d"
-#include "tools/histo/p2d"
 #include "tools/hdf5/ntuple"
 #include "G4Hdf5AnalysisManager.hh"
 #include "G4Hdf5AnalysisReader.hh"
+#include "g4hntools_defs.hh"
 
-namespace G4Hdf5 {
-
-  // H1 types
-  using G4AnaH1 = tools::histo::h1d; // keep for backward compatibility
-  using G4H1 = tools::histo::h1d;
-  using G4H1Iterator  = std::vector<tools::histo::h1d*>::iterator;
-  using G4H1ConstIterator = std::vector<tools::histo::h1d*>::const_iterator;
-
-  // H2 types
-  using G4AnaH2 = tools::histo::h2d; // keep for backward compatibility    
-  using G4H2 = tools::histo::h2d;
-  using G4H2Iterator = std::vector<tools::histo::h2d*>::iterator;
-  using G4H2ConstIterator = std::vector<tools::histo::h2d*>::const_iterator;
-
-  // H3 types
-  using G4H3 = tools::histo::h3d;    
-  using G4H3Iterator = std::vector<tools::histo::h3d*>::iterator;
-  using G4H3ConstIterator = std::vector<tools::histo::h3d*>::const_iterator;
-
-  // P1 types
-  using G4P1 = tools::histo::p1d;
-  using G4P1Iterator = std::vector<tools::histo::p1d*>::iterator;
-  using G4P1ConstIterator = std::vector<tools::histo::p1d*>::const_iterator;
-
-  // P2 types
-  using G4P2 = tools::histo::p2d;    
-  using G4P2Iterator = std::vector<tools::histo::p2d*>::iterator;
-  using G4P2ConstIterator = std::vector<tools::histo::p2d*>::const_iterator;
-
+namespace G4Hdf5
+{
   // Ntuple types
   using G4Ntuple = tools::hdf5::ntuple; 
   using G4NtupleIterator = std::vector<tools::hdf5::ntuple*>::iterator;

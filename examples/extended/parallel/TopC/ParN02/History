@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28th, 2019 I.Hrivnacova (ParN02-V10-05-00)
+- Fixed Doxygen warnings
+
 October 14th, 2016 G.Folger (ParN02-V10-02-00)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC

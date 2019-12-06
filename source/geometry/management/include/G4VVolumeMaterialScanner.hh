@@ -23,17 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4VVolumeMaterialScanner
+// G4VVolumeMaterialScanner
 //
 // Class description:
 //
 // Interface for repeated volumes or parameterisations that are able to 
-//  tabulate their materials.
+// tabulate their materials.
 
-// History:
-//  18.11.05 J.Apostolakis Initial version
+// 18.11.05, J.Apostolakis - Initial version
 // --------------------------------------------------------------------
 #ifndef G4VVOLUMEMATERIALSCANNER_HH
 #define G4VVOLUMEMATERIALSCANNER_HH
@@ -45,6 +42,7 @@ class G4Material;
 class G4VVolumeMaterialScanner
 {
   public:
+
     G4VVolumeMaterialScanner() {;}
     virtual ~G4VVolumeMaterialScanner() {;}
 

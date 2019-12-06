@@ -93,7 +93,7 @@ public:
   inline void Init(std::istream & aDataFile)
   {
     bAdjustFinalState = true;
-    const char* ctmp = getenv("G4PHP_DO_NOT_ADJUST_FINAL_STATE");
+    const char* ctmp = std::getenv("G4PHP_DO_NOT_ADJUST_FINAL_STATE");
     if( ctmp && G4String(ctmp) == "1" )
     {
       bAdjustFinalState = false;

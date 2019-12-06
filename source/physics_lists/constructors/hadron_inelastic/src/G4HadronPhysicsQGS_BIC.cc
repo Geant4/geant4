@@ -74,8 +74,6 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
@@ -84,6 +82,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4PhysListUtil.hh"
+#include "G4HadronicParameters.hh"
 
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -98,17 +97,17 @@ G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(const G4String& name, G4bool /* q
   QuasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
   QuasiElasticQGS= true;    // For QGS, it must use it.
   
-  maxFTF_neutron = maxFTF_proton = 25.*GeV;
-  minFTF_neutron = minFTF_proton = 9.5*GeV;
-  maxBIC_neutron = maxBIC_proton = 9.9*GeV;
+  maxFTF_neutron = maxFTF_proton = G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF();
+  minFTF_neutron = minFTF_proton = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBIC_neutron = maxBIC_proton = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
 
-  maxFTF_pion  = 25.*GeV;
-  maxBERT_pion = 5.0*GeV;
-  minBERT_pion = 1.2*GeV;
-  maxBIC_pion  = 1.3*GeV;
+  maxFTF_pion  = G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF();
+  maxBERT_pion = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  minBERT_pion = 1.0*GeV;
+  maxBIC_pion  = 1.5*GeV;
 
-  maxFTF_kaon  = 25.*GeV;
-  maxBERT_kaon = 5.0*GeV;
+  maxFTF_kaon  = G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF();
+  maxBERT_kaon = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
 }
 
 G4HadronPhysicsQGS_BIC::~G4HadronPhysicsQGS_BIC()
@@ -247,14 +246,6 @@ void G4HadronPhysicsQGS_BIC::ConstructProcess()
 
 void G4HadronPhysicsQGS_BIC::ExtraConfiguration()
 {
-  // --- Kaons ---
-  auto xsk = new G4ComponentGGHadronNucleusXsc();
-  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(xsk);
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
-
   // --- Neutrons ---
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);

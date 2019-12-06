@@ -89,7 +89,7 @@ G4UIXm::G4UIXm (
 
   Widget top = (Widget)interactorManager->GetMainInteractor();
 
-  if(getenv("XENVIRONMENT")==NULL) {
+  if(std::getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
     if(database!=NULL) {
       XrmPutLineResource(&database,"*topShadowColor:white");

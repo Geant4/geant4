@@ -594,6 +594,10 @@ public: // with description
     //that are event specific. Not implemented for sequential since run seed
     //defines event seeds
     virtual void RestoreRndmEachEvent(G4bool) { /*No effect in SEQ */ }
+  protected:
+    G4bool geometryDirectlyUpdated;
+  public:
+    void GeometryDirectlyUpdated(G4bool val=true) { geometryDirectlyUpdated = val; }
 };
 
 #endif

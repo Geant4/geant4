@@ -44,10 +44,11 @@
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4HadronicParameters.hh"
 
+
 G4QGSBinaryNeutronBuilder::
 G4QGSBinaryNeutronBuilder(G4bool quasiElastic) 
 {
-  theMin = 12*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSB");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;

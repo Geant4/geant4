@@ -261,15 +261,15 @@ void c3d::clear(){
 
 inline
 bool c3d::convert( 
- unsigned int aBinsX,double aLowerEdgeX,double aUpperEdgeX
-,unsigned int aBinsY,double aLowerEdgeY,double aUpperEdgeY 
-,unsigned int aBinsZ,double aLowerEdgeZ,double aUpperEdgeZ 
+ unsigned int a_bins_x,double a_lower_edge_x,double a_upper_edge_x
+,unsigned int a_bins_y,double a_lower_edge_y,double a_upper_edge_y 
+,unsigned int a_bins_z,double a_lower_edge_z,double a_upper_edge_z 
 ) { 
   if(m_histo) return true; // Done.
   m_histo = new histo::h3d(base_cloud::title(),
-                           aBinsX,aLowerEdgeX,aUpperEdgeX,
-                           aBinsY,aLowerEdgeY,aUpperEdgeY,
-                           aBinsZ,aLowerEdgeZ,aUpperEdgeZ);
+                           a_bins_x,a_lower_edge_x,a_upper_edge_x,
+                           a_bins_y,a_lower_edge_y,a_upper_edge_y,
+                           a_bins_z,a_lower_edge_z,a_upper_edge_z);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
@@ -450,20 +450,20 @@ double c3d::upper_edge_z() const {
   return m_histo ? m_histo->axis_z().upper_edge() : m_upper_z;
 }
 inline
-double c3d::value_x(unsigned int aIndex) const { 
-  return m_histo ? 0 : m_xs[aIndex];
+double c3d::value_x(unsigned int a_index) const { 
+  return m_histo ? 0 : m_xs[a_index];
 }
 inline
-double c3d::value_y(unsigned int aIndex) const { 
-  return m_histo ? 0 : m_ys[aIndex];
+double c3d::value_y(unsigned int a_index) const { 
+  return m_histo ? 0 : m_ys[a_index];
 }
 inline
-double c3d::value_z(unsigned int aIndex) const { 
-  return m_histo ? 0 : m_zs[aIndex];
+double c3d::value_z(unsigned int a_index) const { 
+  return m_histo ? 0 : m_zs[a_index];
 }
 inline
-double c3d::weight(unsigned int aIndex) const { 
-  return m_histo ? 0 : m_ws[aIndex];
+double c3d::weight(unsigned int a_index) const { 
+  return m_histo ? 0 : m_ws[a_index];
 }
 inline
 double c3d::mean_x() const {

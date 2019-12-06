@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// G4SmartVoxelNode Inline implementation
+// G4SmartVoxelNode inline implementation
 //
 // --------------------------------------------------------------------
 
@@ -43,13 +40,13 @@ void G4SmartVoxelNode::Insert(G4int pVolumeNo)
 }
 
 inline
-G4int G4SmartVoxelNode::GetNoContained() const
+size_t G4SmartVoxelNode::GetNoContained() const
 {
   return fcontents.size();
 }
 
 inline
-G4int G4SmartVoxelNode::GetCapacity() const
+size_t G4SmartVoxelNode::GetCapacity() const
 {
   return fcontents.capacity();
 }
@@ -75,7 +72,7 @@ G4int G4SmartVoxelNode::GetMaxEquivalentSliceNo() const
 inline
 void G4SmartVoxelNode::SetMaxEquivalentSliceNo(G4int pMax)
 {
-  fmaxEquivalent=pMax;
+  fmaxEquivalent = pMax;
 }
 
 inline
@@ -87,5 +84,5 @@ G4int G4SmartVoxelNode::GetMinEquivalentSliceNo() const
 inline
 void G4SmartVoxelNode::SetMinEquivalentSliceNo(G4int pMin)
 {
-  fminEquivalent=pMin;
+  fminEquivalent = pMin;
 }

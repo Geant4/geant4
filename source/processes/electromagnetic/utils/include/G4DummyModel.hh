@@ -57,7 +57,7 @@ public:
 
   explicit G4DummyModel(const G4String& nam = "DummyModel");
 
-  virtual ~G4DummyModel();
+  ~G4DummyModel() override;
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
 
@@ -66,6 +66,14 @@ public:
 			 const G4DynamicParticle*,
 			 G4double tmin,
 			 G4double tmax) final;
+
+  G4double ComputeTruePathLengthLimit(const G4Track&, G4double&) final;
+
+  G4double ComputeGeomPathLength(G4double) final;
+
+  G4double ComputeTrueStepLength(G4double) final;
+
+  G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double) final;
 
 private:
 

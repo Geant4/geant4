@@ -77,9 +77,19 @@ public:
     divide(norme);
     return norme;
   }
+  bool cos_angle(const vec3f& a_v,float& a_cos) const {
+    //WARNING : if ret false, a_cos is not set.
+    float this_length = length();
+    if(this_length==0.0f) return false;
+    float a_v_length = a_v.length();
+    if(a_v_length==0.0f) return false;
+    a_cos = dot(a_v)/(this_length*a_v_length);
+    return true;
+  }
 #else
   float length() const {return parent::length(::sqrtf);}
   float normalize() {return parent::normalize(::sqrtf);}
+  bool cos_angle(const vec3f& a_v,float& a_cos) const {return parent::cos_angle(a_v,a_cos,::sqrtf);}
 #endif
 
   bool theta_phi(float& a_theta,float& a_phi) const {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/AnnotatedFiles/G4VHitsCollection.hh
+/// \file G4VHitsCollection.hh
 /// \brief Definition of the G4VHitsCollection class
 //
 //

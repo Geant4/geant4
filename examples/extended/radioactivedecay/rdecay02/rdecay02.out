@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -33,7 +37,7 @@ Command is ignored.
  Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm 
                        Imean: 350.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.610 g/mole
+   --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.613 g/mole
          --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance: 20.840 %
          --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance: 27.540 %
          --->  Isotope:  Ge73   Z = 32   N =  73   A =  72.92 g/mole   abundance:  7.730 %
@@ -43,10 +47,10 @@ Command is ignored.
 
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
 
 #
 /process/list
@@ -101,8 +105,8 @@ Use Bearden atomic level energies                 0
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
   Process: Radioactivation
@@ -115,8 +119,8 @@ Use Bearden atomic level energies                 0
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
@@ -127,8 +131,8 @@ Use Bearden atomic level energies                 0
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
@@ -171,8 +175,9 @@ Use Bearden atomic level energies                 0
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:              hElasticLHEP: 0 meV ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 meV ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 meV ---> 100 TeV
@@ -210,15 +215,15 @@ Use Bearden atomic level energies                 0
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 meV ---> 3.5 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 meV ---> 100 TeV
 
@@ -231,9 +236,8 @@ Use Bearden atomic level energies                 0
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 meV ---> 12 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -244,9 +248,8 @@ Use Bearden atomic level energies                 0
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 meV ---> 12 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for lambda
@@ -257,8 +260,8 @@ Use Bearden atomic level energies                 0
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 meV ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 meV ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for neutron
@@ -269,7 +272,7 @@ Use Bearden atomic level energies                 0
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 meV ---> 12 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 meV ---> 100 TeV
 
   Process: nCapture
@@ -280,26 +283,24 @@ Use Bearden atomic level energies                 0
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 meV ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 meV ---> 12 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 meV ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 meV ---> 12 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
@@ -311,7 +312,7 @@ Use Bearden atomic level energies                 0
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 meV ---> 12 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
@@ -322,8 +323,8 @@ Use Bearden atomic level energies                 0
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 meV/n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
 
 ================================================================
@@ -332,21 +333,24 @@ Use Bearden atomic level energies                 0
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             0.00014427
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ==============================
@@ -394,52 +398,51 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.980000s Real=1.007935s Sys=0.010000s
+  User=0.950000s Real=0.982970s Sys=0.010000s
 
  The run is 10000 Ne24 of 0 meV through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 665.31 keV  rms = 403.79 keV
- Mean energy deposit in detector, in time window = 127.52 keV  rms = 261.83 keV
+ Mean energy deposit in target,   in time window = 809.21 keV  rms = 423.5 keV
+ Mean energy deposit in detector, in time window = 16.454 keV  rms = 102.34 keV
 
  Process calls frequency in target :
-      Radioactivation=  64545                  Rayl=    307        Transportation=  53842
-              annihil=    150                 compt=   4662                  conv=    158
-                eIoni=  26594               ionIoni=  43622                   msc=   3733
-                 phot=   1740 
+      Radioactivation=  60731                  Rayl=    243        Transportation=  50117
+              annihil=    152                 compt=   4218                  conv=    161
+                eIoni=  26004               ionIoni=  39529                   msc=   3872
+                 phot=   1606 
 
  Process calls frequency in detector:
-                 Rayl=   1405        Transportation=  48945               annihil=    370
-                compt=  26001                  conv=    364                 eIoni=  31669
-                  msc=   6931                  phot=   4985 
+                 Rayl=   1204        Transportation=  45917               annihil=    356
+                compt=  22406                  conv=    351                 eIoni=  27304
+                  msc=   7041                  phot=   4236 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.778 eV 	( 41.932 eV  --> 932.53 eV )
-  Mg24[1368.672]:    9979  Emean =  186.02 eV 	( 6.8604 eV  --> 473.8 eV )
-  Mg24[4122.889]:    8795  Emean =  39.132 eV 	( 229.52 meV --> 74.745 eV )
-  Mg24[4238.240]:      22  Emean =  22.241 eV 	( 22.241 eV  --> 22.241 eV )
-  Mg24[5235.120]:     681  Emean =  3.1982 eV 	( 39.148 meV --> 7.6665 eV )
-           Na24:    9997  Emean =   4.998 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:    5033  Emean =  27.159 eV 	( 165.57 meV --> 53.049 eV )
-  Na24[472.207]:    9998  Emean =  44.778 eV 	( 185.29 meV --> 133.75 eV )
-  Na24[563.199]:      40  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  893.34 keV	( 16.638 keV --> 3.922 MeV)
-             e+:     158  Emean =  890.21 keV	( 66.16 keV --> 2.7124 MeV)
-             e-:   26583  Emean =  580.24 keV	( 12.5 eV  --> 4.1192 MeV)
-          gamma:   34838  Emean =  1.4298 MeV	( 1.0278 keV --> 4.2378 MeV)
+           Mg24:   10000  Emean =  42.179 eV 	( 41.932 eV  --> 786.87 eV )
+  Mg24[1368.672]:    9996  Emean =  169.96 eV 	( 169.78 eV  --> 398.43 eV )
+  Mg24[4122.889]:    9982  Emean =  39.256 eV 	( 211.96 meV --> 74.823 eV )
+  Mg24[5235.120]:       6  Emean =  2.2915 eV 	( 314.93 meV --> 3.5152 eV )
+           Na24:    9996  Emean =  4.9976 eV 	( 4.9901 eV  --> 15.787 eV )
+  Na24[1346.621]:     745  Emean =  27.531 eV 	( 350.48 meV --> 52.235 eV )
+  Na24[472.207]:   10000  Emean =  68.829 eV 	( 147.52 meV --> 133.2 eV )
+  Na24[563.199]:       6  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =  980.57 keV	( 40.395 keV --> 3.8769 MeV)
+             e+:     161  Emean =  787.03 keV	( 4.5051 keV --> 1.6659 MeV)
+             e-:   26005  Emean =  640.31 keV	( 64.434 eV  --> 4.191 MeV)
+          gamma:   31028  Emean =  1.5058 MeV	( 90.991 keV --> 3.8661 MeV)
 
  List of generated particles in detector:
-             e+:     364  Emean =  897.12 keV	( 7.8407 keV --> 2.827 MeV)
-             e-:   31335  Emean =  355.96 keV	( 105.69 eV  --> 3.9317 MeV)
-          gamma:     738  Emean =  517.11 keV	( 325.24 keV --> 1.3915 MeV)
+             e+:     351  Emean =  843.16 keV	( 67.469 keV --> 2.1405 MeV)
+             e-:   26989  Emean =  371.52 keV	( 105.69 eV  --> 3.6231 MeV)
+          gamma:     710  Emean =  518.33 keV	( 320.78 keV --> 1.92 MeV)
 
 ... write Root file : rdecay02.root - done
 ... close Root file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1923133260, 1532559347
+ Current couple of seeds = 674526041, 580742865
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

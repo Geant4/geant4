@@ -35,9 +35,9 @@ public:
   double lower_edge_y() const { return m_histo ? m_histo->axis_y().lower_edge() : m_lower_y;}
   double upper_edge_x() const { return m_histo ? m_histo->axis_x().upper_edge() : m_upper_x;}
   double upper_edge_y() const { return m_histo ? m_histo->axis_y().upper_edge() : m_upper_y;}
-  double value_x(unsigned int aIndex) const { return m_histo ? 0 : m_xs[aIndex];}
-  double value_y(unsigned int aIndex) const { return m_histo ? 0 : m_ys[aIndex];}
-  double weight(unsigned int aIndex) const { return m_histo ? 0 : m_ws[aIndex];}
+  double value_x(unsigned int a_index) const { return m_histo ? 0 : m_xs[a_index];}
+  double value_y(unsigned int a_index) const { return m_histo ? 0 : m_ys[a_index];}
+  double weight(unsigned int a_index) const { return m_histo ? 0 : m_ws[a_index];}
   double mean_x() const {return m_histo ? m_histo->mean_x() : (m_Sw?m_Sxw/m_Sw:0);}
   double mean_y() const {return m_histo ? m_histo->mean_y() : (m_Sw?m_Syw/m_Sw:0);}
   double rms_x() const;
@@ -211,13 +211,13 @@ void c2d::clear(){
 
 inline
 bool c2d::convert( 
- unsigned int aBinsX,double aLowerEdgeX,double aUpperEdgeX
-,unsigned int aBinsY,double aLowerEdgeY,double aUpperEdgeY 
+ unsigned int a_bins_x,double a_lower_edge_x,double a_upper_edge_x
+,unsigned int a_bins_y,double a_lower_edge_y,double a_upper_edge_y 
 ) { 
   if(m_histo) return true; // Done.
   m_histo = new histo::h2d(base_cloud::title(),
-                           aBinsX,aLowerEdgeX,aUpperEdgeX,
-                           aBinsY,aLowerEdgeY,aUpperEdgeY);
+                           a_bins_x,a_lower_edge_x,a_upper_edge_x,
+                           a_bins_y,a_lower_edge_y,a_upper_edge_y);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();

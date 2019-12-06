@@ -46,16 +46,28 @@
 #include "G4Transform3D.hh"
 
 class G4VGraphicsScene;
+class G4ModelingParameters;
 
 class G4VUserVisAction
 {
 public: // With description
-  G4VUserVisAction() {}
+  G4VUserVisAction()
+  : fpSceneHandler(nullptr)
+  , fpTransform(nullptr)
+  , fpMP(nullptr)
+  {}
   virtual ~G4VUserVisAction() {}
   virtual void Draw() = 0;
-  void operator()(G4VGraphicsScene&, const G4Transform3D&) {
+  void operator()(G4VGraphicsScene& scene, const G4Transform3D& trans, const G4ModelingParameters* pMP) {
+    fpSceneHandler = &scene;
+    fpTransform    = &trans;
+    fpMP           = pMP;
     Draw();
   }
+protected:
+  G4VGraphicsScene* fpSceneHandler;
+  const G4Transform3D* fpTransform;
+  const G4ModelingParameters* fpMP;
 };
 
 #endif

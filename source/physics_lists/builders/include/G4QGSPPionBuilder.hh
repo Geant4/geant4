@@ -81,7 +81,5 @@ class G4QGSPPionBuilder : public G4VPionBuilder
 
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

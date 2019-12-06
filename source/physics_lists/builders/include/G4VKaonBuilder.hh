@@ -58,4 +58,6 @@ public:
   virtual void Build(G4KaonZeroSInelasticProcess * aP) = 0;
   using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
+
 #endif
+

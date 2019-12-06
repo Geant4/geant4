@@ -39,8 +39,7 @@ class G4FermiFragment
 {
 public:
 
-  explicit G4FermiFragment(G4int anA, G4int aZ, G4int sp, 
-                           G4double exc, G4bool stable, G4bool phys = true);
+  explicit G4FermiFragment(G4int anA, G4int aZ, G4int sp, G4double exc);
 
   ~G4FermiFragment();
 
@@ -74,20 +73,9 @@ public:
     return (fragmentMass + excitEnergy);
   }
 
-  inline G4bool IsStable() const
-  {
-    return isStable;
-  }
-
-  inline G4bool IsPhysical() const
-  {
-    return isPhysical;
-  }
-
   inline G4double GetCoulombBarrier(G4int Ares, G4int Zres, G4double Eex) const
   {
-    return cBarrier ? cBarrier->GetCoulombBarrier(Ares, Zres, Eex)
-      *cBarrier->BarrierPenetrationFactor(Z) : 0.0;
+    return cBarrier->GetCoulombBarrier(Ares, Zres, Eex);
   }
 
   inline G4bool operator==(const G4FermiFragment &right) const
@@ -98,22 +86,18 @@ public:
 
 private:
 
-  G4int A;
-  G4int Z;
-  G4int spin;
-
-  G4bool isStable;
-  G4bool isPhysical;
-
   G4double excitEnergy;
   G4double fragmentMass;
 
   G4CoulombBarrier* cBarrier;
 
-  G4FermiFragment(const G4FermiFragment &right) = delete;  
-  const G4FermiFragment & operator=(const G4FermiFragment &right) = delete;
-  G4bool operator!=(const G4FermiFragment &right) const = delete;
+  G4int A;
+  G4int Z;
+  G4int spin;
 
+  G4FermiFragment(const G4FermiFragment &right);  
+  const G4FermiFragment & operator=(const G4FermiFragment &right);
+  G4bool operator!=(const G4FermiFragment &right) const;
 };
 
 

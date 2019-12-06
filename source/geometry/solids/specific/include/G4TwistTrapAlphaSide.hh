@@ -23,25 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4TwistTrapAlphaSide
 //
 // Class description:
 //
-//  Class describing a twisted boundary surface for a trapezoid.
+// Class describing a twisted boundary surface for a trapezoid.
 
-// Author:
-//
-//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
-#ifndef __G4TWISTTRAPALPHASIDE__
-#define __G4TWISTTRAPALPHASIDE__
+#ifndef G4TWISTTRAPALPHASIDE_HH
+#define G4TWISTTRAPALPHASIDE_HH
 
 #include "G4VTwistSurface.hh"
 
@@ -51,7 +42,7 @@ class G4TwistTrapAlphaSide : public G4VTwistSurface
 {
   public:  // with description
    
-    G4TwistTrapAlphaSide(const G4String &name,
+    G4TwistTrapAlphaSide(const G4String& name,
                                G4double  PhiTwist, // twist angle
                                G4double  pDz,      // half z lenght
                                G4double  pTheta, // direction between end planes
@@ -68,18 +59,18 @@ class G4TwistTrapAlphaSide : public G4VTwistSurface
   
     virtual ~G4TwistTrapAlphaSide();
    
-    virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
+    virtual G4ThreeVector  GetNormal(const G4ThreeVector& xx,
                                            G4bool isGlobal = false) ;   
    
-    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-                                    const G4ThreeVector &gv,
+    virtual G4int DistanceToSurface(const G4ThreeVector& gp,
+                                    const G4ThreeVector& gv,
                                           G4ThreeVector  gxx[],
                                           G4double  distance[],
                                           G4int     areacode[],
                                           G4bool    isvalid[],
                                     EValidate validate = kValidateWithTol);
                                                   
-    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+    virtual G4int DistanceToSurface(const G4ThreeVector& gp,
                                           G4ThreeVector  gxx[],
                                           G4double       distance[],
                                           G4int          areacode[]);
@@ -94,13 +85,13 @@ class G4TwistTrapAlphaSide : public G4VTwistSurface
 
   private:
 
-    virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+    virtual G4int GetAreaCode(const G4ThreeVector& xx, 
                                     G4bool         withTol = true);
     virtual void SetCorners();
     virtual void SetBoundaries();
 
-    void GetPhiUAtX(G4ThreeVector p, G4double &phi, G4double &u);
-    G4ThreeVector ProjectPoint(const G4ThreeVector &p,
+    void GetPhiUAtX(G4ThreeVector p, G4double& phi, G4double& u);
+    G4ThreeVector ProjectPoint(const G4ThreeVector& p,
                                      G4bool isglobal = false);
 
     virtual G4ThreeVector SurfacePoint(G4double phi, G4double u,
@@ -242,7 +233,7 @@ G4ThreeVector G4TwistTrapAlphaSide::NormAng( G4double phi, G4double u )
                                 + 4*fdeltaY*fDy1*fTAlph)* std::cos(phi)
                                 - 4*fDy1*(fa1md1*fdeltaX + 4*fDy1*(fdeltaY
                                 + fdeltaX*fTAlph))*std::sin(phi))/ 8. ) ;
-    return nvec.unit();
+  return nvec.unit();
 }
 
 #endif

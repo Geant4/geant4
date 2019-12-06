@@ -16,6 +16,43 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 Nov 2019 Igor Semeniouk (interfaces-V10-05-07)
+-- G4UIQt.cc:
+ o fix ui command not stored in callback for icon defined via /gui/addIcon command.
+
+25 Nov 2019 Jonathan Madsen (interfaces-V10-05-06)
+- Added timemory support to this library
+- G4UIExective will grab argc, argv and customize the output directory
+  for timemory
+
+25 November 2019 Laurent Garnier (interfaces-V10-05-05)
+- Fix bug when clicking on user defined icon (run for example)
+
+20 November 2019 Laurent Garnier (interfaces-V10-05-04)
+- Remove deprecated QSignalMapper class
+
+31st October 2019 Ben Morgan (interfaces-V10-05-03)
+- Only use imported targets for X11 and Xm
+- Remove inclusion of QT_USE_FILE from CMake scripts.
+  All usage is now through the qtX_ macros and imported targets
+- Only use imported targets for Wt
+
+30 Oct 2019  Gabriele Cosmo (interfaces-V10-05-02)
+- Fixed deprecation compilation warning on Visual Studio 2019 in G4UIWin32.
+
+22 Oct 2019  John Allison  (interfaces-V10-05-01)
+- Declared Win32 a GUI (isGUI = true), i.e., it's clickable and
+  can have buttons.
+
+13 Sept 2019  Laurent Garnier (interfaces-V10-05-00)
+- Fix square backets around optional parameters (buzilla #2132)
+
+11 Sept 2019  Laurent Garnier ((interfaces-V10-04-11)
+- remove default font size and police
+
+9th Sept 2019 Laurent Garnier
+- Remove comment
+
 30th November 2018  Koichi Murakami (interfaces-V10-04-10)
 - Fixed parse error of empty line of .g4session.
 

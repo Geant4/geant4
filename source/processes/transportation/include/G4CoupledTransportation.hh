@@ -125,9 +125,16 @@ class G4CoupledTransportation : public G4VProcess
      inline void ResetKilledStatistics( G4int report = 1);      
      // Statistics for tracks killed (currently due to looping in field)
 
-     static G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
+     static G4bool EnableMagneticMoment(G4bool useMoment=true);    
      // Whether to deflect particles with force due to magnetic moment
 
+     static G4bool EnableGravity(G4bool useGravity);
+     // Turn on the capability to deflect particles with a gravity field
+
+     static void   SetSilenceLooperWarnings( G4bool val);
+     // Do not warn (or throw exception) about 'looping' particles
+     static G4bool GetSilenceLooperWarnings();
+   
      static void  SetSignifyStepsInAnyVolume( G4bool anyVol )
        { fSignifyStepInAnyVolume = anyVol; } 
      static G4bool GetSignifyStepsInAnyVolume()
@@ -148,6 +155,10 @@ class G4CoupledTransportation : public G4VProcess
 
      void StartTracking(G4Track* aTrack); 
      void EndTracking();
+
+     static G4bool EnableUseMagneticMoment(G4bool useMoment=true)
+      { return EnableMagneticMoment(useMoment); }
+     // Old name ... obsolete
    
      G4double AtRestGetPhysicalInteractionLength( const G4Track& ,
                                                   G4ForceCondition* )
@@ -160,8 +171,9 @@ class G4CoupledTransportation : public G4VProcess
    
   protected:
 
-     G4bool DoesGlobalFieldExist();
-       // Checks whether a field exists for the "global" field manager
+     G4bool DoesAnyFieldExist();
+       // Check whether any field exists in the geometry
+       //  - replaces method that checked only whether a field for the world volume
 
      void ReportInexactEnergy(G4double startEnergy, G4double endEnergy);
        // Issue warning
@@ -183,7 +195,7 @@ class G4CoupledTransportation : public G4VProcess
      G4PropagatorInField* fFieldPropagator;
        // Still required in order to find/set the fieldmanager
 
-     G4bool fGlobalFieldExists; 
+     G4bool               fAnyFieldExists; 
      // G4bool fStartedNewTrack;   // True for first step or restarted tracking
                                    // until first step's AlongStepGPIL
 
@@ -257,6 +269,8 @@ class G4CoupledTransportation : public G4VProcess
 
      friend class G4Transportation;
      static G4bool fUseMagneticMoment;
+     static G4bool fUseGravity;
+     static G4bool fSilenceLooperWarnings;  // Flag to *Supress* all 'looper' warnings   
 
   private:
 

@@ -38,31 +38,28 @@
 
 
 #include "G4EvaporationProbability.hh"
-#include "G4NeutronCoulombBarrier.hh"
 
 class G4NeutronEvaporationProbability : public G4EvaporationProbability
 {
 public:
  
-  G4NeutronEvaporationProbability();
+  explicit G4NeutronEvaporationProbability();
 		
-  virtual ~G4NeutronEvaporationProbability();
+  ~G4NeutronEvaporationProbability() override;
 
 protected:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+  G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+  G4double CalcBetaParam(const G4Fragment & fragment) override;
 
 private:  
   
   G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &right);
-
-  const G4NeutronEvaporationProbability & operator=(const G4NeutronEvaporationProbability &right);
+  const G4NeutronEvaporationProbability & operator=
+  (const G4NeutronEvaporationProbability &right);
   G4bool operator==(const G4NeutronEvaporationProbability &right) const;
   G4bool operator!=(const G4NeutronEvaporationProbability &right) const;
-
-  G4NeutronCoulombBarrier theCoulombBarrier; 
 };
 
 

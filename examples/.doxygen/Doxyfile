@@ -799,9 +799,6 @@ INPUT                  = Doxymain.h \
                          ../extended/analysis/AnaEx03/.README.AIDA.txt \
                          ../extended/analysis/AnaEx03/.README.OpenScientist.txt \
                          ../extended/analysis/B1Con \
-                         ../extended/analysis/B3aScoreWriter/.README.txt \
-                         ../extended/analysis/B3aScoreWriter/scoreWriter \
-                         ../extended/analysis/B4dScoreWriter/.README.txt \
                          ../extended/biasing \
                          ../extended/electromagnetic/.README.txt \
                          ../extended/electromagnetic/TestEm0/.README.txt \
@@ -852,6 +849,7 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/Hadr04/.README.txt \
                          ../extended/hadronic/Hadr06/.README.txt \
                          ../extended/hadronic/Hadr07/.README.txt \
+                         ../extended/hadronic/Hadr08/.README.txt \
                          ../extended/hadronic/FissionFragment \
                          ../extended/hadronic/NeutronSource/.README.txt \
                          ../extended/medical/.README.txt \
@@ -869,15 +867,18 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/dna/chem4/.README.txt \
                          ../extended/medical/dna/chem5/.README.txt \
                          ../extended/medical/dna/clustering/.README.txt \
+                         ../extended/medical/dna/dnadamage1/.README.txt \
                          ../extended/medical/dna/dnaphysics/.README.txt \
                          ../extended/medical/dna/icsd/.README.txt \
                          ../extended/medical/dna/mfp/.README.txt \
                          ../extended/medical/dna/microdosimetry/.README.txt \
+                         ../extended/medical/dna/microprox/.README.txt \
                          ../extended/medical/dna/microyz/.README.txt \
                          ../extended/medical/dna/neuron/.README.txt \
                          ../extended/medical/dna/pdb4dna/.README.txt \
                          ../extended/medical/dna/range/.README.txt \
                          ../extended/medical/dna/slowing/.README.txt \
+                         ../extended/medical/dna/splitting/.README.txt \
                          ../extended/medical/dna/spower/.README.txt \
                          ../extended/medical/dna/svalue/.README.txt \
                          ../extended/medical/dna/wholeNuclearDNA/.README.txt \
@@ -892,6 +893,7 @@ INPUT                  = Doxymain.h \
                          ../extended/parallel/MPI/examples/exMPI01/.README.txt \
                          ../extended/parallel/MPI/examples/exMPI02/.README.txt \
                          ../extended/parallel/MPI/examples/exMPI03/.README.txt \
+                         ../extended/parallel/MPI/examples/exMPI04/.README.txt \
                          ../extended/parallel/MPI/source \
                          ../extended/parallel/TBB \
                          ../extended/parallel/ThreadsafeScorers \
@@ -968,6 +970,7 @@ EXCLUDE                = ../basic/B2/B2b/include/B2ActionInitialization.hh \
                          ../basic/B2/B2b/src/B2RunAction.cc \
                          ../basic/B2/B2b/src/B2TrackerHit.cc \
                          ../basic/B2/B2b/src/B2TrackerSD.cc \
+                         ../basic/B3/B3b/include/B3Analysis.hh \
                          ../basic/B3/B3b/include/B3DetectorConstruction.hh \
                          ../basic/B3/B3b/include/B3PhysicsList.hh \
                          ../basic/B3/B3b/include/B3PrimaryGeneratorAction.hh \
@@ -1042,6 +1045,29 @@ EXCLUDE                = ../basic/B2/B2b/include/B2ActionInitialization.hh \
                          ../extended/parallel/TBB/B2b/src/B2RunAction.cc \
                          ../extended/parallel/TBB/B2b/src/B2TrackerHit.cc \
                          ../extended/parallel/TBB/B2b/src/B2TrackerSD.cc \
+                         ../extended/parameterisations/gflash/gflasha \
+                         ../extended/parameterisations/gflash/gflash2/include/ExGflashActionInitialization.hh \
+                         ../extended/parameterisations/gflash/gflash2/include/ExGflashEventAction.hh \
+                         ../extended/parameterisations/gflash/gflash2/include/ExGflashHit.hh \
+                         ../extended/parameterisations/gflash/gflash2/include/ExGflashHitsCollection.hh \
+                         ../extended/parameterisations/gflash/gflash2/include/ExGflashPrimaryGeneratorAction.hh \
+                         ../extended/parameterisations/gflash/gflash2/include/ExGflashRunAction.hh \
+                         ../extended/parameterisations/gflash/gflash2/src/ExGflashActionInitialization.cc \
+                         ../extended/parameterisations/gflash/gflash2/src/ExGflashEventAction.cc \
+                         ../extended/parameterisations/gflash/gflash2/src/ExGflashHit.cc \
+                         ../extended/parameterisations/gflash/gflash2/src/ExGflashPrimaryGeneratorAction.cc \
+                         ../extended/parameterisations/gflash/gflash2/src/ExGflashRunAction.cc \
+                         ../extended/parameterisations/gflash/gflash3/include/ExGflashActionInitialization.hh \
+                         ../extended/parameterisations/gflash/gflash3/include/ExGflashEventAction.hh \
+                         ../extended/parameterisations/gflash/gflash3/include/ExGflashHit.hh \
+                         ../extended/parameterisations/gflash/gflash3/include/ExGflashHitsCollection.hh \
+                         ../extended/parameterisations/gflash/gflash3/include/ExGflashPrimaryGeneratorAction.hh \
+                         ../extended/parameterisations/gflash/gflash3/include/ExGflashRunAction.hh \
+                         ../extended/parameterisations/gflash/gflash3/src/ExGflashActionInitialization.cc \
+                         ../extended/parameterisations/gflash/gflash3/src/ExGflashEventAction.cc \
+                         ../extended/parameterisations/gflash/gflash3/src/ExGflashHit.cc \
+                         ../extended/parameterisations/gflash/gflash3/src/ExGflashPrimaryGeneratorAction.cc \
+                         ../extended/parameterisations/gflash/gflash3/src/ExGflashRunAction.cc \
                          ../extended/visualization/userVisAction/include/B1ActionInitialization.hh \
                          ../extended/visualization/userVisAction/include/B1DetectorConstruction.hh \
                          ../extended/visualization/userVisAction/include/B1EventAction.hh \

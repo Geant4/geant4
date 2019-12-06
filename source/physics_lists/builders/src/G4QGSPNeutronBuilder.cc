@@ -50,7 +50,7 @@
 G4QGSPNeutronBuilder::
 G4QGSPNeutronBuilder(G4bool quasiElastic) 
 {
-  theMin = 12*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSP");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;
@@ -85,4 +85,3 @@ Build(G4NeutronInelasticProcess * aP)
    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
 }
 
-// 2002 by J.P. Wellisch

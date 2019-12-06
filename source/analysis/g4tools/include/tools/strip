@@ -26,16 +26,24 @@ inline bool strip(std::string& a_string,what a_type = both,char a_char = ' '){
         return (i?true:false); //i=0 : same string.
       }
     }
+    // all chars are a_char :
+    a_string.clear();
+    return true;
     }break;
   case trailing:{
     char* pos = (char*)a_string.c_str();
     pos += (l-1);
-    for(std::string::size_type i=l-1;;i--,pos--) {
+    std::string::size_type i = l-1;
+    std::string::const_reverse_iterator it;
+    for(it=a_string.rbegin();it!=a_string.rend();++it,i--,pos--) {
       if(*pos!=a_char) {
         a_string = a_string.substr(0,i+1);
         return (i==(l-1)?false:true); //i==l-1 : same string.
       }
     }
+    // all chars are a_char :
+    a_string.clear();
+    return true;
     }break;
   case both:{
     bool stat_lead = strip(a_string,leading,a_char);

@@ -57,8 +57,10 @@ G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
 G4WorkerRunManagerKernel* G4WorkerRunManager::GetWorkerRunManagerKernel()
 { return static_cast<G4WorkerRunManagerKernel*>(GetWorkerRunManager()->kernel); }
 
-G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
-    //This constructor should never be called in non-multithreaded mode
+G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM)
+{
+    // This constructor should never be called in non-multithreaded mode
+
 #ifndef G4MULTITHREADED
     G4ExceptionDescription msg;
     msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
@@ -76,6 +78,23 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     workerContext = 0;
     readStatusFromFile = false;
 
+    // Properly initialise luxury level for Ranlux* engines...
+    //
+    if ( dynamic_cast<const CLHEP::Ranlux64Engine*>(G4Random::getTheEngine()) )
+    {
+      const CLHEP::Ranlux64Engine* theEngine = dynamic_cast<const CLHEP::Ranlux64Engine*>(G4Random::getTheEngine());
+      luxury = theEngine->getLuxury();
+    }
+    else if ( dynamic_cast<const CLHEP::RanluxEngine*>(G4Random::getTheEngine()) )
+    {
+      const CLHEP::RanluxEngine* theEngine = dynamic_cast<const CLHEP::RanluxEngine*>(G4Random::getTheEngine());
+      luxury = theEngine->getLuxury();
+    }
+    else
+    {
+      luxury = -1;
+    }
+
     G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
 
 #ifdef G4MULTITHREADED
@@ -92,7 +111,8 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
 
 #include "G4MTRunManager.hh"
 
-G4WorkerRunManager::~G4WorkerRunManager() {
+G4WorkerRunManager::~G4WorkerRunManager()
+{
     // Delete thread-local data process manager objects
     physicsList->TerminateWorker();
 //    physicsList->RemoveProcessManager();
@@ -338,7 +358,7 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
   if(eventHasToBeSeeded) 
   {
     long seeds[3] = { s1, s2, 0 };
-    G4Random::setTheSeeds(seeds,-1);
+    G4Random::setTheSeeds(seeds,luxury);
     runIsSeeded = true;
 ////G4cout<<"Event "<<currEvID<<" is seeded with { "<<s1<<", "<<s2<<" }"<<G4endl;
   }
@@ -460,6 +480,8 @@ void G4WorkerRunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_sele
 namespace { G4Mutex ConstructScoringWorldsMutex = G4MUTEX_INITIALIZER; }
 void G4WorkerRunManager::ConstructScoringWorlds()
 {
+    using MeshShape = G4VScoringMesh::MeshShape;
+
     // Return if unnecessary
     G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
     if(!ScM) return;
@@ -479,15 +501,16 @@ void G4WorkerRunManager::ConstructScoringWorlds()
     {
       G4VScoringMesh* mesh = ScM->GetMesh(iw);
       if(fGeometryHasBeenDestroyed) mesh->GeometryHasBeenDestroyed();
-      G4VPhysicalVolume* pWorld
-       = G4TransportationManager::GetTransportationManager()
-         ->IsWorldExisting(ScM->GetWorldName(iw));
-      if(!pWorld)
+      G4VPhysicalVolume* pWorld = nullptr;
+      if(mesh->GetShape()!=MeshShape::realWorldLogVol)
       {
-        G4ExceptionDescription ed;
-        ed<<"Mesh name <"<<ScM->GetWorldName(iw)<<"> is not found in the master thread.";
-        G4Exception("G4WorkerRunManager::ConstructScoringWorlds()","RUN79001",
-                      FatalException,ed);
+        pWorld = G4TransportationManager::GetTransportationManager()->IsWorldExisting(ScM->GetWorldName(iw));
+        if(!pWorld)
+        {
+          G4ExceptionDescription ed;
+          ed<<"Mesh name <"<<ScM->GetWorldName(iw)<<"> is not found in the master thread.";
+          G4Exception("G4WorkerRunManager::ConstructScoringWorlds()","RUN79001",FatalException,ed);
+        }
       }
       if(!(mesh->GetMeshElementLogical()))
       {
@@ -496,28 +519,31 @@ void G4WorkerRunManager::ConstructScoringWorlds()
         mesh->SetMeshElementLogical(masterMesh->GetMeshElementLogical());
         l.unlock();
         
-        G4ParallelWorldProcess* theParallelWorldProcess = mesh->GetParallelWorldProcess();
-        if(theParallelWorldProcess)
-        { theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw)); }
-        else
+        if(mesh->GetShape()!=MeshShape::realWorldLogVol)
         {
-          theParallelWorldProcess = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
-          mesh->SetParallelWorldProcess(theParallelWorldProcess);
-          theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
+          G4ParallelWorldProcess* theParallelWorldProcess = mesh->GetParallelWorldProcess();
+          if(theParallelWorldProcess)
+          { theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw)); }
+          else
+          {
+            theParallelWorldProcess = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
+            mesh->SetParallelWorldProcess(theParallelWorldProcess);
+            theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
 
-          particleIterator->reset();
-          while( (*particleIterator)() ){
-            G4ParticleDefinition* particle = particleIterator->value();
-            G4ProcessManager* pmanager = particle->GetProcessManager();
-            if(pmanager)
-            {
-              pmanager->AddProcess(theParallelWorldProcess);
-              if(theParallelWorldProcess->IsAtRestRequired(particle))
-              { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900); }
-              pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-              pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
-            } //if(pmanager)
-          }//while
+            particleIterator->reset();
+            while( (*particleIterator)() ){
+              G4ParticleDefinition* particle = particleIterator->value();
+              G4ProcessManager* pmanager = particle->GetProcessManager();
+              if(pmanager)
+              {
+                pmanager->AddProcess(theParallelWorldProcess);
+                if(theParallelWorldProcess->IsAtRestRequired(particle))
+                { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900); }
+                pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
+                pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
+              } //if(pmanager)
+            }//while
+          }
         }
       }
       mesh->WorkerConstruct(pWorld);

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Tubs.icc
-//
 // Implementation of inline methods of G4Tubs
 // --------------------------------------------------------------------
 
@@ -294,10 +287,12 @@ G4double G4Tubs::GetSurfaceArea()
 }
 
 inline
-G4double G4Tubs::FastInverseRxy( const G4ThreeVector& pos, G4double invRad, G4double tolerance ) const
+G4double G4Tubs::FastInverseRxy( const G4ThreeVector& pos,
+                                       G4double invRad,
+                                       G4double tolerance ) const
 {
-  G4double rho2      = sqr( pos.x() ) + sqr( pos.y() );
-  G4bool   onSurface = std::fabs( rho2 * invRad * invRad - 1.0 ) < tolerance;
-  G4double invRho = onSurface ? invRad : 1.0 / sqrt(rho2);
-  return   invRho;
+  G4double rho2 = sqr( pos.x() ) + sqr( pos.y() );
+  G4bool onSurface = std::fabs( rho2 * invRad * invRad - 1.0 ) < tolerance;
+  G4double invRho = onSurface ? invRad : 1.0 / std::sqrt(rho2);
+  return invRho;
 }

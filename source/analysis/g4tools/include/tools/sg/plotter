@@ -17,12 +17,14 @@
 #include "matrix"
 #include "normal"
 #include "holder"
+#include "tex_rect" //for plottable_img.
 
 #include "axis"
 #include "infos_box"
 #include "legend"
 #include "text"
 #include "torche"
+#include "ellipse"
 
 #include "../data_axis"
 #include "../hatcher"
@@ -30,6 +32,7 @@
 #include "../tess_contour"
 #include "../lina/geom3"
 #include "../spline"
+#include "../rtausmef"
 
 //#define INLIBS_SG_PLOTTER_TIMING
 #ifdef INLIBS_SG_PLOTTER_TIMING
@@ -46,7 +49,11 @@ private:
     static const std::string s_v("name entries mean rms fit_quality fit_ndf fit_parameters fit_errors");
     return s_v;
   }
-  static float default_infos_margin() {return 0.005f;} //0.005 or Wt
+  static float default_infos_margin() {return 0.005f;}
+  static float default_title_box_width()    {return 0.3f;}
+  static float default_title_box_height()   {return 0.05f;}
+  static float default_title_box_x_margin() {return 0.01f;}
+  static float default_title_box_y_margin() {return 0.005f;}
 public:
   sf<float> width;          //PAW XSIZ
   sf<float> height;         //PAW YSIZ
@@ -102,11 +109,17 @@ public:
   sf<float> infos_y_margin; //in percent of height. From top.
   sf_string infos_what;
 
+  sf<float> title_box_width;    //in percent of width.
+  sf<float> title_box_height;   //in percent of height.
+  sf<float> title_box_x_margin; //in percent of width. From left.
+  sf<float> title_box_y_margin; //in percent of height. From top.
+
   sf<bool> func2D_borders_visible;  
 
   // used with shape xyz
   sf<float> theta;  //in degrees.
   sf<float> phi;    //in degrees.
+  sf<float> tau;    //in degrees.
 
   ////////////////////////////////////////////////////////////////
   /// legend related :////////////////////////////////////////////
@@ -163,100 +176,153 @@ public:
   //SoMFString legend; //Output
   
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::plotter)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
+    static const desc_fields s_v(parent::node_desc_fields(),61, //WARNING : take care of count.
 
-      TOOLS_ADD_FIELD_DESC(width)
-      TOOLS_ADD_FIELD_DESC(height)
-      TOOLS_ADD_FIELD_DESC(left_margin)
-      TOOLS_ADD_FIELD_DESC(right_margin)
-      TOOLS_ADD_FIELD_DESC(bottom_margin)
-      TOOLS_ADD_FIELD_DESC(top_margin)
-      TOOLS_ADD_FIELD_DESC(depth)
-      TOOLS_ADD_FIELD_DESC(down_margin)
-      TOOLS_ADD_FIELD_DESC(up_margin)
-
-      TOOLS_ADD_FIELD_DESC(colormap_visible)
-      TOOLS_ADD_FIELD_DESC(colormap_axis_labeling)
-      TOOLS_ADD_FIELD_DESC_ENUM(cells)
-      TOOLS_ADD_FIELD_DESC_ENUM(min_max)
-      TOOLS_ADD_FIELD_DESC(colormap_attached)
-      TOOLS_ADD_FIELD_DESC(colormap_axis_visible)
-
-      TOOLS_ADD_FIELD_DESC(title_up); 
-      TOOLS_ADD_FIELD_DESC(title_to_axis); 
-      TOOLS_ADD_FIELD_DESC(title_height); 
-      TOOLS_ADD_FIELD_DESC(title_automated); 
-      TOOLS_ADD_FIELD_DESC(title_hjust); 
-      TOOLS_ADD_FIELD_DESC_ENUM(tools::sg::left)
-      TOOLS_ADD_FIELD_DESC_ENUM(tools::sg::center)
-      TOOLS_ADD_FIELD_DESC_ENUM(tools::sg::right)
-
-      TOOLS_ADD_FIELD_DESC(title)
-
-      TOOLS_ADD_FIELD_DESC(x_axis_enforced)
-      TOOLS_ADD_FIELD_DESC(x_axis_automated)
-      TOOLS_ADD_FIELD_DESC(x_axis_min)
-      TOOLS_ADD_FIELD_DESC(x_axis_max)
-      TOOLS_ADD_FIELD_DESC(x_axis_is_log)
-
-      TOOLS_ADD_FIELD_DESC(y_axis_enforced)
-      TOOLS_ADD_FIELD_DESC(y_axis_automated)
-      TOOLS_ADD_FIELD_DESC(y_axis_min)
-      TOOLS_ADD_FIELD_DESC(y_axis_max)
-      TOOLS_ADD_FIELD_DESC(y_axis_is_log)
-
-      TOOLS_ADD_FIELD_DESC(z_axis_enforced)
-      TOOLS_ADD_FIELD_DESC(z_axis_automated)
-      TOOLS_ADD_FIELD_DESC(z_axis_min)
-      TOOLS_ADD_FIELD_DESC(z_axis_max)
-      TOOLS_ADD_FIELD_DESC(z_axis_is_log)
-
-      TOOLS_ADD_FIELD_DESC(value_top_margin)
-
-      TOOLS_ADD_FIELD_DESC(infos_width)
-      TOOLS_ADD_FIELD_DESC(infos_x_margin)
-      TOOLS_ADD_FIELD_DESC(infos_y_margin)
-      TOOLS_ADD_FIELD_DESC(infos_what)
-
-      TOOLS_ADD_FIELD_DESC(func2D_borders_visible)
-      TOOLS_ADD_FIELD_DESC(theta)
-      TOOLS_ADD_FIELD_DESC(phi)
-
-      TOOLS_ADD_FIELD_DESC(legends_automated)
-      //TOOLS_ADD_FIELD_DESC(legends_attached_to_infos)
-      TOOLS_ADD_FIELD_DESC(legends_origin)
-      TOOLS_ADD_FIELD_DESC_ENUM(unit_percent)
-      TOOLS_ADD_FIELD_DESC_ENUM(unit_axis)
-      TOOLS_ADD_FIELD_DESC(legends_origin_unit)
-      TOOLS_ADD_FIELD_DESC(legends_size)
-      TOOLS_ADD_FIELD_DESC(legends_string)
-
-      TOOLS_ADD_FIELD_DESC(shape_automated)
-
-      TOOLS_ADD_FIELD_DESC(shape)
-      TOOLS_ADD_FIELD_DESC_ENUM(xy)
-      TOOLS_ADD_FIELD_DESC_ENUM(xyz)
-
-      TOOLS_ADD_FIELD_DESC(xy_depth)
-      TOOLS_ADD_FIELD_DESC(curve_number_of_points)
+      TOOLS_ARG_FIELD_DESC(width),
+      TOOLS_ARG_FIELD_DESC(height),
+      TOOLS_ARG_FIELD_DESC(left_margin),
+      TOOLS_ARG_FIELD_DESC(right_margin),
+      TOOLS_ARG_FIELD_DESC(bottom_margin),
+      TOOLS_ARG_FIELD_DESC(top_margin),
+      TOOLS_ARG_FIELD_DESC(depth),
+      TOOLS_ARG_FIELD_DESC(down_margin),
+      TOOLS_ARG_FIELD_DESC(up_margin),
+      TOOLS_ARG_FIELD_DESC(colormap_visible),  //10
       
-      TOOLS_ADD_FIELD_DESC(number_of_levels)
-      TOOLS_ADD_FIELD_DESC(levels)
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(colormap_axis_labeling,2)
+        TOOLS_ARG_ENUM(cells),
+        TOOLS_ARG_ENUM(min_max)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
       
-      TOOLS_ADD_FIELD_DESC(data_light_on_automated)
+      TOOLS_ARG_FIELD_DESC(colormap_attached),
+      TOOLS_ARG_FIELD_DESC(colormap_axis_visible),
+
+      TOOLS_ARG_FIELD_DESC(title_up),
+      TOOLS_ARG_FIELD_DESC(title_to_axis), 
+      TOOLS_ARG_FIELD_DESC(title_height),
+      TOOLS_ARG_FIELD_DESC(title_automated),
       
-      TOOLS_ADD_FIELD_DESC(primitives_enforced)
-      TOOLS_ADD_FIELD_DESC(inner_frame_enforced)
-    }
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(title_hjust,3)
+        "left",left,
+        "center",center,
+        "right",right
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+
+      TOOLS_ARG_FIELD_DESC(title),
+
+      TOOLS_ARG_FIELD_DESC(x_axis_enforced),  //20
+      TOOLS_ARG_FIELD_DESC(x_axis_automated),
+      TOOLS_ARG_FIELD_DESC(x_axis_min),
+      TOOLS_ARG_FIELD_DESC(x_axis_max),
+      TOOLS_ARG_FIELD_DESC(x_axis_is_log),
+
+      TOOLS_ARG_FIELD_DESC(y_axis_enforced),
+      TOOLS_ARG_FIELD_DESC(y_axis_automated),
+      TOOLS_ARG_FIELD_DESC(y_axis_min),
+      TOOLS_ARG_FIELD_DESC(y_axis_max),
+      TOOLS_ARG_FIELD_DESC(y_axis_is_log),
+
+      TOOLS_ARG_FIELD_DESC(z_axis_enforced),  //30
+      TOOLS_ARG_FIELD_DESC(z_axis_automated),
+      TOOLS_ARG_FIELD_DESC(z_axis_min),
+      TOOLS_ARG_FIELD_DESC(z_axis_max),
+      TOOLS_ARG_FIELD_DESC(z_axis_is_log),
+
+      TOOLS_ARG_FIELD_DESC(value_top_margin),
+
+      TOOLS_ARG_FIELD_DESC(infos_width),
+      TOOLS_ARG_FIELD_DESC(infos_x_margin),
+      TOOLS_ARG_FIELD_DESC(infos_y_margin),
+      TOOLS_ARG_FIELD_DESC(infos_what),
+
+      TOOLS_ARG_FIELD_DESC(func2D_borders_visible), //40
+      TOOLS_ARG_FIELD_DESC(theta),
+      TOOLS_ARG_FIELD_DESC(phi),
+      TOOLS_ARG_FIELD_DESC(tau),
+
+      TOOLS_ARG_FIELD_DESC(legends_automated),
+      
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(legends_origin,2)
+        "unit_percent",unit_percent,
+        "unit_axis",unit_axis
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+      
+      TOOLS_ARG_FIELD_DESC(legends_origin_unit),
+      TOOLS_ARG_FIELD_DESC(legends_size),
+      TOOLS_ARG_FIELD_DESC(legends_string),
+
+      TOOLS_ARG_FIELD_DESC(shape_automated),
+
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(shape,2) //50
+        "xy",xy,
+        "xyz",xyz
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+
+      TOOLS_ARG_FIELD_DESC(xy_depth),
+      TOOLS_ARG_FIELD_DESC(curve_number_of_points),
+      
+      TOOLS_ARG_FIELD_DESC(number_of_levels),
+      TOOLS_ARG_FIELD_DESC(levels),
+      
+      TOOLS_ARG_FIELD_DESC(data_light_on_automated),
+      
+      TOOLS_ARG_FIELD_DESC(primitives_enforced),
+      TOOLS_ARG_FIELD_DESC(inner_frame_enforced),
+      
+      TOOLS_ARG_FIELD_DESC(title_box_width),
+      TOOLS_ARG_FIELD_DESC(title_box_height),
+      TOOLS_ARG_FIELD_DESC(title_box_x_margin),
+      TOOLS_ARG_FIELD_DESC(title_box_y_margin)
+      
+    );
     return s_v;
   }
+  virtual bool touched() {
+    if(parent::touched()) return true;
+
+    if(background_style().touched()) return true;
+    if(title_style().touched()) return true;
+    if(infos_style().touched()) return true;
+    if(title_box_style().touched()) return true;
+    if(inner_frame_style().touched()) return true;
+    if(grid_style().touched()) return true;
+    if(wall_style().touched()) return true;
+
+   {tools_vforit(style,m_bins_style,it) {if((*it).touched()) return true;}}
+   {tools_vforit(style,m_errors_style,it) {if((*it).touched()) return true;}}
+   {tools_vforit(style,m_func_style,it) {if((*it).touched()) return true;}}
+   {tools_vforit(style,m_points_style,it) {if((*it).touched()) return true;}}
+   {tools_vforit(style,m_left_hatch_style,it) {if((*it).touched()) return true;}}
+   {tools_vforit(style,m_right_hatch_style,it) {if((*it).touched()) return true;}}
+   {tools_vforit(style,m_legend_style,it) {if((*it).touched()) return true;}}
+	    
+    return false;
+  }
+  virtual void reset_touched() {
+    parent::reset_touched();
+    
+    background_style().reset_touched();
+    title_style().reset_touched();
+    infos_style().reset_touched();
+    title_box_style().reset_touched();
+    inner_frame_style().reset_touched();
+    grid_style().reset_touched();
+    wall_style().reset_touched();
+
+   {tools_vforit(style,m_bins_style,it) (*it).reset_touched();}
+   {tools_vforit(style,m_errors_style,it) (*it).reset_touched();}
+   {tools_vforit(style,m_func_style,it) (*it).reset_touched();}
+   {tools_vforit(style,m_points_style,it) (*it).reset_touched();}
+   {tools_vforit(style,m_left_hatch_style,it) (*it).reset_touched();}
+   {tools_vforit(style,m_right_hatch_style,it) (*it).reset_touched();}
+   {tools_vforit(style,m_legend_style,it) (*it).reset_touched();}
+  }
+
 private:
   void add_fields(){
-    // if adding a field, look for reset_style() and set_from_style()
+    // if adding a field, look for reset_style(), set_from_style() and set_from_string()
     add_field(&width);
     add_field(&height);
     add_field(&left_margin);
@@ -299,9 +365,15 @@ private:
     add_field(&infos_y_margin);
     add_field(&infos_what);
 
+    add_field(&title_box_width);
+    add_field(&title_box_height);
+    add_field(&title_box_x_margin);
+    add_field(&title_box_y_margin);
+    
     add_field(&func2D_borders_visible);
     add_field(&theta);
     add_field(&phi);
+    add_field(&tau);
 
     add_field(&legends_automated);
     //add_field(&legends_attached_to_infos);
@@ -322,6 +394,92 @@ private:
     add_field(&inner_frame_enforced);
   }
 public: //style
+  void copy_style(const plotter& a_from) {  //used in sg::plots.
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    shape_automated = a_from.shape_automated;
+    shape = a_from.shape;
+    xy_depth = a_from.xy_depth;
+    curve_number_of_points = a_from.curve_number_of_points;
+    value_top_margin = a_from.value_top_margin;
+    infos_what = a_from.infos_what;
+    infos_width = a_from.infos_width;
+    //infos height is automatic.
+    infos_x_margin = a_from.infos_x_margin;
+    infos_y_margin = a_from.infos_y_margin;
+
+    title_box_width = a_from.title_box_width;
+    title_box_height = a_from.title_box_height;
+    title_box_x_margin = a_from.title_box_x_margin;
+    title_box_y_margin = a_from.title_box_y_margin;
+
+    legends_automated = a_from.legends_automated;
+    title_automated = a_from.title_automated;
+    title = a_from.title;
+    title_up = a_from.title_up;
+    title_hjust = a_from.title_hjust;
+
+    colormap_visible = a_from.colormap_visible;
+    colormap_axis_labeling = a_from.colormap_axis_labeling;
+    colormap_attached = a_from.colormap_attached;
+    colormap_axis_visible = a_from.colormap_axis_visible;
+
+    number_of_levels = a_from.number_of_levels;
+    levels  = a_from.levels;
+    data_light_on_automated = a_from.data_light_on_automated;
+    primitives_enforced = a_from.primitives_enforced;
+    inner_frame_enforced = a_from.inner_frame_enforced;
+    
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    x_axis_enforced = a_from.x_axis_enforced;
+    x_axis_automated = a_from.x_axis_automated;
+    x_axis_min = a_from.x_axis_min;
+    x_axis_max = a_from.x_axis_max;
+    x_axis_is_log = a_from.x_axis_is_log;
+
+    y_axis_enforced = a_from.y_axis_enforced;
+    y_axis_automated = a_from.y_axis_automated;
+    y_axis_min = a_from.y_axis_min;
+    y_axis_max = a_from.y_axis_max;
+    y_axis_is_log = a_from.y_axis_is_log;
+
+    z_axis_enforced = a_from.z_axis_enforced;
+    z_axis_automated = a_from.z_axis_automated;
+    z_axis_min = a_from.z_axis_min;
+    z_axis_max = a_from.z_axis_max;
+    z_axis_is_log = a_from.z_axis_is_log;
+
+    /*
+    m_x_axis = a_from.m_x_axis;
+    m_y_axis = a_from.m_y_axis;
+    m_z_axis = a_from.m_z_axis;
+    m_cmap_axis = a_from.m_cmap_axis;
+    
+    */
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+  
+    m_background_style = a_from.m_background_style;
+    m_title_style = a_from.m_title_style;
+    m_infos_style = a_from.m_infos_style;
+    m_title_box_style = a_from.m_title_box_style;
+    m_inner_frame_style = a_from.m_inner_frame_style;
+    m_grid_style = a_from.m_grid_style;
+    m_wall_style = a_from.m_wall_style;
+
+    m_bins_style = a_from.m_bins_style;
+    m_errors_style = a_from.m_errors_style;
+    m_func_style = a_from.m_func_style;
+    m_points_style = a_from.m_points_style;
+    m_left_hatch_style = a_from.m_left_hatch_style;
+    m_right_hatch_style = a_from.m_right_hatch_style;
+    m_legend_style = a_from.m_legend_style;
+  }
+
   void reset_style(bool a_geom = false) {
     //reset fields that are considered as part of the style.
     
@@ -341,6 +499,11 @@ public: //style
     //infos height is automatic.
     infos_x_margin = default_infos_margin(); //percent of width
     infos_y_margin = default_infos_margin(); //percent of height
+
+    title_box_width = default_title_box_width();
+    title_box_height = default_title_box_height();
+    title_box_x_margin = default_title_box_x_margin(); //percent of width
+    title_box_y_margin = default_title_box_y_margin(); //percent of height
 
     legends_automated = true;
 
@@ -506,6 +669,7 @@ public: //style
 
     m_title_style.color = colorf_black();
     m_title_style.font = font_hershey();
+    m_title_style.font_modeling = font_filled;
     m_title_style.encoding = encoding_PAW();
 
     m_background_style.back_color = colorf_white();
@@ -519,20 +683,25 @@ public: //style
     m_grid_style.line_pattern = line_dashed;
 
     m_infos_style.font = font_hershey();
+    m_infos_style.font_modeling = font_filled;
     m_infos_style.encoding = encoding_PAW();
 
     m_title_box_style.visible = false;
     m_title_box_style.font = font_hershey();
+    m_title_box_style.font_modeling = font_filled;
     m_title_box_style.encoding = encoding_PAW();
 
    {tools_vforit(style,m_bins_style,it) {
       (*it) = style();
       (*it).modeling = modeling_top_lines();
-      (*it).marker_size = 5; //for profile.
+      (*it).marker_size = 5; //for bins1D of profile.
     }}
    {tools_vforit(style,m_errors_style,it) {(*it) = style();(*it).visible = false;}}
    {tools_vforit(style,m_func_style,it) (*it) = style();}
-   {tools_vforit(style,m_points_style,it) (*it) = style();}
+   {tools_vforit(style,m_points_style,it) {
+      (*it) = style();
+      (*it).modeling = modeling_markers(); //for gopaw.
+    }}
    {tools_vforit(style,m_left_hatch_style,it) {(*it) = style();(*it).visible = false;}}
    {tools_vforit(style,m_right_hatch_style,it) {(*it) = style();(*it).visible = false;}}    
    {tools_vforit(style,m_legend_style,it) {(*it) = style();(*it).visible = false;}}
@@ -543,12 +712,15 @@ public: //style
    {tools_vforit(style,m_bins_style,it) {
       (*it) = style();
       (*it).modeling = modeling_top_lines();
-      (*it).marker_size = 5; //for profile.
+      (*it).marker_size = 5; //for bins1D of profile.
     }}
     
    {tools_vforit(style,m_errors_style,it) {(*it) = style();(*it).visible = false;}}
    {tools_vforit(style,m_func_style,it) (*it) = style();}
-   {tools_vforit(style,m_points_style,it) (*it) = style();}
+   {tools_vforit(style,m_points_style,it) {
+      (*it) = style();
+      (*it).modeling = modeling_markers(); //for gopaw.
+    }}
    {tools_vforit(style,m_left_hatch_style,it) {(*it) = style();(*it).visible = false;}}
    {tools_vforit(style,m_right_hatch_style,it) {(*it) = style();(*it).visible = false;}}    
    {tools_vforit(style,m_legend_style,it) {(*it) = style();(*it).visible = false;}}
@@ -557,8 +729,7 @@ public: //style
   typedef std::pair<std::string,std::string> style_item_t;
   typedef std::vector<style_item_t> style_t;
   bool set_from_style(std::ostream& a_out,const style_t& a_style) {
-    style_t::const_iterator it;
-    for(it=a_style.begin();it!=a_style.end();++it) {
+    tools_vforcit(style_item_t,a_style,it) {
       const std::string& key = (*it).first;
       const std::string& sv = (*it).second;
       //::printf("debug : plotter::set_from_style : key \"%s\" \"%s\"\n",key.c_str(),sv.c_str());
@@ -629,7 +800,7 @@ public: //style
         title_automated = v;
       } else if(key=="title_hjust") {
         hjust v;
-        if(!style_parser::shjust(sv,v))
+        if(!shjust(sv,v))
           {style_failed(a_out,key,sv);return false;}
         title_hjust = v;
 
@@ -713,6 +884,23 @@ public: //style
         if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
         infos_y_margin = v;
 
+      } else if(key=="title_box_width") {
+        float v;
+        if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
+        title_box_width = v;
+      } else if(key=="title_box_height") {
+        float v;
+        if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
+        title_box_height = v;
+      } else if(key=="title_box_x_margin") {
+        float v;
+        if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
+        title_box_x_margin = v;
+      } else if(key=="title_box_y_margin") {
+        float v;
+        if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
+        title_box_y_margin = v;
+
       } else if(key=="infos_what") {
         infos_what = sv;
 
@@ -766,10 +954,209 @@ public: //style
     }
     return true;
   }
+  
 protected:
-  void style_failed(std::ostream& a_out,
-                           const std::string& a_key,
-                           const std::string& a_value) {
+  bool s2axis(const std::string& a_s,sg::axis*& a_axis) {
+         if(a_s=="x_axis")        {a_axis = &(x_axis());return true;}
+    else if(a_s=="y_axis")        {a_axis = &(y_axis());return true;}
+    else if(a_s=="z_axis")        {a_axis = &(z_axis());return true;}
+    else if(a_s=="colormap_axis") {a_axis = &(colormap_axis());return true;}
+    else {
+      a_axis = 0;
+      return false;
+    }
+  }
+public:
+  bool set_from_string(std::ostream& a_out,cmaps_t& a_cmaps,const std::string& a_field,const std::string& a_value) {
+    // see also plotter_style file.
+    std::string::size_type pos = a_field.find('.');
+    bool status = true;
+    if(pos==std::string::npos) {
+      style_t _style;
+      _style.push_back(style_item_t(a_field,a_value));
+      if(!set_from_style(a_out,_style)) status = false;
+    } else {
+      std::vector<std::string> _words;
+      words(a_field,".",false,_words);
+      if(_words.size()==2) {
+        const std::string& word0 = _words[0];
+        const std::string& word1 = _words[1];
+        std::string _s = word1+" "+std::string(a_value);
+        sg::axis* _axis = 0;
+             if(word0=="background_style")  {if(!background_style().from_string(a_out,a_cmaps,_s)) status = false;}
+        else if(word0=="title_style")       {if(!title_style().from_string(a_out,a_cmaps,_s)) status = false;}
+        else if(word0=="infos_style")       {if(!infos_style().from_string(a_out,a_cmaps,_s)) status = false;}
+        else if(word0=="title_box_style")   {if(!title_box_style().from_string(a_out,a_cmaps,_s)) status = false;}
+        else if(word0=="inner_frame_style") {if(!inner_frame_style().from_string(a_out,a_cmaps,_s)) status = false;}
+        else if(word0=="grid_style")        {if(!grid_style().from_string(a_out,a_cmaps,_s)) status = false;}
+        else if(word0=="wall_style")        {if(!wall_style().from_string(a_out,a_cmaps,_s)) status = false;}
+        else if(!s2axis(word0,_axis)) {
+          a_out << "tools::sg::plotter::set_from_string : unexpected axis field " << word0 << "." << std::endl;
+          status = false;
+        } else {
+          style_t _style;
+          _style.push_back(style_item_t(word1,a_value));
+          if(!_axis->set_from_style(a_out,_style)) status = false;
+        }
+      } else if(_words.size()==3) {
+        const std::string& word0 = _words[0];
+        const std::string& word1 = _words[1];
+        const std::string& word2 = _words[2];
+        sg::axis* _axis = 0;
+        std::string _s = word2+" "+std::string(a_value);
+        unsigned int index;
+        bool to_status = to<unsigned int>(word1,index);
+	if(word0=="bins_style") {
+	  if(!to_status) {
+            a_out << "tools::sg::plotter::set_from_string : bad string " << word1 << " for an index." << std::endl;
+            status = false;
+          } else {
+            if(!bins_style(index).from_string(a_out,a_cmaps,_s)) status = false;
+	  }
+	} else if(word0=="errors_style") {
+	  if(!to_status) {
+            a_out << "tools::sg::plotter::set_from_string : bad string " << word1 << " for an index." << std::endl;
+            status = false;
+          } else {
+            if(!errors_style(index).from_string(a_out,a_cmaps,_s)) status = false;
+	  }
+	} else if(word0=="func_style") {
+	  if(!to_status) {
+            a_out << "tools::sg::plotter::set_from_string : bad string " << word1 << " for an index." << std::endl;
+            status = false;
+          } else {
+            if(!func_style(index).from_string(a_out,a_cmaps,_s)) status = false;
+	  }
+	} else if(word0=="points_style") {
+	  if(!to_status) {
+            a_out << "tools::sg::plotter::set_from_string : bad string " << word1 << " for an index." << std::endl;
+            status = false;
+          } else {
+            if(!points_style(index).from_string(a_out,a_cmaps,_s)) status = false;
+	  }
+	} else if(word0=="left_hatch_style") {
+	  if(!to_status) {
+            a_out << "tools::sg::plotter::set_from_string : bad string " << word1 << " for an index." << std::endl;
+            status = false;
+          } else {
+            if(!left_hatch_style(index).from_string(a_out,a_cmaps,_s)) status = false;
+	  }
+	} else if(word0=="right_hatch_style") {
+	  if(!to_status) {
+            a_out << "tools::sg::plotter::set_from_string : bad string " << word1 << " for an index." << std::endl;
+            status = false;
+          } else {
+            if(!right_hatch_style(index).from_string(a_out,a_cmaps,_s)) status = false;
+	  }
+	} else if(word0=="legend_style") {
+	  if(!to_status) {
+            a_out << "tools::sg::plotter::set_from_string : bad string " << word1 << " for an index." << std::endl;
+            status = false;
+          } else {
+            if(!legend_style(index).from_string(a_out,a_cmaps,_s)) status = false;
+	  }
+        } else if(!s2axis(word0,_axis)) {
+          a_out << "tools::sg::plotter::set_from_string : unexpected axis field " << word0 << "." << std::endl;
+          status = false;
+        } else {
+               if(word1=="line_style")   {if(!_axis->line_style().from_string(a_out,a_cmaps,_s)) status = false;}
+          else if(word1=="ticks_style")  {if(!_axis->ticks_style().from_string(a_out,a_cmaps,_s)) status = false;}
+          else if(word1=="labels_style") {if(!_axis->labels_style().from_string(a_out,a_cmaps,_s)) status = false;}
+          else if(word1=="mag_style")    {if(!_axis->mag_style().from_string(a_out,a_cmaps,_s)) status = false;}
+          else if(word1=="title_style")  {if(!_axis->title_style().from_string(a_out,a_cmaps,_s)) status = false;}
+          else {
+            a_out << "tools::sg::plotter::set_from_string : unexpected style field " << word1 << "." << std::endl;
+            status = false;
+          }
+        }
+      } else {
+        a_out << "tools::sg::plotter::set_from_string : unexpected number of fields " << _words.size() << "." << std::endl;
+        status = false;
+      }
+    }
+    return status;
+  }
+
+  void set_encoding(const std::string& a_value) {
+    title_style().encoding = a_value;
+    infos_style().encoding = a_value;
+    title_box_style().encoding = a_value;
+    m_x_axis.set_encoding(a_value);
+    m_y_axis.set_encoding(a_value);
+    m_z_axis.set_encoding(a_value);
+    m_cmap_axis.set_encoding(a_value);
+  }
+  void set_encoding_none() {set_encoding(encoding_none());}
+
+  void print_available_customization(std::ostream& a_out) const {
+    a_out << "plotter fields :" << std::endl;
+   {const std::vector<field_desc>& fds = node_desc_fields();
+    tools_vforcit(field_desc,fds,itd) {
+      a_out << " " << (*itd).name() << ", class " << (*itd).cls() << std::endl;
+    }}
+    a_out << std::endl;
+    
+    a_out << "plotter data available styles :" << std::endl;
+    a_out << " bins_style.<uint>, class style" << std::endl;
+    a_out << " errors_style.<uint>, class style" << std::endl;
+    a_out << " func_style.<uint>, class style" << std::endl;
+    a_out << " points_style.<uint>, class style" << std::endl;
+    a_out << " left_hatch_style.<uint>, class style" << std::endl;
+    a_out << " right_hatch_style.<uint>, class style" << std::endl;
+    a_out << " legend_style.<uint>, class style" << std::endl;
+    a_out << std::endl;
+    
+    a_out << "plotter available styles :" << std::endl;
+    a_out << " title_style, class text_style" << std::endl;
+    a_out << " infos_style, class text_style" << std::endl;
+    a_out << " title_box_style, class text_style" << std::endl;
+    a_out << " background_style, class style" << std::endl;
+    a_out << " inner_frame_style, class style" << std::endl;
+    a_out << " grid_style, class style" << std::endl;
+    a_out << " wall_style, class style" << std::endl;
+    a_out << std::endl;
+    
+    a_out << "plotter available axes :" << std::endl;
+    a_out << " x_axis" << std::endl;
+    a_out << " y_axis" << std::endl;
+    a_out << " z_axis" << std::endl;
+    a_out << " colormap_axis" << std::endl;
+    a_out << std::endl;
+    
+    a_out << "plotter axis available styles :" << std::endl;
+    a_out << " title_style, class text_style" << std::endl;
+    a_out << " labels_style, class text_style" << std::endl;
+    a_out << " mag_style, class text_style" << std::endl;
+    a_out << " line_style, class line_style" << std::endl;
+    a_out << " ticks_style, class line_style" << std::endl;
+    a_out << std::endl;
+    
+    a_out << "plotter style class fields :" << std::endl;
+   {style _style;
+    const std::vector<field_desc>& fds = _style.node_desc_fields();
+    tools_vforcit(field_desc,fds,itd) {
+      a_out << " " << (*itd).name() << ", class " << (*itd).cls() << std::endl;
+    }}
+    a_out << std::endl;
+    
+    a_out << "plotter text_style class fields :" << std::endl;
+   {text_style _style;
+    const std::vector<field_desc>& fds = _style.node_desc_fields();
+    tools_vforcit(field_desc,fds,itd) {
+      a_out << " " << (*itd).name() << ", class " << (*itd).cls() << std::endl;
+    }}
+    a_out << std::endl;
+    
+    a_out << "plotter line_style class fields :" << std::endl;
+   {line_style _style;
+    const std::vector<field_desc>& fds = _style.node_desc_fields();
+    tools_vforcit(field_desc,fds,itd) {
+      a_out << " " << (*itd).name() << ", class " << (*itd).cls() << std::endl;
+    }}
+    a_out << std::endl;
+  }
+protected:
+  void style_failed(std::ostream& a_out,const std::string& a_key,const std::string& a_value) {
     a_out << "tools::sg::plotter::set_from_style :"
           << " failed for key " << sout(a_key)
           << " and value " << sout(a_value) << "."
@@ -778,7 +1165,6 @@ protected:
 public:
   virtual void render(render_action& a_action) {
     if(touched()) {
-      //uuu have to look if styles had been touched.
       update_sg(a_action.out());
       reset_touched();
     }
@@ -786,7 +1172,6 @@ public:
   }
   virtual void pick(pick_action& a_action) { 
     if(touched()) {
-      //uuu have to look if styles had been touched.
       update_sg(a_action.out());
       reset_touched();
     }
@@ -811,7 +1196,6 @@ public:
 
   virtual bool write(write_action& a_action) {
     if(touched()) {
-      //uuu have to look if styles had been touched.
       update_sg(a_action.out());
       reset_touched();
     }
@@ -867,9 +1251,15 @@ public:
   ,infos_y_margin(default_infos_margin()) //percent of height
   ,infos_what(s_infos_what_def())
 
+  ,title_box_width(default_title_box_width())       //percent of width
+  ,title_box_height(default_title_box_height())     //percent of height
+  ,title_box_x_margin(default_title_box_x_margin()) //percent of width
+  ,title_box_y_margin(default_title_box_y_margin()) //percent of height
+  
   ,func2D_borders_visible(true)
   ,theta(30)
   ,phi(30)
+  ,tau(-90)
 
   ,legends_automated(true)
   //,legends_attached_to_infos(true)
@@ -962,9 +1352,15 @@ public:
   ,infos_y_margin(a_from.infos_y_margin)
   ,infos_what(a_from.infos_what)
 
+  ,title_box_width(a_from.title_box_width)
+  ,title_box_height(a_from.title_box_height)
+  ,title_box_x_margin(a_from.title_box_x_margin)
+  ,title_box_y_margin(a_from.title_box_y_margin)
+  
   ,func2D_borders_visible(a_from.func2D_borders_visible)
   ,theta(a_from.theta)
   ,phi(a_from.phi)
+  ,tau(a_from.tau)
 
   ,legends_automated(a_from.legends_automated)
 //,legends_attached_to_infos(a_from.legends_attached_to_infos)
@@ -993,6 +1389,8 @@ public:
   ,m_y_axis(m_ttf)
   ,m_z_axis(m_ttf)
 
+  ,m_etc_sep(a_from.m_etc_sep)
+  
   ,m_shape(a_from.m_shape)
 
   ,m_bins_style(a_from.m_bins_style)
@@ -1073,9 +1471,15 @@ public:
     infos_y_margin = a_from.infos_y_margin;
     infos_what = a_from.infos_what;
 
+    title_box_width = a_from.title_box_width;
+    title_box_height = a_from.title_box_height;
+    title_box_x_margin = a_from.title_box_x_margin;
+    title_box_y_margin = a_from.title_box_y_margin;
+    
     func2D_borders_visible = a_from.func2D_borders_visible;
     theta = a_from.theta;
     phi = a_from.phi;
+    tau = a_from.tau;
 
     legends_automated = a_from.legends_automated;
   //legends_attached_to_infos = a_from.legends_attached_to_infos;
@@ -1095,6 +1499,8 @@ public:
     primitives_enforced = a_from.primitives_enforced;
     inner_frame_enforced = a_from.inner_frame_enforced;
 
+    m_etc_sep = a_from.m_etc_sep;
+    
     m_bins_style = a_from.m_bins_style;
     m_errors_style = a_from.m_errors_style;
     m_func_style = a_from.m_func_style;
@@ -1179,6 +1585,9 @@ public: //public
   
   matrix& tsf() {return m_tsf;}
 
+  const separator& etc_sep() const {return m_etc_sep;}
+  separator& etc_sep() {return m_etc_sep;}
+
   const std::vector<plottable*>& plottables() const {return m_plottables;}
 
   void add_plottable(plottable* a_p) {
@@ -1218,6 +1627,12 @@ public: //public
   }
 
   void add_primitive(plotprim* a_prim) {m_primitives.push_back(a_prim);touch();}
+
+  void transfer_primitives(std::vector<plotprim*>& a_to) {
+    a_to = m_primitives;
+    m_primitives.clear(); //do not delete primitives !
+    touch();
+  }
 
   template <class T>
   void add_todel(T* a_obj) {
@@ -1282,7 +1697,7 @@ public: //public
       for(size_t index=sz;index<=a_index;index++) {
         m_bins_style.push_back(style());
         m_bins_style.back().modeling = modeling_top_lines();
-        m_bins_style.back().marker_size = 5; //for profile.
+        m_bins_style.back().marker_size = 5; //for bins1D of profile.
       }
     }
     return m_bins_style[a_index];
@@ -1317,6 +1732,7 @@ public: //public
       //      6789 loop
       for(size_t index=sz;index<=a_index;index++) {
         m_points_style.push_back(style());
+        m_points_style.back().modeling = modeling_markers(); //for gopaw.
       }
     }
     return m_points_style[a_index];
@@ -1354,48 +1770,47 @@ public: //public
     return m_legend_style[a_index];
   }
 
-  std::vector<std::string> bins_modelings(size_t a_index) {
+  void bins_modelings(size_t a_index,std::vector<std::string>& a_opts) {
+    a_opts.clear();
     update_shape();
     if(m_shape==xy) {
       size_t ibins = 0;
-      std::vector<plottable*>::iterator it;
-      for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+      tools_vforcit(plottable*,m_plottables,it) {
         plottable* object = *it;
         if(!object) continue;
         if(bins1D* b1 = safe_cast<plottable,bins1D>(*object)) {
           //update_bins1D_xy
           if(a_index==ibins) {
             if(b1->is_profile()) {
-              std::vector<std::string> opts;
-              opts.push_back(modeling_points());
-              return opts;
+              a_opts.push_back(modeling_points());
+              a_opts.push_back(modeling_markers());
+	      return;
             } else {
-              std::vector<std::string> opts;
-              opts.push_back(modeling_boxes());
-              opts.push_back(modeling_wire_boxes());
-              opts.push_back(modeling_bar_chart());
-              opts.push_back(modeling_top_lines());
-              opts.push_back(modeling_points());
-              return opts;
+              a_opts.push_back(modeling_boxes());
+              a_opts.push_back(modeling_wire_boxes());
+              a_opts.push_back(modeling_bar_chart());
+              a_opts.push_back(modeling_top_lines());
+              a_opts.push_back(modeling_points());
+              a_opts.push_back(modeling_markers());
+              return;
             }
           }
           ibins++;
         } if(safe_cast<plottable,bins2D>(*object)) {
           //update_bins2D_xy
           if(a_index==ibins) {
-            std::vector<std::string> opts;
-            opts.push_back(modeling_curve());
-            opts.push_back(modeling_filled_curve());
-            opts.push_back(modeling_boxes());
-            opts.push_back(modeling_wire_boxes());
-            opts.push_back(modeling_solid());
-            return opts;
+            a_opts.push_back(modeling_curve());
+            a_opts.push_back(modeling_filled_curve());
+            a_opts.push_back(modeling_boxes());
+            a_opts.push_back(modeling_wire_boxes());
+            a_opts.push_back(modeling_solid());
+            a_opts.push_back(modeling_points());
+            return;
           }
           ibins++;
         }
       }
     }
-    return std::vector<std::string>();
   }
 
   bool xx_2_yy(const vec3f& a_pos,vec3f& a_out) const {
@@ -1632,6 +2047,7 @@ public:
     m_x_axis.modeling = a_v;
     m_y_axis.modeling = a_v;
     m_z_axis.modeling = a_v;
+    m_cmap_axis.modeling = a_v;
   }
 
   void set_axes_color(const colorf& a_color){
@@ -1652,6 +2068,12 @@ public:
     m_z_axis.labels_style().color = a_color;
     m_z_axis.title_style().color = a_color;
     m_z_axis.mag_style().color = a_color;
+    
+    m_cmap_axis.line_style().color = a_color;
+    m_cmap_axis.ticks_style().color = a_color;
+    m_cmap_axis.labels_style().color = a_color;
+    m_cmap_axis.title_style().color = a_color;
+    m_cmap_axis.mag_style().color = a_color;
   }
 
   void set_axes_text_scale(float a_v){
@@ -1666,42 +2088,76 @@ public:
     m_z_axis.labels_style().scale = a_v;
     m_z_axis.title_style().scale = a_v;
     m_z_axis.mag_style().scale = a_v;
+
+    m_cmap_axis.labels_style().scale = a_v;
+    m_cmap_axis.title_style().scale = a_v;
+    m_cmap_axis.mag_style().scale = a_v;
   }
 
   void set_axes_line_pattern(unsigned short a_v){
     m_x_axis.line_style().pattern = a_v;
     m_y_axis.line_style().pattern = a_v;
     m_z_axis.line_style().pattern = a_v;
+    m_cmap_axis.line_style().pattern = a_v;
   }
   
   void set_axes_line_width(int a_v){
     m_x_axis.line_style().width = float(a_v);
     m_y_axis.line_style().width = float(a_v);
     m_z_axis.line_style().width = float(a_v);
+    m_cmap_axis.line_style().width = float(a_v);
   
     m_x_axis.ticks_style().width = float(a_v);
     m_y_axis.ticks_style().width = float(a_v);
     m_z_axis.ticks_style().width = float(a_v);
+    m_cmap_axis.ticks_style().width = float(a_v);
   }
   
   void set_axes_tick_length(float a_v){
     m_x_axis.tick_length = a_v;
     m_y_axis.tick_length = a_v;
     m_z_axis.tick_length = a_v;
+    m_cmap_axis.tick_length = a_v;
   }
   
   void set_axes_title_height(float a_v){
     m_x_axis.title_height = a_v;
     m_y_axis.title_height = a_v;
     m_z_axis.title_height = a_v;
+    m_cmap_axis.title_height = a_v;
   }
   
   void set_axes_label_height(float a_v){
     m_x_axis.label_height = a_v;
     m_y_axis.label_height = a_v;
     m_z_axis.label_height = a_v;
+    m_cmap_axis.label_height = a_v;
   }
 
+  void set_axes_font_modeling(font_modeling a_v){
+    m_x_axis.labels_style().font_modeling = a_v;
+    m_x_axis.title_style().font_modeling = a_v;
+    m_x_axis.mag_style().font_modeling = a_v;
+  
+    m_y_axis.labels_style().font_modeling = a_v;
+    m_y_axis.title_style().font_modeling = a_v;
+    m_y_axis.mag_style().font_modeling = a_v;
+  
+    m_z_axis.labels_style().font_modeling = a_v;
+    m_z_axis.title_style().font_modeling = a_v;
+    m_z_axis.mag_style().font_modeling = a_v;
+
+    m_cmap_axis.labels_style().font_modeling = a_v;
+    m_cmap_axis.title_style().font_modeling = a_v;
+    m_cmap_axis.mag_style().font_modeling = a_v;
+  }
+
+  void set_font_modeling(font_modeling a_v){
+    set_axes_font_modeling(a_v);
+    title_style().font_modeling = a_v;
+    infos_style().font_modeling = a_v;
+    title_box_style().font_modeling = a_v;
+  }
 protected:
   void init_sg(){
 
@@ -1743,7 +2199,9 @@ protected:
     m_data_sep.add(new noderef(m_func_sep));
     m_data_sep.add(new noderef(m_points_sep));
     m_data_sep.add(new noderef(m_inner_frame_sep));
+    m_data_sep.add(new noderef(m_etc_sep));
   }
+
   void update_layout(){
     float XSIZ = width;
     float XMGL = left_margin;
@@ -1785,21 +2243,21 @@ protected:
   
       mtx.mul_rotate(1,0,0,theta*fdeg2rad());
       mtx.mul_rotate(0,1,0,phi*fdeg2rad());
-      mtx.mul_rotate(1,0,0,-90.0F*fdeg2rad());
+      mtx.mul_rotate(1,0,0,tau*fdeg2rad());
 
       // To place as CERN-PAW default.
       // In CERN-PAW, it is the projection
       // which fits in the (XSIZ,XMGL,XMGR)/(YSIZ,YMGL,YMGU)
       // page setup.
-  
+      
       rotf r1(vec3f(1,0,0),theta * fdeg2rad());
       rotf r2(vec3f(0,1,0),phi * fdeg2rad());
-      rotf r3(vec3f(1,0,0),-90.0F * fdeg2rad());
+      rotf r3(vec3f(1,0,0),tau * fdeg2rad());
 
       rotf r = r1*r2*r3;
       mat4f m;
       r.value(m);
-
+      
       float xmn = -0.5F*wData;
       float ymn = -0.5F*hData;
       float zmn = -0.5F*dData;
@@ -1880,8 +2338,7 @@ public:
     unsigned int nbins = 0;
     unsigned int npoints = 0;
     unsigned int nfunc = 0;
-   {std::vector<plottable*>::iterator it;
-    for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+   {tools_vforit(plottable*,m_plottables,it) {
       plottable* object = *it;
       if(!object) continue;
       if(!object->is_valid()) {
@@ -2105,8 +2562,7 @@ public:
       unsigned int ibins = 0; //used to get each bins style and colormap.
       //unsigned int ibins1D = 0;
       //unsigned int ibins2D = 0;
-      std::vector<plottable*>::iterator it;
-      for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+      tools_vforcit(plottable*,m_plottables,it) {
         plottable* object = *it;
         if(!object) continue;
         if(bins1D* b1 = safe_cast<plottable,bins1D>(*object)) {
@@ -2162,8 +2618,7 @@ public:
      {m_func_sep.clear();
       //zz = 0; // Functions in front.
       unsigned int ifunc = 0; //used to get each func style and colormap.
-      std::vector<plottable*>::iterator it;
-      for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+      tools_vforcit(plottable*,m_plottables,it) {
         plottable* object = *it;
         if(!object) continue;
         if(func1D* f1 = safe_cast<plottable,func1D>(*object)) {
@@ -2199,10 +2654,8 @@ public:
       /// pointss ////////////////////////
       ////////////////////////////////////
      {m_points_sep.clear();
-      unsigned int iptb = 0;
       unsigned int ipoints = 0; //used to get each points style and colormap.
-      std::vector<plottable*>::iterator it;
-      for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+      tools_vforcit(plottable*,m_plottables,it) {
         plottable* object = *it;
         if(!object) continue;
         if(points2D* p2 = safe_cast<plottable,points2D>(*object)) {
@@ -2215,14 +2668,15 @@ public:
             m_legend_strings.push_back(object->legend());
             style& _style = legend_style(m_legend_strings.size()-1);
             _style.color = data_style->color;
+            _style.modeling = data_style->modeling;
             _style.marker_style = data_style->marker_style;
             _style.marker_size = data_style->marker_size;
+            _style.point_size = data_style->point_size;
 	  }
 
           delete data_style;
           ipoints++;
         }
-        iptb++;
       }}
     }
 
@@ -2234,8 +2688,7 @@ public:
      {m_bins_sep.clear();
       m_errors_sep.clear();
       unsigned int ibins = 0; //used to get each bins style and colormap.
-      std::vector<plottable*>::iterator it;
-      for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+      tools_vforcit(plottable*,m_plottables,it) {
         plottable* object = *it;
         if(!object) continue;
         if(safe_cast<plottable,bins1D>(*object)) {
@@ -2254,8 +2707,7 @@ public:
 
      {m_func_sep.clear();
       unsigned int ifunc = 0; //used to get each func style and colormap.
-      std::vector<plottable*>::iterator it;
-      for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+      tools_vforcit(plottable*,m_plottables,it) {
         plottable* object = *it;
         if(!object) continue;
         if(safe_cast<plottable,func1D>(*object)) {
@@ -2265,6 +2717,34 @@ public:
           update_func2D_xyz(a_out,*f2,ifunc,*data_style,boxX,boxY,boxZ);
           delete data_style;
           ifunc++;
+        }
+      }}
+
+      ////////////////////////////////////
+      /// pointss ////////////////////////
+      ////////////////////////////////////
+     {m_points_sep.clear();
+      unsigned int ipoints = 0; //used to get each points style and colormap.
+      tools_vforcit(plottable*,m_plottables,it) {
+        plottable* object = *it;
+        if(!object) continue;
+        if(points3D* p3 = safe_cast<plottable,points3D>(*object)) {
+     
+          style* data_style = merge_points_style(ipoints,*object);
+          update_points3D_xyz(a_out,*p3,*data_style,boxX,boxY,boxZ);
+
+          if(legends_automated.value()) {
+            m_legend_strings.push_back(object->legend());
+            style& _style = legend_style(m_legend_strings.size()-1);
+            _style.color = data_style->color;
+            _style.modeling = data_style->modeling;
+            _style.marker_style = data_style->marker_style;
+            _style.marker_size = data_style->marker_size;
+            _style.point_size = data_style->point_size;
+	  }
+
+          delete data_style;
+          ipoints++;
         }
       }}
     }
@@ -2931,7 +3411,7 @@ public:
     m_cmap_cells_sep.add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style = draw_style::lines;
+    ds->style = draw_lines;
     ds->line_pattern = line_solid;
     ds->line_width = 1;
     m_cmap_cells_sep.add(ds);
@@ -3045,6 +3525,10 @@ public:
           update_primitive_text(*ptext);
         } else if(plottable_box* pbox = safe_cast<plotprim,plottable_box>(*(*it))) {
           update_primitive_box(a_out,*pbox);
+        } else if(plottable_ellipse* pellipse = safe_cast<plotprim,plottable_ellipse>(*(*it))) {
+          update_primitive_ellipse(a_out,*pellipse);
+        } else if(plottable_img* pimg = safe_cast<plotprim,plottable_img>(*(*it))) {
+          update_primitive_img(a_out,*pimg);
 	}
       }
     //}
@@ -3074,14 +3558,14 @@ protected: //vis bins
     size_t xnbin = a_bins.bins();
     std::vector<rep_bin1D> bins(xnbin);
     for(size_t ibin=0;ibin<xnbin;ibin++) { 
-      float xx = float(a_bins.bin_lower_edge(ibin));
-      float xe = float(a_bins.bin_upper_edge(ibin));
+      float xx = float(a_bins.bin_lower_edge(int(ibin)));
+      float xe = float(a_bins.bin_upper_edge(int(ibin)));
       float vmin,vmax;
       //if(aSuperpose) {
         //uuugetHeight(aIndex1D,a_bins1DList,a_bins1DListSwMnMx,ibin,vmin,vmax);
       //} else {
         vmin = 0;
-        vmax = a_bins.bin_Sw(ibin);
+        vmax = a_bins.bin_Sw(int(ibin));
       //}
       bins[ibin] = rep_bin1D(xx,xe,vmin,vmax);
     }
@@ -3102,7 +3586,7 @@ protected: //vis bins
         a_bins.bins_Sw_range(bmin,bmax);
        {float dbins = bmax-bmin;
         if(dbins!=0.0F) {
-          for(size_t index=0;index<xnbin;index++) bins[index].m_ratio = a_bins.bin_Sw(index)/dbins;
+          for(size_t index=0;index<xnbin;index++) bins[index].m_ratio = (a_bins.bin_Sw(int(index))-bmin)/dbins;
         }}
         if(painting==painting_grey_scale) {
           m_bins_cmaps[a_index] = new grey_scale_colormap(bmin,bmax,50);
@@ -3121,12 +3605,14 @@ protected: //vis bins
         // AND :
         //  rep_errors_plus for bins rep.
         // NOTE : a_data_style.modeling not used for the moment.
-        rep_bins1D_xy_points(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz);
+        //printf("debug : bins is profile : modeling %s\n",a_data_style.modeling.value().c_str());
+
+        style data_style = a_data_style;
+        data_style.modeling = modeling_markers();
+        rep_bins1D_xy_points(a_out,data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz);
 
         std::vector<float> bars(xnbin);
-        for(size_t ibin=0;ibin<xnbin;ibin++) {
-          bars[ibin] = a_bins.bin_error(ibin);
-        }
+        for(size_t ibin=0;ibin<xnbin;ibin++) bars[ibin] = a_bins.bin_error(int(ibin));
 
         rep_errors_plus_xy(a_out,a_data_style,bins,a_box_x,a_box_y,bars,a_zz+_zerrors());
         errors_visible = false;
@@ -3147,12 +3633,12 @@ protected: //vis bins
         //char sid_bin[128];
         //::sprintf(sid_bin,"SbBin1D/0x%lx",(unsigned long)&a_bins);
   
-        if(modeling==modeling_points()){
+        if((modeling==modeling_points())||(modeling==modeling_markers())){
           //if(oneNode) {
           //  rep_bins1D_xy_points_one(binsNode,aGraphicStyle,
           //                       bins,a_box_x,a_box_y,a_zz,std::string(sid));
           //} else {
-            rep_bins1D_xy_points(a_data_style,
+            rep_bins1D_xy_points(a_out,a_data_style,
                                  *(m_bins_cmaps[a_index]),
                                  bins,a_box_x,a_box_y,a_zz);
           //}
@@ -3224,7 +3710,7 @@ protected: //vis bins
     // Errors :
     if(errors_visible) { 
       std::vector<float> bars(xnbin);
-      for(size_t ibin=0;ibin<xnbin;ibin++) bars[ibin] = a_bins.bin_error(ibin);      
+      for(size_t ibin=0;ibin<xnbin;ibin++) bars[ibin] = a_bins.bin_error(int(ibin));      
       const std::string& modeling = a_errors_style.modeling;
       if(modeling==modeling_plus()) {
         rep_errors_plus_xy(a_out,a_errors_style,bins,a_box_x,a_box_y,bars,a_zz+_zerrors());
@@ -3483,7 +3969,7 @@ protected: //vis bins
        {float dbins = bmax-bmin;
         if(dbins!=0.0F) {
           for(size_t index=0;index<number;index++) {
-            bins[index].m_ratio = bins[index].m_val/dbins;
+            bins[index].m_ratio = (bins[index].m_val-bmin)/dbins;
           }
         }}
         if(painting==painting_grey_scale) {
@@ -3584,7 +4070,8 @@ protected: //vis bins
     const std::string& modeling = a_style.modeling;
 
     if(modeling==modeling_points()){
-      std::vector<float> pts; //npt*3      
+      vertices* vtxs = new vertices;
+      std::vector<float>& pts = vtxs->xyzs.values(); //npt*3
       clip_points_2D(points,a_box_x,a_box_y,pts);
       if(pts.size()) {
         //a_out << "debug : tools::sg::plotter::update_func1D_xy :"
@@ -3598,15 +4085,38 @@ protected: //vis bins
         mat->color = a_style.color;
         sep->add(mat);
 
-/*      if(a_style.marker_style.value()==marker_dot) {
-          draw_style* ds = new draw_style;
-          ds->style = draw_style::lines;
-          ds->line_pattern = a_style.line_pattern;
-          ds->line_width = a_style.line_width;
-          sep->add(ds);
-	}*/
+        draw_style* ds = new draw_style;
+        ds->style = draw_points;
+        ds->point_size = a_style.point_size;
+        sep->add(ds);
+	
+        vtxs->mode = gl::points();
+        sep->add(vtxs);
+      } else {
+        delete vtxs;
+      }
 
-        add_markers(*sep,pts,a_style.marker_style.value(),a_style.marker_size.value());
+    } else if(modeling==modeling_markers()){
+      markers* _marks = new markers;
+      std::vector<float>& pts = _marks->xyzs.values(); //npt*3
+      clip_points_2D(points,a_box_x,a_box_y,pts);
+      if(pts.size()) {
+        //a_out << "debug : tools::sg::plotter::update_func1D_xy :"
+        //      << " ptn " << pts.size()
+        //      << std::endl;
+
+        separator* sep = new separator;
+        m_func_sep.add(sep);
+	
+        rgba* mat = new rgba();
+        mat->color = a_style.color;
+        sep->add(mat);
+
+        _marks->size = a_style.marker_size;
+        _marks->style = a_style.marker_style;
+        sep->add(_marks);
+      } else {
+        delete _marks;
       }
 
     } else {
@@ -3626,7 +4136,7 @@ protected: //vis bins
         sep->add(mat);
 
         draw_style* ds = new draw_style;
-        ds->style = draw_style::lines;
+        ds->style = draw_lines;
         ds->line_pattern = a_style.line_pattern;
         ds->line_width = a_style.line_width;
         sep->add(ds);
@@ -3923,8 +4433,21 @@ protected: //vis bins
     } else if(modeling==modeling_curve()) {
       rep_points2D_xy_curve(a_out,a_style,a_points,a_box_x,a_box_y,a_zz);
     } else {
-      rep_points2D_xy_points(a_style,a_points,a_box_x,a_box_y,a_zz);
+      rep_points2D_xy_points(a_out,a_style,a_points,a_box_x,a_box_y,a_zz);
     }  
+  }
+
+  void update_points3D_xyz(std::ostream& a_out,const points3D& a_points,const style& a_style,
+                           const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z) {
+
+    //a_out << "debug : tools::sg::plotter::update_points3D_xyz : modeling " << a_style.modeling.value() << std::endl;
+
+    if(!a_style.visible) return;
+
+    size_t number = a_points.points();
+    if(!number) return;
+
+    rep_points3D_xyz_points(a_out,a_style,a_points,a_box_x,a_box_y,a_box_z);
   }
 
   void get_title(std::string& a_s){
@@ -4004,7 +4527,7 @@ protected: //vis bins
        {float dbins = bmax-bmin;
         if(dbins!=0.0F) {
           for(size_t index=0;index<number;index++) {
-            bins[index].m_ratio = bins[index].m_val/dbins;
+            bins[index].m_ratio = (bins[index].m_val-bmin)/dbins;
           }
         }}
         if(painting==painting_grey_scale) {
@@ -4156,13 +4679,13 @@ protected: //vis bins
             list_contour.set_limits(limits);
 
             //int zn = numberOfLevels.getValue();
-            int zn = cmap->colorn();
+            size_t zn = cmap->colorn();
             if(zn<=0) zn = 1;
   
             std::vector<double> zs(zn+1);
             float zmax = zmin + dz;
             double zd = (zmax-zmin)/zn;
-            for(int zi=0;zi<=zn;zi++) zs[zi] = zmin + zi * zd;
+            for(size_t zi=0;zi<=zn;zi++) zs[zi] = zmin + zi * zd;
             list_contour.set_planes(zs);
   
             if(zlog) list_contour.set_field_fcn(log_bins2D_to_contour,(void*)&sbFunc);
@@ -4311,7 +4834,7 @@ protected: //vis bins
      {float dbins = vmax-vmin;
       if(dbins!=0.0F) {
         for(size_t index=0;index<number;index++) {
-          faces[index].m_ratio /= dbins;
+          faces[index].m_ratio = (faces[index].m_ratio-vmin)/dbins;
         }
       }}
 
@@ -4533,7 +5056,7 @@ protected: //vis bins
 
     if(font==font_hershey()) {
       draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_pattern = m_title_style.line_pattern;
       ds->line_width = m_title_style.line_width;
       m_title_sep.add(ds);
@@ -4569,6 +5092,7 @@ protected: //vis bins
     vec3f TY(0,1,0);
     add_string(m_title_sep,
                        font,
+                       m_title_style.font_modeling.value(),
                        m_title_style.encoding.value(),
                        m_title_style.smoothing,
                        title.value(),
@@ -4587,11 +5111,11 @@ protected: //vis bins
     float zz = _zinfos();
     if(m_shape==xyz) zz = depth*0.5f;
 
-    float wbox = width*0.3f;
-    float hbox = height*0.05f;
+    float wbox = width*title_box_width;
+    float hbox = height*title_box_height;
 
-    float xmargin = width*0.01f;   //from left border
-    float ymargin = height*0.005f; //from top border
+    float xmargin = width*title_box_x_margin;  //from left border
+    float ymargin = height*title_box_y_margin; //from top border
 
     matrix* _tsf = new matrix;
    {float xx = -width*0.5f+wbox*0.5f+xmargin; //at left.
@@ -4606,6 +5130,7 @@ protected: //vis bins
     title_box->back_area::color = m_title_box_style.back_color;
     title_box->color = m_title_box_style.color;
     title_box->font = m_title_box_style.font;
+    title_box->font_modeling = m_title_box_style.font_modeling;
     title_box->encoding = m_title_box_style.encoding;
     title_box->line_width = m_title_box_style.line_width;
   //title_box->front_face = m_title_box_style.front_face;
@@ -4647,8 +5172,7 @@ protected: //vis bins
       }  
     }}
     //look for fit infos :
-   {std::vector<plottable*>::const_iterator it;
-    for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+   {tools_vforcit(plottable*,m_plottables,it) {
       plottable* object = *it;
       if(!object) continue;
       if(object->cast(s_tools_sg_fit2plot())) {
@@ -4724,6 +5248,7 @@ protected: //vis bins
       txt->back_area::color = m_infos_style.back_color;
       txt->color = m_infos_style.color;
       txt->font = m_infos_style.font;
+      txt->font_modeling = m_infos_style.font_modeling;
       txt->encoding = m_infos_style.encoding;
       txt->line_width = m_infos_style.line_width;
     //txt->front_face = m_infos_style.front_face;
@@ -4753,6 +5278,7 @@ protected: //vis bins
     infos->color = m_infos_style.color;
     infos->font = m_infos_style.font;
     infos->encoding = m_infos_style.encoding;
+    infos->font_modeling = m_infos_style.font_modeling;
     infos->line_width = m_infos_style.line_width;
   //infos->front_face = m_infos_style.front_face;
     infos->back_area::shadow = m_infos_style.back_shadow;
@@ -4964,6 +5490,7 @@ protected: //vis bins
       //sg::text* text = new sg::text;
       legend* text = new legend(m_ttf);
       text->font = _style.font;
+      text->font_modeling = _style.font_modeling;
       text->encoding = _style.encoding;
       text->strings.add(m_legend_strings[index]);
       text->color = _style.color;
@@ -5086,7 +5613,7 @@ protected: //vis bins
     m_inner_frame_sep.add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style = draw_style::lines;
+    ds->style = draw_lines;
     ds->line_pattern = m_inner_frame_style.line_pattern;
     ds->line_width = m_inner_frame_style.line_width;
     m_inner_frame_sep.add(ds);
@@ -5112,7 +5639,7 @@ protected: //vis bins
     m_inner_frame_sep.add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style = draw_style::lines;
+    ds->style = draw_lines;
     ds->line_pattern = m_inner_frame_style.line_pattern;
     ds->line_width = m_inner_frame_style.line_width;
     m_inner_frame_sep.add(ds);
@@ -5156,7 +5683,7 @@ protected: //vis bins
     m_grid_sep.add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style.value(draw_style::lines);
+    ds->style = draw_lines;
     ds->line_pattern = line_solid;
     ds->line_width = m_grid_style.line_width;
     m_grid_sep.add(ds);
@@ -5255,7 +5782,7 @@ protected: //vis bins
     m_grid_sep.add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style = draw_style::lines;
+    ds->style = draw_lines;
     ds->line_pattern = m_grid_style.line_pattern;
     ds->line_width = m_grid_style.line_width;
     m_grid_sep.add(ds);
@@ -5344,7 +5871,7 @@ protected: //rep
     separator* _sep = new separator();
 
     draw_style* ds = new draw_style;
-    ds->style = draw_style::lines;
+    ds->style = draw_lines;
     ds->line_pattern = a_style.line_pattern;
     ds->line_width = a_style.line_width;
     _sep->add(ds);
@@ -5423,7 +5950,8 @@ protected: //rep
     }
   }
 
-  void rep_bins1D_xy_points(const style& a_style,
+  void rep_bins1D_xy_points(std::ostream& a_out,
+                            const style& a_style,
                             const base_colormap& a_cmap,
                             const std::vector<rep_bin1D>& a_bins,
                             const rep_box& a_box_x,
@@ -5443,17 +5971,15 @@ protected: //rep
 
     separator* _sep = new separator();
 
-/*  if(a_style.marker_style.value()==marker_dot) {
+    if(a_style.modeling==modeling_points()) {
       draw_style* ds = new draw_style;
-      ds->style = draw_style::points;
-      ds->point_size = a_style.marker_size;
+      ds->style = draw_points;
+      ds->point_size = a_style.point_size;
       _sep->add(ds);
-    }*/
+    }
     
     bool empty = true;
     colorf clr;
-    vec3f point;
-
     size_t xnbin = a_bins.size();
     for(size_t index=0;index<xnbin;index++) { 
       float x = (a_bins[index].m_x_min + a_bins[index].m_x_max)/2;
@@ -5494,8 +6020,23 @@ protected: //rep
       mat->color = clr;
       sep->add(mat);
 
-      point.set_value(x,y,a_zz);
-      add_markers(*sep,1,&point,a_style.marker_style.value(),a_style.marker_size.value());
+      if(a_style.modeling==modeling_points()) {
+        vertices* vtxs = new vertices;
+        vtxs->mode = gl::points();
+        vtxs->add(x,y,a_zz);
+        sep->add(vtxs);
+      } else if(a_style.modeling==modeling_markers()) {
+        markers* _marks = new markers;
+        _marks->size = a_style.marker_size;
+        _marks->style = a_style.marker_style;
+        _marks->add(x,y,a_zz);
+        sep->add(_marks);
+      } else {
+        a_out << "tools::sg::plotter::rep_bins1D_xy_points :"
+              << " bad modeling style " << tools::sout(a_style.modeling) << std::endl;
+        delete _sep;
+        return;
+      }      
   
       empty = false;
     }
@@ -5531,8 +6072,7 @@ protected: //rep
     bool empty = true;
     colorf clr;
 
-    std::vector<rep_bin1D>::const_iterator it;
-    for(it=a_bins.begin();it!=a_bins.end();++it) {
+    tools_vforcit(rep_bin1D,a_bins,it) {
       const rep_bin1D& rbin = *it;
 
       float xx = rbin.m_x_min;
@@ -5631,8 +6171,7 @@ protected: //rep
     bool empty = true;
     colorf clr;
 
-    std::vector<rep_bin1D>::const_iterator it;
-    for(it=a_bins.begin();it!=a_bins.end();++it) {
+    tools_vforcit(rep_bin1D,a_bins,it) {
       const rep_bin1D& rbin = *it;
 
       float xx = rbin.m_x_min;
@@ -5717,9 +6256,9 @@ protected: //rep
 
     //::printf("debug : rep_bins2D_lines_one\n");
     
-    int xnbin = a_bins.size();
+    size_t xnbin = a_bins.size();
     std::vector<vec3f> points(xnbin);
-    for(int index=0;index<xnbin;index++) { 
+    for(size_t index=0;index<xnbin;index++) { 
       float x = (a_bins[index].m_x_min + a_bins[index].m_x_max)/2;
       float y = a_bins[index].m_val;
       points[index] = vec3f(x,y,a_zz);
@@ -5738,7 +6277,7 @@ protected: //rep
       separator->add(mat);
     
       draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_pattern = a_style.line_pattern;
       ds->line_width = a_style.line_width;
       separator->add(ds);
@@ -5767,8 +6306,8 @@ protected: //rep
       y = a_bins[index].m_val;
       xs[index] = x;ys[index] = y;
     }
-    tools::spline::cubic _spline(a_out,number,xs,ys);    
-  //tools::spline::quintic _spline(a_out,number,xs,ys);    
+    spline::cubic _spline(a_out,number,xs,ys);    
+  //spline::quintic _spline(a_out,number,xs,ys);    
     delete [] xs;delete [] ys;
 
     float xmn = m_x_axis_data.min_value();
@@ -5795,7 +6334,7 @@ protected: //rep
       separator->add(mat);
     
       draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_pattern = a_style.line_pattern;
       ds->line_width = a_style.line_width;
       separator->add(ds);
@@ -5836,8 +6375,7 @@ protected: //rep
     bool empty = true;
     float range = a_bmax - a_bmin;            
 
-    std::vector<rep_bin2D>::const_iterator it;
-    for(it=a_bins.begin();it!=a_bins.end();++it) {
+    tools_vforcit(rep_bin2D,a_bins,it) {
       const rep_bin2D& rbin = *it;
 
       float xx = rbin.m_x_min;
@@ -5923,7 +6461,7 @@ protected: //rep
     separator->add(mat);
   
     draw_style* ds = new draw_style;
-    ds->style = draw_style::lines;
+    ds->style = draw_lines;
     ds->line_pattern = a_style.line_pattern;
     ds->line_width = a_style.line_width;
     separator->add(ds);
@@ -6045,8 +6583,7 @@ protected: //rep
     bool empty = true;
     colorf clr;
 
-    std::vector<rep_bin2D>::const_iterator it;
-    for(it=a_bins.begin();it!=a_bins.end();++it) {
+    tools_vforcit(rep_bin2D,a_bins,it) {
       const rep_bin2D& rbin = *it;
 
       float xx = rbin.m_x_min;
@@ -6115,12 +6652,10 @@ protected: //rep
     mat->color = a_style.color;
     separator->add(mat);
   
-/*  if(a_style.marker_style.value()==marker_dot) {
-      draw_style* ds = new draw_style;
-      ds->style = draw_style::points;
-      ds->point_size = a_style.marker_size;
-      separator->add(ds);
-    }*/
+    draw_style* ds = new draw_style;
+    ds->style = draw_points;
+    ds->point_size = a_style.point_size;
+    separator->add(ds);
     
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
@@ -6136,7 +6671,6 @@ protected: //rep
     float range = a_bmax - a_bmin;
 
     bool empty = true;    
-    vec3f points[100];
     
     size_t number = a_bins.size();
     for(size_t index=0;index<number;index++) {
@@ -6154,23 +6688,24 @@ protected: //rep
       int nmax = 50;
       int npt = range>0. ? (int)((val - a_bmin)*(nmax-nmin)/range + nmin):1;
       if(npt>0) {
+        vertices* vtxs = new vertices;
+        vtxs->mode = gl::points();
+        separator->add(vtxs);
+	
         int ipt = 0;                              
         float xdbin = xe - xx;
         float ydbin = ye - yy;
         for(int count=0;count<npt;count++) {
-          float xxx = xx + xdbin * (((float)::rand())/RAND_MAX);
-          float yyy = yy + ydbin * (((float)::rand())/RAND_MAX);
+          float xxx = xx + xdbin * m_rtausmef.shoot();
+          float yyy = yy + ydbin * m_rtausmef.shoot();
           xxx = verify_log(xxx ,xmin,dx  ,xlog);
           yyy = verify_log(yyy ,ymin,dy  ,ylog);
           if((xxx>=0)&&(xxx<=1)  &&
              (yyy>=0)&&(yyy<=1)  ) { 
-            points[ipt].set_value(xxx,yyy,a_zz);
+            vtxs->add(xxx,yyy,a_zz);
+            empty = false;
             ipt++;
           }                                  
-        }
-        if(ipt>0) {
-          add_markers(*separator,ipt,points,a_style.marker_style.value(),a_style.marker_size.value());
-          empty = false;
         }
       }
   
@@ -6302,6 +6837,7 @@ protected: //rep
   
       empty = false;
     }
+    
     if(empty) {
       delete separator;
     } else {
@@ -6332,7 +6868,7 @@ protected: //rep
     //separator->setString(aID);
   
     draw_style* ds = new draw_style;
-    ds->style.value(draw_style::lines);
+    ds->style.value(draw_lines);
     ds->line_pattern.value(a_style.line_pattern);
     ds->line_width.value(a_style.line_width);
     separator->add(ds);
@@ -6391,7 +6927,7 @@ protected: //rep
 
         bool first = true;
         float xprev = 0;
-	float yprev = 0;
+        float yprev = 0;
         float xx,yy;
 
         tools_lforcit(unsigned int,*pStrip,pos2) {
@@ -6528,10 +7064,10 @@ protected: //rep
           contourVector.push_back(v);
         }
       }
-  
-      tess_contour tessContour(a_out);
-      std::vector<tess_triangle> tris = tessContour.getFilledArea(contourVector);
-  
+
+      std::vector<tess_triangle> tris;
+      tess_contour tessContour(a_out,tris); //we pass a ref to tris.
+      tessContour.getFilledArea(contourVector);
       if(!tris.size()) continue;
   
       colorf _color;
@@ -6593,7 +7129,7 @@ protected: //rep
     _sep->add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style.value(draw_style::lines);
+    ds->style.value(draw_lines);
     ds->line_pattern.value(a_style.line_pattern);
     ds->line_width.value(a_style.line_width);
     _sep->add(ds);
@@ -6689,7 +7225,7 @@ protected: //rep
     _sep->add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style.value(draw_style::lines);
+    ds->style.value(draw_lines);
     ds->line_pattern.value(a_style.line_pattern);
     ds->line_width.value(a_style.line_width);
     _sep->add(ds);
@@ -6791,11 +7327,11 @@ protected: //rep
 
     draw_style* ds = new draw_style;
     if(a_style.strip_width.value()==0) {  
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_pattern = line_solid;
       ds->line_width = a_style.line_width;
     } else {
-      ds->style = draw_style::filled;
+      ds->style = draw_filled;
       //ds->cull_face = true;
     }
     _sep->add(ds);
@@ -6917,7 +7453,7 @@ protected: //rep
     _sep->add(mat);
 
     draw_style* ds = new draw_style;
-    ds->style.value(draw_style::lines);
+    ds->style.value(draw_lines);
     ds->line_pattern.value(a_style.line_pattern);
     ds->line_width.value(a_style.line_width);
     _sep->add(ds);
@@ -6959,8 +7495,8 @@ protected: //rep
       a_points.ith_point(index,x,y);
       xs[index] = x;ys[index] = y;
     }}    
-    tools::spline::cubic _spline(a_out,number,xs,ys);    
-  //tools::spline::quintic _spline(a_out,number,xs,ys);    
+    spline::cubic _spline(a_out,number,xs,ys);    
+  //spline::quintic _spline(a_out,number,xs,ys);    
     delete [] xs;delete [] ys;
 
     float xmn = m_x_axis_data.min_value();
@@ -6987,7 +7523,7 @@ protected: //rep
       separator->add(mat);
     
       draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_pattern = a_style.line_pattern;
       ds->line_width = a_style.line_width;
       separator->add(ds);
@@ -7002,7 +7538,8 @@ protected: //rep
 
   }
 
-  void rep_points2D_xy_points(const style& a_style,const points2D& a_points,
+  void rep_points2D_xy_points(std::ostream& a_out,
+                              const style& a_style,const points2D& a_points,
                               const rep_box& a_box_x,const rep_box& a_box_y,float a_zz) {
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
@@ -7018,29 +7555,148 @@ protected: //rep
     mat->color = a_style.color;
     _sep->add(mat);
 
-    draw_style* ds = new draw_style;
-    ds->style = draw_style::points;
-    ds->point_size = a_style.marker_size;
-    _sep->add(ds);
+    mf<float>* _xyzs = 0;
 
-    vertices* vtxs = new vertices;
-    vtxs->mode = gl::points();
-    _sep->add(vtxs);
-
-    bool empty = true;
+    if(a_style.modeling==modeling_markers()) {
+      markers* _marks = new markers;
+      _marks->size = a_style.marker_size;
+      _marks->style = a_style.marker_style;
+      _xyzs = &(_marks->xyzs);
+      _sep->add(_marks);
+	
+    } else if(a_style.modeling==modeling_points()) {
+      draw_style* ds = new draw_style;
+      ds->style = draw_points;
+      ds->point_size = a_style.point_size;
+      _sep->add(ds);
+	
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::points();
+      _xyzs = &(vtxs->xyzs);
+      _sep->add(vtxs);
+    } else {
+      a_out << "tools::sg::plotter::rep_points2D_xy_points :"
+            << " bad modeling style " << tools::sout(a_style.modeling) << std::endl;
+      delete _sep;
+      return;
+    }
 
     float x,y;
-    unsigned int number = a_points.points();
+    
+    // first round trip to get number of floats :
+    size_t npts = 0;
+   {unsigned int number = a_points.points();
     for(unsigned int index=0;index<number;index++) { 
       a_points.ith_point(index,x,y);      
       //float val = a_bins[index].m_val;
       x = verify_log(x,xmin,dx,xlog);
       y = verify_log(y,ymin,dy,ylog);
       if((x<0)||(x>1)||(y<0)||(y>1)) continue;  
-      vtxs->add(x,y,a_zz);  
+      npts += 3;
+    }}
+
+    _xyzs->values().resize(npts);
+    size_t xyz_pos = 0;
+
+    bool empty = true;
+    
+   {unsigned int number = a_points.points();
+    for(unsigned int index=0;index<number;index++) { 
+      a_points.ith_point(index,x,y);      
+      //float val = a_bins[index].m_val;
+      x = verify_log(x,xmin,dx,xlog);
+      y = verify_log(y,ymin,dy,ylog);
+      if((x<0)||(x>1)||(y<0)||(y>1)) continue;  
+      _xyzs->add_allocated(xyz_pos,x,y,a_zz);  
       empty = false;
+    }}
+    
+    if(empty) {
+      delete _sep;
+    } else {
+      m_points_sep.add(_sep);
     }
+  }
+
+  void rep_points3D_xyz_points(std::ostream& a_out,
+                               const style& a_style,const points3D& a_points,
+                               const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z) {
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
   
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+  
+    float zmin = a_box_z.m_pos;
+    float dz = a_box_z.m_width;
+    bool zlog = a_box_z.m_log;
+  
+    separator* _sep = new separator();
+
+    rgba* mat = new rgba();
+    mat->color = a_style.color;
+    _sep->add(mat);
+
+    mf<float>* _xyzs = 0;
+
+    if(a_style.modeling==modeling_markers()) {
+      markers* _marks = new markers;
+      _marks->size = a_style.marker_size;
+      _marks->style = a_style.marker_style;
+      _xyzs = &(_marks->xyzs);
+      _sep->add(_marks);
+	
+    } else if(a_style.modeling==modeling_points()) {
+      draw_style* ds = new draw_style;
+      ds->style = draw_points;
+      ds->point_size = a_style.point_size;
+      _sep->add(ds);
+	
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::points();
+      _xyzs = &(vtxs->xyzs);
+      _sep->add(vtxs);
+    } else {
+      a_out << "tools::sg::plotter::rep_points3D_xy_points :"
+            << " bad modeling style " << tools::sout(a_style.modeling) << std::endl;
+      delete _sep;
+      return;
+    }
+
+    float x,y,z;
+
+    // first round trip to get number of floats :
+    size_t npts = 0;
+   {unsigned int number = a_points.points();
+    for(unsigned int index=0;index<number;index++) { 
+      a_points.ith_point(index,x,y,z);      
+      //float val = a_bins[index].m_val;
+      x = verify_log(x,xmin,dx,xlog);
+      y = verify_log(y,ymin,dy,ylog);
+      z = verify_log(z,zmin,dz,zlog);
+      if((x<0)||(x>1)||(y<0)||(y>1)||(z<0)||(z>1)) continue;  
+      npts += 3;
+    }}
+
+    _xyzs->values().resize(npts);
+    size_t xyz_pos = 0;
+
+    bool empty = true;
+
+   {unsigned int number = a_points.points();
+    for(unsigned int index=0;index<number;index++) { 
+      a_points.ith_point(index,x,y,z);      
+      //float val = a_bins[index].m_val;
+      x = verify_log(x,xmin,dx,xlog);
+      y = verify_log(y,ymin,dy,ylog);
+      z = verify_log(z,zmin,dz,zlog);
+      if((x<0)||(x>1)||(y<0)||(y>1)||(z<0)||(z>1)) continue;  
+      _xyzs->add_allocated(xyz_pos,x,y,z);  
+      empty = false;
+    }}
+
     if(empty) {
       delete _sep;
     } else {
@@ -7070,8 +7726,7 @@ protected: //rep
     //float range = a_bmax - a_bmin;            
     colorf clr;
 
-    std::vector<rep_bin2D>::const_iterator it;
-    for(it=a_bins.begin();it!=a_bins.end();++it) {
+    tools_vforcit(rep_bin2D,a_bins,it) {
       const rep_bin2D& rbin = *it;
 
       float xx = rbin.m_x_min;
@@ -7180,7 +7835,7 @@ protected: //rep
     separator* _sep = new separator();
 
     //draw_style* ds = new draw_style;
-    //ds->style = draw_style::filled;
+    //ds->style = draw_filled;
     //ds->cull_face = true;
     //_sep->add(ds);
 
@@ -7316,7 +7971,7 @@ protected: //rep
     separator->add(mat);
         
     draw_style* ds = new draw_style;
-    ds->style = draw_style::lines;
+    ds->style = draw_lines;
     ds->line_pattern = line_solid;
     ds->line_width = 1;
     separator->add(ds);
@@ -7577,11 +8232,12 @@ protected: //rep
   // for OpenPAW /GRAPHICS/PRIMITIVES/TEXT
   // for OpenPAW /GRAPHICS/PRIMITIVES/ITX
   void update_primitive_text(const plottable_text& a_obj){
+    if(a_obj.m_TEXT.empty()) return;
+
     float z = xy_depth.value()*1.1F;
 
     vec3f pos;
     axis_2_data_frame(vec3f(a_obj.m_X,a_obj.m_Y,z),pos); //FIXME return FALSE
-  
     xx_2_yy(pos,pos);
   
     separator* sep = new separator;
@@ -7594,7 +8250,6 @@ protected: //rep
     _tsf->set_translate(pos);
     _tsf->mul_rotate(0,0,1,a_obj.m_ANGLE*fpi()/180.0f);
     _tsf->mul_scale(a_obj.m_SCALE,a_obj.m_SCALE,1);
-    _tsf->mul_scale(a_obj.m_SIZE,a_obj.m_SIZE,1);
     sep->add(_tsf);
     
     //SIZE is in page coordinate YSIZ.
@@ -7604,45 +8259,145 @@ protected: //rep
     //::printf("debug : tools::sg::plotter::update_primitive_text : %s : X %g Y %g : SCALE %g SIZE %g : pos %g %g %g\n",
     //    a_obj.m_TEXT.c_str(),a_obj.m_X,a_obj.m_Y,a_obj.m_SCALE,a_obj.m_SIZE,
     //    pos[0],pos[1],pos[2]);
-  
-    if(a_obj.m_FONT==font_hershey()) {
-      //::printf("debug : tools::sg::plotter::update_primitive_text : hershey\n");
-      draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
-      ds->line_pattern = line_solid;
-      ds->line_width = 1;
-      //ds->line_pattern = m_title_style.line_pattern;
-      //ds->line_width = m_title_style.line_width;
-      sep->add(ds);
-  
-      text_hershey* text = new text_hershey;
-      text->encoding = "PAW";
-      text->strings.add(a_obj.m_TEXT);
-      if(a_obj.m_JUST=='R') {
-        text->hjust = right;
-      } else if(a_obj.m_JUST=='C') {
-        text->hjust = center;
-      } else {
-        text->hjust = left;
-      }
-      sep->add(text);
-  
-    } else {
-      //::printf("debug : tools::sg::plotter::update_primitive_text : freetype\n");
-      base_freetype* text = base_freetype::create(m_ttf);
-      
-      text->font = a_obj.m_FONT;
-      
-      //text->encoding = "PAW"
-      //text->smooting = a_obj.m_SMOOTHING;
-      //text->hinting = a_obj.m_HINTING;
-      text->strings.add(a_obj.m_TEXT);
-      //text->hjust.value(a_hjust);
-      //text->vjust.value(a_vjust);
-  
-      sep->add(text);
-    }
+
+    if(a_obj.m_text_mode==plottable_text::text_enforce_width) {  // not tested yet.
+
+      vec3f pos2;
+      axis_2_data_frame(vec3f(a_obj.m_X+a_obj.m_SIZE,a_obj.m_Y,z),pos2);  //m_SIZE is taken as text width in this text_mode.
+      xx_2_yy(pos2,pos2);
     
+      float _width = pos2.x()-pos.x();
+   
+      text* _text = new text(m_ttf);
+      _text->enforce_front_width = true;  //it will set _text->width, height.
+      _text->front_width = _width;
+      _text->back_visible = false;
+      
+      _text->encoding = encoding_PAW();
+      _text->strings.add(a_obj.m_TEXT);
+      _text->line_width = a_obj.m_line_width;
+      _text->font = a_obj.m_FONT;
+      _text->font_modeling = a_obj.m_font_modeling;
+  
+      if(a_obj.m_HJUST=='R') {
+        _text->hjust = right;
+      } else if(a_obj.m_HJUST=='C') {
+        _text->hjust = center;
+      } else {
+        _text->hjust = left;
+      }
+      if(a_obj.m_VJUST=='T') {
+        _text->vjust = top;
+      } else if(a_obj.m_VJUST=='M') {
+        _text->vjust = middle;
+      } else {
+        _text->vjust = bottom;
+      }
+
+      sep->add(_text);
+
+    } else if(a_obj.m_text_mode==plottable_text::text_enforce_height) { // for EsbRootView neard, fard 2D plot.
+
+      vec3f pos2;
+      axis_2_data_frame(vec3f(a_obj.m_X,a_obj.m_Y+a_obj.m_SIZE,z),pos2);  //m_SIZE is taken as text height in this text_mode.
+      xx_2_yy(pos2,pos2);
+    
+      float _height = pos2.y()-pos.y();
+   
+      text* _text = new text(m_ttf);
+      _text->enforce_front_height = true;  //it will set _text->width, height.
+      _text->front_height = _height;
+      _text->back_visible = false;  //if true, we should adapt back_area::width, height to inside text size.
+      
+      _text->encoding = encoding_PAW();
+      _text->strings.add(a_obj.m_TEXT);
+      _text->line_width = a_obj.m_line_width;
+      _text->font = a_obj.m_FONT;
+      _text->font_modeling = a_obj.m_font_modeling;
+  
+      if(a_obj.m_HJUST=='R') {
+        _text->hjust = right;
+      } else if(a_obj.m_HJUST=='C') {
+        _text->hjust = center;
+      } else {
+        _text->hjust = left;
+      }
+      if(a_obj.m_VJUST=='T') {
+        _text->vjust = top;
+      } else if(a_obj.m_VJUST=='M') {
+        _text->vjust = middle;
+      } else {
+        _text->vjust = bottom;
+      }
+
+      sep->add(_text);
+
+    } else { //text_as_it (for gopaw/pagpri.cpp).
+      _tsf->mul_scale(a_obj.m_SIZE,a_obj.m_SIZE,1);
+  
+      if(a_obj.m_FONT==font_hershey()) {
+        //::printf("debug : tools::sg::plotter::update_primitive_text : hershey\n");
+        draw_style* ds = new draw_style;
+        ds->style = draw_lines;
+        ds->line_pattern = line_solid;
+        ds->line_width = a_obj.m_line_width;
+        //ds->line_pattern = m_title_style.line_pattern;
+        //ds->line_width = m_title_style.line_width;
+        sep->add(ds);
+    
+        text_hershey* text = new text_hershey;
+        text->encoding = encoding_PAW();
+        text->strings.add(a_obj.m_TEXT);
+        if(a_obj.m_HJUST=='R') {
+          text->hjust = right;
+        } else if(a_obj.m_HJUST=='C') {
+          text->hjust = center;
+        } else {
+          text->hjust = left;
+        }
+        if(a_obj.m_VJUST=='T') {
+          text->vjust = top;
+        } else if(a_obj.m_VJUST=='M') {
+          text->vjust = middle;
+        } else {
+          text->vjust = bottom;
+        }
+        sep->add(text);
+    
+      } else {
+        //::printf("debug : tools::sg::plotter::update_primitive_text : freetype\n");
+        base_freetype* text = base_freetype::create(m_ttf);
+        
+        text->font = a_obj.m_FONT;
+        if(a_obj.m_HJUST=='R') {
+          text->hjust = right;
+        } else if(a_obj.m_HJUST=='C') {
+          text->hjust = center;
+        } else {
+          text->hjust = left;
+        }
+        if(a_obj.m_VJUST=='T') {
+          text->vjust = top;
+        } else if(a_obj.m_VJUST=='M') {
+          text->vjust = middle;
+        } else {
+          text->vjust = bottom;
+        }
+  
+        text->modeling = a_obj.m_font_modeling;
+  
+        //text->encoding = encoding_PAW()
+        //text->smooting = a_obj.m_SMOOTHING;
+        //text->hinting = a_obj.m_HINTING;
+        text->strings.add(a_obj.m_TEXT);
+        //text->hjust.value(a_hjust);
+        //text->vjust.value(a_vjust);
+    
+        sep->add(text);
+      }
+
+    } //text_mode.
+   
     m_primitives_sep.add(sep);
   }
   
@@ -7831,9 +8586,9 @@ protected: //rep
       sep->add(mat);
   
       draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_pattern = line_solid;
-      ds->line_width = 1;
+      ds->line_width = a_obj.m_LWID;
       sep->add(ds);
   
       vertices* vtxs = new vertices;
@@ -7856,7 +8611,7 @@ protected: //rep
       sep->add(mat);
   
       draw_style* ds = new draw_style;
-      ds->style = draw_style::filled;
+      ds->style = draw_filled;
       sep->add(ds);
   
       vertices* vtxs = new vertices;
@@ -7894,7 +8649,7 @@ protected: //rep
       
       if(hatching==hatching_none) {
         draw_style* ds = new draw_style;
-        ds->style = draw_style::filled;
+        ds->style = draw_filled;
         sep->add(ds);
         vertices* vtxs = new vertices;
         vtxs->mode = gl::triangle_fan();
@@ -7914,7 +8669,7 @@ protected: //rep
         sep->add(mat);
   
         draw_style* ds = new draw_style;
-        ds->style = draw_style::lines;
+        ds->style = draw_lines;
         ds->line_pattern = line_solid;
         ds->line_width = 1;
         sep->add(ds);
@@ -7938,7 +8693,192 @@ protected: //rep
     }
     
   }
+
+  void update_primitive_ellipse(std::ostream& a_out,const plottable_ellipse& a_obj){
   
+    float z = xy_depth.value()*1.1F;
+  
+    vec3f pos;
+    axis_2_data_frame(vec3f(a_obj.m_X,a_obj.m_Y,z),pos);
+    xx_2_yy(pos,pos);
+    
+    vec3f pos2;
+    axis_2_data_frame(vec3f(a_obj.m_X+a_obj.m_R1,a_obj.m_Y+a_obj.m_R2,z),pos2);
+    xx_2_yy(pos2,pos2);
+
+    float rx = pos2[0]-pos[0];
+    float ry = pos2[1]-pos[1];
+    
+    z = pos[2];
+
+    //::printf("debug : tools::sg::plotter::update_primitive_ellipse : FAIS %d : %g %g %g : %g %g\n",a_obj.m_FAIS,
+    //         pos.x(),pos.y(),pos.z(),rx,ry);
+  
+    if(a_obj.m_FAIS==plottable_ellipse::HOLLOW) {
+    
+      separator* sep = new separator;
+  
+      matrix* _tsf = new matrix;
+      _tsf->set_translate(pos);
+      sep->add(_tsf);
+      
+      rgba* mat = new rgba();
+      mat->color = a_obj.m_PLCI;
+      sep->add(mat);
+  
+      draw_style* ds = new draw_style;
+      ds->style = draw_lines;
+      ds->line_pattern = line_solid;
+      ds->line_width = a_obj.m_LWID;
+      sep->add(ds);
+  
+      ellipse* _ellipse = new ellipse;
+      _ellipse->rx = rx;
+      _ellipse->ry = ry;
+      sep->add(_ellipse);
+
+      m_primitives_sep.add(sep);
+
+/*      
+    } else if(a_obj.m_FAIS==plottable_ellipse::SOLID) {
+      separator* sep = new separator;
+  
+      rgba* mat = new rgba();
+      mat->color = a_obj.m_FACI;
+      sep->add(mat);
+  
+      draw_style* ds = new draw_style;
+      ds->style = draw_filled;
+      sep->add(ds);
+  
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::triangle_fan();
+      sep->add(vtxs);
+  
+      vtxs->add(pos1[0],pos1[1],z);
+      vtxs->add(pos2[0],pos1[1],z);
+      vtxs->add(pos2[0],pos2[1],z);
+      vtxs->add(pos1[0],pos2[1],z);
+  
+      m_primitives_sep.add(sep);
+      
+    } else if(a_obj.m_FAIS==plottable_ellipse::HATCHED) {
+    
+     {separator* sep = new separator;
+  
+      rgba* mat = new rgba();
+      mat->color = a_obj.m_FACI;
+      sep->add(mat);
+  
+      hatching_policy hatching;
+      float spacing;
+      float angle_right;
+      float angle_left;
+      PAW_hatch(a_obj.m_FASI,hatching,spacing,angle_right,angle_left);
+      float stripWidth = 0;
+  
+      if((hatching==hatching_right)||((hatching==hatching_left_and_right))) {
+        rep_box_hatch(*sep,spacing,angle_right,stripWidth,pos1[0],pos1[1],pos2[0],pos2[1],z);
+      }
+      if((hatching==hatching_left)||((hatching==hatching_left_and_right))) {
+        rep_box_hatch(*sep,spacing,angle_left,stripWidth,pos1[0],pos1[1],pos2[0],pos2[1],z);
+      }
+      
+      if(hatching==hatching_none) {
+        draw_style* ds = new draw_style;
+        ds->style = draw_filled;
+        sep->add(ds);
+        vertices* vtxs = new vertices;
+        vtxs->mode = gl::triangle_fan();
+        sep->add(vtxs);
+        vtxs->add(pos1[0],pos1[1],z);
+        vtxs->add(pos2[0],pos1[1],z);
+        vtxs->add(pos2[0],pos2[1],z);
+        vtxs->add(pos1[0],pos2[1],z);
+      }
+  
+      m_primitives_sep.add(sep);}
+  
+      if(a_obj.m_BORD) {
+        separator* sep = new separator;
+        rgba* mat = new rgba();
+        mat->color = a_obj.m_PLCI;
+        sep->add(mat);
+  
+        draw_style* ds = new draw_style;
+        ds->style = draw_lines;
+        ds->line_pattern = line_solid;
+        ds->line_width = 1;
+        sep->add(ds);
+  
+        vertices* vtxs = new vertices;
+        vtxs->mode = gl::line_strip();
+        sep->add(vtxs);
+  
+        z *= 1.01F;
+        vtxs->add(pos1[0],pos1[1],z);
+        vtxs->add(pos2[0],pos1[1],z);
+        vtxs->add(pos2[0],pos2[1],z);
+        vtxs->add(pos1[0],pos2[1],z);
+        vtxs->add(pos1[0],pos1[1],z);
+  
+        m_primitives_sep.add(sep);
+      }
+  
+    } else if(a_obj.m_FAIS==plottable_ellipse::PATTERN) {
+      a_out << "tools::sg::plotter::update_plottable_box FAIS PATTERN not yet handled." << std::endl;
+*/      
+    } else {
+      a_out << "tools::sg::plotter::update_plottable_box FAIS " << a_obj.m_FAIS << " not yet handled." << std::endl;
+    }
+    
+  }
+
+  void update_primitive_img(std::ostream& /*a_out*/,const plottable_img& a_obj){
+  
+    float z = xy_depth.value()*1.1F;
+  
+    vec3f pos;
+    axis_2_data_frame(vec3f(a_obj.m_X,a_obj.m_Y,z),pos);
+    xx_2_yy(pos,pos);   //pos = center of image in axes coordinates. 
+    z = pos[2];
+
+    vec3f top;
+    axis_2_data_frame(vec3f(0,a_obj.m_Y+a_obj.m_HEIGHT*0.5f,0),top);
+    xx_2_yy(top,top);  //top = (o,y-top)  of image in axes coordinates.
+    float scale = 2.0f*(top[1]-pos[1]);
+    //float scale = a_obj.m_HEIGHT; //m_HEIGHT is then in page coordinate YSIZ.
+
+    const img<byte>& img = a_obj.m_img;
+
+  //::printf("debug : tools::sg::plotter::update_primitive_img : %d %d %d : %g %g %g : %g : %g %g\n",
+  //    img.width(),img.height(),img.bpp(),
+  //    pos.x(),pos.y(),pos.z(),a_obj.m_HEIGHT,a_obj.m_THETA,a_obj.m_PHI);
+
+    separator* sep = new separator;
+  
+    rgba* mat = new rgba();
+    mat->color = colorf_white();
+    sep->add(mat);
+
+    normal* nm = new normal;
+    sep->add(nm);
+
+    matrix* _tsf = new matrix;
+    _tsf->set_translate(pos);
+    _tsf->mul_rotate(0,1,0,a_obj.m_THETA*fpi()/180.0f);
+    _tsf->mul_rotate(0,0,1,a_obj.m_PHI*fpi()/180.0f);
+    _tsf->mul_scale(scale,scale,1);
+    sep->add(_tsf);
+ 
+    tex_rect* _img = new tex_rect();
+    _img->img = img;
+    sep->add(_img);
+  
+    m_primitives_sep.add(sep);
+      
+  }
+
 protected: //etc
   // background is at z = 0.
   // last z items are text in infos, legend boxes that should be at xy_depth().
@@ -8103,8 +9043,7 @@ protected: //etc
   void clear_todels() {m_todel_group.clear();}
 
   bool first_bins(bins1D*& a_1,bins2D*& a_2) const {
-    std::vector<plottable*>::const_iterator it;
-    for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+    tools_vforcit(plottable*,m_plottables,it) {
       plottable* object = *it;
       if(!object) continue;
       if(bins1D* b1 = safe_cast<plottable,bins1D>(*object)) {
@@ -8123,8 +9062,7 @@ protected: //etc
   }
 
   bool first_func(func1D*& a_1,func2D*& a_2) const {
-    std::vector<plottable*>::const_iterator it;
-    for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+    tools_vforcit(plottable*,m_plottables,it) {
       plottable* object = *it;
       if(!object) continue;
       if(func1D* f1 = safe_cast<plottable,func1D>(*object)) {
@@ -8143,8 +9081,7 @@ protected: //etc
   }
 
   bool first_points(points2D*& a_2,points3D*& a_3) const {
-    std::vector<plottable*>::const_iterator it;
-    for(it=m_plottables.begin();it!=m_plottables.end();++it) {
+    tools_vforcit(plottable*,m_plottables,it) {
       plottable* object = *it;
       if(!object) continue;
       if(points2D* p2 = safe_cast<plottable,points2D>(*object)) {
@@ -8388,6 +9325,7 @@ protected: //fields for skeleton.
   separator m_points_sep;
   separator m_inner_frame_sep;
   separator m_primitives_sep;
+  separator m_etc_sep;
   
 protected: //fields
   shape_type m_shape;    
@@ -8424,6 +9362,7 @@ protected:
   group m_todel_group;
   std::vector<plotprim*> m_primitives;
   cmaps_t m_cmaps;
+  rtausmef m_rtausmef;
 };
 
 }}

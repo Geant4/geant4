@@ -95,4 +95,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_abla_abla
         G4track
         G4intercoms
 
+    SOURCES_EXCLUDE_FORMAT
+        G4Abla.cc
+
 LINK_LIBRARIES)# List any source specific properties here

@@ -23,18 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// Implementation for G4DisplacedSolid class for boolean 
+// Implementation of G4DisplacedSolid class for Boolean 
 // operations between other solids
 //
-// History:
-//
 // 28.10.98 V.Grichine: created
-// 14.11.99 V.Grichine: modifications in CalculateExtent(...) method
-// 22.11.00 V.Grichine: new set methods for matrix/vectors
 // 28.02.18 E.Tcherniaev: improved contruction from G4DisplacedSolid
-//
 // --------------------------------------------------------------------
 
 #include "G4DisplacedSolid.hh"
@@ -55,7 +48,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                           G4RotationMatrix* rotMatrix,
                                     const G4ThreeVector& transVector    )
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(pName)
 {
   if (pSolid->GetEntityType() == "G4DisplacedSolid")
   {
@@ -79,7 +72,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4Transform3D& transform  )
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(pName)
 {
   if (pSolid->GetEntityType() == "G4DisplacedSolid")
   {
@@ -106,7 +99,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                           G4VSolid* pSolid ,
                                     const G4AffineTransform directTransform )
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(pName)
 {
   if (pSolid->GetEntityType() == "G4DisplacedSolid")
   {
@@ -129,8 +122,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4DisplacedSolid::G4DisplacedSolid( __void__& a )
-  : G4VSolid(a), fPtrSolid(0), fPtrTransform(0),
-    fDirectTransform(0), fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(a)
 {
 }
 
@@ -141,7 +133,7 @@ G4DisplacedSolid::G4DisplacedSolid( __void__& a )
 G4DisplacedSolid::~G4DisplacedSolid() 
 {
   CleanTransformations();
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -149,8 +141,7 @@ G4DisplacedSolid::~G4DisplacedSolid()
 // Copy constructor
 
 G4DisplacedSolid::G4DisplacedSolid(const G4DisplacedSolid& rhs)
-  : G4VSolid (rhs), fPtrSolid(rhs.fPtrSolid),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid (rhs), fPtrSolid(rhs.fPtrSolid)
 {
   fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
   fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
@@ -177,17 +168,17 @@ G4DisplacedSolid& G4DisplacedSolid::operator = (const G4DisplacedSolid& rhs)
   fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
   fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
   fRebuildPolyhedron = false;
-  delete fpPolyhedron; fpPolyhedron= 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 
   return *this;
 }  
 
 void G4DisplacedSolid::CleanTransformations()
 {
-  if(fPtrTransform)
+  if(fPtrTransform != nullptr)
   {
-    delete fPtrTransform;  fPtrTransform=0;
-    delete fDirectTransform;  fDirectTransform=0;
+    delete fPtrTransform; fPtrTransform = nullptr;
+    delete fDirectTransform; fDirectTransform = nullptr;
   }
 }
 
@@ -238,7 +229,7 @@ void G4DisplacedSolid::SetDirectTransform(G4AffineTransform& transform)
 
 G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
 {
-  G4RotationMatrix InvRotation= fDirectTransform->NetRotation();
+  G4RotationMatrix InvRotation = fDirectTransform->NetRotation();
   return InvRotation;
 }
 
@@ -265,7 +256,7 @@ void G4DisplacedSolid::SetFrameTranslation(const G4ThreeVector& vector)
 
 G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
 {
-  G4RotationMatrix Rotation= fPtrTransform->NetRotation();
+  G4RotationMatrix Rotation = fPtrTransform->NetRotation();
   return Rotation;
 }
 
@@ -350,7 +341,7 @@ G4DisplacedSolid::CalculateExtent( const EAxis pAxis,
  
 /////////////////////////////////////////////////////
 //
-// 
+// SurfaceNormal
 
 EInside G4DisplacedSolid::Inside(const G4ThreeVector& p) const
 {
@@ -431,7 +422,7 @@ G4DisplacedSolid::DistanceToOut( const G4ThreeVector& p ) const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// ComputeDimensions
 
 void 
 G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
@@ -452,7 +443,7 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
 
 G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
 {
-  G4ThreeVector p =  fPtrSolid->GetPointOnSurface();
+  G4ThreeVector p = fPtrSolid->GetPointOnSurface();
   return fDirectTransform->TransformPoint(p);
 }
 
@@ -502,7 +493,7 @@ std::ostream& G4DisplacedSolid::StreamInfo(std::ostream& os) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-//                    
+// DescribeYourselfTo               
 
 void 
 G4DisplacedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
@@ -512,13 +503,13 @@ G4DisplacedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-//
+// CreatePolyhedron
 
 G4Polyhedron* 
 G4DisplacedSolid::CreatePolyhedron () const 
 {
   G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
-  if (polyhedron)
+  if (polyhedron != nullptr)
   {
     polyhedron
     ->Transform(G4Transform3D(GetObjectRotation(),GetObjectTranslation()));
@@ -535,11 +526,11 @@ G4DisplacedSolid::CreatePolyhedron () const
 
 //////////////////////////////////////////////////////////////////////////
 //
-//
+// GetPolyhedron
 
 G4Polyhedron* G4DisplacedSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

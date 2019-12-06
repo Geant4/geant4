@@ -513,13 +513,13 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
     G4Exception("G4PenelopeGammaConversionModel::ReadDataFile()",
 		"em0100",FatalException,"Worker thread in this method");
 
- if (verboseLevel > 2)
+  if (verboseLevel > 2)
     {
       G4cout << "G4PenelopeGammaConversionModel::ReadDataFile()" << G4endl;
       G4cout << "Going to read Gamma Conversion data files for Z=" << Z << G4endl;
     }
 
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     {
       G4String excep =

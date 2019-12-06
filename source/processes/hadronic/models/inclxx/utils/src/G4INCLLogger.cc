@@ -146,7 +146,7 @@ namespace G4INCL {
     }
 
     void initVerbosityLevelFromEnvvar() {
-      const char * const envVar = getenv("G4INCL_DEBUG_VERBOSITY");
+      const char * const envVar = std::getenv("G4INCL_DEBUG_VERBOSITY");
       if(envVar) {
         std::stringstream verbss(envVar);
         verbss >> verbosityLevel;

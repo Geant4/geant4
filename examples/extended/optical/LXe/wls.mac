@@ -14,9 +14,10 @@
 /gun/particle e-
 /gun/energy 511 keV
 
+/analysis/setFileName wls
 /analysis/h1/set 3 100 -1 10000 
 /analysis/h1/set 4 100 -1 100
 /analysis/h1/set 5 100 -1 10000
 
 /run/printProgress 10
-/run/beamOn 1000
+/run/beamOn 100

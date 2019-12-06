@@ -92,9 +92,10 @@ public:
   void v2(const T& a_value) { m_data[2] = a_value;}
   void v3(const T& a_value) { m_data[3] = a_value;}
 
-  //T x() const {return m_data[0];}
-  //T y() const {return m_data[1];}
-  //T z() const {return m_data[2];}
+  const T& x() const { return m_data[0];}
+  const T& y() const { return m_data[1];}
+  const T& z() const { return m_data[2];}
+  const T& t() const { return m_data[3];}
 
   void set_value(const T& a0,const T& a1,const T& a2,const T& a3) {
     m_data[0] = a0;

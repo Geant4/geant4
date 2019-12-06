@@ -21,3 +21,13 @@ else()
     GEANT4_GLOBAL_LIBRARY_TARGET(COMPONENTS sources.cmake)
 endif()
 
+# Enable smart stack
+if(GEANT4_USE_SMARTSTACK)
+  if(TARGET G4event)
+    target_compile_definitions(G4event PUBLIC G4_USESMARTSTACK)
+  endif()
+
+  if(TARGET G4event-static)
+    target_compile_definitions(G4event-static PUBLIC G4_USESMARTSTACK)
+  endif()
+endif()

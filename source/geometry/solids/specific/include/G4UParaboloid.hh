@@ -23,20 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UParaboloid
 //
 // Class description:
 //
-//   Wrapper class for G4Paraboloid to make use of VecGeom Paraboloid.
+// Wrapper class for G4Paraboloid to make use of VecGeom Paraboloid.
 
-// History:
 // 19.08.15 Guilherme Lima, FNAL
 // --------------------------------------------------------------------
 #ifndef G4UPARABOLOID_HH
@@ -81,8 +73,8 @@ class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4UParaboloid( const G4UParaboloid &source );
-    G4UParaboloid &operator=( const G4UParaboloid &source );
+    G4UParaboloid( const G4UParaboloid& source );
+    G4UParaboloid& operator=( const G4UParaboloid& source );
       // Copy constructor and assignment operator.
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;

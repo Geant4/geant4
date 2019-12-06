@@ -165,7 +165,6 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   charge                 = 0;
   currentMaterialIndex   = -1;
   //
-  lambdalimit            = 1.*mm;
   fr                     = 0.1;
   rangeinit              = 1.e+21;
   geombig                = 1.e+50*mm;
@@ -185,8 +184,6 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   mass                   = electron_mass_c2;
   taulim                 = 1.e-6;
   //
-  facsafety              = 0.6;
-
   currentCouple          = nullptr;
   fParticleChange        = nullptr;
   //
@@ -253,6 +250,7 @@ G4GoudsmitSaundersonMscModel::~G4GoudsmitSaundersonMscModel() {
 
 void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p, const G4DataVector&) {
   SetParticle(p);
+  InitialiseParameters(p);
   // -create GoudsmitSaundersonTable and init its Mott-correction member if
   //  Mott-correction was required
   if (IsMaster()) {
@@ -314,14 +312,13 @@ G4double G4GoudsmitSaundersonMscModel::CrossSectionPerVolume(const G4Material* m
                                          G4double,
                                          G4double) {
   G4double xsecTr1  = 0.; // cross section per volume i.e. macroscopic 1st transport cross section
-  G4double efEnergy = kineticEnergy;
   // 
   fLambda0 = 0.0; // elastic mean free path
   fLambda1 = 0.0; // first transport mean free path
   fScrA    = 0.0; // screening parameter
   fG1      = 0.0; // first transport coef.
   // use Moliere's screening (with Mott-corretion if it was requested)
-  if  (efEnergy<10.*CLHEP::eV) efEnergy = 10.*CLHEP::eV;
+  G4double efEnergy = std::max(kineticEnergy, 10.*CLHEP::eV);
   // total mometum square
   G4double pt2     = efEnergy*(efEnergy+2.0*electron_mass_c2);
   // beta square

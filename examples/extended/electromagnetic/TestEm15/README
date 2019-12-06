@@ -124,4 +124,5 @@
        electron.mac muon.mac  proton.mac
 
        The example of Gamma Conversion macro :
-       gamma.mac
+       gamma.mac - gamma to e+ e- 
+       gamma2mumu.mac gamma to mu+ mu- 

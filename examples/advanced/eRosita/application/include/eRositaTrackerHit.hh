@@ -36,9 +36,6 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
-
-
 
 class eRositaTrackerHit : public G4VHit
 {

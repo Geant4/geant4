@@ -39,7 +39,11 @@
 
 DetectorConstruction::DetectorConstruction() 
     : G4VUserDetectorConstruction()
-{}
+{
+    fpDNAParser.reset(new DNAParser());
+    fpDNAParser->ParseFile("VoxelStraight.fab2g4dna");
+    fpGun = fpDNAParser->ReleaseMoleculeGun();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,14 +69,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                                                       false, 
                                                       0);
 
-    std::unique_ptr<DNAParser> pDNAParser(new DNAParser());
-    G4LogicalVolume* pLogicStraightVoxel =
-    pDNAParser->CreateLogicVolume("VoxelStraight.fab2g4dna");
-    fpGun = pDNAParser->ReleaseMoleculeGun();
-    fGeometryMap = pDNAParser->ReleaseGeoData();
-    
-
-    
+    G4LogicalVolume* pLogicStraightVoxel = fpDNAParser->CreateLogicVolume();
+    fGeometryMap = fpDNAParser->ReleaseGeoData();
+        
     G4VPhysicalVolume* pPhyVoxel = new G4PVPlacement(0, 
                                                     G4ThreeVector(),
                                                     pLogicStraightVoxel, 

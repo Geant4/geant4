@@ -68,7 +68,7 @@ public:
     toBeCached val;
     fCache.Put( val );
 
-    char * method = getenv( "G4PHP_MULTIPLICITY_METHOD" );
+    char * method = std::getenv( "G4PHP_MULTIPLICITY_METHOD" );
     if( method )
     {
       if( G4String(method) == "Poisson" ) {
@@ -100,11 +100,11 @@ public:
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;
-    if( getenv("G4PHPTEST") )
+    if( std::getenv("G4PHPTEST") )
       G4cout << " G4ParticleHPProduct :: Init MassCode "
              << theMassCode << " " << theMass << " theActualStateQValue "
              << theActualStateQValue << G4endl;// GDEB
-    if( getenv("G4PHPTEST") )
+    if( std::getenv("G4PHPTEST") )
       G4cout << " G4ParticleHPProduct :: Init theActualStateQValue "
              << theActualStateQValue << G4endl;// GDEB
     theGroundStateQValue*= CLHEP::eV;

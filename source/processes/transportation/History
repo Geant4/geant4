@@ -16,6 +16,42 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov  1st 2019, J.Apostolakis transport-V10-05-02
+----------------------------
+- Optimisation in G4Transportation and G4CoupledTransportation:
+   Avoid calling user field manager's ConfigureForTrack method,
+   except if particle is charged, or forces from magnetic moment
+   or gravity are enabled.
+   
+  * Introduces new common 'flag' in G4(Coupled)Transportation
+      to enable gravity fields.
+    The following static method must be called if the application uses
+    gravity fields:
+       G4Transportation::EnableGravity(G4bool useGravity)
+
+- Added flag in G4Transportation/G4CoupledTransportation to
+   silence warning about looping tracks.
+
+Aug 15th 2019, D.Sorokin transport-V10-05-01
+------------------------
+- Enable relaxing of delta chord condition (to reduce looping particle
+    issue) for tracks below 'important' energy threshold.
+
+Aug 15th 2019, J.Apostolakis transport-V10-05-00
+----------------------------
+- G4Transportation and G4CoupledTransportation: fix issues related to
+    resetting of looper flag and other state for field propagation.
+    * Replaced check for 'Global' field with check for any field.
+      This is needed to ensure that propagator-in-field state is
+      reset when the setup inludes only local fields.
+    * Ensure that looping flag is reset (false) when a force is not exerted
+      in G4CoupledTransportation::AlongStepGetPhysicalInteractionLength
+      ( Before it was overwritten afterwards. )
+
+   Addresses bugzilla Problem report 2144.
+   Thanks to Richard T. Jones (U. Conn) and Laurie Nevay (RHUL) of the
+     GlueX experiment team.
+
 Nov 9th  2018, J.Apostolakis transport-V10-04-13
 ----------------------------
 - G4Transportation and G4CoupledTransportation:

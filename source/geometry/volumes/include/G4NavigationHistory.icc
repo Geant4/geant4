@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // class G4NavigationHistory Inline implementation
 //
 // ----------------------------------------------------------------------
@@ -39,7 +36,7 @@ extern G4GEOM_DLL G4Allocator<G4NavigationHistory>*& aNavigHistoryAllocator();
 inline
 void* G4NavigationHistory::operator new(size_t)
 {
-  if (!aNavigHistoryAllocator())
+  if (aNavigHistoryAllocator() == nullptr)
   {
     aNavigHistoryAllocator() = new G4Allocator<G4NavigationHistory>;
   }
@@ -65,11 +62,11 @@ G4NavigationHistory::operator=(const G4NavigationHistory &h)
     fNavHistory->resize( h.GetMaxDepth() );
   }
 
-  for ( G4int ilev=h.fStackDepth; ilev>=0; --ilev )
+  for ( G4int ilev=G4int(h.fStackDepth); ilev>=0; --ilev )
   { 
     (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
   }
-  fStackDepth=h.fStackDepth;
+  fStackDepth = h.fStackDepth;
 
   return *this;
 }
@@ -87,7 +84,7 @@ void G4NavigationHistory::Clear()
   G4NavigationLevel tmpNavLevel = G4NavigationLevel(0, origin, kNormal, -1) ;
 
   Reset();
-  for (G4int ilev=fNavHistory->size()-1; ilev>=0; ilev--)
+  for (G4long ilev=G4long(fNavHistory->size()-1); ilev>=0; --ilev)
   {
      (*fNavHistory)[ilev] = tmpNavLevel;
   }
@@ -102,7 +99,7 @@ void G4NavigationHistory::SetFirstEntry(G4VPhysicalVolume* pVol)
   // Protection needed in case pVol=null 
   // so that a touchable-history can signal OutOfWorld 
   //
-  if( pVol!=0 )
+  if( pVol != nullptr )
   {
     translation = pVol->GetTranslation();
     copyNo = pVol->GetCopyNo();
@@ -142,7 +139,7 @@ G4VPhysicalVolume* G4NavigationHistory::GetTopVolume() const
 }
 
 inline
-G4int G4NavigationHistory::GetDepth() const
+size_t G4NavigationHistory::GetDepth() const
 {
   return fStackDepth;
 }
@@ -173,7 +170,7 @@ G4VPhysicalVolume* G4NavigationHistory::GetVolume(G4int n) const
 }
 
 inline
-G4int G4NavigationHistory::GetMaxDepth() const
+size_t G4NavigationHistory::GetMaxDepth() const
 {
   return fNavHistory->size();
 }
@@ -186,36 +183,36 @@ void G4NavigationHistory::BackLevel()
   // Tell  the  level  that I am forgetting it
   // delete (*fNavHistory)[fStackDepth];
   //
-  fStackDepth--;
+  --fStackDepth;
 }
 
 inline
 void G4NavigationHistory::BackLevel(G4int n)
 {
-  assert( n<=fStackDepth );
+  assert( n<=G4int(fStackDepth) );
   fStackDepth-=n;
 }
 
 inline
 void G4NavigationHistory::EnlargeHistory()
 {
-  G4int len = fNavHistory->size();
-  if ( len==fStackDepth )
+  size_t len = fNavHistory->size();
+  if ( len == fStackDepth )
   {
     // Note: Resize operation clears additional entries
     //
-    G4int nlen = len+kHistoryStride;
+    size_t nlen = len+kHistoryStride;
     fNavHistory->resize(nlen);
   }  
 }
 
 
 inline
-void G4NavigationHistory::NewLevel( G4VPhysicalVolume *pNewMother,
+void G4NavigationHistory::NewLevel( G4VPhysicalVolume* pNewMother,
                                     EVolume vType,
                                     G4int nReplica )
 {
-  fStackDepth++;
+  ++fStackDepth;
   EnlargeHistory();  // Enlarge if required
   (*fNavHistory)[fStackDepth] =
     G4NavigationLevel( pNewMother, 

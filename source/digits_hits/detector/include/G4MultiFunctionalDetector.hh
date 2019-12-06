@@ -59,7 +59,7 @@ class G4MultiFunctionalDetector : public G4VSensitiveDetector
       G4bool RegisterPrimitive(G4VPrimitiveScorer*);
       G4bool RemovePrimitive(G4VPrimitiveScorer*);
       inline G4int GetNumberOfPrimitives() const
-      { return primitives.size(); }
+      { return G4int(primitives.size()); }
       G4VPrimitiveScorer* GetPrimitive(G4int id) const
       { return primitives[id]; }
 

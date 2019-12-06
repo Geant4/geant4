@@ -95,8 +95,8 @@ G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)
 	theStableParton=0;
 	theDecayParton=0;
 
-        if(excited.GetDirection() > 0) {decaying=Left; }
-        else                           {decaying=Right;}
+        if (excited.GetDirection() > 0) {decaying=Left; }
+        else                            {decaying=Right;}
 
         Pleft  = excited.GetLeftParton()->Get4Momentum();
         Pright = excited.GetRightParton()->Get4Momentum();
@@ -162,7 +162,8 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		decaying=Right;
 	} else
 	{
-		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
+		throw G4HadronicException(__FILE__, __LINE__, 
+                  "G4FragmentingString::G4FragmentingString: no decay Direction defined");
 	}
 	Pplus  = Pstring.plus();   //old.Pplus  - (momentum->e() + momentum->pz());
 	Pminus = Pstring.minus();  //old.Pminus - (momentum->e() - momentum->pz());
@@ -197,7 +198,8 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
                 decaying=Right;
 	} else                                                            
 	{
-		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
+		throw G4HadronicException(__FILE__, __LINE__, 
+                  "G4FragmentingString::G4FragmentingString: no decay Direction defined");
 	}
 }
 
@@ -232,13 +234,14 @@ G4int G4FragmentingString::GetDecayDirection() const
 {
 	if      (decaying == Left ) return +1;
 	else if (decaying == Right) return -1;
-	else throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::GetDecayDirection: decay side UNdefined!");
+	else throw G4HadronicException(__FILE__, __LINE__, 
+               "G4FragmentingString::GetDecayDirection: decay side UNdefined!");
 	return 0;
 }
  
 //---------------------------------------------------------------------------------
 
-G4bool G4FragmentingString::FourQuarkString() const
+G4bool G4FragmentingString::IsAFourQuarkString() const
 {
 	return   LeftParton->GetParticleSubType()== "di_quark" 
 	     && RightParton->GetParticleSubType()== "di_quark";
@@ -321,10 +324,17 @@ G4double G4FragmentingString::MassT2() const
 }
 
 G4LorentzVector G4FragmentingString::GetPstring()
-{ return Pstring; }
+{ 
+  return Pstring;
+}
 
 G4LorentzVector G4FragmentingString::GetPleft()
-{ return Pleft; }
+{ 
+  return Pleft;
+}
 
 G4LorentzVector G4FragmentingString::GetPright()
-{ return Pright; }
+{ 
+  return Pright;
+}
+

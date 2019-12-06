@@ -117,6 +117,11 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
   fTheElectron(G4Electron::Electron()), fThePositron(G4Positron::Positron()),
   fParticleChange(nullptr) 
 {
+  // gamma energy below which the parametrized atomic x-section is used (80 GeV) 
+  fParametrizedXSectionThreshold = 80.0*CLHEP::GeV;
+  // gamma energy below the Coulomb correction is turned off (50 MeV)
+  fCoulombCorrectionThreshold    = 50.0*CLHEP::MeV;
+  // set angular generator used in the final state kinematics computation 
   SetAngularDistribution(new G4ModifiedTsai());
 }
 
@@ -174,7 +179,9 @@ G4double G4PairProductionRelModel::ComputeXSectionPerAtom(G4double gammaEnergy,
   // the way in which the Coulomb correction is applied i.e. avoid negative DCS)
   const G4int    iz     = std::min(gMaxZet, G4lrint(Z)); 
   const G4double eps0   = CLHEP::electron_mass_c2/gammaEnergy;
-  const G4double dmax   = gElementData[iz]->fDeltaMax;
+  // Coulomb correction is always included in the DCS even below 50 MeV (note: 
+  // that this DCS is only used to get the integrated x-section)
+  const G4double dmax   = gElementData[iz]->fDeltaMaxHigh;
   const G4double dmin   = 4.*eps0*gElementData[iz]->fDeltaFactor;
   const G4double eps1   = 0.5 - 0.5*std::sqrt(1.-dmin/dmax);
   const G4double epsMin = std::max(eps0, eps1);
@@ -306,18 +313,26 @@ G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*
   G4double crossSection = 0.0 ;
   // check kinematical limit
   if ( gammaEnergy <= 2.0*electron_mass_c2 ) { return crossSection; }
-  // Computes the cross section with or without LPM suppression depending on 
-  // settings (by default with if the gamma energy is above a given threshold) 
-  // and using or not using complete sreening approximation (by default not).
-  // Only the dependent part is computed in the numerical integration of the DCS
-  // i.e. the result must be multiplied here with 4 \alpha r_0^2 Z(Z+\eta(Z))
-  crossSection = ComputeXSectionPerAtom(gammaEnergy, Z);
-  // apply the constant factors: 
-  // - eta(Z) is a correction to account interaction in the field of e-
-  // - gXSecFactor = 4 \alpha r_0^2
-  const G4int iz     = std::min(gMaxZet, G4lrint(Z));
-  const G4double eta = gElementData[iz]->fEtaValue; 
-  crossSection      *= gXSecFactor*Z*(Z+eta);
+  // compute the atomic cross section either by using x-section parametrization
+  // or by numerically integrationg the DCS (with or without LPM)
+  if ( gammaEnergy < fParametrizedXSectionThreshold) { 
+    // using the parametrized cross sections (max up to 80 GeV)
+    crossSection = ComputeParametrizedXSectionPerAtom(gammaEnergy, Z);  
+  } else { 
+    // by numerical integration of the DCS:
+    // Computes the cross section with or without LPM suppression depending on 
+    // settings (by default with if the gamma energy is above a given threshold) 
+    // and using or not using complete sreening approximation (by default not).
+    // Only the dependent part is computed in the numerical integration of the DCS
+    // i.e. the result must be multiplied here with 4 \alpha r_0^2 Z(Z+\eta(Z))
+    crossSection = ComputeXSectionPerAtom(gammaEnergy, Z);
+    // apply the constant factors: 
+    // - eta(Z) is a correction to account interaction in the field of e-
+    // - gXSecFactor = 4 \alpha r_0^2
+    const G4int iz     = std::min(gMaxZet, G4lrint(Z));
+    const G4double eta = gElementData[iz]->fEtaValue; 
+    crossSection      *= gXSecFactor*Z*(Z+eta);
+  }
   // final protection
   return std::max(crossSection, 0.);
 }
@@ -363,76 +378,88 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // 'eps' is the total energy transferred to one of the e-/e+ pair in initial
   // gamma energy units Eg. Since the corresponding DCS is symmetric on eps=0.5,
   // the kinematical limits for eps0=mc^2/Eg <= eps <= 0.5 
-  //
-  // The Coulomb factor for the target element (Z) (Eg>50 MeV is assumed)
-  // F(Z) = 8*ln(Z)/3 + 8*fc(Z)
-  //
-  // The screening variable 'delta(eps)' = 136*Z^{-1/3}*eps0/[eps(1-eps)]
-  // Due to the Coulomb correction, the DCS can go below zero even at 
-  // kinematicaly allowed eps > eps0 values. In order to exclude this eps 
-  // range with negative DCS, the minimum eps value will be set to eps_min = 
-  // max[eps0, epsp] with epsp is the solution of SF(delta(epsp)) - F(Z)/2 = 0 
-  // with SF being the screening function (SF1=SF2 at high value of delta). 
-  // The solution is epsp = 0.5 - 0.5*sqrt[ 1 - 4*136*Z^{-1/3}eps0/deltap] 
-  // with deltap = Exp[(42.038-F(Z))/8.29]-0.958. So the limits are:
-  // - when eps=eps_max = 0.5            => delta_min = 136*Z^{-1/3}*eps0/4
-  // - epsp = 0.5 - 0.5*sqrt[ 1 - delta_min/deltap]
-  // - and eps_min = max[eps0, epsp]     
-  const G4int    iZet        = std::min(gMaxZet, anElement->GetZasInt());   
-  const G4double deltaFactor = gElementData[iZet]->fDeltaFactor*eps0;
-  const G4double deltaMin    = 4.*deltaFactor;
-  const G4double deltaMax    = gElementData[iZet]->fDeltaMax;
-  // compute the limits of eps
-  const G4double epsp        = 0.5 - 0.5*std::sqrt(1. - deltaMin/deltaMax) ;
-  const G4double epsMin      = std::max(eps0,epsp);
-  const G4double epsRange    = 0.5 - epsMin;
-  const G4double   FZ        = 8.*(gElementData[iZet]->fLogZ13 + 
-                                   gElementData[iZet]->fCoulomb); 
-  //
-  // sample the energy rate (eps) of the created electron (or positron)
-  G4double F10, F20;
-  ScreenFunction12(deltaMin, F10, F20); 
-  F10 -= FZ;
-  F20 -= FZ; 
-  const G4double NormF1   = std::max(F10 * epsRange * epsRange, 0.); 
-  const G4double NormF2   = std::max(1.5 * F20                , 0.);
-  const G4double NormCond = NormF1/(NormF1 + NormF2); 
-  // check if LPM correction is active
-  const G4bool isLPM = (fIsUseLPMCorrection && gammaEnergy>gEgLPMActivation);
-  fLPMEnergy = mat->GetRadlen()*gLPMconstant;
-  // we will need 3 uniform random number for each trial of sampling 
-  G4double rndmv[3];
-  G4double greject = 0.;
+  // 1. 'eps' is sampled uniformly on the [eps0, 0.5] inteval if Eg<Egsmall 
+  // 2. otherwise, on the [eps_min, 0.5] interval according to the DCS (case 2.) 
   G4double eps;
-  do {
-    rndmEngine->flatArray(3, rndmv);
-    if (NormCond > rndmv[0]) {
-      eps = 0.5 - epsRange * fG4Calc->A13(rndmv[1]);
-      const G4double delta = deltaFactor/(eps*(1.-eps));
-      if (isLPM) {
-        G4double lpmXiS, lpmGS, lpmPhiS, phi1, phi2;
-        ComputePhi12(delta, phi1, phi2);
-        ComputeLPMfunctions(lpmXiS, lpmGS, lpmPhiS, eps, gammaEnergy, iZet); 
-        greject = lpmXiS*((2.*lpmPhiS+lpmGS)*phi1-lpmGS*phi2-lpmPhiS*FZ)/F10;
-      } else {
-        greject = (ScreenFunction1(delta)-FZ)/F10;
-      }
-    } else {
-      eps = epsMin + epsRange*rndmv[1];
-      const G4double delta = deltaFactor/(eps*(1.-eps));
-      if (isLPM) {
-        G4double lpmXiS, lpmGS, lpmPhiS, phi1, phi2;
-        ComputePhi12(delta, phi1, phi2);
-        ComputeLPMfunctions(lpmXiS, lpmGS, lpmPhiS, eps, gammaEnergy, iZet); 
-        greject = lpmXiS*( (lpmPhiS+0.5*lpmGS)*phi1 + 0.5*lpmGS*phi2 
-                           -0.5*(lpmGS+lpmPhiS)*FZ )/F20;
-      } else {
-        greject = (ScreenFunction2(delta)-FZ)/F20;
-      }
+  // case 1.
+  static const G4double Egsmall = 2.*CLHEP::MeV;
+  if (gammaEnergy < Egsmall) {
+    eps = eps0 + (0.5-eps0)*rndmEngine->flat();
+  } else {
+  // case 2.
+    // get the Coulomb factor for the target element (Z) and gamma energy (Eg)
+    // F(Z) = 8*ln(Z)/3           if Eg <= 50 [MeV] => no Coulomb correction
+    // F(Z) = 8*ln(Z)/3 + 8*fc(Z) if Eg  > 50 [MeV] => fc(Z) is the Coulomb cor.
+    //
+    // The screening variable 'delta(eps)' = 136*Z^{-1/3}*eps0/[eps(1-eps)]
+    // Due to the Coulomb correction, the DCS can go below zero even at 
+    // kinematicaly allowed eps > eps0 values. In order to exclude this eps 
+    // range with negative DCS, the minimum eps value will be set to eps_min = 
+    // max[eps0, epsp] with epsp is the solution of SF(delta(epsp)) - F(Z)/2 = 0 
+    // with SF being the screening function (SF1=SF2 at high value of delta). 
+    // The solution is epsp = 0.5 - 0.5*sqrt[ 1 - 4*136*Z^{-1/3}eps0/deltap] 
+    // with deltap = Exp[(42.038-F(Z))/8.29]-0.958. So the limits are:
+    // - when eps=eps_max = 0.5            => delta_min = 136*Z^{-1/3}*eps0/4
+    // - epsp = 0.5 - 0.5*sqrt[ 1 - delta_min/deltap]
+    // - and eps_min = max[eps0, epsp]    
+    const G4int    iZet        = std::min(gMaxZet, anElement->GetZasInt());   
+    const G4double deltaFactor = gElementData[iZet]->fDeltaFactor*eps0;
+    const G4double deltaMin    = 4.*deltaFactor;
+    G4double       deltaMax    = gElementData[iZet]->fDeltaMaxLow;
+    G4double       FZ          = 8.*gElementData[iZet]->fLogZ13;
+    if ( gammaEnergy > fCoulombCorrectionThreshold ) {   // Eg > 50 MeV ?
+      FZ      += 8.*gElementData[iZet]->fCoulomb; 
+      deltaMax = gElementData[iZet]->fDeltaMaxHigh;
     }
-    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-  } while (greject < rndmv[2]);
-  //  end of eps sampling
+    // compute the limits of eps
+    const G4double epsp        = 0.5 - 0.5*std::sqrt(1. - deltaMin/deltaMax) ;
+    const G4double epsMin      = std::max(eps0,epsp);
+    const G4double epsRange    = 0.5 - epsMin;
+    //
+    // sample the energy rate (eps) of the created electron (or positron)
+    G4double F10, F20;
+    ScreenFunction12(deltaMin, F10, F20); 
+    F10 -= FZ;
+    F20 -= FZ; 
+    const G4double NormF1   = std::max(F10 * epsRange * epsRange, 0.); 
+    const G4double NormF2   = std::max(1.5 * F20                , 0.);
+    const G4double NormCond = NormF1/(NormF1 + NormF2); 
+    // check if LPM correction is active
+    const G4bool isLPM = (fIsUseLPMCorrection && gammaEnergy>gEgLPMActivation);
+    fLPMEnergy = mat->GetRadlen()*gLPMconstant;
+    // we will need 3 uniform random number for each trial of sampling 
+    G4double rndmv[3];
+    G4double greject = 0.;
+    do {
+      rndmEngine->flatArray(3, rndmv);
+      if (NormCond > rndmv[0]) {
+        eps = 0.5 - epsRange * fG4Calc->A13(rndmv[1]);
+        const G4double delta = deltaFactor/(eps*(1.-eps));
+        if (isLPM) {
+          G4double lpmXiS, lpmGS, lpmPhiS, phi1, phi2;
+          ComputePhi12(delta, phi1, phi2);
+          ComputeLPMfunctions(lpmXiS, lpmGS, lpmPhiS, eps, gammaEnergy, iZet); 
+          greject = lpmXiS*((2.*lpmPhiS+lpmGS)*phi1-lpmGS*phi2-lpmPhiS*FZ)/F10;
+        } else {
+          greject = (ScreenFunction1(delta)-FZ)/F10;
+        }
+      } else {
+        eps = epsMin + epsRange*rndmv[1];
+        const G4double delta = deltaFactor/(eps*(1.-eps));
+        if (isLPM) {
+          G4double lpmXiS, lpmGS, lpmPhiS, phi1, phi2;
+          ComputePhi12(delta, phi1, phi2);
+          ComputeLPMfunctions(lpmXiS, lpmGS, lpmPhiS, eps, gammaEnergy, iZet); 
+          greject = lpmXiS*( (lpmPhiS+0.5*lpmGS)*phi1 + 0.5*lpmGS*phi2 
+                             -0.5*(lpmGS+lpmPhiS)*FZ )/F20;
+        } else {
+          greject = (ScreenFunction2(delta)-FZ)/F20;
+        }
+      }
+      // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+    } while (greject < rndmv[2]);
+    //  end of eps sampling
+  }
   //
   // select charges randomly
   G4double eTotEnergy, pTotEnergy;
@@ -452,8 +479,7 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   G4ThreeVector eDirection, pDirection;
   //
   GetAngularDistribution()->SamplePairDirections(aDynamicGamma, 
-						 eKinEnergy, pKinEnergy,
-                                                 eDirection, pDirection);
+						 eKinEnergy, pKinEnergy, eDirection, pDirection);
   // create G4DynamicParticle object for the particle1
   G4DynamicParticle* aParticle1= new G4DynamicParticle(
                      fTheElectron,eDirection,eKinEnergy);
@@ -486,7 +512,8 @@ void G4PairProductionRelModel::InitialiseElementData()
       const G4double logZ13 = elem->GetIonisation()->GetlogZ3();
       const G4double Z13    = elem->GetIonisation()->GetZ3();
       const G4double fc     = elem->GetfCoulomb(); 
-      const G4double FZ     = 8.*(logZ13 + fc);
+      const G4double FZLow  = 8.*logZ13;
+      const G4double FZHigh = 8.*(logZ13 + fc);
       G4double       Fel;
       G4double       Finel;
       if (iz<5) {  // use data from Dirac-Fock atomic model
@@ -501,7 +528,8 @@ void G4PairProductionRelModel::InitialiseElementData()
       elD->fCoulomb        = fc;
       elD->fLradEl         = Fel;
       elD->fDeltaFactor    = 136./Z13;
-      elD->fDeltaMax       = G4Exp((42.038 - FZ)/8.29) - 0.958;
+      elD->fDeltaMaxLow    = G4Exp((42.038 - FZLow)/8.29) - 0.958;
+      elD->fDeltaMaxHigh   = G4Exp((42.038 - FZHigh)/8.29) - 0.958;
       elD->fEtaValue       = Finel/(Fel-fc);
       elD->fLPMVarS1Cond   = std::sqrt(2.)*Z13*Z13/(184.*184.);
       elD->fLPMILVarS1Cond = 1./G4Log(elD->fLPMVarS1Cond);
@@ -610,4 +638,72 @@ void G4PairProductionRelModel::ComputeLPMfunctions(G4double &funcXiS,
     funcXiS = 1. / funcPhiS;
   }
 }
+
+// Calculates the microscopic cross section in GEANT4 internal units. Same as in 
+// G4BetheHeitlerModel and should be used below 80 GeV since it start to deverge
+// from the cross section data above 80-90 GeV:
+// Parametrized formula (L. Urban) is used to estimate the atomic cross sections
+// given numerically in the table of [Hubbell, J. H., Heinz Albert Gimm, and I. 
+// Overbo: "Pair, Triplet, and Total Atomic Cross Sections (and Mass Attenuation 
+// Coefficients) for 1 MeV‐100 GeV Photons in Elements Z= 1 to 100." Journal of 
+// physical and chemical reference data 9.4 (1980): 1023-1148.]
+//
+// The formula gives a good approximation of the data from 1.5 MeV to 100 GeV.
+// below 1.5 MeV: sigma=sigma(1.5MeV)*(GammaEnergy-2electronmass)
+//                                   *(GammaEnergy-2electronmass) 
+G4double
+G4PairProductionRelModel::ComputeParametrizedXSectionPerAtom(G4double gammaE, 
+                                                             G4double Z) 
+{
+  G4double xSection = 0.0 ;
+  // short versions
+  static const G4double kMC2  = CLHEP::electron_mass_c2;
+  // zero cross section below the kinematical limit: Eg<2mc^2
+  if (Z < 0.9 || gammaE <= 2.0*kMC2) { return xSection; }
+  //
+  static const G4double gammaEnergyLimit = 1.5*CLHEP::MeV;
+  // set coefficients a, b c
+  static const G4double a0 =  8.7842e+2*CLHEP::microbarn;
+  static const G4double a1 = -1.9625e+3*CLHEP::microbarn; 
+  static const G4double a2 =  1.2949e+3*CLHEP::microbarn;
+  static const G4double a3 = -2.0028e+2*CLHEP::microbarn; 
+  static const G4double a4 =  1.2575e+1*CLHEP::microbarn; 
+  static const G4double a5 = -2.8333e-1*CLHEP::microbarn;
+  
+  static const G4double b0 = -1.0342e+1*CLHEP::microbarn;
+  static const G4double b1 =  1.7692e+1*CLHEP::microbarn;
+  static const G4double b2 = -8.2381   *CLHEP::microbarn;
+  static const G4double b3 =  1.3063   *CLHEP::microbarn;
+  static const G4double b4 = -9.0815e-2*CLHEP::microbarn;
+  static const G4double b5 =  2.3586e-3*CLHEP::microbarn;
+  
+  static const G4double c0 = -4.5263e+2*CLHEP::microbarn;
+  static const G4double c1 =  1.1161e+3*CLHEP::microbarn; 
+  static const G4double c2 = -8.6749e+2*CLHEP::microbarn;
+  static const G4double c3 =  2.1773e+2*CLHEP::microbarn; 
+  static const G4double c4 = -2.0467e+1*CLHEP::microbarn;
+  static const G4double c5 =  6.5372e-1*CLHEP::microbarn;
+  // check low energy limit of the approximation (1.5 MeV)
+  G4double gammaEnergyOrg = gammaE;
+  if (gammaE < gammaEnergyLimit) { gammaE = gammaEnergyLimit; }
+  // compute gamma energy variables
+  const G4double x  = G4Log(gammaE/kMC2);
+  const G4double x2 = x *x; 
+  const G4double x3 = x2*x;
+  const G4double x4 = x3*x;
+  const G4double x5 = x4*x;
+  //
+  const G4double F1 = a0 + a1*x + a2*x2 + a3*x3 + a4*x4 + a5*x5;
+  const G4double F2 = b0 + b1*x + b2*x2 + b3*x3 + b4*x4 + b5*x5;
+  const G4double F3 = c0 + c1*x + c2*x2 + c3*x3 + c4*x4 + c5*x5;     
+  // compute the approximated cross section 
+  xSection = (Z + 1.)*(F1*Z + F2*Z*Z + F3);
+  // check if we are below the limit of the approximation and apply correction
+  if (gammaEnergyOrg < gammaEnergyLimit) {
+    const G4double dum = (gammaEnergyOrg-2.*kMC2)/(gammaEnergyLimit-2.*kMC2);
+    xSection *= dum*dum;
+  }
+  return xSection;
+}
+
 

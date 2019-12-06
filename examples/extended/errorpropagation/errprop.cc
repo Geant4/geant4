@@ -68,7 +68,7 @@ int main()
   // 0: propagate until target, all steps in one go
   // 1: propagate until target, returning control to the user at each step
   G4int iProp = 0;
-  char* prop = getenv("G4ERROR_PROP");
+  char* prop = std::getenv("G4ERROR_PROP");
   if( prop ) {
     if( G4String(prop) == G4String("UNTIL_TARGET") ){
       iProp = 0;
@@ -123,7 +123,7 @@ void Initialize()
   // 3: GeomVolumeTarget
   // 4: TrackLengthTarget
   G4int iTarget = 1;
-  char* target = getenv("G4ERROR_TARGET");
+  char* target = std::getenv("G4ERROR_TARGET");
   if( target ) {
     if( G4String(target) == G4String("PLANE_SURFACE") ) {
       iTarget = 1;
@@ -148,7 +148,7 @@ void Initialize()
   g4edata->SetTarget( theTarget );
 
   theG4ErrorMode = G4ErrorMode_PropBackwards;
-  char* mode = getenv("G4ERROR_MODE");
+  char* mode = std::getenv("G4ERROR_MODE");
   if( mode ) {
     if( G4String(mode) == G4String("FORWARDS") ) {
       theG4ErrorMode = G4ErrorMode_PropForwards;

@@ -23,23 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcTblElement inline methods implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	4th Aug 1998, H.Kurashige
-// ------------------------------------------------------------
-//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
+// Author: H.Kurashige, 04.08.1998
+// --------------------------------------------------------------------
 
 /////////////
 inline 
  G4bool G4ProcTblElement::Contains(const G4ProcessManager* pManager) const
 {
-  G4ProcMgrVector::iterator i;
-  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+  for (auto i = pProcMgrVector->cbegin(); i!= pProcMgrVector->cend(); ++i)
+  {
     if (*i==pManager) return true;
   }
   return false;
@@ -50,8 +44,8 @@ inline
  G4int  G4ProcTblElement::GetIndex(const G4ProcessManager* pManager) const
 {
   G4int index = 0;
-  G4ProcMgrVector::iterator i;
-  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+  for (auto i = pProcMgrVector->cbegin(); i!= pProcMgrVector->cend(); ++i)
+  {
     if (*i==pManager) return index;
     index +=1;
   }
@@ -63,17 +57,20 @@ inline
 inline 
  G4int  G4ProcTblElement::Length() const
 {
-  return pProcMgrVector->size();
+  return G4int(pProcMgrVector->size());
 } 
 
 //////////////////////////
 inline 
  G4ProcessManager* G4ProcTblElement::GetProcessManager(G4int index) const
 {
-  if ((index < G4int(pProcMgrVector->size())) && (index>=0)){
+  if ((index < G4int(pProcMgrVector->size())) && (index>=0))
+  {
     return (*pProcMgrVector)[index];
-  } else {
-    return 0;
+  }
+  else
+  {
+    return nullptr;
   }
 }
 
@@ -97,9 +94,10 @@ inline
 inline 
  void  G4ProcTblElement::Remove(G4ProcessManager* aProcMgr)
 {
-  G4ProcMgrVector::iterator i;
-  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
-    if (*i==aProcMgr){
+  for (auto i = pProcMgrVector->cbegin(); i!= pProcMgrVector->cend(); ++i)
+  {
+    if (*i==aProcMgr)
+    {
       pProcMgrVector->erase(i); 
       break;
     } 

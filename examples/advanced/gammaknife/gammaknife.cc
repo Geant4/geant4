@@ -98,7 +98,7 @@ int main(int argc ,char ** argv)
   G4String physName = "";
 
   // Physics List name defined via environment variable
-  char* path = getenv("PHYSLIST");
+  char* path = std::getenv("PHYSLIST");
   if (path) { physName = G4String(path); }
 
   if(physName != "" && factory.IsReferencePhysList(physName))
@@ -148,10 +148,7 @@ int main(int argc ,char ** argv)
 
   }
 
-  // Job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
 
   delete runManager;
   delete controller;

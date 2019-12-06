@@ -91,7 +91,5 @@ class G4INCLXXProtonBuilder : public G4VProtonBuilder
 
 };
 
-// 2011 by P. Kaitaniemi
-
 #endif
 

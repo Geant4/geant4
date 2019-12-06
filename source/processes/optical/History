@@ -16,7 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-23 May 19: D. Sawkey (op-v10-05-00)
+28 Oct 19: D. Sawkey (op-V10-05-02)
+-  G4OpWLS.cc - call G4VParticleChange->SetNumberOfSecondaries only once
+ - address bug 2200
+
+23 Aug 19: D. Sawkey (op-V10-05-01)
+- G4OpBoundaryProcess: fix Coverity reports
+
+23 May 19: D. Sawkey (op-V10-05-00)
 - most files: format indentation, parentheses; add C++11 keywords;
     - some changes to if/else loops and variable names
 

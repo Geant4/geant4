@@ -80,9 +80,9 @@ class G4UIcommandTree
       inline const G4String GetPathName() const
       { return pathName; };
       inline G4int GetTreeEntry() const
-      { return tree.size(); };
+      { return G4int(tree.size()); };
       inline G4int GetCommandEntry() const
-      { return command.size(); };
+      { return G4int(command.size()); };
       inline G4UIcommandTree * GetTree(G4int i)
       { return tree[i-1]; };
       inline G4UIcommandTree * GetTree(const char* comNameC)

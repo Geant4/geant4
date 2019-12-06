@@ -60,6 +60,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Log.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -123,15 +124,17 @@ void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
     G4int n = dedx0->size();
     if(n < numOfCouples) { dedx0->resize(numOfCouples); }
 
-    // initialise vector
+    G4Pow* g4calc = G4Pow::GetInstance();
+
+    // initialise vector assuming low conductivity
     for(G4int i=0; i<numOfCouples; ++i) {
 
       const G4Material* material = 
-	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+        theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
       G4double eDensity = material->GetElectronDensity();
-      G4double vF = electron_Compton_length*pow(3.*pi*pi*eDensity,0.3333333333);
+      G4double vF2 = 2*electron_Compton_length*g4calc->A13(3.*pi*pi*eDensity);
       (*dedx0)[i] = pi_hbarc2_over_mc2*eDensity*nmpl*nmpl*
-	(G4Log(2.*vF/fine_structure_const) - 0.5)/vF;
+        (G4Log(vF2/fine_structure_const) - 0.5)/vF2;
     }
   }
 }

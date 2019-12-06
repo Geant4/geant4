@@ -118,6 +118,27 @@ HepPolyhedron::HepPolyhedron(const HepPolyhedron &from)
   for (G4int k=1; k<=nface; k++) pF[k] = from.pF[k];
 }
 
+HepPolyhedron::HepPolyhedron(HepPolyhedron&& from)
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron move constructor           Date:    04.11.2019  *
+ * Author: E.Tcherniaev (E.Cheryaev)              Revised:             *
+ *                                                                     *
+ ***********************************************************************/
+: nvert(0), nface(0), pV(nullptr), pF(nullptr)
+{
+  nvert = from.nvert;
+  nface = from.nface;
+  pV = from.pV;
+  pF = from.pF;
+
+  // Release the data from the source object
+  from.nvert = 0;
+  from.nface = 0;
+  from.pV = nullptr;
+  from.pF = nullptr;
+}
+
 HepPolyhedron & HepPolyhedron::operator=(const HepPolyhedron &from)
 /***********************************************************************
  *                                                                     *
@@ -132,6 +153,33 @@ HepPolyhedron & HepPolyhedron::operator=(const HepPolyhedron &from)
     AllocateMemory(from.nvert, from.nface);
     for (G4int i=1; i<=nvert; i++) pV[i] = from.pV[i];
     for (G4int k=1; k<=nface; k++) pF[k] = from.pF[k];
+  }
+  return *this;
+}
+
+HepPolyhedron & HepPolyhedron::operator=(HepPolyhedron&& from)
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron move operator =              Date:   04.11.2019 *
+ * Author: E.Tcherniaev (E.Chernyaev)               Revised:           *
+ *                                                                     *
+ * Function: Move contents of one polyhedron to another                *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (this != &from) {
+    delete [] pV;
+    delete [] pF;
+    nvert = from.nvert;
+    nface = from.nface;
+    pV = from.pV;
+    pF = from.pF;
+
+    // Release the data from the source object
+    from.nvert = 0;
+    from.nface = 0;
+    from.pV = nullptr;
+    from.pF = nullptr;
   }
   return *this;
 }
@@ -374,7 +422,7 @@ void HepPolyhedron::SetSideFacets(G4int ii[4], G4int vv[4],
   if (std::abs((G4double)(dphi-pi)) < perMillion) {          // half a circle
     for (G4int i=0; i<4; i++) {
       k1 = ii[i];
-      k2 = (i == 3) ? ii[0] : ii[i+1];
+      k2 = ii[(i+1)%4];
       if (r[k1] == 0. && r[k2] == 0.) vv[i] = -1;      
     }
   }

@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11.09.2019 - Ivana Hrivnacova   - chem4-V10-05-03
+- Create the analysis manager (in ScoreSpecies) via the new factory
+  function.
+
 10.03.2019 MK                   - chem4-V10-05-02
 - Species hides a pointer
   Make Species alias of const G4MolecularConfiguration

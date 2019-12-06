@@ -17,6 +17,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28/11/19 I.Hrivnacova (doxygen-V10-05-03)
+- Updated for reorganization of gflash examples,
+  added new GB07 in modules
+
+26/11/19 I.Hrivnacova (doxygen-V10-05-02)
+- Added new examples (Hadr08, dnadamage1, microprox, splittimg, exMPI04)
+  and fixing documentation for 10.6
+
+10/07/19 I.Hrivnacova (doxygen-V10-05-01)
+- Removed analysis/B3aScoreWriter and analysis/B4dScoreWriter
+  extended examples
+
 7/5/19 I.Hrivnacova (doxygen-V10-05-00)
 - Fixes in documentation:
   - Linking of geant4.tag in standalone documentation

@@ -122,7 +122,7 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
 
     G4int copyID = ix + fnX*iy + fnX*fnY*iz;
 
-    unsigned int matIndex = GetMaterialIndex(copyID);
+    std::size_t matIndex = GetMaterialIndex(copyID);
     static G4Material* mate = nullptr;
     mate = fMaterials[matIndex];
 
@@ -178,7 +178,7 @@ unsigned int DicomNestedPhantomParameterisation::
 GetMaterialIndex( unsigned int copyNo ) const
 {
     //return *(fMaterialIndices+copyNo);
-    return fMaterialIndices[copyNo];
+    return unsigned(fMaterialIndices[copyNo]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -188,7 +188,7 @@ GetMaterialIndex( unsigned int copyNo ) const
 //
 G4int DicomNestedPhantomParameterisation::GetNumberOfMaterials() const
 {
-    return fMaterials.size();
+    return G4int(fMaterials.size());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

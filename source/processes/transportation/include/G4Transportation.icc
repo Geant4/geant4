@@ -35,6 +35,7 @@
 
 #include <CLHEP/Units/SystemOfUnits.h>
 #include "G4TransportationLogger.hh"
+#include "G4FieldManagerStore.hh"
 
 inline void
 G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
@@ -47,14 +48,10 @@ inline G4PropagatorInField* G4Transportation::GetPropagatorInField()
    return fFieldPropagator;
 }
 
-inline G4bool G4Transportation::DoesGlobalFieldExist()
+inline G4bool G4Transportation::DoesAnyFieldExist()
 {
-  G4TransportationManager* transportMgr;
-  transportMgr= G4TransportationManager::GetTransportationManager();
-
-  // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist();
-  // return fFieldExists;
-  return transportMgr->GetFieldManager()->DoesFieldExist();
+   G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+   return fieldMgrStore->size() > 0;
 }
 
 inline G4double G4Transportation::GetThresholdWarningEnergy() const

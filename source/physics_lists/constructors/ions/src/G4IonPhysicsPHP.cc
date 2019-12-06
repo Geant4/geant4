@@ -108,8 +108,8 @@ void G4IonPhysicsPHP::ConstructProcess() {
 
   const G4double maxPHP = 200.0*MeV;
   const G4double overlapPHP_BIC = 10.0*MeV;
-  const G4double maxBIC = 4.0*GeV;
-  const G4double minFTF = 2.0* GeV;
+  const G4double maxBIC = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  const G4double minFTF = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   const G4double maxFTF = G4HadronicParameters::Instance()->GetMaxEnergy();
 
   G4HadronicInteraction* p =

@@ -16,6 +16,54 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 October 19: D.Sawkey (emutils-V10-05-22)
+- G4EmBiasingManager - delete non-tracked particles
+
+11 October 19: W.G.Shin, S.Incerti (emutils-V10-05-21)
+- G4DNAModelSubType.hh : added Kreipl and Meesungnoen amorphous 
+ice models
+- G4EmLowEParametersMessenger.* : added corresponding commands
+
+10 October 19: V.Ivanchenko (emutils-V10-05-20)
+- G4EmSaturation - do not apply saturation for zero step length,
+    because this is possible only if a tracking cut is applied
+
+08 October 19: V.Ivanchenko (emutils-V10-05-19)
+- G4EmParameters, G4EmParametersMessenger - added new parameter
+- G4LossTableManager - use std::getenv
+
+01 October 19: V.Ivanchenko (emutils-V10-05-18)
+- G4EmParameters, G4EmParametersMessenger - added new parameters
+    for msc FactorSafety and LambdaLimit, until now these parameters
+    were msc model internals, now a user can can customize these 
+    values, default values are used the same as in 10.5
+- G4VMscModel, G4VMultipleScattering - added new method 
+    InitialiseParameters(..), make msc specific methods pure virtual
+- DummyModel - added methods to be consistent with above modifications
+
+11 September 19: V.Ivanchenko (emutils-V10-05-17)
+- G4EmParameters - disable "General Process" for gamma by default
+
+14 August 19: V.Ivanchenko (emutils-V10-05-16)
+- G4LossTableBuilder, G4LossTableManager, G4VEmModel, G4VMscModel, 
+  G4VEmProcess, G4VEnergyLossProcess, G4EmCalculator - allow both 
+  approaches "General Process" and "Base Materials" work together
+  G4EmParameters - enable "General Process" for gamma by default
+
+21 July 19:  M.Novak (emutils-V10-05-15)
+- G4EmElementSelector, G4VEmModel - clean away members not used anymore
+
+18 July 19:  M.Novak (emutils-V10-05-14)
+- G4EmElementSelector - optimised version of element selector (in place linear 
+    interpolation to avoid redundant energy grid related computations; branches,
+    used to handle rare corener cases are eliminated by increased robustness of
+    the algorithm)
+
+17 July 19:  M.Novak (emutils-V10-05-13)
+- G4VEmProcess, G4VEnergyLossProcess, G4VMscModel, G4EmElementSelector 
+    utilise the new, optimised LogVectorValue special (for log-vector) 
+    G4PhysicsVector method in case of EM
+
 31 May 19: V.Ivanchenko (emutils-V10-05-12)
 - G4NIELCalculator - new helper class
 - G4LossTableManager - added access and initialisation of 

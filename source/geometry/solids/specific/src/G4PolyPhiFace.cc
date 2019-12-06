@@ -23,18 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4PolyPhiFace, the face that bounds a polycone or
+// polyhedra at its phi opening.
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4PolyPhiFace.cc
-//
-// Implementation of the face that bounds a polycone or polyhedra at
-// its phi opening.
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4PolyPhiFace.hh"
@@ -47,7 +39,6 @@
 #include "Randomize.hh"
 #include "G4TwoVector.hh"
 
-//
 // Constructor
 //
 // Points r,z should be supplied in clockwise order in r,z. For example:
@@ -57,11 +48,10 @@
 //                 |           |          +--> z
 //                [0]---------[3]
 //
-G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
+G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
                                     G4double phi, 
                                     G4double deltaPhi,
                                     G4double phiOther )
-  : fSurfaceArea(0.), triangles(0)  
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
@@ -99,7 +89,6 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   G4double midPhi = phi + (start ? +0.5 : -0.5)*deltaPhi;
   G4double cosMid = std::cos(midPhi), 
                  sinMid = std::sin(midPhi);
-
   //
   // Allocate corners
   //
@@ -109,8 +98,8 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   //
   G4ReduciblePolygonIterator iterRZ(rz);
   
-  G4PolyPhiFaceVertex *corn = corners;
-  G4PolyPhiFaceVertex *helper=corners;
+  G4PolyPhiFaceVertex* corn   = corners;
+  G4PolyPhiFaceVertex* helper = corners;
 
   iterRZ.Begin();
   do    // Loop checking, 13.08.2015, G.Cosmo
@@ -148,9 +137,9 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   G4double rFact = std::cos(0.5*deltaPhi);
   G4double rFactNormalize = 1.0/std::sqrt(1.0+rFact*rFact);
 
-  G4PolyPhiFaceVertex *prev = corners+numEdges-1,
-                      *here = corners;
-  G4PolyPhiFaceEdge   *edge = edges;
+  G4PolyPhiFaceVertex* prev = corners+numEdges-1,
+                     * here = corners;
+  G4PolyPhiFaceEdge*   edge = edges;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4ThreeVector sideNorm;
@@ -192,7 +181,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   //
   // Go back and fill in corner "normals"
   //
-  G4PolyPhiFaceEdge *prevEdge = edges+numEdges-1;
+  G4PolyPhiFaceEdge* prevEdge = edges+numEdges-1;
   edge = edges;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
@@ -259,8 +248,6 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
   surface = G4ThreeVector( rAve*radial.x(), rAve*radial.y(), zAve );
 }
 
-
-//
 // Diagnose
 //
 // Throw an exception if something is found inconsistent with
@@ -268,9 +255,9 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
 //
 // For debugging purposes only
 //
-void G4PolyPhiFace::Diagnose( G4VSolid *owner )
+void G4PolyPhiFace::Diagnose( G4VSolid* owner )
 {
-  G4PolyPhiFaceVertex   *corner = corners;
+  G4PolyPhiFaceVertex* corner = corners;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4ThreeVector test(corner->x, corner->y, corner->z);
@@ -282,14 +269,11 @@ void G4PolyPhiFace::Diagnose( G4VSolid *owner )
   } while( ++corner < corners+numEdges );
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4PolyPhiFace::G4PolyPhiFace( __void__&)
-  : numEdges(0), edges(0), corners(0), rMin(0.), rMax(0.), zMin(0.), zMax(0.),
-    allBehind(false), kCarTolerance(0.), fSurfaceArea(0.), triangles(0)
+  : numEdges(0), rMin(0.), rMax(0.), zMin(0.), zMax(0.), kCarTolerance(0.)
 {
 }
 
@@ -307,7 +291,7 @@ G4PolyPhiFace::~G4PolyPhiFace()
 //
 // Copy constructor
 //
-G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
+G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace& source )
   : G4VCSGface()
 {
   CopyStuff( source );
@@ -317,7 +301,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
 //
 // Assignment operator
 //
-G4PolyPhiFace& G4PolyPhiFace::operator=( const G4PolyPhiFace &source )
+G4PolyPhiFace& G4PolyPhiFace::operator=( const G4PolyPhiFace& source )
 {
   if (this == &source)  { return *this; }
 
@@ -333,7 +317,7 @@ G4PolyPhiFace& G4PolyPhiFace::operator=( const G4PolyPhiFace &source )
 //
 // CopyStuff (protected)
 //
-void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
+void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace& source )
 {
   //
   // The simple stuff
@@ -347,7 +331,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   zMin    = source.zMin;
   zMax    = source.zMax;
   allBehind  = source.allBehind;
-  triangles  = 0;
+  triangles  = nullptr;
 
   kCarTolerance = source.kCarTolerance;
   fSurfaceArea = source.fSurfaceArea;
@@ -368,10 +352,10 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   //
   edges = new G4PolyPhiFaceEdge[numEdges];
 
-  G4PolyPhiFaceVertex *prev = corners+numEdges-1,
-                      *here = corners;
-  G4PolyPhiFaceEdge   *edge = edges,
-                      *sourceEdge = source.edges;
+  G4PolyPhiFaceVertex* prev = corners+numEdges-1,
+                     * here = corners;
+  G4PolyPhiFaceEdge*   edge = edges,
+                   *   sourceEdge = source.edges;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *edge = *sourceEdge;
@@ -380,18 +364,16 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   } while( ++sourceEdge, ++edge, prev=here, ++here < corners+numEdges );
 }
 
-
-//
 // Intersect
 //
-G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p,
-                                 const G4ThreeVector &v,
+G4bool G4PolyPhiFace::Intersect( const G4ThreeVector& p,
+                                 const G4ThreeVector& v,
                                        G4bool outgoing,
                                        G4double surfTolerance,
-                                       G4double &distance,
-                                       G4double &distFromSurface,
-                                       G4ThreeVector &aNormal,
-                                       G4bool &isAllBehind )
+                                       G4double& distance,
+                                       G4double& distFromSurface,
+                                       G4ThreeVector& aNormal,
+                                       G4bool& isAllBehind )
 {
   G4double normSign = outgoing ? +1 : -1;
   
@@ -437,11 +419,9 @@ G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p,
   return InsideEdgesExact( r, ip.z(), normSign, p, v );
 }
 
-
-//
 // Distance
 //
-G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, G4bool outgoing )
+G4double G4PolyPhiFace::Distance( const G4ThreeVector& p, G4bool outgoing )
 {
   G4double normSign = outgoing ? +1 : -1;
   //
@@ -480,14 +460,12 @@ G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, G4bool outgoing )
     return std::sqrt( distPhi*distPhi + distRZ2 );
   }
 }  
-  
 
-//
 // Inside
 //
-EInside G4PolyPhiFace::Inside( const G4ThreeVector &p,
+EInside G4PolyPhiFace::Inside( const G4ThreeVector& p,
                                      G4double tolerance, 
-                                     G4double *bestDistance )
+                                     G4double* bestDistance )
 {
   //
   // Get distance along phi, which if negative means the point
@@ -505,8 +483,8 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p,
   // Are we inside the face?
   //
   G4double distRZ2;
-  G4PolyPhiFaceVertex *base3Dnorm=0;
-  G4ThreeVector       *head3Dnorm=0;
+  G4PolyPhiFaceVertex* base3Dnorm = nullptr;
+  G4ThreeVector*       head3Dnorm = nullptr;
   
   if (InsideEdges( r, p.z(), &distRZ2, &base3Dnorm, &head3Dnorm ))
   {
@@ -552,15 +530,13 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p,
   }
 }  
 
-
-//
 // Normal
 //
 // This virtual member is simple for our planer shape,
 // which has only one normal
 //
-G4ThreeVector G4PolyPhiFace::Normal( const G4ThreeVector &p,
-                                           G4double *bestDistance )
+G4ThreeVector G4PolyPhiFace::Normal( const G4ThreeVector& p,
+                                           G4double* bestDistance )
 {
   //
   // Get distance along phi, which if negative means the point
@@ -596,8 +572,6 @@ G4ThreeVector G4PolyPhiFace::Normal( const G4ThreeVector &p,
   return normal;
 }
 
-
-//
 // Extent
 //
 // This actually isn't needed by polycone or polyhedra...
@@ -606,7 +580,7 @@ G4double G4PolyPhiFace::Extent( const G4ThreeVector axis )
 {
   G4double max = -kInfinity;
   
-  G4PolyPhiFaceVertex *corner = corners;
+  G4PolyPhiFaceVertex* corner = corners;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double here = axis.x()*corner->r*radial.x()
@@ -618,16 +592,14 @@ G4double G4PolyPhiFace::Extent( const G4ThreeVector axis )
   return max;
 }  
 
-
-//
 // CalculateExtent
 //
 // See notes in G4VCSGface
 //
 void G4PolyPhiFace::CalculateExtent( const EAxis axis, 
-                                     const G4VoxelLimits &voxelLimit,
-                                     const G4AffineTransform &transform,
-                                           G4SolidExtentList &extentList )
+                                     const G4VoxelLimits& voxelLimit,
+                                     const G4AffineTransform& transform,
+                                           G4SolidExtentList& extentList )
 {
   //
   // Construct a (sometimes big) clippable polygon, 
@@ -636,7 +608,7 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
   //
   G4ClippablePolygon polygon;
   
-  G4PolyPhiFaceVertex *corner = corners;
+  G4PolyPhiFaceVertex* corner = corners;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4ThreeVector point( 0, 0, corner->z );
@@ -658,12 +630,6 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
   }
 }
 
-
-//
-//-------------------------------------------------------
-  
-  
-//
 // InsideEdgesExact
 //
 // Decide if the point in r,z is inside the edges of our face,
@@ -681,8 +647,8 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
 //
 G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
                                         G4double normSign,
-                                  const G4ThreeVector &p,
-                                  const G4ThreeVector &v )
+                                  const G4ThreeVector& p,
+                                  const G4ThreeVector& v )
 {
   //
   // Quick check of extent
@@ -743,7 +709,7 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
       G4double nextZ;
       do    // Loop checking, 13.08.2015, G.Cosmo
       {
-        next++;
+        ++next;
         if (next == corners+numEdges) next = corners;
 
         nextZ = ExactZOrder( z, qx, qy, qz, v, normSign, next );
@@ -767,9 +733,9 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
     G4double aboveOrBelow = normSign*qa.cross(qb).dot(v);
     
     if (aboveOrBelow > 0) 
-      answer++;
+      ++answer;
     else if (aboveOrBelow < 0)
-      answer--;
+      --answer;
     else
     {
       //
@@ -783,10 +749,8 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
   
   return answer!=0;
 }
-  
-  
-//
-// InsideEdges (don't care aboud distance)
+
+// InsideEdges (don't care about distance)
 //
 // Decide if the point in r,z is inside the edges of our face
 //
@@ -808,9 +772,8 @@ G4bool G4PolyPhiFace::InsideEdgesExact( G4double r, G4double z,
 //
 // See "Point in Polyon Strategies", Eric Haines [Graphic Gems IV]  pp. 24-46
 //
-// My algorithm below is rather unique, but is based on code needed to
-// calculate the distance to the shape. I left it in here because ...
-// well ... to test it better.
+// The algorithm below is rather unique, but is based on code needed to
+// calculate the distance to the shape. Left here for testing...
 //
 G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z )
 {
@@ -828,24 +791,22 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z )
   return InsideEdges( r, z, &notUsed, 0 );
 }
 
-
-//
 // InsideEdges (care about distance)
 //
 // Decide if the point in r,z is inside the edges of our face
 //
 G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
-                                   G4double *bestDist2, 
-                                   G4PolyPhiFaceVertex **base3Dnorm, 
-                                   G4ThreeVector **head3Dnorm )
+                                   G4double* bestDist2, 
+                                   G4PolyPhiFaceVertex** base3Dnorm, 
+                                   G4ThreeVector** head3Dnorm )
 {
   G4double bestDistance2 = kInfinity;
-  G4bool   answer = 0;
+  G4bool answer = false;
   
-  G4PolyPhiFaceEdge *edge = edges;
+  G4PolyPhiFaceEdge* edge = edges;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
-    G4PolyPhiFaceVertex *testMe;
+    G4PolyPhiFaceVertex* testMe;
     //
     // Get distance perpendicular to the edge
     //
@@ -876,7 +837,7 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
     }
     else
     {
-      testMe = 0;
+      testMe = nullptr;
     }
     
     //
@@ -911,14 +872,13 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
   return answer;
 }
 
-//
 // Calculation of Surface Area of a Triangle 
 // In the same time Random Point in Triangle is given
 //
 G4double G4PolyPhiFace::SurfaceTriangle( G4ThreeVector p1,
                                          G4ThreeVector p2,
                                          G4ThreeVector p3,
-                                         G4ThreeVector *p4 )
+                                         G4ThreeVector* p4 )
 {
   G4ThreeVector v, w;
   
@@ -931,7 +891,6 @@ G4double G4PolyPhiFace::SurfaceTriangle( G4ThreeVector p1,
   return 0.5*(v.cross(w)).mag();
 }
 
-//
 // Compute surface area
 //
 G4double G4PolyPhiFace::SurfaceArea()
@@ -940,7 +899,6 @@ G4double G4PolyPhiFace::SurfaceArea()
   return fSurfaceArea;
 }
 
-//
 // Return random point on face
 //
 G4ThreeVector G4PolyPhiFace::GetPointOnFace()
@@ -953,7 +911,6 @@ G4ThreeVector G4PolyPhiFace::GetPointOnFace()
 // Auxiliary Functions used for Finding the PointOnFace using Triangulation
 //
 
-//
 // Calculation of 2*Area of Triangle with Sign
 //
 G4double G4PolyPhiFace::Area2( G4TwoVector a,
@@ -964,7 +921,6 @@ G4double G4PolyPhiFace::Area2( G4TwoVector a,
           (c.x()-a.x())*(b.y()-a.y()));
 }
 
-//
 // Boolean function for sign of Surface
 //
 G4bool G4PolyPhiFace::Left( G4TwoVector a,
@@ -974,7 +930,6 @@ G4bool G4PolyPhiFace::Left( G4TwoVector a,
   return Area2(a,b,c)>0;
 }
 
-//
 // Boolean function for sign of Surface
 //
 G4bool G4PolyPhiFace::LeftOn( G4TwoVector a,
@@ -984,7 +939,6 @@ G4bool G4PolyPhiFace::LeftOn( G4TwoVector a,
   return Area2(a,b,c)>=0;
 }
 
-//
 // Boolean function for sign of Surface
 //
 G4bool G4PolyPhiFace::Collinear( G4TwoVector a,
@@ -994,7 +948,6 @@ G4bool G4PolyPhiFace::Collinear( G4TwoVector a,
   return Area2(a,b,c)==0;
 }
 
-//
 // Boolean function for finding "Proper" Intersection
 // That means Intersection of two lines segments (a,b) and (c,d)
 // 
@@ -1010,7 +963,6 @@ G4bool G4PolyPhiFace::IntersectProp( G4TwoVector a,
   return Positive && (!Left(c,d,a)^!Left(c,d,b));
 }
 
-//
 // Boolean function for determining if Point c is between a and b
 // For the tree points(a,b,c) on the same line
 //
@@ -1030,7 +982,6 @@ G4bool G4PolyPhiFace::Between( G4TwoVector a, G4TwoVector b, G4TwoVector c )
   }
 }
 
-//
 // Boolean function for finding Intersection "Proper" or not
 // Between two line segments (a,b) and (c,d)
 //
@@ -1049,12 +1000,11 @@ G4bool G4PolyPhiFace::Intersect( G4TwoVector a,
    { return false; }
 }
 
-//
 // Boolean Diagonalie help to determine 
 // if diagonal s of segment (a,b) is convex or reflex
 //
-G4bool G4PolyPhiFace::Diagonalie( G4PolyPhiFaceVertex *a,
-                                  G4PolyPhiFaceVertex *b )
+G4bool G4PolyPhiFace::Diagonalie( G4PolyPhiFaceVertex* a,
+                                  G4PolyPhiFaceVertex* b )
 {
   G4PolyPhiFaceVertex   *corner = triangles;
   G4PolyPhiFaceVertex   *corner_next=triangles;
@@ -1083,11 +1033,10 @@ G4bool G4PolyPhiFace::Diagonalie( G4PolyPhiFaceVertex *a,
   return true;
 }
 
-//
 // Boolean function that determine if b is Inside Cone (a0,a,a1)
 // being a the center of the Cone
 //
-G4bool G4PolyPhiFace::InCone( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b )
+G4bool G4PolyPhiFace::InCone( G4PolyPhiFaceVertex* a, G4PolyPhiFaceVertex* b )
 {
   // a0,a and a1 are consecutive vertices
   //
@@ -1110,23 +1059,21 @@ G4bool G4PolyPhiFace::InCone( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b )
   }
 }
 
-//
 // Boolean function finding if Diagonal is possible
 // inside Polycone or PolyHedra
 //
-G4bool G4PolyPhiFace::Diagonal( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b )
+G4bool G4PolyPhiFace::Diagonal( G4PolyPhiFaceVertex* a, G4PolyPhiFaceVertex* b )
 { 
   return InCone(a,b) && InCone(b,a) && Diagonalie(a,b);
 }
 
-//
 // Initialisation for Triangulisation by ear tips
 // For details see "Computational Geometry in C" by Joseph O'Rourke
 //
 void G4PolyPhiFace::EarInit()
 {
-  G4PolyPhiFaceVertex *corner = triangles;
-  G4PolyPhiFaceVertex *c_prev,*c_next;
+  G4PolyPhiFaceVertex* corner = triangles;
+  G4PolyPhiFaceVertex* c_prev, *c_next;
   
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
@@ -1143,7 +1090,6 @@ void G4PolyPhiFace::EarInit()
   } while( corner!=triangles );
 }
 
-//
 // Triangulisation by ear tips for Polycone or Polyhedra
 // For details see "Computational Geometry in C" by Joseph O'Rourke
 //
@@ -1152,9 +1098,9 @@ void G4PolyPhiFace::Triangulate()
   // The copy of Polycone is made and this copy is reordered in order to 
   // have a list of triangles. This list is used for GetPointOnFace().
 
-  G4PolyPhiFaceVertex *tri_help = new G4PolyPhiFaceVertex[numEdges];
+  G4PolyPhiFaceVertex* tri_help = new G4PolyPhiFaceVertex[numEdges];
   triangles = tri_help;
-  G4PolyPhiFaceVertex *triang = triangles;
+  G4PolyPhiFaceVertex* triang = triangles;
 
   std::vector<G4double> areas;
   std::vector<G4ThreeVector> points;
@@ -1164,8 +1110,8 @@ void G4PolyPhiFace::Triangulate()
 
   // Make copy for prev/next for triang=corners
   //
-  G4PolyPhiFaceVertex *helper = corners;
-  G4PolyPhiFaceVertex *helper2 = corners;
+  G4PolyPhiFaceVertex* helper  = corners;
+  G4PolyPhiFaceVertex* helper2 = corners;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     triang->r = helper->r;
@@ -1235,7 +1181,7 @@ void G4PolyPhiFace::Triangulate()
         v1->next=v3;
         v3->prev=v1;
         triangles=v3; // In case the head was v2
-        n--;
+        --n;
  
         break; // out of inner loop
       }        // end if ear found
@@ -1244,7 +1190,7 @@ void G4PolyPhiFace::Triangulate()
     
     } while( v2!=triangles );
 
-    i++;
+    ++i;
     if(i>=max_n_loops)
     {
       G4Exception( "G4PolyPhiFace::Triangulation()",
@@ -1294,5 +1240,5 @@ void G4PolyPhiFace::Triangulate()
   } while( i<numEdges-2 );
  
   delete [] tri_help;
-  tri_help = 0;
+  tri_help = nullptr;
 }

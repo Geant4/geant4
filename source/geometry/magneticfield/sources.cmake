@@ -29,7 +29,6 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4magneticfield
     HEADERS 
         G4BFieldIntegrationDriver.hh
-        G4BFieldIntegrationDriver.icc
         G4BogackiShampine23.hh
         G4BogackiShampine45.hh
         G4BulirschStoer.hh
@@ -107,6 +106,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4NystromRK4.icc
         G4QuadrupoleMagField.hh
         G4RepleteEofM.hh
+        G4SextupoleMagField.hh
         G4RKG3_Stepper.hh
         G4RK547FEq1.hh
         G4RK547FEq2.hh
@@ -123,6 +123,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4UniformMagField.hh
         G4VIntegrationDriver.hh
     SOURCES
+        G4BFieldIntegrationDriver.cc
         G4BogackiShampine23.cc
         G4BogackiShampine45.cc
         G4BulirschStoer.cc
@@ -177,6 +178,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4NystromRK4.cc
         G4QuadrupoleMagField.cc
         G4RepleteEofM.cc
+        G4SextupoleMagField.cc
         G4RKG3_Stepper.cc
         G4RK547FEq1.cc
         G4RK547FEq2.cc

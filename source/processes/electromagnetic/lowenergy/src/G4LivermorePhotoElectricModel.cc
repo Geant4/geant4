@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // Author: Sebastien Incerti
 //         30 October 2008
 //         on base of G4LowEnergyPhotoElectric developed by A.Forti and M.G.Pia
@@ -57,6 +56,11 @@ G4int                  G4LivermorePhotoElectricModel::fNShellsUsed[] = {0};
 G4ElementData*         G4LivermorePhotoElectricModel::fShellCrossSection = nullptr;
 G4Material*            G4LivermorePhotoElectricModel::fWater = nullptr;
 G4double               G4LivermorePhotoElectricModel::fWaterEnergyLimit = 0.0;
+G4String               G4LivermorePhotoElectricModel::fDataDirectory = "";
+
+#ifdef G4MULTITHREADED
+  G4Mutex G4LivermorePhotoElectricModel::livPhotoeffMutex = G4MUTEX_INITIALIZER;
+#endif
 
 using namespace std;
 
@@ -131,8 +135,6 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
         
         if(!fShellCrossSection) { fShellCrossSection = new G4ElementData(); }
         
-        char* path = getenv("G4LEDATA");
-        
         G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
         G4int numOfCouples = theCoupleTable->GetTableSize();
@@ -146,8 +148,7 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
             
             for (G4int j=0; j<nelm; ++j) {
 	      G4int Z = std::min(maxZ, (*theElementVector)[j]->GetZasInt());
-	      if((!fCrossSectionLE[Z] && 1>fNShells[Z]) || 
-		 (!fCrossSection[Z] && (1<=fNShells[Z])) ) { ReadData(Z, path); }
+	      if(!fCrossSection[Z]) { ReadData(Z); }
             }
         }
     }
@@ -216,20 +217,16 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
     }
     G4double cs = 0.0;
     G4int Z = G4lrint(ZZ);
-    if(Z < 1 || Z >= maxZ) { return cs; }
+    if(Z >= maxZ) { return cs; }
     // if element was not initialised
     
     // do initialisation safely for MT mode
-    if((!fCrossSectionLE[Z] && 1>fNShells[Z]) || (!fCrossSection[Z] && (1<=fNShells[Z])) ) {
-        InitialiseForElement(0, Z);
-        if(!fCrossSectionLE[Z] && !fCrossSection[Z]) { return cs; }
-    }
+    if(!fCrossSection[Z]) { InitialiseForElement(theGamma, Z); }
+
     //7: rows in the parameterization file; 5: number of parameters
     G4int idx = fNShells[Z]*7 - 5;
     
-    if (energy < (*(fParamHigh[Z]))[idx-1]) {
-        energy = (*(fParamHigh[Z]))[idx-1];
-    }
+    energy = std::max(energy, (*(fParamHigh[Z]))[idx-1]);
     
     G4double x1 = 1.0/energy;
     G4double x2 = x1*x1;
@@ -286,8 +283,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
         G4cout << "G4LivermorePhotoElectricModel::SampleSecondaries() Egamma(keV)= "
         << gammaEnergy/keV << G4endl;
     }
-    
-    
+        
     // kill incident photon
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.);
@@ -317,7 +313,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
     if(Z >= maxZ) { Z = maxZ-1; }
     
     // element was not initialised gamma should be absorbed
-    if(!fCrossSectionLE[Z] && !fCrossSection[Z]) {
+    if(!fCrossSection[Z]) {
         fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);
         return;
     }
@@ -328,8 +324,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
     if(nn > 1)
     {
         if(gammaEnergy >= (*(fParamHigh[Z]))[0])
-        {
-            
+        {            
             G4double x1 = 1.0/gammaEnergy;
             G4double x2 = x1*x1;
             G4double x3 = x2*x1;
@@ -363,8 +358,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
                     if(cs >= cs0) { break; }
                 }
             }
-            if(shellIdx >= nn) { shellIdx = nn-1; }
-            
+            if(shellIdx >= nn) { shellIdx = nn-1; }            
         }
         else if(gammaEnergy >= (*(fParamLow[Z]))[0])
         {
@@ -422,8 +416,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
         }
     }
     // END: SAMPLING OF THE SHELL
-    
-    
+        
     G4double bindingEnergy = (*(fParamHigh[Z]))[shellIdx*7 + 1];
     //G4cout << "Z= " << Z << " shellIdx= " << shellIdx
     //       << " nShells= " << fNShells[Z]
@@ -441,8 +434,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
     // If binding energy of the selected shell is larger than photon energy
     //    do not generate secondaries
     if(gammaEnergy < bindingEnergy) {
-        fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);
-        
+        fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);    
         return;
     }
     
@@ -502,8 +494,28 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void
-G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
+const G4String& G4LivermorePhotoElectricModel::FindDirectoryPath()
+{
+  // check environment variable
+  // build the complete string identifying the file with the data set
+  if(fDataDirectory.empty()) {
+    const char* path = std::getenv("G4LEDATA");
+    if (path) {
+      std::ostringstream ost;
+      ost << path << "/livermore/phot_epics2014/";
+      fDataDirectory = ost.str();
+    } else {
+      G4Exception("G4SeltzerBergerModel::FindDirectoryPath()","em0006",
+                  FatalException,
+                  "Environment variable G4LEDATA not defined");
+    }
+  }
+  return fDataDirectory;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LivermorePhotoElectricModel::ReadData(G4int Z)
 {
     if (verboseLevel > 1)
     {
@@ -511,28 +523,14 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
         << G4endl;
     }
     
-    if(fCrossSection[Z] || fCrossSectionLE[Z]) { return; }
+    if(fCrossSection[Z]) { return; }
     
-    const char* datadir = path;
-    
-    if(!datadir)
-    {
-        datadir = getenv("G4LEDATA");
-        if(!datadir)
-        {
-            G4Exception("G4LivermorePhotoElectricModel::ReadData()",
-                        "em0006",FatalException,
-                        "Environment variable G4LEDATA not defined");
-            return;
-        }
-    }
-
     // spline for photoeffect total x-section above K-shell 
     // but below the parameterized ones
     fCrossSection[Z] = new G4LPhysicsFreeVector();
     fCrossSection[Z]->SetSpline(true);
     std::ostringstream ost;
-    ost << datadir << "/livermore/phot_epics2014/pe-cs-" << Z <<".dat";
+    ost << FindDirectoryPath() << "pe-cs-" << Z <<".dat";
     std::ifstream fin(ost.str().c_str());
     if( !fin.is_open()) {
         G4ExceptionDescription ed;
@@ -542,14 +540,14 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
                     "em0003",FatalException,
                     ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
         return;
-    } else {
-        if(verboseLevel > 3) { G4cout << "File " << ost.str().c_str()
-            << " is opened by G4LivermorePhotoElectricModel" << G4endl;}
-        fCrossSection[Z]->Retrieve(fin, true);
-        fCrossSection[Z]->ScaleVector(MeV, barn);
-        fin.close();
+    } 
+    if(verboseLevel > 3) { 
+        G4cout << "File " << ost.str().c_str()
+               << " is opened by G4LivermorePhotoElectricModel" << G4endl;
     }
-    
+    fCrossSection[Z]->Retrieve(fin, true);
+    fCrossSection[Z]->ScaleVector(MeV, barn);
+    fin.close();
     
     // read high-energy fit parameters
     fParamHigh[Z] = new std::vector<G4double>;
@@ -557,7 +555,7 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
     G4int n2 = 0;
     G4double x;
     std::ostringstream ost1;
-    ost1 << datadir << "/livermore/phot_epics2014/pe-high-" << Z <<".dat";
+    ost1 << fDataDirectory << "pe-high-" << Z <<".dat";
     std::ifstream fin1(ost1.str().c_str());
     if( !fin1.is_open()) {
         G4ExceptionDescription ed;
@@ -567,35 +565,34 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
                     "em0003",FatalException,
                     ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
         return;
-    } else {
-        if(verboseLevel > 3) {
-            G4cout << "File " << ost1.str().c_str()
-            << " is opened by G4LivermorePhotoElectricModel" << G4endl;
-        }
-        fin1 >> n1;
-        if(fin1.fail()) { return; }
-        if(0 > n1 || n1 >= INT_MAX) { n1 = 0; }
-        
-        fin1 >> n2;
-        if(fin1.fail()) { return; }
-        if(0 > n2 || n2 >= INT_MAX) { n2 = 0; }
-        
-        fin1 >> x;
-        if(fin1.fail()) { return; }
-        
-        fNShells[Z] = n1;
-        fParamHigh[Z]->reserve(7*n1+1);
-        fParamHigh[Z]->push_back(x*MeV);
-        for(G4int i=0; i<n1; ++i) {
-            for(G4int j=0; j<7; ++j) {
-                fin1 >> x;
-                if(0 == j) { x *= MeV; }
-                else       { x *= barn; }
-                fParamHigh[Z]->push_back(x);
-            }
-        }
-        fin1.close();
     }
+    if(verboseLevel > 3) {
+        G4cout << "File " << ost1.str().c_str()
+	       << " is opened by G4LivermorePhotoElectricModel" << G4endl;
+    }
+    fin1 >> n1;
+    if(fin1.fail()) { return; }
+    if(0 > n1 || n1 >= INT_MAX) { n1 = 0; }
+        
+    fin1 >> n2;
+    if(fin1.fail()) { return; }
+    if(0 > n2 || n2 >= INT_MAX) { n2 = 0; }
+        
+    fin1 >> x;
+    if(fin1.fail()) { return; }
+        
+    fNShells[Z] = n1;
+    fParamHigh[Z]->reserve(7*n1+1);
+    fParamHigh[Z]->push_back(x*MeV);
+    for(G4int i=0; i<n1; ++i) {
+        for(G4int j=0; j<7; ++j) {
+            fin1 >> x;
+            if(0 == j) { x *= MeV; }
+            else       { x *= barn; }
+            fParamHigh[Z]->push_back(x);
+        }
+    }
+    fin1.close();
     
     // read low-energy fit parameters
     fParamLow[Z] = new std::vector<G4double>;
@@ -603,7 +600,7 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
     G4int n2_low = 0;
     G4double x_low;
     std::ostringstream ost1_low;
-    ost1_low << datadir << "/livermore/phot_epics2014/pe-low-" << Z <<".dat";
+    ost1_low << fDataDirectory << "pe-low-" << Z <<".dat";
     std::ifstream fin1_low(ost1_low.str().c_str());
     if( !fin1_low.is_open()) {
         G4ExceptionDescription ed;
@@ -613,47 +610,43 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
                     "em0003",FatalException,
                     ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
         return;
-    } else {
-        if(verboseLevel > 3) {
-            G4cout << "File " << ost1_low.str().c_str()
-            << " is opened by G4LivermorePhotoElectricModel" << G4endl;
-        }
-        fin1_low >> n1_low;
-        if(fin1_low.fail()) { return; }
-        if(0 > n1_low || n1_low >= INT_MAX) { n1_low = 0; }
-        
-        fin1_low >> n2_low;
-        if(fin1_low.fail()) { return; }
-        if(0 > n2_low || n2_low >= INT_MAX) { n2_low = 0; }
-        
-        fin1_low >> x_low;
-        if(fin1_low.fail()) { return; }
-        
-        fNShells[Z] = n1_low;
-        fParamLow[Z]->reserve(7*n1_low+1);
-        fParamLow[Z]->push_back(x_low*MeV);
-        for(G4int i=0; i<n1_low; ++i) {
-            for(G4int j=0; j<7; ++j) {
-                fin1_low >> x_low;
-                if(0 == j) { x_low *= MeV; }
-                else       { x_low *= barn; }
-                fParamLow[Z]->push_back(x_low);
-            }
-        }
-        fin1_low.close();
+    } 
+    if(verboseLevel > 3) {
+        G4cout << "File " << ost1_low.str().c_str()
+               << " is opened by G4LivermorePhotoElectricModel" << G4endl;
     }
-    
+    fin1_low >> n1_low;
+    if(fin1_low.fail()) { return; }
+    if(0 > n1_low || n1_low >= INT_MAX) { n1_low = 0; }
+        
+    fin1_low >> n2_low;
+    if(fin1_low.fail()) { return; }
+    if(0 > n2_low || n2_low >= INT_MAX) { n2_low = 0; }
+        
+    fin1_low >> x_low;
+    if(fin1_low.fail()) { return; }
+        
+    fNShells[Z] = n1_low;
+    fParamLow[Z]->reserve(7*n1_low+1);
+    fParamLow[Z]->push_back(x_low*MeV);
+    for(G4int i=0; i<n1_low; ++i) {
+        for(G4int j=0; j<7; ++j) {
+	    fin1_low >> x_low;
+	    if(0 == j) { x_low *= MeV; }
+	    else       { x_low *= barn; }
+	    fParamLow[Z]->push_back(x_low);
+	}
+    }
+    fin1_low.close();
     
     // there is a possibility to use only main shells
     if(nShellLimit < n2) { n2 = nShellLimit; }
     fShellCrossSection->InitialiseForComponent(Z, n2);//number of shells
     fNShellsUsed[Z] = n2;
     
-    
-    
     if(1 < n2) {
         std::ostringstream ost2;
-        ost2 << datadir << "/livermore/phot_epics2014/pe-ss-cs-" << Z <<".dat";
+        ost2 << fDataDirectory << "pe-ss-cs-" << Z <<".dat";
         std::ifstream fin2(ost2.str().c_str());
         if( !fin2.is_open()) {
             G4ExceptionDescription ed;
@@ -663,32 +656,31 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
                         "em0003",FatalException,
                         ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
             return;
-        } else {
-            if(verboseLevel > 3) {
-                G4cout << "File " << ost2.str().c_str()
-                << " is opened by G4LivermorePhotoElectricModel" << G4endl;
-            }
-            
-            G4int n3, n4;
-            G4double y;
-            for(G4int i=0; i<n2; ++i) {
-                fin2 >> x >> y >> n3 >> n4;
-                G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(n3, x, y);
-                for(G4int j=0; j<n3; ++j) {
-                    fin2 >> x >> y;
-                    v->PutValues(j, x*MeV, y*barn);
-                }
-                fShellCrossSection->AddComponent(Z, n4, v);
-            }
-            fin2.close();
         }
+	if(verboseLevel > 3) {
+	    G4cout << "File " << ost2.str().c_str()
+		   << " is opened by G4LivermorePhotoElectricModel" << G4endl;
+	}
+            
+	G4int n3, n4;
+	G4double y;
+	for(G4int i=0; i<n2; ++i) {
+	    fin2 >> x >> y >> n3 >> n4;
+	    G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(n3, x, y);
+	    for(G4int j=0; j<n3; ++j) {
+	        fin2 >> x >> y;
+		v->PutValues(j, x*MeV, y*barn);
+	    }
+	    fShellCrossSection->AddComponent(Z, n4, v);
+	}
+	fin2.close();
     }
     
     // no spline for photoeffect total x-section below K-shell
     if(1 < fNShells[Z]) {
         fCrossSectionLE[Z] = new G4LPhysicsFreeVector();
         std::ostringstream ost3;
-        ost3 << datadir << "/livermore/phot_epics2014/pe-le-cs-" << Z <<".dat";
+        ost3 << fDataDirectory << "pe-le-cs-" << Z <<".dat";
         std::ifstream fin3(ost3.str().c_str());
         if( !fin3.is_open()) {
             G4ExceptionDescription ed;
@@ -698,52 +690,48 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
                         "em0003",FatalException,
                         ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
             return;
-        } else {
-            if(verboseLevel > 3) {
-                G4cout << "File " << ost3.str().c_str()
-                << " is opened by G4LivermorePhotoElectricModel" << G4endl;
-            }
-            fCrossSectionLE[Z]->Retrieve(fin3, true);
-            fCrossSectionLE[Z]->ScaleVector(MeV, barn);
-            fin3.close();
         }
+	if(verboseLevel > 3) {
+	    G4cout << "File " << ost3.str().c_str()
+		   << " is opened by G4LivermorePhotoElectricModel" << G4endl;
+	}
+	fCrossSectionLE[Z]->Retrieve(fin3, true);
+	fCrossSectionLE[Z]->ScaleVector(MeV, barn);
+	fin3.close();
     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LivermorePhotoElectricModel::GetBindingEnergy(G4double ZZ, G4int shell)
+G4double G4LivermorePhotoElectricModel::GetBindingEnergy(G4int Z, G4int shell)
 {
-    G4int Z = G4lrint(ZZ);
-    //Control on Z
     if(Z < 1 || Z >= maxZ) { return -1;} //If Z is out of the supported return 0
     //If necessary load data for Z
-    InitialiseForElement(0, Z);
-    if(!fCrossSectionLE[Z] && !fCrossSection[Z]) { return -1; } //If there are not data for that Z return -1
-    if(shell < 0 || shell >= fNShellsUsed[Z]) { return -1;}
+    InitialiseForElement(theGamma, Z);
+    if(!fCrossSection[Z] || shell < 0 || shell >= fNShellsUsed[Z]) { return -1; } 
+
     if(Z>2)
         return fShellCrossSection->GetComponentDataByIndex(Z, shell)->Energy(0);
     else
-        return fCrossSection[Z]->Energy(0);
-    
+        return fCrossSection[Z]->Energy(0);    
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4AutoLock.hh"
-namespace { G4Mutex LivermorePhotoElectricModelMutex = G4MUTEX_INITIALIZER; }
 
 void G4LivermorePhotoElectricModel::InitialiseForElement(
                 const G4ParticleDefinition*, G4int Z)
 {
-    G4AutoLock l(&LivermorePhotoElectricModelMutex);
-    //  G4cout << "G4LivermorePhotoElectricModel::InitialiseForElement Z= "
-    //   << Z << G4endl;
-    
-    if((!fCrossSectionLE[Z] && 1>fNShells[Z]) || 
-       (!fCrossSection[Z] && (1<=fNShells[Z])) ) {ReadData(Z); }
-    l.unlock();
+  if (!fCrossSection[Z]) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&livPhotoeffMutex);
+    if (!fCrossSection[Z]) {
+#endif
+      ReadData(Z);
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&livPhotoeffMutex);
+#endif
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

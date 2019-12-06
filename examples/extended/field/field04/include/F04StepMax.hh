@@ -42,9 +42,12 @@ class F04StepMax : public G4VDiscreteProcess
   public:
 
     F04StepMax(const G4String& processName = "UserStepMax");
-    F04StepMax(F04StepMax &);
 
     virtual ~F04StepMax();
+
+    F04StepMax(const F04StepMax&) = delete;
+    F04StepMax& operator=(const F04StepMax&) = delete;
+
 
     virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -63,13 +66,6 @@ class F04StepMax : public G4VDiscreteProcess
     virtual G4double GetMeanFreePath(const G4Track&,
                                      G4double,
                                      G4ForceCondition*);
-
-  private:
-
-    // hide assignment operator as private
-    F04StepMax & operator=(const F04StepMax &right);
-    F04StepMax(const F04StepMax&);
-
   private:
 
     G4double fMaxChargedStep;

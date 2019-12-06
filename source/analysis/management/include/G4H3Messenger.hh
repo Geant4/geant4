@@ -68,6 +68,9 @@ class G4H3Messenger : public G4UImessenger
     std::unique_ptr<G4UIcommand>  fSetH3XAxisCmd;   
     std::unique_ptr<G4UIcommand>  fSetH3YAxisCmd;   
     std::unique_ptr<G4UIcommand>  fSetH3ZAxisCmd; 
+    std::unique_ptr<G4UIcommand>  fSetH3XAxisLogCmd;
+    std::unique_ptr<G4UIcommand>  fSetH3YAxisLogCmd;
+    std::unique_ptr<G4UIcommand>  fSetH3ZAxisLogCmd;
 
     G4int fXId;
     G4int fYId;

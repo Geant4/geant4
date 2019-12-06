@@ -63,15 +63,15 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
-    XMFLAGS   := -I/sw/include
+    XMFLAGS   := -I/usr/local/include
 #   XMFLAGS   := -I/usr/X11/include          ##### some installations.
   endif
   ifndef XMLIBS
-    XMLIBS    := -L/sw/lib -lXm -lXpm
+    XMLIBS    := -L/usr/local/lib -lXm -lXpm
 #   XMLIBS    := -L/usr/X11/lib -lXm -lXpm   ##### some installations.
   endif
   ifndef XAWFLAGS
-    XAWFLAGS   := -I/sw/include
+    XAWFLAGS   := -I/usr/local/include
 #   XAWFLAGS   := -I/usr/X11/include         ##### some installations.
   endif
   ifndef XAWLIBS

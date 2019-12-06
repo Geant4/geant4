@@ -124,7 +124,7 @@ ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol,
             }
             if(!found)
             {
-                G4int matIndex = GetMaterialIndex(copyNo);
+                G4int matIndex = G4int(GetMaterialIndex(copyNo));
                 static uintmax_t n = 0;
                 if(n++ < 100)
                     G4cout << "Unknown material name " << mateName

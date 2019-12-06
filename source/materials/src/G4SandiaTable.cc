@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
 // 10.06.97 created. V. Grichine
@@ -64,7 +62,7 @@ G4int G4SandiaTable::fCumulInterval[] = {0};
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4SandiaTable::G4SandiaTable(G4Material* material)
+G4SandiaTable::G4SandiaTable(const G4Material* material)
   : fMaterial(material)
 {
   fMatSandiaMatrix    = nullptr; 
@@ -659,7 +657,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 
 G4SandiaTable::G4SandiaTable(G4int matIndex)
 { 
-  fMaterial           = 0;
+  fMaterial           = nullptr;
   fMatNbOfIntervals   = 0;
   fMatSandiaMatrix    = 0; 
   fMatSandiaMatrixPAI = 0;
@@ -689,7 +687,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
 
 G4SandiaTable::G4SandiaTable()
 { 
-  fMaterial           = 0;
+  fMaterial           = nullptr;
   fMatNbOfIntervals   = 0;
   fMatSandiaMatrix    = 0; 
   fMatSandiaMatrixPAI = 0;
@@ -704,7 +702,7 @@ G4SandiaTable::G4SandiaTable()
 
 ////////////////////////////////////////////////////////////////////////////////
   
-void G4SandiaTable::Initialize(G4Material* mat)
+void G4SandiaTable::Initialize(const G4Material* mat)
 {
   fMaterial = mat;
   ComputeMatSandiaMatrixPAI();

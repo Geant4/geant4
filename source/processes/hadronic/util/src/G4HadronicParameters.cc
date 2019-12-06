@@ -61,5 +61,9 @@ G4HadronicParameters::~G4HadronicParameters() {}
 
 G4HadronicParameters::G4HadronicParameters() {
   fMaxEnergy = 100.0*CLHEP::TeV;
+  fMinEnergyTransitionFTF_Cascade = 3.0*CLHEP::GeV;
+  fMaxEnergyTransitionFTF_Cascade = 6.0*CLHEP::GeV;
+  fMinEnergyTransitionQGS_FTF = 12.0*CLHEP::GeV;
+  fMaxEnergyTransitionQGS_FTF = 25.0*CLHEP::GeV;
 }
 

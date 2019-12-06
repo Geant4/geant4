@@ -68,6 +68,35 @@ public: //operators
 public:
   double length() const {return parent::length(::sqrt);}
   double normalize() {return parent::normalize(::sqrt);}
+public: //for g4dum/G4ThreeVector :
+  double mag2() const {return m_data[0]*m_data[0]+m_data[1]*m_data[1]+m_data[2]*m_data[2];}
+  void set(double a_0,double a_1,double a_2) {
+    m_data[0] = a_0;
+    m_data[1] = a_1;
+    m_data[2] = a_2;
+  }
+  void rotateUz(const vec3d& a_new_uz_vector) { //from CLHEP/ThreeVector.cc.
+    // a_new_uz_vector must be normalized !
+    double& dx = m_data[0];
+    double& dy = m_data[1];
+    double& dz = m_data[2];
+    double u1 = a_new_uz_vector.x();
+    double u2 = a_new_uz_vector.y();
+    double u3 = a_new_uz_vector.z();
+    double up = u1*u1 + u2*u2;
+    if (up>0) {
+      up = std::sqrt(up);
+      double px = dx,  py = dy,  pz = dz;
+      dx = (u1*u3*px - u2*py)/up + u1*pz;
+      dy = (u2*u3*px + u1*py)/up + u2*pz;
+      dz =    -up*px +             u3*pz;
+    } else if (u3 < 0.) { // phi=0  teta=pi
+      dx = -dx; dz = -dz;
+    } else {
+    }
+    //return *this;
+  }
+
 
 private:static void check_instantiation() {vec3d v(0,0,0);v.set_value(1,1,1);}
 };

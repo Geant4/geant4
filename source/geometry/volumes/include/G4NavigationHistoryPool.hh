@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4NavigationHistoryPool
+// G4NavigationHistoryPool
 //
 // Class description:
 //
@@ -33,7 +31,6 @@
 // allocated by G4NavigationHistory. Allows for reuse of the vectors
 // allocated according to lifetime of G4NavigationHistory objects.
 
-// History:
 // 07.05.14 G.Cosmo Initial version
 // --------------------------------------------------------------------
 #ifndef G4NAVIGATIONHISTORYPOOL_HH

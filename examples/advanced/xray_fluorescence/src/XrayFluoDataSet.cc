@@ -135,9 +135,9 @@ G4bool XrayFluoDataSet::LoadData(const G4String& fileName)
   
   char* path;
 
-  path = getenv("XRAYDATA");
+  path = std::getenv("XRAYDATA");
   if (!path)
-    path = getenv("PWD");
+    path = std::getenv("PWD");
 
   //G4cout << path << G4endl;
   //G4cout << fileName << G4endl;

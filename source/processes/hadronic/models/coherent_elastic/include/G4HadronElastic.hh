@@ -60,6 +60,8 @@ public:
   // sample momentum transfer using Lab. momentum
   G4double SampleInvariantT(const G4ParticleDefinition* p, G4double plab,
 			    G4int Z, G4int A) override;
+  
+  G4double GetSlopeCof( const G4int pdg );
 
   inline void SetLowestEnergyLimit(G4double value);
 
@@ -82,6 +84,7 @@ private:
   G4ParticleDefinition* theAlpha;
 
   G4double lowestEnergyLimit;
+  G4int nwarn;
 };
 
 inline void G4HadronElastic::SetLowestEnergyLimit(G4double value)

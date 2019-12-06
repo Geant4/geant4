@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/AnnotatedFiles/G4THitsCollection.hh
+/// \file G4THitsCollection.hh
 /// \brief Definition of the G4THitsCollection class
 //
 //

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // class G4GRSVolume
 //
 // Class description:
@@ -36,14 +33,12 @@
 //
 // NOTE: The (optional) rotation matrix is copied
 
-// History:
-// - Created. Paul Kent, August 1996
+// Created: Paul Kent - August 1996
 // ----------------------------------------------------------------------
 #ifndef G4GRSVOLUME_HH
 #define G4GRSVOLUME_HH
 
 #include "G4VTouchable.hh"
-
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
@@ -53,29 +48,27 @@ class G4GRSVolume : public G4VTouchable
 {
   public:  // with description
 
-    G4GRSVolume(G4VPhysicalVolume *pVol,
-          const G4RotationMatrix *pRot,
-          const G4ThreeVector &tlate);
-    G4GRSVolume(G4VPhysicalVolume *pVol,
-          const G4RotationMatrix &rot,
-          const G4ThreeVector &tlate);
+    G4GRSVolume(G4VPhysicalVolume* pVol,
+          const G4RotationMatrix* pRot,
+          const G4ThreeVector& tlate);
+    G4GRSVolume(G4VPhysicalVolume* pVol,
+          const G4RotationMatrix& rot,
+          const G4ThreeVector& tlate);
     ~G4GRSVolume();
+
+    G4GRSVolume(const G4GRSVolume&) = delete;
+    G4GRSVolume& operator=(const G4GRSVolume&) = delete;
+      // Copy constructor and assignment operator not allowed
 
     inline G4VPhysicalVolume* GetVolume(G4int depth=0) const;
     inline G4VSolid* GetSolid(G4int depth=0) const;
     inline const G4ThreeVector& GetTranslation(G4int depth=0) const;
-    inline const G4RotationMatrix*  GetRotation(G4int depth=0) const;
-
-  private:
-
-    G4GRSVolume(const G4GRSVolume&);
-    G4GRSVolume& operator=(const G4GRSVolume&);
-      // Copy constructor and assignment operator NOT public
+    inline const G4RotationMatrix* GetRotation(G4int depth=0) const;
 
   private:
   
-    G4VPhysicalVolume *fvol;
-    G4RotationMatrix *frot;
+    G4VPhysicalVolume* fvol = nullptr;
+    G4RotationMatrix* frot = nullptr;
     G4ThreeVector ftlate;
 };
 

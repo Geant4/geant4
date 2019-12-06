@@ -51,12 +51,8 @@ class G4QGSMFragmentation:public G4VLongitudinalStringDecay
     G4bool operator!=(const G4QGSMFragmentation &right) const;
 
   private:
-    void SetMinMasses();
-    void SetMinimalStringMass(const G4FragmentingString  * const string);
-    void SetMinimalStringMass2(const G4double aValue);	
-
     virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
-    virtual G4bool IsFragmentable(const G4FragmentingString * const string);
+    virtual G4bool IsItFragmentable(const G4FragmentingString * const string);
 
     virtual G4bool SplitLast(G4FragmentingString * string, 
 	 	             G4KineticTrackVector * LeftVector, 
@@ -68,6 +64,13 @@ class G4QGSMFragmentation:public G4VLongitudinalStringDecay
     virtual G4KineticTrack * Splitup(G4FragmentingString *string, 
                                      G4FragmentingString *&newString);
 
+    // The hadron can be producet at QuarkSplitup or DiQuarkSplitup
+    // virtual G4ParticleDefinition * QuarkSplitup(G4ParticleDefinition* decay,
+    //	  	   		                   G4ParticleDefinition *&created);
+
+    virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
+                                                  G4ParticleDefinition *&created);
+
     virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
                                          G4FragmentingString * string, 
                                          G4FragmentingString * newString);
@@ -75,32 +78,42 @@ class G4QGSMFragmentation:public G4VLongitudinalStringDecay
     virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding, 
                                    G4ParticleDefinition* pHadron, G4double Px, G4double Py);
 
-    virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
-                                                  G4ParticleDefinition *&created);
+  private:
+    // model parameters
+    G4double arho;
+    G4double aphi;
+    G4double aJPs;        // alpha_J/Psi
+    G4double aUps;        // alpha_Y
+    G4double an;
+    G4double ala;
+
+    G4double alaC;
+    G4double alaB;
+    G4double aXi;
+    G4double aXiC;
+    G4double aXiB;
+    G4double aXiCC;
+    G4double aXiCB;
+    G4double aXiBB;
+
+    G4double aksi;
+    G4double alft;
+
+    G4double FFq2q[5][5][2];
+    G4double FFq2qq[5][15][2];
+    G4double FFqq2q[15][5][2];
+    G4double FFqq2qq[15][5][2];
 
   private:
-    // ------ For estimation of a minimal string mass ---------------
-    G4double Mass_of_light_quark;
-    G4double Mass_of_heavy_quark;
-    G4double Mass_of_string_junction;
+    void SetFFq2q();
+    void SetFFq2qq();
+    void SetFFqq2qq();
+    void SetFFqq2q();
 
-    G4double minMassQQbarStr[3][3];
-    G4double minMassQDiQStr[3][3][3];
-
-    // ------ An estimated minimal string mass ----------------------
-    G4double MinimalStringMass;
-    G4double MinimalStringMass2;
-
-    // model parameters
-    const G4double arho; 
-    const G4double aphi;  
-    const G4double an; 
-    const G4double ala;  
-    const G4double aksi; 
-    const G4double alft;
-
+    G4int IndexDiQ[5][5];
   };
 
 // Class G4QGSMFragmentation 
+
 #endif
 

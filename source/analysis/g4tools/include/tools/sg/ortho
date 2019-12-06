@@ -23,13 +23,11 @@ public:
 public:
   sf<float> height;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::ortho)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(height)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(height)
+    );
     return s_v;
   }
 private:
@@ -92,6 +90,8 @@ protected:
     a_t = hh;
   }
 };
+
+inline ortho* cast_ortho(base_camera& a_bcam) {return safe_cast<base_camera,ortho>(a_bcam);}
 
 }}
 

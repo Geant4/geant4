@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-11-19 I. Hrivnacova (spower-V10-05-00)
+- Fixed Doxygen warnings
+
 06-11-18 S. Incerti (spower-V10-04-05)
 - updated PhysicsList and spower.cc, replacing spower-V10-04-00
 

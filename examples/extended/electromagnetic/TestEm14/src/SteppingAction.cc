@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/src/SteppingAction.cc
+/// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
 // 

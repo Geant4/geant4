@@ -14,6 +14,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-11-19 I. Hrivnacova - tag exicsd-V10-05-01
+- Fixed formatting in .README.txt and Doxygen warnings
+
+01-11-19 V. Ivanchenko - tag exicsd-V10-05-00
+- icsd.mac - reduce statistics to 75 in order not to hit time 
+    limit nightly
+
 07-11-18 I. Hrivnacova - tag exicsd-V10-04-04
 - Updated plot.C for reading ntuples merged with row-wise mode
   (now default)

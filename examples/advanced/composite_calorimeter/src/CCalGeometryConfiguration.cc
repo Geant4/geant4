@@ -45,16 +45,16 @@ CCalGeometryConfiguration* CCalGeometryConfiguration::getInstance(){
 }
 
 
-int CCalGeometryConfiguration::getConstructFlag(const G4String& n) /*const*/ {
-  int flag = -1;
-  CCalGeometryConfIterator it = theConfiguration.find(n);
+G4int CCalGeometryConfiguration::getConstructFlag(const G4String& n) /*const*/ {
+  G4int flag = -1;
+  auto it = theConfiguration.find(n);
 
-  if (it != theConfiguration.end())
+  if (it != theConfiguration.cend())
     flag = (*it).second.ConstructFlag;
   else {
     G4cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
-	 << G4endl 
-	 << "       " << n << " not found in configuration file" << G4endl;
+         << G4endl 
+         << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return flag;
@@ -62,14 +62,14 @@ int CCalGeometryConfiguration::getConstructFlag(const G4String& n) /*const*/ {
 
 G4String CCalGeometryConfiguration::getFileName(const G4String& n) /*const*/ {
   G4String fn;
-  CCalGeometryConfIterator it = theConfiguration.find(n);
+  auto it = theConfiguration.find(n);
 
-  if (it != theConfiguration.end())
+  if (it != theConfiguration.cend())
     fn = (*it).second.FileName;
   else {
-    G4cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
-	 << G4endl 
-	 << "       " << n << " not found in configuration file" << G4endl;
+    G4cerr << "ERROR: In CCalGeometryConfiguration::getFileName(const G4String& n)" 
+         << G4endl 
+         << "       " << n << " not found in configuration file" << G4endl;
   }
 
   return fn;
@@ -80,25 +80,25 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
 
   ///////////////////////////////////////////////////////////////
   // Open the file
-  G4String pathName = getenv("CCAL_CONFPATH");
-  G4String fileenv  = getenv("CCAL_GEOMETRYCONF");
+  G4String pathName = std::getenv("CCAL_CONFPATH");
+  G4String fileenv  = std::getenv("CCAL_GEOMETRYCONF");
   if (!pathName || !fileenv) {
      G4ExceptionDescription ed;
      ed << "ERROR: CCAL_GEOMETRYCONF and/or CCAL_CONFPATH not set" << G4endl
-	<< "       Set them to the geometry configuration file/path" << G4endl;
+        << "       Set them to the geometry configuration file/path" << G4endl;
      G4Exception("CCalGeometryConfiguration::CCalGeometryConfiguration()",
-		 "ccal003",
-		 FatalException,ed);
+                 "ccal003",
+                 FatalException,ed);
   }
 
   G4cout << " ==> Opening file " << fileenv << "..." << G4endl;
   std::ifstream is;
-  bool ok = openGeomFile(is, pathName, fileenv);
+  G4bool ok = openGeomFile(is, pathName, fileenv);
   if (!ok)
     {
       G4Exception("CCalGeometryConfiguration::CCalGeometryConfiguration()",
-		 "ccal004",
-		 FatalException,"Unable to open input data file");
+                 "ccal004",
+                 FatalException,"Unable to open input data file");
     }
 
 
@@ -111,8 +111,8 @@ CCalGeometryConfiguration::CCalGeometryConfiguration():
     is >> gcinfo.ConstructFlag >> jump;
 #ifdef debug
     G4cout << "CCalGeometryConfiguration constructor: Read \"" << name 
-	 << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.ConstructFlag 
-	 << G4endl;
+         << " \"" << gcinfo.FileName << "\"" << tab << gcinfo.ConstructFlag 
+         << G4endl;
 #endif
     theConfiguration[name] = gcinfo;
   }

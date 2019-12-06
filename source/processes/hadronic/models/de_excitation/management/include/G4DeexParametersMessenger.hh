@@ -85,6 +85,7 @@ private:
 
   G4UIcmdWithAnInteger*      maxjCmd;
   G4UIcmdWithAnInteger*      verbCmd;
+  G4UIcmdWithAnInteger*      upCmd;
 
 };
 

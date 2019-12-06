@@ -62,7 +62,7 @@ public:
     theNDLDataM = 0;
 
     adjustResult = true;
-    if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+    if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
 
     theProjectile = G4Neutron::Neutron();
 

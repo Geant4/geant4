@@ -41,7 +41,6 @@
 #include "G4PiKBuilder.hh"
 #include "G4FTFPPiKBuilder.hh"
 #include "G4BertiniPiKBuilder.hh"
-#include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
@@ -52,10 +51,10 @@
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "G4CrossSectionDataSetRegistry.hh"
-
 #include "G4PhysListUtil.hh"
 #include "G4Threading.hh"
+
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -69,18 +68,18 @@ G4HadronPhysicsFTFP_BERT_TRV::G4HadronPhysicsFTFP_BERT_TRV(G4int) :
 G4HadronPhysicsFTFP_BERT_TRV::G4HadronPhysicsFTFP_BERT_TRV(const G4String& name, G4bool quasiElastic)
     :  G4HadronPhysicsFTFP_BERT(name,quasiElastic)
 {
-  //Change configuration parameters of FTFP_BERT
-  minFTFP_pion = 2.0 * GeV;
-  maxBERT_pion = 4.0 * GeV;
-  minFTFP_kaon = 2.0 * GeV;
-  maxBERT_kaon = 4.0 * GeV;
-  minFTFP_proton = 2.0 * GeV;
-  maxBERT_proton = 4.0 * GeV;
-  minFTFP_neutron = 2.0 * GeV;
-  maxBERT_neutron = 4.0 * GeV;
+  minFTFP_pion =    G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_pion =    G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  minFTFP_kaon =    G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_kaon =    G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  minFTFP_proton =  G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_proton =  G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  minFTFP_neutron = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_neutron = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   QuasiElastic = false;
 }
 
+/*
 void G4HadronPhysicsFTFP_BERT_TRV::DumpBanner()
 {
   G4cout << " Revised FTFTP_BERT_TRV - new threshold between BERT and FTFP "
@@ -89,6 +88,7 @@ void G4HadronPhysicsFTFP_BERT_TRV::DumpBanner()
   G4cout << "  -- quasiElastic was asked to be " << QuasiElastic
 	 << " and it is reset to " << false << G4endl;
 }
+*/
 
 void G4HadronPhysicsFTFP_BERT_TRV::Pion()
 {
@@ -112,20 +112,6 @@ void G4HadronPhysicsFTFP_BERT_TRV::Kaon() {
 
 void G4HadronPhysicsFTFP_BERT_TRV::ExtraConfiguration()
 {
-  //Modify XS for kaons and hyperons
-  auto ggComponent = new G4ComponentGGHadronNucleusXsc();
-  G4VCrossSectionDataSet* ggxs = new G4CrossSectionInelastic(ggComponent);
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4Lambda::Lambda())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4SigmaMinus::SigmaMinus())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4SigmaPlus::SigmaPlus())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4XiMinus::XiMinus())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4XiZero::XiZero())->AddDataSet(ggxs);
-  G4PhysListUtil::FindInelasticProcess(G4OmegaMinus::OmegaMinus())->AddDataSet(ggxs);
-
   //Modify Neutrons
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);

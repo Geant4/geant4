@@ -65,7 +65,7 @@ enum EInside {kOutside,kSurface,kInside};
 // kParameterised = (G4PVParameterised) General parameterised volume
 //                           => Distance & location computed to volumes
 //                              after setup/modification via user object
-enum EVolume {kNormal,kReplica,kParameterised};
+enum EVolume {kNormal,kReplica,kParameterised,kExternal};
 
 // Default max size of Navigation history
 //

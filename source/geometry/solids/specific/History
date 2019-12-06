@@ -16,6 +16,44 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-November-2019 G.Cosmo           (geom-specific-V10-05-21)
+ - Fixed cases of implicit type conversions from size_t to G4int.
+
+05-November-2019 E.Tcherniaev      (geom-specific-V10-05-20)
+- G4TesselatedSolid.cc: fixed minor Coverity defect (uninitialized array)
+
+07-October-2019 E.Tcherniaev       (geom-specific-V10-05-19)
+- G4TesselatedSolid.cc: fixed minor Coverity defect
+
+16-September-2019 G.Cosmo          (geom-specific-V10-05-18)
+- Rationalise header inclusions for faceted solids.
+
+06-September-2019 G.Cosmo          (geom-specific-V10-05-17)
+- Removed unnecessary forward declaration in G4VFacet header.
+
+29-August-2019 G.Cosmo             (geom-specific-V10-05-16)
+- Minor c++11 revision and headers cleanup. Code formatting.
+- Use pre-increment wherever possible.
+
+19-August-2019 G.Lima              (geom-specific-V10-05-15)
+- G4ExtrudedSolid: fixed a bug in DistanceToOut(), affecting extruded solids
+  defined off-center along the z-axis.
+
+19-August-2019 G.Cosmo             (geom-specific-V10-05-14)
+- G4GenericTrap: fixed compilation warnings for variable shadowing on clang-8.
+
+13-August-2019 G.Cosmo             (geom-specific-V10-05-13)
+- Enabled wrappers for VecGeom implementation of G4EllipticalTube,
+  G4EllipticalCone and G4Ellipsoid.
+
+10-July-2019 E.Tcherniaev          (geom-specific-V10-05-12)
+- Fixed G4UExtrudedSolid::CreatePolyhedron().
+  Addressing visualization part of the problem report #2171.
+
+04-July-2019 G.Cosmo               (geom-specific-V10-05-11)
+- Avoid defining kCarTolerance as 'static const' in G4VFacet.
+  Addressing problem report #2172.
+
 11-June-2019 E.Tcherniaev          (geom-specific-V10-05-10)
 - Use GetVertices() instead of GetParametersList() in the wrapper G4UTet.
 

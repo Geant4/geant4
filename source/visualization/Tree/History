@@ -24,6 +24,10 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+06 July 2019  John Allison (vistree-V10-05-01)
+- Part of vis-V10-05-21.
+- G4VTreeSceneHandler::PreAddSolid: Fix typo in output message.
+
 18 March 2019  Gabriele Cosmo (vistree-V10-05-00)
 - Corrected few typos in comments.
 

@@ -79,6 +79,7 @@ class G4CollisionOutput;
 class G4DynamicParticle;
 class G4HadFinalState;
 class G4InuclCollider;
+class G4LightTargetCollider;
 class G4InuclParticle;
 class G4ParticleDefinition;
 class G4V3DNucleus;
@@ -165,6 +166,8 @@ private:
 
   G4InuclCollider* collider;
   G4CascadeCheckBalance* balance;
+
+  G4LightTargetCollider* ltcollider;
 
   G4InuclParticle* bullet;		// Pointers to last filled versions
   G4InuclParticle* target;

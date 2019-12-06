@@ -67,7 +67,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
       fSurface->SetType(type);
       G4RunManager::GetRunManager()->GeometryHasBeenModified();
     }
-    
+
     void SetSurfaceModel(const G4OpticalSurfaceModel model) {
       fSurface->SetModel(model);
       G4RunManager::GetRunManager()->GeometryHasBeenModified();
@@ -76,18 +76,20 @@ class DetectorConstruction : public G4VUserDetectorConstruction
       {return fSurface->GetModel();}
 
     void SetSurfaceSigmaAlpha(G4double v);
+    void SetSurfacePolish(G4double v);
 
     void AddTankMPV(const char* c, G4MaterialPropertyVector* mpv);
-    void AddTankMPCV(const char* c, G4double v);
+    void AddTankMPC(const char* c, G4double v);
     G4MaterialPropertiesTable* GetTankMaterialPropertiesTable() 
       {return fTankMPT;}
 
     void AddWorldMPV(const char* c, G4MaterialPropertyVector* mpv);
-    void AddWorldMPCV(const char* c, G4double v);
+    void AddWorldMPC(const char* c, G4double v);
     G4MaterialPropertiesTable* GetWorldMaterialPropertiesTable() 
       {return fWorldMPT;}
 
     void AddSurfaceMPV(const char* c, G4MaterialPropertyVector* mpv);
+    void AddSurfaceMPC(const char* c, G4double v);
     G4MaterialPropertiesTable* GetSurfaceMaterialPropertiesTable() 
       {return fSurfaceMPT;}
 

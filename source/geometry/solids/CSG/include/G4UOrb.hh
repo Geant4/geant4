@@ -23,23 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4UOrb
 //
 // Class description:
 //
-//   Wrapper class for G4Orb to make use of VecGeom Orb.
+// Wrapper class for G4Orb to make use of VecGeom Orb.
 
-// History:
 // 30.10.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
-#ifndef G4ORB_HH
-#define G4ORB_HH
+#ifndef G4UORB_HH
+#define G4UORB_HH
 
 #include "G4UAdapter.hh"
 

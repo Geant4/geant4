@@ -362,7 +362,7 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
 	 chargeBalance-=G4lrint(products->operator[](hpw)->GetDefinition()->GetPDGCharge());
          baryonBalance-=products->operator[](hpw)->GetDefinition()->GetBaryonNumber();
        }
-       if(getenv("ScattererEnergyBalanceCheck"))
+       if(std::getenv("ScattererEnergyBalanceCheck"))
          std::cout << "DEBUGGING energy balance A: "
 	           <<energyBalance<<" "
 	           <<pxBalance<<" "

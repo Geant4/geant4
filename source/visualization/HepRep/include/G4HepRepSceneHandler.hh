@@ -78,6 +78,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddSolid (const G4Polyhedra& polyhedra);
         void AddSolid (const G4Orb& orb);
         void AddSolid (const G4Ellipsoid& ellipsoid);
+        void AddSolid (const G4TessellatedSolid& tess);
         void AddSolid (const G4VSolid& solid);
         
         void AddCompound (const G4VTrajectory&);

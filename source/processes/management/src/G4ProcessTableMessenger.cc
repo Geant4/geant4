@@ -239,8 +239,8 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       }
     }  
     idx =0;
-    G4ProcessTable::G4ProcNameVector::iterator itr; 
-    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
+    for (auto itr=procNameVector->cbegin(); itr!=procNameVector->cend(); ++itr)
+    {
       idx +=1;
       G4ProcessVector* tmpVector = theProcessTable->FindProcesses(*itr);
       G4VProcess* p = (*tmpVector)(0);
@@ -314,7 +314,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       } else {
 	tmpVector = theProcessTable->FindProcesses(G4ProcessType(type));
       }
-      for (G4int i=0; i<tmpVector->length(); i++) {
+      for (std::size_t i=0; i<tmpVector->length(); ++i) {
 	theProcessTable->DumpInfo( (*tmpVector)(i), currentParticle );
       }
       delete tmpVector;
@@ -379,7 +379,7 @@ G4String G4ProcessTableMessenger::GetProcessTypeName(G4ProcessType aType) const
 G4int G4ProcessTableMessenger::GetProcessType(const G4String& aTypeName) const
 {
   G4int type = -1;
-  for (G4int idx = 0; idx < NumberOfProcessType ; idx ++ ) {
+  for (G4int idx = 0; idx < NumberOfProcessType ; ++idx ) {
     if (aTypeName == G4VProcess::GetProcessTypeName(G4ProcessType(idx)) ) {
       type = idx;
       break;
@@ -394,7 +394,7 @@ void G4ProcessTableMessenger::SetNumberOfProcessType()
 {
   G4bool isFoundEndMark = false;
   G4int idx;
-  for (idx = 0; idx < 1000 ; idx ++ ) {
+  for (idx = 0; idx < 1000 ; ++idx ) {
     G4String typeName = G4VProcess::GetProcessTypeName(G4ProcessType(idx));
     isFoundEndMark = typeName.contains("---");
     if ( isFoundEndMark ) break;

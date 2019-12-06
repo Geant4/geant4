@@ -255,8 +255,6 @@ void G4EmLivermorePhysics::ConstructProcess()
       // gamma conversion 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4VEmModel* convLiv = new G4BetheHeitler5DModel();
-      //G4VEmModel* convLiv = new G4LivermoreGammaConversionModel();
-      convLiv->SetHighEnergyLimit(livEnergyLimit);
       theGammaConversion->SetEmModel(convLiv);
 
       // default Rayleigh scattering is Livermore

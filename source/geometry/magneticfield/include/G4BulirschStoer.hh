@@ -22,22 +22,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BulirschStoer
 //
-//
-// Description:
-// G4BulirschStoer class implementation by Dmitry Sorokin
-// Implementation is based on bulirsch_stoer.hpp from boost
+// Class description:
 //
 // The Bulirsch-Stoer is a controlled driver that adjusts both step size
 // and order of the method. The algorithm uses the modified midpoint and
-// a polynomial extrapolation compute the solution.
+// a polynomial extrapolation computes the solution.
 
-//    Implementation by Dmitry Sorokin - GSoC 2016
-//       Work supported by Google as part of Google Summer of Code 2016.
-//    Supervision / code review: John Apostolakis
-//
-///////////////////////////////////////////////////////////////////////////////
-
+// Author: Dmitry Sorokin, Google Summer of Code 2016
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 #ifndef G4BULIRSCH_STOER_HH
 #define G4BULIRSCH_STOER_HH
 

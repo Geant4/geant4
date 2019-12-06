@@ -71,7 +71,7 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
 
   if (OutputDefinitions[0]->IsShortLived() && OutputDefinitions[1]->IsShortLived())
   {
-    if(getenv("G4KCDEBUG")) G4cerr << "two shortlived for Type = "<<typeid(*this).name()<<G4endl;
+    if(std::getenv("G4KCDEBUG")) G4cerr << "two shortlived for Type = "<<typeid(*this).name()<<G4endl;
     // throw G4HadronicException(__FILE__, __LINE__, "G4VScatteringCollision: can't handle two shortlived particles!"); // @hpw@
   }
   

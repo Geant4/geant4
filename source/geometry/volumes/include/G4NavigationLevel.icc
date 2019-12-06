@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NavigationLevel inline implementation
 //
-//
-// 30.09.97 J.Apostolakis Initial version. 
-//                        
+// 30.09.97 J.Apostolakis Initial version
 // ----------------------------------------------------------------------
 
 extern G4GEOM_DLL G4Allocator<G4NavigationLevel>*& aNavigationLevelAllocator();
@@ -67,7 +66,7 @@ G4int G4NavigationLevel::GetReplicaNo() const
 inline
 void* G4NavigationLevel::operator new(size_t)
 {
-  if (!aNavigationLevelAllocator())
+  if (aNavigationLevelAllocator() == nullptr)
   {
     aNavigationLevelAllocator() = new G4Allocator<G4NavigationLevel>;
   }
@@ -77,13 +76,13 @@ void* G4NavigationLevel::operator new(size_t)
 // Added for use by STL (used for pre-allocation).
 //
 inline
-void* G4NavigationLevel::operator new(size_t,void *a)
+void* G4NavigationLevel::operator new(size_t, void* a)
 {
   return a;
 }
 
 inline
-void G4NavigationLevel::operator delete(void *aLevel)
+void G4NavigationLevel::operator delete(void* aLevel)
 {
   aNavigationLevelAllocator()->FreeSingle((G4NavigationLevel *) aLevel);
 }

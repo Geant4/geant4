@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // G4AffineTransformation Inline implementation
 //
 // --------------------------------------------------------------------
@@ -63,7 +60,7 @@ inline G4AffineTransform::G4AffineTransform( const G4RotationMatrix* rot,
                                              const G4ThreeVector& tlate )
  : tx(tlate.x()),ty(tlate.y()),tz(tlate.z())
 {
-  if (rot)
+  if (rot != nullptr)
   {
     rxx=rot->xx();rxy=rot->xy();rxz=rot->xz();
     ryx=rot->yx();ryy=rot->yy();ryz=rot->yz();

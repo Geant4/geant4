@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04TrackingAction.cc
+/// \file ExN04TrackingAction.cc
 /// \brief Implementation of the ExN04TrackingAction class
 //
 

@@ -29,82 +29,75 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
+// V.Ivanchenko general clean-up since 2010
+//
 #ifndef G4EvaporationProbability_h
 #define G4EvaporationProbability_h 1
 
 #include "G4VEmissionProbability.hh"
 
 class G4VCoulombBarrier;
-class G4NuclearLevelData;
 
 class G4EvaporationProbability : public G4VEmissionProbability
 {
 public:
 
   explicit G4EvaporationProbability(G4int anA, G4int aZ, 
-                                    G4double aGamma, 
-                                    G4VCoulombBarrier *); 
+                                    G4double aGamma); 
 
-  virtual ~G4EvaporationProbability();
-
-  // not used for evaporation
-  virtual G4double EmissionProbability(const G4Fragment& fragment,
-				       G4double maxKineticEnergy);
+  ~G4EvaporationProbability() override;
 
   // general method used for evaporation
-  G4double TotalProbability(const G4Fragment& fragment,
-			    G4double minKineticEnergy,
-			    G4double maxKineticEnergy,
-			    G4double CoulombBarrier = 0.0);
-
+  virtual G4double TotalProbability(const G4Fragment& fragment,
+                                    G4double minKinEnergy,
+			            G4double maxKinEnergy,
+			            G4double CB, G4double exEnergy);
+  /*
+  virtual G4double TotalProbability(const G4Fragment& fragment,
+			            G4double minKinEnergy,
+			            G4double maxKinEnergy,
+			            G4double CB);
+  */
   // main method to compute full probability for OPTx > 2
-  virtual G4double ComputeProbability(G4double K, G4double kBarrier);
+  G4double ComputeProbability(G4double K, G4double CB) override;
 
   // Samples fragment kinetic energy and excitation energy 
   // of the residual nucleaus
-  G4double SampleKineticEnergy(G4double minKineticEnergy,
-			       G4double maxKineticEnergy,
-			       G4double CoulombBarrier = 0.0);
+  G4double SampleKineticEnergy(G4double minKinEnergy,
+			       G4double maxKinEnergy,
+			       G4double CB);
 
 protected:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment)=0 ;
+  virtual G4double CalcAlphaParam(const G4Fragment& fragment);
  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment)=0 ;
+  virtual G4double CalcBetaParam(const G4Fragment& fragment);
 
 private:
 
-  G4double CrossSection(G4double K, G4double CoulombBarrier);  
+  G4double CrossSection(G4double K, G4double CB);  
 
   // Copy constructor
-  G4EvaporationProbability(const G4EvaporationProbability &right) = delete;
-
+  G4EvaporationProbability(const G4EvaporationProbability &right);
   const G4EvaporationProbability & operator=
-  (const G4EvaporationProbability &right) = delete;
-  G4bool operator==(const G4EvaporationProbability &right) const = delete;
-  G4bool operator!=(const G4EvaporationProbability &right) const = delete;
+  (const G4EvaporationProbability &right);
+  G4bool operator==(const G4EvaporationProbability &right) const;
+  G4bool operator!=(const G4EvaporationProbability &right) const;
 
-  G4NuclearLevelData* fLevelData;
-
-  G4int fragA;
-  G4int fragZ;
-  G4int resA;
-  G4int resZ;
+  //G4int fragA;
+  //G4int fragZ;
   G4int index;
 
   G4double resA13;
   G4double muu;
-  G4double partMass;
-  G4double resMass;
-  G4double Mass;
-  G4double U, delta0, delta1, a0;
+  G4double freeU;
+  G4double a0;
+  G4double delta1;
 
   // Gamma is A_f(2S_f+1) factor, where A_f is fragment atomic 
   // number and S_f is fragment spin
-  G4double Gamma;
+  G4double fGamma;
   G4double pcoeff;
-
-  G4double probmax;
 };
 
 #endif

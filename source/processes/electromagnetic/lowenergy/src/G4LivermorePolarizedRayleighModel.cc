@@ -127,7 +127,7 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
     InitialiseElementSelectors(particle, cuts);
     
     // Access to elements
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
     G4int numOfCouples = theCoupleTable->GetTableSize();
@@ -181,7 +181,7 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
   
   if(!datadir) 
     {
-      datadir = getenv("G4LEDATA");
+      datadir = std::getenv("G4LEDATA");
       if(!datadir) 
 	{
 	  G4Exception("G4LivermoreRayleighModelModel::ReadData()","em0006",

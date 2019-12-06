@@ -74,6 +74,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4PhysListUtil.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY( HadronPhysicsCRMC_FTFP_BERT );
@@ -87,8 +88,8 @@ HadronPhysicsCRMC_FTFP_BERT::HadronPhysicsCRMC_FTFP_BERT( const G4String& name )
   G4VPhysicsConstructor( name ) {
   minCRMC = 100.0*GeV;
   maxFTFP = 110.0*GeV;
-  minFTFP =   3.0*GeV;
-  maxBERT =  12.0*GeV;
+  minFTFP = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   minBERT =   0.0*GeV;
 }
 

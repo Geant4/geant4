@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4MagneticField
+// G4MagneticField
 //
 // Class description:
 //
 // Magnetic Field abstract class, implements inquiry function interface.
 
-// History:
-// - Created. JA, January 13th, 1996.
+// Created: J.Apostolakis, CERN - 13.01.1996
 // --------------------------------------------------------------------
-
-#ifndef G4MAGNETIC_FIELD_DEF
-#define G4MAGNETIC_FIELD_DEF
+#ifndef G4MAGNETIC_FIELD_HH
+#define G4MAGNETIC_FIELD_HH
 
 #include "G4Types.hh"
 #include "G4Field.hh"
@@ -50,15 +45,15 @@ class G4MagneticField : public G4Field
      virtual ~G4MagneticField();
        // Constructor and destructor. No actions.
 
-     G4MagneticField(const G4MagneticField &r);
-     G4MagneticField& operator = (const G4MagneticField &p);
+     G4MagneticField(const G4MagneticField& r);
+     G4MagneticField& operator= (const G4MagneticField& p);
        // Copy constructor & assignment operator.
 
-     G4bool   DoesFieldChangeEnergy() const { return false; }
-       //  Since a pure magnetic field does not change track energy
+     inline G4bool DoesFieldChangeEnergy() const { return false; }
+       // Since a pure magnetic field does not change track energy
 
-     virtual void  GetFieldValue( const G4double Point[4],
-                                        G4double *Bfield ) const = 0;
+     virtual void GetFieldValue( const G4double Point[4],
+                                       G4double* Bfield ) const = 0;
 };
 
-#endif /* G4MAGNETIC_FIELD_DEF */
+#endif

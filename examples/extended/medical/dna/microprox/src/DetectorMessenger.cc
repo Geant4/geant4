@@ -33,7 +33,7 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file medical/dna/slowing/src/DetectorMessenger.cc
+/// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"

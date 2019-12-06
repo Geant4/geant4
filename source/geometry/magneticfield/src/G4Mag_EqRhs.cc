@@ -23,17 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Mag_EqRhs implementation
 //
-//
-//  This is the standard right-hand side for equation of motion  
-//    in a pure Magnetic Field .
-//
-//   Other that might be required are:
-//     i) is when using a moving reference frame ... or
-//    ii) extending for other forces, eg an electric field
-//
-//            J. Apostolakis, January 13th, 1997
-//
+// Created: J.Apostolakis, CERN - 13.01.1997
 // --------------------------------------------------------------------
 
 #include "G4MagneticField.hh"
@@ -44,22 +36,22 @@
 
 const G4double G4Mag_EqRhs::fUnitConstant = 0.299792458 * (GeV/(tesla*m)); 
 
-// Constructor Implementation
-//
-G4Mag_EqRhs::G4Mag_EqRhs( G4MagneticField *magField ) 
-   : G4EquationOfMotion(magField), fCof_val(0.)
+G4Mag_EqRhs::G4Mag_EqRhs( G4MagneticField* magField ) 
+  : G4EquationOfMotion(magField)
 { 
+}
+
+G4Mag_EqRhs::~G4Mag_EqRhs()
+{
 }
 
 void  
 G4Mag_EqRhs::SetChargeMomentumMass( G4ChargeState particleCharge,
-			            G4double,                // MomentumXc
+                                    G4double,                // MomentumXc
                                     G4double )               // particleMass
 {
    G4double pcharge = particleCharge.GetCharge();
    fCof_val = pcharge*eplus*c_light ; //  B must be in Tesla
-   //  fCof_val = fUnitConstant*pcharge/MomentumXc; //  B must be in Tesla
+   // fCof_val = fUnitConstant*pcharge/MomentumXc; //  B must be in Tesla
    // fMass = particleMass;
 }
-
-G4Mag_EqRhs::~G4Mag_EqRhs() { }

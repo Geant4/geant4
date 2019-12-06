@@ -23,19 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4USphere
 //
 // Class description:
 //
-//   Wrapper class for G4Sphere to make use of VecGeom Sphere.
+// Wrapper class for G4Sphere to make use of VecGeom Sphere.
 
-// History:
 // 13.09.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 #ifndef G4USPHERE_HH

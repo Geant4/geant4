@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-August-2019, Vladimir Ivanchenko (phys-ctor-ions-V10-05-01)
+- G4IonQMDPhysics : replacing explicit values for the QMD model
+  energy transition with value from G4HadronicParameters.
+
+06-August-2019, Alberto Ribon  (phys-ctor-ions-V10-05-00)
+- G4IonPhysics, G4IonPhysicsPHP : replacing explicit values for the
+  energy transition region with values from G4HadronicParameters.
+
 04-September-2018, Vladimir Ivanchenko  (phys-ctor-ions-V10-04-04)
 03-September-2018, Vladimir Ivanchenko  (phys-ctor-ions-V10-04-03)
 - Major revision of all ion builders: reduced number of TLS variables;

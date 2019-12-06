@@ -52,8 +52,9 @@ public:
   inline HepRotation();
   // Default constructor. Gives a unit matrix.
 
-  inline HepRotation(const HepRotation  & m);
-  // Copy constructor.
+  inline HepRotation(const HepRotation & m);
+  inline HepRotation(HepRotation && m) = default;
+  // Copy and move constructors.
 
   inline HepRotation(const HepRotationX & m);
   inline HepRotation(const HepRotationY & m);
@@ -102,7 +103,8 @@ public:
   // set from specialized rotation.
 
   inline  HepRotation & operator = (const HepRotation & r);
-  // Assignment.
+  inline  HepRotation & operator = (HepRotation && r) = default;
+  // Copy and move assignment operators.
 
   inline  HepRotation & operator = (const HepRotationX & r);
   inline  HepRotation & operator = (const HepRotationY & r);

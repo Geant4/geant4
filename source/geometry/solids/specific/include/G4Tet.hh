@@ -27,30 +27,17 @@
 // *                                                                  *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Tet
 //
 // Class description:
 //
-//   A G4Tet is a tetrahedrasolid.
-//
+// A G4Tet is a tetrahedra solid.
 
-// History:
-// -------
 // 03.09.2004 - M.H.Mendenhall & R.A.Weller (Vanderbilt University, USA)
-// 10.02.2005 - D.Anninos (CERN) - Added GetPointOnSurface() method.
-// 12.11.2006 - M.H.Mendenhall - Added GetSurfaceArea() concrete implementation.
-// 20.09.2010 - G.Cosmo (CERN) - Added copy-ctor and operator=().
-// 24.09.2016 - E.Tcherniaev - Removed CreateRotatedVertices().
 // --------------------------------------------------------------------
 #ifndef G4TET_HH
 #define G4TET_HH
-/*
+
 #include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
@@ -61,7 +48,7 @@
   #define G4UTet G4Tet
   #include "G4UTet.hh"
 #else
-*/
+
 #include "G4VSolid.hh"
 
 class G4Tet : public G4VSolid
@@ -74,13 +61,13 @@ class G4Tet : public G4VSolid
                 G4ThreeVector p2,
                 G4ThreeVector p3,
                 G4ThreeVector p4,
-                G4bool *degeneracyFlag=0);
+                G4bool* degeneracyFlag = nullptr);
 
     virtual ~G4Tet();
 
-    void ComputeDimensions(G4VPVParameterisation* p,
-                           const G4int n,
-                           const G4VPhysicalVolume* pRep);
+   void ComputeDimensions(G4VPVParameterisation* p,
+                          const G4int n,
+                          const G4VPhysicalVolume* pRep);
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
@@ -99,8 +86,9 @@ class G4Tet : public G4VSolid
     G4double DistanceToIn(const G4ThreeVector& p) const;
 
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=false,
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
@@ -133,12 +121,7 @@ class G4Tet : public G4VSolid
     G4Tet& operator=(const G4Tet& rhs);
       // Copy constructor and assignment operator.
 
-    const char* CVSHeaderVers()
-      { return "$Id$"; }
-    const char* CVSFileVers()
-      { return CVSVers; }
-    void PrintWarnings(G4bool flag)
-      { warningFlag=flag; }
+    void PrintWarnings(G4bool flag)  { warningFlag=flag; }
     static G4bool CheckDegeneracy(G4ThreeVector anchor,
                                   G4ThreeVector p2,
                                   G4ThreeVector p3,
@@ -148,27 +131,25 @@ class G4Tet : public G4VSolid
 
   private:
 
-    G4double fCubicVolume, fSurfaceArea;
+    G4double fCubicVolume = 0.0, fSurfaceArea = 0.0;
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
     G4ThreeVector GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2,
                                  G4ThreeVector p3, G4double& area) const;
-    static const char CVSVers[];
-
   private:
 
     G4ThreeVector fAnchor, fP2, fP3, fP4, fMiddle;
     G4ThreeVector fNormal123, fNormal142, fNormal134, fNormal234;
 
-    G4bool warningFlag;
+    G4bool warningFlag = false;
 
     G4double fCdotN123, fCdotN142, fCdotN134, fCdotN234;
     G4double fXMin, fXMax, fYMin, fYMax, fZMin, fZMax;
     G4double fDx, fDy, fDz, fTol, fMaxSize;
 };
 
-//#endif
+#endif
 
 #endif

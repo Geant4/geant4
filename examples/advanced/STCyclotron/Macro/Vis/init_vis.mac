@@ -1,0 +1,11 @@
+# Macro file for the initialization phase of example B1
+# when running in interactive mode with visualization
+#
+# Set some default verbose
+#
+/control/verbose 1
+/control/saveHistory
+/run/verbose 1
+#
+# Visualization setting
+/control/execute Macro/Vis/vis.mac

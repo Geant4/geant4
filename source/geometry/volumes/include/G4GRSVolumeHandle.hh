@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
 // Class G4GRSVolumeHandle
 //
 // Class description:
@@ -39,12 +37,12 @@
 // Author: Radovan Chytracek (Radovan.Chytracek@cern.ch), March 2001
 //
 // ----------------------------------------------------------------------
-#ifndef _G4GRSVOLUMEHANDLE_H_
-#define _G4GRSVOLUMEHANDLE_H_ 1
+#ifndef G4GRSVOLUMEHANDLE_HH
+#define G4GRSVOLUMEHANDLE_HH 1
 
 #include "G4GRSVolume.hh"
 #include "G4ReferenceCountedHandle.hh"
 
-typedef G4ReferenceCountedHandle<G4GRSVolume> G4GRSVolumeHandle;
+using G4GRSVolumeHandle = G4ReferenceCountedHandle<G4GRSVolume>;
 
-#endif // _G4GRSVOLUMEHANDLE_H_
+#endif // G4GRSVOLUMEHANDLE_HH

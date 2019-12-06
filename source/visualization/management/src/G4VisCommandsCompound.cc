@@ -84,18 +84,32 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
   G4Scene* keepScene = fpVisManager->GetCurrentScene();
   G4VSceneHandler* keepSceneHandler = fpVisManager->GetCurrentSceneHandler();
   G4VViewer* keepViewer = fpVisManager->GetCurrentViewer();
+  G4VisManager::Verbosity keepVisVerbosity = fpVisManager->GetVerbosity();
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  G4int keepVerbose = UImanager->GetVerboseLevel();
+  G4int keepUIVerbose = UImanager->GetVerboseLevel();
   G4int newVerbose(0);
-  if (keepVerbose >= 2 ||
+  if (keepUIVerbose >= 2 ||
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
+
+  G4bool keepAbleness = fpVisManager->GetConcreteInstance()? true: false;
+
   UImanager->ApplyCommand(G4String("/vis/open " + system));
   if (fErrorCode == 0) {
+    if (!keepAbleness) {  // Enable temporarily
+      fpVisManager->SetVerboseLevel("Quiet");
+      UImanager->ApplyCommand("/vis/enable");
+      fpVisManager->SetVerboseLevel(keepVisVerbosity);
+    }
     UImanager->ApplyCommand(G4String("/vis/drawVolume " + pvname));
     UImanager->ApplyCommand("/vis/viewer/flush");
+    if (!keepAbleness) {  // Disable again
+      fpVisManager->SetVerboseLevel("Quiet");
+      UImanager->ApplyCommand("/vis/disable");
+      fpVisManager->SetVerboseLevel(keepVisVerbosity);
+    }
     if (keepViewer) {
       if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
         G4cout << "Reverting to " << keepViewer->GetName() << G4endl;
@@ -106,7 +120,7 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
       fpVisManager->SetCurrentViewer(keepViewer);
     }
   }
-  UImanager->SetVerboseLevel(keepVerbose);
+  UImanager->SetVerboseLevel(keepUIVerbose);
 }
 
 ////////////// /vis/drawView ///////////////////////////////////////

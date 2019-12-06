@@ -81,7 +81,7 @@ G4ErrorPropagatorManager::G4ErrorPropagatorManager()
   //----- Initialize a few things
   //o  theG4ErrorPropagatorManager = this;
 
-  char* g4emverb = getenv("G4EVERBOSE");
+  char* g4emverb = std::getenv("G4EVERBOSE");
   if( !g4emverb ) {
     G4ErrorPropagatorData::GetErrorPropagatorData()->SetVerbose( 0 );
   } else {

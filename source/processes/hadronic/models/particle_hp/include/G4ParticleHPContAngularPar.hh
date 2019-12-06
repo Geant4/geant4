@@ -94,7 +94,7 @@ class G4ParticleHPContAngularPar
   
   G4double GetEnergy()
   { 
-    if( getenv("G4PHPTEST") )
+    if( std::getenv("G4PHPTEST") )
       G4cout << this << " G4ParticleHPContAngularPar::GetEnergy "
              << theEnergy <<  " nE " << nEnergies << G4endl;
     return theEnergy;

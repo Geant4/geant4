@@ -563,18 +563,24 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
                                         track.GetMaterialCutsCouple(),
                                         track.GetDynamicParticle(), tcut);
       }
-      for (auto sec : tmpSecondaries) {
-        if (sec->GetParticleDefinition() == theGamma) {
-          if (CheckDirection(pos, sec->GetMomentumDirection())) {
-            vd.push_back(sec);
+      for (size_t kk=0; kk<tmpSecondaries.size(); ++kk) {
+        if (tmpSecondaries[kk]->GetParticleDefinition() == theGamma) {
+          if (CheckDirection(pos, tmpSecondaries[kk]->GetMomentumDirection())){
+            vd.push_back(tmpSecondaries[kk]);
             fDirectionalSplittingWeights.push_back(1.);
           } else if (G4UniformRand() < w) {
-            vd.push_back(sec);
+            vd.push_back(tmpSecondaries[kk]);
             fDirectionalSplittingWeights.push_back(1./weight);
+          } else {
+            delete tmpSecondaries[kk];
+            tmpSecondaries[kk] = nullptr;
           }
-        } else if (k==0) { // not gamma
-          vd.push_back(sec);
+        } else if (k==0) { // keep charged 2ry from first splitting
+          vd.push_back(tmpSecondaries[kk]);
           fDirectionalSplittingWeights.push_back(1./weight);
+        } else {
+          delete tmpSecondaries[kk];
+          tmpSecondaries[kk] = nullptr;
         }
       }
 
@@ -678,13 +684,17 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
                                         track.GetMaterialCutsCouple(),
                                         track.GetDynamicParticle(), tcut);
       }
-      for (auto sec : tmpSecondaries) {
-        if (CheckDirection(pos, sec->GetMomentumDirection())) {
-          vd.push_back(sec);
+      //for (auto sec : tmpSecondaries) {
+      for (size_t kk=0; kk < tmpSecondaries.size(); ++kk) {
+        if (CheckDirection(pos, tmpSecondaries[kk]->GetMomentumDirection())) {
+          vd.push_back(tmpSecondaries[kk]);
           fDirectionalSplittingWeights.push_back(1.);
         } else if (G4UniformRand()<w) {
-          vd.push_back(sec);
+          vd.push_back(tmpSecondaries[kk]);
           fDirectionalSplittingWeights.push_back(1./weight);
+        } else {
+          delete tmpSecondaries[kk];
+          tmpSecondaries[kk] = nullptr;
         }
       }
     }  // end of loop over nsplit

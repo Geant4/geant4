@@ -59,6 +59,6 @@ public:
   using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 
 };
-// 2002 by J.P. Wellisch
 
 #endif
+

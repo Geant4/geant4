@@ -95,6 +95,7 @@ private:
   G4double fEnergy;
   G4double fCurrEnergy;
   G4double fTrEnergy;
+  G4double ener, tener;
 
   G4double fTimeFactor;
   G4double fTime;
@@ -110,7 +111,6 @@ private:
   static G4String fFloatingLevels[nfloting];
 
   G4String fDirectory;
-  G4String fFile;
   G4String fPol;
 
   static const G4int nbufmax = 20;
@@ -125,6 +125,7 @@ private:
   G4int fVerbose;
   G4int fLevelMax;
   G4int fTransMax;
+  G4int ntrans, i1, i2, k, kk, tnum;
 
   G4float fNorm1;
 

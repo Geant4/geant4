@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-/// \file PrimaryGeneratorAction
+/// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"

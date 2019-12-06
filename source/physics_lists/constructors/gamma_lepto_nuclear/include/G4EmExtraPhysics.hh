@@ -47,7 +47,8 @@
 
 #include "G4EmMessenger.hh"
 
-class G4BertiniElectroNuclearBuilder;
+class G4CascadeInterface;
+class G4PhotoNuclearProcess;
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -85,6 +86,11 @@ public:
 
 private:
 
+  void ConstructGammaElectroNuclear();
+
+  void ConstructLENDGammaNuclear(G4CascadeInterface* cascade,
+                                 G4PhotoNuclearProcess* gnuc);
+
   G4bool gnActivated;
   G4bool eActivated;
   G4bool gLENDActivated;
@@ -105,8 +111,6 @@ private:
   G4double fNuNucleusBias;
 
   G4String fNuDetectorName;
-
-  static G4ThreadLocal G4BertiniElectroNuclearBuilder* theGNPhysics;
 
   G4EmMessenger* theMessenger;
   G4int verbose;

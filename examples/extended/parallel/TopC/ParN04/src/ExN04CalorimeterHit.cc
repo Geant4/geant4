@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04CalorimeterHit.cc
+/// \file ExN04CalorimeterHit.cc
 /// \brief Implementation of the ExN04CalorimeterHit class
 //
 

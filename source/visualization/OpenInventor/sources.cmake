@@ -159,9 +159,6 @@ if(GEANT4_USE_QT AND GEANT4_USE_INVENTOR_QT)
     G4SoQt.cc
     )
 
-    # Include the UseQt file to build the moc wrappers
-    include(${QT_USE_FILE})
-
     # Add the moc sources - must use absolute path to the files
     QT4_WRAP_CPP(G4OI_MOC_SOURCES
         ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/include/G4OpenInventorQt.hh

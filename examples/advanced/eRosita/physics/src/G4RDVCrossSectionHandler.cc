@@ -161,7 +161,7 @@ void G4RDVCrossSectionHandler::LoadData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char* path = getenv("G4LEDATA");
+      char* path = std::getenv("G4LEDATA");
       if (!path)
 	{ 
 	  G4String excep = "G4LEDATA environment variable not set!";
@@ -235,7 +235,7 @@ void G4RDVCrossSectionHandler::LoadShellData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char* path = getenv("G4LEDATA");
+      char* path = std::getenv("G4LEDATA");
       if (!path)
 	{ 
 	  G4String excep = "G4LEDATA environment variable not set!";

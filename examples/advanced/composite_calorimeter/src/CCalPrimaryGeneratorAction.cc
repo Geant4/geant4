@@ -44,7 +44,7 @@
 #include "G4HEPEvtInterface.hh"
 #include "G4RunManager.hh"
 
-#define debug
+//#define debug
 
 CCalPrimaryGeneratorAction::CCalPrimaryGeneratorAction(): particleGun(0),
   generatorInput(singleFixed),  verboseLevel(0), n_particle(1), 
@@ -103,13 +103,11 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   
     particleDir = G4ThreeVector(randomX,randomY,randomZ);
     particleGun->SetParticleMomentumDirection(particleDir);
-#ifdef debug
     if (verboseLevel >= 2 ) {
       G4cout << "Energy " << particleEnergy/GeV << " GeV; Theta " 
-	     << theta/deg << " degree; Phi " << phi/deg << " degree" << G4endl;
+             << theta/deg << " degree; Phi " << phi/deg << " degree" << G4endl;
       G4cout << "Shooting in " << particleDir << " direction "<< G4endl;
     }
-#endif
   } else if (generatorInput == singleScan) {
     G4double scanEtaStep, scanPhiStep;
     if (scanSteps == 0) { 
@@ -123,20 +121,20 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 #ifdef debug
     if (verboseLevel > 2 ) {
       G4cout << " scanEtaStep " << scanEtaStep << " # of Steps " << etaSteps 
-	     << G4endl;
+             << G4endl;
       G4cout << " scanPhiStep " << scanPhiStep << " # of Steps " << phiSteps 
-	     << G4endl;
+             << G4endl;
     }
 #endif
 
     //----- First scan in phi, then in eta
     if (phiMax - phiValue < 1.E-6 * scanPhiStep) { // !only <= 1.E6 steps allowed
       if (etaMax - etaValue < 1.E-6 * scanEtaStep) { // !only <= 1.E6 steps allowed
-	G4cout << " Scan completed!" << G4endl;
-	return;
+        G4cout << " Scan completed!" << G4endl;
+        return;
       } else {
-	etaValue += scanEtaStep; 
-	phiValue  = phiMin;
+        etaValue += scanEtaStep; 
+        phiValue  = phiMin;
       }
     } else {
       phiValue += scanPhiStep;
@@ -148,7 +146,7 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     G4double scanZ = std::cos(theta);
     if (verboseLevel >= 2 ) {
       G4cout << "Scan eta " << etaValue << " Phi " << phiValue/deg
-	     << " theta " << theta/deg << G4endl;
+             << " theta " << theta/deg << G4endl;
     }
     particleDir = G4ThreeVector(scanX,scanY,scanZ);
     particleGun->SetParticleMomentumDirection(particleDir);
@@ -199,14 +197,14 @@ void CCalPrimaryGeneratorAction::SetMinimumEnergy(G4double p){
 
   if (p <= 0.) {
     G4cerr << "CCalPrimaryGeneratorAction::SetMinimumEnergy: value " << p/GeV 
-	   << "GeV is out of bounds, it will not be used" << G4endl;
+           << "GeV is out of bounds, it will not be used" << G4endl;
     G4cerr << " Should be  >0.  Please check" << G4endl; 
   } else {
     energyMin = p;
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting min. value of energy to "
-	     << energyMin/GeV << " GeV " << G4endl;
+             << energyMin/GeV << " GeV " << G4endl;
     }
 #endif
   }
@@ -217,14 +215,14 @@ void CCalPrimaryGeneratorAction::SetMaximumEnergy(G4double p){
 
   if (p <= 0.) {
     G4cerr << "CCalPrimaryGeneratorAction::SetMaximumEnergy: value " << p/GeV 
-	   << "GeV is out of bounds, it will not be used" << G4endl;
+           << "GeV is out of bounds, it will not be used" << G4endl;
     G4cerr << " Should be  >0.  Please check" << G4endl; 
   } else {
     energyMax = p;
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting max. value of energy to "
-	     << energyMax/GeV << " GeV " << G4endl;
+             << energyMax/GeV << " GeV " << G4endl;
     }
 #endif
   }
@@ -235,14 +233,14 @@ void CCalPrimaryGeneratorAction::SetMinimumPhi(G4double p){
 
   if (std::fabs(p)>2.*pi) {
     G4cerr << "CCalPrimaryGeneratorAction::SetMinimumPhi: setting value quite "
-	   << "large" << G4endl;
+           << "large" << G4endl;
     G4cerr << " Should be given in radians - Please check" << G4endl;
   } else {
     phiMin = std::fabs(p);
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting min. value of phi to "
-	     << phiMin << G4endl;
+             << phiMin << G4endl;
     }
 #endif
   }
@@ -253,14 +251,14 @@ void CCalPrimaryGeneratorAction::SetMaximumPhi(G4double p){
 
   if (std::fabs(p)>2.*pi) {
     G4cerr << "CCalPrimaryGeneratorAction::SetMaximumPhi: setting value quite "
-	   << "large" << G4endl;
+           << "large" << G4endl;
     G4cerr << " Should be given in radians - Please check" << G4endl;
   } else {
     phiMax = std::fabs(p);
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting max. value of phi to "
-	     << phiMax << G4endl;
+             << phiMax << G4endl;
     }
 #endif
   }
@@ -271,14 +269,14 @@ void CCalPrimaryGeneratorAction::SetStepsPhi(G4int val){
 
   if (val <= 0) {
     G4cerr << "CCalPrimaryGeneratorAction::SetStepsPhi: value " << val 
-	   << " is out of bounds, it will not be used" << G4endl;
+           << " is out of bounds, it will not be used" << G4endl;
     G4cerr << " Should be  > 0  Please check" << G4endl; 
   } else {
     phiSteps = val;
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting no. of steps in phi to "
-	     << phiSteps << G4endl;
+             << phiSteps << G4endl;
     }
 #endif
   }
@@ -291,7 +289,7 @@ void CCalPrimaryGeneratorAction::SetMinimumEta(G4double p){
 #ifdef debug
   if (verboseLevel >= 1 ) {
     G4cout << " CCalPrimaryGeneratorAction: setting min. value of eta to "
-	   << etaMin << G4endl;
+           << etaMin << G4endl;
   }
 #endif
 }
@@ -303,7 +301,7 @@ void CCalPrimaryGeneratorAction::SetMaximumEta(G4double p){
 #ifdef debug
   if (verboseLevel >= 1 ) {
     G4cout << " CCalPrimaryGeneratorAction: setting max. value of eta to "
-	   << etaMax << G4endl;
+           << etaMax << G4endl;
   }
 #endif
 }
@@ -319,7 +317,7 @@ void CCalPrimaryGeneratorAction::SetStepsEta(G4int val){
 #ifdef debug
     if (verboseLevel >= 1 ) {
       G4cout << " CCalPrimaryGeneratorAction: setting no. of steps in eta to "
-	     << etaSteps << G4endl;
+             << etaSteps << G4endl;
     }
 #endif
   }
@@ -344,53 +342,49 @@ void CCalPrimaryGeneratorAction::initialize(){
 
 void CCalPrimaryGeneratorAction::print(G4int val){
 
-#ifdef debug
   if (verboseLevel >= val) {
 
     if (generatorInput == singleRandom) {
       G4cout << G4endl
-      	     << "**********************************************************************" << G4endl
-	     << "*                                                                    *" << G4endl  
-      	     << "* CCalPrimaryGeneratorAction DEFAULT Random Energy/Direction setting:*" << G4endl
-	     << "*                                                                    *" << G4endl  
-	     << "*                                                                    *" << G4endl  
-	     << "*   Energy in    [ "<< energyMin/GeV   << " - " << energyMax/GeV   << "] (GeV) "<< G4endl
-	     << "*   Phi angle in [ "<< phiMin          << " - " << phiMax          << "] (rad) "<< G4endl
-	     << "*                [ "<< phiMin/degree   << " - " << phiMax/degree   << "] (deg) "<< G4endl 
-	     << "*   Eta in       [ "<< etaMin          << " - " << etaMax          << "]       "<< G4endl
-	     << "*                                                                    *" << G4endl  
-	     << "*                                                                    *" << G4endl  
-      	     << "**********************************************************************" << G4endl;
+             << "**********************************************************************" << G4endl
+             << "*                                                                    *" << G4endl  
+             << "* CCalPrimaryGeneratorAction DEFAULT Random Energy/Direction setting:*" << G4endl
+             << "*                                                                    *" << G4endl  
+             << "*                                                                    *" << G4endl  
+             << "*   Energy in    [ "<< energyMin/GeV   << " - " << energyMax/GeV   << "] (GeV) "<< G4endl
+             << "*   Phi angle in [ "<< phiMin          << " - " << phiMax          << "] (rad) "<< G4endl
+             << "*                [ "<< phiMin/degree   << " - " << phiMax/degree   << "] (deg) "<< G4endl 
+             << "*   Eta in       [ "<< etaMin          << " - " << etaMax          << "]       "<< G4endl
+             << "*                                                                    *" << G4endl  
+             << "*                                                                    *" << G4endl  
+                   << "**********************************************************************" << G4endl;
     } else if (generatorInput == singleScan) {
       G4cout << G4endl
-	     << "**********************************************************************" << G4endl
-	     << "*                                                                    *" << G4endl  
-      	     << "* CCalPrimaryGeneratorAction DEFAULT Scan Direction settings :       *" << G4endl
-	     << "*                                                                    *" << G4endl  
-	     << "*                                                                    *" << G4endl  
-	     << "*   Phi angle in [ " << phiMin/degree   << " - " << phiMax/degree << "] (deg) " << G4endl
-	     << "*   Eta in       [ " << etaMin          << " - " << etaMax        << "]       " << G4endl
-	     << "*   Steps along eta " << etaSteps << " and along phi " << phiSteps << G4endl
-	     << "*                                                                    *" << G4endl  
-	     << "*                                                                    *" << G4endl  
-      	     << "**********************************************************************" << G4endl;
+             << "**********************************************************************" << G4endl
+             << "*                                                                    *" << G4endl  
+             << "* CCalPrimaryGeneratorAction DEFAULT Scan Direction settings :       *" << G4endl
+             << "*                                                                    *" << G4endl  
+             << "*                                                                    *" << G4endl  
+             << "*   Phi angle in [ " << phiMin/degree   << " - " << phiMax/degree << "] (deg) " << G4endl
+             << "*   Eta in       [ " << etaMin          << " - " << etaMax        << "]       " << G4endl
+             << "*   Steps along eta " << etaSteps << " and along phi " << phiSteps << G4endl
+             << "*                                                                    *" << G4endl  
+             << "*                                                                    *" << G4endl  
+                   << "**********************************************************************" << G4endl;
     } else  if (generatorInput == singleFixed) {
       G4cout << G4endl
-	     << "*******************************************************************" << G4endl
-	     << "*                                                                 *" << G4endl  
-	     << "* CCalPrimaryGeneratorAction: Current settings :                  *" << G4endl
-	     << "*                                                                 *" << G4endl  
-	     << "* " << particleGun->GetNumberOfParticles() 
-	     << "  " << particleGun->GetParticleDefinition()->GetParticleName() 
-	     << " of " << particleGun->GetParticleEnergy()/GeV << " GeV" << G4endl
-	     << "* will be shot from " << particleGun->GetParticlePosition() << G4endl;
+             << "*******************************************************************" << G4endl
+             << "*                                                                 *" << G4endl  
+             << "* CCalPrimaryGeneratorAction: Current settings :                  *" << G4endl
+             << "*                                                                 *" << G4endl  
+             << "* " << particleGun->GetNumberOfParticles() 
+             << "  " << particleGun->GetParticleDefinition()->GetParticleName() 
+             << " of " << particleGun->GetParticleEnergy()/GeV << " GeV" << G4endl
+             << "* will be shot from " << particleGun->GetParticlePosition() << G4endl;
       G4cout << "* in direction " << particleGun->GetParticleMomentumDirection() << G4endl;
-      G4cout  << "*                                                                 *" << G4endl  
-	      << "*                                                                 *" << G4endl  
-	      << "*******************************************************************" << G4endl;
+      G4cout << "*                                                                 *" << G4endl  
+             << "*                                                                 *" << G4endl  
+             << "*******************************************************************" << G4endl;
     }
-  }
-#endif
- 
+  } 
 }
-

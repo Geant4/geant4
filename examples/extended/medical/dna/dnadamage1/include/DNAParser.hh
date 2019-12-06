@@ -52,7 +52,7 @@ public:
                                        DNAVolumeType>;
     DNAParser();
     ~DNAParser();
-    G4LogicalVolume* CreateLogicVolume(const std::string&);
+    G4LogicalVolume* CreateLogicVolume();
     G4double GetVoxelSize();      
     
     std::unique_ptr<G4MoleculeGun> ReleaseMoleculeGun()
@@ -66,6 +66,8 @@ public:
     }
     
     struct Molecule;
+    
+    void ParseFile(const std::string&);
 private:
     G4double fSize;
     std::string fGeoName;
@@ -77,7 +79,6 @@ private:
     std::map<std::string, DNAVolumeType> fEnumMap;
     GeoData fGeometryMap;
     void EnumParser();
-    void ParseFile(const std::string&);
     G4VSolid* CreateCutSolid(G4Orb*,
                              Molecule&,
                              std::vector<Molecule>&,

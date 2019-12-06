@@ -45,24 +45,22 @@ public:
   sf<unsigned int> corner_steps;
   sf<unsigned int> corner_mask;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::back_area)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(width)
-      TOOLS_ADD_FIELD_DESC(height)
-      TOOLS_ADD_FIELD_DESC(color)
-      TOOLS_ADD_FIELD_DESC(gradient)
-      TOOLS_ADD_FIELD_DESC(color_top)
-      TOOLS_ADD_FIELD_DESC(border_visible)
-      TOOLS_ADD_FIELD_DESC(border_color)
-      TOOLS_ADD_FIELD_DESC(border_line_width)
-      TOOLS_ADD_FIELD_DESC(shadow)
-      TOOLS_ADD_FIELD_DESC(corner_radius)
-      TOOLS_ADD_FIELD_DESC(corner_steps)
-      TOOLS_ADD_FIELD_DESC(corner_mask)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),12, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(width),
+      TOOLS_ARG_FIELD_DESC(height),
+      TOOLS_ARG_FIELD_DESC(color),
+      TOOLS_ARG_FIELD_DESC(gradient),
+      TOOLS_ARG_FIELD_DESC(color_top),
+      TOOLS_ARG_FIELD_DESC(border_visible),
+      TOOLS_ARG_FIELD_DESC(border_color),
+      TOOLS_ARG_FIELD_DESC(border_line_width),
+      TOOLS_ARG_FIELD_DESC(shadow),
+      TOOLS_ARG_FIELD_DESC(corner_radius),
+      TOOLS_ARG_FIELD_DESC(corner_steps),
+      TOOLS_ARG_FIELD_DESC(corner_mask)
+    );
     return s_v;
   }
 private:
@@ -172,12 +170,13 @@ protected:
     float xe =  width*0.5f;
     float yb = -height*0.5f;
 
-    float zshadow = -0.05f;
+  //float zshadow = -0.05f;
+    float zshadow = -0.005f; //ok with gopaw and ROOT_default.
     float zback = 0;
     float zborder = 0.01f;
 
     if(shadow.value()) {
-      float zz = zshadow;
+      float zz = zback+zshadow;
       float ye = height*0.5f;
 
       sg::rgba* mat = new sg::rgba();
@@ -199,7 +198,7 @@ protected:
       vtxs->add(xe+dx,ye+dy,zz);
       vtxs->add(xb+dx,ye+dy,zz);
     }
-    
+
    {//background :
     normal* nm = new normal;
     //nm->vec.value(); //default is z. ok.
@@ -348,7 +347,7 @@ protected:
       m_back_sep.add(mat);
   
       draw_style* ds = new draw_style;
-      ds->style = draw_style::lines;
+      ds->style = draw_lines;
       ds->line_width = border_line_width;
       m_back_sep.add(ds);
   

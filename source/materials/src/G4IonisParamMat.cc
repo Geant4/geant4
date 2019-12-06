@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 // 09-07-98, data moved from G4Material, M.Maire
@@ -43,6 +41,8 @@
 #include "G4IonisParamMat.hh"
 #include "G4Material.hh"
 #include "G4DensityEffectData.hh"
+#include "G4DensityEffectCalculator.hh"
+#include "G4AtomicShells.hh"
 #include "G4NistManager.hh"
 #include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
@@ -68,10 +68,11 @@ G4IonisParamMat::G4IonisParamMat(const G4Material* material)
   fD0density = 0.0;
   fAdjustmentFactor = 1.0;
   if(fDensityData == nullptr) { fDensityData = new G4DensityEffectData(); }
+  fDensityEffectCalc = nullptr;
 
   // compute parameters
   ComputeMeanParameters();
-  ComputeDensityEffect();
+  ComputeDensityEffectParameters();
   ComputeFluctModel();
   ComputeIonParameters();
 }
@@ -111,6 +112,7 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
   fMeanEnergyPerIon = 0.0;
   twoln10 = 2.*G4Pow::GetInstance()->logZ(10);
 
+  fDensityEffectCalc = nullptr;
   if(fDensityData == nullptr) { fDensityData = new G4DensityEffectData(); }
 }
 
@@ -118,10 +120,12 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
 
 G4IonisParamMat::~G4IonisParamMat()
 {
+  delete fDensityEffectCalc;
   delete [] fShellCorrectionVector; 
   delete fDensityData;
   fDensityData = nullptr;
   fShellCorrectionVector = nullptr;
+  fDensityEffectCalc = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -177,41 +181,76 @@ G4DensityEffectData* G4IonisParamMat::GetDensityEffectData()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double G4IonisParamMat::DensityCorrection(G4double x)
+{
+  return (!fDensityEffectCalc) ? GetDensityCorrection(x) 
+    : fDensityEffectCalc->ComputeDensityCorrection(x);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
                     
-void G4IonisParamMat::ComputeDensityEffect()
+void G4IonisParamMat::ComputeDensityEffectParameters()
 {
   G4State State = fMaterial->GetState();
 
   // Check if density effect data exist in the table
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
+  // or is assign to one of data set in this table
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
   G4int nelm= fMaterial->GetNumberOfElements();
   G4int Z0  = ((*(fMaterial->GetElementVector()))[0])->GetZasInt();
+  const G4Material* bmat = fMaterial->GetBaseMaterial();
+  G4NistManager* nist = G4NistManager::Instance();
+
+  // arbitrary empirical limits 
+  // parameterisation with very different density is not applicable
+  static const G4double corrmax = 1.;
+  static const G4double massfracmax = 0.9;
 
   // for simple non-NIST materials 
   G4double corr = 0.0;
+
   if(idx < 0 && 1 == nelm) {
     idx = fDensityData->GetElementIndex(Z0, fMaterial->GetState());
 
     // Correction for base material or for non-nominal density
     // Except cases of very different density defined in user code
     if(idx >= 0) {
-      const G4Material* bmat = fMaterial->GetBaseMaterial();
-      if(bmat) {
-	corr = G4Log(bmat->GetDensity()/fMaterial->GetDensity());
-      } else {
-	G4double dens = G4NistManager::Instance()->GetNominalDensity(Z0);
-	if(dens <= 0.0) { idx = -1; }
-	else {
-	  corr = G4Log(dens/fMaterial->GetDensity());
-	}
+      G4double dens = nist->GetNominalDensity(Z0);
+      if(dens <= 0.0) { idx = -1; }
+      else {
+	corr = G4Log(dens/fMaterial->GetDensity());
       }
-      // 1.0 is an arbitrary empirical limit 
-      // parameterisation with very different density is not applicable
-      if(std::abs(corr) > 1.0) { idx = -1; }
+      if(std::abs(corr) > corrmax) { idx = -1; }
+    }
+  }
+  // for base material case
+  if(idx < 0 && bmat) {
+    idx = fDensityData->GetIndex(bmat->GetName());
+    if(idx >= 0) {
+      corr = G4Log(bmat->GetDensity()/fMaterial->GetDensity());
+      if(std::abs(corr) > corrmax) { idx = -1; }
     }
   }
 
+  // for compound non-NIST materials with one element dominating 
+  if(idx < 0 && 1 < nelm) {
+    const G4double tot = fMaterial->GetTotNbOfAtomsPerVolume();
+    for(G4int i=0; i<nelm; ++i) {
+      const G4double frac = fMaterial->GetVecNbOfAtomsPerVolume()[i]/tot;
+      if(frac > massfracmax) {
+        Z0 = ((*(fMaterial->GetElementVector()))[i])->GetZasInt();
+	idx = fDensityData->GetElementIndex(Z0, fMaterial->GetState());
+	G4double dens = nist->GetNominalDensity(Z0);
+        if(idx >= 0 && dens > 0.0) {
+	  corr = G4Log(dens/fMaterial->GetDensity());
+	  if(std::abs(corr) > corrmax) { idx = -1; }
+          else { break; }
+	}
+      }
+    }
+  }
   //G4cout<<"DensityEffect for "<<fMaterial->GetName()<<"  "<< idx << G4endl; 
 
   if(idx >= 0) {
@@ -278,10 +317,6 @@ void G4IonisParamMat::ComputeDensityEffect()
       //
       fMdensity = 3.;
       fX1density = 4.0;
-      //static const G4double ClimiG[] = {10.,10.5,11.,11.5,12.25,13.804};
-      //static const G4double X0valG[] = {1.6,1.7,1.8,1.9,2.0,2.0};
-      //static const G4double X1valG[] = {4.0,4.0,4.0,4.0,4.0,5.0};
-
       if(fCdensity < 10.) {
 	fX0density = 1.6; 
       } else if(fCdensity < 11.5) { 
@@ -310,8 +345,7 @@ void G4IonisParamMat::ComputeDensityEffect()
   // change parameters if the gas is not in STP.
   // For the correction the density(STP) is needed. 
   // Density(STP) is calculated here : 
-  
-    
+      
   if (State == kStateGas) { 
     G4double Density  = fMaterial->GetDensity();
     G4double Pressure = fMaterial->GetPressure();
@@ -354,12 +388,11 @@ void G4IonisParamMat::ComputeFluctModel()
   // compute parameters for the energy loss fluctuation model
   // needs an 'effective Z' 
   G4double Zeff = 0.;
-  for (size_t i=0;i<fMaterial->GetNumberOfElements();i++) {
+  for (size_t i=0; i<fMaterial->GetNumberOfElements(); ++i) {
      Zeff += (fMaterial->GetFractionVector())[i]
              *((*(fMaterial->GetElementVector()))[i]->GetZ());
   }
-  if (Zeff > 2.) { fF2fluct = 2./Zeff; }
-  else           { fF2fluct = 0.; }
+  fF2fluct = (Zeff > 2.) ? 2./Zeff : 0.0; 
 
   fF1fluct         = 1. - fF2fluct;
   fEnergy2fluct    = 10.*Zeff*Zeff*eV;
@@ -383,7 +416,7 @@ void G4IonisParamMat::ComputeIonParameters()
 
   //  loop for the elements in the material
   //  to find out average values Z, vF, lF
-  G4double z(0.0), vF(0.0), lF(0.0), norm(0.0), a23(0.0);
+  G4double z(0.0), vF(0.0), lF(0.0), a23(0.0);
 
   G4Pow* g4pow = G4Pow::GetInstance();
   if( 1 == NumberOfElements ) {
@@ -394,19 +427,19 @@ void G4IonisParamMat::ComputeIonParameters()
     a23 = 1.0/g4pow->A23(element->GetN());
 
   } else {
-    for (G4int iel=0; iel<NumberOfElements; iel++)
-      {
-        const G4Element* element = (*theElementVector)[iel];
-        const G4double weight = theAtomicNumDensityVector[iel];
-        norm += weight ;
-        z    += element->GetZ() * weight;
-        vF   += element->GetIonisation()->GetFermiVelocity() * weight;
-        lF   += element->GetIonisation()->GetLFactor() * weight;
-	a23  += weight/g4pow->A23(element->GetN());
-      }
-    z  /= norm;
-    vF /= norm;
-    lF /= norm;
+    G4double norm(0.0);
+    for (G4int iel=0; iel<NumberOfElements; ++iel) {
+      const G4Element* element = (*theElementVector)[iel];
+      const G4double weight = theAtomicNumDensityVector[iel];
+      norm += weight;
+      z    += element->GetZ() * weight;
+      vF   += element->GetIonisation()->GetFermiVelocity() * weight;
+      lF   += element->GetIonisation()->GetLFactor() * weight;
+      a23  += weight/g4pow->A23(element->GetN());
+    }
+    z   /= norm;
+    vF  /= norm;
+    lF  /= norm;
     a23 /= norm;
   }  
   fZeff        = z;
@@ -485,6 +518,27 @@ void G4IonisParamMat::SetDensityEffectParameters(const G4Material* bmat)
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&ionisMutex);
 #endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4IonisParamMat::ComputeDensityEffectOnFly(G4bool val)
+{
+  if(val) {
+    if(!fDensityEffectCalc) { 
+      G4int n = 0;
+      for(size_t i=0; i<fMaterial->GetNumberOfElements(); ++i) {
+	const G4int Z = fMaterial->GetElement(i)->GetZasInt();
+        n += G4AtomicShells::GetNumberOfShells(Z);
+      }
+      // The last level is the conduction level.  If this is *not* a conductor,
+      // make a dummy conductor level with zero electrons in it.
+      fDensityEffectCalc = new G4DensityEffectCalculator(fMaterial, n);
+    }
+  } else {
+    delete fDensityEffectCalc;
+    fDensityEffectCalc = nullptr;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

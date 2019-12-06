@@ -58,7 +58,7 @@
 
 
 CCalEventAction::CCalEventAction(CCalPrimaryGeneratorAction* pg,
-				 CCalSteppingAction* sa): 
+                                 CCalSteppingAction* sa): 
   isInitialized(false),fPrimaryGenerator(pg),
   fSteppingAction(sa),SDnames(nullptr),numberOfSD(0) 
 {  
@@ -88,11 +88,11 @@ void CCalEventAction::initialize() {
     n = std::min(n, 2);
     SDnames = new nameType[n];
   }
-  for (int i=0; i<numberOfSD; ++i) {
+  for (G4int i=0; i<numberOfSD; ++i) {
     SDnames[i] = G4String(CCalSDList::getInstance()->getCaloSDName(i));
 #ifdef debug
     G4cout << "CCalEndOfEventAction: found SD " << i << " name "
-	 << SDnames[i] << G4endl;
+         << SDnames[i] << G4endl;
 #endif
   }       
 }
@@ -119,79 +119,79 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
   if (allHC == 0) {
 #ifdef debug
     G4cout << "CCalEndOfEventAction: No Hit Collection in this event" 
-	 << G4endl;
+         << G4endl;
 #endif
     return;
   }
-  	
+          
   //
   // hits info
   //
   
   //Now make summary
-  float hcalE[28], ecalE[49], fullE=0., edec=0, edhc=0;
-  int i = 0;
+  G4float hcalE[28], ecalE[49], fullE=0., edec=0, edhc=0;
+  G4int i = 0;
   for (i = 0; i < 28; i++) {hcalE[i]=0.;}
   for (i = 0; i < 49; i++) {ecalE[i]=0.;}
 
-  float* edep = new float[numberOfSD];
-  int nhit=0;
+  G4float* edep = new G4float[numberOfSD];
+  G4int nhit=0;
   for (i = 0; i < numberOfSD; ++i){
 
     //
     // Look for the Hit Collection
     //
     edep[i] = 0;
-    int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
+    G4int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
 
     if (caloHCid >= 0) {
       CCalG4HitCollection* theHC = 
-	(CCalG4HitCollection*) allHC->GetHC(caloHCid);
+        (CCalG4HitCollection*) allHC->GetHC(caloHCid);
     
       if (theHC != 0) {
 
-	G4int nentries = theHC->entries();
+        G4int nentries = theHC->entries();
 #ifdef debug
-	G4cout << " There are " << nentries << " hits in " << SDnames[i] 
-	       << " :" << G4endl;
+        G4cout << " There are " << nentries << " hits in " << SDnames[i] 
+               << " :" << G4endl;
 #endif
 
-	if (nentries > 0) {
+        if (nentries > 0) {
   
-	  int j;
-	  for (j=0; j<nentries; j++){
+          G4int j;
+          for (j=0; j<nentries; j++){
 #ifdef ddebug
-	    G4cout << "Hit " << j;
+            G4cout << "Hit " << j;
 #endif
-	    CCalG4Hit* aHit =  (*theHC)[j];
-	    float En = aHit->getEnergyDeposit();
-	    int unitID = aHit->getUnitID();
-	    int id=-1;
-	    if (unitID > 0 && unitID < 29) {
-	      id = unitID - 1; // HCal
-	      hcalE[id] += En/GeV;
-	    } else {
-	      int i0 = unitID/4096;
-	      int i1 = (unitID/64)%64;
-	      int i2 = unitID%64;
-	      if (i0 == 1 && i1 < 8 && i2 < 8) {
-		id = i1*7 + i2; // ECal
-		ecalE[id] += En/GeV;
-	      }
-	    }
+            CCalG4Hit* aHit =  (*theHC)[j];
+            G4float En = aHit->getEnergyDeposit();
+            G4int unitID = aHit->getUnitID();
+            G4int id=-1;
+            if (unitID > 0 && unitID < 29) {
+              id = unitID - 1; // HCal
+              hcalE[id] += En/GeV;
+            } else {
+              G4int i0 = unitID/4096;
+              G4int i1 = (unitID/64)%64;
+              G4int i2 = unitID%64;
+              if (i0 == 1 && i1 < 8 && i2 < 8) {
+                id = i1*7 + i2; // ECal
+                ecalE[id] += En/GeV;
+              }
+            }
 #ifdef ddebug
-	    G4cout << " with Energy = " << En/MeV << " MeV in Unit " << unitID 
-		   << " " << id << G4endl;
+            G4cout << " with Energy = " << En/MeV << " MeV in Unit " << unitID 
+                   << " " << id << G4endl;
 #endif
-	    fullE   += En/GeV;
-	    edep[i] += En/GeV;
-	    nhit++;
-	  }
+            fullE   += En/GeV;
+            edep[i] += En/GeV;
+            nhit++;
+          }
 #ifdef ddebug
-	  G4cout << " ===> Total Energy Deposit in this Calorimeter = " 
-		 << edep[i]*1000.0 << "  MeV " << G4endl; 
+          G4cout << " ===> Total Energy Deposit in this Calorimeter = " 
+                 << edep[i]*1000.0 << "  MeV " << G4endl; 
 #endif
-	}
+        }
       }
     }
     if (SDnames[i] == "HadronCalorimeter") {
@@ -204,10 +204,10 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
   delete[] edep;
 
   G4ThreeVector pos = fPrimaryGenerator->GetParticlePosition();
-  float ener = fPrimaryGenerator->GetParticleEnergy()/GeV;
-  float x    = pos.x()/mm;
-  float y    = pos.y()/mm;
-  float z    = pos.z()/mm;
+  G4float ener = fPrimaryGenerator->GetParticleEnergy()/GeV;
+  G4float x    = pos.x()/mm;
+  G4float y    = pos.y()/mm;
+  G4float z    = pos.z()/mm;
 
   //Save results
   G4AnalysisManager* man = G4AnalysisManager::Instance();
@@ -221,17 +221,17 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
   static G4int IDhcalE = -1;
   if (IDhcalE < 0)
     IDhcalE = man->GetH1Id("h100");
-  for (int j=0; j<28; j++) {
+  for (G4int j=0; j<28; j++) {
     man->FillH1(IDhcalE+j,hcalE[j]);
 #ifdef debug
-    G4cout << "Fill Hcal histo " << j << " with " << hCalE[j] << G4endl;
+    G4cout << "Fill Hcal histo " << j << " with " << hcalE[j] << G4endl;
 #endif    
     totalFilledEnergyHcal += hcalE[j];  
   }
 #ifdef debug
     G4cout << 
       "CCalAnalysis::InsertEnergyHcal: Total filled Energy Hcal histo " 
-	   << totalFilledEnergyHcal << G4endl;
+           << totalFilledEnergyHcal << G4endl;
 #endif
 
     //3)
@@ -239,7 +239,7 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
     if (IDecalE < 0)
       IDecalE = man->GetH1Id("h200");
     G4double totalFilledEnergyEcal = 0.0;
-  for (int j=0; j<49; j++) {
+  for (G4int j=0; j<49; j++) {
     man->FillH1(IDecalE+j,ecalE[j]);
 #ifdef debug
     G4cout << "Fill Ecal histo " << j << " with " << ecalE[j] << G4endl;
@@ -249,16 +249,16 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
 #ifdef debug
   G4cout << 
     "CCalAnalysis::InsertEnergyEal: Total filled Energy Ecal histo " 
-	 << totalFilledEnergyEcal << G4endl;
+         << totalFilledEnergyEcal << G4endl;
 #endif
   // 4)
   G4int counter=0;
-  for (int j=0; j<28; j++) 
+  for (G4int j=0; j<28; j++) 
     {
       man->FillNtupleFColumn(counter,hcalE[j]);
       counter++;
     }
-  for (int j=0; j<49; j++) 
+  for (G4int j=0; j<49; j++) 
     {
       man->FillNtupleFColumn(counter,ecalE[j]);
       counter++;
@@ -280,23 +280,23 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
   if (IDtimeProfile < 0)
     IDtimeProfile = man->GetH1Id("h901");
   for (i = 0; i < numberOfSD; i++){
-    int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
+    G4int caloHCid = G4SDManager::GetSDMpointer()->GetCollectionID(SDnames[i]);
     if (caloHCid >= 0) {
       CCalG4HitCollection* theHC = 
-	(CCalG4HitCollection*) allHC->GetHC(caloHCid);
+        (CCalG4HitCollection*) allHC->GetHC(caloHCid);
       if (theHC != 0) {
-	G4int nentries = theHC->entries();
-	if (nentries > 0) {
-	  for (G4int k=0; k<nentries; k++) {
-	    CCalG4Hit* aHit =  (*theHC)[k];
-	    man->FillH1(IDtimeProfile,aHit->getTimeSlice(),aHit->getEnergyDeposit()/GeV);
+        G4int nentries = theHC->entries();
+        if (nentries > 0) {
+          for (G4int k=0; k<nentries; k++) {
+            CCalG4Hit* aHit =  (*theHC)[k];
+            man->FillH1(IDtimeProfile,aHit->getTimeSlice(),aHit->getEnergyDeposit()/GeV);
 
 #ifdef debug
-	    G4cout << "CCalAnalysis:: Fill Time Profile with Hit " << k
-		   << " Edeposit " << edep << " Gev at " << time << " ns" << G4endl;
+            G4cout << "CCalAnalysis:: Fill Time Profile with Hit " << k
+                   << " Edeposit " << edep << " Gev" << G4endl;
 #endif
-	  }
-	}
+          }
+        }
       }
     }
   }

@@ -94,13 +94,15 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
   currentMaterialIndex = -1;
 
   Mottcross = new G4ScreeningMottCrossSection();
+  //G4cout <<"## G4eSingleCoulombScatteringModel: " << this << "  " << Mottcross << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eSingleCoulombScatteringModel::~G4eSingleCoulombScatteringModel()
 {
-  delete  Mottcross;
+  //G4cout <<"## G4eSingleCoulombScatteringModel: delete " << this << "  " << Mottcross << G4endl;
+  delete Mottcross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

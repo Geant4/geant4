@@ -94,7 +94,7 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
         return (std::vector<T*>*)theCollection;
       }
       //  Returns a collection vector.
-      inline G4int insert(T* aHit)
+      inline size_t insert(T* aHit)
       {
         if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         std::vector<T*>*theDigiCollection
@@ -104,7 +104,7 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
       }
       //  Insert a digi object. Total number of digi objects stored in this
       // collection is returned.
-      inline G4int entries() const
+      inline size_t entries() const
       {
         if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         std::vector<T*>*theDigiCollection

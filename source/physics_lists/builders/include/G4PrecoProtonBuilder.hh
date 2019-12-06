@@ -70,7 +70,5 @@ class G4PrecoProtonBuilder : public G4VProtonBuilder
 
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

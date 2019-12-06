@@ -13,6 +13,35 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-November-2019, Alberto Ribon    (phys-ctor-hinelastic-V10-05-03)
+- Update of the only README file.
+
+22-October-2019, Alberto Ribon     (phys-ctor-hinelastic-V10-05-02)
+- G4HadronPhysicsFTFP_BERT_TRV : removed special treatment of hadronic
+  inelastic cross sections of hyperons and anti-hyperons (now it is
+  the default in the class G4HyperonFTFPBuilder).
+- G4HadronInelasticFTFQGSP_BERT, G4HadronInelasticQBBC : use Glauber-Gribov
+  inelastic cross sections (instead of Chips ones) for hyperons and
+  anti-hyperons.
+- G4HadronPhysicsFTF_BIC, G4HadronPhysicsFTFP_BERT_HP, 
+  G4HadronPhysicsFTFP_BERT_TRV, G4HadronPhysicsFTFQGSP_BERT,
+  G4HadronPhysicsQGS_BIC, G4HadronPhysicsQGSP_BERT,
+  G4HadronPhysicsQGSP_BERT_HP, G4HadronPhysicsQGSP_BIC, 
+  G4HadronPhysicsQGSP_BIC_HP, G4HadronPhysicsQGSP_BIC_AllHP,
+  G4HadronInelasticQBBC, G4HadronPhysicsINCLXX : removed special treatment
+  of hadronic inelastic cross sections of kaons (now default).
+
+27-August-2019, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-05-01)
+- G4HadronInelasticQBBC - use XS proton inelastic
+
+05-August-2019, Alberto Ribon      (phys-ctor-hinelastic-V10-05-00)
+- README : updated information.
+- Replacing explicit values for the energy transition region with values
+  from G4HadronicParameters in nearly all constructors.
+  Note: kept unchanged the transition region between FTFP and BERT only
+        in 4 cases: G4HadronPhysicsFTFP_BERT_ATL, G4HadronPhysicsINCLXX,
+        G4HadronPhysicsNuBeam and "ShieldingM".
+
 26-November-2018, Alberto Ribon    (phys-ctor-hinelastic-V10-04-14)
 - README : updated information.
 - G4HadronPhysicsFTFQGSP_BERT : use BGG pion cross section, consistently

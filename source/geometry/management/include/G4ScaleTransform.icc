@@ -23,34 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// G4ScaleTransform Inline implementation.
+// G4ScaleTransform inline implementation.
 // Based on implementation provided in Root
 //
+// G.Cosmo, 18 Feb 2016 - initial version
 // --------------------------------------------------------------------
 
 inline G4ScaleTransform::G4ScaleTransform()
-  : fScale(1.,1.,1.), fIScale(1.,1.,1.), flFactor(1.), fgFactor(1.)
+  : fScale(1.,1.,1.), fIScale(1.,1.,1.)
 {
 }
 
 inline G4ScaleTransform::G4ScaleTransform(G4double sx, G4double sy, G4double sz)
-  : fScale(sx,sy,sz), fIScale(), flFactor(1.), fgFactor(1.)
+  : fScale(sx,sy,sz), fIScale()
 {
   Init();
 }  
 
 inline G4ScaleTransform::G4ScaleTransform(const G4ThreeVector& scale)
-  : fScale(scale), fIScale(), flFactor(1.), fgFactor(1.)
+  : fScale(scale), fIScale()
 {
   Init();
 }
         
 inline G4ScaleTransform::G4ScaleTransform(const G4Scale3D& scale)
-  : fScale(scale.xx(), scale.yy(), scale.zz()), fIScale(),
-    flFactor(1.), fgFactor(1.)
+  : fScale(scale.xx(), scale.yy(), scale.zz()), fIScale()
 {
   Init();
 }

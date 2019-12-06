@@ -57,10 +57,10 @@ public:
 
 private:
 
-  inline const G4FermiChannels& operator=(const G4FermiChannels&) = delete;
-  inline G4FermiChannels(const G4FermiChannels &) = delete;
-  inline G4bool operator==(const G4FermiChannels &) const = delete;
-  inline G4bool operator!=(const G4FermiChannels &) const = delete;
+  inline const G4FermiChannels& operator=(const G4FermiChannels&);
+  inline G4FermiChannels(const G4FermiChannels &);
+  inline G4bool operator==(const G4FermiChannels &);
+  inline G4bool operator!=(const G4FermiChannels &);
 
   size_t nch;
   G4double excitation;

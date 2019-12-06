@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-11-19 I. Hrivnacova (testem18-V10-05-00)
+- Fixed Doxygen warnings
+
 10-04-18 mma (testem18-V10-04-02)
 - testem18.cc : set visualisation only in interactive mode
 

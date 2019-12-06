@@ -34,23 +34,21 @@
 #include <map>
 #include "CCalutils.hh"
 
-class CCalGeometryConfiguration {
-
+class CCalGeometryConfiguration
+{
   struct GCInfo { 
     G4String FileName;
-    int      ConstructFlag;
+    G4int      ConstructFlag;
   };
 
   typedef std::map<G4String, GCInfo, std::less<G4String> > CCalGeometryConfTable;
-  typedef std::map<G4String, GCInfo, std::less<G4String> >::iterator CCalGeometryConfIterator;
-		    
   
 public:
   ~CCalGeometryConfiguration() {}
 
   static CCalGeometryConfiguration* getInstance();
 
-  int      getConstructFlag(const G4String& n) /*const*/;
+  G4int getConstructFlag(const G4String& n) /*const*/;
   G4String getFileName(const G4String& n) /*const*/;
 
   CCalGeometryConfTable& getConfTable() { 

@@ -13,6 +13,16 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-Oct-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-02)
+- REAMDE : updated.
+
+06-Aug-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-01)
+- G4StoppingPhysicsFritiofWithBinaryCascade : new class to handle the
+  nuclear capture at rest of negatively charged particles. It is similar
+  to G4StoppingPhysics, with the only difference that Fritiof coupled with
+  Binary Cascade is used (instead of FTFP) for anti-proton and anti-neutron
+  annihilation at rest.
+
 22-May-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-00)
 - Use FTFP also for the annihilation at rest of neutral anti-hadrons:
   anti-neutron, anti-lambda, anti-sigma0 anti-xi0.

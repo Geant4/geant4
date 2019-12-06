@@ -665,7 +665,7 @@ G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e, G4double loge)
            << basedCoupleIndex << " E(MeV)= " << e 
          << " Emin= " << minKinEnergy << "  Factor= " << fFactor 
          << "  " << theDEDXTable << G4endl; */
-  G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e,loge,idxDEDX);
+  G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->LogVectorValue(e,loge);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -732,7 +732,7 @@ G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e, G4double loge)
     lastIdx = basedCoupleIndex;
     preStepRangeEnergy = e;
     computedRange = 
-          ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e, loge, idxRange);
+          ((*theRangeTableForLoss)[basedCoupleIndex])->LogVectorValue(e, loge);
     if(e < minKinEnergy) { computedRange *= std::sqrt(e/minKinEnergy); }
   }
   //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
@@ -763,7 +763,7 @@ G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e,
 {
   G4double x;
   if (e < maxKinEnergyCSDA) {
-    x = ((*theCSDARangeTable)[basedCoupleIndex])->Value(e, loge, idxCSDA);
+    x = ((*theCSDARangeTable)[basedCoupleIndex])->LogVectorValue(e, loge);
     if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   } else {
     x = theRangeAtMaxEnergy[basedCoupleIndex] +
@@ -800,7 +800,7 @@ inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
 inline G4double
 G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e, G4double loge)
 {
-  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e,loge,idxLambda);
+  return fFactor*((*theLambdaTable)[basedCoupleIndex])->LogVectorValue(e,loge);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

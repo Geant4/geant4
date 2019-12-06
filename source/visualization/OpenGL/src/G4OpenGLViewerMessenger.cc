@@ -203,7 +203,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandDisplayListLimit =
     new G4UIcmdWithAnInteger("/vis/ogl/set/displayListLimit", this);
   fpCommandDisplayListLimit->SetGuidance
-    ("Set/reset display list limit (to avoid memory exhaustion).");
+    ("Set/reset display list number of primitive limit (to avoid memory exhaustion).");
   fpCommandDisplayListLimit->SetParameterName("limit", omitable = true);
   fpCommandDisplayListLimit->SetDefaultValue(50000);
   fpCommandDisplayListLimit->SetRange("limit>=10000");

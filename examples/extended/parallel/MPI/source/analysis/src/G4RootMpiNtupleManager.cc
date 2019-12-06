@@ -43,9 +43,10 @@ const int kTAG_NTUPLE = 1004;   // This constant is defined in G4MPImanager
 
 //_____________________________________________________________________________
 G4RootMpiNtupleManager::G4RootMpiNtupleManager(
-                          const G4AnalysisManagerState& state, G4bool rowWise,
+                          const G4AnalysisManagerState& state, 
+                          G4bool rowWise, G4bool rowMode,
                           tools::impi* impi, G4int mpiSize)
- : G4RootNtupleManager(state, 0, rowWise),
+ : G4RootNtupleManager(state, 0, rowWise, rowMode),
    fImpi(impi),
    fSlaveRanks(),
    fMainRank(0)
@@ -82,6 +83,7 @@ G4bool G4RootMpiNtupleManager::Send(G4int id, tools::wroot::ntuple* ntuple)
 
   auto ntupleFile = fFileManager->GetNtupleFile(id);
   tools::uint32 basketSize = fFileManager->GetBasketSize();
+  unsigned int basketEntries = fFileManager->GetBasketEntries();
 
   for ( auto slaveRank : fSlaveRanks ) {
     G4cout << "Going to send main ntuple data to slave rank " << slaveRank << G4endl;
@@ -92,6 +94,11 @@ G4bool G4RootMpiNtupleManager::Send(G4int id, tools::wroot::ntuple* ntuple)
       return false;
     }
   
+    if ( ! fImpi->bpack(fRowWise) ) {
+      G4cerr << "bpack(fRowWise) failed."<< G4endl;
+      return false;
+    }
+
     if ( ! fImpi->bpack(ntupleFile->byte_swap())) {
       G4cerr << "bpack(byte_swap) failed." << G4endl; 
       return false;
@@ -110,12 +117,20 @@ G4bool G4RootMpiNtupleManager::Send(G4int id, tools::wroot::ntuple* ntuple)
 
     if ( fRowWise ) {
       if ( ! fImpi->pack(basketSize) ) {
-        G4cerr << "pack(basket_sizes) failed." << G4endl;
+        G4cerr << "pack(basketSize) failed." << G4endl;
         return false;
       }
     } else {
+      if ( ! fImpi->bpack(fRowMode) ) {
+        G4cerr << "bpack(fRowMode) failed." << G4endl;
+        return false;
+      }      
       if ( ! fImpi->vpack(basketSizes) ) {
-        G4cerr << "vpack(basket_sizes) failed." << G4endl;
+        G4cerr << "vpack(basketSizes) failed." << G4endl;
+        return false;
+      }
+      if ( ! fImpi->pack(basketEntries) ) {
+        G4cerr << "pack(basketEntries) failed." << G4endl;
         return false;
       }      
     }
@@ -159,7 +174,7 @@ G4bool G4RootMpiNtupleManager::WaitBuffer()
 // Receive the pntuple data from the slave ranks
 // For the time being only one ntuple 
 
-  G4cout << "G4RootMpiNtupleManager::WaitBuffer" << G4endl;
+  // G4cout << "G4RootMpiNtupleManager::WaitBuffer" << G4endl;
 
   unsigned long numberOfEndFill = 0;
   
@@ -178,15 +193,15 @@ G4bool G4RootMpiNtupleManager::WaitBuffer()
   
     tools::uint32 protocol;
     if ( ! fImpi->unpack(protocol)) {
-      G4cerr << "sunpack(protocol) failed."<< G4endl;
+      G4cerr << "unpack(protocol) failed."<< G4endl;
       return false;
     }
   
     if ( protocol == tools::wroot::mpi_protocol_basket() ) {
 
-       // G4cout << "G4RootMpiNtupleManager::WaitBuffer got protocol_basket" << G4endl;
+      // G4cout << "G4RootMpiNtupleManager::WaitBuffer got protocol_basket" << G4endl;
   
-        // get ntuple Id
+      // get ntuple Id
       tools::uint32 ntupleId;
       if ( ! fImpi->unpack(ntupleId) ) {
         G4cerr << "unpack(ntuple_id) failed."<< std::endl;
@@ -204,6 +219,32 @@ G4bool G4RootMpiNtupleManager::WaitBuffer()
       // add basket to main ntuple
       if ( ! mainNtuple->mpi_add_basket(*fImpi)) {
           std::cerr << "mainNtuple->mpi_add_basket() failed." << std::endl;    
+          return EXIT_FAILURE;
+      }
+    } 
+    else if ( protocol == tools::wroot::mpi_protocol_baskets() ) {
+      //column_wise and row_mode only.
+
+      // G4cout << "G4RootMpiNtupleManager::WaitBuffer got protocol_baskets" << G4endl;
+  
+      // get ntuple Id
+      tools::uint32 ntupleId;
+      if ( ! fImpi->unpack(ntupleId) ) {
+        G4cerr << "unpack(ntuple_id) failed."<< std::endl;
+        return false;
+      }
+
+      if ( ntupleId >= fNtupleVector.size() ) {
+        std::cerr << "!!! unknown ntupleId " << ntupleId << std::endl;
+        return false;
+      }
+
+      // Main ntuple
+      auto mainNtuple = fNtupleVector[ntupleId];
+
+      // add basket to main ntuple
+      if ( ! mainNtuple->mpi_add_baskets(*fImpi)) {
+          std::cerr << "mainNtuple->mpi_add_baskets() failed." << std::endl;    
           return EXIT_FAILURE;
       }
     } 
@@ -286,4 +327,3 @@ G4bool G4RootMpiNtupleManager::Merge()
 
   return finalResult;
 }
-

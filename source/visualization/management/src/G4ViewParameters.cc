@@ -29,8 +29,6 @@
 // John Allison  19th July 1996
 // View parameters and options.
 
-#include <sstream>
-
 #include "G4ViewParameters.hh"
 
 #include "G4VisManager.hh"
@@ -38,6 +36,9 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
+
+#include <sstream>
+#include <cmath>
 
 G4ViewParameters::G4ViewParameters ():
   fDrawingStyle (wireframe),
@@ -1455,42 +1456,55 @@ G4ViewParameters* G4ViewParameters::CatmullRomCubicSplineInterpolation
 
   // Catmull-Rom cubic spline interpolation
 #define INTERPOLATE(param) \
-  /* This works out the interpolated param in i'th interval */ \
-  /* Assumes n >= 1 */ \
-  if (i == 0) { \
-    /* First interval */ \
-    mi = v[1].param - v[0].param; \
-    /* If there is only one interval, make start and end slopes equal */ \
-    /* (This results in a linear interpolation) */ \
-    if (n == 1) mi1 = mi; \
-    /* else the end slope of the interval takes account of the next waypoint along */ \
-    else mi1 = 0.5 * (v[2].param - v[0].param); \
-  } else if (i >= n - 1) { \
-    /* Similarly for last interval */ \
-    mi1 = v[i+1].param - v[i].param; \
-    /* If there is only one interval, make start and end slopes equal */ \
-    if (n == 1) mi = mi1; \
-    /* else the start slope of the interval takes account of the previous waypoint */ \
-    else mi = 0.5 * (v[i+1].param - v[i-1].param); \
-  } else { \
-    /* Full Catmull-Rom slopes use previous AND next waypoints */ \
-    mi  = 0.5 * (v[i+1].param - v[i-1].param); \
-    mi1 = 0.5 * (v[i+2].param - v[i  ].param); \
-  } \
-  real = h00 * v[i].param + h10 * mi + h01 * v[i+1].param + h11 * mi1;
+/* This works out the interpolated param in i'th interval */ \
+/* Assumes n >= 1 */ \
+if (i == 0) { \
+/* First interval */ \
+mi = v[1].param - v[0].param; \
+/* If there is only one interval, make start and end slopes equal */ \
+/* (This results in a linear interpolation) */ \
+if (n == 1) mi1 = mi; \
+/* else the end slope of the interval takes account of the next waypoint along */ \
+else mi1 = 0.5 * (v[2].param - v[0].param); \
+} else if (i >= n - 1) { \
+/* Similarly for last interval */ \
+mi1 = v[i+1].param - v[i].param; \
+/* If there is only one interval, make start and end slopes equal */ \
+if (n == 1) mi = mi1; \
+/* else the start slope of the interval takes account of the previous waypoint */ \
+else mi = 0.5 * (v[i+1].param - v[i-1].param); \
+} else { \
+/* Full Catmull-Rom slopes use previous AND next waypoints */ \
+mi  = 0.5 * (v[i+1].param - v[i-1].param); \
+mi1 = 0.5 * (v[i+2].param - v[i  ].param); \
+} \
+real = h00 * v[i].param + h10 * mi + h01 * v[i+1].param + h11 * mi1;
+
+#define INTERPOLATELOG(param) \
+if (i == 0) { \
+mi = std::log(v[1].param) - std::log(v[0].param); \
+if (n == 1) mi1 = mi; \
+else mi1 = 0.5 * (std::log(v[2].param) - std::log(v[0].param)); \
+} else if (i >= n - 1) { \
+mi1 = std::log(v[i+1].param) - std::log(v[i].param); \
+if (n == 1) mi = mi1; \
+else mi = 0.5 * (std::log(v[i+1].param) - std::log(v[i-1].param)); \
+} else { \
+mi  = 0.5 * (std::log(v[i+1].param) - std::log(v[i-1].param)); \
+mi1 = 0.5 * (std::log(v[i+2].param) - std::log(v[i  ].param)); \
+} \
+real = std::exp(h00 * std::log(v[i].param) + h10 * mi + h01 * std::log(v[i+1].param) + h11 * mi1);
 
   // Real parameters
   INTERPOLATE(fVisibleDensity);
   if (real < 0.) real = 0.;
   holdingValues.fVisibleDensity = real;
-  INTERPOLATE(fExplodeFactor);
-  if (real < 0.) real = 0.;
+  INTERPOLATELOG(fExplodeFactor);
   holdingValues.fExplodeFactor = real;
   INTERPOLATE(fFieldHalfAngle);
   if (real < 0.) real = 0.;
   holdingValues.fFieldHalfAngle = real;
-  INTERPOLATE(fZoomFactor);
-  if (real < 0.) real = 0.;
+  INTERPOLATELOG(fZoomFactor);
   holdingValues.fZoomFactor = real;
   INTERPOLATE(fDolly);
   holdingValues.fDolly = real;

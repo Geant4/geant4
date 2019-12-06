@@ -56,9 +56,11 @@ class CCalVOrganization;
 
 //#define debug
  
-class CCaloSD : public G4VSensitiveDetector {
+class CCaloSD : public G4VSensitiveDetector
+{
 
 public:
+
   CCaloSD(G4String aSDname, CCalVOrganization* numberingScheme);
   virtual ~CCaloSD();
 
@@ -71,8 +73,8 @@ public:
 
 public:
   
-  void SetPrimaryID(int i) {PrimaryID = i;}
-  int  GetPrimaryID( )     {return PrimaryID;}
+  void SetPrimaryID(G4int i) {PrimaryID = i;}
+  G4int  GetPrimaryID( )     {return PrimaryID;}
   void SetOrganization(CCalVOrganization* org);
 
 private:
@@ -93,7 +95,7 @@ private:
   // unit ID (cristal/fiber/scintillator) and the Time slice ID.
 
   G4ThreeVector EntrancePoint;
-  float IncidentEnergy;
+  G4float IncidentEnergy;
   G4int PrimID  ; //@@ ID of the primary particle.
 
   G4int                HCID;
@@ -111,13 +113,11 @@ private:
 
   const G4StepPoint*   PreStepPoint; 
   const G4StepPoint*   PostStepPoint; 
-  float          EdepositEM, EdepositEHAD;
+  G4float          EdepositEM, EdepositEHAD;
   G4ThreeVector  HitPoint;
 
   CCalVOrganization* theDescription;
 
 };
 
-
 #endif
-

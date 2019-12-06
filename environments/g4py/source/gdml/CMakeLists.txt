@@ -24,7 +24,7 @@ set_target_properties(${_TARGET}
 
 target_link_libraries (${_TARGET}
                       ${GEANT4_LIBRARIES_WITH_VIS} ${XERCESC_LIBRARY}
-                      boost_python ${PYTHON_LIBRARIES})
+                      ${BOOST_PYTHON_LIB} ${PYTHON_LIBRARIES})
 
 # install
 install(TARGETS ${_TARGET} LIBRARY DESTINATION ${G4MODULES_INSTALL_DIR})

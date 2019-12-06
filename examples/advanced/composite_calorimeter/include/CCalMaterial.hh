@@ -33,7 +33,8 @@
 #include <iostream>
 #include "globals.hh"
 
-class CCalMaterial {
+class CCalMaterial
+{
 
 friend std::ostream& operator<<(std::ostream&, const CCalMaterial&);
   
@@ -41,18 +42,18 @@ public:
   enum FractionType {FTWeight, FTVolume};
 
   //Constructors and destructors
-  CCalMaterial(G4String mat, double dens, int nelem, 
-	       CCalMaterial** constituents, double* weights,
-	       FractionType=FTWeight);
+  CCalMaterial(G4String mat, G4double dens, G4int nelem, 
+               CCalMaterial** constituents, G4double* weights,
+               FractionType=FTWeight);
   CCalMaterial(const CCalMaterial&);
   virtual ~CCalMaterial();
 
   //Get methods
-  G4String Name() const         {return name;}           //Material name.
-  double   Density() const      {return density;}        //Density in g/cm3.
-  int      NElements() const    {return nElem;}          //Number of Elements.
-  G4String Element(int i) const {return theElements[i];} //Should be protected.
-  double   Weight(int i) const  {return theWeights[i];}  //Should be protected.
+  G4String Name() const         {return name;}           //Material name
+  G4double Density() const      {return density;}        //Density in g/cm3
+  G4int    NElements() const    {return nElem;}          //Number of Elements
+  G4String Element(G4int i) const {return theElements[i];} //Should be protected
+  G4double Weight(G4int i) const {return theWeights[i];} //Should be protected
 
   //Operators
   G4bool        operator==(const CCalMaterial&) const; //Compares ONLY names
@@ -62,15 +63,15 @@ public:
 protected:
   CCalMaterial(){} //Default constructor
   void computeDensity(int nconst,
-		      CCalMaterial** constituents, double* weights,
-		      FractionType ft);
+                      CCalMaterial** constituents, double* weights,
+                      FractionType ft);
   void closeMaterial(); //Closes material construction.
 
 protected:
   G4String  name;            //Material name
-  double    density;         //Density in g/cm3
-  int       nElem;           //Number of constituents.
+  G4double    density;       //Density in g/cm3
+  G4int       nElem;         //Number of constituents.
   G4String* theElements;     //Basic constituents
-  double*   theWeights;      //Elements' weight fractions
+  G4double*   theWeights;    //Elements' weight fractions
 };
 #endif

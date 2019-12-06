@@ -471,9 +471,10 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
   if (theStatus == FresnelRefraction || theStatus == Transmission ) {
     G4MaterialPropertyVector* groupvel =
-    Material2->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
-    G4double finalVelocity = groupvel->Value(thePhotonMomentum);
-    aParticleChange.ProposeVelocity(finalVelocity);
+      Material2->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
+    if (groupvel) {
+      aParticleChange.ProposeVelocity(groupvel->Value(thePhotonMomentum));
+    }
   }
 
   if (theStatus == Detection && fInvokeSD) InvokeSD(pStep);
@@ -1131,7 +1132,6 @@ void G4OpBoundaryProcess::DielectricDielectric()
           alpha = cost1 - cost2*(Rindex2/Rindex1);
           NewMomentum = OldMomentum + alpha*theFacetNormal;
           NewMomentum = NewMomentum.unit();
-          PdotN   = -cost2;
           A_paral = NewMomentum.cross(A_trans);
           A_paral = A_paral.unit();
           E2_abs  = std::sqrt(E2_total);

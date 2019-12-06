@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04TrackerSD.hh
+/// \file ExN04TrackerSD.hh
 /// \brief Definition of the ExN04TrackerSD class
 //
 

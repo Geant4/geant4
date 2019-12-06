@@ -42,7 +42,7 @@ wls.mac implements a scintillating slab and wavelength shifting fibers.
  6  "photons absorbed at boundary per event"
  7  "energy deposition in scintillator per event"
 
-\section LXe_s5  How to start?
+\section LXe_s6  How to start?
 
   - execute LXe in 'batch' mode from macro files, e.g.
     $ ./LXe cerenkov.mac
@@ -52,7 +52,7 @@ wls.mac implements a scintillating slab and wavelength shifting fibers.
     Then type commands, for instance
     Session: /run/beamOn 1
 
-\section LXe_s6 Detailed Explanation of Geometry Implementation
+\section LXe_s7 Detailed Explanation of Geometry Implementation
 
 The way the geometry is constructed is an experiment for a new, more object
 oriented, way to construct geometry. It separates the concept of how a volume
@@ -100,7 +100,7 @@ and defined only once.
 The updated variable is to signal that the volume needs to be updated and a new
 logical volume made.
 
-\section LXe_s7 Modifying the geometry at runtime
+\section LXe_s8 Modifying the geometry at runtime
 
 This example allows the user to modify the geometry definition at runtime. This
 is accomplished through LXeDetectorMessenger, a derived class of G4UImessenger.
@@ -120,7 +120,7 @@ are used when constructing the geometry.
     }
 \endverbatim
 
-\section LXe_s7 PMT sensitive detector
+\section LXe_s9 PMT sensitive detector
 
 The PMT sensitive detector cannot be triggered like a normal sensitive detector
 because the sensitive volume does not allow photons to pass through it. Rather,
@@ -173,7 +173,7 @@ from G4SDManager and call its ProcessHits function.
       }
 \endverbatim
 
-\section LXe_s8 Selectively drawing trajectories or highlighting volumes
+\section LXe_s10 Selectively drawing trajectories or highlighting volumes
 
 In a simulation such as this one, where an average of 6000 trajectories are
 generated in a small space, there is little use in drawing all of them. There
@@ -219,7 +219,7 @@ the logic used in choosing which trajectories to draw.
 See /LXe/detector/volumes/sphere in "UI commands" below for info on what 
 trajectories are drawn in this simulation.
 
-\section LXe_s9 Saving random engine seeds
+\section LXe_s11 Saving random engine seeds
 
 At times it may be necessary to review a particular event of interest. To do
 this without redoing an entire run, which may take a long time, you must store
@@ -234,7 +234,7 @@ When set to true, this causes the run manager to write the seed for the
 beginning of the current run to CurrentRun.rndm and the current event to 
 CurrentEvent.rndm. However, at the beginning of each event this file will be 
 overwritten with the new event. To keep a copy for a particular event there is
-a function to copy this file to run###evt###.rndm.
+a function to copy this file to "run###evt###.rndm".
 
 \verbatim
 G4RunManager::rndmSaveThisEvent()
@@ -252,7 +252,7 @@ directory to save in must exist first. GEANT4 will not create it for you.
 G4RunManager::SetRandomNumberStoreDir(G4String)
 \endverbatim
 
-\section LXe_s10 UI commands
+\section LXe_s12 UI commands
 
 Directories:
 \verbatim
@@ -267,7 +267,7 @@ Commands:
 \endverbatim
 -Specifies a threshold for saving the random seed for an event. If the number
 of photons generated in an event is below this number then the random seed is
-saved to ./random/run###evt###.rndm. See "Saving random engine seeds".
+saved to "./random/run###evt###.rndm". See "Saving random engine seeds".
 
 \verbatim
 /LXe/eventVerbose <int, default = 1>

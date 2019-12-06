@@ -23,99 +23,106 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//  Dormand-Prince RK 6(5) non-FSAL implementation by Somnath Banerjee
-//  Supervision / code review: John Apostolakis
+// G4DormandPrinceRK56
 //
-// Sponsored by Google in Google Summer of Code 2015.
-// 
-// First version: 26 June 2015
-///////////////////////////////////////////////////////////////////////////////
+// Class description:
+//
+// Dormand-Prince RK 6(5) non-FSAL method
 
-#ifndef DORMAND_PRINCE_RK56_H
-#define DORMAND_PRINCE_RK56_H
+// Created: Somnath Banerjee, Google Summer of Code 2015, 26 June 2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+#ifndef G4DORMAND_PRINCE_RK56_HH
+#define G4DORMAND_PRINCE_RK56_HH
 
 #include "G4MagIntegratorStepper.hh"
 
 class G4DormandPrinceRK56 : public G4MagIntegratorStepper
 {
+  public:
+
+    G4DormandPrinceRK56( G4EquationOfMotion* EqRhs,
+                         G4int numberOfVariables = 6,
+                         G4bool primary = true ) ;
     
-public:
-    //constructor
-    G4DormandPrinceRK56( G4EquationOfMotion *EqRhs,
-               G4int numberOfVariables = 6,
-               G4bool primary= true ) ;
-    
-    //destructor
     ~G4DormandPrinceRK56() ;
     
-    //Stepper
+    G4DormandPrinceRK56(const G4DormandPrinceRK56&) = delete;
+    G4DormandPrinceRK56& operator=(const G4DormandPrinceRK56&) = delete;
+    
     void Stepper( const G4double y[],
                   const G4double dydx[],
-                 		G4double h,
-                 		G4double yout[],
-                 		G4double yerr[] ) ;
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[] ) ;
     
     G4double  DistChord()   const;
     G4int IntegratorOrder() const { return 5; }
     
-    G4DormandPrinceRK56(const G4DormandPrinceRK56&);
-    G4DormandPrinceRK56& operator=(const G4DormandPrinceRK56&);
-    
-    //For Preparing the Interpolant and calculating the extra stages
     void SetupInterpolate_low( const G4double yInput[],
-                              const G4double dydx[],
-                              const G4double Step );
+                               const G4double dydx[],
+                               const G4double Step );
+      // For preparing the Interpolant and calculating the extra stages
     
-    //For calculating the output at the tau fraction of Step
     void Interpolate_low( const G4double yInput[],
                           const G4double dydx[],
                           const G4double Step,
                                 G4double yOut[],
                                 G4double tau );
+      // For calculating the output at the tau fraction of Step
 
-    void SetupInterpolation()
-      { SetupInterpolate( fLastInitialVector, fLastDyDx, fLastStepLength); }
+    inline void SetupInterpolation()
+    {
+      SetupInterpolate( fLastInitialVector, fLastDyDx, fLastStepLength);
+    }
    
     inline void SetupInterpolate( const G4double yInput[],
                                   const G4double dydx[],
-                                  const G4double Step ){
-        SetupInterpolate_low( yInput, dydx, Step);
+                                  const G4double Step )
+    {
+      SetupInterpolate_low( yInput, dydx, Step);
     }
     
-    //For calculating the output at the tau fraction of Step
     inline void Interpolate( const G4double yInput[],
                              const G4double dydx[],
                              const G4double Step,
                                    G4double yOut[],
-                                   G4double tau ){
-        Interpolate_low( yInput, dydx, Step, yOut, tau);
+                                   G4double tau )
+    {
+      Interpolate_low( yInput, dydx, Step, yOut, tau);
     }
+      // For calculating the output at the tau fraction of Step
 
-    void Interpolate( G4double tau, G4double yOut[])
-    { Interpolate( fLastInitialVector, fLastDyDx, fLastStepLength, yOut, tau ); }
+    inline void Interpolate( G4double tau, G4double yOut[])
+    {
+      Interpolate( fLastInitialVector, fLastDyDx, fLastStepLength, yOut, tau );
+    }
 
     void SetupInterpolate_high( const G4double yInput[],
                                 const G4double dydx[],
                                 const G4double Step );
     
-    //For calculating the output at the tau fraction of Step
     void Interpolate_high( const G4double yInput[],
                            const G4double dydx[],
                            const G4double Step,
                                  G4double yOut[],
                                  G4double tau );
+      // For calculating the output at the tau fraction of Step
     
-private:
-    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *ak8, *ak9; // for storing intermediate 'k' values in stepper
-    G4double *ak10_low, *ak10, *ak11, * ak12;    //For the additional stages of Interpolant
+  private:
+
+    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *ak8, *ak9;
+      // For storing intermediate 'k' values in stepper
+    G4double *ak10_low, *ak10, *ak11, * ak12;
+      // For the additional stages of Interpolant
     G4double *yTemp, *yIn;
     
-    G4double fLastStepLength;
+    G4double fLastStepLength = -1.0;
     G4double *fLastInitialVector, *fLastFinalVector,
              *fLastDyDx, *fMidVector, *fMidError;
-      // for DistChord calculations
+      // For DistChord calculations
     
-    G4DormandPrinceRK56* fAuxStepper;
+    G4DormandPrinceRK56* fAuxStepper = nullptr;
 };
 
 #endif /* G4DormandPrinceRK56 */

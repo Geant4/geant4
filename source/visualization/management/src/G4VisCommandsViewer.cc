@@ -1363,7 +1363,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
 
 #else // WIN32 (popen is not available in Windows)
 
-  std::experimental::filesystem::v1::path filePattern(pattern);
+  std::filesystem::path filePattern = pattern.c_str();
 
   // Default pattern : *.g4view
   // Translated to a regexp : ^.*\\.g4view
@@ -1400,10 +1400,11 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   // Build view vector of way points
   // Add "./" for empty paths
   G4String parentPath(filePattern.parent_path().string().length() ? filePattern.parent_path().string() : std::string("./"));
+  std::filesystem::path parentPathPattern = parentPath.c_str();
   // Iterate through files in directory and apply regex match to filter appropriate files
   std::regex result_pattern_regex (result_pattern, std::regex_constants::basic | std::regex_constants::icase);
-  for (auto iter = std::experimental::filesystem::v1::directory_iterator(parentPath);
-       iter != std::experimental::filesystem::v1::directory_iterator() && safetyCount++ < safety;
+  for (auto iter = std::filesystem::directory_iterator(parentPathPattern);
+       iter != std::filesystem::directory_iterator() && safetyCount++ < safety;
        ++iter)
   {
     const auto& file = iter->path();

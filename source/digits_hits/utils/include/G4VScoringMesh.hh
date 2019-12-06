@@ -44,36 +44,41 @@ class G4ParallelWorldProcess;
 
 #include <map>
 
-enum MeshShape { boxMesh, cylinderMesh, sphereMesh , undefinedMesh = -1};
-typedef G4THitsMap< G4double > EventScore;
-typedef G4THitsMap< G4StatDouble > RunScore;
-typedef std::map< G4String, RunScore* > MeshScoreMap;
 // class description:
 //
-//  This class represents a parallel world for interactive scoring purposes.
+//  This class represents a multi-functional detector to be used by command-based scorer
+//  For parallel world scorer, this class creates a parallel world mesh geometry
 //
 
 class G4VScoringMesh
 {
-  public:
+public:
+  enum class MeshShape { box, cylinder, sphere, realWorldLogVol, undefined = -1};
+  using EventScore = G4THitsMap< G4double >;
+  using RunScore = G4THitsMap< G4StatDouble >;
+  using MeshScoreMap = std::map< G4String, RunScore* >;
+
+public:
   G4VScoringMesh(const G4String& wName);
   virtual ~G4VScoringMesh();
 
-  public: // with description
+public: // with description
   // a pure virtual function to construct this mesh geometry
   void Construct(G4VPhysicalVolume* fWorldPhys);
 
   void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
 
-  protected:
+protected:
   virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys) = 0;
 
-  public: // with description
+public: // with description
   // list infomration of this mesh 
   virtual void List() const;
   
-  public: // with description
+public: // with description
   // get the world name
+  // If this ScoringMesh is for parallel world, it returns the name of the parallel world
+  // If this ScoringMesh is for real world logical volume, it returns name of logical volume
   inline const G4String& GetWorldName() const
   { return fWorldName; }
   // get whether this mesh is active or not
@@ -104,6 +109,7 @@ class G4VScoringMesh
   // reset registered primitive scorers
   void ResetScore();
 
+  // Following set/get methods make sense only for parallel world scoring mesh
   // set size of this mesh
   void SetSize(G4double size[3]);
   // get size of this mesh
@@ -123,6 +129,7 @@ class G4VScoringMesh
     if(fRotationMatrix) return *fRotationMatrix;
     else return G4RotationMatrix::IDENTITY;
   }
+
   // set number of segments of this mesh
   void SetNumberOfSegments(G4int nSegment[3]);
   // get number of segments of this mesh
@@ -218,6 +225,16 @@ public:
     fGeometryHasBeenDestroyed = true;
     fMeshElementLogical = nullptr;
   }
+
+protected:
+  G4int copyNumberLevel;
+public:
+  // Geometry hirarchy level (bottom = 0) to be used as the copy number
+  // This is used only for real-world scorer
+  inline void SetCopyNumberLevel(G4int val)
+  { copyNumberLevel = val; }
+  inline G4int GetCopyNumberLevel() const
+  { return copyNumberLevel; }
 };
 
 #endif

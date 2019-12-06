@@ -45,7 +45,7 @@ class G4MPIntupleMerger
 {
 public:
   G4MPIntupleMerger(G4int nofReducedNtupleFiles = 0,
-                    G4bool rowWise = false);
+                    G4bool rowWise = false, G4bool rowMode = true);
   ~G4MPIntupleMerger();
 
 private:

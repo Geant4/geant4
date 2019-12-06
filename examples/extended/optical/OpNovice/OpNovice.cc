@@ -53,9 +53,11 @@
 
 #include "G4UImanager.hh"
 
-#include "OpNovicePhysicsList.hh"
-#include "OpNoviceDetectorConstruction.hh"
+#include "FTFP_BERT.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 
+#include "OpNoviceDetectorConstruction.hh"
 #include "OpNoviceActionInitialization.hh"
 
 #include "G4VisExecutive.hh"
@@ -132,23 +134,21 @@ int main(int argc,char** argv)
   // Detector construction
   runManager-> SetUserInitialization(new OpNoviceDetectorConstruction());
   // Physics list
-  runManager-> SetUserInitialization(new OpNovicePhysicsList());
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  physicsList->RegisterPhysics(opticalPhysics);
+  runManager-> SetUserInitialization(physicsList);
+
   // User action initialization
   runManager->SetUserInitialization(new OpNoviceActionInitialization());
 
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
-
   // Initialize visualization
-  //
-  G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if ( macro.size() ) {

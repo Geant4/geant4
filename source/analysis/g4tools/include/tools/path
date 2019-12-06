@@ -34,6 +34,23 @@ inline void nosuffix(const std::string& a_string,std::string& a_value,bool a_bac
   }
 }
 
+inline void path_no_suffix(const std::string& a_string,std::string& a_value){
+  // If a_string = dir0/dir1/dir2/dir3/name.xxx
+  //   a_value = dir0/dir1/dir2/dir3/name
+  std::string::size_type dot_pos = a_string.rfind('.');
+  if(dot_pos==std::string::npos) {
+    a_value = a_string;
+  } else {
+    a_value = a_string.substr(0,dot_pos);
+  }
+}
+
+inline bool has_dir(const std::string& a_string){
+  if(a_string.rfind('/')!=std::string::npos) return true;
+  if(a_string.rfind('\\')!=std::string::npos) return true;
+  return false;
+}
+
 inline void base_name(const std::string& a_path,std::string& a_value) {
   std::string::size_type pos_slash = a_path.rfind('/');
   std::string::size_type pos_bslash = a_path.rfind('\\');
@@ -59,6 +76,14 @@ inline void base_name(const std::string& a_path,std::string& a_value) {
   pos++;
   a_value = a_path.substr(pos,a_path.size()-pos);
 }
+
+//inline bool first_word(const std::string& a_string,std::string& a_value) {
+//  if(a_string.empty()) {a_value.clear();return false;}
+//  std::string::size_type pos = a_string.find(' ');
+//  if(pos==std::string::npos) {a_value = a_string;return true;}
+//  a_value = a_string.substr(0,pos);
+//  return true;
+//}
 
 inline std::string suffix(const std::string& a_string,bool a_back = true) {
   std::string value;
@@ -111,6 +136,18 @@ inline bool path_name_suffix(const std::string& a_string,std::string& a_path,std
   // If a_string = ..
   //   a_path = ".."
   //   a_name.clear()
+  //   a_suffix.clear()
+  // If a_string = dir0/dir1/dir2/dir3/
+  //   a_path = dir0/dir1/dir2/dir3
+  //   a_name.clear()
+  //   a_suffix.clear()
+  // If a_string = dir0/dir1/dir2/dir3/.
+  //   a_path = dir0/dir1/dir2/dir3
+  //   a_name = "."
+  //   a_suffix.clear()
+  // If a_string = dir0/dir1/dir2/dir3/..
+  //   a_path = dir0/dir1/dir2/dir3
+  //   a_name = ".."
   //   a_suffix.clear()
   if(a_string==".") {
     a_path = ".";
@@ -178,6 +215,13 @@ inline std::string dir_name(const std::string& a_path,unsigned int a_num = 1){
   return path;
 }
 
+inline void quote(std::string& a_path) {
+  if(a_path.find(' ')==std::string::npos) return;
+  // path with spaces :
+  if(a_path[0]=='"') return; //Already in double quote.
+  a_path = std::string("\"")+a_path+"\"";
+}
+
 //used in OpenPAW, BatchLab.
 inline bool is_f77(const std::string& a_path){
   std::string sfx = suffix(a_path);
@@ -210,6 +254,20 @@ inline bool is_cpp(const std::string& a_path){
   if(sfx=="cxx") return true;
   if(sfx=="cpp") return true;
   if(sfx=="C") return true;
+  return false;
+}
+
+//used in OpenPAW, BatchLab.
+inline bool is_python(const std::string& a_path){
+  std::string sfx = suffix(a_path);
+
+  //tolowercase(sfx);
+  for(std::string::iterator it=sfx.begin();it!=sfx.end();++it) {
+    char c = *it;
+    *it = ((c) >= 'A' && (c) <= 'Z' ?  c - 'A' + 'a' : c);
+  }
+
+  if(sfx=="py") return true;
   return false;
 }
 

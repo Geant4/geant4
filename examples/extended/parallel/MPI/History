@@ -9,6 +9,17 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 October 2019 I. Hrivnacova (MPI-V10-05-02)
+- Fixed exMPI03, exMPI04, G4MPIscorerMerger.cc compilation which was broken
+  after changes in scorers
+- Added new option ('rowMode') for ntuple merging:
+  - Added 'rowMode' parameter in the G4MPIntupleMerger constructor
+  - Changed the default merging mode to the new one (column-wise with preserved rows)
+  - Updated the analysis classes for the new merging mode
+
+09 July 2019 I. Hrivnacova (MPI-V10-05-01)
+- Removed G4VIS_USE from exMPI04
+
 14 May 2019 I. Hrivnacova (MPI-V10-05-00)
 - Fixed compilation of G4MPIextraWorker.cc.
   This fixes problem report #2163.

@@ -77,9 +77,6 @@ if(GEANT4_USE_QT)
     list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIQt.hh)
     list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIQt.cc)
 
-    # Now need to add Qt in to build moc wrappers
-    include(${QT_USE_FILE})
-
     # Add the moc sources - must use an absolute path to the files being
     # wrapped
     QT4_WRAP_CPP(G4INTERFACES_MOC_SOURCES 
@@ -111,18 +108,12 @@ if(GEANT4_USE_WT)
     list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIWt.hh)
     list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIWt.cc)
 
-    # Must have Wt includes...
-    include_directories(${Wt_INCLUDE_DIR})
-
-    # Add the definitions
     # We have to also add in G4INTY_BUILD_Wt 'cause G4Wt header needs that...
     GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES G4UIWt.cc G4UIExecutive.cc
         COMPILE_DEFINITIONS G4UI_BUILD_WT_SESSION;G4INTY_BUILD_WT)
 
-    # Add the extra libraries - seem to need to quote variables to get
-    # both linked in.
-    list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES 
-        "${Wt_LIBRARY}") 
+    # Add the extra libraries
+    list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES Wt::Wt Wt::HTTP)
 endif()
 
 
@@ -134,10 +125,6 @@ if(UNIX)
         list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIXm.hh)
         list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIXm.cc)
 
-        # Need the X11 and XM headers
-        include_directories(${X11_INCLUDE_DIR})
-        include_directories(${MOTIF_INCLUDE_DIR})
-
         # Add the compile definitions - also need INTY versions
         GEANT4_ADD_COMPILE_DEFINITIONS(
             SOURCES G4UIXm.cc G4UIExecutive.cc
@@ -146,7 +133,8 @@ if(UNIX)
 
         # Need the X11 and Motif libraries
         list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES
-            "${MOTIF_LIBRARIES};${X11_LIBRARIES}"
+            Motif::Xm
+            X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu X11::Xt
         )
     endif()
 endif()
@@ -169,6 +157,7 @@ GEANT4_DEFINE_MODULE(NAME G4UIbasic
         G4intercoms
     LINK_LIBRARIES
         ${G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES}
+        ${timemory_LIBRARIES}
 )
 
 # List any source specific properties here

@@ -47,6 +47,7 @@ class G4Material;
 class G4Region;
 class G4VTRModel;
 class G4particleDefinition;
+class G4LossTableManager;
 
 class G4VTransitionRadiation : public   G4VDiscreteProcess
 {
@@ -82,8 +83,10 @@ public:
 
   // hide assignment operator
   G4VTransitionRadiation & 
-    operator=(const G4VTransitionRadiation &right) = delete;
-  G4VTransitionRadiation(const G4VTransitionRadiation&) = delete;
+    operator=(const G4VTransitionRadiation &right);
+  G4VTransitionRadiation(const G4VTransitionRadiation&);
+
+  G4LossTableManager*         theManager;
 
   std::vector<const G4Material*>  materials;
   std::vector<G4double>           steps;

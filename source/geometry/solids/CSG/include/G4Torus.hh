@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Torus
 //
 // Class description:
@@ -73,15 +67,9 @@
 //   relative to fRmin and fRmax, i.e. for solution of inside/outside
 //   problems
 
-// History:
-// 30.10.96 V.Grichine: first version of G4Torus
-// 21.04.98 J.Apostolakis: added SetAllParameters() function
-// 26.05.00 V.Grichine: added new SolveBiQuadratic/Cubic() developed
-//                      by O.Cremonesi
-// 31.08.00 E.Medernach: added SolveNumeric functions, migrated to
-//                       numeric solutions
+// 30.10.96 V.Grichine: first version
+// 31.08.00 E.Medernach: migrated to numeric solutions
 // --------------------------------------------------------------------
-
 #ifndef G4TORUS_HH
 #define G4TORUS_HH
 
@@ -144,8 +132,9 @@ class G4Torus : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;

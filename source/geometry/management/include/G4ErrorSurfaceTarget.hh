@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class header file 
-// --------------------------------------------------------------------
+// G4ErrorSurfaceTarget
 //
 // Class Description:
 //
 // Base class for G4ErrorTarget classes that are surfaces.
 
-// History:
-// - Created. P. Arce, September 2004
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
 
 #ifndef G4ErrorSurfaceTarget_hh

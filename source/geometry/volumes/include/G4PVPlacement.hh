@@ -22,24 +22,17 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
-// class G4PVPlacement
+// G4PVPlacement
 //
 // Class description:
 //
 // Class representing a single volume positioned within and relative
 // to a mother volume.
 
-// History:
-// 24.07.95 P.Kent   First non-stub version
-// 25.07.96 P.Kent   Modified interface for new `Replica' capable geometry
-// 28.08.96 P.Kent   Tidied + transform replaced by rotmat+vector
-// 28.02.97 J.Apostolakis Added 2nd constructor with G4Transform3D of solid.
-// 11.07.97 J.Apostolakis Added 3rd constructor with pMotherLogical 
-// 11.05.98 J.Apostolakis Added 4th constructor with G4Transform3D & pMotherLV
+// 24.07.95 P.Kent, First non-stub version
+// 25.07.96 P.Kent, Modified interface for new `Replica' capable geometry
+// 28.08.96 P.Kent. Tidied + transform replaced by rotmat+vector
 // ----------------------------------------------------------------------
 #ifndef G4PVPLACEMENT_HH
 #define G4PVPLACEMENT_HH
@@ -51,18 +44,18 @@ class G4PVPlacement : public G4VPhysicalVolume
 {
   public:  // with description
 
-    G4PVPlacement(G4RotationMatrix *pRot,
-            const G4ThreeVector &tlate,
-                  G4LogicalVolume *pCurrentLogical,
+    G4PVPlacement(G4RotationMatrix* pRot,
+            const G4ThreeVector& tlate,
+                  G4LogicalVolume* pCurrentLogical,
             const G4String& pName,
-                  G4LogicalVolume *pMotherLogical,
+                  G4LogicalVolume* pMotherLogical,
                   G4bool pMany,
                   G4int  pCopyNo,
-                  G4bool pSurfChk=false);
+                  G4bool pSurfChk = false);
       // Initialise a single volume, positioned in a frame which is rotated by
       // *pRot and traslated by tlate, relative to the coordinate system of the
       // mother volume pMotherLogical.
-      // If pRot=0 the volume is unrotated with respect to its mother.
+      // If pRot=nullptr the volume is unrotated with respect to its mother.
       // The physical volume is added to the mother's logical volume.
       // Arguments particular to G4PVPlacement:
       //   pMany Currently NOT used. For future use to identify if the volume
@@ -73,13 +66,13 @@ class G4PVPlacement : public G4VPhysicalVolume
       // especially useful when creating subdetectors: the mother volumes are
       // not placed until a later stage of the assembly program.
 
-    G4PVPlacement(const G4Transform3D &Transform3D,
-                        G4LogicalVolume *pCurrentLogical,
+    G4PVPlacement(const G4Transform3D& Transform3D,
+                        G4LogicalVolume* pCurrentLogical,
                   const G4String& pName,
-                        G4LogicalVolume *pMotherLogical,
+                        G4LogicalVolume* pMotherLogical,
                         G4bool pMany,
                         G4int pCopyNo,
-                        G4bool pSurfChk=false);
+                        G4bool pSurfChk = false);
       // Additional constructor, which expects a G4Transform3D that represents 
       // the direct rotation and translation of the solid (NOT of the frame).  
       // The G4Transform3D argument should be constructed by:
@@ -94,25 +87,25 @@ class G4PVPlacement : public G4VPhysicalVolume
 
   public:  // without description
 
-    G4PVPlacement(G4RotationMatrix *pRot,
-            const G4ThreeVector &tlate,
-            const G4String &pName,
-                  G4LogicalVolume *pLogical,
-                  G4VPhysicalVolume *pMother,
+    G4PVPlacement(G4RotationMatrix* pRot,
+            const G4ThreeVector& tlate,
+            const G4String& pName,
+                  G4LogicalVolume* pLogical,
+                  G4VPhysicalVolume* pMother,
                   G4bool pMany,
                   G4int pCopyNo,
-                  G4bool pSurfChk=false);
+                  G4bool pSurfChk = false);
       // A simple variation of the 1st constructor, only specifying the
       // mother volume as a pointer to its physical volume instead of its
       // logical volume. The effect is exactly the same.
 
-    G4PVPlacement(const G4Transform3D &Transform3D,
-                  const G4String &pName,
-                        G4LogicalVolume *pLogical,
-                        G4VPhysicalVolume *pMother,
+    G4PVPlacement(const G4Transform3D& Transform3D,
+                  const G4String& pName,
+                        G4LogicalVolume* pLogical,
+                        G4VPhysicalVolume* pMother,
                         G4bool pMany,
                         G4int pCopyNo,
-                        G4bool pSurfChk=false);
+                        G4bool pSurfChk = false);
       // Utilises both variations above (from 2nd and 3rd constructor).
       // The effect is the same as for the 2nd constructor.
 
@@ -123,11 +116,11 @@ class G4PVPlacement : public G4VPhysicalVolume
 
     inline G4int GetCopyNo() const  { return fcopyNo; }
 
-    void  SetCopyNo(G4int CopyNo);
+    void SetCopyNo(G4int CopyNo);
       // Gets and sets the copy number of the volume.
 
-    G4bool CheckOverlaps(G4int res=1000, G4double tol=0.,
-                         G4bool verbose=true, G4int maxErr=1);
+    G4bool CheckOverlaps(G4int res = 1000, G4double tol = 0.,
+                         G4bool verbose = true, G4int maxErr = 1);
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.
@@ -143,6 +136,10 @@ class G4PVPlacement : public G4VPhysicalVolume
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4PVPlacement(const G4PVPlacement&) = delete;
+    G4PVPlacement& operator=(const G4PVPlacement&) = delete;
+      // Copy constructor and assignment operator not allowed.
+
     G4bool IsMany() const;
     G4bool IsReplicated() const;
     G4bool IsParameterised() const;
@@ -152,25 +149,23 @@ class G4PVPlacement : public G4VPhysicalVolume
                             G4double& width,
                             G4double& offset,
                             G4bool& consuming) const;
-    G4bool  IsRegularStructure() const; 
-    G4int  GetRegularStructureId() const; 
+    G4bool IsRegularStructure() const; 
+    G4int GetRegularStructureId() const; 
 
+    EVolume VolumeType() const;
+   
   private:
 
-    static G4RotationMatrix* NewPtrRotMatrix(const G4RotationMatrix &RotMat);
+    static G4RotationMatrix* NewPtrRotMatrix(const G4RotationMatrix& RotMat);
       // Auxiliary function for 2nd constructor (one with G4Transform3D).
       // Creates a new RotMatrix on the heap (using "new") and copies 
       // its argument into it.
 
-    G4PVPlacement(const G4PVPlacement&);
-    G4PVPlacement& operator=(const G4PVPlacement&);
-      // Private copy constructor and assignment operator.
-
   private:
 
-    G4bool fmany;           // flag for overlapping structure - not used
-    G4bool fallocatedRotM;  // flag for allocation of Rotation Matrix
-    G4int fcopyNo;          // for identification
+    G4bool fmany = false;   // flag for overlapping structure - not used
+    G4bool fallocatedRotM = false;  // flag for allocation of Rotation Matrix
+    G4int fcopyNo = 0;      // for identification
 
 };
 

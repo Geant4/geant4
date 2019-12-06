@@ -126,7 +126,7 @@ public: // With description
     G4VPhysicalVolume* GetVolume(G4int depth) const;
     G4VSolid* GetSolid(G4int depth) const;
     G4int GetReplicaNumber(G4int depth) const;
-    G4int GetHistoryDepth() const {return fFullPVPath.size();}
+    G4int GetHistoryDepth() const {return G4int(fFullPVPath.size());}
   private:
     const std::vector<G4PhysicalVolumeNodeID>& fFullPVPath;
   };

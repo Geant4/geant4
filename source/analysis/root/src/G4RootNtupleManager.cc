@@ -39,13 +39,14 @@ using namespace G4Analysis;
 //_____________________________________________________________________________
 G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state,
                                          G4int nofMainManagers,
-                                         G4bool rowWise)
+                                         G4bool rowWise, G4bool rowMode)
  : G4TNtupleManager<tools::wroot::ntuple>(state),
    fCreateMode(G4NtupleCreateMode::kUndefined),
    fFileManager(nullptr),
    fNtupleDirectory(nullptr),
    fMainNtupleManagers(),
-   fRowWise(rowWise)
+   fRowWise(rowWise),
+   fRowMode(rowMode)
 {
   for ( G4int i=0; i<nofMainManagers; ++i) {
     fMainNtupleManagers.push_back(
@@ -113,6 +114,20 @@ void G4RootNtupleManager::SetCreateMode()
         ->Message("set", "ntuple create mode", createMode);
 #endif
 }
+
+//_____________________________________________________________________________
+void G4RootNtupleManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode)
+{
+// Set rowWise mode and propagate it to main ntuple managers
+
+  fRowWise = rowWise;
+  fRowMode = rowMode;
+
+  for (auto& mainNtupleManager : fMainNtupleManagers ) {
+    mainNtupleManager->SetRowWise(rowWise);
+  }
+}
+
 
 //_____________________________________________________________________________
 void  G4RootNtupleManager::CreateTNtuple(
@@ -251,3 +266,16 @@ unsigned int G4RootNtupleManager::GetBasketSize() const
   return fFileManager->GetBasketSize(); 
 }
 
+//_____________________________________________________________________________
+unsigned int G4RootNtupleManager::GetBasketEntries() const
+{ 
+  if ( ! fFileManager ) {
+    G4String inFunction = "G4RootNtupleManager::::GetBasketEntries";
+    G4ExceptionDescription description;
+    description << "      " << "File manager must be defined first.";
+    G4Exception(inFunction, "Analysis_W011", JustWarning, description);
+    return 0;         
+  }
+
+  return fFileManager->GetBasketEntries(); 
+}

@@ -14,6 +14,79 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2019 - G. Folger   (hadr-cross-V10-05-31)
+- remove using namespace std and using namespace CLHEP from header file G4NeutronElectronElXsc.hh
+
+07 November 2019 - Alberto Ribon (hadr-cross-V10-05-30)
+- G4HadronNucleonXsc : set protection against division by zero by introducing
+  a minimum energy cutoff (100 keV), below which the cross section is
+  considered constant.
+
+06 November 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-29)
+- G4NeutronInelasticXS, G4ParticleInelasticXS, G4NeutronElasticXS,
+  G4NeutronCaptureXS, G4ComponentSAIDTotalXS, G4CrossSectionDataStore
+    getenv -> std::getenv
+
+10 October 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-28)
+- G4BGGPionInelasticXS, G4BGGPionElasticXS - clean-up pi+ x-section 
+    below 20 MeV
+
+27 September 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-27)
+- G4BGGNucleonInelasticXS, G4BGGNucleonElasticXS,
+  G4BGGPionInelasticXS, G4BGGPionElasticXS - clean-up low-energy
+- G4UPiNuclearCrossSection - below 20 MeV cross section is now
+    const, BGGPion cross section inplement low-energy part
+
+16 September 2019 - V. Grichine (hadr-cross-V10-05-26) 
+- G4HadronNucleonXsc.hh/cc - new interface to G4ComponentGGHadronNucleonXsc 
+    including s-,c-,b-, particles
+
+27 August 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-25)
+- G4BGGNucleonInelasticXS, G4BGGNucleonElasticXS - use coherent 
+    low-energy threshold 14 MeV; code clean-up
+- G4BGGPionInelasticXS, G4BGGPionElasticXS,
+  G4ComponentBarNucleonNucleusXsc - cosmetic clean-up
+
+23 August 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-24)
+- G4BGGPionInelasticXS, G4BGGPionElasticXS - use coherent low-energy
+    limit 1 MeV
+- G4BGGNucleonInelasticXS, G4BGGNucleonElasticXS - minor clean-up
+- G4UPiNuclearCrossSection - cleaned-up and optimise interpolation 
+    method, moved two run time methods to inline, improve low-energy 
+    parameterisation
+
+19 August 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-23)
+- G4HadronNucleonXsc - fixed K+p and K+n parameterisations (NS and VG)
+
+07 August 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-22)
+- G4NeutronInelasticXS, G4ParticleInelasticXS, G4NeutronElasticXS - added 
+    special method for tritium and He3 targets (fixed problem #2162),
+    upload data only for elements used in geometry, code clean-up, use C++11
+- G4NeutronElasticXS - implemented isotope cross section
+- G4NeutronCaptureXS - code clean-up, use C++11
+
+25 July 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-21)
+- G4NeutronCaptureXS - upload data only for elements used in geometry
+
+21 July 2019 - Mihaly Novak (hadr-cross-V10-05-20)
+- G4ParticleInelasticXS - use the new, optimised log-vector access method
+
+17 July 2019 - Mihaly Novak (hadr-cross-V10-05-19)
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS - utilise the new
+    G4PhysicsVector::LogVectorValue optimised (for log-vector) method
+
+13 July 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-18)
+- G4NeutronCaptureXS - restore computation of isotope x-section as
+    it was in 10.5
+
+28 June 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-17)
+- G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS - fixed initialisation
+    for protons and neutrons by usage of separate vectors of correction
+    coeffitients
+- G4BGGPionInelasticXS - fixed low-energy parameterisation (restore
+    one from Geant4 10.5, where low-energy limits were different for 
+    pi+ and pi-)
+
 12 June 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-16)
 - G4BGGPionElasticXS, G4BGGPionInelasticXS - fixed initialisation for 
     pi+- by usage of separate vectors of correction factors; fixed 

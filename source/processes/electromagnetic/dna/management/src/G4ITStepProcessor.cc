@@ -326,7 +326,7 @@ void G4ITStepProcessor::ActiveOnlyITProcess(G4ProcessManager* processManager)
   G4ProcessVector* processVector = processManager->GetProcessList();
 
   G4VITProcess* itProcess = 0;
-  for(int i = 0; i < processVector->size(); i++)
+  for(std::size_t i = 0; i < processVector->size(); ++i)
   {
     G4VProcess* base_process = (*processVector)[i];
     itProcess = dynamic_cast<G4VITProcess*>(base_process);

@@ -24,16 +24,15 @@
 // ********************************************************************
 //
 //
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
-// 17-11-2010 V.Ivanchenko moved constructor and destructor to source and cleanup
+// 17-11-2010 V.Ivanchenko cleanup
 
 #include "G4ProtonEvaporationChannel.hh"
 
 G4ProtonEvaporationChannel::G4ProtonEvaporationChannel() 
-: G4EvaporationChannel(1,1,"proton",&theEvaporationProbability,&theCoulombBarrier) 
+  : G4EvaporationChannel(1,1,&pr) 
 {}
 
 G4ProtonEvaporationChannel::~G4ProtonEvaporationChannel() 

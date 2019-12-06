@@ -251,7 +251,7 @@ void XrayFluoHPGeDetectorType::LoadResponseData(G4String fileName)
   
   G4String name = ost.str();
   
-  char* path = getenv("XRAYDATA");
+  char* path = std::getenv("XRAYDATA");
   
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
@@ -327,14 +327,14 @@ void XrayFluoHPGeDetectorType::LoadResponseData(G4String fileName)
 void XrayFluoHPGeDetectorType::LoadEfficiencyData(G4String fileName)
 {
   /*
-  char* path = getenv("XRAYDATA");
+  char* path = std::getenv("XRAYDATA");
   G4String dirFile;
   if (path) {
     G4String pathString(path);
     dirFile = pathString + "/" + fileName;
   }
   else{ 
-    path = getenv("PWD");
+    path = std::getenv("PWD");
     G4String pathString(path);
     dirFile = pathString + "/" + fileName;
   }

@@ -48,7 +48,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef CCalPrimaryGeneratorAction_h
 #define CCalPrimaryGeneratorAction_h 1
 
@@ -118,6 +117,3 @@ private:
 };
 
 #endif
-
-
-

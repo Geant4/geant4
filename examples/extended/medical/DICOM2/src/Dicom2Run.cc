@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file medical/DICOM/src/Dicom2Run.cc
+/// \file Dicom2Run.cc
 /// \brief Implementation of the Dicom2Run class
 
 //=====================================================================
@@ -87,7 +87,7 @@ Dicom2Run::Dicom2Run(const std::vector<G4String> mfdName)
 Dicom2Run::~Dicom2Run()
 {
     //--- Clear HitsVector for RUN
-    for(uintmax_t i = 0; i < fRunMap.size(); i++)
+    for(std::size_t i = 0; i < fRunMap.size(); ++i)
     {
          if(fRunMap[i])
             fRunMap[i]->clear();
@@ -110,7 +110,7 @@ void Dicom2Run::ConstructMFD(const std::vector<G4String>& mfdName)
     //  Initalize RunMaps for accumulation.
     //  Get CollectionIDs for HitCollections.
     //=================================================
-    for(uintmax_t idet = 0; idet < mfdName.size(); idet++)
+    for(std::size_t idet = 0; idet < mfdName.size(); ++idet)
     {
         // Loop for all MFD.
         G4String detName = mfdName[idet];
@@ -122,7 +122,7 @@ void Dicom2Run::ConstructMFD(const std::vector<G4String>& mfdName)
         if(mfd)
         {
             //--- Loop over the registered primitive scorers.
-            for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++)
+            for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); ++icol)
             {
                 // Get Primitive Scorer object.
                 G4VPrimitiveScorer* scorer = mfd->GetPrimitive(icol);
@@ -178,7 +178,7 @@ void Dicom2Run::RecordEvent(const G4Event* aEvent)
     //=======================================================
     // Sum up HitsVector of this Event  into HitsVector of this RUN
     //=======================================================
-    for(uintmax_t i = 0; i < fCollID.size(); i++)
+    for(std::size_t i = 0; i < fCollID.size(); ++i)
     {
         // Loop over HitsCollection
         G4THitsMap<G4double>* EvtMap = nullptr;
@@ -213,10 +213,10 @@ void Dicom2Run::Merge(const G4Run* aRun)
 
     Copy(fCollName, localRun->fCollName);
     Copy(fCollID, localRun->fCollID);
-    unsigned ncopies = Copy(fRunMap, localRun->fRunMap);
+    G4int ncopies = G4int(Copy(fRunMap, localRun->fRunMap));
     // copy function returns the fRunMap size if all data is copied
     // so this loop isn't executed the first time around
-    for(uintmax_t i = ncopies; i < fRunMap.size(); ++i)
+    for(G4int i = ncopies; i < G4int(fRunMap.size()); ++i)
         *fRunMap[i] += *localRun->fRunMap[i];
 }
 
@@ -243,8 +243,8 @@ Dicom2Run::Dicom2RunVector*
 Dicom2Run::GetHitsVector(const G4String& fullName) const
 {
 
-    G4int Ncol = fCollName.size();
-    for(G4int i = 0; i < Ncol; i++)
+    std::size_t Ncol = fCollName.size();
+    for(std::size_t i = 0; i < Ncol; ++i)
     {
         if(fCollName[i] == fullName)
         {

@@ -50,7 +50,7 @@
 G4QGSPProtonBuilder::
 G4QGSPProtonBuilder(G4bool quasiElastic) 
  {
-   theMin = 12*GeV;
+   theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
    theModel = new G4TheoFSGenerator("QGSP");
 
    theStringModel = new G4QGSModel< G4QGSParticipants >;
@@ -86,4 +86,3 @@ G4QGSPProtonBuilder::~G4QGSPProtonBuilder()
    delete theQGSM;
  }
 
- // 2002 by J.P. Wellisch

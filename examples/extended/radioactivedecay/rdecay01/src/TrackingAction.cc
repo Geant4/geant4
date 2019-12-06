@@ -119,7 +119,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     // 
     //full chain: put at rest; if not: kill secondary      
     G4Track* tr = (G4Track*) track;
-    if (fFullChain)  tr->SetTrackStatus(fStopButAlive);
+    if (fFullChain) { tr->SetKineticEnergy(0.);
+                      tr->SetTrackStatus(fStopButAlive);}
       else if (ID>1) tr->SetTrackStatus(fStopAndKill);
     //
     fTime_birth = track->GetGlobalTime();
@@ -186,6 +187,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     run->EventTiming(time);                     //total time of life
     G4double weight = track->GetWeight();
     analysis->FillH1(8,time,weight);
+////    analysis->FillH1(8,time);    
     fTime_end = DBL_MAX;
   }
   

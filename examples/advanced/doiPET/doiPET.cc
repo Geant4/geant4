@@ -56,15 +56,6 @@
 #include "G4RunManager.hh"
 #endif
 
-//
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
-//
 //////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char** argv)
@@ -125,21 +116,15 @@ int main(int argc,char** argv)
 
 	else           //define visualization and UI terminal for interactive mode
 	{ 
-#ifdef G4VIS_USE
 		G4VisManager* visManager = new G4VisExecutive;
 		visManager->Initialize();
-#endif    
 
-#ifdef G4UI_USE
 		G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
 		ui->SessionStart();
 		delete ui;
-#endif
 
 		//
-#ifdef G4VIS_USE
-		delete visManager;
-#endif     
+		delete visManager;  
 	}
 
 	//close the file

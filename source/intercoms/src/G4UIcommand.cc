@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
 
 #include "G4UIcommand.hh"
 #include "G4UImessenger.hh"
@@ -37,6 +36,9 @@
 #include "G4ios.hh"
 #include <sstream>
 #include <iomanip>
+
+#include "G4UItokenNum.hh"
+using namespace G4UItokenNum;
 
 G4UIcommand::G4UIcommand()
   : messenger(0), toBeBroadcasted(false), toBeFlushed(false), workerThreadOnly(false),

@@ -61,6 +61,9 @@ class G4Radioactivation : public G4RadioactiveDecayBase
 
     virtual void ProcessDescription(std::ostream& outFile) const;
 
+    // Return decay table if it exists, if not, load it from file
+    G4DecayTable* GetDecayTable1(const G4ParticleDefinition*);
+
     // Set the decay biasing scheme using the data in "filename"
     void SetDecayBias(G4String filename);
 
@@ -96,12 +99,6 @@ class G4Radioactivation : public G4RadioactiveDecayBase
        {return theRadioactivityTables;}
     // Return vector of G4Radioactivity map - should be used in VR mode only
 
-
-    inline void  SetVerboseLevel(G4int value) {verboseLevel = value;}
-    // Sets the VerboseLevel which controls duggering display
-
-    inline G4int GetVerboseLevel() const {return verboseLevel;}
-    // Returns the VerboseLevel which controls level of debugging output
 
     // Controls whether G4Radioactivation runs in analogue mode or
     // variance reduction mode.  SetBRBias, SetSplitNuclei and
@@ -139,6 +136,9 @@ class G4Radioactivation : public G4RadioactiveDecayBase
     G4double GetDecayTime();
     G4int GetDecayTimeBin(const G4double aDecayTime);
 
+    G4double GetMeanLifeTime(const G4Track& theTrack,
+                             G4ForceCondition* condition);
+
     //Add gamma,Xray,conversion,and auger electrons for bias mode
     void AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition* apartDef,
                                             G4double weight,
@@ -173,8 +173,13 @@ class G4Radioactivation : public G4RadioactiveDecayBase
     std::vector<G4RadioactivityTable*> theRadioactivityTables;
     G4int decayWindows[100];
 
-    G4int verboseLevel;
+    inline
+    G4VParticleChange* AtRestDoIt(const G4Track& theTrack, const G4Step& theStep)
+      {return DecayIt(theTrack, theStep);}
 
+    inline
+    G4VParticleChange* PostStepDoIt(const G4Track& theTrack, const G4Step& theStep)
+      {return DecayIt(theTrack, theStep);}
 };
 
 #endif

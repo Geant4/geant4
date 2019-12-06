@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // class G4BoundingEnvelope
 //
 // Class description:
@@ -40,10 +37,7 @@
 // Calculation of extent uses G4Transform3D, thus takes into account
 // scaling and reflection, if any.
 
-// History:
-//
-// 2016.05.25 E.Tcherniaev - initial version
-//
+// 2016.05.25,  E.Tcherniaev - initial version
 // --------------------------------------------------------------------
 #ifndef G4BOUNDINGENVELOPE_HH
 #define G4BOUNDINGENVELOPE_HH
@@ -57,9 +51,9 @@
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
 
-typedef std::vector<G4ThreeVector>     G4ThreeVectorList;
-typedef std::vector<G4Point3D>         G4Polygon3D;
-typedef std::pair<G4Point3D,G4Point3D> G4Segment3D;
+using G4ThreeVectorList = std::vector<G4ThreeVector>;
+using G4Polygon3D = std::vector<G4Point3D>;
+using G4Segment3D = std::pair<G4Point3D,G4Point3D>;
 
 class G4BoundingEnvelope
 {
@@ -145,7 +139,7 @@ class G4BoundingEnvelope
     G4ThreeVector fMin, fMax; 
       // original bounding box
 
-    const std::vector<const G4ThreeVectorList*>* fPolygons;
+    const std::vector<const G4ThreeVectorList*>* fPolygons = nullptr;
       // ref to original sequence of polygonal bases
 };
 

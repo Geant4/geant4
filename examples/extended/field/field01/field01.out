@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,10 +49,10 @@
           ElmMassFraction:  85.60 %  ElmAbundance  33.33 % 
 
 
- Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.950 m  
+ Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.949 m  
                        Imean: 352.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.800 g/mole
+   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
          --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:  2.280 %
          --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance: 11.580 %
@@ -108,10 +112,10 @@
           ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
 
 
- Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.666 m  
+ Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.668 m  
                        Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.290 g/mole
+   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:  0.090 %
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
@@ -139,10 +143,10 @@
           ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
 
 
- Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.032 m  
-                       Imean: 412.598 eV   temperature: 293.15 K  pressure:   1.00 atm
+ Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.034 m  
+                       Imean: 412.597 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.290 g/mole
+   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
          --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
          --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:  0.090 %
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
@@ -166,10 +170,10 @@
           ElmMassFraction:   5.67 %  ElmAbundance  28.73 % 
 
 
- Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.555 m  
+ Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.157 m    Nucl.Int.Length: 391.554 m  
                        Imean: 296.926 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.800 g/mole
+   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
          --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
          --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:  2.280 %
          --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance: 11.580 %
@@ -191,7 +195,7 @@
 
 
 
-<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
 
 
  The  WORLD   is made of 44000mm of Air, the transverse size (R) of the world is 22000 mm. 
@@ -208,10 +212,10 @@ The minimal step is equal to 1 mm
                  4. Updating Field Manager.
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
@@ -284,21 +288,24 @@ The minimal step is equal to 0.1 mm
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ==============================
@@ -330,7 +337,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001613s Sys=0.000000s
+  User=0.000000s Real=0.001044s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -361,7 +368,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000138s Sys=0.000000s
+  User=0.000000s Real=0.000172s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -392,7 +399,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000140s Sys=0.000000s
+  User=0.000000s Real=0.000138s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -423,7 +430,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000189s Sys=0.000000s
+  User=0.000000s Real=0.000205s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -454,7 +461,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000123s Sys=0.000000s
+  User=0.000000s Real=0.000136s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 G4Integration Driver Stats: #QuickAdvance 186 - #AccurateAdvance 30 #good steps 30 #bad steps 0
@@ -496,7 +503,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000172s Sys=0.000000s
+  User=0.000000s Real=0.000160s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -527,7 +534,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.008717s Sys=0.000000s
+  User=0.010000s Real=0.007954s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 #
@@ -594,7 +601,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.007380s Sys=0.000000s
+  User=0.010000s Real=0.007430s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 Graphics systems deleted.

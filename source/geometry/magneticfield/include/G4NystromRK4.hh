@@ -23,21 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// class G4NystromRK4
+// G4NystromRK4
 //
 // Class description:
 //
-// Integrate the equations of the motion of a particle in a magnetic field
+// Integrates the equations of the motion of a particle in a magnetic field
 // using 4th Runge-Kutta-Nystrom method with errors estimation 
 // (ATL-SOFT-PUB-2009-01)
 // Current form can be used only for 'pure' magnetic field.
 // Notes: 1) field must be time-independent.
 //        2) time is not integrated
-// 
-// History:
-// - Created: I.Gavrilenko   15.05.2009   (as G4AtlasRK4)
-// - Adaptations:  J. Apostolakis  May-Nov 2009
+
+// Created: I.Gavrilenko, 15.05.2009 (as G4AtlasRK4)
+// Adaptations: J.Apostolakis, November 2009
 // -------------------------------------------------------------------
 
 #ifndef G4NYSTROMRK4_HH
@@ -52,18 +50,19 @@
 
 class G4NystromRK4 : public G4MagIntegratorStepper
 {
-public: 
-    // Can be used only for Magnetic Fields - and for 6 variables (x,p)
+  public: 
+
     G4NystromRK4(G4Mag_EqRhs* EquationMotion, 
                  G4double distanceConstField = 0.0); 
+      // Can be used only for Magnetic Fields - and for 6 variables (x,p)
 
-    // Single call for integration result and error
-    // - Provides Error via analytical method
     virtual void Stepper(const G4double y[],
                          const G4double dydx[],
                          G4double hstep,
                          G4double yOut[],
                          G4double yError[]) override;
+      // Single call for integration result and error
+      // Provides error via analytical method
 
     void SetDistanceForConstantField(G4double length); 
     G4double GetDistanceForConstantField() const; 
@@ -71,17 +70,18 @@ public:
     virtual G4int IntegratorOrder() const override { return 4; }
     virtual G4double DistChord() const override; 
   
-private:
+  private:
+
     inline void GetFieldValue(const G4double point[4], G4double field[3]);
     inline G4double GetFCof();
 
     G4CachedMagneticField* GetField();
     const G4CachedMagneticField* GetField() const;
 
-    G4double fMomentum;
-    G4double fMomentum2;
-    G4double fInverseMomentum;
-    G4double fCoefficient;
+    G4double fMomentum = 0.0;
+    G4double fMomentum2 = 0.0;
+    G4double fInverseMomentum = 0.0;
+    G4double fCoefficient = 0.0;
     G4ThreeVector fInitialPoint;
     G4ThreeVector fMidPoint;
     G4ThreeVector fEndPoint;

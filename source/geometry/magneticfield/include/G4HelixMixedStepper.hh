@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4HelixMixedStepper
+// G4HelixMixedStepper
 //
 // Class description:
 //
@@ -51,70 +51,72 @@
 //  For recommendations see comments in 'SetupStepper' method.
 //
 //  Note: Like other helix steppers, only applicable in pure magnetic field
-//
-// History: 
-// Derived from ExactHelicalStepper 18/05/07 
-//
-// -------------------------------------------------------------------
 
+// Created: T.Nikitina, CERN - 18.05.2007, derived from G4ExactHelicalStepper
+// -------------------------------------------------------------------
 #ifndef G4HELIXMIXEDSTEPPER_HH
 #define G4HELIXMIXEDSTEPPER_HH
 
 #include "G4MagHelicalStepper.hh"
-
 
 class G4HelixMixedStepper: public G4MagHelicalStepper
 {
 
   public:  
 
-  G4HelixMixedStepper(G4Mag_EqRhs *EqRhs,G4int StepperNumber= -1, G4double Angle_threshold= -1.0);
-  ~G4HelixMixedStepper();
+    G4HelixMixedStepper(G4Mag_EqRhs* EqRhs,
+                        G4int StepperNumber = -1,
+                        G4double Angle_threshold = -1.0);
+   ~G4HelixMixedStepper();
 
-   void Stepper( const G4double y[],
-                 const G4double dydx[],
-                       G4double h,
-                       G4double yout[],
-                       G4double yerr[]  );
+    void Stepper( const G4double y[],
+                  const G4double dydx[],
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[] );
       // Step 'integration' for step size 'h'
-      // If SteppingAngle= h/R_curve < pi/3 uses RK stepper (default DormandPrince745) 
-      // Else   use Helix Fast Method 
-      
-  
+      // If SteppingAngle= h/R_curve < pi/3 uses default RK stepper
+      // else use Helix Fast Method 
+
     void DumbStepper( const G4double y[],
                             G4ThreeVector  Bfld,
                             G4double       h,
                             G4double       yout[]);
-   G4double DistChord() const;
+
+    G4double DistChord() const;
       // Estimate maximum distance of curved solution and chord ... 
     
+  public:  // with description
 
-   public:  // with description
-
-    inline void SetVerbose (G4int newvalue){fVerbose=newvalue;}
+    inline void SetVerbose (G4int newvalue) { fVerbose = newvalue; }
   
   public:  // without description
+
     void PrintCalls();
     G4MagIntegratorStepper* SetupStepper(G4Mag_EqRhs* EqRhs, G4int StepperName);
 
-    void     SetAngleThreshold( G4double val ){ fAngle_threshold= val;}
-    G4double GetAngleThreshold(){ return fAngle_threshold; }
-  
-    G4int IntegratorOrder() const { return 4; }
+    inline void     SetAngleThreshold( G4double val ) { fAngle_threshold = val; }
+    inline G4double GetAngleThreshold() { return fAngle_threshold; }
+    inline G4int IntegratorOrder() const { return 4; }
+
   private:
 
-      // Mixed Integration RK4 for 'small' steps
-      G4MagIntegratorStepper* fRK4Stepper;
-      G4int  fStepperNumber; //  Int ID of RK stepper 
+      G4MagIntegratorStepper* fRK4Stepper = nullptr;
+        // Mixed Integration RK4 for 'small' steps
+      G4int fStepperNumber = -1;
+        // Int ID of RK stepper 
    
-      // Threshold angle (in radians ) - above it Helical stepper is used
-        G4double                fAngle_threshold;
-   private:
-    // Used for statistic = how many calls to different steppers
-       G4int fVerbose;
-       G4int fNumCallsRK4;
-       G4int fNumCallsHelix;
+      G4double fAngle_threshold = -1.0;
+        // Threshold angle (in radians ) - above it Helical stepper is used
+
+  private:
+
+     G4int fVerbose = 0;
+
+     G4int fNumCallsRK4 = 0;
+     G4int fNumCallsHelix = 0;
+       // Used for statistic = how many calls to different steppers
     
 };
 
-#endif /* G4HELIXMIXEDSTEPPER_HH */
+#endif

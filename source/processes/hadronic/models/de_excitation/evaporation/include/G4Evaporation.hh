@@ -56,6 +56,7 @@ class G4NistManager;
 class G4IonTable;
 class G4VFermiBreakUp;
 class G4UnstableFragmentBreakUp;
+class G4NuclearLevelData;
 
 class G4Evaporation : public G4VEvaporation
 {
@@ -74,22 +75,24 @@ public:
 
   void SetDefaultChannel();
   void SetGEMChannel();
+  void SetGEMVIChannel();
   void SetCombinedChannel();
 
 private:
 
   void InitialiseChannelFactory();
 
-  G4Evaporation(const G4Evaporation &right) = delete;
-  const G4Evaporation & operator=(const G4Evaporation &right) = delete;
-  G4bool operator==(const G4Evaporation &right) const = delete;
-  G4bool operator!=(const G4Evaporation &right) const = delete;
+  G4Evaporation(const G4Evaporation &right);
+  const G4Evaporation & operator=(const G4Evaporation &right);
+  G4bool operator==(const G4Evaporation &right) const;
+  G4bool operator!=(const G4Evaporation &right) const;
 
   G4int    fVerbose;
   size_t   nChannels;
   G4double minExcitation;
   G4NistManager* nist;
   G4IonTable*    theTableOfIons;
+  G4NuclearLevelData* fLevelData;
   G4UnstableFragmentBreakUp* unstableBreakUp;
   G4bool isInitialised;
 

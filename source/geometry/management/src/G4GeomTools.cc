@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // class G4GeomTools implementation
 //
-// Author: evgueni.tcherniaev@cern.ch
-//
-// 10.10.2016 E.Tcherniaev: initial version.
+// 10.10.2016, E.Tcherniaev: initial version.
 // --------------------------------------------------------------------
 
 #include "G4GeomTools.hh"
@@ -81,7 +76,7 @@ G4double G4GeomTools::QuadArea(const G4TwoVector& A,
 G4double G4GeomTools::PolygonArea(const G4TwoVectorList& p)
 {
   G4int n = p.size();
-  if (n < 3) return 0; // degerate polygon
+  if (n < 3) return 0.0; // degenerate polygon
   G4double area = p[n-1].x()*p[0].y() - p[0].x()*p[n-1].y();
   for(G4int i=1; i<n; ++i)
   {
@@ -239,7 +234,7 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
     // ERROR: if we loop, it is probably a non-simple polygon
     if ((count--) <= 0)
     {
-      delete[] V;
+      delete [] V;
       if (area < 0.) std::reverse(result.begin(),result.end());
       return false; 
     }
@@ -263,7 +258,7 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
       count = 2*nv; // resest error detection counter
     }
   }
-  delete[] V;
+  delete [] V;
   if (area < 0.) std::reverse(result.begin(),result.end());
   return true;
 }
@@ -313,7 +308,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
 {
   iout.resize(0);
   // set tolerance squared
-  G4double delta = tolerance*tolerance;
+  G4double delta = sqr(tolerance);
   // set special value to mark vertices for removal
   G4double removeIt = kInfinity;
 
@@ -355,7 +350,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
     G4double leng3 = (e2-e1).mag2();
     if (leng1 <= delta || leng2 <= delta || leng3 <= delta)
     {
-      polygon[icur].setX(removeIt); nout++;
+      polygon[icur].setX(removeIt); ++nout;
     }
     else
     {
@@ -363,7 +358,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
       G4double area = std::abs(e1.x()*e2.y()-e1.y()*e2.x())*0.5;
       if (area/std::sqrt(lmax) <= std::abs(tolerance))
       {
-        polygon[icur].setX(removeIt); nout++;
+        polygon[icur].setX(removeIt); ++nout;
       }
     }
   }
@@ -585,7 +580,8 @@ G4double G4GeomTools::comp_ellint_2(G4double e)
   G4double y = b;
   G4double S = 0.;
   G4double M = 1.;
-  while (x - y > eps*y) {
+  while (x - y > eps*y)
+  {
     G4double tmp = (x + y) * 0.5;
     y = std::sqrt(x*y);
     x = tmp;

@@ -214,8 +214,7 @@ public:
                    << std::endl;
       return 0;
     }
-    directory* dir = 
-      new directory(m_file,this,a_name,a_title.empty()?a_name:a_title);
+    directory* dir = new directory(m_file,this,a_name,a_title.empty()?a_name:a_title);
     if(!dir->is_valid()) {
       m_file.out() << "tools::wroot::directory::mkdir :" 
                    << " directory badly created."
@@ -327,6 +326,9 @@ public:
   void clear_dirs() {safe_clear<directory>(m_dirs);}
   void clear_objs() {safe_clear<iobject>(m_objs);}
 
+  const std::list<key*>& keys() const {return m_keys;}
+  //std::list<key*>& keys() {return m_keys;}
+
 protected:
   void clear_keys() {
     std::list<key*>::iterator it;
@@ -360,9 +362,6 @@ protected:
     if(!write_header()) return false;
     return true;
   }
-
-  //const std::list<key*>& keys() const {return m_keys;}
-  //std::list<key*>& keys() {return m_keys;}
 
   key* find_key(const std::string& a_name) {
     if(m_file.verbose()) {

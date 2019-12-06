@@ -137,7 +137,7 @@ void G4RDBremsstrahlungParameters::LoadData(const G4String& name)
 
   // Read parameters
 
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (path == 0)
     {
       G4String excep("G4LEDATA environment variable not set!");

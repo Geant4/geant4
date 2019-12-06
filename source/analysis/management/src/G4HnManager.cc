@@ -215,6 +215,39 @@ void  G4HnManager::SetPlotting(G4bool plotting)
 }    
 
 //_____________________________________________________________________________
+G4bool G4HnManager::SetXAxisIsLog(G4int id, G4bool isLog)
+{
+  auto info = GetHnInformation(id, "SetXAxisIsLog");
+
+  if ( ! info ) return false;
+
+  info->SetIsLogAxis(kX, isLog);
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool  G4HnManager::SetYAxisIsLog(G4int id, G4bool isLog)
+{
+  auto info = GetHnInformation(id, "SetYAxisIsLog");
+
+  if ( ! info ) return false;
+
+  info->SetIsLogAxis(kY, isLog);
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool  G4HnManager::SetZAxisIsLog(G4int id, G4bool isLog)
+{
+  auto info = GetHnInformation(id, "SetZAxisIsLog");
+
+  if ( ! info ) return false;
+
+  info->SetIsLogAxis(kZ, isLog);
+  return true;
+}
+
+//_____________________________________________________________________________
 G4String G4HnManager::GetName(G4int id) const
 {
   auto info = GetHnInformation(id, "GetName");
@@ -252,6 +285,36 @@ G4double G4HnManager::GetZUnit(G4int id) const
   if ( ! info ) return 1.0;
   
   return info->fUnit;
+}    
+
+//_____________________________________________________________________________
+G4bool G4HnManager::GetXAxisIsLog(G4int id) const
+{
+  auto info = GetHnInformation(id, "GetXAxisIsLog");
+
+  if ( ! info ) return false;
+  
+  return info->GetIsLogAxis(kX);
+}    
+
+//_____________________________________________________________________________
+G4bool G4HnManager::GetYAxisIsLog(G4int id) const
+{
+  auto info = GetHnInformation(id, "GetYAxisIsLog");
+
+  if ( ! info ) return 1.0;
+  
+  return info->GetIsLogAxis(kY);
+}    
+
+//_____________________________________________________________________________
+G4bool G4HnManager::GetZAxisIsLog(G4int id) const
+{
+  auto info = GetHnInformation(id, "GetZAxisIsLog");
+
+  if ( ! info ) return 1.0;
+  
+  return info->GetIsLogAxis(kZ);
 }    
 
 //_____________________________________________________________________________

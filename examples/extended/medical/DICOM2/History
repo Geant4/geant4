@@ -6,6 +6,19 @@
 
                       Category History file
 
+26.11.2019 - I. Hrivnacova (DICOM2-V10-05-04)
+             Fixed Doxygen warnings
+
+19.11.2019 - Gabriele Cosmo (DICOM2-V10-05-03)
+             Fixed more cases of implicit type conversions.
+
+15.11.2019 - Gabriele Cosmo (DICOM2-V10-05-02)
+             Fixed cases of implicit type conversions from size_t to G4int.
+
+12.11.2019 - Gunter Folger  (DICOM2-V10-05-01)
+             Use updated DicomHandler singleton;
+	     DICOM2 was crashing on Windows
+
 23.04.2019 - Ben Morgan (DICOM2-V10-05-00)
              Explicitly include G4Types.hh to pick up G4MULTITHREADED
 

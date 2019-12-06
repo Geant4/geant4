@@ -319,6 +319,13 @@ class G4VAnalysisManager
 
     void  FinishNtuple(G4int ntupleId); 
     
+    // MT/MPI
+    virtual void SetNtupleMerging(G4bool mergeNtuples, 
+                   G4int nofReducedNtupleFiles = 0);
+    virtual void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true);
+    virtual void SetBasketSize(unsigned int basketSize);
+    virtual void SetBasketEntries(unsigned int basketEntries);
+
     // The ids of histograms and ntuples are generated automatically
     // starting from 0; with following functions it is possible to
     // change the first Id to start from other value
@@ -530,51 +537,76 @@ class G4VAnalysisManager
     G4bool SetH1Title(G4int id, const G4String& title);
     G4bool SetH1XAxisTitle(G4int id, const G4String& title);
     G4bool SetH1YAxisTitle(G4int id, const G4String& title);
+    G4bool SetH1XAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetH1YAxisIsLog(G4int id, G4bool isLog);
     //
     G4bool SetH2Title(G4int id, const G4String& title);
     G4bool SetH2XAxisTitle(G4int id, const G4String& title);
     G4bool SetH2YAxisTitle(G4int id, const G4String& title);
     G4bool SetH2ZAxisTitle(G4int id, const G4String& title);
+    G4bool SetH2XAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetH2YAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetH2ZAxisIsLog(G4int id, G4bool isLog);
     //
     G4bool SetH3Title(G4int id, const G4String& title);
     G4bool SetH3XAxisTitle(G4int id, const G4String& title);
     G4bool SetH3YAxisTitle(G4int id, const G4String& title);
     G4bool SetH3ZAxisTitle(G4int id, const G4String& title);
+    G4bool SetH3XAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetH3YAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetH3ZAxisIsLog(G4int id, G4bool isLog);
     //
     G4bool SetP1Title(G4int id, const G4String& title);
     G4bool SetP1XAxisTitle(G4int id, const G4String& title);
     G4bool SetP1YAxisTitle(G4int id, const G4String& title);
+    G4bool SetP1XAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetP1YAxisIsLog(G4int id, G4bool isLog);
     //
     G4bool SetP2Title(G4int id, const G4String& title);
     G4bool SetP2XAxisTitle(G4int id, const G4String& title);
     G4bool SetP2YAxisTitle(G4int id, const G4String& title);
     G4bool SetP2ZAxisTitle(G4int id, const G4String& title);
+    G4bool SetP2XAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetP2YAxisIsLog(G4int id, G4bool isLog);
+    G4bool SetP2ZAxisIsLog(G4int id, G4bool isLog);
 
     // Access histogram & profiles attributes for plotting
     //
     G4String GetH1Title(G4int id) const;
     G4String GetH1XAxisTitle(G4int id) const;
     G4String GetH1YAxisTitle(G4int id) const;
+    G4bool   GetH1XAxisIsLog(G4int id) const;
+    G4bool   GetH1YAxisIsLog(G4int id) const;
     //
     G4String GetH2Title(G4int id) const;
     G4String GetH2XAxisTitle(G4int id) const;
     G4String GetH2YAxisTitle(G4int id) const;
     G4String GetH2ZAxisTitle(G4int id) const;
+    G4bool   GetH2XAxisIsLog(G4int id) const;
+    G4bool   GetH2YAxisIsLog(G4int id) const;
+    G4bool   GetH2ZAxisIsLog(G4int id) const;
     //
     G4String GetH3Title(G4int id) const;
     G4String GetH3XAxisTitle(G4int id) const;
     G4String GetH3YAxisTitle(G4int id) const;
     G4String GetH3ZAxisTitle(G4int id) const;
+    G4bool   GetH3XAxisIsLog(G4int id) const;
+    G4bool   GetH3YAxisIsLog(G4int id) const;
+    G4bool   GetH3ZAxisIsLog(G4int id) const;
     //
     G4String GetP1Title(G4int id) const;
     G4String GetP1XAxisTitle(G4int id) const;
     G4String GetP1YAxisTitle(G4int id) const;
-    G4String GetP1ZAxisTitle(G4int id) const;
+    G4bool   GetP1XAxisIsLog(G4int id) const;
+    G4bool   GetP1YAxisIsLog(G4int id) const;
     //
     G4String GetP2Title(G4int id) const;
     G4String GetP2XAxisTitle(G4int id) const;
     G4String GetP2YAxisTitle(G4int id) const;
     G4String GetP2ZAxisTitle(G4int id) const;
+    G4bool   GetP2XAxisIsLog(G4int id) const;
+    G4bool   GetP2YAxisIsLog(G4int id) const;
+    G4bool   GetP2ZAxisIsLog(G4int id) const;
 
     // Verbosity
     void  SetVerboseLevel(G4int verboseLevel);
@@ -606,6 +638,10 @@ class G4VAnalysisManager
 
     // Methods to manipulate additional information
     G4bool  WriteAscii(const G4String& fileName); 
+
+    // constants
+    static constexpr unsigned int fgkDefaultBasketSize = 32000;
+    static constexpr unsigned int fgkDefaultBasketEntries = 4000;
 
     // data members
     G4AnalysisManagerState fState;

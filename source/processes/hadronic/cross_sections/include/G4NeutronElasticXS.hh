@@ -46,7 +46,6 @@
 #include "globals.hh"
 #include "G4Threading.hh"
 #include <vector>
-#include <iostream>
 
 const G4int MAXZEL = 93;
 
@@ -70,16 +69,35 @@ public:
   G4bool IsElementApplicable(const G4DynamicParticle*, 
 			     G4int Z, const G4Material*) final;
 
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
+			 const G4Element*, const G4Material*) final;
+
   G4double GetElementCrossSection(const G4DynamicParticle*, 
 			          G4int Z, const G4Material*) final; 
+
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+                              const G4Isotope* iso,
+                              const G4Element* elm,
+                              const G4Material* mat) final;
+
+  const G4Isotope* SelectIsotope(const G4Element*, 
+                                 G4double kinEnergy, G4double logE) final;
 
   void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
   void CrossSectionDescription(std::ostream&) const final;
 
+  G4double IsoCrossSection(G4double ekin, G4double logE, G4int Z, G4int A);
+
 private: 
 
-  void Initialise(G4int Z, const char*);
+  void Initialise(G4int Z);
+
+  void InitialiseOnFly(G4int Z);
+
+  const G4String& FindDirectoryPath();
+
+  G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4NeutronElasticXS & operator=(const G4NeutronElasticXS &right);
   G4NeutronElasticXS(const G4NeutronElasticXS&);
@@ -88,10 +106,13 @@ private:
   G4ComponentGGHadronNucleusXsc* ggXsection;
   const G4ParticleDefinition* neutron;
 
+  std::vector<G4double> temp;
+
   static G4PhysicsVector* data[MAXZEL];
   static G4double coeff[MAXZEL];
+  static G4double aeff[MAXZEL];
+  static G4String gDataDirectory;
 
-  size_t  fIdxXSTable;
   G4bool  isMaster;
 
 #ifdef G4MULTITHREADED

@@ -81,7 +81,7 @@ class G4HCofThisEvent
       //  Returns the number of hits collections which are stored in this class
       // object.
   public:
-      inline G4int GetCapacity()
+      inline size_t GetCapacity()
       {
         return HC->size();
       }

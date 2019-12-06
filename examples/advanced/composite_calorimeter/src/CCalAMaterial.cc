@@ -30,22 +30,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalAMaterial.hh"
 
-CCalAMaterial::CCalAMaterial(G4String mat, G4double dens, int nconst, 
-			     CCalAMaterial** constituents, G4double* weights) {
+CCalAMaterial::CCalAMaterial(G4String mat, G4double dens, G4int nconst, 
+                             CCalAMaterial** constituents, G4double* weights) {
   name=mat;
   nElem=0;
-  int i=0;
+  G4int i=0;
   for (i=0; i<nconst; i++)
     nElem += (constituents[i]->NElements());
 
   theElements = new G4String[nElem];
-  theWeights  = new double[nElem];
+  theWeights  = new G4double[nElem];
 
-  double factor;
-  int nelem=0;
+  G4double factor;
+  G4int nelem=0;
   for (i=0; i<nconst; i++) {
     factor=constituents[i]->Aeff();
-    for (int j=0; j<constituents[i]->NElements(); j++) {
+    for (G4int j=0; j<constituents[i]->NElements(); j++) {
       theElements[nelem] = constituents[i]->Element(j);
       theWeights[nelem]  = constituents[i]->Weight(j)* weights[i] * factor;
       nelem++;
@@ -61,12 +61,12 @@ CCalAMaterial::CCalAMaterial(G4String mat, G4double dens, int nconst,
   closeMaterial();
 }
 
-CCalAMaterial::CCalAMaterial(G4String elemat, double eff, double dens) {
+CCalAMaterial::CCalAMaterial(G4String elemat, G4double eff, G4double dens) {
   name=elemat;
   density=dens;
   nElem=1;
   theElements = new G4String[nElem];
-  theWeights  = new double[nElem];
+  theWeights  = new G4double[nElem];
   
   theElements[0] = elemat;
   theWeights[0]  = 1;
@@ -84,8 +84,8 @@ CCalAMaterial::CCalAMaterial(const CCalAMaterial& mat)
   density = mat.density;
   nElem   = mat.nElem;
   theElements = new G4String[nElem];
-  theWeights  = new double[nElem];
-  for (int i=0; i<nElem; i++){
+  theWeights  = new G4double[nElem];
+  for (G4int i=0; i<nElem; i++){
     theElements[i]=mat.theElements[i];
     theWeights[i]=mat.theWeights[i];
   }
@@ -103,19 +103,19 @@ CCalAMaterial& CCalAMaterial::operator=(const CCalAMaterial& mat){
   aEff=mat.aEff;
   
   theElements = new G4String[nElem];
-  theWeights  = new double[nElem];
-  for (int i=0; i<nElem; i++){
+  theWeights  = new G4double[nElem];
+  for (G4int i=0; i<nElem; i++){
     theElements[i]=mat.theElements[i];
     theWeights[i]=mat.theWeights[i];
   }
   return *this;
 }
 
-void CCalAMaterial::computeAeff(int nconst, 
-				CCalAMaterial** constituents, 
-				double* weights){
+void CCalAMaterial::computeAeff(G4int nconst, 
+                                CCalAMaterial** constituents, 
+                                G4double* weights){
   aEff=0;
-  for (int i=0; i<nconst; i++)
+  for (G4int i=0; i<nconst; i++)
     aEff += weights[i] * constituents[i]->Aeff();
 }
 
@@ -124,7 +124,7 @@ std::ostream& operator<<(std::ostream& os, const CCalAMaterial& mat) {
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
      << mat.nElem 
      << ". Aeff= " << mat.aEff << G4endl;
-  for (int i=0; i<mat.nElem; i++)
+  for (G4int i=0; i<mat.nElem; i++)
     os << '\t' << mat.theElements[i] << '\t' << mat.theWeights[i] << G4endl;
   return os;
 }

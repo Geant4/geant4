@@ -52,6 +52,13 @@ inline bool write(const std::string& a_file,const std::vector<std::string>& a_te
   return true;
 }
 
+inline bool make_empty(const std::string& a_file) {
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) return false;
+  ::fclose(file);
+  return true;
+}
+
 inline bool read_buff(FILE* a_file,char* a_buff,unsigned int a_lbuf,size_t& a_length) {
   a_length = ::fread(a_buff,1,a_lbuf,a_file);
   return true;
@@ -79,21 +86,26 @@ inline bool read_cstring(FILE* a_file,char* a_buff,unsigned int a_lbuf,size_t& a
 }
 
 
-inline bool read(const std::string& a_file,std::vector<std::string>& a_text){
+inline bool read(FILE* a_FILE,std::vector<std::string>& a_text){
   a_text.clear();
-  FILE* file = ::fopen(a_file.c_str(),"rb");
-  if(!file) return false;
   unsigned int BUFSIZE = 65536;
   char* buffer = new char[BUFSIZE+1];
-  if(!buffer) {::fclose(file);return false;}
+  if(!buffer) return false;
   while(true) {
     size_t l;
-    if(!read_cstring(file,buffer,BUFSIZE,l)) break; // EOF.
+    if(!read_cstring(a_FILE,buffer,BUFSIZE,l)) break; // EOF.
     a_text.push_back(buffer);
   }
   delete [] buffer;
-  ::fclose(file);
   return true;
+}
+
+inline bool read(const std::string& a_file,std::vector<std::string>& a_text){
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {a_text.clear();return false;}
+  bool status = read(file,a_text);
+  ::fclose(file);
+  return status;
 }
 
 inline bool read_num(const std::string& a_file,std::vector<std::string>::size_type a_num,std::vector<std::string>& a_text,const std::string& a_cmt = ""){
@@ -337,6 +349,23 @@ inline bool is_py(const std::string& a_file,bool& a_is){
   return true;
 }
 
+inline bool is_kumac(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="kumac") {a_is = true;return true;}
+  //try to guess ?
+  a_is = false;
+  return true;
+}
+
+inline bool is_insh(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="insh") {a_is = true;return true;}
+  //try to guess ?
+  // have a first line : #!insh ?
+  a_is = false;
+  return true;
+}
+
 }}
 
 #include "fileis"
@@ -498,7 +527,7 @@ inline bool std_rename(const std::string& a_from,const std::string& a_to) {
   //NOTE : a_from must not be a path !
   //       Darwin is ok with a path but not Linux !
   //       For example : 
-  //         ::rename("/tmp/tmp01"."x");
+  //         ::rename("/tmp/tmp01","x");
   //       return -1 on Linux.
   //       To do the upper then someone must use move. 
   //       But there is no move in the standard lib C !

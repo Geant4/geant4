@@ -22,21 +22,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4BulirschStoer driver
 //
+// Class description:
 //
-// Helper namespace 'magneticfield'
-//
-// Description:
-// class G4IntegrationDriver<G4BulirschStoer> implementation by Dmitry Sorokin
-// This driver class uses Bulirsch-Stoer method to integrate
-// the equation of motion
-//
-//    Implementation by Dmitry Sorokin - GSoC 2016
-//       Work supported by Google as part of Google Summer of Code 2016.
-//    Supervision / code review: John Apostolakis
-//
-///////////////////////////////////////////////////////////////////////////////
+// G4IntegrationDriver<G4BulirschStoer> is a driver class using
+// Bulirsch-Stoer method to integrate the equation of motion.
 
+// Author: Dmitry Sorokin, Google Summer of Code 2016
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 #ifndef G4BULIRSCH_STOER_DRIVER_HH
 #define G4BULIRSCH_STOER_DRIVER_HH
 
@@ -47,13 +42,14 @@
 template <>
 class G4IntegrationDriver<G4BulirschStoer>: 
     public G4VIntegrationDriver,
-    public G4ChordFinderDelegate<G4IntegrationDriver<G4BulirschStoer>> {
-public:
-    G4IntegrationDriver(
-        G4double hminimum,
-        G4BulirschStoer* stepper,
-        G4int numberOfComponents = 6,
-        G4int statisticsVerbosity = 1);
+    public G4ChordFinderDelegate<G4IntegrationDriver<G4BulirschStoer>>
+{
+  public:
+
+    G4IntegrationDriver( G4double hminimum,
+                         G4BulirschStoer* stepper,
+                         G4int numberOfComponents = 6,
+                         G4int statisticsVerbosity = 1);
 
     ~G4IntegrationDriver() = default;
 
@@ -65,54 +61,51 @@ public:
                                          G4double eps,
                                          G4double chordDistance) override
     {
-        return ChordFinderDelegate::AdvanceChordLimitedImpl(track, hstep, eps, chordDistance);
+      return ChordFinderDelegate::
+             AdvanceChordLimitedImpl(track, hstep, eps, chordDistance);
     }
 
     virtual void OnStartTracking() override
     {
-        ChordFinderDelegate::ResetStepEstimate();
+      ChordFinderDelegate::ResetStepEstimate();
     }
 
     virtual void OnComputeStep() override {};
 
-    virtual G4bool AccurateAdvance(
-        G4FieldTrack& track,
-        G4double stepLen,
-        G4double eps,
-        G4double beginStep = 0) override;
+    virtual G4bool DoesReIntegrate() override { return false; }  /// ????
+   
+    virtual G4bool AccurateAdvance( G4FieldTrack& track,
+                                    G4double stepLen,
+                                    G4double eps,
+                                    G4double beginStep = 0) override;
 
-    virtual G4bool QuickAdvance(
-        G4FieldTrack& y_val,
-        const G4double dydx[],
-        G4double hstep,
-        G4double inverseCurvatureRadius,
-        G4double& missDist,
-        G4double& dyerr) override;
+    virtual G4bool QuickAdvance( G4FieldTrack& y_val,
+                                 const G4double dydx[],
+                                 G4double hstep,
+                                 G4double& missDist,
+                                 G4double& dyerr) override;
 
-    void OneGoodStep(
-        G4double y[],
-        const G4double dydx[],
-        G4double& curveLength,
-        G4double htry,
-        G4double eps,
-        G4double& hdid,
-        G4double& hnext);
+    void OneGoodStep( G4double y[],
+                      const G4double dydx[],
+                      G4double& curveLength,
+                      G4double htry,
+                      G4double eps,
+                      G4double& hdid,
+                      G4double& hnext);
 
-    virtual void GetDerivatives(
-        const G4FieldTrack& track,
-        G4double dydx[]) const override;
+    virtual void GetDerivatives( const G4FieldTrack& track,
+                                 G4double dydx[]) const override;
 
-    virtual void GetDerivatives(
-        const G4FieldTrack& track,
-        G4double dydx[],
-        G4double field[]) const override;
+    virtual void GetDerivatives( const G4FieldTrack& track,
+                                 G4double dydx[],
+                                 G4double field[]) const override;
 
     virtual void SetVerboseLevel(G4int level) override;
     virtual G4int GetVerboseLevel() const override;
 
     virtual G4double ComputeNewStepSize(
-        G4double  errMaxNorm,    // normalised error
-        G4double  hstepCurrent) override; // current step size
+                          G4double  errMaxNorm,    // normalised error
+                          G4double  hstepCurrent) override; // current step size
 
     virtual G4EquationOfMotion* GetEquationOfMotion() override;
     const G4EquationOfMotion* GetEquationOfMotion() const;
@@ -121,7 +114,8 @@ public:
     virtual const G4MagIntegratorStepper* GetStepper() const override;
     virtual G4MagIntegratorStepper* GetStepper() override;
 
-private:
+  private:
+
     G4int GetNumberOfVarialbles() const;
 
     G4double fMinimumStep;
@@ -145,7 +139,8 @@ private:
 
     const G4int interval_sequence[2];
 
-    using ChordFinderDelegate = G4ChordFinderDelegate<G4IntegrationDriver<G4BulirschStoer>>;
+    using ChordFinderDelegate =
+          G4ChordFinderDelegate<G4IntegrationDriver<G4BulirschStoer>>;
 };
 
 #include "G4BulirschStoerDriver.icc"

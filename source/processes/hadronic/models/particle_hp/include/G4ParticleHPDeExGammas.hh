@@ -90,7 +90,7 @@ class G4ParticleHPDeExGammas
   
   inline G4ParticleHPLevel * GetLevel(G4int i)
   {
-    if(getenv("G4PHPTEST")) G4cout << this << " GetLEVEL " << i << " n " << nLevels << G4endl;
+    if(std::getenv("G4PHPTEST")) G4cout << this << " GetLEVEL " << i << " n " << nLevels << G4endl;
     if(i>nLevels-1) return 0;
     return theLevels+i;
   }

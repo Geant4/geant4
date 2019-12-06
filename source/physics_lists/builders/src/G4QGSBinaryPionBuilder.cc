@@ -43,7 +43,7 @@
 G4QGSBinaryPionBuilder::
 G4QGSBinaryPionBuilder(G4bool quasiElastic) 
 {
-  theMin = 12*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSB");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;
@@ -87,3 +87,4 @@ Build(G4PionMinusInelasticProcess * aP)
   aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
   aP->RegisterMe(theModel);
 }
+

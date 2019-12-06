@@ -1,7 +1,10 @@
 # - Use file for Geant4
-# This file should be included after a find_package call has successfully
-# located Geant4. If Geant4 has been located via the Geant4Config.cmake
-# config file, this will have set the following variable:
+# This file may be included after a find_package call has successfully
+# located Geant4 to set global compile definitions, include directories,
+# and compiler flags for building and linking to the Geant4 libraries.
+#
+# If Geant4 has been located via the Geant4Config.cmake config file, the
+# following variable will be set:
 #
 #  Geant4_USE_FILE : Point to the location of the use file for the found
 #                    Geant4 installation.
@@ -14,7 +17,7 @@
 # include directories to those of the directory in which this file is
 # included.
 #
-# Header paths are added to include_directories as SYSTEM type directories
+# Header paths are added via include_directories as SYSTEM type directories
 #
 # The recommended Geant4 compiler flags are also prepended to
 # CMAKE_CXX_FLAGS but duplicated flags are NOT removed. This permits
@@ -39,15 +42,14 @@ include_directories(AFTER SYSTEM ${Geant4_INCLUDE_DIRS})
 #-----------------------------------------------------------------------
 # Because Geant4 is sensitive to the compiler flags, set the base
 # set here. This reproduces as far as possible the behaviour of the
-# original makefile system. Users requiring additional flags must append them
-# *after* inclusion of this file
+# original makefile system.
 #
-set(CMAKE_CXX_FLAGS                "${Geant4_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG          "${Geant4_CXX_FLAGS_DEBUG}")
-set(CMAKE_CXX_FLAGS_MINSIZEREL     "${Geant4_CXX_FLAGS_MINSIZEREL}")
-set(CMAKE_CXX_FLAGS_RELEASE        "${Geant4_CXX_FLAGS_RELEASE}")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${Geant4_CXX_FLAGS_RELWITHDEBINFO}")
-set(CMAKE_EXE_LINKER_FLAGS         "${Geant4_EXE_LINKER_FLAGS}")
+set(CMAKE_CXX_FLAGS                "${Geant4_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG          "${Geant4_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS_DEBUG}")
+set(CMAKE_CXX_FLAGS_MINSIZEREL     "${Geant4_CXX_FLAGS_MINSIZEREL} ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+set(CMAKE_CXX_FLAGS_RELEASE        "${Geant4_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${Geant4_CXX_FLAGS_RELWITHDEBINFO} ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+set(CMAKE_EXE_LINKER_FLAGS         "${Geant4_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
 
 #-----------------------------------------------------------------------
 # Update build type information ONLY for single mode build tools, adding

@@ -16,13 +16,15 @@
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${FREETYPE_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/analysis/g4tools/include)
 
+if(GEANT4_USE_FREETYPE)
+  set(G4analysismng_LINK_LIBRARIES Freetype::Freetype)
+endif()
 #
 # Define the Geant4 Module.
 #
@@ -73,7 +75,6 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4VP1Manager.hh
         G4VP2Manager.hh
         G4VRNtupleManager.hh
-        g4analysis_defs.hh
     SOURCES
         G4AnalysisVerbose.cc
         G4AnalysisManagerState.cc
@@ -108,7 +109,7 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4global
         G4intercoms
     LINK_LIBRARIES
-        ${FREETYPE_LIBRARIES}
+        ${G4analysismng_LINK_LIBRARIES}
 )
 
 # List any source specific properties here

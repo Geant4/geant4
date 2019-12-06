@@ -242,7 +242,7 @@ void G4RDShellData::LoadData(const G4String& fileName)
   
   G4String name(ost.str());
   
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4LEDATA environment variable not set!");

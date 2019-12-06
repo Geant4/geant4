@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
 //
@@ -153,7 +153,7 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  /// G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,6 +195,7 @@ void DetectorConstruction::PrintParameters()
 {
   G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
          << " of " << fMaterial->GetName() << G4endl;
+  G4cout << "\n" << fMaterial << G4endl;	 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -120,28 +120,31 @@ void G4OpenGLSceneHandler::ScaledFlush()
     // Drawing transients, e.g., trajectories.
 
     if (!fpScene) {
-      // No scene, so probably not in event loop.
+      // No scene - shouldn't happen
       glFlush();
       return;
     }
     // Get event from modeling parameters
     if (!fpModel) {
-      // No model, so probably not in event loop
+      // No model - shouldn't happen
       glFlush();
       return;
     }
     const G4ModelingParameters* modelingParameters =
     fpModel->GetModelingParameters();
     if (!modelingParameters) {
-      // No modeling parameters, so probably not in event loop.
+      // No modeling parameters - shouldn't happen
       glFlush();
       return;
     }
     const G4Event* thisEvent = modelingParameters->GetEvent();
     if (!thisEvent) {
-      // No event, so probably not in event loop.
-      glFlush();
-      return;
+      // No event, so not in event loop.
+      if (fFlushAction == endOfEvent) {
+        fFlushAction = endOfRun;
+      } else if (fFlushAction == NthEvent) {
+        fFlushAction = NthPrimitive;
+      }
     }
     G4RunManager* runMan = G4RunManager::GetRunManager();
 #ifdef G4MULTITHREADED
@@ -150,13 +153,18 @@ void G4OpenGLSceneHandler::ScaledFlush()
     }
 #endif
     if (!runMan) {
+      // No run manager - shouldn't happen
       glFlush();
       return;
     }
     const G4Run* thisRun = runMan->GetCurrentRun();
     if (!thisRun) {
-      glFlush();
-      return;
+      // No run, so not in event loop.
+      if (fFlushAction == endOfRun) {
+        fFlushAction = NthPrimitive;
+      } else if (fFlushAction == NthEvent) {
+        fFlushAction = NthPrimitive;
+      }
     }
 
     switch (fFlushAction) {

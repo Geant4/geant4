@@ -67,8 +67,7 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
     G4int iA = G4int(A);
     mass =GetNuclearMass(iA,iZ);
   }
-  
-   return mass;
+  return mass;
 }
 
 
@@ -76,9 +75,6 @@ G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
 {
   if (mass_proton  <= 0.0 ) {
     const G4ParticleDefinition * nucleus = nullptr;
-    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
-    if (nucleus!=nullptr) mass_proton = nucleus->GetPDGMass();
-
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
     if (nucleus!=nullptr) mass_neutron = nucleus->GetPDGMass();
 
@@ -94,6 +90,8 @@ G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
     if (nucleus!=nullptr) mass_He3 = nucleus->GetPDGMass();
 
+    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
+    if (nucleus!=nullptr) mass_proton = nucleus->GetPDGMass();
   }
 
   if (A < 1 || Z < 0 || Z > A) {
@@ -131,6 +129,10 @@ G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
       // Theoretical table
       mass = G4NucleiPropertiesTheoreticalTable::GetNuclearMass(Z,A);
+    } else if ( Z == A ) {
+      mass = A*mass_proton;
+    } else if( 0 == Z ) {
+      mass = A*mass_neutron;
     } else {
       mass = NuclearMass(G4double(A),G4double(Z));
     }

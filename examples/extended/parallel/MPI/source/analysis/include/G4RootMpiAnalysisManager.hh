@@ -52,9 +52,7 @@ class G4RootMpiAnalysisManager : public  G4RootAnalysisManager
     // MPI
     void SetMpiNtupleMerging(tools::impi* impi, 
                              G4int mpiRank, G4int mpiSize,
-                             G4int nofReducedNtupleFiles = 0,
-                             G4bool rowWise = false,
-                             unsigned int basketSize = fgkDefaultBasketSize);
+                             G4int nofReducedNtupleFiles = 0);
 
   protected:
     // virtual methods from base class

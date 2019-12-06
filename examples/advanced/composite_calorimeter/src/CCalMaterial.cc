@@ -32,26 +32,26 @@
 
 //#define debug
 
-CCalMaterial::CCalMaterial(G4String mat, double dens, int nconst, 
-			   CCalMaterial** constituents, double* weights,
-			   FractionType ft): name(mat), density(dens) {
+CCalMaterial::CCalMaterial(G4String mat, G4double dens, G4int nconst, 
+                           CCalMaterial** constituents, G4double* weights,
+                           FractionType ft): name(mat), density(dens) {
   nElem = 0;
   
-  int i=0;
+  G4int i=0;
   for (i=0; i<nconst; i++)
     nElem += constituents[i]->NElements();
 
   theElements = new G4String[nElem];
-  theWeights  = new double[nElem];
+  theWeights  = new G4double[nElem];
 
-  double factor;
-  int nelem=0;
+  G4double factor;
+  G4int nelem=0;
   for (i=0; i<nconst; i++) {
     if (ft==FTWeight)
       factor=1.0;
     else
       factor=constituents[i]->Density();
-    for (int j=0; j<constituents[i]->NElements(); j++) {
+    for (G4int j=0; j<constituents[i]->NElements(); j++) {
       theElements[nelem] = constituents[i]->Element(j);
       theWeights[nelem]  = constituents[i]->Weight(j)* weights[i] * factor;
       nelem++;
@@ -67,8 +67,8 @@ CCalMaterial::CCalMaterial(G4String mat, double dens, int nconst,
 CCalMaterial::CCalMaterial(const CCalMaterial& mat):
   name(mat.name), density(mat.density), nElem(mat.nElem) {
   theElements = new G4String[nElem];
-  theWeights  = new double[nElem];
-  for (int i=0; i<nElem; i++){
+  theWeights  = new G4double[nElem];
+  for (G4int i=0; i<nElem; i++){
     theElements[i]=mat.theElements[i];
     theWeights[i]=mat.theWeights[i];
   }
@@ -81,12 +81,12 @@ CCalMaterial::~CCalMaterial() {
     delete[] theWeights;
 }
 
-void CCalMaterial::computeDensity(int nconst, 
-				  CCalMaterial** constituents, 
-				  double* weights, FractionType ft) {
-  double mass=0;
-  double volume=0;
-  for (int i=0; i<nconst; i++) {
+void CCalMaterial::computeDensity(G4int nconst, 
+                                  CCalMaterial** constituents, 
+                                  G4double* weights, FractionType ft) {
+  G4double mass=0;
+  G4double volume=0;
+  for (G4int i=0; i<nconst; i++) {
     if (ft==FTWeight) {
       mass+=weights[i];
       volume+=(weights[i]/constituents[i]->Density());
@@ -110,8 +110,8 @@ CCalMaterial& CCalMaterial::operator=(const CCalMaterial& mat){
   nElem=mat.nElem;
   
   theElements = new G4String[nElem];
-  theWeights  = new double[nElem];
-  for (int i=0; i<nElem; i++){
+  theWeights  = new G4double[nElem];
+  for (G4int i=0; i<nElem; i++){
     theElements[i]=mat.theElements[i];
     theWeights[i]=mat.theWeights[i];
   }
@@ -127,33 +127,33 @@ G4bool CCalMaterial::operator!=(const CCalMaterial& mat) const{
 }
 
 void CCalMaterial::closeMaterial() {
-  int trueConst=0;
+  G4int trueConst=0;
 
-  double norm=0;
+  G4double norm=0;
 
-  for (int i=0; i<nElem; i++) {
+  for (G4int i=0; i<nElem; i++) {
     norm+=theWeights[i];
     if (theElements[i]!="") {
       trueConst++;
-      for (int j=i+1; j<nElem; j++) {
-	if(theElements[i]==theElements[j]){
-	  theWeights[i]+=theWeights[j];
-	  theElements[j]="";
-	}
+      for (G4int j=i+1; j<nElem; j++) {
+        if(theElements[i]==theElements[j]){
+          theWeights[i]+=theWeights[j];
+          theElements[j]="";
+        }
       }//for j
     } //if
   }//for i
 
   if (trueConst != nElem) {
     G4String* newConst = new G4String[trueConst];
-    double* newWeight = new double[trueConst];
+    G4double* newWeight = new G4double[trueConst];
     
-    int newi=0;
-    for(int i=0; i<nElem; i++){
+    G4int newi=0;
+    for(G4int i=0; i<nElem; i++){
       if (theElements[i]!="") {
-	newConst[newi]  = theElements[i];
-	newWeight[newi] = theWeights[i]/norm;
-	newi++;
+        newConst[newi]  = theElements[i];
+        newWeight[newi] = theWeights[i]/norm;
+        newi++;
       }
     }
 
@@ -169,7 +169,7 @@ void CCalMaterial::closeMaterial() {
     theWeights=newWeight;
   }
   else { //Let's normalize the weights
-    for (int i=0; i<nElem; i++)
+    for (G4int i=0; i<nElem; i++)
       theWeights[i] = theWeights[i]/norm;
   }
 }
@@ -178,7 +178,7 @@ std::ostream& operator<<(std::ostream& os, const CCalMaterial& mat) {
   os << mat.name << G4endl;
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
      << mat.nElem << G4endl;
-  for (int i=0; i<mat.nElem; i++)
+  for (G4int i=0; i<mat.nElem; i++)
     os << '\t' << mat.theElements[i] << '\t' << mat.theWeights[i] << G4endl;
   return os;
 }

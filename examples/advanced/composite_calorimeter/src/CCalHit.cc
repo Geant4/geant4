@@ -65,25 +65,25 @@ const CCalHit& CCalHit::operator=(const CCalHit &right) {
 CLHEP::Hep3Vector   CCalHit::getEntry() const          {return entry;}
 void         CCalHit::setEntry(CLHEP::Hep3Vector xyz)  { entry    = xyz; }
 
-double       CCalHit::getIncidentEnergy() const {return theIncidentEnergy; }
-void         CCalHit::setIncidentEnergy (double e){theIncidentEnergy  = e; }
+G4double       CCalHit::getIncidentEnergy() const {return theIncidentEnergy; }
+void         CCalHit::setIncidentEnergy (G4double e){theIncidentEnergy  = e; }
 
-int          CCalHit::getTrackID() const         {return theTrackID; }
-void         CCalHit::setTrackID (int i)         { theTrackID = i; }
+G4int          CCalHit::getTrackID() const         {return theTrackID; }
+void         CCalHit::setTrackID (G4int i)         { theTrackID = i; }
 
 unsigned int CCalHit::getUnitID() const          {return theUnitID; }
 void         CCalHit::setUnitID (unsigned int i) { theUnitID = i; }
 
-double       CCalHit::getTimeSlice() const       {return theTimeSlice; }
-void         CCalHit::setTimeSlice (double d)    { theTimeSlice = d; }
-int          CCalHit::getTimeSliceID() const     { if ( theTimeSlice > 1.0E9 ) return 999999999;
-                                                   return (int)theTimeSlice;}
+G4double       CCalHit::getTimeSlice() const       {return theTimeSlice; }
+void         CCalHit::setTimeSlice (G4double d)    { theTimeSlice = d; }
+G4int          CCalHit::getTimeSliceID() const     { if ( theTimeSlice > 1.0E9 ) return 999999999;
+                                                   return (G4int)theTimeSlice;}
 
-void CCalHit::setEnergyDeposit(const double e) { 
+void CCalHit::setEnergyDeposit(const G4double e) { 
   theEnergyDeposit = e; 
 }
 
-double CCalHit::getEnergyDeposit() const { 
+G4double CCalHit::getEnergyDeposit() const { 
   return theEnergyDeposit; 
 }
 
@@ -91,7 +91,7 @@ void CCalHit::addEnergyDeposit(const CCalHit& aHit) {
   addEnergyDeposit( aHit.getEnergyDeposit() );
 }
 
-void  CCalHit::addEnergyDeposit(const double e) { 
+void  CCalHit::addEnergyDeposit(const G4double e) { 
   theEnergyDeposit += e; 
 }
 

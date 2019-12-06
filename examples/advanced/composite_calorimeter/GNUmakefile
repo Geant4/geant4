@@ -12,6 +12,10 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+ifdef debug
+  CPPFLAGS += -Ddebug
+endif
+
 .PHONY: all
  
 all: lib bin

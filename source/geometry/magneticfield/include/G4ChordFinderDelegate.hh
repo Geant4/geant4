@@ -23,29 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4ChordFinderDelegate
+// G4ChordFinderDelegate
 //
 // Class description:
 //
 // Implementation of common algorithm of finding step size 
 // with distance to chord less then provided value. 
 
-// History:
-// - Created. D.Sorokin
+// Created: D.Sorokin
 // --------------------------------------------------------------------
-
-
 #ifndef G4CHORD_FINDER_DELEGATE_HH
 #define G4CHORD_FINDER_DELEGATE_HH
 
 #include "G4VIntegrationDriver.hh"
 
 template <class Driver>
-class G4ChordFinderDelegate {
-public:
+class G4ChordFinderDelegate
+{
+  public:
+
     virtual ~G4ChordFinderDelegate();
 
     G4double AdvanceChordLimitedImpl(G4FieldTrack& track,
@@ -78,7 +74,8 @@ public:
     G4double GetLastStepEstimateUnc(); 
     void SetLastStepEstimateUnc(G4double stepEst);
 
-private:
+  private:
+
     Driver& GetDriver();
 
     G4double FindNextChord(const G4FieldTrack& yStart,

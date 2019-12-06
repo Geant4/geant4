@@ -37,33 +37,29 @@
 #define G4ProtonEvaporationProbability_h 1
 
 #include "G4EvaporationProbability.hh"
-#include "G4ProtonCoulombBarrier.hh"
 
 class G4ProtonEvaporationProbability : public G4EvaporationProbability
 {
 public:
 
-  G4ProtonEvaporationProbability();
+  explicit G4ProtonEvaporationProbability();
 
-  virtual ~G4ProtonEvaporationProbability();
+  ~G4ProtonEvaporationProbability() override;
 
 protected:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+  G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+  G4double CalcBetaParam(const G4Fragment & fragment) override;
  
 private:  
 
   G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &right);
-
-  const G4ProtonEvaporationProbability & operator=(const G4ProtonEvaporationProbability &right);
+  const G4ProtonEvaporationProbability & operator=
+  (const G4ProtonEvaporationProbability &right);
   G4bool operator==(const G4ProtonEvaporationProbability &right) const;
   G4bool operator!=(const G4ProtonEvaporationProbability &right) const;
 
-  G4ProtonCoulombBarrier theCoulombBarrier; 
-
 };
-
 
 #endif

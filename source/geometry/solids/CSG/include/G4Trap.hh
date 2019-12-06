@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Trap
 //
 // Class description:
@@ -84,16 +78,12 @@
 //      TrapSidePlane fPlanes[4]   Plane equations of the faces not at +/-fDz
 //                                 NOTE: order is important !!!
 
-// History:
-//
 // 23.3.94 P.Kent: Old C++ code converted to tolerant geometry
 // 9.9.96  V.Grichine: Final modifications before to commit
-// 1.11.96 V.Grichine: Costructors for Right Angular Wedge from STEP, G4Trd/Para
-// 8.12.97 J.Allison: Added "nominal" contructor and method SetAllParameters.
+// 8.12.97 J.Allison: Added "nominal" contructor and method SetAllParameters
 // --------------------------------------------------------------------
-
-#ifndef G4Trap_HH
-#define G4Trap_HH
+#ifndef G4TRAP_HH
+#define G4TRAP_HH
 
 #include "G4Types.hh"
 
@@ -223,8 +213,9 @@ class G4Trap : public G4CSGSolid
     G4double DistanceToIn( const G4ThreeVector& p ) const;
 
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=false,
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 

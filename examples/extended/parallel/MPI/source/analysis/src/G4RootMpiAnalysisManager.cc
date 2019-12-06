@@ -34,7 +34,9 @@
 
 //_____________________________________________________________________________
 G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool isMaster)
- : G4RootAnalysisManager(isMaster)
+ : G4RootAnalysisManager(isMaster),
+   fMpiNtupleMergeMode(G4MpiNtupleMergeMode::kNone),
+   fMpiSlaveNtupleManager(nullptr)
 {}
 
 //_____________________________________________________________________________
@@ -57,14 +59,16 @@ void G4RootMpiAnalysisManager::CreateMpiNtupleManagers(
   switch ( fMpiNtupleMergeMode )
   {
     case G4MpiNtupleMergeMode::kNone:
-      fNtupleManager = new G4RootNtupleManager(fState, 0, fNtupleRowWise);
+      fNtupleManager 
+        = new G4RootNtupleManager(fState, 0, fNtupleRowWise, fNtupleRowMode);
       fNtupleManager->SetFileManager(fFileManager);
       SetNtupleManager(fNtupleManager);
       break;
 
     case G4MpiNtupleMergeMode::kMain: {
       fNtupleManager 
-        = new G4RootMpiNtupleManager(fState, fNtupleRowWise, impi, mpiSize);
+        = new G4RootMpiNtupleManager(fState, fNtupleRowWise, fNtupleRowMode,
+                                     impi, mpiSize);
       fNtupleManager->SetFileManager(fFileManager);
       SetNtupleManager(fNtupleManager);
       break;
@@ -73,7 +77,7 @@ void G4RootMpiAnalysisManager::CreateMpiNtupleManagers(
     case G4MpiNtupleMergeMode::kSlave: {
       auto destinationRank = mpiSize;
       fMpiSlaveNtupleManager 
-        = new G4RootMpiPNtupleManager(fState, fNtupleRowWise, impi, mpiRank, destinationRank);
+        = new G4RootMpiPNtupleManager(fState, impi, mpiRank, destinationRank);
       SetNtupleManager(fMpiSlaveNtupleManager);
       break;
     }
@@ -144,23 +148,15 @@ void G4RootMpiAnalysisManager::SetMpiNtupleMergingMode(
 //_____________________________________________________________________________
 void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi, 
                                              G4int mpiRank, G4int mpiSize,
-                                             G4int nofNtupleFiles,
-                                             G4bool rowWise,
-                                             unsigned int basketSize)
+                                             G4int nofNtupleFiles)
 {
   // G4cout << "SetMpiNtupleMerging: "
   //        << impi << ", "
   //        << mpiRank << ","
   //        << mpiSize << ","
-  //        << nofNtupleFiles << ","
-  //        << rowWise << ","
-  //        << basketSize << G4endl;
+  //        << nofNtupleFiles << G4endl;
 
   // fImpi = impi;
-
-  // Keep basketSize in file manager
-  fFileManager->SetBasketSize(basketSize);
-  fNtupleRowWise = rowWise;
 
   // Set ntuple merging mode 
   SetMpiNtupleMergingMode(mpiRank, mpiSize, nofNtupleFiles);
@@ -330,5 +326,3 @@ G4bool G4RootMpiAnalysisManager::Reset()
   
   return finalResult;
 }
-
- 

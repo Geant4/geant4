@@ -22,20 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // 
 // G4UBox
 //
 // Class description:
 //
-//   Wrapper class for G4Box to make use of VecGeom Box.
+// Wrapper class for G4Box to make use of VecGeom Box.
 
-// History:
 // 13.09.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 #ifndef G4UBOX_HH

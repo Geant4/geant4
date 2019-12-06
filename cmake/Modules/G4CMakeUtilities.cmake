@@ -179,6 +179,57 @@ function(geant4_latest_version dir name var)
   set(${var} ${dir}/${name}${newer} PARENT_SCOPE)
 endfunction()
 
+#-----------------------------------------------------------------------
+# GEANT4 EXTERNAL PACKAGE HELPERS
+#-----------------------------------------------------------------------
+# function geant4_save_package_variables(<title> <var1> ... <varN>)
+#          Save variables <var1> ... <varN> under <title> for export to
+#          build-time package settings file.
+#
+function(geant4_save_package_variables _title)
+  get_property(__ep_titles GLOBAL PROPERTY GEANT4_EXPORT_PACKAGE_TITLES)
+  if(NOT (${_title} IN_LIST __ep_titles))
+    set_property(GLOBAL APPEND PROPERTY GEANT4_EXPORT_PACKAGE_TITLES ${_title})
+  endif()
+
+  get_property(__exported_vars GLOBAL PROPERTY GEANT4_EXPORT_PACKAGE_${_title}_VARIABLES)
+  foreach(__varname ${ARGN})
+    if(NOT (${__varname} IN_LIST __exported_vars))
+      # TODO: Also check that the save variable is in the cache...
+      # if(CACHE ...) only available from 3.14
+      set_property(GLOBAL APPEND PROPERTY GEANT4_EXPORT_PACKAGE_${_title}_VARIABLES ${__varname})
+    endif()
+  endforeach()
+endfunction()
+
+# function geant4_export_package_variables(<file>)
+#          Write saved package variables to <file>
+#
+function(geant4_export_package_variables _file)
+  set(GEANT4_PACKAGE_SETTINGS )
+  get_property(__g4_exports GLOBAL PROPERTY GEANT4_EXPORT_PACKAGE_TITLES)
+
+  foreach(__pkg_title ${__g4_exports})
+    set(__local_build_setting "\n# ${__pkg_title} Build Time Settings")
+    get_property(__pkg_vars GLOBAL PROPERTY GEANT4_EXPORT_PACKAGE_${__pkg_title}_VARIABLES)
+
+    foreach(__var ${__pkg_vars})
+      get_property(__var_value CACHE ${__var} PROPERTY VALUE)
+      get_property(__var_type CACHE ${__var} PROPERTY TYPE)
+      get_property(__var_help CACHE ${__var} PROPERTY HELPSTRING)
+      list(APPEND __local_build_setting "geant4_set_and_check_package_variable(${__var} \"${__var_value}\" ${__var_type} \"${__var_help}\")")
+    endforeach()
+
+    list(APPEND GEANT4_PACKAGE_SETTINGS ${__local_build_setting})
+  endforeach()
+
+  string(REPLACE ";" "\n" GEANT4_PACKAGE_SETTINGS "${GEANT4_PACKAGE_SETTINGS}")
+
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4PackageCache.cmake.in
+    ${_file}
+    @ONLY
+    )
+endfunction()
 
 #-----------------------------------------------------------------------
 # GEANT4 TESTING

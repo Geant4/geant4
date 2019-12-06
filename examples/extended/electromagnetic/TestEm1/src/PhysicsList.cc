@@ -52,6 +52,7 @@
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4EmParameters.hh"
 
 // particles
 
@@ -81,16 +82,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det) 
-  : G4VModularPhysicsList(), fDet(det)
+  : G4VModularPhysicsList(), fEmPhysicsList(nullptr), fEmName(" "), fDet(det)
 {
   fMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
 
   // EM physics
-  fEmName = G4String("local");
-  fEmPhysicsList = new G4EmStandardPhysics(1);
+  AddPhysicsList("emstandard_opt3");    
   
-  G4LossTableManager::Instance();
   // fix lower limit for cut
   G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(10*eV, 1*GeV);
   SetDefaultCutValue(1*mm);
@@ -150,7 +149,7 @@ void PhysicsList::ConstructProcess()
   //  
   AddStepMax();
   
-  // Get process
+  // example of Get process
   auto process = GetProcess("RadioactiveDecay");
   if (process != nullptr) {
     G4cout << "\n  GetProcess : " << process->GetProcessName() << G4endl;
@@ -161,7 +160,7 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel>0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
   
@@ -233,6 +232,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
+  
+  // Em options
+  //
+  G4EmParameters::Instance()->SetBuildCSDARange(true);        
+  G4EmParameters::Instance()->SetGeneralProcessActive(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

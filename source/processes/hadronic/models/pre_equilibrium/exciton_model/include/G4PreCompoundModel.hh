@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // by V. Lara
 //
 // Class Description
@@ -37,12 +36,12 @@
 // 03.09.2008 J.M.Quesada added external choice of inverse 
 //            cross section option.(default OPTxs=3)
 // 06.09.2008 J.M.Quesada external choices have been added for:
-//                - superimposed Coulomb barrier (if useSICB=true, default false) 
-//                - "never go back"  hipothesis (if useNGB=true, default false) 
-//                - soft cutoff from preeq. to equlibrium (if useSCO=true, default false)
+//     - superimposed Coulomb barrier (if useSICB=true, default false) 
+//     - "never go back"  hipothesis (if useNGB=true, default false) 
+//     - soft cutoff from preeq. to equlibrium (if useSCO=true, default false)
 //                - CEM transition probabilities (if useCEMtr=true)
 // 30.10.2009 J.M.Quesada CEM transition probabilities are set as default
-// 20.08.2010 V.Ivanchenko Cleanup of the code - changed data members and inline methods
+// 20.08.2010 V.Ivanchenko Cleanup of the code 
 // 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the 
 //                         constructor
 
@@ -120,7 +119,8 @@ private:
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
 
-  G4double fLimitEnergy;
+  G4double fLowLimitExc;
+  G4double fHighLimitExc;
 
   //for the rest of external choices
   G4bool useSCO;

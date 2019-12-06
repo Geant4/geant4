@@ -23,27 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4Cons
-//
 // Implementation for G4Cons class
 //
-// History:
-//
-// 03.10.16 E.Tcherniaev: use G4BoundingEnvelope for CalculateExtent(),
-//                      removed CreateRotatedVertices()
-// 04.09.14 T.Nikitina: Fix typo error in GetPointOnSurface() when 
-//                      GetRadiusInRing() was introduced
-//                      Fix DistanceToIn(p,v) for points on the Surface,
-//                      error was reported by OpticalEscape test
-// 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in sqrt(r)
+// ~1994    P.Kent: Created, as main part of the geometry prototype
+// 13.09.96 V.Grichine: Review and final modifications
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 12.10.09 T.Nikitina: Added to DistanceToIn(p,v) check on the direction in
 //                      case of point on surface
-// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 13.09.96 V.Grichine: Review and final modifications
-// ~1994    P.Kent: Created, as main part of the geometry prototype
+// 03.10.16 E.Tcherniaev: use G4BoundingEnvelope for CalculateExtent(),
+//                      removed CreateRotatedVertices()
 // --------------------------------------------------------------------
 
 #include "G4Cons.hh"
@@ -79,7 +67,7 @@ enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 //////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
-//               - note if pDPhi>2PI then reset to 2PI
+//             - note if pDPhi>2PI then reset to 2PI
 
 G4Cons::G4Cons( const G4String& pName,
                       G4double  pRmin1, G4double pRmax1,
@@ -136,7 +124,7 @@ G4Cons::G4Cons( __void__& a )
     fRmin1(0.), fRmin2(0.), fRmax1(0.), fRmax2(0.), fDz(0.),
     fSPhi(0.), fDPhi(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhi(0.),
     cosHDPhiOT(0.), cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.),
-    sinEPhi(0.), cosEPhi(0.), fPhiFullCone(false),
+    sinEPhi(0.), cosEPhi(0.),
     halfCarTolerance(0.), halfRadTolerance(0.), halfAngTolerance(0.)
 {
 }
@@ -486,30 +474,30 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
 
   if( distRMax <= halfCarTolerance )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   if( (fRmin1 || fRmin2) && (distRMin <= halfCarTolerance) )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nr;
   }
   if( !fPhiFullCone )   
   {
     if (distSPhi <= halfAngTolerance)
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= halfAngTolerance) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
   if (distZ <= halfCarTolerance)  
   {
-    noSurfaces ++;
+    ++noSurfaces;
     if ( p.z() >= 0.)  { sumnorm += nZ; }
     else               { sumnorm -= nZ; }
   }
@@ -1405,8 +1393,8 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
 G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
                                 const G4ThreeVector& v,
                                 const G4bool calcNorm,
-                                      G4bool *validNorm,
-                                      G4ThreeVector *n) const
+                                      G4bool* validNorm,
+                                      G4ThreeVector* n) const
 {
   ESide side = kNull, sider = kNull, sidephi = kNull;
 
@@ -1510,7 +1498,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3
                 - fRmax2*(fRmax2 + kRadTolerance*secRMax);
   }
-  else if ( v.z() < 0.0 )
+  else if (v.z() < 0.0)
   {
     deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3
                 - fRmax1*(fRmax1 + kRadTolerance*secRMax);
@@ -1933,8 +1921,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     }      
     if ( sphi < snxt )  // Order intersecttions
     {
-      snxt=sphi ;
-      side=sidephi ;
+      snxt = sphi ;
+      side = sidephi ;
     }
   }
   if ( srd < snxt )  // Order intersections

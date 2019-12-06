@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4FieldManager implementation
 //
-//
+// Author: John Apostolakis, 10.03.97 - design and implementation
 // -------------------------------------------------------------------
 
 #include "G4FieldManager.hh"
@@ -37,79 +38,91 @@
 G4double G4FieldManager::fDefault_Delta_One_Step_Value= 0.01 *    millimeter;
 G4double G4FieldManager::fDefault_Delta_Intersection_Val= 0.001 * millimeter;
 
-G4FieldManager::G4FieldManager(G4Field       *detectorField, 
-			       G4ChordFinder *pChordFinder, 
-			       G4bool        fieldChangesEnergy
-			      )
+G4FieldManager::G4FieldManager(G4Field* detectorField, 
+                               G4ChordFinder* pChordFinder, 
+                               G4bool fieldChangesEnergy )
    : fDetectorField(detectorField), 
      fChordFinder(pChordFinder), 
-     fAllocatedChordFinder(false),
-     fDelta_One_Step_Value(   fDefault_Delta_One_Step_Value ), 
+     fDelta_One_Step_Value( fDefault_Delta_One_Step_Value ), 
      fDelta_Intersection_Val( fDefault_Delta_Intersection_Val ),     
      fEpsilonMin( fEpsilonMinDefault ),
      fEpsilonMax( fEpsilonMaxDefault)
 { 
-   if ( detectorField )
-     fFieldChangesEnergy= detectorField->DoesFieldChangeEnergy();
+   if ( detectorField != nullptr )
+   {
+     fFieldChangesEnergy = detectorField->DoesFieldChangeEnergy();
+   }
    else
-     fFieldChangesEnergy= fieldChangesEnergy;
+   {
+     fFieldChangesEnergy = fieldChangesEnergy;
+   }
 
    // Add to store
+   //
    G4FieldManagerStore::Register(this);
 }
 
-G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
+G4FieldManager::G4FieldManager(G4MagneticField* detectorField)
    : fDetectorField(detectorField), fAllocatedChordFinder(true),
-     fFieldChangesEnergy(false),
      fDelta_One_Step_Value(   fDefault_Delta_One_Step_Value ), 
      fDelta_Intersection_Val( fDefault_Delta_Intersection_Val ),
      fEpsilonMin( fEpsilonMinDefault ),
      fEpsilonMax( fEpsilonMaxDefault )
 {
-   fChordFinder= new G4ChordFinder( detectorField );
+   fChordFinder = new G4ChordFinder( detectorField );
+
    // Add to store
+   //
    G4FieldManagerStore::Register(this);
 }
 
 G4FieldManager* G4FieldManager::Clone() const
 {
-    G4Field* aField = 0;
-    G4FieldManager* aFM = 0;
-    G4ChordFinder* aCF = 0;
+    G4Field* aField = nullptr;
+    G4FieldManager* aFM = nullptr;
+    G4ChordFinder* aCF = nullptr;
     try {
-        if ( this->fDetectorField )
-            aField = this->fDetectorField->Clone();
+        if ( fDetectorField != nullptr )
+        {
+           aField = fDetectorField->Clone();
+        }
 
-        //Create a new field manager, note that we do not set any chordfinder now.
-        aFM = new G4FieldManager( aField , 0 , this->fFieldChangesEnergy );
+        // Create a new field manager, note that we do not set
+        // any chordfinder now
+        //
+        aFM = new G4FieldManager( aField , nullptr , fFieldChangesEnergy );
 
-        //Check if orignally we have the fAllocatedChordFinder variable set, in case, call chord
-        //constructor
-        if ( this->fAllocatedChordFinder )
+        // Check if originally we have the fAllocatedChordFinder variable
+        // set, in case, call chord constructor
+        //
+        if ( fAllocatedChordFinder )
         {
             aFM->CreateChordFinder( dynamic_cast<G4MagneticField*>(aField) );
         }
         else
         {
-            //Chord was specified by user, should we clone?
-            //TODO: For the moment copy pointer, to be understood if cloning of ChordFinder is needed
-            aCF = this->fChordFinder;/*->Clone*/
+            // Chord was specified by user, should we clone?
+            // TODO: For the moment copy pointer, to be understood
+            //       if cloning of ChordFinder is needed
+            //
+            aCF = fChordFinder; /*->Clone*/
             aFM->fChordFinder = aCF;
         }
-        //Copy values of other variables
-        aFM->fEpsilonMax = this->fEpsilonMax;
-        aFM->fEpsilonMin = this->fEpsilonMin;
-        // aFM->fDefault_Delta_Intersection_Val = this->fDefault_Delta_Intersection_Val; // now static
-        // aFM->fDefault_Delta_One_Step_Value = this->fDefault_Delta_One_Step_Value;   // now static
-        aFM->fDelta_Intersection_Val = this->fDelta_Intersection_Val;
-        aFM->fDelta_One_Step_Value = this->fDelta_One_Step_Value;
-        //TODO: Should we really add to the store the cloned FM? Who will use this?
+
+        // Copy values of other variables
+
+        aFM->fEpsilonMax = fEpsilonMax;
+        aFM->fEpsilonMin = fEpsilonMin;
+        aFM->fDelta_Intersection_Val = fDelta_Intersection_Val;
+        aFM->fDelta_One_Step_Value = fDelta_One_Step_Value;
+          // TODO: Should we really add to the store the cloned FM?
+          //       Who will use this?
     }
     catch ( ... )
     {
-        //Failed creating clone: probably user did not implement Clone method
-        //in derived classes?
-        //Perform clean-up after ourselves...
+        // Failed creating clone: probably user did not implement Clone method
+        // in derived classes?
+        // Perform clean-up after ourselves...
         delete aField;
         delete aFM;
         delete aCF;
@@ -121,84 +134,103 @@ G4FieldManager* G4FieldManager::Clone() const
 void G4FieldManager::ConfigureForTrack( const G4Track * ) 
 {
    // Default is to do nothing!
-   ;
 }
 
 G4FieldManager::~G4FieldManager()
 {
-   if( fAllocatedChordFinder ){
+   if( fAllocatedChordFinder )
+   {
       delete fChordFinder;
    }
    G4FieldManagerStore::DeRegister(this);
 }
 
 void
-G4FieldManager::CreateChordFinder(G4MagneticField *detectorMagField)
+G4FieldManager::CreateChordFinder(G4MagneticField* detectorMagField)
 {
-   if ( fAllocatedChordFinder ) 
+   if ( fAllocatedChordFinder )
+   { 
       delete fChordFinder;
-   fAllocatedChordFinder= false;
+   }
+   fAllocatedChordFinder = false;
 
-   if( detectorMagField ) {
-      fChordFinder= new G4ChordFinder( detectorMagField );
-      fAllocatedChordFinder= true;
-   } else {
+   if( detectorMagField != nullptr )
+   {
+      fChordFinder = new G4ChordFinder( detectorMagField );
+      fAllocatedChordFinder = true;
+   }
+   else
+   {
       fChordFinder = nullptr;
    }
 }
 
 void G4FieldManager::InitialiseFieldChangesEnergy()
 {
-   if ( fDetectorField )
-     fFieldChangesEnergy= fDetectorField->DoesFieldChangeEnergy();
+   if ( fDetectorField != nullptr )
+   {
+     fFieldChangesEnergy = fDetectorField->DoesFieldChangeEnergy();
+   }
    else
-     fFieldChangesEnergy= false;   //  No field , no change!
+   {
+     fFieldChangesEnergy = false;   // No field, no change!
+   }
 }
 
-G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField, int failMode )
+G4bool G4FieldManager::SetDetectorField(G4Field* pDetectorField,
+                                        G4int failMode )
 {
    G4VIntegrationDriver* driver = nullptr;
    G4EquationOfMotion* equation = nullptr;
-   // G4bool  compatibleField= false;
-   G4bool ableToSet= false;
+   // G4bool  compatibleField = false;
+   G4bool ableToSet = false;
 
-   fDetectorField= pDetectorField;
+   fDetectorField = pDetectorField;
    InitialiseFieldChangesEnergy();
    
    // Must 'propagate' the field to the dependent classes
    //
-   if( fChordFinder )
+   if( fChordFinder != nullptr )
    {
-     failMode= std::max( failMode, 1) ; // If a chord finder exists, warn in case of error!
+     failMode= std::max( failMode, 1) ;
+       // If a chord finder exists, warn in case of error!
       
      driver = fChordFinder->GetIntegrationDriver();
-     if( driver ){
-        equation = driver->GetEquationOfMotion();
-        // Should check the compatibility between the field and the equation HERE
-        if( equation ) {
-           equation->SetFieldObj(pDetectorField);
-           ableToSet = true;
-        }
+     if( driver != nullptr )
+     {
+       equation = driver->GetEquationOfMotion();
+
+       // Should check the compatibility between the
+       // field and the equation HERE
+
+       if( equation != nullptr )
+       {
+          equation->SetFieldObj(pDetectorField);
+          ableToSet = true;
+       }
      }
    }
    
    if( !ableToSet && (failMode > 0) )
    {
-      // If this fails, report the issue !
-      G4ExceptionDescription msg;
-      msg << "Unable to set the field in the dependent objects of G4FieldManager" << G4endl;
-      msg << "All the dependent classes must be fully initialised, before it is possible to call this method." << G4endl;
-      msg << "The problem encountered was the following: " << G4endl;
-      if( !fChordFinder ) { msg << "  No ChordFinder. " ; }
-      else if( !driver)   { msg << "  No Integration Driver set. ";}
-      else if( !equation) { msg << "  No Equation found. " ; }
-      // else if( !compatibleField ) { msg << "  Field not compatible. ";}
-      else { msg << "  Can NOT find reason for failure. ";}
-      msg << G4endl;
-      G4ExceptionSeverity severity= (failMode != 1) ? FatalException : JustWarning ;
-      G4Exception("G4FieldManager::SetDetectorField", "Geometry001",
-                  severity, msg);
+     // If this fails, report the issue !
+
+     G4ExceptionDescription msg;
+     msg << "Unable to set the field in the dependent objects of G4FieldManager"
+         << G4endl;
+     msg << "All the dependent classes must be fully initialised,"
+         << "before it is possible to call this method." << G4endl;
+     msg << "The problem encountered was the following: " << G4endl;
+     if( fChordFinder == nullptr ) { msg << "  No ChordFinder. " ; }
+     else if( driver == nullptr )  { msg << "  No Integration Driver set. ";}
+     else if( equation == nullptr ) { msg << "  No Equation found. " ; }
+     // else if( !compatibleField ) { msg << "  Field not compatible. ";}
+     else { msg << "  Can NOT find reason for failure. ";}
+     msg << G4endl;
+     G4ExceptionSeverity severity = (failMode != 1)
+                                  ? FatalException : JustWarning ;
+     G4Exception("G4FieldManager::SetDetectorField", "Geometry001",
+                 severity, msg);
    }
    return ableToSet;
 }
-

@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 
+- November 15, 2019 G.Cosmo (track-V10-05-01)
+- Fixed implicit type conversions from size_t to G4int in G4Step.
+
 - May 24, 2019 V.Ivanchenko (track-V10-05-00)
   G4Track.hh added forward declaration for G4VProcess
 

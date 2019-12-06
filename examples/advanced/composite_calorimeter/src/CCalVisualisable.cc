@@ -45,7 +45,7 @@ CCalVisualisable::CCalVisualisable(G4String file):visFile(file) {
   readFile();
 }
 
-bool CCalVisualisable::readFile(G4String file) { 
+G4bool CCalVisualisable::readFile(G4String file) { 
   visFile=file;
   return readFile();
 }
@@ -59,28 +59,28 @@ void CCalVisualisable::setDefault(){
   theParameters[PseudoVolumes] = visParameters(false);
 }
 
-void CCalVisualisable::setColor(visType v, double r, double g, double b){
+void CCalVisualisable::setColor(visType v, G4double r, G4double g, G4double b){
   theParameters[v].rColor=r;
   theParameters[v].gColor=g;
   theParameters[v].bColor=b;
 }
 
 void CCalVisualisable::setPath() {
-  pathName = getenv(visEnvName);
+  pathName = std::getenv(visEnvName);
   if (!pathName) {
      G4ExceptionDescription ed;
      ed << "ERROR: " << visEnvName << " environmental variable not set!" 
-	<< G4endl;
+        << G4endl;
      ed << "       Set it and restart." << G4endl;
      G4Exception("CCalVisualisable::setPath()","ccal007",
-		 FatalException,ed);
+                 FatalException,ed);
   }
 }
 
-bool CCalVisualisable::readFile() {
+G4bool CCalVisualisable::readFile() {
   if (visFile=="") {
     G4cerr << "ERROR: No file was specified from which to read Visualisation parameters" 
-	 << G4endl;
+         << G4endl;
     return false;
   }
 
@@ -95,7 +95,7 @@ bool CCalVisualisable::readFile() {
 #ifdef debug
   G4cout << "Viualisable : Path " << pathname << " FIle " << visFile << G4endl;
 #endif
-  bool ok = openGeomFile(is, pathname, visFile);
+  G4bool ok = openGeomFile(is, pathname, visFile);
   if (!ok) {
     G4cout << "WARNING: Could not read " << visFile << G4endl;
     G4cout << "         Default visualization parameters will be used." << G4endl;
@@ -124,12 +124,12 @@ bool CCalVisualisable::readFile() {
     else {
       vt=Undefined;
       G4cerr << "WARNING: Unknown type of visualisable object \"" << viewvol
-	   << "\"." << G4endl;
+           << "\"." << G4endl;
     }
 
 
-    int isvisible, wireframe;
-    double r, g, b;
+    G4int isvisible, wireframe;
+    G4double r, g, b;
     
     is >> isvisible >> r >> g >> b >> wireframe >> jump;
 
@@ -140,8 +140,8 @@ bool CCalVisualisable::readFile() {
     if (vt!=Undefined) {
 #ifdef debug
       G4cout << tab << viewvol << tab << isvisible << tab 
-	   << r << " " << g << " "<< b << tab
-	   << wireframe << G4endl;
+           << r << " " << g << " "<< b << tab
+           << wireframe << G4endl;
 #endif
       theParameters[vt]=visParameters(isvisible, r, g, b, wireframe);
     }
@@ -156,16 +156,16 @@ bool CCalVisualisable::readFile() {
   return true;
 }
 
-double CCalVisualisable::checkColorRange(double cvalue, char ctype) const {
+G4double CCalVisualisable::checkColorRange(G4double cvalue, char ctype) const {
   if (cvalue>1) {
     G4cerr << "ERROR: In " << visFile << ". Color " << ctype << "=" 
-	 << cvalue << " > 1" << G4endl;
+         << cvalue << " > 1" << G4endl;
     G4cerr << "       It will be reset to 1." << G4endl;
     return 1.;
   }
   if (cvalue<0) {
     G4cerr << "ERROR: In " << visFile << ". Color " << ctype << "=" 
-	 << cvalue << " < 0" << G4endl;
+         << cvalue << " < 0" << G4endl;
     G4cerr << "       It will be reset to 0." << G4endl;
     return 0.;
   }

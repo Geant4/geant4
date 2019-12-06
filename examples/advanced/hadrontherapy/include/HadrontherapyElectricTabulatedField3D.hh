@@ -35,8 +35,6 @@
 #include <vector>
 #include <cmath>
 
-using namespace std;
-
 class HadrontherapyElectricTabulatedField3D
 
  : public G4ElectricField
@@ -44,9 +42,9 @@ class HadrontherapyElectricTabulatedField3D
 {
   
   // Storage space for the table
-  vector< vector< vector< G4double > > > xEField;
-  vector< vector< vector< G4double > > > yEField;
-  vector< vector< vector< G4double > > > zEField;
+  std::vector< std::vector< std::vector< G4double > > > xEField;
+  std::vector< std::vector< std::vector< G4double > > > yEField;
+  std::vector< std::vector< std::vector< G4double > > > zEField;
   // The dimensions of the table
   G4int Enx,Eny,Enz; 
   // The physical limits of the defined region

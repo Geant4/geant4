@@ -23,18 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SimpleRunge implementation
 //
-//
-//  Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
-//
-//
-//  W.Wander <wwc@mit.edu> 12/09/97 
+// Created: W.Wander <wwc@mit.edu>, 12/09/1997
 // -------------------------------------------------------------------
 
 #include "G4SimpleRunge.hh"
@@ -43,53 +34,51 @@
 ////////////////////////////////////////////////////////////////
 //
 // Constructor
-
+//
 G4SimpleRunge::G4SimpleRunge(G4EquationOfMotion* EqRhs, G4int numberOfVariables)
   : G4MagErrorStepper(EqRhs, numberOfVariables),
     fNumberOfVariables(numberOfVariables)
 {
    
    unsigned int noVariables= std::max(numberOfVariables,
-					GetNumberOfStateVariables()); 
+                                      GetNumberOfStateVariables()); 
                                              // To deal with Time >= 7+1 
    dydxTemp = new G4double[noVariables] ;
    yTemp    = new G4double[noVariables] ;
 }
 
-
 /////////////////////////////////////////////////////////////////
 //
 // Destructor
-
+//
 G4SimpleRunge::~G4SimpleRunge()
 {
-   delete[] dydxTemp;
-   delete[] yTemp;
+   delete [] dydxTemp;
+   delete [] yTemp;
 }
 
 //////////////////////////////////////////////////////////////////
 //
+// DumbStepper
 //
-
 void
 G4SimpleRunge::DumbStepper( const G4double  yIn[],
-			    const G4double  dydx[],
-			          G4double  h,
-			 	  G4double  yOut[])
+                            const G4double  dydx[],
+                                  G4double  h,
+                                   G4double  yOut[] )
 {
   // Initialise time to t0, needed when it is not updated by the integration.
-  yTemp[7] = yOut[7] = yIn[7];   //  Better to set it to NaN;  // TODO
+  //
+  yTemp[7] = yOut[7] = yIn[7];
 
-  G4int i;
-
-  for( i = 0; i < fNumberOfVariables; i++ ) 
+  for( G4int i = 0; i < fNumberOfVariables; ++i ) 
   {
     yTemp[i] = yIn[i] + 0.5 * h*dydx[i] ;
   }
   
   RightHandSide(yTemp,dydxTemp);
   
-  for( i = 0; i < fNumberOfVariables; i++ ) 
+  for( G4int i = 0; i < fNumberOfVariables; ++i ) 
   {
     yOut[i] = yIn[i] + h * ( dydxTemp[i] );
   }

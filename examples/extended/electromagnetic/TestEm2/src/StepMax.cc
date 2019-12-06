@@ -36,7 +36,7 @@
 
 StepMax::StepMax(PhysicsListMessenger* mess)
   : G4VEmProcess("UserMaxStep", fGeneral),fMessenger(mess),
-    fMaxChargedStep(DBL_MAX),isInitialised(false)
+    fMaxChargedStep(DBL_MAX),fInitialised(false)
 {
   SetProcessSubType(static_cast<G4int>(STEP_LIMITER));  
 }
@@ -57,8 +57,8 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& part)
 
 void StepMax::PreparePhysicsTable(const G4ParticleDefinition&)
 {
-  if(isInitialised) {
-    isInitialised = false;
+  if(fInitialised) {
+    fInitialised = false;
   }
 }
 
@@ -66,9 +66,9 @@ void StepMax::PreparePhysicsTable(const G4ParticleDefinition&)
 
 void StepMax::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  if(!isInitialised) {
+  if(!fInitialised) {
     fMaxChargedStep = fMessenger->GetMaxChargedStep();
-    isInitialised = true;
+    fInitialised = true;
     if(fMaxChargedStep < DBL_MAX) {
       G4cout << GetProcessName() << ":  SubType= " << GetProcessSubType()
              << "  Step limit(mm)= " << fMaxChargedStep << G4endl;

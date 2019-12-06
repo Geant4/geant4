@@ -6,53 +6,53 @@
                              README
                       ---------------------
 
-------------------------------------------------------------------------|
+------------------------------------------------------------------------
 ----> Introduction.                                                     
-                                                                        |  
+                                                                          
 The ULTRA detector is a hybrid 2-component system consisting of:                                  
-                                                                        |
                                                                         
-1) an UV detection system - the UVscope                                 |
+                                                                        
+1) an UV detection system - the UVscope                                 
 2) an array of scintillator detectors - the ETscope                      
-                                                                        |
+                                                                        
 The UVscope detects Cherenkov light associated to cosmic ray showers    
-when it is diffusively reflected on ground.                             |
+when it is diffusively reflected on ground.                             
 The ETscope detects in coincidence the charged particles of the shower. 
-                                                                        |
+                                                                        
 In the current version only the UVscope simulation is included          
-------------------------------------------------------------------------|
+------------------------------------------------------------------------
 ----> Description                                                       
-                                                                        |
+                                                                        
 The UVscope consists of a Fresnel lens and a PMT located in the focal   
-plane, enclosed in a cylindrical aluminum housing. The lens is 457 mm   |
+plane, enclosed in a cylindrical aluminum housing. The lens is 457 mm   
 in diameter and is made of UV transmitting acrylic with 5.6 grooves     
-per mm. The description of the geometry of the Fresnel lens makes use   |
+per mm. The description of the geometry of the Fresnel lens makes use   
 of object parameterisation/replication capabilities.                     
-                                                                        |
+                                                                      
 The primary vertex generator describes a plane circular source of UV 
-(3eV, about 400 nm) optical photons.                                    |
-Depending on the selected detector configuration, the source can be     |
-positioned such that the photons are fired                              |
+(3eV, about 400 nm) optical photons.                                    
+Depending on the selected detector configuration, the source can be     
+positioned such that the photons are fired                              
 to a reflecting surface or, by default, directly to the UVscope 
-(no reflecting surface is present in this case).                        |
+(no reflecting surface is present in this case).                        
 Reflection at the surface can be chosen to be specular or diffuse.
-In both cases the normal to the surface makes an angle of 45 degrees    |
+In both cases the normal to the surface makes an angle of 45 degrees    
 with the UVscope axis and the photons are emitted at an angle of 
-90 degrees with the UVscope axis.                                       |
+90 degrees with the UVscope axis.                                       
 If none of these variables is set no reflecting surface is used 
 and the photons source is positioned at the UVscope axis. 
-                                                                        |
-The definition of the relevant optical boundaries, parameters and       
-processes is made.                                                      |
                                                                         
-------------------------------------------------------------------------|
+The definition of the relevant optical boundaries, parameters and       
+processes is made.                                                      
+                                                                        
+------------------------------------------------------------------------
 ----> SET-UP 
-                                                                        |
+                                                                        
 A standard Geant4 example GNUmakefile and a CMakeLists.txt file are 
-provided, for building with cmake                                       |
+provided, for building with cmake                                       
 
-The following environment variable can be set in order to get           |
-additional verbosity during program running:                            |
+The following environment variable can be set in order to get           
+additional verbosity during program running:                            
 
  1) GNUmakefile
 
@@ -83,41 +83,36 @@ the Geant4 application developer manual (Analysis Manager Classes)
 -
 
 -----------------------------------------------------------------------
-----> How to run the example.                                          |
+----> How to run the example.                                          
 
   From the directory where the Ultra binary resides :
 
-  ./Ultra "macro name" for running in batch mode                       |
-                                                                       |                                             
-  ./Ultra  for running in interative mode.                             |
-  The macro VisDirect.mac is executed.                                 |
-                                                                       | 
-  Several macros are available for interactive visualisation.          |
-  While in interactive mode type the command                           |
+  ./Ultra "macro name" for running in batch mode                       
+                                                                                                                    
+  ./Ultra  for running in interative mode.                             
+  The macro VisDirect.mac is executed.                                 
+                                                                        
+  Several macros are available for interactive visualisation.          
+  While in interactive mode type the command                           
   /control/execute "name_of_macro", 
   where "name_of_macro" is one of the following:
 
-  Direct.mac - a beam of photons is shot directly to the telescope.    |
-  Mirror.mac - the beam is directed to a specular reflecing surface    |
-  Ground.mac - the beam is directed to a diffusively reflecting surface|
+  Direct.mac - a beam of photons is shot directly to the telescope.    
+  Mirror.mac - the beam is directed to a specular reflecing surface    
+  Ground.mac - the beam is directed to a diffusively reflecting surface
 
 ------------------------------------------------------------------------
-----> Simulation output                                                 |
+----> Simulation output                                                 
 
-the output is ultra.xml (or ultra.root) 		                            | 
+the output is ultra.xml (or ultra.root) 		                             
  It contains:
- 1)1Dhistogram with the detected photons energy (eV)                    |
- 2)1Dhistogram with the number of detected photons per event            |
+ 1)1Dhistogram with the detected photons energy (eV)                    
+ 2)1Dhistogram with the number of detected photons per event            
 
-------------------------------------------------------------------------
-----> Visualisation                                                     | 
-
-a macro is provided as example of visulisation:  Visualisation.mac      | 
-to run it :  $G4WORKDIR/bin/Linux-g++/Ultra Visualisation.mac
 ------------------------------------------------------------------------
 
 for comments and questions: bernardo@lip.pt
 for more info http://www.ge.infn.it/geant4/examples/
 
-last modified:  B. Tome 26/11/2016
+last modified:  B. Tome 08/11/2019
 created by   :  B. Tome and M.C. Espirito Santo 20/05/2004

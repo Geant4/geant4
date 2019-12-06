@@ -18,14 +18,16 @@ typedef struct {
 
 class tess_contour {  
 public:
-  tess_contour(std::ostream& a_out)
-  :m_out(a_out),m_vertex_number(0),m_begin_type(gl::triangles()),m_error(false){}
+  tess_contour(std::ostream& a_out,std::vector<tess_triangle>& a_triangles)
+  :m_out(a_out)
+  ,m_triangles(a_triangles)
+  ,m_vertex_number(0),m_begin_type(gl::triangles()),m_error(false){}
   virtual ~tess_contour(){}
 protected:
-  tess_contour(const tess_contour& a_from):m_out(a_from.m_out){}
+  tess_contour(const tess_contour& a_from):m_out(a_from.m_out),m_triangles(a_from.m_triangles){}
   tess_contour& operator=(const tess_contour&){return *this;}
 public:
-  std::vector<tess_triangle> getFilledArea(const std::vector<std::vector<vec3f> > aContour) {
+  void getFilledArea(const std::vector<std::vector<vec3f> > aContour) {
     m_triangles.clear();
     m_combine_tmps.clear();
     m_error = false;
@@ -50,8 +52,8 @@ public:
 
     for(unsigned int a=0;a<aContour.size();a++) {
       //if(aContour[a][0]!=aContour[a][aContour[a].size()-1]) continue;
-      int vecSize = aContour[a].size()-1;
-      if(vecSize<=0) continue; //should not happen.
+      if(aContour[a].size()<=1) continue; //should not happen.
+      size_t vecSize = aContour[a].size()-1;
   
       typedef GLUdouble point[3];
       point* tab = new point[vecSize];
@@ -59,7 +61,7 @@ public:
       ::gluTessBeginPolygon(tobj, this);
   
       ::gluTessBeginContour(tobj);
-      for(unsigned int b=0;b<aContour[a].size()-1;b++) {
+      for(size_t b=0;b<vecSize;b++) {
         tab[b][0] = aContour[a][b][0];
         tab[b][1] = aContour[a][b][1];
         tab[b][2] = aContour[a][b][2];
@@ -80,8 +82,6 @@ public:
     m_combine_tmps.clear();
 
     if(m_error) m_triangles.clear();
-  
-    return m_triangles;
   }
 
 protected:  
@@ -232,11 +232,11 @@ protected:
   
 protected:
   std::ostream& m_out;
+  std::vector<tess_triangle>& m_triangles;
   tess_triangle m_tmp;
   unsigned int m_vertex_number;
   gl::mode_t m_begin_type;
   bool m_error;
-  std::vector<tess_triangle> m_triangles;
   std::vector<double*> m_combine_tmps;
 };
 

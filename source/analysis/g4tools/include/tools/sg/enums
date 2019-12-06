@@ -90,7 +90,8 @@ enum font_type {
 
 enum font_modeling {
   font_outline,
-  font_filled
+  font_filled,
+  font_pixmap
 };
 
 enum arrow_type {
@@ -108,8 +109,13 @@ enum winding_type {
 enum move_type {
   //move_none,
   move_rotate_right,
-  move_translate_right,
   move_rotate_left,
+  move_rotate_up,
+  move_rotate_down,
+  move_roll_plus,
+  move_roll_minus,
+  
+  move_translate_right,
   move_translate_left,
   move_up,
   move_down,
@@ -119,6 +125,10 @@ enum move_type {
   move_zoom_out,
   move_rotate_around_focal_right,
   move_rotate_around_focal_left,
+  move_rotate_around_focal_up,
+  move_rotate_around_focal_down,
+  move_roll_around_focal_plus,
+  move_roll_around_focal_minus,
   move_zoom_in_out,
   move_zoom_in_out_rot,
   move_curve
@@ -129,6 +139,14 @@ enum anim_what {
   anim_right,
   anim_up,
   anim_down
+};
+
+enum anim_mode {
+  anim_mode_0,
+  anim_mode_1,
+  anim_mode_2,
+  anim_mode_3,
+  anim_mode_4
 };
 
 enum key_move {
@@ -167,6 +185,25 @@ enum auto_lut_policy {
   auto_lut_none = 0,
   auto_lut_min_max = 1,
   auto_lut_mean_rms = 2
+};
+
+enum draw_type {
+  draw_points = 0,
+  draw_lines,
+  draw_filled
+//  draw_invisible
+};
+  
+enum shade_type { //shade_model is a node.
+  shade_flat = 0,
+  shade_smooth //Gouraud
+};
+  
+enum solid_operation {
+  solid_none,
+  solid_union,
+  solid_intersection,
+  solid_subtraction
 };
 
 }}

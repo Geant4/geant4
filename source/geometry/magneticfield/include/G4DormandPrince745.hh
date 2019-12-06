@@ -23,36 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DormandPrince745
 //
-//  Class desription: 
-//    An implementation of the 5th order embedded RK method from the paper
-//    J. R. Dormand and P. J. Prince, “A family of embedded Runge-Kutta formulae,”
-//	    Journal of computational and applied …, vol. 6, no. 1, pp. 19–26, 1980.
+// Class desription:
+//
+//  An implementation of the 5th order embedded RK method from the paper:
+//  J. R. Dormand and P. J. Prince, "A family of embedded Runge-Kutta formulae"
+//  Journal of computational and applied Math., vol.6, no.1, pp.19-26, 1980.
 //
 //  DormandPrince7 - 5(4) embedded RK method
 //
-//  Design & Implementation by Somnath Banerjee
-//  Supervision & code review: John Apostolakis
-//
-// Work supported by the Google Summer of Code 2015.
-//
-//  History
-// ------------------------------------------
-//  Created   : 25 May 2015.             - Somnath
-//   Revisions : 
-//   * 29 June 2015:  Added interpolate() method(s) - Somnath
-//   *     May 2016:  Cleanup and first comming in G4 - John Apostolakis
-//   *  4 June 2019:  Cleanup and add FSAL method 
 
-#ifndef DORMAND_PRINCE_745
-#define DORMAND_PRINCE_745
+// Created: Somnath Banerjee, Google Summer of Code 2015, 25 May 2015
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+#ifndef G4DORMAND_PRINCE_745_HH
+#define G4DORMAND_PRINCE_745_HH
 
 #include "G4MagIntegratorStepper.hh"
 #include "G4FieldUtils.hh"
 
 class G4DormandPrince745 : public G4MagIntegratorStepper
 {
-public:
+  public:
+
     G4DormandPrince745(G4EquationOfMotion* equation,
                        G4int numberOfVariables = 6);
 
@@ -71,11 +65,11 @@ public:
 
     inline void SetupInterpolation() {}
 
-    //For calculating the output at the tau fraction of Step
     inline void Interpolate(G4double tau, G4double yOut[]) const
     {
-        Interpolate4thOrder(yOut, tau);       
+        Interpolate4thOrder(yOut, tau);
     }
+      // For calculating the output at the tau fraction of Step
 
     virtual G4double DistChord() const override;
 
@@ -83,11 +77,12 @@ public:
 
     const field_utils::State& GetYOut() const { return fyOut; }
 
-private:
     void Interpolate4thOrder(G4double yOut[], G4double tau) const;
 
-    void SetupInterpolation_high();
-    void Interpolate_high(G4double yOut[], G4double tau);
+    void SetupInterpolation5thOrder();
+    void Interpolate5thOrder(G4double yOut[], G4double tau) const;
+
+  private:
 
     field_utils::State ak2, ak3, ak4, ak5, ak6, ak7, ak8, ak9;
     field_utils::State fyIn, fyOut, fdydxIn;

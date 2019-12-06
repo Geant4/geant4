@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------------------
-//
-// class G4LogicalCrystalVolume
+// G4LogicalCrystalVolume
 //
 // Class description:
 //
@@ -35,12 +31,8 @@
 // The object can be created only with an extended material
 // with a crystal extension. The class handles the orientation
 // of the crystal axes wrt the solid to which the crystal is attached.
-//
 
-// History:
-//
 // 21-04-16, created by E.Bagli
-//
 // ---------------------------------------------------------------------------
 #ifndef G4LOGICALCRYSTALVOLUME_HH
 #define G4LOGICALCRYSTALVOLUME_HH 1
@@ -58,21 +50,21 @@ class G4LogicalCrystalVolume : public G4LogicalVolume
     G4LogicalCrystalVolume(G4VSolid* pSolid,
                            G4ExtendedMaterial* pMaterial,
                            const G4String& name,
-                           G4FieldManager* pFieldMgr=0,
-                           G4VSensitiveDetector* pSDetector=0,
-                           G4UserLimits* pULimits=0,
-                           G4bool optimise=true,
-                           G4int h=0,
-                           G4int k=0,
-                           G4int l=0,
-                           G4double rot=0.);
+                           G4FieldManager* pFieldMgr = nullptr,
+                           G4VSensitiveDetector* pSDetector = nullptr,
+                           G4UserLimits* pULimits = nullptr,
+                           G4bool optimise = true,
+                           G4int h = 0,
+                           G4int k = 0,
+                           G4int l = 0,
+                           G4double rot = 0.0);
 
     ~G4LogicalCrystalVolume();
     
     G4bool IsExtended() const { return true; }
       // Return true if it is not a base-class object.
 
-    void SetMillerOrientation(G4int h, G4int k, G4int l, G4double rot=0.);
+    void SetMillerOrientation(G4int h, G4int k, G4int l, G4double rot = 0.0);
       // Set physical lattice orientation, relative to G4VSolid coordinates
       // Miller orientation aligns lattice normal (hkl) with geometry +Z
     
@@ -94,10 +86,10 @@ class G4LogicalCrystalVolume : public G4LogicalVolume
 
     G4RotationMatrix fOrient;           // Rotate geometry into lattice frame
     G4RotationMatrix fInverse;
-    G4int hMiller, kMiller, lMiller;    // Save Miller indices for dumps
-    G4double fRot;
+    G4int hMiller = 1, kMiller = 1, lMiller = 0; // Save Miller indices for dump
+    G4double fRot = 0.0;
     
-    G4int verboseLevel;
+    G4int verboseLevel = 0;
 
     static std::vector<G4LogicalVolume*> fLCVvec;
 };

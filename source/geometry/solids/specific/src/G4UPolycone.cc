@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation of G4UPolycone wrapper class
+//
+// 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Polycone.hh"
@@ -139,7 +139,7 @@ G4UPolycone::~G4UPolycone()
 //
 // Copy constructor
 //
-G4UPolycone::G4UPolycone( const G4UPolycone &source )
+G4UPolycone::G4UPolycone( const G4UPolycone& source )
   : Base_t( source )
 {
   fGenericPcon = source.fGenericPcon;
@@ -154,7 +154,7 @@ G4UPolycone::G4UPolycone( const G4UPolycone &source )
 //
 // Assignment operator
 //
-G4UPolycone &G4UPolycone::operator=( const G4UPolycone &source )
+G4UPolycone& G4UPolycone::operator=( const G4UPolycone& source )
 {
   if (this == &source) return *this;
   
@@ -187,25 +187,25 @@ G4double G4UPolycone::GetEndPhi() const
 }
 G4double G4UPolycone::GetSinStartPhi() const
 {
-  if (!IsOpen()) return 0;
+  if (!IsOpen()) return 0.;
   G4double phi = GetStartPhi();
   return std::sin(phi);
 }
 G4double G4UPolycone::GetCosStartPhi() const
 {
-  if (!IsOpen()) return 1;
+  if (!IsOpen()) return 1.;
   G4double phi = GetStartPhi();
   return std::cos(phi);
 }
 G4double G4UPolycone::GetSinEndPhi() const
 {
-  if (!IsOpen()) return 0;
+  if (!IsOpen()) return 0.;
   G4double phi = GetEndPhi();
   return std::sin(phi);
 }
 G4double G4UPolycone::GetCosEndPhi() const
 {
-  if (!IsOpen()) return 1;
+  if (!IsOpen()) return 1.;
   G4double phi = GetEndPhi();
   return std::cos(phi);
 }
@@ -245,11 +245,11 @@ void G4UPolycone::SetOriginalParameters()
   fOriginalParameters.Rmin = new G4double[numPlanes];
   fOriginalParameters.Rmax = new G4double[numPlanes];
   for (G4int i=0; i<numPlanes; ++i)
-    {
-      fOriginalParameters.Z_values[i] = original_parameters->fHZ_values[i];
-      fOriginalParameters.Rmin[i]     = original_parameters->fHRmin[i];
-      fOriginalParameters.Rmax[i]     = original_parameters->fHRmax[i];
-    }
+  {
+    fOriginalParameters.Z_values[i] = original_parameters->fHZ_values[i];
+    fOriginalParameters.Rmin[i]     = original_parameters->fHRmin[i];
+    fOriginalParameters.Rmax[i]     = original_parameters->fHRmax[i];
+  }
 }
 void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
 {
@@ -274,14 +274,14 @@ G4bool G4UPolycone::Reset()
   // Rebuild polycone based on original parameters
   //
   wrStart = fOriginalParameters.Start_angle;
-  while (wrStart < 0)
+  while (wrStart < 0.)
   {
     wrStart += twopi;
   }
   wrDelta = fOriginalParameters.Opening_angle;
-  if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
+  if (wrDelta <= 0. || wrDelta >= twopi*(1-DBL_EPSILON))
   {
-    wrStart = 0;
+    wrStart = 0.;
     wrDelta = twopi;
   }
   rzcorners.resize(0);
@@ -443,7 +443,7 @@ G4bool G4UPolycone::CalculateExtent(const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {

@@ -94,7 +94,7 @@ std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs)
       os << "threeD: Passive 3D (with stored structures)";
       break;
     case G4VGraphicsSystem::threeDInteractive:
-      os << "threeDInteractive: 3D with \"pick\" functionality.";
+      os << "threeDInteractive: 3D with mouse control and \"pick\" functionality.";
       break;
     case G4VGraphicsSystem::virtualReality:
       os << "virtualReality";

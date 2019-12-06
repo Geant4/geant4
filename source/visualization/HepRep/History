@@ -19,6 +19,10 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+29 August 2019  John Allison (vis-HepRep-V10-05-00)
+- Part of vis-V10-05-24.
+- Add G4TessellatedSolid to list of solids that may be specially treated
+
 14th September 2017  John Allison  (vis-HepRep-V10-03-01)
 - G4HepRepMessenger.cc: Fix Coverity warning.
 

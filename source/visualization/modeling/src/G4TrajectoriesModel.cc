@@ -94,7 +94,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
   // speed) assumes all trajectories are drawn with the same
   // transformation.  If not, a fatal exception with be raised in
   // G4VisManager::DrawT.
-  for (G4int iT = 0; iT < TC->entries(); iT++) {
+  for (std::size_t iT = 0; iT < TC->entries(); ++iT) {
     fpCurrentTrajectory = (*TC) [iT];
     // Debug trajectory:
     // fpCurrentTrajectory->ShowTrajectory(); G4cout << G4endl;
@@ -154,7 +154,7 @@ void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory* pTraj)
     }
   }
   // Trajectory point attributes
-  for (G4int i = 0; i < pTraj->GetPointEntries(); i++) {
+  for (G4int i = 0; i < pTraj->GetPointEntries(); ++i) {
     G4VTrajectoryPoint* aPoint = pTraj->GetPoint(i);
     std::vector<G4AttValue>* attValues = aPoint->CreateAttValues();
     if (attValues) {

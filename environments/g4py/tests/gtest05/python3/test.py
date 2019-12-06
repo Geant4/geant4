@@ -20,7 +20,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
     self.air= gNistManager.FindOrBuildMaterial("G4_AIR")
     self.lv_object= None
     self.world= self.ConstructWorld()
-    
+
     self.va_red= G4VisAttributes(G4Color(1.,0.,0.))
     self.va_cyan= G4VisAttributes(G4Color(0.,1.,1.))
     self.va_green= G4VisAttributes(G4Color(0.,1.,0.))
@@ -34,7 +34,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
     global sld_world, lv_world, pv_world, va_world
 
     sld_world= G4Box("world", 1.*m, 1.*m, 1.*m)
-    lv_world= G4LogicalVolume(sld_world, self.air, "world")    
+    lv_world= G4LogicalVolume(sld_world, self.air, "world")
     pv_world= G4PVPlacement(G4Transform3D(), lv_world, "world",
                             None, False, 0)
 
@@ -58,7 +58,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
     self.lv_object.SetSolid(sld_box)
     self.lv_object.SetVisAttributes(self.va_red)
     gRunManager.GeometryHasBeenModified()
-    
+
   # -----------------------------------------------------------------
   def ConstructTubs(self):
     global sld_tubs
@@ -66,7 +66,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
     self.lv_object.SetSolid(sld_tubs)
     self.lv_object.SetVisAttributes(self.va_cyan)
     gRunManager.GeometryHasBeenModified()
-        
+
   # -----------------------------------------------------------------
   def ConstructCons(self):
     global sld_cons
@@ -114,7 +114,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
   # -----------------------------------------------------------------
   def ConstructOrb(self):
     global sld_orb
-    sld_orb= G4Orb("orb", 100.*cm)    
+    sld_orb= G4Orb("orb", 100.*cm)
     self.lv_object.SetSolid(sld_orb)
     self.lv_object.SetVisAttributes(self.va_red)
     gRunManager.GeometryHasBeenModified()
@@ -122,7 +122,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
   # -----------------------------------------------------------------
   def ConstructTorus(self):
     global sld_torus
-    sld_torus= G4Torus("torus", 40.*cm, 60.*cm, 200.*cm, 0., 90.*deg)    
+    sld_torus= G4Torus("torus", 40.*cm, 60.*cm, 200.*cm, 0., 90.*deg)
     self.lv_object.SetSolid(sld_torus)
     self.lv_object.SetVisAttributes(self.va_magenta)
     gRunManager.GeometryHasBeenModified()
@@ -164,7 +164,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
   # -----------------------------------------------------------------
   def ConstructEllipticalTube(self):
     global sld_et
-    sld_et= G4EllipticalTube("ellipticaltube", 5.*cm, 10.*cm, 20.*cm)    
+    sld_et= G4EllipticalTube("ellipticaltube", 5.*cm, 10.*cm, 20.*cm)
     self.lv_object.SetSolid(sld_et)
     self.lv_object.SetVisAttributes(self.va_cyan)
     gRunManager.GeometryHasBeenModified()
@@ -182,7 +182,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
   def ConstructEllipticalCone(self):
     global sld_ec
     sld_ec= G4EllipticalCone("ellipticalcone", 30.*cm, 60.*cm,
-                             50.*cm, 25.*cm)    
+                             50.*cm, 25.*cm)
     self.lv_object.SetSolid(sld_ec)
     self.lv_object.SetVisAttributes(self.va_magenta)
     gRunManager.GeometryHasBeenModified()
@@ -249,8 +249,8 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
 
   # -----------------------------------------------------------------
   def Construct(self): # return the world volume
-    return self.world  
-  
+    return self.world
+
 # ==================================================================
 # main
 # ==================================================================
@@ -304,7 +304,8 @@ f_list= (
 
 for s,f in f_list:
   f.__call__()
-  gRunManager.BeamOn(1)  
+  gRunManager.BeamOn(1)
   fname= "%s.wrl" % (s)
   os.rename("g4_00.wrl", fname)
-  
+
+gTerminate()

@@ -245,7 +245,7 @@ int main(int argc,char** argv)
 
     if ( ! physList ) {
       // failed?  get what the user set, but we couldn't find
-      physListNameEnv = getenv("PHYSLIST");
+      physListNameEnv = std::getenv("PHYSLIST");
       if ( physListNameEnv ) {
         G4cout << "extensibleFactory: $PHYSLIST="
                << physListNameEnv << G4endl;

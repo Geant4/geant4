@@ -23,6 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ModifiedMidpoint inline methods implementation
+//
+// Author: Dmitry Sorokin, Google Summer of Code 2016
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
+
 inline void G4ModifiedMidpoint::SetSteps(G4int steps)
 {
     fsteps = steps;
@@ -33,9 +39,9 @@ inline G4int G4ModifiedMidpoint::GetSteps() const
     return fsteps;
 }
 
-inline void G4ModifiedMidpoint::SetEquationOfMotion(G4EquationOfMotion* equation)
+inline void G4ModifiedMidpoint::SetEquationOfMotion(G4EquationOfMotion* eq)
 {
-    fEquation = equation;
+    fEquation = eq;
 }
 
 inline G4EquationOfMotion* G4ModifiedMidpoint::GetEquationOfMotion()

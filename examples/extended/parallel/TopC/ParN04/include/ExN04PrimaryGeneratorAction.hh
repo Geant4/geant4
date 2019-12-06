@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04PrimaryGeneratorAction.hh
+/// \file ExN04PrimaryGeneratorAction.hh
 /// \brief Definition of the ExN04PrimaryGeneratorAction class
 //
 

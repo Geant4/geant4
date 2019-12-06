@@ -36,7 +36,7 @@
 #include "G4ProtonEvaporationProbability.hh"
 
 G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
-    G4EvaporationProbability(1,1,2.0,&theCoulombBarrier) 
+    G4EvaporationProbability(1,1,2.0) 
 {}
 
 G4ProtonEvaporationProbability::~G4ProtonEvaporationProbability() 

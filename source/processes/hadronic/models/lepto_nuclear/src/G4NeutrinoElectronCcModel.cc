@@ -37,6 +37,11 @@
 #include "Randomize.hh"
 #include "G4NeutrinoE.hh"
 #include "G4AntiNeutrinoE.hh"
+
+#include "G4NeutrinoMu.hh"
+#include "G4AntiNeutrinoMu.hh"
+#include "G4NeutrinoTau.hh"
+#include "G4AntiNeutrinoTau.hh"
 #include "G4MuonMinus.hh"
 #include "G4TauMinus.hh"
 #include "G4HadronicParameters.hh"
@@ -53,6 +58,13 @@ G4NeutrinoElectronCcModel::G4NeutrinoElectronCcModel(const G4String& name)
 
   theNeutrinoE = G4NeutrinoE::NeutrinoE();
   theAntiNeutrinoE = G4AntiNeutrinoE::AntiNeutrinoE();
+
+  theNeutrinoMu = G4NeutrinoMu::NeutrinoMu();
+  theAntiNeutrinoMu = G4AntiNeutrinoMu::AntiNeutrinoMu();
+
+  theNeutrinoTau = G4NeutrinoTau::NeutrinoTau();
+  theAntiNeutrinoTau = G4AntiNeutrinoTau::AntiNeutrinoTau();
+  
   theMuonMinus = G4MuonMinus::MuonMinus();
   theTauMinus  = G4TauMinus::TauMinus();
 
@@ -85,19 +97,18 @@ G4bool G4NeutrinoElectronCcModel::IsApplicable(const G4HadProjectile & aPart,
 {
   G4bool result  = false;
   G4String pName = aPart.GetDefinition()->GetParticleName();
+  if(pName == "anti_nu_mu" || pName == "anti_nu_tau") return result; // no cc for anti_nu_(mu,tau)
   G4double minEnergy = 0., energy = aPart.GetTotalEnergy();
   G4double fmass, emass = electron_mass_c2;
 
-  if(      pName == "nu_mu"   || pName == "anti_nu_mu"  ) fmass = theMuonMinus->GetPDGMass(); 
-  else if( pName == "nu_tau"  || pName == "anti_nu_tau" ) fmass = theTauMinus->GetPDGMass(); 
-  else fmass = emass;
+  if(      pName == "nu_mu"  ) fmass = theMuonMinus->GetPDGMass(); 
+  else if( pName == "nu_tau" ) fmass = theTauMinus->GetPDGMass(); 
+  else                         fmass = emass;
 
   minEnergy = (fmass-emass)*(fmass+emass)/emass;
   SetMinEnergy( minEnergy );
   
-  if( ( pName == "nu_mu"  || pName == "anti_nu_mu"  || 
-        pName == "nu_tau" || pName == "anti_nu_tau"   ) &&
-        energy > minEnergy                                 )
+  if( ( pName == "nu_mu"   || pName == "nu_tau" ||  pName == "anti_nu_e"  ) &&  energy > minEnergy )
   {
     result = true;
   }
@@ -122,9 +133,9 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
   G4String pName  = aParticle->GetDefinition()->GetParticleName();
   G4double minEnergy(0.), fmass(0.), emass = electron_mass_c2;
 
-  if(      pName == "nu_mu"   || pName == "anti_nu_mu"  ) fmass = theMuonMinus->GetPDGMass(); 
-  else if( pName == "nu_tau"  || pName == "anti_nu_tau" ) fmass = theTauMinus->GetPDGMass(); 
-  else                                                    fmass = emass;
+  if(      pName == "nu_mu"    ) fmass = theMuonMinus->GetPDGMass(); 
+  else if( pName == "nu_tau"   ) fmass = theTauMinus->GetPDGMass(); 
+  else                           fmass = emass;
 
   minEnergy = (fmass-emass)*(fmass+emass)/emass;
 
@@ -150,8 +161,8 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
 
   G4ThreeVector eP( sint*std::cos(phi), sint*std::sin(phi), cost );
 
-  if(      pName == "nu_mu" || pName == "anti_nu_mu"  ) massf = theMuonMinus->GetPDGMass();
-  else if( pName == "nu_tau" || pName == "anti_nu_tau") massf = theTauMinus->GetPDGMass();
+  if(      pName == "nu_mu"  ) massf = theMuonMinus->GetPDGMass();
+  else if( pName == "nu_tau" ) massf = theTauMinus->GetPDGMass();
 
   massf2 = massf*massf;
 
@@ -171,15 +182,13 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
   {
     aNu = new G4DynamicParticle( theNeutrinoE, lvp2 );
   }
-  else if( pName == "anti_nu_mu" || pName == "anti_nu_tau") 
-  {
-    aNu = new G4DynamicParticle( theAntiNeutrinoE, lvp2 );
-  }
-  if(  pName == "nu_mu" || pName == "anti_nu_mu")       
+  else if( pName == "anti_nu_e" )   aNu = new G4DynamicParticle( theAntiNeutrinoMu, lvp2 ); // s-channel for mu (tau later)
+  
+  if(  pName == "nu_mu" || pName == "anti_nu_e")       
   {
     aLept = new G4DynamicParticle( theMuonMinus, lvt2 );
   }
-  else if( pName == "nu_tau" || pName == "anti_nu_tau") 
+  else if( pName == "nu_tau" ) // || pName == "anti_nu_tau") 
   {
     aLept = new G4DynamicParticle( theTauMinus, lvt2 );
   }

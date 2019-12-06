@@ -35,6 +35,7 @@ public:
   }
   FLAT& flat() {return m_flat;}
   void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set(REAL a_mean = 0,REAL a_std_dev = 1) {m_mean = a_mean;m_std_dev = a_std_dev;}
 protected:
   FLAT& m_flat;
   REAL m_mean;

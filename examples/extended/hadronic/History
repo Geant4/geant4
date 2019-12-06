@@ -13,7 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+25-10-19 A. Ribon (exHadronic-V10-05-01)
+- Created new test: Hadr08.
+
 31-01-19 I. Hrivnacova ((exHadronic-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 

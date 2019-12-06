@@ -49,8 +49,6 @@ class WLSActionInitialization : public G4VUserActionInitialization
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
- 
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 
   private:
     WLSDetectorConstruction* fDetector;

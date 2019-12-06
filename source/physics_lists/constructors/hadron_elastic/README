@@ -1,31 +1,6 @@
 -------------------------------------------------------------------
 
 
- G4ChargeExchangePhysics
- -----------------------
- Hadron nuclear coherent charge exchange, used in this constructor
- only for nucleons and charged pions.
-
- G4HadronDElasticPhysics
- -----------------------
- Hadron nuclear elastic process for all hadrons:
- - proton and charged pions:
-   - cross section: Barashenkov-Glauber-Gribov
-   - final-state:   Diffuse model where applicable, else Gheisha
- - neutron:
-   - cross section: G4NeutronElasticXS           
-   - final-state:   Diffuse model where applicable, else Gheisha
- - kaons
-   - cross section: Chips
-   - final-state:   Diffuse model where applicable, else Gheisha
- - hyperons, anti-hyperons, deuteron, triton, alpha
-   - cross section: Gheisha
-   - final-state:   Gheisha
- - anti_proton, anti_deuteron, anti_triton, anti_He3, anti_alpha
-   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
-   - final-state:   Galoyan-Uzhinsky model above 100 MeV/nucleon,
-                    Gheisha below.
-
  G4HadronElasticPhysics
  ----------------------
  Hadron nuclear elastic process for all hadrons:
@@ -37,17 +12,15 @@
    - final-state:   Chips
  - charged pions:
    - cross section: Barashenkov-Glauber-Gribov
-   - final-state:   Starkov's model above 1 GeV, Gheisha below.
- - kaons
+   - final-state:   Starkov's model (G4ElasticHadrNucleusHE) for all energies
+ - kaons, hyperons, anti-hyperons
    - cross section: Glauber-Gribov
-   - final-state:   Gheisha
- - hyperons, anti-hyperons
-   - cross section: Gheisha
    - final-state:   Gheisha
  - deuteron, triton, He3, alpha 
    - cross section: Glauber-Gribov
    - final-state:   Gheisha
- - anti_proton, anti_deuteron, anti_triton, anti_He3, anti_alpha
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, 
+   anti_alpha
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   Galoyan-Uzhinsky model above 100 MeV/nucleon,
                     Gheisha below.
@@ -82,9 +55,9 @@
  - kaons, hyperons, anti-hyperons
    - cross section: Glauber-Gribov
    - final-state:   Chips
- - deuteron, triton, He3, alpha, and generic ions
+ - deuteron, triton, He3, alpha
    - cross section: Glauber-Gribov
-   - final-state:   Diffuse
+   - final-state:   Gheisha
  - anti_proton, anti_neutron
    - cross section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   Galoyan-Uzhinsky model above 100 MeV/nucleon,
@@ -100,4 +73,31 @@
  generic ion:
  - cross section: Glauber-Gribov
  - final-state:   Diffuse model
+
+
+ G4HadronDElasticPhysics
+ -----------------------
+ Hadron nuclear elastic process for all hadrons:
+ - proton and charged pions:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   Diffuse model where applicable, else Gheisha
+ - neutron:
+   - cross section: G4NeutronElasticXS           
+   - final-state:   Diffuse model where applicable, else Gheisha
+ - kaons
+   - cross section: Glauber-Gribov
+   - final-state:   Diffuse model where applicable, else Gheisha
+ - hyperons, anti-hyperons, deuteron, triton, He3, alpha
+   - cross section: Glauber-Gribov
+   - final-state:   Gheisha
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, 
+   anti_alpha
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   Galoyan-Uzhinsky model above 100 MeV/nucleon,
+                    Gheisha below.
+
+ G4ChargeExchangePhysics
+ -----------------------
+ Hadron nuclear coherent charge exchange, used in this constructor
+ only for nucleons and charged pions.
 

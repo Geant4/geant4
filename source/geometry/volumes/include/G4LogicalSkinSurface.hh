@@ -23,19 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4LogicalSkinSurface
+// G4LogicalSkinSurface
 //
 // Class description:
 //
 // A Logical Surface class for the surface surrounding a single logical
 // volume.
 
-// History:
-// -------
-// Created:     1997-06-16
-// Author:      John Apostolakis (John.Apostolakis@cern.ch)
+// Author: John Apostolakis (John.Apostolakis@cern.ch), 16-06-1997
 //
 // ----------------------------------------------------------------------
 #ifndef G4LogicalSkinSurface_h
@@ -48,7 +43,7 @@
 class G4LogicalVolume;
 class G4LogicalSkinSurface;
 
-typedef std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
+using G4LogicalSkinSurfaceTable = std::vector<G4LogicalSkinSurface*>;
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
@@ -61,6 +56,14 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     ~G4LogicalSkinSurface();
       // Constructor and destructor.
 
+    G4LogicalSkinSurface(const G4LogicalSkinSurface&) = delete;
+    G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface&) = delete;
+      // Assignment and copying not allowed.
+
+    G4bool operator==(const G4LogicalSkinSurface &right) const;
+    G4bool operator!=(const G4LogicalSkinSurface &right) const;
+      // Operators.
+
     static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
     inline const G4LogicalVolume* GetLogicalVolume() const;
     inline void  SetLogicalVolume(G4LogicalVolume* vol);
@@ -71,16 +74,6 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     static size_t GetNumberOfSkinSurfaces();
     static void DumpInfo(); // const 
       // To handle with the table of surfaces.
-
-    G4bool operator==(const G4LogicalSkinSurface &right) const;
-    G4bool operator!=(const G4LogicalSkinSurface &right) const;
-      // Operators.
-
-  private:
-
-    G4LogicalSkinSurface(const G4LogicalSkinSurface &right);
-    G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface &right);
-      // Assignment and copying must be denied.
 
   private:
 

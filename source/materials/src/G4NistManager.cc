@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -197,9 +196,15 @@ void G4NistManager::PrintG4Material(const G4String& name) const
 
 void G4NistManager::SetVerbose(G4int val)
 {
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&nistManagerMutex);
+#endif
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -243,6 +248,34 @@ G4ICRU90StoppingData* G4NistManager::GetICRU90StoppingData()
 #endif
   }
   return fICRU90;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistManager::SetDensityEffectCalculatorFlag(const G4String& mname,
+                                                   G4bool val)
+{
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&nistManagerMutex);
+#endif
+  if(mname == "all") {
+    for(auto mat : materials) {
+      SetDensityEffectCalculatorFlag(mat, val);
+    }
+  } else {
+    G4Material* mat = FindMaterial(mname);
+    SetDensityEffectCalculatorFlag(mat, val);
+  }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistManager::SetDensityEffectCalculatorFlag(G4Material* mat, G4bool val)
+{
+  if(mat) { mat->ComputeDensityEffectOnFly(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

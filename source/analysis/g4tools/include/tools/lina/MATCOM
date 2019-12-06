@@ -132,6 +132,18 @@ public:\
     }}\
   }\
 public:\
+  template <class ARRAY>\
+  bool mul_array(ARRAY& a_array,T a_tmp[]) const {\
+    /* a_array = this *= a_array */\
+    unsigned int _dim = dimension();\
+    T* pos = a_tmp;\
+    for(unsigned int r=0;r<_dim;r++,pos++) {\
+      *pos = T();\
+      for(unsigned int c=0;c<_dim;c++) *pos += m_vec[r+c*_dim]*a_array[c];\
+    }\
+   {for(unsigned int i=0;i<_dim;i++) a_array[i] = a_tmp[i];}\
+    return true;\
+  }\
   template <class VEC>\
   bool mul_vec(VEC& a_vec,T a_tmp[]) const {\
     /* a_vec = this *= a_vec */\
@@ -147,9 +159,9 @@ public:\
   }\
   template <class VEC>\
   bool mul_vec(VEC& a_vec) const {\
-    T* res = new T[dimension()];\
-    bool status = mul_vec(a_vec,res);\
-    delete [] res;\
+    T* _tmp = new T[dimension()];\
+    bool status = mul_vec(a_vec,_tmp);\
+    delete [] _tmp;\
     return status;\
   }\
 \
@@ -165,9 +177,9 @@ public:\
     return true;\
   }\
   bool mul_array(T a_vec[]) const {\
-    T* res = new T[dimension()];\
-    bool status = mul_array(a_vec,res);\
-    delete [] res;\
+    T* _tmp = new T[dimension()];\
+    bool status = mul_array(a_vec,_tmp);\
+    delete [] _tmp;\
     return status;\
   }\
 \
@@ -225,7 +237,7 @@ public:\
     }\
   }\
 \
-  bool is_proportional(const TOOLS_MAT_CLASS& a_m,const T& a_prec,T& a_factor) const {\
+  bool to_rm_is_proportional(const TOOLS_MAT_CLASS& a_m,const T& a_prec,T& a_factor) const {\
     if(&a_m==this) {a_factor=one();return true;}\
     /* If true, then : a_m = a_factor * this.*/\
     a_factor = zero();\
@@ -235,8 +247,8 @@ public:\
     for(unsigned int i=0;i<dim2();i++,tp++,mp++) {\
              if( ((*tp)==zero()) && ((*mp)==zero())) {\
         continue;\
-      } else if( ((*tp)!=zero()) && ((*mp)==zero())) {\
-        return false;\
+      /*} else if( ((*tp)!=zero()) && ((*mp)==zero())) {\
+        return false;*/\
       } else if( ((*tp)==zero()) && ((*mp)!=zero())) {\
         return false;\
       } else {\
@@ -254,9 +266,8 @@ public:\
   }\
 \
 public:\
-  template <class PREC>\
-  bool is_proportional_prec(const TOOLS_MAT_CLASS& a_right,const PREC& a_prec,PREC(*a_fabs)(const T&),T& a_factor) const {\
-    /* If true, then : a_right = a_factor * this.*/\
+  bool is_proportional(const TOOLS_MAT_CLASS& a_right,T& a_factor) const {\
+    /* If true, then : a_right = a_factor * this. a_factor could be zero.*/\
     if(this==&a_right) {a_factor=T(1);return true;}\
     a_factor = zero();\
     if(dimension()!=a_right.dimension()) return false;\
@@ -265,20 +276,41 @@ public:\
     bool first = true;\
     size_t _data_size = data_size();\
     for(size_t i=0;i<_data_size;i++,lp++,rp++) {\
-             if(  is_zero(*lp,a_prec,a_fabs) &&  is_zero(*rp,a_prec,a_fabs) ) {\
-        continue;\
-      } else if( !is_zero(*lp,a_prec,a_fabs) &&  is_zero(*rp,a_prec,a_fabs) ) {\
+      if(*lp==zero()) {\
+        if(*rp==zero()) continue;\
         return false;\
-      } else if(  is_zero(*lp,a_prec,a_fabs) && !is_zero(*rp,a_prec,a_fabs) ) {\
-        return false;\
-      } else {\
-        if(first) {\
-          a_factor = (*rp)/(*lp);\
-          first = false;\
-        } else {\
-          if(!numbers_are_equal((*lp)*a_factor,*rp,a_prec,a_fabs)) return false;\
-        }\
       }\
+      if(first) {\
+        a_factor = (*rp)/(*lp);\
+        first = false;\
+        continue;\
+      }\
+      if((*lp)*a_factor!=(*rp)) return false;\
+    }\
+    return true;\
+  }\
+\
+  template <class PREC>\
+  bool is_proportional_prec(const TOOLS_MAT_CLASS& a_right,const PREC& a_prec,PREC(*a_fabs)(const T&),T& a_factor) const {\
+    /* If true, then : a_right = a_factor * this. a_factor could be zero.*/\
+    if(this==&a_right) {a_factor=T(1);return true;}\
+    a_factor = zero();\
+    if(dimension()!=a_right.dimension()) return false;\
+    T* lp = (T*)m_vec;\
+    T* rp = (T*)a_right.m_vec;\
+    bool first = true;\
+    size_t _data_size = data_size();\
+    for(size_t i=0;i<_data_size;i++,lp++,rp++) {\
+      if(is_zero(*lp,a_prec,a_fabs)) {\
+        if(is_zero(*rp,a_prec,a_fabs)) continue;\
+        return false;\
+      }\
+      if(first) {\
+        a_factor = (*rp)/(*lp);\
+        first = false;\
+        continue;\
+      }\
+      if(!numbers_are_equal((*lp)*a_factor,*rp,a_prec,a_fabs)) return false;\
     }\
     return true;\
   }\
@@ -392,7 +424,7 @@ public:\
                                                  |0 Y|*/\
     unsigned int _D = dimension();\
     unsigned int _D_2 = _D/2;\
-    /*if(2*__D_2!=_D) return false;*/\
+    if(2*_D_2!=_D) return false;\
     for(unsigned int r=0;r<_D_2;r++) {\
       for(unsigned int c=_D_2;c<_D;c++) {\
         if(a_fabs(value(r,c))>=a_prec) return false;\
@@ -412,7 +444,7 @@ public:\
                                                  |Y 0|*/\
     unsigned int _D = dimension();\
     unsigned int _D_2 = _D/2;\
-    /*if(2*__D_2!=_D) return false;*/\
+    if(2*_D_2!=_D) return false;\
     for(unsigned int r=0;r<_D_2;r++) {\
       for(unsigned int c=0;c<_D_2;c++) {\
         if(a_fabs(value(r,c))>=a_prec) return false;\
@@ -421,6 +453,26 @@ public:\
     for(unsigned int r=_D_2;r<_D;r++) {\
       for(unsigned int c=_D_2;c<_D;c++) {\
         if(a_fabs(value(r,c))>=a_prec) return false;\
+      }\
+    }\
+    return true;\
+  }\
+\
+  template <class PREC>\
+  bool is_decomplex(const PREC& a_prec,PREC(*a_fabs)(const T&)) const {\
+    /* Look if even dim matrix is of the form :  | X Y|\
+                                                 |-Y X|*/\
+    unsigned int _D = dimension();\
+    unsigned int _D_2 = _D/2;\
+    if(2*_D_2!=_D) return false;\
+    for(unsigned int r=0;r<_D_2;r++) {\
+      for(unsigned int c=0;c<_D_2;c++) {\
+        if(a_fabs(value(r,c)-value(r+_D_2,c+_D_2))>=a_prec) return false;\
+      }\
+    }\
+    for(unsigned int r=0;r<_D_2;r++) {\
+      for(unsigned int c=_D_2;c<_D;c++) {\
+        if(a_fabs(value(r,c)+value(r+_D_2,c-_D_2))>=a_prec) return false;\
       }\
     }\
     return true;\
@@ -727,21 +779,31 @@ public:\
 \
   void power(unsigned int a_n,TOOLS_MAT_CLASS& a_res) const {\
     a_res.set_identity();\
+    T* _tmp = new T[dim2()];\
     for(unsigned int i=0;i<a_n;i++) {\
-      a_res._mul_mtx(m_vec);\
+      a_res._mul_mtx(m_vec,_tmp);\
+    }\
+    delete [] _tmp;\
+  }\
+\
+  void exp(unsigned int a_le,TOOLS_MAT_CLASS& a_res,TOOLS_MAT_CLASS& a_tmp,T a_tmp_2[]) const { /*OPTIMIZATION*/\
+    /* result = I + M + M**2/2! + M**3/3! + .... */\
+    a_res.set_identity();\
+    a_tmp.set_identity();\
+    for(unsigned int i=1;i<=a_le;i++) {\
+      a_tmp._mul_mtx(m_vec,a_tmp_2);\
+      a_tmp.multiply(one()/T(i));\
+      a_res += a_tmp;\
     }\
   }\
 \
   void exp(unsigned int a_le,TOOLS_MAT_CLASS& a_res) const {\
     /* result = I + M + M**2/2! + M**3/3! + .... */\
-    a_res.set_identity();\
     TOOLS_MAT_CLASS tmp(*this);\
     tmp.set_identity();\
-    for(unsigned int i=1;i<=a_le;i++) {\
-      tmp._mul_mtx(m_vec);\
-      tmp.multiply(one()/T(i)); \
-      a_res += tmp;\
-    }\
+    T* tmp_2 = new T[dim2()];\
+    exp(a_le,a_res,tmp,tmp_2);\
+    delete [] tmp_2;\
   }\
 \
   void cosh(unsigned int a_le,TOOLS_MAT_CLASS& a_res) const {\
@@ -751,12 +813,14 @@ public:\
     M_2._mul_mtx(m_vec);\
     TOOLS_MAT_CLASS tmp(*this);\
     tmp.set_identity();\
+    T* _tmp = new T[dim2()];\
     for(unsigned int i=1;i<=a_le;i+=2) {\
-      tmp *= M_2;\
+      tmp._mul_mtx(M_2.m_vec,_tmp);\
       tmp.multiply(one()/T(i+0)); \
       tmp.multiply(one()/T(i+1)); \
       a_res += tmp;\
     }\
+    delete [] _tmp;\
   }\
 \
   void sinh(unsigned int a_le,TOOLS_MAT_CLASS& a_res) const {\
@@ -766,12 +830,14 @@ public:\
     M_2._mul_mtx(m_vec);\
     TOOLS_MAT_CLASS tmp(*this);\
     tmp._copy(m_vec);\
+    T* _tmp = new T[dim2()];\
     for(unsigned int i=1;i<=a_le;i+=2) {\
-      tmp *= M_2;\
+      tmp._mul_mtx(M_2.m_vec,_tmp);\
       tmp.multiply(one()/T(i+1)); \
       tmp.multiply(one()/T(i+2)); \
       a_res += tmp;\
     }\
+    delete [] _tmp;\
   }\
 \
   void log(unsigned int a_le,TOOLS_MAT_CLASS& a_res) const {\
@@ -789,14 +855,37 @@ public:\
 \
     TOOLS_MAT_CLASS tmp;\
 \
+    T* _tmp = new T[dim2()];\
     for(unsigned int i=0;i<=a_le;i++) {\
       fact *= minus_one();      \
       tmp = M_Ip;\
       tmp.multiply(fact/T(i+1)); \
       a_res += tmp;\
-      M_Ip._mul_mtx(M_I.m_vec);\
+      M_Ip._mul_mtx(M_I.m_vec,_tmp);\
+    }\
+    delete [] _tmp;\
+  }\
+\
+  void omega(unsigned int a_le,TOOLS_MAT_CLASS& a_res,TOOLS_MAT_CLASS& a_tmp,T a_tmp_2[]) const { /*OPTIMIZATION*/\
+    /* result = I + M/2! + M**2/3! + M**3/4! + .... */\
+    a_res.set_identity();\
+    a_tmp.set_identity();\
+    for(unsigned int i=1;i<=a_le;i++) {\
+      a_tmp._mul_mtx(m_vec,a_tmp_2);\
+      a_tmp.multiply(one()/T(i+1));\
+      a_res += a_tmp;\
     }\
   }\
+\
+  void omega(unsigned int a_le,TOOLS_MAT_CLASS& a_res) const {\
+    /* result = I + M/2! + M**2/3! + M**3/4! + .... */\
+    TOOLS_MAT_CLASS tmp(*this);\
+    tmp.set_identity();\
+    T* tmp_2 = new T[dim2()];\
+    omega(a_le,a_res,tmp,tmp_2);\
+    delete [] tmp_2;\
+  }\
+\
   template <class MAT>\
   bool copy(const MAT& a_from) {\
     /*for exa from a double matrix to a symbol matrix*/\
@@ -914,26 +1003,26 @@ protected:\
   }\
 \
   void _mul_mtx(const T a_m[]) {\
-    T* res = new T[dim2()];\
-    _mul_mtx(a_m,res);\
-    delete [] res;\
+    T* _tmp = new T[dim2()];\
+    _mul_mtx(a_m,_tmp);\
+    delete [] _tmp;\
   }\
 \
   void _left_mul_mtx(const T a_m[]) {\
     /* this = a_m * this */\
     unsigned int _D = dimension();\
-    T* res = new T[dim2()];\
+    T* _tmp = new T[dim2()];\
     for(unsigned int r=0;r<_D;r++) {\
       for(unsigned int c=0;c<_D;c++) {\
         T _value = zero();\
         for(unsigned int i=0;i<_D;i++) {\
           _value += (*(a_m+r+i*_D)) * (*(m_vec+i+c*_D)); /*optimize.*/\
         }\
-        *(res+r+c*_D) = _value;\
+        *(_tmp+r+c*_D) = _value;\
       }\
     }\
-    _copy(res);\
-    delete [] res;\
+    _copy(_tmp);\
+    delete [] _tmp;\
   }\
 \
   template <class PREC>\

@@ -23,24 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
 // Declarations
 //
-// Declaration description:
-//
-// declarations of streams for G4GeometryCell and G4GeometryCellStep
+// Declarations of streams for G4GeometryCell and G4GeometryCellStep
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4GeometryCellStepStream_hh
-#define G4GeometryCellStepStream_hh G4GeometryCellStepStream_hh
+#ifndef G4GEOMETRYCELLSTEPSTREAM_HH
+#define G4GEOMETRYCELLSTEPSTREAM_HH 1
 
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellStep.hh"
 
-std::ostream& operator<<(std::ostream &out, const G4GeometryCell &tk);
-std::ostream& operator<<(std::ostream &out, const G4GeometryCellStep &ps);
+std::ostream& operator<<(std::ostream& out, const G4GeometryCell& tk);
+std::ostream& operator<<(std::ostream& out, const G4GeometryCellStep& ps);
 
 #endif

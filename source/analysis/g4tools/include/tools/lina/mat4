@@ -40,9 +40,7 @@ public:
                a_30,a_31,a_32,a_33);
   }
 public:
-  void set_matrix(const mat4<T>& a_m){
-    parent::set_matrix(a_m);
-  }
+  void set_matrix(const mat4<T>& a_m) {parent::set_matrix(a_m);}
   void set_matrix(
     const T& a_00,const T& a_01,const T& a_02,const T& a_03, //1 row
     const T& a_10,const T& a_11,const T& a_12,const T& a_13, //2 row
@@ -57,15 +55,9 @@ public:
     pr::m_vec[3] = a_30;pr::m_vec[7] = a_31;pr::m_vec[11] = a_32;pr::m_vec[15] = a_33;
   }
 
-  void set_scale(const T& a_s) {
-    _set_scale(a_s,a_s,a_s,pr::m_vec);
-  }
-  void set_scale(const T& a_1,const T& a_2,const T& a_3) {
-    _set_scale(a_1,a_2,a_3,pr::m_vec);
-  }
-  void set_translate(const T& a_x,const T& a_y,const T& a_z) {
-    _set_translate(a_x,a_y,a_z,pr::m_vec);
-  }
+  void set_scale(const T& a_s) {_set_scale(a_s,a_s,a_s,pr::m_vec);}
+  void set_scale(const T& a_1,const T& a_2,const T& a_3) {_set_scale(a_1,a_2,a_3,pr::m_vec);}
+  void set_translate(const T& a_x,const T& a_y,const T& a_z) {_set_translate(a_x,a_y,a_z,pr::m_vec);}
   void set_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle,T(*a_sin)(T),T(*a_cos)(T)) {
     _set_rotate(a_x,a_y,a_z,a_angle,pr::m_vec,a_sin,a_cos);
   }
@@ -231,9 +223,7 @@ public:
   }
 
   template <class VEC>
-  void mul_dir_3(VEC& a_dir) const {
-    mul_dir_3(a_dir[0],a_dir[1],a_dir[2]);
-  }
+  void mul_dir_3(VEC& a_dir) const {mul_dir_3(a_dir[0],a_dir[1],a_dir[2]);}
 
   void mul_scale(const T& a_sx,const T& a_sy,const T& a_sz) {
     // this = this * mat4_scale(a_s[x,y,z]
@@ -361,6 +351,7 @@ protected:
 
   static void _set_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle,T v[],T(*a_sin)(T),T(*a_cos)(T)) {
     //WARNING : (a_x,a_y,a_z) must be a normalized vector.
+    // v[] = exp(-a_angle*n(a_x,a_y,a_z)*Rs). It models the rotation of an object in the same coordinate system (active rotation).
     T si = a_sin(a_angle);    
     T co = a_cos(a_angle);    
     T x = a_x;
@@ -389,7 +380,7 @@ protected:
     //
     // R(r,c) = cos(theta)*Id(r,c)+(1-cos(theta))*nr*nc-sin(theta)*(n.E)(r,c)
     //
-    // R = exp(-theta*(n.E))
+    // R = exp(-theta*(n.E)) // active rotation (it models the rotation of an object by theta along n).
 
   }
 

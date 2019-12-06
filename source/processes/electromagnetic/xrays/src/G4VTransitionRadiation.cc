@@ -56,7 +56,8 @@ G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
 {
   SetProcessSubType(fTransitionRadiation);
   Clear();
-  G4LossTableManager::Instance()->Register(this);
+  theManager = G4LossTableManager::Instance();
+  theManager->Register(this);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -64,7 +65,7 @@ G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
 G4VTransitionRadiation::~G4VTransitionRadiation()
 {
   Clear();
-  G4LossTableManager::Instance()->DeRegister(this);
+  theManager->DeRegister(this);
 }
 
 ///////////////////////////////////////////////////////////////////////

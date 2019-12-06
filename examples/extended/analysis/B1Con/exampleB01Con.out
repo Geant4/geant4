@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -9,9 +13,9 @@
 **************************************************************
 
 <<< Reference Physics List QBBC 
-Checking overlaps for volume Envelope ... OK! 
-Checking overlaps for volume Shape1 ... OK! 
-Checking overlaps for volume Shape2 ... OK! 
+Checking overlaps for volume Envelope (G4Box) ... OK! 
+Checking overlaps for volume Shape1 (G4Cons) ... OK! 
+Checking overlaps for volume Shape2 (G4Trd) ... OK! 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -73,8 +77,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -437,7 +440,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 1 GeV ---> 5 GeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
         Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
@@ -451,8 +454,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: ionElastic
@@ -467,8 +470,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -479,8 +482,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -529,8 +532,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -574,14 +578,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -596,7 +600,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -609,7 +613,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -621,7 +625,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -635,8 +639,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -658,26 +662,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -691,9 +693,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 1 GeV ---> 5 GeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
         Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -703,8 +705,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -713,21 +715,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -755,23 +760,23 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 G4ConvergenceTester Output Result of DOSE_TALLY
        EFFICIENCY =         0.177
-             MEAN =   4.00907e-14
-              VAR =   1.45972e-26
-               SD =   1.20819e-13
-                R =     0.0952995
-            SHIFT =   1.87204e-13
-              VOV =     0.0102998
-              FOM =       3670.26
-THE LARGEST SCORE =   5.55155e-13 and it happened at 305th event
-    Affected Mean =   4.06053e-14 and its ratio to original is 1.01283
-     Affected VAR =   1.48476e-26 and its ratio to original is 1.01716
-       Affected R =     0.0948482 and its ratio to original is 0.995264
-   Affected SHIFT =   1.87689e-13 and its ratio to original is 1.00259
-     Affected FOM =       3670.26 and its ratio to original is 1
+             MEAN =   4.07415e-14
+              VAR =   1.46063e-26
+               SD =   1.20856e-13
+                R =     0.0938064
+            SHIFT =    1.8486e-13
+              VOV =     0.0101042
+              FOM =       3788.03
+THE LARGEST SCORE =   5.55155e-13 and it happened at 301th event
+    Affected Mean =   4.12554e-14 and its ratio to original is 1.01261
+     Affected VAR =    1.4856e-26 and its ratio to original is 1.0171
+       Affected R =     0.0933799 and its ratio to original is 0.995453
+   Affected SHIFT =   1.85377e-13 and its ratio to original is 1.0028
+     Affected FOM =       3788.03 and its ratio to original is 1
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0952995
+r is less than 0.1. r = 0.0938064
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -781,26 +786,26 @@ This result passes 5 / 8 Convergence Test.
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  3.57656e-14  1.31381e-26  1.14622e-13     0.403768      0.19091      204.463  1.86653e-13      0.15873     0.084127    0.0763136
-   2   124  3.41652e-14  1.35345e-26  1.16338e-13     0.304567     0.098314      359.347  1.97644e-13        0.168     0.039619    0.0523997
-   3   187  3.31404e-14  1.28348e-26  1.13291e-13      0.24932    0.0665142      536.245  1.94817e-13     0.159574    0.0280142    0.0338158
-   4   249  3.14022e-14  1.18698e-26  1.08949e-13     0.219428    0.0550355      692.299  1.96023e-13         0.16        0.021    0.0269562
-   5   312  3.36344e-14  1.28707e-26  1.13449e-13     0.190654     0.040587      917.041  1.96075e-13     0.159744    0.0168051    0.0194276
-   6   374  3.40453e-14  1.30854e-26  1.14391e-13     0.173508     0.033199      1107.23  1.95896e-13         0.16        0.014    0.0160249
-   7   437  3.47041e-14  1.32239e-26  1.14995e-13      0.15833    0.0276625       1329.7  1.94524e-13      0.16895    0.0112304    0.0137807
-   8   499  3.46985e-14    1.307e-26  1.14324e-13     0.147347    0.0239637      1535.31  1.92314e-13        0.168   0.00990476     0.011763
-   9   562  3.49972e-14  1.31394e-26  1.14627e-13     0.138038    0.0215799      1749.36  1.93839e-13     0.170515   0.00864047    0.0103802
-  10   624  3.59915e-14  1.32406e-26  1.15068e-13     0.127883    0.0188511      2038.21  1.91035e-13       0.1728   0.00765926   0.00866876
-  11   687   3.7299e-14  1.39871e-26  1.18267e-13     0.120885     0.016411      2281.04  1.92697e-13     0.168605    0.0071672   0.00742479
-  12   749  3.71516e-14  1.38481e-26  1.17678e-13     0.115661    0.0150944      2491.76  1.91869e-13     0.166667   0.00666667   0.00669293
-  13   812  3.78787e-14  1.38678e-26  1.17762e-13     0.109034    0.0135325      2803.83  1.88847e-13     0.170972   0.00596423   0.00590964
-  14   874  3.80944e-14  1.39476e-26    1.181e-13     0.104805    0.0124978      3034.67  1.88806e-13     0.170286   0.00556855   0.00540308
-  15   937  3.94075e-14  1.42928e-26  1.19553e-13    0.0990555    0.0111564       3397.2  1.86644e-13     0.175906   0.00499451   0.00480703
-  16   999  4.00907e-14  1.45972e-26  1.20819e-13    0.0952995    0.0102998      3670.26  1.87204e-13        0.177   0.00464972    0.0044232
+   1    62  2.50792e-14  1.00595e-26  1.00297e-13     0.503854     0.281232      131.301  2.03944e-13     0.126984     0.109127     0.140712
+   2   124  2.30481e-14  7.75936e-27  8.80872e-14     0.341839     0.154301      285.256  1.83866e-13        0.128       0.0545    0.0614194
+   3   187  3.70096e-14  1.32562e-26  1.15136e-13     0.226891    0.0593771      647.508  1.83797e-13     0.159574    0.0280142    0.0231914
+   4   249  3.59393e-14  1.27905e-26  1.13095e-13     0.199024     0.046657      841.528  1.84952e-13         0.16        0.021     0.018452
+   5   312  3.56909e-14   1.2925e-26  1.13688e-13     0.180047    0.0378769      1028.27  1.87681e-13     0.159744    0.0168051    0.0155083
+   6   374  3.57526e-14  1.31305e-26  1.14588e-13     0.165507    0.0313673      1216.87  1.88973e-13     0.157333    0.0142825    0.0130372
+   7   437  3.61659e-14   1.3261e-26  1.15156e-13     0.152143    0.0263568      1440.04  1.88657e-13     0.166667    0.0114155    0.0116792
+   8   499  3.60489e-14  1.31001e-26  1.14456e-13     0.141991    0.0229398      1653.33  1.87072e-13        0.168   0.00990476    0.0102163
+   9   562  3.69868e-14  1.35152e-26  1.16255e-13     0.132468    0.0201397      1899.58  1.88864e-13     0.170515   0.00864047   0.00887608
+  10   624  3.78317e-14  1.36198e-26  1.16704e-13     0.123393     0.017751      2189.26   1.8707e-13       0.1728   0.00765926   0.00754221
+  11   687  3.87338e-14  1.41427e-26  1.18923e-13     0.117053    0.0156293      2432.85  1.88078e-13     0.168605    0.0071672   0.00651422
+  12   749  3.91385e-14   1.4111e-26   1.1879e-13     0.110827     0.014105      2713.88  1.85986e-13     0.169333   0.00654068   0.00572546
+  13   812  3.86662e-14  1.38833e-26  1.17827e-13     0.106873    0.0131995      2918.37  1.85837e-13     0.169742   0.00601636   0.00539148
+  14   874  3.88295e-14  1.39614e-26  1.18158e-13     0.102872    0.0122138      3149.79   1.8602e-13     0.170286   0.00556855   0.00500207
+  15   937  4.03658e-14  1.43534e-26  1.19806e-13    0.0969087    0.0108248      3549.39  1.83454e-13     0.175906   0.00499451   0.00438677
+  16   999  4.07415e-14  1.46063e-26  1.20856e-13    0.0938064    0.0101042      3788.03   1.8486e-13        0.177   0.00464972   0.00414113
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 40.0907 picoGy  +- 3.81872 picoGy 
+ Dose in scoring volume : 40.7415 picoGy  +- 3.81991 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 start.
@@ -826,24 +831,24 @@ i/16 till_ith      mean          var           sd            r          vov     
 ---> Begin of event: 900
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.626
-             MEAN =   5.07255e-12
-              VAR =   2.15866e-23
-               SD =   4.64614e-12
-                R =     0.0289645
-            SHIFT =  -4.79523e-15
-              VOV =   0.000159527
-              FOM =       4110.27
-THE LARGEST SCORE =   1.06633e-11 and it happened at 819th event
-    Affected Mean =   5.07813e-12 and its ratio to original is 1.0011
-     Affected VAR =   2.15962e-23 and its ratio to original is 1.00045
-       Affected R =     0.0289246 and its ratio to original is 0.998624
-   Affected SHIFT =  -9.11596e-15 and its ratio to original is 1.90105
-     Affected FOM =       4110.27 and its ratio to original is 1
+       EFFICIENCY =         0.636
+             MEAN =   5.02005e-12
+              VAR =   2.12307e-23
+               SD =   4.60768e-12
+                R =     0.0290251
+            SHIFT =   4.97518e-14
+              VOV =   0.000170576
+              FOM =       4093.11
+THE LARGEST SCORE =   1.07563e-11 and it happened at 858th event
+    Affected Mean =   5.02578e-12 and its ratio to original is 1.00114
+     Affected VAR =   2.12424e-23 and its ratio to original is 1.00055
+       Affected R =     0.0289855 and its ratio to original is 0.998634
+   Affected SHIFT =    4.5526e-14 and its ratio to original is 0.915062
+     Affected FOM =       4093.11 and its ratio to original is 1
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0289645
+r is less than 0.1. r = 0.0290251
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -853,26 +858,26 @@ This result passes 5 / 8 Convergence Test.
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62   4.8348e-12  2.15824e-23  4.64568e-12      0.12106   0.00267046      235.288  1.97758e-13     0.619048   0.00976801   0.00465491
-   2   124  4.80034e-12  2.11325e-23  4.59701e-12    0.0856541   0.00148323      470.009  2.16164e-13        0.616   0.00498701   0.00229092
-   3   187  4.99877e-12  2.12915e-23  4.61427e-12    0.0673226   0.00094726      760.817  5.64428e-14     0.632979   0.00308421   0.00142401
-   4   249  5.11779e-12  2.15121e-23  4.63812e-12    0.0573177  0.000643732       1049.6 -4.07918e-14        0.636   0.00228931  0.000982873
-   5   312  4.93672e-12  2.16755e-23  4.65569e-12    0.0533057  0.000480459      1213.54  1.01689e-13     0.613419   0.00201345  0.000818974
-   6   374  4.80254e-12  2.20402e-23   4.6947e-12    0.0504803   0.00038191      1353.19  2.47347e-13     0.597333   0.00179762  0.000743842
-   7   437  4.80913e-12   2.1809e-23  4.67002e-12    0.0463996  0.000354182      1601.67  2.33859e-13      0.60274   0.00150477  0.000643238
-   8   499  4.90343e-12  2.16466e-23  4.65259e-12    0.0424336  0.000313809      1915.06  1.48165e-13        0.612   0.00126797  0.000529031
-   9   562  4.97713e-12  2.16718e-23   4.6553e-12    0.0394198  0.000273086      2219.08  9.31472e-14     0.619893   0.00108913   0.00046203
-  10   624    5.041e-12  2.15445e-23  4.64161e-12    0.0368309  0.000255502      2542.01   3.0521e-14        0.624  0.000964103  0.000390241
-  11   687  4.96936e-12  2.16041e-23  4.64802e-12    0.0356593  0.000231529      2711.79  1.03751e-13     0.617733  0.000899453  0.000370285
-  12   749  5.01993e-12  2.15996e-23  4.64753e-12     0.033806  0.000211487      3017.27  5.37852e-14     0.621333  0.000812589  0.000328734
-  13   812  5.06904e-12  2.15407e-23  4.64119e-12    0.0321113  0.000197704      3344.15  4.31954e-15     0.629766  0.000723113  0.000306757
-  14   874  5.07263e-12  2.15777e-23  4.64518e-12    0.0309575    0.0001826      3598.08 -1.33668e-15     0.628571  0.000675325  0.000281946
-  15   937  5.02236e-12  2.15507e-23  4.64227e-12    0.0301802  0.000171503      3785.81   4.3475e-14     0.623667  0.000643304  0.000266569
-  16   999  5.07255e-12  2.15866e-23  4.64614e-12    0.0289645  0.000159527      4110.27 -4.79523e-15        0.626  0.000597444  0.000240659
+   1    62  6.53175e-12  2.03034e-23  4.50593e-12     0.086913   0.00844893      456.492 -1.33549e-12     0.746032   0.00540358   0.00203038
+   2   124  5.55112e-12  2.14558e-23  4.63204e-12     0.074634   0.00160675      619.055 -3.82306e-13        0.696   0.00349425   0.00203142
+   3   187  5.30738e-12  2.14919e-23  4.63594e-12    0.0637058  0.000927957      849.659 -1.83031e-13     0.659574   0.00274537   0.00129147
+   4   249  5.15024e-12   2.1194e-23  4.60369e-12    0.0565339  0.000744103      1078.91  -6.1484e-14        0.652   0.00213497   0.00104833
+   5   312  4.92129e-12  2.11952e-23  4.60382e-12    0.0528771   0.00058703       1233.3  1.18743e-13     0.623003   0.00193332  0.000853736
+   6   374  4.80695e-12  2.13467e-23  4.62025e-12    0.0496341  0.000466755      1399.72  2.18457e-13     0.610667   0.00170015  0.000756827
+   7   437  4.85114e-12  2.12678e-23   4.6117e-12    0.0454234   0.00039924      1671.25  1.71454e-13     0.614155   0.00143437  0.000624212
+   8   499   4.9838e-12  2.12165e-23  4.60614e-12    0.0413325  0.000351382      2018.45  6.05528e-14        0.626   0.00119489  0.000510069
+   9   562  4.95828e-12  2.11699e-23  4.60107e-12    0.0391087  0.000316496      2254.52  9.05158e-14     0.625222   0.00106471  0.000462066
+  10   624  4.90925e-12  2.11716e-23  4.60126e-12    0.0374906  0.000284661      2453.34  1.30639e-13       0.6208   0.00097732  0.000425973
+  11   687  4.91322e-12  2.10675e-23  4.58993e-12     0.035616  0.000265223      2718.38  1.32122e-13        0.625  0.000872093  0.000394565
+  12   749  4.98136e-12   2.1168e-23  4.60087e-12    0.0337257  0.000235966      3031.66  7.49022e-14     0.630667  0.000780832  0.000355074
+  13   812    5.032e-12  2.12732e-23  4.61229e-12    0.0321463    0.0002119      3336.87  3.01346e-14     0.633456  0.000711735  0.000320379
+  14   874  5.07195e-12  2.13238e-23  4.61777e-12    0.0307789  0.000191704      3639.95 -6.53368e-15     0.637714  0.000649258     0.000297
+  15   937  5.06502e-12  2.12895e-23  4.61406e-12    0.0297441  0.000179612      3897.63  5.77018e-15     0.637527  0.000606143  0.000277624
+  16   999  5.02005e-12  2.12307e-23  4.60768e-12    0.0290251  0.000170576      4093.11  4.97518e-14        0.636  0.000572327   0.00026929
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.07255 nanoGy  +- 146.85 picoGy 
+ Dose in scoring volume : 5.02005 nanoGy  +- 145.635 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

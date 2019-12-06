@@ -55,7 +55,9 @@
 #include <qdialog.h>
 #include <qevent.h>
 #include <qtextedit.h>
+#if QT_VERSION < 0x050600
 #include <qsignalmapper.h>
+#endif
 #include <qtabwidget.h>
 #include <qtabbar.h>
 #include <qstringlist.h>
@@ -72,7 +74,6 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qcombobox.h>
-#include <qsignalmapper.h>
 #include <qpainter.h>
 #include <qcolordialog.h>
 #include <qtoolbar.h>
@@ -320,11 +321,15 @@ void G4UIQt::SetDefaultIconsToolbar(
     AddIcon("Save viewer state", "save", "/vis/viewer/save");
     
     // View parameters
+#if QT_VERSION < 0x050600
     QSignalMapper *signalMapperViewerProperties = new QSignalMapper(this);
     QAction *actionViewerProperties = fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", signalMapperViewerProperties, SLOT(map()));
     connect(signalMapperViewerProperties, SIGNAL(mapped(int)),this, SLOT(ViewerPropertiesIconCallback(int)));
     int intVP = 0;
     signalMapperViewerProperties->setMapping(actionViewerProperties, intVP);
+#else
+    fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", this, [=](){ this->ViewerPropertiesIconCallback(0); });
+#endif
 
     // Cursors style icons
     AddIcon("Move", "move", "");
@@ -1457,10 +1462,6 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
 
   fCoutTBTextArea = new QTextEdit();
   
-  // set font familly and size
-  fCoutTBTextArea->setFontFamily("Courier");
-  fCoutTBTextArea->setFontPointSize(12);
-
   fCoutFilter = new QLineEdit();
   fCoutFilter->setToolTip("Filter output by...");
   
@@ -1917,8 +1918,6 @@ G4UIsession* G4UIQt::SessionStart (
 
 /**   Display the prompt in the prompt area
    @param aPrompt : string to display as the promt label
-   //FIXME : probablement inutile puisque le seul a afficher qq chose d'autre
-   que "session" est SecondaryLoop()
 */
 void G4UIQt::Prompt (
  G4String aPrompt
@@ -2237,11 +2236,16 @@ void G4UIQt::AddButton (
     }
   }
 
+#if QT_VERSION < 0x050600
   QSignalMapper *signalMapper = new QSignalMapper(this);
   QAction *action = parentTmp->addAction(aLabel, signalMapper, SLOT(map()));
 
   connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
   signalMapper->setMapping(action, QString(aCommand));
+#else
+  QString cmd_tmp = QString(aCommand);
+  parentTmp->addAction(aLabel, this, [=](){ this->ButtonCallback(cmd_tmp); });
+#endif
 }
 
 
@@ -2345,20 +2349,29 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     }
   }
   
+#if QT_VERSION < 0x050600
   QSignalMapper *signalMapper = new QSignalMapper(this);
   QAction *action = currentToolbar->addAction(QIcon(*pix),aLabel, signalMapper, SLOT(map()));
-  
+#endif
   // special cases :"open"
   if (std::string(aIconFile) == "open") {
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString &)));
     QString txt = aCommand + fStringSeparator + aLabel;
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString &)));
     signalMapper->setMapping(action, QString(txt));
+#else
+    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->OpenIconCallback(txt); });
+#endif
 
   // special cases :"save"
   } else if (std::string(aIconFile) == "save") {
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
     QString txt = aCommand + fStringSeparator + aLabel;
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
     signalMapper->setMapping(action, QString(txt));
+#else
+    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->SaveIconCallback(txt); });
+#endif
 
   // special cases : cursor style
   } else if ((std::string(aIconFile) == "move") ||
@@ -2366,12 +2379,16 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
              (std::string(aIconFile) == "pick") ||
              (std::string(aIconFile) == "zoom_out") ||
              (std::string(aIconFile) == "zoom_in")) {
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeCursorAction(const QString&)));
+    signalMapper->setMapping(action, QString(aIconFile));
+#else
+    QString txt = QString(aIconFile);
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangeCursorAction(txt); });
+#endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
     action->setData(aIconFile);
-
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeCursorAction(const QString&)));
-    signalMapper->setMapping(action, QString(aIconFile));
 
     if (std::string(aIconFile) == "move") {
       SetIconMoveSelected();
@@ -2394,11 +2411,16 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
              (std::string(aIconFile) == "hidden_line_and_surface_removal") ||
              (std::string(aIconFile) == "solid") ||
              (std::string(aIconFile) == "wireframe")) {
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeSurfaceStyle(const QString&)));
+    signalMapper->setMapping(action, QString(aIconFile));
+#else
+    QString txt = QString(aIconFile);
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangeSurfaceStyle(txt); });
+#endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
     action->setData(aIconFile);
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeSurfaceStyle(const QString&)));
-    signalMapper->setMapping(action, QString(aIconFile));
 
     if (std::string(aIconFile) == "hidden_line_removal") {
       SetIconHLRSelected();
@@ -2416,11 +2438,16 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     // special case : perspective/ortho
   } else if ((std::string(aIconFile) == "perspective") ||
              (std::string(aIconFile) == "ortho")) {
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangePerspectiveOrtho(const QString&)));
+    signalMapper->setMapping(action, QString(aIconFile));
+#else
+    QString txt = QString(aIconFile);
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangePerspectiveOrtho(txt); });
+#endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
     action->setData(aIconFile);
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangePerspectiveOrtho(const QString&)));
-    signalMapper->setMapping(action, QString(aIconFile));
 
     if (std::string(aIconFile) == "perspective") {
       SetIconPerspectiveSelected();
@@ -2452,8 +2479,13 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
       }
     }
     
+#if QT_VERSION < 0x050600
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
     signalMapper->setMapping(action, QString(aCommand));
+#else
+    QString txt = QString(aCommand);
+    currentToolbar->addAction(QIcon(*pix), aCommand, this, [=](){ this->ButtonCallback(txt); });
+#endif
   }
 }
 
@@ -2957,11 +2989,14 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
           gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
 
           // Connect pushButton to ColorDialog in callback
+#if QT_VERSION < 0x050600
           QSignalMapper* signalMapper = new QSignalMapper(this);
           signalMapper->setMapping(input,input);
           connect(input, SIGNAL(clicked()), signalMapper, SLOT(map()));
           connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(ChangeColorCallback(QWidget*)));
-
+#else
+          connect(dynamic_cast<QPushButton*>(input), &QPushButton::clicked , [=](){ this->ChangeColorCallback(input);});
+#endif
           isColorDialogAdded = true;
           isStillColorParameter = false;
         }
@@ -2981,10 +3016,14 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       
       gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,1);
       
+#if QT_VERSION < 0x050600
       QSignalMapper* signalMapper = new QSignalMapper(this);
       signalMapper->setMapping(applyButton, paramWidget);
       connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
       connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
+#else
+      connect(applyButton, &QPushButton::clicked , [=](){ this->VisParameterCallback(paramWidget);});
+#endif
     } else {
       // Apply/Cancel buttons
       
@@ -2996,10 +3035,14 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       gridLayout->addWidget(cancelButton,n_parameterEntry-nbColorParameter,1);
       gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,0);
       
+#if QT_VERSION < 0x050600
       QSignalMapper* signalMapper = new QSignalMapper(this);
       signalMapper->setMapping(applyButton, paramWidget);
       connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
       connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
+#else
+      connect(applyButton, &QPushButton::clicked , [=](){ this->VisParameterCallback(paramWidget);});
+#endif
 
       QWidget * parentCheck = aParent;
       QDialog* parentDialog = NULL;
@@ -3569,7 +3612,11 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
         // parameters
         for( G4int a=0; a<n_parameterEntry; a++ ) {
           param = command->GetParameter(a);
-          params += "<" + param->GetParameterName()+"> ";
+			if (param->IsOmittable()) {
+				params += "[<" + param->GetParameterName()+">] ";
+			} else {
+				params += "<" + param->GetParameterName()+"> ";
+			}
         }
         nMatch++;
 

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4GenericTrap
 //
 // Class description:
@@ -60,11 +53,10 @@
 
 // Authors:
 //   Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
-//   Adapted from Root Arb8 implementation, author Andrea Gheata, CERN
+//   Adapted from Root Arb8 implementation, author Andrei Gheata, CERN
 // -------------------------------------------------------------------
-
-#ifndef G4GenericTrap_HH
-#define G4GenericTrap_HH
+#ifndef G4GENERICTRAP_HH
+#define G4GENERICTRAP_HH
 
 #include "G4GeomTypes.hh"
 
@@ -79,12 +71,10 @@
 
 #include <vector>
 
+#include "globals.hh"
 #include "G4TwoVector.hh"
 #include "G4VSolid.hh"
-#include "globals.hh"
-
-class G4VFacet;
-class G4TessellatedSolid;
+#include "G4TessellatedSolid.hh"
 
 class G4GenericTrap : public G4VSolid
 {
@@ -118,8 +108,8 @@ class G4GenericTrap : public G4VSolid
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
-                                 G4bool *validNorm = 0,
-                                 G4ThreeVector *n = 0) const;
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
@@ -201,8 +191,8 @@ class G4GenericTrap : public G4VSolid
                                 const G4ThreeVector& p3) const;
   protected:
 
-     mutable G4bool fRebuildPolyhedron;
-     mutable G4Polyhedron*   fpPolyhedron;
+     mutable G4bool fRebuildPolyhedron = false;
+     mutable G4Polyhedron* fpPolyhedron = nullptr;
 
   private:
 
@@ -217,18 +207,18 @@ class G4GenericTrap : public G4VSolid
 
     G4double                 fDz;
     std::vector<G4TwoVector> fVertices;
-    G4bool                   fIsTwisted;
+    G4bool                   fIsTwisted = false;
     G4double                 fTwist[4];
-    G4TessellatedSolid*      fTessellatedSolid;
+    G4TessellatedSolid*      fTessellatedSolid = nullptr;
     G4ThreeVector            fMinBBoxVector;
     G4ThreeVector            fMaxBBoxVector;
-    G4int                    fVisSubdivisions;
+    G4int                    fVisSubdivisions = 0;
 
-    enum ESide {kUndefined,kXY0,kXY1,kXY2,kXY3,kMZ,kPZ};
+    enum ESide {kUndef,kXY0,kXY1,kXY2,kXY3,kMZ,kPZ};
       // Codes for faces (kXY[num]=num of lateral face,kMZ= minus z face etc)
 
-    G4double                 fSurfaceArea;
-    G4double                 fCubicVolume;
+    G4double                 fSurfaceArea = 0.0;
+    G4double                 fCubicVolume = 0.0;
       // Surface and Volume
 };
 

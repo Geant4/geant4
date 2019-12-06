@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4CashKarpRKF45
+// G4CashKarpRKF45
 //
 // Class description:
 //
@@ -37,12 +34,10 @@
 // It is used to integrate the equations of the motion of a particle 
 // in a magnetic field.
 
-// History:
-// - Created. J.Apostolakis, V.Grichine - 30.1.97
+// Authors: J.Apostolakis, V.Grichine - 30.01.1997
 // -------------------------------------------------------------------
-
-#ifndef G4CashKARP_RKF45
-#define G4CashKARP_RKF45
+#ifndef G4CASHKARP_RKF45_HH
+#define G4CASHKARP_RKF45_HH
 
 #include "G4MagIntegratorStepper.hh"
 
@@ -51,9 +46,9 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   public:  // with description
 
-    G4CashKarpRKF45( G4EquationOfMotion *EqRhs,
+    G4CashKarpRKF45( G4EquationOfMotion* EqRhs,
                      G4int numberOfVariables = 6,
-                     G4bool primary= true ) ;
+                     G4bool primary = true ) ;
    ~G4CashKarpRKF45() ;
 
     void Stepper( const G4double y[],
@@ -88,13 +83,13 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *yTemp, *yIn; // *ak7
       // scratch space
 
-    G4double fLastStepLength;
+    G4double fLastStepLength = 0.0;
     G4double *fLastInitialVector, *fLastFinalVector,
              *fLastDyDx, *fMidVector, *fMidError;
       // for DistChord calculations
 
-    G4CashKarpRKF45* fAuxStepper; 
+    G4CashKarpRKF45* fAuxStepper = nullptr; 
 
 };
 
-#endif /* G4CashKARP_RKF45 */
+#endif

@@ -16,6 +16,7 @@
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate Rayl
+/process/inactivate GammaToMuPair
 #
 # direction 1 0 0
 /gun/particle gamma

@@ -23,12 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// G4RegularNavigationHelper
+// class G4RegularNavigationHelper
 //
 // Class description:
 //
@@ -42,13 +37,18 @@
 
 #include <vector>
 #include "globals.hh"
+#include "G4ThreadLocalSingleton.hh"
 
-typedef std::vector< std::pair<G4int,G4double> > G4RegularNavigationHelper_theStepLengths_t;
+using G4RegularNavigationHelper_theStepLengths_t = 
+      std::vector< std::pair<G4int,G4double> >;
 
 class G4RegularNavigationHelper
 {
+  friend class G4ThreadLocalSingleton<G4RegularNavigationHelper>;
+
   public:
-    static G4RegularNavigationHelper * Instance();
+
+    static G4RegularNavigationHelper* Instance();
    ~G4RegularNavigationHelper();
   
     void ClearStepLengths();
@@ -58,8 +58,8 @@ class G4RegularNavigationHelper
     std::vector< std::pair<G4int,G4double> > theStepLengths;
 
   private:
+
     G4RegularNavigationHelper();
-    static G4ThreadLocal G4RegularNavigationHelper * theInstance;
 };
 
 #endif

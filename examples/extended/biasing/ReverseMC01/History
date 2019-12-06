@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 18, 2019 G.Cosmo  (ReverseMC01-V10-05-01)
+- Fixed cases of type conversions from size_t to G4int in B5HodoscopeSD.
+
+Sep 11, 2019 I.Hrivnacova  (ReverseMC01-V10-05-00)
+- Updated for clean-up in analysis typedefs:
+  G4AnaHn types replaced with G4Hn
+
 May 20, 2018 J.Allison  (ReverseMC01-V10-04-00)
 - Add #include "G4Types.hh"
 - Remove G4UI_USE and G4VIS_USE.

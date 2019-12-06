@@ -45,7 +45,6 @@
 class G4HadronBuilder
 {
   public:
-
      G4ParticleDefinition * Build(G4ParticleDefinition * black, G4ParticleDefinition * white);
      G4ParticleDefinition * BuildLowSpin(G4ParticleDefinition * black, G4ParticleDefinition * white);
      G4ParticleDefinition * BuildHighSpin(G4ParticleDefinition * black, G4ParticleDefinition * white);
@@ -53,10 +52,10 @@ class G4HadronBuilder
      //  ctor
      G4HadronBuilder(G4double mesonMix, G4double barionMix,
 		     std::vector<double> scalarMesonMix,
-		     std::vector<double> vectorMesonMix); 
+		     std::vector<double> vectorMesonMix,
+                     G4double Eta_cProb, G4double Eta_bProb);
 
   private:
-
      G4HadronBuilder(); // no default ctor
 
      enum Spin { SpinZero=1, SpinHalf=2, SpinOne=3, SpinThreeHalf=4 };
@@ -70,6 +69,7 @@ class G4HadronBuilder
      std::vector<double> scalarMesonMixings;
      std::vector<double> vectorMesonMixings;
      
+     G4double ProbEta_c, ProbEta_b;
 };
 
 #endif

@@ -53,7 +53,7 @@
 #include "G4PEEffectFluoModel.hh"
 #include "G4KleinNishinaModel.hh"
 #include "G4LowEPComptonModel.hh"
-#include "G4PenelopeGammaConversionModel.hh"
+#include "G4BetheHeitler5DModel.hh"
 #include "G4LivermorePhotoElectricModel.hh"
 
 #include "G4eMultipleScattering.hh"
@@ -127,7 +127,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option4);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver, 
-							 const G4String&)
+                                                         const G4String&)
   : G4VPhysicsConstructor("G4EmStandard_opt4"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
@@ -250,9 +250,8 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       // Gamma conversion
       G4GammaConversion* gc = new G4GammaConversion();
-      G4VEmModel* thePenelopeGCModel = new G4PenelopeGammaConversionModel();
-      thePenelopeGCModel->SetHighEnergyLimit(20*MeV);
-      gc->AddEmModel(0,thePenelopeGCModel);
+      G4VEmModel* conv = new G4BetheHeitler5DModel();
+      gc->SetEmModel(conv);
 
       if(G4EmParameters::Instance()->GeneralProcessActive()) {
         G4GammaGeneralProcess* sp = new G4GammaGeneralProcess();
@@ -261,12 +260,12 @@ void G4EmStandardPhysics_option4::ConstructProcess()
         sp->AddEmProcess(gc);
         sp->AddEmProcess(new G4RayleighScattering());
         man->SetGammaGeneralProcess(sp);
-	ph->RegisterProcess(sp, particle);
+        ph->RegisterProcess(sp, particle);
       } else {
-	ph->RegisterProcess(pe, particle);
-	ph->RegisterProcess(cs, particle);
-	ph->RegisterProcess(gc, particle);
-	ph->RegisterProcess(new G4RayleighScattering(), particle);
+        ph->RegisterProcess(pe, particle);
+        ph->RegisterProcess(cs, particle);
+        ph->RegisterProcess(gc, particle);
+        ph->RegisterProcess(new G4RayleighScattering(), particle);
       }
  
     } else if (particleName == "e-") {
@@ -410,7 +409,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       ph->RegisterProcess(kss, particle);
 
     } else if (particleName == "proton" ||
-	       particleName == "anti_proton") {
+               particleName == "anti_proton") {
 
       G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       pmsc->SetEmModel(new G4WentzelVIModel());
@@ -423,11 +422,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "B+" ||
-	       particleName == "B-" ||
-	       particleName == "D+" ||
-	       particleName == "D-" ||
-	       particleName == "Ds+" ||
-	       particleName == "Ds-" ||
+               particleName == "B-" ||
+               particleName == "D+" ||
+               particleName == "D-" ||
+               particleName == "Ds+" ||
+               particleName == "Ds-" ||
                particleName == "anti_He3" ||
                particleName == "anti_alpha" ||
                particleName == "anti_deuteron" ||
@@ -441,7 +440,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
-	       particleName == "lambda_c+" ||
+               particleName == "lambda_c+" ||
                particleName == "omega-" ||
                particleName == "sigma_c+" ||
                particleName == "sigma_c++" ||

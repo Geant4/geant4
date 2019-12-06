@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04DetectorConstruction.cc
+/// \file ExN04DetectorConstruction.cc
 /// \brief Implementation of the ExN04DetectorConstruction class
 //
 

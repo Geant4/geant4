@@ -4,6 +4,8 @@
 #ifndef tools_sg_text_freetype
 #define tools_sg_text_freetype
 
+//#define TOOLS_DONE_FACE
+
 #include <tools/sg/base_freetype>
 #include <tools/sg/render_action>
 #include <tools/sg/pick_action>
@@ -13,6 +15,12 @@
 #include <tools/fmanip>
 #include <tools/nostream>
 #include <tools/lina/box_3f>
+
+// font_pixmap :
+#include <tools/sg/group>
+#include <tools/sg/blend>
+#include <tools/sg/tex_quadrilateral>
+#include <tools/platform> //for APPLE TargetConditionals.h
 
 #include "../glutess/glutess"
 
@@ -61,6 +69,8 @@ namespace sg {
 class text_freetype : public tools::sg::base_freetype {
   TOOLS_NODE(text_freetype,tools::sg::text_freetype,tools::sg::base_freetype)
 protected:
+  text_freetype& self() const {return const_cast<text_freetype&>(*this);}
+protected:
   TOOLS_CLASS_STRING(TOOLS_FONT_PATH)
 protected:
   enum wndg_type {
@@ -69,7 +79,7 @@ protected:
     wndg_not_done
   };
 protected: //gstos
-  virtual unsigned int create_gsto(std::ostream& a_out,tools::sg::gl_manager& a_mgr) {
+  virtual unsigned int create_gsto(std::ostream& a_out,tools::sg::render_manager& a_mgr) {
     std::vector<float> gsto_data;
 
    {tools_vforcit(line_t,m_lines,it) {
@@ -170,10 +180,12 @@ protected: //gstos
 
 public:
   virtual void render(tools::sg::render_action& a_action) {
-    if(touched()) {
+   {bool _color_touched = color_touched(a_action.state());
+    bool _char_height_touched = char_height_touched(a_action.state());
+    if(touched()||_color_touched||_char_height_touched) {
       update_sg(a_action.out(),font.touched());
       reset_touched();
-    }
+    }}
 
     const tools::sg::state& state = a_action.state();
 
@@ -181,7 +193,7 @@ public:
     else if(m_wndg==wndg_cw) a_action.set_winding(tools::sg::winding_cw);
 
     if(state.m_use_gsto) {
-      unsigned int _id = get_gsto_id(a_action.out(),a_action.gl_manager());
+      unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
       if(_id) {
         a_action.begin_gsto(_id);
         size_t sz_tris = m_gsto_sz-m_gsto_lines_sz;
@@ -206,7 +218,7 @@ public:
         // use immediate rendering.
       }
     } else {
-      clean_gstos(&a_action.gl_manager());
+      clean_gstos(&a_action.render_manager());
     }
 
     // immediate rendering :
@@ -253,13 +265,30 @@ public:
     a_action.set_line_smooth(state.m_GL_LINE_SMOOTH);
     a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
     a_action.set_winding(state.m_winding);
+    
+    ///////////////////////////////////////////////////////////
+    /// bitmap ////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
+#if defined(ANDROID) /*|| TARGET_OS_IPHONE*/
+    // we do not have transparent texture here (see also gl/tex_img() that does img/4-bytes => img/3-bytes) :
+   {tools::sg::state& _state = a_action.state();
+    tools::colorf old_color = _state.m_color;
+    _state.m_color = tools::colorf_white();
+    a_action.color4f(_state.m_color);
+    m_bitmaps.render(a_action);
+    _state.m_color = old_color;
+    a_action.color4f(_state.m_color);}
+#else
+    m_bitmaps.render(a_action);
+#endif
   }
 
   virtual void pick(tools::sg::pick_action& a_action) {
-    if(touched()) {
+   {bool _char_height_touched = char_height_touched(a_action.state());
+    if(touched()||_char_height_touched) {
       update_sg(a_action.out(),font.touched());
       reset_touched();
-    }
+    }}
 
 /*
     //OPTIMIZATION : pick on the bounding box ?
@@ -313,13 +342,18 @@ public:
       if(a_action.add__primitive_xy(*this,item.first,2*num,data,true)) return;
     }}
 
+    ///////////////////////////////////////////////////////////
+    /// bitmap ////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
+    m_bitmaps.pick(a_action);
   }
 
   virtual void bbox(tools::sg::bbox_action& a_action) {
-    if(touched()) {
+   {bool _char_height_touched = char_height_touched(a_action.state());
+    if(touched()||_char_height_touched) {
       update_sg(a_action.out(),font.touched());
       reset_touched();
-    }
+    }}
 
    {tools_vforcit(line_t,m_lines,it) {
       const line_t& item = *it;
@@ -355,6 +389,10 @@ public:
       }  
     }}
 
+    ///////////////////////////////////////////////////////////
+    /// bitmap ////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
+    m_bitmaps.bbox(a_action);
   }
 
 public:
@@ -367,6 +405,7 @@ public:
   ,m_verbose(false)
   ,m_scale(1)
   ,m_pos(0)
+  ,m_char_height(0)
   {
     if(!initialize()){} //throw
   }
@@ -385,6 +424,7 @@ public:
   ,m_verbose(a_from.m_verbose)
   ,m_scale(1)
   ,m_pos(0)
+  ,m_char_height(0)
   {
     if(!initialize()){} //throw
   }
@@ -400,43 +440,49 @@ public:
     m_encoding_offset = 0;
     m_verbose = a_from.m_verbose;
     m_scale = 1;
+    m_char_height = 0;
 
     if(!initialize()){} //throw
 
     return *this;
   }
-
 public: //tools::sg::base_text :
   virtual float ascent(float a_height) const {
     tools::nostream out;
-    if(!m_face) {
-      const_cast<text_freetype*>(this)->load_face(out);
-    }
+    if(!m_face) self().load_face(out);
     if(!m_face) return 0;
     float value;
-    ascent(out,m_face,a_height,value);
+    if(!ascent(out,self().m_face,a_height,value)) return 0;
+#ifdef TOOLS_DONE_FACE
+    ::FT_Done_Face(m_face);
+    self().m_face = 0;
+#endif    
     return value;
   }
 
   virtual float descent(float a_height) const {
     tools::nostream out;
-    if(!m_face) {
-      const_cast<text_freetype*>(this)->load_face(out);
-    }
+    if(!m_face) self().load_face(out);
     if(!m_face) return 0;
     float value;
-    descent(out,m_face,a_height,value);
+    if(!descent(out,self().m_face,a_height,value)) return 0;
+#ifdef TOOLS_DONE_FACE
+    ::FT_Done_Face(m_face);
+    self().m_face = 0;
+#endif    
     return value;
   }
 
   virtual float y_advance(float a_height) const {
     tools::nostream out;
-    if(!m_face) {
-      const_cast<text_freetype*>(this)->load_face(out);
-    }
+    if(!m_face) self().load_face(out);
     if(!m_face) return 0;
     float value;
-    y_advance(out,m_face,a_height,value);
+    if(!y_advance(out,self().m_face,a_height,value)) return 0;
+#ifdef TOOLS_DONE_FACE
+    ::FT_Done_Face(m_face);
+    self().m_face = 0;
+#endif    
     return value;
   }
 
@@ -444,31 +490,30 @@ public: //tools::sg::base_text :
                           float& a_mn_x,float& a_mn_y,float& a_mn_z,
                           float& a_mx_x,float& a_mx_y,float& a_mx_z) const {
     tools::nostream out;
-    if(!m_face) {
-      const_cast<text_freetype*>(this)->load_face(out);
-    }
+    if(!m_face) self().load_face(out);
     if(!m_face) return;
     if(strings.values().size()) {
-      get_bounds(out,m_face,a_height,strings.values(),
-                 a_mn_x,a_mn_y,a_mn_z,
-                 a_mx_x,a_mx_y,a_mx_z);
+      if(!get_bounds(out,self().m_face,a_height,strings.values(),a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z)) return;
     } else if(unitext.values().size()) {
-      get_bounds(out,m_face,a_height,unitext.values(),
-                 a_mn_x,a_mn_y,a_mn_z,
-                 a_mx_x,a_mx_y,a_mx_z);
+      if(!get_bounds(out,self().m_face,a_height,unitext.values(),a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z)) return;
     }    
+#ifdef TOOLS_DONE_FACE
+    ::FT_Done_Face(m_face);
+    self().m_face = 0;
+#endif    
   }
 
-  virtual bool truncate(const std::string& a_string,
-                        float a_height,float a_cut_width,
-                        std::string& a_out) const {
+  virtual bool truncate(const std::string& a_string,float a_height,float a_cut_width,std::string& a_out) const {
     a_out.clear();
     tools::nostream out;
-    if(!m_face) {
-      const_cast<text_freetype*>(this)->load_face(out);
-    }
+    if(!m_face) self().load_face(out);
     if(!m_face) return false;
-    return truncate(out,m_face,a_height,a_string,a_cut_width,a_out);
+    if(!truncate(out,self().m_face,a_height,a_string,a_cut_width,a_out)) return false;
+#ifdef TOOLS_DONE_FACE
+    ::FT_Done_Face(m_face);
+    self().m_face = 0;
+#endif    
+    return true;
   }
 
   void dump_unitext(std::ostream& a_out) {
@@ -524,10 +569,38 @@ protected:
     faces_and_lines
   };
 
+  bool color_touched(const tools::sg::state& a_state) {
+    if(modeling!=tools::sg::font_pixmap) return false;
+    if(a_state.m_color==m_front_color) return false;
+    m_front_color = a_state.m_color;
+    return true;
+  }
+  
+  bool char_height_touched(const tools::sg::state& a_state) {
+    if(modeling!=tools::sg::font_pixmap) return false;
+
+    float ymn,ymx;
+   {float x,y,z,w;
+    x = 0;y = -height.value()*0.5f;z = 0;
+    if(!a_state.project_point(x,y,z,w)) return false;
+    ymn = y;
+    x = 0;y = height.value()*0.5f;z = 0;
+    if(!a_state.project_point(x,y,z,w)) return false;
+    ymx = y;}
+    float screen_height = ymx-ymn;
+    if(a_state.m_wh) screen_height *= a_state.m_wh; else screen_height = 100;
+
+    //::printf("debug : char_height_touched %g\n",screen_height);
+    
+    if(screen_height==m_char_height) return false;
+    m_char_height = screen_height;
+    return true;
+  }
+
   void update_sg(std::ostream& a_out,bool a_load_font) {
     if(a_load_font) load_face(a_out);
 
-    clean_gstos(); //must reset for all gl_manager.
+    clean_gstos(); //must reset for all render_manager.
 
     if(!m_face) return;
 
@@ -549,16 +622,24 @@ protected:
     m_pos = 0;
     m_lines.clear();
     m_triangles.clear();
-
+    m_bitmaps.clear();
+    m_tqs.clear();
+    
     m_wndg = wndg_not_done;
 
-    update_what _what = lines;
-    //if(modeling==tools::sg::font_filled) _what = faces_and_lines;
-    if(modeling==tools::sg::font_filled) _what = faces;
-
-    if((_what==faces)||(_what==faces_and_lines)) outline_triangles_2_gl(a_out);
-
-    if((_what==lines)||(_what==faces_and_lines)) outline_lines_2_gl(a_out);
+    if(modeling==tools::sg::font_pixmap) {    
+      if(m_char_height<=0) return;
+      tools::sg::blend* blend = new tools::sg::blend;
+      blend->on = true; //to handle background transparency.
+      m_bitmaps.add(blend);
+      if(!bitmap_2_gl(a_out)) {m_bitmaps.clear();m_tqs.clear();return;}
+    } else {
+      update_what _what = lines;
+      //if(modeling==tools::sg::font_filled) _what = faces_and_lines;
+      if(modeling==tools::sg::font_filled) _what = faces;
+      if((_what==faces)||(_what==faces_and_lines)) outline_triangles_2_gl(a_out);
+      if((_what==lines)||(_what==faces_and_lines)) outline_lines_2_gl(a_out);
+    }
 
     if(vjust==tools::sg::bottom) {
     } else if(vjust==tools::sg::middle) {
@@ -581,6 +662,11 @@ protected:
         size_t npt = item.second.second;
         float* data = tools::vec_data<float>(m_xys)+pos+1;
         for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F * szy;
+      }}
+      
+     {tools_vforcit(tools::sg::tex_quadrilateral*,m_tqs,itqs) {
+        std::vector<tools::vec3f>& vcs = (*itqs)->corners.values();
+        for(size_t i=0;i<4;i++) vcs[i][1] -= 0.5f * szy;
       }}
 
     } else if(vjust==tools::sg::top) {
@@ -605,12 +691,23 @@ protected:
         for(size_t i=0;i<npt;i++,data+=2) *data -= szy;
       }}
 
+     {tools_vforcit(tools::sg::tex_quadrilateral*,m_tqs,itqs) {
+        std::vector<tools::vec3f>& vcs = (*itqs)->corners.values();
+        for(size_t i=0;i<4;i++) vcs[i][1] -= szy;
+      }}
+
     }
 
+    m_tqs.clear();
+    
+#ifdef TOOLS_DONE_FACE
+    ::FT_Done_Face(m_face);
+    m_face = 0;
+#endif    
   }
 
   void outline_lines_2_gl(std::ostream& a_out) {
-    if(!set_char_size(a_out,m_face,height,m_scale)) return;
+    if(!set_char_size(a_out,m_face,height.value(),m_scale)) return;
     FT_Pos face_height = m_face->size->metrics.height; //FT_Pos (long)
 
     m_tobj = 0; //IMPORTANT.
@@ -766,18 +863,19 @@ protected:
   /// outline triangles //////////////////////////////////
   ////////////////////////////////////////////////////////
   void outline_triangles_2_gl(std::ostream& a_out) {
-    if(!set_char_size(a_out,m_face,height,m_scale)) return;
+    if(!set_char_size(a_out,m_face,height.value(),m_scale)) return;
     FT_Pos face_height = m_face->size->metrics.height; //FT_Pos (long)
 
     m_tobj = gluNewTess();
 
-    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_BEGIN_DATA,  (Func)begin_cbk);
-    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_END_DATA,    (Func)end_cbk);
-    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_VERTEX_DATA, (Func)vertex_cbk);
-    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combine_cbk);
-    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)error_cbk);
-
-    // NOTE : the gluTessCallback_<enum>() functions are tools/glutess specific.
+#ifdef TOOLS_USE_NATIVE_GLUTESS
+    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_BEGIN_DATA,  (Func)begin_cbk);
+    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_END_DATA,    (Func)end_cbk);
+    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_VERTEX_DATA, (Func)vertex_cbk);
+    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combine_cbk);
+    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)error_cbk);
+#else
+    // NOTE : the gluTessCallback_<enum>() functions are inlib/glutess specific.
     //        They had been introduced to avoid g++-8.1.0 warnings :
     //          warnings : cast between incompatible function types.
     ::gluTessCallback_GLU_TESS_BEGIN_DATA   (m_tobj,begin_cbk);
@@ -785,6 +883,7 @@ protected:
     ::gluTessCallback_GLU_TESS_VERTEX_DATA  (m_tobj,vertex_cbk);
     ::gluTessCallback_GLU_TESS_COMBINE_DATA (m_tobj,combine_cbk);
     ::gluTessCallback_GLU_TESS_ERROR_DATA   (m_tobj,error_cbk);
+#endif
 
     ::gluTessProperty(m_tobj,(GLUenum)GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
 
@@ -957,6 +1056,89 @@ protected:
     return true;
   }
 
+  ////////////////////////////////////////////////////////
+  /// bitmap /////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  bool bitmap_2_gl(std::ostream& a_out) {
+  //if(!set_char_size(a_out,m_face,height.value(),m_scale)) return;
+    //::printf("debug : xxxxx %g\n",m_char_height);
+    FT_F26Dot6 wchar = (FT_F26Dot6)(m_char_height*64);
+    FT_F26Dot6 hchar = (FT_F26Dot6)(m_char_height*64);
+    FT_UInt hres = 72;
+    FT_UInt vres = 72;
+    FT_Error error = ::FT_Set_Char_Size(m_face,wchar,hchar,hres,vres);
+    if(error) {
+      a_out << "tools::sg::text_freetype::bitmap_2_gl :"
+            << " FT_Set_Char_Size : error : " << serror(error) << "."
+            << std::endl;
+      ::FT_Done_Face(m_face);
+      m_face = 0;
+      return false;
+    }
+    m_scale = height.value()/float(wchar);
+
+    FT_Pos face_height = m_face->size->metrics.height; //FT_Pos (long)
+    //::printf("debug : face_height %lu\n",face_height);
+    if(strings.values().size()) {
+      float yline = 0;
+      tools_vforcit(std::string,strings.values(),vit) {
+        const std::string& line = *vit;
+        //a_out << line << std::endl;
+        m_trans_x = 0;
+        m_trans_y = yline;
+        size_t ibeg = m_tqs.size(); //for hjust.
+        tools_sforcit(line,it) {
+          if(!char_2_bitmap(a_out,*it + m_encoding_offset)) return false;
+        }  
+        yline += -float(face_height)*m_scale; //height>0
+	
+       {float sx = m_trans_x;
+        if(hjust==tools::sg::center) {
+          size_t num = m_tqs.size();
+          for(size_t index=ibeg;index<num;index++) {
+            std::vector<tools::vec3f>& vcs = m_tqs[index]->corners.values();
+            for(size_t i=0;i<4;i++) vcs[i][0] -= sx*0.5f;
+          } 
+        } else if(hjust==tools::sg::right) {
+          size_t num = m_tqs.size();
+          for(size_t index=ibeg;index<num;index++) {
+            std::vector<tools::vec3f>& vcs = m_tqs[index]->corners.values();
+            for(size_t i=0;i<4;i++) vcs[i][0] -= sx;
+          } 
+        }}
+      }
+    } else if(unitext.values().size()) {
+      float yline = 0;
+      tools_vforcit(uniline,unitext.values(),vit) {
+        const uniline& line = *vit;
+        //a_out << line << std::endl;
+        m_trans_x = 0;
+        m_trans_y = yline;
+        size_t ibeg = m_tqs.size(); //for hjust.
+        tools_vforcit(unichar,line,it) {
+          if(!char_2_bitmap(a_out,*it)) return false;
+        }
+        yline += -float(face_height)*m_scale; //height>0
+
+       {float sx = m_trans_x;
+        if(hjust==tools::sg::center) {
+          size_t num = m_tqs.size();
+          for(size_t index=ibeg;index<num;index++) {
+            std::vector<tools::vec3f>& vcs = m_tqs[index]->corners.values();
+            for(size_t i=0;i<4;i++) vcs[i][0] -= sx*0.5f;
+          } 
+        } else if(hjust==tools::sg::right) {
+          size_t num = m_tqs.size();
+          for(size_t index=ibeg;index<num;index++) {
+            std::vector<tools::vec3f>& vcs = m_tqs[index]->corners.values();
+            for(size_t i=0;i<4;i++) vcs[i][0] -= sx;
+          } 
+        }}	
+      }
+    }
+    return true;
+  }
+
   bool char_2_bitmap(std::ostream& a_out,unsigned int a_unichar) {
     //if(m_verbose) {
     //  a_out << "tools::sg::text_freetype::char_2_bitmap :"
@@ -1022,13 +1204,13 @@ protected:
     //    short           num_grays;
     //    char            pixel_mode;
     //    char            palette_mode;
-    //   void*           palette;
+    //   void*            palette;
     //} FT_Bitmap;
 
     FT_BitmapGlyph bitmap = (FT_BitmapGlyph)glyph;
 
-    //::printf("debug : pixmap : %c : r %d  w %d p %d : grays %d\n",
-    //    aChar,bitmap->bitmap.rows,bitmap->bitmap.width,bitmap->bitmap.pitch,bitmap->bitmap.num_grays);
+    //::printf("debug : unichar %u : r %d  w %d pitch %d : grays %d\n",
+    //    a_unichar,bitmap->bitmap.rows,bitmap->bitmap.width,bitmap->bitmap.pitch,bitmap->bitmap.num_grays);
 
     if( (bitmap->bitmap.pixel_mode!=ft_pixel_mode_mono) &&
         (bitmap->bitmap.pixel_mode!=ft_pixel_mode_grays) ){
@@ -1055,99 +1237,141 @@ protected:
       return false;
     } 
 
-/*
-    typedef struct {
-      int rows;
-      int cols;
-      int width;
-      void* buffer;
-      int size;
-      int grays;
-    } SbTTF_Raster_Map;
+    unsigned int img_w = 0;
+    unsigned int img_h = 0;
+    unsigned int img_bpp = 4;
+    size_t img_sz = 0;
 
     if(bitmap->bitmap.pixel_mode==ft_pixel_mode_mono) {
-      a_raster.rows = bitmap->bitmap.rows;
-      a_raster.width = bitmap->bitmap.width;
+      a_out << "tools::sg::text_freetype::char_2_bitmap : mode_mono : not yet handled." << std::endl;
+      
+      //img_grays = 1;
+      img_h = bitmap->bitmap.rows;
       //WARNING : bitmap->bitmap.pitch != int((bitmap->bitmap.width+7)/8) !!!
       // OpenGL wants the below for cols.
-      a_raster.cols = (a_raster.width+7)/8;
-      a_raster.size = a_raster.rows * a_raster.cols;
-      a_raster.grays = 1;
+      img_w = (bitmap->bitmap.width+7)/8;
+      img_sz = img_w * img_h;
+
+      ::FT_Done_Glyph(glyph);
+      ::FT_Done_Face(m_face);
+      m_face = 0;
+      return false;
+
     } else { //ft_pixel_mode_grays
-
-      if(bitmap->bitmap.width!=bitmap->bitmap.pitch) {
-        SoDebugError::post("SbTextTTF2::getCharacter",
-          "bitmap pitch (%d) != width (%d) for character '%c'",
-          aChar,bitmap->bitmap.pitch,bitmap->bitmap.width);
-        FT_Done_Glyph(glyph);
-        return FALSE;
+      if(int(bitmap->bitmap.width)!=bitmap->bitmap.pitch) {
+        a_out << "tools::sg::text_freetype::char_2_bitmap :"
+              << " for font " << tools::sout(font.value())
+              << " and for character " << a_unichar
+              << "bitmap pitch (" << bitmap->bitmap.pitch << ") != width (" << bitmap->bitmap.width << ")."
+              << std::endl;
+        ::FT_Done_Glyph(glyph);
+        ::FT_Done_Face(m_face);
+        m_face = 0;
+        return false;
       } 
-
-      a_raster.rows = bitmap->bitmap.rows;
-      a_raster.width = bitmap->bitmap.width;
-      a_raster.cols = a_raster.width;
-      a_raster.size = a_raster.rows * a_raster.cols;
-      a_raster.grays = bitmap->bitmap.num_grays;
+      img_w = bitmap->bitmap.width;
+      img_h = bitmap->bitmap.rows;
+      img_sz = img_w * img_h * img_bpp;
+      //img_grays = bitmap->bitmap.num_grays;
     }
 
-    if(a_raster.size<=0) {
+    if(img_sz<=0) {
       // This may happen (for example for the space character).
-      a_raster.buffer = 0;
     } else {
-      a_raster.buffer = new char[a_raster.size];
-      if(!a_raster.buffer) {
-        SoDebugError::post("SbTextTTF2::getCharacter",
-          "can't alloc bitmap buffer for character '%c'",aChar);
-        FT_Done_Glyph(glyph);
-        return FALSE;
+      tools::byte* img_buffer = new tools::byte[img_sz];
+      if(!img_buffer) {
+        a_out << "tools::sg::text_freetype::char_2_bitmap :"
+              << " for font " << tools::sout(font.value())
+              << " and for character " << a_unichar
+              << ", can't alloc bitmap buffer for character."
+              << std::endl;
+        ::FT_Done_Glyph(glyph);
+        ::FT_Done_Face(m_face);
+        m_face = 0;
+        return false;
       }  
       // The bitmap is upside down for OpenGL.
-      for(int row=0;row<a_raster.rows;++row) {
-        unsigned char* from = (unsigned char*)bitmap->bitmap.buffer + 
-          (bitmap->bitmap.rows-row-1)*bitmap->bitmap.pitch;
-        unsigned char* to = 
-          (unsigned char*)a_raster.buffer + row * a_raster.cols;
-        for( int col=0;col<a_raster.cols;++col) to[col] = from[col];
-      }
-    }
-
-    FT_BBox bbox;
-    FT_Glyph_Get_CBox(glyph,ft_glyph_bbox_pixels,&bbox);
-
-    aBox.xMin = int(bbox.xMin);
-    aBox.yMin = int(bbox.yMin);
-    aBox.xMax = int(bbox.xMax);
-    aBox.yMax = int(bbox.yMax);
-    aAdvance = int(face->glyph->advance.x/64);
-  */
-
-    ::FT_Done_Glyph(glyph);
-
-    /*
-    if(bitmap->bitmap.pixel_mode==ft_pixel_mode_mono) {
-      if((aChar=='T')||(aChar=='a')||(aChar=='o')||(aChar=='L')) {
-        printf("bitmap for '%c' : w = %d h = %d cols %d : ptsize = %d\n",
-          aChar,a_raster.width,a_raster.rows,a_raster.cols,getPointSize());
-        for( int row = (a_raster.rows-1); row >=0; --row ) {
-          unsigned char* bline = (unsigned char*)a_raster.buffer + row * a_raster.cols;
-          int icol = 0;
-          int ibit = 0;
-          unsigned char byte = (unsigned char)bline[icol];
-          icol++;
-          for( int i= 0; i < a_raster.width; ++i ) {
-            unsigned char v =  (byte & (1<<(7-ibit)));
-            printf("%c",(v?'x':' '));
-            ibit++;
-            if(ibit==8) {
-              ibit = 0;
-              byte = (unsigned char)bline[icol];
-              icol++;
-            }
-          }
-          printf("\n");
+      float a,b;
+      tools::colorf back_color = tools::colorf_white();
+      back_color.set_a(0); //transparent background.
+      typedef unsigned char uchar;
+      for(unsigned int row=0;row<img_h;++row) {
+        unsigned char* from = (unsigned char*)bitmap->bitmap.buffer + (bitmap->bitmap.rows-row-1)*bitmap->bitmap.pitch;
+        unsigned char* to = img_buffer + row * img_w * img_bpp;
+        for(unsigned int col=0;col<img_w;++col,++from) {
+          a = float(*from)/255.0f;
+          b = float(255-*from)/255.0f;
+          *to = uchar(m_front_color.ruchar()*a+back_color.ruchar()*b);to++;
+          *to = uchar(m_front_color.guchar()*a+back_color.guchar()*b);to++;
+          *to = uchar(m_front_color.buchar()*a+back_color.buchar()*b);to++;
+          *to = uchar(m_front_color.auchar()*a+back_color.auchar()*b);to++;
         }
       }
-    }*/
+
+      FT_BBox _bbox;
+      FT_Glyph_Get_CBox(glyph,ft_glyph_bbox_pixels,&_bbox);
+      //float _width  = float(_bbox.xMax)-float(_bbox.xMin);
+      //float _height = float(_bbox.yMax)-float(_bbox.yMin);
+      //aAdvance = int(face->glyph->advance.x/64);
+      
+      std::vector<tools::vec3f> vcs;
+      //::printf("debug : box : %d %d %d %d\n",_bbox.xMin,_bbox.xMax,_bbox.yMin,_bbox.yMax);
+      float scale = height.value()/m_char_height;
+      float x_min = float(_bbox.xMin)*scale+m_trans_x;
+      float x_max = float(_bbox.xMax)*scale+m_trans_x;
+      float y_min = float(_bbox.yMin)*scale+m_trans_y;
+      float y_max = float(_bbox.yMax)*scale+m_trans_y;
+      //::printf("debug : scale %g, trans %g %g\n",m_scale,m_trans_x,m_trans_y);
+      //::printf("debug : corners %g %g %g %g\n",x_min,x_max,y_min,y_max);
+      
+      vcs.push_back(tools::vec3f(x_min,y_min,0));
+      vcs.push_back(tools::vec3f(x_max,y_min,0));
+      vcs.push_back(tools::vec3f(x_max,y_max,0));
+      vcs.push_back(tools::vec3f(x_min,y_max,0));
+      
+      tools::sg::tex_quadrilateral* _node = new tools::sg::tex_quadrilateral;
+      _node->img.value().set(img_w,img_h,img_bpp,img_buffer,true);
+      _node->expand = true;
+      _node->back_color = tools::colorf_white(); //used as back pixel when expanding.
+      _node->back_color.value().set_a(0);        //transparent background.
+      //_node->nearest = false;                    //to have antialiasing on texture.
+      _node->corners.set_values(vcs);
+      
+      m_bitmaps.add(_node);
+      m_tqs.push_back(_node);
+  
+      /*
+      if(bitmap->bitmap.pixel_mode==ft_pixel_mode_mono) {
+        if((aChar=='T')||(aChar=='a')||(aChar=='o')||(aChar=='L')) {
+          printf("bitmap for '%c' : w = %d h = %d cols %d : ptsize = %d\n",
+            aChar,a_raster.width,a_raster.rows,a_raster.cols,getPointSize());
+          for( int row = (a_raster.rows-1); row >=0; --row ) {
+            unsigned char* bline = (unsigned char*)a_raster.buffer + row * a_raster.cols;
+            int icol = 0;
+            int ibit = 0;
+            unsigned char byte = (unsigned char)bline[icol];
+            icol++;
+            for( int i= 0; i < a_raster.width; ++i ) {
+              unsigned char v =  (byte & (1<<(7-ibit)));
+              printf("%c",(v?'x':' '));
+              ibit++;
+              if(ibit==8) {
+                ibit = 0;
+                byte = (unsigned char)bline[icol];
+                icol++;
+              }
+            }
+            printf("\n");
+          }
+        }
+      }*/
+
+    }
+    
+    m_trans_x += float(m_face->glyph->advance.x)*m_scale;
+    m_trans_y += float(m_face->glyph->advance.y)*m_scale;
+
+    ::FT_Done_Glyph(glyph);
 
     return true;
   }
@@ -1357,8 +1581,7 @@ protected:
 
     return 0;
   }
-  void set_g(float& a_gx,float& a_gy,
-             float a_x,float a_y) const {
+  void set_g(float& a_gx,float& a_gy,float a_x,float a_y) const {
     a_gx = a_x*m_scale+m_trans_x;
     a_gy = a_y*m_scale+m_trans_y;
   }
@@ -1464,15 +1687,23 @@ protected:
 
 public:
 #ifndef SWIG
-  static std::string serror(int a_FT_Error) {    
-    static std::map<int,std::string> errs;
-    if(errs.empty()) {
+  class serrors : public std::map<int,std::string> {
+    typedef std::map<int,std::string> parent;
+  public:
+    serrors(){
 #undef __FTERRORS_H__                                           
 #define FT_ERROR_START_LIST
 #define FT_ERROR_END_LIST
-#define FT_ERRORDEF( e, v, s )  errs[e] = s;
+#define FT_ERRORDEF( e, v, s )  parent::operator[](e) = s;
 #include FT_ERRORS_H
     }
+    virtual ~serrors() {}
+  protected:
+    serrors(const serrors& a_from):parent(a_from) {}
+    serrors& operator=(const serrors&){return *this;}
+  };
+  static std::string serror(int a_FT_Error) {    
+    static const serrors errs;
     std::map<int,std::string>::const_iterator it = errs.find(a_FT_Error);
     if(it!=errs.end()) return (*it).second;
     return "unknown";
@@ -1596,8 +1827,7 @@ protected:
     //return FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
   }
 
-  static bool set_char_size(std::ostream& a_out,FT_Face& a_face,
-                            float a_height,float& a_scale) {
+  static bool set_char_size(std::ostream& a_out,FT_Face& a_face,float a_height,float& a_scale) {
 
     // arrange char_width, char_height and m_scale so
     // that text height be 1 in world coordinates.
@@ -1606,19 +1836,10 @@ protected:
     // In what unit do we receive points in callbacks ?
     // Knowing char_height and vres can we know height of points ?
 
-/*
-*/
     FT_F26Dot6 wchar = 1000*64;
     FT_F26Dot6 hchar = 1000*64;
     FT_UInt hres = 72;
     FT_UInt vres = 72;
-
-/*
-    FT_F26Dot6 wchar = 1000;
-    FT_F26Dot6 hchar = 1000;
-    FT_UInt hres = 100;
-    FT_UInt vres = 100;
-*/
 
     FT_Error error = ::FT_Set_Char_Size(a_face,wchar,hchar,hres,vres);
     if(error) {
@@ -1634,8 +1855,7 @@ protected:
     return true;
   }
 
-  static bool ascent(std::ostream& a_out,FT_Face a_face,float a_height,
-                     float& a_value) {
+  static bool ascent(std::ostream& a_out,FT_Face& a_face,float a_height,float& a_value) {
     float scale;
     if(!set_char_size(a_out,a_face,a_height,scale)) {a_value = 0;return false;}
     FT_Pos ascent = a_face->size->metrics.ascender; //FT_Pos (long)
@@ -1643,8 +1863,7 @@ protected:
     return true;
   }
 
-  static bool descent(std::ostream& a_out,FT_Face a_face,float a_height,
-                      float& a_value) {
+  static bool descent(std::ostream& a_out,FT_Face& a_face,float a_height,float& a_value) {
     float scale;
     if(!set_char_size(a_out,a_face,a_height,scale)) {a_value = 0;return false;}
     FT_Pos descent = a_face->size->metrics.descender; //FT_Pos (long) //<0
@@ -1652,8 +1871,7 @@ protected:
     return true;
   }
 
-  static bool y_advance(std::ostream& a_out,FT_Face a_face,float a_height,
-                        float& a_adv) {
+  static bool y_advance(std::ostream& a_out,FT_Face& a_face,float a_height,float& a_adv) {
     float scale;
     if(!set_char_size(a_out,a_face,a_height,scale)) {a_adv = 0;return false;}
     FT_Pos face_height = a_face->size->metrics.height; //FT_Pos (long)
@@ -1661,9 +1879,8 @@ protected:
     return true;
   }
 
-  static bool truncate(std::ostream& a_out,FT_Face a_face,float a_height,
-                       const std::string& a_string,
-                       float a_cut_width,std::string& a_sout) {
+  static bool truncate(std::ostream& a_out,FT_Face& a_face,float a_height,
+                        const std::string& a_string,float a_cut_width,std::string& a_sout) {
     a_sout.clear();
 
     float scale;
@@ -1685,6 +1902,8 @@ protected:
               << std::endl;
 #endif
         a_sout.clear();
+        ::FT_Done_Face(a_face);
+        a_face = 0;
         return false;
       }
   
@@ -1697,9 +1916,11 @@ protected:
               << std::endl;
 #endif
         a_sout.clear();
+        ::FT_Done_Face(a_face);
+        a_face = 0;
         return false;
       }}
-  
+
       float cwidth = float(a_face->glyph->metrics.width)*scale;
       float advance = float(a_face->glyph->advance.x)*scale;
       if((width+cwidth)>=a_cut_width) return true;
@@ -1710,10 +1931,10 @@ protected:
     return true;
   }
 
-  static bool get_bounds(std::ostream& a_out,FT_Face a_face,float a_height,
-                                const std::vector<std::string>& a_text,
-                                float& a_mn_x,float& a_mn_y,float& a_mn_z,
-                                float& a_mx_x,float& a_mx_y,float& a_mx_z){
+  static bool get_bounds(std::ostream& a_out,FT_Face& a_face,float a_height,
+                         const std::vector<std::string>& a_text,
+                         float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                         float& a_mx_x,float& a_mx_y,float& a_mx_z){
     tools::box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
 
     if(a_text.empty()) return true;
@@ -1735,11 +1956,15 @@ protected:
         FT_UInt glyph_index = ::FT_Get_Char_Index(a_face,charcode);
         //NOTE : if not found -> glyph_index = 0 which is the "missing glyph".
         if((FT_Long)glyph_index>=a_face->num_glyphs) {
+          ::FT_Done_Face(a_face);
+          a_face = 0;
           return false;
         }
     
        {FT_Error error = ::FT_Load_Glyph(a_face,glyph_index,load_flags());
         if(error) {
+          ::FT_Done_Face(a_face);
+          a_face = 0;
           return false;
         }}
     
@@ -1768,10 +1993,10 @@ protected:
     return true;
   }
 
-  static bool get_bounds(std::ostream& a_out,FT_Face a_face,float a_height,
-                                const std::vector<uniline>& a_text,
-                                float& a_mn_x,float& a_mn_y,float& a_mn_z,
-                                float& a_mx_x,float& a_mx_y,float& a_mx_z){
+  static bool get_bounds(std::ostream& a_out,FT_Face& a_face,float a_height,
+                         const std::vector<uniline>& a_text,
+                         float& a_mn_x,float& a_mn_y,float& a_mn_z,
+                         float& a_mx_x,float& a_mx_y,float& a_mx_z){
     tools::box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
 
     if(a_text.empty()) return true;
@@ -1791,11 +2016,15 @@ protected:
         FT_UInt glyph_index = ::FT_Get_Char_Index(a_face,charcode);
         //NOTE : if not found -> glyph_index = 0 which is the "missing glyph".
         if((FT_Long)glyph_index>=a_face->num_glyphs) {
+          ::FT_Done_Face(a_face);
+          a_face = 0;
           return false;
         }
     
        {FT_Error error = ::FT_Load_Glyph(a_face,glyph_index,load_flags());
         if(error) {
+          ::FT_Done_Face(a_face);
+          a_face = 0;
           return false;
         }}
     
@@ -1824,7 +2053,7 @@ protected:
     return true;
   }
 
-  static bool encoding_offset(FT_Face a_face,unsigned short& a_offset) {
+  static bool encoding_offset(FT_Face& a_face,unsigned short& a_offset) {
 
     // arialbd.ttf :
     //   num charmap 2
@@ -1869,6 +2098,8 @@ protected:
            (platform == 0 && encoding == 0 ) ) {
           FT_Error error = FT_Set_Charmap(a_face,charmap);
           if(error) {
+            ::FT_Done_Face(a_face);
+            a_face = 0;
             a_offset = 0;
             return false;
           }
@@ -1887,6 +2118,8 @@ protected:
     //a_out << "tools::sg::text_freetype::update_sg :"
     //      << " This font doesn't contain any Unicode mapping table."
     //      << std::endl;
+    ::FT_Done_Face(a_face);
+    a_face = 0;
     a_offset = 0;
     return false;
   }
@@ -1933,7 +2166,10 @@ protected:
   size_t m_gsto_lines_sz;
   size_t m_gsto_sz;
   wndg_type m_wndg;
-
+  tools::colorf m_front_color;
+  tools::sg::group m_bitmaps;
+  std::vector<tools::sg::tex_quadrilateral*> m_tqs;
+  float m_char_height;
 };
 
 }}

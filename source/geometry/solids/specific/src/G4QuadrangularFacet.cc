@@ -24,26 +24,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4QuadrangularFacet class implementation.
 //
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// CHANGE HISTORY
-// --------------
-//
-// 31 October 2004  P R Truscott, QinetiQ Ltd, UK - Created.
-//
-// 12 October 2012  M Gayer, CERN
-//                  New implementation reducing memory requirements by 50%,
-//                  and considerable CPU speedup together with the new
-//                  implementation of G4TessellatedSolid.
-//
+// 31 October 2004 P R Truscott, QinetiQ Ltd, UK - Created.
+// 12 October 2012 M Gayer, CERN
+//                 New implementation reducing memory requirements by 50%,
+//                 and considerable CPU speedup together with the new
+//                 implementation of G4TessellatedSolid.
 // 29 February 2016 E Tcherniaev, CERN
-//                  Added exhaustive tests to catch various problems with a
-//                  quadrangular facet: collinear vertices, non planar surface,
-//                  degenerate, concave or self intersecting quadrilateral.
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//                 Added exhaustive tests to catch various problems with a
+//                 quadrangular facet: collinear vertices, non planar surface,
+//                 degenerate, concave or self intersecting quadrilateral.
+// --------------------------------------------------------------------
 
 #include "G4QuadrangularFacet.hh"
 #include "geomdefs.hh"
@@ -53,19 +45,18 @@ using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// !!!THIS IS A FUDGE!!!  IT'S TWO ADJACENT G4TRIANGULARFACETS
-// --- NOT EFFICIENT BUT PRACTICAL.
+// Constructing two adjacent G4TriangularFacet
+// Not efficient, but practical...
 //
-G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector &vt0,
-                                          const G4ThreeVector &vt1,
-                                          const G4ThreeVector &vt2,
-                                          const G4ThreeVector &vt3,
+G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector& vt0,
+                                          const G4ThreeVector& vt1,
+                                          const G4ThreeVector& vt2,
+                                          const G4ThreeVector& vt3,
                                                 G4FacetVertexType vertexType)
+  : G4VFacet()
 {
   G4double delta   =  1.0 * kCarTolerance; // dimension tolerance
   G4double epsilon = 0.01 * kCarTolerance; // planarity tolerance
-
-  fRadius = 0.0;
 
   G4ThreeVector e1, e2, e3;
   SetVertex(0, vt0);
@@ -221,7 +212,7 @@ G4QuadrangularFacet::~G4QuadrangularFacet ()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet &rhs)
+G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet& rhs)
   : G4VFacet(rhs)
 {
   fFacet1 = rhs.fFacet1;
@@ -232,10 +223,9 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet &rhs)
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4QuadrangularFacet &
-G4QuadrangularFacet::operator=(const G4QuadrangularFacet &rhs)
+G4QuadrangularFacet::operator=(const G4QuadrangularFacet& rhs)
 {
-  if (this == &rhs)
-    return *this;
+  if (this == &rhs)  return *this;
 
   fFacet1 = rhs.fFacet1;
   fFacet2 = rhs.fFacet2;
@@ -246,7 +236,7 @@ G4QuadrangularFacet::operator=(const G4QuadrangularFacet &rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4VFacet *G4QuadrangularFacet::GetClone ()
+G4VFacet* G4QuadrangularFacet::GetClone ()
 {
   G4QuadrangularFacet *c = new G4QuadrangularFacet (GetVertex(0), GetVertex(1),
                                                     GetVertex(2), GetVertex(3),
@@ -256,7 +246,7 @@ G4VFacet *G4QuadrangularFacet::GetClone ()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4ThreeVector G4QuadrangularFacet::Distance (const G4ThreeVector &p)
+G4ThreeVector G4QuadrangularFacet::Distance (const G4ThreeVector& p)
 {
   G4ThreeVector v1 = fFacet1.Distance(p);
   G4ThreeVector v2 = fFacet2.Distance(p);
@@ -267,7 +257,7 @@ G4ThreeVector G4QuadrangularFacet::Distance (const G4ThreeVector &p)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p,
+G4double G4QuadrangularFacet::Distance (const G4ThreeVector& p,
                                               G4double)
 {  
   G4double dist = Distance(p).mag();
@@ -276,7 +266,7 @@ G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p, G4double,
+G4double G4QuadrangularFacet::Distance (const G4ThreeVector& p, G4double,
                                         const G4bool outgoing)
 {
   G4double dist;
@@ -307,12 +297,12 @@ G4double G4QuadrangularFacet::Extent (const G4ThreeVector axis)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector &p,
-                                       const G4ThreeVector &v,
+G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector& p,
+                                       const G4ThreeVector& v,
                                              G4bool outgoing,
-                                             G4double &distance,
-                                             G4double &distFromSurface,
-                                             G4ThreeVector &normal)
+                                             G4double& distance,
+                                             G4double& distFromSurface,
+                                             G4ThreeVector& normal)
 {
   G4bool intersect =
     fFacet1.Intersect(p,v,outgoing,distance,distFromSurface,normal);

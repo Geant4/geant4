@@ -133,7 +133,7 @@ class G4VSensitiveDetector
 
   public:
       inline G4int GetNumberOfCollections() const
-      { return collectionName.size(); }
+      { return G4int(collectionName.size()); }
       inline G4String GetCollectionName(G4int id) const
       { return collectionName[id]; }
       inline void SetVerboseLevel(G4int vl)

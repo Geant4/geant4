@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4SmartVoxelNode
+// G4SmartVoxelNode
 //
 // Class description:
 //
@@ -43,9 +41,8 @@
 // std::vector<G4int> fcontents
 //   - Vector of no.s of volumes inside the node.
 
-// History:
-// 18.04.01 G.Cosmo Migrated to STL vector
-// 12.07.95 P.Kent  Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
+// 12.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELNODE_HH
 #define G4SMARTVOXELNODE_HH
@@ -53,14 +50,14 @@
 #include "G4Types.hh"
 #include <vector>
 
-typedef std::vector<G4int> G4SliceVector;
+using G4SliceVector = std::vector<G4int>;
 
 class G4SmartVoxelNode
 {
   public:  // with description
 
-    G4SmartVoxelNode(G4int pSlice=0) : fminEquivalent(pSlice),
-                                       fmaxEquivalent(pSlice) {}
+    G4SmartVoxelNode(G4int pSlice = 0) : fminEquivalent(pSlice),
+                                         fmaxEquivalent(pSlice) {}
       // Constructor. Create an empty node with slice number pSlice.
       // This number is not stored, but used to provide defaults for the
       // minimum and maximum equivalent node numbers.
@@ -75,10 +72,10 @@ class G4SmartVoxelNode
     inline void Insert(G4int pVolumeNo);
       // Add the specified volume number to the contents.
 
-    inline G4int GetNoContained() const;
+    inline size_t GetNoContained() const;
       // Return the number of volumes inside the node.
 
-    inline G4int GetCapacity() const;
+    inline size_t GetCapacity() const;
       // Return the maximum capacity of the buffer.
 
     inline void Reserve(G4int noSlices);

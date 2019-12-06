@@ -14,7 +14,7 @@ examples/extended/optical/LXe and wls
 
  Define Random Number Engine and initial seed
 
-\section ExampleOpNovice_s2 G4VUserPhysicsList
+\section ExampleOpNovice_s2 G4OpticalPhysics
 
  - Define particles; including - *** G4OpticalPhoton     ***
  - Define processes; including 
@@ -24,7 +24,7 @@ examples/extended/optical/LXe and wls
    - *** G4OpRayleigh        ***
    - *** G4OpBoundaryProcess ***
 
- A messenger command allows to define interactivly the 
+ A messenger command allows to define interactively the 
  verbose level and the maximum number of Cerenkov photons per step
  (see for instance OpNovice.in)
 
@@ -41,7 +41,7 @@ examples/extended/optical/LXe and wls
 
  Use G4ParticleGun to shoot a charge particle into a Cerenkov radiator
  
- A messenger command allows to define interactivly the polarization of an
+ A messenger command allows to define interactively the polarization of an
  primary optical photon (see for instance optPhoton.mac)
      
 \section ExampleOpNovice_s5 G4UserRunAction
@@ -66,10 +66,6 @@ examples/extended/optical/LXe and wls
 \section ExampleOpNovice_s8 How to start
 
  - compile and link to generate an executable
-\verbatim
-        % cd OpNovice
-        % gmake
-\endverbatim
 
    This example handles the program arguments in a new way.
    It can be run with the following optional arguments:

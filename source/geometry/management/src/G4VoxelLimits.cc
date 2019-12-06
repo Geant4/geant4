@@ -23,16 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4VoxelLimits implementation
 //
-//
-// class G4VoxelLimits
-// 
-// Implementation
-//
-// History:
-//
-// 14.03.02 V. Grichine, cosmetics
-// 13.07.95 P.Kent Initial version
+// 13.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 
 #include "G4VoxelLimits.hh"
@@ -43,11 +36,7 @@
 //
 // Empty constructor and destructor
 //
-
 G4VoxelLimits::G4VoxelLimits()
- : fxAxisMin(-kInfinity),fxAxisMax(kInfinity),
-   fyAxisMin(-kInfinity),fyAxisMax(kInfinity),
-   fzAxisMin(-kInfinity),fzAxisMax(kInfinity)
 {
 }
 
@@ -60,7 +49,6 @@ G4VoxelLimits::~G4VoxelLimits()
 // Further restrict limits
 // No checks for illegal restrictions
 //
-
 void G4VoxelLimits::AddLimit( const EAxis pAxis, 
                               const G4double pMin,
                               const G4double pMax )
@@ -97,7 +85,6 @@ void G4VoxelLimits::AddLimit( const EAxis pAxis,
 // Use Cohen-Sutherland clipping in 3D
 // [Fundamentals of Interactive Computer Graphics,Foley & Van Dam]
 //
-
 G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
                                     G4ThreeVector& pEnd      ) const
 {
@@ -136,20 +123,7 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
     x2 = pEnd.x() ;
     y2 = pEnd.y() ;
     z2 = pEnd.z() ;
-    /*
-    if( std::abs(x1-x2) < kCarTolerance*kCarTolerance)
-    {
-      G4cout<<"x1 = "<<x1<<"\t"<<"x2 = "<<x2<<G4endl; 
-    }   
-    if( std::abs(y1-y2) < kCarTolerance*kCarTolerance)
-    {
-      G4cout<<"y1 = "<<y1<<"\t"<<"y2 = "<<y2<<G4endl; 
-    }   
-    if( std::abs(z1-z2) < kCarTolerance*kCarTolerance)
-    {
-      G4cout<<"z1 = "<<z1<<"\t"<<"z2 = "<<z2<<G4endl; 
-    } 
-    */  
+
     while ( sCode != eCode )  // Loop checking, 06.08.2015, G.Cosmo
     {
       // Copy vectors to work variables x1-z1,x2-z2
@@ -234,7 +208,6 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
           z2  = fzAxisMax;
         }
       }
-      //  G4endl; G4cout<<"x1 = "<<x1<<"\t"<<"x2 = "<<x2<<G4endl<<G4endl;
       pStart = G4ThreeVector(x1,y1,z1);
       pEnd   = G4ThreeVector(x2,y2,z2);
       sCode  = OutCode(pStart);
@@ -257,7 +230,6 @@ G4bool G4VoxelLimits::ClipToLimits( G4ThreeVector& pStart,
 //   4      pVec.z()<fzAxisMin && IsZLimited()
 //   5      pVec.z()>fzAxisMax && IsZLimited()
 //
-
 G4int G4VoxelLimits::OutCode( const G4ThreeVector& pVec ) const
 {
   G4int code = 0 ;                // The outcode

@@ -59,6 +59,3 @@
    aP->RegisterMe(theModel);
  }
 
-
- // 2011 by P. Kaitaniemi
-

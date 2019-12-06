@@ -51,12 +51,6 @@
 
 G4LENDBertiniGammaElectroNuclearBuilder::G4LENDBertiniGammaElectroNuclearBuilder(G4bool eNucl) : 
 G4BertiniElectroNuclearBuilder( eNucl )
-/*
-  thePhotoNuclearProcess(nullptr), theElectronNuclearProcess(nullptr), 
-  thePositronNuclearProcess(nullptr), theElectroReaction(nullptr), 
-  theGammaReaction(nullptr), theModel(nullptr), theCascade(nullptr), 
-  theStringModel(nullptr), theFragmentation(nullptr), theStringDecay(nullptr), 
-  wasActivated(false), eActivated(eNucl)*/
 {
 }
 
@@ -74,7 +68,7 @@ void G4LENDBertiniGammaElectroNuclearBuilder::Build()
 
    base::Build();
 
-   if ( getenv ("G4LENDDATA") == NULL ) { 
+   if ( std::getenv ("G4LENDDATA") == NULL ) { 
       G4String message = "\n Skipping activation of Low Energy Nuclear Data (LEND) model for gamma nuclear interactions.\n The LEND model needs data files and they are available from ftp://gdo-nuclear.ucllnl.org/GND_after2013/GND_v1.3.tar.gz.\n Please set the environment variable G4LENDDATA to point to the directory named v1.3 extracted from the archive file.\n"; 
       G4Exception( "G4LENDBertiniGammaElectroNuclearBuilder::Build()"
                  , "G4LENDBertiniGammaElectroNuclearBuilder001"

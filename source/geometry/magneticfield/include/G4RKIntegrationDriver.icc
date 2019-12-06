@@ -23,20 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RKIntegrationDriver inline implementation
 //
-//
-//
-// class G4RKIntegrationDriver
-//
-// Class description:
-//
-// Driver class which controls the integration error of a 
-// Runge-Kutta stepper 
-
-// History:
-// - Created. D.Sorokin
+// Created: D.Sorokin, 2017
 // --------------------------------------------------------------------
-
 
 #include "globals.hh"
 
@@ -49,6 +39,7 @@ G4RKIntegrationDriver<T>::G4RKIntegrationDriver(T* pStepper)
 }
 
 // Step failed; compute the size of retrial Step.
+//
 template <class T> G4double G4RKIntegrationDriver<T>::
 ShrinkStepSize(G4double h, G4double error) const
 {
@@ -70,6 +61,7 @@ ShrinkStepSize2(G4double h, G4double error2) const
 }
 
 // Compute size of next Step
+//
 template<class T> G4double G4RKIntegrationDriver<T>::
 GrowStepSize(G4double h, G4double error) const
 {

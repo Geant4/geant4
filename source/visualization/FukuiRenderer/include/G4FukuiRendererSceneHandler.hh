@@ -87,16 +87,19 @@ public:
   void AddSolid ( const G4Polycone& polycone) {
     G4VSceneHandler::AddSolid (polycone);
   }
-  void AddSolid ( const G4Polyhedra& polyhedra) {
+  void AddSolid ( const G4Polyhedra& polyhedra ) {
     G4VSceneHandler::AddSolid (polyhedra);
   }
   void AddSolid ( const G4Orb& orb ) {
     G4VSceneHandler::AddSolid (orb);
   }
-  void AddSolid ( const G4Ellipsoid& ellipsoid) {
+  void AddSolid ( const G4Ellipsoid& ellipsoid ) {
     G4VSceneHandler::AddSolid (ellipsoid);
   }
-  void AddSolid ( const G4VSolid& solid  );
+  void AddSolid ( const G4TessellatedSolid& tess ) {
+    G4VSceneHandler::AddSolid (tess);
+  }
+  void AddSolid ( const G4VSolid& solid );
   void AddCompound ( const G4VTrajectory& traj) {
     G4VSceneHandler::AddCompound(traj);
   }

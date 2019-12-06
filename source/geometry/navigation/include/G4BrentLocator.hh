@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Class G4BrentLocator
 //
 // class description:
@@ -70,14 +68,9 @@ class G4BrentLocator : public G4VIntersectionLocator
 
   private:
 
-    static const G4int max_depth=4;
+    static const G4int max_depth = 4;
     G4FieldTrack* ptrInterMedFT[max_depth+1];
       // Used to store intermediate tracks values in case of too slow progress
-
-    G4int maxNumberOfStepsForIntersection;
-    G4int maxNumberOfCallsToReIntegration;
-    G4int maxNumberOfCallsToReIntegration_depth;
-      //  Counters for Statistics about Location and ReIntegrations
 };
 
 #endif

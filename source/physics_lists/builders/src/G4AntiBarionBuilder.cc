@@ -96,3 +96,4 @@ void G4AntiBarionBuilder::RegisterMe(G4PhysicsBuilderInterface* aB ) {
   }
 
 }
+

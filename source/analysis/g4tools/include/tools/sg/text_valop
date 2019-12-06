@@ -20,21 +20,26 @@ public:
 public:
   sf_string encoding;
   sf_string font;
+  sf_enum<sg::font_modeling> font_modeling;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::text_valop)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(encoding)
-      TOOLS_ADD_FIELD_DESC(font)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),3, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(encoding),
+      TOOLS_ARG_FIELD_DESC(font),
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(font_modeling,3)
+        TOOLS_ARG_ENUM(font_outline),
+        TOOLS_ARG_ENUM(font_filled),
+        TOOLS_ARG_ENUM(font_pixmap)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END
+    );
     return s_v;
   }
 private:
   void add_fields(){
     add_field(&encoding);
     add_field(&font);
+    add_field(&font_modeling);
   }
 public:
   virtual void render(render_action& a_action) {
@@ -74,7 +79,8 @@ public:
   text_valop(const base_freetype& a_ttf)
   :parent()
   ,encoding(encoding_none())
-  ,font()
+  ,font(font_hershey())
+  ,font_modeling(font_filled)
   ,m_ttf(a_ttf)
   {
     add_fields();
@@ -85,6 +91,7 @@ public:
   :parent(a_from)
   ,encoding(a_from.encoding)
   ,font(a_from.font)
+  ,font_modeling(a_from.font_modeling)
   ,m_ttf(a_from.m_ttf)
   {
     add_fields();
@@ -93,6 +100,7 @@ public:
     parent::operator=(a_from);
     encoding = a_from.encoding;
     font = a_from.font;
+    font_modeling = a_from.font_modeling;
     return *this;
   }
 public: //sg::base_text :

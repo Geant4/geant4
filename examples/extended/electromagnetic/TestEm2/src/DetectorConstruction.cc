@@ -26,8 +26,6 @@
 /// \file electromagnetic/TestEm2/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -214,4 +212,5 @@ void DetectorConstruction::ConstructSDandField()
     fFieldMessenger.Put( msg );
   }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

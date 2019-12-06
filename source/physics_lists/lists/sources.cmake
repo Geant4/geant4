@@ -106,37 +106,25 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_lists
     HEADERS
 	FTF_BIC.hh
-	FTF_BIC.icc
 	FTFP_BERT.hh
 	FTFP_BERT_HP.hh
-	FTFP_BERT_HP.icc
-	FTFP_BERT.icc
 	FTFP_BERT_TRV.hh
-	FTFP_BERT_TRV.icc
 	FTFP_BERT_ATL.hh
-	FTFP_BERT_ATL.icc
 	FTFQGSP_BERT.hh
-	FTFQGSP_BERT.icc
 	G4GenericPhysicsList.hh
 	G4GenericPhysicsList.icc
         G4PhysListFactory.hh
         G4PhysListFactoryMessenger.hh
         LBE.hh
-	LBE.icc
 	NuBeam.hh
-	NuBeam.icc
 	QBBC.hh
 	QGS_BIC.hh
-	QGS_BIC.icc
 	QGSP_BERT.hh
 	QGSP_BERT_HP.hh
-	QGSP_BERT_HP.icc
-	QGSP_BERT.icc
 	QGSP_BIC.hh
 	QGSP_BIC_HP.hh
         QGSP_BIC_AllHP.hh
 	QGSP_FTFP_BERT.hh
-	QGSP_FTFP_BERT.icc
         INCLXXPhysicsListHelper.hh
         INCLXXPhysicsListHelper.icc
         QGSP_INCLXX.hh
@@ -150,15 +138,27 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4PhysListFactoryAlt.hh
         G4RegisterPhysLists.icc
     SOURCES
+	FTF_BIC.cc
+	FTFP_BERT_ATL.cc
+	FTFP_BERT.cc
+	FTFP_BERT_HP.cc
+	FTFP_BERT_TRV.cc
+	FTFQGSP_BERT.cc
+        G4PhysListFactoryAlt.cc
         G4PhysListFactory.cc
         G4PhysListFactoryMessenger.cc
+        G4PhysListRegistry.cc
+	LBE.cc
+	NuBeam.cc
         QBBC.cc
+	QGS_BIC.cc
+	QGSP_BERT.cc
+	QGSP_BERT_HP.cc
+        QGSP_BIC_AllHP.cc
 	QGSP_BIC.cc
 	QGSP_BIC_HP.cc
-        QGSP_BIC_AllHP.cc
+	QGSP_FTFP_BERT.cc
 	Shielding.cc
-        G4PhysListRegistry.cc
-        G4PhysListFactoryAlt.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

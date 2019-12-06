@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4LogicalVolumeStore implementation for singleton container
 //
-//
-// G4LogicalVolumeStore
-//
-// Implementation for singleton container
-//
-// History:
-// 10.07.95 P.Kent Initial version
+// 10.07.95 - P.Kent, Initial version
 // --------------------------------------------------------------------
 
 #include "G4Types.hh"
@@ -41,8 +36,8 @@
 // Static class variables
 // ***************************************************************************
 //
-G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = 0;
-G4ThreadLocal G4VStoreNotifier* G4LogicalVolumeStore::fgNotifier = 0;
+G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = nullptr;
+G4ThreadLocal G4VStoreNotifier* G4LogicalVolumeStore::fgNotifier = nullptr;
 G4ThreadLocal G4bool G4LogicalVolumeStore::locked = false;
 
 // ***************************************************************************
@@ -86,18 +81,18 @@ void G4LogicalVolumeStore::Clean()
   //
   locked = true;  
 
-  size_t i=0;
+  size_t i = 0;
   G4LogicalVolumeStore* store = GetInstance();
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Logical Volumes ... ";
 #endif
 
-  for(iterator pos=store->begin(); pos!=store->end(); pos++)
+  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    if (*pos) { (*pos)->Lock(); delete *pos; }
-    i++;
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
+    if (*pos != nullptr) { (*pos)->Lock(); delete *pos; }
+    ++i;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -139,8 +134,8 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
+    for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
     {
       if (**i==*pVolume)
       {
@@ -158,7 +153,7 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 G4LogicalVolume*
 G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
 {
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
   {
     if ((*i)->GetName() == name) { return *i; }
   }
@@ -181,7 +176,7 @@ G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
 G4LogicalVolumeStore* G4LogicalVolumeStore::GetInstance()
 {
   static G4LogicalVolumeStore worldStore;
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = &worldStore;
   }

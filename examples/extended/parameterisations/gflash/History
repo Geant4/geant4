@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Nov-2019 I. Hrivnacova (exgflash-V10-05-02)
+- Updated README files:
+  changed text to correspond to a description of a set of examples;
+  fixed formatting in .README.txt 
+- Fixed Doxygen warnings
+
+25-Nov-2019 I. Semeniouk (exgflash-V10-05-01)
+- Add gflasha example with histogramming
+
+01-Nov-2019 A.Zaborowska (exgflash-V10-05-00)
+- Extend GFlash example moving existing one to gflash1
+- Add gflash2 with envelope in parallel world
+- Add gflash3 with SD in parallel world
+
 17-May-2018 J.Allison (exgflash-V10-04-00)
 - Add #include "G4Types.hh"
 - Remove G4UI_USE and G4VIS_USE.

@@ -374,7 +374,7 @@ public:
   bool mpi_add_basket(impi& a_impi) {
     uint32 icol; //not used if row_wise.
     if(!a_impi.unpack(icol)) {
-      m_out << "tools::wroot::ntuple::mpi_add_baset : unpack(icol) failed."<< std::endl;
+      m_out << "tools::wroot::ntuple::mpi_add_basket : unpack(icol) failed."<< std::endl;
       return false;
     }
 	
@@ -385,13 +385,14 @@ public:
                                          m_dir.file().byte_swap(),m_dir.seek_directory(),
                                          m_row_wise_branch->basket_size());
       if(!basket) {
-        m_out << "tools::wroot::ntuple::mpi_add_baset : mpi_create_basket() failed."<< std::endl;
+        m_out << "tools::wroot::ntuple::mpi_add_basket : mpi_create_basket() failed."<< std::endl;
         return false;
       }
 
       uint32 add_bytes,nout;
       if(!m_row_wise_branch->add_basket(m_dir.file(),*basket,add_bytes,nout)) {
-        m_out << "tools::wroot::ntuple::mpi_add_baset : row wise : branch.add_basket() failed."<< std::endl;
+        m_out << "tools::wroot::ntuple::mpi_add_basket : row wise : branch.add_basket() failed."<< std::endl;
+        delete basket;
         return false;
       }
 
@@ -401,7 +402,7 @@ public:
 	  
     } else {
       if(icol>=m_cols.size()) {
-        m_out << "tools::wroot::ntuple::mpi_add_baset : column index "  << icol << " >= " << m_cols.size() << std::endl;
+        m_out << "tools::wroot::ntuple::mpi_add_basket : column index "  << icol << " >= " << m_cols.size() << std::endl;
         return false;
       }
       
@@ -411,19 +412,57 @@ public:
                                          m_dir.file().byte_swap(),m_dir.seek_directory(),
                                          _branch.basket_size());
       if(!basket) {
-        m_out << "tools::wroot::ntuple::mpi_add_baset : mpi_create_basket() failed."<< std::endl;
+        m_out << "tools::wroot::ntuple::mpi_add_basket : mpi_create_basket() failed."<< std::endl;
         return false;
       }
 
       uint32 add_bytes,nout;
       if(!_branch.add_basket(m_dir.file(),*basket,add_bytes,nout)) {
-        m_out << "tools::wroot::ntuple::mpi_add_baset : column wise : branch.add_basket() failed."<< std::endl;
+        m_out << "tools::wroot::ntuple::mpi_add_basket : column wise : branch.add_basket() failed."<< std::endl;
+        delete basket;
         return false;
       }
 
       delete basket;
       _branch.set_tot_bytes(_branch.tot_bytes()+add_bytes);
       _branch.set_zip_bytes(_branch.zip_bytes()+nout);
+    }
+    return true;
+  }
+  
+  bool mpi_add_baskets(impi& a_impi) { //column_wise && row_mode only.
+    uint32 _icol = 0;
+    tools_vforcit(icol*,m_cols,it) {
+      uint32 icol;
+      if(!a_impi.unpack(icol)) {
+        m_out << "tools::wroot::ntuple::mpi_add_baskets : unpack(icol) failed."<< std::endl;
+        return false;
+      }
+      if(icol!=_icol) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : received column index "  << icol << ", whilst " << _icol << " expected." << std::endl;
+        return false;
+      }
+      branch& _branch = m_cols[icol]->get_branch();
+      basket* basket = mpi_create_basket(m_out,a_impi,
+                                         m_dir.file().byte_swap(),m_dir.seek_directory(),
+                                         _branch.basket_size());
+      if(!basket) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : mpi_create_basket() failed."<< std::endl;
+        return false;
+      }
+
+      uint32 add_bytes,nout;
+      if(!_branch.add_basket(m_dir.file(),*basket,add_bytes,nout)) {
+        m_out << "tools::wroot::ntuple::mpi_add_basket : column wise : branch.add_basket() failed."<< std::endl;
+        delete basket;
+        return false;
+      }
+
+      delete basket;
+      _branch.set_tot_bytes(_branch.tot_bytes()+add_bytes);
+      _branch.set_zip_bytes(_branch.zip_bytes()+nout);
+
+      _icol++;
     }
     return true;
   }

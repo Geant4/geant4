@@ -24,10 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// Class G4TessellatedSolid
+// G4TessellatedSolid
 //
 // Class description:
 //
@@ -85,18 +82,11 @@
 //
 //      solidTarget->SetSolidClosed(true);
 
-// CHANGE HISTORY
-// --------------
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK
-//  - Created.
-// 22 November 2005, F Lei,
-//  - Added GetPolyhedron().
-// 12 October 2012, M Gayer,
-//  - Reviewed optimized implementation including voxelization of surfaces.
-//
-///////////////////////////////////////////////////////////////////////////////
-#ifndef G4TessellatedSolid_hh
-#define G4TessellatedSolid_hh 1
+// 31.10.2004, P R Truscott, QinetiQ Ltd, UK - Created.
+// 12.10.2012, M Gayer, CERN - New implementation with voxelization of surfaces.
+// --------------------------------------------------------------------
+#ifndef G4TESSELLATEDSOLID_HH
+#define G4TESSELLATEDSOLID_HH 1
 
 #include "G4GeomTypes.hh"
 
@@ -114,9 +104,10 @@
 #include <set>
 #include <map>
 
-#include "G4VSolid.hh"
 #include "G4Types.hh"
+#include "G4VSolid.hh"
 #include "G4Voxelizer.hh"
+#include "G4VFacet.hh"
 
 struct G4VertexInfo
 {
@@ -124,12 +115,10 @@ struct G4VertexInfo
   G4double mag2;
 };
 
-class G4VFacet;
-
 class G4VertexComparator
 {
 public:
-  G4bool operator() (const G4VertexInfo &l, const G4VertexInfo &r) const
+  G4bool operator() (const G4VertexInfo& l, const G4VertexInfo& r) const
   {
     return l.mag2 == r.mag2 ? l.id < r.id : l.mag2 < r.mag2;
   }
@@ -142,23 +131,23 @@ class G4TessellatedSolid : public G4VSolid
     G4TessellatedSolid ();
     virtual ~G4TessellatedSolid ();
 
-    G4TessellatedSolid (const G4String &name);
+    G4TessellatedSolid (const G4String& name);
 
     G4TessellatedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4TessellatedSolid (const G4TessellatedSolid &ts);
-    G4TessellatedSolid &operator= (const G4TessellatedSolid &right);
-    G4TessellatedSolid &operator+= (const G4TessellatedSolid &right);
+    G4TessellatedSolid (const G4TessellatedSolid& ts);
+    G4TessellatedSolid &operator= (const G4TessellatedSolid& right);
+    G4TessellatedSolid &operator+= (const G4TessellatedSolid& right);
 
-    G4bool AddFacet (G4VFacet *aFacet);
-    inline G4VFacet *GetFacet (G4int i) const;
+    G4bool AddFacet (G4VFacet* aFacet);
+    inline G4VFacet* GetFacet (G4int i) const;
 
     G4int GetNumberOfFacets () const;
 
-    virtual EInside Inside (const G4ThreeVector &p) const;
+    virtual EInside Inside (const G4ThreeVector& p) const;
     virtual G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
     virtual G4double DistanceToIn(const G4ThreeVector& p,
                                   const G4ThreeVector& v)const;
@@ -167,30 +156,30 @@ class G4TessellatedSolid : public G4VSolid
     virtual G4double DistanceToOut(const G4ThreeVector& p,
                                    const G4ThreeVector& v,
                                    const G4bool calcNorm,
-                                         G4bool *validNorm,
-                                         G4ThreeVector *norm) const;
+                                         G4bool* validNorm,
+                                         G4ThreeVector* norm) const;
 
-    virtual G4bool Normal (const G4ThreeVector &p, G4ThreeVector &n) const;
-    virtual G4double SafetyFromOutside(const G4ThreeVector &p,
-                                             G4bool aAccurate=false) const;
-    virtual G4double SafetyFromInside (const G4ThreeVector &p,
-                                             G4bool aAccurate=false) const;
+    virtual G4bool Normal (const G4ThreeVector& p, G4ThreeVector& n) const;
+    virtual G4double SafetyFromOutside(const G4ThreeVector& p,
+                                             G4bool aAccurate = false) const;
+    virtual G4double SafetyFromInside (const G4ThreeVector& p,
+                                             G4bool aAccurate = false) const;
 
     virtual G4GeometryType GetEntityType () const;
-    virtual std::ostream &StreamInfo(std::ostream &os) const;
+    virtual std::ostream& StreamInfo(std::ostream& os) const;
 
     virtual G4VSolid* Clone() const;
 
     virtual G4ThreeVector GetPointOnSurface() const;
     virtual G4double GetSurfaceArea();
-    virtual G4double GetCubicVolume ();
+    virtual G4double GetCubicVolume();
 
     void SetSolidClosed (const G4bool t);
     G4bool GetSolidClosed () const;
 
     inline void SetMaxVoxels(G4int max);
 
-    inline G4Voxelizer &GetVoxels();
+    inline G4Voxelizer& GetVoxels();
 
     virtual G4bool CalculateExtent(const EAxis pAxis,
                                    const G4VoxelLimits& pVoxelLimit,
@@ -219,27 +208,27 @@ class G4TessellatedSolid : public G4VSolid
 
     void Initialize();
 
-    G4double DistanceToOutNoVoxels(const G4ThreeVector &p,
-                                   const G4ThreeVector &v,
-                                         G4ThreeVector &aNormalVector,
-                                         G4bool        &aConvex,
+    G4double DistanceToOutNoVoxels(const G4ThreeVector& p,
+                                   const G4ThreeVector& v,
+                                         G4ThreeVector& aNormalVector,
+                                         G4bool&        aConvex,
                                          G4double aPstep = kInfinity) const;
-    G4double DistanceToInCandidates(const std::vector<G4int> &candidates,
-                                    const G4ThreeVector &aPoint,
-                                    const G4ThreeVector &aDirection) const;
-    void DistanceToOutCandidates(const std::vector<G4int> &candidates,
-                                 const G4ThreeVector &aPoint,
-                                 const G4ThreeVector &direction,
-                                       G4double &minDist,
-                                       G4ThreeVector &minNormal,
-                                       G4int &minCandidate) const;
-    G4double DistanceToInNoVoxels(const G4ThreeVector &p,
-                                  const G4ThreeVector &v,
+    G4double DistanceToInCandidates(const std::vector<G4int>& candidates,
+                                    const G4ThreeVector& aPoint,
+                                    const G4ThreeVector& aDirection) const;
+    void DistanceToOutCandidates(const std::vector<G4int>& candidates,
+                                 const G4ThreeVector& aPoint,
+                                 const G4ThreeVector& direction,
+                                       G4double& minDist,
+                                       G4ThreeVector& minNormal,
+                                       G4int& minCandidate) const;
+    G4double DistanceToInNoVoxels(const G4ThreeVector& p,
+                                  const G4ThreeVector& v,
                                         G4double aPstep = kInfinity) const;
     void SetExtremeFacets();
 
-    EInside InsideNoVoxels (const G4ThreeVector &p) const;
-    EInside InsideVoxels(const G4ThreeVector &aPoint) const;
+    EInside InsideNoVoxels (const G4ThreeVector& p) const;
+    EInside InsideVoxels(const G4ThreeVector& aPoint) const;
 
     void Voxelize();
 
@@ -249,28 +238,28 @@ class G4TessellatedSolid : public G4VSolid
 
     void SetRandomVectors();
 
-    G4double DistanceToInCore(const G4ThreeVector &p, const G4ThreeVector &v,
+    G4double DistanceToInCore(const G4ThreeVector &p, const G4ThreeVector& v,
                                     G4double aPstep = kInfinity) const;
-    G4double DistanceToOutCore(const G4ThreeVector &p, const G4ThreeVector &v,
-                                     G4ThreeVector &aNormalVector,
-                                     G4bool        &aConvex,
+    G4double DistanceToOutCore(const G4ThreeVector& p, const G4ThreeVector& v,
+                                     G4ThreeVector& aNormalVector,
+                                     G4bool& aConvex,
                                      G4double aPstep = kInfinity) const;
 
-    G4int SetAllUsingStack(const std::vector<G4int> &voxel,
-                           const std::vector<G4int> &max,
-                                 G4bool status, G4SurfBits &checked);
+    G4int SetAllUsingStack(const std::vector<G4int>& voxel,
+                           const std::vector<G4int>& max,
+                                 G4bool status, G4SurfBits& checked);
 
     void DeleteObjects ();
-    void CopyObjects (const G4TessellatedSolid &s);
+    void CopyObjects (const G4TessellatedSolid& s);
 
-    static G4bool CompareSortedVoxel(const std::pair<G4int, G4double> &l,
-                                     const std::pair<G4int, G4double> &r);
+    static G4bool CompareSortedVoxel(const std::pair<G4int, G4double>& l,
+                                     const std::pair<G4int, G4double>& r);
 
-    G4double MinDistanceFacet(const G4ThreeVector &p, G4bool simple,
-                                    G4VFacet * &facet) const;
+    G4double MinDistanceFacet(const G4ThreeVector& p, G4bool simple,
+                                    G4VFacet* &facet) const;
 
-    inline G4bool OutsideOfExtent(const G4ThreeVector &p,
-                                        G4double tolerance=0) const;
+    inline G4bool OutsideOfExtent(const G4ThreeVector& p,
+                                        G4double tolerance = 0.0) const;
 
   protected:
 
@@ -278,24 +267,24 @@ class G4TessellatedSolid : public G4VSolid
 
   private:
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
-    std::vector<G4VFacet *>  fFacets;
-    std::set<G4VFacet *> fExtremeFacets; // Does all other facets lie on
-                                         // or behind this surface?
+    std::vector<G4VFacet*> fFacets;
+    std::set<G4VFacet*> fExtremeFacets; // Does all other facets lie on
+                                        // or behind this surface?
 
-    G4GeometryType           fGeometryType;
-    G4double                 fCubicVolume;
-    G4double                 fSurfaceArea;
+    G4GeometryType fGeometryType;
+    G4double       fCubicVolume = 0.0;
+    G4double       fSurfaceArea = 0.0;
 
-    std::vector<G4ThreeVector>  fVertexList;
+    std::vector<G4ThreeVector> fVertexList;
 
     std::set<G4VertexInfo,G4VertexComparator> fFacetList;
 
     G4ThreeVector fMinExtent, fMaxExtent;
 
-    G4bool fSolidClosed;
+    G4bool fSolidClosed = false;
 
     std::vector<G4ThreeVector> fRandir;
 
@@ -325,7 +314,7 @@ inline G4Voxelizer &G4TessellatedSolid::GetVoxels()
   return fVoxels;
 }
 
-inline G4bool G4TessellatedSolid::OutsideOfExtent(const G4ThreeVector &p,
+inline G4bool G4TessellatedSolid::OutsideOfExtent(const G4ThreeVector& p,
                                                   G4double tolerance) const
 {
   return ( p.x() < fMinExtent.x() - tolerance

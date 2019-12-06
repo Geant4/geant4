@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-
 // class description
 //
 // Class consists of atomic subshell binding energies for first 100 elements.
@@ -61,6 +59,7 @@ public :  //with description
 
   static G4int    GetNumberOfShells(G4int Z);
   static G4int    GetNumberOfElectrons(G4int Z, G4int SubshellNb);
+  static G4int    GetNumberOfFreeElectrons(G4int Z, G4double th);
   static G4double GetBindingEnergy(G4int Z, G4int SubshellNb);
   static G4double GetTotalBindingEnergy(G4int Z);
 

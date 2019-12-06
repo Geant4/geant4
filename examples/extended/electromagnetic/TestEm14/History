@@ -13,6 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26-11-19 I. Hrivnacova (testem14-V10-05-01)
+- Fixed Doxygen warnings
+
+10-09-19 mma  (testem14-V10-05-00)
+- update PhysListEmStandard, livermore, penelope
+  go back to V10-03-01 : register only post step part of the processes. 
+- PhysicsList::SetCuts() : set lower limit = 100 eV
+     
 09-05-18 B.Morgan (testem14-V10-04-03)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

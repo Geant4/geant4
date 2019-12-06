@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4MultiUnion class
 //
-//
-// Implementation for G4MultiUnion class
-//
-// History:
-//
-// 06.04.17 G.Cosmo - Imported implementation in Geant4 for VecGeom migration
-// 19.10.12 Marek Gayer - Original implementation from USolids module
+// 19.10.12 M.Gayer - Original implementation from USolids module
+// 06.04.17 G.Cosmo - Adapted implementation in Geant4 for VecGeom migration
 // --------------------------------------------------------------------
 
 #include <iostream>
@@ -56,14 +52,11 @@ namespace
 
 //______________________________________________________________________________
 G4MultiUnion::G4MultiUnion(const G4String& name)
-  : G4VSolid(name), fAccurate(false),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(name)
 {
   SetName(name);
   fSolids.clear();
   fTransformObjs.clear();
-  fCubicVolume = 0;
-  fSurfaceArea = 0;
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 }
 
@@ -88,18 +81,16 @@ G4VSolid* G4MultiUnion::Clone() const
 // Copy constructor
 //______________________________________________________________________________
 G4MultiUnion::G4MultiUnion(const G4MultiUnion& rhs)
-  : G4VSolid(rhs),fCubicVolume (rhs.fCubicVolume),
-    fSurfaceArea (rhs.fSurfaceArea),
-    kRadTolerance(rhs.kRadTolerance), fAccurate(false),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(rhs), fCubicVolume(rhs.fCubicVolume),
+    fSurfaceArea(rhs.fSurfaceArea),
+    kRadTolerance(rhs.kRadTolerance), fAccurate(rhs.fAccurate)
 {
 }
 
 // Fake default constructor for persistency
 //______________________________________________________________________________
 G4MultiUnion::G4MultiUnion( __void__& a )
-  : G4VSolid(a), fCubicVolume (0.), fSurfaceArea (0.), kRadTolerance(0.),
-    fAccurate(false), fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(a)
 {
 }
 
@@ -136,13 +127,13 @@ G4double G4MultiUnion::GetCubicVolume()
     p = (extentMax + extentMin) / 2.;
     G4ThreeVector left = p - d;
     G4ThreeVector length = d * 2;
-    for (generated = 0; generated < 10000; generated++)
+    for (generated = 0; generated < 10000; ++generated)
     {
       G4ThreeVector rvec(G4UniformRand(), G4UniformRand(), G4UniformRand());
       point = left + G4ThreeVector(length.x()*rvec.x(),
                                    length.y()*rvec.y(),
                                    length.z()*rvec.z());
-      if (Inside(point) != EInside::kOutside) inside++;
+      if (Inside(point) != EInside::kOutside) ++inside;
     }
     G4double vbox = (2 * d.x()) * (2 * d.y()) * (2 * d.z());
     fCubicVolume = inside * vbox / generated;
@@ -393,7 +384,7 @@ G4double G4MultiUnion::DistanceToOutVoxels(const G4ThreeVector& aPoint,
 
         distance += maxDistance;
         currentPoint += maxDistance * direction;
-        if(maxDistance == 0.) count++;
+        if(maxDistance == 0.) ++count;
 
         // the current component will be ignored
         exclusion.SetBitNumber(maxCandidate);
@@ -541,7 +532,7 @@ EInside G4MultiUnion::InsideNoVoxels(const G4ThreeVector& aPoint) const
     location = solid.Inside(localPoint);
 
     if (location == EInside::kSurface)
-      countSurface++;
+      ++countSurface;
 
     if (location == EInside::kInside) return EInside::kInside;
   }
@@ -779,14 +770,14 @@ G4double G4MultiUnion::DistanceToIn(const G4ThreeVector& point) const
     {
       const G4ThreeVector& pos = boxes[j].pos;
       const G4ThreeVector& hlen = boxes[j].hlen;
-      for (G4int i = 0; i <= 2; ++i)
+      for (auto i = 0; i <= 2; ++i)
         // distance to middle point - hlength => distance from point to border
         // of x,y,z
         if ((dxyz[i] = std::abs(point[i] - pos[i]) - hlen[i]) > safetyMin)
           continue;
 
       G4double d2xyz = 0.;
-      for (G4int i = 0; i <= 2; ++i)
+      for (auto i = 0; i <= 2; ++i)
         if (dxyz[i] > 0) d2xyz += dxyz[i] * dxyz[i];
 
       // minimal distance is at least this, but could be even higher. therefore,
@@ -994,7 +985,7 @@ G4Polyhedron* G4MultiUnion::CreatePolyhedron() const
 //______________________________________________________________________________
 G4Polyhedron* G4MultiUnion::GetPolyhedron() const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

@@ -72,7 +72,9 @@ class G4HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     virtual void ExtraConfiguration();
     
     G4double maxBIC_pion;
-    G4double maxBERT_kaon; //Bertini for kaons
+    G4double minBERT_pion;
+    G4double maxBERT_pion;
+    G4double maxBERT_kaon;
     G4double maxBIC_proton;
     G4double maxBIC_neutron;
 };

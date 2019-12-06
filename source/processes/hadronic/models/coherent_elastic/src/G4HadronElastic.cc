@@ -50,7 +50,9 @@ G4HadronElastic::G4HadronElastic(const G4String& name)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  lowestEnergyLimit= 1.e-6*eV;  
+  lowestEnergyLimit= 1.e-6*eV;
+  pLocalTmax  = 0.0;
+  nwarn = 0;
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -115,38 +117,31 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   pLocalTmax = 4.0*momentumCMS*momentumCMS;
 
   // Sampling in CM system
-  G4double t    = SampleInvariantT(theParticle, plab, Z, A);
+  G4double t = SampleInvariantT(theParticle, plab, Z, A);
+
+  if(t < 0.0 || t > pLocalTmax) {
+    // For the very rare cases where cos(theta) is greater than 1 or smaller than -1,
+    // print some debugging information via a "JustWarning" exception, and resample
+    // using the default algorithm
+#ifdef G4VERBOSE
+    if(nwarn < 2) {
+      G4ExceptionDescription ed;
+      ed << GetModelName() << " wrong sampling t= " << t << " tmax= " << pLocalTmax
+	 << " for " << aParticle->GetDefinition()->GetParticleName() 
+	 << " ekin=" << ekin << " MeV" 
+	 << " off (Z,A)=(" << Z << "," << A << ") - will be resampled" << G4endl;
+      G4Exception( "G4HadronElastic::ApplyYourself", "hadEla001", JustWarning, ed);
+      ++nwarn;
+    }
+#endif
+    t = G4HadronElastic::SampleInvariantT(theParticle, plab, Z, A);
+  }
+
   G4double phi  = G4UniformRand()*CLHEP::twopi;
   G4double cost = 1. - 2.0*t/pLocalTmax;
 
-  // For the very rare cases where cos(theta) is greater than 1 or smaller than -1,
-  // print some debugging information via a "JustWarning" exception, and safely
-  // return (simply setting "cost=1.0" or "cost=-1.0" can sometimes cause a crash,
-  // due to numerical imprecisions, e.g. 3-momentum = (0.0, 0.0, 0.0) but
-  // Ekin very small but not 0.0).
-  if ( std::abs( cost ) > 1.0 ) {
-    G4ExceptionDescription ed;
-    ed << " LARGE cost ! cost=" << cost << " for " << aParticle->GetDefinition()->GetParticleName() 
-       << " ekin=" << ekin << " MeV" << "  on (Z,A)=(" << Z << "," << A << ")" << G4endl;
-    if ( cost > 1.0 ) { 
-      // We assume here no interaction and let the projectile keep going unchanged.
-      theParticleChange.SetEnergyChange( ekin );
-      theParticleChange.SetMomentumChange( aParticle->Get4Momentum().vect().unit() );
-      ed << "\t No interaction: the projectile keeps going unchanged!" << G4endl;
-      G4Exception( "G4HadronElastic::ApplyYourself", "hadEla001", JustWarning, ed );
-      return &theParticleChange;
-    } else {  // cost < -1.0 ) { 
-      // We assume here that the projectile stops and its energy is deposited locally
-      // (for simplicity, given that this condition should happen rarely, we neglect
-      // the recoil of the target nucleus).
-      theParticleChange.SetEnergyChange( 0.0 );
-      theParticleChange.SetLocalEnergyDeposit( ekin );
-      ed << "\t Projectile stops and its energy is deposited locally:" << G4endl
-         << "\t neglected recoil of the target nucleus!" << G4endl;
-      G4Exception( "G4HadronElastic::ApplyYourself", "hadEla002", JustWarning, ed );
-      return &theParticleChange;
-    }
-  }
+  if (cost > 1.0) { cost = 1.0; }
+  else if(cost < -1.0) { cost = -1.0; } 
 
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
@@ -207,22 +202,58 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
 // sample momentum transfer in the CMS system 
 G4double 
-G4HadronElastic::SampleInvariantT(const G4ParticleDefinition*, 
-				  G4double, G4int, G4int A)
+G4HadronElastic::SampleInvariantT(const G4ParticleDefinition* part,
+				  G4double mom, G4int, G4int A)
 {
-  static const G4double GeV2 = GeV*GeV;
+  const G4double plabLowLimit = 400.0*CLHEP::MeV;
+  const G4double GeV2 = GeV*GeV;
+  const G4double z07in13 = std::pow(0.7, 0.3333333333);
+
+  G4int pdg = std::abs(part->GetPDGEncoding());
   G4double tmax = pLocalTmax/GeV2;
-  G4double aa, bb, cc;
-  static const G4double dd = 10.;
+
+  G4double aa, bb, cc, dd;
   G4Pow* g4pow = G4Pow::GetInstance();
   if (A <= 62) {
-    bb = 14.5*g4pow->Z23(A);
-    aa = g4pow->powZ(A, 1.63)/bb;
-    cc = 1.4*g4pow->Z13(A)/dd;
-  } else {
-    bb = 60.*g4pow->Z13(A);
-    aa = g4pow->powZ(A, 1.33)/bb;
-    cc = 0.4*g4pow->powZ(A, 0.4)/dd;
+    if (pdg == 211){ //Pions
+      if(mom >= plabLowLimit){     //High energy
+	bb = 14.5*g4pow->Z23(A);/*14.5*/
+	dd = 10.;
+	cc = 0.075*g4pow->Z13(A)/dd;//1.4
+	//aa = g4pow->powZ(A, 1.93)/bb;//1.63
+	aa = (A*A)/bb;//1.63
+      } else {                       //Low energy
+	bb = 29.*z07in13*z07in13*g4pow->Z23(A);
+	dd = 15.;
+	cc = 0.04*g4pow->Z13(A)/dd;//1.4
+	aa = g4pow->powZ(A, 1.63)/bb;//1.63
+      }
+    } else { //Other particles
+      bb = 14.5*g4pow->Z23(A);
+      dd = 20.;
+      aa = (A*A)/bb;//1.63
+      cc = 1.4*g4pow->Z13(A)/dd;          
+    }
+      //===========================
+  } else { //(A>62)
+    if (pdg == 211) {
+      if(mom >= plabLowLimit){ //high
+	bb = 60.*z07in13*g4pow->Z13(A);//60
+	dd = 30.;
+	aa = 0.5*(A*A)/bb;//1.33
+	cc = 4.*g4pow->powZ(A,0.4)/dd;//1:0.4     ---    2: 0.4
+      } else { //low
+	bb = 120.*z07in13*g4pow->Z13(A);//60
+	dd = 30.;
+	aa = 2.*g4pow->powZ(A,1.33)/bb;
+	cc = 4.*g4pow->powZ(A,0.4)/dd;//1:0.4     ---    2: 0.4
+      }
+    } else {
+      bb = 60.*g4pow->Z13(A);
+      dd = 25.;
+      aa = g4pow->powZ(A,1.33)/bb;//1.33
+      cc = 0.2*g4pow->powZ(A,0.4)/dd;//1:0.4     ---    2: 0.4
+    }
   }
   G4double q1 = 1.0 - G4Exp(-bb*tmax);
   G4double q2 = 1.0 - G4Exp(-dd*tmax);
@@ -234,3 +265,119 @@ G4HadronElastic::SampleInvariantT(const G4ParticleDefinition*,
   }
   return -GeV2*G4Log(1.0 - G4UniformRand()*q1)/bb;
 }
+
+//////////////////////////////////////////////
+//
+// Cofs for s-,c-,b-particles ds/dt slopes
+
+G4double G4HadronElastic::GetSlopeCof(const G4int pdg )
+{
+  // The input parameter "pdg" should be the absolute value of the PDG code
+  // (i.e. the same value for a particle and its antiparticle).
+
+  G4double coeff = 1.0;
+
+  // heavy barions
+
+  static const G4double  lBarCof1S  = 0.88;
+  static const G4double  lBarCof2S  = 0.76;
+  static const G4double  lBarCof3S  = 0.64;
+  static const G4double  lBarCof1C  = 0.784378;
+  static const G4double  lBarCofSC  = 0.664378;
+  static const G4double  lBarCof2SC = 0.544378;
+  static const G4double  lBarCof1B  = 0.740659;
+  static const G4double  lBarCofSB  = 0.620659;
+  static const G4double  lBarCof2SB = 0.500659;
+  
+  if( pdg == 3122 || pdg == 3222 ||  pdg == 3112 || pdg == 3212  )
+  {
+    coeff = lBarCof1S; // Lambda, Sigma+, Sigma-, Sigma0
+
+  } else if( pdg == 3322 || pdg == 3312   )
+  {
+    coeff = lBarCof2S; // Xi-, Xi0
+  }
+  else if( pdg == 3324)
+  {
+    coeff = lBarCof3S; // Omega
+  }
+  else if( pdg == 4122 ||  pdg == 4212 ||   pdg == 4222 ||   pdg == 4112   )
+  {
+    coeff = lBarCof1C; // LambdaC+, SigmaC+, SigmaC++, SigmaC0
+  }
+  else if( pdg == 4332 )
+  {
+    coeff = lBarCof2SC; // OmegaC
+  }
+  else if( pdg == 4232 || pdg == 4132 )
+  {
+    coeff = lBarCofSC; // XiC+, XiC0
+  }
+  else if( pdg == 5122 || pdg == 5222 || pdg == 5112 || pdg == 5212    )
+  {
+    coeff = lBarCof1B; // LambdaB, SigmaB+, SigmaB-, SigmaB0
+  }
+  else if( pdg == 5332 )
+  {
+    coeff = lBarCof2SB; // OmegaB-
+  }
+  else if( pdg == 5132 || pdg == 5232 ) // XiB-, XiB0
+  {
+    coeff = lBarCofSB;
+  }
+  // heavy mesons Kaons?
+  static const G4double lMesCof1S = 0.82; // Kp/piP kaons?
+  static const G4double llMesCof1C = 0.676568;
+  static const G4double llMesCof1B = 0.610989;
+  static const G4double llMesCof2C = 0.353135;
+  static const G4double llMesCof2B = 0.221978;
+  static const G4double llMesCofSC = 0.496568;
+  static const G4double llMesCofSB = 0.430989;
+  static const G4double llMesCofCB = 0.287557;
+  static const G4double llMesCofEtaP = 0.88;
+  static const G4double llMesCofEta = 0.76;
+
+  if( pdg == 321 || pdg == 311 || pdg == 310 )
+  {
+    coeff = lMesCof1S; //K+-0
+  }
+  else if( pdg == 511 ||  pdg == 521  )
+  {
+    coeff = llMesCof1B; // BMeson0, BMeson+
+  }
+  else if(pdg == 421 ||  pdg == 411 )
+  {
+    coeff = llMesCof1C; // DMeson+, DMeson0
+  }
+  else if( pdg == 531  )
+  {
+    coeff = llMesCofSB; // BSMeson0
+  }
+  else if( pdg == 541 )
+  {
+    coeff = llMesCofCB; // BCMeson+-
+  }
+  else if(pdg == 431 ) 
+  {
+    coeff = llMesCofSC; // DSMeson+-
+  }
+  else if(pdg == 441 || pdg == 443 )
+  {
+    coeff = llMesCof2C; // Etac, JPsi
+  }
+  else if(pdg == 553 )
+  {
+    coeff = llMesCof2B; // Upsilon
+  }
+  else if(pdg == 221 )
+  {
+    coeff = llMesCofEta; // Eta
+  }
+  else if(pdg == 331 )
+  {
+    coeff = llMesCofEtaP; // Eta'
+  } 
+  return coeff;
+}
+
+

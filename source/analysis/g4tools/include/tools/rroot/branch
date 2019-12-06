@@ -13,6 +13,7 @@
 #include "../mnmx"
 #include "../forit"
 #include "../sprintf"
+#include "dummy" //for TIOFeatures streaming.
 
 #include <map>
 
@@ -42,6 +43,7 @@ public:
   virtual iro* copy() const {return new branch(*this);}
   virtual bool stream(buffer& a_buffer) {
     _clear();
+    //::printf("debug : branch::stream : begin\n");
 
     int fCompress;
     int fBasketSize;
@@ -80,8 +82,7 @@ public:
     
     if(!Named_stream(a_buffer,m_name,m_title)) return false;
 
-    //::printf("debug : branch::stream %s %s\n",
-    //   m_name.c_str(),m_title.c_str());
+    //::printf("debug : branch::stream %s %s\n",m_name.c_str(),m_title.c_str());
 
     if(vers<=5) {
       if(!a_buffer.read(fCompress)) return false;
@@ -211,6 +212,13 @@ public:
      {uint64 v;
       if(!a_buffer.read(v)) return false;
       m_entry_number = uint32(v);}
+      if(vers>=13) {
+        dummy _dummy;
+        if(!_dummy.stream(a_buffer)) { //TIOFeatures fIOFeatures
+          m_out << "tools::rroot::branch::stream : can't read (dummy) TIOFeatures." << std::endl;
+          return false;
+        }
+      }
       if(!a_buffer.read(fOffset)) return false;
       if(!a_buffer.read(fMaxBaskets)) return false;
       if(!a_buffer.read(fSplitLevel)) return false;
@@ -514,7 +522,7 @@ public:
 public:
   //virtual for branch_element
 
-  virtual bool read_leaves(buffer& a_buffer){
+  virtual bool read_leaves(ifile&,buffer& a_buffer){
     tools_vforcit(base_leaf*,m_leaves,it) {
       if(!(*it)->read_buffer(a_buffer)) {
         m_out << "tools::rroot::branch::read_leaves :" 
@@ -595,7 +603,7 @@ public:
       } else {
         // if found, erase m_baskets[old_read_basket] to avoid
         // having all data in memory !
-        std::map<uint32, std::pair<rroot::basket*,bool> >::iterator it = m_baskets.find(old_read_basket);
+        std::map<uint32, std::pair<basket*,bool> >::iterator it = m_baskets.find(old_read_basket);
         if(it!=m_baskets.end()) {
           if((*it).second.second) {
             basket* bsk = (*it).second.first;
@@ -609,7 +617,7 @@ public:
 
     if(!m__read_basket) {
 
-      rroot::basket* bsk = 0;
+      basket* bsk = 0;
       std::map<uint32, std::pair<basket*,bool> >::iterator it = m_baskets.find(m_read_basket);
       if(it!=m_baskets.end()) {
         bsk = (*it).second.first;
@@ -706,10 +714,11 @@ public:
     }
 */
 
-    rroot::buffer buffer(m_out,a_file.byte_swap(),m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
-    buffer.set_offset(bufbegin);
+    buffer _buffer(m_out,a_file.byte_swap(),m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
+    _buffer.set_offset(bufbegin);
+    _buffer.set_map_objs(true);  //for MEMPHYS/applications/read.icc
 
-    if(!read_leaves(buffer)) {
+    if(!read_leaves(a_file,_buffer)) {
       m_out << "tools::rroot::branch::find_entry :"
             << " can't read leaves for entry " << a_entry
             << ". read_basket was " << m_read_basket
@@ -722,7 +731,7 @@ public:
 
     //fReadEntry = a_entry;
 
-    a_nbytes = buffer.length() - bufbegin;
+    a_nbytes = _buffer.length() - bufbegin;
 
     return true;
   }
@@ -760,7 +769,7 @@ public:
   :m_out(a_out)
   ,m_fac(a_fac)
 
-  ,m_streamed_baskets(m_fac,true,true)
+  ,m_streamed_baskets(m_fac)
   ,m__read_basket(0)
 
   //,m_bits(0)
@@ -768,8 +777,8 @@ public:
   ,m_title("")
   ,fAutoDelete(false)
 
-  ,m_branches(m_fac,true,true)
-  ,m_leaves(m_fac,true,true)
+  ,m_branches(m_fac)
+  ,m_leaves(m_fac)
 
   ,fEntryOffsetLen(0)
   ,m_write_basket(0)
@@ -793,11 +802,11 @@ protected:
   branch(const branch& a_from)
   :iro(a_from)
   ,m_out(a_from.m_out),m_fac(a_from.m_fac)
-  ,m_streamed_baskets(m_fac,false,true)
+  ,m_streamed_baskets(m_fac)
   ,m__read_basket(0)
   ,fAutoDelete(false)
-  ,m_branches(m_fac,false,true)
-  ,m_leaves(m_fac,false,true)
+  ,m_branches(m_fac)
+  ,m_leaves(m_fac)
   ,fEntryOffsetLen(1000)
   ,m_write_basket(0)
   ,m_entry_number(0)
@@ -818,59 +827,59 @@ protected:
     //if(fBranch.tree().memoryFull(fBufferSize)) fBranch.dropBaskets();
     if(!a_len) return 0;  
 
-    rroot::basket* basket = new rroot::basket(m_out,a_pos,a_len); //basket is a key.
-    if(!basket->read_file(a_file)) {
+    basket* _basket = new basket(m_out,a_pos,a_len); //basket is a key.
+    if(!_basket->read_file(a_file)) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " read_file() failed."
             << std::endl;
-      delete basket;
+      delete _basket;
       return 0;
     }
-   {rroot::buffer buffer(m_out,a_file.byte_swap(),a_len,basket->buf(),0,false); 
-    if(!basket->stream(buffer)) {
+   {buffer _buffer(m_out,a_file.byte_swap(),a_len,_basket->buf(),0,false); 
+    if(!_basket->stream(_buffer)) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " basket stream failed."
             << std::endl;
-      delete basket;
+      delete _basket;
       return 0;
     }}
     unsigned int sz;    
-    char* buf = basket->get_object_buffer(a_file,sz); //basket owns buf.
+    char* buf = _basket->get_object_buffer(a_file,sz); //basket owns buf.
     if(!buf) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " get_object_buffer() failed."
             << std::endl;
-      delete basket;
+      delete _basket;
       return 0;
     }
 
-    if(basket->seek_key()!=a_pos) { //consistency check.
+    if(_basket->seek_key()!=a_pos) { //consistency check.
       m_out << "tools::rroot::branch::get_basket :" 
             << " seek anomaly."
             << " a_pos " << a_pos
-            << " seek_key() " << basket->seek_key()
+            << " seek_key() " << _basket->seek_key()
             << std::endl;
-      delete basket;
+      delete _basket;
       return 0;
     }
-    //if(basket->nbytes()!=a_len) { //consistency check.
+    //if(_basket->nbytes()!=a_len) { //consistency check.
     //  m_out << "tools::rroot::branch::get_basket :" 
     //        << " WARNING : length anomaly."
     //        << " a_len " << a_len
-    //        << " nbytes() " << basket->nbytes()
+    //        << " nbytes() " << _basket->nbytes()
     //       << std::endl;
     //}
 
     if(fEntryOffsetLen) {
-    if(!basket->read_offset_tables(a_file.byte_swap())) {
+    if(!_basket->read_offset_tables(a_file.byte_swap())) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " read_offset_tables failed."
             << std::endl;
-      delete basket;
+      delete _basket;
       return 0;
     }}
 
-    return basket;
+    return _basket;
   }
 protected:
   void _clear() {

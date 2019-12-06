@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:   PhysListEm5DStandard
@@ -59,7 +57,7 @@ public:
   virtual void ConstructProcess();
 
 private:
-  G4int  verbose;
+  G4int fVerbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

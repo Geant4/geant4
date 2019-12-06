@@ -46,7 +46,7 @@ public:
 
   AClass operator+(const AClass& aclass) {
     AClass atemp;
-    atemp.ival= ival + aclass.ival;    
+    atemp.ival= ival + aclass.ival;
     return atemp;
   }
 
@@ -55,7 +55,7 @@ public:
     return *this;
   }
 
-  G4bool operator==(const AClass& aclass) const {
+  bool operator==(const AClass& aclass) const {
     if(ival == aclass.ival) return true;
     return false;
   }
@@ -84,4 +84,3 @@ BOOST_PYTHON_MODULE(test09)
     .def(self_ns::str(self))
     ;
 }
-

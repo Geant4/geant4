@@ -71,13 +71,17 @@ public:
     m_columns.push_back(column_booking(a_name,_cid(T()),0));
   }
   template <class T>
+  void add_column(const std::string& a_name,T& a_user) {
+    m_columns.push_back(column_booking(a_name,_cid(T()),(void*)&a_user));
+  }
+  
+  template <class T>
   void add_column_vec(const std::string& a_name) {
     m_columns.push_back(column_booking(a_name,_cid_std_vector<T>(),0));
   }
-
   template <class T>
-  void add_column(const std::string& a_name,T& a_user) {
-    m_columns.push_back(column_booking(a_name,_cid(T()),(void*)&a_user));
+  void add_column_vec(const std::string& a_name,std::vector<T>& a_user_vec) {
+    m_columns.push_back(column_booking(a_name,_cid_std_vector<T>(),(void*)&a_user_vec));
   }
   template <class T>
   void add_column(const std::string& a_name,std::vector<T>& a_user_vec) {

@@ -73,7 +73,7 @@ G4double G4SimplexDownhill<T>::GetMinimum()
 
    std::vector< G4double >::iterator it_minh =
       std::min_element( currentHeights.begin() , currentHeights.end() );
-   G4int imin = -1;
+   G4int imin = 0;
    G4int i = 0;
    for ( std::vector< G4double >::iterator it = currentHeights.begin();
          it != currentHeights.end(); it++ )
@@ -424,7 +424,7 @@ std::vector< G4double > G4SimplexDownhill<T>::GetMinimumPoint()
 
    std::vector< G4double >::iterator it_minh =
      std::min_element( currentHeights.begin() , currentHeights.end() );;
-   G4int imin = -1;
+   G4int imin = 0;
    G4int i = 0;
    for ( std::vector< G4double >::iterator 
          it = currentHeights.begin(); it != currentHeights.end(); it++ )

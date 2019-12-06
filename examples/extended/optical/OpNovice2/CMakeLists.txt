@@ -43,8 +43,10 @@ set(OpNovice2_SCRIPTS
     OpNovice2.out
     OpNovice2.in
     vis.mac
-    surface.mac
+    unified.mac
+    glisur.mac
     electron.mac
+    scint_by_particle.mac
   )
 
 foreach(_script ${OpNovice2_SCRIPTS})

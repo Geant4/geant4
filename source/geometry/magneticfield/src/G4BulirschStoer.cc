@@ -22,14 +22,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // G4BulirschStoer class implementation
 // Based on bulirsch_stoer.hpp from boost
 //
-// Author: Dmitry Sorokin - GSoC 2016
-//
-///////////////////////////////////////////////////////////////////////////////
+// Author: Dmitry Sorokin, Google Summer of Code 2016
+// --------------------------------------------------------------------
 
 #include "G4BulirschStoer.hh"
 

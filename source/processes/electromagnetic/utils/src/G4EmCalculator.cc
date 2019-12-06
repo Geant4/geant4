@@ -1184,12 +1184,15 @@ G4VEmProcess*
 G4EmCalculator::FindDiscreteProcess(const G4ParticleDefinition* part,
                                     const G4String& processName)
 {
-  G4VEmProcess* proc = 0;
-  const std::vector<G4VEmProcess*> v = 
-    manager->GetEmProcessVector();
+  G4VEmProcess* proc = nullptr;
+  auto v = manager->GetEmProcessVector();
   G4int n = v.size();
   for(G4int i=0; i<n; ++i) {
-    if((v[i])->GetProcessName() == processName) {
+    auto pName = v[i]->GetProcessName();
+    if(pName == "GammaGeneralProc") {
+      proc = v[i]->GetEmProcess(processName);
+      break;
+    } else if(pName == processName) {
       G4VProcess* p = reinterpret_cast<G4VProcess*>(v[i]);
       if(ActiveForParticle(part, p)) {
         proc = v[i];
@@ -1239,7 +1242,6 @@ G4VProcess* G4EmCalculator::FindProcess(const G4ParticleDefinition* part,
   }
   return proc;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

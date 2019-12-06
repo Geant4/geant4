@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VImportanceSplitExaminer implementation
 //
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4VImportanceSplitExaminer.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4VImportanceSplitExaminer.hh"
 
 G4VImportanceSplitExaminer::G4VImportanceSplitExaminer()
-{}
+{
+}
 
 G4VImportanceSplitExaminer::~G4VImportanceSplitExaminer()
-{}
+{
+}

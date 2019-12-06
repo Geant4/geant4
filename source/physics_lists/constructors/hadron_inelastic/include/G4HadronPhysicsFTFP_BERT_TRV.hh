@@ -55,7 +55,7 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4HadronPhysicsFTFP_BERT
     //Modify the minimum needed
       virtual void Pion() override;
       virtual void Kaon() override;
-      virtual void DumpBanner() override;
+      //virtual void DumpBanner() override;
       virtual void ExtraConfiguration() override;
 };
 

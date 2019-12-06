@@ -852,7 +852,7 @@ G4bool G4FTFModel::ExciteParticipants() {
   G4cout << "G4FTFModel::ExciteParticipants() " << G4endl;
   #endif
 
-  G4bool Successfull( true );  
+  G4bool Success( false );  //Uzhi Aug.2019
   G4int MaxNumOfInelCollisions = G4int( theParameters->GetMaxNumberOfCollisions() );
   if ( MaxNumOfInelCollisions > 0 ) {  //  Plab > Pbound, normal application of FTF is possible
     G4double ProbMaxNumber = theParameters->GetMaxNumberOfCollisions() - MaxNumOfInelCollisions;
@@ -863,14 +863,14 @@ G4bool G4FTFModel::ExciteParticipants() {
   }
 
   #ifdef debugBuildString
-  G4cout << "MaxNumOfInelCollisions MaxNumOfInelCollisions " << MaxNumOfInelCollisions << G4endl;
+  G4cout << "MaxNumOfInelCollisions per hadron/nucleon " << MaxNumOfInelCollisions << G4endl;
   #endif
 
   G4int CurrentInteraction( 0 );
   theParticipants.StartLoop();
 
-  while ( theParticipants.Next() ) {  /* Loop checking, 10.08.2015, A.Ribon */   
-
+  G4bool InnerSuccess( true );  //Uzhi Aug.2019
+  while ( theParticipants.Next() ) {  /* Loop checking, 10.08.2015, A.Ribon */
     CurrentInteraction++;
     const G4InteractionContent& collision = theParticipants.GetInteraction();
     G4VSplitableHadron* projectile = collision.GetProjectile();
@@ -901,14 +901,13 @@ G4bool G4FTFModel::ExciteParticipants() {
                                           TargetNucleon, Annihilation );
           if ( ! Result ) continue;
          } 
-         Successfull = theElastic->ElasticScattering( projectile, target, theParameters ) 
-                       ||  Successfull; 
+         InnerSuccess = theElastic->ElasticScattering( projectile, target, theParameters );  //Uzhi Aug.2019
       } else if ( G4UniformRand() > theParameters->GetProbabilityOfAnnihilation() ) { 
         // Inelastic scattering
 
         #ifdef debugBuildString
         G4cout << "Inelastic interaction" << G4endl
-               << "MaxNumOfInelCollisions " << MaxNumOfInelCollisions << G4endl;
+               << "MaxNumOfInelCollisions per hadron/nucleon " << MaxNumOfInelCollisions << G4endl;
         #endif
 
         if ( ! HighEnergyInter ) {
@@ -926,8 +925,8 @@ G4bool G4FTFModel::ExciteParticipants() {
           //                                  TargetNucleon, Annihilation );
           //  if ( ! Result ) continue;
           //} 
-          if (theExcitation->ExciteParticipants( projectile, target, theParameters, theElastic )){
-
+          if ( theExcitation->ExciteParticipants( projectile, target, theParameters, theElastic ) ) {
+            InnerSuccess = true;  //Uzhi Aug.2019
             #ifdef debugBuildString
             G4cout << "FTF excitation Successfull " << G4endl;
             // G4cout << "After  pro " << projectile->Get4Momentum() << " " 
@@ -935,31 +934,24 @@ G4bool G4FTFModel::ExciteParticipants() {
             //        << "After  tar " << target->Get4Momentum() << " "
             //        << target->Get4Momentum().mag() << G4endl;
             #endif
-
           } else {
-
-            Successfull = theElastic->ElasticScattering( projectile, target, theParameters )
-                          &&  Successfull;
- 
+            InnerSuccess = theElastic->ElasticScattering( projectile, target, theParameters );  //Uzhi Aug.2019
             #ifdef debugBuildString
-            G4cout << "FTF excitation Non Successfull -> Elastic scattering " 
-                   << Successfull << G4endl;
+            G4cout << "FTF excitation Non InnerSuccess of Elastic scattering " 
+                   << InnerSuccess << G4endl;
             #endif
           }
-        } else { // The inelastic interactition was rejected -> elastic scattering
-
+        } else {  // The inelastic interactition was rejected -> elastic scattering
           #ifdef debugBuildString
           G4cout << "Elastic scat. at rejection inelastic scattering" << G4endl;
           #endif
-
           //if ( ! HighEnergyInter ) {
           //  G4bool Annihilation = false;
           //  G4bool Result = AdjustNucleons( projectile, ProjectileNucleon, target,
           //                                  TargetNucleon, Annihilation );
           //  if ( ! Result) continue;
           //} 
-          Successfull = theElastic->ElasticScattering( projectile, target, theParameters )
-                        ||  Successfull;
+          InnerSuccess = theElastic->ElasticScattering( projectile, target, theParameters );  //Uzhi Aug.2019
         } 
       } else {  // Annihilation
 
@@ -989,9 +981,8 @@ G4bool G4FTFModel::ExciteParticipants() {
           if ( ! Result ) continue;
         }             
         G4VSplitableHadron* AdditionalString = 0;
-        if ( theAnnihilation->Annihilate( projectile, target, AdditionalString, theParameters ) ){
-          Successfull = Successfull  ||  true;
-
+        if ( theAnnihilation->Annihilate( projectile, target, AdditionalString, theParameters ) ) {
+          InnerSuccess = true;  //Uzhi Aug.2019
           #ifdef debugBuildString
           G4cout << "Annihilation successfull. " << "*AdditionalString " 
                  << AdditionalString << G4endl;
@@ -1019,17 +1010,19 @@ G4bool G4FTFModel::ExciteParticipants() {
       } 
     }
 
+    if( InnerSuccess ) Success = true;  //Uzhi Aug.2019
+
     #ifdef debugBuildString
     G4cout << "----------------------------- Final properties " << G4endl
            << "projectile->GetStatus target->GetStatus " << projectile->GetStatus() 
            << " " << target->GetStatus() << G4endl << "projectile->GetSoftC  target->GetSoftC  "
            << projectile->GetSoftCollisionCount() << " " << target->GetSoftCollisionCount()
-           << G4endl << "ExciteParticipants() Successfull? " << Successfull << G4endl;
+           << G4endl << "ExciteParticipants() Success? " << Success << G4endl;
     #endif
 
   }  // end of while ( theParticipants.Next() )
 
-  return Successfull;
+  return Success;
 }
 
 
@@ -1254,7 +1247,7 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
       common.PResidualMass = G4ParticleTable::GetParticleTable()->GetIonTable()
                              ->GetIonMass( common.PResidualCharge, common.PResidualMassNumber );
     }
-    common.PNucleonMass = ProjectileNucleon->GetDefinition()->GetPDGMass();
+    common.PNucleonMass = ProjectileNucleon->GetDefinition()->GetPDGMass();  // On-shell (anti-)nucleon mass 
     common.TResidualMassNumber = TargetResidualMassNumber - 1;
     common.TResidualCharge =   TargetResidualCharge
                              - G4int( TargetNucleon->GetDefinition()->GetPDGCharge() );
@@ -1269,7 +1262,7 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
       common.TResidualMass = G4ParticleTable::GetParticleTable()->GetIonTable()
                              ->GetIonMass( common.TResidualCharge, common.TResidualMassNumber );
     }
-    common.TNucleonMass = TargetNucleon->GetDefinition()->GetPDGMass();
+    common.TNucleonMass = TargetNucleon->GetDefinition()->GetPDGMass();  // On-shell nucleon mass
     common.SumMasses =   common.PNucleonMass + common.PResidualMass + common.TNucleonMass 
                        + common.TResidualMass;
     #ifdef debugAdjust
@@ -1339,7 +1332,7 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
         common.TResidualExcitationEnergy = 0.0;
       }  
       common.TNucleonMass =   common.SqrtS - ( common.SumMasses - common.TNucleonMass )
-                            - common.TResidualExcitationEnergy; 
+                            - common.TResidualExcitationEnergy;  // Off-shell nucleon mass 
       #ifdef debugAdjust
       G4cout << "TNucleonMass " << common.TNucleonMass << G4endl;
       #endif
@@ -1391,7 +1384,12 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
     G4cout << "Proj stop " << common.Ptmp << G4endl;
     #endif
     common.Pprojectile = common.Ptmp; 
-    common.Pprojectile.transform( common.toLab );
+    common.Pprojectile.transform( common.toLab );  // From center-of-mass to Lab frame
+    //---AR-Jul2019 : To avoid unphysical projectile (anti-)fragments at rest, save the
+    //                original momentum of the anti-baryon in the center-of-mass frame.
+    G4LorentzVector saveSelectedAntiBaryon4Momentum = SelectedAntiBaryon->Get4Momentum();
+    saveSelectedAntiBaryon4Momentum.transform( common.toCms );  // From Lab to center-of-mass frame
+    //---
     SelectedAntiBaryon->Set4Momentum( common.Pprojectile );
     // New target nucleon
     if ( interactionCase == 1  ||  interactionCase == 3 ) {
@@ -1403,7 +1401,12 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
     G4cout << "Targ stop " << common.Ptmp << G4endl;
     #endif
     common.Ptarget = common.Ptmp; 
-    common.Ptarget.transform( common.toLab );
+    common.Ptarget.transform( common.toLab );  // From center-of-mass to Lab frame
+    //---AR-Jul2019 : To avoid unphysical target fragments at rest, save the original
+    //                momentum of the target nucleon in the center-of-mass frame.
+    G4LorentzVector saveSelectedTargetNucleon4Momentum = SelectedTargetNucleon->Get4Momentum();
+    saveSelectedTargetNucleon4Momentum.transform( common.toCms );  // From Lab to center-of-mass frame
+    //---
     SelectedTargetNucleon->Set4Momentum( common.Ptarget );
     // New target residual
     if ( interactionCase == 1  ||  interactionCase == 3 ) {
@@ -1411,11 +1414,19 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
       TargetResidualMassNumber       = common.TResidualMassNumber;
       TargetResidualCharge           = common.TResidualCharge;
       TargetResidualExcitationEnergy = common.TResidualExcitationEnergy;
-      common.Ptmp.setE( common.TResidualMass + TargetResidualExcitationEnergy );
+      //---AR-Jul2019 : To avoid unphysical target fragments at rest, use the saved
+      //                original momentum of the target nucleon (instead of setting 0).
+      //                This is a rough and simple approach!
+      //common.Ptmp.setE( common.TResidualMass + TargetResidualExcitationEnergy );
+      common.Ptmp.setPx( -saveSelectedTargetNucleon4Momentum.x() ); 
+      common.Ptmp.setPy( -saveSelectedTargetNucleon4Momentum.y() ); 
+      common.Ptmp.setPz( -saveSelectedTargetNucleon4Momentum.z() );
+      common.Ptmp.setE( std::sqrt( sqr( common.TResidualMass + TargetResidualExcitationEnergy ) + common.Ptmp.vect().mag2() ) ); 
+      //---
       #ifdef debugAdjust
       G4cout << "Targ Resi stop " << common.Ptmp << G4endl;
       #endif
-      common.Ptmp.transform( common.toLab );          
+      common.Ptmp.transform( common.toLab );  // From center-of-mass to Lab frame
       TargetResidual4Momentum = common.Ptmp;
     }
     // New projectile residual
@@ -1430,12 +1441,20 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
         ProjectileResidualMassNumber       = common.PResidualMassNumber;
         ProjectileResidualCharge           = common.PResidualCharge;
         ProjectileResidualExcitationEnergy = common.PResidualExcitationEnergy;
-        common.Ptmp.setE( common.PResidualMass + ProjectileResidualExcitationEnergy ); 
+        //---AR-Jul2019 : To avoid unphysical projectile (anti-)fragments at rest, use the
+        //                saved original momentum of the anti-baryon (instead of setting 0).
+        //                This is a rough and simple approach!
+        //common.Ptmp.setE( common.PResidualMass + ProjectileResidualExcitationEnergy );
+        common.Ptmp.setPx( -saveSelectedAntiBaryon4Momentum.x() ); 
+        common.Ptmp.setPy( -saveSelectedAntiBaryon4Momentum.y() ); 
+        common.Ptmp.setPz( -saveSelectedAntiBaryon4Momentum.z() );
+        common.Ptmp.setE( std::sqrt( sqr( common.PResidualMass + ProjectileResidualExcitationEnergy ) + common.Ptmp.vect().mag2() ) ); 
+        //---
       }
       #ifdef debugAdjust
       G4cout << "Proj Resi stop " << common.Ptmp << G4endl;
       #endif
-      common.Ptmp.transform( common.toLab );
+      common.Ptmp.transform( common.toLab );  // From center-of-mass to Lab frame
       ProjectileResidual4Momentum = common.Ptmp;
     }
     return returnCode = 0;  // successfully ended and nothing else needs to be done (i.e. no sampling)
@@ -1468,6 +1487,7 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
 
   return returnCode = 1;  // successfully completed, but the work needs to be continued, i.e. try to sample
 }
+
 
 //-------------------------------------------------------------------
 
@@ -2464,7 +2484,7 @@ void G4FTFModel::GetResiduals() {
     G4cout << "End projectile" << G4endl;
     #endif
    
-  } else {
+  } else {  // Related to the condition: if ( HighEnergyInter )
 
     #ifdef debugFTFmodel
     G4cout << "Low energy interaction: Target nucleus --------------" << G4endl
@@ -2521,50 +2541,47 @@ void G4FTFModel::GetResiduals() {
     for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
       G4Nucleon* aNucleon = TheInvolvedNucleonsOfProjectile[i];
       G4VSplitableHadron* projectileSplitable = aNucleon->GetSplitableHadron();
-      if ( projectileSplitable->GetSoftCollisionCount() != 0 ) 
-        NumberOfProjectileParticipant++;
-      }
- 
-      #ifdef debugFTFmodel
-      G4cout << "NumberOfProjectileParticipant" << G4endl;
-      #endif
-
-      DeltaExcitationE = 0.0;
-      DeltaPResidualNucleus = G4LorentzVector( 0.0, 0.0, 0.0, 0.0 );
-
-      if ( NumberOfProjectileParticipant != 0 ) {
-        DeltaExcitationE = ProjectileResidualExcitationEnergy / 
-                           G4double( NumberOfProjectileParticipant );
-        DeltaPResidualNucleus = ProjectileResidual4Momentum /
-                                G4double( NumberOfProjectileParticipant );
-      }
-      //G4cout << "DeltaExcitationE DeltaPResidualNucleus " << DeltaExcitationE
-      //       << " " << DeltaPResidualNucleus << G4endl;
-      for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
-        G4Nucleon* aNucleon = TheInvolvedNucleonsOfProjectile[i];
-        G4VSplitableHadron* projectileSplitable = aNucleon->GetSplitableHadron();
-        if ( projectileSplitable->GetSoftCollisionCount() != 0 ) {
-          G4LorentzVector tmp = -DeltaPResidualNucleus;
-          aNucleon->SetMomentum( tmp );
-          aNucleon->SetBindingEnergy( DeltaExcitationE );
-        } else {
-          delete projectileSplitable;  
-          projectileSplitable = 0; 
-          aNucleon->Hit( projectileSplitable );
-          aNucleon->SetBindingEnergy( 0.0 );
-        } 
-      } 
-
-      #ifdef debugFTFmodel
-      G4cout << "NumberOfProjectileParticipant " << NumberOfProjectileParticipant << G4endl
-             << "ProjectileResidual4Momentum " << ProjectileResidual4Momentum << G4endl;
-      #endif
-
+      if ( projectileSplitable->GetSoftCollisionCount() != 0 ) NumberOfProjectileParticipant++;
     }
+ 
+    #ifdef debugFTFmodel
+    G4cout << "NumberOfProjectileParticipant" << G4endl;
+    #endif
+
+    DeltaExcitationE = 0.0;
+    DeltaPResidualNucleus = G4LorentzVector( 0.0, 0.0, 0.0, 0.0 );
+
+    if ( NumberOfProjectileParticipant != 0 ) {
+      DeltaExcitationE = ProjectileResidualExcitationEnergy / G4double( NumberOfProjectileParticipant );
+      DeltaPResidualNucleus = ProjectileResidual4Momentum / G4double( NumberOfProjectileParticipant );
+    }
+    //G4cout << "DeltaExcitationE DeltaPResidualNucleus " << DeltaExcitationE
+    //       << " " << DeltaPResidualNucleus << G4endl;
+    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
+      G4Nucleon* aNucleon = TheInvolvedNucleonsOfProjectile[i];
+      G4VSplitableHadron* projectileSplitable = aNucleon->GetSplitableHadron();
+      if ( projectileSplitable->GetSoftCollisionCount() != 0 ) {
+        G4LorentzVector tmp = -DeltaPResidualNucleus;
+        aNucleon->SetMomentum( tmp );
+        aNucleon->SetBindingEnergy( DeltaExcitationE );
+      } else {
+        delete projectileSplitable;  
+        projectileSplitable = 0; 
+        aNucleon->Hit( projectileSplitable );
+        aNucleon->SetBindingEnergy( 0.0 );
+      } 
+    } 
 
     #ifdef debugFTFmodel
-    G4cout << "End GetResiduals -----------------" << G4endl;
+    G4cout << "NumberOfProjectileParticipant " << NumberOfProjectileParticipant << G4endl
+           << "ProjectileResidual4Momentum " << ProjectileResidual4Momentum << G4endl;
     #endif
+
+  }  // End of the condition: if ( HighEnergyInter )
+
+  #ifdef debugFTFmodel
+  G4cout << "End GetResiduals -----------------" << G4endl;
+  #endif
 
 }
 
@@ -2703,8 +2720,7 @@ GenerateDeltaIsobar( const G4double sqrtS,                  // input parameter
   G4int numberOfDeltas = 0;
 
   for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
-    //G4cout << "i maxNumberOfDeltas probDeltaIsobar " << i << " " << maxNumberOfDeltas
-    //       << " " << probDeltaIsobar << G4endl;
+
     if ( G4UniformRand() < probDeltaIsobar  &&  numberOfDeltas < maxNumberOfDeltas ) {
       numberOfDeltas++;
       if ( ! involvedNucleons[i] ) continue;
@@ -2731,8 +2747,7 @@ GenerateDeltaIsobar( const G4double sqrtS,                  // input parameter
       }
     } 
   }
-  //G4cout << "maxNumberOfDeltas numberOfDeltas " << maxNumberOfDeltas << " " 
-  //       << numberOfDeltas << G4endl;
+
   return true;
 }
 

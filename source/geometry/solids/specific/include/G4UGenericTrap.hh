@@ -23,24 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UGenericTrap
 //
 // Class description:
 //
-//   Wrapper class for G4GenericTrap to make use of VecGeom GenericTrap.
+// Wrapper class for G4GenericTrap to make use of VecGeom GenericTrap.
 
-// History:
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
-#ifndef G4UGENERICTRAP_hh
-#define G4UGENERICTRAP_hh
+#ifndef G4UGENERICTRAP_HH
+#define G4UGENERICTRAP_HH
 
 #include "G4UAdapter.hh"
 
@@ -84,7 +76,7 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
       // persistifiable objects.
 
     G4UGenericTrap( const G4UGenericTrap& source );
-    G4UGenericTrap &operator=(const G4UGenericTrap& source);
+    G4UGenericTrap& operator=(const G4UGenericTrap& source);
       // Copy constructor and assignment operator.
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
@@ -98,7 +90,7 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
 
   private:
 
-    G4int                    fVisSubdivisions;
+    G4int fVisSubdivisions;
     std::vector<G4TwoVector> fVertices;
 
 };

@@ -57,15 +57,18 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   ReaderCmd->SetGuidance("Read GDML file.");
   ReaderCmd->SetParameterName("filename",false);
   ReaderCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  ReaderCmd->SetToBeBroadcasted(false);
 
   TopVolCmd = new G4UIcmdWithAString("/persistency/gdml/topvol",this);
   TopVolCmd->SetGuidance("Set the top volume for writing the GDML file.");
   TopVolCmd->SetParameterName("topvol",false);
+  TopVolCmd->SetToBeBroadcasted(false);
 
   WriterCmd = new G4UIcmdWithAString("/persistency/gdml/write",this);
   WriterCmd->SetGuidance("Write GDML file.");
   WriterCmd->SetParameterName("filename",false);
   WriterCmd->AvailableForStates(G4State_Idle);
+  WriterCmd->SetToBeBroadcasted(false);
 
   StripCmd = new G4UIcmdWithABool("/persistency/gdml/strip_pointers",this);
   StripCmd->SetGuidance("Enable/disable stripping of pointers on names");
@@ -73,6 +76,7 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   StripCmd->SetParameterName("strip_pointers",true);
   StripCmd->SetDefaultValue(true);
   StripCmd->AvailableForStates(G4State_Idle);
+  StripCmd->SetToBeBroadcasted(false);
 
   AppendCmd = new G4UIcmdWithABool("/persistency/gdml/add_pointers",this);
   AppendCmd->SetGuidance("Enable/disable appending of pointers to names");
@@ -80,6 +84,7 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   AppendCmd->SetParameterName("append_pointers",true);
   AppendCmd->SetDefaultValue(true);
   AppendCmd->AvailableForStates(G4State_Idle);
+  AppendCmd->SetToBeBroadcasted(false);
 
   RegionCmd = new G4UIcmdWithABool("/persistency/gdml/export_regions",this);
   RegionCmd->SetGuidance("Enable export of geometrical regions");
@@ -87,6 +92,7 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   RegionCmd->SetParameterName("export_regions",false);
   RegionCmd->SetDefaultValue(false);
   RegionCmd->AvailableForStates(G4State_Idle);
+  RegionCmd->SetToBeBroadcasted(false);
 
   EcutsCmd = new G4UIcmdWithABool("/persistency/gdml/export_Ecuts",this);
   EcutsCmd->SetGuidance("Enable export of energy cuts associated");
@@ -97,6 +103,7 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   EcutsCmd->SetParameterName("export_Ecuts",false);
   EcutsCmd->SetDefaultValue(false);
   EcutsCmd->AvailableForStates(G4State_Idle);
+  EcutsCmd->SetToBeBroadcasted(false);
 
   SDCmd = new G4UIcmdWithABool("/persistency/gdml/export_SD",this);
   SDCmd->SetGuidance("Enable export of SD associated");
@@ -104,10 +111,12 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   SDCmd->SetParameterName("export_SD",false);
   SDCmd->SetDefaultValue(false);
   SDCmd->AvailableForStates(G4State_Idle);
+  SDCmd->SetToBeBroadcasted(false);
 
   ClearCmd = new G4UIcmdWithoutParameter("/persistency/gdml/clear",this);
   ClearCmd->SetGuidance("Clear geometry (before reading a new one from GDML).");
   ClearCmd->AvailableForStates(G4State_Idle);
+  ClearCmd->SetToBeBroadcasted(false);
 }
 
 G4GDMLMessenger::~G4GDMLMessenger()
@@ -144,6 +153,7 @@ void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4GeometryManager::GetInstance()->OpenGeometry();
     myParser->Read(newValue);
     G4RunManager::GetRunManager()->DefineWorldVolume(myParser->GetWorldVolume());
+    G4RunManager::GetRunManager()->GeometryDirectlyUpdated();
   }
 
   if( command == RegionCmd )

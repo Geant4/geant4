@@ -81,7 +81,7 @@ G4VPhysicalVolume* G4MIRDRightClavicle::Construct(const G4String& volumeName, G4
 							   "logical" + volumeName,
 							   0, 0, 0);
   G4VPhysicalVolume* physRightClavicle = new G4PVPlacement(0,
-							   G4ThreeVector(0.*cm,0.*cm,33.25*cm),
+							   G4ThreeVector(0.*cm,2.*cm,33.25*cm),
 							   "physicalRightClavicle",
 							   logicRightClavicle,
 							   mother,

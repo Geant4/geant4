@@ -127,7 +127,7 @@ void G4FastSimulationPhysics::ConstructProcess()
 	  G4int icount(0);
 	  
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+	  for (size_t ip = 0 ; ip < vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      G4FastSimulationManagerProcess* pb = dynamic_cast< G4FastSimulationManagerProcess* >(process);

@@ -44,7 +44,7 @@ G4TrajectoryDrawByEncounteredVolume::G4TrajectoryDrawByEncounteredVolume
 G4TrajectoryDrawByEncounteredVolume::~G4TrajectoryDrawByEncounteredVolume() {}
 
 void
-G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4bool& visible) const
+G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4bool& /*visible*/) const
 {
   try
   {
@@ -74,7 +74,6 @@ G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4boo
     G4VisTrajContext myContext(GetContext());
 
     myContext.SetLineColour(colour);
-    myContext.SetVisible(visible);
 
     if (GetVerbose()) {
       G4cout

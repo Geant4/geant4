@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//---------------------------------------------------------------
-//
-// G4RichTrajectory.hh
+// G4RichTrajectory
 //
 // class description:
+//
 //   This class extends G4Trajectory, which includes the following:
 //     1) List of trajectory points which compose the trajectory,
 //     2) static information of particle which generated the 
@@ -40,7 +37,7 @@
 //     4) physical volume and next physical volume;
 //     5) creator process;
 //   ...and much more.
-//
+
 // Contact:
 //   Questions and comments on G4Trajectory should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
@@ -49,9 +46,7 @@
 //   and on the extended code to:
 //     John Allison   (e-mail: John.Allison@manchester.ac.uk)
 //     Joseph Perl    (e-mail: perl@slac.stanford.edu)
-//
-// ---------------------------------------------------------------
-
+// --------------------------------------------------------------------
 #ifndef G4RICHTRAJECTORY_HH
 #define G4RICHTRAJECTORY_HH
 
@@ -59,54 +54,49 @@
 #include "G4Trajectory.hh"
 #include "G4TouchableHandle.hh"
 
-typedef std::vector<G4VTrajectoryPoint*>  RichTrajectoryPointsContainer;
+class G4RichTrajectory : public G4Trajectory
+{  
+  using RichTrajectoryPointsContainer = std::vector<G4VTrajectoryPoint*>;
 
-class G4RichTrajectory : public G4Trajectory {
+  public: // with description
   
-public: // with description
+    // Constructors/destructor
+    G4RichTrajectory();
+    G4RichTrajectory(const G4Track* aTrack);
+    G4RichTrajectory(G4RichTrajectory &);
+    virtual ~G4RichTrajectory();
+
+    // Operators
+    G4RichTrajectory& operator= (const G4RichTrajectory &) = delete;
+    G4int operator == (const G4RichTrajectory& r) const { return (this==&r); } 
+
+    inline void* operator new(size_t);
+    inline void  operator delete(void*);
   
-  // Constructors/destructors
-  G4RichTrajectory();
-  G4RichTrajectory(const G4Track* aTrack);
-  G4RichTrajectory(G4RichTrajectory &);
-  virtual ~G4RichTrajectory();
+    // Other (virtual) member functions
+    void ShowTrajectory(std::ostream& os=G4cout) const;
+    void DrawTrajectory() const;
+    void AppendStep(const G4Step* aStep);
+    void MergeTrajectory(G4VTrajectory* secondTrajectory);
+    G4int GetPointEntries() const {return G4int(fpRichPointsContainer->size());}
+    G4VTrajectoryPoint* GetPoint(G4int i) const {return (*fpRichPointsContainer)[i];}
 
-private:
-  G4RichTrajectory& operator= (const G4RichTrajectory &);
+    // Get methods for HepRep style attributes
+    virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
+    virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-  // Operators
-public:
-  inline void* operator new(size_t);
-  inline void  operator delete(void*);
-  inline int operator == (const G4RichTrajectory& right) const
-  {return (this==&right);} 
-  
-  // Other (virtual) member functions
-  void ShowTrajectory(std::ostream& os=G4cout) const;
-  void DrawTrajectory() const;
-  void AppendStep(const G4Step* aStep);
-  void MergeTrajectory(G4VTrajectory* secondTrajectory);
-  int GetPointEntries() const { return fpRichPointsContainer->size(); }
-  G4VTrajectoryPoint* GetPoint(G4int i) const 
-   { return (*fpRichPointsContainer)[i]; }
+  private:
 
-  // Get methods for HepRep style attributes
-  virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-  virtual std::vector<G4AttValue>* CreateAttValues() const;
-
-private:
-
-  // Extended information (only publicly accessible through AttValues)...
-  RichTrajectoryPointsContainer* fpRichPointsContainer;
-  G4TouchableHandle fpInitialVolume;
-  G4TouchableHandle fpInitialNextVolume;
-  const G4VProcess* fpCreatorProcess;
-  G4int             fCreatorModelID;
-  G4TouchableHandle fpFinalVolume;
-  G4TouchableHandle fpFinalNextVolume;
-  const G4VProcess* fpEndingProcess;
-  G4double          fFinalKineticEnergy;
-
+    // Extended information (only publicly accessible through AttValues)...
+    RichTrajectoryPointsContainer* fpRichPointsContainer;
+    G4TouchableHandle fpInitialVolume;
+    G4TouchableHandle fpInitialNextVolume;
+    const G4VProcess* fpCreatorProcess;
+    G4int             fCreatorModelID;
+    G4TouchableHandle fpFinalVolume;
+    G4TouchableHandle fpFinalNextVolume;
+    const G4VProcess* fpEndingProcess;
+    G4double          fFinalKineticEnergy;
 };
 
 extern G4TRACKING_DLL G4Allocator<G4RichTrajectory>*& aRichTrajectoryAllocator();

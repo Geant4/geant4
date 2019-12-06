@@ -173,7 +173,7 @@ void G4eIonisationParameters::LoadData()
     }
   }
   
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     { 
       G4Exception("G4BremsstrahlungParameters::LoadData",

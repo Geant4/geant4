@@ -53,6 +53,7 @@ class G4Sphere;
 class G4Ellipsoid;
 class G4Polycone;
 class G4Polyhedra;
+class G4TessellatedSolid;
 
 class G4PhysicalVolumeModel;
 class G4VTrajectory;
@@ -105,12 +106,13 @@ public: // With description
   virtual void AddSolid (const G4Tubs&)      = 0;
 
   // From geometry/solids/specific
-  virtual void AddSolid (const G4Ellipsoid&) = 0;
-  virtual void AddSolid (const G4Polycone&)  = 0;
-  virtual void AddSolid (const G4Polyhedra&) = 0;
+  virtual void AddSolid (const G4Ellipsoid&)        = 0;
+  virtual void AddSolid (const G4Polycone&)         = 0;
+  virtual void AddSolid (const G4Polyhedra&)        = 0;
+  virtual void AddSolid (const G4TessellatedSolid&) = 0;
 
-  // For solids not above.
-  virtual void AddSolid (const G4VSolid&)    = 0;
+  // For solids not above
+  virtual void AddSolid (const G4VSolid&) = 0;
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding "compound" GEANT4 objects to the scene
@@ -123,10 +125,10 @@ public: // With description
   // use graphics-system-specific code or (d) any combination of the
   // above.
 
-  virtual void AddCompound (const G4VTrajectory&)        = 0;
-  virtual void AddCompound (const G4VHit&)               = 0;
-  virtual void AddCompound (const G4VDigi&)              = 0;
-  virtual void AddCompound (const G4THitsMap<G4double>&) = 0;
+  virtual void AddCompound (const G4VTrajectory&)            = 0;
+  virtual void AddCompound (const G4VHit&)                   = 0;
+  virtual void AddCompound (const G4VDigi&)                  = 0;
+  virtual void AddCompound (const G4THitsMap<G4double>&)     = 0;
   virtual void AddCompound (const G4THitsMap<G4StatDouble>&) = 0;
 
   ///////////////////////////////////////////////////////////////////

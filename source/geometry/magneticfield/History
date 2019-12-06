@@ -15,6 +15,44 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 14, 2019 J.Apostolakis                  - field-V10-05-17
+-------------------------------
+- Added method / attribute to G4VIntegrationDriver DoesReIntegrate()
+   to inform whether the driver recomputes segment when
+   AccurateAdvance is called.
+
+October 27, 2019 D.Sorokin                       - field-V10-05-16
+----------------------------
+- Remove statistics printouts from destructor of G4BFieldIntegrationDriver
+
+October 24, 2019 H.Burkhardt                       - field-V10-05-15
+----------------------------
+- Standard sextupole magnet first implementation G4SextupoleMagField.cc,.hh
+
+October 18, 2019 D. Sorokin                         - field-V10-05-14
+-----------------------------------------
+- Fix floating point exception in G4BFieldIntegrationDriver.
+
+October 1, 2019 G. Cosmo                         - field-V10-05-13
+-----------------------------------------
+- Fixed unitialised data in G4EqMagElectricField and G4EqGravityField,
+  reported by Coverity.
+
+September 12, 2019 G. Cosmo                      - field-V10-05-12
+-----------------------------------------
+- Minor C++11 revision. Code formatting and cleanup.
+
+July 8, 2019 D. Sorokin                          - field-V10-05-11
+-----------------------------------------
+- G4BFieldIntegrationDriver: an attempt to solve looping particle issue. 
+
+July 3, 2019 D. Sorokin                          - field-V10-05-10
+-----------------------------------------
+- Make G4InterpolationDriver default for performance assessments.
+
+June 25, 2019 D. Sorokin                          - field-V10-05-09
+-----------------------------------------
+- Fix Dormand-Prince 5th order interpolation method
 
 June 20, 2019 D. Sorokin                          - field-V10-05-08
 -----------------------------------------
@@ -64,28 +102,28 @@ November 9, 2018 J.Apostolakis                   - field-V10-04-17
 
 September 26, 2018 D.Sorokin                   - field-V10-04-15, -16
 ----------------------------
-- Implement G4InterpolationDrvier. This driver uses a Runge-Kutta
+- Implemented G4InterpolationDriver. This driver uses a Runge-Kutta
   stepper with interpolation property to integrate EoM with error control.
-    The field evaluations used to calculate the enpoint of an 'advance' can
-    be reused to obtain one or multiple internal points on the curve (x,p).
-    So in steps in which an intersection is found, the number of field
-    evaluations are expected to be reduced substantially.
+  The field evaluations used to calculate the enpoint of an 'advance' can
+  be reused to obtain one or multiple internal points on the curve (x,p).
+  So in steps in which an intersection is found, the number of field
+  evaluations are expected to be reduced substantially.
 
 September 13, 2018 D.Sorokin                   - field-V10-04-13, -14
 ----------------------------
 - G4NystromRK4 creates G4CachedMagneticField if it was not provided.
 - Removed G4MagIntegratorStepper::ComputeRightHandSide() method
-   (all calls now use non-virtual RightHandSide() method instead).
+  (all calls now use non-virtual RightHandSide() method instead).
 - Reversed declaration of final for the class G4UniformMagField.
-   Returned to previous status: only GetFieldValue method is final.
-   ( This avoid need to change examples/tests and potentially migrate 
-     users' code. ) 
+  Returned to previous status: only GetFieldValue method is final.
+  ( This avoid need to change examples/tests and potentially migrate 
+    users' code. ) 
 
 September 12, 2018 D.Sorokin                   - field-V10-04-11, -12
 ----------------------------
 - Created new experimental driver G4BFieldIntegrationDriver for pure
-   magnetic fields.  In QuickAdvance it uses helix stepper when the
-   estimated 'helix' rotation angle is larger than pi/3.
+  magnetic fields.  In QuickAdvance it uses helix stepper when the
+  estimated 'helix' rotation angle is larger than pi/3.
 - G4NystromRK4 uses G4CachedMagneticField for caching values.
   NOTE: It now the user's responsibility to create G4CachedMagneticField. 
   ( The alternative is to create G4CachedMagneticField inside G4NystromRK4.
@@ -97,18 +135,17 @@ September 12, 2018 D.Sorokin                   - field-V10-04-11, -12
 July 10, 2018 D. Sorokin              - field-V10-04-08, -09, -10
 ------------------------ Tags by J. Apostolakis
 - Corrections in calculation of chord distance in G4DormandPrince745
-   ( use 4th order interpolation from Shampine 1986 for mid-point. )
+  ( use 4th order interpolation from Shampine 1986 for mid-point. )
 - Revised G4FieldUtils: moved copy() method from steppers,
-    added 2 new setValue: simple & variadic methods.
+  added 2 new setValue: simple & variadic methods.
 - Fixes to copy input time in ModifiedMidpoint, CashKarp, G4RK547FEq1/2/3
-    Bogacki-Shampine 4/5 and 2/3  (note: B-S 2/3 largely rewritten )
-    Dormand Prince 4/5, 5/6 and 7/8,  and Tsitouras steppers.
+  Bogacki-Shampine 4/5 and 2/3  (note: B-S 2/3 largely rewritten )
+  Dormand Prince 4/5, 5/6 and 7/8,  and Tsitouras steppers.
 - Trial revision in G4BulirschStoer to reduce number of division
   operations (J.A.)
 - Fix for unitialised pIntStepper pointer in G4FSALIntegrationDriver
   constructor.  Revision of data member variable names.  ( J.A. )
   
-
 June 15, 2018 G.Cosmo                   - field-V10-04-07
 ---------------------
 - Fixed minor Coverity defects in G4BurlischStoer and G4ModifiedMidPoint.

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4TwistedBox
 //
 // Class description:
@@ -45,13 +38,10 @@
 //     pDz    Half-length along z axis
 //     pPhiTwist Twist angle
 
-// Author:
-//
-//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
-#ifndef __G4TWISTEDBOX__
-#define __G4TWISTEDBOX__
+#ifndef G4TWISTEDBOX_HH
+#define G4TWISTEDBOX_HH
 
 #include "G4VTwistedFaceted.hh"
 

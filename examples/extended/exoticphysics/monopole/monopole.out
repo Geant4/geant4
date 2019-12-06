@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -9,7 +13,7 @@
 **************************************************************
 
 G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
-<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
 
 <<< Reference Physics List FTFP_BERT is built
 
@@ -79,10 +83,10 @@ Some /vis commands (optionally) take a string to specify colour.
 G4MonopoleEquation::G4MonopoleEquation
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /particle/select monopole
@@ -128,8 +132,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -492,7 +495,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
   Process: nCapture
@@ -505,8 +508,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -517,8 +520,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -529,8 +532,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -579,8 +582,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -624,14 +628,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -646,7 +650,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -659,9 +663,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -672,9 +675,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -687,8 +689,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -710,26 +712,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -743,7 +743,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -754,8 +754,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -764,21 +764,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -817,7 +820,7 @@ Index : 1     used in the geometry : Yes
 
  The run consists of 100 monopole of 100 GeV
  through 10 cm  of G4_Si (density: 2.33 g/cm3 )
- Projected Range= 7.7511 cm    rms= 94.241 um 
+ Projected Range= 7.7925 cm    rms= 181.99 um 
 
 ##################################################################
 ### Stopping Powers and Cross Sections
@@ -825,65 +828,65 @@ Index : 1     used in the geometry : Yes
 # N   E(MeV)  p_dEdx(MeV/mm) mpl_dEdx(MeV/mm)           xs(1/mm)
                restr    tot      restr    tot          p      mpl
 ##################################################################
- 0.    0.001    24.5    24.5     1.27-8.09e-16         0         0
- 1.  0.00126    27.4    27.3     1.42-9.07e-16         0         0
- 2.  0.00158    30.7    30.8     1.59-1.02e-15         0         0
- 3.    0.002    34.6    34.6     1.79-1.14e-15         0         0
- 4.  0.00251    38.8    38.8     2.01-1.28e-15         0         0
- 5.  0.00316    43.5    43.5     2.25-1.44e-15         0         0
- 6.  0.00398    48.8    48.8     2.53-1.61e-15         0         0
- 7.  0.00501    54.8    54.8     2.83-1.81e-15         0         0
- 8.  0.00631    61.4    61.5     3.18-2.03e-15         0         0
- 9.  0.00794      69    68.9     3.57-2.28e-15         0         0
-10.     0.01    77.4    77.4        4-2.56e-15         0         0
-11.   0.0126    85.3    85.2     4.49-2.87e-15         0         0
-12.   0.0158    93.3    93.5     5.04-3.22e-15         0         0
-13.     0.02     102     102     5.65-3.61e-15         0         0
-14.   0.0251     110     110     6.34-4.05e-15         0         0
-15.   0.0316     118     118     7.12-4.55e-15         0         0
-16.   0.0398     124     124     7.99 -5.1e-15         0         0
-17.   0.0501     127     127     8.96-5.73e-15         0         0
-18.   0.0631     128     128     10.1-6.42e-15         0         0
-19.   0.0794     124     124     11.3-7.21e-15         0         0
-20.      0.1     118     118     12.7-8.09e-15         0         0
-21.    0.126     109     109     14.2-9.07e-15         0         0
-22.    0.158    99.7    99.7     15.9-1.02e-14         0         0
-23.      0.2    90.6    90.6     17.9-1.14e-14         0         0
-24.    0.251    82.1    82.1     20.1-1.28e-14         0         0
-25.    0.316    74.2    74.2     22.5-1.44e-14         0         0
-26.    0.398    66.8    66.8     25.3-1.61e-14         0         0
-27.    0.501    59.8    59.7     28.3-1.81e-14         0         0
-28.    0.631    53.3    53.4     31.8-2.03e-14         0         0
-29.    0.794    47.2    47.1     35.7-2.28e-14         0         0
-30.        1    40.8    40.8       40-2.56e-14         0         0
-31.     1.26    35.3    35.3     44.9-2.87e-14         0         0
-32.     1.58    30.4    30.4     50.4-3.22e-14         0         0
-33.        2    26.1    26.1     56.5-3.61e-14         0         0
-34.     2.51    22.2    22.3     63.4-4.05e-14         0         0
-35.     3.16    18.9    18.9     71.2-4.55e-14         0         0
-36.     3.98    16.1      16     79.9 -5.1e-14         0         0
-37.     5.01    13.6    13.6     88.8   0.0264         0         0
-38.     6.31    11.4    11.4     92.6      3.1         0         0
-39.     7.94    9.59    9.61     93.5     7.11         0         0
-40.       10    8.05    8.05     97.6     12.2         0         0
-41.     12.6     6.7    6.69      102     18.5         0         0
-42.     15.8    5.57    5.58      108     26.3         0         0
-43.       20    4.66    4.66      115     35.8         0         0
-44.     25.1    3.91    3.91      124     47.2         0         0
-45.     31.6    3.27    3.27      135     60.8         0         0
-46.     39.8    2.74    2.74      148       77         0         0
-47.     50.1    2.29    2.29      164     96.2         0         0
-48.     63.1    1.92    1.92      183      119         0         0
-49.     79.4    1.61    1.61      205      145         0         0
-50.      100    1.36    1.36      231      176         0         0
-51.      126    1.15    1.15      262      213         0         0
-52.      158   0.983   0.984      298      255         0         0
-53.      200   0.842   0.847      341      304   0.00775         0
-54.      251   0.724   0.736      390      361     0.024         0
-55.      316   0.628   0.646      447      427    0.0302         0
-56.      398   0.554   0.575      515      503    0.0338         0
-57.      501   0.495    0.52      589      591    0.0353         0
-58.      631   0.449   0.476      637      631     0.036         0
+ 0.    0.001    24.5    24.5    0.633-4.04e-16         0         0
+ 1.  0.00126    27.4    27.3     0.71-4.54e-16         0         0
+ 2.  0.00158    30.7    30.8    0.797-5.09e-16         0         0
+ 3.    0.002    34.6    34.6    0.894-5.71e-16         0         0
+ 4.  0.00251    38.8    38.8        1-6.41e-16         0         0
+ 5.  0.00316    43.5    43.5     1.13-7.19e-16         0         0
+ 6.  0.00398    48.8    48.8     1.26-8.07e-16         0         0
+ 7.  0.00501    54.8    54.8     1.42-9.05e-16         0         0
+ 8.  0.00631    61.4    61.5     1.59-1.02e-15         0         0
+ 9.  0.00794      69    68.9     1.78-1.14e-15         0         0
+10.     0.01    77.4    77.4        2-1.28e-15         0         0
+11.   0.0126    85.3    85.2     2.25-1.43e-15         0         0
+12.   0.0158    93.3    93.5     2.52-1.61e-15         0         0
+13.     0.02     102     102     2.83-1.81e-15         0         0
+14.   0.0251     110     110     3.17-2.03e-15         0         0
+15.   0.0316     118     118     3.56-2.27e-15         0         0
+16.   0.0398     124     124     3.99-2.55e-15         0         0
+17.   0.0501     127     127     4.48-2.86e-15         0         0
+18.   0.0631     128     128     5.03-3.21e-15         0         0
+19.   0.0794     124     124     5.64 -3.6e-15         0         0
+20.      0.1     118     118     6.33-4.04e-15         0         0
+21.    0.126     109     109      7.1-4.54e-15         0         0
+22.    0.158    99.7    99.7     7.97-5.09e-15         0         0
+23.      0.2    90.6    90.6     8.94-5.71e-15         0         0
+24.    0.251    82.1    82.1       10-6.41e-15         0         0
+25.    0.316    74.2    74.2     11.3-7.19e-15         0         0
+26.    0.398    66.8    66.8     12.6-8.07e-15         0         0
+27.    0.501    59.8    59.7     14.2-9.05e-15         0         0
+28.    0.631    53.3    53.4     15.9-1.02e-14         0         0
+29.    0.794    47.2    47.1     17.8-1.14e-14         0         0
+30.        1    40.8    40.8       20-1.28e-14         0         0
+31.     1.26    35.3    35.3     22.5-1.43e-14         0         0
+32.     1.58    30.4    30.4     25.2-1.61e-14         0         0
+33.        2    26.1    26.1     28.3-1.81e-14         0         0
+34.     2.51    22.2    22.3     31.7-2.03e-14         0         0
+35.     3.16    18.9    18.9     35.6-2.27e-14         0         0
+36.     3.98    16.1      16     39.9-2.55e-14         0         0
+37.     5.01    13.6    13.6     44.5   0.0264         0         0
+38.     6.31    11.4    11.4     47.7      3.1         0         0
+39.     7.94    9.59    9.61     50.4     7.11         0         0
+40.       10    8.05    8.05     54.9     12.2         0         0
+41.     12.6     6.7    6.69     60.4     18.5         0         0
+42.     15.8    5.57    5.58     67.1     26.3         0         0
+43.       20    4.66    4.66     75.6     35.8         0         0
+44.     25.1    3.91    3.91     85.8     47.2         0         0
+45.     31.6    3.27    3.27       98     60.8         0         0
+46.     39.8    2.74    2.74      113       77         0         0
+47.     50.1    2.29    2.29      130     96.2         0         0
+48.     63.1    1.92    1.92      151      119         0         0
+49.     79.4    1.61    1.61      175      145         0         0
+50.      100    1.36    1.36      204      176         0         0
+51.      126    1.15    1.15      238      213         0         0
+52.      158   0.983   0.984      277      255         0         0
+53.      200   0.842   0.847      322      304   0.00775         0
+54.      251   0.724   0.736      376      361     0.024         0
+55.      316   0.628   0.646      437      427    0.0302         0
+56.      398   0.554   0.575      509      503    0.0338         0
+57.      501   0.495    0.52      588      591    0.0353         0
+58.      631   0.449   0.476      638      631     0.036         0
 59.      794   0.414   0.444      667      670    0.0364         0
 60.    1e+03   0.388   0.421      708      708    0.0368         0
 61. 1.26e+03   0.369   0.405      748      747    0.0373         0
@@ -930,11 +933,11 @@ Index : 1     used in the geometry : Yes
 ... close Root file : monopole.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
-G4Integration Driver Stats: #QuickAdvance 1521430 - #AccurateAdvance 8999 #good steps 14929 #bad steps 0
+G4Integration Driver Stats: #QuickAdvance 1519870 - #AccurateAdvance 8944 #good steps 14494 #bad steps 1
 G4ChordFinder statistics report: 
-  No trials: 1520472  No Calls: 1519911  Max-trial: 2
+  No trials: 1518812  No Calls: 1518280  Max-trial: 2
   Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
-G4Integration Driver Stats: #QuickAdvance 1714218 - #AccurateAdvance 600 #good steps 5664 #bad steps 0
+G4Integration Driver Stats: #QuickAdvance 983295 - #AccurateAdvance 581 #good steps 5180 #bad steps 0
 G4ChordFinder statistics report: 
-  No trials: 1713668  No Calls: 1713567  Max-trial: 3
+  No trials: 983186  No Calls: 983085  Max-trial: 3
   Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

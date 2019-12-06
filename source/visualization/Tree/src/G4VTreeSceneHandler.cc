@@ -100,7 +100,7 @@ void G4VTreeSceneHandler::PreAddSolid
       // G4PhysicalVolumeModel sends volumes as it encounters them,
       // i.e., mothers before daughters, in its descent of the
       // geometry tree.  Error!
-      G4cerr << "ERROR: G4XXXSceneHandler::PreAddSolid: Mother "
+      G4cerr << "ERROR: G4VTreeSceneHandler::PreAddSolid: Mother "
 	     << ri->GetPhysicalVolume()->GetName()
 	     << ':' << ri->GetCopyNo()
 	     << " not previously encountered."

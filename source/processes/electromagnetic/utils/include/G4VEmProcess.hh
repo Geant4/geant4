@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -144,13 +143,16 @@ public:
                                       const G4String& directory,
                                       G4bool ascii) override;
 
+  // allowing check process name
+  virtual G4VEmProcess* GetEmProcess(const G4String& name);
+
   //------------------------------------------------------------------------
   // Specific methods for Discrete EM post step simulation 
   //------------------------------------------------------------------------
 
   // It returns the cross section per volume for energy/ material
-  G4double CrossSectionPerVolume(G4double kineticEnergy,
-				                         const G4MaterialCutsCouple* couple);
+  G4double CrossSectionPerVolume(G4double kineticEnergy, 
+                                 const G4MaterialCutsCouple* couple);
 
   // It returns the cross section of the process per atom
   G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
@@ -315,7 +317,6 @@ private:
 
   void PrintWarning(G4String tit, G4double val);
 
-//  void ComputeIntegralLambda(G4double kinEnergy);
   void ComputeIntegralLambda(G4double kinEnergy, G4double logKinEnergy);
 
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
@@ -362,8 +363,6 @@ private:
   const std::vector<G4double>* theCutsGamma;
   const std::vector<G4double>* theCutsElectron;
   const std::vector<G4double>* theCutsPositron;
-  const std::vector<G4double>* theDensityFactor;
-  const std::vector<G4int>*    theDensityIdx;
 
   G4int                        nLambdaBins;
 
@@ -399,7 +398,11 @@ protected:
   std::vector<G4DynamicParticle*> secParticles;
   const G4MaterialCutsCouple*  currentCouple;
   const G4Material*            currentMaterial;
+  const std::vector<G4double>* theDensityFactor;
+  const std::vector<G4int>*    theDensityIdx;
+
   size_t                       currentCoupleIndex;
+  size_t                       basedCoupleIndex;
 
   G4int                        mainSecondaries;
   G4int                        secID;  
@@ -425,7 +428,6 @@ private:
 
   // cache
   const G4Material*            baseMaterial;
-  size_t                       basedCoupleIndex;
 
   G4double                     fFactor;
   G4bool                       biasFlag;
@@ -515,7 +517,7 @@ inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e, G4double loge)
 {
-  return ((*theLambdaTable)[basedCoupleIndex])->Value(e, loge, idxLambda);
+  return ((*theLambdaTable)[basedCoupleIndex])->LogVectorValue(e, loge);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -527,8 +529,7 @@ inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
 
 inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e, G4double loge)
 {
-  return
-     ((*theLambdaTablePrim)[basedCoupleIndex])->Value(e, loge, idxLambdaPrim)/e;
+  return ((*theLambdaTablePrim)[basedCoupleIndex])->LogVectorValue(e, loge)/e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

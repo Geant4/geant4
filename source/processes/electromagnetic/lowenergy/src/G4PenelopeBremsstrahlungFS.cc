@@ -371,7 +371,7 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
 void G4PenelopeBremsstrahlungFS::ReadDataFile(G4int Z)
 {
 
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     {
       G4String excep = "G4PenelopeBremsstrahlungFS - G4LEDATA environment variable not set!";

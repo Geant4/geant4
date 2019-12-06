@@ -65,8 +65,8 @@ G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandle
 {
   // Set a g4.gdd-file viewer 
   std::strncpy( kG4GddViewer, "gMocren", 8);
-  if( getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
-    char * env = getenv( "G4GMocrenFile_VIEWER" );
+  if( std::getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
+    char * env = std::getenv( "G4GMocrenFile_VIEWER" );
     G4int len = std::strlen(env);
     if(len >= 32) {
       G4Exception("G4GMocrenFileViewer::G4GMocrenFileViewer(*)",

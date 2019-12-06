@@ -23,29 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//  Bogacki-Shampine's RK 5(4) non-FSAL implementation by Somnath Banerjee
-//  Supervision / code review: John Apostolakis
+// G4BogackiShampine45 implementation
 //
-//  Somnath's work was sponsored by Google as part of the Google Summer of
-//  Code 2015, as part of the CERN / SFT organisation.p
-//
-// First version: 25 May 2015
-//
-//  History
-// -----------------------------
-//  Created by Somnath Banerjee on May-August 2015
-//  Improvements by John Apostolakis, May 2016
-///////////////////////////////////////////////////////////////////////////////
-//
-// This is the source file of G4BogackiShampine45 class containing the
-// definition of the stepper() method that evaluates one step in
+// Bogacki-Shampine's RK 5(4) non-FSAL interpolation method
+// Definition of the stepper() method that evaluates one step in
 // field propagation.
 //
 // The Butcher table of the Bogacki-Shampine-8-4-5 method is:
 //
 //   0  |
 //  1/6 |      1/6
-//  2/9 |      2/27	     4/27
+//  2/9 |      2/27          4/27
 //  3/7 |    183/1372     -162/343      1053/1372
 //  2/3 |     68/297        -4/11         42/143         1960/3861
 //  3/4 |    597/22528      81/352     63099/585728     58653/366080    4617/20480
@@ -55,39 +43,40 @@
 //           587/8064         0      4440339/15491840   24353/124800     387/44800    2152/5985   7267/94080       0
 //          2479/34992        0          123/416       612941/3411720    43/1440      2272/6561  79937/1113912  3293/556956
 //
-// Do NOT re-indent the lines above - their meaning becomes lost
-// ********************************
-// Coefficients have been obtained from rksuite.f : http://www.netlib.org/ode/rksuite/
-
-//  Note on meaning of label "non-FSAL version": 
-//     This method calculates the deriviative dy/dx at the endpoint of the integration interval at each step.
-//     as part of its evaluation of the endpoint and its error. 
-//     So this value is available to be returned, for re-use in case of a successful step.
-//     ( This is done in a 'later' version using a refined interface. )
+// Coefficients have been obtained from:
+// http://www.netlib.org/ode/rksuite/
+//
+// Note on meaning of label "non-FSAL version": 
+//   This method calculates the deriviative dy/dx at the endpoint of the
+//   integration interval at each step, as part of its evaluation of the
+//   endpoint and its error. So this value is available to be returned,
+//   for re-use in case of a successful step.
+//   (This is done in a 'later' version using a refined interface).
+//
+// Created: Somnath Banerjee, Google Summer of Code 2015, May-August 2015
+// Revision: John Apostolakis, CERN, May 2016
+// --------------------------------------------------------------------
 
 #include <cassert>
 
 #include "G4BogackiShampine45.hh"
 #include "G4LineSection.hh"
 
-G4bool G4BogackiShampine45::fPreparedConstants= false;
+G4bool G4BogackiShampine45::fPreparedConstants = false;
 G4double G4BogackiShampine45::bi[12][7];
 
-//Constructor
+// Constructor
+//
 G4BogackiShampine45::G4BogackiShampine45(G4EquationOfMotion *EqRhs,
                                          G4int     noIntegrationVariables,
                                          G4bool    primary)   
-   : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
-     fLastStepLength(-1.0),
-     fAuxStepper(nullptr),
-     fPreparedInterpolation(false)
+   : G4MagIntegratorStepper(EqRhs, noIntegrationVariables)
 {
-    
     const G4int numberOfVariables = noIntegrationVariables;
     
-    //New Chunk of memory being created for use by the stepper
+    // New Chunk of memory being created for use by the stepper
     
-    //aki - for storing intermediate RHS
+    // aki - for storing intermediate RHS
     ak2 = new G4double[numberOfVariables];
     ak3 = new G4double[numberOfVariables];
     ak4 = new G4double[numberOfVariables];
@@ -99,8 +88,9 @@ G4BogackiShampine45::G4BogackiShampine45(G4EquationOfMotion *EqRhs,
     ak10 = new G4double[numberOfVariables];
     ak11 = new G4double[numberOfVariables];    
 
-    for (int i = 0; i < 6; i++) {
-        p[i]= new G4double[numberOfVariables];
+    for (auto i = 0; i < 6; ++i)
+    {
+       p[i]= new G4double[numberOfVariables];
     }
 
     assert ( GetNumberOfStateVariables() >= 8 );    
@@ -115,11 +105,13 @@ G4BogackiShampine45::G4BogackiShampine45(G4EquationOfMotion *EqRhs,
     fLastFinalVector = new G4double[numStateVars] ;
     fLastDyDx = new G4double[numberOfVariables];  // Only derivatives
 
-    fMidVector = new G4double[numberOfVariables];  // new G4double[numStateVars];
-    fMidError =  new G4double[numberOfVariables];  // new G4double[numStateVars];
-    
+    fMidVector = new G4double[numberOfVariables];
+    fMidError =  new G4double[numberOfVariables];
+
     if( ! fPreparedConstants )
+    {
        PrepareConstants();
+    }
     
     if( primary )
     {
@@ -127,56 +119,55 @@ G4BogackiShampine45::G4BogackiShampine45(G4EquationOfMotion *EqRhs,
     }
 }
 
+// Destructor
+//
+G4BogackiShampine45::~G4BogackiShampine45()
+{
+    // Clear all previously allocated memory for stepper and DistChord
+    //
+    delete [] ak2;
+    delete [] ak3;
+    delete [] ak4;
+    delete [] ak5;
+    delete [] ak6;
+    delete [] ak7;
+    delete [] ak8;
+    delete [] ak9;
+    delete [] ak10;
+    delete [] ak11;
 
-//Destructor
-G4BogackiShampine45::~G4BogackiShampine45(){
-    //clear all previously allocated memory for stepper and DistChord
-    delete[] ak2;
-    delete[] ak3;
-    delete[] ak4;
-    delete[] ak5;
-    delete[] ak6;
-    delete[] ak7;
-    delete[] ak8;
-    delete[] ak9;
-    delete[] ak10;
-    delete[] ak11;
-
-    for (int i = 0; i < 6; i++) {
-       delete[] p[i];
+    for (auto i = 0; i < 6; ++i)
+    {
+       delete [] p[i];
     }
 
-    delete[] yTemp;
-    delete[] yIn;
+    delete [] yTemp;
+    delete [] yIn;
     
-    delete[] fLastInitialVector;
-    delete[] fLastFinalVector;
-    delete[] fLastDyDx;
-    delete[] fMidVector;
-    delete[] fMidError;
+    delete [] fLastInitialVector;
+    delete [] fLastFinalVector;
+    delete [] fLastDyDx;
+    delete [] fMidVector;
+    delete [] fMidError;
     
     delete fAuxStepper;
 }
 
-// G4double* G4BogackiShampine45::getLastDydx(){
-//        return ak8;
-// }
-
-void
-G4BogackiShampine45::GetLastDydx( G4double dyDxLast[] )
+void G4BogackiShampine45::GetLastDydx( G4double dyDxLast[] )
 {
-   const G4int numberOfVariables= this->GetNumberOfVariables();
+   const G4int numberOfVariables = GetNumberOfVariables();
    
-   for(G4int i=0; i < numberOfVariables; i++ ){
+   for(G4int i=0; i < numberOfVariables; ++i )
+   {
       dyDxLast[i] = ak9[i];
    }
 }       
 
-//Stepper :
-
+// Stepper
+//
 // Passing in the value of yInput[],the first time dydx[] and Step length
 // Giving back yOut and yErr arrays for output and error respectively
-
+//
 void G4BogackiShampine45::Stepper( const G4double yInput[],
                                    const G4double DyDx[],
                                          G4double Step,
@@ -186,6 +177,7 @@ void G4BogackiShampine45::Stepper( const G4double yInput[],
     G4int i;
     
     // Constants from the Butcher tableu
+    //
     const G4double 
        b21 = 1.0/6.0 ,
        b31 = 2.0/27.0 ,     b32 = 4.0/27.0,
@@ -221,6 +213,7 @@ void G4BogackiShampine45::Stepper( const G4double yInput[],
     // taken and is used directly later (instead of defining the last row
     // of Butcher table in separate constants and taking the
     // difference)
+    //
     const G4double 
        dc1 = b81 -   2479.0 /   34992.0 ,
        dc2 = 0.0,
@@ -231,73 +224,76 @@ void G4BogackiShampine45::Stepper( const G4double yInput[],
        dc7 = b87 -  79937.0 / 1113912.0,
        dc8 =     -   3293.0 /  556956.0;
 
-    const G4int numberOfVariables= this->GetNumberOfVariables();
+    const G4int numberOfVariables = GetNumberOfVariables();
     
     // The number of variables to be integrated over
+    //
     yOut[7] = yTemp[7]  = yIn[7] = yInput[7];
-    //  Saving yInput because yInput and yOut can be aliases for same array
-    
-    for(i=0;i<numberOfVariables;i++)
+
+    // Saving yInput because yInput and yOut can be aliases for same array
+    //
+    for(i=0; i<numberOfVariables; ++i)
     {
         yIn[i]=yInput[i];
     }
     
     // RightHandSide(yIn, dydx) ;
     // 1st Step - Not doing, getting passed
-    
-    for(i=0;i<numberOfVariables;i++)
+    //
+    for(i=0; i<numberOfVariables; ++i)
     {
         yTemp[i] = yIn[i] + b21*Step*DyDx[i] ;
     }
     RightHandSide(yTemp, ak2) ;              // 2nd Step
     
-    for(i=0;i<numberOfVariables;i++)
+    for(i=0; i<numberOfVariables; ++i)
     {
         yTemp[i] = yIn[i] + Step*(b31*DyDx[i] + b32*ak2[i]) ;
     }
     RightHandSide(yTemp, ak3) ;              // 3rd Step
     
-    for(i=0;i<numberOfVariables;i++)
+    for(i=0; i<numberOfVariables; ++i)
     {
         yTemp[i] = yIn[i] + Step*(b41*DyDx[i] + b42*ak2[i] + b43*ak3[i]) ;
     }
     RightHandSide(yTemp, ak4) ;              // 4th Step
     
-    for(i=0;i<numberOfVariables;i++)
+    for(i=0; i<numberOfVariables; ++i)
     {
         yTemp[i] = yIn[i] + Step*(b51*DyDx[i] + b52*ak2[i] + b53*ak3[i] +
                                   b54*ak4[i]) ;
     }
     RightHandSide(yTemp, ak5) ;              // 5th Step
     
-    for(i=0;i<numberOfVariables;i++)
+    for(i=0; i<numberOfVariables; ++i)
     {
         yTemp[i] = yIn[i] + Step*(b61*DyDx[i] + b62*ak2[i] + b63*ak3[i] +
                                   b64*ak4[i] + b65*ak5[i]) ;
     }
     RightHandSide(yTemp, ak6) ;              // 6th Step
     
-    for(i=0;i<numberOfVariables;i++)
+    for(i=0; i<numberOfVariables; ++i)
     {
         yTemp[i] = yIn[i] + Step*(b71*DyDx[i] + b72*ak2[i] + b73*ak3[i] +
                                   b74*ak4[i] + b75*ak5[i] + b76*ak6[i]);
     }
-    RightHandSide(yTemp, ak7);				//7th Step
+    RightHandSide(yTemp, ak7);               // 7th Step
     
-    for(i=0;i<numberOfVariables;i++)
+    for(i=0; i<numberOfVariables; ++i)
     {
         yOut[i] = yIn[i] + Step*(b81*DyDx[i] + b82*ak2[i] + b83*ak3[i] +
                                   b84*ak4[i] + b85*ak5[i] + b86*ak6[i] +
                                   b87*ak7[i]);
     }
-    RightHandSide(yOut, ak8);				//8th Step - Final one Using FSAL
+    RightHandSide(yOut, ak8);                // 8th Step - Final one Using FSAL
 
-    for(i=0;i<numberOfVariables;i++)
+    for(i=0; i<numberOfVariables; ++i)
     {
         yErr[i] = Step*(dc1*DyDx[i] + dc2*ak2[i] + dc3*ak3[i] + dc4*ak4[i] +
                         dc5*ak5[i] + dc6*ak6[i] + dc7*ak7[i] + dc8*ak8[i]) ;
         
         // Store Input and Final values, for possible use in calculating chord
+        //
         fLastInitialVector[i] = yIn[i] ;
         fLastFinalVector[i]   = yOut[i];
         fLastDyDx[i]          = DyDx[i];
@@ -309,48 +305,51 @@ void G4BogackiShampine45::Stepper( const G4double yInput[],
     return ;
 }
 
-
-//The following has not been tested
-
-//The DistChord() function fot the class - must define it here.
-G4double  G4BogackiShampine45::DistChord() const
+// DistChord
+//
+G4double G4BogackiShampine45::DistChord() const
 {
     G4double distLine, distChord;
     G4ThreeVector initialPoint, finalPoint, midPoint;
     
-    // Store last initial and final points (they will be overwritten in self-Stepper call!)
-    initialPoint = G4ThreeVector( fLastInitialVector[0],
+    // Store last initial and final points
+    // (they will be overwritten in self-Stepper call!)
+    //
+    initialPoint = G4ThreeVector(fLastInitialVector[0],
                                  fLastInitialVector[1], fLastInitialVector[2]);
-    finalPoint   = G4ThreeVector( fLastFinalVector[0],
+    finalPoint   = G4ThreeVector(fLastFinalVector[0],
                                  fLastFinalVector[1],  fLastFinalVector[2]);
 
 #if 1
     // Old method -- Do half a step using StepNoErr
-    fAuxStepper->Stepper( fLastInitialVector, fLastDyDx, 0.5 * fLastStepLength,
-                           fMidVector,   fMidError);
+    //
+    fAuxStepper->Stepper( fLastInitialVector, fLastDyDx, 0.5*fLastStepLength,
+                          fMidVector, fMidError);
 #else
-    // New method -- Using interpolation, requires only 3 extra stages (ie 3 extra field evaluations )
+    // New method -- Using interpolation,
+    // requires only 3 extra stages (ie 3 extra field evaluations )
 
     // Use Interpolation, instead of auxiliary stepper to evaluate midpoint
-    if( ! fPreparedInterpolation ) {
-       G4BogackiShampine45 *cThis= const_cast<G4BogackiShampine45 *>(this);
-       cThis-> SetupInterpolationHigh(); // ( fLastInitialVector, fLastDyDx, fLastStepLength );
+    //
+    if( ! fPreparedInterpolation )
+    {
+       G4BogackiShampine45* cThis = const_cast<G4BogackiShampine45 *>(this);
+       cThis-> SetupInterpolationHigh();
     }
-    //For calculating the output at the tau fraction of Step
+    // For calculating the output at the tau fraction of Step
+    //
     G4double tau = 0.5;
-    // cThis->InterpolateHigh( /* fLastInitialVector, fLastDyDx, fLastStepLength, */, fMidVector, tau);
-    //   Old arguments: ( /*yInput, dydx, step,*/ yOut, tau );
-    this->InterpolateHigh( tau, fMidVector );    
+    InterpolateHigh( tau, fMidVector );    
 #endif
    
     midPoint = G4ThreeVector( fMidVector[0], fMidVector[1], fMidVector[2]);
     
     // Use stored values of Initial and Endpoint + new Midpoint to evaluate
-    //  distance of Chord
+    // distance of Chord
     
     if (initialPoint != finalPoint)
     {
-        distLine  = G4LineSection::Distline( midPoint, initialPoint, finalPoint );
+        distLine  = G4LineSection::Distline( midPoint,initialPoint,finalPoint );
         distChord = distLine;
     }
     else
@@ -361,9 +360,9 @@ G4double  G4BogackiShampine45::DistChord() const
 }
 
 void G4BogackiShampine45::SetupInterpolationHigh()
-    // ( const G4double *yInput, const G4double *dydx, const G4double Step)
 {
-    //Coefficients for the additional stages :
+    // Coefficients for the additional stages
+    //
     const G4double
     a91 = 455.0/6144.0 ,
     a92 = 0.0 ,
@@ -396,46 +395,50 @@ void G4BogackiShampine45::SetupInterpolationHigh()
     a1110 = -1403317093.0/11371610250.0 ;
     
     const G4int numberOfVariables= this->GetNumberOfVariables();
-    
-    // const G4double *yIn=  fLastInitialVector;
-    const G4double *dydx= fLastDyDx;
+    const G4double* dydx= fLastDyDx;
     const G4double Step = fLastStepLength;
     
     yTemp[7]  = yIn[7];
 
-    //Evaluate the extra stages :
-    for(int i=0; i<numberOfVariables; i++){
+    // Evaluate the extra stages
+    //
+    for(G4int i=0; i<numberOfVariables; ++i)
+    {
         yTemp[i] = yIn[i] + Step*(a91*dydx[i] + a92*ak2[i] + a93*ak3[i] +
                                   a94*ak4[i] + a95*ak5[i] + a96*ak6[i] +
                                   a97*ak7[i] + a98*ak8[i] );
     }
     
-    RightHandSide(yTemp, ak9);		//9th stage
+    RightHandSide(yTemp, ak9);   // 9th stage
     
-    for(int i=0; i<numberOfVariables; i++){
+    for(G4int i=0; i<numberOfVariables; ++i)
+    {
         yTemp[i] = yIn[i] + Step*(a101*dydx[i] + a102*ak2[i] + a103*ak3[i] +
                                   a104*ak4[i] + a105*ak5[i] + a106*ak6[i] +
                                   a107*ak7[i] + a108*ak8[i] + a109*ak9[i] );
     }
     
-    RightHandSide(yTemp, ak10);		//10th stage
+    RightHandSide(yTemp, ak10);  // 10th stage
     
-    for(int i=0; i<numberOfVariables; i++){
+    for(G4int i=0; i<numberOfVariables; ++i)
+    {
         yTemp[i] = yIn[i] + Step*(a111*dydx[i] + a112*ak2[i] + a113*ak3[i] +
                                   a114*ak4[i] + a115*ak5[i] + a116*ak6[i] +
                                   a117*ak7[i] + a118*ak8[i] + a119*ak9[i] +
                                   a1110*ak10[i] );
     }
-    RightHandSide(yTemp, ak11);		//11th stage
+    RightHandSide(yTemp, ak11);  // 11th stage
 
     //  In future we can restrict the number of variables interpolated
-    int nwant = numberOfVariables; 
+    //
+    G4int nwant = numberOfVariables; 
 
-//  Form the coefficients of the interpolating polynomial in its shifted
-//  and scaled form.  The terms are grouped to minimize the errors 
-//  of the transformation, to cope with ill-conditioning. ( From RKSUITE )
-//   
-    for (int l = 0; l < nwant; l++) {
+    //  Form the coefficients of the interpolating polynomial in its shifted
+    //  and scaled form.  The terms are grouped to minimize the errors 
+    //  of the transformation, to cope with ill-conditioning. ( From RKSUITE )
+    //   
+    for (G4int l = 0; l < nwant; ++l)
+    {
         //  Coefficient of tau^6        
         p[5][l] =   bi[5][6]*ak5[l] +
                   ((bi[10][6]*ak10[l] + bi[8][6]*ak8[l]) + 
@@ -467,25 +470,31 @@ void G4BogackiShampine45::SetupInterpolationHigh()
                  bi[10][2]*ak10[l])+ ((bi[4][2]*ak4[l] + 
                  bi[11][2]*ak2[l]) +   bi[7][2]*ak7[l]);
       }
-//
-//  Scale all the coefficients by the step size.
-//
-      for (int i = 0; i < 6; i++) {
-         for (int l = 0; l < nwant; l++) {  
+
+      //  Scale all the coefficients by the step size.
+      //
+      for (G4int i = 0; i < 6; ++i)
+      {
+         for (G4int l = 0; l < nwant; ++l)
+         {  
             p[i][l] *= Step;
          }
       }
 
-    fPreparedInterpolation= true;
+    fPreparedInterpolation = true;
 }
 
 void G4BogackiShampine45::PrepareConstants()
 {
-    for(int i=1; i<= 11; i++)
+    for(auto i=1; i<= 11; ++i)
+    {
         bi[i][1] = 0.0 ;
+    }
     
-    for(int i=1; i<=6; i++)
+    for(auto i=1; i<=6; ++i)
+    {
         bi[2][i] = 0.0 ;
+    }
 
     bi[1][6] = -12134338393.0 / 1050809760.0 ,
     bi[1][5] =  -1620741229.0 / 50038560.0 ,
@@ -547,61 +556,68 @@ void G4BogackiShampine45::PrepareConstants()
     bi[11][4] = 117.0 ,
     bi[11][3] =  59.0 ,
     bi[11][2] =  12.0 ;
-    fPreparedConstants= true;
+
+    fPreparedConstants = true;
 }
 
-void G4BogackiShampine45::InterpolateHigh(G4double tau, G4double *yOut) const
-// ( const G4double *yInput, const G4double *dydx, const G4double Step, G4double *yOut, G4double tau)
+void G4BogackiShampine45::InterpolateHigh(G4double tau, G4double* yOut) const
 {
-    G4int numberOfVariables = this->GetNumberOfVariables();
-    assert( fPreparedConstants);
+    G4int numberOfVariables = GetNumberOfVariables();
     
     G4Exception("G4BogackiShampine45::InterpolateHigh()", "GeomField0001",
-              FatalException, "Method is not yet validated.");
+                FatalException, "Method is not yet validated.");
 
     // const G4double *yIn=  fLastInitialVector;
     // const G4double *dydx= fLastDyDx;
     const G4double Step = fLastStepLength;
     
-    // for(G4int i = 0; i< numberOfVariables; i++)   yIn[i] = yInput[i];
 #if 1
     G4int nwant = numberOfVariables;
     const G4int norder= 6;
     G4int l, k;
 
-    for (l = 0; l < nwant; l++) {
+    for (l = 0; l < nwant; ++l)
+    {
       yOut[l] = p[norder-1][l] * tau;
     }
-    for (k = norder - 2; k >= 1; k--) {
-      for (l = 0; l < nwant; l++) {
+    for (k = norder - 2; k >= 1; --k)
+    {
+      for (l = 0; l < nwant; ++l)
+      {
          yOut[l] = ( yOut[l] + p[k][l] ) * tau;
       }
     }
-    for (l = 0; l < nwant; l++) {
+    for (l = 0; l < nwant; ++l)
+    {
       yOut[l] = ( yOut[l] + Step * ak8[l] ) * tau + yIn[l];
     }
     // The derivative at the end-point is nextDydx[i] = ak8[i];
 #else
-  //  The scheme tries to do the same as the DormandPrince745 routine, but fails 
+    // The scheme tries to do the same as the DormandPrince745 routine,
+    // but fails 
+
     G4double b[12];
-    const G4double *dydx= fLastDyDx;
+    const G4double* dydx = fLastDyDx;
     
     G4double tau0 = tau;
     
-    for(int iStage=1; iStage<=11; iStage++){    // iStage = stage number
+    for(G4int iStage=1; iStage<=11; ++iStage)   // iStage = stage number
+    {
         b[iStage] = 0.0;
         tau = tau0;
-        for(int j=6; j>=1; j--){		// j reversed
+        for(G4int j=6; j>=1; --j)               // j reversed
+        {
             b[iStage] += bi[iStage][j] * tau;
             tau *= tau0;
         }
     }
 
-    for(int i=0; i<numberOfVariables; i++){
-        yOut[i] = yIn[i] + Step*(b[1] * dydx[i] + b[2] * ak2[i] + b[3] * ak3[i] +
-                                 b[4] *  ak4[i] + b[5] * ak5[i] + b[6] * ak6[i] +
-                                 b[7] *  ak7[i] + b[8] * ak8[i] + b[9] * ak9[i] +
-                                 b[10] * ak10[i] + b[11] * ak11[i] );
+    for(G4int i=0; i<numberOfVariables; ++i)
+    {
+        yOut[i] = yIn[i] + Step*(b[1]*dydx[i] + b[2]*ak2[i] + b[3]*ak3[i] +
+                                 b[4]*ak4[i] + b[5]*ak5[i] + b[6]*ak6[i] +
+                                 b[7]*ak7[i] + b[8]*ak8[i] + b[9]*ak9[i] +
+                                 b[10]*ak10[i] + b[11]*ak11[i] );
     }
 #endif    
 }

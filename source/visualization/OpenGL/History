@@ -16,6 +16,60 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 November 2019 Gabriele Cosmo (opengl-V10-05-18)
+- Fixed QT_VERSION protection for use of screening function in
+  G4OpenGLQtViewer.
+
+25 November 2019 Gabriele Cosmo (opengl-V10-05-17)
+- Fixed deprecation compilation warning on Qt5 related to use of
+  QProcess::setProcessChannelMode() in place of setReadChannelMode().
+
+25 November 2019 Gabriele Cosmo (opengl-V10-05-16)
+- Fixed protection for compilation on older versions of Qt, including Qt4.
+
+21 November 2019 Laurent Garnier (opengl-V10-05-15)
+- Remove Qt deprecation warnings
+  * Replacing availableGeometry() by QGuiApplication::screenAt(QPoint(20,20))->availableGeometry()
+  * Replace QProcess::setReadChannelMode() by setProcessChannelMode
+  * Remove unused function hasPendingEvents()
+  * Replace QFontMetrics::width()) by boundingRect(textCString[0]).width()
+
+20 November 2019 Laurent Garnier (opengl-V10-05-14)
+- Remove deprecated QSignalMapper class
+
+19 november 2019 Laurent Garnier (opengl-V10-05-13)
+- Refine DisplayListLimit command guidance and output
+
+07 November 2019 Ben Morgan (opengl-V10-05-12)
+- Only link to imported targets for Motif and X11
+- Remove inclusion of QT_USE_FILE from CMake scripts.
+  All usage is now through the qtX_ macros and imported targets
+- Only use Wt through imported targets
+
+04 November 2019  John Allison  (opengl-V10-05-11)
+- Part of vis-V10-05-26.
+- G4OpenGLSceneHandler::ScaledFlush:
+  o Extend glFlush scaling to all circumstances (not just in the event loop).
+
+22 October 2019  Gabriele Cosmo (opengl-V10-05-10)
+- Rationalise headers inclusion in G4OpenGLQtViewer.cc.
+
+11 Sept 2019  Laurent Garnier (opengl-V10-05-09)
+- remove default font size and police
+
+16 July 2019  John Allison (opengl-V10-05-08)
+- Part of vis-V10-05-22.
+- G4OpenGLImmediateXViewer:
+  o Revert fix in OpenGL-V10-05-05. The fix in OpenGL-V10-05-07 is better.
+
+06 July 2019  Guy Barrand (OpenGL-V10-05-07)
+- Part of vis-V10-05-21.
+- G4OpenGLXmViewer.cc:
+  Fix argument compatibility in calls to XmVaCreateSimpleMenuBar and similar.
+  Use (KeySym)XK_S instead of 'S', etc.
+- G4OpenGLXViewer.cc:
+  Improve logic for finding a colormap.
+
 13 June 2019  John Allison (OpenGL-V10-05-06)
 - Part of vis-V10-05-20.
 - Final changes for introduction of cloud drawing:

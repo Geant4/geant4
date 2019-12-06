@@ -16,6 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 19th, 2019 G. Cosmo (event-V10-05-08)
+- Fixed more implicit type conversions.
+
+November 15th, 2019 G. Cosmo (event-V10-05-07)
+- Fixed implicit type conversions from size_t to G4int in G4TrackStack
+  and G4TrajectoryContainer. Fixed typos and ome code cleanup.
+
+October 25th, 2019 B. Morgan (event-V10-05-06)
+- Make -DG4_USESMARTSTACK a public compile definition of G4event
+  to propagate it directly to CMake clients.
+
+October 1st, 2019 M. Asai (event-V10-05-05)
+- G4SPSEneDistribution.cc: Protect inifinite loop caused by while loop.
+  Addressing to Bugzilla report #2177.
+
 June 3rd, 2019 M. Asai (event-V10-05-04)
 - G4SPSPosDistribution::GetConfineVolume() now returns 
   const G4String&.

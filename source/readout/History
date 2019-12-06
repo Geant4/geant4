@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 26, 2019,  G.Cosmo (readout-V10-05-01)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
 Jan 31, 2019,  I.Hrivnacova (readout-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 

@@ -23,15 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WeightWindowStore implementation
 //
-//
+// Author: Michael Dressel (CERN), 2003
+// Modified: Alex Howard (CERN), 2013 - Changed class to a 'singleton'
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4WeightWindowStore
-//
-// ----------------------------------------------------------------------
-
 
 #include "G4WeightWindowStore.hh"
 #include "G4VPhysicalVolume.hh"
@@ -42,84 +38,92 @@
 // ***************************************************************************
 // Static class variable: ptr to single instance of class
 // ***************************************************************************
-G4ThreadLocal G4WeightWindowStore* G4WeightWindowStore::fInstance = 0;
+G4ThreadLocal G4WeightWindowStore* G4WeightWindowStore::fInstance = nullptr;
 
 G4WeightWindowStore::
-G4WeightWindowStore() :
-fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),
-  fGeneralUpperEnergyBounds(),
-  fCellToUpEnBoundLoWePairsMap(),
-  fCurrentIterator(fCellToUpEnBoundLoWePairsMap.end())
-{}
+G4WeightWindowStore()
+ : fWorldVolume(G4TransportationManager::GetTransportationManager()
+                ->GetNavigatorForTracking()->GetWorldVolume()),
+   fGeneralUpperEnergyBounds(),
+   fCellToUpEnBoundLoWePairsMap(),
+   fCurrentIterator(fCellToUpEnBoundLoWePairsMap.cend())
+{
+}
 
 G4WeightWindowStore::
-G4WeightWindowStore(const G4String& ParallelWorldName) :
-fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName)),
-  fGeneralUpperEnergyBounds(),
-  fCellToUpEnBoundLoWePairsMap(),
-  fCurrentIterator(fCellToUpEnBoundLoWePairsMap.end())
-{}
+G4WeightWindowStore(const G4String& ParallelWorldName)
+ : fWorldVolume(G4TransportationManager::GetTransportationManager()
+                ->GetParallelWorld(ParallelWorldName)),
+   fGeneralUpperEnergyBounds(),
+   fCellToUpEnBoundLoWePairsMap(),
+   fCurrentIterator(fCellToUpEnBoundLoWePairsMap.cend())
+{
+}
 
-G4WeightWindowStore::~G4WeightWindowStore()
-{}
+G4WeightWindowStore::
+~G4WeightWindowStore()
+{
+}
 
-
-G4double G4WeightWindowStore::GetLowerWeight(const G4GeometryCell &gCell, 
-					     G4double partEnergy) const
+G4double G4WeightWindowStore::
+GetLowerWeight(const G4GeometryCell& gCell, 
+                     G4double partEnergy) const
 {
   SetInternalIterator(gCell);
-  G4GeometryCellWeight::const_iterator gCellIterator = fCurrentIterator;
-  if (gCellIterator ==  fCellToUpEnBoundLoWePairsMap.end()) {
+  auto gCellIterator = fCurrentIterator;
+  if (gCellIterator == fCellToUpEnBoundLoWePairsMap.cend())
+  {
     Error("GetLowerWitgh() - Cell does not exist!");
     return 0.;
   }
-  G4UpperEnergyToLowerWeightMap upEnLoWeiPairs =
-    fCurrentIterator->second;
+  G4UpperEnergyToLowerWeightMap upEnLoWeiPairs = fCurrentIterator->second;
   G4double lowerWeight = -1;
   G4bool found = false;
-  for (G4UpperEnergyToLowerWeightMap::iterator it = 
-	 upEnLoWeiPairs.begin(); it != upEnLoWeiPairs.end(); it++) {
-    if (partEnergy < it->first) {
+  for (auto it = upEnLoWeiPairs.cbegin(); it != upEnLoWeiPairs.cend(); ++it)
+  {
+    if (partEnergy < it->first)
+    {
       lowerWeight = it->second;
       found = true;
       break;
     }
   }
-  if (!found) {
+  if (!found)
+  {
     std::ostringstream err_mess;
     err_mess << "GetLowerWitgh() - Couldn't find lower weight bound." << G4endl
              << "Energy: " << partEnergy << ".";
     Error(err_mess.str());
   }
   return lowerWeight;
-
-
 }
 
 void G4WeightWindowStore::
-SetInternalIterator(const G4GeometryCell &gCell) const
+SetInternalIterator(const G4GeometryCell& gCell) const
 {
   fCurrentIterator = fCellToUpEnBoundLoWePairsMap.find(gCell);
 }
 
 G4bool G4WeightWindowStore::
-IsInWorld(const G4VPhysicalVolume &aVolume) const
+IsInWorld(const G4VPhysicalVolume& aVolume) const
 {
   G4bool isIn(true);
-  if (!(aVolume == *fWorldVolume)) {
+  if (!(aVolume == *fWorldVolume))
+  {
     isIn = fWorldVolume->GetLogicalVolume()->IsAncestor(&aVolume);
   }
   return isIn;
 }
 
-
-G4bool G4WeightWindowStore::IsKnown(const G4GeometryCell &gCell) const
+G4bool G4WeightWindowStore::
+IsKnown(const G4GeometryCell& gCell) const
 {
   G4bool inWorldKnown(IsInWorld(gCell.GetPhysicalVolume()));
-		      
-  if ( inWorldKnown ) {
+                      
+  if ( inWorldKnown )
+  {
     SetInternalIterator(gCell);
-    inWorldKnown = (fCurrentIterator!=fCellToUpEnBoundLoWePairsMap.end());
+    inWorldKnown = (fCurrentIterator!=fCellToUpEnBoundLoWePairsMap.cend());
   }
   return inWorldKnown;
 }
@@ -132,41 +136,44 @@ void G4WeightWindowStore::Clear()
 void G4WeightWindowStore::SetWorldVolume()
 {
   G4cout << " G4IStore:: SetWorldVolume " << G4endl;
-  fWorldVolume = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
+  fWorldVolume = G4TransportationManager::GetTransportationManager()
+                 ->GetNavigatorForTracking()->GetWorldVolume();
   G4cout << " World volume is: " << fWorldVolume->GetName() << G4endl;
-  //  fGeometryCelli = new G4GeometryCellImportance;
+  // fGeometryCelli = new G4GeometryCellImportance;
 }
 
-void G4WeightWindowStore::SetParallelWorldVolume(G4String paraName)
+void G4WeightWindowStore::SetParallelWorldVolume(const G4String& paraName)
 {
-  fWorldVolume = G4TransportationManager::GetTransportationManager()->GetParallelWorld(paraName);
-    //  fGeometryCelli = new G4GeometryCellImportance;
+  fWorldVolume = G4TransportationManager::GetTransportationManager()
+                 ->GetParallelWorld(paraName);
+  // fGeometryCelli = new G4GeometryCellImportance;
 }
-
 
 const G4VPhysicalVolume &G4WeightWindowStore::GetWorldVolume() const
 {
   return *fWorldVolume;
 }
 
-const G4VPhysicalVolume* G4WeightWindowStore::GetParallelWorldVolumePointer() const
+const G4VPhysicalVolume* G4WeightWindowStore::
+GetParallelWorldVolumePointer() const
 {
   return fWorldVolume;
 }
 
-
-
 void G4WeightWindowStore::
-AddLowerWeights(const G4GeometryCell & gCell,
-                const std::vector<G4double> &lowerWeights)
+AddLowerWeights(const G4GeometryCell& gCell,
+                const std::vector<G4double>& lowerWeights)
 {
-  if (fGeneralUpperEnergyBounds.empty()) {
+  if (fGeneralUpperEnergyBounds.empty())
+  {
     Error("AddLowerWeights() - No general upper energy limits set!");
   }
-  if (IsKnown(gCell)) {
+  if (IsKnown(gCell))
+  {
     Error("AddLowerWeights() - Cell already in the store.");
   }
-  if (lowerWeights.size() != fGeneralUpperEnergyBounds.size()) {
+  if (lowerWeights.size() != fGeneralUpperEnergyBounds.size())
+  {
     std::ostringstream err_mess;
     err_mess << "AddLowerWeights() - Mismatch between "
              << "number of lower weights (" << lowerWeights.size()
@@ -176,49 +183,47 @@ AddLowerWeights(const G4GeometryCell & gCell,
   }
   G4UpperEnergyToLowerWeightMap map;
   G4int i = 0;
-  for (std::set<G4double, std::less<G4double> >::iterator it = 
-	 fGeneralUpperEnergyBounds.begin(); 
-       it != fGeneralUpperEnergyBounds.end();
-       it++) {
+  for (auto it = fGeneralUpperEnergyBounds.cbegin(); 
+            it != fGeneralUpperEnergyBounds.cend(); ++it)
+  {
     map[*it] = lowerWeights[i];
-    i++;
+    ++i;
   }
   fCellToUpEnBoundLoWePairsMap[gCell] = map;
 }
 
- 
 void G4WeightWindowStore::
-AddUpperEboundLowerWeightPairs(const G4GeometryCell &gCell,
+AddUpperEboundLowerWeightPairs(const G4GeometryCell& gCell,
                                const G4UpperEnergyToLowerWeightMap& enWeMap)
 {
-  if (IsKnown(gCell)) {
+  if (IsKnown(gCell))
+  {
     Error("AddUpperEboundLowerWeightPairs() - Cell already in the store.");
   }
-  if (IsKnown(gCell)) {
+  if (IsKnown(gCell))
+  {
     Error("AddUpperEboundLowerWeightPairs() - Cell already in the store.");
   }
   fCellToUpEnBoundLoWePairsMap[gCell] = enWeMap;
 
 }
 
-
 void G4WeightWindowStore::
 SetGeneralUpperEnergyBounds(const std::set<G4double,
-                            std::less<G4double> > &enBounds)
+                            std::less<G4double> >& enBounds)
 {
-  if (!fGeneralUpperEnergyBounds.empty()) {
+  if (!fGeneralUpperEnergyBounds.empty())
+  {
     Error("SetGeneralUpperEnergyBounds() - Energy bounds already set.");
   }
   fGeneralUpperEnergyBounds = enBounds;
 }
-
-  
-void G4WeightWindowStore::Error(const G4String &msg) const
+ 
+void G4WeightWindowStore::Error(const G4String& msg) const
 {
   G4Exception("G4WeightWindowStore::Error()",
               "GeomBias0002", FatalException, msg);
 }
-
 
 // ***************************************************************************
 // Returns the instance of the singleton.
@@ -227,7 +232,7 @@ void G4WeightWindowStore::Error(const G4String &msg) const
 //
 G4WeightWindowStore* G4WeightWindowStore::GetInstance()
 {
-  if (!fInstance)
+  if (fInstance == nullptr)
   {
     fInstance = new G4WeightWindowStore();
   }
@@ -239,13 +244,16 @@ G4WeightWindowStore* G4WeightWindowStore::GetInstance()
 // Creates it in case it's called for the first time.
 // ***************************************************************************
 //
-G4WeightWindowStore* G4WeightWindowStore::GetInstance(const G4String& ParallelWorldName)
+G4WeightWindowStore* G4WeightWindowStore::
+GetInstance(const G4String& ParallelWorldName)
 {
-  if (!fInstance)
+  if (fInstance == nullptr)
   {
-    G4cout << "G4IStore:: Creating new Parallel IStore " << ParallelWorldName << G4endl;
+#ifdef G4VERBOSE
+    G4cout << "G4IStore:: Creating new Parallel IStore "
+           << ParallelWorldName << G4endl;
+#endif
     fInstance = new G4WeightWindowStore(ParallelWorldName);
   }
   return fInstance;    
 }
-

@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4EqEMFieldWithSpin
+// G4EqEMFieldWithSpin
 //
 // Class description:
 //
 // This is the right-hand side of equation of motion in a combined
 // electric and magnetic field.
 
-// History:
-// - Created. Chris Gong, P.Gumplinger, 30.08.2007
+// Created: Chris Gong & Peter Gumplinger, 30.08.2007
 // -------------------------------------------------------------------
-
-#ifndef G4EQEMFIELDWITHSPIN_hh
-#define G4EQEMFIELDWITHSPIN_hh
+#ifndef G4EQEMFIELDWITHSPIN_HH
+#define G4EQEMFIELDWITHSPIN_HH
 
 #include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
@@ -49,13 +44,13 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 {
   public:  // with description
 
-    G4EqEMFieldWithSpin(G4ElectroMagneticField *emField );
+    G4EqEMFieldWithSpin(G4ElectroMagneticField* emField );
 
     ~G4EqEMFieldWithSpin();
 
-    void  SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
-                                G4double MomentumXc,
-                                G4double mass);
+    void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
+                               G4double MomentumXc,
+                               G4double mass);
 
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
@@ -71,7 +66,7 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
     G4double charge, mass, magMoment, spin;
 
-    G4double fElectroMagCof ;
+    G4double fElectroMagCof;
     G4double fMassCof;
 
     G4double omegac, anomaly;
@@ -79,4 +74,4 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
 };
 
-#endif /* G4EQEMFIELDWITHSPIN */
+#endif

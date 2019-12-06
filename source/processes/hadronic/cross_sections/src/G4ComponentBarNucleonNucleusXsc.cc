@@ -140,7 +140,7 @@ G4double G4ComponentBarNucleonNucleusXsc::GetElasticIsotopeCrossSection(
 ////////////////////////////////////////////////////////////////////////////
 
 void G4ComponentBarNucleonNucleusXsc::ComputeCrossSections(
-     const G4ParticleDefinition* aParticle, G4double kineticEnergy, G4int ZZ) 
+     const G4ParticleDefinition* aParticle, G4double kineticEnergy, G4int ZZ)
 {
   G4int Z = std::min(ZZ, 92);
   G4int it = 0;
@@ -164,7 +164,7 @@ void G4ComponentBarNucleonNucleusXsc::ComputeCrossSections(
     fInelasticXsc = Interpolate(Z1, Z2, Z, x1, x2);
     fTotalXsc = Interpolate(Z1, Z2, Z, xt1, xt2);
   }
-  
+
   fElasticXsc = std::max(fTotalXsc - fInelasticXsc, 0.0);
 }
 

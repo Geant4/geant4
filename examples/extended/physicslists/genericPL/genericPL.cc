@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/Hadr00.cc
-/// \brief Main program of the hadronic/Hadr00 example
+/// \file genericPL.cc
+/// \brief Main program of the physicslists/genericPL example
 //
 //
 //

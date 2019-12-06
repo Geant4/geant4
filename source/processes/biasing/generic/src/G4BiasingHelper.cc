@@ -36,7 +36,7 @@ G4bool G4BiasingHelper::ActivatePhysicsBiasing(G4ProcessManager* pmanager,
   G4VProcess* physicsProcess(0);
   
   G4ProcessVector* vprocess = pmanager->GetProcessList();
-  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
     {
       if ( (*vprocess)[ip]->GetProcessName() == physicsProcessToBias )
 	{
@@ -110,7 +110,7 @@ G4ParallelGeometriesLimiterProcess* G4BiasingHelper::AddLimiterProcess(G4Process
   
   G4ProcessVector* processList = pmanager->GetProcessList();
   G4bool noInstance = true;
-  for (G4int i = 0 ; i < processList->size() ; i++)
+  for (std::size_t i = 0 ; i < processList->size() ; ++i)
     {
       G4VProcess* process = (*processList)[i];
       if ( dynamic_cast< G4ParallelGeometriesLimiterProcess* >( process ) )

@@ -60,15 +60,13 @@
 
 // #########################################################################
 
-G4IonStoppingData::G4IonStoppingData(const G4String& leDirectory) :
-  subDir( leDirectory ) {
-
+G4IonStoppingData::G4IonStoppingData(const G4String& dir, G4bool val) :
+  subDir(dir), fICRU90(val) {
 }
 
 // #########################################################################
 
 G4IonStoppingData::~G4IonStoppingData() {
-
   ClearTable();
 }
 
@@ -306,12 +304,12 @@ G4bool G4IonStoppingData::RemovePhysicsVector(
 
 G4bool G4IonStoppingData::BuildPhysicsVector(
 	G4int atomicNumberIon,          // Atomic number of ion
-        const G4String& matIdentifier   // Name of material
+        const G4String& matname         // Name of material
         					     ) {
 
-  if( IsApplicable(atomicNumberIon, matIdentifier) ) return true;
+  if( IsApplicable(atomicNumberIon, matname) ) return true;
 
-  char* path = getenv("G4LEDATA");
+  const char* path = std::getenv("G4LEDATA");
   if ( !path ) {
     G4Exception("G4IonStoppingData::BuildPhysicsVector()", "mat521",
                 FatalException, "G4LEDATA environment variable not set");
@@ -319,11 +317,12 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   }
   
   std::ostringstream file;
+  G4String ww = (fICRU90 && (matname == "G4_WATER" || 
+			     matname == "G4_AIR" || 
+			     matname == "G4_GRAPHITE")) ? "90" : "73";
  
-  file << path << "/" << subDir << "/z" 
-       << atomicNumberIon << "_" << matIdentifier 
-       << ".dat";
-                      
+  file << path << "/" << subDir << ww << "/z" 
+       << atomicNumberIon << "_" << matname << ".dat";
   G4String fileName = G4String( file.str().c_str() );
 
   std::ifstream ifilestream( fileName );
@@ -343,7 +342,7 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   physicsVector -> FillSecondDerivatives();
 
   // Retrieved vector is added to material store
-  if( !AddPhysicsVector(physicsVector, atomicNumberIon, matIdentifier) ) {
+  if( !AddPhysicsVector(physicsVector, atomicNumberIon, matname) ) {
      delete physicsVector;
      ifilestream.close();
      return false;
@@ -356,34 +355,33 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
 // #########################################################################
 
 G4bool G4IonStoppingData::BuildPhysicsVector(
-	G4int atomicNumberIon,          // Atomic number of ion
-        G4int atomicNumberElem          // Atomic number of elemental material
+	G4int ZIon,          // Atomic number of ion
+        G4int ZElem          // Atomic number of elemental material
         					     ) 
 {
-  if( IsApplicable(atomicNumberIon, atomicNumberElem) ) return true;
+  if( IsApplicable(ZIon, ZElem) ) return true;
 
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if ( !path ) {
     G4Exception("G4IonStoppingData::BuildPhysicsVector()", "mat522",
                 FatalException, "G4LEDATA environment variable not set");
     return false;
   }
   std::ostringstream file;
+  G4String ww = (fICRU90 && ZIon <= 18 && 
+		 (ZElem == 1 || ZElem == 6 || 
+		  ZElem == 7 || ZElem == 8)) ? "90" : "73";
  
-  file << path << "/" << subDir << "/z" 
-       << atomicNumberIon << "_" << atomicNumberElem
-       << ".dat";
+  file << path << "/" << subDir << ww << "/z" 
+       << ZIon << "_" << ZElem << ".dat";
                       
   G4String fileName = G4String( file.str().c_str() );
-
   std::ifstream ifilestream( fileName );
 
-  if ( !ifilestream.is_open() ) return false;
-  
+  if ( !ifilestream.is_open() ) return false;  
   G4LPhysicsFreeVector* physicsVector = new G4LPhysicsFreeVector(); 
 
   if( !physicsVector -> Retrieve(ifilestream, true) ) {
- 
      ifilestream.close();
      return false;
   }
@@ -393,7 +391,7 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   physicsVector -> FillSecondDerivatives();
 
   // Retrieved vector is added to material store
-  if( !AddPhysicsVector(physicsVector, atomicNumberIon, atomicNumberElem) ) {
+  if( !AddPhysicsVector(physicsVector, ZIon, ZElem) ) {
      delete physicsVector;
      ifilestream.close();
      return false;

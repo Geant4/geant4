@@ -23,8 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MagIntegratorStepper inline methods implementation
 //
+// Author: J.Apostolakis, CERN - 15.01.1997
+// --------------------------------------------------------------------
 
+inline
+G4int G4MagIntegratorStepper::IntegrationOrder()
+{
+  return fIntegrationOrder;
+}
+   
 inline
 G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion()
 {
@@ -37,14 +46,44 @@ const G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion() const
   return fEquation_Rhs;
 }
 
-inline void
- G4MagIntegratorStepper::SetEquationOfMotion(G4EquationOfMotion* newEquation)
+inline
+void G4MagIntegratorStepper::SetEquationOfMotion(G4EquationOfMotion* newEq)
 {
-  if( newEquation != 0 )
+  if( newEq != nullptr )
   {
-    fEquation_Rhs= newEquation;
+    fEquation_Rhs = newEq;
   }
 } 
+
+inline
+unsigned long G4MagIntegratorStepper::GetfNoRHSCalls()
+{
+  return fNoRHSCalls;
+}
+
+inline
+void G4MagIntegratorStepper::ResetfNORHSCalls()
+{
+  fNoRHSCalls = 0;
+}
+
+inline
+G4bool G4MagIntegratorStepper::IsFSAL() const
+{
+  return fIsFSAL;
+}
+
+inline
+void G4MagIntegratorStepper::SetIntegrationOrder(G4int order)
+{
+  fIntegrationOrder = order;
+}
+
+inline
+void G4MagIntegratorStepper::SetFSAL(G4bool flag)
+{
+  fIsFSAL = flag;
+}
 
 inline
 G4int G4MagIntegratorStepper::GetNumberOfVariables() const
@@ -60,19 +99,20 @@ G4int G4MagIntegratorStepper::GetNumberOfStateVariables() const
 }
 
 inline
-void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] ) const
+void G4MagIntegratorStepper::RightHandSide(const G4double y[],
+                                                 G4double dydx[]) const
 {
-  fEquation_Rhs-> RightHandSide(y, dydx);
-  fNoRHSCalls++; // IncrementRHSCalls();
+  fEquation_Rhs->RightHandSide(y, dydx);
+  ++fNoRHSCalls; // IncrementRHSCalls();
 }
 
 inline
 void G4MagIntegratorStepper::RightHandSide(const G4double y[],
-                                           G4double dydx[],
-                                           G4double field[]) const
+                                                 G4double dydx[],
+                                                 G4double field[]) const
 {
   fEquation_Rhs->EvaluateRhsReturnB(y, dydx, field);
-  fNoRHSCalls++;
+  ++fNoRHSCalls;
 }
 
 inline
@@ -83,7 +123,7 @@ void G4MagIntegratorStepper::NormaliseTangentVector( G4double vec[6] )
   if( std::fabs(drds2 - 1.0) > 1.e-14 )
   {
     G4double normx = 1.0 / std::sqrt(drds2);
-    for(G4int i=3;i<6;i++) { vec[i] *= normx; }
+    for(auto i=3; i<6; ++i) { vec[i] *= normx; }
   }
 }
 
@@ -97,7 +137,7 @@ void G4MagIntegratorStepper::NormalisePolarizationVector( G4double vec[12] )
     if( std::fabs(drds2 - 1.0) > 1.e-14 )
     {
       G4double normx = 1.0 / std::sqrt(drds2);
-      for(G4int i=9;i<12;i++)  { vec[i] *= normx; }
+      for(auto i=9; i<12; ++i)  { vec[i] *= normx; }
     }
   }
 }

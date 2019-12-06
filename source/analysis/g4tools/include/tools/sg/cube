@@ -5,31 +5,29 @@
 #define tools_sg_cube
 
 #include "node"
+#include "render_gstos"
+
 #include "sf"
-#include "render_action"
 #include "pick_action"
 #include "bbox_action"
-#include "gstos"
 
 namespace tools {
 namespace sg {
 
-class cube : public node, public gstos {
+class cube : public node, public render_gstos {
   TOOLS_NODE(cube,tools::sg::cube,node)
 public:
   sf<float> width;
   sf<float> height;
   sf<float> depth;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::cube)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(width)
-      TOOLS_ADD_FIELD_DESC(height)
-      TOOLS_ADD_FIELD_DESC(depth)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),3, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(width),
+      TOOLS_ARG_FIELD_DESC(height),
+      TOOLS_ARG_FIELD_DESC(depth)
+    );
     return s_v;
   }
 private:
@@ -38,121 +36,59 @@ private:
     add_field(&height);
     add_field(&depth);
   }
-protected:
-  typedef float* floatp;
-protected: //gstos
-  virtual unsigned int create_gsto(std::ostream&,sg::gl_manager& a_mgr) {
-    std::vector<float> gsto_data;
-
-    //bool draw_edges = state.m_GL_LIGHTING?false:true;
-    //if(draw_edges) {
-
-   {size_t nsegs = 24;  //4 segs * 6 faces.
-    size_t ngsto = nsegs*2*3; //2 points * 3 coords.
-    size_t sz = gsto_data.size();
-    gsto_data.resize(sz+ngsto);
-    float* pxyz = vec_data<float>(gsto_data)+sz;    
-    floatp lines;
-    _lines(lines);
-    ::memcpy(pxyz,lines,ngsto*sizeof(float));
-    m_gsto_segs_sz = ngsto;}
-
-   {size_t ntris = 12;
-    size_t nxyzs = ntris*3*3; //3 points * 3 coords
-    size_t ngsto = nxyzs*2;     //xyz+nms
-    size_t sz = gsto_data.size();
-    gsto_data.resize(sz+ngsto);
-    float* pxyz = vec_data<float>(gsto_data)+sz;    
-    floatp tris,nms;
-    _tris(tris,nms);
-    ::memcpy(pxyz,tris,nxyzs*sizeof(float));
-    ::memcpy(pxyz+nxyzs,nms,nxyzs*sizeof(float));
-    m_gsto_tris_sz = nxyzs;}
-
-    if(gsto_data.empty()) return 0;
-
-    return a_mgr.create_gsto_from_data(gsto_data);
+protected: //render_gstos
+  virtual void visit(gstos_add& a_visitor,draw_type a_style) {
+    visit<gstos_add>(a_visitor,a_style);
   }
 public:
   virtual void render(render_action& a_action) {
-    const state& state = a_action.state();
-
-    bool draw_edges = state.m_GL_LIGHTING?false:true;
-
-    if(state.m_use_gsto) {
-      unsigned int _id = get_gsto_id(a_action.out(),a_action.gl_manager());
-      if(_id) {        
-        bufpos pxyzs = 0;
-        bufpos ptris = m_gsto_segs_sz*sizeof(float);
-        bufpos pnms  = ptris+m_gsto_tris_sz*sizeof(float);
-
-        a_action.begin_gsto(_id);
-        if(draw_edges) {
-          //a_action.set_lighting(false); //NOTE : we should do that if style==draw_fill !
-          a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
-          a_action.line_width(1);
-
-          a_action.draw_gsto_v(gl::lines(),m_gsto_segs_sz/3,pxyzs);
-
-          //pushes back the filled polygons to avoid z-fighting with lines
-          a_action.set_polygon_offset(true);
-
-          a_action.color4f(state.m_color);
-          a_action.line_width(state.m_line_width);
-          //a_action.set_lighting(state.m_GL_LIGHTING);
-        }
-        a_action.draw_gsto_vn(gl::triangles(),m_gsto_tris_sz/3,ptris,pnms);
-        a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
-        a_action.end_gsto();
-        return;
-  
-      } else { //!_id
-        // use immediate rendering.
-      }
-
-    } else {
-      clean_gstos(&a_action.gl_manager());
-    }
-
+    if(gstos_render(a_action)) return;
+    
     // immediate rendering :
+    const state& state = a_action.state();
+    bool draw_edges = false;
+    if(state.m_draw_type==draw_filled) draw_edges = state.m_GL_LIGHTING?false:true;
+    
     if(draw_edges) {
       a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
       a_action.line_width(1);
-
-      floatp lines;
-      _lines(lines);
-      a_action.draw_vertex_array(gl::lines(),144,lines);
-
+      visit(a_action,draw_lines);
       a_action.set_polygon_offset(true);
-
       a_action.color4f(state.m_color);
       a_action.line_width(state.m_line_width);
     }
 
-    floatp tris,nms;
-    _tris(tris,nms);
-    a_action.draw_vertex_normal_array(gl::triangles(),108,tris,nms);
-    a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
+    visit(a_action,state.m_draw_type);
+    if(draw_edges) a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
   }
 
   virtual void pick(pick_action& a_action) {
-    floatp tris,nms;
-    _tris(tris,nms);
-    a_action.add__triangles(*this,108,tris,true);
+    const state& state = a_action.state();
+    if(a_action.stop_at_first()){
+      visit(a_action,state.m_draw_type);
+      if(a_action.done()) a_action.set_node(this);
+    } else {
+      a_action.set_done(false);
+      a_action.zs().clear();
+      a_action.ws().clear();
+      visit(a_action,state.m_draw_type);
+      if(a_action.done()) {
+        a_action.add_pick(*this,a_action.zs(),a_action.ws(),a_action.state());
+        a_action.set_done(false);
+      }
+    }
   }
   virtual void bbox(bbox_action& a_action) {
-    floatp tris,nms;
-    _tris(tris,nms);
-    a_action.add_points(108,tris);
+    const state& state = a_action.state();
+    visit(a_action,state.m_draw_type);
   }
 public:
   cube()
   :parent()
+  ,render_gstos()
   ,width(1.0f)
   ,height(1.0f)
   ,depth(1.0f)
-  ,m_gsto_segs_sz(0)
-  ,m_gsto_tris_sz(0)
   {
     add_fields();
   }
@@ -160,18 +96,16 @@ public:
 public:
   cube(const cube& a_from)
   :parent(a_from)
-  ,gstos(a_from)
+  ,render_gstos(a_from)
   ,width(a_from.width)
   ,height(a_from.height)
   ,depth(a_from.depth)
-  ,m_gsto_segs_sz(0)
-  ,m_gsto_tris_sz(0)
   {
     add_fields();
   }
   cube& operator=(const cube& a_from){
     parent::operator=(a_from);
-    gstos::operator=(a_from);
+    render_gstos::operator=(a_from);
 
     width = a_from.width;
     height = a_from.height;
@@ -180,16 +114,9 @@ public:
     return *this;
   }
 protected:
-  void _faces(float*& a_front,float*& a_back,   //[12]
-              float*& a_right,float*& a_left,
-              float*&   a_top,float*& a_bottom){
-
-    static float front[12];
-    static float back[12];
-    static float right[12];
-    static float left[12];
-    static float top[12];
-    static float bottom[12];
+  void _faces(float front[],float back[],   //[12]
+              float right[],float left[],
+              float   top[],float bottom[]){
 
     float wh = width.value()*0.5f;
     float hh = height.value()*0.5f;
@@ -224,22 +151,17 @@ protected:
     bottom[3] = -wh;bottom[ 4] = -hh;bottom[ 5] =  dh;
     bottom[6] = -wh;bottom[ 7] = -hh;bottom[ 8] = -dh;
     bottom[9] =  wh;bottom[10] = -hh;bottom[11] = -dh;
-
-    a_front  = front;
-    a_back   = back;
-    a_right  = right;
-    a_left   = left;
-    a_top    = top;
-    a_bottom = bottom;
   }
 
-  void _tris(float*& a_tris,float*& a_nms){ //[108]
-    floatp front,back,right,left,top,bottom;
+  void _tris(float tris[],float nms[]){ //[108]
+    float front[12];
+    float back[12];
+    float right[12];
+    float left[12];
+    float top[12];
+    float bottom[12];
 
     _faces(front,back,right,left,top,bottom);
-
-    static float tris[108];
-    static float nms[108];  
 
     /////////////////////
     tris[0] = front[0];
@@ -542,21 +464,21 @@ protected:
     nms[106] = -1;
     nms[107] =  0;
     /////////////////////
-
-    a_tris = tris;
-    a_nms = nms;
   }
 
-  void _lines(float*& a_lines) { //[144]
-    floatp front,back,right,left,top,bottom;
+  void _lines(float lines[]) { //[144]
+    float front[12];
+    float back[12];
+    float right[12];
+    float left[12];
+    float top[12];
+    float bottom[12];
 
     _faces(front,back,right,left,top,bottom);
 
     //4 segs * 2 points * 3 coords * 6 faces.
 
     //4*2*3*6 = 24*6 = 144
-
-    static float lines[144]; //segments
 
     lines[0] = front[0];
     lines[1] = front[1];
@@ -725,45 +647,42 @@ protected:
     lines[141] = bottom[0];
     lines[142] = bottom[1];
     lines[143] = bottom[2];
-
-    a_lines = lines;
   }   
 
-protected:
-  size_t m_gsto_segs_sz;
-  size_t m_gsto_tris_sz;
-/*
-  enum draw_style {
-    draw_point = 0,
-    draw_line = 1,
-    draw_fill = 2
-  };
+  void _points(float points[]) { //[24]
+    float wh = width.value()*0.5f;
+    float hh = height.value()*0.5f;
+    float dh = depth.value()*0.5f;
+
+    points[0] =  wh;points[ 1] = -hh;points[ 2] = dh;
+    points[3] =  wh;points[ 4] =  hh;points[ 5] = dh;
+    points[6] = -wh;points[ 7] =  hh;points[ 8] = dh;
+    points[9] = -wh;points[10] = -hh;points[11] = dh;
+
+    points[12+0] =  wh;points[12+ 1] = -hh;points[12+ 2] = -dh;
+    points[12+3] = -wh;points[12+ 4] = -hh;points[12+ 5] = -dh;
+    points[12+6] = -wh;points[12+ 7] =  hh;points[12+ 8] = -dh;
+    points[12+9] =  wh;points[12+10] =  hh;points[12+11] = -dh;
+  }   
 
   template <class T>
-  void visit(T& a_visitor,draw_style a_style){
-    if(a_style==draw_fill) {
-      floatp tris,nms;
-      _tris(tris,nms);
-      a_visitor.add_triangles(108,tris);
+  void visit(T& a_visitor,draw_type a_style){
+    if(a_style==draw_points) {
+      float points[24];
+      _points(points);
+      a_visitor.add_points(24,points);
 
-    } else if(a_style==draw_line) {
-      floatp lines;
+    } else if(a_style==draw_lines) {
+      float lines[144]; //segments
       _lines(lines);
-      a_action.add_lines(144,lines);
+      a_visitor.add_lines(144,lines);
 
-    } else if(a_style==draw_point) {
-      floatp tris,nms;
+    } else if(a_style==draw_filled) {
+      float tris[108];float nms[108];  
       _tris(tris,nms);
-
-      a_action.add_points(108,tris);
-
-    } else if(a_style==pick) {
-      floatp tris,nms;
-      _tris(tris,nms);
-      a_action.add__triangles(*this,108,tris,true);
+      a_visitor.add_triangles(108,tris,nms);
     }
   }
-*/
 };
 
 }}

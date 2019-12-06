@@ -23,22 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4FSALIntegrationDriver inline implementation
 //
-//
-//
-// class G4FSALIntegrationDriver
-//
-// Class description:
-//
-// Driver class which controls the integration error of a 
-// Runge-Kutta stepper with a FSAL property 
-
-// History:
-// - Created. D.Sorokin
+// Created: D.Sorokin, 2017
 // --------------------------------------------------------------------
 
 #include "G4FieldUtils.hh"
-
 
 template <class T>
 G4FSALIntegrationDriver<T>::
@@ -83,6 +73,7 @@ G4FSALIntegrationDriver<T>::~G4FSALIntegrationDriver()
 // On output ystart is replaced by values at the end of the integration
 // interval. RightHandSide is the right-hand side of ODE system.
 // The source is similar to odeint routine from NRC p.721-722 .
+//
 template <class T>
 G4bool G4FSALIntegrationDriver<T>::
 AccurateAdvance( G4FieldTrack& track, G4double hstep,
@@ -92,10 +83,10 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
 
     if (hstep < GetMinimumStep())
     {
-        G4double dchord_step = 0, dyerr = 0;
+        G4double dchord_step = 0.0, dyerr = 0.0;
         G4double dydx[G4FieldTrack::ncompSVEC];
         Base::GetDerivatives(track, dydx);
-        return QuickAdvance(track, dydx, hstep, Base::UNKNOWN_CURVATURE_RADIUS, dchord_step, dyerr);
+        return QuickAdvance(track, dydx, hstep, dchord_step, dyerr);
     }
 
     G4bool succeeded = false;
@@ -107,7 +98,7 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
     track.DumpToArray(y);
 
     // hstep somtimes is too small. No need to add large curveLength.
-    G4double curveLength = 0;
+    G4double curveLength = 0.0;
     G4double endCurveLength = hstep;
 
 
@@ -211,7 +202,7 @@ OneGoodStep(G4double y[],
 template <class T>
 G4bool G4FSALIntegrationDriver<T>::
 QuickAdvance( G4FieldTrack& fieldTrack, const G4double dydxIn[],
-              G4double hstep, G4double /*inverseCurvatureRadius*/,
+              G4double hstep,
               G4double& dchord_step, G4double& dyerr )
 {
     ++fNoQuickAvanceCalls;
@@ -331,4 +322,15 @@ template <class T>
 void G4FSALIntegrationDriver<T>::IncrementQuickAdvanceCalls()
 {
     ++fNoQuickAvanceCalls;
+}
+
+template <class T>
+G4double
+G4FSALIntegrationDriver<T>::AdvanceChordLimited(G4FieldTrack& track,
+                                             G4double hstep,
+                                             G4double eps,
+                                             G4double chordDistance)
+{
+   return ChordFinderDelegate::AdvanceChordLimitedImpl(track, hstep,
+                                                       eps, chordDistance);
 }

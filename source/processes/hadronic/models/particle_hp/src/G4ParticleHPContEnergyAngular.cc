@@ -47,7 +47,7 @@ G4ReactionProduct * G4ParticleHPContEnergyAngular::Sample(G4double anEnergy, G4d
      if(theAngular[i].GetEnergy()>=anEnergy) break;
 #endif
    }
-   if( getenv("G4PHPTEST") )    G4cout << i << " G4ParticleHPContEnergyAngular dataE " << theAngular[i].GetEnergy() << " > " << anEnergy << " it_theAngular " << it << " interpolation " << theInterpolation << G4endl; //GDEB
+   if( std::getenv("G4PHPTEST") )    G4cout << i << " G4ParticleHPContEnergyAngular dataE " << theAngular[i].GetEnergy() << " > " << anEnergy << " it_theAngular " << it << " interpolation " << theInterpolation << G4endl; //GDEB
    G4double targetMass = GetTarget()->GetMass();
    if(it==0)
    {
@@ -79,7 +79,7 @@ G4ReactionProduct * G4ParticleHPContEnergyAngular::Sample(G4double anEnergy, G4d
 				    theAngularRep, theInterpolation);
      currentMeanEnergy.Put( theAngular[it].MeanEnergyOfThisInteraction() ); 
 #else
-    if( getenv("G4PHPTEST") )     G4cout << i << " G4ParticleHPContEnergyAngular To BUILDBYINTERPOLATION " << it << " : " << theAngular[it].GetEnergy()<< " , " << theAngular[it].GetNEnergies() << " " << it-1 << " : " << theAngular[it-1].GetEnergy()<< " : " << theAngular[it-1].GetNEnergies() << G4endl; //GDEB
+    if( std::getenv("G4PHPTEST") )     G4cout << i << " G4ParticleHPContEnergyAngular To BUILDBYINTERPOLATION " << it << " : " << theAngular[it].GetEnergy()<< " , " << theAngular[it].GetNEnergies() << " " << it-1 << " : " << theAngular[it-1].GetEnergy()<< " : " << theAngular[it-1].GetNEnergies() << G4endl; //GDEB
 
 //     G4ParticleHPContAngularPar * fAngular = new  G4ParticleHPContAngularPar(theProjectile ); //fix start
      if (fCacheAngular.Get() == NULL) {

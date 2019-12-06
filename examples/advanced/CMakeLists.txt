@@ -46,3 +46,5 @@ add_subdirectory(microelectronics)
 add_subdirectory(purging_magnet)
 add_subdirectory(underground_physics)
 add_subdirectory(xray_fluorescence)
+add_subdirectory(STCyclotron)
+

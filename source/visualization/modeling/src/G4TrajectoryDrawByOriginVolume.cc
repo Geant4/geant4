@@ -41,7 +41,7 @@ G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& n
 G4TrajectoryDrawByOriginVolume::~G4TrajectoryDrawByOriginVolume() {}
 
 void
-G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& visible) const
+G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& /*visible*/) const
 {
   G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
   assert (0 != aTrajectoryPoint);
@@ -68,7 +68,6 @@ G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& vi
   G4VisTrajContext myContext(GetContext());
   
   myContext.SetLineColour(colour);
-  myContext.SetVisible(visible);
   
   if (GetVerbose()) {
     G4cout<<"G4TrajectoryDrawByOriginVolume drawer named "<<Name();

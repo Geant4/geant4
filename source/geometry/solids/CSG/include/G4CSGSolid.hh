@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//  
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4CSGSolid
 //
 // Class description:
@@ -36,8 +30,7 @@
 //   An abstract class inherited from G4VSolid for Constructed Solids.
 //   Used primarily to structure inheritance tree.
 
-// History:
-// 27.03.98 J.Apostolakis   Created first version.
+// 27.03.98 J.Apostolakis - Created first version.
 // --------------------------------------------------------------------
 
 #ifndef G4CSGSOLID_HH
@@ -74,10 +67,10 @@ class G4CSGSolid : public G4VSolid
 
   protected:
 
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    G4double fCubicVolume = 0.0;
+    G4double fSurfaceArea = 0.0;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 #endif

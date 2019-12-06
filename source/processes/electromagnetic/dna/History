@@ -14,6 +14,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+15-11-19: G.Cosmo emdna-V10-05-11
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+8-11-19: HT, tag emdna-V10-05-10
+- Fixed the exception divide by zero of diffusionCoefficient in 
+G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength
+for the case of static molecules (DNA) (diffusionCoefficient = 0)
+
+24-10-19: J.Apostolakis, tag emdna-V10-05-09
+- Enabled G4ItNavigator{1,2} to flag if it encounters new type
+  of external physical volume (meant for adapting external navigators)
+
+19-10-19: WGS, SI, tag emdna-V10-05-08
+- Added new model G4DNAELSEPAElasticModel 
+
+11-10-19: WGS, SI, tag emdna-V10-05-07
+- G4DNAOneStepThermalizationModel.* : 
+added Kreipl and Meesungnoen amorphous ice models
+- G4DNAWaterDissociationDisplacer* : updated
+
 03-06-2019, MK, tag emdna-V10-05-06
 - Fix GCC9 warnings
 

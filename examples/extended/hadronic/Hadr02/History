@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-08-19   A. Ribon   (exhadr02-V10-05-03)
+- HadronPhysicsCRMC_FTFP_BERT : use G4HadronicParameters for the energy
+  transition region between FTF and BERT models.
+
+02-08-19   G. Folger   (exhadr02-V10-05-02)
+- remove use of G4DataQuestionaire, following cleanup in
+   physicslists, see phys-lists-V10-05-02 and phys-util-V10-04-02
+   
 12-06-19  A. Ribon  (exhadr02-V10-05-01)
 - G4CRMCModel : some improvements (e.g. considered the energy-per-nucleon,
   instead of the whole projectile, in the case of nucleus projectile) and

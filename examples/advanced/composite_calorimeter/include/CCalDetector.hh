@@ -77,8 +77,8 @@ public:
   G4String Name() const {return detectorName;}
   G4String baseFileName() const {return fileName;}
   G4String File() const {return fileName+".geom";}
-  CCalDetector* getDaughter(int i) const {return theDetectorsInside[i];}
-  int getNDaughters() const {return theDetectorsInside.size();}
+  CCalDetector* getDaughter(G4int i) const {return theDetectorsInside[i];}
+  G4int getNDaughters() const {return theDetectorsInside.size();}
   
 
   ////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ protected:
 
   //Should read a file and store the information inside the concrete 
   //CCalDetector
-  virtual int readFile() = 0;
+  virtual G4int readFile() = 0;
   //Construct the daughters by calling the apropiate constructors
   virtual void constructDaughters() = 0;
 
@@ -107,7 +107,7 @@ protected:
   //Building related methods  
 
   //Builds the detector from a file
-  int buildFromFile();
+  G4int buildFromFile();
 
 protected:
   ////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ protected:
 
   CCalDetectorTable theDetectorsInside; //A collection of CCalDetectors inside
 
-  int constructFlag;                    //True if this detector is to be built
+  G4int constructFlag;                  //True if this detector is to be built
 };
 
 #endif

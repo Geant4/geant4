@@ -68,11 +68,33 @@ inline void copy(std::map<K,V*>& a_to,const std::map<K,V*>& a_from){
 }
 
 template <class K,class V>
+inline bool add_unique(std::map<K,V*>& a_map,const K& a_key,V* a_value,bool a_delete) {
+  typedef typename std::map<K,V*>::iterator it_t;
+  it_t it = a_map.find(a_key);
+  if(it==a_map.end()) {a_map[a_key] = a_value;return false;} //false=was not found.
+  if(a_delete) {
+    V* entry  = (*it).second;
+    a_map.erase(it);
+    delete entry;
+  }
+  a_map[a_key] = a_value;
+  return true;
+}
+
+template <class K,class V>
 inline bool find(const std::map<K,V>& a_map,const K& a_key,V& a_value) {
   typedef typename std::map<K,V>::const_iterator it_t;
   it_t it = a_map.find(a_key);
   if(it==a_map.end()) {a_value = V();return false;}
   a_value = (*it).second;
+  return true;
+}
+
+template <class K,class V>
+inline bool is_key(const std::map<K,V>& a_map,const K& a_key) {
+  typedef typename std::map<K,V>::const_iterator it_t;
+  it_t it = a_map.find(a_key);
+  if(it==a_map.end()) return false;
   return true;
 }
 

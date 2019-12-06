@@ -144,6 +144,20 @@
 
 /** @} */
 
+/** @defgroup extended_biasing_GB07 GB07
+ *  Biasing example GB07
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB07ActionInitialization {};
+  class GB07BOptrLeadingParticle {};
+  class GB07DetectorConstruction {};
+  class GB07PrimaryGeneratorAction {};
+  class GB07SD {};
+
+/** @} */
+
 /** @defgroup extended_biasing_ReverseMC01 ReverseMC01
  *  Biasing example ReverseMC01
  *  @ingroup extended_biasing

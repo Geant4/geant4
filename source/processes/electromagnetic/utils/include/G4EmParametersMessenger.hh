@@ -103,6 +103,7 @@ private:
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
+  G4UIcmdWithADoubleAndUnit* max5DCmd;
   G4UIcmdWithADoubleAndUnit* cenCmd;
   G4UIcmdWithADoubleAndUnit* lowEnCmd;
   G4UIcmdWithADoubleAndUnit* lowEn3Cmd;
@@ -117,6 +118,8 @@ private:
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fr1Cmd;
   G4UIcmdWithADouble*        fgCmd;
+  G4UIcmdWithADouble*        safCmd;
+  G4UIcmdWithADoubleAndUnit* llimCmd;
   G4UIcmdWithADouble*        skinCmd;
   G4UIcmdWithADouble*        screCmd;
 

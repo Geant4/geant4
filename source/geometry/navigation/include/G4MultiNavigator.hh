@@ -23,20 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // class G4MultiNavigator
 //
 // Class description:
 //
 // Utility class for polling the navigators of several geometries to
-// identify the next  boundary. 
+// identify the next boundary. 
 
 // History:
 // - Created. John Apostolakis, November 2006
-// *********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4MULTINAVIGATOR_HH
 #define G4MULTINAVIGATOR_HH
 
@@ -59,7 +55,7 @@ class G4MultiNavigator : public G4Navigator
 {
   public:  // with description
 
-  friend std::ostream& operator << (std::ostream &os, const G4Navigator &n);
+  friend std::ostream& operator << (std::ostream& os, const G4Navigator& n);
 
   G4MultiNavigator();
     // Constructor - initialisers and setup.
@@ -67,16 +63,16 @@ class G4MultiNavigator : public G4Navigator
   ~G4MultiNavigator();
     // Destructor. No actions.
 
-  G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
-                       const G4ThreeVector &pDirection,
-                       const G4double      pCurrentProposedStepLength,
-                             G4double      &pNewSafety);
+  G4double ComputeStep( const G4ThreeVector& pGlobalPoint,
+                        const G4ThreeVector& pDirection,
+                        const G4double       pCurrentProposedStepLength,
+                              G4double&      pNewSafety );
     // Return the distance to the next boundary of any geometry
 
   G4double ObtainFinalStep( G4int        navigatorId, 
-                            G4double     &pNewSafety,     // for this geom 
-                            G4double     &minStepLast,
-                            ELimited     &limitedStep); 
+                            G4double&    pNewSafety,     // for this geom 
+                            G4double&    minStepLast,
+                            ELimited&    limitedStep ); 
     // Get values for a single geometry
 
   void PrepareNavigators(); 
@@ -85,33 +81,33 @@ class G4MultiNavigator : public G4Navigator
                         const G4ThreeVector direction ); 
     // Prepare Navigators and locate 
 
-  G4VPhysicalVolume* ResetHierarchyAndLocate(const G4ThreeVector &point,
-                                             const G4ThreeVector &direction,
-                                             const G4TouchableHistory &h);
+  G4VPhysicalVolume* ResetHierarchyAndLocate( const G4ThreeVector& point,
+                                              const G4ThreeVector& direction,
+                                              const G4TouchableHistory& h );
     // Reset the geometrical hierarchy for all geometries.
     // Use the touchable history for the first (mass) geometry.
     // Return the volume in the first (mass) geometry.
     // 
     // Important Note: In order to call this the geometries MUST be closed.
 
-  G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-                                         const G4ThreeVector* direction=0,
-                                         const G4bool pRelativeSearch=true,
-                                         const G4bool ignoreDirection=true);
+  G4VPhysicalVolume* LocateGlobalPointAndSetup( const G4ThreeVector& point,
+                                     const G4ThreeVector* direction = nullptr,
+                                     const G4bool pRelativeSearch = true,
+                                     const G4bool ignoreDirection = true);
     // Locate in all geometries.
     // Return the volume in the first (mass) geometry
     //  Maintain vector of other volumes,  to be returned separately
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-   void LocateGlobalPointWithinVolume(const G4ThreeVector& position); 
+  void LocateGlobalPointWithinVolume( const G4ThreeVector& position ); 
     // Relocate in all geometries for point that has not changed volume
     // (ie is within safety  in all geometries or is distance less that 
     // along the direction of a computed step.
 
-  G4double ComputeSafety(const G4ThreeVector &globalpoint,
-                         const G4double pProposedMaxLength = DBL_MAX,
-                         const G4bool keepState = false);
+  G4double ComputeSafety( const G4ThreeVector& globalpoint,
+                          const G4double pProposedMaxLength = DBL_MAX,
+                          const G4bool keepState = false );
     // Calculate the isotropic distance to the nearest boundary 
     // in any geometry from the specified point in the global coordinate
     // system. The geometry must be closed.
@@ -119,11 +115,11 @@ class G4MultiNavigator : public G4Navigator
   G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
 
-  virtual G4ThreeVector GetLocalExitNormal(G4bool* obtained); // const
-  virtual G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector &CurrentE_Point,
-						   G4bool* obtained); // const
-  virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
- 					           G4bool* obtained); // const
+  virtual G4ThreeVector GetLocalExitNormal( G4bool* obtained ); // const
+  virtual G4ThreeVector GetLocalExitNormalAndCheck( const G4ThreeVector &E_Pt,
+                                                    G4bool* obtained ); // const
+  virtual G4ThreeVector GetGlobalExitNormal( const G4ThreeVector &E_Pt,
+                                                   G4bool* obtained ); // const
     // Return Exit Surface Normal and validity too.
     // Can only be called if the Navigator's last Step either
     //  - has just crossed a volume geometrical boundary and relocated, or
@@ -137,10 +133,10 @@ class G4MultiNavigator : public G4Navigator
 
  public:  // without description
 
-  G4Navigator* GetNavigator(G4int n) const
+  inline G4Navigator* GetNavigator( G4int n ) const
   { 
-     if( (n>fNoActiveNavigators)||(n<0)){ n=0; }
-     return fpNavigator[n]; 
+    if( (n>fNoActiveNavigators) || (n<0) ) { n=0; }
+    return fpNavigator[n]; 
   }
 
  protected:  // with description
@@ -162,35 +158,43 @@ class G4MultiNavigator : public G4Navigator
 
    // STATE Information 
 
-   G4int   fNoActiveNavigators; 
-   static const G4int fMaxNav = 16;   // rename to kMaxNoNav ??
-   G4VPhysicalVolume* fLastMassWorld; 
+   G4int fNoActiveNavigators = 0; 
+   static const G4int fMaxNav = 16;
+   G4VPhysicalVolume* fLastMassWorld = nullptr; 
 
-   // Global state (retained during stepping for one track
-   G4Navigator*  fpNavigator[fMaxNav];   // G4Navigator** fpNavigator;
+   G4Navigator*  fpNavigator[fMaxNav];
+     // Global state (retained during stepping for one track
 
    // State after a step computation 
+   //
    ELimited      fLimitedStep[fMaxNav];
    G4bool        fLimitTruth[fMaxNav];
    G4double      fCurrentStepSize[fMaxNav]; 
-   G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
-   G4int         fNoLimitingStep;       // How many geometries limited the step
-   G4int         fIdNavLimiting;        // Id of Navigator limiting step (if only one limits)
+   G4double      fNewSafety[ fMaxNav ]; // Safety for starting point
+   G4int         fNoLimitingStep = -1;  // How many geometries limited the step
+   G4int         fIdNavLimiting = -1;   // Id of Navigator limiting step
 
-   // Lowest values - determine step length, and safety 
-   G4double      fMinStep;      // As reported by Navigators. Can be kInfinity
-   G4double      fMinSafety;
-   G4double      fTrueMinStep;  // Corrected in case fMinStep >= proposed 
+   // Lowest values - determine step length, and safety
+   //
+   G4double      fMinStep = -kInfinity; // As reported by Navigators
+   G4double      fMinSafety = -kInfinity;
+   G4double      fTrueMinStep = -kInfinity; // Corrected if fMinStep>=proposed
 
    // State after calling 'locate'
+   //
    G4VPhysicalVolume* fLocatedVolume[fMaxNav];
    G4ThreeVector      fLastLocatedPosition; 
 
-   // cache of safety information 
-   G4ThreeVector fSafetyLocation;       //  point where ComputeSafety is called
-   G4double      fMinSafety_atSafLocation; // /\ corresponding value of safety
-   G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
-   G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
+   // Cache of safety information
+   //
+   G4ThreeVector fSafetyLocation;
+     // point where ComputeSafety is called
+   G4double      fMinSafety_atSafLocation = -1.0;
+     // - corresponding value of safety
+   G4ThreeVector fPreStepLocation;
+     // point where last ComputeStep called
+   G4double      fMinSafety_PreStepPt = -1.0;
+     // - corresponding value of safety
 
    G4TransportationManager* pTransportManager; // Cache for frequent use
 };

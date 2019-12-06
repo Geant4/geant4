@@ -75,10 +75,10 @@ G4VRML2SceneHandler::G4VRML2SceneHandler(G4VRML2& system, const G4String& name) 
 {
 	
 	// PV name pickability 	
-	if( getenv( "G4VRML_PV_PICKABLE" ) != NULL ) {
+	if( std::getenv( "G4VRML_PV_PICKABLE" ) != NULL ) {
 
 		int is_pickable ;
-		sscanf( getenv("G4VRML_PV_PICKABLE"), "%d", &is_pickable ) ;
+		sscanf( std::getenv("G4VRML_PV_PICKABLE"), "%d", &is_pickable ) ;
 
 		if ( is_pickable ) { SetPVPickability ( true ) ; }
 	} 

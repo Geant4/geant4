@@ -61,9 +61,8 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 
 RunAction::~RunAction()
 {
-#ifdef G4MULTITHREADED
-  if(isMaster) delete fKinematic;
-#endif
+  if(isMaster && G4Threading::IsMultithreadedApplication()) delete fKinematic;
+
   delete fMessenger;
 }
 

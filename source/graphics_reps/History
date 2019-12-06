@@ -19,6 +19,16 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
+07 November 2019  Evgueni Tcherniaev (greps-V10-05-06)
+- HepPolyhedron: Added move constructor and move assignment
+- BooleanProcessor::createPolyhedron(): Use return std::move() 
+
+04 October 2019  Evgueni Tcherniaev  (greps-V10-05-05)
+- HepPolyhedron::SetSideFacets: Fixed false defect reported by Coverity
+
+29 August 2019  John Allison  (greps-V10-05-04)
+- Add G4TessellatedSolid to list of solids that may be specially treated
+
 12 June 2019  John Allison (greps-V10-05-03)
 - G4VisAttributes:
   o Add G4VisAttributes::cloud and methods to force:

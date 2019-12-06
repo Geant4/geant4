@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // 15.03.2016 V.Ivanchenko 
 //
 // List of parameters of the pre-compound model
@@ -65,27 +64,30 @@ void G4DeexPrecoParameters::SetDefaults()
   fFBUEnergyLimit = 20.0*CLHEP::MeV; 
   fFermiEnergy = 35.0*CLHEP::MeV; 
   fPrecoLowEnergy = 0.1*CLHEP::MeV;
+  fPrecoHighEnergy = 30*CLHEP::MeV;
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
   fMaxLifeTime = 1000*CLHEP::second;
-  fMinExPerNucleounForMF = 100*CLHEP::GeV;
+  fMinExPerNucleounForMF = 200*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
   fPrecoType = 3;
   fDeexType = 3;
   fTwoJMAX = 10;
+  fMaxZ = 9;
   fVerbose = 1;
   fNeverGoBack = false;
   fUseSoftCutoff = false;
   fUseCEM = true;
   fUseGNASH = false;
   fUseHETC = false;
-  fUseAngularGen = true;
+  fUseAngularGen = false;
   fPrecoDummy = false;
   fCorrelatedGamma = false;
   fStoreAllLevels = false;
   fInternalConversion = true;
   fLD = true;
+  fFD = false;
   fDeexChannelType = fCombined;
   fInternalConversionID = 
     G4PhysicsModelCatalog::Register("e-InternalConvertion");
@@ -128,6 +130,12 @@ void G4DeexPrecoParameters::SetPrecoLowEnergy(G4double val)
 {
   if(IsLocked() || val < 0.0) { return; }
   fPrecoLowEnergy = val;
+}
+
+void G4DeexPrecoParameters::SetPrecoHighEnergy(G4double val)
+{
+  if(IsLocked() || val < 0.0) { return; }
+  fPrecoHighEnergy = val;
 }
 
 void G4DeexPrecoParameters::SetPhenoFactor(G4double val)
@@ -182,6 +190,12 @@ void G4DeexPrecoParameters::SetTwoJMAX(G4int n)
 {
   if(IsLocked() || n < 0) { return; }
   fTwoJMAX = n;
+}
+
+void G4DeexPrecoParameters::SetUploadZ(G4int z)
+{
+  if(IsLocked() || z < 1) { return; }
+  fMaxZ = z;
 }
 
 void G4DeexPrecoParameters::SetVerbose(G4int n)
@@ -262,6 +276,12 @@ void G4DeexPrecoParameters::SetLevelDensityFlag(G4bool val)
   fLD = val;
 }
 
+void G4DeexPrecoParameters::SetDiscreteExcitationFlag(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fFD = val;
+}
+
 void G4DeexPrecoParameters::SetDeexChannelsType(G4DeexChannelType val)
 {
   if(IsLocked()) { return; }
@@ -270,8 +290,8 @@ void G4DeexPrecoParameters::SetDeexChannelsType(G4DeexChannelType val)
 
 std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 {
-  static const G4String namm[4] = {"Evaporation","GEM","Evaporation+GEM","Dummy"};
-  static const G4int nmm[4] = {8, 68, 68, 0};
+  static const G4String namm[5] = {"Evaporation","GEM","Evaporation+GEM","GEMVI","Dummy"};
+  static const G4int nmm[5] = {8, 68, 68, 31, 0};
   size_t idx = (size_t)fDeexChannelType;
 
   G4int prec = os.precision(5);
@@ -280,8 +300,10 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
   os << "=======================================================================" << "\n";
   os << "Type of pre-compound inverse x-section              " << fPrecoType << "\n";
   os << "Pre-compound model active                           " << (!fPrecoDummy) << "\n";
-  os << "Pre-compound low energy (MeV)                       " 
+  os << "Pre-compound excitation low energy (MeV)            " 
      << fPrecoLowEnergy/CLHEP::MeV << "\n";
+  os << "Pre-compound excitation high energy (MeV)           " 
+     << fPrecoHighEnergy/CLHEP::MeV << "\n";
   os << "Type of de-excitation inverse x-section             " << fDeexType << "\n";
   os << "Type of de-excitation factory                       " << namm[idx] << "\n";
   os << "Number of de-excitation channels                    " << nmm[idx] << "\n";
@@ -293,7 +315,8 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
      << fFBUEnergyLimit/CLHEP::MeV << "\n";
   os << "Level density (1/MeV)                               " 
      << fLevelDensity*CLHEP::MeV << "\n";
-  os << "Model of level density flag                         " << fLD << "\n";
+  os << "Use simple level density model                      " << fLD << "\n";
+  os << "Use discrete excitation energy of the residual      " << fFD << "\n";
   os << "Time limit for long lived isomeres (ns)             " 
      << fMaxLifeTime/CLHEP::ns << "\n";
   os << "Internal e- conversion flag                         " 
@@ -303,6 +326,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
      << fInternalConversionID << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
   os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";
+  os << "Upload data before 1st event for                Z < " << fMaxZ << "\n";
   os << "=======================================================================" << "\n";
   os.precision(prec);
   return os;

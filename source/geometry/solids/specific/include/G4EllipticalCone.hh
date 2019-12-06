@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4EllipticalCone
 //
 // Class description:
@@ -66,16 +60,24 @@
 //  ySemiAxis = (Dy-dy)/(2*zTopCut)
 //    zheight = (Dx+dx)/(2*xSemiAxis)
 
-// First implementation:
-//   Dionysios Anninos, 8.9.2005
-// 
+// Author: Dionysios Anninos, 8.9.2005
 // Revisions:
 //   Lukas Lindroos, Tatiana Nikitina, 20.08.2007
 //   Evgueni Tcherniaev, 20.07.2017
-//
 // --------------------------------------------------------------------
-#ifndef G4EllipticalCone_HH
-#define G4EllipticalCone_HH
+#ifndef G4ELLIPTICALCONE_HH
+#define G4ELLIPTICALCONE_HH
+
+#include "G4GeomTypes.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UELLIPTICALCONE 1
+#endif
+
+#if (defined(G4GEOM_USE_UELLIPTICALCONE) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UEllipticalCone G4EllipticalCone
+  #include "G4UEllipticalCone.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -128,9 +130,9 @@ class G4EllipticalCone : public G4VSolid
 
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
@@ -162,24 +164,26 @@ class G4EllipticalCone : public G4VSolid
 
   protected:  // without description
  
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
   private:
 
-    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+    G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
   private:
 
     G4double halfCarTol;
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
+    G4double fCubicVolume = 0.0;
+    G4double fSurfaceArea = 0.0;
     G4double xSemiAxis, ySemiAxis, zheight, zTopCut;
     G4double cosAxisMin, invXX, invYY;
 };
 
 #include "G4EllipticalCone.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UELLIPTICALCONE) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+#endif // G4ELLIPTICALCONE_HH

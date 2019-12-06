@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-
 // class description
 //
 // This class is an interface to G4StaticSandiaData.
@@ -66,7 +64,7 @@ class G4SandiaTable
 {
 public:  // with description
 
-  G4SandiaTable(G4Material*);	         
+  G4SandiaTable(const G4Material*);   
 	         
   ~G4SandiaTable();
 
@@ -118,10 +116,10 @@ private:
   static const G4double funitc[5];
 
   // used at initialisation
-  std::vector<G4double>   fSandiaCofPerAtom;
+  std::vector<G4double> fSandiaCofPerAtom;
   
   // members of the class
-  G4Material*     fMaterial;
+  const G4Material* fMaterial;
   G4int           fMatNbOfIntervals;
   G4OrderedTable* fMatSandiaMatrix;
   G4OrderedTable* fMatSandiaMatrixPAI;
@@ -138,7 +136,7 @@ public:  // without description
         
   G4SandiaTable();
 
-  void Initialize(G4Material*);	         
+  void Initialize(const G4Material*);
 
   G4int SandiaIntervals(G4int Z[], G4int el);
 
@@ -162,9 +160,11 @@ private:
 
   G4double** GetPointerToCof(); 
 
-  // copy constructor and hide assignment operator
-  G4SandiaTable(G4SandiaTable &) = delete;
-  G4SandiaTable & operator=(const G4SandiaTable &right) = delete;
+  // operators       
+  G4bool operator==(const G4SandiaTable&) const;
+  G4bool operator!=(const G4SandiaTable&) const;
+  G4SandiaTable(G4SandiaTable &);
+  G4SandiaTable & operator=(const G4SandiaTable &right);
 
   static const G4double fSandiaTable[981][5];
   static const G4int fNumberOfElements;

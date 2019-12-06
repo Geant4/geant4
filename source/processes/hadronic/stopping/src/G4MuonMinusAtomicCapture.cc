@@ -62,14 +62,11 @@
 
 G4MuonMinusAtomicCapture::G4MuonMinusAtomicCapture(const G4String& name)
   : G4VRestProcess(name, fHadronic),
-    //  : G4HadronicProcess(name, fHadronAtRest),// name, process type
     fElementSelector(new G4ElementSelector()),
     fEmCascade(new G4EmCaptureCascade()),  // Owned by InteractionRegistry
-    theTotalResult(new G4ParticleChange())
+    theTotalResult(new G4ParticleChange()),
+    result(nullptr)
 {
-  // Modify G4VProcess flags to emulate G4VRest instead of G4VDiscrete
-  //  enableAtRestDoIt = true;
-  //  enablePostStepDoIt = false;
   SetProcessSubType(fMuAtomicCapture);
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }

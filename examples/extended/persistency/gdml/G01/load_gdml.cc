@@ -97,6 +97,7 @@ int main(int argc,char **argv)
 // Uncomment the following if wish to avoid names stripping
 // parser.SetStripFlag(false);
 
+   parser.SetOverlapCheck(true);
    parser.Read(argv[1]);
 
    if (argc>4)

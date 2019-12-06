@@ -94,7 +94,7 @@ void CCaloSD::getStepInfo(const G4Step* aStep) {
   
   PreStepPoint = aStep->GetPreStepPoint(); 
   PostStepPoint= aStep->GetPostStepPoint(); 
-  HitPoint     = PreStepPoint->GetPosition();	
+  HitPoint     = PreStepPoint->GetPosition();        
 
   theTrack = aStep->GetTrack();   
   CurrentPV= PreStepPoint->GetPhysicalVolume();
@@ -102,7 +102,7 @@ void CCaloSD::getStepInfo(const G4Step* aStep) {
   G4String pname = theTrack->GetDefinition()->GetParticleName();
   G4double de = aStep->GetTotalEnergyDeposit();
   //G4cout << "##### Process new step dE= " << de
-  //	 << "  " << pname << " inside " << GetName() << G4endl;
+  //         << "  " << pname << " inside " << GetName() << G4endl;
 
   const G4VTouchable* touch = aStep->GetPreStepPoint()->GetTouchable();
   G4double weight = 1.;
@@ -141,12 +141,12 @@ G4bool CCaloSD::hitExists() {
   // exists already:
    
   G4bool found = false;
-  for (G4int j=0; j<theHC->entries(); ++j) {
+  for (std::size_t j=0; j<theHC->entries(); ++j) {
 
     CCalG4Hit* aPreviousHit = (*theHC)[j];
     if (aPreviousHit->getTrackID()  == PrimaryID &&
-	aPreviousHit->getTimeSliceID() == TSliceID  &&
-	aPreviousHit->getUnitID()== UnitID       ) {
+        aPreviousHit->getTimeSliceID() == TSliceID  &&
+        aPreviousHit->getUnitID()== UnitID       ) {
       CurrentHit = aPreviousHit;
       found = true;
       break;
@@ -201,7 +201,7 @@ void CCaloSD::createNewHit() {
          << " time slice " << TSliceID 
          << " For Track  " << theTrack->GetTrackID()
          << " which is a " <<  theTrack->GetDefinition()->GetParticleName();
-	   
+           
   if (theTrack->GetTrackID()==1) {
     G4cout << " of energy "     << theTrack->GetTotalEnergy();
   } else {
@@ -226,14 +226,14 @@ void CCaloSD::createNewHit() {
   
   StoreHit(CurrentHit);
 
-}	 
+}         
 
 void CCaloSD::updateHit() {
   if (EdepositEM+EdepositEHAD != 0) {
     CurrentHit->addEnergyDeposit(EdepositEM,EdepositEHAD);
 #ifdef debug
     G4cout << "Energy deposit in Unit " << UnitID << " em " << EdepositEM/MeV
-	 << " hadronic " << EdepositEHAD/MeV << " MeV" << G4endl;
+         << " hadronic " << EdepositEHAD/MeV << " MeV" << G4endl;
 #endif
   }
 
@@ -289,15 +289,15 @@ G4double CCaloSD::curve_LY(const G4StepPoint* stepPoint) {
       weight = 1.05 - dapd * 0.0005;
   } else {
     G4cout << "CCaloSD, light coll curve : wrong distance to APD " << dapd 
-	   << " crlength = " << crlength
-	   << " z of localPoint = " << localPoint.z() 
-	   << " take weight = " << weight << G4endl;
+           << " crlength = " << crlength
+           << " z of localPoint = " << localPoint.z() 
+           << " take weight = " << weight << G4endl;
   }
 #ifdef ddebug
   G4cout << "CCaloSD, light coll curve : " << dapd 
-	 << " crlength = " << crlength
-	 << " z of localPoint = " << localPoint.z() 
-	 << " take weight = " << weight << G4endl;
+         << " crlength = " << crlength
+         << " z of localPoint = " << localPoint.z() 
+         << " take weight = " << weight << G4endl;
 #endif
   return weight;
 }

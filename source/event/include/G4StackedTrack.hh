@@ -23,38 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//  Last Modification : 02/Feb/96 M.Asai
-//
-
-
-#ifndef G4StackedTrack_h
-#define G4StackedTrack_h 1
-
-class G4VTrajectory;
-class G4Track;
-
 // class description:
 //
 // This class is exclusively used by G4StackManager and G4TrackStack
 // classes for storing a G4Track object.
+//
+// Author: Makoto Asai (SLAC) - 02/Feb/96
+// --------------------------------------------------------------------
+#ifndef G4StackedTrack_hh
+#define G4StackedTrack_hh 1
+
+class G4VTrajectory;
+class G4Track;
 
 class G4StackedTrack
 {
-public:
-  G4StackedTrack() : track(0), trajectory(0) {}
-  G4StackedTrack(G4Track* aTrack, G4VTrajectory* aTraj = 0) : track(aTrack), trajectory(aTraj) {}
-  ~G4StackedTrack() {}
-  
-private:
-  G4Track* track;
-  G4VTrajectory* trajectory;
-  
-public:
-  G4Track* GetTrack() const { return track; }
-  G4VTrajectory* GetTrajectory() const { return trajectory; }
+  public:
+
+    G4StackedTrack() : track(nullptr), trajectory(nullptr) {}
+    G4StackedTrack(G4Track* aTrack, G4VTrajectory* aTraj = nullptr)
+      : track(aTrack), trajectory(aTraj) {}
+   ~G4StackedTrack() {}
+
+    G4Track* GetTrack() const { return track; }
+    G4VTrajectory* GetTrajectory() const { return trajectory; }
+
+  private:
+
+    G4Track* track;
+    G4VTrajectory* trajectory;
 };
 
 #endif

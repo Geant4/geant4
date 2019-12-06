@@ -23,42 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Tubs implementation
 //
-//
-// 
-// class G4Tubs
-//
-// History:
-//
-// 24.08.16 E.Tcherniaev: reimplemented CalculateExtent() to make use
-//                      of G4BoundingEnvelope  
-// 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
-// 02.08.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for negative value under sqrt
-//                      for the case: p on the surface and v is tangent to the surface
-// 11.05.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for phi < 2pi
-// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 16.03.05 V.Grichine: SurfaceNormal(p) with edges/corners for boolean
-// 20.07.01 V.Grichine: bug fixed in Inside(p)
-// 20.02.01 V.Grichine: bug fixed in Inside(p) and CalculateExtent was 
-//                      simplified base on G4Box::CalculateExtent
-// 07.12.00 V.Grichine: phi-section algorithm was changed in Inside(p)
-// 28.11.00 V.Grichine: bug fixed in Inside(p)
-// 31.10.00 V.Grichine: assign srd, sphi in Distance ToOut(p,v,...)
+// 1994-95 P.Kent: first implementation
 // 08.08.00 V.Grichine: more stable roots of 2-equation in DistanceToOut(p,v,..)
-// 02.08.00 V.Grichine: point is outside check in Distance ToOut(p)
-// 17.05.00 V.Grichine: bugs (#76,#91) fixed in Distance ToOut(p,v,...)
-// 31.03.00 V.Grichine: bug fixed in Inside(p)
-// 19.11.99 V.Grichine: side = kNull in DistanceToOut(p,v,...)
-// 13.10.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
-// 28.05.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
-// 25.05.99 V.Grichine: bugs fixed in DistanceToIn(p,v) 
-// 23.03.99 V.Grichine: bug fixed in DistanceToIn(p,v) 
-// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
-// 18.06.98 V.Grichine: n-normalisation in DistanceToOut(p,v)
-// 
-// 1994-95  P.Kent:     implementation
-//
-/////////////////////////////////////////////////////////////////////////
+// 07.12.00 V.Grichine: phi-section algorithm was changed in Inside(p)
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J.Apostolakis proposal
+// 24.08.16 E.Tcherniaev: reimplemented CalculateExtent().
+// --------------------------------------------------------------------
 
 #include "G4Tubs.hh"
 
@@ -89,10 +61,11 @@ G4Tubs::G4Tubs( const G4String &pName,
                       G4double pRMin, G4double pRMax,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi )
-   : G4CSGSolid(pName), fRMin(pRMin), fRMax(pRMax), fDz(pDz), fSPhi(0), fDPhi(0),
-     fInvRmax( pRMax > 0.0 ?  1.0/pRMax : 0.0 ), fInvRmin( ( pRMin > 0. ? 1.0/pRMin : 0.0 ) )
+   : G4CSGSolid(pName), fRMin(pRMin), fRMax(pRMax), fDz(pDz),
+     fSPhi(0), fDPhi(0),
+     fInvRmax( pRMax > 0.0 ? 1.0/pRMax : 0.0 ),
+     fInvRmin( pRMin > 0.0 ? 1.0/pRMin : 0.0 )
 {
-
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
@@ -157,8 +130,7 @@ G4Tubs::G4Tubs(const G4Tubs& rhs)
     cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
     sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
     sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullTube(rhs.fPhiFullTube),
-    fInvRmax(rhs.fInvRmax),
-    fInvRmin(rhs.fInvRmin),
+    fInvRmax(rhs.fInvRmax), fInvRmin(rhs.fInvRmin),
     halfCarTolerance(rhs.halfCarTolerance),
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
@@ -189,8 +161,8 @@ G4Tubs& G4Tubs::operator = (const G4Tubs& rhs)
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
    fPhiFullTube = rhs.fPhiFullTube;
-   fInvRmax= rhs.fInvRmax;
-   fInvRmin=rhs.fInvRmin;
+   fInvRmax = rhs.fInvRmax;
+   fInvRmin = rhs.fInvRmin;
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
@@ -272,7 +244,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
@@ -575,30 +547,30 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 
   if( distRMax <= halfCarTolerance )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   if( fRMin && (distRMin <= halfCarTolerance) )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm -= nR;
   }
   if( fDPhi < twopi )   
   {
     if (distSPhi <= halfAngTolerance)  
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= halfAngTolerance)  
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
   if (distZ <= halfCarTolerance)  
   {
-    noSurfaces ++;
+    ++noSurfaces;
     if ( p.z() >= 0.)  { sumnorm += nZ; }
     else               { sumnorm -= nZ; }
   }
@@ -1180,8 +1152,8 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
                                 const G4ThreeVector& v,
                                 const G4bool calcNorm,
-                                      G4bool *validNorm,
-                                      G4ThreeVector *n    ) const
+                                      G4bool* validNorm,
+                                      G4ThreeVector* n ) const
 {
   ESide side=kNull , sider=kNull, sidephi=kNull ;
   G4double snxt, srd=kInfinity, sphi=kInfinity, pdist ;
@@ -1390,8 +1362,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
         // Comp -ve when in direction of outwards normal
 
-        compS   = -sinSPhi*v.x() + cosSPhi*v.y() ;
-        compE   =  sinEPhi*v.x() - cosEPhi*v.y() ;
+        compS = -sinSPhi*v.x() + cosSPhi*v.y() ;
+        compE =  sinEPhi*v.x() - cosEPhi*v.y() ;
        
         sidephi = kNull;
         
@@ -1779,4 +1751,5 @@ G4Polyhedron* G4Tubs::CreatePolyhedron () const
 {
   return new G4PolyhedronTubs (fRMin, fRMax, fDz, fSPhi, fDPhi) ;
 }
+
 #endif

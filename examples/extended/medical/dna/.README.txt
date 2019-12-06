@@ -2,45 +2,36 @@
 ///\file "medical/dna/.README.txt"
 ///\brief Examples dna README page
 
-/*! \page Examples_dna  Category "dna"
+/*! \page Examples_dna  Category "medical/dna"
 
 This directory contains a set of Geant4-DNA examples.
 
 \section dna_s0 Physics
-   - \link ExampleDnaphysics dnaphysics \endlink  
-   The dnaphysics example shows how to simulate track structures in liquid water
-using the Geant4-DNA physics processes and models.
+   - \link ExampleDnaphysics dnaphysics \endlink  Simulation of track structures in liquid water using the Geant4-DNA physics processes and models.
 
-   - \link Exampleicsd icsd \endlink
-       This example shows how to use cross section models for DNA materials
+   - \link Exampleclustering clustering \endlink  Clustering application for direct damage extraction.
 
-   - \link Examplemfp mfp \endlink
-       This example shows how to simulate mean free path in liquid water
+   - \link Exampleicsd icsd \endlink Use of cross section models for DNA materials,
 
-   - \link ExampleMicrodosimetry  microdosimetry \endlink   
-   The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
-Geant4 standard EM models are used in the World volume while Geant4-DNA models
-are used in a Target volume, declared as a Region.
+   - \link Examplemfp mfp \endlink Simulation of mean free path in liquid water.
 
-   - \link Examplemicroyz  microyz \endlink  
-   Simulation of microdosimetry spectra
+   - \link ExampleMicrodosimetry  microdosimetry \endlink  Simulation of the track of a 5 MeV proton in liquid water. Geant4 standard EM models are used in the World volume while Geant4-DNA models are used in a Target volume, declared as a Region.
 
-   - \link Examplerange  range \endlink  
-   Simulation of ranges.
+   - \link Examplemicroprox microprox \endlink Computation of proximity functions in liquid water
 
-   - \link ExampleSlowing  slowing \endlink  
-   Simulation of slowing down spectra.
+   - \link Examplemicroyz  microyz \endlink  Simulation of microdosimetry spectra
 
-   - \link Examplespower  spower \endlink  
-   Simulation of stopping power.
+   - \link Examplerange  range \endlink  Simulation of ranges.
 
-   - \link Examplesvalue svalue \endlink
-   This example shows how to simulate S-values in spheres of liquid water
-   using the Geant4-DNA physics processes and models.
+   - \link ExampleSlowing  slowing \endlink  Simulation of slowing down spectra.
 
-   - \link Examplewvalue wvalue \endlink
-   This example shows how to simulate W-values in liquid water
-   using the Geant4-DNA physics processes and models.
+   - \link ExampleSplitting splitting \endlink Use of variance reduction to improve the computational efficiency of ionization.
+
+   - \link Examplespower  spower \endlink  Simulation of stopping power.
+
+   - \link Examplesvalue svalue \endlink Simulation of S-values in spheres of liquid water using the Geant4-DNA physics processes and models.
+
+   - \link Examplewvalue wvalue \endlink Simulation of W-values in liquid water using the Geant4-DNA physics processes and models.
 
 \section dna_s1 Chemistry
    - \link ExampleChem1  chem1 \endlink   Simple activation of the chemistry module.
@@ -50,10 +41,10 @@ are used in a Target volume, declared as a Region.
    - \link ExampleChem5  chem5 \endlink   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1.
 
 \section dna_s2 Geometry and other   
-   - \link ExamplePdb4dna  pdb4dna \endlink   Usage of the Protein Data Bank (PDB) file format to build geometries.
-   - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink   Geometrical description of a full simplified cell nucleus.
-   - \link Exampleneuron  neuron \endlink   Irradiation of a realistic neuron cell.
-   - \link Exampleclustering  clustering \endlink   Clustering application for direct damage extraction  
+   - \link ExamplePdb4dna  pdb4dna \endlink  Usage of the Protein Data Bank (PDB) file format to build geometries.
+   - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink  Geometrical description of a full simplified cell nucleus.
+   - \link Examplednadamage1 dnadamage1  \endlink Damage simulation on a chromatin fiber.
+   - \link Exampleneuron  neuron \endlink  Irradiation of a realistic neuron cell.
 
 
 See the README page inside each example for more detail.

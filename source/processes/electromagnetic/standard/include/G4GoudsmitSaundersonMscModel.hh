@@ -201,7 +201,6 @@ private:
   G4double rangeinit;
   G4double geombig;
   G4double geomlimit;
-  G4double lambdalimit;
   G4double tlimit;
   G4double tgeom;
   //

@@ -38,6 +38,9 @@
 
 enum class G4AnalysisOutput {
   kCsv,
+#ifdef TOOLS_USE_HDF5
+  kHdf5,
+#endif
   kRoot,
   kXml,
   kNone
@@ -86,7 +89,7 @@ std::unique_ptr<T> make_unique(Args&&... args)
 }
 
 // get output type from name
-G4AnalysisOutput GetOutput(const G4String& outputName);
+G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn = true);
 G4String GetOutputName(G4AnalysisOutput outputType);
 
 /*

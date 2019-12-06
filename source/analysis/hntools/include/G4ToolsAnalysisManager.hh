@@ -59,6 +59,10 @@ class G4ToolsAnalysisManager : public  G4VAnalysisManager
     explicit G4ToolsAnalysisManager(const G4String& type, G4bool isMaster = true);
     virtual ~G4ToolsAnalysisManager();
     
+        // static methods
+    static G4ToolsAnalysisManager* Instance();
+    static G4bool IsInstance();
+
     // Access methods
     tools::histo::h1d*  GetH1(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
@@ -109,12 +113,20 @@ class G4ToolsAnalysisManager : public  G4VAnalysisManager
     // methods
     G4bool Reset();
 
+     // static data members
+    static G4ThreadLocal G4ToolsAnalysisManager* fgToolsInstance;    
+
     // data members
     G4H1ToolsManager*  fH1Manager;
     G4H2ToolsManager*  fH2Manager;
     G4H3ToolsManager*  fH3Manager;
     G4P1ToolsManager*  fP1Manager;
     G4P2ToolsManager*  fP2Manager;
+
+  private:
+    //  // static data members
+    // static G4ThreadLocal G4ToolsAnalysisManager* fgToolsInstance;    
+
  };
 
 #include "G4ToolsAnalysisManager.icc"

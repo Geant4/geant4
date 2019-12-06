@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31-July-2019  Gunter Folger (phys-util-V10-05-00)
+-  removed G4DataQuestionaire.hh as consequence to code cleanup 
+   in lists, see phys-lists-V10-05-02
+
 03-Nov-2018, Vladimir Ivanchenko        (phys-util-V10-04-01)
 - G4DataQuestionaire - substituted G4NEUTRONXSDATA by G4PARTICLEXSDATA
 

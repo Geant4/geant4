@@ -74,14 +74,14 @@ public:
 
   explicit G4UrbanMscModel(const G4String& nam = "UrbanMsc");
 
-  virtual ~G4UrbanMscModel();
+  ~G4UrbanMscModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, 
+		  const G4DataVector&) override;
 
-  virtual void StartTracking(G4Track*) override;
+  void StartTracking(G4Track*) override;
 
-  virtual G4double 
+  G4double 
   ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
 			     G4double KineticEnergy,
 			     G4double AtomicNumber,
@@ -89,16 +89,15 @@ public:
 			     G4double cut =0.,
 			     G4double emax=DBL_MAX) override;
 
-  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
-					  G4double safety) override;
+  G4ThreeVector& SampleScattering(const G4ThreeVector&, 
+				  G4double safety) override;
 
-  virtual G4double 
-  ComputeTruePathLengthLimit(const G4Track& track,
-			     G4double& currentMinimalStep) override;
+  G4double ComputeTruePathLengthLimit(const G4Track& track,
+			              G4double& currentMinimalStep) override;
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength) override;
+  G4double ComputeGeomPathLength(G4double truePathLength) override;
 
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength) override;
+  G4double ComputeTrueStepLength(G4double geomStepLength) override;
 
   G4double ComputeTheta0(G4double truePathLength, G4double KineticEnergy);
 
@@ -133,7 +132,7 @@ private:
 
   G4double mass;
   G4double charge,ChargeSquare;
-  G4double masslimite,lambdalimit,fr;
+  G4double masslimite,fr;
 
   G4double taubig;
   G4double tausmall;
@@ -177,7 +176,7 @@ private:
   G4bool   firstStep;
   G4bool   insideskin;
 
-  G4bool   latDisplasmentbackup ;
+  G4bool   latDisplasmentbackup;
   G4bool   dispAlg96;
 
   G4double rangecut;

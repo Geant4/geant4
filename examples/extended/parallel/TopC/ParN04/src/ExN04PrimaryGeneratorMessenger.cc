@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04PrimaryGeneratorMessenger.cc
+/// \file ExN04PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the ExN04PrimaryGeneratorMessenger class
 //
 

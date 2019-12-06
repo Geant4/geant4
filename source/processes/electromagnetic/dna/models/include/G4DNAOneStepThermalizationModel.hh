@@ -70,6 +70,28 @@ namespace DNA{
       static const double gCoeff[13];
     };
     
+    struct Meesungnoen2002_amorphous{
+	  static void GetPenetration(G4double energy,
+							   G4ThreeVector& displacement);
+	  static double GetRmean(double energy);
+	  //-----
+	  // Polynomial fit of Meesungnoen, 2002
+	  static const double gCoeff[7];
+    };
+
+    //-----------------------
+    /*
+     * Article: Kreipl M S, Friedland W, Paretzke H G (2009) Time- and
+     * 			space-resolved Monte Carlo study of water radiolysis
+     * 			for photon, electron and ion irradiation.
+     * 			Radiat Environ Biophys 48:11-20
+     */
+
+    struct Kreipl2009{
+      static void GetPenetration(G4double energy,
+                                 G4ThreeVector& displacement);
+    };
+
     //-----------------------
     /*
      * Article: Terrissol M, Beaudre A (1990) Simulation of space and time 

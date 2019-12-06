@@ -108,6 +108,7 @@ protected:
   inline G4double ScreenFunction2(const G4double delta);
   inline void ScreenFunction12(const G4double delta, G4double &f1, G4double &f2);
   // helper methods for cross-section computation under different approximations
+  G4double ComputeParametrizedXSectionPerAtom(G4double gammaEnergy, G4double Z);
   G4double ComputeXSectionPerAtom(G4double gammaEnergy, G4double Z);
   G4double ComputeDXSectionPerAtom(G4double eplusEnergy, G4double gammaEnergy, 
                                    G4double Z);
@@ -124,7 +125,8 @@ private:
     G4double  fCoulomb;
     G4double  fLradEl;
     G4double  fDeltaFactor;
-    G4double  fDeltaMax;
+    G4double  fDeltaMaxLow;
+    G4double  fDeltaMaxHigh;
     G4double  fEtaValue;
     G4double  fLPMVarS1Cond;
     G4double  fLPMILVarS1Cond;
@@ -175,6 +177,9 @@ protected:
   G4bool                            fIsUseCompleteScreening;
   //
   G4double                          fLPMEnergy;
+  //
+  G4double                          fParametrizedXSectionThreshold;
+  G4double                          fCoulombCorrectionThreshold;
   //
   G4Pow*                            fG4Calc;
   G4ParticleDefinition*             fTheGamma;

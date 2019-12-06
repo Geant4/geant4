@@ -80,7 +80,5 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
 
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

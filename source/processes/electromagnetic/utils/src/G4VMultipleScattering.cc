@@ -121,6 +121,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   currentModel = nullptr;
   modelManager = new G4EmModelManager();
   emManager = G4LossTableManager::Instance();
+  mscModels.reserve(2);
   emManager->Register(this);
 }
 
@@ -143,9 +144,10 @@ G4VMultipleScattering::~G4VMultipleScattering()
 void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
                                        const G4Region* region)
 {
+  if(!p) { return; }
   G4VEmFluctuationModel* fm = nullptr;
   modelManager->AddEmModel(order, p, fm, region);
-  if(p) { p->SetParticleChange(pParticleChange); }
+  p->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -256,11 +258,6 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
       msc->SetIonisation(nullptr, firstParticle);
       msc->SetMasterThread(master);
       currentModel = msc; 
-      msc->SetStepLimitType(stepLimit);
-      msc->SetLateralDisplasmentFlag(latDisplacement);
-      msc->SetSkin(theParameters->MscSkin());
-      msc->SetRangeFactor(facrange);
-      msc->SetGeomFactor(theParameters->MscGeomFactor());
       msc->SetPolarAngleLimit(theParameters->MscThetaLimit());
       G4double emax = 
         std::min(msc->HighEnergyLimit(),theParameters->MaxKinEnergy());

@@ -34,16 +34,6 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-#include "G4OpenGLQtViewer.hh"
-
-#include "G4OpenGLSceneHandler.hh"
-#include "G4VSolid.hh"
-#include "G4OpenGLQtExportDialog.hh"
-#include "G4OpenGLQtMovieDialog.hh"
-#include "G4Qt.hh"
-#include "G4UIQt.hh"
-#include "G4UImanager.hh"
-#include "G4UIcommandTree.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4VisCommandsGeometrySet.hh"
@@ -52,6 +42,15 @@
 #include "G4UnitsTable.hh"
 #include "G4OpenGLStoredQtViewer.hh"
 #include "G4Threading.hh"
+
+#include "G4OpenGLQtViewer.hh"
+#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLQtExportDialog.hh"
+#include "G4OpenGLQtMovieDialog.hh"
+#include "G4Qt.hh"
+#include "G4UIQt.hh"
+#include "G4UImanager.hh"
+#include "G4UIcommandTree.hh"
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
@@ -84,7 +83,11 @@
 #include <qgroupbox.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
+#if QT_VERSION < 0x050600
 #include <qsignalmapper.h>
+#else
+#include <qscreen.h>
+#endif
 #include <qmainwindow.h>
 #include <qtablewidget.h>
 #include <qheaderview.h>
@@ -93,8 +96,6 @@
 #include <qcheckbox.h>
 #include <qcursor.h>
 #include <qthread.h>
-
-#include "G4Threading.hh"
 
 namespace
 {
@@ -184,9 +185,14 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
     
     //useful for MACOSX, we have to compt the menuBar height
-    int offset = QApplication::desktop()->height() 
-      - QApplication::desktop()->availableGeometry().height();
-    
+#if QT_VERSION >= 0x050a00
+      G4int offset = QApplication::desktop()->height()
+          - QGuiApplication::screenAt(QPoint(20,20))->availableGeometry().height();
+#else
+      G4int offset = QApplication::desktop()->height()
+          - QApplication::desktop()->availableGeometry().height();
+#endif
+
     G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
     if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
       YPos = offset;
@@ -259,9 +265,11 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fModelShortNameItem(NULL)
   ,fMaxPOindexInserted(-1)
   ,fUiQt(NULL)
+#if QT_VERSION < 0x050600
   ,fSignalMapperMouse(NULL)
   ,fSignalMapperSurface(NULL)
   ,fSignalMapperPicking(NULL)
+#endif
   ,fTreeIconOpen(NULL)
   ,fTreeIconClosed(NULL)
   ,fLastExportSliderValue(80)
@@ -289,9 +297,10 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   initMovieParameters();
 
   fLastEventTime = new QTime();
+#if QT_VERSION < 0x050600
   fSignalMapperMouse = new QSignalMapper(this);
   fSignalMapperSurface = new QSignalMapper(this);
-
+#endif
   // Set default path and format
   fFileSavePath = QDir::currentPath();
 
@@ -532,11 +541,19 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QMenu *mMouseAction = fContextMenu->addMenu("&Mouse actions");
 
+#if QT_VERSION < 0x050600
   fMouseRotateAction = mMouseAction->addAction("Rotate", fSignalMapperMouse, SLOT(map()));
   fMouseMoveAction = mMouseAction->addAction("Move", fSignalMapperMouse, SLOT(map()));
   fMousePickAction = mMouseAction->addAction("Pick", fSignalMapperMouse, SLOT(map()));
   fMouseZoomOutAction = mMouseAction->addAction("Zoom out", fSignalMapperMouse, SLOT(map()));
   fMouseZoomInAction = mMouseAction->addAction("Zoom in", fSignalMapperMouse, SLOT(map()));
+#else
+  fMouseRotateAction = mMouseAction->addAction("Rotate", this, [=](){ this->toggleMouseAction(1); });
+  fMouseMoveAction = mMouseAction->addAction("Move", this, [=](){ this->toggleMouseAction(2); });
+  fMousePickAction = mMouseAction->addAction("Pick", this, [=](){ this->toggleMouseAction(3); });
+  fMouseZoomOutAction = mMouseAction->addAction("Zoom out", this, [=](){ this->toggleMouseAction(4); });
+  fMouseZoomInAction = mMouseAction->addAction("Zoom in", this, [=](){ this->toggleMouseAction(5); });
+#endif
   QAction *shortcutsAction = mMouseAction->addAction("Show shortcuts");
 
   fMouseRotateAction->setCheckable(true);
@@ -546,14 +563,16 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   fMouseZoomInAction->setCheckable(true);
   shortcutsAction->setCheckable(false);
 
+#if QT_VERSION < 0x050600
   connect(fSignalMapperMouse, SIGNAL(mapped(int)),this, SLOT(toggleMouseAction(int)));
   fSignalMapperMouse->setMapping(fMouseRotateAction,1);
   fSignalMapperMouse->setMapping(fMouseMoveAction,2);
   fSignalMapperMouse->setMapping(fMousePickAction,3);
   fSignalMapperMouse->setMapping(fMouseZoomOutAction,4);
   fSignalMapperMouse->setMapping(fMouseZoomInAction,5);
+#endif
 
-  QObject::connect(shortcutsAction, 
+  QObject::connect(shortcutsAction,
                     SIGNAL(triggered(bool)),
                     this, 
                     SLOT(showShortcuts()));
@@ -563,6 +582,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QMenu *mProjection = mStyle->addMenu("&Projection");
 
+#if QT_VERSION < 0x050600
   fProjectionOrtho = mProjection->addAction("Orthographic", fSignalMapperSurface, SLOT(map()));
   fProjectionPerspective = mProjection->addAction("Persepective", fSignalMapperSurface, SLOT(map()));
 
@@ -572,10 +592,15 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   } else {
     createRadioAction(fProjectionOrtho, fProjectionPerspective,SLOT(toggleProjection(bool)),2);
   }
-
+#else
+  // no more radioAction, not realy useful and could be confusing to use context menu and icon at the same time
+  fProjectionOrtho = mProjection->addAction("Orthographic", this, [=](){ this->toggleProjection(1); });
+  fProjectionPerspective = mProjection->addAction("Persepective", this, [=](){ this->toggleProjection(2); });
+#endif
   // === Drawing Menu ===
   QMenu *mDrawing = mStyle->addMenu("&Drawing");
 
+#if QT_VERSION < 0x050600
   fDrawingWireframe = mDrawing->addAction("Wireframe", fSignalMapperSurface, SLOT(map()));
 
   fDrawingLineRemoval = mDrawing->addAction("Hidden line removal", fSignalMapperSurface, SLOT(map()));
@@ -583,18 +608,25 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal", fSignalMapperSurface, SLOT(map()));
 
   fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal", fSignalMapperSurface, SLOT(map()));
+#endif
 
-  fDrawingWireframe->setCheckable(true);
-  fDrawingLineRemoval->setCheckable(true);
-  fDrawingSurfaceRemoval->setCheckable(true);
-  fDrawingLineSurfaceRemoval->setCheckable(true);
-
+#if QT_VERSION < 0x050600
   connect(fSignalMapperSurface, SIGNAL(mapped(int)),this, SLOT(toggleSurfaceAction(int)));
   fSignalMapperSurface->setMapping(fDrawingWireframe,1);
   fSignalMapperSurface->setMapping(fDrawingLineRemoval,2);
   fSignalMapperSurface->setMapping(fDrawingSurfaceRemoval,3);
   fSignalMapperSurface->setMapping(fDrawingLineSurfaceRemoval,4);
+#else
+  fDrawingWireframe = mDrawing->addAction("Wireframe", this, [=](){ this->toggleSurfaceAction(1); });
+  fDrawingLineRemoval = mDrawing->addAction("Hidden line removal", this, [=](){ this->toggleSurfaceAction(2); });
+  fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal", this, [=](){ this->toggleSurfaceAction(3); });
+  fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal", this, [=](){ this->toggleSurfaceAction(4); });
+#endif
 
+  fDrawingWireframe->setCheckable(true);
+  fDrawingLineRemoval->setCheckable(true);
+  fDrawingSurfaceRemoval->setCheckable(true);
+  fDrawingLineSurfaceRemoval->setCheckable(true);
 
   // Background Color
 
@@ -1855,7 +1887,7 @@ void G4OpenGLQtViewer::initMovieParameters() {
      
   QObject ::connect(fProcess,SIGNAL(finished ( int)),
                     this,SLOT(processLookForFinished()));
-  fProcess->setReadChannelMode(QProcess::MergedChannels);
+  fProcess->setProcessChannelMode(QProcess::MergedChannels);
   fProcess->start ("which ppmtompeg");
   
 }
@@ -2171,12 +2203,6 @@ bool G4OpenGLQtViewer::exportImage(std::string name, int width, int height) {
   return true;
 }
 
-
-
-bool G4OpenGLQtViewer::hasPendingEvents () {
-  return ((QApplication*)G4Qt::getInstance ())->hasPendingEvents ();
-}
-
 bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
 
   // save the parameter file
@@ -2344,7 +2370,11 @@ void G4OpenGLQtViewer::encodeVideo()
     QObject ::connect(fProcess,SIGNAL(readyReadStandardOutput ()),
                       this,SLOT(processEncodeStdout()));
 #endif
+#if QT_VERSION < 0x050a00
     fProcess->setReadChannelMode(QProcess::MergedChannels);
+#else
+    fProcess->setProcessChannelMode(QProcess::MergedChannels);
+#endif
     fProcess->start (fEncoderPath, QStringList(fMovieTempFolderPath+fParameterFileName));
   }
 }
@@ -2777,7 +2807,11 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
 
     // Calculate move for centre and right adjustment
     QFontMetrics* f = new QFontMetrics (font);
+#if QT_VERSION > 0x050110
+    G4double span = f->boundingRect(textCString[0]).width();
+#else
     G4double span = f->width(textCString);
+#endif
     G4double xmove = 0., ymove = 0.;
     switch (g4text.GetLayout()) {
     case G4Text::left: break;
@@ -4480,8 +4514,10 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
   }
 
   // Create a new signalMapper
+#if QT_VERSION < 0x050600
   delete fSignalMapperPicking;
   fSignalMapperPicking = new QSignalMapper(this);
+#endif
   
   // parse all pick results
   G4int nPickedObjectsWithAttributes = 0;
@@ -4544,19 +4580,24 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
       newStr = QStringList(QString(content.str().c_str()).trimmed());
 
       QTextEdit* ed = new QTextEdit();
-      ed->setFontFamily("Courier");
-      ed->setFontPointSize(12);
       ed->setReadOnly(true);
       fPickInfosWidget->layout()->addWidget(ed);
       ed->setVisible((false));
       ed->append(newStr.join(""));
 
+#if QT_VERSION < 0x050600
       connect(pickCoutButton, SIGNAL(clicked()), fSignalMapperPicking, SLOT(map()));
       fSignalMapperPicking->setMapping(pickCoutButton,fPickInfosWidget->layout()->count()-1);
+#else
+      std::cout << pickCoutButton->text().toStdString() << " "<< fPickInfosWidget->layout()->count()-1<< std::endl;
+      int tmp = fPickInfosWidget->layout()->count()-1;
+      connect(pickCoutButton, &QPushButton::clicked , [=](){ this->toggleSceneTreeComponentPickingCout(tmp);});
+#endif
     }
   }
-  
+#if QT_VERSION < 0x050600
   connect(fSignalMapperPicking, SIGNAL(mapped(int)),this, SLOT(toggleSceneTreeComponentPickingCout(int)));
+#endif
   
   // add a label to push everything up!
   QLabel * pushUp = new QLabel("");

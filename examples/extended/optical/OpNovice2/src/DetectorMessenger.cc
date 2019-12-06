@@ -51,7 +51,7 @@
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 :G4UImessenger(),fDetector(Det)
-{ 
+{
   fOpticalDir = new G4UIdirectory("/opnovice2/");
   fOpticalDir->SetGuidance("Parameters for optical simulation.");
 
@@ -59,24 +59,31 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSurfaceTypeCmd->SetGuidance("Surface type.");
   fSurfaceTypeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceTypeCmd->SetToBeBroadcasted(false);
-  
+
   fSurfaceFinishCmd = new G4UIcmdWithAString("/opnovice2/surfaceFinish", this);
   fSurfaceFinishCmd->SetGuidance("Surface finish.");
   fSurfaceFinishCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceFinishCmd->SetToBeBroadcasted(false);
-  
+
   fSurfaceModelCmd =
     new G4UIcmdWithAString("/opnovice2/surfaceModel", this);
   fSurfaceModelCmd->SetGuidance("surface model.");
   fSurfaceModelCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceModelCmd->SetToBeBroadcasted(false);
- 
+
   fSurfaceSigmaAlphaCmd =
     new G4UIcmdWithADouble("/opnovice2/surfaceSigmaAlpha", this);
   fSurfaceSigmaAlphaCmd->SetGuidance("surface sigma alpha");
   fSurfaceSigmaAlphaCmd->SetGuidance(" parameter.");
   fSurfaceSigmaAlphaCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceSigmaAlphaCmd->SetToBeBroadcasted(false);
+
+  fSurfacePolishCmd =
+    new G4UIcmdWithADouble("/opnovice2/surfacePolish", this);
+  fSurfacePolishCmd->SetGuidance("surface polish");
+  fSurfacePolishCmd->SetGuidance(" parameter (for Glisur model).");
+  fSurfacePolishCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fSurfacePolishCmd->SetToBeBroadcasted(false);
 
   fSurfaceMatPropVectorCmd =
     new G4UIcmdWithAString("/opnovice2/surfaceProperty", this);
@@ -85,6 +92,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSurfaceMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceMatPropVectorCmd->SetToBeBroadcasted(false);
 
+  fSurfaceMatPropConstCmd =
+    new G4UIcmdWithAString("/opnovice2/surfaceConstProperty", this);
+  fSurfaceMatPropConstCmd->SetGuidance("Set material constant property");
+  fSurfaceMatPropConstCmd->SetGuidance(" for the surface.");
+  fSurfaceMatPropConstCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fSurfaceMatPropConstCmd->SetToBeBroadcasted(false);
+
   fTankMatPropVectorCmd =
     new G4UIcmdWithAString("/opnovice2/boxProperty", this);
   fTankMatPropVectorCmd->SetGuidance("Set material property vector for ");
@@ -92,12 +106,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fTankMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fTankMatPropVectorCmd->SetToBeBroadcasted(false);
 
-  fTankMatConstPropVectorCmd =
+  fTankMatPropConstCmd =
     new G4UIcmdWithAString("/opnovice2/boxConstProperty", this);
-  fTankMatConstPropVectorCmd->SetGuidance("Set material constant property ");
-  fTankMatConstPropVectorCmd->SetGuidance("for the box.");
-  fTankMatConstPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  fTankMatConstPropVectorCmd->SetToBeBroadcasted(false);
+  fTankMatPropConstCmd->SetGuidance("Set material constant property ");
+  fTankMatPropConstCmd->SetGuidance("for the box.");
+  fTankMatPropConstCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fTankMatPropConstCmd->SetToBeBroadcasted(false);
 
   fTankMaterialCmd = new G4UIcmdWithAString("/opnovice2/boxMaterial", this);
   fTankMaterialCmd->SetGuidance("Set material of box.");
@@ -111,13 +125,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fWorldMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fWorldMatPropVectorCmd->SetToBeBroadcasted(false);
 
-  fWorldMatConstPropVectorCmd =
+  fWorldMatPropConstCmd =
     new G4UIcmdWithAString("/opnovice2/worldConstProperty", this);
-  fWorldMatConstPropVectorCmd->SetGuidance("Set material constant property");
-  fWorldMatConstPropVectorCmd->SetGuidance(" for the world.");
-  fWorldMatConstPropVectorCmd->
+  fWorldMatPropConstCmd->SetGuidance("Set material constant property");
+  fWorldMatPropConstCmd->SetGuidance(" for the world.");
+  fWorldMatPropConstCmd->
     AvailableForStates(G4State_PreInit, G4State_Idle);
-  fWorldMatConstPropVectorCmd->SetToBeBroadcasted(false);
+  fWorldMatPropConstCmd->SetToBeBroadcasted(false);
 
   fWorldMaterialCmd = new G4UIcmdWithAString("/opnovice2/worldMaterial", this);
   fWorldMaterialCmd->SetGuidance("Set material of world.");
@@ -134,12 +148,14 @@ DetectorMessenger::~DetectorMessenger()
   delete fSurfaceTypeCmd;
   delete fSurfaceModelCmd;
   delete fSurfaceSigmaAlphaCmd;
+  delete fSurfacePolishCmd;
   delete fSurfaceMatPropVectorCmd;
+  delete fSurfaceMatPropConstCmd;
   delete fTankMatPropVectorCmd;
-  delete fTankMatConstPropVectorCmd;
+  delete fTankMatPropConstCmd;
   delete fTankMaterialCmd;
   delete fWorldMatPropVectorCmd;
-  delete fWorldMatConstPropVectorCmd;
+  delete fWorldMatPropConstCmd;
   delete fWorldMaterialCmd;
 }
 
@@ -323,13 +339,16 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     fDetector->SetSurfaceSigmaAlpha(
       G4UIcmdWithADouble::GetNewDoubleValue(newValue));
   }
+  else if (command == fSurfacePolishCmd) {
+    fDetector->SetSurfacePolish(
+      G4UIcmdWithADouble::GetNewDoubleValue(newValue));
+  }
   else if (command == fTankMatPropVectorCmd) {
     // got a string. need to convert it to physics vector.
-    // string format is property name, then pairs of energy, value  
+    // string format is property name, then pairs of energy, value
     // specify units for each value, eg 3.0*eV
     // space delimited
     G4MaterialPropertyVector* mpv = new G4MaterialPropertyVector();
-    mpv->SetSpline(true);
     std::istringstream instring(newValue);
     G4String prop;
     instring >> prop;
@@ -342,14 +361,14 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
       G4double val;
       val = G4UIcommand::ConvertToDouble(tmp);
       mpv->InsertValues(en, val);
-    } 
+    }
     const char* c = prop.c_str();
 
     fDetector->AddTankMPV(c, mpv);
   }
   else if (command == fWorldMatPropVectorCmd) {
     // Convert string to physics vector
-    // string format is property name, then pairs of energy, value  
+    // string format is property name, then pairs of energy, value
     G4MaterialPropertyVector* mpv = new G4MaterialPropertyVector();
     std::istringstream instring(newValue);
     G4String prop;
@@ -390,7 +409,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     fDetector->AddSurfaceMPV(c, mpv);
   }
 
-  else if (command == fTankMatConstPropVectorCmd) {
+  else if (command == fTankMatPropConstCmd) {
     // Convert string to physics vector
     // string format is property name, then value
     // space delimited
@@ -401,9 +420,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     instring >> tmp;
     G4double val = G4UIcommand::ConvertToDouble(tmp);
     const char* c = prop.c_str();
-    fDetector->AddTankMPCV(c, val);
+    fDetector->AddTankMPC(c, val);
   }
-  else if (command == fWorldMatConstPropVectorCmd) {
+  else if (command == fWorldMatPropConstCmd) {
     // Convert string to physics vector
     // string format is property name, then value
     // space delimited
@@ -414,9 +433,22 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     instring >> tmp;
     G4double val = G4UIcommand::ConvertToDouble(tmp);
     const char* c = prop.c_str();
-    fDetector->AddTankMPCV(c, val);
+    fDetector->AddTankMPC(c, val);
   }
-  else if (command == fWorldMaterialCmd) {
+  else if (command == fSurfaceMatPropConstCmd) {
+    // Convert string to physics vector
+    // string format is property name, then value
+    // space delimited
+    std::istringstream instring(newValue);
+    G4String prop;
+    G4String tmp;
+    instring >> prop;
+    instring >> tmp;
+    G4double val = G4UIcommand::ConvertToDouble(tmp);
+    const char* c = prop.c_str();
+    fDetector->AddSurfaceMPC(c, val);
+  }
+ else if (command == fWorldMaterialCmd) {
     fDetector->SetWorldMaterial(newValue);
   }
   else if (command == fTankMaterialCmd) {

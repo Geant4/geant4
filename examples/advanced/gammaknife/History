@@ -6,6 +6,14 @@ francesco.romano@lns.infn.it
          ====================================================
              History file of the GammaKnife application
          ====================================================
+
+20.09.2019 M.Asai      Tag: gammaknife-V10-05-01
+           - Add G4VScoringMesh:: scope identifier to GammaKnifeController.hh
+           - Co-working with detutils-V10-05-01
+
+30.08.2019 S. Guatelli Tag:gammaknife-V10-05-00
+           - G4VIS_USE deleted
+
 18.10.2018 S. Guatelli  Tag: gammaknife-V10-04-01
            - G4VIS_USE and G4UI_USE deleted
 

@@ -97,6 +97,7 @@ class G4HnInformation
     G4HnInformation(const G4String& name, G4int nofDimensions)
       : fName(name),
         fHnDimensionInformations(),
+        fIsLogAxis({ false, false, false }),
         fActivation(true),
         fAscii(false),
         fPlotting(false) { fHnDimensionInformations.reserve(nofDimensions); }
@@ -111,6 +112,7 @@ class G4HnInformation
             const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme);
     void SetDimension(G4int dimension,
             const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme);
+    void SetIsLogAxis(G4int axis, G4bool isLog);
     void SetActivation(G4bool activation);
     void SetAscii(G4bool ascii);
     void SetPlotting(G4bool plotting);
@@ -118,6 +120,7 @@ class G4HnInformation
     // Get methods
     G4String GetName() const;
     G4HnDimensionInformation* GetHnDimensionInformation(G4int dimension);
+    G4bool  GetIsLogAxis(G4int axis) const;
     G4bool  GetActivation() const;
     G4bool  GetAscii() const;
     G4bool  GetPlotting() const;
@@ -126,6 +129,7 @@ class G4HnInformation
     // Data members
     G4String fName;
     std::vector<G4HnDimensionInformation> fHnDimensionInformations;
+    std::vector<G4bool> fIsLogAxis;
     G4bool   fActivation;
     G4bool   fAscii;  
     G4bool   fPlotting;
@@ -134,11 +138,11 @@ class G4HnInformation
 // inline functions
 
 inline void G4HnInformation::AddHnDimensionInformation(
-                const G4HnDimensionInformation& hnDimensionInformation)
+  const G4HnDimensionInformation& hnDimensionInformation)
 { fHnDimensionInformations.push_back(hnDimensionInformation); }
 
 inline void G4HnInformation::AddDimension(
-                const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
+  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)  
 {
   auto unit = G4Analysis::GetUnitValue(unitName);
   auto fcn = G4Analysis::GetFunction(fcnName);
@@ -147,7 +151,7 @@ inline void G4HnInformation::AddDimension(
 }
 
 inline void G4HnInformation::SetDimension(G4int dimension,
-                const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
+  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)    
 {
   auto info = GetHnDimensionInformation(dimension);
   auto unit = G4Analysis::GetUnitValue(unitName);
@@ -158,6 +162,9 @@ inline void G4HnInformation::SetDimension(G4int dimension,
   info->fFcn = fcn;
   info->fBinScheme = binScheme;
 }
+
+inline void G4HnInformation::SetIsLogAxis(G4int axis, G4bool isLog)
+{ fIsLogAxis[axis] = isLog; }
 
 inline void G4HnInformation::SetActivation(G4bool activation)
 { fActivation = activation; }
@@ -173,6 +180,9 @@ inline G4String G4HnInformation::GetName() const
 
 inline G4HnDimensionInformation* G4HnInformation::GetHnDimensionInformation(G4int dimension)
 { return &(fHnDimensionInformations[dimension]); }
+
+inline G4bool  G4HnInformation::GetIsLogAxis(G4int axis) const
+{ return fIsLogAxis[axis]; }
 
 inline G4bool  G4HnInformation::GetActivation() const
 { return fActivation; }

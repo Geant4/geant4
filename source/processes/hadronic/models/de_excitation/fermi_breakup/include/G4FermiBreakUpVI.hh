@@ -48,22 +48,22 @@ class G4FermiBreakUpVI : public G4VFermiBreakUp
 public:
 
   explicit G4FermiBreakUpVI();
-  virtual ~G4FermiBreakUpVI();
+  ~G4FermiBreakUpVI() final;
 
-  virtual void Initialise() final;
+  void Initialise() final;
 
   // check if the Fermi Break Up model can be used 
   // mass is an effective mass of a fragment
-  virtual G4bool IsApplicable(G4int ZZ, G4int AA, G4double etot) const final;
+  G4bool IsApplicable(G4int ZZ, G4int AA, G4double etot) const final;
 
   // new interface - vector of products is added to the provided vector
   // primary fragment is deleted or is modified and added to the list
   // of products 
-  virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus) final;
+  void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus) final;
   
 private:
 
-  virtual void InitialisePool() final;
+  void InitialisePool();
 
   G4bool SampleDecay();
 
@@ -77,7 +77,6 @@ private:
 
   CLHEP::HepRandomEngine* rndmEngine;
 
-  G4int verbose;
   G4int maxZ;
   G4int maxA;
 

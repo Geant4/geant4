@@ -43,11 +43,13 @@
 #include "G4SDManager.hh"
 
 G4VScoringMesh::G4VScoringMesh(const G4String& wName)
-  : fWorldName(wName),fCurrentPS(nullptr),fConstructed(false),fActive(true),fShape(undefinedMesh),
+  : fWorldName(wName),fCurrentPS(nullptr),fConstructed(false),fActive(true),
+    fShape(MeshShape::undefined),
     fRotationMatrix(nullptr), fMFD(new G4MultiFunctionalDetector(wName)),
     verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
     fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(nullptr),
-    fParallelWorldProcess(nullptr), fGeometryHasBeenDestroyed(false)
+    fParallelWorldProcess(nullptr), fGeometryHasBeenDestroyed(false),
+    copyNumberLevel(0)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
@@ -90,7 +92,7 @@ void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
   fCenterPosition = G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);
 }
 void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3]) {
-  if ( !nMeshIsSet ){
+  if ( !nMeshIsSet || fShape==MeshShape::realWorldLogVol ){
     for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
     nMeshIsSet = true;
   } else {
@@ -357,7 +359,7 @@ void G4VScoringMesh::Construct(G4VPhysicalVolume* fWorldPhys)
       fGeometryHasBeenDestroyed = false;
     }
     if(verboseLevel > 0)
-      G4cout << fWorldPhys->GetName() << " --- All quantities are reset."
+      G4cout << fWorldName << " --- All quantities are reset."
       << G4endl;
     ResetScore();
   }

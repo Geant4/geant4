@@ -62,9 +62,9 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);    // enable inactivation of histograms
 
   // Define histogram indices, titles
-  G4int maxHisto = 12;
+  G4int maxHisto = 13;
   G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                   "10","11","12" };
+                   "10","11","12","13" };
   
   G4String title[] = {
       "dummy",                                        // 0
@@ -80,6 +80,7 @@ void HistoManager::Book()
       "X momentum dir of Fresnel-refracted photons",  //10
       "Y momentum dir of Fresnel-refracted photons",  //11
       "Z momentum dir of Fresnel-refracted photons",  //12
+      "scintillation photons creation time",          //13
   };
  
   // Default values (to be reset via /analysis/h1/set command)               

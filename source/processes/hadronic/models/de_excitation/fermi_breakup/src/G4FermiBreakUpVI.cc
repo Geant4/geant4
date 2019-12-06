@@ -44,9 +44,8 @@ G4Mutex G4FermiBreakUpVI::FermiBreakUpVIMutex = G4MUTEX_INITIALIZER;
 #endif
 
 G4FermiBreakUpVI::G4FermiBreakUpVI() 
-  : theDecay(nullptr), rndmEngine(nullptr), verbose(0), maxZ(9), maxA(17)
+  : theDecay(nullptr), rndmEngine(nullptr), maxZ(9), maxA(17)
 {
-  prob.reserve(10);
   frag.reserve(10);
   lvect.reserve(10);
   Z = A = spin = 0;
@@ -67,13 +66,12 @@ G4FermiBreakUpVI::~G4FermiBreakUpVI()
 
 void G4FermiBreakUpVI::Initialise()
 {
-  if(verbose > 0) {
+  if(verbose > 1) {
     G4cout << "### G4FermiBreakUpVI::Initialise(): " << thePool << G4endl;
   }
   if(thePool == nullptr) { InitialisePool(); }
   theDecay = thePool->FermiDecayProbability();
   elim = thePool->GetEnergyLimit();
-  //tolerance = thePool->GetTolerance();
 }
 
 void G4FermiBreakUpVI::InitialisePool()
@@ -91,18 +89,18 @@ void G4FermiBreakUpVI::InitialisePool()
 
 G4bool G4FermiBreakUpVI::IsApplicable(G4int ZZ, G4int AA, G4double eexc) const
 {
-  return (ZZ < maxZ && AA < maxA && AA > 0 && eexc <= elim) ? true : false;
+  return (ZZ < maxZ && AA < maxA && AA > 0 && eexc <= elim 
+  	  && thePool->HasChannels(ZZ, AA, eexc));
 }
 
 void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult, 
 				     G4Fragment* theNucleus)
 {
-  if(verbose > 0) {
-    G4cout << "### G4FermiBreakUpVI::BreakFragment start new fragment " << G4endl;
+  if(verbose > 1) {
+    G4cout << "### G4FermiBreakUpVI::BreakFragment start new fragment " 
+           << G4endl;
     G4cout << *theNucleus << G4endl;
   }
-  frag.clear();
-  lvect.clear();
 
   // initial fragment
   Z = theNucleus->GetZ_asInt();
@@ -110,16 +108,17 @@ void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult,
   excitation = theNucleus->GetExcitationEnergy();
   mass = theNucleus->GetGroundStateMass() + excitation;
   spin = -1;
-  G4double time = theNucleus->GetCreationTime();
 
   lv0 = theNucleus->GetMomentum();
   rndmEngine = G4Random::getTheEngine();
 
   // sample first decay of an initial state
+  // if not possible to decay - exit
   if(!SampleDecay()) {
-    theResult->push_back(theNucleus);
     return; 
   }
+
+  G4double time = theNucleus->GetCreationTime();
   delete theNucleus;
 
   static const G4int imax = 100; 
@@ -131,18 +130,15 @@ void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult,
     A = frag[i]->GetA();
     spin = frag[i]->GetSpin();
     mass = frag[i]->GetTotalEnergy();
-    excitation = 0.0;
-    if(thePool->IsPhysical(Z, A)) {
-      excitation = frag[i]->GetExcitationEnergy();
-    }
     lv0 = lvect[i];
-    if(verbose > 0) {
+    if(verbose > 1) {
       G4cout << "# FermiFrag " << i << ".  Z= " << Z << " A= " << A 
-	     << " mass= " << mass << " exc= " << excitation << G4endl;
+	     << " mass= " << mass << " exc= " 
+	     << frag[i]->GetExcitationEnergy() << G4endl;
     }
     // stable fragment
     if(!SampleDecay()) {
-      if(verbose > 0) { G4cout << "   New G4Fragment" << G4endl; }
+      if(verbose > 1) { G4cout << "   New G4Fragment" << G4endl; }
       G4Fragment* f = new G4Fragment(A, Z, lv0);
       f->SetSpin(0.5*spin);
       f->SetCreationTime(time);
@@ -153,6 +149,8 @@ void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult,
       break;
     }
   }
+  frag.clear();
+  lvect.clear();
 }
 
 G4bool G4FermiBreakUpVI::SampleDecay()
@@ -160,7 +158,7 @@ G4bool G4FermiBreakUpVI::SampleDecay()
   const G4FermiChannels* chan = thePool->ClosestChannels(Z, A, mass);
   if(!chan) { return false; }
   size_t nn = chan->GetNumberOfChannels();
-  if(verbose > 0) {
+  if(verbose > 1) {
     G4cout << "== SampleDecay " << nn << " channels Eex= " 
 	   << chan->GetExcitation() << G4endl;
   }
@@ -185,7 +183,7 @@ G4bool G4FermiBreakUpVI::SampleDecay()
       const std::vector<const G4FermiPair*>& pvect = chan->GetChannels();
       if(nn > 12) { prob.resize(nn, 0.0); }
       G4double ptot = 0.0;
-      if(verbose > 1) { 
+      if(verbose > 2) { 
 	G4cout << "Start recompute probabilities" << G4endl;
       }
       for(size_t i=0; i<nn; ++i) {
@@ -193,7 +191,7 @@ G4bool G4FermiBreakUpVI::SampleDecay()
 					     pvect[i]->GetFragment1(),
 					     pvect[i]->GetFragment2());
 	prob[i] = ptot;
-	if(verbose > 1) { 
+	if(verbose > 2) { 
 	  G4cout << i << ". " << prob[i]
 		 << " Z1= " << pvect[i]->GetFragment1()->GetZ()
 		 << " A1= " << pvect[i]->GetFragment1()->GetA()
@@ -218,7 +216,7 @@ G4bool G4FermiBreakUpVI::SampleDecay()
   
   G4double mass1 = frag1->GetTotalEnergy();
   G4double mass2 = frag2->GetTotalEnergy();
-  if(verbose > 1) {
+  if(verbose > 2) {
     G4cout << " M= " << mass << " M1= " << mass1 << "  M2= " << mass2 
 	   << " Exc1= " << frag1->GetExcitationEnergy() 
 	   << " Exc2= " << frag2->GetExcitationEnergy() << G4endl;
@@ -239,13 +237,12 @@ G4bool G4FermiBreakUpVI::SampleDecay()
   boostVector = lv0.boostVector();  
   lv1.boost(boostVector);
 
-  G4double e2 = mass - e1;
+  lv0 -= lv1;
+
+  G4double e2 = lv0.e();
   if(e2 < mass2) {
-    e2 = mass2;
-    p1 = 0.0;
+    lv0.set(0.,0.,0.,mass2);
   }
-  lv0.set(-v*p1, e2);
-  lv0.boost(boostVector);
 
   frag.push_back(frag1);
   frag.push_back(frag2);

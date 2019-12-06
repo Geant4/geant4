@@ -94,3 +94,4 @@ Build(G4NeutronInelasticProcess * aP)
   aP->AddDataSet(theHPInelasticData);
   aP->RegisterMe(theHPInelastic);
 }
+

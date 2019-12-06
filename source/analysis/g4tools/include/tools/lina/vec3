@@ -196,16 +196,16 @@ public:
     m_data[2] -= a2;
   }    
 
-/*
-  bool cos_angle(const vec3& a_v,T& a_cos) const {
+  bool cos_angle(const vec3& a_v,T& a_cos,T(*a_sqrt)(T)) const {
     //WARNING : if ret false, a_cos is not set.
-    if(length()==T()) return false;
-    if(a_v.length()==T()) return false;
-    a_cos = dot(a_v)/(length()*a_v.length());
+    T this_length = length(a_sqrt);
+    if(this_length==T()) return false;
+    T a_v_length = a_v.length(a_sqrt);
+    if(a_v_length==T()) return false;
+    a_cos = dot(a_v)/(this_length*a_v_length);
     return true;
   }
 
-*/
   bool theta_phi(T& a_theta,T& a_phi,T(*a_sqrt)(T),T(*a_atan2)(T,T)) const {    
     //WARNING : if ret false, a_theta, a_phi are not set.
     if(length(a_sqrt)==T()) return false;

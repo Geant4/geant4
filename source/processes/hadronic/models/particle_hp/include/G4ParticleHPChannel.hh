@@ -59,7 +59,7 @@ class G4ParticleHPChannel
 public:
 
   G4ParticleHPChannel(G4ParticleDefinition* projectile)
-  : wendtFissionGenerator(getenv("G4NEUTRON_HP_USE_WENDT_FISSION_MODEL") == NULL ? NULL : G4WendtFissionFragmentGenerator::GetInstance())
+  : wendtFissionGenerator(std::getenv("G4NEUTRON_HP_USE_WENDT_FISSION_MODEL") == NULL ? NULL : G4WendtFissionFragmentGenerator::GetInstance())
   {
     theProjectile = const_cast<G4ParticleDefinition*>(projectile);
     theChannelData = new G4ParticleHPVector; 
@@ -73,7 +73,7 @@ public:
   }
 
   G4ParticleHPChannel()
-  : wendtFissionGenerator(getenv("G4NEUTRON_HP_USE_WENDT_FISSION_MODEL") == NULL ? NULL : G4WendtFissionFragmentGenerator::GetInstance())
+  : wendtFissionGenerator(std::getenv("G4NEUTRON_HP_USE_WENDT_FISSION_MODEL") == NULL ? NULL : G4WendtFissionFragmentGenerator::GetInstance())
   {
     theProjectile = G4Neutron::Neutron();
     theChannelData = new G4ParticleHPVector; 

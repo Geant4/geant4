@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04MuonSD.cc
+/// \file ExN04MuonSD.cc
 /// \brief Implementation of the ExN04MuonSD class
 //
 

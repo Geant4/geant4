@@ -24,24 +24,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// CHANGE HISTORY
-// --------------
+// G4TessellatedGeometryAlgorithms implementation
 //
 // 07 August 2007, P R Truscott, QinetiQ Ltd, UK - Created, with member
 //                 functions based on the work of Rickard Holmberg.
-//
-// 26 September 2007
-//                 P R Truscott, qinetiQ Ltd, UK
-//                 Updated to assign values of location array, not update
-//                 just the pointer.
-//
 // 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
-//
-///////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 
 #include "G4TessellatedGeometryAlgorithms.hh"
 
@@ -65,8 +53,8 @@
 // This is based on the work of Rickard Holmberg.
 //
 G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
-  const G4TwoVector &p,  const G4TwoVector &v,
-  const G4TwoVector &p0, const G4TwoVector &e0, const G4TwoVector &e1,
+  const G4TwoVector& p,  const G4TwoVector& v,
+  const G4TwoVector& p0, const G4TwoVector& e0, const G4TwoVector& e1,
   G4TwoVector location[2])
 {
   G4TwoVector loc0[2];
@@ -173,9 +161,8 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
 // Graphics," ISBN 1-55860-694-0, pp 244-245, 2003.
 //
 G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
-  const G4TwoVector &p0, const G4TwoVector &d0,
-  const G4TwoVector &p1, const G4TwoVector &d1,
-  G4TwoVector location[2])
+  const G4TwoVector& p0, const G4TwoVector& d0,
+  const G4TwoVector& p1, const G4TwoVector& d1, G4TwoVector location[2])
 {
   G4TwoVector e     = p1 - p0;
   G4double kross    = cross(d0,d1);
@@ -246,8 +233,8 @@ G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
 // "ficticious" because such an operation is not relevant to 2D space compared
 // with 3D space.
 //
-G4double G4TessellatedGeometryAlgorithms::cross(const G4TwoVector &v1,
-                                                const G4TwoVector &v2)
+G4double G4TessellatedGeometryAlgorithms::cross(const G4TwoVector& v1,
+                                                const G4TwoVector& v2)
 {
   return v1.x()*v2.y() - v1.y()*v2.x();
 }

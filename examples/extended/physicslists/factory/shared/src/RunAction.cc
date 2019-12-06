@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction
+/// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"

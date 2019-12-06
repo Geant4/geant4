@@ -226,10 +226,10 @@ int G4FRClientServer::ConnectINET()
 	}
 
 		//----- get IP address of server from its name
-	if( getenv( FR_ENV_SERVER_HOST_NAME ) != NULL ) 
+	if( std::getenv( FR_ENV_SERVER_HOST_NAME ) != NULL ) 
 	{
 			//----- get server name
-		strcpy( server_hostname, getenv( FR_ENV_SERVER_HOST_NAME ) );
+		strcpy( server_hostname, std::getenv( FR_ENV_SERVER_HOST_NAME ) );
 
 			//----- get IP address of server from its name,
 			//..... reading /etc/hosts

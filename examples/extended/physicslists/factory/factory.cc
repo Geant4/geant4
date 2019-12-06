@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/Hadr00.cc
-/// \brief Main program of the hadronic/Hadr00 example
+/// \file factory.cc
+/// \brief Main program of the physicslists/factory example
 //
 //
 //
@@ -131,7 +131,7 @@ int main(int argc,char** argv)
   // Get physics list name 
   if ( ! physListName.size() ) {
     // Physics List is defined via environment variable PHYSLIST
-    char* physListNameEnv = getenv("PHYSLIST");
+    char* physListNameEnv = std::getenv("PHYSLIST");
     if ( physListNameEnv ) { 
       physListName = G4String(physListNameEnv); 
     }

@@ -70,4 +70,3 @@
    }
  }
 
- // 2002 by J.P. Wellisch

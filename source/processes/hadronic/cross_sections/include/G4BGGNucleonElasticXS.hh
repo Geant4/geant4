@@ -97,11 +97,12 @@ private:
   G4double fGlauberEnergy;  
   G4double fLowEnergy;  
 
-  static G4double theGlauberFac[93];
-  static G4double theCoulombFac[93];
+  static G4double theGlauberFacP[93];
+  static G4double theCoulombFacP[93];
+  static G4double theGlauberFacN[93];
+  static G4double theCoulombFacN[93];
   static G4int    theA[93];
 
-  const G4ParticleDefinition*     particle;
   const G4ParticleDefinition*     theProton;
   G4ComponentGGHadronNucleusXsc*  fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;

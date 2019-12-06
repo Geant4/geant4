@@ -49,8 +49,8 @@ CCalSensAssign* CCalSensAssign::getInstance() {
 CCalSensAssign::CCalSensAssign() {}
 
 
-bool CCalSensAssign::assign() {
-  bool result = false;
+G4bool CCalSensAssign::assign() {
+  G4bool result = false;
 
   CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
   for (std::map<G4String,G4VSensitiveDetector*>::const_iterator sens_it = sens_.begin();
@@ -61,7 +61,7 @@ bool CCalSensAssign::assign() {
       G4SDManager::GetSDMpointer()->AddNewDetector(sens);
 #ifdef debug
       G4cout << "Add " << sens->GetName() 
-	   << " to the list of Sensitive detetctors" << G4endl;
+           << " to the list of Sensitive detetctors" << G4endl;
 #endif
     }
   }
@@ -69,9 +69,9 @@ bool CCalSensAssign::assign() {
   return result;
 }
 
-bool CCalSensAssign::stackingAction() {
+G4bool CCalSensAssign::stackingAction() {
 
-  bool result = false;
+  G4bool result = false;
   //Create the stacking manager required by Calorimeter
   if (G4RunManager::GetRunManager()->GetUserStackingAction() == 0) {
     G4cout << "***CCalSensAssign creating a CCalStackingAction ***" << G4endl;
@@ -79,14 +79,14 @@ bool CCalSensAssign::stackingAction() {
     result = true;
   } else {
     G4cout << "***CCalSens: a StackingAction already exists. "
-	 << "Maybe not the one CCaloSD needs?" << G4endl;
+         << "Maybe not the one CCaloSD needs?" << G4endl;
   }  
   return result;
 }
 
 
-bool CCalSensAssign::addCaloSD(G4String name, 
-			       CCalVOrganization* numberingScheme) {
+G4bool CCalSensAssign::addCaloSD(G4String name, 
+                               CCalVOrganization* numberingScheme) {
   sens_[name]         = new CCaloSD(name, numberingScheme);
   return true;
 

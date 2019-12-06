@@ -73,7 +73,9 @@ class QColor;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
 class QLineEdit;
+#if QT_VERSION < 0x050600
 class QSignalMapper;
+#endif
 class G4UIQt;
 class QTableWidget;
 class QTableWidgetItem;
@@ -184,7 +186,6 @@ protected:
 
 protected:
   QWidget* fGLWidget;
-  bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
 
@@ -355,10 +356,11 @@ private:
   int fNumber;
   int fMaxPOindexInserted;
   G4UIQt* fUiQt;
+#if QT_VERSION < 0x050600
   QSignalMapper *fSignalMapperMouse;
   QSignalMapper *fSignalMapperSurface;
   QSignalMapper *fSignalMapperPicking;
-
+#endif
   // quick map index to find next item
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIteratorEnd;

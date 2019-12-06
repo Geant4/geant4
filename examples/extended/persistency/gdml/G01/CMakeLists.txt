@@ -40,7 +40,7 @@ target_link_libraries(load_gdml ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(G01_SCRIPTS
-    assembly.gdml auxiliary.gdml axes.gdml divisionvol.gdml entity.gdml g01.in g01.out loop.gdml materials.xml mat_nist.gdml matricesandloops.gdml multiUnion.gdml opticalsurfaces.gdml parameterized.gdml pTube.gdml replicated.gdml scale.gdml scaledTube.gdml solids.gdml tess.gdml vis.mac
+    assembly.gdml auxiliary.gdml axes.gdml block.gdml divisionvol.gdml entity.gdml g01.in g01.out loop.gdml materials.xml mat_nist.gdml matricesandloops.gdml multiUnion.gdml opticalsurfaces.gdml parameterized.gdml pTube.gdml replicated.gdml scale.gdml scaledTube.gdml solids.gdml tess.gdml vis.mac
   )
 
 foreach(_script ${G01_SCRIPTS})

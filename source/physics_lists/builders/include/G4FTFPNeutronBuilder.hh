@@ -83,7 +83,5 @@ class G4FTFPNeutronBuilder : public G4VNeutronBuilder
     G4double theMax;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
 

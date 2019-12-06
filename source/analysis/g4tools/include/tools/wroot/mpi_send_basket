@@ -1,0 +1,52 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_mpi_send_basket
+#define tools_wroot_mpi_send_basket
+
+#include "mpi_protocol"
+#include "../impi"
+#include "basket"
+
+namespace tools {
+namespace wroot {
+
+inline bool mpi_pack_basket(impi& a_mpi,uint32 a_icol,const basket& a_basket) {
+  if(!a_mpi.pack(a_icol)) return false;
+      
+  if(!a_mpi.spack(a_basket.object_name())) return false;
+  if(!a_mpi.spack(a_basket.object_title())) return false;
+  
+  if(!a_mpi.pack(a_basket.last())) return false;
+  if(!a_mpi.pack(a_basket.nev_buf_size())) return false;
+  if(!a_mpi.pack(a_basket.nev())) return false;
+        
+  if(a_basket.entry_offset()) {
+    if(!a_mpi.bpack(true)) return false;
+    if(!a_mpi.pack(a_basket.nev_buf_size(),a_basket.entry_offset())) return false;
+  } else {
+    if(!a_mpi.bpack(false)) return false;
+  }
+  
+  if(a_basket.displacement()) {
+    if(!a_mpi.bpack(true)) return false;
+    if(!a_mpi.pack(a_basket.nev_buf_size(),a_basket.displacement())) return false;
+  } else {
+    if(!a_mpi.bpack(false)) return false;
+  }
+  
+  if(!a_mpi.pack(a_basket.datbuf().length(),a_basket.datbuf().buf())) return false;
+  return true;
+}
+
+inline bool mpi_send_basket(impi& a_mpi,int a_dest,int a_tag,uint32 a_id,uint32 a_icol,const basket& a_basket) {
+  a_mpi.pack_reset();
+  if(!a_mpi.pack(mpi_protocol_basket())) return false;
+  if(!a_mpi.pack(a_id)) return false;
+  if(!mpi_pack_basket(a_mpi,a_icol,a_basket)) return false;
+  return a_mpi.send_buffer(a_dest,a_tag);
+}
+
+}}
+
+#endif

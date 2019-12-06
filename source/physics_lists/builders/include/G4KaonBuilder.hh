@@ -67,5 +67,6 @@ class G4KaonBuilder : public G4PhysicsBuilderInterface
 
     G4bool wasActivated;
 };
+
 #endif
 

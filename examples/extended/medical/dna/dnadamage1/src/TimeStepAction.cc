@@ -85,6 +85,12 @@ void TimeStepAction::UserReactionAction(const G4Track& trackA,
         return;
     }
     
+    //check for the case "no product"
+    if(!pProducts)
+    {
+        return;
+    }
+    
     auto phyEventId = G4EventManager::GetEventManager()->
     GetConstCurrentEvent()->GetEventID();
     

@@ -24,9 +24,8 @@ ROOT for histogramming/analysis
 
 ### Tested Platforms
 
-* CentOS7 (RH7 clones)
-* OSX (High Siera)
-
+* CentOS7 (Python2)
+* Ubuntu 18.04 LTS (Python3)
 
 How to Install
 --------------
@@ -40,7 +39,7 @@ then
 
     # mkdir build
     # cd build
-    # cmake ..   
+    # cmake ..
     # make
     # make install
 
@@ -67,7 +66,11 @@ Python module search directories, given by a colon-separated list of directories
     # export PYTHONPATH=<g4py>/lib64:<g4py>/lib64/examples:<g4py>/lib64/tests  (zsh, bash)
     # setenv PYTHONPATH <g4py>/lib64:<g4py>/lib64/examples:<g4py>/lib64/tests (csh)
 
+### *LD_LIBRARY_PATH*
 
+You might need define LD_LIBRARY_PATH for Geant4 libraries.
+    # export LD_LIBRARY_PATH=<Geant4 install path>/lib (zsh, bash)
+    # setenv LD_LIBRARY_PATH=<Geant4 install path>/lib (csh)
 
 ### Getting started
 You can import Geant4Py modules in Python just like

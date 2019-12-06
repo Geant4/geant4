@@ -302,11 +302,11 @@ public:
     delete [] m_entry_offset;
     m_entry_offset = 0;
 
-    rroot::buffer buffer(m_out,a_byte_swap,m_buf_size,m_buffer,0,false); 
-    buffer.set_offset(m_last);
+    buffer _buffer(m_out,a_byte_swap,m_buf_size,m_buffer,0,false); 
+    _buffer.set_offset(m_last);
 
    {uint32 n;
-    if(!buffer.read_array<int>(0,m_entry_offset,n)) {
+    if(!_buffer.read_array<int>(0,m_entry_offset,n)) {
       m_out << "tools::rroot::basket::read_offset_tables :"
                    << " read_array failed."
                    << std::endl;
@@ -323,11 +323,11 @@ public:
 
     delete [] m_displacement;
     m_displacement = 0;
-    if(buffer.length()!=buffer.size()) {
+    if(_buffer.length()!=_buffer.size()) {
       // There is more data in the buffer!  It is the diplacement
       // array.
       uint32 n;
-      if(!buffer.read_array<int>(0,m_displacement,n)) {
+      if(!_buffer.read_array<int>(0,m_displacement,n)) {
         m_out << "tools::rroot::basket::read_offset_tables :"
                      << " readArray(2) failed."
                      << std::endl;

@@ -46,11 +46,8 @@
 #include "G4NucleiProperties.hh"
 #include "G4LorentzVector.hh"
 
-using namespace std;
-using namespace CLHEP;
-
 class G4ParticleDefinition;
-// class G4VPreCompoundModel;
+class G4PreCompoundModel;
 // class G4CascadeInterface;
 // class G4BinaryCascade;
 // class G4TheoFSGenerator;
@@ -58,6 +55,9 @@ class G4ParticleDefinition;
 // class G4ExcitedStringDecay;
 // class G4INCLXXInterface;
 class G4Nucleus;
+class G4Fragment;
+class G4GeneratorPrecompoundInterface;
+class G4ExcitationHandler;
 
 class G4NeutrinoNucleusModel : public G4HadronicInteraction
 {
@@ -73,24 +73,15 @@ public:
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
 					  G4Nucleus & targetNucleus)=0;
 
-
-  ////////// KR excitation kinematics ////////////////////
-  /*
-  void SampleLVkr(const G4HadProjectile & aTrack, G4Nucleus & targetNucleus);
-
-  G4double SampleXkr(G4double energy);
-  G4double GetXkr(G4int iEnergy, G4double prob);
-  G4double SampleQkr(G4double energy, G4double xx);
-  G4double GetQkr(G4int iE, G4int jX, G4double prob);
-
-*/
-  //////// fragmentation functions /////////////////////////
+ //////// fragmentation functions /////////////////////////
 
   void ClusterDecay( G4LorentzVector & lvX, G4int qX);
 
   void MesonDecay( G4LorentzVector & lvX, G4int qX);
 
   void FinalBarion( G4LorentzVector & lvB, G4int qB, G4int pdgB);
+
+  void RecoilDeexcitation( G4Fragment& fragment);
 
   void FinalMeson( G4LorentzVector & lvM, G4int qM, G4int pdgM);
 
@@ -126,11 +117,11 @@ public:
   G4LorentzVector GetLVt(){return fLVt;};
   G4LorentzVector GetLVcpi(){return fLVcpi;};
 
-  G4double GetMinNuMuEnergy(){ return fMu + 0.5*fMu*fMu/fM1 + 4.*MeV; }; // kinematics + accuracy for sqrts
+  G4double GetMinNuMuEnergy(){ return fMu + 0.5*fMu*fMu/fM1 + 4.*CLHEP::MeV; }; // kinematics + accuracy for sqrts
 
   G4double ThresholdEnergy(G4double mI, G4double mF, G4double mP) // for cluster decay
   { 
-    G4double w = sqrt(fW2);
+    G4double w = std::sqrt(fW2);
     return w + 0.5*( (mP+mF)*(mP+mF)-(w+mI)*(w+mI) )/mI;
   };
   G4double FinalMomentum(G4double mI, G4double mF, G4double mP, G4LorentzVector lvX); // for cluster decay
@@ -139,7 +130,10 @@ public:
 
   G4double FermiMomentum( G4Nucleus & targetNucleus);
   G4double NucleonMomentum( G4Nucleus & targetNucleus);
-
+  
+  G4double GetEx( G4int A, G4bool fP );
+  G4double GgSampleNM(G4Nucleus & nucl);
+  
   G4int    GetEnergyIndex(G4double energy);
   G4double GetNuMuQeTotRat(G4int index, G4double energy);
 
@@ -150,13 +144,13 @@ public:
 
 protected:
 
-  // G4ParticleDefinition* theMuonMinus;
-  // G4ParticleDefinition* theMuonPlus;
+  G4ParticleDefinition* theMuonMinus;
+  G4ParticleDefinition* theMuonPlus;
  
   G4double fSin2tW;    // sin^2theta_Weinberg
   G4double fCutEnergy; // minimal recoil electron energy detected
 
-  G4int fNbin, fIndex, fEindex, fXindex, fOnePionIndex, fPDGencoding;
+  G4int fNbin, fIndex, fEindex, fXindex, fQindex, fOnePionIndex, fPDGencoding;
   G4bool fCascade, fString, fProton, f2p2h, fBreak;
 
   G4double fNuEnergy, fQ2, fQtransfer, fXsample;
@@ -166,19 +160,12 @@ protected:
   G4double fEmu, fEmuPi, fEx, fMr, fCosTheta, fCosThetaPi; // final lepton
 
   G4LorentzVector fLVh, fLVl, fLVt, fLVcpi;
-  /*
-  G4VPreCompoundModel* fPrecoModel;
 
-  G4TheoFSGenerator*         theFTFP;
-  G4TheoFSGenerator*         theQGSP;
+  G4GeneratorPrecompoundInterface* fPrecoInterface;
+  G4PreCompoundModel*              fPreCompound;
+  G4ExcitationHandler*             fDeExcitation;
 
-  G4LundStringFragmentation* theFragmentation;
-  G4ExcitedStringDecay*      theStringDecay;
 
-  G4CascadeInterface*        theBertini;
-  // G4BinaryCascade*           theBinary;
-  // G4INCLXXInterface*         theINCLXX;
-*/
   G4Nucleus* fRecoil;
 
   static const G4int fResNumber;

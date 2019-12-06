@@ -29,12 +29,14 @@
 #define G4FTFParameters_h 1
 
 #include <CLHEP/Units/SystemOfUnits.h>
-
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4ChipsComponentXS.hh"
-
+#include <vector>
+#include "G4Types.hh"
 #include "G4Exp.hh"
+
+class G4ParticleDefinition;
+class G4VComponentCrossSection;
+class G4LundStringFragmentation;
+
 
      // NOTE: the settings are different for:
      //       * baryons projectile
@@ -63,19 +65,43 @@ class G4FTFParamCollection {
      //
      // Proc=1 --> Qexchg w/excitation
      //
-     // Proc=2 & Proc=3 for the case ( AbsProjectileBaryonNumber > 1 ||  NumberOfTargetNucleons > 1 )
-     // (diffraction dissociation)
-     //
-     bool   IsProjDiffDissociation() const { return fProjDiffDissociation; }
-     bool   IsTgtDiffDissociation()  const { return fTgtDiffDissociation; }
-     //
      double GetProc1A1()   const  { return fProc1A1; }
      double GetProc1B1()   const  { return fProc1B1; }
      double GetProc1A2()   const  { return fProc1A2; }
      double GetProc1B2()   const  { return fProc1B2; }
      double GetProc1A3()   const  { return fProc1A3; }
      double GetProc1Atop() const  { return fProc1Atop; }
-     double GetProc1Ymin() const  { return fProc0Ymin; }
+     double GetProc1Ymin() const  { return fProc1Ymin; }
+     //
+     // Proc=2 & Proc=3 in case ( AbsProjectileBaryonNumber > 1 ||  NumberOfTargetNucleons > 1 )
+     // Update: Proc=2 & Proc=3 in case ( AbsProjectileBaryonNumber > 10 ||  NumberOfTargetNucleons > 10 )
+     // (diffraction dissociation)
+     //
+     // Other parameters have a complex form for baryon projectile
+     // although they're just numbers for e.g. pions projectile
+     //
+     // Proc=2 --> Projectile diffraction
+     //
+     double GetProc2A1()   const  { return fProc2A1; }
+     double GetProc2B1()   const  { return fProc2B1; }
+     double GetProc2A2()   const  { return fProc2A2; }
+     double GetProc2B2()   const  { return fProc2B2; }
+     double GetProc2A3()   const  { return fProc2A3; }
+     double GetProc2Atop() const  { return fProc2Atop; }
+     double GetProc2Ymin() const  { return fProc2Ymin; }
+     //
+     // Proc=3 --> Target diffraction
+     //
+     double GetProc3A1()   const  { return fProc3A1; }
+     double GetProc3B1()   const  { return fProc3B1; }
+     double GetProc3A2()   const  { return fProc3A2; }
+     double GetProc3B2()   const  { return fProc3B2; }
+     double GetProc3A3()   const  { return fProc3A3; }
+     double GetProc3Atop() const  { return fProc3Atop; }
+     double GetProc3Ymin() const  { return fProc3Ymin; }
+     //
+     bool   IsProjDiffDissociation() const { return fProjDiffDissociation; }
+     bool   IsTgtDiffDissociation()  const { return fTgtDiffDissociation; }
      //
      // Proc=4 --> Qexchg "w/additional multiplier" in excitation
      //
@@ -101,8 +127,6 @@ class G4FTFParamCollection {
      // NOTE (JVY): There is also the Pt2Kind parameter but for now it's set to 0., so we'll leave it aside
 
      // --> FIXME !!! --> void Get/SetBaryonMaxNumberOfCollisions( const double, const double ); // 1st is Plab, 2nd - D=2.
-     //
-     // NOTE (JVY): These parameters are COMMON among various projectiles !!!
      //
      double GetNuclearProjDestructP1()    const { return fNuclearProjDestructP1; }
      bool   IsNuclearProjDestructP1_NBRNDEP() const { return fNuclearProjDestructP1_NBRNDEP; }
@@ -157,7 +181,8 @@ class G4FTFParamCollection {
       //
       // NOTE: Proc #2 & 3 are projectile & target diffraction
       //       they have more complex definition of A1 & A2 
-      //      (see around line 540 or so)
+      //       for *baryons* although they're just numbers for pions
+      //       (example for baryons below)
       // SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Projectile diffraction
       // SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Target diffraction
       //
@@ -165,7 +190,22 @@ class G4FTFParamCollection {
       // projectile and/or target diffraction (dissociation) may be switched ON/OFF 
       bool   fProjDiffDissociation;
       bool   fTgtDiffDissociation;
-      //
+      // Proc=2 --> Projectile diffraction
+      double fProc2A1; 
+      double fProc2B1; 
+      double fProc2A2; 
+      double fProc2B2; 
+      double fProc2A3; 
+      double fProc2Atop; 
+      double fProc2Ymin; 
+      // Proc=3 --> Target diffraction
+      double fProc3A1; 
+      double fProc3B1; 
+      double fProc3A2; 
+      double fProc3B2; 
+      double fProc3A3; 
+      double fProc3Atop; 
+      double fProc3Ymin; 
       // Proc=4 --> Qexchg w/additional multiplier in excitation  
       double fProc4A1; // D=0.6 (or 1. as in Doc ?)
       double fProc4B1; // D=0.
@@ -175,7 +215,13 @@ class G4FTFParamCollection {
       double fProc4Atop; // D=0.
       double fProc4Ymin; // D=1.4
       //
-      // parameters of participating baryon excitation
+      // parameters of participating baryon excitation 
+      // NOTE: baryon ot HADRON ???
+      // NOTE: this parameters (as C++ class data members) are used for all types of hadrons
+      //       but the values for a specific group of particles can be are different from
+      //       another group of particles
+      //       the defaults listed under coments are for baryons, 
+      //       and they may be different or the same for other hadrons (e.g. mesons)
       //
       double fDeltaProbAtQuarkExchange; // D=0. 
       double fProbOfSameQuarkExchange;  // D=0. if A<=26, otherwise D=1.
@@ -184,8 +230,8 @@ class G4FTFParamCollection {
       double fTgtMinDiffMass;           // target, D=1.16GeV
       double fTgtMinNonDiffMass;        // target, D=1.16GeV
       double fAveragePt2;               // D=0.3GeV**2 ( or 0.15 as in the Doc ???)
-      double fProbLogDistrPrD;          // D=0.6 (or 0.3 ???)
-      double fProbLogDistr;             // D=0.6 (or 0.3 ???)
+      double fProbLogDistrPrD;          // D=0.55 (or 0.6 ??? or 0.3 ???)
+      double fProbLogDistr;             // D=0.55 (or 0.6 ??? or 0.3 ???)
 
       // parameters of nuclear distruction 
       //
@@ -217,11 +263,13 @@ class G4FTFParamCollection {
       double fPt2NuclearDestructP2; // D=0.04
       double fPt2NuclearDestructP3; // D=4.0
       double fPt2NuclearDestructP4; // D=2.5 
-      // baryons
+      // baryons... well, in fact also mesons...
       double fR2ofNuclearDestruct;         // D=1.5*fermi*fermi
       double fExciEnergyPerWoundedNucleon; // D=40MeV
       double fDofNuclearDestruct;          // D=0.3
       // NOTE: this parameter has changed from 1. to 9. between 10.2 and 10.4.ref04 !!!
+      //       ... but that's for baryons !
+      //       ... while for mesons it's 1GeV**2
       double fMaxPt2ofNuclearDestruct;     // D=9GeV**2
 
    private:
@@ -236,6 +284,23 @@ class G4FTFParamCollBaryonProj : public G4FTFParamCollection {
       G4FTFParamCollBaryonProj();
 };
 
+class G4FTFParamCollMesonProj : public G4FTFParamCollection {
+
+   public:
+      
+      // ctor
+      G4FTFParamCollMesonProj();
+
+};
+
+class G4FTFParamCollPionProj : public G4FTFParamCollMesonProj {
+
+   public:
+      
+      // ctor
+      G4FTFParamCollPionProj();
+
+};
 
 class G4FTFParameters {
   public:
@@ -356,9 +421,6 @@ class G4FTFParameters {
     // Initial energy of hN interactions
     G4double FTFhNcmsEnergy;  // Initial hN CMS energy
 
-    // hN cross section manager
-    G4ChipsComponentXS* FTFxsManager;
-
     // Geometrical parameteres
     G4double FTFXtotal;                      // Total X in mb
     G4double FTFXelastic;                    // Elastic X in mb
@@ -400,22 +462,26 @@ class G4FTFParameters {
 
     G4double ExcitationEnergyPerWoundedNucleon;
 
-    G4double DofNuclearDestruction;       // D for momentum sampling
+    G4double DofNuclearDestruction;       // Dispersion for momentum sampling
     G4double Pt2ofNuclearDestruction;     // Pt2
     G4double MaxPt2ofNuclearDestruction;  // Max Pt2
 
   private:
-  
+    G4LundStringFragmentation* StringMass;
+    G4double GetMinMass( const G4ParticleDefinition* aParticle );
+
     void Reset(); 
 
     // JVY, July 31, 2017: encapsulates (current set of) parameters for the baryon projectile
     //
     G4FTFParamCollBaryonProj fParCollBaryonProj;
+    
+    // JVY, Feb 14, 2019: encapsulates (current set of) parameters for meson/pion (+/-/0) projectile
+    G4FTFParamCollMesonProj  fParCollMesonProj;
+    G4FTFParamCollPionProj   fParCollPionProj;
 
-    // G4-MT changes
-  private:
-    static G4ThreadLocal bool chipsComponentXSisInitialized;
-    static G4ThreadLocal G4ChipsComponentXS* chipsComponentXSinstance;
+    // Glauber-Gribov hN x-section
+    G4VComponentCrossSection* csGGinstance;
 };
 
 

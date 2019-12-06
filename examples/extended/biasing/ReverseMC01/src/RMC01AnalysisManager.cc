@@ -242,8 +242,8 @@ void  RMC01AnalysisManager::EndOfEventForForwardSimulation(
    //Total energy deposited in Event
    //-------------------------------
    G4double totEdep=0; 
-   G4int i;
-   for (i=0;i<edepCollection->entries();i++)
+   std::size_t i;
+   for (i=0;i<edepCollection->entries();++i)
         totEdep+=(*edepCollection)[i]->GetValue()
                   *(*edepCollection)[i]->GetWeight();
    
@@ -264,19 +264,19 @@ void  RMC01AnalysisManager::EndOfEventForForwardSimulation(
    //Particle current on sensitive cylinder
    //-------------------------------------
    
-   for (i=0;i<electronCurrentCollection->entries();i++) {
+   for (i=0;i<electronCurrentCollection->entries();++i) {
            G4double ekin =(*electronCurrentCollection)[i]->GetValue();
         G4double weight=(*electronCurrentCollection)[i]->GetWeight();
         fElectron_current->fill(ekin,weight);
    }
    
-   for (i=0;i<protonCurrentCollection->entries();i++) {
+   for (i=0;i<protonCurrentCollection->entries();++i) {
            G4double ekin =(*protonCurrentCollection)[i]->GetValue();
         G4double weight=(*protonCurrentCollection)[i]->GetWeight();
         fProton_current->fill(ekin,weight);
    }        
    
-   for (i=0;i<gammaCurrentCollection->entries();i++) {
+   for (i=0;i<gammaCurrentCollection->entries();++i) {
            G4double ekin =(*gammaCurrentCollection)[i]->GetValue();
         G4double weight=(*gammaCurrentCollection)[i]->GetWeight();
         fGamma_current->fill(ekin,weight);
@@ -312,8 +312,8 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
   //Computation of total energy deposited in fwd tracking phase
   //-------------------------------
    G4double totEdep=0;
-   G4int i;
-   for (i=0;i<edepCollection->entries();i++)
+   std::size_t i;
+   for (i=0;i<edepCollection->entries();++i)
        totEdep+=(*edepCollection)[i]->GetValue()*
                                             (*edepCollection)[i]->GetWeight();
 
@@ -329,7 +329,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
 
   //We need to loop over the adjoint tracks that have reached the external
   //surface.
-  for (size_t j=0;j<nb_adj_track;j++) {
+  for (std::size_t j=0;j<nb_adj_track;++j) {
     G4int pdg_nb =theAdjointSimManager
          ->GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(j);
     G4double prim_ekin=theAdjointSimManager
@@ -349,10 +349,10 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
   
     //Answer matrices
     //-------------
-    G4AnaH1* edep_rmatrix =0;
-    G4AnaH2* electron_current_rmatrix =0;
-    G4AnaH2* gamma_current_rmatrix =0;
-    G4AnaH2* proton_current_rmatrix =0;
+    G4H1* edep_rmatrix =0;
+    G4H2* electron_current_rmatrix =0;
+    G4H2* gamma_current_rmatrix =0;
+    G4H2* proton_current_rmatrix =0;
 
     if (pdg_nb == G4Electron::Electron()->GetPDGEncoding()){ //e- matrices
       edep_rmatrix = fEdep_rmatrix_vs_electron_prim_energy;
@@ -385,19 +385,19 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
   //Registering of current of particles on the sensitive volume
   //------------------------------------------------------------
    
-   for (i=0;i<electronCurrentCollection->entries();i++) {
+   for (i=0;i<electronCurrentCollection->entries();++i) {
      G4double ekin =(*electronCurrentCollection)[i]->GetValue();
      G4double weight=(*electronCurrentCollection)[i]->GetWeight();
      fElectron_current->fill(ekin,weight*normalised_weight);
      electron_current_rmatrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
    }
-   for (i=0;i<protonCurrentCollection->entries();i++) {
+   for (i=0;i<protonCurrentCollection->entries();++i) {
      G4double ekin =(*protonCurrentCollection)[i]->GetValue();
      G4double weight=(*protonCurrentCollection)[i]->GetWeight();
      fProton_current->fill(ekin,weight*normalised_weight);
      proton_current_rmatrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
    }
-   for (i=0;i<gammaCurrentCollection->entries();i++) {
+   for (i=0;i<gammaCurrentCollection->entries();++i) {
      G4double ekin =(*gammaCurrentCollection)[i]->GetValue();
      G4double weight=(*gammaCurrentCollection)[i]->GetWeight();
      fGamma_current->fill(ekin,weight*normalised_weight);
@@ -463,14 +463,14 @@ G4double RMC01AnalysisManager::PrimDiffAndDirFluxForAdjointSim(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 /*
-void  RMC01AnalysisManager::WriteHisto(G4AnaH1* anHisto,
+void  RMC01AnalysisManager::WriteHisto(G4H1* anHisto,
             G4double scaling_factor, G4String fileName, G4String header_lines)
 { std::fstream FileOutput(fileName, std::ios::out);
   FileOutput<<header_lines;
   FileOutput.setf(std::ios::scientific);
   FileOutput.precision(6);
 
-  for (G4int i =0;i<G4int(anHisto->axis().bins());i++) {
+  for (G4int i =0;i<G4int(anHisto->axis().bins());++i) {
         FileOutput<<anHisto->axis().bin_lower_edge(i)
               <<'\t'<<anHisto->axis().bin_upper_edge(i)
               <<'\t'<<anHisto->bin_height(i)*scaling_factor
@@ -480,7 +480,7 @@ void  RMC01AnalysisManager::WriteHisto(G4AnaH1* anHisto,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void  RMC01AnalysisManager::WriteHisto(G4AnaH2* anHisto,
+void  RMC01AnalysisManager::WriteHisto(G4H2* anHisto,
             G4double scaling_factor, G4String fileName, G4String header_lines)
 { std::fstream FileOutput(fileName, std::ios::out);
   FileOutput<<header_lines;
@@ -488,8 +488,8 @@ void  RMC01AnalysisManager::WriteHisto(G4AnaH2* anHisto,
   FileOutput.setf(std::ios::scientific);
   FileOutput.precision(6);
 
-  for (G4int i =0;i<G4int(anHisto->axis_x().bins());i++) {
-    for (G4int j =0;j<G4int(anHisto->axis_y().bins());j++) {
+  for (G4int i =0;i<G4int(anHisto->axis_x().bins());++i) {
+    for (G4int j =0;j<G4int(anHisto->axis_y().bins());++j) {
        FileOutput<<anHisto->axis_x().bin_lower_edge(i)
                      <<'\t'<<anHisto->axis_x().bin_upper_edge(i)
                    <<'\t'<<anHisto->axis_y().bin_lower_edge(i)
@@ -765,11 +765,11 @@ void RMC01AnalysisManager::Save(G4double scaling_factor)
     //scaling of results
     //-----------------
 
-    for (int ind=1; ind<=theHistoManager->GetNofH1s();ind++){
+    for (G4int ind=1; ind<=theHistoManager->GetNofH1s();++ind){
        theHistoManager->SetH1Ascii(ind,true);
        theHistoManager->ScaleH1(ind,scaling_factor);
     }
-    for (int ind=1; ind<=theHistoManager->GetNofH2s();ind++)
+    for (G4int ind=1; ind<=theHistoManager->GetNofH2s();++ind)
                         theHistoManager->ScaleH2(ind,scaling_factor);
 
     theHistoManager->Write();

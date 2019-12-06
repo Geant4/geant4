@@ -69,17 +69,15 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
-#include "G4CrossSectionDataSetRegistry.hh"
-
 #include "G4PhysListUtil.hh"
 #include "G4Threading.hh"
+
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -94,14 +92,14 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool 
     :  G4VPhysicsConstructor(name) 
     , QuasiElastic(quasiElastic)
 {
-  minFTFP_pion = 3.0 * GeV;
-  maxBERT_pion = 12.0 * GeV;
-  minFTFP_kaon = 3.0 * GeV;
-  maxBERT_kaon = 12.0 * GeV;
-  minFTFP_proton = 3.0 * GeV;
-  maxBERT_proton = 12.0 * GeV;
-  minFTFP_neutron = 3.0 * GeV;
-  maxBERT_neutron = 12.0 * GeV;
+  minFTFP_pion =    G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_pion =    G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  minFTFP_kaon =    G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_kaon =    G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  minFTFP_proton =  G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_proton =  G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  minFTFP_neutron = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_neutron = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
 }
 
 G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
@@ -155,7 +153,7 @@ void G4HadronPhysicsFTFP_BERT::Neutron()
   auto bertn = new G4BertiniNeutronBuilder;
   AddBuilder(bertn);
   neu->RegisterMe(bertn);
-  bertn->SetMinEnergy(0.*GeV);
+  bertn->SetMinEnergy(0.0);
   bertn->SetMaxEnergy(maxBERT_neutron);
   neu->Build();
 }
@@ -233,14 +231,6 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
 #include "G4ProcessManager.hh"
 void G4HadronPhysicsFTFP_BERT::ExtraConfiguration()
 {
-  //Modify XS for kaons
-  auto xsk = new G4ComponentGGHadronNucleusXsc();
-  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(xsk);
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
-
   //Modify Neutrons
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);

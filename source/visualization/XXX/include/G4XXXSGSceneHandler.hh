@@ -99,6 +99,8 @@ public:
   {G4VSceneHandler::AddSolid(orb);}
   void AddSolid(const G4Ellipsoid& ellipsoid)
   {G4VSceneHandler::AddSolid(ellipsoid);}
+  void AddSolid(const G4TessellatedSolid& tess)
+  {G4VSceneHandler::AddSolid(tess);}
   void AddSolid(const G4VSolid& solid)
   {G4VSceneHandler::AddSolid(solid);}
   // More optional functions...

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 5, 201, S. Guatelli tag human_phantom_V10-05-01
+- Geometry bug resolved (Left and right clavicles in the MIRD model, 
+  position translated of 2 cm in the y direction
+
 Jan 31, 2019, I.Hrivnacova tag human_phantom-V10-05-00
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -26,6 +30,7 @@ Oct 19, 2018. S. Guatelli tag human_phantom-V10-04-00
 
 Nov 19, 2016, A. Dotti tag human_phantom-V10-02-02
 - explicit set of SD to manager
+
 
 May 23, 2016, G. Cosmo tag human_phantom-V10-02-01
 - More compilation warnings in gcc-6.1 fixed...

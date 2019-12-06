@@ -47,7 +47,7 @@ class G4ParticleHPDiscreteTwoBody : public G4VParticleHPEnergyAngular
   {
     theCoeff = 0;
     bCheckDiffCoeffRepr = true;
-    if ( getenv( "G4PHP_DO_NOT_CHECK_DIFF_COEFF_REPR" ) ) bCheckDiffCoeffRepr = false;
+    if ( std::getenv( "G4PHP_DO_NOT_CHECK_DIFF_COEFF_REPR" ) ) bCheckDiffCoeffRepr = false;
     nEnergy = 0;
   }
   ~G4ParticleHPDiscreteTwoBody()

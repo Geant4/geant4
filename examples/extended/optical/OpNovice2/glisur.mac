@@ -1,0 +1,94 @@
+/control/verbose 2
+/tracking/verbose 0
+/control/cout/ignoreThreadsExcept 0
+
+/opnovice2/boxProperty RINDEX    0.000002 1.3   0.000008 1.4
+/opnovice2/boxProperty ABSLENGTH 0.000002 10000 0.000005 20000 0.000008 30000
+
+/opnovice2/worldProperty RINDEX    0.000002 1.01  0.000008 1.01
+/opnovice2/worldProperty ABSLENGTH 0.000002 1000  0.000005 2000  0.000008 3000
+
+/opnovice2/surfaceModel glisur
+/opnovice2/surfaceType dielectric_dielectric
+
+/opnovice2/surfaceProperty SPECULARLOBECONSTANT  0.000002 0.1 0.000008 0.1
+/opnovice2/surfaceProperty SPECULARSPIKECONSTANT 0.000002 0.1 0.000008 0.1
+/opnovice2/surfaceProperty BACKSCATTERCONSTANT   0.000002 0.1 0.000008 0.1
+
+/opnovice2/surfaceProperty TRANSMITTANCE 0.000002 0.1  0.000008 0.1
+/opnovice2/surfaceProperty REFLECTIVITY  0.000002 0.8  0.000008 0.8
+/opnovice2/surfaceProperty EFFICIENCY    0.000002 0.05 0.000008 0.05
+
+/run/initialize
+#
+/gun/particle opticalphoton
+/gun/energy 3 eV
+/gun/position 0 0 0 cm
+/gun/direction .9 0.1 0.1
+/opnovice2/gun/optPhotonPolar
+#
+/analysis/setFileName glisur
+/analysis/h1/set 3  40 -1 39
+/analysis/h1/set 4  100 -1.1 1.1
+/analysis/h1/set 5  100 -1.1 1.1
+/analysis/h1/set 6  100 -1.1 1.1
+/analysis/h1/set 7  100 -1.1 1.1
+/analysis/h1/set 8  100 -1.1 1.1
+/analysis/h1/set 9  100 -1.1 1.1
+/analysis/h1/set 10 100 -1.1 1.1
+/analysis/h1/set 11 100 -1.1 1.1
+/analysis/h1/set 12 100 -1.1 1.1
+
+############################# polished ########################################
+
+/opnovice2/surfaceFinish polished
+
+/run/initialize
+/run/beamOn 10000
+
+/opnovice2/surfaceConstProperty SURFACEROUGHNESS 0.01
+/run/initialize
+/run/beamOn 10000
+/opnovice2/surfaceConstProperty SURFACEROUGHNESS 0.0
+
+############################# ground ##########################################
+
+/opnovice2/surfaceFinish ground
+/run/initialize
+/opnovice2/surfacePolish 0.2
+/run/beamOn 10000
+/opnovice2/surfacePolish 1.0
+
+############################# painted #########################################
+
+/opnovice2/surfaceFinish polishedfrontpainted
+/run/initialize
+/run/beamOn 10000
+
+/opnovice2/surfaceFinish polishedbackpainted
+/opnovice2/surfaceProperty RINDEX 0.000002 1.4 0.000008 1.5
+/run/initialize
+/run/beamOn 10000
+
+/opnovice2/surfaceFinish groundfrontpainted
+/run/initialize
+/run/beamOn 10000
+
+/opnovice2/surfaceFinish groundbackpainted
+/opnovice2/surfacePolish 0.2
+/run/initialize
+/run/beamOn 10000
+/opnovice2/surfacePolish 1.0
+
+############################# dielectric_metal ################################
+
+/opnovice2/surfaceType dielectric_metal
+/opnovice2/surfaceFinish polished
+
+/run/initialize
+/run/beamOn 10000
+
+/opnovice2/surfaceFinish ground
+/run/initialize
+/opnovice2/surfacePolish 0.2
+/run/beamOn 10000

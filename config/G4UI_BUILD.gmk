@@ -7,6 +7,7 @@
 ifndef G4UI_NONE
   G4UI_BUILD = 1
   CPPFLAGS += -DG4UI_BUILD
+  INC_X11 = 1
 
 # The following sessions are built by default (no environment
 #   variables needed)...

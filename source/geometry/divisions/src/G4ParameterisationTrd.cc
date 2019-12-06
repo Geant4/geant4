@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4ParameterisationTrd Implementation file
+// G4ParameterisationTrd[X/Y/Z] implementation
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
@@ -48,8 +46,7 @@ G4VParameterisationTrd::
 G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid ),
-     bDivInTrap(false)
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
   G4Trd* msol = (G4Trd*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
@@ -201,7 +198,7 @@ ComputeDimensions( G4Trd& trd, const G4int, const G4VPhysicalVolume* ) const
 }
 
 G4VSolid* G4ParameterisationTrdX::
-ComputeSolid(const G4int i, G4VPhysicalVolume * pv)
+ComputeSolid(const G4int i, G4VPhysicalVolume* pv)
 {
   if( bDivInTrap ) 
   {

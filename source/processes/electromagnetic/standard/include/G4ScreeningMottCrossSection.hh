@@ -58,7 +58,7 @@
 //      3) Nuclear Form Factor:
 //      A.V. Butkevich et al. Nucl. Instr. Meth. A488 (2002), 282-294.
 //
-// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 //
 #ifndef G4ScreeningMottCrossSection_h
@@ -67,13 +67,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
-#include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ThreeVector.hh" 
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-static const G4int DIM = 750;
+static const G4int DIMMOTT = 750;
 
 class G4NistManager;
 class G4Pow;
@@ -85,35 +84,29 @@ public:
 
   explicit G4ScreeningMottCrossSection();
 
-  virtual ~G4ScreeningMottCrossSection();
+  ~G4ScreeningMottCrossSection();
 
   void Initialise(const G4ParticleDefinition*, G4double cosThetaLim);
 
-  inline void SetupParticle(const G4ParticleDefinition*);
   void SetupKinematic(G4double kinEnergy, G4int Z);
 
-  G4double NuclearCrossSection(G4int, G4int);
-  G4ThreeVector GetNewDirection();
+  G4double NuclearCrossSection(G4int form, G4int fast);
+  G4double GetScatteringAngle(G4int form, G4int fast);
 
-  inline G4double GetMom2CM()const;
-  inline G4double GetMom2Lab()const;
-  inline G4double GetTrec() const;
-  inline G4double GetScreeningCoefficient() const;
-  inline G4double GetTotalCross() const;
+  G4double RatioMottRutherford(G4double tet);
+  G4double RatioMottRutherfordCosT(G4double sin2t2);
 
-  G4double McFcorrection(G4double);
-  G4double RatioMottRutherford(G4double);
-  G4double RatioMottRutherfordCosT(G4double);
-  G4double FormFactor2ExpHof(G4double);
-  G4double FormFactor2Gauss(G4double);
-  G4double FormFactor2UniformHelm(G4double);
-  G4double GetScatteringAngle(G4int, G4int);
-  G4double SetDifferentialXSection(G4double, G4double, G4int);
+  G4double McFcorrection(G4double sin2t2);
+  inline void SetupParticle(const G4ParticleDefinition*);
 
 private:
 
-  inline G4double GetScreeningAngle();
-  void SetScreeningCoefficient();
+  G4double ComputeAngle(G4int idx, G4double& rand);
+
+  G4double FormFactor2ExpHof(G4double sin2t2);
+  G4double FormFactor2Gauss(G4double sin2t2);
+  G4double FormFactor2UniformHelm(G4double sin2t2);
+  G4double DifferentialXSection(G4int idx, G4int form);
 
   G4double  GetTransitionRandom();
 
@@ -123,6 +116,8 @@ private:
 
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;
+
+  const G4ParticleDefinition* particle;
 
   G4double 	        fTotalCross;
   //cost - min - max
@@ -135,9 +130,6 @@ private:
   //energy cut
   G4double              ecut;
   G4double              etag;
-
-  // projectile........................
-  const G4ParticleDefinition* particle;
 
   G4double              spin;
   G4double              mass;
@@ -155,20 +147,19 @@ private:
   G4double		beta;
   G4double		gamma;
 
-  // target nucleus
-  G4int                 targetZ;
-  G4int 	        targetA;
-  G4double              targetMass;
-  G4double 		Trec;
-  G4double 		As;
-
   //constants
   G4double              alpha;
   G4double              htc2;
   G4double              e2;
 
-  //angle
-  G4double              cross[DIM];
+  // target nucleus
+  G4double              targetMass;
+  G4double 		As;
+  G4int                 targetZ;
+  G4int 	        targetA;
+
+  // working array
+  std::vector<G4double> cross;
 };
 
 
@@ -182,49 +173,6 @@ void G4ScreeningMottCrossSection::SetupParticle(const G4ParticleDefinition* p)
   spin = particle->GetPDGSpin();
   if(0.0 != spin) { spin = 0.5; }
   tkin = 0.0;
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ScreeningMottCrossSection::GetMom2CM() const
-{
-  return mom2;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-inline G4double G4ScreeningMottCrossSection::GetMom2Lab() const
-{
-  return momLab2;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ScreeningMottCrossSection::GetTrec() const
-{
-  return Trec;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ScreeningMottCrossSection::GetScreeningCoefficient() const
-{
-  return As;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ScreeningMottCrossSection::GetTotalCross() const
-{
-  return fTotalCross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ScreeningMottCrossSection::GetScreeningAngle()
-{
-  G4double screenangle=2.*std::asin(std::sqrt(As));
-  return std::min(screenangle, CLHEP::pi);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

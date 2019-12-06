@@ -72,7 +72,7 @@ G4RootAnalysisManager* G4RootAnalysisManager::Instance()
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::IsInstance()
 {
-  return ( fgInstance != 0 );
+  return ( fgInstance != nullptr );
 }    
 
 //_____________________________________________________________________________
@@ -80,6 +80,7 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
  : G4ToolsAnalysisManager("Root", isMaster),
    fNofNtupleFiles(0),
    fNtupleRowWise(false),
+   fNtupleRowMode(true),
    fNtupleMergeMode(G4NtupleMergeMode::kNone),
    fNtupleManager(nullptr),
    fSlaveNtupleManager(nullptr),
@@ -101,12 +102,13 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
   fFileManager = std::make_shared<G4RootFileManager>(fState);
   SetFileManager(fFileManager);
   fFileManager->SetBasketSize(fgkDefaultBasketSize);
+  fFileManager->SetBasketEntries(fgkDefaultBasketEntries);
 
   // Do not merge ntuples by default
   // Merging may require user code migration as analysis manager
   // must be created both on master and workers.
   auto mergeNtuples = false;
-  SetNtupleMergingMode(mergeNtuples, fNofNtupleFiles, fNtupleRowWise);
+  SetNtupleMergingMode(mergeNtuples, fNofNtupleFiles);
 
   // Create ntuple managers
   CreateNtupleManagers();
@@ -125,8 +127,7 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
 
 //_____________________________________________________________________________
 void G4RootAnalysisManager::SetNtupleMergingMode(G4bool mergeNtuples, 
-                                                 G4int nofNtupleFiles,
-                                                 G4bool rowWise)
+                                                 G4int nofNtupleFiles)
 
 {
 #ifdef G4VERBOSE
@@ -172,7 +173,6 @@ void G4RootAnalysisManager::SetNtupleMergingMode(G4bool mergeNtuples,
   else {
     // Set the number of reduced ntuple files
     fNofNtupleFiles = nofNtupleFiles;
-    fNtupleRowWise = rowWise;
   
     // Check the number of reduced ntuple files
     // if ( fNofNtupleFiles < 0 || fNofNtupleFiles > nofThreads ) {
@@ -260,7 +260,7 @@ void G4RootAnalysisManager::CreateNtupleManagers()
   switch ( fNtupleMergeMode )
   {
     case G4NtupleMergeMode::kNone:
-      fNtupleManager = new G4RootNtupleManager(fState, 0, fNtupleRowWise);
+      fNtupleManager = new G4RootNtupleManager(fState, 0, fNtupleRowWise, fNtupleRowMode);
       fNtupleManager->SetFileManager(fFileManager);
       SetNtupleManager(fNtupleManager);
       break;
@@ -269,7 +269,8 @@ void G4RootAnalysisManager::CreateNtupleManagers()
       G4int nofMainManagers = fNofNtupleFiles;
       if ( ! nofMainManagers ) nofMainManagers = 1;
              // create one manager if merging required into the histos & profiles files
-      fNtupleManager = new G4RootNtupleManager(fState, nofMainManagers, fNtupleRowWise);
+      fNtupleManager 
+        = new G4RootNtupleManager(fState, nofMainManagers, fNtupleRowWise, fNtupleRowMode);
       fNtupleManager->SetFileManager(fFileManager);
       SetNtupleManager(fNtupleManager);
       break;
@@ -280,7 +281,8 @@ void G4RootAnalysisManager::CreateNtupleManagers()
         // The master class is used only in Get* functions
       auto mainNtupleManager 
         = fNtupleManager->GetMainNtupleManager(GetNtupleFileNumber()); 
-      fSlaveNtupleManager = new G4RootPNtupleManager(mainNtupleManager, fState); 
+      fSlaveNtupleManager 
+        = new G4RootPNtupleManager(mainNtupleManager, fState, fNtupleRowWise, fNtupleRowMode); 
       SetNtupleManager(fSlaveNtupleManager);
       break;
   }
@@ -682,16 +684,11 @@ G4bool G4RootAnalysisManager::CloseFileImpl(G4bool reset)
 
 //_____________________________________________________________________________
 void G4RootAnalysisManager::SetNtupleMerging(G4bool mergeNtuples, 
-                                             G4int  nofNtupleFiles,
-                                             G4bool rowWise,
-                                             unsigned int basketSize)
+                                             G4int  nofNtupleFiles)
 
 {
-  // Keep basketSize in file manager
-  fFileManager->SetBasketSize(basketSize);
-
   // Set ntuple merging mode 
-  SetNtupleMergingMode(mergeNtuples, nofNtupleFiles, rowWise);
+  SetNtupleMergingMode(mergeNtuples, nofNtupleFiles);
 
   // Clear existing managers
   ClearNtupleManagers();  
@@ -701,17 +698,50 @@ void G4RootAnalysisManager::SetNtupleMerging(G4bool mergeNtuples,
 }
 
 //_____________________________________________________________________________
-void G4RootAnalysisManager::SetNtupleRowWise(G4bool rowWise)
+void G4RootAnalysisManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode) 
 {
+#ifdef G4VERBOSE
+  // Print info even when setting makes no effect
+  // (as we do not get printed the default setting in the output)
+  G4String rowWiseMode;
+  if ( rowWise ) {
+    rowWiseMode = "row-wise with extra branch";
+  } 
+  else if ( rowMode ) {
+    rowWiseMode = "row-wise";
+  }
+  else {
+    rowWiseMode = "column-wise"; 
+  }
+
+  if ( fState.GetVerboseL1() ) 
+    fState.GetVerboseL1()
+      ->Message("set", "ntuple merging row mode", rowWiseMode);
+#endif
+
   // Do nothing if the mode is not changed
-  if ( fNtupleRowWise == rowWise ) return;
+  if ( fNtupleRowWise == rowWise && fNtupleRowMode == rowMode ) return;
 
   fNtupleRowWise = rowWise;
+  fNtupleRowMode = rowMode;
 
-  // Clear existing managers
-  ClearNtupleManagers();  
+  if ( fNtupleManager ) {
+    fNtupleManager->SetNtupleRowWise(rowWise, rowMode);
+  }
 
-  // Re-create managers
-  CreateNtupleManagers();
+  if ( fSlaveNtupleManager ) {
+    fSlaveNtupleManager->SetNtupleRowWise(rowWise, rowMode);
+  }
 }
 
+//_____________________________________________________________________________
+void G4RootAnalysisManager::SetBasketSize(unsigned int basketSize) 
+{
+  fFileManager->SetBasketSize(basketSize);
+}
+
+//_____________________________________________________________________________
+void G4RootAnalysisManager::SetBasketEntries(unsigned int basketEntries)
+{
+  fFileManager->SetBasketEntries(basketEntries);
+}

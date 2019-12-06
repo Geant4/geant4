@@ -26,8 +26,6 @@
 /// \file electromagnetic/TestEm2/src/SteppingVerbose.cc
 /// \brief Implementation of the SteppingVerbose class
 //
-//
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

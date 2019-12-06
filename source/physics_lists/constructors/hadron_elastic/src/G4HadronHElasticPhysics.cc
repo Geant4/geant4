@@ -37,11 +37,6 @@
 //
 //----------------------------------------------------------------------------
 //
-// CHIPS for sampling scattering for p and n
-// Glauber model for samplimg of high energy pi+- (E > 1GeV)
-// LHEP sampling model for the other particle
-// BBG cross sections for p, n and pi+- 
-// LHEP cross sections for other particles
 
 #include "G4HadronHElasticPhysics.hh"
 
@@ -178,25 +173,15 @@ void G4HadronHElasticPhysics::ConstructProcess() {
          pname == "anti_sigma+"  || 
          pname == "anti_xi-"     || 
          pname == "anti_xi0"     ||
-         pname == "anti_omega-"
-       ) {
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet( G4ChipsAntiBaryonElasticXS::Default_Name() ) );
-      hel->RegisterMe( chips1 );
-      pmanager->AddDiscreteProcess( hel );
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-      
-    } else if ( pname == "lambda"  || 
-                pname == "sigma-"  ||
-                pname == "sigma0"  || 
-                pname == "sigma+"  || 
-                pname == "xi-"     || 
-                pname == "xi0"     ||
-                pname == "omega-"
-              ) {
+         pname == "anti_omega-"  ||
+         pname == "lambda"       || 
+         pname == "sigma-"       ||
+         pname == "sigma0"       || 
+         pname == "sigma+"       || 
+         pname == "xi-"          || 
+         pname == "xi0"          ||
+         pname == "omega-"
+    ) {
       hel = new G4HadronElasticProcess();
       hel->AddDataSet( theComponentGGHadronNucleusData );
       hel->RegisterMe( chips1 );

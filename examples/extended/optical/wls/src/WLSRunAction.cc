@@ -62,8 +62,7 @@ void WLSRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
   if (fAutoSeed) {
      // automatic (time-based) random seeds for each run

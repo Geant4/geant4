@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2301,12 +2305,12 @@ Terminate current event processing.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.020000s Real=0.018469s Sys=0.000000s
+  User=0.010000s Real=0.020700s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Maximum number of tracks in the urgent stack : -1
+ Maximum number of tracks in the urgent stack : 576460752303423487
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

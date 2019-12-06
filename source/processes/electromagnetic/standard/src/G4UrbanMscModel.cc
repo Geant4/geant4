@@ -80,7 +80,6 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   : G4VMscModel(nam)
 {
   masslimite    = 0.6*MeV;
-  lambdalimit   = 1.*mm;
   fr            = 0.02;
   taubig        = 8.0;
   tausmall      = 1.e-16;
@@ -101,8 +100,6 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-
-  facsafety     = 0.6;
 
   Zold          = 0.;
   Zeff          = 1.;
@@ -127,8 +124,8 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   dispAlg96 = true;
 
   rangecut = geombig;
-  drr      = 0.35 ;
-  finalr   = 10.*um ;
+  drr      = 0.35;
+  finalr   = 10.*um;
 
   skindepth = skin*stepmin;
 
@@ -156,12 +153,17 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   // set values of some data members
   SetParticle(p);
   fParticleChange = GetParticleChangeForMSC(p);
+  InitialiseParameters(p);
 
   latDisplasmentbackup = latDisplasment;
   dispAlg96 = (G4EmParameters::Instance()->LateralDisplacementAlg96());
-
-  //G4cout << "### G4UrbanMscModel::Initialise done for " 
-  //	 << p->GetParticleName() << G4endl;
+  /*
+  G4cout << "### G4UrbanMscModel::Initialise done for " 
+ 	 << p->GetParticleName() << " type= " << steppingAlgorithm << G4endl;
+  G4cout << "    RangeFact= " << facrange << " GeomFact= " << facgeom
+	 << " SafetyFact= " << facsafety << " LambdaLim= " << lambdalimit
+	 << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -471,13 +473,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
   // upper limit for the straight line distance the particle can travel
   // for electrons and positrons
-  G4double distance = currentRange;
-  // for muons, hadrons
-  if(mass > masslimite) {
-    distance *= (1.15-9.76e-4*Zeff);
-  } else {
-    distance *= (1.20-Zeff*(1.62e-2-9.22e-5*Zeff));
-  }
+  G4double distance = (mass < masslimite) 
+    ? currentRange*(1.20-Zeff*(1.62e-2-9.22e-5*Zeff))
+    // for muons, hadrons
+    : currentRange*(1.15-9.76e-4*Zeff);
+
   presafety = sp->GetSafety();
   /*  
   G4cout << "G4Urban::StepLimit tPathLength= " 
@@ -591,7 +591,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       // randomise if not 'small' step and step determined by msc
       tPathLength = ((tlimit < tPathLength)&&(smallstep > skin)&& !insideskin) 
-        ? min(tPathLength, Randomizetlimit()) : min(tPathLength, tlimit);
+        ? std::min(tPathLength, Randomizetlimit()) 
+	: std::min(tPathLength, tlimit);
     }
     // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
@@ -639,7 +640,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
      
       // randomise if step determined by msc
       tPathLength = (tlimit < tPathLength) ?
-        min(tPathLength, Randomizetlimit()) : min(tPathLength, tlimit); 
+        std::min(tPathLength, Randomizetlimit()) : tPathLength; 
     }
   // new stepping mode UseSafetyPlus
   else if(steppingAlgorithm == fUseSafetyPlus)
@@ -703,7 +704,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       // randomise if step determined by msc
       tPathLength = (tlimit < tPathLength) ?
-        min(tPathLength, Randomizetlimit()) : min(tPathLength, tlimit); 
+        std::min(tPathLength, Randomizetlimit()) : tPathLength; 
     }
 
   // version similar to 7.1 (needed for some experiments)
@@ -717,7 +718,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         }
       // randomise if step determined by msc
       tPathLength = (tlimit < tPathLength) ?
-        min(tPathLength, Randomizetlimit()) : min(tPathLength, tlimit); 
+        std::min(tPathLength, Randomizetlimit()) : tPathLength; 
     }
   firstStep = false; 
   return ConvertTrueToGeom(tPathLength, currentMinimalStep);
@@ -931,7 +932,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       return SimpleScattering(xmeanth,x2meanth);
     }
     // is step extreme small ?
-    G4bool extremesmallstep = false ;
+    G4bool extremesmallstep = false;
     G4double tsmall = std::min(tlimitmin,lambdalimit);
     G4double theta0 = 0.;
     if(trueStepLength > tsmall) {

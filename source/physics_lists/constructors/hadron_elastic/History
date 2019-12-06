@@ -13,6 +13,17 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-Oct-2019, A. Ribon       (phys-ctor-helastic-V10-05-03)
+- G4HadronElasticPhysics, G4HadronDElasticPhysics : use the Glauber-Gribov
+  elastic cross section for anti-baryons also for anti-neutron;
+  extended to sigma0, anti_sigma0 and xi0.
+- G4HadronHElasticPhysics : use the Glauber-Gribov elastic cross section
+  for anti-hyperons (instead of Chips).
+- README : updated.
+
+06-Aug-2019, V. Ivanchenko  (phys-ctor-helastic-V10-05-02)
+- G4HadronElasticPhysics - use HE elastic model for the full energy range
+
 08-May-2019, V. Ivanchenko  (phys-ctor-helastic-V10-05-01)
 - G4HadronElasticPhysics : use Glauber-Gribov x-section for hyperons
 - G4HadronDElasticPhysics, G4HadronDElasticPhysics : use 

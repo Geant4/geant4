@@ -80,7 +80,7 @@ int main(int argc,char** argv) {
   // Physics List name defined via 2nd argument
   if (argc==3) { physName = argv[2]; }
   else {
-    char* path = getenv("PHYSLIST");
+    char* path = std::getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
   if ( physName == "UrQMD" ) { 

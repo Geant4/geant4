@@ -80,11 +80,11 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     std::vector<tools::wroot::ntuple*>::const_iterator EndConstNtuple() const;
 
     // MT/MPI
-    void SetNtupleMerging(G4bool mergeNtuples, 
-                          G4int nofReducedNtupleFiles = 0,
-                          G4bool rowWise = true,
-                          unsigned int basketSize = fgkDefaultBasketSize);
-    void SetNtupleRowWise(G4bool rowWise);
+    virtual void SetNtupleMerging(G4bool mergeNtuples, 
+                   G4int nofReducedNtupleFiles = 0) override;
+    virtual void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
+    virtual void SetBasketSize(unsigned int basketSize) override;
+    virtual void SetBasketEntries(unsigned int basketEntries) override;
 
   protected:
     // virtual methods from base class
@@ -97,17 +97,13 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     virtual G4bool Reset();
 
   private:
-    // constants
-    static constexpr unsigned int fgkDefaultBasketSize = 32000;
-
     // static data members
     static G4RootAnalysisManager* fgMasterInstance;
-    static G4ThreadLocal G4RootAnalysisManager* fgInstance;    
+    static G4ThreadLocal G4RootAnalysisManager* fgInstance;
 
     // methods
     void SetNtupleMergingMode(G4bool mergeNtuples, 
-                              G4int nofNtupleFiles, 
-                              G4bool rowWise);
+                              G4int nofNtupleFiles);
     void ClearNtupleManagers();
     void CreateNtupleManagers();
     G4int  GetNtupleFileNumber();
@@ -127,6 +123,7 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     // data members 
     G4int   fNofNtupleFiles;
     G4bool  fNtupleRowWise;
+    G4bool  fNtupleRowMode;
     G4NtupleMergeMode      fNtupleMergeMode;
     G4RootNtupleManager*   fNtupleManager; 
     G4RootPNtupleManager*  fSlaveNtupleManager;

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Polyhedra.icc
-//
 // Implementation of inline methods of G4Polyhedra
 // --------------------------------------------------------------------
 
@@ -108,7 +101,7 @@ G4PolyhedraHistorical* G4Polyhedra::GetOriginalParameters() const
 inline
 void G4Polyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
 {
-  if (!pars)
+  if (pars == nullptr)
   {
     G4Exception("G4Polyhedra::SetOriginalParameters()", "GeomSolids0002",
                 FatalException, "NULL pointer to parameters!");

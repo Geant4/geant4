@@ -89,6 +89,15 @@ void message(RunManager* runmanager)
 
 int main(int argc, char** argv)
 {
+    TIMEMORY_INIT(argc, argv);
+
+#if defined(GEANT4_USE_TIMEMORY)
+    // override environment settings
+    tim::settings::json_output() = true;
+    tim::settings::dart_output() = true;
+    tim::settings::dart_type() = "peak_rss";
+    tim::settings::dart_count() = 1;
+#endif
 
     // Detect interactive mode (if no arguments) and define UI session
     //
@@ -137,36 +146,6 @@ int main(int argc, char** argv)
         ui->SessionStart();
         delete ui;
     }
-
-#ifdef GEANT4_USE_TIMEMORY
-    G4cout << "\nOutputting TiMemory results...\n" << G4endl;
-    tim::manager* manager = tim::manager::instance();
-#   if defined(G4MULTITHREADED)
-    // TiMemory by default will report master + workers
-    manager->set_get_num_threads_func(
-                [=]() { return runmanager->GetNumberOfThreads(); });
-#   endif
-    manager->write_report(std::cout, true);
-    std::string fname = argv[0];
-    std::string rfname = fname + ".txt";
-    std::string sfname = fname + ".json";
-    manager->write_report(rfname);
-    manager->write_serialization(sfname);
-    if(std::system(nullptr))
-    {
-        std::stringstream ss;
-        ss << "timemory-plotter -f " << sfname << " -t \"ThreadSafe Scorers\" "
-           << "-o plots -e --timing-fields cpu wall sys";
-        int ret = std::system(ss.str().c_str());
-        if(ret != 0)
-        {
-            G4ExceptionDescription desc;
-            desc << "Error generating plots with command: '"
-                 << ss.str() << "'";
-            G4Exception("ThreadsafeScorers::main", "0001", JustWarning, desc);
-        }
-    }
-#endif
 
     // Job termination
     // Free the store: user actions, physics_list and detector_description are

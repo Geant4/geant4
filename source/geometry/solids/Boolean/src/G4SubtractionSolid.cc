@@ -23,19 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation of methods for the class G4IntersectionSolid
 //
-// History:
-//
-// 14.10.98 V.Grichine: implementation of the first version 
+// 22.07.11 T.Nikitina: added detection of infinite loop in DistanceToIn(p,v)
 // 19.10.98 V.Grichine: new algorithm of DistanceToIn(p,v)
-// 02.08.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
-//                      while -> do-while & surfaceA limitations
-// 13.09.00 V.Grichine: bug fixed in SurfaceNormal(p), p can be inside
-// 22.07.11 T.Nikitina: add detection of Infinite Loop in DistanceToIn(p,v)
-//
+// 14.10.98 V.Grichine: implementation of the first version 
 // --------------------------------------------------------------------
 
 #include "G4SubtractionSolid.hh"
@@ -315,7 +307,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             dist2 = dist+disTmp;
             if (dist == dist2)  { return dist; }   // no progress
             dist = dist2 ;
-            count1++;
+            ++count1;
             if( count1 > 1000 )  // Infinite loop detected
             {
               G4String nameB = fPtrSolidB->GetName();
@@ -371,7 +363,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             dist2 = dist+disTmp;
             if (dist == dist2)  { return dist; }   // no progress
             dist = dist2 ;
-            count2++;
+            ++count2;
             if( count2 > 1000 )  // Infinite loop detected
             {
               G4String nameB = fPtrSolidB->GetName();
@@ -412,7 +404,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 G4double 
 G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p ) const 
 {
-  G4double dist=0.0;
+  G4double dist = 0.0;
 
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -431,11 +423,11 @@ G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p ) const
   if( ( fPtrSolidA->Inside(p) != kOutside) &&   // case 1
       ( fPtrSolidB->Inside(p) != kOutside)    )
   {
-      dist= fPtrSolidB->DistanceToOut(p)  ;
+    dist = fPtrSolidB->DistanceToOut(p);
   }
   else
   {
-      dist= fPtrSolidA->DistanceToIn(p) ; 
+    dist = fPtrSolidA->DistanceToIn(p); 
   }
   
   return dist; 
@@ -545,7 +537,7 @@ G4VSolid* G4SubtractionSolid::Clone() const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// ComputeDimensions
 
 void 
 G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
@@ -556,7 +548,7 @@ G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
 
 /////////////////////////////////////////////////
 //
-//                    
+// DescribeYourselfTo
 
 void 
 G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
@@ -566,7 +558,7 @@ G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 ////////////////////////////////////////////////////
 //
-//
+// CreatePolyhedron
 
 G4Polyhedron* 
 G4SubtractionSolid::CreatePolyhedron () const 
@@ -577,5 +569,5 @@ G4SubtractionSolid::CreatePolyhedron () const
   G4Polyhedron* top = StackPolyhedron(processor, this);
   G4Polyhedron* result = new G4Polyhedron(*top);
   if (processor.execute(*result)) { return result; }
-  else { return 0; }
+  else { return nullptr; }
 }

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -58,8 +57,6 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
-#include "G4LossTableManager.hh"
-#include "G4LossTableBuilder.hh"
 #include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4LineCurrentMagField implementation
+//
+// Author: V.Grichine, 03.02.1997
 // -------------------------------------------------------------------
 
 #include "G4LineCurrentMagField.hh"
@@ -33,19 +36,20 @@ G4LineCurrentMagField::G4LineCurrentMagField(G4double pFieldConstant)
    fFieldConstant = pFieldConstant ;
 }
 
+// -----------------------------------------------------------------
+
 G4Field* G4LineCurrentMagField::Clone() const
 {
-    return new G4LineCurrentMagField( fFieldConstant );
+   return new G4LineCurrentMagField( fFieldConstant );
 }
 
-////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------------
 
 G4LineCurrentMagField::~G4LineCurrentMagField()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////
-
+// -----------------------------------------------------------------
 
 void G4LineCurrentMagField::GetFieldValue( const G4double yTrack[7],
                                                  G4double B[3]      ) const  
@@ -58,7 +62,7 @@ void G4LineCurrentMagField::GetFieldValue( const G4double yTrack[7],
    G4double Br = fFieldConstant/r;
    B[0] = -Br*y/r ;
    B[1] = Br*x/r ;
-   B[2] = 0 ;
+   B[2] = 0.0 ;
 }
 
 // -----------------------------------------------------------------

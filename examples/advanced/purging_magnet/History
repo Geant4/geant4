@@ -8,6 +8,10 @@
                       Category History file
                       ---------------------
 
+20.11.2019 G. Folger     (purmag-V10-05-00)
+- remove using namespace std from header file PurgMagTabulatedField3D.hh
+   and correct follow-on problems.
+
 7.11.2018 - I. Hrivnacova (purmag-V10-04-02)
 - Switch back to csv output format.
 

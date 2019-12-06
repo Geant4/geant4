@@ -23,24 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TwistedBox implementation
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4TwistedBox.cc
-//
-// Author:
-//
-//   10/11/2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author:  10/11/2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
 
 #include "G4TwistedBox.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
+
+//=====================================================================
+//* Constructor -------------------------------------------------------
 
 G4TwistedBox::G4TwistedBox( const G4String& pName,
                                   G4double  pPhiTwist,
@@ -52,30 +45,34 @@ G4TwistedBox::G4TwistedBox( const G4String& pName,
 {
 }
 
+//=====================================================================
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
-//
+
 G4TwistedBox::G4TwistedBox( __void__& a )
   : G4VTwistedFaceted(a)
 {
 }
 
+//=====================================================================
+//* Destructor --------------------------------------------------------
+
 G4TwistedBox::~G4TwistedBox()
 {
 }
 
+//=====================================================================
+//* Copy constructor --------------------------------------------------
 
-// Copy constructor
-//
 G4TwistedBox::G4TwistedBox(const G4TwistedBox& rhs)
   : G4VTwistedFaceted(rhs)
 {
   fpPolyhedron = GetPolyhedron();
 }
 
+//=====================================================================
+//* Assignment operator -----------------------------------------------
 
-// Assignment operator
-//
 G4TwistedBox& G4TwistedBox::operator = (const G4TwistedBox& rhs) 
 {
    // Check assignment to self
@@ -90,6 +87,8 @@ G4TwistedBox& G4TwistedBox::operator = (const G4TwistedBox& rhs)
    return *this;
 }
 
+//=====================================================================
+//* StreamInfo --------------------------------------------------------
 
 std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
 {
@@ -109,7 +108,6 @@ std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
 
   return os;
 }
-
 
 //=====================================================================
 //* GetEntityType -----------------------------------------------------

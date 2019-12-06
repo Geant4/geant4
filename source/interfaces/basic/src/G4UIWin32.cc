@@ -23,15 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// G.Barrand
-
-//#define DEBUG
+// Author: G.Barrand
+// --------------------------------------------------------------------
 
 #ifdef G4UI_BUILD_WIN32_SESSION
 
-// this :
 #include "G4UIWin32.hh"
 
 #include <string.h>
@@ -39,8 +35,6 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <wingdi.h>
-
-#include <strstream>
 
 #include "G4UImanager.hh"
 #include "G4StateManager.hh"

@@ -12,6 +12,7 @@
 #define BASIC_VECTOR3D_H
 
 #include <iosfwd>
+#include <type_traits>
 #include "CLHEP/Vector/ThreeVector.h"
 
 namespace HepGeom {
@@ -50,19 +51,24 @@ namespace HepGeom {
     BasicVector3D(T x1, T y1, T z1) { v_[0] = x1; v_[1] = y1; v_[2] = z1; }
 
     /**
-     * Copy constructor.
-     * Note: BasicVector3D<double> has constructors
-     * from BasicVector3D<double> (provided by compiler) and
-     * from BasicVector3D<float> (defined in this file);
-     * BasicVector3D<float> has only the last one.
-     */
+     * Copy constructor. */
+    BasicVector3D(const BasicVector3D<T> &) = default;
+
+    /**
+     * Constructor for BasicVector3D<double> from BasicVector3D<float>. */
+    template<typename U = T,
+             typename = typename std::enable_if<!std::is_same<U,float>::value >::type>
     BasicVector3D(const BasicVector3D<float> & v) {
       v_[0] = v.x(); v_[1] = v.y(); v_[2] = v.z();
     }
 
     /**
+     * Move constructor. */
+    BasicVector3D(BasicVector3D<T> &&) = default;
+
+    /**
      * Destructor. */
-    virtual ~BasicVector3D() {}
+    virtual ~BasicVector3D() = default;
 
     // -------------------------
     // Interface to "good old C"
@@ -80,7 +86,7 @@ namespace HepGeom {
      * Conversion (cast) to CLHEP::Hep3Vector.
      * This operator is needed only for backward compatibility and
      * in principle should not exit.
-     */ 
+     */
     operator CLHEP::Hep3Vector () const { return CLHEP::Hep3Vector(x(),y(),z()); }
 
     // -----------------------------
@@ -90,6 +96,9 @@ namespace HepGeom {
     /**
      * Assignment. */
     BasicVector3D<T> & operator= (const BasicVector3D<T> &) = default;
+    /**
+     * Move assignment. */
+    BasicVector3D<T> & operator= (BasicVector3D<T> &&) = default;
     /**
      * Addition. */
     BasicVector3D<T> & operator+=(const BasicVector3D<T> & v) {
@@ -121,36 +130,36 @@ namespace HepGeom {
     /**
      * Gets components by index. */
     T operator[](int i) const { return v_[i]; }
-    
+
     /**
      * Sets components by index. */
     T & operator()(int i) { return v_[i]; }
     /**
      * Sets components by index. */
     T & operator[](int i) { return v_[i]; }
-    
+
     // ------------------------------------
     // Cartesian coordinate system: x, y, z
     // ------------------------------------
 
     /**
-     * Gets x-component in cartesian coordinate system. */ 
+     * Gets x-component in cartesian coordinate system. */
     T x() const { return v_[0]; }
     /**
-     * Gets y-component in cartesian coordinate system. */ 
+     * Gets y-component in cartesian coordinate system. */
     T y() const { return v_[1]; }
     /**
-     * Gets z-component in cartesian coordinate system. */ 
+     * Gets z-component in cartesian coordinate system. */
     T z() const { return v_[2]; }
 
     /**
-     * Sets x-component in cartesian coordinate system. */ 
+     * Sets x-component in cartesian coordinate system. */
     void setX(T a) { v_[0] = a; }
     /**
-     * Sets y-component in cartesian coordinate system. */ 
+     * Sets y-component in cartesian coordinate system. */
     void setY(T a) { v_[1] = a; }
     /**
-     * Sets z-component in cartesian coordinate system. */ 
+     * Sets z-component in cartesian coordinate system. */
     void setZ(T a) { v_[2] = a; }
 
     /**
@@ -177,7 +186,7 @@ namespace HepGeom {
       T factor = perp();
       if (factor > 0) {
 	factor = rh/factor; v_[0] *= factor; v_[1] *= factor;
-      } 
+      }
     }
 
     // ------------------------------------------
@@ -210,10 +219,10 @@ namespace HepGeom {
     /**
      * Gets r-component in spherical coordinate system */
     T getR() const { return r(); }
-    /** 
+    /**
      * Gets phi-component in spherical coordinate system */
     T getPhi() const { return phi(); }
-    /** 
+    /**
      * Gets theta-component in spherical coordinate system */
     T getTheta() const { return theta(); }
 
@@ -223,7 +232,7 @@ namespace HepGeom {
       T factor = mag();
       if (factor > 0) {
 	factor = ma/factor; v_[0] *= factor; v_[1] *= factor; v_[2] *= factor;
-      } 
+      }
     }
     /**
      * Sets r-component in spherical coordinate system. */
@@ -297,7 +306,7 @@ namespace HepGeom {
     // ---------------
 
     /**
-     * Returns unit vector parallel to this. */ 
+     * Returns unit vector parallel to this. */
     BasicVector3D<T> unit() const {
       T len = mag();
       return (len > 0) ?
@@ -305,7 +314,7 @@ namespace HepGeom {
     }
 
     /**
-     * Returns orthogonal vector. */ 
+     * Returns orthogonal vector. */
     BasicVector3D<T> orthogonal() const {
       T dx = x() < 0 ? -x() : x();
       T dy = y() < 0 ? -y() : y();
@@ -338,9 +347,9 @@ namespace HepGeom {
   };
 
   /*************************************************************************
-   *                                                                       *  
+   *                                                                       *
    * Non-member functions for BasicVector3D<float>                         *
-   *                                                                       *  
+   *                                                                       *
    *************************************************************************/
 
   /**
@@ -426,9 +435,9 @@ namespace HepGeom {
   operator/(const BasicVector3D<float> & v, double a) {
     return BasicVector3D<float>(v.x()/static_cast<float>(a), v.y()/static_cast<float>(a), v.z()/static_cast<float>(a));
   }
-  
+
   /**
-   * Comparison of two vectors for equality. 
+   * Comparison of two vectors for equality.
    * @relates BasicVector3D
    */
   inline bool
@@ -437,7 +446,7 @@ namespace HepGeom {
   }
 
   /**
-   * Comparison of two vectors for inequality. 
+   * Comparison of two vectors for inequality.
    * @relates BasicVector3D
    */
   inline bool
@@ -446,9 +455,9 @@ namespace HepGeom {
   }
 
   /*************************************************************************
-   *                                                                       *  
+   *                                                                       *
    * Non-member functions for BasicVector3D<double>                        *
-   *                                                                       *  
+   *                                                                       *
    *************************************************************************/
 
   /**
@@ -534,9 +543,9 @@ namespace HepGeom {
   operator/(const BasicVector3D<double> & v, double a) {
     return BasicVector3D<double>(v.x()/a, v.y()/a, v.z()/a);
   }
-  
+
   /**
-   * Comparison of two vectors for equality. 
+   * Comparison of two vectors for equality.
    * @relates BasicVector3D
    */
   inline bool
@@ -546,7 +555,7 @@ namespace HepGeom {
   }
 
   /**
-   * Comparison of two vectors for inequality. 
+   * Comparison of two vectors for inequality.
    * @relates BasicVector3D
    */
   inline bool

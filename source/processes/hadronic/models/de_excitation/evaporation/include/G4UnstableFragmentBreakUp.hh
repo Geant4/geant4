@@ -66,19 +66,22 @@ public:
 
   virtual G4double GetEmissionProbability(G4Fragment* fragment) final;
 
+  inline void SetVerbose(G4int val) { fVerbose = val; }
+
 private:
 
-  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right) = delete;
+  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right);
   const G4UnstableFragmentBreakUp & operator = 
-  (const G4UnstableFragmentBreakUp & right) = delete;
-  G4bool operator == (const G4UnstableFragmentBreakUp & right) const = delete;
-  G4bool operator != (const G4UnstableFragmentBreakUp & right) const = delete;
+  (const G4UnstableFragmentBreakUp & right);
+  G4bool operator == (const G4UnstableFragmentBreakUp & right) const;
+  G4bool operator != (const G4UnstableFragmentBreakUp & right) const;
 
   static const G4int Zfr[6];
   static const G4int Afr[6];
   G4double masses[6];
 
   G4NuclearLevelData* fLevelData;
+  G4int fVerbose;
 };
 
 #endif

@@ -54,8 +54,6 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
@@ -87,10 +85,10 @@ void G4HadronPhysicsQGSP_BIC_HP::CreateModels()
   G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
   G4bool quasiElasticQGS= true;    // For QGS, it must use it.
 
-  const G4double maxFTFP = 25.0*GeV;
-  const G4double minFTFP =  9.5*GeV;
-  const G4double maxBIC  =  9.9*GeV;
-  const G4double maxBERT =  5.0*GeV;
+  const G4double maxFTFP = G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF();
+  const G4double minFTFP = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  const G4double maxBIC  = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  const G4double maxBERT = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   const G4double maxHP   = 19.9*MeV;
 
   tpdata->theNeutrons=new G4NeutronBuilder( true ); // Fission on
@@ -171,14 +169,6 @@ void G4HadronPhysicsQGSP_BIC_HP::ConstructProcess()
   tpdata->theNeutrons->Build();
   tpdata->thePro->Build();
   tpdata->thePiK->Build();
-
-  // --- Kaons ---
-  G4VCrossSectionDataSet * kaonxs = 
-    new G4CrossSectionInelastic(new G4ComponentGGHadronNucleusXsc());
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
 
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();

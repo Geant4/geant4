@@ -42,7 +42,7 @@ endif()
 
 # - Needed CMake modules
 include(CMakeParseArguments)
-include(G4WindowsDLLSupport)
+include(G4ClangFormat)
 
 #-----------------------------------------------------------------------
 #.rst:
@@ -103,10 +103,13 @@ include(G4WindowsDLLSupport)
 # using include_directories
 #
 macro(geant4_define_module)
+    set(multiargs
+        HEADERS SOURCES GRANULAR_DEPENDENCIES GLOBAL_DEPENDENCIES LINK_LIBRARIES
+        HEADERS_EXCLUDE_FORMAT SOURCES_EXCLUDE_FORMAT)
   cmake_parse_arguments(G4DEFMOD
     ""
     "NAME"
-    "HEADERS;SOURCES;GRANULAR_DEPENDENCIES;GLOBAL_DEPENDENCIES;LINK_LIBRARIES"
+    "${multiargs}"
     ${ARGN}
     )
 
@@ -134,6 +137,10 @@ macro(geant4_define_module)
     endif()
   endforeach()
 
+  exclude_from_format(
+      HEADERS ${G4DEFMOD_HEADERS_EXCLUDE_FORMAT}
+      SOURCES ${G4DEFMOD_SOURCES_EXCLUDE_FORMAT})
+
   foreach(_LIB ${G4DEFMOD_GRANULAR_DEPENDENCIES})
     list(APPEND ${G4MODULENAME}_GRANULAR_DEPENDENCIES ${_LIB})
   endforeach()
@@ -145,8 +152,6 @@ macro(geant4_define_module)
   foreach(_LIB ${G4DEFMOD_LINK_LIBRARIES})
     list(APPEND ${G4MODULENAME}_LINK_LIBRARIES ${_LIB})
   endforeach()
-
-  include_directories(${${G4MODULENAME}_INCDIR})
 endmacro()
 
 
@@ -214,25 +219,6 @@ endmacro()
 
 
 #-----------------------------------------------------------------------
-# function geant4_compile_definitions_config(<target>)
-#          Set a custom compile definition for a Geant4 target on a
-#          per configuration basis:
-#            For mode <CONFIG>, define GEANT4_DEVELOPER_<CONFIG>
-#
-function(geant4_compile_definitions_config _target)
-  if(NOT TARGET ${_target})
-    message(FATAL_ERROR "geant4_compile_definitions_config passed target '${_target}' which is not a valid CMake target")
-  endif()
-
-  # CMake 3 prefers $<CONFIG> in generator expressions
-  set(__default_config_generator "\$<CONFIG>")
-
-  set_property(TARGET ${_target}
-    APPEND PROPERTY COMPILE_DEFINITIONS
-      GEANT4_DEVELOPER_${__default_config_generator}
-    )
-endfunction()
-
 
 #-----------------------------------------------------------------------
 # - GEANT4_LIBRARY_TARGET
@@ -245,26 +231,26 @@ macro(geant4_library_target)
     ${ARGN}
     )
 
+  geant4_format_target(NAME ${G4LIBTARGET_NAME}-format SOURCES ${G4LIBTARGET_SOURCES})
+
   if(BUILD_SHARED_LIBS)
     # Add the shared library target and link its dependencies
-    # WIN32/CMake<3.4 workaround
-    if(WIN32 AND (CMAKE_VERSION VERSION_LESS 3.4))
-      __geant4_add_dll_old(${ARGV})
-    else()
-      # - Common shared lib commands
-      add_library(${G4LIBTARGET_NAME} SHARED ${G4LIBTARGET_SOURCES})
-      geant4_compile_definitions_config(${G4LIBTARGET_NAME})
-      target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
-      target_link_libraries(${G4LIBTARGET_NAME}
-        ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
-        ${G4LIBTARGET_LINK_LIBRARIES})
-      # DLL support, portable to all platforms
-      # G4LIB_BUILD_DLL is public as despite the name it indicates the shared/archive mode
-      # and clients must apply it when linking to the shared libs. The global
-      # category handles the exact import/export statements
-      target_compile_definitions(${G4LIBTARGET_NAME} PUBLIC G4LIB_BUILD_DLL)
-      set_target_properties(${G4LIBTARGET_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    endif()
+    # - Common shared lib commands
+    add_library(${G4LIBTARGET_NAME} SHARED ${G4LIBTARGET_SOURCES})
+    target_compile_definitions(${G4LIBTARGET_NAME} PRIVATE GEANT4_DEVELOPER_$<CONFIG>)
+    target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
+    target_link_libraries(${G4LIBTARGET_NAME}
+      ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
+      ${G4LIBTARGET_LINK_LIBRARIES})
+    # DLL support, portable to all platforms
+    # G4LIB_BUILD_DLL is public as despite the name it indicates the shared/archive mode
+    # and clients must apply it when linking to the shared libs. The global
+    # category handles the exact import/export statements
+    target_compile_definitions(${G4LIBTARGET_NAME} PUBLIC G4LIB_BUILD_DLL)
+    set_target_properties(${G4LIBTARGET_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+    # Set the include directory usage requirements
+    target_include_directories(${G4LIBTARGET_NAME} PUBLIC "$<BUILD_INTERFACE:${${G4LIBTARGET_NAME}_BUILDTREE_INCLUDES}>")
 
     # This property is set to prevent concurrent builds of static and
     # shared libs removing each others files.
@@ -283,6 +269,9 @@ macro(geant4_library_target)
         )
     endif()
 
+    # Alias the library for transparent internal use in build or link contexts
+    add_library(Geant4::${G4LIBTARGET_NAME} ALIAS ${G4LIBTARGET_NAME})
+
     # Install the library - note the use of RUNTIME, LIBRARY and ARCHIVE
     # this helps with later DLL builds.
     # Export to standard depends file for later install
@@ -290,12 +279,8 @@ macro(geant4_library_target)
       EXPORT Geant4LibraryDepends
       RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
       LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Runtime
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development)
-
-    # Append the library target to a global property so that build tree
-    # export of library dependencies can pick up all targets
-    set_property(GLOBAL APPEND
-      PROPERTY GEANT4_EXPORTED_TARGETS ${G4LIBTARGET_NAME})
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
+      INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
   endif()
 
   #
@@ -306,8 +291,9 @@ macro(geant4_library_target)
     # -static targets (We should strictly do this for the external
     # libraries as well if we want a pure static build).
     add_library(${G4LIBTARGET_NAME}-static STATIC ${G4LIBTARGET_SOURCES})
-    geant4_compile_definitions_config(${G4LIBTARGET_NAME}-static)
+    target_compile_definitions(${G4LIBTARGET_NAME}-static PRIVATE GEANT4_DEVELOPER_$<CONFIG>)
     target_compile_features(${G4LIBTARGET_NAME}-static PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
+    target_include_directories(${G4LIBTARGET_NAME}-static PUBLIC "$<BUILD_INTERFACE:${${G4LIBTARGET_NAME}_BUILDTREE_INCLUDES}>")
 
     set(G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC )
     foreach(_tgt ${G4LIBTARGET_GEANT4_LINK_LIBRARIES})
@@ -324,7 +310,7 @@ macro(geant4_library_target)
       "${G4LIBTARGET_LINK_LIBRARIES}"
       )
 
-    target_link_libraries(${G4LIBTARGET_NAME}-static
+    target_link_libraries(${G4LIBTARGET_NAME}-static PUBLIC
       ${G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC}
       ${G4LIBTARGET_LINK_LIBRARIES_STATIC})
 
@@ -339,14 +325,15 @@ macro(geant4_library_target)
     set_target_properties(${G4LIBTARGET_NAME}-static
       PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
+    # Alias the library for transparent internal use in build or link contexts
+    add_library(Geant4::${G4LIBTARGET_NAME}-static ALIAS ${G4LIBTARGET_NAME}-static)
+
     install(TARGETS ${G4LIBTARGET_NAME}-static
       EXPORT Geant4LibraryDepends
       RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime
       LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Runtime
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development)
-
-    set_property(GLOBAL APPEND
-      PROPERTY GEANT4_EXPORTED_TARGETS ${G4LIBTARGET_NAME}-static)
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
+      INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
   endif()
 endmacro()
 
@@ -373,7 +360,7 @@ macro(geant4_header_module_target)
   # Store the include path of the component so that the build tree
   # config file can pick up all needed header paths
   set_property(GLOBAL APPEND
-    PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS ${${G4MODULENAME}_INCDIR})
+    PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS "${${G4MODULENAME}_INCDIR}")
 endmacro()
 
 #-----------------------------------------------------------------------
@@ -388,26 +375,7 @@ macro(geant4_granular_library_target)
     ${ARGN}
     )
 
-  # Granular lib only has one component, but we must pick out
-  # the granular dependencies
-  include(${G4GRANLIB_COMPONENT})
-
-  # Add the library target, using variables set by the inclusion of
-  # the component file
-  geant4_library_target(NAME ${G4MODULENAME}
-    SOURCES ${${G4MODULENAME}_SOURCES} ${${G4MODULENAME}_HEADERS}
-    GEANT4_LINK_LIBRARIES ${${G4MODULENAME}_GRANULAR_DEPENDENCIES}
-    LINK_LIBRARIES ${${G4MODULENAME}_LINK_LIBRARIES})
-
-  # Header install?
-  install(FILES ${${G4MODULENAME}_HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-    COMPONENT Development)
-
-  # Store the include path of the component so that the build tree
-  # config file can pick up all needed header paths
-  set_property(GLOBAL APPEND
-    PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS ${${G4MODULENAME}_INCDIR})
+  message(FATAL_ERROR "geant4_granular_library_target is no longer supported")
 endmacro()
 
 #-----------------------------------------------------------------------
@@ -443,11 +411,8 @@ macro(geant4_global_library_target)
     list(APPEND ${G4GLOBLIB_NAME}_BUILDTREE_INCLUDES ${${G4MODULENAME}_INCDIR})
   endforeach()
 
-  # Reset include dirs, setting from module direct dirs only
-  # But need to pass this forward to the library target so that
-  # it can use this list in target_include_directories...
-  #set_directory_properties(PROPERTIES INCLUDE_DIRECTORIES "")
-  #include_directories(${${G4GLOBLIB_NAME}_BUILDTREE_INCLUDES})
+  # Reset directory scope include dirs so we enforce usage requirements
+  set_directory_properties(PROPERTIES INCLUDE_DIRECTORIES "")
 
   # Filter out duplicates/self in GLOBAL_DEPENDENCIES and LINK_LIBRARIES
   if(${G4GLOBLIB_NAME}_GLOBAL_DEPENDENCIES)
@@ -473,8 +438,9 @@ macro(geant4_global_library_target)
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
     COMPONENT Development)
 
-  # Store the include path of the component so that the build tree
-  # config file can pick up all needed header paths
+  # Store the include path of the component. Only used so that
+  # other tools like GNUmake/pkg-config can be configured for the
+  # build tree
   set_property(GLOBAL APPEND
     PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS ${${G4GLOBLIB_NAME}_BUILDTREE_INCLUDES})
 endmacro()

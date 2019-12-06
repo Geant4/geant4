@@ -18,13 +18,11 @@ class rgba : public node {
 public:
   sf_vec<colorf,float> color;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::rgba)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(color)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(color)
+    );
     return s_v;
   }
 private:

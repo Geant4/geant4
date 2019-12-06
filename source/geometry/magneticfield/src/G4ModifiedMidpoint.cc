@@ -22,14 +22,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ModifiedMidpoint implementation
 //
-//
-//    G4ModifiedMidpoint implementation
-//    Based on modified_midpoint.hpp from boost
-//
-//    Author: Dmitry Sorokin - GSoC 2016
-//
-///////////////////////////////////////////////////////////////////////////////
+// Author: Dmitry Sorokin, Google Summer of Code 2016
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 
 #include "G4ModifiedMidpoint.hh"
 #include "G4FieldUtils.hh"
@@ -62,6 +59,7 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydyIn[],
   const G4double h2 = 2 * h;
 
   // y1 = yIn + h * dydx
+  //
   for (G4int i = 0; i < fnvar; ++i)
   {
     y1[i] = yIn[i] + h * dydyIn[i];
@@ -73,6 +71,7 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydyIn[],
 
   // general step
   // yTemp = y1; y1 = y0 + h2 * dydx; y0 = yTemp
+  //
   for (G4int i = 1; i < fsteps; ++i)
   {
     copy(yTemp, y1);
@@ -87,6 +86,7 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydyIn[],
 
   // last step
   // yOut = 0.5 * (y0 + y1 + h * dydx)
+  //
   for (G4int i = 0; i < fnvar; ++i)
   {
     yOut[i] = 0.5 * (y0[i] + y1[i] + h * dydx[i]);
@@ -116,6 +116,7 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydxIn[],
 
   // result of first step already gives approximation
   // at the center of the interval
+  //
   if(fsteps == 2)
   {
     copy(yMid, y1);
@@ -125,6 +126,7 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydxIn[],
 
   // general step
   // yTemp = y1; y1 = y0 + h2 * dydx; y0 = yTemp
+  //
   for (G4int i = 1; i < fsteps; ++i)
   {
     copy(yTemp, y1);
@@ -145,6 +147,7 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydxIn[],
 
   // last step
   // yOut = 0.5 * (y0 + y1 + h * dydx)
+  //
   for (G4int i = 0; i < fnvar; ++i)
   {
     yOut[i] = 0.5 * (y0[i] + y1[i] + h * derivs[fsteps-1][i]);

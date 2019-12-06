@@ -61,13 +61,15 @@ class G4RootFileManager : public G4VFileManager
     // Set methods
     void  SetNofNtupleFiles(G4int nofFiles);
     void  SetBasketSize(unsigned int basketSize);
+    void  SetBasketEntries(unsigned int basketEntries);
 
     // Get methods
     tools::wroot::directory* GetHistoDirectory() const;
     tools::wroot::directory* GetNtupleDirectory() const;
     std::shared_ptr<tools::wroot::file> GetNtupleFile(G4int index) const;
     tools::wroot::directory* GetMainNtupleDirectory(G4int index) const;
-    unsigned int GetBasketSize() const; 
+    unsigned int GetBasketSize() const;
+    unsigned int GetBasketEntries() const;
 
   private:
     // methods
@@ -85,6 +87,7 @@ class G4RootFileManager : public G4VFileManager
     std::vector<std::shared_ptr<tools::wroot::file> >  fNtupleFiles;
     std::vector<tools::wroot::directory*>  fMainNtupleDirectories;
     unsigned int fBasketSize;
+    unsigned int fBasketEntries;
 };
 
 // inline functions
@@ -95,6 +98,9 @@ inline void  G4RootFileManager::SetNofNtupleFiles(G4int nofFiles)
 inline void  G4RootFileManager::SetBasketSize(unsigned int basketSize)  
 { fBasketSize = basketSize; }
 
+inline void  G4RootFileManager::SetBasketEntries(unsigned int basketEntries)  
+{ fBasketEntries = basketEntries; }
+
 inline tools::wroot::directory* G4RootFileManager::GetHistoDirectory() const
 { return fHistoDirectory; }
 
@@ -103,6 +109,9 @@ inline tools::wroot::directory* G4RootFileManager::GetNtupleDirectory() const
 
 inline unsigned int G4RootFileManager::GetBasketSize() const
 { return fBasketSize; }
+
+inline unsigned int G4RootFileManager::GetBasketEntries() const
+{ return fBasketEntries; }
 
 #endif
 

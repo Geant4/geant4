@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4ImplicitEuler
+// G4ImplicitEuler
 //
 // Class description:
 //
@@ -38,9 +35,8 @@
 // Takes the output and its derivative. Adds the mean of both
 // derivatives to form the final output.
 
-// W. Wander <wwc@mit.edu> 12/09/97
+// Author: W. Wander <wwc@mit.edu>, 12.09.1997
 // -------------------------------------------------------------------
-
 #ifndef G4IMPLICITEULER_HH
 #define G4IMPLICITEULER_HH
 
@@ -51,23 +47,21 @@ class G4ImplicitEuler : public G4MagErrorStepper
 
   public:  // with description
 
-    G4ImplicitEuler(G4EquationOfMotion *EqRhs, G4int numberOfVariables = 6) ;
+    G4ImplicitEuler(G4EquationOfMotion* EqRhs, G4int numberOfVariables = 6);
    ~G4ImplicitEuler();
 
-    void  DumbStepper(  const G4double y[] ,
-                        const G4double dydx[] ,
-                              G4double h ,
-                              G4double yout[] ) ;
+    void  DumbStepper( const G4double y[] ,
+                       const G4double dydx[] ,
+                             G4double h ,
+                             G4double yout[] );
 
-  public:  // without description
-
-    G4int IntegratorOrder() const { return 2 ; } ;
+    inline G4int IntegratorOrder() const { return 2; }
 
   private:
 
-    G4double*  dydxTemp;
-    G4double*  yTemp;    
+    G4double* dydxTemp = nullptr;
+    G4double* yTemp = nullptr;    
       // Temporaries, created to avoid new/delete on every call
 };
 
-#endif /* G4IMPLICITEULER_HH */
+#endif

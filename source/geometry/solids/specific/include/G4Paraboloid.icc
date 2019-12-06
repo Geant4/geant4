@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Paraboloid.icc
-//
 // Implementation of inline methods of G4Paraboloid
 // --------------------------------------------------------------------
 
@@ -124,7 +116,7 @@ void G4Paraboloid::SetRadiusMinusZ(G4double pR1)
 inline
 G4double G4Paraboloid::GetCubicVolume()
 {
-  if(fCubicVolume != 0 ) {;}
+  if(fCubicVolume != 0. ) {;}
   else
   {
     fCubicVolume = CLHEP::twopi * k2 * dz;

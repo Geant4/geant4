@@ -32,13 +32,20 @@
 // This is a modified version of the FTFP_BERT hadron physics for ATLAS.
 // The hadron physics of FTFP_BERT_ATL has the transition between Bertini
 // (BERT) intra-nuclear cascade model and Fritiof (FTF) string model in the
-// energy region [9, 12] GeV (instead of [4, 5] GeV as in FTFP_BERT).
+// energy region [9, 12] GeV.
 //---------------------------------------------------------------------------
 //
 #include <iomanip>   
 
 #include "G4HadronPhysicsFTFP_BERT_ATL.hh"
 
+#include "G4NeutronBuilder.hh"
+#include "G4BertiniNeutronBuilder.hh"
+#include "G4FTFPNeutronBuilder.hh"
+#include "G4ProtonBuilder.hh"
+#include "G4BertiniProtonBuilder.hh"
+#include "G4FTFPNeutronBuilder.hh"
+#include "G4FTFPProtonBuilder.hh"
 #include "G4PiKBuilder.hh"
 #include "G4FTFPPiKBuilder.hh"
 #include "G4BertiniPiKBuilder.hh"
@@ -71,8 +78,39 @@ G4HadronPhysicsFTFP_BERT_ATL::G4HadronPhysicsFTFP_BERT_ATL(const G4String& name,
 
 void G4HadronPhysicsFTFP_BERT_ATL::DumpBanner()
 {
-  G4cout << " FTFP_BERT_ATL : new threshold between BERT and FTFP"
+  G4cout << " FTFP_BERT_ATL : threshold between BERT and FTFP"
          << " is over the interval " << minFTFP_pion/GeV << " to "<< maxBERT_pion/GeV << " GeV." << G4endl;
+}
+
+void G4HadronPhysicsFTFP_BERT_ATL::Neutron()
+{
+  auto neu = new G4NeutronBuilder;
+  AddBuilder(neu);
+  auto ftfpn = new G4FTFPNeutronBuilder(QuasiElastic);
+  AddBuilder(ftfpn);
+  neu->RegisterMe(ftfpn);
+  ftfpn->SetMinEnergy(minFTFP_neutron);
+  auto bertn = new G4BertiniNeutronBuilder;
+  AddBuilder(bertn);
+  neu->RegisterMe(bertn);
+  bertn->SetMinEnergy(0.0);
+  bertn->SetMaxEnergy(maxBERT_neutron);
+  neu->Build();
+}
+
+void G4HadronPhysicsFTFP_BERT_ATL::Proton()
+{
+  auto pro = new G4ProtonBuilder;
+  AddBuilder(pro);
+  auto ftfpp = new G4FTFPProtonBuilder(QuasiElastic);
+  AddBuilder(ftfpp);
+  pro->RegisterMe(ftfpp);
+  ftfpp->SetMinEnergy(minFTFP_proton);
+  auto bertp = new G4BertiniProtonBuilder;
+  AddBuilder(bertp);
+  pro->RegisterMe(bertp);
+  bertp->SetMaxEnergy(maxBERT_proton);
+  pro->Build();
 }
 
 void G4HadronPhysicsFTFP_BERT_ATL::Pion()

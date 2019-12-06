@@ -26,7 +26,7 @@ endif
 ########################### Qt ###############################
 # Should be before X11.
 ifdef INC_QT
-  CPPFLAGS += $(QTFLAGS)
+  CPPFLAGS += -DQT_NO_DEPRECATED_WARNINGS $(QTFLAGS)
 endif
 ifdef LOAD_QT
   INTYLIBS += $(QTLIBS)

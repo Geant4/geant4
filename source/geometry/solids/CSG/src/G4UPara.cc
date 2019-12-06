@@ -22,11 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // Implementation for G4UPara wrapper class
+//
+// 13.09.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 
 #include "G4Para.hh"

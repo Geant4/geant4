@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4EllipticalTube.icc
-//
 // Implementation of inline methods of G4EllipticalTube
 // --------------------------------------------------------------------
 

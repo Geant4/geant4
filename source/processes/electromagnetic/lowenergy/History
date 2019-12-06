@@ -16,8 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06.11.2019 V. Ivanchenko, emlowen-V10-05-02
+- make transition getenv -> std::getenv in all sub-library
+
+08.10.2019 V. Ivanchenko, emlowen-V10-05-01
+- G4LivermorePhotoElectricModel - use std::getenv, slightly speed-up
+- G4IonParametrisedLossModel - use std::getenv, allowed ICRU90 option
+
 05.02.2019 S. Incerti, emlowen-V10-05-00
-- Fix Bugzill 2089
+- Fix Bugzilla 2089
 
 22.10.2018 F. Longo, emlowen-V10-04-12
 - Fix Bugzilla 2089

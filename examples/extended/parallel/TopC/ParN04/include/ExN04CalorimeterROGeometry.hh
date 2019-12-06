@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04CalorimeterROGeometry.hh
+/// \file ExN04CalorimeterROGeometry.hh
 /// \brief Definition of the ExN04CalorimeterROGeometry class
 //
 #ifndef ExN04CalorimeterROGeometry_h

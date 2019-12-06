@@ -16,7 +16,6 @@
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${TiMemory_INCLUDE_DIRS})
 
 # List internal includes needed.
 
@@ -170,7 +169,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES
         ${CLHEP_LIBRARIES}
-        ${TiMemory_LIBRARIES}
+        ${timemory_LIBRARIES}
 )
 
 # List any source specific properties here

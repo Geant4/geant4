@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4SmartVoxelNode implementation
 //
-//
-// Class G4SmartVoxelNode
-//
-// Implementation
-//
+// 18.04.01, G.Cosmo - Migrated to STL vector
+// 12.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 
 #include "G4SmartVoxelNode.hh"
@@ -46,12 +44,12 @@ G4SmartVoxelNode::~G4SmartVoxelNode()
 // Node contents were entered in the same order
 G4bool G4SmartVoxelNode::operator == (const G4SmartVoxelNode& v) const
 {
-  G4int maxNode=GetNoContained();
-  if (maxNode==v.GetNoContained())
+  size_t maxNode = GetNoContained();
+  if (maxNode == v.GetNoContained())
   {
-    for (G4int node=0;node<maxNode;node++)
+    for (size_t node=0; node<maxNode; ++node)
     {
-      if (GetVolume(node)!=v.GetVolume(node))
+      if (GetVolume(node) != v.GetVolume(node))
       {
         return false;
       }

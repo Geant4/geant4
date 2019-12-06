@@ -64,6 +64,8 @@ G4P1Messenger::G4P1Messenger(G4VAnalysisManager* manager)
   fSetP1TitleCmd = fHelper->CreateSetTitleCommand(this);
   fSetP1XAxisCmd = fHelper->CreateSetAxisCommand("x", this);
   fSetP1YAxisCmd = fHelper->CreateSetAxisCommand("y", this);
+  fSetP1XAxisLogCmd = fHelper->CreateSetAxisLogCommand("x", this);
+  fSetP1YAxisLogCmd = fHelper->CreateSetAxisLogCommand("y", this);
 }
 
 //_____________________________________________________________________________
@@ -243,7 +245,7 @@ void G4P1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
   std::vector<G4String> parameters;
   G4Analysis::Tokenize(newValues, parameters);
   // check consistency
-  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+  if ( parameters.size() != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
     fHelper->WarnAboutParameters(command, parameters.size());
     return;
@@ -335,4 +337,16 @@ void G4P1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     auto yaxis = parameters[counter++];
     fManager->SetP1YAxisTitle(id, yaxis);     
   }
-}  
+  else if ( command == fSetP1XAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto xaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetP1XAxisIsLog(id, xaxisLog);
+  }
+  else if ( command == fSetP1YAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto yaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetP1YAxisIsLog(id, yaxisLog);
+  }
+}

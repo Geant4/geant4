@@ -370,7 +370,7 @@ void G4OpticalSurface::ReadLUTFile()
 
   if (readLUTFileName == " ") return;
 
-  char* path = getenv("G4REALSURFACEDATA");
+  char* path = std::getenv("G4REALSURFACEDATA");
   if (!path) {
      G4String excep =
         "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
@@ -435,7 +435,7 @@ void G4OpticalSurface::ReadLUTDAVISFile()
 
   if (readLUTDAVISFileName == " ") return;
 
-  char* path = getenv("G4REALSURFACEDATA");
+  char* path = std::getenv("G4REALSURFACEDATA");
   if (!path) {
      G4String excep =
         "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
@@ -509,7 +509,7 @@ void G4OpticalSurface::ReadReflectivityLUTFile()
 
   if (readReflectivityLUTFileName == " ") return;
 
-  char* path = getenv("G4REALSURFACEDATA");
+  char* path = std::getenv("G4REALSURFACEDATA");
   if (!path) {
      G4String excep =
         "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
@@ -551,7 +551,7 @@ void G4OpticalSurface::ReadReflectivityLUTFile()
 
 void G4OpticalSurface::ReadDichroicFile()
 {
-  const char* datadir = getenv("G4DICHROICDATA");
+  const char* datadir = std::getenv("G4DICHROICDATA");
 
   if(!datadir) {
     G4Exception("G4OpticalSurface::ReadDichroicFile()","mat313",

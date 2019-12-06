@@ -204,7 +204,7 @@ void PurgMagDetectorConstruction::DefineMaterials()
   GapMaterial = Fe;
 
 
-  G4cout << "end material"<< endl;  
+  G4cout << "end material"<< G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -432,7 +432,7 @@ void PurgMagDetectorConstruction::ConstructSDandField()
       G4FieldManager* pFieldMgr = 
 	G4TransportationManager::GetTransportationManager()->GetFieldManager();
            
-      G4cout<< "DeltaStep "<<pFieldMgr->GetDeltaOneStep()/mm <<"mm" <<endl;
+      G4cout<< "DeltaStep "<<pFieldMgr->GetDeltaOneStep()/mm <<"mm" <<G4endl;
       //G4ChordFinder *pChordFinder = new G4ChordFinder(PurgMagField);
 
       pFieldMgr->SetDetectorField(fField.Get());

@@ -35,14 +35,10 @@
 # `GEANT4_USE_SYSTEM_CLHEP_GRANULAR` is available to configure
 # use of the modular CLHEP libraries.
 #
+set(_default_use_system_clhep OFF)
 if(CLHEP_ROOT_DIR)
   set(_default_use_system_clhep ON)
-  # CLHEP_ROOT_DIR is non-standard for Config mode, so attempt temporary translation
-  # into CMAKE_PREFIX_PATH. Could also add as PATHS to find_package,
-  # but CMAKE_PREFIX_PATH has higher search priority.
   list(INSERT CMAKE_PREFIX_PATH 0 "${CLHEP_ROOT_DIR}")
-else()
-  set(_default_use_system_clhep OFF)
 endif()
 
 option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" ${_default_use_system_clhep})
@@ -65,16 +61,9 @@ if(GEANT4_USE_SYSTEM_CLHEP)
     set(__system_clhep_mode " (granular)")
   endif()
 
-  # Find CLHEP using config-mode (i.e. CLHEPConfig)
-  # Note that the imported targets have different properties
-  # depending on version:
-  # >= 2.3.3.0 Imported targets have INTERFACE_INCLUDE_DIRECTORIES
-  # >= 2.3.1.0 Imported targets are namespaced, all components available
-  # < 2.3.1.0 Only CLHEP/CLHEPS available as imported targets
-  #
-  # By supplying components, CLHEP_LIBRARIES is populated with the
-  # appropriate set of imported targets.
   find_package(CLHEP 2.3.3.0 REQUIRED ${__g4_clhep_components} CONFIG)
+
+  geant4_save_package_variables(CLHEP CLHEP_DIR)
 else()
   set(CLHEP_FOUND TRUE)
   # TODO: CLHEP_INCLUDE_DIRS still required for windows support
@@ -115,6 +104,8 @@ else()
   if(GEANT4_USE_SYSTEM_EXPAT)
     # If system package requested, find it or fail
     find_package(EXPAT REQUIRED)
+    # Shim only needed until we require CMake >= 3.10
+    include("${CMAKE_CURRENT_LIST_DIR}/G4EXPATShim.cmake")
 
     # Check version requirement externally to provide information
     # on using internal expat.
@@ -131,65 +122,54 @@ EXPAT_LIBRARY = ${__badexpat_library}
 are of insufficient version '${EXPAT_VERSION_STRING}' (Required >= 2.0.1)
 Set the above CMake variables to point to an expat install of the required version, or set GEANT4_USE_SYSTEM_EXPAT to OFF to use Geant4's packaged version.")
     endif()
+
+    # Backward compatibility for sources.cmake using the variable
+    set(EXPAT_LIBRARIES EXPAT::EXPAT)
+    geant4_save_package_variables(EXPAT EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
   else()
     set(EXPAT_FOUND TRUE)
     set(GEANT4_USE_BUILTIN_EXPAT TRUE)
     set(EXPAT_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/expat/include)
-    if(BUILD_SHARED_LIBS)
-      set(EXPAT_LIBRARIES G4expat)
-    else()
-      set(EXPAT_LIBRARIES G4expat-static)
-    endif()
+    set(EXPAT_LIBRARIES G4expat)
   endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
+geant4_add_feature(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
 
 #-----------------------------------------------------------------------
-# Find required ZLIB package
-# Default to use internal zlib, otherwise point interface variables to
-# internal zlib
+# Find required ZLIB package, defaulting in internal
+# Rely on ZLIB::ZLIB imported target (since CMake 3.1)
 option(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_ZLIB)
   find_package(ZLIB REQUIRED)
-
-  # NB : FindZLIB on cmake < 2.8 does not set the ZLIB_INCLUDE_DIRS
-  # variable, only the ZLIB_INCLUDE_DIR variable. Set the DIRS variable
-  # here for backward compatibility.
-  if(${CMAKE_VERSION} VERSION_LESS "2.8.0")
-    set(ZLIB_INCLUDE_DIRS "${ZLIB_INCLUDE_DIR}")
-  endif()
+  # Backward compatibility for sources.cmake using the variable
+  set(ZLIB_LIBRARIES ZLIB::ZLIB)
+  geant4_save_package_variables(ZLIB ZLIB_INCLUDE_DIR ZLIB_LIBRARY_DEBUG ZLIB_LIBRARY_RELEASE)
 else()
   set(ZLIB_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_ZLIB TRUE)
-  set(ZLIB_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/zlib/include
-                        ${PROJECT_BINARY_DIR}/source/externals/zlib)
-  if(BUILD_SHARED_LIBS)
-    set(ZLIB_LIBRARIES G4zlib)
-  else()
-    set(ZLIB_LIBRARIES G4zlib-static)
-  endif()
+  set(ZLIB_LIBRARIES G4zlib)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
+geant4_add_feature(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
 
 #-----------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
-#
+# Relies on XercesC::XercesC imported target (since CMake 3.5)
+set(_default_use_gdml OFF)
 if(XERCESC_ROOT_DIR)
   set(_default_use_gdml ON)
-else()
-  set(_default_use_gdml OFF)
+  list(INSERT CMAKE_PREFIX_PATH 0 "${XERCESC_ROOT_DIR}")
 endif()
 
-option(GEANT4_USE_GDML "Build Geant4 with GDML support" ${_default_use_gdml}
-)
+option(GEANT4_USE_GDML "Build Geant4 with GDML support" ${_default_use_gdml})
 
 if(GEANT4_USE_GDML)
   find_package(XercesC REQUIRED)
+  geant4_save_package_variables(XercesC XercesC_INCLUDE_DIR XercesC_LIBRARY_DEBUG XercesC_LIBRARY_RELEASE)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
+geant4_add_feature(GEANT4_USE_GDML "Building Geant4 with GDML support")
 
 #-----------------------------------------------------------------------
 # Optional use of smart stack
@@ -204,37 +184,35 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 
 option(GEANT4_USE_SMARTSTACK "Use smart track stack" OFF)
 mark_as_advanced(GEANT4_USE_SMARTSTACK)
-
-if(GEANT4_USE_SMARTSTACK)
-  add_definitions(-DG4_USESMARTSTACK)
-endif()
-
-GEANT4_ADD_FEATURE(GEANT4_USE_SMARTSTACK "Use smart track stack")
+geant4_add_feature(GEANT4_USE_SMARTSTACK "Use smart track stack")
 
 #-----------------------------------------------------------------------
-# Optional Support for TiMemory -- cross-language timing and memory
+# Optional Support for TiMemory -- timing, memory, HW counters, roofline, gperftools, etc.
 # easily installed via:
-#   "pip install timemory" and pointing TiMemory_DIR to
-#    <install-prefix>/share/cmake/TiMemory
-#    e.g. -DTiMemory_DIR=/usr/local/share/cmake/TiMemory
-#    for /usr/local/bin/pip
+#   git clone https://github.com/NERSC/timemory.git timemory
+#   pip install -vvv ./timemory
+#       and setting timemory_DIR to `python -c "import sys; print(sys.prefix)"`
 #
+set(_default_use_timemory OFF)
 if(TiMemory_DIR)
   set(_default_use_timemory ON)
-else()
-  set(_default_use_timemory OFF)
 endif()
 
-option(GEANT4_USE_TIMEMORY "Build Geant4 with TiMemory support"
-    ${_default_use_timemory}
-)
+option(GEANT4_USE_TIMEMORY "Build Geant4 with TiMemory support" ${_default_use_timemory})
 mark_as_advanced(GEANT4_USE_TIMEMORY)
 
 if(GEANT4_USE_TIMEMORY)
-    find_package(TiMemory REQUIRED)
+  set(_G4timemory_DEFAULT_COMPONENTS headers caliper papi gotcha gperftools-cpu vector)
+  set(G4timemory_COMPONENTS "${_G4timemory_DEFAULT_COMPONENTS}" CACHE STRING
+      "timemory INTERFACE libraries that activate various capabilities in toolkit")
+  set(G4timemory_VERSION 3.0)
+  set(timemory_FIND_COMPONENTS_INTERFACE geant4-timemory)
+  find_package(timemory ${G4timemory_VERSION} REQUIRED COMPONENTS ${G4timemory_COMPONENTS})
+  set(timemory_LIBRARIES geant4-timemory)
+  geant4_save_package_variables(timemory timemory_DIR)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_TIMEMORY "Building Geant4 with TiMemory support")
+geant4_add_feature(GEANT4_USE_TIMEMORY "Building Geant4 with TiMemory support")
 
 #-----------------------------------------------------------------------
 # Optional support for G3TOG4 convertion interface.
@@ -261,6 +239,9 @@ set(GEANT4_USOLIDS_SHAPES
   BOX
   CONS
   CTUBS
+  ELLIPSOID
+  ELLIPTICALCONE
+  ELLIPTICALTUBE
   EXTRUDEDSOLID
   HYPE
   GENERICPOLYCONE
@@ -309,7 +290,14 @@ endif()
 
 # - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
+  # VecGeom's config file doesn't support versioning...
   find_package(VecGeom REQUIRED)
+  # Shim until VecGeom supports config mode properly
+  include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
+  # Backward Compatibility
+  set(VECGEOM_LIBRARIES VecGeom::VecGeom)
+
+  geant4_save_package_variables(VecGeom VecGeom_DIR)
 
   if(GEANT4_USE_ALL_USOLIDS)
     set(G4GEOM_USE_USOLIDS TRUE)
@@ -321,11 +309,6 @@ if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
     endforeach()
     GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with VecGeom equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
   endif()
-
-  # Always need defs/includes for VecGeom until that supports usage reqs...
-  # Or can create a "G4VecGeom" internal target to propagate these.
-  add_definitions(${VECGEOM_DEFINITIONS})
-  include_directories(${VECGEOM_INCLUDE_DIR} ${VECGEOM_EXTERNAL_INCLUDES})
 endif()
 
 
@@ -337,9 +320,17 @@ mark_as_advanced(GEANT4_USE_FREETYPE)
 
 if(GEANT4_USE_FREETYPE)
   find_package(Freetype REQUIRED)
+  # Shim only needed until we require CMake >= 3.10
+  include("${CMAKE_CURRENT_LIST_DIR}/G4FreetypeShim.cmake")
+
+  geant4_save_package_variables(Freetype
+    FREETYPE_INCLUDE_DIR_freetype2
+    FREETYPE_INCLUDE_DIR_ft2build
+    FREETYPE_LIBRARY_DEBUG
+    FREETYPE_LIBRARY_RELEASE)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_FREETYPE "Building Geant4 analysis library with Freetype support")
+geant4_add_feature(GEANT4_USE_FREETYPE "Building Geant4 analysis library with Freetype support")
 
 #-----------------------------------------------------------------------
 # Optional support for HDF5
@@ -351,35 +342,19 @@ mark_as_advanced(GEANT4_USE_HDF5)
 
 if(GEANT4_USE_HDF5)
   find_package(HDF5 1.8 REQUIRED)
+  include("${CMAKE_CURRENT_LIST_DIR}/G4HDF5Shim.cmake")
+  # Backward compatibility
+  set(HDF5_LIBRARIES Geant4::HDF5)
 
-  # If we're in MT mode, found HDF5 must also support MT
-  if(GEANT4_BUILD_MULTITHREADED)
-    include(CheckCXXSymbolExists)
-    set(CMAKE_REQUIRED_INCLUDES "${HDF5_INCLUDE_DIRS}")
-    check_cxx_symbol_exists(H5_HAVE_THREADSAFE "H5pubconf.h" GEANT4_HAVE_H5_HAVE_THREADSAFE)
-    unset(CMAKE_REQUIRED_INCLUDES)
-
-    if(NOT GEANT4_HAVE_H5_HAVE_THREADSAFE)
-      message(FATAL_ERROR
-        "Found an install of HDF5, but it was not built with support for thread safety. "
-        "Either build Geant4 in single threaded mode, or use/reinstall HDF5 with "
-        "thread safety enabled. See HDF5's install guides, available from https://support.hdfgroup.org/HDF5/release/, for instructions on this.\n"
-        )
+  # May have found via config mode...
+  if(HDF5_DIR)
+    geant4_save_package_variables(HDF5 HDF5_DIR)
+  else()
+    # Otherwise almost certainly used compiler wrapper
+    geant4_save_package_variables(HDF5
+      HDF5_C_COMPILER_EXECUTABLE
+      HDF5_C_LIBRARY_hdf5)
     endif()
-  endif()
-
-  # As FindHDF5 does not yet supply imported targets, we
-  # create an internal INTERFACE target to wrap these.
-  # This still hard-codes include/library paths, but limits it
-  # to one place. Later, we'll create proper imported targets
-  # with re-finds but for now this is the best minimally invasive proceedure
-  add_library(G4HDF5 INTERFACE)
-  target_include_directories(G4HDF5 INTERFACE ${HDF5_INCLUDE_DIRS})
-  target_link_libraries(G4HDF5 INTERFACE ${HDF5_LIBRARIES})
-  install(TARGETS G4HDF5 EXPORT Geant4LibraryDepends)
-
-  # Override HDF5_LIBRARIES for back compatibility
-  set(HDF5_LIBRARIES G4HDF5)
 endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_HDF5 "Building Geant4 analysis library with HDF5 support")

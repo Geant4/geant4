@@ -1,0 +1,86 @@
+
+///\file "biasing/GB07/.README.txt"
+///\brief Example GB07 README page
+
+/*! \page ExampleGB07 Example GB07
+
+\section ExampleGB07_s1 Leading particle biasing
+
+This example illustrates how to use the leading particle biasing option.
+
+It uses the G4BOptnLeadingParticle biasing operation located in:
+
+                     source/processes/biasing/generic ,
+
+and defines the following biasing operation to handle it:
+
+                        GB07OptrLeadingParticle.
+
+As a reminder, the generic biasing scheme consists of a G4VBiasingOperator
+that takes decisions on what sort of biasing technique to be applied. The
+techniques are called biasing operations, represented by the G4VBiasingOperation
+class. The operator is attached to a logical volume in which the biasing must
+happen. Decisions are made on requests of the G4BiasingProcessInterface process
+that messages the operator when the track is travelling in the volume. To equip
+the phyics list with this process, the G4GenericBiasingPhysics physics
+constructor is used. In this example, several processes -to which the technique
+is applied- are wrapped by this process to control their final state production
+for applying the biasing technique.
+
+
+\section ExampleGB07_s2 Geometry
+
+    The geometry is simply :
+    - a volume in which the biasing occurs and to which an instance of
+      GB07OptrLeadingParticle is attached,
+    - a thin volume placed after the above volume, that is used to tally the
+      particles exiting biasing volume.
+    - a sensitive detector is attached to the thin volume to simply print the
+      particles entering here. In particular the statistical weight is printed,
+      this one is obtained by:
+
+\verbatim
+w = track->GetWeight() ;
+\endverbatim
+
+
+\section ExampleGB07_s3 Biasing configuration
+
+    The particle types and processes under the leading particle biasing are
+visible in the main program exampleGB07.cc, these are:
+
+        pi+ and pi-,            inelastic process,
+	proton and anti-proton, inelastic process,
+	neutron,                inelastic and capture processes,
+	anti-neutron,           inelastic process,
+
+	gamma,                  conversion and photonNuclear processes,
+	electron,               electronNuclear process,
+	positron,               annihilation and positronNuceal processes,
+
+	pi0,                    decay process.
+
+    For the inelastic and lepto/gamma-nuclear processes, leading particle is applied in a rather
+classical way:
+    	- keep the leading particle,
+	- keep one particle of each species (particles and anti-particles are considered a one
+species, and all hadrons with Z>=2 are counted as one species too).
+    For e+, e-, gamma and pi0 processes (which means in practice main conversion, annihililation
+and pi0 decay processes), the leading particle is kept, and the companion track(s) is(are) randomly
+kept/killed under a Russian roulette, with a 2/3 killing probabilty. See
+GB07BOptrLeadingParticle::StartTracking( ... ) for this killing probability setting.
+
+
+\section ExampleGB07_s4 Running the program:
+
+    The program can be run in batch or interactive mode and has the following options:
+
+batch mode:
+                ./exampleGB07 [-m macro ]  [-b biasing {'on' = default,'off'}]
+                or
+                ./exampleGB07 [macro.mac]
+interactive mode:
+                ./exampleGB07 [-b biasing {'on' = default,'off'}]
+
+
+*/

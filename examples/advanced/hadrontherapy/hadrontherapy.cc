@@ -98,13 +98,8 @@
 
 #include "HadrontherapyActionInitialization.hh"
 
-//#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-//#endif
-
-//#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-//#endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc ,char ** argv)
@@ -155,7 +150,7 @@ int main(int argc ,char ** argv)
     G4String physName = "";
     
     // Physics List name defined via environment variable
-    char* path = getenv("PHYSLIST");
+    char* path = std::getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
     
     if(physName != "" && factory.IsReferencePhysList(physName))
@@ -191,10 +186,8 @@ int main(int argc ,char ** argv)
 
     
 // Initialise the Visualisation
-//#ifdef G4VIS_USE
     G4VisManager* visManager = new G4VisExecutive;
     visManager -> Initialize();
-//#endif
     
     //** Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -208,7 +201,6 @@ int main(int argc ,char ** argv)
     }
     
     else {
-        G4cout << "sono qua" << G4endl;
 
         UImanager -> ApplyCommand("/control/execute macro/defaultMacro.mac");
         ui -> SessionStart();

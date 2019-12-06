@@ -23,23 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4IntersectingCone, a utility class which calculates
+// the intersection of an arbitrary line with a fixed cone
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4IntersectingCone.cc
-//
-// Implementation of a utility class which calculates the intersection
-// of an arbitrary line with a fixed cone
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4IntersectingCone.hh"
 #include "G4GeometryTolerance.hh"
 
-//
 // Constructor
 //
 G4IntersectingCone::G4IntersectingCone( const G4double r[2],
@@ -71,26 +63,20 @@ G4IntersectingCone::G4IntersectingCone( const G4double r[2],
   zHi = std::max(z[0], z[1]) + halfCarTolerance;
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4IntersectingCone::G4IntersectingCone( __void__& )
-  : zLo(0.), zHi(0.), rLo(0.), rHi(0.), type1(false), A(0.), B(0.)
+  : zLo(0.), zHi(0.), rLo(0.), rHi(0.), A(0.), B(0.)
 {
 }
 
-
-//
 // Destructor
 //
 G4IntersectingCone::~G4IntersectingCone()
 {
 }
 
-
-//
 // HitOn
 //
 // Check r or z extent, as appropriate, to see if the point is possibly
@@ -115,16 +101,14 @@ G4bool G4IntersectingCone::HitOn( const G4double r,
   return true;
 }
 
-
-//
 // LineHitsCone
 //
 // Calculate the intersection of a line with our conical surface, ignoring
 // any phi division
 //
-G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
-                                        const G4ThreeVector &v,
-                                              G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector& p,
+                                        const G4ThreeVector& v,
+                                              G4double* s1, G4double* s2 )
 {
   if (type1)
   {
@@ -136,8 +120,6 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
   }
 }
 
-
-//
 // LineHitsCone1
 //
 // Calculate the intersections of a line with a conical surface. Only
@@ -196,9 +178,9 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
 // where epsilon is small, then:
 //             Delta = epsilon/2/B
 //
-G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
-                                         const G4ThreeVector &v,
-                                               G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector& p,
+                                         const G4ThreeVector& v,
+                                               G4double* s1, G4double* s2 )
 {
   static const G4double EPS = DBL_EPSILON; // Precision constant,
                                            // originally it was 1E-6
@@ -283,8 +265,6 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   }
 }
 
-
-//
 // LineHitsCone2
 //
 // See comments under LineHitsCone1. In this routine, case2, we have:
@@ -308,9 +288,9 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
 //          for tz/B < 0, this is the smallest s
 // thus, same as in case 1 ( since sign(tz/B) = sign(tz*B) )
 //
-G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
-                                         const G4ThreeVector &v,
-                                               G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector& p,
+                                         const G4ThreeVector& v,
+                                               G4double* s1, G4double* s2 )
 {
   static const G4double EPS = DBL_EPSILON; // Precision constant,
                                            // originally it was 1E-6

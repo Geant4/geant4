@@ -27,15 +27,16 @@
 // File: CCalRunAction.hh
 // Description: A class for providing user actions at begin and end of run
 ///////////////////////////////////////////////////////////////////////////////
+
 #ifndef CCalRunAction_h
-#define CCalRunAction_h
+#define CCalRunAction_h 1
 
 #include "G4UserRunAction.hh"
 
 class G4Run;
 
-class CCalRunAction: public G4UserRunAction{
-
+class CCalRunAction: public G4UserRunAction
+{
 public:
   CCalRunAction(){};
   virtual ~CCalRunAction(){};
@@ -48,8 +49,6 @@ public:
 
 private:
   G4int numberOfTimeSlices;
-  
-  
 };
 
 #endif

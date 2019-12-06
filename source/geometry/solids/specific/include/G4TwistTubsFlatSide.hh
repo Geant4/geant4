@@ -23,28 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4TwistTubsFlatSide
 //
 // Class description:
 //
-//  Class describing a flat boundary surface for a cylinder.
+// Class describing a flat boundary surface for a cylinder.
 
-// Author: 
-//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
-//
-// History:
-//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//                 from original version in Jupiter-2.5.02 application.
+// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
+// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
-#ifndef __G4TWISTTUBSFLATSIDE__
-#define __G4TWISTTUBSFLATSIDE__
+#ifndef G4TWISTTUBSFLATSIDE_HH
+#define G4TWISTTUBSFLATSIDE_HH
 
 #include "G4VTwistSurface.hh"
 
@@ -52,10 +42,10 @@ class G4TwistTubsFlatSide : public G4VTwistSurface
 {
   public:  // with description
 
-   G4TwistTubsFlatSide(const G4String         &name,
-                 const G4RotationMatrix &rot,
-                 const G4ThreeVector    &tlate,
-                 const G4ThreeVector    &n,
+   G4TwistTubsFlatSide(const G4String&   name,
+                 const G4RotationMatrix& rot,
+                 const G4ThreeVector&    tlate,
+                 const G4ThreeVector&    n,
                  const EAxis             axis1 = kRho, // RHO axis !
                  const EAxis             axis2 = kPhi, // PHI axis !
                        G4double          axis0min = -kInfinity,
@@ -63,7 +53,7 @@ class G4TwistTubsFlatSide : public G4VTwistSurface
                        G4double          axis0max = kInfinity,
                        G4double          axis1max = kInfinity );
                        
-   G4TwistTubsFlatSide( const G4String        &name,
+   G4TwistTubsFlatSide( const G4String&  name,
                         G4double         EndInnerRadius[2],
                         G4double         EndOuterRadius[2],
                         G4double         DPhi,
@@ -72,30 +62,28 @@ class G4TwistTubsFlatSide : public G4VTwistSurface
                         G4int            handedness ) ;
 
    virtual ~G4TwistTubsFlatSide();
-   virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
+   virtual G4ThreeVector  GetNormal(const G4ThreeVector& /* xx */ ,
                                           G4bool isGlobal = false);
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-                                   const G4ThreeVector &gv,
+   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
+                                   const G4ThreeVector& gv,
                                          G4ThreeVector  gxx[],
                                          G4double       distance[],
                                          G4int          areacode[],
                                          G4bool         isvalid[],
                                          EValidate validate = kValidateWithTol);
                                                   
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
                                          G4ThreeVector  gxx[],
                                          G4double       distance[],
                                          G4int          areacode[]);
                                                   
   virtual G4ThreeVector SurfacePoint(G4double, G4double,
-                                     G4bool isGlobal = false ) ;  
+                                     G4bool isGlobal = false) ;  
   virtual G4double GetBoundaryMin(G4double phi) ;
   virtual G4double GetBoundaryMax(G4double phi) ;
   virtual G4double GetSurfaceArea() { return fSurfaceArea ; }
   virtual void GetFacets( G4int m, G4int n, G4double xyz[][3],
                           G4int faces[][4], G4int iside ) ;
-
-  G4double fSurfaceArea ;
 
   public:  // without description
 
@@ -106,14 +94,17 @@ class G4TwistTubsFlatSide : public G4VTwistSurface
 
   protected:  // with description
 
-   virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+   virtual G4int GetAreaCode(const G4ThreeVector& xx, 
                                    G4bool withTol = true) ;
 
   private:
 
    virtual void SetCorners();
    virtual void SetBoundaries();
-   
+
+  private:
+
+   G4double fSurfaceArea = 0.0;
 };
 
 inline G4ThreeVector G4TwistTubsFlatSide::

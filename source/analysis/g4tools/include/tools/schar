@@ -33,6 +33,15 @@ inline bool is_spaces(const std::string& a_string){
   return true;
 }
 
+//inline std::string::size_type find_not(const std::string& a_s,char a_c) {
+//  std::string::size_type _size = a_s.size();
+//  const char* p = a_s.c_str();
+//  for(std::string::size_type pos=0;pos<_size;pos++,p++) {
+//    if((*p)!=a_c) return pos;
+//  }
+//  return std::string::npos;
+//}
+
 }
 
 #endif

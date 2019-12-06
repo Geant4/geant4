@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/ParN04.cc
-/// \brief Main program of the parallel/ParN04 example
+/// \file ParN04.cc
+/// \brief Main program of the parallel/TopC/ParN04 example
 //
 //
 //
@@ -34,11 +34,7 @@
 // --------------------------------------------------------------
 
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
 #include "ExN04DetectorConstruction.hh"
-#include "QGSP_BERT.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04RunAction.hh"
 #include "ExN04EventAction.hh"
@@ -47,18 +43,23 @@
 #include "ExN04SteppingAction.hh"
 #include "ExN04SteppingVerbose.hh"
 
-#ifdef G4VIS_USE
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "QGSP_BERT.hh"
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "ParTopC.icc"
 
 int main(int argc,char** argv)
 {
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // User Verbose output class
   //
   G4VSteppingVerbose* verbosity = new ExN04SteppingVerbose;
@@ -76,13 +77,13 @@ int main(int argc,char** argv)
   G4VUserPhysicsList* physics = new QGSP_BERT();
   runManager->SetUserInitialization(physics);
   
-#ifdef G4VIS_USE
   // Visualization, if you choose to have it!
   //
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
+  // Initialize G4 kernel
+  //
   runManager->Initialize();
 
   // User Action classes
@@ -109,29 +110,26 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if(argc==1)  // Define (G)UI terminal for interactive mode
-  {
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-    UImanager->ApplyCommand("/control/execute vis.mac");
-    ui->SessionStart();
-    delete ui;
-#endif
-  }
-  else  // Batch mode
-  {
+  // Process macro or start UI session
+  //
+  if ( ! ui ) {
+    // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
+  }
+  else {
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
   }
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
   delete verbosity;
 

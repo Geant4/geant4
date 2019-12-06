@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Paraboloid
 //
 // Class description:
@@ -49,13 +43,10 @@
 //        r1^2 = k1 * (-dz) + k2
 //        r2^2 = k1 * ( dz) + k2
 
-// History:
-// -------
-// 10.07.2007  L.Lindroos (CERN) - First implementation
-//
+// 10.07.2007, L.Lindroos (CERN) - First implementation
 // --------------------------------------------------------------------
-#ifndef G4Paraboloid_HH
-#define G4Paraboloid_HH
+#ifndef G4PARABOLOID_HH
+#define G4PARABOLOID_HH
 
 #include "G4GeomTypes.hh"
 
@@ -78,9 +69,9 @@ class G4Paraboloid : public G4VSolid
   public:  // with description
 
     G4Paraboloid(const G4String& pName,
-              G4double  pDz,
-                      G4double  pR1,
-                      G4double  pR2);
+                       G4double  pDz,
+                       G4double  pR1,
+                       G4double  pR2);
 
     virtual ~G4Paraboloid();
 
@@ -102,9 +93,6 @@ class G4Paraboloid : public G4VSolid
 
     // Solid standard methods
 
-    //void ComputeDimensions(       G4VPVParamerisation p,
-    //                        const G4Int               n,
-    //                        const G4VPhysicalVolume*  pRep );
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -117,9 +105,9 @@ class G4Paraboloid : public G4VSolid
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
@@ -149,15 +137,15 @@ class G4Paraboloid : public G4VSolid
 
   protected:  // without description
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
   private:
 
     // Making this mutable to allow GetPointOnSurface to have access to
     // area function.
-    mutable G4double fSurfaceArea;
-    G4double fCubicVolume;
+    mutable G4double fSurfaceArea = 0.0;
+    G4double fCubicVolume = 0.0;
 
     G4double dz, r1, r2;
     G4double k1, k2;

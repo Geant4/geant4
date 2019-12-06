@@ -51,7 +51,7 @@ RE03UserScoreWriter::~RE03UserScoreWriter()
 void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, 
                                              const G4String & fileName, 
                                              const G4String & option) {
-
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   //
   if(verboseLevel > 0) {
     G4cout << "User-defined DumpQuantityToFile() method is invoked."

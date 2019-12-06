@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/include/PhysListEmStandard.hh
+/// \file PhysListEmStandard.hh
 /// \brief Definition of the PhysListEmStandard class
 //
 //

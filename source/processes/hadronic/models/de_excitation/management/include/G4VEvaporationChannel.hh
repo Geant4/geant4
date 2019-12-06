@@ -83,21 +83,6 @@ public:
   // flag of the radioactive decay module
   virtual void RDMForced(G4bool);
 
-  // get energy of final level if this channel is photon evaporation 
-  virtual G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy);
-
-  // get energy of the upper level if this channel is photon evaporation
-  virtual G4double GetUpperLevelEnergy(G4int Z, G4int A);
-
-  // get energy of the upper level in level DB for any decay channel
-  inline G4double GetMaxLevelEnergy(G4int Z, G4int A);
-
-  // get energy of nearest level for any decay channel
-  inline G4double GetNearestLevelEnergy(G4int Z, G4int A, G4double energy);
-
-  // set pointer to photon evaporation in order to access level data
-  inline void SetPhotonEvaporation(G4VEvaporationChannel* p);
-
   // for cross section selection
   inline void SetOPTxs(G4int opt);
   // for superimposed Coulomb Barrier for inverse cross sections 	
@@ -110,13 +95,11 @@ protected:
 
 private:
 
-  G4VEvaporationChannel(const G4VEvaporationChannel & right) = delete;
+  G4VEvaporationChannel(const G4VEvaporationChannel & right);
   const G4VEvaporationChannel & operator=
-  (const G4VEvaporationChannel & right)  = delete;
-  G4bool operator==(const G4VEvaporationChannel & right) const = delete;
-  G4bool operator!=(const G4VEvaporationChannel & right) const = delete;
-
-  G4VEvaporationChannel* photonEvaporation;
+  (const G4VEvaporationChannel & right);
+  G4bool operator==(const G4VEvaporationChannel & right) const;
+  G4bool operator!=(const G4VEvaporationChannel & right) const;
 };
 
 inline G4FragmentVector* 
@@ -125,27 +108,6 @@ G4VEvaporationChannel::BreakUpFragment(G4Fragment* theNucleus)
   G4FragmentVector* results = new G4FragmentVector();
   BreakUpChain(results, theNucleus);
   return results;
-}
-
-
-inline G4double 
-G4VEvaporationChannel::GetNearestLevelEnergy(G4int Z, G4int A, G4double energy)
-{
-  return (photonEvaporation) ? 
-    photonEvaporation->GetFinalLevelEnergy(Z, A, energy) : energy;
-}
-
-inline G4double 
-G4VEvaporationChannel::GetMaxLevelEnergy(G4int Z, G4int A)
-{
-  return (photonEvaporation) ? 
-    photonEvaporation->GetUpperLevelEnergy(Z, A) : 0.0;
-}
-
-inline void 
-G4VEvaporationChannel::SetPhotonEvaporation(G4VEvaporationChannel* p)
-{
-  photonEvaporation = p;
 }
 
 inline void G4VEvaporationChannel::SetOPTxs(G4int) 

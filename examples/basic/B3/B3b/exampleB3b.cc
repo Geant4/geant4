@@ -36,15 +36,16 @@
 #endif
 
 #include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
+#include "G4TScoreNtupleWriter.hh"
 
 #include "Randomize.hh"
 
 #include "B3DetectorConstruction.hh"
 #include "B3PhysicsList.hh"
 #include "B3bActionInitialization.hh"
-
-#include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
+#include "B3Analysis.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,9 +58,9 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
+  // Optionally: choose a different Random engine...
   //
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
   // Construct the default run manager
   //
@@ -88,6 +89,13 @@ int main(int argc,char** argv)
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  // Activate score ntuple writer
+  // The Root output type (Root) is selected in B3Analysis.hh.
+  // The verbose level can be also set via UI commands
+  // /score/ntuple/writerVerbose level
+  G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
+  scoreNtupleWriter.SetVerboseLevel(1);
 
   // Process macro or start UI session
   //

@@ -62,7 +62,7 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
   friend class G4RootNtupleManager;
 
   public:
-    explicit G4RootMpiPNtupleManager(const G4AnalysisManagerState& state, G4bool rowWise,
+    explicit G4RootMpiPNtupleManager(const G4AnalysisManagerState& state, 
                                      tools::impi* impi, G4int mpiRank, G4int destinationRank);
     ~G4RootMpiPNtupleManager();
 
@@ -143,7 +143,6 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     tools::wroot::directory*  fNtupleDirectory;
     std::vector<G4RootMpiPNtupleDescription*> fNtupleDescriptionVector;
     std::vector<tools::wroot::impi_ntuple*> fNtupleVector;
-    G4bool fRowWise;
     tools::impi*  fImpi;
     G4int  fMpiRank;
     G4int  fDestinationRank;

@@ -58,8 +58,8 @@
 
 class G4IonStoppingData : public G4VIonDEDXTable {
 
- public:
-   G4IonStoppingData(const G4String& leDirectory);
+public:
+   G4IonStoppingData(const G4String& dir, G4bool icru);
    virtual ~G4IonStoppingData();
 
    // Function for checking the availability of stopping power tables
@@ -166,6 +166,8 @@ class G4IonStoppingData : public G4VIonDEDXTable {
 
    G4IonDEDXMapElem dedxMapElements; 
    G4IonDEDXMapMat dedxMapMaterials;
+
+   G4bool fICRU90;
 };
 
 #endif // G4IONSTOPPINGDATA_HH

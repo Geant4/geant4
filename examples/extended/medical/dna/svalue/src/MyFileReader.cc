@@ -34,7 +34,7 @@
 // Phys. Med. 31 (2015) 861-874
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file medical/dna/svalue2/src/MyFileReader.cc
+/// \file medical/dna/svalue/src/MyFileReader.cc
 /// \brief Implementation of the MyFileReader class
 
 #include "MyFileReader.hh"
@@ -50,13 +50,13 @@ MyFileReader::MyFileReader()
   G4String fileName= "spectrum.txt";
   //
   
-  inputFile.open(fileName.data()); 
+  fInputFile.open(fileName.data()); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 MyFileReader::~MyFileReader()
-{ inputFile.close(); }
+{ fInputFile.close(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,21 +69,21 @@ G4double MyFileReader::GetAnEvent()
   G4int numberOfLinesToRead = 100;
   //
   
-  if( evList.size() == 0 )
+  if( fEvList.size() == 0 )
   {
     for(G4int i=0;i<numberOfLinesToRead;i++)
     {
       G4double nrj;
-      inputFile >> nrj;
-      evList.push_back(nrj);
+      fInputFile >> nrj;
+      fEvList.push_back(nrj);
     }
   }
 
   //get first element from list
-  G4double ev = evList.front();
+  G4double ev = fEvList.front();
   
   //remove this element from list
-  evList.pop_front();
+  fEvList.pop_front();
   
   return ev;
 }

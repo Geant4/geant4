@@ -68,7 +68,7 @@ private:
     Arrow2D(G4double x1, G4double y1,
 	    G4double x2, G4double y2,
 	    G4double width, const G4Colour& colour);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters* fpMp);
     G4Polyline fShaftPolyline;
     G4Polyline fHeadPolyline;
     G4double fWidth;
@@ -105,7 +105,7 @@ private:
      const G4String& date):
       fpVisManager(vm), fSize(size),
       fX(x), fY(y), fLayout(layout), fDate(date) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
     G4VisManager* fpVisManager;
     G4Timer fTimer;
     G4int fSize;
@@ -137,12 +137,14 @@ public:
 private:
   G4VisCommandSceneAddEventID (const G4VisCommandSceneAddEventID&);
   G4VisCommandSceneAddEventID& operator = (const G4VisCommandSceneAddEventID&);
+  enum ForWhat {forEndOfEvent, forEndOfRun};
   struct EventID {
-    EventID(G4VisManager* vm, G4int size,
-	    G4double x, G4double y, G4Text::Layout layout):
-      fpVisManager(vm), fSize(size),
-      fX(x), fY(y), fLayout(layout) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    EventID(ForWhat w, G4VisManager* vm, G4int size,
+            G4double x, G4double y, G4Text::Layout layout):
+    fForWhat(w), fpVisManager(vm), fSize(size),
+    fX(x), fY(y), fLayout(layout) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
+    ForWhat fForWhat;
     G4VisManager* fpVisManager;
     G4int fSize;
     G4double fX, fY;
@@ -164,7 +166,7 @@ private:
     Extent(G4double xmin, G4double xmax,
            G4double ymin, G4double ymax,
            G4double zmin, G4double zmax);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
     G4VisExtent fExtent;
   };
   G4UIcommand* fpCommand;
@@ -194,7 +196,7 @@ private:
   struct Frame {
     Frame(G4double size, G4double width, const G4Colour& colour):
       fSize(size), fWidth(width), fColour(colour) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
     G4double fSize;
     G4double fWidth;
     G4Colour fColour;
@@ -252,7 +254,7 @@ private:
     Line(G4double x1, G4double y1, G4double z1,
 	 G4double x2, G4double y2, G4double z2,
 	 G4double width, const G4Colour& colour);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
     G4Polyline fPolyline;
     G4double fWidth;
     G4Colour fColour;
@@ -273,7 +275,7 @@ private:
     Line2D(G4double x1, G4double y1,
 	 G4double x2, G4double y2,
 	 G4double width, const G4Colour& colour);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
     G4Polyline fPolyline;
     G4double fWidth;
     G4Colour fColour;
@@ -308,7 +310,7 @@ private:
   struct G4Logo {
     G4Logo(G4double height, const G4VisAttributes&);
     ~G4Logo();
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
   private:
     G4VisAttributes fVisAtts;
     G4Polyhedron *fpG, *fp4;
@@ -331,7 +333,7 @@ private:
      G4double x, G4double y, G4Text::Layout layout):
       fpVisManager(vm), fSize(size),
       fX(x), fY(y), fLayout(layout) {}
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
     G4VisManager* fpVisManager;
     G4int fSize;
     G4double fX, fY;
@@ -399,7 +401,7 @@ private:
   G4VisCommandSceneAddText2D& operator = (const G4VisCommandSceneAddText2D&);
   struct G4Text2D {
     G4Text2D(const G4Text&);
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&, const G4ModelingParameters*);
   private:
     G4Text fText;
   };

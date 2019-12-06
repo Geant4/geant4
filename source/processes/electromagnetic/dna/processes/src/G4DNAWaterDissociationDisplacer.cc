@@ -51,6 +51,8 @@
 #include "G4RandomDirection.hh"
 #include "G4Exp.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmParameters.hh"
+#include "G4DNAOneStepThermalizationModel.hh"
 
 using namespace std;
 
@@ -70,7 +72,7 @@ G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
 
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 DissociativeAttachment)
-
+/*
 //------------------------------------------------------------------------------
 #ifdef _WATER_DISPLACER_USE_KREIPL_
 // This function is used to generate the following density distribution:
@@ -98,7 +100,7 @@ G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 
 G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 {
-#define b 27.22 //*nanometer
+#define b 27.22 // nanometer
     static constexpr double sqrt_pi = 1.77245; // sqrt(CLHEP::pi);
     static constexpr double b_to3 = 20168.1; // pow(b,3.);
     static constexpr double b_to2 = 740.928; // pow(b,2.);
@@ -115,16 +117,17 @@ G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 
 #endif
 //------------------------------------------------------------------------------
-
+*/
 G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer()
         :
         G4VMolecularDissociationDisplacer(),
-#ifdef _WATER_DISPLACER_USE_KREIPL_
+        ke(1.7*eV)
+/*#ifdef _WATER_DISPLACER_USE_KREIPL_
         fFastElectronDistrib(0., 5., 0.001)
 #elif defined _WATER_DISPLACER_USE_TERRISOL_
         fFastElectronDistrib(0., 100., 0.001)
-#endif
-{
+#endif*/
+{/*
     fProba1DFunction =
             std::bind((G4double(*)(G4double))
                               &G4DNAWaterDissociationDisplacer::ElectronProbaDistribution,
@@ -143,7 +146,8 @@ G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer()
         fElectronThermalization.push_back(r * nanometer);
         proba += eps;
 //  G4cout << G4BestUnit(r*nanometer, "Length") << G4endl;
-    }
+    }*/
+	dnaSubType = G4EmParameters::Instance()->DNAeSolvationSubType();
 //   SetVerbose(1);
 }
 
@@ -434,7 +438,7 @@ radialDistributionOfProducts(G4double Rrms) const
 
 G4ThreeVector
 G4DNAWaterDissociationDisplacer::radialDistributionOfElectron() const
-{
+{/*
     G4double rand_value = G4UniformRand();
     size_t nBins = fElectronThermalization.size();
     size_t bin = size_t(floor(rand_value * nBins));
@@ -442,5 +446,15 @@ G4DNAWaterDissociationDisplacer::radialDistributionOfElectron() const
 
     return (fElectronThermalization[bin] * (1. - rand_value)
             + fElectronThermalization[bin_p1] * rand_value) *
-           G4RandomDirection();
+           G4RandomDirection();*/
+
+	G4ThreeVector pdf = G4ThreeVector(0,0,0);
+
+	if(dnaSubType == fRitchie1994eSolvation) DNA::Penetration::Ritchie1994::GetPenetration(ke,pdf);
+	else if(dnaSubType == fTerrisol1990eSolvation) DNA::Penetration::Terrisol1990::GetPenetration(ke,pdf);
+	else if(dnaSubType == fMeesungnoensolid2002eSolvation) DNA::Penetration::Meesungnoen2002_amorphous::GetPenetration(ke,pdf);
+	else if(dnaSubType == fKreipl2009eSolvation) DNA::Penetration::Kreipl2009::GetPenetration(ke,pdf);
+	else DNA::Penetration::Meesungnoen2002::GetPenetration(ke,pdf);
+
+	return pdf;
 }

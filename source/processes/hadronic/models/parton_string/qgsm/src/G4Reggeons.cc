@@ -36,7 +36,7 @@
 
 G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle) 
 {
-  //                    KP              Orig
+  //              Kaidalov&Piskunova    Orig
   Alpha_pomeron      = 1.12;         //0.9808;
   Alphaprime_pomeron = 0.22/GeV/GeV; //0.25/GeV/GeV; 
   S0_pomeron         = 1.0*GeV*GeV;  //2.7*GeV*GeV; 
@@ -48,7 +48,7 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
   G4int absPDGcode = std::abs(PDGcode);
 
   //-------------------------------------------------------
-  //                           KP                               Orig
+  //              Kaidalov&Piskunova    Orig
   G4double C_pomeron_NN     = 1.5; 
   G4double C_pomeron_N      = std::sqrt(C_pomeron_NN);
 
@@ -61,7 +61,33 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
   G4double Rsquare_pomeron_Pr(0.), Rsquare_pomeron_Tr(0.); 
   //-------------------------------------------------------
 
+  // Copied from G4HadronNucleonXsc::HyperonNucleonXscNS(...)
+  G4double coeff = 1.0;
+  static const G4double  lBarCof1S  = 0.88;
+  static const G4double  lBarCof2S  = 0.76;
+  static const G4double  lBarCof3S  = 0.64;
+  static const G4double  lBarCof1C  = 0.784378;
+  static const G4double  lBarCofSC  = 0.664378;
+  static const G4double  lBarCof2SC = 0.544378;
+  static const G4double  lBarCof1B  = 0.740659;
+  static const G4double  lBarCofSB  = 0.620659;
+  static const G4double  lBarCof2SB = 0.500659;
+  // End of Copied from G4HadronNucleonXsc::HyperonNucleonXscNS(...)
+
+  // Copied from G4HadronNucleonXsc::SCBMesonNucleonXscNS(...)
+  static const G4double llMesCof1C   = 0.676568;
+  static const G4double llMesCof1B   = 0.610989;
+  static const G4double llMesCof2C   = 0.353135;
+  static const G4double llMesCof2B   = 0.221978;
+  static const G4double llMesCofSC   = 0.496568;
+  static const G4double llMesCofSB   = 0.430989;
+  static const G4double llMesCofCB   = 0.287557;
+  static const G4double llMesCofEtaP = 0.88;
+  static const G4double llMesCofEta  = 0.76;
+  // End of Copied from G4HadronNucleonXsc::SCBMesonNucleonXscNS(...)
+
   if ( absPDGcode > 1000 ) {  //  Projectile is baryon or anti_baryon --------
+
     Cpr_pomeron = C_pomeron_N;                              // Shower enhancement coefficient for projectile 
     Ctr_pomeron = C_pomeron_N;                              // Shower enhancement coefficient for target
     C_pomeron   = Cpr_pomeron*Ctr_pomeron;
@@ -88,8 +114,53 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
     Wreggeon_C          =   1.0;                            // Shower enhancement coefficient
     if (PDGcode > 0) WParity = -1;                          // Parity +1 for Pbar P, and -1 for PP interactions
     if (PDGcode < 0) WParity = +1;
-  }
-  else if ( absPDGcode == 211  ||  PDGcode ==  111 ) {  // Projectile is Pion
+
+    // Copied from G4HadronNucleonXsc::HyperonNucleonXscNS(...)
+    if ( PDGcode == 3122 || PDGcode == 3222 ||
+         PDGcode == 3112 || PDGcode == 3212 ||
+         PDGcode ==-3122 || PDGcode ==-3222 ||
+         PDGcode ==-3112 || PDGcode ==-3212   ) {
+      coeff = lBarCof1S;
+    }
+    if ( PDGcode == 3312 || PDGcode == 3322 ||
+         PDGcode ==-3312 || PDGcode ==-3322   ) {
+      coeff = lBarCof2S;
+    }
+    if ( PDGcode == 3334 || PDGcode ==-3334 ) {
+      coeff = lBarCof3S;
+    }
+    if ( PDGcode == 4122 || PDGcode ==-4122 ||
+	 PDGcode == 4222 || PDGcode ==-4222 ||
+	 PDGcode == 4212 || PDGcode ==-4212 ||
+	 PDGcode == 4112 || PDGcode ==-4112   ) {
+      coeff = lBarCof1C;
+    }
+    if ( PDGcode == 4432 || PDGcode ==-4432 ) {
+      coeff = lBarCof2SC;
+    }
+    if ( PDGcode == 4232 || PDGcode == 4132 || 
+         PDGcode ==-4232 || PDGcode ==-4132   ) {
+      coeff = lBarCofSC;
+    }
+    if ( PDGcode == 5122 || PDGcode ==-5122 ||
+	 PDGcode == 5222 || PDGcode ==-5222 ||
+	 PDGcode == 5112 || PDGcode ==-5112 ||
+	 PDGcode == 5212 || PDGcode ==-5212   ) {
+      coeff = lBarCof1B;
+    }
+    if ( PDGcode == 5332 || PDGcode ==-5332 ) {
+      coeff = lBarCof2SB;
+    }
+    if ( PDGcode == 5132 || PDGcode == 5232 || 
+         PDGcode ==-5132 || PDGcode ==-5232   ) {
+      coeff = lBarCofSB;
+    } 
+    // End of Copied from G4HadronNucleonXsc::HyperonNucleonXscNS(...)
+
+    Gamma_pomeron_Pr *= coeff;
+
+  } else if ( absPDGcode == 211 || PDGcode == 111 || absPDGcode >= 400 ) {  // Projectile is a nonstrange meson
+
     Cpr_pomeron = 1.352;
     Ctr_pomeron = C_pomeron_N; 
     C_pomeron   = Cpr_pomeron*Ctr_pomeron;
@@ -116,9 +187,44 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
     Wreggeon_C          =   1.0;
     if (PDGcode > 0) WParity = -1;
     if (PDGcode < 0) WParity = +1;
-  }
-  else if ( absPDGcode == 321  ||  absPDGcode == 311  || 
-               PDGcode == 130  ||  PDGcode == 310 )      {  // Projectile is Kaon
+
+    // Copied from G4HadronNucleonXsc::SCBMesonNucleonXscNS(...)
+    if ( PDGcode == 511 || PDGcode ==-511 ||
+         PDGcode == 521 || PDGcode ==-521   ) { 
+      coeff = llMesCof1B;
+    }
+    if ( PDGcode == 421 || PDGcode ==-421 ||
+         PDGcode == 411 || PDGcode ==-411   ) {
+      coeff = llMesCof1C;
+    }
+    if ( PDGcode == 531 || PDGcode ==-531 ) {
+      coeff = llMesCofSB;
+    }
+    if ( PDGcode == 541 || PDGcode ==-541 ) {
+      coeff = llMesCofCB;
+    }
+    if ( PDGcode == 431 || PDGcode ==-431 ) {
+      coeff = llMesCofSC;
+    }
+    if ( PDGcode == 441 || PDGcode == 443 ) {
+      coeff = llMesCof2C;
+    }
+    if ( PDGcode == 553 ) {
+      coeff = llMesCof2B;
+    }
+    if ( PDGcode == 221 ) {
+      coeff = llMesCofEta;
+    }
+    if ( PDGcode == 331 ) {
+      coeff = llMesCofEtaP;
+    }
+    // End of Copied from G4HadronNucleonXsc::SCBMesonNucleonXscNS(...)
+
+    Gamma_pomeron_Pr *= coeff;
+
+  } else if ( absPDGcode == 321 || absPDGcode == 311 || 
+                 PDGcode == 130 ||    PDGcode == 310   ) {  // Projectile is a Kaon
+
     Cpr_pomeron = 1.522; 
     Ctr_pomeron = C_pomeron_N; 
     C_pomeron   = Cpr_pomeron*Ctr_pomeron;
@@ -147,8 +253,9 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
 
     if (PDGcode > 0) WParity = -1;
     if (PDGcode < 0) WParity = +1;
-  }
-  else if ( absPDGcode == 22 ) {                 // Projectile is Gamma
+
+  } else if ( absPDGcode == 22 ) {  // Projectile is Gamma
+
     Cpr_pomeron = 1.437; 
     Ctr_pomeron = C_pomeron_N; 
     C_pomeron   = Cpr_pomeron*Ctr_pomeron;
@@ -174,8 +281,9 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
     Wreggeon_Rsquare    =   1.0/GeV/GeV;
     Wreggeon_C          =   1.0;
     WParity             =  +1;
-  }
-  else {  // Projectile is undefined, Nucleon assumed
+
+  } else {  // Projectile is undefined, Nucleon assumed
+
     Cpr_pomeron = C_pomeron_N; 
     Ctr_pomeron = C_pomeron_N; 
     C_pomeron   = Cpr_pomeron*Ctr_pomeron;
@@ -201,7 +309,9 @@ G4Reggeons::G4Reggeons(const G4ParticleDefinition * particle)
     Wreggeon_Alphaprime =   1.5/GeV/GeV;
     Wreggeon_C          =   1.0;
     WParity             =  -1;
+
   }
+
   chiPin=0.;
   Xtotal  =0.; XtotalP=0.; XtotalR=0.;
   Xelastic=0.; Xpr_Diff=0.; Xtr_Diff=0.; XDDiff=0.;

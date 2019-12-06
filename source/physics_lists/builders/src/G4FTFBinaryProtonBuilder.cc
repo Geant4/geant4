@@ -45,10 +45,11 @@
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4HadronicParameters.hh"
 
+
 G4FTFBinaryProtonBuilder::
 G4FTFBinaryProtonBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFB");
 
@@ -89,3 +90,4 @@ G4FTFBinaryProtonBuilder::
   //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
+

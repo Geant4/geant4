@@ -53,12 +53,12 @@ public:
 
   // Static methods to shoot random values using the static generator
 
-  static float shoot() {return shoot(HepRandom::getTheEngine());};
-  static float shoot( float mean ) {return shoot(HepRandom::getTheEngine(),mean);};
+  static float shoot() {return shoot(HepRandom::getTheEngine());}
+  static float shoot( float mean ) {return shoot(HepRandom::getTheEngine(),mean);}
 
   /* ENGINE IS INTRINSIC FLOAT
-  static double shoot() {return shoot(HepRandom::getTheEngine());};
-  static double shoot( double mean ) {return shoot(HepRandom::getTheEngine(),mean);};
+  static double shoot() {return shoot(HepRandom::getTheEngine());}
+  static double shoot( double mean ) {return shoot(HepRandom::getTheEngine(),mean);}
   */
 
   static void shootArray ( const int size, float* vect, float mean=1.0 );
@@ -67,13 +67,13 @@ public:
   //  Static methods to shoot random values using a given engine
   //  by-passing the static generator.
 
-  static inline float shoot( HepRandomEngine* anEngine ) {return ziggurat_REXP(anEngine);};
-  static inline float shoot( HepRandomEngine* anEngine, float mean ) {return shoot(anEngine)*mean;};
+  static inline float shoot( HepRandomEngine* anEngine ) {return ziggurat_REXP(anEngine);}
+  static inline float shoot( HepRandomEngine* anEngine, float mean ) {return shoot(anEngine)*mean;}
   
   /* ENGINE IS INTRINSIC FLOAT
-  static inline double shoot( HepRandomEngine* anEngine ) {return ziggurat_REXP(anEngine);};
+  static inline double shoot( HepRandomEngine* anEngine ) {return ziggurat_REXP(anEngine);}
 
-  static inline double shoot( HepRandomEngine* anEngine, double mean ) {return shoot(anEngine)*mean;};
+  static inline double shoot( HepRandomEngine* anEngine, double mean ) {return shoot(anEngine)*mean;}
   */
   
   static void shootArray ( HepRandomEngine* anEngine, const int size, float* vect, float mean=1.0 );
@@ -82,12 +82,12 @@ public:
   //  Methods using the localEngine to shoot random values, by-passing
   //  the static generator.
 
-  inline float fire() {return fire(defaultMean);};
-  inline float fire( float mean ) {return ziggurat_REXP(localEngine.get())*mean;};
+  inline float fire() {return fire(float(defaultMean));}
+  inline float fire( float mean ) {return ziggurat_REXP(localEngine.get())*mean;}
   
   /* ENGINE IS INTRINSIC FLOAT
-  inline double fire() {return fire(defaultMean);};
-  inline double fire( double mean ) {return ziggurat_REXP(localEngine.get())*mean;};
+  inline double fire() {return fire(defaultMean);}
+  inline double fire( double mean ) {return ziggurat_REXP(localEngine.get())*mean;}
   */
   
   void fireArray ( const int size, float* vect );
@@ -96,7 +96,7 @@ public:
   void fireArray ( const int size, double* vect, double mean );
   
   virtual double operator()();
-  inline float operator()( float mean ) {return fire( mean );};
+  inline float operator()( float mean ) {return fire( mean );}
 
   // Save and restore to/from streams
   
@@ -132,14 +132,14 @@ protected:
 
   static CLHEP_THREAD_LOCAL bool ziggurat_is_init;
 
-  static inline unsigned long ziggurat_SHR3(HepRandomEngine* anEngine) {return (unsigned int)(*anEngine);};
-  static inline float ziggurat_UNI(HepRandomEngine* anEngine) {return anEngine->flat();};
+  static inline unsigned long ziggurat_SHR3(HepRandomEngine* anEngine) {return (unsigned int)(*anEngine);}
+  static inline float ziggurat_UNI(HepRandomEngine* anEngine) {return float(anEngine->flat());}
   static inline float ziggurat_REXP(HepRandomEngine* anEngine) {
     if(!ziggurat_is_init) ziggurat_init();
     unsigned long jz=ziggurat_SHR3(anEngine);
     unsigned long iz=jz&255;
     return (jz<ke[iz]) ? jz*we[iz] : ziggurat_efix(jz,anEngine);
-  };
+  }
   static float ziggurat_efix(unsigned long jz,HepRandomEngine* anEngine);
 
 private:

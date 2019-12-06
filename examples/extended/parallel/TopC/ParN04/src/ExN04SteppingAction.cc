@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04SteppingAction.cc
+/// \file ExN04SteppingAction.cc
 /// \brief Implementation of the ExN04SteppingAction class
 //
 

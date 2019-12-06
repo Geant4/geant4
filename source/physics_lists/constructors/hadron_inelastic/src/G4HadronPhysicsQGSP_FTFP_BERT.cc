@@ -37,6 +37,7 @@
 
 #include "G4HadronPhysicsQGSP_FTFP_BERT.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicParameters.hh"
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_FTFP_BERT);
@@ -49,11 +50,14 @@ G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(const G4String& nam
 							 G4bool quasiElastic)
     :  G4HadronPhysicsQGSP_BERT(name,quasiElastic), QuasiElastic(quasiElastic)
 {
- maxBERT_proton = maxBERT_neutron = maxBERT_pik = 8.*GeV;
- minFTFP_proton = minFTFP_neutron = minFTFP_pik = 6.*GeV;
+  minFTFP_proton = minFTFP_neutron = minFTFP_pik = 
+    G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  maxBERT_proton = maxBERT_neutron = maxBERT_pik = 
+    G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
 }
 
 
+/*
 void G4HadronPhysicsQGSP_FTFP_BERT::DumpBanner()
 {
   G4cout << " New QGSP_FTFP_BERT physics list, replaces LEP with FTF/P for p/n/pi (/K?)";
@@ -66,3 +70,5 @@ void G4HadronPhysicsQGSP_FTFP_BERT::DumpBanner()
 	 << "     Changed to " << QuasiElasticQGS << " for QGS "
 	 << " and to " << QuasiElasticFTF << " (must be false) for FTF" << G4endl;
 }
+*/
+

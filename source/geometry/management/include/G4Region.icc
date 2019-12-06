@@ -22,13 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
-// class G4Region Inline Implementation file
+// G4Region inline implementation
 //
-// 19.09.02 - G.Cosmo: Created
+// 19.09.02, G.Cosmo - Created
 // --------------------------------------------------------------------
 
 // ********************************************************************
@@ -133,7 +130,7 @@ inline
 std::vector<G4Material*>::const_iterator
 G4Region::GetMaterialIterator() const
 {
-  G4MaterialList::const_iterator iterator = fMaterials.begin();
+  G4MaterialList::const_iterator iterator = fMaterials.cbegin();
   return iterator;
 }
 
@@ -206,8 +203,8 @@ void G4Region::ClearMap()
 {
   if(!(fMaterialCoupleMap.empty()))
   {
-    G4MaterialCoupleMap::iterator b = fMaterialCoupleMap.begin();
-    G4MaterialCoupleMap::iterator e = fMaterialCoupleMap.end();
+    auto b = fMaterialCoupleMap.cbegin();
+    auto e = fMaterialCoupleMap.cend();
     fMaterialCoupleMap.erase(b,e);
   }
 }
@@ -230,9 +227,9 @@ void G4Region::RegisterMaterialCouplePair(G4Material* mat,
 inline
 G4MaterialCutsCouple* G4Region::FindCouple(G4Material* mat)
 {
-  G4MaterialCoupleMap::iterator c = fMaterialCoupleMap.find(mat);
-  G4MaterialCutsCouple* couple = 0;
-  if(c!=fMaterialCoupleMap.end()) couple = (*c).second;
+  auto c = fMaterialCoupleMap.find(mat);
+  G4MaterialCutsCouple* couple = nullptr;
+  if(c!=fMaterialCoupleMap.cend()) couple = (*c).second;
   return couple;
 }
 
@@ -273,9 +270,8 @@ G4VPhysicalVolume* G4Region::GetWorldPhysical() const
 inline
 void G4Region::AddMaterial(G4Material* aMaterial)
 {
-  G4MaterialList::iterator pos =
-    std::find(fMaterials.begin(),fMaterials.end(),aMaterial);
-  if (pos == fMaterials.end())
+  auto pos = std::find(fMaterials.cbegin(),fMaterials.cend(),aMaterial);
+  if (pos == fMaterials.cend())
   {
     fMaterials.push_back(aMaterial);
     fRegionMod = true;

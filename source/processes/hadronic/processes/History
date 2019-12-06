@@ -14,7 +14,35 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-     
+
+11 July 2019 Alberto Ribon (hadr-proc-V10-05-06)
+-----------------------------------------------------
+- Created new inelastic processes for heavy hadron - nucleus interactions:
+  G4DMesonMinusInelasticProcess,  G4DMesonPlusInelasticProcess,
+  G4DMesonZeroInelasticProcess,   G4AntiDMesonZeroInelasticProcess,
+  G4DsMesonMinusInelasticProcess, G4DsMesonPlusInelasticProcess,
+  G4BMesonMinusInelasticProcess,  G4BMesonPlusInelasticProcess,
+  G4BMesonZeroInelasticProcess,   G4AntiBMesonZeroInelasticProcess,
+  G4BsMesonZeroInelasticProcess,  G4AntiBsMesonZeroInelasticProcess,
+  G4BcMesonMinusInelasticProcess, G4BcMesonPlusInelasticProcess,
+  G4LambdacPlusInelasticProcess,  G4AntiLambdacPlusInelasticProcess,
+  G4LambdabInelasticProcess,      G4AntiLambdabInelasticProcess,
+  G4XicPlusInelasticProcess,      G4AntiXicPlusInelasticProcess,
+  G4XicZeroInelasticProcess,      G4AntiXicZeroInelasticProcess,
+  G4XibMinusInelasticProcess,     G4AntiXibMinusInelasticProcess,
+  G4XibZeroInelasticProcess,      G4AntiXibZeroInelasticProcess,
+  G4OmegacZeroInelasticProcess,   G4AntiOmegacZeroInelasticProcess,
+  G4OmegabMinusInelasticProcess,  G4AntiOmegabMinusInelasticProcess.
+  Notes:
+  * There is no need to create similar processes for elastic
+    heavy hadron - nucleus interactions.
+  * Only hadrons (mesons and baryons) that can fly macroscopic distances are
+    considered (that's why Sigmac's and Sigmab's are not included).
+  * For the time being, only the (Glauber-Gribov) (elastic and inelastic)
+    cross sections exist for these heavy hadrons, but not yet final-state
+    models. Therefore, currently none of these processes is used in any
+    physics list.
+
 19 May 2019 V. Grichine (hadr-proc-V10-05-05)
 -----------------------------------------------------
 - G4MuNeutrinoNucleusProcess : change process type to fHadronInelastic

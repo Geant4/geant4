@@ -36,7 +36,8 @@
 
 #include "G4VFissionBarrier.hh"
 #include "globals.hh"
-#include "G4CameronShellPlusPairingCorrections.hh"
+
+class G4CameronShellPlusPairingCorrections;
 
 class G4FissionBarrier : public G4VFissionBarrier
 {
@@ -44,18 +45,18 @@ public:
 
   explicit G4FissionBarrier();
 
-  virtual ~G4FissionBarrier();
+  ~G4FissionBarrier() override;
 
-  virtual G4double FissionBarrier(G4int A, G4int Z, G4double U) const final;
+  G4double FissionBarrier(G4int A, G4int Z, G4double U) const final;
 
 private:
 
   G4double BarashenkovFissionBarrier(G4int A, G4int Z) const;
   
-  G4FissionBarrier(const G4FissionBarrier & right) = delete;
-  const G4FissionBarrier & operator=(const G4FissionBarrier & right) = delete;
-  G4bool operator==(const G4FissionBarrier & right) const = delete;
-  G4bool operator!=(const G4FissionBarrier & right) const = delete;
+  G4FissionBarrier(const G4FissionBarrier & right);
+  const G4FissionBarrier & operator=(const G4FissionBarrier & right);
+  G4bool operator==(const G4FissionBarrier & right) const;
+  G4bool operator!=(const G4FissionBarrier & right) const;
 
   const G4CameronShellPlusPairingCorrections* SPtr;
 };

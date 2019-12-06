@@ -34,8 +34,8 @@ class G4VPhysicalVolume;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class DetectorConstruction : 
-public G4VUserDetectorConstruction
+class DetectorConstruction 
+    : public G4VUserDetectorConstruction
 {
 public:
     DetectorConstruction();
@@ -53,5 +53,6 @@ public:
     }
 private:
     std::unique_ptr<G4MoleculeGun> fpGun;
+    std::unique_ptr<DNAParser> fpDNAParser;
     DNAParser::GeoData fGeometryMap;
 };

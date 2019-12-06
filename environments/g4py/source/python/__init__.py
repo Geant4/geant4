@@ -7,8 +7,8 @@
 #  This package contains a set of Python interface with Geant4.
 # ==================================================================
 """
-__version__ ='10.5'
-__date__ = 'December/2018'
+__version__ ='10.6'
+__date__ = 'December/2019'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
 
 # import submodules

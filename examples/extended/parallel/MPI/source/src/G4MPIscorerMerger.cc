@@ -323,7 +323,7 @@ void G4MPIscorerMerger::Pack(const G4VScoringMesh* mesh) {
   assert(outputBufferPosition<=outputBufferSize);
   DMSG(3,"Packing mesh: "<<mesh);
 
-  const MeshScoreMap& map = mesh->GetScoreMap();
+  auto map = mesh->GetScoreMap();
   /*const*/ size_t nummaps = map.size();//TODO: old MPI interface
   MPI_Pack(&nummaps,1,MPI::UNSIGNED,
       outputBuffer,outputBufferSize,
@@ -496,7 +496,7 @@ G4int G4MPIscorerMerger::CalculatePackSize(const G4VScoringMesh* mesh) const
   DMSG(3,"Calculating size for mesh: "<<mesh);
   //PackSingleMesh(Mesh)
   G4int size = sizeof(unsigned int);//num maps
-  const MeshScoreMap& map = mesh->GetScoreMap();
+  auto map = mesh->GetScoreMap();
   for (const auto& ele : map ) {
       //PackHitsMap
       size += sizeof(unsigned int);//name size

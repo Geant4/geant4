@@ -34,7 +34,7 @@ Known problem:
 Computing time of T cannot be gotten properly in current MT migration of example of B1Con. Therefore  
 FOM (=1/(R^2T) where R is relative error and T is computing time) relates numbers are unusable.
 
-<pre>
+\verbatim
 ***********************************************************************************************************************
 Output example
 
@@ -99,7 +99,7 @@ i/16 till_ith      mean          var           sd            r          vov     
 
 
 **************************************************************************************************************************
-</pre>
+\endverbatim
 
 Reference of this Convergence tests: \n
 MCNP(TM) -A General Monte Carlo N-Particle Transport Code \n

@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -53,49 +57,49 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume crystal ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume ring ... OK! 
-Checking overlaps for volume Detector ... OK! 
-Checking overlaps for volume Patient ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume Detector (G4Tubs) ... OK! 
+Checking overlaps for volume Patient (G4Tubs) ... OK! 
 
 ***** Table : Nb of materials = 3 *****
 
@@ -203,9 +207,9 @@ G4SDManager::AddNewCollection : the collection <patient/dose> is registered at 2
 #
 /run/printProgress 1000
 /run/beamOn 10000
-=======================================================================
-======       Radioactive Decay Physics Parameters              ========
-=======================================================================
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
 Max life time                                     1.4427e+06 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
@@ -216,11 +220,12 @@ Auger electron emission enabled                   1
 Auger cascade enabled                             1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
-=======================================================================
+======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
+... open Root analysis file : scoring.root - done
 --> Event 0 starts.
 --> Event 1000 starts.
 --> Event 2000 starts.
@@ -233,9 +238,11 @@ See commands in /vis/modeling/trajectories/ for other options.
 --> Event 9000 starts.
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1286
- Total dose in patient : 291.796 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1345
+ Total dose in patient : 292.044 picoGy 
 ------------------------------------------------------------
 
+... write Root file : scoring.root - done
+... close Root file : scoring.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -84,18 +84,24 @@ class G4HnManager : public G4BaseAnalysisManager
 
     // Function implementing public analysis manager interface
     //
-    
     void  SetActivation(G4bool activation);
     void  SetActivation(G4int id, G4bool activation);
     void  SetAscii(G4int id, G4bool ascii);
     void  SetPlotting(G4bool plotting);
     void  SetPlotting(G4int id, G4bool plotting);
+    G4bool  SetXAxisIsLog(G4int id, G4bool isLogAxis);
+    G4bool  SetYAxisIsLog(G4int id, G4bool isLogAxis);
+    G4bool  SetZAxisIsLog(G4int id, G4bool isLogAxis);
+
 
     // Access to Hn additional information
     G4String GetName(G4int id) const;
     G4double GetXUnit(G4int id) const;
     G4double GetYUnit(G4int id) const;
     G4double GetZUnit(G4int id) const;
+    G4bool   GetXAxisIsLog(G4int id) const;
+    G4bool   GetYAxisIsLog(G4int id) const;
+    G4bool   GetZAxisIsLog(G4int id) const;
     G4bool   GetActivation(G4int id) const;
     G4bool   GetAscii(G4int id) const;
     G4bool   GetPlotting(G4int id) const;
@@ -112,7 +118,7 @@ class G4HnManager : public G4BaseAnalysisManager
 };
 
 inline G4int G4HnManager::GetNofHns() const
-{ return fHnVector.size(); }
+{ return G4int(fHnVector.size()); }
 
 inline G4String G4HnManager::GetHnType() const
 { return fHnType; }

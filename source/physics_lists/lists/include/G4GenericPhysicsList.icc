@@ -45,15 +45,11 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-#include "G4DataQuestionaire.hh"
-
-
 
 template<class T> TG4GenericPhysicsList<T>::TG4GenericPhysicsList(G4int ver):  T(), messenger(this, "/PhysicsList/")
 {
   DeclareProperties();
 
-  G4DataQuestionaire it(photon);
   G4cout << "<<< Geant4 Physics List simulation engine: G4GenericPhysicsList"<<G4endl;
   G4cout <<G4endl;
     this->defaultCutValue = 0.7*CLHEP::mm;
@@ -64,7 +60,6 @@ template<class T> TG4GenericPhysicsList<T>::TG4GenericPhysicsList(std::vector<G4
 {
   DeclareProperties();
 
-  G4DataQuestionaire it(photon);
   G4cout << "<<< Geant4 Physics List simulation engine: G4GenericPhysicsList"<<G4endl;
   G4cout <<G4endl;
     this->defaultCutValue = 0.7*CLHEP::mm;

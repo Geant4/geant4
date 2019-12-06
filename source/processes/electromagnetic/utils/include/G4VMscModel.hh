@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -62,6 +61,7 @@
 #include <vector>
 
 class G4ParticleChangeForMSC;
+class G4ParticleDefinition;
 
 class G4VMscModel : public G4VEmModel
 {
@@ -70,24 +70,25 @@ public:
 
   explicit G4VMscModel(const G4String& nam);
 
-  virtual ~G4VMscModel();
+  ~G4VMscModel() override;
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,  
-					      G4double& stepLimit);
+					      G4double& stepLimit) = 0;
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
+  virtual G4double ComputeGeomPathLength(G4double truePathLength) = 0;
 
-  virtual G4double ComputeTrueStepLength(G4double geomPathLength);
+  virtual G4double ComputeTrueStepLength(G4double geomPathLength) = 0;
 
   virtual G4ThreeVector& SampleScattering(const G4ThreeVector&,
-					  G4double safety);
+					  G4double safety) = 0;
+
+  void InitialiseParameters(const G4ParticleDefinition*);
 
   // empty method
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double tmax) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin, G4double tmax) override;
 
   //================================================================
   //  Set parameters of multiple scattering models
@@ -102,6 +103,10 @@ public:
   inline void SetGeomFactor(G4double);
 
   inline void SetSkin(G4double);
+
+  inline void SetLambdaLimit(G4double);
+
+  inline void SetSafetyFactor(G4double);
 
   inline void SetSampleZ(G4bool);
 
@@ -227,6 +232,20 @@ inline void G4VMscModel::SetRangeFactor(G4double val)
 inline void G4VMscModel::SetGeomFactor(G4double val)
 {
   if(!IsLocked()) { facgeom = val; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VMscModel::SetLambdaLimit(G4double val)
+{
+  if(!IsLocked()) { lambdalimit = val; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VMscModel::SetSafetyFactor(G4double val)
+{
+  if(!IsLocked()) { facsafety = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -387,8 +406,7 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
   G4double x;
   if (xSectionTable) {
     const G4int idx = CurrentCouple()->GetIndex();
-    x =  (*xSectionTable)[(*theDensityIdx)[idx]]->Value(ekin, idxTable)
-        *(*theDensityFactor)[idx]/(ekin*ekin);
+    x =  (*xSectionTable)[idx]->Value(ekin, idxTable)/(ekin*ekin);
   } else { 
     x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 
                               0.0, DBL_MAX); 
@@ -403,8 +421,7 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
   G4double x;
   if (xSectionTable) {
     const G4int idx = CurrentCouple()->GetIndex();
-    x =  (*xSectionTable)[(*theDensityIdx)[idx]]->Value(ekin, logekin, idxTable)
-        *(*theDensityFactor)[idx]/(ekin*ekin);
+    x =  (*xSectionTable)[idx]->LogVectorValue(ekin, logekin)/(ekin*ekin);
   } else { 
     x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 
                               0.0, DBL_MAX); 

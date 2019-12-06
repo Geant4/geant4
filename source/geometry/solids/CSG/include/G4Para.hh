@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Para
 //
 // Class description:
@@ -61,14 +55,11 @@
 //      fTthetaCphi   Tan theta * Cos phi
 //      fTthetaSphi   Tan theta * Sin phi
 
-// History:
 // 21.3.94 P.Kent Old C++ code converted to tolerant geometry
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
-// 18.11.99 V.Grichine , kUndefined was added to ESide
 // --------------------------------------------------------------------
-
-#ifndef G4Para_HH
-#define G4Para_HH
+#ifndef G4PARA_HH
+#define G4PARA_HH
 
 #include "G4GeomTypes.hh"
 
@@ -142,8 +133,9 @@ class G4Para : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p) const;
 
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;

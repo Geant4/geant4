@@ -12,3 +12,8 @@
  For mu-, Bertini model is used for nuclear capture, together with
  default element selector, EM cascade sampling and bound decay sampling.
 
+ G4StoppingPhysicsFritiofWithBinaryCascade
+ -----------------------------------------
+ The same as G4StoppingPhysics, except that for anti-proton and anti-neutron
+ annihilation at rest it uses Fritiof coupled with Binary Cascade.
+

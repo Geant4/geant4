@@ -31,7 +31,7 @@ inline cid matrix_cid()         {return base_cid()+10;}
 inline cid leaf_string_cid()    {return base_cid()+11;}
 inline cid leaf_element_cid()   {return base_cid()+12;}
 
-inline cid StreamerInfo_cid()      {return base_cid()+13;}
+inline cid streamer_info_cid()     {return base_cid()+13;}
 inline cid streamer_element_cid()  {return base_cid()+14;}
 
 inline cid stl_vector_string_cid() {return base_cid()+16;}
@@ -46,6 +46,11 @@ inline cid base_leaf_cid()         {return base_cid()+20;} //+12=32
 //NOTE : leaf<T> = base_leaf_cid()+_cid(T)
 inline cid stl_vector_cid()        {return base_cid()+33;} //+12=45
 inline cid stl_vector_vector_cid() {return base_cid()+46;} //+12=58
+
+inline cid clones_array_cid()   {return base_cid()+60;}
+inline cid vector3_cid()        {return base_cid()+61;}
+
+inline cid stl_vector_obj_cid() {return base_cid()+100;}
 
 }}
 

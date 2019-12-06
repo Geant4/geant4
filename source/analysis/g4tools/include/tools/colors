@@ -182,6 +182,22 @@ TOOLS_COLORS_STAT(white,1,1,1)
 TOOLS_COLORS_STAT(yellow,1,1,0)
 TOOLS_COLORS_STAT(greenyellow,0.675792F,0.996109F,0.18359F)
 
+////////////////////////////////////////////////////////
+/// CERN-ROOT colors : /////////////////////////////////
+////////////////////////////////////////////////////////
+
+TOOLS_COLORS_STAT(ROOT_Color8,  0.35F,0.83F,0.33F)
+TOOLS_COLORS_STAT(ROOT_Color9,  0.35F,0.33F,0.85F)
+TOOLS_COLORS_STAT(ROOT_grey12,  0.3F,0.3F,0.3F)
+TOOLS_COLORS_STAT(ROOT_grey13,  0.4F,0.4F,0.4F)
+TOOLS_COLORS_STAT(ROOT_grey14,  0.5F,0.5F,0.5F)
+TOOLS_COLORS_STAT(ROOT_grey15,  0.6F,0.6F,0.6F)
+TOOLS_COLORS_STAT(ROOT_grey16,  0.7F,0.7F,0.7F)
+TOOLS_COLORS_STAT(ROOT_grey17,  0.8F,0.8F,0.8F)
+TOOLS_COLORS_STAT(ROOT_grey18,  0.9F,0.9F,0.9F)
+TOOLS_COLORS_STAT(ROOT_grey19 , 0.95F,0.95F,0.95F)
+TOOLS_COLORS_STAT(ROOT_Color50, 0.83F,0.35F,0.33F)
+
 #undef TOOLS_COLORS_STAT
 
 }

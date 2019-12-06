@@ -23,17 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4TrialsCounter
+// G4TrialsCounter
 //
 // Class description:
-//    Keep statistics of the number of trials,
-//    including the Maximum and how many times it was reached.
 //
+// Keeps statistics of the number of trials, including the Maximum
+// and how many times it was reached.
 
-// Author: Dec 8, 2006  John Apostolakis    
+// Author: John Apostolakis, CERN - 08.12.2006   
 // -------------------------------------------------------------------
 #ifndef G4TRIALS_COUNTER_HH
 #define G4TRIALS_COUNTER_HH
@@ -46,7 +43,7 @@ class  G4TrialsCounter
   public:  // with description
 
     G4TrialsCounter( const G4String& nameStats,
-                     const G4String& description, G4bool printOnExit=false ); 
+                     const G4String& description, G4bool printOnExit = false ); 
    ~G4TrialsCounter();
 
     inline void AccumulateCounts( G4int noTrials ); 
@@ -60,15 +57,18 @@ class  G4TrialsCounter
 
   private:
 
-    G4int    fTotalNoTrials;    //  Counts sum of trials 
-    G4int    fNumberCalls;      //  Total # of calls to accumulate
-    G4int    fmaxTrials;        // Max value of trials
-    G4int    fNoTimesMaxTrials; // How many times maximum is reached
+    G4int fTotalNoTrials = 0;    //  Counts sum of trials 
+    G4int fNumberCalls = 0;      //  Total # of calls to accumulate
+    G4int fmaxTrials = 0;        // Max value of trials
+    G4int fNoTimesMaxTrials = 0; // How many times maximum is reached
 
-    G4String  fName;         //  Identifies stats, and is printed 
-    G4String  fDescription;  //  Explanation of stats
-    G4bool    fStatsVerbose; //  If verbose and not printed, print on destruction
-    G4bool    fPrinted;      //  Flag, to avoid reprinting on destruction
+    G4String fName;        //  Identifies stats, and is printed 
+    G4String fDescription; //  Explanation of stats
+
+    G4bool fStatsVerbose = false;
+      // If verbose and not printed, print on destruction
+    G4bool fPrinted = false;
+      // Flag, to avoid reprinting on destruction
 }; 
 
 #include "G4TrialsCounter.icc"

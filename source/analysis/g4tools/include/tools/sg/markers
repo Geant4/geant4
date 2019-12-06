@@ -25,15 +25,13 @@ public:
   mf<float> xyzs; //[x,y,z]
   sf<float> size; //horizontal size in pixels.
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::markers)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(style)
-      TOOLS_ADD_FIELD_DESC(xyzs)
-      TOOLS_ADD_FIELD_DESC(size)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),3, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(style),
+      TOOLS_ARG_FIELD_DESC(xyzs),
+      TOOLS_ARG_FIELD_DESC(size)
+    );
     return s_v;
   }
 private:
@@ -43,9 +41,13 @@ private:
     add_field(&size);
   }
 public:
+  virtual bool draw_in_frame_buffer() const {return true;}
+
   virtual void render(render_action& a_action) {
     size_t num = xyzs.size()/3;
     if(!num) return;
+
+    //NOTE : gstos would not work because of project_point() that must be done at each render().
 
     const state& state = a_action.state();
 

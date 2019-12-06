@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4hntools
         G4ToolsAnalysisManager.icc
         G4ToolsAnalysisReader.hh
         G4ToolsAnalysisReader.icc
+        g4hntools_defs.hh
     SOURCES
         G4BaseHistoUtilities.cc
         G4H1ToolsManager.cc

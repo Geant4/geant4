@@ -23,20 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4IntersectionSolid
+// G4IntersectionSolid
 //
 // Class description:
 //
-// Class for description of intersection of two CSG solids.
+// Class for description of intersection of two solids.
 
-// History: 
-//
 // 12.09.98 V.Grichine: initial design and implementation
-// 28.10.98 V.Grichine: addition of two constructors with G4PlacedSolid
-//
 // --------------------------------------------------------------------
 #ifndef G4INTERSECTIONSOLID_HH
 #define G4INTERSECTIONSOLID_HH
@@ -116,8 +109,7 @@ class G4IntersectionSolid : public G4BooleanSolid
                                    
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
-
-} ;
+};
 
 #endif
 

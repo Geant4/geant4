@@ -68,8 +68,8 @@ G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& sceneHandler,
 {
 	// Set a g4.prim-file viewer 
 	strcpy( fG4PrimViewer, "dawn" ); 
-	if( getenv( "G4DAWNFILE_VIEWER" ) != NULL ) {
-		strcpy( fG4PrimViewer, getenv( "G4DAWNFILE_VIEWER" ) ) ;			
+	if( std::getenv( "G4DAWNFILE_VIEWER" ) != NULL ) {
+		strcpy( fG4PrimViewer, std::getenv( "G4DAWNFILE_VIEWER" ) ) ;			
 	} 
 
 	// string for viewer invocation
@@ -86,8 +86,8 @@ G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& sceneHandler,
 	// Set a PostScript Viewer
 //	strcpy( fPSViewer, "ghostview" ); 
 	strcpy( fPSViewer, "gv" ); 
-	if( getenv( "G4DAWNFILE_PS_VIEWER" ) != NULL ) {
-		strcpy( fPSViewer, getenv( "G4DAWNFILE_PS_VIEWER" ) ) ;			
+	if( std::getenv( "G4DAWNFILE_PS_VIEWER" ) != NULL ) {
+		strcpy( fPSViewer, std::getenv( "G4DAWNFILE_PS_VIEWER" ) ) ;			
 	} 
 
 }
@@ -354,10 +354,10 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	//######### P4
                //----- drawing device
   //	enum {PS=1, XWIN=2, PS2=3, XWIN2=4, OPEN_GL=5, DEVICE_END=6};
-        if( ( ( getenv( FR_ENV_MULTI_WINDOW ) != NULL        ) && \
-              ( strcmp( getenv( FR_ENV_MULTI_WINDOW ),"0"  ) )       ) || \
-            ( ( getenv( FR_ENV_MULTI_WINDOW2 ) != NULL        ) && \
-              ( strcmp( getenv( FR_ENV_MULTI_WINDOW2 ),"0"  ) )      )     )
+        if( ( ( std::getenv( FR_ENV_MULTI_WINDOW ) != NULL        ) && \
+              ( strcmp( std::getenv( FR_ENV_MULTI_WINDOW ),"0"  ) )       ) || \
+            ( ( std::getenv( FR_ENV_MULTI_WINDOW2 ) != NULL        ) && \
+              ( strcmp( std::getenv( FR_ENV_MULTI_WINDOW2 ),"0"  ) )      )     )
         {
                 gui_out << 2 << G4endl; // OpenWindow
         } else {

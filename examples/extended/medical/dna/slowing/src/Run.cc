@@ -31,7 +31,7 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
-/// \filemedical/dna/slowing/src/Run.cc
+/// \file medical/dna/slowing/src/Run.cc
 /// \brief Implementation of the Run class
 
 #include "Run.hh"

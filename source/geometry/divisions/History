@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 23rd, 2019      J.Apostolakis (geomdiv-V10-05-02)
+- Added new virtual VolumeType() method in Physical Volume types.
+  Requires and coworks with geommng-V10-05-11 and geomvol-V10-05-05.
+
+September 19th, 2019    G.Cosmo (geomdiv-V10-05-01)
+- G4PVDivision: added missing implementation of alternative constructor.
+- Implemented minor c++11 revision; code cleanup and formatting.
+
 June 13th, 2019         G.Cosmo (geomdiv-V10-05-00)
 - Return correct value for multiplicity in G4PVDivision and G4ReplicatedSlice.
   Addressing problem report #2168.

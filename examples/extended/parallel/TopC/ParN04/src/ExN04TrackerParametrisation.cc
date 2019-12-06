@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04TrackerParametrisation.cc
+/// \file ExN04TrackerParametrisation.cc
 /// \brief Implementation of the ExN04TrackerParametrisation class
 //
 

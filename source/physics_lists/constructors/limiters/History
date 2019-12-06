@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Nov-2019, G. Cosmo (phys-ctor-limiters-V10-05-00)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
 22-Nov-2017, V. Ivanchenko (phys-ctor-limiters-V10-03-02)
 - G4StepLimiterPhysics - fixed thread safety - removed possible 
     race condition

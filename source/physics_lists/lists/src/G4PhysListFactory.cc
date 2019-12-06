@@ -108,7 +108,7 @@ G4PhysListFactory::ReferencePhysList()
 {
   // instantiate PhysList by environment variable "PHYSLIST"
   G4String name = "";
-  char* path = getenv("PHYSLIST");
+  char* path = std::getenv("PHYSLIST");
   if (path) {
     name = G4String(path);
   } else {

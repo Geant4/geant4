@@ -126,6 +126,8 @@ public:
 
   G4int GetProcessSubType() const;
 
+  G4VEmProcess* GetEmProcess(const G4String& name) final;
+
 protected:
 
   G4double GetMeanFreePath(const G4Track& track, G4double previousStepSize,
@@ -136,9 +138,9 @@ private:
   // It returns the cross section per volume for energy/ material
   G4double TotalCrossSectionPerVolume();
 
-  inline G4double ComputeGeneralLambda(size_t idxe, size_t idxt, size_t& idx);
+  inline G4double ComputeGeneralLambda(size_t idxe, size_t idxt);
 
-  inline G4double GetProbability(size_t idxt, size_t& idx);
+  inline G4double GetProbability(size_t idxt);
 
   inline void SelectedProcess(const G4Track& track, G4VProcess* ptr);
 
@@ -149,8 +151,8 @@ private:
 				       G4HadronicProcess*);
 
   // hide copy constructor and assignment operator
-  G4GammaGeneralProcess(G4GammaGeneralProcess &) = delete;
-  G4GammaGeneralProcess & operator=(const G4GammaGeneralProcess &right) = delete;
+  G4GammaGeneralProcess(G4GammaGeneralProcess &);
+  G4GammaGeneralProcess & operator=(const G4GammaGeneralProcess &right);
 
   static G4EmDataHandler*      theHandler;
   static const size_t          nTables = 15;
@@ -170,33 +172,30 @@ private:
   G4double                     minMMEnergy;
   G4double                     peLambda;
   G4double                     preStepLogE;
+  G4double                     factor;
 
   size_t                       nLowE;
   size_t                       nHighE;
   size_t                       idxEnergy;
-  size_t                       idx0;
-  size_t                       idx1;
-  size_t                       idx2;
-  size_t                       idx3;
   G4bool                       splineFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 inline G4double
-G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt, size_t& idx)
+G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt)
 {
   idxEnergy = idxe;
-  return theHandler->GetVector(idxt, currentCoupleIndex)
-    ->Value(preStepKinEnergy, preStepLogE, idx);
+  return factor*theHandler->GetVector(idxt, basedCoupleIndex)
+    ->LogVectorValue(preStepKinEnergy, preStepLogE);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4GammaGeneralProcess::GetProbability(size_t idxt, size_t& idx)
+inline G4double G4GammaGeneralProcess::GetProbability(size_t idxt)
 {
-  return (theT[idxt]) ? theHandler->GetVector(idxt, 
-          currentCoupleIndex)->Value(preStepKinEnergy, preStepLogE, idx) : 1.0;
+  return (theT[idxt]) ? theHandler->GetVector(idxt, basedCoupleIndex)
+    ->LogVectorValue(preStepKinEnergy, preStepLogE) : 1.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

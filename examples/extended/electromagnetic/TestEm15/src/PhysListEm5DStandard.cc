@@ -47,6 +47,7 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4RayleighScattering.hh"
 #include "G4BetheHeitler5DModel.hh"
+#include "G4GammaConversionToMuons.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
@@ -99,16 +100,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEm5DStandard::PhysListEm5DStandard(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmStandard_5D"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandard_5D")
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(ver);
   param->SetNumberOfBinsPerDecade(10);
   param->SetMscStepLimitType(fUseSafetyPlus);
-#if G4VERSION_NUMBER >= 1040
   param->SetLateralDisplacementAlg96(false);
-#endif  
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -153,7 +152,7 @@ void PhysListEm5DStandard::ConstructParticle()
 
 void PhysListEm5DStandard::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(G4EmParameters::Instance()->Verbose() > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
@@ -199,11 +198,13 @@ void PhysListEm5DStandard::ConstructProcess()
       ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
       ph->RegisterProcess(new G4ComptonScattering(), particle);
 
-      // Gamma conversion
+      // Gamma conversion to e+ e-
       G4GammaConversion* gc = new G4GammaConversion();
       G4VEmModel* theGC5DModel = new G4BetheHeitler5DModel();
       gc->SetEmModel(theGC5DModel);
       ph->RegisterProcess(gc, particle);
+      // Gamma conversion to mu+ mu-
+      ph->RegisterProcess(new G4GammaConversionToMuons(), particle);
 
       // Rayleigh scattering
       ph->RegisterProcess(new G4RayleighScattering(), particle);

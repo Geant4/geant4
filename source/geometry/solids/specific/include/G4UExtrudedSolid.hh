@@ -23,24 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UExtrudedSolid
 //
 // Class description:
 //
-//   Wrapper class for G4ExtrudedSolid to make use of VecGeom ExtrudedSolid.
+// Wrapper class for G4ExtrudedSolid to make use of VecGeom ExtrudedSolid.
 
-// History:
 // 17.11.17 G.Cosmo, CERN
 // --------------------------------------------------------------------
-#ifndef G4UEXTRUDEDSOLID_hh
-#define G4UEXTRUDEDSOLID_hh
+#ifndef G4UEXTRUDEDSOLID_HH
+#define G4UEXTRUDEDSOLID_HH
 
 #include "G4UAdapter.hh"
 
@@ -70,12 +62,12 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
 
   public:  // with description
 
-    G4UExtrudedSolid(const G4String&        pName,
+    G4UExtrudedSolid(const G4String& pName,
                      std::vector<G4TwoVector> polygon,
                      std::vector<ZSection>    zsections);
     // General constructor
 
-    G4UExtrudedSolid(const G4String&        pName,
+    G4UExtrudedSolid(const G4String& pName,
                      std::vector<G4TwoVector> polygon,
                      G4double                 halfZ,
                      G4TwoVector off1, G4double scale1,

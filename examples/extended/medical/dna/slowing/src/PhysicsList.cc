@@ -31,7 +31,7 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
-/// \filemedical/dna/slowing/src/PhysicsList.cc
+/// \file medical/dna/slowing/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"

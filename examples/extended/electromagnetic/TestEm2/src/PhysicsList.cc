@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
 //
@@ -160,7 +160,7 @@ void PhysicsList::AddStepMax()
 
     if (stepMaxProcess->IsApplicable(*particle))
       {
-        pmanager ->AddDiscreteProcess(stepMaxProcess);
+        pmanager->AddDiscreteProcess(stepMaxProcess);
       }
   }
 }
@@ -169,7 +169,7 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel>1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 

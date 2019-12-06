@@ -47,7 +47,7 @@ G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name,
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
 
 void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4bool& visible) const
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4bool& /*visible*/) const
 {
   G4Colour colour(fDefault);
   G4String particle = traj.GetParticleName();
@@ -57,7 +57,6 @@ G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4bool& visi
   G4VisTrajContext myContext(GetContext());
   
   myContext.SetLineColour(colour);
-  myContext.SetVisible(visible);
   
   if (GetVerbose()) {
     G4cout<<"G4TrajectoryDrawByParticleID drawer named "<<Name();

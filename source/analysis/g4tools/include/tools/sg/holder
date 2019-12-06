@@ -33,13 +33,11 @@ public:
 public:
   sf_string class_name;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::holder)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(class_name)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(class_name)
+    );
     return s_v;
   }
 private:

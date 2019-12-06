@@ -221,6 +221,9 @@ void G4EmStandardPhysicsSS::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4CoulombScattering* ss = new G4CoulombScattering();
+      if(G4EmParameters::Instance()->UseMottCorrection()) {
+	ss->SetEmModel(new G4eSingleCoulombScatteringModel());
+      }
 
       ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);

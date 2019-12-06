@@ -13,13 +13,29 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26-11-19 I. Hrivnacova (rdecay01-V10-05-06)
+- Fixed formatting in .README.txt
+
+01-10-19 mma (rdecay01-V10-05-05)
+- document timeWindowBiased.mac
+  
+14-09-19 mma (rdecay01-V10-05-04)
+- timeWindow command : allow t1 = 0.     
+
+10-09-19 I. Hrivnacova (rdecay01-V10-05-03)
+- Removed tabulation from TrackingAction.cc
+
+04-09-19 mma (rdecay01-V10-05-02)
+- PhysicsList.cc : restore separators
+     
+11-07-19 mma (rdecay01-V10-05-01)
+- TrackingAction.cc: if (fFullChain) set kinetic energy to zero
 
 21-06-19 Dennis Wright (rdecay01-V10-05-00)
--------------------------------------------
 - PhysicsList.cc: replace G4RadioactiveDecay with refactored class G4Radioactivation
 
 27-06-18 mma (rdecay01-V10-04-03)
----------------------------------
 - add timeWindowBiased.mac and data
 
 08-05-18 Ben Morgan (rdecay01-V10-04-02)

@@ -34,10 +34,9 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4AlphaEvaporationProbability.hh"
-#include "G4SystemOfUnits.hh"
 
 G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :
-    G4EvaporationProbability(4,2,1.0,&theCoulombBarrier) 
+    G4EvaporationProbability(4,2,1.0) 
 {}
 
 G4AlphaEvaporationProbability::~G4AlphaEvaporationProbability()

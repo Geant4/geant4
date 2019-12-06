@@ -59,8 +59,8 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 {
   type = T_G4PhysicsLogVector;
 
-  dBin     =  G4Log(theEmax/theEmin)/(G4double)theNbin;
-  baseBin  =  G4Log(theEmin)/dBin;
+  invdBin  =  1./(G4Log(theEmax/theEmin)/(G4double)theNbin);
+  baseBin  =  G4Log(theEmin)*invdBin;
 
   numberOfNodes = theNbin + 1;
   dataVector.reserve(numberOfNodes);
@@ -71,7 +71,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 
   for (size_t i=1; i<numberOfNodes-1; ++i)
     {
-      binVector.push_back(G4Exp((baseBin+i)*dBin));
+      binVector.push_back(G4Exp((baseBin+i)/invdBin));
       dataVector.push_back(0.0);
     }
   binVector.push_back(theEmax);
@@ -89,8 +89,8 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success)
   {
-    dBin = G4Log(binVector[1]/edgeMin);
-    baseBin = G4Log(edgeMin)/dBin;
+    invdBin = 1./G4Log(binVector[1]/edgeMin);
+    baseBin = G4Log(edgeMin)*invdBin;
   }
   return success;
 }
@@ -98,6 +98,6 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 void G4PhysicsLogVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
-  dBin = G4Log(binVector[1]/edgeMin);
-  baseBin = G4Log(edgeMin)/dBin;
+  invdBin = 1./G4Log(binVector[1]/edgeMin);
+  baseBin = G4Log(edgeMin)*invdBin;
 }

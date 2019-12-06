@@ -46,8 +46,8 @@ public:
 
   // Static methods to shoot random values using the static generator
   
-  static inline float shoot() {return ziggurat_RNOR(HepRandom::getTheEngine());};
-  static inline float shoot( float mean, float stdDev ) {return shoot()*stdDev + mean;};
+  static inline float shoot() {return ziggurat_RNOR(HepRandom::getTheEngine());}
+  static inline float shoot( float mean, float stdDev ) {return shoot()*stdDev + mean;}
 
   static void shootArray ( const int size, float* vect, float mean=0.0, float stdDev=1.0 );
   static void shootArray ( const int size, double* vect, double mean=0.0, double stdDev=1.0 );
@@ -55,8 +55,8 @@ public:
   //  Static methods to shoot random values using a given engine
   //  by-passing the static generator.
 
-  static inline float shoot( HepRandomEngine* anotherEngine ) {return ziggurat_RNOR(anotherEngine);};
-  static inline float shoot( HepRandomEngine* anotherEngine, float mean, float stdDev ) {return shoot(anotherEngine)*stdDev + mean;};
+  static inline float shoot( HepRandomEngine* anotherEngine ) {return ziggurat_RNOR(anotherEngine);}
+  static inline float shoot( HepRandomEngine* anotherEngine, float mean, float stdDev ) {return shoot(anotherEngine)*stdDev + mean;}
 
   static void shootArray ( HepRandomEngine* anotherEngine, const int size, float* vect, float mean=0.0, float stdDev=1.0 );
   static void shootArray ( HepRandomEngine* anotherEngine, const int size, double* vect, double mean=0.0, double stdDev=1.0 );
@@ -64,9 +64,9 @@ public:
   //  Instance methods using the localEngine to instead of the static 
   //  generator, and the default mean and stdDev established at construction
 
-  inline float fire() {return ziggurat_RNOR(localEngine.get()) * defaultStdDev + defaultMean;};
+  inline float fire() {return float(ziggurat_RNOR(localEngine.get()) * defaultStdDev + defaultMean);}
 
-  inline float fire ( float mean, float stdDev ) {return ziggurat_RNOR(localEngine.get()) * stdDev + mean;};
+  inline float fire ( float mean, float stdDev ) {return ziggurat_RNOR(localEngine.get()) * stdDev + mean;}
   
   void fireArray  ( const int size, float* vect);
   void fireArray  ( const int size, double* vect);
@@ -110,14 +110,14 @@ protected:
 
   static CLHEP_THREAD_LOCAL bool ziggurat_is_init;
   
-  static inline unsigned long ziggurat_SHR3(HepRandomEngine* anEngine) {return (unsigned int)(*anEngine);};
-  static inline float ziggurat_UNI(HepRandomEngine* anEngine) {return anEngine->flat();};
+  static inline unsigned long ziggurat_SHR3(HepRandomEngine* anEngine) {return (unsigned int)(*anEngine);}
+  static inline float ziggurat_UNI(HepRandomEngine* anEngine) {return float(anEngine->flat());}
   static inline float ziggurat_RNOR(HepRandomEngine* anEngine) {
     if(!ziggurat_is_init) ziggurat_init();
     long hz=(signed)ziggurat_SHR3(anEngine);
     unsigned long iz=hz&127;
     return ((unsigned long)std::abs(hz)<kn[iz]) ? hz*wn[iz] : ziggurat_nfix(hz,anEngine);
-  };
+  }
   static float ziggurat_nfix(long hz,HepRandomEngine* anEngine);
   
 private:

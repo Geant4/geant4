@@ -42,7 +42,7 @@ protected:
   class point_writer : public virtual writer {
   public:
     virtual void write(ZPos a_x,ZPos a_y,ZZ a_z) {
-      if(m_size>1) {
+      if(m_size>=1) { //see zb_action::npix().
         ZPos x,y;
         for(int i=-int(m_size);i<=int(m_size);i++) {
           x = a_x + i;
@@ -72,6 +72,15 @@ protected:
       writer::operator=(a_from);
       m_size = a_from.m_size;
       return *this;
+    }
+  public:
+    bool get_pixel(ZPos a_x,ZPos a_y,ZZ /*a_z*/,ZPixel& a_pixel) const {
+      if((a_x<m_buffer.m_begX) || (a_x>m_buffer.m_endX)) {a_pixel=0;return false;}
+      if((a_y<m_buffer.m_begY) || (a_y>m_buffer.m_endY)) {a_pixel=0;return false;}
+      unsigned long offset = a_y * m_buffer.m_zbw + a_x;
+      ZPixel* zimage = m_buffer.m_zimage  + offset;
+      a_pixel = *zimage;
+      return true;
     }
   protected:
     void _write(ZPos a_x,ZPos a_y,ZZ a_z) {
@@ -248,9 +257,9 @@ public:
     }
   }
 
-  ZPixel get_pixel(ZPos a_x,ZPos a_y) const {
-    return *(m_zimage + a_y * m_zbw + a_x);
-  }
+  //ZPixel get_pixel(ZPos a_x,ZPos a_y) const {
+  //  return *(m_zimage + a_y * m_zbw + a_x);
+  //}
 
   bool get_clipped_pixel(ZPos a_x,ZPos a_y,ZPixel& a_pixel) const {
     if((a_x<m_begX) || (a_x>m_endX))  return false;
@@ -260,8 +269,7 @@ public:
   }
 
 public:
-  void set_clip_region(ZPos a_x,ZPos a_y,
-                       unsigned int a_width,unsigned int a_height){
+  void set_clip_region(ZPos a_x,ZPos a_y,unsigned int a_width,unsigned int a_height){
     // if a_width or a_height is zero, clip region is empty.
 
     m_begX      = a_x;
@@ -278,6 +286,11 @@ public:
   void draw_point(const point& a_p,ZPixel a_pixel,unsigned int a_size){
     point_writer pw(a_pixel,*this,a_size);
     pw.write(a_p.x,a_p.y,a_p.z);
+  }
+
+  bool get_pixel(const point& a_p,ZPixel& a_pixel){
+    point_writer pw(a_pixel,*this,1);
+    return pw.get_pixel(a_p.x,a_p.y,a_p.z,a_pixel);
   }
 
   void draw_line(const point& a_beg,const point& a_end,ZPixel a_pixel,unsigned int a_size){

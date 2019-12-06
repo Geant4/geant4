@@ -23,21 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TwistedTubs implementation
 //
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4TwistTubsSide.cc
-//
-// Author: 
-//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
-//
-// History:
-//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//                 from original version in Jupiter-2.5.02 application.
+// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
+// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
 #include "G4TwistedTubs.hh"
@@ -68,7 +58,7 @@ namespace
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4TwistedTubs::G4TwistedTubs(const G4String &pname,
+G4TwistedTubs::G4TwistedTubs(const G4String& pname,
                                    G4double  twistedangle,
                                    G4double  endinnerrad,
                                    G4double  endouterrad,
@@ -76,9 +66,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  dphi)
    : G4VSolid(pname), fDPhi(dphi), 
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.),
-     fRebuildPolyhedron(false), fpPolyhedron(0)
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
    if (endinnerrad < DBL_MIN)
    {
@@ -101,7 +89,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    CreateSurfaces();
 }
 
-G4TwistedTubs::G4TwistedTubs(const G4String &pname,     
+G4TwistedTubs::G4TwistedTubs(const G4String& pname,     
                                    G4double  twistedangle,    
                                    G4double  endinnerrad,  
                                    G4double  endouterrad,  
@@ -110,9 +98,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  totphi)
    : G4VSolid(pname),
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.),
-     fRebuildPolyhedron(false), fpPolyhedron(0)
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
 
    if (!nseg)
@@ -145,7 +131,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    CreateSurfaces();
 }
 
-G4TwistedTubs::G4TwistedTubs(const G4String &pname,
+G4TwistedTubs::G4TwistedTubs(const G4String& pname,
                                    G4double  twistedangle,
                                    G4double  innerrad,
                                    G4double  outerrad,
@@ -154,9 +140,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  dphi)
    : G4VSolid(pname), fDPhi(dphi),
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.),
-     fRebuildPolyhedron(false), fpPolyhedron(0)
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
    if (innerrad < DBL_MIN)
    {
@@ -168,7 +152,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
    CreateSurfaces();
 }
 
-G4TwistedTubs::G4TwistedTubs(const G4String &pname,     
+G4TwistedTubs::G4TwistedTubs(const G4String& pname,     
                                    G4double  twistedangle,    
                                    G4double  innerrad,  
                                    G4double  outerrad,  
@@ -178,9 +162,7 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  totphi)
    : G4VSolid(pname),
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-     fCubicVolume(0.), fSurfaceArea(0.),
-     fRebuildPolyhedron(false), fpPolyhedron(0)
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
    if (!nseg)
    {
@@ -209,9 +191,7 @@ G4TwistedTubs::G4TwistedTubs( __void__& a )
     fZHalfLength(0.), fInnerStereo(0.), fOuterStereo(0.), fTanInnerStereo(0.),
     fTanOuterStereo(0.), fKappa(0.), fInnerRadius2(0.), fOuterRadius2(0.),
     fTanInnerStereo2(0.), fTanOuterStereo2(0.), fLowerEndcap(0), fUpperEndcap(0),
-    fLatterTwisted(0), fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
-    fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+    fLatterTwisted(0), fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
 {
 }
 
@@ -226,7 +206,7 @@ G4TwistedTubs::~G4TwistedTubs()
    if (fFormerTwisted) { delete fFormerTwisted; }
    if (fInnerHype)     { delete fInnerHype;     }
    if (fOuterHype)     { delete fOuterHype;     }
-   if (fpPolyhedron)   { delete fpPolyhedron; fpPolyhedron = 0; }
+   if (fpPolyhedron)   { delete fpPolyhedron; fpPolyhedron = nullptr; }
 }
 
 //=====================================================================
@@ -244,14 +224,13 @@ G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0), fFormerTwisted(0),
     fInnerHype(0), fOuterHype(0),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fRebuildPolyhedron(false), fpPolyhedron(0),
     fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
     fLastDistanceToIn(rhs.fLastDistanceToIn),
     fLastDistanceToOut(rhs.fLastDistanceToOut),
     fLastDistanceToInWithV(rhs.fLastDistanceToInWithV),
     fLastDistanceToOutWithV(rhs.fLastDistanceToOutWithV)
 {
-  for (size_t i=0; i<2; ++i)
+  for (auto i=0; i<2; ++i)
   {
     fEndZ[i] = rhs.fEndZ[i];
     fEndInnerRadius[i] = rhs.fEndInnerRadius[i];
@@ -295,7 +274,7 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
    fLastDistanceToInWithV= rhs.fLastDistanceToInWithV;
    fLastDistanceToOutWithV= rhs.fLastDistanceToOutWithV;
  
-   for (size_t i=0; i<2; ++i)
+   for (auto i=0; i<2; ++i)
    {
      fEndZ[i] = rhs.fEndZ[i];
      fEndInnerRadius[i] = rhs.fEndInnerRadius[i];
@@ -306,7 +285,7 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
  
    CreateSurfaces();
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
@@ -323,9 +302,8 @@ void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
               "G4TwistedTubs does not support Parameterisation.");
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Get bounding box
+//=====================================================================
+//* BoundingLimits ----------------------------------------------------
 
 void G4TwistedTubs::BoundingLimits(G4ThreeVector& pMin,
                                    G4ThreeVector& pMax) const
@@ -350,9 +328,8 @@ void G4TwistedTubs::BoundingLimits(G4ThreeVector& pMin,
   }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Calculate extent under transform and specified limit
+//=====================================================================
+//* CalculateExtent ---------------------------------------------------
 
 G4bool
 G4TwistedTubs::CalculateExtent(const EAxis pAxis,
@@ -459,9 +436,8 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
 
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   G4int i;
    G4int besti = -1;
-   for (i=0; i< 6; i++)
+   for (auto i=0; i<6; ++i)
    {
       G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
       if (tmpdistance < distance)
@@ -495,9 +471,9 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    // checking last value
    //
    
-   G4ThreeVector *tmpp;
-   G4ThreeVector *tmpv;
-   G4double      *tmpdist;
+   G4ThreeVector* tmpp;
+   G4ThreeVector* tmpv;
+   G4double* tmpdist;
    if ((fLastDistanceToInWithV.p == p) && (fLastDistanceToInWithV.vec == v))
    {
      return fLastDistanceToIn.value;
@@ -530,7 +506,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
        G4ThreeVector normal = SurfaceNormal(p);
        if (normal*v < 0)
        {
-         *tmpdist = 0;
+         *tmpdist = 0.;
          return fLastDistanceToInWithV.value;
        } 
      }
@@ -544,7 +520,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
 
    // find intersections and choose nearest one.
    //
-   G4VTwistSurface *surfaces[6];
+   G4VTwistSurface* surfaces[6];
    surfaces[0] = fLowerEndcap;
    surfaces[1] = fUpperEndcap;
    surfaces[2] = fLatterTwisted;
@@ -554,8 +530,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   G4int i;
-   for (i=0; i< 6; i++)
+   for (auto i=0; i<6; ++i)
    {
       G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
       if (tmpdistance < distance)
@@ -582,8 +557,8 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
    // checking last value
    //
    
-   G4ThreeVector *tmpp;
-   G4double      *tmpdist;
+   G4ThreeVector* tmpp;
+   G4double* tmpdist;
    if (fLastDistanceToIn.p == p)
    {
      return fLastDistanceToIn.value;
@@ -613,7 +588,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
       case (kOutside) :
       {
          // Initialize
-         G4double      distance = kInfinity;   
+         G4double distance = kInfinity;   
 
          // find intersections and choose nearest one.
          G4VTwistSurface *surfaces[6];
@@ -624,10 +599,9 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
          surfaces[4] = fInnerHype;
          surfaces[5] = fOuterHype;
 
-         G4int i;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 6; i++)
+         for (auto i=0; i<6; ++i)
          {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
             if (tmpdistance < distance)
@@ -668,9 +642,9 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    // checking last value
    //
    
-   G4ThreeVector *tmpp;
-   G4ThreeVector *tmpv;
-   G4double      *tmpdist;
+   G4ThreeVector* tmpp;
+   G4ThreeVector* tmpv;
+   G4double* tmpdist;
    if ((fLastDistanceToOutWithV.p == p) && (fLastDistanceToOutWithV.vec == v) )
    {
      return fLastDistanceToOutWithV.value;
@@ -719,11 +693,11 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    
    // Initialize
    //
-   G4double      distance = kInfinity;
+   G4double distance = kInfinity;
        
    // find intersections and choose nearest one.
    //
-   G4VTwistSurface *surfaces[6];
+   G4VTwistSurface* surfaces[6];
    surfaces[0] = fLatterTwisted;
    surfaces[1] = fFormerTwisted;
    surfaces[2] = fInnerHype;
@@ -731,11 +705,10 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p,
    surfaces[4] = fLowerEndcap;
    surfaces[5] = fUpperEndcap;
    
-   G4int i;
    G4int besti = -1;
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   for (i=0; i< 6; i++)
+   for (auto i=0; i<6; ++i)
    {
       G4double tmpdistance = surfaces[i]->DistanceToOut(p, v, xx);
       if (tmpdistance < distance)
@@ -774,8 +747,8 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
    // checking last value
    //
    
-   G4ThreeVector *tmpp;
-   G4double      *tmpdist;
+   G4ThreeVector* tmpp;
+   G4double* tmpdist;
    if (fLastDistanceToOut.p == p)
    {
       return fLastDistanceToOut.value;
@@ -809,7 +782,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
          G4double      distance = kInfinity;
    
          // find intersections and choose nearest one.
-         G4VTwistSurface *surfaces[6];
+         G4VTwistSurface* surfaces[6];
          surfaces[0] = fLatterTwisted;
          surfaces[1] = fFormerTwisted;
          surfaces[2] = fInnerHype;
@@ -817,10 +790,9 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
          surfaces[4] = fLowerEndcap;
          surfaces[5] = fUpperEndcap;
 
-         G4int i;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 6; i++)
+         for (auto i=0; i<6; ++i)
          {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
             if (tmpdistance < distance)
@@ -840,7 +812,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
       }
    } // switch end
 
-   return 0;
+   return 0.;
 }
 
 //=====================================================================
@@ -915,7 +887,7 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
   const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
   const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;
 
-  G4Polyhedron *ph=new G4Polyhedron;
+  G4Polyhedron* ph = new G4Polyhedron;
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
   G4double3* xyz = new G4double3[nnodes];  // number of nodes 
@@ -940,7 +912,7 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
 
 G4Polyhedron* G4TwistedTubs::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
@@ -1058,7 +1030,7 @@ G4double G4TwistedTubs::GetSurfaceArea()
 G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 {
 
-  G4double  z = G4RandFlat::shoot(fEndZ[0],fEndZ[1]);
+  G4double z = G4RandFlat::shoot(fEndZ[0],fEndZ[1]);
   G4double phi , phimin, phimax ;
   G4double x   , xmin,   xmax ;
   G4double r   , rmin,   rmax ;

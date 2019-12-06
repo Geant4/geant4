@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // GEM de-excitation model
 // by V. Ivanchenko (July 2016)
 //
@@ -130,11 +128,6 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationGEMFactoryVI::GetChannel()
   theChannel->push_back( new G4GEMChannelVI(26,12) );// Mg26
   theChannel->push_back( new G4GEMChannelVI(27,12) );// Mg27
   theChannel->push_back( new G4GEMChannelVI(28,12) );// Mg28
-
-  size_t nn = theChannel->size();
-  for(size_t i=2; i<nn; ++i) { 
-    (*theChannel)[i]->SetPhotonEvaporation(thePhotonEvaporation);
-  }
 
   return theChannel;
 }

@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -8,7 +12,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
 
 Using Root
 Visualization Manager instantiating with verbosity "warnings (3)"...
@@ -70,39 +74,39 @@ Some /vis commands (optionally) take a string to specify colour.
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
+ Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.076 cm 
                        Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.950 g/mole
+   --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
          --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:  0.063 %
          --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance: 99.600 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.010 g/mole
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
 
-Checking overlaps for volume Calorimeter ... OK! 
-Checking overlaps for volume Abso ... OK! 
-Checking overlaps for volume Gap ... OK! 
+Checking overlaps for volume Calorimeter (G4Box) ... OK! 
+Checking overlaps for volume Abso (G4Box) ... OK! 
+Checking overlaps for volume Gap (G4Box) ... OK! 
 
 ------------------------------------------------------------
 ---> The calorimeter is 10 layers of: [ 10mm of G4_Pb + 5mm of liquidArgon ] 
 ------------------------------------------------------------
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
@@ -120,8 +124,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -484,7 +487,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
   Process: nCapture
@@ -497,8 +500,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -509,8 +512,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -521,8 +524,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -571,8 +574,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
@@ -616,14 +620,14 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: positronNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
 
@@ -638,7 +642,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -651,9 +655,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -664,9 +667,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -679,8 +681,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for mu+
@@ -702,26 +704,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
-        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -735,7 +735,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -746,8 +746,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
-        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -756,21 +756,24 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
+Min energy per nucleon for multifragmentation (MeV) 2e+05
 Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
-Model of level density flag                         1
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1e+12
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
+Upload data before 1st event for                Z < 9
 =======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -778,32 +781,32 @@ See commands in /vis/modeling/trajectories/ for other options.
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 261.936 MeV       total track length: 18.7922 cm 
-        Gap: total energy: 23.6541 MeV       total track length:  11.542 cm 
+   Absorber: total energy: 274.694 MeV       total track length: 19.6217 cm 
+        Gap: total energy: 12.6791 MeV       total track length: 6.15095 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 261.936 MeV rms = 0 eV 
- EGap : mean = 23.6541 MeV rms = 0 eV 
- LAbs : mean = 18.7922 cm  rms = 0 fm 
- LGap : mean = 11.542 cm  rms = 0 fm 
+ EAbs : mean = 274.694 MeV rms = 0 eV 
+ EGap : mean = 12.6791 MeV rms = 0 eV 
+ LAbs : mean = 19.6217 cm  rms = 0 fm 
+ LGap : mean = 6.15095 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
      Transportation,               phot,              compt,               conv
                Rayl,                msc,              eIoni,              eBrem
         CoulombScat,            annihil,             muIoni,            muBrems
          muPairProd,              hIoni,             hBrems,          hPairProd
-            ionIoni,      photonNuclear,    electronNuclear,    positronNuclear
-        muonNuclear,              Decay,         hadElastic,   neutronInelastic
-           nCapture,    protonInelastic,       pi+Inelastic,       pi-Inelastic
-     kaon+Inelastic,     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic
-    lambdaInelastic,anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic
-    sigma+Inelastic,anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic
-       xi0Inelastic,  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic
-anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic
-  anti_He3Inelastic,anti_alphaInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest
-muMinusCaptureAtRest,         dInelastic,         tInelastic,       He3Inelastic
-     alphaInelastic,       ionInelastic,            nKiller
+            ionIoni,      photonNuclear,    electronNuclear,        muonNuclear
+              Decay,         hadElastic,   neutronInelastic,           nCapture
+    protonInelastic,       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic
+     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic
+anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic
+anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic
+  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic
+anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic
+anti_alphaInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest
+         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
+       ionInelastic,            nKiller
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
@@ -819,8 +822,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -1174,15 +1176,15 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 264.229 MeV       total track length: 18.9842 cm 
-        Gap: total energy: 19.9122 MeV       total track length: 10.1764 cm 
+   Absorber: total energy: 281.686 MeV       total track length: 20.4226 cm 
+        Gap: total energy: 18.7841 MeV       total track length: 9.05115 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 264.229 MeV rms = 0 eV 
- EGap : mean = 19.9122 MeV rms = 0 eV 
- LAbs : mean = 18.9842 cm  rms = 0 fm 
- LGap : mean = 10.1764 cm  rms = 0 fm 
+ EAbs : mean = 281.686 MeV rms = 0 eV 
+ EGap : mean = 18.7841 MeV rms = 0 eV 
+ LAbs : mean = 20.4226 cm  rms = 0 fm 
+ LGap : mean = 9.05115 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
 
@@ -1200,8 +1202,7 @@ compt:  for gamma SubType=13 BuildTable=1
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
-     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
@@ -1555,15 +1556,15 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 463.172 MeV       total track length: 33.6907 cm 
-        Gap: total energy: 11.5496 MeV       total track length: 5.30204 cm 
+   Absorber: total energy: 441.762 MeV       total track length: 31.7514 cm 
+        Gap: total energy:   33.75 MeV       total track length: 16.6706 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 463.172 MeV rms = 0 eV 
- EGap : mean = 11.5496 MeV rms = 0 eV 
- LAbs : mean = 33.6907 cm  rms = 0 fm 
- LGap : mean = 5.30204 cm  rms = 0 fm 
+ EAbs : mean = 441.762 MeV rms = 0 eV 
+ EGap : mean = 33.75 MeV rms = 0 eV 
+ LAbs : mean = 31.7514 cm  rms = 0 fm 
+ LGap : mean = 16.6706 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
 Graphics systems deleted.

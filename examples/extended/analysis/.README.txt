@@ -24,17 +24,4 @@
  It does not make histograms.
  It has the same geometry as B1.
 
-\link ExampleB3aScoreWriter B3aScoreWriter \endlink
-
- This example demonstrates saving the Geant4 scorers hits in form of ntuples in a Root 
- file using Geant4 analysis tools. 
-
-\link ExampleB4dScoreWriter B4dScoreWriter  \endlink
-
- This example demonstrates saving the Geant4 scorers hits in form of ntuples in a Root 
- file using Geant4 analysis tools. 
- In difference from the B3aScoreWriter example, the G4AnalysisManager is explicitly used 
- in this example and the ntuples with scorers hits are saved in addition to the histograms 
- and ntuples created in B4RunAction.
-
 */

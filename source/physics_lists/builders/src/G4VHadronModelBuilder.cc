@@ -49,3 +49,4 @@ G4HadronicInteraction* G4VHadronModelBuilder::GetModel()
   if(!model) model = BuildModel();
   return model;
 }
+

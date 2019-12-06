@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-/// \file DetectorConstruction
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"

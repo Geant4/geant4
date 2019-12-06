@@ -109,6 +109,10 @@ inline G4double G4DynamicParticle::GetMass() const
   return theDynamicalMass;
 }
 
+inline void G4DynamicParticle::SetMass(G4double newMass)
+{
+  theDynamicalMass = std::max(newMass, 0.0);
+}
 
 inline G4double G4DynamicParticle::GetSpin() const
 {
@@ -201,8 +205,7 @@ inline G4double G4DynamicParticle::GetKineticEnergy() const
 inline G4double G4DynamicParticle::GetLogKineticEnergy() const
 {
   if (theLogKineticEnergy == DBL_MAX) { 
-    theLogKineticEnergy = (theKineticEnergy > 0.) ?
-      G4Log(theKineticEnergy) : LOG_EKIN_MIN;
+    theLogKineticEnergy = (theKineticEnergy > 0.) ? G4Log(theKineticEnergy) : LOG_EKIN_MIN;
   }
   return theLogKineticEnergy;
 }
@@ -249,7 +252,7 @@ inline const G4DecayProducts* G4DynamicParticle::GetPreAssignedDecayProducts() c
 
 inline void G4DynamicParticle::SetPreAssignedDecayProducts(G4DecayProducts* aDecayProducts)
 {
- thePreAssignedDecayProducts = aDecayProducts;
+  thePreAssignedDecayProducts = aDecayProducts;
 }
 
 inline G4double G4DynamicParticle::GetPreAssignedDecayProperTime() const
@@ -277,7 +280,7 @@ G4int G4DynamicParticle::GetVerboseLevel() const
 inline 
 void G4DynamicParticle::SetPrimaryParticle(G4PrimaryParticle* p) 
 {
-  primaryParticle=p;
+  primaryParticle = p;
 }
 
 inline
@@ -289,11 +292,11 @@ G4PrimaryParticle* G4DynamicParticle::GetPrimaryParticle() const
 inline 
 G4int G4DynamicParticle::GetPDGcode() const
 {
-  return thePDGcode;
+  G4int code = theParticleDefinition->GetPDGEncoding();
+  return (code == 0) ? thePDGcode : code;
 }
 
-inline 
-void G4DynamicParticle::SetPDGcode(G4int c)
+inline void G4DynamicParticle::SetPDGcode(G4int c)
 {
   thePDGcode = c;
 }

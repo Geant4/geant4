@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PVDivision Implementation file
 //
-//
-// class G4PVDivision Implementation file
-//
-// 26.05.03 - P.Arce Initial version
+// 26.05.03 - P.Arce, Initial version
 // --------------------------------------------------------------------
 
 #include "G4PVDivision.hh"
@@ -50,10 +48,9 @@ G4PVDivision::G4PVDivision(const G4String& pName,
                            const G4int nDivs,
                            const G4double width,
                            const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
-    fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
-  if (!pMotherLogical)
+  if (pMotherLogical == nullptr)
   {
     std::ostringstream message;
     message << "Invalid setup." << G4endl
@@ -85,10 +82,9 @@ G4PVDivision::G4PVDivision(const G4String& pName,
                            const EAxis pAxis,
                            const G4int nDivs,
                            const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
-    fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
-  if (!pMotherLogical)
+  if (pMotherLogical == nullptr)
   {
     std::ostringstream message;
     message << "Invalid setup." << G4endl
@@ -118,10 +114,9 @@ G4PVDivision::G4PVDivision(const G4String& pName,
                            const EAxis pAxis,
                            const G4double width,
                            const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
-    fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
-  if (!pMotherLogical)
+  if (pMotherLogical == nullptr)
   {
     std::ostringstream message;
     message << "Invalid setup." << G4endl
@@ -142,6 +137,42 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   SetMotherLogical(pMotherLogical);
   SetParameterisation(pMotherLogical, pAxis, 0, width, offset, DivWIDTH);
   CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical);
+}
+
+//--------------------------------------------------------------------------
+G4PVDivision::G4PVDivision(const G4String& pName,
+                                 G4LogicalVolume* pLogical,
+                                 G4VPhysicalVolume* pMotherPhysical,
+                           const EAxis pAxis,
+                           const G4int nDivs,
+                           const G4double width,
+                           const G4double offset )
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
+{
+  if (pMotherPhysical == nullptr)
+  {
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "NULL pointer specified as mother for volume: " << pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
+    return;
+  }
+  G4LogicalVolume* pMotherLogical = pMotherPhysical->GetLogicalVolume();
+  if (pLogical == pMotherLogical)
+  {
+    std::ostringstream message;
+    message << "Invalid setup." << G4endl
+            << "Cannot place a volume inside itself! Volume: " << pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "GeomDiv0002",
+                FatalException, message);
+  }
+  pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
+  SetParameterisation(pMotherLogical, pAxis, nDivs,
+                      width, offset, DivNDIVandWIDTH);
+  CheckAndSetParameters (pAxis, nDivs, width, offset,
+                         DivNDIVandWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -199,7 +230,7 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   // in G4VPVParameterisation::ComputeTransformation, for others
   // it will stay the unity
   //
-  G4RotationMatrix *pRMat = new G4RotationMatrix();
+  G4RotationMatrix* pRMat = new G4RotationMatrix();
   SetRotation(pRMat);
   
   switch (faxis)
@@ -268,7 +299,7 @@ G4int G4PVDivision::GetCopyNo() const
 //--------------------------------------------------------------------------
 void  G4PVDivision::SetCopyNo(G4int newCopyNo)
 {
-  fcopyNo= newCopyNo;
+  fcopyNo = newCopyNo;
 }
 
 //--------------------------------------------------------------------------
@@ -296,17 +327,23 @@ void G4PVDivision::GetReplicationData(EAxis& axis,
                                       G4double& offset,
                                       G4bool& consuming ) const
 {
-  axis=faxis;
-  nDivs=fnReplicas;
-  width=fwidth;
-  offset=foffset;
-  consuming=false;
+  axis = faxis;
+  nDivs = fnReplicas;
+  width = fwidth;
+  offset = foffset;
+  consuming = false;
 }
 
+//--------------------------------------------------------------------------
+EVolume G4PVDivision::VolumeType() const
+{
+  return kParameterised;
+}
 
 //--------------------------------------------------------------------------
-//TODO: this method should check that the child lv is of the correct type,
-//      else the ComputeDimensions will never be called
+// TODO: this method should check that the child lv is of the correct type,
+//       else the ComputeDimensions will never be called
+//
 void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
                                   const EAxis axis,
                                   const G4int nDivs,
@@ -523,11 +560,13 @@ void G4PVDivision::ErrorInAxis( EAxis axis, G4VSolid* solid )
   G4Exception("G4PVDivision::ErrorInAxis()", "GeomDiv0002",
               FatalException, error);
 }
-// The next methods are for specialised repeated volumes 
-//     (replicas, parameterised vol.) which are completely regular.
+
+// The next methods are for specialised repeated volumes (replicas,
+// parameterised vol.) which are completely regular.
 // Currently this is not applicable to divisions  ( J.A. Nov 2005 )
+
 // ----------------------------------------------------------------------
-// IsRegularRepeatedStructure()
+// IsRegularStructure()
 //
 G4bool G4PVDivision::IsRegularStructure() const
 {
@@ -535,10 +574,9 @@ G4bool G4PVDivision::IsRegularStructure() const
 }           
 
 // ----------------------------------------------------------------------
-// IsRegularRepeatedStructure()
+// GetRegularStructureId()
 //
 G4int G4PVDivision::GetRegularStructureId() const
 {
   return 0;  
 }           
-// This is for specialised repeated volumes (replicas, parameterised vol.)

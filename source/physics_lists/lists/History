@@ -13,6 +13,34 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-October-2019  Alberto Ribon (phys-lists-V10-05-04)
+ - FTFP_BERT_HP, QGSP_BERT_HP, INCLXXPhysicsListHelper : added (consistently)
+   RadioactiveDecay to all physics lists which use NeutronHP (the rationale
+   is that precision is more valuable than speed for these physics lists;
+   note that, among the reference physics lists with NeutronHP, only 
+   FTFP_BERT_HP, QGSP_BERT_HP, FTFP_INCLXX_HP and QGSP_INCLXX_HP did not have
+   RadioactiveDecay activated by default).
+
+06-August-2019  Alberto Ribon (phys-lists-V10-05-03)
+ - FTF_BIC, QGS_BIC : use the newly introduced stopping physics constructor
+   G4StoppingPhysicsFritiofWithBinaryCascade (instead of the default
+   G4StoppingPhysics).
+ - Shielding : replacing explicit values for the energy transition region
+               with values from G4HadronicParameters.
+
+31-July-2019  Gunter Folger (phys-lists-V10-05-02)
+ - Code clean-up
+   - remove template mechanism
+      - except for G4GenericPhysicsList, G4PhysListStamper, 
+        and INCLXXPhysicsListHelper
+   - delete copy ctor and assigmnet operator
+   - for empty dtor, use =default	
+   - move include/x.icc to src/x.cc for lists without template
+   - remove SetCuts() implementation where not specialised
+   - remove version number from lists
+   - remove G4DataQuestionaire
+   
+
 25-June-2019  Dennis Wright (phys-lists-V10-05-01)
 - replace G4RadioactiveDecay with G4RadioactiveDecayBase in LBE.icc
 

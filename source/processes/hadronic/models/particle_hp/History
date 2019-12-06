@@ -14,6 +14,50 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 4 December 2019  Alberto Ribon (hadr-hpp-V10-05-09)
+----------------------------------------------------
+- G4ParticleHPContAngularPar : set protection against unphysical interpolation
+  result in the method Sample.
+- G4ParticleHPKallbachMannSyst : added the possibility of tritium and He3
+  projectiles in the "A" method, taking in this case (arbitrarily) an
+  intermediate value between the two already considered cases 
+  (proton-neutron-deuteron and alpha).
+Note: these two fixes are needed to avoid crashes seen only with the physics
+      list QGSP_BIC_AllHP. They should be checked and confirmed by experts.
+
+24 October 2019  Alberto Ribon (hadr-hpp-V10-05-08)
+---------------------------------------------------
+-  G4ParticleHPNames : remove restriction of using isotopes with Z > 92
+   (threfore removing the environmental variable AllowForHeavyElements).
+   This was proposed by Emilio Mendoza and approved.
+
+22 July 2019  Dennis Wright (hadr-hpp-V10-05-07)
+------------------------------------------------
+Two more corrections from Emilio:
+- G4ParticleHPInelasticBaseFS::BaseApply(): re-calculation of Q value when
+   no data in library
+- G4ParticleHPNBodyPhaseSpace::Sample(): protection against maxE < 0
+
+ 5 July 2019  Dennis Wright (hadr-hpp-V10-05-06)
+------------------------------------------------
+Add Emilio Mendoza's improvements and bug fixes:
+- G4ParticleHPChannel, G4ParticleHPNames: allow using an incomplete data
+    library name if the environment variable G4NEUTRONHP_SKIP_MISSING_ISOTOPES
+    is set.  The missing cross sections are then set to 0. 
+- G4ParticleHPContAngularPar: redefine residual mass to consider incident 
+    particles other than neutrons.
+- G4ParticleHPInelasticBaseFS: add protection against residual with Z<0 or A<Z,
+    do not apply adjust_final_state when data is in MF=6 format (no correlated
+    particle emission), 
+    bug correction (add Q value info to G4ParticleHPNBodyPhaseSpace)
+- G4ParticleHPInelasticCompFS: re-build method two_body_reaction() to be used by 
+    incident charged particles (now isotropic emission in the CMS).
+    Also restrict nresp use below 20 MeV.  
+    Add photon emission when no data available. 
+- G4ParticleHPEnAngCorrelation: delete part of code trying to preserve baryon
+    number - one has to assume that it is not preserved when using ENDF-6 data.
+- G4ParticleHPKallbachMannSyst: bug fixes
+  
 25 June 2019  Dennis Wright (hadr-hpp-V10-05-05)
 ------------------------------------------------
 - G4ParticleHPInelasticCompFS.cc : adopt fix of bug #2166 (A. Zontikov) to

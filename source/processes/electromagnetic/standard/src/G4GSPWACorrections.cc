@@ -175,12 +175,12 @@ void G4GSPWACorrections::InitDataPerMaterials() {
 // it's called only if data has not been loaded for this element yet
 void G4GSPWACorrections::LoadDataElement(const G4Element *elem) {
   // allocate memory
-  G4int izet = G4lrint(elem->GetZ());
+  G4int izet = elem->GetZasInt();
   if (izet>gMaxZet) {
     izet = gMaxZet;
   }
   // load data from file
-  char* tmppath = getenv("G4LEDATA");
+  char* tmppath = std::getenv("G4LEDATA");
   if (!tmppath) {
     G4Exception("G4GSPWACorrection::LoadDataElement()","em0006",
 		FatalException,

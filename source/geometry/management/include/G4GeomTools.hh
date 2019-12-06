@@ -23,22 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// class G4GeomTools
+// G4GeomTools
 //
 // Class description:
 //
 // A collection of utilities which can be helpfull for a wide range
 // of geometry-related tasks
 
-// History:
-//
-// 10.10.2016 E.Tcherniaev: Initial version.
+// 10.10.2016, E.Tcherniaev: Initial version.
 // --------------------------------------------------------------------
-
 #ifndef G4GEOMTOOLS_HH
 #define G4GEOMTOOLS_HH
 
@@ -46,8 +39,8 @@
 #include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
 
-typedef std::vector<G4TwoVector>   G4TwoVectorList;
-typedef std::vector<G4ThreeVector> G4ThreeVectorList;
+using G4TwoVectorList = std::vector<G4TwoVector>;
+using G4ThreeVectorList = std::vector<G4ThreeVector>;
 
 class G4GeomTools
 {
@@ -64,7 +57,7 @@ class G4GeomTools
   static G4double TriangleArea(const G4TwoVector& A,
                                const G4TwoVector& B,
                                const G4TwoVector& C);
-    // Calcuate area of 2D triangle, return value is positive if
+    // Calculate area of 2D triangle, return value is positive if
     // vertices of the triangle are given in anticlockwise order,
     // otherwise it is negative
 
@@ -72,12 +65,12 @@ class G4GeomTools
                            const G4TwoVector& B,
                            const G4TwoVector& C,
                            const G4TwoVector& D);
-    // Calcuate area of 2D quadrilateral, return value is positive if
+    // Calculate area of 2D quadrilateral, return value is positive if
     // vertices of the quadrilateral are given in anticlockwise order,
     // otherwise it is negative
 
   static G4double PolygonArea(const G4TwoVectorList& polygon);
-    // Calcuate area of 2D polygon, return value is positive if
+    // Calculate area of 2D polygon, return value is positive if
     // vertices of the polygon are defined in anticlockwise order,
     // otherwise it is negative
 
@@ -113,7 +106,7 @@ class G4GeomTools
 
   static void RemoveRedundantVertices(G4TwoVectorList& polygon,
                                       std::vector<G4int>& iout,
-                                      G4double tolerance = 0);
+                                      G4double tolerance = 0.0);
     // Remove collinear and coincident points from 2D polygon.
     // Indices of removed points are available in iout. 
 

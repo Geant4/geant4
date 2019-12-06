@@ -16,9 +16,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28th, 2019 I. Hrivnacova G01-V10-05-06
+- Fixed Doxygen warning in .README.txt
+
+September 24th, 2019 Gabriele Cosmo G01-V10-05-05
+- Enable overlaps checking in example.
+- Corrected overlap in assembly.gdml sample.
+
+August 17th, 2019 John Allison G01-V10-05-04
+- Added block.gdml to list copied to project directories.
+
 May 2nd, 2019 Witek Pokorski G01-V10-05-03
 - Added BeamOn(0) to initialize range to energy converters
-needed when exporting cuts per volume
+  needed when exporting cuts per volume
 
 April 25th, 2019 Ben Morgan G01-V10-05-02
 - Include G4Types.hh before use of G4MULTITHREADED

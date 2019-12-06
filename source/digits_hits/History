@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 19th, 2019 G. Cosmo (digits_hits-V10-05-07)
+- Fixed more cases of implicit type conversions.
+
+November 15th, 2019 G. Cosmo (digits_hits-V10-05-06)
+- Fixed implicit type conversions from size_t to G4int in digits and hits
+  classes (collections, vectors, maps).
+- Pass G4String by const reference in digits and hist collections base classes.
+
+July 4th, 2019 S. Wenzel (digits_hits-V10-05-05)
+- G4SDStructure : pass G4String by reference
+
 May 29th, 2019 M. Asai (digits_hits-V10-05-04)
 - G4PSSphereSurfaceFlux : fix track weight forgotten from SphereSurfaceFlux.
 

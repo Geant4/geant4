@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// 
 // G4MultiUnion
 //
 // Class description:
@@ -38,9 +32,8 @@
 //   instance of "G4Node". An instance of "G4MultiUnion" is subsequently
 //   composed of one or several nodes.
 
-// History:
-// 06.04.17 G.Cosmo - Imported implementation in Geant4 for VecGeom migration
 // 19.10.12 M.Gayer - Original implementation from USolids module
+// 06.04.17 G.Cosmo - Adapted implementation in Geant4 for VecGeom migration
 // --------------------------------------------------------------------
 #ifndef G4MULTIUNION_HH
 #define G4MULTIUNION_HH
@@ -93,9 +86,9 @@ class G4MultiUnion : public G4VSolid
                           const G4ThreeVector& aDirection) const;
     G4double DistanceToOut(const G4ThreeVector& aPoint,
                            const G4ThreeVector& aDirection,
-                           const G4bool calcNorm=false,
-                           G4bool *validNorm=0,
-                           G4ThreeVector *aNormalVector=0) const;
+                           const G4bool calcNorm = false,
+                           G4bool* validNorm = nullptr,
+                           G4ThreeVector* aNormalVector = nullptr) const;
 
     G4double DistanceToInNoVoxels(const G4ThreeVector& aPoint,
                                   const G4ThreeVector& aDirection) const;
@@ -178,14 +171,14 @@ class G4MultiUnion : public G4VSolid
 
     std::vector<G4VSolid*> fSolids;
     std::vector<G4Transform3D> fTransformObjs;
-    G4Voxelizer fVoxels;           // Pointer to the vozelized solid
-    G4double       fCubicVolume;   // Cubic Volume
-    G4double       fSurfaceArea;   // Surface Area
-    G4double       kRadTolerance;  // Cached radial tolerance
-    mutable G4bool fAccurate;      // Accurate safety (off by default)
+    G4Voxelizer fVoxels;              // Vozelizer for the solid
+    G4double fCubicVolume = 0.0;      // Cubic Volume
+    G4double fSurfaceArea = 0.0;      // Surface Area
+    G4double kRadTolerance;           // Cached radial tolerance
+    mutable G4bool fAccurate = false; // Accurate safety (off by default)
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 //______________________________________________________________________________
@@ -209,7 +202,7 @@ inline G4VSolid* G4MultiUnion::GetSolid(G4int index) const
 //______________________________________________________________________________
 inline G4int G4MultiUnion::GetNumberOfSolids() const
 {
-  return fSolids.size();
+  return G4int(fSolids.size());
 }
 
 //______________________________________________________________________________

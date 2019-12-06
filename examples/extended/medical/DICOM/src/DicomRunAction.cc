@@ -220,7 +220,7 @@ std::string DicomRunAction::FillString(const std::string &name,
                                        char c, G4int n, G4bool back)
 {
   std::string fname("");
-  G4int k = n - name.size();
+  G4int k = G4int(n - name.size());
   if (k > 0) {
     if (back) {
       fname = name;

@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Tube/Cone Meshing constants for extent calculations
 
-// History:
-// 13.08.95 P.Kent Created separate file
+// 13.08.95, P.Kent - Created separate file
 // --------------------------------------------------------------------
 #ifndef MESHDEFS_HH
 #define MESHDEFS_HH
@@ -38,11 +34,15 @@
 
 #include "G4Types.hh"
 
-const G4double kMeshAngleDefault=(CLHEP::pi/4); // Angle for mesh `wedges' in rads
-                                 // Works best when simple fraction of pi/2
+const G4double kMeshAngleDefault = (CLHEP::pi/4);
+  // Angle for mesh `wedges' in rads
+  // Works best when simple fraction of pi/2
 
-const G4int kMinMeshSections=3;	 // Min wedges+1 to make
-const G4int kMaxMeshSections=37; // max wedges+1 to make
-                                 // =>10 degrees/wedge for complete tube
+const G4int kMinMeshSections = 3;
+  // Min wedges+1 to make
+
+const G4int kMaxMeshSections = 37;
+  // max wedges+1 to make
+  // =>10 degrees/wedge for complete tube
 
 #endif

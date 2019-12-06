@@ -238,9 +238,10 @@ void G4EmLowEPPhysics::ConstructProcess()
       theLowEPComptonModel->SetHighEnergyLimit(20*MeV);
       cs->AddEmModel(0, theLowEPComptonModel);
 
-      // gamma conversion - Livermore model below 80 GeV
+      // gamma conversion - 5D model below 80 GeV with Livermore x-sections
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      theGammaConversion->SetEmModel(new G4BetheHeitler5DModel());
+      G4VEmModel* conv = new G4BetheHeitler5DModel();
+      theGammaConversion->SetEmModel(conv);
 
       // default Rayleigh scattering is Livermore
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();

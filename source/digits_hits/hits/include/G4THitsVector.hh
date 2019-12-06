@@ -148,14 +148,14 @@ public:
 
     //  Overwrite a hit object. Total number of hit objects stored in this
     // map is returned.
-    inline G4int entries() const
+    inline std::size_t entries() const
     { return (scast(Vector_t*)(theCollection))->size(); }
 
     //  Returns the number of hit objects stored in this map
     inline void clear();
 
-    virtual G4VHit* GetHit(size_t) const { return nullptr; }
-    virtual size_t GetSize() const
+    virtual G4VHit* GetHit(std::size_t) const { return nullptr; }
+    virtual std::size_t GetSize() const
     { return (scast(Vector_t*)(theCollection))->size(); }
 
     inline map_t* GetMap() const;
@@ -275,7 +275,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< is_same_t(U, T), int> = 0>
-    G4int add(const G4int& key, U*& aHit) const
+    std::size_t add(const G4int& key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         _add(theHitsVector, key, *aHit);
@@ -286,7 +286,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< !is_same_t(U, T), int> = 0>
-    G4int add(const G4int& key, U*& aHit) const
+    std::size_t add(const G4int& key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         store_type hit = allocate();
@@ -299,7 +299,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< is_same_t(U, T), int> = 0>
-    G4int add(const G4int& key, U& aHit) const
+    std::size_t add(const G4int& key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         _add(theHitsVector, key, aHit);
@@ -310,7 +310,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< !is_same_t(U, T), int> = 0>
-    G4int add(const G4int& key, U& aHit) const
+    std::size_t add(const G4int& key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         _add(theHitsVector, key, aHit);
@@ -327,7 +327,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< is_same_t(U, T), int> = 0>
-    inline G4int set(const G4int& key, U*& aHit) const
+    inline std::size_t set(const G4int& key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         _assign(theHitsVector, key, aHit);
@@ -338,7 +338,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< !is_same_t(U, T), int> = 0>
-    inline G4int set(const G4int & key, U*& aHit) const
+    inline std::size_t set(const G4int & key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         store_type hit = allocate();
@@ -357,7 +357,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< is_same_t(U, T), int> = 0>
-    inline G4int set(const G4int& key, U& aHit) const
+    inline std::size_t set(const G4int& key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         _assign(theHitsVector, key, &aHit);
@@ -368,7 +368,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               enable_if_t< !is_same_t(U, T), int> = 0>
-    inline G4int set(const G4int & key, U& aHit) const
+    inline std::size_t set(const G4int & key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
         store_type hit = allocate();
@@ -627,7 +627,7 @@ G4VTHitsVector<T, Vector_t>::GetMap() const
     G4ThreadLocalStatic map_t* theHitsMap = new map_t();
     theHitsMap->clear();
     vector_type* theHitsVector = GetVector();
-    for(G4int i = 0; i < theHitsVector->size(); ++i)
+    for(std::size_t i = 0; i < theHitsVector->size(); ++i)
     {
         store_type& _obj = (*theHitsVector)[i];
         if(_obj)

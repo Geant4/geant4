@@ -67,3 +67,4 @@ void G4TritonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
       G4PhysicsBuilderInterface::RegisterMe(aB);
   }
 }
+

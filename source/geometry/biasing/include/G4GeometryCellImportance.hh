@@ -23,29 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4GeometryCellImportance
+// G4GeometryCellImportance
 //
 // Class description:
 //
 // Used internally by importance sampling. 
-// It is acontainer for "cell" importance value pairs.
+// It is a container for "cell" importance value pairs.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4GeometryCellImportance_hh
-#define G4GeometryCellImportance_hh G4GeometryCellImportance_hh 
+#ifndef GEOMETRYCELLIMPORTANCE_HH
+#define GEOMETRYCELLIMPORTANCE_HH 1
 
 #include <map>
 #include "globals.hh"
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
 
-typedef std::map<G4GeometryCell, G4double, G4GeometryCellComp> G4GeometryCellImportance;
+using G4GeometryCellImportance = std::map<G4GeometryCell,
+                                          G4double, G4GeometryCellComp>;
   // implement container G4GeometryCellImportance as map
 
-std::ostream& operator<<(std::ostream &out, const G4GeometryCellImportance &gCelli);
+std::ostream& operator<<(std::ostream& out,
+                         const G4GeometryCellImportance& gCelli);
 
 #endif

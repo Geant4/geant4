@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VCurvedTrajectoryFilter class implementation
 //
+// First version: Oct 30, 2002 - Jacek Generowicz
 // --------------------------------------------------------------------
 
 #include "G4VCurvedTrajectoryFilter.hh"
 
 G4VCurvedTrajectoryFilter::G4VCurvedTrajectoryFilter()
-  : fpFilteredPoints(0)
 {
 }
 
@@ -49,17 +50,17 @@ G4VCurvedTrajectoryFilter::GimmeThePointsAndForgetThem()
   // responsibility for deleting the vector lies with the
   // SmoothTrajctoryPoint, which is the vector's final destination.)
   // (jacek 08/11/2002)
-  fpFilteredPoints = 0;
+  fpFilteredPoints = nullptr;
   return tmp;
 }
 
 void
 G4VCurvedTrajectoryFilter::CreateNewTrajectorySegment( )
 {
-  if (fpFilteredPoints)
+  if (fpFilteredPoints != nullptr)
   {
     // GimmePoints has not been called (it would have set the
-    // pointer to NULL), therefore nobody has taken charge of the
+    // pointer to nullptr), therefore nobody has taken charge of the
     // points and they will never be deleted!
     G4cout << "!!!!!!!! Filter: auxiliary points are being memory leaked !!!!!"
            << G4endl;

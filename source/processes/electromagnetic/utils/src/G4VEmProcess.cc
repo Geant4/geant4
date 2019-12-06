@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -79,8 +78,6 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   numberOfModels(0),
   theLambdaTable(nullptr),
   theLambdaTablePrim(nullptr),
-  theDensityFactor(nullptr),
-  theDensityIdx(nullptr),
   integral(false),
   applyCuts(false),
   startFromNull(false),
@@ -137,6 +134,10 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   weightFlag   = false;
   lManager = G4LossTableManager::Instance();
   lManager->Register(this);
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
+  theDensityFactor = bld->GetDensityFactors();
+  theDensityIdx = bld->GetCoupleIndexes();
+
   secID = fluoID = augerID = biasID = -1;
   mainSecondaries = 100;
   if("phot" == GetProcessName() || "compt" == GetProcessName()
@@ -341,6 +342,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     theLambdaTablePrim = theData->MakeTable(1);
     bld->InitialiseBaseMaterials(theLambdaTablePrim);
   }
+  bld->InitialiseBaseMaterials();
   // forced biasing
   if(biasManager) { 
     biasManager->Initialise(part,GetProcessName(),verboseLevel); 
@@ -381,20 +383,11 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(particle == &part) { 
 
-    G4LossTableBuilder* bld = lManager->GetTableBuilder();
-
     // worker initialisation
     if(!isTheMaster) {
       theLambdaTable = masterProc->LambdaTable();
       theLambdaTablePrim = masterProc->LambdaTablePrim();
 
-      if(theLambdaTable) {
-        bld->InitialiseBaseMaterials(theLambdaTable);
-      } else if(theLambdaTablePrim) {
-        bld->InitialiseBaseMaterials(theLambdaTablePrim);
-      }
-      theDensityFactor = bld->GetDensityFactors();
-      theDensityIdx = bld->GetCoupleIndexes();
       if(theLambdaTable) { FindLambdaMax(); }
 
       // local initialisation of models
@@ -409,8 +402,6 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
       }
     // master thread
     } else {
-      theDensityFactor = bld->GetDensityFactors();
-      theDensityIdx = bld->GetCoupleIndexes();
       if(buildLambdaTable || minKinEnergyPrim < maxKinEnergy) {
         BuildLambdaTable();
       }
@@ -1252,6 +1243,13 @@ void G4VEmProcess::SetMinKinEnergyPrim(G4double e)
   if(theParameters->MinKinEnergy() <= e && 
      e <= theParameters->MaxKinEnergy()) { minKinEnergyPrim = e; } 
   else { PrintWarning("SetMinKinEnergyPrim", e); } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmProcess* G4VEmProcess::GetEmProcess(const G4String& nam)
+{
+  return (nam == GetProcessName()) ? this : nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

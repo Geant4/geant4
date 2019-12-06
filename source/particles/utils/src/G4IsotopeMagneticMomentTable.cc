@@ -56,7 +56,7 @@ const G4double G4IsotopeMagneticMomentTable::nuclearMagneton = eplus*hbar_Planck
 G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
   :G4VIsotopeTable("MagneticMoment")
 {
-  if ( !getenv("G4IONMAGNETICMOMENT")) {
+  if ( !std::getenv("G4IONMAGNETICMOMENT")) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
       G4cout << "G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable():  " 
@@ -75,7 +75,7 @@ G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
     return;
   }
   
-  G4String file = getenv("G4IONMAGNETICMOMENT");
+  G4String file = std::getenv("G4IONMAGNETICMOMENT");
   std::ifstream DataFile(file);
 
   if (!DataFile ) {

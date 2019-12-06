@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -251,13 +250,13 @@ public:
   // should be called at initialisation to set element selectors
   inline void SetElementSelectors(std::vector<G4EmElementSelector*>*);
 
-  // dEdx per unit length
+  // dEdx per unit length, base material approach may be used
   virtual inline G4double ComputeDEDX(const G4MaterialCutsCouple*,
-                              const G4ParticleDefinition*,
-                              G4double kineticEnergy,
-                              G4double cutEnergy = DBL_MAX);
+                               const G4ParticleDefinition*,
+                               G4double kineticEnergy,
+                               G4double cutEnergy = DBL_MAX);
 
-  // cross section per volume
+  // cross section per volume, base material approach may be used
   inline G4double CrossSection(const G4MaterialCutsCouple*,
                                const G4ParticleDefinition*,
                                G4double kineticEnergy,
@@ -358,7 +357,7 @@ public:
 
   inline void SetActivationLowEnergyLimit(G4double);
 
-  inline G4bool IsActive(G4double kinEnergy);
+  inline G4bool IsActive(G4double kinEnergy) const;
 
   inline void SetPolarAngleLimit(G4double);
 
@@ -375,6 +374,10 @@ public:
   inline void SetMasterThread(G4bool val);
 
   inline G4bool IsMaster() const;
+
+  inline void SetUseBaseMaterials(G4bool val);
+
+  inline G4bool UseBaseMaterials() const;
 
   inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
@@ -399,14 +402,14 @@ protected:
 private:
 
   //  hide assignment operator
-  G4VEmModel & operator=(const  G4VEmModel &right) = delete;
-  G4VEmModel(const  G4VEmModel&) = delete;
+  G4VEmModel & operator=(const  G4VEmModel &right);
+  G4VEmModel(const  G4VEmModel&);
 
   // ======== Parameters of the class fixed at construction =========
  
   G4VEmFluctuationModel* flucModel;
   G4VEmAngularDistribution* anglModel;
-  const G4String   name;
+  const G4String  name;
 
   // ======== Parameters of the class fixed at initialisation =======
 
@@ -424,6 +427,7 @@ private:
   G4bool          localTable;
   G4bool          localElmSelectors;
   G4bool          useAngularGenerator;
+  G4bool          useBaseMaterials;
   G4bool          isLocked;
   G4int           nSelectors;
   std::vector<G4EmElementSelector*>* elmSelectors;
@@ -434,12 +438,13 @@ protected:
   G4ElementData*               fElementData;
   G4VParticleChange*           pParticleChange;
   G4PhysicsTable*              xSectionTable;
+  const G4Material*            pBaseMaterial;
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
   size_t                       idxTable;
-  size_t                       fIdxTableElmSelector;
   G4bool                       lossFlucFlag;
-  G4double                     inveplus;       
+  G4double                     inveplus;
+  G4double                     pFactor;
 
   // ======== Cached values - may be state dependent ================
 
@@ -457,9 +462,17 @@ private:
 
 // ======== Run time inline methods ================
 
-inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
+inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* ptr)
 {
-  fCurrentCouple = p;
+  if(fCurrentCouple != ptr) {
+    fCurrentCouple = ptr;
+    pBaseMaterial = ptr->GetMaterial();
+    pFactor = 1.0;
+    if(useBaseMaterials && pBaseMaterial->GetBaseMaterial()) {
+      pBaseMaterial = pBaseMaterial->GetBaseMaterial();
+      pFactor = (*theDensityFactor)[(*theDensityIdx)[ptr->GetIndex()]];
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -508,7 +521,7 @@ inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                         G4double cutEnergy)
 {
   SetCurrentCouple(couple);
-  return ComputeDEDXPerVolume(couple->GetMaterial(),part,kinEnergy,cutEnergy);
+  return pFactor*ComputeDEDXPerVolume(pBaseMaterial,part,kinEnergy,cutEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -520,8 +533,8 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* couple,
                                          G4double maxEnergy)
 {
   SetCurrentCouple(couple);
-  return CrossSectionPerVolume(couple->GetMaterial(),part,kinEnergy,
-                               cutEnergy,maxEnergy);
+  return pFactor*CrossSectionPerVolume(pBaseMaterial,part,kinEnergy,
+                                       cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -560,10 +573,10 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
                              G4double cutEnergy,
                              G4double maxEnergy)
 {
-  fCurrentCouple = couple;
+  SetCurrentCouple(couple);
   fCurrentElement = (nSelectors > 0) ?
     ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy) :
-    SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,cutEnergy,maxEnergy);
+    SelectRandomAtom(pBaseMaterial,part,kinEnergy,cutEnergy,maxEnergy);
   fCurrentIsotope = nullptr;
   return fCurrentElement;
 }
@@ -574,19 +587,17 @@ inline const G4Element*
 G4VEmModel::SelectTargetAtom(const G4MaterialCutsCouple* couple,
                              const G4ParticleDefinition* part,
                              G4double kinEnergy,
-                             G4double logKinEnergy,
+                             G4double logKinE,
                              G4double cutEnergy,
                              G4double maxEnergy)
 {
-  fCurrentCouple = couple;
+  SetCurrentCouple(couple);
   fCurrentElement = (nSelectors > 0)
-   ? ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy,
-                      logKinEnergy, fIdxTableElmSelector)
-   : SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,cutEnergy,maxEnergy);
+   ? ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy,logKinE)
+   : SelectRandomAtom(pBaseMaterial,part,kinEnergy,cutEnergy,maxEnergy);
   fCurrentIsotope = nullptr;
   return fCurrentElement;
 }
-
 
 // ======== Get/Set inline methods used at initialisation ================
 
@@ -729,6 +740,20 @@ inline G4bool G4VEmModel::IsMaster() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline void G4VEmModel::SetUseBaseMaterials(G4bool val)
+{
+  useBaseMaterials = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VEmModel::UseBaseMaterials() const
+{
+  return useBaseMaterials;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline void G4VEmModel::SetHighEnergyLimit(G4double val)
 {
   highLimit = val;
@@ -757,7 +782,7 @@ inline void G4VEmModel::SetActivationLowEnergyLimit(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4VEmModel::IsActive(G4double kinEnergy)
+inline G4bool G4VEmModel::IsActive(G4double kinEnergy) const
 {
   return (kinEnergy >= eMinActive && kinEnergy <= eMaxActive);
 }
@@ -816,9 +841,11 @@ inline std::vector<G4EmElementSelector*>* G4VEmModel::GetElementSelectors()
 inline void 
 G4VEmModel::SetElementSelectors(std::vector<G4EmElementSelector*>* p)
 {
-  elmSelectors = p;
-  nSelectors = (elmSelectors) ? elmSelectors->size() : 0;
-  localElmSelectors = false;
+  if(p != elmSelectors) {
+    elmSelectors = p;
+    nSelectors = (elmSelectors) ? G4int(elmSelectors->size()) : 0;
+    localElmSelectors = false;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

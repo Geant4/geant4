@@ -28,7 +28,7 @@
 
 #include "G4RadioactiveDecayPhysics.hh"
 
-#include "G4RadioactiveDecay.hh"
+#include "G4RadioactiveDecayBase.hh"
 #include "G4GenericIon.hh"
 #include "globals.hh"
 #include "G4PhysicsListHelper.hh"
@@ -87,7 +87,7 @@ void G4RadioactiveDecayPhysics::ConstructProcess()
   }
 
   G4PhysicsListHelper::GetPhysicsListHelper()->
-    RegisterProcess(new G4RadioactiveDecay(), G4GenericIon::GenericIon());
+    RegisterProcess(new G4RadioactiveDecayBase(), G4GenericIon::GenericIon());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

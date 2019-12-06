@@ -38,10 +38,7 @@
 
 #include "G4UImanager.hh"
 #include "G4UserRunAction.hh"
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -106,11 +103,9 @@ G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
     g4MPI->SetExtraWorker(new G4MPIextraWorker(runAction));
   }
 
-#ifdef G4VIS_USE
   G4VisExecutive* visManager = new G4VisExecutive;
   visManager-> Initialize();
   G4cout << G4endl;
-#endif
 
   // --------------------------------------------------------------------
   // ready for go
@@ -122,10 +117,7 @@ G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
   // --------------------------------------------------------------------
   // termination
   // --------------------------------------------------------------------
-#ifdef G4VIS_USE
   delete visManager;
-#endif
-
   delete g4MPI;
   delete runManager;
 

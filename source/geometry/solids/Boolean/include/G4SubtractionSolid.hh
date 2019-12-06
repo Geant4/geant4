@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4SubtractionSolid
+// G4SubtractionSolid
 //
 // Class description:
 //
-// Class for description of subtraction of two CSG solids: A - B.
+// Class for description of subtraction of two solids: A - B.
 
-// History: 
-//
 // 14.10.98 V.Grichine: first implementation
-//
 // --------------------------------------------------------------------
 #ifndef G4SUBTRACTIONSOLID_HH
 #define G4SUBTRACTIONSOLID_HH
@@ -103,9 +97,9 @@ class G4SubtractionSolid : public G4BooleanSolid
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
-                            const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0   ) const ;
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const ;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const ;
 

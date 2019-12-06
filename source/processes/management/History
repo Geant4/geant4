@@ -15,7 +15,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Nov. 26, 2019  Gabriele Cosmo (procman-V10-05-05)
+- Fixed more cases of implicit type conversions from size_t to G4int.
+
+- Nov. 21, 2019  Vladimir Ivanchenko (procman-V10-05-04)
+- ProcessTable - make it true thread local singleton
 	 
+- Nov. 19, 2019  Gabriele Cosmo (procman-V10-05-03)
+- Fixed more cases of implicit type conversions.
+
+- Nov. 15, 2019  Gabriele Cosmo (procman-V10-05-02)
+- Fixed cases of implicit type conversions from size_t to G4int.
+- Some code cleanup in G4ProcessManager.
+
 - Mar. 11, 2019  Gabriele Cosmo (procman-V10-05-01)
 - Fixed typos in printouts in G4ProcessTableMessenger, G4ProcessManager
   and G4VRest*Process.

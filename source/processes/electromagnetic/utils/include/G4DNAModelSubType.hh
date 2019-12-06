@@ -44,7 +44,9 @@ enum G4DNAModelSubType
   fDNAUnknownModel = 0,
   fRitchie1994eSolvation = 1, 
   fTerrisol1990eSolvation = 2, 
-  fMeesungnoen2002eSolvation = 3
+  fMeesungnoen2002eSolvation = 3,
+  fKreipl2009eSolvation = 4,
+  fMeesungnoensolid2002eSolvation = 5
 };
 
 #endif

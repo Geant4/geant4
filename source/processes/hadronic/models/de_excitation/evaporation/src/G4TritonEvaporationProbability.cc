@@ -36,7 +36,7 @@
 #include "G4TritonEvaporationProbability.hh"
 
 G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
-    G4EvaporationProbability(3,1,2.0,&theCoulombBarrier) 
+    G4EvaporationProbability(3,1,2.0) 
 {}
 
 G4TritonEvaporationProbability::~G4TritonEvaporationProbability()

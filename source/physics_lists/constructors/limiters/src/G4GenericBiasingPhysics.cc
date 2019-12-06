@@ -342,7 +342,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
       if ( biasAll )
 	{
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+	  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      biasedProcesses.push_back( process->GetProcessName() );
@@ -352,7 +352,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
       G4bool restartLoop(true);
       while ( restartLoop )
 	{
-	  for (std::size_t ip = 0 ; ip < biasedProcesses.size() ; ip++)
+	  for (std::size_t ip = 0 ; ip < biasedProcesses.size() ; ++ip)
 	    {
 	      G4bool activ = G4BiasingHelper::ActivatePhysicsBiasing(pmanager, biasedProcesses[ip] );
 	      restartLoop = activ;
@@ -422,7 +422,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
 	{
 	  std::vector < G4String > biasedProcesses;
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+	  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      biasedProcesses.push_back( process->GetProcessName() );
@@ -431,7 +431,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
 	  G4bool restartLoop(true);
 	  while ( restartLoop )
 	    {
-	      for (std::size_t ip = 0 ; ip < biasedProcesses.size() ; ip++)
+	      for (std::size_t ip = 0 ; ip < biasedProcesses.size() ; ++ip)
 		{
 		  G4bool activ = G4BiasingHelper::ActivatePhysicsBiasing(pmanager, biasedProcesses[ip] );
 		  restartLoop = activ;
@@ -465,7 +465,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
 	  G4int icount(0);
 	  
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+	  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      G4BiasingProcessInterface* pb = dynamic_cast< G4BiasingProcessInterface* >(process);

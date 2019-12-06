@@ -43,7 +43,7 @@ namespace HepGeom {
   public:
     /**
      * Default constructor. */
-    Vector3D() {}
+    Vector3D() = default;
 
     /**
      * Constructor from three numbers. */
@@ -56,7 +56,11 @@ namespace HepGeom {
 
     /**
      * Copy constructor. */
-    Vector3D(const Vector3D<float> & v) : BasicVector3D<float>(v) {}
+    Vector3D(const Vector3D<float> &) = default;
+
+    /**
+     * Move constructor. */
+    Vector3D(Vector3D<float> &&) = default;
 
     /**
      * Constructor from BasicVector3D<float>. */
@@ -64,19 +68,22 @@ namespace HepGeom {
 
     /**
      * Destructor. */
-    ~Vector3D() {}
+    ~Vector3D() = default;
 
     /**
      * Assignment. */
-    Vector3D<float> & operator=(const Vector3D<float> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
-    }
+    Vector3D<float> & operator=(const Vector3D<float> &) = default;
 
     /**
      * Assignment from BasicVector3D<float>. */
     Vector3D<float> & operator=(const BasicVector3D<float> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
+      this->BasicVector3D<float>::operator=(v);
+      return *this;
     }
+
+    /**
+     * Move assignment. */
+    Vector3D<float> & operator=(Vector3D<float> &&) = default;
 
     /**
      * Transformation by Transform3D. */
@@ -101,7 +108,7 @@ namespace HepGeom {
   public:
     /**
      * Default constructor. */
-    Vector3D() {}
+    Vector3D() = default;
 
     /**
      * Constructor from three numbers. */
@@ -119,7 +126,11 @@ namespace HepGeom {
 
     /**
      * Copy constructor. */
-    Vector3D(const Vector3D<double> & v) : BasicVector3D<double>(v) {}
+    Vector3D(const Vector3D<double> &) = default;
+
+    /**
+     * Move constructor. */
+    Vector3D(Vector3D<double> &&) = default;
 
     /**
      * Constructor from BasicVector3D<float>. */
@@ -131,7 +142,7 @@ namespace HepGeom {
 
     /**
      * Destructor. */
-    ~Vector3D() {}
+    ~Vector3D() = default;
 
     /**
      * Constructor from CLHEP::Hep3Vector.
@@ -145,26 +156,30 @@ namespace HepGeom {
      * Conversion (cast) to CLHEP::Hep3Vector.
      * This operator is needed only for backward compatibility and
      * in principle should not exit.
-     */ 
+     */
     operator CLHEP::Hep3Vector () const { return CLHEP::Hep3Vector(x(),y(),z()); }
 
     /**
      * Assignment. */
-    Vector3D<double> & operator=(const Vector3D<double> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
-    }
+    Vector3D<double> & operator=(const Vector3D<double> &) = default;
 
     /**
      * Assignment from BasicVector3D<float>. */
     Vector3D<double> & operator=(const BasicVector3D<float> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
+      this->BasicVector3D<double>::operator=(v);
+      return *this;
     }
 
     /**
      * Assignment from BasicVector3D<double>. */
     Vector3D<double> & operator=(const BasicVector3D<double> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
+      this->BasicVector3D<double>::operator=(v);
+      return *this;
     }
+
+    /**
+     * Move assignment. */
+    Vector3D<double> & operator=(Vector3D<double> &&) = default;
 
     /**
      * Transformation by Transform3D. */

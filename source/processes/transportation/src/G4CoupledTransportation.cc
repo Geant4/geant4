@@ -53,6 +53,8 @@ G4bool G4CoupledTransportation::fSignifyStepInAnyVolume= false;
 // This mode must apply to all threads 
 
 G4bool G4CoupledTransportation::fUseMagneticMoment=false;
+G4bool G4CoupledTransportation::fUseGravity= false;
+G4bool G4CoupledTransportation::fSilenceLooperWarnings= false;
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
@@ -115,8 +117,7 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
   fCurrentTouchableHandle = *pNullTouchableHandle;
     // Points to (G4VTouchable*) 0
 
-  G4FieldManager  *globalFieldMgr= transportMgr->GetFieldManager();
-  fGlobalFieldExists= globalFieldMgr ? globalFieldMgr->GetDetectorField() : 0 ; 
+  fAnyFieldExists= DoesAnyFieldExist();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -259,34 +260,32 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Check if the particle has a force, EM or gravitational, exerted on it
   //
-  G4FieldManager* fieldMgr=0;
+  G4FieldManager* fieldMgr= nullptr;
   G4bool          fieldExertsForce = false ;
 
-  G4bool gravityOn = false;
-  const G4Field* ptrField= 0;
+  const G4Field* ptrField= nullptr;
 
   fieldMgr = fFieldPropagator->FindAndSetFieldManager( track.GetVolume() );
-  if( fieldMgr != 0 )
+  G4bool eligibleEM = (particleCharge != 0.0)
+                   || ( fUseMagneticMoment && (magneticMoment != 0.0) );
+  G4bool eligibleGrav =  fUseGravity && (restMass != 0.0) ;
+
+  if( (fieldMgr!=nullptr) && (eligibleEM||eligibleGrav) )
   {
      // Message the field Manager, to configure it for this track
      //
      fieldMgr->ConfigureForTrack( &track );
 
-     // Here it can transition from a null field-ptr to a finite field.
+     // The above call can transition from a null field-ptr oto a finite field.
      // If the field manager has no field ptr, the field is zero 
      // by definition ( = there is no field ! )
      //
      ptrField= fieldMgr->GetDetectorField();
  
-     if( ptrField != 0)
+     if( ptrField != nullptr)
      { 
-        gravityOn= ptrField->IsGravityActive();
-        if(  (particleCharge != 0.0) 
-             || (fUseMagneticMoment && (magneticMoment != 0.0) )
-             || (gravityOn && (restMass != 0.0))  )
-        {
-           fieldExertsForce = true;
-        }
+        fieldExertsForce = eligibleEM
+              || ( eligibleGrav && ptrField->IsGravityActive() );
      }
   }
   G4double momentumMagnitude = pParticle->GetTotalMomentum() ;
@@ -434,6 +433,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   } 
   else 
   { 
+      fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
   
 #ifdef G4DEBUG_TRANSPORT
       if( verboseLevel > 1 )
@@ -484,13 +484,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
           // Correct the energy for fields that conserve it
           //  This - hides the integration error
           //       - but gives a better physical answer
-          fTransportEndKineticEnergy= track.GetKineticEnergy(); 
+          fTransportEndKineticEnergy= track.GetKineticEnergy();
       }
   }
 
   fEndpointDistance   = (fTransportEndPosition - startPosition).mag() ;
-  fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
-
   fTransportEndSpin = endTrackState.GetSpin();
 
   // Calculate the safety
@@ -677,7 +675,7 @@ G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
            }
         }
 
-        if( endEnergy > fThreshold_Warning_Energy )
+        if( endEnergy > fThreshold_Warning_Energy && ! fSilenceLooperWarnings )           
         {
           fpLogger->ReportLoopingTrack( track, stepData, fNoLooperTrials,
                                         noCallsCT_ASDI, methodName );
@@ -696,7 +694,7 @@ G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
              fSumEnergyUnstableSaved += endEnergy;
         }
 #ifdef G4VERBOSE
-        if( verboseLevel > 2 )
+        if( verboseLevel > 2 && ! fSilenceLooperWarnings )           
         {
           G4cout << "  ** G4CoupledTransportation::AlongStepDoIt():"
                  << " Particle is looping but is saved ..."  << G4endl
@@ -957,8 +955,8 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
   fPathFinder->PrepareNewTrack( position, direction); 
   // This implies a call to fPathFinder->Locate( position, direction ); 
 
-  // Global field, if any, must exist before tracking is started
-  fGlobalFieldExists= DoesGlobalFieldExist(); 
+  // Whether field exists should be determined at run level -- TODO
+  fAnyFieldExists= DoesAnyFieldExist(); 
 
   // reset safety value and center
   //
@@ -975,7 +973,7 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
 
   // ChordFinder reset internal state
   //
-  if( fGlobalFieldExists )
+  if( fFieldPropagator && fAnyFieldExists )
   {
      fFieldPropagator->ClearPropagatorState();   
        // Resets safety values, in case of overlaps.  
@@ -1064,12 +1062,40 @@ ReportInexactEnergy(G4double startEnergy, G4double endEnergy)
 
 /////////////////////////////////////////////////////////////////////////////
 
-G4bool G4CoupledTransportation::EnableUseMagneticMoment(G4bool useMoment)
+G4bool G4CoupledTransportation::EnableMagneticMoment(G4bool useMoment)
 {
   G4bool lastValue= fUseMagneticMoment;
   fUseMagneticMoment= useMoment;
   G4Transportation::fUseMagneticMoment= useMoment;
   return lastValue;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+G4bool G4CoupledTransportation::EnableGravity(G4bool useGravity)
+{
+  G4bool lastValue= fUseGravity;
+  fUseGravity= useGravity;
+  G4Transportation::fUseGravity= useGravity;
+  return lastValue;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+//  Supress (or not) warnings about 'looping' particles
+
+void G4CoupledTransportation::SetSilenceLooperWarnings( G4bool val)
+{
+  fSilenceLooperWarnings= val;  // Flag to *Supress* all 'looper' warnings  
+  // G4CoupledTransportation::fSilenceLooperWarnings= val;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+G4bool G4CoupledTransportation::GetSilenceLooperWarnings()
+{
+  return fSilenceLooperWarnings; 
 }
 
 /////////////////////////////////////////////////////////////////////////////

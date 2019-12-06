@@ -23,22 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EqGravityField implementation
 //
-//  This is the right-hand side for equation of motion for a
-//  massive particle in a gravitational field.
+// This is the right-hand side for equation of motion for a
+// massive particle in a gravitational field.
 //
-// History:
-// - 14.06.11 P.Gumplinger, Created.
-// -------------------------------------------------------------------
-// Adopted from G4EqMagElectricField.hh
-//
-// Thanks to Peter Fierlinger (PSI) and
-// A. Capra and A. Fontana (INFN Pavia)
+// Created: P.Gumplinger, 14.06.11 - Adopted from G4EqMagElectricField
+//          Thanks to P.Fierlinger (PSI) and A.Capra and A.Fontana (INFN Pavia)
 // -------------------------------------------------------------------
 
 #include "G4EqGravityField.hh"
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
+
+G4EqGravityField::G4EqGravityField(G4UniformGravityField* gField) 
+  : G4EquationOfMotion( gField )
+{
+}
+
+G4EqGravityField::~G4EqGravityField()
+{
+}
 
 void
 G4EqGravityField::SetChargeMomentumMass(G4ChargeState,
@@ -51,7 +56,7 @@ G4EqGravityField::SetChargeMomentumMass(G4ChargeState,
 void
 G4EqGravityField::EvaluateRhsGivenB(const G4double y[],
                                     const G4double G[],
-                                    G4double dydx[] ) const
+                                          G4double dydx[] ) const
 {
 
   // Components of y:
@@ -75,6 +80,7 @@ G4EqGravityField::EvaluateRhsGivenB(const G4double y[],
   dydx[5] = G[2]*cof1*cof2/c_light;
 
   // Lab Time of flight
+  //
   dydx[7] = inverse_velocity;
 
   return;

@@ -23,24 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class header file 
-// --------------------------------------------------------------------
+// G4ErrorMag_UsualEqRhs
 //
 // Class description:
 //
 // Serves to reverse the magnetic field when propagation is backwards
 // for error propagation.
 
-// History:
-// - Created. P. Arce, September 2004
+// Created: P.Arce, September 2004.
 // --------------------------------------------------------------------
-
-#ifndef G4ErrorMag_UsualEqRhs_hh
-#define G4ErrorMag_UsualEqRhs_hh
+#ifndef G4ERRORMAG_USUALEQRHS_HH
+#define G4ERRORMAG_USUALEQRHS_HH
 
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4MagneticField.hh"
@@ -58,4 +51,4 @@ class G4ErrorMag_UsualEqRhs : public G4Mag_UsualEqRhs
        // Reverses dedx if propagation is backwards
 };
 
-#endif /* G4MAG_USUAL_EQRHS */
+#endif

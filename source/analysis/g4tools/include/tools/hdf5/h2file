@@ -24,7 +24,7 @@ namespace hdf5 {
 inline bool write_std_map_ss(hid_t a_loc,const std::string& a_name,const std::map<std::string,std::string>& a_map,
                              unsigned int /*a_chunked*/ = 0,unsigned int /*a_compress*/ = 0) {
   if(!write_scalar<tools::uint64>(a_loc,a_name+"_size",a_map.size())) return false;
-  size_t count = 0;
+  unsigned int count = 0; //uint for num2s.
   std::string scount;
   tools_mforcit(std::string,std::string,a_map,it) {
     tools::num2s(count,scount);
@@ -205,8 +205,10 @@ inline bool read_hdata(hid_t a_loc,histo_data_t& a_hdata) {
 }
 
 template <class HISTO>
-inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name,HISTO*& a_histo) {
+inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name,HISTO*& a_histo,bool a_verb_class = true) {
   a_histo = 0;
+
+  //if(::H5Gget_objinfo(a_loc,a_name.c_str(),0,NULL)<0) {return false;}
 
   hid_t histo = tools_H5Gopen(a_loc,a_name.c_str());
   if(histo<0) {
@@ -222,7 +224,10 @@ inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name
   }
 
   if(sclass!=HISTO::s_class()) {
-    a_out << "tools::hdf5::read_histo : unknown class : " << sclass << std::endl;
+    if(a_verb_class) {
+      a_out << "tools::hdf5::read_histo :"
+            << " read class " << tools::sout(sclass) << " not " << tools::sout(HISTO::s_class()) << std::endl;
+    }	    
     ::H5Gclose(histo);
     return false;
   }
@@ -249,7 +254,7 @@ inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name
 }
 
 template <class PROFILE>
-inline bool read_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_name,PROFILE*& a_histo) {
+inline bool read_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_name,PROFILE*& a_histo,bool a_verb_class = true) {
   a_histo = 0;
 
   hid_t histo = tools_H5Gopen(a_loc,a_name.c_str());
@@ -266,7 +271,10 @@ inline bool read_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_na
   }
 
   if(sclass!=PROFILE::s_class()) {
-    a_out << "tools::hdf5::read_profile : unknown class : " << sclass << std::endl;
+    if(a_verb_class) {
+      a_out << "tools::hdf5::read_profile :"
+            << " read class " << tools::sout(sclass) << " not " << tools::sout(PROFILE::s_class()) << std::endl;
+    }
     ::H5Gclose(histo);
     return false;
   }
@@ -295,6 +303,36 @@ inline bool read_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_na
   
   a_histo = new PROFILE;
   a_histo->copy_from_data(pdata);
+  return true;
+}
+
+inline bool read_class_version(std::ostream& a_out,hid_t a_loc,const std::string& a_name,
+                               std::string& a_class,int& a_version,bool a_verbose = true) {
+  hid_t id = tools_H5Gopen(a_loc,a_name.c_str());
+  if(id<0) {
+    if(a_verbose) a_out << "tools::hdf5::read_class_version : can't open group." << std::endl;
+    a_class.clear();
+    a_version = 0;
+    return false;
+  }
+
+  if(!read_atb(id,"class",a_class)) {
+    if(a_verbose) a_out << "tools::hdf5::read_class_version : can't read_atb() class." << std::endl;
+    ::H5Gclose(id);
+    a_class.clear();
+    a_version = 0;
+    return false;
+  }
+
+  if(!read_atb(id,"version",a_version)) {
+    if(a_verbose) a_out << "tools::hdf5::read_class_version : read_atb version failed." << std::endl;
+    ::H5Gclose(id);
+    a_class.clear();
+    a_version = 0;
+    return false;
+  }
+
+  ::H5Gclose(id);
   return true;
 }
 

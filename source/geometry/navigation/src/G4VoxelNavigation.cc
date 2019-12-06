@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // class G4VoxelNavigation Implementation
 //
 // Author: P.Kent, 1996
@@ -44,13 +41,12 @@
 // ********************************************************************
 //
 G4VoxelNavigation::G4VoxelNavigation()
-  : fBList(), fVoxelDepth(-1),
+  : fBList(),
     fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
     fVoxelNoSlicesStack(kNavigatorVoxelStackMax,0),
     fVoxelSliceWidthStack(kNavigatorVoxelStackMax,0.),
     fVoxelNodeNoStack(kNavigatorVoxelStackMax,0),
-    fVoxelHeaderStack(kNavigatorVoxelStackMax,(G4SmartVoxelHeader*)0),
-    fVoxelNode(0), fpVoxelSafety(0), fCheck(false), fBestSafety(false)
+    fVoxelHeaderStack(kNavigatorVoxelStackMax,(G4SmartVoxelHeader*)nullptr)
 {
   fLogger= new G4NavigationLogger("G4VoxelNavigation");
   fpVoxelSafety= new G4VoxelSafety();
@@ -85,15 +81,15 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                                       G4ThreeVector& exitNormal,
                                       G4bool& exiting,
                                       G4bool& entering,
-                                      G4VPhysicalVolume *(*pBlockedPhysical),
+                                      G4VPhysicalVolume* (*pBlockedPhysical),
                                       G4int& blockedReplicaNo )
 {
-  G4VPhysicalVolume *motherPhysical, *samplePhysical, *blockedExitedVol=0;
+  G4VPhysicalVolume *motherPhysical, *samplePhysical, *blockedExitedVol=nullptr;
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid;
   G4ThreeVector sampleDirection;
   G4double ourStep=currentProposedStepLength, ourSafety;
-  G4double motherSafety, motherStep=DBL_MAX;
+  G4double motherSafety, motherStep = DBL_MAX;
   G4int localNoDaughters, sampleNo;
 
   G4bool initialNode, noStep;
@@ -139,7 +135,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
   entering = false;
 
   // For extra checking,  get the distance to Mother early !!
-  G4bool   motherValidExitNormal= false;
+  G4bool motherValidExitNormal = false;
   G4ThreeVector motherExitNormal(0.0, 0.0, 0.0);
 
 #ifdef G4VERBOSE
@@ -164,20 +160,20 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
     
       ourStep = 0.0;
     
-      exiting= true;
-      entering= false;
+      exiting = true;
+      entering = false;
     
       // validExitNormal= motherValidExitNormal;
       // exitNormal= motherExitNormal;
       // Makes sense and is useful only if the point is very close ...
       //  Alternatives: i) validExitNormal= false;
       //               ii) Check safety from outside and choose !!
-      validExitNormal= false;
+      validExitNormal = false;
     
-      *pBlockedPhysical= 0; // or motherPhysical ?
-      blockedReplicaNo= 0;  // or motherReplicaNumber ?
+      *pBlockedPhysical = nullptr; // or motherPhysical ?
+      blockedReplicaNo = 0;  // or motherReplicaNumber ?
     
-      newSafety= 0.0;
+      newSafety = 0.0;
       return ourStep;
     }
   }
@@ -291,7 +287,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
         noStep = false;
         entering = false;
         exiting = false;
-        *pBlockedPhysical = 0;
+        *pBlockedPhysical = nullptr;
         ourStep = kInfinity;
       }
       else
@@ -343,10 +339,10 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
             // => but it would need to be rotated to grand-mother ref frame !
             validExitNormal= false;
 
-            *pBlockedPhysical= 0; // or motherPhysical ?
-            blockedReplicaNo= 0;  // or motherReplicaNumber ?
+            *pBlockedPhysical = nullptr; // or motherPhysical ?
+            blockedReplicaNo = 0;  // or motherReplicaNumber ?
     
-            newSafety= 0.0;
+            newSafety = 0.0;
             return ourStep;
           }          
           
@@ -358,8 +354,8 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
 
             // Exit normal: Natural location to set these;confirmed short step
             //
-            validExitNormal= motherValidExitNormal;
-            exitNormal= motherExitNormal;
+            validExitNormal = motherValidExitNormal;
+            exitNormal = motherExitNormal;
 
             if ( validExitNormal )
             {
@@ -372,7 +368,6 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                    fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
                                                     motherExitNormal,  // original 
                                                     *rot,
-                                                    // motherPhysical, 
                                                     "From RotationMatrix" );
 #endif
               }
@@ -450,7 +445,7 @@ G4VoxelNavigation::ComputeVoxelSafety(const G4ThreeVector& localPoint) const
   // Compute isotropic safety to boundaries of previous levels
   // [NOT to collected boundaries]
 
-  // Loop checking, 07.10.2016, J.Apostolakis
+  // Loop checking, 07.10.2016, JA
   while ( (localVoxelDepth>0) && (voxelSafety>0) )
   {
     localVoxelDepth--;
@@ -498,22 +493,22 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
                                    const G4ThreeVector& localDirection,
                                    const G4double currentStep)
 {
-  G4SmartVoxelHeader *workHeader=0, *newHeader=0;
-  G4SmartVoxelProxy *newProxy=0;
-  G4SmartVoxelNode *newVoxelNode=0;
+  G4SmartVoxelHeader *workHeader=nullptr, *newHeader=nullptr;
+  G4SmartVoxelProxy *newProxy=nullptr;
+  G4SmartVoxelNode *newVoxelNode=nullptr;
   G4ThreeVector targetPoint, voxelPoint;
   G4double workNodeWidth, workMinExtent, workCoord;
   G4double minVal, maxVal, newDistance=0.;
   G4double newHeaderMin, newHeaderNodeWidth;
   G4int depth=0, newDepth=0, workNodeNo=0, newNodeNo=0, newHeaderNoSlices=0;
   EAxis workHeaderAxis, newHeaderAxis;
-  G4bool isNewVoxel=false;
+  G4bool isNewVoxel = false;
   
   G4double currentDistance = currentStep;
 
   // Determine if end of Step within current voxel
   //
-  for (depth=0; depth<fVoxelDepth; depth++)
+  for (depth=0; depth<fVoxelDepth; ++depth)
   {
     targetPoint = localPoint+localDirection*currentDistance;
     newDistance = currentDistance;
@@ -599,7 +594,7 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
     // newHeader=Header for crossed voxel
     // newDistance=distance to crossed voxel boundary (along the track)
     //
-    if ( (newNodeNo<0) || (newNodeNo>=newHeader->GetNoSlices()))
+    if ( (newNodeNo<0) || (newNodeNo>=G4int(newHeader->GetNoSlices())))
     {
       // Leaving mother volume
       //
@@ -623,7 +618,7 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
         }
         else
         {
-          fVoxelDepth++;
+          ++fVoxelDepth;
           newHeader = newProxy->GetHeader();
           newHeaderAxis = newHeader->GetAxis();
           newHeaderNoSlices = newHeader->GetNoSlices();
@@ -639,9 +634,9 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
             newNodeNo=0;
           }
           else if ( newNodeNo>=newHeaderNoSlices )
-               {
-                 newNodeNo = newHeaderNoSlices-1;
-               }
+          {
+            newNodeNo = newHeaderNoSlices-1;
+          }
           // Stack info for stepping
           //
           fVoxelAxisStack[fVoxelDepth] = newHeaderAxis;
@@ -668,7 +663,7 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 G4double
 G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
                                  const G4NavigationHistory& history,
-                                 const G4double       maxLength)
+                                 const G4double maxLength)
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
   G4LogicalVolume *motherLogical;
@@ -699,7 +694,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   {
 #ifdef G4DEBUG_NAVIGATION
     // Check that point is inside mother volume
-    EInside  insideMother= motherSolid->Inside(localPoint);
+    EInside  insideMother = motherSolid->Inside(localPoint);
 
     if( insideMother == kOutside )
     {
@@ -716,8 +711,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
       message << "  Description of solid: " << G4endl
             << *motherSolid << G4endl;
       G4Exception("G4VoxelNavigation::ComputeSafety()", "GeomNav0003",
-                  JustWarning,  // FatalException,
-                  message);
+                  JustWarning, message);
     }
 
     // Following check is NOT for an issue - it is only for information
@@ -763,10 +757,8 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                samplePhysical->GetTranslation());
     sampleTf.Invert();
-    const G4ThreeVector samplePoint =
-                          sampleTf.TransformPoint(localPoint);
-    const G4VSolid *sampleSolid     =
-                          samplePhysical->GetLogicalVolume()->GetSolid();
+    const G4ThreeVector samplePoint = sampleTf.TransformPoint(localPoint);
+    const G4VSolid* sampleSolid= samplePhysical->GetLogicalVolume()->GetSolid();
     G4double sampleSafety = sampleSolid->DistanceToIn(samplePoint);
     if ( sampleSafety<ourSafety )
     {
@@ -775,7 +767,8 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 #ifdef G4VERBOSE
     if( fCheck )
     {
-      fLogger->ComputeSafetyLog(sampleSolid,samplePoint,sampleSafety,false,false);
+      fLogger->ComputeSafetyLog(sampleSolid, samplePoint,
+                                sampleSafety, false, false);
     }
 #endif
   }
@@ -793,6 +786,6 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 //
 void  G4VoxelNavigation::SetVerboseLevel(G4int level)
 {
-  if( fLogger )       fLogger->SetVerboseLevel(level);
-  if( fpVoxelSafety)  fpVoxelSafety->SetVerboseLevel( level ); 
+  if( fLogger )      fLogger->SetVerboseLevel(level);
+  if( fpVoxelSafety) fpVoxelSafety->SetVerboseLevel(level); 
 }

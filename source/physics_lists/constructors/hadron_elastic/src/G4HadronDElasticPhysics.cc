@@ -148,21 +148,20 @@ void G4HadronDElasticPhysics::ConstructProcess()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String pname = particle->GetParticleName();
     if(pname == "anti_lambda"  ||
-       pname == "anti_neutron" ||
        pname == "anti_omega-"  || 
        pname == "anti_sigma-"  || 
+       pname == "anti_sigma0"  || 
        pname == "anti_sigma+"  || 
-       pname == "anti_xi-"  || 
-       pname == "anti_xi0"  || 
-       pname == "lambda"    || 
-       pname == "omega-"    || 
-       pname == "sigma-"    || 
-       pname == "sigma+"    || 
-       pname == "xi-"       || 
-       pname == "alpha"     ||
-       pname == "deuteron"  ||
-       pname == "triton"    
-       ) {
+       pname == "anti_xi-"     || 
+       pname == "anti_xi0"     || 
+       pname == "lambda"       || 
+       pname == "omega-"       || 
+       pname == "sigma-"       || 
+       pname == "sigma0"       ||
+       pname == "sigma+"       || 
+       pname == "xi-"          ||       
+       pname == "xi0"
+      ) {
       
       hel = new G4HadronElasticProcess();
       hel->RegisterMe(lhep0);
@@ -177,7 +176,6 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
       hel = new G4HadronElasticProcess();
       hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      //hel->AddDataSet(new G4CHIPSElasticXS());
       model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
@@ -218,7 +216,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 	      ) {
       
       hel = new G4HadronElasticProcess();
-      model = new G4DiffuseElastic();
+              model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
       hel->AddDataSet( theComponentGGHadronNucleusData );
@@ -242,6 +240,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       }
 
     } else if(
+       pname == "anti_neutron"   ||
        pname == "anti_proton"    || 
        pname == "anti_alpha"     ||
        pname == "anti_deuteron"  ||

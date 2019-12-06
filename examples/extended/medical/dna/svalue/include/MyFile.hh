@@ -34,7 +34,7 @@
 // Phys. Med. 31 (2015) 861-874
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file medical/dna/svalue2/include/MyFile.hh
+/// \file medical/dna/svalue/include/MyFile.hh
 /// \brief Declaration of the MyFile class
 
 //#define MYFILE 1

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4GenericPolycone
 //
 // Class description:
@@ -45,10 +38,11 @@
 //               const G4double r[],  // r coordinate of these corners
 //               const G4double z[])  // z coordinate of these corners
 //
-//
+
+// Authors: T.Nikitina, G.Cosmo - CERN
 // --------------------------------------------------------------------
-#ifndef G4GenericPolycone_hh
-#define G4GenericPolycone_hh
+#ifndef G4GENERICPOLYCONE_HH
+#define G4GENERICPOLYCONE_HH
 
 #include "G4GeomTypes.hh"
 
@@ -125,8 +119,8 @@ class G4GenericPolycone : public G4VCSGfaceted
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
-  G4GenericPolycone( const G4GenericPolycone &source );
-  G4GenericPolycone &operator=( const G4GenericPolycone &source );
+  G4GenericPolycone( const G4GenericPolycone& source );
+  G4GenericPolycone& operator=( const G4GenericPolycone& source );
     // Copy constructor and assignment operator.
 
  protected:  // without description
@@ -135,9 +129,9 @@ class G4GenericPolycone : public G4VCSGfaceted
 
   void Create( G4double phiStart,        // initial phi starting angle
                G4double phiTotal,        // total phi angle
-               G4ReduciblePolygon *rz ); // r/z coordinate of these corners
+               G4ReduciblePolygon* rz ); // r/z coordinate of these corners
 
-  void CopyStuff( const G4GenericPolycone &source );
+  void CopyStuff( const G4GenericPolycone& source );
 
   // Methods for random point generation
 
@@ -145,16 +139,15 @@ class G4GenericPolycone : public G4VCSGfaceted
 
   // Here are our parameters
 
-  G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
-  G4double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
-  G4bool   phiIsOpen;   // true if there is a phi segment
-  G4int    numCorner;   // number RZ points
-  G4PolyconeSideRZ *corners;  // corner r,z points
+  G4double startPhi;            // Starting phi value (0 < phiStart < 2pi)
+  G4double endPhi;              // end phi value (0 < endPhi-phiStart < 2pi)
+  G4bool   phiIsOpen = false;   // true if there is a phi segment
+  G4int    numCorner;           // number RZ points
+  G4PolyconeSideRZ* corners = nullptr;  // corner r,z points
 
   // Our quick test
 
-  G4EnclosingCylinder *enclosingCylinder;
-
+  G4EnclosingCylinder* enclosingCylinder = nullptr;
 };
 
 #include "G4GenericPolycone.icc"

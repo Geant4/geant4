@@ -251,6 +251,10 @@ void G4OpticalPhysics::ConstructProcess()
           pManager->SetProcessOrderingToLast(fScintillationProcess,idxAtRest);
           pManager->SetProcessOrderingToLast(fScintillationProcess,idxPostStep);
     }
+    if( fBoundaryProcess->IsApplicable(*particle) &&
+        fProcessUse[kBoundary] ) {
+          pManager->SetProcessOrderingToLast(fBoundaryProcess,idxPostStep);
+    }
   }
 
   // Add verbose

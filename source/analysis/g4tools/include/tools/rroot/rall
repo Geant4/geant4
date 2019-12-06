@@ -15,6 +15,8 @@
 #include "osc"
 #endif
 
+#include "THistogram"
+
 namespace tools {
 namespace rroot {
 
@@ -169,7 +171,7 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
     delete p;
 
   } else if(a_key.object_class()==TTree_cls()) {
-   
+    b.set_map_objs(true); //for "root_ls -ls" on esb evetest.root files.
     fac _fac(a_out);
     tree tree(a_file,_fac);
     if(!tree.stream(b)) {
@@ -267,6 +269,30 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
       if(a_dump) h.hprint(a_out);
     }
 #endif
+
+  } else if(a_key.object_class()==THistogram_cls()) { //produced with osc/AIDA through BatchLab/Rio/THistogram.
+
+    pd_data_t data; 
+    annotations_t annotations;
+    if(!read_THistogram(b,data,annotations)) {
+      a_out << "tools::rroot::read_key : read_THistogram() failed." << std::endl;
+    } else {
+      if(histo::h1d* _h1d = THistogram_to_h1d(data)) {
+        if(a_dump) _h1d->hprint(a_out);
+        delete _h1d;
+      } else if(histo::h2d* _h2d = THistogram_to_h2d(data)) {
+        if(a_dump) _h2d->hprint(a_out);
+        delete _h2d;
+      } else if(histo::p1d* _p1d = THistogram_to_p1d(data)) {
+        if(a_dump) _p1d->hprint(a_out);
+        delete _p1d;
+      } else if(histo::p2d* _p2d = THistogram_to_p2d(data)) {
+        if(a_dump) _p2d->hprint(a_out);
+        delete _p2d;
+      } else {
+        a_out << "tools::rroot::read_key : can't convert THistogram dat to h1d,h2d,p1d or p2d." << std::endl;
+      }
+    }
 
   } else if(a_key.object_class()==TDirectory_cls()) {
 
@@ -428,6 +454,7 @@ inline tree* key_to_tree(ifile& a_file,ifac& a_fac,key& a_key,bool a_warn = true
     return 0;
   }
   buffer b(out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
+  b.set_map_objs(true); //for ioda/comres/tree.py, tree.lua.
   tree* _tree = new tree(a_file,a_fac);
   if(!_tree->stream(b)) {
     out << "tools::rroot::key_to_tree : TTree streaming failed" << std::endl;

@@ -22,19 +22,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ModifiedMidpoint
 //
+// Class description:
 //
-//
-// Description:
-//    Modified midpoint method implementation
-//    Implementation is based on modified_midpoint.hpp from boost odeint
+// Modified midpoint method implementation, based on Boost odeint
 
-//    Implementation by Dmitry Sorokin - GSoC 2016
-//       Work supported by Google as part of Google Summer of Code 2016.
-//    Supervision / code review: John Apostolakis
-//
-///////////////////////////////////////////////////////////////////////////////
-
+// Author: Dmitry Sorokin, Google Summer of Code 2016
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 #ifndef G4MODIFIED_MIDPOINT_HH
 #define G4MODIFIED_MIDPOINT_HH
 
@@ -71,9 +67,9 @@ class G4ModifiedMidpoint
 
   private:
 
-    G4EquationOfMotion* fEquation;
-    G4int fnvar;
-    G4int fsteps;
+    G4EquationOfMotion* fEquation = nullptr;
+    G4int fnvar = 0;
+    G4int fsteps = 0;
 };
 
 #include "G4ModifiedMidpoint.icc"

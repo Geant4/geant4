@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // File name:     G4NistMessenger
 //
 // Author:        Vladimir Ivanchenko
@@ -101,7 +100,9 @@ private:
   G4UIdirectory*             g4Dir;
   G4UIcmdWithAString*        g4ElmCmd;   
   G4UIcmdWithAString*        g4MatCmd;
-  G4UIcmdWithAString*        g4DensCmd;    
+  G4UIcmdWithAString*        g4DensCmd;
+  G4UIcmdWithAString*        densCmd;
+  G4UIcmdWithAString*        adensCmd;
 };
 
 #endif

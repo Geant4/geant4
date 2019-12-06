@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VIStore implementation
 //
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4VIStore.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4VIStore.hh"
 
 G4VIStore::G4VIStore()
-{}
+{
+}
 
 G4VIStore::~G4VIStore() 
-{}
+{
+}

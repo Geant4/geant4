@@ -50,13 +50,8 @@
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "DMXAnalysisManager.hh"
 #include "DMXDetectorConstruction.hh"
@@ -81,12 +76,9 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new DMXPhysicsList);
   runManager->SetUserInitialization(new DMXActionInitializer());
 
-#ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-
 
 #ifdef DMXENV_GPS_USE
   G4cout << " Using GPS and not DMX gun " << G4endl;
@@ -104,14 +96,10 @@ int main(int argc,char** argv) {
   // Define UI session for interactive mode.
   if(argc == 1)
     {
-#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute initInter.mac");
-#endif
       ui->SessionStart();
       delete ui;
-#endif
     }
   // Batch mode
   else
@@ -129,9 +117,8 @@ int main(int argc,char** argv) {
   // Complete clean-up
   delete G4AnalysisManager::Instance();
 
-#ifdef G4VIS_USE
   if(visManager) delete visManager;
-#endif
+
   delete runManager;
 
   return 0;

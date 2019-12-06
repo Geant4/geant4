@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -51,6 +50,7 @@
 #include "G4VEmModel.hh"
 #include "G4ElementData.hh"
 #include "G4LossTableManager.hh"
+#include "G4LossTableBuilder.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ParticleChangeForGamma.hh"
@@ -68,9 +68,9 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
   isMaster(true),fElementData(nullptr),pParticleChange(nullptr),
-  xSectionTable(nullptr),theDensityFactor(nullptr),theDensityIdx(nullptr),
-  lossFlucFlag(true),inveplus(1.0/CLHEP::eplus),fCurrentCouple(nullptr),
-  fCurrentElement(nullptr),fCurrentIsotope(nullptr),
+  xSectionTable(nullptr),pBaseMaterial(nullptr),idxTable(0),
+  lossFlucFlag(true),inveplus(1.0/CLHEP::eplus),pFactor(1.0),
+  fCurrentCouple(nullptr),fCurrentElement(nullptr),fCurrentIsotope(nullptr),
   fTripletModel(nullptr),nsec(5) 
 {
   xsec.resize(nsec);
@@ -79,12 +79,14 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   localElmSelectors = true;
   localTable = true;
   useAngularGenerator = false;
+  useBaseMaterials = true;
   isLocked = false;
-  idxTable = 0;
-  fIdxTableElmSelector = 0;
 
   fEmManager = G4LossTableManager::Instance();
   fEmManager->Register(this);
+  G4LossTableBuilder* bld = fEmManager->GetTableBuilder();
+  theDensityFactor = bld->GetDensityFactors();
+  theDensityIdx = bld->GetCoupleIndexes();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,8 +183,9 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
     // no need in element selectors for infionite cuts
     if(cuts[i] == DBL_MAX) { continue; }
    
-    fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = fCurrentCouple->GetMaterial();
+    auto couple = theCoupleTable->GetMaterialCutsCouple(i); 
+    auto material = couple->GetMaterial();
+    SetCurrentCouple(couple);
 
     // selector already exist check if should be deleted
     G4bool create = true;
@@ -203,8 +206,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
     }
     ((*elmSelectors)[i])->Initialise(part, cuts[i]);
     /*      
-      G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i
-             << " idx= " << fCurrentCouple->GetIndex() 
+      G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i 
              << "  "  << part->GetParticleName() 
              << " for " << GetName() << "  cut= " << cuts[i] 
              << "  " << (*elmSelectors)[i] << G4endl;      
@@ -414,7 +416,7 @@ G4double G4VEmModel::Value(const G4MaterialCutsCouple* couple,
                            const G4ParticleDefinition* p, G4double e)
 {
   SetCurrentCouple(couple);
-  return e*e*CrossSectionPerVolume(couple->GetMaterial(),p,e,0.0,DBL_MAX);
+  return pFactor*e*e*CrossSectionPerVolume(pBaseMaterial,p,e,0.0,DBL_MAX);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

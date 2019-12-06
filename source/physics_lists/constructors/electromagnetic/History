@@ -13,6 +13,35 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 October 2019, W.G.Shin, S.Incerti (phys-ctor-em-V10-05-17)
+- added new ELSEPA elastic model for Geant4-DNA in G4EmDNAPhysics_option2 
+
+13 September 2019, V.Ivanchenko (phys-ctor-em-V10-05-16)
+- G4EmLivermorePhysics, G4EmLowEPPhysics, G4EmStandardPhysics_option4
+    use SetEmModel(..) instead of AddEmModel(..) for gamma conversion 
+
+11 September 2019, D.Sawkey (phys-ctor-em-V10-05-15)
+- G4OpticalPhysics - set boundary process to last. Fix bug 2113.
+
+02 September 2019, M.Novak (phys-ctor-em-V10-05-14)
+- G4EmLivermorePhysics, G4EmLowEPPhysics, G4EmStandardPhysics_option4 - updated 
+    settings of the gamma conversion process to provide the original model 
+    combinations when the low energy G4BetheHeitlerModel model was replaced by 
+    the G4BetheHeitler5DModel. 
+
+14 August 2019, V.Ivanchenko (phys-ctor-em-V10-05-13)
+- G4GammaGeneralProcess - fixed "Base Material" use case
+- G4EmStandardPhysics_option2, G4EmStandardPhysics_option3 - implement
+    "General Process" option for gamma
+- G4EmStandardPhysics_option4 - use 5D model for gamma conversion
+
+21 July 2019, M.Novak (phys-ctor-em-V10-05-12)
+- G4GammaGeneralProcess - use the new, optimised log-vector access method
+
+20 July 2019, V.Ivanchenko (phys-ctor-em-V10-05-11)
+- G4EmStandardPhysicsSS - in the case if Mott correction flag is TRUE
+    apply G4eSingleCoulombScatteringModel both for e+ and e-
+
 21 May 2019, V.Ivanchenko (phys-ctor-em-V10-05-10)
 - G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysics_option4,
   G4EmStandardPhysics_option3 - define upper energy limit for nuclear

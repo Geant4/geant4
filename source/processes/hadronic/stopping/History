@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 November 2019 V.Ivanchenko (hadr-stopping-V10-05-02)
+ --------------------------------------------------------------------
+- G4MuonMinusAtomicCapture - fixed trivial Coverity warning
+
+01 Aug 2019 A. Ribon          (hadr-stopping-V10-05-01)
+ --------------------------------------------------------------------
+- G4HadronicAbsorptionFritofWithBinaryCascade : created a new class for
+  handling anti-proton and anti-neutron annihilation at rest using
+  Fritiof coupled with Binary cascade (instead of directly with 
+  Precompound, as in the class G4HadronicAbsorptionFritiof).
+
 22 May 2019 A. Ribon          (hadr-stopping-V10-05-00)
  --------------------------------------------------------------------
 - G4HadronicAbsorptionFritof : extended to neutral anti-hadrons:

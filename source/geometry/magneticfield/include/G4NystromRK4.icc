@@ -23,12 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NystromRK4 inline methods implementation
+//
+// Created: I.Gavrilenko, 15.05.2009 (as G4AtlasRK4)
+// Adaptations: J.Apostolakis, November 2009
+// -------------------------------------------------------------------
+
 void G4NystromRK4::GetFieldValue(const G4double point[4], G4double field[3])
 {
-    GetEquationOfMotion()->GetFieldValue(point, field);
+  GetEquationOfMotion()->GetFieldValue(point, field);
 }
 
 G4double G4NystromRK4::GetFCof()
 {
-    return static_cast<G4Mag_EqRhs*>(GetEquationOfMotion())->FCof();
+  return static_cast<G4Mag_EqRhs*>(GetEquationOfMotion())->FCof();
 }

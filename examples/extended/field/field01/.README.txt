@@ -8,12 +8,12 @@
   tracking in a magnetic field.
 
    The key Geant4 capabilities demonstrated in this example are:
-   \item creating a uniform magnetic field interactively using the field
-         messenger,
-   \item choosing the type of Runge Kutta stepper used for integration of the 
-         motion of charged particles in the magnetic field,
-   \item controlling the thresholds that determine which looping particles are
-         killed by G4Transporation.
+   - creating a uniform magnetic field interactively using the field
+     messenger,
+   - choosing the type of Runge Kutta stepper used for integration of the
+     motion of charged particles in the magnetic field,
+   - controlling the thresholds that determine which looping particles are
+     killed by G4Transporation.
 
   Some of these capabilities are available via interactive commands,
   implemented in F01FieldMessenger.
@@ -25,31 +25,28 @@
   The magnetic field is defined in F01FieldSetup, which is created in
   the ConstructSDandField() method in the F01DetectorConstruction class.
 
- \subsection Choosing the type of stepper
+ \section field01_s01 Choosing the type of stepper
 
   The basic capabilities of choosing the stepper type are demonstrated in the
   field.in macro file:
   
-  \verbatim
-       /field/setStepperType  145   ##  Choose a stepper type   ( Tsitouras )
-
-       /field/setStepperType  101   ##  Choose an FSAL stepper  ( FEqRK1 )
-
-       /field/setMinStep 0.1 mm     ##  Smaller steps always succeed
-
-       /field/update                ##  Initialise using parameters above
-  \endverbatim
+\verbatim
+/field/setStepperType  145   ##  Choose a stepper type   ( Tsito
+/field/setStepperType  101   ##  Choose an FSAL stepper  ( FE
+/field/setMinStep 0.1 mm     ##  Smaller steps always s
+/field/update                ##  Initialise using parameters above
+\endverbatim
   
   In addition it is possible to choose to use a new type of stepper, known
   as 'First Same as Last' or FSAL, which in each step obtains the field value 
   at the step endpoint and evaluates the 'right hand size' of the equation
   for the next integration step.  This reduces the number of calls to the field
-  evaluation, which can be one the most computationally expensive methods,      
+  evaluation, which can be one the most computationally expensive methods,
   while providing similar accuracy.
 
   There are several potential choices of the stepper type. Here are some suggestions:
-   \verbatim
-      ===========================================================================
+\verbatim
+     ===========================================================================
      Number  Name of Stepper      Comments
      ===========================================================================
      Recommended - default since Geant4 10.4:
@@ -112,97 +109,97 @@
         3 - SimpleHeum         : low   order, with error obtained from half-steps
        23 - BogackiShampine23  : lower order embedded method  (new in 10.3-beta)
      ===========================================================================       
-  \endverbatim
+\endverbatim
 
-\subsection Controlling the killing of looping particles
+\section  field01_s02 Controlling the killing of looping particles
          
-       Occasionally tracks 'looping' in a strong magnetic field, making little
-       progress even over hundreds of integration steps.  This is due to a
-       combination of a strong magnetic field and a thin material (gas or vacuum)
-       in which the size of a physics step is substantially larger than the radius
-       of curvature of the track.
+Occasionally tracks 'looping' in a strong magnetic field, making little
+progress even over hundreds of integration steps.  This is due to a
+combination of a strong magnetic field and a thin material (gas or vacuum)
+in which the size of a physics step is substantially larger than the radius
+of curvature of the track.
 
-       Since the amount of CPU time which can be consumed by one or few such tracks
-       is very large, it is important to limit the number of integration steps
-       spent on these tracks.  The module for propagation in field in Geant4
-       flags tracks which take more than a certain number (default 1,000) integration
-       steps without reaching the requested end of the step size, which was
-       determined by the physics and geometry. 
+Since the amount of CPU time which can be consumed by one or few such tracks
+is very large, it is important to limit the number of integration steps
+spent on these tracks.  The module for propagation in field in Geant4
+flags tracks which take more than a certain number (default 1,000) integration
+steps without reaching the requested end of the step size, which was
+determined by the physics and geometry.
 
-       The Geant4 G4Transportation and G4CoupledTransportation processes are tasked
-       to select which of the looping tracks are killed and which survive. To
-       balance the potential significant cost of integrating looping particles,
-       three thresholds exist
+The Geant4 G4Transportation and G4CoupledTransportation processes are tasked
+to select which of the looping tracks are killed and which survive. To
+balance the potential significant cost of integrating looping particles,
+three thresholds exist
 
-        The 'Warning' Energy: a track with energy below this value that is found to
-	                      loop is killed silently (no warning.)
-
-        Above the 'Warning Energy', if a track is selected for killing a warning is
-	generated.
+- **The 'Warning' Energy**: a track with energy below this value that is found to
+loop is killed silently (no warning.)
+Above the 'Warning Energy', if a track is selected for killing a warning is
+generated.
 	
-        The 'Important' Energy: the threshold energy above which a track will survive
-	for multiple steps if found looping.
+- **The 'Important' Energy**: the threshold energy above which a track will survive
+for multiple steps if found looping.
 
-          number of 'tracking' steps.  They will be only be killed only if they still
-       loop after than
-        The number of 'trials': the number of steps that 'important' tracks survive.
+- Number of 'tracking' steps. They will be only be killed only if they still
+loop after than.
+**The number of 'trials'**: the number of steps that 'important' tracks survive.
 
-        Note that currently only stable particles are killed. ( Refinements to enable
-	toggling whether unstable particles can be killed are in development. )
+Note that currently only stable particles are killed. ( Refinements to enable
+toggling whether unstable particles can be killed are in development. )
 
-       This example demonstrate choosing different values for these parametes
-       in the main() method of field01.cc using one of two techniques.
+This example demonstrate choosing different values for these parametes
+in the main () method of field01.cc using one of two techniques.
 
-       The first method is new in Geant4 release 10.5, and uses the G4PhysicsListHelper
-       which has methods to choose a pre-selected set of parameter values. The choices
-       are between a set each of low and high thresholds.  Either one can be enabled
-       by calling correspondingly 
-           - G4PhysicsListHelper::GetPhysicsListHelper()->UseLowLooperThresholds();
-          or
-           - G4PhysicsListHelper::GetPhysicsListHelper()->UseHighLooperThresholds();
-       These methods must be called before the physics is constructed - i.e. typically
-       before RunManager's Initialise() method is called.
-       This works only if either
-           - a modular physics lists is used, or if
-	   - the G4ModularPhysicsList and its AddTransporation method are used 
-	   to create and register a common transportation process for all particles
-	   (one for each thread).
+\subsection  field01_s02_sub1 i) Using G4PhysicsListHelper
 
-       ii) Fine grained control (available in Geant4 versions since 7.0)
+The first method is new in Geant4 release 10.5, and uses the G4PhysicsListHelper
+which has methods to choose a pre-selected set of parameter values. The choices
+are between a set each of low and high thresholds.  Either one can be enabled
+by calling correspondingly
+  - G4PhysicsListHelper::GetPhysicsListHelper()->UseLowLooperThresholds();
+   or
+  - G4PhysicsListHelper::GetPhysicsListHelper()->UseHighLooperThresholds();
+
+These methods must be called before the physics is constructed - i.e. typically
+before RunManager's Initialise() method is called.
+This works only if either
+  - a modular physics lists is used, or if
+  - the G4ModularPhysicsList and its AddTransporation method are used to create and register a common transportation process for all particles (one for each thread).
+
+\subsection  field01_s02_sub2 ii) Fine grained control (available in Geant4 versions since 7.0)
        
-       Fine grained control of the Transportation's parameters for looping particles
-       is also possible.
+Fine grained control of the Transportation's parameters for looping particles
+is also possible.
 
-       This is demonstrated in the F01RunAction's ChangeLooperParameters method, 
-       which is called by the BeginOfRunAction.  There the appropriate
-       Transportation object for the electron is obtained, and its parameters
-       (if valid) are used to overwrite the thresholds in the G4Transportation class.
+This is demonstrated in the F01RunAction::ChangeLooperParameters() method,
+which is called by the BeginOfRunAction.  There the appropriate
+Transportation object for the electron is obtained, and its parameters
+(if valid) are used to overwrite the thresholds in the G4Transportation class.
 
-       For example, to ensure that only looping particles with energy 10 keV are
-       killed silently we change the value of the 'Warning' Energy:
-       \verbatim
-         runAction->SetWarningEnergy(   10.0 * CLHEP::keV );
-       \endverbatim
-       [ This is passed along to the registered G4Transportation or
-       G4CoupledTransportation object by the F01RunAction's ChangeLooperParameters.]
+For example, to ensure that only looping particles with energy 10 keV are
+killed silently we change the value of the 'Warning' Energy:
+\code{.cpp}
+  runAction->SetWarningEnergy( 10.0 * CLHEP::keV );
+\endcode
+[ This is passed along to the registered G4Transportation or
+G4CoupledTransportation object by the F01RunAction's ChangeLooperParameters.]
 
-       As a result the killing of any (stable) looping track with energy over 10 keV
-       will generate a warning.
+As a result the killing of any (stable) looping track with energy over 10 keV
+will generate a warning.
 
-       A second configurable energy threshold enables tracks above it to survive a
-       chosen number of 'tracking' steps.  They will be only be killed only if they 
-       still loop after than number of tracking steps.  F01RunAction's methods are 
-       used to configure these parameters:
-       \verbatim       
-         runAction->SetImportantEnergy( 0.1  * CLHEP::MeV );
-         runAction->SetNumberOfTrials( 30 );
-       \endverbatim
-       which the run action passes to the G4Transportation or
-       G4CoupledTransportation object registered for the electron.
+A second configurable energy threshold enables tracks above it to survive a
+chosen number of 'tracking' steps.  They will be only be killed only if they
+still loop after than number of tracking steps.  F01RunAction's methods are
+used to configure these parameters:
+\code{.cpp}
+  runAction->SetImportantEnergy( 0.1  * CLHEP::MeV );
+  runAction->SetNumberOfTrials( 30 );
+\endcode
+which the run action passes to the G4Transportation or
+G4CoupledTransportation object registered for the electron.
 
-       Note that for all pre-configured and modular physics lists share a single
-       Transportation process for all types of particles.  So the parameters for
-       killing loopers will be shared by all particle types in this case.
+Note that for all pre-configured and modular physics lists share a single
+Transportation process for all types of particles.  So the parameters for
+killing loopers will be shared by all particle types in this case.
 
 \section field01_s1 Background Information    
 
@@ -276,4 +273,3 @@ Idle> /run/beamOn 1
 \endverbatim
 
 */
-

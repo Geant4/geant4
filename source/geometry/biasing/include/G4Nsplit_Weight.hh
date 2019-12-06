@@ -23,20 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4Nsplit_Weight
+// G4Nsplit_Weight
 //
 // Class description:
 // 
 // A class (struct) used by importance sampling. It contains the number
 // of tracks a mother track should be split into and their weight.
  
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4Nsplit_Weight_hh
-#define G4Nsplit_Weight_hh G4Nsplit_Weight_hh
+#ifndef G4NSPLIT_WEIGHT_HH
+#define G4NSPLIT_WEIGHT_HH 1
 
 #include "globals.hh"
 
@@ -44,26 +41,14 @@ class G4Nsplit_Weight
 {
   public:
 
-  G4int fN;
-    // number of tracks a mother track should be split into
-    // including the mother track
+    G4int fN = 0;
+      // number of tracks a mother track should be split into
+      // including the mother track
 
-  G4double fW;
-    // the weight to be given to the tracks
+    G4double fW = 0.0;
+      // the weight to be given to the tracks
 };
 
-std::ostream& operator<<(std::ostream &out, 
-			   const G4Nsplit_Weight &nw);
-
+std::ostream& operator<<(std::ostream& out, const G4Nsplit_Weight& nw);
 
 #endif
-
-
-
-
-
-
-
-
-
-

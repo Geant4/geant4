@@ -23,20 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UHype
 //
 // Class description:
 //
-//   Wrapper class for G4Hype to make use of VecGeom Hyperboloid.
+// Wrapper class for G4Hype to make use of VecGeom Hyperboloid.
 
-// History:
 // 16.10.17 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UHYPE_HH
@@ -92,8 +84,8 @@ class G4UHype : public G4UAdapter<vecgeom::GenericUnplacedHype>
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4UHype( const G4UHype &source );
-    G4UHype &operator=( const G4UHype &source );
+    G4UHype( const G4UHype& source );
+    G4UHype& operator=( const G4UHype& source );
       // Copy constructor and assignment operator.
 
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;

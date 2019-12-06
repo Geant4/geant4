@@ -46,10 +46,11 @@
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4HadronicParameters.hh"
 
+
 G4FTFBinaryNeutronBuilder::
 G4FTFBinaryNeutronBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFB");
 
@@ -87,3 +88,4 @@ Build(G4NeutronInelasticProcess * aP)
   aP->RegisterMe(theModel);
   aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
 }
+

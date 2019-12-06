@@ -168,7 +168,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
           G4Track* t = new G4Track(dp, time, track.GetPosition());
           t->SetTouchableHandle(track.GetTouchableHandle());
           if (biasManager) {
-            t->SetWeight(biasManager->GetWeight(i));
+            t->SetWeight(weight * biasManager->GetWeight(i));
           } else {
             t->SetWeight(weight);
           }

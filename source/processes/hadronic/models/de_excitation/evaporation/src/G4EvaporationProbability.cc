@@ -36,6 +36,8 @@
 // JMQ (14 february 2009) bug fixed in emission width: hbarc instead of 
 //                        hbar_Planck in the denominator
 //
+// V.Ivanchenko general clean-up since 2010
+//
 #include "G4EvaporationProbability.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4VCoulombBarrier.hh"
@@ -48,84 +50,78 @@
 #include "Randomize.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
+#include "G4Pow.hh"
 
 using namespace std;
 
 static const G4double explim = 160.;
 
 G4EvaporationProbability::G4EvaporationProbability(G4int anA, G4int aZ, 
-						   G4double aGamma, 
-						   G4VCoulombBarrier*) 
-  : G4VEmissionProbability(aZ, anA), Gamma(aGamma)
+						   G4double aGamma) 
+  : G4VEmissionProbability(aZ, anA), fGamma(aGamma)
 {
-  resZ = resA = fragA = fragZ = 0;
-  resA13 = muu = resMass = Mass = U = delta0 = delta1 = a0 = probmax = 0.0;
-  partMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
-  pcoeff = Gamma*partMass*CLHEP::millibarn
+  resA13 = muu = freeU = a0 = delta1 = 0.0;
+  pcoeff = fGamma*pEvapMass*CLHEP::millibarn
     /((CLHEP::pi*CLHEP::hbarc)*(CLHEP::pi*CLHEP::hbarc)); 
 
   if(0 == theZ)      { index = 0; }
   else if(1 == theZ) { index = theA; }
   else               { index = theA + 1; }
-  fLevelData = G4NuclearLevelData::GetInstance(); 
   if(0 == aZ) {
     ResetIntegrator(30, 0.25*CLHEP::MeV, 0.02);
-  } else if(1 == aZ && 1 == anA) {
-    ResetIntegrator(30, 0.5*CLHEP::MeV, 0.03);
   } else {
     ResetIntegrator(30, 0.5*CLHEP::MeV, 0.03);
   }
+  // G4cout << "G4EvaporationProbability: Z= " << theZ << " A= " << theA 
+  // << " M(GeV)= " << pEvapMass/GeV << G4endl;
 }
 
 G4EvaporationProbability::~G4EvaporationProbability() 
 {}
 
-G4double G4EvaporationProbability::EmissionProbability(
-         const G4Fragment&, G4double)
+G4double G4EvaporationProbability::CalcAlphaParam(const G4Fragment&)
 {
-  return 0.0;
+  return 1.0;
+}
+ 
+G4double G4EvaporationProbability::CalcBetaParam(const G4Fragment&)
+{
+  return 1.0;
 }
 
 G4double G4EvaporationProbability::TotalProbability(
-  const G4Fragment & fragment, G4double minEnergy, G4double maxEnergy, 
-  G4double CoulombBarrier)
+  const G4Fragment& fragment, G4double minEnergy, G4double maxEnergy, 
+  G4double CB, G4double exEnergy)
 {
-  fragA = fragment.GetA_asInt();
-  fragZ = fragment.GetZ_asInt();
-  resA  = fragA - theA;
-  resZ  = fragZ - theZ;
-
-  G4double fragMass = fragment.GetGroundStateMass();
-  U = fragment.GetExcitationEnergy();
-  Mass = fragMass + U;
-  delta0 = std::max(0.0, fPairCorr->GetPairingCorrection(fragA,fragZ));
-  delta1 = std::max(0.0, fPairCorr->GetPairingCorrection(resA,resZ));
-  resMass = G4NucleiProperties::GetNuclearMass(resA, resZ);
-  resA13 = fG4pow->Z13(resA);
-  a0 = fLevelData->GetLevelDensity(fragZ,fragA,U);
-  /*  
+  G4int fragA = fragment.GetA_asInt();
+  G4int fragZ = fragment.GetZ_asInt();
+  G4double U = fragment.GetExcitationEnergy(); 
+  a0 = pNuclearLevelData->GetLevelDensity(fragZ,fragA,U);
+  freeU = exEnergy;
+  resA13 = pG4pow->Z13(resA);
+  delta1 = pNuclearLevelData->GetPairingCorrection(resZ,resA);
+  /*    
   G4cout << "G4EvaporationProbability: Z= " << theZ << " A= " << theA 
 	 << " resZ= " << resZ << " resA= " << resA 
 	 << " fragZ= " << fragZ << " fragA= " << fragA 
-	 << "\n      U= " << U << " d0= " << delta0 << " a0= " << a0 
-	 << " OPT= " << OPTxs << G4endl;
+	 << "\n   freeU= " << freeU  
+	 << " a0= " << a0 << " OPT= " << OPTxs << " emin= " 
+         << minEnergy << " emax= " << maxEnergy 
+	 << " CB= " << CB << G4endl;
   */
-  if(U < delta0 || maxEnergy <= minEnergy) { return 0.0; }
-   
-  G4double Width = 0.0;
-  if (OPTxs==0 || (OPTxs==4 && U < 10. + delta0)) {
+  if (OPTxs==0 || (OPTxs==4 && freeU < 10.)) {
 
-    G4double SystemEntropy = 2.0*std::sqrt(a0*(U-delta0));
+    G4double SystemEntropy = 2.0*std::sqrt(a0*freeU);
 								  
-    static const G4double RN2 = 
-      2.25*fermi*fermi/(twopi* hbar_Planck*hbar_Planck);
+    const G4double RN2 = 2.25*CLHEP::fermi*CLHEP::fermi
+      /(CLHEP::twopi*CLHEP::hbar_Planck*hbar_Planck);
 
     G4double Alpha = CalcAlphaParam(fragment);
     G4double Beta = CalcBetaParam(fragment);
 
     // to be checked where to use a0, where - a1	
-    G4double a1 = fLevelData->GetLevelDensity(resZ,resA,U);
-    G4double GlobalFactor = Gamma*Alpha*partMass*RN2*resA13*resA13/(a1*a1);
+    G4double a1 = pNuclearLevelData->GetLevelDensity(resZ,resA,freeU);
+    G4double GlobalFactor = fGamma*Alpha*pEvapMass*RN2*resA13*resA13/(a1*a1);
     
     G4double maxea = maxEnergy*a1;
     G4double Term1 = Beta*a1 - 1.5 + maxea;
@@ -137,7 +133,7 @@ G4double G4EvaporationProbability::TotalProbability(
     ExpTerm2 = std::min(ExpTerm2, explim);
     ExpTerm2 = G4Exp(ExpTerm2);
 	
-    Width = GlobalFactor*(Term1*ExpTerm1 + Term2*ExpTerm2);
+    pProbability = GlobalFactor*(Term1*ExpTerm1 + Term2*ExpTerm2);
              
   } else {
 
@@ -147,49 +143,52 @@ G4double G4EvaporationProbability::TotalProbability(
     }
     // if Coulomb barrier cutoff is superimposed for all cross sections 
     // then the limit is the Coulomb Barrier
-    Width = IntegrateProbability(minEnergy, maxEnergy, CoulombBarrier);
+    pProbability = IntegrateProbability(minEnergy, maxEnergy, CB);
   }
-  return Width;
+  return pProbability;
 }
 
-G4double G4EvaporationProbability::ComputeProbability(G4double K, G4double cb)
+G4double G4EvaporationProbability::ComputeProbability(G4double K, G4double CB)
 { 
   //G4cout << "### G4EvaporationProbability::ProbabilityDistributionFunction" 
   //  << G4endl;
 
-  G4double E0 = std::max(U - delta0, 0.0);
-  G4double E1 = Mass - partMass - resMass - delta1 - K;
-  /*  
-  G4cout << "PDF: FragZ= " << fragZ << " FragA= " << fragA
-  	 << " Z= " << theZ << "  A= " << theA 
-	 << " K= " << K << " E0= " << E0 << " E1= " << E1 << G4endl;
-  */
-  if(E1 < 0.0) { return 0.0; }
+  G4double E0 = freeU;
+  // abnormal case - should never happens
+  if(pMass < pEvapMass + pResMass) { return 0.0; }
+    
+  G4double m02   = pMass*pMass;
+  G4double m12   = pEvapMass*pEvapMass;
+  G4double mres  = sqrt(m02 + m12 - 2.*pMass*(pEvapMass + K));
 
-  G4double a1 = fLevelData->GetLevelDensity(resZ,resA,U);
-  G4double xs = CrossSection(K, cb); 
+  G4double excRes = mres - pResMass;
+  G4double E1 = excRes - delta1;
+  if(E1 <= 0.0) { return 0.0; }
+  G4double a1 = pNuclearLevelData->GetLevelDensity(resZ,resA,excRes);
+  G4double xs = CrossSection(K, CB); 
   G4double prob = pcoeff*G4Exp(2.0*(std::sqrt(a1*E1) - std::sqrt(a0*E0)))*K*xs;
-  /*
-  G4cout << "Evap prob: " << prob << " FragZ= " << fragZ << " FragA= " << fragA
-  	 << " Z= " << theZ << "  A= " << theA  
-	 << "\n      K= " << K << " E0= " << E0 << " E1= " << E1 
-	 << " cb= " << cb << " xsec= " << xs << G4endl;
+  /*  
+  G4cout << "PDF: Z= " << theZ << "  A= " << theA 
+	 << " K= " << K << " E0= " << E0 << " E1= " << E1 << G4endl;
+  G4cout << " prob= " << prob << " pcoeff= " << pcoeff 
+         << " xs= " << xs << G4endl;
   */
   return prob;
 }
 
 G4double 
-G4EvaporationProbability::CrossSection(G4double K, G4double cb)
+G4EvaporationProbability::CrossSection(G4double K, G4double CB)
 {
   G4double res;
   if(OPTxs <= 2) { 
-    res = G4ChatterjeeCrossSection::ComputeCrossSection(K, cb, resA13, muu,
+    res = G4ChatterjeeCrossSection::ComputeCrossSection(K, CB, resA13, muu,
 							index, theZ, resA); 
   } else { 
-    res = G4KalbachCrossSection::ComputeCrossSection(K, cb, resA13, muu,
+    res = G4KalbachCrossSection::ComputeCrossSection(K, CB, resA13, muu,
 						     index, theZ, theA, resA);
   }
-  //G4cout << "     K= " << K << "  res= " << res << " muu= " << muu << G4endl;
+  //G4cout << "XS: K= "<<K<<" res= "<<res<<" cb= "<<CB<<" muu= "
+  //       <<muu<<" index= " << index<< G4endl;
   return res;
 }  
 
@@ -205,8 +204,7 @@ G4EvaporationProbability::SampleKineticEnergy(G4double minKinEnergy,
   */
   G4double T = 0.0;
   CLHEP::HepRandomEngine* rndm = G4Random::getTheEngine();
-  static const G4int nmax = 100;
-  if (OPTxs==0 || (OPTxs==4 && U < 10. + delta0)) {
+  if (OPTxs==0 || (OPTxs==4 && freeU < 10.)) {
     // JMQ:
     // It uses Dostrovsky's approximation for the inverse reaction cross
     // in the probability for fragment emission
@@ -219,6 +217,8 @@ G4EvaporationProbability::SampleKineticEnergy(G4double minKinEnergy,
     G4double Rk = 0.0;
     G4double FRk = 0.0;
     G4int nn = 0;
+    const G4int nmax = 100;
+    const G4double ssqr3  = 1.5*std::sqrt(3.0);
     do {
       G4double RandNumber = rndm->flat();
       Rk = 1.0 + (1./RbSqrt)*G4Log(RandNumber + (1.0-RandNumber)*PEX1);
@@ -230,7 +230,6 @@ G4EvaporationProbability::SampleKineticEnergy(G4double minKinEnergy,
         Q2 = Q1*std::sqrt(Q1);
       } 
       
-      static const G4double ssqr3  = 1.5*std::sqrt(3.0);
       FRk = ssqr3 * Rk * (Q1 - Rk*Rk)/Q2;
       if(nn > nmax) { break; }
       ++nn;
@@ -240,16 +239,8 @@ G4EvaporationProbability::SampleKineticEnergy(G4double minKinEnergy,
     T = std::max(maxKinEnergy * (1.0-Rk*Rk), 0.0) + minKinEnergy;
 
   } else { 
-
-    if(fVerbose > 1) {
-      G4cout << "###=== SampleEnergy: " << " Z= " << theZ
-	     << " A= " << theA << " FragZ= " << fragZ 
-	     << " FragA= " << fragA << G4endl; 
-    }
     T = SampleEnergy();
-
   }
-  //G4cout << "-- new Z= " << theZ << " A= " << theA << " ekin= " << T << G4endl; 
+  //G4cout<<"-- new Z= "<<theZ<<" A= "<< theA << " ekin= " << T << G4endl; 
   return T;
-  //return fLevelData->FindLevel(resZ, resA, resMass, Mass, partMass, T);
 }

@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4CSGSolid
 //
-//
+// 27.03.98 J.Apostolakis - First version.
 // --------------------------------------------------------------------
 
 #include <cmath>
@@ -47,8 +48,7 @@ namespace
 //  - Base class constructor 
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
-  G4VSolid(name), fCubicVolume(0.), fSurfaceArea(0.),
-  fRebuildPolyhedron(false), fpPolyhedron(0)
+  G4VSolid(name)
 {
 }
 
@@ -58,8 +58,7 @@ G4CSGSolid::G4CSGSolid(const G4String& name) :
 //                            for usage restricted to object persistency.
 
 G4CSGSolid::G4CSGSolid( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(a)
 {
 }
 
@@ -70,7 +69,7 @@ G4CSGSolid::G4CSGSolid( __void__& a )
 
 G4CSGSolid::~G4CSGSolid() 
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -80,7 +79,7 @@ G4CSGSolid::~G4CSGSolid()
 
 G4CSGSolid::G4CSGSolid(const G4CSGSolid& rhs)
   : G4VSolid(rhs), fCubicVolume(rhs.fCubicVolume),
-    fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false), fpPolyhedron(0)
+    fSurfaceArea(rhs.fSurfaceArea)
 {
 }
 
@@ -103,7 +102,7 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
    fCubicVolume = rhs.fCubicVolume;
    fSurfaceArea = rhs.fSurfaceArea;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }  
@@ -128,7 +127,7 @@ std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4CSGSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

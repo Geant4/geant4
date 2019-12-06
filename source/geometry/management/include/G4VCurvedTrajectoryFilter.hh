@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4VCurevedTrajectoryFilter
+// G4VCurvedTrajectoryFilter
 //
 // Class description:
 //
@@ -42,9 +39,7 @@
 // subclass of G4VTrajectoryPoint, which must take responsibility for
 // deleting them.
 
-// History
-//
-// - First version: Oct 30, 2002  Jacek Generowicz
+// First version: Oct 30, 2002 - Jacek Generowicz
 // ------------------------------------------------------------------------
 #ifndef G4VCurvedTrajectoryFilter_hh
 #define G4VCurvedTrajectoryFilter_hh
@@ -63,7 +58,7 @@ public:  // with description
     // Probably do not want these objects to be copied,
     // so make the copy constructor private
   
-  void CreateNewTrajectorySegment( );
+  void CreateNewTrajectorySegment();
     // Each segment stores the auxiliary points of a single step.
 
   virtual void TakeIntermediatePoint( G4ThreeVector newPoint ) = 0;
@@ -75,7 +70,7 @@ public:  // with description
   
 protected:
 
-  std::vector<G4ThreeVector>* fpFilteredPoints;
+  std::vector<G4ThreeVector>* fpFilteredPoints = nullptr;
 };
 
-#endif  /* End of ifndef G4VCurvedTrajectoryFilter_hh */
+#endif  /* G4VCurvedTrajectoryFilter_hh */

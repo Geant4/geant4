@@ -31,8 +31,7 @@ public:
                                          int& a_number,int* a_mx_point,
                                          float* aX,float* aY,float& a_width){
     // PAW special characters.
-    extract(H_SPECIAL,
-            H_UPPER,a_char,a_scale,a_number,a_mx_point,aX,aY,a_width);
+    extract(H_SPECIAL,H_UPPER,a_char,a_scale,a_number,a_mx_point,aX,aY,a_width);
   }
 
   static void latin_char_points(char a_char,float a_scale, //input

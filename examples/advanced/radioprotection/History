@@ -8,6 +8,9 @@
                       Category History file
                       ---------------------
 
+30.10.2019 - S. Guatelli tag radioprotection-V10-05-01
+             using namespace std removed
+
 31.01.2019 - I.Hrivnacova tag radioprotection-V10-05-00
              Merged GitHub PR #4: all Boolean operators now return G4bool.
 

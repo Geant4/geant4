@@ -187,8 +187,9 @@ public:
   void set_win_size(unsigned a_ww,unsigned int a_wh) {
     m_ww = a_ww;
     m_wh = a_wh;
-    m_state.m_ww = a_ww;
-    m_state.m_wh = a_wh;
+    sg::state& _state = state();
+    _state.m_ww = a_ww;
+    _state.m_wh = a_wh;
     m_states.clear();
     reset();
   }
@@ -294,8 +295,9 @@ public:
     model_matrix() = m_identity;
   }
   void set_matrices_from_state() {
-    projection_matrix() = m_state.m_proj;
-    model_matrix() = m_state.m_model;
+    const sg::state& _state = state();
+    projection_matrix() = _state.m_proj;
+    model_matrix() = _state.m_model;
   }
 public:
   bool add__primitive_xy(sg::node& a_node,
@@ -315,7 +317,7 @@ public:
       m_zs.clear();
       add_primitive_xy(a_mode,a_floatn,a_xys,a_stop,a_triangle_revert);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -340,7 +342,7 @@ public:
       m_zs.clear();
       add_primitive_xy(a_mode,a_xys,a_stop,a_triangle_revert);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -361,7 +363,7 @@ public:
       m_zs.clear();
       add_line_strip_xy(a_floatn,a_xys,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -384,7 +386,7 @@ public:
       m_zs.clear();
       add_lines_xy(a_xys,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -393,10 +395,7 @@ public:
   }
 
 public:
-  bool add__primitive(sg::node& a_node,
-                      gl::mode_t a_mode,
-                      size_t a_floatn,const float* a_xyzs,
-                      bool a_stop = false){
+  bool add__primitive(sg::node& a_node,gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs,bool a_stop = false){
     if(!a_floatn) return false;
     if(m_stop_at_first){
       add_primitive(a_mode,a_floatn,a_xyzs,a_stop);
@@ -409,7 +408,7 @@ public:
       m_zs.clear();
       add_primitive(a_mode,a_floatn,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -417,10 +416,7 @@ public:
     return false;
   }
 
-  bool add__primitive(sg::node& a_node,
-                      gl::mode_t a_mode,
-                      const std::vector<float>& a_xyzs,
-                      bool a_stop = false) {
+  bool add__primitive(sg::node& a_node,gl::mode_t a_mode,const std::vector<float>& a_xyzs,bool a_stop = false) {
     if(a_xyzs.empty()) return false;
     if(m_stop_at_first){
       add_primitive(a_mode,a_xyzs,a_stop);
@@ -433,7 +429,7 @@ public:
       m_zs.clear();
       add_primitive(a_mode,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -441,9 +437,7 @@ public:
     return false;
   }
 
-  bool add__line_strip(sg::node& a_node,
-                       size_t a_floatn,const float* a_xyzs,
-                       bool a_stop = false){
+  bool add__line_strip(sg::node& a_node,size_t a_floatn,const float* a_xyzs,bool a_stop = false){
     if(!a_floatn) return false;
     if(m_stop_at_first){
       add_line_strip(a_floatn,a_xyzs,a_stop);
@@ -456,7 +450,7 @@ public:
       m_zs.clear();
       add_line_strip(a_floatn,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -480,7 +474,7 @@ public:
       m_zs.clear();
       add_triangles(a_floatn,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -503,7 +497,7 @@ public:
       m_zs.clear();
       add_lines(a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }

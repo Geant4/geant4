@@ -13,6 +13,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06-Nov-2019, Alberto Ribon          had-binary-V10-05-01
+- G4GeneratorPrecompoundInterface: trivial fix.
+
+15-Oct-2019, Alberto Ribon          had-binary-V10-05-00
+- G4GeneratorPrecompoundInterface: extended by Vladimir Uzhinsky to
+  include a simple coalescence model for nucleus-nucleus interactions
+  (in the interface between string and precompound models).
+  This allows to improve the nucleon spectra and produce fast deuterons
+  in ion-ion collisions.
+
 09-Nov-2018, Gabriele Cosmo         had-binary-V10-04-00
 - G4GeneratorPrecompoundInterface: fixed printout typo.
 

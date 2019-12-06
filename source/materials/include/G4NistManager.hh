@@ -194,7 +194,7 @@ public:
                                           const G4String& basename, 
 					  G4double density = 0.0,
 					  G4double temp = NTP_Temperature,  
-					  G4double pres = CLHEP::STP_Pressure);  
+					  G4double pres = CLHEP::STP_Pressure);
 
   // Construct a G4Material from scratch by atome count
   // temperature and pressure should be consistent with the density
@@ -239,7 +239,15 @@ public:
                                   G4bool isotopes    = true,
                                   G4double  temp     = NTP_Temperature,
                                   G4double  pressure = CLHEP::STP_Pressure);
-				      
+
+  // enable/disable density effect calculator by material name
+  //
+  void SetDensityEffectCalculatorFlag(const G4String&, G4bool);
+
+  // enable/disable density effect calculator by material pointer
+  //
+  void SetDensityEffectCalculatorFlag(G4Material*, G4bool);
+
   // Get number of G4Materials
   //
   inline size_t GetNumberOfMaterials() const;
@@ -284,25 +292,24 @@ public:
 private:
 
   explicit G4NistManager();
-  static G4NistManager* instance;
 
-  G4Pow* g4pow;
+  static G4NistManager* instance;
+  
+  std::vector<G4Element*>  elements;
+  std::vector<G4Material*> materials;
+
+  G4ICRU90StoppingData*  fICRU90;
+  G4NistElementBuilder*  elmBuilder;
+  G4NistMaterialBuilder* matBuilder;
+  G4NistMessenger*       messenger;
+  G4Pow*                 g4pow;
+
   G4double POWERA27[101];
   G4double LOGAZ[101];
-  
-  std::vector<G4Element*>   elements;
-  std::vector<G4Material*>  materials;
-  
+
   size_t   nElements;
-  size_t   nMaterials;
-  
+  size_t   nMaterials;  
   G4int    verbose;
-
-  G4ICRU90StoppingData*    fICRU90;
-
-  G4NistElementBuilder*    elmBuilder;
-  G4NistMaterialBuilder*   matBuilder;
-  G4NistMessenger*         messenger;
 
 #ifdef G4MULTITHREADED
   static G4Mutex nistManagerMutex;

@@ -16,7 +16,6 @@
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${TiMemory_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
@@ -178,7 +177,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4track
         G4tracking
     LINK_LIBRARIES
-        ${TiMemory_LIBRARIES}
+        ${timemory_LIBRARIES}
 )
 
 # List any source specific properties here

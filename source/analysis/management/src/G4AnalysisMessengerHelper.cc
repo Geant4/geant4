@@ -268,15 +268,37 @@ G4AnalysisMessengerHelper::CreateSetAxisCommand(const G4String& axis,
   parId->SetGuidance(Update("OBJECT id"));
   parId->SetParameterRange("id>=0");
 
-  auto parAxis = new G4UIparameter("axis", 's', true);
+  auto parAxis = new G4UIparameter("axis", 's', false);
   parAxis->SetGuidance(Update("Histogram AXIS-axis title", axis));
-  parAxis->SetDefaultValue("none");
 
   std::unique_ptr<G4UIcommand> command( 
     new G4UIcommand(Update("/analysis/HNTYPE_/setUAXISaxis", axis), messenger));
   command->SetGuidance(Update("Set AXIS-axis title for the NDIM_D LOBJECT of given id", axis));
   command->SetParameter(parId);
   command->SetParameter(parAxis);
+  command->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  return command;
+}
+
+//_____________________________________________________________________________
+std::unique_ptr<G4UIcommand> 
+G4AnalysisMessengerHelper::CreateSetAxisLogCommand(const G4String& axis,
+                                                   G4UImessenger* messenger) const
+{
+  auto parId = new G4UIparameter("id", 'i', false);
+  parId->SetGuidance(Update("OBJECT id"));
+  parId->SetParameterRange("id>=0");
+
+  auto parAxisLog = new G4UIparameter("axis", 'b', false);
+  parAxisLog->SetGuidance(Update("Histogram AXIS-axis log scale", axis));
+
+  std::unique_ptr<G4UIcommand> command( 
+    new G4UIcommand(Update("/analysis/HNTYPE_/setUAXISaxisLog", axis), messenger));
+  command->SetGuidance(
+    Update("Activate AXIS-axis log scale for plotting of the NDIM_D LOBJECT of given id", axis));
+  command->SetParameter(parId);
+  command->SetParameter(parAxisLog);
   command->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   return command;

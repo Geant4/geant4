@@ -22,12 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // class G4VTouchable implementation
 //
+// Created: Paul Kent, August 1996
 // --------------------------------------------------------------------
 
 #include "G4VTouchable.hh"
@@ -44,14 +42,14 @@ G4VPhysicalVolume* G4VTouchable::GetVolume(G4int) const
 {
   G4Exception("G4VTouchable::GetVolume()", "GeomMgt0001",
               FatalException, "Undefined call to base class.");
-  return 0;
+  return nullptr;
 }
 
 G4VSolid* G4VTouchable::GetSolid(G4int) const
 {
   G4Exception("G4VTouchable::GetSolid()", "GeomMgt0001",
               FatalException, "Undefined call to base class.");
-  return 0;
+  return nullptr;
 }
 
 G4int G4VTouchable::GetReplicaNumber(G4int) const

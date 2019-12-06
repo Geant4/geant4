@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization
+/// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"

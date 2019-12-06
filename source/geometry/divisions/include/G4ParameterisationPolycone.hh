@@ -23,24 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-// classes G4ParameterisationPolyconeRho,
-//         G4ParameterisationPolyconePhi,
-//         G4ParameterisationPolyconeZ
+// G4ParameterisationPolycone[Rho/Phi/Z]
 //
 // Class description:
 //
 // These classes represent the parameterised positioning equivalent to 
 // dividing a G4Polycone along one of each axis Rho, Phi, Z.
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
 //---------------------------------------------------------------------
-#ifndef G4ParameterisationPolycone_H
-#define G4ParameterisationPolycone_H 1
+#ifndef G4PARAMETERISATIONPOLYCONE_HH
+#define G4PARAMETERISATIONPOLYCONE_HH 1
 
 #include "G4VDivisionParameterisation.hh"
 #include "G4Polycone.hh"
@@ -230,8 +224,8 @@ class G4ParameterisationPolyconeZ : public G4VParameterisationPolycone
                             const G4VPhysicalVolume*) const {}
   private:
 
-    G4int fNSegment;
-    G4PolyconeHistorical* fOrigParamMother;
+    G4int fNSegment = 0;
+    G4PolyconeHistorical* fOrigParamMother = nullptr;
 };
 
 #endif

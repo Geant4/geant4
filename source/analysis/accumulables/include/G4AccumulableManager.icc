@@ -104,7 +104,7 @@ G4AccumulableManager::GetAccumulable(G4int id, G4bool warn) const
 //_____________________________________________________________________________
 inline G4int G4AccumulableManager::GetNofAccumulables() const
 {
-  return fVector.size();
+  return G4int(fVector.size());
 }
 
 //_____________________________________________________________________________

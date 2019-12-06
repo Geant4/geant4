@@ -55,6 +55,10 @@
 #include "G4EmConfigurator.hh"
 #include "G4ElectronIonPair.hh"
 #include "G4NIELCalculator.hh"
+#include "G4EmCorrections.hh"
+#include "G4LossTableBuilder.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4VSubCutProducer.hh"
 
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -156,7 +160,7 @@ G4LossTableManager::G4LossTableManager()
     verbose = theParameters->WorkerVerbose();
     isMaster = false;
   }  
-  tableBuilder = new G4LossTableBuilder();
+  tableBuilder = new G4LossTableBuilder(isMaster);
   emCorrections= new G4EmCorrections(verbose);
   emConfigurator = nullptr;
   emElectronIonPair = nullptr;
@@ -1094,8 +1098,8 @@ void G4LossTableManager::DumpHtml()
   // NB. for model names with length > 18 characters the .rst file needs
   //  to be edited by hand. Or modify G4EmModelManager::DumpModelList
 
-  char* dirName = getenv("G4PhysListDocDir");
-  char* physList = getenv("G4PhysListName");
+  char* dirName = std::getenv("G4PhysListDocDir");
+  char* physList = std::getenv("G4PhysListName");
   if (dirName && physList) {
     G4String physListName = G4String(physList);
     G4String pathName = G4String(dirName) + "/" + physListName + ".rst";

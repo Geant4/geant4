@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4Mag_UsualEqRhs
+// G4Mag_UsualEqRhs
 //
 // Class description:
 //
@@ -35,10 +32,8 @@
 // frame ... or extending the class to include additional Forces,
 // eg an electric field
 
-// History:
-// - Created: J. Apostolakis, January 13th 1997.
+// Created: J.Apostolakis, CERN - 13.01.1997
 // --------------------------------------------------------------------
-
 #ifndef G4MAG_USUAL_EQRHS
 #define G4MAG_USUAL_EQRHS
 
@@ -66,4 +61,4 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
                                          G4double mass);
 };
 
-#endif /* G4MAG_USUAL_EQRHS */
+#endif

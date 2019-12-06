@@ -16,7 +16,6 @@
 #
 /process/inactivate muIoni
 /process/inactivate muPairProd
-/process/inactivate muNucl
 #
 /gun/particle mu+
 /gun/energy 10 TeV

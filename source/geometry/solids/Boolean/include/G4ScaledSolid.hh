@@ -23,23 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4ScaledSolid
+// G4ScaledSolid
 //
 // Class description:
 //
 // A scaled solid is a solid that has been scaled in dimensions
 // in X, Y or Z, from its original description.
 
-// History:
-//
 // 27.10.15 G.Cosmo: created
-//
 // --------------------------------------------------------------------
-#ifndef G4ScaledSolid_HH
-#define G4ScaledSolid_HH
+#ifndef G4SCALEDSOLID_HH
+#define G4SCALEDSOLID_HH
 
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
@@ -76,9 +70,9 @@ class G4ScaledSolid : public G4VSolid
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
-                            const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0      ) const;
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const;
 
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
@@ -121,12 +115,12 @@ class G4ScaledSolid : public G4VSolid
 
   private:
 
-    G4VSolid* fPtrSolid;
-    G4ScaleTransform* fScale;
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    G4VSolid* fPtrSolid = nullptr;
+    G4ScaleTransform* fScale = nullptr;
+    G4double fCubicVolume = -1.0;
+    G4double fSurfaceArea = -1.0;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 } ;
 
 #endif

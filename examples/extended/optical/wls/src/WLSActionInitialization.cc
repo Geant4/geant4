@@ -37,8 +37,6 @@
 #include "WLSTrackingAction.hh"
 #include "WLSSteppingAction.hh"
 #include "WLSStackingAction.hh"
-#include "WLSSteppingVerbose.hh"
-#include "G4GeneralParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -78,7 +76,3 @@ void WLSActionInitialization::Build() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VSteppingVerbose* WLSActionInitialization::InitializeSteppingVerbose() const
-{
-  return new WLSSteppingVerbose();
-}

@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4LineCurrentMagField
+// G4LineCurrentMagField
 //
 // Class description:
 //
@@ -35,10 +32,8 @@
 // The line current is directed along Z axis and crosses the XY
 // plane in the origin point (0,0).
 
-// History:
-// 3.2.97 - V. Grichine, created.
+// Author: V.Grichine, 03.02.1997
 // --------------------------------------------------------------------
-
 #ifndef G4LINECURRENTMAGFIELD_HH
 #define G4LINECURRENTMAGFIELD_HH
 
@@ -51,13 +46,13 @@ class G4LineCurrentMagField : public G4MagneticField
     G4LineCurrentMagField(G4double pFieldConstant);
    ~G4LineCurrentMagField();
 
-    void GetFieldValue(const G4double yTrack[] ,
-                             G4double B[]      ) const;
+    void GetFieldValue(const G4double yTrack[],
+                             G4double B[] ) const;
     G4Field* Clone() const;
 
   private:
   
-    G4double fFieldConstant;
+    G4double fFieldConstant = 0.0;
 };
 
 #endif

@@ -23,7 +23,7 @@ public:
     if(m_cols.empty()) return false;
     tools_vforit(icol*,m_cols,it) (*it)->add();
     mpi_basket_add _badd(a_mpi,a_dest,a_tag,m_id,0);
-    if(!m_row_wise_branch.pfill(_badd)) return false;
+    if(!m_row_wise_branch.pfill(_badd,0)) return false;
     tools_vforit(icol*,m_cols,it) (*it)->set_def();
     return true;
   }

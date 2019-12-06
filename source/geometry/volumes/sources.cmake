@@ -63,6 +63,7 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4TouchableHistory.hh
         G4TouchableHistory.icc
         G4TouchableHistoryHandle.hh
+	G4VExternalPhysicalVolume.hh
     SOURCES
         G4AssemblyStore.cc
         G4AssemblyVolume.cc
@@ -80,6 +81,7 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4PVReplica.cc
         G4ReflectionFactory.cc
         G4TouchableHistory.cc
+	G4VExternalPhysicalVolume.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
         G4globman

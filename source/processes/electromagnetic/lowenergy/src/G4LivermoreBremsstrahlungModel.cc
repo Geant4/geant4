@@ -114,13 +114,13 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 
     // check environment variable
     // Build the complete string identifying the file with the data set
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
 
     const G4ElementTable* theElmTable = G4Element::GetElementTable();
     size_t numOfElm = G4Element::GetNumberOfElements();
     if(numOfElm > 0) {
       for(size_t i=0; i<numOfElm; ++i) {
-	G4int Z = G4int(((*theElmTable)[i])->GetZ());
+	G4int Z = (*theElmTable)[i]->GetZasInt();
 	if(Z < 1)        { Z = 1; }
 	else if(Z > 100) { Z = 100; }
 	//G4cout << "Z= " << Z << G4endl;
@@ -151,7 +151,7 @@ void G4LivermoreBremsstrahlungModel::ReadData(G4int Z, const char* path)
   const char* datadir = path;
 
   if(!datadir) {
-    datadir = getenv("G4LEDATA");
+    datadir = std::getenv("G4LEDATA");
     if(!datadir) {
       G4Exception("G4LivermoreBremsstrahlungModel::ReadData()","em0006",
 		  FatalException,"Environment variable G4LEDATA not defined");

@@ -95,7 +95,7 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
     G4int numOfCouples = theCoupleTable->GetTableSize();
@@ -110,7 +110,7 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
     
 	for (G4int j=0; j<nelm; ++j) 
 	  {
-	    G4int Z = G4lrint((*theElementVector)[j]->GetZ());
+	    G4int Z = (*theElementVector)[j]->GetZasInt();
 	    if(Z < 1)          { Z = 1; }
 	    else if(Z > maxZ)  { Z = maxZ; }
 	    if( (!dataCS[Z]) ) { ReadData(Z, path); }
@@ -148,7 +148,7 @@ void G4LivermoreRayleighModel::ReadData(size_t Z, const char* path)
 
   if(!datadir) 
   {
-    datadir = getenv("G4LEDATA");
+    datadir = std::getenv("G4LEDATA");
     if(!datadir) 
     {
       G4Exception("G4LivermoreRayleighModelModel::ReadData()","em0006",

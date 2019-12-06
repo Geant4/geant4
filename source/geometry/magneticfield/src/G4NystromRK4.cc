@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NystromRK4 implmentation
 //
-//
-// History:
-// - Created:      I.Gavrilenko    15.05.2009   (as G4AtlasRK4)
-// - Adaptations:  J.Apostolakis  May-Nov 2009
+// Created: I.Gavrilenko, 15.05.2009 (as G4AtlasRK4)
+// Adaptations: J.Apostolakis, November 2009
 // -------------------------------------------------------------------
 
 #include "G4NystromRK4.hh"
@@ -39,22 +38,18 @@
 
 using namespace field_utils;
 
-namespace {
-
-G4bool notEquals(G4double p1, G4double p2)
+namespace
 {
-    return std::fabs(p1 - p2) > perMillion * p2;
-  }
-   constexpr G4int INTEGRATED_COMPONENTS = 6;
+    G4bool notEquals(G4double p1, G4double p2)
+    {
+      return std::fabs(p1 - p2) > perMillion * p2;
+    }
+    constexpr G4int INTEGRATED_COMPONENTS = 6;
 } // namespace
 
 
 G4NystromRK4::G4NystromRK4(G4Mag_EqRhs* equation, G4double distanceConstField)
-    : G4MagIntegratorStepper(equation, INTEGRATED_COMPONENTS),
-      fMomentum(0),
-      fMomentum2(0),
-      fInverseMomentum(0),
-      fCoefficient(0)
+  : G4MagIntegratorStepper(equation, INTEGRATED_COMPONENTS)
 {
     if (distanceConstField > 0)
     {
@@ -192,38 +187,37 @@ G4double G4NystromRK4::DistChord() const
 
 void G4NystromRK4::SetDistanceForConstantField(G4double length)
 {
-    if (!GetField())
-    {
-        G4Exception("G4NystromRK4::SetDistanceForConstantField","Nystrom 001",
-                    JustWarning, "Provided field is not G4CachedMagneticField. Changing field type.");
+  if (GetField() == nullptr)
+  {
+    G4Exception("G4NystromRK4::SetDistanceForConstantField",
+                "Nystrom 001", JustWarning,
+        "Provided field is not G4CachedMagneticField. Changing field type.");
 
-        fCachedField = std::unique_ptr<G4CachedMagneticField>(
-            new G4CachedMagneticField(
-                dynamic_cast<G4MagneticField*>(GetEquationOfMotion()->GetFieldObj()), 
-                length));
+    fCachedField = std::unique_ptr<G4CachedMagneticField>(
+       new G4CachedMagneticField(
+           dynamic_cast<G4MagneticField*>(GetEquationOfMotion()->GetFieldObj()),
+           length));
 
-        GetEquationOfMotion()->SetFieldObj(fCachedField.get());
-    }
-
-    GetField()->SetConstDistance(length);
+    GetEquationOfMotion()->SetFieldObj(fCachedField.get());
+  }
+  GetField()->SetConstDistance(length);
 }
 
 G4double G4NystromRK4::GetDistanceForConstantField() const
 {
-    if (!GetField())
-    {
-        return 0;
-    }
-
-    return GetField()->GetConstDistance(); 
+  if (GetField() == nullptr)
+  {
+    return 0.0;
+  }
+  return GetField()->GetConstDistance(); 
 }
 
 G4CachedMagneticField* G4NystromRK4::GetField()
 {
-    return dynamic_cast<G4CachedMagneticField*>(GetEquationOfMotion()->GetFieldObj());
+  return dynamic_cast<G4CachedMagneticField*>(GetEquationOfMotion()->GetFieldObj());
 }
 
 const G4CachedMagneticField* G4NystromRK4::GetField() const
 {
-    return const_cast<G4NystromRK4*>(this)->GetField();
+  return const_cast<G4NystromRK4*>(this)->GetField();
 }

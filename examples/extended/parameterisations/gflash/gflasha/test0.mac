@@ -1,0 +1,26 @@
+#
+# Macro file gflasha example
+# when runing in batch mode
+# GFLASH off
+#
+
+/gps/pos/centre 0 0 0
+/gps/particle  e-
+/gps/energy    50 GeV
+/gps/direction  0. 0. 1.0
+
+
+# Paramatrisation off 
+/GFlash/flag 0
+/analysis/setFileName gflash00
+
+
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+#/tracking/storeTrajectory 1
+
+#/vis/scene/endOfEventAction accumulate
+/tracking/verbose 0
+#/analysys/setFileName gflash00
+
+/run/beamOn 500

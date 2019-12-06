@@ -741,6 +741,11 @@ void G4HepRepSceneHandler::AddSolid (const G4Ellipsoid& ellipsoid) {
   G4VSceneHandler::AddSolid (ellipsoid);
 }
 
+void G4HepRepSceneHandler::AddSolid (const G4TessellatedSolid& tess) {
+  if (dontWrite()) return;
+  G4VSceneHandler::AddSolid (tess);
+}
+
 void G4HepRepSceneHandler::AddSolid (const G4VSolid& solid) {
     if (dontWrite()) return;
     G4VSceneHandler::AddSolid(solid); 

@@ -22,18 +22,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// Helper namespace 'field_utils'
+// Helper namespace field_utils
 //
 // Description:
-//    Simple methods to extract vectors from arrays in conventions of
-//     the magnetic field integration
 //
-//    Implementation by Dmitry Sorokin - GSoC 2017
-//       Work supported by Google as part of Google Summer of Code 2017.
-//    Supervision / code review: John Apostolakis
+//  Simple methods to extract vectors from arrays in conventions of
+//  the magnetic field integration.
 
+// Author: Dmitry Sorokin, Google Summer of Code 2017
+// Supervision: John Apostolakis, CERN
+// --------------------------------------------------------------------
 #ifndef G4FIELD_UTILS_HH
 #define G4FIELD_UTILS_HH
 
@@ -41,66 +39,72 @@
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
-namespace field_utils {
+namespace field_utils
+{
 
-using State = G4double[G4FieldTrack::ncompSVEC];
+  using State = G4double[G4FieldTrack::ncompSVEC];
 
-enum class Value3D {
+  enum class Value3D
+  {
     Position = 0,
     Momentum = 3,
     Spin = 9
-};
+  };
 
-enum class Value1D {
+  enum class Value1D
+  {
     KineticEnergy = 6,
     LabTime = 7,
     ProperTime = 8
-};
+  };
 
-template <typename ArrayType>
-G4double getValue(const ArrayType& array, Value1D value);
+  template <typename ArrayType>
+  G4double getValue(const ArrayType& array, Value1D value);
 
-template <typename ArrayType>
-G4double getValue2(const ArrayType& array, Value1D value);
+  template <typename ArrayType>
+  G4double getValue2(const ArrayType& array, Value1D value);
 
-template <typename ArrayType>
-G4double getValue(const ArrayType& array, Value3D value);
+  template <typename ArrayType>
+  G4double getValue(const ArrayType& array, Value3D value);
 
-template <typename ArrayType>
-G4double getValue2(const ArrayType& array, Value3D value);
+  template <typename ArrayType>
+  G4double getValue2(const ArrayType& array, Value3D value);
 
-template <typename ArrayType>
-G4ThreeVector makeVector(const ArrayType& array, Value3D value);
+  template <typename ArrayType>
+  G4ThreeVector makeVector(const ArrayType& array, Value3D value);
 
-G4double absoluteError(
+  G4double absoluteError(
     const G4double y[],
     const G4double yerr[],
     G4double hstep);
 
-G4double relativeError2(
+  G4double relativeError2(
     const G4double y[],
     const G4double yerr[],
     G4double hstep,
     G4double errorTolerance);
 
-G4double relativeError(
+  G4double relativeError(
     const G4double y[],
     const G4double yerr[],
     G4double hstep,
     G4double errorTolerance);
 
-template <typename SourceArray, typename TargetArray>
-void setValue(const SourceArray& src, Value1D value, TargetArray& trg);
+  template <typename SourceArray, typename TargetArray>
+  void setValue(const SourceArray& src, Value1D value, TargetArray& trg);
 
-template <typename SourceArray, typename TargetArray, typename ...TargetArrays>
-void setValue(const SourceArray& src, Value1D value, TargetArray& trg, TargetArrays&... trgs);
+  template <typename SourceArray, typename TargetArray, typename ...TargetArrays>
+  void setValue(const SourceArray& src, Value1D value,
+                TargetArray& trg, TargetArrays&... trgs);
 
-void copy(G4double dst[], const G4double src[], size_t size = G4FieldTrack::ncompSVEC);
+  void copy(G4double dst[], const G4double src[],
+            size_t size = G4FieldTrack::ncompSVEC);
 
-G4double inverseCurvatureRadius(G4double particleCharge, G4double momentum, G4double BField);
+  G4double inverseCurvatureRadius(G4double particleCharge,
+                                  G4double momentum, G4double BField);
 
-template <typename T>
-T clamp(T value, T lo, T hi);
+  template <typename T>
+  T clamp(T value, T lo, T hi);
 
 } // field_utils
 

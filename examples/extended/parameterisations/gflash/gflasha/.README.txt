@@ -1,0 +1,119 @@
+///\file "parameterisations/gflash/gflasha/.README.txt"
+///\brief Example gflasha README page
+
+/*! \page Examplegflasha Example gflasha
+
+This example demonstrates usage 'gflash' shower parameterisation
+in homogeneous calorimeter. Compare with glash1,2,3 in this
+example histograms was added. This makes it possible to use this
+example for fine tuning of GFLASH parameters.
+
+This example allows to compare the shower profiles from fast simulation
+with full simulation by histograming of longitudinal (slice)
+and radial profiles with different "binning".
+Then GFlash fast simulation can be "tuned" via modification
+of the model parameters file:
+
+include/ExGflashHomoShowerTuning.hh
+
+in this example.
+
+\section gflasha_s1 Geometry Definition
+
+In this example the calorimeter is a simple cube,
+which consists of 10 x 10 crystals of PbWO4 (CMS like).
+
+Geometry, sensitive detector and hits are defined respectively in:
+- ExGflashDetectorConstruction
+- ExGflashSensitiveDetector
+- ExGflashHit
+
+Materials can be choosen from Nist Materials: G4_Air G4_WATER ...
+eg: 
+\verbatim
+/exgflash/det/setMat G4_PbWO4 
+\endverbatim
+see also: csi1.mac 
+
+\section gflasha_s2 Hit Scoring
+
+The virtual cylinder sliced longitudinally (slice) and radially (ring) was used.
+The size of the slices and rings are expressed in radiation 
+length units and can be changed.
+eg: 
+\verbatim
+/exgflash/det/setLbin 20   1.    ---> 20 slices of 1. radl
+/exgflash/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
+     (MaxBin = 500 in both directions)
+\endverbatim
+
+In ExGflashEventAction class the arrays corresponded slices and rings was
+created and filled with hists information. This arrays was use to fill
+histograms later.
+
+\section gflasha_s3 Visualization
+
+The Visualization Manager is set in the main().
+The initialization of the drawing is done via the commands /vis/...
+in the macro vis.mac. To get visualization:
+\verbatim
+/control/execute vis.mac
+\endverbatim
+
+\section gflasha_s4 How to start ?
+
+- Execute ExGflasha in 'batch' mode from macro files
+\verbatim
+ % ExGflasha   test.mac
+\endverbatim
+
+- Execute ExGflasha in 'interactive mode' with visualization
+\verbatim
+ % ExGflasha
+   ....
+  Idle> type your commands
+  ....
+  Idle> exit
+\endverbatim
+
+The GFLASH activated via:
+\verbatim
+/GFlash/flag 1
+\endverbatim
+
+\section gflasha_s5 Histograms
+
+ExGflasha produces several histograms:
+The histograms defined in ExGflashHistoManager class
+
+Content of these histo:
+
+- h0 : energy deposit       per event
+- h1 : the number of hits  per event
+- h2 : the energy per hit ( in MeV )
+
+- p0 : longitudinal energy profile
+- p1 : radial energy profile
+
+- p2 : cumulated longitudinal energy profile
+- p3 : cumulated radial energy profile
+
+To define the output file name with histograms, use the UI command :
+\verbatim
+/analysys/setFileName name
+\endverbatim
+
+\section gflasha_s6 Macros
+
+The macros to run in batch mode:
+
+- test.mac - default macro for example testing
+
+- run01.mac - show how redefine the histograms
+  
+- csi1.mac - macro which produce profiles in CsI Material
+
+- test0.mac - profile caparison, long run without GFLASH
+- test1.mac - profile comprising, long run with GFLASH on
+
+*/

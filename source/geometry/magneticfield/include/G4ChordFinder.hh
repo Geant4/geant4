@@ -23,31 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ChordFinder
 //
+// Class description:
 //
-// 
-// Class G4ChordFinder
-//
-// class description:
-//
-// A class that provides RK integration of motion ODE  (as does g4magtr)
+// A class that provides RK integration of motion ODE (as does g4magtr)
 // and also has a method that returns an Approximate point on the curve 
 // near to a (chord) point.
 
-// History:
-// - 25.02.97 - John Apostolakis - Design and implementation 
+// Author: J.Apostolakis - Design and implementation - 25.02.1997
 // -------------------------------------------------------------------
-
 #ifndef G4CHORDFINDER_HH
 #define G4CHORDFINDER_HH
 
 #include "G4VIntegrationDriver.hh"
 #include "G4MagIntegratorStepper.hh"
+
+#include <memory>
+
 class G4VFSALIntegrationStepper;
-// #include "G4VFSALIntegratorSteper.hh"
 
 class G4MagneticField;
 class G4CachedMagneticField;
+class G4HelixHeum;
 
 class G4ChordFinder
 {
@@ -55,7 +53,7 @@ class G4ChordFinder
 
       explicit G4ChordFinder( G4VIntegrationDriver* pIntegrationDriver );
         // The most flexible constructor, which allows the user to specify
-        //   any type of field, equation, stepper and integration driver.
+        // any type of field, equation, stepper and integration driver.
 
       G4ChordFinder( G4MagneticField* itsMagField,
                      G4double         stepMinimum = 1.0e-2, // * mm 
@@ -64,18 +62,22 @@ class G4ChordFinder
                      G4bool           useFSALstepper = false  );
         // A constructor that creates defaults for all "children" classes.
         //
-        //   The type of equation of motion is fixed.
-        //   A default type of stepper (Dormand Prince since release 10.4) is used,
-        //   and the corresponding (old-style without themplates) integration driver.
-        //   Except if 'useFSAL' is set (true), which provides a FSAL stepper
-        //    and its corresponding specialised (templated) driver.
+        // The type of equation of motion is fixed.
+        // A default type of stepper (Dormand Prince since release 10.4) is used,
+        // and the corresponding integration driver.
+        // Except if 'useFSAL' is set (true), which provides a FSAL stepper
+        // and its corresponding specialised (templated) driver.
       
       virtual ~G4ChordFinder();
+
+      G4ChordFinder(const G4ChordFinder&) = delete;
+      G4ChordFinder& operator=(const G4ChordFinder&) = delete;
+        // Copy constructor and assignment operator not allowed.
 
       inline G4double AdvanceChordLimited( G4FieldTrack& yCurrent,
                                            G4double stepInitial,
                                            G4double epsStep_Relative,
-                                           const G4ThreeVector& latestSafetyOrigin,
+                                     const G4ThreeVector& latestSafetyOrigin,
                                            G4double lasestSafetyRadius);
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
@@ -108,45 +110,39 @@ class G4ChordFinder
       inline void ResetStepEstimate();
         // Clear internal state (last step estimate)
 
-        // A report with the above -- and possibly other stats
       inline G4int SetVerbose( G4int newvalue=1); 
         // Set verbosity and return old value
 
       void OnComputeStep();
 
    protected:   // .........................................................
-      void     PrintDchordTrial(G4int     noTrials, 
-                                G4double  stepTrial, 
-                                G4double  oldStepTrial, 
-                                G4double  dChordStep);
+
+      void     PrintDchordTrial(G4int    noTrials, 
+                                G4double stepTrial, 
+                                G4double oldStepTrial, 
+                                G4double dChordStep);
 
    private:  // ............................................................
 
-      G4ChordFinder(const G4ChordFinder&);
-      G4ChordFinder& operator=(const G4ChordFinder&);
-        // Private copy constructor and assignment operator.
-
-   private:  // ............................................................
-                                          // G4int    nOK, nBAD;
-
-      // Constants
+      //  Constants
+      //  ---------------------
       const G4double fDefaultDeltaChord;  // SET in G4ChordFinder.cc = 0.25 mm
 
       //  PARAMETERS 
       //  ---------------------
       G4double  fDeltaChord;               //  Maximum miss distance 
 
-      // G4double  fMultipleRadius;        //  Use forgotten
-      G4int     fStatsVerbose;  // if > 0, print Statistics in destructor
+      G4int fStatsVerbose = 0;  // if > 0, print Statistics in destructor
 
       //  DEPENDENT Objects
       //  ---------------------
-      G4VIntegrationDriver*      fIntgrDriver;
-      G4MagIntegratorStepper*    fRegularStepperOwned= nullptr;
-      G4MagIntegratorStepper*    fNewFSALStepperOwned= nullptr;
-      G4CachedMagneticField*     fCachedField= nullptr;
-   // G4VFSALIntegrationStepper* fOldFSALStepperOwned= nullptr;
-      G4EquationOfMotion*        fEquation;  
+      G4VIntegrationDriver*      fIntgrDriver = nullptr;
+      G4MagIntegratorStepper*    fRegularStepperOwned = nullptr;
+      G4MagIntegratorStepper*    fNewFSALStepperOwned = nullptr;
+      std::unique_ptr<G4HelixHeum> fLongStepper;
+      G4CachedMagneticField*     fCachedField = nullptr;
+   // G4VFSALIntegrationStepper* fOldFSALStepperOwned = nullptr;
+      G4EquationOfMotion*        fEquation = nullptr;  
 };
 
 // Inline function implementation:

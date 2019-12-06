@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// class G4VSolid
+// G4VSolid
 //
 // Class description:
 //
@@ -52,10 +49,9 @@
 // G4String fshapeName
 //   - Name for this solid.
 
-// History:
 // 12.04.00 J.Allison     Implemented GetExtent() in terms of CalculateExtent()
 // 17.06.98 J.Apostolakis Added pure virtual function GetEntityType()
-// 26.07.96 P.Kent        Added ComputeDimensions for replication mechanism
+// 26.07.96 P.Kent        Added ComputeDimensions() for replication mechanism
 // 27.03.96 J.Allison     Methods for visualisation 
 // 30.06.95 P.Kent        Initial version, no scoping or visualisation functions
 // --------------------------------------------------------------------
@@ -80,8 +76,8 @@ class G4DisplacedSolid;
 #include "G4ThreeVector.hh"
 #include <vector>
 
-typedef std::vector<G4ThreeVector> G4ThreeVectorList;
-typedef G4String   G4GeometryType;
+using G4ThreeVectorList = std::vector<G4ThreeVector>;
+using G4GeometryType = G4String;
 
 class G4VSolid
 {
@@ -142,8 +138,8 @@ class G4VSolid
     virtual G4double DistanceToOut(const G4ThreeVector& p,
 				   const G4ThreeVector& v,
 				   const G4bool calcNorm=false,
-				   G4bool *validNorm=0,
-				   G4ThreeVector *n=0) const = 0;
+				   G4bool* validNorm = nullptr,
+				   G4ThreeVector* n = nullptr) const = 0;
       // Return the distance along the normalised vector v to the shape,
       // from a point at an offset p inside or on the surface of the shape.
       // Intersections with surfaces, when the point is < Tolerance/2 from a

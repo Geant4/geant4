@@ -88,5 +88,6 @@ class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
     G4double theMax;
 
 };
+
 #endif
 

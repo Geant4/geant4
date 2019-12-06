@@ -23,21 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation of methods for the class G4IntersectionSolid
 //
-// History:
-//
-// 17.02.05 V.Grichine: bug was fixed in DistanceToIn(p,v) based on algorithm
-//                      proposed by Dino Bazzacco <dino.bazzacco@pd.infn.it>
-// 29.05.01 V.Grichine: bug was fixed in DistanceToIn(p,v)
-// 16.03.01 V.Grichine: modifications in CalculateExtent() and Inside()
-// 29.07.99 V.Grichine: modifications in DistanceToIn(p,v)
 // 12.09.98 V.Grichine: first implementation
-//
 // --------------------------------------------------------------------
-
 
 #include <sstream>
 
@@ -208,7 +197,7 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
 EInside G4IntersectionSolid::Inside(const G4ThreeVector& p) const
 {
   EInside positionA = fPtrSolidA->Inside(p);
-  if(positionA == kOutside) return positionA; //outside A
+  if(positionA == kOutside) return positionA; // outside A
 
   EInside positionB = fPtrSolidB->Inside(p);
   if(positionA == kInside)  return positionB;
@@ -226,8 +215,8 @@ G4IntersectionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   G4ThreeVector normal;
   EInside insideA, insideB;
   
-  insideA= fPtrSolidA->Inside(p);
-  insideB= fPtrSolidB->Inside(p);
+  insideA = fPtrSolidA->Inside(p);
+  insideB = fPtrSolidB->Inside(p);
 
 #ifdef G4BOOLDEBUG
   if( (insideA == kOutside) || (insideB == kOutside) )
@@ -247,27 +236,31 @@ G4IntersectionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   //
   if( insideA == kSurface )
   {
-    normal= fPtrSolidA->SurfaceNormal(p) ;
+    normal = fPtrSolidA->SurfaceNormal(p) ;
   }
   else if( insideB == kSurface )
   {
-    normal= fPtrSolidB->SurfaceNormal(p) ;
+    normal = fPtrSolidB->SurfaceNormal(p) ;
   } 
   else  // We are on neither surface, so we should generate an exception
   {
-    if(fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToOut(p) ) 
+    if(fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToOut(p) )
+    { 
       normal= fPtrSolidA->SurfaceNormal(p) ;   
+    }
     else
+    {
       normal= fPtrSolidB->SurfaceNormal(p) ;   
+    }
 #ifdef G4BOOLDEBUG
-      G4cout << "WARNING - Invalid call in "
-             << "G4IntersectionSolid::SurfaceNormal(p)" << G4endl
-             << "  Point p is out of surface !" << G4endl;
-      G4cout << "          p = " << p << G4endl;
-      G4cerr << "WARNING - Invalid call in "
-             << "G4IntersectionSolid::SurfaceNormal(p)" << G4endl
-             << "  Point p is out of surface !" << G4endl;
-      G4cerr << "          p = " << p << G4endl;
+    G4cout << "WARNING - Invalid call in "
+           << "G4IntersectionSolid::SurfaceNormal(p)" << G4endl
+           << "  Point p is out of surface !" << G4endl;
+    G4cout << "          p = " << p << G4endl;
+    G4cerr << "WARNING - Invalid call in "
+           << "G4IntersectionSolid::SurfaceNormal(p)" << G4endl
+           << "  Point p is out of surface !" << G4endl;
+    G4cerr << "          p = " << p << G4endl;
 #endif
     }
 
@@ -405,20 +398,20 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p) const
   EInside sideB = fPtrSolidB->Inside(p) ;
   G4double dist=0.0 ;
 
-  if( sideA != kInside && sideB  != kOutside )
+  if( sideA != kInside && sideB != kOutside )
   {
     dist = fPtrSolidA->DistanceToIn(p) ;
   }
   else
   {
-    if( sideB != kInside  && sideA != kOutside )
+    if( sideB != kInside && sideA != kOutside )
     {
       dist = fPtrSolidB->DistanceToIn(p) ;
     }
     else
     {
       dist =  std::min(fPtrSolidA->DistanceToIn(p),
-                    fPtrSolidB->DistanceToIn(p) ) ; 
+                       fPtrSolidB->DistanceToIn(p) ) ; 
     }
   }
   return dist ;
@@ -433,7 +426,7 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
                                     const G4ThreeVector& v,
                                     const G4bool calcNorm,
                                           G4bool *validNorm,
-                                          G4ThreeVector *n      ) const 
+                                          G4ThreeVector *n ) const 
 {
   G4bool         validNormA, validNormB;
   G4ThreeVector  nA, nB;
@@ -511,7 +504,7 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p ) const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// ComputeDimensions
 
 void 
 G4IntersectionSolid::ComputeDimensions( G4VPVParameterisation*,
@@ -522,7 +515,7 @@ G4IntersectionSolid::ComputeDimensions( G4VPVParameterisation*,
 
 /////////////////////////////////////////////////
 //
-//                    
+// GetEntityType
 
 G4GeometryType G4IntersectionSolid::GetEntityType() const 
 {
@@ -540,7 +533,7 @@ G4VSolid* G4IntersectionSolid::Clone() const
 
 /////////////////////////////////////////////////
 //
-//                    
+// DescribeYourselfTo
 
 void 
 G4IntersectionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
@@ -550,7 +543,7 @@ G4IntersectionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 ////////////////////////////////////////////////////
 //
-//
+// CreatePolyhedron
 
 G4Polyhedron* 
 G4IntersectionSolid::CreatePolyhedron () const 
@@ -561,5 +554,5 @@ G4IntersectionSolid::CreatePolyhedron () const
   G4Polyhedron* top = StackPolyhedron(processor, this);
   G4Polyhedron* result = new G4Polyhedron(*top);
   if (processor.execute(*result)) { return result; }
-  else { return 0; }
+  else { return nullptr; }
 }

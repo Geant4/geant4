@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15th, 2019   Gabriele Cosmo (procbiasing-V10-05-01)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
 March 11th, 2019   Gabriele Cosmo (procbiasing-V10-05-00)
 - Fixed typos in printouts and comments.
 

@@ -82,7 +82,7 @@ G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
     }
 
 
-	debug_G4BinaryLightIonReactionResults=getenv("debug_G4BinaryLightIonReactionResults")!=0;
+	debug_G4BinaryLightIonReactionResults=std::getenv("debug_G4BinaryLightIonReactionResults")!=0;
 }
 
 G4BinaryLightIonReaction::~G4BinaryLightIonReaction()
@@ -106,7 +106,7 @@ struct ReactionProduct4Mom
 G4HadFinalState *G4BinaryLightIonReaction::
 ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 {
-	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction starts ######### " << G4endl;
+	if(std::getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction starts ######### " << G4endl;
 	G4ping debug("debug_G4BinaryLightIonReaction");
 	pA=aTrack.GetDefinition()->GetBaryonNumber();
 	pZ=G4lrint(aTrack.GetDefinition()->GetPDGCharge()/eplus);
@@ -358,7 +358,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 			<< "        3mom.mag() " << (aTrack.Get4Momentum()+ G4LorentzVector(m_nucl) - ptot).vect().mag() << G4endl;
 #endif
 
-	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number ends ######### " << G4endl;
+	if(std::getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number ends ######### " << G4endl;
 
 	return &theResult;
 }

@@ -143,6 +143,9 @@ class G4UIparameter
       inline void SetGuidance(const char * theGuidance)
       { parameterGuidance = theGuidance; }
 
+  protected:
+    using yystype = G4UItokenNum::yystype;
+    using tokenNum = G4UItokenNum::tokenNum;
   private:
     // --- the following is used by CheckNewValue() -------
     G4int TypeCheck(const char* newValue );

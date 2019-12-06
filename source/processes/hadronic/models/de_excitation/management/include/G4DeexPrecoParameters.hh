@@ -41,6 +41,7 @@ enum G4DeexChannelType
   fEvaporation = 0,
   fGEM,
   fCombined,
+  fGEMVI,
   fDummy
 };
 
@@ -77,6 +78,8 @@ public:
 
   inline G4double GetPrecoLowEnergy() const;
 
+  inline G4double GetPrecoHighEnergy() const;
+
   inline G4double GetPhenoFactor() const;
 
   inline G4double GetMinExcitation() const;
@@ -96,6 +99,8 @@ public:
   inline G4int GetDeexModelType() const;
 
   inline G4int GetTwoJMAX() const;
+
+  inline G4int GetUploadZ() const;
 
   inline G4int GetVerbose() const;
 
@@ -119,6 +124,8 @@ public:
 
   inline G4bool GetLevelDensityFlag() const;
 
+  inline G4bool GetDiscreteExcitationFlag() const;
+
   inline G4bool StoreICLevelData() const;
 
   inline G4DeexChannelType GetDeexChannelsType() const;
@@ -136,6 +143,8 @@ public:
   void SetFermiEnergy(G4double);
 
   void SetPrecoLowEnergy(G4double);
+
+  void SetPrecoHighEnergy(G4double);
 
   void SetPhenoFactor(G4double);
 
@@ -156,6 +165,8 @@ public:
   void SetDeexModelType(G4int);
 
   void SetTwoJMAX(G4int);
+
+  void SetUploadZ(G4int);
 
   void SetVerbose(G4int);
 
@@ -183,6 +194,8 @@ public:
   void SetInternalConversionFlag(G4bool);
 
   void SetLevelDensityFlag(G4bool);
+
+  void SetDiscreteExcitationFlag(G4bool);
 
   void SetDeexChannelsType(G4DeexChannelType);
 
@@ -217,8 +230,9 @@ private:
   // Fermi energy level
   G4double fFermiEnergy;
 
-  // Low-energy excitation per nucleon limit 
+  // Excitation per nucleon limits 
   G4double fPrecoLowEnergy;
+  G4double fPrecoHighEnergy;
 
   // Preco phenomenological factor
   G4double fPhenoFactor;
@@ -242,6 +256,7 @@ private:
   G4int fMinZForPreco;
   G4int fMinAForPreco;
 
+  G4int fMaxZ;
   G4int fVerbose;
 
   // Preco flags
@@ -257,7 +272,8 @@ private:
   G4bool fCorrelatedGamma;
   G4bool fStoreAllLevels;
   G4bool fInternalConversion;
-  G4bool fLD;
+  G4bool fLD;  // use simple level density model 
+  G4bool fFD;  // use transition to discrete level 
 
   // type of a set of e-exitation channels
   G4DeexChannelType fDeexChannelType;   
@@ -295,6 +311,11 @@ inline G4double G4DeexPrecoParameters::GetFermiEnergy() const
 inline G4double G4DeexPrecoParameters::GetPrecoLowEnergy() const
 { 
   return fPrecoLowEnergy; 
+}
+
+inline G4double G4DeexPrecoParameters::GetPrecoHighEnergy() const
+{ 
+  return fPrecoHighEnergy; 
 }
 
 inline G4double G4DeexPrecoParameters::GetPhenoFactor() const
@@ -345,6 +366,11 @@ inline G4int G4DeexPrecoParameters::GetDeexModelType() const
 inline G4int G4DeexPrecoParameters::GetTwoJMAX() const
 {
   return fTwoJMAX;
+}
+
+inline G4int G4DeexPrecoParameters::GetUploadZ() const
+{
+  return fMaxZ;
 }
 
 inline G4int G4DeexPrecoParameters::GetVerbose() const
@@ -405,6 +431,11 @@ inline G4bool G4DeexPrecoParameters::GetInternalConversionFlag() const
 inline G4bool G4DeexPrecoParameters::GetLevelDensityFlag() const
 {
   return fLD;
+}
+
+inline G4bool G4DeexPrecoParameters::GetDiscreteExcitationFlag() const
+{
+  return fFD;
 }
 
 inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannelsType() const

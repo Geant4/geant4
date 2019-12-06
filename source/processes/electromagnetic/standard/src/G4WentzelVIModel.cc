@@ -124,6 +124,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 {
   // reset parameters
   SetupParticle(p);
+  InitialiseParameters(p);
   currentRange = 0.0;
 
   if(isCombined) {

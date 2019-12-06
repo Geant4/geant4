@@ -1,3 +1,14 @@
+#
+# Macro file for the initialization phase of "OpNovice.cc"
+#
+# Sets some default verbose
+# and initializes the graphic.
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
 #

@@ -61,5 +61,6 @@ class G4PionBuilder : public G4PhysicsBuilderInterface
 
     G4bool wasActivated;
 };
+
 #endif
 

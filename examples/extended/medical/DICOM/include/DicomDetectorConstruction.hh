@@ -65,17 +65,17 @@ struct matInfo
 
 class DicomDetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+  public:
     DicomDetectorConstruction();
     ~DicomDetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
     // trigger the construction of the geometry
 
-public:
     G4int GetTotalVoxels() const;
 
-protected:
+  protected:
+
     void InitialisationOfMaterials();
     // create the original materials
 
@@ -93,7 +93,7 @@ protected:
     // merge the slice headers of all the files
 
     G4Material* BuildMaterialWithChangingDensity(
-        const G4Material* origMate, float density, G4String newMateName );
+        const G4Material* origMate, G4float density, G4String newMateName );
     // build a new material if the density of the voxel is different
     // to the other voxels
 
@@ -107,8 +107,8 @@ protected:
 
     virtual void ConstructSDandField();
 
+  protected:
 
-protected:
     G4Material* fAir;
 
     // World ...
@@ -155,8 +155,7 @@ protected:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4int
-DicomDetectorConstruction::GetTotalVoxels() const
+inline G4int DicomDetectorConstruction::GetTotalVoxels() const
 {
     return fNVoxelX * fNVoxelY * fNVoxelZ;
 }
@@ -164,4 +163,3 @@ DicomDetectorConstruction::GetTotalVoxels() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

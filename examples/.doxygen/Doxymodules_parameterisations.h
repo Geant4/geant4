@@ -52,19 +52,68 @@ class Par02TrackingAction {};
 /** @} */
 
 /** @defgroup extended_parameterisations_gflash gflash
- *  parameterisations example gflash
+ *  Extended examples parameterisations gflash classes
  *  @{
  */
 
+/** @defgroup extended_parameterisations_gflash_gflash1 gflash1
+ *  parameterisations example gflash1
+ *  @{
+ */
+
+  class ExGflash1DetectorConstruction {};
+  class ExGflash1SensitiveDetector {};
   class ExGflashActionInitialization {};
-  class ExGflashDetectorConstruction {};
   class ExGflashEventAction {};
   class ExGflashHit {};
   class ExGflashHitsCollection {};
-  class ExGflashPhysics {};
   class ExGflashPrimaryGeneratorAction {};
   class ExGflashRunAction {};
-  class ExGflashSensitiveDetector {};
+
+/** @} */
+
+/** @defgroup extended_parameterisations_gflash_gflash2 gflash2
+ *  parameterisations example gflash2
+ *  @{
+ */
+
+  class ExGflash2DetectorConstruction {};
+  class ExGflash2ParallelWorld {};
+  class ExGflash2SensitiveDetector {};
+  class ExGflashActionInitialization {};
+  class ExGflashEventAction {};
+  class ExGflashHit {};
+  class ExGflashHitsCollection {};
+  class ExGflashPrimaryGeneratorAction {};
+  class ExGflashRunAction {};
+
+/** @} */
+
+/** @defgroup extended_parameterisations_gflash_gflash3 gflash3
+ *  parameterisations example gflash3
+ *  @{
+ */
+
+  class ExGflash3DetectorConstruction {};
+  class ExGflash3ParallelWorld {};
+  class ExGflash3SensitiveDetector {};
+  class ExGflashActionInitialization {};
+  class ExGflashEventAction {};
+  class ExGflashHit {};
+  class ExGflashHitsCollection {};
+  class ExGflashPrimaryGeneratorAction {};
+  class ExGflashRunAction {};
+
+/** @} */
+
+/** @defgroup extended_parameterisations_gflash_gflasha gflasha
+ *  The gflasha classes have their
+ *  <a href="../html_gflasha/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parameterisations_gflash
+ *  @{
+ */
+
+/** @} */
 
 /** @} */
 

@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 October 2019: I.Semeniouk (emhighenergy-V10-05-06)
+- G4GammaConversionToMuons - initialisation of the 5D model cuts size
+
+18 October 2019: V.Ivantchenko (emhighenergy-V10-05-05)
+- G4GammaConversionToMuons - added initialisation of the 5D model 
+
+08 October 2019: V.Ivantchenko (emhighenergy-V10-05-04)
+- G4GammaConversionToMuons - fixed DeRegister; added optional
+    possibility to use 5D model for the sampling of the final state
+
+02 July 2019: V.Ivantchenko (emhighenergy-V10-05-03)
+- G4mplIonisationWithDeltaModel, G4mplIonisationModel - fixed 
+    dEdx for electron gas model (beta<0.01) - problem #2169
+
 03 April 2019: V.Ivantchenko (emhighenergy-V10-05-02)
 - G4GammaConversionToMuons, G4AnnihiToMuPair - added Register/DeRegister
     mechanism

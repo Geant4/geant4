@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ----------------------------------------------------------------------
-// Class G4VImportanceAlgorithm
+// G4VImportanceAlgorithm
 //
 // Class description:
 //
@@ -40,26 +37,24 @@
 // A user defined algorithm deriving from this interface may be used
 // by the importance sampling.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4VImportanceAlgorithm_hh
-#define G4VImportanceAlgorithm_hh G4VImportanceAlgorithm_hh 
+#ifndef G4VIMPORTANCEALGORITHM_HH
+#define G4VIMPORTANCEALGORITHM_HH 1
 
 #include "G4Nsplit_Weight.hh"
 
 class G4VImportanceAlgorithm
 {
+  public:  // with description
 
-public:  // with description
-
-  G4VImportanceAlgorithm();
-  virtual ~G4VImportanceAlgorithm();
-  virtual G4Nsplit_Weight Calculate(G4double ipre,
-				    G4double ipost,
-                                    G4double init_w) const = 0;
-    // calculate the number of tracks and their weight according 
-    // to the  pre and post importance value and the weight of
-    // the mother track.
+    G4VImportanceAlgorithm();
+    virtual ~G4VImportanceAlgorithm();
+    virtual G4Nsplit_Weight Calculate(G4double ipre,
+                                      G4double ipost,
+                                      G4double init_w) const = 0;
+      // calculate the number of tracks and their weight according to the
+      // pre and post importance value and the weight of the mother track
 };
 
 #endif

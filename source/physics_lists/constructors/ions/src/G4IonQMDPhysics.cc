@@ -72,6 +72,8 @@
 #include "G4DeexPrecoParameters.hh"
 #include "G4NuclearLevelData.hh"
 
+#include "G4HadronicParameters.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -111,6 +113,7 @@ void G4IonQMDPhysics::ConstructProcess()
   theIonBC->SetMaxEnergy(eminQMD + overlap);
 
   G4double emax = G4HadronicParameters::Instance()->GetMaxEnergy();
+  emaxQMD = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   G4HadronicInteraction* theFTFP = nullptr;
   if(emax > emaxQMD) {
     theFTFPBuilder = new G4FTFBuilder("FTFP",thePreCompound);

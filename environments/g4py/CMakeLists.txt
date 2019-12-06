@@ -40,6 +40,14 @@ if(NOT GEANT4_FOUND)
   message(FATAL_ERROR "NOT Found Geant4.")
 endif()
 
+if(NOT DEFINED BOOST_PYTHON_LIB)
+  if (${PYTHON_VERSION_MAJOR} MATCHES "2")
+    set(BOOST_PYTHON_LIB boost_python)
+  elseif (${PYTHON_VERSION_MAJOR} MATCHES "3")
+    set(BOOST_PYTHON_LIB boost_python3)
+  endif()
+endif()
+
 #------------------------------------------------------------------------------
 # parameters for building
 message(STATUS "--------------------------------------------------------")

@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // class G4NormalNavigation
 //
@@ -103,7 +100,7 @@ class G4NormalNavigation
 
   private:
 
-    G4bool fCheck; 
+    G4bool fCheck = false; 
     G4NavigationLogger* fLogger;
 };
 

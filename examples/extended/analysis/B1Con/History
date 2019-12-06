@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28/11/19 I. Hrivnacova (B1Con-V10-05-00)
+- Fixed formatting in .README.txt
+
 08/05/18 J.Allison  (B1Con-V10-04-01)
 - Re-instated init.mac. (It is used after all! Perhaps in testing?)
 

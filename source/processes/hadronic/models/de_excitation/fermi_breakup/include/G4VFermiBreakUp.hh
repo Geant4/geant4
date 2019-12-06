@@ -40,7 +40,7 @@ class G4VFermiBreakUp
 {
 public:
 
-  explicit G4VFermiBreakUp() {};
+  explicit G4VFermiBreakUp() : verbose(0) {};
   virtual ~G4VFermiBreakUp() {};
 
   virtual void Initialise() = 0;
@@ -56,12 +56,18 @@ public:
   virtual void BreakFragment(G4FragmentVector* results, 
 			     G4Fragment* theNucleus) = 0;
 
+  inline void SetVerbose(G4int val) { verbose = val; }
+
+protected:
+
+  G4int verbose;
+
 private:
 
-  G4VFermiBreakUp(const G4VFermiBreakUp &right) = delete;  
-  const G4VFermiBreakUp & operator=(const G4VFermiBreakUp &right) = delete;
-  G4bool operator==(const G4VFermiBreakUp &right) const = delete;
-  G4bool operator!=(const G4VFermiBreakUp &right) const = delete;
+  G4VFermiBreakUp(const G4VFermiBreakUp &right);  
+  const G4VFermiBreakUp & operator=(const G4VFermiBreakUp &right);
+  G4bool operator==(const G4VFermiBreakUp &right) const;
+  G4bool operator!=(const G4VFermiBreakUp &right) const;
 };
 
 #endif

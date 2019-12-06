@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
@@ -37,7 +36,7 @@
 #include "G4DeuteronEvaporationProbability.hh"
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
-    G4EvaporationProbability(2,1,3.0,&theCoulombBarrier)
+    G4EvaporationProbability(2,1,3.0)
 {}
 
 G4DeuteronEvaporationProbability::~G4DeuteronEvaporationProbability()

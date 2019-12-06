@@ -50,33 +50,35 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
   public:
-  
+
     DetectorMessenger(DetectorConstruction* );
    ~DetectorMessenger();
-    
+
     virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
-  
+
     DetectorConstruction*      fDetector;
-      
+
     G4UIdirectory*             fOpticalDir;
-   
+
     // the surface
     G4UIcmdWithAString*        fSurfaceTypeCmd;
     G4UIcmdWithAString*        fSurfaceFinishCmd;
     G4UIcmdWithAString*        fSurfaceModelCmd;
     G4UIcmdWithADouble*        fSurfaceSigmaAlphaCmd;
+    G4UIcmdWithADouble*        fSurfacePolishCmd;
     G4UIcmdWithAString*        fSurfaceMatPropVectorCmd;
+    G4UIcmdWithAString*        fSurfaceMatPropConstCmd;
 
-    // the box 
+    // the box
     G4UIcmdWithAString*        fTankMatPropVectorCmd;
-    G4UIcmdWithAString*        fTankMatConstPropVectorCmd;
+    G4UIcmdWithAString*        fTankMatPropConstCmd;
     G4UIcmdWithAString*        fTankMaterialCmd;
 
     // the world
     G4UIcmdWithAString*        fWorldMatPropVectorCmd;
-    G4UIcmdWithAString*        fWorldMatConstPropVectorCmd;
+    G4UIcmdWithAString*        fWorldMatPropConstCmd;
     G4UIcmdWithAString*        fWorldMaterialCmd;
 
 };

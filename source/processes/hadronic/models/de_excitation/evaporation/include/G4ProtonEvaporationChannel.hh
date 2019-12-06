@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
@@ -34,31 +33,26 @@
 #define G4ProtonEvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
-#include "G4ProtonCoulombBarrier.hh"
 #include "G4ProtonEvaporationProbability.hh"
 
 class G4ProtonEvaporationChannel : public G4EvaporationChannel
 {
 public:
   // only available constructor
-  G4ProtonEvaporationChannel();
+  explicit G4ProtonEvaporationChannel();
 
   // destructor
-  virtual ~G4ProtonEvaporationChannel();
+  ~G4ProtonEvaporationChannel() override;
 
 private:
 
-  const G4ProtonEvaporationChannel & operator=(const G4ProtonEvaporationChannel & right);  
-
+  const G4ProtonEvaporationChannel & operator=
+  (const G4ProtonEvaporationChannel & right);  
   G4ProtonEvaporationChannel(const G4ProtonEvaporationChannel & right);
-
   G4bool operator==(const G4ProtonEvaporationChannel & right) const;
   G4bool operator!=(const G4ProtonEvaporationChannel & right) const;
 
-  G4ProtonCoulombBarrier  theCoulombBarrier;
- 
-  G4ProtonEvaporationProbability  theEvaporationProbability;
-	
-
+  G4ProtonEvaporationProbability pr;
 };
+
 #endif

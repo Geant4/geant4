@@ -23,16 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // G4ChordFinder inline implementations
 //
+// Author: J.Apostolakis - Design and implementation - 25.02.1997
 // --------------------------------------------------------------------
 
 inline 
-void G4ChordFinder::SetIntegrationDriver(G4VIntegrationDriver* IntegrationDriver)
+void G4ChordFinder::SetIntegrationDriver(G4VIntegrationDriver* driver)
 {
-  fIntgrDriver=IntegrationDriver;
+  fIntgrDriver = driver;
 }
 
 inline
@@ -50,7 +49,7 @@ G4double G4ChordFinder::GetDeltaChord() const
 inline
 void G4ChordFinder::SetDeltaChord(G4double newval)
 {
-  fDeltaChord=newval;
+  fDeltaChord = newval;
 }
 
 inline
@@ -59,9 +58,10 @@ void G4ChordFinder::ResetStepEstimate()
   fIntgrDriver->OnStartTracking();
 }
 
-inline G4int G4ChordFinder::SetVerbose( G4int newvalue )
+inline
+G4int G4ChordFinder::SetVerbose( G4int newvalue )
 { 
-  G4int oldval= fStatsVerbose; 
+  G4int oldval = fStatsVerbose; 
   fStatsVerbose = newvalue;
   return oldval; 
 }
@@ -70,27 +70,30 @@ inline G4int G4ChordFinder::SetVerbose( G4int newvalue )
 // the three points (x,y) and returns the value x that, for the
 // inverse parabolic, corresponds to y=0.
 //
-inline G4double G4ChordFinder::InvParabolic ( const G4double xa, const G4double ya,
-				    const G4double xb, const G4double yb,
-				    const G4double xc, const G4double yc )
-{   	const G4double R = yb/yc,
-	               S = yb/ya,
-		       T = ya/yc;
-        const G4double Q = (T-1)*(R-1)*(S-1);
-	if (std::fabs(Q) <DBL_MIN ) return  DBL_MAX;
-	
-	const G4double P = S*(T*(R-T)*(xc-xb) - (1-R)*(xb-xa));
-	return xb + P/Q;
+inline
+G4double G4ChordFinder::InvParabolic ( const G4double xa, const G4double ya,
+                                       const G4double xb, const G4double yb,
+                                       const G4double xc, const G4double yc )
+{
+  const G4double R = yb/yc,
+                 S = yb/ya,
+                 T = ya/yc;
+  const G4double Q = (T-1)*(R-1)*(S-1);
+  if (std::fabs(Q) <DBL_MIN ) return  DBL_MAX;
+        
+  const G4double P = S*(T*(R-T)*(xc-xb) - (1-R)*(xb-xa));
+  return xb + P/Q;
 }
 
-inline 
-G4double G4ChordFinder::AdvanceChordLimited(G4FieldTrack& yCurrent,
-                                            G4double stepInitial,
-                                            G4double epsStep_Relative,
-                                            const G4ThreeVector& /*latestSafetyOrigin*/,
-                                            G4double /*lasestSafetyRadius*/)
+inline G4double
+G4ChordFinder::AdvanceChordLimited(G4FieldTrack& yCurrent,
+                                   G4double stepInitial,
+                                   G4double epsStep_Relative,
+                             const G4ThreeVector& /*latestSafetyOrigin*/,
+                                   G4double /*lasestSafetyRadius*/)
 {
-  return fIntgrDriver->AdvanceChordLimited(yCurrent, stepInitial, epsStep_Relative, fDeltaChord);
+  return fIntgrDriver->AdvanceChordLimited(yCurrent, stepInitial,
+                                           epsStep_Relative, fDeltaChord);
 }
 
 inline

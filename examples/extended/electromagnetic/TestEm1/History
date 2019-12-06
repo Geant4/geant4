@@ -13,6 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+09-10-19 mma (testem1-V10-05-03)
+- PhysicsList : cleanup initialisation.
+ 
+23-09-19 mma (testem1-V10-05-02)
+- PhysicsList : add BuildCSDARange() and set em option3 as default. 
+
+24-08-19 V.Ivant (testem1-V10-05-01)
+- PhysicsList - disable GeneralProcess for all EM physics
 
 31-05-19 V.Ivanchenko (testem1-V10-05-00)
 - Added G4NIELCalculator, corresponding histograms and printouts,

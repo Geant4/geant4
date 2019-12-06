@@ -32,36 +32,35 @@
 
 #include "globals.hh"
 
-#if __SUNPRO_CC==0x420
-   typedef G4bool bool;
-#endif
-
-class CCalVisualisable {
+class CCalVisualisable
+{
 public:
 
   //Here we define the different type of volumes we consider.
   enum visType {Sensitive=0,
-		Electronics=1,
-		Support=2,
-		Cable=3, 
-		Absorber=4,
-		OtherServices=5,
-		PseudoVolumes=6,
-		TotalVisTypes=7,
-		Undefined=-1};
+                Electronics=1,
+                Support=2,
+                Cable=3, 
+                Absorber=4,
+                OtherServices=5,
+                PseudoVolumes=6,
+                TotalVisTypes=7,
+                Undefined=-1};
 
 private:
 
   //This class groups the important visualization parameters.
-  class visParameters {
-  public:
-    visParameters(bool v=false, double r=1,double g=1,double b=1, bool w=true):
-      visibility(v),rColor(r),gColor(g),bColor(b),wireframe(w) {}
-    bool visibility;
-    double rColor;
-    double gColor;
-    double bColor;
-    bool wireframe;
+  class visParameters
+  {
+   public:
+     visParameters(G4bool v=false, G4double r=1,G4double g=1,
+                   G4double b=1, G4bool w=true)
+       : visibility(v),rColor(r),gColor(g),bColor(b),wireframe(w) {}
+     G4bool visibility;
+     G4double rColor;
+     G4double gColor;
+     G4double bColor;
+     G4bool wireframe;
   };
   
 public:
@@ -71,42 +70,39 @@ public:
   virtual ~CCalVisualisable() {}
 
   //Reads this object from file
-  bool readFile(G4String file);
+  G4bool readFile(G4String file);
 
   //Sets visibility to true for Sensitive and to false otherwise.
   void setDefault();
 
   //Get & Set methods.
-  bool isVisible (visType v) const {return theParameters[v].visibility;}
-  void setVisible(visType v, bool flag=true){theParameters[v].visibility=flag;}
+  G4bool isVisible (visType v) const
+    {return theParameters[v].visibility;}
+  void setVisible(visType v, G4bool flag=true)
+    {theParameters[v].visibility=flag;}
 
-  double colorRed  (visType v) const {return theParameters[v].rColor;}
-  double colorGreen(visType v) const {return theParameters[v].gColor;}
-  double colorBlue (visType v) const {return theParameters[v].bColor;}
-  void setColorRed  (visType v, double r) {theParameters[v].rColor=r;}
-  void setColorGreen(visType v, double g) {theParameters[v].gColor=g;}
-  void setColorBlue (visType v, double b) {theParameters[v].bColor=b;}
-  void setColor(visType v, double r, double g, double b);
+  G4double colorRed  (visType v) const {return theParameters[v].rColor;}
+  G4double colorGreen(visType v) const {return theParameters[v].gColor;}
+  G4double colorBlue (visType v) const {return theParameters[v].bColor;}
+  void setColorRed  (visType v, G4double r) {theParameters[v].rColor=r;}
+  void setColorGreen(visType v, G4double g) {theParameters[v].gColor=g;}
+  void setColorBlue (visType v, G4double b) {theParameters[v].bColor=b;}
+  void setColor(visType v, G4double r, G4double g, G4double b);
 
-  bool isWireFrame (visType v) const {return theParameters[v].wireframe;}
-  void setWireFrame(visType v, bool wf=true){theParameters[v].wireframe=wf;}
+  G4bool isWireFrame (visType v) const {return theParameters[v].wireframe;}
+  void setWireFrame(visType v, G4bool wf=true){theParameters[v].wireframe=wf;}
 
-  
-  
 protected:
   //Read this object from visFile
   static void setPath();
-  bool readFile();
+  G4bool readFile();
 
 private:
   static const char* pathName;                //Path in which to look for files
   G4String visFile;                           //File with visualization info
   visParameters theParameters[TotalVisTypes]; //Visualisation parameters
 
-  double checkColorRange(double color, char type) const;
+  G4double checkColorRange(G4double color, char type) const;
 };
 
 #endif
-
-
-

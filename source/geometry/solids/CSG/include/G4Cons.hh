@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Cons
 //
 // Class description:
@@ -58,12 +52,11 @@
 //      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
 //      made with (say) Phi of a point.
 
-// History:
 // 19.3.94 P.Kent: Old C++ code converted to tolerant geometry
 // 13.9.96 V.Grichine: Final modifications to commit
 // --------------------------------------------------------------------
-#ifndef G4Cons_HH
-#define G4Cons_HH
+#ifndef G4CONS_HH
+#define G4CONS_HH
 
 #include "G4GeomTypes.hh"
 
@@ -146,9 +139,9 @@ class G4Cons : public G4CSGSolid
     G4double DistanceToIn (const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
@@ -230,7 +223,7 @@ class G4Cons : public G4CSGSolid
       //
       // Cached trigonometric values
 
-    G4bool fPhiFullCone;
+    G4bool fPhiFullCone = false;
       //
       // Flag for identification of section or full cone
 

@@ -46,7 +46,8 @@ class G4RootMpiNtupleManager : public G4RootNtupleManager
   friend class G4RootMpiMainNtupleManager;
 
   public:
-    G4RootMpiNtupleManager(const G4AnalysisManagerState& state, G4bool rowWise, 
+    G4RootMpiNtupleManager(const G4AnalysisManagerState& state, 
+                           G4bool rowWise, G4bool rowMode,
                            tools::impi* impi, G4int mpiSize);
     virtual ~G4RootMpiNtupleManager();
 

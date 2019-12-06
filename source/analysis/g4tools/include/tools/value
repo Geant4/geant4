@@ -76,7 +76,7 @@ public:
   //static e_type type(const std::string&) {return STRING;}
 */
 public:
-  value():m_label(0),m_id(0){
+  value():m_label(0),m_itag(0){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -84,56 +84,56 @@ public:
     u.m_unsigned_int64 = 0;
   }
 
-  value(bool a_value):m_label(0),m_id(0) {
+  value(bool a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = BOOL;
     u.m_bool = a_value;
   }
-//  value(char a_value):m_label(0),m_id(0) {
+//  value(char a_value):m_label(0),m_itag(0) {
 //#ifdef TOOLS_MEM
 //    mem::increment(s_class().c_str());
 //#endif
 //    m_type = CHAR;
 //    u.m_char = a_value;
 //  }
-  value(short a_value):m_label(0),m_id(0) {
+  value(short a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = SHORT;
     u.m_short = a_value;
   }
-  value(int a_value):m_label(0),m_id(0) {
+  value(int a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = INT;
     u.m_int = a_value;
   }
-  value(int64 a_value):m_label(0),m_id(0) {
+  value(int64 a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = INT64;
     u.m_int64 = a_value;
   }
-  value(uint64 a_value):m_label(0),m_id(0) {
+  value(uint64 a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = UNSIGNED_INT64;
     u.m_unsigned_int64 = a_value;
   }
-  value(float a_value):m_label(0),m_id(0) {
+  value(float a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = FLOAT;
     u.m_float = a_value;
   }
-  value(double a_value):m_label(0),m_id(0) {
+  value(double a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -141,49 +141,49 @@ public:
     u.m_double = a_value;
   }
 
-//  value(unsigned char a_value):m_label(0),m_id(0) {
+//  value(unsigned char a_value):m_label(0),m_itag(0) {
 //#ifdef TOOLS_MEM
 //    mem::increment(s_class().c_str());
 //#endif
 //    m_type = UNSIGNED_CHAR;
 //    u.m_unsigned_char = a_value;
 //  }
-  value(unsigned short a_value):m_label(0),m_id(0) {
+  value(unsigned short a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = UNSIGNED_SHORT;
     u.m_unsigned_short = a_value;
   }
-  value(unsigned int a_value):m_label(0),m_id(0) {
+  value(unsigned int a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = UNSIGNED_INT;
     u.m_unsigned_int = a_value;
   }
-  value(void* a_value):m_label(0),m_id(0) {
+  value(void* a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = VOID_STAR;
     u.m_void_star = a_value;
   }
-  value(double* a_value):m_label(0),m_id(0) {
+  value(double* a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = DOUBLE_STAR;
     u.m_double_star = a_value;
   }
-  value(float* a_value):m_label(0),m_id(0) {
+  value(float* a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = FLOAT_STAR;
     u.m_float_star = a_value;
   }
-  value(int* a_value):m_label(0),m_id(0) {
+  value(int* a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -191,14 +191,14 @@ public:
     u.m_int_star = a_value;
   }
 
-  value(const char* a_value):m_label(0),m_id(0) {
+  value(const char* a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     m_type = STRING;
     u.m_string = new std::string(a_value?a_value:"");
   }
-  value(const std::string& a_value):m_label(0),m_id(0) {
+  value(const std::string& a_value):m_label(0),m_itag(0) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -208,7 +208,7 @@ public:
 
 #ifdef TOOLS_MEM
 #define TOOLS_VALUE_CSTOR(a_what,a_m_what,a_type) \
-  value(const std::vector<a_what>& a_v):m_label(0),m_id(0){\
+  value(const std::vector<a_what>& a_v):m_label(0),m_itag(0){\
     mem::increment(s_class().c_str());\
     m_type = a_type;\
     std::vector<unsigned int> is(1);\
@@ -218,7 +218,7 @@ public:
   }
 #else
 #define TOOLS_VALUE_CSTOR(a_what,a_m_what,a_type) \
-  value(const std::vector<a_what>& a_v):m_label(0),m_id(0){\
+  value(const std::vector<a_what>& a_v):m_label(0),m_itag(0){\
     m_type = a_type;\
     std::vector<unsigned int> is(1);\
     is[0] = (unsigned int)a_v.size();\
@@ -244,14 +244,14 @@ public:
 
 #ifdef TOOLS_MEM
 #define TOOLS_VALUE_CSTORA(a_what,a_m_what,a_type) \
-  value(const array<a_what>& a_a):m_label(0),m_id(0){\
+  value(const array<a_what>& a_a):m_label(0),m_itag(0){\
     mem::increment(s_class().c_str());\
     m_type = a_type;\
     u.a_m_what = new array<a_what>(a_a);\
   }
 #else
 #define TOOLS_VALUE_CSTORA(a_what,a_m_what,a_type) \
-  value(const array<a_what>& a_a):m_label(0),m_id(0){\
+  value(const array<a_what>& a_a):m_label(0),m_itag(0){\
     m_type = a_type;\
     u.a_m_what = new array<a_what>(a_a);\
   }
@@ -280,7 +280,7 @@ public:
 #endif
   }
 public:
-  value(const value& a_from):m_label(0),m_id(a_from.m_id){
+  value(const value& a_from):m_label(0),m_itag(a_from.m_itag){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -340,7 +340,7 @@ public:
     delete m_label;m_label = 0;
     if(a_from.m_label) m_label = new std::string(*a_from.m_label);
     
-    m_id = a_from.m_id;
+    m_itag = a_from.m_itag;
     
     reset();
 
@@ -429,8 +429,8 @@ private:
     return s_v;
   }
 public:
-  void set_id(unsigned int a_id) {m_id = a_id;} //gopaw
-  unsigned int id() const {return m_id;} //gopaw
+  void set_itag(unsigned int a_itag) {m_itag = a_itag;} //gopaw
+  unsigned int itag() const {return m_itag;} //gopaw
   void set_label(const std::string& a_s) {
     delete m_label;
     m_label = new std::string(a_s);
@@ -711,8 +711,35 @@ public:
     case NONE:
       sprintf(a_s,5,"(nil)");
       return true;
+    case BOOL:
+      sprintf(a_s,5,"%s",a_v.u.m_bool?"true":"false");
+      return true;
+  //case UNSIGNED_CHAR:
+  //  sprintf(a_s,32,"%c",a_v.u.m_unsigned_char);
+  //  return true;
+  //case CHAR:
+  //  sprintf(a_s,32,"%c",a_v.u.m_char);
+  //  return true;
+    case UNSIGNED_SHORT:
+      sprintf(a_s,32,"%u",a_v.u.m_unsigned_short);
+      return true;
+    case SHORT:
+      sprintf(a_s,32,"%d",a_v.u.m_short);
+      return true;
+    case UNSIGNED_INT:
+      sprintf(a_s,32,"%u",a_v.u.m_unsigned_int);
+      return true;
     case INT:
       sprintf(a_s,32,"%d",a_v.u.m_int);
+      return true;
+    case UNSIGNED_INT64:
+      sprintf(a_s,32,int64_format(),a_v.u.m_unsigned_int64);
+      return true;
+    case INT64:
+      sprintf(a_s,32,int64_format(),a_v.u.m_int64);
+      return true;
+    case FLOAT:
+      sprintf(a_s,32,"%g",a_v.u.m_float);
       return true;
     case DOUBLE:
       sprintf(a_s,32,"%g",a_v.u.m_double);
@@ -720,33 +747,6 @@ public:
     case VOID_STAR:
       sprintf(a_s,32,upointer_format_x(),(upointer)a_v.u.m_void_star);
       return true;
-    case UNSIGNED_SHORT:
-      sprintf(a_s,32,"%u",a_v.u.m_unsigned_short);
-      return true;
-    case UNSIGNED_INT:
-      sprintf(a_s,32,"%u",a_v.u.m_unsigned_int);
-      return true;
-    case BOOL:
-      sprintf(a_s,5,"%s",a_v.u.m_bool?"true":"false");
-      return true;
-    case SHORT:
-      sprintf(a_s,32,"%d",a_v.u.m_short);
-      return true;
-    case INT64:
-      sprintf(a_s,32,int64_format(),a_v.u.m_int64);
-      return true;
-    case UNSIGNED_INT64:
-      sprintf(a_s,32,int64_format(),a_v.u.m_unsigned_int64);
-      return true;
-    case FLOAT:
-      sprintf(a_s,32,"%g",a_v.u.m_float);
-      return true;
-    //case UNSIGNED_CHAR:
-    //  sprintf(a_s,32,"%c",a_v.u.m_unsigned_char);
-    //  return true;
-    //case CHAR:
-    //  sprintf(a_s,32,"%c",a_v.u.m_char);
-    //  return true;
     case DOUBLE_STAR:
       sprintf(a_s,32,upointer_format_x(),(upointer)a_v.u.m_double_star);
       return true;
@@ -796,6 +796,50 @@ public:
       return false;
     }
   }
+
+/*
+  size_t header_size() const {return header_size(*this);} //used in base_evaluator::dump()
+  static size_t header_size(const value& a_v){
+    switch(a_v.m_type) {
+    case NONE:           return 5;
+
+    case BOOL:           return 5;
+  //case UNSIGNED_CHAR:  return 1;
+  //case CHAR:           return 1;
+    
+    case INT:
+    case UNSIGNED_SHORT:
+    case SHORT:
+    case FLOAT:
+    case UNSIGNED_INT:   return 8;
+    
+    
+    case DOUBLE:
+    case INT64:
+    case UNSIGNED_INT64:
+    case VOID_STAR:
+    case DOUBLE_STAR:
+    case FLOAT_STAR:
+    case INT_STAR:
+    case STRING:         return 12;
+
+    //case ARRAY_UNSIGNED_CHAR:
+    //case ARRAY_CHAR:
+  
+    case ARRAY_UNSIGNED_SHORT:
+    case ARRAY_SHORT:
+    case ARRAY_UNSIGNED_INT:
+    case ARRAY_INT:
+    case ARRAY_UNSIGNED_INT64:
+    case ARRAY_INT64:
+    case ARRAY_FLOAT:
+    case ARRAY_DOUBLE:
+    case ARRAY_BOOL:
+    case ARRAY_STRING:   return 5; //size("array")
+    default: return 8;
+    }
+  }
+*/
 
   bool to_double(double& a_d) const {
     switch(m_type) {
@@ -1078,7 +1122,7 @@ protected:
   }
 protected:
   std::string* m_label;
-  unsigned int m_id;
+  unsigned int m_itag;
 protected:
   e_type m_type;
   union {

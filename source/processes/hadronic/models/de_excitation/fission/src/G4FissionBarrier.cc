@@ -31,6 +31,7 @@
 // 21.03.2013 V.Ivanchenko redesign parameters classes
 
 #include "G4FissionBarrier.hh"
+#include "G4CameronShellPlusPairingCorrections.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4ShellCorrection.hh"
 #include "G4SystemOfUnits.hh"
@@ -51,8 +52,8 @@ G4FissionBarrier::FissionBarrier(G4int A, G4int Z, G4double U) const
   // prescription for A >= 65
 {
   static const G4double blimit = 100.0*CLHEP::GeV;
-  return (A < 65) ? blimit :
-    BarashenkovFissionBarrier(A,Z)/(1.0 + std::sqrt(U/(G4double)(2*A)));
+  return (A >= 65) ? BarashenkovFissionBarrier(A,Z)
+    /(1.0 + std::sqrt(U/(G4double)(2*A))) : blimit;
 }
 
 G4double 
@@ -73,7 +74,7 @@ G4FissionBarrier::BarashenkovFissionBarrier(G4int A, G4int Z) const
   
   // Liquid drop model part of Fission Barrier
   G4double BF0 = aSurf*G4Pow::GetInstance()->Z23(A);
-  if (x <= 2./3.) { BF0 *= 0.38*(3./4.-x); }
+  if (x <= 2./3.) { BF0 *= 0.38*(0.75 - x); }
   else { BF0 *= 0.83*(1. - x)*(1. - x)*(1. - x); }
 
   G4int d = N - 2*(N/2) + Z - 2*(Z/2);

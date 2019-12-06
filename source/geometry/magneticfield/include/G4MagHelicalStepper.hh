@@ -23,29 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//
-//
-// class G4MagHelicalStepper
+// G4MagHelicalStepper
 //
 // Class description:
 //
 // Abstract base class for integrator of particle's equation of motion,
 // used in tracking in space dependent magnetic field
-
+//
 // It is used for a set of steppers which use the helix as a sort of
 // 'first order' solution.
 //   - Most obtain an error by breaking up the step in two
 //   - G4ExactHelicalStepper does not provide an error estimate
 
-// History:
-// - 05.11.98  J.Apostolakis   Creation of new ABC 
+// Created: J.Apostolakis, CERN - 05.11.1998
 // --------------------------------------------------------------------
-
-#ifndef G4MagHelicalStepper_hh
-#define G4MagHelicalStepper_hh
+#ifndef G4MAGHELICALSTEPPER_HH
+#define G4MAGHELICALSTEPPER_HH
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -61,20 +54,23 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
     G4MagHelicalStepper(G4Mag_EqRhs *EqRhs);
     virtual ~G4MagHelicalStepper();
   
-    virtual void Stepper( const G4double y[],    // VIRTUAL for ExactHelix - temporary
-                  const G4double dydx[],
-                        G4double h,
-                        G4double yout[],
-                        G4double yerr[]  );
+    G4MagHelicalStepper(const G4MagHelicalStepper&) = delete;
+    G4MagHelicalStepper& operator=(const G4MagHelicalStepper&) = delete;
+ 
+    virtual void Stepper( const G4double y[], // VIRTUAL for ExactHelix
+                          const G4double dydx[],
+                                G4double h,
+                                G4double yout[],
+                                G4double yerr[] );
       // The stepper for the Runge Kutta integration.
       // The stepsize is fixed, equal to h.
       // Integrates ODE starting values y[0 to 6]
       // Outputs yout[] and its estimated error yerr[].
   
     virtual  void DumbStepper( const G4double y[],
-                               G4ThreeVector   Bfld,
-                               G4double  h,
-                               G4double yout[] ) = 0;
+                                     G4ThreeVector Bfld,
+                                     G4double h,
+                                     G4double yout[] ) = 0;
       // Performs a 'dump' Step without error calculation.
   
     G4double DistChord()const ;
@@ -82,62 +78,51 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
 
   protected:  // with description
 
-    inline void LinearStep( const G4double  yIn[],
-                                  G4double  h,
-                                  G4double  yHelix[]) const;
+    inline void LinearStep( const G4double yIn[],
+                                  G4double h,
+                                  G4double yHelix[]) const;
       // A linear Step in regions without magnetic field.
 
-     void AdvanceHelix( const G4double  yIn[],
-                             G4ThreeVector   Bfld,
-                             G4double  h,
-			G4double  yHelix[],G4double yHelix2[]=0);    // output 
+    void AdvanceHelix( const G4double yIn[],
+                             G4ThreeVector Bfld,
+                             G4double h,
+                             G4double yHelix[], G4double yHelix2[] = 0);
       // A first order Step along a helix inside the field.
 
     inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );
       // Evaluate the field at a certain point.
-
   
-   inline G4double GetInverseCurve( const G4double Momentum, const G4double Bmag );
+    inline G4double GetInverseCurve( const G4double Momentum,
+                                     const G4double Bmag );
       // Evaluate Inverse of Curvature of Track
 
-      // Store and use the parameters of track : 
-      // Radius of curve, Stepping angle, Radius of projected helix
-   inline void SetAngCurve(const G4double Ang);
-   inline G4double GetAngCurve()const;
+    // Store and use the parameters of track : 
+    // radius of curve, Stepping angle, Radius of projected helix
 
-   inline void SetCurve(const G4double Curve);
-   inline G4double GetCurve()const;
+    inline void SetAngCurve(const G4double Ang);
+    inline G4double GetAngCurve()const;
 
-   inline void SetRadHelix(const G4double Rad);
-   inline G4double GetRadHelix()const;
+    inline void SetCurve(const G4double Curve);
+    inline G4double GetCurve()const;
 
-
-  protected:  // without description
-
-    // void MagFieldEvaluate( const G4double y[], G4double B[] )   
-    //  { GetEquationOfMotion()->  GetFieldValue(y, B); }
+    inline void SetRadHelix(const G4double Rad);
+    inline G4double GetRadHelix()const;
 
   private:
 
-    G4MagHelicalStepper(const G4MagHelicalStepper&);
-    G4MagHelicalStepper& operator=(const G4MagHelicalStepper&);
-      // Private copy constructor and assignment operator.
+    static const G4double fUnitConstant;
+      // As in G4Mag_EqRhs.hh/cc where it is not used.
+
+    G4Mag_EqRhs* fPtrMagEqOfMot = nullptr;
  
-    static const G4double fUnitConstant;   //  As in G4Mag_EqRhs.hh/cc where it is not used.
-  private:
-   
-    G4Mag_EqRhs*  fPtrMagEqOfMot;
- 
-    // Data stored in order to find the chord.
-      G4double fAngCurve;
-      G4double frCurve;
-      G4double frHelix;
-    // Data stored in order to find the chord.
-      G4ThreeVector yInitial, yMidPoint, yFinal;
-       
-    
+    // Data stored in order to find the chord
+    //
+    G4double fAngCurve = 0.0;
+    G4double frCurve = 0.0;
+    G4double frHelix = 0.0;
+    G4ThreeVector yInitial, yMidPoint, yFinal;
 };
 
 #include  "G4MagHelicalStepper.icc"
 
-#endif  /* G4MagHelicalStepper_hh */
+#endif

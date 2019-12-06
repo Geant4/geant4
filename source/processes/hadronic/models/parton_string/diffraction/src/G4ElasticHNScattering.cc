@@ -39,6 +39,7 @@
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ElasticHNScattering.hh"
 #include "G4LorentzRotation.hh"
@@ -66,36 +67,19 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   projectile->IncrementCollisionCount( 1 );
   target->IncrementCollisionCount( 1 );
 
-  G4SampleResonance BrW;
+  if ( projectile->Get4Momentum().z() < 0.0 ) return false;  //Uzhi Aug.2019
 
   // Projectile parameters
   G4LorentzVector Pprojectile = projectile->Get4Momentum();
-  if ( Pprojectile.z() < 0.0 ) return false;
-  G4bool PutOnMassShell( false );
-  G4double M0projectile = Pprojectile.mag();       
-  //if ( M0projectile < projectile->GetDefinition()->GetPDGMass() ) {
-
-  G4double MminProjectile=BrW.GetMinimumMass(projectile->GetDefinition());
-
-  if ( M0projectile < MminProjectile ) {
-    PutOnMassShell = true;
-    M0projectile = projectile->GetDefinition()->GetPDGMass();
-  }
+  G4double M0projectile = Pprojectile.mag();
   G4double M0projectile2 = M0projectile * M0projectile;
-  G4double AveragePt2 = theParameters->GetAvaragePt2ofElasticScattering();
 
   // Target parameters
   G4LorentzVector Ptarget = target->Get4Momentum();
   G4double M0target = Ptarget.mag();
-  //if ( M0target < target->GetDefinition()->GetPDGMass() ) {
+  G4double M0target2 = M0target * M0target;
 
-  G4double MminTarget=BrW.GetMinimumMass(target->GetDefinition());
-
-  if ( M0target < MminTarget ) {
-    PutOnMassShell = true;
-    M0target = target->GetDefinition()->GetPDGMass();
-  }   
-  G4double M0target2 = M0target * M0target;                      
+  G4double AveragePt2 = theParameters->GetAvaragePt2ofElasticScattering();
 
   // Transform momenta to cms and then rotate parallel to z axis;
   G4LorentzVector Psum;
@@ -111,7 +95,6 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   Pprojectile.transform( toCms );
   Ptarget.transform( toCms );
 
-  // Putting on mass-on-shell, if needed
   G4double PZcms2, PZcms;                                          
   G4double S = Psum.mag2();                                          
   G4double SqrtS = std::sqrt( S );
@@ -120,36 +103,7 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   PZcms2 = ( S*S + sqr( M0projectile2 ) + sqr( M0target2 )
              - 2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2 ) / 4.0 / S;
 
-  if ( PZcms2 < 0.0 ) {  // It can be in an interaction with off-shell nuclear nucleon
-    if ( M0projectile > projectile->GetDefinition()->GetPDGMass() ) { 
-      // An attempt to de-excite the projectile
-      // It is assumed that the target is in the ground state
-      M0projectile = projectile->GetDefinition()->GetPDGMass();
-      M0projectile2 = M0projectile * M0projectile;
-      PZcms2= ( S*S + sqr( M0projectile2 ) + sqr( M0target2 )
-                - 2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2 ) / 4.0 / S;
-      if ( PZcms2 < 0.0 ) { return false; }  // Nonsuccesful attempt to de-excitate the projectile
-    } else {                                  
-      return false; // The projectile was not excited, but the energy was too low to put
-                    // the target nucleon on mass-shell
-    }
-  }
-
-  PZcms = std::sqrt( PZcms2 );
-
-  if ( PutOnMassShell ) {
-    if ( Pprojectile.z() > 0.0 ) {
-      Pprojectile.setPz( PZcms );
-      Ptarget.setPz( -PZcms );
-    } else {
-      Pprojectile.setPz( -PZcms );
-      Ptarget.setPz( PZcms );
-    };
-    Pprojectile.setE( std::sqrt( M0projectile2 + Pprojectile.x() * Pprojectile.x() +
-                                                 Pprojectile.y() * Pprojectile.y() + PZcms2 ) );
-    Ptarget.setE( std::sqrt( M0target2 + Ptarget.x() * Ptarget.x() + Ptarget.y() * Ptarget.y() +
-                             PZcms2 ) );
-  }
+  PZcms = ( PZcms2 > 0.0 ? std::sqrt( PZcms2 ) : 0.0 );
 
   G4double maxPtSquare = PZcms2;
 
@@ -214,10 +168,9 @@ G4ThreeVector G4ElasticHNScattering::GaussianPt( G4double AveragePt2,
   if ( AveragePt2 <= 0.0 ) {
     Pt2 = 0.0;
   } else {
-    Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
-                                        ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) ); 
+    Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) ); 
   }
-  G4double Pt = std::sqrt( Pt2 );
+  G4double Pt = ( Pt2 > 0.0 ? std::sqrt( Pt2 ) : 0.0 );
   G4double phi = G4UniformRand() * twopi;
   return G4ThreeVector( Pt * std::cos( phi ), Pt * std::sin( phi ), 0.0 );    
 }

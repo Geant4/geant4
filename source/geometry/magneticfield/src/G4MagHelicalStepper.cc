@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MagHelicalStepper implementation
 //
+// Given a purely magnetic field a better approach than adding a straight line
+// (as in the normal runge-kutta-methods) is to add helix segments to the
+// current position
 //
+// Created: J.Apostolakis, CERN - 05.11.1998
 // --------------------------------------------------------------------
 
 #include "G4MagHelicalStepper.hh"
@@ -33,20 +38,14 @@
 #include "G4LineSection.hh"
 #include "G4Mag_EqRhs.hh"
 
-// given a purely magnetic field a better approach than adding a straight line
-// (as in the normal runge-kutta-methods) is to add helix segments to the
-// current position
-
-
 // Constant for determining unit conversion when using normal as integrand.
 //
 const G4double G4MagHelicalStepper::fUnitConstant = 0.299792458*(GeV/(tesla*m));
 
-
 G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
    : G4MagIntegratorStepper(EqRhs, 6), // integrate over 6 variables only !!
                                        // position & velocity
-     fPtrMagEqOfMot(EqRhs), fAngCurve(0.), frCurve(0.), frHelix(0.)
+     fPtrMagEqOfMot(EqRhs)
 {
 }
 
@@ -55,11 +54,11 @@ G4MagHelicalStepper::~G4MagHelicalStepper()
 }
 
 void
-G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
-                                   G4ThreeVector   Bfld,    
-                                   G4double  h,
-                                   G4double  yHelix[],
-                                   G4double  yHelix2[] )
+G4MagHelicalStepper::AdvanceHelix( const G4double yIn[],
+                                         G4ThreeVector Bfld,    
+                                         G4double h,
+                                         G4double yHelix[],
+                                         G4double yHelix2[] )
 {
   // const G4int    nvar = 6;
  
@@ -79,12 +78,12 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   G4ThreeVector positionMove, endTangent;
 
   G4double Bmag = Bfld.mag();
-  const G4double *pIn = yIn+3;
-  G4ThreeVector initVelocity= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
+  const G4double* pIn = yIn+3;
+  G4ThreeVector initVelocity = G4ThreeVector( pIn[0], pIn[1], pIn[2]);
   G4double      velocityVal = initVelocity.mag();
   G4ThreeVector initTangent = (1.0/velocityVal) * initVelocity;
   
-  R_1=GetInverseCurve(velocityVal,Bmag);
+  R_1 = GetInverseCurve(velocityVal,Bmag);
 
   // for too small magnetic fields there is no curvature
   // (include momentum here) FIXME
@@ -182,11 +181,9 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   }
 }
 
+// Use the midpoint method to get an error estimate and correction
+// modified from G4ClassicalRK4: W.Wander <wwc@mit.edu> 12/09/97
 //
-//  Use the midpoint method to get an error estimate and correction
-//  modified from G4ClassicalRK4: W.Wander <wwc@mit.edu> 12/09/97
-//
-
 void
 G4MagHelicalStepper::Stepper( const G4double yInput[],
                               const G4double*,
@@ -196,8 +193,6 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
 {  
    const G4int nvar = 6;
 
-   G4int i;
-
    // correction for Richardson Extrapolation.
    // G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
    
@@ -205,27 +200,30 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
    G4ThreeVector Bfld_initial, Bfld_midpoint;
    
    //  Saving yInput because yInput and yOut can be aliases for same array
-
-   for(i=0;i<nvar;i++) { yIn[i]=yInput[i]; }
+   //
+   for(G4int i=0; i<nvar; ++i)
+   {
+     yIn[i]=yInput[i];
+   }
 
    G4double h = hstep * 0.5; 
 
    MagFieldEvaluate(yIn, Bfld_initial) ;      
 
    // Do two half steps
-
-   DumbStepper(yIn,   Bfld_initial,  h, yTemp);
+   //
+   DumbStepper(yIn, Bfld_initial, h, yTemp);
    MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
    DumbStepper(yTemp, Bfld_midpoint, h, yOut); 
 
    // Do a full Step
-
+   //
    h = hstep ;
    DumbStepper(yIn, Bfld_initial, h, yTemp);
 
    // Error estimation
-
-   for(i=0;i<nvar;i++)
+   //
+   for(G4int i=0; i<nvar; ++i)
    {
      yErr[i] = yOut[i] - yTemp[i] ;
    }

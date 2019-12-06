@@ -8,6 +8,10 @@
                       Category History file
                       ---------------------
 
+20.09.2019 - M. Asai;brachy-V10-05-00
+             Add G4VScoringMesh:: scope identifier to BrachyUserScoreWriter.cc
+             Co-working with detutils-V10-05-01
+
 30.11.2018 - G. Cosmo;brachy-V10-04-07.
              Fixed compilation warning for shadowing variables/parameters
              in BrachyAnalysisManager, BrachyPrimaryGeneratorAction and

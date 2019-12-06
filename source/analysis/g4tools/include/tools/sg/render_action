@@ -12,7 +12,7 @@
 
 namespace tools {
 namespace sg {
-  class gl_manager;
+  class render_manager;
 }}
 
 
@@ -59,6 +59,7 @@ public:
   virtual void point_size(float) = 0;
   virtual void set_polygon_offset(bool) = 0;
   virtual void set_winding(winding_type) = 0;
+  virtual void set_shade_model(shade_type) = 0;
   virtual void set_cull_face(bool) = 0;
   virtual void set_point_smooth(bool) = 0;
   virtual void set_line_smooth(bool) = 0;
@@ -69,9 +70,10 @@ public:
                             float,float,float, //directrion
                             float,float,float,float) = 0; //RGBA
   virtual void set_lighting(bool) = 0;
+  virtual void set_blend(bool) = 0;
   virtual void restore_state(unsigned int) = 0;
 
-  virtual sg::gl_manager& gl_manager() = 0; //sg:: is needed.
+  virtual sg::render_manager& render_manager() = 0; //sg:: is needed.
 public:
   render_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
   :matrix_action(a_out,a_ww,a_wh){}
@@ -90,8 +92,9 @@ public:
     load_model_matrix(m_identity);
   }
   void load_matrices_from_state() {
-    load_proj_matrix(m_state.m_proj);
-    load_model_matrix(m_state.m_model);
+    const sg::state& _state = state();
+    load_proj_matrix(_state.m_proj);
+    load_model_matrix(_state.m_model);
   }
 
   void clear_color(const colorf& a_color){
@@ -149,6 +152,10 @@ public:
 
 public:
   // for sphere::visit template.
+  bool add_triangles(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
+    draw_vertex_normal_array(gl::triangles(),a_floatn,a_xyzs,a_nms);
+    return true;
+  }
   bool add_triangle_fan(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
     draw_vertex_normal_array(gl::triangle_fan(),a_floatn,a_xyzs,a_nms);
     return true;
@@ -163,6 +170,10 @@ public:
   }
   bool add_triangle_strip(size_t a_floatn,const float* a_xyzs,const float* a_rgbas,const float* a_nms) {
     draw_vertex_color_normal_array(gl::triangle_strip(),a_floatn,a_xyzs,a_rgbas,a_nms);
+    return true;
+  }
+  bool add_lines(size_t a_floatn,const float* a_xyzs) {
+    draw_vertex_array(gl::lines(),a_floatn,a_xyzs);
     return true;
   }
   bool add_line_loop(size_t a_floatn,const float* a_xyzs) {
@@ -207,6 +218,63 @@ public:
     const float* _xyzs = vec_data<float>(a_xyzs);
     draw_vertex_array(gl::line_loop(),a_xyzs.size(),_xyzs);
     return true;
+  }
+
+  bool add_line_strip(const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    draw_vertex_array(gl::line_strip(),a_xyzs.size(),_xyzs);
+    return true;
+  }
+
+/*
+  /////////////////////////////////////////////////////////
+  /// for sg::markers and gstos : /////////////////////////
+  /////////////////////////////////////////////////////////
+  bool add_lines(const std::vector<float>& a_xyzs){
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    draw_vertex_array(gl::lines(),a_xyzs.size(),_xyzs);
+    return true;
+  }
+  bool add_triangles(const std::vector<float>& a_xyzs,const std::vector<float>& a_nms){
+    if(a_xyzs.size()!=a_nms.size()) return false;
+    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _nms = vec_data<float>(a_nms);
+    draw_vertex_normal_array(gl::triangles(),a_xyzs.size(),_xyzs,_nms);
+    return true;
+  }
+  bool project_point(const mat4f& a_model_matrix,const mat4f& a_projection_matrix,
+                     float& a_x,float& a_y,float& a_z,float& a_w) {
+    //return project_point(a_x,a_y,a_z,a_w);		       
+    a_w = 1;
+    a_model_matrix.mul_4f(a_x,a_y,a_z,a_w);
+    a_projection_matrix.mul_4f(a_x,a_y,a_z,a_w);
+    if(a_w==0.0F) return false;
+    a_x /= a_w;
+    a_y /= a_w;
+    a_z /= a_w;
+    return true;
+  }		     
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+*/
+
+  bool add_triangle_strip_as_triangles(size_t a_floatn,const float* a_xyzs,const float* a_nms) { //used in sg::sphere, icosahedron_sphere.
+    // It appears that if glShadeModel is GL_FLAT, triangle strip does not look the same in "gsto mode" where it is rendered as triangles.
+    // We use this function for immediate rendering, in case we want the same rendering as "gsto mode".
+    
+    size_t num = a_floatn/3;
+    if(num<3) return false;
+    size_t nxyzs = (num-2)*3*3;
+    
+    std::vector<float> m_xyzs(nxyzs);
+    std::vector<float> m_nms(nxyzs);
+    
+   {float* pxyzs = vec_data<float>(m_xyzs);
+    float* pnms = vec_data<float>(m_nms);
+    gl::triangle_strip_to_triangles(num,a_xyzs,a_nms,pxyzs,pnms);}
+
+    return add_triangles(nxyzs,vec_data<float>(m_xyzs),vec_data<float>(m_nms));
   }
 
   void dump_vertex_array_xy(std::ostream& a_out,gl::mode_t /*a_mode*/,size_t a_floatn,const float* a_xys) {

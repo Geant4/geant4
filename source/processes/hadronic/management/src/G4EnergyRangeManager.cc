@@ -34,6 +34,7 @@
 #include "G4EnergyRangeManager.hh"
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
+#include "G4SystemOfUnits.hh"
 
 G4EnergyRangeManager::G4EnergyRangeManager()
  : theHadronicInteractionCounter(0)
@@ -41,22 +42,6 @@ G4EnergyRangeManager::G4EnergyRangeManager()
 
 G4EnergyRangeManager::~G4EnergyRangeManager()
 {}
-
-G4EnergyRangeManager::G4EnergyRangeManager(const G4EnergyRangeManager& right)
-{
-  theHadronicInteractionCounter = right.theHadronicInteractionCounter;
-  theHadronicInteraction = right.theHadronicInteraction;
-}
- 
-G4EnergyRangeManager& G4EnergyRangeManager::operator=(
-   const G4EnergyRangeManager& right)
-{
-  if (this != &right) {
-    theHadronicInteractionCounter = right.theHadronicInteractionCounter;
-    theHadronicInteraction = right.theHadronicInteraction;
-  }
-  return *this;
-}
 
 void G4EnergyRangeManager::RegisterMe(G4HadronicInteraction* a)
 {
@@ -70,16 +55,18 @@ void G4EnergyRangeManager::RegisterMe(G4HadronicInteraction* a)
   ++theHadronicInteractionCounter;
 }
 
-
 G4HadronicInteraction*
 G4EnergyRangeManager::GetHadronicInteraction(const G4HadProjectile & aHadProjectile, 
                                              G4Nucleus & aTargetNucleus,
                                              const G4Material* aMaterial,
                                              const G4Element* anElement) const
 {
-  if(0 == theHadronicInteractionCounter) {
-    throw G4HadronicException(__FILE__, __LINE__,
-			      "GetHadronicInteraction: NO MODELS STORED");
+  // VI shortcut: if only one interaction is registered skip all checks
+  if(1 == theHadronicInteractionCounter) { return theHadronicInteraction[0]; }
+  else if(0 == theHadronicInteractionCounter) {
+    G4cout << "G4EnergyRangeManager::GetHadronicInteraction: "
+	   << "no models defined for a process" << G4endl;
+    return nullptr;
   }
 
   G4double kineticEnergy = aHadProjectile.GetKineticEnergy();
@@ -94,11 +81,8 @@ G4EnergyRangeManager::GetHadronicInteraction(const G4HadProjectile & aHadProject
   for (G4int i = 0; i<theHadronicInteractionCounter; ++i) {
     if ( theHadronicInteraction[i]->IsApplicable( aHadProjectile, aTargetNucleus ) ) {
       G4double low  = theHadronicInteraction[i]->GetMinEnergy( aMaterial, anElement );
-      // Work-around for particles with 0 kinetic energy, which still
-      // require a model to return a ParticleChange
-      //if (low == 0.) low = -DBL_MIN;
       G4double high = theHadronicInteraction[i]->GetMaxEnergy( aMaterial, anElement );
-      if (low <= kineticEnergy && high > kineticEnergy) {
+      if (low <= kineticEnergy && high >= kineticEnergy) {
         ++cou;
         emi2 = emi1;
         ema2 = ema1;
@@ -110,158 +94,62 @@ G4EnergyRangeManager::GetHadronicInteraction(const G4HadProjectile & aHadProject
     }
   }
 
-  G4int mem = -1;
-  G4double rand;
+  G4HadronicInteraction* hi = nullptr;
   switch (cou) {
     case 0:
-       G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="
-	     <<theHadronicInteractionCounter<<", Ek="
-             <<kineticEnergy<<", Material = "<<aMaterial->GetName()
-	     <<", Element = "
-             <<anElement->GetName()<<G4endl;
-       for( G4int j=0; j<theHadronicInteractionCounter; ++j)
-       {
-         G4HadronicInteraction* HInt=theHadronicInteraction[j];
-         G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
-               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
-       }
-       throw G4HadronicException(__FILE__, __LINE__,
-          "GetHadronicInteraction: No Model found");
-       return 0;
+      G4cout << "No model found out of " << theHadronicInteractionCounter << G4endl;
+      for( G4int j=0; j<theHadronicInteractionCounter; ++j) {
+	G4HadronicInteraction* hint=theHadronicInteraction[j];
+	G4cout << "   "<< j << ".  Elow= " << hint->GetMinEnergy(aMaterial,anElement)
+	       <<", Ehigh= " << hint->GetMaxEnergy(aMaterial,anElement)
+	       <<"   " << hint->GetModelName() << G4endl;
+      }
+      break;
+
     case 1:
-       mem = memory;
-       break;
+      hi = theHadronicInteraction[memory];
+      break;
+
     case 2:
-       if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) )
-       {
-         G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="
-	       <<theHadronicInteractionCounter<<", Ek="
-               <<kineticEnergy<<", Material = "<<aMaterial->GetName()
-	       <<", Element = "
-               <<anElement->GetName()<<G4endl;
-         for( G4int j=0; j<theHadronicInteractionCounter; ++j)
-         {
-           G4HadronicInteraction* HInt=theHadronicInteraction[j];
-           G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
-               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
-         }
-         throw G4HadronicException(__FILE__, __LINE__,
-         "GetHadronicInteraction: Energy ranges of two models fully overlapping");
-       }
-       rand = G4UniformRand();
-       if( emi1 < emi2 )
-       {
-         if( (ema1-kineticEnergy) < rand*(ema1-emi2) ) {
-           mem = memor2;
-         } else {
-           mem = memory;
-	 }
-       } else {
-         if( (ema2-kineticEnergy) < rand*(ema2-emi1) ) {
-           mem = memory;
-	 } else {
-           mem = memor2;
-	 }
-       }
-       break;
+      if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) ) {
+	G4cout << "Energy ranges of two models fully overlapping " << G4endl;
+	for( G4int j=0; j<theHadronicInteractionCounter; ++j) {
+	  G4HadronicInteraction* hint=theHadronicInteraction[j];
+	  G4cout << "   "<< j << ".  Elow= " << hint->GetMinEnergy(aMaterial,anElement)
+		 <<", Ehigh= " << hint->GetMaxEnergy(aMaterial,anElement)
+		 <<"   " << hint->GetModelName() << G4endl;
+	}
+      } else {
+	G4double rand = G4UniformRand();
+	G4int mem;
+	if( emi1 < emi2 ) {
+	  if( (ema1-kineticEnergy) < rand*(ema1-emi2) ) {
+	    mem = memor2;
+	  } else {
+	    mem = memory;
+	  }
+	} else {
+	  if( (ema2-kineticEnergy) < rand*(ema2-emi1) ) {
+	    mem = memory;
+	  } else {
+	    mem = memor2;
+	  }
+	}
+	hi = theHadronicInteraction[mem];
+      }
+      break;
+
     default:
-      throw G4HadronicException(__FILE__, __LINE__,
-      "GetHadronicInteraction: More than two competing models in this energy range");
+      G4cout << "More than two competing models for this energy" << G4endl;
+      for( G4int j=0; j<theHadronicInteractionCounter; ++j) {
+	G4HadronicInteraction* hint=theHadronicInteraction[j];
+	G4cout << "   "<< j << ".  Elow= " << hint->GetMinEnergy(aMaterial,anElement)
+	       <<", Ehigh= " << hint->GetMaxEnergy(aMaterial,anElement)
+	       <<"   " << hint->GetModelName() << G4endl;
+      }
+      break;
   }
-
-  return theHadronicInteraction[mem];
-} 
-
-
-G4HadronicInteraction*
-G4EnergyRangeManager::GetHadronicInteraction(const G4double kineticEnergy,
-                                             const G4Material* aMaterial,
-                                             const G4Element* anElement) const
-{
-  if(0 == theHadronicInteractionCounter) {
-    throw G4HadronicException(__FILE__, __LINE__,
-			      "GetHadronicInteraction: NO MODELS STORED");
-  } 
-  G4int cou = 0, memory = 0, memor2 = 0;
-  G4double emi1 = 0.0, ema1 = 0.0, emi2 = 0.0, ema2 = 0.0;
-
-  for (G4int i = 0; i<theHadronicInteractionCounter; ++i) {
-      G4double low  = theHadronicInteraction[i]->GetMinEnergy( aMaterial, anElement );
-    // Work-around for particles with 0 kinetic energy, which still
-    // require a model to return a ParticleChange
-    //if (low == 0.) low = -DBL_MIN;
-    G4double high = theHadronicInteraction[i]->GetMaxEnergy( aMaterial, anElement );
-    if (low <= kineticEnergy && high > kineticEnergy) {
-      ++cou;
-      emi2 = emi1;
-      ema2 = ema1;
-      emi1 = low;
-      ema1 = high;
-      memor2 = memory;
-      memory = i;
-    }
-  }
-
-  G4int mem = -1;
-  G4double rand;
-  switch (cou) {
-    case 0:
-       G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="
-	     <<theHadronicInteractionCounter<<", Ek="
-             <<kineticEnergy<<", Material = "<<aMaterial->GetName()
-	     <<", Element = "
-             <<anElement->GetName()<<G4endl;
-       for( G4int j=0; j<theHadronicInteractionCounter; ++j)
-       {
-         G4HadronicInteraction* HInt=theHadronicInteraction[j];
-         G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
-               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
-       }
-       throw G4HadronicException(__FILE__, __LINE__,
-          "GetHadronicInteraction: No Model found");
-       return 0;
-    case 1:
-       mem = memory;
-       break;
-    case 2:
-       if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) )
-       {
-         G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="
-	       <<theHadronicInteractionCounter<<", Ek="
-               <<kineticEnergy<<", Material = "<<aMaterial->GetName()
-	       <<", Element = "
-               <<anElement->GetName()<<G4endl;
-         for( G4int j=0; j<theHadronicInteractionCounter; ++j)
-         {
-           G4HadronicInteraction* HInt=theHadronicInteraction[j];
-           G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
-               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
-         }
-         throw G4HadronicException(__FILE__, __LINE__,
-         "GetHadronicInteraction: Energy ranges of two models fully overlapping");
-       }
-       rand = G4UniformRand();
-       if( emi1 < emi2 )
-       {
-         if( (ema1-kineticEnergy) < rand*(ema1-emi2) ) {
-           mem = memor2;
-         } else {
-           mem = memory;
-	 }
-       } else {
-         if( (ema2-kineticEnergy) < rand*(ema2-emi1) ) {
-           mem = memory;
-	 } else {
-           mem = memor2;
-	 }
-       }
-       break;
-    default:
-      throw G4HadronicException(__FILE__, __LINE__,
-      "GetHadronicInteraction: More than two competing models in this energy range");
-  }
-
-  return theHadronicInteraction[mem];
+  return hi;
 } 
 
 std::vector<G4HadronicInteraction*>& 
@@ -270,7 +158,6 @@ G4EnergyRangeManager::GetHadronicInteractionList()
   return theHadronicInteraction;
 }
 
-#include "G4SystemOfUnits.hh"
 void G4EnergyRangeManager::Dump( G4int verbose )
 {
   G4cout << "G4EnergyRangeManager " << this << G4endl;
@@ -290,10 +177,9 @@ void G4EnergyRangeManager::Dump( G4int verbose )
 void
 G4EnergyRangeManager::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-   for ( std::vector<G4HadronicInteraction*>::iterator 
-         it = theHadronicInteraction.begin() ; it != theHadronicInteraction.end() ; it++ ) {
-      (*it)->BuildPhysicsTable( aParticleType );
-   }
+  for (auto & hadi : theHadronicInteraction) {
+    hadi->BuildPhysicsTable( aParticleType );
+  }
 }
- /* end of file */
+
  

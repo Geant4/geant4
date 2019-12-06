@@ -40,7 +40,6 @@
 //
 //----------------------------------------------------------------------------
 //
-#include "QGSP_BIC_HP.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -51,12 +50,11 @@
 #include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 
-#include "G4DataQuestionaire.hh"
+#include "QGSP_BIC_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
 
 QGSP_BIC_HP::QGSP_BIC_HP(G4int ver)
 {
-  G4DataQuestionaire it(photon, neutron);
   G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_HP"<<G4endl;
   G4cout <<G4endl;
 
@@ -88,7 +86,3 @@ QGSP_BIC_HP::QGSP_BIC_HP(G4int ver)
   RegisterPhysics( new G4IonPhysics(ver));
   
 }
-
-QGSP_BIC_HP::~QGSP_BIC_HP()
-{}
-

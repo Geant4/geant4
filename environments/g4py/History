@@ -11,6 +11,11 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 Dec. 2019 K. Murakami
+- update for 10.6 release
+- update for Python3 support
+- boost_python library name can be specified in cmake (BZ-2059)
+
 31 Jan. 2019, I.Hrivnacova
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 

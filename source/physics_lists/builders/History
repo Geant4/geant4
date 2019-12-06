@@ -13,6 +13,28 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-Oct-2019  Alberto Ribon          (phys-builders-V10-05-02)
+-  G4HyperonFTFPBuilder : replaced the Chips inelastic cross sections for
+   hyperons and anti-hyperons with Glauber-Gribov ones (in this way, elastic
+   and inelastic cross sections follows consistently the same approach).
+-  G4BertiniKaonBuilder, G4BertiniPiKBuilder : replaced the Chips inelastic
+   cross sections with Glauber-Gribov ones as default kaon cross sections.
+-  G4FTFBinaryKaonBuilder, G4QGSBinaryKaonBuilder, G4QGSBinaryPiKBuilder,
+   G4QGSPPiKBuilder, G4QGSPKaonBuilder : removed kaon cross sections
+   (already set by the Bertini's builder, which is always needed).
+
+06-Aug-2019  Alberto Ribon          (phys-builders-V10-05-01)
+-  Replacing explicit values for the energy transition region with values
+   from G4HadronicParameters, for nearly all builders.
+   Note: kept unchanged the transition region between FTFP and BERT only
+         in 4 cases: G4HadronPhysicsFTFP_BERT_ATL, G4HadronPhysicsINCLXX,
+         G4HadronPhysicsNuBeam and "ShieldingM".
+
+31-Jul-2019  Gunter Folger          (phys-builders-V10-05-00)
+-  modified G4NeutronCrossSectionXS as consequence to code cleanup 
+   in lists (phys-lists-V10-05-02),i.e. removed G4Dataquestionaire
+   from util (phys-util-V10-04-02).
+
 22-Nov-2018, Alberto Ribon          (phys-builders-V10-04-03)
 -  G4QGSBinaryPionBuilder, G4QGSBinaryPiKBuilder, G4QGSPPiKBuilder, 
    G4FTFPPionBuilder, G4BertiniPiKBuilder, G4FTFPPiKBuilder, 

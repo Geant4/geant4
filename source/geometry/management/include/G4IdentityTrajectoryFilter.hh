@@ -23,23 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class GIdentityTrajectoryFilter
+// G4IdentityTrajectoryFilter
 //
 // Class description:
 //
-// Implements a trajectory point filter which accepts all points submitted to it.
+// Implements a trajectory point filter which accepts all points submitted
+// to it.
 //
 // IMPORTANT: The base class heap allocates vectors of auxiliary
 // points, which it does not delete. The vectors must find their way
 // to a subclass of G4VTrajectoryPoint, which must take responsibility
 // for deleting them.
 
-// History
-//
-// - First version: Nov 19, 2002  Jacek Generowicz
+// First version: Nov 19, 2002 - Jacek Generowicz
 // ------------------------------------------------------------------------
 #ifndef G4IdentityTrajectoryFilter_hh
 #define G4IdentityTrajectoryFilter_hh
@@ -50,17 +46,18 @@
 class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
 {
 
-public:  // with description
+  public:  // with description
 
-  G4IdentityTrajectoryFilter();
-  virtual ~G4IdentityTrajectoryFilter();
+    G4IdentityTrajectoryFilter();
+    virtual ~G4IdentityTrajectoryFilter();
 
-    // Probably do not want these objects to be copied,
-    // so make the copy constructor private
+    G4IdentityTrajectoryFilter(const G4IdentityTrajectoryFilter&) =  delete;
+    G4IdentityTrajectoryFilter& operator=(const G4IdentityTrajectoryFilter&) = delete;
+      // Do not want these objects to be copied or assigned
 
-  void TakeIntermediatePoint( G4ThreeVector newPoint );
-    // Submit intermediate points for the filter
-    // to consider keeping or rejecting
+    void TakeIntermediatePoint( G4ThreeVector newPoint );
+      // Submit intermediate points for the filter
+      // to consider keeping or rejecting
 };
 
-#endif  /* End of ifndef G4IdentityTrajectoryFilter_hh */
+#endif  /* G4IdentityTrajectoryFilter_hh */

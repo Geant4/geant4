@@ -23,11 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4SurfBits
 //
 // Class description:
@@ -41,15 +36,12 @@
 // number is either set or tested.  To reduce the memory size of the
 // container use the Compact function, this will discard the memory
 // occupied by the upper bits that are 0.
-//
 
-// History:
-// 19.10.12 Marek Gayer, created and adapted from original implementation
-//                       of Root's TBits class by P.Canal
+// 19.10.12 - Marek Gayer, created and adapted from original implementation
+//                         of Root's TBits class by P.Canal
 // --------------------------------------------------------------------
-
-#ifndef G4SurfBits_HH
-#define G4SurfBits_HH
+#ifndef G4SURFBITS_HH
+#define G4SURFBITS_HH
 
 #include <cstring>
 
@@ -65,7 +57,7 @@ class G4SurfBits
    ~G4SurfBits();
 
     //----- Bit manipulation
-    void ResetAllBits(G4bool value=false);  // if value=1 set all bits to 1
+    void ResetAllBits(G4bool value = false);  // if value=1 set all bits to 1
     void ResetBitNumber(unsigned int bitnumber);
     void SetBitNumber(unsigned int bitnumber, G4bool value = true);
     G4bool TestBitNumber(unsigned int bitnumber) const;
@@ -78,8 +70,8 @@ class G4SurfBits
     // bitvector in the parameter array. The number of bits is changed
     // to nbits. If nbits is smaller than fNBits, the receiver will NOT
     // be compacted.
-    void   set(unsigned int nbits, const char *array);
-    void   set(unsigned int nbits, const G4int *array);
+    void set(unsigned int nbits, const char* array);
+    void set(unsigned int nbits, const G4int* array);
 
     //----- Optimized getters
     // Each of these will replace the contents of the parameter array with the
@@ -90,18 +82,18 @@ class G4SurfBits
     // example, if you call Get(Int*) with an array of one integer and the
     // G4SurfBits object has less than 32 bits, then the remaining bits in the
     // integer will have an unspecified value.
-    void   Get(char *array) const;
-    void   Get(G4int *array) const;
+    void Get(char* array) const;
+    void Get(G4int* array) const;
 
     //----- Utilities
-    void    Clear();
-    void    Compact();               // Reduce the space used.
+    void Clear();
+    void Compact();               // Reduce the space used.
 
-    unsigned int  GetNbits()      const { return fNBits; }
-    unsigned int  GetNbytes()     const { return fNBytes; }
+    unsigned int GetNbits()      const { return fNBits; }
+    unsigned int GetNbytes()     const { return fNBytes; }
 
-    void    Print() const;  // to show the list of active bits
-    void    Output(std::ostream &) const;
+    void Print() const;  // to show the list of active bits
+    void Output(std::ostream &) const;
 
   protected:
 
@@ -109,12 +101,12 @@ class G4SurfBits
 
   public:
 
-    unsigned char *fAllBits;       // [fNBytes] array of UChars
+    unsigned char* fAllBits = nullptr; // [fNBytes] array of UChars
 
   protected:
 
-    unsigned int   fNBits;         // Highest bit set + 1
-    unsigned int   fNBytes;        // Number of UChars in fAllBits
+    unsigned int fNBits;         // Highest bit set + 1
+    unsigned int fNBytes;        // Number of UChars in fAllBits
 };
 
 // inline functions...
@@ -122,11 +114,13 @@ class G4SurfBits
 inline void G4SurfBits::SetBitNumber(unsigned int bitnumber, G4bool value)
 {
   // set bit number 'bitnumber' to be value
-  if (bitnumber >= fNBits) {
+
+  if (bitnumber >= fNBits)
+  {
     unsigned int new_size = (bitnumber/8) + 1;
-    if (new_size > fNBytes) {
-      if (new_size < 100 * 1024 * 1024)
-        new_size *= 2;
+    if (new_size > fNBytes)
+    {
+      if (new_size < 100 * 1024 * 1024) new_size *= 2;
       unsigned char *old_location = fAllBits;
       fAllBits = new unsigned char[new_size];
       std::memcpy(fAllBits,old_location,fNBytes);
@@ -136,7 +130,7 @@ inline void G4SurfBits::SetBitNumber(unsigned int bitnumber, G4bool value)
     }
     fNBits = bitnumber+1;
   }
-  unsigned int  loc = bitnumber/8;
+  unsigned int loc = bitnumber/8;
   unsigned char bit = bitnumber%8;
   if (value)
     fAllBits[loc] |= (1<<bit);
@@ -149,10 +143,10 @@ inline G4bool G4SurfBits::TestBitNumber(unsigned int bitnumber) const
   // Return the current value of the bit
 
   if (bitnumber >= fNBits) return false;
-  unsigned int  loc = bitnumber/8;
+  unsigned int loc = bitnumber/8;
   unsigned char value = fAllBits[loc];
   unsigned char bit = bitnumber%8;
-  G4bool  result = (value & (1<<bit)) != 0;
+  G4bool result = (value & (1<<bit)) != 0;
   return result;
   // short: return 0 != (fAllBits[bitnumber/8] & (1<< (bitnumber%8)));
 }

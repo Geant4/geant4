@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Implementation for G4ScaledSolid class
 //
-// History:
-//
 // 27.10.15 G.Cosmo: created, based on implementation also provided in Root
-//
 // --------------------------------------------------------------------
 
 #include "G4ScaledSolid.hh"
@@ -50,9 +45,7 @@
 G4ScaledSolid::G4ScaledSolid( const G4String& pName,
                                     G4VSolid* pSolid,
                               const G4Scale3D& pScale )
-  : G4VSolid(pName), fPtrSolid(pSolid),
-    fCubicVolume(-1.), fSurfaceArea(-1.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(pName), fPtrSolid(pSolid)
 {
   fScale = new G4ScaleTransform(pScale);
 }
@@ -63,9 +56,7 @@ G4ScaledSolid::G4ScaledSolid( const G4String& pName,
 //                            for usage restricted to object persistency
 //
 G4ScaledSolid::G4ScaledSolid( __void__& a )
-  : G4VSolid(a), fPtrSolid(0), fScale(0),
-    fCubicVolume(-1.), fSurfaceArea(-1.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(a)
 {
 }
 
@@ -75,8 +66,8 @@ G4ScaledSolid::G4ScaledSolid( __void__& a )
 //
 G4ScaledSolid::~G4ScaledSolid()
 {
-  delete fpPolyhedron; fpPolyhedron= 0;
-  delete fScale; fScale= 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
+  delete fScale; fScale = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -85,8 +76,7 @@ G4ScaledSolid::~G4ScaledSolid()
 //
 G4ScaledSolid::G4ScaledSolid(const G4ScaledSolid& rhs)
   : G4VSolid (rhs), fPtrSolid(rhs.fPtrSolid),
-    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea)
 {
   fScale = new G4ScaleTransform(*(rhs.fScale));
 }
@@ -113,7 +103,7 @@ G4ScaledSolid& G4ScaledSolid::operator = (const G4ScaledSolid& rhs)
   fCubicVolume = rhs.fCubicVolume;
   fSurfaceArea = rhs.fSurfaceArea;
   fRebuildPolyhedron = false;
-  delete fpPolyhedron; fpPolyhedron= 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 
   return *this;
 }
@@ -361,7 +351,7 @@ G4Scale3D G4ScaledSolid::GetScaleTransform() const
 //
 void G4ScaledSolid::SetScaleTransform(const G4Scale3D& scale)
 {
-  if (fScale) { delete fScale; }
+  if (fScale != nullptr) { delete fScale; }
   fScale = new G4ScaleTransform(scale);
   fRebuildPolyhedron = true;
 }
@@ -437,7 +427,7 @@ G4Polyhedron*
 G4ScaledSolid::CreatePolyhedron () const
 {
   G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
-  if (polyhedron)
+  if (polyhedron != nullptr)
   {
     polyhedron->Transform(GetScaleTransform());
   }
@@ -457,7 +447,7 @@ G4ScaledSolid::CreatePolyhedron () const
 //
 G4Polyhedron* G4ScaledSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

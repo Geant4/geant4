@@ -110,6 +110,7 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 #include "G4EmModelActivator.hh"
+#include "G4GammaGeneralProcess.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -176,6 +177,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4LossTableManager* man = G4LossTableManager::Instance();
 
   // muon & hadron bremsstrahlung and pair production
   G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
@@ -213,10 +215,20 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
-      ph->RegisterProcess(pee, particle);
 
-      ph->RegisterProcess(new G4ComptonScattering(), particle);
-      ph->RegisterProcess(new G4GammaConversion(), particle);
+      if(G4EmParameters::Instance()->GeneralProcessActive()) {
+        G4GammaGeneralProcess* sp = new G4GammaGeneralProcess();
+        sp->AddEmProcess(pee);
+        sp->AddEmProcess(new G4ComptonScattering());
+        sp->AddEmProcess(new G4GammaConversion());
+        man->SetGammaGeneralProcess(sp);
+	ph->RegisterProcess(sp, particle);
+
+      } else {
+	ph->RegisterProcess(pee, particle);
+	ph->RegisterProcess(new G4ComptonScattering(), particle);
+	ph->RegisterProcess(new G4GammaConversion(), particle);
+      }
 
     } else if (particleName == "e-") {
 

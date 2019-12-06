@@ -56,8 +56,8 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // Optionally: choose a different Random engine...
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
   // Construct the default run manager
   //

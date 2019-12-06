@@ -34,7 +34,7 @@
 // Phys. Med. 31 (2015) 861-874
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file medical/dna/svalue2/include/MyFileReader.hh
+/// \file medical/dna/svalue/include/MyFileReader.hh
 /// \brief Declaration of the MyFileReader class
 
 #include <list>
@@ -50,6 +50,6 @@ class MyFileReader
    G4double GetAnEvent();
    
  private:
-   std::ifstream inputFile;
-   std::list<G4double> evList;
+   std::ifstream fInputFile;
+   std::list<G4double> fEvList;
 };

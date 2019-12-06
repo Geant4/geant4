@@ -63,5 +63,4 @@ Build(G4NeutronInelasticProcess * aP)
   aP->RegisterMe(theModel);
   aP->AddDataSet((G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name()));
 }
-// 2011 by P. Kaitaniemi
 

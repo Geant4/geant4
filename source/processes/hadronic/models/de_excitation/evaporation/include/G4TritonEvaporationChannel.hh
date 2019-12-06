@@ -28,7 +28,7 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
-// 17-11-2010 V.Ivanchenko moved constructor and destructor to source and cleanup
+// 17-11-2010 V.Ivanchenko cleanup
 
 #ifndef G4TritonEvaporationChannel_h
 #define G4TritonEvaporationChannel_h 1
@@ -41,22 +41,19 @@ class G4TritonEvaporationChannel : public G4EvaporationChannel
 {
 public:
   // only available constructor
-  G4TritonEvaporationChannel();
+  explicit G4TritonEvaporationChannel();
 
   // destructor
-  virtual ~G4TritonEvaporationChannel();
+  ~G4TritonEvaporationChannel() override;
 
 private:
-  const G4TritonEvaporationChannel & operator=(const G4TritonEvaporationChannel & right);  
-
+  const G4TritonEvaporationChannel & operator=
+  (const G4TritonEvaporationChannel & right);  
   G4TritonEvaporationChannel(const G4TritonEvaporationChannel & right);
-
   G4bool operator==(const G4TritonEvaporationChannel & right) const;
   G4bool operator!=(const G4TritonEvaporationChannel & right) const;
 
-  G4TritonCoulombBarrier theCoulombBarrier;
-	
-  G4TritonEvaporationProbability theEvaporationProbability;
-
+  G4TritonEvaporationProbability pr;
 };
+
 #endif

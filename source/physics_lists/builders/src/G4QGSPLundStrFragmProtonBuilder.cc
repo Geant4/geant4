@@ -83,4 +83,3 @@ G4QGSPLundStrFragmProtonBuilder::~G4QGSPLundStrFragmProtonBuilder()
    delete theStrFragm;
  }
 
- 

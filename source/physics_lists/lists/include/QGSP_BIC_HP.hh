@@ -45,13 +45,11 @@ class QGSP_BIC_HP : public G4VModularPhysicsList
 {
 public:
   QGSP_BIC_HP(G4int ver = 1);
-  virtual ~QGSP_BIC_HP();
+  virtual ~QGSP_BIC_HP()=default;
 
-private:
-
-  // copy constructor and hide assignment operator
-  QGSP_BIC_HP(QGSP_BIC_HP &);
-  QGSP_BIC_HP & operator=(const QGSP_BIC_HP &right);
+  // delete copy constructor and assignment operator
+  QGSP_BIC_HP(const QGSP_BIC_HP &)=delete;
+  QGSP_BIC_HP & operator=(const QGSP_BIC_HP &right)=delete;
 
 };
 

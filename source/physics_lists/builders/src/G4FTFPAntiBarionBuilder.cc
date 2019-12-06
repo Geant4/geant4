@@ -137,3 +137,4 @@ Build(G4AntiAlphaInelasticProcess * aP)
   aP->AddDataSet(theAntiNucleonData);
   aP->RegisterMe(theModel);
 }
+

@@ -87,28 +87,28 @@ int main(int argc,char** argv)
   }
 
   new G4tgrMessenger;
-  char* part = getenv( "DICOM_PARTIAL_PARAM" );
+  char* part = std::getenv( "DICOM_PARTIAL_PARAM" );
   G4bool bPartial = FALSE;
   if( part && G4String(part) == "1" ) {
     bPartial = TRUE;
   }
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(24534575684783);
-  long seeds[2];
-  seeds[0] = 534524575674523;
-  seeds[1] = 526345623452457;
+  CLHEP::HepRandom::setTheSeed(G4long(24534575684783));
+  G4long seeds[2];
+  seeds[0] = G4long(534524575674523);
+  seeds[1] = G4long(526345623452457);
   CLHEP::HepRandom::setTheSeeds(seeds);
 
   // Construct the default run manager
 #ifdef G4MULTITHREADED
-  char* nthread_c = getenv("DICOM_NTHREADS");
+  char* nthread_c = std::getenv("DICOM_NTHREADS");
 
   unsigned nthreads = 4;
   unsigned env_threads = 0;
 
-  if(nthread_c) { env_threads = G4UIcommand::ConvertToDouble(nthread_c); }
-  if(env_threads > 0) { nthreads = env_threads; }
+  if(nthread_c) {env_threads=unsigned(G4UIcommand::ConvertToDouble(nthread_c));}
+  if(env_threads > 0) {nthreads=env_threads;}
 
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(nthreads);
@@ -139,12 +139,12 @@ int main(int argc,char** argv)
 
 #else
     // Treatment of DICOM images before creating the G4runManager
-    dcmHandler = new DicomHandler;
+    dcmHandler = DicomHandler::Instance();
     dcmHandler->CheckFileFormat();
 #endif
 
     // Initialisation of physics, geometry, primary particles ...
-    char* nest = getenv( "DICOM_NESTED_PARAM" );
+    char* nest = std::getenv( "DICOM_NESTED_PARAM" );
     if( nest && G4String(nest) == "1" ) {
       theGeometry = new DicomNestedParamDetectorConstruction();
     } else {
@@ -193,8 +193,6 @@ int main(int argc,char** argv)
   if( !bPartial ) {
 #ifdef G4_DCMTK
     delete theFileMgr;
-#else
-    delete dcmHandler;
 #endif
   }
 

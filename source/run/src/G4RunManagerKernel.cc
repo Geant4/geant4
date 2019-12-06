@@ -441,6 +441,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
+
   if(currentState!=G4State_Init)
   {
     if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
@@ -1038,7 +1039,7 @@ void G4RunManagerKernel::SetupShadowProcess() const
         if(pm)
         {
             G4ProcessVector& procs = *(pm->GetProcessList());
-            for ( G4int idx = 0 ; idx<procs.size() ; ++idx)
+            for ( std::size_t idx = 0 ; idx<procs.size() ; ++idx)
             {
                 const G4VProcess* masterP = procs[idx]->GetMasterProcess();
                 if ( ! masterP )

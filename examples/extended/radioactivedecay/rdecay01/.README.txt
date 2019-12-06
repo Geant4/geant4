@@ -60,8 +60,16 @@ allows to limit to single decay or full decay chain (default).
  Examples of such files are given in subdirectory UserData. \n
  Formats are described in readme \n
  Examples in macros Cf238.mac and No252.mac 
-  	
-\section rdecay01_s6 Visualisation
+
+ \section rdecay01_s6 example of biasing
+
+ macro timeWindowBiased.mac illustrates one of the biasing capabilities of the 
+ radioactiveDecay package. Ca47 is forced to decay within 20 days
+ (eg. 1728000 seconds in data file).
+ It is instructive to plot time of life (histo 8) with and without the weight of the track:
+ see line 189/190 of TrackingAction.cc
+ And also to compare with analog decay mode : comment out /grdm/ commands in the macro.   	
+\section rdecay01_s7 Visualisation
  
  Visualization Manager is set in the main () (see rdecay01.cc).
  Initialisation of the drawing is done via the commands
@@ -76,7 +84,7 @@ allows to limit to single decay or full decay chain (default).
  - alpha yellow
  - GenericIon grey
  
-\section rdecay01_s7 How to start ?
+\section rdecay01_s8 How to start ?
  
   - Execute rdecay01 in 'batch' mode from macro files
 \verbatim
@@ -95,7 +103,7 @@ Idle> /run/beamOn 1
 Idle> exit
 \endverbatim
 	
-\section rdecay01_s8 Histograms
+\section rdecay01_s9 Histograms
  
   rdecay01 produces several 1D histograms which are saved as
   rdecay01.root by default.

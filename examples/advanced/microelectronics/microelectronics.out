@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -188,72 +192,19 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-##### Create analysis manager   0x145feb0
+##### Create analysis manager   0x12ffdd0
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
  Run terminated.
 Run Summary
-  Number of events processed : 1
-  User=0.000000s Real=0.002569s Sys=0.000000s
+  Number of events processed : 10
+  User=0.010000s Real=0.006974s Sys=0.000000s
 ... write Root file : microelectronics.root - done
 ... close Root file : microelectronics.root - done
 Number and type of particles created outside region "Target" :
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 21
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_Si 
- Production cuts :   gamma 1 um      e- 1 um      e+ 1 um  proton 1 um 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 um      e- 1 um      e+ 1 um  proton 1 um 
-
-Region <Target> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : Target 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_Si 
- Production cuts :   gamma 1 nm      e- 1 nm      e+ 1 nm  proton 1 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : G4_Si
- Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : G4_Si
- Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
- Region(s) which use this couple : 
-    Target
-
-====================================================================
-
-### Run 1 starts.
-##### Create analysis manager   0x145feb0
-Using Root analysis manager
-... open Root analysis file : microelectronics.root - done
- Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.000000s Real=0.000056s Sys=0.000000s
-... write Root file : microelectronics.root - done
-... close Root file : microelectronics.root - done
-Number and type of particles created outside region "Target" :
-_______________________
-Number and type of particles created in region "Target" :
-N e- : 21
+N e- : 162
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -273,12 +224,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00192 MB
-Pool ID '7G4Track', size : 0.00385 MB
+Pool ID '17G4DynamicParticle', size : 0.00481 MB
+Pool ID '7G4Track', size : 0.00865 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.019 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.027 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

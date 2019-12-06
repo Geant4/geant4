@@ -22,11 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
-// G4VSolid Inline implementation
+// G4VSolid inline implementation
 //
 // --------------------------------------------------------------------
 
@@ -45,17 +42,17 @@ void G4VSolid::DumpInfo () const
 inline
 G4String G4VSolid::GetName() const
 {
-    return fshapeName;
+  return fshapeName;
 }	
 
 inline
 void G4VSolid::SetName(const G4String& name)
 {
-    fshapeName=name;
+  fshapeName = name;
 }	
 
 inline
 G4double G4VSolid::GetTolerance() const
 {
-    return kCarTolerance;
+  return kCarTolerance;
 }

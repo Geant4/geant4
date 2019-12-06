@@ -50,7 +50,6 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_string_diff
     HEADERS
         G4DiffractiveExcitation.hh
-        G4DiffractiveHHScatterer.hh
         G4DiffractiveSplitableHadron.hh
         G4ElasticHNScattering.hh
         G4FTFAnnihilation.hh
@@ -59,7 +58,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_diff
         G4FTFParticipants.hh
     SOURCES
         G4DiffractiveExcitation.cc
-        G4DiffractiveHHScatterer.cc
         G4DiffractiveSplitableHadron.cc
         G4ElasticHNScattering.cc
         G4FTFAnnihilation.cc

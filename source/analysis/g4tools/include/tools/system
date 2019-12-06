@@ -15,6 +15,10 @@
 #include "vmanip"
 #include "srep"
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
 namespace tools {
 
 inline bool is_env(const std::string& a_string){
@@ -37,10 +41,10 @@ inline bool get_env(const std::string& a_string,std::string& a_value){
 inline bool getenv(const std::string& a_string,std::string& a_value){return get_env(a_string,a_value);} //deprecated.
 
 template <class T>
-inline bool get_env(const std::string& a_string,T& a_v){
+inline bool get_env(const std::string& a_string,T& a_v,const T& a_def = T()){
   std::string s;
-  if(!getenv(a_string,s)) return false;
-  return to<T>(s,a_v);
+  if(!getenv(a_string,s)) {a_v = a_def;return false;}
+  return to<T>(s,a_v,a_def);
 }
 
 inline bool get_env_bool(const std::string& a_string,bool& a_v){
@@ -91,7 +95,15 @@ inline bool check_getenv(std::ostream& a_out,
   return false;
 }
 
-inline int execute(const std::string& a_string) {return ::system(a_string.c_str());}
+inline int std_system(std::ostream& a_out,const std::string& a_string) {
+#if TARGET_OS_IPHONE
+  a_out << "tools::std_system : system() not available on iOS. Can't execute " << sout(a_string) << "." << std::endl;
+  return EXIT_FAILURE;
+#else
+  return ::system(a_string.c_str());
+  (void)a_out;
+#endif
+}
 
 inline bool env_append(const std::string& a_env,const std::string& a_sep,const std::vector<std::string>& a_vals){
   std::string env_value;
@@ -132,7 +144,7 @@ inline bool env_append_path(const std::string& a_env,const std::string& a_path){
 }
 
 // OpenPAW, Panoramix :
-inline bool repenv(std::string& a_string) {
+inline bool rep_env(std::string& a_string) {
   char spec_char = '\n';
   std::string::size_type dollar;
   while((dollar=a_string.find('$'))!=std::string::npos){
@@ -179,10 +191,12 @@ inline bool repenv(std::string& a_string) {
   return true;
 }
 
+inline bool repenv(std::string& a_string) {return rep_env(a_string);} //deprecated.
+
 inline bool file_name(const std::string& a_path,std::string& a_name) {
   //used in osc packages and a tools::xml::parser::load_file() compatible for OnX.
   a_name = a_path;
-  if(!repenv(a_name)) {a_name.clear();return false;}
+  if(!rep_env(a_name)) {a_name.clear();return false;}
 #ifdef _WIN32
   replace(a_name,"/","\\");
   replace(a_name,"\"","");

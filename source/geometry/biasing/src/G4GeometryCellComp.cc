@@ -23,30 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GeometryCellCmp implementation
 //
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GeometryCellCmp.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCellComp.hh"
 #include "G4GeometryCell.hh"
-//#include "G4VPhysicalVolume.hh"
-
 
 G4GeometryCellComp::G4GeometryCellComp()
-{}
-
-G4bool G4GeometryCellComp::operator() (const G4GeometryCell &k1,
-                              const G4GeometryCell &k2) const
 {
-  G4bool smaler=false;
-  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume())) {
-    smaler = &(k1.GetPhysicalVolume()) < &(k2.GetPhysicalVolume());
-  } else {
-    smaler =  k1.GetReplicaNumber() < k2.GetReplicaNumber();
+}
+
+G4bool G4GeometryCellComp::operator() (const G4GeometryCell& k1,
+                                       const G4GeometryCell& k2) const
+{
+  G4bool smaller = false;
+  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume()))
+  {
+    smaller = &(k1.GetPhysicalVolume()) < &(k2.GetPhysicalVolume());
   }
-  return smaler;
+  else
+  {
+    smaller =  k1.GetReplicaNumber() < k2.GetReplicaNumber();
+  }
+  return smaller;
 }

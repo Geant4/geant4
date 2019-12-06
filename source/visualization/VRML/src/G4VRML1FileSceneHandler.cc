@@ -81,17 +81,17 @@ G4VRML1FileSceneHandler::G4VRML1FileSceneHandler(G4VRML1File& system, const G4St
 	fCurrentDEF = "";
 	strcpy(fVRMLFileName, "");
 
-	if ( getenv( VRMLFILE_DEST_DIR ) == NULL ) {
+	if ( std::getenv( VRMLFILE_DEST_DIR ) == NULL ) {
 		strcpy( fVRMLFileDestDir, "" );
 	} else {
-		strcpy( fVRMLFileDestDir, getenv( VRMLFILE_DEST_DIR ) );
+		strcpy( fVRMLFileDestDir, std::getenv( VRMLFILE_DEST_DIR ) );
 	}
 
 	// maximum number of g4.wrl files in the dest directory
 	fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ; // initialization
-	if ( getenv( "G4VRMLFILE_MAX_FILE_NUM" ) != NULL ) {	
+	if ( std::getenv( "G4VRMLFILE_MAX_FILE_NUM" ) != NULL ) {	
 		
-		sscanf( getenv("G4VRMLFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
+		sscanf( std::getenv("G4VRMLFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
 
 	} else {
 		fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ;
@@ -186,8 +186,8 @@ void G4VRML1FileSceneHandler::closePort()
 	char command[256] ;
 	char viewer [256] ; 
 	strcpy( viewer, NO_VRML_VIEWER ); // initialization
-	if( getenv( ENV_VRML_VIEWER ) ) {
-		strcpy( viewer, getenv( ENV_VRML_VIEWER ) ) ;
+	if( std::getenv( ENV_VRML_VIEWER ) ) {
+		strcpy( viewer, std::getenv( ENV_VRML_VIEWER ) ) ;
 	}
 
 	// close VRML file	

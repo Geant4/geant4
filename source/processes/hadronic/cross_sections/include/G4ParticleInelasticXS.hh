@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -92,7 +91,13 @@ public:
 
 private: 
 
-  void Initialise(G4int Z, const char*);
+  void Initialise(G4int Z);
+
+  void InitialiseOnFly(G4int Z);
+
+  const G4String& FindDirectoryPath();
+
+  const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
@@ -106,18 +111,16 @@ private:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* proton;
 
-  G4double emax;
   std::vector<G4double> temp;
 
-  size_t  fIdxXSTable;
   G4bool  isMaster;
 
-  static G4double  coeff[MAXZINELP];
-
+  static G4ElementData* data;
+  static G4double   coeff[MAXZINELP];
+  static G4double    aeff[MAXZINELP];
   static const G4int amin[MAXZINELP];
   static const G4int amax[MAXZINELP];
-
-  static G4ElementData* data;
+  static G4String gDataDirectory;
 
 #ifdef G4MULTITHREADED
   static G4Mutex particleInelasticXSMutex;

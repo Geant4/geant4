@@ -57,9 +57,27 @@ inline double angle_modulo(double a_angle) {
 
 namespace tools {
 
+inline double dcos(const double& a_x) {return ::cos(a_x);}
+inline double dsin(const double& a_x) {return ::sin(a_x);}
+inline double dpow(const double& a_x,const double& a_y) {return ::pow(a_x,a_y);}
+
 inline double dconj(const double& a_x) {return a_x;}
 inline double dfabs(const double& a_x) {return ::fabs(a_x);} //if passing a_fabs(const T&).
 inline double dsqrt(const double& a_x) {return ::sqrt(a_x);}
+
+//long double
+#ifndef ANDROID
+inline long double ldfabs(const long double& a_x) {return ::fabsl(a_x);}
+#endif
+
+inline bool dpow(const double& a_x,const double& a_y,double& a_v) {
+  if((a_x==0)&&(a_y<0)) {
+    a_v = 0;
+    return false;
+  }
+  a_v = dpow(a_x,a_y);
+  return true;
+}
 
 }
 

@@ -23,32 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UniformElectricField implementation
 //
-//
-// 
-//
-// Class for creation of uniform Electric Field
-//
-// 30.1.97 V.Grichine
-//
+// Created: V.Grichine, 30.01.1997
 // -------------------------------------------------------------------
 
 #include "G4UniformElectricField.hh"
 #include "G4PhysicalConstants.hh"
 
-G4UniformElectricField::G4UniformElectricField(const G4ThreeVector FieldVector )
+G4UniformElectricField::
+G4UniformElectricField(const G4ThreeVector& FieldVector)
 {
-      fFieldComponents[0] = 0.0;
-      fFieldComponents[1] = 0.0;
-      fFieldComponents[2] = 0.0;
-      fFieldComponents[3] = FieldVector.x();
-      fFieldComponents[4] = FieldVector.y();
-      fFieldComponents[5] = FieldVector.z();
+  fFieldComponents[0] = 0.0;
+  fFieldComponents[1] = 0.0;
+  fFieldComponents[2] = 0.0;
+  fFieldComponents[3] = FieldVector.x();
+  fFieldComponents[4] = FieldVector.y();
+  fFieldComponents[5] = FieldVector.z();
 }
    
 G4UniformElectricField::G4UniformElectricField(G4double vField,
                                                G4double vTheta,
-                                               G4double vPhi    )
+                                               G4double vPhi)
 {
    if ( (vField<0) || (vTheta<0) || (vTheta>pi) || (vPhi<0) || (vPhi>twopi) )
    {
@@ -64,47 +60,48 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    fFieldComponents[5] = vField*std::cos(vTheta) ;
 }
 
-G4Field* G4UniformElectricField::Clone() const
-{
-    return new G4UniformElectricField( G4ThreeVector(fFieldComponents[3],
-                                                     fFieldComponents[4],
-                                                     fFieldComponents[5]) );
-}
-
 G4UniformElectricField::~G4UniformElectricField()
 {
 }
 
-G4UniformElectricField::G4UniformElectricField (const G4UniformElectricField &p)
+G4UniformElectricField::
+G4UniformElectricField (const G4UniformElectricField& p)
    : G4ElectricField(p)
 {
-   for (G4int i=0; i<6; i++)
+   for (auto i=0; i<6; ++i)
    {
      fFieldComponents[i] = p.fFieldComponents[i];
    }
 }
 
 G4UniformElectricField&
-G4UniformElectricField::operator = (const G4UniformElectricField &p)
+G4UniformElectricField::operator = (const G4UniformElectricField& p)
 {
   if (&p == this) return *this; 
   G4ElectricField::operator=(p); 
-  for (G4int i=0; i<6; i++)
+  for (auto i=0; i<6; ++i)
   {
     fFieldComponents[i] = p.fFieldComponents[i];
   }
   return *this;
 }
 
+G4Field* G4UniformElectricField::Clone() const
+{
+   return new G4UniformElectricField( G4ThreeVector(fFieldComponents[3],
+                                                    fFieldComponents[4],
+                                                    fFieldComponents[5]));
+}
+
 // ------------------------------------------------------------------------
 
 void G4UniformElectricField::GetFieldValue (const G4double[4],
-                                            G4double *fieldBandE ) const 
+                                            G4double* fieldBandE) const 
 {
-   fieldBandE[0]= 0.0;
-   fieldBandE[1]= 0.0;
-   fieldBandE[2]= 0.0;
-   fieldBandE[3]= fFieldComponents[3] ;
-   fieldBandE[4]= fFieldComponents[4] ;
-   fieldBandE[5]= fFieldComponents[5] ;
+   fieldBandE[0] = 0.0;
+   fieldBandE[1] = 0.0;
+   fieldBandE[2] = 0.0;
+   fieldBandE[3] = fFieldComponents[3];
+   fieldBandE[4] = fFieldComponents[4];
+   fieldBandE[5] = fFieldComponents[5];
 }

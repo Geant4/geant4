@@ -37,7 +37,7 @@
 
 // Fundamental definitions
 #ifndef G4GMAKE
-#include "G4GlobalConfig.hh"
+#    include "G4GlobalConfig.hh"
 #endif
 
 #include "globals.hh"
@@ -45,41 +45,119 @@
 //----------------------------------------------------------------------------//
 #ifdef GEANT4_USE_TIMEMORY
 
-#   if defined __GNUC__
-#       pragma GCC diagnostic push
-#       pragma GCC diagnostic ignored "-Wexceptions"
-#       pragma GCC diagnostic ignored "-Wunused-private-field"
-#   endif
+#    include <timemory/timemory.hpp>
 
-#include <timemory/timemory.hpp>
-
-typedef tim::auto_timer G4AutoTimer;
-
-inline void InitializeTiMemory()
-{
-    tim::manager* instance = tim::manager::instance();
-    instance->enable(true);
-}
-
-#   if defined __GNUC__
-#       pragma GCC diagnostic pop
-#   endif
+using G4AutoTimer = tim::auto_timer;
 
 #else
 
-#define TIMEMORY_AUTO_TIMER(str)
-#define TIMEMORY_AUTO_TIMER_OBJ(str) {}
+#    include <ostream>
+#    include <string>
 
-#define TIMEMORY_BASIC_AUTO_TIMER(str)
-#define TIMEMORY_BASIC_AUTO_TIMER_OBJ(str) {}
+namespace tim
+{
+template <typename... _Args>
+void timemory_init(_Args...)
+{
+}
+inline void timemory_finalize() {}
+inline void print_env() {}
 
-#define TIMEMORY_DEBUG_BASIC_AUTO_TIMER(str)
-#define TIMEMORY_DEBUG_AUTO_TIMER(str)
+/// this provides "functionality" for *_HANDLE macros
+/// and can be omitted if these macros are not utilized
+struct dummy
+{
+    template <typename... _Args>
+    dummy(_Args&&...)
+    {
+    }
+    ~dummy()            = default;
+    dummy(const dummy&) = default;
+    dummy(dummy&&)      = default;
+    dummy& operator=(const dummy&) = default;
+    dummy& operator=(dummy&&) = default;
 
-inline void InitializeTiMemory()
-{ }
+    void start() {}
+    void stop() {}
+    void conditional_start() {}
+    void conditional_stop() {}
+    void report_at_exit(bool) {}
+    template <typename... _Args>
+    void mark_begin(_Args&&...)
+    {
+    }
+    template <typename... _Args>
+    void mark_end(_Args&&...)
+    {
+    }
+    friend std::ostream& operator<<(std::ostream& os, const dummy&) { return os; }
+};
+
+}  // namespace tim
+
+// startup/shutdown/configure
+#    define TIMEMORY_INIT(...)
+#    define TIMEMORY_FINALIZE()
+#    define TIMEMORY_CONFIGURE(...)
+
+// label creation
+#    define TIMEMORY_BASIC_LABEL(...) std::string("")
+#    define TIMEMORY_LABEL(...) std::string("")
+#    define TIMEMORY_JOIN(...) std::string("")
+
+// define an object
+#    define TIMEMORY_BLANK_MARKER(...)
+#    define TIMEMORY_BASIC_MARKER(...)
+#    define TIMEMORY_MARKER(...)
+
+// define an unique pointer object
+#    define TIMEMORY_BLANK_POINTER(...)
+#    define TIMEMORY_BASIC_POINTER(...)
+#    define TIMEMORY_POINTER(...)
+
+// define an object with a caliper reference
+#    define TIMEMORY_BLANK_CALIPER(...)
+#    define TIMEMORY_BASIC_CALIPER(...)
+#    define TIMEMORY_CALIPER(...)
+
+// define a static object with a caliper reference
+#    define TIMEMORY_STATIC_BLANK_CALIPER(...)
+#    define TIMEMORY_STATIC_BASIC_CALIPER(...)
+#    define TIMEMORY_STATIC_CALIPER(...)
+
+// invoke member function on caliper reference or type within reference
+#    define TIMEMORY_CALIPER_APPLY(...)
+#    define TIMEMORY_CALIPER_TYPE_APPLY(...)
+
+// get an object
+#    define TIMEMORY_BLANK_HANDLE(...) tim::dummy()
+#    define TIMEMORY_BASIC_HANDLE(...) tim::dummy()
+#    define TIMEMORY_HANDLE(...) tim::dummy()
+
+// get a pointer to an object
+#    define TIMEMORY_BLANK_POINTER_HANDLE(...) nullptr
+#    define TIMEMORY_BASIC_POINTER_HANDLE(...) nullptr
+#    define TIMEMORY_POINTER_HANDLE(...) nullptr
+
+// debug only
+#    define TIMEMORY_DEBUG_BLANK_MARKER(...)
+#    define TIMEMORY_DEBUG_BASIC_MARKER(...)
+#    define TIMEMORY_DEBUG_MARKER(...)
+
+// auto-timers
+#    define TIMEMORY_BLANK_AUTO_TIMER(...)
+#    define TIMEMORY_BASIC_AUTO_TIMER(...)
+#    define TIMEMORY_AUTO_TIMER(...)
+#    define TIMEMORY_BLANK_AUTO_TIMER_HANDLE(...)
+#    define TIMEMORY_BASIC_AUTO_TIMER_HANDLE(...)
+#    define TIMEMORY_AUTO_TIMER_HANDLE(...)
+#    define TIMEMORY_DEBUG_BASIC_AUTO_TIMER(...)
+#    define TIMEMORY_DEBUG_AUTO_TIMER(...)
+
+using G4AutoTimer = tim::dummy;
 
 #endif
+
 //----------------------------------------------------------------------------//
 
 #endif

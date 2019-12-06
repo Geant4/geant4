@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/src/ExN02TrackerHit.cc
+/// \file ExN02TrackerHit.cc
 /// \brief Implementation of the ExN02TrackerHit class
 //
 //

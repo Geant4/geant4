@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4HarmonicPolMagField
+// G4HarmonicPolMagField
 //
 // Class description:
 //
@@ -33,13 +31,11 @@
 // 3rd order. The function MagneticField(yTrack,B) calculates the magnetic
 // field induction vector B for the trajectory point yTrack according to
 // formula given in:
-//   M.Metcalf, Analysis of the SFM Field,
-//              OM Development Note AP-10 (revised), 1974
+//   M.Metcalf, Analysis of the SFM Field
+//   OM Development Note AP-10 (revised), 1974
 
-// History:
-// 3.2.97 - V.Grichine, created.
+// Author: V.Grichine, 03.02.1997
 // --------------------------------------------------------------------
-
 #ifndef G4HARMONICPOLMAGFIELD_HH
 #define G4HARMONICPOLMAGFIELD_HH
 

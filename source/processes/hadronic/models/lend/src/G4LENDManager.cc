@@ -66,23 +66,23 @@ G4LENDManager::G4LENDManager()
    G4String xmcf_t;
    G4String xmcf_he3;
    G4String xmcf_a;
-   if( getenv("G4LENDDATA") == NULL ) {
+   if( std::getenv("G4LENDDATA") == NULL ) {
       throw G4HadronicException(__FILE__, __LINE__, " Please setenv G4LENDDATA to point to the LEND files." );
    } else {
-      xmcf = getenv("G4LENDDATA");
+      xmcf = std::getenv("G4LENDDATA");
       //xmcf += "/xmcf.n_1.map";
       xmcf += "/neutrons.map";
-      xmcf_gamma = getenv("G4LENDDATA");
+      xmcf_gamma = std::getenv("G4LENDDATA");
       xmcf_gamma += "/gammas.map";
-      xmcf_p = getenv("G4LENDDATA");
+      xmcf_p = std::getenv("G4LENDDATA");
       xmcf_p += "/protons.map";
-      xmcf_d = getenv("G4LENDDATA");
+      xmcf_d = std::getenv("G4LENDDATA");
       xmcf_d += "/deuterons.map";
-      xmcf_t = getenv("G4LENDDATA");
+      xmcf_t = std::getenv("G4LENDDATA");
       xmcf_t += "/tritons.map";
-      xmcf_he3 = getenv("G4LENDDATA");
+      xmcf_he3 = std::getenv("G4LENDDATA");
       xmcf_he3 += "/He3s.map";
-      xmcf_a = getenv("G4LENDDATA");
+      xmcf_a = std::getenv("G4LENDDATA");
       xmcf_a += "/alphas.map";
    }
 

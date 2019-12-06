@@ -108,8 +108,8 @@ public:
   inline G4String& remove(str_size);
   inline G4String& remove(str_size, str_size);
 
-  inline G4int first(char) const;
-  inline G4int last(char) const;
+  inline std::size_t first(char) const;
+  inline std::size_t last(char) const;
 
   inline G4bool contains(const std::string&) const;
   inline G4bool contains(char) const;

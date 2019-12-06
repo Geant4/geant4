@@ -22,8 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
 // 
 // Class G4TouchableHistoryHandle
 //
@@ -39,12 +37,12 @@
 
 // Author: Radovan Chytracek (Radovan.Chytracek@cern.ch), March 2001
 // ----------------------------------------------------------------------
-#ifndef _G4TOUCHABLEHISTORYHANDLE_H_
-#define _G4TOUCHABLEHISTORYHANDLE_H_ 1
+#ifndef G4TOUCHABLEHISTORYHANDLE_HH
+#define G4TOUCHABLEHISTORYHANDLE_HH 1
 
 #include "G4TouchableHistory.hh"
 #include "G4ReferenceCountedHandle.hh"
 
-typedef G4ReferenceCountedHandle<G4TouchableHistory> G4TouchableHistoryHandle;
+using G4TouchableHistoryHandle = G4ReferenceCountedHandle<G4TouchableHistory>;
 
-#endif // _G4TOUCHABLEHISTORYHANDLE_H_
+#endif // G4TOUCHABLEHISTORYHANDLE_HH

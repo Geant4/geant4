@@ -95,8 +95,8 @@ std::unique_ptr<G4ITReactionChange> G4DNAMolecularReaction::MakeReaction(const G
     {
         const G4double D1 = pMoleculeA->GetDiffusionCoefficient();
         const G4double D2 = pMoleculeB->GetDiffusionCoefficient();
-        const G4double sqrD1 = D1 == 0. ? 0. : sqrt(D1);
-        const G4double sqrD2 = D2 == 0. ? 0. : sqrt(D2);
+        const G4double sqrD1 = D1 == 0. ? 0. : std::sqrt(D1);
+        const G4double sqrD2 = D2 == 0. ? 0. : std::sqrt(D2);
         const G4double inv_numerator = 1./(sqrD1 + sqrD2);
         const G4ThreeVector reactionSite = sqrD2 * inv_numerator * trackA.GetPosition()
                                          + sqrD1 * inv_numerator * trackB.GetPosition();

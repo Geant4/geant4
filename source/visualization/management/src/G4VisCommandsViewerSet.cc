@@ -889,8 +889,8 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandEdge) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-    if (G4UIcommand::ConvertToBool(newValue)) {
-      switch (existingStyle) {  // true
+    if (G4UIcommand::ConvertToBool(newValue)) {  // true
+      switch (existingStyle) {
         case G4ViewParameters::wireframe:
           break;
         case G4ViewParameters::hlr:
@@ -901,7 +901,6 @@ void G4VisCommandsViewerSet::SetNewValue
         case G4ViewParameters::hlhsr:
           break;
         case G4ViewParameters::cloud:
-          G4cout << "No effect in cloud style" << G4endl;
           break;
       }
     }
@@ -917,7 +916,6 @@ void G4VisCommandsViewerSet::SetNewValue
           vp.SetDrawingStyle(G4ViewParameters::hsr);
           break;
         case G4ViewParameters::cloud:
-          G4cout << "No effect in cloud style" << G4endl;
           break;
       }
     }
@@ -978,7 +976,6 @@ void G4VisCommandsViewerSet::SetNewValue
         case G4ViewParameters::hlhsr:
           break;
         case G4ViewParameters::cloud:
-          G4cout << "No effect in cloud style" << G4endl;
           break;
       }
     }
@@ -995,7 +992,6 @@ void G4VisCommandsViewerSet::SetNewValue
           vp.SetDrawingStyle(G4ViewParameters::hsr);
           break;
         case G4ViewParameters::cloud:
-          G4cout << "No effect in cloud style" << G4endl;
           break;
       }
     }
@@ -1220,7 +1216,7 @@ void G4VisCommandsViewerSet::SetNewValue
           vp.SetDrawingStyle(G4ViewParameters::hlr);
           break;
         case G4ViewParameters::cloud:
-          vp.SetDrawingStyle(G4ViewParameters::cloud);
+          vp.SetDrawingStyle(G4ViewParameters::wireframe);
           break;
       }
     }
@@ -1237,7 +1233,7 @@ void G4VisCommandsViewerSet::SetNewValue
         case G4ViewParameters::hlhsr:
           break;
         case G4ViewParameters::cloud:
-          vp.SetDrawingStyle(G4ViewParameters::cloud);
+          vp.SetDrawingStyle(G4ViewParameters::hsr);
           break;
      }
     }

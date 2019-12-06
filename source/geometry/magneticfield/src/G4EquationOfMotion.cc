@@ -23,36 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EquationOfMotion implementation
 //
-//
+// Created: J.Apostolakis, 1998
 // -------------------------------------------------------------------
 
 #include "G4EquationOfMotion.hh"
 
+G4EquationOfMotion::G4EquationOfMotion(G4Field* pField) 
+  : itsField(pField)
+{
+}
+
 G4EquationOfMotion::~G4EquationOfMotion()
-{}
-
-void 
-G4EquationOfMotion::EvaluateRhsReturnB( const G4double y[],
-				 G4double dydx[],
-				 G4double  Field[]  ) const
-{
-     G4double  PositionAndTime[4];
-
-     // Position
-     PositionAndTime[0] = y[0];
-     PositionAndTime[1] = y[1];
-     PositionAndTime[2] = y[2];
-     // Global Time
-     PositionAndTime[3] = y[7];  // See G4FieldTrack::LoadFromArray
-
-     GetFieldValue(PositionAndTime, Field) ;
-     EvaluateRhsGivenB( y, Field, dydx );
-}
-
-#if  HELP_THE_COMPILER
-void 
-G4EquationOfMotion::doNothing()
 {
 }
-#endif

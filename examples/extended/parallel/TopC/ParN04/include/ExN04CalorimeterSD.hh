@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/include/ExN04CalorimeterSD.hh
+/// \file ExN04CalorimeterSD.hh
 /// \brief Definition of the ExN04CalorimeterSD class
 //
 

@@ -57,6 +57,7 @@ endif()
 #
 include(CheckCXXSourceCompiles)
 include(IntelCompileFeatures)
+include(MSVCCompileFeatures)
 
 #-----------------------------------------------------------------------
 #.rst:
@@ -156,10 +157,16 @@ endif() #NOT WIN32
 # - ``GEANT4_BUILD_CXXSTD`` (Allowed values: 11, 14, 17, c++11, c++14, c++17)
 #
 #   - Choose C++ Standard to build against from supported list.
+#   - Note that only C++17 is supported on Windows with MSVC
 #
+set(__g4_default_cxxstd 11 14 17 c++11 c++14 c++17)
+if(MSVC)
+  set(__g4_default_cxxstd 17 c++17)
+endif()
+
 enum_option(GEANT4_BUILD_CXXSTD
   DOC "C++ Standard to compile against"
-  VALUES 11 14 17 c++11 c++14 c++17
+  VALUES ${__g4_default_cxxstd}
   CASE_INSENSITIVE
   )
 

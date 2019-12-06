@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2019 - Vladimir Ivanchenko (hadr-modman-V10-05-02)
+-----------------------------------------------------------
+- G4VHighEnergyGenerator - use inheritance from G4HadronicInteraction
+    this reducing memory leak at exit in several times
+
+13 July 2019 - Vladimir Ivanchenko (hadr-modman-V10-05-01)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - use C++11 paterns
+- G4HadronicInteraction - fixed definition of model per element and 
+    material; use C++11 patterns
+
 30 May 2019 - Vladimir Ivanchenko (hadr-modman-V10-05-00)
 -----------------------------------------------------------
 - G4HadronicInteractionRegistry - fixed typo in comments, remove unused 

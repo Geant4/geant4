@@ -92,6 +92,8 @@ class G4AnalysisMessengerHelper
                                         G4UImessenger* messenger) const;
     std::unique_ptr<G4UIcommand>  CreateSetAxisCommand(const G4String& axis,
                                         G4UImessenger* messenger) const;
+    std::unique_ptr<G4UIcommand>  CreateSetAxisLogCommand(const G4String& axis,
+                                        G4UImessenger* messenger) const;
 
     // methods to read command paremeters
     void GetBinData(BinData& data, std::vector<G4String>& parameters, 

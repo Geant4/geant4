@@ -12,6 +12,11 @@ private:\
   typedef a__parent parent;\
 public:\
   TOOLS_SCLASS(a__sclass)\
+/*public:\
+  static bool is_a(const std::string& a_class) {\
+    if(!rcmp(a_class,s_class())) return true;\
+    return parent::is_a(a_class);\
+  }*/\
 public:\
   virtual void* cast(const std::string& a_class) const {\
     if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\

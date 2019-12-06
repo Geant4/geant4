@@ -5,8 +5,8 @@
  ------------------------------
  It includes gamma-nuclear, electron-nuclear and positron-nuclear
  processes.
- For gamma-nuclear, it uses Bertini (BERT) model for gamma below 3.5 GeV,
- and Quark-Gluon-String (QGS) model above 3.0 GeV.
+ For gamma-nuclear, it uses Bertini (BERT) model for gamma below 6 GeV,
+ and Quark-Gluon-String (QGS) model above 3 GeV.
  For electron-nuclear and positron-nuclear, it uses the equivalent photon
  approximation in which the incoming lepton generates a virtual photon, 
  and then the virtual photon is converted to a real photon. This real

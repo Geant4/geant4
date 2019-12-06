@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file parallel/ParN04/src/ExN04Field.cc
+/// \file ExN04Field.cc
 /// \brief Implementation of the ExN04Field class
 //
 

@@ -14,6 +14,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28, 2019 I. Hrivnacova (LXe-V10-05-05)
+- Fixed Doxygen warnings in .README.txt 
+
+November 26, 2019 I. Hrivnacova (LXe-V10-05-04)
+- Fixed formatting in .README.txt and Doxygen warnings
+
+October 29, 2019 D. Sawkey (LXe-V10-05-03)
+- wls.mac, cerenkov.mac: unique analysis filenames
+
+October 28, 2019 D. Sawkey (LXe-V10-05-02)
+- LXePMTSD.cc, LXeDetectorConstruction.cc - update PMT positions when changing
+  number of PMTs
+
+October 15, 2019 D. Sawkey (LXe-V10-05-01)
+- wls.mac, cerenkov.mac - fewer particles
+
 May 24, 2019 D. Sawkey (LXe-V10-05-00)
 - LXeDetectorConstruction - remove protection against rebuilding detector
 - LXeEventAction - randomSaveEvent not working so comment out

@@ -60,13 +60,13 @@ class LXePMTSD : public G4VSensitiveDetector
     void PrintAll();
  
     //Initialize the arrays to store pmt possitions
-    inline void InitPMTs(G4int nPMTs){
+    inline void InitPMTs(){
       if(fPMTPositionsX)delete fPMTPositionsX;
       if(fPMTPositionsY)delete fPMTPositionsY;
       if(fPMTPositionsZ)delete fPMTPositionsZ;
-      fPMTPositionsX=new G4DataVector(nPMTs);
-      fPMTPositionsY=new G4DataVector(nPMTs);
-      fPMTPositionsZ=new G4DataVector(nPMTs);
+      fPMTPositionsX = new G4DataVector();
+      fPMTPositionsY = new G4DataVector();
+      fPMTPositionsZ = new G4DataVector();
     }
 
     //Store a pmt position

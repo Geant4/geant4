@@ -69,12 +69,11 @@ class G4BertiniPiKBuilder : public G4VPiKBuilder
     using G4VPiKBuilder::Build; //Prevent Compilation warning
 
   private:
+    G4VCrossSectionDataSet * kaonxs;
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

@@ -169,10 +169,15 @@ protected:
     return *this;
   }
 public:
+  const buffer& datbuf() const {return m_data;}
   buffer& datbuf() {return m_data;}
 
+  const int* entry_offset() const {return m_entry_offset;}
   int* entry_offset() {return m_entry_offset;}
+
+  const int* displacement() const {return m_displacement;}
   int* displacement() {return m_displacement;}
+  
   uint32 nev_buf_size() const {return m_nev_buf_size;}
   uint32 nev() const {return m_nev;}
   uint32 last() const {return m_last;}

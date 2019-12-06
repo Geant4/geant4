@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // class G4BlockingList
 //
 // Class description:
@@ -39,9 +37,7 @@
 // increased, so that the ValVector must only be zeroed when the
 // numerical range of the tag is used.
 
-// History:
-//
-// 24.7.96 P.Kent Separated from G4Navigator
+// 24.7.96, P.Kent - Separated from G4Navigator
 // --------------------------------------------------------------------
 #ifndef G4BLOCKINGLIST_HH
 #define G4BLOCKINGLIST_HH
@@ -58,8 +54,8 @@ class G4BlockingList
 {
   public:  // with description
 
-    G4BlockingList(G4int maxDefault=kBlockingListMaxDefault,
-                   G4int stride=kBlockingListStride);
+    G4BlockingList(G4int maxDefault = kBlockingListMaxDefault,
+                   G4int stride = kBlockingListStride);
       // Create empty blocking List of default size and `stride' resize count.
 
     ~G4BlockingList();
@@ -77,7 +73,7 @@ class G4BlockingList
       // Enlarges blocking List if current size < nv, in units of stride.
       // Clears the new part of the List.
 
-    G4int Length() const;
+    size_t Length() const;
       // Returns the current length of the List. Note a length of 16
       // means volumes of indices between 0 & 15 inclusive may be blocked.
 
@@ -91,13 +87,12 @@ class G4BlockingList
 
   private:
 
-    G4int fBlockTagNo, fStride;
+    G4int fBlockTagNo = 1, fStride;
       // Current blocked volume tag number.
 
     std::vector<G4int> fBlockingList; 
       // Blocked volumes: Elements with indices
       // corresponding to blocked volume set to fBlockTagNo.
-
 };
 
 #include "G4BlockingList.icc"

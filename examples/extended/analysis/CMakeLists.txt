@@ -9,8 +9,6 @@ include(${Geant4_USE_FILE})
 
 add_subdirectory(AnaEx01)
 add_subdirectory(B1Con)
-add_subdirectory(B3aScoreWriter)
-add_subdirectory(B4dScoreWriter)
 
 #----------------------------------------------------------------------------
 # AnaEx02 example requires ROOT

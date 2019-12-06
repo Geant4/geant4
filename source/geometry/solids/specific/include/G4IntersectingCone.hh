@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4IntersectingCone
 //
 // Class description:
@@ -37,11 +30,10 @@
 //   Utility class which calculates the intersection
 //   of an arbitrary line with a fixed cone
 
-// Author: 
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-#ifndef G4IntersectingCone_hh
-#define G4IntersectingCone_hh
+#ifndef G4INTERSECTINGCONE_HH
+#define G4INTERSECTINGCONE_HH
 
 #include "G4Types.hh"
 #include "geomdefs.hh"
@@ -54,8 +46,8 @@ class G4IntersectingCone
     G4IntersectingCone( const G4double r[2], const G4double z[2] );
     virtual ~G4IntersectingCone();
   
-    G4int LineHitsCone( const G4ThreeVector &p, const G4ThreeVector &v,
-                              G4double *s1, G4double *s2 );
+    G4int LineHitsCone( const G4ThreeVector& p, const G4ThreeVector& v,
+                              G4double* s1, G4double* s2 );
   
     G4bool HitOn( const G4double r, const G4double z );
   
@@ -77,16 +69,16 @@ class G4IntersectingCone
     G4double zLo, zHi,  // Z bounds of side
              rLo, rHi;  // R bounds of side
 
-    G4bool   type1;    // True if cone is type 1
-                       //  (std::fabs(z1-z2)>std::fabs(r1-r2))
+    G4bool type1 = false;    // True if cone is type 1
+                             // (std::fabs(z1-z2)>std::fabs(r1-r2))
     G4double A, B;     // Cone radius parameter:
                        //  type 1: r = A + B*z
                        //  type 2: z = A + B*r
 
-    G4int LineHitsCone1( const G4ThreeVector &p, const G4ThreeVector &v,
-                               G4double *s1, G4double *s2 );
-    G4int LineHitsCone2( const G4ThreeVector &p, const G4ThreeVector &v,
-                               G4double *s1, G4double *s2 );
+    G4int LineHitsCone1( const G4ThreeVector& p, const G4ThreeVector& v,
+                               G4double* s1, G4double* s2 );
+    G4int LineHitsCone2( const G4ThreeVector& p, const G4ThreeVector& v,
+                               G4double* s1, G4double* s2 );
 };
 
 #endif

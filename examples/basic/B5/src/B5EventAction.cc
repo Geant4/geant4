@@ -33,7 +33,6 @@
 #include "B5EmCalorimeterHit.hh"
 #include "B5HadCalorimeterHit.hh"
 #include "B5Constants.hh"
-#include "B5Analysis.hh"
 
 #include "G4Event.hh"
 #include "G4RunManager.hh"
@@ -43,6 +42,7 @@
 #include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
+#include "g4analysis.hh"
 
 using std::array;
 using std::vector;
