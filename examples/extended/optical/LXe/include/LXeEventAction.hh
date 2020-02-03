@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXeEventAction.hh 68752 2013-04-05 10:23:47Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/include/LXeEventAction.hh
 /// \brief Definition of the LXeEventAction class
@@ -38,21 +41,27 @@
 #include "G4ThreeVector.hh"
 
 class G4Event;
+<<<<<<< HEAD
 class LXeRecorderBase;
+=======
+class LXeDetectorConstruction;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 class LXeEventAction : public G4UserEventAction
 {
   public:
 
+<<<<<<< HEAD
     LXeEventAction(LXeRecorderBase*);
+=======
+    LXeEventAction(const LXeDetectorConstruction*);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     virtual ~LXeEventAction();
 
   public:
 
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
-
-    void SetSaveThreshold(G4int );
 
     void SetEventVerbose(G4int v){fVerbose=v;}
 
@@ -61,23 +70,81 @@ class LXeEventAction : public G4UserEventAction
     void SetForceDrawPhotons(G4bool b){fForcedrawphotons=b;}
     void SetForceDrawNoPhotons(G4bool b){fForcenophotons=b;}
 
+<<<<<<< HEAD
+=======
+    void IncPhotonCount_Scint(){fPhotonCount_Scint++;}
+    void IncPhotonCount_Ceren(){fPhotonCount_Ceren++;}
+    void IncEDep(G4double dep){fTotE+=dep;}
+    void IncAbsorption(){fAbsorptionCount++;}
+    void IncBoundaryAbsorption(){fBoundaryAbsorptionCount++;}
+    void IncHitCount(G4int i=1){fHitCount+=i;}
+
+    void SetEWeightPos(const G4ThreeVector& p){fEWeightPos=p;}
+    void SetReconPos(const G4ThreeVector& p){fReconPos=p;}
+    void SetConvPos(const G4ThreeVector& p){fConvPos=p;fConvPosSet=true;}
+    void SetPosMax(const G4ThreeVector& p,G4double edep) {
+      fPosMax = p;
+      fEdepMax = edep;
+    }
+
+    G4int GetPhotonCount_Scint()const {return fPhotonCount_Scint;}
+    G4int GetPhotonCount_Ceren()const {return fPhotonCount_Ceren;}
+    G4int GetHitCount()const {return fHitCount;}
+    G4double GetEDep()const {return fTotE;}
+    G4int GetAbsorptionCount()const {return fAbsorptionCount;}
+    G4int GetBoundaryAbsorptionCount() const {return fBoundaryAbsorptionCount;}
+
+    G4ThreeVector GetEWeightPos(){return fEWeightPos;}
+    G4ThreeVector GetReconPos(){return fReconPos;}
+    G4ThreeVector GetConvPos(){return fConvPos;}
+    G4ThreeVector GetPosMax(){return fPosMax;}
+    G4double GetEDepMax(){return fEdepMax;}
+    G4double IsConvPosSet(){return fConvPosSet;}
+
+    //Gets the total photon count produced
+    G4int GetPhotonCount(){return fPhotonCount_Scint+fPhotonCount_Ceren;}
+
+    void IncPMTSAboveThreshold(){fPMTsAboveThreshold++;}
+    G4int GetPMTSAboveThreshold(){return fPMTsAboveThreshold;}
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   private:
 
     LXeRecorderBase* fRecorder;
     LXeEventMessenger* fEventMessenger;
+    const LXeDetectorConstruction* fDetector;
 
-    G4int              fSaveThreshold;
+    G4int fScintCollID;
+    G4int fPMTCollID;
 
-    G4int              fScintCollID;
-    G4int              fPMTCollID;
+    G4int fVerbose;
 
-    G4int              fVerbose;
-
-    G4int              fPMTThreshold;
+    G4int fPMTThreshold;
 
     G4bool fForcedrawphotons;
     G4bool fForcenophotons;
 
+<<<<<<< HEAD
+=======
+    G4int fHitCount;
+    G4int fPhotonCount_Scint;
+    G4int fPhotonCount_Ceren;
+    G4int fAbsorptionCount;
+    G4int fBoundaryAbsorptionCount;
+
+    G4double fTotE;
+
+    //These only have meaning if totE > 0
+    //If totE = 0 then these wont be set by EndOfEventAction
+    G4ThreeVector fEWeightPos;
+    G4ThreeVector fReconPos; //Also relies on hitCount>0
+    G4ThreeVector fConvPos;//true (initial) converstion position
+    G4bool fConvPosSet;
+    G4ThreeVector fPosMax;
+    G4double fEdepMax;
+
+    G4int fPMTsAboveThreshold;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 #endif

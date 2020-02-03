@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B3PhysicsList.cc 66536 2012-12-19 14:32:36Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B3PhysicsList.cc
 /// \brief Implementation of the B3PhysicsList class

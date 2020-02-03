@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison 2nd February 2005 (based on MyVisManager, 24th January 1998).

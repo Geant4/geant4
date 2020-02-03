@@ -1,0 +1,28 @@
+
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+20 February 2019 Ben Morgan (visexternals-V10-05-00)
+- visexternalgl2ps-V10-05-00: Add include path for generated G4GlobalConfig.hh
+
+28 May 2018  Gabriele Cosmo  (visexternals-V10-04-01)
+- visexternalgl2ps-V10-04-01: Corrected GNUmakefile, now requiring dependency
+  on global module.
+
+26 May 2018  John Allison  (visexternals-V10-04-00)
+- visexternalgl2ps-V10-04-00: Fix gcc-8 warnings.

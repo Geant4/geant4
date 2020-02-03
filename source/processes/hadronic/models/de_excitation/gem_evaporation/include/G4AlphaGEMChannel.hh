@@ -24,46 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaGEMChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
 //
 // J. M. Quesada (July 2009) coulomb barrier striclty according to Furihata's paper
 
-
 #ifndef G4AlphaGEMChannel_h
 #define G4AlphaGEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4AlphaGEMCoulombBarrier.hh"
 #include "G4AlphaGEMProbability.hh"
 
 class G4AlphaGEMChannel : public G4GEMChannel
 {
 public:
     // only available constructor
-    G4AlphaGEMChannel() : G4GEMChannel(4,2,"Alpha",
-                                     &theEvaporationProbability,
-                                     &theCoulombBarrier)
-        {
-            theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
-        }
+  explicit G4AlphaGEMChannel() 
+    : G4GEMChannel(4,2,"He4",&theEvaporationProbability) {}
 
-    // destructor
-    ~G4AlphaGEMChannel() {};
+  // destructor
+  ~G4AlphaGEMChannel() {};
 
 private:
-    const G4AlphaGEMChannel & operator=(const G4AlphaGEMChannel & right);  
-    G4AlphaGEMChannel(const G4AlphaGEMChannel & right);    
-    G4bool operator==(const G4AlphaGEMChannel & right) const;
-    G4bool operator!=(const G4AlphaGEMChannel & right) const;
+  const G4AlphaGEMChannel & operator=(const G4AlphaGEMChannel & right) = delete;  
+  G4AlphaGEMChannel(const G4AlphaGEMChannel & right) = delete;    
+  G4bool operator==(const G4AlphaGEMChannel & right) const = delete;
+  G4bool operator!=(const G4AlphaGEMChannel & right) const = delete;
     
-// JMQ 190709
-//       G4AlphaCoulombBarrier theCoulombBarrier;
-    G4AlphaGEMCoulombBarrier theCoulombBarrier;
-	
-    G4AlphaGEMProbability theEvaporationProbability;
+  G4AlphaGEMProbability theEvaporationProbability;
     
 };
 #endif

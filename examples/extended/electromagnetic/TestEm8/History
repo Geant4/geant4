@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +18,46 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 14-10-16 G.Folger
+=======
+13-02-19 V.Ivantchenko (testem8-V10-05-00)
+- DetectorConstruction - added alternative materials in order to test
+    all methods to construct new material by G4NistMaterialBuilder
+    (problem reports #2133, #2134)
+
+16-05-18 J.Allison (testem8-V10-04-05)
+- RunAction.cc: Removed vis commands.
+
+01-05-18 J.Allison (testem8-V10-04-04)
+- RunAction.cc: Removed G4VIS_USE and G4UI_USE.
+
+29-03-18 V.Ivant (testem8-V10-04-03)
+- TestEm8.cc - minor optimisation
+
+26-03-18 V.Ivant (testem8-V10-04-02)
+- PrimaryGeneratorAction - fixed thread safety
+- TestEm8.in - disable tracking cuts
+
+17-03-18 mma (testem8-V10-04-01)
+- testem8.cc : remove G4UI_USE and G4VIS_USE
+
+14-12-17 V.Ivant (testem8-V10-04-00)
+- corrected default macro to optimise output
+
+27-10-17 V.Ivant (testem8-V10-03-01)
+- PhysicsList, DetectorConstruction, DetectorMesenger, StepMax
+  make StepMax initialisation to be more thread safe
+
+28-08-17 V.Ivant (testem8-V10-03-00)
+- PhysicsList - restore functionality for the old command
+  "/testem/phys/addPhysics pai"
+
+19-11-16 A.Dotti  (testem8-V10-02-05)
+- explicit set of SD to manager
+
+14-10-16 G.Folger (testem8-V10-02-04)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 

@@ -23,23 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Step.hh 93028 2015-09-30 16:09:00Z gcosmo $
-//
-//
-//---------------------------------------------------------------
-//
-// G4Step.hh
+// G4Step
 //
 // Class Description:
-//   This class represents the Step of a particle tracked.
+//   This class represents the Step of a particle being tracked.
 //   It includes information of 
 //     1) List of Step points which compose the Step,
 //     2) static information of particle which generated the 
 //        Step, 
 //     3) trackID and parent particle ID of the Step,
 //     4) termination condition of the Step,
-//
+
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
@@ -53,11 +47,9 @@
 //   Separate implementation of inline functions inti G4Step.icc
 //   Add updating mass/charge                        6 Oct. 1999 H.Kurashige
 //   add nonIonizingEnergyLoss                      26 Mar. 2007 H.Kurashige 
-//
-//   Repository test - Dennis Wright
-//
-#ifndef G4Step_h
-#define G4Step_h 1
+// ---------------------------------------------------------------
+#ifndef G4Step_hh
+#define G4Step_hh 1
 
 #include <stdlib.h>                 // Include from 'system'
 #include <cmath>                    // Include from 'system'
@@ -80,19 +72,20 @@ class G4Step
 //--------
    public:
 
-// Constructor/Destrcutor
+  // Constructor/Destrcutor
    G4Step();
    ~G4Step();
 
-// Copy Counstructor and assignment operator
+  // Copy Counstructor and assignment operator
    G4Step(const G4Step& );
    G4Step & operator=(const G4Step &);   
 
 //--------
-   public: // WIth description
+   public: // with description
 
-// Get/Set functions 
-   // currnet track
+  // Get/Set functions 
+
+   // current track
    G4Track* GetTrack() const;
    void SetTrack(G4Track* value);
 
@@ -119,7 +112,7 @@ class G4Step
    G4double GetNonIonizingEnergyDeposit() const;
    void SetNonIonizingEnergyDeposit(G4double value);
 
-   // cotrole flag for stepping
+   // control flag for stepping
    G4SteppingControl GetControlFlag() const;
    void SetControlFlag(G4SteppingControl StepControlFlag);
 
@@ -127,14 +120,13 @@ class G4Step
    void AddTotalEnergyDeposit(G4double value);
    void ResetTotalEnergyDeposit();
 
-   // manipulation of non-ionizng energy deposit 
+   // manipulation of non-ionizing energy deposit 
    void AddNonIonizingEnergyDeposit(G4double value);
    void ResetNonIonizingEnergyDeposit();
 
 
-  // Get/Set/Clear flag for initial/last step
+   // Get/Set/Clear flag for initial/last step
    // NOTE:  following flags are not used 
-   //        will be ready in later release
    G4bool IsFirstStepInVolume() const;
    G4bool IsLastStepInVolume() const;
 
@@ -143,7 +135,7 @@ class G4Step
    void SetLastStepFlag();
    void ClearLastStepFlag();
 
-  // difference of position, time, momentum and energy
+   // difference of position, time, momentum and energy
    G4ThreeVector GetDeltaPosition() const;
    G4double GetDeltaTime() const;
 
@@ -154,10 +146,10 @@ class G4Step
    G4ThreeVector GetDeltaMomentum() const;
    G4double GetDeltaEnergy() const;
 
+  // Other member functions
 
-// Other member functions
    void InitializeStep( G4Track* aValue );
-   // initiaize contents of G4Step
+   // initialize contents of G4Step
 
    void UpdateTrack( );
    // update track by using G4Step information
@@ -172,18 +164,20 @@ class G4Step
    protected:
 //-----------
 
-// Member data
+  // Member data
+
    G4double fTotalEnergyDeposit;
-     // Accummulated total energy desposit in the current Step
+     // Accumulated total energy deposit in the current Step
 
    G4double fNonIonizingEnergyDeposit;
-     // Accummulated non-ionizing energy desposit in the current Step
+     // Accumulated non-ionizing energy deposit in the current Step
 
 //---------
    private:
 //---------
 
-// Member data
+  // Member data
+
    G4StepPoint* fpPreStepPoint;
    G4StepPoint* fpPostStepPoint;
    G4double fStepLength;
@@ -192,16 +186,18 @@ class G4Step
    G4Track* fpTrack;
      //
    G4SteppingControl fpSteppingControlFlag;     
-    // A flag to control SteppingManager behavier from process
+    // A flag to control SteppingManager behavior from process
 
   // flag for initial/last step
    G4bool fFirstStepInVolume;
    G4bool fLastStepInVolume;
 
-// Secondary buckets
-public:
-  // secodaries in the current step
-   G4int GetNumberOfSecondariesInCurrentStep() const;
+  // Secondary buckets
+
+  public:
+
+  // secondaries in the current step
+   size_t GetNumberOfSecondariesInCurrentStep() const;
 
    const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const; 
 
@@ -221,32 +217,36 @@ public:
    // Add secondary tracks to the bucket 
    void SetSecondary( G4TrackVector* value);
 
-private: 
-   // Secondaty bucket implemented by using  std::vector of G4Track*   
+  private: 
+
+   // Secondary bucket implemented by using  std::vector of G4Track*   
    G4TrackVector* fSecondary;
 
    // number of secondaries which have been created by the last step
-   G4int  nSecondaryByLastStep;
+   size_t nSecondaryByLastStep;
 
    typedef const G4Track* CT;
    std::vector<CT>* secondaryInCurrentStep;
 
   // Prototyping implementation of smooth representation of curved
   // trajectories. (jacek 30/10/2002)
-public:
-  // Auxiliary points are ThreeVectors for now; change to
-  // G4VAuxiliaryPoints or some such (jacek 30/10/2002)
-  void SetPointerToVectorOfAuxiliaryPoints( std::vector<G4ThreeVector>* theNewVectorPointer ) {
-    fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
-  }
-  std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const {
-    return fpVectorOfAuxiliaryPointsPointer;
-  }
-private:
-  // Explicity including the word "Pointer" in the name as I keep
-  // forgetting the * (jacek 30/10/2002)
-  std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
 
+  public:
+    // Auxiliary points are ThreeVectors for now; change to
+    // G4VAuxiliaryPoints or some such (jacek 30/10/2002)
+   void SetPointerToVectorOfAuxiliaryPoints( std::vector<G4ThreeVector>* theNewVectorPointer )
+   {
+     fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
+   }
+   std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const
+   {
+     return fpVectorOfAuxiliaryPointsPointer;
+   }
+
+ private:
+   // Explicity including the word "Pointer" in the name as I keep
+   // forgetting the * (jacek 30/10/2002)
+   std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
 };
 
 #include "G4Step.icc"

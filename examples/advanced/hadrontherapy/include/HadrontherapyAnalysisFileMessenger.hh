@@ -33,7 +33,7 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class HadrontherapyAnalysisManager; ///< Provides SetanalysisFileName()
+class HadrontherapyAnalysis; ///< Provides SetanalysisFileName()
 class G4UIcmdWithAString; 
 class G4UIcmdWithABool; 
 
@@ -49,7 +49,7 @@ class G4UIcmdWithABool;
 class HadrontherapyAnalysisFileMessenger: public G4UImessenger
 {
 public:
-  HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager*);
+  HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysis*);
   ~HadrontherapyAnalysisFileMessenger();
 
   /**   
@@ -59,7 +59,7 @@ public:
    * @return is void   
    */     
   void SetNewValue(G4UIcommand* command, G4String newValue);
-  HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
+  HadrontherapyAnalysis* AnalysisManager; ///< handle to AnalysisManager
     
 private:
 

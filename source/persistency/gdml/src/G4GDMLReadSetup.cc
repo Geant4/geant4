@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSetup.cc 88207 2015-02-03 13:47:36Z gcosmo $
 //
 // class G4GDMLReadSetup Implementation
 //
@@ -64,8 +63,9 @@ G4String G4GDMLReadSetup::GetSetup(const G4String& ref)
 
 void G4GDMLReadSetup::SetupRead(const xercesc::DOMElement* const element)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading setup..." << G4endl;
-
+#endif
    G4String name;
 
    const xercesc::DOMNamedNodeMap* const attributes = element->getAttributes();

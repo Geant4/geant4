@@ -27,23 +27,29 @@
 // File: CCalRunAction.hh
 // Description: A class for providing user actions at begin and end of run
 ///////////////////////////////////////////////////////////////////////////////
+
 #ifndef CCalRunAction_h
-#define CCalRunAction_h
+#define CCalRunAction_h 1
 
 #include "G4UserRunAction.hh"
 
 class G4Run;
-class CCalRunAction: public G4UserRunAction{
 
+class CCalRunAction: public G4UserRunAction
+{
 public:
   CCalRunAction(){};
   virtual ~CCalRunAction(){};
       
-public:
   virtual void BeginOfRunAction(const G4Run* aRun);    
   virtual void EndOfRunAction(const G4Run* aRun);    
 
 
+<<<<<<< HEAD
+=======
+private:
+  G4int numberOfTimeSlices;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 #endif

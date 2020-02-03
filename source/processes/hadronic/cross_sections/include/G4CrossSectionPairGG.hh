@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.hh 93682 2015-10-28 10:09:49Z gcosmo $
-// $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
 //
@@ -50,16 +48,11 @@ class G4ComponentGGHadronNucleusXsc;
 
 class G4CrossSectionPairGG : public G4VCrossSectionDataSet
 {
-  private:
-   G4CrossSectionPairGG();
-   G4CrossSectionPairGG(const G4CrossSectionPairGG&);
-   G4CrossSectionPairGG& operator=(const G4CrossSectionPairGG&);
+private:
 
-  public:
-  
+public:
   G4CrossSectionPairGG(G4VCrossSectionDataSet * low,
-//  	             G4VCrossSectionDataSet * high,
-		     G4double Etransit);
+ 		       G4double Etransit);
 			      
   virtual ~G4CrossSectionPairGG();
 
@@ -76,15 +69,19 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   virtual void DumpPhysicsTable(const G4ParticleDefinition&);
   
-  private:
+private:
 
-    G4NistManager* NistMan;
-    G4VCrossSectionDataSet * theLowX;   
-    G4ComponentGGHadronNucleusXsc * theHighX;
-    G4double ETransition;
-    typedef std::valarray<G4double> XS_factors;
-    typedef std::pair<const G4ParticleDefinition *, XS_factors > ParticleXScale;
-    std::vector<ParticleXScale> scale_factors;
+  G4CrossSectionPairGG();
+  G4CrossSectionPairGG(const G4CrossSectionPairGG&);
+  G4CrossSectionPairGG& operator=(const G4CrossSectionPairGG&);
+
+  G4NistManager* NistMan;
+  G4VCrossSectionDataSet * theLowX;   
+  G4ComponentGGHadronNucleusXsc * theHighX;
+  G4double ETransition;
+  typedef std::valarray<G4double> XS_factors;
+  typedef std::pair<const G4ParticleDefinition *, XS_factors > ParticleXScale;
+  std::vector<ParticleXScale> scale_factors;
 
 };
 

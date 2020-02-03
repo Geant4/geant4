@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/include/XAluminumElectrodeHit.hh
 /// \brief Definition of the XAluminumElectrodeHit class
 //
-// $Id: XAluminumElectrodeHit.hh 92176 2015-08-20 13:07:22Z gcosmo $
 //
 // 20141008  Allocators must be thread-local, and must be pointers
 // 20150818  Make hit a simple container, with public data members
@@ -54,7 +53,7 @@ public:
   virtual ~XAluminumElectrodeHit();
   XAluminumElectrodeHit(const XAluminumElectrodeHit &right);
   const XAluminumElectrodeHit& operator=(const XAluminumElectrodeHit &right);
-  int operator==(const XAluminumElectrodeHit &right) const;
+  G4bool operator==(const XAluminumElectrodeHit &right) const;
   
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);

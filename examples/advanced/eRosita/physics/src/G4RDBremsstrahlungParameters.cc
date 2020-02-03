@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
@@ -139,7 +142,7 @@ void G4RDBremsstrahlungParameters::LoadData(const G4String& name)
 
   // Read parameters
 
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (path == 0)
     {
       G4String excep("G4LEDATA environment variable not set!");

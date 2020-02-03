@@ -23,18 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4EnclosingCylinder, a utility class
+// for a quick check of geometry.
 //
-// $Id: G4EnclosingCylinder.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4EnclosingCylinder.cc
-//
-// Implementation of a utility class for a quick check of geometry.
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4EnclosingCylinder.hh"
@@ -42,16 +34,13 @@
 #include "G4ReduciblePolygon.hh"
 #include "G4GeometryTolerance.hh"
 
-//
 // Constructor
 //
-G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
+G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon* rz,
                                                 G4bool thePhiIsOpen, 
                                                 G4double theStartPhi,
                                                 G4double theTotalPhi )
   : startPhi(theStartPhi), totalPhi(theTotalPhi),
-    rx1(0.), ry1(0.), dx1(0.), dy1(0.),
-    rx2(0.), ry2(0.), dx2(0.), dy2(0.),     
     concave(theTotalPhi > pi)
 {
   //
@@ -88,33 +77,28 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
   zHi    += 10*kCarTolerance;
 }
 
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4EnclosingCylinder::G4EnclosingCylinder( __void__& )
 : radius(0.), zLo(0.), zHi(0.), phiIsOpen(0.), startPhi(0.), totalPhi(0.),
-  rx1(0.), ry1(0.), dx1(0.), dy1(0.), rx2(0.), ry2(0.), dx2(0.), dy2(0.),
   concave(false)
 {
 }
 
-//
 // Destructor
 //
 G4EnclosingCylinder::~G4EnclosingCylinder()
 {
 }
 
-
-//
 // Outside
 //
 // Decide very rapidly if the point is outside the cylinder
 //
 // If one is not certain, return false
 //
-G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector &p ) const
+G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector& p ) const
 {
   if (p.perp() > radius) return true;
   if (p.z() < zLo) return true;
@@ -136,17 +120,15 @@ G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector &p ) const
   
   return false;
 }
-    
-    
-//
+
 // Misses
 //
 // Decide very rapidly if the trajectory is going to miss the cylinder
 //
 // If one is not sure, return false
 //
-G4bool G4EnclosingCylinder::ShouldMiss( const G4ThreeVector &p,
-                                        const G4ThreeVector &v ) const
+G4bool G4EnclosingCylinder::ShouldMiss( const G4ThreeVector& p,
+                                        const G4ThreeVector& v ) const
 {
   if (!MustBeOutside(p)) return false;
   

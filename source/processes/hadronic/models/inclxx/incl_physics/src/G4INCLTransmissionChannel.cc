@@ -75,7 +75,8 @@ namespace G4INCL {
     // Correction for real masses
     const G4int AParent = theNucleus->getA();
     const G4int ZParent = theNucleus->getZ();
-    const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(AParent,ZParent);
+    const G4int SParent = theNucleus->getS();
+    const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(AParent,ZParent,SParent);
     TOut += theQValueCorrection;
     return TOut;
   }
@@ -112,15 +113,13 @@ namespace G4INCL {
   void TransmissionChannel::fillFinalState(FinalState *fs) {
     G4double initialEnergy = 0.0;
     initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
-
     // Correction for real masses
     const G4int AParent = theNucleus->getA();
     const G4int ZParent = theNucleus->getZ();
+    const G4int SParent = theNucleus->getS();
     initialEnergy += theParticle->getTableMass() - theParticle->getMass()
-      + theParticle->getEmissionQValueCorrection(AParent,ZParent);
-
+      + theParticle->getEmissionQValueCorrection(AParent,ZParent,SParent);
     particleLeaves();
-
     fs->setTotalEnergyBeforeInteraction(initialEnergy);
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
   }

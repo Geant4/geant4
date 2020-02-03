@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRegularDetectorConstruction.cc 74592 2013-10-15 21:20:11Z jmadsen 
 //
 /// \file DicomRegularDetectorConstruction.cc
 /// \brief Implementation of the DicomRegularDetectorConstruction clas

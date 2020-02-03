@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerHit.cc 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -79,7 +78,7 @@ const GammaRayTelTrackerHit& GammaRayTelTrackerHit::operator=(const GammaRayTelT
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int GammaRayTelTrackerHit::operator==(const GammaRayTelTrackerHit& right) const
+G4bool GammaRayTelTrackerHit::operator==(const GammaRayTelTrackerHit& right) const
 {
   return((EdepSil==right.EdepSil)&&(NStrip==right.NStrip)&&(IsXPlane==right.IsXPlane)&& (pos==right.pos));
 }

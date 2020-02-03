@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc 97543 2016-06-03 15:49:14Z gcosmo $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -47,6 +46,7 @@
 #include "G4Polyhedra.hh"
 #include "G4QuadrangularFacet.hh"
 #include "G4ReflectedSolid.hh"
+#include "G4ScaledSolid.hh"
 #include "G4Sphere.hh"
 #include "G4SolidStore.hh"
 #include "G4SubtractionSolid.hh"
@@ -573,17 +573,6 @@ void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
-#if !defined(G4GEOM_USE_USOLIDS)
-void G4GDMLReadSolids::
-MultiUnionNodeRead(const xercesc::DOMElement* const,
-                   G4MultiUnion* const)
-{
-   G4Exception("G4GDMLReadSolids::MultiUnionNodeRead()",
-               "InvalidSetup", FatalException,
-               "Installation with USolids primitives required!");
-   return;
-}
-#else
 void G4GDMLReadSolids::
 MultiUnionNodeRead(const xercesc::DOMElement* const unionNodeElement,
                    G4MultiUnion* const multiUnionSolid)
@@ -652,18 +641,7 @@ MultiUnionNodeRead(const xercesc::DOMElement* const unionNodeElement,
    G4Transform3D transform(GetRotationMatrix(rotation),position);
    multiUnionSolid->AddNode(*solidNode, transform);
 }
-#endif
 
-#if !defined(G4GEOM_USE_USOLIDS)
-void G4GDMLReadSolids::
-MultiUnionRead(const xercesc::DOMElement* const)
-{
-   G4Exception("G4GDMLReadSolids::MultiUnionRead()",
-               "InvalidSetup", FatalException,
-               "Installation with USolids primitives required!");
-   return;
-}
-#else
 void G4GDMLReadSolids::
 MultiUnionRead(const xercesc::DOMElement* const unionElement)
 {
@@ -722,7 +700,6 @@ MultiUnionRead(const xercesc::DOMElement* const unionElement)
    }
    multiUnion->Voxelize();
 }
-#endif
 
 void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
 {
@@ -1360,6 +1337,74 @@ ReflectedSolidRead(const xercesc::DOMElement* const reflectedSolidElement)
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
           
    new G4ReflectedSolid(name,GetSolid(solid),transform);
+}
+
+void G4GDMLReadSolids::
+ScaledSolidRead(const xercesc::DOMElement* const scaledSolidElement)
+{
+   G4String name;
+   G4VSolid* solid=0;
+   G4ThreeVector scale(1.0,1.0,1.0);
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = scaledSolidElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::ScaledSolidRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); }
+   }
+
+   for (xercesc::DOMNode* iter = scaledSolidElement->getFirstChild();
+        iter != 0; iter = iter->getNextSibling())
+   {
+     if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+     const xercesc::DOMElement* const child
+           = dynamic_cast<xercesc::DOMElement*>(iter);
+     if (!child)
+     {
+       G4Exception("G4GDMLReadSolids::ScaledSolidRead()",
+                   "InvalidRead", FatalException, "No child found!");
+       return;
+     }
+     const G4String tag = Transcode(child->getTagName());
+
+     if (tag=="solidref")
+     { solid = GetSolid(GenerateName(RefRead(child))); }
+     else if (tag=="scale")
+     { VectorRead(child,scale); }
+     else if (tag=="scaleref")
+     { scale = GetScale(GenerateName(RefRead(child))); }
+     else
+     {
+       G4String error_msg = "Unknown tag in scaled solid: " + tag;
+       G4Exception("G4GDMLReadSolids::ScaledSolidRead()", "ReadError",
+                   FatalException, error_msg);
+       return;
+     }
+   }
+
+   G4Scale3D transform = G4Scale3D(scale.x(),scale.y(),scale.z());
+          
+   new G4ScaledSolid(name, solid ,transform);
 }
 
 G4ExtrudedSolid::ZSection G4GDMLReadSolids::
@@ -2243,6 +2288,12 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
    G4double endouterrad = 0.0;
    G4double zlen = 0.0;
    G4double phi = 0.0;
+   G4double totphi = 0.0;
+   G4double midinnerrad = 0.0;
+   G4double midouterrad = 0.0;
+   G4double positiveEndz = 0.0;
+   G4double negativeEndz = 0.0;
+   G4int nseg = 0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = twistedtubsElement->getAttributes();
@@ -2282,6 +2333,12 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
       if (attName=="endinnerrad")  { endinnerrad=eval.Evaluate(attValue);  } else
       if (attName=="endouterrad")  { endouterrad=eval.Evaluate(attValue);  } else
       if (attName=="zlen") { zlen = eval.Evaluate(attValue); } else
+      if (attName=="midinnerrad")  { midinnerrad=eval.Evaluate(attValue);  } else
+      if (attName=="midouterrad")  { midouterrad=eval.Evaluate(attValue);  } else
+      if (attName=="negativeEndz") { negativeEndz = eval.Evaluate(attValue); } else
+      if (attName=="positiveEndz") { positiveEndz = eval.Evaluate(attValue); } else
+      if (attName=="nseg") { nseg = eval.Evaluate(attValue); } else
+      if (attName=="totphi") { totphi = eval.Evaluate(attValue); } else
       if (attName=="phi") { phi = eval.Evaluate(attValue); }
    }
 
@@ -2289,9 +2346,29 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
    endinnerrad *= lunit;
    endouterrad *= lunit;
    zlen *= 0.5*lunit;
+   midinnerrad *= lunit;
+   midouterrad *= lunit;
+   positiveEndz *= lunit;
+   negativeEndz *= lunit;
    phi *= aunit;
+   totphi *= aunit;
 
-   new G4TwistedTubs(name,twistedangle,endinnerrad,endouterrad,zlen,phi);
+   if (zlen != 0.0)
+   {
+     if (nseg != 0)
+       new G4TwistedTubs(name,twistedangle,endinnerrad,endouterrad,zlen,nseg,totphi);
+     else
+       new G4TwistedTubs(name,twistedangle,endinnerrad,endouterrad,zlen,phi);
+   }
+   else
+   {
+     if (nseg != 0)
+       new G4TwistedTubs(name,twistedangle,midinnerrad,midouterrad,
+                         negativeEndz,positiveEndz,nseg,totphi);
+     else
+       new G4TwistedTubs(name,twistedangle,midinnerrad,midouterrad,
+                         negativeEndz,positiveEndz,phi);
+   }
 }
 
 G4TwoVector G4GDMLReadSolids::
@@ -2395,6 +2472,88 @@ RZPointRead(const xercesc::DOMElement* const zplaneElement)
     
    return rzpoint;
  
+}
+
+void G4GDMLReadSolids::
+PropertyRead(const xercesc::DOMElement* const propertyElement,
+             G4OpticalSurface* opticalsurface)
+{
+   G4String name;
+   G4String ref;
+   G4GDMLMatrix matrix;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = propertyElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+      { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::PropertyRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); } else
+      if (attName=="ref")  { matrix = GetMatrix(ref=attValue); }
+   }
+
+   /*
+   if (matrix.GetCols() != 2)
+   {
+     G4String error_msg = "Referenced matrix '" + ref
+            + "' should have \n two columns as a property table for opticalsurface: "
+            + opticalsurface->GetName();
+     G4Exception("G4GDMLReadSolids::PropertyRead()", "InvalidRead",
+                 FatalException, error_msg);
+   }
+   */
+
+   if (matrix.GetRows() == 0) { return; }
+
+   G4MaterialPropertiesTable* matprop=opticalsurface->GetMaterialPropertiesTable();
+   if (!matprop)
+   {
+     matprop = new G4MaterialPropertiesTable();
+     opticalsurface->SetMaterialPropertiesTable(matprop);
+   }
+   if (matrix.GetCols() == 1)  // constant property assumed
+   {
+     matprop->AddConstProperty(Strip(name), matrix.Get(0,0));
+   }
+   else  // build the material properties vector
+   {
+     G4MaterialPropertyVector* propvect;
+     // first check if it was already built
+     if ( mapOfMatPropVects.find(Strip(name)) == mapOfMatPropVects.end())
+       {
+	 // if not create a new one
+	 propvect = new G4MaterialPropertyVector();
+	 for (size_t i=0; i<matrix.GetRows(); i++)
+	   {
+	     propvect->InsertValues(matrix.Get(i,0),matrix.Get(i,1));
+	   }
+	 // and add it to the list for potential future reuse
+	 mapOfMatPropVects[Strip(name)] = propvect;
+       }
+     else
+       {
+	 propvect = mapOfMatPropVects[Strip(name)];
+       }
+	 
+     matprop->AddProperty(Strip(name),propvect);
+   }
 }
 
 void G4GDMLReadSolids::
@@ -2517,13 +2676,33 @@ OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
       { type = firsov; }
    else { type = x_ray; }
 
-   new G4OpticalSurface(name,model,finish,type,value);
+   G4OpticalSurface* opticalsurface
+         = new G4OpticalSurface(name,model,finish,type,value);
+
+   for (xercesc::DOMNode* iter = opticalsurfaceElement->getFirstChild();
+        iter != 0;iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::OpticalSurfaceRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+
+      if (tag=="property") { PropertyRead(child,opticalsurface); }
+   }
 }
 
 void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading solids..." << G4endl;
-
+#endif
    for (xercesc::DOMNode* iter = solidsElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
    {
@@ -2556,6 +2735,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="polyhedra") { PolyhedraRead(child); } else
       if (tag=="genericPolyhedra") { GenericPolyhedraRead(child); } else
       if (tag=="reflectedSolid") { ReflectedSolidRead(child); } else
+      if (tag=="scaledSolid") { ScaledSolidRead(child); } else
       if (tag=="sphere") { SphereRead(child); } else
       if (tag=="subtraction") { BooleanRead(child,SUBTRACTION); } else
       if (tag=="tessellated") { TessellatedRead(child); } else

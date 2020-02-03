@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 #include "G4HepRepMessenger.hh"
 
@@ -46,6 +45,7 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	scale(1.),
     suffix (""),
     geometry(true),
+    pointAttributes(false),
     solids(true),
     invisibles(true) {
 
@@ -56,11 +56,11 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	setFileDirCommand->SetGuidance("Set directory for output.");
 	setFileDirCommand->SetGuidance("This command is used by HepRepFile, not by HepRepXML.");
 	setFileDirCommand->SetParameterName("directory",false);
-	if ( getenv( "G4HEPREPFILE_DIR" ) == NULL ) {
+	if ( std::getenv( "G4HEPREPFILE_DIR" ) == NULL ) {
 		setFileDirCommand->SetDefaultValue("");
 	} else {
-		setFileDirCommand->SetDefaultValue(getenv("G4HEPREPFILE_DIR"));
-		fileDir = getenv("G4HEPREPFILE_DIR");
+		setFileDirCommand->SetDefaultValue(std::getenv("G4HEPREPFILE_DIR"));
+		fileDir = std::getenv("G4HEPREPFILE_DIR");
 	}
 	setFileDirCommand->AvailableForStates(G4State_Idle);
 		
@@ -68,11 +68,11 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	setFileNameCommand->SetGuidance("Set file name for output.");
 	setFileNameCommand->SetGuidance("This command is used by HepRepFile, not by HepRepXML.");
 	setFileNameCommand->SetParameterName("directory",false);
-	if ( getenv( "G4HEPREPFILE_NAME" ) == NULL ) {
+	if ( std::getenv( "G4HEPREPFILE_NAME" ) == NULL ) {
 		setFileNameCommand->SetDefaultValue("G4Data");
 	} else {
-		setFileNameCommand->SetDefaultValue(getenv("G4HEPREPFILE_NAME"));
-		fileName = getenv("G4HEPREPFILE_NAME");
+		setFileNameCommand->SetDefaultValue(std::getenv("G4HEPREPFILE_NAME"));
+		fileName = std::getenv("G4HEPREPFILE_NAME");
 	}
 	setFileNameCommand->AvailableForStates(G4State_Idle);
 
@@ -81,11 +81,11 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	setOverwriteCommand->SetGuidance("Set false to increment the file name for each new output.");
 	setOverwriteCommand->SetGuidance("This command is used by HepRepFile, not by HepRepXML.");
 	setOverwriteCommand->SetParameterName("flag",false);
-	if ( getenv( "G4HEPREPFILE_OVERWRITE" ) == NULL ) {
+	if ( std::getenv( "G4HEPREPFILE_OVERWRITE" ) == NULL ) {
 		setOverwriteCommand->SetDefaultValue(false);
 	} else {
-		setOverwriteCommand->SetDefaultValue(getenv("G4HEPREPFILE_OVERWRITE"));
-		overwrite = setOverwriteCommand->ConvertToBool(getenv("G4HEPREPFILE_OVERWRITE"));
+		setOverwriteCommand->SetDefaultValue(std::getenv("G4HEPREPFILE_OVERWRITE"));
+		overwrite = setOverwriteCommand->ConvertToBool(std::getenv("G4HEPREPFILE_OVERWRITE"));
 	}
 	setOverwriteCommand->AvailableForStates(G4State_Idle);
 		
@@ -93,11 +93,11 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	setCullInvisiblesCommand->SetGuidance("Remove invisible objects from output file.");
 	setCullInvisiblesCommand->SetGuidance("This command is used by HepRepFile, not by HepRepXML.");
 	setCullInvisiblesCommand->SetParameterName("flag",false);
-	if ( getenv( "G4HEPREPFILE_CULL" ) == NULL ) {
+	if ( std::getenv( "G4HEPREPFILE_CULL" ) == NULL ) {
 		setCullInvisiblesCommand->SetDefaultValue(false);
 	} else {
-		setCullInvisiblesCommand->SetDefaultValue(getenv("G4HEPREPFILE_CULL"));
-		cullInvisibles = setCullInvisiblesCommand->ConvertToBool(getenv("G4HEPREPFILE_CULL"));
+		setCullInvisiblesCommand->SetDefaultValue(std::getenv("G4HEPREPFILE_CULL"));
+		cullInvisibles = setCullInvisiblesCommand->ConvertToBool(std::getenv("G4HEPREPFILE_CULL"));
 	}
 	setCullInvisiblesCommand->AvailableForStates(G4State_Idle);
 		

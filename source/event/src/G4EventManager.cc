@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc 97477 2016-06-03 10:13:42Z gcosmo $
 //
 //
 //
@@ -48,6 +47,7 @@ G4EventManager* G4EventManager::GetEventManager()
 
 G4EventManager::G4EventManager()
 :currentEvent(nullptr),trajectoryContainer(nullptr),
+ trackIDCounter(0),
  verboseLevel(0),tracking(false),abortRequested(false),
  storetRandomNumberStatusToG4Event(false)
 {
@@ -91,8 +91,8 @@ G4EventManager::~G4EventManager()
 /*
 const G4EventManager & G4EventManager::operator=(const G4EventManager &right)
 { }
-G4int G4EventManager::operator==(const G4EventManager &right) const { }
-G4int G4EventManager::operator!=(const G4EventManager &right) const { }
+G4bool G4EventManager::operator==(const G4EventManager &right) const { }
+G4bool G4EventManager::operator!=(const G4EventManager &right) const { }
 */
 
 void G4EventManager::DoProcessing(G4Event* anEvent)
@@ -116,7 +116,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
     currentEvent->SetRandomNumberStatusForProcessing(randomNumberStatusToG4Event); 
   }
 
-  // Reseting Navigator has been moved to G4EventManager, so that resetting
+  // Resetting Navigator has been moved to G4EventManager, so that resetting
   // is now done for every event.
   G4ThreeVector center(0,0,0);
   G4Navigator* navigator =
@@ -233,8 +233,10 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
         break;
 
       case fAlive:
-        G4cout << "Illeagal TrackStatus returned from G4TrackingManager!"
-             << G4endl;
+        G4Exception("G4EventManager::DoProcessing","Event004",JustWarning,
+            "Illegal trackstatus returned from G4TrackingManager. Continue with"\
+            "simulation.");
+        break;
       case fKillTrackAndSecondaries:
         //if( secondaries ) secondaries->clearAndDestroy();
         if( secondaries )

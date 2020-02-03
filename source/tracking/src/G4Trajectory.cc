@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc 69003 2013-04-15 09:25:23Z gcosmo $
 //
 // ---------------------------------------------------------------
 //
@@ -52,7 +51,11 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4ThreadLocal G4Allocator<G4Trajectory> *aTrajectoryAllocator = 0;
+G4Allocator<G4Trajectory>*& aTrajectoryAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4Trajectory>* _instance = nullptr;
+    return _instance;
+}
 
 G4Trajectory::G4Trajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),

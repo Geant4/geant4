@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
     char useWendtFission[] = "G4NEUTRON_HP_USE_WENDT_FISSION_MODEL";
 
     char Force[] = "G4FORCENUMBEROFTHREADS";
-    if(getenv(Force) != NULL) {
+    if(std::getenv(Force) != NULL) {
        char doNotForce[]="G4FORCENUMBEROFTHREADS=1";
        putenv(doNotForce);
     }
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
     
     // Verify that NeutronHP is going to create fission fragments
     // Throw and error if it isn't.
-    if(getenv(makeFissionFragments) == NULL)
+    if(std::getenv(makeFissionFragments) == NULL)
     {
         G4cerr << G4endl << "!!!!" << G4endl;
         G4cerr << "!!!! Error in example" << argv[0] << G4endl;
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
     
     // We are trying to use the Wendt fission model in Neutron_HP
     // Warn the user if the appropriate environment variable is not set up
-    if(getenv(useWendtFission) == NULL)
+    if(std::getenv(useWendtFission) == NULL)
     {
         G4cout << G4endl << "!!!!" << G4endl;
         G4cout << "!!!! Warning in example" << argv[0] << G4endl;

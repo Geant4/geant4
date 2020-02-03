@@ -11,7 +11,6 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 91565 2015-07-27 12:18:45Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -19,9 +18,6 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/digits/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/event/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
@@ -55,12 +51,16 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/muons/i
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/standard/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/xrays/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/optical/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 
 #
 # Define the Geant4 Module.
@@ -69,18 +69,28 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
   HEADERS
     G4EmDNAChemistry.hh
+    G4EmDNAChemistry_option1.hh
+    G4EmDNAChemistry_option2.hh
     G4EmDNAPhysics.hh
     G4EmDNAPhysics_option1.hh
     G4EmDNAPhysics_option2.hh
     G4EmDNAPhysics_option3.hh
     G4EmDNAPhysics_option4.hh
     G4EmDNAPhysics_option5.hh
+    G4EmDNAPhysics_option6.hh
     G4EmDNAPhysics_option7.hh
+    G4EmDNAPhysics_option8.hh
+    G4EmDNAPhysics_stationary.hh
+    G4EmDNAPhysics_stationary_option2.hh
+    G4EmDNAPhysics_stationary_option4.hh
+    G4EmDNAPhysics_stationary_option6.hh
+    G4EmDNAPhysicsActivator.hh
     G4EmLEPTSPhysics.hh
     G4EmLivermorePhysics.hh
     G4EmLivermorePolarizedPhysics.hh
     G4EmLowEPPhysics.hh
     G4EmModelActivator.hh
+    G4EmParticleList.hh
     G4EmPenelopePhysics.hh
     G4EmStandardPhysics.hh
     G4EmStandardPhysicsGS.hh
@@ -90,23 +100,34 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmStandardPhysics_option2.hh
     G4EmStandardPhysics_option3.hh
     G4EmStandardPhysics_option4.hh
+    G4GammaGeneralProcess.hh
     G4OpticalPhysics.hh
     G4OpticalPhysicsMessenger.hh
     G4OpticalProcessIndex.hh
   SOURCES
     G4EmDNAChemistry.cc
+    G4EmDNAChemistry_option1.cc
+    G4EmDNAChemistry_option2.cc
     G4EmDNAPhysics.cc
     G4EmDNAPhysics_option1.cc
     G4EmDNAPhysics_option2.cc
     G4EmDNAPhysics_option3.cc
     G4EmDNAPhysics_option4.cc
     G4EmDNAPhysics_option5.cc
+    G4EmDNAPhysics_option6.cc
     G4EmDNAPhysics_option7.cc
+    G4EmDNAPhysics_option8.cc
+    G4EmDNAPhysics_stationary.cc
+    G4EmDNAPhysics_stationary_option2.cc
+    G4EmDNAPhysics_stationary_option4.cc
+    G4EmDNAPhysics_stationary_option6.cc
+    G4EmDNAPhysicsActivator.cc
     G4EmLEPTSPhysics.cc
     G4EmLivermorePhysics.cc
     G4EmLivermorePolarizedPhysics.cc
     G4EmLowEPPhysics.cc
     G4EmModelActivator.cc
+    G4EmParticleList.cc
     G4EmPenelopePhysics.cc
     G4EmStandardPhysics.cc
     G4EmStandardPhysicsGS.cc
@@ -116,6 +137,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmStandardPhysics_option2.cc
     G4EmStandardPhysics_option3.cc
     G4EmStandardPhysics_option4.cc
+    G4GammaGeneralProcess.cc
     G4OpticalPhysics.cc
     G4OpticalPhysicsMessenger.cc
   GRANULAR_DEPENDENCIES
@@ -123,7 +145,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4bosons
     G4cuts
     G4decay
-    G4digits
     G4emdna-utils
     G4emdna-processes
     G4emdna-molman
@@ -133,10 +154,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4emlowenergy
     G4emstandard
     G4emutils
-    G4event
     G4geometrymng
     G4globman
-    G4hits
+    G4had_mod_man
+    G4hadronic_mgt
+    G4hadronic_proc
+    G4hadronic_xsect
+    G4hadronic_util
     G4intercoms
     G4ions
     G4leptons
@@ -154,13 +178,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4run
     G4shortlived
     G4track
-    G4tracking
     G4transportation
     G4volumes
     G4xrays
   GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
     G4geometry
     G4global
     G4intercoms
@@ -169,7 +190,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4processes
     G4run
     G4track
-    G4tracking
   LINK_LIBRARIES
 )
 

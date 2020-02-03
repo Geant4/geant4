@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
@@ -69,19 +76,22 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {    
-  G4double radius = fDetector->GetAbsorRadius();
+  G4double thickness = fDetector->GetCytoThickness();
+  G4double radius = fDetector->GetNuclRadius();
 
   G4double rx=1*m;
   G4double ry=1*m;
   G4double rz=1*m;
+  G4double myRadius = 0;
 
   do
   {
-    rx = (2*G4UniformRand()-1)*radius;
-    ry = (2*G4UniformRand()-1)*radius;
-    rz = (2*G4UniformRand()-1)*radius;
+    rx = (2*G4UniformRand()-1)*(radius+thickness)*1.01;
+    ry = (2*G4UniformRand()-1)*(radius+thickness)*1.01;
+    rz = (2*G4UniformRand()-1)*(radius+thickness)*1.01;
+    myRadius = std::sqrt(rx*rx+ry*ry+rz*rz);
 
-  } while (std::sqrt(rx*rx+ry*ry+rz*rz)>radius) ;
+  } while (myRadius>radius+thickness || myRadius<radius) ;
 
   fParticleGun->SetParticlePosition(G4ThreeVector(rx,ry,rz));
   fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
@@ -102,7 +112,7 @@ G4bool PrimaryGeneratorAction::Notify(G4ApplicationState requestedState)
     G4ParticleDefinition* particle
              = G4ParticleTable::GetParticleTable()->FindParticle("e-");
     fParticleGun->SetParticleDefinition(particle);
-    fParticleGun->SetParticleEnergy(300*eV);
+    fParticleGun->SetParticleEnergy(0*eV);
     fParticleGun->SetParticlePosition(G4ThreeVector());
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1,0,0));
   }

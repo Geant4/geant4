@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4RegionStore.hh 89814 2015-04-30 14:49:43Z gcosmo $
-//
-// class G4RegionStore
+// G4RegionStore
 //
 // Class description:
 //
@@ -46,8 +43,7 @@
 // static G4RegionStore*
 //   - Pointer to the single G4RegionStore
 
-// History:
-// 18.09.02 G.Cosmo Initial version
+// 18.09.02, G.Cosmo - Initial version
 // --------------------------------------------------------------------
 #ifndef G4REGIONSTORE_HH
 #define G4REGIONSTORE_HH
@@ -87,7 +83,7 @@ class G4RegionStore : public std::vector<G4Region*>
       // Forces recomputation of material lists in all regions
       // in the store.
 
-    G4Region* GetRegion(const G4String& name, G4bool verbose=true) const;
+    G4Region* GetRegion(const G4String& name, G4bool verbose = true) const;
       // Returns a region through its name specification.
 
     G4Region* FindOrCreateRegion(const G4String& name);

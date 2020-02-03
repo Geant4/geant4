@@ -33,6 +33,9 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
+// June-2019 - E. Mendoza --> Modification to allow using an incomplete data library if the G4NEUTRONHP_SKIP_MISSING_ISOTOPES environmental flag is defined. The missing XS are set to 0.
+
+
 #include <stdlib.h>
 
 #include "G4ParticleHPChannel.hh"
@@ -88,7 +91,7 @@
 */
     //if(Z=theElement->GetZ()-5) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
     // Bug fix by TK on behalf of AH
-    if ( Z <=theElement->GetZ()-5 ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
+    //if ( Z <=theElement->GetZ()-5 ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
     G4int count = 0;
     if(registerCount==0) count = theElement->GetNumberOfIsotopes();
     if(count == 0||registerCount!=0) count +=

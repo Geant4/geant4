@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: field04.cc 78551 2014-01-07 09:45:08Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file field/field04/field04.cc
 /// \brief Main program of the field/field04 example
@@ -67,21 +70,60 @@
 #include "G4UIExecutive.hh"
 #endif
 
-// argc holds the number of arguments (including the name) on the command line
-// -> it is ONE when only the name is  given !!!
-// argv[0] is always the name of the program
-// argv[1] points to the first argument, and so on
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+namespace {
+  void PrintUsage() {
+    G4cerr << " Usage: " << G4endl;
+    G4cerr << " field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]" 
+           << G4endl;
+  }
+}
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
+<<<<<<< HEAD
+=======
+  // Evaluate arguments
+  // argc holds the number of arguments (including the name) on the command line
+  // -> it is ONE when only the name is  given !!!
+  // argv[0] is always the name of the program
+  // argv[1] points to the first argument, and so on
+  //
+  if ( argc > 7 ) {
+    PrintUsage();
+    return 1;
+  }
+  
+  G4String macro;
+  G4String physicsList = "QGSP_BERT";
+  G4int randomSeed = 1234;
+  G4String startPhase = "idle";
+  for ( G4int i=1; i<argc; i=i+2 ) {
+    if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
+    else if ( G4String(argv[i]) == "-r" ) randomSeed = atoi(argv[i+1]);
+    else if ( G4String(argv[i]) == "-p" ) physicsList = argv[i+1];
+    else if ( G4String(argv[i]) == "-s" ) startPhase = argv[i+1];
+    else {
+      PrintUsage();
+      return 1;
+    }
+  }  
+  
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( ! macro.size() ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // Choose the Random engine
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
-  G4int myseed = 1234;
-  if (argc  > 2) myseed = atoi(argv[argc-1]);
 
   // Construct the default run manager
   //
@@ -92,28 +134,7 @@ int main(int argc,char** argv)
   G4RunManager * runManager = new G4RunManager;
 #endif
 
-  G4Random::setTheSeed(myseed);
-
-  G4String physicsList = "QGSP_BERT";
-
-#ifndef WIN32
-  G4int c = 0;
-  while ((c=getopt(argc,argv,"p")) != -1)
-  {
-     switch (c)
-     {
-       case 'p':
-         physicsList = optarg;
-         G4cout << "Physics List used is " <<  physicsList << G4endl;
-         break;
-       case ':':       /* -p without operand */
-         fprintf(stderr,"Option -%c requires an operand\n", optopt);
-         break;
-       case '?':
-         fprintf(stderr,"Unrecognised option: -%c\n", optopt);
-     }
-  }
-#endif
+  G4Random::setTheSeed(randomSeed);
 
   // Set mandatory initialization classes
   //
@@ -142,6 +163,7 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
+<<<<<<< HEAD
 #ifndef WIN32
   G4int optmax = argc;
   if (argc > 2)  { optmax = optmax-1; }
@@ -183,6 +205,35 @@ int main(int argc,char** argv)
      ui->SessionStart();
      delete ui;
 #endif
+=======
+  // Process macro or start UI session
+  //
+  if ( macro.size() ) {
+    // batch mode
+    G4String command = "/control/execute ";
+    UImanager->ApplyCommand(command+macro);
+  }
+  else  { 
+    // interactive mode : define UI session
+    if ( startPhase == "preinit" ) {
+      // start in PreInit> phase if requested
+      G4cout << "At the prompt, issue commands to set up detector & field, then:"
+          << G4endl;
+      G4cout << "/run/initialize" << G4endl;
+      G4cout << "Then if you want a viewer:"<< G4endl;
+      G4cout << "/control/execute vis.mac" << G4endl;
+      G4cout << "Then: " << G4endl;
+      G4cout << "/run/beamOn … etc." << G4endl;
+    } else {
+      // perform initialization and draw geometry
+      UImanager->ApplyCommand("/control/execute init_vis.mac");
+    }
+    if (ui->IsGUI()) {
+      UImanager->ApplyCommand("/control/execute gui.mac");
+    }
+    ui->SessionStart();
+    delete ui;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   }
 
   // Job termination

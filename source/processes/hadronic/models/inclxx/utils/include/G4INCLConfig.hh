@@ -220,6 +220,12 @@ namespace G4INCL {
     }
 #endif
 
+#ifdef INCL_DEEXCITATION_ABLACXX
+    std::string const &getABLAXXDataFilePath() const {
+      return ablaxxDataFilePath;
+    }
+#endif
+
 #ifdef INCL_DEEXCITATION_ABLA07
     std::string const &getABLA07DataFilePath() const {
       return abla07DataFilePath;
@@ -400,6 +406,9 @@ namespace G4INCL {
     DeExcitationType deExcitationType;
 #ifdef INCL_DEEXCITATION_ABLAXX
     std::string ablav3pCxxDataFilePath;
+#endif
+#ifdef INCL_DEEXCITATION_ABLACXX
+    std::string ablaxxDataFilePath;
 #endif
 #ifdef INCL_DEEXCITATION_ABLA07
     std::string abla07DataFilePath;

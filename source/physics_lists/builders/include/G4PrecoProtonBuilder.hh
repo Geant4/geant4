@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PrecoProtonBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,13 +52,15 @@ class G4PrecoProtonBuilder : public G4VProtonBuilder
 {
   public: 
     G4PrecoProtonBuilder();
-    virtual ~G4PrecoProtonBuilder();
+    virtual ~G4PrecoProtonBuilder() {}
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {};
+    virtual void Build(G4ProtonInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+
+    using G4VProtonBuilder::Build; //Prevent compiler warning
 
   private:
 
@@ -68,8 +69,6 @@ class G4PrecoProtonBuilder : public G4VProtonBuilder
     G4double theMax;
 
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

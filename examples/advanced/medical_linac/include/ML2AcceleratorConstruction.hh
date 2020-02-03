@@ -40,6 +40,7 @@
 //
 //*******************************************************//
 
+
 #ifndef CML2AcceleratorConstructionH
 #define CML2AcceleratorConstructionH
 
@@ -53,7 +54,10 @@
 
 #include "ML2PrimaryGenerationAction.hh"
 
+#include "ML2Accelerator.hh"
 #include "ML2Acc1.hh"
+#include "ML2Acc2.hh"
+#include "ML2AccSaturn.hh"
 
 class CML2AcceleratorConstructionMessenger;
 class CML2PrimaryGenerationAction;
@@ -103,7 +107,7 @@ private:
 	G4bool bRotate90Y, bOnlyVisio;
 	
 
-	CML2Acc1 *accelerator1;
+	CML2Accelerator *accelerator;
 };
 
 #endif

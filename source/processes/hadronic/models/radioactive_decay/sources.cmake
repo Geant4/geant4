@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 93732 2015-10-30 10:57:14Z gcosmo $
+# $Id: sources.cmake 106689 2017-10-19 16:20:21Z dwright $
 #
 #------------------------------------------------------------------------------
 
@@ -40,6 +40,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/fission/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
@@ -53,54 +54,56 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     HEADERS
         G4AlphaDecay.hh
-        G4AlphaDecayChannel.hh
+        G4BatemanParameters.hh
         G4BetaDecayCorrections.hh
         G4BetaDecayType.hh
         G4BetaMinusDecay.hh
-        G4BetaMinusDecayChannel.hh
         G4BetaPlusDecay.hh
-        G4BetaPlusDecayChannel.hh
         G4ECDecay.hh
         G4ITDecay.hh
-        G4ITDecayChannel.hh
-        G4KshellECDecayChannel.hh
-        G4LshellECDecayChannel.hh
-        G4MshellECDecayChannel.hh
+        G4SFDecay.hh
         G4NeutronDecay.hh
-        G4NuclearDecayChannel.hh
         G4NuclearDecay.hh
         G4NucleusLimits.hh
         G4ProtonDecay.hh
-	G4ProtonDecayChannel.hh
-        G4RIsotopeTable.hh
         G4RadioactiveDecay.hh
+        G4RadioactiveDecayBase.hh
+        G4RadioactiveDecayBaseMessenger.hh
+        G4Radioactivation.hh
+        G4RadioactivationMessenger.hh
         G4RadioactiveDecayMode.hh
-        G4RadioactiveDecayRate.hh
-        G4RadioactiveDecayRateVector.hh
+        G4RadioactiveDecayRatesToDaughter.hh
+        G4RadioactiveDecayChainsFromParent.hh
         G4RadioactiveDecaymessenger.hh
         G4RadioactivityTable.hh
+        G4TritonDecay.hh
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
         G4AlphaDecay.cc
+        G4BatemanParameters.cc
         G4BetaDecayCorrections.cc
         G4BetaDecayType.cc
         G4BetaMinusDecay.cc
         G4BetaPlusDecay.cc
         G4ECDecay.cc
         G4ITDecay.cc
+        G4SFDecay.cc
         G4NeutronDecay.cc
-        G4NuclearDecayChannel.cc
         G4NuclearDecay.cc
         G4NucleusLimits.cc
         G4ProtonDecay.cc
-        G4RIsotopeTable.cc
         G4RadioactiveDecay.cc
+        G4RadioactiveDecayBase.cc
+        G4RadioactiveDecayBaseMessenger.cc
+        G4Radioactivation.cc
+        G4RadioactivationMessenger.cc
         G4RadioactiveDecayMode.cc
-        G4RadioactiveDecayRate.cc
-        G4RadioactiveDecayRateVector.cc
+        G4RadioactiveDecayRatesToDaughter.cc
+        G4RadioactiveDecayChainsFromParent.cc
         G4RadioactiveDecaymessenger.cc
         G4RadioactivityTable.cc
+        G4TritonDecay.cc
         G4UIcmdWithNucleusLimits.cc
     GRANULAR_DEPENDENCIES
         G4baryons
@@ -112,6 +115,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4hadronic_deex_management
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
+        G4had_fission
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_util

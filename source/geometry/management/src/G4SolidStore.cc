@@ -23,15 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SolidStore implementation for singleton container
 //
-// $Id: G4SolidStore.cc 67975 2013-03-13 10:19:44Z gcosmo $
-//
-// G4SolidStore
-//
-// Implementation for singleton container
-//
-// History:
-// 10.07.95 P.Kent Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
+// 10.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 
 #include "globals.hh"
@@ -42,8 +37,8 @@
 // Static class variables
 // ***************************************************************************
 //
-G4SolidStore* G4SolidStore::fgInstance = 0;
-G4ThreadLocal G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
+G4SolidStore* G4SolidStore::fgInstance = nullptr;
+G4ThreadLocal G4VStoreNotifier* G4SolidStore::fgNotifier = nullptr;
 G4ThreadLocal G4bool G4SolidStore::locked = false;
 
 // ***************************************************************************
@@ -63,13 +58,7 @@ G4SolidStore::G4SolidStore()
 //
 G4SolidStore::~G4SolidStore() 
 {
-  // In multi-threaded mode, since parameterised solids are replicated
-  // by threads, the master thread can not free them when thread private
-  // malloc library is used. May let the master thread to replicate.
-
-#ifndef G4MULTITHREADED  
   Clean();
-#endif
 }
 
 // ***************************************************************************
@@ -80,7 +69,7 @@ void G4SolidStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
+  if (G4GeometryManager::IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the solid store"
            << " while geometry closed !" << G4endl;
@@ -92,18 +81,17 @@ void G4SolidStore::Clean()
   //
   locked = true;  
 
-  size_t i=0;
+  size_t i = 0;
   G4SolidStore* store = GetInstance();
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Solids ... ";
 #endif
 
-  for(iterator pos=store->begin(); pos!=store->end(); pos++)
+  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    if (*pos) { delete *pos; }
-    i++;
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
+    delete *pos; ++i;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -134,7 +122,7 @@ void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
 void G4SolidStore::Register(G4VSolid* pSolid)
 {
   GetInstance()->push_back(pSolid);
-  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
 }
 
 // ***************************************************************************
@@ -145,12 +133,12 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
+    for (auto i=GetInstance()->crbegin(); i!=GetInstance()->crend(); ++i)
     {
       if (**i==*pSolid)
       {
-        GetInstance()->erase(i);
+        GetInstance()->erase(std::next(i).base());
         break;
       }
     }
@@ -163,7 +151,7 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 //
 G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
 {
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
   {
     if ((*i)->GetName() == name) { return *i; }
   }
@@ -175,7 +163,7 @@ G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
      G4Exception("G4SolidStore::GetSolid()",
                  "GeomMgt1001", JustWarning, message);
   }
-  return 0;
+  return nullptr;
 }
 
 // ***************************************************************************
@@ -185,7 +173,7 @@ G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
 G4SolidStore* G4SolidStore::GetInstance()
 {
   static G4SolidStore worldStore;
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = &worldStore;
   }

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // G4VRML2.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -53,14 +52,14 @@ G4VRML2::G4VRML2() :
 {
 	// port number
 	fPort = FR_VRML_DEFAULT_PORT;
-	char *pport = getenv(FR_VRML_PORT_ENV);
+	char *pport = std::getenv(FR_VRML_PORT_ENV);
 	if (pport) {
 		sscanf(pport, "%d", &fPort);
 	}
 
 	// host name
 	fHostName = "localhost" ; // G4String::operator = ( const char* cs )
-	char *phostname =  getenv(FR_VRML_HOST_NAME_ENV); 
+	char *phostname =  std::getenv(FR_VRML_HOST_NAME_ENV); 
 	if (phostname) {
 		fHostName = phostname;
 	}

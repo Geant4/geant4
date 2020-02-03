@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 94509 2015-11-20 10:14:44Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +21,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+envs-V10-05-00/ Dec. 1, 2019 K.Murakami
+ - g4py, updated for 10.6 release
+ - g4pym boost_python library name can be specified in cmake (BZ-2059)
+
+envs-V10-04-01 / Nov. 30, 2018 K.Murakami
+ - g4py, updated for 10.5 release
+ - g4py, fix CMAKE_INSTALL_PREFIX does not work (id 1924)
+
+envs-V10-03-01 / Nov. 24, 2017 K.Murakami
+ - g4py, updated for 10.4 release
+ - zmq, new ZeroMQ interface (experimental)
+
+envs-V10-02-02 / 7 Dec. 2016 K.Murakami
+ - remove G4VisAttributes::Invisible as deprecated
+
+envs-V10-02-01 / 21 Nov. 2016 K.Murakami
+ - fixed version strings in __init_.py
+
+envs-V10-02-00 / 18 Nov. 2016 K.Murakami
+ - update for 10.3 release
+ - CMake modified for unit/integration tests with CTest
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 envs-V10-01-01 / 20 Nov. 2015 K. Murakami
  - update CMakeLists.txt, change minimum version requirement to 3.3
  - add exported methods requested by enhansment-id 1613
@@ -184,7 +212,7 @@ envs-V08-01-00 20 November 2006 Koichi Murakami
   - more exposed stuffs
   - add physics list module
   - add GUI examples using wxPython
-      
+
 envs-V08-00-09 29 June 2006 Koichi Murakami
   [g4py]
   - fix rpath of boost_python (config/sys/linux.gmk, linuxx8664gcc.gmk)
@@ -218,7 +246,7 @@ envs-V08-00-04 05 June 2006  Koichi Murakami
   - [g4py] additional moddifications of g4py for G4 8.1 (08-00-ref-05)
 
 envs-V08-00-03 05 June 2006  Koichi Murakami
-  - History file is updated. 
+  - History file is updated.
   - same as the previous
 
 envs-V08-00-02 05 June 2006  Koichi Murakami
@@ -235,7 +263,7 @@ envs-V08-00-00 28 February 2006 Hajime Yoshida
  -addition of new Python environments
     -- g4py/source : Python wrappers of geant4/sources
     -- g4py/site-modules : some application modules using the wrappers
-    -- g4py/ associated files to configure 
+    -- g4py/ associated files to configure
 
 envs-V06-02-00 27 November 2004 Hajime Yoshida
  -old depricated files
@@ -266,7 +294,7 @@ envs-V01-01-01  09 June 2000 John Allison
 - Only OPACS and History tagged.
 
 09 June 2000 Guy Barrand
-- Some correction to be able to compile 
+- Some correction to be able to compile
   with 01-01-ref-04
 
 envs-V01-01-00  7th June 2000  Guy Barrand
@@ -303,7 +331,7 @@ envs-00-03-02  14th Sep 1998 Hajime Yoshida
 	- minor updates in GGE
 envs-00-03-01  13th Sep 1998 Hajime Yoshida
 	-Momo/GGEmake added README and a macro file
-	-Momo/java/Momo/GGE updated. 
+	-Momo/java/Momo/GGE updated.
 		BREPs, sample persistent files etc.
 envs-00-02-01  3rd Sep 1998 Hajime Yoshida
 	Momo/GGEmake

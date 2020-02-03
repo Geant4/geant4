@@ -1,4 +1,3 @@
-$Id: History 70477 2013-05-31 08:35:08Z ahoward $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +16,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+Sep 11th, 2018, M. Verderi - GB03-V10-04-02
+- Bug fix in GB03BOptnSplitOrKillOnBoundary.cc in
+  the computation of the killing probability.
+
+May 20th, 2018 J. Allison - GB03-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive nearer to start of main.
+
+May 8th, 2018 B. Morgan - GB03-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Nov 19, 2016 A. Dotti
+- explicit set of SD to manager
+- tag GB03-V10-02-00
+
+Jul 20, 2016 I. Hrivnacova
+- Coding guidelines(redundant empty lines)
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 Nov 29, 2014, I. Hrivnacova
 - Fixed .README
 - tag GB03-V10-00-05

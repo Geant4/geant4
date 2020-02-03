@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /run/numberOfThreads 4
 #/run/numberOfThreads 8
 
@@ -18,3 +19,44 @@
 
 /run/beamOn 1
 #/run/beamOn 80
+=======
+#/run/numberOfThreads 2
+/run/numberOfThreads 8
+#
+/tracking/verbose 0
+#
+#/microyz/phys/addPhysics  liv	        
+#/microyz/phys/addPhysics  pene	        
+/microyz/phys/addPhysics  dna_opt2	        
+#/microyz/phys/addPhysics  dna_opt4	        
+#/microyz/phys/addPhysics  dna_opt6	        
+#
+/microyz/det/setTrackingCut 11 eV
+#
+# *** For Geant4 (condensed history) only ***
+#/run/setCut 1 nm
+#/cuts/setLowEdge 100 eV
+#/process/em/lowestElectronEnergy 100 eV
+#/microyz/det/setMaxStepSize 1 nm
+# ***
+#
+/run/initialize
+#
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/pixe true
+/process/em/deexcitationIgnoreCut true 
+#
+/gun/particle e-
+#
+/gun/energy 1 keV
+#
+/run/printProgress 100
+#
+# *** For Geant4-DNA only ***
+/process/inactivate e-_G4DNAVibExcitation
+/process/inactivate e-_G4DNAAttachment
+#
+/run/beamOn 1000
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

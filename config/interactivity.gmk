@@ -1,4 +1,3 @@
-# $Id: interactivity.gmk 66368 2012-12-18 09:20:17Z gcosmo $
 #  GNUmakefile for CPPFLAGS, LDFLAGS for interactivy, 
 # ie interfaces and visualization.
 #
@@ -27,7 +26,7 @@ endif
 ########################### Qt ###############################
 # Should be before X11.
 ifdef INC_QT
-  CPPFLAGS += $(QTFLAGS)
+  CPPFLAGS += -DQT_NO_DEPRECATED_WARNINGS $(QTFLAGS)
 endif
 ifdef LOAD_QT
   INTYLIBS += $(QTLIBS)

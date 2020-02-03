@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F05PrimaryGeneratorAction.hh 69563 2013-05-08 12:30:36Z gcosmo $
 //
 /// \file field/field05/include/F05PrimaryGeneratorAction.hh
 /// \brief Definition of the F05PrimaryGeneratorAction class

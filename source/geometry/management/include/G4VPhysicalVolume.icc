@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VPhysicalVolume.icc 102288 2017-01-20 10:57:03Z gcosmo $
-//
-//
-// class G4VPhysicalVolume Inline Implementation
+// class G4VPhysicalVolume inline implementation
 //
 // --------------------------------------------------------------------
 
@@ -50,9 +46,9 @@ G4LogicalVolume* G4VPhysicalVolume::GetLogicalVolume() const
 }
 
 inline
-void G4VPhysicalVolume::SetLogicalVolume(G4LogicalVolume *pLogical)
+void G4VPhysicalVolume::SetLogicalVolume(G4LogicalVolume* pLogical)
 {
-  flogical=pLogical;
+  flogical = pLogical;
 }
 
 inline
@@ -62,9 +58,9 @@ G4LogicalVolume* G4VPhysicalVolume::GetMotherLogical() const
 }
 
 inline
-void G4VPhysicalVolume::SetMotherLogical(G4LogicalVolume *pMother)
+void G4VPhysicalVolume::SetMotherLogical(G4LogicalVolume* pMother)
 {
-  flmother=pMother;
+  flmother = pMother;
 }
 
 inline
@@ -76,11 +72,11 @@ const G4String& G4VPhysicalVolume::GetName() const
 inline
 void G4VPhysicalVolume::SetName(const G4String& pName)
 {
-  fname=pName;
+  fname = pName;
 }
 
 inline
-EVolume G4VPhysicalVolume::VolumeType() const
+EVolume G4VPhysicalVolume::DeduceVolumeType() const
 {
   EVolume type;
   EAxis axis;

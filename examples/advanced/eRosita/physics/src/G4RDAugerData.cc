@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDAugerData.cc v1.0
 // 
 //
 // Author: Alfonso Mmantero (Alfonso.Mantero@ge.infn.it)
@@ -268,7 +267,7 @@ std::vector<G4RDAugerTransition> G4RDAugerData::LoadData(G4int Z)
     }
     G4String name(ost.str());
   
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
     if (!path)
       { 
 	G4String excep = "G4LEDATA environment variable not set";

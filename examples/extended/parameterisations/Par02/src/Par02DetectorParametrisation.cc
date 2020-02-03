@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 /// \file Par02DetectorParametrisation.cc
 /// \brief Implementation of the Par02DetectorParametrisation class

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh 95426 2016-02-10 14:54:59Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -56,50 +55,6 @@
 
 typedef std::string::size_type str_size;
 
-class G4String;
-
-class G4SubString
-{
-public:
-
-  inline G4SubString(const G4SubString&);
-
-  inline G4SubString& operator=(const char*);         
-
-  inline G4SubString& operator=(const G4SubString&);
- 
-  inline char& operator()(str_size);
-  inline char  operator()(str_size) const;
-  inline char& operator[](str_size);
-  inline char  operator[](str_size) const;
-
-  inline G4int operator!() const;
-
-  inline G4bool operator==(const G4String&) const;
-  inline G4bool operator==(const char*) const;
-  inline G4bool operator!=(const G4String&) const;
-  inline G4bool operator!=(const char*) const;
-
-  inline str_size length() const;
-  inline str_size start() const;
-
-  // For detecting null substrings
-  //
-  inline G4bool isNull() const;
-
-private:
-
-  inline G4SubString(G4String&, str_size, str_size);
-
-  G4String*    mystring;     
-  str_size     mystart;
-  str_size     extent;
-
-  friend class G4String;
-
-};
- 
-
 class G4String : public std::string
 {
 
@@ -115,18 +70,18 @@ public:
   inline G4String ( const char * );
   inline G4String ( const char *, str_size );
   inline G4String ( const G4String& );
-  inline G4String ( const G4SubString& );
   inline G4String ( const std::string & );
+  inline G4String ( G4String&& ) = default;
   ~G4String () {}
 
   inline G4String& operator=(const G4String&);
   inline G4String& operator=(const std::string &);
   inline G4String& operator=(const char*);
+  inline G4String& operator=(G4String&&) = default;
 
   inline char operator () (str_size) const; 
   inline char& operator () (str_size);
 
-  inline G4String& operator+=(const G4SubString&);
   inline G4String& operator+=(const char*);
   inline G4String& operator+=(const std::string &);
   inline G4String& operator+=(const char&);
@@ -136,7 +91,7 @@ public:
   inline G4bool operator!=(const char*) const;
 
   inline operator const char*() const;
-  inline G4SubString operator()(str_size, str_size);
+  inline G4String operator()(str_size, str_size);
 
   inline G4int compareTo(const char*, caseCompare mode=exact) const;
   inline G4int compareTo(const G4String&, caseCompare mode=exact) const;
@@ -153,8 +108,8 @@ public:
   inline G4String& remove(str_size);
   inline G4String& remove(str_size, str_size);
 
-  inline G4int first(char) const;
-  inline G4int last(char) const;
+  inline std::size_t first(char) const;
+  inline std::size_t last(char) const;
 
   inline G4bool contains(const std::string&) const;
   inline G4bool contains(char) const;

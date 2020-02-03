@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonParametrisedLossModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -91,6 +90,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 #include "G4GenericIon.hh"
 #include "G4Electron.hh"
 #include "G4DeltaAngle.hh"
@@ -113,23 +113,16 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
     particleChangeLoss(0),
     corrFactor(1.0),
     energyLossLimit(0.01),
-    cutEnergies(0)
+    cutEnergies(0),
+    isInitialised(false)
 {
   genericIon = G4GenericIon::Definition();
-  genericIonPDGMass = genericIon -> GetPDGMass();
-  corrections = G4LossTableManager::Instance() -> EmCorrections();
-
-  // The upper limit of the current model is set to 100 TeV
-  SetHighEnergyLimit(100.0 * TeV);
+  genericIonPDGMass = genericIon->GetPDGMass();
+  corrections = G4LossTableManager::Instance()->EmCorrections();
 
   // The Bragg ion and Bethe Bloch models are instantiated
   braggIonModel = new G4BraggIonModel();
   betheBlochModel = new G4BetheBlochModel();
-
-  // By default ICRU 73 stopping power tables are loaded:
-  AddDEDXTable("ICRU73",
-	       new G4IonStoppingData("ion_stopping_data/icru73"),
-  	       new G4IonDEDXScalingICRU73());
 
   // The boundaries for the range tables are set
   lowerEnergyEdgeIntegr = 0.025 * MeV;
@@ -191,8 +184,7 @@ G4double G4IonParametrisedLossModel::MinEnergyCut(
                                        const G4ParticleDefinition*,
                                        const G4MaterialCutsCouple* couple) {
 
-  return couple -> GetMaterial() -> GetIonisation() ->
-                                                  GetMeanExcitationEnergy();
+  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
 // #########################################################################
@@ -278,19 +270,28 @@ void G4IonParametrisedLossModel::Initialise(
   dedxCacheTransitionFactor = 0.0;
   dedxCacheGenIonMassRatio = 0.0;
 
+  // By default ICRU 73 stopping power tables are loaded:
+  if(!isInitialised) {
+    G4bool icru90 = G4EmParameters::Instance()->UseICRU90Data();
+    isInitialised = true;
+    AddDEDXTable("ICRU73",
+		 new G4IonStoppingData("ion_stopping_data/icru",icru90),
+		 new G4IonDEDXScalingICRU73());
+  }
   // The cache of loss tables is cleared
   LossTableList::iterator iterTables = lossTableList.begin();
   LossTableList::iterator iterTables_end = lossTableList.end();
 
-  for(;iterTables != iterTables_end; iterTables++)
-                                       (*iterTables) -> ClearCache();
+  for(;iterTables != iterTables_end; ++iterTables) {
+    (*iterTables) -> ClearCache();
+  }
 
   // Range vs energy and energy vs range vectors from previous runs are
   // cleared
   RangeEnergyTable::iterator iterRange = r.begin();
   RangeEnergyTable::iterator iterRange_end = r.end();
 
-  for(;iterRange != iterRange_end; iterRange++) {
+  for(;iterRange != iterRange_end; ++iterRange) {
     delete iterRange->second;
   }
   r.clear();
@@ -303,15 +304,13 @@ void G4IonParametrisedLossModel::Initialise(
   }
   E.clear();
 
-  // The cut energies are (re)loaded
-  size_t size = cuts.size();
-  cutEnergies.clear();
-  for(size_t i = 0; i < size; i++) cutEnergies.push_back(cuts[i]);
+  // The cut energies 
+  cutEnergies = cuts;
 
   // All dE/dx vectors are built
   const G4ProductionCutsTable* coupleTable=
                      G4ProductionCutsTable::GetProductionCutsTable();
-  size_t nmbCouples = coupleTable -> GetTableSize();
+  size_t nmbCouples = coupleTable->GetTableSize();
 
 #ifdef PRINT_TABLE_BUILT
     G4cout << "G4IonParametrisedLossModel::Initialise():"
@@ -319,30 +318,25 @@ void G4IonParametrisedLossModel::Initialise(
            << G4endl;
 #endif
 
-  for (size_t i = 0; i < nmbCouples; i++) {
+  for (size_t i = 0; i < nmbCouples; ++i) {
 
-    const G4MaterialCutsCouple* couple =
-                                     coupleTable -> GetMaterialCutsCouple(i);
+    const G4MaterialCutsCouple* couple = coupleTable->GetMaterialCutsCouple(i);
+    const G4Material* material = couple->GetMaterial();
 
-    const G4Material* material = couple -> GetMaterial();
-    //    G4ProductionCuts* productionCuts = couple -> GetProductionCuts();
-
-    for(G4int atomicNumberIon = 3; atomicNumberIon < 102; atomicNumberIon++) {
+    for(G4int atomicNumberIon = 3; atomicNumberIon < 102; ++atomicNumberIon) {
 
        LossTableList::iterator iter = lossTableList.begin();
        LossTableList::iterator iter_end = lossTableList.end();
 
-       for(;iter != iter_end; iter++) {
+       for(;iter != iter_end; ++iter) {
 
           if(*iter == 0) {
               G4cout << "G4IonParametrisedLossModel::Initialise():"
                      << " Skipping illegal table."
                      << G4endl;
           }
-
-          G4bool isApplicable =
-                    (*iter) -> BuildDEDXTable(atomicNumberIon, material);
-          if(isApplicable) {
+	  
+	  if((*iter)->BuildDEDXTable(atomicNumberIon, material)) {
 
 #ifdef PRINT_TABLE_BUILT
              G4cout << "  Atomic Number Ion = " << atomicNumberIon
@@ -359,8 +353,8 @@ void G4IonParametrisedLossModel::Initialise(
   // The particle change object
   if(! particleChangeLoss) {
     particleChangeLoss = GetParticleChangeForLoss();
-    braggIonModel -> SetParticleChange(particleChangeLoss, 0);
-    betheBlochModel -> SetParticleChange(particleChangeLoss, 0);
+    braggIonModel->SetParticleChange(particleChangeLoss, 0);
+    betheBlochModel->SetParticleChange(particleChangeLoss, 0);
   }
 
   // The G4BraggIonModel and G4BetheBlochModel instances are initialised with
@@ -1246,7 +1240,7 @@ G4bool G4IonParametrisedLossModel::AddDEDXTable(
                                 G4VIonDEDXScalingAlgorithm* algorithm) {
 
   if(table == 0) {
-     G4cerr << "G4IonParametrisedLossModel::AddDEDXTable() Cannot "
+     G4cout << "G4IonParametrisedLossModel::AddDEDXTable() Cannot "
             << " add table: Invalid pointer."
             << G4endl;
 
@@ -1257,11 +1251,11 @@ G4bool G4IonParametrisedLossModel::AddDEDXTable(
   LossTableList::iterator iter = lossTableList.begin();
   LossTableList::iterator iter_end = lossTableList.end();
 
-  for(;iter != iter_end; iter++) {
-     G4String tableName = (*iter) -> GetName();
+  for(;iter != iter_end; ++iter) {
+     const G4String& tableName = (*iter)->GetName();
 
      if(tableName == nam) {
-        G4cerr << "G4IonParametrisedLossModel::AddDEDXTable() Cannot "
+        G4cout << "G4IonParametrisedLossModel::AddDEDXTable() Cannot "
                << " add table: Name already exists."
                << G4endl;
 
@@ -1321,11 +1315,11 @@ G4bool G4IonParametrisedLossModel::RemoveDEDXTable(
 }
 
 // #########################################################################
-
+/*
 void G4IonParametrisedLossModel::DeactivateICRU73Scaling() {
 
   RemoveDEDXTable("ICRU73");
   AddDEDXTable("ICRU73", new G4IonStoppingData("ion_stopping_data/icru73"));
 }
-
+*/
 // #########################################################################

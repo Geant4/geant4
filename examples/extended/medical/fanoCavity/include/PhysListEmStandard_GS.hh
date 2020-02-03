@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity/include/PhysListEmStandard_GS.hh
 /// \brief Definition of the PhysListEmStandard_GS class
 //
+<<<<<<< HEAD
 // $Id: PhysListEmStandard_GS.hh 86064 2014-11-07 08:49:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -398,7 +397,7 @@ void G4ShellEMDataSet::CleanUpComponents(void)
 
 G4String G4ShellEMDataSet::FullFileName(const G4String& fileName) const
 {
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   
   if (!path)
   {

@@ -32,7 +32,6 @@
 //                  simulations (submitted to Comput. Phys. Commun.)
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file pdb4dna.cc
 /// \brief Main program of the pdb4dna example
@@ -69,14 +68,6 @@ int main(int argc,char** argv)
   // Parse options given in commandLine
   //
   Parse(argc, argv);
-
-  // Set the Seed
-  CLHEP::RanecuEngine defaultEngine(1234567);
-  G4Random::setTheEngine(&defaultEngine);
-
-  // Choose the Random engine
-  //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   //////////
   // Construct the run manager according to whether MT is activated or not

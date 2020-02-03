@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITNavigator2.cc 79045 2014-02-12 13:57:26Z matkara $
 // 
 // class G4ITNavigator2 Implementation
 //
@@ -299,6 +298,11 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
                                   &parentTouchable));
               }
               break;
+           case kExternal:
+             G4Exception("G4ITNavigator2::LocateGlobalPointAndSetup()",
+                         "GeomNav0001", FatalException,
+                         "Not applicable for external volumes.");
+             break;
           }
           fEntering = false;
           fBlockedPhysicalVolume = 0;
@@ -531,6 +535,11 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
                                              localPoint);
         }
         break;
+      case kExternal:
+        G4Exception("G4ITNavigator2::LocateGlobalPointAndSetup()",
+                    "GeomNav0001", FatalException,
+                    "Not applicable for external volumes.");
+        break;
     }
 
     // LevelLocate returns true if it finds a daughter volume 
@@ -672,6 +681,11 @@ G4ITNavigator2::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
          G4Exception("G4ITNavigator2::LocateGlobalPointWithinVolume()",
                      "GeomNav0001", FatalException,
                      "Not applicable for replicated volumes.");
+         break;
+       case kExternal:
+         G4Exception("G4ITNavigator2::LocateGlobalPointWithinVolume()",
+                     "GeomNav0001", FatalException,
+                     "Not applicable for external volumes.");
          break;
      }
    }
@@ -1095,6 +1109,10 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
         G4Exception("G4ITNavigator2::ComputeStep()", "GeomNav0001",
                     FatalException, "Not applicable for replicated volumes.");
         break;
+      case kExternal:
+        G4Exception("G4ITNavigator2::ComputeStep()", "GeomNav0001",
+                    FatalException, "Not applicable for external volumes.");
+        break;
     }
   }
   else
@@ -1449,6 +1467,7 @@ void G4ITNavigator2::SetupHierarchy()
         freplicaNav.ComputeTransformation(fHistory.GetReplicaNo(i), current);
         break;
       case kParameterised:
+      {
         G4int replicaNo;
         pParam = current->GetParameterisation();
         replicaNo = fHistory.GetReplicaNo(i);
@@ -1478,7 +1497,15 @@ void G4ITNavigator2::SetupHierarchy()
         pLogical->UpdateMaterial( pParam ->
           ComputeMaterial(replicaNo, current, pTouchable) );
         delete pTouchable;
-        break;
+      }
+      break;
+        
+      case kExternal:
+        G4Exception("G4ITNavigator2::SetupHierarchy()",
+                    "GeomNav0001", FatalException,
+                    "Not applicable for external volumes.");
+        break;        
+
     }
   }
 }
@@ -1685,6 +1712,11 @@ G4ITNavigator2::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVo
         pLogical->SetSolid( pSolid );
       }
       break;
+      case kExternal:
+        G4Exception("G4ITNavigator2::GetMotherToDaughterTransform()",
+                    "GeomNav0001", FatalException,
+                    "Not applicable for external volumes.");
+        break;
   }
   return G4AffineTransform(pEnteringPhysVol->GetRotation(), 
                            pEnteringPhysVol->GetTranslation()).Invert(); 
@@ -2004,6 +2036,11 @@ G4double G4ITNavigator2::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           G4Exception("G4ITNavigator2::ComputeSafety()", "GeomNav0001",
                       FatalException, "Not applicable for replicated volumes.");
           break;
+        case kExternal:
+          G4Exception("G4ITNavigator2::ComputeSafety()",
+                      "GeomNav0001", FatalException,
+                      "Not applicable for external volumes.");
+         break;
       }
     }
     else

@@ -26,9 +26,6 @@
 /// \file electromagnetic/TestEm17/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-//
-// $Id: DetectorConstruction.hh 67268 2013-02-13 11:38:40Z ihrivnac $
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +54,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      virtual G4VPhysicalVolume* Construct();
      
      void SetSize     (G4double);              
-     void SetMaterial (G4String);            
+     void SetMaterial (const G4String&);
 
      void UpdateGeometry();
      
@@ -67,7 +64,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* GetWorld()      {return fPBox;};           
                     
      G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
+     const G4Material*  GetMaterial()   {return fMaterial;};
      
      void               PrintParameters();
                        

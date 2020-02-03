@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 /// \file electromagnetic/TestEm2/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
@@ -32,6 +33,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+=======
+/// \file PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

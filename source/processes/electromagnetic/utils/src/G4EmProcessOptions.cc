@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc 92766 2015-09-15 15:21:42Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,20 +54,22 @@
 #include "G4EmProcessOptions.hh"
 #include "G4EmParameters.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4LossTableManager.hh"
 #include "G4VEmProcess.hh"
 #include "G4VEnergyLossProcess.hh"
-#include "G4VMultipleScattering.hh"
+#include "G4VAtomDeexcitation.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
-#include "G4VAtomDeexcitation.hh"
 #include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmProcessOptions::G4EmProcessOptions()
 {
-  theManager = G4LossTableManager::Instance();
+  G4cout << "### WARNING: G4EmProcessOptions class is obsolete and "
+	 << "will be removed in the next public release \n"
+	 << "    Please, try to use G4EmParameters class and/or UI "
+	 << "interface to EM parameters" 
+	 << G4endl;
   theParameters = G4EmParameters::Instance();
 }
 
@@ -301,38 +302,34 @@ void G4EmProcessOptions::SetMscStepLimitation(G4MscStepLimitType val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4Region* r)
+void G4EmProcessOptions::SetSubCutoff(G4bool val, const G4String& r)
 {
-  theManager->SetSubCutoff(val, r);
+  theParameters->SetSubCutoff(val, r);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetIntegral(G4bool val)
 {
-  theManager->SetIntegral(val);
+  theParameters->SetIntegral(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 {
-  theManager->SetStepFunction(v1, v2);
+  theParameters->SetStepFunction(v1, v2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void 
 G4EmProcessOptions::SetDeexcitationActiveRegion(const G4String& rname, 
-						G4bool valDeexcitation,
+						G4bool valDeex,
 						G4bool valAuger,
 						G4bool valPIXE)
 {
-  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
-  if(ad) { 
-    ad->SetDeexcitationActiveRegion(rname, valDeexcitation,
-				    valAuger,valPIXE); 
-  }
+  theParameters->SetDeexActiveRegion(rname, valDeex, valAuger, valPIXE);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -356,28 +353,7 @@ void
 G4EmProcessOptions::SetProcessBiasingFactor(const G4String& name, G4double val,
 					    G4bool flag)
 {
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); ++itr) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) {
-      if (p->GetProcessName() == name) { 
-	p->SetCrossSectionBiasingFactor(val, flag); 
-      }
-    }
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) {
-      if (q->GetProcessName() == name) { 
-	q->SetCrossSectionBiasingFactor(val, flag); 
-      }
-    }
-  }
+  theParameters->SetProcessBiasingFactor(name, val, flag);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -388,28 +364,7 @@ G4EmProcessOptions::ActivateForcedInteraction(const G4String& name,
 					      const G4String& region,
 					      G4bool flag)
 {
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); ++itr) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) {
-      if (p->GetProcessName() == name) { 
-	p->ActivateForcedInteraction(length,region,flag); 
-      }
-    }
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) {
-      if (q->GetProcessName() == name) { 
-	q->ActivateForcedInteraction(length,region,flag); 
-      }
-    }
-  }
+  theParameters->ActivateForcedInteraction(name, region, length, flag);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -420,18 +375,7 @@ G4EmProcessOptions::ActivateSecondaryBiasing(const G4String& name,
 					     G4double factor,
 					     G4double energyLimit)
 {
-  if(0.0 > factor) { return; }
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); ++itr) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) {
-      if (p->GetProcessName() == name) { 
-	p->ActivateSecondaryBiasing(region, factor, energyLimit); 
-      }
-    }
-  }
+  theParameters->ActivateSecondaryBiasing(name, region, factor, energyLimit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -442,18 +386,7 @@ G4EmProcessOptions::ActivateSecondaryBiasingForGamma(const G4String& name,
 					     G4double factor,
 					     G4double energyLimit)
 {
-  if(0.0 > factor) { return; }
-  const std::vector<G4VEmProcess*>& v =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); ++itr) {
-    G4VEmProcess* p = *itr;
-    if(p) {
-      if (p->GetProcessName() == name) { 
-	p->ActivateSecondaryBiasing(region, factor, energyLimit); 
-      }
-    }
-  }
+  theParameters->ActivateSecondaryBiasing(name, region, factor, energyLimit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

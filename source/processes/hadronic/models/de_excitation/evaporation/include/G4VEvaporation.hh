@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh 88841 2015-03-12 10:34:14Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations interface
 //
@@ -48,18 +47,16 @@
 #include <vector>
 
 class G4VEvaporationChannel;
+class G4VFermiBreakUp;
 
 class G4VEvaporation 
 {
 public:
-  G4VEvaporation();
+
+  explicit G4VEvaporation();
   virtual ~G4VEvaporation(); 
 
-  // primary fragment is copied to the new instance, the copy is deleted 
-  // or is added to the list of products 
-  virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
-
-  // new interface - vector of products is added to the provided vector
+  // vector of products is added to the provided vector
   // primary fragment is deleted or is modified and added to the list
   // of products 
   virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);
@@ -69,19 +66,25 @@ public:
 
   virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
+  inline void SetFermiBreakUp(G4VFermiBreakUp* ptr);
+
+  inline G4VFermiBreakUp* GetFermiBreakUp() const;
   inline G4VEvaporationChannel* GetPhotonEvaporation();
   inline G4VEvaporationChannel* GetFissionChannel();
 
   // for inverse cross section choice
-  inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
+  inline void SetOPTxs(G4int opt); 
   // for superimposed Coulomb Barrier for inverse cross sections 	
-  inline void UseSICB(G4bool use) { useSICB = use; }	
+  inline void UseSICB(G4bool use);
+
+  inline size_t GetNumberOfChannels() const;
 
 protected:
 
   void CleanChannels();
 
   G4VEvaporationChannel* thePhotonEvaporation;
+  G4VFermiBreakUp* theFBU; 
 
   G4int OPTxs;
   G4bool useSICB;
@@ -90,12 +93,22 @@ protected:
   G4VEvaporationFactory * theChannelFactory;
 
 private:  
-  G4VEvaporation(const G4VEvaporation &right);
-  const G4VEvaporation & operator=(const G4VEvaporation &right);
-  G4bool operator==(const G4VEvaporation &right) const;
-  G4bool operator!=(const G4VEvaporation &right) const;
+  G4VEvaporation(const G4VEvaporation &right) = delete;
+  const G4VEvaporation & operator=(const G4VEvaporation &right) = delete;
+  G4bool operator==(const G4VEvaporation &right) const = delete;
+  G4bool operator!=(const G4VEvaporation &right) const = delete;
 
 };
+
+inline void G4VEvaporation::SetFermiBreakUp(G4VFermiBreakUp* ptr)
+{
+  theFBU = ptr;
+}
+
+inline G4VFermiBreakUp* G4VEvaporation::GetFermiBreakUp() const
+{
+  return theFBU;
+}
 
 inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 {
@@ -104,9 +117,22 @@ inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 
 inline G4VEvaporationChannel* G4VEvaporation::GetFissionChannel()
 {
-  G4VEvaporationChannel* p = 0;
-  if(theChannels->size() > 1) { p = (*theChannels)[1]; }
-  return p;
+  return (theChannels && theChannels->size() > 1) ? (*theChannels)[1] : nullptr;
 }
+
+inline void G4VEvaporation::SetOPTxs(G4int opt) 
+{ 
+  OPTxs = opt;
+} 
+
+inline void G4VEvaporation::UseSICB(G4bool use) 
+{ 
+  useSICB = use; 
+}	
+
+inline size_t G4VEvaporation::GetNumberOfChannels() const 
+{ 
+  return theChannels ? theChannels->size() : 0; 
+}	
 
 #endif

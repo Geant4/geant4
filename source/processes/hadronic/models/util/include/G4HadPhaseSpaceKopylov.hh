@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // Multibody "phase space" generator using Kopylov's algorithm
 //

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hBremsstrahlung.cc 85013 2014-10-23 09:45:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,7 +79,7 @@ void G4hBremsstrahlung::InitialiseEnergyLossProcess(
     isInitialised = true;
     if (!EmModel()) { SetEmModel(new G4hBremsstrahlungModel()); }
 
-    G4VEmFluctuationModel* fm = 0;
+    G4VEmFluctuationModel* fm = nullptr;
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
@@ -90,3 +89,10 @@ void G4hBremsstrahlung::InitialiseEnergyLossProcess(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4hBremsstrahlung::ProcessDescription(std::ostream& out) const
+{
+  out << "  Hadron bremsstrahlung";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

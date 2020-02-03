@@ -7,6 +7,8 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 #
 find_package(Geant4)
 
+find_package(ROOT QUIET)
+
 add_subdirectory(air_shower)
 add_subdirectory(amsEcal)
 add_subdirectory(brachytherapy)
@@ -24,6 +26,13 @@ else()
 endif() 
 
 add_subdirectory(composite_calorimeter)
+
+if(ROOT_FOUND)
+  add_subdirectory(doiPET)
+else()
+  message(STATUS "G4 Examples: ROOT package not found --> doiPET disabled")
+endif()  
+
 add_subdirectory(eRosita)
 add_subdirectory(gammaknife)
 add_subdirectory(gammaray_telescope)
@@ -37,3 +46,5 @@ add_subdirectory(microelectronics)
 add_subdirectory(purging_magnet)
 add_subdirectory(underground_physics)
 add_subdirectory(xray_fluorescence)
+add_subdirectory(STCyclotron)
+

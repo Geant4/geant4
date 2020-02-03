@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.hh 80062 2014-03-31 13:41:30Z gcosmo $
-//
 // by V. Lara
 //
 // Class Description
@@ -38,12 +36,12 @@
 // 03.09.2008 J.M.Quesada added external choice of inverse 
 //            cross section option.(default OPTxs=3)
 // 06.09.2008 J.M.Quesada external choices have been added for:
-//                - superimposed Coulomb barrier (if useSICB=true, default false) 
-//                - "never go back"  hipothesis (if useNGB=true, default false) 
-//                - soft cutoff from preeq. to equlibrium (if useSCO=true, default false)
+//     - superimposed Coulomb barrier (if useSICB=true, default false) 
+//     - "never go back"  hipothesis (if useNGB=true, default false) 
+//     - soft cutoff from preeq. to equlibrium (if useSCO=true, default false)
 //                - CEM transition probabilities (if useCEMtr=true)
 // 30.10.2009 J.M.Quesada CEM transition probabilities are set as default
-// 20.08.2010 V.Ivanchenko Cleanup of the code - changed data members and inline methods
+// 20.08.2010 V.Ivanchenko Cleanup of the code 
 // 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the 
 //                         constructor
 
@@ -56,26 +54,32 @@
 #include "G4ReactionProduct.hh"
 #include "G4ExcitationHandler.hh"
 
-class G4PreCompoundParameters;
 class G4PreCompoundEmission;
 class G4VPreCompoundTransitions;
+class G4NuclearLevelData;
 class G4ParticleDefinition;
 
 class G4PreCompoundModel : public G4VPreCompoundModel
 { 
 public:
 
-  G4PreCompoundModel(G4ExcitationHandler* ptr = 0); 
+  explicit G4PreCompoundModel(G4ExcitationHandler* ptr = nullptr); 
 
   virtual ~G4PreCompoundModel();
 
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
-					  G4Nucleus & theNucleus);
+					  G4Nucleus & theNucleus) final;
 
-  virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment);
+  virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) final;
+
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) final;
+
+  virtual void InitialiseModel() final;
   
-  virtual void ModelDescription(std::ostream& outFile) const;
-  virtual void DeExciteModelDescription(std::ostream& outFile) const;
+  virtual void ModelDescription(std::ostream& outFile) const final;
+  virtual void DeExciteModelDescription(std::ostream& outFile) const final;
+
+  //====== obsolete Set methods =======
   void UseHETCEmission();
   void UseDefaultEmission();
   void UseGNASHTransition();
@@ -89,6 +93,7 @@ public:
   void UseNGB();
   void UseSCO();
   void UseCEMtr();
+  //======================================
 
 private:  
 
@@ -96,11 +101,12 @@ private:
   void PerformEquilibriumEmission(const G4Fragment & aFragment, 
 				  G4ReactionProductVector * theResult) const;
 
-  //  G4PreCompoundModel();
-  G4PreCompoundModel(const G4PreCompoundModel &);
-  const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
-  G4bool operator==(const G4PreCompoundModel &right) const;
-  G4bool operator!=(const G4PreCompoundModel &right) const;
+  void PrintWarning(const G4String& mname);
+
+  G4PreCompoundModel(const G4PreCompoundModel &) = delete;
+  const G4PreCompoundModel& operator=(const G4PreCompoundModel &right) = delete;
+  G4bool operator==(const G4PreCompoundModel &right) const = delete;
+  G4bool operator!=(const G4PreCompoundModel &right) const = delete;
 
   //==============
   // Data Members 
@@ -108,26 +114,21 @@ private:
 
   G4PreCompoundEmission*     theEmission;
   G4VPreCompoundTransitions* theTransition;
+  G4NuclearLevelData*        fNuclData;
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
 
-  G4double fLevelDensity;
-
-  G4bool useHETCEmission;
-  G4bool useGNASHTransition;
-
-  //for cross section options
-  G4int OPTxs;
+  G4double fLowLimitExc;
+  G4double fHighLimitExc;
 
   //for the rest of external choices
-  G4bool useSICB;
-  G4bool useNGB;
   G4bool useSCO;
-  G4bool useCEMtr;
+  G4bool isInitialised;
+  G4bool isActive;
 
-  G4int  maxZ;
-  G4int  maxA;
+  G4int  minZ;
+  G4int  minA;
 
   G4HadFinalState theResult;
 

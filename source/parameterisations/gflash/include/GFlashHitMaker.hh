@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GFlashHitMaker.hh 68057 2013-03-13 14:46:00Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -57,13 +56,16 @@ class GFlashHitMaker
     ~GFlashHitMaker();
   
     void make(GFlashEnergySpot * aSpot, const G4FastTrack * aT );
+    inline void SetNameOfWorldWithSD(const G4String& aName) {fWorldWithSdName = aName;};
   
   private:  
 
     G4TouchableHandle fTouchableHandle;
     G4Navigator *fpNavigator;
     G4bool fNaviSetup;
-  
+    /// Name of the world containing the sensitive detector. If empty, default mass world is used.
+    G4String fWorldWithSdName;
+
   private:
 
     GFlashHitMaker(const GFlashHitMaker & ) {}

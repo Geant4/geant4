@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/include/G4MonopoleFieldSetup.hh
 /// \brief Definition of the G4MonopoleFieldSetup class
 //
+<<<<<<< HEAD
 // $Id: G4MonopoleFieldSetup.hh 66817 2013-01-12 16:16:08Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,6 +70,11 @@ public:
   void InitialiseAll();    //  Set parameters and call method below
   void SetMagField(G4double fieldValue);
   void SetStepperAndChordFinder(G4int val);
+<<<<<<< HEAD
+=======
+  void SetZMagFieldValue (G4double val);
+  void ConstructMagField ();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
   static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
 

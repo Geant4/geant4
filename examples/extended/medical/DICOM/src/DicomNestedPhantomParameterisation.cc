@@ -26,10 +26,14 @@
 /// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
 /// \brief Implementation of the DicomNestedPhantomParameterisation class
 //
+<<<<<<< HEAD
 // $Id: DicomNestedPhantomParameterisation.cc 92820 2015-09-17 15:22:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "DicomNestedPhantomParameterisation.hh"
+#include "DicomHandler.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VTouchable.hh"
@@ -42,10 +46,16 @@
 #include "G4VVisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4String DicomNestedPhantomParameterisation::defaultColorFile =
+        DicomHandler::GetDicomDataPath() + "/ColourMap.dat";
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomNestedPhantomParameterisation::
 DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
                                    std::vector<G4Material*>& mat,
-                                   G4int fnZ_, G4int fnY_, G4int fnX_)
+                                   G4int fnZ_, G4int fnY_, G4int fnX_,
+                                   G4String colorfile)
 :
   //G4VNestedParameterisation(),
   fdX(voxelSize.x()), fdY(voxelSize.y()), fdZ(voxelSize.z()),
@@ -53,7 +63,7 @@ DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
   fMaterials(mat),
   fMaterialIndices(0)
 {
-    ReadColourData();
+    ReadColourData(colorfile);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,9 +72,10 @@ DicomNestedPhantomParameterisation::~DicomNestedPhantomParameterisation()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomNestedPhantomParameterisation::ReadColourData()
+void DicomNestedPhantomParameterisation::ReadColourData(G4String colourFile)
 {
     //----- Add a G4VisAttributes for materials not defined in file;
+<<<<<<< HEAD
     /*G4VisAttributes* blankAtt = new G4VisAttributes;
     blankAtt->SetVisibility( FALSE );
     fColours["Default"] = blankAtt;
@@ -88,23 +99,33 @@ void DicomNestedPhantomParameterisation::ReadColourData()
     }*/
 
     //----- Add a G4VisAttributes for materials not defined in file;
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     G4VisAttributes* blankAtt = new G4VisAttributes;
     blankAtt->SetVisibility( FALSE );
     fColours["Default"] = blankAtt;
 
+<<<<<<< HEAD
     //----- Read file
     G4String colourFile = "ColourMap.dat";
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     std::ifstream fin(colourFile.c_str());
     G4int nMate;
     G4String mateName;
     G4double cred, cgreen, cblue, copacity;
     fin >> nMate;
-    for( G4int ii = 0; ii < nMate; ii++ ){
-        fin >> mateName >> cred >> cgreen >> cblue >> copacity;
+    for( G4int ii = 0; ii < nMate; ii++ )
+    {
+        fin >> mateName;
+        if(fin.eof())
+            break;
+        fin >> cred >> cgreen >> cblue >> copacity;
         G4Colour colour( cred, cgreen, cblue, copacity );
         G4VisAttributes* visAtt = new G4VisAttributes( colour );
-        //visAtt->SetForceSolid(true);
+        visAtt->SetVisibility(true);
         fColours[mateName] = visAtt;
+        mColours[ii] = new G4VisAttributes(*visAtt);
     }
 }
 
@@ -125,7 +146,8 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
 
     // protection for initialization and vis at idle state
     //
-    if(parentTouch==0) return fMaterials[0];
+    if(parentTouch == nullptr)
+        return fMaterials[0];
 
     // Copy number of voxels.
     // Copy number of X and Y are obtained from replication number.
@@ -135,26 +157,54 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
 
     G4int copyID = ix + fnX*iy + fnX*fnY*iz;
 
-    unsigned int matIndex = GetMaterialIndex(copyID);
-    static G4Material* mate = 0;
+    std::size_t matIndex = GetMaterialIndex(copyID);
+    static G4Material* mate = nullptr;
     mate = fMaterials[matIndex];
 
-    if(false && physVol && G4VVisManager::GetConcreteInstance()) {
+    if(G4VVisManager::GetConcreteInstance() && physVol)
+    {
         G4String mateName = fMaterials.at(matIndex)->GetName();
         std::string::size_type iuu = mateName.find("__");
-        if( iuu != std::string::npos ) {
+        if( iuu != std::string::npos )
             mateName = mateName.substr( 0, iuu );
-        }
 
-        if(0 < fColours.count(mateName)) {
-            physVol->GetLogicalVolume()->
-            SetVisAttributes(fColours.find(mateName)->second);
-        } else {
-            physVol->GetLogicalVolume()->
-            SetVisAttributes(fColours.begin()->second);
+        if(0 < fColours.count(mateName))
+            physVol->GetLogicalVolume()->SetVisAttributes(
+                fColours.find(mateName)->second);
+        else
+        {
+            bool found = false;
+            for(const auto& itr : fColours)
+            {
+                G4String mat_color = itr.first;
+                auto len = mat_color.length();
+                if(mateName.find(mat_color) == 0 &&
+                   mateName.length() > len && mateName[len] == '_')
+                {
+                    physVol->GetLogicalVolume()->SetVisAttributes(
+                        fColours.find(mat_color)->second);
+                    found = true;
+                }
+                if(found)
+                    break;
+            }
+            if(!found)
+            {
+
+                static uintmax_t n = 0;
+                if(n++ < 100)
+                    G4cout << "Unknown material name " << mateName
+                           << " for index " << matIndex << G4endl;
+                if(mColours.find(matIndex) != mColours.end())
+                    physVol->GetLogicalVolume()->SetVisAttributes(
+                        mColours.find(matIndex)->second);
+                else
+                    physVol->GetLogicalVolume()->SetVisAttributes(
+                        fColours.begin()->second);
+            }
         }
     }
-    
+
     return mate;
 }
 
@@ -163,7 +213,7 @@ unsigned int DicomNestedPhantomParameterisation::
 GetMaterialIndex( unsigned int copyNo ) const
 {
     //return *(fMaterialIndices+copyNo);
-    return fMaterialIndices[copyNo];
+    return unsigned(fMaterialIndices[copyNo]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,7 +223,7 @@ GetMaterialIndex( unsigned int copyNo ) const
 //
 G4int DicomNestedPhantomParameterisation::GetNumberOfMaterials() const
 {
-    return fMaterials.size();
+    return G4int(fMaterials.size());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

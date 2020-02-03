@@ -32,7 +32,7 @@
      http://research.kek.jp/people/hiromi/MyHomePage/G-2_work_files/SpinStudyinEMfieldByGeant4.pdf
 
 
-     Credit goes to Hiromi Iinuma from KEK
+     Credit goes to Hiromi Iinuma from KEK.
 
 **************
 *Classes Used*
@@ -57,6 +57,7 @@
 
  4- PHYSICS
 
+<<<<<<< HEAD
     RegisterPhysics(new G4DecayPhysics());
     RegisterPhysics(new F05ExtraPhysics());
 
@@ -70,6 +71,13 @@
         G4PionDecayMakeSpin process for the pion
 
     F05ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+=======
+    RegisterPhysics(new G4SpinDecayPhysics());
+    RegisterPhysics(new G4StepLimiterPhysics());
+
+    G4SpinDecayPhysics defines muon decay modes with spin,
+    G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  5- User Action Classes
 
@@ -79,10 +87,10 @@
 
  6- HOW TO START ?
 
-        - execute field05 in 'batch' mode from macro files e.g.
+        - Execute field05 in 'batch' mode from macro files e.g.
                 % field05 field05.in > field.out &
 
-        - execute field05 in 'interactive' mode with visualization e.g.
+        - Execute field05 in 'interactive' mode with visualization e.g.
                 % field05
                 ....
                 Idle> type your commands, for example:

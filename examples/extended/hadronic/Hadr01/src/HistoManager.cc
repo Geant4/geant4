@@ -26,8 +26,11 @@
 /// \file hadronic/Hadr01/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
+<<<<<<< HEAD
 // $Id: HistoManager.cc 70761 2013-06-05 12:30:51Z gcosmo $
 //
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager
@@ -99,7 +102,7 @@ HistoManager::HistoManager()
   fVerbose(0),  
   fNBinsE (100),
   fNSlices(300),
-  fNHisto (25),
+  fNHisto (28),
   fBeamFlag(true),
   fHistoBooked(false),
   fHisto(0)
@@ -161,6 +164,10 @@ void HistoManager::bookHisto()
   fHisto->Add1D("25",
              "Proton energy deposition in the target normalized to beam energy",
                 110,0.0,1.1,1.0);
+  fHisto->Add1D("26","Energy (MeV) of pi+",fNBinsE,0.,500.,1.0);
+  fHisto->Add1D("27","Energy (MeV) of pi-",fNBinsE,0.,500.,1.0);
+  fHisto->Add1D("28","Energy (MeV) of pi0",fNBinsE,0.,500.,1.0);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -326,7 +333,8 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 {
   const G4ParticleDefinition* pd = track->GetDefinition();
   G4String name = pd->GetParticleName();
-  G4double e = track->GetKineticEnergy();
+  G4double ee = track->GetKineticEnergy();
+  G4double e = ee;
 
   // Primary track
   if(0 == track->GetParentID()) {
@@ -374,15 +382,19 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       fNcpions++;
       fHisto->Fill(6,e,1.0);
       fHisto->Fill(19,e,1.0);
+      fHisto->Fill(25,ee,1.0);
 
     } else if ( pd == G4PionMinus::PionMinus()) {
       fNcpions++;
       fHisto->Fill(6,e,1.0);
       fHisto->Fill(20,e,1.0);
+      fHisto->Fill(26,ee,1.0);
 
     } else if ( pd == G4PionZero::PionZero()) {
       fNpi0++;
       fHisto->Fill(7,e,1.0);
+      fHisto->Fill(27,ee,1.0);
+
     } else if ( pd == G4KaonPlus::KaonPlus() || 
                 pd == G4KaonMinus::KaonMinus()) {
       fNkaons++;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversionModel.cc 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,7 +66,7 @@
 
 G4PolarizedGammaConversionModel::G4PolarizedGammaConversionModel(const G4ParticleDefinition* pd,
 					 const G4String& nam)
-  : G4BetheHeitlerModel(pd,nam), crossSectionCalculator(0)
+  : G4BetheHeitlerModel(pd,nam), crossSectionCalculator(nullptr)
 {
 }
 

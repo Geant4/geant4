@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm1/include/PhysListEmStandard.hh
 /// \brief Definition of the PhysListEmStandard class
 //
+<<<<<<< HEAD
 // $Id: PhysListEmStandard.hh 66586 2012-12-21 10:48:39Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

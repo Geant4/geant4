@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/src/RE04ParallelWorldParam.cc
 /// \brief Implementation of the RE04ParallelWorldParam class
 //
-// $Id: $
 //
 #include "RE04ParallelWorldParam.hh"
 

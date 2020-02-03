@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITree.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -41,7 +40,7 @@ G4ASCIITree::G4ASCIITree ():
 	   "A graphics system to dump geometry hierarchy"
 	   "\n  to standard output as an ASCII stream.",
 	   G4VGraphicsSystem::nonEuclidian),
-  fVerbosity(0),
+  fVerbosity(1),
   fOutFileName ("G4cout")
 {
   fpMessenger = new G4ASCIITreeMessenger(this);

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996
@@ -88,10 +87,19 @@ public:
   void AddSolid ( const G4Polycone& polycone) {
     G4VSceneHandler::AddSolid (polycone);
   }
-  void AddSolid ( const G4Polyhedra& polyhedra) {
+  void AddSolid ( const G4Polyhedra& polyhedra ) {
     G4VSceneHandler::AddSolid (polyhedra);
   }
-  void AddSolid ( const G4VSolid& solid  );
+  void AddSolid ( const G4Orb& orb ) {
+    G4VSceneHandler::AddSolid (orb);
+  }
+  void AddSolid ( const G4Ellipsoid& ellipsoid ) {
+    G4VSceneHandler::AddSolid (ellipsoid);
+  }
+  void AddSolid ( const G4TessellatedSolid& tess ) {
+    G4VSceneHandler::AddSolid (tess);
+  }
+  void AddSolid ( const G4VSolid& solid );
   void AddCompound ( const G4VTrajectory& traj) {
     G4VSceneHandler::AddCompound(traj);
   }
@@ -102,6 +110,9 @@ public:
     G4VSceneHandler::AddCompound(digi);
   }
   void AddCompound ( const G4THitsMap<G4double> & hits) {
+    G4VSceneHandler::AddCompound(hits);
+  }
+  void AddCompound ( const G4THitsMap<G4StatDouble> & hits) {
     G4VSceneHandler::AddCompound(hits);
   }
 

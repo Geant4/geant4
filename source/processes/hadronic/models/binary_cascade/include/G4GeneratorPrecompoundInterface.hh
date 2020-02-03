@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeneratorPrecompoundInterface.hh 66812 2013-01-12 16:06:46Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -70,11 +69,16 @@ public:
   virtual G4ReactionProductVector*
   Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 
-  virtual G4ReactionProductVector*                               // Uzhi Nov. 2012
+  virtual G4ReactionProductVector*
   PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus,
                                                   G4V3DNucleus* theProjectileNucleus);
 
   inline void SetCaptureThreshold(G4double);
+
+  inline void SetDeltaM(G4double);
+  inline void SetDeltaR(G4double);
+
+  void MakeCoalescence(G4KineticTrackVector* theSecondaries);
 
   virtual void PropagateModelDescription(std::ostream&) const;
 
@@ -82,10 +86,13 @@ private:
 
   G4GeneratorPrecompoundInterface(const G4GeneratorPrecompoundInterface& right);
   const G4GeneratorPrecompoundInterface& operator=(const G4GeneratorPrecompoundInterface &right);
-  G4int operator==(G4GeneratorPrecompoundInterface& right) {return (this == &right);}
-  G4int operator!=(G4GeneratorPrecompoundInterface& right) {return (this != &right);}
+  G4bool operator==(G4GeneratorPrecompoundInterface& right) {return (this == &right);}
+  G4bool operator!=(G4GeneratorPrecompoundInterface& right) {return (this != &right);}
 
   G4double CaptureThreshold;
+  G4double DeltaM;
+  G4double DeltaR;
+
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
 
@@ -106,9 +113,20 @@ private:
 inline
 void G4GeneratorPrecompoundInterface::SetCaptureThreshold(G4double value)
 {
-  CaptureThreshold=value;
+  CaptureThreshold = value;
+}
+
+inline
+void G4GeneratorPrecompoundInterface::SetDeltaM(G4double value)
+{ 
+  DeltaM = value;
+}
+
+inline 
+void G4GeneratorPrecompoundInterface::SetDeltaR(G4double value)
+{ 
+  DeltaR = value;
 }
 
 #endif // G4GeneratorPrecompoundInterface_h
-
 

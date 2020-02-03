@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITStepModel.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -44,104 +43,54 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4VITMODEL_HH
-#define G4VITMODEL_HH
+#pragma once
 
 #include "AddClone_def.hh"
 #include "G4VITTimeStepComputer.hh"
 #include "G4VITReactionProcess.hh"
 #include "G4ITReactionTable.hh"
+#include "G4ITType.hh"
+#include <memory>
 
 /**
- * Define what to do before stepping and after stepping.
+ * Define actions before and after stepping.
  * The concrete implementation of G4VITModel defines the interaction
- * between two G4IT types. The type might be just equal like :
+ * between two G4IT types. The types can be equal like :
  * Molecule + Molecule, or different : Molecule + Atom.
  */
-
 class G4VITStepModel
 {
 public:
-    /** Default constructor */
     G4VITStepModel(const G4String& aName = "NoName");
-    /** Default destructor */
-    virtual ~G4VITStepModel();
+    G4VITStepModel(std::unique_ptr<G4VITTimeStepComputer> pTimeStepper,
+                   std::unique_ptr<G4VITReactionProcess> pReactionProcess,
+                   const G4String& aName = "NoName");
 
-    /* Macro define in AddClone_def*/
-    G4IT_TO_BE_CLONED(G4VITStepModel)
+    G4VITStepModel(const G4VITStepModel& other) = delete;
+    G4VITStepModel& operator=(const G4VITStepModel& other) = delete;
 
-    void IsApplicable(G4ITType& type1, G4ITType& type2) ;
-    void virtual PrintInfo(){;}
+    virtual ~G4VITStepModel() = default;
 
     virtual void Initialize();
+    void PrepareNewTimeStep();
 
-    inline void SetTimeStepper(G4VITTimeStepComputer* timeStepper);
-    inline void SetReactionProcess(G4VITReactionProcess* reactionProcess);
+    void GetApplicable(G4ITType& type1, G4ITType& type2);
+    void virtual PrintInfo() {;}
 
-    inline G4VITTimeStepComputer* GetTimeStepper();
-    inline const G4String& GetName();
+    G4VITTimeStepComputer* GetTimeStepper();
+    const G4String& GetName();
 
-    inline G4VITReactionProcess* GetReactionProcess();
-    inline void SetReactionTable(G4ITReactionTable*);
-    inline const G4ITReactionTable* GetReactionTable();
+    G4VITReactionProcess* GetReactionProcess();
+    void SetReactionTable(G4ITReactionTable*);
+    const G4ITReactionTable* GetReactionTable();
 
 protected:
-
     G4String fName;
 
-    G4VITTimeStepComputer* fpTimeStepper;
-    G4VITReactionProcess* fpReactionProcess;
-
+    std::unique_ptr<G4VITTimeStepComputer> fpTimeStepper;
+    std::unique_ptr<G4VITReactionProcess> fpReactionProcess;
     const G4ITReactionTable* fpReactionTable ;
 
     G4ITType fType1;
     G4ITType fType2;
-
-protected :
-    /** Copy constructor
-         *  \param other Object to copy from
-         */
-    G4VITStepModel(const G4VITStepModel& other);
-    /** Assignment operator
-         *  \param other Object to assign from
-         *  \return A reference to this
-         */
-    G4VITStepModel& operator=(const G4VITStepModel& other);
 };
-
-inline void G4VITStepModel::SetReactionTable(G4ITReactionTable* table)
-{
-    fpReactionTable = table;
-}
-
-inline const G4ITReactionTable* G4VITStepModel::GetReactionTable()
-{
-    return fpReactionTable ;
-}
-
-inline void G4VITStepModel::SetTimeStepper(G4VITTimeStepComputer* timeStepper)
-{
-    fpTimeStepper = timeStepper ;
-}
-
-inline void G4VITStepModel::SetReactionProcess(G4VITReactionProcess* reactionProcess)
-{
-    fpReactionProcess = reactionProcess ;
-}
-
-inline G4VITTimeStepComputer* G4VITStepModel::GetTimeStepper()
-{
-    return fpTimeStepper;
-}
-
-inline G4VITReactionProcess* G4VITStepModel::GetReactionProcess()
-{
-    return fpReactionProcess ;
-}
-
-inline const G4String& G4VITStepModel::GetName()
-{
-    return fName;
-}
-
-#endif // G4VITMODEL_HH

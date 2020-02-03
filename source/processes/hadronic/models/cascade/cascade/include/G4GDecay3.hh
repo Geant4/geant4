@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 // File:    G4GDecay3.hh
 // Author:  Dennis Wright (SLAC)

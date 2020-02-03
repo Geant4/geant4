@@ -45,7 +45,7 @@ public:
  
   const HadrontherapyDetectorHit& operator=(const HadrontherapyDetectorHit&);
  
-  G4int operator==(const HadrontherapyDetectorHit&) const;
+  G4bool operator==(const HadrontherapyDetectorHit&) const;
 
 //******************************MT
 inline void* operator new(size_t);

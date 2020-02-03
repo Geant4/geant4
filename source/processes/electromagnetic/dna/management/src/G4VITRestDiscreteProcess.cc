@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITRestDiscreteProcess.cc 93883 2015-11-03 08:25:04Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -33,26 +32,111 @@
 //
 // -------------------------------------------------------------------
 
-
 #include "G4VITRestDiscreteProcess.hh"
-G4VITRestDiscreteProcess::G4VITRestDiscreteProcess()
-                   :G4VITProcess("No Name Discrete Process")
+
+G4VITRestDiscreteProcess::G4VITRestDiscreteProcess(const G4String& aName,
+                                                   G4ProcessType aType)
+    : G4VITProcess(aName, aType)
 {
-  G4Exception("G4VITRestDiscreteProcess::G4VITRestDiscreteProcess","Illegal operation",
-	      JustWarning,"default constructor is called");
+    enableAlongStepDoIt = false;
 }
 
-G4VITRestDiscreteProcess::G4VITRestDiscreteProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VITProcess(aName, aType)
+G4VITRestDiscreteProcess::~G4VITRestDiscreteProcess() = default;
+
+G4double G4VITRestDiscreteProcess::PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                                                        G4double previousStepSize,
+                                                                        G4ForceCondition* condition)
 {
-  enableAlongStepDoIt  = false;
+    if ((previousStepSize < 0.0) || (fpState->theNumberOfInteractionLengthLeft
+                                     <= 0.0))
+    {
+        // beggining of tracking (or just after DoIt of this process)
+        ResetNumberOfInteractionLengthLeft();
+    }
+    else if (previousStepSize > 0.0)
+    {
+        // subtract NumberOfInteractionLengthLeft
+        SubtractNumberOfInteractionLengthLeft(previousStepSize);
+    }
+    else
+    {
+        // zero step
+        //  DO NOTHING
+    }
+
+    // condition is set to "Not Forced"
+    *condition = NotForced;
+
+    // get mean free path
+    fpState->currentInteractionLength = GetMeanFreePath(track,
+                                                        previousStepSize,
+                                                        condition);
+
+    G4double value;
+    if (fpState->currentInteractionLength < DBL_MAX)
+    {
+        value = fpState->theNumberOfInteractionLengthLeft * (fpState->currentInteractionLength);
+    }
+    else
+    {
+        value = DBL_MAX;
+    }
+#ifdef G4VERBOSE
+    if (verboseLevel > 1)
+    {
+        G4cout << "G4VITRestDiscreteProcess::PostStepGetPhysicalInteractionLength ";
+        G4cout << "[ " << GetProcessName() << "]" << G4endl;
+        track.GetDynamicParticle()->DumpInfo();
+        G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
+        G4cout << "InteractionLength= " << value / CLHEP::cm << "[cm] " << G4endl;
+    }
+#endif
+    return value;
 }
 
-G4VITRestDiscreteProcess::~G4VITRestDiscreteProcess()
+G4VParticleChange* G4VITRestDiscreteProcess::PostStepDoIt(const G4Track&,
+                                                          const G4Step&)
 {
+//  reset NumberOfInteractionLengthLeft
+    ClearNumberOfInteractionLengthLeft();
+
+    return pParticleChange;
 }
 
-G4VITRestDiscreteProcess::G4VITRestDiscreteProcess(const G4VITRestDiscreteProcess& right)
-                  : G4VITProcess(right)
+G4double G4VITRestDiscreteProcess::AtRestGetPhysicalInteractionLength(const G4Track& track,
+                                                                      G4ForceCondition* condition)
 {
+    // beggining of tracking
+    ResetNumberOfInteractionLengthLeft();
+
+    // condition is set to "Not Forced"
+    *condition = NotForced;
+
+    // get mean life time
+    fpState->currentInteractionLength = GetMeanLifeTime(track, condition);
+
+#ifdef G4VERBOSE
+    if ((fpState->currentInteractionLength < 0.0) || (verboseLevel > 2))
+    {
+        G4cout << "G4VITRestDiscreteProcess::AtRestGetPhysicalInteractionLength ";
+        G4cout << "[ " << GetProcessName() << "]" << G4endl;
+        track.GetDynamicParticle()->DumpInfo();
+        G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
+        G4cout << "MeanLifeTime = " << fpState->currentInteractionLength / CLHEP::ns
+               << "[ns]" << G4endl;
+    }
+#endif
+
+    return fpState->theNumberOfInteractionLengthLeft
+           * (fpState->currentInteractionLength);
 }
+
+G4VParticleChange* G4VITRestDiscreteProcess::AtRestDoIt(const G4Track&,
+                                                        const G4Step&)
+{
+//  clear NumberOfInteractionLengthLeft
+    ClearNumberOfInteractionLengthLeft();
+
+    return pParticleChange;
+}
+

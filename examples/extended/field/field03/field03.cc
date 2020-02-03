@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: field03.cc 77485 2013-11-25 10:12:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file field/field03/field03.cc
 /// \brief Main program of the field/field03 example
@@ -109,11 +112,18 @@ int main(int argc,char** argv)
       UImanager->ApplyCommand(command+fileName);
     }
   else
+<<<<<<< HEAD
     {  // interactive mode : define UI session
 #ifdef G4UI_USE
      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
      if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");
+=======
+    {
+     UImanager->ApplyCommand("/control/execute init_vis.mac");
+     if (ui->IsGUI())
+       UImanager->ApplyCommand("/control/execute gui.mac");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
      ui->SessionStart();
      delete ui;
 #endif

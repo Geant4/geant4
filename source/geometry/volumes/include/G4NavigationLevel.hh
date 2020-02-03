@@ -23,20 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NavigationLevel.hh 86527 2014-11-13 15:06:24Z gcosmo $
-//
-// class G4NavigationLevel
+// G4NavigationLevel
 //
 // Class description:
 //
 // Maintains one level of the geometrical hierarchy.
 // A utility class for use by G4NavigationHistory.
 
-// History:
-//
 // 30.09.97 J.Apostolakis Initial version. Services derived from
-//                        requirements of touchables & G4NavigatorHistory.
+//                        requirements of touchables & G4NavigatorHistory
 // ----------------------------------------------------------------------
 #ifndef G4NAVIGATIONLEVEL_HH
 #define G4NAVIGATIONLEVEL_HH
@@ -59,13 +54,13 @@ class G4NavigationLevel
    G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
                      const G4AffineTransform& newT,
                      EVolume                  newVolTp,
-                     G4int                    newRepNo= -1);
+                     G4int                    newRepNo = -1);
 
    G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
                      const G4AffineTransform& levelAbove,
                      const G4AffineTransform& relativeCurrent,
                      EVolume                  newVolTp,
-                     G4int                    newRepNo= -1);
+                     G4int                    newRepNo = -1);
      // As the previous constructor, but instead of giving Transform, give 
      // the AffineTransform to the level above and the current level's 
      // Transform relative to that.
@@ -75,7 +70,7 @@ class G4NavigationLevel
 
    ~G4NavigationLevel();
 
-   G4NavigationLevel& operator=(const G4NavigationLevel &right);
+   G4NavigationLevel& operator=(const G4NavigationLevel& right);
 
    inline G4VPhysicalVolume*       GetPhysicalVolume() const;
    inline const G4AffineTransform* GetTransformPtr() const ;  // New
@@ -89,20 +84,20 @@ class G4NavigationLevel
    inline const G4AffineTransform* GetPtrTransform() const;
      // To try to resolve the possible problem with returning a reference.
 
-   inline void *operator new(size_t);
-   inline void operator delete(void *aLevel);
+   inline void* operator new(size_t);
+   inline void operator delete(void* aLevel);
      // Override "new" and "delete" to use "G4Allocator".
 
-   inline void *operator new(size_t, void *);
+   inline void* operator new(size_t, void*);
 #ifndef G4NOT_ISO_DELETES
-   inline void operator delete(void *ptr, void*);  // Not accepted Sun/HP
+   inline void operator delete(void* ptr, void*);  // Not accepted Sun/HP
 #endif
      // Pre-allocated 'new' and 'delete' for use with STL 
      // Do not (directly) use Allocator
 
  private:
 
-   G4NavigationLevelRep*  fLevelRep;
+   G4NavigationLevelRep* fLevelRep;
 };
 
 #include "G4NavigationLevel.icc"

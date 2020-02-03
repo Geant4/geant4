@@ -26,9 +26,12 @@
 /// \file electromagnetic/TestEm2/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // 
 // $Id: DetectorConstruction.cc 78550 2014-01-07 09:43:41Z gcosmo $
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -218,4 +221,5 @@ void DetectorConstruction::ConstructSDandField()
 
     }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -90,7 +90,7 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
     if(level == 0) filename = nameChar0;
     if(level == 1) filename = nameChar1;
 
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
     if (!path)
       {
         G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
@@ -257,7 +257,7 @@ G4PhotoElectricAngularGeneratorPolarized::DSigmaKshellGavrila1959(
                + (1-sqrtOneBeta2)/(4*beta2*oneBetaCosTheta*oneBetaCosTheta) * (beta/oneBeta2 - 2/oneBeta2 * cosTheta * cosPhi2 +
                (1-sqrtOneBeta2)/oneBeta2_to_3_2 * cosTheta - beta * (1-sqrtOneBeta2)/oneBeta2_to_3_2);
 
-  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) );
+  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) )*std::sin(theta);
 
   return dsigma;
 }
@@ -294,7 +294,7 @@ G4PhotoElectricAngularGeneratorPolarized::DSigmaL1shellGavrila(
                + (1-sqrtOneBeta2)/(4*beta2*oneBetaCosTheta*oneBetaCosTheta) * (beta/oneBeta2 - 2/oneBeta2 * cosTheta * cosPhi2 +
                (1-sqrtOneBeta2)/oneBeta2_to_3_2*cosTheta - beta*(1-sqrtOneBeta2)/oneBeta2_to_3_2);
 
-  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) );
+  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) )*std::sin(theta);
 
   return dsigma;
 }

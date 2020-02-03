@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXePMTHit.hh 72250 2013-07-12 08:59:26Z gcosmo $
 //
 /// \file optical/LXe/include/LXePMTHit.hh
 /// \brief Definition of the LXePMTHit class
@@ -54,7 +53,7 @@ class LXePMTHit : public G4VHit
     LXePMTHit(const LXePMTHit &right);
 
     const LXePMTHit& operator=(const LXePMTHit &right);
-    G4int operator==(const LXePMTHit &right) const;
+    G4bool operator==(const LXePMTHit &right) const;
 
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

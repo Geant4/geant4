@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SimpleHeum.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// class G4SimpleHeum
+// G4SimpleHeum
 //
 // Class description:
 //
@@ -38,10 +34,8 @@
 //
 // Third order solver.
 
-// History:
-// - Created. W. Wander <wwc@mit.edu>, 12/09/97
+// Created: W.Wander <wwc@mit.edu>, 12/09/1997
 // -------------------------------------------------------------------
-
 #ifndef G4SIMPLEHEUM_HH
 #define G4SIMPLEHEUM_HH
 
@@ -52,28 +46,28 @@ class G4SimpleHeum : public G4MagErrorStepper
 
   public:  // with description
 
-    G4SimpleHeum(G4EquationOfMotion *EqRhs, G4int num_variables=6);
+    G4SimpleHeum(G4EquationOfMotion* EqRhs, G4int num_variables = 6);
    ~G4SimpleHeum();
       // Constructor and destructor.
 
     void DumbStepper( const G4double y[],
                       const G4double dydx[],
                             G4double h,
-                            G4double yout[]);
+                            G4double yout[] );
 
   public:  // without description
   
-    G4int IntegratorOrder() const { return 3; }
+    inline G4int IntegratorOrder() const { return 3; }
 
   private:
 
-    G4int fNumberOfVariables;
+    G4int fNumberOfVariables = 0;
 
-    G4double* dydxTemp  ;
-    G4double* dydxTemp2 ;
-    G4double* yTemp     ;
-    G4double* yTemp2    ;
+    G4double* dydxTemp = nullptr;
+    G4double* dydxTemp2 = nullptr;
+    G4double* yTemp = nullptr;
+    G4double* yTemp2 = nullptr;
       // scratch space    
 };
 
-#endif /* G4SIMPLEHEUM_HH */
+#endif

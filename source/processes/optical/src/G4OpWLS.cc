@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc 86052 2014-11-07 08:31:04Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -101,12 +100,13 @@ G4OpWLS::~G4OpWLS()
 G4VParticleChange*
 G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
+  std::vector<G4Track*> proposedSecondaries;
   aParticleChange.Initialize(aTrack);
   
   aParticleChange.ProposeTrackStatus(fStopAndKill);
 
   if (verboseLevel>0) {
-    G4cout << "\n** Photon absorbed! **" << G4endl;
+    G4cout << "\n** G4OpWLS: Photon absorbed! **" << G4endl;
   }
   
   const G4Material* aMaterial = aTrack.GetMaterial();
@@ -119,7 +119,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
   const G4MaterialPropertyVector* WLS_Intensity = 
-    aMaterialPropertiesTable->GetProperty("WLSCOMPONENT"); 
+    aMaterialPropertiesTable->GetProperty(kWLSCOMPONENT); 
 
   if (!WLS_Intensity)
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -129,7 +129,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   if (aMaterialPropertiesTable->ConstPropertyExists("WLSMEANNUMBERPHOTONS")) {
 
      G4double MeanNumberOfPhotons = aMaterialPropertiesTable->
-                                    GetConstProperty("WLSMEANNUMBERPHOTONS");
+                                    GetConstProperty(kWLSMEANNUMBERPHOTONS);
 
      NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
 
@@ -145,8 +145,6 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
   }
 
-  aParticleChange.SetNumberOfSecondaries(NumPhotons);
-
   G4double primaryEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
 
   G4int materialIndex = aMaterial->GetIndex();
@@ -158,7 +156,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   G4PhysicsOrderedFreeVector* WLSIntegral = 0;
 
   WLSTime   = aMaterialPropertiesTable->
-    GetConstProperty("WLSTIMECONSTANT");
+    GetConstProperty(kWLSTIMECONSTANT);
   WLSIntegral =
     (G4PhysicsOrderedFreeVector*)((*theIntegralTable)(materialIndex));
    
@@ -181,10 +179,10 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4double CIIvalue = G4UniformRand()*CIImax;
         sampledEnergy = WLSIntegral->GetEnergy(CIIvalue);
 
-        if (verboseLevel>1) {
-           G4cout << "sampledEnergy = " << sampledEnergy << G4endl;
-           G4cout << "CIIvalue =      " << CIIvalue << G4endl;
-        }
+        //if (verboseLevel>1) {
+        //   G4cout << "G4OpWLS: sampledEnergy = " << sampledEnergy << G4endl;
+        //   G4cout << "G4OpWLS: CIIvalue =      " << CIIvalue << G4endl;
+        //}
 
         if (sampledEnergy <= primaryEnergy) break;
     }
@@ -192,19 +190,26 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     // If no such energy can be sampled, return one less secondary, or none
 
     if (sampledEnergy > primaryEnergy) {
-       if (verboseLevel>1)
-       G4cout << " *** One less WLS photon will be returned ***" << G4endl;
+       if (verboseLevel>1) {
+         G4cout << " *** G4OpWLS: One less WLS photon will be returned ***"
+                << G4endl;
+        }
        NumberOfPhotons--;
-       aParticleChange.SetNumberOfSecondaries(NumberOfPhotons);
        if (NumberOfPhotons == 0) {
-          if (verboseLevel>1)
-          G4cout << " *** No WLS photon can be sampled for this primary ***"
-                 << G4endl;
+          if (verboseLevel>1) {
+            G4cout <<
+              " *** G4OpWLS: No WLS photon can be sampled for this primary ***"
+                   << G4endl;
+          }
           // return unchanged particle and no secondaries
+          aParticleChange.SetNumberOfSecondaries(0);
           return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
        }
        continue;
-    }
+    } else if (verboseLevel > 0) {
+         G4cout << "G4OpWLS: Created photon with energy: " << sampledEnergy
+                << G4endl;
+       }
 
     // Generate random photon direction
     
@@ -269,10 +274,14 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     // aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
     
     aSecondaryTrack->SetParentID(aTrack.GetTrackID());
-    
-    aParticleChange.AddSecondary(aSecondaryTrack);
+
+    proposedSecondaries.push_back(aSecondaryTrack);
   }
 
+  aParticleChange.SetNumberOfSecondaries(proposedSecondaries.size());
+  for (auto sec : proposedSecondaries) {
+    aParticleChange.AddSecondary(sec);
+  }
   if (verboseLevel>0) {
     G4cout << "\n Exiting from G4OpWLS::DoIt -- NumberOfSecondaries = " 
 	   << aParticleChange.GetNumberOfSecondaries() << G4endl;  
@@ -318,7 +327,7 @@ void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
       if (aMaterialPropertiesTable) {
 
 	G4MaterialPropertyVector* theWLSVector = 
-	  aMaterialPropertiesTable->GetProperty("WLSCOMPONENT");
+	  aMaterialPropertiesTable->GetProperty(kWLSCOMPONENT);
 
 	if (theWLSVector) {
 	  
@@ -398,7 +407,7 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
 
   if ( aMaterialPropertyTable ) {
     AttenuationLengthVector = aMaterialPropertyTable->
-      GetProperty("WLSABSLENGTH");
+      GetProperty(kWLSABSLENGTH);
     if ( AttenuationLengthVector ){
       AttenuationLength = AttenuationLengthVector->
 	Value(thePhotonEnergy);

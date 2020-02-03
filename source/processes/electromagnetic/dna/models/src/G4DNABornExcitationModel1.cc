@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel1.cc 90054 2015-05-11 18:47:32Z matkara $
 //
 
 #include "G4DNABornExcitationModel1.hh"
@@ -40,7 +39,7 @@ using namespace std;
 
 G4DNABornExcitationModel1::G4DNABornExcitationModel1(const G4ParticleDefinition*,
                                                      const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false), fTableData(0)
+G4VEmModel(nam), isInitialised(false), fTableData(0)
 {
   fpMolWaterDensity = 0;
   fHighEnergy = 0;
@@ -155,23 +154,20 @@ G4double G4DNABornExcitationModel1::CrossSectionPerVolume(const G4Material* mate
 
   G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
 
-  if(waterDensity!= 0.0)
+  if (ekin >= fLowEnergy && ekin <= fHighEnergy)
   {
-    if (ekin >= fLowEnergy && ekin < fHighEnergy)
-    {
-      sigma = fTableData->FindValue(ekin);
-    }
+    sigma = fTableData->FindValue(ekin);
+  }
 
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "G4DNABornExcitationModel1 - XS INFO START" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "G4DNABornExcitationModel1 - XS INFO END" << G4endl;
-    }
-  } // if (waterMaterial)
+  if (verboseLevel > 2)
+  {
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "G4DNABornExcitationModel1 - XS INFO START" << G4endl;
+    G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
+    G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+    G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+    G4cout << "G4DNABornExcitationModel1 - XS INFO END" << G4endl;
+  }
 
   return sigma*waterDensity;
 }

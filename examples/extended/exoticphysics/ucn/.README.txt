@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "exoticphysics/ucn/.README.txt"
 ///\brief Example ucn README page
@@ -9,7 +8,7 @@
  gum@triumf.ca
 
 This example demonstrates how ultra-cold neutrons (UCN) propagate
-in a guilde and how this can be simulated in Geant4.
+in a guide pipe and how this can be simulated in Geant4.
 
 \section ucn_s1 INTRODUCTION
 

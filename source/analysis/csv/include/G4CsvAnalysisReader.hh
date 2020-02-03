@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvAnalysisReader.hh 74257 2013-10-02 14:24:55Z gcosmo $
 
 // The main manager for Csv analysis reader.
 // It delegates most of functions to the object specific managers. 

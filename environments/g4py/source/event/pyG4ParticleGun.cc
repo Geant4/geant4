@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleGun.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4ParticleGun.cc
 //
@@ -65,17 +64,17 @@ const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun &right)
 }
 
 /////////////////////////////////////////////////////////////////
-G4int G4ParticleGun::operator==(const G4ParticleGun &right) const
+G4bool G4ParticleGun::operator==(const G4ParticleGun &right) const
 /////////////////////////////////////////////////////////////////
 {
-  return 0;
+  return false;
 }
 
 /////////////////////////////////////////////////////////////////
-G4int G4ParticleGun::operator!=(const G4ParticleGun &right) const
+G4bool G4ParticleGun::operator!=(const G4ParticleGun &right) const
 /////////////////////////////////////////////////////////////////
 {
-  return 0;
+  return false;
 }
 
 #endif

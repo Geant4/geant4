@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VLevelDensityParameter.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -38,17 +37,17 @@ class G4VLevelDensityParameter
 {
 public:
 
-  G4VLevelDensityParameter();
-  virtual ~G4VLevelDensityParameter();
+  explicit G4VLevelDensityParameter() {};
+  virtual ~G4VLevelDensityParameter() {};
 
   virtual G4double 
   LevelDensityParameter(G4int A, G4int Z, G4double U) const = 0;
 
 private:  
-  G4VLevelDensityParameter(const G4VLevelDensityParameter &right);
-  const G4VLevelDensityParameter & operator=(const G4VLevelDensityParameter &right);
-  G4bool operator==(const G4VLevelDensityParameter &right) const;
-  G4bool operator!=(const G4VLevelDensityParameter &right) const;
+  G4VLevelDensityParameter(const G4VLevelDensityParameter &right) = delete;
+  const G4VLevelDensityParameter & operator=(const G4VLevelDensityParameter &right) = delete;
+  G4bool operator==(const G4VLevelDensityParameter &right) const = delete;
+  G4bool operator!=(const G4VLevelDensityParameter &right) const = delete;
   
 };
 

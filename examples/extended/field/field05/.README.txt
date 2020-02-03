@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "field/field05/.README.txt"
 ///\brief Example field05 README page
@@ -55,6 +54,7 @@ Classes Used
 
 \section field05_s4 PHYSICS
 \verbatim
+<<<<<<< HEAD
 RegisterPHysics(new G4DecayPhysics());
 RegisterPhysics(new F05ExtraPhysics());
 
@@ -70,6 +70,13 @@ G4VModularPhysicsList::ConstructParticle();
 - G4PionDecayMakeSpin process for the pion
 
  F05ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+=======
+RegisterPhysics(new G4SpinDecayPhysics());
+RegisterPhysics(new G4StepLimiterPhysics());
+
+ G4SpinDecayPhysics defines muon decay modes with spin,
+ G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 \section field05_s5 User Action Classes
 

@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/src/ExN02MagneticField.cc
+/// \file ExN02MagneticField.cc
 /// \brief Implementation of the ExN02MagneticField class
 //
 //
-// $Id: ExN02MagneticField.cc 66241 2012-12-13 18:34:42Z gunter $
 //  
 //   User Field class implementation.
 //

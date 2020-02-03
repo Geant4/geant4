@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 93391 2015-10-20 07:06:43Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +18,39 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+15-10-18 G. Cosmo (AnaEx01-V10-04-02)
+- Added missing include of G4SteateManager.hh in DetectorConstruction source.
+
+04-07-18 I. Hrivnacova (AnaEx01-V10-04-01)
+- Fixed compilation error introduced in previous tag
+
+03-07-18 I. Hrivnacova (AnaEx01-V10-04-00)
+- Macro & commands review:
+  - Removed obsolete /N03 top command directory
+  - Added protection against warnings issued from ReinitializeGeometry() if 
+    called in PreInit phase
+  - Added test for all commands defined in this example in AnaEx01.in
+  - Updated README files
+
+27-07-17 I. Hrivnacova (AnaEx01-V10-03-00)
+- Coding guidelines: removed redundant empty lines
+
+26-10-16 I. Hrivnacova (AnaEx01-V10-02-03)
+- Activated merging ntuples
+- Updated main program according to basic examples
+
+28-09-16 I. Hrivnacova (AnaEx01-V10-02-02)
+- Removed Hbook
+
+04-07-16 I. Hrivnacova (AnaEx01-V10-02-01)
+- Fixes for Doxygen documentation
+
+01-07-16 I. Hrivnacova (AnaEx01-V10-02-00)
+- Coding guidelines (function names)
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 19-10-15 I. Hrivnacova (AnaEx01-V10-01-09)
 - Updated hbook for developments in analysis category
 

@@ -1,0 +1,36 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example factory History file
+                    ----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+26/11/19 I. Hrivnacova  (factory-V10-05-00)
+- Fixed Doxygen warnings
+
+18/1/18  G.Folger       (factory-V10-04-01)
+-  Re-tag using procedure to remove svn:externals from tag.
+
+15/1/18  G.Folger       (factory-V10-04-00)
+- Correct G4INSTALL in GNUmakefile.
+
+4/12/17  G.Folger       (factory-V10-03-02)
+- delete extraneous file(!) src
+ 
+28/11/17 I. Hrivnacova  (factory-V10-03-01)
+- Fixed documentation
+
+26/10/17 I. Hrivnacova  (factory-V10-03-00)
+- Updated documentation, the first tag
+
+25/10/17 I. Hrivnacova
+- First version of example

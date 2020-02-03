@@ -1,4 +1,3 @@
-$Id: History 102339 2017-01-23 13:22:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,35 +16,364 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 21, 2016 G.Cosmo (run-V10-01-19)
+November 22nd, 2019 J. Madsen (run-V10-05-11)
+- Updated sources.cmake to use ${timemory_LIBRARIES} instead of
+  difficult to type ${TiMemory_LIBRARIES}
+- Removed InitializeTiMemory() from G4RunManager
+
+November 21th, 2019  V.Ivanchenko (run-V10-05-10)
+- G4PhysicsListHelper.cc : make it true thread local singleton
+- G4RunManager - does not call G4ProcessTable, because it is true
+    thread local singleton now
+
+November 19th, 2019  D.Sorokin (run-V10-05-09)
+- G4PhysicsListHelper.cc : Fix typo.
+
+November 15th, 2019  G.Cosmo (run-V10-05-08)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+October 7th, 2019  M.Asai (run-V10-05-07)
+- G4RunMessenger.cc : accept "/run/storeRndmStatToEvent 3".
+  Addressing problem report #2198.
+
+October 3rd, 2019  G.Cosmo (run-V10-05-06)
+- Properly initialise luxury level for Ranlux* engines in MT mode.
+  Addressing problem report #2184.
+
+September 19th, 2019  M.Asai (run-V10-05-05)
+- Introducing G4ScoringRealWorld that allows to define command-based
+  scorers to a logical volume in the mass world.
+- Co-working with detutils-V10-05-01.
+
+July 19th, 2019, M. Asai (run-V10-05-04)
+- G4RunManager, G4RunManagerKernel: addressing to the cases GDML perser
+  directly replaces the world volume without changing the user detector
+  construction.
+
+March 13th, 2019, M. Asai (run-V10-05-03)
+- G4UserPhysicsListMessenger.cc: Defining unit categories for UI commands
+  that take units. Co-working with intercoms-V10-05-02.
+
+March 11th, 2019, G. Cosmo (run-V10-05-02)
+- Fixed typos in printouts in G4RunMessenger, G4UserPhysicsListMessenger
+  and G4VUserPhysicsList.
+
+February 13th, 2019, M. Asai (run-V10-05-01)
+- Fix G4MultiRunAction.cc to coop with more than one user run action classes
+
+January 31st, 2019, I.Hrivnacova (run-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+November 9th, 2018, J. Apostolakis (run-V10-04-22)
+- G4PhysicsListHelper - new methods to set low or high 'looper' thresholds
+    in Transportation classes (simple & coupled.)
+  NOTE: requires co-working tag transport-V10-04-13
+
+November 9th, 2018, G. Cosmo (run-V10-04-21)
+- G4RunMessenger, G4WorkerRunManager: fixed printout typos.
+
+November 7th, 2018, I. Hrivnacova (run-V10-04-20)
+- Removed a debug printing introduced with G4VScoreNtupleWriter.
+
+October 30th, 2018, I. Hrivnacova (run-V10-04-17,18,19)
+- Removed the dependence on analysis:
+  using the  G4VScoreNtupleWriter interface class instead
+  of the concrete class
+
+October 27th, 2018, I. Hrivnacova (run-V10-04-16)
+- Fixed GNUmakefile: added analysis/management include
+
+October 25th, 2018, I. Hrivnacova (run-V10-04-15)
+- Fixed dependencies in sources.cmake
+
+October 25th, 2018, J.Madsen (run-V10-04-14)
+- Minor update to G4Run constructor to invoke G4StatAnalysis::ResetCpuClock().
+  this enables the calculation of the FOM for G4StatAnalysis without requiring
+  each instance to hold it's own timer.
+
+October 25th, 2018, I. Hrivnacova (run-V10-04-13)
+- Adding calls to new G4ScoreNtupleWriter, if activated.
+  This utility class implements automated storing of hits collections
+  of G4THitsMap<G4double> type (used by primitive scorers) vith Geant4
+  analysis tools.
+
+October 10th, 2018, G.Cosmo (run-V10-04-12)
+- Added clearing of G4AssemblyStore in G4RunManager::ReinitializeGeometry().
+
+August 18th, 2018, V.Ivanchenko (run-V10-04-11)
+- G4PhysicsListHelper - added two new EM physics process types
+
+July 12th, 2018, G. Cosmo (run-V10-04-10)
+- G4WorkerThread: use G4GeometryWorkspace and G4SolidsWorkspace the same
+  way as the other workspaces, through the templated worskspace pool class.
+- Coworks with tags in geometry and visualization/management.
+
+June 8th, 2018, J. Madsen (run-V10-04-09)
+- Fixed compilation warnings related to TIMEMORY_AUTO_TIMER macros on Windows
+
+June 6th, 2018, J. Madsen (run-V10-04-08)
+- Added TiMemory auto-timer macros to some key functions in
+  G4RunManager, G4RunManagerKernel, G4MTRunManager, and G4MTRunManagerKernel
+- Added TiMemory libraries and includes to sources.cmake
+
+May 17th, 2018, J. Madsen (run-V10-04-07)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+April 3, 2018, M. Asai (run-V10-04-06)
+- G4ExceptionHandler: Add track/step/volume information when
+  exception happens while event is in process.
+
+February 27, 2018, G. Cosmo (run-V10-04-05)
+- G4RunManagerKernel: updated also MT banner.
+
+February 26, 2018, M. Asai (run-V10-04-04)
+- G4RunManagerKernel: two general papers are added to the banner.
+
+February 21 2018 Jonathan Madsen (run-V10-04-03)
+- Replace pthread-style <void*(void*)> function signatures with
+  <void(G4WorkerThread*)> as it is now unnecessary
+
+February 12 2018 Jonathan Madsen (run-V10-04-02)
+- Removed WIN32 conditional for G4THREADCREATE in
+  G4UnserWorkerThreadInitialization (no longer needed)
+- Changed G4Thread to G4NativeThread when setting pin affinity in
+  G4WorkerThread
+
+February 9, 2018, M. Asai (run-V10-04-01)
+- G4RunManagerKernel.cc :
+  Application state is set to G4State_Init while application is in
+  RunInitialization().
+- Co-working with global-V10-04-01.
+
+December 26, 2017, M. Asai (run-V10-04-00)
+- G4UserPhysicsListMessenger :
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
+
+November 21, 2017, G. Cosmo (run-V10-03-16)
+- Fixed compilation warning on clang compiler.
+
+November 20, 2017, M. Asai (run-V10-03-13, -14, -15)
+- Delete G4RNGHelper singleton object at the end of program.
+
+September 12, 2017, K.L.Genser (run-V10-03-12)
+- G4PhysicsListHelper added MuAtomicCapture & DecayMuAtom
+
+June 1, 2017, A.Dotti (run-V10-03-11)
+- Prevent adding multiple times the same SD to the same LV via
+  G4VUserDetectorConsturction::SetSensitiveDetector.
+  In case skip and issue a warning.
+
+May 3, 2017, A. Dotti (run-V10-03-10)
+- Transfor G4VPhysicsConstructor split-class to be all pointers
+  (assessing valgrind report)
+
+April 26, 2017, A. Dotti (run-V10-03-08, -09)
+- New design of physics lists for cleanup of memory in MT
+- Introduced new class G4PhysicsBuilderInterface from which
+  all physics_lists/builders inherit
+  Worker threads now call G4VUserPhysicsList::TerminateWorker
+  to clean up physics list thread-specific objects
+- G4VPhysicsConstructor holds list of TLS builders
+- Coworking tag phys-builders-V10-03-03
+
+April 21, 2017, M. Asai (run-V10-03-07)
+- G4MTRunManager.cc, G4WorkerRunManager.cc : protect against null
+  pointer for SetUserAction() method.
+
+March 24, 2017, M. Asai (run-V10-03-06)
+- G4RunManagerKernel : remove unnecessary warning message.
+- G4RunManager : notify Vis manager when world volune is re-initialized.
+
+March 23, 2017, G. Cosmo (run-V10-03-05)
+- Added deletion of field-manager store and geometry manager thread-local
+  singletons in G4RunManagerKernel destructor.
+
+March 17, 2017, G. Cosmo (run-V10-03-04, 03)
+- Delete G4TransportationManager and G4PathFinder singletons in
+  G4RunManagerKernel, clearing static leaks at exit.
+
+March 13, 2017, G. Cosmo (run-V10-03-02)
+- G4WorkerThread: use CleanUpAndDestroyAllWorkspaces() from workspace pools
+  in DestroyGeometryAndPhysicsVector(). Minor code cleanup.
+
+February 9, 2017, M. Asai (run-V10-03-01)
+- Banner on worker RunManager will no longer be printed.
+
+December 22, 2016, L. Desorgher (run-V10-03-00)
+- Modifications to solve bug with reverse track splitting.
+  Works with tag tracking-V10-03-00.
+  - Add G4AdjointSimManager::ResetDidOneAdjPartReachExtSourceDuringEvent()
+  - Use G4AdjointSimManager::ResetDidOneAdjPartReachExtSourceDuringEvent() in
+                G4AdjointPrimaryGeneratorAction.
+
+November 15, 2016 A. Dotti (run-V10-02-38,-39)
+- Fix bug #1908: create unique names with logVol pointer value
+  for G4MultiSD and avoid to register target SD implictly
+
+November 7, 2016, G.Folger (run-V10-02-37)
+- remove #define for aParticleIterator from G4VPhysicsConstructor.hh
+   Move the #define for theParticleIterator to G4VUserPhysicsList.cc
+
+October 21, 2016, A.Dotti (run-V10-02-36)
+- Partially revert back previous tag to solve deadlocks.
+  G4MTRunManager::GetNumberOfActiveThreads() returns size of the
+  threads pool. This number may be different from
+  G4Threading::GetNumberOfWorkerThreads() that instead returns the
+  number of threads currently in running state (during start
+  of threads)
+
+October 21, 2016 G.Cosmo (run-V10-02-35)
 - Moved initialisation of G4VUPLSplitter thread-local data to be inline
   along with generic template type. Removed explicit initialisation of
   thread-local data from workspaces, as now happening inline in
   G4TWorkspacePool.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+- Requires tags "global-V10-02-30" and "particles-V10-02-30".
 
-October 14, 2016, G.Cosmo
+October 12, 2016, A.Dotti (run-V10-02-34)
+- Use G4Threading::GetNumberOfWorkerThreads method.
+  Requires global-V10-02-28
+
+
+October 14, 2016, G.Cosmo (run-V10-02-33, 32)
 - Again trying fixing G4RNGHelper inlining issue.
 
-October 13, 2016, G.Cosmo
+October 13, 2016, G.Cosmo (run-V10-02-31)
 - Explicitly initialise G4VUPLSplitter data in G4PhysicsListWorkspace.
 - Moved static GetInstance() method in G4RNGHelper to be not inline.
 - Grouped #include statements in G4WorkerThread.cc.
 
-October 12, 2016, G.Folger
+October 12, 2016, G.Folger (run-V10-02-30)
 - Add method GetParticleIterator in G4VUserPhysicsList
-   and make these methods const and protected in both classes 
+   and make these methods const and protected in both classes
    ... fix for compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-October 11, 2016, G.Folger
+October 11, 2016, G.Folger (run-V10-02-29)
 - Add method GetParticleIterator in G4VPhysicsConstructor
   Start to fix for compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-Jan 27th, 2016 M.Asai (run-V10-01-17)
+October 3, 2016, M.Asai (run-V10-02-27, -28)
+- G4GunManagerKernel: G4Exception is replaced with G4cout when the world
+  volume is assigned at PreInit or Idle state.
+
+September 21, 2016, G.Cosmo
+- Restored trunk to "run-V10-02-25".
+  Modifications done in previous tags cause duplicate symbols in generation
+  of the dynamic library on Mac... A cleaner solution needs to be applied in
+  order to take also into account improper use of splitters symbols by
+  derived physics-lists and custom physics-lists in examples and tests.
+
+September 20, 2016, G.Cosmo (run-V10-02-26)
+- Explicitly initialise templated data in G4PhysicsListWorkspace,
+  G4VUserPhysicsList, G4WorkerThread, G4WorkerRunManager and
+  G4MTRunManager translation units.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+September 14, 2016, M.Asai (run-V10-02-25)
+- Geant4 is now in G4State_Init state while initialization phase.
+  This is enforced even if the user uses only the G4GunManagerKernel.
+
+September 13, 2016, M.Asai (run-V10-02-24)
+- Geant4 is now in G4State_Init state while G4RunManager::Initialize().
+
+September 7, 2016, G.Cosmo (run-V10-02-23)
+- Fixed GNUmakefile for missing dependency on global/HEPNumerics, now required.
+
+September 2, 2016 M.Asai (run-V10-02-22)
+- sources.cmake : add global/HEPNumerics
+
+August 4, 2016 M.Asai (run-V10-02-21)
+- G4WorkerRunManager.cc : minor printout improvement.
+
+July 29, 30, 2016 M.Asai      (run-V10-02-19, -20)
+- Fix G4UnitDefinition to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+July 22, 2016 M.Asai      (run-V10-02-16, -17 and -18)
+- Fix G4UnitsTable to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+July 21, 2016 L.Desorgher  (run-V10-02-15)
+- Remove compilation warnings in  G4AdjointPrimaryGeneratorAction.
+
+July 21, 2016 L.Desorgher  (run-V10-02-14)
+- Modification of G4AdjointSimManager, G4AdjointPrimaryGeneratorAction
+ and G4AdjointSimMessenger for the implementation of the
+ splitting of the reverse MC tracking.
+
+July 7, 2016 G.Cosmo     (run-V10-02-13)
+- Removed redundant check in G4VUPLSplitter::UseWorkArea().
+  Addressing problem report #1876.
+
+June 1, 2016 M.Asai      (run-V10-02-12)
+- G4PhysicsListHelper.cc: Fix the default process ordering parameters
+  for G4UnknownDecay that should not have AtRest.
+
+June 1, 2016 L.Desorgher (run-V10-02-11)
+- G4AdjointSimManager correction in the use of run actions to avoid
+  infinite loop during an adjoint simulation.
+- G4AdjointPrimaryGenerationAction. Remove 3 times spliting of
+  primary adjoint gamma.
+
+Apr 15rd, 2016 V.Ivanchenko(run-V10-02-10)
+- G4PhysicsListHelper - disable msc PostStep
+
+Feb 23rd, 2016 A.Dotti	   (run-V10-02-09)
+- minor typos correction in output
+
+Feb 22nd, 2016 A.Dotti     (run-V10-02-08)
+- Introduce new UI command: /run/workersProcessCmds to trigger
+  execution of UI commands by workers even without a /run/beamOn
+  C++ API is G4MTRunManager::RequestWorkersProcessCommandsStack()
+- When workers are terminated they execute the UI commands issued
+  after the last /run/beamOn
+
+Feb 18th, 2016 A.Dotti     (run-V10-02-07)
+- Fix compilation in WIN attempt #1
+
+Feb 18th, 2016 A.Dotti	   (run-V10-02-06)
+- Use new class G4MTBarrier to implement synchronization points.
+
+Feb 9th, 2016 A.Dotti      (run-V10-02-05)
+- Fix typo of G4CONDITIONBORADCAST (requires global-V10-02-03)
+- use scoped enum for G4MTRunManager:: WorkerAcitonRequest and
+  add PROCESSUI action
+- add G4MTRunManager::GetNumberActiveThreads() method
+- Introduced skeleton for new functionality to force workers to
+  execute UI commands w/o beamOn (not functioning yet)
+
+Feb 5th, 2016 P.Gumplinger (run-V10-02-04)
+- fix val-grind memory leakage check tool error in G4RunMessenger
+
+Feb 1st, 2016 A.Dotti (run-V10-02-03)
+- removing automatic handling of multi-user actions
+   in G4RunManager::SetUserAction(XYZ) (tag run-V10-02-01) since
+  reverse MC needs ability to replace user-actions.
+  if needed, multiple user-actions must be instantiated and handled by
+  user code
+
+Jan 29th, 2016 A.Dotti (run-V10-02-02)
+- Renaming all MT related exception to have code matching pattern:
+  Run01[0-9]{2} current maximum number Run0127
+  (JIRA TASK: DEV-74)
+
+Jan 19th, 2016 A.Dotti (run-V10-02-01)
+- Adding G4MultiRunAction to allow multiple run actions in a single
+  job.
+- Adding G4MultiPrimaryAction to allow multiple user-primary generation
+  actions in a single job
+- Adding hangling of multiple actions. Requires event-V10-02-01 and
+  tracking-V10-02-00
+
+Jan 27th, 2016 M.Asai (run-V10-02-00)
 - G4PhysicsListHelper: add entry for G4ParallelWorldProcess
 - G4RunManager, G4WorkerRunManager: change process order index of
   G4ParallelWorldProcess to 9900 to make sure it is registered
-  prior to G4OpBoundaryProcess. 
+  prior to G4OpBoundaryProcess.
 
 Nov 14th, 2015 M.Asai (run-V10-01-16)
 - Co-working with particles-V10-01-17. Destructor of G4WorkerRunManagerKernel
@@ -62,8 +390,8 @@ Nov 9th, 2015  G.Cosmo (run-V10-01-14)
 - Requires installation of CLHEP version 2.3.1.0.
 
 Nov 6th, 2015  A.Dotti (run-V10-01-13)
-- Bug fixing for RNG strong-reproducibility 
-  in MT mode  
+- Bug fixing for RNG strong-reproducibility
+  in MT mode
 
 Oct 23rd, 2015 A.Dotti (run-V10-01-12)
 - Fixing typo in exception warning output
@@ -80,7 +408,7 @@ May 16th, 2015 J.Allison (run-V10-01-09)
 
 May 7th, 2015 A.Dotti (run-V10-01-06)
 - G4MTRunManager: Remove explicit initialization of Bertini cascade
-  (done in Bertini module), requires hadr-casc-V10-01-04 
+  (done in Bertini module), requires hadr-casc-V10-01-04
 
 March 27th, 2015 G. Cosmo (run-V10-01-05)
 - G4VUserPhysicsList: lookup for default-world-region in G4RegionStore
@@ -94,11 +422,11 @@ February 10th, 2015 A.Dotti (run-V10-01-02)
 - Removing sporious MKL engine reference
 
 February 6th, 2015 A.Dotti (run-V10-01-01)
-- Move setting of pin affinity from G4MTRunManagerKernel::StartThread 
+- Move setting of pin affinity from G4MTRunManagerKernel::StartThread
   to G4WorkerThread
-- New method G4WorkerRunManager::DoWork(), called by 
+- New method G4WorkerRunManager::DoWork(), called by
   G4MTRunManagerKernel::StartThread to process requests of new runs
-  from kernel 
+  from kernel
 
 December 5th, 2014 M.Asai (run-V10-01-00)
 - Print deleting message of G4NavigationHistoryPool only if the
@@ -117,17 +445,17 @@ November 14th, 2014 M.Asai (run-V10-00-41)
 
 November 8th, 2014 M.Asai (run-V10-00-39 -40)
 - Further fix of logic at G4RunManager::RunTermination() for keeping
-  events  
+  events
 
 November 7th, 2014 A.Dotti (run-V10-00-38)
-- Fix logic at G4RunManager::RunTermination() for keeping events  
+- Fix logic at G4RunManager::RunTermination() for keeping events
 
 November 6th, 2014 M.Asai (run-V10-00-37)
 - Fix unnecessary print-out incorrectly added with run-V10-00-31.
 
 November 6th, 2014 M.Asai (run-V10-00-36)
 - In MT mode, a new option of setting random number seeds only once
-  per run per worker thread is introduced. 
+  per run per worker thread is introduced.
 
 October 27th, 2014 M.Asai (run-V10-00-35)
 - Introduced /run/useMaximumLogicalCores UI command.
@@ -147,10 +475,10 @@ October 17th, 2014 A.Dotti (run-V10-00-31)
 - G4RunManagerKernel::RunTermination() workers do not
   call G4ProductionCutsTable::PhysicsTableUpdated()
 - G4WorkerRunManager::TermianteEventLoop() implemented
-  in workerd and avoid data-race on shared 
+  in workerd and avoid data-race on shared
   resource fGeometryHasBeenDestroyed
 - G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster
-  remove mechanism of copying pointer of region that is 
+  remove mechanism of copying pointer of region that is
   not needed
 
 October 14th, 2014 M.Asai (run-V10-00-30)
@@ -164,7 +492,7 @@ October 1st, 2015 M.Asai (run-V10-00-29)
 August 26th, 2014 M.Asai (run-V10-00-28)
 - All the G4ParallelWorldProcess objects of all threads update their
   corresponding world volumes when the entire geometry has been
-  destroyed and rebuilt from scratch. Addressing further to bug 
+  destroyed and rebuilt from scratch. Addressing further to bug
   report #1665. Co-working with procscore-V10-00-00.
 
 August 25th, 2014 M.Asai (run-V10-00-27)
@@ -198,7 +526,7 @@ August 18th, 2014 M.Asai (run-V10-00-21)
 
 July 19th, 2014 A.Dotti       (run-V10-00-20)
 - Revert back at run-V10-00-17, need more time to udnerstand
-  logic. Previous two tags are *probably* not correct. 
+  logic. Previous two tags are *probably* not correct.
 
 July 19th, 2014 A.Dotti       (run-V10-00-19)
 - Pre-prepares nucleide-table to be empty (fix previous crash)
@@ -221,7 +549,7 @@ July 11th, 2014 A.Dotti       (run-V10-00-15)
 - Fixing race condition in G4VUPLSplitter class
 
 July 5th, 2014 A. Dotti       (run-V10-00-14)
-- Fixing data-race condition in G4RunManagerKernel 
+- Fixing data-race condition in G4RunManagerKernel
   when FPE is active
 
 July 5th, 2014 A. Dotti       (run-V10-00-13)
@@ -232,7 +560,7 @@ July 5th, 2014 A. Dotti       (run-V10-00-13)
 July 1th, 2014, V. Ivanchenko (run-V10-00-12)
 - G4PhysicsListHelper - minor fix in the default list of processeses:
     positron annihilation in muons and hadrons cannot be AtRest -
-    these are rare high energy discrete processes. Equivalent fix was 
+    these are rare high energy discrete processes. Equivalent fix was
     for OrderingParameterTable (problem report #1598)
 
 June 4th, 2014, L. Desorgher (run-V10-00-11)
@@ -254,7 +582,7 @@ May 6th, 2014, G. Cosmo (run-V10-00-07)
 
 Apr 11th, 2014, A. Dotti (run-V10-00-06)
 - Use G4Threading::SetMultithreadedApplication(true) if a G4MTRunManagerKernel
-  is instantiated. Requires global-V10-00-16 or more recent 
+  is instantiated. Requires global-V10-00-16 or more recent
 
 Apr 8th, 2014,  A. Dotti (run-V10-00-04,run-V10-00-05)
 - Protect against compilation error in WIN32 for pin-affinity
@@ -288,7 +616,7 @@ Nov 29th, 2013, M. Asai (run-V09-06-138, run-V09-06-139)
   run after vis manager is instantiated.
 
 Nov 27th, 2013, G. Folger (run-V09-06-137)
-- G4MTRunManager.cc: Correctly delete randDbl using delete [] 
+- G4MTRunManager.cc: Correctly delete randDbl using delete []
 
 Nov 27th, 2013, G. Folger (run-V09-06-136)
 - Correct deletion of memory: using free() for memory obtained with malloc()
@@ -346,13 +674,13 @@ Nov 12th, 2013, M. Asai (run-V09-06-123)
 - Add missing G4endl.
 
 Nov 8th, 2013, L. Desorgher (run-V09-06-122)
-- Remove non used  field 'last_generated_part_was_adjoint' in 
+- Remove non used  field 'last_generated_part_was_adjoint' in
   G4AdjointPrimaryGeneratorAction.hh to avoid compilation warning.
- 
+
 Nov 7th, 2013, L. Desorgher (run-V09-06-121)
 - Modification of adjoint classes to migrate to the new RMC schema where reverse
   and forward trackings of  equivalent adjoint and forward primaries are processed
-  in the same events. This in preparation for the migration to the G4MT mode. 
+  in the same events. This in preparation for the migration to the G4MT mode.
 
 Nov 7th, 2013, A.Dotti (run-V09-06-120)
 - Fix correct use of G4VUserWorkerInitialization::InitializeSteppingVerbose()
@@ -382,7 +710,7 @@ Nov 5th, 2013, A.Dotti  (run-V09-06-115)
 - Added G4MTRunManager::CreateAndStartWorkers virtual protected method
 - All barriers are now virtual methods. Derived classes can re-implement
   synchronization of threads.
-- Added G4WorkerRunManager::MergePartialResults() re-factor 
+- Added G4WorkerRunManager::MergePartialResults() re-factor
   reduction of local results into global. Derived class cen re-implement
   reduction
 
@@ -394,7 +722,7 @@ Oct 31th, 2013, A.Dotti (run-V09-06-113)
 - Retagging, previous tag was rejected by mistake.
 
 Oct 30th, 2013, A.Dotti (run-V09-06-112)
-- Bug fixing: reintroduce delete of worker run manager at end of 
+- Bug fixing: reintroduce delete of worker run manager at end of
   G4MTRunManagerKernel::StartThread function.
 
 Oct 21st, 2013, M.Asai (run-V09-06-111)
@@ -419,7 +747,7 @@ Oct 10th, 2013, M.Asai (run-V09-06-106)
 - Added Mutex lock for G4MTRunManagerKernel::ReinitializeGeometry().
 
 Oct 2nd, 2013, H.Kurashige (run-V09-06-105)
-- Modified G4PhysicsListHelper::AddTransportation() 
+- Modified G4PhysicsListHelper::AddTransportation()
   that would prevent to add the G4Transportation to 'Molecues'
 
 Oct 1st, 2013, A.Dotti (run-V09-06-104)
@@ -452,14 +780,14 @@ Sep 16th, 2013, M.Asai (run-V09-06-99)
 - Split part of G4UserWorkerInitialization to G4UserWorkerThreadInitialization.
 
 Sep 12th, 2013, M.Asai (run-V09-06-98)
-- Add #ifdef G4MULTITHREADED prtection for the modification introduced 
+- Add #ifdef G4MULTITHREADED prtection for the modification introduced
   in the previous tag.
 
 Sep 12th, 2013, M.Asai (run-V09-06-97)
 - G4WorkerRunManager now invokes G4VVisManager::SetUpForAThread() method
   so that G4VisManager will get noticed at the end of event of each
   worker thread.
- 
+
 Sep 11th, 2013, M.Asai (run-V09-06-96)
 - Fix ConstructSD() to be invoked for masther thread as well.
 
@@ -498,7 +826,7 @@ Sep 1st, 2013, M.Asai (run-V09-06-88)
   seeds.
 
 Aug 30th, 2013, M.Asai (run-V09-06-87)
-- In addition to G4IonTable::InitializeLightIons(), 
+- In addition to G4IonTable::InitializeLightIons(),
   G4IonConstructor::ConstructParticle() is invoked to ensure all
   light ions are properly constructed when GenericIon is constructed.
 
@@ -519,12 +847,12 @@ Aug 26th, 2013, A.Dotti (run-V09-06-83)
 - Use new interface for G4Threading namespace
 
 Aug 16th, 2013, A.Dotti (run-V09-06-82)
-- Enable locking of mutex in master loop on condition variable: 
+- Enable locking of mutex in master loop on condition variable:
   fix deadlock observed in Mac OS X 10.8 after report from valgrind drd tool
 - Correct MT defects reported by DRD tool
 
 Aug 15th, 2013, M.Asai (run-V09-06-81)
-- Re-tag 
+- Re-tag
 
 Aug 14th, 2013, M.Asai (run-V09-06-80)
 - G4VUserPhysicsList takes care of setting the process manager pointer
@@ -533,7 +861,7 @@ Aug 14th, 2013, M.Asai (run-V09-06-80)
 Aug 7th, 2013, M.Asai (run-V09-06-79)
 - G4WorkerRunManager no longer has a for-loop for the event loop, but it
   asks G4MTRunManager to process another event. With this modification,
-  number of events processed on each thread varies based on the 
+  number of events processed on each thread varies based on the
   availability of each thread.
 - Based on this modification, the array of random number seeds and event
   ID are centrary managed by G4MTRunManager.
@@ -542,7 +870,7 @@ Aug 6th, 2013, A.Dotti (run-V09-06-78)
 - Protecting agains compilation warning in case G4VERBOSE is not defined
 
 July 29th, 2013, A.Dotti (run-V09-06-77)
-- Activating new interfaces for worker thread G4VProcess initialization 
+- Activating new interfaces for worker thread G4VProcess initialization
   (requires procman-V09-06-02) in G4VUserPhysicsList for
   {Prepare,Build}PhysicsTable. Co-working with tag emutils-V09-06-52.
 
@@ -569,7 +897,7 @@ July 5th, 2013, A.Dotti (run-V09-06-72)
 July 5th, 2013, A.Dotti (run-V09-06-71)
 - Protect G4UserWorkerInitialization::JoinWorker for sequential build warning
 - Add virtual G4WorkerRunManager* G4UserWorkerInitialization::CreateWorkerRunManager method
-  to simplify instantiation of user-defined run manager (no more need to change StartThread 
+  to simplify instantiation of user-defined run manager (no more need to change StartThread
   function)
 
 July 3rd, 2013, M.Asai (run-V09-06-70)
@@ -577,14 +905,14 @@ July 3rd, 2013, M.Asai (run-V09-06-70)
   G4WorkerRunManager.
 
 July 3rd, 2013, M.Asai (run-V09-06-69)
-- Introducing G4MTRunManagerKernel class for better symmetry of run manager and 
+- Introducing G4MTRunManagerKernel class for better symmetry of run manager and
   run manager kernel.
 - First cleaning up of kernel classes.
 
 July 3rd, 2013, A.Dotti (run-V09-06-68)
 - Add call to G4SetThreadId global function in G4UserWorkerInitialization::StartThread function
 - Remove unused list of G4WorkerRunManager from G4MTRunManager
-- Moving joining of threads in G4UserWorkerInitialization class from G4MTRunManager, 
+- Moving joining of threads in G4UserWorkerInitialization class from G4MTRunManager,
   now G4MTRunManager does not cantain anymore thread model specific code and delegates
   all model to G4UserWorkerInitialization
 - Bug fix for G4cout use in G4RunManagerKernel::~G4RunManagerKernel for worker threads
@@ -604,10 +932,10 @@ July 1st, 2013, M.Asai (run-V09-06-65)
 
 June 25th, 2013, A. Dotti (run-V09-06-64)
 - Bug fix for compilation with C++11 standard in G4MTRunManager.hh in
-  use of std::make_pair 
- 
+  use of std::make_pair
+
 June 22nd, 2013, A. Dotti (run-V09-06-63)
-- Copy SensitiveDetector and FieldManagers pointers between 
+- Copy SensitiveDetector and FieldManagers pointers between
   runs. Bug fix to solve issue introduced with tag -59
   (G4UserWorkerInitialization::StartThread)
 
@@ -624,14 +952,14 @@ June 20th, 2013, M. Asai  (run-V09-06-60)
 - Moving G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated() call
   from G4RunManagerKernel::BuildPhysicsTables() to
   G4RunManager::TerminateEventLoop(): in combination with previous TEMPORARY
-  modification allows changing material between runs 
+  modification allows changing material between runs
 
 June 20th, 2013, A. Dotti (run-V09-06-59)
 - Fix coverity warnings in G4VUPLSplitter and G4VUserPhysicsList
 - Adding TEMPORARY re-initialization of geometry in G4UserWorkerInitialization
   to allow threads to re-copy shared geometry data in case gemotry has changed
   This is only temporary and needs revision after 10.0-beta, but this hack is
-  currently the only solution that does not require API changes 
+  currently the only solution that does not require API changes
 
 June 19th, 2013, G. Cosmo (run-V09-06-58)
 - Restored deletion of allocators as in "run-V09-06-56".
@@ -658,7 +986,7 @@ June 14th, 2013, A. Dotti (run-V09-06-53)
 June 12th, 2013, A. Dotti (run-V09-06-52)
 - Typo correction in exception from G4UserWorkerInitialization::StartThread
 - Re-enabling joining of threads: run-V09-06-50 fixed deadlocks responsible
-  for problems at exit 
+  for problems at exit
 
 June 11th, 2013, M. Asai (run-V09-06-51)
 - Change ions and isomers to be created after BuildPhysics.
@@ -670,12 +998,12 @@ June 10th, 2013, A. Dotti (run-V09-06-50)
 
 June 9th, 2013, A. Dotti  (run-V09-06-49)
 - In G4MTRunManager rewritten logic of "nextIteration" to solve deadlocks.
-  Now logic is very similar to the other barriers 
+  Now logic is very similar to the other barriers
 
 June 6th, 2013, G. Folger (run-V09-06-48)
 - In G4MTRunManager::WaitForEndEventLoopWorkers protect numberOfReadyWorkers
     by its Mutex.
-     
+
 June 5th, 2013, G. Cosmo (run-V09-06-47, run-V09-06-46, run-V09-06-45)
 - Use wrappers for calls to pthreads to allow for porting on Windows.
   Updated files: G4VUserPhysicsList.cc and G4MTRunManager.cc.
@@ -691,7 +1019,7 @@ May 29th, 2013, A. Dotti (run-V09-06-42)
   before event-loop (will be removed when a general way to initialize
   processes for MT will be implemented). Needs hadr-casc-V09-06-29
 - Prepare for TPmalloc (currently comment out relevant code)
-- Initialize ions and isomers for MT (in MTRunManager) before event-loop. 
+- Initialize ions and isomers for MT (in MTRunManager) before event-loop.
 - Initialize light-ions in MT in kernel. Needs particles-V09-06-28
 
 May 24th, 2013, M. Asai (run-V09-06-41)
@@ -703,14 +1031,14 @@ May 24th, 2013, M. Asai (run-V09-06-40)
 May 23rd, 2013, M. Asai (run-V09-06-39)
 - Move thread-local cout/cerr handling to intercoms category.
 - UI commands in /run/cout/ directory are moved to /control/cout/.
- 
+
 May 21th, 2013, A. Dotti (run-V09-06-38)
 - New UI command /random/saveEachEventFlag if true save random
   seed for each event in a file with unique name: runXXXevtYYY.rndm
 - Workers write out random files in files with G4WorkerXX postfix
 - Moving "end-of-event-loop" barrier to RunTermination to guarantee
   end of run user action in master thread is executed after corresponding
-  one is executed by workers 
+  one is executed by workers
 
 May 16th, 2013, A. Dotti (run-V09-06-37)
 - Threads now use new cout streaming, controllable by UI commands in /run/cout
@@ -725,7 +1053,7 @@ May 16th, 2013, A. Dotti (run-V09-06-35)
 - Fixing compilation error on WIN
 - Commenting out joining of threads at exit (some instabilities have
   been observed at exit time, this tag is trying to fix this)
-  NEED TO FIX THIS 
+  NEED TO FIX THIS
 
 May 15th, 2013, M. Asai (run-V09-06-34)
 - Enabling more than one runs.
@@ -753,7 +1081,7 @@ May 5th, 2013, A.Dotti, M.Asai (run-V09-06-29)
 - Adding two possibly temporary hacks for hadroncis physics instabilities
   1. All ions are created in MT by master thread (workers copy ions table)
   2. G4VModularPhysicsList::ConstructProcess has a global mutex lock, in this
-     way all worker threads call this method one at a time. This limitation is 
+     way all worker threads call this method one at a time. This limitation is
      needed since with many threads we have seen instabilities due to one or more
      hadronics model corrupting common shared part of physics (most likely particles
      table). Not yet found the correct solution for this problem.
@@ -762,7 +1090,7 @@ May 5th, 2013, A.Dotti, M.Asai (run-V09-06-29)
 May 5th, 2013, H.Kurashige (run-V09-06-28)
 - 'run/particle/AddProcManager' can be used in Pre_Init state
   (requested by particles-V09-06-24 tag)
- 
+
 Apr. 25th, 2013, M.Asai (run-V09-06-27)
 - Remove unnecessary G4Exception warning message for not having
   G4VUserDetectorConstruction::ConstructSDandField() implemented.
@@ -796,7 +1124,7 @@ Apr. 16th, 2013, A.Dotti (run-V09-06-21)
 Apr. 11th, 2013, I.Hrivnacova (run-V09-06-20)
 - Added G4VUserApplication and G4WorkerInitialization classes
   and userApplication data member and SetUserApplication() method
-  in G4(MT)RunManager which allow to simplify user main() 
+  in G4(MT)RunManager which allow to simplify user main()
   program wirking in both sequential and MT modes
 
 Apr. 10th, 2013, A.Dotti (run-V09-06-19)
@@ -813,7 +1141,7 @@ Apr. 9th, 2013, A.Dotti (run-V09-06-17)
 
 Apr. 7th, 2013, A.Dotti (run-V09-06-16)
 - Adding barrier mechanism: worerk threads and master are synchronized
-  at beginning and end of for-loop event loop 
+  at beginning and end of for-loop event loop
   (cfr G4WorkerRunManager::DoEventLoop and
 	G4MTRunManager::InitializeEventLoop)
 - Bug fixing for RNG seeds lenght. Now vector of event seeds correctly
@@ -823,7 +1151,7 @@ Apr. 5th, 2013, M.Asai (run-V09-06-15)
 - Fix G4VUserDetectorConstruction::SetSentitiveDetector() method.
 
 Apr. 5th, 2013, M.Asai (run-V09-06-14)
-- Adding isMaster boolean flag to G4UserRunAction. It is set to true 
+- Adding isMaster boolean flag to G4UserRunAction. It is set to true
 for the user action object assigned to G4MTRunManager.
 
 Apr. 5th, 2013, A.Dotti (run-V09-06-13)
@@ -847,13 +1175,13 @@ Apr. 3rd, 2013, A.Dotti (run-V09-06-09)
 - RNG Engine is "cloned" in worker threads from master thread one.
   This functionality is at the moment implemented in RunManager classes,
   but we may want to remove it from there and put it somewhere else
-- Fix compilation warnings in gcc 
+- Fix compilation warnings in gcc
 
 Apr. 2nd, 2013, A.Dotti (run-V09-06-08)
 - Further round of refinements for sharing of phusocs lists.
    (co-working tag with: hadr-cross-V09-06-16, particles-V09-06-13,
     run-V09-06-08, intercoms-V09-06-04, error-propagation-V09-06-04,
-    physics_lists-V09-06-01, 
+    physics_lists-V09-06-01,
     rdecay02-V09-06-01, gtherapy-V09-06-02, electronScattering-V09-06-04,
     exampleSE2-V09-06-01, fano-V09-06-03, fano2-V09-06-02, exampleRE01-V09-06-04,
     exampleRE02-V09-06-02, exPolarisation-V09-05-03, exOptical-V09-06-01,
@@ -892,7 +1220,7 @@ Dec. 3rd, 2012, M.Asai (run-V09-06-00)
 
 Oct. 15th, 2012, M.Asai (run-V09-05-09)
 - Offering more granular public methods of G4RunManager, which enable
-external framework with its own event loop to execute each individual 
+external framework with its own event loop to execute each individual
 event without copying context of base class methods of G4RunManager.
 
 Oct. 1st, 2012, G.Cosmo (run-V09-05-08, run-V09-05-07)
@@ -900,7 +1228,7 @@ Oct. 1st, 2012, G.Cosmo (run-V09-05-08, run-V09-05-07)
 
 Sep. 14th, 2012, H.Kurashige (run-V09-05-06)
 - Fix ordering parameter for DNA processs (62,63,64)
-- Fix Coverity defects in G4UserPhysicsListMessenger 
+- Fix Coverity defects in G4UserPhysicsListMessenger
 
 Aug. 10th, 2012, H.Kurashige (run-V09-05-05)
 - Added new subType process numbers for DNA processs (62,63,64)
@@ -932,7 +1260,7 @@ Nov. 9th, 2011, H.Kurashige (run-V09-04-25)
 - Fix Coverity defects in PhysicsList classes
 
 Nov. 8th, 2011, H.Kurashige (run-V09-04-24)
-- Update PhysicsListHelper for new DNA processes (Mathieu) 
+- Update PhysicsListHelper for new DNA processes (Mathieu)
 
 Oct. 20th, 2011, M.Asai (run-V09-04-23)
 - Improve G4Exception error messages
@@ -942,7 +1270,7 @@ Oct. 20th, 2011, M.Asai (run-V09-04-22)
 - Re-number G4Exception error numbers.
 
 Sep. 23rd, 2011,  H.Kurashige (run-V09-04-21)
-- Change G4VModularPhysicsList to issue messages 
+- Change G4VModularPhysicsList to issue messages
   always if physics is added and/or removed.
   Cleared compilation warning on gcc-4.6.
 
@@ -998,18 +1326,18 @@ June 11th, 2011, H.Kurashige (run-V09-04-07)
 - Removed obsolete method of SetCutValueForOthers
 
 May 31st, 2011,  J.Apostolakis
-- Ensure that a ScoreSplittingProcess is added only once in 
+- Ensure that a ScoreSplittingProcess is added only once in
   G4RunManagerKernel::SetScoreSplitter.
    Fixes PR 1218
 
 May 20th, 2011, B.Morgan (run-V09-04-06)
-- CMakeLists.txt : Added G4RUN_ALLOC_EXPORT compiler definition via 
+- CMakeLists.txt : Added G4RUN_ALLOC_EXPORT compiler definition via
   add_definitions so it's applied to all sources in this module.
 - sources.cmake : Fixed typo in source files listing.
 
 May 10th, 2011, H.Kurashige (run-V09-04-05)
 - Fix bug in G4VUserPhysicsList::CheckParticleList()
-   (fDisableCheckParticleList was ignored in previous tag) 
+   (fDisableCheckParticleList was ignored in previous tag)
 
 May 4th, 2011, H.Kurashige (run-V09-04-04)
 - Add NULL check for theTable in G4PhysicsListHelper
@@ -1063,7 +1391,7 @@ September 3rd, 2010 G.Cosmo (run-V09-03-03)
 
 July 21st, 2010 G.Cosmo (run-V09-03-02)
 - Added dummy initialisation of data members in constructors for classes:
-  G4AdjointPrimaryGeneratorAction, 
+  G4AdjointPrimaryGeneratorAction,
 - Use canonical form for exceptions in G4RunManager and added dummy return
   statements; same in G4VUserPhysicsList.
 
@@ -1100,7 +1428,7 @@ Oct 19, 2009, Hisaya Kurashige (run-V09-02-06)
 Makoto Asai (run-V09-02-05)
 Sep 20, 2009, Makoto Asai (run-V09-02-05)
 - G4RunManagerKernel checks G4VUserPhysicsList to confirm no particle
-  is registered when G4RunManagerKernel is instantiated. 
+  is registered when G4RunManagerKernel is instantiated.
 
 Aug 10, 2009, Makoto Asai (run-V09-02-04)
 - G4RunManagerKernel now invokes G4VUserPhysicsList::CheckParticleList
@@ -1109,17 +1437,17 @@ Aug 10, 2009, Makoto Asai (run-V09-02-04)
 Aug 05, 2009, Hisaya Kurashige (run-V09-02-03)
 - Add G4VUserPhysicsList::DisableCheckParticleList method
 - Modify G4VUserPhysicsList::CheckParticleList to check existence
-   of any EM processes 
+   of any EM processes
 
 Aug 03, 2009, Hisaya Kurashige (run-V09-02-02)
-- Modify G4VUserPhysicsList to fit with proton cuts 
+- Modify G4VUserPhysicsList to fit with proton cuts
 - Modify G4VUserPhysicsList::BuildPhysicsTable
-  to avoid problem  when ions are created in Pre-Init state 
-  
+  to avoid problem  when ions are created in Pre-Init state
+
 May 22nd, 2009, Hisaya Kurashige (run-V09-02-01)
-- Add G4VUserPhysicsList::CheckParticleList() to check consistencies of 
+- Add G4VUserPhysicsList::CheckParticleList() to check consistencies of
   list of particles before constructing processes
-- Change severity of G4Exception in G4VUserPhysicsList 
+- Change severity of G4Exception in G4VUserPhysicsList
   'FatalException' is assigned if core dump is foreseen
 
 May 21st, 2009, Hisaya Kurashige (run-V09-02-00)
@@ -1189,7 +1517,7 @@ May 9th, 2007, Makoto Asai (run-V08-03-02)
   to make sure all region information are updated.
 
 May 7th, 2007, Makoto Asai (run-V08-03-01)
-- Add UseG4Transportation8() method to G4VUserPhysicsList and /run/useOldTransportation 
+- Add UseG4Transportation8() method to G4VUserPhysicsList and /run/useOldTransportation
   command to G4UserPhysicsListMessenger. This option works only prior to /run/initialize
   and also wothout a parallel world.
 
@@ -1199,10 +1527,10 @@ May 4th, 2007, Makoto Asai (run-V08-03-00)
 May 3rd, 2007, Makoto Asai (run-V08-02-03)
 - Fix memory leak in G4VUserPhysicsList.
 - G4VUserDetectorConstruction class now has access methods to the parallel worlds.
- 
+
 March 8th, 2007, Makoto Asai (run-V08-02-02)
 - Consolidation of previous tag with a new G4RunManager flag and corresponding UI command.
- 
+
 March 5th, 2007, Makoto Asai (run-V08-02-01)
 - Prevent from unnecessary creation of G4String objects in G4Event, which were
 default for random number status.
@@ -1247,7 +1575,7 @@ November 14th, 2006, Gabriele Cosmo (run-V08-01-01)
   the user can have an access to the valid G4Run pointer during the
   Idle state after the run.
  - Events can be kept un-deleted, stored in G4Run, and persist until
-  the deletion of G4Run objects. 
+  the deletion of G4Run objects.
 
 June 9th, 2006, Makoto Asai (run-V08-01-00)
 - Introducing G4VUserParallelWorld class and related changes in G4RunManager
@@ -1300,7 +1628,7 @@ October 20, 2005, Joseph Perl (run-V07-01-02)
 - Tag to co-work with vis-V07-01-05.
 
 October 17th, 2005 Jane Tinslay
-- Modify GNUmakefile to follow intercoms->graphics_reps migration for 
+- Modify GNUmakefile to follow intercoms->graphics_reps migration for
   G4VGraphicsScene and G4VVisManager
 
 September 26th, 2005 G.Cosmo (run-V07-01-01)
@@ -1347,7 +1675,7 @@ November 1st,  2004 H.Kurashige (run-V06-02-05)
 - Add PreparePhysicsTable for nucleus process initialization
 
 October 25,  2004 H.Kurashige (run-V06-02-04)
-- Modify BuildPhysicsTable for new scheme of Store/RetrievePhysicsTable 
+- Modify BuildPhysicsTable for new scheme of Store/RetrievePhysicsTable
 
 September 24, 2004 M.Asai (run-V06-02-03)
 - Temporarily allow the use of G4ParticleTable before the construction of physics table.
@@ -1398,7 +1726,7 @@ December 09, 2003, G.Cosmo (run-V05-02-10)
 - Changed date for release 6.0.
 
 November 12, 2003, M.Asai (run-V05-02-09)
-- Remove dedicated treatment of anti-proton, neutron and anti-neutron 
+- Remove dedicated treatment of anti-proton, neutron and anti-neutron
   from BuildPhysicsTable of UserPhysicsList.
 
 November 04, 2003, M.Asai (run-V05-02-08)
@@ -1541,7 +1869,7 @@ Aug 20, 2002 R. Chytracek (run-V04-01-03)
 - Introducing ResetNavigator() method needed in cases where a geometry
   has been modified between runs in order to properly re-initialize navigator's
   state
-  
+
 Aug 19, 2002 M.Asai (run-V04-01-02)
 - Introducing a new G4Exception scheme
  Added : G4ExceptionHandler.hh G4ExceptionHandler.cc
@@ -1553,8 +1881,8 @@ Aug 13, 2002 M.Asai (run-V04-01-01)
 
 Aug 13, 2002 M.Dressel
 - removed the files I have placed in run:
- include/G4MapPtkStandardCellScorer.hh 
- include/G4ParallelSamplerMessenger.hh  
+ include/G4MapPtkStandardCellScorer.hh
+ include/G4ParallelSamplerMessenger.hh
  include/G4StandardCellScoreValues.hh
  include/G4StandardCellScorer.hh
  include/G4StandardScoreTable.hh
@@ -1574,16 +1902,16 @@ Aug 8, 2002 M.Asai (run-V04-01-00)
  internal-1-run-V04-01-01 is NOT included in this tag
 
 July 18, 2002 M.Dressel
-- change G4StandardScorerTable to the new G4IStore 
+- change G4StandardScorerTable to the new G4IStore
 
-July 12, 2002 M.Dressel 
+July 12, 2002 M.Dressel
 - added comments to include/G4ParallelSamplerMessenger.hh
   and src/G4ParallelSamplerMessenger.cc
 
 July 11, 2002 M.Dressel (internal-1-run-V04-01-01)
 - add:
- include/G4MapPtkStandardCellScorer.hh 
- include/G4ParallelSamplerMessenger.hh  
+ include/G4MapPtkStandardCellScorer.hh
+ include/G4ParallelSamplerMessenger.hh
  include/G4StandardCellScoreValues.hh
  include/G4StandardCellScorer.hh
  include/G4StandardScoreTable.hh
@@ -1596,8 +1924,8 @@ July 11, 2002 M.Dressel (internal-1-run-V04-01-01)
  src/G4StandardScorer.cc
 - the G4StandardScorer.cc needs the G4EventManager
   G4ParallelSamplerMessenger.hh needs G4StandardScorer.
-  The other classes are needed in turn. 
-- coworks with  internal-2-transport-V04-01-01 
+  The other classes are needed in turn.
+- coworks with  internal-2-transport-V04-01-01
                 internal-2-geombias-V04-01-01
 
 Jun 25, 2002 G.Cosmo (run-V04-00-04)
@@ -1605,7 +1933,7 @@ Jun 25, 2002 G.Cosmo (run-V04-00-04)
 
 May 29, 2002 H.Kurashige (run-V04-00-03)
 - Add G4VModularPhysicsList.cc
-- Use "virtual" inheritance for G4VVModularPhysicsList 
+- Use "virtual" inheritance for G4VVModularPhysicsList
 
 Apr 26, 2002 M.Asai (run-V04-00-02)
 - G4RunManager re-opens geometry when G4 state becomes QUIT.
@@ -1621,7 +1949,7 @@ Dec 07, 2001 G.Cosmo (run-V03-02-11)
 
 Nov 27, 2001 M.Asai (run-V03-02-10)
 - Change implementation in rndmSaveThisRun() and rndmSaveThisEvent().
-     
+
 Nov 23, 2001 M.Maire
 - Add rndmSaveThisRun() and rndmSaveThisEvent() methods to G4RunManager.
 - Add /random/ commands to G4RunMessenger
@@ -1642,7 +1970,7 @@ Oct 24, 2001 G.Cosmo (run-V03-02-07)
 Oct 23, 2001 G.Cosmo (run-V03-02-06)
 - Merged changes in "run-V03-02-04a" and "run-V03-02-05" for removal of
   STLinterface module.
- 
+
 Oct 11, 2001 G.Cosmo (run-V03-02-05)
 - Replaced inclusion of ctoken.h with G4Tokenizer.hh in
   G4UserPhysicsListMessenger.cc.
@@ -1664,10 +1992,10 @@ Oct 10, 2001 M.Asai (run-V03-02-04)
 
 Oct 10, 2001 H.Kurashige
 - Modify G4VUserPhysicsList::SetCutsForOthers to fix problems of
-   no invocation of RetreivePhysicsTable() for muons  
-   
+   no invocation of RetreivePhysicsTable() for muons
+
 Sep 19, 2001 H.Kurashige (run-V03-02-03)
-- Modify G4VUserPhysicsList for STL migration of materials (Hisaya) 
+- Modify G4VUserPhysicsList for STL migration of materials (Hisaya)
 
 Aug 02, 2001, G.Cosmo (run-V03-02-02)
 - Add Set/GetApplyCuts methods in G4VUserPhysicsList (Hisaya)
@@ -1678,11 +2006,11 @@ Jul 18, 2001, M.Asai (run-V03-02-01)
 - Add a new feature for the user to increase the number of waiting stacks
 - Co-working with event-V03-02-02
 
-Jul 15, 2001 
+Jul 15, 2001
 - Fixed bugs in G4VUserPhysicsList     (Hisaya)
 --- Modify Store/RetreivePhysicsTable for new G4VProcess
---- Fixed bugs in StoreMaterialInfor and StoreCutValues in binary mode 
- 
+--- Fixed bugs in StoreMaterialInfor and StoreCutValues in binary mode
+
 Jul 13, 2001, G.Cosmo (run-V03-02-00)
 - Cleanup of pedantic warnings in Linux-g++ ANSI setup.
 - Corrected "NULL" to "0".
@@ -1695,7 +2023,7 @@ Jun 22, 2001, M.Asai (run-V03-01-00)
 Mar. 12 2001, H.Kurashige
 - add binary mode for G4VUserPhysicsList::Retrieve/StorePhysicsTable
 - add G4VUserPhysicsList::RetrieveCutValues and related
-- add G4VUserPhysicsList::Set/ResetStoredInAscii() 
+- add G4VUserPhysicsList::Set/ResetStoredInAscii()
   to switch on ascii mode for Retrieve/StorePhysicsTable
 - add setStoredInAscii command in G4UserPhysicsList
 
@@ -1718,17 +2046,17 @@ Nov 16 2000, M.Asai (run-V02-00-04)
 - Fixes a bug in G4VUserPhysicsList (H.K)
 
 Nov 16 2000, M.Asai (run-V02-00-03)
-- Add G4VModularPhysicsList and G4VPhysicsConstructor 
+- Add G4VModularPhysicsList and G4VPhysicsConstructor
   to modularize UserPhysicsList   (H.K)
 
 Nov 13 2000, M.Asai (run-V02-00-02)
 - Introducing a capability of storing random number status file to other directory
 
 Nov 9 2000, M.Asai (run-V02-00-01)
-- add Retrieve/StorePhysicsTable and related methods 
+- add Retrieve/StorePhysicsTable and related methods
   in G4VUserPhysicsList and modify BuildPhysicsTable method  (H.K.)
-- add store/retreivePhysicsTable command in G4UserPhysicsListMessenger (H.K.) 
- 
+- add store/retreivePhysicsTable command in G4UserPhysicsListMessenger (H.K.)
+
 Jul 22 2000, M.Asai (run-V02-00-00)
 - Modify G4RunManager and G4RunMessenger because of elimination of
   G4StateManager::Pause() and introducing new G4UImanager as state
@@ -1777,7 +2105,7 @@ Apr 09, 99 M.Asai (tag run-01-00-01)
 - Argument of G4UserRunAction methods bcomes to const.
 
 Feb. 9 99 H.Kurashige
-- G4VUserPhysicsList::RemoveProcessManager is added 
+- G4VUserPhysicsList::RemoveProcessManager is added
 
 Dec. 9 98 H.Kurashige (tag run-00-04-01)
 - G4VUserPhysicsList is updated to use G4GenericIon (Hisaya)
@@ -1840,7 +2168,7 @@ June 30, 98 M.Asai (tag run-00-07-01)
 
 June 30, 98 H.Kurashige
 - Modified G4VUserPhysicsList.cc and MyPhysicsList.cc in example4
-  for shortlived particles 
+  for shortlived particles
 
 June 26, 98 G.Cosmo (run-00-06-06)
 - Modified GNUmakefiles for new electromagnetics structure.
@@ -1855,8 +2183,8 @@ June 25, 98 M.Asai (run-00-06-04)
 - Bug fixes for example4 (J.Allison)
 - Update ".out" for EmPhys2 (M.Maire)
 
-June 22, 98 G.Cosmo (run-00-06-03 - re-tagged) 
-- Added missing include paths to digits+hits/* (fix which was already 
+June 22, 98 G.Cosmo (run-00-06-03 - re-tagged)
+- Added missing include paths to digits+hits/* (fix which was already
   in place in run-00-06-02 ...) to almost all GNUmakefiles.
 - Removed inclusion/usage of MyTrackerHit.hh (!?) in example4.cc and
   example_demo.cc.
@@ -1877,7 +2205,7 @@ June 12, 98 G.Cosmo
 
 June 9, 98 M.Asai
 - Some changes affected by new aspects of Particles.
-- Tagged as run-00-06-01. 
+- Tagged as run-00-06-01.
 
 June 6, 98 M.Asai
 - Modify G4Run and G4RunManager for the new "digits+hits" scheme
@@ -1935,7 +2263,7 @@ March 24, 98 G.Barrand
 
 5th  March 1998 H.Kurashige (run-00-04-01)
 - Remove old sceme for initialization (G4UserProcessList,
-  G4UserProcessList, G4UserParticleListMessenger) 
+  G4UserProcessList, G4UserParticleListMessenger)
 - Fixed bugs in MyPhysicsList.cc
 
 27th February 1998 H.Kurashige

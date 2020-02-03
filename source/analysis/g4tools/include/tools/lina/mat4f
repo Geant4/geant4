@@ -5,17 +5,19 @@
 #define tools_mat4f
 
 #include "mat4"
+#include <cmath>
 
 namespace tools {
 
 class mat4f : public mat4<float> {
+  typedef mat4<float> parent;
 public:
   mat4f(){}
   virtual ~mat4f() {}
 public:
-  mat4f(const mat4f& a_from):mat4<float>(a_from){}
+  mat4f(const mat4f& a_from):parent(a_from){}
   mat4f& operator=(const mat4f& a_from){
-    mat4<float>::operator=(a_from);
+    parent::operator=(a_from);
     return *this;
   }
 public:
@@ -23,28 +25,46 @@ public:
         float a_10,float a_11,float a_12,float a_13, //second row
         float a_20,float a_21,float a_22,float a_23, //third  row
         float a_30,float a_31,float a_32,float a_33) //fourth row
-  :mat4<float>(a_00,a_01,a_02,a_03,
-               a_10,a_11,a_12,a_13,
-               a_20,a_21,a_22,a_23,
-               a_30,a_31,a_32,a_33)
+  :parent(a_00,a_01,a_02,a_03,
+          a_10,a_11,a_12,a_13,
+          a_20,a_21,a_22,a_23,
+          a_30,a_31,a_32,a_33)
   {}
-  mat4f(const mat4<float>& a_from):mat4<float>(a_from){}
-  mat4f& operator=(const mat4<float>& a_from){
-    mat4<float>::operator=(a_from);
+  mat4f(const parent& a_from):parent(a_from){}
+  mat4f& operator=(const parent& a_from){
+    parent::operator=(a_from);
     return *this;
   }
+public:
+  void set_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
+    //WARNING : (a_x,a_y,a_z) must be a normalized vector.
+    parent::set_rotate(a_x,a_y,a_z,a_angle,::sinf,::cosf);
+  }
+  void mul_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
+    parent::mul_rotate(a_x,a_y,a_z,a_angle,::sinf,::cosf);
+  }
+  void left_mul_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
+    parent::left_mul_rotate(a_x,a_y,a_z,a_angle,::sinf,::cosf);
+  }
+
+  template <class VEC>
+  void set_rotate(const VEC& a_dir,float a_angle) {
+    //WARNING : a_dir must be a normalized vector.
+    parent::set_rotate(a_dir[0],a_dir[1],a_dir[2],a_angle,::sinf,::cosf);
+  }
+
 public: //backward compatibility
-  void mul_2f(float& a_x,float& a_y) const {
-    mat4<float>::mul_2(a_x,a_y);
-  }
-  void mul_3f(float& a_x,float& a_y,float& a_z) const {
-    mat4<float>::mul_3(a_x,a_y,a_z);
-  }
-  void mul_dir_3f(float& a_x,float& a_y,float& a_z) const {
-    mat4<float>::mul_dir_3(a_x,a_y,a_z);
-  }
-  void mul_4f(float& a_x,float& a_y,float& a_z,float& a_w) const {
-    mat4<float>::mul_4(a_x,a_y,a_z,a_w);
+  void mul_2f(float& a_x,float& a_y) const {parent::mul_2(a_x,a_y);}
+  void mul_3f(float& a_x,float& a_y,float& a_z) const {parent::mul_3(a_x,a_y,a_z);}
+  void mul_dir_3f(float& a_x,float& a_y,float& a_z) const {parent::mul_dir_3(a_x,a_y,a_z);}
+  void mul_trans_3f(float& a_x,float& a_y,float& a_z) const {parent::mul_trans_3(a_x,a_y,a_z);}
+  void mul_4f(float& a_x,float& a_y,float& a_z,float& a_w) const {parent::mul_4(a_x,a_y,a_z,a_w);}
+  void mul_dir_3d(double& a_x,double& a_y,double& a_z) const { //used in sg::healpix
+    float x = float(a_x);
+    float y = float(a_y);
+    float z = float(a_z);
+    parent::mul_dir_3(x,y,z);
+    a_x = x;a_y = y;a_z = z;
   }
 public: //operators
 };

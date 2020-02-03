@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -122,7 +121,7 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
     
     // Access to elements 
 
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable = 
       G4ProductionCutsTable::GetProductionCutsTable();
@@ -206,7 +205,7 @@ void G4LivermorePolarizedComptonModel::ReadData(size_t Z, const char* path)
   const char* datadir = path;
   if(!datadir) 
     {
-      datadir = getenv("G4LEDATA");
+      datadir = std::getenv("G4LEDATA");
       if(!datadir) 
 	{
 	  G4Exception("G4LivermorePolarizedComptonModel::ReadData()",

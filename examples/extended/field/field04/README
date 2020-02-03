@@ -25,36 +25,24 @@
 
  See field04.cc.
  
-        Note:
+        The example can be run with the following optional arguments:
 
-        //  runManager->Initialize();
+        % field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]   
 
-        is commented out and must be executed with: /run/initialize
-        either in a macro or on the command line. Note: One can change
-        the geometry (see below) only BEFORE the initialization!
+        If a macro is provided with the option "-m", the program runs in a batch mode,
+        otherwise the program open the interactive session after executing the
+        default initialization macro init_vis.mac. The option "-s preinit" can be used
+        to start the program without initialization in PreInit phase.
 
-        Is is possible to assign the F04PhysicsList via an argument to
-        program submission:
-
+        For example:
+        to assign the F04PhysicsList: 
         % field04 -p QGSP_BERT
 
-        and an initial random number seed with:
+        an initial random number seed with:
+        % field04 field04.in -r 12345
 
-        % field04 field04.in 12345
-
-        It is also possible to specify more than one macro file which are
-        then executed in succession:
-
-        % field04 field04.in field04.in 12345
-
-        (Note, in this case the initial random # must also be provided)
-
-        (1) argc holds the number of arguments on the command line. Since
-            this MUST include at least the program name, argc value is >= 1!
-        (2) argv[0] is always the name of the program
-            argv[1] points to the first argument, and so on ...
-        (3) argv[argc-1] is assumed to be the intial random # seed
-        (4) the loop over macro files goes from optind = 1 to (argc-1)
+        to start with a macro file and an initial seed:
+        % field04 -m field04.in -r 12345
 
 
  2- GEOMETRY DEFINITION
@@ -199,58 +187,16 @@
 
  6- PHYSICS 
 
-        The F04PhysicsList is adopted from examples/extended/hadronic/Hadr01.
-        It uses components which are distributed with Geant4 in
-        /geant4/physics_lists subdirectory. So, before compiling field04
-        it is necessary to compile physics_lists.
+        The F04PhysicsList extends a selected Geant4 physics list.
+        The base physics list name is provided by its name in the F04PhysicsList 
+        constructor.
 
-        There are two std::vector<G4VPhysicsConstructor*> PhysicsListVectors;
-        one for EMPhysics and one for HadronPHysics and a user defined process
-        F04StepMax.
+        In addition to processes defined in the base Geant4 physics list, 
+        there is added the F04StepMax process and the decay of pions can be assigned 
+        via dedicated commands in F04PhysicsListMessenger.
 
-        The choice of the physics is provided by the UI command:
-
-        /exp/phys/addPhysics emstandard_opt1
-        /exp/phys/addPhysics QGSP_BERT
-
-        To see the list of available configurations one can use:
-
-        /exp/phys/list
-
-        The command:
-
-        /exp/phys/addPhysics PHYSLIST
-
-        allows to download a physics configuration defined by an
-        environment variable PHYSLIST.
-
-        The cuts for electromagnetic phsyics can be established via:
-
-        /exp/phys/allCuts       1 mm
-        /exp/phys/gammaCut    0.1 mm
-        /exp/phys/electronCut 0.2 mm
-        /exp/phys/positronCut 0.3 mm
-
-        The cut for the F04StepMax process via:
-
-        /exp/phys/stepMax
-
-        The two G4PhysConstVectors can be cleared via:
-
-        /exp/phys/clearEMPhysics
-        /exp/phys/clearHadronPhysics
-
-        and individual processes can be removed from the vectors via,
-        for example:
-
-        /exp/phys/removeEMPhysics msc
-        /exp/phys/removeHadronPhysics gamma_nuc
-
-        Furthermore, the following commands are also available, but
-        may only be used AFTER /run/initialize
-
-        /process/inactivate msc
-        /process/activate msc
+        The command to define maximum step:
+        /exp/phys/stepMax value unit
 
         The decay of pions can be assigned via (pi -> e nu, pi -> mu nu):
 
@@ -269,6 +215,11 @@
 
         The muon decay process is G4DecayWithSpin
 
+        Furthermore, the following commands are also available, but
+        may only be used AFTER /run/initialize
+
+        /process/inactivate msc
+        /process/activate msc
 
  7- Overlapping Fields
 
@@ -317,8 +268,8 @@
         A beamline element, for example the F04SimpleSolenoid, will derive
         from F04ElementField and implement the computation for the element.
 
-        simpleSolenoid = new F04SimpleSolenoid(B, l,
-                                      logicTransferMgnt,TransferMgntCenter);
+        simpleSolenoid 
+          = new F04SimpleSolenoid(B, l, logicTransferMgnt,TransferMgntCenter);
 
         Besides the magnetic field and the length of the simple solenoid,
         the constructor needs the knowledge of the G4LogicalVolume for
@@ -400,19 +351,27 @@
 
         F04SteppingVerbose:
                     Only print track header and step information for
-                    pi+ and mu+
+                    pi+ and mu+. 
+                    Note: the information for primary protons is not printed.
 
         F04Trajectory, TrajectoryPoint:
                     Example of application specific implementations
 
  9- HOW TO START ?
 
-        - execute field04 in 'batch' mode from macro files e.g.
-                % field04 field04.in
+        - Execute field04 in 'batch' mode from macro files e.g.
+                % field04 -m field04.in
 
-        - execute field04 in 'interactive' mode with visualization e.g.
+        - Execute field04 in 'interactive' mode with visualization
                 % field04
                 ....
-                Idle> type your commands, for example:
-                Idle> control/execute field04.in
+                Idle> type your commands
+                ....
+
+        - Execute field04 in 'interactive' mode without initialization
+                % field04 -s preinit
+                ....
+                Idle> type your commands, then
+                Idle> /run/initialize
+                Idle> /control/execute vis.mac
                 ....

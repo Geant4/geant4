@@ -1,0 +1,39 @@
+# The iridium source is the default option
+/run/initialize
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+#
+# Scoring mesh is used to calculate
+#  the energy deposition in the phantom
+/score/create/boxMesh boxMesh_1
+#
+# the voxels are 0.25 mm wide.
+/score/mesh/boxSize 10.0125 10.0125 0.0125 cm
+/score/mesh/nBin 801 801 1
+/score/quantity/energyDeposit eDep
+#
+/score/close
+#
+/score/list  
+##### Primary radiation Field
+/control/execute iridium_source_primary.mac
+# Alternatively model the radioactive decay ...
+#/control/execute TG186_iridium_decay.mac
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/radius 0.30 mm
+/gps/pos/halfz 1.75 mm
+/gps/pos/centre 0. 0. 0. mm
+/gps/ang/type iso
+################################################
+/run/beamOn  100
+#
+# Dump scores to a file
+#
+/score/dumpQuantityToFile boxMesh_1 eDep EnergyDeposition_TG186.out
+#
+
+
+

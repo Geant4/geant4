@@ -23,25 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ParameterisationPolyhedra.hh 73433 2013-08-27 11:05:39Z gcosmo $
-// 
-// classes G4ParameterisationPolyhedraRho,
-//         G4ParameterisationPolyhedraPhi,
-//         G4ParameterisationPolyhedraZ
+// G4ParameterisationPolyhedra[Rho/Phi/Z]
 //
 // Class description:
 //
 // These classes represent the parameterised positioning equivalent to 
 // dividing a G4Polyhedra along one of each axis Rho, Phi, Z.
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
 //---------------------------------------------------------------------
-#ifndef G4ParameterisationPolyhedra_H
-#define G4ParameterisationPolyhedra_H 1
+#ifndef G4PARAMETERISATIONPOLYHEDRA_HH
+#define G4PARAMETERISATIONPOLYHEDRA_HH 1
 
 #include "G4VDivisionParameterisation.hh"
 #include "G4Polyhedra.hh"
@@ -238,8 +231,8 @@ class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
                             const G4VPhysicalVolume*) const {}
   private:
 
-    G4int fNSegment;
-    G4PolyhedraHistorical* fOrigParamMother;
+    G4int fNSegment = 0;
+    G4PolyhedraHistorical* fOrigParamMother = nullptr;
 };
 
 #endif

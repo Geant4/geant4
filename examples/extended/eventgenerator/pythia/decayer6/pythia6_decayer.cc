@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: pythia6_decayer.cc 81443 2014-05-28 14:26:55Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file eventgenerator/pythia/decayer6/pythia6_decayer.cc
 /// \brief Main program of the pythia6Decayer example

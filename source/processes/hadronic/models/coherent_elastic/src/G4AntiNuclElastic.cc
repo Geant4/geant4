@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AntiNuclElastic.cc  - A.Galoyan 02.05.2011
 //
 // Geant4 Header : G4AntiNuclElastic
 //
@@ -52,7 +51,7 @@
 #include "G4Log.hh"
 
 #include "G4NucleiProperties.hh"
-
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4AntiNuclElastic::G4AntiNuclElastic() 
   : G4HadronElastic("AntiAElastic")
@@ -60,7 +59,6 @@ G4AntiNuclElastic::G4AntiNuclElastic()
   //V.Ivanchenko commented out 
   //SetMinEnergy( 0.1*GeV );
   //SetMaxEnergy( 10.*TeV );
-
 
   theAProton       = G4AntiProton::AntiProton();
   theANeutron      = G4AntiNeutron::AntiNeutron();
@@ -74,8 +72,10 @@ G4AntiNuclElastic::G4AntiNuclElastic()
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
 
+  G4CrossSectionDataSetRegistry* reg = G4CrossSectionDataSetRegistry::Instance();
+  cs = static_cast<G4ComponentAntiNuclNuclearXS*>(reg->GetComponentCrossSection("AntiAGlauber"));
+  if(!cs) { cs = new G4ComponentAntiNuclNuclearXS(); }
 
-  cs = new G4ComponentAntiNuclNuclearXS();
   fParticle = 0;
   fWaveVector = 0.;
   fBeta = 0.;
@@ -92,9 +92,7 @@ G4AntiNuclElastic::G4AntiNuclElastic()
 
 /////////////////////////////////////////////////////////////////////////
 G4AntiNuclElastic::~G4AntiNuclElastic()
-{
-  delete cs;  
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 // sample momentum transfer in the CMS system 
@@ -125,7 +123,7 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
 
   G4LorentzVector lv(0.0,0.0,0.0,TargMass);   
   lv += Pproj;
-  G4double S = lv.mag2()/GeV/GeV;
+  G4double S = lv.mag2()/(GeV*GeV);
 
   G4ThreeVector bst = lv.boostVector();
   Pproj.boost(-bst);
@@ -137,7 +135,7 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   fptot= ptot;
   fTmax = 4.0*ptot*ptot;  
 
-  if(Plab/std::abs(particle->GetBaryonNumber()) < 100.*MeV)    // Uzhi 24 Nov. 2011
+  if(Plab < (std::abs(particle->GetBaryonNumber())*100)*MeV)   // Uzhi 24 Nov. 2011
   {return fTmax*G4UniformRand();}                              // Uzhi 24 Nov. 2011
   
   G4double  Z1 = particle->GetPDGCharge();
@@ -152,13 +150,10 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   G4double  XsCoulomb = sqr(n/fWaveVector)*pi*(1+ctet1)/(1.+Am)/(1.+2.*Am-ctet1); 
   XsCoulomb=XsCoulomb*0.38938e+6;
 
-
   G4double XsElastHad =cs->GetElasticElementCrossSection(particle, energy, Z, (G4double)A);
   G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4double)A);
 
-
   XsElastHad/=millibarn; XstotalHad/=millibarn;
-
 
   G4double CoulombProb =  XsCoulomb/(XsCoulomb+XsElastHad);
 
@@ -377,11 +372,13 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
    T*=3.893913e+4;                // fm -> MeV^2
    }
 
+  // VI: 29.04.2019 unnecessary computation of trigonometry
+  /*
    G4double cosTet=1.0-T/(2.*ptot*ptot);
    if(cosTet >  1.0 ) cosTet= 1.;          // Uzhi 30 Nov. 
    if(cosTet < -1.0 ) cosTet=-1.;          // Uzhi 30 Nov. 
    fTetaCMS=std::acos(cosTet);
-
+  */
    return T;
 }
 

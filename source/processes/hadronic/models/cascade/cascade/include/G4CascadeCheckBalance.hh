@@ -25,7 +25,6 @@
 //
 #ifndef G4CASCADE_CHECK_BALANCE_HH
 #define G4CASCADE_CHECK_BALANCE_HH
-// $Id: G4CascadeCheckBalance.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceHeader.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomPhantomZSliceHeader.hh
 /// \brief Definition of the DicomPhantomZSliceHeader class
@@ -32,10 +31,11 @@
 #ifndef DicomPhantomZSliceHeader_h
 #define DicomPhantomZSliceHeader_h 1
 
-#include "globals.hh"
-class G4material;
 #include <fstream>
 #include <vector>
+#include "globals.hh"
+
+class G4material;
 
 //*******************************************************
 /// DicomPhantomZSliceHeader class
@@ -52,7 +52,7 @@ class DicomPhantomZSliceHeader
 public:
   DicomPhantomZSliceHeader(const G4String&);
   
-  DicomPhantomZSliceHeader( const DicomPhantomZSliceHeader& rhs );
+  DicomPhantomZSliceHeader( const DicomPhantomZSliceHeader& ) = default;
   // build object copying an existing one (except Z dimensions)
   
   DicomPhantomZSliceHeader( std::ifstream& fin );

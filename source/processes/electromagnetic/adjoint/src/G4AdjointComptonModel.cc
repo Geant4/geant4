@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointComptonModel.cc 91870 2015-08-07 15:21:40Z gcosmo $
 //
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -193,7 +192,6 @@ void G4AdjointComptonModel::RapidSampleSecondaries(const G4Track& aTrack,
 	gammaE2 =adjointPrimKinEnergy;
 	gammaE1=Emin*std::pow(Emax/Emin,G4UniformRand());
 	diffCSUsed= diffCSUsed/gammaE1;
-	
  }
   
   
@@ -202,14 +200,17 @@ void G4AdjointComptonModel::RapidSampleSecondaries(const G4Track& aTrack,
  //Weight correction
  //-----------------------
  //First w_corr is set to the ratio between adjoint total CS and fwd total CS
- G4double w_corr=G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection();
-
+ G4double w_corr=additional_weight_correction_factor_for_post_step_outside_model;
+  if (correct_weight_for_post_step_in_model) {
+      w_corr=G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection();
+  }
  //Then another correction is needed due to the fact that a biaised differential CS has been used rather than the 
  //one consistent with the direct model
  
  
  G4double diffCS = DiffCrossSectionPerAtomPrimToScatPrim(gammaE1, gammaE2,1,0.);
  if (diffCS >0)  diffCS /=G4direct_CS;  // here we have the normalised diffCS
+ //An we remultiply by the lambda of the forward process
  diffCS*=theDirectEMProcess->GetLambda(gammaE1,currentCouple);
  //diffCS*=theDirectEMModel->CrossSectionPerVolume(currentMaterial,G4Gamma::Gamma(),gammaE1,0.,2.*gammaE1);
  //G4cout<<"diffCS/diffCSUsed "<<diffCS/diffCSUsed<<'\t'<<gammaE1<<'\t'<<gammaE2<<G4endl;                                 
@@ -296,8 +297,8 @@ G4double G4AdjointComptonModel::DiffCrossSectionPerAtomPrimToScatPrim(
 				      G4double Z, 
                                       G4double )
 { //Based on Klein Nishina formula
- // In the forward case (see G4KleinNishinaModel)  the  cross section is parametrised 
- // the secondaries are sampled from the 
+ // In the forward case (see G4KleinNishinaCompton)  the  cross section is parametrised
+ // but the secondaries are sampled from the
  // Klein Nishida differential cross section
  // The used diffrential cross section here is therefore the cross section multiplied by the normalised 
  //differential Klein Nishida cross section

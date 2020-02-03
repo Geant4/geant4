@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.cc 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //
 // ---------------------------------------------------------------
@@ -61,7 +60,11 @@
 
 #include <sstream>
 
-G4ThreadLocal G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator = 0;
+G4Allocator<G4RichTrajectoryPoint>*& aRichTrajectoryPointAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4RichTrajectoryPoint>* _instance = nullptr;
+    return _instance;
+}
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint():
   fpAuxiliaryPointVector(0),

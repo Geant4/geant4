@@ -27,7 +27,10 @@
 /// \brief Implementation of the PhysListEmPenelope class
 //
 //
+<<<<<<< HEAD
 // $Id: PhysListEmPenelope.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -81,7 +84,20 @@
 
 PhysListEmPenelope::PhysListEmPenelope(const G4String& name)
   :  G4VPhysicsConstructor(name)
+<<<<<<< HEAD
 { }
+=======
+{
+    G4EmParameters* param = G4EmParameters::Instance();
+    param->SetDefaults();
+    param->SetMinEnergy(10*eV);
+    param->SetMaxEnergy(10*TeV);
+    param->SetNumberOfBinsPerDecade(10);
+  
+    param->SetVerbose(0);
+    param->Dump();
+}
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,7 +114,11 @@ void PhysListEmPenelope::ConstructProcess()
   particleIterator->reset();
   while( (*particleIterator)() ){
     G4ParticleDefinition* particle = particleIterator->value();
+<<<<<<< HEAD
     G4ProcessManager* pmanager = particle->GetProcessManager();
+=======
+    G4ProcessManager* pmanager = particle->GetProcessManager();    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     G4String particleName = particle->GetParticleName();
 
     //Applicability range for Penelope models
@@ -114,28 +134,44 @@ void PhysListEmPenelope::ConstructProcess()
       photModel->SetHighEnergyLimit(highEnergyLimit);
       phot->AddEmModel(0, photModel);
       pmanager->AddDiscreteProcess(phot);
+<<<<<<< HEAD
 
+=======
+     
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       G4ComptonScattering* compt = new G4ComptonScattering();
       G4PenelopeComptonModel* 
       comptModel = new G4PenelopeComptonModel();
       comptModel->SetHighEnergyLimit(highEnergyLimit);
       compt->AddEmModel(0, comptModel);
       pmanager->AddDiscreteProcess(compt);
+<<<<<<< HEAD
 
+=======
+     
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       G4GammaConversion* conv = new G4GammaConversion();
       G4PenelopeGammaConversionModel* 
       convModel = new G4PenelopeGammaConversionModel();
       convModel->SetHighEnergyLimit(highEnergyLimit);
       conv->AddEmModel(0, convModel);
       pmanager->AddDiscreteProcess(conv);
+<<<<<<< HEAD
 
+=======
+     
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       G4RayleighScattering* rayl = new G4RayleighScattering();
       G4PenelopeRayleighModel* 
       raylModel = new G4PenelopeRayleighModel();
       raylModel->SetHighEnergyLimit(highEnergyLimit);
       rayl->AddEmModel(0, raylModel);
       pmanager->AddDiscreteProcess(rayl);
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     } else if (particleName == "e-") {
       //electron
 
@@ -191,8 +227,18 @@ void PhysListEmPenelope::ConstructProcess()
                (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hIonisation,       -1,-1, 1);
+<<<<<<< HEAD
     }
   }
+=======
+    }    
+  }
+  
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* deex = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(deex);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,16 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NavigationLevel implementation
 //
-// $Id: G4NavigationLevel.cc 86527 2014-11-13 15:06:24Z gcosmo $
-//
-// 30.09.97 J.Apostolakis Initial version. 
-//                    
+// 30.09.97 J.Apostolakis Initial version
 // ----------------------------------------------------------------------
 
 #include "G4NavigationLevel.hh"
 
-G4ThreadLocal G4Allocator<G4NavigationLevel> *aNavigationLevelAllocator = 0;
+G4Allocator<G4NavigationLevel>*& aNavigationLevelAllocator()
+{
+  G4ThreadLocalStatic G4Allocator<G4NavigationLevel>* _instance = nullptr;
+  return _instance;
+}
 
 G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
                                 const G4AffineTransform& afTransform,

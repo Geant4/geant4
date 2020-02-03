@@ -55,32 +55,29 @@
 
 
 class CML2PhantomConstructionMessenger;
-
-
 class CML2PhantomConstruction
 {
 public:
 	CML2PhantomConstruction(void);
 	~CML2PhantomConstruction(void);
 	static CML2PhantomConstruction* GetInstance(void);
-	bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG, G4bool bOnlyVisio);
+
+	bool Construct(G4VPhysicalVolume *PVWorld, 
+        G4int voxelX, G4int voxelY, G4int voxelZ, G4bool bOnlyVisio); 
+
 	G4int getTotalNumberOfEvents();
 	inline G4String getPhantomName(){return phantomName;}
 	inline void setPhantomName(G4String val){phantomName=val;}
 	inline void setPhantomFileName (G4String val){PhantomFileName =val;}
-	inline void setNewName(){sensDet->setFullOutFileDataSingle("");}
-	inline void setNewName(G4String val){sensDet->setFullOutFileDataSingle(val);}
 
 	void applyNewCentre(G4ThreeVector val); 
 	bool applyNewCentre(); // it opens the geometry changes the phantom centre and closes the geometry : used also by CML2PhantomConstructionMessenger
 
-	inline void saveData(){sensDet->save();}
-
-	inline void addNewCentre(G4ThreeVector val){centre.push_back(val);}
+	inline void addNewCentre(G4ThreeVector val){ centre.push_back(val); }
 
 	void writeInfo();
 	G4String getCurrentTranslationString();
-	inline void resetSensDet(){sensDet->resetVoxelsSingle();}
+
 private:
 	bool design(void);
 	void createPhysicalVolumeNamesList(G4String  *matNames, G4int nMatNames);
@@ -91,8 +88,6 @@ private:
 
 	G4VPhysicalVolume *PVPhmWorld;
 
-
-	CML2SDWithVoxels *sensDet;
 	std::vector <SvolumeNameId> volumeNameIdLink;
 	G4int idVolumeName;
 

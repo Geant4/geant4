@@ -27,7 +27,10 @@
 /// \brief Definition of the F02ElectricFieldSetup class
 //
 //
+<<<<<<< HEAD
 // $Id: F02ElectricFieldSetup.hh 76247 2013-11-08 11:18:52Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +74,7 @@ public:
   void UpdateField();
 
   void SetFieldValue(G4ThreeVector fieldVector);
-  void SetFieldValue(G4double      fieldValue);
+  void SetFieldZValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
 
 protected:

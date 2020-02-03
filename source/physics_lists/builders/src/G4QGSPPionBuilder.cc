@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPionBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,6 +35,7 @@
 // 17.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
 //             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -44,22 +44,20 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4PiNuclearCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4BGGPionInelasticXS.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4QGSPPionBuilder::
 G4QGSPPionBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
-  theMin = 12*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSP");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;
   theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
   
-
   theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
@@ -83,14 +81,11 @@ G4QGSPPionBuilder::
 }
 
 void G4QGSPPionBuilder::
-Build(G4HadronElasticProcess * ) {}
-
-void G4QGSPPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
-  aP->AddDataSet(thePiData);
+  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
   aP->RegisterMe(theModel);
 }
 
@@ -98,10 +93,8 @@ void G4QGSPPionBuilder::
 Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
-  aP->AddDataSet(thePiData);
+  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
   aP->RegisterMe(theModel);
 }
 
-
-// 2002 by J.P. Wellisch

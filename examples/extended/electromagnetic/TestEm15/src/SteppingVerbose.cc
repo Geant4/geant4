@@ -27,7 +27,10 @@
 /// \brief Implementation of the SteppingVerbose class
 //
 //
+<<<<<<< HEAD
 // $Id: SteppingVerbose.cc 71790 2013-06-24 12:25:13Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

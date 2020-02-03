@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 84398 2014-10-15 07:20:18Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -46,13 +45,19 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4AngleDirect.hh
         G4AtomicShell.hh
         G4AtomicShellEnumerator.hh
+        G4DNAModelSubType.hh
         G4DummyModel.hh
         G4ElectronIonPair.hh
         G4EmBiasingManager.hh
         G4EmCalculator.hh
         G4EmConfigurator.hh
         G4EmCorrections.hh
+        G4EmDataHandler.hh
         G4EmElementSelector.hh
+        G4EmExtraParameters.hh
+        G4EmExtraParametersMessenger.hh
+        G4EmLowEParameters.hh
+        G4EmLowEParametersMessenger.hh
         G4EmModelManager.hh
         G4EmMultiModel.hh
         G4EmParameters.hh
@@ -61,11 +66,12 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmProcessSubType.hh
         G4EmSaturation.hh
         G4EmTableType.hh
-        G4EnergyLossMessenger.hh
         G4EnergyLossTables.hh
         G4LossTableBuilder.hh
         G4LossTableManager.hh
         G4MscStepLimitType.hh
+        G4NIELCalculator.hh
+        G4NuclearFormfactorType.hh
         G4VAtomDeexcitation.hh
         G4VEmAngularDistribution.hh
         G4VEmFluctuationModel.hh
@@ -78,24 +84,28 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4ionEffectiveCharge.hh
     SOURCES
         G4AngleDirect.cc
-        G4AtomicShell.cc
         G4DummyModel.cc
         G4ElectronIonPair.cc
         G4EmBiasingManager.cc
         G4EmCalculator.cc
         G4EmConfigurator.cc
         G4EmCorrections.cc
+        G4EmDataHandler.cc
         G4EmElementSelector.cc 
+        G4EmExtraParameters.cc
+        G4EmExtraParametersMessenger.cc
+        G4EmLowEParameters.cc
+        G4EmLowEParametersMessenger.cc
         G4EmModelManager.cc
         G4EmMultiModel.cc
         G4EmParameters.cc
         G4EmParametersMessenger.cc
         G4EmProcessOptions.cc
         G4EmSaturation.cc
-        G4EnergyLossMessenger.cc
         G4EnergyLossTables.cc
         G4LossTableBuilder.cc
         G4LossTableManager.cc
+        G4NIELCalculator.cc
         G4VAtomDeexcitation.cc
         G4VEmAngularDistribution.cc
         G4VEmFluctuationModel.cc

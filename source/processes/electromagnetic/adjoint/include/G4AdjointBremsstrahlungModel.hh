@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.hh 74727 2013-10-21 08:43:49Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointBremsstrahlungModel
@@ -55,6 +54,7 @@
 #define G4AdjointBremsstrahlungModel_h 1
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
+#include "G4VEmAngularDistribution.hh"
 #include "G4PhysicsTable.hh"
 #include "G4EmModelManager.hh"
 class G4Timer;
@@ -108,6 +108,7 @@ private:
   std::vector<G4DataVector*> partialSumSigma;
   std::vector<float> SigmaPerAtom; 
   
+
 };
 
 

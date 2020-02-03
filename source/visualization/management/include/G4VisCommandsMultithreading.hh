@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsMultithreading.hh 66264 2012-12-14 10:17:44Z allison $
 
 // /vis/multithreading commands - John Allison  29th September 2015
 

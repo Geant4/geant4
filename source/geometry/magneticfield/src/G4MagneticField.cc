@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MagneticField implementation
 //
-// $Id: G4MagneticField.cc 97486 2016-06-03 10:45:04Z gcosmo $
-//
+// Created: J.Apostolakis, CERN - 13.01.1996
 // --------------------------------------------------------------------
 
 #include "G4MagneticField.hh"
 
 G4MagneticField::G4MagneticField()
-  : G4ElectroMagneticField()
+  : G4Field( false ) // No gravitational field (default)
 {
 }
 
@@ -39,14 +39,14 @@ G4MagneticField::~G4MagneticField()
 {
 }
 
-G4MagneticField::G4MagneticField(const G4MagneticField &MagField)
-  : G4ElectroMagneticField( MagField )
+G4MagneticField::G4MagneticField(const G4MagneticField& )
+  : G4Field( false )
 {
 }
 
-G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
+G4MagneticField& G4MagneticField::operator = (const G4MagneticField& p)
 {
   if (&p == this) return *this; 
-  G4ElectroMagneticField::operator=(p); 
+  G4Field::operator=(p); 
   return *this;
 }

@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Torus.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Torus.icc
-//
 // Implementation of inline methods of G4Torus
 // --------------------------------------------------------------------
 
@@ -62,6 +54,30 @@ inline
 G4double G4Torus::GetDPhi() const
 {
   return fDPhi ;
+}
+
+inline
+G4double G4Torus::GetSinStartPhi () const
+{
+  return std::sin(fSPhi);
+}
+
+inline
+G4double G4Torus::GetCosStartPhi () const
+{
+  return std::cos(fSPhi);
+}
+
+inline
+G4double G4Torus::GetSinEndPhi () const
+{
+  return std::sin(fSPhi+fDPhi);
+}
+
+inline
+G4double G4Torus::GetCosEndPhi () const
+{
+  return std::cos(fSPhi+fDPhi);
 }
 
 inline

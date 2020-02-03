@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength.cc 81087 2014-05-20 15:44:27Z gcosmo $
 //
 // G4PSPassageTrackLength
 #include "G4PSPassageTrackLength.hh"

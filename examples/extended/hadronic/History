@@ -1,4 +1,3 @@
-$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,30 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
+=======
+
+25-10-19 A. Ribon (exHadronic-V10-05-01)
+- Created new test: Hadr08.
+
+31-01-19 I. Hrivnacova ((exHadronic-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+29-11-17 I. Hrivnacova (exHadronic-V10-03-00)
+- Removed Hadr05 (replaced with physicslists/genericPL)
+
+28-09-16 M. Maire (exHadronic-V10-02-03)
+- remove AmBe
+
+26-09-16 M. Maire (exHadronic-V10-02-02)
+- Added newly created example NeutronSource
+
+04-07-16 I. Hrivnacova  (exHadronic-V10-02-01)
+- Fixes for Doxygen documentation in Hadr03 - Hadr07 
+
+03-04-16 M. Maire (exHadronic-V10-02-00)
+- Added newly created example Hadr07
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 27-06-14 I. Hrivnacova (exHadronic-V10-00-00)
 - Updated documentation:

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc 87013 2014-11-21 16:22:53Z gcosmo $
 //
 // G4ForwardXrayTR class -- implementation file
 //
@@ -85,12 +84,12 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
                  const G4String& processName                          )
   :        G4TransitionRadiation(processName)
 {
-  fPtrGamma = 0;
-  fGammaCutInKineticEnergy = 0;
+  fPtrGamma = nullptr;
+  fGammaCutInKineticEnergy = nullptr;
   fGammaTkinCut = fMinEnergyTR = fMaxEnergyTR =  fMaxThetaTR = fGamma = 
     fSigma1 = fSigma2 = 0.0; 
-  fAngleDistrTable = 0;
-  fEnergyDistrTable = 0;
+  fAngleDistrTable = nullptr;
+  fEnergyDistrTable = nullptr;
   fMatIndex1 = fMatIndex2 = 0;
 
   // Proton energy vector initialization
@@ -147,12 +146,12 @@ G4ForwardXrayTR::
 G4ForwardXrayTR( const G4String& processName  )
    :        G4TransitionRadiation(processName)
 {
-  fPtrGamma = 0;
-  fGammaCutInKineticEnergy = 0;
+  fPtrGamma = nullptr;
+  fGammaCutInKineticEnergy = nullptr;
   fGammaTkinCut = fMinEnergyTR = fMaxEnergyTR =  fMaxThetaTR = fGamma = 
     fSigma1 = fSigma2 = 0.0; 
-  fAngleDistrTable = 0;
-  fEnergyDistrTable = 0;
+  fAngleDistrTable = nullptr;
+  fEnergyDistrTable = nullptr;
   fMatIndex1 = fMatIndex2 = 0;
 
   // Proton energy vector initialization
@@ -800,16 +799,36 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 // theta angle relative to particle direction
 //
 
-
 G4double
 G4ForwardXrayTR::GetThetaTR(G4int, G4int, G4int) const
 {
-  G4double theta = 0.0;
-
-  return theta;
+  return 0.0;
 }
 
+G4int G4ForwardXrayTR::GetSympsonNumber()
+{ 
+  return fSympsonNumber;
+}
 
+G4int G4ForwardXrayTR::GetBinTR()
+{ 
+  return fBinTR;
+}
+
+G4double G4ForwardXrayTR::GetMinProtonTkin()
+{ 
+  return fMinProtonTkin; 
+}
+
+G4double G4ForwardXrayTR::GetMaxProtonTkin()
+{ 
+  return fMaxProtonTkin; 
+}
+
+G4int G4ForwardXrayTR::GetTotBin()
+{ 
+  return fTotBin;
+}
 
 // end of G4ForwardXrayTR implementation file
 //

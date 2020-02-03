@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc 80341 2014-04-11 12:48:55Z gcosmo $
-// GEANT4 tag $Name: $
 //
 //
 // class G4tgbGeometryDumper
@@ -38,7 +36,6 @@
 
 #include "G4tgrMessenger.hh"
 
-#include "G4SystemOfUnits.hh"
 #include "G4UIcommand.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -75,6 +72,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //------------------------------------------------------------------------

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.icc 70961 2013-06-07 15:17:02Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -38,7 +37,7 @@
 inline
  void G4PhysicsTable::clearAndDestroy() 
 {
-  G4PhysicsVector* a=0;
+  G4PhysicsVector* a=nullptr;
   while (size()>0)
   {
     a = G4PhysCollection::back();
@@ -78,6 +77,15 @@ inline
 inline
  void  G4PhysicsTable::insertAt (size_t idx, G4PhysicsVector* pvec)
 {
+  if(idx > entries())
+  { 
+    G4ExceptionDescription ed;
+    ed << "Sprcified index (" << idx << ") is larger than the size of the vector ("
+       << entries() << ").";
+    G4Exception("G4PhysicsTable::insertAt()","Global_PhysTbl0001",
+                FatalException,ed);
+  }
+
   G4PhysicsTableIterator itr=begin();
   for (size_t i=0; i<idx; ++i) { itr++; }
   G4PhysCollection::insert(itr, pvec);

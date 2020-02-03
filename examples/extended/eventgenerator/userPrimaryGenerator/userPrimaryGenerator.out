@@ -3,6 +3,7 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+<<<<<<< HEAD
 *************************************************************
  Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
@@ -56,6 +57,16 @@ End of Run User Vis Actions: none
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+=======
+**************************************************************
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 /run/verbose 1
 #
@@ -89,7 +100,11 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
+<<<<<<< HEAD
   User=0.71s Real=0.72s Sys=0.01s
+=======
+  User=0.440000s Real=0.438345s Sys=0.000000s
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

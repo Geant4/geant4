@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // Semi-concrete base class for de-excitation modules, analogous to
 // G4CascadeColliderBase.

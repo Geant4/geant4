@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DeuteronBuilder.cc,v 1.2 2013/02/26 10:34:03 arce Exp $
-// GEANT4 tag $Name:  $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,6 +30,8 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
 //----------------------------------------------------------------------------
 //
  #include "G4DeuteronBuilder.hh"
@@ -58,7 +58,12 @@
    theDeuteronInelastic=new G4DeuteronInelasticProcess;
  }
 
- G4DeuteronBuilder::
- ~G4DeuteronBuilder() 
- {}
+ void G4DeuteronBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
+   auto bld = dynamic_cast<G4VDeuteronBuilder*>(aB);
+   if ( bld != nullptr ) {
+       theModelCollections.push_back(bld);
+   } else {
+       G4PhysicsBuilderInterface::RegisterMe(aB);
+   }
+ }
 

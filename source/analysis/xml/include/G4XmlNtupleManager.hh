@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4XmlNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Manager class for Xml ntuples 
 //
@@ -73,7 +72,8 @@ class G4XmlNtupleManager : public G4TNtupleManager<tools::waxml::ntuple>
                     NtupleDescriptionType* ntupleDescription) final;
 
     virtual void FinishTNtuple(
-                    NtupleDescriptionType* ntupleDescription) final;
+                    NtupleDescriptionType* ntupleDescription,
+                    G4bool fromBooking) final;
 
     // data members
     //

@@ -26,11 +26,11 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02DetectorConstruction.cc
 /// \brief Implementation of the H02DetectorConstruction class
 //
-//    $Id: H02DetectorConstruction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 
 #include "G4Box.hh"
 #include "G4ChordFinder.hh"
 #include "G4Element.hh"
+#include "G4NistManager.hh"
 #include "G4FieldManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
@@ -61,7 +61,7 @@ static const G4double DZ_ENDCAP_CAL= 0.5*m;
 
 // [muon system]
 static const G4double RIN_BARREL_MUON= 4.3*m;
-static const G4double ROUT_BARREL_MUON= 4.5*m;
+// static const G4double ROUT_BARREL_MUON= 4.5*m;
 static const G4double DX_BARREL_MUON= RIN_BARREL_MUON*std::cos(67.5*deg)-5.*cm;
 static const G4double DY_BARREL_MUON= 10.*cm;
 static const G4double DZ_BARREL_MUON= 7.*m;
@@ -72,6 +72,7 @@ static const G4double DZ_ENDCAP_MUON= 10.*cm;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02DetectorConstruction::H02DetectorConstruction()
+ : G4VUserDetectorConstruction()
 {
 }
 
@@ -87,39 +88,15 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
   // Materials
   // ==============================================================
 
-  G4double a, iz, z, density;
-  G4String name, symbol;
-  G4int nel;
+  G4NistManager* nistManager = G4NistManager::Instance();
+  G4Material* air = nistManager->FindOrBuildMaterial("G4_AIR");
+  G4Material* lead = nistManager->FindOrBuildMaterial("G4_Pb");
 
-  a= 1.01*g/mole;
-  G4Element* elH= new G4Element(name="Hydrogen", symbol="H", iz=1., a);
-
-  a= 12.01*g/mole;
-  G4Element* elC= new G4Element(name="Carbon", symbol="C", iz=6., a);
-
-  a= 14.01*g/mole;
-  G4Element* elN= new G4Element(name="Nitrogen", symbol="N", iz=7., a);
-
-  a = 16.00*g/mole;
-  G4Element* elO= new G4Element(name="Oxygen", symbol="O", iz=8., a);
-
-  density= 1.29e-03*g/cm3;
-  G4Material* Air= new G4Material(name="Air", density, nel=2);
-  Air-> AddElement(elN, .7);
-  Air-> AddElement(elO, .3);
-
-  a= 207.19*g/mole;
-  density= 11.35*g/cm3;
-  G4Material* Lead= new G4Material(name="Lead", z=82., a, density);
-
+  // Argon gas
+  G4double a, z, density;
   a= 39.95*g/mole;
   density= 1.782e-03*g/cm3;
-  G4Material* Ar= new G4Material(name="ArgonGas", z=18., a, density);
-
-  density= 1.032*g/cm3;
-  G4Material* Scinti= new G4Material(name="Scintillator", density, nel=2);
-  Scinti-> AddElement(elC, 9);
-  Scinti-> AddElement(elH, 10);
+  G4Material* ar= new G4Material("ArgonGas", z=18., a, density);
 
 
   // ==============================================================
@@ -129,7 +106,7 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
     new G4Tubs("EXP_HALL", 0., R_EXPHALL, DZ_EXPHALL, 0., 360.*deg);
 
   G4LogicalVolume* expHallLV=
-    new G4LogicalVolume(expHallSolid, Air, "EXP_HALL_LV");
+    new G4LogicalVolume(expHallSolid, air, "EXP_HALL_LV");
 
   // visualization attributes
   G4VisAttributes* expHallVisAtt=
@@ -154,10 +131,10 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
                DZ_ENDCAP_CAL, 0., 360.*deg);
 
   G4LogicalVolume* barrelCalLV=
-    new G4LogicalVolume(barrelCalSolid, Lead, "BARREL_CAL_LV");
+    new G4LogicalVolume(barrelCalSolid, lead, "BARREL_CAL_LV");
 
   G4LogicalVolume* endcapCalLV=
-    new G4LogicalVolume(endcapCalSolid, Lead, "ENDCAP_CAL_LV");
+    new G4LogicalVolume(endcapCalSolid, lead, "ENDCAP_CAL_LV");
 
   G4VisAttributes* calVisAtt=
     new G4VisAttributes(true, G4Colour(0., 1., 1.));
@@ -185,10 +162,10 @@ G4VPhysicalVolume* H02DetectorConstruction::Construct()
                DZ_ENDCAP_MUON, 0., 360.*deg);
 
   G4LogicalVolume* barrelMuonLV=
-    new G4LogicalVolume(barrelMuonSolid, Ar, "BARREL_MUON_LV");
+    new G4LogicalVolume(barrelMuonSolid, ar, "BARREL_MUON_LV");
 
   G4LogicalVolume* endcapMuonLV=
-    new G4LogicalVolume(endcapMuonSolid, Ar, "ENDCAP_MUON_LV");
+    new G4LogicalVolume(endcapMuonSolid, ar, "ENDCAP_MUON_LV");
 
   G4VisAttributes* muonVisAtt=
     new G4VisAttributes(true, G4Colour(1., 1., 0.5));

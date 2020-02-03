@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -45,6 +44,8 @@ GEANT4_DEFINE_MODULE(NAME G4hepnumerics
         G4SimplexDownhill.hh
         G4SimplexDownhill.icc
         G4StatDouble.hh
+        G4StatAnalysis.hh
+        G4StatAnalysis.icc
         G4VGaussianQuadrature.hh
     SOURCES
         G4AnalyticalPolSolver.cc

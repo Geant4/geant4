@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SimpleRunge.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// class G4SimpleRunge
+// G4SimpleRunge
 //
 // Class description:
 //
@@ -39,10 +35,8 @@
 // Takes the derivative at a position to be assumed at the middle of the
 // Step and adds it to the current position.
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
+// Created: W.Wander <wwc@mit.edu>, 12/09/1997
 // -------------------------------------------------------------------
-
 #ifndef G4SIMPLERUNGE_HH
 #define G4SIMPLERUNGE_HH
 
@@ -53,26 +47,26 @@ class G4SimpleRunge : public G4MagErrorStepper
 
   public:  // with description
 
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
+    G4SimpleRunge(G4EquationOfMotion* EquationRhs, G4int numberOfVariables = 6) ;
    ~G4SimpleRunge();
       // Constructor and destructor.
 
     void DumbStepper( const G4double y[],
                       const G4double dydx[],
                             G4double h,
-                            G4double yout[]);
+                            G4double yout[] );
 
   public:  // without description
   
-    G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const { return 2; }
 
   private:
 
-    G4int fNumberOfVariables ;
+    G4int fNumberOfVariables = 0;
 
-    G4double* dydxTemp;
-    G4double* yTemp;
+    G4double* dydxTemp = nullptr;
+    G4double* yTemp = nullptr;
       // scratch space    
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+#endif

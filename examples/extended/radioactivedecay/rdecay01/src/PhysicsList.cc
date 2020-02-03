@@ -25,11 +25,13 @@
 //
 /// \file radioactivedecay/rdecay01/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
+<<<<<<< HEAD
 //
 //
 // $Id: PhysicsList.cc 95541 2016-02-12 14:33:23Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
@@ -37,7 +39,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4IonConstructor.hh"
 #include "G4PhysicsListHelper.hh"
-#include "G4RadioactiveDecay.hh"
+#include "G4Radioactivation.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NuclideTable.hh"
 
@@ -95,7 +97,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
 
-  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+  G4Radioactivation* radioactiveDecay = new G4Radioactivation();
 
   radioactiveDecay->SetARM(false);               //Atomic Rearangement
   

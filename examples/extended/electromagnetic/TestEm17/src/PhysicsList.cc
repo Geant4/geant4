@@ -27,7 +27,10 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 94383 2015-11-13 10:20:27Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

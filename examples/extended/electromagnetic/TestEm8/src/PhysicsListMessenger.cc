@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm8/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
+<<<<<<< HEAD
 // $Id: PhysicsListMessenger.cc 92047 2015-08-14 07:23:37Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //---------------------------------------------------------------------------
 //

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 82281 2014-06-13 14:47:16Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+4 September 2018 I. Hrivnacova (mctruthex-V10-04-00)
+- coding guidelines
+
+20 March 2017 W. Pokorski (mctruthex-V10-03-00)
+- fixing bug (typo) introduced in previous tag
+
+07 October 2016 W. Pokorski (mctruthex-V10-02-00)
+- changes to comply with coding conventions
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 11 June 2014 W. Pokorski (mctruthex-V10-00-00)
 - changes to comply with coding conventions
 

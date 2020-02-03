@@ -14,6 +14,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+November 28th, 2019 I. Hrivnacova (exampleP02-V10-05-00)
+- Fixed Doxygen warning in .README.txt
+
+June 15th 2018 W.Pokorski (exampleP02-V10-04-01)
+- updating selection.xml file with new members of G4MaterialPropertiesTable
+- fixing the crash on reading due to duplication of materials in .root file
+
+May 19th 2018 J.Allison (exampleP02-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive nearer to start of main.
+
+November 29th, 2017 B.Morgan (exampleP02-V10-03-01)
+- Use correct case "RootNewMacros"
+
+November 28th, 2017 B. Morgan (exampleP02-V10-03-00)
+- Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+- Include ROOTNewMacros for reflex_generate_dictionary
+- Update generated source name
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 November 23rd, 2015 I. Hrivnacova (exampleP02-V10-01-02)
 - Updated documentation and CMakeLists.tx (requiring ROOT 6)
 

@@ -1,0 +1,61 @@
+#
+# Macro file for "TestEm15.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+/testem/det/setSize 4000 m
+#
+/testem/phys/addPhysics emstandard5D
+# activete 5d model for gamma -> mu+ mu+ and seet high E limit
+/process/em/verbose 1
+/process/em/max5DMuPairEnergy 1 TeV
+#
+/run/initialize
+#
+/run/setCut 1 mm
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate Rayl
+/process/inactivate conv
+#
+# direction 1 0 0
+/gun/particle gamma
+/gun/energy 800 GeV
+/gun/polarization 0.0 1.0 0.0
+#
+/analysis/setFileName gamma2mumu
+#
+# msc
+#
+#/analysis/setActivation true
+#/analysis/verbose 4
+#/analysis/h1/set 1  100  0     1000 um #true step length
+#/analysis/h1/set 2  100  0     1000 um #geom step length
+#/analysis/h1/set 3  100  0   1.1 none  #ratio geom/true
+#/analysis/h1/set 4  100  0     500 um  #lateral radius
+#/analysis/h1/set 5  100  0    +25 deg  #psi_space angle
+#/analysis/h1/set 6  100 -50   +50 deg  #theta_plane angle
+#/analysis/h1/set 7   90 -180  +180 deg #phi-position angle
+#/analysis/h1/set 8   90 -180  +180 deg #phi-direction angle
+#/analysis/h1/set 9  100  -1    +1 none #phi correlation
+#
+# conv
+#
+/control/alias pi 3.141592653589793
+#
+/analysis/h1/set 10  100  0.0  1000.0 MeV  # Open Angle (rad)* E gamma (MeV)
+/analysis/h1/set 11  100 -2.0  4.0  none   # Log10 ( recoil momentum) 
+/analysis/h1/set 12  100 -{pi} {pi} none   # Phi recoil 
+/analysis/h1/set 13  100 -{pi} {pi} none   # Phi positron 
+/analysis/h1/set 14  100 -2.0  2.0  none   # Asymmentry 2 * cos(phi_+ + phi_-)
+/analysis/h1/set 15  100  0.0  1.0  none   # E plus / E gamma
+/analysis/h1/set 16  100 -{pi} {pi} none   # Phi of Gamma Polarization
+#
+###/tracking/verbose 2
+###/run/beamOn 1
+#
+/run/beamOn 100000

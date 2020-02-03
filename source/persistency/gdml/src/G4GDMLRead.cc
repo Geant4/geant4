@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc 89819 2015-04-30 14:53:35Z gcosmo $
 //
 // class G4GDMLRead Implementation
 //
@@ -45,7 +44,8 @@
 G4GDMLRead::G4GDMLRead()
   : validate(true), check(false), dostrip(true), inLoop(0), loopCount(0)
 {
-   G4UnitDefinition::BuildUnitsTable();
+   // Make sure units are defined.
+   G4UnitDefinition::GetUnitsTable();
 }
 
 G4GDMLRead::~G4GDMLRead()
@@ -321,8 +321,9 @@ AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
 
 void G4GDMLRead::UserinfoRead(const xercesc::DOMElement* const userinfoElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading userinfo..." << G4endl;
-
+#endif
    for (xercesc::DOMNode* iter = userinfoElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
    {
@@ -364,6 +365,7 @@ void G4GDMLRead::Read(const G4String& fileName,
                             G4bool strip)
 {
    dostrip = strip;
+#ifdef G4VERBOSE
    if (isModule)
    {
       G4cout << "G4GDML: Reading module '" << fileName << "'..." << G4endl;
@@ -372,7 +374,7 @@ void G4GDMLRead::Read(const G4String& fileName,
    {
       G4cout << "G4GDML: Reading '" << fileName << "'..." << G4endl;
    }
-
+#endif
    inLoop = 0;
    validate = validation;
 
@@ -458,7 +460,9 @@ void G4GDMLRead::Read(const G4String& fileName,
 
    if (isModule)
    {
+#ifdef G4VERBOSE
       G4cout << "G4GDML: Reading module '" << fileName << "' done!" << G4endl;
+#endif
    }
    else
    {

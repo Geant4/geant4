@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // OpenInventor graphics system factory.
 
@@ -50,9 +49,8 @@ void G4OpenInventorWin::Initialize ()
   if(fInited) return; //Done
 
   SetInteractorManager (G4Win32::getInstance());
-  GetInteractorManager () -> RemoveDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);  
-
-  //  GetInteractorManager () -> AddDispatcher((G4DispatchFunction)SoWin::dispatchEvent);
+  GetInteractorManager () -> RemoveDispatcher((G4DispatchFunction)G4Win32::DispatchWin32Event);
+  GetInteractorManager () -> AddDispatcher((G4DispatchFunction)SoWin::dispatchEvent);
 
   HWND toplevel = (HWND)GetInteractorManager()->GetMainInteractor();
 

@@ -114,6 +114,7 @@ G4VPhysicalVolume* PassiveCarbonBeamLine::Construct()
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::SetDefaultDimensions()
 {
+<<<<<<< HEAD
 	// Set of coulors that can be used
 	white = new G4VisAttributes( G4Colour());
 	white -> SetVisibility(true);
@@ -321,6 +322,125 @@ void PassiveCarbonBeamLine::SetDefaultDimensions()
 	
 	// Material of the final collimator
 	finalCollimatorMaterial = brass;
+=======
+    // Set of coulors that can be used
+    white = new G4VisAttributes( G4Colour());
+    white -> SetVisibility(true);
+    white -> SetForceSolid(true);
+    
+    black = new G4VisAttributes( G4Colour(1., 1., 1.));
+    black -> SetVisibility(true);
+    black -> SetForceSolid(true);
+    
+    
+    blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
+    blue -> SetVisibility(true);
+    blue -> SetForceSolid(true);
+    
+    gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
+    gray-> SetVisibility(true);
+    gray-> SetForceSolid(true);
+    
+    red = new G4VisAttributes(G4Colour(1. ,0. ,0.));
+    red-> SetVisibility(true);
+    red-> SetForceSolid(true);
+    
+    yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
+    yellow-> SetVisibility(true);
+    yellow-> SetForceSolid(true);
+    
+    green = new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255. ));
+    green -> SetVisibility(true);
+    green -> SetForceSolid(true);
+    
+    darkGreen = new G4VisAttributes( G4Colour(0/255. , 100/255. ,  0/255. ));
+    darkGreen -> SetVisibility(true);
+    darkGreen -> SetForceSolid(true);
+    
+    darkOrange3 = new G4VisAttributes( G4Colour(205/255. , 102/255. ,  000/255. ));
+    darkOrange3 -> SetVisibility(true);
+    darkOrange3 -> SetForceSolid(true);
+    
+    skyBlue = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
+    skyBlue -> SetVisibility(true);
+    skyBlue -> SetForceSolid(true);
+    
+    
+    // FINAL COLLIMATOR: is the collimator giving the final transversal shape
+    // of the beam
+    
+    G4double defaultinnerRadiusFinalCollimator = 12.5 *mm;
+    innerRadiusFinalCollimator = defaultinnerRadiusFinalCollimator;
+    
+    // DEFAULT DEFINITION OF THE MATERIALS
+    // All elements and compound definition follows the NIST database
+    
+    // ELEMENTS
+    G4bool isotopes = false;
+    aluminumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al", isotopes);
+    G4Element* zincNist = G4NistManager::Instance()->FindOrBuildElement("Zn");
+    G4Element* copperNist = G4NistManager::Instance()->FindOrBuildElement("Cu");
+    
+    // MATERIAL (Including compounds)
+    copperNistMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu", isotopes);
+    airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+    kaptonNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON", isotopes);
+    galacticNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic", isotopes);
+    PMMANist = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
+    tantalumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ta", isotopes);
+    
+    G4double d; // Density
+    G4int nComponents;// Number of components
+    G4double fractionmass; // Fraction in mass of an element in a material
+    
+    d = 8.40*g/cm3;
+    nComponents = 2;
+    brass = new G4Material("Brass", d, nComponents);
+    brass -> AddElement(zincNist, fractionmass = 30 *perCent);
+    brass -> AddElement(copperNist, fractionmass = 70 *perCent);
+    
+    //***************************** PW ***************************************
+    
+    // DetectorROGeometry Material
+    new G4Material("dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+    
+    //***************************** PW ***************************************
+    
+    // MATERIAL ASSIGNMENT
+    // Support of the beam line
+    beamLineSupportMaterial = aluminumNist;
+    
+    // Vacuum pipe
+    vacuumZoneMaterial = galacticNist;
+    firstScatteringFoilMaterial = tantalumNist;
+    
+    // Material of kapton window
+    kaptonWindowMaterial = kaptonNist;
+    
+    // Material of ripple filter
+    rippleFilterMaterial = airNist;
+    rippleFilterBoxMaterial = airNist;
+    
+    // Materials of the monitor chamber
+    layer1MonitorChamberMaterial = kaptonNist;
+    layer2MonitorChamberMaterial = copperNistMaterial;
+    layer3MonitorChamberMaterial = airNist;
+    layer4MonitorChamberMaterial = copperNistMaterial;
+    
+    // Material of the final nozzle
+    nozzleSupportMaterial = PMMANist;
+    holeNozzleSupportMaterial = airNist;
+    seconHoleNozzleSupportMaterial = airNist;
+    
+    // Material of the final collimator
+    brassTubeMaterial = brassTube2Material = brassTube3Material = brass;
+    
+    // Material of the final collimator
+    finalCollimatorMaterial = brass;
+    
+    // Material of the PMMA collimator
+    PMMACollimatorMaterial = airNist;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -442,6 +562,7 @@ void PassiveCarbonBeamLine::HadrontherapyBeamLineSupport()
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::VacuumToAirInterface()
 {
+<<<<<<< HEAD
 	// ------------//
 	// VACUUM PIPE //
 	//-------------//
@@ -515,10 +636,209 @@ void PassiveCarbonBeamLine::VacuumToAirInterface()
 	
 	logicKaptonWindow -> SetVisAttributes(darkOrange3);
 }
+=======
+    // ------------//
+    // VACUUM PIPE //
+    //-------------//
+    //
+    // First track of the beam line is inside vacuum;
+    
+    vacuumZoneXSize = 100 *mm;
+    vacuumZoneYSize = 52.5 *mm;
+    vacuumZoneZSize = 52.5 *mm;
+    vacuumPipeXPosition = -1708.0 *mm;
+    
+    
+    vacuumZone = new G4Box("VacuumZone",
+                           vacuumZoneXSize/2,
+                           vacuumZoneYSize/2,
+                           vacuumZoneZSize/2);
+    
+    logicVacuumZone = new G4LogicalVolume(vacuumZone, vacuumZoneMaterial,"VacuumZone");
+    
+    physiVacuumZone = new G4PVPlacement(0, G4ThreeVector(vacuumPipeXPosition, 0., 0.),
+                                        "VacuumZone",
+                                        logicVacuumZone,
+                                        physicalTreatmentRoom,
+                                        false,
+                                        0);
+    
+    // --------------------------//
+    // THE FIRST SCATTERING FOIL //
+    // --------------------------//
+    // A thin foil performing a first scattering
+    // of the original beam
+
+    firstScatteringFoilXSize = 0.015 *mm;
+    firstScatteringFoilYSize = 52.5 *mm;
+    firstScatteringFoilZSize = 52.5 *mm;
+    firstScatteringFoilXPosition = 0.0 *mm;
+    
+    firstScatteringFoil = new G4Box("FirstScatteringFoil",
+                                    firstScatteringFoilXSize/2,
+                                    firstScatteringFoilYSize/2,
+                                    firstScatteringFoilZSize/2);
+    
+    logicFirstScatteringFoil = new G4LogicalVolume(firstScatteringFoil,
+                                                   firstScatteringFoilMaterial,
+                                                   "FirstScatteringFoil");
+    
+    physiFirstScatteringFoil = new G4PVPlacement(0, G4ThreeVector(firstScatteringFoilXPosition, 0.,0.),
+                                                 "FirstScatteringFoil", logicFirstScatteringFoil, physiVacuumZone,
+                                                 false, 0);
+    
+    logicFirstScatteringFoil -> SetVisAttributes(skyBlue);
+
+    // -------------------//
+    // THE KAPTON WINDOWS //
+    //--------------------//
+    //It permits the passage of the beam from vacuum to air
+    
+    // KAPTON WINDOW: it permits the passage of the beam from vacuum to air
+    kaptonWindowXSize = 0.050 *mm;
+    kaptonWindowYSize = 52.5 *mm;
+    kaptonWindowZSize = 52.5 *mm;
+    kaptonWindowXPosition = vacuumZoneXSize/2 - kaptonWindowXSize/2;
+    
+    solidKaptonWindow = new G4Box("KaptonWindow",
+                                  kaptonWindowXSize/2,
+                                  kaptonWindowYSize/2,
+                                  kaptonWindowZSize/2);
+    
+    logicKaptonWindow = new G4LogicalVolume(solidKaptonWindow,
+                                            kaptonWindowMaterial,
+                                            "KaptonWindow");
+    
+    physiKaptonWindow = new G4PVPlacement(0, G4ThreeVector(kaptonWindowXPosition, 0., 0.),
+                                          "KaptonWindow", logicKaptonWindow,
+                                          physiVacuumZone, false,	0);
+    
+    logicKaptonWindow -> SetVisAttributes(darkOrange3);
+
+
+
+
+
+
+}
+/////////////////////////////////////////////////////////////////////////////
+void PassiveCarbonBeamLine::HadrontherapyRippleFilter()
+{
+
+
+    G4double defaultRippleFilterXPosition = -1638.0*mm;
+    G4double ripple_position=(defaultRippleFilterXPosition);
+    G4double RF_x = 200.0 * mm;
+    G4double RF_y = 200.0 * mm;
+    G4double RF_z = 1.4 * mm;
+    G4double RFbase_z = 0.2 * mm;
+    G4double RFtrd_z = RF_z - RFbase_z;
+    G4double RFtrd_top = 1e-4 * mm;
+    G4double RFtrd_bottom = 1.5 * mm;
+    G4double distanceBetweenTrd = 0.1*mm;
+    
+    
+    
+    
+    G4double theta = -90. *deg;
+    // Matrix definition for a "theta" deg rotation with respect to Y axis
+    G4RotationMatrix rot;
+    rot.rotateY(theta);
+    
+    
+    SolidRippleFilter= new G4Box("RippleFilter",
+                                 RF_x/2 + 1*mm,
+                                 RF_y/2 + 1*mm,
+                                 RF_z/2 + 1*mm);
+    
+    LogicRippleFilter = new G4LogicalVolume(SolidRippleFilter,
+                                            rippleFilterBoxMaterial,
+                                            "LogicRippleFilter",
+                                            0,0,0);
+    
+    PhysiRippleFilter = new G4PVPlacement(G4Transform3D(rot,G4ThreeVector(ripple_position,0,0)),
+                                          "PhysiRippleFilter",
+                                          LogicRippleFilter,
+                                          physicalTreatmentRoom,
+                                          false,
+                                          1,
+                                          true);
+    
+    PhysiRippleFilter = new G4PVPlacement(G4Transform3D(rot,G4ThreeVector(ripple_position + 10*cm,0,0)),
+                                          "PhysiRippleFilter",
+                                          LogicRippleFilter,
+                                          physicalTreatmentRoom,
+                                          false,
+                                          2,
+                                          true);
+    
+    LogicRippleFilter -> SetVisAttributes(G4VisAttributes::GetInvisible());
+    
+    SolidRippleFilterBase = new G4Box("RippleFilterBase",
+                                      RF_x/2,
+                                      RF_y/2,
+                                      RFbase_z/2);
+    
+    LogicRippleFilterBase = new G4LogicalVolume(SolidRippleFilterBase,
+                                                rippleFilterMaterial,
+                                                "LogicRippleFilterBase",
+                                                0,0,0);
+    
+    LogicRippleFilterBase -> SetVisAttributes(green);
+    
+    PhysiRippleFilterBase = new G4PVPlacement(0,
+                                              G4ThreeVector(0, 0, -RF_z/2 + RFbase_z/2),
+                                              "PhysiRippleFilter",
+                                              LogicRippleFilterBase,
+                                              PhysiRippleFilter,
+                                              false,
+                                              0,
+                                              false);
+    
+    SolidRippleFilterTrd = new G4Trd("SolidRippleFilterTrd",
+                                     RF_x/2,
+                                     RF_x/2,
+                                     RFtrd_bottom/2,
+                                     RFtrd_top/2,
+                                     RFtrd_z/2);
+    
+    LogicRippleFilterTrd = new G4LogicalVolume(SolidRippleFilterTrd,
+                                               rippleFilterMaterial,
+                                               "LogicRippleFilterTrd",
+                                               0,0,0);
+    
+    LogicRippleFilterTrd -> SetVisAttributes(green);
+    
+    G4int numberOfTrd = static_cast<int>(std::floor( RF_y / (RFtrd_bottom+distanceBetweenTrd) ));
+    
+    G4int N = static_cast<int>( std::floor(numberOfTrd-1)/2 );
+    
+    G4int copyNumber = 0;
+    
+    for( int i = -N; i <= N; i++ )
+    {
+        PhysiRippleFilterTrd = new G4PVPlacement(0,
+                                                 G4ThreeVector(0,
+                                                               i*(RFtrd_bottom+distanceBetweenTrd),
+                                                               -RF_z/2+RFbase_z+RFtrd_z/2),
+                                                 "PhysiRippleFilterTrd",
+                                                 LogicRippleFilterTrd,
+                                                 PhysiRippleFilter,
+                                                 false,
+                                                 copyNumber,
+                                                 false);
+        
+        copyNumber++;
+    }
+
+   }
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 /////////////////////////////////////////////////////////////////////////////  
 void PassiveCarbonBeamLine::ScatteringSystem()
 {
+<<<<<<< HEAD
 	// ------------//
 	// THE STOPPER //
 	//-------------//
@@ -581,11 +901,88 @@ void PassiveCarbonBeamLine::ScatteringSystem()
 	
 	logicSecondScatteringFoil -> SetVisAttributes(skyBlue);
 	
+=======
+
+    // ----------------------//
+    //   PMMA COLLIMATOR     //
+    // ----------------------//
+    PMMACollimatorSupportXSize = 25.0 *mm;
+    PMMACollimatorSupportYSize = 200. *mm;
+    PMMACollimatorSupportZSize = 200. *mm;
+    
+    PMMACollimatorXPosition = -1082.00 *mm;
+    
+    G4double phi = 90. *deg;
+    G4RotationMatrix rm;
+    rm.rotateY(phi);
+    
+    solidPMMACollimatorSupport = new G4Box("PMMACollimatorSupport",
+                                           PMMACollimatorSupportXSize/2,
+                                           PMMACollimatorSupportYSize/2,
+                                           PMMACollimatorSupportZSize/2);
+    
+    logicPMMACollimatorSupport = new G4LogicalVolume(solidPMMACollimatorSupport,
+                                                     PMMACollimatorMaterial,
+                                                     "PMMACollimatorSupport");
+    
+    physiPMMACollimatorSupport = new G4PVPlacement(0, G4ThreeVector(PMMACollimatorXPosition,0., 0.),
+                                                   "PMMACollimatorSupport",
+                                                   logicPMMACollimatorSupport,
+                                                   physicalTreatmentRoom,
+                                                   false,
+                                                   0);
+    
+    
+    yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
+    yellow-> SetVisibility(true);
+    yellow-> SetForceWireframe(true);
+    
+    logicPMMACollimatorSupport -> SetVisAttributes(yellow);
+    
+    // ----------------------//
+    //     PMMA COLLIMATOR   //
+    //-----------------------//
+    innerRadiusPMMACollimator= 4.5 *cm;
+    outerRadiusPMMACollimator = 4.6 *cm;
+    hightPMMACollimator = PMMACollimatorSupportXSize;
+    startAnglePMMACollimator = 0.*deg;
+    spanningAnglePMMACollimator = 360.*deg;
+    
+    
+    solidPMMACollimator = new G4Tubs("PMMACollimator",
+                                     innerRadiusPMMACollimator,
+                                     outerRadiusPMMACollimator,
+                                     hightPMMACollimator/2,
+                                     startAnglePMMACollimator,
+                                     spanningAnglePMMACollimator);
+    
+    logicPMMACollimator = new G4LogicalVolume(solidPMMACollimator,
+                                              PMMACollimatorMaterial,
+                                              "PMMACollimator",
+                                              0,
+                                              0,
+                                              0);
+    
+    physiPMMACollimator = new G4PVPlacement(G4Transform3D(rm,
+                                                          G4ThreeVector(0,0.,0.)),
+                                            "PMMACollimator",
+                                            logicPMMACollimator,
+                                            physiPMMACollimatorSupport,
+                                            false,
+                                            0);
+    
+    logicPMMACollimator -> SetVisAttributes(yellow);
+    
+
+    
+    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
 {
+<<<<<<< HEAD
 	// ----------------------------
 	//   THE FIRST MONITOR CHAMBER
 	// ----------------------------  
@@ -672,6 +1069,95 @@ void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
 	
 	logicFirstMonitorLayer3 -> SetVisAttributes(white);
 	
+=======
+
+    // ----------------------------
+    //       MONITOR CHAMBER
+    // ----------------------------
+    // A monitor chamber is a free-air  ionisation chamber
+    // able to measure do carbon fluence during the treatment.
+    // Here its responce is not simulated in terms of produced
+    // charge but only the energy losses are taked into account.
+    // Each chamber consist of 9 mm of air in a box
+    // that has two layers one of kapton and one
+    // of copper
+    
+    monitor1XSize = 4.525022*mm;
+    monitor2XSize = 0.000011*mm;
+    monitor3XSize = 4.5*mm;
+    monitorYSize = 10.*cm;
+    monitorZSize = 10.*cm;
+    monitor1XPosition = -1059.0 *mm;
+    monitor2XPosition = -4.500011*mm;
+    monitor4XPosition = 4.500011*mm;
+    
+    solidFirstMonitorLayer1 = new G4Box("FirstMonitorLayer1",
+                                        monitor1XSize,
+                                        monitorYSize,
+                                        monitorZSize);
+    
+    logicFirstMonitorLayer1 = new G4LogicalVolume(solidFirstMonitorLayer1,
+                                                  layer1MonitorChamberMaterial,
+                                                  "FirstMonitorLayer1");
+    
+    physiFirstMonitorLayer1 = new G4PVPlacement(0,
+                                                G4ThreeVector(monitor1XPosition,0.*cm,0.*cm),
+                                                "FirstMonitorLayer1",
+                                                logicFirstMonitorLayer1,
+                                                physicalTreatmentRoom,
+                                                false,
+                                                0);
+    
+    solidFirstMonitorLayer2 = new G4Box("FirstMonitorLayer2",
+                                        monitor2XSize,
+                                        monitorYSize,
+                                        monitorZSize);
+    
+    logicFirstMonitorLayer2 = new G4LogicalVolume(solidFirstMonitorLayer2,
+                                                  layer2MonitorChamberMaterial,
+                                                  "FirstMonitorLayer2");
+    
+    physiFirstMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector(monitor2XPosition,0.*cm,0.*cm),
+                                                "FirstMonitorLayer2",
+                                                logicFirstMonitorLayer2,
+                                                physiFirstMonitorLayer1,
+                                                false,
+                                                0);
+    
+    solidFirstMonitorLayer3 = new G4Box("FirstMonitorLayer3",
+                                               monitor3XSize,
+                                               monitorYSize,
+                                               monitorZSize);
+    
+    logicFirstMonitorLayer3 = new G4LogicalVolume(solidFirstMonitorLayer3,
+                                                                   layer3MonitorChamberMaterial,
+                                                                   "FirstMonitorLayer3");
+    
+    physiFirstMonitorLayer3 = new G4PVPlacement(0,
+                                                G4ThreeVector(0.*mm,0.*cm,0.*cm),
+                                                "MonitorLayer3",
+                                                logicFirstMonitorLayer3,
+                                                physiFirstMonitorLayer1,
+                                                false,
+                                                0);
+    
+    solidFirstMonitorLayer4 = new G4Box("FirstMonitorLayer4",
+                                               monitor2XSize,
+                                               monitorYSize,
+                                               monitorZSize);
+    
+    logicFirstMonitorLayer4 = new G4LogicalVolume(solidFirstMonitorLayer4,
+                                                                   layer4MonitorChamberMaterial,
+                                                                   "FirstMonitorLayer4");
+    
+    physiFirstMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm),
+                                                "FirstMonitorLayer4",
+                                                logicFirstMonitorLayer4,
+                                                physiFirstMonitorLayer1, false, 0);
+    
+    logicFirstMonitorLayer3 -> SetVisAttributes(white);
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 /////////////////////////////////////////////////////////////////////////////

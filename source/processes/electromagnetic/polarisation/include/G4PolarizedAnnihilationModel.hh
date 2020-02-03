@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,18 +64,17 @@ class G4PolarizedAnnihilationModel : public G4eeToTwoGammaModel
 
 public:
 
-  G4PolarizedAnnihilationModel(const G4ParticleDefinition* p = 0, 
+  explicit G4PolarizedAnnihilationModel(const G4ParticleDefinition* p = nullptr, 
 			const G4String& nam = "Polarized-Annihilation");
 
   virtual ~G4PolarizedAnnihilationModel();
 
   virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&);
-  virtual G4double ComputeCrossSectionPerElectron(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double cut,
-                                      G4double emax);
+			  const G4DataVector&) final;
+
+  virtual G4double 
+  ComputeCrossSectionPerElectron(G4double kinEnergy) final;
+
   void ComputeAsymmetriesPerElectron(G4double gammaEnergy,
 				     G4double & valueX,
 				     G4double & valueA,
@@ -86,7 +84,7 @@ public:
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) final;
 
   // polarized routines 
   inline void SetTargetPolarization(const G4ThreeVector & pTarget);
@@ -95,11 +93,13 @@ public:
   inline const G4ThreeVector & GetBeamPolarization() const;
   inline const G4ThreeVector & GetFinalGamma1Polarization() const;
   inline const G4ThreeVector & GetFinalGamma2Polarization() const;
+
 private:
 
   // hide assignment operator
-  G4PolarizedAnnihilationModel & operator=(const  G4PolarizedAnnihilationModel &right);
-  G4PolarizedAnnihilationModel(const  G4PolarizedAnnihilationModel&);
+  G4PolarizedAnnihilationModel & 
+  operator=(const  G4PolarizedAnnihilationModel &right) = delete;
+  G4PolarizedAnnihilationModel(const  G4PolarizedAnnihilationModel&) = delete;
 
   G4PolarizedAnnihilationCrossSection * crossSectionCalculator;
   // incomming
@@ -112,7 +112,6 @@ private:
   G4int verboseLevel;
 
   G4ParticleChangeForGamma* gParticleChange;
-  G4bool gIsInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,0 +1,30 @@
+set(@PROJECT_NAME@_VERSION @Geant4_VERSION@)
+
+@PACKAGE_INIT@
+
+set_and_check(@PROJECT_NAME@_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+check_required_components(@PROJECT_NAME@)
+
+include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_TARGETS_FILE@)
+
+set(@PROJECT_NAME@_INCLUDE_DIRS ${@PROJECT_NAME@_INCLUDE_DIR})
+set(@PROJECT_NAME@_LIBRARIES DICOM-library@_geant4_lib_use_suffix@)
+
+set(DICOM_USE_DCMTK @DICOM_USE_DCMTK@)
+set(DICOM_USE_HEAD @DICOM_USE_HEAD@)
+
+if(DICOM_USE_DCMTK)
+    set(dicomReader_DIR ${CMAKE_CURRENT_LIST_DIR}
+        CACHE PATH "Path to dicomReader configuration")
+    find_package(dicomReader @Geant4_VERSION@ EXACT REQUIRED)
+    list(APPEND DICOM_INCLUDE_DIRS ${dicomReader_INCLUDE_DIRS})
+    list(APPEND DICOM_LIBRARIES ${dicomReader_LIBRARIES})
+    add_definitions(-DG4_DCMTK)
+endif(DICOM_USE_DCMTK)
+
+if(DICOM_USE_HEAD)
+    add_definitions(-DDICOM_USE_HEAD)
+endif(DICOM_USE_HEAD)
+
+set(@PROJECT_NAME@_FOUND ON)

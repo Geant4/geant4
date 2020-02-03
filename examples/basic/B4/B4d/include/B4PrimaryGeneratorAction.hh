@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B4PrimaryGeneratorAction.hh 95508 2016-02-12 13:52:06Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 /// \file B4PrimaryGeneratorAction.hh
 /// \brief Definition of the B4PrimaryGeneratorAction class

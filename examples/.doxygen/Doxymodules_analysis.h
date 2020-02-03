@@ -1,4 +1,3 @@
-// $Id: Doxymodules_analysis.h 86514 2014-11-13 09:10:24Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_analysis.h
@@ -53,6 +52,5 @@
   class B1SteppingAction{};
 
 /** @} */
-
 
 /** @} */

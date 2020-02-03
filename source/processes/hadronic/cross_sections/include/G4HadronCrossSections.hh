@@ -48,10 +48,8 @@
 #define G4HadronCrossSections_h 1
  
 #include "globals.hh"
-#include "G4Element.hh"
-#include "G4VProcess.hh"
 #include "G4DynamicParticle.hh"
-#include "G4HadTmpUtil.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 enum { TSIZE=41, NPARTS=35, NELAB=17, NCNLW=15, NFISS=21 };
 
@@ -59,13 +57,13 @@ class G4Pow;
 
 class G4HadronCrossSections
 {
+  friend class G4ThreadLocalSingleton<G4HadronCrossSections>;
+
   public:
 
-    G4HadronCrossSections();
+    static G4HadronCrossSections* Instance();
 
     ~G4HadronCrossSections();
-
-    static G4HadronCrossSections* Instance();
 
     G4bool IsApplicable(const G4DynamicParticle* aParticle);
 
@@ -80,33 +78,26 @@ class G4HadronCrossSections
     G4double GetFissionCrossSection(const G4DynamicParticle*, G4int /*ZZ*/,
                                     G4int /*AA*/);
 
-  /*
-    static void SetCorrectInelasticNearZero(G4bool value)
-      {correctInelasticNearZero = value;}
-
-    static G4bool GetCorrectInelasticNearZero()
-      {return correctInelasticNearZero;}
-  */
-
     void SetVerboseLevel(G4int value) {verboseLevel = value;}
 
     G4int GetVerboseLevel() {return verboseLevel;}
 
   private:
 
+    G4HadronCrossSections();
+
     G4int GetParticleCode(const G4DynamicParticle*);
 
     void CalcScatteringCrossSections(const G4DynamicParticle*, 
                                      G4int /*ZZ*/, G4int /*AA*/);
 
-    static G4ThreadLocal G4HadronCrossSections* theInstance;
+    static G4ThreadLocal G4HadronCrossSections* instance;
 
     G4Pow* g4pow;
 
     G4double sigelastic;
     G4double siginelastic;
     G4ParticleDefinition* prevParticleDefinition;
-//    G4Element* prevElement;
     G4int prevZZ;
     G4int prevAA;
     G4double prevKineticEnergy;
@@ -116,7 +107,7 @@ class G4HadronCrossSections
 
     G4int verboseLevel;
 
-    // The following arrays are declared static to allow the use of initializers.  
+    // The following arrays are declared static to allow the use of initializers.
     // They are initialized in G4HadronCrossSections.cc, thus providing some 
     // data hiding.
 

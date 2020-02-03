@@ -1,0 +1,16 @@
+set(FOO_VERSION @Geant4_VERSION@)
+
+@PACKAGE_INIT@
+
+set_and_check(dicomReader_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+check_required_components(dicomReader)
+
+include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_TARGETS_FILE@)
+
+find_package(DCMTK REQUIRED)
+
+set(dicomReader_INCLUDE_DIRS ${dicomReader_INCLUDE_DIR} ${DCMTK_INCLUDE_DIRS})
+set(dicomReader_LIBRARIES dicomReader@_geant4_lib_use_suffix@ ${DCMTK_LIBRARIES})
+
+set(dicomReader_FOUND ON)

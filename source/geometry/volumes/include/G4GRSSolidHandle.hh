@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4GRSSolidHandle.hh 66356 2012-12-18 09:02:32Z gcosmo $
 // 
 // Class G4GRSSolidHandle
 //
@@ -40,12 +37,12 @@
 // Author: Radovan Chytracek (Radovan.Chytracek@cern.ch), March 2001
 //
 // ----------------------------------------------------------------------
-#ifndef _G4GRSSOLIDHANDLE_H_
-#define _G4GRSSOLIDHANDLE_H_ 1
+#ifndef G4GRSSOLIDHANDLE_HH
+#define G4GRSSOLIDHANDLE_HH 1
 
 #include "G4GRSSolid.hh"
 #include "G4ReferenceCountedHandle.hh"
 
-typedef G4ReferenceCountedHandle<G4GRSSolid> G4GRSSolidHandle;
+using G4GRSSolidHandle = G4ReferenceCountedHandle<G4GRSSolid>;
 
-#endif // _G4GRSSOLIDHANDLE_H_
+#endif // G4GRSSOLIDHANDLE_HH

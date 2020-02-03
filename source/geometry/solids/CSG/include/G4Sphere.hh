@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Sphere.hh 79491 2014-03-05 15:24:29Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Sphere
 //
 // Class description:
@@ -55,19 +48,19 @@
 //   fSTheta  starting angle of the segment in radians
 //   fDTheta  delta angle of the segment in radians
 //
-//     
+//
 //   Note:
 //      Internally fSPhi & fDPhi are adjusted so that fDPhi<=2PI,
 //      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
 //      made with (say) Phi of a point.
 
-// History:
 // 28.3.94 P.Kent: old C++ code converted to tolerant geometry
 // 17.9.96 V.Grichine: final modifications to commit
 // --------------------------------------------------------------------
+#ifndef G4SPHERE_HH
+#define G4SPHERE_HH
 
-#ifndef G4Sphere_HH
-#define G4Sphere_HH
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_USPHERE 1
@@ -95,25 +88,33 @@ class G4Sphere : public G4CSGSolid
       //
       // Constructs a sphere or sphere shell section
       // with the given name and dimensions
-       
+
    ~G4Sphere();
       //
       // Destructor
 
     // Accessors
-       
+
     inline G4double GetInnerRadius    () const;
     inline G4double GetOuterRadius    () const;
     inline G4double GetStartPhiAngle  () const;
     inline G4double GetDeltaPhiAngle  () const;
     inline G4double GetStartThetaAngle() const;
     inline G4double GetDeltaThetaAngle() const;
+    inline G4double GetSinStartPhi    () const;
+    inline G4double GetCosStartPhi    () const;
+    inline G4double GetSinEndPhi      () const;
+    inline G4double GetCosEndPhi      () const;
+    inline G4double GetSinStartTheta  () const;
+    inline G4double GetCosStartTheta  () const;
+    inline G4double GetSinEndTheta    () const;
+    inline G4double GetCosEndTheta    () const;
 
     // Modifiers
 
     inline void SetInnerRadius    (G4double newRMin);
     inline void SetOuterRadius    (G4double newRmax);
-    inline void SetStartPhiAngle  (G4double newSphi, G4bool trig=true);
+    inline void SetStartPhiAngle  (G4double newSphi, G4bool trig = true);
     inline void SetDeltaPhiAngle  (G4double newDphi);
     inline void SetStartThetaAngle(G4double newSTheta);
     inline void SetDeltaThetaAngle(G4double newDTheta);
@@ -127,30 +128,32 @@ class G4Sphere : public G4CSGSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double& pmin, G4double& pmax) const;
-         
+
     EInside Inside(const G4ThreeVector& p) const;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
 
     G4double DistanceToIn(const G4ThreeVector& p,
                           const G4ThreeVector& v) const;
-    
+
     G4double DistanceToIn(const G4ThreeVector& p) const;
-    
+
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
-         
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
+
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
- 
+
     G4ThreeVector GetPointOnSurface() const;
 
     G4VSolid* Clone() const;
@@ -159,12 +162,12 @@ class G4Sphere : public G4CSGSolid
 
     // Visualisation functions
 
-    G4VisExtent   GetExtent          () const;    
+    G4VisExtent   GetExtent          () const;
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
-  
+
   public:  // without description
-   
+
     G4Sphere(__void__&);
       //
       // Fake default constructor for usage restricted to direct object
@@ -172,7 +175,7 @@ class G4Sphere : public G4CSGSolid
       // persistifiable objects.
 
     G4Sphere(const G4Sphere& rhs);
-    G4Sphere& operator=(const G4Sphere& rhs); 
+    G4Sphere& operator=(const G4Sphere& rhs);
       // Copy constructor and assignment operator.
 
     // Old access functions
@@ -187,13 +190,6 @@ class G4Sphere : public G4CSGSolid
     inline void SetInsideRadius(G4double newRmin);
 
   private:
- 
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform,
-                                G4int& noPolygonVertices) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
     inline void Initialize();
       //
@@ -221,13 +217,13 @@ class G4Sphere : public G4CSGSolid
     // Used by distanceToOut
     //
     enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
-  
+
     // used by normal
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
     G4double fRminTolerance, fRmaxTolerance, kAngTolerance,
-             kRadTolerance, fEpsilon;
+             kRadTolerance, fEpsilon = 2.e-11;
       //
       // Radial and angular tolerances
 
@@ -235,7 +231,7 @@ class G4Sphere : public G4CSGSolid
       //
       // Radial and angular dimensions
 
-    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+    G4double sinCPhi, cosCPhi, cosHDPhi, cosHDPhiOT, cosHDPhiIT,
              sinSPhi, cosSPhi, sinEPhi, cosEPhi, hDPhi, cPhi, ePhi;
       //
       // Cached trigonometric values for Phi angle
@@ -245,7 +241,7 @@ class G4Sphere : public G4CSGSolid
       //
       // Cached trigonometric values for Theta angle
 
-    G4bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
+    G4bool fFullPhiSphere=false, fFullThetaSphere=false, fFullSphere=true;
       //
       // Flags for identification of section, shell or full sphere
 

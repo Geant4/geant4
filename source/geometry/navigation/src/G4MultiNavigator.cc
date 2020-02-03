@@ -22,12 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4MultiNavigator.cc 83466 2014-08-25 10:31:39Z gcosmo $
-// GEANT4 tag $ Name:  $
 // 
-// class G4PathFinder Implementation
+// class G4MultiNavigator Implementation
 //
 // Author:  John Apostolakis, November 2006
 // --------------------------------------------------------------------
@@ -48,26 +44,20 @@ class G4FieldManager;
 // ********************************************************************
 //
 G4MultiNavigator::G4MultiNavigator() 
-  : G4Navigator(), fLastMassWorld(0)
+  : G4Navigator()
 {
-  fNoActiveNavigators= 0; 
   G4ThreeVector Big3Vector( kInfinity, kInfinity, kInfinity ); 
   fLastLocatedPosition = Big3Vector;
   fSafetyLocation  = Big3Vector;
   fPreStepLocation = Big3Vector;
 
-  fMinSafety_PreStepPt=  -1.0; 
-  fMinSafety_atSafLocation= -1.0; 
-  fMinSafety= -kInfinity;  
-  fTrueMinStep= fMinStep= -kInfinity;  
-
-  for(G4int num=0; num< fMaxNav; ++num )
+  for(auto num=0; num< fMaxNav; ++num )
   {
-    fpNavigator[num] =  0;   
+    fpNavigator[num] = nullptr;   
     fLimitTruth[num] = false;
     fLimitedStep[num] = kUndefLimited;
     fCurrentStepSize[num] = fNewSafety[num] = -1.0; 
-    fLocatedVolume[num] = 0; 
+    fLocatedVolume[num] = nullptr; 
   }
 
   pTransportManager= G4TransportationManager::GetTransportationManager();
@@ -82,19 +72,16 @@ G4MultiNavigator::G4MultiNavigator()
       fLastMassWorld = pWorld; 
     }
   }
-
-  fNoLimitingStep= -1; 
-  fIdNavLimiting= -1; 
 }
 
 G4MultiNavigator::~G4MultiNavigator() 
 {
 }
 
-G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
-                                       const G4ThreeVector &pDirection,
+G4double G4MultiNavigator::ComputeStep(const G4ThreeVector& pGlobalPoint,
+                                       const G4ThreeVector& pDirection,
                                        const G4double       proposedStepLength,
-                                             G4double      &pNewSafety)
+                                             G4double&      pNewSafety)
 {
   G4double safety= 0.0, step=0.0;
   G4double minSafety= kInfinity, minStep= kInfinity;
@@ -119,7 +106,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
   G4ThreeVector initialPosition = pGlobalPoint;
   G4ThreeVector initialDirection= pDirection;
 
-  for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+  for( auto num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
   {
      safety= kInfinity;
 
@@ -191,9 +178,9 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 
 G4double 
 G4MultiNavigator::ObtainFinalStep( G4int     navigatorId, 
-                                   G4double &pNewSafety,  // for this geometry
-                                   G4double &minStep,
-                                   ELimited &limitedStep) 
+                                   G4double& pNewSafety,  // for this geometry
+                                   G4double& minStep,
+                                   ELimited& limitedStep) 
 {
   if( navigatorId > fNoActiveNavigators )
   { 
@@ -278,14 +265,14 @@ void G4MultiNavigator::PrepareNavigators()
                 FatalException, message); 
   }
 
-  pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
-  for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+  pNavigatorIter= pTransportManager->GetActiveNavigatorsIterator();
+  for( auto num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
   {
-     fpNavigator[num] =  *pNavigatorIter;   
+     fpNavigator[num] = *pNavigatorIter;   
      fLimitTruth[num] = false;
      fLimitedStep[num] = kDoNot;
      fCurrentStepSize[num] = 0.0; 
-     fLocatedVolume[num] = 0; 
+     fLocatedVolume[num] = nullptr; 
   }
   fWasLimitedByGeometry = false; 
 
@@ -342,7 +329,7 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
   }
 #endif
 
-  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( auto num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      if( fWasLimitedByGeometry && fLimitTruth[num] )
      { 
@@ -384,7 +371,7 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
   }
 
   fWasLimitedByGeometry = false;   // Clear on locating
-  G4VPhysicalVolume* volMassLocated= fLocatedVolume[0]; 
+  G4VPhysicalVolume* volMassLocated = fLocatedVolume[0]; 
 
   return volMassLocated;
 }
@@ -407,7 +394,7 @@ G4MultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
   }
 #endif
 
-  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( auto num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      //  ... none limited the step
 
@@ -437,7 +424,7 @@ G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
     std::vector<G4Navigator*>::iterator pNavigatorIter;
     pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
 
-    for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+    for( auto num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
     {
        safety = (*pNavigatorIter)->ComputeSafety( position, maxDistance, state);
        if( safety < minSafety ) { minSafety = safety; } 
@@ -469,7 +456,7 @@ G4MultiNavigator::CreateTouchableHistoryHandle() const
   touchHist= fpNavigator[0] -> CreateTouchableHistory(); 
 
   G4VPhysicalVolume* locatedVolume= fLocatedVolume[0]; 
-  if( locatedVolume == 0 )
+  if( locatedVolume == nullptr )
   {
     // Workaround to ensure that the touchable is fixed !! // TODO: fix
     //
@@ -503,21 +490,21 @@ void G4MultiNavigator::WhichLimited()
                          && ( fMinStep!= kInfinity); 
   if( transportLimited )
   { 
-     shared= kSharedTransport;
+     shared = kSharedTransport;
   }
 
-  for ( G4int num= 0; num < fNoActiveNavigators; num++ )
+  for ( auto num = 0; num < fNoActiveNavigators; ++num )
   { 
     G4bool limitedStep;
 
-    G4double step= fCurrentStepSize[num]; 
+    G4double step = fCurrentStepSize[num]; 
 
     limitedStep = ( step == fMinStep ) && ( step != kInfinity); 
    
     fLimitTruth[ num ] = limitedStep; 
     if( limitedStep )
     {
-      noLimited++;  
+      ++noLimited;  
       fLimitedStep[num] = shared;
       last= num; 
     }
@@ -532,7 +519,7 @@ void G4MultiNavigator::WhichLimited()
     fIdNavLimiting = last;
   }
 
-  fNoLimitingStep= noLimited;  
+  fNoLimitingStep = noLimited;  
 
   return;
 }
@@ -565,7 +552,7 @@ G4MultiNavigator::PrintLimited()
   }
 #endif
 
-  for ( G4int num= 0; num < fNoActiveNavigators; num++ )
+  for ( auto num = 0; num < fNoActiveNavigators; ++num )
   { 
     G4double rawStep = fCurrentStepSize[num]; 
     G4double stepLen = fCurrentStepSize[num]; 
@@ -573,7 +560,7 @@ G4MultiNavigator::PrintLimited()
     { 
       stepLen = fTrueMinStep;     // did not limit (went as far as asked)
     }
-    G4int oldPrec= G4cout.precision(9); 
+    G4int oldPrec = G4cout.precision(9); 
 
     G4cout << std::setw(5) << num  << " "
            << std::setw(12) << stepLen << " "
@@ -583,20 +570,20 @@ G4MultiNavigator::PrintLimited()
     G4String limitedStr;
     switch ( fLimitedStep[num] )
     {
-      case kDoNot          : limitedStr= StrDoNot; break;
+      case kDoNot          : limitedStr = StrDoNot; break;
       case kUnique         : limitedStr = StrUnique; break; 
-      case kSharedTransport: limitedStr= StrSharedTransport; break; 
+      case kSharedTransport: limitedStr = StrSharedTransport; break; 
       case kSharedOther    : limitedStr = StrSharedOther; break;
       default              : limitedStr = StrUndefined; break;
     }
     G4cout << " " << std::setw(15) << limitedStr << " ";  
     G4cout.precision(oldPrec); 
 
-    G4Navigator *pNav= fpNavigator[ num ]; 
+    G4Navigator *pNav = fpNavigator[ num ]; 
     G4String  WorldName( "Not-Set" ); 
-    if (pNav)
+    if (pNav != nullptr)
     {
-       G4VPhysicalVolume *pWorld= pNav->GetWorldVolume(); 
+       G4VPhysicalVolume *pWorld = pNav->GetWorldVolume(); 
        if( pWorld )
        {
            WorldName = pWorld->GetName(); 
@@ -612,18 +599,19 @@ G4MultiNavigator::PrintLimited()
 
 void G4MultiNavigator::ResetState()
 {
-   fWasLimitedByGeometry= false; 
+   fWasLimitedByGeometry = false; 
 
    G4Exception("G4MultiNavigator::ResetState()", "GeomNav0001",  
                FatalException,  
                "Cannot reset state for navigators of G4MultiNavigator.");
-   
+/*
    std::vector<G4Navigator*>::iterator pNavigatorIter;
-   pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
-   for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+   pNavigatorIter = pTransportManager->GetActiveNavigatorsIterator();
+   for( auto num = 0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
    {
        //  (*pNavigatorIter)->ResetState();  // KEEP THIS comment !!!
-   } 
+   }
+*/
 }
 
 // -----------------------------------------------------------------------
@@ -639,7 +627,7 @@ void G4MultiNavigator::SetupHierarchy()
 
 void G4MultiNavigator::CheckMassWorld()
 {
-   G4VPhysicalVolume* navTrackWorld=
+   G4VPhysicalVolume* navTrackWorld =
      pTransportManager->GetNavigatorForTracking()->GetWorldVolume();
 
    if( navTrackWorld != fLastMassWorld )
@@ -653,16 +641,16 @@ void G4MultiNavigator::CheckMassWorld()
 // -----------------------------------------------------------------------
 
 G4VPhysicalVolume*
-G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
-                                          const G4ThreeVector &direction,
-                                          const G4TouchableHistory &MassHistory)
+G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector& point,
+                                          const G4ThreeVector& direction,
+                                          const G4TouchableHistory& MassHistory)
 {
    // Reset geometry for all -- and use the touchable for the mass history
 
-   G4VPhysicalVolume* massVolume=0; 
-   G4Navigator* pMassNavigator= fpNavigator[0]; 
+   G4VPhysicalVolume* massVolume = nullptr; 
+   G4Navigator* pMassNavigator = fpNavigator[0]; 
 
-   if( pMassNavigator )
+   if( pMassNavigator != nullptr )
    {
       massVolume= pMassNavigator->ResetHierarchyAndLocate( point, direction,
                                                            MassHistory); 
@@ -677,7 +665,7 @@ G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
    std::vector<G4Navigator*>::iterator pNavIter= 
        pTransportManager->GetActiveNavigatorsIterator(); 
 
-   for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+   for ( auto num = 0; num < fNoActiveNavigators ; ++pNavIter,++num )
    {
       G4bool relativeSearch, ignoreDirection; 
 
@@ -689,23 +677,24 @@ G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
    return massVolume; 
 }
 
-// -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
+// -----------------------------------------------------------------------
 
 G4ThreeVector 
-G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
+G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector& argPoint,
                                       G4bool* argpObtained)  //  obtained valid
 {
   G4ThreeVector normalGlobalCrd(0.0, 0.0, 0.0); 
-  G4bool isObtained= false; 
+  G4bool isObtained = false; 
   // These default values will be used if fNoLimitingStep== 0
-  G4int  firstNavigatorId= -1;
-  G4bool        oneObtained= false;
+  G4int firstNavigatorId = -1;
+  G4bool oneObtained = false;
     
-  if( fNoLimitingStep==1 )
+  if( fNoLimitingStep == 1 )
   { 
     // Only message the Navigator which limited the step!
-    normalGlobalCrd= fpNavigator[ fIdNavLimiting ]->GetGlobalExitNormal( argPoint, &isObtained); 
-    *argpObtained= isObtained; 
+    normalGlobalCrd = fpNavigator[ fIdNavLimiting ]
+                    ->GetGlobalExitNormal( argPoint, &isObtained ); 
+    *argpObtained = isObtained; 
   }
   else 
   {
@@ -714,43 +703,51 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
       std::vector<G4Navigator*>::iterator pNavIter= 
         pTransportManager->GetActiveNavigatorsIterator(); 
 
-      for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+      for ( auto num = 0; num < fNoActiveNavigators ; ++pNavIter, ++num )
       {
         G4ThreeVector oneNormal;
         if( fLimitTruth[ num ] )  // Did this geometry limit the step ? 
         { 
-          G4ThreeVector newNormal= (*pNavIter)-> GetGlobalExitNormal( argPoint, &oneObtained );
+          G4ThreeVector newNormal =
+            (*pNavIter)->GetGlobalExitNormal( argPoint, &oneObtained );
           if( oneObtained )
           {
             // Keep first one - only if it is valid (ie not null)
             if( !isObtained && (newNormal.mag2() != 0.0) )
             {
-              normalGlobalCrd= newNormal; 
-              isObtained =     oneObtained;
-              firstNavigatorId= num; 
-            }else{
+              normalGlobalCrd = newNormal; 
+              isObtained = oneObtained;
+              firstNavigatorId = num; 
+            }
+            else
+            {
               // Check for clash
-              G4double dotNewPrevious= newNormal.dot( normalGlobalCrd );
-              G4double productMagSq= normalGlobalCrd.mag2() * newNormal.mag2(); 
+              G4double dotNewPrevious = newNormal.dot( normalGlobalCrd );
+              G4double productMagSq = normalGlobalCrd.mag2()*newNormal.mag2(); 
               if( productMagSq > 0.0 ) 
               {
-                G4double productMag= std::sqrt( productMagSq ); 
+                G4double productMag = std::sqrt( productMagSq ); 
                 dotNewPrevious /= productMag; // Normalise
                 if( dotNewPrevious < (1 - perThousand) ) 
                 {
-                  *argpObtained= false; 
+                  *argpObtained = false; 
 
                   if( fVerbose > 2 )  //  dotNewPrevious <= 0.0 )
                   {
                     std::ostringstream message;
-                    message << "Clash of Normal from different Navigators!" << G4endl
-                            << "        Previous Navigator Id = " << firstNavigatorId << G4endl
-                            << "        Current  Navigator Id = " << num << G4endl;
-                    message << "  Dot product of 2 normals = " << dotNewPrevious << G4endl;
-                    message << "        Normal (previous) = " << normalGlobalCrd << G4endl;
+                    message << "Clash of Normal from different Navigators!"
+                            << G4endl
+                            << "        Previous Navigator Id = "
+                            << firstNavigatorId << G4endl
+                            << "        Current  Navigator Id = "
+                            << num << G4endl;
+                    message << "  Dot product of 2 normals = "
+                            << dotNewPrevious << G4endl;
+                    message << "        Normal (previous) = "
+                            << normalGlobalCrd << G4endl;
                     message << "        Normal (current)  = " << newNormal       << G4endl;
-                    G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
-                                JustWarning, message); 
+                    G4Exception("G4MultiNavigator::GetGlobalExitNormal()",
+                                "GeomNav0002", JustWarning, message); 
                   }
                 }
                 else
@@ -776,59 +773,61 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
     } // end if ( fNoLimiting > 1 ) 
   } // end else
 
-  *argpObtained= isObtained;
+  *argpObtained = isObtained;
   return normalGlobalCrd;
 }
 
-// -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
+// -----------------------------------------------------------------------
 
 G4ThreeVector 
 G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
 {
   // If it is the mass navigator, then expect
   G4ThreeVector normalGlobalCrd(0.0, 0.0, 0.0); 
-  G4bool isObtained= false; 
+  G4bool isObtained = false; 
   // These default values will be used if fNoLimitingStep== 0
 
-  if( fNoLimitingStep==1 )
+  if( fNoLimitingStep == 1 )
   { 
     // Only message the Navigator which limited the step!
-    normalGlobalCrd= fpNavigator[ fIdNavLimiting ]->GetLocalExitNormal( &isObtained); 
-    *argpObtained= isObtained;
+    normalGlobalCrd = fpNavigator[ fIdNavLimiting ]
+                    ->GetLocalExitNormal( &isObtained ); 
+    *argpObtained = isObtained;
 
-    static G4ThreadLocal G4int numberWarnings= 0;
-    G4int noWarningsStart= 10, noModuloWarnings=100; 
-    numberWarnings++; 
-    if( (numberWarnings < noWarningsStart ) || (numberWarnings%noModuloWarnings==0) ) 
+    static G4ThreadLocal G4int numberWarnings = 0;
+    G4int noWarningsStart = 10, noModuloWarnings = 100; 
+    ++numberWarnings; 
+    if( (numberWarnings < noWarningsStart )
+     || (numberWarnings%noModuloWarnings == 0) ) 
     {
-    std::ostringstream message;
-    message << "Cannot obtain normal in local coordinates of two or more coordinate systems." << G4endl;
-    G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
-                JustWarning, message);       
+      std::ostringstream message;
+      message << "Cannot obtain normal in local coordinates of two or more "
+              << "coordinate systems." << G4endl;
+      G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+                  JustWarning, message);       
     }
   }
   else
   {
     if( fNoLimitingStep > 1 ) 
     {
-        // Does not make sense - cannot obtain *local* normal in several coordinate systems
-        std::ostringstream message;
-        message << "Cannot obtain normal in local coordinates of two or more coordinate systems." << G4endl;
-        G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
-                    FatalException, message);       
+      std::ostringstream message;
+      message << "Cannot obtain normal in local coordinates of two or more "
+              << "coordinate systems." << G4endl;
+      G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+                  FatalException, message);       
     }
   }
     
-  *argpObtained= isObtained;
+  *argpObtained = isObtained;
   return normalGlobalCrd; 
 }
 
-
-// -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
+// -----------------------------------------------------------------------
 
 G4ThreeVector 
-G4MultiNavigator::GetLocalExitNormalAndCheck(const G4ThreeVector &, // point,
+G4MultiNavigator::GetLocalExitNormalAndCheck(const G4ThreeVector&, // point,
                                                    G4bool* obtained)
 {
-  return G4MultiNavigator::GetLocalExitNormal( obtained);
+  return G4MultiNavigator::GetLocalExitNormal( obtained );
 }

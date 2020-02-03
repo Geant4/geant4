@@ -1,4 +1,3 @@
-$Id: History 94094 2015-11-05 15:17:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +12,20 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-July-2019  Gunter Folger (phys-util-V10-05-00)
+-  removed G4DataQuestionaire.hh as consequence to code cleanup 
+   in lists, see phys-lists-V10-05-02
+
+03-Nov-2018, Vladimir Ivanchenko        (phys-util-V10-04-01)
+- G4DataQuestionaire - substituted G4NEUTRONXSDATA by G4PARTICLEXSDATA
+
+21-Jul-2018, Vladimir Ivanchenko        (phys-util-V10-04-00)
+- G4PhysListUtil - added methods GetCaptureProcess and GetFissionProcess
+
+26-Oct-2017, Tatsumi Koi                (phys-util-V10-03-00)
+- Fix address of ftp site of LEND data 
+- Improve instruction about download file and environment variable for LEND data
 
 05-Nov-2015, Alberto Ribon              (phys-util-V10-01-00)
 - Removed neutron_hp/

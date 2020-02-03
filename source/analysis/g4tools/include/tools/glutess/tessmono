@@ -26,7 +26,7 @@
  * polygon have a winding number of "value", and regions outside
  * have a winding number of 0.
  *
- * If keepOnlyBoundary is GLU_TRUE, it also deletes all edges which do not
+ * If keepOnlyBoundary is TOOLS_GLU_TRUE, it also deletes all edges which do not
  * separate an interior region from an exterior one.
  */
 
@@ -173,7 +173,7 @@ inline void __gl_meshDiscardExterior( GLUmesh *mesh )
  * polygon have a winding number of "value", and regions outside
  * have a winding number of 0.
  *
- * If keepOnlyBoundary is GLU_TRUE, it also deletes all edges which do not
+ * If keepOnlyBoundary is TOOLS_GLU_TRUE, it also deletes all edges which do not
  * separate an interior region from an exterior one.
  */
 inline int __gl_meshSetWindingNumber( GLUmesh *mesh, int value,

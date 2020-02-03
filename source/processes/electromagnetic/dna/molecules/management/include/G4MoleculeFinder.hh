@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITManager.hh 84670 2014-10-17 15:23:24Z matkara $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.hh 91566 2015-07-27 12:20:23Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +63,7 @@ class G4EmConfigurator
 {
 public: 
   
-  G4EmConfigurator(G4int verboseLevel = 1);
+  explicit G4EmConfigurator(G4int verboseLevel = 1);
  
   ~G4EmConfigurator();
 
@@ -78,7 +77,7 @@ public:
                        const G4String& regionName = "",
                        G4double emin = 0.0,
                        G4double emax = DBL_MAX,
-                       G4VEmFluctuationModel* fm = 0); 
+                       G4VEmFluctuationModel* fm = nullptr); 
 
   // Add all previously declared models to corresponding processes
   // Can be called in ConstructPhysics
@@ -116,8 +115,8 @@ private:
                                 G4double emin, G4double emax);
 
   // hide assignment operator
-  G4EmConfigurator & operator=(const G4EmConfigurator &right);
-  G4EmConfigurator(const G4EmConfigurator&);
+  G4EmConfigurator & operator=(const G4EmConfigurator &right) = delete;
+  G4EmConfigurator(const G4EmConfigurator&) = delete;
 
   std::vector<G4VEmModel*> models;  
   std::vector<G4VEmFluctuationModel*> flucModels;  

@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VImportanceSplitExaminer.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// Class G4VImportanceSplitExaminer
+// G4VImportanceSplitExaminer
 //
 // Class description:
 //
@@ -37,22 +33,22 @@
 // remaining necessary information about the ratio of importances
 // in the pre and post "cell". 
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4VImportanceSplitExaminer_hh
-#define G4VImportanceSplitExaminer_hh G4VImportanceSplitExaminer_hh
+#ifndef G4VIMPORTANCESPLITEXAMINER_HH
+#define G4VIMPORTANCESPLITEXAMINER_HH 1
 
 #include "globals.hh"
 #include "G4Nsplit_Weight.hh"
 
 class G4VImportanceSplitExaminer
 {
+  public:  // with description
 
-public:  // with description
-  G4VImportanceSplitExaminer();
-  virtual ~G4VImportanceSplitExaminer();
-  virtual G4Nsplit_Weight Examine(G4double w) const = 0; 
-    // Get  G4Nsplit_Weight for a given mother track weight.
+    G4VImportanceSplitExaminer();
+    virtual ~G4VImportanceSplitExaminer();
+    virtual G4Nsplit_Weight Examine(G4double w) const = 0; 
+      // Get G4Nsplit_Weight for a given mother track weight
 };
 
 #endif

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyData.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // class G4ParticlePropertyData
 //
@@ -185,13 +184,13 @@ G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4ParticlePrope
 }
   
 ////////////////////////
-G4int G4ParticlePropertyData::operator==(const G4ParticlePropertyData &right) const
+G4bool G4ParticlePropertyData::operator==(const G4ParticlePropertyData &right) const
 {
   return (this == &right);
 }
 
 ////////////////////////
-G4int G4ParticlePropertyData::operator!=(const G4ParticlePropertyData &right) const
+G4bool G4ParticlePropertyData::operator!=(const G4ParticlePropertyData &right) const
 {
   return (this != &right);
 }

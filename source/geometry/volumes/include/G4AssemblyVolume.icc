@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4AssemblyVolume.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
 // 
 // Class G4AssemblyVolume - inline implementation
 //
@@ -43,17 +39,16 @@ void         G4AssemblyVolume::SetImprintsCount( unsigned int value )
   fImprintsCounter = value;
 }
 
-
 inline 
 void         G4AssemblyVolume::ImprintsCountPlus()
 {
-  fImprintsCounter++;
+  ++fImprintsCounter;
 }
 
 inline 
 void         G4AssemblyVolume::ImprintsCountMinus()
 {
-  fImprintsCounter--;
+  --fImprintsCounter;
 }
 
 inline 
@@ -68,16 +63,34 @@ void         G4AssemblyVolume::SetAssemblyID( unsigned int value )
   fAssemblyID = value;
 }
 
-inline
-std::vector<G4VPhysicalVolume*>::iterator
-             G4AssemblyVolume::GetVolumesIterator()
+inline std::vector<G4VPhysicalVolume*>::iterator
+G4AssemblyVolume::GetVolumesIterator()
 {
   std::vector<G4VPhysicalVolume*>::iterator iterator = fPVStore.begin();
   return iterator;
 }
 
 inline 
-unsigned int G4AssemblyVolume::TotalImprintedVolumes() const
+std::size_t G4AssemblyVolume::TotalImprintedVolumes() const
 {
   return fPVStore.size();
+}
+
+inline G4Transform3D&
+G4AssemblyVolume::GetImprintTransformation(unsigned int imprintID)
+{
+  return fImprintsTransf[imprintID];
+}
+
+inline std::vector<G4AssemblyTriplet>::iterator
+G4AssemblyVolume::GetTripletsIterator()
+{
+  std::vector<G4AssemblyTriplet>::iterator iterator = fTriplets.begin();
+  return iterator;
+}
+
+inline 
+std::size_t G4AssemblyVolume::TotalTriplets() const
+{
+  return fTriplets.size();
 }

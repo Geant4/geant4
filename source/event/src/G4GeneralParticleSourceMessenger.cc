@@ -131,12 +131,12 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   gpsDirectory->SetGuidance("General Paricle Source control commands.");
   //  gpsDirectory->SetGuidance(" The first 9 commands are the same as in G4ParticleGun ");
 
-  // now the commands for mutiple sources
+  // now the commands for multiple sources
   sourceDirectory = new G4UIdirectory("/gps/source/");
   sourceDirectory->SetGuidance("Multiple source control sub-directory");
 
   addsourceCmd = new G4UIcmdWithADouble("/gps/source/add",this);
-  addsourceCmd->SetGuidance("add a new source defintion to the particle gun with the specified intensity");
+  addsourceCmd->SetGuidance("add a new source definition to the particle gun with the specified intensity");
   addsourceCmd->SetParameterName("addsource",false,false);
   addsourceCmd->SetRange("addsource > 0.");
 
@@ -166,7 +166,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   setintensityCmd->SetRange("setintensity > 0."); 
 
   multiplevertexCmd = new G4UIcmdWithABool("/gps/source/multiplevertex",this);
-  multiplevertexCmd->SetGuidance("true for simulaneous generation mutiple vertex");
+  multiplevertexCmd->SetGuidance("true for simultaneous generation multiple vertex");
   multiplevertexCmd->SetGuidance("Default is false");
   multiplevertexCmd->SetParameterName("multiplevertex",true);
   multiplevertexCmd->SetDefaultValue(false);

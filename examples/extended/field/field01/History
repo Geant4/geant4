@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 92496 2015-09-02 07:22:25Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,83 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+Nov  28, 2019 I. Hrivnacova   - fieldex01-V10-05-00
+- Fixed formatting in .README.txt
+
+Dec   4, 2018 J.Apostolakis   - fieldex01-V10-04-06
+- Corrections to use arguments of methods in F01RunAction. 
+  Fixes compilation warnings.
+- Added information to README, .README.txt about new choice of
+   FSAL drivers and choices to control killing of particles looping
+   in low density medium with strong field.
+
+Dec   3, 2018 J.Apostolakis   - fieldex01-V10-04-05
+- field01.cc: Added code to demonstrate use of G4PhysicsListHelper's
+  UseLowLooperThresholds / UseHighLooperThresholds method
+- Added F01RunAction class to demonstrate fine grained control
+  of G4(Coupled)Transportation's parameters for (killing) looping
+  tracks.  ( Tracks which take too many iterations to finish
+  integration - typically due to electrons in vacuum, but also
+  can affect other charged particles. )
+- field01.cc, F01FieldSetup and F01DetectorConstruction:
+  enable use of FSAL stepper and driver. ( To use it uncomment line
+  in field01.cc )
+
+Nov  12, 2018 J.Apostolakis   - fieldex01-V10-04-04
+- Improved README, .README.txt and field01.in updating information
+  on steppers.  Noted that DoPri5 (Dormand Prince 7 4/5) is now
+  the default stepper, and proposed G4NystromRK4 as a fast alternative.
+
+July 27, 2018 I.Hrivnacova - fieldex01-V10-04-02,03
+- Added command:
+   /field/setField  Bx By Bz unit
+- Macro review and code clean-up:
+  - Removed EventAction, RunAction, RunActionMessenger
+    used only for storing random numbers, already available in kernel
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac
+  - Added test for commands defined in the example at the end 
+    of field01.in macro
+  - Improved visualization of geometry
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
+
+May 15, 2018 J.Allison - fieldex01-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+- F01RunAction.cc: Remove vis commands.
+
+May 09, 2018 B.Morgan - fieldex01-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+May 24, 2017 J.Apostolakis   - fieldex01-V10-03-00
+- Fixed valgrind error in F01FieldSetup CreateStepperAndChordFinder() method.
+    first delete all dependent objects, then create new ones.
+
+November 19,2016 A.Dotti   - fieldex01-V10-02-05
+- explicit set of SD to manager
+
+November 2, 2016 L.Garnier - fieldex01-V10-02-04
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+October 24, 2016 - I. Hrivnacova - fieldex01-V10-02-03
+- Inactivated use of the new Runge Kutta Stepper in field01.in,
+  not yet working.
+
+October 14, 2016 - I. Hrivnacova - fieldex01-V10-02-02
+July 1, 2016 - I. Hrivnacova - fieldex01-V10-02-01
+- Replaced F01PhysicsList with FTFP_BERT with G4StepLimiterPhyiscs
+- Propagated last update of README in .README.txt and fixed text format
+
+June 8, 2016 - J. Apostolakis - fieldex01-V10-02-00
+- Added option to use new Runge Kutta Steppers 
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 September 01, 2015 - I. Hrivnacova - fieldex01-V10-01-02
 - Removed F01EventActionMessenger classes, now obsolete, and 
   replaced /event/printModulo commands in macros with /run/printProgress

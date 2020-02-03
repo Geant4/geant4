@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/src/HIJINGNeutronBuilder.cc
 /// \brief Implementation of the HIJINGNeutronBuilder class
 //
-// $Id: HIJINGNeutronBuilder.cc,v 1.4 2009-04-02 08:11:32 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,13 +42,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HIJINGNeutronBuilder::HIJINGNeutronBuilder() 
 {
   fMin = 0*MeV;
-  fMax = 100*TeV;
+  fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   fModel = new G4HIJING_Model();
   captureModel = new G4NeutronRadCapture();
   fissionModel = new G4LFission();

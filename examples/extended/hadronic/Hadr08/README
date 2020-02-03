@@ -1,0 +1,40 @@
+This is an example of how to use "generic biasing" to get the following
+functionality which is currently not available directly in the Geant4
+hadronic framework.
+
+We want to use the physics list FTFP_BERT everywhere in our detector,
+except that in one (or more) logical volume(s) we want to use a 
+different combination of hadronic models, e.g. FTFP + INCLXX 
+(instead of the default FTFP + BERT), for the final-state generation.
+
+Notice that we use the powerful "generic biasing" machinery available
+in Geant4, but the actual weights of all tracks remain to the usual
+value (1.0) as in the normal (unbiased) case.
+
+In this example, the detector is very simple: 
+-  a homogeneous block of silicon, as a proxy of a tracker sub-detector;
+-  followed by a crystal, as a proxy of an electromagnetic calorimeter;
+-  followed by a homogeneous block of iron, as a proxy of a hadron
+   calorimeter.
+We assume that the block of silicon is where we want to replace FTFP+BERT
+with FTFP+INCLXX for the final-state modeling of proton, neutron, pion-
+and pion+-inelastic interactions (of any energy).
+This silicon layer is made artificially thick (20 cm) in order to have
+more hadron inelastic interactions for testing.
+
+This example has been tested only for G4 10.5.p01 and 10.6, but it should
+work also for previous recent releases (i.e. 10.4 and 10.3).
+The example works in both sequential and multi-threaded modes, and the
+CPU overhead due to "generic biasing" for this application seems to be
+very small (at the per-cent level).
+
+To build it:
+  mkdir Build; cd Build
+  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DGeant4_DIR=/path-to-geant4-libraries ../.
+  make
+
+To run it:
+  ./Hadr08 hadr08.in  
+which shoot 100 pion+ of 5 GeV kinetic energy.
+

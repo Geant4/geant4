@@ -27,7 +27,10 @@
 /// \brief Definition of the F03FieldSetup class
 //
 //
+<<<<<<< HEAD
 // $Id: F03FieldSetup.hh 77294 2013-11-22 11:01:00Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +69,10 @@ public:
   void SetMinStep(G4double s) { fMinStep = s; }
 
   void SetFieldValue(G4ThreeVector fieldVector);
-  void SetFieldValue(G4double      fieldValue);
-  G4ThreeVector GetConstantFieldValue();
+  void SetFieldZValue(G4double      fieldValue);
+  void SetLocalFieldValue(G4ThreeVector fieldVector);
+  G4ThreeVector GetGlobalFieldValue() const { return GetConstantFieldValue(fMagneticField); }
+  G4ThreeVector GetLocalFieldValue() const { return GetConstantFieldValue(fLocalMagneticField); }
 
   void UpdateField();
 
@@ -76,8 +81,8 @@ public:
 protected:
 
   // Find the global Field Manager
-
   G4FieldManager*         GetGlobalFieldManager() ;
+  G4ThreeVector           GetConstantFieldValue(G4MagneticField* magneticField) const;
 
   G4FieldManager*         fFieldManager;
   G4FieldManager*         fLocalFieldManager;

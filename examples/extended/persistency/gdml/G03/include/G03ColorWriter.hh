@@ -27,7 +27,6 @@
 /// \brief Definition of the G03ColorWriter class
 //
 //
-// $Id: G03ColorWriter.hh 68025 2013-03-13 13:43:46Z gcosmo $
 //
 //
 // class G03ColorWriter

@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm17/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 67491 2013-02-22 17:03:46Z vnivanch $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +40,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
 #include "MuCrossSections.hh"
+#include "G4ProductionCutsTable.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -52,12 +56,16 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
                      HistoManager* HistM)
   : G4UserRunAction(),
     fDetector(det), fPrimary(prim), fProcCounter(0), fHistoManager(HistM)
-{}
+{
+  fMucs = new MuCrossSections();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{}
+{
+  delete fMucs;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,24 +74,32 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 
+<<<<<<< HEAD
   fProcCounter = new ProcessesCount;
   fHistoManager->book();
+=======
+  fProcCounter = new ProcessesCount();
+  fHistoManager->Book();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::CountProcesses(G4String procName)
+void RunAction::CountProcesses(const G4String& procName)
 {
    //does the process  already encounted ?
-   size_t nbProc = fProcCounter->size();
-   size_t i = 0;
-   while ((i<nbProc)&&((*fProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) fProcCounter->push_back( new OneProcessCount(procName));
-
-   (*fProcCounter)[i]->Count();
+   size_t n = fProcCounter->size();
+   for(size_t i = 0; i<n; ++i) {
+     if((*fProcCounter)[i]->GetName()==procName) {
+       (*fProcCounter)[i]->Count();
+       return;
+     }
+   }
+   OneProcessCount* count = new OneProcessCount(procName);
+   count->Count();
+   fProcCounter->push_back(count);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,10 +109,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   if (NbOfEvents == 0) return;
   
-  std::ios::fmtflags mode = G4cout.flags();
+  //  std::ios::fmtflags mode = G4cout.flags();
   G4int  prec = G4cout.precision(2);
     
-  G4Material* material = fDetector->GetMaterial();
+  const G4Material* material = fDetector->GetMaterial();
   G4double length  = fDetector->GetSize();
   G4double density = material->GetDensity();
    
@@ -113,10 +129,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //total number of process calls
   G4double countTot = 0.;
   G4cout << "\n Number of process calls --->";
-  for (size_t i=0; i< fProcCounter->size();i++) {
+  for (size_t i=0; i< fProcCounter->size();++i) {
      G4String procName = (*fProcCounter)[i]->GetName();
      if (procName != "Transportation") {
-       G4int count    = (*fProcCounter)[i]->GetCounter(); 
+       G4int count = (*fProcCounter)[i]->GetCounter(); 
        G4cout << "\t" << procName << " : " << count;
        countTot += count;
      }
@@ -127,7 +143,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4double totalCrossSection = countTot/(NbOfEvents*length);
   G4double MeanFreePath      = 1./totalCrossSection;        
-  G4double massCrossSection  =totalCrossSection/density;     
+  G4double massCrossSection  = totalCrossSection/density;     
    
   G4cout.precision(5);
   G4cout << "\n Simulation: "
@@ -136,11 +152,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << "\t massicCrossSection = " << massCrossSection*g/cm2 << " cm2/g"
          << G4endl;
   
-  //compute theoritical predictions
+  //compute theoretical predictions
   //
   if(particle == "mu+" || particle == "mu-") { 
     totalCrossSection = 0.;
-    for (size_t i=0; i< fProcCounter->size();i++) {
+    for (size_t i=0; i< fProcCounter->size();++i) {
       G4String procName = (*fProcCounter)[i]->GetName();
       if (procName != "Transportation") {
         totalCrossSection += ComputeTheory(procName, NbOfEvents);
@@ -157,53 +173,57 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
            << G4endl;
   }
                                                                             
-  G4cout.setf(mode,std::ios::floatfield);
+  //  G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
 
   // delete and remove all contents in fProcCounter 
-  while (fProcCounter->size()>0){
-    OneProcessCount* aProcCount=fProcCounter->back();
-    fProcCounter->pop_back();
-    delete aProcCount;
-  }
+  size_t n = fProcCounter->size();
+  for(size_t i = 0; i<n; ++i) { delete (*fProcCounter)[i]; }
   delete fProcCounter;
   
   fHistoManager->save();
   
   // show Rndm status
-  CLHEP::HepRandom::showEngineStatus();
+  //CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)    
+G4double RunAction::ComputeTheory(const G4String& process, G4int NbOfMu)    
 {   
-  G4Material* material = fDetector->GetMaterial();
+  const G4Material* material = fDetector->GetMaterial();
   G4double ekin = fPrimary->GetParticleGun()->GetParticleEnergy();
-  MuCrossSections crossSections;
 
+<<<<<<< HEAD
   G4int id = 0; G4double cut = 0.;
   if (process == "muIoni")          {id = 11; cut =    GetEnergyCut(material,1);}
   else if (process == "muPairProd") {id = 12; cut = 2*(GetEnergyCut(material,1) 
                                                       + electron_mass_c2); }
   else if (process == "muBrems")    {id = 13; cut =    GetEnergyCut(material,0);}
   else if (process == "muonNuclear"){id = 14; }
+=======
+  G4int id = 0; G4double cut = 1.e-10*ekin;
+  if (process == "muIoni")          {id = 11; cut =  GetEnergyCut(material,1);}
+  else if (process == "muPairProd") {id = 12; cut = 2*(GetEnergyCut(material,1)
+                                                      + electron_mass_c2); }
+  else if (process == "muBrems")    {id = 13; cut =  GetEnergyCut(material,0);}
+  else if (process == "muonNuclear"){id = 14; cut = 100*MeV;}
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   if (id == 0) { return 0.; }
   
   G4int nbOfBins = 100;
-  G4double binMin = -10.;
+  //G4double binMin = -10.;
+  G4double binMin = std::log10(cut/ekin);
   G4double binMax = 0.;
   G4double binWidth = (binMax-binMin)/G4double(nbOfBins);
 
-  //create histo for theoritical crossSections, with same bining as simulation
+  //create histo for theoretical crossSections, with same bining as simulation
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     
-  G4AnaH1* histoTh = 0;
-  //  G4AnaH1* histoMC = 0;     
+  G4H1* histoTh = 0;
   if (fHistoManager->HistoExist(id)) {
     histoTh  = analysisManager->GetH1(fHistoManager->GetHistoID(id));  
-    //histoMC  = analysisManager->GetH1(fHistoManager->GetHistoID(id-10));  
     nbOfBins = fHistoManager->GetNbins(id);
     binMin   = fHistoManager->GetVmin (id);
     binMax   = fHistoManager->GetVmax (id);
@@ -219,11 +239,14 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   G4double sigmaTot = 0.;
   const G4double ln10 = std::log(10.);  
   G4double length = fDetector->GetSize();
-      
+
+  //G4cout << "MU: " << process << " E= " << ekin 
+  //       <<"  binMin= " << binMin << " binW= " << binWidth << G4endl;
+
   for (G4int ibin=0; ibin<nbOfBins; ibin++) {
     lgeps = binMin + (ibin+0.5)*binWidth;
     etransf = ekin*std::pow(10.,lgeps);
-    sigmaE = crossSections.CR_Macroscopic(process,material,ekin,etransf);
+    sigmaE = fMucs->CR_Macroscopic(process,material,ekin,etransf);
     dsigma = sigmaE*etransf*binWidth*ln10;
     if (etransf > cut) sigmaTot += dsigma;    
     if (histoTh) {
@@ -239,9 +262,7 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ProductionCutsTable.hh"
-
-G4double RunAction::GetEnergyCut(G4Material* material, G4int idParticle)
+G4double RunAction::GetEnergyCut(const G4Material* material, G4int idParticle)
 { 
  G4ProductionCutsTable* table = G4ProductionCutsTable::GetProductionCutsTable();
  

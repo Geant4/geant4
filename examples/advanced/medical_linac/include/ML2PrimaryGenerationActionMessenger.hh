@@ -66,7 +66,7 @@ private:
 
 	G4UIcmdWithAnInteger *nRecycling; 
 	G4UIcmdWithAnInteger *nMaxParticlesInRamPhaseSpace;
-	G4UIcmdWithADoubleAndUnit *GunMeanEnegy, *GunStdEnegy, *GunRadious;
+	G4UIcmdWithADoubleAndUnit *GunMeanEnergy, *GunStdEnergy, *GunRadius;
 	G4UIcmdWithAString  *calculatedPhaseSpaceFileIN, *sourceTypeName;
 };
 

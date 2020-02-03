@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaInterface.cc
 /// \brief Implementation of the HepMCG4PythiaInterface class
 //
-// $Id: HepMCG4PythiaInterface.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifdef G4LIB_USE_PYTHIA

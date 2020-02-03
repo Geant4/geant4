@@ -73,90 +73,104 @@ public:
     snpf(ss,sizeof(ss),"%g %g %g",c[0],c[1],c[2]);
     a_s = std::string(ss);  
     return true;
-  }
+  } 
 public:
-  void add(style_color a_color) {
-    (*this)[(*this).size()] = a_color;
+  void add(const style_color& a_color) {
+    (*this)[uint32((*this).size())] = a_color;
   }
 };
+
+}}
+
+#include "../colors"
+
+namespace tools {
+namespace sg {
 
 class style_default_colormap : public style_colormap {
 public:
   TOOLS_CLASS_STRING(default)
 public:
+#define STYLE_COLORMAP_ADD(a__name) \
+    tmp.set_name(#a__name);\
+    set_color_##a__name(tmp);\
+    add(tmp);
+  
   style_default_colormap() {
-    add(style_color("aquamarine",colorf::aquamarine()));
-    add(style_color("mediumaquamarine",colorf::mediumaquamarine()));
-    add(style_color("black",colorf::black()));
-    add(style_color("blue",colorf::blue()));
-    add(style_color("cadetblue",colorf::cadetblue()));
-    add(style_color("cornflowerblue",colorf::cornflowerblue()));
-    add(style_color("darkslateblue",colorf::darkslateblue()));
-    add(style_color("lightblue",colorf::lightblue()));
-    add(style_color("lightsteelblue",colorf::lightsteelblue()));
-    add(style_color("mediumblue",colorf::mediumblue()));
+    style_color tmp;
+    STYLE_COLORMAP_ADD(aquamarine)
+    STYLE_COLORMAP_ADD(mediumaquamarine)
+    STYLE_COLORMAP_ADD(black)
+    STYLE_COLORMAP_ADD(blue)
+    STYLE_COLORMAP_ADD(cadetblue)
+    STYLE_COLORMAP_ADD(cornflowerblue)
+    STYLE_COLORMAP_ADD(darkslateblue)
+    STYLE_COLORMAP_ADD(lightblue)
+    STYLE_COLORMAP_ADD(lightsteelblue)
+    STYLE_COLORMAP_ADD(mediumblue)
 
-    add(style_color("mediumslateblue",colorf::mediumslateblue()));
-    add(style_color("midnightblue",colorf::midnightblue()));
-    add(style_color("navyblue",colorf::navyblue()));
-    add(style_color("navy",colorf::navy()));
-    add(style_color("skyblue",colorf::skyblue()));
-    add(style_color("slateblue",colorf::slateblue()));
-    add(style_color("steelblue",colorf::steelblue()));
-    add(style_color("coral",colorf::coral()));
-    add(style_color("cyan",colorf::cyan()));
-    add(style_color("firebrick",colorf::firebrick()));
+    STYLE_COLORMAP_ADD(mediumslateblue)
+    STYLE_COLORMAP_ADD(midnightblue)
+    STYLE_COLORMAP_ADD(navyblue)
+    STYLE_COLORMAP_ADD(navy)
+    STYLE_COLORMAP_ADD(skyblue)
+    STYLE_COLORMAP_ADD(slateblue)
+    STYLE_COLORMAP_ADD(steelblue)
+    STYLE_COLORMAP_ADD(coral)
+    STYLE_COLORMAP_ADD(cyan)
+    STYLE_COLORMAP_ADD(firebrick)
       
-    add(style_color("brown",colorf::brown()));
-    add(style_color("gold",colorf::gold()));
-    add(style_color("goldenrod",colorf::goldenrod()));
-    add(style_color("green",colorf::green()));
-    add(style_color("darkgreen",colorf::darkgreen()));
-    add(style_color("darkolivegreen",colorf::darkolivegreen()));
-    add(style_color("forestgreen",colorf::forestgreen()));
-    add(style_color("limegreen",colorf::limegreen()));
-    add(style_color("mediumseagreen",colorf::mediumseagreen()));
-    add(style_color("mediumspringgreen",colorf::mediumspringgreen()));
+    STYLE_COLORMAP_ADD(brown)
+    STYLE_COLORMAP_ADD(gold)
+    STYLE_COLORMAP_ADD(goldenrod)
+    STYLE_COLORMAP_ADD(green)
+    STYLE_COLORMAP_ADD(darkgreen)
+    STYLE_COLORMAP_ADD(darkolivegreen)
+    STYLE_COLORMAP_ADD(forestgreen)
+    STYLE_COLORMAP_ADD(limegreen)
+    STYLE_COLORMAP_ADD(mediumseagreen)
+    STYLE_COLORMAP_ADD(mediumspringgreen)
       
-    add(style_color("palegreen",colorf::palegreen()));
-    add(style_color("seagreen",colorf::seagreen()));
-    add(style_color("springgreen",colorf::springgreen()));
-    add(style_color("yellowgreen",colorf::yellowgreen()));
-    add(style_color("darkslategrey",colorf::darkslategrey()));
-    add(style_color("dimgrey",colorf::dimgrey()));
-    add(style_color("lightgrey",colorf::lightgrey()));
-    add(style_color("grey",colorf::grey()));
-    add(style_color("khaki",colorf::khaki()));
-    add(style_color("magenta",colorf::magenta()));
+    STYLE_COLORMAP_ADD(palegreen)
+    STYLE_COLORMAP_ADD(seagreen)
+    STYLE_COLORMAP_ADD(springgreen)
+    STYLE_COLORMAP_ADD(yellowgreen)
+    STYLE_COLORMAP_ADD(darkslategrey)
+    STYLE_COLORMAP_ADD(dimgrey)
+    STYLE_COLORMAP_ADD(lightgrey)
+    STYLE_COLORMAP_ADD(grey)
+    STYLE_COLORMAP_ADD(khaki)
+    STYLE_COLORMAP_ADD(magenta)
       
-    add(style_color("maroon",colorf::maroon()));
-    add(style_color("orange",colorf::orange()));
-    add(style_color("orchid",colorf::orchid()));
-    add(style_color("darkorchid",colorf::darkorchid()));
-    add(style_color("mediumorchid",colorf::mediumorchid()));
-    add(style_color("pink",colorf::pink()));
-    add(style_color("plum",colorf::plum()));
-    add(style_color("red",colorf::red()));
-    add(style_color("indianred",colorf::indianred()));
-    add(style_color("mediumvioletred",colorf::mediumvioletred()));
+    STYLE_COLORMAP_ADD(maroon)
+    STYLE_COLORMAP_ADD(orange)
+    STYLE_COLORMAP_ADD(orchid)
+    STYLE_COLORMAP_ADD(darkorchid)
+    STYLE_COLORMAP_ADD(mediumorchid)
+    STYLE_COLORMAP_ADD(pink)
+    STYLE_COLORMAP_ADD(plum)
+    STYLE_COLORMAP_ADD(red)
+    STYLE_COLORMAP_ADD(indianred)
+    STYLE_COLORMAP_ADD(mediumvioletred)
       
-    add(style_color("orangered",colorf::orangered()));
-    add(style_color("violetred",colorf::violetred()));
-    add(style_color("salmon",colorf::salmon()));
-    add(style_color("sienna",colorf::sienna()));
-    add(style_color("tan",colorf::tan()));
-    add(style_color("thistle",colorf::thistle()));
-    add(style_color("turquoise",colorf::turquoise()));
-    add(style_color("darkturquoise",colorf::darkturquoise()));
-    add(style_color("mediumturquoise",colorf::mediumturquoise()));
-    add(style_color("violet",colorf::violet()));
+    STYLE_COLORMAP_ADD(orangered)
+    STYLE_COLORMAP_ADD(violetred)
+    STYLE_COLORMAP_ADD(salmon)
+    STYLE_COLORMAP_ADD(sienna)
+    STYLE_COLORMAP_ADD(tan)
+    STYLE_COLORMAP_ADD(thistle)
+    STYLE_COLORMAP_ADD(turquoise)
+    STYLE_COLORMAP_ADD(darkturquoise)
+    STYLE_COLORMAP_ADD(mediumturquoise)
+    STYLE_COLORMAP_ADD(violet)
       
-    add(style_color("blueviolet",colorf::blueviolet()));
-    add(style_color("wheat",colorf::wheat()));
-    add(style_color("white",colorf::white()));
-    add(style_color("yellow",colorf::yellow()));
-    add(style_color("greenyellow",colorf::greenyellow()));
+    STYLE_COLORMAP_ADD(blueviolet)
+    STYLE_COLORMAP_ADD(wheat)
+    STYLE_COLORMAP_ADD(white)
+    STYLE_COLORMAP_ADD(yellow)
+    STYLE_COLORMAP_ADD(greenyellow)
   }
+#undef STYLE_COLORMAP_ADD
 };
 
 class style_ROOT_colormap : public style_colormap {
@@ -230,17 +244,22 @@ public:
     new_TColor(29,0.69,0.81,0.78,"Color29");
 
     // Initialize some additional greyish non saturated colors
-    new_TColor(8, 0.35,0.83,0.33,"Color8");
-    new_TColor(9, 0.35,0.33,0.85,"Color9");
-    new_TColor(12,.3,.3,.3,"grey12");
-    new_TColor(13,.4,.4,.4,"grey13");
-    new_TColor(14,.5,.5,.5,"grey14");
-    new_TColor(15,.6,.6,.6,"grey15");
-    new_TColor(16,.7,.7,.7,"grey16");
-    new_TColor(17,.8,.8,.8,"grey17");
-    new_TColor(18,.9,.9,.9,"grey18");
-    new_TColor(19,.95,.95,.95,"grey19");
-    new_TColor(50, 0.83,0.35,0.33,"Color50");
+#define TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(a__i,a__name) \
+    new_TColor(a__i,get_color_ROOT_##a__name<colorf>(),#a__name);
+    
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR( 8,Color8)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR( 9,Color9)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(12,grey12)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(13,grey13)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(14,grey14)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(15,grey15)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(16,grey16)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(17,grey17)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(18,grey18)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(19,grey19)
+    TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(50,Color50)
+
+#undef TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR
 
     // Initialize the Pretty Palette Spectrum Violet->Red
     //   The color model used here is based on the HLS model which
@@ -345,8 +364,11 @@ protected:
                   double a_r,double a_g,double a_b,
                   const std::string& a_head,unsigned int a_index) {
     std::string stmp;
-    if(!tools::num2s(a_index,stmp)) {}
+    if(!num2s(a_index,stmp)) {}
     new_TColor(a_i,a_r,a_g,a_b,a_head+stmp);
+  }
+  void new_TColor(unsigned int a_i,const colorf& a_color,const std::string& a_n) {
+    (*this)[a_i] = style_color(a_n,a_color.r(),a_color.g(),a_color.b());
   }
 
   void create_colors_circle(unsigned int a_offset,
@@ -524,19 +546,18 @@ inline bool to_ulong(const std::string& a_s,unsigned long& a_v){
   return true;
 }
 
-inline bool find_color(const cmaps_t& a_cmaps,
-                       const std::string& a_s,colorf& a_col){
-    //NOTE : if ret false, we do not set a_col to something.
+inline bool find_color(const cmaps_t& a_cmaps,const std::string& a_s,colorf& a_col){
+  //NOTE : if ret false, we do not set a_col to something.
 
-    std::string::size_type pos_slash = a_s.rfind('/');
-    if(pos_slash!=std::string::npos) { //<cmap>/<color name>
-      std::string cmap = a_s.substr(0,pos_slash);
-      std::string cnam = a_s.substr(pos_slash+1,a_s.size()-(pos_slash+1));
-      cmaps_t::const_iterator it = a_cmaps.find(cmap);
-      if(it==a_cmaps.end()) return false;
-      return (*it).second.get_color(cnam,a_col);
+  std::string::size_type pos_slash = a_s.rfind('/');
+  if(pos_slash!=std::string::npos) { //<cmap>/<color name>
+    std::string cmap = a_s.substr(0,pos_slash);
+    std::string cnam = a_s.substr(pos_slash+1,a_s.size()-(pos_slash+1));
+    cmaps_t::const_iterator it = a_cmaps.find(cmap);
+    if(it==a_cmaps.end()) return false;
+    return (*it).second.get_color(cnam,a_col);
       
-    } else {
+  } else {
 
     if( (a_s.size()==7) && (a_s[0]=='#') ) {
       // #RRGGBB format :
@@ -561,56 +582,40 @@ inline bool find_color(const cmaps_t& a_cmaps,
   
     //a_s of the form : <real:r> <real:g> <real:b>
     //a_s of the form : <real:r> <real:g> <real:b> <real:a>
-    //a_s of the form : <real:r> <real:g> <real:b> <string:name> 
-    //a_s of the form : <real:r> <real:g> <real:b> <real:a> <string:name> 
 
-   {std::vector<std::string> words;
-    tools::words(a_s," ",false,words);
-    if(words.size()==3) {
+   {std::vector<std::string> ws;
+    words(a_s," ",false,ws);
+    if(ws.size()==3) {
       float r,g,b;
-      if( tools::to<float>(words[0],r) &&
-          tools::to<float>(words[1],g) &&
-          tools::to<float>(words[2],b) ){
+      if( to<float>(ws[0],r) && ((0<=r)&&(r<=1)) &&
+          to<float>(ws[1],g) && ((0<=g)&&(g<=1)) &&
+          to<float>(ws[2],b) && ((0<=b)&&(b<=1)) ){
         a_col = colorf(r,g,b);
         return true;
       }
 
-    } else if(words.size()==4) {
+    } else if(ws.size()==4) {
       float r,g,b,a;
-      if( tools::to<float>(words[0],r) &&
-          tools::to<float>(words[1],g) &&
-          tools::to<float>(words[2],b) ){
-
-        if(tools::to<float>(words[3],a)) {
-          a_col = colorf(r,g,b,a);
-        } else {
-          a_col = colorf(r,g,b,1);
-        }
-        return true;
-      }
-
-    } else if(words.size()==5) {
-      float r,g,b,a;
-      if( tools::to<float>(words[0],r) &&
-          tools::to<float>(words[1],g) &&
-          tools::to<float>(words[2],b) &&
-          tools::to<float>(words[3],a) ){
+      if( to<float>(ws[0],r) && ((0<=r)&&(r<=1)) &&
+          to<float>(ws[1],g) && ((0<=g)&&(g<=1)) &&
+          to<float>(ws[2],b) && ((0<=b)&&(b<=1)) &&
+          to<float>(ws[3],a) && ((0<=a)&&(a<=1)) ){
         a_col = colorf(r,g,b,a);
         return true;
       }
 
     }}
 
+    // search in default colormap :
    {cmaps_t::const_iterator it = a_cmaps.find(style_default_colormap::s_default());
     if(it!=a_cmaps.end()) {
       if((*it).second.get_color(a_s,a_col)) return true;
     }}      
 
-    }
+  }
   
-    return false;
+  return false;
 }
-
 
 }}
 

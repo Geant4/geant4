@@ -42,6 +42,11 @@
 #include "G4Triton.hh"
 #include "G4Alpha.hh"
 
+G4bool G4ParticleHPFinalState::DoNotAdjustFinalState()
+{
+   return !G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState();
+}
+
 void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 {
 
@@ -64,12 +69,12 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       max_SecA = std::max ( max_SecA , theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() );
       if ( theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA ) imaxA = i;
 #ifdef G4PHPDEBUG
-      if( getenv("G4ParticleHPDebug"))    G4cout << "G4ParticleHPFinalState::adjust_final_stat SECO " << i << " " <<theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
+      if( std::getenv("G4ParticleHPDebug"))    G4cout << "G4ParticleHPFinalState::adjust_final_stat SECO " << i << " " <<theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
 #endif
 
    }
 
-   G4ParticleDefinition* resi_pd = NULL;
+   G4ParticleDefinition* resi_pd = 0;
 
    G4double baseZNew = theBaseZ;
    G4double baseANew = theBaseA;
@@ -90,11 +95,11 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    }
 
 #ifdef G4PHPDEBUG
-   if( getenv("G4ParticleHPDebug")) G4cout  << "G4ParticleHPFinalState::adjust_final_stat  BaseZ " << baseZNew << " BaseA " << baseANew << " sum_Z " << sum_Z << " sum_A " << sum_A << G4endl;
+   if( std::getenv("G4ParticleHPDebug")) G4cout  << "G4ParticleHPFinalState::adjust_final_stat  BaseZ " << baseZNew << " BaseA " << baseANew << " sum_Z " << sum_Z << " sum_A " << sum_A << G4endl;
 #endif
 
    G4bool needOneMoreSec = false;
-   G4ParticleDefinition* oneMoreSec_pd = NULL;
+   G4ParticleDefinition* oneMoreSec_pd = 0;
    if ( (int)(baseZNew - sum_Z) == 0 && (int)(baseANew - sum_A) == 0 )
    {
       //All secondaries are already created;
@@ -124,7 +129,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          else 
          {
 #ifdef G4PHPDEBUG
-	   if( getenv("G4ParticleHPDebug")) G4cout << this << "G4ParticleHPFinalState oneMoreSec_pd Z " << baseZNew << " - " << sum_Z << " A " << baseANew << " - " << sum_A << " projectile " << theProjectile->GetParticleName() << G4endl;
+	   if( std::getenv("G4ParticleHPDebug")) G4cout << this << "G4ParticleHPFinalState oneMoreSec_pd Z " << baseZNew << " - " << sum_Z << " A " << baseANew << " - " << sum_A << " projectile " << theProjectile->GetParticleName() << G4endl;
 #endif
 	   oneMoreSec_pd = G4IonTable::GetIonTable()->GetIon ( int(baseZNew - sum_Z) , (int)(baseANew - sum_A) , 0.0 );
 	   if( !oneMoreSec_pd ) {
@@ -138,7 +143,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          }
       }
   
-      if ( resi_pd == NULL )
+      if ( resi_pd == 0 )
       {
          // theNDLDataZ,A has the Z and A of used NDL file
 	G4double ndlZNew = theNDLDataZ;

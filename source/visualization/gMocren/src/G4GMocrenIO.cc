@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc 75179 2013-10-29 10:09:31Z gcosmo $
 //
 //
 // File I/O manager class for writing or reading calcuated dose
@@ -506,13 +505,9 @@ bool G4GMocrenIO::storeData4() {
 
   // comment 
   char cmt[1025];
-  for(int i = 0; i < 1025; i++) cmt[i] = '\0';
-  //std::strncpy(cmt, kComment.c_str(), 1024);
-  const char * cmnt = kComment.c_str();
-  size_t lcm = std::strlen(cmnt);
-  if(lcm > 1024) lcm = 1024;
-  std::strncpy(cmt, cmnt, lcm);
-  ofile.write((char *)cmt, 1024);
+  std::strncpy(cmt, kComment.c_str(), 1024);
+  cmt[1024] = '\0';
+  ofile.write(cmt, 1024);
   if(DEBUG || kVerbose > 0) {
     G4cout << "Data comment : "
 	      << kComment << G4endl;
@@ -737,12 +732,9 @@ bool G4GMocrenIO::storeData4() {
 
       // dose distribution unit
       char cdunit[13];
-      for(int i = 0; i < 13; i++) cdunit[i] = '\0';
-      const char * cu = kDoseUnit.c_str();
-      size_t lcu = std::strlen(cu);
-      if(lcu > 12) lcu = 12;
-      std::strncpy(cdunit, cu, lcu);
-      ofile.write((char *)cdunit, 12);
+      std::strncpy(cdunit, kDoseUnit.c_str(), 12);
+      cdunit[12] = '\0';
+      ofile.write(cdunit, 12);
       if(DEBUG || kVerbose > 0) {
 	G4cout << "Dose dist. unit : " << kDoseUnit << G4endl;
       }

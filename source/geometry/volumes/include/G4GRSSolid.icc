@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.icc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // 
 // class G4GRSSolid inline implementation
@@ -38,10 +37,10 @@ G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
     fsolid(pSolid),
     ftlate(tlate)
 {
-  if (pRot)
+  if (pRot != nullptr)
   {
     frot = new G4RotationMatrix(*pRot);
-    if ( !frot )
+    if ( frot == nullptr )
     {
       G4Exception("G4GRSSolid::G4GRSSolid()","GeomVol0002",FatalException,
                   "Cannot allocate G4RotationMatrix, NULL pointer.");
@@ -49,7 +48,7 @@ G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
   }
   else
   {
-    frot=0;
+    frot = nullptr;
   }
 }
 
@@ -62,7 +61,7 @@ G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
     ftlate(tlate)
 {
   frot = new G4RotationMatrix(rot);
-  if ( !frot )
+  if ( frot == nullptr )
   {
     G4Exception("G4GRSSolid::G4GRSSolid()","GeomVol0002",FatalException,
                 "Cannot allocate G4RotationMatrix, NULL pointer.");

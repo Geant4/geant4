@@ -53,16 +53,12 @@ struct E_P_E_isoAng;
 class G4ParticleHPManager 
 {
    public:
-      static G4ParticleHPManager* GetInstance() {
-         if ( instance == NULL) instance = new G4ParticleHPManager();
-         return instance;
-      };
+      static G4ParticleHPManager* GetInstance();
 
    private: 
       G4ParticleHPManager();
       G4ParticleHPManager( const G4ParticleHPManager& ){};
       ~G4ParticleHPManager();
-      //static G4ThreadLocal G4ParticleHPManager* instance;
       static G4ParticleHPManager* instance;
 
    public:

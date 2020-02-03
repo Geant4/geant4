@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc 85023 2014-10-23 09:56:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -98,19 +97,14 @@ using namespace std;
 
 G4MuIonisation::G4MuIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
-    theBaseParticle(0),
+    theParticle(nullptr),
+    theBaseParticle(nullptr),
     isInitialised(false)
 {
   mass = ratio = 0;
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4MuIonisation::~G4MuIonisation()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -149,29 +143,29 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     G4double ehigh = std::min(1*GeV, emax);
 
     // Bragg peak model
-    if (!EmModel(1)) {
-      if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
-      else { SetEmModel(new G4ICRU73QOModel(),1); }
+    if (!EmModel(0)) {
+      if(q > 0.0) { SetEmModel(new G4BraggModel()); }
+      else        { SetEmModel(new G4ICRU73QOModel()); }
     }
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(elow); 
-    AddEmModel(1, EmModel(1), new G4IonFluctuations());
+    EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(0)->SetHighEnergyLimit(elow); 
+    AddEmModel(1, EmModel(0), new G4IonFluctuations());
 
     // high energy fluctuation model
     if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
 
     // moderate energy model
-    if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }
-    EmModel(2)->SetLowEnergyLimit(elow);
-    EmModel(2)->SetHighEnergyLimit(ehigh);
-    AddEmModel(2, EmModel(2), FluctModel());
+    if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
+    EmModel(1)->SetLowEnergyLimit(elow);
+    EmModel(1)->SetHighEnergyLimit(ehigh);
+    AddEmModel(2, EmModel(1), FluctModel());
 
     // high energy model
     if(ehigh < emax) {
-      if (!EmModel(3)) { SetEmModel(new G4MuBetheBlochModel(),3); }
-      EmModel(3)->SetLowEnergyLimit(ehigh);
-      EmModel(3)->SetHighEnergyLimit(emax);
-      AddEmModel(3, EmModel(3), FluctModel());
+      if (!EmModel(2)) { SetEmModel(new G4MuBetheBlochModel()); }
+      EmModel(2)->SetLowEnergyLimit(ehigh);
+      EmModel(2)->SetHighEnergyLimit(emax);
+      AddEmModel(3, EmModel(2), FluctModel());
     }
     ratio = electron_mass_c2/mass;
     isInitialised = true;
@@ -185,6 +179,10 @@ void G4MuIonisation::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4MuIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "  Muon ionisation";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

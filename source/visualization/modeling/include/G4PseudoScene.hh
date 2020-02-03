@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PseudoScene.hh 66773 2013-01-12 14:48:08Z allison $
 //
 // 
 // John Allison  15th May 2014
@@ -36,14 +35,17 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
+#include "G4Orb.hh"
 #include "G4Para.hh"
+#include "G4Sphere.hh"
 #include "G4Torus.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4Tubs.hh"
+#include "G4Ellipsoid.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
+#include "G4TessellatedSolid.hh"
 
 class G4PseudoScene: public G4VGraphicsScene {
 
@@ -55,27 +57,36 @@ public:
 		    const G4VisAttributes&)
   {fpCurrentObjectTransformation = &objectTransformation;}
   void PostAddSolid () {}
-  void AddSolid (const G4Box& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Cons & solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Tubs& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Trd& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Trap& solid) {ProcessVolume (solid);}
+  // From geometry/solids/CSG
+  void AddSolid (const G4Box&    solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Cons&   solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Orb&    solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Para&   solid) {ProcessVolume (solid);}
   void AddSolid (const G4Sphere& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Para& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Torus& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Polycone& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Polyhedra& solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Torus&  solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Trap&   solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Trd&    solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Tubs&   solid) {ProcessVolume (solid);}
+  // From geometry/solids/specific
+  void AddSolid (const G4Ellipsoid&        solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Polycone&         solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Polyhedra&        solid) {ProcessVolume (solid);}
+  void AddSolid (const G4TessellatedSolid& solid) {ProcessVolume (solid);}
+  // For solids not above
   void AddSolid (const G4VSolid& solid) {ProcessVolume (solid);}
+  // Compounds
   void AddCompound (const G4VTrajectory&) {}
-  void AddCompound (const G4VHit&) {}
-  void AddCompound (const G4VDigi&) {}
-  void AddCompound (const G4THitsMap<G4double>&) {}
-  void BeginPrimitives (const G4Transform3D&) {}
-  void EndPrimitives () {}
+  void AddCompound (const G4VHit&)        {}
+  void AddCompound (const G4VDigi&)       {}
+  void AddCompound (const G4THitsMap<G4double>&)     {}
+  void AddCompound (const G4THitsMap<G4StatDouble>&) {}
+  // Primitives
+  void BeginPrimitives   (const G4Transform3D&) {}
+  void EndPrimitives     ()                     {}
   void BeginPrimitives2D (const G4Transform3D&) {}
-  void EndPrimitives2D () {}
+  void EndPrimitives2D   ()                     {}
   void AddPrimitive (const G4Polyline&)   {}
-  void AddPrimitive (const G4Scale&)       {}
+  void AddPrimitive (const G4Scale&)      {}
   void AddPrimitive (const G4Text&)       {}
   void AddPrimitive (const G4Circle&)     {}
   void AddPrimitive (const G4Square&)     {}

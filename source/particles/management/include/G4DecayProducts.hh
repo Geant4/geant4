@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -62,8 +61,8 @@ class G4DecayProducts
     ~G4DecayProducts();
 
     // (un)equal operator
-    G4int operator==(const G4DecayProducts &right) const;
-    G4int operator!=(const G4DecayProducts &right) const;
+    G4bool operator==(const G4DecayProducts &right) const;
+    G4bool operator!=(const G4DecayProducts &right) const;
 
   public: // With Description
    //  set-get methods for the parent particle   
@@ -92,8 +91,6 @@ class G4DecayProducts
     void DumpInfo() const;
 
     typedef std::vector<G4DynamicParticle*>  G4DecayProductVector;
-  protected:
-    enum {MaxNumberOfProducts = 64};
 
   private: 
     G4int                               numberOfProducts;
@@ -107,13 +104,13 @@ class G4DecayProducts
 // ------------------------
 
 inline 
- G4int G4DecayProducts::operator==(const G4DecayProducts &right) const
+ G4bool G4DecayProducts::operator==(const G4DecayProducts &right) const
 {
   return (this == (G4DecayProducts *) &right);
 }
 
 inline 
- G4int G4DecayProducts::operator!=(const G4DecayProducts &right) const
+ G4bool G4DecayProducts::operator!=(const G4DecayProducts &right) const
 {
   return (this != (G4DecayProducts *) &right);
 }

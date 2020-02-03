@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterROGeometry.cc
 /// \brief Implementation of the ExN04CalorimeterROGeometry class
 //
-// $Id: ExN04CalorimeterROGeometry.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4Box.hh"

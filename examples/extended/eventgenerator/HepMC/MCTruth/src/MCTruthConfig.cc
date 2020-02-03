@@ -27,7 +27,10 @@
 /// \brief Implementation of the MCTruthConfig class
 //
 //
+<<<<<<< HEAD
 // $Id: MCTruthConfig.cc 73446 2013-08-27 11:32:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------
@@ -37,6 +40,7 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+<<<<<<< HEAD
 
 #include "MCTruthConfig.hh"
 
@@ -45,3 +49,21 @@ MCTruthConfig::MCTruthConfig()
 
 MCTruthConfig::~MCTruthConfig() 
 {} 
+=======
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "MCTruthConfig.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+MCTruthConfig::MCTruthConfig() 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+MCTruthConfig::~MCTruthConfig() 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

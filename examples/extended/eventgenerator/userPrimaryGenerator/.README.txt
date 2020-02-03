@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "eventgenerator/userPrimaryGenerator/.README.txt"
 ///\brief Example basic README page

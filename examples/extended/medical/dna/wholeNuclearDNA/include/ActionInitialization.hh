@@ -32,7 +32,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
-// $ID$
 /// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
 

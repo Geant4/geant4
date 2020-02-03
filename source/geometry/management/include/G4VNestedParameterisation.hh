@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VNestedParameterisation.hh 73434 2013-08-27 11:06:16Z gcosmo $
-//
-// class G4VNestedParameterisation
+// G4VNestedParameterisation
 //
 // Class description:
 //
@@ -45,8 +42,7 @@
 //   - the mother volume, in which these copies are placed, must always be
 //     of the same dimensions
 
-// History:
-// 24.02.05 - J.Apostolakis - First created version.
+// 24.02.05, J.Apostolakis - First created version.
 // --------------------------------------------------------------------
 #ifndef G4VNESTEDPARAMETERISATION_HH
 #define G4VNESTEDPARAMETERISATION_HH
@@ -88,10 +84,10 @@ class G4VNestedParameterisation: public G4VPVParameterisation,
     // -----------------------------------
 
     virtual G4Material* ComputeMaterial(G4VPhysicalVolume* currentVol,
-                                        const G4int repNo, 
-                                        const G4VTouchable* parentTouch=0) = 0;
+                                 const G4int repNo, 
+                                 const G4VTouchable* parentTouch = nullptr) = 0;
       // Required method, as it is the reason for this class.
-      // Must cope with parentTouch=0 for navigator's SetupHierarchy.
+      // Must cope with parentTouch=nullptr for navigator's SetupHierarchy.
 
     virtual G4int       GetNumberOfMaterials() const=0;
     virtual G4Material* GetMaterial(G4int idx) const=0;
@@ -105,7 +101,7 @@ class G4VNestedParameterisation: public G4VPVParameterisation,
     // Methods optional in derived classes
     // -----------------------------------
 
-    virtual G4VSolid* ComputeSolid(const G4int no, G4VPhysicalVolume *thisVol);
+    virtual G4VSolid* ComputeSolid(const G4int no, G4VPhysicalVolume* thisVol);
       // Additional standard parameterisation methods, 
       // which can be optionally defined, in case solid is used.
 
@@ -163,8 +159,8 @@ class G4VNestedParameterisation: public G4VPVParameterisation,
  
 
     G4Material* ComputeMaterial(const G4int repNo, 
-                                      G4VPhysicalVolume *currentVol,
-                                const G4VTouchable *parentTouch=0);
+                                      G4VPhysicalVolume* currentVol,
+                                const G4VTouchable* parentTouch = nullptr);
       // Method implemented in this class in terms of the above
       // ComputeMaterial() method.
 

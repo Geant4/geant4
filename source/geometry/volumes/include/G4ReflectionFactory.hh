@@ -22,12 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4ReflectionFactory.hh 66872 2013-01-15 01:25:57Z japost $
-//
 // 
-// class G4ReflectionFactory
+// G4ReflectionFactory
 //
 // Class description:
 //
@@ -60,7 +56,7 @@
 //        = TV * R*TD*R-1 * R*x(inD)
 //        = TV * ReflTD * x(inReflD)
 
-// Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
+// Author: Ivana Hrivnacova (Ivana.Hrivnacova@cern.ch), 16.10.2001
 // --------------------------------------------------------------------
 #ifndef G4_REFLECTION_FACTORY_HH
 #define G4_REFLECTION_FACTORY_HH
@@ -76,14 +72,12 @@ class G4LogicalVolume;
 class G4VSolid;
 class G4VPVDivisionFactory;
 
-typedef std::pair<G4VPhysicalVolume*,
-                  G4VPhysicalVolume*> G4PhysicalVolumesPair;  
-typedef std::map<G4LogicalVolume*, G4LogicalVolume*,  
-                 std::less<G4LogicalVolume*> > G4ReflectedVolumesMap;
-
+using G4PhysicalVolumesPair = std::pair<G4VPhysicalVolume*, G4VPhysicalVolume*>;
+using G4ReflectedVolumesMap = std::map<G4LogicalVolume*, G4LogicalVolume*,  
+                                       std::less<G4LogicalVolume*> >;
 class G4ReflectionFactory 
 {
-    typedef G4ReflectedVolumesMap::const_iterator LogicalVolumesMapIterator;
+    using LogicalVolumesMapIterator = G4ReflectedVolumesMap::const_iterator;
 
   public:  // with description
   
@@ -99,7 +93,7 @@ class G4ReflectionFactory
                                       G4LogicalVolume* motherLV,
                                       G4bool isMany, 
                                       G4int  copyNo,
-                                      G4bool surfCheck=false);
+                                      G4bool surfCheck = false);
       // Evaluates the passed transformation; if it contains reflection
       // it performs its decomposition, creates new reflected solid and
       // logical volume (or retrieves them from a map if the reflected
@@ -115,7 +109,7 @@ class G4ReflectionFactory
                                           EAxis axis, 
                                           G4int nofReplicas, 
                                           G4double width,
-                                          G4double offset=0);
+                                          G4double offset = 0.);
       // Creates replica in the given mother.
       // The result is a pair of physical volumes;
       // the second physical volume is a replica in a reflected mother
@@ -143,7 +137,7 @@ class G4ReflectionFactory
       // Creates division in the given mother.
       // The result is a pair of physical volumes;
       // the second physical volume is a division in a reflected mother
-      // or 0 if mother LV was not reflected.
+      // or nullptr if mother LV was not reflected.
 
     void  SetVerboseLevel(G4int verboseLevel);
     G4int GetVerboseLevel() const;
@@ -161,11 +155,11 @@ class G4ReflectionFactory
 
     G4LogicalVolume* GetConstituentLV(G4LogicalVolume* reflLV) const;
       // Returns the consituent volume of the given reflected volume,
-      // 0 if the given reflected volume was not found.
+      // nullptr if the given reflected volume was not found.
 
     G4LogicalVolume* GetReflectedLV(G4LogicalVolume* lv) const;
       // Returns the reflected volume of the given consituent volume,
-      // 0 if the given volume was not reflected.
+      // nullptr if the given volume was not reflected.
 
     G4bool IsConstituent(G4LogicalVolume* lv) const;
       // Returns true if the given volume has been already reflected
@@ -183,18 +177,18 @@ class G4ReflectionFactory
       // Resets maps of constituent and reflected volumes.
       // To be used exclusively when volumes are removed from the stores.
 
+    G4ReflectionFactory(const G4ReflectionFactory&) = delete;
+    G4ReflectionFactory& operator=(const G4ReflectionFactory&) = delete;
+      // Disabled copy constructor and assignment operator.
+ 
   protected:  
 
     G4ReflectionFactory();
       // Protected singleton constructor.
 
-    G4ReflectionFactory(const G4ReflectionFactory&);
-    G4ReflectionFactory& operator=(const G4ReflectionFactory&);
-      // Disabled copy constructor and assignment operator.
- 
   private:  
 
-    G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV, G4bool surfCheck=false);
+    G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV, G4bool surfCheck = false);
       // Gets/creates the reflected solid and logical volume
       // and copies + transforms LV daughters.
 
@@ -203,11 +197,11 @@ class G4ReflectionFactory
       // and add the logical volumes pair in the maps.
 
     void ReflectDaughters(G4LogicalVolume* LV,
-                          G4LogicalVolume* refLV, G4bool surfCheck=false);
+                          G4LogicalVolume* refLV, G4bool surfCheck = false);
       // Reflects daughters recursively.
 
     void ReflectPVPlacement(G4VPhysicalVolume* PV,
-                            G4LogicalVolume* refLV, G4bool surfCheck=false);
+                            G4LogicalVolume* refLV, G4bool surfCheck = false);
       // Copies and transforms daughter of PVPlacement type of
       // a constituent volume into a reflected volume. 
 
@@ -220,7 +214,7 @@ class G4ReflectionFactory
       // a constituent volume into a reflected volume. 
 
     void ReflectPVParameterised(G4VPhysicalVolume* PV,
-                                G4LogicalVolume* refLV, G4bool surfCheck=false);
+                                G4LogicalVolume* refLV, G4bool surfChk = false);
       // Not implemented yet.
       // Should copy and transform daughter of PVReplica type of
       // a constituent volume into a reflected volume. 
@@ -245,7 +239,7 @@ class G4ReflectionFactory
     static const G4Scale3D      fScale;
     G4double                    fScalePrecision;
 
-    G4int              fVerboseLevel;
+    G4int              fVerboseLevel = 0;
     G4String           fNameExtension;
     G4ReflectedVolumesMap  fConstituentLVMap;
     G4ReflectedVolumesMap  fReflectedLVMap;

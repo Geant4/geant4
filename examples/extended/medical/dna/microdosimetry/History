@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 73136 2013-08-19 14:28:09Z sincerti $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,20 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
 
                        Package History file
                        --------------------
+<<<<<<< HEAD
+=======
+
+03-03-19 S. Incerti - microdosimetry-V10-05-00
+- updated plot.C.
+
+22-07-18 S. Incerti - microdosimetry-V10-04-01
+- removed obsolete RanecuEngine.
+
+09-05-18 B.Morgan - microdosimetry-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 14-10-16 G.Folger
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

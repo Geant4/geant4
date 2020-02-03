@@ -27,7 +27,6 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 67277 2013-02-13 12:24:26Z ihrivnac $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

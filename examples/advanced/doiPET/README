@@ -1,0 +1,112 @@
+===========================================================
+---------------Geant4 doiPET example---------------------
+===========================================================
+ Author list to be updated, with names of co-authors and contributors from National Institute of Radiological Sciences (NIRS)
+
+ Abdella M. Ahmed (1, 2), Andrew Chacon (1, 2), Harley Rutherford (1, 2),
+ Hideaki Tashima (3), Go Akamatsu (3), Akram Mohammadi (3), Eiji Yoshida (3), Taiga Yamaya (3)
+ Susanna Guatelli (2), and Mitra Safavi-Naeini (1, 2)
+
+(1) Australian Nuclear Science and Technology Organisation, Australia
+(2) University of Wollongong, Australia
+(3) National Institute of Radiological Sciences, Japan
+
+================================================================================================
+
+This example is for simulating depth-of-interaction enabled positron emission tomography (PET) scanner
+
+1-GEOMETRY 
+The detector construction has two main parts: constructing the PET system and the phantoms.
+
+The PET system is constructed from depth-of-interaction (DOI)detectors blocks. Each detector consisted of 16 x 16 x 4 crystal array constructed from GSO scintillation material. Material are defined in the DefineMaterials() using Geant4 NIST database. The geometrical specifications are given (and can be changed) in the GlobalParameters.hh file. 
+
+The scanner has 4 ring detectors. The detectors are covered with Aluminum material. Gaps between crystal elements, as well as adjacent rings are introduced.
+
+Various types of NEMA NU phantoms has been provided and are defined in the ConstructPhantom() method. To precisely create the image quality phantom, the G4UnionSolid from the Constructive Solid Geometry (CSG) has been used. The type, position and size of the phantoms can be changed using the macro file when necessary. A macro file is provided for each type of phantom imaging. For example, to run the simulation with image quality phantom, the run_imageQualityPhantom_wholeBody.mac should be used.
+	
+ 2- PHYSICS LIST
+
+The physics list contains standard electromagnetic processes and the RadioactiveDecay module for GenericIon. It is defined in the PhysicsList class as a Geant4 modular physics list with registered physics builders provided in Geant4:
+   - G4DecayPhysics - defines all particles and their decay processes
+   - G4RadioactiveDecayPhysics - defines radioactiveDecay for GenericIon
+   - G4EmStandardPhysics_option3 - defines EM standard processes
+    
+ 3- ACTION INITALIZATION
+
+   The ActionInitialization class instantiates and registers to Geant4 kernel all user action classes by invoking the ActionInitialization::Build().
+
+ 4- PRIMARY GENERATOR
+
+The default particle beam is F-18 ion at rest defined in the GPS (General particle Source). The GPS is used for all types of activity distribution. Various macro files are provided with the name appended on it for specific simulation. The following macro files are provided:
+ 
+run_imageQualityPhantom_wholeBody.mac
+run_imageQualityPhantom_smallAnimal.mac
+run_NECR.mac
+run_sensitivity.mac
+run_spatialResolution.mac
+run_normalization.mac (This one is not given in the NEMA NU manual but it is an important part of image reconstruction) 
+   
+5-EVENT ACTION
+
+At the end of each event, the information is extracted by calling FindInteractingCrystal() function and associative container (multimap and set methods) and the containers are cleared by calling the Clear() function.
+
+6-RUN ACTION
+
+The RunAction class is used mainly to conform all the events are processed. At the beginning of the run, a file is created and opened to write the output file and the file is closed at the end of the run and other instances are deleted.
+
+   		
+ 7- STEPPING ACTION
+
+The SteppingAction class is the one which is used to track the steps. In the stepping action, interaction information of the photon with the crystal and the phantoms are extracted. The interaction information (such as energy deposition, blockID, crystalID, etc) is passed into the Analysis.cc class, which outputs the result into an ASCII file. 
+
+Generation of the source (F-18 ion) is confined in the physical volume by killing the event in the SteppingAction class when it is out of the physical volume.
+
+8-ANALYSIS
+
+The interaction information from SteppingAction is passed to the Analysis class. In this class, multiple mapping of the interaction information is stored in the multimap (associative container) by taking the blockID as key value. The information obtained (such as the energy deposition, etc) is then blurred before writing it into the output file. 
+Blurring parameters are given and can be changed in the inputparameters.txt file. The inputparameter.txt file include some characteristics of the scanner such as: 
+
+Crystal dependent energy resolution: this can be set between a minimum and a maximum value. The crystals are not assigned a constant energy resolution.
+
+b)	Dead time: the default dead time for each block is 256 ns. An option for axially arranged (multiplexed) detectors can also be set (the default value is 0 ns).
+
+c)	Detection efficiency (Quantum efficiency): This parameter represents the effect of the transfer efficiency of the crystal and of the quantum efficiency of the photo-detector. To model the efficiency of the system, a coefficient (between 0 and 1) can be set. 
+
+d)	Reflector insertion: In addition to the 2D plane (tangential and axial dirction), the interaction points along the depth direction are identified by DOI technique. One method is to control the optical photons by means of reflectors. Since it takes a very long time to simulate optical photons, the response due to reflector is modeled without real reflector insertion. This is done by reading reflector patterns for each layer and then shift the response based on the existence of the reflector between crystals. The reflector patter is given in the inputparameter.txt file.
+
+(Virtual) photomultiplier tube (PMT)
+
+Four PMTs are assumed to be placed at each corners of the crystal block. These PMTs are linear in that the signals are calculated based on their distances from the interaction position.
+
+Anger Logic calculation
+
+In PET analysis, the lines of response (LOR) needed for the image reconstruction is drawn between two opposing crystals. In simulation, these crystals are identified based on the highest energy deposition. In reality, however, errors are introduced in identifying the crystals which includes the Anger Logic calculation. Without additional blurring of the crystal, simulation results will always have a better spatial resolution than experimental measurements. To include the blurring in identifying the crystals, we included the Anger Logic calculation method. The steps in identifying the crystals are as follows:
+ 
+Crystal ID in 3D (tangential, axial and DOI directions) are identified with the highest energy deposition and this information along with energy deposition and position interaction is passed into the AngerLogic(Åc) function.
+Signals (energy deposition) on the PMTs are obtained based on the lateral distance of the PMTs from the interaction position.
+Anger Logic position calculation is performed based on the signals on each PMT to obtain position interaction in 2D. The response of the PMTs are then shifted based on whether reflector exists between crystals or not. Note that, each layer has different reflector pattern.
+The new crystal ID is then calculated by comparing the look-up-table which is provided in the code based on a publication from NIRS. 
+ 
+***** ROOT ANALYSIS
+To have ROOT Analysis, Be in the build director
+/Path/doiPET/build/ and type:
+cmake -DWITH_ANALYSIS_USE=ON -DGeant4_DIR=.... ../
+
+
+***** How to run a  simulation:
+
+Be in the build director
+/Path/doiPET/build/ cmake ../
+/Path/doiPET/build/ make
+/Path/doiPET/build/ ./doiPET run.mac
+
+Simulation output:
+
+ASCII and ROOT files are created depending on the type of the output format. The following information of the event is written in the output file:
+
+EventID, BlockID, tangentialCrystalID, AxialCrystalID, DOI_ID, time, and Energy deposition in the crystal is written to the file as a list-mode format. 
+
+The user can choose to make the output either in singles or coincidence mode in the inputParameter.txt file as follows: 
+
+
+=================== end ====================

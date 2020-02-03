@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KaonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +32,7 @@
 //  devired from G4PiKBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -49,10 +49,6 @@ G4KaonBuilder(): wasActivated(false)
   theKaonZeroLInelastic=new G4KaonZeroLInelasticProcess;
   theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess;
 }
-
-G4KaonBuilder::
-~G4KaonBuilder()
-{}
 
 void G4KaonBuilder::
 Build()
@@ -81,3 +77,13 @@ Build()
   theProcMan = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theKaonZeroSInelastic);
 }
+
+void G4KaonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
+  auto bld = dynamic_cast<G4VKaonBuilder*>(aB);
+  if ( bld != nullptr ) {
+      theModelCollections.push_back(bld);
+  } else {
+      G4PhysicsBuilderInterface::RegisterMe(aB);
+  }
+}
+

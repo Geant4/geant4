@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity2/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 68763 2013-04-05 12:36:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +47,7 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
   public:
-  
+
     DetectorMessenger(DetectorConstruction* );
    ~DetectorMessenger();
     
@@ -62,10 +61,9 @@ class DetectorMessenger: public G4UImessenger
     G4UIdirectory*             fDetDir;    
     G4UIcmdWithAString*        fWallMater;
     G4UIcmdWithADoubleAndUnit* fWallThick;
+    G4UIcmdWithAString*        fCavMater;
     G4UIcmdWithADoubleAndUnit* fCavThick;
-    G4UIcmdWithADoubleAndUnit* fWorldRadius;
-            
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+    G4UIcmdWithADoubleAndUnit* fCavRadius;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

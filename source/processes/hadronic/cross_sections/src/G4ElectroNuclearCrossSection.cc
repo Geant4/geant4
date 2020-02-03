@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearCrossSection.cc 94079 2015-11-05 15:03:02Z gcosmo $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -42,6 +41,7 @@
 #include <iostream>
 
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4ElectroNuclearCrossSection.hh"
 
@@ -2178,16 +2178,17 @@ static const G4double* P2[nN]={P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P210,P211
 //
 
 G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection():G4VCrossSectionDataSet(Default_Name()),
-currentN(0), currentZ(0), lastZ(0),
-lastE(0), lastSig(0), lastG(0), lastL(0), mNeut(G4NucleiProperties::GetNuclearMass(1,0)), mProt(G4NucleiProperties::GetNuclearMass(1,1))
+currentN(0), currentZ(0), lastZ(0),lastE(0), lastSig(0), lastG(0), lastL(0), 
+mNeut(neutron_mass_c2), mProt(proton_mass_c2)
 {
+    SetForAllAtomsAndEnergies(true);
     //Initialize caches
-    lastUsedCacheEl = new cacheEl_t;
+    lastUsedCacheEl = new cacheEl_t();
     nistmngr = G4NistManager::Instance();
     
     for (G4int i=0;i<120;i++)
     {
-        cache.push_back(0);
+        cache.push_back(nullptr);
     }
     
 }
@@ -2195,12 +2196,13 @@ lastE(0), lastSig(0), lastG(0), lastL(0), mNeut(G4NucleiProperties::GetNuclearMa
 G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
 {
      std::vector<cacheEl_t*>::iterator it = cache.begin();
-     while ( it != cache.end() )
+     while ( it != cache.end() )  /* Loop checking, 08.01.2016, W. Pokorski */
      {
          if ( *it ) {
              delete[] (*it)->J1; (*it)->J1 = 0;
              delete[] (*it)->J2; (*it)->J2 = 0;
              delete[] (*it)->J3; (*it)->J3 = 0;
+             delete *it;
          }
      ++it;
      }
@@ -2252,9 +2254,9 @@ G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) con
     << "all energies.\n";
 }
 
-G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*aParticle*/, G4int /*Z*/, const G4Material*)
+G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*aParticle*/, G4int Z, const G4Material*)
 {
-    return true;
+  return (Z>0 && Z<120);
 }
 
 
@@ -2317,7 +2319,7 @@ G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicPar
     if(lE<lEMa) // Linear fit is made explicitly to fix the last bin for the randomization
 	{
         G4double shift=(lE-lEMi)/dlnE;
-        G4int    blast=static_cast<int>(shift);
+        G4int    blast=static_cast<G4int>(shift);
         if(blast<0)   blast=0;
         if(blast>=mLL) blast=mLL-1;
         shift-=blast;
@@ -2380,7 +2382,10 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* xx, G4dou
 {
     // --------------------------------
     G4int r=-1;                             // Low channel for J-functions
-    if(a<=.9999 || a>238.49)                // Plutonium 244 is forbidden
+
+    //AR-24Apr2018 Switch to allow transuranic elements
+    const G4bool isHeavyElementAllowed = true;
+    if(a<=.9999 || ( !isHeavyElementAllowed && a>238.49))
     {
         G4cout<<"***G4ElectroNuclearCrossSection::GetFunctions: A="<<a<<"(?). No CS returned!"<<G4endl;
         return r;
@@ -2452,7 +2457,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
     if (ris < Y[lastL]) {               // Search the table
         G4int j = lastUsedCacheEl->F;
         G4double Yj = Y[j];               // It must be 0 (sometimes just very small)
-        while (ris > Yj && j < lastL) {   // Associative search
+        while (ris > Yj && j < lastL) {   // Associative search  /* Loop checking, 08.01.2016, W. Pokorski */
             j++;
             Yj = Y[j];                      // Yj is first value above ris
         }
@@ -2530,7 +2535,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
     G4int maxTry=3;
     G4int cntTry=0;
     G4double Q2=Qi2;
-    while(cond&&cntTry<maxTry)             // The loop to avoid x>1.
+    while(cond&&cntTry<maxTry)             // The loop to avoid x>1.  /* Loop checking, 08.01.2016, W. Pokorski */
     {
         G4double R=G4UniformRand();           // Random number (0,1)
         Q2=Qi2*(ePy+1./(G4Exp(R*LyQa2-(1.-R)*Uy)-Fy));

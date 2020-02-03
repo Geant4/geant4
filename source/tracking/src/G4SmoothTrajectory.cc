@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //
 // ---------------------------------------------------------------
@@ -53,7 +52,11 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4ThreadLocal G4Allocator<G4SmoothTrajectory> *aSmoothTrajectoryAllocator = 0;
+G4Allocator<G4SmoothTrajectory>*& aSmoothTrajectoryAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4SmoothTrajectory>* _instance = nullptr;
+    return _instance;
+}
 
 G4SmoothTrajectory::G4SmoothTrajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),

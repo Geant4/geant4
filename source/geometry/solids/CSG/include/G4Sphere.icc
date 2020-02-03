@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Sphere.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Sphere.icc
-//
 // Implementation of inline methods of G4Sphere
 // --------------------------------------------------------------------
 
@@ -75,6 +67,54 @@ G4double G4Sphere::GetDeltaThetaAngle() const
   return fDTheta;
 }
 
+inline
+G4double G4Sphere::GetSinStartPhi () const
+{
+  return sinSPhi;
+}
+
+inline
+G4double G4Sphere::GetCosStartPhi () const
+{
+  return cosSPhi;
+}
+
+inline
+G4double G4Sphere::GetSinEndPhi () const
+{
+  return sinEPhi;
+}
+
+inline
+G4double G4Sphere::GetCosEndPhi () const
+{
+  return cosEPhi;
+}
+
+inline
+G4double G4Sphere::GetSinStartTheta () const
+{
+  return sinSTheta;
+}
+
+inline
+G4double G4Sphere::GetCosStartTheta () const
+{
+  return cosSTheta;
+}
+
+inline
+G4double G4Sphere::GetSinEndTheta () const
+{
+  return sinETheta;
+}
+
+inline
+G4double G4Sphere::GetCosEndTheta () const
+{
+  return cosETheta;
+}
+
 inline 
 void G4Sphere::Initialize()
 {
@@ -92,6 +132,7 @@ void G4Sphere::InitializePhiTrigonometry()
 
   sinCPhi    = std::sin(cPhi);
   cosCPhi    = std::cos(cPhi);
+  cosHDPhi   = std::cos(hDPhi);
   cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
   cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
   sinSPhi = std::sin(fSPhi);

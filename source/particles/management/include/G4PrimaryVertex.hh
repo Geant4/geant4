@@ -24,11 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh 102267 2017-01-19 10:14:40Z gcosmo $
 //
 //
-
-
+// class description:
+//
+// This is the class which represents a primary vertex. The object of this
+// class is set to G4Event object by G4VPrimaryGenerator concrete class.
+// This class object has one or more G4PrimaryParticle objects as primary
+// particles.
+// --------------------------------------------------------------------
 #ifndef G4PrimaryVertex_h
 #define G4PrimaryVertex_h 1
 
@@ -39,13 +43,6 @@
 #include "G4PrimaryParticle.hh"
 
 class G4VUserPrimaryVertexInformation;
-
-// class description:
-//
-//  This is the class which represents a primary vertex. The ofject of this
-// class is set to G4Event objct by G4VPrimaryGenerator concrete class.
-// This class object has one or more G4PrimaryParticle objects as primary
-// particles.
 
 class G4PrimaryVertex 
 {
@@ -63,8 +60,8 @@ class G4PrimaryVertex
   G4PrimaryVertex(const G4PrimaryVertex &right);
   G4PrimaryVertex & operator=(const G4PrimaryVertex &right);
 
-  G4int operator==(const G4PrimaryVertex &right) const;
-  G4int operator!=(const G4PrimaryVertex &right) const;
+  G4bool operator==(const G4PrimaryVertex &right) const;
+  G4bool operator!=(const G4PrimaryVertex &right) const;
 
  public: // with description
   G4ThreeVector GetPosition() const;
@@ -102,20 +99,20 @@ class G4PrimaryVertex
 
 };
 
-extern G4PART_DLL G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator;
+extern G4PART_DLL G4Allocator<G4PrimaryVertex>*& aPrimaryVertexAllocator();
 
 inline void * G4PrimaryVertex::operator new(size_t)
 {
-  if (!aPrimaryVertexAllocator)
+  if (!aPrimaryVertexAllocator())
   {
-    aPrimaryVertexAllocator = new G4Allocator<G4PrimaryVertex>;
+    aPrimaryVertexAllocator() = new G4Allocator<G4PrimaryVertex>;
   }
-  return (void *) aPrimaryVertexAllocator->MallocSingle();
+  return (void *) aPrimaryVertexAllocator()->MallocSingle();
 }
 
 inline void G4PrimaryVertex::operator delete(void * aPrimaryVertex)
 {
-  aPrimaryVertexAllocator->FreeSingle((G4PrimaryVertex *) aPrimaryVertex);
+  aPrimaryVertexAllocator()->FreeSingle((G4PrimaryVertex *) aPrimaryVertex);
 }
 
 inline G4ThreeVector  G4PrimaryVertex::GetPosition() const

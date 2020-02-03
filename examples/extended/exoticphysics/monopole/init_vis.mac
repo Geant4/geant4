@@ -1,0 +1,26 @@
+# Macro file for "monopole.cc"
+# with initial setting equivalent to monopole.in
+# for running in interactive mode
+#
+#
+/control/verbose 1
+/run/verbose 0
+/tracking/verbose 0
+#
+/testex/det/setMat G4_Si
+/testex/det/setSizeX  10 cm
+/testex/det/setSizeYZ 20 cm
+/testex/det/setStepSize 0.2 mm
+#
+/testex/run/binSize 0.2 mm
+#
+/process/em/verbose 1
+#
+/testex/fld/setField 0.2 tesla
+#
+/gun/particle monopole
+/gun/energy 100 GeV
+#
+/run/initialize
+#
+/control/execute vis.mac

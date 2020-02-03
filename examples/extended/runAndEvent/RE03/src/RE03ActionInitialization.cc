@@ -27,7 +27,6 @@
 /// \brief Implementation of the RE03ActionInitialization class
 //
 //
-// $Id: RE03ActionInitialization.cc 66780 2013-01-12 14:56:35Z gcosmo $
 //
 
 #include "RE03ActionInitialization.hh"

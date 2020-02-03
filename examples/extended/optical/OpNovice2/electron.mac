@@ -1,0 +1,68 @@
+/control/verbose 2
+/tracking/verbose 0
+/control/cout/ignoreThreadsExcept 0
+
+/opnovice2/boxMaterial G4_BGO
+/opnovice2/worldMaterial G4_AIR
+
+/opnovice2/boxProperty ABSLENGTH 0.000002 1   0.000005 2   0.000008 3
+/opnovice2/boxProperty RAYLEIGH 0.000002 1   0.000008 1
+/opnovice2/boxProperty RINDEX   0.000002 1.3 0.000008 1.4
+/opnovice2/boxProperty FASTCOMPONENT 0.000002 1.0 0.000008 1.3
+/opnovice2/boxProperty SLOWCOMPONENT 0.000002 0.1 0.000003 0.2 0.000004 0.4 0.000005 0.6 0.000006 0.8 0.000007 0.9 .000008 1.0
+
+/opnovice2/boxConstProperty FASTTIMECONSTANT 20   ## ns
+/opnovice2/boxConstProperty SLOWTIMECONSTANT 100
+/opnovice2/boxConstProperty SCINTILLATIONYIELD 5000.0
+/opnovice2/boxConstProperty YIELDRATIO 0.5
+/opnovice2/boxConstProperty RESOLUTIONSCALE 1
+/opnovice2/boxConstProperty FASTSCINTILLATIONRISETIME 3
+/opnovice2/boxConstProperty SLOWSCINTILLATIONRISETIME 10
+
+/opnovice2/worldProperty RINDEX    0.000002 1.01 0.000008 1.01
+/opnovice2/worldProperty ABSLENGTH 0.000002 100  0.000005 100   0.000008 100
+
+/opnovice2/surfaceFinish ground
+
+/opnovice2/surfaceSigmaAlpha 0.2
+/opnovice2/surfaceProperty SPECULARLOBECONSTANT  0.000002 0.1 0.000008 0.1
+/opnovice2/surfaceProperty SPECULARSPIKECONSTANT 0.000002 0.1 0.000008 0.1
+/opnovice2/surfaceProperty BACKSCATTERCONSTANT   0.000002 0.1 0.000008 0.1
+
+/opnovice2/surfaceProperty TRANSMITTANCE 0.000002 0.1 0.000008 0.1
+/opnovice2/surfaceProperty REFLECTIVITY  0.000002 0.8 0.000008 0.8
+/opnovice2/surfaceProperty EFFICIENCY    0.000002 0.1 0.000008 0.1
+
+
+/process/optical/verbose 0
+
+/process/optical/cerenkov/setMaxPhotons 3
+/process/optical/cerenkov/setMaxBetaChange 10
+
+/process/optical/scintillation/setExcitationRatio .5
+/process/optical/scintillation/setByParticleType false
+/process/optical/scintillation/setTrackInfo      false
+/process/optical/scintillation/setFiniteRiseTime true
+/process/optical/scintillation/setStackPhotons   true
+
+/run/initialize
+
+/analysis/setFileName electron
+/analysis/h1/set      1  100 0 10
+/analysis/h1/setXaxis 1  "Energy [eV]"
+/analysis/h1/setYaxis 1  "Number of photons"
+/analysis/h1/set      2  100 0 10
+/analysis/h1/setXaxis 2  "Energy [eV]"
+/analysis/h1/setYaxis 2  "Number of photons"
+/analysis/h1/set      13 400 0 200
+/analysis/h1/setXaxis 13 "Creation time [ns]"
+/analysis/h1/setYaxis 13 "Number of photons"
+
+
+/gun/particle e-
+/gun/energy 1 MeV
+/gun/position -1 0 0 m
+/gun/direction 1 0 0
+#
+/run/printProgress 100
+/run/beamOn 100

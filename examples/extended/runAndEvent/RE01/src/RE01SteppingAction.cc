@@ -26,7 +26,10 @@
 /// \file runAndEvent/RE01/src/RE01SteppingAction.cc
 /// \brief Implementation of the RE01SteppingAction class
 //
+<<<<<<< HEAD
 // $Id: RE01SteppingAction.cc 66379 2012-12-18 09:46:33Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "RE01SteppingAction.hh"

@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "biasing/.README.txt"
 ///\brief Examples biasing README page
@@ -106,6 +105,22 @@ Illustrates geometry based biasing.
 
 Illustrates a bremsstrahlung splitting.
 
+<<<<<<< HEAD
+=======
+\link ExampleGB05 Example GB05 \endlink
+
+Illustrates a "splitting by cross-section" technique: a splitting-based
+technique using absorption cross-section to control the neutron population.
+
+\link ExampleGB06 Example GB06 \endlink
+
+Illustrates the usage of parallel geometries with generic biasing.
+
+\link ExampleGB07 Example GB07 \endlink
+
+Illustrates the usage of leading particle biasing with generic biasing.
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 \section biasing_s3 Reverse MonteCarlo Technique example
 
 \link ExampleReverseMC01 Example ReverseMC01 \endlink

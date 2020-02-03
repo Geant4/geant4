@@ -1,0 +1,115 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_colorfs
+#define tools_colorfs
+
+#include "colors"
+#include "colorf"
+
+namespace tools {
+
+#define TOOLS_COLORFS_STAT(a__name) \
+  inline const colorf& colorf_##a__name() {return get_color_##a__name<colorf>();}
+
+//NOTE : false in the upper so that mem balance is ok at exit.
+
+//0-9
+TOOLS_COLORFS_STAT(aquamarine)
+TOOLS_COLORFS_STAT(mediumaquamarine)
+TOOLS_COLORFS_STAT(black)
+TOOLS_COLORFS_STAT(blue)
+TOOLS_COLORFS_STAT(cadetblue)
+TOOLS_COLORFS_STAT(cornflowerblue)
+TOOLS_COLORFS_STAT(darkslateblue)
+TOOLS_COLORFS_STAT(lightblue)
+TOOLS_COLORFS_STAT(lightsteelblue)
+TOOLS_COLORFS_STAT(mediumblue)
+ 
+//10-19
+TOOLS_COLORFS_STAT(mediumslateblue)
+TOOLS_COLORFS_STAT(midnightblue)
+TOOLS_COLORFS_STAT(navyblue)
+TOOLS_COLORFS_STAT(navy)
+TOOLS_COLORFS_STAT(skyblue)
+TOOLS_COLORFS_STAT(slateblue)
+TOOLS_COLORFS_STAT(steelblue)
+TOOLS_COLORFS_STAT(coral)
+TOOLS_COLORFS_STAT(cyan)
+TOOLS_COLORFS_STAT(firebrick)
+      
+//20-29
+TOOLS_COLORFS_STAT(brown)
+TOOLS_COLORFS_STAT(gold)
+TOOLS_COLORFS_STAT(goldenrod)
+TOOLS_COLORFS_STAT(green)
+TOOLS_COLORFS_STAT(darkgreen)
+TOOLS_COLORFS_STAT(darkolivegreen)
+TOOLS_COLORFS_STAT(forestgreen)
+TOOLS_COLORFS_STAT(limegreen)
+TOOLS_COLORFS_STAT(mediumseagreen)
+TOOLS_COLORFS_STAT(mediumspringgreen)
+      
+//30-39
+TOOLS_COLORFS_STAT(palegreen)
+TOOLS_COLORFS_STAT(seagreen)
+TOOLS_COLORFS_STAT(springgreen)
+TOOLS_COLORFS_STAT(yellowgreen)
+TOOLS_COLORFS_STAT(darkslategrey)
+TOOLS_COLORFS_STAT(dimgrey)
+TOOLS_COLORFS_STAT(lightgrey)
+TOOLS_COLORFS_STAT(grey)
+TOOLS_COLORFS_STAT(khaki)
+TOOLS_COLORFS_STAT(magenta)
+
+//40-49
+TOOLS_COLORFS_STAT(maroon)
+TOOLS_COLORFS_STAT(orange)
+TOOLS_COLORFS_STAT(orchid)
+TOOLS_COLORFS_STAT(darkorchid)
+TOOLS_COLORFS_STAT(mediumorchid)
+TOOLS_COLORFS_STAT(pink)
+TOOLS_COLORFS_STAT(plum)
+TOOLS_COLORFS_STAT(red)
+TOOLS_COLORFS_STAT(indianred)
+TOOLS_COLORFS_STAT(mediumvioletred)
+      
+//50-59
+TOOLS_COLORFS_STAT(orangered)
+TOOLS_COLORFS_STAT(violetred)
+TOOLS_COLORFS_STAT(salmon)
+TOOLS_COLORFS_STAT(sienna)
+TOOLS_COLORFS_STAT(tan)
+TOOLS_COLORFS_STAT(thistle)
+TOOLS_COLORFS_STAT(turquoise)
+TOOLS_COLORFS_STAT(darkturquoise)
+TOOLS_COLORFS_STAT(mediumturquoise)
+TOOLS_COLORFS_STAT(violet)
+
+//60-64
+TOOLS_COLORFS_STAT(blueviolet)
+TOOLS_COLORFS_STAT(wheat)
+TOOLS_COLORFS_STAT(white)
+TOOLS_COLORFS_STAT(yellow)
+TOOLS_COLORFS_STAT(greenyellow)
+
+////////////////////////////////////////////////////////
+/// CERN-ROOT colors : /////////////////////////////////
+////////////////////////////////////////////////////////
+TOOLS_COLORFS_STAT(ROOT_Color8)
+TOOLS_COLORFS_STAT(ROOT_Color9)
+TOOLS_COLORFS_STAT(ROOT_grey12)
+TOOLS_COLORFS_STAT(ROOT_grey13)
+TOOLS_COLORFS_STAT(ROOT_grey14)
+TOOLS_COLORFS_STAT(ROOT_grey15)
+TOOLS_COLORFS_STAT(ROOT_grey16)
+TOOLS_COLORFS_STAT(ROOT_grey17)
+TOOLS_COLORFS_STAT(ROOT_grey18)
+TOOLS_COLORFS_STAT(ROOT_grey19)
+TOOLS_COLORFS_STAT(ROOT_Color50)
+
+#undef TOOLS_COLORFS_STAT
+
+}
+
+#endif

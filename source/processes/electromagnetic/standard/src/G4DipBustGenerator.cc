@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DipBustGenerator.cc 74581 2013-10-15 12:03:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -32,117 +31,122 @@
 //
 // File name:     G4DipBustGenerator
 //
-// Author:  Vladimir Grichine     
-// 
+// Author:  Vladimir Grichine
+//
 // Creation date: 17 May 2011
 //
-// Modifications: 
-// 
+// Modifications:
 //
-// Class Description: 
+// 17.07.2018  optimisations, using G4Pow in SampleCosTheta() method  M.Novak
 //
-// Bremsstrahlung Angular Distribution Generation 
-// suggested  the dipole approximation in the rest frame of electron 
+// Class Description:
+//
+// Bremsstrahlung Angular Distribution Generation
+// suggested  the dipole approximation in the rest frame of electron
 // busted in the laboratory frame.
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
 
 #include "G4DipBustGenerator.hh"
-#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
-#include "G4Log.hh"
-#include "G4Exp.hh"
+// #include "G4Log.hh"
+// #include "G4Exp.hh"
+#include "G4Pow.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DipBustGenerator::G4DipBustGenerator(const G4String&)
   : G4VEmAngularDistribution("DipBustGen")
-{}    
-
-G4DipBustGenerator::~G4DipBustGenerator() 
 {}
 
-G4ThreeVector& 
-G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
-				    G4double, G4int, const G4Material*)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4DipBustGenerator::~G4DipBustGenerator()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DipBustGenerator::SampleCosTheta(const G4double kinEnergy)
 {
-  G4double a, c, cosTheta, delta, cofA, signc = 1.;
+  const G4double c        = 4. - 8.*G4UniformRand();
+  const G4double delta    = 0.5*(std::sqrt(c*c+4.) + std::abs(c));
+  const G4double signc    = (c < 0.) ? -1.0 : 1.0;
+  // const G4double cofA = -signc*G4Exp(G4Log(delta)/3.0);
+  const G4double cofA     = -signc*G4Pow::GetInstance()->A13(delta);
+  const G4double cosTheta = std::min(1.,std::max(-1.,cofA - 1./cofA));
+  const G4double tau      = kinEnergy/CLHEP::electron_mass_c2;
+  const G4double beta     = std::sqrt(tau*(tau + 2.))/(tau + 1.);
 
-  G4double eTkin = dp->GetKineticEnergy();
+  return (cosTheta + beta)/(1. + cosTheta*beta);
+}
 
-  c = 4. - 8.*G4UniformRand();
-  a = c;
- 
-  if( c < 0. )
-  {
-    signc = -1.;
-    a     = -c;
-  }
-  delta  = std::sqrt(a*a+4.);
-  delta += a;
-  delta *= 0.5; 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  cofA = -signc*G4Exp(G4Log(delta)/3.0);
+G4ThreeVector&
+G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp, G4double,
+                                     G4int, const G4Material*)
+{
+  const G4double cosTheta = SampleCosTheta(dp->GetKineticEnergy());
 
-  cosTheta = cofA - 1./cofA;
-
-  G4double tau = eTkin/electron_mass_c2;
-  G4double beta = std::sqrt(tau*(tau + 2.))/(tau + 1.);
-
-  cosTheta = (cosTheta + beta)/(1 + cosTheta*beta);
-
-  G4double sinTheta = std::sqrt((1 - cosTheta)*(1 + cosTheta));
-  G4double phi  = twopi*G4UniformRand(); 
+  const G4double sinTheta = std::sqrt((1. - cosTheta)*(1. + cosTheta));
+  const G4double phi      = CLHEP::twopi*G4UniformRand();
 
   fLocalDirection.set(sinTheta*std::cos(phi), sinTheta*std::sin(phi),cosTheta);
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
 
   return fLocalDirection;
-
 }
 
-G4double G4DipBustGenerator::PolarAngle(const G4double eTkin,
-				    const G4double, // final_energy
-				    const G4int ) // Z
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DipBustGenerator::PolarAngle(G4double eTkin,
+					                               G4double, // final_energy
+					                               G4int ) // Z
 {
-  G4double c, cosTheta, delta, cofA, signc = 1., a;
-  G4double gamma, beta, theta;
-
-  c = 4. - 8.*G4UniformRand();
-  a = c;
- 
-  if( c < 0. )
-  {
-    signc = -1.;
-    a     = -c;
-  }
-  delta  = std::sqrt(a*a+4.);
-  delta += a;
-  delta *= 0.5; 
-
-  cofA = -signc*G4Exp(G4Log(delta)/3.0);
-
-  cosTheta = cofA - 1./cofA;
-
-  gamma = 1. + eTkin/electron_mass_c2;
-  beta = std::sqrt(1. - 1./gamma/gamma);
-
-  cosTheta = (cosTheta + beta)/(1 + cosTheta*beta);
-
-  theta = std::acos(cosTheta);
-
-  if( theta < 0. )  theta = 0.;
-  if( theta > pi )  theta = pi;
-  // G4cout <<"theta = "<<theta<<"; ";
-
+  const G4double cosTheta = SampleCosTheta(eTkin);
+  G4double theta = std::acos(cosTheta);
+  theta = std::min(std::max(theta, 0.), CLHEP::pi);
   return theta;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4DipBustGenerator::SamplePairDirections(const G4DynamicParticle* dp,
+					                                     G4double elecKinEnergy,
+					                                     G4double posiKinEnergy,
+					                                     G4ThreeVector& dirElectron,
+					                                     G4ThreeVector& dirPositron,
+					                                     G4int, const G4Material*)
+{
+  const G4double phi  = CLHEP::twopi * G4UniformRand();
+  const G4double sinp = std::sin(phi);
+  const G4double cosp = std::cos(phi);
+
+  G4double cost = SampleCosTheta(elecKinEnergy);
+  G4double sint = std::sqrt((1. - cost)*(1. + cost));
+
+  dirElectron.set(sint*cosp, sint*sinp, cost);
+  dirElectron.rotateUz(dp->GetMomentumDirection());
+
+  cost = SampleCosTheta(posiKinEnergy);
+  sint = std::sqrt((1. - cost)*(1. + cost));
+
+  dirPositron.set(-sint*cosp, -sint*sinp, cost);
+  dirPositron.rotateUz(dp->GetMomentumDirection());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DipBustGenerator::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
   G4cout << "Angular Generator based on classical formula from" << G4endl;
-  G4cout << "J.D. Jackson, Classical Electrodynamics, Wiley, New York 1975" 
+  G4cout << "J.D. Jackson, Classical Electrodynamics, Wiley, New York 1975"
 	 << G4endl;
-} 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

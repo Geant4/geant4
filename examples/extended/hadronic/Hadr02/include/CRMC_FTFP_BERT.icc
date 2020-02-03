@@ -1,0 +1,79 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+/// \file hadronic/Hadr02/include/CRMC_FTFP_BERT.icc
+/// \brief Implementation of the CRMC_FTFP_BERT class inline functions
+//
+//
+//---------------------------------------------------------------------------
+//
+// ClassName: CRMC_FTFP_BERT
+//
+// Author:    2018 Alberto Ribon
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include <iomanip>   
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4DecayPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "HadronPhysicsCRMC_FTFP_BERT.hh"
+#include "G4StoppingPhysics.hh"
+#include "IonCRMCPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
+#include "G4SystemOfUnits.hh"
+
+
+template<class T> TCRMC_FTFP_BERT<T>::TCRMC_FTFP_BERT( G4int ver ):  T() {
+  G4cout << "<<< Geant4 Physics List simulation engine: CRMC_FTFP_BERT 0.1" << G4endl;
+  G4cout << G4endl;
+  this->defaultCutValue = 0.7*CLHEP::mm;  
+  this->SetVerboseLevel( ver );
+
+  this->RegisterPhysics( new G4EmStandardPhysics( ver ) );          // EM physics  
+  this->RegisterPhysics( new G4EmExtraPhysics( ver ) );             // Synchroton & GN physics
+  this->RegisterPhysics( new G4DecayPhysics( ver ) );               // Decays
+  this->RegisterPhysics( new G4HadronElasticPhysics( ver ) );       // Hadron Elastic scattering
+  this->RegisterPhysics( new HadronPhysicsCRMC_FTFP_BERT( ver ) );  // Hadron Inelastic scattering
+  this->RegisterPhysics( new G4StoppingPhysics( ver ) );            // Stopping physics
+  this->RegisterPhysics( new IonCRMCPhysics( ver ) );               // Ion physics
+  this->RegisterPhysics( new G4NeutronTrackingCut( ver ) );         // Neutron tracking cut
+}
+
+template<class T> TCRMC_FTFP_BERT<T>::~TCRMC_FTFP_BERT() {}
+
+template<class T> void TCRMC_FTFP_BERT<T>::SetCuts() {
+  if ( this->verboseLevel > 1 ) {
+    G4cout << "CRMC_FTFP_BERT::SetCuts:";
+  }  
+  this->SetCutsWithDefault();   
+}
+

@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
@@ -34,9 +41,15 @@
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
 #include "HistoManager.hh"
+#include "MyFile.hh"
+
+#ifdef MYFILE
+ #include "MyPrimaryGeneratorActionFromFile.hh"
+#else
+ #include "PrimaryGeneratorAction.hh"
+#endif
 
 #include "G4RunManager.hh"
 #include "G4EmCalculator.hh"
@@ -87,10 +100,25 @@ void RunAction::BeginOfRunAction(const G4Run*)
     analysisManager->OpenFile();
   }
   
+<<<<<<< HEAD
   //=============================================================================
   const PrimaryGeneratorAction* primary =
+=======
+  //============================================================================
+
+#ifdef MYFILE
+   
+   const MyPrimaryGeneratorActionFromFile* primary =
+      dynamic_cast<const MyPrimaryGeneratorActionFromFile*>(G4RunManager::GetRunManager()
+          ->GetUserPrimaryGeneratorAction());
+   
+#else
+   const PrimaryGeneratorAction* primary =
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       dynamic_cast<const PrimaryGeneratorAction*>(G4RunManager::GetRunManager()
           ->GetUserPrimaryGeneratorAction());
+
+#endif
 
   if (!primary) return; //
       

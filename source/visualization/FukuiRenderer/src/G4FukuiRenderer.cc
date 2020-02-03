@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRenderer.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // 
 // Satoshi TANAKA
@@ -67,8 +66,8 @@ G4FukuiRenderer::G4FukuiRenderer ():
   flag_connected   (0) 
 {
 		//----- sorting of objects
-	if( ( getenv( FR_ENV_DAWN_GUI_ALWAYS ) != NULL        ) && \
-	    ( strcmp( getenv( FR_ENV_DAWN_GUI_ALWAYS ),"0"  ) )      ) 
+	if( ( std::getenv( FR_ENV_DAWN_GUI_ALWAYS ) != NULL        ) && \
+	    ( strcmp( std::getenv( FR_ENV_DAWN_GUI_ALWAYS ),"0"  ) )      ) 
 	{
 		flag_use_gui =	true ;
 	} 
@@ -127,9 +126,9 @@ void G4FukuiRenderer::UseInetDomainAuto()
 
 			//----- Set waiting time to ensure connection
 		int connection_time = FR_DEFAULT_CONNECTION_TIME  ;
-		if( getenv( FR_ENV_CONNECTION_TIME ) != NULL  ) {
+		if( std::getenv( FR_ENV_CONNECTION_TIME ) != NULL  ) {
 			int sscanf_status = \
-				sscanf( getenv( FR_ENV_CONNECTION_TIME ), "%d", &connection_time) ;
+				sscanf( std::getenv( FR_ENV_CONNECTION_TIME ), "%d", &connection_time) ;
 			if ( sscanf_status == EOF ) {  
 			  connection_time = FR_DEFAULT_CONNECTION_TIME  ;
 			}
@@ -243,9 +242,9 @@ void G4FukuiRenderer::UseBSDUnixDomainAuto()
 	  		//----- Sleep for a while to make sure that 
 			//..... FukuiRenderer is ready
 		int connection_time = FR_DEFAULT_CONNECTION_TIME  ;
-		if( getenv( FR_ENV_CONNECTION_TIME ) != NULL  ) {
+		if( std::getenv( FR_ENV_CONNECTION_TIME ) != NULL  ) {
 			int sscanf_status = \
-				sscanf( getenv( FR_ENV_CONNECTION_TIME ), "%d", &connection_time) ;
+				sscanf( std::getenv( FR_ENV_CONNECTION_TIME ), "%d", &connection_time) ;
 			if ( sscanf_status == EOF ) {  connection_time = FR_DEFAULT_CONNECTION_TIME  ;}
 		}
 		sleep(connection_time); 

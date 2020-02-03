@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc 94459 2015-11-18 14:39:46Z gcosmo $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
@@ -52,112 +50,144 @@
 #include "G4SystemOfUnits.hh"
 #include "G4EvaporationFactory.hh"
 #include "G4EvaporationGEMFactory.hh"
+#include "G4EvaporationGEMFactoryVI.hh"
 #include "G4EvaporationDefaultGEMFactory.hh"
-#include "G4HadronicException.hh"
 #include "G4NistManager.hh"
-#include "G4FermiFragmentsPool.hh"
+#include "G4VFermiBreakUp.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4PhotonEvaporationOLD.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-
-G4Evaporation::G4Evaporation()  
-  : nChannels(0)
-{
-  thePool = G4FermiFragmentsPool::Instance();
-
-  G4VEvaporationChannel* gammaEvap = 0;
-  char* env = getenv("G4UsePhotonEvaporationOLD"); 
-  if(env)  { gammaEvap = new G4PhotonEvaporationOLD(); } 
-  else     { gammaEvap = new G4PhotonEvaporation(); }
-  SetPhotonEvaporation(gammaEvap);
-
-  theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
-  SetParameters();
-  InitialiseEvaporation();
-  theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
-}
+#include "G4NuclearLevelData.hh"
+#include "G4LevelManager.hh"
+#include "G4UnstableFragmentBreakUp.hh"
+#include "Randomize.hh"
 
 G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)  
-  : nChannels(0)
+  : G4VEvaporation(),fVerbose(0),nChannels(0),minExcitation(0.1*keV),
+    isInitialised(false)
 {
   if(photoEvaporation) { SetPhotonEvaporation(photoEvaporation); }
   else                 { SetPhotonEvaporation(new G4PhotonEvaporation()); }
 
-  thePool = G4FermiFragmentsPool::Instance();
-  theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
-  SetParameters();
-  InitialiseEvaporation();
+  channelType = fDummy;
+  theChannelFactory = nullptr;
+
+  fLevelData = G4NuclearLevelData::GetInstance();
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
+  nist = G4NistManager::Instance();
+  unstableBreakUp = new G4UnstableFragmentBreakUp();
+  /*
+    G4cout << "G4Evaporation() " << this << " thePhotonEvaporation: "
+	   << photoEvaporation << "  UnstableFragmentBreakUp: " 
+           << unstableBreakUp << G4endl;
+  */
 }
 
 G4Evaporation::~G4Evaporation()
-{}
-
-void G4Evaporation::SetParameters()
 {
-  nist = G4NistManager::Instance();
-  minExcitation = 0.1*CLHEP::keV;
-  maxZforFBU = thePool->GetMaxZ();
-  maxAforFBU = thePool->GetMaxA();
-  probabilities.reserve(68);
-}
-
-void G4Evaporation::InitialiseEvaporation()
-{
-  CleanChannels();
-  theChannels = theChannelFactory->GetChannel(); 
-  nChannels = theChannels->size();   
-  probabilities.resize(nChannels, 0.0);
-  InitialiseChannels();
+  delete unstableBreakUp;
 }
 
 void G4Evaporation::InitialiseChannels()
 {
+  if(isInitialised) { return; }
+
+  G4DeexPrecoParameters* param = fLevelData->GetParameters(); 
+  minExcitation = param->GetMinExcitation();
+  fVerbose = param->GetVerbose();
+  unstableBreakUp->SetVerbose(fVerbose);
+
+  G4DeexChannelType type = param->GetDeexChannelsType();
+  if(type == fCombined) { SetCombinedChannel(); }
+  else if(type == fGEM) { SetGEMChannel(); }
+  else if(type == fEvaporation) { SetDefaultChannel(); }
+  else if(type == fGEMVI) { SetGEMVIChannel(); }
+
+  isInitialised = true;
+}
+
+void G4Evaporation::InitialiseChannelFactory()
+{
+  theChannels = theChannelFactory->GetChannel(); 
+  nChannels = theChannels->size();   
+  probabilities.resize(nChannels, 0.0);
+
+  if(fVerbose > 1) {
+    G4cout << "### G4Evaporation::InitialiseChannelFactory  for " 
+	   << nChannels << " channels " << this << G4endl;
+  }
   for(size_t i=0; i<nChannels; ++i) {
     (*theChannels)[i]->SetOPTxs(OPTxs);
-    (*theChannels)[i]->UseSICB(useSICB);
     (*theChannels)[i]->Initialise();
   }
 }
 
 void G4Evaporation::SetDefaultChannel()
 {
-  delete theChannelFactory;
-  theChannelFactory = new G4EvaporationFactory(thePhotonEvaporation);
-  InitialiseEvaporation();
+  if(fEvaporation != channelType) {
+    channelType = fEvaporation;
+    if(theChannelFactory) {
+      CleanChannels();
+      delete theChannelFactory;
+    }
+    theChannelFactory = new G4EvaporationFactory(thePhotonEvaporation);
+    InitialiseChannelFactory();
+  }
 }
 
 void G4Evaporation::SetGEMChannel()
 {
-  delete theChannelFactory;
-  theChannelFactory = new G4EvaporationGEMFactory(thePhotonEvaporation);
-  InitialiseEvaporation();
+  if(fGEM != channelType) {
+    channelType = fCombined;
+    if(theChannelFactory) {
+      CleanChannels();
+      delete theChannelFactory;
+    }
+    theChannelFactory = new G4EvaporationGEMFactory(thePhotonEvaporation);
+    InitialiseChannelFactory();
+  }
+}
+
+void G4Evaporation::SetGEMVIChannel()
+{
+  if(fGEMVI != channelType) {
+    channelType = fGEMVI;
+    if(theChannelFactory) {
+      CleanChannels();
+      delete theChannelFactory;
+    }
+    theChannelFactory = new G4EvaporationGEMFactoryVI(thePhotonEvaporation);
+    InitialiseChannelFactory();
+  }
 }
 
 void G4Evaporation::SetCombinedChannel()
 {
-  delete theChannelFactory;
-  theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
-  InitialiseEvaporation();
-}
-
-G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
-{
-  G4FragmentVector * theResult = new G4FragmentVector;
-  G4Fragment* theResidualNucleus = new G4Fragment(theNucleus);
-  BreakFragment(theResult,  theResidualNucleus);
-  return theResult;
+  if(fCombined != channelType) {
+    channelType = fCombined;
+    if(theChannelFactory) {
+      CleanChannels();
+      delete theChannelFactory;
+    }
+    theChannelFactory = 
+      new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
+    InitialiseChannelFactory();
+  }
 }
 
 void G4Evaporation::BreakFragment(G4FragmentVector* theResult, 
 				  G4Fragment* theResidualNucleus)
 {
+  if(!isInitialised) { InitialiseChannels(); }
+
   G4double totprob, prob, oldprob = 0.0;
   size_t maxchannel, i;
 
   G4int Amax = theResidualNucleus->GetA_asInt();
+  if(fVerbose > 1) {
+    G4cout << "### G4Evaporation::BreakItUp loop" << G4endl;
+  }
 
   // Starts loop over evaporated particles, loop is limited by number
   // of nucleons
@@ -166,46 +196,36 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // g,n,p and light fragments - evaporation is finished
     G4int Z = theResidualNucleus->GetZ_asInt();
     G4int A = theResidualNucleus->GetA_asInt();
+    if(A <= 1) { break; }
     G4double Eex = theResidualNucleus->GetExcitationEnergy();
-    G4double mass = theResidualNucleus->GetGroundStateMass();
 
     // stop deecitation loop if residual can be deexcited by FBU    
-    if(maxZforFBU > Z && maxAforFBU > A && Z > 0 && A > Z) {
-      if(thePool->IsApplicable(Z, A, mass+Eex)) {
-	theResult->push_back(theResidualNucleus);
-	return;
-      }
-    }
+    if(theFBU->IsApplicable(Z, A, Eex)) { break; }
+
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    /*
-    G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
-    	   << " A= " << A << " Eex(MeV)= " 
-    	   << theResidualNucleus->GetExcitationEnergy()
-    	   << " aban= " << abun << G4endl;
-    */
     // stop deecitation loop in the case of a cold stable fragment 
-    if(Eex <= minExcitation && abun > 0.0) {
-      theResult->push_back(theResidualNucleus);
-      return;
-    }
+    if(Eex <= minExcitation && 
+       (abun > 0.0 || (A == 3 && (Z == 1 || Z == 2)))) { break; }
  
     totprob = 0.0;
     maxchannel = nChannels;
-    /*
-    G4cout << "### Evaporation loop #" << ia 
-    	   << "  Fragment: " << theResidualNucleus << G4endl;
-    */
+    if(fVerbose > 1) {
+      G4cout << "Evaporation# " << ia << " Z= " << Z << " A= " << A 
+             << " Eex(MeV)= " << theResidualNucleus->GetExcitationEnergy()
+	     << " aban= " << abun << G4endl;
+    }
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
-      // G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
-
+      if(fVerbose > 2 && prob > 0.0) {
+	G4cout << "    Channel# " << i << "  prob= " << prob << G4endl; 
+      }
       totprob += prob;
       probabilities[i] = totprob;
 
       // if two recent probabilities are near zero stop computations
-      if(i>=8) {
+      if(i>=8 && prob > 0.0) {
 	if(prob <= totprob*1.e-8 && oldprob <= totprob*1.e-8) {
 	  maxchannel = i+1; 
 	  break;
@@ -215,9 +235,11 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     }
 
     // photon evaporation in the case of no other channels available
-    // do evaporation chain and reset total probability
+    // do evaporation chain and return back ground state fragment
     if(0.0 < totprob && probabilities[0] == totprob) {
-      // G4cout << "Start chain of gamma evaporation" << G4endl;
+      if(fVerbose > 1) {
+	G4cout << "$$$ Start chain of gamma evaporation" << G4endl;
+      }
       (*theChannels)[0]->BreakUpChain(theResult, theResidualNucleus);
       totprob = 0.0;
     }
@@ -225,14 +247,19 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // stable fragment - evaporation is finished
     if(0.0 == totprob) {
 
-      // if fragment is exotic, then force its decay 
-      if(0.0 == abun && Z < 20) {
-	//G4cout << "$$$ Decay exotic fragment" << G4endl;
-	unstableBreakUp.BreakUpChain(theResult, theResidualNucleus);
-      } else {
-	theResult->push_back(theResidualNucleus);
+      // release fragment known to DB
+      if(fLevelData->GetLevelManager(Z, A)) { break; }
+
+      // if fragment is exotic, then it forced to decay 
+      // if success, then decay product is added to results 
+      if(fVerbose > 1) { 
+	G4cout << "$$$ Decay exotic fragment" << G4endl; 
       }
-      return;
+      if(unstableBreakUp->BreakUpChain(theResult, theResidualNucleus)) {
+        continue;
+      }
+      // release if it is not possible to decay
+      break;
     }
 
     // select channel
@@ -240,17 +267,12 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // loop over evaporation channels
     for(i=0; i<maxchannel; ++i) { if(probabilities[i] >= totprob) { break; } }
 
-    //G4cout << "Channel # " << i << G4endl;
+    if(fVerbose > 1) { G4cout << "$$$ Channel # " << i << G4endl; }
     G4Fragment* frag = (*theChannels)[i]->EmittedFragment(theResidualNucleus);
-    //if(frag) G4cout << "   " << *frag << G4endl;
-    if(frag) { theResult->push_back(frag); }
-    // selected channel cannot sample secondary
-    else { 
-      theResult->push_back(theResidualNucleus); 
-      return; 
-    }
-  }
+    if(fVerbose > 2 && frag) { G4cout << "   " << *frag << G4endl; }
 
-  // loop is stopped, save residual, which is unclear state
-  theResult->push_back(theResidualNucleus);
+    // normaly a fragment should be created
+    if(frag) { theResult->push_back(frag); }
+    else     { break; }
+  }
 }

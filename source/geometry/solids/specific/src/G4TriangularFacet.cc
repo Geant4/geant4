@@ -23,40 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc 87920 2015-01-21 13:11:38Z gcosmo $
+// G4TriangularFacet implementation
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// CHANGE HISTORY
-// --------------
-//
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
-//
-// 01 August 2007   P R Truscott, QinetiQ Ltd, UK
+// 31.10.2004, P R Truscott, QinetiQ Ltd, UK - Created.
+// 01.08.2007, P R Truscott, QinetiQ Ltd, UK
 //                  Significant modification to correct for errors and enhance
 //                  based on patches/observations kindly provided by Rickard
 //                  Holmberg.
-//
-// 26 September 2007
-//                  P R Truscott, QinetiQ Ltd, UK
-//                  Further chamges implemented to the Intersect member
-//                  function to correctly treat rays nearly parallel to the
-//                  plane of the triangle.
-//
-// 12 April 2010    P R Truscott, QinetiQ, bug fixes to treat optical
-//                  photon transport, in particular internal reflection
-//                  at surface.
-//
-// 22 August 2011   I Hrivnacova, Orsay, fix in Intersect() to take into
-//                  account geometrical tolerance and cases of zero distance
-//                  from surface.
-//
-// 12 October 2012  M Gayer, CERN
+// 12.10.2012, M Gayer, CERN
 //                  New implementation reducing memory requirements by 50%,
 //                  and considerable CPU speedup together with the new
 //                  implementation of G4TessellatedSolid.
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// 23.02.2016, E Tcherniaev, CERN
+//                  Improved test to detect degenerate (too small or
+//                  too narrow) triangles.
+// --------------------------------------------------------------------
 
 #include "G4TriangularFacet.hh"
 
@@ -72,11 +53,11 @@ using namespace std;
 // two relative vectors (E0 and E1) define the sides and orientation of 
 // the outward surface normal.
 //
-G4TriangularFacet::G4TriangularFacet (const G4ThreeVector &vt0,
-                                      const G4ThreeVector &vt1,
-                                      const G4ThreeVector &vt2,
+G4TriangularFacet::G4TriangularFacet (const G4ThreeVector& vt0,
+                                      const G4ThreeVector& vt1,
+                                      const G4ThreeVector& vt2,
                                             G4FacetVertexType vertexType)
-  : fSqrDist(0.)
+  : G4VFacet()
 {
   fVertices = new vector<G4ThreeVector>(3);
 
@@ -96,69 +77,65 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector &vt0,
     fE2 = vt2;
   }
 
+  G4ThreeVector E1xE2 = fE1.cross(fE2);
+  fArea = 0.5 * E1xE2.mag();
   for (G4int i = 0; i < 3; ++i) fIndices[i] = -1;
 
-  G4double eMag1 = fE1.mag();
-  G4double eMag2 = fE2.mag();
-  G4double eMag3 = (fE2-fE1).mag();
+  fIsDefined = true;
+  G4double delta = kCarTolerance; // Set tolerance for checking
 
-  if (eMag1 <= kCarTolerance || eMag2 <= kCarTolerance
-                             || eMag3 <= kCarTolerance)
+  // Check length of edges
+  //
+  G4double leng1 = fE1.mag();
+  G4double leng2 = (fE2-fE1).mag();
+  G4double leng3 = fE2.mag();
+  if (leng1 <= delta || leng2 <= delta || leng3 <= delta) 
+  {
+    fIsDefined = false;
+  }
+
+  // Check min height of triangle
+  //
+  if (fIsDefined)
+  {
+    if (2.*fArea/std::max(std::max(leng1,leng2),leng3) <= delta)
+    {
+      fIsDefined = false;
+    } 
+  }
+
+  // Define facet
+  //
+  if (!fIsDefined)
   {
     ostringstream message;
-    message << "Length of sides of facet are too small." << G4endl
-      << "fVertices[0] = " << GetVertex(0) << G4endl
-      << "fVertices[1] = " << GetVertex(1) << G4endl
-      << "fVertices[2] = " << GetVertex(2) << G4endl
-      << "Side lengths = fVertices[0]->fVertices[1]" << eMag1 << G4endl
-      << "Side lengths = fVertices[0]->fVertices[2]" << eMag2 << G4endl
-      << "Side lengths = fVertices[1]->fVertices[2]" << eMag3;
+    message << "Facet is too small or too narrow." << G4endl
+            << "Triangle area = " << fArea << G4endl
+            << "P0 = " << GetVertex(0) << G4endl
+            << "P1 = " << GetVertex(1) << G4endl
+            << "P2 = " << GetVertex(2) << G4endl
+            << "Side1 length (P0->P1) = " << leng1 << G4endl
+            << "Side2 length (P1->P2) = " << leng2 << G4endl
+            << "Side3 length (P2->P0) = " << leng3;
     G4Exception("G4TriangularFacet::G4TriangularFacet()",
-                "GeomSolids1001", JustWarning, message);
-    fIsDefined     = false;
+		"GeomSolids1001", JustWarning, message);
     fSurfaceNormal.set(0,0,0);
     fA = fB = fC = 0.0;
     fDet = 0.0;
+    fCircumcentre = vt0 + 0.5*fE1 + 0.5*fE2;
     fArea = fRadius = 0.0;
   }
   else
   { 
-    fIsDefined     = true;
-    fSurfaceNormal = fE1.cross(fE2).unit();
+    fSurfaceNormal = E1xE2.unit();
     fA   = fE1.mag2();
     fB   = fE1.dot(fE2);
     fC   = fE2.mag2();
-    fDet = fabs(fA*fC - fB*fB);
+    fDet = std::fabs(fA*fC - fB*fB);
 
-    //    sMin = -0.5*kCarTolerance/sqrt(fA);
-    //    sMax = 1.0 - sMin;
-    //    tMin = -0.5*kCarTolerance/sqrt(fC);
-    //    G4ThreeVector vtmp = 0.25 * (fE1 + fE2);
-
-    fArea = 0.5 * (fE1.cross(fE2)).mag();
-    G4double lambda0, lambda1;
-    if(std::fabs(fArea) < kCarTolerance*kCarTolerance)
-    {
-      ostringstream message;
-      message << "Area of Facet is too small, possible flat triangle!" << G4endl
-              << "  fVertices[0] = " << GetVertex(0) << G4endl
-              << "  fVertices[1] = " << GetVertex(1) << G4endl
-              << "  fVertices[2] = " << GetVertex(2) << G4endl
-              << "Area = " << fArea;
-      G4Exception("G4TriangularFacet::G4TriangularFacet()",
-                  "GeomSolids1001", JustWarning, message);
-      lambda0 = 0.5;
-      lambda1 = 0.5;  
-    }
-    else
-    {
-      lambda0 = (fA-fB) * fC / (8.0*fArea*fArea);
-      lambda1 = (fC-fB) * fA / (8.0*fArea*fArea);
-    }
-    G4ThreeVector p0 = GetVertex(0);
-    fCircumcentre = p0 + lambda0*fE1 + lambda1*fE2;
-    G4double radiusSqr = (fCircumcentre-p0).mag2();
-    fRadius = sqrt(radiusSqr);
+    fCircumcentre = 
+      vt0 + (E1xE2.cross(fE1)*fC + fE2.cross(E1xE2)*fA) / (2.*E1xE2.mag2());
+    fRadius = (fCircumcentre - vt0).mag();
   }
 }
 
@@ -186,17 +163,17 @@ G4TriangularFacet::G4TriangularFacet ()
 //
 G4TriangularFacet::~G4TriangularFacet ()
 {
-  SetVertices(0);
+  SetVertices(nullptr);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-void G4TriangularFacet::CopyFrom (const G4TriangularFacet &rhs)
+void G4TriangularFacet::CopyFrom (const G4TriangularFacet& rhs)
 {
   char *p = (char *) &rhs;
   copy(p, p + sizeof(*this), (char *)this);
 
-  if (fIndices[0] < 0 && fVertices)
+  if (fIndices[0] < 0 && fVertices == nullptr)
   {
     fVertices = new vector<G4ThreeVector>(3);
     for (G4int i = 0; i < 3; ++i) (*fVertices)[i] = (*rhs.fVertices)[i];
@@ -205,7 +182,25 @@ void G4TriangularFacet::CopyFrom (const G4TriangularFacet &rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4TriangularFacet::G4TriangularFacet (const G4TriangularFacet &rhs)
+void G4TriangularFacet::MoveFrom (G4TriangularFacet& rhs)
+{
+  fSurfaceNormal = move(rhs.fSurfaceNormal);
+  fArea = move(rhs.fArea);
+  fCircumcentre = move(rhs.fCircumcentre);
+  fRadius = move(rhs.fRadius);
+  fIndices = move(rhs.fIndices);
+  fA = move(rhs.fA); fB = move(rhs.fB); fC = move(rhs.fC);
+  fDet = move(rhs.fDet);
+  fSqrDist = move(rhs.fSqrDist);
+  fE1 = move(rhs.fE1); fE2 = move(rhs.fE2);
+  fIsDefined = move(rhs.fIsDefined);
+  fVertices = move(rhs.fVertices);
+  rhs.fVertices = nullptr;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4TriangularFacet::G4TriangularFacet (const G4TriangularFacet& rhs)
   : G4VFacet(rhs)
 {
   CopyFrom(rhs);
@@ -213,13 +208,40 @@ G4TriangularFacet::G4TriangularFacet (const G4TriangularFacet &rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4TriangularFacet &
-G4TriangularFacet::operator=(const G4TriangularFacet &rhs)
+G4TriangularFacet::G4TriangularFacet (G4TriangularFacet&& rhs)
+  : G4VFacet(rhs)
 {
-  SetVertices(0);
+  MoveFrom(rhs);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4TriangularFacet&
+G4TriangularFacet::operator=(const G4TriangularFacet& rhs)
+{
+  SetVertices(nullptr);
 
   if (this != &rhs)
+  {
+    delete fVertices;
     CopyFrom(rhs);
+  }
+
+  return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4TriangularFacet&
+G4TriangularFacet::operator=(G4TriangularFacet&& rhs)
+{
+  SetVertices(nullptr);
+
+  if (this != &rhs)
+  {
+    delete fVertices;
+    MoveFrom(rhs);
+  }
 
   return *this;
 }
@@ -230,9 +252,9 @@ G4TriangularFacet::operator=(const G4TriangularFacet &rhs)
 //
 // Simple member function to generate fA duplicate of the triangular facet.
 //
-G4VFacet *G4TriangularFacet::GetClone ()
+G4VFacet* G4TriangularFacet::GetClone ()
 {
-  G4TriangularFacet *fc =
+  G4TriangularFacet* fc =
     new G4TriangularFacet (GetVertex(0), GetVertex(1), GetVertex(2), ABSOLUTE);
   return fc;
 }
@@ -244,9 +266,9 @@ G4VFacet *G4TriangularFacet::GetClone ()
 // Member function to generate an identical facet, but with the normal vector
 // pointing at 180 degrees.
 //
-G4TriangularFacet *G4TriangularFacet::GetFlippedFacet ()
+G4TriangularFacet* G4TriangularFacet::GetFlippedFacet ()
 {
-  G4TriangularFacet *flipped =
+  G4TriangularFacet* flipped =
     new G4TriangularFacet (GetVertex(0), GetVertex(1), GetVertex(2), ABSOLUTE);
   return flipped;
 }
@@ -265,7 +287,7 @@ G4TriangularFacet *G4TriangularFacet::GetFlippedFacet ()
 // The by-product is the square-distance fSqrDist, which is retained
 // in case needed by the other "Distance" member functions.
 //
-G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
+G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector& p)
 {
   G4ThreeVector D  = GetVertex(0) - p;
   G4double d = fE1.dot(D);
@@ -449,7 +471,7 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
 // the distance is to be greater than minDist, then forget about further
 // computation and return fA very large number.
 //
-G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
+G4double G4TriangularFacet::Distance (const G4ThreeVector& p,
                                             G4double minDist)
 {
   //
@@ -484,7 +506,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
 // This method has been heavily modified thanks to the valuable comments and 
 // corrections of Rickard Holmberg.
 //
-G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
+G4double G4TriangularFacet::Distance (const G4ThreeVector& p,
                                             G4double minDist,
                                       const G4bool outgoing)
 {
@@ -562,12 +584,12 @@ G4double G4TriangularFacet::Extent (const G4ThreeVector axis)
 // vector.  If G4TessellatedSolid or other classes call this member function
 // with |v| != 1 then there will be errors.
 //
-G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
-                                     const G4ThreeVector &v,
+G4bool G4TriangularFacet::Intersect (const G4ThreeVector& p,
+                                     const G4ThreeVector& v,
                                            G4bool outgoing,
-                                           G4double &distance,
-                                           G4double &distFromSurface,
-                                           G4ThreeVector &normal)
+                                           G4double& distance,
+                                           G4double& distFromSurface,
+                                           G4ThreeVector& normal)
 {
   //
   // Check whether the direction of the facet is consistent with the vector v
@@ -588,7 +610,7 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   // surface (at fA distance greater than kCarTolerance to be consistent with
   // "outgoing".
   //
-  const G4ThreeVector &p0 = GetVertex(0);
+  const G4ThreeVector& p0 = GetVertex(0);
   G4ThreeVector D  = p0 - p;
   distFromSurface  = D.dot(fSurfaceNormal);
   G4bool wrongSide = (outgoing && distFromSurface < -0.5*kCarTolerance) ||
@@ -752,16 +774,14 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 //
 // GetPointOnFace
 //
-// Auxiliary method for get fA random point on surface
+// Auxiliary method, returns a uniform random point on the facet
 //
 G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 {
-  G4double alpha = G4RandFlat::shoot(0., 1.);
-  G4double beta = G4RandFlat::shoot(0., 1.);
-  G4double lambda1 = alpha*beta;
-  G4double lambda0 = alpha-lambda1;
-
-  return GetVertex(0) + lambda0*fE1 + lambda1*fE2;
+  G4double u = G4UniformRand();
+  G4double v = G4UniformRand();
+  if (u+v > 1.) { u = 1. - u; v = 1. - v; }
+  return GetVertex(0) + u*fE1 + v*fE2;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -770,7 +790,7 @@ G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 //
 // Auxiliary method for returning the surface fArea
 //
-G4double G4TriangularFacet::GetArea()
+G4double G4TriangularFacet::GetArea() const
 {
   return fArea;
 }

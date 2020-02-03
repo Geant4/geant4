@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4RegularNavigation.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
 // class G4RegularNavigation
 //
 // Class description:
@@ -36,7 +32,7 @@
 // navigation does not stop at the surface
 
 // History:
-// - Created.   P. Arce, May 2007
+// - Created: P.Arce, May 2007
 // --------------------------------------------------------------------
 #ifndef G4RegularNavigation_HH
 #define G4RegularNavigation_HH
@@ -104,7 +100,7 @@ class G4RegularNavigation
 
     G4double ComputeSafety( const G4ThreeVector& localPoint,
                             const G4NavigationHistory& history,
-                            const G4double pProposedMaxLength=DBL_MAX );
+                            const G4double pProposedMaxLength = DBL_MAX );
       // Method never called because to be called the daughter has to be a
       // 'regular' volume. This would only happen if the track is in the
       // mother of voxels volume. But the voxels fill completely their mother,
@@ -121,10 +117,10 @@ class G4RegularNavigation
 
   private:
 
-    G4int fverbose;
-    G4bool fcheck;
+    G4int fverbose = false;
+    G4bool fcheck = false;
 
-    G4NormalNavigation* fnormalNav;
+    G4NormalNavigation* fnormalNav = nullptr;
     G4double kCarTolerance;  
 };
 

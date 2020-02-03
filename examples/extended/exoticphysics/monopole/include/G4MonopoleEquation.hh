@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/include/G4MonopoleEquation.hh
 /// \brief Definition of the G4MonopoleEquation class
 //
+<<<<<<< HEAD
 // $Id: G4MonopoleEquation.hh 69705 2013-05-13 09:09:52Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackingAction.hh
 /// \brief Definition of the ExN04TrackingAction class
 //
-// $Id: ExN04TrackingAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04TrackingAction_h
@@ -36,7 +35,7 @@
 
 class ExN04TrackingAction : public G4UserTrackingAction {
 public:
-  ExN04TrackingAction(){};
+  ExN04TrackingAction() : G4UserTrackingAction() {};
   virtual ~ExN04TrackingAction(){};
 
   virtual void PreUserTrackingAction(const G4Track*);

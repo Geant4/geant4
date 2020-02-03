@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc 77479 2013-11-25 10:01:22Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -42,6 +41,10 @@ G4ModelingParameters::GetDefaultVisAttributes () const {
 inline G4ModelingParameters::DrawingStyle
 G4ModelingParameters::GetDrawingStyle () const {
   return fDrawingStyle;
+}
+
+inline G4int G4ModelingParameters::GetNumberOfCloudPoints () const {
+  return fNumberOfCloudPoints;
 }
 
 inline G4bool G4ModelingParameters::IsCulling () const {
@@ -64,6 +67,14 @@ inline G4bool G4ModelingParameters::IsCullingCovered () const {
   return fCullCovered;
 }
 
+inline G4int G4ModelingParameters::GetCBDAlgorithmNumber () const {
+  return fCBDAlgorithmNumber;
+}
+
+inline const std::vector<G4double>& G4ModelingParameters::GetCBDParameters () const {
+  return fCBDParameters;
+}
+
 inline G4bool G4ModelingParameters::IsExplode () const {
   return fExplodeFactor > 1.;
 }
@@ -80,10 +91,10 @@ inline G4int G4ModelingParameters::GetNoOfSides () const {
   return fNoOfSides;
 }
 
-inline G4VSolid* G4ModelingParameters::GetSectionSolid () const
+inline G4DisplacedSolid* G4ModelingParameters::GetSectionSolid () const
 {return fpSectionSolid;}
 
-inline G4VSolid* G4ModelingParameters::GetCutawaySolid () const
+inline G4DisplacedSolid* G4ModelingParameters::GetCutawaySolid () const
 {return fpCutawaySolid;}
 
 inline const G4Event* G4ModelingParameters::GetEvent () const
@@ -109,6 +120,10 @@ G4ModelingParameters::SetDrawingStyle
   fDrawingStyle = style;
 }
 
+inline void G4ModelingParameters::SetNumberOfCloudPoints (G4int n) {
+  fNumberOfCloudPoints = n;
+}
+
 inline void G4ModelingParameters::SetCulling (G4bool value) {
   fCulling = value;
 }
@@ -123,6 +138,14 @@ inline void G4ModelingParameters::SetDensityCulling (G4bool value) {
 
 inline void G4ModelingParameters::SetCullingCovered (G4bool value) {
   fCullCovered = value;
+}
+
+inline void G4ModelingParameters::SetCBDAlgorithmNumber (G4int n) {
+  fCBDAlgorithmNumber = n;
+}
+
+inline void G4ModelingParameters::SetCBDParameters (const std::vector<G4double>& p) {
+  fCBDParameters = p;
 }
 
 inline void G4ModelingParameters::SetExplodeFactor (G4double explodeFactor) {
@@ -142,4 +165,3 @@ inline void G4ModelingParameters::SetVisAttributesModifiers
 (const std::vector<G4ModelingParameters::VisAttributesModifier>& vams) {
   fVisAttributesModifiers = vams;
 }
-

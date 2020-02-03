@@ -26,7 +26,10 @@
 /// \file biasing/ReverseMC01/include/RMC01AnalysisManager.hh
 /// \brief Definition of the RMC01AnalysisManager class
 //
+<<<<<<< HEAD
 // $Id: RMC01AnalysisManager.hh 90260 2015-05-22 08:59:31Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:            RMC01AnalysisManager
@@ -111,9 +114,9 @@ private:
   void EndOfEventForAdjointSimulation(const G4Event* anEvent);
   G4double PrimDiffAndDirFluxForAdjointSim(G4double prim_energy);
   /*
-  void WriteHisto(G4AnaH1* anHisto, G4double scaling_factor,
+  void WriteHisto(G4H1* anHisto, G4double scaling_factor,
                                 G4String fileName, G4String header_lines);
-  void WriteHisto(G4AnaH2* anHisto, G4double scaling_factor,
+  void WriteHisto(G4H2* anHisto, G4double scaling_factor,
                                 G4String fileName, G4String header_lines);
   */
   void ComputeMeanEdepAndError(const G4Event* anEvent,
@@ -123,10 +126,10 @@ private:
   
   //Histos for  fwd simulation
   //--------------
-  G4AnaH1* fEdep_vs_prim_ekin;
-  G4AnaH1* fElectron_current;
-  G4AnaH1* fProton_current;
-  G4AnaH1* fGamma_current;
+  G4H1* fEdep_vs_prim_ekin;
+  G4H1* fElectron_current;
+  G4H1* fProton_current;
+  G4H1* fGamma_current;
   
   //Fluence
   //------------
@@ -149,18 +152,18 @@ private:
   
   //Histos for forward and adjoint simulation
   //-----------------------------
-  G4AnaH1* fEdep_rmatrix_vs_electron_prim_energy;
-  G4AnaH2* fElectron_current_rmatrix_vs_electron_prim_energy;
-  G4AnaH2* fGamma_current_rmatrix_vs_electron_prim_energy;
+  G4H1* fEdep_rmatrix_vs_electron_prim_energy;
+  G4H2* fElectron_current_rmatrix_vs_electron_prim_energy;
+  G4H2* fGamma_current_rmatrix_vs_electron_prim_energy;
   
-  G4AnaH1* fEdep_rmatrix_vs_gamma_prim_energy;
-  G4AnaH2* fElectron_current_rmatrix_vs_gamma_prim_energy;
-  G4AnaH2* fGamma_current_rmatrix_vs_gamma_prim_energy;
+  G4H1* fEdep_rmatrix_vs_gamma_prim_energy;
+  G4H2* fElectron_current_rmatrix_vs_gamma_prim_energy;
+  G4H2* fGamma_current_rmatrix_vs_gamma_prim_energy;
   
-  G4AnaH1* fEdep_rmatrix_vs_proton_prim_energy;
-  G4AnaH2* fElectron_current_rmatrix_vs_proton_prim_energy;
-  G4AnaH2* fProton_current_rmatrix_vs_proton_prim_energy;
-  G4AnaH2* fGamma_current_rmatrix_vs_proton_prim_energy;
+  G4H1* fEdep_rmatrix_vs_proton_prim_energy;
+  G4H2* fElectron_current_rmatrix_vs_proton_prim_energy;
+  G4H2* fProton_current_rmatrix_vs_proton_prim_energy;
+  G4H2* fGamma_current_rmatrix_vs_proton_prim_energy;
   
   G4String      fFileName[2];
   G4bool        fFactoryOn;

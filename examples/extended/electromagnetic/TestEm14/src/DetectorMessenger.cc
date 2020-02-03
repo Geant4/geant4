@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/src/DetectorMessenger.cc
+/// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 84208 2014-10-10 14:44:50Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

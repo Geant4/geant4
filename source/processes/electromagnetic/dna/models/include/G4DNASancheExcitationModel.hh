@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.hh 93616 2015-10-27 08:59:17Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,15 +42,14 @@
 
 class G4DNASancheExcitationModel : public G4VEmModel
 {
-
 public:
-
   G4DNASancheExcitationModel(const G4ParticleDefinition* p = 0,
-                              const G4String& nam = "DNASancheExcitationModel");
+                             const G4String& nam = "DNASancheExcitationModel");
 
   virtual ~G4DNASancheExcitationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
@@ -73,21 +70,24 @@ public:
 
   inline void ExtendLowEnergyLimit(G4double /*threshold*/);
 
-  inline void SetVerboseLevel(int verbose)
+  inline void SetVerboseLevel(G4int verbose)
   {
     verboseLevel = verbose;
   }
+
+  inline void SelectStationary(G4bool input); 
 
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+
+  G4bool statCode;
+
   // Water density table
   const std::vector<G4double>* fpWaterDensity;
 
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
   G4bool isInitialised;
   G4int verboseLevel;
 
@@ -106,9 +106,9 @@ private:
   //
 //  typedef std::map<double, std::map<double, double> > TriDimensionMap;
 //  TriDimensionMap map1;
-  std::vector<double> tdummyVec;
-  std::vector<std::vector<double>> fEnergyLevelXS;
-  std::vector<double> fEnergyTotalXS;
+  std::vector<G4double> tdummyVec;
+  std::vector<std::vector<G4double>> fEnergyLevelXS;
+  std::vector<G4double> fEnergyTotalXS;
 
   //
   G4DNASancheExcitationModel & operator=(const G4DNASancheExcitationModel &right);
@@ -120,12 +120,20 @@ private:
 
 inline void G4DNASancheExcitationModel::ExtendLowEnergyLimit(G4double threshold)
 {
-  lowEnergyLimit = threshold;
-  if(lowEnergyLimit < 2 * CLHEP::eV)
+  if(threshold < 2 * CLHEP::eV)
     G4Exception("*** WARNING : the G4DNASancheExcitationModel class is not "
                 "validated below 2 eV !",
                 "", JustWarning, "");
+  
+  SetLowEnergyLimit(threshold);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4DNASancheExcitationModel::SelectStationary (G4bool input)
+{ 
+    statCode = input; 
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

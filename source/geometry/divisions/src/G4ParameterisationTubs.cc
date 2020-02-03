@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ParameterisationTubs.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// class G4ParameterisationTubs Implementation file
+// G4ParameterisationTubs[Rho/Phi/Z] implementation
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
@@ -46,9 +43,9 @@
 //--------------------------------------------------------------------------
 G4VParameterisationTubs::
 G4VParameterisationTubs( EAxis axis, G4int nDiv, G4double width,
-                        G4double offset, G4VSolid* msolid,
-                        DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+                         G4double offset, G4VSolid* msolid,
+                         DivisionType divType )
+  : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
   G4Tubs* msol = (G4Tubs*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
@@ -72,7 +69,7 @@ G4ParameterisationTubsRho::
 G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VParameterisationTubs( axis, nDiv, width, offset, msolid, divType )
+  : G4VParameterisationTubs( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionTubsRho" );
@@ -155,8 +152,8 @@ ComputeDimensions( G4Tubs& tubs, const G4int copyNo,
 {
   G4Tubs* msol = (G4Tubs*)(fmotherSolid);
 
-  G4double pRMin = msol->GetInnerRadius() + foffset + fwidth * copyNo + fhgap;
-  G4double pRMax = msol->GetInnerRadius() + foffset + fwidth * (copyNo+1) - fhgap;
+  G4double pRMin = msol->GetInnerRadius() + foffset + fwidth*copyNo + fhgap;
+  G4double pRMax = msol->GetInnerRadius() + foffset + fwidth*(copyNo+1) - fhgap;
   G4double pDz = msol->GetZHalfLength();
   //- already rotated  G4double pSR = foffset + copyNo*fwidth;
   G4double pSPhi = msol->GetStartPhiAngle();
@@ -183,7 +180,7 @@ G4ParameterisationTubsPhi::
 G4ParameterisationTubsPhi( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VParameterisationTubs( axis, nDiv, width, offset, msolid, divType )
+  : G4VParameterisationTubs( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivisionTubsPhi" );

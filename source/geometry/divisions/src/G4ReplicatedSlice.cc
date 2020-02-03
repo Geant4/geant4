@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ReplicatedSlice implementation
 //
-// $Id: G4ReplicatedSlice.cc 89815 2015-04-30 14:50:22Z gcosmo $
-//
+// Author: M.Asai (SLAC), 20/04/2010 - Extended from G4PVDivision
 // --------------------------------------------------------------------
 
 #include "G4ReplicatedSlice.hh"
@@ -49,7 +49,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
   CheckAndSetParameters(pAxis, nDivs, width, half_gap, offset,
                         DivNDIVandWIDTH, pMotherLogical, pLogical);
@@ -63,7 +63,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4int nDivs,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
   CheckAndSetParameters(pAxis, nDivs, 0., half_gap, offset,
                         DivNDIV, pMotherLogical, pLogical);
@@ -77,7 +77,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
   CheckAndSetParameters(pAxis, 0, width, half_gap, offset,
                         DivWIDTH, pMotherLogical, pLogical);
@@ -92,7 +92,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
   CheckAndSetParameters(pAxis, nDivs, width, half_gap, offset,
       DivNDIVandWIDTH, pMotherPhysical->GetLogicalVolume(), pLogical);
@@ -106,7 +106,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4int nDivs,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
   CheckAndSetParameters(pAxis, nDivs, 0., half_gap, offset,
       DivNDIV, pMotherPhysical->GetLogicalVolume(), pLogical);
@@ -120,7 +120,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double width,
                                      const G4double half_gap,
                                      const G4double offset )
-  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
+  : G4VPhysicalVolume(nullptr,G4ThreeVector(),pName,pLogical,nullptr)
 {
   CheckAndSetParameters(pAxis, 0, width, half_gap, offset,
       DivWIDTH, pMotherPhysical->GetLogicalVolume(), pLogical);
@@ -137,7 +137,7 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
                                                 G4LogicalVolume* pMotherLogical,
                                           const G4LogicalVolume* pLogical )
 {
-  if(!pMotherLogical)
+  if(pMotherLogical == nullptr)
   {
     std::ostringstream message;
     message << "Invalid setup." << G4endl
@@ -241,7 +241,7 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
   // in G4VPVParameterisation::ComputeTransformation, for others
   // it will stay the unity
   //
-  G4RotationMatrix *pRMat = new G4RotationMatrix();
+  G4RotationMatrix* pRMat = new G4RotationMatrix();
   SetRotation(pRMat);
 }
 
@@ -288,9 +288,21 @@ G4bool G4ReplicatedSlice::IsReplicated() const
 }
 
 //--------------------------------------------------------------------------
+G4int G4ReplicatedSlice::GetMultiplicity() const
+{
+  return fnReplicas;
+}
+
+//--------------------------------------------------------------------------
 G4VPVParameterisation* G4ReplicatedSlice::GetParameterisation() const
 {
   return fparam;
+}
+
+//--------------------------------------------------------------------------
+EVolume G4ReplicatedSlice::VolumeType() const 
+{
+  return kParameterised;
 }
 
 //--------------------------------------------------------------------------
@@ -300,11 +312,11 @@ void G4ReplicatedSlice::GetReplicationData(EAxis& axis,
                                            G4double& offset,
                                            G4bool& consuming ) const
 {
-  axis=faxis;
-  nDivs=fnReplicas;
-  width=fwidth;
-  offset=foffset;
-  consuming=false;
+  axis = faxis;
+  nDivs = fnReplicas;
+  width = fwidth;
+  offset = foffset;
+  consuming = false;
 }
 
 
@@ -319,7 +331,7 @@ void G4ReplicatedSlice::SetParameterisation( G4LogicalVolume* motherLogical,
 {
   G4VSolid* mSolid = motherLogical->GetSolid();
   G4String mSolidType = mSolid->GetEntityType();
-  fparam = 0;
+  fparam = nullptr;
 
   // If the solid is a reflected one, update type to its
   // real constituent solid.
@@ -527,10 +539,11 @@ void G4ReplicatedSlice::ErrorInAxis( EAxis axis, G4VSolid* solid )
 }
 
 // The next methods are for specialised repeated volumes 
-//     (replicas, parameterised vol.) which are completely regular.
+// (replicas, parameterised vol.) which are completely regular.
 // Currently this is not applicable to divisions  ( J.A. Nov 2005 )
+
 // ----------------------------------------------------------------------
-// IsRegularRepeatedStructure()
+// IsRegularStructure()
 //
 G4bool G4ReplicatedSlice::IsRegularStructure() const
 {
@@ -538,7 +551,7 @@ G4bool G4ReplicatedSlice::IsRegularStructure() const
 }           
 
 // ----------------------------------------------------------------------
-// IsRegularRepeatedStructure()
+// GetRegularStructureId()
 //
 G4int G4ReplicatedSlice::GetRegularStructureId() const
 {

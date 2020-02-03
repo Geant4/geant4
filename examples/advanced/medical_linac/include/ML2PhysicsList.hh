@@ -44,7 +44,6 @@
 #define ML2PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
@@ -60,25 +59,12 @@ public:
 
   void ConstructParticle();
 
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
 
   void AddStepMax();
-  ML2StepMax* GetStepMaxProcess() {return stepMaxProcess;}
-  void AddPackage(const G4String& name);
 
 private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
 
   G4bool helIsRegisted;
   G4bool bicIsRegisted;

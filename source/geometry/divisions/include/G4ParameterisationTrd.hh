@@ -23,25 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ParameterisationTrd.hh 73433 2013-08-27 11:05:39Z gcosmo $
-//
-// classes G4ParameterisationTrdX
-//         G4ParameterisationTrdY
-//         G4ParameterisationTrdZ
+// G4ParameterisationTrd[X/Y/Z]
 //
 // Class description:
 //
 // This class represents the parameterised positioning equivalent to 
 // dividing a trapezoid along one of each axis X, Y, Z.
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
 // --------------------------------------------------------------------
-#ifndef G4ParameterisationTrd_H
-#define G4ParameterisationTrd_H 1
+#ifndef G4PARAMETERISATIONTRD_HH
+#define G4PARAMETERISATIONTRD_HH 1
 
 #include <vector>
 
@@ -76,7 +69,7 @@ class G4VParameterisationTrd : public G4VDivisionParameterisation
 
   protected:
 
-    G4bool bDivInTrap;
+    G4bool bDivInTrap = false;
 };
 
 class G4ParameterisationTrdX : public G4VParameterisationTrd

@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02Field.hh
 /// \brief Definition of the H02Field class
 //
-//   $Id: H02Field.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 #ifndef H02_FIELD_H
 #define H02_FIELD_H
@@ -36,10 +35,10 @@
 
 class H02Field : public G4MagneticField {
 public:
-  H02Field() { }
+  H02Field() : G4MagneticField() { }
   ~H02Field() { }
 
-  void GetFieldValue(const  G4double Point[3],  G4double* Bfield ) const;
+  virtual void GetFieldValue(const  G4double Point[3],  G4double* Bfield ) const;
 
 };
 

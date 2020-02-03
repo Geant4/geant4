@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc 91897 2015-08-10 09:55:12Z gcosmo $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -50,13 +49,14 @@
 #include "G4Log.hh"
 #include "G4Pow.hh"
 
+#include "G4HadronicParameters.hh"
+
 
 G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange")
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( 100.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
-  lowEnergyRecoilLimit = 100.*keV;  
   lowestEnergyLimit    = 1.*MeV;  
 
   theProton   = G4Proton::Proton();
@@ -105,7 +105,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   if(ekin <= lowestEnergyLimit || A < 3) {
     theParticleChange.SetEnergyChange(ekin);
-    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    theParticleChange.SetMomentumChange(0.0,0.0,1.0);
     return &theParticleChange;
   }
 
@@ -128,9 +128,9 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 	   << " A= " << A << " N= " << N
 	   << G4endl;
 
-  G4ParticleDefinition * theDef = 0;
+  const G4ParticleDefinition* theDef = nullptr;
 
-  G4double mass2 = G4NucleiProperties::GetNuclearMass((G4double)A, (G4double)Z);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass(A, Z);
   G4LorentzVector lv1 = aParticle->Get4Momentum();
   G4LorentzVector lv0(0.0,0.0,0.0,mass2);
 
@@ -141,8 +141,8 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   // Sample final particles
   G4bool theHyperon = false;
-  G4ParticleDefinition* theRecoil = 0;
-  G4ParticleDefinition* theSecondary = 0;
+  const G4ParticleDefinition* theRecoil = nullptr;
+  const G4ParticleDefinition* theSecondary = nullptr;
 
   if(theParticle == theProton) {
     theSecondary = theNeutron;
@@ -247,7 +247,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   // kinematiacally impossible
   if(etot < m11 + m21) {
     theParticleChange.SetEnergyChange(ekin);
-    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    theParticleChange.SetMomentumChange(0.0,0.0,1.0);
     return &theParticleChange;
   }
 
@@ -261,10 +261,10 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   G4double t = g2*SampleT(tmax/g2, A);
 
-  if(verboseLevel>1)
+  if(verboseLevel>1) {
     G4cout <<"## G4ChargeExchange t= " << t << " tmax= " << tmax
 	   << " ptot= " << ptot << G4endl;
-
+  }
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
@@ -287,7 +287,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   G4DynamicParticle * aSec = new G4DynamicParticle(theSecondary, nlv1);
   theParticleChange.AddSecondary(aSec);
 
-  G4double erec =  nlv0.e() - m21;
+  G4double erec = std::max(nlv0.e() - m21, 0.0);
 
   //G4cout << "erec= " <<erec << " Esec= " << aSec->GetKineticEnergy() << G4endl;  
 
@@ -296,28 +296,28 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
     aSec = new G4DynamicParticle();
     aSec->SetDefinition(theRecoil);
     aSec->SetKineticEnergy(0.0);
-  } else if(erec > lowEnergyRecoilLimit) {
+  } else if(erec > GetRecoilEnergyThreshold()) {
     aSec = new G4DynamicParticle(theRecoil, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {
-    if(erec < 0.0) erec = 0.0;
     theParticleChange.SetLocalEnergyDeposit(erec);
   }
   return &theParticleChange;
 }
 
-G4double G4ChargeExchange::SampleT(G4double tmax, G4double A)
+G4double G4ChargeExchange::SampleT(G4double tmax, G4int A)
 {
   G4double aa, bb, cc, dd;
+  G4Pow* g4pow = G4Pow::GetInstance();
   if (A <= 62.) {
-    aa = G4Pow::GetInstance()->powA(A, 1.63);
-    bb = 14.5*G4Pow::GetInstance()->powA(A, 0.66);
-    cc = 1.4*G4Pow::GetInstance()->powA(A, 0.33);
+    aa = g4pow->powZ(A, 1.63);
+    bb = 14.5*g4pow->powZ(A, 0.66);
+    cc = 1.4*g4pow->powZ(A, 0.33);
     dd = 10.;
   } else {
-    aa = G4Pow::GetInstance()->powA(A, 1.33);
-    bb = 60.*G4Pow::GetInstance()->powA(A, 0.33);
-    cc = 0.4*G4Pow::GetInstance()->powA(A, 0.40);
+    aa = g4pow->powZ(A, 1.33);
+    bb = 60.*g4pow->powZ(A, 0.33);
+    cc = 0.4*g4pow->powZ(A, 0.40);
     dd = 10.;
   }
   G4double x1 = (1.0 - G4Exp(-tmax*bb))*aa/bb;
@@ -336,7 +336,6 @@ G4double G4ChargeExchange::SampleT(G4double tmax, G4double A)
   if ( loopCounter >= maxNumberOfLoops ) {
     t = 0.0;
   }
-
   return t;
 }
 

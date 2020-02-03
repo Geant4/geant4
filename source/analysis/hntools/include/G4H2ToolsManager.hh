@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H2ToolsManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Manager class for tools::histo::h2d.
 // It implements functions specific to the H2 type

@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4BlockingList.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
 // class G4BlockingList Implementation
 //
 // --------------------------------------------------------------------
@@ -34,7 +30,7 @@
 #include "G4BlockingList.hh"
 
 G4BlockingList::G4BlockingList(G4int maxDefault, G4int stride)
-  : fBlockTagNo(1), fStride(stride), fBlockingList(maxDefault,0)
+  : fStride(stride), fBlockingList(maxDefault,0)
 {
 }
 
@@ -49,7 +45,7 @@ G4BlockingList::~G4BlockingList()
 void G4BlockingList::FullyReset()
 {
   fBlockTagNo = 1;
-  for ( G4int i=fBlockingList.size()-1; i>=0; i-- )
+  for ( G4long i=G4long(fBlockingList.size()-1); i>=0; --i )
   {
     fBlockingList[i] = 0;
   }  

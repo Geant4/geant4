@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSPhotonDetHit.cc 70825 2013-06-06 08:29:26Z gcosmo $
 //
 /// \file optical/wls/src/WLSPhotonDetHit.cc
 /// \brief Implementation of the WLSPhotonDetHit class
@@ -78,7 +77,7 @@ const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
+G4bool WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
 {
   return fPosExit     == right.fPosExit    &&
          fPosArrive   == right.fPosArrive  &&

@@ -11,7 +11,6 @@
 #
 # Generated on : 30/9/2010
 #
-# $Id: sources.cmake 71942 2013-06-28 19:08:11Z mkelsey $
 #
 # 20110725  M. Kelsey -- Update HEADERS and SOURCES with new code
 # 20110919  M. Kelsey -- Add G4CascadeCoalescence
@@ -164,6 +163,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InteractionCase.hh
         G4IntraNucleiCascader.hh
         G4InuclCollider.hh
+        G4LightTargetCollider.hh
         G4InuclElementaryParticle.hh
         G4InuclEvaporation.hh
         G4InuclNuclei.hh
@@ -278,6 +278,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InteractionCase.cc
         G4IntraNucleiCascader.cc
         G4InuclCollider.cc
+        G4LightTargetCollider.cc
         G4InuclElementaryParticle.cc
         G4InuclEvaporation.cc
         G4InuclNuclei.cc

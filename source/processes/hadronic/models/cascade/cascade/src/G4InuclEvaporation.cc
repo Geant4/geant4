@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
@@ -74,7 +73,7 @@ G4InuclEvaporation::G4InuclEvaporation()
   : verboseLevel(0),   evaporator(new G4EvaporationInuclCollider) {}
 
 G4InuclEvaporation::G4InuclEvaporation(const G4InuclEvaporation &) : G4VEvaporation() {
-  throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::copy_constructor meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::copy_constructor meant to not be accessible.");
 }
 
 G4InuclEvaporation::~G4InuclEvaporation() {
@@ -82,7 +81,7 @@ G4InuclEvaporation::~G4InuclEvaporation() {
 }
 
 const G4InuclEvaporation & G4InuclEvaporation::operator=(const G4InuclEvaporation &) {
-  throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::operator= meant to not be accessable.");
+  throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::operator= meant to not be accessible.");
 }
 
 

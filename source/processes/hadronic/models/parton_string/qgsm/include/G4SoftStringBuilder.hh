@@ -33,18 +33,18 @@
 
 
 class G4SoftStringBuilder 
-    {
-public:
+{
+  public:
     G4SoftStringBuilder();
     ~G4SoftStringBuilder();
 
-
     G4ExcitedString* BuildString(G4PartonPair * aPair);        
 
-private:     
+  private:     
     G4SoftStringBuilder(const G4SoftStringBuilder &right);
-    G4int operator==(const G4SoftStringBuilder &right) const;
-    G4int operator!=(const G4SoftStringBuilder &right) const;
-    };
+    G4bool operator==(const G4SoftStringBuilder &right) const;
+    G4bool operator!=(const G4SoftStringBuilder &right) const;
+};
 
-#endif     
+#endif
+

@@ -35,7 +35,6 @@
  *  Created on: 10 oct. 2014
  *      Author: kara
  */
-// $ID$
 /// \file RunInitObserver.hh
 /// \brief Definition of the RunInitObserver & RunInitManager classes
 

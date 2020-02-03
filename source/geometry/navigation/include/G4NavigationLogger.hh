@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NavigationLogger.hh 93289 2015-10-15 10:01:15Z gcosmo $
-//
-// 
 // class G4NavigationLogger
 //
 // Class description:
@@ -64,31 +60,31 @@ class G4NavigationLogger
                              const G4ThreeVector& localDirection,
                                    G4double sampleSafety,
                                    G4double sampleStep) const;
-     // Report about a candidate daughter 
+      // Report about a candidate daughter 
    
-   void CheckDaughterEntryPoint(const G4VSolid* sampleSolid,
-                                const G4ThreeVector& samplePoint,
-                                const G4ThreeVector& sampleDirection,
-                                const G4VSolid* motherSolid,
-                                const G4ThreeVector& localPoint,
-                                const G4ThreeVector& localDirection,
-                                G4double motherStep,
-                                G4double sampleStep) const;
-     // Check suspicious distance to a candidate daughter
+    void CheckDaughterEntryPoint(const G4VSolid* sampleSolid,
+                                 const G4ThreeVector& samplePoint,
+                                 const G4ThreeVector& sampleDirection,
+                                 const G4VSolid* motherSolid,
+                                 const G4ThreeVector& localPoint,
+                                 const G4ThreeVector& localDirection,
+                                       G4double motherStep,
+                                       G4double sampleStep) const;
+      // Check suspicious distance to a candidate daughter
    
     void PostComputeStepLog (const G4VSolid* motherSolid,
                              const G4ThreeVector& localPoint,
                              const G4ThreeVector& localDirection,
                                    G4double motherStep,
                                    G4double motherSafety) const;
-     // Report exit distance from mother 
+      // Report exit distance from mother 
    
     void ComputeSafetyLog   (const G4VSolid* solid,
                              const G4ThreeVector& point,
                                    G4double safety,
                                    G4bool isMotherVolume,    //  For labeling
                                    G4int banner= -1) const;
-     // Report about safety computation (daughter?)
+      // Report about safety computation (daughter?)
    
     void PrintDaughterLog   (const G4VSolid* sampleSolid,
                              const G4ThreeVector& samplePoint,
@@ -96,7 +92,7 @@ class G4NavigationLogger
                                    G4bool   onlySafety,
                              const G4ThreeVector& sampleDirection,
                                    G4double sampleStep ) const;
-     // Report about a new minimum distance to candidate daughter
+      // Report about a new minimum distance to candidate daughter
 
     G4bool CheckAndReportBadNormal(const G4ThreeVector& unitNormal,
                                    const G4ThreeVector& localPoint,
@@ -106,10 +102,10 @@ class G4NavigationLogger
                                    const char* msg ) const;
       // Report issue with normal from Solid    - for ComputeStep()
 
-   G4bool CheckAndReportBadNormal(const G4ThreeVector& unitNormal,
-                                  const G4ThreeVector& originalNormal,
-                                  const G4RotationMatrix& rotationM,
-                                  const char*          msg ) const;
+    G4bool CheckAndReportBadNormal(const G4ThreeVector& unitNormal,
+                                   const G4ThreeVector& originalNormal,
+                                   const G4RotationMatrix& rotationM,
+                                   const char* msg ) const;
       // Report issue with normal from Rotation - for ComputeStep()
    
     void ReportOutsideMother(const G4ThreeVector& localPoint,
@@ -122,23 +118,25 @@ class G4NavigationLogger
                                      const G4ThreeVector& localPoint,
                                      const G4ThreeVector& localDirection,
                                      const G4VPhysicalVolume* physical ) const;
-      // Auxiliary method to report information about volume & position/direction 
+      // Auxiliary method to report information about volume
+      // and position/direction 
       
   public:  // without description
 
     inline G4int GetVerboseLevel() const  { return fVerbose; }
     inline void  SetVerboseLevel(G4int level)  { fVerbose = level; }
 
-    inline G4double GetMinTriggerDistance() const { return fMinTriggerDistance; }
-    inline void     SetMinTriggerDistance(G4double d) { fMinTriggerDistance= d; }
-    inline G4bool   GetReportSoftWarnings() const { return fReportSoftWarnings; }    
-    inline void     SetReportSoftWarnings(G4bool b) { fReportSoftWarnings = b; } 
+    inline G4double GetMinTriggerDistance() const {return fMinTriggerDistance;}
+    inline void     SetMinTriggerDistance(G4double d) {fMinTriggerDistance= d;}
+    inline G4bool   GetReportSoftWarnings() const {return fReportSoftWarnings;}    
+    inline void     SetReportSoftWarnings(G4bool b) {fReportSoftWarnings = b;} 
+
   private:
 
     G4String fId;                  // Navigation type
-    G4int    fVerbose;             // Verbosity level
-    G4double fMinTriggerDistance;  // Errors beyond this distance are fatal in ReportMother
-    G4bool   fReportSoftWarnings;  // Flag> Whether to warn about small issues
+    G4int    fVerbose = 0;         // Verbosity level
+    G4double fMinTriggerDistance = DBL_MAX;  // Errors beyond this are fatal
+    G4bool   fReportSoftWarnings = false; // Flag to warn about small issues
 };
 
 #endif

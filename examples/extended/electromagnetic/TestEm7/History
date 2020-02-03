@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +18,50 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 14-10-16 G.Folger
+=======
+28-11-19 I. Hrivnacova (testem7-V10-05-01)
+- Fixed comments, causing doxygen warnings, in c2_function.hh
+
+19-11-19 V.Ivant (testem7-V10-05-00)
+- Fixed compilation on Windows for unused exception object
+  in G4NativeScreenedCoulombCrossSection::LoadData().
+
+15-06-18 V.Ivant (testem7-V10-04-03)
+- fixed gcc8.0 warnings
+	 
+04-06-18 mma (testem7-V10-04-02)
+- SteppingAction.cc : Photoelectric, edep at end of step
+
+08-04-18 mma (testem7-V10-04-01)
+- testem7.cc : set visualisation in interactive mode only
+
+17-03-18 mma (testem7-V10-04-00)
+- testem7.cc : remove G4UI_USE and G4VIS_USE
+
+07-11-17 V.Ivant (testem7-V10-03-01)
+- fixed macro files
+
+08-05-17 V.Ivant (testem7-V10-03-00)
+- c2_functions - fixed compillation for gcc 7.1
+
+16-11-16 V.Ivant (testem7-V10-02-07)
+- DetectorConstruction - fixed valgrind reported problem
+
+09-11-16 V.Ivant (testem7-V10-02-06)
+- PhysicsList - removed local PhysListEmStandardSS, removed
+    usage of G4EmProcessOptions
+- PhysListEmStandard - use G4EmParameters
+- DetectorConstruction, DetectorMessenger - removed warnings for
+    incorrect calls to kernel, updated UI commands 
+- macro files are updated accordingly
+
+01-11-16  I. Hrivnacova (testem7-V10-02-05)
+- Renamed MaxTally constant in kMaxTally
+
+14-10-16 G.Folger (testem7-V10-02-04)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 

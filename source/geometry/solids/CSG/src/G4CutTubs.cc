@@ -22,25 +22,23 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4CutTubs.cc 102294 2017-01-20 11:41:52Z gcosmo $
-//
 // 
-// class G4CutTubs
+// G4CutTubs implementation
 //
-// History:
-//
-// 05.04.12 M.Kelsey   - GetPointOnSurface() throw flat in sqrt(r)
 // 01.06.11 T.Nikitina - Derived from G4Tubs
-//
-/////////////////////////////////////////////////////////////////////////
+// 30.10.16 E.Tcherniaev - reimplemented CalculateExtent(),
+//                         removed CreateRotatedVetices()
+// --------------------------------------------------------------------
 
 #include "G4CutTubs.hh"
 
+#if !defined(G4GEOM_USE_UCTUBS)
+
+#include "G4GeomTools.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -49,7 +47,6 @@
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -63,8 +60,7 @@ G4CutTubs::G4CutTubs( const G4String &pName,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi,
                       G4ThreeVector pLowNorm,G4ThreeVector pHighNorm )
-  : G4OTubs(pName, pRMin, pRMax, pDz, pSPhi, pDPhi),
-    fPhiFullCutTube(true)
+  : G4CSGSolid(pName), fRMin(pRMin), fRMax(pRMax), fDz(pDz), fSPhi(0), fDPhi(0)
 {
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
@@ -73,11 +69,28 @@ G4CutTubs::G4CutTubs( const G4String &pName,
   halfRadTolerance = kRadTolerance*0.5;
   halfAngTolerance = kAngTolerance*0.5;
 
+  if (pDz<=0) // Check z-len
+  {
+    std::ostringstream message;
+    message << "Negative Z half-length (" << pDz << ") in solid: " << GetName();
+    G4Exception("G4CutTubs::G4CutTubs()", "GeomSolids0002", FatalException, message);
+  }
+  if ( (pRMin >= pRMax) || (pRMin < 0) ) // Check radii
+  {
+    std::ostringstream message;
+    message << "Invalid values for radii in solid: " << GetName()
+            << G4endl
+            << "        pRMin = " << pRMin << ", pRMax = " << pRMax;
+    G4Exception("G4CutTubs::G4CutTubs()", "GeomSolids0002", FatalException, message);
+  }
+
+  // Check angles                                                                          
+  //                                                                                       
+  CheckPhiAngles(pSPhi, pDPhi);
+
   // Check on Cutted Planes Normals
   // If there is NO CUT, propose to use G4Tubs instead
   //
-  if(pDPhi<twopi)  { fPhiFullCutTube=false; }
- 
   if ( ( !pLowNorm.x()) && ( !pLowNorm.y())
     && ( !pHighNorm.x()) && (!pHighNorm.y()) )
   {
@@ -142,9 +155,12 @@ G4CutTubs::G4CutTubs( const G4String &pName,
 //                            for usage restricted to object persistency.
 //
 G4CutTubs::G4CutTubs( __void__& a )
-  : G4OTubs(a), fLowNorm(G4ThreeVector()),
-    fHighNorm(G4ThreeVector()), fPhiFullCutTube(false),
-    halfCarTolerance(0.), halfRadTolerance(0.), halfAngTolerance(0.)
+  : G4CSGSolid(a), kRadTolerance(0.), kAngTolerance(0.),
+    fRMin(0.), fRMax(0.), fDz(0.), fSPhi(0.), fDPhi(0.),
+    sinCPhi(0.), cosCPhi(0.), cosHDPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
+    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
+    halfCarTolerance(0.), halfRadTolerance(0.), halfAngTolerance(0.),
+    fLowNorm(G4ThreeVector()), fHighNorm(G4ThreeVector())
 {
 }
 
@@ -161,11 +177,19 @@ G4CutTubs::~G4CutTubs()
 // Copy constructor
 
 G4CutTubs::G4CutTubs(const G4CutTubs& rhs)
-  : G4OTubs(rhs), fLowNorm(rhs.fLowNorm), fHighNorm(rhs.fHighNorm),
+  : G4CSGSolid(rhs),
+    kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
+    fRMin(rhs.fRMin), fRMax(rhs.fRMax), fDz(rhs.fDz),
+    fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
+    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi), cosHDPhi(rhs.cosHDPhi),
+    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
+    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
+    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi),
     fPhiFullCutTube(rhs.fPhiFullCutTube),
     halfCarTolerance(rhs.halfCarTolerance),
     halfRadTolerance(rhs.halfRadTolerance),
-    halfAngTolerance(rhs.halfAngTolerance)
+    halfAngTolerance(rhs.halfAngTolerance),
+    fLowNorm(rhs.fLowNorm), fHighNorm(rhs.fHighNorm)
 {
 }
 
@@ -181,17 +205,141 @@ G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
 
    // Copy base class data
    //
-   G4OTubs::operator=(rhs);
+   G4CSGSolid::operator=(rhs);
 
    // Copy data
    //
-   fLowNorm = rhs.fLowNorm; fHighNorm = rhs.fHighNorm;
+   kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
+   fRMin = rhs.fRMin; fRMax = rhs.fRMax; fDz = rhs.fDz;
+   fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
+   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
+   sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
+   sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
    fPhiFullCutTube = rhs.fPhiFullCutTube;
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+   fLowNorm = rhs.fLowNorm; fHighNorm = rhs.fHighNorm;
 
    return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4CutTubs::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double rmin = GetInnerRadius();
+  G4double rmax = GetOuterRadius();
+  G4double dz   = GetZHalfLength();
+  G4double dphi = GetDeltaPhiAngle();
+
+  G4double sinSphi = GetSinStartPhi(); 
+  G4double cosSphi = GetCosStartPhi(); 
+  G4double sinEphi = GetSinEndPhi(); 
+  G4double cosEphi = GetCosEndPhi(); 
+
+  G4ThreeVector norm;
+  G4double mag, topx, topy, dists, diste; 
+  G4bool iftop;
+
+  // Find Zmin
+  //
+  G4double zmin;
+  norm = GetLowNorm();
+  mag  = std::sqrt(norm.x()*norm.x() + norm.y()*norm.y());
+  topx = (mag == 0) ? 0 : -rmax*norm.x()/mag; 
+  topy = (mag == 0) ? 0 : -rmax*norm.y()/mag; 
+  dists =  sinSphi*topx - cosSphi*topy;
+  diste = -sinEphi*topx + cosEphi*topy;
+  if (dphi > pi)
+  {
+    iftop = true;
+    if (dists > 0 && diste > 0)iftop = false;
+  }
+  else
+  {
+    iftop = false;
+    if (dists <= 0 && diste <= 0) iftop = true;
+  }
+  if (iftop)
+  {
+    zmin = -(norm.x()*topx + norm.y()*topy)/norm.z() - dz;
+  }
+  else
+  {
+    G4double z1 = -rmin*(norm.x()*cosSphi + norm.y()*sinSphi)/norm.z() - dz;  
+    G4double z2 = -rmin*(norm.x()*cosEphi + norm.y()*sinEphi)/norm.z() - dz;  
+    G4double z3 = -rmax*(norm.x()*cosSphi + norm.y()*sinSphi)/norm.z() - dz;  
+    G4double z4 = -rmax*(norm.x()*cosEphi + norm.y()*sinEphi)/norm.z() - dz;  
+    zmin = std::min(std::min(std::min(z1,z2),z3),z4);
+  }
+
+  // Find Zmax
+  //
+  G4double zmax;
+  norm = GetHighNorm();
+  mag  = std::sqrt(norm.x()*norm.x() + norm.y()*norm.y());
+  topx = (mag == 0) ? 0 : -rmax*norm.x()/mag; 
+  topy = (mag == 0) ? 0 : -rmax*norm.y()/mag; 
+  dists =  sinSphi*topx - cosSphi*topy;
+  diste = -sinEphi*topx + cosEphi*topy;
+  if (dphi > pi)
+  {
+    iftop = true;
+    if (dists > 0 && diste > 0) iftop = false;
+  }
+  else
+  {
+    iftop = false;
+    if (dists <= 0 && diste <= 0) iftop = true;
+  }
+  if (iftop)
+  {
+    zmax = -(norm.x()*topx + norm.y()*topy)/norm.z() + dz;
+  }
+  else
+  {
+    G4double z1 = -rmin*(norm.x()*cosSphi + norm.y()*sinSphi)/norm.z() + dz;  
+    G4double z2 = -rmin*(norm.x()*cosEphi + norm.y()*sinEphi)/norm.z() + dz;  
+    G4double z3 = -rmax*(norm.x()*cosSphi + norm.y()*sinSphi)/norm.z() + dz;  
+    G4double z4 = -rmax*(norm.x()*cosEphi + norm.y()*sinEphi)/norm.z() + dz;  
+    zmax = std::max(std::max(std::max(z1,z2),z3),z4);
+  }
+
+  // Find bounding box
+  //
+  if (dphi < twopi)
+  {
+    G4TwoVector vmin,vmax;
+    G4GeomTools::DiskExtent(rmin,rmax,
+                            GetSinStartPhi(),GetCosStartPhi(),
+                            GetSinEndPhi(),GetCosEndPhi(),
+                            vmin,vmax);
+    pMin.set(vmin.x(),vmin.y(), zmin);
+    pMax.set(vmax.x(),vmax.y(), zmax);
+  }
+  else
+  {
+    pMin.set(-rmax,-rmax, zmin);
+    pMax.set( rmax, rmax, zmax);
+  }
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4CutTubs::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -204,307 +352,180 @@ G4bool G4CutTubs::CalculateExtent( const EAxis              pAxis,
                                          G4double&          pMin, 
                                          G4double&          pMax    ) const
 {
-  if ( (!pTransform.IsRotated()) && (fDPhi == twopi) && (fRMin == 0) )
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Get bounding box
+  BoundingLimits(bmin,bmax);
+
+  // Check bounding box
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    // Special case handling for unrotated solid tubes
-    // Compute x/y/z mins and maxs fro bounding box respecting limits,
-    // with early returns if outside limits. Then switch() on pAxis,
-    // and compute exact x and y limit for x/y case
-      
-    G4double xoffset, xMin, xMax;
-    G4double yoffset, yMin, yMax;
-    G4double zoffset, zMin, zMax;
-
-    G4double diff1, diff2, maxDiff, newMin, newMax;
-    G4double xoff1, xoff2, yoff1, yoff2, delta;
-
-    xoffset = pTransform.NetTranslation().x();
-    xMin = xoffset - fRMax;
-    xMax = xoffset + fRMax;
-
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin > pVoxelLimit.GetMaxXExtent())
-        || (xMax < pVoxelLimit.GetMinXExtent()) )
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin < pVoxelLimit.GetMinXExtent())
-        {
-          xMin = pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax > pVoxelLimit.GetMaxXExtent())
-        {
-          xMax = pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-    yoffset = pTransform.NetTranslation().y();
-    yMin    = yoffset - fRMax;
-    yMax    = yoffset + fRMax;
-
-    if ( pVoxelLimit.IsYLimited() )
-    {
-      if ( (yMin > pVoxelLimit.GetMaxYExtent())
-        || (yMax < pVoxelLimit.GetMinYExtent()) )
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin < pVoxelLimit.GetMinYExtent())
-        {
-          yMin = pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax > pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-    zoffset = pTransform.NetTranslation().z();
-    GetMaxMinZ(zMin,zMax);
-    zMin    += zoffset;
-    zMax    += zoffset;
-
-    if ( pVoxelLimit.IsZLimited() )
-    {
-      if ( (zMin > pVoxelLimit.GetMaxZExtent())
-        || (zMax < pVoxelLimit.GetMinZExtent()) )
-      {
-        return false;
-      }
-      else
-      {
-        if (zMin < pVoxelLimit.GetMinZExtent())
-        {
-          zMin = pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax > pVoxelLimit.GetMaxZExtent())
-        {
-          zMax = pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-    switch ( pAxis )  // Known to cut cylinder
-    {
-      case kXAxis :
-      {
-        yoff1 = yoffset - yMin;
-        yoff2 = yMax    - yoffset;
-
-        if ( (yoff1 >= 0) && (yoff2 >= 0) ) // Y limits cross max/min x
-        {                                   // => no change
-          pMin = xMin;
-          pMax = xMax;
-        }
-        else
-        {
-          // Y limits don't cross max/min x => compute max delta x,
-          // hence new mins/maxs
-
-          delta   = fRMax*fRMax - yoff1*yoff1;
-          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
-          delta   = fRMax*fRMax - yoff2*yoff2;
-          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1 > diff2) ? diff1:diff2;
-          newMin  = xoffset - maxDiff;
-          newMax  = xoffset + maxDiff;
-          pMin    = (newMin < xMin) ? xMin : newMin;
-          pMax    = (newMax > xMax) ? xMax : newMax;
-        }    
-        break;
-      }
-      case kYAxis :
-      {
-        xoff1 = xoffset - xMin;
-        xoff2 = xMax - xoffset;
-
-        if ( (xoff1 >= 0) && (xoff2 >= 0) ) // X limits cross max/min y
-        {                                   // => no change
-          pMin = yMin;
-          pMax = yMax;
-        }
-        else
-        {
-          // X limits don't cross max/min y => compute max delta y,
-          // hence new mins/maxs
-
-          delta   = fRMax*fRMax - xoff1*xoff1;
-          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
-          delta   = fRMax*fRMax - xoff2*xoff2;
-          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1 > diff2) ? diff1 : diff2;
-          newMin  = yoffset - maxDiff;
-          newMax  = yoffset + maxDiff;
-          pMin    = (newMin < yMin) ? yMin : newMin;
-          pMax    = (newMax > yMax) ? yMax : newMax;
-        }
-        break;
-      }
-      case kZAxis:
-      {
-        pMin = zMin;
-        pMax = zMax;
-        break;
-      }
-      default:
-        break;
-    }
-    pMin -= kCarTolerance;
-    pMax += kCarTolerance;
-    return true;
+    return exist = (pMin < pMax) ? true : false;
   }
-  else // Calculate rotated vertex coordinates
+
+  // Get parameters of the solid
+  G4double rmin = GetInnerRadius();
+  G4double rmax = GetOuterRadius();
+  G4double dphi = GetDeltaPhiAngle();
+  G4double zmin = bmin.z();
+  G4double zmax = bmax.z();
+
+  // Find bounding envelope and calculate extent
+  //
+  const G4int NSTEPS = 24;            // number of steps for whole circle
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
+  G4int    ksteps = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
+  G4double ang    = dphi/ksteps;
+
+  G4double sinHalf = std::sin(0.5*ang);
+  G4double cosHalf = std::cos(0.5*ang);
+  G4double sinStep = 2.*sinHalf*cosHalf;
+  G4double cosStep = 1. - 2.*sinHalf*sinHalf;
+  G4double rext    = rmax/cosHalf;
+
+  // bounding envelope for full cylinder consists of two polygons,
+  // in other cases it is a sequence of quadrilaterals
+  if (rmin == 0 && dphi == twopi)
   {
-    G4int i, noEntries, noBetweenSections4;
-    G4bool existsAfterClip = false;
-    G4ThreeVectorList* vertices = CreateRotatedVertices(pTransform);
+    G4double sinCur = sinHalf;
+    G4double cosCur = cosHalf;
 
-    pMin =  kInfinity;
-    pMax = -kInfinity;
+    G4ThreeVectorList baseA(NSTEPS),baseB(NSTEPS);
+    for (G4int k=0; k<NSTEPS; ++k)
+    {
+      baseA[k].set(rext*cosCur,rext*sinCur,zmin);
+      baseB[k].set(rext*cosCur,rext*sinCur,zmax);
 
-    noEntries = vertices->size();
-    noBetweenSections4 = noEntries - 4;
-    
-    for ( i = 0 ; i < noEntries ; i += 4 )
-    {
-      ClipCrossSection(vertices, i, pVoxelLimit, pAxis, pMin, pMax);
+      G4double sinTmp = sinCur;
+      sinCur = sinCur*cosStep + cosCur*sinStep;
+      cosCur = cosCur*cosStep - sinTmp*sinStep;
     }
-    for ( i = 0 ; i < noBetweenSections4 ; i += 4 )
-    {
-      ClipBetweenSections(vertices, i, pVoxelLimit, pAxis, pMin, pMax);
-    }
-    if ( (pMin != kInfinity) || (pMax != -kInfinity) )
-    {
-      existsAfterClip = true;
-      pMin -= kCarTolerance; // Add 2*tolerance to avoid precision troubles
-      pMax += kCarTolerance;
-    }
-    else
-    {
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-
-      G4ThreeVector clipCentre(
-             (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-             (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-             (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 );
-        
-      if ( Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside )
-      {
-        existsAfterClip = true;
-        pMin            = pVoxelLimit.GetMinExtent(pAxis);
-        pMax            = pVoxelLimit.GetMaxExtent(pAxis);
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
+    std::vector<const G4ThreeVectorList *> polygons(2);
+    polygons[0] = &baseA;
+    polygons[1] = &baseB;
+    G4BoundingEnvelope benv(bmin,bmax,polygons);
+    exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
   }
+  else
+  {
+    G4double sinStart = GetSinStartPhi();
+    G4double cosStart = GetCosStartPhi();
+    G4double sinEnd   = GetSinEndPhi();
+    G4double cosEnd   = GetCosEndPhi();
+    G4double sinCur   = sinStart*cosHalf + cosStart*sinHalf;
+    G4double cosCur   = cosStart*cosHalf - sinStart*sinHalf;
+
+    // set quadrilaterals
+    G4ThreeVectorList pols[NSTEPS+2];
+    for (G4int k=0; k<ksteps+2; ++k) pols[k].resize(4);
+    pols[0][0].set(rmin*cosStart,rmin*sinStart,zmax);
+    pols[0][1].set(rmin*cosStart,rmin*sinStart,zmin);
+    pols[0][2].set(rmax*cosStart,rmax*sinStart,zmin);
+    pols[0][3].set(rmax*cosStart,rmax*sinStart,zmax);
+    for (G4int k=1; k<ksteps+1; ++k)
+    {
+      pols[k][0].set(rmin*cosCur,rmin*sinCur,zmax);
+      pols[k][1].set(rmin*cosCur,rmin*sinCur,zmin);
+      pols[k][2].set(rext*cosCur,rext*sinCur,zmin);
+      pols[k][3].set(rext*cosCur,rext*sinCur,zmax);
+
+      G4double sinTmp = sinCur;
+      sinCur = sinCur*cosStep + cosCur*sinStep;
+      cosCur = cosCur*cosStep - sinTmp*sinStep;
+    }
+    pols[ksteps+1][0].set(rmin*cosEnd,rmin*sinEnd,zmax);
+    pols[ksteps+1][1].set(rmin*cosEnd,rmin*sinEnd,zmin);
+    pols[ksteps+1][2].set(rmax*cosEnd,rmax*sinEnd,zmin);
+    pols[ksteps+1][3].set(rmax*cosEnd,rmax*sinEnd,zmax);
+
+    // set envelope and calculate extent
+    std::vector<const G4ThreeVectorList *> polygons;
+    polygons.resize(ksteps+2);
+    for (G4int k=0; k<ksteps+2; ++k) { polygons[k] = &pols[k]; }
+    G4BoundingEnvelope benv(bmin,bmax,polygons);
+    exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  }
+  return exist;
 }
 
-///////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Return whether point inside/outside/on surface
 
 EInside G4CutTubs::Inside( const G4ThreeVector& p ) const
 {
-  G4double zinLow,zinHigh,r2,pPhi=0.;
-  G4double tolRMin,tolRMax;
-  G4ThreeVector vZ=G4ThreeVector(0,0,fDz);
+  G4ThreeVector vZ = G4ThreeVector(0,0,fDz);
   EInside in = kInside;
-
-  // Check if point is contained in the cut plane in -/+ Z
 
   // Check the lower cut plane
   //
-  zinLow =(p+vZ).dot(fLowNorm);
-  if (zinLow>halfCarTolerance)  { return kOutside; }
+  G4double zinLow =(p+vZ).dot(fLowNorm);
+  if (zinLow > halfCarTolerance)  { return kOutside; }
 
   // Check the higher cut plane
   //
-  zinHigh = (p-vZ).dot(fHighNorm);
-  if (zinHigh>halfCarTolerance)  { return kOutside; }
+  G4double zinHigh = (p-vZ).dot(fHighNorm);
+  if (zinHigh > halfCarTolerance)  { return kOutside; }
 
   // Check radius
   //
-  r2 = p.x()*p.x() + p.y()*p.y() ;
+  G4double r2 = p.x()*p.x() + p.y()*p.y() ;
 
-  // First check 'generous' boundaries R+tolerance
-  //
-  tolRMin = fRMin - halfRadTolerance ;
-  tolRMax = fRMax + halfRadTolerance ;
+  G4double tolRMin = fRMin - halfRadTolerance;
+  G4double tolRMax = fRMax + halfRadTolerance;
   if ( tolRMin < 0 )  { tolRMin = 0; }
-    
-  if ( ((r2 < tolRMin*tolRMin) || (r2 > tolRMax*tolRMax))
-     && (r2 >=halfRadTolerance*halfRadTolerance) )  { return kOutside; }
-   
-  // Check Phi
+
+  if (r2 < tolRMin*tolRMin || r2 > tolRMax*tolRMax) { return kOutside; }
+
+  // Check Phi cut
   //
   if(!fPhiFullCutTube)
   {
-    // Try outer tolerant phi boundaries only
-
-    if ( (tolRMin==0) && (std::fabs(p.x())<=halfCarTolerance)
-                      && (std::fabs(p.y())<=halfCarTolerance) )
+    if ((tolRMin == 0) && (std::fabs(p.x()) <= halfCarTolerance)
+                       && (std::fabs(p.y()) <= halfCarTolerance))
     {
       return kSurface;
     }
- 
-    pPhi = std::atan2(p.y(),p.x()) ;
 
-    if ( pPhi < -halfAngTolerance)  { pPhi += twopi; } // 0<=pPhi<2pi
-    if ( fSPhi >= 0 )
-    {
-      if ( (std::fabs(pPhi) < halfAngTolerance)
-        && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
-      { 
-        pPhi += twopi ; // 0 <= pPhi < 2pi
-      }
-      if ( (pPhi <= fSPhi - halfAngTolerance)
-        || (pPhi >= fSPhi + fDPhi + halfAngTolerance) )
-      {
-        in = kOutside ;
-      }
-      else if ( (pPhi <= fSPhi + halfAngTolerance)
-             || (pPhi >= fSPhi + fDPhi - halfAngTolerance) )
-      {
-        in=kSurface;
-      }
-    }
-    else  // fSPhi < 0
-    {
-      if ( (pPhi <= fSPhi + twopi - halfAngTolerance)
-        && (pPhi >= fSPhi + fDPhi + halfAngTolerance) )
-      {
-        in = kOutside;
-      }
-      else
-      {
-        in = kSurface ;
-      }
-    }
+    G4double phi0 = std::atan2(p.y(),p.x());
+    G4double phi1 = phi0 - twopi;
+    G4double phi2 = phi0 + twopi;
+
+    in = kOutside;
+    G4double sphi = fSPhi - halfAngTolerance;
+    G4double ephi = sphi + fDPhi + kAngTolerance;
+    if ((phi0  >= sphi && phi0  <= ephi) ||
+        (phi1  >= sphi && phi1  <= ephi) ||
+        (phi2  >= sphi && phi2  <= ephi)) in = kSurface;
+    if (in == kOutside)  { return kOutside; }
+
+    sphi += kAngTolerance;
+    ephi -= kAngTolerance;
+    if ((phi0  >= sphi && phi0  <= ephi) ||
+        (phi1  >= sphi && phi1  <= ephi) ||
+        (phi2  >= sphi && phi2  <= ephi)) in = kInside;
+    if (in == kSurface)  { return kSurface; }
   }
 
   // Check on the Surface for Z
   //
-  if ((zinLow>=-halfCarTolerance)
-   || (zinHigh>=-halfCarTolerance))
+  if ((zinLow >= -halfCarTolerance) || (zinHigh >= -halfCarTolerance))
   {
-    in=kSurface;
+    return kSurface;
   }
 
   // Check on the Surface for R
   //
-  if (fRMin) { tolRMin = fRMin + halfRadTolerance ; }
-  else       { tolRMin = 0 ; }
-  tolRMax = fRMax - halfRadTolerance ;  
-  if ( ((r2 <= tolRMin*tolRMin) || (r2 >= tolRMax*tolRMax))&&
-        (r2 >=halfRadTolerance*halfRadTolerance) )
+  if (fRMin) { tolRMin = fRMin + halfRadTolerance; }
+  else       { tolRMin = 0; }
+  tolRMax = fRMax - halfRadTolerance;
+  if (((r2 <= tolRMin*tolRMin) || (r2 >= tolRMax*tolRMax)) &&
+       (r2 >= halfRadTolerance*halfRadTolerance))
   {
     return kSurface;
   }
@@ -560,42 +581,42 @@ G4ThreeVector G4CutTubs::SurfaceNormal( const G4ThreeVector& p ) const
       distSPhi = 0.; 
       distEPhi = 0.; 
     }
-    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
-    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+    nPs = G4ThreeVector( sinSPhi, -cosSPhi, 0 );
+    nPe = G4ThreeVector( -sinEPhi, cosEPhi, 0 );
   }
   if ( rho > halfCarTolerance ) { nR = G4ThreeVector(p.x()/rho,p.y()/rho,0); }
 
   if( distRMax <= halfCarTolerance ) 
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   if( fRMin && (distRMin <= halfCarTolerance) )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm -= nR;
   }
   if( fDPhi < twopi )   
   {
     if (distSPhi <= halfAngTolerance)  
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= halfAngTolerance)  
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
   if (distZLow <= halfCarTolerance)  
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += fLowNorm;
   }
   if (distZHigh <= halfCarTolerance)  
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += fHighNorm;
   }
   if ( noSurfaces == 0 )
@@ -623,6 +644,8 @@ G4ThreeVector G4CutTubs::SurfaceNormal( const G4ThreeVector& p ) const
 
 G4ThreeVector G4CutTubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
+  enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+
   ENorm side ;
   G4ThreeVector norm ;
   G4double rho, phi ;
@@ -721,12 +744,12 @@ G4ThreeVector G4CutTubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     }
     case kNSPhi:
     {
-      norm = G4ThreeVector(std::sin(fSPhi), -std::cos(fSPhi), 0) ;
+      norm = G4ThreeVector(sinSPhi, -cosSPhi, 0) ;
       break ;
     }
     case kNEPhi:
     {
-      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0) ;
+      norm = G4ThreeVector(-sinEPhi, cosEPhi, 0) ;
       break;
     }
     default:      // Should never reach this case ...
@@ -1251,7 +1274,7 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p ) const
      //
      cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/rho ;
      
-     if ( cosPsi < std::cos(fDPhi*0.5) )
+     if ( cosPsi < cosHDPhi )
      {
        // Point lies outside phi range
  
@@ -1279,9 +1302,11 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
                                    const G4ThreeVector& v,
                                    const G4bool calcNorm,
-                                         G4bool *validNorm,
-                                         G4ThreeVector *n    ) const
-{  
+                                         G4bool* validNorm,
+                                         G4ThreeVector* n ) const
+{
+  enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
+
   ESide side=kNull , sider=kNull, sidephi=kNull ;
   G4double snxt=kInfinity, srd=kInfinity,sz=kInfinity, sphi=kInfinity ;
   G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
@@ -1750,98 +1775,6 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p ) const
   return safe ;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fDz cross section
-//          [4-7] +fDz cross section such that [0] is below [4],
-//                                             [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
-
-G4ThreeVectorList*
-G4CutTubs::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
-{
-  G4ThreeVectorList* vertices ;
-  G4ThreeVector vertex0, vertex1, vertex2, vertex3 ;
-  G4double meshAngle, meshRMax, crossAngle,
-           cosCrossAngle, sinCrossAngle, sAngle;
-  G4double rMaxX, rMaxY, rMinX, rMinY, meshRMin ;
-  G4int crossSection, noCrossSections;
-
-  // Compute no of cross-sections necessary to mesh tube
-  //
-  noCrossSections = G4int(fDPhi/kMeshAngleDefault) + 1 ;
-
-  if ( noCrossSections < kMinMeshSections )
-  {
-    noCrossSections = kMinMeshSections ;
-  }
-  else if (noCrossSections>kMaxMeshSections)
-  {
-    noCrossSections = kMaxMeshSections ;
-  }
-  // noCrossSections = 4 ;
-
-  meshAngle = fDPhi/(noCrossSections - 1) ;
-  // meshAngle = fDPhi/(noCrossSections) ;
-
-  meshRMax  = (fRMax+100*kCarTolerance)/std::cos(meshAngle*0.5) ;
-  meshRMin = fRMin - 100*kCarTolerance ; 
- 
-  // If complete in phi, set start angle such that mesh will be at fRMax
-  // on the x axis. Will give better extent calculations when not rotated.
-
-  if (fPhiFullCutTube && (fSPhi == 0) )  { sAngle = -meshAngle*0.5 ; }
-  else                                { sAngle =  fSPhi ; }
-    
-  vertices = new G4ThreeVectorList();
-    
-  if ( vertices )
-  {
-    vertices->reserve(noCrossSections*4);
-    for (crossSection = 0 ; crossSection < noCrossSections ; crossSection++ )
-    {
-      // Compute coordinates of cross section at section crossSection
-
-      crossAngle    = sAngle + crossSection*meshAngle ;
-      cosCrossAngle = std::cos(crossAngle) ;
-      sinCrossAngle = std::sin(crossAngle) ;
-
-      rMaxX = meshRMax*cosCrossAngle ;
-      rMaxY = meshRMax*sinCrossAngle ;
-
-      if(meshRMin <= 0.0)
-      {
-        rMinX = 0.0 ;
-        rMinY = 0.0 ;
-      }
-      else
-      {
-        rMinX = meshRMin*cosCrossAngle ;
-        rMinY = meshRMin*sinCrossAngle ;
-      }
-      vertex0 = G4ThreeVector(rMinX,rMinY,GetCutZ(G4ThreeVector(rMinX,rMinY,-fDz))) ;
-      vertex1 = G4ThreeVector(rMaxX,rMaxY,GetCutZ(G4ThreeVector(rMaxX,rMaxY,-fDz))) ;
-      vertex2 = G4ThreeVector(rMaxX,rMaxY,GetCutZ(G4ThreeVector(rMaxX,rMaxY,+fDz))) ;
-      vertex3 = G4ThreeVector(rMinX,rMinY,GetCutZ(G4ThreeVector(rMinX,rMinY,+fDz))) ;
-
-      vertices->push_back(pTransform.TransformPoint(vertex0)) ;
-      vertices->push_back(pTransform.TransformPoint(vertex1)) ;
-      vertices->push_back(pTransform.TransformPoint(vertex2)) ;
-      vertices->push_back(pTransform.TransformPoint(vertex3)) ;
-    }
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4CutTubs::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices ;
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Stream object contents to an output stream
@@ -1943,16 +1876,16 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   else if( (chose >= aOne + aTwo + 2.*aThr)
         && (chose < aOne + aTwo + 2.*aThr + aFou) )
   {
-    xRand = rRand*std::cos(fSPhi);
-    yRand = rRand*std::sin(fSPhi);
+    xRand = rRand*cosSPhi;
+    yRand = rRand*sinSPhi;
     zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
                               GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else
   {
-    xRand = rRand*std::cos(fSPhi+fDPhi);
-    yRand = rRand*std::sin(fSPhi+fDPhi);
+    xRand = rRand*cosEPhi;
+    yRand = rRand*sinEPhi;
     zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
                               GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
@@ -1974,13 +1907,13 @@ G4Polyhedron* G4CutTubs::CreatePolyhedron () const
   typedef G4int G4int4[4];
 
   G4Polyhedron *ph  = new G4Polyhedron;
-  G4Polyhedron *ph1 = G4OTubs::CreatePolyhedron();
+  G4Polyhedron *ph1 = new G4PolyhedronTubs (fRMin, fRMax, fDz, fSPhi, fDPhi);
   G4int nn=ph1->GetNoVertices();
   G4int nf=ph1->GetNoFacets();
   G4double3* xyz = new G4double3[nn];  // number of nodes 
   G4int4*  faces = new G4int4[nf] ;    // number of faces
 
-  for(G4int i=0;i<nn;i++)
+  for(G4int i=0; i<nn; ++i)
   {
     xyz[i][0]=ph1->GetVertex(i+1).x();
     xyz[i][1]=ph1->GetVertex(i+1).y();
@@ -2001,14 +1934,14 @@ G4Polyhedron* G4CutTubs::CreatePolyhedron () const
   G4int iNodes[4];
   G4int *iEdge=0;
   G4int n;
-  for(G4int i=0;i<nf;i++)
+  for(G4int i=0; i<nf ; ++i)
   {
     ph1->GetFacet(i+1,n,iNodes,iEdge);
-    for(G4int k=0;k<n;k++)
+    for(G4int k=0; k<n; ++k)
     {
       faces[i][k]=iNodes[k];
     }
-    for(G4int k=n;k<4;k++)
+    for(G4int k=n; k<4; ++k)
     {
       faces[i][k]=0;
     }
@@ -2087,7 +2020,7 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
   G4bool in_range_hi = false;
  
   G4int i;
-  for (i=0; i<2; i++)
+  for (i=0; i<2; ++i)
   {
     if (phiLow<0)  { phiLow+=twopi; }
     G4double ddp = phiLow-fSPhi;
@@ -2107,7 +2040,7 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
     phiLow += pi;
     if (phiLow>twopi)  { phiLow-=twopi; }
   }
-  for (i=0; i<2; i++)
+  for (i=0; i<2; ++i)
   {
     if (phiHigh<0)  { phiHigh+=twopi; }
     G4double ddp = phiHigh-fSPhi;
@@ -2128,30 +2061,30 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
     if (phiHigh>twopi)  { phiHigh-=twopi; }
   }
 
-  xc = fRMin*std::cos(fSPhi);
-  yc = fRMin*std::sin(fSPhi);
+  xc = fRMin*cosSPhi;
+  yc = fRMin*sinSPhi;
   z[0] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[4] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  
-  xc = fRMin*std::cos(fSPhi+fDPhi);
-  yc = fRMin*std::sin(fSPhi+fDPhi);
+  xc = fRMin*cosEPhi;
+  yc = fRMin*sinEPhi;
   z[1] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[5] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  
-  xc = fRMax*std::cos(fSPhi);
-  yc = fRMax*std::sin(fSPhi);
+  xc = fRMax*cosSPhi;
+  yc = fRMax*sinSPhi;
   z[2] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[6] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  
-  xc = fRMax*std::cos(fSPhi+fDPhi);
-  yc = fRMax*std::sin(fSPhi+fDPhi);
+  xc = fRMax*cosEPhi;
+  yc = fRMax*sinEPhi;
   z[3] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[7] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  
   // Find min/max
 
   z1=z[0];
-  for (i = 1; i < 4; i++)
+  for (i = 1; i < 4; ++i)
   {
     if(z[i] < z[i-1])z1=z[i];
   }
@@ -2165,7 +2098,7 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
     zmin = z1;
   }
   z1=z[4];
-  for (i = 1; i < 4; i++)
+  for (i = 1; i < 4; ++i)
   {
     if(z[4+i] > z[4+i-1])  { z1=z[4+i]; }
   }
@@ -2173,3 +2106,4 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
   if (in_range_hi)  { zmax = std::max(zmax, z1); }
   else              { zmax = z1; }
 }
+#endif

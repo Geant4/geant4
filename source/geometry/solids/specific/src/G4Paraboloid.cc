@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc 102297 2017-01-20 13:33:54Z gcosmo $
-//
-// class G4Paraboloid
-//
 // Implementation for G4Paraboloid class
 //
 // Author : Lukas Lindroos (CERN), July 2007
@@ -41,6 +37,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "meshdefs.hh"
 
@@ -61,14 +58,12 @@ using namespace CLHEP;
 ///////////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters
-
+//
 G4Paraboloid::G4Paraboloid(const G4String& pName,
                                  G4double pDz,
                                  G4double pR1,
                                  G4double pR2)
- : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
-   fSurfaceArea(0.), fCubicVolume(0.) 
-
+ : G4VSolid(pName)
 {
   if( (pDz <= 0.) || (pR2 <= pR1) || (pR1 < 0.) )
   {
@@ -99,37 +94,34 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Paraboloid::G4Paraboloid( __void__& a )
-  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0),
-    fSurfaceArea(0.), fCubicVolume(0.),
-    dz(0.), r1(0.), r2(0.), k1(0.), k2(0.)
+  : G4VSolid(a), dz(0.), r1(0.), r2(0.), k1(0.), k2(0.)
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Destructor
-
+//
 G4Paraboloid::~G4Paraboloid()
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
-
+//
 G4Paraboloid::G4Paraboloid(const G4Paraboloid& rhs)
-  : G4VSolid(rhs), fRebuildPolyhedron(false), fpPolyhedron(0),
+  : G4VSolid(rhs),
     fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume),
     dz(rhs.dz), r1(rhs.r1), r2(rhs.r2), k1(rhs.k1), k2(rhs.k2)
 {
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
-
+//
 G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs) 
 {
    // Check assignment to self
@@ -145,174 +137,60 @@ G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs)
    fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
    dz = rhs.dz; r1 = rhs.r1; r2 = rhs.r2; k1 = rhs.k1; k2 = rhs.k2;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 //
-// Dispatch to parameterisation for replication mechanism dimension
-// computation & modification.
+// Get bounding box
+//
+void G4Paraboloid::BoundingLimits(G4ThreeVector& pMin,
+                                  G4ThreeVector& pMax) const
+{
+  pMin.set(-r2,-r2,-dz);
+  pMax.set( r2, r2, dz);
 
-//void ComputeDimensions(       G4VPVParamerisation p,
-//                        const G4Int               n,
-//                        const G4VPhysicalVolume*  pRep )
-//{
-//  p->ComputeDimensions(*this,n,pRep) ;
-//}
-
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Paraboloid::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
-
+//
 G4bool
 G4Paraboloid::CalculateExtent(const EAxis pAxis,
-                             const G4VoxelLimits& pVoxelLimit,
-                             const G4AffineTransform& pTransform,
-                                   G4double& pMin, G4double& pMax) const
+                              const G4VoxelLimits& pVoxelLimit,
+                              const G4AffineTransform& pTransform,
+                                    G4double& pMin, G4double& pMax) const
 {
-  G4double xMin = -r2 + pTransform.NetTranslation().x(),
-           xMax = r2 + pTransform.NetTranslation().x(),
-           yMin = -r2 + pTransform.NetTranslation().y(),
-           yMax = r2 + pTransform.NetTranslation().y(),
-           zMin = -dz + pTransform.NetTranslation().z(),
-           zMax = dz + pTransform.NetTranslation().z();
+  G4ThreeVector bmin, bmax;
 
-  if(!pTransform.IsRotated()
-  || pTransform.NetRotation()(G4ThreeVector(0, 0, 1)) == G4ThreeVector(0, 0, 1))
-  {
-    if(pVoxelLimit.IsXLimited())
-    {
-      if(pVoxelLimit.GetMaxXExtent() < xMin - 0.5 * kCarTolerance
-      || pVoxelLimit.GetMinXExtent() > xMax + 0.5 * kCarTolerance)
-      {
-        return false;
-      }
-      else
-      {
-        if(pVoxelLimit.GetMinXExtent() > xMin)
-        {
-          xMin = pVoxelLimit.GetMinXExtent();
-        }
-        if(pVoxelLimit.GetMaxXExtent() < xMax)
-        {
-          xMax = pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-    if(pVoxelLimit.IsYLimited())
-    {
-      if(pVoxelLimit.GetMaxYExtent() < yMin - 0.5 * kCarTolerance
-      || pVoxelLimit.GetMinYExtent() > yMax + 0.5 * kCarTolerance)
-      {
-        return false;
-      }
-      else
-      {
-        if(pVoxelLimit.GetMinYExtent() > yMin)
-        {
-          yMin = pVoxelLimit.GetMinYExtent();
-        }
-        if(pVoxelLimit.GetMaxYExtent() < yMax)
-        {
-          yMax = pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-    if(pVoxelLimit.IsZLimited())
-    {
-      if(pVoxelLimit.GetMaxZExtent() < zMin - 0.5 * kCarTolerance
-      || pVoxelLimit.GetMinZExtent() > zMax + 0.5 * kCarTolerance)
-      {
-        return false;
-      }
-      else
-      {
-        if(pVoxelLimit.GetMinZExtent() > zMin)
-        {
-          zMin = pVoxelLimit.GetMinZExtent();
-        }
-        if(pVoxelLimit.GetMaxZExtent() < zMax)
-        {
-          zMax = pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-    switch(pAxis)
-    {
-      case kXAxis:
-        pMin = xMin;
-        pMax = xMax;
-        break;
-      case kYAxis:
-        pMin = yMin;
-        pMax = yMax;
-        break;
-      case kZAxis:
-        pMin = zMin;
-        pMax = zMax;
-        break;
-      default:
-        pMin = 0;
-        pMax = 0;
-        return false;
-    }
-  }
-  else
-  {
-    G4bool existsAfterClip=true;
+  // Get bounding box
+  BoundingLimits(bmin,bmax);
 
-    // Calculate rotated vertex coordinates
-
-    G4int noPolygonVertices=0;
-    G4ThreeVectorList* vertices
-      = CreateRotatedVertices(pTransform,noPolygonVertices);
-
-    if(pAxis == kXAxis || pAxis == kYAxis || pAxis == kZAxis)
-    {
-
-      pMin =  kInfinity;
-      pMax = -kInfinity;
-
-      for(G4ThreeVectorList::iterator it = vertices->begin();
-          it < vertices->end(); it++)
-      {
-        if(pMin > (*it)[pAxis]) pMin = (*it)[pAxis];
-        if((*it)[pAxis] < pVoxelLimit.GetMinExtent(pAxis))
-        {
-          pMin = pVoxelLimit.GetMinExtent(pAxis);
-        }
-        if(pMax < (*it)[pAxis])
-        {
-          pMax = (*it)[pAxis];
-        }
-        if((*it)[pAxis] > pVoxelLimit.GetMaxExtent(pAxis))
-        {
-          pMax = pVoxelLimit.GetMaxExtent(pAxis);
-        }
-      }
-
-      if(pMin > pVoxelLimit.GetMaxExtent(pAxis)
-      || pMax < pVoxelLimit.GetMinExtent(pAxis)) { existsAfterClip = false; }
-    }
-    else
-    {
-      pMin = 0;
-      pMax = 0;
-      existsAfterClip = false;
-    }
-    delete vertices;
-    return existsAfterClip;
-  }
-  return true;
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Return whether point inside/outside/on surface
-
+//
 EInside G4Paraboloid::Inside(const G4ThreeVector& p) const
 {
   // First check is  the point is above or below the solid.
@@ -354,7 +232,8 @@ EInside G4Paraboloid::Inside(const G4ThreeVector& p) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-
+// SurfaceNormal
+//
 G4ThreeVector G4Paraboloid::SurfaceNormal( const G4ThreeVector& p) const
 {
   G4ThreeVector n(0, 0, 0);
@@ -448,9 +327,9 @@ G4ThreeVector G4Paraboloid::SurfaceNormal( const G4ThreeVector& p) const
 // Calculate distance to shape from outside, along normalised vector
 // - return kInfinity if no intersection
 //
-
+//
 G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
-                                    const G4ThreeVector& v  ) const
+                                     const G4ThreeVector& v  ) const
 {
   G4double rho2 = p.perp2(), paraRho2 = std::fabs(k1 * p.z() + k2);
   G4double tol2 = kCarTolerance*kCarTolerance;
@@ -580,19 +459,19 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance (<= actual) to closest surface of shape from outside
-// - Return 0 if point inside
-
+// - Return zero if point inside
+//
 G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 {
   G4double safz = -dz+std::fabs(p.z());
-  if(safz<0) { safz=0; }
+  if(safz<0.) { safz=0.; }
   G4double safr = kInfinity;
 
   G4double rho = p.x()*p.x()+p.y()*p.y();
   G4double paraRho = (p.z()-k2)/k1;
   G4double sqrho = std::sqrt(rho);
 
-  if(paraRho<0)
+  if(paraRho<0.)
   {
     safr=sqrho-r2;
     if(safr>safz) { safz=safr; }
@@ -601,7 +480,7 @@ G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 
   G4double sqprho = std::sqrt(paraRho);
   G4double dRho = sqrho-sqprho;
-  if(dRho<0) { return safz; }
+  if(dRho<0.) { return safz; }
 
   G4double talf = -2.*k1*sqprho;
   G4double tmp  = 1+talf*talf;
@@ -617,12 +496,12 @@ G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to surface of shape from 'inside'
-
+//
 G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
                                     const G4ThreeVector& v,
                                     const G4bool calcNorm,
-                                          G4bool *validNorm,
-                                          G4ThreeVector *n  ) const
+                                          G4bool* validNorm,
+                                          G4ThreeVector* n ) const
 {
   G4double rho2 = p.perp2(), paraRho2 = std::fabs(k1 * p.z() + k2);
   G4double vRho2 = v.perp2(), intersection;
@@ -928,7 +807,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance (<=actual) to closest surface of shape from inside
-
+//
 G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 {
   G4double safe=0.0,rho,safeR,safeZ ;
@@ -969,7 +848,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 //////////////////////////////////////////////////////////////////////////
 //
 // G4EntityType
-
+//
 G4GeometryType G4Paraboloid::GetEntityType() const
 {
   return G4String("G4Paraboloid");
@@ -978,7 +857,7 @@ G4GeometryType G4Paraboloid::GetEntityType() const
 //////////////////////////////////////////////////////////////////////////
 //
 // Make a clone of the object
-
+//
 G4VSolid* G4Paraboloid::Clone() const
 {
   return new G4Paraboloid(*this);
@@ -987,7 +866,7 @@ G4VSolid* G4Paraboloid::Clone() const
 //////////////////////////////////////////////////////////////////////////
 //
 // Stream object contents to an output stream
-
+//
 std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 {
   G4int oldprc = os.precision(16);
@@ -1008,7 +887,7 @@ std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 ////////////////////////////////////////////////////////////////////
 //
 // GetPointOnSurface
-
+//
 G4ThreeVector G4Paraboloid::GetPointOnSurface() const
 {
   G4double A = (fSurfaceArea == 0)? CalculateSurfaceArea(): fSurfaceArea;
@@ -1036,121 +915,10 @@ G4ThreeVector G4Paraboloid::GetPointOnSurface() const
   }
 }
 
-G4ThreeVectorList*
-G4Paraboloid::CreateRotatedVertices(const G4AffineTransform& pTransform,
-                                          G4int& noPolygonVertices) const
-{
-  G4ThreeVectorList *vertices;
-  G4ThreeVector vertex;
-  G4double meshAnglePhi, cosMeshAnglePhiPer2,
-           crossAnglePhi, coscrossAnglePhi, sincrossAnglePhi, sAnglePhi,
-           sRho, dRho, rho, lastRho = 0., swapRho;
-  G4double rx, ry, rz, k3, k4, zm;
-  G4int crossSectionPhi, noPhiCrossSections, noRhoSections;
-
-  // Phi cross sections
-  //
-  noPhiCrossSections = G4int(twopi/kMeshAngleDefault)+1;  // =9!
-/*
-  if (noPhiCrossSections<kMinMeshSections)          // <3
-  {
-    noPhiCrossSections=kMinMeshSections;
-  }
-  else if (noPhiCrossSections>kMaxMeshSections)     // >37
-  {
-    noPhiCrossSections=kMaxMeshSections;
-  }
-*/
-  meshAnglePhi=twopi/(noPhiCrossSections-1);
-
-  sAnglePhi = -meshAnglePhi*0.5*0;
-  cosMeshAnglePhiPer2 = std::cos(meshAnglePhi / 2.);
-
-  noRhoSections = G4int(pi/2/kMeshAngleDefault) + 1;
-
-  // There is no obvious value for noRhoSections, at the moment the parabola is
-  // viewed as a quarter circle mean this formula for it.
-
-  // An alternetive would be to calculate max deviation from parabola and
-  // keep adding new vertices there until it was under a decided constant.
-
-  // maxDeviation on a line between points (rho1, z1) and (rho2, z2) is given
-  // by rhoMax = sqrt(k1 * z + k2) - z * (rho2 - rho1)
-  //           / (z2 - z1) - (rho1 * z2 - rho2 * z1) / (z2 - z1)
-  // where z is k1 / 2 * (rho1 + rho2) - k2 / k1
-
-  sRho = r1;
-  dRho = (r2 - r1) / double(noRhoSections - 1);
-
-  vertices=new G4ThreeVectorList();
-
-  if (vertices)
-  {
-    for (crossSectionPhi=0; crossSectionPhi<noPhiCrossSections;
-         crossSectionPhi++)
-    {
-      crossAnglePhi=sAnglePhi+crossSectionPhi*meshAnglePhi;
-      coscrossAnglePhi=std::cos(crossAnglePhi);
-      sincrossAnglePhi=std::sin(crossAnglePhi);
-      lastRho = 0;
-      for (int iRho=0; iRho < noRhoSections;
-           iRho++)
-      {
-        // Compute coordinates of cross section at section crossSectionPhi
-        //
-        if(iRho == noRhoSections - 1)
-        {
-          rho = r2;
-        }
-        else
-        {
-          rho = iRho * dRho + sRho;
-
-          // This part is to ensure that the vertices
-          // will form a volume larger than the paraboloid
-
-          k3 = k1 / (2*rho + dRho);
-          k4 = rho - k3 * (sqr(rho) - k2) / k1;
-          zm = (sqr(k1 / (2 * k3)) - k2) / k1;
-          rho += std::sqrt(k1 * zm + k2) - zm * k3 - k4;
-        }
-
-        rho += (1 / cosMeshAnglePhiPer2 - 1) * (iRho * dRho + sRho);
-
-        if(rho < lastRho)
-        {
-          swapRho = lastRho;
-          lastRho = rho + dRho;
-          rho = swapRho;
-        }
-        else
-        {
-          lastRho = rho + dRho;
-        }
-
-        rx = coscrossAnglePhi*rho;
-        ry = sincrossAnglePhi*rho;
-        rz = (sqr(iRho * dRho + sRho) - k2) / k1;
-        vertex = G4ThreeVector(rx,ry,rz);
-        vertices->push_back(pTransform.TransformPoint(vertex));
-      }
-    }    // Phi
-    noPolygonVertices = noRhoSections ;
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Paraboloid::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices;
-}
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
-
+//
 void G4Paraboloid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddSolid(*this);
@@ -1161,10 +929,9 @@ G4Polyhedron* G4Paraboloid::CreatePolyhedron () const
   return new G4PolyhedronParaboloid(r1, r2, dz, 0., twopi);
 }
 
-
 G4Polyhedron* G4Paraboloid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

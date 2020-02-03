@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FissionBarrier.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -32,38 +31,40 @@
 // 21.03.2013 V.Ivanchenko redesign parameters classes
 
 #include "G4FissionBarrier.hh"
+#include "G4CameronShellPlusPairingCorrections.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4ShellCorrection.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
 G4FissionBarrier::G4FissionBarrier()
 {
-  SPtr = 
-    G4ShellCorrection::GetInstance()->GetCameronShellPlusPairingCorrections();
+  SPtr = G4NuclearLevelData::GetInstance()->GetShellCorrection()
+    ->GetCameronShellPlusPairingCorrections();
 }
 
 G4FissionBarrier::~G4FissionBarrier()
 {}
 
 G4double 
-G4FissionBarrier::FissionBarrier(G4int A, G4int Z, G4double U)
+G4FissionBarrier::FissionBarrier(G4int A, G4int Z, G4double U) const 
   // Compute fission barrier according with Barashenkov's 
   // prescription for A >= 65
 {
-  if (A >= 65) {
-    return BarashenkovFissionBarrier(A,Z)/(1.0 + std::sqrt(U/(2.0*A)));
-  } else { return 100.0*GeV; }
+  static const G4double blimit = 100.0*CLHEP::GeV;
+  return (A >= 65) ? BarashenkovFissionBarrier(A,Z)
+    /(1.0 + std::sqrt(U/(G4double)(2*A))) : blimit;
 }
 
 G4double 
-G4FissionBarrier::BarashenkovFissionBarrier(G4int A, G4int Z)
+G4FissionBarrier::BarashenkovFissionBarrier(G4int A, G4int Z) const
   // Calculates Fission Barrier heights 
 {
   // Liquid drop model parameters for
   // surface energy of a spherical nucleus
-  static const G4double aSurf = 17.9439*MeV;
+  static const G4double aSurf = 17.9439*CLHEP::MeV;
   // and coulomb energy
-  static const G4double aCoul = 0.7053*MeV;
+  static const G4double aCoul = 0.7053*CLHEP::MeV;
   static const G4double k = 1.7826;
   G4int N = A - Z;
 
@@ -73,13 +74,15 @@ G4FissionBarrier::BarashenkovFissionBarrier(G4int A, G4int Z)
   
   // Liquid drop model part of Fission Barrier
   G4double BF0 = aSurf*G4Pow::GetInstance()->Z23(A);
-  if (x <= 2./3.) { BF0 *= 0.38*(3./4.-x); }
+  if (x <= 2./3.) { BF0 *= 0.38*(0.75 - x); }
   else { BF0 *= 0.83*(1. - x)*(1. - x)*(1. - x); }
 
-  // 
-  G4double D = 1.248*MeV;
-  D *= (N - 2*(N/2) + Z - 2*(Z/2));
+  G4int d = N - 2*(N/2) + Z - 2*(Z/2);
 
-  return BF0 + D - SellPlusPairingCorrection(Z,N);
+  G4double res = 0.0;
+  SPtr->GetPairingCorrection(N,Z,res);
+
+  static const G4double D = 1.248*CLHEP::MeV;
+  return BF0 + D*d - res;
 }
 

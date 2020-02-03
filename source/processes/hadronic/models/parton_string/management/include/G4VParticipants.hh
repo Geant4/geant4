@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.hh 83684 2014-09-09 12:37:39Z gcosmo $
 //
 
 #ifndef G4VParticipants_h
@@ -47,26 +46,25 @@ class G4V3DNucleus;
 
 class G4VParticipants 
 {
-
   public:
-      G4VParticipants();
-      G4VParticipants(const G4VParticipants &right);
-      virtual ~G4VParticipants();
+    G4VParticipants();
+    G4VParticipants(const G4VParticipants &right);
+    virtual ~G4VParticipants();
 
-      const G4VParticipants & operator=(const G4VParticipants &right);
-      int operator==(const G4VParticipants &right) const;
-      int operator!=(const G4VParticipants &right) const;
+    const G4VParticipants & operator=(const G4VParticipants &right);
+    G4bool operator==(const G4VParticipants &right) const;
+    G4bool operator!=(const G4VParticipants &right) const;
 
-      virtual void Init(G4int theZ, G4int theA);
-      virtual void SetNucleus(G4V3DNucleus* aNucleus);
-      virtual G4V3DNucleus* GetWoundedNucleus() const;
+    virtual void Init(G4int theZ, G4int theA);
+    virtual void SetNucleus(G4V3DNucleus* aNucleus);
+    virtual G4V3DNucleus* GetWoundedNucleus() const;
 
-      virtual void InitProjectileNucleus(G4int theZ, G4int theA);
-      virtual void SetProjectileNucleus(G4V3DNucleus* aNucleus);
-      virtual G4V3DNucleus* GetProjectileNucleus() const;
+    virtual void InitProjectileNucleus(G4int theZ, G4int theA);
+    virtual void SetProjectileNucleus(G4V3DNucleus* aNucleus);
+    virtual G4V3DNucleus* GetProjectileNucleus() const;
 
-      G4V3DNucleus* theNucleus;
-      G4V3DNucleus* theProjectileNucleus;      
+    G4V3DNucleus* theNucleus;
+    G4V3DNucleus* theProjectileNucleus;      
   private:
   
 };
@@ -82,6 +80,6 @@ inline G4V3DNucleus * G4VParticipants::GetProjectileNucleus() const
 {
   return theProjectileNucleus;
 }
-#endif
 
+#endif
 

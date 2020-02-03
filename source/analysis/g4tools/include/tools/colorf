@@ -9,18 +9,23 @@
 namespace tools {
 
 class colorf : public vec4f {  
-public: //for swig
+  typedef vec4f parent;
+public: //for SWIG
   typedef unsigned char uchar;
 public:
   TOOLS_SCLASS(tools::colorf) //for stype()
 public:
-  colorf():vec4f(0,0,0,1){}
-  colorf(float a_r,float a_g,float a_b,float a_a = 1):vec4f(a_r,a_g,a_b,a_a){}
+  colorf():parent(0,0,0,1){}
+#ifdef TOOLS_MEM
+  colorf(float a_r,float a_g,float a_b,float a_a = 1,bool a_inc = true):parent(a_r,a_g,a_b,a_a,a_inc){}
+#else
+  colorf(float a_r,float a_g,float a_b,float a_a = 1):parent(a_r,a_g,a_b,a_a){}
+#endif  
   virtual ~colorf() {}
 public:
-  colorf(const colorf& a_from):vec4f(a_from){}
+  colorf(const colorf& a_from):parent(a_from){}
   colorf& operator=(const colorf& a_from){
-    vec4f::operator=(a_from);
+    parent::operator=(a_from);
     return *this;
   }
 public:
@@ -34,11 +39,24 @@ public:
   void set_b(float a_v) {m_data[2] = a_v;}
   void set_a(float a_v) {m_data[3] = a_v;}
 
+  uchar ruchar() const {return uchar(255.0f*m_data[0]);}
+  uchar guchar() const {return uchar(255.0f*m_data[1]);}
+  uchar buchar() const {return uchar(255.0f*m_data[2]);}
+  uchar auchar() const {return uchar(255.0f*m_data[3]);}
+
+#ifdef tools_colorf
+  // deprecated, use the upper ones.
   uchar rchar() const {return uchar(255.0f*m_data[0]);}
   uchar gchar() const {return uchar(255.0f*m_data[1]);}
   uchar bchar() const {return uchar(255.0f*m_data[2]);}
+#endif
 
 public:
+//#define tools_stat_colorfs
+#ifdef tools_stat_colorfs
+  //NOTE : the below are deprecated, use functions in inlib/colorfs.
+  //       colorf::white() replaced by colorf_white()
+
   // our forever 65 named colors taken long time ago from X11.
 
   //NOTE : don't handle a static object because of mem balance.
@@ -120,6 +138,7 @@ public:
   static colorf white() {return colorf(1,1,1);}
   static colorf yellow() {return colorf(1,1,0);}
   static colorf greenyellow() {return colorf(0.675792F,0.996109F,0.18359F);}
+#endif
 };
 
 struct cmp_colorf {
@@ -135,6 +154,12 @@ struct cmp_colorf {
     return false;
   }
 };
+
+#if defined(TOOLS_MEM) && !defined(TOOLS_MEM_ATEXIT)
+inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1,false);return s_v;}
+#else
+inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1);return s_v;}
+#endif
 
 }
 

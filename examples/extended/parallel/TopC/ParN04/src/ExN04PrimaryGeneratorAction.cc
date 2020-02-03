@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04PrimaryGeneratorAction.cc 78055 2013-12-03 08:27:48Z gcosmo $
 //
-/// \file parallel/ParN04/src/ExN04PrimaryGeneratorAction.cc
+/// \file ExN04PrimaryGeneratorAction.cc
 /// \brief Implementation of the ExN04PrimaryGeneratorAction class
 //
 

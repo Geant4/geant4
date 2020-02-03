@@ -33,7 +33,7 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,17 +77,9 @@ private:
   G4double cutForElectron;
   G4double cutForPositron;
 
-  G4bool helIsRegistered;
-  G4bool bicIsRegistered;
-  G4bool biciIsRegistered;
-  G4bool locIonIonInelasticIsRegistered;
-  G4bool radioactiveDecayIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
+  G4String emName;
+  G4VPhysicsConstructor* emPhysicsList;
+  G4VPhysicsConstructor* decPhysicsList;
   IORTStepMax* stepMaxProcess;
 
   IORTPhysicsListMessenger* pMessenger;

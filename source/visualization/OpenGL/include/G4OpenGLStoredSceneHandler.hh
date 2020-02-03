@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh 81942 2014-06-06 15:54:20Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
 // G4OpenGLStoredSceneHandler - creates OpenGL Display lists.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLSTOREDSCENEHANDLER_HH
 #define G4OPENGLSTOREDSCENEHANDLER_HH

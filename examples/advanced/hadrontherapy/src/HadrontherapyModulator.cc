@@ -47,12 +47,17 @@
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
 
+<<<<<<< HEAD
 HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),
 						 solidMod0(0),         logicMod0(0),          physiMod0(0),
+=======
+HadrontherapyModulator::HadrontherapyModulator(): physiMotherMod(0),
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 						 solidMod1(0),         logicMod1(0),          physiMod1(0),
 						 solidMod2(0),         logicMod2(0),          physiMod2(0),
 						 solidMod3(0),         logicMod3(0),          physiMod3(0),
 						 solidMod4(0),         logicMod4(0),          physiMod4(0),
+<<<<<<< HEAD
 						 solidMod5(0),         logicMod5(0),          physiMod5(0),
 						 solidMod6(0),         logicMod6(0),          physiMod6(0),
 						 solidMod7(0),         logicMod7(0),          physiMod7(0),
@@ -125,6 +130,43 @@ HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),
 						 solidMod77(0),        logicMod77(0),         physiMod77(0),
 						 solidMod78(0),        logicMod78(0),         physiMod78(0) 
 {
+=======
+						 FileName("Modulators/Modulator010.txt")
+{ 
+   pi=4*std::atan(1.);
+   StepNumbers=22;
+   Weight=new G4double[StepNumbers];
+   StepThickness=new G4double[StepNumbers];
+   StartingAngle=new G4double[StepNumbers];
+   SpanningAngle=new G4double[StepNumbers];
+   PositionMod=new G4ThreeVector[StepNumbers];
+
+
+   solidMod=new G4Tubs *[StepNumbers];
+   logicMod=new G4LogicalVolume *[StepNumbers];
+   physiMod=new G4VPhysicalVolume *[(4*(StepNumbers-1)+1)];
+     
+   for (G4int i=0;i<StepNumbers;i++)
+  {
+	Weight[i]=0;
+	StepThickness[i]=0;
+	StartingAngle[i]=0;
+	SpanningAngle[i]=0;
+	PositionMod[i]=G4ThreeVector(0,0,0);
+	solidMod[i]=0;
+	logicMod[i]=0;  
+	  
+  }
+  
+  for (G4int i=0;i<4*(StepNumbers-1)+1;i++)
+  {
+  physiMod[i]=0;	  
+  }
+	
+  
+  ModulatorMessenger = new  HadrontherapyModulatorMessenger(this);	
+  ModulatorDefaultProperties();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   rm = new G4RotationMatrix(); 
   G4double phi = 270. *deg;     
   rm -> rotateY(phi); 

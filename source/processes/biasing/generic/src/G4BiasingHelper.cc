@@ -27,6 +27,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4BiasingProcessInterface.hh"
+#include "G4ParallelGeometriesLimiterProcess.hh"
 
 G4bool G4BiasingHelper::ActivatePhysicsBiasing(G4ProcessManager* pmanager,
 					       G4String physicsProcessToBias,
@@ -35,7 +36,7 @@ G4bool G4BiasingHelper::ActivatePhysicsBiasing(G4ProcessManager* pmanager,
   G4VProcess* physicsProcess(0);
   
   G4ProcessVector* vprocess = pmanager->GetProcessList();
-  for (G4int ip = 0 ; ip < vprocess->size() ; ip++)
+  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
     {
       if ( (*vprocess)[ip]->GetProcessName() == physicsProcessToBias )
 	{
@@ -101,4 +102,43 @@ void G4BiasingHelper::ActivateNonPhysicsBiasing(G4ProcessManager* pmanager,
 			ordInActive,
 			ordInActive,
 			ordDefault);
+}
+
+G4ParallelGeometriesLimiterProcess* G4BiasingHelper::AddLimiterProcess(G4ProcessManager* pmanager, const G4String& processName)
+{
+  G4ParallelGeometriesLimiterProcess* toReturn = nullptr;
+  
+  G4ProcessVector* processList = pmanager->GetProcessList();
+  G4bool noInstance = true;
+  for (std::size_t i = 0 ; i < processList->size() ; ++i)
+    {
+      G4VProcess* process = (*processList)[i];
+      if ( dynamic_cast< G4ParallelGeometriesLimiterProcess* >( process ) )
+	{
+	  noInstance = false;
+	  
+	  G4ExceptionDescription ed;
+	  ed << "Trying to re-add a G4ParallelGeometriesLimiterProcess process to the process manager for '"<<
+	    pmanager->GetParticleType()->GetParticleName() << " (PDG : " <<  pmanager->GetParticleType()->GetPDGEncoding() << " )"
+	     << " while one is already present." << G4endl;
+	  G4Exception("G4BiasingHelper::AddBiasingProcessLimiter(G4ProcessManager* pmanager)",
+		      "BIAS.GEN.28",
+		      JustWarning, ed,
+		      "Call ignored.");
+	  break;
+	}
+    }
+  
+  if ( noInstance )
+    {
+      G4ParallelGeometriesLimiterProcess* biasingLimiter = new G4ParallelGeometriesLimiterProcess(processName);
+      pmanager->AddProcess                ( biasingLimiter );
+      pmanager->SetProcessOrderingToSecond( biasingLimiter, idxAlongStep );
+      pmanager->SetProcessOrderingToLast  ( biasingLimiter, idxPostStep  );
+      
+      toReturn = biasingLimiter;
+    }
+  
+  return toReturn;
+  
 }

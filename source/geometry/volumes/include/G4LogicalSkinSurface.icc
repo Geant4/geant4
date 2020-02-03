@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4LogicalSkinSurface.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
 // 
 // class G4LogicalSkinSurface inline implementation
 //

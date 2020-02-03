@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04CalorimeterHit.cc 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// \file parallel/ParN04/src/ExN04CalorimeterHit.cc
+/// \file ExN04CalorimeterHit.cc
 /// \brief Implementation of the ExN04CalorimeterHit class
 //
 
@@ -70,7 +69,7 @@ const ExN04CalorimeterHit& ExN04CalorimeterHit::operator=(const ExN04Calorimeter
   return *this;
 }
 
-G4int ExN04CalorimeterHit::operator==(const ExN04CalorimeterHit &right) const
+G4bool ExN04CalorimeterHit::operator==(const ExN04CalorimeterHit &right) const
 {
   return ((ZCellID==right.ZCellID)&&(PhiCellID==right.PhiCellID));
 }

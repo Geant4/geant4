@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
+<<<<<<< HEAD
 // $Id: PrimaryGeneratorAction.hh 86064 2014-11-07 08:49:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

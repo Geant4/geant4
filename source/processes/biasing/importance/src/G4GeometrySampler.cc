@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometrySampler.cc 78011 2013-12-02 11:32:48Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -88,7 +87,7 @@
 
 G4GeometrySampler::~G4GeometrySampler()
 {
-  ClearSampling();
+  // ClearSampling();
 }
 
 void G4GeometrySampler::ClearSampling()

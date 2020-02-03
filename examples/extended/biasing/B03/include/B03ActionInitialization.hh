@@ -27,7 +27,6 @@
 /// \brief Definition of the B03ActionInitialization class
 //
 //
-// $Id: B03ActionInitialization.hh 66780 2013-01-12 14:56:35Z gcosmo $
 //
 
 #ifndef B03ActionInitialization_h

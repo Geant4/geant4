@@ -23,19 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT1GamNChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
-// GEANT4 tag: $Name: not supported by cvs2svn $
 //
-// 06 20 18 - N. Toro added new processes for pion-nucleon backscatter
-//   would be more elegant to modify kin. distribution for
-//   existing pi-nucleon processes to populate this phase space but
-//   tricky because I don't really understand how these distributions
-//   were derived, and comparing Geant4 distribution to data
-//   from 10.1103/PhysRevLett.94.012003 suggests that the current
-//   distributions underpopulate backscatter region already for 2.45 GeV
-//  
-// 06 20 18 - N. Toro reversed the ordering of pion and nucleon in 2-body
-//   final states so that kinematic distribution is consistent.
 
 #include "G4CascadeGamPChannel.hh"
 #include "G4CascadeGamNChannel.hh"
@@ -44,12 +32,12 @@ using namespace G4InuclParticleNames;
 
 namespace {
   // gamma p : Outgoing particle types of a given multiplicity
-  static const G4int gamp2bfs[8][2] =
-    {{gam,pro}, {pi0, pro}, {pip, neu}, {pro,pi0}, {neu,pip}, {kpl, lam}, {kpl, s0}, {k0, sp}};
+  static const G4int gamp2bfs[6][2] =
+  {{gam,pro}, {pi0,pro}, {pip,neu}, {kpl,lam}, {kpl,s0}, {k0,sp}};
 
   static const G4int gamp3bfs[6][3] =
-  {{pro,pip,pim}, {pro,pi0,pi0}, {neu,pip,pi0},
-   {pro,kpl,kmi},  {pro,k0,k0b},  {neu,kpl,k0b}};
+  {{pip,pro,pim}, {pi0,pro,pi0}, {pip,neu,pi0},
+   {kpl,pro,kmi}, {k0,pro,k0b},  {kpl,neu,k0b}};
 
   static const G4int gamp4bfs[4][4] =
   {{pro,pip,pim,pi0}, {pro,pi0,pi0,pi0}, {neu,pip,pip,pim}, {neu,pip,pi0,pi0}};
@@ -83,8 +71,8 @@ namespace {
 
 namespace {
   // gamma n : Outgoing particle types of a given multiplicity
-  static const G4int gamn2bfs[8][2] =
-    {{gam,neu}, {pi0,neu}, {pim, pro}, {neu,pi0}, {pro,pim}, {k0, lam}, {k0, s0}, {kpl, sm}};
+  static const G4int gamn2bfs[6][2] =
+  {{gam,neu}, {neu,pi0}, {pro,pim}, {lam,k0}, {s0, k0}, {sm,kpl}};
 
   static const G4int gamn3bfs[6][3] =
   {{neu,pip,pim}, {neu,pi0,pi0}, {pro,pim,pi0},
@@ -129,7 +117,7 @@ namespace {
     0.18,   0.146,  0.138,  0.1296, 0.1275, 0.124,  0.122,  0.12,   0.1185,
     0.117,  0.115,  0.115};
 
-  static const G4double gampCrossSections[50][30] = {
+  static const G4double gampCrossSections[48][30] = {
   //
   // multiplicity 2 (6 channels)
   //
@@ -139,25 +127,15 @@ namespace {
     0.0003,  0.0002, 0.0002, 0.0002, 0.0002, 0.0002, 0.0001, 0.0001, 0.0001,
     0.0001,  0.0001, 0.0001},
  
-  // pi0 p ( = pi0 n ) with new data above 500 MeV
+  // p pi0 ( = n pi0 ) with new data above 500 MeV
    {0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
     0.0,    0.01,   0.08,   0.3,    0.1143, 0.03,  0.029,  0.0229, 0.0106, 0.005,
     0.0018, 0.0009, 0.0004, 0.0002, 0.0,    0.0,   0.0,    0.0,    0.0,    0.0}, 
  
-  // pi+ n ( = pi- p ) with new data above 800 MeV
+  // n pi+ ( = p pi- ) with new data above 800 MeV
    {0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,   0.0,
     0.0,    0.062,  0.152,  0.2373, 0.1143, 0.084, 0.0983, 0.0419, 0.015, 0.006,
     0.0035, 0.0022, 0.0014, 0.0007, 0.0003, 0.0,   0.0,    0.0,    0.0,   0.0},
-
-  // p pi0 ( = n pi0 ) backscatter -- from integral of Anderson 1969 data.  Start at 2.4 GeV 
-   {0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
-    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
-   1.5e-4, 6.4e-5, 2.85e-5, 1.2e-5, 5.0e-6 , 2.1e-6, 9.6e-7,  3.6e-7,  1.5e-7, 6.4e-8}, 
- 
-  // n pi+ ( = p pi- ) backscatter -- from integral of Anderson 1969 data.  Start at 2.4 GeV
-   {0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
-    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
-   1.5e-4, 6.4e-5, 2.85e-5, 1.2e-5, 5.0e-6 , 2.1e-6, 9.6e-7,  3.6e-7,  1.5e-7, 6.4e-8}, 
 
   // L K+ ( = L K0 )
    {0.0,    0.0,    0.0,    0.0,    0.0,   0.0,  0.0,  0.0,    0.0,    0.0,

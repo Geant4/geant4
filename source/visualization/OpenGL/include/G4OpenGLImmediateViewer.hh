@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -32,7 +31,7 @@
 //                                 an OpenGL viewer, for inheritance by
 //                                 derived (X, Xm...) classes.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLIMMEDIATEVIEWER_HH
 #define G4OPENGLIMMEDIATEVIEWER_HH

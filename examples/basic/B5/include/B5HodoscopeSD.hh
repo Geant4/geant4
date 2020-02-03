@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B5HodoscopeSD.hh 76474 2013-11-11 10:36:34Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B5HodoscopeSD.hh
 /// \brief Definition of the B5HodoscopeSD class

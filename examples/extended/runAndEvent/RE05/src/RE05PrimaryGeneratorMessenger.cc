@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: RE05PrimaryGeneratorMessenger.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file RE05/src/RE05PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the RE05PrimaryGeneratorMessenger class

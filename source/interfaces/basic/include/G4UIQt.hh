@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh 97681 2016-06-07 08:59:17Z gcosmo $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -41,6 +40,7 @@
 #include <qstringlist.h>
 #include <qtabwidget.h>
 #include <qdockwidget.h>
+#include <qdialog.h>
 
 class QMainWindow;
 class QLineEdit;
@@ -58,6 +58,10 @@ class QToolBar;
 class QTableWidget;
 class QPixmap;
 class QComboBox;
+class QCompleter;
+class QtGlobal;
+class QStandardItemModel;
+class QToolButton;
 
 // Class description :
 //
@@ -144,11 +148,24 @@ public: // With description
   // Fourth argument is the path to the icon file if "user_icon" selected
   // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
 
+  void DefaultIcons(bool aVal);
+  // Enable/Disable the default icon ToolBar in Qt
+
   bool AddTabWidget(QWidget*,QString);
   // To add a tab for vis openGL Qt driver
   
-  QTabWidget* GetSceneTreeComponentsTBWidget();
-  // Get the viewComponent
+  inline QTabWidget* GetViewerTabWidget() {
+    return fViewerTabWidget;
+  };
+
+  QWidget* GetSceneTreeWidget();
+  // Get the scene tree component
+
+  QWidget* GetViewerPropertiesWidget();
+  // Get the Viewer Properties Widget
+
+  QWidget* GetPickInfosWidget();
+  // Get the Pick Widget
 
   bool IsSplitterReleased();
 
@@ -210,7 +227,7 @@ public: // With description
   };
   // Return the UserInterface widget (including scene tree, help and History widgets)
 
-  inline QTabWidget* GetViewersWidget() {
+  inline QTabWidget* GetUITabWidget() {
     return fUITabWidget;
   }
   // return the viewer widget including all viewers
@@ -245,7 +262,10 @@ private:
   void CreateHelpWidget();
   void InitHelpTreeAndVisParametersWidget();
   void FillHelpTree();
+  void UpdateCommandCompleter();
+  void CreateIcons();
   virtual void ExitHelp() const;
+  void SetDefaultIconsToolbar();
 
   void CreateHelpTree(QTreeWidgetItem*,G4UIcommandTree*);
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
@@ -262,7 +282,7 @@ private:
   G4UIDockWidget* CreateCoutTBWidget();
   QWidget* CreateHistoryTBWidget();
   G4UIDockWidget* CreateUITabWidget();
-  QWidget* CreateSceneTreeComponentsTBWidget();
+  QWidget* CreateSceneTreeWidget();
   void CreateViewerWidget();
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
@@ -270,12 +290,18 @@ private:
   G4bool IsGUICommand(const G4UIcommand*);
   bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, int, bool isDialog);
   bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, bool isDialog);
+  void CreateViewerPropertiesDialog();
+  void CreatePickInfosDialog();
 #ifdef G4MULTITHREADED
   void UpdateCoutThreadFilter();
 #endif
   void FilterAllOutputTextArea();
   QString FilterOutput(const G4UIOutputString&,const QString&,const QString&);
   G4String GetThreadPrefix();
+  bool CheckG4EnvironmentVariable(char* txt, char* version);
+  QStandardItemModel* CreateCompleterModel(G4String aCmd);
+  void CreateEmptyViewerPropertiesWidget();
+  void CreateEmptyPickInfosWidget();
 private:
 
   QMainWindow * fMainWindow;
@@ -285,14 +311,18 @@ private:
   QTabWidget* fUITabWidget;
   std::vector <G4UIOutputString> fG4OutputString;
   QLineEdit * fCoutFilter;
-
+  QCompleter* fCompleter;
+  bool fDefaultIcons;
+  
   QListWidget *fHistoryTBTableList;
   QTreeWidget *fHelpTreeWidget;
   QWidget* fHelpTBWidget;
   QWidget* fHistoryTBWidget;
   G4UIDockWidget* fCoutDockWidget;
   G4UIDockWidget* fUIDockWidget;
-  QTabWidget* fSceneTreeComponentsTBWidget;
+  QWidget* fSceneTreeWidget;
+  QWidget* fViewerPropertiesWidget;
+  QWidget* fPickInfosWidget;
   QLineEdit* fHelpLine;
   G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
@@ -306,12 +336,38 @@ private:
   QString fStringSeparator;
   G4String fLastErrMessage;
   QString fLastOpenPath;
+  QToolButton* fViewModePopupButton;
+  QToolButton* fSurfaceModePopupButton;
   
   QPixmap* fSearchIcon;
   QPixmap* fClearIcon;
+  QPixmap* fSaveIcon;
+  QPixmap* fOpenIcon;
+  QPixmap* fMoveIcon;
+  QPixmap* fRotateIcon;
+  QPixmap* fPickIcon;
+  QPixmap* fZoomInIcon;
+  QPixmap* fZoomOutIcon;
+  QPixmap* fWireframeIcon;
+  QPixmap* fSolidIcon;
+  QPixmap* fHiddenLineRemovalIcon;
+  QPixmap* fHiddenLineAndSurfaceRemovalIcon;
+  QPixmap* fPerspectiveIcon;
+  QPixmap* fOrthoIcon;
+  QPixmap* fCommandIcon;
+  QPixmap* fDirIcon;
+  QPixmap* fRunIcon;
+  QPixmap* fParamIcon;
+  QPixmap* fPickTargetIcon;
+  
+#ifdef G4MULTITHREADED
   QComboBox* fThreadsFilterComboBox;
+#endif
   std::string fDefaultViewerFirstPageHTMLText;
   
+  QDialog* fViewerPropertiesDialog;
+  QDialog* fPickInfosDialog;
+  QString fLastCompleteCommand;
   bool fMoveSelected;
   bool fRotateSelected;
   bool fPickSelected;
@@ -321,6 +377,7 @@ private:
 private Q_SLOTS :
   void ExitSession();
   void ClearButtonCallback();
+  void SaveOutputCallback();
   void CommandEnteredCallback();
   void CommandEditedCallback(const QString & text);
   void ButtonCallback(const QString&);
@@ -337,10 +394,11 @@ private Q_SLOTS :
   void ToolBoxActivated(int);
   void VisParameterCallback(QWidget*);
   void ChangeColorCallback(QWidget*);
-  void ChangeCursorStyle(const QString&);
+  void ChangeCursorAction(const QString&);
   void ChangeSurfaceStyle(const QString&);
   void OpenIconCallback(const QString&);
   void SaveIconCallback(const QString&);
+  void ViewerPropertiesIconCallback(int);
   void ChangePerspectiveOrtho(const QString&);
 };
 

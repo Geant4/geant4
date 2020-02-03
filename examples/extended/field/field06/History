@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: History 91270 2015-06-29 07:07:49Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // ------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,37 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+Nov   1, 2019 J.Apostolakis - fieldex06-V10-05-01
+- Adjusted for change in G4Transportation (need to inform of use of gravity)
+    and corrected creation of G4ChordFinder.  
+
+July 27, 2018 I.Hrivnacova - fieldex06-V10-04-01
+- Macro review and code clean-up:
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
+
+May 15, 2018 J.Allison - fieldex06-V10-04-00
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+
+Nov 03, 2016 L.Garnier - fieldex06-V10-02-02
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+July 18, 2016 I. Hrivnacova - fieldex06-V10-02-01
+- In F06PhysicsList: apply step limiter process to all particles
+  by calling the new G4StepLimiterPhysics::SetApplyToAll() function
+
+July 01, 2016 I. Hrivnacova - fieldex06-V10-02-00
+- Replaced F06ExtraPhysics with use of G4StepLimiterPhysics, 
+  code clean-up
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 June 26, 2015 P. Gumplinger - fieldex06-V10-01-01/02/03
 - remove AddBetaDecay method
 

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: Doxymodules_exoticphysics.h 86514 2014-11-13 09:10:24Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_exoticphysics.h

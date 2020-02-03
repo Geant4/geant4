@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.hh,v 1.8 2009-03-09 12:42:00 allison Exp $
 
 // /vis/set - John Allison  21st March 2012
 // Set quantities for use in appropriate future commands.
@@ -47,6 +46,18 @@ public:
 private:
   G4VisCommandSetColour (const G4VisCommandSetColour&);
   G4VisCommandSetColour& operator = (const G4VisCommandSetColour&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSetExtentForField: public G4VVisCommand {
+public:
+  G4VisCommandSetExtentForField ();
+  virtual ~G4VisCommandSetExtentForField ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetExtentForField (const G4VisCommandSetExtentForField&);
+  G4VisCommandSetExtentForField& operator = (const G4VisCommandSetExtentForField&);
   G4UIcommand* fpCommand;
 };
 
@@ -107,6 +118,18 @@ public:
 private:
   G4VisCommandSetTouchable (const G4VisCommandSetTouchable&);
   G4VisCommandSetTouchable& operator = (const G4VisCommandSetTouchable&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSetVolumeForField: public G4VVisCommand {
+public:
+  G4VisCommandSetVolumeForField ();
+  virtual ~G4VisCommandSetVolumeForField ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetVolumeForField (const G4VisCommandSetVolumeForField&);
+  G4VisCommandSetVolumeForField& operator = (const G4VisCommandSetVolumeForField&);
   G4UIcommand* fpCommand;
 };
 

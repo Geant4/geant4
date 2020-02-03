@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysicsTableHelper.cc 70369 2013-05-29 14:59:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
 // Class Description
+//
 //  G4PhysicsTableHelper is a static utility class 
-//  for helping proceeses to build their physics table
+//  for helping processes to build their physics table
 //
 // ------------------------------------------------------------
 //   First Implementation          20 Aug. 2004   H.Kurashige
@@ -66,11 +66,11 @@ G4PhysicsTable* G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTa
   G4ProductionCutsTable* cutTable = G4ProductionCutsTable::GetProductionCutsTable();  
   size_t numberOfMCC = cutTable->GetTableSize(); 
 
-  if ( physTable !=0) {
+  if ( physTable != nullptr) {
     // compare size of physics table and number of material-cuts-couple
     if ( physTable->size() < numberOfMCC) {
       // enlarge physcis table
-      physTable->resize(numberOfMCC, (G4PhysicsVector*)(0));
+      physTable->resize(numberOfMCC, nullptr);
 #ifdef G4VERBOSE  
       if (verboseLevel>2) {
 	G4cerr << "G4PhysicsTableHelper::PreparePhysicsTable  ";
@@ -96,8 +96,8 @@ G4PhysicsTable* G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTa
   } else {
     // create PhysicsTable is given poitner is null
     physTable = new G4PhysicsTable(numberOfMCC);
-    if (physTable!=0) {
-      physTable->resize(numberOfMCC, (G4PhysicsVector*)(0));
+    if (physTable != nullptr) {
+      physTable->resize(numberOfMCC, nullptr);
     } else {
       G4Exception( "G4PhysicsTableHelper::PreparePhysicsTable()",
 		   "ProcCuts002", FatalException, 
@@ -107,7 +107,7 @@ G4PhysicsTable* G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTa
 
 #ifdef G4VERBOSE  
   if (verboseLevel>2) {
-    if ( physTable !=0) { 
+    if ( physTable != nullptr) { 
       G4cerr << "Physics Table size "<< physTable->size();
     } else {
       G4cerr << "Physics Table does not exist   ";
@@ -138,7 +138,7 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
 						  const G4String& fileName,
 						  G4bool ascii              )
 {
-  if (physTable == 0) return false;
+  if (physTable == nullptr ) return false;
   
   // retrieve physics table from the given file
   G4PhysicsTable* tempTable = new G4PhysicsTable();
@@ -146,7 +146,7 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
 #ifdef G4VERBOSE  
     if (verboseLevel>1) {
       G4cerr << "G4PhysicsTableHelper::RetrievePhysicsTable  ";
-      G4cerr << "Fail to retreive from "<< fileName << G4endl;
+      G4cerr << "Fail to retrieve from "<< fileName << G4endl;
     }
 #endif 
     G4Exception( "G4ProductionCutsTable::RetrievePhysicsTable()",
@@ -184,7 +184,7 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
       if (converter->GetIndex(idx)<0) continue;
       size_t i = converter->GetIndex(idx);
       G4PhysicsVector* vec = (*physTable)[i];
-       if (vec !=0 ) delete vec;
+       if (vec != nullptr ) delete vec;
       (*physTable)[i] =  (*tempTable)[idx];
       physTable->ClearFlag(i);
     }
@@ -200,7 +200,7 @@ void G4PhysicsTableHelper::SetPhysicsVector(G4PhysicsTable* physTable,
 					    size_t idx,
 					    G4PhysicsVector* vec)
 {
-  if ( physTable ==0) {  return;  }
+  if ( physTable == nullptr) {  return;  }
 
   if ( physTable->size() <= idx) {
 #ifdef G4VERBOSE  

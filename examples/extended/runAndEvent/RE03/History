@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 69567 2013-05-08 12:43:15Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,32 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+Sep 20, 2019 M. Asai (exampleRE03-V10-05-00)
+- Add G4VScoringMesh:: scope identifier to RE03UserScoreWriter.cc.
+- Co-working with detutils-V10-05-01
+
+May 23, 2018 M. Asai (exampleRE03-V10-04-01)
+- Add batchrun1.mac for batch job and update CMakelists.txt
+  accordingly.
+
+May 16, 2018 J. Allison
+- Minor fixes to run*.mac files.
+
+May 14, 2018 J. Allison  (exampleRE03-V10-04-00)
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac: Tidy.
+  o No need to create empty scene - /vis/drawVolume creates a new one.
+  o No need to /tracking/storeTrajectories - /vis/scene/add/trajectories does.
+- run1.mac: Tidy.
+
+Sep 02, 2016 M. Asai (exampleRE03-V10-02-00)
+- Migrate to G4THitsMap<G4StatDouble>.
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 May 02, 2013 M. Asai (exampleRE03-V09-06-03)
 - Migrate to G4VUserActionInitalization so that it works
   for both sequential and multi-threaded modes.

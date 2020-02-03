@@ -29,6 +29,7 @@
 // Jun 27, 2015 : Ivana Hrivnacova - new implementation using g4analysis
 
 #include "G4MPIhistoMerger.hh"
+#include "G4MPImanager.hh"
 #include "G4ios.hh"
 #include "tools/mpi/hmpi"
 #include <mpi.h>
@@ -47,13 +48,14 @@ void G4MPIhistoMerger::Merge()
     G4cout << "Starting merging of histograms" << G4endl;
   }
 
-  MPI::Intracomm comm = MPI::COMM_WORLD.Dup();
+  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
+  MPI::Intracomm comm = parentComm->Dup();
 
   G4bool verbose = ( verboseLevel > 1 );
   G4int tag = G4MPImanager::kTAG_HISTO;
   //const MPI::Intracomm* comm = &COMM_G4COMMAND_;
-  tools::mpi::hmpi* hmpi = new tools::mpi::hmpi(G4cout, destination, tag,
-                                                                            comm, verbose);
+  tools::mpi::hmpi* hmpi 
+    = new tools::mpi::hmpi(G4cout, destination, tag, comm, verbose);
   if ( ! manager->Merge(hmpi) ) {
       G4cout<<" Merge FAILED"<<G4endl;
   }

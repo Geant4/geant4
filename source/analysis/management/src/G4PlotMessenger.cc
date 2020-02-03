@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Author: Ivana Hrivnacova, 21/10/2015  (ivana@ipno.in2p3.fr)
 
@@ -113,11 +112,11 @@ void G4PlotMessenger::SetLayoutCmd()
   fSetLayoutCmd = G4Analysis::make_unique<G4UIcommand>("/analysis/plot/setLayout", this);
   // Guidance text:
   // Set page layout (number of columns and rows per page).
-  //    Suported layouts: 
+  //    Supported layouts: 
   //    columns = 1 .. maxValueAllowed
   //    rows    = 1 .. maxValueAllowed, and >= columns
   fSetLayoutCmd->SetGuidance("Set page layout (number of columns and rows per page).");
-  fSetLayoutCmd->SetGuidance("   Suported layouts: ");
+  fSetLayoutCmd->SetGuidance("   Supported layouts: ");
   G4String guidance = "  columns = 1 .. ";
   guidance.append(osMaxColumns.str());
   fSetLayoutCmd->SetGuidance(guidance);
@@ -157,7 +156,7 @@ void G4PlotMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   std::vector<G4String> parameters;
   G4Analysis::Tokenize(newValues, parameters);
   // check consistency
-  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+  if ( parameters.size() != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
     fHelper->WarnAboutParameters(command, parameters.size());
     return;

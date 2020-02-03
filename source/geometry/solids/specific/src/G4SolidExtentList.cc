@@ -23,38 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SolidExtentList implementation; a list of (voxel) extents along one axis.
 //
-// $Id: G4SolidExtentList.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4SolidExtentList.cc
-//
-// Implementation of a list of (voxel) extents along one axis
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"
 #include "G4GeometryTolerance.hh"
 
-
-//
 // Constructor (default)
 //
 G4SolidExtentList::G4SolidExtentList() 
 {
   axis = kZAxis;
-  limited = false;
   minLimit = -INT_MAX/2;
   maxLimit =  INT_MAX/2;
 }
 
-
-//
 // Constructor (limited case)
 //
 G4SolidExtentList::G4SolidExtentList( const EAxis targetAxis,
@@ -75,20 +61,16 @@ G4SolidExtentList::G4SolidExtentList( const EAxis targetAxis,
   }
 }
 
-
-//
 // Destructor
 //
 G4SolidExtentList::~G4SolidExtentList()
 {
 }
 
-
-//
 // AddSurface
 //
 //
-void G4SolidExtentList::AddSurface( const G4ClippablePolygon &surface )
+void G4SolidExtentList::AddSurface( const G4ClippablePolygon& surface )
 {
   //
   // Keep track of four surfaces
@@ -121,14 +103,11 @@ void G4SolidExtentList::AddSurface( const G4ClippablePolygon &surface )
   }
 }
 
-
-
-//
 // GetExtent
 //
 // Return extent after processing all surfaces
 //
-G4bool G4SolidExtentList::GetExtent( G4double &min, G4double &max ) const
+G4bool G4SolidExtentList::GetExtent( G4double& min, G4double& max ) const
 {
   G4double kCarTolerance = G4GeometryTolerance::GetInstance()
                            ->GetSurfaceTolerance();

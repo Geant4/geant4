@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id$
 // GEANT4 tag $Name:  $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -123,7 +126,7 @@ void G4RDDopplerProfile::LoadBiggsP(const G4String& fileName)
   ost << fileName << ".dat";
   G4String name(ost.str());
   
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4LEDATA environment variable not set!");
@@ -165,7 +168,7 @@ void G4RDDopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
   ost << fileName << "-" << Z << ".dat";
   G4String name(ost.str());
   
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4LEDATA environment variable not set!");

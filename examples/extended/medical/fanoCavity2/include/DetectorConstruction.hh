@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity2/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.hh 68763 2013-04-05 12:36:20Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,50 +55,46 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
   
-     void SetWallMaterial    (G4String);
+     void SetWallThickness   (G4double);
+     void SetWallMaterial    (const G4String&);
        
-     void SetWallThickness   (G4double);       
-     void SetCavityThickness (G4double);            
-      
-     void SetWorldRadius     (G4double);
-                 
+     void SetCavityThickness (G4double);
+     void SetCavityRadius    (G4double);           
+     void SetCavityMaterial  (const G4String&);
+          
      virtual G4VPhysicalVolume* Construct();
-     void               UpdateGeometry();
      
-  public:
-    
      G4double     GetWallThickness()   {return fWallThickness;};
+     G4double     GetWallRadius()      {return fWallRadius;};           
      G4Material*  GetWallMaterial()    {return fWallMaterial;};
      G4VPhysicalVolume* GetWall()      {return fWall;};
                      
      G4double     GetCavityThickness() {return fCavityThickness;};
+     G4double     GetCavityRadius()    {return fCavityRadius;};           
      G4Material*  GetCavityMaterial()  {return fCavityMaterial;}; 
      G4VPhysicalVolume* GetCavity()    {return fCavity;};
           
-     G4double     GetWorldThickness()  {return fWorldThickness;};
-     G4double     GetWorldRadius()     {return fWorldRadius;};        
+     G4double     GetTotalThickness()  {return fTotalThickness;};     
      
      void         PrintParameters();
                        
   private:
+
+     void         DefineMaterials();
    
      G4double            fWallThickness;
+     G4double            fWallRadius;     
      G4Material*         fWallMaterial;
      G4VPhysicalVolume*  fWall;
      
      G4double            fCavityThickness;
+     G4double            fCavityRadius;     
      G4Material*         fCavityMaterial;
      G4VPhysicalVolume*  fCavity;
      
-     G4double            fWorldThickness;
-     G4double            fWorldRadius;
+     G4double            fTotalThickness;
 
-     DetectorMessenger* fDetectorMessenger;
-
-  private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
+     DetectorMessenger*  fDetectorMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

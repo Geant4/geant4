@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/include/XDetectorConstruction.hh
 /// \brief Definition of the XDetectorConstruction class
 //
-// $Id: XDetectorConstruction.hh 84197 2014-10-10 14:33:03Z gcosmo $
 //
 
 #ifndef XDetectorConstruction_h

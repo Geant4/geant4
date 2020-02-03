@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh 84398 2014-10-15 07:20:18Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -59,7 +58,6 @@
 
 class G4EmParameters;
 class G4LossTableManager;
-class G4Region;
 
 class G4EmProcessOptions
 {
@@ -134,7 +132,7 @@ public:
 
   void SetMscStepLimitation(G4MscStepLimitType val);
 
-  void SetSubCutoff(G4bool val, const G4Region* r=0);
+  void SetSubCutoff(G4bool val, const G4String& r = "");
 
   void SetIntegral(G4bool val);
 
@@ -165,10 +163,9 @@ public:
 
 private:
 
-  G4EmProcessOptions & operator=(const  G4EmProcessOptions &right);
-  G4EmProcessOptions(const  G4EmProcessOptions&);
+  G4EmProcessOptions & operator=(const  G4EmProcessOptions &right) = delete;
+  G4EmProcessOptions(const  G4EmProcessOptions&) = delete;
 
-  G4LossTableManager* theManager;
   G4EmParameters* theParameters;
 };
 

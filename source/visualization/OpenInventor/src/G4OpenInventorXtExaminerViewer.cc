@@ -27,6 +27,8 @@
 // Open Inventor Xt Extended Viewer - 30 Oct 2012
 // Rastislav Ondrasek, Pierre-Luc Gagnon, Frederick Jones TRIUMF
 
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 #include <stdio.h>
 #include <string.h>
 #include <string>
@@ -3015,7 +3017,9 @@ void G4OpenInventorXtExaminerViewer::saveViewPtCB(Widget w,
    XmStringFree(label);
    XtAddCallback(nameViewPtDialog, XmNokCallback, getViewPtNameCB, This);
    XtAddCallback(nameViewPtDialog, XmNcancelCallback,
-                 (XtCallbackProc) XtDestroyWidget, NULL);
+                 getViewPtNameCancelCB, This);
+   // Coverity gcc8 bad cast warning
+   //            (XtCallbackProc) XtDestroyWidget, NULL);
 
    Widget text = XtNameToWidget(nameViewPtDialog, "Text");
    XtVaSetValues(text, XmNmaxLength, This->MAX_VP_NAME, NULL);
@@ -3155,6 +3159,13 @@ void G4OpenInventorXtExaminerViewer::getViewPtNameCB(Widget w,
 
    }
 }
+
+void G4OpenInventorXtExaminerViewer::getViewPtNameCancelCB(Widget w,
+                                        XtPointer,
+                                        XtPointer)
+{
+   XtUnmanageChild(w);
+}   
 
 
 // Saves current camera parameters to a viewpoint file.
@@ -4851,3 +4862,5 @@ G4bool HookEventProcState::Notify(G4ApplicationState requiredState)
    }
    return true;
 }
+
+#endif // G4VIS_BUILD_OIX_DRIVER

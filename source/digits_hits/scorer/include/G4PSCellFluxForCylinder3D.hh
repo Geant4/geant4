@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G3PSCellFluxForCylinder3D.hh,v 1.3 2010/07/22 07:23:45 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G3PSCellFluxForCylinder3D_h

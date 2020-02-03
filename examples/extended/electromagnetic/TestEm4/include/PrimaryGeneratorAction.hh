@@ -27,7 +27,10 @@
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 //
+<<<<<<< HEAD
 // $Id: PrimaryGeneratorAction.hh 66241 2012-12-13 18:34:42Z gunter $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

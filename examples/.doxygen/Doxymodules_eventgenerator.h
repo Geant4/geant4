@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: Doxymodules_eventgenerator.h 94561 2015-11-24 09:17:12Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_eventgenerator.h

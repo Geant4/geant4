@@ -454,7 +454,7 @@ G4bool G4MuElecCrossSectionDataSet::SaveData(const G4String & argFileName) const
 
 G4String G4MuElecCrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
   {
       G4Exception("G4MuElecCrossSectionDataSet::FullFileName","em0006",

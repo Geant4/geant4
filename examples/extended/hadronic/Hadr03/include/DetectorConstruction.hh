@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr03/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.hh 78398 2013-12-16 16:39:55Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

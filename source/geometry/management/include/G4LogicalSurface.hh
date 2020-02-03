@@ -23,12 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LogicalSurface.hh 80066 2014-03-31 13:47:20Z gcosmo $
-//
-////////////////////////////////////////////////////////////////////////
-// Class G4LogicalSurface
-////////////////////////////////////////////////////////////////////////
+// G4LogicalSurface
 //
 // Class description:
 //
@@ -56,15 +51,9 @@
 
 // Created:     1997, June, 4th to 17th
 // Author:      John Apostolakis, (with help of Peter Gumplinger)
-// mail:        japost@mail.cern.ch
-//
 // ------------------------------------------------------------------------
 #ifndef G4LogicalSurface_h
 #define G4LogicalSurface_h 1
-
-/////////////
-// Includes
-/////////////
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -72,30 +61,29 @@
 class G4SurfaceProperty;
 class G4TransitionRadiationSurface;
 
-/////////////////////
-// Class Definition
-/////////////////////
-
 class G4LogicalSurface
 {
 
  public:  // with description
 
-   inline G4SurfaceProperty*  GetSurfaceProperty() const;
+   inline G4SurfaceProperty* GetSurfaceProperty() const;
    inline void SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
 
    inline const G4String& GetName() const;
    inline void SetName(const G4String& name);
 
    inline G4TransitionRadiationSurface* GetTransitionRadiationSurface() const;
-   inline void SetTransitionRadiationSurface(G4TransitionRadiationSurface* tRadSurf);
+   inline void SetTransitionRadiationSurface(G4TransitionRadiationSurface* trs);
 
  public:  // without description
 
    virtual ~G4LogicalSurface();
 
-   inline G4int operator==(const G4LogicalSurface &right) const;
-   inline G4int operator!=(const G4LogicalSurface &right) const;
+   G4LogicalSurface(const G4LogicalSurface&) = delete;
+   G4LogicalSurface& operator=(const G4LogicalSurface&) = delete;
+
+   inline G4bool operator==(const G4LogicalSurface &right) const;
+   inline G4bool operator!=(const G4LogicalSurface &right) const;
 
  protected:
 
@@ -104,22 +92,13 @@ class G4LogicalSurface
    G4LogicalSurface(const G4String& name, G4SurfaceProperty* prop); 
      // Is the name more meaningful for the properties or the logical surface ?
 
- private:  // Copying restricted
-
-   G4LogicalSurface(const G4LogicalSurface &right);
-   inline G4LogicalSurface& operator=(const G4LogicalSurface& right);
-
  private:
 
    G4String theName;              // Surface name
 
-   G4SurfaceProperty*             theSurfaceProperty;
-   G4TransitionRadiationSurface*  theTransRadSurface;
+   G4SurfaceProperty*             theSurfaceProperty = nullptr;
+   G4TransitionRadiationSurface*  theTransRadSurface = nullptr;
 };
-
-////////////////////
-// Inline methods
-////////////////////
 
 #include "G4LogicalSurface.icc"
 

@@ -32,7 +32,7 @@
 
 inline int __gl_vertLeq( GLUvertex *u, GLUvertex *v )
 {
-  /* Returns GLU_TRUE if u is lexicographically <= v. */
+  /* Returns TOOLS_GLU_TRUE if u is lexicographically <= v. */
 
   return VertLeq( u, v );
 }

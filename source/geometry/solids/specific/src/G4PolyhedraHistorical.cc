@@ -23,37 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4PolyhedraHistorical, polyhedra data
 //
-// $Id:$
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4PolyhedraHistorical.cc
-//
-// Implementation of polyhedra data
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4PolyhedraHistorical.hh"
 
 G4PolyhedraHistorical::G4PolyhedraHistorical()
-  : Start_angle(0.), Opening_angle(0.), numSide(0), Num_z_planes(0),
-    Z_values(0), Rmin(0), Rmax(0)
 {
 }
 
 G4PolyhedraHistorical::G4PolyhedraHistorical( G4int z_planes )
-  : Start_angle(0.), Opening_angle(0.), numSide(0),
-    Num_z_planes(z_planes)
+  : Num_z_planes(z_planes)
 {
   Z_values = new G4double[z_planes];
   Rmin     = new G4double[z_planes];
   Rmax     = new G4double[z_planes];
   
-  for( G4int i = 0; i < z_planes; i++)
+  for( G4int i = 0; i < z_planes; ++i)
   {
     Z_values[i] = 0.0;
     Rmin[i]     = 0.0;
@@ -80,7 +68,7 @@ G4PolyhedraHistorical( const G4PolyhedraHistorical& source )
   Rmin     = new G4double[Num_z_planes];
   Rmax     = new G4double[Num_z_planes];
   
-  for( G4int i = 0; i < Num_z_planes; i++)
+  for( G4int i = 0; i < Num_z_planes; ++i)
   {
     Z_values[i] = source.Z_values[i];
     Rmin[i]     = source.Rmin[i];
@@ -105,7 +93,7 @@ G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
   Rmin     = new G4double[Num_z_planes];
   Rmax     = new G4double[Num_z_planes];
   
-  for( G4int i = 0; i < Num_z_planes; i++)
+  for( G4int i = 0; i < Num_z_planes; ++i)
   {
     Z_values[i] = right.Z_values[i];
     Rmin[i]     = right.Rmin[i];

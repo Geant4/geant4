@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/src/XActionInitialization.cc
 /// \brief Implementation of the XActionInitialization class
 //
-// $Id$
 
 #include "XActionInitialization.hh"
 #include "XPrimaryGeneratorAction.hh"

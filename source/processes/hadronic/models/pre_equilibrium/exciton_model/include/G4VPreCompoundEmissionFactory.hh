@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundEmissionFactory.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // by V. Lara
 //

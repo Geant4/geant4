@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm1/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 76293 2013-11-08 13:11:23Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +36,7 @@
 #include "G4UserSteppingAction.hh"
 
 class EventAction;
+class G4NIELCalculator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,12 +44,13 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(EventAction*);
-   ~SteppingAction() {};
+    ~SteppingAction() override;
 
-    virtual void UserSteppingAction(const G4Step*);
-    
+    void UserSteppingAction(const G4Step*) override;
+
   private:
     EventAction*  fEventAction;
+    G4NIELCalculator* fNIELCalculator;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,29 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DCtable
 //
-// $Id: G4DCtable.hh 80987 2014-05-19 10:50:22Z gcosmo $
-//
-
-#ifndef G4DCtable_H
-#define G4DCtable_H 1
-
-class G4VDigitizerModule;
-#include "globals.hh"
-//#include "g4rw/tvordvec.h"
-#include <vector>
-
 // class description:
 //
-//  This class is used by G4DigiManager for book keeping the
+// This class is used by G4DigiManager for book keeping the
 // digitizer modules and digits collections. The order of
 // digi collections stored in G4DCofThisEvent is same as the
 // order of DClist. 
-//  The order may vary from run to run, if the user adds/changes
+// The order may vary from run to run, if the user adds/changes
 // some of his/her digitizer modules.
-//  In case user wants to make G4Run object persistent, this
+// In case user wants to make G4Run object persistent, this
 // G4DCtable class object should be copied and stored with
 // G4Run object.
+
+// Author: M.Asai
+// --------------------------------------------------------------------
+#ifndef G4DCtable_hh
+#define G4DCtable_hh 1
+
+#include "globals.hh"
+#include <vector>
+
+class G4VDigitizerModule;
 
 class G4DCtable
 {
@@ -64,7 +64,7 @@ class G4DCtable
 
   public:
     inline G4int entries() const
-    { return DClist.size(); }
+    { return G4int(DClist.size()); }
     inline G4String GetDMname(G4int i) const
     {
       if(i<0||i>entries()) return "***Not Defined***";
@@ -75,7 +75,6 @@ class G4DCtable
       if(i<0||i>entries()) return "***Not Defined***";
       return DClist[i];
     }
-
 };
 
 #endif

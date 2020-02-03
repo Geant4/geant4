@@ -146,14 +146,14 @@ inline void __gl_projectPolygon( GLUtesselator *tess )
   GLUvertex *v, *vHead = &tess->mesh->vHead;
   GLUdouble norm[3];
   GLUdouble *sUnit, *tUnit;
-  int i, computedNormal = GLU_FALSE;
+  int i, computedNormal = TOOLS_GLU_FALSE;
 
   norm[0] = tess->normal[0];
   norm[1] = tess->normal[1];
   norm[2] = tess->normal[2];
   if( norm[0] == 0 && norm[1] == 0 && norm[2] == 0 ) {
     static_ComputeNormal( tess, norm );
-    computedNormal = GLU_TRUE;
+    computedNormal = TOOLS_GLU_TRUE;
   }
   sUnit = tess->sUnit;
   tUnit = tess->tUnit;

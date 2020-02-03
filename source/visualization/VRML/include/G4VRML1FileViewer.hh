@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // G4VRML1FileViewer.hh
 // Satoshi Tanaka and Yasuhide Sawada

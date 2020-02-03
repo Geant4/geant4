@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointAlpha.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 
 #include "G4AdjointAlpha.hh"

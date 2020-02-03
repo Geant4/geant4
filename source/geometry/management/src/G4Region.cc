@@ -22,13 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4Region.cc 102288 2017-01-20 10:57:03Z gcosmo $
-//
 // 
-// class G4Region Implementation
+// G4Region class implementation
 //
+// 18.09.02, G.Cosmo - Initial version
 // --------------------------------------------------------------------
 
 #include "G4Region.hh"
@@ -66,17 +63,15 @@ const G4RegionManager& G4Region::GetSubInstanceManager()
 // *******************************************************************
 //
 G4Region::G4Region(const G4String& pName)
-  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
-    fFieldManager(0), fWorldPhys(0),
-    fInMassGeometry(false), fInParallelGeometry(false)
+  : fName(pName)
 {
 
   instanceID = subInstanceManager.CreateSubInstance();
-  G4MT_fsmanager = 0;
-  G4MT_rsaction = 0;
+  G4MT_fsmanager = nullptr;
+  G4MT_rsaction = nullptr;
 
   G4RegionStore* rStore = G4RegionStore::GetInstance();
-  if (rStore->GetRegion(pName,false))
+  if (rStore->GetRegion(pName, false))
   {
     std::ostringstream message;
     message << "The region has NOT been registered !" << G4endl
@@ -97,13 +92,11 @@ G4Region::G4Region(const G4String& pName)
 // ********************************************************************
 //
 G4Region::G4Region( __void__& )
-  : fName(""), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
-    fFieldManager(0), fWorldPhys(0),
-    fInMassGeometry(false), fInParallelGeometry(false)
+  : fName("")
 {
   instanceID = subInstanceManager.CreateSubInstance();
-  G4MT_fsmanager = 0;
-  G4MT_rsaction = 0;
+  G4MT_fsmanager = nullptr;
+  G4MT_rsaction = nullptr;
 
   // Register to store
   //
@@ -118,7 +111,7 @@ G4Region::G4Region( __void__& )
 G4Region::~G4Region()
 {
   G4RegionStore::GetInstance()->DeRegister(this);
-  if(fUserInfo) delete fUserInfo;
+  if(fUserInfo != nullptr)  { delete fUserInfo; }
 }
 
 // ********************************************************************
@@ -171,10 +164,10 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   // If logical volume is going to become a region, add 
   // its material to the list if not already present
   //
-  G4Region* currentRegion = 0;
+  G4Region* currentRegion = nullptr;
   size_t noDaughters = lv->GetNoDaughters();
   G4Material* volMat = lv->GetMaterial();
-  if(!volMat && fInMassGeometry)
+  if((volMat == nullptr) && fInMassGeometry)
   {
     std::ostringstream message;
     message << "Logical volume <" << lv->GetName() << ">" << G4endl
@@ -187,11 +180,11 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   if (region)
   {
     currentRegion = this;
-    if (volMat)
+    if (volMat != nullptr)
     { 
       AddMaterial(volMat); 
       G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
-      if (baseMat) { AddMaterial(baseMat); }
+      if (baseMat != nullptr) { AddMaterial(baseMat); }
     }
   }
 
@@ -212,10 +205,10 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     //
     G4VPVParameterisation* pParam = daughterPVol->GetParameterisation();
 
-    if (pParam->GetMaterialScanner())
+    if (pParam->GetMaterialScanner() != nullptr)
     {
       size_t matNo = pParam->GetMaterialScanner()->GetNumberOfMaterials();
-      for (size_t mat=0; mat<matNo; mat++)
+      for (size_t mat=0; mat<matNo; ++mat)
       {
         volMat = pParam->GetMaterialScanner()->GetMaterial(mat);
         if(!volMat && fInMassGeometry)
@@ -229,21 +222,21 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
           G4Exception("G4Region::ScanVolumeTree()", "GeomMgt0002",
                       FatalException, message, "Check your parameterisation.");
         }
-        if (volMat)
+        if (volMat != nullptr)
         { 
           AddMaterial(volMat); 
           G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
-          if (baseMat) { AddMaterial(baseMat); }
+          if (baseMat != nullptr) { AddMaterial(baseMat); }
         }
       }
     }
     else
     {
       size_t repNo = daughterPVol->GetMultiplicity();
-      for (size_t rep=0; rep<repNo; rep++)
+      for (size_t rep=0; rep<repNo; ++rep)
       {
         volMat = pParam->ComputeMaterial(rep, daughterPVol);
-        if(!volMat && fInMassGeometry)
+        if((volMat == nullptr) && fInMassGeometry)
         {
           std::ostringstream message;
           message << "The parameterisation for the physical volume <"
@@ -254,11 +247,11 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
           G4Exception("G4Region::ScanVolumeTree()", "GeomMgt0002",
                       FatalException, message, "Check your parameterisation.");
         }
-        if(volMat)
+        if(volMat != nullptr)
         { 
           AddMaterial(volMat);
           G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
-          if (baseMat) { AddMaterial(baseMat); }
+          if (baseMat != nullptr) { AddMaterial(baseMat); }
         }
       }
     }
@@ -267,7 +260,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   }
   else
   {
-    for (size_t i=0; i<noDaughters; i++)
+    for (size_t i=0; i<noDaughters; ++i)
     {
       G4LogicalVolume* daughterLVol = lv->GetDaughter(i)->GetLogicalVolume();
       if (!daughterLVol->IsRootRegion())
@@ -287,20 +280,26 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
 //    regions. It also recomputes the materials list for the region.
 // *******************************************************************
 //
-void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv)
+void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv, G4bool search)
 {
   // Check the logical volume is not already in the list
   //
-  G4RootLVList::iterator pos;
-  pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
-  if (pos == fRootVolumes.end())
+  if (search) 
   {
-    // Insert the root volume in the list and set it as root region
-    //
+    auto pos = std::find(fRootVolumes.cbegin(),fRootVolumes.cend(),lv);
+    if (pos == fRootVolumes.cend())
+    {
+      // Insert the root volume in the list and set it as root region
+      //
+      fRootVolumes.push_back(lv);
+      lv->SetRegionRootFlag(true);
+    }
+  }
+  else  // WARNING: user *MUST* guarantee lv is not already inserted.
+  {     // Providing speedup for very complex flat geometries
     fRootVolumes.push_back(lv);
     lv->SetRegionRootFlag(true);
   }
-
   // Scan recursively the tree of daugther volumes and set regions
   //
   ScanVolumeTree(lv, true);
@@ -320,9 +319,8 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan)
 {
   // Find and remove logical volume from the list
   //
-  G4RootLVList::iterator pos;
-  pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
-  if (pos != fRootVolumes.end())
+  auto pos = std::find(fRootVolumes.cbegin(),fRootVolumes.cend(),lv);
+  if (pos != fRootVolumes.cend())
   {
     if (fRootVolumes.size() != 1)  // Avoid resetting flag for world since
     {                              // volume may be already deleted !
@@ -339,6 +337,15 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan)
   // Set region as modified
   //
   fRegionMod = true;
+}
+
+// ********************************************************************
+// Clean
+// ********************************************************************
+//
+void G4Region::Clean()
+{
+  subInstanceManager.FreeSlave();
 }
 
 // *******************************************************************
@@ -366,8 +373,7 @@ void G4Region::UpdateMaterialList()
   // Loop over the root logical volumes and rebuild the list
   // of materials from scratch
   //
-  G4RootLVList::iterator pLV;
-  for (pLV=fRootVolumes.begin(); pLV!=fRootVolumes.end(); pLV++)
+  for (auto pLV=fRootVolumes.cbegin(); pLV!=fRootVolumes.cend(); ++pLV)
   {
     ScanVolumeTree(*pLV, true);
   }
@@ -419,7 +425,7 @@ void G4Region::ClearFastSimulationManager()
 {
   G4bool isUnique;
   G4Region* parent = GetParentRegion(isUnique);
-  if(parent)
+  if(parent != nullptr)
   {
     if (isUnique)
     {
@@ -435,12 +441,12 @@ void G4Region::ClearFastSimulationManager()
               << "to have fast-simulation assigned.";
       G4Exception("G4Region::ClearFastSimulationManager()",
                   "GeomMgt1002", JustWarning, message);
-      G4MT_fsmanager = 0;
+      G4MT_fsmanager = nullptr;
     }
   }
   else
   {
-    G4MT_fsmanager = 0;
+    G4MT_fsmanager = nullptr;
   }
 }
 
@@ -452,20 +458,19 @@ void G4Region::ClearFastSimulationManager()
 // 
 G4Region* G4Region::GetParentRegion(G4bool& unique) const
 {
-  G4Region* parent = 0; unique = true;
+  G4Region* parent = nullptr; unique = true;
   G4LogicalVolumeStore* lvStore = G4LogicalVolumeStore::GetInstance();
-  G4LogicalVolumeStore::iterator lvItr;
 
   // Loop over all logical volumes in the store
   //
-  for(lvItr=lvStore->begin(); lvItr!=lvStore->end(); lvItr++)
+  for(auto lvItr=lvStore->cbegin(); lvItr!=lvStore->cend(); ++lvItr)
   {
     G4int nD = (*lvItr)->GetNoDaughters();
     G4Region* aR = (*lvItr)->GetRegion();
 
     // Loop over all daughters of each logical volume
     //
-    for(G4int iD=0; iD<nD; iD++)
+    for(auto iD=0; iD<nD; ++iD)
     {
       if((*lvItr)->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
       { 

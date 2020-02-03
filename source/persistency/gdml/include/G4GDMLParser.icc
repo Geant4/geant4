@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc 89698 2015-04-27 13:25:23Z gcosmo $
 //
 //
 // class G4GDMLParser inline methods
@@ -34,15 +33,21 @@
 inline 
 void G4GDMLParser::Read(const G4String& filename, G4bool validate)
 {   
-  reader->Read(filename,validate,false,strip);
-  ImportRegions();
+  if ( G4Threading::IsMasterThread() )
+  {
+    reader->Read(filename,validate,false,strip);
+    ImportRegions();
+  }
 }
 
 inline 
 void G4GDMLParser::ReadModule(const G4String& filename, G4bool validate)
 {   
-  reader->Read(filename,validate,true);
-  ImportRegions();
+  if ( G4Threading::IsMasterThread() )
+  {
+    reader->Read(filename,validate,true);
+    ImportRegions();
+  }
 }
 
 inline
@@ -50,22 +55,25 @@ void G4GDMLParser::Write(const G4String& filename,
                          const G4VPhysicalVolume* pvol,
                                G4bool refs,
                          const G4String& schemaLocation)
-{ 
-  const G4int depth = 0;
-  G4LogicalVolume* lvol = 0;
-
-  if (!pvol)
+{
+  if ( G4Threading::IsMasterThread() )
   {
-    lvol = G4TransportationManager::GetTransportationManager()->
-           GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
-  }
-  else
-  {
-    lvol = pvol->GetLogicalVolume();
-  }
+    const G4int depth = 0;
+    G4LogicalVolume* lvol = 0;
 
-  if (rexp) { ExportRegions(refs); }
-  writer->Write(filename,lvol,schemaLocation,depth,refs);
+    if (!pvol)
+    {
+      lvol = G4TransportationManager::GetTransportationManager()->
+             GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
+    }
+    else
+    {
+      lvol = pvol->GetLogicalVolume();
+    }
+
+    if (rexp) { ExportRegions(refs); }
+    writer->Write(filename,lvol,schemaLocation,depth,refs);
+  }
 }
 
 inline
@@ -74,15 +82,18 @@ void G4GDMLParser::Write(const G4String& filename,
                                G4bool refs,
                          const G4String& schemaLocation)
 { 
-  const G4int depth = 0;
-
-  if (!lvol)
+  if ( G4Threading::IsMasterThread() )
   {
-    lvol = G4TransportationManager::GetTransportationManager()->
-           GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
+    const G4int depth = 0;
+
+    if (!lvol)
+    {
+      lvol = G4TransportationManager::GetTransportationManager()->
+             GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
+    }
+    if (rexp) { ExportRegions(refs); }
+    writer->Write(filename,lvol,schemaLocation,depth,refs);
   }
-  if (rexp) { ExportRegions(refs); }
-  writer->Write(filename,lvol,schemaLocation,depth,refs);
 }
 
 inline 
@@ -90,8 +101,15 @@ G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
                                              G4Material* medium,
                                              G4Material* solid)
 {   
-  G4STRead STreader;
-  return STreader.Read(filename, medium, solid);
+  if ( G4Threading::IsMasterThread() )
+  {
+    G4STRead STreader;
+    return STreader.Read(filename, medium, solid);
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 //
@@ -206,6 +224,21 @@ inline void G4GDMLParser::SetRegionExport(G4bool flag)
 inline void G4GDMLParser::SetEnergyCutsExport(G4bool flag)
 {
   writer->SetEnergyCutsExport(flag);
+}
+
+inline void G4GDMLParser::SetSDExport(G4bool flag)
+{
+  writer->SetSDExport(flag);
+}
+
+inline G4int G4GDMLParser::GetMaxExportLevel() const
+{
+  return writer->GetMaxExportLevel();
+}
+
+inline void G4GDMLParser::SetMaxExportLevel(G4int level)
+{
+  writer->SetMaxExportLevel(level);
 }
 
 inline void G4GDMLParser::Clear()

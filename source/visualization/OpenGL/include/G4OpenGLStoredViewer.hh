@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh 91268 2015-06-29 07:04:24Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -32,7 +31,7 @@
 //                              an OpenGL viewer, for inheritance by
 //                              derived (X, Xm...) classes.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLSTOREDVIEWER_HH
 #define G4OPENGLSTOREDVIEWER_HH
@@ -41,6 +40,8 @@
 
 class G4OpenGLStoredSceneHandler;
 class G4Colour;
+class G4Text;
+class G4Circle;
 
 class G4OpenGLStoredViewer: virtual public G4OpenGLViewer {
   
@@ -51,10 +52,17 @@ public:
 protected:
   void KernelVisitDecision ();
   virtual G4bool CompareForKernelVisit(G4ViewParameters&);
+  
   void DrawDisplayLists ();
+
   virtual void DisplayTimePOColourModification
   (G4Colour&, size_t /*currentPOListIndex*/) {}
+
+  void AddPrimitiveForASingleFrame(const G4Text& text);
+  void AddPrimitiveForASingleFrame(const G4Circle& circle);
+
   G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
+
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   
   // Two virtual functions to return sub-class selection.

@@ -23,20 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SubtractionSolid.cc 102292 2017-01-20 11:27:42Z gcosmo $
-//
 // Implementation of methods for the class G4IntersectionSolid
 //
-// History:
-//
-// 14.10.98 V.Grichine: implementation of the first version 
+// 22.07.11 T.Nikitina: added detection of infinite loop in DistanceToIn(p,v)
 // 19.10.98 V.Grichine: new algorithm of DistanceToIn(p,v)
-// 02.08.99 V.Grichine: bugs fixed in DistanceToOut(p,v,...)
-//                      while -> do-while & surfaceA limitations
-// 13.09.00 V.Grichine: bug fixed in SurfaceNormal(p), p can be inside
-// 22.07.11 T.Nikitina: add detection of Infinite Loop in DistanceToIn(p,v)
-//
+// 14.10.98 V.Grichine: implementation of the first version 
 // --------------------------------------------------------------------
 
 #include "G4SubtractionSolid.hh"
@@ -134,7 +125,35 @@ G4SubtractionSolid::operator = (const G4SubtractionSolid& rhs)
   return *this;
 }  
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void
+G4SubtractionSolid::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
+{
+  // Since it is unclear how the shape of the first solid will be changed
+  // after subtraction, just return its original bounding box.
+  //
+  fPtrSolidA->BoundingLimits(pMin,pMax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4SubtractionSolid::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
      
@@ -159,31 +178,20 @@ G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
 EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
 {
   EInside positionA = fPtrSolidA->Inside(p);
-  if (positionA == kOutside) return kOutside;
+  if (positionA == kOutside) return positionA; // outside A
 
   EInside positionB = fPtrSolidB->Inside(p);
-  
-  if(positionA == kInside && positionB == kOutside)
-  {
-    return kInside ;
-  }
-  else
-  {
-    static const G4double rtol
-      = 1000.0*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
-    if(( positionA == kInside && positionB == kSurface) ||
-       ( positionB == kOutside && positionA == kSurface) ||
-       ( positionA == kSurface && positionB == kSurface &&
-         ( fPtrSolidA->SurfaceNormal(p) - 
-           fPtrSolidB->SurfaceNormal(p) ).mag2() > rtol ) )
-    {
-      return kSurface;
-    }
-    else
-    {
-      return kOutside;
-    }
-  }
+  if (positionB == kOutside) return positionA;
+
+  if (positionB == kInside) return kOutside;
+  if (positionA == kInside) return kSurface; // surface B
+
+  // Point is on both surfaces
+  //
+  static const G4double rtol = 1000*kCarTolerance;
+
+  return ((fPtrSolidA->SurfaceNormal(p) -
+           fPtrSolidB->SurfaceNormal(p)).mag2() > rtol) ? kSurface : kOutside;
 }
 
 //////////////////////////////////////////////////////////////
@@ -194,8 +202,11 @@ G4ThreeVector
 G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const 
 {
   G4ThreeVector normal;
-  EInside insideThis= Inside(p); 
-  if( insideThis == kOutside )
+
+  EInside InsideA = fPtrSolidA->Inside(p);
+  EInside InsideB = fPtrSolidB->Inside(p); 
+
+  if( InsideA == kOutside )
   {
 #ifdef G4BOOLDEBUG
     G4cout << "WARNING - Invalid call [1] in "
@@ -207,46 +218,41 @@ G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const
            << "  Point p is outside !" << G4endl;
     G4cerr << "          p = " << p << G4endl;
 #endif
+    normal = fPtrSolidA->SurfaceNormal(p) ;
   }
-  else
-  { 
-    EInside InsideA = fPtrSolidA->Inside(p); 
-    EInside InsideB = fPtrSolidB->Inside(p); 
-
-    if( InsideA == kSurface && 
-        InsideB != kInside      ) 
+  else if( InsideA == kSurface && 
+           InsideB != kInside      ) 
+  {
+    normal = fPtrSolidA->SurfaceNormal(p) ;
+  }
+  else if( InsideA == kInside && 
+           InsideB != kOutside    )
+  {
+    normal = -fPtrSolidB->SurfaceNormal(p) ;
+  }
+  else 
+  {
+    if ( fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToIn(p) )
     {
       normal = fPtrSolidA->SurfaceNormal(p) ;
     }
-    else if( InsideA == kInside && 
-             InsideB != kOutside    )
+    else
     {
       normal = -fPtrSolidB->SurfaceNormal(p) ;
     }
-    else 
-    {
-      if ( fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToIn(p) )
-      {
-        normal = fPtrSolidA->SurfaceNormal(p) ;
-      }
-      else
-      {
-        normal = -fPtrSolidB->SurfaceNormal(p) ;
-      }
 #ifdef G4BOOLDEBUG
-      if(insideThis == kInside)
-      {
-        G4cout << "WARNING - Invalid call [2] in "
+    if(Inside(p) == kInside)
+    {
+      G4cout << "WARNING - Invalid call [2] in "
              << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-        G4cout << "          p = " << p << G4endl;
-        G4cerr << "WARNING - Invalid call [2] in "
+      G4cout << "          p = " << p << G4endl;
+      G4cerr << "WARNING - Invalid call [2] in "
              << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-        G4cerr << "          p = " << p << G4endl;
-      }
-#endif
+      G4cerr << "          p = " << p << G4endl;
     }
+#endif
   }
   return normal;
 }
@@ -301,7 +307,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             dist2 = dist+disTmp;
             if (dist == dist2)  { return dist; }   // no progress
             dist = dist2 ;
-            count1++;
+            ++count1;
             if( count1 > 1000 )  // Infinite loop detected
             {
               G4String nameB = fPtrSolidB->GetName();
@@ -357,7 +363,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             dist2 = dist+disTmp;
             if (dist == dist2)  { return dist; }   // no progress
             dist = dist2 ;
-            count2++;
+            ++count2;
             if( count2 > 1000 )  // Infinite loop detected
             {
               G4String nameB = fPtrSolidB->GetName();
@@ -398,7 +404,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 G4double 
 G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p ) const 
 {
-  G4double dist=0.0;
+  G4double dist = 0.0;
 
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -417,11 +423,11 @@ G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p ) const
   if( ( fPtrSolidA->Inside(p) != kOutside) &&   // case 1
       ( fPtrSolidB->Inside(p) != kOutside)    )
   {
-      dist= fPtrSolidB->DistanceToOut(p)  ;
+    dist = fPtrSolidB->DistanceToOut(p);
   }
   else
   {
-      dist= fPtrSolidA->DistanceToIn(p) ; 
+    dist = fPtrSolidA->DistanceToIn(p); 
   }
   
   return dist; 
@@ -531,7 +537,7 @@ G4VSolid* G4SubtractionSolid::Clone() const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// ComputeDimensions
 
 void 
 G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
@@ -542,7 +548,7 @@ G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
 
 /////////////////////////////////////////////////
 //
-//                    
+// DescribeYourselfTo
 
 void 
 G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
@@ -552,7 +558,7 @@ G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 ////////////////////////////////////////////////////
 //
-//
+// CreatePolyhedron
 
 G4Polyhedron* 
 G4SubtractionSolid::CreatePolyhedron () const 
@@ -563,5 +569,5 @@ G4SubtractionSolid::CreatePolyhedron () const
   G4Polyhedron* top = StackPolyhedron(processor, this);
   G4Polyhedron* result = new G4Polyhedron(*top);
   if (processor.execute(*result)) { return result; }
-  else { return 0; }
+  else { return nullptr; }
 }

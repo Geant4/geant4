@@ -5,6 +5,40 @@
                        Package History file
                        --------------------
 
+<<<<<<< HEAD
+=======
+11/02/19 - tag microyz-V10-05-02 - S. Incerti
+added EM UI commands in microyz.in
+
+09/02/19 - tag microyz-V10-05-01 - S. Incerti
+added condensed history models including step size control
+
+31/01/19 - tag microyz-V10-05-00 - I. Hrivnacova 
+Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+07/11/18 - tag microyz-V10-04-03 - I. Hrivnacova 
+updated plot.C for reading ntuples merged with row-wise mode
+(now default)
+
+09/09/18 - tag microyz-V10-04-02 - S. Incerti
+updated plot.C
+
+26/07/18 - tag microyz-V10-04-01 - S. Incerti
+added ntuple merging
+
+22/07/18 - tag microyz-V10-04-00 - S. Incerti
+removed obsolete RanecuEngine
+
+24/07/2017 - tag microyz-V10-03-01 - S.Incerti
+update of README*
+
+30/06/2017 - tag microyz-V10-03-00 - S.Incerti
+update of the code for release 10.4
+
+17/07/2016 - tag microyz-V10-02-00 - S.Incerti
+general update of the code
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 19/11/2015 - tag microyz-V10-01-05 - S.Incerti
 updated plot.C and microyz.in
 

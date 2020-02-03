@@ -1,5 +1,8 @@
 -------------------------------------------------------------------
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,8 +12,48 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
                           History file
                           ------------
 
+<<<<<<< HEAD
 28.10.2016 - G. Folger
              Remove direct use of aParticleIterator, use GetParticleTableIterator().
+=======
+31.01.2019 - I.Hrivnacova, Tag gammaraytel-V10-05-00
+             Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+21.10.2018 - F. Romano, Tag gammaraytel-V10-04-06
+             - G4VIS_USE and G4UI_USE deleted
+
+09.09.2018 - A. Ribon, Tag gammaraytel-V10-04-05
+             GammaRayTelHadronPhysics , GammaRayTelIonPhysics : replaced the
+             explicit high-energy limit of hadronic physics with the one from
+             G4HadronicParameters .
+
+16.05.2018 - L. Pandola, Tag gammaraytel-V10-04-04
+             Fix compiler warning on gcc8.1
+
+15.05.2018 - B. Morgan, Tag gammaraytel-V10-04-03
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+13.05.2018 - L. Pandola, Tag gammaraytel-V10-04-02
+	     Fix more warnings on clang
+
+10.05.2018 - L. Pandola, Tag gammaraytel-V10-04-01
+             Fix warning on clang
+
+08.05.2018 - F. Longo and L. Pandola, Tag gammaraytel-V10-04-00
+	     Fix problems reported by Valgrind (bug report #1981)
+
+19.11.2016 - A. Dotti gammaraytel-V10-02-02
+	     explicit set of SDs to manager
+
+31.10.2016 - F. Longo and L. Pandola, Tag  gammaraytel-V10-02-01
+	     Extended physics list to give the possibility to handle 
+	     polarized gamma-rays.
+
+28.10.2016 - G. Folger, Tag gammaraytel-V10-02-00
+            Remove direct use of aParticleIterator, use GetParticleTableIterator().
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
              fix required by clang39 on Linux and MAC
 
 27.10.2015 - A. Ribon, Tag gammaraytel-V10-01-00 

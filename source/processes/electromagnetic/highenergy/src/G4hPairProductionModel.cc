@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hPairProductionModel.cc 74020 2013-09-19 13:38:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -100,7 +99,7 @@ G4double G4hPairProductionModel::ComputeDMicroscopicCrossSection(
   if( Z < 1.5 ) { bbb = bbbh ; g1 = g1h ; g2 = g2h ; }
   else          { bbb = bbbtf; g1 = g1tf; g2 = g2tf; }
 
-  G4double zeta = 0;
+  G4double zeta = 0.;
   G4double zeta1 = 
     0.073*G4Log(totalEnergy/(particleMass+g1*z23*totalEnergy))-0.26;
   if ( zeta1 > 0.)

@@ -24,18 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
 // G4Exception
-//
-// Global error function prints string to G4cerr (or G4cout in case of
-// warning). May abort program according to severity.
 // ----------------------------------------------------------------------
 
-#include "G4ios.hh"
-#include "G4String.hh"
+#include "G4Exception.hh"
 #include "G4StateManager.hh"
 
 void G4Exception(const char* originOfException,
@@ -53,14 +48,10 @@ void G4Exception(const char* originOfException,
   }
   else
   {
-    static const G4String es_banner
-      = "\n-------- EEEE ------- G4Exception-START -------- EEEE -------\n";
-    static const G4String ee_banner
-      = "\n-------- EEEE -------- G4Exception-END --------- EEEE -------\n";
-    static const G4String ws_banner
-      = "\n-------- WWWW ------- G4Exception-START -------- WWWW -------\n";
-    static const G4String we_banner
-      = "\n-------- WWWW -------- G4Exception-END --------- WWWW -------\n";
+    static const G4String& es_banner = G4ExceptionErrBannerStart();
+    static const G4String& ee_banner = G4ExceptionErrBannerEnd();
+    static const G4String& ws_banner = G4ExceptionWarnBannerStart();
+    static const G4String& we_banner = G4ExceptionWarnBannerEnd();
     std::ostringstream message;
     message << "\n*** ExceptionHandler is not defined ***\n"
             << "*** G4Exception : " << exceptionCode << G4endl
@@ -109,8 +100,8 @@ void G4Exception(const char* originOfException,
 
 void G4Exception(const char* originOfException,
                  const char* exceptionCode,
-                 G4ExceptionSeverity severity,
-                 G4ExceptionDescription & description)
+                             G4ExceptionSeverity severity,
+                             G4ExceptionDescription & description)
 {
   G4String des = description.str();
   G4Exception(originOfException, exceptionCode, severity, des.c_str());
@@ -118,8 +109,8 @@ void G4Exception(const char* originOfException,
 
 void G4Exception(const char* originOfException,
                  const char* exceptionCode,
-                 G4ExceptionSeverity severity,
-                 G4ExceptionDescription & description,
+                             G4ExceptionSeverity severity,
+                             G4ExceptionDescription & description,
                  const char* comments)
 {
   description << comments << G4endl;

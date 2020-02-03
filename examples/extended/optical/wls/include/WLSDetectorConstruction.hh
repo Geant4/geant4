@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSDetectorConstruction.hh 77487 2013-11-25 10:15:04Z gcosmo $
 //
 /// \file optical/wls/include/WLSDetectorConstruction.hh
 /// \brief Definition of the WLSDetectorConstruction class

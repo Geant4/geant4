@@ -1,0 +1,27 @@
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setNbOfAbsor  4
+/testhadr/det/setAbsor 1 G4_PLEXIGLASS 5 mm
+/testhadr/det/setAbsor 2 G4_Al 0.5 mm
+/testhadr/det/setAbsor 3 G4_AIR 2 mm
+/testhadr/det/setAbsor 4 G4_SODIUM_IODIDE 5 cm
+/testhadr/det/setSizeYZ  5 cm
+#
+/run/initialize
+#
+/testhadr/gun/setDefault
+/gun/particle ion
+/gun/ion 11 22
+/gun/energy 0 eV
+/gun/position -26.25 0 0 mm
+#
+/analysis/setFileName rdecay
+/analysis/h1/set 4 100 0. 3. MeV	#edep in absor 4
+/analysis/h1/setAscii 4
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

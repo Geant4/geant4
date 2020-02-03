@@ -53,6 +53,8 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4SDManager;
+class G4OpticalSurface;
+class UltraDetectorMessenger;
 class UltraScintSD;
 class UltraPMTSD;
 class UltraFresnelLens;
@@ -67,26 +69,31 @@ public:
 public:
   G4VPhysicalVolume* Construct();
   void ConstructSDandField();
-  
-  
+  void SetReflectionType(G4String);  
+
   inline G4double GetLambdaMin() const {return lambda_min;}
   inline G4double GetLambdaMax() const {return lambda_max;}
   
 private:
   
   // Methods to build ULTRA
-  G4VPhysicalVolume  *ConstructUVscope(G4VPhysicalVolume *);
-  G4VPhysicalVolume  *ConstructMirror(G4VPhysicalVolume *);
-  G4VPhysicalVolume  *ConstructGround(G4VPhysicalVolume *);
-  UltraFresnelLens   *FresnelLens ;
-  
+  void ConstructUVscope();
+  void ConstructReflector();
+  void SetReflectorOpticalProperties();
+
   // Material definitions
   void ConstructTableMaterials();
-  
-  
+
 private:
-  G4LogicalVolume* logicalPMT;
-  
+  UltraDetectorMessenger *fDetectorMessenger;
+  G4VPhysicalVolume *fWorld_phys ;
+  UltraFresnelLens  *FresnelLens ;
+  G4OpticalSurface  *fReflectorOpticalSurface;
+  G4LogicalVolume   *logicalPMT;
+  G4LogicalVolume   *fReflectorLog;
+  G4String fReflectionType;
+  G4bool fIsReflectorConstructed;
+    
   G4double lambda_min ;
   G4double lambda_max ;
 };

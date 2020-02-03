@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeDecreaseModel.cc 92859 2015-09-18 07:58:30Z gcosmo $
 //
 
 #include "G4DNADingfelderChargeDecreaseModel.hh"
@@ -40,9 +39,8 @@ using namespace std;
 
 G4DNADingfelderChargeDecreaseModel::G4DNADingfelderChargeDecreaseModel(const G4ParticleDefinition*,
                                                                        const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam), isInitialised(false)
 {
-  //  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fpMolWaterDensity = 0;
   numberOfPartialCrossSections[0] = 0;
   numberOfPartialCrossSections[1] = 0;
@@ -97,7 +95,7 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
   G4String alphaPlusPlus;
   G4String alphaPlus;
 
-  // LIMITS
+  // Limits
 
   proton = protonDef->GetParticleName();
   lowEnergyLimit[proton] = 100. * eV;
@@ -242,46 +240,42 @@ G4double G4DNADingfelderChargeDecreaseModel::CrossSectionPerVolume(const G4Mater
 
   G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
 
-  if(waterDensity!= 0.0)
-  //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  const G4String& particleName = particleDefinition->GetParticleName();
+
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
+  pos1 = lowEnergyLimit.find(particleName);
+
+  if (pos1 != lowEnergyLimit.end())
   {
-    const G4String& particleName = particleDefinition->GetParticleName();
+    lowLim = pos1->second;
+  }
 
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-    pos1 = lowEnergyLimit.find(particleName);
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
+  pos2 = highEnergyLimit.find(particleName);
 
-    if (pos1 != lowEnergyLimit.end())
-    {
-      lowLim = pos1->second;
-    }
+  if (pos2 != highEnergyLimit.end())
+  {
+    highLim = pos2->second;
+  }
 
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(particleName);
+  if (k >= lowLim && k <= highLim)
+  {
+    crossSection = Sum(k,particleDefinition);
+  }
 
-    if (pos2 != highEnergyLimit.end())
-    {
-      highLim = pos2->second;
-    }
-
-    if (k >= lowLim && k < highLim)
-    {
-      crossSection = Sum(k,particleDefinition);
-    }
-
-    if (verboseLevel > 2)
-    {
-      G4cout << "_______________________________________" << G4endl;
-      G4cout << "G4DNADingfelderChargeDecreaeModel" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << k/eV << "particle :" << particleName << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << crossSection*
-      waterDensity/(1./cm) << G4endl;
-//            material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-    }
+  if (verboseLevel > 2)
+  {
+    G4cout << "_______________________________________" << G4endl;
+    G4cout << "G4DNADingfelderChargeDecreaeModel" << G4endl;
+    G4cout << "Kinetic energy(eV)=" << k/eV << "particle :" << particleName << G4endl;
+    G4cout << "Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
+    G4cout << "Cross section per water molecule (cm^-1)=" << crossSection*
+    waterDensity/(1./cm) << G4endl;
+    // material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
   }
 
   return crossSection*waterDensity;
-//    return crossSection*material->GetAtomicNumDensityVector()[1];
+  //return crossSection*material->GetAtomicNumDensityVector()[1];
 
 }
 
@@ -496,8 +490,10 @@ G4double G4DNADingfelderChargeDecreaseModel::PartialCrossSection(G4double k,
 
   if (particleDefinition == G4Proton::ProtonDefinition())
     particleTypeIndex = 0;
+
   if (particleDefinition == instance->GetIon("alpha++"))
     particleTypeIndex = 1;
+
   if (particleDefinition == instance->GetIon("alpha+"))
     particleTypeIndex = 2;
 
@@ -569,8 +565,10 @@ G4int G4DNADingfelderChargeDecreaseModel::RandomSelect(G4double k,
 
   if (particleDefinition == G4Proton::ProtonDefinition())
     particleTypeIndex = 0;
+
   if (particleDefinition == instance->GetIon("alpha++"))
     particleTypeIndex = 1;
+
   if (particleDefinition == instance->GetIon("alpha+"))
     particleTypeIndex = 2;
 
@@ -615,8 +613,10 @@ G4double G4DNADingfelderChargeDecreaseModel::Sum(G4double k,
 
   if (particleDefinition == G4Proton::ProtonDefinition())
     particleTypeIndex = 0;
+
   if (particleDefinition == instance->GetIon("alpha++"))
     particleTypeIndex = 1;
+
   if (particleDefinition == instance->GetIon("alpha+"))
     particleTypeIndex = 2;
 
@@ -626,6 +626,7 @@ G4double G4DNADingfelderChargeDecreaseModel::Sum(G4double k,
   {
     totalCrossSection += PartialCrossSection(k, i, particleDefinition);
   }
+
   return totalCrossSection;
 }
 

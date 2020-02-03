@@ -14,6 +14,184 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 November 2019 - V.Ivanchenko  (hadr-cohe-V10-05-10)
+---------------------------------------------------------------
+- G4HadronElastic : Added limit on number of warning printouts 
+
+19 November 2019 - G. Folger   (hadr-cohe-V10-05-09)
+---------------------------------------------------------------
+- remove using namespace std and using namespace CLHEP from header file
+   G4NeutronElectronElModel.hh
+
+15 November 2019 - V.Ivanchenko  (hadr-cohe-V10-05-08)
+---------------------------------------------------------------
+- G4HadronElastic : Change warning printout, in the case if sampled 
+    t>tmax resample using simple algorithm, protect this warning 
+    by G4VERBOSE, this is a partial fix of #2204
+
+06 November 2019 - A.Ribon       (hadr-cohe-V10-05-07)
+---------------------------------------------------------------
+- G4HadronElastic : Coverity fix in the unused method GetSlopeCof.
+
+31 October 2019 - V.Ivanchenko   (hadr-cohe-V10-05-06)
+--------------------------------------------------------
+- G4ElasticHadrNucleusHE - reduction of size of data structure and
+    time for initialisation ~2 times; general code clean-up; addition
+    of protections
+
+07 October 2019 - V.Grichine     (hadr-cohe-V10-05-05)
+     ---------------------------------------------------------------
+- G4hadronElstic - new method for s-,c-,b-particle
+- ds/dt slope modifications in preparation
+
+03 July 2019 - V.Ivanchenko     (hadr-cohe-V10-05-04)
+--------------------------------------------------------
+- G4ElasticHadrNucleusHE - general clean-up of the code
+- G4HadronElastic - added new parameterisation of A.Yeltokov
+
+14 May 2019 - A.Ribon           (hadr-cohe-V10-05-03)
+--------------------------------------------------------
+- G4HadronElastic : numerically safer treatment of the very rare cases
+    in which cos(theta) is either greater than 1.0 or smaller than -1.0
+    (in the first case, we assume no interaction and the projectile keeps
+    going unchanged; in the second case, we assume that the projectile
+    stops and its kinetic energy is deposited locally, neglecting the
+    recoil of the target nucleus).
+
+10 May 2019 - V.Ivanchenko      (hadr-cohe-V10-05-02)
+--------------------------------------------------------
+- G4ElasticHadrNucleusHE, G4LEpp, G4LEnp - clean-up
+- G4LowEHadronElastic - new model class
+
+29 April 2019 - V.Ivanchenko    (hadr-cohe-V10-05-01)
+--------------------------------------------------------
+- G4HadronElastic - added protected variable pLocalTmax, added protection 
+    for zero energy primary;
+  G4ChargeExchange - updated interfaces, added protection for zero 
+    energy primary
+  G4ElasticHadrNucleusHE - make all data shared between threads
+  G4AntiNuclElastic - do not compute trigonametric functions, 
+  which are not used
+
+19 April 2019 - V.Ivanchenko    (hadr-cohe-V10-05-00)
+--------------------------------------------------------
+- G4HadronElastic - removed tracking cut and use numerically safer 
+  computation for very low-energy projectile; improved description 
+  and comments; added C++11 keywords
+
+05 November 2018 - V.Ivanchenko    (hadr-cohe-V10-04-08)
+--------------------------------------------------------
+- G4HadronElastic - fixed numberical instability when 
+    final kinetic energy of projectile is nearly zero
+
+17 August 2018 - A.Ribon           (hadr-cohe-V10-04-07)
+--------------------------------------------------------
+- G4DiffuseElastic, G4DiffuseElasticV2, G4NuclNuclDiffuseElastic : increased
+  the number of equal-sized logarithmic-energy bins (from 200 to 300) in 
+  order to have no larger bins up to 10 PeV.
+- G4NuclNuclDiffuseElastic : replaced the high-energy limit of applicability
+  of the model from 1 TeV to the value specified in G4HadronicParameters.
+
+16 August 2018 - V.Ivanchenko      (hadr-cohe-V10-04-06)
+15 August 2018 - V.Ivanchenko      (hadr-cohe-V10-04-05)
+--------------------------------------------------------
+- G4AntiNuclElastic - do not delete component end of run
+
+06 August 2018 - A.Ribon           (hadr-cohe-V10-04-04)
+--------------------------------------------------------
+- G4HadronElastic, G4DiffuseElastic, G4DiffuseElasticV2, G4hhElastic,
+  G4ChargeExchange, G4NeutrinoElectronNcModel : replaced the explicit
+  high-energy limit of hadronic physics with the one from 
+  G4HadronicParameters .
+
+01 August 2018 - V.Ivanchenko      (hadr-cohe-V10-04-03)
+--------------------------------------------------------
+- G4AntiNuclElastic - proper deletion of component end of run
+
+18 July 2018 - V.Ivanchenko        (hadr-cohe-V10-04-02)
+--------------------------------------------------------
+- G4AntiNuclElastic - use cross section component from 
+    G4CrossSectionDataSetRegistry and do not delete it end of run    
+
+20 Mar 2018 - A.Ribon              (hadr-cohe-V10-04-01)
+--------------------------------------------------------
+- Set to 100.0 TeV (instead of 1 TeV) the upper limit of applicability
+  for the model G4DiffuseElastic and G4DiffuseElasticV2
+  (the number of equally-sized logarithmic energy bins has been increased
+   from 200 to 250 to keep the same bin size (0.04) ).
+  The model has been validated with experimental data up to 300 GeV,
+  but it should not give meaningless results well above this energy.
+
+14 Dec 2017 - A.Ribon              (hadr-cohe-V10-04-00)
+--------------------------------------------------------
+- Re-tag of the previous tag (incorrectly named).
+- Grichine's update of G4hhElastic to take into account the recent
+  TOTEM data for proton-proton at 13 TeV.
+
+24 November 2017 - W. Pokorski     (hadr-cohe-V10-03-07)
+--------------------------------------------------------
+- Added new class G4DiffuseElasticV2. The underlying physics model is
+the same as in G4DiffuseElastic by V.Grichine, however, the code has been
+revised, cleanup and significantly improved in a number of places.
+The performance has been improved by the factor of ~2 with respect to the
+original implementation. The approximation of small angles has been droped
+(replaced by exact calculation) as it was not bringing any visible benefits.
+
+19 Oct 2017 - A.Ribon              (hadr-cohe-V10-03-06)
+--------------------------------------------------------
+- G4NuclNuclDiffuseElastic : Grichine's simplification of this class to
+  avoid reproducibility violations in ion-ion elastic scattering.
+  On-the-fly sampling of the nucleus-nucleus elastic scattering is done
+  according to the Coulomb law in the limits 0 < theta < thetaC, where
+  thetaC is the Coulomb grazing angle: this means that hadron elastic
+  works like Coulomb in the limits.
+
+23 Jun 2017 - Dennis Wright        (hadr-cohe-V10-03-05)
+--------------------------------------------------------
+- G4NuclNuclDiffuseElastic ctor: variables fCofAlphaMax and fCofAlphaCoulomb
+  were first set to non-zero values (1.5 and 0.5, respectively), then zeroed 
+  a few lines later.   This caused a zero scattering angle and no elastically
+  scattered target particle.  Fixed in response to bug report #1979.
+
+13 Jun 2017 - A.Ribon              (hadr-cohe-V10-03-04)
+-----------------------------------------------------------------
+- G4NeutronElectronElModel : Coverity fix.
+
+29 May 2017 - A.Ribon              (hadr-cohe-V10-03-03)
+-----------------------------------------------------------------
+- G4NeutronElectronElModel : added (by Grichine) model for neutron-electron
+  elastic scattering. It produces recoil electrons resulting in visible
+  energy deposition. The model is based on ultra-relativistic approximation
+  of the Rosenbluth formula, since recoil electrons will have enough energy
+  to be detected in the case of high energy neutrons, roughly > 1 GeV.
+
+23 May 2017 - A.Ribon              (hadr-cohe-V10-03-02)
+-----------------------------------------------------------------
+- G4NeutrinoElectronNcModel : fixed (by Grichine) bug on the Plab
+  calculation in the G4NeutrinoElectronNcModel::ApplyYourself method.
+
+11 April 2017 - A.Ribon            (hadr-cohe-V10-03-01)
+-----------------------------------------------------------------
+- Forgot to add the (new) class G4NeutrinoElectronNcModel in the
+  sources.cmake.
+
+11 April 2017 - A.Ribon            (hadr-cohe-V10-03-00)
+-----------------------------------------------------------------
+- G4NeutrinoElectronNcModel : added new class by Vladimir Grichine
+  for the final-state model of elastic neutrino-electron scattering.
+  This class is useful for dark matter and neutrino experiments.
+
+12 August 2016 - A.Ribon           (hadr-cohe-V10-02-01)
+-----------------------------------------------------------------
+- G4hhElastic : fixed wrong pointer initialization;
+- G4NuclNuclDiffuseElastic : comment out redundant if-statement.
+(fixes suggested by the PVS-Studio static code analyzer)
+
+14 January 2016 - A.Ribon          (hadr-cohe-V10-02-00)
+-----------------------------------------------------------------
+- G4LMsdGenerator : hadronic internal decay scheme was restored
+  allowing stable decay of the Roper resonances
+
 13 November 2015 Gunter Folger     (hadr-cohe-V10-01-19)
 --------------------------------------------------------
 - Revert back to G4float, add "f" for initialisation.

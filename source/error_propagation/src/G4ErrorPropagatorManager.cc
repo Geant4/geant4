@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagatorManager.cc 78318 2013-12-11 15:02:40Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -82,7 +81,7 @@ G4ErrorPropagatorManager::G4ErrorPropagatorManager()
   //----- Initialize a few things
   //o  theG4ErrorPropagatorManager = this;
 
-  char* g4emverb = getenv("G4EVERBOSE");
+  char* g4emverb = std::getenv("G4EVERBOSE");
   if( !g4emverb ) {
     G4ErrorPropagatorData::GetErrorPropagatorData()->SetVerbose( 0 );
   } else {
@@ -238,11 +237,9 @@ G4bool G4ErrorPropagatorManager::InitFieldForBackwards()
   //  G4Field* myfield = fieldMgr->GetDetectorField();
   G4ChordFinder* cf = fieldMgr ->GetChordFinder();
   if( !cf ) return 0;
-  G4MagInt_Driver* mid = cf->GetIntegrationDriver();
-  if( !mid ) return 0;
-  G4MagIntegratorStepper* stepper = const_cast<G4MagIntegratorStepper*>(mid->GetStepper());
-  if( !stepper ) return 0;
-  G4EquationOfMotion* equation = stepper->GetEquationOfMotion();
+  auto driver = cf->GetIntegrationDriver();
+  if( !driver ) return 0;
+  auto equation = driver->GetEquationOfMotion();
 
   //----- Replaces the equation by a G4ErrorMag_UsualEqRhs to handle backwards tracking
   if ( !dynamic_cast<G4ErrorMag_UsualEqRhs*>(equation) ) {
@@ -253,7 +250,7 @@ G4bool G4ErrorPropagatorManager::InitFieldForBackwards()
     if( theEquationOfMotion == 0 ) theEquationOfMotion = new G4ErrorMag_UsualEqRhs(myfield);
  
     //---- Pass the equation of motion to the G4MagIntegratorStepper
-    stepper->SetEquationOfMotion( theEquationOfMotion );
+    driver->SetEquationOfMotion( theEquationOfMotion );
 
     //--- change stepper for speed tests
    G4MagIntegratorStepper* g4eStepper = new G4ClassicalRK4(theEquationOfMotion);

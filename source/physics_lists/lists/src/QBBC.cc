@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,24 +48,22 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4StoppingPhysics.hh"
 
-#include "G4DataQuestionaire.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4ChargeExchangePhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4IonPhysicsXS.hh"
+#include "G4IonElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 QBBC::QBBC( G4int ver, const G4String&)
 {
-  G4DataQuestionaire it(photon, neutronxs);
-  G4cout << "<<< Reference Physics List QBBC "
-	 <<G4endl;	
+  G4cout << "<<< Reference Physics List QBBC " <<G4endl;	
 
   defaultCutValue = 0.7*mm;  
   SetVerboseLevel(ver);
@@ -85,19 +82,13 @@ QBBC::QBBC( G4int ver, const G4String&)
 
   RegisterPhysics( new G4StoppingPhysics(ver) );
 
-  RegisterPhysics( new G4IonPhysics(ver) );
+  RegisterPhysics( new G4IonPhysicsXS(ver) );
+
+  RegisterPhysics( new G4IonElasticPhysics(ver) );
 
   RegisterPhysics( new G4HadronInelasticQBBC(ver));
 
   // Neutron tracking cut
   RegisterPhysics( new G4NeutronTrackingCut(ver) );
 }		 
-
-QBBC::~QBBC() 
-{}
-
-void QBBC::SetCuts()
-{
-  SetCutsWithDefault();   
-}
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 //
 // GEANT4 native types
@@ -32,6 +31,11 @@
 
 #ifndef G4TYPES_HH
 #define G4TYPES_HH
+
+// Fundamental definitions
+#ifndef G4GMAKE
+#include "G4GlobalConfig.hh"
+#endif
 
 #ifdef WIN32
   // Disable warning C4786 on WIN32 architectures:
@@ -43,7 +47,7 @@
   // Define DLL export macro for WIN32 systems for
   // importing/exporting external symbols to DLLs
   //
-  #if defined G4LIB_BUILD_DLL
+  #if defined G4LIB_BUILD_DLL && !defined G4MULTITHREADED
     #define G4DLLEXPORT __declspec( dllexport )
     #define G4DLLIMPORT __declspec( dllimport )
   #else

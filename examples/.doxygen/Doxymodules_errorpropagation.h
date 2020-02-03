@@ -1,4 +1,3 @@
-// $Id: Doxymodules_errorpropagation.h 60059 2012-06-27 13:00:49Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_errorpropagation.h

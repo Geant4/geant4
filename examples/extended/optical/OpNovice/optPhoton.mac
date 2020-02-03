@@ -1,5 +1,7 @@
 /control/verbose 2
-/tracking/verbose 3
+/tracking/verbose 2
+#
+/run/initialize
 #
 /gun/particle opticalphoton
 /gun/energy 3 eV

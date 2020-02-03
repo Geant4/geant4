@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B5HodoscopeSD.cc 76474 2013-11-11 10:36:34Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B5HodoscopeSD.cc
 /// \brief Implementation of the B5HodoscopeSD class
@@ -67,6 +70,7 @@ void B5HodoscopeSD::Initialize(G4HCofThisEvent* hce)
 
 G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
+<<<<<<< HEAD
     G4double edep = step->GetTotalEnergyDeposit();
     if (edep==0.) return true;
     
@@ -86,6 +90,22 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
             ix = i;
             break;
         }
+=======
+  auto edep = step->GetTotalEnergyDeposit();
+  if (edep==0.) return true;
+  
+  auto preStepPoint = step->GetPreStepPoint();
+  auto touchable = preStepPoint->GetTouchable();
+  auto copyNo = touchable->GetVolume()->GetCopyNo();
+  auto hitTime = preStepPoint->GetGlobalTime();
+  
+  // check if this finger already has a hit
+  auto ix = -1;
+  for (std::size_t i=0;i<fHitsCollection->entries();++i) {
+    if ((*fHitsCollection)[i]->GetID()==copyNo) {
+      ix = i;
+      break;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     }
 
     if (ix>=0)

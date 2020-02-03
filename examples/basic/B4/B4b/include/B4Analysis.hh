@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B4Analysis.hh 68058 2013-03-13 14:47:43Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B4Analysis.hh
 /// \brief Selection of the analysis technology
@@ -32,6 +35,10 @@
 #define B4Analysis_h 1
 
 #include "g4root.hh"
+<<<<<<< HEAD
+=======
+//#include "g4csv.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //#include "g4xml.hh"
 
 #endif

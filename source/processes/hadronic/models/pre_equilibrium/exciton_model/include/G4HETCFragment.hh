@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -70,8 +69,8 @@ private:
   G4HETCFragment(const G4HETCFragment &right);
   const G4HETCFragment& 
   operator= (const G4HETCFragment &right);  
-  G4int operator==(const G4HETCFragment &right) const;
-  G4int operator!=(const G4HETCFragment &right) const;
+  G4bool operator==(const G4HETCFragment &right) const;
+  G4bool operator!=(const G4HETCFragment &right) const;
 
   G4double r2norm;
 };

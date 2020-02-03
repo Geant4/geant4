@@ -1,0 +1,601 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_Windows_tools
+#define tools_Windows_tools
+
+#include <windows.h>
+#include <windowsx.h>
+
+#include <string>
+
+namespace tools {
+namespace WinTk {
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+inline bool GetClassName(HWND aWindow,std::string& a_value) { 
+  if(!aWindow) {a_value.clear();return false;}
+  char className[256];
+  ::GetClassName(aWindow,className,128);
+  a_value = std::string(className);
+  return true;
+}
+
+inline HWND GetChildByClassName(HWND aWindow,const std::string& aClassName) {
+  // A CBS_SIMPLE has two children of class ComboLBox and Edit.
+  // At creation, a CBS_DROPDOWN has one child of class Edit.
+  if(!aWindow) return NULL;
+  HWND child = GetFirstChild(aWindow);
+  std::string ss;
+  while(child) {
+    GetClassName(child,ss);
+    if(ss==aClassName) return child;
+    child = GetNextSibling(child);
+  }
+  return NULL;
+}
+
+inline void SetGeometry(HWND aWindow,int aX,int aY,unsigned int aWidth,unsigned int aHeight) { 
+  if(!aWindow) return;
+  std::string className;
+  GetClassName(aWindow,className);
+  if(className=="ComboBox") {
+    // For a Combo the height is the visible part + the height of the list !
+    // (A combo may have no edit control).
+    ::MoveWindow(aWindow,aX,aY,aWidth,200,TRUE);
+  } else {
+    ::MoveWindow(aWindow,aX,aY,aWidth,aHeight,TRUE);
+  }
+}
+
+inline void GetSize(HWND aWindow,int& aWidth,int& aHeight) { 
+  RECT rect;
+  ::GetWindowRect(aWindow,&rect);
+  aWidth = rect.right-rect.left;
+  aHeight = rect.bottom-rect.top;
+}
+
+inline unsigned int GetNumberOfChildren(HWND aWindow) {
+  unsigned int number = 0;
+  HWND child = GetFirstChild(aWindow);
+  while(child) {
+    number++;
+    child = GetNextSibling(child);
+  }
+  return number;
+}
+
+inline HWND GetLastChild(HWND aWindow) {
+  HWND child = GetFirstChild(aWindow);
+  while(child) {
+    HWND next = GetNextSibling(child);
+    if(!next) return child;
+    child = next;
+  }
+  return 0;
+}
+
+inline void GetText(HWND aWindow,std::string& a_value) {
+  int l = ::GetWindowTextLength(aWindow);
+  a_value.resize(l);
+  ::GetWindowText(aWindow,(char*)a_value.c_str(),l+1);
+}
+
+/*
+inline void PrintChildren(HWND aWindow) {
+  // A CBS_SIMPLE has two children of class ComboLBox and Edit.
+  // At creation, a CBS_DROPDOWN has one child of class Edit.
+  if(!aWindow) return;
+  HWND child = GetFirstChild(aWindow);
+  while(child) {
+    //printf("debug : window : %ld, child : %ld class \"%s\"\n",
+    //   aWindow,child,ClassName(child).c_str());
+    child = GetNextSibling(child);
+  }
+}
+*/
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+inline bool IsStyle(HWND aWindow,LONG aStyle) {
+  LONG_PTR style = ::GetWindowLongPtr(aWindow,GWL_STYLE);
+  return ( ((style & aStyle ) == aStyle) ? true : false);
+}
+
+inline void ChangeStyle(HWND aWindow,LONG aStyle,bool aValue) {
+  LONG_PTR style = ::GetWindowLongPtr(aWindow,GWL_STYLE);
+  if(aValue) { //Enable style.
+    style = style | aStyle;
+  } else { //Disbale style.
+    style = style & ~aStyle;
+  }
+  ::SetWindowLongPtr(aWindow,GWL_STYLE,style);
+}
+
+inline bool IsShell(HWND aWindow) {
+  if(IsStyle(aWindow,WS_OVERLAPPEDWINDOW)) return true;
+  if(IsStyle(aWindow,WS_POPUP)) return true;
+  return false;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+inline HWND GetShell(HWND aWindow) {
+  HWND window = aWindow;
+  if(IsShell(window)) return window;
+  while(true) {
+    HWND parent = GetParent(window);
+    if(!parent) return window;
+    if(IsShell(parent)) return parent;
+    window = parent;
+  }
+  return 0;
+}
+
+inline bool Show(HWND aWindow) {
+  HWND shell = GetShell(aWindow);
+  if(!shell) return false;
+  ::SetForegroundWindow(shell);
+  ::ShowWindow(shell,SW_SHOWDEFAULT);
+  ::UpdateWindow(shell);
+  ::DrawMenuBar(shell);
+  return true;
+}
+
+inline bool Hide(HWND aWindow) {
+  HWND shell = GetShell(aWindow);
+  if(!shell) return false;
+  ::ShowWindow(shell,SW_HIDE);
+  return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+inline bool IsTabStop(HWND aWindow) {
+  LONG_PTR style = ::GetWindowLongPtr(aWindow,GWL_STYLE);
+  return ((style & WS_TABSTOP ) == WS_TABSTOP ? true : false);
+}
+
+inline HWND GetTabStopInTree(HWND aWindow,bool aForward) {
+  if(IsTabStop(aWindow)) return aWindow;
+  HWND child = aForward ? GetFirstChild(aWindow) : GetLastChild(aWindow);
+  while(child) {
+    HWND tabStop = GetTabStopInTree(child,aForward);
+    if(tabStop) return tabStop;
+    child = aForward ? GetNextSibling(child) : GetPrevSibling(child);
+  }
+  return NULL;
+}
+
+inline HWND GetTabStopInSibling(HWND aWindow,bool aForward) {
+  if(!aWindow) return NULL;
+  HWND child = aForward ? GetNextSibling(aWindow) : GetPrevSibling(aWindow);
+  while(child) {
+    HWND tabStop = GetTabStopInTree(child,aForward);
+    if(tabStop) return tabStop;
+    child = aForward ? GetNextSibling(child) : GetPrevSibling(child);
+  }
+  return NULL;
+}
+
+inline HWND GetTabStop(HWND aDialog,HWND aWindow,bool aForward = true) {
+  if(!aWindow) return NULL;
+  HWND window = aWindow;
+  while(window && (window!=aDialog) ) {
+    HWND tabStop = GetTabStopInSibling(window,aForward);
+    if(tabStop) return tabStop;
+    window = GetParent(window);
+  }
+  return GetTabStopInTree(aDialog,aForward);
+}
+
+inline HBITMAP CreateDIB(HDC aDC,int aWidth,int aHeight,int aBPP /*16||24||32*/,void** aBits) {
+  if((aBPP!=24) && (aBPP!=32)) return 0;
+
+  BITMAPINFO format;
+  BITMAPINFOHEADER* header = (BITMAPINFOHEADER*)&format;
+  header->biSize = sizeof(BITMAPINFOHEADER);
+  header->biWidth = aWidth;
+  header->biHeight = -aHeight;
+  header->biPlanes = 1;
+  header->biBitCount = aBPP;
+  header->biCompression = BI_RGB;
+  header->biSizeImage = 0;
+  header->biXPelsPerMeter = 0;
+  header->biYPelsPerMeter = 0;
+  header->biClrUsed = 0;
+  header->biClrImportant = 0;
+
+  UINT flag = DIB_RGB_COLORS;
+  HBITMAP bitmap = ::CreateDIBSection(aDC,&format,flag,(void**)aBits,NULL,0);
+
+  if(!(*aBits)) return 0;
+
+  return bitmap;
+}
+
+}}
+
+#include <commctrl.h>
+
+namespace tools {
+namespace WinTk {
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+inline bool TreeGetItemLabel(HWND aWindow,HTREEITEM aItem,std::string& a_value) { 
+  TCHAR text[256];
+  TV_ITEM item;
+  item.hItem = aItem;
+  item.mask = TVIF_TEXT;
+  item.pszText = text;
+  item.cchTextMax = 256;
+  if(!TreeView_GetItem(aWindow,&item)) {a_value.clear();return false;}
+  a_value = std::string(text);
+  return true;
+}
+
+inline bool TreeIsItemBranch(HWND aWindow,HTREEITEM aItem) { 
+  TV_ITEM item;
+  item.hItem = aItem;
+  item.mask = TVIF_CHILDREN;
+  if(!TreeView_GetItem(aWindow,&item)) return 0;
+  return item.cChildren?true:false;
+}
+
+inline bool TreeIsItemExpanded(HWND aWindow,HTREEITEM aItem) { 
+  TV_ITEM item;
+  item.hItem = aItem;
+  item.mask = TVIS_EXPANDED;
+  if(!TreeView_GetItem(aWindow,&item)) return 0;
+  return ((item.state & TVIS_EXPANDED)== TVIS_EXPANDED) ? true : false;
+}
+
+inline void TreeGetItemPath(HWND aWindow,HTREEITEM aItem,std::string& a_value) {
+  HTREEITEM item = aItem;
+  a_value.clear();
+  std::string ss;
+  while(item && (item!=TVI_ROOT)) {
+    TreeGetItemLabel(aWindow,item,ss);
+    std::string opath = a_value;
+    a_value = "\n";
+    a_value += ss;
+    a_value += opath;
+    item = TreeView_GetParent(aWindow,item);
+  }
+  // Remove the leading \n
+  if(a_value.size()) a_value = a_value.substr(1,a_value.size()-1);
+}
+
+inline void TreeGetItemXML(HWND aWindow,HTREEITEM aItem,std::string& a_value) {
+  //return a XML string representing this tree
+  std::string spaceItem = "";
+  std::string spaceRoot = "";
+  std::string ss;
+  a_value.clear();
+  do  {
+    a_value += spaceRoot + "<treeItem>";
+    a_value += spaceItem + "<label>";
+    TreeGetItemLabel(aWindow,aItem,ss);
+    a_value.append(ss);
+    a_value += "</label>";
+    a_value += spaceItem + "<opened>";
+    if (TreeIsItemExpanded(aWindow,aItem)) a_value.append("true");
+    else a_value.append("false");
+    a_value += "</opened>";
+    if (TreeView_GetChild(aWindow,aItem)) {
+      TreeGetItemXML(aWindow,TreeView_GetChild(aWindow,aItem),ss);
+      a_value += ss;
+    }    
+    a_value += spaceRoot + "</treeItem>";
+    aItem = TreeView_GetNextSibling(aWindow,aItem);
+  }
+  while (aItem);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+inline int smanip_axtoi(const std::string& a_string) {
+  // convert from ASCII hex to int
+  // Exa : "FF" -> 256.
+  int x = 0;
+  size_t n = a_string.size();
+  // convert n nibbles
+  for (size_t i = 0; i < n; i++) {
+    char c = a_string[i];
+    // numbers 0 - 9
+    if ((c > 0x2F) && (c < 0x3A))
+      x += ((c - 0x30) << ((n - i - 1) * 4));
+
+    // capital letters A - F
+    if ((c > 0x40) && (c < 0x47))
+      x += ((c - 0x41 + 0x0A) << ((n - i - 1) * 4));
+
+    // lower case letters a - f
+    if ((c > 0x60) && (c < 0x67))
+      x += ((c - 0x61 + 0x0A) << ((n - i - 1) * 4));
+  }
+  return x;
+}
+
+}}
+
+#include <tools/svalues>
+
+namespace tools {
+namespace WinTk {
+
+inline HBITMAP ConvertXpmToDIB(HDC aDC,const std::vector<std::string>& aXPM,int& aWidth,int& aHeight) {
+  // Convert from xpm to DIB (demands hex colors).
+  // From CoinWin/widgets/SoWinBitmapButton.cpp.
+  aWidth = 0;
+  aHeight = 0;
+  if(!aXPM.size()) return 0;
+
+  std::vector<int> vals;
+  tools::values<int>(aXPM[0]," ",false,vals);
+  if(vals.size()!=4) return 0;
+  int width = vals[0];
+  int height = vals[1];
+  int numcol = vals[2];
+  int numchars = vals[3];
+  if(width<=0) return 0;
+  if(height<=0) return 0;
+  if(numcol<=0) return 0;
+  if(numchars<=0) return 0;
+
+  // Check consistency :
+  if((height+numcol)!=aXPM.size()-1) return 0;
+
+  size_t lcolor = 0;
+  int i;
+  for (i = 0; i < numcol; i++) {
+    std::string::size_type pos = aXPM[i+1].rfind("c #");
+    if(pos==std::string::npos) continue; // May be "c None"
+    lcolor = aXPM[i+1].size()-(pos+3);
+    break;
+  }
+  //printf("debug : xpm : numcol %d (%d)\n",numcol,lcolor);
+
+  if( (lcolor!=6) && (lcolor!=12) ) return 0;
+
+  // create color lookup table
+  char* charlookuptable = new char[numcol * numchars];
+  //long* colorlookuptable = new long[numcol];
+  int* rlookuptable = new int[numcol];
+  int* glookuptable = new int[numcol];
+  int* blookuptable = new int[numcol];
+
+  bool done = true;
+  // get colors
+  for (i = 0; i < numcol; i++) {
+
+    const std::string& line = aXPM[i+1];
+
+    // Check consistency :
+    if((int)line.size()<numchars) {
+      done = false;
+      break;
+    }
+
+    for (int j = 0; j < numchars; j ++) {
+      charlookuptable[(i * numchars) + j] = line[j];
+    }
+
+    // Find color by value :
+    std::string::size_type pos = line.find("c #",numchars);
+    if(pos!=std::string::npos) {
+      size_t lc = line.size()-(pos+3);
+      if(lc!=lcolor) {
+        done = false;
+        //printf("debug : xpm : error in \"%s\" %d %d\n",
+        //line.c_str(),lc,lcolor);
+        break;
+      }
+      if(lcolor==6) {
+        rlookuptable[i] = smanip_axtoi(line.substr(pos+3+0,2));
+        glookuptable[i] = smanip_axtoi(line.substr(pos+3+2,2));
+        blookuptable[i] = smanip_axtoi(line.substr(pos+3+4,2));
+      } else { //lcolor 12
+        rlookuptable[i] = smanip_axtoi(line.substr(pos+3+0,2));
+        glookuptable[i] = smanip_axtoi(line.substr(pos+3+4,2));
+        blookuptable[i] = smanip_axtoi(line.substr(pos+3+8,2));
+      }
+
+      //printf("debug : xpm : color %d : (%x,%x,%x)\n",
+      //     i,rlookuptable[i],glookuptable[i],blookuptable[i]);
+
+    } else { // Could be "c None"
+      rlookuptable[i] = -1;
+      glookuptable[i] = -1;
+      blookuptable[i] = -1;
+    }
+  }
+
+  //printf("debug : xpm : read color %d\n",done);
+
+  //WARNING : pixelsize 3 does not work with button in a toolbar.
+  // unsigned char pixelsize = 3;
+  unsigned char pixelsize = 4;
+
+  if(!done) pixelsize = 0; // Will induce a clean exit.
+
+  // create bitmap
+  void* dest;
+  HBITMAP hbmp = CreateDIB(aDC,width,height,pixelsize * 8,&dest);
+
+  if(hbmp) {
+    int noneColor = ::GetSysColor(COLOR_3DFACE);
+    done = true;
+    // put pixels
+    for (i = 0; i < height; i++) {
+
+      const std::string& line = aXPM[i + 1 + numcol];
+
+      // Check consistency :
+      if((int)line.size()!=(numchars*width)) {
+        done = false;
+        break;
+      }
+
+      int y = i * width * pixelsize;
+
+      for (int j = 0; j < width; j++) {
+
+        int x = j * pixelsize;
+
+        // for every color
+        for (int k = 0; k < numcol; k++) {
+
+          bool found = true;
+          for (int l = 0; l < numchars; l++) {
+            if (charlookuptable[(k * numchars) + l] 
+                  != line[(j * numchars) + l]) {
+              found = false;
+              break;
+            }
+          }
+
+          if(found) {
+
+            unsigned char r,g,b;
+            if (rlookuptable[k] == -1) {
+              r = (noneColor & 0x00FF0000)>>16;
+              g = (noneColor & 0x0000FF00)>>8;
+              b = noneColor & 0x000000FF;
+            } else {
+              r = rlookuptable[k];
+              g = glookuptable[k];
+              b = blookuptable[k];
+            }
+            
+            if(pixelsize==4) {
+              ((unsigned char*)dest)[y + x + 0] = b;
+              ((unsigned char*)dest)[y + x + 1] = g;
+              ((unsigned char*)dest)[y + x + 2] = r;
+              ((unsigned char*)dest)[y + x + 3] = 0;
+            } else {
+              ((unsigned char*)dest)[y + x + 0] = b;
+              ((unsigned char*)dest)[y + x + 1] = g;
+              ((unsigned char*)dest)[y + x + 2] = r;
+            }
+            
+            // next pixel
+            break;
+            
+          }
+          
+        }
+        
+      }
+      
+    }
+    if(!done) {
+      //printf("debug : xpm : can'tread pixels.\n");
+      ::DeleteObject(hbmp);
+      hbmp = 0;
+    }    
+  }
+
+  // cleanup
+  delete [] charlookuptable;
+  delete [] rlookuptable;
+  delete [] glookuptable;
+  delete [] blookuptable;
+
+  if(hbmp) {
+    aWidth = width;
+    aHeight = height;
+  }
+
+  return hbmp;
+}
+
+}}
+
+#include <tools/file>
+
+namespace tools {
+namespace WinTk {
+
+inline HBITMAP Read_Xpm(HDC aDC,const std::string& aFileName,int& aWidth,int& aHeight) {
+  aWidth = 0;
+  aHeight = 0;
+  std::vector<std::string> text;
+  //std::string name;
+  //tools::file_name(aFileName,name);
+  if(!tools::file::read(aFileName,text)) return 0;
+
+  std::vector<std::string> xpm;
+
+ {for(size_t index=0;index<text.size();index++) {
+    if(text[index][0]!='"') continue;
+    std::string::size_type l = text[index].size();
+    std::string line = text[index].substr(1,l-1);
+    std::string::size_type pos = line.find("\"");
+    if(pos==std::string::npos) return 0;
+    xpm.push_back(line.substr(0,pos));
+  }}
+
+  if(!xpm.size()) return 0;
+
+  return ConvertXpmToDIB(aDC,xpm,aWidth,aHeight);
+}
+
+inline std::string TreeGetItemLabel(HWND aWindow,HTREEITEM aItem) {
+  std::string ss;
+  TreeGetItemLabel(aWindow,aItem,ss);
+  return ss;
+}
+
+inline std::string TreeGetItemPath(HWND aWindow,HTREEITEM aItem) {
+  std::string ss;
+  TreeGetItemPath(aWindow,aItem,ss);
+  return ss;
+}
+
+inline std::string TreeGetItemXML(HWND aWindow,HTREEITEM aItem) {
+  std::string ss;
+  TreeGetItemXML(aWindow,aItem,ss);
+  return ss;
+}
+
+inline std::string GetText(HWND aWindow) {
+  std::string ss;
+  GetText(aWindow,ss);
+  return ss;
+}
+
+inline std::string GetClassName(HWND aWindow) {
+  std::string ss;
+  GetClassName(aWindow,ss);
+  return ss;
+}
+
+}}
+
+#include <tools/system> //backcomp
+
+namespace tools {
+namespace WinTk {
+
+inline HBITMAP ReadXpm(HDC aDC,const std::string& aFileName,int& aWidth,int& aHeight) {
+  std::string name;
+  tools::file_name(aFileName,name);
+  return Read_Xpm(aDC,name,aWidth,aHeight);
+}
+
+}}
+
+#endif
+

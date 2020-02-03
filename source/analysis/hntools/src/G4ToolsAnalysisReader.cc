@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ToolsAnalysisReader.cc 91116 2015-06-20 12:33:45Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 20/07/2015  (ivana@ipno.in2p3.fr)
 

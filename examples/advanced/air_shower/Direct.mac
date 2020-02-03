@@ -1,0 +1,21 @@
+/control/verbose  1
+/run/verbose 1
+/event/verbose    0
+/tracking/verbose 0
+/run/initialize
+/detector/reflection none
+
+/gps/particle opticalphoton
+/gps/energy 3.0 eV
+/gps/direction 0.0 0.0 -1.0
+/gps/polarization 1.0 1.0 0.0
+
+/gps/pos/type   Plane
+/gps/pos/shape  Circle
+/gps/pos/radius 20.0 cm
+
+/gps/pos/rot1   1.0 0.0 0.0
+/gps/pos/rot2   0.0 1.0 0.0
+/gps/pos/centre  0.0 0.0 150. cm
+
+/run/beamOn 100

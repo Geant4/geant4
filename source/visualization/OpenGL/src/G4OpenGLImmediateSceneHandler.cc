@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -73,7 +72,9 @@ G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Polyhedron& v
 
 G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline)
 {
-  const G4Colour& c = GetColour (visible);
+  // Get applicable vis attributes for all primitives.
+  fpVisAttribs = fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
+  const G4Colour& c = GetColour ();
   G4double opacity = c.GetAlpha ();
   
   G4bool transparency_enabled = true;
@@ -271,8 +272,8 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
   glMatrixMode (GL_MODELVIEW);
   glPopMatrix();
 
-  // See all primitives immediately...
-  glFlush ();
+  // See all primitives immediately...  At least soon...
+  ScaledFlush();
 
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }

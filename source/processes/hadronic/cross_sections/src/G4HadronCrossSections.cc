@@ -33,29 +33,15 @@
 //
 // Note: this is implemented as a SINGLETON class
 //
-// 27-MAR-97 FWJ: first version for Alpha release
-// 14-APR-97 FWJ: class name changed from G4LCrossSectionData
-//    to G4HadronicCrossSections
-// 23-Apr-97 Johannes Peter Wellisch: debugging, add the residual particles
-// 23-MAY-97 FWJ: corrected problem with neutron cross sections
-// 20-JUN-97 FWJ: added some missing elastic data (e.g. K+) and 
-//    fixed a momentum/energy units problem in the physics vectors
-// 14-APR-98 FWJ: rewritten as class G4HadronCrossSections
-//    and adapted to G4CrossSectionDataSet/DataStore class design.
-// 25-JUN-98 FWJ: optimised bin selection.
-// 06-NOV-98 FWJ: added first-order correction for low-energy
-//    inelastic cross sections
-//
 
 #include "G4HadronCrossSections.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadronicException.hh"
 #include "G4Pow.hh"
+#include "G4Threading.hh"
  
 // Initialize static pointer for singleton instance
-G4ThreadLocal G4HadronCrossSections* G4HadronCrossSections::theInstance = 0;
-
+G4ThreadLocal G4HadronCrossSections* G4HadronCrossSections::instance = nullptr;
 
 // Cross section tables from G3.21/GHEISHA routine GHESIG
 
@@ -1209,11 +1195,8 @@ const G4float G4HadronCrossSections::csa[4] = {1.f, 27.00f, 63.54f, 207.19f};
 
 const G4int G4HadronCrossSections::ipart2[7] = {9, 8, 7, 11, 10, 13, 12};
 
-//const G4bool G4HadronCrossSections::correctInelasticNearZero = false;
-
 G4HadronCrossSections::G4HadronCrossSections()
   : prevParticleDefinition(0),
-//  prevElement(0),
     prevZZ(0), prevAA(0), 
     prevKineticEnergy(DBL_MAX), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
 {
@@ -1227,11 +1210,11 @@ G4HadronCrossSections::~G4HadronCrossSections()
 
 G4HadronCrossSections* G4HadronCrossSections::Instance()
 {
-  if (!theInstance) {
-    static G4ThreadLocal G4HadronCrossSections *xsection_G4MT_TLS_ = 0 ; if (!xsection_G4MT_TLS_) xsection_G4MT_TLS_ = new  G4HadronCrossSections  ;  G4HadronCrossSections &xsection = *xsection_G4MT_TLS_;
-    theInstance = &xsection;
+  if (!instance) {
+    static G4ThreadLocalSingleton<G4HadronCrossSections> inst;
+    instance = inst.Instance();
   }
-  return theInstance;
+  return instance;
 }
 
 G4bool G4HadronCrossSections::IsApplicable(const G4DynamicParticle* aParticle)
@@ -1291,6 +1274,16 @@ G4HadronCrossSections::CalcScatteringCrossSections(
    G4double xspiel, xspiin;
 
    G4int ipart = GetParticleCode(aParticle);
+
+   // Protection in the case "IsApplicable" is not invoked
+   if ( ipart <= 0 ) {
+     G4ExceptionDescription ed;
+     ed << aParticle->GetDefinition()->GetParticleName() << " NOT allowed ! ";
+     G4Exception( "G4HadronCrossSections::CalcScatteringCrossSections(...)", 
+                  "hadXsec001", JustWarning, ed );
+     return;
+   }
+
    prevAA = AA;
    prevZZ = ZZ;
    prevParticleDefinition = aParticle->GetDefinition(); 
@@ -1712,13 +1705,6 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
     case -3334:
       ipart = 34;  // anti-omega-
       break;
-      /*
-    default:      
-      throw G4HadronicException(__FILE__, __LINE__,
-	"G4HadronCrossSections::GetParticleCode: unsupported particle "
-	+ aParticle->GetDefinition()->GetParticleName());
-      return 0;
-      */
   }
 
   return ipart;

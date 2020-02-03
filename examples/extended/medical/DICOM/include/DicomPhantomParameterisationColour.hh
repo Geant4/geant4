@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomParameterisationColour.hh 66587 2012-12-21 11:06:44Z ihrivnac$
 //
 /// \file medical/DICOM/include/DicomPhantomParameterisationColour.hh
 /// \brief Definition of the DicomPhantomParameterisationColour class
@@ -38,7 +37,7 @@
 class G4VisAttributes;
 
 // *********************************************************************
-/// Class inherited from G4PhantomParameterisation to provide different 
+/// Class inherited from G4PhantomParameterisation to provide different
 //  colour for each material
 ///
 /// History:
@@ -48,20 +47,29 @@ class G4VisAttributes;
 
 class DicomPhantomParameterisationColour : public G4PhantomParameterisation
 {
+public:
+    typedef std::map<G4String,G4VisAttributes*> ColourMap_t;
+
+    static G4String defaultColorFile;
+
 public:  // with description
-  
-  DicomPhantomParameterisationColour();
-  ~DicomPhantomParameterisationColour();
-  
-  virtual G4Material* ComputeMaterial(const G4int repNo, 
-                                      G4VPhysicalVolume *currentVol,
-                                      const G4VTouchable *parentTouch=0);
-  
-private:
-  void ReadColourData();
+    DicomPhantomParameterisationColour(G4String colorFile =
+                                       defaultColorFile);
+    ~DicomPhantomParameterisationColour();
+
+    virtual G4Material* ComputeMaterial(const G4int repNo,
+                                        G4VPhysicalVolume *currentVol,
+                                        const G4VTouchable *parentTouch=0);
+
+    const ColourMap_t& GetColourMap() const { return fColours; }
+    ColourMap_t& GetColourMap() { return fColours; }
 
 private:
-  std::map<G4String,G4VisAttributes*> fColours;
+    void ReadColourData(G4String colourFile);
+
+private:
+    ColourMap_t fColours;
+    std::map<G4int, G4VisAttributes*> mColours;
 };
 
 

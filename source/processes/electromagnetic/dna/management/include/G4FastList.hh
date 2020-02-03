@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FastList.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -44,8 +43,7 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4FastList_H
-#define G4FastList_H
+#pragma once
 
 #include "globals.hh"
 #include "G4ReferenceCountedHandle.hh"
@@ -426,8 +424,8 @@ template<class OBJECT>
   private:
     G4FastList(const G4FastList<OBJECT>& other);
     G4FastList<OBJECT> & operator=(const G4FastList<OBJECT> &right);
-    G4int operator==(const G4FastList<OBJECT> &right) const;
-    G4int operator!=(const G4FastList<OBJECT> &right) const;
+    G4bool operator==(const G4FastList<OBJECT> &right) const;
+    G4bool operator!=(const G4FastList<OBJECT> &right) const;
   };
 
 
@@ -462,20 +460,15 @@ template<typename OBJECT>
     typedef G4FastList_iterator<OBJECT> _Self;
     typedef G4FastListNode<OBJECT> _Node;
 
-    G4FastList_iterator() :
-        fpNode(0)
-    {
-    }
+    G4FastList_iterator() = default;
 
     explicit G4FastList_iterator(_Node* __x) :
         fpNode(__x)
     {
     }
 
-    G4FastList_iterator(const G4FastList_iterator& right) :
-        fpNode(right.fpNode)
-    {
-    }
+    G4FastList_iterator(const G4FastList_iterator& right) = default;
+    _Self& operator=(const G4FastList_iterator& right) = default;
 
     _Node* GetNode()
     {
@@ -527,19 +520,19 @@ template<typename OBJECT>
       return __tmp;
     }
 
-    bool operator==(const _Self& __x) const
+    G4bool operator==(const _Self& __x) const
     {
       return (fpNode == __x.fpNode);
     }
 
-    bool operator!=(const _Self& __x) const
+    G4bool operator!=(const _Self& __x) const
     {
       return (fpNode != __x.fpNode);
     }
 
 //  private:
     // The only member points to the G4FastList_iterator element.
-    _Node* fpNode;
+    _Node* fpNode = nullptr;
   };
 
 /**
@@ -554,24 +547,25 @@ template<typename OBJECT>
     typedef G4FastList_const_iterator<OBJECT> _Self;
     typedef G4FastListNode<OBJECT> _Node;
 
-    G4FastList_const_iterator() :
-        fpNode(0)
-    {
-    }
+    G4FastList_const_iterator() = default;
 
     explicit G4FastList_const_iterator(const _Node* __x) :
         fpNode(__x)
     {
     }
 
-    G4FastList_const_iterator(const G4FastList_const_iterator& right) :
-        fpNode(right.fpNode)
-    {
-    }
+    G4FastList_const_iterator(const G4FastList_const_iterator& right) = default;
+    _Self& operator=(const G4FastList_const_iterator& right) = default;
 
     G4FastList_const_iterator(const G4FastList_iterator<OBJECT>& right) :
         fpNode(right.GetNode())
     {
+    }
+
+    _Self& operator=(const G4FastList_iterator<OBJECT>& right)
+    {
+      fpNode = right.GetNode();
+      return *this;
     }
 
     const OBJECT*
@@ -616,21 +610,19 @@ template<typename OBJECT>
       return __tmp;
     }
 
-    bool operator==(const _Self& __x) const
+    G4bool operator==(const _Self& __x) const
     {
       return (fpNode == __x.fpNode);
     }
 
-    bool operator!=(const _Self& __x) const
+    G4bool operator!=(const _Self& __x) const
     {
       return (fpNode != __x.fpNode);
     }
 
 //  private:
     // The only member points to the G4FastList_iterator element.
-    const _Node* fpNode;
+    const _Node* fpNode = nullptr;
   };
 
 #include "G4FastList.icc"
-
-#endif // G4FastList_H

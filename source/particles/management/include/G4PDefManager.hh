@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDefManager.hh 102308 2017-01-20 14:54:21Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -103,7 +102,6 @@ class G4PDefManager
     void FreeSlave();
       // Invoked by all threads to free the subinstance array.
 
-
     G4PDefData*   GetOffset();
 
     void UseWorkArea( G4PDefData* newOffset ); // ,  G4int numObjects, G4int numSpace)
@@ -112,8 +110,8 @@ class G4PDefManager
 
   public:
 
-    G4PART_DLL G4ThreadLocalStatic G4int slavetotalspace;
-    G4PART_DLL G4ThreadLocalStatic G4PDefData* offset;
+    G4PART_DLL static G4int& slavetotalspace(); // thread-local
+    G4PART_DLL static G4PDefData*& offset(); // thread-local
 
   private:
 

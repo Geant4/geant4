@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm1/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.cc 84815 2014-10-21 12:19:02Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +53,9 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -57,7 +63,7 @@ DetectorConstruction::DetectorConstruction()
 {
   fBoxSize = 10*m;
   DefineMaterials();
-  SetMaterial("Aluminium");  
+  SetMaterial("G4_Al");  
   fDetectorMessenger = new DetectorMessenger(this);
 }
 
@@ -187,6 +193,7 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
+<<<<<<< HEAD
   // Cleanup old geometry
   G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
@@ -195,6 +202,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4Box*
   sBox = new G4Box("Container",                         //its name
+=======
+  if(fPBox) { return fPBox; }
+  fBox = new G4Box("Container",                         //its name
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
                    fBoxSize/2,fBoxSize/2,fBoxSize/2);   //its dimensions
 
   fLBox = new G4LogicalVolume(sBox,                     //its shape
@@ -226,7 +237,7 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name
   ////G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
@@ -253,10 +264,13 @@ void DetectorConstruction::SetSize(G4double value)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+<<<<<<< HEAD
 
 #include "G4GlobalMagFieldMessenger.hh"
 #include "G4AutoDelete.hh"
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 void DetectorConstruction::ConstructSDandField()
 {
     if ( fFieldMessenger.Get() == 0 ) {

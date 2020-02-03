@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "analysis/AnaEx03/.README.AIDA.txt"
 ///\brief Example AnaEx03 README.AIDA page

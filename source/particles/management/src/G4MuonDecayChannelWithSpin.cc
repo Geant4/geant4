@@ -245,7 +245,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
   // daughter 1 ,2 (neutrinos)
   // create neutrinos in the C.M frame of two neutrinos
-  G4double energy2 = parentmass*(1.0 - x/2.0); 
+  G4double energy2 = parentmass-energy; 
   G4double vmass   = std::sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
@@ -278,9 +278,17 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   if (GetVerboseLevel()>1) {
     G4cout << "G4MuonDecayChannelWithSpin::DecayIt ";
     G4cout << "  create decay products in rest frame " <<G4endl;
-    products->DumpInfo();
+    G4double TT = daughterparticle0->GetTotalEnergy()
+      + daughterparticle1->GetTotalEnergy()
+      + daughterparticle2->GetTotalEnergy(); 
+    G4cout << "e  " << daughterparticle0->GetTotalEnergy()/MeV << G4endl; 
+    G4cout << "nu1" << daughterparticle1->GetTotalEnergy()/MeV << G4endl; 
+    G4cout << "nu2" << daughterparticle2->GetTotalEnergy()/MeV << G4endl; 
+    G4cout << "total" << (TT-parentmass)/keV << G4endl;
+    if (GetVerboseLevel()>2) { products->DumpInfo(); }
   }
 #endif
+
   return products;
 }
 

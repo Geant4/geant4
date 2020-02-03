@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CameronTruranHilfShellCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -81,5 +80,3 @@ G4CameronTruranHilfShellCorrections::G4CameronTruranHilfShellCorrections()
   for(size_t i=0; i<NTableSize; ++i) { ShellNTable[i] *= CLHEP::MeV; }
 }
 
-G4CameronTruranHilfShellCorrections::~G4CameronTruranHilfShellCorrections()
-{}

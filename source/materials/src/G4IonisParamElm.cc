@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc 81374 2014-05-27 13:07:25Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -51,7 +50,7 @@
 
 G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 {
-  G4int Z = G4int(AtomNumber + 0.5);
+  G4int Z = G4lrint(AtomNumber);
   if (Z < 1) {
     G4Exception("G4IonisParamElm::G4IonisParamElm()",  "mat501", FatalException,
                 "It is not allowed to create an Element with Z<1");
@@ -139,7 +138,7 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 //                            for usage restricted to object persistency
 
 G4IonisParamElm::G4IonisParamElm(__void__&)
-  : fShellCorrectionVector(0)
+  : fShellCorrectionVector(nullptr)
 {
   fZ=fZ3=fZZ3=flogZ3=fTau0=fTaul=fBetheBlochLow=fAlow=fBlow=fClow
     =fMeanExcitationEnergy=fVFermi=fLFactor=0.0;
@@ -150,56 +149,6 @@ G4IonisParamElm::G4IonisParamElm(__void__&)
 G4IonisParamElm::~G4IonisParamElm()
 {
   if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-/*
-G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
-{
-  fShellCorrectionVector = 0;
-  *this = right;
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
-{
-  if (this != &right)
-    {
-      fZ                     = right.fZ;
-      fZ3                    = right.fZ3;
-      fZZ3                   = right.fZZ3;
-      flogZ3                 = right.flogZ3;
-      fTau0                  = right.fTau0;
-      fTaul                  = right.fTaul;
-      fBetheBlochLow         = right.fBetheBlochLow;
-      fAlow                  = right.fAlow;
-      fBlow                  = right.fBlow;
-      fClow                  = right.fClow;
-      fMeanExcitationEnergy  = right.fMeanExcitationEnergy;
-      fVFermi                = right.fVFermi;
-      fLFactor               = right.fLFactor;
-      if (fShellCorrectionVector) { delete [] fShellCorrectionVector; } 
-      fShellCorrectionVector = new G4double[3];            
-      fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
-      fShellCorrectionVector[1] = right.fShellCorrectionVector[1];
-      fShellCorrectionVector[2] = right.fShellCorrectionVector[2];      
-    } 
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4int G4IonisParamElm::operator==(const G4IonisParamElm& right) const
-{
-  return (this == (G4IonisParamElm *) &right);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4int G4IonisParamElm::operator!=(const G4IonisParamElm& right) const
-{
-  return (this != (G4IonisParamElm *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

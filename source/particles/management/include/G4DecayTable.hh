@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.hh 92057 2015-08-14 13:34:55Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -70,8 +69,8 @@ class G4DecayTable
 
  public:
     // equality operators
-    G4int operator==(const G4DecayTable &right) const {return (this == &right);};
-    G4int operator!=(const G4DecayTable &right) const {return (this != &right);};
+    G4bool operator==(const G4DecayTable &right) const {return (this == &right);};
+    G4bool operator!=(const G4DecayTable &right) const {return (this != &right);};
 
  public: // With Description
     void  Insert( G4VDecayChannel* aChannel);
@@ -93,13 +92,13 @@ class G4DecayTable
 
  private:
     G4ParticleDefinition       *parent;
-    G4VDecayChannelVector       *channels;
+    G4VDecayChannelVector      *channels;
 };
 
 inline     
  G4int G4DecayTable::entries() const
 {
-  return channels->size();
+  return G4int(channels->size());
 }
 
 inline     
@@ -112,7 +111,7 @@ inline
 inline     
  G4VDecayChannel* G4DecayTable::GetDecayChannel(G4int index) const
 {
-  G4VDecayChannel* selectedChannel = 0;
+  G4VDecayChannel* selectedChannel = nullptr;
   if ( (index>=0) && (index<G4int(channels->size())) ){
     selectedChannel = (*channels)[index];
   }

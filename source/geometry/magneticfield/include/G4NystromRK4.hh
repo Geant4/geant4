@@ -23,111 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NystromRK4.hh 66356 2012-12-18 09:02:32Z gcosmo $ 
-//
-// class G4NystromRK4
+// G4NystromRK4
 //
 // Class description:
 //
-// Integrate the equations of the motion of a particle in a magnetic field
+// Integrates the equations of the motion of a particle in a magnetic field
 // using 4th Runge-Kutta-Nystrom method with errors estimation 
 // (ATL-SOFT-PUB-2009-01)
 // Current form can be used only for 'pure' magnetic field.
 // Notes: 1) field must be time-independent.
 //        2) time is not integrated
-// 
-// History:
-// - Created: I.Gavrilenko   15.05.2009   (as G4AtlasRK4)
-// - Adaptations:  J. Apostolakis  May-Nov 2009
+
+// Created: I.Gavrilenko, 15.05.2009 (as G4AtlasRK4)
+// Adaptations: J.Apostolakis, November 2009
 // -------------------------------------------------------------------
 
 #ifndef G4NYSTROMRK4_HH
 #define G4NYSTROMRK4_HH
 
-#include "globals.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4Mag_EqRhs.hh"
+#include "G4CachedMagneticField.hh"
+#include "G4ThreeVector.hh"
+
+#include <memory>
 
 class G4NystromRK4 : public G4MagIntegratorStepper
 {
   public: 
-    G4NystromRK4(G4Mag_EqRhs *EquationMotion, G4double distanceConstField=0.0); 
+
+    G4NystromRK4(G4Mag_EqRhs* EquationMotion, 
+                 G4double distanceConstField = 0.0); 
       // Can be used only for Magnetic Fields - and for 6 variables (x,p)
 
-    ~G4NystromRK4() ;
-
-    void Stepper(const G4double P   [],
-	         const G4double dPdS[],
-	               G4double step  ,
-	               G4double Po  [],
-	               G4double Err []);
+    virtual void Stepper(const G4double y[],
+                         const G4double dydx[],
+                         G4double hstep,
+                         G4double yOut[],
+                         G4double yError[]) override;
       // Single call for integration result and error
-      // - Provides Error via analytical method
+      // Provides error via analytical method
 
-    virtual void ComputeRightHandSide(const double P[],double dPdS[]);   
-      // Must compute RHS - and does caches result
-
-    void      SetDistanceForConstantField( G4double length ); 
-    G4double  GetDistanceForConstantField() const; 
+    void SetDistanceForConstantField(G4double length); 
+    G4double GetDistanceForConstantField() const; 
    
-    G4int     IntegratorOrder() const {return 4;}
-    G4double  DistChord() const; 
+    virtual G4int IntegratorOrder() const override { return 4; }
+    virtual G4double DistChord() const override; 
   
   private:
 
-    inline void getField   (const G4double P[4]);
+    inline void GetFieldValue(const G4double point[4], G4double field[3]);
+    inline G4double GetFCof();
 
-    ////////////////////////////////////////////////////////////////
-    // Private data
-    ////////////////////////////////////////////////////////////////
+    G4CachedMagneticField* GetField();
+    const G4CachedMagneticField* GetField() const;
 
-    G4Mag_EqRhs*           m_fEq;          
-    G4double      m_lastField[3];
-    G4double      m_fldPosition[4];
-    G4double      m_magdistance ;
-    G4double      m_magdistance2;
-    G4double      m_cof         ;
-    G4double      m_mom         ;
-    G4double      m_imom        ;
-    G4bool        m_cachedMom   ;
-    G4double      m_iPoint   [3];
-    G4double      m_mPoint   [3];
-    G4double      m_fPoint   [3];
-    
+    G4double fMomentum = 0.0;
+    G4double fMomentum2 = 0.0;
+    G4double fInverseMomentum = 0.0;
+    G4double fCoefficient = 0.0;
+    G4ThreeVector fInitialPoint;
+    G4ThreeVector fMidPoint;
+    G4ThreeVector fEndPoint;
+
+    std::unique_ptr<G4CachedMagneticField> fCachedField;
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-// Inline methods
-/////////////////////////////////////////////////////////////////////////////////
-inline void  G4NystromRK4::SetDistanceForConstantField( G4double length )
-{
-  m_magdistance=   length;
-  m_magdistance2 = length*length;
-}
+#include "G4NystromRK4.icc"
 
-inline G4double  G4NystromRK4::GetDistanceForConstantField() const
-{
-  return m_magdistance; 
-}
-
-/////////////////////////////////////////////////////////////////////////////////
-// Get value of magnetic field while checking distance from last stored call
-/////////////////////////////////////////////////////////////////////////////////
-
-inline void G4NystromRK4::getField (const G4double P[4])
-{
-  
-  G4double dx = P[0]-m_fldPosition[0];
-  G4double dy = P[1]-m_fldPosition[1];
-  G4double dz = P[2]-m_fldPosition[2];
-
-  if((dx*dx+dy*dy+dz*dz) > m_magdistance2)
-  {
-    m_fldPosition[0] = P[0];
-    m_fldPosition[1] = P[1];
-    m_fldPosition[2] = P[2];
-    m_fldPosition[3] = P[3];   //  Generally it is P[7] - changed convention !!
-    m_fEq->GetFieldValue(m_fldPosition, m_lastField);
-  }
-}
-#endif  // G4NYSTROMRK4
+#endif

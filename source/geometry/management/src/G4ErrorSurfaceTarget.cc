@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ErrorSurfaceTarget class implementation
 //
-// $Id: G4ErrorSurfaceTarget.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
 
 #include "G4ErrorSurfaceTarget.hh"

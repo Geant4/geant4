@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExP01SteppingVerbose class
 //
 //
-// $Id: ExP01SteppingVerbose.cc 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Manager class for Root ntuples.
 // It implements functions specific to Root ntuples.
@@ -38,6 +37,8 @@
 
 #include "tools/wroot/ntuple"
 
+class G4RootMainNtupleManager;
+class G4RootFileManager;
 
 namespace tools {
 namespace wroot {
@@ -45,13 +46,15 @@ class directory;
 }
 }
 
-// template specializations used by this class defined below
+enum class G4NtupleCreateMode {
+  kNoMergeBeforeOpen,
+  kNoMergeAfterOpen,
+  kMainBeforeOpen,
+  kMainAfterOpen,
+  kUndefined
+};
 
-template <>
-template <>
-void G4TNtupleManager<tools::wroot::ntuple>::CreateTColumnInNtuple(
-  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription,
-  const G4String& name, std::vector<std::string>* vector);
+// template specializations used by this class defined below
 
 template <>
 template <>
@@ -62,9 +65,14 @@ G4bool G4TNtupleManager<tools::wroot::ntuple>::FillNtupleTColumn(
 class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple> 
 {
   friend class G4RootAnalysisManager;
+  friend class G4RootMainNtupleManager;
+  friend class G4RootMpiAnalysisManager;
+  friend class G4RootMpiNtupleManager;
 
   public:
-    explicit G4RootNtupleManager(const G4AnalysisManagerState& state);
+    explicit G4RootNtupleManager(const G4AnalysisManagerState& state,
+                                 G4int nofMainManagers,
+                                 G4bool rowWise, G4bool rowMode);
     virtual ~G4RootNtupleManager();
 
    private:
@@ -75,21 +83,46 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
     // Functions specific to the output type
 
     void SetNtupleDirectory(tools::wroot::directory* directory);
+    void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
     
+    // Utility function  
+    void CreateTNtuple(NtupleDescriptionType*  ntupleDescription);
+
     // Methods from the templated base class
-    //
-    virtual void CreateTNtuple(
-                    NtupleDescriptionType*  ntupleDescription,
-                    const G4String& name, const G4String& title) final;
+
     virtual void CreateTNtupleFromBooking(
                     NtupleDescriptionType*  ntupleDescription) final;
 
     virtual void FinishTNtuple(
-                    NtupleDescriptionType*  ntupleDescription) final;
+                    NtupleDescriptionType*  ntupleDescription,
+                    G4bool fromBooking) final;
+
+    virtual G4bool Reset(G4bool deleteNtuple);
+
+    // Method for merging
+    //
+    virtual G4bool Merge();
+
+    // Access functions
+    //
+    const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() const;
+    G4RootMainNtupleManager* GetMainNtupleManager(G4int index) const;
+    unsigned int GetBasketSize() const;
+    unsigned int GetBasketEntries() const;
+
+    // Utility functions
+    //
+    void SetCreateMode();
+    void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
 
     // data members
     //
+    G4NtupleCreateMode fCreateMode;
+    std::shared_ptr<G4RootFileManager> fFileManager;
     tools::wroot::directory*  fNtupleDirectory;
+    std::vector<G4RootMainNtupleManager*>  fMainNtupleManagers;
+    G4bool fRowWise;
+    G4bool fRowMode;
 };    
 
 // inline functions
@@ -98,25 +131,13 @@ inline void
 G4RootNtupleManager::SetNtupleDirectory(tools::wroot::directory* directory) 
 { fNtupleDirectory = directory; }
 
-//_____________________________________________________________________________
-template <>
-template <>
-inline void G4TNtupleManager<tools::wroot::ntuple>::CreateTColumnInNtuple(
-  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription,
-  const G4String& name, std::vector<std::string>* vector)
-{
-  if ( ntupleDescription->fNtuple ) {
-    if ( vector  == nullptr ) {
-      ntupleDescription->fNtuple->create_column_string(name);
-    }  
-    else {
-      G4ExceptionDescription description;
-      description << "Column of vector<std::string> type is not supported";
-      G4Exception("G4RootNtupleManager::CreateTColumnInNtuple()",
-                  "Analysis_W001", JustWarning, description);
-    } 
-  }  
-}
+inline void 
+G4RootNtupleManager::SetFileManager(std::shared_ptr<G4RootFileManager> fileManager)
+{ fFileManager = fileManager; }
+
+inline const std::vector<G4TNtupleDescription<tools::wroot::ntuple>* >& 
+G4RootNtupleManager::GetNtupleDescriptionVector() const
+{ return fNtupleDescriptionVector; }
 
 //_____________________________________________________________________________
 template <>

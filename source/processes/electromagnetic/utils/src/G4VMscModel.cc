@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,7 +49,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
+#include "G4LossTableManager.hh"
 #include "G4LossTableBuilder.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,10 +62,10 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   ionisation(nullptr),
   facrange(0.04),
   facgeom(2.5),
-  facsafety(0.3),
+  facsafety(0.6),
   skin(1.0),
   dtrl(0.05),
-  lambdalimit(mm),
+  lambdalimit(1.*CLHEP::mm),
   geomMin(1.e-6*CLHEP::mm),
   geomMax(1.e50*CLHEP::mm),
   fDisplacement(0.,0.,0.),
@@ -75,8 +76,8 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   dedx       = 2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g;
   localrange = DBL_MAX;
   localtkin  = 0.0;
-  man = G4LossTableManager::Instance();
-  currentPart = 0;
+  currentPart = nullptr;
+  SetUseBaseMaterials(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,20 +115,20 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
       // table is always built for low mass particles 
     } else if(p->GetPDGMass() < 4.5*GeV || ForceBuildTableFlag()) {
 
+      G4EmParameters* param = G4EmParameters::Instance();
       idxTable = 0;
-      G4LossTableBuilder* builder = man->GetTableBuilder();
+      G4LossTableBuilder* builder = 
+	G4LossTableManager::Instance()->GetTableBuilder();
       if(IsMaster()) {
         G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
         G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
-        emin = std::max(emin, man->MinKinEnergy());
-        emax = std::min(emax, man->MaxKinEnergy());
+        emin = std::max(emin, param->MinKinEnergy());
+        emax = std::min(emax, param->MaxKinEnergy());
         if(emin < emax) {
           xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
                                                       emin, emax, true);
         }
       }
-      theDensityFactor = builder->GetDensityFactors();
-      theDensityIdx = builder->GetCoupleIndexes();
     }
   }
   return change;
@@ -135,31 +136,23 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreeVector& 
-G4VMscModel::SampleScattering(const G4ThreeVector&, G4double)
+void G4VMscModel::InitialiseParameters(const G4ParticleDefinition* part)
 {
-  return fDisplacement;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::ComputeTruePathLengthLimit(const G4Track&, G4double&)
-{
-  return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::ComputeGeomPathLength(G4double truePathLength)
-{
-  return truePathLength;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::ComputeTrueStepLength(G4double geomPathLength)
-{
-  return geomPathLength;
+  if(IsLocked()) { return; }
+  G4EmParameters* param = G4EmParameters::Instance();
+  if(std::abs(part->GetPDGEncoding()) == 11) {
+    steppingAlgorithm = param->MscStepLimitType(); 
+    facrange = param->MscRangeFactor(); 
+    latDisplasment = param->LateralDisplacement();
+  } else {
+    steppingAlgorithm = param->MscMuHadStepLimitType(); 
+    facrange = param->MscMuHadRangeFactor(); 
+    latDisplasment = param->MuHadLateralDisplacement();
+  }
+  skin = param->MscSkin();
+  facgeom = param->MscGeomFactor();
+  facsafety = param->MscSafetyFactor();
+  lambdalimit = param->MscLambdaLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

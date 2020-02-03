@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.cc 83403 2014-08-21 15:07:30Z gcosmo $
 //
 // 
 // John Allison  3rd April 2001
@@ -86,7 +85,7 @@ G4AxesModel::G4AxesModel
 	 << "\" not found.  Defaulting to white and opaque.";
       G4Exception
 	("G4AxesModel::G4AxesModel",
-	 "modeling0012", JustWarning, ed);
+	 "modeling0011", JustWarning, ed);
     }
   }
 

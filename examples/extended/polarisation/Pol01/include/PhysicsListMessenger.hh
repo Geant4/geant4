@@ -26,7 +26,10 @@
 /// \file polarisation/Pol01/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
+<<<<<<< HEAD
 // $Id: PhysicsListMessenger.hh 86418 2014-11-11 10:39:38Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

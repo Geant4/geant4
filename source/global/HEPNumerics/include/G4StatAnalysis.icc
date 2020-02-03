@@ -1,0 +1,419 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+//
+// ----------------------------------------------------------------------
+// Class typename G4StatAnalysis
+//
+// Class description:
+//
+//  Class for statistical analysis of random variable
+//
+//  Adapted
+//  Lux, I.
+//      Monte Carlo particle transport methods: neutron and photon
+//      calculations/authors, Ivan Lux and Laszlo Koblinger.
+//      ISBN 0-8493-6074-9
+//  1. Neutron transport theory. 2. Photon transport theory.
+//  3. Monte Carlo method. I. Koblinger, Laszlo. II. Title.
+//  QC793.5.N4628L88 1990
+//  530.1 '38—dc20
+//
+// https://gnssn.iaea.org/NSNI/Shared%20Documents/OPEN%20Shared%20Files/MonteCarloParticleTransportMethodsNeutronAndPhotonCalculations.pdf
+//
+//
+
+#include <iostream>
+#include <iomanip>
+#include <limits>
+#include <fstream>
+#include <cmath>
+
+#include "globals.hh"
+#include "tls.hh"
+#include "G4Timer.hh"
+#include "G4ios.hh"
+
+#include "G4Types.hh"
+#include "G4Allocator.hh"
+
+//----------------------------------------------------------------------------//
+
+G4StatAnalysis::G4StatAnalysis()
+: fSum1(0.0),
+  fSum2(0.0),
+  fHits(0),
+  fZero(0)
+{ }
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetMean() const
+{
+    return (fHits > 0) ? fSum1/((G4double) fHits) : 0.;
+}
+
+//----------------------------------------------------------------------------//
+
+const G4double& G4StatAnalysis::GetSum() const
+{
+    return fSum1;
+}
+
+//----------------------------------------------------------------------------//
+
+const G4double& G4StatAnalysis::GetSumSquared() const
+{
+    return fSum2;
+}
+
+//----------------------------------------------------------------------------//
+
+const G4double& G4StatAnalysis::GetSum1() const
+{
+    return fSum1;
+}
+
+//----------------------------------------------------------------------------//
+
+const G4double& G4StatAnalysis::GetSum2() const
+{
+    return fSum2;
+}
+
+//----------------------------------------------------------------------------//
+
+const G4int& G4StatAnalysis::GetHits() const
+{
+    return fHits;
+}
+
+//----------------------------------------------------------------------------//
+
+G4int G4StatAnalysis::GetNumNonZero() const
+{
+    return fHits - fZero;
+}
+
+//----------------------------------------------------------------------------//
+
+G4int G4StatAnalysis::GetNumZero() const
+{
+    return fZero;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::SetSum(const G4double& val)
+{
+    fSum1 = val;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::SetSumSquared(const G4double& val)
+{
+    fSum2 = val;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::SetSum1(const G4double& val)
+{
+    fSum1 = val;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::SetSum2(const G4double& val)
+{
+    fSum2 = val;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::SetHits(const G4int& val)
+{
+    fHits = val;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::SetZero(const G4int& val)
+{
+    fZero = val;
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetFOM() const
+{
+    G4double elapsed_time = this->GetCpuTime();
+    G4double relative_err = this->GetRelativeError();
+    // lambda for equation clarity (will be inlined)
+    auto compute_figure_of_merit = [&] ()
+    {
+        return ( 1.0 / ( relative_err * relative_err ) / elapsed_time );
+    };
+    return (std::fabs(relative_err) > 0.0 && elapsed_time > 0.0)
+            ? compute_figure_of_merit() : ((fHits > 0) ? 1.0 : 0.0);
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetRelativeError() const
+{
+    // lambda for equation clarity (will be inlined)
+    auto compute_relative_error = [&] ()
+    {
+        return ( GetStdDev() / GetMean() / std::sqrt((G4double) fHits) );
+    };
+    return (std::fabs(GetMean()) > 0 && fHits > 0)
+            ? compute_relative_error() : ((fHits > 0) ? 1.0 : 0.0);
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetStdDev() const
+{
+    return ::sqrt(std::fabs(GetVariance()));
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetVariance() const
+{
+    // lambda for equation clarity (will be inlined)
+    auto compute_variance = [&] ()
+    {
+        return ((fSum2 - (std::pow(fSum1, 2.0)/fHits))/(((G4double) fHits) - 1.0));
+    };
+    return (fHits > 1) ? compute_variance() : 0.0;
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetCoeffVariation() const
+{
+    // lambda for equation clarity (will be inlined)
+    auto coefficient_of_variation = [&] ()
+    {
+        G4double hits = fHits;
+        return ::sqrt(
+                    (hits / (hits-1.0)) *
+                    ( (fSum2/(fSum1*fSum1)) - (1.0/hits))
+                    );
+    };
+    return (fHits > 1) ? coefficient_of_variation() : 0.0;
+    //return (fHits > 0 && fabs(fSum1) > 0.0)
+    //        ? (100.0*GetStdDev()/GetMean()) : 0.0;
+
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetEfficiency() const
+{
+    G4double hits = fHits;
+    G4double nzero = fHits - fZero;
+    return (fHits > 0) ? (nzero/hits) : 0.0;
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetR2Int() const
+{
+    G4double hits = fHits;
+    return (fHits > 0)
+            ? (fSum2 / (fSum1 * fSum1)) - 1.0/(GetEfficiency() * hits)
+            : 0.0;
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetR2Eff() const
+{
+    G4double hits = fHits;
+    return (fHits > 0)
+            ? (1.0 - GetEfficiency()) / (GetEfficiency() * hits)
+            : 0.0;
+}
+
+//----------------------------------------------------------------------------//
+
+G4StatAnalysis::operator G4double() const
+{
+    return this->GetSum();
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::Reset()
+{
+    fHits = 0;
+    fZero = 0;
+    fSum1 = 0.0;
+    fSum2 = 0.0;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::Add(const G4double& val, const G4double& weight)
+{
+    fHits += 1;
+    fSum1 += val * weight;
+    fSum2 += val * val * weight;
+    if(std::fabs(val*weight) < std::fabs(GetMean() * std::numeric_limits<double>::epsilon()))
+        fZero += 1;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::Rescale(const G4double& factor)
+{
+    fSum1 *= factor;
+    fSum2 *= factor * factor;
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::PrintInfo(std::ostream& os, const std::string& tab) const
+{
+    G4int _hits     = this->GetHits();
+    G4double _sum   = this->GetSum();
+    G4double _sigma = this->GetStdDev();
+    G4double _coeff = this->GetCoeffVariation();
+    G4double _error = this->GetRelativeError();
+    G4double _eff   = this->GetEfficiency();
+    G4double _fom   = this->GetFOM();
+    G4double _r2int = this->GetR2Int();
+    G4double _r2eff = this->GetR2Eff();
+
+    using std::setprecision;
+    using std::setw;
+    using std::scientific;
+    using std::fixed;
+    using std::left;
+    using std::right;
+    using std::ios;
+
+    std::stringstream ss;
+    ss << tab //<< scientific
+       << setprecision(os.precision()) << right << _sum
+       << left << " [sigma: " << right << _sigma
+       << left << " | error: " << right << _error
+       << left << " | coeff: " << right << _coeff
+       << left << " | eff: " << right << _eff
+       << left << " | fom: " << right << _fom
+       << left << " | r2int: " << right << _r2int
+       << left << " | r2eff: " << right << _r2eff
+       << left << " | hits: " << right << _hits
+       << left << " ]";
+
+    os << ss.str();
+}
+
+//----------------------------------------------------------------------------//
+
+G4double G4StatAnalysis::GetCpuTime() const
+{
+    tms* startTime = GetCpuClock();
+    tms endTime;
+    times(&endTime);
+    return ((endTime.tms_stime - startTime->tms_stime) +
+            (endTime.tms_utime - startTime->tms_utime)) / sysconf(_SC_CLK_TCK);
+}
+
+//----------------------------------------------------------------------------//
+
+G4StatAnalysis&
+G4StatAnalysis::operator+=(const G4double& _val)
+{
+    this->Add(_val);
+    return *this;
+}
+
+//----------------------------------------------------------------------------//
+
+G4StatAnalysis&
+G4StatAnalysis::operator/=(const G4double& _val)
+{
+    fSum1 /= _val;
+    fSum2 /= (_val*_val);
+    return *this;
+}
+
+//----------------------------------------------------------------------------//
+
+G4StatAnalysis&
+G4StatAnalysis::operator+=(const G4StatAnalysis& rhs)
+{
+    fHits += rhs.fHits;
+    fSum1 += rhs.fSum1;
+    fSum2 += rhs.fSum2;
+    fZero += rhs.fZero;
+    return *this;
+}
+
+//----------------------------------------------------------------------------//
+
+G4StatAnalysis&
+G4StatAnalysis::operator-=(const G4StatAnalysis& rhs)
+{
+    fHits -= rhs.fHits;
+    fSum1 -= rhs.fSum1;
+    fSum2 -= rhs.fSum2;
+    fZero -= rhs.fZero;
+    return *this;
+}
+
+//----------------------------------------------------------------------------//
+
+inline G4Allocator<G4StatAnalysis>*& _aStatAnalysisAllocator_G4MT_TLS_()
+{
+    G4ThreadLocalStatic G4Allocator<G4StatAnalysis>* _instance
+            = new G4Allocator<G4StatAnalysis>();
+    return _instance;
+}
+
+//----------------------------------------------------------------------------//
+
+void* G4StatAnalysis::operator new(size_t)
+{
+    G4Allocator<G4StatAnalysis>& _allocator = *_aStatAnalysisAllocator_G4MT_TLS_();
+    return (void*) _allocator.MallocSingle();
+}
+
+//----------------------------------------------------------------------------//
+
+void G4StatAnalysis::operator delete(void* _ptr)
+{
+    G4Allocator<G4StatAnalysis>& _allocator = *_aStatAnalysisAllocator_G4MT_TLS_();
+    _allocator.FreeSingle( (G4StatAnalysis*) _ptr);
+}
+
+//----------------------------------------------------------------------------//

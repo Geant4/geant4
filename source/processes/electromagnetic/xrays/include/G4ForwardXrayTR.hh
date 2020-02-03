@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh 68037 2013-03-13 14:15:08Z gcosmo $
 //
 // G4ForwardXrayTR
 //
@@ -69,11 +68,11 @@ public:
 
   // Constructors
 
-  G4ForwardXrayTR(  const G4String& matName1,    //  G4Material* pMat1,
+  explicit G4ForwardXrayTR(  const G4String& matName1,    //  G4Material* pMat1,
 		    const G4String& matName2,    //  G4Material* pMat2,     
                     const G4String& processName="XrayTR"     );
   
-  G4ForwardXrayTR(  const G4String& processName="XrayTR"     );
+  explicit G4ForwardXrayTR(  const G4String& processName="XrayTR"     );
 
   // Destructor //  virtual
 
@@ -84,10 +83,10 @@ public:
   void BuildXrayTRtables();
 
   G4double GetMeanFreePath(const G4Track&, G4double,
-			   G4ForceCondition* condition);
+			   G4ForceCondition* condition) override;
 
-    G4VParticleChange* PostStepDoIt( const G4Track& aTrack,
-				     const G4Step&  aStep    );
+  G4VParticleChange* PostStepDoIt( const G4Track& aTrack,
+           const G4Step&  aStep    ) override;
 
   G4double GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const;
   
@@ -98,7 +97,7 @@ public:
 //
 
 G4double SpectralAngleTRdensity( G4double energy,
-                                 G4double varAngle ) const;
+                                 G4double varAngle ) const override;
 
 G4double AngleDensity( G4double energy,
                        G4double varAngle ) const;
@@ -125,15 +124,15 @@ G4double EnergySum( G4double energy1,
 
 ///////////////////////////   Access functions  ////////////////////////////
 
-  G4PhysicsTable* GetAngleDistrTable()  { return fAngleDistrTable; };
-  G4PhysicsTable* GetEnergyDistrTable() { return fEnergyDistrTable; };
+  G4PhysicsTable* GetAngleDistrTable();
+  G4PhysicsTable* GetEnergyDistrTable();
 
-  static G4int    GetSympsonNumber()       { return fSympsonNumber;  };
-  static G4int            GetBinTR()       { return fBinTR;       };
+  static G4int    GetSympsonNumber();
+  static G4int            GetBinTR();
 
-  static G4double GetMinProtonTkin()       { return fMinProtonTkin; };
-  static G4double GetMaxProtonTkin()       { return fMaxProtonTkin; };
-  static G4int           GetTotBin()       { return fTotBin;       };
+  static G4double GetMinProtonTkin();
+  static G4double GetMaxProtonTkin();
+  static G4int           GetTotBin();
 
 
 protected:  // for access from X-ray TR fast simulation models
@@ -176,12 +175,12 @@ G4double fSigma2;                       // plasma energy Sq of matter2
 private:
   // Operators
 
-  G4ForwardXrayTR(const G4ForwardXrayTR& right) ;
+  G4ForwardXrayTR(const G4ForwardXrayTR& right) = delete;
 
-  G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right);
+  G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right) = delete;
 
-  // G4int operator==(const G4ForwardXrayTR& right)const;
-  // G4int operator!=(const G4ForwardXrayTR& right)const;
+  // G4bool operator==(const G4ForwardXrayTR& right)const;
+  // G4bool operator!=(const G4ForwardXrayTR& right)const;
 
 };    // end of G4ForwardXrayTR class ---------------------------
 

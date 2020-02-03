@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SolidStore.hh 66872 2013-01-15 01:25:57Z japost $
-//
-// class G4SolidStore
+// G4SolidStore
 //
 // Class description:
 //
@@ -48,8 +45,8 @@
 //   - Ptr to the single G4SolidStore
 
 // History:
-// 18.04.01 G.Cosmo Migrated to STL vector
-// 10.07.95 P.Kent  Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
+// 10.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4VSOLIDSTORE_HH
 #define G4VSOLIDSTORE_HH
@@ -74,7 +71,7 @@ class G4SolidStore : public std::vector<G4VSolid*>
     static void Clean();
       // Delete all solids from the store.
 
-    G4VSolid* GetSolid(const G4String& name, G4bool verbose=true) const;
+    G4VSolid* GetSolid(const G4String& name, G4bool verbose = true) const;
       // Return the pointer of the first solid in the collection having
       // that name.
 

@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm16/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
+<<<<<<< HEAD
 // $Id: PrimaryGeneratorAction.cc 68208 2013-03-18 18:17:16Z maire $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

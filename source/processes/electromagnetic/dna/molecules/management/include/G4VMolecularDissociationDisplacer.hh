@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -44,43 +44,43 @@
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 
-#ifndef G4VMolecularDecayDisplacer_h
-#define G4VMolecularDecayDisplacer_h 1
+#pragma once
 
+#include <vector>
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include <vector>
+#include "G4CTCounter.hh"
 
 class G4Molecule;
 class G4MolecularDissociationChannel;
 
-typedef int DisplacementType;
+using DisplacementType = int;
 
-class G4VMolecularDecayDisplacer
+//------------------------------------------------------------------------------
+
+class G4VMolecularDissociationDisplacer
 {
-public :
-    virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDissociationChannel*) const = 0;
-    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const = 0;
-    inline void SetVerbose(G4int);
-    virtual ~G4VMolecularDecayDisplacer();
+public:
+    virtual ~G4VMolecularDissociationDisplacer() = default;
 
-#if defined G4EM_ALLOC_EXPORT
-    G4DLLEXPORT static const DisplacementType NoDisplacement;
-#else
-    G4DLLIMPORT static const DisplacementType NoDisplacement;
-#endif
+    virtual std::vector<G4ThreeVector>
+    GetProductsDisplacement(const G4MolecularDissociationChannel*) const = 0;
+
+    virtual G4ThreeVector
+    GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const = 0;
+
+    inline void SetVerbose(G4int verbose)
+    {
+        fVerbose = verbose;
+    }
+
+public:
+    G4CT_COUNT_INIT_DEF(0)
+    G4CT_COUNT_DEF(NoDisplacement)
 
 protected :
-    G4VMolecularDecayDisplacer();
-    G4int fVerbose ;
-    static DisplacementType AddDisplacement();
-    static /*G4ThreadLocal*/ DisplacementType *Last;
+    G4VMolecularDissociationDisplacer() = default;
+
+    G4int fVerbose;
 };
-
-void G4VMolecularDecayDisplacer :: SetVerbose(G4int verbose)
-{
-    fVerbose = verbose ;
-}
-#endif
-
 

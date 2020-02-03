@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAAttachment.cc 91992 2015-08-13 07:20:24Z gcosmo $
-// GEANT4 tag $Name:  $
 
 #include "G4DNAAttachment.hh"
 #include "G4LEPTSAttachmentModel.hh"

@@ -28,6 +28,10 @@
 //
 //
 //    ******      SUGGESTED PHYSICS FOR ACCURATE SIMULATIONS    *********
+<<<<<<< HEAD
+=======
+//    ******            IN MEDICAL PHYSICS APPLICATIONS         *********
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // At moment, if accurate simulations are necessary, we suggest the use of the
 // Physics Lists 'HADRONTHERAPY_1';
@@ -71,6 +75,7 @@
 #include "G4ParallelWorldPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4AutoDelete.hh"
+#include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
@@ -82,7 +87,10 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
     cutForPositron  = defaultCutValue;
     
     pMessenger = new HadrontherapyPhysicsListMessenger(this);
+<<<<<<< HEAD
     
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     SetVerboseLevel(1);
 
     
@@ -136,6 +144,10 @@ HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
 void HadrontherapyPhysicsList::ConstructParticle()
 {
     decay_List -> ConstructParticle();
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -148,7 +160,13 @@ void HadrontherapyPhysicsList::ConstructProcess()
     // Electromagnetic physics
     //
     emPhysicsList -> ConstructProcess();
+<<<<<<< HEAD
     em_config.AddModels();
+=======
+    
+    
+    //em_config.AddModels();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     
     // Hadronic physics
     //

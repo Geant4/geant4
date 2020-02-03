@@ -23,24 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4MonopoleEq.hh 69699 2013-05-13 08:50:30Z gcosmo $
-//
-//
-// class G4MonopoleEq
+// G4MonopoleEq
 //
 // Class description:
 //
-// This is the right-hand side of equation of motion 
-// for monopole in a combined
-// electric and magnetic field.
+// This is the right-hand side of equation of motion for monopole
+// in a combined electric and magnetic field:
+// d(p_c)/ds=g{c-energyB_ - p_c x E}/pc
 
-// History:
-// - Created. V.Grichine, 17.11.09
+// Created: V.Grichine, 17.11.2009
 // -------------------------------------------------------------------
-
-#ifndef G4EQMAGELECTRICFIELD_hh
-#define G4EQMAGELECTRICFIELD_hh
+#ifndef G4EQMAGELECTRICFIELD_HH
+#define G4EQMAGELECTRICFIELD_HH
 
 #include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
@@ -50,10 +44,9 @@ class G4MonopoleEq : public G4EquationOfMotion
 {
   public:  // with description
 
-    G4MonopoleEq(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField ) {;}
+    G4MonopoleEq(G4ElectroMagneticField* emField );
 
-    ~G4MonopoleEq() {;} 
+    ~G4MonopoleEq();
 
     void  SetChargeMomentumMass(G4ChargeState particleCharge,
                                 G4double MomentumXc,
@@ -67,8 +60,8 @@ class G4MonopoleEq : public G4EquationOfMotion
 
   private:
 
-    G4double        fElectroMagCof ;
-    G4double        fMassCof;
+    G4double fElectroMagCof = 0.0;
+    G4double fMassCof = 0.0;
 };
 
 #endif

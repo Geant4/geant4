@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
 /// \brief Implementation of the G4MonopolePhysics class
 //
+<<<<<<< HEAD
 // $Id: G4MonopolePhysics.cc 68036 2013-03-13 14:13:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //---------------------------------------------------------------------------
 //
@@ -106,16 +109,15 @@ void G4MonopolePhysics::ConstructProcess()
   G4ProcessManager* pmanager = fMpl->GetProcessManager();
   
   // defined monopole parameters and binning
-
   G4double magn = fMpl->MagneticCharge();
-  G4double emin = fMonopoleMass/20000.;
-  if(emin < keV) { emin = keV; }
+  G4double emin = std::min(fMonopoleMass/20000., CLHEP::keV);
   G4double emax = std::max(10.*TeV, fMonopoleMass*100);
-  G4int nbin = G4lrint(10*std::log10(emax/emin));
+  G4int nbin    = G4lrint(10*std::log10(emax/emin));
 
   // dedicated trasporation 
   if(magn != 0.0) {
-    pmanager->RemoveProcess(0);
+    G4int idxt(0);
+    pmanager->RemoveProcess(idxt);
     pmanager->AddProcess(new G4MonopoleTransportation(fMpl),-1, 0, 0);
   }
 
@@ -140,21 +142,36 @@ void G4MonopolePhysics::ConstructProcess()
 
 void G4MonopolePhysics::SetMagneticCharge(G4double val)
 {
-  fMagCharge = val;
+  if ( fMpl ) {
+    G4Exception("G4MonopolePhysics", "01", JustWarning, 
+                "Cannot set value when monopole is already constructed.");
+  } else {
+    fMagCharge = val;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysics::SetElectricCharge(G4double val)
 {
-  fElCharge = val;
+  if ( fMpl ) {
+    G4Exception("G4MonopolePhysics", "01", JustWarning, 
+                "Cannot set value when monopole is already constructed.");
+  } else {
+    fElCharge = val;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysics::SetMonopoleMass(G4double mass)
 {
-  fMonopoleMass = mass;
+  if ( fMpl ) {
+    G4Exception("G4MonopolePhysics", "01", JustWarning, 
+                "Cannot set value when monopole is already constructed.");
+  } else {
+    fMonopoleMass = mass;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

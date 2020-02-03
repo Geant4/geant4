@@ -25,7 +25,6 @@
 //
 #ifndef G4CASCADE_INTERPOLATOR_ICC
 #define G4CASCADE_INTERPOLATOR_ICC
-// $Id: G4CascadeInterpolator.icc 71890 2013-06-27 22:14:13Z mkelsey $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
 //

@@ -29,7 +29,6 @@
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file dnaphysics.cc
 /// \brief Implementation of the dnaphysics example
@@ -62,10 +61,13 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
+<<<<<<< HEAD
   // Choose the Random engine
   
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // Construct the default run manager
 
 #ifdef G4MULTITHREADED

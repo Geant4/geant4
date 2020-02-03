@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VelocityTable.cc 97631 2016-06-06 14:06:58Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -44,10 +43,11 @@
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
 #include "G4Log.hh"
+#include "G4Exp.hh"
 
 #include "G4ios.hh" 
 
-G4ThreadLocal G4VelocityTable* G4VelocityTable::theInstance = 0;
+G4ThreadLocal G4VelocityTable* G4VelocityTable::theInstance = nullptr;
 
 ////////////////
 G4VelocityTable::G4VelocityTable()
@@ -73,12 +73,12 @@ G4VelocityTable::~G4VelocityTable()
 void G4VelocityTable::PrepareVelocityTable()
 ///////////////////
 {
-  const G4double g4log10 = std::log(10.); 
+  //const G4double g4log10 = std::log(10.); 
   
   dataVector.clear();
   binVector.clear();
-  dBin     =  std::log10(maxT/minT)/NbinT;
-  baseBin  =  std::log10(minT)/dBin;
+  dBin     =  G4Log(maxT/minT)/NbinT;
+  baseBin  =  G4Log(minT)/dBin;
 
   numberOfNodes = NbinT + 1;
   dataVector.reserve(numberOfNodes);
@@ -88,7 +88,7 @@ void G4VelocityTable::PrepareVelocityTable()
   dataVector.push_back(0.0);
 
   for (size_t i=1; i<numberOfNodes-1; i++){
-    binVector.push_back(std::exp(g4log10*(baseBin+i)*dBin));
+    binVector.push_back(G4Exp((baseBin+i)*dBin));
     dataVector.push_back(0.0);
   }
   binVector.push_back(maxT);
@@ -117,8 +117,8 @@ size_t G4VelocityTable::FindBinLocation(G4double theEnergy) const
   // not through pointers or references. In this case, the 'inline' will
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
-  const G4double g4log10 = G4Log(10.); 
-  return size_t( G4Log(theEnergy)/dBin/g4log10 - baseBin );
+  //const G4double g4log10 = G4Log(10.); 
+  return size_t( G4Log(theEnergy)/dBin - baseBin );
 }
 
 G4double G4VelocityTable::Value(G4double theEnergy) 
@@ -146,7 +146,8 @@ G4double G4VelocityTable::Value(G4double theEnergy)
      lastValue  = dataVector[lastBin];
 
   } else {
-     lastBin = FindBinLocation(theEnergy); 
+     lastBin = (size_t)( G4Log(theEnergy)/dBin - baseBin ); 
+     if(lastBin == numberOfNodes) { --lastBin; } // VI: fix possible precision lost
      lastEnergy = theEnergy;
      lastValue = Interpolation();
      
@@ -161,7 +162,10 @@ G4double G4VelocityTable::Value(G4double theEnergy)
 G4VelocityTable* G4VelocityTable::GetVelocityTable()
 ///////////////////
 {
-  if (!theInstance)  { theInstance = new G4VelocityTable(); }
+  if (!theInstance)  { 
+    static G4ThreadLocalSingleton<G4VelocityTable> inst;
+    theInstance = inst.Instance();
+  }
   return theInstance;
 }
 
@@ -169,7 +173,7 @@ G4VelocityTable* G4VelocityTable::GetVelocityTable()
 void G4VelocityTable::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
 ///////////////////
 {
-  if (theInstance == 0)  { theInstance = new G4VelocityTable(); }
+  if (theInstance == nullptr)  { GetVelocityTable(); }
 
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();

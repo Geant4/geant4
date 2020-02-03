@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//----------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsQGSP_BIC_AllHP_h
 #define G4HadronPhysicsQGSP_BIC_AllHP_h 1
@@ -42,10 +43,6 @@
 #include "G4FTFPProtonBuilder.hh"
 #include "G4QGSPProtonBuilder.hh"
 #include "G4BinaryProtonBuilder.hh"
-#include "G4BinaryDeuteronBuilder.hh"
-#include "G4BinaryTritonBuilder.hh"
-#include "G4BinaryHe3Builder.hh"
-#include "G4BinaryAlphaBuilder.hh"
 #include "G4ProtonPHPBuilder.hh"
 
 #include "G4NeutronBuilder.hh"
@@ -58,6 +55,9 @@
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
 
+#include "G4HadronicParameters.hh"
+
+
 class G4ComponentGGHadronNucleusXsc;
 
 
@@ -68,43 +68,46 @@ class G4HadronPhysicsQGSP_BIC_AllHP : public G4VPhysicsConstructor
     G4HadronPhysicsQGSP_BIC_AllHP(const G4String& name, G4bool quasiElastic=true);
     virtual ~G4HadronPhysicsQGSP_BIC_AllHP();
 
-  public: 
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
   private:
     void CreateModels();
 
+    const G4double maxFTFP = G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF();
+    const G4double minFTFP = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+    const G4double maxBIC  = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+    const G4double maxBERT = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+    const G4double minBIC_neutron = 19.9*CLHEP::MeV;
+    const G4double maxHP_neutron =  20.0*CLHEP::MeV;
+    const G4double minBIC_proton = 199.0*CLHEP::MeV;
+    const G4double maxHP_proton =  200.0*CLHEP::MeV;
+
     struct ThreadPrivate {
-      G4NeutronBuilder * theNeutronB;
+      G4NeutronBuilder * theNeutrons;
       G4FTFPNeutronBuilder * theFTFPNeutron;
       G4QGSPNeutronBuilder * theQGSPNeutron;
       G4BinaryNeutronBuilder * theBinaryNeutron;
       G4NeutronPHPBuilder * thePHPNeutron;
     
-      G4PiKBuilder * thePiKB;
+      G4PiKBuilder * thePiK;
       G4FTFPPiKBuilder * theFTFPPiK;
       G4QGSPPiKBuilder * theQGSPPiK;
       G4BertiniPiKBuilder * theBertiniPiK;
     
-      G4ProtonBuilder * theProtonB;
-      G4FTFPProtonBuilder * theFTFPProton;
-      G4QGSPProtonBuilder * theQGSPProton;
-      G4BinaryProtonBuilder * theBinaryProton;
+      G4ProtonBuilder * thePro;
+      G4FTFPProtonBuilder * theFTFPPro;
+      G4QGSPProtonBuilder * theQGSPPro;
+      G4BinaryProtonBuilder * theBinaryPro;
       G4ProtonPHPBuilder * thePHPProton;
 
       G4HyperonFTFPBuilder * theHyperon;
 
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;
 
-    // G4bool QuasiElastic;
 };
 
 #endif
-

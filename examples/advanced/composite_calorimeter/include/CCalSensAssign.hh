@@ -29,7 +29,7 @@
 //              from the map of logical volumes which are potentially sensitive
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalSensAssign_h
-#define CCalSensAssign_h
+#define CCalSensAssign_h 1
 
 #include "CCalVOrganization.hh"
 
@@ -37,14 +37,14 @@
 #include "globals.hh"
 #include "G4VSensitiveDetector.hh"
 
-class CCalSensAssign {
-
+class CCalSensAssign
+{
 public:
-  ~CCalSensAssign(){};
+  ~CCalSensAssign(){}
   static CCalSensAssign* getInstance();
-  bool assign();
-  bool stackingAction();
-  bool addCaloSD(G4String name, CCalVOrganization* numberingScheme);
+  G4bool assign();
+  G4bool stackingAction();
+  G4bool addCaloSD(G4String name, CCalVOrganization* numberingScheme);
 
 private:
   CCalSensAssign();

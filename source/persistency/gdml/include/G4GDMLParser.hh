@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh 89698 2015-04-27 13:25:23Z gcosmo $
 //
 //
 // class G4GDMLParser
@@ -48,7 +47,7 @@
 
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
-
+#include "G4Threading.hh"
 
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd")
 
@@ -126,6 +125,10 @@ class G4GDMLParser
    inline void SetOverlapCheck(G4bool);
    inline void SetRegionExport(G4bool);
    inline void SetEnergyCutsExport(G4bool);
+   inline void SetSDExport(G4bool);
+
+   inline G4int GetMaxExportLevel() const;  // Manage max number of levels
+   inline void SetMaxExportLevel(G4int);    // to export
 
    inline void Clear();                  // Clears the evaluator
 

@@ -33,14 +33,13 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <cmath>
-#include <CLHEP/Units/SystemOfUnits.h>
-
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
@@ -60,17 +59,15 @@
 #include "G4VisAttributes.hh"
 #include "G4NistManager.hh"
 #include "IORTDetectorConstruction.hh"
-#include "IORTDetectorROGeometry.hh"
-#include "IORTDetectorMessenger.hh"
-#include "IORTDetectorSD.hh"
-#include "IORTMatrix.hh"
-#include "IORTAnalysisManager.hh"
 #include "G4Tubs.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4PSDoseDeposit3D.hh"
+#include "IORTDetectorMessenger.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 IORTDetectorConstruction::IORTDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
   : motherPhys(physicalTreatmentRoom), // pointer to WORLD volume 
-    detectorSD(0), detectorROGeometry(0), matrix(0), 
     phantom(0), detector(0),
     phantomLogicalVolume(0), detectorLogicalVolume(0), 
     phantomPhysicalVolume(0), detectorPhysicalVolume(0),
@@ -89,7 +86,6 @@ IORTDetectorConstruction::IORTDetectorConstruction(G4VPhysicalVolume* physicalTr
     physiDiscoIORT1(0)
 
 {
-  IORTAnalysisManager::GetInstance();
 
   /* NOTE! that the IORTDetectorConstruction class
    * does NOT inherit from G4VUserDetectorConstruction G4 class
@@ -100,54 +96,58 @@ IORTDetectorConstruction::IORTDetectorConstruction(G4VPhysicalVolume* physicalTr
   // Messenger to change parameters of the phantom/detector geometry
   detectorMessenger = new IORTDetectorMessenger(this);
 
-  // Default detector voxels size
-  // 200 slabs along the beam direction (X)
-  sizeOfVoxelAlongX = 0.5 *CLHEP::mm; // 
-  sizeOfVoxelAlongY = 0.5 *CLHEP::mm; //  
-  sizeOfVoxelAlongZ = 0.5 *CLHEP::mm; // 
-
   // Define here the material of the water phantom and of the detector
   SetPhantomMaterial("G4_WATER"); 
+
   // Construct geometry (messenger commands)
-  SetDetectorSize(7.*CLHEP::cm, 15.*CLHEP::cm, 15.*CLHEP::cm);    
-  SetPhantomSize(20. *CLHEP::cm, 20. *CLHEP::cm, 20. *CLHEP::cm);   
-  SetPhantomPosition(G4ThreeVector(4.5 *CLHEP::cm, 0. *CLHEP::cm, 0. *CLHEP::cm)); 
-  SetDetectorToPhantomPosition(G4ThreeVector(0. *CLHEP::cm, 2.5 *CLHEP::cm, 2.5 *CLHEP::cm));  
+
+  // Detector
+  // Default detector sizes
+  detectorSizeX = 7.* cm;
+  detectorSizeY = 15.* cm;
+  detectorSizeZ = 15.* cm;
+
+  SetDetectorSize(detectorSizeX,  detectorSizeY,  detectorSizeZ); 
+ 
+  // Phantom 
+  SetPhantomSize(20. *cm, 20. *cm, 20. *cm);   
+  SetPhantomPosition(G4ThreeVector(4.5 *cm, 0. *cm, 0. *cm)); 
+  SetDetectorToPhantomPosition(G4ThreeVector(0. *cm, 2.5 *cm, 2.5 *cm));  
 
   // Default protection disc geometry and materials
-  SetOuterRadiusDiscoIORT (40. *CLHEP::mm);  
-  SetinnerRadiusDiscoIORT (0.*CLHEP::mm);   
-  SetheightDiscoIORT (2.0*CLHEP::mm);        
-  SetDiscoXPositionIORT (-11.0*CLHEP::mm);
-  SetDiscoYPositionIORT (0.0*CLHEP::mm);
-  SetDiscoZPositionIORT (0.0*CLHEP::mm);
+  SetOuterRadiusDiscoIORT (40. *mm);  
+  SetinnerRadiusDiscoIORT (0.*mm);   
+  SetheightDiscoIORT (2.0*mm);        
+  SetDiscoXPositionIORT (-11.0*mm);
+  SetDiscoYPositionIORT (0.0*mm);
+  SetDiscoZPositionIORT (0.0*mm);
   SetDiscoMaterialIORT("G4_WATER");   
 
-  SetOuterRadiusDiscoIORT1 (40. *CLHEP::mm);  
-  SetinnerRadiusDiscoIORT1 (0.*CLHEP::mm);   
-  SetheightDiscoIORT1 (1.0*CLHEP::mm);        
-  SetDiscoXPositionIORT1 (-8.0*CLHEP::mm);
+  SetOuterRadiusDiscoIORT1 (40. *mm);  
+  SetinnerRadiusDiscoIORT1 (0.*mm);   
+  SetheightDiscoIORT1 (1.0*mm);        
+  SetDiscoXPositionIORT1 (-8.0*mm);
   SetDiscoMaterialIORT1("G4_WATER");
 
-  SetAngleDiscoIORT0 (90.0 *CLHEP::deg);    
+  SetAngleDiscoIORT0 (90.0 *deg);    
 
   // Write virtual parameters to the real ones and check for consistency      
-  UpdateGeometry();
+  UpdateGeometry(); 
 }
 
 /////////////////////////////////////////////////////////////////////////////
 IORTDetectorConstruction::~IORTDetectorConstruction()
 { 
-    delete detectorROGeometry;  
-    delete matrix;  
     delete detectorMessenger;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // ConstructPhantom() is the method that reconstuct a water box (called phantom 
-// (or water phantom) in the usual Medical physicists slang). 
+// (or water phantom)). 
 // A water phantom can be considered a good
 // approximation of a an human body. 
+////////////////////////////////////////////////////////////////////////////
+
 void IORTDetectorConstruction::ConstructPhantom()
 {
     // Definition of the solid volume of the Phantom
@@ -201,6 +201,7 @@ void IORTDetectorConstruction::ConstructPhantom()
 // The detector is the volume that can be dived in slices or voxelized
 // and in it we can collect a number of usefull information:
 // dose distribution, fluence distribution, LET and so on
+
 void IORTDetectorConstruction::ConstructDetector()
 {
 
@@ -224,19 +225,17 @@ void IORTDetectorConstruction::ConstructDetector()
 					       false,0);
 
 // Visualisation attributes of the detector 
-    //skyBlue = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
+   
     G4VisAttributes * skyBlue1 = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
-    //skyBlue1 -> SetForceWireframe(true);
-    //skyBlue1 -> SetForceSolid(true);
-    //skyBlue -> SetVisibility(true);
-    //skyBlue -> SetForceSolid(true);
-    //skyBlue -> SetForceWireframe(false);
-    //detectorLogicalVolume -> SetVisAttributes(skyBlue);
     detectorLogicalVolume -> SetVisAttributes(skyBlue1);
+<<<<<<< HEAD
     
    // detectorLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
 
 
+=======
+   
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // **************
   // Cut per Region    
   // **************
@@ -249,7 +248,8 @@ void IORTDetectorConstruction::ConstructDetector()
 	detectorLogicalVolume -> SetRegion(aRegion);
 	aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
     }
-
+ G4cout << "The Detector has been built --- Add a scoring mesh for it  in the GUI if appropriate (similar to the phantom one)" << G4endl;
+ 
 }
 
 void IORTDetectorConstruction::ConstructDisc()
@@ -257,10 +257,8 @@ void IORTDetectorConstruction::ConstructDisc()
 // ---------------------------------------------------------------//
   //                    6.0 mm Protection Discs Volume          //
     // ---------------------------------------------------------------//
-  const G4double startAngleDiscoIORT0 = 0.*CLHEP::deg;
-  const G4double spanningAngleDiscoIORT0 = 360.*CLHEP::deg;
-
-  //G4double phi0 = 180. *CLHEP::deg; // messenger    
+  const G4double startAngleDiscoIORT0 = 0.*deg;
+  const G4double spanningAngleDiscoIORT0 = 360.*deg;
 
   // Matrix definition for a rotation (deg).       
   G4RotationMatrix rm0;               
@@ -299,23 +297,16 @@ void IORTDetectorConstruction::ConstructDisc()
   gray1-> SetVisibility(true);
   //gray1 -> SetForceWireframe(true);
   //gray1-> SetForceSolid(true);
- // const G4double OuterRadiusDiscoIORT = 35. *CLHEP::mm;  // messenger
- // const G4double innerRadiusDiscoIORT = 0.*CLHEP::mm;   // messenger
- //  const G4double heightDiscoIORT = 3.0*CLHEP::mm;        // messenger
-  const G4double startAngleDiscoIORT = 0.*CLHEP::deg;
-  const G4double spanningAngleDiscoIORT = 360.*CLHEP::deg;
- // const G4double DiscoXPositionIORT = -14.0*CLHEP::mm; // messenger 
 
-//G4Material* DiscoMaterialIORT = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);// messenger 
-  
+  const G4double startAngleDiscoIORT = 0.*deg;
+  const G4double spanningAngleDiscoIORT = 360.*deg;
    
-  G4double phi = 0. *CLHEP::deg;     
+  G4double phi = 0. *deg;     
 
   // Matrix definition for a 90 deg rotation. Also used for other volumes       
   G4RotationMatrix rm;               
   rm.rotateY(phi);
 
-  
   solidDiscoIORT = new G4Tubs("DiscoIORT", innerRadiusDiscoIORT, 
 				    OuterRadiusDiscoIORT,
 				    heightDiscoIORT, 
@@ -334,16 +325,9 @@ void IORTDetectorConstruction::ConstructDisc()
       // ---------------------------------------------------------------//
       //             2.0 mm Lead Protection Disc                          //
       // ---------------------------------------------------------------//
-  
- // const G4double OuterRadiusDiscoIORT1 = 35. *CLHEP::mm;
- // const G4double innerRadiusDiscoIORT1 = 0.*CLHEP::mm;
- // const G4double heightDiscoIORT1 = 0.5*CLHEP::mm;
-  const G4double startAngleDiscoIORT1 = 0.*CLHEP::deg;
-  const G4double spanningAngleDiscoIORT1 = 360.*CLHEP::deg;
-//  const G4double DiscoXPositionIORT1 = -10.5*CLHEP::mm; messenger
-//  G4Material* DiscoMaterialIORT1 = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu", isotopes);// messenger  
-  
-       
+ 
+  const G4double startAngleDiscoIORT1 = 0.*deg;
+  const G4double spanningAngleDiscoIORT1 = 360.*deg;    
   
   solidDiscoIORT1 = new G4Tubs("DiscoIORT1", innerRadiusDiscoIORT1, 
 				    OuterRadiusDiscoIORT1,
@@ -364,47 +348,6 @@ void IORTDetectorConstruction::ConstructDisc()
 }
 /////////////////////////////////////////////////////////////////////////////
 
-void  IORTDetectorConstruction::ConstructSensitiveDetector(G4ThreeVector detectorToWorldPosition)
-{  
-    // Install new Sensitive Detector and ROGeometry 
-    delete detectorROGeometry; // this should be safe in C++ also if we have a NULL pointer
-    //if (detectorSD) detectorSD->PrintAll();
-    //delete detectorSD;
-    // Sensitive Detector and ReadOut geometry definition
-    G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
-
-    static G4String sensitiveDetectorName = "Detector"; 
-    if (!detectorSD)
-	{
-	    // The sensitive detector is instantiated
-	    detectorSD = new IORTDetectorSD(sensitiveDetectorName);
-	}
-    // The Read Out Geometry is instantiated
-    static G4String ROGeometryName = "DetectorROGeometry";
-    detectorROGeometry = new IORTDetectorROGeometry(ROGeometryName,
-							    detectorToWorldPosition,
-							    detectorSizeX/2,  // controllare che sia necessario /2
-							    detectorSizeY/2,  // CONFERMATO!!! ci vuole!!!
-							    detectorSizeZ/2,
-							    numberOfVoxelsAlongX,
-							    numberOfVoxelsAlongY,
-							    numberOfVoxelsAlongZ);
-
-    G4cout << "Instantiating new Read Out Geometry \"" << ROGeometryName << "\""<< G4endl;
-    // This will invoke Build() IORTDetectorROGeometry virtual method 
-    detectorROGeometry -> BuildROGeometry();
-    // Attach ROGeometry to SDetector
-    detectorSD -> SetROgeometry(detectorROGeometry);
-    //sensitiveDetectorManager -> Activate(sensitiveDetectorName, true);
-    if (!sensitiveDetectorManager -> FindSensitiveDetector(sensitiveDetectorName, false))
-	{
-	    G4cout << "Registering new DetectorSD \"" << sensitiveDetectorName << "\""<< G4endl;
-	    // Register user SD
-	    sensitiveDetectorManager -> AddNewDetector(detectorSD);
-	    // Attach SD to detector logical volume
-	    detectorLogicalVolume -> SetSensitiveDetector(detectorSD);
-	}
-}
 void  IORTDetectorConstruction::ParametersCheck()
 {
     // Check phantom/detector sizes & relative position
@@ -417,20 +360,8 @@ void  IORTDetectorConstruction::ParametersCheck()
 		detectorToPhantomPosition
 		))
       G4Exception("IORTDetectorConstruction::ParametersCheck()", "IORT0001", FatalException, "Error: Detector is not fully inside Phantom!");
-
-    // Check Detector sizes respect to the voxel ones
-
-    if ( detectorSizeX < sizeOfVoxelAlongX) {
-      G4Exception("IORTDetectorConstruction::ParametersCheck()", "IORT0002", FatalException, "Error: Detector X size must be bigger or equal than that of Voxel X");
-    }
-    if ( detectorSizeY < sizeOfVoxelAlongY) {
-      G4Exception("IORTDetectorConstruction::ParametersCheck()", "IORT0003", FatalException, "Error: Detector X size must be bigger or equal than that of Voxel Y");	
-    }
-    if ( detectorSizeZ < sizeOfVoxelAlongZ) {
-      G4Exception("IORTDetectorConstruction::ParametersCheck()", "IORT0004", FatalException, "Error: Detector X size must be bigger or equal than that of Voxel Z");
-    }
-
 }
+
 /////////////////
 // MESSENGERS //
 ////////////////
@@ -530,15 +461,12 @@ void IORTDetectorConstruction::SetDetectorSize(G4double sizeX, G4double sizeY, G
     if (sizeX > 0.) {detectorSizeX = sizeX;}
     if (sizeY > 0.) {detectorSizeY = sizeY;}
     if (sizeZ > 0.) {detectorSizeZ = sizeZ;}
-    SetVoxelSize(sizeOfVoxelAlongX, sizeOfVoxelAlongY, sizeOfVoxelAlongZ);
 }
 /////////////////////////////////////////////////////////////////////////////
 
-void IORTDetectorConstruction::SetVoxelSize(G4double sizeX, G4double sizeY, G4double sizeZ)
+void IORTDetectorConstruction::SetVoxelSize(G4double , G4double , G4double)
 {
-    if (sizeX > 0.) {sizeOfVoxelAlongX = sizeX;}
-    if (sizeY > 0.) {sizeOfVoxelAlongY = sizeY;}
-    if (sizeZ > 0.) {sizeOfVoxelAlongZ = sizeZ;}
+    G4cout<< "SetVoxelSize method is not needed anymore " << G4endl;
 }
 void IORTDetectorConstruction::SetPhantomPosition(G4ThreeVector pos)
 {
@@ -560,7 +488,7 @@ void IORTDetectorConstruction::SetOuterRadiusDiscoIORT(G4double outerr)
 
 void IORTDetectorConstruction::SetinnerRadiusDiscoIORT(G4double innerr)
 {
-    if (innerr > 0.) {innerRadiusDiscoIORT = innerr;}
+    if (innerr >= 0.) {innerRadiusDiscoIORT = innerr;}
     
 }
 
@@ -599,7 +527,7 @@ void IORTDetectorConstruction::SetOuterRadiusDiscoIORT1(G4double outerr)
 
 void IORTDetectorConstruction::SetinnerRadiusDiscoIORT1(G4double innerr)
 {
-    if (innerr > 0.) {innerRadiusDiscoIORT1 = innerr;}
+    if (innerr >= 0.) {innerRadiusDiscoIORT1 = innerr;}
     
 }
 
@@ -654,38 +582,19 @@ void IORTDetectorConstruction::UpdateGeometry()
     else    ConstructDetector();
 
     // update disc function
-    delete solidDiscoIORT0;
-    delete logicDiscoIORT0;
-    delete physiDiscoIORT0;
-    delete solidDiscoIORT;
-    delete logicDiscoIORT;
-    delete physiDiscoIORT;
-    delete solidDiscoIORT1;
-    delete logicDiscoIORT1;
-    delete physiDiscoIORT1;
+   if (physiDiscoIORT1) delete physiDiscoIORT1;
+   if (logicDiscoIORT1) delete logicDiscoIORT1;
+   if (solidDiscoIORT1) delete solidDiscoIORT1;
+   
+   if (physiDiscoIORT) delete physiDiscoIORT;
+   if (logicDiscoIORT) delete logicDiscoIORT;
+   if (solidDiscoIORT) delete solidDiscoIORT;
+
+   if (physiDiscoIORT0) delete physiDiscoIORT0;
+   if (logicDiscoIORT0)  delete logicDiscoIORT0;
+   if (solidDiscoIORT0) delete solidDiscoIORT0;
+     
     ConstructDisc();
-    
-
-    // Round to nearest integer number of voxel 
-    numberOfVoxelsAlongX = G4lrint(detectorSizeX / sizeOfVoxelAlongX);
-    sizeOfVoxelAlongX = ( detectorSizeX / numberOfVoxelsAlongX );
-
-    numberOfVoxelsAlongY = G4lrint(detectorSizeY / sizeOfVoxelAlongY);
-    sizeOfVoxelAlongY = ( detectorSizeY / numberOfVoxelsAlongY );
-
-    numberOfVoxelsAlongZ = G4lrint(detectorSizeZ / sizeOfVoxelAlongZ);
-    sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
-
-    //G4cout << "*************** DetectorToWorldPosition " << GetDetectorToWorldPosition()/cm << "\n";
-    ConstructSensitiveDetector(GetDetectorToWorldPosition());
-
-    volumeOfVoxel = sizeOfVoxelAlongX * sizeOfVoxelAlongY * sizeOfVoxelAlongZ;
-    massOfVoxel = detectorMaterial -> GetDensity() * volumeOfVoxel;
-    //  This will clear the existing matrix (together with all data inside it)! 
-    matrix = IORTMatrix::GetInstance(numberOfVoxelsAlongX, 
-	    numberOfVoxelsAlongY,
-	    numberOfVoxelsAlongZ,
-	    massOfVoxel);
 
     // Inform the kernel about the new geometry
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
@@ -695,18 +604,21 @@ void IORTDetectorConstruction::UpdateGeometry()
 }
 
 void IORTDetectorConstruction::DeleteDisc()
-{
-    delete solidDiscoIORT0;
-    delete logicDiscoIORT0;
-    delete physiDiscoIORT0;
-    delete solidDiscoIORT;
-    delete logicDiscoIORT;
-    delete physiDiscoIORT;
-    delete solidDiscoIORT1;
-    delete logicDiscoIORT1;
-    delete physiDiscoIORT1;
-    G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
+{ 
+  if (physiDiscoIORT1) delete physiDiscoIORT1;
+  if (logicDiscoIORT1) delete logicDiscoIORT1;
+  if (solidDiscoIORT1) delete solidDiscoIORT1;
+  
+  if (physiDiscoIORT) delete physiDiscoIORT;
+  if (logicDiscoIORT) delete logicDiscoIORT;
+  if (solidDiscoIORT) delete solidDiscoIORT;
+  
+  if (physiDiscoIORT0) delete physiDiscoIORT0;
+  if (logicDiscoIORT0) delete logicDiscoIORT0;
+  if (solidDiscoIORT0) delete solidDiscoIORT0;
+   
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
+  G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
 }
 
 
@@ -727,15 +639,5 @@ void IORTDetectorConstruction::PrintParameters()
     G4cout << "DX= "<< G4BestUnit(phantomPosition.getX(),"Length") << 
 	"DY= "<< G4BestUnit(phantomPosition.getY(),"Length") << 
 	"DZ= "<< G4BestUnit(phantomPosition.getZ(),"Length") << G4endl;
-
-    G4cout << "The (X,Y,Z) sizes of the Voxels are: (" << 
-	G4BestUnit(sizeOfVoxelAlongX, "Length")  << ',' << 
-	G4BestUnit(sizeOfVoxelAlongY, "Length")  << ',' << 
-	G4BestUnit(sizeOfVoxelAlongZ, "Length") << ')' << G4endl;
-
-    G4cout << "The number of Voxels along (X,Y,Z) is: (" << 
-	numberOfVoxelsAlongX  << ',' <<
-	numberOfVoxelsAlongY  <<','  <<
-	numberOfVoxelsAlongZ  << ')' << G4endl;
-
 }
+

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMessenger.cc 72057 2013-07-04 13:07:29Z gcosmo $
-//
 //
 // File name:     G4NistMessenger
 //
@@ -110,6 +108,18 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   g4DensCmd->SetGuidance("all - all materials");
   g4DensCmd->SetParameterName("dmat", true);
   g4DensCmd->SetDefaultValue("all");
+
+  densCmd = new G4UIcmdWithAString("/material/g4/enableDensityEffOnFly",this);
+  densCmd->SetGuidance("enable accurate computation of density effect.");
+  densCmd->SetGuidance("all - all materials.");
+  densCmd->SetParameterName("dens", true);
+  densCmd->SetDefaultValue("all");
+
+  adensCmd = new G4UIcmdWithAString("/material/g4/disableDensityEffOnFly",this);
+  adensCmd->SetGuidance("disable accurate computation of density effect.");
+  adensCmd->SetGuidance("all - all materials.");
+  adensCmd->SetParameterName("dens", true);
+  adensCmd->SetDefaultValue("all");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,6 +135,8 @@ G4NistMessenger::~G4NistMessenger()
   delete g4ElmCmd;   
   delete g4MatCmd;
   delete g4DensCmd;
+  delete densCmd;
+  delete adensCmd;
   delete g4Dir;
   delete matDir;  
 }
@@ -135,26 +147,25 @@ void G4NistMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   //G4cout << "G4NistMessenger::SetNewValue <" << newValue << ">" << G4endl;
   if (command == verCmd) 
-   { manager->SetVerbose(verCmd->GetNewIntValue(newValue));}
-    
+    { manager->SetVerbose(verCmd->GetNewIntValue(newValue));}
   else if (command == prtElmCmd)
-   { manager->PrintElement(newValue); }
-    
+    { manager->PrintElement(newValue); }
   else if (command == przElmCmd) {
     G4int Z = przElmCmd->GetNewIntValue(newValue);
     if(Z >= 0 && Z < 108) { manager->PrintElement(Z); }
-  }   
+  }
   else if (command == lisMatCmd) 
-   { manager->ListMaterials(newValue); }
-
+    { manager->ListMaterials(newValue); }
   else if (command == g4ElmCmd)
-   { manager->PrintG4Element(newValue); }
-   
+    { manager->PrintG4Element(newValue); }
   else if (command == g4MatCmd)
-   { manager->PrintG4Material(newValue); }
-
+    { manager->PrintG4Material(newValue); }
   else if (command == g4DensCmd)
     { G4IonisParamMat::GetDensityEffectData()->PrintData(newValue); }
+  else if (command == densCmd)
+    { manager->SetDensityEffectCalculatorFlag(newValue,true); }
+  else if (command == adensCmd)
+    { manager->SetDensityEffectCalculatorFlag(newValue,false); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

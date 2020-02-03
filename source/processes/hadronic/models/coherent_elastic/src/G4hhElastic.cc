@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhElastic.cc,v 1.5 2010-11-09 09:04:29 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Physics model class G4hhElastic 
@@ -62,6 +60,8 @@
 
 #include "G4Pow.hh"
 
+#include "G4HadronicParameters.hh"
+
 using namespace std;
 
 
@@ -74,7 +74,7 @@ G4hhElastic::G4hhElastic()
   : G4HadronElastic("HadrHadrElastic")
 {
   SetMinEnergy( 1.*GeV );
-  SetMaxEnergy( 10000.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   verboseLevel = 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
@@ -115,7 +115,7 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   : G4HadronElastic("HadrHadrElastic")
 {
   SetMinEnergy( 1.*GeV );
-  SetMaxEnergy( 10000.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   verboseLevel         = 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ      = 0.0*GeV;  
@@ -160,7 +160,7 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   : G4HadronElastic("HadrHadrElastic")
 {
   SetMinEnergy( 1.*GeV );
-  SetMaxEnergy( 10000.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   verboseLevel = 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  

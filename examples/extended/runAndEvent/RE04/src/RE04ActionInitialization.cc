@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE04ActionInitialization.cc 66522 2012-12-19 12:26:04Z ihrivnac $
 //
 /// \file src/RE04ActionInitialization.cc
 /// \brief Implementation of the RE04ActionInitialization class

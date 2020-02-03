@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc 94206 2015-11-09 08:11:59Z gcosmo $
 //
 //
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
@@ -40,7 +39,7 @@
 #include "G4Threading.hh"
 #endif
 #include <qapplication.h>
-#include <qevent.h>
+#include <qtabwidget.h>
 
 #ifdef G4OPENGL_VERSION_2
 #include <qglshaderprogram.h>
@@ -55,6 +54,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
   G4OpenGLQtViewer (sceneHandler),
   G4OpenGLImmediateViewer (sceneHandler)
 {
+  fQGLWidgetInitialiseCompleted = false;
 
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
@@ -66,7 +66,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
   setVboDrawer(new G4OpenGLVboDrawer(this,"OGL-VBO"));
 #endif
   
-  resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+  fUpdateGLLock = false;
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -76,10 +76,21 @@ G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
+  makeCurrent();
+  
   fQGLWidgetInitialiseCompleted = false;
   CreateMainWindow (this,QString(GetName()));
-  CreateFontLists ();
 
+  glDrawBuffer (GL_BACK);
+  
+  // set the good tab active
+  if (QGLWidget::parentWidget()) {
+    QTabWidget *parentTab = dynamic_cast<QTabWidget*> (QGLWidget::parentWidget()->parent()) ;
+    if (parentTab) {
+      parentTab->setCurrentIndex(parentTab->count()-1);
+    }
+  }
+  
   fQGLWidgetInitialiseCompleted = true;
 }
 
@@ -135,7 +146,6 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
   }
 
   // Set the component visible
-  setVisible(true) ;
   
   // and update it immediatly before wait for SessionStart() (batch mode)
 //  QCoreApplication::sendPostedEvents () ;
@@ -205,7 +215,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
 //    return ;
   }
   if (!fQGLWidgetInitialiseCompleted) {
-    fQGLWidgetInitialiseCompleted= true;
+    fPaintEventLock = false;
     return;
   }
   if ((getWinWidth() == 0) && (getWinHeight() == 0)) {
@@ -267,7 +277,9 @@ void G4OpenGLImmediateQtViewer::wheelEvent (QWheelEvent * event)
 
 void G4OpenGLImmediateQtViewer::showEvent (QShowEvent *) 
 {
-  fHasToRepaint = true;
+  if (fQGLWidgetInitialiseCompleted) {
+    fHasToRepaint = true;
+  }
 }
 
 
@@ -297,6 +309,11 @@ void G4OpenGLImmediateQtViewer::contextMenuEvent(QContextMenuEvent *e)
 }
 
 void G4OpenGLImmediateQtViewer::paintEvent(QPaintEvent *) {
+  if (! fQGLWidgetInitialiseCompleted) {
+    return;
+  }
+  // Force a repaint next time if the FRAMEBUFFER is not READY
+  fHasToRepaint = isFramebufferReady();
   if ( fHasToRepaint) {
     updateGL();
   }
@@ -304,11 +321,20 @@ void G4OpenGLImmediateQtViewer::paintEvent(QPaintEvent *) {
 
 
 void G4OpenGLImmediateQtViewer::updateQWidget() {
+  if (fUpdateGLLock) {
+    return;
+  }
+  
+  if (! isCurrentWidget()){
+    return;
+  }
+  
+  fUpdateGLLock = true;
   fHasToRepaint= true;
-  updateGL();
-  updateSceneTreeComponentTreeWidgetInfos();
   repaint();
-  fHasToRepaint= false;
+  updateViewerPropertiesTableWidget();
+  updateSceneTreeWidget();
+  fUpdateGLLock= false;
 }
 
 

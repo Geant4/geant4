@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm11/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 93562 2015-10-26 14:44:24Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

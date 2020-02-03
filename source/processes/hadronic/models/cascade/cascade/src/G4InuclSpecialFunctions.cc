@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclSpecialFunctions.cc 68163 2013-03-15 20:11:44Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard pointless

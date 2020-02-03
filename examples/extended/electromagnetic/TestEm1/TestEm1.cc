@@ -27,8 +27,12 @@
 /// \brief Main program of the electromagnetic/TestEm1 example
 //
 //
+<<<<<<< HEAD
 // $Id: TestEm1.cc 84815 2014-10-21 12:19:02Z gcosmo $
 // 
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,14 +61,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
+<<<<<<< HEAD
  
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
     
   // Construct the default run manager
+=======
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+
+  //construct the default run manager
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    G4int nThreads = G4Threading::G4GetNumberOfCores();
+    G4int nThreads = 4;
     if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
     runManager->SetNumberOfThreads(nThreads);
 #else

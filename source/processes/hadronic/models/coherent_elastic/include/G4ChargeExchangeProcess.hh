@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //
 // Geant4 Hadron Elastic Charge Exchange Process -- header file

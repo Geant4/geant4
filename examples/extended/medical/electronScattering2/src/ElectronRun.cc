@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronRun.cc 78175 2013-12-04 14:11:29Z gunter $
 //
 /// \file medical/electronScattering2/src/ElectronRun.cc
 /// \brief Implementation of the ElectronRun class

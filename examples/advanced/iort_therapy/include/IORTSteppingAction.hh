@@ -33,7 +33,7 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,12 +49,6 @@
 class IORTRunAction;
 class IORTSteppingMessenger;
 
-
-#ifndef G4NOHIST
-class HepTupleManager;
-class HepHistogram;
-#endif
-
 class IORTSteppingAction : public G4UserSteppingAction
 {
 public:
@@ -62,8 +56,5 @@ public:
   ~IORTSteppingAction();
   
   void UserSteppingAction(const G4Step*);
-
-private:
-  IORTRunAction* runAction;
 };
 #endif

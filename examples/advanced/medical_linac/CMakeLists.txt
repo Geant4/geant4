@@ -40,7 +40,22 @@ target_link_libraries(ml2 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(medical_linac_SCRIPTS
-    acc1.mac batch.mac ml2.mac vis.mac
+    ml2.mac  
+    batch.mac
+    acc1.mac
+    macroAndData/macro_files/accelerator/acc1.mac
+    macroAndData/macro_files/accelerator/acc2_6MeV_3x3.mac
+    macroAndData/macro_files/accelerator/acc2_6MeV_10x10.mac
+    macroAndData/macro_files/accelerator/acc2_15MeV_3x3.mac
+    macroAndData/macro_files/accelerator/accSaturn.mac
+    macroAndData/macro_files/main/batch.mac 
+    macroAndData/macro_files/main/ml2.mac 
+    macroAndData/macro_files/main/vis.mac
+    macroAndData/experimental/VoxelsTest_In.txt
+    macroAndData/experimental/EXP_Saturn_Cal_Data.txt
+    macroAndData/results/PhSp/PhSp_Acc1.txt
+    macroAndData/results/ROG/ROG_Out.txt
+    macroAndData/results/experimental/VoxelsTest_Out.m   
   )
 
 foreach(_script ${medical_linac_SCRIPTS})

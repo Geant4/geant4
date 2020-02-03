@@ -23,18 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5RunAction.cc 74204 2013-10-01 07:04:43Z ihrivnac $
 //
 /// \file B5RunAction.cc
 /// \brief Implementation of the B5RunAction class
 
 #include "B5RunAction.hh"
 #include "B5EventAction.hh"
-#include "B5Analysis.hh"
 
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "g4analysis.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,10 +41,16 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
  : G4UserRunAction(),
    fEventAction(eventAction)
 { 
+<<<<<<< HEAD
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in B5Analysis.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+=======
+  // Create the analysis manager using a new factory method.
+  // The choice of analysis technology is done via the function argument.
+  auto analysisManager = G4Analysis::ManagerInstance("root");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   // Default settings

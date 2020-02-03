@@ -26,7 +26,6 @@
 /// \file persistency/P03/include/ExTGTrackerHit.hh
 /// \brief Definition of the ExTGTrackerHit class
 //
-// $Id: ExTGTrackerHit.hh 76481 2013-11-11 10:49:21Z gcosmo $
 
 #ifndef ExTGTrackerHit_h
 #define ExTGTrackerHit_h 1
@@ -46,7 +45,7 @@ class ExTGTrackerHit : public G4VHit
    ~ExTGTrackerHit();
     ExTGTrackerHit(const ExTGTrackerHit&);
     const ExTGTrackerHit& operator=(const ExTGTrackerHit&);
-    G4int operator==(const ExTGTrackerHit&) const;
+    G4bool operator==(const ExTGTrackerHit&) const;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

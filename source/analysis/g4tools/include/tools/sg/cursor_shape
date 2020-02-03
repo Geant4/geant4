@@ -1,0 +1,18 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_cursor_shape
+#define tools_sg_cursor_shape
+
+namespace tools {
+namespace sg {
+
+enum cursor_shape {
+  cursor_default = 0,
+  cursor_target
+};  
+
+}}
+
+#endif
+

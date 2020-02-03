@@ -99,8 +99,7 @@ void G4LivermoreGammaConversionModel::Initialise(
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
-    char* path = getenv("G4LEDATA");
-
+    char* path = std::getenv("G4LEDATA");
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
   
@@ -161,7 +160,7 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
 
   if(!datadir) 
   {
-    datadir = getenv("G4LEDATA");
+    datadir = std::getenv("G4LEDATA");
     if(!datadir) 
     {
       G4Exception("G4LivermoreGammaConversionModel::ReadData()",

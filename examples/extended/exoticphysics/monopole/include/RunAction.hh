@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,6 +58,7 @@ public:
   virtual void BeginOfRunAction(const G4Run*);
   virtual void EndOfRunAction(const G4Run*);
 
+<<<<<<< HEAD
   void FillHisto(G4int id, G4double x, G4double weight = 1.0);
            
   //  G4double GetBinLength() {return binLength;};
@@ -66,6 +70,10 @@ public:
     
   inline void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x; };
                    
+=======
+  void SetBinSize(G4double size);
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 private:  
 
   Histo*                  fHisto;    
@@ -73,6 +81,7 @@ private:
   PrimaryGeneratorAction* fKinematic;
   RunActionMessenger*     fRunActionMessenger;
 
+<<<<<<< HEAD
   G4int                   fVerboseLevel;
 
   G4double                fBinLength;
@@ -80,6 +89,9 @@ private:
   G4double                fProjRange; 
   G4double                fProjRange2;
 
+=======
+  G4double                fBinLength;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

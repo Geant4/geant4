@@ -99,6 +99,7 @@ protected:
     G4bool runIsSeeded;
     G4int nevModulo;
     G4int currEvID;
+    G4int luxury;
     G4SeedsQueue seedsQueue;
     G4bool readStatusFromFile;
 

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: RE05MuonHit.hh 69764 2013-05-14 09:59:36Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file RE05/include/RE05MuonHit.hh
 /// \brief Definition of the RE05MuonHit class
@@ -48,7 +51,7 @@ class RE05MuonHit : public G4VHit
       virtual ~RE05MuonHit();
       RE05MuonHit(const RE05MuonHit &right);
       const RE05MuonHit& operator=(const RE05MuonHit &right);
-      G4int operator==(const RE05MuonHit &right) const;
+      G4bool operator==(const RE05MuonHit &right) const;
 
 
       inline void *operator new(size_t);

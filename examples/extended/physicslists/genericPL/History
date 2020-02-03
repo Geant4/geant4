@@ -1,0 +1,37 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example genericPL History file
+                    ------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+26/11/19 I. Hrivnacova  (genericPL-V10-05-01)
+- Fixed Doxygen warnings
+
+24/3/19  J.Allison      (genericPL-V10-05-00)
+- Part of Merge Request exampleB4-V10-05-00.
+- Corrected name of include file: csv.hh
+
+18/1/18  G.Folger       (genericPL-V10-04-01)
+-  Re-tag using procedure to remove svn:externals from tag.
+
+15/1/18  G.Folger       (genericPL-V10-04-00)
+- Correct G4INSTALL in GNUmakefile.
+
+28/11/17 I. Hrivnacova  (genericPL-V10-03-01)
+- Fixed documentation
+
+26/10/17 I. Hrivnacova  (genericPL-V10-03-00)
+- Updated documentation, the first tag
+
+25/10/17 I. Hrivnacova
+- First version of example

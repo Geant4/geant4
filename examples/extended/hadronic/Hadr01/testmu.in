@@ -1,0 +1,25 @@
+#================================================
+#     Macro file for hadr01
+#     06.06.2006 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_PbWO4 
+/testhadr/TargetRadius     100 cm
+/testhadr/TargetLength     100 cm
+/testhadr/NumberDivZ       100
+#/testhadr/PrintModulo      10
+#
+/run/setCut                1 mm
+#/testhadr/Physics          QBBC
+#
+/run/initialize
+#
+/testhadr/HistoName        pi-pbw04
+/gun/particle pi-
+#/gun/particle mu-
+/gun/energy 0.3 GeV
+/run/beamOn 10000
+#

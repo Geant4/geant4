@@ -48,10 +48,12 @@ public:
   // Default constructor. Gives a boost of 0.  
 
   inline HepBoostX(const HepBoostX & b);
-  // Copy constructor.
+  inline HepBoostX(HepBoostX && b) = default;
+  // Copy and move constructors.
 
   inline HepBoostX & operator = (const HepBoostX & m);
-  // Assignment.
+  inline HepBoostX & operator = (HepBoostX && m) = default;
+  // Copy and move assignment operators.
 
          HepBoostX & set (double beta);
   inline HepBoostX       (double beta);

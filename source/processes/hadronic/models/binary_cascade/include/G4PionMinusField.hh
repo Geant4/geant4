@@ -54,8 +54,8 @@ public:
 private:
   G4PionMinusField(const  G4PionMinusField &right);
   const G4PionMinusField & operator=(const G4PionMinusField & right);
-  int operator==(const G4PionMinusField & right) const;
-  int operator!=(const G4PionMinusField & right) const;
+  G4bool operator==(const G4PionMinusField & right) const;
+  G4bool operator!=(const G4PionMinusField & right) const;
 
 public:
 

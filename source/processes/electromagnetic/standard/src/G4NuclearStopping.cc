@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.cc 78837 2014-01-28 08:44:36Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -61,7 +60,6 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName)
   SetBuildTableFlag(false);
   enableAlongStepDoIt = true; 
   enablePostStepDoIt = false; 
-  modelICRU49 = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,11 +81,9 @@ void G4NuclearStopping::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialized) {
     isInitialized = true;
 
-    if(!EmModel(1)) {
-      modelICRU49 = new G4ICRU49NuclearStoppingModel();
-      SetEmModel(modelICRU49);
-    }
+    if(!EmModel(0)) { SetEmModel(new G4ICRU49NuclearStoppingModel()); }
     AddEmModel(1, EmModel());
+    EmModel()->SetActivationHighEnergyLimit(10*GeV);
     EmModel()->SetParticleChange(&nParticleChange);
   }
 }
@@ -116,9 +112,10 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
   G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
 
   const G4ParticleDefinition* part = track.GetParticleDefinition();
-  G4double Z = std::fabs(part->GetPDGCharge()/eplus);
+  G4double Z = std::abs(part->GetPDGCharge()/eplus);
+  G4double massR = proton_mass_c2/part->GetPDGMass();
 
-  if(T2 > 0.0 && T2*proton_mass_c2 < Z*Z*MeV*part->GetPDGMass()) {
+  if(T2 > 0.0 && T2*massR < Z*Z*MeV) {
 
     G4double length = step.GetStepLength(); 
     if(length > 0.0) {
@@ -127,17 +124,18 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
       G4double T1= step.GetPreStepPoint()->GetKineticEnergy();
       G4double T = 0.5*(T1 + T2);
       const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple(); 
-      G4VEmModel* mod = SelectModel(T, couple->GetIndex());
+      G4double Tscaled = T*massR;
+      G4VEmModel* mod = SelectModel(Tscaled, couple->GetIndex());
 
       // sample stopping
-      if(modelICRU49) { modelICRU49->SetFluctuationFlag(true); }
-      G4double nloss = 
-	length*mod->ComputeDEDXPerVolume(couple->GetMaterial(), part, T);
-      if(nloss > T1) { nloss = T1; }
-      nParticleChange.SetProposedKineticEnergy(T1 - nloss);
-      nParticleChange.ProposeLocalEnergyDeposit(nloss);
-      nParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
-      if(modelICRU49) { modelICRU49->SetFluctuationFlag(false); }
+      if(mod->IsActive(Tscaled)) {
+	G4double nloss = 
+	  length*mod->ComputeDEDXPerVolume(couple->GetMaterial(), part, T);
+	nloss = std::min(nloss, T1);
+	nParticleChange.SetProposedKineticEnergy(T1 - nloss);
+	nParticleChange.ProposeLocalEnergyDeposit(nloss);
+	nParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
+      }
     }
   }
   return &nParticleChange;
@@ -150,3 +148,10 @@ void G4NuclearStopping::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4NuclearStopping::ProcessDescription(std::ostream& out) const
+{
+  out << "  Nuclear stopping";
+  G4VEmProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

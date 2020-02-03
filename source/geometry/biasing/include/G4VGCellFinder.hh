@@ -23,24 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VGCellFinder.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// Class G4VGCellFinder
+// G4VGCellFinder
 //
 // Class description:
 //
 // An interface of an GCellFinder. The G4GeometryCell is obtained
 // in the parallel geometry from G4VParallelStepper and in the
-// mass geometry form G4Step. This interface allows to implement
+// mass geometry from G4Step. This interface allows to implement
 // the two different ways to get a G4GeometryCell used by a process.
-// 
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4VGCellFinder_hh
-#define G4VGCellFinder_hh G4VGCellFinder_hh
+#ifndef G4VGCELLFINDER_HH
+#define G4VGCELLFINDER_HH 1
 
 #include "globals.hh"
 #include "G4GeometryCell.hh"
@@ -49,17 +44,13 @@ class G4Step;
 
 class  G4VGCellFinder
 {
+  public:  // with description
 
-public:  // with description
+    G4VGCellFinder();
+    virtual ~G4VGCellFinder();
 
-  G4VGCellFinder();
-  virtual  ~G4VGCellFinder();
-
-  virtual G4GeometryCell 
-  GetPreGeometryCell(const G4Step &aStep) const=0;
-  virtual G4GeometryCell 
-  GetPostGeometryCell(const G4Step &aStep) const=0;
-  
+    virtual G4GeometryCell GetPreGeometryCell(const G4Step& aStep) const = 0;
+    virtual G4GeometryCell GetPostGeometryCell(const G4Step& aStep) const = 0;
 };
 
 #endif

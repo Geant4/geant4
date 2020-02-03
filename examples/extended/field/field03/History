@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 97643 2016-06-06 14:27:17Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +18,58 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 May 19, 2016 - G.Cosmo - fieldex03-V10-01-01
+=======
+July 27, 2018 I.Hrivnacova - fieldex03-V10-04-02
+- Added commands:
+   /field/setField  Bx By Bz unit
+   /field/setLocalField  Bx By Bz unit
+- Fixed geometry (corrected overlaps, parameters handling)   
+  - Activated checkOverlaps in G4PVPlacements
+- Macro review and code clean-up:
+  - Removed EventAction, RunAction, RunActionMessenger
+    used only for storing random numbers, already available in kernel
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac
+  - Added test for commands defined in the example at the end 
+    of field02.in macro
+  - Improved visualization of geometry
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
+
+May 15, 2018 J.Allison - fieldex03-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+- F03RunAction.cc: Remove vis commands.
+
+May 09, 2018 B.Morgan - fieldex03-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Jun   2, 2017 - J.Apostolakis - fieldex03-V10-03-01
+- renamed SetStepper() method to CreateSteppers()
+
+May  24, 2017 - J.Apostolakis - fieldex03-V10-03-00
+- fixed valgrind issues in field setup's update method: first
+    delete all dependent objects, then create new ones.
+
+November 19, 2016 A.Dotti   - fieldex03-V10-02-04
+- explicit set of SD to manager
+
+November 02, 2016 L.Garnier - fieldex03-V10-02-03
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+July 04, 2016 - I. Hrivnacova - fieldex03-V10-02-02
+- Fix for Doxygen documentation
+
+July 01, 2016 - I. Hrivnacova - fieldex03-V10-02-01
+- Replaced F03PhysicsList with FTFP_BERT with G4StepLimiterPhysics
+
+May 19, 2016 - G.Cosmo - fieldex03-V10-02-00
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - Fixed compilation warnings on gcc-6.1 in F03FieldMessenger.
 
 September 01, 2015 - I. Hrivnacova - fieldex03-V10-01-00

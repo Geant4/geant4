@@ -22,15 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4PVParameterised.cc 73250 2013-08-22 13:22:23Z gcosmo $
-//
 // 
-// class G4PVParameterised
+// class G4PVParameterised implementation
 //
-// Implementation
-//
+// 29.07.95, P.Kent - first non-stub version
 // ----------------------------------------------------------------------
 
 #include "G4PVParameterised.hh"
@@ -45,16 +40,27 @@
 //
 G4PVParameterised::G4PVParameterised( const G4String& pName,
                                             G4LogicalVolume* pLogical,
-                                            G4VPhysicalVolume* pMother,
+                                            G4VPhysicalVolume* pMotherPhysical,
                                       const EAxis pAxis,
                                       const G4int nReplicas,
-                                            G4VPVParameterisation *pParam,
+                                            G4VPVParameterisation* pParam,
                                             G4bool pSurfChk )
-  : G4PVReplica(pName, pLogical, pMother, pAxis, nReplicas, 0, 0),
+: G4PVReplica(pName, nReplicas, pAxis, pLogical,
+              pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr ),
     fparam(pParam)
 {
+  G4LogicalVolume* motherLogical= pMotherPhysical ?
+      pMotherPhysical->GetLogicalVolume() : nullptr;
+
+  SetMotherLogical( motherLogical );
+  if( motherLogical )
+  {
+    // Registration moved here to ensure that the volume is recognised as Parameterised     
+    motherLogical->AddDaughter(this);
+  }
+
 #ifdef G4VERBOSE  
-  if ((pMother) && (pMother->IsParameterised()))
+  if ((pMotherPhysical != nullptr) && (pMotherPhysical->IsParameterised()))
   {
     std::ostringstream message, hint;
     message << "A parameterised volume is being placed" << G4endl
@@ -62,7 +68,7 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
     hint << "To make sure that no overlaps are generated," << G4endl
          << "you should verify the mother replicated shapes" << G4endl
          << "are of the same type and dimensions." << G4endl
-         << "   Mother physical volume: " << pMother->GetName() << G4endl
+         << "   Mother physical volume: " << pMotherPhysical->GetName() << G4endl
          << "   Parameterised volume: " << pName << G4endl
          << "  (To switch this warning off, compile with G4_NO_VERBOSE)";
     G4Exception("G4PVParameterised::G4PVParameterised()", "GeomVol1002",
@@ -80,11 +86,17 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
                                             G4LogicalVolume* pMotherLogical,
                                       const EAxis pAxis,
                                       const G4int nReplicas,
-                                            G4VPVParameterisation *pParam,
+                                            G4VPVParameterisation* pParam,
                                             G4bool pSurfChk )
-  : G4PVReplica(pName, pLogical, pMotherLogical, pAxis, nReplicas, 0, 0),
+  : G4PVReplica(pName, nReplicas, pAxis, pLogical, pMotherLogical ),
     fparam(pParam)
 {
+  SetMotherLogical( pMotherLogical );
+  if( pMotherLogical )
+  {
+    // Registration moved here to ensure that the volume is recognised as Parameterised
+    pMotherLogical->AddDaughter(this);
+  }
   if (pSurfChk) { CheckOverlaps(); }
 }
 
@@ -93,7 +105,7 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4PVParameterised::G4PVParameterised( __void__& a )
-  : G4PVReplica(a), fparam(0)
+  : G4PVReplica(a)
 {
 }
 
@@ -121,6 +133,14 @@ G4bool G4PVParameterised::IsParameterised() const
 }
 
 // ----------------------------------------------------------------------
+// VolumeType
+//
+EVolume G4PVParameterised::VolumeType() const 
+{
+  return kParameterised;
+}
+
+// ----------------------------------------------------------------------
 // GetReplicationData
 //
 void G4PVParameterised::GetReplicationData( EAxis& axis,
@@ -139,11 +159,11 @@ void G4PVParameterised::GetReplicationData( EAxis& axis,
 // ----------------------------------------------------------------------
 // SetRegularStructureId
 //
-void  G4PVParameterised::SetRegularStructureId( G4int Code )
+void  G4PVParameterised::SetRegularStructureId( G4int code )
 {
-  G4PVReplica::SetRegularStructureId( Code );
+  G4PVReplica::SetRegularStructureId( code );
   // To undertake additional preparation, a derived volume must
-  //   redefine this method, while calling also the above method.
+  // redefine this method, while calling also the above method
 }
 
 
@@ -158,8 +178,8 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
 
   G4int trials = 0;
   G4bool retval = false;
-  G4VSolid *solidA = 0, *solidB = 0;
-  G4LogicalVolume *motherLog = GetMotherLogical();
+  G4VSolid *solidA = nullptr, *solidB = nullptr;
+  G4LogicalVolume* motherLog = GetMotherLogical();
   G4VSolid *motherSolid = motherLog->GetSolid();
   std::vector<G4ThreeVector> points;
 
@@ -169,7 +189,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
            << GetName() << " ... ";
   }
 
-  for (G4int i=0; i<GetMultiplicity(); i++)
+  for (auto i=0; i<GetMultiplicity(); ++i)
   {
     solidA = fparam->ComputeSolid(i, this);
     solidA->ComputeDimensions(fparam, i, this);
@@ -184,7 +204,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
     // with the mother volume, cache them in a vector for later use with
     // the daughters
     //
-    for (G4int n=0; n<res; n++)
+    for (auto n=0; n<res; ++n)
     {
       G4ThreeVector mp = Tm.TransformPoint(solidA->GetPointOnSurface());
 
@@ -195,7 +215,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
         G4double distin = motherSolid->DistanceToIn(mp);
         if (distin > tol)
         {
-          trials++; retval = true;
+          ++trials; retval = true;
           std::ostringstream message;
           message << "Overlap with mother volume !" << G4endl
                   << "         Overlap is detected for volume "
@@ -221,8 +241,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
 
     // Checking overlaps with each other parameterised instance
     //
-    std::vector<G4ThreeVector>::iterator pos;
-    for (G4int j=i+1; j<GetMultiplicity(); j++)
+    for (auto j=i+1; j<GetMultiplicity(); ++j)
     {
       solidB = fparam->ComputeSolid(j,this);
       solidB->ComputeDimensions(fparam, j, this);
@@ -232,18 +251,18 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
       //
       G4AffineTransform Td( GetRotation(), GetTranslation() );
 
-      for (pos=points.begin(); pos!=points.end(); pos++)
+      for (auto pos=points.cbegin(); pos!=points.cend(); ++pos)
       {
         // Transform each point according to daughter's frame
         //
-        G4ThreeVector md = Td.Inverse().TransformPoint(*pos);
+        G4ThreeVector md = Td.InverseTransformPoint(*pos);
 
         if (solidB->Inside(md)==kInside)
         {
           G4double distout = solidB->DistanceToOut(md);
           if (distout > tol)
           {
-            trials++; retval = true;
+            ++trials; retval = true;
             std::ostringstream message;
             message << "Overlap within parameterised volumes !" << G4endl
                     << "          Overlap is detected for volume "

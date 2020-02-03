@@ -12,14 +12,401 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ---------------------------------------------------------
+     ----------------------------------------------------------
 
-29 February 2016 Andrea Dotti   radioactive_decay-V10-01-26
+1 November 2019  Laurent Desorgher  radioactive_decay-V10-05-09
+----------------------------------------------------------
+-Add passing of type of sub-models to secondary particles generated in
+G4RadioctiveDecay.cc   and G4RadioctiveDecayBase.cc
+
+-Add radioactive decay mode with emission of Triton, in  
+G4RadioctiveDecay.cc, G4RadioctiveDecayBase.cc, and G4Radioactivation.
+Code received from Anselmo Meregaglia.
+
+20 August 2019  Dennis Wright  radioactive_decay-V10-05-08
+----------------------------------------------------------
+- G4RadioactiveDecayBase, G4Radioactivation : remove spurious debug messages
+- G4Radioactivation : remove verboseLevel member and SetVerboseLevel() 
+    and GetVerboseLevel() methods as they are already in the base classa
+- remove G4cerr from G4Radioactivation and G4RadioactiveDecayBase.  Replace
+    with G4cout. 
+   
+29 July 2019  Dennis Wright  radioactive_decay-V10-05-07
+--------------------------------------------------------
+- G4RadioactiveDecayBase: split off unbiased decay part of DecayIt()
+  and make it protected method called DecayAnalog().  Move dkmap to
+  protected.
+
+- G4Radioactivation: correct bug in which AtRestDoIt() and PostStepDoIt()
+  both incorrectly call base class method DecayIt() 
+
+15 July 2019  Dennis Wright  radioactive_decay-V10-05-06
+--------------------------------------------------------
+- G4RadioactiveDecayBase::LoadDecayTable: line 675 - add line b /= 100.;
+  which was accidentally deleted when creating G4RadioactiveDecayBase
+  from G4RadioactiveDecay.  This gives correct decay branching ratios.
+
+21 June 2019  Makoto Asai  radioactive_decay-V10-05-05
+--------------------------------------------------------
+- G4RadioactiveDecay, G4RadioactiveDecayBase : make sure decay table maps
+    are cleanly deleted at the end of program.
+
+17 June 2019  Dennis Wright  radioactive_decay-V10-05-04
+--------------------------------------------------------
+- G4RadioactivationMessenger : remove "fast beta" option (obsolete), internal 
+    conversion option (not part of biasing) and atomic relaxation option (not 
+    part of biasing).
+    Add analogueMC option which was forgotten when class was developed.
+- G4RadioactiveDecayBaseMessenger : remove "fast beta" option 
+- G4RadioactiveDecayBase.hh : remove boolean FBeta
+
+- replace G4ExceptionDescription in loop with simple string at exception time
+  (G4RadioactiveDecay, G4RadioactiveDecayBase, G4Radioactivation)
+ 
+29 May 2019  Dennis Wright  radioactive_decay-V10-05-03
+------------------------------------------------------- 
+- G4RadioactiveDecay::CalculateChainsFromParent and
+  G4Radioactivation::CalculateChainsFromParent : fix Coverity memory leak 
+  of summedDecayTable
+
+ 8 May 2019  Dennis Wright  radioactive_decay-V10-05-02
+-------------------------------------------------------
+- Fix incorrect branching ratio sum for biased mode, to account for the addition 
+  of N shell EC capture and spontaneous fission.  Files affected:
+    G4Radioactivation.cc
+    G4RadioactiveDecay.cc
+
+ 4 April 2019  Dennis Wright  radioactive_decay-V10-05-01
+---------------------------------------------------------
+- Add spontaneous fission channel
+    Add new class G4SFDecay to handle neutron and gamma generation using LLNL model 
+    G4RadioactiveDecayMode.hh, .cc : add SpFission to enum
+    G4NucleusLimits.cc : set aMax to 260 (to accommodate 252Cf)
+    G4RadioactiveDecay.cc, G4RadioactiveDecayBase.cc : read spontaneous fission data 
+      from database, insert into decay tables and instantiate G4SFDecay
+    modify sources.cmake to include fission model library and G4SFDecay 
+    add fission model directory to GNUmakefile  
+  
+14 December 2018  Dennis Wright  radioactive_decay-V10-05-00
+------------------------------------------------------------
+- G4RadioactiveDecayBase.hh - add StreamInfo() method
+- G4RadioactiveDecayBase.cc - update to new N shell EC, add StreamInfo() method.
+   Enable printout of parameters with G4VERBOSE in BuildPhysicsTable().
+
+ 5 December 2018  Gabriele Cosmo  radioactive_decay-V10-04-04
+-------------------------------------------------------------
+- G4RadioactiveDecay: enable printout of parameters with G4VERBOSE in
+  BuildPhysicsTable().
+
+ 8 May 2018  Laurent Desorgher  radioactive_decay-V10-04-03
+-----------------------------------------------------------
+- G4ECCapture, G4RadioactiveDecay, G4RadioactiveDecayMode
+    -Add the electron capture channel from the N Shell :
+
+- G4ECCapture
+    -Add tables of PL2/PL1 PM2/PM1 and PN2/PN1 based on  bound electrons radial wave amplitudes
+     taken from bambynek et, Rev. Mod. Phys., vol. 49, 1977 
+    
+    -Compute partial probabilities of subshells PL1,PL2,PM1,PM2,PN1,PN2 from 
+     the tables  PL2/PL1, PM2/PM1, and PN2/PN1. Valid for allowed transitions.
+
+
+ 4 April 2018  Dennis Wright  radioactive_decay-V10-04-02
+---------------------------------------------------------
+- G4RadioactiveDecay::ConvolveSourceTimeProfile: switch from std::exp to
+  std::expm1 where small exp arguments are expected.  This greatly reduces
+  cancellation errors as well as the accumulated error in the variance
+  reduction weight calculation.  Although negative weights still occur,
+  their size is reduced by about ten orders of magnitude, enough to set
+  negative weights to zero.  Fixes bug report #1480.
+
+- G4Radioactivation::ConvolveSourceTimeProfile: same as above. 
+
+12 March 2018  Dennis Wright  radioactive_decay-V10-04-01
+---------------------------------------------------------
+- G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode: make sure 
+    last stable nuclide in decay chain is included as secondary.
+    Fixes bug 2024.
+- G4Radioactivation::AddDeexcitationSpectrumForBiasMode: same as above 
+
+14 December 2017  Dennis Wright  radioactive_decay-V10-04-00
+------------------------------------------------------------
+- re-tag 
+ 
+12 December 2017  Dennis Wright  radioactive_decay-V10-03-21
+------------------------------------------------------------
+- G4RadioactiveDecay.hh, .cc: add check that environment variable
+   G4RADIOACTIVEDATA is pointing to correct directory.  Moved check from
+   G4RadioactiveDecay::LoadDecayTable() to ctor.  Fixes bug #1942.
+
+- G4RadioactiveDecayBase.hh, .cc: same change as above  
+
+
+15 November 2017  Dennis Wright  radioactive_decay-V10-03-20
+------------------------------------------------------------
+- G4RadioactiveDecay::DecayIt in the variance reduction branch:
+  replace the line 
+      if (asecondaryparticle->GetDefinition()->GetBaryonNumber() < 5) {
+  with 
+      if (asecondaryparticle->GetDefinition()->GetPDGStable() ) {
+  This will allow the stable nucleus at the end of the decay chain to 
+  be added to the final state particle stack.  Fixes bug report #2007.
+
+
+09 November 2017  L.Desorgher  radioactive_decay-V10-03-19
+-----------------------------------------------------------
+- G4ECDecay: Set the probability for selection of L and M subshells to PL1/PL=0.995,PL2/PL=0.005
+             PM1/PM=0.995 and PM2/PM=0.005. Close to Fe55 case.
+                     
+
+01 November 2017  V.Ivanchenko  radioactive_decay-V10-03-18
+-----------------------------------------------------------
+- G4RadioactiveDecay: added StreamInfo method for printing
+    radioactive decay parameters; call this method in BuildPhysicsTable;
+    do not enable correlated gamma; removed unused EM headers 
+
+23 October 2017  Dennis Wright  radioactive_decay-V10-03-17
+-----------------------------------------------------------
+- G4Radioactivation.hh: fix unused variable warning for isInitilised
+
+20 October 2017  Dennis Wright  radioactive_decay-V10-03-16
+-----------------------------------------------------------
+- G4Radioactivation.hh: fix unused variable warning for fRemainderLifeTime
+- include Gabriele's GNUmakefile fix
+
+20 October 2017  Gabriele Cosmo
+-----------------------------------------------------------
+- Fixed GNUmakefile for missing dependency on module
+  processes/hadronic/models/management.
+
+ 5 October 2017  Dennis Wright  radioactive_decay-V10-03-15
+-----------------------------------------------------------
+- change name of class and file G4RadioactiveDecayRate to 
+  G4RadioactiveDecayRatesToDaughter
+
+- change name of class and file G4RadioactiveDecayRateVector to
+  G4RadioactiveDecayChainsFromParent
+
+- add and fill method G4RadioactiveDecay::ProcessDescription()
+
+- create new classes G4Radioactivation and G4RadioactivationMessenger for 
+    biased use only
+
+- create new classes G4RadioactiveDecayBase and G4RadioactiveDecayBaseMessenger
+    for unbiased use only
+
+- sources.cmake: use new class names mentioned above
+
+13 September 2017  Laurent Desorgher  radioactive_decay-V10-03-14
+--------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable()
+  Divide the b branching ratio of a specific decay channel read in the database
+  by 100 to avoid that it is higher than 1 as prevented by G4VDecayChannel.
+  This BR is given in pc in the database while it should be smaller than 1
+  when setting it by G4VDecayChannel::SetBR method.
+  This solve a bug that appeared  with changes in  G4VDecayChannel from
+  tag particles-V10-03-13.
+  
+11 July 2017  Dennis Wright  radioactive_decay-V10-03-13
+--------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable(): remove all settings of photon 
+    evaporation; now done in G4PhotonEvaporation and in physics list
+
+- G4ITDecay::DecayIt() remove all manipulations of nuclear polarization - now 
+    done in G4PhotonEvaporation
+
+16 June 2017  Dennis Wright  radioactive_decay-V10-03-12
+--------------------------------------------------------
+- G4RadioactiveDecay.hh:
+    restore static G4ThreadLocal G4Fragment* polarizedNucleus;
+- G4RadioactiveDecay.cc:
+    add G4ThreadLocal G4Fragment* G4RadioactiveDecay::polarizedNucleus = nullptr;
+    outside of class to avoid Clang compiler error
+
+12 June 2017  Dennis Wright  radioactive_decay-V10-03-11
+--------------------------------------------------------
+- due to run and compile errors on Mac, go back to radioactive_decay-V10-03-07,
+  remove all cached variables and delete instance of photonEvaporation in 
+  G4RadioactiveDecay::dtor
+
+3 June 2017  Dennis Wright  radioactive_decay-V10-03-10
+-------------------------------------------------------
+- G4RadioactiveDecay: store polarizedNucleus as a heap object instead of stack
+  in order to improve multithreading behavior
+- G4ITDecay::DecayIt: change code to deal with polarizedNucleus as a heap object  
+
+31 May 2017  Dennis Wright  radioactive_decay-V10-03-09
+-------------------------------------------------------
+- G4ITDecay: remove unused pointer to daughterNucleus
+
+29 May 2017  Dennis Wright  radioactive_decay-V10-03-08
+-------------------------------------------------------
+- G4RadioactiveDecay: add static thread local G4Fragment to act as cache for
+    nuclear polarization in G4ITDecay
+- G4RadioactiveDecay::dtor:  delete photonEvaporation
+- G4ITDecay: store in static G4Fragment the nuclear polarization after each 
+    decay so that it can be used as initial polarization for next decay 
+
+12 May 2017  Dennis Wright  radioactive_decay-V10-03-07
+-------------------------------------------------------
+- G4RadioactiveDecay: instantiate G4PhotonEvaporation in ctor and pass ptr to
+    G4ITDecay
+- G4ITDecay: remove instantiation of G4PhotonEvaporation and use ptr from
+    G4RadioactiveDecay instead
+
+ 7 March 2017  Dennis Wright  radioactive_decay-V10-03-06
+---------------------------------------------------------
+- G4RadioactiveDecay::DecayIt() : add line
+  fParticleChangeForRadDecay.ProposeWeight(theTrack.GetWeight());
+  to propagate weight of parent track.  Fixes Bug #1946.
+
+21 February 2017  V.Ivanchenko  radioactive_decay-V10-03-05
+------------------------------------------------------------
+- G4ITDecay: make daughterNucleus a pointer and store previous 
+    state of the G4Fragment there
+- G4RadioactiveDecay - removed G4ThreadLocal G4Fragment
+
+20 February 2017  A. Ribon      radioactive_decay-V10-03-04
+------------------------------------------------------------
+- G4RadioactiveDecay: switch off temporarily the correlated gamma emission,
+                      to limit the non-reproducibility violations.
+
+16 February 2017  V.Ivanchenko  radioactive_decay-V10-03-03
+------------------------------------------------------------
+- G4ITDecay: fixed old mass variable
+
+14 February 2017  Dennis Wright  radioactive_decay-V10-03-02
+------------------------------------------------------------
+- G4ITDecay: Vladimir's changes from trunk which fix warnings:
+    added check on Z, A, excitation energy in order to be
+    sure that correlated gamma may be sampled; reset 4-momentum at rest
+    when previous nucleaus is reused; use floating level index
+    when a new ion is created
+
+- G4RadioactiveDecay: use Laurent's level tolerence level of 10 eV 
+ 
+10 February 2017  Dennis Wright  radioactive_decay-V10-03-01
+------------------------------------------------------------
+- G4RadioactiveDecay: add static G4ThreadLocal G4Fragment polarizedNucleus
+  to serve as cache for polarized nucleus
+
+- G4RadioactiveDecay::BuildPhysicsTable: added lines
+    G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
+    param->SetUseFilesNEW(true);
+    param->SetCorrelatedGamma(true);
+
+  in order to enable correlated gamma emission
+
+- G4ITDecay: use G4RadioactiveDecay::polarizedNucleus as a cache to enable
+  chain decay with polarization
+
+20 December 2016  Dennis Wright  radioactive_decay-V10-03-00
+------------------------------------------------------------
+- G4ITDecay::G4ITDecay(): make G4PhotonEvaporation a class member 
+  and intialize only once to avoid memory churn
+
+- G4ITDecay::DecayIt(): make G4Fragment a data member to avoid its
+    deletion at end of this method and keep polarization information 
+
+7 November 2016  Dennis Wright  radioactive_decay-V10-02-15
+-----------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable: fix segfault by removing deletion of 
+  empty decay table 
+
+4 November 2016  Dennis Wright  radioactive_decay-V10-02-14
+-----------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable: fix bug which ignores IT decay when no
+  entries found in database
+ 
+30 September 2016  Dennis Wright  radioactive_decay-V10-02-13
+-------------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable: fix unexpected behavior when decay file
+  is not found
+
+26 September 2016  Dennis Wright  radioactive_decay-V10-02-12
+-------------------------------------------------------------
+- G4BetaMinusDecay::DecayIt: add protection for spectrumSampler to try and avoid 
+  unitialized read error 
+- G4BetaMinusDecay::SetUpBetaSpectrumSampler: put array creation inside (e0 > 0)
+  block
+ 
+23 September 2016  Dennis Wright  radioactive_decay-V10-02-11
+-------------------------------------------------------------
+- G4BetaMinusDecay::SetUpBetaSpectrumSampler: add missing initialization of 
+  spectrumSampler
+
+- G4RadioactiveDecayRate copy ctor: restore verboseLevel initialization as
+  per Coverity
+
+ 7 September 2016  Dennis Wright  radioactive_decay-V10-02-10
+------------------------------------------------------------
+- G4NuclearDecay.hh: fixed compilation error by adding Get() method for
+  floating level
+
+16 August 2016  Dennis Wright  radioactive_decay-V10-02-09
+----------------------------------------------------------
+- remove obsolete class G4NuclearDecayChannel and all classes based on it:
+  G4AlphaDecayChannel, G4BetaMinusDecayChannel, G4BetaPlusDecayChannel,
+  G4ITDecayChannel, G4KshellECDecayChannel, G4LshellECDecayChannel,
+  G4MshellECDecayChannel and G4ProtonDecayChannel.hh
+
+- G4RadioactiveDecay: enable reading of floating levels and entry as unique 
+  nuclides into decay tables
+
+- G4RadioactiveDecay and all specific decay channel classes: allow 
+  nuclides with floating levels to decay
+
+- this tag works only with the RadioactiveDecay5.0 database or later 
+
+
+25 July 2016  Vladimir Ivanchenko  radioactive_decay-V10-02-08
+--------------------------------------------------------
+- G4NuclearDecayChannel, G4RadioactiveDecay, G4RadioactiveDecaymessenger
+    switch to use new gamma level data instead of old obsolete
+
+16 June 2016  Vladimir Ivanchenko  radioactive_decay-V10-02-07
+--------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable: remove initialization of atomic 
+  deexcitation and leave only G4Exception. Initialisation should be done 
+  in Physics List
+
+15 June 2016  Dennis Wright  radioactive_decay-V10-02-06
+--------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable: remove initialization of atomic 
+  deexcitation to avoid overwriting its initialization in EM.  Throw
+  fatal exception if initialization not done somewhere.
+ 
+4 April 2016  Dennis Wright  radioactive_decay-V10-02-05
+--------------------------------------------------------
+- remove obsolete class G4RIsotopeTable
+
+29 March 2016 Laurent Desorgher   radioactive_decay-V10-02-04
+-------------------------------------------------------------
+- Add production of gamma and electron spectra from deexcitation of excited levels
+  in the biased mode. New method G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode
+
+29 February 2016 Andrea Dotti   radioactive_decay-V10-02-03
 -----------------------------------------------------------
 - New API for G4VDecayChannel class (avoid MT data-race)
-  requires particles-V10-02-08
+  requires partciles-V10-02-08
 
- 3 December 2015 Dennis Wright  radioactive_decay-V10-01-25
+16 February 2016 Dennis Wright  radioactive_decay-V10-02-02
+-----------------------------------------------------------
+- G4RadioactiveDecay::DoDecay: add protection for zero ptr in case of missing
+  decay channel
+
+16 December 2015 Dennis Wright  radioactive_decay-V10-02-01
+-----------------------------------------------------------
+- G4RadioactiveDecay: rename several methods and variables to more closely
+  represent their meaning: 
+    GetTaoTime() -> ConvolveSourceTimeProfile()
+    taotime -> convolvedTime
+    theDecayTable -> summedDecayTable
+    rates -> Acoeff
+
+- added class G4BatemanParameters to eventually replace G4RadioactiveDecayRate
+
+ 3 December 2015 Dennis Wright  radioactive_decay-V10-02-00
 -----------------------------------------------------------
 - retag radioactive_decay-V10-01-24
 

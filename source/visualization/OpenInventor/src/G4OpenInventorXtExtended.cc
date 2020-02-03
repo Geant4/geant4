@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXt.cc,v 1.5 2010-05-26 14:30:46 allison Exp $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -66,7 +65,7 @@ void G4OpenInventorXtExtended::Initialize()
   Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
   G4cout << "TOP LEVEL WIDGET FOR SoXt::init() = " << top << G4endl;
 
-  if(getenv("XENVIRONMENT")==NULL) {
+  if(std::getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
     if(database!=NULL) {
       XrmPutLineResource(&database,"*topShadowColor:white");

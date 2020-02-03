@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -41,52 +40,22 @@
 // --------------------------------------------------------------------
 
 #include "G4LPhysicsFreeVector.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ios.hh"
 
 // --------------------------------------------------------------------
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
-   : G4PhysicsVector()
-{
-   type = T_G4LPhysicsFreeVector;
-}
+   : G4PhysicsFreeVector()
+{}
 
 // --------------------------------------------------------------------
 
-G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
-                                           G4double binmin,
-                                           G4double binmax)
-  : G4PhysicsVector()
-{
-   type = T_G4LPhysicsFreeVector;
-   
-   edgeMin = binmin;
-   edgeMax = binmax;
-   numberOfNodes = nbin;
-   binVector.reserve(numberOfNodes);
-   dataVector.reserve(numberOfNodes);
-   for (size_t i=0; i<numberOfNodes; i++)
-   {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
-   }
-}  
+G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t length, G4double, G4double)
+  : G4PhysicsFreeVector(length)
+{}  
 
 // --------------------------------------------------------------------
 
 G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
-{
-}
-
-// --------------------------------------------------------------------
-
-void G4LPhysicsFreeVector::DumpValues()
-{
-   for (size_t i = 0; i < numberOfNodes; i++)
-   {
-      G4cout << binVector[i] << "   " << dataVector[i]/millibarn << G4endl;
-   }
-}
+{}
 
 // --------------------------------------------------------------------

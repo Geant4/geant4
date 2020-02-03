@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.cc 91837 2015-08-07 07:27:08Z gcosmo $
 //
 // by V. Lara
 //
@@ -32,15 +31,16 @@
 //            the source, use G4Pow
  
 #include "G4HETCFragment.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4PreCompoundParameters.hh"
 
 G4HETCFragment::
 G4HETCFragment(const G4ParticleDefinition* part,
 	       G4VCoulombBarrier* aCoulombBarrier)
   : G4VPreCompoundFragment(part, aCoulombBarrier)
 {
-  G4double r0 = theParameters->Getr0();
+  G4double r0 = theParameters->GetR0();
   r2norm = r0*r0/(CLHEP::pi*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
 }
 
@@ -75,8 +75,9 @@ IntegrateEmissionProbability(G4double & Low, G4double & Up,
   G4int Pb = P - theA;
   G4int Nb = Pb + H;
   if (Nb <= 0.0) { return 0.0; }
-  G4double ga = (6.0/pi2)*theFragA*theParameters->GetLevelDensity();
-  G4double gb = (6.0/pi2)*theResA*theParameters->GetLevelDensity();
+
+  G4double ga = (6.0/pi2)*fNucData->GetLevelDensity(theFragZ,theFragA,U);
+  G4double gb = (6.0/pi2)*fNucData->GetLevelDensity(theResZ,theResA,U);
 
   G4double A  = G4double(P*P+H*H+P-3*H)/(4.0*ga);
   G4double Ab = G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*gb);
@@ -97,8 +98,8 @@ IntegrateEmissionProbability(G4double & Low, G4double & Up,
   G4double Y = std::max(Up - Ab - Low, 0.0);
 
   G4double Probability = r2norm*GetSpinFactor()*theReducedMass*GetAlpha() 
-    *g4pow->Z23(theResA)*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
-    *U*g4pow->powN(gb*Y,Nb)/g4pow->powN(ga*U,N);
+    *g4calc->Z23(theResA)*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
+    *U*g4calc->powN(gb*Y,Nb)/g4calc->powN(ga*U,N);
 
   return Probability;
 }

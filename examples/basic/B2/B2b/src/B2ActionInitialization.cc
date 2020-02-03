@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file B2ActionInitialization.cc
 /// \brief Implementation of the B2ActionInitialization class

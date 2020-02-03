@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MolecularConfiguration.cc 94289 2015-11-11 08:33:40Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -542,7 +541,7 @@ G4MolecularConfiguration::~G4MolecularConfiguration()
 
 G4MolecularConfiguration*
 G4MolecularConfiguration::
-ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy)
+ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy) const
 {
   G4MolecularConfiguration* output =
       GetManager()->GetMolecularConfiguration(fMoleculeDefinition,
@@ -559,7 +558,7 @@ ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy)
 //______________________________________________________________________________
 
 G4MolecularConfiguration*
-G4MolecularConfiguration::ChangeConfiguration(int charge)
+G4MolecularConfiguration::ChangeConfiguration(int charge) const
 {
   G4MolecularConfiguration* output =
       GetManager()->GetMolecularConfiguration(fMoleculeDefinition, charge);
@@ -585,7 +584,7 @@ G4MolecularConfiguration::operator=(G4MolecularConfiguration& /*right*/)
 /** Method used in Geant4-DNA to excite water molecules
  */
 G4MolecularConfiguration*
-G4MolecularConfiguration::ExciteMolecule(G4int ExcitedLevel)
+G4MolecularConfiguration::ExciteMolecule(G4int ExcitedLevel) const
 {
 //  MakeExceptionIfFinalized();
   CheckElectronOccupancy(__func__);
@@ -602,7 +601,7 @@ G4MolecularConfiguration::ExciteMolecule(G4int ExcitedLevel)
 /** Method used in Geant4-DNA to ionize water molecules
  */
 G4MolecularConfiguration*
-G4MolecularConfiguration::IonizeMolecule(G4int IonizedLevel)
+G4MolecularConfiguration::IonizeMolecule(G4int IonizedLevel) const
 {
 //  MakeExceptionIfFinalized();
   CheckElectronOccupancy(__func__);
@@ -634,7 +633,7 @@ G4MolecularConfiguration::IonizeMolecule(G4int IonizedLevel)
 //______________________________________________________________________________
 
 G4MolecularConfiguration* G4MolecularConfiguration::AddElectron(G4int orbit,
-                                                                G4int number)
+                                                                G4int number) const
 {
 //  MakeExceptionIfFinalized();
   CheckElectronOccupancy(__func__);
@@ -647,7 +646,7 @@ G4MolecularConfiguration* G4MolecularConfiguration::AddElectron(G4int orbit,
 
 G4MolecularConfiguration*
 G4MolecularConfiguration::RemoveElectron(G4int orbit,
-                                         G4int number)
+                                         G4int number) const
 {
 //  MakeExceptionIfFinalized();
   CheckElectronOccupancy(__func__);
@@ -676,7 +675,7 @@ G4MolecularConfiguration::RemoveElectron(G4int orbit,
 
 G4MolecularConfiguration*
 G4MolecularConfiguration::MoveOneElectron(G4int orbitToFree,
-                                          G4int orbitToFill)
+                                          G4int orbitToFill) const
 {
 //  MakeExceptionIfFinalized();
   CheckElectronOccupancy(__func__);
@@ -787,7 +786,7 @@ void G4MolecularConfiguration::PrintState() const
 
 // added - to be transformed in a "Decay method"
 const vector<const G4MolecularDissociationChannel*>*
-  G4MolecularConfiguration::GetDecayChannel() const
+  G4MolecularConfiguration::GetDissociationChannels() const
 {
   // if (fElectronOccupancy == 0) return 0;
   return fMoleculeDefinition->GetDecayChannels(this);
@@ -801,7 +800,7 @@ G4int G4MolecularConfiguration::GetFakeParticleID() const
   else G4Exception("G4MolecularConfiguration::GetMoleculeID",
                    "",
                    FatalErrorInArgument,
-                   "You should first enter a molecule defintion");
+                   "You should first enter a molecule definition");
 
   return INT_MAX;
 }
@@ -1556,6 +1555,8 @@ G4MolecularConfiguration::GetMolecularConfiguration(const G4String& userID)
 {
   return GetManager()->GetMolecularConfiguration(userID);
 }
+
+//______________________________________________________________________________
 
 void G4MolecularConfiguration::FinalizeAll()
 {

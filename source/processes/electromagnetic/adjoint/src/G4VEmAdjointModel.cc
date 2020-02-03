@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.cc 93358 2015-10-19 13:41:21Z gcosmo $
 //
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -48,6 +47,7 @@ name(nam)
   mass_ratio_product=1.;
   mass_ratio_projectile=1.;
   currentCouple=0;
+  additional_weight_correction_factor_for_post_step_outside_model=1.;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

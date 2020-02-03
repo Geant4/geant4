@@ -27,8 +27,12 @@
 /// \brief Main program of the hadronic/Hadr03 example
 //
 //
+<<<<<<< HEAD
 // $Id: rdecay02.cc 88647 2015-03-03 11:06:49Z gcosmo $
 // 
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -9,9 +9,15 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
+<<<<<<< HEAD
   ifdef G4USE_STD11
     CXXFLAGS  += -std=c++11
   endif
+=======
+  CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  CPPFLAGS  += -DGL_SILENCE_DEPRECATION
+  G4USE_STD11 := 1
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   ifdef G4USE_STD14
     G4USE_STD11 := 1
     CPPFLAGS  += -std=c++14
@@ -46,6 +52,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     FCFLAGS   += -O2 -g
     CCFLAGS   += -O2 -g
   endif
+<<<<<<< HEAD
   ifdef G4LIB_BUILD_SHARED
     CXXFLAGS  += -fPIC
     FCFLAGS   += -fPIC
@@ -53,6 +60,10 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
   G4STATIC_MODE += -Wl,-force_load
+=======
+  G4RUNPATHOPTION := -Wl,-rpath, 
+#  G4STATIC_MODE += -Wl,-force_load
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load
@@ -66,15 +77,15 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     X11LIBS   := -L/usr/X11/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
-    XMFLAGS   := -I/sw/include
+    XMFLAGS   := -I/usr/local/include
 #   XMFLAGS   := -I/usr/X11/include          ##### some installations.
   endif
   ifndef XMLIBS
-    XMLIBS    := -L/sw/lib -lXm -lXpm
+    XMLIBS    := -L/usr/local/lib -lXm -lXpm
 #   XMLIBS    := -L/usr/X11/lib -lXm -lXpm   ##### some installations.
   endif
   ifndef XAWFLAGS
-    XAWFLAGS   := -I/sw/include
+    XAWFLAGS   := -I/usr/local/include
 #   XAWFLAGS   := -I/usr/X11/include         ##### some installations.
   endif
   ifndef XAWLIBS
@@ -88,12 +99,12 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    QTGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
-    ifeq ($(QTGLPATH),/System/Library/Frameworks/OpenGL.framework)
-      OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
-      ifeq ($(G4VIS_USE_OPENGLX),1)
-        OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
-      endif
+    OGLPATH  := $(shell test -f /Library/Frameworks/OpenGL.framework/OpenGL && echo "/Library/Frameworks/OpenGL.framework")
+    ifneq ($(OGLPATH),/Library/Frameworks/OpenGL.framework)
+      OGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
+    endif
+    ifneq ($(OGLPATH),)
+      OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
     else
       OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
     endif

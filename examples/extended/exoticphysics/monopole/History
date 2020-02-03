@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 92500 2015-09-02 07:26:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,93 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+26 November 2019 I. Hrivnacova (monopole-V10-05-02)
+- Fixed Doxygen warnings
+
+09 July 2019: I.Hrivnacova (monopole-V10-05-01)
+- Use G4Threading::IsMultithreadedApplication() instead of G4MULTITHREADED tests:
+  This fixes compilation of code when used in sequential application built
+  against Geant4 libraries built with MT.
+
+01 March 2019: V.Ivantchenko (monopole-V10-05-00)
+- G4MonopolePhysics - minor code clean-up, replaced G4cerr by G4Exception
+- monopole.cc - do not instantiate VisManager in the batch mode, default
+    number of threads is now 1
+- Run, RunAction - extend histograms and printouts to restricted dEdx and
+    delta-electron cross section (needed to fix problem #2126)  
+
+23 October 2018: I.Hrivnacova (monopole-V10-04-06)
+- Define the field setup data (fMonFieldSetup) in the DetectorConstruction class
+  thread-local using G4Cache utility.
+
+19 October 2018: I.Hrivnacova (monopole-V10-04-05)
+Macro review and code clean-up:
+- Removed not used and not working commands:
+  /testex/det/setField  
+       not used, duplicates /testex/fld/setField 0.2 tesla
+  /testex/det/update
+       not used
+  /monopole/magCharge, elCharge, Mass 
+       not working, as these parameters need to be set at a very early stage
+  /testex/run/verbose
+       the set verbose level is not used
+- Updated main() to make possible passing the monopole setup in both
+  batch and interactive mode
+- DetectorConstruction, RunAction: code clean-up
+- Added warning in G4MonopolePhysics when setting monopole parameters fails
+- Updated README files
+
+15 October 2018: I.Hrivnacova (monopole-V10-04-04)
+- Removed run initialization from main and added init_vis.mac
+  macro for interactive session
+- Explicitly define physics lists ("FTFP_BERT") 
+- Added the default value of magnetic field 0.2 tesla
+  and also setting of this value in monopole.in and init_vis.mac
+- Fixed updating geometry parameters after initialization
+  by calling G4RunManager::ReinitializeGeometry() instead of 
+  GeometryHasBeenModified()
+- Added printing production cuts table in RunAction::EndOfRunAction
+
+01 August 2018: V.Ivantchenko (monopole-V10-04-03)
+- G4MonopolePhysics - fixed static analizer warning
+- G4MonopoleTransportation - removed several static variables;
+    respect line length requirement
+
+17-May-2018 J.Allison (monopole-V10-04-02)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- Add runManager->Initialize().
+
+8 May 2018: B. Morgan (monopole-V10-04-01)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+8 March 2018: J. Apostolakis   (monopole-V10-04-00)
+- As equations of motion do not use Electric field, changed
+  G4MonopoleEquation to use G4MagneticField (instead of 
+   G4ElectroMagneticField.)
+  This is needed due to correction of inheritance in 
+     magfield-V10-04-00 which is a co-working tag.
+
+21 November 17: V.Ivantchenko (monopole-V10-03-04)
+- Simplified histograms defition and filling
+
+20 November 17: V.Ivantchenko (monopole-V10-03-03)
+- Fixed lost functionality of histograms and monopole parameter
+  definitions
+
+26 October 17: D. Sorokin (monopole-V10-03-01)
+- G4MonopoleTransportation.cc - build fix
+
+23 June 17: S. Elles (monopole-V10-03-00)
+- add MT interface
+- switch ActionInitialization, Run and RunAction classes
+- switch to G4AnalysisManager
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 01 September 15: I. Hrivnacova (monopole-V10-01-00)
 - Removed EventAction and EventActionMessenger classes, now obsolete, and 
   replaced /testex/event/printModulo commands in macros with 

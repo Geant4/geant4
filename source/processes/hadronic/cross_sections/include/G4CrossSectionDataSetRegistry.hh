@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataSetRegistry.hh 89024 2015-03-18 08:17:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,7 +50,7 @@
 #include "G4ThreadLocalSingleton.hh"
 
 class G4VCrossSectionDataSet;
-//class G4VBaseXSFactory; //AND
+class G4VComponentCrossSection;
 
 class G4CrossSectionDataSetRegistry
 {
@@ -70,24 +69,31 @@ public:
   void DeRegister(G4VCrossSectionDataSet*);
   //deregister cross section
 
+  void Register(G4VComponentCrossSection*);
+  //register new cross section component
+
+  void DeRegister(G4VComponentCrossSection*);
+  //deregister cross section component
+
+  void DeleteComponent(G4VComponentCrossSection*);
+  //deregister and delete cross section component
+
   void Clean();
   //clean the store
-  
-  //void AddFactory(G4String, G4VBaseXSFactory*);//AND
-
+      
   G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, 
-						 G4bool warning=true);
-    
+                                                 G4bool warning=true);
+  
+  G4VComponentCrossSection* GetComponentCrossSection(const G4String& name);
+  
 private:
 
   G4CrossSectionDataSetRegistry();
 
   static G4ThreadLocal G4CrossSectionDataSetRegistry* instance;
   
-  std::vector <G4VCrossSectionDataSet*> xSections;
-
-  //std::map <G4String, G4VBaseXSFactory*> factories;//AND
-
+  std::vector <G4VCrossSectionDataSet*>   xSections;
+  std::vector <G4VComponentCrossSection*> xComponents;
 };
 
 #endif

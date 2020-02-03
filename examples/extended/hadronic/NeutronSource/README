@@ -1,0 +1,141 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            NeutronSource
+                            -------------
+
+   NeutronSource is an example of neutrons production. It illustrates the cooperative work
+   of nuclear reactions and radioactive decay processes.
+   It survey energy deposition and particle's flux.
+   It uses PhysicsConstructor objects.
+
+	
+ 1- MATERIALS AND GEOMETRY DEFINITION
+ 
+   The geometry is a cylinder (absorber) of an homogenous material (default : Beryllium oxide).
+   This absorber is within a container (default : stainless-steel).
+
+   Five parameters define the geometry :
+	- the material of the absorber
+	- the radius and length of the absorber
+	- the material of the container
+	- the thickness of the container
+	
+   The default geometry is built in DetectorConstruction, but the above
+   parameters can be changed interactively via commands defined in DetectorMessenger.
+   
+   The container is surrounded by a World volume (air)
+   
+   A function, and its associated UI command, allows to build a material
+   directly from a single isotope.
+   
+   To be identified by the ThermalScattering module, the elements composing a
+   material must have a specific name (see G4ParticleHPThermalScatteringNames.cc)
+   Examples of such materials are build in DetectorConstruction of Hadr04,06,07.
+ 	
+ 2- PHYSICS LIST
+   
+  "Full" set of physics processes are registered, but via PhysicsConstructor
+  objects rather than complete pre-defined G4 physics lists. This alternative 
+  way may give more freedom to register physics.
+  
+  Physics constructors are either constructors provided in Geant4 (with G4 prefix)
+  or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic, GammaNuclear,
+  RadioactiveDecay and Electomagnetic.
+  (see geant4/source/physics_lists/constructors)
+
+  HadronElasticPhysicsHP include a model for thermalized neutrons, under the control of a command
+  defined in NeutronHPMesseger.
+
+  GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
+
+  ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
+  In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
+  This is enough when spatial distribution of deposited energy do not need
+  to be accurate (see param->SetStepFunction(1., 1*mm)).
+
+  In PhysicsList::ConstructProcess() we give an example of how to access hadronic models.
+
+  Several hadronic physics options are controlled by environment variables.
+  To trigger them, an envHadronic.csh has been added in this example.
+  One must select the options wished, and do
+        source envHadronic.csh  (or sh) 
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+   The primary kinematic is a single particle uniformly shooted within the absorber.
+   The type of the particle and its energy are set in PrimaryGeneratorAction (Am241, at rest),
+   and can be changed via the G4 build-in commands of ParticleGun class 
+   (see the macros provided with this example).
+ 	
+ 4- PHYSICS
+
+   The program computes and plots energy deposited in the interaction volume
+   (absorber + container) and the flux of particles leaving this volume.
+   Processes invoked and particles generated during hadronic cascade are listed.
+
+ 5- HISTOGRAMS
+         
+   The test contains 13 built-in 1D histograms, which are managed by
+   G4AnalysisManager and its Messenger. The histos can be individually 
+   activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, etc..)
+   (see the macros xxxx.mac).
+   
+            1     "total energy deposit"
+            2     "dummy"
+            3     "total kinetic energy flow"
+            4     "energy spectrum of emerging gamma"
+            5     "energy spectrum of emerging e+-"
+            6     "energy spectrum of emerging neutrons"
+            7     "energy spectrum of emerging protons"
+            8     "energy spectrum of emerging deuterons"
+            9     "energy spectrum of emerging alphas"
+            10    "energy spectrum of all others emerging ions"
+            11    "energy spectrum of all others emerging baryons"
+            12    "energy spectrum of all others emerging mesons"
+            13    "energy spectrum of all others emerging leptons (neutrinos)" 
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default NeutronSource)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default NeutronSource) 
+ 	 				
+ 6- VISUALIZATION
+ 
+   The Visualization Manager is set in the main().
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+   > /control/execute vis.mac
+ 	
+   The tracks are drawn at the end of event, and erased at the end of run.   
+   gamma green   
+   neutron yellow
+   negative particles (e-, ...) red
+   positive particles (e+, ions, ...) blue
+ 	
+ 7- HOW TO START ?
+ 
+   Execute NeutronSource in 'batch' mode from macro files :
+ 	% NeutronSource   run1.mac
+ 		
+   Execute NeutronSource in 'interactive mode' with visualization :
+ 	% NeutronSource
+	Idle> control/execute vis.mac
+ 	....
+ 	Idle> type your commands
+ 	....
+ 	Idle> exit

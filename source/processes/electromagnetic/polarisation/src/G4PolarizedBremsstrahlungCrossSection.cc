@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBremsstrahlungCrossSection.cc 77295 2013-11-22 11:02:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -132,11 +131,11 @@ void G4PolarizedBremsstrahlungCrossSection::Initialize(
     }
   }
   else  {
-    G4double alpha_sc  = (111 * std::pow(theZ, -1./3.)) / Xsi;
-    GG = std::log(alpha_sc)- 2 - fCoul;
+    G4double alpha_sc  = (111. * std::pow(theZ, -1./3.)) / Xsi;
+    GG = std::log(alpha_sc)- 2. - fCoul;
   }
 
-  if(GG<-1) GG=-1;     // *KL* do we need this ?!
+  if(GG<-1.) GG=-1.;     // *KL* do we need this ?!
 
   G4double I_Lept   = (Lept0E2 + Lept1E2) * (3.+2.*GG) - 2 * Lept0E * Lept1E * (1. + 4. * u2 * Xsi2 * GG);
   G4double F_Lept   = Lept1E * 4. * GammaE *  u * Xsi * (1. - 2 * Xsi) * GG / I_Lept;
@@ -166,14 +165,14 @@ void G4PolarizedBremsstrahlungCrossSection::Initialize(
   }
 
 
-  G4double I_Gamma   = (Lept0E2 + Lept1E2)*(3+2*GG) - 2 * Lept0E * Lept1E * (1 + 4 * u2 * Xsi2 * GG);
-  G4double D_Gamma   = 8 * Lept0E * Lept1E * u2 * Xsi2 * GG / I_Gamma;
-  G4double L_Gamma   = GammaE * ((Lept0E + Lept1E) * (3 + 2 * GG) 
-				 - 2 * Lept1E * (1 + 4 * u2 * Xsi2 * GG))/I_Gamma;   
-  G4double T_Gamma   = 4 * GammaE * Lept1E * Xsi * u * (2 * Xsi - 1) * GG / I_Gamma ;
+  G4double I_Gamma   = (Lept0E2 + Lept1E2)*(3.+2.*GG) - 2. * Lept0E * Lept1E * (1. + 4. * u2 * Xsi2 * GG);
+  G4double D_Gamma   = 8. * Lept0E * Lept1E * u2 * Xsi2 * GG / I_Gamma;
+  G4double L_Gamma   = GammaE * ((Lept0E + Lept1E) * (3. + 2. * GG) 
+				 - 2. * Lept1E * (1. + 4. * u2 * Xsi2 * GG))/I_Gamma;   
+  G4double T_Gamma   = 4. * GammaE * Lept1E * Xsi * u * (2. * Xsi - 1.) * GG / I_Gamma ;
     
   G4double Stokes_P1 = D_Gamma ;
-  G4double Stokes_P2 = 0 ;
+  G4double Stokes_P2 = 0.;
   G4double Stokes_P3 = (Stokes_S3*L_Gamma + Stokes_S1*T_Gamma) ;
 
   theFinalGammaPolarization.SetPhoton();
@@ -196,7 +195,7 @@ G4double G4PolarizedBremsstrahlungCrossSection::XSection(const G4StokesVector & 
 							 const G4StokesVector & /*pol3*/)
 {
   G4cout<<"ERROR dummy routine G4PolarizedBremsstrahlungCrossSection::XSection called \n";
-  return 0;
+  return 0.;
 }
 
   // return expected mean polarisation

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -60,6 +59,7 @@ G4PhysicsTable::G4PhysicsTable(size_t cap)
   vecFlag.reserve(cap);
 }
 
+/*
 G4PhysicsTable::G4PhysicsTable(const G4PhysicsTable& right)
   : G4PhysCollection()
 {
@@ -81,7 +81,7 @@ G4PhysicsTable& G4PhysicsTable::operator=(const G4PhysicsTable& right)
   }
   return *this;
 }
-
+*/
 G4PhysicsTable::~G4PhysicsTable()
 {
   G4PhysCollection::clear();
@@ -212,7 +212,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
       fIn >>  vType;
     }
     G4PhysicsVector* pVec = CreatePhysicsVector(vType);
-    if (pVec==0)
+    if (pVec==nullptr)
     {
 #ifdef G4VERBOSE  
       G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
@@ -282,7 +282,7 @@ void G4PhysicsTable::ResetFlagArray()
 
 G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type)
 {
-  G4PhysicsVector* pVector=0;
+  G4PhysicsVector* pVector = nullptr;
   switch (type)
   {
   case T_G4PhysicsLinearVector: 
@@ -294,7 +294,7 @@ G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type)
     break;
 
   case T_G4PhysicsLnVector: 
-    pVector = new G4PhysicsLnVector();
+    pVector = new G4PhysicsLogVector();
     break;
 
   case T_G4PhysicsFreeVector: 
@@ -306,7 +306,7 @@ G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type)
     break;
 
   case T_G4LPhysicsFreeVector: 
-    pVector = new G4LPhysicsFreeVector();
+    pVector = new G4PhysicsFreeVector();
     break;
   
   default:

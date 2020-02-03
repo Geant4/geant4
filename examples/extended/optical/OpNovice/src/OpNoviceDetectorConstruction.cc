@@ -307,20 +307,20 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   G4double ephoton[num] = {2.034*eV, 4.136*eV};
 
   //OpticalWaterSurface
-  G4double refractiveIndex[num] = {1.35, 1.40};
-  G4double specularLobe[num]    = {0.3, 0.3};
-  G4double specularSpike[num]   = {0.2, 0.2};
-  G4double backScatter[num]     = {0.2, 0.2};
-
-  G4MaterialPropertiesTable* myST1 = new G4MaterialPropertiesTable();
-
-  myST1->AddProperty("RINDEX",                ephoton, refractiveIndex, num);
-  myST1->AddProperty("SPECULARLOBECONSTANT",  ephoton, specularLobe,    num);
-  myST1->AddProperty("SPECULARSPIKECONSTANT", ephoton, specularSpike,   num);
-  myST1->AddProperty("BACKSCATTERCONSTANT",   ephoton, backScatter,     num);
-
-  G4cout << "Water Surface G4MaterialPropertiesTable" << G4endl;
-  myST1->DumpTable();
+  // if surface model is unified we can set parameters
+//  G4double refractiveIndex[num] = {1.35, 1.40};
+//  G4double specularLobe[num]    = {0.3, 0.3};
+//  G4double specularSpike[num]   = {0.2, 0.2};
+//  G4double backScatter[num]     = {0.2, 0.2};
+//
+//  G4MaterialPropertiesTable* myST1 = new G4MaterialPropertiesTable();
+//  myST1->AddProperty("RINDEX",                ephoton, refractiveIndex, num);
+//  myST1->AddProperty("SPECULARLOBECONSTANT",  ephoton, specularLobe,    num);
+//  myST1->AddProperty("SPECULARSPIKECONSTANT", ephoton, specularSpike,   num);
+//  myST1->AddProperty("BACKSCATTERCONSTANT",   ephoton, backScatter,     num);
+//
+//  G4cout << "Water Surface G4MaterialPropertiesTable" << G4endl;
+//  myST1->DumpTable();
 
   opWaterSurface->SetMaterialPropertiesTable(myST1);
 

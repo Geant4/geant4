@@ -35,9 +35,6 @@
 #include "globals.hh"
 #include "AnalysisManager.hh"
 
-using namespace std; 
-
-
 class G4GeneralParticleSource;
 class G4Event;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction

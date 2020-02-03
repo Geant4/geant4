@@ -173,9 +173,7 @@ public:
   ///////////////////////////////////////////////////////
   /// elements //////////////////////////////////////////
   ///////////////////////////////////////////////////////
-  void add_element(const std::string& a_name,
-                   const std::vector<atb>& a_atbs,
-                   const std::string& a_value){
+  void add_element(const std::string& a_name,const std::vector<atb>& a_atbs,const std::string& a_value){
     m_childs.push_back(new element(a_name,a_atbs,a_value));
   }
   
@@ -222,9 +220,7 @@ public:
 
 */  
 
-  bool element_atb_value(const std::string& a_elem,
-                         const std::string& a_atb,
-                         std::string& a_value) const {
+  bool element_atb_value(const std::string& a_elem,const std::string& a_atb,std::string& a_value) const {
     a_value.clear();
     tools_lforcit(ielem*,m_childs,it) {
       if(element* _elem = id_cast<ielem,element>(*(*it))) {
@@ -257,8 +253,7 @@ public:
     return false;
   }
 
-  bool set_element_value(const std::string& a_name,
-                         const std::string& a_value,int a_index = 0){
+  bool set_element_value(const std::string& a_name,const std::string& a_value,int a_index = 0){
     int index = 0;
     tools_lforcit(ielem*,m_childs,it) {
       if(element* _elem = id_cast<ielem,element>(*(*it))) {
@@ -278,8 +273,7 @@ public:
     return true;
   }
 
-  bool set_attribute_value(const std::string& a_atb,
-                           const std::string& a_value) {
+  bool set_attribute_value(const std::string& a_atb,const std::string& a_value) {
     tools_vforit(atb,m_atbs,it) {
       if((*it).first==a_atb) {
         (*it).second = a_value;
@@ -356,8 +350,7 @@ public:
     return true;
   }
   
-  static void collect_by_tag(tree& a_tree,const std::string& a_tag,
-                             std::vector<tree*>& a_items) {
+  static void collect_by_tag(tree& a_tree,const std::string& a_tag,std::vector<tree*>& a_items) {
     if(a_tree.tag_name()==a_tag) a_items.push_back(&a_tree);
     tools_lforcit(ielem*,a_tree.m_childs,it) {
       if(tree* _tree = id_cast<ielem,tree>(*(*it))) {

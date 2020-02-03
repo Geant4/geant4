@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -91,11 +90,45 @@ class G4Ions : public G4ParticleDefinition
   // Get Isomer level (=0 for ground state)
   G4int GetIsomerLevel() const; 
    
-  private:
+  // enumerator for floating level base
+  enum class G4FloatLevelBase
+       { no_Float=0,
+         plus_X, plus_Y, plus_Z, plus_U, plus_V, plus_W,
+         plus_R, plus_S, plus_T, plus_A, plus_B, plus_C, plus_D, plus_E
+       };
+  static G4Ions::G4FloatLevelBase FloatLevelBase(char flbChar);
+  static G4Ions::G4FloatLevelBase FloatLevelBase(G4int flbIdx);
+  static char FloatLevelBaseChar(G4Ions::G4FloatLevelBase flb);
+
+  // set/get methods for floating level base
+  G4Ions::G4FloatLevelBase GetFloatLevelBase() const;
+  G4int GetFloatLevelBaseIndex() const;
+  void SetFloatLevelBase(G4Ions::G4FloatLevelBase flb);
+  void SetFloatLevelBase(char flbChar);
+  void SetFloatLevelBase(G4int flbIdx);
+
+ private:
   G4double theExcitationEnergy; 
   G4int    theIsomerLevel;
+  G4FloatLevelBase floatLevelBase;
 
 };
+
+#define noFloat G4Ions::G4FloatLevelBase::no_Float
+#define plusU G4Ions::G4FloatLevelBase::plus_U 
+#define plusV G4Ions::G4FloatLevelBase::plus_V 
+#define plusW G4Ions::G4FloatLevelBase::plus_W 
+#define plusX G4Ions::G4FloatLevelBase::plus_X
+#define plusY G4Ions::G4FloatLevelBase::plus_Y 
+#define plusZ G4Ions::G4FloatLevelBase::plus_Z 
+#define plusR G4Ions::G4FloatLevelBase::plus_R 
+#define plusS G4Ions::G4FloatLevelBase::plus_S 
+#define plusT G4Ions::G4FloatLevelBase::plus_T 
+#define plusA G4Ions::G4FloatLevelBase::plus_A
+#define plusB G4Ions::G4FloatLevelBase::plus_B 
+#define plusC G4Ions::G4FloatLevelBase::plus_C 
+#define plusD G4Ions::G4FloatLevelBase::plus_D 
+#define plusE G4Ions::G4FloatLevelBase::plus_E 
 
 inline
  G4Ions* G4Ions::IonsDefinition()
@@ -121,6 +154,108 @@ inline
   return theIsomerLevel;
 }
     
+inline
+ G4Ions::G4FloatLevelBase G4Ions::GetFloatLevelBase() const
+{
+  return floatLevelBase;
+}
+
+inline
+ G4int G4Ions::GetFloatLevelBaseIndex() const
+{
+  return static_cast<G4int>(floatLevelBase);
+}
+
+inline
+ void G4Ions::SetFloatLevelBase(G4Ions::G4FloatLevelBase flb)
+{
+  floatLevelBase = flb;
+}
+
+inline
+ void G4Ions::SetFloatLevelBase(char flbChar)
+{
+  floatLevelBase = FloatLevelBase(flbChar);
+}
+
+inline
+ void G4Ions::SetFloatLevelBase(G4int flbIdx)
+{
+  floatLevelBase = FloatLevelBase(flbIdx);
+}
+
+inline
+ G4Ions::G4FloatLevelBase G4Ions::FloatLevelBase(char flbChar)
+{
+  G4Ions::G4FloatLevelBase flb = noFloat;
+  switch(flbChar)
+  {
+   case 'x': case 'X':
+    flb = plusX;
+    break;
+   case 'y': case 'Y':
+    flb = plusY;
+    break;
+   case 'z': case 'Z':
+    flb = plusZ;
+    break;
+   case 'u': case 'U':
+    flb = plusU;
+    break;
+   case 'v': case 'V':
+    flb = plusV;
+    break;
+   case 'w': case 'W':
+    flb = plusW;
+    break;
+   case 'r': case 'R':
+    flb = plusR;
+    break;
+   case 's': case 'S':
+    flb = plusS;
+    break;
+   case 't': case 'T':
+    flb = plusT;
+    break;
+   case 'a': case 'A':
+    flb = plusA;
+    break;
+   case 'b': case 'B':
+    flb = plusB;
+    break;
+   case 'c': case 'C':
+    flb = plusC;
+    break;
+   case 'd': case 'D':
+    flb = plusD;
+    break;
+   case 'e': case 'E':
+    flb = plusE;
+    break;
+   case '\0': default:
+    break;
+  }
+  return flb;
+}
+
+inline
+ G4Ions::G4FloatLevelBase G4Ions::FloatLevelBase(G4int flbIdx)
+{
+  static G4Ions::G4FloatLevelBase flb[] = 
+  { noFloat,
+    plusX, plusY, plusZ, plusU, plusV, plusW, 
+    plusR, plusS, plusT, plusA, plusB, plusC, plusD, plusE };
+  return flb[flbIdx];
+}
+
+inline
+ char G4Ions::FloatLevelBaseChar(G4Ions::G4FloatLevelBase flb)
+{
+  static char flbChar[] = {'\0','X','Y','Z','U','V','W',
+                                'R','S','T','A','B','C','D','E'};
+  return flbChar[static_cast<G4int>(flb)];
+}
+
 #endif
 
 

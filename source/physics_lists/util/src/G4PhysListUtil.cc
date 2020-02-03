@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListUtil.cc 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,16 +44,48 @@
 G4HadronicProcess* 
 G4PhysListUtil::FindInelasticProcess(const G4ParticleDefinition* p)
 {
-  G4HadronicProcess* had = 0;
+  G4HadronicProcess* had = nullptr;
   if(p) {
      G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
      size_t n = pvec->size();
-     if(0 < n) {
-       for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
+     for(size_t i=0; i<n; ++i) {
+       if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
+	 had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+	 break;
+       }
+     }
+  }
+  return had;
+}
+
+G4HadronicProcess* 
+G4PhysListUtil::FindCaptureProcess(const G4ParticleDefinition* p)
+{
+  G4HadronicProcess* had = nullptr;
+  if(p) {
+     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
+     size_t n = pvec->size();
+     for(size_t i=0; i<n; ++i) {
+       if(fCapture == ((*pvec)[i])->GetProcessSubType()) {
+	 had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+	 break;
+       }
+     }
+  }
+  return had;
+}
+
+G4HadronicProcess* 
+G4PhysListUtil::FindFissionProcess(const G4ParticleDefinition* p)
+{
+  G4HadronicProcess* had = nullptr;
+  if(p) {
+     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
+     size_t n = pvec->size();
+     for(size_t i=0; i<n; ++i) {
+       if(fFission == ((*pvec)[i])->GetProcessSubType()) {
+	 had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+	 break;
        }
      }
   }

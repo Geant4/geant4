@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -44,17 +43,13 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
+#pragma once
 
-#ifndef G4MOLECULARSTEPBYSTEPMODEL_H
-#define G4MOLECULARSTEPBYSTEPMODEL_H
-
-#include <AddClone_def.hh>
 #include <G4String.hh>
 #include <G4VITStepModel.hh>
 
 class G4DNAMolecularReactionTable;
 class G4VDNAReactionModel;
-
 
 /**
   * G4DNAMolecularStepByStepModel :
@@ -65,45 +60,25 @@ class G4VDNAReactionModel;
   * within this time step. Then, only the relevant pair of molecules are checked for
   * reaction.
   */
-
 class G4DNAMolecularStepByStepModel : public G4VITStepModel
 {
 public:
-    /** Default constructor */
     G4DNAMolecularStepByStepModel(const G4String& name = "DNAMolecularStepByStepModel");
-    /** Default destructor */
-    virtual ~G4DNAMolecularStepByStepModel();
+    G4DNAMolecularStepByStepModel(const G4String& name,
+                                  std::unique_ptr<G4VITTimeStepComputer> pTimeStepper,
+                                  std::unique_ptr<G4VITReactionProcess> pReactionProcess);
+    G4DNAMolecularStepByStepModel& operator=(const G4DNAMolecularStepByStepModel&) = delete;
+    G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel&) = delete;
+    ~G4DNAMolecularStepByStepModel() override;
 
-    G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel&);
+    void PrintInfo() override;
+    void Initialize() override;
 
-    G4IT_ADD_CLONE(G4VITStepModel, G4DNAMolecularStepByStepModel)
-
-    virtual void PrintInfo();
-    virtual void Initialize();
-
-    inline void SetReactionModel(G4VDNAReactionModel*);
-    inline G4VDNAReactionModel* GetReactionModel();
+    void SetReactionModel(G4VDNAReactionModel*);
+    G4VDNAReactionModel* GetReactionModel();
 
 protected:
     const G4DNAMolecularReactionTable*& fMolecularReactionTable;
-    G4VDNAReactionModel* fReactionModel;
-
-private :
-    /** Assignment operator
-         *  \param other Object to assign from
-         *  \return A reference to this
-         */
-    G4DNAMolecularStepByStepModel& operator=(const G4DNAMolecularStepByStepModel& /*other*/);
+    std::unique_ptr<G4VDNAReactionModel> fpReactionModel;
 };
 
-inline void G4DNAMolecularStepByStepModel::SetReactionModel(G4VDNAReactionModel* reactionModel)
-{
-    fReactionModel = reactionModel;
-}
-
-inline G4VDNAReactionModel* G4DNAMolecularStepByStepModel::GetReactionModel()
-{
-    return fReactionModel;
-}
-
-#endif // G4MOLECULARSTEPBYSTEPMODEL_H

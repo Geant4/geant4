@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "geometry/.README.txt"
 ///\brief Examples geometry README page

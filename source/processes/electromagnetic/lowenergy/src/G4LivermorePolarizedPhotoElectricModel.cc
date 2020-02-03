@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc 90578 2015-06-04 09:55:07Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -130,7 +129,7 @@ G4LivermorePolarizedPhotoElectricModel::Initialise(const G4ParticleDefinition*,
 
     if(!fShellCrossSection) { fShellCrossSection = new G4ElementData(); }
 
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
@@ -446,7 +445,7 @@ G4LivermorePolarizedPhotoElectricModel::ReadData(G4int Z, const char* path)
 
   if(!datadir) 
   {
-    datadir = getenv("G4LEDATA");
+    datadir = std::getenv("G4LEDATA");
     if(!datadir) 
     {
       G4Exception("G4LivermorePolarizedPhotoElectricModel::ReadData()",

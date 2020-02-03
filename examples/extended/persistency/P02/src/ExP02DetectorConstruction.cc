@@ -26,7 +26,10 @@
 /// \file persistency/P02/src/ExP02DetectorConstruction.cc
 /// \brief Implementation of the ExP02DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: ExP02DetectorConstruction.cc 93306 2015-10-16 07:38:07Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 #include "ExP02DetectorConstruction.hh"

@@ -11,5 +11,7 @@
 # 1000 events
 #
 /run/printProgress 100
+/score/ntuple/writerVerbose 1
+#
 /run/beamOn 1000
 

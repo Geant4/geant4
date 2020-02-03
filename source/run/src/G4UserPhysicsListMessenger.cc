@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc 71799 2013-06-24 14:45:59Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -50,6 +49,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIparameter.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"           
@@ -92,7 +92,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   param->SetParameterRange("cut>=0.0") ;
   setCutForAGivenParticleCmd->SetParameter(param) ;
   param = new G4UIparameter("unit",'s',false) ;
-  param->SetDefaultValue("mm") ;
+  param->SetDefaultUnit("mm");
   setCutForAGivenParticleCmd->SetParameter(param) ;
   setCutForAGivenParticleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
@@ -155,7 +155,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
   //  /run/particle/setStoredInAscii command
   asciiCmd = new G4UIcmdWithAnInteger("/run/particle/setStoredInAscii",this);
-  asciiCmd->SetGuidance("Switch on/off ascii mode in store/retreive Physics Table");
+  asciiCmd->SetGuidance("Switch on/off ascii mode in store/retrieve Physics Table");
   asciiCmd->SetGuidance("  Enter 0(binary) or 1(ascii)");
   asciiCmd->SetParameterName("ascii",true);
   asciiCmd->SetDefaultValue(0);
@@ -192,7 +192,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetGuidance("Dumping a list takes place when you issue 'beamOn' and");
   dumpCutValuesCmd->SetGuidance("actual conversion tables from range to energy are available.");
   dumpCutValuesCmd->SetGuidance("If you want a list 'immediately', use '/run/dumpRegion' for threshold");
-  dumpCutValuesCmd->SetGuidance("list given in gange only. Also, '/run/dumpCouples' gives you the");
+  dumpCutValuesCmd->SetGuidance("list given in range only. Also, '/run/dumpCouples' gives you the");
   dumpCutValuesCmd->SetGuidance("current list if you have already issued 'run/beamOn' at least once.");
   dumpCutValuesCmd->SetParameterName("particle",true);
   dumpCutValuesCmd->SetDefaultValue("all");
@@ -227,6 +227,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
+  G4ExceptionDescription ed;
   if( command==setCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
@@ -238,7 +239,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     str >> particleName >> cut >> unit ;
     thePhysicsList->SetCutValue(cut*G4UIcommand::ValueOf(unit), particleName) ; 
 
-   } else if( command==getCutForAGivenParticleCmd ){
+  } else if( command==getCutForAGivenParticleCmd ){
     G4cout << thePhysicsList->GetCutValue(newValue)/mm <<"[mm]" << G4endl ;
 
   } else if( command==setCutRCmd ){
@@ -248,7 +249,8 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     G4double cVal = -1.0;
     is >> regName >> cVal >> uniName;
     if (is.fail()) {
-      G4cout << "illegal arguments : try again " << G4endl;
+      ed << "illegal arguments : " << newValue;
+      command->CommandFailed(ed);
       return;
     }
     thePhysicsList->SetCutsForRegion(cVal*(setCutRCmd->ValueOf(uniName)),regName);
@@ -265,13 +267,28 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == 0) return;
-    if (particle->GetProcessManager() != 0) return;
+    if (particle == 0)
+    {
+      ed << " Particle is not found : " << newValue;
+      command->CommandFailed(ed);
+      return;
+    }
+    else if (particle->GetProcessManager() != 0)
+    {
+      ed << " Particle is not initialized : " << newValue;
+      command->CommandFailed(ed);
+      return;
+    }
     thePhysicsList->AddProcessManager(particle);
 
   }  else if( command == buildPTCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == 0) return;
+    if (particle == 0)
+    {
+      ed << " Particle is not found : " << newValue;
+      command->CommandFailed(ed);
+      return;
+    }
     thePhysicsList->PreparePhysicsTable(particle);
     thePhysicsList->BuildPhysicsTable(particle);
     

@@ -28,7 +28,10 @@
 //
 
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.cc 93512 2015-10-23 13:45:07Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GlobalMagFieldMessenger.hh 66536 2012-12-19 14:32:36Z ihrivnac $
-//
 // class G4GlobalMagFieldMessenger
 //
 // Class description:
@@ -72,12 +70,12 @@ class G4GlobalMagFieldMessenger : public G4UImessenger
 
     void SetField(const G4ThreeVector& value, const G4String& inFunction);
     
-    G4UniformMagField*  fMagField;
-    G4int               fVerboseLevel;
+    G4UniformMagField* fMagField = nullptr;
+    G4int fVerboseLevel = 0;
 
-    G4UIdirectory*      fDirectory;
-    G4UIcmdWith3VectorAndUnit* fSetValueCmd;
-    G4UIcmdWithAnInteger*      fSetVerboseCmd;
+    G4UIdirectory* fDirectory = nullptr;
+    G4UIcmdWith3VectorAndUnit* fSetValueCmd = nullptr;
+    G4UIcmdWithAnInteger* fSetVerboseCmd = nullptr;
 };
 
 // inline functions

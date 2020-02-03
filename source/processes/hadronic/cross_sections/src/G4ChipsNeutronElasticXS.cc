@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsNeutronElasticXS.cc 93080 2015-10-02 14:45:31Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsNeutronElasticXS for nA elastic cross sections
@@ -769,10 +768,10 @@ G4double G4ChipsNeutronElasticXS::GetPTables(G4double LP, G4double ILP, G4int PD
   static const G4int N41=3;
   static const G4double pZ41N52[7]={2.6E-7, 8.3, 2.E-4, 1.2E-9, .4, 4.E-6, .0051};
   static const std::pair<G4int, const G4double*> Z41N52(52,pZ41N52);
-  static const G4double pZ41N53[7]={2.E-7, 8.3, 1.6E-4, 1.4E-9, .35, 2.5E-6, .0051};
-  static const std::pair<G4int, const G4double*> Z41N53(53,pZ41N53);
-  static const G4double pZ41N54[7]={1.5E-7, 8.6, 1.E-4, 1.5E-9, .35, 2.5E-6, .0045};
-  static const std::pair<G4int, const G4double*> Z41N54(54,pZ41N54);
+  //static const G4double pZ41N53[7]={2.E-7, 8.3, 1.6E-4, 1.4E-9, .35, 2.5E-6, .0051};
+  //static const std::pair<G4int, const G4double*> Z41N53(53,pZ41N53);
+  //static const G4double pZ41N54[7]={1.5E-7, 8.6, 1.E-4, 1.5E-9, .35, 2.5E-6, .0045};
+  //static const std::pair<G4int, const G4double*> Z41N54(54,pZ41N54);
   static const std::pair<G4int, const G4double*> Z41[N41]={Z41N52, Z41N52, Z41N52};
   //==> Mo(Z=42)
   static const G4int N42=8;
@@ -1175,8 +1174,8 @@ G4double G4ChipsNeutronElasticXS::GetPTables(G4double LP, G4double ILP, G4int PD
   static const G4int N65=2;
   static const G4double pZ65N94[7]={9.E-7, 16., 3.9E-4, 1.7E-9, 2., 2.2E-5, .0042};
   static const std::pair<G4int, const G4double*> Z65N94(94,pZ65N94);
-  static const G4double pZ65N95[7]={4.5E-7, 16., 1.1E-4, 3.E-9, 1.7, 2.2E-5, .0024};
-  static const std::pair<G4int, const G4double*> Z65N95(95,pZ65N95);
+  //static const G4double pZ65N95[7]={4.5E-7, 16., 1.1E-4, 3.E-9, 1.7, 2.2E-5, .0024};
+  //static const std::pair<G4int, const G4double*> Z65N95(95,pZ65N95);
   static const std::pair<G4int, const G4double*> Z65[N65]={Z65N94, Z65N94};
   //==> Dy(Z=66)
   static const G4int N66=7;
@@ -1271,8 +1270,8 @@ G4double G4ChipsNeutronElasticXS::GetPTables(G4double LP, G4double ILP, G4int PD
   static const G4int N73=2;
   static const G4double pZ73N108[7]={5.E-7, 18., 1.7E-4, 2.E-9, 1.2, 1.4E-5, .0035};
   static const std::pair<G4int, const G4double*> Z73N108(108,pZ73N108);
-  static const G4double pZ73N109[7]={1.E-6, 14., .002, .3E-9, 1.3, 1.5E-5, .016};
-  static const std::pair<G4int, const G4double*> Z73N109(109,pZ73N109);
+  //static const G4double pZ73N109[7]={1.E-6, 14., .002, .3E-9, 1.3, 1.5E-5, .016};
+  //static const std::pair<G4int, const G4double*> Z73N109(109,pZ73N109);
   static const std::pair<G4int, const G4double*> Z73[N73]={Z73N108, Z73N108};
   //==> W (Z=74) *** W180 only bad TENDL-2008 *** (W180=Hf178)
   static const G4int N74=5;
@@ -1476,8 +1475,8 @@ G4double G4ChipsNeutronElasticXS::GetPTables(G4double LP, G4double ILP, G4int PD
   static const std::pair<G4int, const G4double*> Z92N147(147,pZ92N147);
   static const G4double pZ92N148[7]={3.4E-7, 20., 1.3E-4, 1.3E-9, 2.2, 2.8E-5, .0036};
   static const std::pair<G4int, const G4double*> Z92N148(148,pZ92N148);
-  static const G4double pZ92N149[7]={3.3E-7, 20., 1.5E-4, 1.2E-9, 3., 3.4E-5, .0044};
-  static const std::pair<G4int, const G4double*> Z92N149(149,pZ92N149);
+  //static const G4double pZ92N149[7]={3.3E-7, 20., 1.5E-4, 1.2E-9, 3., 3.4E-5, .0044};
+  //static const std::pair<G4int, const G4double*> Z92N149(149,pZ92N149);
   static const std::pair<G4int, const G4double*> Z92[N92]={Z92N140, Z92N141, Z92N142,
                                                            Z92N143, Z92N144, Z92N145,
                                                            Z92N146, Z92N147, Z92N148,
@@ -1669,8 +1668,13 @@ G4double G4ChipsNeutronElasticXS::GetPTables(G4double LP, G4double ILP, G4int PD
         }
         if(nfound) 
         {
-          G4cout<<"-Warning-G4ChipsNeutronElasticXS::CalcCS: Z="<<tgZ<<", N="<<tgN
-                <<" isotope is not implemented in CHIPS"<<G4endl; // Put default values:
+          //AR-24Apr2018 Switch to allow transuranic elements (in this case to avoid a harmless warning)
+          const G4bool isHeavyElementAllowed = true; 
+          if ( ! isHeavyElementAllowed ) {
+            G4cout<<"-Warning-G4ChipsNeutronElasticXS::CalcCS: Z="<<tgZ<<", N="<<tgN
+                  <<" isotope is not implemented in CHIPS"<<G4endl; 
+          }
+          // Put default values:
           lastPAR[ 4]=5.2E-7;                                              // p4
           lastPAR[ 7]=22.;                                                 // p7
           lastPAR[ 8]=.00026;                                              // p8
@@ -1994,7 +1998,10 @@ G4double G4ChipsNeutronElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tgZ
                                                      G4int tgN)
 {
   if(PDG!=2112) G4cout<<"*Warning*G4ChipsNeutronElasticXS::GetTaV:PDG="<<PDG<<G4endl;
-  if(tgZ<0 || tgZ>92)
+
+  //AR-24Apr2018 Switch to allow transuranic elements
+  const G4bool isHeavyElementAllowed = true;
+  if(tgZ<0 || ( !isHeavyElementAllowed && tgZ>92))
   {
     G4cout<<"*Warning*G4QNElasticCrS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
     return 0.;

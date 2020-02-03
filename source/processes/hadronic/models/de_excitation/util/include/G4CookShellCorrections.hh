@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CookShellCorrections.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -40,9 +39,7 @@ class G4CookShellCorrections
 {
 public:
 
-  G4CookShellCorrections();
-
-  ~G4CookShellCorrections();
+  explicit G4CookShellCorrections();
 
   inline G4bool GetShellCorrection(G4int N, G4int Z, G4double& result) const
   {
@@ -58,6 +55,9 @@ public:
 	  NTableMin = 33, NTableMax = 150 };
 private:
   
+  G4CookShellCorrections(const G4CookShellCorrections & right) = delete;
+  const G4CookShellCorrections & operator=(const G4CookShellCorrections & right) = delete;
+
   static G4double ShellZTable[ZTableSize];
   static G4double ShellNTable[NTableSize];
   

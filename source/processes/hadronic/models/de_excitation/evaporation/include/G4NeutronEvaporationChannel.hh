@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
@@ -35,30 +33,26 @@
 #define G4NeutronEvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
-#include "G4NeutronCoulombBarrier.hh"
 #include "G4NeutronEvaporationProbability.hh"
 
 class G4NeutronEvaporationChannel : public G4EvaporationChannel
 {
 public:
   // only available constructor
-  G4NeutronEvaporationChannel();
+  explicit G4NeutronEvaporationChannel();
 
   // destructor
-  virtual ~G4NeutronEvaporationChannel();
+  ~G4NeutronEvaporationChannel() override;
 
 private:
 
-  const G4NeutronEvaporationChannel & operator=(const G4NeutronEvaporationChannel & right);  
-
+  const G4NeutronEvaporationChannel & operator=
+  (const G4NeutronEvaporationChannel & right);  
   G4NeutronEvaporationChannel(const G4NeutronEvaporationChannel & right);
-
   G4bool operator==(const G4NeutronEvaporationChannel & right) const;
   G4bool operator!=(const G4NeutronEvaporationChannel & right) const;
-
-  G4NeutronCoulombBarrier theCoulombBarrier;
 	
-  G4NeutronEvaporationProbability theEvaporationProbability;
+  G4NeutronEvaporationProbability pr;
 
 };
 #endif

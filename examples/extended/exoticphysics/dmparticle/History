@@ -1,0 +1,39 @@
+----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    dmparticle History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+17-05-18 J.Allison (dmparticle-V10-04-01)
+- RunAction.cc: Remove vis commands.
+
+17-05-18 J.Allison (dmparticle-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+20-06-17 V.Ivanchenko (dmparticle-V10-03-04)
+- Run - V.Grichine fixed typo in printout
+
+07-06-17 V.Ivanchenko (dmparticle-V10-03-03)
+- fixed LDMP production model
+
+06-06-17 I.Hrivnacova (dmparticle-V10-03-02)
+- fixed Doxygen documentation 
+
+06-06-17 V.Ivanchenko (dmparticle-V10-03-01)
+- general cleanup of the code and documentation
+
+02-06-17 V.Ivanchenko (dmparticle-V10-03-00)
+- first commit
+

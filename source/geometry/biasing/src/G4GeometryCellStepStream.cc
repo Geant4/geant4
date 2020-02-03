@@ -23,28 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GeometryCellStepStream implementation
 //
-// $Id: G4GeometryCellStepStream.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GeometryCellStepStream.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCellStepStream.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryCellStep.hh"
 
-std::ostream& operator<<(std::ostream &out, const G4GeometryCell &tk)
+std::ostream& operator<<(std::ostream& out, const G4GeometryCell& tk)
 {
   out << "Volume name = " << tk.GetPhysicalVolume().GetName() << ", ";
   out << "Replica number = " << tk.GetReplicaNumber();
   return out;
 }
 
-std::ostream& operator<<(std::ostream &out, const G4GeometryCellStep &ps)
+std::ostream& operator<<(std::ostream& out, const G4GeometryCellStep& ps)
 {
   out << "PreGeometryCell : " <<  ps.GetPreGeometryCell() << " ";
   out << "PostGeometryCell: " <<  ps.GetPostGeometryCell() << " ";

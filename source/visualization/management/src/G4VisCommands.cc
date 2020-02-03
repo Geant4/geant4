@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc 93025 2015-09-30 16:02:12Z gcosmo $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -70,9 +69,50 @@ G4String G4VisCommandAbortReviewKeptEvents::GetCurrentValue (G4UIcommand*) {
 }
 
 void G4VisCommandAbortReviewKeptEvents::SetNewValue (G4UIcommand*,
-						     G4String newValue) {
+                                                     G4String newValue) {
   fpVisManager->SetAbortReviewKeptEvents(G4UIcommand::ConvertToBool(newValue));
   G4cout << "Type \"continue\" to complete the abort." << G4endl;
+}
+
+////////////// /vis/drawOnlyToBeKeptEvents /////////////////////////////
+
+G4VisCommandDrawOnlyToBeKeptEvents::G4VisCommandDrawOnlyToBeKeptEvents ()
+{
+  G4bool omitable;
+
+  fpCommand = new G4UIcmdWithABool("/vis/drawOnlyToBeKeptEvents", this);
+  fpCommand -> SetGuidance
+  ("DURING A RUN draw only those events that have been \"to be kept\" by the user"
+   "\nwith G4EventManager::GetEventManager()->KeepTheCurrentEvent() or"
+   "\nwith \"/event/keepCurrentEvent\".");
+  fpCommand -> SetGuidance(
+  "To draw selected events the user should set this flag, then in a user action:"
+  "\n  if ( some criterion ) {"
+  "\n    G4EventManager::GetEventManager()->KeepTheCurrentEvent();"
+  "\n  }");
+  fpCommand -> SetParameterName("draw", omitable=true);
+  fpCommand -> SetDefaultValue(true);
+}
+
+G4VisCommandDrawOnlyToBeKeptEvents::~G4VisCommandDrawOnlyToBeKeptEvents () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandDrawOnlyToBeKeptEvents::GetCurrentValue (G4UIcommand*) {
+  return G4String();
+}
+
+void G4VisCommandDrawOnlyToBeKeptEvents::SetNewValue (G4UIcommand*,
+                                                  G4String newValue) {
+  fpVisManager->SetDrawEventOnlyIfToBeKept(G4UIcommand::ConvertToBool(newValue));
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  if (verbosity < G4VisManager::warnings) {
+    if (fpVisManager->GetDrawEventOnlyIfToBeKept()) {
+      G4cout << "Only events that have been kept will be drawn." << G4endl;
+    } else {
+      G4cout << "All events will be drawn." << G4endl;
+    }
+  }
 }
 
 ////////////// /vis/enable ///////////////////////////////////////
@@ -235,8 +275,7 @@ G4String G4VisCommandReviewKeptEvents::GetCurrentValue (G4UIcommand*)
 
 void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 {
-  static bool reviewing = false;
-  if (reviewing) {
+  if (fpVisManager->GetReviewingKeptEvents()) {
     G4cout <<
       "\"/vis/reviewKeptEvents\" not allowed within an already started review."
       "\n  No action taken."
@@ -293,9 +332,12 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   
   G4VVisManager* keepConcreteInstance = fpVisManager->GetConcreteInstance();
   fpVisManager->Enable();
-  
+
+  // Start on clean view
+  UImanager->ApplyCommand("/vis/viewer/rebuild");
+
   // Event by event refreshing...
-  reviewing  = true;
+  fpVisManager->SetReviewingKeptEvents(true);
   G4bool currentRefreshAtEndOfEvent = pScene->GetRefreshAtEndOfEvent();
   pScene->SetRefreshAtEndOfEvent(true);
   if (macroFileName.empty()) {
@@ -360,7 +402,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   pScene->SetRefreshAtEndOfEvent(currentRefreshAtEndOfEvent);
-  reviewing  = false;
+  fpVisManager->SetReviewingKeptEvents(false);
 
   if (keepConcreteInstance) fpVisManager->Enable();
   else fpVisManager->Disable();

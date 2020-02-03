@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4PolarizedAnnihilationCrossSection.hh 68046 2013-03-13 14:31:38Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -60,22 +59,22 @@ public:
 public:
   virtual void Initialize(G4double eps, G4double gamma, G4double phi, 
 		  const G4StokesVector & p0,const G4StokesVector & p1,
-		  G4int flag=0); 
+		  G4int flag=0) override; 
 
   G4double DiceEpsilon(); 
   virtual G4double XSection(const G4StokesVector & pol2,
-			    const G4StokesVector & pol3); 
+			    const G4StokesVector & pol3) override; 
   virtual G4double TotalXSection(G4double xmin, G4double xmax, 
 				 G4double y,
 				 const G4StokesVector & pol0,
-				 const G4StokesVector & pol1); 
+				 const G4StokesVector & pol1) override; 
 
   // return expected mean polarisation
-  G4StokesVector GetPol2();
-  G4StokesVector GetPol3();
+  G4StokesVector GetPol2() override;
+  G4StokesVector GetPol3() override;
 
-  virtual G4double GetXmin(G4double y); // minimal energy fraction in TotalXSection
-  virtual G4double GetXmax(G4double y); // maximal energy fraction in TotalXSection
+  virtual G4double GetXmin(G4double y) override; // minimal energy fraction in TotalXSection
+  virtual G4double GetXmax(G4double y) override; // maximal energy fraction in TotalXSection
 
   G4double getVar(G4int );
   // test routine

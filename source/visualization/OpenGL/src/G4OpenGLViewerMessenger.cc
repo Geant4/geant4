@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc 82764 2014-07-08 14:24:04Z gcosmo $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
@@ -61,6 +60,59 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpDirectory = new G4UIdirectory("/vis/ogl/");
   fpDirectory->SetGuidance("G4OpenGLViewer commands.");
 
+  fpCommandExport =
+  new G4UIcommand("/vis/ogl/export", this);
+  fpCommandExport->SetGuidance ("export a screenshot of current OpenGL viewer");
+  fpCommandExport->SetGuidance ("If name is \"\", filename and extension will have the default value");
+  fpCommandExport->SetGuidance ("If name is \"toto.png\", set the name to \"toto\" and the format to \"png\". No incremented suffix is added.");
+  fpCommandExport->SetGuidance ("If name is \"toto\", set the name to \"toto\" and the format to default (or current format if specify). Will also add an incremented suffix at the end of the file, except if name is the same as previous it will not reset incremented suffix.");
+  fpCommandExport->SetGuidance ("Setting size is available only on eps/pdf/svg/ps formats");
+  G4UIparameter* parameterExport;
+  parameterExport = new G4UIparameter ("name", 's', omitable = true);
+  parameterExport->SetDefaultValue("!");
+  parameterExport->SetGuidance("by default, will take a default value or the last /vis/ogl/set/printFilename value if set");
+  fpCommandExport->SetParameter(parameterExport);
+  parameterExport = new G4UIparameter ("width", 'd', omitable = true);
+  parameterExport->SetGuidance("By default, will take the current width of the viewer or /vis/ogl/set/printSize if set");
+  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
+  parameterExport->SetDefaultValue(-1);
+  fpCommandExport->SetParameter(parameterExport);
+  parameterExport = new G4UIparameter ("height", 'd', omitable = true);
+  parameterExport->SetGuidance("By default, will take the current height of the viewer or /vis/ogl/set/printSize if set");
+  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
+  parameterExport->SetDefaultValue(-1);
+  fpCommandExport->SetParameter(parameterExport);
+
+  fpCommandFlushAt = new G4UIcommand("/vis/ogl/flushAt", this);
+  fpCommandFlushAt->SetGuidance
+  ("Controls the rate at which graphics primitives are flushed to screen.");
+  fpCommandFlushAt->SetGuidance
+  ("Flushing to screen is an expensive operation so to speed drawing choose"
+   "\nan action suitable for your application.  Note that detectors are flushed"
+   "\nto screen anyway at end of drawing, and events are flushed to screen"
+   "\nanyway depending on /vis/scene/endOfEventAction and endOfRunAction.");
+  fpCommandFlushAt->SetGuidance
+  ("For NthPrimitive and NthEvent the second parameter N is operative.");
+  fpCommandFlushAt->SetGuidance
+  ("For \"never\", detectors and events are still flushed as described above.");
+  G4UIparameter* parameterFlushAt;
+  parameterFlushAt = new G4UIparameter ("action", 's', omitable = true);
+  parameterFlushAt->SetParameterCandidates
+  ("endOfEvent endOfRun eachPrimitive NthPrimitive NthEvent never");
+  parameterFlushAt->SetDefaultValue("NthEvent");
+  fpCommandFlushAt->SetParameter(parameterFlushAt);
+  parameterFlushAt = new G4UIparameter ("N", 'i', omitable = true);
+  parameterFlushAt->SetDefaultValue(100);
+  fpCommandFlushAt->SetParameter(parameterFlushAt);
+
+  fpCommandPrintEPS =
+  new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
+  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
+  fpCommandPrintEPS->SetGuidance
+  ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
+   "\nnumber, starting at 0."
+   "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
+
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
 
@@ -69,7 +121,8 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandDisplayHeadTime =
     new G4UIcommand("/vis/ogl/set/displayHeadTime", this);
   fpCommandDisplayHeadTime->SetGuidance
-    ("Display head time of range in 2D text.");
+  ("DEPRECATED. Use /vis/viewer/set/timeWindow/displayHeadTime."
+   "\n  Display head time of range in 2D text.");
   parameter = new G4UIparameter ("displayHeadTime", 'b', omitable = false);
   parameter->SetDefaultValue(false);
   fpCommandDisplayHeadTime->SetParameter(parameter);
@@ -102,7 +155,8 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandDisplayLightFront =
     new G4UIcommand("/vis/ogl/set/displayLightFront", this);
   fpCommandDisplayLightFront->SetGuidance
-    ("Display the light front at head time.");
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/displayLightFront."
+     "\n  Display the light front at head time.");
   fpCommandDisplayLightFront->SetGuidance
     ("Tip: The trajectories can appear of jump ahead of the light front"
      "\nbecause their time range overlaps the viewer's time range.  To"
@@ -149,16 +203,18 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandDisplayListLimit =
     new G4UIcmdWithAnInteger("/vis/ogl/set/displayListLimit", this);
   fpCommandDisplayListLimit->SetGuidance
-    ("Set/reset display list limit (to avoid memory exhaustion).");
+    ("Set/reset display list number of primitive limit (to avoid memory exhaustion).");
   fpCommandDisplayListLimit->SetParameterName("limit", omitable = true);
   fpCommandDisplayListLimit->SetDefaultValue(50000);
   fpCommandDisplayListLimit->SetRange("limit>=10000");
 
   fpCommandEndTime =
     new G4UIcommand("/vis/ogl/set/endTime", this);
-  fpCommandEndTime->SetGuidance("Set end and range of track time.");
+  fpCommandEndTime->SetGuidance
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/endTime."
+     "\n  Set end and range of time window.");
   parameter = new G4UIparameter ("end-time", 'd', omitable = false);
-  parameter->SetDefaultValue(DBL_MAX);
+  parameter->SetDefaultValue(G4VisAttributes::fVeryLongTime);
   fpCommandEndTime->SetParameter(parameter);
   parameter = new G4UIparameter ("end-time-unit", 's', omitable = false);
   parameter->SetDefaultValue("ns");
@@ -173,28 +229,19 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandEventsDrawInterval =
     new G4UIcmdWithAnInteger("/vis/ogl/set/eventsDrawInterval", this);
   fpCommandEventsDrawInterval->SetGuidance
-    ("Set number of events allowed in drawing pipeline - speeds drawing");
+  ("Deprecated.  Use /vis/ogl/flushAt.");
   fpCommandEventsDrawInterval->SetGuidance
-    ("By default, the screen is updated at the end of every event."
-     "\nAllowing OpenGL to buffer several events can make a big improvement"
-     "\nin drawing speed.");
-  fpCommandEventsDrawInterval->SetParameterName("interval", omitable = true);
+  ("(This is equivalent to \"/vis/ogl/flushAt NthPrimitive N\"");
+  fpCommandEventsDrawInterval->SetParameterName("N", omitable = true);
   fpCommandEventsDrawInterval->SetDefaultValue(1);
 
   fpCommandFade = new G4UIcmdWithADouble("/vis/ogl/set/fade", this);
   fpCommandFade->SetGuidance
-    ("0: no fade; 1: maximum fade with time within range.");
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/fadeFactor."
+    "\n  0: no fade; 1: maximum fade with time within range.");
   fpCommandFade->SetParameterName("fadefactor", omitable = false);
   fpCommandFade->SetRange("fadefactor>=0.&&fadefactor<=1.");
   fpCommandFade->SetDefaultValue(0.);
-
-  fpCommandPrintEPS =
-    new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
-  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
-  fpCommandPrintEPS->SetGuidance
-    ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
-     "\nnumber, starting at 0."
-     "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
 
   fpCommandPrintFilename =
     new G4UIcommand("/vis/ogl/set/printFilename", this);
@@ -219,30 +266,6 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameterExportFormat->SetDefaultValue("");
   fpCommandExportFormat->SetParameter(parameterExportFormat);
   
-  fpCommandExport =
-  new G4UIcommand("/vis/ogl/export", this);
-  fpCommandExport->SetGuidance ("export a screenshot of current OpenGL viewer");
-  fpCommandExport->SetGuidance ("If name is \"\", filename and extension will have the default value");
-  fpCommandExport->SetGuidance ("If name is \"toto.png\", set the name to \"toto\" and the format to \"png\". No incremented suffix is added.");
-  fpCommandExport->SetGuidance ("If name is \"toto\", set the name to \"toto\" and the format to default (or current format if specify). Will also add an incremented suffix at the end of the file, except if name is the same as previous it will not reset incremented suffix.");
-  fpCommandExport->SetGuidance ("Setting size is available only on eps/pdf/svg/ps formats");
-
-  G4UIparameter* parameterExport;
-  parameterExport = new G4UIparameter ("name", 's', omitable = true);
-  parameterExport->SetDefaultValue("!");
-  parameterExport->SetGuidance("by default, will take a default value or the last /vis/ogl/set/printFilename value if set");
-  fpCommandExport->SetParameter(parameterExport);
-  parameterExport = new G4UIparameter ("width", 'd', omitable = true);
-  parameterExport->SetGuidance("By default, will take the current width of the viewer or /vis/ogl/set/printSize if set");
-  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
-  parameterExport->SetDefaultValue(-1);
-  fpCommandExport->SetParameter(parameterExport);
-  parameterExport = new G4UIparameter ("height", 'd', omitable = true);
-  parameterExport->SetGuidance("By default, will take the current height of the viewer or /vis/ogl/set/printSize if set");
-  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
-  parameterExport->SetDefaultValue(-1);
-  fpCommandExport->SetParameter(parameterExport);
-  
   fpCommandPrintMode = new G4UIcmdWithAString
     ("/vis/ogl/set/printMode",this);
   fpCommandPrintMode->SetGuidance("Set print mode, only available for \"ps\" format");
@@ -254,7 +277,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     new G4UIcommand("/vis/ogl/set/printSize", this);
   fpCommandPrintSize->SetGuidance ("Set print size");
   fpCommandPrintSize->SetGuidance ("Tip : -1 will mean 'print size' = 'window size'");
-  fpCommandPrintSize->SetGuidance ("       Setting size greatter than your maximum graphic card capacity , will set the size to maximum  size.");
+  fpCommandPrintSize->SetGuidance ("       Setting size greater than your maximum graphic card capacity , will set the size to maximum  size.");
   G4UIparameter* parameterPrintSize;
   parameterPrintSize = new G4UIparameter ("width", 'd', omitable = false);
   parameterPrintSize->SetDefaultValue(-1);
@@ -265,9 +288,11 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpCommandStartTime =
     new G4UIcommand("/vis/ogl/set/startTime", this);
-  fpCommandStartTime->SetGuidance("Set start and range of track time.");
+  fpCommandStartTime->SetGuidance
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/startTime."
+     "\n  Set start and range of time window.");
   parameter = new G4UIparameter ("start-time", 'd', omitable = false);
-  parameter->SetDefaultValue(-DBL_MAX);
+  parameter->SetDefaultValue(-G4VisAttributes::fVeryLongTime);
   fpCommandStartTime->SetParameter(parameter);
   parameter = new G4UIparameter ("start-time-unit", 's', omitable = false);
   parameter->SetDefaultValue("ns");
@@ -295,16 +320,17 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpCommandPrintSize;
   delete fpCommandPrintMode;
   delete fpCommandPrintFilename;
-  delete fpCommandExport;
-  delete fpCommandPrintEPS;
-  delete fpCommandExportFormat;
   delete fpCommandFade;
+  delete fpCommandExportFormat;
   delete fpCommandEventsDrawInterval;
   delete fpCommandEndTime;
   delete fpCommandDisplayListLimit;
   delete fpCommandDisplayLightFront;
   delete fpCommandDisplayHeadTime;
   delete fpDirectorySet;
+  delete fpCommandPrintEPS;
+  delete fpCommandFlushAt;
+  delete fpCommandExport;
   delete fpDirectory;
 
   delete fpInstance;
@@ -316,7 +342,6 @@ void G4OpenGLViewerMessenger::SetNewValue
   G4VisManager* pVisManager = G4VisManager::GetInstance();
 
   G4VViewer* pViewer = pVisManager->GetCurrentViewer();
-
   if (!pViewer) {
     G4cout <<
       "G4OpenGLViewerMessenger::SetNewValue: No current viewer."
@@ -325,8 +350,18 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
 
+  G4VSceneHandler* pSceneHandler = pViewer->GetSceneHandler();
+  if (!pSceneHandler) {
+    G4cout <<
+    "G4OpenGLViewerMessenger::SetNewValue: This viewer has no scene handler."
+    "\n  Shouldn't happen - please report circumstances."
+    "\n  (Viewer is \"" << pViewer->GetName() << "\".)"
+    "\n  Try \"/vis/open\", or similar, to get one."
+    << G4endl;
+    return;
+  }
+  
   G4OpenGLViewer* pOGLViewer = dynamic_cast<G4OpenGLViewer*>(pViewer);
-
   if (!pOGLViewer) {
     G4cout <<
       "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type"
@@ -337,6 +372,19 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
 
+  G4OpenGLSceneHandler* pOGLSceneHandler =
+  dynamic_cast<G4OpenGLSceneHandler*>(pSceneHandler);
+  if (!pOGLSceneHandler) {
+    G4cout <<
+    "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
+    "\n  OGL.  (Viewer is \"" << pViewer->GetName() << "\".)"
+    "\n  (Scene handler is \"" << pSceneHandler->GetName() << "\".)"
+    "\n  Use \"/vis/sceneHandler/list\" and \"/vis/sceneHandler/select\""
+    "\n  or \"/vis/open\"."
+    << G4endl;
+    return;
+  }
+  
   if (command == fpCommandPrintEPS)
   {
     pOGLViewer->setExportImageFormat("eps",true);
@@ -406,6 +454,37 @@ void G4OpenGLViewerMessenger::SetNewValue
       return;
     }
 
+  if (command == fpCommandEventsDrawInterval)
+  {
+    G4int entitiesFlushInterval =
+    fpCommandEventsDrawInterval->GetNewIntValue(newValue);
+    pOGLSceneHandler->SetFlushAction(G4OpenGLSceneHandler::NthPrimitive);
+    pOGLSceneHandler->SetEntitiesFlushInterval(entitiesFlushInterval);
+    return;
+  }
+
+  if (command == fpCommandFlushAt)
+  {
+//    G4bool firstTime = true;
+    std::map<G4String,G4OpenGLSceneHandler::FlushAction> actionMap;
+//    if (firstTime) {
+      actionMap["endOfEvent"]    = G4OpenGLSceneHandler::endOfEvent;
+      actionMap["endOfRun"]      = G4OpenGLSceneHandler::endOfRun;
+      actionMap["eachPrimitive"] = G4OpenGLSceneHandler::eachPrimitive;
+      actionMap["NthPrimitive"]  = G4OpenGLSceneHandler::NthPrimitive;
+      actionMap["NthEvent"]      = G4OpenGLSceneHandler::NthEvent;
+      actionMap["never"]         = G4OpenGLSceneHandler::never;
+//      firstTime = false;
+//    }
+    G4String action;
+    G4int entitiesFlushInterval;
+    std::istringstream iss(newValue);
+    iss >> action >> entitiesFlushInterval;
+    pOGLSceneHandler->SetFlushAction(actionMap[action]);
+    pOGLSceneHandler->SetEntitiesFlushInterval(entitiesFlushInterval);
+    return;
+  }
+
   G4OpenGLStoredViewer* pOGLSViewer =
     dynamic_cast<G4OpenGLStoredViewer*>(pViewer);
 
@@ -427,13 +506,16 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> display >> screenX >> screenY
 	  >> screenSize >> red >> green >> blue;
-      pOGLSViewer->fDisplayHeadTime = command->ConvertToBool(display);
-      pOGLSViewer->fDisplayHeadTimeX = screenX;
-      pOGLSViewer->fDisplayHeadTimeY = screenY;
-      pOGLSViewer->fDisplayHeadTimeSize = screenSize;
-      pOGLSViewer->fDisplayHeadTimeRed = red;
-      pOGLSViewer->fDisplayHeadTimeGreen = green;
-      pOGLSViewer->fDisplayHeadTimeBlue = blue;
+      pOGLSViewer->fVP.SetDisplayHeadTime(command->ConvertToBool(display));
+      pOGLSViewer->fVP.SetDisplayHeadTimeX(screenX);
+      pOGLSViewer->fVP.SetDisplayHeadTimeY(screenY);
+      pOGLSViewer->fVP.SetDisplayHeadTimeSize(screenSize);
+      pOGLSViewer->fVP.SetDisplayHeadTimeRed(red);
+      pOGLSViewer->fVP.SetDisplayHeadTimeGreen(green);
+      pOGLSViewer->fVP.SetDisplayHeadTimeBlue(blue);
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/displayHeadTime."
+      << G4endl;
       return;
     }
 
@@ -446,18 +528,21 @@ void G4OpenGLViewerMessenger::SetNewValue
 	  >> originX >> originY >> originZ >> unitS
 	  >> originT >> unitT
 	  >> red >> green >> blue;
-      pOGLSViewer->fDisplayLightFront = command->ConvertToBool(display);
-      pOGLSViewer->fDisplayLightFrontX =
-	command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS));
-      pOGLSViewer->fDisplayLightFrontY =
-	command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS));
-      pOGLSViewer->fDisplayLightFrontZ =
-	command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS));
-      pOGLSViewer->fDisplayLightFrontT =
-	command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT));
-      pOGLSViewer->fDisplayLightFrontRed = red;
-      pOGLSViewer->fDisplayLightFrontGreen = green;
-      pOGLSViewer->fDisplayLightFrontBlue = blue;
+      pOGLSViewer->fVP.SetDisplayLightFront(command->ConvertToBool(display));
+      pOGLSViewer->fVP.SetDisplayLightFrontX
+      (command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS)));
+      pOGLSViewer->fVP.SetDisplayLightFrontY
+      (command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS)));
+      pOGLSViewer->fVP.SetDisplayLightFrontZ
+      (command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS)));
+      pOGLSViewer->fVP.SetDisplayLightFrontT
+      (command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT)));
+      pOGLSViewer->fVP.SetDisplayLightFrontRed(red);
+      pOGLSViewer->fVP.SetDisplayLightFrontGreen(green);
+      pOGLSViewer->fVP.SetDisplayLightFrontBlue(blue);
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/displayLightFront."
+      << G4endl;
       return;
     }
 
@@ -468,23 +553,31 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> end_time_string >> end_time_unit
 	  >> time_range_string >> time_range_unit;
-      pOGLSViewer->fEndTime = command->ConvertToDimensionedDouble
-	(G4String(end_time_string + ' ' + end_time_unit));
+      pOGLSViewer->fVP.SetEndTime
+      (command->ConvertToDimensionedDouble
+       (G4String(end_time_string + ' ' + end_time_unit)));
       G4double timeRange = command->ConvertToDimensionedDouble
 	(G4String(time_range_string + ' ' + time_range_unit));
       if (timeRange > 0.) {
-	pOGLSViewer->fStartTime = pOGLSViewer->fEndTime - timeRange;
+	pOGLSViewer->fVP.SetStartTime
+        (pOGLSViewer->fVP.GetEndTime() - timeRange);
       }
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/endTime."
+      << G4endl;
       return;
     }
 
   if (command == fpCommandFade)
     {
-      pOGLSViewer->fFadeFactor = command->ConvertToDouble(newValue);
+      pOGLSViewer->fVP.SetFadeFactor(command->ConvertToDouble(newValue));
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/fadeFactor."
+      << G4endl;
       return;
     }
 
@@ -495,49 +588,20 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> start_time_string >> start_time_unit
 	  >> time_range_string >> time_range_unit;
-      pOGLSViewer->fStartTime = command->ConvertToDimensionedDouble
-	(G4String(start_time_string + ' ' + start_time_unit));
+      pOGLSViewer->fVP.SetStartTime
+      (command->ConvertToDimensionedDouble
+       (G4String(start_time_string + ' ' + start_time_unit)));
       G4double timeRange = command->ConvertToDimensionedDouble
 	(G4String(time_range_string + ' ' + time_range_unit));
       if (timeRange > 0.) {
-	pOGLSViewer->fEndTime = pOGLSViewer->fStartTime + timeRange;
+	pOGLSViewer->fVP.SetEndTime
+        (pOGLSViewer->fVP.GetStartTime() + timeRange);
       }
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-      return;
-    }
-
-  G4VSceneHandler* pSceneHandler = pViewer->GetSceneHandler();
-
-  if (!pSceneHandler) {
-    G4cout <<
-  "G4OpenGLViewerMessenger::SetNewValue: This viewer has no scene handler."
-  "\n  Shouldn't happen - please report circumstances."
-  "\n  (Viewer is \"" << pViewer->GetName() << "\".)"
-  "\n  Try \"/vis/open\", or similar, to get one."
-           << G4endl;
-    return;
-  }
-
-  G4OpenGLSceneHandler* pOGLSceneHandler =
-    dynamic_cast<G4OpenGLSceneHandler*>(pSceneHandler);
-
-  if (!pOGLSceneHandler) {
-    G4cout <<
-  "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
-  "\n  OGL.  (Viewer is \"" << pViewer->GetName() << "\".)"
-  "\n  (Scene handler is \"" << pSceneHandler->GetName() << "\".)"
-  "\n  Use \"/vis/sceneHandler/list\" and \"/vis/sceneHandler/select\""
-  "\n  or \"/vis/open\"."
-           << G4endl;
-    return;
-  }
-
-  if (command == fpCommandEventsDrawInterval)
-    {
-      G4int eventsDrawInterval =
-	fpCommandEventsDrawInterval->GetNewIntValue(newValue);
-      pOGLSceneHandler->SetEventsDrawInterval(eventsDrawInterval);
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/startTime."
+      << G4endl;
       return;
     }
 

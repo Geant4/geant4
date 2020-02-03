@@ -1,0 +1,30 @@
+/run/numberOfThreads 4
+#
+/tracking/verbose 0
+#
+/microprox/phys/addPhysics  dna_opt2	        
+#/microprox/phys/addPhysics  dna_opt4	        
+#/microprox/phys/addPhysics  dna_opt6	        
+#
+/microprox/det/setTrackingCut 7.4 eV
+#
+/run/initialize
+#
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/pixe true
+/process/em/deexcitationIgnoreCut true 
+#
+/gun/particle e-
+#/gun/particle proton
+#/gun/particle alpha
+#
+/gun/energy 100 eV
+#
+/run/printProgress 1000
+#
+#/process/inactivate e-_G4DNAVibExcitation
+#/process/inactivate e-_G4DNAAttachment
+#
+/run/beamOn 10000

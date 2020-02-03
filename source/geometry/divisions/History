@@ -1,4 +1,3 @@
-$Id: History 92635 2015-09-09 13:39:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23rd, 2019      J.Apostolakis (geomdiv-V10-05-02)
+- Added new virtual VolumeType() method in Physical Volume types.
+  Requires and coworks with geommng-V10-05-11 and geomvol-V10-05-05.
+
+September 19th, 2019    G.Cosmo (geomdiv-V10-05-01)
+- G4PVDivision: added missing implementation of alternative constructor.
+- Implemented minor c++11 revision; code cleanup and formatting.
+
+June 13th, 2019         G.Cosmo (geomdiv-V10-05-00)
+- Return correct value for multiplicity in G4PVDivision and G4ReplicatedSlice.
+  Addressing problem report #2168.
+
+March 22nd, 2017        G.Cosmo (geomdiv-V10-03-00)
+- Updated ExDivision unit test.
+
+May 13th, 2016          G.Cosmo (geomdiv-V10-02-00)
+- Updated unit tests.
 
 September 9th, 2015     G.Cosmo (geomdiv-V10-01-07)
 - Set as unsupported divisions of polycone and polyhedra in MT-mode.

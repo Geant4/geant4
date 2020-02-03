@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -73,11 +72,14 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
   
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.GetCBDAlgorithmNumber() !=
+       fVP.GetCBDAlgorithmNumber())                               ||
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
       // Section (DCUT) implemented locally.  But still need to visit
       // kernel if status changes so that back plane culling can be
@@ -93,8 +95,8 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
-      (lastVP.GetVisAttributesModifiers().size() !=
-       fVP.GetVisAttributesModifiers().size())
+      (lastVP.GetVisAttributesModifiers() !=
+       fVP.GetVisAttributesModifiers())
       )
   return true;
   
@@ -102,17 +104,15 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
   return true;
   
-  /**************************************************************
-   Section (DCUT) implemented locally.  No need to visit kernel if
-   section plane itself changes.
-   if (lastVP.IsSection () &&
-   (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
-   return true;
-   ***************************************************************/
+//  /**************************************************************
+//   If section (DCUT) is implemented locally, comment this out.
+  if (lastVP.IsSection () &&
+      (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
+    return true;
+//   ***************************************************************/
   
   /**************************************************************
-   Cutaways implemented locally.  No need to visit kernel if cutaway
-   planes themselves change.
+   If cutaways are implemented locally, comment this out.
    if (lastVP.IsCutaway ()) {
    if (lastVP.GetCutawayPlanes ().size () !=
    fVP.GetCutawayPlanes ().size ()) return true;
@@ -122,15 +122,46 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
    }
    ***************************************************************/
   
+  if (lastVP.GetCBDAlgorithmNumber() > 0) {
+    if (lastVP.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (lastVP.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  }
+
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-  return true;
+    return true;
+
+  // Time window parameters operate on the existing database so no need
+  // to rebuild even if they change.
   
   return false;
 }
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
   
+  // We moved these from G4OpenGLViewer to G4ViewParamaters. To avoid
+  // editing many lines below we introduce these convenient aliases.
+#define CONVENIENT_DOUBLE_ALIAS(q) const G4double& f##q = fVP.Get##q();
+#define CONVENIENT_BOOL_ALIAS(q) const G4bool& f##q = fVP.Is##q();
+  CONVENIENT_DOUBLE_ALIAS(StartTime)
+  CONVENIENT_DOUBLE_ALIAS(EndTime)
+  CONVENIENT_DOUBLE_ALIAS(FadeFactor)
+  CONVENIENT_BOOL_ALIAS(DisplayHeadTime)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeX)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeY)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeSize)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeRed)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeGreen)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeBlue)
+  CONVENIENT_BOOL_ALIAS(DisplayLightFront)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontX)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontY)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontZ)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontT)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontRed)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontGreen)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontBlue)
+
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
   fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
@@ -140,7 +171,6 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   G4bool thirdPassForNonHiddenMarkersRequested = false;
   fDepthTestEnable = true;
   glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);
-  fOldDisplayListColor = G4Colour();
   do {
     for (size_t iCutaway = 0; iCutaway < nCutaways; ++iCutaway) {
       
@@ -183,13 +213,10 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
             }
           }
           if (isPicking) glLoadName(po.fPickName);
-          if ((iPO == 0) || (c != fOldDisplayListColor)) {
-            fOldDisplayListColor = c;
-            if (transparency_enabled) {
-              glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
-            } else {
-              glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
-            }
+          if (transparency_enabled) {
+            glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+          } else {
+            glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
           }
           if (po.fMarkerOrPolyline && fVP.IsMarkerNotHidden()) {
             if (fDepthTestEnable !=false) {
@@ -213,14 +240,14 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
               glLoadIdentity();
               G4OpenGLTransform3D oglt (po.fTransform);
               glMultMatrixd (oglt.GetGLMatrix ());
-              fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
-              (po.fpG4TextPlus->fG4Text);
+              // This text is from a PODL. We don't want to create a new PODL.
+              AddPrimitiveForASingleFrame(po.fpG4TextPlus->fG4Text);
             } else {
               glPushMatrix();
               G4OpenGLTransform3D oglt (po.fTransform);
               glMultMatrixd (oglt.GetGLMatrix ());
-              fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
-              (po.fpG4TextPlus->fG4Text);
+              // This text is from a PODL. We don't want to create a new PODL.
+              AddPrimitiveForASingleFrame(po.fpG4TextPlus->fG4Text);
               glPopMatrix();
             }
             
@@ -242,7 +269,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       
       G4Transform3D lastMatrixTransform;
       G4bool first = true;
-      
+
       for (size_t iTO = 0;
            iTO < fG4OpenGLStoredSceneHandler.fTOList.size(); ++iTO) {
         if (TOSelected(iTO)) {
@@ -293,13 +320,8 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
               }
               G4OpenGLTransform3D oglt (to.fTransform);
               glMultMatrixd (oglt.GetGLMatrix ());
-              if (transparency_enabled) {
-                glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
-              } else {
-                glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
-              }
-              fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
-              (to.fpG4TextPlus->fG4Text);
+              // This text is from a TODL. We don't want to create a new TODL.
+              AddPrimitiveForASingleFrame(to.fpG4TextPlus->fG4Text);
               if (to.fpG4TextPlus->fProcessing2D) {
                 glMatrixMode (GL_PROJECTION);
                 glPopMatrix();
@@ -366,7 +388,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   } while (true);
   
   // Display time at "head" of time range, which is fEndTime...
-  if (fDisplayHeadTime && fEndTime < DBL_MAX) {
+  if (fDisplayHeadTime && fEndTime < G4VisAttributes::fVeryLongTime) {
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -382,7 +404,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
                               fDisplayHeadTimeGreen,
                               fDisplayHeadTimeBlue));
     headTimeText.SetVisAttributes(&visAtts);
-    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(headTimeText);
+    AddPrimitiveForASingleFrame(headTimeText);
     glMatrixMode (GL_PROJECTION);
     glPopMatrix();
     glMatrixMode (GL_MODELVIEW);
@@ -390,7 +412,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   }
   
   // Display light front...
-  if (fDisplayLightFront && fEndTime < DBL_MAX) {
+  if (fDisplayLightFront && fEndTime < G4VisAttributes::fVeryLongTime) {
     G4double lightFrontRadius = (fEndTime - fDisplayLightFrontT) * c_light;
     if (lightFrontRadius > 0.) {
       G4Point3D lightFrontCentre(fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ);
@@ -432,13 +454,35 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       if (circleRadius > 0.) {
         G4Circle lightFront(circleCentre);
         lightFront.SetWorldRadius(circleRadius);
-        glColor3d(fDisplayLightFrontRed,
-                  fDisplayLightFrontGreen,
-                  fDisplayLightFrontBlue);
-        fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(lightFront);
+        G4VisAttributes visAtts(G4Colour
+         (fDisplayLightFrontRed,
+          fDisplayLightFrontGreen,
+          fDisplayLightFrontBlue));
+        lightFront.SetVisAttributes(visAtts);
+        AddPrimitiveForASingleFrame(lightFront);
       }
     }
   }
+}
+
+void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Text& text)
+{
+  // We don't want this to get into a display list or a TODL or a PODL so
+  // use the fMemoryForDisplayLists flag.
+  G4bool memoryForDisplayListsKeep = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(text);
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
+}
+
+void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Circle& circle)
+{
+  // We don't want this to get into a display list or a TODL or a PODL so
+  // use the fMemoryForDisplayLists flag.
+  G4bool memoryForDisplayListsKeep = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(circle);
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
 }
 
 #endif

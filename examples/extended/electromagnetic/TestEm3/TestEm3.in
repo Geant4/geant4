@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: TestEm3.in 92914 2015-09-21 15:00:48Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)

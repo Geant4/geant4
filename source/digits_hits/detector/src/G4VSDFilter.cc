@@ -24,14 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSDFilter.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4VSensitiveDetector
 #include "G4VSDFilter.hh"
+#include "G4SDManager.hh"
 
 G4VSDFilter::G4VSDFilter(G4String name)
 :filterName(name)
-{;}
+{
+  G4SDManager::GetSDMpointer()->RegisterSDFilter(this);
+}
 
 G4VSDFilter::~G4VSDFilter()
-{;}
+{
+  G4SDManager::GetSDMpointer()->DeRegisterSDFilter(this);
+}
+

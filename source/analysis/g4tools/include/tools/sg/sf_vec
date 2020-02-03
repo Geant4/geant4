@@ -72,6 +72,10 @@ public:
     parent::operator=(a_value);
     return *this;
   }
+  sf_vec& operator+=(const T& a_value) {
+    parent::value(parent::value()+a_value);
+    return *this;
+  }
   virtual bool s_value(std::string& a_s) const {
     const T& vec = parent::m_value;
     typename T::size_type sz = vec.size();

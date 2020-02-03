@@ -28,7 +28,6 @@
 
 // HPW Feb1999 based on prototype, needs urgent clean-up of data structures.
 // Also needs clean-up of interfaces.
-// @@@@@@@@@@@@@@@@@
 // clean-up of data structures
 
 #include "globals.hh"

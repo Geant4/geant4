@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4He3EvaporationProbability.cc 89518 2015-04-15 14:43:30Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -37,7 +36,7 @@
 #include "G4He3EvaporationProbability.hh"
 
 G4He3EvaporationProbability::G4He3EvaporationProbability() :
-   G4EvaporationProbability(3,2,2.0,&theCoulombBarrier)
+   G4EvaporationProbability(3,2,2.0)
 {}
 
 G4He3EvaporationProbability::~G4He3EvaporationProbability() 
@@ -54,7 +53,7 @@ G4double G4He3EvaporationProbability::CalcAlphaParam(const G4Fragment& fragment)
   //	G4double Calpha[5] = { 0.10, 0.10, 0.10, 0.08, 0.06};
   // C for He3 is equal to C for alpha times 4/3
 
-  G4int aZ = fragment.GetZ_asInt()-GetZ();
+  G4int aZ = fragment.GetZ_asInt() - GetZ();
   G4double C;
 	
   if (aZ <= 30)

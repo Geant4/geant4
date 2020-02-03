@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 # $Id: fanoCavity.in 93258 2015-10-14 08:34:50Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 /control/verbose 2
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 2
+#
+###/testem/det/wallMater Water
+###/testem/det/cavityMater Water_gas
 #
 /testem/phys/addPhysics standard_opt3
 #
 /run/initialize
 #
 /run/printProgress 1000
-#
 /run/beamOn 4000

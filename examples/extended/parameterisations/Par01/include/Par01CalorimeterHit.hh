@@ -24,7 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id: Par01CalorimeterHit.hh 90093 2015-05-13 11:59:54Z gcosmo $
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #ifndef Par01CalorimeterHit_h
@@ -47,7 +51,7 @@ public:
   ~Par01CalorimeterHit();
   Par01CalorimeterHit(const Par01CalorimeterHit &right);
   const Par01CalorimeterHit& operator=(const Par01CalorimeterHit &right);
-  G4int operator==(const Par01CalorimeterHit &right) const;
+  G4bool operator==(const Par01CalorimeterHit &right) const;
   
   
   inline void *operator new(size_t);

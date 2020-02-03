@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc 93090 2015-10-05 13:14:43Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -131,12 +130,12 @@ G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 
 }
 
-G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
+G4bool G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
 {
   return this == &right;
 }
 
-G4int G4VRangeToEnergyConverter::operator!=(const G4VRangeToEnergyConverter &right) const
+G4bool G4VRangeToEnergyConverter::operator!=(const G4VRangeToEnergyConverter &right) const
 {
   return this != &right;
 }

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.hh 90757 2015-06-09 07:45:14Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -54,19 +53,20 @@ public:
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
   inline void SetDiffraction(G4bool val) {fDiffraction = val;};
 
 private:
 
-  G4HadronHElasticPhysics(G4HadronHElasticPhysics &);
-  G4HadronHElasticPhysics & operator=(const G4HadronHElasticPhysics &right);
+  G4HadronHElasticPhysics(G4HadronHElasticPhysics &) = delete;
+  G4HadronHElasticPhysics & operator=
+  (const G4HadronHElasticPhysics &right) = delete;
 
   G4int  verbose;
   G4bool fDiffraction;

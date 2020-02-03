@@ -23,11 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 /// \file radioactivedecay/rdecay01/include/SteppingVerbose.hh
 /// \brief Definition of the SteppingVerbose class
 //
 //
 // $Id: SteppingVerbose.hh 71025 2013-06-10 08:57:23Z gcosmo $
+=======
+/// \file SteppingVerbose.hh
+/// \brief Definition of the SteppingVerbose class
+//
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

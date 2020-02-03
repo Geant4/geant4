@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationCrossSection.cc 74626 2013-10-17 07:00:59Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -88,7 +87,7 @@ G4double G4PenelopeIonisationCrossSection::CrossSection(G4int Z,
     {
       //CRASH!
       G4ExceptionDescription ed;
-      ed << "The method has been called with a NULL G4Material pointer" << G4endl;
+      ed << "The method has been called with a null G4Material pointer" << G4endl;
       G4Exception("G4PenelopeIonisationCrossSection::CrossSection()","em2042",
 		  FatalException,ed);
       return cross;

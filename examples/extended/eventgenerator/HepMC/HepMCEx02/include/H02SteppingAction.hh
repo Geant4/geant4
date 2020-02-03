@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02SteppingAction.hh
 /// \brief Definition of the H02SteppingAction class
 //
-//   $Id: H02SteppingAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 #ifndef H02_STEPPING_ACTION_H
 #define H02_STEPPING_ACTION_H

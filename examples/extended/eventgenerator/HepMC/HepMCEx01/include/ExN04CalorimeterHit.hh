@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04CalorimeterHit.hh
 /// \brief Definition of the ExN04CalorimeterHit class
 //
-// $Id: ExN04CalorimeterHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04CalorimeterHit_h
@@ -49,7 +48,7 @@ public:
   virtual ~ExN04CalorimeterHit();
 
   const ExN04CalorimeterHit& operator=(const ExN04CalorimeterHit& right);
-  G4int operator==(const ExN04CalorimeterHit& right) const;
+  G4bool operator==(const ExN04CalorimeterHit& right) const;
 
   inline void* operator new(size_t);
   inline void operator delete(void* aHit);

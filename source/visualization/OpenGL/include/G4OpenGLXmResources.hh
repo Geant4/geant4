@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmResources.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 //
 // Default resources file for GEANT4 OpenGL Motif windows.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
 
 #ifndef G4OPENGLXMRESOURCES_HH
 #define G4OPENGLXMRESOURCES_HH

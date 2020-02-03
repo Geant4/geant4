@@ -1,5 +1,5 @@
 //
-/// \file parallel/ParN04/AnnotatedFiles/MarshaledG4THitsCollection.h
+/// \file MarshaledG4THitsCollection.h
 /// \brief Definition of the MaraledG4THitsCollection class
 //
 // This file was generated automatically by marshalgen.

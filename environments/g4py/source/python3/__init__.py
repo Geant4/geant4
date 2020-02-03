@@ -7,9 +7,14 @@
 #  This package contains a set of Python interface with Geant4.
 # ==================================================================
 """
+<<<<<<< HEAD
 # $Id: __init__.py 94382 2015-11-13 10:18:01Z gcosmo $
 __version__ ='10.2.0'
 __date__ = 'November/2015'
+=======
+__version__ ='10.6'
+__date__ = 'December/2019'
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
 
 # import submodules
@@ -38,9 +43,8 @@ def print_version():
   
   Version : %s
   Date    : %s
-  Contact : %s
 =============================================================
-""" % ( __version__, __date__, __author__) )
+""" % ( __version__, __date__) )
 
 # ==================================================================
 # initialize
@@ -86,9 +90,6 @@ gParticleIterator = PyG4ParticleList()
 
 # gProcessTable
 gProcessTable = G4ProcessTable.GetProcessTable()
-
-# gLossTableManager
-gLossTableManager = G4LossTableManager.Instance()
 
 # gProductionCutsTable
 gProductionCutsTable = G4ProductionCutsTable.GetProductionCutsTable()

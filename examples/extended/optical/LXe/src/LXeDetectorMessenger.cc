@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXeDetectorMessenger.cc 77486 2013-11-25 10:14:16Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/src/LXeDetectorMessenger.cc
 /// \brief Implementation of the LXeDetectorMessenger class
@@ -137,6 +140,21 @@ LXeDetectorMessenger::LXeDetectorMessenger(LXeDetectorConstruction* detector)
   fWLSScintYield->SetGuidance("Specified in photons/MeV");
   fWLSScintYield->AvailableForStates(G4State_PreInit,G4State_Idle);
   fWLSScintYield->SetToBeBroadcasted(false);
+<<<<<<< HEAD
+=======
+
+  fSaveThresholdCmd = new G4UIcmdWithAnInteger("/LXe/saveThreshold",this);
+  fSaveThresholdCmd->
+SetGuidance("Set the photon count threshold for saving the random number seed");
+  fSaveThresholdCmd->SetParameterName("photons",true);
+  fSaveThresholdCmd->SetDefaultValue(4500);
+  fSaveThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fDefaultsCmd = new G4UIcommand("/LXe/detector/defaults",this);
+  fDefaultsCmd->SetGuidance("Set all detector geometry values to defaults.");
+  fDefaultsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDefaultsCmd->SetToBeBroadcasted(false);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -159,6 +177,11 @@ LXeDetectorMessenger::~LXeDetectorMessenger()
   delete fReflectivityCmd;
   delete fMainScintYield;
   delete fWLSScintYield;
+<<<<<<< HEAD
+=======
+  delete fSaveThresholdCmd;
+  delete fDefaultsCmd;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -209,4 +232,15 @@ void LXeDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   else if (command == fWLSScintYield){
     fLXeDetector->SetWLSScintYield(fWLSScintYield->GetNewDoubleValue(newValue));
   }
+<<<<<<< HEAD
+=======
+  else if( command == fSaveThresholdCmd ){
+    fLXeDetector->SetSaveThreshold(fSaveThresholdCmd->GetNewIntValue(newValue));
+  }
+  else if (command == fDefaultsCmd){
+    fLXeDetector->SetDefaults();
+
+    G4RunManager::GetRunManager()->ReinitializeGeometry(); //Add here this line
+  }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }

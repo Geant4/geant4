@@ -32,25 +32,26 @@
 
 #include "CCalDetector.hh"
 
-class CCalHall: public CCalDetector {
+class CCalHall: public CCalDetector
+{
 public:
   //Constructor and Destructor
   CCalHall(const G4String &name);
   virtual ~CCalHall();
 
   //Get Methods
-  G4String getMaterial()                  const {return genMaterial;}
-  double   getDy_2Hall()                  const {return dy_2Hall;}
-  double   getDx_2Hall()                  const {return dx_2Hall;}
+  G4String getMaterial()                    const {return genMaterial;}
+  G4double   getDy_2Hall()                  const {return dy_2Hall;}
+  G4double   getDx_2Hall()                  const {return dx_2Hall;}
 
 protected:
-  virtual int readFile();
+  virtual G4int readFile();
   virtual void constructDaughters();
 
 private:
   G4String genMaterial;            //General material
-  double   dy_2Hall;               //Half width     of the Experimental Hall
-  double   dx_2Hall;               //Half thickness of the Experimental Hall
+  G4double   dy_2Hall;               //Half width     of the Experimental Hall
+  G4double   dx_2Hall;               //Half thickness of the Experimental Hall
 };
 
 #endif

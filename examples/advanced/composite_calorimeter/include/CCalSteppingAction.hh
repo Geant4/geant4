@@ -34,6 +34,7 @@
 #include "globals.hh"
 
 class G4Step;
+<<<<<<< HEAD
 class CCalSteppingAction : public G4UserSteppingAction {
 
   friend class CCalEndOfEventAction;
@@ -41,19 +42,33 @@ private:
   CCalSteppingAction();
 public:
   ~CCalSteppingAction();
-      
+=======
+
+class CCalSteppingAction : public G4UserSteppingAction 
+{
+  
 public:
+  CCalSteppingAction();
+  virtual ~CCalSteppingAction();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+      
   virtual void UserSteppingAction(const G4Step* aStep);    
 
 
 private:
 
+<<<<<<< HEAD
   float          LateralProfile[70];	
   float          timeDeposit[200];
   int            timeHistoMaxBin;	    
       
 private:
   void endOfEvent();
+=======
+  G4float        LateralProfile[70];
+  G4float        timeDeposit[200];
+  G4int          timeHistoMaxBin;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 #endif

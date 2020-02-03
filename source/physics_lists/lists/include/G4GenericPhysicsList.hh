@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GenericPhysicsList.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,9 +40,7 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 #include "CompileTimeConstraints.hh"
-
 #include "G4PhysicsConstructorRegistry.hh"
-
 #include "G4GenericMessenger.hh"
 
 template<class T>

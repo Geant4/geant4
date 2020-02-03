@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: F04PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file field/field04/src/F04PhysicsList.cc
 /// \brief Implementation of the F04PhysicsList class
@@ -72,9 +75,6 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
     G4LossTableManager::Instance();
 
     defaultCutValue  = 1.*mm;
-    fCutForGamma     = defaultCutValue;
-    fCutForElectron  = defaultCutValue;
-    fCutForPositron  = defaultCutValue;
 
     fMessenger = new F04PhysicsListMessenger(this);
 
@@ -94,7 +94,7 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
     // Physics List is defined via environment variable PHYSLIST
 //    if (!phys) phys = factory.ReferencePhysList();
 
-    if (!phys) G4Exception("WLSPhysicsList::WLSPhysicsList","InvalidSetup",
+    if (!phys) G4Exception("F04PhysicsList::F04PhysicsList","InvalidSetup",
                               FatalException,"PhysicsList does not exist");
 
     for (G4int i = 0; ; ++i) {
@@ -244,49 +244,6 @@ void F04PhysicsList::ClearPhysics()
     physicsVector->clear();
 }
 */
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04PhysicsList::SetCuts()
-{
-    if (verboseLevel >0) {
-        G4cout << "F04PhysicsList::SetCuts:";
-        G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length")
-               << G4endl;
-    }
-
-    // set cut values for gamma at first and for e- second and next for e+,
-    // because some processes for e+/e- need cut values for gamma
-    SetCutValue(fCutForGamma, "gamma");
-    SetCutValue(fCutForElectron, "e-");
-    SetCutValue(fCutForPositron, "e+");
-
-    if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04PhysicsList::SetCutForGamma(G4double cut)
-{
-    fCutForGamma = cut;
-    SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04PhysicsList::SetCutForElectron(G4double cut)
-{
-    fCutForElectron = cut;
-    SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04PhysicsList::SetCutForPositron(G4double cut)
-{
-    fCutForPositron = cut;
-    SetParticleCuts(fCutForPositron, G4Positron::Positron());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

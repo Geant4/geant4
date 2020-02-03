@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: DicomPhantomZSliceHeader.cc 92820 2015-09-17 15:22:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file DicomPhantomZSliceHeader.cc
 /// \brief Implementation of the DicomPhantomZSliceHeader class
@@ -53,6 +56,7 @@ DicomPhantomZSliceHeader::~DicomPhantomZSliceHeader()
 
 }
 
+<<<<<<< HEAD
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( 
                               const DicomPhantomZSliceHeader& rhs )
@@ -74,6 +78,9 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
 {
     //----- Read material indices and names

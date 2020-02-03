@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,23 +61,38 @@
 #include "G4PhysicsModelCatalog.hh"
 #include "G4Gamma.hh"
 
+#ifdef G4MULTITHREADED
+  G4Mutex G4VAtomDeexcitation::atomDeexcitationMutex = G4MUTEX_INITIALIZER;
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4VAtomDeexcitation::pixeIDg = -1;
 G4int G4VAtomDeexcitation::pixeIDe = -1;
 
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname) 
-  : verbose(1), name(modname), isActive(false), 
-    flagAuger(false),flagAugerCascade(false), 
-    flagPIXE(false), ignoreCuts(false)
+  : verbose(1), name(modname), isActive(false), flagAuger(false),
+    flagAugerCascade(false), flagPIXE(false), ignoreCuts(false),
+    isActiveLocked(false), isAugerLocked(false),
+    isAugerCascadeLocked(false), isPIXELocked(false)
 {
   theParameters = G4EmParameters::Instance();
   vdyn.reserve(5);
   theCoupleTable = nullptr;
   G4String gg = "gammaPIXE";
   G4String ee = "e-PIXE";
-  if(pixeIDg < 0) { pixeIDg = G4PhysicsModelCatalog::Register(gg); }
-  if(pixeIDe < 0) { pixeIDe = G4PhysicsModelCatalog::Register(ee); }
+  if(pixeIDg < 0) { 
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&atomDeexcitationMutex);
+    if(pixeIDg < 0) { 
+#endif
+      pixeIDg = G4PhysicsModelCatalog::Register(gg); 
+      pixeIDe = G4PhysicsModelCatalog::Register(ee); 
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&atomDeexcitationMutex);
+#endif
+  }
   gamma = G4Gamma::Gamma();
 }
 
@@ -91,6 +105,8 @@ G4VAtomDeexcitation::~G4VAtomDeexcitation()
 
 void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 {
+  theParameters->DefineRegParamForDeex(this);
+
   // Define list of couples
   theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
@@ -103,18 +119,19 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   activeZ.resize(93, false);
 
   // initialisation of flags and options
-  isActive   = theParameters->Fluo();
-  flagAuger  = theParameters->Auger();
-  flagAugerCascade = theParameters->AugerCascade();
-  flagPIXE   = theParameters->Pixe();
+  // normally there is no locksed flags
+  if(!isActiveLocked)       { isActive  = theParameters->Fluo(); }
+  if(!isAugerLocked)        { flagAuger = theParameters->Auger(); }
+  if(!isAugerCascadeLocked) { flagAugerCascade = theParameters->AugerCascade(); }
+  if(!isPIXELocked)         { flagPIXE  = theParameters->Pixe(); }
   ignoreCuts = theParameters->DeexcitationIgnoreCut();
-
-  // check if deexcitation is active for the given run
-  if( !isActive ) { return; }
 
   // Define list of regions
   size_t nRegions = deRegions.size();
+  // check if deexcitation is active for the given run
+  if(!isActive && 0 == nRegions) { return; }
 
+  // if no active regions add a world
   if(0 == nRegions) {
     SetDeexcitationActiveRegion("World",isActive,flagAuger,flagPIXE);
     nRegions = deRegions.size();
@@ -135,7 +152,9 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     if(reg && 0 < numOfCouples) {
       const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
       if(0 < verbose) {
-        G4cout << "          " << activeRegions[j] << G4endl;  
+        G4cout << "          " << activeRegions[j]
+	       << "  " << deRegions[j]  << "  " << AugerRegions[j]
+	       << "  " << PIXERegions[j] << G4endl;  
       }
       for(G4int i=0; i<numOfCouples; ++i) {
         const G4MaterialCutsCouple* couple =
@@ -151,7 +170,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   G4int nelm = G4Element::GetNumberOfElements();
   //G4cout << nelm << G4endl;
   for(G4int k=0; k<nelm; ++k) {
-    G4int Z = G4lrint((*(G4Element::GetElementTable()))[k]->GetZ());
+    G4int Z = (*(G4Element::GetElementTable()))[k]->GetZasInt();
     if(Z > 5 && Z < 93) { 
       activeZ[Z] = true;
       //G4cout << "!!! Active de-excitation Z= " << Z << G4endl;  
@@ -161,6 +180,14 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   // Initialise derived class
   InitialiseForNewRun();
 
+  if(0 < verbose && flagAuger) {
+    G4cout << "### ===  Auger cascade flag: " << flagAugerCascade 
+	   << G4endl;
+  }
+  if(0 < verbose) {
+    G4cout << "### ===  Ignore cuts flag:   " << ignoreCuts
+	   << G4endl;
+  }
   if(0 < verbose && flagPIXE) {
     G4cout << "### ===  PIXE model for hadrons: " 
            << theParameters->PIXECrossSectionModel()
@@ -183,23 +210,23 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   if(rname == "DefaultRegionForParallelWorld") { return; }
 
   G4String ss = rname;
-  //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << ss 
-  //         << "  " << valDeexcitation << "  " << valAuger
-  //         << "  " << valPIXE << G4endl;
+  /*  
+  G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << ss 
+         << "  " << valDeexcitation << "  " << valAuger
+         << "  " << valPIXE << G4endl;
+  */
   if(ss == "world" || ss == "World" || ss == "WORLD") {
     ss = "DefaultRegionForTheWorld";
   }
   size_t n = deRegions.size();
-  if(n > 0) {
-    for(size_t i=0; i<n; ++i) {
+  for(size_t i=0; i<n; ++i) {
  
-      // Region already exist
-      if(ss == activeRegions[i]) {
-        deRegions[i] = valDeexcitation;
-        AugerRegions[i] = valAuger;
-        PIXERegions[i] = valPIXE;
-        return; 
-      } 
+    // Region already exist
+    if(ss == activeRegions[i]) {
+      deRegions[i] = valDeexcitation;
+      AugerRegions[i] = valAuger;
+      PIXERegions[i] = valPIXE;
+      return;  
     }
   }
   // New region
@@ -208,16 +235,40 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   AugerRegions.push_back(valAuger);
   PIXERegions.push_back(valPIXE);
 
-  // if de-excitation defined fo rthe world volume 
-  // it should be active everywhere
+  // if de-excitation defined for the world volume 
+  // it should be active for all G4Regions
   if(ss == "DefaultRegionForTheWorld") {
     G4RegionStore* regions = G4RegionStore::GetInstance();
     G4int nn = regions->size();
     for(G4int i=0; i<nn; ++i) {
+      if(ss == (*regions)[i]->GetName()) { continue; }
       SetDeexcitationActiveRegion((*regions)[i]->GetName(), valDeexcitation,
                                   valAuger, valPIXE);
                                   
     }
+  }
+}
+
+void G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,  
+					    const G4AtomicShell* as, 
+					    G4int Z, G4int idx)
+{
+  G4double gCut = DBL_MAX;
+  if(ignoreCuts) {
+    gCut = 0.0;
+  } else if (theCoupleTable) {
+    gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
+  }
+  if(gCut < as->BindingEnergy()) {
+    G4double eCut = DBL_MAX;
+    if(CheckAugerActiveRegion(idx)) {
+      if(ignoreCuts) {
+        eCut = 0.0;
+      } else if (theCoupleTable) {
+        eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
+      }
+    }
+    GenerateParticles(v, as, Z, gCut, eCut);
   }
 }
 
@@ -265,7 +316,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
   // loop over deexcitations
   for(G4int i=0; i<nelm; ++i) {
-    G4int Z = G4lrint((*theElementVector)[i]->GetZ());
+    G4int Z = (*theElementVector)[i]->GetZasInt();
     if(activeZ[Z] && Z < 93) {  
       G4int nshells = 
         std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());

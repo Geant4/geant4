@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheRayTracer.cc 86973 2014-11-21 11:57:27Z gcosmo $
 //
 //
 //
@@ -207,7 +206,7 @@ G4bool G4TheRayTracer::CreateBitMap()
   G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(pWorld);
   G4ProcessVector* pVector
     = G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
-  for (G4int j=0; j < pVector->size(); ++j) {
+  for (std::size_t j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->BuildPhysicsTable(*(G4Geantino::GeantinoDefinition()));
   }
 
@@ -275,14 +274,14 @@ G4bool G4TheRayTracer::CreateBitMap()
 	theRayShooter->Shoot(anEvent,rayPosition,rayDirection.unit());
 	theEventManager->ProcessOneEvent(anEvent);
 	succeeded = GenerateColour(anEvent);
-	colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));
-	colorG[iCoord] = (unsigned char)(int(255*rayColour.GetGreen()));
-	colorB[iCoord] = (unsigned char)(int(255*rayColour.GetBlue()));
+	colorR[iCoord] = (unsigned char)(G4int(255*rayColour.GetRed()));
+	colorG[iCoord] = (unsigned char)(G4int(255*rayColour.GetGreen()));
+	colorB[iCoord] = (unsigned char)(G4int(255*rayColour.GetBlue()));
       } else {  // Ray does not intercept world at all.
 	// Store background colour...
-	colorR[iCoord] = (unsigned char)(int(255*backgroundColour.GetRed()));
-	colorG[iCoord] = (unsigned char)(int(255*backgroundColour.GetGreen()));
-	colorB[iCoord] = (unsigned char)(int(255*backgroundColour.GetBlue()));
+	colorR[iCoord] = (unsigned char)(G4int(255*backgroundColour.GetRed()));
+	colorG[iCoord] = (unsigned char)(G4int(255*backgroundColour.GetGreen()));
+	colorB[iCoord] = (unsigned char)(G4int(255*backgroundColour.GetBlue()));
 	succeeded = true;
       }
 
@@ -318,7 +317,7 @@ G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent)
   { initialColour = GetSurfaceColour(trajectory->GetPointC(nPoint-1)); }
   rayColour = Attenuate(trajectory->GetPointC(nPoint-1),initialColour);
 
-  for(int i=nPoint-2;i>=0;i--)
+  for(G4int i=nPoint-2;i>=0;--i)
   {
     G4Colour surfaceColour = GetSurfaceColour(trajectory->GetPointC(i));
     G4double weight = 1.0 - surfaceColour.GetAlpha();

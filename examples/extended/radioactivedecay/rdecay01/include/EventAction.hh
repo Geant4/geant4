@@ -26,7 +26,10 @@
 /// \file radioactivedecay/rdecay01/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
+<<<<<<< HEAD
 // $Id: EventAction.hh 92499 2015-09-02 07:25:02Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

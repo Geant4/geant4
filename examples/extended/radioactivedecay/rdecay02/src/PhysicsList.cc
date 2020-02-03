@@ -26,9 +26,7 @@
 /// \file hadronic/Hadr03/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 70268 2013-05-28 14:17:50Z maire $
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 
@@ -38,11 +36,18 @@
 
 #include "EmStandardPhysics.hh"
 #include "G4DecayPhysics.hh"
+<<<<<<< HEAD
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
+=======
+#include "G4NuclideTable.hh"
+#include "BiasedRDPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronPhysicsFTFP_BERT.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronPhysicsINCLXX.hh"
 #include "G4IonElasticPhysics.hh"
@@ -60,7 +65,6 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
 :G4VModularPhysicsList()
@@ -88,14 +92,21 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new G4DecayPhysics());
 
   // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());
+  RegisterPhysics(new BiasedRDPhysics());
             
   // Hadron Elastic scattering
+<<<<<<< HEAD
   ////RegisterPhysics( new G4HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic physics
   ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+=======
+  RegisterPhysics( new G4HadronElasticPhysics(verb) );
+  
+  // Hadron Inelastic physics
+  RegisterPhysics( new G4HadronPhysicsFTFP_BERT(verb));
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   

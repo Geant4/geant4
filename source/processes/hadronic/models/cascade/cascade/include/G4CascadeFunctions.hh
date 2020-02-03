@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeFunctions.hh 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
 //		using a static variable in the function as a buffer.

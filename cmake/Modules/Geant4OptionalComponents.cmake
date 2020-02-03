@@ -28,11 +28,18 @@
 # As requested by ATLAS, an additional option for preferring use of
 # CLHEP's granular libs is provided when using a system CLHEP.
 #
+<<<<<<< HEAD
 # KNOWNISSUE : For internal CLHEP, how to deal with static and shared?
 if(CLHEP_ROOT_DIR)
   set(_default_use_system_clhep ON)
 else()
   set(_default_use_system_clhep OFF)
+=======
+set(_default_use_system_clhep OFF)
+if(CLHEP_ROOT_DIR)
+  set(_default_use_system_clhep ON)
+  list(INSERT CMAKE_PREFIX_PATH 0 "${CLHEP_ROOT_DIR}")
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 endif()
 
 option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" ${_default_use_system_clhep})
@@ -53,6 +60,7 @@ if(GEANT4_USE_SYSTEM_CLHEP)
     set(__system_clhep_mode " (granular)")
   endif()
 
+<<<<<<< HEAD
   # Find CLHEP using package-mode (i.e. FindCLHEP)
   # This will set up imported targets for us, but we need
   # to set CLHEP_LIBRARIES afterwards to use these
@@ -67,6 +75,11 @@ if(GEANT4_USE_SYSTEM_CLHEP)
   endif()
 
   set(GEANT4_USE_SYSTEM_CLHEP TRUE)
+=======
+  find_package(CLHEP 2.3.3.0 REQUIRED ${__g4_clhep_components} CONFIG)
+
+  geant4_save_package_variables(CLHEP CLHEP_DIR)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 else()
   set(CLHEP_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_CLHEP TRUE)
@@ -100,67 +113,123 @@ else()
   if(GEANT4_USE_SYSTEM_EXPAT)
     # If system package requested, make damn sure we find it
     find_package(EXPAT REQUIRED)
+<<<<<<< HEAD
+=======
+    # Shim only needed until we require CMake >= 3.10
+    include("${CMAKE_CURRENT_LIST_DIR}/G4EXPATShim.cmake")
+
+    # Check version requirement externally to provide information
+    # on using internal expat.
+    if(${EXPAT_VERSION_STRING} VERSION_LESS "2.0.1")
+      set(__badexpat_include_dir ${EXPAT_INCLUDE_DIR})
+      set(__badexpat_library ${EXPAT_LIBRARY})
+      unset(EXPAT_FOUND)
+      unset(EXPAT_INCLUDE_DIR CACHE)
+      unset(EXPAT_LIBRARY CACHE)
+      message(FATAL_ERROR
+"Detected system expat header and library:
+EXPAT_INCLUDE_DIR = ${__badexpat_include_dir}
+EXPAT_LIBRARY = ${__badexpat_library}
+are of insufficient version '${EXPAT_VERSION_STRING}' (Required >= 2.0.1)
+Set the above CMake variables to point to an expat install of the required version, or set GEANT4_USE_SYSTEM_EXPAT to OFF to use Geant4's packaged version.")
+    endif()
+
+    # Backward compatibility for sources.cmake using the variable
+    set(EXPAT_LIBRARIES EXPAT::EXPAT)
+    geant4_save_package_variables(EXPAT EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   else()
     set(EXPAT_FOUND TRUE)
     set(GEANT4_USE_BUILTIN_EXPAT TRUE)
     set(EXPAT_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/expat/include)
-    if(BUILD_SHARED_LIBS)
-      set(EXPAT_LIBRARIES G4expat)
-    else()
-      set(EXPAT_LIBRARIES G4expat-static)
-    endif()
+    set(EXPAT_LIBRARIES G4expat)
   endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
+geant4_add_feature(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
 
 #-----------------------------------------------------------------------
-# Find required ZLIB package
-# Default to use internal zlib, otherwise point interface variables to
-# internal zlib
+# Find required ZLIB package, defaulting in internal
+# Rely on ZLIB::ZLIB imported target (since CMake 3.1)
 option(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_ZLIB)
   find_package(ZLIB REQUIRED)
-
-  # NB : FindZLIB on cmake < 2.8 does not set the ZLIB_INCLUDE_DIRS
-  # variable, only the ZLIB_INCLUDE_DIR variable. Set the DIRS variable
-  # here for backward compatibility.
-  if(${CMAKE_VERSION} VERSION_LESS "2.8.0")
-    set(ZLIB_INCLUDE_DIRS "${ZLIB_INCLUDE_DIR}")
-  endif()
+  # Backward compatibility for sources.cmake using the variable
+  set(ZLIB_LIBRARIES ZLIB::ZLIB)
+  geant4_save_package_variables(ZLIB ZLIB_INCLUDE_DIR ZLIB_LIBRARY_DEBUG ZLIB_LIBRARY_RELEASE)
 else()
   set(ZLIB_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_ZLIB TRUE)
-  set(ZLIB_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/zlib/include
-                        ${PROJECT_BINARY_DIR}/source/externals/zlib)
-  if(BUILD_SHARED_LIBS)
-    set(ZLIB_LIBRARIES G4zlib)
-  else()
-    set(ZLIB_LIBRARIES G4zlib-static)
-  endif()
+  set(ZLIB_LIBRARIES G4zlib)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
+geant4_add_feature(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
 
 #-----------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
-#
+# Relies on XercesC::XercesC imported target (since CMake 3.5)
+set(_default_use_gdml OFF)
 if(XERCESC_ROOT_DIR)
   set(_default_use_gdml ON)
-else()
-  set(_default_use_gdml OFF)
+  list(INSERT CMAKE_PREFIX_PATH 0 "${XERCESC_ROOT_DIR}")
 endif()
 
-option(GEANT4_USE_GDML "Build Geant4 with GDML support" ${_default_use_gdml}
-)
+option(GEANT4_USE_GDML "Build Geant4 with GDML support" ${_default_use_gdml})
 
 if(GEANT4_USE_GDML)
   find_package(XercesC REQUIRED)
+  geant4_save_package_variables(XercesC XercesC_INCLUDE_DIR XercesC_LIBRARY_DEBUG XercesC_LIBRARY_RELEASE)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
+geant4_add_feature(GEANT4_USE_GDML "Building Geant4 with GDML support")
 
 #-----------------------------------------------------------------------
+<<<<<<< HEAD
+=======
+# Optional use of smart stack
+#  With this option, G4StackManager uses G4SmartTrackStack instead of
+# ordinary G4TrackStack as the Urgent stack. G4SmartTrackStack tries to
+# stick to the same kind of particle as the previous track when Pop()
+# is called. This G4SmartTrackStack may provide some performance
+# improvements in particular for crystal calorimeters in high energy
+# physics experiments. On the other hand, G4SmartTrackStack won't give
+# any benefit for granular geometry or lower energy applications, while
+# it may causes some visible memory footprint increase.
+
+option(GEANT4_USE_SMARTSTACK "Use smart track stack" OFF)
+mark_as_advanced(GEANT4_USE_SMARTSTACK)
+geant4_add_feature(GEANT4_USE_SMARTSTACK "Use smart track stack")
+
+#-----------------------------------------------------------------------
+# Optional Support for TiMemory -- timing, memory, HW counters, roofline, gperftools, etc.
+# easily installed via:
+#   git clone https://github.com/NERSC/timemory.git timemory
+#   pip install -vvv ./timemory
+#       and setting timemory_DIR to `python -c "import sys; print(sys.prefix)"`
+#
+set(_default_use_timemory OFF)
+if(TiMemory_DIR)
+  set(_default_use_timemory ON)
+endif()
+
+option(GEANT4_USE_TIMEMORY "Build Geant4 with TiMemory support" ${_default_use_timemory})
+mark_as_advanced(GEANT4_USE_TIMEMORY)
+
+if(GEANT4_USE_TIMEMORY)
+  set(_G4timemory_DEFAULT_COMPONENTS headers caliper papi gotcha gperftools-cpu vector)
+  set(G4timemory_COMPONENTS "${_G4timemory_DEFAULT_COMPONENTS}" CACHE STRING
+      "timemory INTERFACE libraries that activate various capabilities in toolkit")
+  set(G4timemory_VERSION 3.0)
+  set(timemory_FIND_COMPONENTS_INTERFACE geant4-timemory)
+  find_package(timemory ${G4timemory_VERSION} REQUIRED COMPONENTS ${G4timemory_COMPONENTS})
+  set(timemory_LIBRARIES geant4-timemory)
+  geant4_save_package_variables(timemory timemory_DIR)
+endif()
+
+geant4_add_feature(GEANT4_USE_TIMEMORY "Building Geant4 with TiMemory support")
+
+#-----------------------------------------------------------------------
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 # Optional support for G3TOG4 convertion interface.
 # We do not build the rztog4 application.
 # -- OLDER NOTES --
@@ -184,6 +253,13 @@ endif()
 set(GEANT4_USOLIDS_SHAPES
   BOX
   CONS
+<<<<<<< HEAD
+=======
+  CTUBS
+  ELLIPSOID
+  ELLIPTICALCONE
+  ELLIPTICALTUBE
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   EXTRUDEDSOLID
   GENERICPOLYCONE
   GENERICTRAP
@@ -229,18 +305,34 @@ endif()
 
 # - G4USolids setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
+<<<<<<< HEAD
   find_package(USolids REQUIRED)
 
   if(GEANT4_USE_ALL_USOLIDS)
     set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_USOLIDS")
     GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing all Geant4 solids with USolids equivalents (EXPERIMENTAL)")
+=======
+  # VecGeom's config file doesn't support versioning...
+  find_package(VecGeom REQUIRED)
+  # Shim until VecGeom supports config mode properly
+  include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
+  # Backward Compatibility
+  set(VECGEOM_LIBRARIES VecGeom::VecGeom)
+
+  geant4_save_package_variables(VecGeom VecGeom_DIR)
+
+  if(GEANT4_USE_ALL_USOLIDS)
+    set(G4GEOM_USE_USOLIDS TRUE)
+    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with all VecGeom equivalents (EXPERIMENTAL)")
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   else()
-    set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_PARTIAL_USOLIDS")
+    set(G4GEOM_USE_PARTIAL_USOLIDS TRUE)
     foreach(__g4_usolid_shape ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST})
-      list(APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_U${__g4_usolid_shape}")
+      set(G4GEOM_USE_U${__g4_usolid_shape} TRUE)
     endforeach()
     GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with USolids equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
   endif()
+<<<<<<< HEAD
 
   # Combined definitions
   add_definitions(${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
@@ -248,6 +340,8 @@ if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   # Add USolids inc dirs here - can be removed once USolids supports
   # INTERFACE_INCLUDE_DIRECTORIES
   include_directories(${USOLIDS_INCLUDE_DIRS})
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 endif()
 
 
@@ -259,7 +353,45 @@ mark_as_advanced(GEANT4_USE_FREETYPE)
 
 if(GEANT4_USE_FREETYPE)
   find_package(Freetype REQUIRED)
+  # Shim only needed until we require CMake >= 3.10
+  include("${CMAKE_CURRENT_LIST_DIR}/G4FreetypeShim.cmake")
+
+  geant4_save_package_variables(Freetype
+    FREETYPE_INCLUDE_DIR_freetype2
+    FREETYPE_INCLUDE_DIR_ft2build
+    FREETYPE_LIBRARY_DEBUG
+    FREETYPE_LIBRARY_RELEASE)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_FREETYPE "Building Geant4 analysis library with Freetype support")
+geant4_add_feature(GEANT4_USE_FREETYPE "Building Geant4 analysis library with Freetype support")
 
+<<<<<<< HEAD
+=======
+#-----------------------------------------------------------------------
+# Optional support for HDF5
+# - Requires external HDF5 1.8 or higher install
+# - Install must be MT safe if building Geant4 in MT mode
+#
+option(GEANT4_USE_HDF5 "Build Geant4 analysis library with HDF5 support" OFF)
+mark_as_advanced(GEANT4_USE_HDF5)
+
+if(GEANT4_USE_HDF5)
+  find_package(HDF5 1.8 REQUIRED)
+  include("${CMAKE_CURRENT_LIST_DIR}/G4HDF5Shim.cmake")
+  # Backward compatibility
+  set(HDF5_LIBRARIES Geant4::HDF5)
+
+  # May have found via config mode...
+  if(HDF5_DIR)
+    geant4_save_package_variables(HDF5 HDF5_DIR)
+  else()
+    # Otherwise almost certainly used compiler wrapper
+    geant4_save_package_variables(HDF5
+      HDF5_C_COMPILER_EXECUTABLE
+      HDF5_C_LIBRARY_hdf5)
+    endif()
+endif()
+
+GEANT4_ADD_FEATURE(GEANT4_USE_HDF5 "Building Geant4 analysis library with HDF5 support")
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

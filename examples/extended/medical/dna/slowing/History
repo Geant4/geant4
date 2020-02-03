@@ -1,0 +1,29 @@
+     =========================================================
+ 		      Geant4 - slowing example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+26 Nov 19 - tag slowing-V10-05-00 - I. Hrivnacova
+- Fixed Doxygen warnings
+
+22 Jul 18 - tag slowing-V10-04-02 - S. Incerti 
+- removed obsolete RanecuEngine
+
+13 June 2018 - tag slowing-V10-04-01 - S. Incerti
+- updated slowing.in
+
+09 May 2018 - tag slowing-V10-04-00 - B. Morgan
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+26 Jul 2017 - tag slowing-V10-03-02 - S. Incerti
+- apply coding guidelines
+
+03 Mar 2017 - tag slowing-V10-03-01 - S. Incerti
+- fix warnigs
+
+02 Mar 2017 - tag slowing-V10-03-00 - S. Incerti
+- creation

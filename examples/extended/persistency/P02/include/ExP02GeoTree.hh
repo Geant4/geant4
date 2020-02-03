@@ -26,7 +26,10 @@
 /// \file persistency/P02/include/ExP02GeoTree.hh
 /// \brief Definition of the ExP02GeoTree class
 //
+<<<<<<< HEAD
 // $Id: ExP02GeoTree.hh 71727 2013-06-21 07:55:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #ifndef INCLUDE_EXP02GEOTREE_H 
 #define INCLUDE_EXP02GEOTREE_H 1

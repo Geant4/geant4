@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/HepMCG4AsciiReader.hh
 /// \brief Definition of the HepMCG4AsciiReader class
 //
-// $Id: HepMCG4AsciiReader.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef HEPMC_G4_ASCII_READER_H

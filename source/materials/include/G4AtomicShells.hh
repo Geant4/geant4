@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AtomicShells.hh 94016 2015-11-05 10:14:49Z gcosmo $
-
 // class description
 //
 // Class consists of atomic subshell binding energies for first 100 elements.
@@ -52,9 +49,7 @@
 #ifndef G4ATOMICSHELLS_H
 #define G4ATOMICSHELLS_H
 
-
 #include "globals.hh"
-#include "templates.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -62,20 +57,28 @@ class G4AtomicShells
 {
 public :  //with description
 
-static G4int    GetNumberOfShells(G4int Z);
-static G4int    GetNumberOfElectrons(G4int Z, G4int SubshellNb);
-static G4double GetBindingEnergy (G4int Z, G4int SubshellNb);
-       G4double GetTotalBindingEnergy (G4int Z);
+  static G4int    GetNumberOfShells(G4int Z);
+  static G4int    GetNumberOfElectrons(G4int Z, G4int SubshellNb);
+  static G4int    GetNumberOfFreeElectrons(G4int Z, G4double th);
+  static G4double GetBindingEnergy(G4int Z, G4int SubshellNb);
+  static G4double GetTotalBindingEnergy(G4int Z);
 
 private :
 
-static const G4int    fNumberOfShells[101];
-static const G4int    fIndexOfShells[101];
-static const G4int    fNumberOfElectrons[1540];
-static const G4double fBindingEnergies[1540];
+#ifdef G4VERBOSE
+  static G4int PrintErrorZ(G4int Z, const G4String&);
+  static G4int PrintErrorShell(G4int Z, G4int SubshellNb, const G4String&);
+#endif
+
+  G4AtomicShells(const G4AtomicShells&) = delete;
+  const G4AtomicShells& operator=(const G4AtomicShells&) = delete;
+
+  static const G4int    fNumberOfShells[101];
+  static const G4int    fIndexOfShells[101];
+  static const G4int    fNumberOfElectrons[1540];
+  static const G4double fBindingEnergies[1540];
 
 };
-
 
 /*   *********************************************************
 Below is the atomic subshell binding energytable for elements Z=1-100.

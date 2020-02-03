@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 74059 2013-09-20 10:01:33Z gcosmo $
 
 name := G4RayTracer
 
@@ -36,6 +35,7 @@ CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
+CPPFLAGS += -I$(G4BASE)/geometry/magneticfield/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/detector/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
@@ -48,6 +48,7 @@ CPPFLAGS += -I$(G4BASE)/particles/bosons/include
 CPPFLAGS += -I$(G4BASE)/particles/management/include
 CPPFLAGS += -I$(G4BASE)/processes/management/include
 CPPFLAGS += -I$(G4BASE)/processes/cuts/include
+CPPFLAGS += -I$(G4BASE)/processes/scoring/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk

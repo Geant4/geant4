@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DeuteronEvaporationProbability.hh 89518 2015-04-15 14:43:30Z gcosmo $
-//
 // J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
@@ -45,27 +43,24 @@ class G4DeuteronEvaporationProbability : public G4EvaporationProbability
 {
 public:
 
-  G4DeuteronEvaporationProbability();
+  explicit G4DeuteronEvaporationProbability();
 
-  virtual ~G4DeuteronEvaporationProbability();
+  ~G4DeuteronEvaporationProbability() override;
 
 protected:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+  G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+  G4double CalcBetaParam(const G4Fragment & fragment) override;
 
 private:  
 
   G4DeuteronEvaporationProbability(const G4DeuteronEvaporationProbability &right);
-
-  const G4DeuteronEvaporationProbability & operator=(const G4DeuteronEvaporationProbability &right);
+  const G4DeuteronEvaporationProbability & operator=
+  (const G4DeuteronEvaporationProbability &right);
   G4bool operator==(const G4DeuteronEvaporationProbability &right) const;
   G4bool operator!=(const G4DeuteronEvaporationProbability &right) const;
-
-  G4DeuteronCoulombBarrier theCoulombBarrier; 
 };
-
 
 #endif
 

@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWtViewer.hh 85263 2014-10-27 08:58:31Z gcosmo $
 //
 // 
 // Class G4OpenGLImmediateWtViewer : a class derived from
 //   G4OpenGLWtViewer and G4OpenGLImmediateViewer.
 
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
 
 #ifndef G4OPENGLIMMEDIATEWTVIEWER_HH
 #define G4OPENGLIMMEDIATEWTVIEWER_HH

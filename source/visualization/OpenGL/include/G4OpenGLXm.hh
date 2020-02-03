@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // John Allison  16th July 2015
 // Base class for OpenGLImmediate/StoredXm graphics system factories.

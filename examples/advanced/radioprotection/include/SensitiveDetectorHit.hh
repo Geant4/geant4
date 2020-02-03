@@ -46,7 +46,7 @@ class SensitiveDetectorHit : public G4VHit
 
     // operators
     const SensitiveDetectorHit& operator=(const SensitiveDetectorHit&);
-    G4int operator==(const SensitiveDetectorHit&) const;
+    G4bool operator==(const SensitiveDetectorHit&) const;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

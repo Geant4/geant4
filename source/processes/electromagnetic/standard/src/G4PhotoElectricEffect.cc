@@ -23,48 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 //
 //------------------ G4PhotoElectricEffect physics process ---------------------
 //                   by Michel Maire, 24 May 1996
 //
-// 12-06-96, Added SelectRandomAtom() method, by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 17-09-96, PartialSumSigma(i)
-//           split of ComputeBindingEnergy, M.Maire
-// 08-01-97, crossection table + meanfreepath table, M.Maire
-// 13-03-97, adapted for the new physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 04-06-98, in DoIt, secondary production condition:
-//                        range > std::min(threshold,safety)
-// 13-08-98, new methods SetBining() PrintInfo()
-// 17-11-98, use table of Atomic shells in PostStepDoIt
-// 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma
-// 20-05-99, protection against very low energy photons ,L.Urban
-// 08-06-99, removed this above protection from the DoIt. mma
-// 21-06-00, in DoIt, killing photon: aParticleChange.SetEnergyChange(0.); mma
-// 22-06-00, in DoIt, absorbe very low energy photon (back to 20-05-99); mma
-// 22-02-01, back to 08-06-99 after correc in SandiaTable (materials-V03-00-05)
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 13-07-01, DoIt: suppression of production cut of the electron (mma)
-// 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)
-// 20-09-01, DoIt: fminimalEnergy of generated electron = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
-// 10-01-02, moved few function from icc to cc
-// 17-04-02, Keep only Sandia crossSections. Remove BuildPhysicsTables.
-//           Simplify public interface (mma)
-// 29-04-02, Generate theta angle of the photoelectron from Sauter-Gavrila
-//           distribution (mma)
-// 15-01-03, photoelectron theta ditribution : return costeta=1 if gamma>5
-//           (helmut burkhardt)
-// 21-04-05  Migrate to model interface and inherit 
-//           from G4VEmProcess (V.Ivanchenko)
-// 04-05-05, Make class to be default (V.Ivanchenko)
-// 09-08-06, add SetModel(G4VEmModel*) (mma)
-// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
+// Modified by Michel Maire and Vladimir Ivanchenko
+//
 // -----------------------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -105,11 +70,11 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!EmModel(1)) { SetEmModel(new G4PEEffectFluoModel(),1); }
+    if(!EmModel()) { SetEmModel(new G4PEEffectFluoModel()); }
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(1, EmModel(1));
+    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(1, EmModel());
   }
 }
 
@@ -117,5 +82,13 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4PhotoElectricEffect::PrintInfo()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4PhotoElectricEffect::ProcessDescription(std::ostream& out) const
+{
+  out << "  Photoelectric effect";
+  G4VEmProcess::ProcessDescription(out);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

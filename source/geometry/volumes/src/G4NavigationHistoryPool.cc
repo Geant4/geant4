@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
 // G4NavigationHistoryPool
 //
 // Implementation for singleton container
 //
-// History:
 // 07.05.14 G.Cosmo Initial version
 // --------------------------------------------------------------------
 
@@ -41,7 +37,8 @@
 // Static class variables
 // ***************************************************************************
 //
-G4ThreadLocal G4NavigationHistoryPool* G4NavigationHistoryPool::fgInstance = 0;
+G4ThreadLocal G4NavigationHistoryPool*
+G4NavigationHistoryPool::fgInstance = nullptr;
 
 // ***************************************************************************
 // Private constructor: Construct underlying containers
@@ -59,7 +56,7 @@ G4NavigationHistoryPool::G4NavigationHistoryPool()
 //
 G4NavigationHistoryPool::~G4NavigationHistoryPool() 
 {
-  Clean(); fgInstance = 0;
+  Clean(); fgInstance = nullptr;
 }
 
 // ***************************************************************************
@@ -110,7 +107,7 @@ void G4NavigationHistoryPool::Reset()
 //
 G4NavigationHistoryPool* G4NavigationHistoryPool::GetInstance()
 {
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = new G4NavigationHistoryPool;
   }

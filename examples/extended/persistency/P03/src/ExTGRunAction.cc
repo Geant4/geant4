@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRunAction.cc 76943 2013-11-19 09:57:34Z gcosmo $
 //
 /// \file persistency/P03/src/ExTGRunAction.cc
 /// \brief Implementation of the ExTGRunAction class

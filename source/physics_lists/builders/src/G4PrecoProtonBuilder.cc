@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PrecoProtonBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,14 +52,6 @@ G4PrecoProtonBuilder()
   theModel = new G4PreCompoundModel(new G4ExcitationHandler);
 }
 
-G4PrecoProtonBuilder::
-~G4PrecoProtonBuilder() {}
-
-void G4PrecoProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
 void G4PrecoProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
 {
@@ -70,4 +61,3 @@ Build(G4ProtonInelasticProcess * aP)
   aP->AddDataSet(new G4ProtonInelasticCrossSection);  
 }
 
-// 2002 by J.P. Wellisch

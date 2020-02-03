@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VGCellFinder implementation
 //
-// $Id: G4VGCellFinder.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4VGCellFinder.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4VGCellFinder.hh"
 
 G4VGCellFinder::G4VGCellFinder()
-{}
+{
+}
+
 G4VGCellFinder::~G4VGCellFinder()
-{}
+{
+}

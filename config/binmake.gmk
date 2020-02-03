@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: binmake.gmk 94578 2015-11-25 08:11:03Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -51,7 +54,12 @@ ifndef INCFLAGS
               -I$(G4BASE)/analysis/csv/include \
               -I$(G4BASE)/analysis/root/include \
               -I$(G4BASE)/analysis/xml/include \
+<<<<<<< HEAD
               -I$(G4BASE)/analysis/parameters/include \
+=======
+              -I$(G4BASE)/analysis/factory/include \
+              -I$(G4BASE)/analysis/accumulables/include \
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
@@ -191,6 +199,7 @@ ifdef G4EXLIB
 #     For the example dependent directory, keep the 
 #     path to the shared lib in the executable.
       LDFLAGS += $(G4RUNPATHOPTION)$(G4TMPDIR)
+      LDFLAGS += $(G4RUNPATHOPTION)$(G4LIB)/$(G4SYSTEM)
     endif
   endif
   include $(G4INSTALL)/config/common.gmk

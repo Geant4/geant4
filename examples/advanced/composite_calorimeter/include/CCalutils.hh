@@ -34,9 +34,8 @@
 #include <fstream>
 #include "globals.hh"
 
-
-G4String operator+(const G4String&, const int);
-G4String operator+(const G4String&, const double);
+G4String operator+(const G4String&, const G4int);
+G4String operator+(const G4String&, const G4double);
 // "number " + i = "number i"
 
 std::ifstream& readName(std::ifstream&, G4String&);
@@ -52,9 +51,8 @@ std::ostream& tab(std::ostream&);
 std::istream& jump(std::istream&);
 // It ignores character until the end of line.
 
-bool openGeomFile(std::ifstream& is, const G4String& pathname, 
-		  const G4String& filename);
+G4bool openGeomFile(std::ifstream& is, const G4String& pathname, 
+                    const G4String& filename);
 // It opens the geometry file, either locally (if it exists) or "remotely".
-
 
 #endif

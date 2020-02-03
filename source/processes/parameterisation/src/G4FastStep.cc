@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc 68056 2013-03-13 14:44:48Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -45,6 +44,7 @@
 #include "G4FastStep.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
@@ -295,11 +295,16 @@ void G4FastStep::Initialize(const G4Track&)
 }
 
 G4FastStep::G4FastStep()
-  : G4VParticleChange()
+  : G4VParticleChange(),
+    theEnergyChange    ( 0.0     ),
+    theTimeChange      ( 0.0     ),
+    theProperTimeChange( 0.0     ),
+    fFastTrack         ( nullptr ),
+    theWeightChange    ( 0.0     )
 {
   if (verboseLevel>2)
   {
-    G4cerr << "G4FastStep::G4FastStep() " << G4endl;
+    G4cerr << "G4FastStep::G4FastStep()" << G4endl;
   }
 }
 
@@ -307,7 +312,7 @@ G4FastStep::~G4FastStep()
 {
   if (verboseLevel>2)
   {
-    G4cerr << "G4FastStep::~G4FastStep() " << G4endl;
+    G4cerr << "G4FastStep::~G4FastStep()" << G4endl;
   }
 }
 
@@ -331,12 +336,14 @@ G4FastStep & G4FastStep::operator=(const G4FastStep &right)
      theMomentumChange             = right.theMomentumChange;
      thePolarizationChange         = right.thePolarizationChange;
      thePositionChange             = right.thePositionChange;
+     theProperTimeChange           = right.theProperTimeChange;
      theTimeChange                 = right.theTimeChange;
      theEnergyChange               = right.theEnergyChange;
      theTrueStepLength             = right.theTrueStepLength;
      theLocalEnergyDeposit         = right.theLocalEnergyDeposit;
      theSteppingControlFlag        = right.theSteppingControlFlag;
      theWeightChange               = right.theWeightChange;
+     fFastTrack                    = right.fFastTrack;
    }
    return *this;
 }
@@ -436,44 +443,23 @@ void G4FastStep::DumpInfo() const
 {
 // use base-class DumpInfo
   G4VParticleChange::DumpInfo();
-
+  
+  G4cout << "        Position - x (mm)   : " <<      G4BestUnit( thePositionChange.x(), "Length" ) << G4endl; 
+  G4cout << "        Position - y (mm)   : " <<      G4BestUnit( thePositionChange.y(), "Length" ) << G4endl;
+  G4cout << "        Position - z (mm)   : " <<      G4BestUnit( thePositionChange.z(), "Length" ) << G4endl;   
+  G4cout << "        Time (ns)           : " <<      G4BestUnit( theTimeChange,         "Time"   ) << G4endl;
+  G4cout << "        Proper Time (ns)    : " <<      G4BestUnit( theProperTimeChange,   "Time"   ) << G4endl;
+  G4int olprc = G4cout.precision(3);
+  G4cout << "        Momentum Direct - x : " << std::setw(20) << theMomentumChange.x() << G4endl;
+  G4cout << "        Momentum Direct - y : " << std::setw(20) << theMomentumChange.y() << G4endl;
+  G4cout << "        Momentum Direct - z : " << std::setw(20) << theMomentumChange.z() << G4endl;
+  G4cout.precision(olprc);
+  G4cout << "        Kinetic Energy (MeV): " <<      G4BestUnit( theEnergyChange,       "Energy" ) << G4endl;
   G4cout.precision(3);
-  G4cout << "        Position - x (mm)   : " 
-       << std::setw(20) << thePositionChange.x()/mm
-       << G4endl; 
-  G4cout << "        Position - y (mm)   : " 
-       << std::setw(20) << thePositionChange.y()/mm
-       << G4endl; 
-  G4cout << "        Position - z (mm)   : " 
-       << std::setw(20) << thePositionChange.z()/mm
-       << G4endl;
-  G4cout << "        Time (ns)           : " 
-       << std::setw(20) << theTimeChange/ns
-       << G4endl;
-  G4cout << "        Proper Time (ns)    : " 
-       << std::setw(20) << theProperTimeChange/ns
-       << G4endl;
-  G4cout << "        Momentum Direct - x : " 
-       << std::setw(20) << theMomentumChange.x()
-       << G4endl;
-  G4cout << "        Momentum Direct - y : " 
-       << std::setw(20) << theMomentumChange.y()
-       << G4endl;
-  G4cout << "        Momentum Direct - z : " 
-       << std::setw(20) << theMomentumChange.z()
-       << G4endl;
-  G4cout << "        Kinetic Energy (MeV): " 
-       << std::setw(20) << theEnergyChange/MeV
-       << G4endl;
-  G4cout << "        Polarization - x    : " 
-       << std::setw(20) << thePolarizationChange.x()
-       << G4endl;
-  G4cout << "        Polarization - y    : " 
-       << std::setw(20) << thePolarizationChange.y()
-       << G4endl;
-  G4cout << "        Polarization - z    : " 
-       << std::setw(20) <<  thePolarizationChange.z()
-       << G4endl;
+  G4cout << "        Polarization - x    : " << std::setw(20) << thePolarizationChange.x() << G4endl;
+  G4cout << "        Polarization - y    : " << std::setw(20) << thePolarizationChange.y() << G4endl;
+  G4cout << "        Polarization - z    : " << std::setw(20) << thePolarizationChange.z() << G4endl;
+  G4cout.precision(olprc);
 }
 
 G4bool G4FastStep::CheckIt(const G4Track& aTrack)

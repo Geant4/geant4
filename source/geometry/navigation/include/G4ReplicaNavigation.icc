@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4ReplicaNavigation.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
 // 
 // class G4ReplicaNavigation Inline implementation
 //
@@ -42,13 +38,13 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
                                   const G4int blocked ) const
 {
   EAxis targetHeaderAxis;
-  G4double coord=0.;
+  G4double coord = 0.;
   G4double targetHeaderMin, targetHeaderMax;
   G4double targetHeaderNodeWidth, targetNodePos;
   G4int targetHeaderNoSlices, targetNodeNo;
   
   targetHeaderAxis = pHead->GetAxis();
-  targetHeaderNoSlices = pHead->GetNoSlices();
+  targetHeaderNoSlices = G4int(pHead->GetNoSlices());
   targetHeaderMin = pHead->GetMinExtent();
   targetHeaderMax = pHead->GetMaxExtent();
   targetHeaderNodeWidth = ( targetHeaderMax-targetHeaderMin )
@@ -93,11 +89,14 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
     {
 
 #ifdef G4DEBUG_NAVIGATION
-      G4cerr << " WARNING: assert in G4ReplicaNavigation::VoxelLocate " 
-             << " has failed : " << G4endl
-             << " (targetNodeNo>=0&&targetNodeNo<targetHeaderNoSlices) " 
-             << " targetNodeNo= " << targetNodeNo 
-             << " Number of Slices =  " << targetHeaderNoSlices << G4endl;
+      std::ostringstream message; 
+      message << "Voxel location failed:" << G4endl
+              << " (targetNodeNo>=0&&targetNodeNo<targetHeaderNoSlices) "
+              << G4endl
+              << " - targetNodeNo= " << targetNodeNo << G4endl
+              << " - Number of Slices =  " << targetHeaderNoSlices;
+      G4Exception("G4ReplicaNavigation::VoxelLocate()",
+                  "GeomNav1002", JustWarning, message);
 #endif
       // In the case of rotational symmetry and an extent over the
       // whole 360 degrees, the above is not true and you can go from
@@ -187,8 +186,10 @@ G4ReplicaNavigation::SetPhiTransformation( const G4double ang,
 {
   G4RotationMatrix rm;
   rm.rotateZ(ang);
-  if ( pVol )
+  if ( pVol != nullptr )
+  {
     *pVol->GetRotation() = rm;
+  }
 }
 
 // ********************************************************************
@@ -206,7 +207,7 @@ G4int G4ReplicaNavigation::GetVerboseLevel() const
 // ********************************************************************
 //
 inline
-void  G4ReplicaNavigation::SetVerboseLevel(G4int level)
+void G4ReplicaNavigation::SetVerboseLevel(G4int level)
 {
   fVerbose = level;
 }
@@ -216,7 +217,7 @@ void  G4ReplicaNavigation::SetVerboseLevel(G4int level)
 // ********************************************************************
 //
 inline
-void  G4ReplicaNavigation::CheckMode(G4bool mode)
+void G4ReplicaNavigation::CheckMode(G4bool mode)
 {
   fCheck = mode;
 }

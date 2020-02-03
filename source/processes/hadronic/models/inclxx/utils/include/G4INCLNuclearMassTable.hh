@@ -55,6 +55,7 @@ namespace G4INCL {
   namespace NuclearMassTable {
     void initialize(const std::string &path, const G4double pMass, const G4double nMass);
     G4double getMass(const G4int A, const G4int Z);
+    G4double getMass(const G4int A, const G4int Z, const G4int S);
     void deleteTable();
   }
 

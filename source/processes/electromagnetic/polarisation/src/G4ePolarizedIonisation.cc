@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc 93113 2015-10-07 07:49:04Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -127,7 +126,7 @@ G4bool G4ePolarizedIonisation::IsApplicable(const G4ParticleDefinition& p)
 
 void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
 		    const G4ParticleDefinition* part,
-		    const G4ParticleDefinition* /*part2*/)
+		    const G4ParticleDefinition*)
 {
   if(!isInitialised) {
 
@@ -137,7 +136,7 @@ void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
     flucModel = FluctModel();
 
     emModel = new  G4PolarizedMollerBhabhaModel();
-    SetEmModel(emModel, 1);
+    SetEmModel(emModel);
     G4EmParameters* param = G4EmParameters::Instance();
     emModel->SetLowEnergyLimit(param->MinKinEnergy());
     emModel->SetHighEnergyLimit(param->MaxKinEnergy());
@@ -176,23 +175,32 @@ G4double G4ePolarizedIonisation::PostStepGetPhysicalInteractionLength(const G4Tr
                                               G4double step,
                                               G4ForceCondition* cond)
 {
-  // save previous value
+  // save previous values
   G4double nLength = theNumberOfInteractionLengthLeft;
+  G4double iLength = currentInteractionLength;
 
-  // *** get unploarised mean free path from lambda table ***
+  // *** get unpolarised mean free path from lambda table ***
+  // this changes theNumberOfInteractionLengthLeft and currentInteractionLength
   G4double x = G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(track, step, cond);
-
+  G4double x0 = x;
+  G4double satFact = 1.;
+  
+  // *** add corrections on polarisation ***
   if(theAsymmetryTable && theTransverseAsymmetryTable && x < DBL_MAX) {
-    G4double curLength = currentInteractionLength*ComputeSaturationFactor(track);
+    satFact = ComputeSaturationFactor(track);
+    G4double curLength = currentInteractionLength*satFact;
+    G4double prvLength = iLength*satFact;
     if(nLength > 0.0) {
       theNumberOfInteractionLengthLeft = 
-	std::max(nLength - step/curLength, 0.0);
+        std::max(nLength - step/prvLength, 0.0);
     }
     x = theNumberOfInteractionLengthLeft * curLength;
   }
   if (verboseLevel>=2) {
-    G4cout << "G4ePolarizedIonisation::PostStepGetPhysicalInteractionLength:  " 
-	   << x/mm << " mm " << G4endl;
+    G4cout << "G4ePolarizedIonisation::PostStepGPIL: " 
+           << std::setprecision(8) << x/mm  << " mm;" << G4endl
+           << "                   unpolarized value: "
+           << std::setprecision(8) << x0/mm << " mm." << G4endl;
   }
   return x;
 }

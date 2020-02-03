@@ -23,30 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VTwistSurface.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
 // G4VTwistSurface class inline methods
 //
-// Author: 
-//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
-//
-// History:
-//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//                 from original version in Jupiter-2.5.02 application.
+// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
+// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
 //=====================================================================
 //* DistanceToPlaneWithV ----------------------------------------------
 
 inline
-G4double G4VTwistSurface::DistanceToPlaneWithV(const G4ThreeVector &p,
-                                          const G4ThreeVector &v,
-                                          const G4ThreeVector &x0,
-                                          const G4ThreeVector &n0,
-                                                G4ThreeVector &xx)
+G4double G4VTwistSurface::DistanceToPlaneWithV(const G4ThreeVector& p,
+                                          const G4ThreeVector& v,
+                                          const G4ThreeVector& x0,
+                                          const G4ThreeVector& n0,
+                                                G4ThreeVector& xx)
 {
    G4double q = n0 * v;
    G4double t = kInfinity;
@@ -59,10 +51,10 @@ G4double G4VTwistSurface::DistanceToPlaneWithV(const G4ThreeVector &p,
 //* DistanceToPlane ---------------------------------------------------
 
 inline
-G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector &p,
-                                     const G4ThreeVector &x0,
-                                     const G4ThreeVector &n0,
-                                           G4ThreeVector &xx)
+G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector& p,
+                                     const G4ThreeVector& x0,
+                                     const G4ThreeVector& n0,
+                                           G4ThreeVector& xx)
 {
    // DistanceToPlane :
    // Calculate distance to plane in local coordinate,
@@ -94,12 +86,12 @@ G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector &p,
 //* DistanceToPlane ---------------------------------------------------
 
 inline
-G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector &p,
-                                     const G4ThreeVector &x0,
-                                     const G4ThreeVector &t1,
-                                     const G4ThreeVector &t2,
-                                           G4ThreeVector &xx,
-                                           G4ThreeVector &n)
+G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector& p,
+                                          const G4ThreeVector& x0,
+                                          const G4ThreeVector& t1,
+                                          const G4ThreeVector& t2,
+                                                G4ThreeVector& xx,
+                                                G4ThreeVector& n)
 {
    // DistanceToPlane :
    // Calculate distance to plane in local coordinate,
@@ -115,10 +107,10 @@ G4double G4VTwistSurface::DistanceToPlane(const G4ThreeVector &p,
 //* DistanceToLine ----------------------------------------------------
 
 inline
-G4double G4VTwistSurface::DistanceToLine(const G4ThreeVector &p,
-                                    const G4ThreeVector &x0,
-                                    const G4ThreeVector &d,
-                                          G4ThreeVector &xx)
+G4double G4VTwistSurface::DistanceToLine(const G4ThreeVector& p,
+                                         const G4ThreeVector& x0,
+                                         const G4ThreeVector& d,
+                                               G4ThreeVector& xx)
 {
    // DistanceToLine :
    // Calculate distance to line,
@@ -267,7 +259,7 @@ G4int G4VTwistSurface::GetAxisType(G4int areacode, G4int whichaxis) const
 //* ComputeGlobalPoint ------------------------------------------------
 
 inline
-G4ThreeVector G4VTwistSurface::ComputeGlobalPoint(const G4ThreeVector &lp) const
+G4ThreeVector G4VTwistSurface::ComputeGlobalPoint(const G4ThreeVector& lp) const
 {
    return fRot * G4ThreeVector(lp) + fTrans;
 }
@@ -276,7 +268,7 @@ G4ThreeVector G4VTwistSurface::ComputeGlobalPoint(const G4ThreeVector &lp) const
 //* ComputeGlobalPoint ------------------------------------------------
 
 inline
-G4ThreeVector G4VTwistSurface::ComputeLocalPoint(const G4ThreeVector &gp) const
+G4ThreeVector G4VTwistSurface::ComputeLocalPoint(const G4ThreeVector& gp) const
 {
    return fRot.inverse() * ( G4ThreeVector(gp) - fTrans ) ;
 }
@@ -284,8 +276,8 @@ G4ThreeVector G4VTwistSurface::ComputeLocalPoint(const G4ThreeVector &gp) const
 //=====================================================================
 //* ComputeGlobalDirection --------------------------------------------
 
-inline
-G4ThreeVector G4VTwistSurface::ComputeGlobalDirection(const G4ThreeVector &lp) const
+inline G4ThreeVector
+G4VTwistSurface::ComputeGlobalDirection(const G4ThreeVector& lp) const
 {
    return fRot * G4ThreeVector(lp); 
 }
@@ -293,8 +285,8 @@ G4ThreeVector G4VTwistSurface::ComputeGlobalDirection(const G4ThreeVector &lp) c
 //=====================================================================
 //* ComputeLocalDirection ---------------------------------------------
 
-inline
-G4ThreeVector G4VTwistSurface::ComputeLocalDirection(const G4ThreeVector &gp) const
+inline G4ThreeVector
+G4VTwistSurface::ComputeLocalDirection(const G4ThreeVector& gp) const
 {
    return fRot.inverse() * G4ThreeVector(gp);
 }
@@ -302,50 +294,54 @@ G4ThreeVector G4VTwistSurface::ComputeLocalDirection(const G4ThreeVector &gp) co
 //=====================================================================
 //* SetNeighbours -----------------------------------------------------
 
-inline
-void G4VTwistSurface::SetNeighbours(G4VTwistSurface* axis0min, G4VTwistSurface* axis1min, 
-                               G4VTwistSurface* axis0max, G4VTwistSurface* axis1max)
+inline void
+G4VTwistSurface::SetNeighbours(G4VTwistSurface* ax0min, G4VTwistSurface* ax1min,
+                               G4VTwistSurface* ax0max, G4VTwistSurface* ax1max)
 {
-   fNeighbours[0] = axis0min;
-   fNeighbours[1] = axis1min;
-   fNeighbours[2] = axis0max;
-   fNeighbours[3] = axis1max;
+   fNeighbours[0] = ax0min;
+   fNeighbours[1] = ax1min;
+   fNeighbours[2] = ax0max;
+   fNeighbours[3] = ax1max;
 }
 
 //=====================================================================
 //* GetNeighbours -----------------------------------------------------
 
-inline
-G4int G4VTwistSurface::GetNeighbours(G4int areacode, G4VTwistSurface** surfaces) 
+inline G4int
+G4VTwistSurface::GetNeighbours(G4int areacode, G4VTwistSurface** surfaces) 
 {
 
-  int sAxis0Min = sAxis0 & sAxisMin ;
-  int sAxis1Min = sAxis1 & sAxisMin ;
-  int sAxis0Max = sAxis0 & sAxisMax ;
-  int sAxis1Max = sAxis1 & sAxisMax ;
+  G4int sAxis0Min = sAxis0 & sAxisMin ;
+  G4int sAxis1Min = sAxis1 & sAxisMin ;
+  G4int sAxis0Max = sAxis0 & sAxisMax ;
+  G4int sAxis1Max = sAxis1 & sAxisMax ;
 
-   G4int i = 0;
+  G4int i = 0;
    
-  if ( (areacode & sAxis0Min ) == sAxis0Min ) {
+  if ( (areacode & sAxis0Min ) == sAxis0Min )
+  {
     surfaces[i] = fNeighbours[0] ;
-    i++ ;
+    ++i ;
   }
   
-  if ( ( areacode & sAxis1Min ) == sAxis1Min ) {
+  if ( ( areacode & sAxis1Min ) == sAxis1Min )
+  {
      surfaces[i] = fNeighbours[1] ;
-   i++ ;
+    ++i ;
     if ( i == 2 ) return i ;
   }
 
-  if ( ( areacode & sAxis0Max ) == sAxis0Max ) {
+  if ( ( areacode & sAxis0Max ) == sAxis0Max )
+  {
     surfaces[i] = fNeighbours[2] ;
-    i++ ;
+    ++i ;
     if ( i == 2 ) return i ;
   }
   
-  if ( ( areacode & sAxis1Max ) == sAxis1Max ) {
+  if ( ( areacode & sAxis1Max ) == sAxis1Max )
+  {
     surfaces[i] = fNeighbours[3] ;
-    i++ ;
+    ++i ;
     if ( i == 2 ) return i ;
   }
     
@@ -358,7 +354,8 @@ G4int G4VTwistSurface::GetNeighbours(G4int areacode, G4VTwistSurface** surfaces)
 inline
 G4ThreeVector G4VTwistSurface::GetCorner(G4int areacode) const
 {
-   if (!(areacode & sCorner)){
+   if (!(areacode & sCorner))
+   {
       std::ostringstream message;
       message << "Area code must represent corner." << G4endl
               << "        areacode = " << areacode;

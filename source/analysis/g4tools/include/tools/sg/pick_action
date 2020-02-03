@@ -187,8 +187,9 @@ public:
   void set_win_size(unsigned a_ww,unsigned int a_wh) {
     m_ww = a_ww;
     m_wh = a_wh;
-    m_state.m_ww = a_ww;
-    m_state.m_wh = a_wh;
+    sg::state& _state = state();
+    _state.m_ww = a_ww;
+    _state.m_wh = a_wh;
     m_states.clear();
     reset();
   }
@@ -202,6 +203,13 @@ public:
     m_b = a_b;
     m_t = a_t;
     set_to_pick_ndc(); //OPTIMIZATION
+  }
+
+  void get_area(float& a_l,float& a_r,float& a_b,float& a_t) const {
+    a_l = m_l;
+    a_r = m_r;
+    a_b = m_b;
+    a_t = m_t;
   }
 
   /////////////////////////////////////////////
@@ -257,7 +265,7 @@ public:
     float z;
     std::vector<pick_t>::const_iterator it;
     for(it=m_picks.begin();it!=m_picks.end();++it) {
-      if(tools::minimum((*it).zs(),z)) {
+      if(minimum((*it).zs(),z)) {
         pck = (pick_t*)&(*it);
         break;
       }
@@ -266,7 +274,7 @@ public:
     it++;
     for(;it!=m_picks.end();++it) {
       float zi;
-      if(tools::minimum((*it).zs(),zi)) {
+      if(minimum((*it).zs(),zi)) {
         if(zi<=z) {
           pck = (pick_t*)&(*it);
           z = zi;
@@ -287,13 +295,14 @@ public:
     model_matrix() = m_identity;
   }
   void set_matrices_from_state() {
-    projection_matrix() = m_state.m_proj;
-    model_matrix() = m_state.m_model;
+    const sg::state& _state = state();
+    projection_matrix() = _state.m_proj;
+    model_matrix() = _state.m_model;
   }
 public:
   bool add__primitive_xy(sg::node& a_node,
                          gl::mode_t a_mode,
-                         unsigned int a_floatn,const float* a_xys,
+                         size_t a_floatn,const float* a_xys,
                          bool a_stop = false,
                          bool a_triangle_revert = false){
     if(!a_floatn) return false;
@@ -308,7 +317,7 @@ public:
       m_zs.clear();
       add_primitive_xy(a_mode,a_floatn,a_xys,a_stop,a_triangle_revert);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -333,7 +342,7 @@ public:
       m_zs.clear();
       add_primitive_xy(a_mode,a_xys,a_stop,a_triangle_revert);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -341,9 +350,7 @@ public:
     return false;
   }
 
-  bool add__line_strip_xy(sg::node& a_node,
-                          unsigned int a_floatn,const float* a_xys,
-                          bool a_stop = false){
+  bool add__line_strip_xy(sg::node& a_node,size_t a_floatn,const float* a_xys,bool a_stop = false){
     if(!a_floatn) return false;
     if(m_stop_at_first){
       add_line_strip_xy(a_floatn,a_xys,a_stop);
@@ -356,7 +363,7 @@ public:
       m_zs.clear();
       add_line_strip_xy(a_floatn,a_xys,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -379,7 +386,7 @@ public:
       m_zs.clear();
       add_lines_xy(a_xys,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -388,10 +395,7 @@ public:
   }
 
 public:
-  bool add__primitive(sg::node& a_node,
-                      gl::mode_t a_mode,
-                      unsigned int a_floatn,const float* a_xyzs,
-                      bool a_stop = false){
+  bool add__primitive(sg::node& a_node,gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs,bool a_stop = false){
     if(!a_floatn) return false;
     if(m_stop_at_first){
       add_primitive(a_mode,a_floatn,a_xyzs,a_stop);
@@ -404,7 +408,7 @@ public:
       m_zs.clear();
       add_primitive(a_mode,a_floatn,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -412,10 +416,7 @@ public:
     return false;
   }
 
-  bool add__primitive(sg::node& a_node,
-                      gl::mode_t a_mode,
-                      const std::vector<float>& a_xyzs,
-                      bool a_stop = false) {
+  bool add__primitive(sg::node& a_node,gl::mode_t a_mode,const std::vector<float>& a_xyzs,bool a_stop = false) {
     if(a_xyzs.empty()) return false;
     if(m_stop_at_first){
       add_primitive(a_mode,a_xyzs,a_stop);
@@ -428,7 +429,7 @@ public:
       m_zs.clear();
       add_primitive(a_mode,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -436,9 +437,7 @@ public:
     return false;
   }
 
-  bool add__line_strip(sg::node& a_node,
-                       unsigned int a_floatn,const float* a_xyzs,
-                       bool a_stop = false){
+  bool add__line_strip(sg::node& a_node,size_t a_floatn,const float* a_xyzs,bool a_stop = false){
     if(!a_floatn) return false;
     if(m_stop_at_first){
       add_line_strip(a_floatn,a_xyzs,a_stop);
@@ -451,7 +450,7 @@ public:
       m_zs.clear();
       add_line_strip(a_floatn,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -460,7 +459,7 @@ public:
   }
 
   bool add__triangles(sg::node& a_node,
-                      unsigned int a_floatn,
+                      size_t a_floatn,
                       const float* a_xyzs,
                       bool a_stop = false){
     if(!a_floatn) return false;
@@ -475,7 +474,7 @@ public:
       m_zs.clear();
       add_triangles(a_floatn,a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -498,7 +497,7 @@ public:
       m_zs.clear();
       add_lines(a_xyzs,a_stop);
       if(m_done) {
-        add_pick(a_node,m_zs,m_ws,m_state);
+        add_pick(a_node,m_zs,m_ws,state());
         m_done = false;
         return true;
       }
@@ -675,13 +674,13 @@ protected:
     //NOTE : optimize ?
 
     vec3f O(0,0,0);
-    line<float> ln(O,O+vec3f(0,0,1));
+    line<vec3f> ln(O,O+vec3f(0,0,1));
 
     vec3f pz;   
    {vec3f p1(x1,y1,a_1z);
     vec3f p2(x2,y2,a_2z);
     vec3f p3(x3,y3,a_3z);
-    plane<float> pl(p1,p2,p3);
+    plane<vec3f> pl(p1,p2,p3);
     if(!pl.intersect(ln,pz)) {
       m_out << "pick_action::intersect_triangle :"
             << " z plane/line intersection failed."
@@ -697,14 +696,14 @@ protected:
    {vec3f p1(x1,y1,a_1w);
     vec3f p2(x2,y2,a_2w);
     vec3f p3(x3,y3,a_3w);
-    plane<float> pl(p1,p2,p3);
+    plane<vec3f> pl(p1,p2,p3);
     if(!pl.intersect(ln,pw)) {
       m_out << "pick_action::intersect_triangle :"
             << " plane/line intersection failed."
             << std::endl;      
       return false;
     }}
-    //::printf("debug : w plane %g\n",p[2]);
+    //::printf("debug : w planey %g\n",p[2]);
 
     //m_out << "pick_action::intersect_triangle :"
     //      << " p " << p[0] << " " << p[1] << " " << p[2]
@@ -718,8 +717,8 @@ protected:
    {vec3f p1(x1,y1,a_1z);
     vec3f p2(x2,y2,a_2z);
     vec3f p3(x3,y3,a_3z);
-    line<float> l1p(p1,pz);
-    line<float> l23(p2,p3);
+    line<vec3f> l1p(p1,pz);
+    line<vec3fy> l23(p2,p3);
     vec3f q; //on 23 side.
     float prec = 1e10-8;
     if(!l1p.intersect(l23,q,prec)) {

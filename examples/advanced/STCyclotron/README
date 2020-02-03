@@ -1,0 +1,314 @@
+
+     =========================================================
+              Geant4 - Solid-target cyclotron example
+     =========================================================
+
+                             README
+                      ---------------------
+
+// 
+// March 2014 - September 2014                                                              //
+// The code was written by :                                                                //
+//                Floriane Poignant - floriane.poignant@gmail.com                           //
+//                with the support of Scott Penfold (University of Adelaide, Australia)     //
+//                                                                                          //
+//  for a colloboration work between the University of Adelaide & the SAHMRI                //
+//  (J. Asp, P. Takhar)                                                                     //
+//                                                                                          //   
+//******************************************************************************************//
+
+-------------------------------
+----    I) Introduction    ----
+-------------------------------
+
+
+This project was realised by F. Poignant at the University of Adelaide, for a collaboration
+between the University of Adelaide, the SAHMRI and Comecer (company in charge of the design
+of the solid target). The aim was to model a solid target of the cyclotron to study to 
+production of the radioisotope of interest for proton irradiation, and to be able to estimate
+any undesired secondary product, especially isotopes of the product of interest.
+
+For more details about this project and the results, see : 
+    http://www.physicamedica.com/article/S1120-1797%2816%2930023-0/abstract
+
+
+Anyone who would like to study the production of radioisotope for low current and low energy
+irradiation can use this simulation.
+
+The solid target system is made of a tube surrounded by aluminium, a foil, a volume of helium
+between the foild and the target, and the target set on a plate of platinium.
+
+------------------------------------
+----  II) Setting the database  ----
+------------------------------------
+
+Beforehand, you first need to make sure that the database used for inelastic collisions of primary
+particles is set up correctly. You can download formated data of the TENDL and ENDF-VII0 database
+at the following links:
+
+http://geant4.web.cern.ch/geant4/support/download.shtml (TENDL1.3)
+ftp://gdo-nuclear.ucllnl.org/pub/G4LEND/ (G4 Low Energy Nuclear Data)
+
+In your bashrc file, add the following:
+export G4PROTONHPDATA=/PATH_TO_TENDL____OR____ENDF_DATABASE/Proton
+export G4NEUTRONHPDATA=/PATHTO_GEANT4_INSTALLATION_FOLDER/share/Geant4-vXX.XX/data/G4NDL4.5
+export G4PHP_DO_NOT_ADJUST_FINAL_STATE=1
+export G4PHP_MULTIPLICITY_METHOD=Poisson
+
+
+------------------------------------
+----  III) Input parameters     ----
+------------------------------------
+
+-----Macro/init_parameters.mac, file available also in the main directory.
+
+To study the optimization of the isotope production, a list of parameters can be changed in
+the Macro/init_parameters.mac (or using the Geant4 User Interface):
+
+PART1) Beam parameters
+
+   Different parameters can be changed for the beam : type of particle, energy, energy distribution,
+   shape of the beam, etc ... To design your own beam, please refer to the Geant4 User's Guide for
+   Application Developpers.
+
+   Time and current parameters
+   As Geant4 doesn't model any time scale, the current/particles generated relation is established as
+   the following:
+   - for one event generated, the number of particles represent 10E-11 second of a real experiment. It
+   is calculated the following way :
+     	     NumberOfParticle = beamCurrent*timePerEvent/chargeParticle
+	     where - beamCurrent is a parameter that can be changed, in ampere
+	     	   - timePerEvent is set to 10E-11 second.
+		   - chargetParticle is the charger of the particle 
+		   in Coulomb (for example, the value is 1.9E-19 C for proton).
+   Then, the user can choose the time of irradiation. Note that a simulation for a real time of irradiation
+   would be too long. The time of irradiation parameter enables to get results for the real time of irradiation
+   from a smaller time simulation.
+
+PART2) Target parameters:
+   - the target thickness. Must be smaller than 38.32 mm, which is the length of the tube containing the target.
+   - the target diameter. Must be smaller than 15 mm, which is the diameter of the tube containing the target.
+   - the target material : there are two ways to change the material of the target :     
+      - If the material is natural, the user can choose to use the NIST database.
+      - If the material is enriched, the user can set up their own material. The material created is made of a
+      number of elements. The number of elements can be set up by the user. Then, one element can be created in
+      two different ways : it can be a natural element, using the NIST database, or it can be made of a number
+      of isotopes that the user can set up. Please, note that the order to declare parameters is important and
+      has to be the following : 
+       	   	       1) Material settings
+		       2) Element i settings
+		       3) Isotopes settings for the element i
+		       4) Element i+1 settings 
+		       5) Isotopes settings for the element i+1, .... and so on.
+      For example, to create an target of nickel enriched to 60% of Ni64 : one will create a new material, made
+      of two elements : natural nickel and pure Ni64. The natural nickel will be an element created using the NIST
+      database. The pure Ni64 will be an element made of one isotope : Ni64. In case you want to create a pure 64Ni
+      target, the materialis made of one element, made itself of one isotope (Ni64). Few examples are provided in 
+      the folder "Macro/Material/Target" that can be executed in the init_parameters.mac.
+
+PART3) Foil parameters:
+   - the foil thickness. 
+   - the foil material. With this parameter, it is possible to change the foil material in order to study some specific
+     aspects of the reaction. Refers to the change of target material for more detail.
+
+PART4) Histograms:
+   The histograms parameters can be changed in order to fit to the expected range for a given data. For example, for a
+   proton beam with an expected energy of 16 MeV when reaching the target, the beam energy profile range can be set up
+   between 15. to 17. MeV.
+
+-----Macro/Vis/vis.mac
+   This file sets up the visualisation parameters. vis.mac is also available in the main directory.
+
+-----Macro/GUI/gui.mac
+   This file sets up the tool bars and buttons that enables to modify the parameters using the Geant4 User Interface.
+
+------------------------------------
+---- IV) Running the simulation ----
+------------------------------------
+
+To run your simulation, create a "STCyclotron-build" directory. Go in the build directory, and compile:
+      cmake PATHTO_SOURCE_DIRECTORY (corresponding to the path to the STCyclotron directory).
+      make
+ 
+It will create and executable 'STCyclotron'. To run your simulation, type:
+      ./STCyclotron
+
+If the Graphical User Interface is activated and your Geant4 environment is correctly set, a Graphical User Interface
+should open. On the top, the tool bar enables the user to execute the different commands. There are few menus : one for
+the beam parameters, one for the target material, one for the geometry of the target, one for the foil material, and one
+for the foil geometry. Through this tool bar, you can modify the main parameters you need to run your simulation.
+
+The viewer shows you the structure of the target system. The proton beam arrives from the left and is transported through
+the tube and the foil before impacting the target. The yellow tube is either void (before the blue foil) or pressured helium
+(after the foil). The out-layer is made of aluminum or gold. The target is displayed in green.
+
+To send protons, type
+     /run/beamOn 1
+
+/!\IMPORTANT/!\ If the number of runs you launch is larger than a few, desactivate the viewer (Menu 'Viewer' -> 'Disable
+Viewer') otherwise it will crash. This is due to the number of particles sent per event, that is quite large. The viewer
+has a limit of the number of particles it can display on the screen.
+
+Note that the number of particles per event is set according to the current, so that one event represents 10^-11 second
+of irradiation. For 30 μA, it corresponds to 1 875 protons. This value was chosen so the number of protons per event won't
+be too high. If you work on high current (over 100 μA) you might need to change the set up. This time is defined in the
+PrimaryGeneratorAction class. Also note that, for one event, all primaries are set up with the same primary coordinates.
+You need to launch a high enough number of runs (~ 1000) if you want a good statistics on results such as the beam intensity.
+
+At the end of the run, type 'exit' to leave the Geant4 User Interface. Execute the file Plot.C by typing
+       root Plot.C
+It will create many PDF files. To exit ROOT, type
+   	.q
+
+------------------------------------
+----         V) Output          ----
+------------------------------------
+
+Different types of output are available.
+
+1) The .root file:
+   This ROOT file gives a list of histograms representing the following data :
+   	
+	a) 1D histograms :
+	     - n°0: The energy distribution of primary particles (e.g. protons) when reaching the target (MeV).
+	     - n°1: The energy distribution of primary particles (e.g. protons) when reaching the foil   (MeV).
+	     - n°2: The energy distribution of primary particles (e.g. protons) going out of the target  (MeV).
+	     - n°3: The energy distribution of primary particles (e.g. protons) going out of the foil    (MeV).
+	     - n°4: The depth of isotope production in your target (number of particles as a function of the foil
+	       	    thickness in mm).
+	     - n°5-8:  energy spectrum of particles produced in the target following inelastic collision of primary
+	       	       particles (e.g. protons) with the target material (MeV).
+		       In order: 5 = positrons; 6 = electrons; 7 = gammas; 8 = neutrons.
+             - n°9-14: energy spectrum of particles produced in the target following decay of isotopes produced in
+	       	       the target (MeV).
+		       In order: 9 = positrons; 10 = electrons; 11 = gammas; 12 = neutrons; 13 = nu; 14 = anti_nu
+		       (electron (anti)neutrinos).
+	
+	b) 2D histograms :
+	   - n°0: the beam intensity profile before hiting the target (mm x mm).
+	   - n°1: the beam intensity profile before hiting the foil (mm x mm).
+	   - n°2: the radioisotopes produced according to their Z and A number.
+	   - n°3: the energy of the primary particles (e.g. protons) according to depth in the target (mm x MeV).
+	   - n°4: the beam intensity going out from the target (mm x mm).
+	   - n°5: the beam intensity going out from the foil (mm x mm).
+
+	   /!\ the histograms are not normalized /!\. The file 'Plot.C' renormalize the histograms and plot them into
+	   PDFs as explained below.
+
+2) .txt files:
+   Several text files are provided :
+
+----a) Output_General.txt
+   This file summarizes the parameters used during the simulation:
+   	- Geam parameters: primary particles (by default protons), energy of the primary particles (MeV), current
+	    of the beam (Ampere), irradiation time (hour(s)), and current factor. This last factor is a rescaling
+	    factor: in the simulation, the number of particles sent is calculated for a current obtained before the foil,
+	    while the current in the actual cyclotron the current is measured after the foil. This parameter therefore
+	    rescales the number of particles to match the current arriving at the target.
+	- simulation parameters: equivalent time per event (by default set at 10^-11 second), number of events run
+	    during the simulation, number of primaries per event (calculated according to the time per event, the beam
+	    current and the charge of the primary particle), total number of particles sent during the simulation.
+	- Geometry parameters: target thickness, diameter and foil thickness.
+
+   It also provides the heating of the target and the foil (W/mm3).
+
+----b) Output_ParentIsotopes.txt
+   This file provides a list of radioisotopes produced during the irradiation of the target. For each isotope, it contains:
+   	- Name of the isotope.
+	- Number of isotopes created during the simulation. Can be used to evaluate the accuracy of your predictions.
+	- Decay constant (s-1).
+	- Half life time (hour(s)).
+	- Process that induced its creation.
+	- Number of isotopes produced per second of irradiation.
+	- Number of isotopes produced at the end of the beam.
+	- Activity induced by the isotope at the end of the beam (mCi).
+
+----c) Output_DaughterIsotopes.txt
+   This file provides a list of unstable daughter radioisotopes produced due to the decay on unstable primary (parent) radiosotopes.
+   Note that it may be empty. As for the file Output_ParentIsotopes.txt, it contains:
+    	- Name of the daughter isotope.
+    	- Name of the parent isotope.
+	- Decay constant of the parent isotope (s-1).
+	- Decay constant of the daughter isotope (s-1).
+	- Half life time of the parent isotope (hour(s)).
+	- Half life time of the daughter isotope (hour(s)).
+	- Number of daughter isotopes produced per second of irradiation.
+	- Number of daughter isotopes produced at the end of the beam.
+  	- Activity induced by the daughter isotope at the end of the beam (mCi).
+
+----d) Output_StableIsotopes.txt
+   For information, this file provides a list of stable isotopes (name and number of isotopes produced during the simulation)
+   that are produced in the target due to the decay of radioisotopes.
+
+----e) Output_Particles.txt
+   For information, this file provides a list of other particles such as electrons, etc., (name and number of isotopes produced
+   during the simulation) that are produced in the target.
+
+   This folder provides pdf format of the histograms generated in the root file, using a the macro 
+   file Plot.C to generate it. It also provides the following curves :
+   	- the number of each isotope according to the time, from the start of the irradiation to 
+	  the end of the irradiation, but also until few hours after the end of the irradiation.
+	- the variation of activity from the end of the irradiation time to few hours after.
+
+3) PDF Files:
+
+   After running the 'Plot.C' file, you obtain many PDF files that are created in a folder 'Results'. This code reads the different
+   outputs from the simulation (.root file and .txt files), normalize the results and plot them in PDFs in various folders:
+
+----a) Results/BeamData folder
+   - BeamEnergyInFoil.pdf and BeamEnergyInTarget.pdf: beam energy distribution before entering the foil/target using histograms 1D0 and 1D1,
+     normalized to the number of primary protons and the bin width.
+   - BeamEnergyOutFoil.pdf and BeamEnergyOutTarget.pdf: beam energy distribution when exiting the foil/target, using histograms 1D2 and 1D3,
+     normalized to the number of primary protons and the bin width.
+   - BeamIntensityInFoil.pdf and BeamIntensityInTarget.pdf:  beam intensity before entering the foil/target using histograms 2D0 and 2D1,
+     normalized per primary particle and to the bins widths.
+   - BeamIntensityOutTarget.pdf: beam intensity when exiting the target using histogram 2D4, normalized per primary particle and to the bins
+     widths.
+   - EnergyDepth.pdf: energy of protons as a function of the depth in the target.
+
+----b) Results/IsotopesProduction
+   - ActivityOfXX.pdf and YieldOfXX.pdf
+     Shows the production of the isotope XX (number of nuclei or activity) as a function of the time, starting from the beginning of
+     irradiation and up to 30 hours. Note that if the time of irradiation is longer than 30 hours, you must change the maximum time
+     to display the activity or yield by opening the file 'Plot.C' and changing tMax.
+   - ActivitySaturationOfXX.pdf and YiedSaturationOfXX.pdf
+     Shows the saturation reached for the production of the isotope XX (number of nuclei or activity) as a function of the time, if the
+     time of irradiation is set 'infinite'.
+   - Activity.pdf/Activity.jpg and Yield.pdf/Yield.jpg
+     Shows the activity (or yield) of all the isotopes produced during the irradiation as a function of the time up to 30 hours on the
+     same graph.
+   - TotalActivity.pdf
+     Shows the sum of the activities induced by all the radioisotope up to 30 hours.
+   - RadioisotopeProduction.pdf/RadioisotopeProduction.jpg
+     Shows the number of isotopes produced per primary particles, as a function of Z and A.
+   - DepthCreation.pdf
+     Shows the depth at which radioisotopes were created.
+
+----c) ParticlesEnergySpectra
+       Subfolder: beam. Energy spectra (normalized per primary particles and bin width) of particles created following the inelastic
+       interaction of the beam with the target (1D 5->8).
+       Subfolder: decay. Energy spectra (normalized per primary particles and bin width) of particles created following the decay of
+       radioisotopes created in the target (1D 9->14).
+       
+------------------------------------
+----  VI) Checking the results  ----
+------------------------------------
+
+Keep a critical mind with the results : they are highly dependent on the accuracy of the database used. You can verify the coherence
+of your results on checking the nuclear database you are using. Go to the following website:
+   http://www.oecd-nea.org/janis/book/
+
+In the web access part, you can click on the “protons” to access the database of protons.  Click on the atom which your target is made of.
+For example, for the production of Copper 64, Nickel 64 is used, so you will click on 28-Ni. The list of isotopes of Nickel is available.
+Click on 28-Ni-64 and select the nuclear reaction you are interested in. The cross sections will be displayed on your screen for different
+nuclear databases and experiments.
+
+The computed values can be used to be compared to experimental ones using the EXFOR website. Go on this website:
+    https://www-nds.iaea.org/exfor/exfor.htm
+Enter the parameters of the irradiation (i.e., atomic target, reaction, etc.). Then click on submit. You will have different experimental
+data available. Tick the ones you are interested in. Tick “Quick plot” and then click on retrieve. It will display a plot with different
+experimental values. On the right, you can tick “use my data”. Do it and add the data from the JANIS Book website. Make sure the units
+are coherent. Rename your data. Tick “authors” and “legend”. Then click on repaint. You can save your plot buy clicking on PostScript and
+selecting a PDF format.
+
+These tools can be used to check on the accuracy of the database at a given energy.

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: DicomPartialDetectorConstruction.hh 92820 2015-09-17 15:22:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/DICOM/include/DicomPartialDetectorConstruction.hh
 /// \brief Definition of the DicomPartialDetectorConstruction class
@@ -32,14 +35,16 @@
 #ifndef DicomPartialDetectorConstruction_h
 #define DicomPartialDetectorConstruction_h 1
 
-#include "globals.hh"
 #include <map>
+
+#include "globals.hh"
 #include "DicomDetectorConstruction.hh"
 
 class G4PartialPhantomParameterisation;
 class G4LogicalVolume;
 class G4Material;
 
+<<<<<<< HEAD
 
 struct matInfo 
 {
@@ -48,11 +53,14 @@ struct matInfo
   G4int id;
 };
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /// Construct a DICOM Geant4 geometry produced from the intersetion
-///  of a DICOM file and a volume
+/// of a DICOM file and a volume
 
 class DicomPartialDetectorConstruction : public DicomDetectorConstruction
 {
+
 public:
 
   DicomPartialDetectorConstruction();
@@ -61,24 +69,27 @@ public:
   virtual G4VPhysicalVolume* Construct();
 
 private:
+
   virtual void ReadPhantomData();
   void ReadPhantomDataFile(const G4String& fname);
   void ConstructPhantomContainer();
   virtual void ConstructPhantom();
 
-  void ReadVoxelDensitiesPartial( std::ifstream& fin, 
-                                  std::map< G4int, std::map< G4int, G4int > > ifxmin, 
-                                  std::map< G4int, std::map< G4int, G4int > > ifxmax );
-
-  std::pair<G4double,G4double> ReadVoxelDim( G4int nVoxel, std::ifstream& fin ); 
   void ReadVoxelDensitiesPartial( std::ifstream& fin );
 
-  void SetScorer(G4LogicalVolume* voxel_logic);
-
-  G4Material* BuildMaterialChangingDensity( const G4Material* origMate, 
-                                            float density, G4String mateName );
+// void ReadVoxelDensitiesPartial( std::ifstream& fin,
+//                      std::map< G4int, std::map< G4int, G4int > > ifxmin,
+//                      std::map< G4int, std::map< G4int, G4int > > ifxmax );
+//
+// std::pair<G4double,G4double> ReadVoxelDim(G4int nVoxel, std::ifstream& fin);
+//
+// void SetScorer(G4LogicalVolume* voxel_logic);
+//
+// G4Material* BuildMaterialChangingDensity(const G4Material* origMate, 
+//                                          G4float density, G4String mateName);
 
 private:
+
   G4PartialPhantomParameterisation* fPartialPhantomParam;
 
   std::multimap<G4int,G4int> fFilledIDs;
@@ -87,9 +98,7 @@ private:
   G4int fNVoxels;
   G4double fDimX, fDimY, fDimZ;
   G4double fOffsetX, fOffsetY, fOffsetZ;
-  size_t* fMateIDs;
-  std::vector<G4Material*> fPhantomMaterials; 
-
+  std::vector<G4Material*> fPhantomMaterials;
 };
 
 #endif

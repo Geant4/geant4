@@ -13,10 +13,6 @@
 #/vis/viewer/set/style surface
 /vis/viewer/set/style wireframe
 #
-# Set direction from target to camera.
-/vis/viewer/set/viewpointVector 1 1.5 1.1
-/vis/viewer/set/viewpointThetaPhi 110 140
-/vis/viewer/zoom 1.4
 #
 #    The compound command "/vis/drawVolume"
 #    is equivalent to the following set of commands:
@@ -33,9 +29,9 @@
 #
 # Add trajectories to the current scene
 /vis/scene/add/trajectories smooth
-#/vis/modeling/trajectories/create/drawByCharge
-#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 #/vis/modeling/trajectories/create/drawByParticleID
@@ -46,8 +42,35 @@
 #/vis/modeling/trajectories/drawByParticleID-0/set nu_e yellow
 #/vis/modeling/trajectories/drawByParticleID-0/set anti_nu_mu yellow
 #
-# Requests viewer to accumulate hits, tracks, etc. at end of event.
-# detector remains or is redrawn.
-/vis/scene/endOfEventAction refresh
-#/vis/scene/endOfEventAction accumulate
+# To superimpose all of the events from a given run:
+/vis/scene/endOfEventAction accumulate
 #
+# field04 specific setting
+#
+# To get nice view
+#/vis/geometry/set/visibility World 0 false
+/vis/geometry/set/colour World 0 1 1 1 .3          # gray
+/vis/geometry/set/colour CaptureMgnt 0 0 0 1 .3    # blue
+/vis/geometry/set/colour Target 0 1 0 0 .3         # red
+/vis/geometry/set/colour TransferMgnt 0 0 1 0 .3   # green
+/vis/geometry/set/colour TestPlane 0 1 1 0 .3      # yellow
+/vis/geometry/set/colour Degrader 0 0 1 1 .3       # cyan
+/vis/viewer/set/style surface
+/vis/viewer/set/hiddenMarker true
+#
+# Specify view angle:
+# Set direction from target to camera.
+/vis/viewer/set/viewpointThetaPhi 110 140
+#
+# Specify zoom value:
+/vis/viewer/zoom 1.4
+#
+# Draw magnetic field
+#/vis/scene/add/magneticField 1
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+#
+# For file-based drivers, use this to create an empty detector view:
+#/vis/viewer/flush

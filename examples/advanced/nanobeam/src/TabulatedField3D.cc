@@ -64,15 +64,15 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
 	 << "\n      3D Magnetic field from OPERA software "
 	 << "\n-----------------------------------------------------------";
     
-  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl; 
-  ifstream file( filename ); // Open the file for reading.
+  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << G4endl; 
+  std::ifstream file( filename ); // Open the file for reading.
   
   // Read table dimensions 
   file >> fNx >> fNy >> fNz; // Note dodgy order
 
   G4cout << "  [ Number of values x,y,z: " 
 	 << fNx << " " << fNy << " " << fNz << " ] "
-	 << endl;
+	 << G4endl;
 
   // Set up storage space for table
   fXField.resize( fNx );
@@ -114,21 +114,26 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   fMaxiy = yval * lenUnit;
   fMaxiz = zval * lenUnit;
 
-  G4cout << "\n ---> ... done reading " << endl;
+  G4cout << "\n ---> ... done reading " << G4endl;
 
+<<<<<<< HEAD
   // G4cout << " Read values of field from file " << filename << endl; 
+=======
+  // G4cout << " Read values of field from file " << filename << G4endl; 
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4cout << " ---> assumed the order:  x, y, z, Bx, By, Bz "
 	 << "\n ---> Min values x,y,z: " 
 	 << fMinix/cm << " " << fMiniy/cm << " " << fMiniz/cm << " cm "
 	 << "\n ---> Max values x,y,z: " 
-	 << fMaxix/cm << " " << fMaxiy/cm << " " << fMaxiz/cm << " cm " << endl;
+	 << fMaxix/cm << " " << fMaxiy/cm << " " << fMaxiz/cm << " cm " << G4endl;
 
   fDx = fMaxix - fMinix;
   fDy = fMaxiy - fMiniy;
   fDz = fMaxiz - fMiniz;
   G4cout << "\n ---> Dif values x,y,z (range): " 
 	 << fDx/cm << " " << fDy/cm << " " << fDz/cm << " cm in z "
-	 << "\n-----------------------------------------------------------" << endl;
+	 << "\n-----------------------------------------------------------" << G4endl;
 
   
   // Table normalization

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeColliderBase.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function

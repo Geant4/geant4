@@ -23,26 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeKminusPChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 //
-// 20100507  M. Kelsey -- Remove redundant total-bins template argument
-// 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
-//		to template for channel typedef
-// 20100514  M. Kelsey -- Replace G4CascadeSampler with G4KaonHypSampler.
 
 #ifndef G4_CASCADE_KMINUSP_CHANNEL_HH
 #define G4_CASCADE_KMINUSP_CHANNEL_HH
 
 #include "G4CascadeData.hh"
 #include "G4CascadeFunctions.hh"
-#include "G4KaonHypSampler.hh"
+#include "G4KaonSampler.hh"
 
 struct  G4CascadeKminusPChannelData {
-  typedef G4CascadeData<31,8,20,34,48,22,16> data_t;
+  typedef G4CascadeData<30,8,20,42,68,78,96,40,42> data_t;
   static const data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadeKminusPChannelData,G4KaonHypSampler> G4CascadeKminusPChannel;
+typedef G4CascadeFunctions<G4CascadeKminusPChannelData,G4KaonSampler> G4CascadeKminusPChannel;
 
 #endif
 

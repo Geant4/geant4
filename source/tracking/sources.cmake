@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 77241 2013-11-22 09:55:47Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -58,7 +57,9 @@ GEANT4_DEFINE_MODULE(NAME G4tracking
         G4Trajectory.hh
         G4TrajectoryPoint.hh
         G4UserSteppingAction.hh
+        G4MultiSteppingAction.hh
         G4UserTrackingAction.hh
+        G4MultiTrackingAction.hh
         G4VSteppingVerbose.hh
         G4VTrajectory.hh
         G4VTrajectoryPoint.hh
@@ -79,10 +80,13 @@ GEANT4_DEFINE_MODULE(NAME G4tracking
         G4Trajectory.cc
         G4TrajectoryPoint.cc
         G4UserSteppingAction.cc
+        G4MultiSteppingAction.cc
         G4UserTrackingAction.cc
+        G4MultiTrackingAction.cc
         G4VSteppingVerbose.cc
         G4VTrajectory.cc
         G4VTrajectoryPoint.cc
+        G4MultiSteppingAction.cc
     GRANULAR_DEPENDENCIES
         G4csg
         G4cuts

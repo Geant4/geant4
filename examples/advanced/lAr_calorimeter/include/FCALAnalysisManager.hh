@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALAnalysisManager.hh
 // GEANT4 tag 
 //
 // Author: Patricia Mendez (patricia.mendez@cern.ch)

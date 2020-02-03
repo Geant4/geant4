@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm12/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
+<<<<<<< HEAD
 // $Id: DetectorMessenger.cc 78723 2014-01-20 10:32:17Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

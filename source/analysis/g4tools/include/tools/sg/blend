@@ -1,0 +1,62 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_blend
+#define tools_sg_blend
+
+#include "node"
+#include "sf_vec3f"
+#include "render_action"
+
+#include "../colorfs"
+
+namespace tools {
+namespace sg {
+
+class blend : public node {
+  TOOLS_NODE(blend,tools::sg::blend,node)
+public:
+  sf<bool> on;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::blend)
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(on)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&on);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    state& state = a_action.state();
+    state.m_GL_BLEND = on.value();
+    a_action.set_blend(state.m_GL_BLEND);
+  }
+public:
+  blend()
+  :parent()
+  ,on(false)
+  {
+    add_fields();
+  }
+  virtual ~blend(){}
+public:
+  blend(const blend& a_from)
+  :parent(a_from)
+  ,on(a_from.on)
+  {
+    add_fields();
+  }
+  blend& operator=(const blend& a_from){
+    parent::operator=(a_from);
+    on = a_from.on;
+    return *this;
+  }
+};
+
+}}
+
+#endif

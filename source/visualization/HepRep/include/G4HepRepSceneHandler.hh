@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 
 /**
@@ -75,9 +74,12 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddSolid (const G4Sphere& sphere);      
         void AddSolid (const G4Para& para);          
         void AddSolid (const G4Torus& torus);        
-        void AddSolid (const G4Polycone& polycone);  
+        void AddSolid (const G4Polycone& polycone);
         void AddSolid (const G4Polyhedra& polyhedra);
-        void AddSolid (const G4VSolid& solid);       
+        void AddSolid (const G4Orb& orb);
+        void AddSolid (const G4Ellipsoid& ellipsoid);
+        void AddSolid (const G4TessellatedSolid& tess);
+        void AddSolid (const G4VSolid& solid);
         
         void AddCompound (const G4VTrajectory&);
         void AddCompound (const G4VHit& hit);
@@ -85,6 +87,9 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 	  G4VSceneHandler::AddCompound(digi);
 	}
         void AddCompound (const G4THitsMap<G4double>& hits) {
+	  G4VSceneHandler::AddCompound(hits);
+	}
+        void AddCompound (const G4THitsMap<G4StatDouble>& hits) {
 	  G4VSceneHandler::AddCompound(hits);
 	}
 

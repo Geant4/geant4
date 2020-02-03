@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSPhotonDetHit.hh 70603 2013-06-03 11:23:16Z gcosmo $
 //
 /// \file optical/wls/include/WLSPhotonDetHit.hh
 /// \brief Definition of the WLSPhotonDetHit class
@@ -65,7 +64,7 @@ class WLSPhotonDetHit : public G4VHit
     WLSPhotonDetHit(const WLSPhotonDetHit &right);
     const WLSPhotonDetHit& operator=(const WLSPhotonDetHit& right);
 
-    G4int operator==(const WLSPhotonDetHit& right) const;
+    G4bool operator==(const WLSPhotonDetHit& right) const;
 
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

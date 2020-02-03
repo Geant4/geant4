@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh 86978 2014-11-21 12:08:34Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -57,6 +56,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4TablesForExtrapolator.hh"
 #include "G4Log.hh"
+#include "G4Threading.hh"
 
 class G4ParticleDefinition;
 class G4Material;
@@ -68,7 +68,7 @@ class G4EnergyLossForExtrapolator
 {
 public:
 
-  G4EnergyLossForExtrapolator(G4int verb = 1);
+  explicit G4EnergyLossForExtrapolator(G4int verb = 1);
 
   ~G4EnergyLossForExtrapolator();
 
@@ -143,6 +143,9 @@ private:
   G4EnergyLossForExtrapolator & operator=(const G4EnergyLossForExtrapolator &right);
   G4EnergyLossForExtrapolator(const G4EnergyLossForExtrapolator&);
 
+#ifdef G4MULTITHREADED
+  static G4Mutex extrapolatorMutex;
+#endif
   static G4TablesForExtrapolator* tables;
 
   const G4ParticleDefinition* currentParticle;

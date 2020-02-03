@@ -27,25 +27,6 @@ inline bool exists(const std::string& a_string) {
   return true;
 }
 
-inline bool size(const std::string& a_file,long& a_size){
-  FILE* file = ::fopen(a_file.c_str(),"rb");
-  if(!file) {
-    a_size = 0L;
-    return false;
-  }
-  //::rewind(file);
-  ::fseek(file,0L,SEEK_END);
-  a_size = ::ftell(file);
-  ::fclose(file);
-  return true;
-}
-
-inline bool is_empty(const std::string& a_file){
-  long sz;
-  if(!size(a_file,sz)) return true; //if not existing, consider it empty.
-  return (sz==0L)?true:false;  
-}
-
 inline bool write(const std::string& a_file,const std::string& a_string) {
   // a_string could contain \n separated lines.
   FILE* file = ::fopen(a_file.c_str(),"wb");
@@ -67,6 +48,13 @@ inline bool write(const std::string& a_file,const std::vector<std::string>& a_te
       return false;
     }
   }
+  ::fclose(file);
+  return true;
+}
+
+inline bool make_empty(const std::string& a_file) {
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) return false;
   ::fclose(file);
   return true;
 }
@@ -98,21 +86,26 @@ inline bool read_cstring(FILE* a_file,char* a_buff,unsigned int a_lbuf,size_t& a
 }
 
 
-inline bool read(const std::string& a_file,std::vector<std::string>& a_text){
+inline bool read(FILE* a_FILE,std::vector<std::string>& a_text){
   a_text.clear();
-  FILE* file = ::fopen(a_file.c_str(),"rb");
-  if(!file) return false;
   unsigned int BUFSIZE = 65536;
   char* buffer = new char[BUFSIZE+1];
-  if(!buffer) {::fclose(file);return false;}
+  if(!buffer) return false;
   while(true) {
     size_t l;
-    if(!read_cstring(file,buffer,BUFSIZE,l)) break; // EOF.
+    if(!read_cstring(a_FILE,buffer,BUFSIZE,l)) break; // EOF.
     a_text.push_back(buffer);
   }
   delete [] buffer;
-  ::fclose(file);
   return true;
+}
+
+inline bool read(const std::string& a_file,std::vector<std::string>& a_text){
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {a_text.clear();return false;}
+  bool status = read(file,a_text);
+  ::fclose(file);
+  return status;
 }
 
 inline bool read_num(const std::string& a_file,std::vector<std::string>::size_type a_num,std::vector<std::string>& a_text,const std::string& a_cmt = ""){
@@ -198,20 +191,6 @@ inline bool write_bytes(const std::string& a_file,const char* a_buffer,size_t a_
   return (nitem!=1?false:true);
 }  
 
-inline bool is_aida(const std::string& a_file,bool& a_is){
-  long sz;
-  if(!size(a_file,sz)) {a_is = false;return false;}
-
-  //NOTE : it assumes that the file is not compressed.
-  unsigned char head[1024];
- {unsigned int num = 1024;
-  if(!signature(a_file,head,num)) {a_is = false;return false;}
-  if(num!=1024) {a_is = false;return true;}}
-  head[1023] = 0; //to have a C string.
-  a_is = ::strstr((const char*)head,"<aida")?true:false;
-  return true;
-}
-
 inline bool num_csv_doubles(const std::string& a_string,char& a_sep,unsigned int& a_number){
   if(a_string.empty()) {a_sep=0;a_number=0;return true;} //it is ok.
 
@@ -279,11 +258,11 @@ inline bool is_hippo(const std::string& a_file,bool& a_is){
   char csep;
   unsigned int number;
   if(!num_csv_doubles(txt[2],csep,number)) {a_is=false;return true;}
-  std::vector<std::string> words;
-  tools::words(txt[1],"\t",false,words);
-  if(words.size()!=number) {a_is=false;return true;}
+  std::vector<std::string> ws;
+  words(txt[1],"\t",false,ws);
+  if(ws.size()!=number) {a_is=false;return true;}
   bool all_doubles = true;
-  tools_vforcit(std::string,words,it) {
+  tools_vforcit(std::string,ws,it) {
     const char* pos = (*it).c_str();
     char* end;
     double d = ::strtod(pos,&end);(void)d;
@@ -352,6 +331,39 @@ inline bool is_csv(const std::string& a_file,bool& a_is){
   std::vector<std::string> txt;
   if(!file::read_num(a_file,3,txt,"#")) {a_is=false;return false;}
   return is_csv(txt,a_is);
+}
+
+inline bool is_lua(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="lua") {a_is = true;return true;}
+  //try to guess ?
+  a_is = false;
+  return true;
+}
+
+inline bool is_py(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="py") {a_is = true;return true;}
+  //try to guess ?
+  a_is = false;
+  return true;
+}
+
+inline bool is_kumac(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="kumac") {a_is = true;return true;}
+  //try to guess ?
+  a_is = false;
+  return true;
+}
+
+inline bool is_insh(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="insh") {a_is = true;return true;}
+  //try to guess ?
+  // have a first line : #!insh ?
+  a_is = false;
+  return true;
 }
 
 }}
@@ -515,7 +527,7 @@ inline bool std_rename(const std::string& a_from,const std::string& a_to) {
   //NOTE : a_from must not be a path !
   //       Darwin is ok with a path but not Linux !
   //       For example : 
-  //         ::rename("/tmp/tmp01"."x");
+  //         ::rename("/tmp/tmp01","x");
   //       return -1 on Linux.
   //       To do the upper then someone must use move. 
   //       But there is no move in the standard lib C !
@@ -616,5 +628,6 @@ protected:
 }
 
 #include "file_format" //backcomp
+#include "fsize"       //backcomp
 
 #endif

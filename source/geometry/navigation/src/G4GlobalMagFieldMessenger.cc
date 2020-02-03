@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GlobalMagFieldMessenger.cc 66536 2012-12-19 14:32:36Z ihrivnac $
-// 
 // class G4GlobalMagFieldMessenger
-//
-// Implementation
 //
 // Implementation of the G4GlobalMagFieldMessenger class
 //
@@ -47,12 +43,7 @@
 //______________________________________________________________________________
 
 G4GlobalMagFieldMessenger::G4GlobalMagFieldMessenger(const G4ThreeVector& value)
- : G4UImessenger(),
-   fMagField(0),
-   fVerboseLevel(0),
-   fDirectory(0),
-   fSetValueCmd(0),
-   fSetVerboseCmd(0)
+ : G4UImessenger()
 {
   fDirectory = new G4UIdirectory("/globalField/");
   fDirectory->SetGuidance("Global uniform magnetic field UI commands");

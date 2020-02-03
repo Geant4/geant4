@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReactionTable.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -44,18 +43,17 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 
-
-#ifndef G4MolecularReactionTable_h
-#define G4MolecularReactionTable_h 1
+#pragma once
 
 #include "G4ITReactionTable.hh"
 #include "G4MolecularConfiguration.hh"
+#include "G4ReferenceCast.hh"
 #include <vector>
 #include <map>
 #include <functional>
-#include "G4ReferenceCast.hh"
+#include <memory>
 
-class G4VDNAReactionModel ;
+class G4VDNAReactionModel;
 class G4DNAMolecularReactionTable;
 class G4ReactionTableMessenger;
 
@@ -63,226 +61,164 @@ class G4ReactionTableMessenger;
  * G4DNAMolecularReactionData contains the information
  * relative to a given reaction (eg : °OH + °OH -> H2O2)
  */
-
 class G4DNAMolecularReactionData
 {
-  public :
-  //----------------------------------------------------------------------------
+public:
+    //----------------------------------------------------------------------------
 
-  G4DNAMolecularReactionData(G4double reactionRate,
-                             G4MolecularConfiguration* reactive1,
-                             G4MolecularConfiguration* reactive2);
-  
-  G4DNAMolecularReactionData(G4double reactionRate,
-                             const G4String& reactive1,
-                             const G4String& reactive2);
-  ~G4DNAMolecularReactionData();
-  
+    G4DNAMolecularReactionData(G4double reactionRate,
+                               const G4MolecularConfiguration* reactive1,
+                               const G4MolecularConfiguration* reactive2);
 
-  //----------------------------------------------------------------------------
-  inline int GetReactionID() const { return fReactionID; }
-  inline void SetReactionID(int ID) { fReactionID = ID; }
+    G4DNAMolecularReactionData(G4double reactionRate,
+                               const G4String& reactive1,
+                               const G4String& reactive2);
+    ~G4DNAMolecularReactionData();
 
-  //----------------------------------------------------------------------------
-  inline std::pair<G4MolecularConfiguration*, G4MolecularConfiguration*>
-  GetReactants()
-  {
-    return std::make_pair(fReactant1, fReactant2);
-  }
+    using Reactant = const G4MolecularConfiguration;
+    using ReactantPair = std::pair<Reactant*, Reactant*>;
+    using ReactionProducts = std::vector<Reactant*>;
 
-  inline G4MolecularConfiguration* GetReactant1() const
-  {
-    return fReactant1;
-  }
-  inline G4MolecularConfiguration* GetReactant2() const
-  {
-    return fReactant2;
-  }
+    int GetReactionID() const;
+    void SetReactionID(int ID);
 
-  inline void SetObservedReactionRateConstant(G4double rate)
-  {
-    fObservedReactionRate = rate;
-  }
+    ReactantPair GetReactants();
 
-  inline G4double GetObservedReactionRateConstant() const
-  {
-    return fObservedReactionRate;
-  }
+    Reactant* GetReactant1() const;
+    Reactant* GetReactant2() const;
 
-  inline G4double GetEffectiveReactionRadius() const
-  {
-    return fEffectiveReactionRadius;
-  }
-  
-  inline void SetEffectiveReactionRadius(G4double radius)
-  {
-    fEffectiveReactionRadius = radius;
-  }
+    void SetObservedReactionRateConstant(G4double rate);
+    G4double GetObservedReactionRateConstant() const;
 
-  //_____________________________________________________
+    G4double GetEffectiveReactionRadius() const;
+    void SetEffectiveReactionRadius(G4double radius);
 
-  void SetReactant1(G4MolecularConfiguration* reactive) ;
-  void SetReactant2(G4MolecularConfiguration* reactive) ;
-  
-  void SetReactants(G4MolecularConfiguration* reactive1,
-                   G4MolecularConfiguration* reactive2);
+    void SetReactant1(Reactant* reactive);
+    void SetReactant2(Reactant* reactive);
 
-  void AddProduct(G4MolecularConfiguration* molecule);
+    void SetReactants(Reactant* reactive1,
+                      Reactant* reactive2);
 
-  void SetReactant1(const G4String& reactive) ;
-  void SetReactant2(const G4String& reactive) ;
-  void SetReactants(const G4String& reactive1, const G4String& reactive2);
-  void AddProduct(const G4String& molecule);
-  
-  inline G4int GetNbProducts() const
-  {
-    if(fProducts) return fProducts->size();
-    return 0;
-  }
-  
-  inline G4MolecularConfiguration* GetProduct(G4int i) const
-  {
-    if(fProducts) return (*fProducts)[i];
-    return 0;
-  }
-  
-  inline const std::vector<G4MolecularConfiguration*>* GetProducts() const
-  {
-    return fProducts;
-  }
+    void AddProduct(Reactant* molecule);
 
-  inline void RemoveProducts()
-  {
-    if(fProducts)
-    {
-      fProducts->clear();
-      delete fProducts;
-    }
-  }
+    void SetReactant1(const G4String& reactive);
+    void SetReactant2(const G4String& reactive);
+    void SetReactants(const G4String& reactive1, const G4String& reactive2);
+    void AddProduct(const G4String& molecule);
 
-  //----------------------------------------------------------------------------
-  // Temperature scaling
-  typedef std::function<double(double)> RateParam;
+    G4int GetNbProducts() const;
+    Reactant* GetProduct(G4int i) const;
 
-  static double PolynomialParam(double temp_K, std::vector<double> P);
-  static double ArrehniusParam(double temp_K, std::vector<double> P);
-  static double ScaledParameterization(double temp_K,
-                                       double temp_init,
-                                       double rateCste_init);
+    const ReactionProducts* GetProducts() const;
+    void RemoveProducts();
 
-  void SetPolynomialParameterization(const std::vector<double>& P);
+    //----------------------------------------------------------------------------
+    // Temperature scaling
+    typedef std::function<double(double)> RateParam;
 
-  void SetArrehniusParameterization(double A0, double E_R);
-  void SetScaledParameterization(double temperature_K,
-      double rateCste);
+    static double PolynomialParam(double temp_K, std::vector<double> P);
+    static double ArrehniusParam(double temp_K, std::vector<double> P);
+    static double ScaledParameterization(double temp_K,
+                                         double temp_init,
+                                         double rateCste_init);
 
-  void ScaleForNewTemperature(double temp_K);
+    void SetPolynomialParameterization(const std::vector<double>& P);
 
-  protected :
-  G4DNAMolecularReactionData();
-  G4MolecularConfiguration* fReactant1;
-  G4MolecularConfiguration* fReactant2;
-  G4double fObservedReactionRate;
-  G4double fEffectiveReactionRadius;
-  
-  std::vector<G4MolecularConfiguration*>* fProducts;
-  // G4DNAReactionType fReactionType;
-  RateParam fRateParam;
-  int fReactionID;
+    void SetArrehniusParameterization(double A0, double E_R);
+    void SetScaledParameterization(double temperature_K,
+                                   double rateCste);
+
+    void ScaleForNewTemperature(double temp_K);
+
+private:
+    void ComputeEffectiveRadius();
+
+protected:
+    G4DNAMolecularReactionData();
+    Reactant* fpReactant1;
+    Reactant* fpReactant2;
+    G4double fObservedReactionRate;
+    G4double fEffectiveReactionRadius;
+
+    ReactionProducts fProducts;
+    RateParam fRateParam;
+    int fReactionID;
 };
 
 /**
  * G4DNAMolecularReactionTable sorts out the G4DNAMolecularReactionData
  * for bimolecular reaction
  */
-
 class G4DNAMolecularReactionTable : public G4ITReactionTable
 {
 protected:
-  G4DNAMolecularReactionTable();
-  static G4DNAMolecularReactionTable* fInstance;
-  
-  public :
-  static G4DNAMolecularReactionTable* GetReactionTable();
-  static G4DNAMolecularReactionTable* Instance();
-  static void DeleteInstance();
-  virtual ~G4DNAMolecularReactionTable();
-  
-  /**
-   * Define a reaction :
-   * First argument : reaction rate
-   * Second argument : reactant 1
-   * Third argument : reactant 2
-   * Fourth argument : a std::vector holding the molecular products
-   * if this last argument is NULL then it will be interpreted as
-   * a reaction giving no products
-   */
-  void SetReaction(G4double observedReactionRate,
-                   G4MolecularConfiguration* reactive1,
-                   G4MolecularConfiguration* reactive2);
-  
-  void SetReaction(G4DNAMolecularReactionData*);
-  
-  const G4DNAMolecularReactionData* GetReactionData(G4MolecularConfiguration*,
-                                                    G4MolecularConfiguration*) const;
-  
-  const G4DNAMolecularReactionData* GetReactionData(const G4String&,
-                                                    const G4String&) const;
+    G4DNAMolecularReactionTable();
+    static G4DNAMolecularReactionTable* fpInstance;
 
-  const G4DNAMolecularReactionData* GetReaction(int reactionID) const;
+public:
+    static G4DNAMolecularReactionTable* GetReactionTable();
+    static G4DNAMolecularReactionTable* Instance();
+    static void DeleteInstance();
+    virtual ~G4DNAMolecularReactionTable();
 
-  size_t GetNReactions() const
-  { return fVectorOfReactionData.size(); }
+    using Reactant = const G4MolecularConfiguration;
+    using Data = const G4DNAMolecularReactionData;
+    using ReactantList = std::vector<Reactant*>;
+    using DataList = std::vector<Data*>;
+    using SpecificDataList = std::map<Reactant*, Data*>;
 
-  //_________________________________________________________________
-  /**
-   * Given a molecule's type, it returns with which a reaction is allowed
-   */
-  const std::vector<G4MolecularConfiguration*>*
-  CanReactWith(G4MolecularConfiguration*) const ;
+    using ReactionDataMap = std::map<Reactant*, SpecificDataList>;
+    using ReactivesMV = std::map<Reactant*, ReactantList>;
+    using ReactionDataMV = std::map<Reactant*, DataList>;
 
-  const std::map<G4MolecularConfiguration*, const G4DNAMolecularReactionData*>*
-  GetReativesNData(G4MolecularConfiguration*) const;
+    /**
+     * Define a reaction :
+     * First argument : reaction rate
+     * Second argument : reactant 1
+     * Third argument : reactant 2
+     * Fourth argument : a std::vector holding the molecular products
+     * if this last argument is NULL then it will be interpreted as
+     * a reaction giving no products
+     */
+    void SetReaction(G4double observedReactionRate,
+                     Reactant* reactive1,
+                     Reactant* reactive2);
 
-  const std::vector<const G4DNAMolecularReactionData*>*
-  GetReactionData(G4MolecularConfiguration*) const;
-  
-  inline const std::map<G4MolecularConfiguration*,
-        std::map<G4MolecularConfiguration*,
-            const G4DNAMolecularReactionData*> >&
-  GetAllReactionData()
-  {
-    return fReactionData;
-  }
+    void SetReaction(G4DNAMolecularReactionData*);
 
-  inline const std::vector<const G4DNAMolecularReactionData*>&
-  GetVectorOfReactionData()
-  {
-    return fVectorOfReactionData;
-  }
+    Data* GetReactionData(Reactant*, Reactant*) const;
 
-  void ScaleReactionRateForNewTemperature(double temp_K);
+    Data* GetReactionData(const G4String&, const G4String&) const;
 
-  //_________________________________________________________________
-  void PrintTable(G4VDNAReactionModel* = 0);
-  
-  protected :
-  G4bool fVerbose;
-  
-  //_________________________________________________
-  typedef std::map<G4MolecularConfiguration*,
-      std::map<G4MolecularConfiguration*,
-          const G4DNAMolecularReactionData*> > ReactionDataMap;
-  typedef std::map<G4MolecularConfiguration*,
-      std::vector<G4MolecularConfiguration*> > ReactivesMV;
-  typedef std::map<G4MolecularConfiguration*,
-      std::vector<const G4DNAMolecularReactionData*> > ReactionDataMV;
-  
-  ReactionDataMap fReactionData;
-  ReactivesMV     fReactantsMV;
-  ReactionDataMV  fReactionDataMV;
-  std::vector<const G4DNAMolecularReactionData*> fVectorOfReactionData;
-  G4ReactionTableMessenger* fpMessenger;
+    Data* GetReaction(int reactionID) const;
+
+    size_t GetNReactions() const;
+
+    //_________________________________________________________________
+    /**
+     * Given a molecule's type, it returns with which a reaction is allowed
+     */
+    const ReactantList* CanReactWith(Reactant*) const;
+
+    const SpecificDataList* GetReativesNData(const G4MolecularConfiguration*) const;
+
+    const DataList* GetReactionData(const G4MolecularConfiguration*) const;
+
+    const ReactionDataMap& GetAllReactionData();
+
+    DataList GetVectorOfReactionData();
+
+    void ScaleReactionRateForNewTemperature(double temp_K);
+
+    //_________________________________________________________________
+    void PrintTable(G4VDNAReactionModel* = 0);
+
+protected:
+    G4bool fVerbose;
+
+    ReactionDataMap fReactionData;
+    ReactivesMV     fReactantsMV;
+    ReactionDataMV  fReactionDataMV;
+    std::vector<std::unique_ptr<Data>> fVectorOfReactionData;
+    std::unique_ptr<G4ReactionTableMessenger> fpMessenger;
 };
-#endif /*G4MolecularReactionTable_HH*/
-

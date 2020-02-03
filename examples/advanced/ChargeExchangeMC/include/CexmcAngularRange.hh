@@ -82,7 +82,7 @@ inline void  CexmcAngularRange::serialize( Archive &  archive,
 }
 
 
-inline bool  operator<( const CexmcAngularRange &  left,
+inline G4bool  operator<( const CexmcAngularRange &  left,
                         const CexmcAngularRange &  right )
 {
     if ( left.top != right.top )

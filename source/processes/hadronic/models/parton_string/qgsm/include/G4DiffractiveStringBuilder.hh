@@ -33,17 +33,17 @@
 
 class G4DiffractiveStringBuilder 
 {
-public:
-	G4DiffractiveStringBuilder();
-	~G4DiffractiveStringBuilder();
+  public:
+    G4DiffractiveStringBuilder();
+    ~G4DiffractiveStringBuilder();
 
-	G4ExcitedString* BuildString(G4PartonPair* aParton);
+    G4ExcitedString* BuildString(G4PartonPair* aParton);
 
-private:
-	G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &right);
-	G4int operator==(const G4DiffractiveStringBuilder &right) const;
-	G4int operator!=(const G4DiffractiveStringBuilder &right) const;
-
+  private:
+    G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &right);
+    G4bool operator==(const G4DiffractiveStringBuilder &right) const;
+    G4bool operator!=(const G4DiffractiveStringBuilder &right) const;
 };
 
-#endif     
+#endif
+

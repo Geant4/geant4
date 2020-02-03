@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 # $Id$
 # 									
 # Decays of U238 in VR mode   
 #
+=======
+# Decays of U238[44.916] in VR mode   
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #                                                                         
 /control/verbose 2
 /run/verbose 1

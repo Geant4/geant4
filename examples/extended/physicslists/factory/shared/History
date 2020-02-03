@@ -1,0 +1,31 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    physicslists/shared History file
+                    --------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+24/3/19  J.Allison      (physicslistsShared-V10-05-00)
+- Part of Merge Request exampleB4-V10-05-00.
+- Corrected name of include file: csv.hh
+
+15/1/18  G.Folger       (physicslistsShared-V10-04-00)
+-  Retag previously rejected tag.
+
+4/12/17  G.Folger       (physicslistsShared-V10-03-01)
+- Correct copy script
+
+26/10/17 I. Hrivnacova  (physicslistsShared-V10-03-00)
+- The first tag
+
+25/10/17 I. Hrivnacova
+- First version of example

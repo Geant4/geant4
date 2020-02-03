@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomActionInitialization.hh 68058 2013-07-22 14:47:43Z jmadsen $
 //
 /// \file DicomActionInitialization.hh
 /// \brief Definition of the DicomActionInitialization class

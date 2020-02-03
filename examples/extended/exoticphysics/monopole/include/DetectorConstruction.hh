@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,15 +61,26 @@ public:
   void SetSizeX(G4double);
   void SetSizeYZ(G4double);              
   void SetMaterial(const G4String&);            
+<<<<<<< HEAD
   void SetMagField(G4double);
   void SetMaxStepSize(G4double);
   void UpdateGeometry();
+=======
+  void SetMaxStepSize(G4double);
+
+  virtual void ConstructSDandField();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
           
   // access to geometry
   inline G4double     GetWorldSizeX()    {return fWorldSizeX;};
   inline G4double     GetAbsorSizeX()    {return fAbsorSizeX;};
   inline G4double     GetMaxStepSize()   {return fMaxStepSize;};
   inline const G4Material* GetAbsorMaterial() {return fAbsorMaterial;};
+<<<<<<< HEAD
+=======
+
+  G4MonopoleFieldSetup* GetMonopoleFieldSetup() const { return fMonFieldSetup.Get(); }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
                            
 private:
 
@@ -80,10 +94,14 @@ private:
   G4double            fMaxStepSize;
   G4Material*         fAbsorMaterial;
 
+<<<<<<< HEAD
   G4UniformMagField*    fMagField;
   G4MonopoleFieldSetup* fMonFieldSetup;
 
   G4LogicalVolume*    fLogAbsor;
+=======
+  G4Cache<G4MonopoleFieldSetup*> fMonFieldSetup;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
                
   DetectorMessenger*  fDetectorMessenger;
 

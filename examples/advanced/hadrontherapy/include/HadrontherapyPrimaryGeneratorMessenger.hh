@@ -40,6 +40,7 @@ class G4UIcmdWithADouble;
 class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
 {
 public:
+<<<<<<< HEAD
   HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
   ~HadrontherapyPrimaryGeneratorMessenger();
   HadrontherapyPrimaryGeneratorAction* HadrontherapyAction;
@@ -60,6 +61,25 @@ private:
   G4UIdirectory*                    EnergyDir;
   G4UIdirectory*                    particlePositionDir;
   G4UIdirectory*                    MomentumDir;
+=======
+    
+    HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
+    ~HadrontherapyPrimaryGeneratorMessenger();
+    
+    
+    HadrontherapyPrimaryGeneratorAction* HadrontherapyAction;
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+    
+    G4UIcmdWithABool *NewSource;
+    G4UIcmdWithAString  *calculatedPhaseSpaceFileIN;
+    G4UIdirectory* changeTheSource;
+    G4bool *BoolRead;
+    
+private:
+    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 #endif

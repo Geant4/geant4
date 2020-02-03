@@ -1,0 +1,58 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Activation History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+07-10-18 mma (activation-V10-04-04)
+- PhysicsList : use G4IonElasticPhysics and G4IonPhysicsXS
+
+25-06-18 mma (activation-V10-04-03)
+- envHadronic : add env variables for particleHP (PHP)
+
+08-05-18 Ben Morgan (activation-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+06-04-18 mma (activation-V10-04-01)
+- Activation.cc : set visualisation only in interactive mode
+
+15-03-18 mma (activation-V10-04-00)
+- Activation.cc : remove G4UI_USE and G4VIS_USE
+
+28-11-17 Ivana Hrivnacova (activation-V10-03-05)
+- Fixed Doxygen warnings
+
+25-10-17 Ivana Hrivnacova (activation-V10-03-03,04)
+- Reverted back the example name; 
+  (it's not possible to tag the renamed example)
+- Minor modifications in  readme only
+
+19-10-17 Ivana Hrivnacova (activation-V10-03-02)
+- Renamed example from Activation in activation
+
+17-10-17 mma (activation-V10-03-01)
+- update readme
+
+16-05-17 mma (activation-V10-03-00)
+- first tag. Cowork with ctests-V10-03-07
+
+21-04-17 Ivana Hrivnacova
+- Make the Run::fIonMap, fIonId static and added lock in Run::GetIonId()
+  where these data are updated. This makes the code working in MT mode. 
+- Simplified code in Run class:
+  - Introduced C++11 range for-loops
+  - Added a private function for merging particle data maps to avoid code duplication
+
+07-02-17 Michel Maire
+- created from Hadr06

@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE01/include/RE01TrackerHit.hh
 /// \brief Definition of the RE01TrackerHit class
 //
-// $Id: RE01TrackerHit.hh 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #ifndef RE01TrackerHit_h

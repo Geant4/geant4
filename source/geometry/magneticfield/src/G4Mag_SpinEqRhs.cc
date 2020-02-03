@@ -23,17 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Mag_SpinEqRhs implementation
 //
-// $Id: G4Mag_SpinEqRhs.cc 95824 2016-02-26 08:45:54Z gcosmo $
-//
-// This is the standard right-hand side for equation of motion.
-// This version of the right-hand side includes the three components
-// of the particle's spin.
-//
-//            J. Apostolakis, February 8th, 1999
-//            P. Gumplinger,  February 8th, 1999
-//            D. Cote-Ahern, P. Gumplinger,  April 11th, 2001
-//
+// Created: J.Apostolakis, P.Gumplinger - 08.02.1999
 // --------------------------------------------------------------------
 
 #include "G4Mag_SpinEqRhs.hh"
@@ -43,8 +35,7 @@
 #include "G4ThreeVector.hh"
 
 G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ), charge(0.), mass(0.), magMoment(0.),
-    spin(0.), omegac(0.), anomaly(0.0011659208), beta(0.), gamma(0.)
+  : G4Mag_EqRhs( MagField )
 {
 }
 
@@ -92,11 +83,14 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
    dydx[1] = y[4] * inv_momentum_magnitude;       //  (d/ds)y = Vy/V
    dydx[2] = y[5] * inv_momentum_magnitude;       //  (d/ds)z = Vz/V
 
-   if (charge == 0.) {
+   if (charge == 0.)
+   {
       dydx[3] = 0.;
       dydx[4] = 0.;
       dydx[5] = 0.;
-   } else {
+   }
+   else
+   {
       dydx[3] = cof*(y[4]*B[2] - y[5]*B[1]) ;   // Ax = a*(Vy*Bz - Vz*By)
       dydx[4] = cof*(y[5]*B[0] - y[3]*B[2]) ;   // Ay = a*(Vz*Bx - Vx*Bz)
       dydx[5] = cof*(y[3]*B[1] - y[4]*B[0]) ;   // Az = a*(Vx*By - Vy*Bx)
@@ -116,17 +110,24 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
    G4double pcharge;
-   if (charge == 0.) pcharge = 1.;
-   else pcharge = charge;
-
-   G4ThreeVector dSpin(0.,0.,0.);
-   if (Spin.mag2() != 0.) {
-      dSpin = pcharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   if (charge == 0.)
+   {
+     pcharge = 1.;
+   }
+   else
+   {
+     pcharge = charge;
    }
 
-   dydx[ 9] = dSpin.x();
+   G4ThreeVector dSpin(0.,0.,0.);
+   if (Spin.mag2() != 0.)
+   {
+     dSpin = pcharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   }
+
+   dydx[9] = dSpin.x();
    dydx[10] = dSpin.y();
    dydx[11] = dSpin.z();
 
-   return ;
+   return;
 }

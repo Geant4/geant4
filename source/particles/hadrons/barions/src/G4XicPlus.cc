@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicPlus.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +68,7 @@ G4XicPlus* G4XicPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      2.4678*GeV,   1.49e-9*MeV,   +1.*eplus,
+                 name,     2.46787*GeV,   1.49e-9*MeV,   +1.*eplus,
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            +1,        4232,

@@ -1,8 +1,10 @@
-# $Id: fanoCavity2.in 93259 2015-10-14 08:35:22Z gcosmo $
 #
-/control/verbose 2
+/control/verbose 1
 /control/cout/ignoreThreadsExcept 0
-/run/verbose 2
+/run/verbose 1
+#
+###/testem/det/wallMater Water
+###/testem/det/cavityMater Water_gas
 #
 /testem/phys/addPhysics standard_opt3
 #
@@ -11,5 +13,4 @@
 /gun/energy 1 MeV
 #
 /run/printProgress 10000
-#
 /run/beamOn 40000

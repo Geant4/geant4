@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -32,7 +31,7 @@
 //
 // File name:     G4eBremsstrahlungRelModel
 //
-// Author:        Andreas Schaelicke 
+// Author:        Andreas Schaelicke
 //
 // Creation date: 12.08.2008
 //
@@ -41,536 +40,750 @@
 // 13.11.08    add SetLPMflag and SetLPMconstant methods
 // 13.11.08    change default LPMconstant value
 // 13.10.10    add angular distributon interface (VI)
+// 31.05.16    change LPMconstant such that it gives suppression variable 's'
+//             that consistent to Migdal's one; fix a small bug in 'logTS1'
+//             computation; better agreement with exp.(M.Novak)
+// 15.07.18    improved LPM suppression function approximation (no artificial
+//             steps), code cleanup and optimizations,more implementation and
+//             model related comments, consistent variable naming (M.Novak)
 //
 // Main References:
-//  Y.-S.Tsai, Rev. Mod. Phys. 46 (1974) 815; Rev. Mod. Phys. 49 (1977) 421. 
+//  Y.-S.Tsai, Rev. Mod. Phys. 46 (1974) 815; Rev. Mod. Phys. 49 (1977) 421.
 //  S.Klein,  Rev. Mod. Phys. 71 (1999) 1501.
 //  T.Stanev et.al., Phys. Rev. D25 (1982) 1291.
-//  M.L.Ter-Mikaelian, High-energy Electromagnetic Processes in Condensed Media, Wiley, 1972.
+//  M.L.Ter-Mikaelian, High-energy Electromagnetic Processes in Condensed Media,
+//  Wiley, 1972.
 //
 // -------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
-#include "G4LossTableManager.hh"
 #include "G4ModifiedTsai.hh"
-#include "G4DipBustGenerator.hh"
+//#include "G4DipBustGenerator.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+const G4int G4eBremsstrahlungRelModel::gMaxZet = 120;
 
-const G4double 
-G4eBremsstrahlungRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-				   0.5917, 0.7628, 0.8983, 0.9801 };
-const G4double 
-G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-				   0.1813, 0.1569, 0.1112, 0.0506 };
-const G4double 
-G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71};
-const G4double 
-G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924};
+// constant DCS factor: 16\alpha r_0^2/3
+const G4double G4eBremsstrahlungRelModel::gBremFactor
+  = 16. * CLHEP::fine_structure_const * CLHEP::classic_electr_radius
+    * CLHEP::classic_electr_radius/3.;
 
-using namespace std;
+// Migdal's constant: 4\pi r_0*electron_reduced_compton_wavelength^2
+const G4double G4eBremsstrahlungRelModel::gMigdalConstant
+  = 4. * CLHEP::pi * CLHEP::classic_electr_radius
+    * CLHEP::electron_Compton_length * CLHEP::electron_Compton_length;
 
-G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
-       const G4ParticleDefinition* p, const G4String& nam)
-  : G4VEmModel(nam),
-    particle(0),
-    bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
-    isElectron(true),
-    fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
-    fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
-    fXiLPM(0), fPhiLPM(0), fGLPM(0),
-    use_completescreening(false)
+// LPM constant: \alpha(mc^2)^2/(4\pi*\hbar c)
+const G4double G4eBremsstrahlungRelModel::gLPMconstant
+  = CLHEP::fine_structure_const * CLHEP::electron_mass_c2
+    * CLHEP::electron_mass_c2 / (4. * CLHEP::pi * CLHEP::hbarc);
+
+// abscissas and weights of an 8 point Gauss-Legendre quadrature
+// for numerical integration on [0,1]
+const G4double G4eBremsstrahlungRelModel::gXGL[] = {
+  1.98550718e-02, 1.01666761e-01, 2.37233795e-01, 4.08282679e-01,
+  5.91717321e-01, 7.62766205e-01, 8.98333239e-01, 9.80144928e-01
+};
+const G4double G4eBremsstrahlungRelModel::gWGL[] = {
+  5.06142681e-02, 1.11190517e-01, 1.56853323e-01, 1.81341892e-01,
+  1.81341892e-01, 1.56853323e-01, 1.11190517e-01, 5.06142681e-02
+};
+
+// elastic and inelatic radiation logarithms for light elements (where the
+// Thomas-Fermi model doesn't work): computed by using Dirac-Fock model of atom.
+const G4double G4eBremsstrahlungRelModel::gFelLowZet  [] = {
+  0.0, 5.3104, 4.7935, 4.7402, 4.7112, 4.6694, 4.6134, 4.5520
+};
+const G4double G4eBremsstrahlungRelModel::gFinelLowZet[] = {
+  0.0, 5.9173, 5.6125, 5.5377, 5.4728, 5.4174, 5.3688, 5.3236
+};
+
+// LPM supression functions evaluated at initialisation time
+G4eBremsstrahlungRelModel::LPMFuncs  G4eBremsstrahlungRelModel::gLPMFuncs;
+
+// special data structure per element i.e. per Z
+std::vector<G4eBremsstrahlungRelModel::ElementData*> G4eBremsstrahlungRelModel::gElementData;
+
+G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
+                                                     const G4String& nam)
+: G4VEmModel(nam), fIsElectron(true), fIsScatOffElectron(false),
+  fIsLPMActive(false), fPrimaryParticle(nullptr), fIsUseCompleteScreening(false)
 {
-  fParticleChange = 0;
-  theGamma = G4Gamma::Gamma();
-
-  lowestKinEnergy = 1.0*MeV;
-  SetLowEnergyLimit(lowestKinEnergy);  
-
-  nist = G4NistManager::Instance();  
+  fCurrentIZ = 0;
+  //
+  fPrimaryParticleMass = 0.;
+  fPrimaryKinEnergy    = 0.;
+  fPrimaryTotalEnergy  = 0.;
+  fDensityFactor       = 0.;
+  fDensityCorr         = 0.;
+  fNucTerm             = 0.;
+  fSumTerm             = 0.;
+  //
+  fPrimaryParticle     = nullptr;
+  fGammaParticle       = G4Gamma::Gamma();
+  fParticleChange      = nullptr;
+  //
+  fLowestKinEnergy     = 1.0*MeV;
+  SetLowEnergyLimit(fLowestKinEnergy);
+  //
+  fLPMEnergyThreshold  = 1.e+39;
+  fLPMEnergy           = 0.;
 
   SetLPMFlag(true);
-  //SetAngularDistribution(new G4ModifiedTsai());
-  SetAngularDistribution(new G4DipBustGenerator());
-
-  particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
-    = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 
-    = xiLPM = phiLPM = gLPM = klpm = kp = 0.0;
-
-  energyThresholdLPM = 1.e39;
-
-  InitialiseConstants();
-  if(p) { SetParticle(p); }
+  //
+  SetAngularDistribution(new G4ModifiedTsai());
+  //SetAngularDistribution(new G4DipBustGenerator());
+  //
+  if (p) {
+    SetParticle(p);
+  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eBremsstrahlungRelModel::InitialiseConstants()
-{
-  facFel = G4Log(184.15);
-  facFinel = G4Log(1194.);
-
-  preS1 = 1./(184.15*184.15);
-  logTwo = G4Log(2.);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
 {
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eBremsstrahlungRelModel::SetParticle(const G4ParticleDefinition* p)
-{
-  particle = p;
-  particleMass = p->GetPDGMass();
-  if(p == G4Electron::Electron()) { isElectron = true; }
-  else                            { isElectron = false;}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
-						 const G4Material* mat, 
-						 G4double kineticEnergy)
-{
-  densityFactor = mat->GetElectronDensity()*fMigdalConstant;
-  lpmEnergy = mat->GetRadlen()*fLPMconstant;
-
-  // Threshold for LPM effect (i.e. below which LPM hidden by density effect) 
-  if (LPMFlag()) {
-    energyThresholdLPM=sqrt(densityFactor)*lpmEnergy;
-  } else {
-     energyThresholdLPM=1.e39;   // i.e. do not use LPM effect
+  if (IsMaster()) {
+    // clear ElementData container
+    for (size_t iz = 0; iz < gElementData.size(); ++iz) {
+      if (gElementData[iz]) {
+        delete gElementData[iz];
+      }
+    }
+    gElementData.clear();
+    // clear LPMFunctions (if any)
+    if (LPMFlag()) {
+      gLPMFuncs.fLPMFuncG.clear();
+      gLPMFuncs.fLPMFuncPhi.clear();
+      gLPMFuncs.fIsInitialized = false;
+    }
   }
-  // calculate threshold for density effect
-  kinEnergy   = kineticEnergy;
-  totalEnergy = kineticEnergy + particleMass;
-  densityCorr = densityFactor*totalEnergy*totalEnergy;
-
-  // define critical gamma energies (important for integration/dicing)
-  klpm=totalEnergy*totalEnergy/lpmEnergy;
-  kp=sqrt(densityCorr);    
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
-					   const G4DataVector& cuts)
+                                           const G4DataVector& cuts)
 {
-  if(p) { SetParticle(p); }
-
-  currentZ = 0.;
-
-  if(IsMaster() && LowEnergyLimit() < HighEnergyLimit()) { 
-    InitialiseElementSelectors(p, cuts); 
+  if (p) {
+    SetParticle(p);
   }
-
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  fCurrentIZ = 0;
+  // init element data and precompute LPM functions (only if lpmflag is true)
+  if (IsMaster()) {
+    InitialiseElementData();
+    if (LPMFlag()) { InitLPMFunctions(); }
+    if (LowEnergyLimit() < HighEnergyLimit()) {
+      InitialiseElementSelectors(p, cuts);
+    }
+  }
+  if (!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if (GetTripletModel()) {
+    GetTripletModel()->Initialise(p, cuts);
+    fIsScatOffElectron = true;
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
-						G4VEmModel* masterModel)
+                                                G4VEmModel* masterModel)
 {
-  if(LowEnergyLimit() < HighEnergyLimit()) { 
+  if (LowEnergyLimit() < HighEnergyLimit()) {
     SetElementSelectors(masterModel->GetElementSelectors());
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double 
-G4eBremsstrahlungRelModel::MinPrimaryEnergy(const G4Material*,
-					    const G4ParticleDefinition*,
-					    G4double cut)
+void G4eBremsstrahlungRelModel::SetParticle(const G4ParticleDefinition* p)
 {
-  return std::max(lowestKinEnergy, cut);
+  fPrimaryParticle     = p;
+  fPrimaryParticleMass = p->GetPDGMass();
+  fIsElectron          = (p==G4Electron::Electron());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
-					     const G4Material* material,
-                                             const G4ParticleDefinition* p,
-                                                   G4double kineticEnergy,
-                                                   G4double cutEnergy)
+// Sets kinematical variables like E_kin, E_t and some material dependent
+// variables like LPM energy and characteristic photon energy k_p (more exactly
+// k_p^2) for the Ter-Mikaelian suppression effect.
+void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
+                                                 const G4Material* mat,
+	                                               G4double kineticEnergy)
 {
-  if(!particle) { SetParticle(p); }
-  if(kineticEnergy < LowEnergyLimit()) { return 0.0; }
-  G4double cut = std::min(cutEnergy, kineticEnergy);
-  if(cut == 0.0) { return 0.0; }
+  fDensityFactor = gMigdalConstant*mat->GetElectronDensity();
+  fLPMEnergy     = gLPMconstant*mat->GetRadlen();
+  // threshold for LPM effect (i.e. below which LPM hidden by density effect)
+  if (LPMFlag()) {
+    fLPMEnergyThreshold = std::sqrt(fDensityFactor)*fLPMEnergy;
+  } else {
+    fLPMEnergyThreshold = 1.e+39;   // i.e. do not use LPM effect
+  }
+  // calculate threshold for density effect: k_p = sqrt(fDensityCorr)
+  fPrimaryKinEnergy   = kineticEnergy;
+  fPrimaryTotalEnergy = kineticEnergy+fPrimaryParticleMass;
+  fDensityCorr        = fDensityFactor*fPrimaryTotalEnergy*fPrimaryTotalEnergy;
+  // set activation flag for LPM effects in the DCS
+  fIsLPMActive        = (fPrimaryTotalEnergy>fLPMEnergyThreshold);
+}
 
-  SetupForMaterial(particle, material,kineticEnergy);
+// minimum primary (e-/e+) energy at which discrete interaction is possible
+G4double G4eBremsstrahlungRelModel::MinPrimaryEnergy(const G4Material*,
+                                                     const G4ParticleDefinition*,
+                                                     G4double cut)
+{
+  return std::max(fLowestKinEnergy, cut);
+}
 
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
-
+// Computes the restricted dE/dx as the appropriate weight of the individual
+// element contributions that are computed by numerically integrating the DCS.
+G4double
+G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(const G4Material* material,
+                                                const G4ParticleDefinition* p,
+                                                G4double kineticEnergy,
+                                                G4double cutEnergy)
+{
   G4double dedx = 0.0;
-
-  //  loop for elements in the material
-  for (size_t i=0; i<material->GetNumberOfElements(); i++) {
-
-    G4VEmModel::SetCurrentElement((*theElementVector)[i]);
-    SetCurrentElement((*theElementVector)[i]->GetZ());
-
-    dedx += theAtomicNumDensityVector[i]*currentZ*currentZ*ComputeBremLoss(cut);
+  if (!fPrimaryParticle) {
+    SetParticle(p);
   }
-  dedx *= bremFactor;
-
-
-  return dedx;
+  if (kineticEnergy < LowEnergyLimit()) {
+    return dedx;
+  }
+  // maximum value of the dE/dx integral (the minimum is 0 of course)
+  G4double tmax = std::min(cutEnergy, kineticEnergy);
+  if (tmax == 0.0) {
+    return dedx;
+  }
+  // sets kinematical and material related variables
+  SetupForMaterial(fPrimaryParticle, material,kineticEnergy);
+  // get element compositions of the material
+  const G4ElementVector* theElemVector = material->GetElementVector();
+  const G4double* theAtomNumDensVector = material->GetAtomicNumDensityVector();
+  const size_t        numberOfElements = theElemVector->size();
+  // loop over the elements of the material and compute their contributions to
+  // the restricted dE/dx by numerical integration of the dependent part of DCS
+  for (size_t ie = 0; ie < numberOfElements; ++ie) {
+    G4VEmModel::SetCurrentElement((*theElemVector)[ie]);
+    //SetCurrentElement((*theElementVector)[i]->GetZasInt());
+    const G4double zet = (*theElemVector)[ie]->GetZ();
+    fCurrentIZ         = std::min(G4lrint(zet), gMaxZet);
+    dedx              += theAtomNumDensVector[ie]*zet*zet*ComputeBremLoss(tmax);
+  }
+  // apply the constant factor C/Z = 16\alpha r_0^2/3
+  dedx *= gBremFactor;
+  return std::max(dedx,0.);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eBremsstrahlungRelModel::ComputeBremLoss(G4double cut)
+// Computes the integral part of the restricted dE/dx contribution from a given
+// element (Z) by numerically integrating the k dependent part of the DCS between
+// k_min=0 and k_max = tmax = min[gamma-cut, electron-kinetic-eenrgy].
+// The numerical integration is done by dividing the integration range into 'n'
+// subintervals and an 8 pint GL integral (on [0,1]) is performed on each sub-
+// inteval by tranforming k to alpha=k/E_t (E_t is the total energy of the e-)
+// and each sub-interavl is transformed to [0,1]. So the integrastion is done
+// in xi(alpha) = xi(k) = [k/E_t-alpha_i]/delta where alpha_i=(i-1)*delta for
+// the i = 1,2,..,n-th sub-interval so xi(k) in [0,1] on each sub-intevals.
+// This transformation from 'k' to 'xi(k)' results in a multiplicative factor
+// of E_t*delta at each step.
+// The restricted dE/dx = N int_{0}^{k_max} k*ds/dk dk. There are 2 DCS model
+// one with LPM and one without LPM effects (see them below). In both case not
+// the ds/dk(Z,k) but ds/dk(Z,k)*[F*k/C] is computed since:
+// (i)    what we need here is ds/dk*k and not k so this multiplication is done
+// (ii)   the Ter-Mikaelian suppression i.e. F related factor is done here
+// (iii)  the constant factor C (includes Z^2 as well)is accounted in the caller
+G4double G4eBremsstrahlungRelModel::ComputeBremLoss(G4double tmax)
 {
-  G4double loss = 0.0;
-
-  // number of intervals and integration step 
-  G4double vcut = cut/totalEnergy;
-  G4int n = (G4int)(20*vcut) + 3;
-  G4double delta = vcut/G4double(n);
-
-  G4double e0 = 0.0;
-  G4double xs; 
-
-  // integration
-  for(G4int l=0; l<n; l++) {
-
-    for(G4int i=0; i<8; i++) {
-
-      G4double eg = (e0 + xgi[i]*delta)*totalEnergy;
-
-      if(totalEnergy > energyThresholdLPM) {
-	xs = ComputeRelDXSectionPerAtom(eg);
-      } else {
-	xs = ComputeDXSectionPerAtom(eg);
-      }
-      loss += wgi[i]*xs/(1.0 + densityCorr/(eg*eg));
+  // number of intervals and integration step
+  const G4double alphaMax = tmax/fPrimaryTotalEnergy;
+  const G4int        nSub = (G4int)(20*alphaMax)+3;
+  const G4double    delta = alphaMax/((G4double)nSub);
+  // set minimum value of the first sub-inteval
+  G4double alpha_i        = 0.0;
+  G4double dedxInteg      = 0.0;
+  for (G4int l = 0; l < nSub; ++l) {
+    for (G4int igl = 0; igl < 8; ++igl) {
+      // compute the emitted photon energy k
+      const G4double k   = (alpha_i+gXGL[igl]*delta)*fPrimaryTotalEnergy;
+      // compute the DCS value at k (without the constant, the 1/k, 1/F factors)
+      const G4double dcs = fIsLPMActive
+                          ? ComputeRelDXSectionPerAtom(k)  // DCS WITHOUT LPM
+                          : ComputeDXSectionPerAtom(k);    // DCS WITH    LPM
+      // account Ter-Mikaelian suppression: times 1/F with F = 1+(k_p/k)^2
+      dedxInteg += gWGL[igl]*dcs/(1.0+fDensityCorr/(k*k));
     }
-    e0 += delta;
+    // update sub-interval minimum value
+    alpha_i += delta;
   }
-
-  loss *= delta*totalEnergy;
-
-  return loss;
+  // apply corrections due to variable transformation i.e. E_t*delta
+  dedxInteg *= delta*fPrimaryTotalEnergy;
+  return std::max(dedxInteg,0.);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// Computes restrected atomic cross section by numerically integrating the
+// DCS between the proper kinematical limits accounting the gamma production cut
 G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
-                                              const G4ParticleDefinition* p,
-					      G4double kineticEnergy, 
-					      G4double Z,   G4double,
-					      G4double cutEnergy, 
-					      G4double maxEnergy)
+                                                  const G4ParticleDefinition* p,
+                                                  G4double kineticEnergy,
+                                                  G4double Z,
+                                                  G4double,
+                                                  G4double cut,
+                                                  G4double maxEnergy)
 {
-  if(!particle) { SetParticle(p); }
-  if(kineticEnergy < LowEnergyLimit()) { return 0.0; }
-  G4double cut  = std::min(cutEnergy, kineticEnergy);
-  G4double tmax = std::min(maxEnergy, kineticEnergy);
-
-  if(cut >= tmax) { return 0.0; }
-
-  SetCurrentElement(Z);
-
-  G4double cross = ComputeXSectionPerAtom(cut);
-
-  // allow partial integration
-  if(tmax < kinEnergy) { cross -= ComputeXSectionPerAtom(tmax); }
-  
-  cross *= Z*Z*bremFactor;
-
-  return cross;
+  G4double crossSection = 0.0;
+  if (!fPrimaryParticle) {
+    SetParticle(p);
+  }
+  if (kineticEnergy < LowEnergyLimit()) {
+    return crossSection;
+  }
+  // min/max kinetic energy limits of the DCS integration:
+  const G4double tmin = std::min(cut, kineticEnergy);
+  const G4double tmax = std::min(maxEnergy, kineticEnergy);
+  // zero restricted x-section if e- kinetic energy is below gamma cut
+  if (tmin >= tmax) {
+    return crossSection;
+  }
+  fCurrentIZ   = std::min(G4lrint(Z), gMaxZet);
+  // integrate numerically (dependent part of) the DCS between the kin. limits:
+  // a. integrate between tmin and kineticEnergy of the e-
+  crossSection = ComputeXSectionPerAtom(tmin);
+  // allow partial integration: only if maxEnergy < kineticEnergy
+  // b. integrate between tmax and kineticEnergy (tmax=maxEnergy in this case)
+  // (so the result in this case is the integral of DCS between tmin and
+  // maxEnergy)
+  if (tmax < kineticEnergy) {
+    crossSection -= ComputeXSectionPerAtom(tmax);
+  }
+  // multiply with the constant factors: 16\alpha r_0^2/3 Z^2
+  crossSection *= Z*Z*gBremFactor;
+  return std::max(crossSection, 0.);
 }
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
+// Numerical integral of the (k dependent part of) DCS between k_min=tmin and
+// k_max = E_k (where E_k is the kinetic energy of the e- and tmin is the
+// minimum of energy of the  emitted photon). The integration is done in the
+// transformed alpha(k) = ln(k/E_t) variable (with E_t being the total energy of
+// the primary e-). The integration range is divided into n sub-intervals with
+// delta = [ln(k_min/E_t)-ln(k_max/E_t)]/n width each. An 8 point GL integral
+// on [0,1] is applied on each sub-inteval so alpha is transformed to
+// xi(alpha) = xi(k) = [ln(k/E_t)-alpha_i]/delta where alpha_i = ln(k_min/E_t) +
+// (i-1)*delta for the i = 1,2,..,n-th sub-interval and xi(k) in [0,1] on each
+// sub-intevals. From the transformed xi, k(xi) = E_t exp[xi*delta+alpha_i].
+// Since the integration is done in variable xi instead of k this
+// transformation results in a multiplicative factor of k*delta at each step.
+// However, DCS differential in k is ~1/k so the multiplicative factor is simple
+// becomes delta and the 1/k factor is dropped from the DCS computation.
+// NOTE:
+//   - LPM suppression is accounted above threshold e- energy (corresponidng
+//     flag is set in SetUpForMaterial() => 2 DCS with/without LPM
+//   - Ter-Mikaelian suppression is always accounted
+G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double tmin)
 {
-  G4double cross = 0.0;
-
-  // number of intervals and integration step 
-  G4double vcut = G4Log(cut/totalEnergy);
-  G4double vmax = G4Log(kinEnergy/totalEnergy);
-  G4int n = (G4int)(0.45*(vmax - vcut)) + 4;
-  //  n=1; //  integration test 
-  G4double delta = (vmax - vcut)/G4double(n);
-
-  G4double e0 = vcut;
-  G4double xs; 
-
-  // integration
-  for(G4int l=0; l<n; l++) {
-
-    for(G4int i=0; i<8; i++) {
-
-      G4double eg = G4Exp(e0 + xgi[i]*delta)*totalEnergy;
-
-      if(totalEnergy > energyThresholdLPM) {
-	xs = ComputeRelDXSectionPerAtom(eg);
-      } else {
-	xs = ComputeDXSectionPerAtom(eg);
-      }
-      cross += wgi[i]*xs/(1.0 + densityCorr/(eg*eg));
+  G4double xSection = 0.0;
+  const G4double alphaMin = G4Log(tmin/fPrimaryTotalEnergy);
+  const G4double alphaMax = G4Log(fPrimaryKinEnergy/fPrimaryTotalEnergy);
+  const G4int    nSub     = (G4int)(0.45*(alphaMax-alphaMin))+4;
+  const G4double delta    = (alphaMax-alphaMin)/((G4double)nSub);
+  // set minimum value of the first sub-inteval
+  G4double alpha_i        = alphaMin;
+  for (G4int l = 0; l < nSub; ++l) {
+    for (G4int igl = 0; igl < 8; ++igl) {
+      // compute the emitted photon energy k
+      const G4double k   = G4Exp(alpha_i+gXGL[igl]*delta)*fPrimaryTotalEnergy;
+      // compute the DCS value at k (without the constant, the 1/k, 1/F factors)
+      const G4double dcs = fIsLPMActive
+                          ? ComputeRelDXSectionPerAtom(k) // DCS WITHOUT LPM
+                          : ComputeDXSectionPerAtom(k);   // DCS WITH    LPM
+      // account Ter-Mikaelian suppression: times 1/F with F = 1+(k_p/k)^2
+      xSection += gWGL[igl]*dcs/(1.0+fDensityCorr/(k*k));
     }
-    e0 += delta;
+    // update sub-interval minimum value
+    alpha_i += delta;
   }
-
-  cross *= delta;
-
-  return cross;
+  // apply corrections due to variable transformation
+  xSection *= delta;
+  // final check
+  return std::max(xSection, 0.);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
+// DCS WITH LPM EFFECT: complete screening aprx. and includes LPM suppression
+// ds/dk(Z,k) = C/[F*k]*{ Xi(s*F)*[y^2*G/4 +(1-y+y^2/3)Phi]*[L_el-f_c+L_inel/Z]
+//                        +(1-y)*[1+1/Z]/12}  with C = 16\alpha r_0^2/3 Z^2 and
+// Xi(s),G(s), Phi(s) are LPM suppression functions:
+//
+// LPM SUPPRESSION: The 's' is the suppression variable and F = F(k,k_p) =
+// 1+(k_p/k)^2 with k_p = hbar*w_p*E/(m*c^2) is a material (e- density)
+// dependent constant. F accounts the Ter-Mikaelian suppression with a smooth
+// transition in the emitted photon energy. Also, the LPM suppression functions
+// goes to 0 when s goes to 0 and goes to 1 when s is increasing (=1 at s=~2)
+// So evaluating the LPM suppression functions at 'sF' instead of 's' ensures a
+// smooth transition depending on the emitted photon energy 'k': LPM effect is
+// smoothly turned off i.e. Xi(sF)=G(sF)=Phi(sF)=1 when k << k_p because F >> 1
+// and sF ~ s when k >> k_p since F ~ 1 in that case.
+// HERE, ds/dk(Z,k)*[F*k/C] is computed since:
+//  (i)   DCS ~ 1/k factor will disappear due to the variable transformation
+//        v(k)=ln(k/E_t) -> dk/dv=E_t*e^v=k -> ds/dv= ds/dk*dk/dv=ds/dk*k so it
+//        would cnacell out the 1/k factor => 1/k don't included here
+//  (ii)  the constant factor C and Z don't depend on 'k' => not included here
+//  (iii) the 1/F(k) factor is accounted in the callers: explicitely (cross sec-
+//        tion computation) or implicitly through further variable transformaton
+//        (in the final state sampling algorithm)
+// COMPLETE SCREENING: see more at the DCS without LPM effect below.
+G4double
+G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEnergy)
 {
-  // *** calculate lpm variable s & sprime ***
-  // Klein eqs. (78) & (79)
-  G4double sprime = sqrt(0.125*k*lpmEnergy/(totalEnergy*(totalEnergy-k)));
-
-  G4double s1 = preS1*z23;
-  G4double logS1 = 2./3.*lnZ-2.*facFel;
-  G4double logTS1 = logTwo+logS1;
-
-  xiLPM = 2.;
-
-  if (sprime>1) 
-    xiLPM = 1.;
-  else if (sprime>sqrt(2.)*s1) {
-    G4double h  = G4Log(sprime)/logTS1;
-    xiLPM = 1+h-0.08*(1-h)*(1-sqr(1-h))/logTS1;
+  G4double dxsec = 0.0;
+  if (gammaEnergy < 0.) {
+    return dxsec;
   }
-
-  G4double s0 = sprime/sqrt(xiLPM); 
-
-  // *** merging with density effect***  should be only necessary in region 
-  // "close to" kp, e.g. k<100*kp using Ter-Mikaelian eq. (20.9)
-  G4double k2 = k*k;
-  s0 *= (1 + (densityCorr/k2) );
-
-  // recalculate Xi using modified s above
-  // Klein eq. (75)
-  xiLPM = 1.;
-  if (s0<=s1) xiLPM = 2.;
-  else if ( (s1<s0) && (s0<=1) ) { xiLPM = 1. + G4Log(s0)/logS1; }
-  
-
-  // *** calculate supression functions phi and G ***
-  // Klein eqs. (77)
-  G4double s2=s0*s0;
-  G4double s3=s0*s2;
-  G4double s4=s2*s2;
-
-  if (s0<0.1) {
-    // high suppression limit
-    phiLPM = 6.*s0 - 18.84955592153876*s2 + 39.47841760435743*s3 
-      - 57.69873135166053*s4;
-    gLPM = 37.69911184307752*s2 - 236.8705056261446*s3 + 807.7822389*s4;
+  const G4double y     = gammaEnergy/fPrimaryTotalEnergy;
+  const G4double onemy = 1.-y;
+  const G4double dum0  = 0.25*y*y;
+  // evaluate LPM functions (combined with the Ter-Mikaelian effect)
+  G4double funcGS, funcPhiS, funcXiS;
+  ComputeLPMfunctions(funcXiS, funcGS, funcPhiS, gammaEnergy);
+  const ElementData* elDat = gElementData[fCurrentIZ];
+  const G4double term1     = funcXiS*(dum0*funcGS+(onemy+2.0*dum0)*funcPhiS);
+  dxsec = term1*elDat->fZFactor1+onemy*elDat->fZFactor2;
+  //
+  if (fIsScatOffElectron) {
+    fSumTerm = dxsec;
+    fNucTerm = term1*elDat->fZFactor11 + onemy/12.;
   }
-  else if (s0<1.9516) {
-    // intermediate suppression
-    // using eq.77 approxim. valid s<2.      
-    phiLPM = 1.-G4Exp(-6.*s0*(1.+(3.-pi)*s0)
-		+s3/(0.623+0.795*s0+0.658*s2));
-    if (s0<0.415827397755) {
-      // using eq.77 approxim. valid 0.07<s<2
-      G4double psiLPM = 1-G4Exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
-      gLPM = 3*psiLPM-2*phiLPM;
+  return std::max(dxsec,0.0);
+}
+
+// DCS WITHOUT LPM EFFECT: DCS with sceening (Z>5) and Coulomb cor. no LPM
+// ds/dk(Z,k)=C/[F*k]*{(1-y+3*y^2/4)*[(0.25*phi1(g)-ln(Z)/3-f_c)+(0.25*psi1(e)
+// -2*ln(Z)/3)/Z]+ (1-y)*[(phi1(g)-phi2(g))+(psi1(e)-psi2(e))/Z]/8}
+// where f_c(Z) is the Coulomb correction factor and phi1(g),phi2(g) and psi1(e),
+// psi2(e) are coherent and incoherent screening functions. In the Thomas-Fermi
+// model of the atom, the screening functions will have a form that do not
+// depend on Z (not explicitely). These numerical screening functions can be
+// approximated as Tsai Eqs. [3.38-3.41] with the variables g=gamma and
+// e=epsilon given by Tsai Eqs. [3.30 and 3.31] (see more details at the method
+// ComputeScreeningFunctions()). Note, that in case of complete screening i.e.
+// g = e = 0 => 0.25*phi1(0)-ln(Z)/3 = ln(184.149/Z^(1/3)) = L_el and
+// 0.25*psi1(0)-2*ln(Z)/3=ln(1193.923/Z^(2/3))=L_inel and phi1(0)-phi2(0) =
+// psi1(0)-psi2(0) = 2/3 so the DCS in complete screening =>
+// COMPLETE SCREENING:
+// ds/dk(Z,k)=C/k*{(1-y+3*y^2/4)*[L_el-f_c+L_inel/Z] + (1-y)*[1+1/Z]/12} that is
+// used in case of DCS with LPM above (if all the suprression functions are
+// absent i.e. their value = 1).
+// Since the Thomas-Fermi model of the atom is not accurate at low Z, the DCS in
+// complete screening is used here at low Z(<5) with L_el(Z), L_inel(Z) values
+// computed by using the Dirac-Fock model of the atom.
+// NOTE: that the Ter-Mikaelian suppression is accounted in the DCS through the
+// 1/F factor but it is included in the caller and not considered here.
+// HERE, ds/dk(Z,k)*[F*k/C] is computed exactly like in the DCS with LPM case.
+G4double
+G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
+{
+  G4double dxsec = 0.0;
+  if (gammaEnergy < 0.) {
+    return dxsec;
+  }
+  const G4double y         = gammaEnergy/fPrimaryTotalEnergy;
+  const G4double onemy     = 1.-y;
+  const G4double dum0      = onemy+0.75*y*y;
+  const ElementData* elDat = gElementData[fCurrentIZ];
+  // use complete screening and L_el, L_inel from Dirac-Fock model instead of TF
+  if (fCurrentIZ < 5 || fIsUseCompleteScreening) {
+    dxsec  = dum0*elDat->fZFactor1;
+    dxsec += onemy*elDat->fZFactor2;
+    if (fIsScatOffElectron) {
+      fSumTerm = dxsec;
+      fNucTerm = dum0*elDat->fZFactor11+onemy/12.;
     }
-    else {
-      // using alternative parametrisiation
-      G4double pre = -0.16072300849123999 + s0*3.7550300067531581 + s2*-1.7981383069010097 
-	+ s3*0.67282686077812381 + s4*-0.1207722909879257;
-      gLPM = tanh(pre);
+  } else {
+    // use Tsai's analytical approx. (Tsai Eqs. [3.38-3.41]) to the 'universal'
+    // numerical screening functions computed by using the TF model of the atom
+    const G4double invZ    = 1./(G4double)fCurrentIZ;
+    const G4double Fz      = elDat->fFz;
+    const G4double logZ    = elDat->fLogZ;
+    const G4double dum1    = y/(fPrimaryTotalEnergy-gammaEnergy);
+    const G4double gamma   = dum1*elDat->fGammaFactor;
+    const G4double epsilon = dum1*elDat->fEpsilonFactor;
+    // evaluate the screening functions
+    G4double phi1, phi1m2, psi1, psi1m2;
+    ComputeScreeningFunctions(phi1, phi1m2, psi1, psi1m2, gamma, epsilon);
+    dxsec  = dum0*((0.25*phi1-Fz) + (0.25*psi1-2.*logZ/3.)*invZ);
+    dxsec += 0.125*onemy*(phi1m2 + psi1m2*invZ);
+    if (fIsScatOffElectron) {
+      fSumTerm = dxsec;
+      fNucTerm = dum0*(0.25*phi1-Fz) + 0.125*onemy*phi1m2;
     }
   }
-  else {
-    // low suppression limit valid s>2.
-    phiLPM = 1. - 0.0119048/s4;
-    gLPM = 1. - 0.0230655/s4;
-  }
-
-  // *** make sure suppression is smaller than 1 ***
-  // *** caused by Migdal approximation in xi    ***
-  if (xiLPM*phiLPM>1. || s0>0.57)  { xiLPM=1./phiLPM; }
+  return std::max(dxsec,0.0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-G4double G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEnergy)
-// Ultra relativistic model
-//   only valid for very high energies, but includes LPM suppression
-//    * complete screening
+// Coherent and incoherent screening function approximations (see Tsai
+// Eqs.[3.38-3.41]). Tsai's analytical approximations to the numerical screening
+// functions computed by using the Thomas-Fermi model of atom (Moliere's appro-
+// ximation to the numerical TF screening function). In the TF-model, these
+// screening functions can be expressed in a 'universal' i.e. Z (directly) inde-
+// pendent variable (see Tsai Eqs. Eqs. [3.30 and 3.31]).
+void G4eBremsstrahlungRelModel::ComputeScreeningFunctions(G4double& phi1,
+                                                          G4double& phi1m2,
+                                                          G4double& psi1,
+                                                          G4double& psi1m2,
+                                                          const G4double gam,
+                                                          const G4double eps)
 {
-  if(gammaEnergy < 0.0) { return 0.0; }
-
-  G4double y = gammaEnergy/totalEnergy;
-  G4double y2 = y*y*.25;
-  G4double yone2 = (1.-y+2.*y2);
-
-  // ** form factors complete screening case **      
-
-  // ** calc LPM functions -- include ter-mikaelian merging with density effect **
-  //  G4double xiLPM, gLPM, phiLPM;  // to be made member variables !!!
-  CalcLPMFunctions(gammaEnergy);
-
-  G4double mainLPM   = xiLPM*(y2 * gLPM + yone2*phiLPM) * ( (Fel-fCoulomb) + Finel/currentZ );
-  G4double secondTerm = (1.-y)/12.*(1.+1./currentZ);
-
-  G4double cross = mainLPM+secondTerm;
-  return cross;
+  const G4double gam2 = gam*gam;
+  phi1   = 16.863-2.0*G4Log(1.0+0.311877*gam2)+2.4*G4Exp(-0.9*gam)
+          +1.6*G4Exp(-1.5*gam);
+  phi1m2 = 2.0/(3.0+19.5*gam+18.0*gam2);    // phi1-phi2
+  const G4double eps2 = eps*eps;
+  psi1   = 24.34-2.0*G4Log(1.0+13.111641*eps2)+2.8*G4Exp(-8.0*eps)
+          +1.2*G4Exp(-29.2*eps);
+  psi1m2 = 2.0/(3.0+120.0*eps+1200.0*eps2); //psi1-psi2
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
-// Relativistic model
-//  only valid for high energies (and if LPM suppression does not play a role)
-//  * screening according to thomas-fermi-Model (only valid for Z>5)
-//  * no LPM effect
+void
+G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+                                             const G4MaterialCutsCouple* couple,
+                                             const G4DynamicParticle* dp,
+                                             G4double cutEnergy,
+                                             G4double maxEnergy)
 {
-
-  if(gammaEnergy < 0.0) { return 0.0; }
-
-  G4double y = gammaEnergy/totalEnergy;
-
-  G4double main=0.,secondTerm=0.;
-
-  if (use_completescreening|| currentZ<5) {
-    // ** form factors complete screening case **      
-    main   = (3./4.*y*y - y + 1.) * ( (Fel-fCoulomb) + Finel/currentZ );
-    secondTerm = (1.-y)/12.*(1.+1./currentZ);
+  const G4double kineticEnergy    = dp->GetKineticEnergy();
+//  const G4double logKineticEnergy = dp->GetLogKineticEnergy();
+  if (kineticEnergy < LowEnergyLimit()) {
+    return;
   }
-  else {
-    // ** intermediate screening using Thomas-Fermi FF from Tsai only valid for Z>=5** 
-    G4double dd=100.*electron_mass_c2*y/(totalEnergy-gammaEnergy);
-    G4double gg=dd/z13;
-    G4double eps=dd/z23;
-    G4double phi1=Phi1(gg,currentZ),  phi1m2=Phi1M2(gg,currentZ);
-    G4double psi1=Psi1(eps,currentZ),  psi1m2=Psi1M2(eps,currentZ);
-    
-    main   = (3./4.*y*y - y + 1.) * ( (0.25*phi1-1./3.*lnZ-fCoulomb) + (0.25*psi1-2./3.*lnZ)/currentZ );
-    secondTerm = (1.-y)/8.*(phi1m2+psi1m2/currentZ);
+  // min, max kinetic energy limits
+  const G4double tmin = std::min(cutEnergy, kineticEnergy);
+  const G4double tmax = std::min(maxEnergy, kineticEnergy);
+  if (tmin >= tmax) {
+    return;
   }
-  G4double cross = main+secondTerm;
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eBremsstrahlungRelModel::SampleSecondaries(
-				      std::vector<G4DynamicParticle*>* vdp, 
-				      const G4MaterialCutsCouple* couple,
-				      const G4DynamicParticle* dp,
-				      G4double cutEnergy,
-				      G4double maxEnergy)
-{
-  G4double kineticEnergy = dp->GetKineticEnergy();
-  if(kineticEnergy < LowEnergyLimit()) { return; }
-  G4double cut  = std::min(cutEnergy, kineticEnergy);
-  G4double emax = std::min(maxEnergy, kineticEnergy);
-  if(cut >= emax) { return; }
-
-  SetupForMaterial(particle, couple->GetMaterial(), kineticEnergy);
-
-  const G4Element* elm = 
-    SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
-  SetCurrentElement(elm->GetZ());
-
-  kinEnergy   = kineticEnergy;
-  totalEnergy = kineticEnergy + particleMass;
-  densityCorr = densityFactor*totalEnergy*totalEnergy;
-
-  //G4double fmax= fMax;
-  G4bool highe = true;
-  if(totalEnergy < energyThresholdLPM) { highe = false; }
- 
-  G4double xmin = G4Log(cut*cut + densityCorr);
-  G4double xmax = G4Log(emax*emax  + densityCorr);
-  G4double gammaEnergy, f, x; 
-
+  //
+  SetupForMaterial(fPrimaryParticle, couple->GetMaterial(), kineticEnergy);
+  const G4Element* elm = SelectTargetAtom(couple,fPrimaryParticle,kineticEnergy,
+                                          dp->GetLogKineticEnergy(),tmin,tmax);
+  //
+  fCurrentIZ = elm->GetZasInt();
+  const ElementData* elDat = gElementData[fCurrentIZ];
+  const G4double funcMax = elDat->fZFactor1+elDat->fZFactor2;
+  // get the random engine
+  G4double rndm[2];
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
-
+  // min max of the transformed variable: x(k) = ln(k^2+k_p^2) that is in [ln(k_c^2+k_p^2), ln(E_k^2+k_p^2)]
+  const G4double xmin   = G4Log(tmin*tmin+fDensityCorr);
+  const G4double xrange = G4Log(tmax*tmax+fDensityCorr)-xmin;
+  G4double gammaEnergy, funcVal;
   do {
-    x = G4Exp(xmin + rndmEngine->flat()*(xmax - xmin)) - densityCorr;
-    if(x < 0.0) { x = 0.0; }
-    gammaEnergy = sqrt(x);
-    if(highe) { f = ComputeRelDXSectionPerAtom(gammaEnergy); }
-    else      { f = ComputeDXSectionPerAtom(gammaEnergy); }
-
-    if ( f > fMax ) {
-      G4cout << "### G4eBremsstrahlungRelModel Warning: Majoranta exceeded! "
-	     << f << " > " << fMax
-	     << " Egamma(MeV)= " << gammaEnergy
-	     << " Ee(MeV)= " << kineticEnergy
-	     << "  " << GetName()
-	     << G4endl;
-    }
-
+    rndmEngine->flatArray(2, rndm);
+    gammaEnergy = std::sqrt(std::max(G4Exp(xmin+rndm[0]*xrange)-fDensityCorr, 0.0));
+    funcVal     = fIsLPMActive
+                 ? ComputeRelDXSectionPerAtom(gammaEnergy)
+                 : ComputeDXSectionPerAtom(gammaEnergy);
+    // cross-check of proper function maximum in the rejection
+//    if (funcVal > funcMax) {
+//      G4cout << "### G4eBremsstrahlungRelModel Warning: Majoranta exceeded! "
+//	     << funcVal << " > " << funcMax
+//	     << " Egamma(MeV)= " << gammaEnergy
+//	     << " Ee(MeV)= " << kineticEnergy
+//	     << "  " << GetName()
+//	     << G4endl;
+//    }
     // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-  } while (f < fMax*rndmEngine->flat());
-
+  } while (funcVal < funcMax*rndm[1]);
+  //
+  // scattering off nucleus or off e- by triplet model
+  if (fIsScatOffElectron && rndmEngine->flat()*fSumTerm>fNucTerm) {
+    GetTripletModel()->SampleSecondaries(vdp, couple, dp, cutEnergy, maxEnergy);
+    return;
+  }
   //
   // angles of the emitted gamma. ( Z - axis along the parent particle)
   // use general interface
-  //
-
-  G4ThreeVector gammaDirection = 
-    GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
-					      G4lrint(currentZ), 
-					      couple->GetMaterial());
-
+  G4ThreeVector gamDir =
+    GetAngularDistribution()->SampleDirection(dp,fPrimaryTotalEnergy-gammaEnergy,
+                                              fCurrentIZ, couple->GetMaterial());
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* gamma = new G4DynamicParticle(theGamma,gammaDirection,
-						   gammaEnergy);
+  G4DynamicParticle* gamma = new G4DynamicParticle(fGammaParticle, gamDir,
+                                                   gammaEnergy);
   vdp->push_back(gamma);
-  
-  G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
-  G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
-			     - gammaEnergy*gammaDirection).unit();
-
-  // energy of primary
-  G4double finalE = kineticEnergy - gammaEnergy;
-
-  // stop tracking and create new secondary instead of primary
-  if(gammaEnergy > SecondaryThreshold()) {
+  // compute post-interaction kinematics of primary e-/e+ based on
+  // energy-momentum conservation
+  const G4double totMomentum = std::sqrt(kineticEnergy*(
+                               fPrimaryTotalEnergy + CLHEP::electron_mass_c2));
+  G4ThreeVector dir =
+             (totMomentum*dp->GetMomentumDirection()-gammaEnergy*gamDir).unit();
+  const G4double finalE   = kineticEnergy-gammaEnergy;
+  // if secondary gamma energy is higher than threshold(very high by default)
+  // then stop tracking the primary particle and create new secondary e-/e+
+  // instead of the primary one
+  if (gammaEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
-    G4DynamicParticle* el = 
-      new G4DynamicParticle(const_cast<G4ParticleDefinition*>(particle),
-			    direction, finalE);
+    G4DynamicParticle* el = new G4DynamicParticle(
+              const_cast<G4ParticleDefinition*>(fPrimaryParticle), dir, finalE);
     vdp->push_back(el);
-
-    // continue tracking
-  } else {
-    fParticleChange->SetProposedMomentumDirection(direction);
+  } else { // continue tracking the primary e-/e+ otherwise
+    fParticleChange->SetProposedMomentumDirection(dir);
     fParticleChange->SetProposedKineticEnergy(finalE);
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4eBremsstrahlungRelModel::InitialiseElementData()
+{
+  const G4int size = gElementData.size();
+  if (size < gMaxZet+1) {
+    gElementData.resize(gMaxZet+1, nullptr);
+  }
+  // create for all elements that are in the detector
+  const G4ElementTable* elemTable = G4Element::GetElementTable();
+  size_t numElems = (*elemTable).size();
+  for (size_t ielem=0; ielem<numElems; ++ielem) {
+    const G4Element* elem = (*elemTable)[ielem];
+    const G4double    zet = elem->GetZ();
+    const G4int      izet = std::min(G4lrint(zet),gMaxZet);
+    if (!gElementData[izet]) {
+      ElementData *elemData  = new ElementData();
+      const G4double fc = elem->GetfCoulomb();
+      G4double Fel      = 1.;
+      G4double Finel    = 1.;
+      elemData->fLogZ   = G4Log(zet);
+      elemData->fFz     = elemData->fLogZ/3.+fc;
+      if (izet < 5) {
+        Fel   = gFelLowZet[izet];
+        Finel = gFinelLowZet[izet];
+      } else {
+        Fel   = G4Log(184.15) -    elemData->fLogZ/3.;
+        Finel = G4Log(1194)   - 2.*elemData->fLogZ/3.;
+      }
+      const G4double z23       = std::pow(zet,2./3.);
+      const G4double z13       = std::pow(zet,1./3.);
+      elemData->fZFactor1      = (Fel-fc)+Finel/zet;
+      elemData->fZFactor11     = (Fel-fc); // used only for the triplet
+      elemData->fZFactor2      = (1.+1./zet)/12.;
+      elemData->fVarS1         = z23/(184.15*184.15);
+      elemData->fILVarS1Cond   = 1./(G4Log(std::sqrt(2.0)*elemData->fVarS1));
+      elemData->fILVarS1       = 1./G4Log(elemData->fVarS1);
+      elemData->fGammaFactor   = 100.0*electron_mass_c2/z13;
+      elemData->fEpsilonFactor = 100.0*electron_mass_c2/z23;
+      gElementData[izet] = elemData;
+    }
+  }
+}
 
+void G4eBremsstrahlungRelModel::ComputeLPMfunctions(G4double& funcXiS,
+                                                    G4double& funcGS,
+                                                    G4double& funcPhiS,
+	                                                  const G4double egamma)
+{
+  static const G4double sqrt2 = std::sqrt(2.);
+  const G4double    redegamma = egamma/fPrimaryTotalEnergy;
+  const G4double    varSprime = std::sqrt(0.125*redegamma*fLPMEnergy/
+                                ((1.0-redegamma)*fPrimaryTotalEnergy));
+  const ElementData* elDat    = gElementData[fCurrentIZ];
+  const G4double varS1        = elDat->fVarS1;
+  const G4double condition    = sqrt2*varS1;
+  G4double funcXiSprime = 2.0;
+  if (varSprime > 1.0) {
+    funcXiSprime = 1.0;
+  } else if (varSprime > condition) {
+    const G4double ilVarS1Cond = elDat->fILVarS1Cond;
+    const G4double funcHSprime = G4Log(varSprime)*ilVarS1Cond;
+    funcXiSprime = 1.0 + funcHSprime - 0.08*(1.0-funcHSprime)*funcHSprime
+                                      *(2.0-funcHSprime)*ilVarS1Cond;
+  }
+  const G4double varS    = varSprime/std::sqrt(funcXiSprime);
+  // - include dielectric suppression effect into s according to Migdal
+  const G4double varShat = varS*(1.0+fDensityCorr/(egamma*egamma));
+  funcXiS = 2.0;
+  if (varShat > 1.0) {
+    funcXiS = 1.0;
+  } else if (varShat > varS1) {
+    funcXiS = 1.0+G4Log(varShat)*elDat->fILVarS1;
+  }
+  GetLPMFunctions(funcGS, funcPhiS, varShat);
+  //ComputeLPMGsPhis(funcGS, funcPhiS, varShat);
+  //
+  //MAKE SURE SUPPRESSION IS SMALLER THAN 1: due to Migdal's approximation on xi
+  if (funcXiS*funcPhiS > 1. || varShat > 0.57) {
+    funcXiS=1./funcPhiS;
+  }
+}
+
+void G4eBremsstrahlungRelModel::ComputeLPMGsPhis(G4double& funcGS,
+                                                 G4double& funcPhiS,
+                                                 const G4double varShat)
+{
+  if (varShat < 0.01) {
+    funcPhiS = 6.0*varShat*(1.0-CLHEP::pi*varShat);
+    funcGS   = 12.0*varShat-2.0*funcPhiS;
+  } else {
+    const G4double varShat2 = varShat*varShat;
+    const G4double varShat3 = varShat*varShat2;
+    const G4double varShat4 = varShat2*varShat2;
+    // use Stanev approximation: for \psi(s) and compute G(s)
+    if (varShat < 0.415827) {
+      funcPhiS = 1.0-G4Exp(-6.0*varShat*(1.0+varShat*(3.0-CLHEP::pi))
+                + varShat3/(0.623+0.796*varShat+0.658*varShat2));
+      // 1-\exp \left\{-4s-\frac{8s^2}{1+3.936s+4.97s^2-0.05s^3+7.5s^4} \right\}
+      const G4double funcPsiS = 1.0 - G4Exp(-4.0*varShat
+                               - 8.0*varShat2/(1.0+3.936*varShat+4.97*varShat2
+                               - 0.05*varShat3 + 7.5*varShat4));
+      // G(s) = 3 \psi(s) - 2 \phi(s)
+      funcGS = 3.0*funcPsiS - 2.0*funcPhiS;
+    } else if (varShat<1.55) {
+      funcPhiS = 1.0-G4Exp(-6.0*varShat*(1.0+varShat*(3.0-CLHEP::pi))
+                + varShat3/(0.623+0.796*varShat+0.658*varShat2));
+      const G4double dum0  = -0.160723          + 3.755030*varShat
+                             -1.798138*varShat2 + 0.672827*varShat3
+                             -0.120772*varShat4;
+      funcGS = std::tanh(dum0);
+    } else {
+      funcPhiS = 1.0-0.011905/varShat4;
+      if (varShat<1.9156) {
+        const G4double dum0 = -0.160723          + 3.755030*varShat
+                              -1.798138*varShat2 + 0.672827*varShat3
+                              -0.120772*varShat4;
+        funcGS = std::tanh(dum0);
+      } else {
+        funcGS   = 1.0-0.023065/varShat4;
+      }
+    }
+  }
+}
+
+// s goes up to 2 with ds = 0.01 to be the default bining
+void G4eBremsstrahlungRelModel::InitLPMFunctions()
+{
+  if (!gLPMFuncs.fIsInitialized) {
+    const G4int num = gLPMFuncs.fSLimit*gLPMFuncs.fISDelta+1;
+    gLPMFuncs.fLPMFuncG.resize(num);
+    gLPMFuncs.fLPMFuncPhi.resize(num);
+    for (G4int i = 0; i < num; ++i) {
+      const G4double sval=i/gLPMFuncs.fISDelta;
+      ComputeLPMGsPhis(gLPMFuncs.fLPMFuncG[i],gLPMFuncs.fLPMFuncPhi[i],sval);
+    }
+    gLPMFuncs.fIsInitialized = true;
+  }
+}
+
+void G4eBremsstrahlungRelModel::GetLPMFunctions(G4double& lpmGs,
+                                                G4double& lpmPhis,
+                                                const G4double sval)
+{
+  if (sval < gLPMFuncs.fSLimit) {
+    G4double     val = sval*gLPMFuncs.fISDelta;
+    const G4int ilow = (G4int)val;
+    val    -= ilow;
+    lpmGs   = (gLPMFuncs.fLPMFuncG[ilow+1]-gLPMFuncs.fLPMFuncG[ilow])*val
+              + gLPMFuncs.fLPMFuncG[ilow];
+    lpmPhis = (gLPMFuncs.fLPMFuncPhi[ilow+1]-gLPMFuncs.fLPMFuncPhi[ilow])*val
+              + gLPMFuncs.fLPMFuncPhi[ilow];
+  } else {
+    G4double ss = sval*sval;
+    ss *= ss;
+    lpmPhis = 1.0-0.01190476/ss;
+    lpmGs   = 1.0-0.0230655/ss;
+  }
+}
 

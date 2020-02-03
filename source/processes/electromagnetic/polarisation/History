@@ -1,4 +1,3 @@
-$Id: History 93316 2015-10-16 12:36:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01 April 18: V.Ivanchenko (empolar-V10-04-02)
+- G4PolarizedCompton, G4PolarizedPhotoElectricEffect, 
+  G4PolarizedGammaConversion, G4ePolarizedBremsstrahlung,
+  G4ePolarizedIonisation - cleanup process classes, moved virtual
+    methods to source, removed unused headers and methods
+
+01 April 18: V.Ivanchenko (empolar-V10-04-01)
+- G4PolarizedAnnihilationModel - implemented sampling of final 
+    state AtRest
+
+12 February 18: V.Ivanchenko (empolar-V10-04-00)
+- G4StokesVector - moved static inline method to the source
+
+05 August 17: V.Ivanchenko (empolar-V10-03-01)
+03 August 17: V.Ivanchenko (empolar-V10-03-00)
+- G4PolarizedCompton, G4PolarizedGammaConversion, G4ePolarizedIonisation
+    make coherent model initialisation
+
+1 Jun 16: D.Sawkey (empolar-V10-02-04)
+- G4PolarizationManager: C++11 range-based for loop; 
+- G4PolarizationManager, G4ePolarizedBremsstrahlungModel: nullptr
+
+26 May 16: D.Sawkey (empolar-V10-02-03)
+- G4PolarizedCompton, G4eplusPolarizedAnnihilation, G4ePolarisedIonisation
+  In PostStepGPIL, use cached values of currentInteractionLength; fixes
+  problem at boundaries where updated value incorrectly used
+
+16 March 16: D.Sawkey (empolar-V10-02-02)
+- G4PolarizedAnnihilationModel, G4PolarizedPEEffectModel
+  try again; use the previous unused variables (verbosity)
+
+15 March 16: D.Sawkey (empolar-V10-02-01)
+- G4PolarizedAnnihilationModel.hh, G4PolarizedPEEffectModel.hh
+  Remove unused private variables; plus retry of previous changes
+
+14 March 16: D.Sawkey (empolar-V10-02-00)
+- C++11 migrations (most files): explicit, override, delete operators on
+  function declarations (except G4StokesVector ctor); remaining nullptr;
+  write floats/doubles with '.'
 
 16 October 15: V.Ivanchenko (empolar-V10-01-02)
 - G4PolarizedComptonModel - fixed Coverity warning, use vector of random

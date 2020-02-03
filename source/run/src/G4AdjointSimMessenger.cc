@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimMessenger.cc 81773 2014-06-05 08:35:38Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -160,7 +159,7 @@ G4AdjointSimMessenger::G4AdjointSimMessenger(G4AdjointSimManager* pAdjointRunMan
   ConsiderParticleAsPrimaryCmd->SetCandidates("e- gamma proton ion");
 
   NeglectParticleAsPrimaryCmd= new G4UIcmdWithAString("/adjoint/NeglectAsPrimary",this);
-  NeglectParticleAsPrimaryCmd->SetGuidance("Remove the selected particle from the lits of primaries");
+  NeglectParticleAsPrimaryCmd->SetGuidance("Remove the selected particle from the list of primaries");
   NeglectParticleAsPrimaryCmd->SetParameterName("particle",false);
   NeglectParticleAsPrimaryCmd->SetCandidates("e- gamma proton ion");
 
@@ -170,6 +169,19 @@ G4AdjointSimMessenger::G4AdjointSimMessenger(G4AdjointSimManager* pAdjointRunMan
   setNbOfPrimaryFwdGammasPerEventCmd->SetGuidance("Set the nb of primary fwd gamm  generated on the adjoint source");
   setNbOfPrimaryFwdGammasPerEventCmd->SetParameterName("Nb_gammas",false);
   setNbOfPrimaryFwdGammasPerEventCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  setNbOfPrimaryAdjGammasPerEventCmd =
+              new G4UIcmdWithAnInteger("/adjoint/SetNbOfPrimaryAdjGammasPerEvent",this);
+  setNbOfPrimaryAdjGammasPerEventCmd->SetGuidance("Set the nb of primary fwd gamm  generated on the adjoint source");
+  setNbOfPrimaryAdjGammasPerEventCmd->SetParameterName("Nb_gammas",false);
+  setNbOfPrimaryAdjGammasPerEventCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  setNbOfPrimaryAdjElectronsPerEventCmd =
+              new G4UIcmdWithAnInteger("/adjoint/SetNbOfPrimaryAdjElectronsPerEvent",this);
+  setNbOfPrimaryAdjElectronsPerEventCmd->SetGuidance("Set the nb of primary fwd gamm  generated on the adjoint source");
+  setNbOfPrimaryAdjElectronsPerEventCmd->SetParameterName("Nb_gammas",false);
+  setNbOfPrimaryAdjElectronsPerEventCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
 
 
 
@@ -325,6 +337,12 @@ void G4AdjointSimMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   else if ( command== setNbOfPrimaryFwdGammasPerEventCmd){
     theAdjointRunManager->SetNbOfPrimaryFwdGammasPerEvent(setNbOfPrimaryFwdGammasPerEventCmd->GetNewIntValue(newValue));
+  }
+  else if ( command== setNbOfPrimaryAdjGammasPerEventCmd){
+      theAdjointRunManager->SetNbAdjointPrimaryGammasPerEvent(setNbOfPrimaryAdjGammasPerEventCmd->GetNewIntValue(newValue));
+  }
+  else if ( command== setNbOfPrimaryAdjElectronsPerEventCmd){
+      theAdjointRunManager->SetNbAdjointPrimaryElectronsPerEvent(setNbOfPrimaryAdjElectronsPerEventCmd->GetNewIntValue(newValue));
   }
 
 

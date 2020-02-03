@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc 97681 2016-06-07 08:59:17Z gcosmo $
 //
 // G.Barrand
 
@@ -90,7 +89,7 @@ G4UIXm::G4UIXm (
 
   Widget top = (Widget)interactorManager->GetMainInteractor();
 
-  if(getenv("XENVIRONMENT")==NULL) {
+  if(std::getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
     if(database!=NULL) {
       XrmPutLineResource(&database,"*topShadowColor:white");

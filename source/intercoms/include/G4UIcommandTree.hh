@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh 77651 2013-11-27 08:47:55Z gcosmo $
 //
 
 #ifndef G4UIcommandTree_h
@@ -47,8 +46,8 @@ class G4UIcommandTree
       G4UIcommandTree();
       G4UIcommandTree(const char * thePathName);
       ~G4UIcommandTree();
-      G4int operator==(const G4UIcommandTree &right) const;
-      G4int operator!=(const G4UIcommandTree &right) const;
+      G4bool operator==(const G4UIcommandTree &right) const;
+      G4bool operator!=(const G4UIcommandTree &right) const;
 
   public:
       void AddNewCommand(G4UIcommand * newCommand, G4bool workerThreadOnly=false);
@@ -56,7 +55,8 @@ class G4UIcommandTree
       G4UIcommand* FindPath(const char* commandPath) const;
       G4UIcommandTree* FindCommandTree(const char* commandPath);
       G4String CompleteCommandPath(const G4String& commandPath);
-      // Complete most available caracters in common into command path in the command line 
+      G4String GetFirstMatchedString(const G4String&,const G4String&) const;
+      // Complete most available caracters in common into command path in the command line
       // given
 
       void List() const;
@@ -67,7 +67,6 @@ class G4UIcommandTree
   private:
       G4String CreateFileName(const char* pName);
       G4String ModStr(const char* strS);
-      G4String GetFirstMatchedString(const G4String&,const G4String&) const;
 
       std::vector<G4UIcommand*> command;
       std::vector<G4UIcommandTree*> tree;
@@ -81,9 +80,9 @@ class G4UIcommandTree
       inline const G4String GetPathName() const
       { return pathName; };
       inline G4int GetTreeEntry() const
-      { return tree.size(); };
+      { return G4int(tree.size()); };
       inline G4int GetCommandEntry() const
-      { return command.size(); };
+      { return G4int(command.size()); };
       inline G4UIcommandTree * GetTree(G4int i)
       { return tree[i-1]; };
       inline G4UIcommandTree * GetTree(const char* comNameC)

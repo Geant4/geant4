@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.hh 83008 2014-07-24 14:49:52Z gcosmo $
 
 #ifndef G4WaterStopping_h
 #define G4WaterStopping_h 1
@@ -58,7 +57,7 @@ class G4WaterStopping
 {
 public:
 
-  G4WaterStopping(G4EmCorrections* corr = 0, G4bool splineFlag = true);
+  explicit G4WaterStopping(G4EmCorrections* corr = 0, G4bool splineFlag = true);
 
   ~G4WaterStopping();
 
@@ -72,12 +71,12 @@ private:
 	       G4double factor);
 
   // hide assignment operator
-  G4WaterStopping & operator=(const  G4WaterStopping &right);
-  G4WaterStopping(const  G4WaterStopping&);
+  G4WaterStopping & operator=(const  G4WaterStopping &right) = delete;
+  G4WaterStopping(const  G4WaterStopping&) = delete;
 
   G4bool   spline;
-  G4int    Z[17];
-  G4double A[17];
+  static const G4int Z[17];
+  static const G4double A[17];
   G4double emin;
   std::vector<G4LPhysicsFreeVector*>  dedx;
 };

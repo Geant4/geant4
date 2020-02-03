@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ExN02ChamberParameterisation.hh
+/// \file ExN02ChamberParameterisation.hh
 /// \brief Definition of the ExN02ChamberParameterisation class
 //
 //
-// $Id: ExN02ChamberParameterisation.hh 73400 2013-08-27 09:52:57Z gcosmo $
 //
 //
 //  A parameterisation that describes a series of boxes along Z

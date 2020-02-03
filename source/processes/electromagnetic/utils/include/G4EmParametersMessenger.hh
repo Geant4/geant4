@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmParametersMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -34,8 +32,6 @@
 // Author:        Vladimir Ivanchenko created from G4EnergyLossMessenger
 //
 // Creation date: 22-05-2013
-//
-// Modifications:
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +57,7 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWith3VectorAndUnit;
 class G4EmParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -69,18 +66,20 @@ class G4EmParametersMessenger: public G4UImessenger
 {
 public:   // with description
   
-  G4EmParametersMessenger(G4EmParameters*);
+  explicit G4EmParametersMessenger(G4EmParameters*);
   virtual ~G4EmParametersMessenger();
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String) override;
 
 private:
 
   G4EmParameters*            theParameters;
 
+  G4UIdirectory*             gconvDirectory;
   G4UIdirectory*             eLossDirectory;
   G4UIdirectory*             mscDirectory;
   G4UIdirectory*             emDirectory;
+  G4UIdirectory*             dnaDirectory;
 
   G4UIcmdWithABool*          flucCmd;
   G4UIcmdWithABool*          rangeCmd;
@@ -88,33 +87,41 @@ private:
   G4UIcmdWithABool*          splCmd;
   G4UIcmdWithABool*          rsCmd;
   G4UIcmdWithABool*          aplCmd;
-  G4UIcmdWithABool*          deCmd;
-  G4UIcmdWithABool*          dirFluoCmd;
-  G4UIcmdWithABool*          auCmd;
-  G4UIcmdWithABool*          auCascadeCmd;
-  G4UIcmdWithABool*          pixeCmd;
-  G4UIcmdWithABool*          dcutCmd;
   G4UIcmdWithABool*          latCmd;
+  G4UIcmdWithABool*          lat96Cmd;
   G4UIcmdWithABool*          mulatCmd;
   G4UIcmdWithABool*          catCmd;
   G4UIcmdWithABool*          delCmd;
+  G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          mottCmd;
+  G4UIcmdWithABool*          birksCmd;
+  G4UIcmdWithABool*          sharkCmd;
+  G4UIcmdWithABool*          onIsolatedCmd;
+  G4UIcmdWithABool*          sampleTCmd;
+  G4UIcmdWithABool*          icru90Cmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
+  G4UIcmdWithADoubleAndUnit* max5DCmd;
   G4UIcmdWithADoubleAndUnit* cenCmd;
   G4UIcmdWithADoubleAndUnit* lowEnCmd;
+  G4UIcmdWithADoubleAndUnit* lowEn3Cmd;
   G4UIcmdWithADoubleAndUnit* lowhEnCmd;
   G4UIcmdWithADouble*        lllCmd;
   G4UIcmdWithADoubleAndUnit* brCmd;
   G4UIcmdWithADouble*        labCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
+  G4UIcmdWithADoubleAndUnit* msceCmd;
+  G4UIcmdWithADoubleAndUnit* nielCmd;
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fr1Cmd;
   G4UIcmdWithADouble*        fgCmd;
+  G4UIcmdWithADouble*        safCmd;
+  G4UIcmdWithADoubleAndUnit* llimCmd;
   G4UIcmdWithADouble*        skinCmd;
+  G4UIcmdWithADouble*        screCmd;
 
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;
@@ -122,17 +129,14 @@ private:
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      ver2Cmd;
+  G4UIcmdWithAnInteger*      tripletCmd;
 
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithAString*        msc1Cmd;
+  G4UIcmdWithAString*        nffCmd;
 
-  G4UIcmdWithAString*        pixeXsCmd;
-  G4UIcmdWithAString*        pixeeXsCmd;
-
-  G4UIcommand*               paiCmd;
-  G4UIcmdWithAString*        meCmd;
-  G4UIcommand*               dnaCmd;
   G4UIcommand*               dumpCmd;
+
 };
 
 #endif

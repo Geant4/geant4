@@ -23,19 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ClippablePolygon.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4ClippablePolygon.icc
-//
 // Implementation of inline methods of G4ClippablePolygon
 // --------------------------------------------------------------------
 
 inline
-void G4ClippablePolygon::SetNormal( const G4ThreeVector &newNormal )
+void G4ClippablePolygon::SetNormal( const G4ThreeVector& newNormal )
 {
    normal = newNormal;
 }

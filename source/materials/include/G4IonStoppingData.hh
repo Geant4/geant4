@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonStoppingData.hh 66811 2013-01-12 16:04:23Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class header file
@@ -59,8 +58,8 @@
 
 class G4IonStoppingData : public G4VIonDEDXTable {
 
- public:
-   G4IonStoppingData(const G4String& leDirectory);
+public:
+   G4IonStoppingData(const G4String& dir, G4bool icru);
    virtual ~G4IonStoppingData();
 
    // Function for checking the availability of stopping power tables
@@ -152,6 +151,10 @@ class G4IonStoppingData : public G4VIonDEDXTable {
    void DumpMap();
 
  private:
+
+   G4IonStoppingData(G4IonStoppingData&) = delete;
+   const G4IonStoppingData & operator=(const G4IonStoppingData&) = delete;
+
    // Subdirectory of G4LEDATA
    G4String subDir;
 
@@ -163,6 +166,8 @@ class G4IonStoppingData : public G4VIonDEDXTable {
 
    G4IonDEDXMapElem dedxMapElements; 
    G4IonDEDXMapMat dedxMapMaterials;
+
+   G4bool fICRU90;
 };
 
 #endif // G4IONSTOPPINGDATA_HH

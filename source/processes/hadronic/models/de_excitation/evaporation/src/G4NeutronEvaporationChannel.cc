@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationChannel.cc 67983 2013-03-13 10:42:03Z gcosmo $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
@@ -34,7 +32,7 @@
 #include "G4NeutronEvaporationChannel.hh"
 
 G4NeutronEvaporationChannel::G4NeutronEvaporationChannel() 
-: G4EvaporationChannel(1,0,"neutron",&theEvaporationProbability,&theCoulombBarrier) 
+  : G4EvaporationChannel(1,0,&pr) 
 {}
 
 G4NeutronEvaporationChannel::~G4NeutronEvaporationChannel() 

@@ -14,41 +14,41 @@
 #
 /run/initialize
 /process/em/workerVerbose 0
+/process/em/verbose 0
 #
 /gun/particle pi+
 /gun/energy 100. MeV
-##/testhadr/histo/fileName  pi+al
+##/testhadr/fileName  pi+al
 /testhadr/particle   pi+
-/testhadr/verbose 0
-/process/eLoss/verbose 0
-/run/beamOn 0
+/testhadr/verbose    1
+/run/beamOn 1
 #
 /testhadr/targetElm  Pb
-/testhadr/histo/fileName  pi+pb
-/run/beamOn 0
+/testhadr/fileName  pi+pb
+/run/beamOn 1
 /testhadr/targetElm  Fe
-##/testhadr/histo/fileName  pi+fe
-/run/beamOn 0
+##/testhadr/fileName  pi+fe
+/run/beamOn 1
 /testhadr/targetElm  C
-##/testhadr/histo/fileName  pi+c
-/run/beamOn 0
+##/testhadr/fileName  pi+c
+/run/beamOn 1
 /testhadr/targetElm  H
-##/testhadr/histo/fileName  pi+h
-/run/beamOn 0
+##/testhadr/fileName  pi+h
+/run/beamOn 1
 #
 /testhadr/particle   pi-
-##/testhadr/histo/fileName  pi-h
-/run/beamOn 0
+##/testhadr/fileName  pi-h
+/run/beamOn 1
 /testhadr/targetElm  Pb
-##/testhadr/histo/fileName  pi-pb
-/run/beamOn 0
+##/testhadr/fileName  pi-pb
+/run/beamOn 1
 /testhadr/targetElm  Fe
-##/testhadr/histo/fileName  pi-fe
-/run/beamOn 0
+##/testhadr/fileName  pi-fe
+/run/beamOn 1
 /testhadr/targetElm  C
-##/testhadr/histo/fileName  pi-c
-/run/beamOn 0
+##/testhadr/fileName  pi-c
+/run/beamOn 1
 /testhadr/targetElm  Al
-##/testhadr/histo/fileName  pi-al
-/run/beamOn 0
+##/testhadr/fileName  pi-al
+/run/beamOn 1
 #

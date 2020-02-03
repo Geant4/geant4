@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -91,9 +90,8 @@ G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
     {
       if (logAtomicCrossSection)
 	{
-	  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
-	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	    if (i->second) delete i->second;
+	  for (auto& item : (*logAtomicCrossSection))
+	    if (item.second) delete item.second;
 	  delete logAtomicCrossSection;
 	}
       if (fEffectiveCharge)
@@ -127,17 +125,17 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition* part
       if (fEffectiveCharge)
 	{
 	  delete fEffectiveCharge;
-	  fEffectiveCharge = 0;
+	  fEffectiveCharge = nullptr;
 	}
       if (fMaterialInvScreeningRadius)
 	{
 	  delete fMaterialInvScreeningRadius;
-	  fMaterialInvScreeningRadius = 0;
+	  fMaterialInvScreeningRadius = nullptr;
 	}
       if (fScreeningFunction)
 	{
 	  delete fScreeningFunction;
-	  fScreeningFunction = 0;
+	  fScreeningFunction = nullptr;
 	}
       //and create new ones
       fEffectiveCharge = new std::map<const G4Material*,G4double>;
@@ -515,13 +513,13 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
     G4Exception("G4PenelopeGammaConversionModel::ReadDataFile()",
 		"em0100",FatalException,"Worker thread in this method");
 
- if (verboseLevel > 2)
+  if (verboseLevel > 2)
     {
       G4cout << "G4PenelopeGammaConversionModel::ReadDataFile()" << G4endl;
       G4cout << "Going to read Gamma Conversion data files for Z=" << Z << G4endl;
     }
 
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     {
       G4String excep =

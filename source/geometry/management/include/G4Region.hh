@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Region.hh 102288 2017-01-20 10:57:03Z gcosmo $
-//
-// class G4Region
+// G4Region
 //
 // Class description:
 //
@@ -34,8 +31,7 @@
 // setup, sharing properties associated to materials or production
 // cuts which may affect or bias specific physics processes. 
 
-// History:
-// 18.09.02 G.Cosmo Initial version
+// 18.09.02, G.Cosmo - Initial version
 // --------------------------------------------------------------------
 #ifndef G4REGION_HH
 #define G4REGION_HH
@@ -68,8 +64,8 @@ class G4RegionData
 
     void initialize()
     {
-      fFastSimulationManager = 0;
-      fRegionalSteppingAction = 0;
+      fFastSimulationManager = nullptr;
+      fRegionalSteppingAction = nullptr;
     }
 
     G4FastSimulationManager* fFastSimulationManager;
@@ -108,14 +104,22 @@ class G4Region
     G4Region(const G4String& name);
     virtual ~G4Region();
 
+    G4Region(const G4Region&) = delete;
+    G4Region& operator=(const G4Region&) = delete;
+      // Copy constructor and assignment operator not allowed.
+
     inline G4bool operator==(const G4Region& rg) const;
       // Equality defined by address only.
 
-    void AddRootLogicalVolume(G4LogicalVolume* lv);
+    void AddRootLogicalVolume(G4LogicalVolume* lv, G4bool search=true);
     void RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan=true);
       // Add/remove root logical volumes and set/reset their
       // daughters flags as regions. They also recompute the
-      // materials list for the region.
+      // materials list for the region. Flag for scanning the subtree
+      // always enabled by default. Search in the tree can be turned off
+      // when adding, assuming the user guarantees the logical volume is
+      // NOT already inserted, in which case significant speedup can be
+      // achieved in very complex flat geometry setups.
 
     inline void SetName(const G4String& name);
     inline const G4String& GetName() const;
@@ -226,18 +230,17 @@ class G4Region
     static const G4RegionManager& GetSubInstanceManager();
       // Returns the private data instance manager. 
 
-    inline void UsedInMassGeometry(G4bool val=true);
-    inline void UsedInParallelGeometry(G4bool val=true);
+    static void Clean();
+      // Clear memory allocated by sub-instance manager.
+
+    inline void UsedInMassGeometry(G4bool val = true);
+    inline void UsedInParallelGeometry(G4bool val = true);
     inline G4bool IsInMassGeometry() const;
     inline G4bool IsInParallelGeometry() const;
       // Utility methods to identify if region is part of the main mass
       // geometry for tracking or a parallel geometry.
 
   private:
-
-    G4Region(const G4Region&);
-    G4Region& operator=(const G4Region&);
-      // Private copy constructor and assignment operator.
 
     inline void AddMaterial (G4Material* aMaterial);
       // Searchs the specified material in the material table and
@@ -251,17 +254,17 @@ class G4Region
     G4MaterialList fMaterials;
     G4MaterialCoupleMap fMaterialCoupleMap;
 
-    G4bool fRegionMod;
-    G4ProductionCuts* fCut;
+    G4bool fRegionMod = true;
+    G4ProductionCuts* fCut = nullptr;
 
-    G4VUserRegionInformation* fUserInfo;
-    G4UserLimits* fUserLimits;
-    G4FieldManager* fFieldManager;
+    G4VUserRegionInformation* fUserInfo = nullptr;
+    G4UserLimits* fUserLimits = nullptr;
+    G4FieldManager* fFieldManager = nullptr;
 
-    G4VPhysicalVolume* fWorldPhys;
+    G4VPhysicalVolume* fWorldPhys = nullptr;
 
-    G4bool fInMassGeometry;
-    G4bool fInParallelGeometry;
+    G4bool fInMassGeometry = false;
+    G4bool fInParallelGeometry = false;
 
     G4int instanceID;
       // This field is used as instance ID.

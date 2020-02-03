@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSTrajectoryPoint.hh 72065 2013-07-05 09:54:59Z gcosmo $
 //
 /// \file optical/wls/include/WLSTrajectoryPoint.hh
 /// \brief Definition of the WLSTrajectoryPoint class
@@ -65,7 +64,7 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint {
 
     inline void *operator new(size_t);
     inline void operator delete(void *aTrajectoryPoint);
-    inline int operator==(const WLSTrajectoryPoint& right) const
+    inline G4bool operator==(const WLSTrajectoryPoint& right) const
     { return (this==&right); };
 
 // Get/Set functions

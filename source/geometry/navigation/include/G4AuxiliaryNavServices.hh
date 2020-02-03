@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AuxiliaryNavServices.hh 90009 2015-05-08 07:42:39Z gcosmo $
-//
-// 
 // class G4AuxiliaryNavServices
 //
 // Class description:

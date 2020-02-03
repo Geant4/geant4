@@ -23,31 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MagIntegratorStepper implementation
 //
-// $Id: G4MagIntegratorStepper.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
+// Author: J.Apostolakis, CERN - 15.01.1997
 // --------------------------------------------------------------------
 
 #include "G4MagIntegratorStepper.hh"
 
 // Constructor for stepper abstract base class. 
 // 
-
-G4MagIntegratorStepper::G4MagIntegratorStepper(G4EquationOfMotion* Equation,
-					       G4int       num_integration_vars,
-					       G4int       num_state_vars)
+//
+G4MagIntegratorStepper::
+G4MagIntegratorStepper( G4EquationOfMotion* Equation,
+                        G4int               num_integration_vars,
+                        G4int               num_state_vars,
+                        G4bool              isFSAL )
   : fEquation_Rhs(Equation),
     fNoIntegrationVariables(num_integration_vars),
-    fNoStateVariables(num_state_vars)
-    // fNumberOfVariables( std::max(num_var,fNoStateVariables) )
+    fNoStateVariables(std::max(num_state_vars,8)),
+    fIsFSAL(isFSAL)
 {
-}
-
-G4MagIntegratorStepper::~G4MagIntegratorStepper()
-{
-}
-
-void G4MagIntegratorStepper::ComputeRightHandSide( const G4double y[], G4double dydx[] ) 
-{
-  this->RightHandSide( y, dydx );
 }

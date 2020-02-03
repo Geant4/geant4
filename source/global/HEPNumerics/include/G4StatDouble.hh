@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // 
 // ----------------------------------------------------------------------
@@ -51,6 +50,9 @@ class G4StatDouble
     virtual ~G4StatDouble();
 
   public:
+
+    G4StatDouble(const G4StatDouble&) = default;
+
     G4StatDouble& operator=(const G4double &rhs) 
     {
       reset();

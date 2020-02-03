@@ -328,9 +328,9 @@ void G4ParticleHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefini
       // Read Cross Section Data files
 
       G4String dirName;
-      if ( !getenv( "G4NEUTRONHPDATA" ) ) 
+      if ( !std::getenv( "G4NEUTRONHPDATA" ) ) 
          throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-      G4String baseName = getenv( "G4NEUTRONHPDATA" );
+      G4String baseName = std::getenv( "G4NEUTRONHPDATA" );
 
       dirName = baseName + "/ThermalScattering";
 

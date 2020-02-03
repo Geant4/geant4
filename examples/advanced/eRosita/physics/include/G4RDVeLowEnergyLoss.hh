@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 3.4.2000 Veronique Lefebure:
 //          Move utils/include/G4VEnergyLoss.hh to 

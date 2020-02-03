@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class header file
 //
@@ -69,13 +68,14 @@ class G4StokesVector: public G4ThreeVector
 public:
   G4StokesVector();
   G4StokesVector(const G4ThreeVector & v);
-  virtual ~G4StokesVector();
-public:
+  ~G4StokesVector() = default;
+
+  G4bool IsZero() const; 
+
   inline G4double p1() const { return x(); }
   inline G4double p2() const { return y(); }
   inline G4double p3() const { return z(); }
 
-  inline G4bool IsZero() const { return *this==ZERO; } 
   inline G4double Transverse() const { return perp(); } 
 
   inline G4ThreeVector PolSqr() const { 

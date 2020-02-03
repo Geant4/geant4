@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: WLSDetectorConstruction.cc 84718 2014-10-20 07:40:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/wls/src/WLSDetectorConstruction.cc
 /// \brief Implementation of the WLSDetectorConstruction class
@@ -39,7 +42,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-#include "G4OpBoundaryProcess.hh"
+#include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
 

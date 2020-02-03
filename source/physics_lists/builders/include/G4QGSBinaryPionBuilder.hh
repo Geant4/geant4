@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -53,7 +52,6 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
 
-#include "G4VCrossSectionDataSet.hh"
 
 class G4QGSBinaryPionBuilder : public G4VPionBuilder
 {
@@ -69,7 +67,6 @@ class G4QGSBinaryPionBuilder : public G4VPionBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4VCrossSectionDataSet* thePiData;
     G4TheoFSGenerator * theModel;
     G4BinaryCascade * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;

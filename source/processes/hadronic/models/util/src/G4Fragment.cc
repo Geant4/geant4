@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 97617 2016-06-06 12:47:17Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -43,9 +42,13 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-//#define debug_G4Fragment 
+G4Allocator<G4Fragment>*& pFragmentAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4Fragment>* _instance = nullptr;
+    return _instance;
+}
 
-G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator = nullptr;
+const G4double G4Fragment::minFragExcitation = 10.*CLHEP::eV;
 
 // Default constructor
 G4Fragment::G4Fragment() :
@@ -61,6 +64,7 @@ G4Fragment::G4Fragment() :
   numberOfHoles(0),
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
+  xLevel(0),
   theParticleDefinition(nullptr),
   spin(0.0),
   theCreationTime(0.0)
@@ -73,21 +77,18 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
    theExcitationEnergy(right.theExcitationEnergy),
    theGroundStateMass(right.theGroundStateMass),
    theMomentum(right.theMomentum),
-   thePolarization(nullptr),
+   thePolarization(right.thePolarization),
    creatorModel(right.creatorModel),
    numberOfParticles(right.numberOfParticles),
    numberOfCharged(right.numberOfCharged),
    numberOfHoles(right.numberOfHoles),
    numberOfChargedHoles(right.numberOfChargedHoles),
    numberOfShellElectrons(right.numberOfShellElectrons),
+   xLevel(right.xLevel),
    theParticleDefinition(right.theParticleDefinition),
    spin(right.spin),
    theCreationTime(right.theCreationTime)
-{
-  if(right.thePolarization != nullptr) { 
-    thePolarization = new G4NuclearPolarization(*(right.thePolarization));
-  }
-}
+{}
 
 G4Fragment::~G4Fragment()
 {}
@@ -105,6 +106,7 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   numberOfHoles(0),
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
+  xLevel(0),
   theParticleDefinition(nullptr),
   spin(0.0),
   theCreationTime(0.0)
@@ -129,6 +131,7 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   numberOfHoles(0),
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
+  xLevel(0),
   theParticleDefinition(aParticleDefinition),
   spin(0.0),
   theCreationTime(0.0)
@@ -150,17 +153,14 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theExcitationEnergy = right.theExcitationEnergy;
     theGroundStateMass = right.theGroundStateMass;
     theMomentum  = right.theMomentum;
-    delete thePolarization; 
-    thePolarization = nullptr;
-    if(right.thePolarization != nullptr) { 
-      thePolarization = new G4NuclearPolarization(*(right.thePolarization));
-    }
+    thePolarization = right.thePolarization;
     creatorModel = right.creatorModel;
     numberOfParticles = right.numberOfParticles;
     numberOfCharged = right.numberOfCharged;
     numberOfHoles = right.numberOfHoles;
     numberOfChargedHoles = right.numberOfChargedHoles;
     numberOfShellElectrons = right.numberOfShellElectrons;
+    xLevel = right.xLevel;
     theParticleDefinition = right.theParticleDefinition;
     spin = right.spin;
     theCreationTime = right.theCreationTime;
@@ -178,84 +178,63 @@ G4bool G4Fragment::operator!=(const G4Fragment &right) const
   return (this != (G4Fragment *) &right);
 }
 
-std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
+std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 {
-  if (!theFragment) {
-    out << "Fragment: null pointer ";
-    return out;
-  }
-
   std::ios::fmtflags old_floatfield = out.flags();
   out.setf(std::ios::floatfield);
 
-  out << "Fragment: A = " << std::setw(3) << theFragment->theA 
-      << ", Z = " << std::setw(3) << theFragment->theZ ;
+  out << "Fragment: A = " << std::setw(3) << theFragment.theA 
+      << ", Z = " << std::setw(3) << theFragment.theZ ;
   out.setf(std::ios::scientific,std::ios::floatfield);
 
   // Store user's precision setting and reset to (3) here: back-compatibility
   std::streamsize floatPrec = out.precision();
 
   out << std::setprecision(3)
-      << ", U = " << theFragment->GetExcitationEnergy()/CLHEP::MeV 
+      << ", U = " << theFragment.GetExcitationEnergy()/CLHEP::MeV 
       << " MeV  ";
-  if(theFragment->GetCreatorModelType() >= 0) { 
-    out << " creatorModelType= " << theFragment->GetCreatorModelType(); 
+  if(theFragment.GetCreatorModelType() >= 0) { 
+    out << " creatorModelType= " << theFragment.GetCreatorModelType(); 
   }
-  if(theFragment->GetCreationTime() > 0.0) { 
-    out << "  Time= " << theFragment->GetCreationTime()/CLHEP::ns << " ns"; 
+  if(theFragment.GetCreationTime() > 0.0) { 
+    out << "  Time= " << theFragment.GetCreationTime()/CLHEP::ns << " ns"; 
   }
   out << G4endl
       << "          P = (" 
-      << theFragment->GetMomentum().x()/CLHEP::MeV << ","
-      << theFragment->GetMomentum().y()/CLHEP::MeV << ","
-      << theFragment->GetMomentum().z()/CLHEP::MeV 
+      << theFragment.GetMomentum().x()/CLHEP::MeV << ","
+      << theFragment.GetMomentum().y()/CLHEP::MeV << ","
+      << theFragment.GetMomentum().z()/CLHEP::MeV 
       << ") MeV   E = " 
-      << theFragment->GetMomentum().t()/CLHEP::MeV << " MeV"
+      << theFragment.GetMomentum().t()/CLHEP::MeV << " MeV"
       << G4endl;
-       
-  if(theFragment->GetNuclearPolarization()) { 
-    out << theFragment->GetNuclearPolarization(); 
+
+  out << "    #spin= " << theFragment.GetSpin()
+      << "    #floatLevelNo= " << theFragment.GetFloatingLevelNumber() << "  ";
+        
+  if (theFragment.GetNumberOfExcitons() != 0) {
+    out << "   " 
+	<< "#Particles= " << theFragment.GetNumberOfParticles() 
+	<< ", #Charged= " << theFragment.GetNumberOfCharged()
+	<< ", #Holes= "   << theFragment.GetNumberOfHoles()
+	<< ", #ChargedHoles= " << theFragment.GetNumberOfChargedHoles();
+  } 
+  out << G4endl;
+  if(theFragment.GetNuclearPolarization()) { 
+    out << *(theFragment.GetNuclearPolarization()); 
   }
- 
-  if (theFragment->GetNumberOfExcitons() != 0) {
-    out << "          " 
-	<< "#Particles= " << theFragment->GetNumberOfParticles() 
-	<< ", #Charged= " << theFragment->GetNumberOfCharged()
-	<< ", #Holes= "   << theFragment->GetNumberOfHoles()
-	<< ", #ChargedHoles= " << theFragment->GetNumberOfChargedHoles()
-	<< ", #spin= " << theFragment->GetSpin()
-	<< G4endl;
-  }
+  //out << G4endl;
   out.setf(old_floatfield,std::ios::floatfield);
   out.precision(floatPrec);
 
   return out;
 }
 
-std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
-{
-  out << &theFragment;
-  return out; 
-}
-
 void G4Fragment::ExcitationEnergyWarning()
 {
-  const G4double exclimit = -10*CLHEP::eV;
-  if (theExcitationEnergy < exclimit) {
-
 #ifdef G4VERBOSE
-    G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
-    G4cout << *this << G4endl;
+  G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
+  G4cout << *this << G4endl;
 #endif
-
-#ifdef debug_G4Fragment
-    G4ExceptionDescription ed;
-    ed << *this << G4endl;
-    G4Exception("G4Fragment::ExcitationEnergyWarning()", "had777", 
-		FatalException,ed);
-#endif
-  }
-  theExcitationEnergy = 0.0;
 }
 
 void G4Fragment::NumberOfExitationWarning(const G4String& value)
@@ -267,7 +246,7 @@ void G4Fragment::NumberOfExitationWarning(const G4String& value)
   throw G4HadronicException(__FILE__, __LINE__, text);
 }
 
-void G4Fragment::SetAngularMomentum(G4ThreeVector& v)
+void G4Fragment::SetAngularMomentum(const G4ThreeVector& v)
 {
   spin = v.mag();
 }

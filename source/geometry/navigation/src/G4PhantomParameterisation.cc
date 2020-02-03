@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PhantomParameterisation.cc 102290 2017-01-20 11:19:44Z gcosmo $
-// GEANT4 tag $ Name:$
-//
 // class G4PhantomParameterisation implementation
 //
-// May 2007 Pedro Arce,   first version
+// May 2007 Pedro Arce, first version
 //
 // --------------------------------------------------------------------
 
@@ -44,11 +40,6 @@
 
 //------------------------------------------------------------------
 G4PhantomParameterisation::G4PhantomParameterisation()
-  : fVoxelHalfX(0.), fVoxelHalfY(0.), fVoxelHalfZ(0.),
-    fNoVoxelX(0), fNoVoxelY(0), fNoVoxelZ(0), fNoVoxelXY(0), fNoVoxel(0),
-    fMaterialIndices(0), fContainerSolid(0),
-    fContainerWallX(0.), fContainerWallY(0.), fContainerWallZ(0.),
-    bSkipEqualMaterials(true)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
@@ -62,7 +53,7 @@ G4PhantomParameterisation::~G4PhantomParameterisation()
 
 //------------------------------------------------------------------
 void G4PhantomParameterisation::
-BuildContainerSolid( G4VPhysicalVolume *pMotherPhysical )
+BuildContainerSolid( G4VPhysicalVolume* pMotherPhysical )
 {
   fContainerSolid = pMotherPhysical->GetLogicalVolume()->GetSolid();
   fContainerWallX = fNoVoxelX * fVoxelHalfX;
@@ -74,7 +65,7 @@ BuildContainerSolid( G4VPhysicalVolume *pMotherPhysical )
 
 //------------------------------------------------------------------
 void G4PhantomParameterisation::
-BuildContainerSolid( G4VSolid *pMotherSolid )
+BuildContainerSolid( G4VSolid* pMotherSolid )
 {
   fContainerSolid = pMotherSolid;
   fContainerWallX = fNoVoxelX * fVoxelHalfX;
@@ -87,7 +78,7 @@ BuildContainerSolid( G4VSolid *pMotherSolid )
 
 //------------------------------------------------------------------
 void G4PhantomParameterisation::
-ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol ) const
+ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
   // Voxels cannot be rotated, return translation
   //
@@ -118,7 +109,7 @@ GetTranslation(const G4int copyNo ) const
 
 //------------------------------------------------------------------
 G4VSolid* G4PhantomParameterisation::
-ComputeSolid(const G4int, G4VPhysicalVolume *pPhysicalVol) 
+ComputeSolid(const G4int, G4VPhysicalVolume* pPhysicalVol) 
 {
   return pPhysicalVol->GetLogicalVolume()->GetSolid();
 }
@@ -141,7 +132,7 @@ GetMaterialIndex( size_t copyNo ) const
 {
   CheckCopyNo( copyNo );
 
-  if( !fMaterialIndices ) { return 0; }
+  if( fMaterialIndices == nullptr ) { return 0; }
   return *(fMaterialIndices+copyNo);
 }
 
@@ -240,13 +231,13 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     message << "Point outside voxels!" << G4endl
             << "        localPoint - " << localPoint
             << " - is outside container solid: "
-            << fContainerSolid->GetName() << G4endl;
+            << fContainerSolid->GetName() << G4endl
+            << "DIFFERENCE WITH PHANTOM WALLS X: "
+            << std::fabs(localPoint.x()) - fContainerWallX
+            << " Y: " << std::fabs(localPoint.y()) - fContainerWallY
+            << " Z: " << std::fabs(localPoint.z()) - fContainerWallZ;
     G4Exception("G4PhantomParameterisation::GetReplicaNo()", "GeomNav0003",
-                JustWarning, message);
-    G4cerr << " DIFFERENCE WITH PHANTOM WALLS X: "
-           << fabs(localPoint.x()) - fContainerWallX
-           << " Y: " << fabs(localPoint.y()) - fContainerWallY
-           << " Z: " << fabs(localPoint.z()) - fContainerWallZ << G4endl;
+                FatalErrorInArgument, message);
   }
   
   // Check the voxel numbers corresponding to localPoint
@@ -261,13 +252,13 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   // Add +kCarTolerance so that they are first placed on voxel N, and then
   // if the direction is negative substract 1
 
-  G4double fx = (localPoint.x()+fContainerWallX)/(fVoxelHalfX*2.);
+  G4double fx = (localPoint.x()+fContainerWallX+kCarTolerance)/(fVoxelHalfX*2.);
   G4int nx = G4int(fx);
 
-  G4double fy = (localPoint.y()+fContainerWallY)/(fVoxelHalfY*2.); 
+  G4double fy = (localPoint.y()+fContainerWallY+kCarTolerance)/(fVoxelHalfY*2.); 
   G4int ny = G4int(fy);
 
-  G4double fz = (localPoint.z()+fContainerWallZ)/(fVoxelHalfZ*2.);
+  G4double fz = (localPoint.z()+fContainerWallZ+kCarTolerance)/(fVoxelHalfZ*2.);
   G4int nz = G4int(fz);
 
   // If it is on the surface side, check the direction: if direction is
@@ -277,7 +268,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   // due to multiple scattering: track is entering a voxel but multiple
   // scattering changes the angle towards outside
   //
-  if( fx - nx < kCarTolerance*fContainerWallX )
+  if( fx - nx < kCarTolerance*fVoxelHalfX )
   {
     if( localDir.x() < 0 )
     {
@@ -294,7 +285,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
       }
     }
   }
-  if( fy - ny < kCarTolerance*fContainerWallY )
+  if( fy - ny < kCarTolerance*fVoxelHalfY )
   {
     if( localDir.y() < 0 )
     {
@@ -311,7 +302,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
       }
     }
   }
-  if( fz - nz < kCarTolerance*fContainerWallZ )
+  if( fz - nz < kCarTolerance*fVoxelHalfZ )
   {
     if( localDir.z() < 0 )
     {
@@ -381,10 +372,6 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     copyNo = nx + fNoVoxelX*ny + fNoVoxelXY*nz;
   }
 
-  // CheckCopyNo( copyNo ); // not needed, just for debugging code
-  // G4cout << " COPYNO " << copyNo << " " << nx << " " << ny << " " << nz
-  //        << G4endl; //GDEB
-  
   return copyNo;
 }
 

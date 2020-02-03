@@ -40,22 +40,22 @@
 //
 //*******************************************************//
 
+
 #include "ML2AcceleratorConstruction.hh"
 #include "ML2AcceleratorConstructionMessenger.hh"
+#include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+
+using namespace std;
 
 CML2AcceleratorConstruction::CML2AcceleratorConstruction(void)
 {
-	acceleratorConstructionMessenger=new CML2AcceleratorConstructionMessenger(this);
-	idCurrentRotationX=0;
+	acceleratorConstructionMessenger = new CML2AcceleratorConstructionMessenger(this);
+	idCurrentRotationX = 0;
 }
 
 CML2AcceleratorConstruction::~CML2AcceleratorConstruction(void)
 {
-	if (AcceleratorName=="acc1")
-	{delete accelerator1;}
-
-	delete PVAccWorld;
 	delete acceleratorConstructionMessenger;
 }
 CML2AcceleratorConstruction* CML2AcceleratorConstruction::instance = 0;
@@ -71,62 +71,71 @@ CML2AcceleratorConstruction* CML2AcceleratorConstruction::GetInstance(void)
 
 void CML2AcceleratorConstruction::resetAccelerator()
 {
-	if (AcceleratorName=="acc1")
-	{
-		accelerator1->reset();
-	}
-
+		accelerator -> reset();
 }
 
 bool CML2AcceleratorConstruction::design(void)
 {
 // switch between different accelerators according to the main macro selection (actually only one accelerator is available)
-	std::cout << "I'm building "<< AcceleratorName<<"  accelerator"<< G4endl;
-	bool bAccExists=false;
-	if (AcceleratorName=="acc1")
-	{accelerator1=CML2Acc1::GetInstance();bAccExists=true;}
+	G4cout << "I'm building " << AcceleratorName << " accelerator" << G4endl;
+	bool bAccExists = false;
+	if (AcceleratorName == "acc1")
+	{
+		accelerator = CML2Acc1::GetInstance();
+		bAccExists = true;
+	}
+	else if (AcceleratorName == "acc2")
+	{
+		accelerator = CML2Acc2::GetInstance();
+		bAccExists = true;
+	}
+	else if (AcceleratorName == "accSaturn")
+	{
+		accelerator = CML2AccSaturn::GetInstance();
+		bAccExists = true;
+	}
 
 	if (bAccExists && AcceleratorMacFileName!="")
 	{
-	// read the messenger data related to the accelerator selected 
+		// read the messenger data related to the selected accelerator
 		G4UImanager* UI = G4UImanager::GetUIpointer();
 		G4String command = "/control/execute ";
 		UI->ApplyCommand(command+AcceleratorMacFileName); 
 	}
 
- 	if (rotationsX.size()<1)
- 	{addAcceleratorRotationsX(0.);}
+ 	if (rotationsX.size() < 1)
+ 	{
+ 		addAcceleratorRotationsX(0.);
+ 	}
 
 	return bAccExists;
 }
 bool CML2AcceleratorConstruction::Construct(G4VPhysicalVolume *PVWorld, G4bool bOV)
 {
-// a call to select the right accelerator
-	bOnlyVisio=bOV;
+	// a call to select the right accelerator
+	bOnlyVisio = bOV;
 	if (design())
 	{
+//		G4cout << "*** debug *** AcceleratorConstruction::Construct" << G4endl;
 		acceleratorConstructionMessenger->SetReferenceWorld(bOnlyVisio);
 		// create the accelerator-world box
-		G4Material *Vacuum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+		G4Material *Vacuum = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 		G4ThreeVector halfSize;
 		initialCentre.set(0.*mm, 0.*mm, -isoCentre);
 		halfSize.set(600.*mm, 600.*mm, 600.*mm);
 		G4Box *accWorldB = new G4Box("accWorldG", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 		G4LogicalVolume *accWorldLV = new G4LogicalVolume(accWorldB, Vacuum, "accWorldL", 0, 0, 0);
-		G4VisAttributes* simpleAlSVisAtt= new G4VisAttributes(G4Colour::White());
-		simpleAlSVisAtt->SetVisibility(false);
-// 		simpleAlSVisAtt->SetForceWireframe(false);
-		accWorldLV->SetVisAttributes(simpleAlSVisAtt);
+		G4VisAttributes* simpleAlSVisAtt = new G4VisAttributes(G4Colour::White());
+		simpleAlSVisAtt -> SetVisibility(false);
+		accWorldLV -> SetVisAttributes(simpleAlSVisAtt);
 	
 		PVAccWorld= new G4PVPlacement(0, initialCentre, "acceleratorBox", accWorldLV, PVWorld, false, 0);
 
-	// create the actual accelerator
-		if (AcceleratorName=="acc1")
-		{
-			accelerator1->Construct(PVAccWorld, isoCentre);
-			Z_Value_PhaseSpaceBeforeJaws=accelerator1->getBeforeJaws_Z_PhaseSpacePosition();
-			accelerator1->writeInfo();
-		}
+		// create the actual accelerator
+		accelerator -> Construct(PVAccWorld, isoCentre);
+		Z_Value_PhaseSpaceBeforeJaws = accelerator -> getBeforeJaws_Z_PhaseSpacePosition();
+		accelerator -> writeInfo();
+
 	}
 	else
 	{
@@ -138,8 +147,10 @@ bool CML2AcceleratorConstruction::Construct(G4VPhysicalVolume *PVWorld, G4bool b
 void CML2AcceleratorConstruction::writeInfo()
 {
 	if (!bOnlyVisio)
-	{std::cout <<"Actual rotation: "<<idCurrentRotationX<<"/"<<rotationsX.size() <<"  "<< G4endl;}
-	std::cout <<"Accelerator angle: "<< currentRotationX/deg << " [deg]"<< G4endl;
+	{
+		G4cout << "Actual rotation: " << idCurrentRotationX << "/" << rotationsX.size() << "  " << G4endl;
+	}
+	G4cout << "Accelerator angle: " << currentRotationX/deg << " [deg]" << G4endl;
 }
 
 G4RotationMatrix * CML2AcceleratorConstruction::rotateAccelerator()
@@ -147,24 +158,29 @@ G4RotationMatrix * CML2AcceleratorConstruction::rotateAccelerator()
 	G4RotationMatrix *rmInv=new G4RotationMatrix();
 	if (idCurrentRotationX <(int) rotationsX.size())
 	{
-		currentRotationX=rotationsX[idCurrentRotationX];
-		rmInv=rotateAccelerator(currentRotationX);
+		currentRotationX = rotationsX[idCurrentRotationX];
+		rmInv = rotateAccelerator(currentRotationX);
 		idCurrentRotationX++;
 	}
 	else
-	{rmInv=0;}
+	{
+		rmInv = 0;
+	}
 	return rmInv;
 }
 G4RotationMatrix * CML2AcceleratorConstruction::rotateAccelerator(G4double angleX)
 {
-	currentRotationX=angleX;
+	currentRotationX = angleX;
 	G4GeometryManager::GetInstance()->OpenGeometry();
 	G4ThreeVector NewCentre;
-	G4RotationMatrix *rm=new G4RotationMatrix();
-	G4RotationMatrix *rmInv=new G4RotationMatrix();
+	G4RotationMatrix *rm = new G4RotationMatrix();
+	G4RotationMatrix *rmInv = new G4RotationMatrix();
 	PVAccWorld->SetTranslation(initialCentre);
 	PVAccWorld->SetRotation(rm);
-	if (bRotate90Y)	{rm->rotateY(90.*deg);}
+	if (bRotate90Y)
+	{
+		rm->rotateY(90.*deg);
+	}
 	rm->rotateX(-angleX);
 	PVAccWorld->SetRotation(rm);
 	*rmInv=CLHEP::inverseOf(*rm);

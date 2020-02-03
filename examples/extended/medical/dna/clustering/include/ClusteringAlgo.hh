@@ -31,7 +31,6 @@
 //
 // Authors: Henri Payno and Yann Perrot
 //
-// $Id$
 //
 /// \file ClusteringAlgo.hh
 /// \brief Definition of the ClustreringAlgo class

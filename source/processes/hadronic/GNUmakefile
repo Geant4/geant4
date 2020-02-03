@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 94123 2015-11-06 09:45:13Z gcosmo $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -10,8 +9,6 @@ SUBDIRS += util
 SUBDIRS += processes
 SUBDIRS += cross_sections
 SUBDIRS += stopping
-
-
 SUBDIRS += models/abla
 SUBDIRS += models/abrasion
 SUBDIRS += models/binary_cascade
@@ -29,6 +26,7 @@ SUBDIRS += models/de_excitation/util
 SUBDIRS += models/de_excitation/ablation
 SUBDIRS += models/em_dissociation
 SUBDIRS += models/fission
+SUBDIRS += models/gamma_nuclear
 SUBDIRS += models/im_r_matrix
 SUBDIRS += models/inclxx/utils
 SUBDIRS += models/inclxx/incl_physics
@@ -44,8 +42,8 @@ SUBDIRS += models/parton_string/qgsm
 SUBDIRS += models/pre_equilibrium/exciton_model
 SUBDIRS += models/radioactive_decay
 SUBDIRS += models/rpg
-SUBDIRS += models/quasi_elastic
 SUBDIRS += models/qmd
+SUBDIRS += models/quasi_elastic
 SUBDIRS += models/theo_high_energy
 SUBDIRS += models/util
 
@@ -65,6 +63,7 @@ SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_part_hp
 SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_fission
+SUBLIBS +=  G4had_gamm_nuclear
 SUBLIBS +=  G4hadronic_radioactivedecay
 SUBLIBS +=  G4had_theo_max
 SUBLIBS +=  G4had_mod_util

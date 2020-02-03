@@ -24,7 +24,10 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id: G4Pythia6DecayerMessenger.hh 72244 2013-07-12 08:49:56Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file eventgenerator/pythia/decayer6/include/G4Pythia6DecayerMessenger.hh
 /// \brief Definition of the G4Pythia6DecayerMessenger class

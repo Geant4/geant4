@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 66783 2013-01-12 15:05:20Z gcosmo $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -24,6 +23,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
+            -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/models/management/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPionBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +32,7 @@
 //  devired from G4QGSPPiKBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -53,7 +53,7 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4VCrossSectionDataSet.hh"
+
 
 class G4QGSPPionBuilder : public G4VPionBuilder
 {
@@ -62,14 +62,15 @@ class G4QGSPPionBuilder : public G4VPionBuilder
     virtual ~G4QGSPPionBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+
+    using G4VPionBuilder::Build; //Prevent compiler warning
 
   private:
-    G4VCrossSectionDataSet* thePiData;
     G4TheoFSGenerator * theModel;
     G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
@@ -79,8 +80,6 @@ class G4QGSPPionBuilder : public G4VPionBuilder
     G4double theMin;
 
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

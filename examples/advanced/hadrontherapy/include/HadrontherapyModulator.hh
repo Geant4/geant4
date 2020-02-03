@@ -29,6 +29,16 @@
 #ifndef HadrontherapyModulator_H
 #define HadrontherapyModulator_H 1
 
+<<<<<<< HEAD
+=======
+#include "globals.hh"
+#include <fstream>
+#include "G4Material.hh"
+#include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
+#include "HadrontherapyModulatorMessenger.hh"
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;

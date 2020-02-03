@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.hh 81087 2014-05-20 15:44:27Z gcosmo $
 //
 
 #ifndef G4SDManager_h
@@ -37,6 +36,9 @@ class G4VHitsCollection;
 class G4VSensitiveDetector;
 class G4HCofThisEvent;
 class G4SDmessenger;
+
+#include "G4VSDFilter.hh"
+#include <vector>
 
 // class description:
 //
@@ -105,6 +107,12 @@ private:
     G4SDManager( const G4SDManager& );
     G4SDManager& operator=(const G4SDManager&);
 
+public:
+    void RegisterSDFilter(G4VSDFilter* filter);
+    void DeRegisterSDFilter(G4VSDFilter* filter);
+private:
+    void DestroyFilters();
+    std::vector<G4VSDFilter*> FilterList;
 };
 
 

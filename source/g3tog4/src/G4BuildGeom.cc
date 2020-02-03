@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4BuildGeom.cc 67982 2013-03-13 10:36:03Z gcosmo $
 //
 // modified by I. Hrivnacova, 13.10.99 
 
@@ -92,7 +91,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
 
   // mark as invisible
 
-  topLV->SetVisAttributes(G4VisAttributes::Invisible);
+  topLV->SetVisAttributes(G4VisAttributes::GetInvisible());
     
   G4cout << "Top-level G3toG4 logical volume " << topLV->GetName() << " "
          << *(topLV->GetVisAttributes()) << G4endl;

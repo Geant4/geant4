@@ -36,30 +36,27 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TFTFP_BERT_HP_h
-#define TFTFP_BERT_HP_h 1
+#ifndef FTFP_BERT_HP_h
+#define FTFP_BERT_HP_h 1
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TFTFP_BERT_HP: public T
+
+class FTFP_BERT_HP: public G4VModularPhysicsList
 {
 public:
-  TFTFP_BERT_HP(G4int ver = 1);
-  virtual ~TFTFP_BERT_HP();
+  FTFP_BERT_HP(G4int ver = 1);
+  virtual ~FTFP_BERT_HP()=default;
   
-public:
+  FTFP_BERT_HP(const FTFP_BERT_HP &) = delete;
+  FTFP_BERT_HP & operator=(const FTFP_BERT_HP &)=delete;
+
   // SetCuts() 
   virtual void SetCuts();
-
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+  
 };
-#include "FTFP_BERT_HP.icc"
-typedef TFTFP_BERT_HP<G4VModularPhysicsList> FTFP_BERT_HP;
 
 #endif

@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94565 2015-11-24 10:21:17Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -42,7 +41,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/abla/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
@@ -57,10 +55,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
     HEADERS
-        G4INCLXXInterfaceMessenger.hh
         G4INCLXXInterface.hh
-        G4INCLXXVInterfaceTally.hh
+        G4INCLXXInterfaceMessenger.hh
         G4INCLXXInterfaceStore.hh
+        G4INCLXXVInterfaceTally.hh
 
     SOURCES
         G4INCLXXInterface.cc
@@ -95,7 +93,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_abla_abla
         G4hadronic_inclxx_utils
         G4hadronic_inclxx_physics
 

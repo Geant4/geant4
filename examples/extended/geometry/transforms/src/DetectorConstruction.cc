@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc 68726 2013-04-05 09:35:20Z gcosmo $
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
@@ -182,7 +181,7 @@ void DetectorConstruction::PlaceWithDirectMatrix()
                     "Trd",              //name
                     fWorldVolume,       //mother volume
                     false,              //no boolean operation
-                    1);                 //copy number                       
+                    2);                 //copy number                       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -239,12 +238,17 @@ void DetectorConstruction::PlaceWithAxialRotations()
   // 1st position (with first G4PVPlacement constructor)
   //
   G4double phi = 30*deg, theta = 90*deg;
+  G4ThreeVector rotAxis =
+               G4ThreeVector(std::sin(theta-pi/2), 0., std::cos(theta-pi/2));
   G4RotationMatrix rotm1 = G4RotationMatrix();
-  rotm1.rotateY(theta); 
-  rotm1.rotateZ(phi);
-  G4cout << "\n --> phi = " << phi/deg << " deg;  direct rotation matrix : ";
+  rotm1.rotateY(theta);
+  rotm1.rotate (phi, rotAxis);  
+  G4cout << "\n --> direct rotation matrix : "
+         << " theta = " << theta/deg << " deg;"
+         << " phi  = "  <<  phi/deg << " deg;";
   rotm1.print(G4cout);        
-  G4ThreeVector w = G4ThreeVector(std::cos(phi), std::sin(phi),0.);    
+  G4ThreeVector w = G4ThreeVector( std::sin(theta)*std::cos(phi),
+                    std::sin(phi), std::cos(theta)*std::cos(phi));
   G4ThreeVector position1 = og*w;
   G4Transform3D transform1(rotm1,position1);
 
@@ -253,21 +257,22 @@ void DetectorConstruction::PlaceWithAxialRotations()
                     "Trd",               //name
                     fWorldVolume,        //mother volume
                     false,               //no boolean operation
-                    1);                  //copy number                       
+                    1);                  //copy number
 
   // 2nd position (with second G4PVPlacement constructor)
   //
-  phi = phi + 90*deg;  
+  phi = phi + 90*deg;
   //rotm2Inv could be calculated with rotm2.inverse()
   //but also by the following :
-  G4RotationMatrix* rotm2Inv  = new G4RotationMatrix();  
-  rotm2Inv->rotateZ(-phi); 
-  rotm2Inv->rotateY(-theta);     
-  w = G4ThreeVector(std::cos(phi), std::sin(phi),0.);    
+  G4RotationMatrix* rotm2Inv  = new G4RotationMatrix();
+  rotm2Inv->rotate (-phi, rotAxis);  
+  rotm2Inv->rotateY(-theta);
+  w = G4ThreeVector( std::sin(theta)*std::cos(phi),
+                     std::sin(phi), std::cos(theta)*std::cos(phi));
   G4ThreeVector position2 = og*w;
   
   new G4PVPlacement(rotm2Inv,           //rotation
-                    position2,          //position                             
+                    position2,          //position
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
@@ -333,7 +338,7 @@ void DetectorConstruction::PlaceWithEulerAngles()
 
 void DetectorConstruction::PlaceWithReflections()
 {
-/// Placement with reflcetions.
+/// Placement with reflections.
 /// In order to better show the reflection symmetry we do not apply
 /// the rotation along Y axis.  
 

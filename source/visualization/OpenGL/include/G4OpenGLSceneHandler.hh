@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh 85263 2014-10-27 08:58:31Z gcosmo $
 //
 //
 // Andrew Walkden  27th March 1996
 // OpenGL scene handler - base for immediate mode and stored mode classes to
 //                        inherit from.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLSCENEHANDLER_HH
 #define G4OPENGLSCENEHANDLER_HH
@@ -77,15 +76,34 @@ public:
   void AddSolid (const G4Torus&);
   void AddSolid (const G4Polycone&);
   void AddSolid (const G4Polyhedra&);
+  void AddSolid (const G4Orb&);
+  void AddSolid (const G4Ellipsoid&);
+  void AddSolid (const G4TessellatedSolid&);
   void AddSolid (const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
   void AddCompound (const G4VHit&);
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
+  void AddCompound (const G4THitsMap<G4StatDouble>&);
   
-  G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
-  void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
-  
+  // enum for /vis/ogl/flushAt.
+  enum FlushAction {
+    endOfEvent,
+    endOfRun,
+    eachPrimitive,
+    NthPrimitive,
+    NthEvent,
+    never
+  };
+  static G4int GetEntitiesFlushInterval()
+  {return fEntitiesFlushInterval;}
+  static FlushAction GetFlushAction()
+  {return fFlushAction;}
+  static void SetEntitiesFlushInterval(G4int interval)
+  {fEntitiesFlushInterval = interval;}
+  static void SetFlushAction(FlushAction action)
+  {fFlushAction = action;}
+
 #ifdef G4OPENGL_VERSION_2
   private :
   // vertex vector to be given to the graphic card
@@ -106,12 +124,12 @@ public:
   void drawVBOArray(std::vector<double> vertices);
   
   // Buffers used to access vertex and indices elements
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
-  GLuint fVertexBufferObject;
-  GLuint fIndicesBufferObject;
-#else
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   Wt::WGLWidget::Buffer fVertexBufferObject;
   Wt::WGLWidget::Buffer fIndicesBufferObject;
+#else
+  GLuint fVertexBufferObject;
+  GLuint fIndicesBufferObject;
 #endif // G4VIS_BUILD_OPENGLWT_DRIVER
   
 #endif //G4OPENGL_VERSION_2
@@ -124,8 +142,8 @@ protected:
   virtual ~G4OpenGLSceneHandler ();
   
   void ProcessScene();
-  G4VSolid* CreateSectionSolid ();
-  G4VSolid* CreateCutawaySolid ();
+  G4DisplacedSolid* CreateSectionSolid ();
+  G4DisplacedSolid* CreateCutawaySolid ();
   
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
   
@@ -147,11 +165,11 @@ protected:
   
   // Shared code to wait until we make a single glFlush
   void ScaledFlush () ;
-  // Number of events to wait until we make a single glFlush
-  G4int fEventsDrawInterval;
-  // Number of events waiting to be flushed
-  G4int fEventsWaitingToBeFlushed;
-  
+  // Static so that they apply to all OGL scene handlers...
+  static FlushAction fFlushAction;
+  // Number of entities between flushes
+  static G4int fEntitiesFlushInterval;
+
   // True if caller of primitives is capable of processing three passes.
   G4bool fThreePassCapable;
   

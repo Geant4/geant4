@@ -23,13 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ErrorPropagationNavigator.hh 87697 2014-12-17 09:40:21Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class header file 
-// --------------------------------------------------------------------
+// class G4ErrorPropagationNavigator
 //
 // Class Description:
 //
@@ -57,7 +51,7 @@ class G4ErrorPropagationNavigator : public G4Navigator
     G4double ComputeStep (const G4ThreeVector &pGlobalPoint,
                           const G4ThreeVector &pDirection,
                           const G4double pCurrentProposedStepLength,
-                          G4double &pNewSafety);
+                                G4double &pNewSafety);
       // Calls the navigation in the detector geometry and then checks
       // if the distance to surface is smaller than the proposed step
 
@@ -69,12 +63,12 @@ class G4ErrorPropagationNavigator : public G4Navigator
   
     G4ThreeVector GetGlobalExitNormal(const G4ThreeVector& point,
                                             G4bool* valid);
-    // Return Exit Surface Normal and validity too. Can only be called if
-    // the Navigator's last Step has crossed a volume geometrical boundary.
-    // Normal points out of the volume exited and/or into the volume entered.
+      // Return Exit Surface Normal and validity too. Can only be called if
+      // the Navigator's last Step has crossed a volume geometrical boundary.
+      // Normal points out of the volume exited and/or into the volume entered.
 
     G4double TargetSafetyFromPoint( const G4ThreeVector &pGlobalpoint );
-    // Isotropic safety for 'Target' 
+      // Isotropic safety for 'Target' 
    
     //-- NOT implemented, as it is difficult to define the coordinate system:
     // G4ThreeVector GetLocalExitNormal(G4bool* valid);

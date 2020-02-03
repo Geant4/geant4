@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/HEPEvtcom.cc
 /// \brief Implementation of the HEPEvtcom class
 //
-//$Id: HEPEvtcom.cc 77801 2013-11-28 13:33:20Z gcosmo $
 // ======================================================================
 //      PARAMETER (NMXHEP=4000)
 //      COMMON/HEPEVT/NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP),

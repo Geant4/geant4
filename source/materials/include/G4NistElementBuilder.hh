@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh 94234 2015-11-09 10:58:13Z gcosmo $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -58,27 +57,28 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
+#include "G4Element.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4int maxNumElements = 108;
 const G4int maxAbundance   = 3500;
 
-class G4Element;
-
 class G4NistElementBuilder
 {
 public:
 
-  G4NistElementBuilder(G4int vb);
+  explicit G4NistElementBuilder(G4int vb);
   ~G4NistElementBuilder();
 
   // Find or build a G4Element by atomic number
+  inline G4Element* FindElement (G4int Z) const;
   G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
 
   // Find  or build a G4Element by symbol
-  G4Element* FindOrBuildElement (const G4String& symb,
-				 G4bool buildIsotopes = true);
+  G4Element* FindOrBuildElement (const G4String& symb,	
+			         G4bool buildIsotopes = true);
   // print element information
   void PrintElement (G4int Z) const;
 
@@ -150,9 +150,11 @@ private:
 
   G4int      index;
   G4int      verbose;
-  G4bool     first;
 
   std::vector<G4String>    elmNames;
+#ifdef G4MULTITHREADED
+  static G4Mutex nistElementMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,9 +162,7 @@ private:
 
 inline G4double G4NistElementBuilder::GetAtomicMassAmu(G4int Z) const
 {
-  G4double a = 0.0;
-  if(Z>0 && Z<maxNumElements) { a = atomicMass[Z]; }
-  return a;
+  return (Z>0 && Z<maxNumElements) ? atomicMass[Z] : 0.0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,8 +170,10 @@ inline G4double G4NistElementBuilder::GetAtomicMassAmu(G4int Z) const
 inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N) const
 {
   G4double mass = 0.0;
-  G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) {mass = massIsotopes[i + idxIsotopes[Z]];}
+  if(Z > 0 && Z < maxNumElements) {
+    G4int i = N - nFirstIsotope[Z];
+    if(i >= 0 && i <nIsotopes[Z]) {mass = massIsotopes[i + idxIsotopes[Z]];}
+  }
   return mass;
 }
 
@@ -180,10 +182,12 @@ inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N) const
 inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N) const
 {
   G4double mass = 0.0;
-  G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) {
-    mass = massIsotopes[i + idxIsotopes[Z]] + 
-      Z*CLHEP::electron_mass_c2 - bindingEnergy[Z]; 
+  if(Z > 0 && Z < maxNumElements) {
+    G4int i = N - nFirstIsotope[Z];
+    if(i >= 0 && i <nIsotopes[Z]) {
+      mass = massIsotopes[i + idxIsotopes[Z]] + 
+	Z*CLHEP::electron_mass_c2 - bindingEnergy[Z]; 
+    }
   }
   return mass;
 }
@@ -193,7 +197,7 @@ inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N) const
 inline 
 G4double G4NistElementBuilder::GetTotalElectronBindingEnergy(G4int Z) const
 {
-  return bindingEnergy[Z];
+  return (Z > 0 && Z < maxNumElements) ? bindingEnergy[Z] : 0.0;
 }
 
 
@@ -203,8 +207,10 @@ inline
 G4double G4NistElementBuilder::GetIsotopeAbundance(G4int Z, G4int N) const
 {
   G4double x = 0.0;
-  G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) {x = relAbundance[i + idxIsotopes[Z]];}
+  if(Z > 0 && Z < maxNumElements) {
+    G4int i = N - nFirstIsotope[Z];
+    if(i >= 0 && i <nIsotopes[Z]) { x = relAbundance[i + idxIsotopes[Z]]; }
+  }
   return x;
 }
 
@@ -212,14 +218,14 @@ G4double G4NistElementBuilder::GetIsotopeAbundance(G4int Z, G4int N) const
 
 inline G4int G4NistElementBuilder::GetNistFirstIsotopeN(G4int Z) const
 {
-  return nFirstIsotope[Z];
+  return (Z > 0 && Z < maxNumElements) ? nFirstIsotope[Z] : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4int G4NistElementBuilder::GetNumberOfNistIsotopes(G4int Z) const
 {
-  return nIsotopes[Z];
+  return (Z > 0 && Z < maxNumElements) ? nIsotopes[Z] : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,6 +248,15 @@ inline G4int G4NistElementBuilder::GetMaxNumElements() const
 inline void G4NistElementBuilder::SetVerbose(G4int val) 
 {
   verbose = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4Element* G4NistElementBuilder::FindElement(G4int Z) const
+{
+  const G4ElementTable* theElementTable = G4Element::GetElementTable();
+  return (Z > 0 && Z < maxNumElements && elmIndex[Z] >= 0) ?
+    (*theElementTable)[elmIndex[Z]] : nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

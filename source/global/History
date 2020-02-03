@@ -1,4 +1,3 @@
-$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,59 +9,462 @@ $Id:$
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
-It DOES NOT substitute the SVN log-message one should put at every
-committal in the SVN repository !
+It DOES NOT substitute the log-message one should put at every
+commit in the repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 16, 2016 G.Cosmo (global-V10-01-29)
+December 03, 2019 Gabriele Cosmo (global-V10-05-26)
+- Updated tag IDs for release 10.6.
+
+November 22, 2019 Jonathan Madsen (global-V10-05-25)
+- Updated G4TiMemory.hh to support new macros
+- Updated templates.hh to use move semantics in consume_parameters
+  - Eliminates warning about unnecessary copy for some compilers
+- Updated sources.cmake to use ${timemory_LIBRARIES} instead of
+  difficult to type ${TiMemory_LIBRARIES}
+
+November 19, 2019 Gabriele Cosmo (global-V10-05-24)
+- Updated tag IDs for geant4-10-06-cand-01.
+
+November 15, 2019 Gabriele Cosmo (global-V10-05-23)
+- Fixed implicit type conversions in G4String internal methods.
+
+November 12, 2019 Gabriele Cosmo (global-V10-05-22)
+- Updated tag IDs for geant4-10-06-cand-00.
+
+November 08, 2019 Evgueni Tcherniaev (global-V10-05-21)
+- G4SimplexDownhill: fixed minor Coverity defect
+
+October 30, 2019 Gabriele Cosmo (global-V10-05-20)
+- Updated date and tag-ID for geant4-10-05-ref-10.
+
+October 25, 2019 Gabriele Cosmo (global-V10-05-19)
+- Added 'External' (physical) volume type to geomdefs.hh.
+
+September 30, 2019 Gabriele Cosmo (global-V10-05-18)
+- Updated date and tag-ID for geant4-10-05-ref-09.
+
+September 12, 2019 Evgueni Tcherniaev (global-V10-05-17)
+- Added HEPRandom/include/G4QuickRand.hh
+
+August 31, 2019 Gabriele Cosmo (global-V10-05-16)
+- Updated date and tag-ID for geant4-10-05-ref-08.
+
+August 2, 2019 Makoto Asain (global-V10-05-15)
+- G4PhysicsVector::insertAt() : add protection against idx > entries().
+  Addressing to Bug report #2182.
+
+July 21, 2019 Mihaly Novak (global-V10-05-14)
+- G4PhysicsVector: remove temporary codes used during the optimisation of the
+  physics log-vector data access
+
+July 18, 2019 Mihaly Novak (global-V10-05-13)
+- G4PhysicsVector: further optimisation of the LogVectorValue data access method
+  (all conditional branchings are eliminated by increased robustness of the alg.)
+
+July 17, 2019 Mihaly Novak (global-V10-05-12)
+- G4PhysicsVector: add optimised LogVectorValue method(special Value method only
+  for log-vectors) to G4PhysicsVector
+- G4PhysicsVector, G4PhysicsLogVector, G4PhysicsLinearVector, G4PhysicsVector:
+  change dBin member to invdBin(=1/dBin) to get rid of run-time divisions
+
+July 15, 2019 Gabriele Cosmo (global-V10-05-11)
+- Updated date and tag-ID for geant4-10-05-ref-07.
+
+June 17, 2019 Gabriele Cosmo (global-V10-05-10)
+- Updated date and tag-ID for geant4-10-05-ref-06.
+
+May 28, 2019 Gabriele Cosmo (global-V10-05-09)
+- Updated date and tag-ID for geant4-10-05-ref-05.
+
+May 20, 2019 Gabriele Cosmo (global-V10-05-08)
+- Defined default move constructor and move assignment operator for G4String
+  and G4DataVector.
+
+May 16, 2019 Gabriele Cosmo (global-V10-05-07)
+- Defaulted copy constructor for G4StatDouble, to fix compilation warnings
+  on gcc-9.1.
+
+April 27, 2019 Gabriele Cosmo (global-V10-05-06)
+- Updated date and tag-ID for geant4-10-05-ref-04.
+
+April 25, 2019 Ben Morgan (global-V10-05-05)
+- DEV-250: Add G4GlobalConfig.hh generated header to hold global, always
+  required, preprocessor symbols instead of relying on -D flags.
+  - G4USE_STD11
+  - G4MULTITHREADED
+  - G4_STORE_TRAJECTORY
+  - G4VERBOSE
+  - GEANT4_USE_TIMEMORY
+- Add inclusion of G4GlobalConfig.hh in G4Types.hh, tls.hh and
+  G4TiMemory.hh so that global and other categories pick up
+  the definitions transparently. Protect inclusion so that
+  only CMake builds use this header
+- Update other headers/srcs to include G4Types/G4Threading if
+  they use G4MULTITHREADED
+- Uses cmake-V10-05-02
+
+March 29, 2019 Gabriele Cosmo (global-V10-05-04)
+- Updated date and tag-ID for geant4-10-05-ref-03.
+
+March 17, 2019 Mihaly Novak (global-V10-05-03)
+- G4PhysicsVector: adding additional public Value() method option to propagate
+  down the known log-energy value (can avoid the log call in case of log-vector)
+- templates: new LOG_EKIN_MIN constant as value taken incase of zero kin-energy.
+
+March 13, 2019 Gabriele Cosmo (global-V10-05-02)
+- Enable FPE detection on MacOS with clang.
+  Addressing problem report #2147.
+
+February 28, 2019 Gabriele Cosmo
+- Updated date and tag-ID for geant4-10-05-ref-02.
+
+January 31, 2019 Ivana Hrivnacova (global-V10-05-01)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+January 30, 2019 Gabriele Cosmo (global-V10-05-00)
+- Updated date and tag-ID for geant4-10-05-ref-01.
+
+November 26, 2018 Gabriele Cosmo (global-V10-04-31)
+- G4Cache, G4CacheDetails: minor code cleanup and formatting.
+
+November 16, 2018 Gabriele Cosmo (global-V10-04-30)
+- G4OrderedTable and G4DataVector: fixed store/retrieve of binary
+  data format.
+- G4AllocatorPool: moved copy-ctr and operator=() to public section.
+- Changed ID for release 10.5.
+- Fixed unit tests.
+
+November 13, 2018 Jonathan Madsen (global-V10-04-29)
+- Fixes to G4ConvergenceTester to ensure there are no divide-by-zeros
+  when calculating the stat history
+
+November 9, 2018 Gabriele Cosmo (global-V10-04-28)
+- G4ConvergenceTester: fixed printout typos.
+
+November 8, 2018 Gabriele Cosmo (global-V10-04-27)
+- G4Threading: replaced 'typedef' statements with C++11 'using' correspondents.
+
+November 1, 2018 Gabriele Cosmo (global-V10-04-26)
+- Fixed inclusion recursion in G4EnvironmentUtils header.
+
+October 30, 2018 Gabriele Cosmo (global-V10-04-25)
+- Renamed G4Utility.hh to G4EnvironmentUtils.hh and moved one of the
+  functions to templates.hh.
+
+October 25, 2018 Jonathan Madsen (global-V10-04-24)
+- added operator += (G4double) to G4ConvergenceTester
+- added G4StatAnalysis.{hh,icc} class
+  - this class is a lightweight statistics class that calculates the
+    mean, FOM, relative error, standard deviation, variance, coefficient of
+    variation, efficiency, r2eff, r2int (corr-coeff-of-interp/coeff-of-determ)
+- G4Utility.hh - convenient environment converters and variadic template
+  to consume unused parameters and variables
+
+October 12, 2018 Gabriele Cosmo (global-V10-04-23, 22)
+- Moved back main G4Exception functions to source to reduce dependencies.
+- Reset singleton pointer in G4StateManager destructor; addressing problem
+  report #2094. Minor code cleanup.
+
+September 14, 2018 Vladimir Ivanchenko (global-V10-04-21)
+- G4PhysicsVector: similar fix as in previous tag of the problem #2087
+
+September 10, 2018 Mihaly Novak (global-V10-04-20)
+- G4Physics2DVector: fixed possible out-of-bound access in the FindBin method.
+  problem report #2087
+
+August 14, 2018 Gabriele Cosmo (global-V10-04-19)
+- G4Timer: fixed CPU number printout in operator<<(). Use G4 types.
+  Code formatting.
+
+June 6, 2018 Jonathan Madsen (global-V10-04-18)
+- Added G4TiMemory.hh which defines an dummy initializer and empty macros when
+  TiMemory is disabled and includes the TiMemory headers and defines an
+  initializer when built with TiMemory support
+- Removed "#define times ostimes" from G4Timer.hh and G4SliceTimer.hh
+  - conflicts with TiMemory and this is left over from a conflict that
+    no longer exists (see global-01-00-03 from 1999)
+  - Removed corresponding "#undef times" from G4Timer.cc and G4SliceTimer.cc
+- Added TiMemory libraries and includes to sources.cmake
+
+May 18, 2018 Gabriele Cosmo (global-V10-04-17)
+- Moved G4Exception functions to inline and extracted banner front/end
+  strings for use in Qt parsing.
+
+May 17, 2018 Jonathan Madsen (global-V10-04-16)
+- Removed G4GLOB_DLL from G4CacheReference<G4double>
+
+May 17, 2018 Jonathan Madsen (global-V10-04-15)
+- Updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+March 23, 2018 Mihaly Novak (global-V10-04-14)
+- Increased accuracy of G4Pow::A13 in the most critical [1/4,4] interval.
+
+March 22, 2018 Gabriele Cosmo (global-V10-04-13)
+- Avoid exporting symbols for Windows DLLs in multi-threaded builds.
+
+March 21, 2018 Gabriele Cosmo (global-V10-04-12)
+- Moved test80 to unit tests in HEPRandom/test module and renamed testRngMT.
+
+March 9, 2018 Gabriele Cosmo (global-V10-04-11)
+- Removed obsolete MT wrappers for random numbers, no longer necessary.
+  Simplified definition of G4Random types in Randomize.hh accordingly.
+- Full support for thread-local storage on clang (also MacOS clang) now
+  enabled; updated tls.hh definitions accordingly; removed use of the
+  G4USE_STD11 flag, now always enabled by default.
+- Minor code cleanup in G4UniformRandPool.
+
+March 7, 2018 Jonathan Madsen (global-V10-04-10)
+- Replaced erroneous "id_type" return type for G4DummyThread::get_id()
+  with correct "id" type.
+
+March 6, 2018 Jonathan Madsen (global-V10-04-09)
+- updated G4cout_p and G4cerr_p to point to std::cout and std::cerr before
+  and after library load. G4cout before G4RunManager creation has been seen to
+  fail on Windows
+- Improvement to G4AutoLock in non-MT mode + bug fix (void try_lock() ->
+  bool try_lock()) plus error handling within G4AutoLock if static mutex
+  is attempted to be used at application cleanup (previously handled in
+  G4Cache)
+- using atomics in G4Cache
+- Define G4ThisThread, G4Promise, G4Future, and G4SharedFuture in G4Threading
+  the promises and futures are not currently used except for in upcoming
+  RNG testing but will be used in future
+- G4TypeMutex and G4RecursiveTypeMutex now accept an index, e.g.
+  G4AutoLock l(G4TypeMutex<G4SomeClass>(0)) and
+  G4AutoLock l(G4TypeMutex<G4SomeClass>(1))
+- G4DummyThread typedef std::thread::id as id instead of id_type
+
+March 6, 2018 Gabriele Cosmo (global-V10-04-08)
+- Use thread_local keyword on Windows, instead of __declspec(thread) in tls.hh.
+- Removed no longer necessary windefs.hh header.
+
+February 21, 2018 Jonathan Madsen (global-V10-04-07)
+- Overloaded G4AutoLock member functions in serial mode to not
+  execute locking/unlocking
+- Fixed std::system_error in G4Cache where destructor tries
+  to use a static G4Mutex that has already been deleted by cleanup
+  which is a non-critical error related to a singleton memory leak
+- Returned some functionality in G4Threading to dummy types such
+  as G4MUTEXLOCK and G4MUTEXUNLOCK do not actually lock
+  and G4Thread is a dummy thread that executes upon construction
+
+February 19, 2018 Jonathan Madsen (global-V10-04-06)
+- Added G4TypeMutex<T> and G4TypeRecursiveMutex<T> function to threading
+  for safely obtaining a static mutex that is unique to the template type T
+- Replaced static G4Mutex in G4Cache<T> with calls to G4TypeMutex<G4Cache<T>>
+  function calls to safely initialize mutexes on Windows
+
+February 14, 2018 Jonathan Madsen (global-V10-04-05)
+- G4THREADSLEEP had an extra space before paramter field rendering the
+  macro invalid. This was fixed
+- Sequential clang builds were emitting -Wunused-private-field warning
+  in G4MTBarrier. Modified G4CONDITION macros to fix this
+
+February 13, 2018 Jonathan Madsen (global-V10-04-04)
+- Simplified G4Threading by not ifdef'ing out G4Mutex
+  It was determined the average time to lock and unlock a mutex in
+  single-thread mode is ~5 nanoseconds in release mode. Therefore, it
+  was determined the mutex locking is not a concern for performance in
+  non-MT mode. This fixes issues with G4Mutex and G4AutoLock in
+  global-V10-04-03
+- Extended G4TemplateAutoLock to take advantage of the features
+  std::unique_lock offers
+- migrated G4Timer real (wall) time to use std::chrono::high_precision_clock
+  from C++11
+
+February 12, 2018 Jonathan Madsen (global-V10-04-03)
+- G4Threading - replaced POSIX threading with C++11 threading
+  - std::condition_variable
+  - std::mutex + std::recursive_mutex
+  - std::thread
+  - many of the former macros are now dummy macros (e.g. G4MUTEXINIT,
+    G4MUTEX_INITIALIZER, etc.)
+  - G4GetPidId() -> uses std::this_thread::get_id()
+  - G4GetNumberOfCores() -> uses std::thread::hardware_concurrency()
+  - Updated pin affinity
+  - Removed G4THREADSELF (not used, no C++11 platform-independent equivalent)
+- G4AutoLock is now a thin wrapper around std::unique_lock providing previous
+  functionality + more features (e.g. try_lock, try_lock_until, etc.)
+- Added G4RecursiveAutoLock for recursive mutexes
+- Expanded DEFINED_PPC and DEFINED_INTEL in G4FPEDetection (warning in GCC 7+)
+- G4MTBarrier: removed WIN32 specifics, updated G4CONDITIONWAIT to use
+  G4AutoLock (std::unique_lock) instead of G4Mutex, removed G4MUTEX_INITIALIZER
+  from constructor
+
+February 12, 2018 G.Cosmo (global-V10-04-02)
+- G4StateManager: move static method SetVerboseLevel() to be non inline.
+
+February 9, 2018 M.Asai (global-V10-04-01)
+- G4MTcoutDestination.cc blocks G4cout from worker threads while spplication
+  is in G4State_Init instead of G4State_Idle.
+- G4StateManager has a new method to set verbosity and print the state change.
+
+December 19, 2017 G.Cosmo (global-V10-04-00)
+- Fixed self-consistency in G4ReferenceCountedHandle header (missing #include).
+  Added missing #ifdef guard in G4CacheDetails header; code formatting.
+  Thanks to Raphael Isemann for reporting these.
+
+October 20, 2017 E.Tcherniaev (global-V10-03-11)
+- Use more performant G.Marsaglia (1972) algorithm for G4RandomDirection.
+  Thanks to Kostas Savvidy for the suggestion.
+- Updated unit test G4RandomDirectionTest.
+
+July 24, 2017 E.Tcherniaev (global-V10-03-10)
+- Added G4RandomPointOnEllipsoid() and G4RandomPointOnEllipse() to functions
+  collection in G4RandomTools.hh.
+
+July 20, 2017 E.Tcherniaev (global-V10-03-09)
+- Added G4RandomRadiusInRing() and G4RandomPointInEllipse() to functions
+  collection in G4RandomTools.hh.
+
+June 21, 2017 G.Cosmo      (global-V10-03-08)
+- Corrected TLS setup in tls.hh for gcc compiler.
+
+April 20, 2017 G.Cosmo     (global-V10-03-07)
+- Removed obsolete internal definition of abs() in templates.hh.
+- Code cleanup/formatting in recent G4cout* classes.
+
+April 18, 2017 A.Dotti     (global-V10-03-06)
+- Fixed WIN compilation error.
+
+April 18, 2017 A.Dotti     (global-V10-03-05)
+- Fixed compiler error for gcc < 5.
+- Fixed compilation warning on Mac OS  10.11 clang-8.
+
+April 18, 2017 A.Dotti     (global-V10-03-04)
+- New structure for G4coutDestination functionality with division
+  between sink and filter.
+
+April 6, 2017 E.Tcherniaev (global-V10-03-03)
+- Added function G4RandomDirection(G4double cosTheta) to G4RandomDirection.hh.
+  Addressing enhancement request #1961.
+
+March 14, 2017 G.Cosmo (global-V10-03-02)
+- Fix in destructor of G4ThreadLocalSingleton to destroy mutex as last
+  action. Fixes contention reported by Valgrind/DRD.
+
+March 13, 2017 G.Cosmo (global-V10-03-01)
+- G4TWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),
+  and Recycle() to be called by worker threads.
+
+December 19, 2016 G.Cosmo (global-V10-03-00)
+- Removed obsolete utility class G4SubString used internally in G4String,
+  as no longer necessary and also including unnecessary and buggy operators.
+  Addressing problem report #1864.
+
+November 16, 2016 G.Cosmo (global-V10-02-33)
 - Fixed compilation warning on MacOS Sierra in MT mode in function
   G4Threading::G4GetPidId().
 
-October 21, 2016 G.Cosmo (global-V10-01-28)
+October 21, 2016 A.Dotti (global-V10-02-31, -32)
+- To avoid confusion rename method to:
+  G4Threading::GetNumberOfRunningWorkerThreads()
+
+October 21, 2016 G.Cosmo (global-V10-02-30)
 - Made initialisation of G4TWorkspacePool thread-local data to be inline
   along with generic template type.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-September 7, 2016 M.Asai
+October 17, 2016 G.Cosmo (global-V10-02-29)
+- Moved inclusion of <atomic> within G4MULTITHREADED guard in G4Threading.cc
+
+October 11, 2016 A.Dotti (global-V10-02-28)
+- Added G4Threading::GetNumberOfActiveWorkerThreads() function.
+
+September 26, 2016 G.Cosmo (global-V10-02-27)
+- Added kilovolt/m and megavolt/m to G4UnitsTable for electric field.
+  Addressing enhancement request #1891.
+
+September 7, 2016 M.Asai (global-V10-02-26)
 - G4StatDouble: Additional constructor.
 
-September 6, 2016 M.Asai
+September 6, 2016 M.Asai (global-V10-02-25)
 - G4StatDouble: Added = and += operators.
 
-August 31, 2016 V.Ivanchenko
+August 31, 2016 V.Ivanchenko (global-V10-02-24)
 - G4StatDouble: fixed computation of RMS - was completely wrong.
 
-August 12, 2016 G.Cosmo
+August 18, 2016 G.Cosmo (global-V10-02-23)
+- G4UnitsTable: added IsUnitDefined() method, checking existance of a unit
+  in the table. Addressing problem report #1880.
+
+August 15, 2016 V.Ivanchenko (global-V10-02-22)
+- G4PhysicsVector, G4PhysicsTable and derived classes: general cleanup.
+  Updated comments; removed duplicate methods; more correct names for some
+  variables; adoption of c++11 keywords.
+  Removed .icc files for G4LPhysicsFreeVector and G4PhysicsOrderedFreeVector.
+
+August 12, 2016 G.Cosmo (global-V10-02-21)
 - G4UnitsTable: use 'hep_pascal' instead of 'pascal' to avoid potential
   symbol conflicts on Windows.
 
-April 25, 2016 G.Cosmo (global-V10-01-27)
+July 29, 2016 M.Asai (global-V10-02-20)
+- Fix G4UnitDefinition to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+July 21 and 22, 2016 M.Asai (global-V10-02-16, -17, -18 and -19)
+- Fix G4UnitsTable to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+June 3, 2016 G.Cosmo (global-V10-02-15)
+- Enabled new units 'us' and 'ps' in G4SystemOfUnits.hh.
+  Now requiring CLHEP-2.3.3.0.
+- Updated version ID for 10.3-Beta.
+
+May 2, 2016 G.Cosmo (global-V10-02-14)
+- Added 'us' and 'ps' units symbols for microsend and picosecond
+  respectively to G4UnitsTable. (M.Maire)
+  Commented out in G4SystemOfUnits.hh, pending installation of new
+  external CLHEP library.
+- Converted all units anc constants from "static const" to "static constexpr".
+- Coworks with tag "externals-V10-02-08".
+
+April 25, 2016 G.Cosmo (global-V10-02-13)
 - Added check for support of atomics for clang compiler in HEPRandom wrappers.
 
-April 14, 2016 G.Cosmo
+April 14, 2016 G.Cosmo (global-V10-02-12)
 - Define G4GeometryTolerance singleton instance pointer as tread-local
   to get rid of spurious race conflicts at initialisation.
 
-March 30, 2016 G.Cosmo
+March 30, 2016 G.Cosmo (global-V10-02-11)
 - Added MixMax in unit tests for HepRandom.
 
-March 22, 2016 A.Dotti
+March 22, 2016 A.Dotti (global-V10-02-10)
 - Fixing compilation of unit test for HEPRandom. Only test
   subdirectory touched to port to new G4 interfaces
 
-March 16, 2016 G.Cosmo
+March 16, 2016 G.Cosmo (global-V10-02-09)
 - Improved algorithm for G4RandomDirection (E.Tcherniaev).
 - Turn warnings to fatal exceptions in G4UnitsTable for non existing
   units or categories in the table. Addressing problem report #1843.
 
-December 17, 2015 G.Cosmo (global-V10-01-26)
+February 17, 1016 A.Dotti (global-V10-02-08, 07, 06, 05)
+- Fixed sequential build and Windows builds for G4MTBarrier class.
+
+February 16, 2016 A.Dotti (global-V10-02-04)
+- Fixed typo CONDTIONBROADCAST for sequential mode.
+- Removed default move constructor to prevent compilation errors on Windows.
+
+February 16, 2016 A.Dotti (global-V10-02-03)
+- Introduced new utility class G4MTBarrier implementing a synchronization
+  point between threads.
+- Corrected typo for macro CONDITIONBROADCAST.
+
+January 28, 2016 A.Dotti (global-V10-02-02)
+- Changed exception code in G4TWorkspacePool from G4TWorkspacePool
+  to "WorkspaceNN".
+
+December 17, 2015 G.Cosmo (global-V10-02-01)
 - Corrected conditions for proper treatment of gcc-5 in tls.hh and
   G4Threading.hh.
 
-December 10, 2015 G.Cosmo
+December 10, 2015 G.Cosmo (global-V10-02-00)
 - Removed unused and buggy operator=(const G4String&) in G4SubString.
 
 November 5, 2015 G.Cosmo (global-V10-01-25)
@@ -75,7 +477,7 @@ November 4, 2015 A.Dotti (global-V10-01-24)
 
 October 21, 2015 V.Ivantchenko (global-V10-01-23)
 - G4PhysicsVector, G4Physics2DVector, G4PhysicsOrderedFreeVector:
-  use std::lower_bound instead of old do/while loops according to 
+  use std::lower_bound instead of old do/while loops according to
   proposal of K.Genser (FNAL); also minor cleanup of the code.
 
 October 16, 2015 V.Ivantchenko (global-V10-01-22)
@@ -98,7 +500,7 @@ August 21, 2015 G.Cosmo (global-V10-01-19)
 August 19, 2015 M.Maire (global-V10-01-18)
 - G4SystemOfUnits.hh : keep only liter, L, dL, cL, mL
 - Updated G4SIunits.hh and G4UnitsTable.
-     
+
 August 10, 2015 M.Maire
 - G4SystemOfUnits.hh : add dm, dm2, dm3, liter
 - Update G4SIunits.hh
@@ -113,12 +515,12 @@ August 10, 2015 G.Cosmo (global-V10-01-16)
 
 June 26, 2015 A.Dotti (global-V10-01-15)
 - Coverity fix in G4UniformRandPool and bug fixing
- 
+
 June 12, 2015 A.Dotti (global-V10-01-14)
 - Fix bug in G4CacheReference::Destroy method
-- Modify behavior of G4Cache to identify internal 
+- Modify behavior of G4Cache to identify internal
   inconsistencies. An exception is thrown
- 
+
 May 27, 2015 J.Allison (global-V10-01-13)
 - Define G4THREADSLEEP(tick) macro in G4Threading.hh also for sequential
   builds.
@@ -142,11 +544,11 @@ May 5, 2015 A.Dotti (global-V10-01-08)
 
 April 26, 2015 V.Ivantchenko
 - G4StatDouble: return RMS 0 instead of -1 in the case the number
-  of entries is below 2 (fixes arithmetic exceptions in examples for 
+  of entries is below 2 (fixes arithmetic exceptions in examples for
   run with 1 event only).
 
 April 9, 2015 A.Dotti (global-V10-01-07)
-- Fix testRandPool for sequential builds 
+- Fix testRandPool for sequential builds
 
 April 8, 2015 G.Cosmo (global-V10-01-06)
 - Some code cleanup/formatting in G4UniformRandPool.
@@ -155,7 +557,7 @@ April 8, 2015 G.Cosmo (global-V10-01-06)
 - Corrected GNUmakefile in HepRandom unit tests.
 
 April 8, 2015 A.Dotti (global-V10-01-05)
-- Fixed compilation error on Windows. 
+- Fixed compilation error on Windows.
 
 April 8, 2015 A.Dotti (global-V10-01-04)
 - First implementation of G4UniformRandPool for serial generation of
@@ -285,10 +687,10 @@ April 24, 2014 G.Cosmo (global-V10-00-17)
   keyword to conform to Standard.
 
 April 11, 2014 A.Dotti (global-V10-00-16)
-- New utility function G4Threading::IsMultithreadedApplication() 
-  and G4Threding::SetMultithreadedApplication(bool) used to 
+- New utility function G4Threading::IsMultithreadedApplication()
+  and G4Threding::SetMultithreadedApplication(bool) used to
   specify which type of kernel is instantiated indipendently by
-  build type (e.g. to distinghuish application migrated to MT or 
+  build type (e.g. to distinghuish application migrated to MT or
   still using sequential run manager)
 
 April 11, 2014 G.Cosmo (global-V10-00-15)
@@ -301,7 +703,7 @@ April 8, 2014 G.Cosmo (global-V10-00-13)
 - Define G4ThreadLocal to be std::thread_local in case C++11 standard is
   used (temporarly enabled only on GNUMake system for testing, through use
   of environment variable G4USE_STD11); directly adopt CLHEP classes in such
-  a case instead of G4MT* wrappers. 
+  a case instead of G4MT* wrappers.
 
 March 27, 2014 G.Cosmo (global-V10-00-12)
 - Fixed signature for call to G4Exception in G4Threading.cc.
@@ -313,7 +715,7 @@ March 26, 2014 G.Cosmo (global-V10-00-10)
 - Minor code cleanup.
 
 March 25, 2014 A.Dotti (global-V10-00-08,global-V10-00-09)
-- Introduce G4SetPinAffinity function (available only for LINUX): 
+- Introduce G4SetPinAffinity function (available only for LINUX):
   "locks" a pthread to the given CPU index. This will be used by run
   category as an option to improve performance on high-core counts CPUs.
 
@@ -330,7 +732,7 @@ February 7, 2014 V.Ivantchenko (global-V10-00-05)
 - Updated date and tag-ID for geant4-10-00-ref-02.
 
 February 5, 2014 T.Koi         (global-V10-00-04)
-- Added protections to avoid core dumps caused by division by zero 
+- Added protections to avoid core dumps caused by division by zero
   and other minor updates in G4ConvergenceTester.
 
 January 23, 2014 G.Cosmo       (global-V10-00-03)
@@ -338,7 +740,7 @@ January 23, 2014 G.Cosmo       (global-V10-00-03)
 
 January 13, 2014 A. Dotti      (global-V10-00-02)
 - Call G4iosInitialization/G4iosFinalization with functions marked
-  __attribute__((destructor)) and __attribute__((destructor)) to 
+  __attribute__((destructor)) and __attribute__((destructor)) to
   guarantee G4cout/G4cerr are initialized correctly before main
   function
 
@@ -371,10 +773,10 @@ October 30, 2013 A.Dotti       (global-V09-06-79)
 
 Octover 29, 2013 A.Dotti       (global-V09-06-78)
 - Adding G4ThreadPrivateSingleton class for thread-private singleton
-  handling and G4AutoDelete namespace with utility function for 
+  handling and G4AutoDelete namespace with utility function for
   simplified garbage-collection: management/include/G4AutoDelete.hh
   management/include/G4ThreadLocalSingleton.hh. Two unit tests have
-  been developed management/test/testAutoDelete.cc and 
+  been developed management/test/testAutoDelete.cc and
   management/test/testG4TLSSingleton.cc
 - Adding G4MUTEXINIT macro that expands to pthread_mutex_init
 
@@ -385,20 +787,20 @@ October 28, 2013 A.Dotti       (global-V09-06-76)
 - Bug fixing in G4Cache::Put method signature
 
 October 23, 2013 A.Dotti       (global-V09-06-75)
-- Adding G4Cache classes for a thread-private data members in 
+- Adding G4Cache classes for a thread-private data members in
   shared classes.
 
 October 18, 2013 V.Ivantchenko (global-V09-06-74)
 - G4PhysicsVector - in the FindBinLocation method extra checks
-    are added for Log and Lin vectors to avoid rare cases when bin 
-    is computed incorrectly due to limited numerical precision of 
+    are added for Log and Lin vectors to avoid rare cases when bin
+    is computed incorrectly due to limited numerical precision of
     computations (P.Arce report)
 
 October 02, 2013 V.Ivantchenko (global-V09-06-73)
 - G4Pow - fixed typo in previous tag
 
 October 02, 2013 V.Ivantchenko (global-V09-06-72)
-- G4Pow - is now static not G4ThreadLocal, added check that it is 
+- G4Pow - is now static not G4ThreadLocal, added check that it is
     instantiated in the master thread
 - G4PhysicsVector - FindBinLocation is now inlined and not virtual,
     using table type different algorithms are invoked to compute bin
@@ -438,7 +840,7 @@ September 3, 2013 G.Cosmo, V.Ivantchenko (global-V09-06-65, global-V09-06-64)
   the VDT library (http://svnweb.cern.ch/world/wsvn/vdt).
 
 August 31, 2013 M.Asai (global-V09-06-63)
-- G4Threading::G4GetThreadId() returns -2 instead of 0 for the case 
+- G4Threading::G4GetThreadId() returns -2 instead of 0 for the case
   of sequential mode.
 
 August 26, 2013 A.Dotti(global-V09-06-62)
@@ -449,16 +851,16 @@ August 26, 2013 A.Dotti(global-V09-06-61)
    i. Protect G4MTcoutDestination
   ii. Correct check of already-locked condition for G4AutoLock
  iii. Protect creation of shared resource in G4MTHepRandom
-- Add performance test for RNG engines 
+- Add performance test for RNG engines
 
 August 15, 2013 M.Asai (global-V09-06-60)
-- G4MTcoutDestination now has a capabilitu of printing out only for 
+- G4MTcoutDestination now has a capabilitu of printing out only for
   the selected thread to make the display readable.
 
 August 6, 2013 V.Ivantchenko (global-V09-06-59)
 - Fixed compillation
 August 6, 2013 V.Ivantchenko (global-V09-06-58)
-- G4PhysicsLogVector, G4PhysicsLnVector - more accurate check of 
+- G4PhysicsLogVector, G4PhysicsLnVector - more accurate check of
     bin inside FindBinLocation method to avoid non-reproducibility
 
 July 24, 2013 V.Ivantchenko (global-V09-06-57)
@@ -485,10 +887,10 @@ July 3, 2013 V.Ivantchenko (global-V09-06-53)
 July 1, 2013 V.Ivantchenko (global-V09-06-52)
 - G4PhysicsVector: make FindBin method public, added method
     FindLinearEnergy for sampling of energy for vectors
-    with cumulative probability function 
-- G4Physics2DVector: make FindBinLocationX and FindBinLocationY  
+    with cumulative probability function
+- G4Physics2DVector: make FindBinLocationX and FindBinLocationY
     methods public, add method FindLinearX for sampling of energy
-    for 2D cumulative probability functions, added new inlined 
+    for 2D cumulative probability functions, added new inlined
     method Value with different signature
 
 June 26, 2013 G.Cosmo (global-V09-06-51)
@@ -566,9 +968,9 @@ June 7, 2013 G.Cosmo (global-V09-06-38)
 - Updated date and tag for 10.0-Beta.
 
 June 5, 2013 G.Folger (global-V09-06-37)
-- In management/G4FPEDetection.hh add first version of stack backtrace 
+- In management/G4FPEDetection.hh add first version of stack backtrace
    when FPE exception is detected. Linux only.
-    
+
 May 29, 2013 G.Cosmo (global-V09-06-36)
 - Fix for allowing compilation on Windows in G4Threading: disable definition
   of min()/max() and 'pascal' from inclusion of <windows.h>.
@@ -582,7 +984,7 @@ May 29, 2013 G.Cosmo (global-V09-06-35)
   to allow for porting on Windows.
 
 May 23, 2013 M.Asai (global-V09-06-34)
-- Replaced G4coutIdDestination class to G4MTcoutDestination class for cleaner 
+- Replaced G4coutIdDestination class to G4MTcoutDestination class for cleaner
   handling of thread-local cout/cerr.
 
 May 22, 2013 G.Cosmo (global-V09-06-33)
@@ -593,12 +995,12 @@ May 18, 2013 A.Dotti (global-V09-06-32)
 - Fix for sequentual compilation error introduced in latest tag.
 
 May 17, 2013 A.Dotti (global-V09-06-31)
-- Adding new cout streaming for MT: on file and with header 
-  at each line (with optional buffering) 
+- Adding new cout streaming for MT: on file and with header
+  at each line (with optional buffering)
 - Adding G4GetNumberOfCores and G4GetThreadId global helper functions
 
 May 16, 2013 V.Ivanchenko (global-V09-06-30)
-- G4Physics2DVector - removed cache; changed signature of 
+- G4Physics2DVector - removed cache; changed signature of
     several methods; all run time methods become const;
     the class become read only in run time
 
@@ -654,7 +1056,7 @@ April 9, 2013 A.Dotti (global-V09-06-16)
   G4CONDITIONWAIT and G4CONDITIONBROADCAST
 
 April 7, 2013 A.Dotti (global-V09-06-15)
-- Bug fixing: do not delete static data mamber theGenerator 
+- Bug fixing: do not delete static data mamber theGenerator
   (only affects MT builds)
 
 March 29, 2013 G.Cosmo (global-V09-06-14)
@@ -867,7 +1269,7 @@ June 15, 2011 B.Morgan (global-V09-04-09)
 - More fixes for CMake setup.
 
 May 19, 2011 B.Morgan (global-v09-04-08)
-- CMakeLists.txt : Added G4IOS_ALLOC_EXPORT compiler definition via 
+- CMakeLists.txt : Added G4IOS_ALLOC_EXPORT compiler definition via
   add_definitions so all submodules pick it up.
 
 May 13, 2011  G.Cosmo (global-V09-04-07)
@@ -1021,13 +1423,13 @@ Nov 24, 2009  G.Cosmo (global-V09-02-11)
 - Changed date for release 9.3.
 
 Nov 17, 2009  V.Ivanchenko (global-V09-02-10)
-- G4PhysicsVector: fixed Value() method for the case when energy is 
+- G4PhysicsVector: fixed Value() method for the case when energy is
   around 'edgeMax'; adding extra protection.
 
 Nov 04, 2009  V.Ivanchenko (global-V09-02-09)
 - G4PhysicsVector: cleaned up initialisation of cached values;
   simplified Value() method, now not looking into previous bin;
-  added method ScaleVector() needed for ICRU'73 data. 
+  added method ScaleVector() needed for ICRU'73 data.
 
 Oct 29, 2009  G.Cosmo (global-V09-02-08)
 - Cleared warning for unused argument in G4Allocator internal method.
@@ -1038,7 +1440,7 @@ Aug 07, 2009  G.Cosmo (global-V09-02-07)
 - Removed obsolete static hash(s) method.
 
 Jul 03, 2009  V.Ivanchenko (global-V09-02-06)
-- New class G4Pow, a singleton for fast computation of log() and pow() for 
+- New class G4Pow, a singleton for fast computation of log() and pow() for
   integer and double arguments in the interval [1-256].
 - G4PhysicsVector:
   o Added ComputeSecDerivative() and SplinePossible() methods as a
@@ -1048,10 +1450,10 @@ Jul 03, 2009  V.Ivanchenko (global-V09-02-06)
 
 May 26, 2009  A.Bagulya (global-V09-02-05)
 - G4PhysicsVector: do not change flag "useSpline" during initialisation
-  to address bug in N02 reported by valgrind 
+  to address bug in N02 reported by valgrind
 
 May 26, 2009  A.Bagulya (global-V09-02-04)
-- G4PhysicsVector: set limits of number of bins for spline: 4 for the case 
+- G4PhysicsVector: set limits of number of bins for spline: 4 for the case
   of first derivatives defined; 5 for the case when "Not-a-Knot" algorithm
   is used.
 
@@ -1258,7 +1660,7 @@ May 03, 2006  G.Cosmo (global-V08-00-02)
 
 Feb 15, 2006  M.Maire (global-V08-00-01)
 - G4UnitsTable: added GeV/cm, MeV/cm, keV/cm, eV/cm (Energy/Length)
-  g/cm2 ("Mass/Surface") and MeV*cm2/g ..etc.. ("Energy*Surface/Mass").     
+  g/cm2 ("Mass/Surface") and MeV*cm2/g ..etc.. ("Energy*Surface/Mass").
 
 Jan 30, 2006  M.Maire (global-V08-00-00)
 - G4UnitsTable.cc: added Symbol um for micrometer.
@@ -1417,12 +1819,12 @@ January 21, 2004  G.Cosmo (global-V06-00-00)
 November 24, 2003  G.Cosmo (global-V05-02-03)
 - G4UnitsTable.cc: fixed units initialisation and deletion of objects in
   constructors.
- 
+
 November 4, 2003  G.Cosmo (global-V05-02-02)
 - Added method ExistPhysicsTable() to G4PhysicsTable. (H.Kurasige)
 
 October 31, 2003  M.Asai (global-V05-02-01)
-- Fixed uninitialized variable in G4StateManager and protect null pointer 
+- Fixed uninitialized variable in G4StateManager and protect null pointer
   of G4VExceptionHandler used in G4Exception
 
 June 17, 2003  G.Cosmo (global-V05-02-00)
@@ -1431,8 +1833,8 @@ June 17, 2003  G.Cosmo (global-V05-02-00)
 June 6, 2003  G.Cosmo (global-V05-01-01)
 - Made g4std wrappers obsolete:
   o modified wrappers to include standard std headers
-  o replaced all occurences of G4std:: with std::
-  o replaced all occurences of
+  o replaced all occurrences of G4std:: with std::
+  o replaced all occurrences of
       #include "g4std/XXX"
     with
       #include <XXX>
@@ -1596,7 +1998,7 @@ April 02, 2001 G.Cosmo (global-V03-00-09)
   formatting in G4UnitsTable::operator<<.
 - Fix for compilation on WIN32-VC: added typedef to base collection G4PhysCollection
   in G4PhysicsTable.
- 
+
 March 09, 2001 G.Cosmo (global-V03-00-08)
 - Tyde up comments.
 - Added patch to G4PhysicsTable::Store/Retrieve methods for non-ISO setup
@@ -1654,7 +2056,7 @@ January 09, 2001 H.Kurashige
 
 January 09, 2001 G.Cosmo (global-V03-00-00)
 - Fixed bug in destructor of G4Allocator (report #181): use "delete"
-  instead of "free" for deleting a page allocated with "new". 
+  instead of "free" for deleting a page allocated with "new".
 
 December 13, 2000 G.Folger (global-V02-00-06)
 - Added GNUmakefile to HEPRandom to handle "includes" gmake target.
@@ -1674,9 +2076,9 @@ November 20, 2000 G.Cosmo (global-V02-00-05)
 November 3, 2000 G.Folger (global-V02-00-04)
 - Added rules for "includes" target to GNUmakefile and management/GNUmakefile.
   Added GNUmakefile in STLInterface for the "include" target.
-   
+
 November 1, 2000 G.Cosmo (global-V02-00-03)
-- Moved geometry constants kHistoryMax, kHistoryStride and 
+- Moved geometry constants kHistoryMax, kHistoryStride and
   kNavigatorVoxelStackMax to geomdefs.hh.
 
 August 22, 2000 H.P.Wellisch
@@ -1858,7 +2260,7 @@ October 22, 99 G.Cosmo (global-V00-01-03)
 - Added first implementation of wrapper files for ISO-ANSI migration:
   added new directory management/include/g4std.
 - Added definition of G4std keyword in G4Types.hh.
- 
+
 October 20, 99 G.Cosmo (global-V00-01-02)
 - Tagged.
 
@@ -1872,7 +2274,7 @@ October 20, 99 J.Allison
 October 6, 99 G.Cosmo (global-V00-01-01)
 - STLInterface: Changed tolower/toupper to old implementation in cstring.h
   (by F.Behner)
- 
+
 September 14, 99 G.Cosmo
 - STLInterface: renamed classes HashPtr and Hash to G4HashPtr and G4Hash in
   tphdict and tvhdict to make them compliant with G4 coding standards and
@@ -1973,7 +2375,7 @@ November 27, 98 M.Asai
 - G4UnitsMessenger has been moved to intercoms category to avoid a loop dependency.
 
 November 12, 98 K. Amako (global-00-03-05)
-- Corrected a bug in the GetVectorLength() method of 
+- Corrected a bug in the GetVectorLength() method of
   management/src/G4PhysicsVector.cc. The fixed bug has nothing
   to do with the basic behavior of G4PhysicsVector.
 
@@ -2128,7 +2530,7 @@ April 09, 98 M.Maire
 - Added new data and member functions to G4UserLimits class.
 
 March 24, 98 G.Barrand
-- GNUmakefile, GNUmakefile.architecture, GNUmakefile.common : 
+- GNUmakefile, GNUmakefile.architecture, GNUmakefile.common :
   MAKESHLIB changed in G4MAKESHLIB
 
 March 13, 98 G.Cosmo (global-00-04-04)
@@ -2169,15 +2571,15 @@ January 29, 98 G. Cosmo (global-00-03-02)
 - Tagged global-00-03-02
 
 January 29, 98 S. Sadilov
-- Included new G4SYSTEMS for Win/NT platform: WIN32-VC-NICE and 
+- Included new G4SYSTEMS for Win/NT platform: WIN32-VC-NICE and
   WIN32-G++-NICE in GNUmakefiles.architecture.
-  Added CLHEP, RW, architecture dependant variables and variables for 
-  positional qualifiers (different between UNIX and VC). 
-- In GNUmakefile.common and GNUmakefile used $OUT_LIB introduced in 
+  Added CLHEP, RW, architecture dependant variables and variables for
+  positional qualifiers (different between UNIX and VC).
+- In GNUmakefile.common and GNUmakefile used $OUT_LIB introduced in
   GNUmakefile.architecture as positional qualifier for creating
   simple-libraries and composite-library.
 - In GNUmakefile.common used $RWINCGPP introduced in GNUmakefiles.architecture
-  as right path on RW includes: different compilers (g++ for dependencies 
+  as right path on RW includes: different compilers (g++ for dependencies
   and VC compiler for buiding) use different RW.
 
 January 27, 98 G. Cosmo (global-00-03-01)

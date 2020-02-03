@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh 70822 2013-06-06 08:25:05Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -43,7 +42,7 @@
 // Version:     1.0
 // Created:     13-10-2003
 // Author:      Fan Lei
-//
+// Updated:     Mariele Stockhoff 2017-02-24 add DAVIS model 
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4SurfaceProperty_h
@@ -67,6 +66,7 @@ enum G4SurfaceType
    dielectric_metal,            // dielectric-metal interface
    dielectric_dielectric,       // dielectric-dielectric interface
    dielectric_LUT,              // dielectric-Look-Up-Table interface
+   dielectric_LUTDAVIS,         // dielectric-Look-Up-Table DAVIS interface
    dielectric_dichroic,         // dichroic filter interface
    firsov,                      // for Firsov Process
    x_ray                        // for x-ray mirror process
@@ -87,8 +87,8 @@ class G4SurfaceProperty
     // G4SurfaceProperty(const G4SurfaceProperty &right);
     // const G4SurfaceProperty & operator=(const G4SurfaceProperty &right);
 
-    // G4int operator==(const G4SurfaceProperty &right) const;
-    // G4int operator!=(const G4SurfaceProperty &right) const;
+    // G4bool operator==(const G4SurfaceProperty &right) const;
+    // G4bool operator!=(const G4SurfaceProperty &right) const;
 
   public: // With description
 

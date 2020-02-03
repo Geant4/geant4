@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: DicomHandler.cc 92820 2015-09-17 15:22:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/DICOM/src/DicomHandler.cc
 /// \brief Implementation of the DicomHandler class
@@ -71,11 +74,84 @@ DicomHandler* DicomHandler::fInstance = 0;
 
 DicomHandler* DicomHandler::Instance()
 {
-    return fInstance;
+  if (fInstance == 0)
+  {
+    static DicomHandler dicomhandler;
+    fInstance = &dicomhandler;
+  }
+  return fInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4String DicomHandler::GetDicomDataPath()
+{
+    // default is current directory
+    G4String driverPath = ".";
+    // check environment
+    const char* path = std::getenv("DICOM_PATH");
+
+    if(path)
+    {
+        // if is set in environment
+        return G4String(path);
+    }
+    else
+    {
+        // if DICOM_USE_HEAD, look for data installation
+#ifdef DICOM_USE_HEAD
+        G4cerr << "Warning! DICOM was compiled with DICOM_USE_HEAD option but "
+               << "the DICOM_PATH was not set!" << G4endl;
+        G4String datadir = G4GetEnv<G4String>("G4ENSDFSTATEDATA", "");
+        if(datadir.length() > 0)
+        {
+            auto _last = datadir.rfind("/");
+            if(_last != std::string::npos)
+                datadir.erase(_last);
+            driverPath = datadir + "/DICOM1.1/DICOM_HEAD_TEST";
+            G4int rc = setenv("DICOM_PATH", driverPath.c_str(), 0);
+            G4cerr << "\t --> Using '" << driverPath << "'..." << G4endl;
+            G4ConsumeParameters(rc);
+        }
+#endif
+    }
+    return driverPath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4String DicomHandler::GetDicomDataFile()
+{
+#if defined(DICOM_USE_HEAD) && defined(G4_DCMTK)
+    return GetDicomDataPath() + "/Data.dat.new";
+#else
+    return GetDicomDataPath() + "/Data.dat";
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+<<<<<<< HEAD
+=======
+#ifdef DICOM_USE_HEAD
+DicomHandler::DicomHandler()
+:DATABUFFSIZE(8192), LINEBUFFSIZE(5020), FILENAMESIZE(512),
+ fCompression(0),fNFiles(0), fRows(0), fColumns(0), 
+ fBitAllocated(0), fMaxPixelValue(0),
+ fMinPixelValue(0),fPixelSpacingX(0.),
+ fPixelSpacingY(0.),fSliceThickness(0.), 
+ fSliceLocation(0.),fRescaleIntercept(0), 
+ fRescaleSlope(0),fLittleEndian(true), 
+ fImplicitEndian(false),fPixelRepresentation(0), 
+ fNbrequali(0),fValueDensity(NULL),fValueCT(NULL),fReadCalibration(false),
+ fMergedSlices(NULL),fCt2DensityFile("null.dat")
+{
+    fMergedSlices = new DicomPhantomZSliceMerged;
+    fDriverFile = GetDicomDataFile();
+    G4cout << "Reading the DICOM_HEAD project " << fDriverFile << G4endl;
+}
+#else
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 DicomHandler::DicomHandler()
 :   DATABUFFSIZE(8192), LINEBUFFSIZE(5020), FILENAMESIZE(512),
     fCompression(0), fNFiles(0), fRows(0), fColumns(0),
@@ -146,9 +222,10 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
       
       // beginning of the pixels
       if(tagDictionary == 0x7FE00010) {
-        // Folling 2 fread's are modifications to original DICOM example 
-        //(Jonathan Madsen)
-        rflag = std::fread(buffer,2,1,dicom);   // Reserved 2 bytes
+        // Following 2 fread's are modifications to original DICOM example
+        // (Jonathan Madsen)
+        if(!fImplicitEndian)
+            rflag = std::fread(buffer,2,1,dicom);   // Reserved 2 bytes
         // (not used for pixels)
         rflag = std::fread(buffer,4,1,dicom);   // Element Length  
         // (not used for pixels)
@@ -246,9 +323,15 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
 
     // Perform functions originally written straight to file
     DicomPhantomZSliceHeader* zslice = new DicomPhantomZSliceHeader(fnameG4DCM);
+<<<<<<< HEAD
 
     std::map<G4float,G4String>::const_iterator ite;
     for( ite = fMaterialIndices.begin(); ite != fMaterialIndices.end(); ++ite){
+=======
+    for(auto ite = fMaterialIndices.cbegin();
+             ite != fMaterialIndices.cend(); ++ite)
+    {
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       zslice->AddMaterial(ite->second);
     }
     
@@ -389,9 +472,9 @@ void DicomHandler::GetInformation(G4int & tagDictionary, char * data)
 
     } else if(tagDictionary == 0x00280030 ) { // Pixel Spacing
         G4String datas(data);
-        int iss = datas.find('\\');
+        G4int iss = G4int(datas.find('\\'));
         fPixelSpacingX = atof( datas.substr(0,iss).c_str() );
-        fPixelSpacingY = atof( datas.substr(iss+2,datas.length()).c_str() );
+        fPixelSpacingY = atof( datas.substr(iss+1,datas.length()).c_str() );
 
     } else if(tagDictionary == 0x00200037 ) { // Image Orientation ( not used )
         std::printf("[0x00200037] Image Orientation (Phantom) -> %s\n", data);
@@ -443,13 +526,13 @@ void DicomHandler::StoreData(DicomPhantomZSliceHeader* dcmPZSH)
 
     //----- Print indices of material
     if(fCompression == 1) { // no fCompression: each pixel has a density value)
-        for( G4int ww = 0; ww < fRows; ww++) {
+        for( G4int ww = 0; ww < fRows; ++ww) {
             dcmPZSH->AddRow();
-            for( G4int xx = 0; xx < fColumns; xx++) {
+            for( G4int xx = 0; xx < fColumns; ++xx) {
                 mean = fTab[ww][xx];
                 density = Pixel2density(mean);
                 dcmPZSH->AddValue(density);
-                dcmPZSH->AddMateID(GetMaterialIndex(density));
+                dcmPZSH->AddMateID(GetMaterialIndex(G4float(density)));
             }
         }
 
@@ -461,8 +544,8 @@ void DicomHandler::StoreData(DicomPhantomZSliceHeader* dcmPZSH)
         for(G4int xx = 0; xx < fColumns ;xx +=fCompression ) {
           overflow = false;
           mean = 0;
-          for(int sumx = 0; sumx < fCompression; sumx++) {
-            for(int sumy = 0; sumy < fCompression; sumy++) {
+          for(G4int sumx = 0; sumx < fCompression; ++sumx) {
+            for(G4int sumy = 0; sumy < fCompression; ++sumy) {
               if(ww+sumy >= fRows || xx+sumx >= fColumns) overflow = true;
               mean += fTab[ww+sumy][xx+sumx];
             }
@@ -473,7 +556,7 @@ void DicomHandler::StoreData(DicomPhantomZSliceHeader* dcmPZSH)
           if(!overflow) {
             density = Pixel2density(mean);
             dcmPZSH->AddValue(density);
-            dcmPZSH->AddMateID(GetMaterialIndex(density));
+            dcmPZSH->AddMateID(GetMaterialIndex(G4float(density)));
           }
         }
       }
@@ -493,11 +576,11 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
   
   //----- Print indices of material
   if(fCompression == 1) { // no fCompression: each pixel has a density value)
-    for( G4int ww = 0; ww < fRows; ww++) {
-      for( G4int xx = 0; xx < fColumns; xx++) {
+    for( G4int ww = 0; ww < fRows; ++ww) {
+      for( G4int xx = 0; xx < fColumns; ++xx) {
         mean = fTab[ww][xx];
         density = Pixel2density(mean);
-        foutG4DCM << GetMaterialIndex( density ) << " ";
+        foutG4DCM << GetMaterialIndex( G4float(density) ) << " ";
       }
       foutG4DCM << G4endl;
     }
@@ -509,8 +592,8 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
       for(G4int xx = 0; xx < fColumns ;xx +=fCompression ) {
         overflow = false;
         mean = 0;
-        for(int sumx = 0; sumx < fCompression; sumx++) {
-          for(int sumy = 0; sumy < fCompression; sumy++) {
+        for(G4int sumx = 0; sumx < fCompression; ++sumx) {
+          for(G4int sumy = 0; sumy < fCompression; ++sumy) {
             if(ww+sumy >= fRows || xx+sumx >= fColumns) overflow = true;
             mean += fTab[ww+sumy][xx+sumx];
           }
@@ -520,7 +603,7 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
         
         if(!overflow) {
           density = Pixel2density(mean);
-          foutG4DCM << GetMaterialIndex( density ) << " ";
+          foutG4DCM << GetMaterialIndex( G4float(density) ) << " ";
         }
       }
       foutG4DCM << G4endl;
@@ -546,8 +629,8 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
       for(G4int xx = 0; xx < fColumns ;xx +=fCompression ) {
         overflow = false;
         mean = 0;
-        for(int sumx = 0; sumx < fCompression; sumx++) {
-          for(int sumy = 0; sumy < fCompression; sumy++) {
+        for(G4int sumx = 0; sumx < fCompression; ++sumx) {
+          for(G4int sumy = 0; sumy < fCompression; ++sumy) {
             if(ww+sumy >= fRows || xx+sumx >= fColumns) overflow = true;
             mean += fTab[ww+sumy][xx+sumx];
           }
@@ -578,7 +661,8 @@ void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
   if( finData.eof() ) return;
   
   G4cout << " ReadMaterialIndices " << nMate << G4endl;
-  for( unsigned int ii = 0; ii < nMate; ii++ ){
+  for( unsigned int ii = 0; ii < nMate; ++ii )
+  {
     finData >> mateName >> densityMax;
     fMaterialIndices[densityMax] = mateName;
     G4cout << ii << " ReadMaterialIndices " << mateName << " " 
@@ -591,6 +675,7 @@ void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
 
 unsigned int DicomHandler::GetMaterialIndex( G4float density )
 {
+<<<<<<< HEAD
   std::map<G4float,G4String>::reverse_iterator ite;
   G4int ii = fMaterialIndices.size();
   for( ite = fMaterialIndices.rbegin(); ite != fMaterialIndices.rend();
@@ -598,14 +683,20 @@ unsigned int DicomHandler::GetMaterialIndex( G4float density )
     if( density >= (*ite).first ) {
       break;
     }
+=======
+  std::map<G4float,G4String>::const_reverse_iterator ite;
+  std::size_t ii = fMaterialIndices.size();
+ 
+  for( ite = fMaterialIndices.crbegin(); ite != fMaterialIndices.crend();
+       ++ite, ii-- )
+  {
+    if( density >= (*ite).first )  { break; }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   }
-  //-  G4cout << " GetMaterialIndex " << density << " = " << ii << G4endl;
   
-  if(static_cast<unsigned int>(ii) == fMaterialIndices.size())
-    { ii = fMaterialIndices.size()-1; }
+  if(ii == fMaterialIndices.size())  { ii = fMaterialIndices.size()-1; }
   
-  return  ii;
-  
+  return unsigned(ii);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -618,9 +709,10 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   G4int w = 0;
   
   fTab = new G4int*[fRows];
-  for ( G4int i = 0; i < fRows; i ++ ) {
-        fTab[i] = new G4int[fColumns];
-    }
+  for ( G4int i = 0; i < fRows; ++i )
+  {
+    fTab[i] = new G4int[fColumns];
+  }
   
   if(fBitAllocated == 8) { // Case 8 bits :
     
@@ -630,8 +722,8 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     
     unsigned char ch = 0;
     
-    for(G4int j = 0; j < fRows; j++) {
-      for(G4int i = 0; i < fColumns; i++) {
+    for(G4int j = 0; j < fRows; ++j) {
+      for(G4int i = 0; i < fColumns; ++i) {
         w++;
         rflag = std::fread( &ch, 1, 1, dicom);
         fTab[j][i] = ch*fRescaleSlope + fRescaleIntercept;
@@ -642,8 +734,8 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   } else { //  from 12 to 16 bits :
     char sbuff[2];
     short pixel;
-    for( G4int j = 0; j < fRows; j++) {
-      for( G4int i = 0; i < fColumns; i++) {
+    for( G4int j = 0; j < fRows; ++j) {
+      for( G4int i = 0; i < fColumns; ++i) {
         w++;
         rflag = std::fread(sbuff, 2, 1, dicom);
         GetValue(sbuff, pixel);
@@ -655,7 +747,11 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   // Creation of .g4 files wich contains averaged density data
   char * nameProcessed = new char[FILENAMESIZE];
   FILE* fileOut;
+<<<<<<< HEAD
   
+=======
+ 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   std::sprintf(nameProcessed,"%s.g4dcmb",filename2);
   fileOut = std::fopen(nameProcessed,"w+b");
   std::printf("### Writing of %s ###\n",nameProcessed);
@@ -663,10 +759,12 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   unsigned int nMate = fMaterialIndices.size();
   rflag = std::fwrite(&nMate, sizeof(unsigned int), 1, fileOut);
   //--- Write materials
-  std::map<G4float,G4String>::const_iterator ite;
-  for( ite = fMaterialIndices.begin(); ite != fMaterialIndices.end(); ite++ ){
+  for( auto ite = fMaterialIndices.cbegin();
+            ite != fMaterialIndices.cend(); ++ite )
+  {
     G4String mateName = (*ite).second;
-    for( G4int ii = (*ite).second.length(); ii < 40; ii++ ) {
+    for( std::size_t ii = (*ite).second.length(); ii < 40; ++ii )
+    {
       mateName += " ";
     }         //mateName = const_cast<char*>(((*ite).second).c_str());
     
@@ -677,12 +775,12 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   unsigned int fRowsC = fRows/fCompression;
   unsigned int fColumnsC = fColumns/fCompression;
   unsigned int planesC = 1;
-  G4float pixelLocationXM = -fPixelSpacingX*fColumns/2.;
-  G4float pixelLocationXP = fPixelSpacingX*fColumns/2.;
-  G4float pixelLocationYM = -fPixelSpacingY*fRows/2.;
-  G4float pixelLocationYP = fPixelSpacingY*fRows/2.;
-  G4float fSliceLocationZM = fSliceLocation-fSliceThickness/2.;
-  G4float fSliceLocationZP = fSliceLocation+fSliceThickness/2.;
+  G4float pixelLocationXM = -G4float(fPixelSpacingX*fColumns/2.);
+  G4float pixelLocationXP = G4float(fPixelSpacingX*fColumns/2.);
+  G4float pixelLocationYM = -G4float(fPixelSpacingY*fRows/2.);
+  G4float pixelLocationYP = G4float(fPixelSpacingY*fRows/2.);
+  G4float fSliceLocationZM = G4float(fSliceLocation-fSliceThickness/2.);
+  G4float fSliceLocationZP = G4float(fSliceLocation+fSliceThickness/2.);
   //--- Write number of voxels (assume only one voxel in Z)
   rflag = std::fwrite(&fRowsC, sizeof(unsigned int), 1, fileOut);
   rflag = std::fwrite(&fColumnsC, sizeof(unsigned int), 1, fileOut);
@@ -709,8 +807,8 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   
   //----- Write index of material for each pixel
   if(compSize == 1) { // no fCompression: each pixel has a density value)
-    for( G4int ww = 0; ww < fRows; ww++) {
-      for( G4int xx = 0; xx < fColumns; xx++) {
+    for( G4int ww = 0; ww < fRows; ++ww) {
+      for( G4int xx = 0; xx < fColumns; ++xx) {
         mean = fTab[ww][xx];
         density = Pixel2density(mean);
         unsigned int mateID = GetMaterialIndex( density );
@@ -725,8 +823,8 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
       for(G4int xx = 0; xx < fColumns ;xx +=compSize ) {
         overflow = false;
         mean = 0;
-        for(int sumx = 0; sumx < compSize; sumx++) {
-          for(int sumy = 0; sumy < compSize; sumy++) {
+        for(G4int sumx = 0; sumx < compSize; ++sumx) {
+          for(G4int sumy = 0; sumy < compSize; ++sumy) {
             if(ww+sumy >= fRows || xx+sumx >= fColumns) overflow = true;
             mean += fTab[ww+sumy][xx+sumx];
           }
@@ -746,8 +844,8 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   
   //----- Write density for each pixel
   if(compSize == 1) { // no fCompression: each pixel has a density value)
-    for( G4int ww = 0; ww < fRows; ww++) {
-      for( G4int xx = 0; xx < fColumns; xx++) {
+    for( G4int ww = 0; ww < fRows; ++ww) {
+      for( G4int xx = 0; xx < fColumns; ++xx) {
         mean = fTab[ww][xx];
         density = Pixel2density(mean);
         rflag = std::fwrite(&density, sizeof(G4float), 1, fileOut);
@@ -761,8 +859,8 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
       for(G4int xx = 0; xx < fColumns ;xx +=compSize ) {
         overflow = false;
         mean = 0;
-        for(int sumx = 0; sumx < compSize; sumx++) {
-          for(int sumy = 0; sumy < compSize; sumy++) {
+        for(G4int sumx = 0; sumx < compSize; ++sumx) {
+          for(G4int sumy = 0; sumy < compSize; ++sumy) {
             if(ww+sumy >= fRows || xx+sumx >= fColumns) overflow = true;
             mean += fTab[ww+sumy][xx+sumx];
           }
@@ -799,6 +897,7 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 // Increases the speed of reading file by several orders of magnitude
 void DicomHandler::ReadCalibration()
 {
+<<<<<<< HEAD
   fNbrequali = 0;
   
   // CT2Density.dat contains the calibration curve to convert CT (Hounsfield)
@@ -820,6 +919,25 @@ void DicomHandler::ReadCalibration()
       //pts in CT2Density.dat
       calibration >> fValueCT[i] >> fValueDensity[i];
     }
+=======
+ fNbrequali = 0;
+// CT2Density.dat contains the calibration curve to convert CT (Hounsfield)
+// number to physical density
+ std::ifstream calibration(fCt2DensityFile.c_str());
+ calibration >> fNbrequali; 
+ fValueDensity = new G4double[fNbrequali];
+ fValueCT = new G4double[fNbrequali];
+
+ if(!calibration) {
+   G4Exception("DicomHandler::ReadFile","DICOM001", FatalException,
+               "@@@ No value to transform pixels in density!");
+   } 
+   else { // calibration was successfully opened
+      for(G4int i = 0; i < fNbrequali; ++i) 
+         { // Loop to store all the pts in CT2Density.dat
+        calibration >> fValueCT[i] >> fValueDensity[i];
+        }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   }
   calibration.close();
   
@@ -837,14 +955,19 @@ G4float DicomHandler::Pixel2density(G4int pixel)
   G4double deltaDensity = 0;
   
   
-  for(G4int j = 1; j < fNbrequali; j++) {
+  for(G4int j = 1; j < fNbrequali; ++j) {
     if( pixel >= fValueCT[j-1] && pixel < fValueCT[j]) {
       
       deltaCT = fValueCT[j] - fValueCT[j-1];
       deltaDensity = fValueDensity[j] - fValueDensity[j-1];
       
       // interpolating linearly
+<<<<<<< HEAD
       density = fValueDensity[j] - ((fValueCT[j] - pixel)*deltaDensity/deltaCT );
+=======
+      density = G4float(fValueDensity[j]
+                        -((fValueCT[j] - pixel)*deltaDensity/deltaCT ));
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       break;
     }
   }
@@ -886,7 +1009,7 @@ void DicomHandler::CheckFileFormat()
   checkData.getline(oneLine,100);
   std::ifstream testExistence;
   G4bool existAlready = true;
-  for(G4int rep = 0; rep < fNFiles; rep++) {
+  for(G4int rep = 0; rep < fNFiles; ++rep) {
     checkData.getline(oneLine,100);
     oneName = oneLine;
     oneName += ".g4dcm"; // create dicomFile.g4dcm
@@ -926,8 +1049,47 @@ void DicomHandler::CheckFileFormat()
     rflag = std::fscanf(lecturePref,"%s",maxc);
     fNFiles = atoi(maxc);
     G4cout << " fNFiles " << fNFiles << G4endl;
+<<<<<<< HEAD
     
     for( G4int i = 1; i <= fNFiles; i++ ) { // Begin loop on filenames
+=======
+  
+///////////////////// 
+
+#ifdef DICOM_USE_HEAD
+    for( G4int i = 1; i <= fNFiles; ++i ) 
+    { // Begin loop on filenames
+     rflag = std::fscanf(lecturePref,"%s",inputFile);
+      G4String path = GetDicomDataPath() + "/";
+    
+     std::sprintf(name,"%s.dcm",inputFile);
+     //Writes the results to a character string buffer.
+     
+     char name2[200];
+     strcpy(name2, path.c_str());
+     strcat(name2, name);
+     //  Open input file and give it to gestion_dicom :
+     std::printf("### Opening %s and reading :\n",name2);
+     dicom = std::fopen(name2,"rb");
+     // Reading the .dcm in two steps:
+     //      1.  reading the header
+     //      2. reading the pixel data and store the density in Moyenne.dat
+     if( dicom != 0 ) {
+        ReadFile(dicom,inputFile);
+      } else {
+        G4cout << "\nError opening file : " << name2 << G4endl;
+      }
+      rflag = std::fclose(dicom);
+    }
+#else
+
+     for( G4int i = 1; i <= fNFiles; ++i ) 
+     { // Begin loop on filenames
+      rflag = std::fscanf(lecturePref,"%s",inputFile);
+ 
+      std::sprintf(name,"%s.dcm",inputFile);
+      //Writes the results to a character string buffer.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       
       rflag = std::fscanf(lecturePref,"%s",inputFile);
       std::sprintf(name,"%s.dcm",inputFile);
@@ -1079,9 +1241,9 @@ void DicomHandler::GetValue(char * _val, Type & _rval) {
 #else // BYTE_ORDER == LITTLE_ENDIAN
     if(!fLittleEndian) {     // big endian
 #endif
-      const int SIZE = sizeof(_rval);
+      const G4int SIZE = sizeof(_rval);
       char ctemp;
-      for(int i = 0; i < SIZE/2; i++) {
+      for(G4int i = 0; i < SIZE/2; ++i) {
         ctemp = _val[i];
         _val[i] = _val[SIZE - 1 - i];
         _val[SIZE - 1 - i] = ctemp;
@@ -1090,5 +1252,9 @@ void DicomHandler::GetValue(char * _val, Type & _rval) {
     _rval = *(Type *)_val;
   }
   
+<<<<<<< HEAD
   //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

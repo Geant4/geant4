@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: TestEm12.in 85260 2014-10-27 08:53:35Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # limit the step size from histos 1 and 8
 #

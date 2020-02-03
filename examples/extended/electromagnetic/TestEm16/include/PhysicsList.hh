@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm16/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 84365 2014-10-14 12:43:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsListMessenger;
-class G4SynchrotronRadiation;
+class G4DecayPhysics;
 
 class PhysicsList: public G4VUserPhysicsList
 {
@@ -58,14 +57,11 @@ public:
 
 private:
 
-  void ConstructBosons();
-  void ConstructLeptons();
-
-  void ConstructGeneral();
   void ConstructEM();
 
   G4bool                  fSRType;
   PhysicsListMessenger*   fMess;
+  G4DecayPhysics*         fDecayPhysics;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

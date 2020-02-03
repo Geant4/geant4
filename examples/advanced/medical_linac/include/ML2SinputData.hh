@@ -23,22 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// The code was written by :
-//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
-//      *Barbara Caccia barbara.caccia@iss.it
-//      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
-//	with the contribute of Alessandro Occhigrossi*
-//
-// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
-// *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
-//  Viale Regina Elena 299, 00161 Roma (Italy)
-//  tel (39) 06 49902246
-//  fax (39) 06 49387075
-//
-// more information:
-// http://g4advancedexamples.lngs.infn.it/Examples/medical-linac
-//
-//*******************************************************//
+
 
 #ifndef inputDataH
 #define inputDataH
@@ -55,9 +40,9 @@ enum idParticleSource
 };
 enum idTypeOfSensitiveDetector
 {
-	idSD_ComponentROG=1,
-	idSD_PhaseSpace=2,
-	idSD_KillerPlane=3
+	idSD_ComponentROG = 1,
+	idSD_PhaseSpace = 2,
+	idSD_KillerPlane = 3
 };
 struct SStartInputData
 {
@@ -92,10 +77,18 @@ struct SPrimaryParticle
 {
 	G4int partPDGE, nPrimaryParticle;
 };
+// SUSANNA: added in input data
+struct SvoxelSegmentation
+{
+ // SUSANNA - changed here
+	G4int nX, nY, nZ; 
+};
+
 struct SInputData
 {
 	SGeneralData generalData;
 	SPrimaryParticle primaryParticleData;
+        SvoxelSegmentation voxelSegmentation;
 };
 struct Svoxel
 {
@@ -103,9 +96,11 @@ struct Svoxel
 	G4double depEnergy, depEnergy2, expDose, depEnergyNorm, depEnergyNormError;
 	G4int nEvents, volumeId;
 };
+
 struct SvolumeNameId
 {
 	G4String volumeName;
 	G4int volumeId;
 };
+
 #endif

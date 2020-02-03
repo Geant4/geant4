@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.hh 66811 2013-01-12 16:04:23Z gcosmo $
-//
 // File name:     G4NistMessenger
 //
 // Author:        Vladimir Ivanchenko
@@ -82,10 +80,10 @@ class G4NistMessenger: public G4UImessenger
 {
 public:
 
-  G4NistMessenger(G4NistManager* );
+  explicit G4NistMessenger(G4NistManager* );
   virtual ~G4NistMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String) final;
 
 private:
 
@@ -102,7 +100,9 @@ private:
   G4UIdirectory*             g4Dir;
   G4UIcmdWithAString*        g4ElmCmd;   
   G4UIcmdWithAString*        g4MatCmd;
-  G4UIcmdWithAString*        g4DensCmd;    
+  G4UIcmdWithAString*        g4DensCmd;
+  G4UIcmdWithAString*        densCmd;
+  G4UIcmdWithAString*        adensCmd;
 };
 
 #endif

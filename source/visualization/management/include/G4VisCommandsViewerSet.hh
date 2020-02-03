@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh 66373 2012-12-18 09:41:34Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -35,6 +34,7 @@
 
 #include <vector>
 
+class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithABool;
@@ -42,7 +42,7 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 class G4UIcmdWith3VectorAndUnit;
 
-class G4VisCommandsViewerSet: public G4VVisCommandViewer {
+class G4VisCommandsViewerSet: public G4VVisCommand {
 public:
   G4VisCommandsViewerSet ();
   virtual ~G4VisCommandsViewerSet ();
@@ -65,11 +65,12 @@ private:
   G4UIcmdWithADouble*   fpCommandGlobalLineWidthScale;
   G4UIcmdWithABool*     fpCommandHiddenEdge;
   G4UIcmdWithABool*     fpCommandHiddenMarker;
-  G4UIcmdWithAnInteger* fpCommandLineSegments;
   G4UIcmdWithAString*   fpCommandLightsMove;
   G4UIcommand*          fpCommandLightsThetaPhi;
   G4UIcommand*          fpCommandLightsVector;
   G4ThreeVector         fLightsVector;
+  G4UIcmdWithAnInteger* fpCommandLineSegments;
+  G4UIcmdWithAnInteger* fpCommandNumberOfCloudPoints;
   G4UIcmdWithABool*     fpCommandPicking;
   G4UIcommand*          fpCommandProjection;
   G4UIcmdWithAString*   fpCommandRotationStyle;
@@ -82,6 +83,12 @@ private:
   G4UIcommand*          fpCommandViewpointThetaPhi;
   G4UIcommand*          fpCommandViewpointVector;
   G4ThreeVector         fViewpointVector;
+  G4UIdirectory*        fpTimeWindowDirectory;
+  G4UIcommand*          fpCommandTimeWindowDisplayHeadTime;
+  G4UIcommand*          fpCommandTimeWindowDisplayLightFront;
+  G4UIcommand*          fpCommandTimeWindowEndTime;
+  G4UIcmdWithADouble*   fpCommandTimeWindowFadeFactor;
+  G4UIcommand*          fpCommandTimeWindowStartTime;
 };
 
 #endif

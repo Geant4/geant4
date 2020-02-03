@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 68026 2013-03-13 13:45:22Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +19,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 Feb 15, 2013 I. Hrivnacova (exRunAndEvent-V09-06-01)
+=======
+Jan. 31, 2019 I. Hrivnacova  (exRunAndEvent-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+Nov. 01, 2016 I. Hrivnacova  (exRunAndEvent-V10-02-01)
+- Coding guidelines (missing separators)
+
+Jun. 01, 2016 M. Asai (exRunAndEvent-V10-02-00)
+- README is updated
+
+Feb. 15, 2013 I. Hrivnacova (exRunAndEvent-V09-06-01)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - Applied coding guidelines (data members names and initialization)
 - Fixed GNUmakefile (in RE05, RE06)
 

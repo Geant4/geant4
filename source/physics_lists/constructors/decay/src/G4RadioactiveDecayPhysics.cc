@@ -28,33 +28,43 @@
 
 #include "G4RadioactiveDecayPhysics.hh"
 
-#include "G4RadioactiveDecay.hh"
+#include "G4RadioactiveDecayBase.hh"
 #include "G4GenericIon.hh"
 #include "globals.hh"
 #include "G4PhysicsListHelper.hh"
+#include "G4EmParameters.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "G4NuclideTable.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
-:  G4VPhysicsConstructor("G4RadioactiveDecay")//, theRadioactiveDecay(0)
-{}
+:  G4VPhysicsConstructor("G4RadioactiveDecay")
+{
+  G4EmParameters::Instance()->AddPhysics("World","G4RadioactiveDecay");
+  G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
+  deex->SetStoreICLevelData(true);
+  deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()
+                       /std::log(2.));
+}
 
-G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String& name)
-:  G4VPhysicsConstructor(name)//, theRadioactiveDecay(0)
+G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String&)
+  : G4RadioactiveDecayPhysics(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4RadioactiveDecayPhysics::~G4RadioactiveDecayPhysics()
-{
-  //delete theRadioactiveDecay;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,8 +77,17 @@ void G4RadioactiveDecayPhysics::ConstructParticle()
 
 void G4RadioactiveDecayPhysics::ConstructProcess()
 {
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4VAtomDeexcitation* ad = man->AtomDeexcitation();
+  if(!ad) {
+    G4EmParameters::Instance()->SetAugerCascade(true);
+    ad = new G4UAtomicDeexcitation();
+    man->SetAtomDeexcitation(ad);
+    ad->InitialiseAtomicDeexcitation();
+  }
+
   G4PhysicsListHelper::GetPhysicsListHelper()->
-    RegisterProcess(new G4RadioactiveDecay(), G4GenericIon::GenericIon());
+    RegisterProcess(new G4RadioactiveDecayBase(), G4GenericIon::GenericIon());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

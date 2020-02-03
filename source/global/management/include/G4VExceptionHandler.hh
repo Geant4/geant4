@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VExceptionHandler.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -49,7 +48,7 @@
 #ifndef G4VExceptionHandler_h
 #define G4VExceptionHandler_h 1
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ExceptionSeverity.hh"
 
 class G4VExceptionHandler
@@ -59,8 +58,8 @@ public:
 
   G4VExceptionHandler();
   virtual ~G4VExceptionHandler();
-  G4int operator==(const G4VExceptionHandler &right) const;
-  G4int operator!=(const G4VExceptionHandler &right) const;
+  G4bool operator==(const G4VExceptionHandler &right) const;
+  G4bool operator!=(const G4VExceptionHandler &right) const;
 
 public: // with description
 

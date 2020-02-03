@@ -41,7 +41,7 @@ void G4HadFinalState::SetEnergyChange(G4double anEnergy)
   theEnergy=anEnergy;
   if(theEnergy<0) 
     {
-      std::cout << "Final state energy was: E = "<<theEnergy<<G4endl;
+      G4cout << "Final state energy was: E = "<<theEnergy<<G4endl;
       throw G4HadronicException(__FILE__, __LINE__, 
       "G4HadFinalState: fatal - negative energy");
     }
@@ -50,7 +50,7 @@ void G4HadFinalState::SetEnergyChange(G4double anEnergy)
 void G4HadFinalState::SetMomentumChange(G4double x, G4double y, G4double z) 
 {
   theDirection.set(x,y,z);
-  if(std::fabs(x*x + y*y + z*z - 1.0)>0.001) {
+  if(std::abs(x*x + y*y + z*z - 1.0)>0.001) {
     G4cout <<"We have negative theDirection.mag() = "<<theDirection.mag()
 	   <<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, 

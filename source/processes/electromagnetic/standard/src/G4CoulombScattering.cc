@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc 85246 2014-10-27 08:26:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -125,11 +124,11 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
        name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
   }
 
-  if(!EmModel(1)) { 
-    if(yes) { SetEmModel(new G4eCoulombScatteringModel(), 1); } 
-    else    { SetEmModel(new G4IonCoulombScatteringModel(), 1); }
+  if(!EmModel(0)) { 
+    if(yes) { SetEmModel(new G4eCoulombScatteringModel()); } 
+    else    { SetEmModel(new G4IonCoulombScatteringModel()); }
   }
-  G4VEmModel* model = EmModel(1);
+  G4VEmModel* model = EmModel(0);
   G4double emin = std::max(param->MinKinEnergy(),model->LowEnergyLimit());
   G4double emax = std::min(param->MaxKinEnergy(),model->HighEnergyLimit());
   model->SetPolarAngleLimit(theta);
@@ -160,13 +159,28 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4CoulombScattering::PrintInfo()
+void G4CoulombScattering::StreamProcessInfo(std::ostream& outFile) const
 {
-  G4cout << "      " << G4EmParameters::Instance()->MscThetaLimit()/degree
-	 << " < Theta(degree) < 180";
+  G4double tetmin = G4EmParameters::Instance()->MscThetaLimit()/degree;
+  outFile << "      ";
+  if(tetmin > 179.) { outFile << "ThetaMin(p)"; }
+  else              { outFile << tetmin; }
+  outFile << " < Theta(degree) < 180";
 
-  if(q2Max < DBL_MAX) { G4cout << "; pLimit(GeV^1)= " << sqrt(q2Max)/GeV; }
-  G4cout << G4endl;
+  if(q2Max < DBL_MAX) { outFile << "; pLimit(GeV^1)= " << sqrt(q2Max)/GeV; }
+  outFile << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4CoulombScattering::ProcessDescription(std::ostream& out) const
+{
+  out <<
+  "  Coulomb scattering. Simulation of elastic scattering\n" << 
+  "    events individually. May be used in combination with multiple\n" << 
+  "    scattering, where Coulomb scattering is used for hard (large angle)\n" <<
+  "    collisions and multiple scattering for soft collisions.";
+  G4VEmProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VComponentCrossSection.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -49,11 +48,13 @@
 #include "G4Element.hh"
 #include "globals.hh"
 
+class G4CrossSectionDataSetRegistry;
+
 class G4VComponentCrossSection
 {
 public: //with description
 
-  G4VComponentCrossSection(const G4String& nam = "");
+  explicit G4VComponentCrossSection(const G4String& nam = "");
 
   virtual ~G4VComponentCrossSection();
 
@@ -113,8 +114,7 @@ public: //with description
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
-  virtual
-  void Description() const;
+  virtual void Description(std::ostream&) const;
 
   inline void SetVerboseLevel(G4int value);
 
@@ -135,6 +135,8 @@ private:
   G4VComponentCrossSection & operator=(const G4VComponentCrossSection &right);
   G4VComponentCrossSection(const G4VComponentCrossSection&);
 
+  G4CrossSectionDataSetRegistry* registry;
+
   G4int verboseLevel;
 
   G4double minKinEnergy;
@@ -150,7 +152,7 @@ G4VComponentCrossSection::GetTotalElementCrossSection(
 	 const G4Element* elm)
 {
   return GetTotalElementCrossSection(p,kinEnergy,
-				     (G4int)elm->GetZ(),elm->GetN());
+				     elm->GetZasInt(),elm->GetN());
 }
 
 inline G4double 
@@ -160,7 +162,7 @@ G4VComponentCrossSection::GetInelasticElementCrossSection(
 	 const G4Element* elm)
 {
   return GetInelasticElementCrossSection(p,kinEnergy,
-					 (G4int)elm->GetZ(),elm->GetN());
+					 elm->GetZasInt(),elm->GetN());
 }
 
 inline G4double 
@@ -170,7 +172,7 @@ G4VComponentCrossSection::GetElasticElementCrossSection(
 	 const G4Element* elm)
 {
   return GetElasticElementCrossSection(p,kinEnergy,
-				       (G4int)elm->GetZ(),elm->GetN());
+				       elm->GetZasInt(),elm->GetN());
 }
 
 inline void G4VComponentCrossSection::SetVerboseLevel(G4int value)

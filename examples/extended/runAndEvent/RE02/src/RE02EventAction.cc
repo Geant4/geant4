@@ -27,7 +27,10 @@
 /// \brief Implementation of the RE02EventAction class
 //
 //
+<<<<<<< HEAD
 // $Id: RE02EventAction.cc 68026 2013-03-13 13:45:22Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
  
 #include "RE02EventAction.hh"

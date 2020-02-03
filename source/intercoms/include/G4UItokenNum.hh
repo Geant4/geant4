@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh 67965 2013-03-13 09:35:29Z gcosmo $
 //
 // G4UItokenNum.hh
 
@@ -32,8 +31,9 @@
 #define G4UItokenNum_hh 1
 #include "globals.hh"
 
-
-enum  tokenNum
+namespace G4UItokenNum
+{
+enum tokenNum
 {
   NONE       = 0,
   IDENTIFIER = 257,
@@ -56,7 +56,6 @@ enum  tokenNum
   MINUS      = 45
 };
 
-
 typedef struct yystype
 {
     tokenNum type;
@@ -65,10 +64,10 @@ typedef struct yystype
     char     C;
     G4String S;
 
-    yystype() : type(NONE), D(0.0), I(0), C(' '), S("")
+    yystype() : type(tokenNum::NONE), D(0.0), I(0), C(' '), S("")
     {
     }
-    G4int operator==(const yystype& right) const
+    G4bool operator==(const yystype& right) const
     {
       return (this == &right)?1:0;
     }
@@ -87,5 +86,5 @@ typedef struct yystype
       *this=right;
     }
 } yystype;
-
+}
 #endif

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // Multibody "phase space" generator, which provides multiple algorithms
 // for sampling.  Momentum vectors are generated in the center-of-mass

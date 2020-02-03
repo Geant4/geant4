@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITNavigator1.cc 97709 2016-06-07 11:00:54Z gcosmo $
 // 
 // class G4ITNavigator1 Implementation
 //
@@ -276,6 +275,11 @@ G4ITNavigator1::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
                                   &parentTouchable));
               }
               break;
+           case kExternal:
+             G4Exception("G4ITNavigator1::LocateGlobalPointAndSetup()",
+                         "GeomNav0001", FatalException,
+                         "Not applicable for external volumes.");
+             break;
           }
           fEntering = false;
           fBlockedPhysicalVolume = 0;
@@ -508,6 +512,11 @@ G4ITNavigator1::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
                                              localPoint);
         }
         break;
+      case kExternal:
+        G4Exception("G4ITNavigator1::LocateGlobalPointAndSetup()",
+                    "GeomNav0001", FatalException,
+                    "Not applicable for external volumes.");
+        break;
     }
 
     // LevelLocate returns true if it finds a daughter volume 
@@ -635,6 +644,11 @@ G4ITNavigator1::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
          G4Exception("G4ITNavigator1::LocateGlobalPointWithinVolume()",
                      "GeomNav0001", FatalException,
                      "Not applicable for replicated volumes.");
+         break;
+       case kExternal:
+         G4Exception("G4ITNavigator1::LocateGlobalPointWithinVolume()",
+                     "GeomNav0001", FatalException,
+                     "Not applicable for external volumes.");
          break;
      }
    }
@@ -970,6 +984,10 @@ G4double G4ITNavigator1::ComputeStep( const G4ThreeVector &pGlobalpoint,
       case kReplica:
         G4Exception("G4ITNavigator1::ComputeStep()", "GeomNav0001",
                     FatalException, "Not applicable for replicated volumes.");
+        break;
+      case kExternal:
+        G4Exception("G4ITNavigator1::ComputeStep()", "GeomNav0001",
+                    FatalException, "Not applicable for external volumes.");
         break;
     }
   }
@@ -1313,26 +1331,32 @@ void G4ITNavigator1::SetupHierarchy()
       case kReplica:
         freplicaNav.ComputeTransformation(fHistory.GetReplicaNo(i), current);
         break;
-      case kParameterised:
-        G4int replicaNo;
-        pParam = current->GetParameterisation();
-        replicaNo = fHistory.GetReplicaNo(i);
-        pSolid = pParam->ComputeSolid(replicaNo, current);
+      case kParameterised: {
+          G4int replicaNo;
+          pParam = current->GetParameterisation();
+          replicaNo = fHistory.GetReplicaNo(i);
+          pSolid = pParam->ComputeSolid(replicaNo, current);
 
-        // Set up dimensions & transform in solid/physical volume
-        //
-        pSolid->ComputeDimensions(pParam, replicaNo, current);
-        pParam->ComputeTransformation(replicaNo, current);
+          // Set up dimensions & transform in solid/physical volume
+          //
+          pSolid->ComputeDimensions(pParam, replicaNo, current);
+          pParam->ComputeTransformation(replicaNo, current);
 
-        G4TouchableHistory touchable( fHistory );
-        touchable.MoveUpHistory();  // move up to the parent level
-      
-        // Set up the correct solid and material in Logical Volume
-        //
-        G4LogicalVolume *pLogical = current->GetLogicalVolume();
-        pLogical->SetSolid( pSolid );
-        pLogical->UpdateMaterial( pParam ->
-          ComputeMaterial(replicaNo, current, &touchable) );
+          G4TouchableHistory touchable( fHistory );
+          touchable.MoveUpHistory();  // move up to the parent level
+        
+          // Set up the correct solid and material in Logical Volume
+          //
+          G4LogicalVolume *pLogical = current->GetLogicalVolume();
+          pLogical->SetSolid( pSolid );
+          pLogical->UpdateMaterial( pParam ->
+            ComputeMaterial(replicaNo, current, &touchable) );
+          break;
+      }
+      case kExternal:
+        G4Exception("G4ITNavigator1::SetupHierarchy()",
+                    "GeomNav0001", FatalException,
+                    "Not applicable for external volumes.");
         break;
     }
   }
@@ -1538,6 +1562,11 @@ G4ITNavigator1::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVo
         pLogical->SetSolid( pSolid );
       }
       break;
+      case kExternal:
+        G4Exception("G4ITNavigator1::GetMotherToDaughterTransform()",
+                    "GeomNav0001", FatalException,
+                    "Not applicable for external volumes.");
+        break;
   }
   return G4AffineTransform(pEnteringPhysVol->GetRotation(), 
                            pEnteringPhysVol->GetTranslation()).Invert(); 
@@ -1781,6 +1810,11 @@ G4double G4ITNavigator1::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           G4Exception("G4ITNavigator1::ComputeSafety()", "GeomNav0001",
                       FatalException, "Not applicable for replicated volumes.");
           break;
+        case kExternal:
+          G4Exception("G4ITNavigator1::ComputeSafety()",
+                      "GeomNav0001", FatalException,
+                      "Not applicable for external volumes.");
+         break;
       }
     }
     else
@@ -1876,9 +1910,13 @@ void  G4ITNavigator1::PrintState() const
            << std::setw( 9)  << fExiting          << " "
            << std::setw( 9)  << fEntering         << " ";
     if ( fBlockedPhysicalVolume==0 )
+    {
       G4cout << std::setw(15) << "None";
+    }
     else
+    {
       G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName();
+    }
     G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
            << std::setw( 8)  << fLastStepWasZero   << " "
            << G4endl;   

@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/src/RE04EventAction.cc
 /// \brief Implementation of the RE04EventAction class
 //
-// $Id: $
 //
 #include "RE04EventAction.hh"
 

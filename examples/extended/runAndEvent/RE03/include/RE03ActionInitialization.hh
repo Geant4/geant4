@@ -27,7 +27,6 @@
 /// \brief Definition of the RE03ActionInitialization class
 //
 //
-// $Id: RE03ActionInitialization.hh 66780 2013-01-12 14:56:35Z gcosmo $
 //
 
 #ifndef RE03ActionInitialization_h

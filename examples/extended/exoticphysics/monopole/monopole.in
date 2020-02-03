@@ -2,10 +2,8 @@
 # Macro file for "monopole.cc"
 # (can be run in batch, without graphic)
 #
-#
 /control/verbose 1
 /run/verbose 0
-/testex/run/verbose 1
 /tracking/verbose 0
 #
 /testex/det/setMat G4_Si
@@ -16,14 +14,26 @@
 /testex/run/binSize 0.2 mm
 #
 /process/em/verbose 1
+#
+/run/setCut 0.7 mm
+#
 /run/initialize
+<<<<<<< HEAD
 /process/em/verbose 1
+=======
+#
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /particle/select monopole
 /particle/process/dump
 #
 #/process/eLoss/verbose 1
 /run/printProgress 10
 #
+<<<<<<< HEAD
+=======
+/testex/fld/setField 0.2 tesla
+#
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /gun/particle monopole
 /gun/energy 100 GeV
 /run/beamOn 100

@@ -59,79 +59,88 @@ public:
     theNDLDataZ = 0;
     theNDLDataA = 0;
 
-     adjustResult = true;
-     if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+    adjustResult = true;
+    if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
 
-     theProjectile = G4Neutron::Neutron();
+    theProjectile = G4Neutron::Neutron();
 
-     theResult.Put( NULL );
-
-  };
+    theResult.Put( 0 );
+  }
   
-  virtual ~G4ParticleHPFinalState(){};
+  virtual ~G4ParticleHPFinalState()
+  {
+    if (theResult.Get() != 0) delete theResult.Get();
+  }
 
-  //virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType, G4ParticleDefinition* projectile) { G4int M = 0; Init ( A, Z, M, dirName, aFSType,const_cast<G4ParticleDefinition*>(projectile)); };
-  virtual void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition* ) =0;
+  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType,
+             G4ParticleDefinition* projectile)
+  {
+    G4int M = 0;
+    Init ( A, Z, M, dirName, aFSType,const_cast<G4ParticleDefinition*>(projectile));
+  }
+  virtual void Init (G4double A, G4double Z, G4int M, G4String & dirName,
+                     G4String & aFSType, G4ParticleDefinition* ) = 0;
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & ) 
   {
     throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");
     return 0;
-  };
+  }
   
-  // of course this would better be Done templating G4ParticleHPChannel..., 
-  // but due to peculiarities of the DEC compiler, this way it
-  // is easier to maintain.
+  // this would better be done templating G4ParticleHPChannel..., 
+  // 
   virtual G4ParticleHPFinalState * New() = 0;
   
-  G4bool HasXsec() {return hasXsec;};
-  G4bool HasFSData() {return hasFSData;};
-  G4bool HasAnyData() {return hasAnyData;};
+  G4bool HasXsec() { return hasXsec; }
+  G4bool HasFSData() { return hasFSData; }
+  G4bool HasAnyData() { return hasAnyData; }
   
-  virtual G4double GetXsec(G4double ) { return 0; };
-  virtual G4ParticleHPVector * GetXsec() { return 0; };
+  virtual G4double GetXsec(G4double ) { return 0; }
+  virtual G4ParticleHPVector * GetXsec() { return 0; }
   
-  void     SetA_Z(G4double anA, G4double aZ, G4int aM=0) {theBaseA = anA; theBaseZ = aZ; theBaseM=aM; };
-  G4double GetZ() { return theBaseZ; };
-  G4double GetN() { return theBaseA; };
-  G4double GetA() { return theBaseA; }; 
-  G4int GetM() { return theBaseM; };
+  void     SetA_Z(G4double anA, G4double aZ, G4int aM=0) {theBaseA = anA; theBaseZ = aZ; theBaseM=aM; }
+  G4double GetZ() { return theBaseZ; }
+  G4double GetN() { return theBaseA; }
+  G4double GetA() { return theBaseA; }
+  G4int GetM() { return theBaseM; }
 
   void SetAZMs(G4double anA, G4double aZ, G4int aM, G4ParticleHPDataUsed used) 
-  { theBaseA = anA; theBaseZ = aZ; theBaseM=aM; 
-    theNDLDataA=(G4int)used.GetA(); theNDLDataZ=(G4int)used.GetZ(); theNDLDataM=used.GetM(); };
+  {
+    theBaseA = anA; theBaseZ = aZ; theBaseM=aM; 
+    theNDLDataA=(G4int)used.GetA();
+    theNDLDataZ=(G4int)used.GetZ();
+    theNDLDataM=used.GetM();
+  }
   
-  void SetProjectile( G4ParticleDefinition* projectile ) {
-    theProjectile = projectile; }
+  void SetProjectile( G4ParticleDefinition* projectile )
+  {
+    theProjectile = projectile;
+  }
 
 protected:
   
-  G4bool hasXsec;
-  G4bool hasFSData;
-  G4bool hasAnyData;
-  G4ParticleHPNames theNames;
-  
-  //G4HadFinalState theResult;
-  G4Cache< G4HadFinalState* > theResult;
-
-  
-  G4double theBaseA;
-  G4double theBaseZ;
-  G4int theBaseM;
-
-//080721
-   protected:
-      void adjust_final_state ( G4LorentzVector );
-      G4bool DoNotAdjustFinalState(){ return !G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState(); };
-      G4int theNDLDataZ;
-      G4int theNDLDataA;
-      G4int theNDLDataM;
-
-   private:
-      G4bool adjustResult;
+    void adjust_final_state ( G4LorentzVector );
+    G4bool DoNotAdjustFinalState();
 
 protected:
-  G4ParticleDefinition* theProjectile;
   
+    G4bool hasXsec;
+    G4bool hasFSData;
+    G4bool hasAnyData;
+    G4ParticleHPNames theNames;
+  
+    G4Cache< G4HadFinalState* > theResult;
+    G4ParticleDefinition* theProjectile;
+  
+    G4double theBaseA;
+    G4double theBaseZ;
+    G4int theBaseM;
+
+    G4int theNDLDataZ;
+    G4int theNDLDataA;
+    G4int theNDLDataM;
+
+private:
+
+    G4bool adjustResult;
 };
 #endif

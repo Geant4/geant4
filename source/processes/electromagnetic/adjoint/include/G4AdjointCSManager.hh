@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSManager.hh 93569 2015-10-26 14:53:21Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointCSManager
@@ -44,7 +43,7 @@
 //-------------------------------------------------------------
 //	Documentation:
 //		Is responsible for the management of all adjoint cross sections matrices, and for the computation of the total forward and adjoint cross sections.
-//		Total adjoint and forward cross sections are needed to correct the weight of a particle after a tracking step or after the occurence of a reverse reaction. 
+//		Total adjoint and forward cross sections are needed to correct the weight of a particle after a tracking step or after the occurrence of a reverse reaction. 
 //		It is also used to sample an adjoint secondary from a given adjoint cross section matrix.
 //
 #ifndef G4AdjointCSManager_h

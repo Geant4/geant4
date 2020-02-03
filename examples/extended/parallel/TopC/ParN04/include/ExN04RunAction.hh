@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/include/ExN04RunAction.hh
+/// \file ExN04RunAction.hh
 /// \brief Definition of the ExN04RunAction class
 //
 //
-// $Id: ExN04RunAction.hh 66241 2012-12-13 18:34:42Z gunter $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

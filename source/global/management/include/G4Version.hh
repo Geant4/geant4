@@ -23,16 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Version.hh 102299 2017-01-20 14:03:34Z gcosmo $
-// GEANT4 tag $Name:$
-//
 // Version information
 //
-// History:
 // 26.09.05 K.Murakami  - Created
-//
-
+// --------------------------------------------------------------------
 #ifndef G4VERSION_HH
 #define G4VERSION_HH
 
@@ -41,27 +35,28 @@
 // - The meaning of each digit is as follows;
 //
 //   711
-//   |--> major version number 
+//   |--> major version number
 //    |--> minor version number
 //     |--> patch number
 
 #ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  1023
+#define G4VERSION_NUMBER  1060
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "${GIT_SHA1}" 
+#define G4VERSION_TAG "$Name: geant4-10-06 $"
 #endif
 
 // as variables
 
+#include "G4Types.hh"
 #include "G4String.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-02-patch-03 [MT]$";
+static const G4String G4Version = "$Name: geant4-10-06 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-10-02-patch-03 $";
+static const G4String G4Version = "$Name: geant4-10-06 $";
 #endif
-static const G4String G4Date    = "(27-January-2017)";
+static const G4String G4Date    = "(6-December-2019)";
 
 #endif

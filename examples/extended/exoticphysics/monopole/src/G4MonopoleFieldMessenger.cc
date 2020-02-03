@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleFieldMessenger.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 /// \file exoticphysics/monopole/src/G4MonopoleFieldMessenger.cc
 /// \brief Implementation of the G4MonopoleFieldMessenger class
@@ -59,7 +58,7 @@ G4MonopoleFieldMessenger::G4MonopoleFieldMessenger(G4MonopoleFieldSetup * fld)
   fSetFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   fSetFieldCmd->SetParameterName("Bz",false);
   fSetFieldCmd->SetUnitCategory("Magnetic flux density");
-  fSetFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSetFieldCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +74,7 @@ G4MonopoleFieldMessenger::~G4MonopoleFieldMessenger()
 void G4MonopoleFieldMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == fSetFieldCmd )
-   { fField->SetMagField(fSetFieldCmd->GetNewDoubleValue(newValue));}
+   { fField->SetZMagFieldValue(fSetFieldCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

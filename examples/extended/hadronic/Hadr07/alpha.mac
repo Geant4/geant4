@@ -1,0 +1,23 @@
+#
+# limit the step size from histo 10
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setNbOfAbsor  1
+/testhadr/det/setAbsor 1 Water  10 cm
+/testhadr/det/setSizeYZ 10 cm
+#
+/run/initialize
+#
+/testhadr/gun/setDefault
+/gun/particle alpha
+/gun/energy 400 MeV
+#
+/analysis/setFileName alpha
+/analysis/h1/set 10 100 65. 85. mm	#edep profile
+#
+/testhadr/applyAutomaticStepMax true
+#
+/run/printProgress 1000
+/run/beamOn 10000

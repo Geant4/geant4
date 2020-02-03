@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.hh 82967 2014-07-21 15:54:41Z vnivanch $
 
 #ifndef G4NISTStoppingData_h
 #define G4NISTStoppingData_h 1

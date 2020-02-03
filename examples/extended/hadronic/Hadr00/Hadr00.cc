@@ -27,7 +27,10 @@
 /// \brief Main program of the hadronic/Hadr00 example
 //
 //
+<<<<<<< HEAD
 // $Id: Hadr00.cc 81073 2014-05-20 10:23:13Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr00
@@ -97,9 +100,15 @@ int main(int argc,char** argv) {
   // Physics List name defined via 3nd argument
   if (argc>=3) { physName = argv[2]; }
 
+<<<<<<< HEAD
   // Physics List is defined via environment variable PHYSLIST
   if("" == physName) {
     char* path = getenv("PHYSLIST");
+=======
+  //Physics List is defined via environment variable PHYSLIST
+  if ("" == physName) {
+    char* path = std::getenv("PHYSLIST");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     if (path) { physName = G4String(path); }
   }
 

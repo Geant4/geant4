@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,12 +49,18 @@
 
 #include "G4VEmAngularDistribution.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name) 
   : fLocalDirection(0.0,0.0,1.0),fName(name)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VEmAngularDistribution::~G4VEmAngularDistribution() 
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ThreeVector& G4VEmAngularDistribution::SampleDirectionForShell(
                                          const G4DynamicParticle* dp,
@@ -66,4 +71,17 @@ G4ThreeVector& G4VEmAngularDistribution::SampleDirectionForShell(
   return SampleDirection(dp, finalTotalEnergy, Z, mat); 
 }
 
-//    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmAngularDistribution::SamplePairDirections(const G4DynamicParticle* dp,
+				                    G4double, G4double,
+				                    G4ThreeVector& dirElectron,
+				                    G4ThreeVector& dirPositron,
+				                    G4int, const G4Material*)
+{
+  dirElectron = dp->GetMomentumDirection();
+  dirPositron = dp->GetMomentumDirection();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

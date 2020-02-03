@@ -51,8 +51,8 @@ private:
 
   G4VNuclearField(const  G4VNuclearField &right);
   const G4VNuclearField & operator=(const G4VNuclearField & right);
-  G4int operator==(const G4VNuclearField & right) const;
-  G4int operator!=(const G4VNuclearField & right) const;
+  G4bool operator==(const G4VNuclearField & right) const;
+  G4bool operator!=(const G4VNuclearField & right) const;
 
 };
 

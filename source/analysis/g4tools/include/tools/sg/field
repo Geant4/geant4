@@ -68,11 +68,25 @@ protected:
 #define TOOLS_FIELD_DESC_NODE_CLASS(a__class) \
   static const std::string s_node_class(#a__class);
 
-#define TOOLS_ADD_FIELD_DESC(a__field) \
-  s_v.push_back(tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this))); 
+#define TOOLS_ARG_FIELD_DESC(a__field) \
+  new tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),true)
+  
+#define TOOLS_ARG_FIELD_DESC_NOT_EDITABLE(a__field) \
+  new tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),false)
 
-#define TOOLS_ADD_FIELD_DESC_ENUM(a__key) s_v.back().add_enum(#a__key,a__key);
-#define TOOLS_ADD_FIELD_DESC_OPT(a__value) s_v.back().add_opt(a__value);
+#define TOOLS_ARG_FIELD_DESC_ENUMS_BEG(a__field,a__num) \
+  new tools::sg::field_desc_enums(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),true,a__num,
+#define TOOLS_ARG_FIELD_DESC_ENUMS_END )
+
+#define TOOLS_ARG_FIELD_DESC_NOT_EDITABLE_ENUMS_BEG(a__field,a__num) \
+  new tools::sg::field_desc_enums(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),false,a__num,
+#define TOOLS_ARG_FIELD_DESC_ENUMS_END )
+
+#define TOOLS_ARG_ENUM(a__value) #a__value,a__value
+
+#define TOOLS_ARG_FIELD_DESC_OPTS_BEG(a__field,a__num) \
+  new tools::sg::field_desc_opts(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),true,a__num,
+#define TOOLS_ARG_FIELD_DESC_OPTS_END )
 
 #endif
 

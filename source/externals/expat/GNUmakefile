@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 54915 2011-11-14 17:10:43Z gcosmo $
 # -------------------------------------------------------------
 # Geant4 GNUmakefile for expat.  Gunter Folger 12-April-2011
 

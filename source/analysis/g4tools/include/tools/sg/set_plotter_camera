@@ -45,10 +45,10 @@ inline void set_plotter_camera(plotter& a_plotter,tools::sg::ortho& a_camera,uns
     // and plotter XSIZ matches viewport width.
     // It it the CERN-ROOT and osc-plot logic.
     if(aspect>=1) { //w>h
-      //Camera must match in height YSIZ. Adjust XSIZ.
+      // camera must match in height YSIZ. Adjust XSIZ.
       a_plotter.width.value(YSIZ * aspect);
     } else { 
-      //Camera must match in width XSIZ. Adjust YSIZ.
+      // camera must match in width XSIZ. Adjust YSIZ.
       a_plotter.height.value(XSIZ / aspect);
     }
   }}

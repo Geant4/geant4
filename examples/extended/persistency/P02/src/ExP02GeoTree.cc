@@ -26,7 +26,10 @@
 /// \file persistency/P02/src/ExP02GeoTree.cc
 /// \brief Implementation of the ExP02GeoTree class
 //
+<<<<<<< HEAD
 // $Id: ExP02GeoTree.cc 71727 2013-06-21 07:55:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // Include files
 
 // local

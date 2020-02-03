@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoCaptureProcess.cc 66499 2012-12-19 09:16:35Z gcosmo $
 //
 
 #include "G4PhotoCaptureProcess.hh"

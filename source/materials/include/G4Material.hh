@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Material.hh 94016 2015-11-05 10:14:49Z gcosmo $
-//
-
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4Material
@@ -110,10 +106,11 @@
 #include "G4SandiaTable.hh"
 #include "G4ElementVector.hh"
 #include "G4MaterialTable.hh"
+#include "G4Threading.hh"
 
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
-static const G4double NTP_Temperature = 293.15;
+static const G4double NTP_Temperature = 293.15*CLHEP::kelvin;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -167,16 +164,13 @@ public:  // with description
   void AddMaterial(G4Material* material,			//the material
                    G4double   fraction);			//fractionOfMass
                      
-                     
-  virtual ~G4Material();
-  
-  inline void SetChemicalFormula (const G4String& chF) {fChemicalFormula=chF;}
-
+  virtual ~G4Material();  
   //
   // retrieval methods
   // 
   inline const G4String& GetName()            const {return fName;}
   inline const G4String& GetChemicalFormula() const {return fChemicalFormula;}
+  inline G4double GetFreeElectronDensity()    const {return fFreeElecDensity;}
   inline G4double GetDensity()     const {return fDensity;}
   inline G4State  GetState()       const {return fState;}
   inline G4double GetTemperature() const {return fTemp;}
@@ -203,18 +197,18 @@ public:  // with description
   
   //vector of nb of atoms per volume of each element in this material:
   inline const
-  G4double* GetVecNbOfAtomsPerVolume() const {return VecNbOfAtomsPerVolume;}
+  G4double* GetVecNbOfAtomsPerVolume() const {return fVecNbOfAtomsPerVolume;}
   //total number of atoms per volume:
   inline
-  G4double  GetTotNbOfAtomsPerVolume() const {return TotNbOfAtomsPerVolume;}
+  G4double  GetTotNbOfAtomsPerVolume() const {return fTotNbOfAtomsPerVolume;}
   //total number of electrons per volume:
   inline
-  G4double  GetTotNbOfElectPerVolume() const {return TotNbOfElectPerVolume;}
+  G4double  GetTotNbOfElectPerVolume() const {return fTotNbOfElectPerVolume;}
 
   //obsolete names (5-10-98) see the 2 functions above
   inline const
-  G4double* GetAtomicNumDensityVector() const {return VecNbOfAtomsPerVolume;}
-  inline G4double  GetElectronDensity() const {return TotNbOfElectPerVolume;}
+  G4double* GetAtomicNumDensityVector() const {return fVecNbOfAtomsPerVolume;}
+  inline G4double  GetElectronDensity() const {return fTotNbOfElectPerVolume;}
     
   // Radiation length:     
   inline G4double  GetRadlen()            const {return fRadlen;}
@@ -224,10 +218,10 @@ public:  // with description
         
   // ionisation parameters:
   inline G4IonisParamMat* GetIonisation() const {return fIonisation;}
-  
-  // Sandia table:
-  inline G4SandiaTable*  GetSandiaTable() const {return fSandiaTable;}
 
+  // Sandia table:
+  inline G4SandiaTable* GetSandiaTable()  const {return fSandiaTable; }
+  
   // Base material:
   inline 
   const G4Material* GetBaseMaterial()     const {return fBaseMaterial;}
@@ -238,31 +232,41 @@ public:  // with description
                                                 {return fMatComponents;}
 					       
   // for chemical compound
-  inline 
-  G4double GetMassOfMolecule() const            {return fMassOfMolecule;}
+  inline G4double GetMassOfMolecule() const     {return fMassOfMolecule;}
+
+  void SetChemicalFormula(const G4String& chF);
+
+  void SetFreeElectronDensity(G4double);
+
+  void ComputeDensityEffectOnFly(G4bool);
       
   // meaningful only for single material:
   G4double GetZ() const;
   G4double GetA() const;
 
   //the MaterialPropertiesTable (if any) attached to this material:
-  inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
-  {fMaterialPropertiesTable = anMPT;}
+  void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT);
   				       
   inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
   {return fMaterialPropertiesTable;}
+
+  //the index of this material in the Table:    
+  inline size_t GetIndex() const {return fIndexInTable;}
 
   // the static Table of Materials:
   //
   static G4MaterialTable* GetMaterialTable();
       
   static size_t GetNumberOfMaterials();
-  
-  //the index of this material in the Table:    
-  inline size_t GetIndex() const {return fIndexInTable;}
-    
+      
   //return  pointer to a material, given its name:    
   static G4Material* GetMaterial(const G4String& name, G4bool warning=true);
+
+  //return  pointer to a simple material, given its propeties:
+  static G4Material* GetMaterial(G4double z, G4double a, G4double dens);
+
+  //return  pointer to a composit material, given its propeties:
+  static G4Material* GetMaterial(size_t nComp, G4double dens);
   
   //
   //printing methods
@@ -270,10 +274,6 @@ public:  // with description
   friend std::ostream& operator<<(std::ostream&, const G4Material*);    
   friend std::ostream& operator<<(std::ostream&, const G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
-
-  // operators       
-  G4int operator==(const G4Material&) const;
-  G4int operator!=(const G4Material&) const;
     
   G4Material(__void__&);
     // Fake default constructor for usage restricted to direct object
@@ -282,8 +282,13 @@ public:  // with description
 
   inline void SetName (const G4String& name) {fName=name;}
 
+  virtual G4bool IsExtended() const;
+
 private:
 
+  // operators       
+  G4bool operator==(const G4Material&) const;
+  G4bool operator!=(const G4Material&) const;
   G4Material(const G4Material&);
   const G4Material& operator=(const G4Material&);
 
@@ -303,53 +308,56 @@ private:
     
 private:
 
-  //
-  // Basic data members ( To define a material)
-  //
-  G4String         fName;                 // Material name
-  G4String         fChemicalFormula;      // Material chemical formula
-  G4double         fDensity;              // Material density
+  const G4Material* fBaseMaterial;        // Pointer to the base material
+  G4MaterialPropertiesTable* fMaterialPropertiesTable;
   
-  G4State          fState;                // Material state (determined 
-                                          // internally based on density)
-  G4double         fTemp;                 // Temperature (defaults: STP)
-  G4double         fPressure;             // Pressure    (defaults: STP)
-
-  G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
-  G4int            fArrayLength;          // the length of fAtomsVector 
-  G4int            fNumberOfComponents;   // Nb of components declared so far
-
-  G4int            fNumberOfElements;     // Nb of Elements in the material
   G4ElementVector* theElementVector;      // vector of constituent Elements
   G4double*        fMassFractionVector;   // composition by fractional mass
   G4int*           fAtomsVector;          // composition by atom count
 
-  G4MaterialPropertiesTable* fMaterialPropertiesTable;
-
   static
   G4MaterialTable theMaterialTable;       // the material table
-  size_t fIndexInTable;                   // the position in the table 
 
   //
   // Derived data members (computed from the basic data members)
   //
   // some general atomic properties
    
-  G4double* VecNbOfAtomsPerVolume;        // vector of nb of atoms per volume
-  G4double  TotNbOfAtomsPerVolume;        // total nb of atoms per volume 
-  G4double  TotNbOfElectPerVolume;        // total nb of electrons per volume 
-  G4double  fRadlen;                      // Radiation length
-  G4double  fNuclInterLen;                // Nuclear interaction length  
+  G4double* fVecNbOfAtomsPerVolume;       // vector of nb of atoms per volume
   
   G4IonisParamMat* fIonisation;           // ionisation parameters
   G4SandiaTable*   fSandiaTable;          // Sandia table         
 
-  // utilities
-  //         
-  const G4Material* fBaseMaterial;        // Pointer to the base material
-  G4double fMassOfMolecule; 		  // for materials built by atoms count
+  G4double         fDensity;              // Material density
+  G4double         fFreeElecDensity;      // Free electron density
+  G4double         fTemp;                 // Temperature (defaults: STP)
+  G4double         fPressure;             // Pressure    (defaults: STP)
+
+  G4double  fTotNbOfAtomsPerVolume;       // total nb of atoms per volume 
+  G4double  fTotNbOfElectPerVolume;       // total nb of electrons per volume 
+  G4double  fRadlen;                      // Radiation length
+  G4double  fNuclInterLen;                // Nuclear interaction length  
+  G4double  fMassOfMolecule; 		  // for materials built by atoms count
+
+  G4State          fState;                // Material state (determined 
+                                          // internally based on density)
+  size_t           fIndexInTable;         // the position in the material table 
+
+  G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
+  G4int            fArrayLength;          // the length of fAtomsVector 
+  G4int            fNumberOfComponents;   // Nb of components declared so far
+
+  G4int            fNumberOfElements;     // Nb of Elements in the material
+
   std::map<G4Material*,G4double> fMatComponents; // for composites built via
                                                  // AddMaterial()
+
+  G4String         fName;                 // Material name
+  G4String         fChemicalFormula;      // Material chemical formula
+
+#ifdef G4MULTITHREADED
+  static G4Mutex materialMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

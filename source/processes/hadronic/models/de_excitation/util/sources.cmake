@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 89518 2015-04-15 14:43:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -53,7 +52,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4CookShellCorrections.hh
         G4CoulombBarrier.hh
         G4DeuteronCoulombBarrier.hh
-        G4EvaporationLevelDensityParameter.hh
         G4He3CoulombBarrier.hh
         G4KalbachCrossSection.hh
         G4NeutronCoulombBarrier.hh
@@ -62,7 +60,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4ShellCorrection.hh
         G4TritonCoulombBarrier.hh
         G4VCoulombBarrier.hh
-        G4VEmissionProbability.hh
         G4VLevelDensityParameter.hh
     SOURCES
         G4AlphaCoulombBarrier.cc
@@ -71,21 +68,20 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4CameronShellPlusPairingCorrections.cc
         G4CameronTruranHilfPairingCorrections.cc
         G4CameronTruranHilfShellCorrections.cc
+	G4ChatterjeeCrossSection.cc
         G4ConstantLevelDensityParameter.cc
         G4CookPairingCorrections.cc
         G4CookShellCorrections.cc
         G4CoulombBarrier.cc
         G4DeuteronCoulombBarrier.cc
-        G4EvaporationLevelDensityParameter.cc
         G4He3CoulombBarrier.cc
+        G4KalbachCrossSection.cc
         G4NeutronCoulombBarrier.cc
         G4PairingCorrection.cc
         G4ProtonCoulombBarrier.cc
         G4ShellCorrection.cc
         G4TritonCoulombBarrier.cc
         G4VCoulombBarrier.cc
-        G4VEmissionProbability.cc
-        G4VLevelDensityParameter.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

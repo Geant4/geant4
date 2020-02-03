@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: electronScattering2.cc 93734 2015-10-30 10:59:21Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/electronScattering2/electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example

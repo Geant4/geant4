@@ -27,7 +27,6 @@
 /// \brief Definition of the B02ActionInitialization class
 //
 //
-// $Id: B02ActionInitialization.hh 66780 2013-01-12 14:56:35Z gcosmo $
 //
 
 #ifndef B02ActionInitialization_h

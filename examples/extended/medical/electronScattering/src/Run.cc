@@ -26,7 +26,6 @@
 /// \file medical/electronScattering/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,31 +86,31 @@ void Run::Merge(const G4Run* run)
 
    // Some value by value 
    
-  for (unsigned  int i = 0; i < localRun->fluence.size(); i++)
+  for (unsigned  int i = 0; i < localRun->fluence.size(); ++i)
   {
     try { fluence[i]+=localRun->fluence[i]; }
-    catch(const std::out_of_range& oor) 
+    catch(const std::out_of_range&) 
       { fluence.push_back(localRun->fluence[i]); }
   }
 
-  for (unsigned  int i = 0; i < localRun->fluence1.size(); i++)
+  for (unsigned  int i = 0; i < localRun->fluence1.size(); ++i)
   {
     try { fluence1[i]+=localRun->fluence1[i]; }
-    catch(const std::out_of_range& oor) 
+    catch(const std::out_of_range&) 
       { fluence1.push_back(localRun->fluence1[i]); }
   }
 
-  for (unsigned  int i = 0; i < localRun->fluence2.size(); i++)
+  for (unsigned  int i = 0; i < localRun->fluence2.size(); ++i)
   {
     try { fluence2[i]+=localRun->fluence2[i]; }
-    catch(const std::out_of_range& oor) 
+    catch(const std::out_of_range&) 
       { fluence2.push_back(localRun->fluence2[i]); }
   }
     
-  for (unsigned  int i = 0; i < localRun->fNbEntries.size(); i++)
+  for (unsigned  int i = 0; i < localRun->fNbEntries.size(); ++i)
   {
     try { fNbEntries[i]+=localRun->fNbEntries[i]; }
-    catch(const std::out_of_range& oor) 
+    catch(const std::out_of_range&) 
       { fNbEntries.push_back(localRun->fNbEntries[i]); }
   }
 

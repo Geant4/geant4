@@ -27,7 +27,10 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.hh 77206 2013-11-22 01:33:52Z adotti $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

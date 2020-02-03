@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.cc 93362 2015-10-19 13:45:19Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -246,7 +245,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
       edep += elecKineEnergy;
       elecKineEnergy = 0.0;
     }
-    if(fabs(energy - elecKineEnergy - esec - edep) > eV) {
+    if(std::abs(energy - elecKineEnergy - esec - edep) > CLHEP::eV) {
       G4cout << "### G4PEffectFluoModel dE(eV)= " 
 	     << (energy - elecKineEnergy - esec - edep)/eV 
 	     << " shell= " << i 

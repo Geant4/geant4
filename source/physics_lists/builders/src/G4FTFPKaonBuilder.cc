@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -36,12 +35,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4FTFPKaonBuilder::
 G4FTFPKaonBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
-  theMax = 100*TeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
   theStringModel = new G4FTFModel;
@@ -60,7 +61,7 @@ G4FTFPKaonBuilder(G4bool quasiElastic)
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 }
 
 G4FTFPKaonBuilder::~G4FTFPKaonBuilder() 

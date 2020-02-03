@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 92392 2015-08-31 14:07:02Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -70,9 +69,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4ReduciblePolygon.hh
         G4SolidExtentList.hh
         G4SolidsWorkspace.hh
-        G4SolidsWorkspacePool.hh
-        G4SurfaceVoxelizer.hh
-        G4SurfaceVoxelizer.icc
         G4SurfBits.hh
         G4TessellatedGeometryAlgorithms.hh
         G4TessellatedSolid.hh
@@ -89,16 +85,24 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.hh
         G4TwistedTrd.hh
         G4TwistedTubs.hh
+        G4UEllipsoid.hh
+        G4UEllipticalCone.hh
+        G4UEllipticalTube.hh
         G4UExtrudedSolid.hh
         G4UGenericPolycone.hh
         G4UGenericTrap.hh
+        G4UHype.hh
         G4UParaboloid.hh
         G4UPolycone.hh
         G4UPolyhedra.hh
+        G4UHype.hh
+        G4UTessellatedSolid.hh
         G4UTet.hh
         G4VCSGface.hh
         G4VCSGfaceted.hh
         G4VFacet.hh
+        G4Voxelizer.hh
+        G4Voxelizer.icc
         G4VTwistSurface.hh
         G4VTwistSurface.icc
         G4VTwistedFaceted.hh
@@ -125,8 +129,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4ReduciblePolygon.cc
         G4SolidExtentList.cc
         G4SolidsWorkspace.cc
-        G4SolidsWorkspacePool.cc
-        G4SurfaceVoxelizer.cc
         G4SurfBits.cc
         G4TessellatedGeometryAlgorithms.cc
         G4TessellatedSolid.cc
@@ -143,15 +145,21 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.cc
         G4TwistedTrd.cc
         G4TwistedTubs.cc
+        G4UEllipsoid.cc
+        G4UEllipticalCone.cc
+        G4UEllipticalTube.cc
         G4UExtrudedSolid.cc
         G4UGenericPolycone.cc
         G4UGenericTrap.cc
+        G4UHype.cc
         G4UParaboloid.cc
         G4UPolycone.cc
         G4UPolyhedra.cc
+        G4UTessellatedSolid.cc
         G4UTet.cc
         G4VCSGfaceted.cc
         G4VFacet.cc
+        G4Voxelizer.cc
         G4VTwistSurface.cc
         G4VTwistedFaceted.cc
     GRANULAR_DEPENDENCIES
@@ -162,13 +170,12 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4hepnumerics
         G4intercoms
         G4volumes
-        G4GeomUSolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps
         G4intercoms
     LINK_LIBRARIES
-        ${USOLIDS_LIBRARIES}
+        ${VECGEOM_LIBRARIES}
 )
 
 # List any source specific properties here

@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr03/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 86125 2014-11-07 11:07:29Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,12 +39,23 @@
 #include "G4UnitsTable.hh"
 
 #include "G4HadronElasticPhysicsHP.hh"
+<<<<<<< HEAD
+=======
+#include "G4HadronElasticPhysicsXS.hh"
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronPhysicsINCLXX.hh"
 #include "G4IonElasticPhysics.hh"
+<<<<<<< HEAD
 #include "G4IonPhysics.hh"
+=======
+#include "G4IonPhysicsXS.hh"
+#include "G4IonQMDPhysics.hh"
+#include "G4IonPhysicsPHP.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "G4IonINCLXXPhysics.hh"
 #include "GammaPhysics.hh"
 
@@ -71,12 +85,20 @@ PhysicsList::PhysicsList()
   // Hadron Elastic scattering
   //
   RegisterPhysics( new G4HadronElasticPhysicsHP(verb));
+  ///RegisterPhysics( new G4HadronElasticPhysicsXS(verb));  
 
   // Hadron Inelastic physics
   //
+<<<<<<< HEAD
   RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
+=======
+  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
+  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   
   // Ion Elastic scattering
@@ -85,12 +107,23 @@ PhysicsList::PhysicsList()
   
   // Ion Inelastic physics
   //
+<<<<<<< HEAD
   RegisterPhysics( new G4IonPhysics(verb));
+=======
+  RegisterPhysics( new G4IonPhysicsXS(verb));
+  ////RegisterPhysics( new G4IonPhysicsPHP(verb));
+  ////RegisterPhysics( new G4IonQMDPhysics(verb));
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
     
   // Gamma physics
   //
+<<<<<<< HEAD
   RegisterPhysics( new GammaPhysics("gamma"));
+=======
+  RegisterPhysics( new GammaNuclearPhysics("gamma"));
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,7 +158,11 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::SetCuts()
 {
+<<<<<<< HEAD
   SetCutValue(0*mm, "proton");
+=======
+   SetCutValue(0.*mm, "proton");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

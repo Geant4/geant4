@@ -27,7 +27,6 @@
 /// \brief Main program of the hadronic/Hadr03 example
 //
 //
-// $Id: TestEm1.cc,v 1.16 2010-04-06 11:11:24 maire Exp $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +78,11 @@ int main(int argc,char** argv) {
   
   PhysicsList* phys = new PhysicsList;  
   runManager->SetUserInitialization(phys);
+<<<<<<< HEAD
+=======
+
+  runManager->SetUserInitialization(new ActionInitialization(det));
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
   runManager->SetUserInitialization(new ActionInitialization(det));    
  

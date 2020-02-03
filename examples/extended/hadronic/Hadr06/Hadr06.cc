@@ -27,8 +27,12 @@
 /// \brief Main program of the hadronic/Hadr03 example
 //
 //
+<<<<<<< HEAD
 // $Id: TestEm1.cc,v 1.16 2010-04-06 11:11:24 maire Exp $
 // 
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

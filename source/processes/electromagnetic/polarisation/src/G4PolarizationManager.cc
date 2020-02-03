@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationManager.cc 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -47,25 +46,25 @@
 
 #include "G4LogicalVolume.hh"
 
-G4ThreadLocal G4PolarizationManager * G4PolarizationManager::instance = 0;
+G4ThreadLocal G4PolarizationManager * G4PolarizationManager::instance = nullptr;
 
 G4PolarizationManager* G4PolarizationManager::GetInstance()
 {
-  if (instance == 0) instance = new G4PolarizationManager();
+  if (instance == nullptr) instance = new G4PolarizationManager();
   return instance;
 }
 
 void G4PolarizationManager::Dispose()
 {
-  if (instance != 0)
+  if (instance != nullptr)
   {
     delete instance;
-    instance = 0;
+    instance = nullptr;
   }
 }
 
 G4PolarizationManager::G4PolarizationManager()
-  : messenger(0), verboseLevel(0), activated(true)
+  : messenger(nullptr), verboseLevel(0), activated(true)
 {
   messenger = new G4PolarizationMessenger(this);  
 }
@@ -81,9 +80,8 @@ void G4PolarizationManager::ListVolumes()
 	<<" registered volume(s) : "<<G4endl;
   if (!activated) 
     G4cout<<" but polarization deactivated "<<G4endl;
-  for (PolarizationMap::const_iterator cit=volumePolarizations.begin();
-       cit!=volumePolarizations.end();cit++) {
-    G4cout<<cit->first->GetName()<<" : "<<cit->second<<G4endl;
+  for (auto vp : volumePolarizations) {
+    G4cout << vp.first->GetName() << " : " << vp.second << G4endl;
   }
 }
 
@@ -97,10 +95,9 @@ void G4PolarizationManager::SetVolumePolarization(G4LogicalVolume* lVol, const G
 
 void G4PolarizationManager::SetVolumePolarization(const G4String & lVolName, const G4ThreeVector & pol)
 {
-  for (PolarizationMap::iterator it=volumePolarizations.begin();
-       it!=volumePolarizations.end();it++) {
-    if (it->first->GetName()==lVolName) {
-      it->second=pol;
+  for (auto& vp : volumePolarizations) {
+    if (vp.first->GetName()==lVolName) {
+      vp.second=pol;
       if (verboseLevel>=1) G4cout<<" SetVolumePolarization "
 				 <<lVolName<<" "
 				 <<pol<<G4endl;

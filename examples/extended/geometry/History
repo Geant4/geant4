@@ -1,4 +1,3 @@
-$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24/02/2018 I. Hrivnacova (exGeometry-V10-04-01)
+- Removed example rotations
+  (its new features will be integrated in the transforms example)
+
+24/02/2018 M. Maire (exGeometry-V10-04-00)
+- added example rotations
 
 14/02/2013 I. Hrivnacova (exGeometry-V09-06-00)
 - Removed olap example (now obsolete)

@@ -24,13 +24,10 @@
 // ********************************************************************
 //
 //
-// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
-// 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
+// Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli,University of Wollongong, Australia
+// Contributions by F. Ambroglini INFN Perugia, Italy
+//
 //
 #ifndef G4VoxelBreastFactory_h
 #define G4VoxelBreastFactory_h 1

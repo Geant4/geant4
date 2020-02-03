@@ -23,30 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMolecularDissociationDisplacer.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 #include "G4VMolecularDissociationDisplacer.hh"
-#include "G4Molecule.hh"
 
-DisplacementType *G4VMolecularDecayDisplacer::Last = 0;
-const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement =
-    G4VMolecularDecayDisplacer::AddDisplacement();
+G4CT_COUNT_INIT_IMPL(G4VMolecularDissociationDisplacer, 0)
+G4CT_COUNT_IMPL(G4VMolecularDissociationDisplacer, NoDisplacement)
 
-G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer()
-{
-  if (!Last) Last = new DisplacementType(0);
-  fVerbose = 0;
-}
-
-G4VMolecularDecayDisplacer::~G4VMolecularDecayDisplacer()
-{
-  ;
-}
-
-DisplacementType G4VMolecularDecayDisplacer::AddDisplacement()
-{
-  if (!Last) Last = new DisplacementType(0);
-  DisplacementType output = *Last;
-  (*Last)++;
-  return output;
-}

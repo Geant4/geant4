@@ -27,7 +27,10 @@
 /// \brief Implementation of the PhysicsListMessenger class
 //
 //
+<<<<<<< HEAD
 // $Id: PhysicsListMessenger.cc 70761 2013-06-05 12:30:51Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -167,7 +170,7 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     if(fPhysicsList) {
       G4String name = newValue;
       if(name == "PHYSLIST") {
-        char* path = getenv(name);
+        char* path = std::getenv(name);
         if (path) name = G4String(path);
         else {
           G4cout << "### PhysicsListMessenger WARNING: "

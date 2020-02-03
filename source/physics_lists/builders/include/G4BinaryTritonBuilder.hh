@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryTritonBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -68,8 +67,6 @@ class G4BinaryTritonBuilder : public G4VTritonBuilder
     G4double theMin;
     G4double theMax;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

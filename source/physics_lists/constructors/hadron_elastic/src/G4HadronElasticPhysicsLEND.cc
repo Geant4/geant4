@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsLEND.cc 71037 2013-06-10 09:20:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,7 +41,6 @@
 
 #include "G4HadronElasticPhysicsLEND.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadronElasticPhysics.hh"
 #include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"
 #include "G4HadronElastic.hh"
@@ -55,53 +53,41 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLEND);
 
-G4ThreadLocal G4bool G4HadronElasticPhysicsLEND::wasActivated = false;
-G4ThreadLocal G4HadronElasticPhysics* G4HadronElasticPhysicsLEND::mainElasticBuilder = 0;
-
-G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver,G4String eva)
-  : G4VPhysicsConstructor("hElasticWEL_CHIPS_LEND"), verbose(ver), 
-    evaluation(eva)
+G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver, const G4String& eva)
+  : G4HadronElasticPhysics(ver, "hElasticWEL_CHIPS_LEND"), evaluation(eva)
 {
   if(verbose > 1) { 
     G4cout << "### G4HadronElasticPhysicsLEND: " << GetPhysicsName() 
 	   << G4endl; 
   }
-  mainElasticBuilder = new G4HadronElasticPhysics(verbose);
 }
 
 G4HadronElasticPhysicsLEND::~G4HadronElasticPhysicsLEND()
-{
-  delete mainElasticBuilder;
-}
-
-void G4HadronElasticPhysicsLEND::ConstructParticle()
-{
-  // G4cout << "G4HadronElasticPhysics::ConstructParticle" << G4endl;
-  mainElasticBuilder->ConstructParticle();
-}
+{}
 
 void G4HadronElasticPhysicsLEND::ConstructProcess()
 {
-  if(wasActivated) return;
-  wasActivated = true;
-  //Needed because this is a TLS object and this method is called by all threads
-  if ( ! mainElasticBuilder )  mainElasticBuilder = new G4HadronElasticPhysics(verbose);
-  mainElasticBuilder->ConstructProcess();
+  G4HadronElasticPhysics::ConstructProcess();
 
-  mainElasticBuilder->GetNeutronModel()->SetMinEnergy(19.5*MeV);
-
-  G4HadronicProcess* hel = mainElasticBuilder->GetNeutronProcess();
-
-  G4LENDElastic* lend = new G4LENDElastic( G4Neutron::Neutron() );
-  if ( evaluation.size() > 0 ) lend->ChangeDefaultEvaluation( evaluation );
-  //lend->AllowNaturalAbundanceTarget();
-  lend->AllowAnyCandidateTarget();
-  hel->RegisterMe(lend);
-  G4LENDElasticCrossSection* lend_XS = new G4LENDElasticCrossSection( G4Neutron::Neutron() );
-  if ( evaluation.size() > 0 ) lend_XS->ChangeDefaultEvaluation( evaluation );
-  //lend_XS->AllowNaturalAbundanceTarget();
-  lend_XS->AllowAnyCandidateTarget();
-  hel->AddDataSet( lend_XS );
+  G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronElastic* he = GetElasticModel(neutron);
+  G4HadronicProcess* hel = GetElasticProcess(neutron);
+  if(he && hel) { 
+    he->SetMinEnergy(19.5*MeV); 
+    G4LENDElastic* lend = new G4LENDElastic(neutron);
+    G4LENDElasticCrossSection* lend_XS = new G4LENDElasticCrossSection(neutron);
+    if ( evaluation.size() > 0 ) { 
+      lend->ChangeDefaultEvaluation( evaluation ); 
+      lend_XS->ChangeDefaultEvaluation( evaluation );
+    }
+    lend->AllowNaturalAbundanceTarget();
+    //lend->AllowAnyCandidateTarget();
+    lend->DumpLENDTargetInfo(true);
+    hel->RegisterMe(lend);
+    lend_XS->AllowNaturalAbundanceTarget();
+    //lend_XS->AllowAnyCandidateTarget();
+    hel->AddDataSet( lend_XS );
+  }
 
   if(verbose > 1) {
     G4cout << "### HadronElasticPhysicsLEND is constructed" 

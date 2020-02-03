@@ -73,10 +73,8 @@ int main(int argc,char** argv) {
 #endif
 
   // UserInitialization classes - mandatory
-  UltraDetectorConstruction* detector = new UltraDetectorConstruction;
-  UltraPhysicsList* list = new UltraPhysicsList();
-  runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(list);
+  runManager->SetUserInitialization(new UltraDetectorConstruction);
+  runManager->SetUserInitialization(new UltraPhysicsList());
 
   // UserAction classes - optional
   runManager->SetUserInitialization(new UltraActionInitializer());
@@ -97,8 +95,12 @@ int main(int argc,char** argv) {
   // Define (G)UI for interactive mode
   if(argc==1)
   {
+<<<<<<< HEAD
 #ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+=======
+    UImanager->ApplyCommand("/control/execute VisDirect.mac");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     ui->SessionStart();
     delete ui;
 #endif

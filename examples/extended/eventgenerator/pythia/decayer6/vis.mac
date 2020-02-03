@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: vis.mac 72244 2013-07-12 08:49:56Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # Macro file for the initialization phase
 # when running in interactive mode

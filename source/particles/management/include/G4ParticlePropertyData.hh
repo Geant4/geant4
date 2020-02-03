@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyData.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -65,8 +64,8 @@ class G4ParticlePropertyData
       
   G4ParticlePropertyData & operator=(const G4ParticlePropertyData &right);
   
-  G4int operator==(const G4ParticlePropertyData &right) const;
-  G4int operator!=(const G4ParticlePropertyData &right) const;
+  G4bool operator==(const G4ParticlePropertyData &right) const;
+  G4bool operator!=(const G4ParticlePropertyData &right) const;
 
  public: // With Description
   // By these following Getxxxx methods, you can get values 

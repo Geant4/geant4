@@ -41,26 +41,28 @@
 
 class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
 {
+  struct toBeCached
+  {
+    const G4ReactionProduct* theNeutronRP;
+    const G4ReactionProduct* theTarget;
+    toBeCached() : theNeutronRP(0),theTarget(0) {}
+  };
 
-   struct toBeCached {
-      const G4ReactionProduct* theNeutronRP;
-      const G4ReactionProduct* theTarget;
-      toBeCached() : theNeutronRP(NULL),theTarget(NULL){};
-   };
-
-  public:
+public:
   
   G4ParticleHPFissionBaseFS()
   { 
     hasXsec = true; 
     theXsection = new G4ParticleHPVector;
   }
+
   virtual ~G4ParticleHPFissionBaseFS()
   {
     delete theXsection;
   }
 
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & bit, G4ParticleDefinition*);
+  void Init (G4double A, G4double Z, G4int M,
+             G4String & dirName, G4String & bit, G4ParticleDefinition*);
 
   G4DynamicParticleVector * ApplyYourself(G4int Prompt);
 
@@ -68,21 +70,25 @@ class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
   {
     return std::max(0., theXsection->GetY(anEnergy));
   }
-  virtual G4ParticleHPVector * GetXsec() { return theXsection; }
+
+  virtual G4ParticleHPVector * GetXsec()
+  {
+    return theXsection;
+  }
 
   inline void SetNeutronRP(const G4ReactionProduct & aNeutron)
-                        { 
-                          fCache.Get().theNeutronRP = &aNeutron;
-                          theAngularDistribution.SetProjectileRP(aNeutron);
-                        }
+  { 
+    fCache.Get().theNeutronRP = &aNeutron;
+    theAngularDistribution.SetProjectileRP(aNeutron);
+  }
   
   inline void SetTarget(const G4ReactionProduct & aTarget)
-                        { 
-                          fCache.Get().theTarget = &aTarget; 
-                          theAngularDistribution.SetTarget(aTarget);
-                        }
+  { 
+    fCache.Get().theTarget = &aTarget; 
+    theAngularDistribution.SetTarget(aTarget);
+  }
   
-  private:
+private:
   
   G4HadFinalState * ApplyYourself(const G4HadProjectile & ) {return 0;}
   
@@ -90,12 +96,7 @@ class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
   G4ParticleHPEnergyDistribution theEnergyDistribution;
   G4ParticleHPAngular theAngularDistribution;
   
-  //G4ReactionProduct theNeutronRP;
-  //G4ReactionProduct theTarget;
-   private:
-      G4Cache<toBeCached> fCache;
-
-  private:
-  
+  G4Cache<toBeCached> fCache;
 };
+
 #endif

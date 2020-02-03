@@ -23,23 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ImportanceAlgorithm implementation
 //
-// $Id: G4ImportanceAlgorithm.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4ImportanceAlgorithm.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
 #include <sstream>
 #include "Randomize.hh"
+#include "G4Threading.hh"
 
 #include "G4ImportanceAlgorithm.hh"
 
-G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false)
+#ifdef G4MULTITHREADED
+G4Mutex G4ImportanceAlgorithm::ImportanceMutex = G4MUTEX_INITIALIZER;
+#endif
+
+G4ImportanceAlgorithm::G4ImportanceAlgorithm()
 {
 }
 
@@ -49,26 +49,36 @@ G4ImportanceAlgorithm::~G4ImportanceAlgorithm()
 
 G4Nsplit_Weight
 G4ImportanceAlgorithm::Calculate(G4double ipre,
-				 G4double ipost,
+                                 G4double ipost,
                                  G4double init_w) const
 {
-  G4Nsplit_Weight nw = {0,0};
-  if (ipost>0.){
-    if (!(ipre>0.)){
+
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4ImportanceAlgorithm::ImportanceMutex);
+#endif
+
+  G4Nsplit_Weight nw;
+  if (ipost>0.)
+  {
+    if (!(ipre>0.))
+    {
       Error("Calculate() - ipre==0.");
     }
     G4double ipre_over_ipost = ipre/ipost;
-    if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
+    if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWarned)
+    {
       std::ostringstream os;
       os << "Calculate() - ipre_over_ipost ! in [0.25, 4]." << G4endl
          << "ipre_over_ipost = " << ipre_over_ipost << ".";
       Warning(os.str());
-      fWorned = true;
-      if (ipre_over_ipost<=0) {
-	Error("Calculate() - ipre_over_ipost<=0.");
+      fWarned = true;
+      if (ipre_over_ipost<=0)
+      {
+        Error("Calculate() - ipre_over_ipost<=0.");
       }
     }
-    if (init_w<=0.) {
+    if (init_w<=0.)
+    {
       Error("Calculate() - iniitweight<= 0. found!");
     }
 
@@ -80,45 +90,52 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
     nw.fW = init_w * ipre_over_ipost;
     
     // geometrical splitting for double mode
-    if (ipre_over_ipost<1) {
-      if ( static_cast<G4double>(nw.fN) != inv) {
-	// double mode
-	// probability p for splitting into n+1 tracks
-	G4double p = inv - nw.fN;
-	// get a random number out of [0,1)
-	G4double r = G4UniformRand();
-	if (r<p) {
-	  nw.fN++;
-	} 
+    if (ipre_over_ipost<1)
+    {
+      if ( static_cast<G4double>(nw.fN) != inv)
+      {
+        // double mode
+        // probability p for splitting into n+1 tracks
+        G4double p = inv - nw.fN;
+        // get a random number out of [0,1)
+        G4double r = G4UniformRand();
+        if (r<p)
+        {
+          ++nw.fN;
+        } 
       }  
     }
-    // ipre_over_ipost > 1
-    //  russian roulett
-    else if (ipre_over_ipost>1) {
+    else if (ipre_over_ipost>1)   // russian roulette
+    {
       // probabiity for killing track
       G4double p = 1-inv;
       // get a random number out of [0,1)
       G4double r = G4UniformRand();
-      if (r<p) {
-	// kill track
-	nw.fN = 0;
-	nw.fW = 0;
+      if (r<p)
+      {
+        // kill track
+        nw.fN = 0;
+        nw.fW = 0;
       }
-      else {
-	nw.fN = 1;     
+      else
+      {
+        nw.fN = 1;     
       }
     }
   }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4ImportanceAlgorithm::ImportanceMutex);
+#endif
   return nw;
 }
 
-void G4ImportanceAlgorithm::Error(const G4String &msg) const
+void G4ImportanceAlgorithm::Error(const G4String& msg) const
 {
   G4Exception("G4ImportanceAlgorithm::Error()",
               "GeomBias0002", FatalException, msg);
 }
 
-void G4ImportanceAlgorithm::Warning(const G4String &msg) const
+void G4ImportanceAlgorithm::Warning(const G4String& msg) const
 {
   G4Exception("G4ImportanceAlgorithm::Warning()",
               "GeomBias1001", JustWarning, msg);

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlung.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,12 +52,12 @@ class G4ePolarizedBremsstrahlung : public G4eBremsstrahlung
 
 public:
 
-  G4ePolarizedBremsstrahlung(const G4String& name = "pol-eBrem");
+  explicit G4ePolarizedBremsstrahlung(const G4String& name = "pol-eBrem");
 
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+					   const G4ParticleDefinition*) override;
 
 };
 #endif

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04SteppingAction.cc 73014 2013-08-15 08:54:47Z gcosmo $
 //
 /// \file field/field04/src/F04SteppingAction.cc
 /// \brief Implementation of the F04SteppingAction class

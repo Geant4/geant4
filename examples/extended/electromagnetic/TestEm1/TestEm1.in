@@ -1,9 +1,9 @@
+<<<<<<< HEAD
 # $Id: TestEm1.in 85282 2014-10-27 09:22:11Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # Macro file for "TestEm1.cc"
-# (can be run in batch, without graphic)
-#
-# electron 100 MeV; all processes
 #
 /control/verbose 2
 /control/cout/ignoreThreadsExcept 0
@@ -15,6 +15,11 @@
 #
 /testem/phys/addPhysics  emstandard_opt0
 ###/testem/phys/addPhysics  local
+<<<<<<< HEAD
+=======
+/process/em/printParameters 
+#
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /run/setCut 1 mm
 #
 /run/initialize
@@ -28,3 +33,7 @@
 /run/printProgress 200
 #
 /run/beamOn 2000
+#
+/gun/particle proton
+/run/beamOn 2000
+#

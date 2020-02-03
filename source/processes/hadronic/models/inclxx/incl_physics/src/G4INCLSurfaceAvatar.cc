@@ -116,7 +116,7 @@ namespace G4INCL {
       if(candidateCluster != 0 &&
           Clustering::clusterCanEscape(theNucleus, candidateCluster)) {
 
-        INCL_DEBUG("Cluster algorithm succeded. Candidate cluster:" << '\n' << candidateCluster->print() << '\n');
+        INCL_DEBUG("Cluster algorithm succeeded. Candidate cluster:" << '\n' << candidateCluster->print() << '\n');
 
         // Check if the cluster can penetrate the Coulomb barrier
         const G4double clusterTransmissionProbability = getTransmissionProbability(candidateCluster);
@@ -152,6 +152,7 @@ namespace G4INCL {
 
     if(x <= transmissionProbability) { // Transmission
       INCL_DEBUG("Particle " << theParticle->getID() << " passes the Coulomb barrier, transmitting." << '\n');
+      if(theParticle->isKaon()) theNucleus->setNumberOfKaon(theNucleus->getNumberOfKaon()-1);
       if(theNucleus->getStore()->getConfig()->getRefraction()) {
         return new TransmissionChannel(theNucleus, theParticle, kOut, cosR);
       } else {
@@ -206,7 +207,8 @@ namespace G4INCL {
     // Correction to the particle kinetic energy if using real masses
     const G4int theA = theNucleus->getA();
     const G4int theZ = theNucleus->getZ();
-    const G4double correction = particle->getEmissionQValueCorrection(theA, theZ);
+    const G4int theS = theNucleus->getS();
+    const G4double correction = particle->getEmissionQValueCorrection(theA, theZ, theS);
     particleTOut = particle->getKineticEnergy() + correction;
 
     if (particleTOut <= V) // No transmission if total energy < 0

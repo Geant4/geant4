@@ -23,15 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4CSGSolid
 //
-// $Id: G4CSGSolid.cc 83572 2014-09-01 15:23:27Z gcosmo $
-//
+// 27.03.98 J.Apostolakis - First version.
 // --------------------------------------------------------------------
 
 #include <cmath>
 
 #include "G4CSGSolid.hh"
 #include "Randomize.hh"
+#include "G4RandomTools.hh"
 #include "G4Polyhedron.hh"
 
 #include "G4AutoLock.hh"
@@ -47,8 +48,7 @@ namespace
 //  - Base class constructor 
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
-  G4VSolid(name), fCubicVolume(0.), fSurfaceArea(0.),
-  fRebuildPolyhedron(false), fpPolyhedron(0)
+  G4VSolid(name)
 {
 }
 
@@ -58,8 +58,7 @@ G4CSGSolid::G4CSGSolid(const G4String& name) :
 //                            for usage restricted to object persistency.
 
 G4CSGSolid::G4CSGSolid( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
+  : G4VSolid(a)
 {
 }
 
@@ -70,7 +69,7 @@ G4CSGSolid::G4CSGSolid( __void__& a )
 
 G4CSGSolid::~G4CSGSolid() 
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -80,7 +79,7 @@ G4CSGSolid::~G4CSGSolid()
 
 G4CSGSolid::G4CSGSolid(const G4CSGSolid& rhs)
   : G4VSolid(rhs), fCubicVolume(rhs.fCubicVolume),
-    fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false), fpPolyhedron(0)
+    fSurfaceArea(rhs.fSurfaceArea)
 {
 }
 
@@ -103,19 +102,14 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
    fCubicVolume = rhs.fCubicVolume;
    fSurfaceArea = rhs.fSurfaceArea;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }  
 
 G4double G4CSGSolid::GetRadiusInRing(G4double rmin, G4double rmax) const
 {
-  // Generate radius in annular ring according to uniform area
-  //
-  if (rmin<=0.)   { return rmax*std::sqrt(G4UniformRand()); }
-  if (rmin!=rmax) { return std::sqrt(G4UniformRand()
-                           * (sqr(rmax)-sqr(rmin))+sqr(rmin)); }
-  return rmin;
+  return G4RandomRadiusInRing(rmin, rmax);
 }
 
 std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
@@ -133,7 +127,7 @@ std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4CSGSolid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

@@ -175,6 +175,33 @@ err:
 /*
 =========================================================
 */
+GIDI_settings_processedFlux& GIDI_settings_processedFlux::operator=( const GIDI_settings_processedFlux &flux ) {
+  if ( this != &flux ) {
+    // Clean-up existing things
+    for( std::vector<ptwXYPoints *>::iterator iter = mFluxXY.begin( ); iter != mFluxXY.end( ); ++iter ) ptwXY_free( *iter );
+    for( std::vector<ptwXPoints *>::iterator iter = mGroupedFlux.begin( ); iter != mGroupedFlux.end( ); ++iter ) ptwX_free( *iter );
+    // Now assign
+    mFlux = flux.mFlux;
+    nfu_status status_nf;
+    ptwXYPoints *fluxXY;
+    ptwXPoints *fluxX;
+    for( int order = 0; order < (int) mFlux.size( ); ++order ) {
+        if( ( fluxXY = ptwXY_clone( flux.mFluxXY[order], &status_nf ) ) == NULL ) goto err;
+        mFluxXY.push_back( fluxXY );
+        if( ( fluxX = ptwX_clone( flux.mGroupedFlux[order], &status_nf ) ) == NULL ) goto err;
+        mGroupedFlux.push_back( fluxX );
+    }
+  }
+  return *this;
+
+err:
+    for( std::vector<ptwXYPoints *>::iterator iter = mFluxXY.begin( ); iter != mFluxXY.end( ); ++iter ) ptwXY_free( *iter );
+    for( std::vector<ptwXPoints *>::iterator iter = mGroupedFlux.begin( ); iter != mGroupedFlux.end( ); ++iter ) ptwX_free( *iter );
+    throw 1;
+}
+/*
+=========================================================
+*/
 GIDI_settings_processedFlux::~GIDI_settings_processedFlux( ) {
 
     for( std::vector<ptwXYPoints *>::iterator iter = mFluxXY.begin( ); iter != mFluxXY.end( ); ++iter ) ptwXY_free( *iter );

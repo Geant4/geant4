@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04StackingActionMessenger.hh
 /// \brief Definition of the ExN04StackingActionMessenger class
 //
-// $Id: ExN04StackingActionMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04StackingActionMessenger_h
@@ -44,16 +43,16 @@ public:
   ExN04StackingActionMessenger(ExN04StackingAction* msa);
   ~ExN04StackingActionMessenger();
 
-  void SetNewValue(G4UIcommand * command,G4String newValues);
-  G4String GetCurrentValue(G4UIcommand * command);
+  virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+  virtual G4String GetCurrentValue(G4UIcommand * command);
 
 private:
-  ExN04StackingAction * myAction;
+  ExN04StackingAction * fMyAction;
 
-  G4UIcmdWithAnInteger * muonCmd;
-  G4UIcmdWithAnInteger * isomuonCmd;
-  G4UIcmdWithAnInteger * isoCmd;
-  G4UIcmdWithADoubleAndUnit * roiCmd;
+  G4UIcmdWithAnInteger * fMuonCmd;
+  G4UIcmdWithAnInteger * fIsoMuonCmd;
+  G4UIcmdWithAnInteger * fIsoCmd;
+  G4UIcmdWithADoubleAndUnit * fRoiCmd;
 
 };
 

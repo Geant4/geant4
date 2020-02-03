@@ -23,40 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------
 //                   by Michel Maire, April 1996
 //
-// 28-05-96, DoIt() small change in ElecDirection, by M.Maire
-// 10-06-96, simplification in ComputeMicroscopicCrossSection(), by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 13-09-96, small changes in DoIt for better efficiency. Thanks to P.Urban
-// 06-01-97, crossection table + meanfreepath table, M.Maire
-// 05-03-97, new Physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
-// 04-06-98, in DoIt, secondary production condition:
-//                                     range>std::min(threshold,safety)
-// 13-08-98, new methods SetBining()  PrintInfo()
-// 15-12-98, cross section=0 below 10 keV
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 13-07-01, DoIt: suppression of production cut for the electron (mma)
-// 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
-// 17-04-02, LowestEnergyLimit = 1*keV     
-// 26-05-04, cross section parametrization improved for low energy :
-//           Egamma <~ 15 keV (Laszlo) 
-// 08-11-04, Remove Store/Retrieve tables (V.Ivanchenko)
-// 09-03-05  Migrate to model interface 
-//           and inherit from G4VEmProcess (V.Ivanchenko) 
-// 04-05-05, Make class to be default (V.Ivanchenko)
-// 09-09-06, modify SetModel(G4VEmModel*) (mma)
-// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
+// Modified: Michel Maire and Vladimir Ivanchenko
 //
 // -----------------------------------------------------------------------------
 
@@ -101,11 +73,11 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!EmModel(1)) { SetEmModel(new G4KleinNishinaCompton(), 1); }
+    if(!EmModel(0)) { SetEmModel(new G4KleinNishinaCompton()); }
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(1, EmModel(1));
+    EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(1, EmModel(0));
   } 
 }
 
@@ -115,3 +87,11 @@ void G4ComptonScattering::PrintInfo()
 {}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4ComptonScattering::ProcessDescription(std::ostream& out) const
+{
+  out << "  Compton scattering";
+  G4VEmProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

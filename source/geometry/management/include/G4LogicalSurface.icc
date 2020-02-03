@@ -23,18 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LogicalSurface.icc 80066 2014-03-31 13:47:20Z gcosmo $
-//
-////////////////////////////////////////////////////////////////////////
-// Surface Class Inline Methods
-////////////////////////////////////////////////////////////////////////
-//
-// File:        G4LogicalSurface.icc
-// Description: A Surface class 
-// Created:     1997-06-26
-// Author:      John Apostolakis
-//
+// G4LogicalSurface class inline methods
+
+// Created: John Apostolakis, 26-06-1997
 // ------------------------------------------------------------------------
 
 inline G4SurfaceProperty*
@@ -71,31 +62,16 @@ inline void
 G4LogicalSurface::SetTransitionRadiationSurface(G4TransitionRadiationSurface*
                                                 transRadSurf )
 {
-  theTransRadSurface= transRadSurf;
+  theTransRadSurface = transRadSurf;
 } 
 
-  //////////////
-  // Operators
-  //////////////
-
-inline G4LogicalSurface &
-G4LogicalSurface::operator=(const G4LogicalSurface &right)
-{
-  if (&right == this)  { return *this; }
-  theName = right.theName;
-  theSurfaceProperty = right.theSurfaceProperty;
-  theTransRadSurface = right.theTransRadSurface;
-        
-  return *this;
-}
-
-inline G4int
+inline G4bool
 G4LogicalSurface::operator==(const G4LogicalSurface &right) const
 {
   return (this == (G4LogicalSurface *) &right);
 }
 
-inline G4int
+inline G4bool
 G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
 {
   return (this != (G4LogicalSurface *) &right);

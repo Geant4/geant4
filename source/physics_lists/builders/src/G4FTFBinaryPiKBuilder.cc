@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +34,7 @@
 // 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
 //             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -43,15 +43,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4PiNuclearCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4BGGPionInelasticXS.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4FTFBinaryPiKBuilder::
 G4FTFBinaryPiKBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
-  theMin = 4*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -70,25 +69,20 @@ G4FTFBinaryPiKBuilder(G4bool quasiElastic)
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 }
 
 G4FTFBinaryPiKBuilder:: ~G4FTFBinaryPiKBuilder() 
 {
   delete theStringDecay;
-  delete theStringModel;
-  //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
-
-void G4FTFBinaryPiKBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4FTFBinaryPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  aP->AddDataSet(thePiData);
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
   aP->RegisterMe(theModel);
 }
 
@@ -96,7 +90,7 @@ void G4FTFBinaryPiKBuilder::
 Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  aP->AddDataSet(thePiData);
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
   aP->RegisterMe(theModel);
 }
 
@@ -127,3 +121,4 @@ Build(G4KaonZeroSInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   aP->RegisterMe(theModel);
 }
+

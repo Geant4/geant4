@@ -52,8 +52,8 @@ public:
 private:
   G4SigmaMinusField(const  G4SigmaMinusField &right);
   const G4SigmaMinusField & operator=(const G4SigmaMinusField & right);
-  int operator==(const G4SigmaMinusField & right) const;
-  int operator!=(const G4SigmaMinusField & right) const;
+  G4bool operator==(const G4SigmaMinusField & right) const;
+  G4bool operator!=(const G4SigmaMinusField & right) const;
 
 public:
   virtual G4double GetField(const G4ThreeVector & aPosition);

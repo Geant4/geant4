@@ -1,4 +1,4 @@
-/// \file parallel/ParN04/AnnotatedFiles/MarshaledG4String.h
+/// \file MarshaledG4String.h
 /// \brief Definition of the MaraledG4String class
 //
 // This file was generated automatically by marshalgen.

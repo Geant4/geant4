@@ -1,4 +1,3 @@
-# $Id: G4UI_USE.gmk 66368 2012-12-18 09:20:17Z gcosmo $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.

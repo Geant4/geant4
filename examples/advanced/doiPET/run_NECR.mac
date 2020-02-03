@@ -1,0 +1,37 @@
+#==========================- Pre-initialisation parameters -=========================
+
+#choose the type of phantom
+/changePhantom/setPhantom NEMA_phantom_NECR 
+
+#set the activity in the phantom
+/change/Activity 3840000 becquerel #3840000 becquerel
+
+#Set the halflife of the isotope in units of second
+/change/HalfLife 6586.2 s #Halflife of F-18
+
+
+#Change the size of the phantom
+/changePhantom/Radius 100 mm
+/changePhantom/Length 705 mm
+
+#Change the position of phantom. !!!Remember to change the source position as well.
+/changePhantom/position 0 0 0 mm
+
+/run/initialize
+/run/verbose 2
+
+/gps/particle ion
+/gps/ion 9 18 0 0 # F-18
+#/gps/particle e+
+/gps/energy 0
+/gps/pos/type Volume
+#/gps/pos/shape Sphere
+/gps/pos/shape Cylinder
+/gps/pos/centre 0 -45 0 mm 
+/gps/pos/radius 3.2 mm
+/gps/pos/halfz  350 mm
+/gps/ang/type iso
+
+#/random/setSeeds  1 2 
+
+/run/beamOn 1000000

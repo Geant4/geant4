@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VIStore.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// Class G4VIStore
+// G4VIStore
 //
 // Class description:
 //
@@ -38,10 +34,10 @@
 // from the "importance store". 
 // 
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4VIStore_hh
-#define G4VIStore_hh G4VIStore_hh
+#ifndef G4VISTORE_HH
+#define G4VISTORE_HH 1
 
 #include "globals.hh"
 
@@ -50,20 +46,19 @@ class G4VPhysicalVolume;
 
 class  G4VIStore
 {
+  public:  // with description
 
-public:  // with description
+    G4VIStore();
+    virtual ~G4VIStore();
 
-  G4VIStore();
-  virtual  ~G4VIStore();
+    virtual G4double GetImportance(const G4GeometryCell& gCell) const = 0;
+      // derive a importance value of a "cell" addressed by a G4GeometryCell
+      // from the store
 
-  virtual G4double GetImportance(const G4GeometryCell &gCell) const = 0;
-    // derive a importance value of a "cell" addresed by a G4GeometryCell
-    // from the store.
+    virtual G4bool IsKnown(const G4GeometryCell& gCell) const = 0;
+      // returns true if the gCell is in the store, else false 
 
-  virtual G4bool IsKnown(const G4GeometryCell &gCell) const = 0;
-    // returns true if the gCell is in the store, else false 
-
-  virtual const G4VPhysicalVolume &GetWorldVolume() const = 0;
+    virtual const G4VPhysicalVolume& GetWorldVolume() const = 0;
 };
 
 #endif

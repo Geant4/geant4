@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88190 2015-02-02 17:24:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -27,6 +26,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/event/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -37,6 +37,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
@@ -113,17 +114,13 @@ if(GEANT4_USE_RAYTRACER_X11)
     #
     # Add source properties and additional LINK_LIBRARIES here
     #
-    # Need X11 includes!
-    include_directories(${X11_INCLUDE_DIR})
-
     # Must use G4VIS_BUILD_RAYTRACERX_DRIVER define
     GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_RAYTRACER_MODULE_SOURCES}
         COMPILE_DEFINITIONS G4VIS_BUILD_RAYTRACERX_DRIVER)
 
     # The X11 Libraries
-    list(APPEND G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES ${X11_LIBRARIES})
+    list(APPEND G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
 endif()
-    
 
 #
 # Define the Geant4 Module.

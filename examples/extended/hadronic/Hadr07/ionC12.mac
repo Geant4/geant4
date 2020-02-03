@@ -1,0 +1,26 @@
+#
+# Macro file for "Hadr07.cc"
+#
+# limit the step size from histo 10
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setNbOfAbsor  1
+/testhadr/det/setAbsor 1 Water  20 cm
+/testhadr/det/setSizeYZ 20 cm
+#
+/run/initialize
+#
+/testhadr/gun/setDefault
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 2.4 GeV
+#
+/analysis/setFileName ionC12
+/analysis/h1/set 10 100 80. 90. mm	#edep profile
+#
+/testhadr/applyAutomaticStepMax true
+#
+/run/printProgress 1000
+/run/beamOn 10000

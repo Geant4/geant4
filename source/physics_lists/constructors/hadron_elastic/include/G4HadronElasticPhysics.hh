@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh 81758 2014-06-05 08:12:06Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,39 +48,45 @@
 #include "G4HadronElastic.hh"
 #include "G4HadronicProcess.hh"
 
+class G4VCrossSectionDataSet;
+class G4ParticleDefinition;
+
 class G4HadronElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  G4HadronElasticPhysics(G4int ver = 0); 
+  explicit G4HadronElasticPhysics(G4int ver = 0, 
+				  const G4String& nam = "hElasticWEL_CHIPS_XS"); 
 
   virtual ~G4HadronElasticPhysics();
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
-  G4HadronElastic* GetNeutronModel();
+  G4HadronicProcess* GetElasticProcess(const G4ParticleDefinition* part) const;
 
-  G4HadronicProcess* GetNeutronProcess();
+  G4HadronElastic* GetElasticModel(const G4ParticleDefinition* part) const;
+
+  G4HadronicProcess* GetNeutronProcess() const;
+
+  G4HadronElastic* GetNeutronModel() const;
+
+  void AddXSection(const G4ParticleDefinition*, G4VCrossSectionDataSet*) const; 
 
 private:
 
   // copy constructor and hide assignment operator
-  G4HadronElasticPhysics(G4HadronElasticPhysics &);
-  G4HadronElasticPhysics & operator=(const G4HadronElasticPhysics &right);
+  G4HadronElasticPhysics(G4HadronElasticPhysics &) = delete;
+  G4HadronElasticPhysics & operator=(const G4HadronElasticPhysics &right) = delete;
 
-  G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
-
-  static G4ThreadLocal G4HadronElastic*   neutronModel;
-  static G4ThreadLocal G4HadronicProcess* neutronProcess;
-
+protected:
+  G4int verbose;
 };
 #endif
 

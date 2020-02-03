@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASecondOrderReaction.cc 94218 2015-11-09 08:24:48Z gcosmo $
 //
 #include "G4DNASecondOrderReaction.hh"
 
@@ -32,7 +31,7 @@
 #include "G4Molecule.hh"
 #include "G4DNAMolecularMaterial.hh"
 #include "G4MolecularConfiguration.hh"
-#include "G4DNADamages.hh"
+#include "G4DNADamage.hh"
 #include "G4UnitsTable.hh"
 #include "G4TrackingInformation.hh"
 
@@ -259,7 +258,7 @@ G4VParticleChange* G4DNASecondOrderReaction::PostStepDoIt(const G4Track& track,c
   fReturnedValue  = DBL_MAX;
   fParticleChange.Initialize(track);
   fParticleChange.ProposeTrackStatus(fStopAndKill);
-  G4DNADamages::Instance()->AddIndirectDamage(fpMaterial->GetName(),molecule,track.GetPosition(),track.GetGlobalTime());
+  G4DNADamage::Instance()->AddIndirectDamage(fpMaterial->GetName(),molecule,track.GetPosition(),track.GetGlobalTime());
   State(fPreviousTimeAtPreStepPoint) = -1;
   return &fParticleChange;
 }

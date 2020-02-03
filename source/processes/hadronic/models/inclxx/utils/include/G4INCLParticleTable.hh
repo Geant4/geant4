@@ -63,6 +63,7 @@ namespace G4INCL {
 
     const G4int clusterTableZSize = maxClusterCharge+1;
     const G4int clusterTableASize = maxClusterMass+1;
+    const G4int clusterTableSSize = 4;
 
     const G4double effectiveNucleonMass = 938.2796;
     const G4double effectiveNucleonMass2 = 8.8036860777616e5;
@@ -98,7 +99,7 @@ namespace G4INCL {
     std::string getShortName(const G4int A, const G4int Z);
 
     /// \brief Get INCL nuclear mass (in MeV/c^2)
-    G4double getINCLMass(const G4int A, const G4int Z);
+    G4double getINCLMass(const G4int A, const G4int Z, const G4int S);
 
     /// \brief Get INCL particle mass (in MeV/c^2)
     G4double getINCLMass(const ParticleType t);
@@ -122,7 +123,7 @@ namespace G4INCL {
     ///\brief Get particle mass (in MeV/c^2)
     G4double getRealMass(const G4INCL::ParticleType t);
     ///\brief Get nuclear mass (in MeV/c^2)
-    G4double getRealMass(const G4int A, const G4int Z);
+    G4double getRealMass(const G4int A, const G4int Z, const G4int S = 0);
 
     /**\brief Get Q-value (in MeV/c^2)
      *
@@ -130,7 +131,7 @@ namespace G4INCL {
      * following reaction:
      * \f[ (A_1,Z_1) + (A_2, Z_2) --> (A_1+A_2,Z_1+Z_2) \f]
      */
-    G4double getTableQValue(const G4int A1, const G4int Z1, const G4int A2, const G4int Z2);
+    G4double getTableQValue(const G4int A1, const G4int Z1, const G4int S1, const G4int A2, const G4int Z2, const G4int S2);
 
     /**\brief Get Q-value (in MeV/c^2)
      *
@@ -138,7 +139,7 @@ namespace G4INCL {
      * following reaction:
      * \f[ (A_1,Z_1) + (A_2, Z_2) --> (A_3,Z_3) + (A1+A2-A3,Z1+Z2-Z3) \f]
      */
-    G4double getTableQValue(const G4int A1, const G4int Z1, const G4int A2, const G4int Z2, const G4int A3, const G4int Z3);
+    G4double getTableQValue(const G4int A1, const G4int Z1, const G4int S1, const G4int A2, const G4int Z2, const G4int S2, const G4int A3, const G4int Z3, const G4int S3);
 
     G4double getTableSpeciesMass(const ParticleSpecies &p);
 
@@ -201,7 +202,8 @@ namespace G4INCL {
     G4int drawRandomNaturalIsotope(const G4int Z);
 
     // Typedefs and pointers for transparent handling of mass functions
-    typedef G4double (*NuclearMassFn)(const G4int, const G4int);
+    //typedef G4double (*NuclearMassFn)(const G4int, const G4int);
+    typedef G4double (*NuclearMassFn)(const G4int, const G4int, const G4int);
     typedef G4double (*ParticleMassFn)(const ParticleType);
     /// \brief Static pointer to the mass function for nuclei
     extern G4ThreadLocal NuclearMassFn getTableMass;

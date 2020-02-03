@@ -11,7 +11,6 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 94085 2015-11-05 15:07:50Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -49,6 +48,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/biasing/generic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/biasing/importance/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/parameterisation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/stopping/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
@@ -92,6 +92,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_limiters
         G4ImportanceBiasing.hh
         G4WeightWindowBiasing.hh
         G4GenericBiasingPhysics.hh
+	G4FastSimulationPhysics.hh
         G4MaxTimeCuts.hh
         G4MinEkineCuts.hh
         G4NeutronTrackingCut.hh
@@ -102,6 +103,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_limiters
         G4ImportanceBiasing.cc
         G4WeightWindowBiasing.cc
         G4GenericBiasingPhysics.cc
+	G4FastSimulationPhysics.cc
         G4MaxTimeCuts.cc
         G4MinEkineCuts.cc
         G4NeutronTrackingCut.cc
@@ -114,6 +116,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_limiters
         G4cuts
         G4scoring
 	G4biasing
+	G4parameterisation
         G4decay
         G4digits
         G4emhighenergy

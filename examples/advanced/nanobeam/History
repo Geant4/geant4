@@ -1,5 +1,8 @@
 -------------------------------------------------------------------
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +12,39 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
                        Package History file
                        --------------------
 
+<<<<<<< HEAD
 28 Oct 2016 - G.Folger
+=======
+19 Nov 2019 - G. Folger  tag nanobeam-V10-05-01
+- remove using namespace std from header file TabulatedField3D.hh
+
+25 Apr 2019- B.Morgan - tag nanobeam-V10-05-00
+- Include G4Types header before use of G4MULTITHREADED
+
+09 Sep 2018- S.Incerti - tag nanobeam-V10-04-02
+- updated default.mac
+
+04 Sep 2018- S.Incerti - tag nanobeam-V10-04-01
+- simplified UI session
+
+01 Jul 2018- S.Incerti - tag nanobeam-V10-04-00
+- relaxed EM field settings
+
+17 Apr 2017 - S.Incerti - tag nanobeam-V10-03-03
+- changed EM field settings for MT
+
+14 Apr 2017 - S.Incerti - tag nanobeam-V10-03-02
+- changed default.mac macro for MT mode
+
+30 Dec 2016 - S.Incerti - tag nanobeam-V10-03-01
+- cleanup
+
+15 Dec 2016 - S.Incerti - tag nanobeam-V10-03-00
+- added usage of std::floor() in TabulatedField3D.cc
+- updated handling of UI commands
+
+28 Oct 2016 - G.Folger tag nanobeam-V10-02-01
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - Remove direct use of theParticleIterator, use GetParticleTableIterator().
    fix required by clang39 on Linux and MAC
 

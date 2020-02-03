@@ -23,52 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // 
 //------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
 //
-// 11-06-96 Added SelectRandomAtom() method, M.Maire
-// 21-06-96 SetCuts implementation, M.Maire
-// 24-06-96 simplification in ComputeCrossSectionPerAtom, M.Maire
-// 24-06-96 in DoIt : change the particleType stuff, M.Maire
-// 25-06-96 modification in the generation of the teta angle, M.Maire
-// 16-09-96 minors optimisations in DoIt. Thanks to P.Urban
-//          dynamical array PartialSumSigma
-// 13-12-96 fast sampling of epsil below 2 MeV, L.Urban
-// 14-01-97 crossection table + meanfreepath table.
-//          PartialSumSigma removed, M.Maire
-// 14-01-97 in DoIt the positron is always created, even with Ekine=0,
-//          for further annihilation, M.Maire
-// 14-03-97 new Physics scheme for geant4alpha, M.Maire
-// 28-03-97 protection in BuildPhysicsTable, M.Maire
-// 19-06-97 correction in ComputeCrossSectionPerAtom, L.Urban
-// 04-06-98 in DoIt, secondary production condition:
-//            range>std::min(threshold,safety)
-// 13-08-98 new methods SetBining() PrintInfo()
-// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 11-07-01 PostStepDoIt - sampling epsil: power(rndm,0.333333)
-// 13-07-01 DoIt: suppression of production cut for the (e-,e+) (mma)
-// 06-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01 BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01 migration of Materials to pure STL (mma)
-// 20-09-01 DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01 come back to BuildPhysicsTable(const G4ParticleDefinition&)
-// 11-01-02 ComputeCrossSection: correction of extrapolation below EnergyLimit
-// 21-03-02 DoIt: correction of the e+e- angular distribution (bug 363) mma
-// 08-11-04 Remove of Store/Retrieve tables (V.Ivantchenko)
-// 19-04-05 Migrate to model interface and inherit 
-//          from G4VEmProcess (V.Ivanchenko) 
-// 04-05-05, Make class to be default (V.Ivanchenko)
-// 09-08-06, add SetModel(G4VEmModel*) (mma)
-// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
+// Modified by Michel Maire and Vladimir Ivanchenko
+//
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4BetheHeitlerModel.hh"
 #include "G4PairProductionRelModel.hh"
 #include "G4Electron.hh"
 #include "G4EmParameters.hh"
@@ -110,21 +76,13 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
     G4EmParameters* param = G4EmParameters::Instance();
     G4double emin = std::max(param->MinKinEnergy(), 2*electron_mass_c2);
     G4double emax = param->MaxKinEnergy();
-    G4double energyLimit = std::min(emax, 80*GeV);
 
     SetMinKinEnergy(emin);
 
-    if(!EmModel(1)) { SetEmModel(new G4BetheHeitlerModel(), 1); }
-    EmModel(1)->SetLowEnergyLimit(emin);
-    EmModel(1)->SetHighEnergyLimit(energyLimit);
-    AddEmModel(1, EmModel(1));
-
-    if(emax > energyLimit) {
-      if(!EmModel(2)) { SetEmModel(new G4PairProductionRelModel(), 2); }
-      EmModel(2)->SetLowEnergyLimit(energyLimit);
-      EmModel(2)->SetHighEnergyLimit(emax);
-      AddEmModel(2, EmModel(2));
-    }
+    if(!EmModel(0)) { SetEmModel(new G4PairProductionRelModel()); }
+    EmModel(0)->SetLowEnergyLimit(emin);
+    EmModel(0)->SetHighEnergyLimit(emax);
+    AddEmModel(1, EmModel(0));
   } 
 }
 
@@ -142,3 +100,11 @@ void G4GammaConversion::PrintInfo()
 {}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4GammaConversion::ProcessDescription(std::ostream& out) const
+{
+  out << "  Gamma conversion";
+  G4VEmProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

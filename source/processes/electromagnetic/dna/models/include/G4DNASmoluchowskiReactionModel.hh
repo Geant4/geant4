@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASmoluchowskiReactionModel.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -44,11 +43,8 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
+#pragma once
 
-#ifndef G4DiffControlledReactionRadius_
-#define G4DiffControlledReactionRadius_
-
-#include "AddClone_def.hh"
 #include "G4VDNAReactionModel.hh"
 #include <vector>
 
@@ -70,25 +66,21 @@ public :
     G4DNASmoluchowskiReactionModel();
     virtual ~G4DNASmoluchowskiReactionModel();
 
-    G4DNASmoluchowskiReactionModel(const G4DNASmoluchowskiReactionModel&);
+    G4DNASmoluchowskiReactionModel(const G4DNASmoluchowskiReactionModel&) = delete;
+    G4DNASmoluchowskiReactionModel& operator=(const G4DNASmoluchowskiReactionModel&) = delete;
 
-    G4IT_ADD_CLONE(G4VDNAReactionModel, G4DNASmoluchowskiReactionModel)
-
-    virtual void Initialise(G4MolecularConfiguration*, const G4Track&) ;
-    virtual void InitialiseToPrint(G4MolecularConfiguration*) ;
-    virtual G4double GetReactionRadius(G4MolecularConfiguration*,
-                                       G4MolecularConfiguration*);
+    virtual void Initialise(const G4MolecularConfiguration*, const G4Track&) ;
+    virtual void InitialiseToPrint(const G4MolecularConfiguration*) ;
+    virtual G4double GetReactionRadius(const G4MolecularConfiguration*,
+                                       const G4MolecularConfiguration*);
     virtual G4double GetReactionRadius(const G4int);
 
     virtual G4bool FindReaction(const G4Track&,
                                 const G4Track&,
-                                const G4double /*reactionRadius*/,
+                                G4double /*reactionRadius*/,
                                 G4double& /*separationDistance*/,
-                                const G4bool /*alongStepInteraction*/) ;
+                                G4bool /*alongStepInteraction*/) ;
 
 private :
-    const std::vector<const G4DNAMolecularReactionData*>* fReactionData ;
-    G4DNASmoluchowskiReactionModel& operator=(const G4DNASmoluchowskiReactionModel&);
+    const std::vector<const G4DNAMolecularReactionData*>* fpReactionData ;
 };
-
-#endif

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 97638 2016-06-06 14:18:36Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +21,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 May 23, 2016, G. Cosmo tag human_phantom-V10-01-02
+=======
+Dec 5, 201, S. Guatelli tag human_phantom_V10-05-01
+- Geometry bug resolved (Left and right clavicles in the MIRD model, 
+  position translated of 2 cm in the y direction
+
+Jan 31, 2019, I.Hrivnacova tag human_phantom-V10-05-00
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+Oct 19, 2018. S. Guatelli tag human_phantom-V10-04-00
+- G4VIS_USE and G4UI_USE deleted
+- authorship of the example updated
+
+Nov 19, 2016, A. Dotti tag human_phantom-V10-02-02
+- explicit set of SD to manager
+
+
+May 23, 2016, G. Cosmo tag human_phantom-V10-02-01
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - More compilation warnings in gcc-6.1 fixed...
 
 May 19, 2016, G. Cosmo

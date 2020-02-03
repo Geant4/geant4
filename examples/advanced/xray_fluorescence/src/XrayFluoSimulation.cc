@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoSimulation.cc
 //
 // Author: Elena Guardincerri 
 //
@@ -44,12 +43,8 @@
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoPlaneDetectorConstruction.hh"
 #include "XrayFluoMercuryDetectorConstruction.hh"
@@ -135,10 +130,10 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   runManager->SetUserInitialization
     (new XrayFluoActionInitializer(geometryNumber));
 
-#ifdef G4VIS_USE
   //visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
+<<<<<<< HEAD
 #endif
   
   // get the pointer to the User Interface manager 
@@ -153,9 +148,19 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
       UImanager->ApplyCommand("/control/execute initInter.mac");     
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);        
+=======
+
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (argc == 1)   // Define UI session for interactive mode.
+    {
+      UImanager->ApplyCommand("/control/execute initInter.mac");
+      UImanager->ApplyCommand("/control/execute vis.mac");
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ui->SessionStart();
       delete ui;
-#endif
     }
   else           // Batch mode
     { 
@@ -165,13 +170,17 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     }
   
   // job termination
-#ifdef G4VIS_USE
   delete visManager;
   G4cout << "visManager deleted"<< G4endl;
+<<<<<<< HEAD
 #endif
 
   
   delete runManager;
   
   
+=======
+
+  delete runManager;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }

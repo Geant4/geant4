@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id$
 // GEANT4 tag $Name:  $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

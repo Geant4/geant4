@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectoryPoint.cc 71495 2013-06-17 09:13:30Z gcosmo $
 //
 //
 //
@@ -35,7 +34,11 @@
 
 #include"G4RayTrajectoryPoint.hh"
 
-G4ThreadLocal G4Allocator<G4RayTrajectoryPoint>* rayTrajectoryPointAllocator = 0;
+G4Allocator<G4RayTrajectoryPoint>*& rayTrajectoryPointAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4RayTrajectoryPoint>* _instance = nullptr;
+    return _instance;
+}
 
 G4RayTrajectoryPoint :: G4RayTrajectoryPoint()
   :preStepAtt(0)

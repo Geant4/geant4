@@ -86,13 +86,14 @@ G4MPIscorerMerger::~G4MPIscorerMerger() {
 
 void G4MPIscorerMerger::Merge() {
   DMSG(0, "G4MPIscorerMerger::Merge called");
-  const unsigned int myrank = MPI::COMM_WORLD.Get_rank();
-  commSize = MPI::COMM_WORLD.Get_size();
+  const unsigned int myrank = G4MPImanager::GetManager()->GetRank();
+  commSize = G4MPImanager::GetManager()->GetActiveSize();
   if ( commSize == 1 ) {
       DMSG(1,"Comm world size is 1, nothing to do");
       return;
   }
-  comm = MPI::COMM_WORLD.Dup();
+  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
+  comm = parentComm->Dup();
   DestroyBuffer();
 
   //ANDREA:->
@@ -287,7 +288,7 @@ void G4MPIscorerMerger::Pack(const G4VScoringMesh* mesh) {
   assert(outputBufferPosition<=outputBufferSize);
   DMSG(3,"Packing mesh: "<<mesh);
 
-  const MeshScoreMap& map = mesh->GetScoreMap();
+  auto map = mesh->GetScoreMap();
   /*const*/ size_t nummaps = map.size();//TODO: old MPI interface
   MPI_Pack(&nummaps,1,MPI::UNSIGNED,
       outputBuffer,outputBufferSize,
@@ -414,7 +415,7 @@ G4int G4MPIscorerMerger::CalculatePackSize(const G4VScoringMesh* mesh) const
   DMSG(3,"Calculating size for mesh: "<<mesh);
   //PackSingleMesh(Mesh)
   G4int size = sizeof(unsigned int);//num maps
-  const MeshScoreMap& map = mesh->GetScoreMap();
+  auto map = mesh->GetScoreMap();
   for (const auto& ele : map ) {
       //PackHitsMap
       size += sizeof(unsigned int);//name size

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VTwistedFaceted.hh 83572 2014-09-01 15:23:27Z gcosmo $
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4VTwistedFaceted
 //
 // Class description:
@@ -37,14 +30,10 @@
 //  G4VTwistedFaceted is an abstract base class for twisted boxoids:
 //  G4TwistedTrd, G4TwistedTrap and G4TwistedBox
 
-// Author:
-//
-//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
-
-#ifndef __G4VTWISTEDFACETED__
-#define __G4VTWISTEDFACETED__
+#ifndef G4VTWISTEDFACETED_HH
+#define G4VTWISTEDFACETED_HH
 
 #include "G4VSolid.hh"
 #include "G4TwistTrapAlphaSide.hh"
@@ -59,7 +48,7 @@ class G4VTwistedFaceted: public G4VSolid
 {
  public:  // with description
  
-  G4VTwistedFaceted(const G4String &pname,    // Name of instance
+  G4VTwistedFaceted(const G4String& pname,    // Name of instance
                           G4double PhiTwist,  // twist angle
                           G4double pDz,       // half z lenght
                           G4double pTheta,  // direction between end planes
@@ -79,44 +68,46 @@ class G4VTwistedFaceted: public G4VSolid
                                  const G4int,
                                  const G4VPhysicalVolume*  );
  
-  virtual G4bool CalculateExtent(const EAxis               pAxis,
-                                 const G4VoxelLimits      &pVoxelLimit,
-                                 const G4AffineTransform  &pTransform,
-                                       G4double           &pMin,
-                                       G4double           &pMax ) const;
+  virtual void BoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const;
 
-  virtual G4double DistanceToIn (const G4ThreeVector &p,
-                                 const G4ThreeVector &v ) const;
+  virtual G4bool CalculateExtent(const EAxis              pAxis,
+                                 const G4VoxelLimits&     pVoxelLimit,
+                                 const G4AffineTransform& pTransform,
+                                       G4double&          pMin,
+                                       G4double&          pMax ) const;
 
-  virtual G4double DistanceToIn (const G4ThreeVector &p ) const;
+  virtual G4double DistanceToIn (const G4ThreeVector& p,
+                                 const G4ThreeVector& v ) const;
+
+  virtual G4double DistanceToIn (const G4ThreeVector& p ) const;
    
-  virtual G4double DistanceToOut(const G4ThreeVector &p, 
-                                 const G4ThreeVector &v,
+  virtual G4double DistanceToOut(const G4ThreeVector& p, 
+                                 const G4ThreeVector& v,
                                  const G4bool         calcnorm  = false,
-                                       G4bool        *validnorm = 0, 
-                                       G4ThreeVector *n=0 ) const;
+                                       G4bool* validnorm = nullptr, 
+                                       G4ThreeVector*  n = nullptr ) const;
 
-  virtual G4double DistanceToOut(const G4ThreeVector &p) const;
+  virtual G4double DistanceToOut(const G4ThreeVector& p) const;
   
-  virtual EInside Inside (const G4ThreeVector &p) const;
+  virtual EInside Inside (const G4ThreeVector& p) const;
 
-  virtual G4ThreeVector SurfaceNormal(const G4ThreeVector &p) const;
+  virtual G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
 
   G4ThreeVector GetPointOnSurface() const;
   G4ThreeVector GetPointInSolid(G4double z) const;
   
-  virtual inline G4double GetCubicVolume() ;
-  virtual inline G4double GetSurfaceArea() ;
+  virtual inline G4double GetCubicVolume();
+  virtual inline G4double GetSurfaceArea();
 
-  virtual void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
-  virtual G4Polyhedron   *CreatePolyhedron   () const ;
-  virtual G4Polyhedron   *GetPolyhedron      () const;
+  virtual void DescribeYourselfTo (G4VGraphicsScene& scene) const;
+  virtual G4Polyhedron* CreatePolyhedron   () const;
+  virtual G4Polyhedron* GetPolyhedron      () const;
 
   virtual std::ostream &StreamInfo(std::ostream& os) const;
 
   // accessors
   
-  inline G4double GetTwistAngle    () const { return fPhiTwist; }
+  inline G4double GetTwistAngle() const { return fPhiTwist; }
 
   inline G4double GetDx1   () const { return fDx1   ; } 
   inline G4double GetDx2   () const { return fDx2   ; } 
@@ -129,7 +120,7 @@ class G4VTwistedFaceted: public G4VSolid
   inline G4double GetTheta () const { return fTheta ; }
   inline G4double GetAlpha () const { return fAlph  ; }
 
-  inline G4double Xcoef(G4double u,G4double phi, G4double ftg) const ;
+  inline G4double Xcoef(G4double u, G4double phi, G4double ftg) const;
     // For calculating the w(u) function
 
   inline G4double GetValueA(G4double phi) const;
@@ -152,13 +143,8 @@ class G4VTwistedFaceted: public G4VSolid
 
  protected:  // with description
 
-  G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
-      // Create the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
-
-  mutable G4bool fRebuildPolyhedron;
-  mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
+  mutable G4bool fRebuildPolyhedron = false;
+  mutable G4Polyhedron* fpPolyhedron = nullptr;  // polyhedron for vis
 
  private:
  
@@ -190,16 +176,16 @@ class G4VTwistedFaceted: public G4VSolid
     
   G4double fPhiTwist;  // twist angle ( dphi in surface equation)
 
-  G4VTwistSurface *fLowerEndcap ;  // surface of -ve z
-  G4VTwistSurface *fUpperEndcap ;  // surface of +ve z
+  G4VTwistSurface* fLowerEndcap ;  // surface of -ve z
+  G4VTwistSurface* fUpperEndcap ;  // surface of +ve z
   
-  G4VTwistSurface *fSide0 ;         // Twisted Side at phi = 0 deg
-  G4VTwistSurface *fSide90 ;        // Twisted Side at phi = 90 deg
-  G4VTwistSurface *fSide180 ;       // Twisted Side at phi = 180 deg
-  G4VTwistSurface *fSide270 ;       // Twisted Side at phi = 270 deg
+  G4VTwistSurface* fSide0 ;    // Twisted Side at phi = 0 deg
+  G4VTwistSurface* fSide90 ;   // Twisted Side at phi = 90 deg
+  G4VTwistSurface* fSide180 ;  // Twisted Side at phi = 180 deg
+  G4VTwistSurface* fSide270 ;  // Twisted Side at phi = 270 deg
 
-  G4double fCubicVolume ;      // volume of the solid
-  G4double fSurfaceArea ;      // area of the solid
+  G4double fCubicVolume = 0.0; // volume of the solid
+  G4double fSurfaceArea = 0.0; // area of the solid
 
   class LastState              // last Inside result
   {
@@ -304,7 +290,6 @@ class G4VTwistedFaceted: public G4VSolid
   LastValue    fLastDistanceToOut;
   LastValueWithDoubleVector   fLastDistanceToInWithV;
   LastValueWithDoubleVector   fLastDistanceToOutWithV;
-
  };
 
 //=====================================================================

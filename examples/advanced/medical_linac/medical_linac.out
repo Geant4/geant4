@@ -1,0 +1,1677 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+**************************************************************
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+/run/verbose 2
+List of instantiated particles ============================================
+B+ B- B0 Bc+ Bc- Bs0 D+ D- D0 Ds+ 
+Ds- GenericIon He3 J/psi N(1440)+ N(1440)0 N(1520)+ N(1520)0 N(1535)+ N(1535)0 
+N(1650)+ N(1650)0 N(1675)+ N(1675)0 N(1680)+ N(1680)0 N(1700)+ N(1700)0 N(1710)+ N(1710)0 
+N(1720)+ N(1720)0 N(1900)+ N(1900)0 N(1990)+ N(1990)0 N(2090)+ N(2090)0 N(2190)+ N(2190)0 
+N(2220)+ N(2220)0 N(2250)+ N(2250)0 Upsilon a0(1450)+ a0(1450)- a0(1450)0 a0(980)+ a0(980)- 
+a0(980)0 a1(1260)+ a1(1260)- a1(1260)0 a2(1320)+ a2(1320)- a2(1320)0 alpha anti_B0 anti_Bs0 
+anti_D0 anti_He3 anti_N(1440)+ anti_N(1440)0 anti_N(1520)+ anti_N(1520)0 anti_N(1535)+ anti_N(1535)0 anti_N(1650)+ anti_N(1650)0 
+anti_N(1675)+ anti_N(1675)0 anti_N(1680)+ anti_N(1680)0 anti_N(1700)+ anti_N(1700)0 anti_N(1710)+ anti_N(1710)0 anti_N(1720)+ anti_N(1720)0 
+anti_N(1900)+ anti_N(1900)0 anti_N(1990)+ anti_N(1990)0 anti_N(2090)+ anti_N(2090)0 anti_N(2190)+ anti_N(2190)0 anti_N(2220)+ anti_N(2220)0 
+anti_N(2250)+ anti_N(2250)0 anti_alpha anti_b_quark anti_bb1_diquark anti_bc0_diquark anti_bc1_diquark anti_bd0_diquark anti_bd1_diquark anti_bs0_diquark 
+anti_bs1_diquark anti_bu0_diquark anti_bu1_diquark anti_c_quark anti_cc1_diquark anti_cd0_diquark anti_cd1_diquark anti_cs0_diquark anti_cs1_diquark anti_cu0_diquark 
+anti_cu1_diquark anti_d_quark anti_dd1_diquark anti_delta(1600)+ anti_delta(1600)++ anti_delta(1600)- anti_delta(1600)0 anti_delta(1620)+ anti_delta(1620)++ anti_delta(1620)- 
+anti_delta(1620)0 anti_delta(1700)+ anti_delta(1700)++ anti_delta(1700)- anti_delta(1700)0 anti_delta(1900)+ anti_delta(1900)++ anti_delta(1900)- anti_delta(1900)0 anti_delta(1905)+ 
+anti_delta(1905)++ anti_delta(1905)- anti_delta(1905)0 anti_delta(1910)+ anti_delta(1910)++ anti_delta(1910)- anti_delta(1910)0 anti_delta(1920)+ anti_delta(1920)++ anti_delta(1920)- 
+anti_delta(1920)0 anti_delta(1930)+ anti_delta(1930)++ anti_delta(1930)- anti_delta(1930)0 anti_delta(1950)+ anti_delta(1950)++ anti_delta(1950)- anti_delta(1950)0 anti_delta+ 
+anti_delta++ anti_delta- anti_delta0 anti_deuteron anti_k(1460)0 anti_k0_star(1430)0 anti_k1(1270)0 anti_k1(1400)0 anti_k2(1770)0 anti_k2_star(1430)0 
+anti_k2_star(1980)0 anti_k3_star(1780)0 anti_k_star(1410)0 anti_k_star(1680)0 anti_k_star0 anti_kaon0 anti_lambda anti_lambda(1405) anti_lambda(1520) anti_lambda(1600) 
+anti_lambda(1670) anti_lambda(1690) anti_lambda(1800) anti_lambda(1810) anti_lambda(1820) anti_lambda(1830) anti_lambda(1890) anti_lambda(2100) anti_lambda(2110) anti_lambda_b 
+anti_lambda_c+ anti_neutron anti_nu_e anti_nu_mu anti_nu_tau anti_omega- anti_omega_b- anti_omega_c0 anti_proton anti_s_quark 
+anti_sd0_diquark anti_sd1_diquark anti_sigma(1385)+ anti_sigma(1385)- anti_sigma(1385)0 anti_sigma(1660)+ anti_sigma(1660)- anti_sigma(1660)0 anti_sigma(1670)+ anti_sigma(1670)- 
+anti_sigma(1670)0 anti_sigma(1750)+ anti_sigma(1750)- anti_sigma(1750)0 anti_sigma(1775)+ anti_sigma(1775)- anti_sigma(1775)0 anti_sigma(1915)+ anti_sigma(1915)- anti_sigma(1915)0 
+anti_sigma(1940)+ anti_sigma(1940)- anti_sigma(1940)0 anti_sigma(2030)+ anti_sigma(2030)- anti_sigma(2030)0 anti_sigma+ anti_sigma- anti_sigma0 anti_sigma_b+ 
+anti_sigma_b- anti_sigma_b0 anti_sigma_c+ anti_sigma_c++ anti_sigma_c0 anti_ss1_diquark anti_su0_diquark anti_su1_diquark anti_t_quark anti_triton 
+anti_u_quark anti_ud0_diquark anti_ud1_diquark anti_uu1_diquark anti_xi(1530)- anti_xi(1530)0 anti_xi(1690)- anti_xi(1690)0 anti_xi(1820)- anti_xi(1820)0 
+anti_xi(1950)- anti_xi(1950)0 anti_xi(2030)- anti_xi(2030)0 anti_xi- anti_xi0 anti_xi_b- anti_xi_b0 anti_xi_c+ anti_xi_c0 
+b1(1235)+ b1(1235)- b1(1235)0 b_quark bb1_diquark bc0_diquark bc1_diquark bd0_diquark bd1_diquark bs0_diquark 
+bs1_diquark bu0_diquark bu1_diquark c_quark cc1_diquark cd0_diquark cd1_diquark chargedgeantino cs0_diquark cs1_diquark 
+cu0_diquark cu1_diquark d_quark dd1_diquark delta(1600)+ delta(1600)++ delta(1600)- delta(1600)0 delta(1620)+ delta(1620)++ 
+delta(1620)- delta(1620)0 delta(1700)+ delta(1700)++ delta(1700)- delta(1700)0 delta(1900)+ delta(1900)++ delta(1900)- delta(1900)0 
+delta(1905)+ delta(1905)++ delta(1905)- delta(1905)0 delta(1910)+ delta(1910)++ delta(1910)- delta(1910)0 delta(1920)+ delta(1920)++ 
+delta(1920)- delta(1920)0 delta(1930)+ delta(1930)++ delta(1930)- delta(1930)0 delta(1950)+ delta(1950)++ delta(1950)- delta(1950)0 
+delta+ delta++ delta- delta0 deuteron e+ e- eta eta(1295) eta(1405) 
+eta(1475) eta2(1645) eta2(1870) eta_prime etac f0(1370) f0(1500) f0(1710) f0(500) f0(980) 
+f1(1285) f1(1420) f2(1270) f2(1810) f2(2010) f2_prime(1525) gamma geantino gluon h1(1170) 
+h1(1380) k(1460)+ k(1460)- k(1460)0 k0_star(1430)+ k0_star(1430)- k0_star(1430)0 k1(1270)+ k1(1270)- k1(1270)0 
+k1(1400)+ k1(1400)- k1(1400)0 k2(1770)+ k2(1770)- k2(1770)0 k2_star(1430)+ k2_star(1430)- k2_star(1430)0 k2_star(1980)+ 
+k2_star(1980)- k2_star(1980)0 k3_star(1780)+ k3_star(1780)- k3_star(1780)0 k_star(1410)+ k_star(1410)- k_star(1410)0 k_star(1680)+ k_star(1680)- 
+k_star(1680)0 k_star+ k_star- k_star0 kaon+ kaon- kaon0 kaon0L kaon0S lambda 
+lambda(1405) lambda(1520) lambda(1600) lambda(1670) lambda(1690) lambda(1800) lambda(1810) lambda(1820) lambda(1830) lambda(1890) 
+lambda(2100) lambda(2110) lambda_b lambda_c+ mu+ mu- neutron nu_e nu_mu nu_tau 
+omega omega(1420) omega(1650) omega- omega3(1670) omega_b- omega_c0 opticalphoton phi phi(1680) 
+phi3(1850) pi(1300)+ pi(1300)- pi(1300)0 pi+ pi- pi0 pi2(1670)+ pi2(1670)- pi2(1670)0 
+proton rho(1450)+ rho(1450)- rho(1450)0 rho(1700)+ rho(1700)- rho(1700)0 rho+ rho- rho0 
+rho3(1690)+ rho3(1690)- rho3(1690)0 s_quark sd0_diquark sd1_diquark sigma(1385)+ sigma(1385)- sigma(1385)0 sigma(1660)+ 
+sigma(1660)- sigma(1660)0 sigma(1670)+ sigma(1670)- sigma(1670)0 sigma(1750)+ sigma(1750)- sigma(1750)0 sigma(1775)+ sigma(1775)- 
+sigma(1775)0 sigma(1915)+ sigma(1915)- sigma(1915)0 sigma(1940)+ sigma(1940)- sigma(1940)0 sigma(2030)+ sigma(2030)- sigma(2030)0 
+sigma+ sigma- sigma0 sigma_b+ sigma_b- sigma_b0 sigma_c+ sigma_c++ sigma_c0 ss1_diquark 
+su0_diquark su1_diquark t_quark tau+ tau- triton u_quark ud0_diquark ud1_diquark uu1_diquark 
+xi(1530)- xi(1530)0 xi(1690)- xi(1690)0 xi(1820)- xi(1820)0 xi(1950)- xi(1950)0 xi(2030)- xi(2030)0 
+xi- xi0 xi_b- xi_b0 xi_c+ xi_c0 
+/control/execute /mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc9/LABEL/centos7/THREAD/Seq/build/examples/advanced/medical_linac/batch.mac
+########### Launch parameters #########
+###
+###  Visualization
+#/OnlyVisio true                                       # switch the visualization mode
+###  Experimental comparison and convergence
+/convergence/bCompareExp false
+/convergence/nMaxLoop 2
+/convergence/fileExperimentalData VoxelsTest.txt
+/convergence/maxNumberOfEvents 5
+/convergence/fileExperimentalDataOut VoxelsTest_Out
+### Phase space
+/general/centrePhaseSpace 0 0 550 mm
+/general/halfSizePhaseSpace 200 200 1 mm
+/general/bSavePhaseSpace true
+/general/bStopAtPhaseSpace false
+/general/PhaseSpaceOutFile PhSp_Acc1
+/general/bForcePhaseSpaceBeforeJaws true
+### Number of primary events
+/general/nBeam 50000
+### NUMBER STORED
+/general/nMaxParticlesInRamPlanePhaseSpace 100000
+/general/saving_in_Selected_Voxels_every_events 10000
+/general/saving_in_ROG_Voxels_every_events 10000
+/general/max_N_particles_in_PhSp_File 10000000
+### Primary generator
+/primaryParticleData/nMaxParticlesInRamPhaseSpace 1000
+Current nMaxParticlesInRamPhaseSpace: 1000
+/primaryParticleData/nIdenticalParticles 1
+/primaryParticleData/GunMeanEnergy 6 MeV
+/primaryParticleData/GunStdEnergy 0.127 MeV
+/primaryParticleData/GunRadius 0.5 mm
+/primaryParticleData/sourceTypeName randomTarget
+/primaryParticleData/calculatedPhaseSpaceFileIN PhSp_Acc1_1.txt
+### PHANTOM
+/phantom/PhantomName fullWater
+/phantom/centre 0 0 0
+/phantom/centre 0 0 -200
+### ACCELERATOR
+/accelerator/AcceleratorName acc1
+/accelerator/AcceleratorMacFileName acc1.mac
+/accelerator/isoCentre 1000 mm
+/accelerator/rotation90Y false
+/accelerator/rotationX 0 deg
+/accelerator/rotationX 45 deg
+### Physics
+#/physics/addPhysics standard_opt3
+/physics/addPhysics LowE_Livermore
+THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics
+/control/verbose 2
+#################### INFO   ######################################
+# All possible choices
+#    Particle sources
+# randomTarget // random from target
+# phaseSpace // from phase space
+#    Accelerators
+# acc1 // non real accelearator but working
+#    Phantoms
+# fullWater // water box
+# boxInBox  // box in a box with a layer of PMMA at the exposed surface
+Using seed 1
+I'm building acc1 accelerator
+/control/execute acc1.mac
+/accelerator/isoCentre 1000 mm
+/accelerator/rotation90Y false
+#/accelerator/rotationX 0 deg       # rotation around X [deg]
+#/accelerator/rotationX 200 deg     # rotation around X [deg]
+#/accelerator/rotationX -45 deg     # rotation around X [deg]
+#/accelerator/idEnergy 6             # no units
+/accelerator/aperture1X -10 cm
+/accelerator/aperture2X 100 mm
+/accelerator/aperture1Y -100 mm
+/accelerator/aperture2Y 100 mm
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesA 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+/accelerator/leavesB 200
+
+
+	nominal beam energy: 6
+	Jaw X aperture: 1) -100[mm]	2) 100 [mm]
+	Jaw Y aperture: 1) -100[mm]	2) 100 [mm]
+
+I'm building fullWater  phantom
+VoxelX, voxelY, Voxelz = 30, 30, 30 
+  Water Phantom Size (300,300,300)
+  Segmentation  (30,30,30)
+scorer registered: totalDose
+PV in name: phmWorldPV
+PV in name: fullWaterPhantomPV
+PV in name: RepY
+PV in name: RepX
+PV in name: phantomSens
+physical volume name: G4_WATER
+physical volume name: G4_WATER
+physical volume name: G4_WATER
+physical volume name: G4_WATER
+physical volume name: G4_Galactic
+
+
+	centre of the phantom: (0,0,0) [mm]
+	half thickness of the phantom: (150,150,150) [mm]
+
+userDetector->Construct() start.
+worldL is registered to the default region.
+physicsList->Construct() start.
+--- G4CoupledTransportation is used 
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+/run/geometryModified
+/run/geometryModified
+
+Checking overlaps for volume acceleratorBox (G4Box) ... OK! 
+Checking overlaps for volume targetA (G4Box) ... OK! 
+Checking overlaps for volume targetB (G4Box) ... OK! 
+Checking overlaps for volume BeWTubePV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeW1PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeP1PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeW2PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeP2PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeW3PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeP3PV (G4Tubs) ... OK! 
+Checking overlaps for volume FFL1A_1PV (G4Cons) ... OK! 
+Checking overlaps for volume FFL2_1PV (G4Tubs) ... OK! 
+Checking overlaps for volume MirrorTubePV (G4Tubs) ... OK! 
+Checking overlaps for volume UpperCollimator (G4Tubs) ... OK! 
+Checking overlaps for volume CylMinusCone (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume leafA1 (G4Box) ... OK! 
+Checking overlaps for volume leafA2 (G4Box) ... OK! 
+Checking overlaps for volume leafA3 (G4Box) ... OK! 
+Checking overlaps for volume leafA4 (G4Box) ... OK! 
+Checking overlaps for volume leafA5 (G4Box) ... OK! 
+Checking overlaps for volume leafA6 (G4Box) ... OK! 
+Checking overlaps for volume leafA7 (G4Box) ... OK! 
+Checking overlaps for volume leafA8 (G4Box) ... OK! 
+Checking overlaps for volume leafA9 (G4Box) ... OK! 
+Checking overlaps for volume leafA10 (G4Box) ... OK! 
+Checking overlaps for volume leafB1 (G4Box) ... OK! 
+Checking overlaps for volume leafB2 (G4Box) ... OK! 
+Checking overlaps for volume leafB3 (G4Box) ... OK! 
+Checking overlaps for volume leafB4 (G4Box) ... OK! 
+Checking overlaps for volume leafB5 (G4Box) ... OK! 
+Checking overlaps for volume leafB6 (G4Box) ... OK! 
+Checking overlaps for volume leafB7 (G4Box) ... OK! 
+Checking overlaps for volume leafB8 (G4Box) ... OK! 
+Checking overlaps for volume leafB9 (G4Box) ... OK! 
+Checking overlaps for volume leafB10 (G4Box) ... OK! 
+Checking overlaps for volume Jaws1XPV (G4Box) ... OK! 
+Checking overlaps for volume Jaws2XPV (G4Box) ... OK! 
+Checking overlaps for volume Jaws1YPV (G4Box) ... OK! 
+Checking overlaps for volume Jaws2YPV (G4Box) ... OK! 
+Checking overlaps for volume phmWorldPV (G4Box) ... OK! 
+Checking overlaps for volume fullWaterPhantomPV (G4Box) ... OK! 
+
+################ START NEW GEOMETRY ########################
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 13 regions:
+          DefaultRegionForTheWorld  1  0  0
+          targetR  1  0  0
+          BeWindow  1  0  0
+          ionizationChamber  1  0  0
+          flatfilterR  1  0  0
+          Mirror  1  0  0
+          PrymCollR  1  0  0
+          MLCR  1  0  0
+          Jaws1XR  1  0  0
+          Jaws2XR  1  0  0
+          Jaws1YR  1  0  0
+          Jaws2YR  1  0  0
+          fullWaterPhantomR  1  0  0
+### ===  Ignore cuts flag:   0
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 174 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 20 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton : Emin=    0 eV  Emax=    1 GeV Fluo
+        KleinNishina : Emin=    1 GeV Emax=  100 TeV Fluo
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      RangeFactor= 0.08, stepLimType: 2, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+
+eIoni:  for e-  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni : Emin=    0 eV  Emax=  100 keV  deltaVI
+        MollerBhabha : Emin=  100 keV Emax=  100 TeV  deltaVI
+
+eBrem:  for e-  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
+
+ePairProd:  for e-  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for e-, integral:1  SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for e+  SubType= 10
+      RangeFactor= 0.08, stepLimType: 2, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+
+eIoni:  for e+  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV  deltaVI
+
+eBrem:  for e+  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
+
+ePairProd:  for e+  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=    0 eV  Emax=  100 TeV
+
+annihil:  for e+, integral:1  SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for e+, integral:1  SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for proton  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+hIoni:  for proton  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=    2 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for proton  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV
+
+hPairProd:  for proton  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for GenericIon  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+
+ionIoni:  for GenericIon  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
+
+nuclearStopping:  for GenericIon SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for alpha  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+ionIoni:  for alpha  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=7.9452 MeV  deltaVI
+          BetheBloch : Emin=7.9452 MeV Emax=  100 TeV  deltaVI
+
+nuclearStopping:  for alpha SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for anti_proton  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+hIoni:  for anti_proton  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for anti_proton  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV
+
+hPairProd:  for anti_proton  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon+  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+hIoni:  for kaon+  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for kaon+  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV
+
+hPairProd:  for kaon+  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon-  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+hIoni:  for kaon-  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for kaon-  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV
+
+hPairProd:  for kaon-  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
+      Used Lambda table of kaon+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu+  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1, polarAngLim(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+muIoni:  for mu+  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
+          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu+  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV
+
+muPairProd:  for mu+  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu-  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1, polarAngLim(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+muIoni:  for mu-  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
+          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu-  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV
+
+muPairProd:  for mu-  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
+      Used Lambda table of mu+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi+  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+hIoni:  for pi+  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
+
+hBrems:  for pi+  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV
+
+hPairProd:  for pi+  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi-  SubType= 10
+      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+
+hIoni:  for pi-  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
+
+hBrems:  for pi-  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV
+
+hPairProd:  for pi-  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
+      Used Lambda table of pi+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : worldL 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <targetR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : targetA_log targetB_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_W G4_Cu 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <BeWindow> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : BeWTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Be 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <ionizationChamber> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : ionizationChamberTubeW1LV ionizationChamberTubeP1LV ionizationChamberTubeW2LV ionizationChamberTubeP2LV ionizationChamberTubeW3LV ionizationChamberTubeP3LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_KAPTON 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <flatfilterR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : FFL1A_1LV FFL2_1LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Cu 
+ Production cuts :   gamma 5 mm      e- 5 mm      e+ 5 mm  proton 5 mm 
+
+Region <Mirror> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : MirrorTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_MYLAR 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <PrymCollR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : collim_log CylminusCone_log UpperCollimator_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic G4_W 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <MLCR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : leafSolidALV leafSolidBLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Fe 
+ Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 1 cm 
+
+Region <Jaws1XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws1YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : fullWaterPhantomLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_WATER 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 2     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  24.7508 keV    e-  1.39534 MeV    e+  1.31345 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Be
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.01157 keV    e-  466.625 keV    e+  457.312 keV proton 100 keV
+ Region(s) which use this couple : 
+    BeWindow
+
+Index : 4     used in the geometry : Yes
+ Material : G4_KAPTON
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.98035 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    ionizationChamber
+
+Index : 5     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
+ Energy thresholds :  gamma  55.0667 keV    e-  6.8606 MeV    e+  6.41471 MeV proton 500 keV
+ Region(s) which use this couple : 
+    flatfilterR
+
+Index : 6     used in the geometry : Yes
+ Material : G4_MYLAR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  3.02067 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    Mirror
+
+Index : 7     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 8     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 9     used in the geometry : Yes
+ Material : G4_Fe
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  60.499 keV    e-  13.0779 MeV    e+  12.2279 MeV proton 1 MeV
+ Region(s) which use this couple : 
+    MLCR
+
+Index : 10     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1XR
+
+Index : 11     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2XR
+
+Index : 12     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1YR
+
+Index : 13     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2YR
+
+Index : 14     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 10 keV
+ Region(s) which use this couple : 
+    fullWaterPhantomR
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   10 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k worldL
+       0.00         0.00         0.00            5k accWorldL
+       0.00         0.00         0.00            2k fullWaterPhantomLV
+       0.00         0.00         0.00            2k RepY
+       0.00         0.00         0.00            2k RepX
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      47.50          4k        12       50        220         0.00    accWorldL
+      16.57          1k         1       30         30         0.00    fullWaterPhantomLV
+      16.57          1k         1       30         30         0.00    RepY
+      16.57          1k         1       30         30         0.00    RepX
+       2.80          0k         1        4          4         0.00    worldL
+++ PhantomSD/TotalDose id 0
+### Run 0 starts.
+### Run 0 start.
+Actual rotation: 1/2  
+Accelerator angle: 0 [deg]
+Actual centre: 1/2  
+Phantom and its ROG centre: (0,0,0)
+*********************************************
+loop n. 1/2
+Launched 50000 random primary particles
+Launched 50000 random primary particles
+*********************************************
+ Run terminated.
+Run Summary
+  Number of events processed : 50000
+  User=18.340000s Real=18.473930s Sys=0.030000s
+ PrimitiveScorer RUN PhantomSD,TotalDose
+ Number of entries 166
+loop elapsed time [s] : 18.38
+
+
+Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : worldL 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <targetR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : targetA_log targetB_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_W G4_Cu 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <BeWindow> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : BeWTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Be 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <ionizationChamber> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : ionizationChamberTubeW1LV ionizationChamberTubeP1LV ionizationChamberTubeW2LV ionizationChamberTubeP2LV ionizationChamberTubeW3LV ionizationChamberTubeP3LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_KAPTON 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <flatfilterR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : FFL1A_1LV FFL2_1LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Cu 
+ Production cuts :   gamma 5 mm      e- 5 mm      e+ 5 mm  proton 5 mm 
+
+Region <Mirror> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : MirrorTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_MYLAR 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <PrymCollR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : collim_log CylminusCone_log UpperCollimator_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic G4_W 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <MLCR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : leafSolidALV leafSolidBLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Fe 
+ Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 1 cm 
+
+Region <Jaws1XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws1YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : fullWaterPhantomLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_WATER 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 2     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  24.7508 keV    e-  1.39534 MeV    e+  1.31345 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Be
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.01157 keV    e-  466.625 keV    e+  457.312 keV proton 100 keV
+ Region(s) which use this couple : 
+    BeWindow
+
+Index : 4     used in the geometry : Yes
+ Material : G4_KAPTON
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.98035 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    ionizationChamber
+
+Index : 5     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
+ Energy thresholds :  gamma  55.0667 keV    e-  6.8606 MeV    e+  6.41471 MeV proton 500 keV
+ Region(s) which use this couple : 
+    flatfilterR
+
+Index : 6     used in the geometry : Yes
+ Material : G4_MYLAR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  3.02067 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    Mirror
+
+Index : 7     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 8     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 9     used in the geometry : Yes
+ Material : G4_Fe
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  60.499 keV    e-  13.0779 MeV    e+  12.2279 MeV proton 1 MeV
+ Region(s) which use this couple : 
+    MLCR
+
+Index : 10     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1XR
+
+Index : 11     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2XR
+
+Index : 12     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1YR
+
+Index : 13     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2YR
+
+Index : 14     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 10 keV
+ Region(s) which use this couple : 
+    fullWaterPhantomR
+
+====================================================================
+
+++ PhantomSD/TotalDose id 0
+### Run 1 starts.
+### Run 1 start.
+Actual rotation: 1/2  
+Accelerator angle: 0 [deg]
+Actual centre: 1/2  
+Phantom and its ROG centre: (0,0,0)
+*********************************************
+loop n. 2/2
+Launched 50000 random primary particles
+Launched 50000 random primary particles
+*********************************************
+ Run terminated.
+Run Summary
+  Number of events processed : 50000
+  User=18.240000s Real=18.316144s Sys=0.010000s
+ PrimitiveScorer RUN PhantomSD,TotalDose
+ Number of entries 117
+loop elapsed time [s] : 18.27
+
+################ END NEW GEOMETRY ########################
+/run/geometryModified
+/run/geometryModified
+
+Checking overlaps for volume acceleratorBox (G4Box) ... OK! 
+Checking overlaps for volume targetA (G4Box) ... OK! 
+Checking overlaps for volume targetB (G4Box) ... OK! 
+Checking overlaps for volume BeWTubePV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeW1PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeP1PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeW2PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeP2PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeW3PV (G4Tubs) ... OK! 
+Checking overlaps for volume ionizationChamberTubeP3PV (G4Tubs) ... OK! 
+Checking overlaps for volume FFL1A_1PV (G4Cons) ... OK! 
+Checking overlaps for volume FFL2_1PV (G4Tubs) ... OK! 
+Checking overlaps for volume MirrorTubePV (G4Tubs) ... OK! 
+Checking overlaps for volume UpperCollimator (G4Tubs) ... OK! 
+Checking overlaps for volume CylMinusCone (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume leafA1 (G4Box) ... OK! 
+Checking overlaps for volume leafA2 (G4Box) ... OK! 
+Checking overlaps for volume leafA3 (G4Box) ... OK! 
+Checking overlaps for volume leafA4 (G4Box) ... OK! 
+Checking overlaps for volume leafA5 (G4Box) ... OK! 
+Checking overlaps for volume leafA6 (G4Box) ... OK! 
+Checking overlaps for volume leafA7 (G4Box) ... OK! 
+Checking overlaps for volume leafA8 (G4Box) ... OK! 
+Checking overlaps for volume leafA9 (G4Box) ... OK! 
+Checking overlaps for volume leafA10 (G4Box) ... OK! 
+Checking overlaps for volume leafB1 (G4Box) ... OK! 
+Checking overlaps for volume leafB2 (G4Box) ... OK! 
+Checking overlaps for volume leafB3 (G4Box) ... OK! 
+Checking overlaps for volume leafB4 (G4Box) ... OK! 
+Checking overlaps for volume leafB5 (G4Box) ... OK! 
+Checking overlaps for volume leafB6 (G4Box) ... OK! 
+Checking overlaps for volume leafB7 (G4Box) ... OK! 
+Checking overlaps for volume leafB8 (G4Box) ... OK! 
+Checking overlaps for volume leafB9 (G4Box) ... OK! 
+Checking overlaps for volume leafB10 (G4Box) ... OK! 
+Checking overlaps for volume Jaws1XPV (G4Box) ... OK! 
+Checking overlaps for volume Jaws2XPV (G4Box) ... OK! 
+Checking overlaps for volume Jaws1YPV (G4Box) ... OK! 
+Checking overlaps for volume Jaws2YPV (G4Box) ... OK! 
+Checking overlaps for volume phmWorldPV (G4Box) ... OK! 
+Checking overlaps for volume fullWaterPhantomPV (G4Box) ... OK! 
+
+################ START NEW GEOMETRY ########################
+
+Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : worldL 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <targetR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : targetA_log targetB_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_W G4_Cu 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <BeWindow> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : BeWTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Be 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <ionizationChamber> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : ionizationChamberTubeW1LV ionizationChamberTubeP1LV ionizationChamberTubeW2LV ionizationChamberTubeP2LV ionizationChamberTubeW3LV ionizationChamberTubeP3LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_KAPTON 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <flatfilterR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : FFL1A_1LV FFL2_1LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Cu 
+ Production cuts :   gamma 5 mm      e- 5 mm      e+ 5 mm  proton 5 mm 
+
+Region <Mirror> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : MirrorTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_MYLAR 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <PrymCollR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : collim_log CylminusCone_log UpperCollimator_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic G4_W 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <MLCR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : leafSolidALV leafSolidBLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Fe 
+ Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 1 cm 
+
+Region <Jaws1XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws1YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : fullWaterPhantomLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_WATER 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 2     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  24.7508 keV    e-  1.39534 MeV    e+  1.31345 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Be
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.01157 keV    e-  466.625 keV    e+  457.312 keV proton 100 keV
+ Region(s) which use this couple : 
+    BeWindow
+
+Index : 4     used in the geometry : Yes
+ Material : G4_KAPTON
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.98035 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    ionizationChamber
+
+Index : 5     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
+ Energy thresholds :  gamma  55.0667 keV    e-  6.8606 MeV    e+  6.41471 MeV proton 500 keV
+ Region(s) which use this couple : 
+    flatfilterR
+
+Index : 6     used in the geometry : Yes
+ Material : G4_MYLAR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  3.02067 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    Mirror
+
+Index : 7     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 8     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 9     used in the geometry : Yes
+ Material : G4_Fe
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  60.499 keV    e-  13.0779 MeV    e+  12.2279 MeV proton 1 MeV
+ Region(s) which use this couple : 
+    MLCR
+
+Index : 10     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1XR
+
+Index : 11     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2XR
+
+Index : 12     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1YR
+
+Index : 13     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2YR
+
+Index : 14     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 10 keV
+ Region(s) which use this couple : 
+    fullWaterPhantomR
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   10 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k worldL
+       0.00         0.00         0.00            5k accWorldL
+       0.00         0.00         0.00            2k fullWaterPhantomLV
+       0.00         0.00         0.00            2k RepY
+       0.00         0.00         0.00            2k RepX
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      47.72          4k        12       50        220         0.00    accWorldL
+      16.64          1k         1       30         30         0.00    fullWaterPhantomLV
+      16.64          1k         1       30         30         0.00    RepY
+      16.64          1k         1       30         30         0.00    RepX
+       2.36          0k         1        3          4         0.00    worldL
+++ PhantomSD/TotalDose id 0
+### Run 2 starts.
+### Run 2 start.
+Actual rotation: 2/2  
+Accelerator angle: 45 [deg]
+Actual centre: 2/2  
+Phantom and its ROG centre: (0,0,-200)
+*********************************************
+loop n. 1/2
+Launched 50000 random primary particles
+Launched 50000 random primary particles
+*********************************************
+ Run terminated.
+Run Summary
+  Number of events processed : 50000
+  User=18.230000s Real=18.475172s Sys=0.030000s
+ PrimitiveScorer RUN PhantomSD,TotalDose
+ Number of entries 71
+loop elapsed time [s] : 18.26
+
+
+Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : worldL 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <targetR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : targetA_log targetB_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_W G4_Cu 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <BeWindow> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : BeWTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Be 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <ionizationChamber> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : ionizationChamberTubeW1LV ionizationChamberTubeP1LV ionizationChamberTubeW2LV ionizationChamberTubeP2LV ionizationChamberTubeW3LV ionizationChamberTubeP3LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_KAPTON 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <flatfilterR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : FFL1A_1LV FFL2_1LV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Cu 
+ Production cuts :   gamma 5 mm      e- 5 mm      e+ 5 mm  proton 5 mm 
+
+Region <Mirror> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : MirrorTubeLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_MYLAR 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <PrymCollR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : collim_log CylminusCone_log UpperCollimator_log 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Galactic G4_W 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <MLCR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : leafSolidALV leafSolidBLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_Fe 
+ Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 1 cm 
+
+Region <Jaws1XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2XR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2XLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws1YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws1YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <Jaws2YR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Jaws2YLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : steel1 
+ Production cuts :   gamma 2 cm      e- 2 cm      e+ 2 cm  proton 2 cm 
+
+Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : fullWaterPhantomLV 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_WATER 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 2     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  24.7508 keV    e-  1.39534 MeV    e+  1.31345 MeV proton 100 keV
+ Region(s) which use this couple : 
+    targetR
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Be
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.01157 keV    e-  466.625 keV    e+  457.312 keV proton 100 keV
+ Region(s) which use this couple : 
+    BeWindow
+
+Index : 4     used in the geometry : Yes
+ Material : G4_KAPTON
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.98035 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    ionizationChamber
+
+Index : 5     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
+ Energy thresholds :  gamma  55.0667 keV    e-  6.8606 MeV    e+  6.41471 MeV proton 500 keV
+ Region(s) which use this couple : 
+    flatfilterR
+
+Index : 6     used in the geometry : Yes
+ Material : G4_MYLAR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  3.02067 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
+ Region(s) which use this couple : 
+    Mirror
+
+Index : 7     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 8     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  106.569 keV    e-  2.30976 MeV    e+  2.13081 MeV proton 100 keV
+ Region(s) which use this couple : 
+    PrymCollR
+
+Index : 9     used in the geometry : Yes
+ Material : G4_Fe
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  60.499 keV    e-  13.0779 MeV    e+  12.2279 MeV proton 1 MeV
+ Region(s) which use this couple : 
+    MLCR
+
+Index : 10     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1XR
+
+Index : 11     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2XR
+
+Index : 12     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws1YR
+
+Index : 13     used in the geometry : Yes
+ Material : steel1
+ Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
+ Energy thresholds :  gamma  81.0405 keV    e-  28.1348 MeV    e+  26.3063 MeV proton 2 MeV
+ Region(s) which use this couple : 
+    Jaws2YR
+
+Index : 14     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 10 keV
+ Region(s) which use this couple : 
+    fullWaterPhantomR
+
+====================================================================
+
+++ PhantomSD/TotalDose id 0
+### Run 3 starts.
+### Run 3 start.
+Actual rotation: 2/2  
+Accelerator angle: 45 [deg]
+Actual centre: 2/2  
+Phantom and its ROG centre: (0,0,-200)
+*********************************************
+loop n. 2/2
+Launched 50000 random primary particles
+Launched 50000 random primary particles
+*********************************************
+ Run terminated.
+Run Summary
+  Number of events processed : 50000
+  User=18.230000s Real=18.302562s Sys=0.010000s
+ PrimitiveScorer RUN PhantomSD,TotalDose
+ Number of entries 128
+loop elapsed time [s] : 18.27
+
+################ END NEW GEOMETRY ########################
+loop elapsed time [s] : 77.08
+
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+TransportationManager deleted.
+Total navigation history collections cleaned: 18
+================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 0.0269 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '16G4HitsCollection', size : 0 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
+Pool ID '15G4HCofThisEvent', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.00288 MB
+Pool ID '7G4Track', size : 0.00577 MB
+Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
+Pool ID '12G4Trajectory', size : 0.00288 MB
+Pool ID '17G4TrajectoryPoint', size : 0.0346 MB
+Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
+Number of memory pools allocated: 14 of which, static: 0
+Dynamic pools deleted: 14 / Total memory freed: 0.082 MB
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)

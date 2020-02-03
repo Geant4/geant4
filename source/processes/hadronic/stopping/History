@@ -14,6 +14,69 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 November 2019 V.Ivanchenko (hadr-stopping-V10-05-02)
+ --------------------------------------------------------------------
+- G4MuonMinusAtomicCapture - fixed trivial Coverity warning
+
+01 Aug 2019 A. Ribon          (hadr-stopping-V10-05-01)
+ --------------------------------------------------------------------
+- G4HadronicAbsorptionFritofWithBinaryCascade : created a new class for
+  handling anti-proton and anti-neutron annihilation at rest using
+  Fritiof coupled with Binary cascade (instead of directly with 
+  Precompound, as in the class G4HadronicAbsorptionFritiof).
+
+22 May 2019 A. Ribon          (hadr-stopping-V10-05-00)
+ --------------------------------------------------------------------
+- G4HadronicAbsorptionFritof : extended to neutral anti-hadrons:
+  anti-neutron, anti-lambda, anti-sigma0 and anti-xi0.
+  Note: this extension is for completeness and practical convenience,
+        although physically neutral hadrons should never be completely
+        at rest!
+
+05 November 2018 V.Ivanchenko (hadr-stopping-V10-04-03)
+ --------------------------------------------------------------------
+- G4MuonMinusBoundDecay: fixed Coverity warning in GetMuonDecayRate,
+    removed forbidden creation of G4Element in any model class
+
+08 October 2018 K.L. Genser   (hadr-stopping-V10-04-02)
+ --------------------------------------------------------------------
+- G4MuonMinusBoundDecay: changed the calculation used in GetMuonDecayRate,
+  inspired by the bug report 2049
+  added another GetMuonDecayRate function using A, muon and nucleus
+  masses in addtion to Z to accomodate the more accurate formula
+
+06 August 2018 A. Ribon       (hadr-stopping-V10-04-01)
+--------------------------------------------------------------------
+- G4HadronicAbsorptionFritiof : replaced the explicit high-energy limit
+  of hadronic physics with the one from G4HadronicParameters .
+
+09 May 2018 A. Ribon          (hadr-stopping-V10-04-00)
+--------------------------------------------------------------------
+- G4HadronStoppingProcess, G4MuonicAtomDecay : fixed warnings in gcc 8
+    regarding catching polymorphic type by value, instead of by reference.
+
+23 October 2017 K.L. Genser   (hadr-stopping-V10-03-02)
+--------------------------------------------------------------------
+- G4MuonicAtomDecay fixed verbosity
+
+12 September 2017 K.L. Genser (hadr-stopping-V10-03-01)
+--------------------------------------------------------------------
+- made G4MuonMinusAtomicCapture G4VRestProcess; added G4MuonicAtomDecay
+
+01 July 2017 V. Ivantchenko  (hadr-stopping-V10-03-00)
+--------------------------------------------------------------------
+- G4AntiNeutronAnnihilationAtRest: fixed Coverity warning, removed usage
+    of static G4ThreadLocal, instead all variables are local
+
+16 November 2016 V. Ivantchenko  (hadr-stopping-V10-02-02)
+--------------------------------------------------------------------
+- G4EmCaptureCascade - added C++11 keywords, an attempt to remove 
+    bound check warning
+
+11 October 2016 K.L. Genser  (hadr-stopping-V10-02-01)
+--------------------------------------------------------------------
+- added G4MuonMinusAtomicCapture
+
 12 November 2015 V. Ivantchenko  (hadr-stopping-V10-01-05)
 --------------------------------------------------------------------
 - G4HadronStoppingProcess - removed call to DeRegistration to avoid

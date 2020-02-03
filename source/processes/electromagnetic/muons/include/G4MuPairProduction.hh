@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh 72942 2013-08-14 13:37:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -75,28 +74,33 @@ class G4MuPairProduction : public G4VEnergyLossProcess
 {
 public:
 
-  G4MuPairProduction(const G4String& processName = "muPairProd");
+  explicit G4MuPairProduction(const G4String& processName = "muPairProd");
 
-  virtual ~G4MuPairProduction();
+  ~G4MuPairProduction() = default;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut);
-
-  virtual void PrintInfo();
+				    const G4Material*, G4double cut) override;
 
   inline void SetLowestKineticEnergy(G4double e);
 
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
+
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+  // Print out of the class parameters
+  virtual void StreamProcessInfo(std::ostream& outFile) const override;
+
+  virtual void 
+  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+			      const G4ParticleDefinition*) override;
 
 private:
 
-  G4MuPairProduction & operator=(const G4MuPairProduction &right);
-  G4MuPairProduction(const G4MuPairProduction&);
+  G4MuPairProduction & operator=(const G4MuPairProduction &right) = delete;
+  G4MuPairProduction(const G4MuPairProduction&) = delete;
 
 protected:
 

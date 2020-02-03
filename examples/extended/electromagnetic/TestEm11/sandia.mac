@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: sandia.mac 76258 2013-11-08 11:36:51Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # limit the step size from histo 8
 #

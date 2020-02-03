@@ -27,7 +27,6 @@
 /// \brief Definition of the TSRun class
 //
 //
-// $Id: TSRun.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// TSRun contains three collections of hits maps: a thread-local hits map,
@@ -62,10 +61,17 @@
 #include "G4Event.hh"
 #include "G4THitsMap.hh"
 #include "G4TAtomicHitsMap.hh"
+#include "G4THitsVector.hh"
+#include "G4StatAnalysis.hh"
+#include "G4ConvergenceTester.hh"
 
 #include <vector>
 
 class G4Event;
+
+//template <typename _Tp> using G4StatContainer = G4THitsMap<_Tp>;
+//template <typename _Tp> using G4StatContainer = G4THitsVector<_Tp>;
+template <typename _Tp> using G4StatContainer = G4THitsDeque<_Tp>;
 
 class TSRun : public G4Run
 {
@@ -86,6 +92,8 @@ public:
     G4THitsMap<G4double>* GetHitsMap(const G4String& collname) const;
     G4TAtomicHitsMap<G4double>* GetAtomicHitsMap(const G4String&) const;
     MutexHitsMap_t* GetMutexHitsMap(const G4String&) const;
+    G4StatContainer<G4StatAnalysis>* GetStatMap(const G4String& collname) const;
+    G4StatContainer<G4ConvergenceTester>* GetConvMap(const G4String&) const;
 
     void ConstructMFD(const G4String&);
 
@@ -95,9 +103,14 @@ private:
     std::vector<G4String> fCollNames;
     std::vector<G4int> fCollIDs;
     std::vector<G4THitsMap<G4double>*> fRunMaps;
+<<<<<<< HEAD
     static AtomicHitsSum_t fAtomicRunSums;
+=======
+    std::vector<G4StatContainer<G4StatAnalysis>*> fStatMaps;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     static std::vector<G4TAtomicHitsMap<G4double>*> fAtomicRunMaps;
     static std::map<G4String, MutexHitsMap_t> fMutexRunMaps;
+    static std::vector<G4StatContainer<G4ConvergenceTester>*> fConvMaps;
 
 };
 

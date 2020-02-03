@@ -1,0 +1,4 @@
+/run/initialize
+/detector/reflection ground 
+/control/execute Source.mac
+/run/beamOn 500

@@ -1,4 +1,3 @@
-$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +13,30 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11-Oct-2016, Gunter Folger
+22-Oct-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-02)
+- REAMDE : updated.
+
+06-Aug-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-01)
+- G4StoppingPhysicsFritiofWithBinaryCascade : new class to handle the
+  nuclear capture at rest of negatively charged particles. It is similar
+  to G4StoppingPhysics, with the only difference that Fritiof coupled with
+  Binary Cascade is used (instead of FTFP) for anti-proton and anti-neutron
+  annihilation at rest.
+
+22-May-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-00)
+- Use FTFP also for the annihilation at rest of neutral anti-hadrons:
+  anti-neutron, anti-lambda, anti-sigma0 anti-xi0.
+  Note: this extension is for completeness and practical convenience,
+        although physically neutral hadrons should never be completely
+        at rest!
+
+03-Nov-2016, Alberto Ribon              (phys-ctor-stopping-V10-02-02)
+- Written first draft of the README
+	 
+16-October-2016, Michel Maire           (phys-ctor-stopping-V10-02-01)
+- add README
+
+11-Oct-2016, Gunter Folger              (phys-ctor-stopping-V10-02-00)
 - replace direct use of aParticleIterator by GetParticleIterator().
 
 05-Nov-2015, Alberto Ribon              (phys-ctor-stopping-V10-01-00)

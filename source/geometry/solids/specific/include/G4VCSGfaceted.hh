@@ -23,27 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VCSGfaceted.hh 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4VCSGfaceted
 //
 // Class description:
 //
-//   Virtual class defining CSG-like type shape that is built entire
+//   Virtual class defining CSG-like type shape that is built entirely
 //   of G4CSGface faces.
 
-// Author:
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
-#ifndef G4VCSGfaceted_hh
-#define G4VCSGfaceted_hh
+#ifndef G4VCSGFACETED_HH
+#define G4VCSGFACETED_HH
 
 #include "G4VSolid.hh"
 
@@ -57,13 +47,13 @@ class G4VCSGfaceted : public G4VSolid
     G4VCSGfaceted( const G4String& name );
     virtual ~G4VCSGfaceted();
   
-    G4VCSGfaceted( const G4VCSGfaceted &source );
-    G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
+    G4VCSGfaceted( const G4VCSGfaceted& source );
+    G4VCSGfaceted& operator=( const G4VCSGfaceted& source );
   
     virtual G4bool CalculateExtent( const EAxis pAxis,
                                     const G4VoxelLimits& pVoxelLimit,
                                     const G4AffineTransform& pTransform,
-                                          G4double& pmin,G4double& pmax ) const;
+                                          G4double& pmin, G4double& pmax) const;
   
     virtual EInside Inside( const G4ThreeVector& p ) const;
 
@@ -74,9 +64,9 @@ class G4VCSGfaceted : public G4VSolid
     virtual G4double DistanceToIn( const G4ThreeVector& p ) const;
     virtual G4double DistanceToOut( const G4ThreeVector& p,
                                     const G4ThreeVector& v,
-                                    const G4bool calcNorm=false,
-                                          G4bool *validNorm=0,
-                                          G4ThreeVector *n=0 ) const;
+                                    const G4bool calcNorm = false,
+                                          G4bool* validNorm = nullptr,
+                                          G4ThreeVector* n = nullptr ) const;
     virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
 
     virtual G4GeometryType GetEntityType() const;
@@ -116,21 +106,21 @@ class G4VCSGfaceted : public G4VSolid
 
   protected:  // without description
 
-    G4int    numFace;
-    G4VCSGface **faces;
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    G4int numFace = 0;
+    G4VCSGface **faces = nullptr;
+    G4double fCubicVolume = 0.0;
+    G4double fSurfaceArea = 0.0;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
-    virtual G4double DistanceTo( const G4ThreeVector &p,
+    virtual G4double DistanceTo( const G4ThreeVector& p,
                                  const G4bool outgoing ) const;
 
     G4ThreeVector GetPointOnSurfaceGeneric()const;
       // Returns a random point located on the surface of the solid 
       // in case of generic Polycone or generic Polyhedra.
 
-    void CopyStuff( const G4VCSGfaceted &source );
+    void CopyStuff( const G4VCSGfaceted& source );
     void DeleteStuff();
 
   private:

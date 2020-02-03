@@ -6,6 +6,6 @@
 /particle/createAllIon
 /control/verbose 2
 /run/verbose 2
-/run/beamOn 100
+/run/beamOn 10
 #
 

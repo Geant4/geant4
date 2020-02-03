@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadNucl4BodyMomDst.cc 67874 2013-03-12 05:37:09Z mkelsey $
 // Author:  Michael Kelsey (SLAC)
 // Date:    7 March 2013
 //

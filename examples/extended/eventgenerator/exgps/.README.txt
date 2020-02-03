@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "eventgenerator/exgps/.README.txt"
 ///\brief Example exgps README page

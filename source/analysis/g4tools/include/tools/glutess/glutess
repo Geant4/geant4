@@ -80,8 +80,8 @@ gluNewTess( void )
 
   tess->relTolerance = GLU_TESS_DEFAULT_TOLERANCE;
   tess->windingRule = GLU_TESS_WINDING_ODD;
-  tess->flagBoundary = GLU_FALSE;
-  tess->boundaryOnly = GLU_FALSE;
+  tess->flagBoundary = TOOLS_GLU_FALSE;
+  tess->boundaryOnly = TOOLS_GLU_FALSE;
 
   tess->callBegin = &static_noBegin;
   tess->callEdgeFlag = &static_noEdgeFlag;
@@ -221,7 +221,7 @@ gluGetTessProperty( GLUtesselator *tess, GLUenum which, GLUdouble *value )
       *value= tess->windingRule;
       break;
    case GLU_TESS_BOUNDARY_ONLY:
-      assert(tess->boundaryOnly == GLU_TRUE || tess->boundaryOnly == GLU_FALSE);
+      assert(tess->boundaryOnly == TOOLS_GLU_TRUE || tess->boundaryOnly == TOOLS_GLU_FALSE);
       *value= tess->boundaryOnly;
       break;
    default:
@@ -372,7 +372,7 @@ inline/*static*/ int static_EmptyCache( GLUtesselator *tess )
     if ( !static_AddVertex( tess, v->coords, v->data ) ) return 0;
   }
   tess->cacheCount = 0;
-  tess->emptyCache = GLU_FALSE;
+  tess->emptyCache = TOOLS_GLU_FALSE;
 
   return 1;
 }
@@ -381,7 +381,7 @@ inline/*static*/ int static_EmptyCache( GLUtesselator *tess )
 inline void GLUAPIENTRY
 gluTessVertex( GLUtesselator *tess, GLUdouble coords[3], void *data )
 {
-  int i, tooLarge = GLU_FALSE;
+  int i, tooLarge = TOOLS_GLU_FALSE;
   GLUdouble x, clamped[3];
 
   RequireState( tess, T_IN_CONTOUR );
@@ -397,11 +397,11 @@ gluTessVertex( GLUtesselator *tess, GLUdouble coords[3], void *data )
     x = coords[i];
     if( x < - GLU_TESS_MAX_COORD ) {
       x = - GLU_TESS_MAX_COORD;
-      tooLarge = GLU_TRUE;
+      tooLarge = TOOLS_GLU_TRUE;
     }
     if( x > GLU_TESS_MAX_COORD ) {
       x = GLU_TESS_MAX_COORD;
-      tooLarge = GLU_TRUE;
+      tooLarge = TOOLS_GLU_TRUE;
     }
     clamped[i] = x;
   }
@@ -432,7 +432,7 @@ gluTessBeginPolygon( GLUtesselator *tess, void *data )
 
   tess->state = T_IN_POLYGON;
   tess->cacheCount = 0;
-  tess->emptyCache = GLU_FALSE;
+  tess->emptyCache = TOOLS_GLU_FALSE;
   tess->mesh = NULL;
 
   tess->polygonData= data;
@@ -451,7 +451,7 @@ gluTessBeginContour( GLUtesselator *tess )
      * -- these can be generated accidentally with the obsolete
      * NextContour() interface.
      */
-    tess->emptyCache = GLU_TRUE;
+    tess->emptyCache = TOOLS_GLU_TRUE;
   }
 }
 
@@ -517,7 +517,7 @@ gluTessEndPolygon( GLUtesselator *tess )
      * Otherwise we tessellate all the regions marked "inside".
      */
     if( tess->boundaryOnly ) {
-      rc = __gl_meshSetWindingNumber( mesh, 1, GLU_TRUE );
+      rc = __gl_meshSetWindingNumber( mesh, 1, TOOLS_GLU_TRUE );
     } else {
       rc = __gl_meshTessellateInterior( mesh );
     }

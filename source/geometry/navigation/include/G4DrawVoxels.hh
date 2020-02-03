@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4DrawVoxels.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
 // 
 // class G4DrawVoxels
 //
@@ -35,10 +31,6 @@
 // Define G4DrawVoxelsDebug in the environment at compilation for debugging
 // information printed to G4cout.
 
-// History:
-// 03/08/1999 The G4VisAttributes have been made member data for lifetime
-//            reasons / visualisation - L.G (ask John Allison for further
-//            explanation).
 // 29/07/1999 First comitted version - L.G.
 // --------------------------------------------------------------------
 #ifndef G4DrawVoxels_HH
@@ -74,20 +66,22 @@ class G4DrawVoxels
     void SetBoundingBoxVisAttributes(G4VisAttributes&);
 
   private:
-  
-    // Member data
-    G4VisAttributes fVoxelsVisAttributes[3];
-    G4VisAttributes fBoundingBoxVisAttributes;
-    
+
     void ComputeVoxelPolyhedra(const G4LogicalVolume*,
                                const G4SmartVoxelHeader*,
                                      G4VoxelLimits&,
                                      G4PlacedPolyhedronList*) const;
     
-    // Copy constructor Assignment operator not supported
-    // (array fvoxelcolours ...)
-    G4DrawVoxels(const G4DrawVoxels&);	
-    G4DrawVoxels operator=(const G4DrawVoxels&);	
+    G4DrawVoxels(const G4DrawVoxels&) = delete;	
+    G4DrawVoxels operator=(const G4DrawVoxels&) = delete;	
+      // Copy constructor and assignment operator not allowed
+
+  private:
+  
+    // Member data
+    //
+    G4VisAttributes fVoxelsVisAttributes[3];
+    G4VisAttributes fBoundingBoxVisAttributes;
 };
 
 #endif

@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SolidExtentList.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4SolidExtentList
 //
 // Class description:
@@ -41,11 +33,10 @@
 //   to calculate the extent of a CSG-like solid for a voxel
 //   (G4VSolid::CalculateExtent). 
 
-// Author: 
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-#ifndef G4SolidExtentList_hh
-#define G4SolidExtentList_hh
+#ifndef G4SOLIDEXTENTLIST_HH
+#define G4SOLIDEXTENTLIST_HH
 
 #include "G4Types.hh"
 
@@ -57,18 +48,18 @@ class G4SolidExtentList
   
   G4SolidExtentList();
   G4SolidExtentList( const EAxis targetAxis,
-                     const G4VoxelLimits &voxelLimits );
+                     const G4VoxelLimits& voxelLimits );
   ~G4SolidExtentList();
 
 
-  void AddSurface( const G4ClippablePolygon &surface );
+  void AddSurface( const G4ClippablePolygon& surface );
 
-  G4bool GetExtent( G4double &min, G4double &max ) const;
+  G4bool GetExtent( G4double& min, G4double& max ) const;
 
   protected:
   
   EAxis    axis;     // Target axis
-  G4bool   limited;  // True if limited
+  G4bool   limited = false;  // True if limited
   G4double minLimit; // ... min limit
   G4double maxLimit; // ... max limit
 

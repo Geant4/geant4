@@ -40,8 +40,8 @@ public:
 private:
   G4VFieldPropagation(const  G4VFieldPropagation &right);
   const G4VFieldPropagation & operator=(const G4VFieldPropagation & right);
-  G4int operator==(const G4VFieldPropagation & right) const;
-  G4int operator!=(const G4VFieldPropagation & right) const;
+  G4bool operator==(const G4VFieldPropagation & right) const;
+  G4bool operator!=(const G4VFieldPropagation & right) const;
 
 public:
   virtual void Init(G4V3DNucleus * theNucleus) = 0;

@@ -27,7 +27,6 @@
 /// \brief Implementation of the G03PrimaryGeneratorAction class
 //
 //
-// $Id: G03PrimaryGeneratorAction.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G03PrimaryGeneratorAction implementation
 //

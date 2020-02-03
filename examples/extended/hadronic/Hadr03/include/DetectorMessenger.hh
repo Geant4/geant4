@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr03/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
+<<<<<<< HEAD
 // $Id: DetectorMessenger.hh 80190 2014-04-07 10:18:04Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -60,30 +59,34 @@ class G4alphaIonisation : public G4VEnergyLossProcess
 {
 public:
 
-  G4alphaIonisation(const G4String& name = "alphaIoni");
+  explicit G4alphaIonisation(const G4String& name = "alphaIoni");
 
   virtual ~G4alphaIonisation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
+
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+  virtual void 
+  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+			      const G4ParticleDefinition*) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				   const G4Material*, G4double cut);
+				   const G4Material*, G4double cut) final;
 
   inline G4double BetheBlochEnergyThreshold();
 
 private:
 
   // hide assignment operator
-  G4alphaIonisation & operator=(const G4alphaIonisation &right);
-  G4alphaIonisation(const G4alphaIonisation&);
+  G4alphaIonisation & operator=(const G4alphaIonisation &right) = delete;
+  G4alphaIonisation(const G4alphaIonisation&) = delete;
 
   const G4ParticleDefinition* theParticle;
 

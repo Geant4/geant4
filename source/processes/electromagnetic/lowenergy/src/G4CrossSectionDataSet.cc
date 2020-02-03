@@ -25,7 +25,6 @@
 //
 //
 
-// $Id: G4CrossSectionDataSet.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 // Code review by MGP October 2007: removed inheritance from concrete class
@@ -166,25 +165,17 @@ G4bool G4CrossSectionDataSet::LoadData(const G4String & argFileName)
 	      break;
      
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }
@@ -324,25 +315,17 @@ G4bool G4CrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 	      break;
      
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }
@@ -479,7 +462,7 @@ G4bool G4CrossSectionDataSet::SaveData(const G4String & argFileName) const
 
 G4String G4CrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     {
       G4Exception("G4CrossSectionDataSet::FullFileName",

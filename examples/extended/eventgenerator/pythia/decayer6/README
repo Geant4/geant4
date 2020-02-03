@@ -1,4 +1,7 @@
+<<<<<<< HEAD
  $Id: README 85904 2014-11-06 08:50:03Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
  ------------------------------------------------------------ 
 
  Example of the external decayer implementation with PYTHIA6

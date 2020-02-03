@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGSceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // 
 // John Allison  10th March 2006
@@ -98,7 +97,7 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& /*header*/) {
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
     // the path of the current drawn (non-culled) volume in terms of
-    // drawn (non-culled) ancesters.  Each node is identified by a
+    // drawn (non-culled) ancestors.  Each node is identified by a
     // PVNodeID object, which is a physical volume and copy number.  It
     // is a vector of PVNodeIDs corresponding to the geometry hierarchy
     // actually selected, i.e., not culled.

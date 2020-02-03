@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VStoreNotifier.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// class G4VStoreNotifier
+// G4VStoreNotifier
 //
 // Class description:
 //
@@ -35,14 +32,13 @@
 // volume, solid and region stores.
 // See G4VNotifier for the details.
 
-// Author:
-// 01.09.04 G.Cosmo Initial version
+// 01.09.04, G.Cosmo - Initial version
 // --------------------------------------------------------------------
 #ifndef G4VSTORENOTIFIER_HH
 #define G4VSTORENOTIFIER_HH
 
 #include "G4VNotifier.hh"
 
-typedef G4VNotifier G4VStoreNotifier;
+using G4VStoreNotifier = G4VNotifier;
 
 #endif

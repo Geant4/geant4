@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,8 +31,7 @@
 // Author:    A.Ribon  24-May-2016
 //
 // Ion physics with ParticleHP, used below 200 MeV/n for d, t, He3, alpha;
-// Binary Cascade used below 4 GeV/n (down to 190 MeV/n for d, t, He3, alpha,
-// and 0 for the other ions); FTFP used above 2 GeV/n.
+// Binary Cascade used above to 190 MeV/n and then FTFP at higher energies.
 // This is as G4IonPhysics, except that ParticleHP is used below 200 MeV/n
 // for d, t, He3, alpha. 
 // 
@@ -49,11 +47,8 @@
 
 class G4HadronicInteraction;
 class G4VCrossSectionDataSet;
-class G4VComponentCrossSection;
 class G4FTFBuilder;
-class G4BinaryLightIonReaction;
 class G4ParticleHPInelasticData;
-
 
 class G4IonPhysicsPHP : public G4VPhysicsConstructor {
   public:
@@ -72,27 +67,12 @@ class G4IonPhysicsPHP : public G4VPhysicsConstructor {
 
     void AddProcess( const G4String&, G4ParticleDefinition*, 
                      G4ParticleHPInelasticData*, G4HadronicInteraction*, 
-                     G4BinaryLightIonReaction*, G4HadronicInteraction* );
+                     G4HadronicInteraction*, G4HadronicInteraction*,
+		     G4VCrossSectionDataSet*);
 
-    static G4ThreadLocal G4VCrossSectionDataSet*    theNuclNuclData; 
-    static G4ThreadLocal G4VComponentCrossSection*  theGGNuclNuclXS;
-    static G4ThreadLocal G4ParticleHPInelasticData* theDeuteronHPInelasticData;
-    static G4ThreadLocal G4ParticleHPInelasticData* theTritonHPInelasticData;
-    static G4ThreadLocal G4ParticleHPInelasticData* theHe3HPInelasticData;
-    static G4ThreadLocal G4ParticleHPInelasticData* theAlphaHPInelasticData;
-
-    static G4ThreadLocal G4BinaryLightIonReaction* theIonBC1;
-    static G4ThreadLocal G4BinaryLightIonReaction* theIonBC2;
-    static G4ThreadLocal G4HadronicInteraction*    theFTFP;
     static G4ThreadLocal G4FTFBuilder*             theBuilder;
-    static G4ThreadLocal G4HadronicInteraction*    modelDeuteronPHP;
-    static G4ThreadLocal G4HadronicInteraction*    modelTritonPHP;
-    static G4ThreadLocal G4HadronicInteraction*    modelHe3PHP;
-    static G4ThreadLocal G4HadronicInteraction*    modelAlphaPHP;
 
     G4int  verbose;
-    static G4ThreadLocal G4bool wasActivated;
 };
-
 
 #endif

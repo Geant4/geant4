@@ -52,7 +52,6 @@
  * @see G4INCLXXNeutronBuilder
  */
 
-class G4VCrossSectionDataSet;
 
 class G4INCLXXPionBuilder : public G4VPionBuilder
 {
@@ -69,13 +68,10 @@ class G4INCLXXPionBuilder : public G4VPionBuilder
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4VCrossSectionDataSet* thePiData;
     G4INCLXXInterface * theModel;    
     G4double theMin;
     G4double theMax;
 };
-
-// 2011 by P. Kaitaniemi
 
 #endif
 

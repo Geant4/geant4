@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 77567 2013-11-26 09:40:31Z gcosmo $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/constructors/electromagnetic library.  
 #  Gunter Folger 10-Jan-2012.
@@ -34,6 +33,11 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/physics_lists/builders/include \
 	    -I$(G4BASE)/physics_lists/constructors/factory/include \
 	    -I$(G4BASE)/physics_lists/util/include \
+	    -I$(G4BASE)/processes/hadronic/cross_sections/include \
+	    -I$(G4BASE)/processes/hadronic/management/include \
+	    -I$(G4BASE)/processes/hadronic/models/management/include \
+	    -I$(G4BASE)/processes/hadronic/processes/include \
+	    -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \

@@ -34,8 +34,9 @@
 #include "G4SystemOfUnits.hh"
 
 HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
-                                             HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
+                                                                               HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
 :HadrontherapyAction(HadrontherapyGun)
+<<<<<<< HEAD
 { 
   //
   // Definition of the interactive commands to modify the parameters of the
@@ -112,10 +113,32 @@ HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
  sigmaZCmd -> SetUnitCandidates("mm cm m");
  sigmaZCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
 */
+=======
+{
+    
+    changeTheSource = new G4UIdirectory("/primaryParticleData/");
+    changeTheSource -> SetGuidance("Command to change the source");
+    
+    NewSource = new G4UIcmdWithABool("/primaryParticleData/NewSource",this);
+    NewSource -> SetParameterName("NewSource ", true);
+    NewSource -> SetDefaultValue("false");
+    NewSource -> SetGuidance("Set if you want read a .txt file"
+                             "\n[usage]: /primaryParticleData/NewSource [true/false]");
+    NewSource -> AvailableForStates(G4State_Idle, G4State_PreInit);
+    
+    
+    calculatedPhaseSpaceFileIN=new G4UIcmdWithAString("/primaryParticleData/calculatedPhaseSpaceFileIN",this);
+    calculatedPhaseSpaceFileIN->SetDefaultValue("");
+    calculatedPhaseSpaceFileIN->SetGuidance("full path and file name of the phase space file to be used as particle generator");
+    
+    
+    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 HadrontherapyPrimaryGeneratorMessenger::~HadrontherapyPrimaryGeneratorMessenger()
 {
+<<<<<<< HEAD
   delete beamParametersDir;
   delete EnergyDir;
  // delete meanKineticEnergyCmd;  
@@ -154,6 +177,32 @@ void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4
   if ( command == sigmaYCmd )                                                                        
     { HadrontherapyAction -> SetsigmaY(sigmaYCmd
 				       -> GetNewDoubleValue(newValue));}
+=======
+    
+    delete NewSource;
+    delete changeTheSource;
+    delete calculatedPhaseSpaceFileIN;
+    
+    
+}
+
+
+void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String NewValue)
+
+{
+    if (command == calculatedPhaseSpaceFileIN)
+    {
+        HadrontherapyAction->setCalculatedPhaseSpaceFileIN(NewValue);
+    }
+    
+    if (command == NewSource)
+    {
+        HadrontherapyAction->setNewSource(NewSource->GetNewBoolValue(NewValue));
+        
+    }
+    
+}
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
   if ( command == sigmaZCmd )                                                                        
     { HadrontherapyAction -> SetsigmaZ(sigmaZCmd

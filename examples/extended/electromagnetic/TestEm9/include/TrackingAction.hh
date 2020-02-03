@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm9/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id: TrackingAction.hh 66587 2012-12-21 11:06:44Z ihrivnac $
 //
 #ifndef TrackingAction_h
 #define TrackingAction_h 1

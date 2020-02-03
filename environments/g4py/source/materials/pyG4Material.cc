@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Material.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4Material.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4Version.hh"
 #include "G4Material.hh"
 
 using namespace boost::python;
@@ -45,6 +43,14 @@ void (G4Material::*f1_AddElement)(G4Element*, G4int)
   = &G4Material::AddElement;
 void (G4Material::*f2_AddElement)(G4Element*, G4double)
   = &G4Material::AddElement;
+
+// GetMaterial
+G4Material* (*f1_GetMaterial)(const G4String&, G4bool)
+  = &G4Material::GetMaterial;
+G4Material* (*f2_GetMaterial)(G4double, G4double, G4double)
+  = &G4Material::GetMaterial;
+G4Material* (*f3_GetMaterial)(size_t, G4double)
+  = &G4Material::GetMaterial;
 
 BOOST_PYTHON_FUNCTION_OVERLOADS(f_GetMaterial, G4Material::GetMaterial, 1, 2)
 
@@ -157,9 +163,12 @@ void export_G4Material()
     .def("GetNumberOfMaterials",  &G4Material::GetNumberOfMaterials)
     .staticmethod("GetNumberOfMaterials")
     .def("GetIndex",              &G4Material::GetIndex)
-    .def("GetMaterial",           &G4Material::GetMaterial,
-      f_GetMaterial()
-      [return_value_policy<reference_existing_object>()])
+    .def("GetMaterial",           f1_GetMaterial, f_GetMaterial()
+    [return_value_policy<reference_existing_object>()])
+    .def("GetMaterial",           f2_GetMaterial,
+    return_value_policy<reference_existing_object>())
+    .def("GetMaterial",           f3_GetMaterial,
+    return_value_policy<reference_existing_object>())
     .staticmethod("GetMaterial")
     // ---
     //.def(self_ns::str(self))
@@ -174,4 +183,3 @@ void export_G4Material()
     .value("kStateGas",       kStateGas)
     ;
 }
-

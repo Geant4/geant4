@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +65,8 @@
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
 #include "G4DeltaAngle.hh"
+#include "G4ICRU90StoppingData.hh"
+#include "G4NistManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -81,11 +82,13 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
     corr(nullptr),
     particle(nullptr),
     fParticleChange(nullptr),
+    fICRU90(nullptr),
     currentMaterial(nullptr),
+    baseMaterial(nullptr),
     iMolecula(-1),
     iASTAR(-1),
-    isIon(false),
-    isInitialised(false)
+    iICRU90(-1),
+    isIon(false)
 {
   SetHighEnergyLimit(2.0*MeV);
 
@@ -119,8 +122,17 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
   // always false before the run
   SetDeexcitationFlag(false);
 
-  if(!isInitialised) {
-    isInitialised = true;
+  if(IsMaster()) {
+    if(nullptr == fASTAR)  { fASTAR = new G4ASTARStopping(); }
+    if(particle->GetPDGMass() < GeV) { fASTAR->Initialise(); }
+    if(G4EmParameters::Instance()->UseICRU90Data()) {
+      if(!fICRU90) { 
+	fICRU90 = G4NistManager::Instance()->GetICRU90StoppingData(); 
+      } else if(particle->GetPDGMass() < GeV) { fICRU90->Initialise(); }
+    }
+  }
+
+  if(nullptr == fParticleChange) {
 
     if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
       SetAngularDistribution(new G4DeltaAngle());
@@ -134,9 +146,7 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
     corr = G4LossTableManager::Instance()->EmCorrections();
 
     fParticleChange = GetParticleChangeForLoss();
-    if(!fASTAR) { fASTAR = new G4ASTARStopping(); }
   }
-  if(IsMaster() && particle->GetPDGMass() < GeV) { fASTAR->Initialise(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -210,9 +220,8 @@ G4double G4BraggIonModel::ComputeCrossSectionPerAtom(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  G4double cross = Z*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return
+    Z*ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -224,10 +233,8 @@ G4double G4BraggIonModel::CrossSectionPerVolume(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  G4double eDensity = material->GetElectronDensity();
-  G4double cross = eDensity*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return material->GetElectronDensity()
+    *ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -262,8 +269,7 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // now compute the total ionization loss
 
-  if (dedx < 0.0) dedx = 0.0 ;
-
+  dedx = std::max(dedx, 0.0);
   dedx *= chargeSquare;
   /*
   G4cout << "Bragg: tkin(MeV) = " << tkin/MeV << " dedx(MeVxcm^2/g) = " 
@@ -389,12 +395,10 @@ G4double G4BraggIonModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4BraggIonModel::HasMaterial(const G4Material*)
+void G4BraggIonModel::HasMaterial(const G4Material* mat)
 {
-  return false;
-  /*
-  G4String chFormula = material->GetChemicalFormula();
-  if("" == chFormula) { return false; }
+  const G4String& chFormula = mat->GetChemicalFormula();
+  if(chFormula.empty()) { return; }
 
   // ICRU Report N49, 1993. Ziegler model for He.
   
@@ -408,12 +412,11 @@ G4bool G4BraggIonModel::HasMaterial(const G4Material*)
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; ++i) {
     if (chFormula == molName[i]) {
-      iASTAR = fASTAR->GetIndex(matName[i]);  
-      break;
+      iMolecula = i;  
+      return;
     }
   }
-  return (iASTAR >= 0);
-  */
+  return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -431,37 +434,42 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
 
     G4double T = kineticEnergy*rateMassHe2p/MeV ;
 
-    static const G4double a[11][5] = {
-       {9.43672, 0.54398, 84.341, 1.3705, 57.422},
-       {67.1503, 0.41409, 404.512, 148.97, 20.99},
-       {5.11203, 0.453,  36.718,  50.6,  28.058}, 
-       {61.793, 0.48445, 361.537, 57.889, 50.674},
-       {7.83464, 0.49804, 160.452, 3.192, 0.71922},
-       {19.729, 0.52153, 162.341, 58.35, 25.668}, 
-       {26.4648, 0.50112, 188.913, 30.079, 16.509},
-       {7.8655, 0.5205, 63.96, 51.32, 67.775},
-       {8.8965, 0.5148, 339.36, 1.7205, 0.70423},
-       {2.959, 0.53255, 34.247, 60.655, 15.153}, 
-       {3.80133, 0.41590, 12.9966, 117.83, 242.28} };   
+    static const G4float a[11][5] = {
+       {9.43672f, 0.54398f, 84.341f,  1.3705f, 57.422f},
+       {67.1503f, 0.41409f, 404.512f, 148.97f, 20.99f},
+       {5.11203f, 0.453f,   36.718f,  50.6f,   28.058f}, 
+       {61.793f,  0.48445f, 361.537f, 57.889f, 50.674f},
+       {7.83464f, 0.49804f, 160.452f, 3.192f,  0.71922f},
+       {19.729f,  0.52153f, 162.341f, 58.35f,  25.668f}, 
+       {26.4648f, 0.50112f, 188.913f, 30.079f, 16.509f},
+       {7.8655f,  0.5205f,  63.96f,   51.32f,  67.775f},
+       {8.8965f,  0.5148f,  339.36f,  1.7205f, 0.70423f},
+       {2.959f,   0.53255f, 34.247f,  60.655f, 15.153f}, 
+       {3.80133f, 0.41590f, 12.9966f, 117.83f, 242.28f} };   
 
     static const G4double atomicWeight[11] = {
-       101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
-       104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
+       101.96128f, 44.0098f, 16.0426f, 28.0536f, 42.0804f,
+       104.1512f,  44.665f,  60.0843f, 18.0152f, 18.0152f, 12.0f};       
 
     G4int i = iMolecula;
 
+    G4double slow = (G4double)(a[i][0]);
+
+    G4double x1 = (G4double)(a[i][1]);
+    G4double x2 = (G4double)(a[i][2]);
+    G4double x3 = (G4double)(a[i][3]);
+    G4double x4 = (G4double)(a[i][4]);
+
     // Free electron gas model
     if ( T < 0.001 ) {
-      G4double slow  = a[i][0] ;
-      G4double shigh = G4Log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
-         * a[i][2]*1000.0 ;
+      G4double shigh = G4Log( 1.0 + x3*1000.0 + x4*0.001 ) *x2*1000.0;
       ionloss  = slow*shigh / (slow + shigh) ;
       ionloss *= sqrt(T*1000.0) ;
 
       // Main parametrisation
     } else {
-      G4double slow  = a[i][0] * G4Exp(G4Log(T*1000.0)*a[i][1]) ;
-      G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+      slow  *= G4Exp(G4Log(T*1000.0)*x1) ;
+      G4double shigh = G4Log( 1.0 + x3/T + x4*T ) * x2/T ;
       ionloss = slow*shigh / (slow + shigh) ;
        /*
          G4cout << "## " << i << ". T= " << T << " slow= " << slow
@@ -471,10 +479,10 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
          << G4endl;
        */
     }
-    if ( ionloss < 0.0) ionloss = 0.0 ;
+    ionloss = std::max(ionloss, 0.0);
 
     // He effective charge
-    G4double aa = atomicWeight[iMolecula];
+    G4double aa = (G4double)atomicWeight[iMolecula];
     ionloss /= (HeEffChargeSquare(0.5*aa, T)*aa);
 
   // pure material (normally not the case for this function)
@@ -492,135 +500,138 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
                                                   G4double kineticEnergy) const
 {
   G4double ionloss ;
-  G4int i = G4lrint(z)-1 ;  // index of atom
-  if(i < 0)  i = 0 ;
-  if(i > 91) i = 91 ;
+  G4int i = std::min(std::max(G4lrint(z)-1,0),91);  // index of atom
 
   // The data and the fit from:
   // ICRU Report 49, 1993. Ziegler's type of parametrisations.
   // Proton kinetic energy for parametrisation (keV/amu)
 
-   // He energy in internal units of parametrisation formula (MeV)
+  // He energy in internal units of parametrisation formula (MeV)
   G4double T = kineticEnergy*rateMassHe2p/MeV ;
 
-  static const G4double a[92][5] = {
-    {0.35485, 0.6456, 6.01525,  20.8933, 4.3515
-   },{ 0.58,    0.59,   6.3,     130.0,   44.07
-   },{ 1.42,    0.49,   12.25,    32.0,    9.161
-   },{ 2.206,   0.51,   15.32,    0.25,    8.995 //Be Ziegler77
-       // },{ 2.1895,  0.47183,7.2362,   134.30,  197.96 //Be from ICRU
-   },{ 3.691,   0.4128, 18.48,    50.72,   9.0
-   },{ 3.83523, 0.42993,12.6125,  227.41,  188.97
-   },{ 1.9259,  0.5550, 27.15125, 26.0665, 6.2768
-   },{ 2.81015, 0.4759, 50.0253,  10.556,  1.0382
-   },{ 1.533,   0.531,  40.44,    18.41,   2.718
-   },{ 2.303,   0.4861, 37.01,    37.96,   5.092
+  static const G4float a[92][5] = {
+    {  0.35485f, 0.6456f, 6.01525f,  20.8933f, 4.3515f
+   },{ 0.58f,    0.59f,   6.3f,      130.0f,   44.07f
+   },{ 1.42f,    0.49f,   12.25f,    32.0f,    9.161f
+   },{ 2.206f,   0.51f,   15.32f,    0.25f,    8.995f //Be Ziegler77
+       // },{ 2.1895f,  0.47183,7.2362f,   134.30f,  197.96f //Be from ICRU
+   },{ 3.691f,   0.4128f, 18.48f,    50.72f,   9.0f
+   },{ 3.83523f, 0.42993f,12.6125f,  227.41f,  188.97f
+       // },{ 1.9259f,  0.5550f, 27.15125f, 26.0665f, 6.2768f //too many digits
+   },{ 1.9259f,  0.5550f, 27.1513f,  26.0665f, 6.2768f
+   },{ 2.81015f, 0.4759f, 50.0253f,  10.556f,  1.0382f
+   },{ 1.533f,   0.531f,  40.44f,    18.41f,   2.718f
+   },{ 2.303f,   0.4861f, 37.01f,    37.96f,   5.092f
        // Z= 11-20
-   },{ 9.894,   0.3081, 23.65,    0.384,   92.93
-   },{ 4.3,     0.47,   34.3,     3.3,     12.74
-   },{ 2.5,     0.625,  45.7,     0.1,     4.359
-   },{ 2.1,     0.65,   49.34,    1.788,   4.133
-   },{ 1.729,   0.6562, 53.41,    2.405,   3.845
-   },{ 1.402,   0.6791, 58.98,    3.528,   3.211
-   },{ 1.117,   0.7044, 69.69,    3.705,    2.156
-   },{ 2.291,   0.6284, 73.88,    4.478,    2.066
-   },{ 8.554,   0.3817, 83.61,    11.84,    1.875
-   },{ 6.297,   0.4622, 65.39,    10.14,    5.036
+   },{ 9.894f,   0.3081f, 23.65f,    0.384f,   92.93f
+   },{ 4.3f,     0.47f,   34.3f,     3.3f,     12.74f
+   },{ 2.5f,     0.625f,  45.7f,     0.1f,     4.359f
+   },{ 2.1f,     0.65f,   49.34f,    1.788f,   4.133f
+   },{ 1.729f,   0.6562f, 53.41f,    2.405f,   3.845f
+   },{ 1.402f,   0.6791f, 58.98f,    3.528f,   3.211f
+   },{ 1.117f,   0.7044f, 69.69f,    3.705f,   2.156f
+   },{ 2.291f,   0.6284f, 73.88f,    4.478f,   2.066f
+   },{ 8.554f,   0.3817f, 83.61f,    11.84f,   1.875f
+   },{ 6.297f,   0.4622f, 65.39f,    10.14f,   5.036f
        // Z= 21-30     
-   },{ 5.307,   0.4918, 61.74,    12.4,    6.665
-   },{ 4.71,    0.5087, 65.28,    8.806,    5.948
-   },{ 6.151,   0.4524, 83.0,    18.31,    2.71
-   },{ 6.57,    0.4322, 84.76,    15.53,    2.779
-   },{ 5.738,   0.4492, 84.6,    14.18,    3.101
-   },{ 5.013,   0.4707, 85.8,    16.55,    3.211
-   },{ 4.32,    0.4947, 76.14,    10.85,    5.441
-   },{ 4.652,   0.4571, 80.73,    22.0,    4.952
-   },{ 3.114,   0.5236, 76.67,    7.62,    6.385
-   },{ 3.114,   0.5236, 76.67,    7.62,    7.502
+   },{ 5.307f,   0.4918f, 61.74f,    12.4f,    6.665f
+   },{ 4.71f,    0.5087f, 65.28f,    8.806f,   5.948f
+   },{ 6.151f,   0.4524f, 83.0f,     18.31f,   2.71f
+   },{ 6.57f,    0.4322f, 84.76f,    15.53f,   2.779f
+   },{ 5.738f,   0.4492f, 84.6f,     14.18f,   3.101f
+   },{ 5.013f,   0.4707f, 85.8f,     16.55f,   3.211f
+   },{ 4.32f,    0.4947f, 76.14f,    10.85f,   5.441f
+   },{ 4.652f,   0.4571f, 80.73f,    22.0f,    4.952f
+   },{ 3.114f,   0.5236f, 76.67f,    7.62f,    6.385f
+   },{ 3.114f,   0.5236f, 76.67f,    7.62f,    7.502f
        // Z= 31-40
-   },{ 3.114,   0.5236, 76.67,    7.62,    8.514
-   },{ 5.746,   0.4662, 79.24,    1.185,    7.993
-   },{ 2.792,   0.6346, 106.1,    0.2986,   2.331
-   },{ 4.667,   0.5095, 124.3,    2.102,    1.667
-   },{ 2.44,    0.6346, 105.0,    0.83,    2.851
-   },{ 1.413,   0.7377, 147.9,    1.466,    1.016
-   },{ 11.72,   0.3826, 102.8,    9.231,    4.371
-   },{ 7.126,   0.4804, 119.3,    5.784,    2.454
-   },{ 11.61,   0.3955, 146.7,    7.031,    1.423
-   },{ 10.99,   0.41,   163.9,   7.1,      1.052
+   },{ 3.114f,   0.5236f, 76.67f,    7.62f,    8.514f
+   },{ 5.746f,   0.4662f, 79.24f,    1.185f,   7.993f
+   },{ 2.792f,   0.6346f, 106.1f,    0.2986f,  2.331f
+   },{ 4.667f,   0.5095f, 124.3f,    2.102f,   1.667f
+   },{ 2.44f,    0.6346f, 105.0f,    0.83f,    2.851f
+   },{ 1.413f,   0.7377f, 147.9f,    1.466f,   1.016f
+   },{ 11.72f,   0.3826f, 102.8f,    9.231f,   4.371f
+   },{ 7.126f,   0.4804f, 119.3f,    5.784f,   2.454f
+   },{ 11.61f,   0.3955f, 146.7f,    7.031f,   1.423f
+   },{ 10.99f,   0.41f,   163.9f,    7.1f,     1.052f
        // Z= 41-50
-   },{ 9.241,   0.4275, 163.1,    7.954,    1.102
-   },{ 9.276,   0.418,  157.1,   8.038,    1.29
-   },{ 3.999,   0.6152, 97.6,    1.297,    5.792
-   },{ 4.306,   0.5658, 97.99,    5.514,    5.754
-   },{ 3.615,   0.6197, 86.26,    0.333,    8.689
-   },{ 5.8,     0.49,   147.2,   6.903,    1.289
-   },{ 5.6,     0.49,   130.0,   10.0,     2.844
-   },{ 3.55,    0.6068, 124.7,    1.112,    3.119
-   },{ 3.6,     0.62,   105.8,   0.1692,   6.026
-   },{ 5.4,     0.53,   103.1,   3.931,    7.767
+   },{ 9.241f,   0.4275f, 163.1f,    7.954f,   1.102f
+   },{ 9.276f,   0.418f,  157.1f,    8.038f,   1.29f
+   },{ 3.999f,   0.6152f, 97.6f,     1.297f,   5.792f
+   },{ 4.306f,   0.5658f, 97.99f,    5.514f,   5.754f
+   },{ 3.615f,   0.6197f, 86.26f,    0.333f,   8.689f
+   },{ 5.8f,     0.49f,   147.2f,    6.903f,   1.289f
+   },{ 5.6f,     0.49f,   130.0f,    10.0f,    2.844f
+   },{ 3.55f,    0.6068f, 124.7f,    1.112f,   3.119f
+   },{ 3.6f,     0.62f,   105.8f,    0.1692f,  6.026f
+   },{ 5.4f,     0.53f,   103.1f,    3.931f,   7.767f
        // Z= 51-60
-   },{ 3.97,    0.6459, 131.8,    0.2233,   2.723
-   },{ 3.65,    0.64,   126.8,   0.6834,   3.411
-   },{ 3.118,   0.6519, 164.9,    1.208,    1.51
-   },{ 3.949,   0.6209, 200.5,    1.878,    0.9126
-   },{ 14.4,    0.3923, 152.5,    8.354,    2.597
-   },{ 10.99,   0.4599, 138.4,    4.811,    3.726
-   },{ 16.6,    0.3773, 224.1,    6.28,    0.9121
-   },{ 10.54,   0.4533, 159.3,   4.832,    2.529
-   },{ 10.33,   0.4502, 162.0,   5.132,    2.444
-   },{ 10.15,   0.4471, 165.6,   5.378,    2.328
+   },{ 3.97f,    0.6459f, 131.8f,    0.2233f,  2.723f
+   },{ 3.65f,    0.64f,   126.8f,    0.6834f,  3.411f
+   },{ 3.118f,   0.6519f, 164.9f,    1.208f,   1.51f
+   },{ 3.949f,   0.6209f, 200.5f,    1.878f,   0.9126f
+   },{ 14.4f,    0.3923f, 152.5f,    8.354f,   2.597f
+   },{ 10.99f,   0.4599f, 138.4f,    4.811f,   3.726f
+   },{ 16.6f,    0.3773f, 224.1f,    6.28f,    0.9121f
+   },{ 10.54f,   0.4533f, 159.3f,    4.832f,   2.529f
+   },{ 10.33f,   0.4502f, 162.0f,    5.132f,   2.444f
+   },{ 10.15f,   0.4471f, 165.6f,    5.378f,   2.328f
        // Z= 61-70
-   },{ 9.976,   0.4439, 168.0,   5.721,    2.258
-   },{ 9.804,   0.4408, 176.2,   5.675,    1.997
-   },{ 14.22,   0.363,  228.4,   7.024,    1.016
-   },{ 9.952,   0.4318, 233.5,   5.065,    0.9244
-   },{ 9.272,   0.4345, 210.0,   4.911,    1.258
-   },{ 10.13,   0.4146, 225.7,   5.525,    1.055
-   },{ 8.949,   0.4304, 213.3,   5.071,    1.221
-   },{ 11.94,   0.3783, 247.2,   6.655,    0.849
-   },{ 8.472,   0.4405, 195.5,   4.051,    1.604
-   },{ 8.301,   0.4399, 203.7,   3.667,    1.459
+   },{ 9.976f,   0.4439f, 168.0f,    5.721f,   2.258f
+   },{ 9.804f,   0.4408f, 176.2f,    5.675f,   1.997f
+   },{ 14.22f,   0.363f,  228.4f,    7.024f,   1.016f
+   },{ 9.952f,   0.4318f, 233.5f,    5.065f,   0.9244f
+   },{ 9.272f,   0.4345f, 210.0f,    4.911f,   1.258f
+   },{ 10.13f,   0.4146f, 225.7f,    5.525f,   1.055f
+   },{ 8.949f,   0.4304f, 213.3f,    5.071f,   1.221f
+   },{ 11.94f,   0.3783f, 247.2f,    6.655f,   0.849f
+   },{ 8.472f,   0.4405f, 195.5f,    4.051f,   1.604f
+   },{ 8.301f,   0.4399f, 203.7f,    3.667f,   1.459f
        // Z= 71-80
-   },{ 6.567,   0.4858, 193.0,   2.65,     1.66
-   },{ 5.951,   0.5016, 196.1,   2.662,    1.589
-   },{ 7.495,   0.4523, 251.4,   3.433,    0.8619
-   },{ 6.335,   0.4825, 255.1,   2.834,    0.8228
-   },{ 4.314,   0.5558, 214.8,   2.354,    1.263
-   },{ 4.02,    0.5681, 219.9,   2.402,    1.191
-   },{ 3.836,   0.5765, 210.2,   2.742,    1.305
-   },{ 4.68,    0.5247, 244.7,   2.749,    0.8962
-   },{ 2.892,   0.6204, 208.6,   2.415,    1.416 //Au Z77
-       // },{ 3.223,   0.5883, 232.7,   2.954,    1.05  //Au ICRU
-   },{ 2.892,   0.6204, 208.6,   2.415,    1.416
+   },{ 6.567f,   0.4858f, 193.0f,    2.65f,    1.66f
+   },{ 5.951f,   0.5016f, 196.1f,    2.662f,   1.589f
+   },{ 7.495f,   0.4523f, 251.4f,    3.433f,   0.8619f
+   },{ 6.335f,   0.4825f, 255.1f,    2.834f,   0.8228f
+   },{ 4.314f,   0.5558f, 214.8f,    2.354f,   1.263f
+   },{ 4.02f,    0.5681f, 219.9f,    2.402f,   1.191f
+   },{ 3.836f,   0.5765f, 210.2f,    2.742f,   1.305f
+   },{ 4.68f,    0.5247f, 244.7f,    2.749f,   0.8962f
+   },{ 2.892f,   0.6204f, 208.6f,    2.415f,   1.416f //Au Z77
+       // },{ 3.223f,   0.5883f, 232.7f,   2.954f,    1.05  //Au ICRU
+   },{ 2.892f,   0.6204f, 208.6f,    2.415f,   1.416f
        // Z= 81-90
-   },{ 4.728,   0.5522, 217.0,   3.091,    1.386
-   },{ 6.18,    0.52,   170.0,   4.0,      3.224
-   },{ 9.0,     0.47,   198.0,   3.8,      2.032
-   },{ 2.324,   0.6997, 216.0,   1.599,    1.399
-   },{ 1.961,   0.7286, 223.0,   1.621,    1.296
-   },{ 1.75,    0.7427, 350.1,   0.9789,   0.5507
-   },{ 10.31,   0.4613, 261.2,   4.738,    0.9899
-   },{ 7.962,   0.519,  235.7,   4.347,    1.313
-   },{ 6.227,   0.5645, 231.9,   3.961,    1.379
-   },{ 5.246,   0.5947, 228.6,   4.027,    1.432
+   },{ 4.728f,   0.5522f, 217.0f,    3.091f,   1.386f
+   },{ 6.18f,    0.52f,   170.0f,    4.0f,     3.224f
+   },{ 9.0f,     0.47f,   198.0f,    3.8f,     2.032f
+   },{ 2.324f,   0.6997f, 216.0f,    1.599f,   1.399f
+   },{ 1.961f,   0.7286f, 223.0f,    1.621f,   1.296f
+   },{ 1.75f,    0.7427f, 350.1f,    0.9789f,  0.5507f
+   },{ 10.31f,   0.4613f, 261.2f,    4.738f,   0.9899f
+   },{ 7.962f,   0.519f,  235.7f,    4.347f,   1.313f
+   },{ 6.227f,   0.5645f, 231.9f,    3.961f,   1.379f
+   },{ 5.246f,   0.5947f, 228.6f,    4.027f,   1.432f
        // Z= 91-92
-   },{ 5.408,   0.5811, 235.7,   3.961,    1.358
-   },{ 5.218,   0.5828, 245.0,   3.838,    1.25}
+   },{ 5.408f,   0.5811f, 235.7f,    3.961f,   1.358f
+   },{ 5.218f,   0.5828f, 245.0f,    3.838f,   1.25f}
   };
+
+  G4double slow = (G4double)(a[i][0]);
+
+  G4double x1 = (G4double)(a[i][1]);
+  G4double x2 = (G4double)(a[i][2]);
+  G4double x3 = (G4double)(a[i][3]);
+  G4double x4 = (G4double)(a[i][4]);
 
   // Free electron gas model
   if ( T < 0.001 ) {
-    G4double slow  = a[i][0] ;
-    G4double shigh = G4Log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
-                   * a[i][2]*1000.0 ;
-    ionloss  = slow*shigh / (slow + shigh) ;
-    ionloss *= sqrt(T*1000.0) ;
+    G4double shigh = G4Log( 1.0 + x3*1000.0 + x4*0.001 )* x2*1000.0;
+    ionloss  = slow*shigh*sqrt(T*1000.0)  / (slow + shigh) ;
 
   // Main parametrisation
   } else {
-    G4double slow  = a[i][0] * G4Exp(G4Log(T*1000.0)*a[i][1]) ;
-    G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+    slow  *= G4Exp(G4Log(T*1000.0)*x1);
+    G4double shigh = G4Log( 1.0 + x3/T + x4*T ) * x2/T;
     ionloss = slow*shigh / (slow + shigh) ;
     /*
     G4cout << "## " << i << ". T= " << T << " slow= " << slow
@@ -630,7 +641,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
            << G4endl;
     */
   }
-  if ( ionloss < 0.0) { ionloss = 0.0; }
+  ionloss = std::max(ionloss, 0.0);
 
   // He effective charge
   ionloss /= HeEffChargeSquare(z, T);
@@ -641,34 +652,48 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggIonModel::DEDX(const G4Material* material,
-                                     G4double kineticEnergy)
+                               G4double kineticEnergy)
 {
   G4double eloss = 0.0;
   // check DB
   if(material != currentMaterial) {
     currentMaterial = material;
+    baseMaterial = material->GetBaseMaterial() 
+      ? material->GetBaseMaterial() : material;
     iASTAR    = -1;
     iMolecula = -1;
-    if( !HasMaterial(material) ) { iASTAR = fASTAR->GetIndex(material); }
+    iICRU90 = fICRU90 ? fICRU90->GetIndex(baseMaterial) : -1;
+    
+    if(iICRU90 < 0) { 
+      iASTAR = fASTAR->GetIndex(baseMaterial); 
+      if(iASTAR < 0) { HasMaterial(baseMaterial); }
+    }
+    //G4cout << "%%% " <<material->GetName() << "  iMolecula= " 
+    //       << iMolecula << "  iPSTAR= " << iPSTAR 
+    //       << "  iICRU90= " << iICRU90<< G4endl; 
   }
-
-  const G4int numberOfElements = material->GetNumberOfElements();
-  const G4double* theAtomicNumDensityVector =
-                                 material->GetAtomicNumDensityVector();
-
+  if(iICRU90 >= 0) {
+    return fICRU90->GetElectronicDEDXforAlpha(iICRU90, kineticEnergy)
+      *material->GetDensity()/chargeSquare;
+  }
   if( iASTAR >= 0 ) {
     G4double T = kineticEnergy*rateMassHe2p;
     G4int zeff = G4lrint(material->GetTotNbOfElectPerVolume()/
                          material->GetTotNbOfAtomsPerVolume());
     return fASTAR->GetElectronicDEDX(iASTAR, T)*material->GetDensity()/
       HeEffChargeSquare(zeff, T/MeV);
+  }
 
-  } else if(iMolecula >= 0) {
+  const G4int numberOfElements = material->GetNumberOfElements();
+  const G4double* theAtomicNumDensityVector =
+                                 material->GetAtomicNumDensityVector();
 
-    eloss = StoppingPower(material, kineticEnergy)*
+  if(iMolecula >= 0) {
+
+    eloss = StoppingPower(baseMaterial, kineticEnergy)*
       material->GetDensity()/amu;
 
-  // pure material
+    // pure material
   } else if(1 == numberOfElements) {
 
     G4double z = material->GetZ();
@@ -708,8 +733,8 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z,
   G4double x = c[0] ;
   G4double y = 1.0 ;
   for (G4int i=1; i<6; ++i) {
-    y *= e ;
-    x += y * c[i] ;
+    y *= e;
+    x += y * c[i];
   }
 
   G4double w = 7.6 -  e ;

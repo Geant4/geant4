@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc 69015 2013-04-15 09:46:48Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -48,13 +47,13 @@
 
 
 G4DecayProducts::G4DecayProducts()
-                :numberOfProducts(0),theParentParticle(0)
+                :numberOfProducts(0),theParentParticle(nullptr)
 { 
    theProductVector = new G4DecayProductVector();
 }
 
 G4DecayProducts::G4DecayProducts(const G4DynamicParticle &aParticle)
-  :numberOfProducts(0),theParentParticle(0)
+  :numberOfProducts(0),theParentParticle(nullptr)
 {
   theParentParticle = new G4DynamicParticle(aParticle);
   theProductVector = new G4DecayProductVector();
@@ -91,10 +90,9 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
 {
   G4int index;
 
-  if (this != &right)
-  { 
+  if (this != &right){ 
     // recreate parent
-    if (theParentParticle != 0) delete theParentParticle;
+    if (theParentParticle != nullptr) delete theParentParticle;
     theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
     // delete G4DynamicParticle objects
@@ -127,8 +125,9 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
 G4DecayProducts::~G4DecayProducts()
 {
   //delete parent
-  if (theParentParticle != 0) delete theParentParticle;
-  
+  if (theParentParticle != nullptr) delete theParentParticle;
+  theParentParticle = nullptr;
+
   // delete G4DynamicParticle object
   for (G4int index=0; index < numberOfProducts; index++) {
       delete theProductVector->at(index);
@@ -136,6 +135,7 @@ G4DecayProducts::~G4DecayProducts()
   theProductVector->clear();
   numberOfProducts = 0;    
   delete theProductVector;
+  theProductVector = nullptr;
 }
 
 G4DynamicParticle* G4DecayProducts::PopProducts()
@@ -146,7 +146,7 @@ G4DynamicParticle* G4DecayProducts::PopProducts()
      theProductVector->pop_back();
      return part;
    } else {
-     return 0;
+     return nullptr;
    }
 }
 
@@ -162,13 +162,13 @@ G4DynamicParticle* G4DecayProducts::operator[](G4int anIndex) const
    if ((numberOfProducts > anIndex) && (anIndex >=0) ) {
      return  theProductVector->at(anIndex);
    } else {
-     return 0;
+     return nullptr;
    }
 }
 
 void  G4DecayProducts::SetParentParticle(const G4DynamicParticle &aParticle)
 {
-  if (theParentParticle != 0) delete theParentParticle;
+  if (theParentParticle != nullptr) delete theParentParticle;
   theParentParticle = new G4DynamicParticle(aParticle);
 }
 
@@ -262,8 +262,8 @@ G4bool G4DecayProducts::IsChecked() const
   G4ThreeVector momentum;
   G4double   total_energy = parent_energy;
   G4ThreeVector total_momentum =  parent_momentum;
-  for (G4int index=0; index < numberOfProducts; index++) 
-  {
+
+  for (G4int index=0; index < numberOfProducts; index++) {
     G4DynamicParticle* part = theProductVector->at(index);
     mass = part->GetMass();
     energy  = part->GetTotalEnergy();
@@ -314,8 +314,7 @@ void G4DecayProducts::DumpInfo() const
    G4cout << " ------ Parent Particle ----------" << G4endl;
    if (theParentParticle != 0) theParentParticle->DumpInfo();
    G4cout << " ------ Daughter Particles  ------" << G4endl;  
-   for (G4int index=0; index < numberOfProducts; index++) 
-   {
+   for (G4int index=0; index < numberOfProducts; index++) {
       G4cout << " ----------" << index+1 << " -------------" << G4endl;  
       (theProductVector->at(index))-> DumpInfo();
    }

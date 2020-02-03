@@ -62,8 +62,8 @@ public:
                            G4double, G4double );
   //Adds a new CCal Material to the list and returns a G4Material.
   G4Material* addMaterial(const G4String& nam, G4double density, 
-			  G4int nconst, G4String mats[], G4double prop[],
-			  MatDescription md=byWeight);
+                          G4int nconst, G4String mats[], G4double prop[],
+                          MatDescription md=byWeight);
 
   void readElements (const G4String&);
   void readMaterials(const G4String&);
@@ -82,9 +82,8 @@ private:
 
   //Adds a CCalMaterial to the list. Used by readMaterials and addMaterial.
   CCalMaterial* addCCalMaterial(const G4String& nam, G4double density, 
-				G4int nconst, G4String mats[], G4double prop[],
-				MatDescription md=byWeight);
-  
+                                G4int nconst, G4String mats[], G4double prop[],
+                                MatDescription md=byWeight);
 
 private:
   static CCalMaterialFactory* instance;

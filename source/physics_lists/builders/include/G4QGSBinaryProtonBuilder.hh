@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryProtonBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -61,12 +60,12 @@ class G4QGSBinaryProtonBuilder : public G4VProtonBuilder
     G4QGSBinaryProtonBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSBinaryProtonBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4ProtonInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 
+    using G4VProtonBuilder::Build; //Prevent compiler warning
   private:
 
     G4TheoFSGenerator * theModel;

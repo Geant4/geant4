@@ -52,10 +52,6 @@
 #include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
 #include "G4SDManager.hh"
-
-#include "ML2SDWithParticle.hh"
-#include "ML2SDWithVoxels.hh"
-#include "ML2ReadOutGeometry.hh"
 #include "G4BooleanSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4ProductionCuts.hh"
@@ -66,9 +62,7 @@ class CML2Ph_BoxInBox
 public:
     CML2Ph_BoxInBox();
     ~CML2Ph_BoxInBox(void);
-    bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
-    inline G4int getTotalNumberOfEvents(){return sensDet->getTotalNumberOfEvents();}
-    inline CML2SDWithVoxels* getSensDet(){return  sensDet;}
+    bool Construct(G4VPhysicalVolume *PVWorld);
     inline G4VPhysicalVolume *getPhysicalVolume(){return PVWorld;}
     inline G4ThreeVector getHalfContainerSize(){return halfSize;}
     void writeInfo();
@@ -77,8 +71,6 @@ private:
     G4VPhysicalVolume *boxInSidePV;
     G4VPhysicalVolume *layerPV;
     G4VPhysicalVolume *OutMinusInBoxPV;
-
-    CML2SDWithVoxels *sensDet;
 
     G4ThreeVector centreBoxInside;
     G4double halfBoxInside_Thickness; 

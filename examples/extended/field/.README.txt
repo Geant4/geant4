@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "field/.README.txt"
 ///\brief Examples field README page

@@ -1,4 +1,3 @@
-$Id: History 68056 2013-03-13 14:44:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 30, 2019, A. Zaborowska (param-v10-05-00)
+- Register G4FastSimulationManagerProcess with highest ordering in
+  G4FastSimulationManagerHelper to ensure it is the only process
+  invoked for a given step (ExclusivelyForced) and no other
+  StronglyForced processes will be considered.
+
+December 19, 2017, G. Cosmo (param-V10-04-00)
+- Fixed self-consistency in G4FastSimulationVector header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+November 03, 2016, M. Verderi (param-V10-02-01)
+- New G4FastSimulationManagerHelper utility for
+  adding G4FastSimulationManagerProcess to a
+  process manager.
+
+November 02, 2016, M. Verderi (param-V10-02-00)
+- fix various Coverity defects.
 
 March 27, 2013, M. Verderi (param-V09-06-00)
 - remove unused field 'fOnBoundary' in G4FastSimulationManagerProcess.hh

@@ -322,6 +322,7 @@ void DetectorConstruction::ConstructSDandField()
 
   fStepper = new G4ClassicalRK4 (fEquation);
 
+<<<<<<< HEAD
   fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
   fChordFinder = new G4ChordFinder(fField,1e-9*m,fStepper);
@@ -331,6 +332,23 @@ void DetectorConstruction::ConstructSDandField()
   fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
   fFieldMgr->SetDeltaIntersection(1e-9*m);
   fFieldMgr->SetDeltaOneStep(1e-9*m);     
+=======
+      fFieldMgr->SetChordFinder(fChordFinder);
+      fFieldMgr->SetDetectorField(fField);    
+ 
+      // SI: 01-07-2018 : following settings were initially set to 1e-9*m
+      //  instead of 1e-9*m, but they now induce warnings as
+      //  *** G4Exception : GeomNav1002
+      //  issued by : G4PropagatorInField::ComputeStep
+
+      fFieldMgr->GetChordFinder()->SetDeltaChord(1e-7*m);
+      fFieldMgr->SetDeltaIntersection(1e-7*m);
+      fFieldMgr->SetDeltaOneStep(1e-7*m);     
+      
+      //
+
+      // To avoid G4MagIntegratorDriver::OneGoodStep:Stepsize underflows in Stepper
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       
   fPropInField =
     G4TransportationManager::GetTransportationManager()->GetPropagatorInField();

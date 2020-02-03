@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE01/src/RE01TrackingAction.cc
 /// \brief Implementation of the RE01TrackingAction class
 //
-// $Id: RE01TrackingAction.cc 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
 #include "RE01TrackingAction.hh"

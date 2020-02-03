@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04MuonHit.hh
 /// \brief Definition of the ExN04MuonHit class
 //
-// $Id: ExN04MuonHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04MuonHit_h
@@ -43,7 +42,7 @@ public:
   ~ExN04MuonHit();
   ExN04MuonHit(const ExN04MuonHit& right);
   const ExN04MuonHit& operator=(const ExN04MuonHit &right);
-  G4int operator==(const ExN04MuonHit &right) const;
+  G4bool operator==(const ExN04MuonHit &right) const;
 
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);

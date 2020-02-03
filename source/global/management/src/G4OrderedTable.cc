@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -77,7 +76,7 @@ G4bool G4OrderedTable::Store(const G4String& fileName,
   }
 
  // Number of elements
-  size_t tableSize = size(); 
+  G4int tableSize = G4int(size()); 
   if (!ascii)
   {
     fOut.write( (char*)(&tableSize), sizeof tableSize); 
@@ -112,7 +111,7 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
 {
   std::ifstream fIn;  
   // open input file //
-  if (ascii)
+  if (!ascii)
     { fIn.open(fileName,std::ios::in|std::ios::binary); }
   else
     { fIn.open(fileName,std::ios::in); }
@@ -180,7 +179,7 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
     {
 #ifdef G4VERBOSE  
       G4cerr << "G4OrderedTable::Retrieve(): ";
-      G4cerr << " Rrror in retreiving " << idx
+      G4cerr << " Error in retreiving " << idx
              << "-th Physics Vector from file: ";
       G4cerr << fileName << G4endl;
 #endif          

@@ -23,44 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Sphere.cc 102294 2017-01-20 11:41:52Z gcosmo $
-//
-// class G4Sphere
-//
 // Implementation for G4Sphere class
 //
-// History:
-//
-// 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in cos(theta), sqrt(r)
-// 14.09.09 T.Nikitina: fix for phi section in DistanceToOut(p,v,..),as for G4Tubs,G4Cons 
-// 26.03.09 G.Cosmo   : optimisations and uniform use of local radial tolerance
-// 12.06.08 V.Grichine: fix for theta intersections in DistanceToOut(p,v,...)
-// 22.07.05 O.Link    : Added check for intersection with double cone
-// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
-// 16.07.04 V.Grichine: bug fixed in DistanceToOut(p,v), Rmin go outside
-// 02.06.04 V.Grichine: bug fixed in DistanceToIn(p,v), on Rmax,Rmin go inside
-// 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
-// 29.10.03 J.Apostolakis: fix in Inside for SPhi-0.5*kAngTol < phi<SPhi, SPhi<0
-// 19.06.02 V.Grichine: bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
-// 30.01.02 V.Grichine: bug fixed in Inside(p), && -> || at l.451
-// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 18.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
-// 25.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), phi intersections
-// 12.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), theta intersections
-// 09.10.98 V.Grichine: modifications in DistanceToOut(p,v,...)
-// 17.09.96 V.Grichine: final modifications to commit
 // 28.03.94 P.Kent: old C++ code converted to tolerant geometry
+// 17.09.96 V.Grichine: final modifications to commit
+// 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
+// 22.07.05 O.Link: Added check for intersection with double cone
+// 26.03.09 G.Cosmo: optimisations and uniform use of local radial tolerance
+// 26.10.16 E.Tcherniaev: re-implemented CalculateExtent() using
+//                        G4BoundingEnvelope, removed CreateRotatedVertices()
 // --------------------------------------------------------------------
 
 #include "G4Sphere.hh"
 
 #if !defined(G4GEOM_USE_USPHERE)
 
+#include "G4GeomTools.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -90,8 +73,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName), fEpsilon(2.e-11), fSPhi(0.0),
-    fFullPhiSphere(true), fFullThetaSphere(true)
+  : G4CSGSolid(pName), fSPhi(0.0), fFullPhiSphere(true), fFullThetaSphere(true)
 {
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
@@ -126,13 +108,13 @@ G4Sphere::G4Sphere( const G4String& pName,
 //
 G4Sphere::G4Sphere( __void__& a )
   : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.),
-    kAngTolerance(0.), kRadTolerance(0.), fEpsilon(0.),
+    kAngTolerance(0.), kRadTolerance(0.),
     fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
-    fDTheta(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
+    fDTheta(0.), sinCPhi(0.), cosCPhi(0.),
+    cosHDPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
     ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
     tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
-    fFullPhiSphere(false), fFullThetaSphere(false), fFullSphere(true),
     halfCarTolerance(0.), halfAngTolerance(0.)
 {
 }
@@ -155,7 +137,7 @@ G4Sphere::G4Sphere(const G4Sphere& rhs)
     kRadTolerance(rhs.kRadTolerance), fEpsilon(rhs.fEpsilon),
     fRmin(rhs.fRmin), fRmax(rhs.fRmax), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
     fSTheta(rhs.fSTheta), fDTheta(rhs.fDTheta),
-    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
+    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi), cosHDPhi(rhs.cosHDPhi),
     cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
     sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
     sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi),
@@ -192,6 +174,7 @@ G4Sphere& G4Sphere::operator = (const G4Sphere& rhs)
    fEpsilon = rhs.fEpsilon; fRmin = rhs.fRmin; fRmax = rhs.fRmax;
    fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi; fSTheta = rhs.fSTheta;
    fDTheta = rhs.fDTheta; sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   cosHDPhi = rhs.cosHDPhi;
    cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
@@ -220,6 +203,63 @@ void G4Sphere::ComputeDimensions(       G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4Sphere::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double rmin = GetInnerRadius();
+  G4double rmax = GetOuterRadius();
+
+  // Find bounding box
+  //
+  if (GetDeltaThetaAngle() >= pi && GetDeltaPhiAngle() >= twopi)
+  {
+    pMin.set(-rmax,-rmax,-rmax);
+    pMax.set( rmax, rmax, rmax);
+  }
+  else
+  {
+    G4double sinStart = GetSinStartTheta();
+    G4double cosStart = GetCosStartTheta();
+    G4double sinEnd   = GetSinEndTheta();
+    G4double cosEnd   = GetCosEndTheta();
+
+    G4double stheta = GetStartThetaAngle();
+    G4double etheta = stheta + GetDeltaThetaAngle();
+    G4double rhomin = rmin*std::min(sinStart,sinEnd);
+    G4double rhomax = rmax;
+    if (stheta > halfpi) rhomax = rmax*sinStart;
+    if (etheta < halfpi) rhomax = rmax*sinEnd;
+
+    G4TwoVector xymin,xymax;
+    G4GeomTools::DiskExtent(rhomin,rhomax,
+                            GetSinStartPhi(),GetCosStartPhi(),
+                            GetSinEndPhi(),GetCosEndPhi(),
+                            xymin,xymax);
+
+    G4double zmin = std::min(rmin*cosEnd,rmax*cosEnd);
+    G4double zmax = std::max(rmin*cosStart,rmax*cosStart);
+    pMin.set(xymin.x(),xymin.y(),zmin);
+    pMax.set(xymax.x(),xymax.y(),zmax);
+  }
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Sphere::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
 ////////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
@@ -229,238 +269,14 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
                                   const G4AffineTransform& pTransform,
                                         G4double& pMin, G4double& pMax ) const
 {
-  if ( fFullSphere )
-  {
-    // Special case handling for solid spheres-shells
-    // (rotation doesn't influence).
-    // Compute x/y/z mins and maxs for bounding box respecting limits,
-    // with early returns if outside limits. Then switch() on pAxis,
-    // and compute exact x and y limit for x/y case
-      
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
+  G4ThreeVector bmin, bmax;
 
-    G4double diff1,diff2,delta,maxDiff,newMin,newMax;
-    G4double xoff1,xoff2,yoff1,yoff2;
+  // Get bounding box
+  BoundingLimits(bmin,bmax);
 
-    xoffset=pTransform.NetTranslation().x();
-    xMin=xoffset-fRmax;
-    xMax=xoffset+fRmax;
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
-        || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin<pVoxelLimit.GetMinXExtent())
-        {
-          xMin=pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax>pVoxelLimit.GetMaxXExtent())
-        {
-          xMax=pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-
-    yoffset=pTransform.NetTranslation().y();
-    yMin=yoffset-fRmax;
-    yMax=yoffset+fRmax;
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
-        || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin<pVoxelLimit.GetMinYExtent())
-        {
-          yMin=pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax>pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-
-    zoffset=pTransform.NetTranslation().z();
-    zMin=zoffset-fRmax;
-    zMax=zoffset+fRmax;
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
-        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (zMin<pVoxelLimit.GetMinZExtent())
-        {
-          zMin=pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax>pVoxelLimit.GetMaxZExtent())
-        {
-          zMax=pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-
-    // Known to cut sphere
-
-    switch (pAxis)
-    {
-      case kXAxis:
-        yoff1=yoffset-yMin;
-        yoff2=yMax-yoffset;
-        if ((yoff1>=0) && (yoff2>=0))
-        {
-          // Y limits cross max/min x => no change
-          //
-          pMin=xMin;
-          pMax=xMax;
-        }
-        else
-        {
-          // Y limits don't cross max/min x => compute max delta x,
-          // hence new mins/maxs
-          //
-          delta=fRmax*fRmax-yoff1*yoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=fRmax*fRmax-yoff2*yoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff=(diff1>diff2) ? diff1:diff2;
-          newMin=xoffset-maxDiff;
-          newMax=xoffset+maxDiff;
-          pMin=(newMin<xMin) ? xMin : newMin;
-          pMax=(newMax>xMax) ? xMax : newMax;
-        }
-        break;
-      case kYAxis:
-        xoff1=xoffset-xMin;
-        xoff2=xMax-xoffset;
-        if ((xoff1>=0) && (xoff2>=0))
-        {
-          // X limits cross max/min y => no change
-          //
-          pMin=yMin;
-          pMax=yMax;
-        }
-        else
-        {
-          // X limits don't cross max/min y => compute max delta y,
-          // hence new mins/maxs
-          //
-          delta=fRmax*fRmax-xoff1*xoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=fRmax*fRmax-xoff2*xoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff=(diff1>diff2) ? diff1:diff2;
-          newMin=yoffset-maxDiff;
-          newMax=yoffset+maxDiff;
-          pMin=(newMin<yMin) ? yMin : newMin;
-          pMax=(newMax>yMax) ? yMax : newMax;
-        }
-        break;
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-      default:
-        break;
-    }
-    pMin-=kCarTolerance;
-    pMax+=kCarTolerance;
-
-    return true;  
-  }
-  else       // Transformed cutted sphere
-  {
-    G4int i,j,noEntries,noBetweenSections;
-    G4bool existsAfterClip=false;
-
-    // Calculate rotated vertex coordinates
-
-    G4ThreeVectorList* vertices;
-    G4int  noPolygonVertices ;
-    vertices=CreateRotatedVertices(pTransform,noPolygonVertices);
-
-    pMin=+kInfinity;
-    pMax=-kInfinity;
-
-    noEntries=vertices->size();  // noPolygonVertices*noPhiCrossSections
-    noBetweenSections=noEntries-noPolygonVertices;
-
-    G4ThreeVectorList ThetaPolygon ;
-    for (i=0;i<noEntries;i+=noPolygonVertices)
-    {
-      for(j=0;j<(noPolygonVertices/2)-1;j++)
-      {
-        ThetaPolygon.push_back((*vertices)[i+j]) ;      
-        ThetaPolygon.push_back((*vertices)[i+j+1]) ;      
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-2-j]) ;      
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1-j]) ;      
-        CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-        ThetaPolygon.clear() ;
-      }
-    }
-    for (i=0;i<noBetweenSections;i+=noPolygonVertices)
-    {
-      for(j=0;j<noPolygonVertices-1;j++)
-      {
-        ThetaPolygon.push_back((*vertices)[i+j]) ;      
-        ThetaPolygon.push_back((*vertices)[i+j+1]) ;      
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j+1]) ;      
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j]) ;      
-        CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-        ThetaPolygon.clear() ;
-      }
-      ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1]) ;      
-      ThetaPolygon.push_back((*vertices)[i]) ;  
-      ThetaPolygon.push_back((*vertices)[i+noPolygonVertices]) ;      
-      ThetaPolygon.push_back((*vertices)[i+2*noPolygonVertices-1]) ;      
-      CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-      ThetaPolygon.clear() ;
-    }
-      
-    if ((pMin!=kInfinity) || (pMax!=-kInfinity))
-    {
-      existsAfterClip=true;
-
-      // Add 2*tolerance to avoid precision troubles
-      //
-      pMin-=kCarTolerance;
-      pMax+=kCarTolerance;
-    }
-    else
-    {
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-
-      G4ThreeVector clipCentre(
-          (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-          (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-          (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-        
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-      {
-        existsAfterClip=true;
-        pMin=pVoxelLimit.GetMinExtent(pAxis);
-        pMax=pVoxelLimit.GetMaxExtent(pAxis);
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
-  }
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -551,9 +367,9 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
     if ( in == kInside )
     {
       if ( ((fSTheta > 0.0) && (pTheta < fSTheta + halfAngTolerance))
-	|| ((eTheta < pi) && (pTheta > eTheta - halfAngTolerance)) )
+        || ((eTheta < pi) && (pTheta > eTheta - halfAngTolerance)) )
       {
-	if ( (( (fSTheta>0.0)&&(pTheta>=fSTheta-halfAngTolerance) )
+        if ( (( (fSTheta>0.0)&&(pTheta>=fSTheta-halfAngTolerance) )
              || (fSTheta == 0.0) )
           && ((eTheta==pi)||(pTheta <= eTheta + halfAngTolerance) ) )
         {
@@ -568,7 +384,7 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
     else
     {
         if ( ((fSTheta > 0.0)&&(pTheta < fSTheta - halfAngTolerance))
-	   ||((eTheta < pi  )&&(pTheta > eTheta + halfAngTolerance)) )
+           ||((eTheta < pi  )&&(pTheta > eTheta + halfAngTolerance)) )
       {
         in = kOutside;
       }
@@ -656,24 +472,24 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 
   if( distRMax <= halfCarTolerance )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   if( fRmin && (distRMin <= halfCarTolerance) )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm -= nR;
   }
   if( !fFullPhiSphere )   
   {
     if (distSPhi <= halfAngTolerance)
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= halfAngTolerance) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
@@ -681,13 +497,13 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   {
     if ((distSTheta <= halfAngTolerance) && (fSTheta > 0.))
     {
-      noSurfaces ++;
+      ++noSurfaces;
       if ((radius <= halfCarTolerance) && fFullPhiSphere)  { sumnorm += nZ;  }
       else                                                 { sumnorm += nTs; }
     }
     if ((distETheta <= halfAngTolerance) && (eTheta < pi)) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       if ((radius <= halfCarTolerance) && fFullPhiSphere)  { sumnorm -= nZ;  }
       else                                                 { sumnorm += nTe; }
       if(sumnorm.z() == 0.)  { sumnorm += nZ; }
@@ -707,7 +523,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 //
 // Algorithm for SurfaceNormal() following the original specification
 // for points not on the surface
@@ -777,16 +593,16 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     {
       if (distSPhi<distMin)
       {
-        distMin=distSPhi;
-        side=kNSPhi;
+        distMin = distSPhi;
+        side = kNSPhi;
       }
     }
     else
     {
       if (distEPhi<distMin)
       {
-        distMin=distEPhi;
-        side=kNEPhi;
+        distMin = distEPhi;
+        side = kNEPhi;
       }
     }
   }
@@ -1373,7 +1189,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
     // => (px^2+py^2-pz^2tan^2(t))+2sd(pxvx+pyvy-pzvztan^2(t))
     //       + sd^2(vx^2+vy^2-vz^2tan^2(t)) = 0
     //
-    // => sd^2(1-vz^2(1+tan^2(t))+2sd(pdotv2d-pzvztan^2(t))+(rho2-pz^2tan^2(t))=0
+    // => sd^2(1-vz^2(1+tan^2(t))+2sd(pdotv2d-pzvztan^2(t))
+    //       + (rho2-pz^2tan^2(t)) = 0
 
     if (fSTheta)
     {
@@ -1872,7 +1689,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p ) const
     // Psi=angle from central phi to point
     //
     cosPsi=(p.x()*cosCPhi+p.y()*sinCPhi)/rho;
-    if (cosPsi<std::cos(hDPhi))
+    if (cosPsi<cosHDPhi)
     {
       // Point lies outside phi range
       //
@@ -1932,8 +1749,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                                   const G4ThreeVector& v,
                                   const G4bool calcNorm,
-                                        G4bool *validNorm,
-                                        G4ThreeVector *n   ) const
+                                        G4bool* validNorm,
+                                        G4ThreeVector* n ) const
 {
   G4double snxt = kInfinity;     // snxt is default return value
   G4double sphi= kInfinity,stheta= kInfinity;
@@ -2033,7 +1850,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         if ( (c < fRminTolerance*fRmin)              // leaving from Rmin
           && (d2 >= fRminTolerance*fRmin) && (pDotV3d < 0) )
         {
-          if(calcNorm)  { *validNorm = false; }  // Rmin surface is concave         
+          if(calcNorm)  { *validNorm = false; }  // Rmin surface is concave
           return snxt = 0 ;
         }
         else
@@ -2076,7 +1893,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     // => (px^2+py^2-pz^2tan^2(t))+2sd(pxvx+pyvy-pzvztan^2(t))
     //       + sd^2(vx^2+vy^2-vz^2tan^2(t)) = 0
     //
-    // => sd^2(1-vz^2(1+tan^2(t))+2sd(pdotv2d-pzvztan^2(t))+(rho2-pz^2tan^2(t))=0
+    // => sd^2(1-vz^2(1+tan^2(t))+2sd(pdotv2d-pzvztan^2(t))
+    //       + (rho2-pz^2tan^2(t)) = 0
     //
   
     if(fSTheta) // intersection with first cons
@@ -2338,11 +2156,13 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               sd = -b - d;         // First root
 
               if ( ((std::fabs(sd) < halfRmaxTolerance) && (t2 >= 0.))
-                || (sd < 0.) || ( (sd > 0.) && (p.z() + sd*v.z() > halfRmaxTolerance) ) )
+                || (sd < 0.)
+                || ( (sd > 0.) && (p.z() + sd*v.z() > halfRmaxTolerance) ) )
               {
                 sd = -b + d ; // 2nd root
               }
-              if( (sd > halfRmaxTolerance) && (p.z() + sd*v.z() <= halfRmaxTolerance) )  
+              if ( ( sd>halfRmaxTolerance )
+                && ( p.z()+sd*v.z() <= halfRmaxTolerance ) )
               {
                 if( sd < stheta )
                 {
@@ -2419,7 +2239,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
             // Check intersection with correct half-plane
             //
-            if ((std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance))
+            if ( (std::fabs(xi)<=kCarTolerance)
+              && (std::fabs(yi)<=kCarTolerance))
             {
               // Leaving via ending phi
               //
@@ -2525,7 +2346,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
+              if( (std::fabs(xi)<=kCarTolerance)
+               && (std::fabs(yi)<=kCarTolerance) )
               {
                 vphi = std::atan2(v.y(),v.x());
                 sidephi = kSPhi;
@@ -2607,7 +2429,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if((std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance))
+              if( (std::fabs(xi)<=kCarTolerance)
+               && (std::fabs(yi)<=kCarTolerance))
               {
                 vphi = std::atan2(v.y(),v.x()) ;
                 sidephi = kSPhi;
@@ -2901,141 +2724,6 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
     // An improvement to return negative answer if outside (TODO)
   
   return safe;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fDz cross section
-//          [4-7] +fDz cross section such that [0] is below [4],
-//                                             [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
-//  Potential improvement: For last slice, use actual ending angle
-//                         to avoid rounding error problems.
-
-G4ThreeVectorList*
-G4Sphere::CreateRotatedVertices( const G4AffineTransform& pTransform,
-                                       G4int& noPolygonVertices ) const
-{
-  G4ThreeVectorList *vertices;
-  G4ThreeVector vertex;
-  G4double meshAnglePhi,meshRMax,crossAnglePhi,
-           coscrossAnglePhi,sincrossAnglePhi,sAnglePhi;
-  G4double meshTheta,crossTheta,startTheta;
-  G4double rMaxX,rMaxY,rMinX,rMinY,rMinZ,rMaxZ;
-  G4int crossSectionPhi,noPhiCrossSections,crossSectionTheta,noThetaSections;
-
-  // Phi cross sections
-    
-  noPhiCrossSections = G4int(fDPhi/kMeshAngleDefault)+1;
-    
-  if (noPhiCrossSections<kMinMeshSections)
-  {
-    noPhiCrossSections=kMinMeshSections;
-  }
-  else if (noPhiCrossSections>kMaxMeshSections)
-  {
-    noPhiCrossSections=kMaxMeshSections;
-  }
-  meshAnglePhi=fDPhi/(noPhiCrossSections-1);
-    
-  // If complete in phi, set start angle such that mesh will be at fRMax
-  // on the x axis. Will give better extent calculations when not rotated.
-    
-  if (fFullPhiSphere)
-  {
-    sAnglePhi = -meshAnglePhi*0.5;
-  }
-    else
-  {
-    sAnglePhi=fSPhi;
-  }    
-
-  // Theta cross sections
-    
-  noThetaSections = G4int(fDTheta/kMeshAngleDefault)+1;
-    
-  if (noThetaSections<kMinMeshSections)
-  {
-    noThetaSections=kMinMeshSections;
-  }
-  else if (noThetaSections>kMaxMeshSections)
-  {
-    noThetaSections=kMaxMeshSections;
-  }
-  meshTheta=fDTheta/(noThetaSections-1);
-    
-  // If complete in Theta, set start angle such that mesh will be at fRMax
-  // on the z axis. Will give better extent calculations when not rotated.
-    
-  if (fFullThetaSphere)
-  {
-    startTheta = -meshTheta*0.5;
-  }
-  else
-  {
-    startTheta=fSTheta;
-  }    
-
-  meshRMax = (meshAnglePhi >= meshTheta) ?
-             fRmax/std::cos(meshAnglePhi*0.5) : fRmax/std::cos(meshTheta*0.5);
-  G4double* cosCrossTheta = new G4double[noThetaSections];
-  G4double* sinCrossTheta = new G4double[noThetaSections];    
-  vertices=new G4ThreeVectorList();
-  if (vertices && cosCrossTheta && sinCrossTheta)
-  {
-    vertices->reserve(noPhiCrossSections*(noThetaSections*2));
-    for (crossSectionPhi=0;
-         crossSectionPhi<noPhiCrossSections; crossSectionPhi++)
-    {
-      crossAnglePhi=sAnglePhi+crossSectionPhi*meshAnglePhi;
-      coscrossAnglePhi=std::cos(crossAnglePhi);
-      sincrossAnglePhi=std::sin(crossAnglePhi);
-      for (crossSectionTheta=0;
-           crossSectionTheta<noThetaSections;crossSectionTheta++)
-      {
-        // Compute coordinates of cross section at section crossSectionPhi
-        //
-        crossTheta=startTheta+crossSectionTheta*meshTheta;
-        cosCrossTheta[crossSectionTheta]=std::cos(crossTheta);
-        sinCrossTheta[crossSectionTheta]=std::sin(crossTheta);
-
-        rMinX=fRmin*sinCrossTheta[crossSectionTheta]*coscrossAnglePhi;
-        rMinY=fRmin*sinCrossTheta[crossSectionTheta]*sincrossAnglePhi;
-        rMinZ=fRmin*cosCrossTheta[crossSectionTheta];
-        
-        vertex=G4ThreeVector(rMinX,rMinY,rMinZ);
-        vertices->push_back(pTransform.TransformPoint(vertex));
-        
-      }    // Theta forward 
-    
-      for (crossSectionTheta=noThetaSections-1;
-           crossSectionTheta>=0; crossSectionTheta--)
-      {
-        rMaxX=meshRMax*sinCrossTheta[crossSectionTheta]*coscrossAnglePhi;
-        rMaxY=meshRMax*sinCrossTheta[crossSectionTheta]*sincrossAnglePhi;
-        rMaxZ=meshRMax*cosCrossTheta[crossSectionTheta];
-        
-        vertex=G4ThreeVector(rMaxX,rMaxY,rMaxZ);
-        vertices->push_back(pTransform.TransformPoint(vertex));
-
-      }   // Theta back 
-    }   // Phi
-    noPolygonVertices = noThetaSections*2 ;
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Sphere::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-
-  delete [] cosCrossTheta;
-  delete [] sinCrossTheta;
-
-  return vertices;
 }
 
 //////////////////////////////////////////////////////////////////////////

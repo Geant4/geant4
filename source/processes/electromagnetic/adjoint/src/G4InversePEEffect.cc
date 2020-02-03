@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InversePEEffect.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 #include "G4InversePEEffect.hh"
 #include "G4VEmAdjointModel.hh"

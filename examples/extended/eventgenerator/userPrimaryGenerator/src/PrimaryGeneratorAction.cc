@@ -27,7 +27,6 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc 89705 2015-04-27 17:15:27Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

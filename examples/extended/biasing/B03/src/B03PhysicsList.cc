@@ -27,7 +27,6 @@
 /// \brief Implementation of the B03PhysicsList class
 //
 //
-// $Id: B03PhysicsList.cc 75089 2013-10-25 23:25:21Z dwright $
 //
 
 #include "globals.hh"
@@ -50,6 +49,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -289,6 +289,10 @@ void B03PhysicsList::ConstructEM()
 #include "G4IonsShenCrossSection.hh"
 #include "G4TripathiCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionElastic.hh"
+#include "G4CrossSectionInelastic.hh"
+#include "G4NeutronInelasticXS.hh"
 
 //
 // ConstructHad()
@@ -335,7 +339,7 @@ void B03PhysicsList::ConstructHad()
   theTheoModel->SetTransport(theCascade);
   theTheoModel->SetHighEnergyGenerator(theStringModel);
   theTheoModel->SetMinEnergy(19*GeV);
-  theTheoModel->SetMaxEnergy(100*TeV);
+  theTheoModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   G4VLongitudinalStringDecay* theFragmentation = new G4QGSMFragmentation;
   G4ExcitedStringDecay* theStringDecay = 
@@ -373,8 +377,13 @@ void B03PhysicsList::ConstructHad()
   G4TripathiCrossSection* tripXS = new G4TripathiCrossSection;
   G4TripathiLightCrossSection* tripLightXS = new G4TripathiLightCrossSection;
 
+  G4ComponentGGHadronNucleusXsc * ggHNXsec = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet * theGGHNEl = new G4CrossSectionElastic(ggHNXsec);
+  G4VCrossSectionDataSet * theGGHNInel = new G4CrossSectionInelastic(ggHNXsec);
+
   // Elastic process
   G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+  theElasticProcess->AddDataSet(theGGHNEl);
   G4HadronElastic* theElasticModel = new G4HadronElastic;
   theElasticProcess->RegisterMe(theElasticModel);
 
@@ -389,6 +398,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4PionPlusInelasticProcess* theInelasticProcess = 
                                 new G4PionPlusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -396,6 +406,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4PionMinusInelasticProcess* theInelasticProcess = 
                                 new G4PionMinusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -403,6 +414,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonPlusInelasticProcess* theInelasticProcess = 
                                   new G4KaonPlusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -411,6 +423,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonZeroSInelasticProcess* theInelasticProcess = 
                              new G4KaonZeroSInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -419,6 +432,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonZeroLInelasticProcess* theInelasticProcess = 
                              new G4KaonZeroLInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -427,6 +441,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonMinusInelasticProcess* theInelasticProcess = 
                                  new G4KaonMinusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -435,6 +450,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4ProtonInelasticProcess* theInelasticProcess = 
                                     new G4ProtonInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -443,6 +459,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiProtonInelasticProcess* theInelasticProcess = 
                                 new G4AntiProtonInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(antiBHighEnergyModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
 
@@ -453,6 +470,7 @@ void B03PhysicsList::ConstructHad()
       // inelastic scattering
       G4NeutronInelasticProcess* theInelasticProcess = 
                                     new G4NeutronInelasticProcess("inelastic");
+      theInelasticProcess->AddDataSet(new G4NeutronInelasticXS());
       theInelasticProcess->RegisterMe(bertini);
       theInelasticProcess->RegisterMe(theTheoModel);
       pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -473,6 +491,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiNeutronInelasticProcess* theInelasticProcess = 
                                new G4AntiNeutronInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(antiBHighEnergyModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
 
@@ -480,6 +499,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4LambdaInelasticProcess* theInelasticProcess = 
                                     new G4LambdaInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -488,6 +508,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiLambdaInelasticProcess* theInelasticProcess = 
                                 new G4AntiLambdaInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(antiBHighEnergyModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -495,6 +516,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4SigmaPlusInelasticProcess* theInelasticProcess = 
                                  new G4SigmaPlusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -503,6 +525,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4SigmaMinusInelasticProcess* theInelasticProcess = 
                                  new G4SigmaMinusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -511,6 +534,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiSigmaPlusInelasticProcess* theInelasticProcess = 
                              new G4AntiSigmaPlusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(antiBHighEnergyModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -518,6 +542,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiSigmaMinusInelasticProcess* theInelasticProcess = 
                             new G4AntiSigmaMinusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(antiBHighEnergyModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -525,6 +550,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4XiZeroInelasticProcess* theInelasticProcess = 
                             new G4XiZeroInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -533,6 +559,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4XiMinusInelasticProcess* theInelasticProcess = 
                             new G4XiMinusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(bertini);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -541,6 +568,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiXiZeroInelasticProcess* theInelasticProcess = 
                             new G4AntiXiZeroInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(antiBHighEnergyModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -548,6 +576,7 @@ void B03PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiXiMinusInelasticProcess* theInelasticProcess = 
                             new G4AntiXiMinusInelasticProcess("inelastic");
+         theInelasticProcess->AddDataSet(theGGHNInel);
          theInelasticProcess->RegisterMe(antiBHighEnergyModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -588,6 +617,7 @@ void B03PhysicsList::ConstructHad()
       pmanager->AddDiscreteProcess(theElasticProcess);
       G4OmegaMinusInelasticProcess* theInelasticProcess = 
                             new G4OmegaMinusInelasticProcess("inelastic");
+      theInelasticProcess->AddDataSet(theGGHNInel);
       theInelasticProcess->RegisterMe(bertini);
       theInelasticProcess->RegisterMe(theTheoModel);
       pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -596,6 +626,7 @@ void B03PhysicsList::ConstructHad()
       pmanager->AddDiscreteProcess(theElasticProcess);
       G4AntiOmegaMinusInelasticProcess* theInelasticProcess = 
                             new G4AntiOmegaMinusInelasticProcess("inelastic");
+      theInelasticProcess->AddDataSet(theGGHNInel);
       theInelasticProcess->RegisterMe(antiBHighEnergyModel);
       pmanager->AddDiscreteProcess(theInelasticProcess);
     }

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITManager.hh 84670 2014-10-17 15:23:24Z matkara $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -44,8 +43,8 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4ITManager_hh
-#define G4ITManager_hh 1
+#ifndef G4ITFinder_hh
+#define G4ITFinder_hh 1
 
 #include <G4AllITFinder.hh>
 

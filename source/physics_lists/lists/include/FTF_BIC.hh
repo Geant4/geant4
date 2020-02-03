@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTF_BIC.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,31 +34,25 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TFTF_BIC_h
-#define TFTF_BIC_h 1
+#ifndef FTF_BIC_h
+#define FTF_BIC_h 1
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TFTF_BIC: public T
+
+class FTF_BIC: public G4VModularPhysicsList
 {
 public:
-  TFTF_BIC(G4int ver = 1);
-  virtual ~TFTF_BIC();
+  FTF_BIC(G4int ver = 1);
+  virtual ~FTF_BIC()=default;
   
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+  FTF_BIC(const FTF_BIC &) = delete;
+  FTF_BIC & operator=(const FTF_BIC &)=delete;
+  
 };
-#include "FTF_BIC.icc"
-typedef TFTF_BIC<G4VModularPhysicsList> FTF_BIC;
 
 #endif
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedPhotoElectricModel.hh 95459 2016-02-11 10:23:30Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008

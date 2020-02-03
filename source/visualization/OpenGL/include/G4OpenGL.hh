@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh 85263 2014-10-27 08:58:31Z gcosmo $
 //
 // G.Barrand.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
  #ifndef G4OpenGL_h
  #define G4OpenGL_h 
@@ -39,26 +38,43 @@
  #endif
 
 
- #ifdef G4VIS_BUILD_OPENGLX_DRIVER
- #  include <GL/gl.h>
+ #if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
+   #if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
+     #ifdef __MACH__
+       #include <OpenGL/gl.h>
+     #else
+       #include <GL/gl.h>
+     #endif
+   #else
+     #include <GL/gl.h>
+   #endif
  #endif
 
- #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
- #    include <GL/gl.h>
- #endif
+ #if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
+   #if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
+     #ifdef __MACH__
+       #include <OpenGL/gl.h>
+     #else
+       #include <GL/gl.h>
+     #endif
+   #else
+     #include <GL/gl.h>
+   #endif
+#endif
 
- #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+ #if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
  #    include <GL/gl.h>
  #endif
 //# Do NOT include glx Here ! It has to be done, after all <Qxx...> includes
 //#  include <GL/glx.h>
 
- #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+ #if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
  #  include <Wt/WGLWidget>
  #  define G4OPENGL_VERSION_2 1
  #endif
- #ifdef  G4VIS_BUILD_OPENGLQT_DRIVER
-  #ifndef G4VIS_BUILD_OPENGLX_DRIVER
+ #if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
+   #if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
+   #else
     #ifdef __MACH__
 //#  define G4OPENGL_VERSION_2 1
       #include <OpenGL/gl.h>
@@ -77,6 +93,6 @@
 
 #define G4OPENGL_FLT_BIG 1.e20
 
- #endif
+#endif
 
 #endif

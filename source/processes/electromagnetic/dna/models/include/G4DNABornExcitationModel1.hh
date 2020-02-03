@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel1.hh 90057 2015-05-11 22:25:50Z matkara $
 //
 
 #ifndef G4DNABornExcitationModel1_h

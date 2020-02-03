@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.hh 69717 2013-05-13 09:47:57Z gcosmo $
 //      V. Uzhinsky Nov. 2012
 //          Added method GetProjectileNucleus for simulation of nucleus-nucleus inter. 
 //
@@ -38,39 +37,34 @@
 // generation of complete final states for inelastic scattering.
 // Class Description - End
 
+#include "G4HadronicInteraction.hh"
 #include "G4Nucleus.hh"
 #include "G4HadProjectile.hh"
-class G4KineticTrackVector;
 #include "G4ReactionProduct.hh"
 #include "G4V3DNucleus.hh"
 
-class G4VHighEnergyGenerator 
+class G4KineticTrackVector;
+
+class G4VHighEnergyGenerator : public G4HadronicInteraction
 {
   public:
       G4VHighEnergyGenerator(const G4String& modelName = "High Energy Generator");
-      virtual ~G4VHighEnergyGenerator();
+      ~G4VHighEnergyGenerator() override;
+
+      G4HadFinalState *ApplyYourself(const G4HadProjectile&, G4Nucleus&) final;
 
   private:
       G4VHighEnergyGenerator(const G4VHighEnergyGenerator &right);
       const G4VHighEnergyGenerator & operator=(const G4VHighEnergyGenerator &right);
-      int operator==(const G4VHighEnergyGenerator &right) const;
-      int operator!=(const G4VHighEnergyGenerator &right) const;
+      G4bool operator==(const G4VHighEnergyGenerator &right) const;
+      G4bool operator!=(const G4VHighEnergyGenerator &right) const;
 
  public:
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
       virtual G4V3DNucleus * GetProjectileNucleus() const;  // Uzhi Nov. 2012
       virtual G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, 
                                              const G4DynamicParticle &thePrimary) = 0;
-      std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
-      void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double AbsoluteLevel);
-      virtual void ModelDescription(std::ostream&) const;
-      virtual G4String GetModelName() const;
-
-  private:
-      std::pair<G4double, G4double> epCheckLevels;
-
-  private:
-      G4String theGeneratorModelName;
+      void ModelDescription(std::ostream&) const override;
 
 };
 #endif

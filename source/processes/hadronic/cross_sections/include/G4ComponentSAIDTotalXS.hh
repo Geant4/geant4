@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComponentSAIDTotalXS.hh 67988 2013-03-13 10:52:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +49,7 @@
 #include "G4VComponentCrossSection.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "G4Threading.hh"
 
 enum G4SAIDCrossSectionType 
 { 
@@ -114,8 +114,7 @@ public: //with description
 					 G4double kinEnergy, 
 					 G4int /*Z*/, G4int /*N*/);
 
-  virtual
-  void Description() const;
+  virtual void Description(std::ostream&) const final;
 
 private:
 
@@ -139,6 +138,10 @@ private:
   static const G4String fnames[numberOfSaidXS];
   G4PhysicsVector* elastdata[numberOfSaidXS];
   G4PhysicsVector* inelastdata[numberOfSaidXS];
+
+#ifdef G4MULTITHREADED
+  static G4Mutex saidXSMutex;
+#endif
 
 };
 

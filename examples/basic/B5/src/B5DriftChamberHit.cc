@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B5DriftChamberHit.cc 76474 2013-11-11 10:36:34Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B5DriftChamberHit.cc
 /// \brief Implementation of the B5DriftChamberHit class
@@ -86,9 +89,13 @@ const B5DriftChamberHit& B5DriftChamberHit::operator=(const B5DriftChamberHit &r
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int B5DriftChamberHit::operator==(const B5DriftChamberHit &/*right*/) const
+G4bool B5DriftChamberHit::operator==(const B5DriftChamberHit &/*right*/) const
 {
+<<<<<<< HEAD
     return 0;
+=======
+  return false;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

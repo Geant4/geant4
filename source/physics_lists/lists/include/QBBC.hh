@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,17 +44,13 @@ class QBBC : public G4VModularPhysicsList
 {
 public:
 
-  QBBC(G4int ver = 1, const G4String& type = "QBBC");
+  explicit QBBC(G4int ver = 1, const G4String& type = "QBBC");
 
-  virtual ~QBBC();
-
-  virtual void SetCuts();
-
-private:
+  virtual ~QBBC()=default;
 
   // copy constructor and hide assignment operator
-  QBBC(QBBC &);
-  QBBC & operator=(const QBBC &right);
+  QBBC(const QBBC &)=delete;
+  QBBC & operator=(const QBBC &right)=delete;
 
 };
 

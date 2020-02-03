@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ElectricField.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// class G4ElectricField
+// G4ElectricField
 //
 // Class description:
 //
-// Electric Field abstract class, implements inquiry function interface.
+// Electric field abstract class, implements inquiry function interface.
 
-// History:
-// - Created. JA, November 4th, 2003.
-
-#ifndef G4ELECTRIC_FIELD_DEF
-#define G4ELECTRIC_FIELD_DEF
+// Created: J.Apostolakis - 04.11.2003
+// --------------------------------------------------------------------
+#ifndef G4ELECTRIC_FIELD_HH
+#define G4ELECTRIC_FIELD_HH
 
 #include "G4Types.hh"
 #include "G4ElectroMagneticField.hh"
@@ -50,15 +45,15 @@ class G4ElectricField : public G4ElectroMagneticField
      virtual ~G4ElectricField();
        // Constructor and destructor. No actions.
 
-     G4ElectricField(const G4ElectricField &r);
-     G4ElectricField& operator = (const G4ElectricField &p);
+     G4ElectricField(const G4ElectricField& r);
+     G4ElectricField& operator = (const G4ElectricField& p);
        // Copy constructor & assignment operator.
 
      G4bool   DoesFieldChangeEnergy() const { return true; }
        // Since an electric field can change track energy
 
      virtual void  GetFieldValue( const G4double Point[4],
-					G4double *Bfield ) const = 0;
+					G4double* Bfield ) const = 0;
 };
 
 #endif /* G4ELECTRIC_FIELD_DEF */

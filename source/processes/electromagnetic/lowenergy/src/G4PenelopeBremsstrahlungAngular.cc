@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // --------------------------------------------------------------
 //
@@ -85,35 +84,33 @@ void G4PenelopeBremsstrahlungAngular::Initialize()
 
 void G4PenelopeBremsstrahlungAngular::ClearTables()
 {
-  std::map<G4double,G4PhysicsTable*>::iterator j;
-
   if (theLorentzTables1)
     {
-      for (j=theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
+      for (auto j = theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
           //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables1;
-      theLorentzTables1 = 0;
+      theLorentzTables1 = nullptr;
     }
 
   if (theLorentzTables2)
     {
-      for (j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
+      for (auto j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
           //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables2;
-      theLorentzTables2 = 0;
+      theLorentzTables2 = nullptr;
     }
   if (theEffectiveZSq)
     {
       delete theEffectiveZSq;
-      theEffectiveZSq = 0;
+      theEffectiveZSq = nullptr;
     }
 }
 
@@ -122,7 +119,7 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
 void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 {
    //Read information from DataBase file
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     {
       G4String excep =
@@ -335,7 +332,7 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
   if (!material)
     {
       G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
-		  "em2040",FatalException,"The pointer to G4Material* is NULL");
+		  "em2040",FatalException,"The pointer to G4Material* is nullptr");
       return fLocalDirection;
     }
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh 87829 2015-01-14 17:19:59Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -53,8 +52,10 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
+
 class G4SafetyHelper; 
 class G4CoupledTransportation;
+class G4TransportationLogger;
 
 class G4Transportation : public G4VProcess 
 {
@@ -71,37 +72,32 @@ class G4Transportation : public G4VProcess
                                    G4double  currentMinimumStep, 
                                    G4double& currentSafety,
                                    G4GPILSelection* selection
-                            );
+                            ); // override;
 
      G4VParticleChange* AlongStepDoIt(
                              const G4Track& track,
                              const G4Step& stepData
-                            );
+                            ); // override; 
 
      G4VParticleChange* PostStepDoIt(
                              const G4Track& track,
                              const G4Step&  stepData
-                            );
-       // Responsible for the relocation.
+                            ); // override;    
+       // Responsible for the relocation
 
      G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& ,
                              G4double   previousStepSize,
                              G4ForceCondition* pForceCond
-                            );
+                            ); // override;                            
        // Forces the PostStepDoIt action to be called, 
-       // but does not limit the step.
+       // but does not limit the step
 
-     G4bool FieldExertedForce() { return fFieldExertedForce; }
+     inline G4bool FieldExertedForce() { return fFieldExertedForce; }
    
      G4PropagatorInField* GetPropagatorInField();
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
-       // Access/set the assistant class that Propagate in a Field.
-
-     inline void   SetVerboseLevel( G4int verboseLevel );
-     inline G4int  GetVerboseLevel() const;
-       // Level of warnings regarding eg energy conservation
-       // in field integration.
+       // Access/set the assistant class that Propagate in a Field
 
      inline G4double GetThresholdWarningEnergy() const; 
      inline G4double GetThresholdImportantEnergy() const; 
@@ -110,11 +106,15 @@ class G4Transportation : public G4VProcess
      inline void SetThresholdWarningEnergy( G4double newEnWarn ); 
      inline void SetThresholdImportantEnergy( G4double newEnImp ); 
      inline void SetThresholdTrials(G4int newMaxTrials ); 
-
      // Get/Set parameters for killing loopers: 
      //   Above 'important' energy a 'looping' particle in field will 
      //   *NOT* be abandoned, except after fThresholdTrials attempts.
      // Below Warning energy, no verbosity for looping particles is issued
+
+     void SetHighLooperThresholds(); // Shortcut method - old values (meant for HEP)   
+     void SetLowLooperThresholds(); // Set low thresholds - for low-E applications
+     void PushThresholdsToLogger(); // Inform logger of current thresholds
+     void ReportLooperThresholds(); // Print values of looper thresholds
 
      inline G4double GetMaxEnergyKilled() const; 
      inline G4double GetSumEnergyKilled() const;
@@ -124,62 +124,74 @@ class G4Transportation : public G4VProcess
      inline void EnableShortStepOptimisation(G4bool optimise=true); 
      // Whether short steps < safety will avoid to call Navigator (if field=0)
 
-     static G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
-     // Whether to deflect particles with force due to magnetic moment
+     static G4bool EnableMagneticMoment(G4bool useMoment=true); 
+     // Whether to enable particles to be deflected with force due to magnetic moment
 
+     static G4bool EnableGravity(G4bool useGravity=true); 
+     // Whether to enable particles to be deflected with force due to gravity
+
+     static void   SetSilenceLooperWarnings( G4bool val);
+     // Do not warn (or throw exception) about 'looping' particles
+     static G4bool GetSilenceLooperWarnings();
+   
+  public: // without description    
+     static G4bool EnableUseMagneticMoment(G4bool useMoment=true)
+     { return EnableMagneticMoment(useMoment); }  // Old name - will be deprecated
+   
   public:  // without description
 
-     G4double AtRestGetPhysicalInteractionLength(
-                             const G4Track& ,
-                             G4ForceCondition* 
-                            ) { return -1.0; };
-       // No operation in  AtRestDoIt.
+     G4double AtRestGetPhysicalInteractionLength( const G4Track&,
+                                                  G4ForceCondition*)
+       { return -1.0; }  // No operation in AtRestGPIL
 
-     G4VParticleChange* AtRestDoIt(
-                             const G4Track& ,
-                             const G4Step&
-                            ) {return 0;};
-       // No operation in  AtRestDoIt.
+     G4VParticleChange* AtRestDoIt( const G4Track&, const G4Step& )
+       { return 0; }     // No operation in AtRestDoIt
 
-  void StartTracking(G4Track* aTrack);
+     void StartTracking(G4Track* aTrack);
        // Reset state for new (potentially resumed) track 
 
+     virtual void ProcessDescription(std::ostream& outFile) const; // override;
+     void PrintStatistics( std::ostream& outStr) const;
+   
   protected:
 
-     G4bool               DoesGlobalFieldExist();
-       // Checks whether a field exists for the "global" field manager.
-
+     G4bool DoesAnyFieldExist();
+       // Check whether any field exists in the geometry
+       //  - replaces method that checked only whether a field for the world volume
+   
+     void ReportMissingLogger(const char * methodName);
+   
   private:
 
-     G4Navigator*         fLinearNavigator;
+     G4Navigator* fLinearNavigator;
      G4PropagatorInField* fFieldPropagator;
        // The Propagators used to transport the particle
 
-     // G4FieldManager*      fGlobalFieldMgr;     // Used MagneticField CC
-       // Field Manager for the whole Detector
-
-     G4ThreeVector        fTransportEndPosition;
-     G4ThreeVector        fTransportEndMomentumDir;
-     G4double             fTransportEndKineticEnergy;
-     G4ThreeVector        fTransportEndSpin;
-     G4bool               fMomentumChanged;
-     G4bool               fEndGlobalTimeComputed; 
-     G4double             fCandidateEndGlobalTime;
+     G4ThreeVector fTransportEndPosition=     G4ThreeVector( 0.0, 0.0, 0.0 );
+     G4ThreeVector fTransportEndMomentumDir=  G4ThreeVector( 0.0, 0.0, 0.0 );
+     G4double      fTransportEndKineticEnergy= 0.0;
+     G4ThreeVector fTransportEndSpin=  G4ThreeVector( 0.0, 0.0, 0.0 );
+     G4bool        fMomentumChanged=   true;
+     G4bool        fEndGlobalTimeComputed= false; 
+     G4double      fCandidateEndGlobalTime= 0.0;
        // The particle's state after this Step, Store for DoIt
 
-     G4bool               fParticleIsLooping;
-     G4bool               fNewTrack;            // Flag from StartTracking 
-     G4bool               fFirstStepInVolume;
-     G4bool               fLastStepInVolume;     // Last step - almost same as next flag
-                                                 //             (temporary redundancy for checking) 
-     G4bool               fGeometryLimitedStep;  // Flag to determine whether a boundary was reached.
+     G4bool        fAnyFieldExists= false; 
+   
+     G4bool fParticleIsLooping = false;
+     G4bool fNewTrack= true;          // Flag from StartTracking 
+     G4bool fFirstStepInVolume= true;
+     G4bool fLastStepInVolume= false;  // Last step - almost same as next flag
+                                // (temporary redundancy for checking) 
+     G4bool fGeometryLimitedStep= true;
+       // Flag to determine whether a boundary was reached
 
-     G4bool               fFieldExertedForce;   // During current step
+     G4bool fFieldExertedForce= false; // During current step
 
-     G4TouchableHandle    fCurrentTouchableHandle;
+     G4TouchableHandle fCurrentTouchableHandle;
      
-     G4ThreeVector  fPreviousSftOrigin;
-     G4double       fPreviousSafety; 
+     G4ThreeVector fPreviousSftOrigin;
+     G4double      fPreviousSafety; 
        // Remember last safety origin & value.
 
      G4ParticleChangeForTransport fParticleChange;
@@ -187,38 +199,49 @@ class G4Transportation : public G4VProcess
 
      G4double fEndPointDistance;
 
-  // Thresholds for looping particles: 
-  // 
-     G4double fThreshold_Warning_Energy;     //  Warn above this energy
-     G4double fThreshold_Important_Energy;   //  Hesitate above this
-     G4int    fThresholdTrials;              //    for this no of trials
+     // Thresholds for looping particles: 
+     //
+     G4double fThreshold_Warning_Energy =   1.0 * CLHEP::keV;  //  Warn above this energy
+     G4double fThreshold_Important_Energy = 1.0 * CLHEP::MeV;  //  Give a few trial above this E
+     G4int    fThresholdTrials = 10;       //  Number of trials an important looper survives
        // Above 'important' energy a 'looping' particle in field will 
-       //   *NOT* be abandoned, except after fThresholdTrials attempts.
+       // *NOT* be abandoned, except after fThresholdTrials attempts.
+     G4int    fAbandonUnstableTrials = 0;  //  Number of trials after which to abandon
+                                           //   unstable loopers ( 0 = never )
+     // Counter for steps in which particle reports 'looping',
+     //  ( Used if it is above 'Important' Energy. )
+     G4int    fNoLooperTrials= 0; 
 
-  // Counter for steps in which particle reports 'looping',
-  //   if it is above 'Important' Energy 
-     G4int    fNoLooperTrials; 
-  // Statistics for tracks abandoned
-     G4double fSumEnergyKilled;
-     G4double fMaxEnergyKilled;
-
-  // Whether to avoid calling G4Navigator for short step ( < safety)
-  //   If using it, the safety estimate for endpoint will likely be smaller.
+     // Statistics for tracks abandoned due to looping - and 'saved' despite looping
+     //
+     G4double fSumEnergyKilled= 0.0;
+     G4double fSumEnerSqKilled= 0.0;   
+     G4double fMaxEnergyKilled= -1.0;
+     G4int    fMaxEnergyKilledPDG= 0;
+     unsigned long fNumLoopersKilled= 0;
+     G4double fSumEnergyKilled_NonElectron= 0.0;
+     G4double fSumEnerSqKilled_NonElectron= 0.0;
+     G4double fMaxEnergyKilled_NonElectron= -1.0;
+     G4int    fMaxEnergyKilled_NonElecPDG= 0;
+     unsigned long fNumLoopersKilled_NonElectron= 0;
+     G4double fSumEnergySaved=  0.0;
+     G4double fMaxEnergySaved= -1.0;
+     G4double fSumEnergyUnstableSaved = 0.0;
+     // Whether to avoid calling G4Navigator for short step ( < safety)
+     // If using it, the safety estimate for endpoint will likely be smaller.
+     //
      G4bool   fShortStepOptimisation; 
 
-     G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
-
-  // Verbosity 
-     G4int    fVerboseLevel;
-       // Verbosity level for warnings
-       // eg about energy non-conservation in magnetic field.
-
-  // Whether to track state change from magnetic moment in a B-field
+     G4SafetyHelper* fpSafetyHelper;    // To pass it the safety value obtained
+     G4TransportationLogger* fpLogger;  // Reports issues / raises warnings
 
   private:
-     friend class G4CoupledTransportation;
-     static G4bool fUseMagneticMoment; 
 
+     friend class G4CoupledTransportation;
+     static G4bool fUseMagneticMoment;
+     static G4bool fUseGravity;
+     static G4bool fSilenceLooperWarnings;  // Flag to *Supress* all 'looper' warnings
+   
 };
 
 #include "G4Transportation.icc"

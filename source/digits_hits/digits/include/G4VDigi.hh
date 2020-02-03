@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigi.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4VDigi_h
@@ -52,7 +51,7 @@ class G4VDigi
       G4VDigi();
       virtual ~G4VDigi();
 
-      G4int operator==(const G4VDigi &right) const;
+      G4bool operator==(const G4VDigi &right) const;
 
       virtual void Draw();
       virtual void Print();

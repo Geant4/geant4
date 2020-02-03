@@ -3,12 +3,23 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+<<<<<<< HEAD
 *************************************************************
  Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
+=======
+**************************************************************
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -24,12 +35,10 @@ RayTracer (RayTracer)
 VRML1FILE (VRML1FILE)
 VRML2FILE (VRML2FILE)
 gMocrenFile (gMocrenFile)
-OpenGLImmediateQt (OGLIQt, OGLI)
-OpenGLStoredQt (OGLSQt, OGL, OGLS)
-OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+OpenGLImmediateXm (OGLIXm, OGLI)
+OpenGLStoredXm (OGLSXm, OGL, OGLS)
+OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
 RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -54,6 +63,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
+<<<<<<< HEAD
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
@@ -100,6 +110,52 @@ Checking overlaps for volume ring ... OK!
 Checking overlaps for volume ring ... OK! 
 Checking overlaps for volume Detector ... OK! 
 Checking overlaps for volume Patient ... OK! 
+=======
+"/vis/list" to see available colours.
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume crystal (G4Box) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume ring (G4Tubs) ... OK! 
+Checking overlaps for volume Detector (G4Tubs) ... OK! 
+Checking overlaps for volume Patient (G4Tubs) ... OK! 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ***** Table : Nb of materials = 3 *****
 
@@ -207,15 +263,55 @@ New sensitive detector <crystal> is registered at /
 G4SDManager::AddNewCollection : the collection <patient/dose> is registered at 2
 New sensitive detector <patient> is registered at /
 #
+/run/printProgress 1000
 /run/beamOn 10000
+<<<<<<< HEAD
+=======
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+Max life time                                     1.4427e+06 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+======================================================================
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+### Run 0 starts.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ### Run 0 start.
+... open Root analysis file : scoring.root - done
+--> Event 0 starts.
 
 ---> end of event: 0
+--> Event 1000 starts.
+--> Event 2000 starts.
+--> Event 3000 starts.
+--> Event 4000 starts.
+--> Event 5000 starts.
+--> Event 6000 starts.
+--> Event 7000 starts.
+--> Event 8000 starts.
+--> Event 9000 starts.
 
 --------------------End of Global Run-----------------------
+<<<<<<< HEAD
   The run was 10000 events  Nb of 'good' e+ annihilations: 1294
  Total dose in patient : 291.523 picoGy 
+=======
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1345
+ Total dose in patient : 292.044 picoGy 
+ Total dose in patient : 2.92044e-10 [sigma: 1.76605e-14 | error: 0.0060472 | coeff: 0.0060472 | eff: 1 | fom: 27345.9 | r2int: 3.65649e-05 | r2eff: 0 | hits: 10000 ] Gy
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ------------------------------------------------------------
 
+... write Root file : scoring.root - done
+... close Root file : scoring.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

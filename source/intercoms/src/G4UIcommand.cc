@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4UIcommand.cc 89953 2015-05-06 08:09:12Z gcosmo $
-//
-// 
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
 
 #include "G4UIcommand.hh"
 #include "G4UImessenger.hh"
@@ -37,17 +35,23 @@
 #include "G4Tokenizer.hh"
 #include "G4ios.hh"
 #include <sstream>
+#include <iomanip>
+
+#include "G4UItokenNum.hh"
+using namespace G4UItokenNum;
 
 G4UIcommand::G4UIcommand()
   : messenger(0), toBeBroadcasted(false), toBeFlushed(false), workerThreadOnly(false),
-    bp(0), token(IDENTIFIER), paramERR(0)
+    commandFailureCode(0), failureDescription(""),
+    bp(0), token(IDENTIFIER),paramERR(0)
 {
 }
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
      G4UImessenger * theMessenger, G4bool tBB)
 :messenger(theMessenger),toBeBroadcasted(tBB),toBeFlushed(false), workerThreadOnly(false),
-token(IDENTIFIER),paramERR(0)
+    commandFailureCode(0), failureDescription(""),
+    bp(0), token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;
   if(!theMessenger)
@@ -107,12 +111,12 @@ G4UIcommand::~G4UIcommand()
   parameter.clear();
 }
 
-G4int G4UIcommand::operator==(const G4UIcommand &right) const
+G4bool G4UIcommand::operator==(const G4UIcommand &right) const
 {
   return ( commandPath == right.GetCommandPath() );
 }
 
-G4int G4UIcommand::operator!=(const G4UIcommand &right) const
+G4bool G4UIcommand::operator!=(const G4UIcommand &right) const
 {
   return ( commandPath != right.GetCommandPath() );
 }
@@ -386,7 +390,10 @@ G4String G4UIcommand::ConvertToString(G4int intValue)
 G4String G4UIcommand::ConvertToString(G4double doubleValue)
 {
   std::ostringstream os;
-  os << doubleValue;
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << doubleValue; }
+  else
+  { os << doubleValue; }
   G4String vl = os.str();
   return vl;
 }
@@ -397,7 +404,10 @@ G4String G4UIcommand::ConvertToString(G4double doubleValue,const char* unitName)
   G4double uv = ValueOf(unitName);
 
   std::ostringstream os;
-  os << doubleValue/uv << " " << unitName;
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << doubleValue/uv << " " << unitName; }
+  else
+  { os << doubleValue/uv << " " << unitName; }
   G4String vl = os.str();
   return vl;
 }
@@ -405,7 +415,10 @@ G4String G4UIcommand::ConvertToString(G4double doubleValue,const char* unitName)
 G4String G4UIcommand::ConvertToString(G4ThreeVector vec)
 {
   std::ostringstream os;
-  os << vec.x() << " " << vec.y() << " " << vec.z();
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << vec.x() << " " << vec.y() << " " << vec.z(); }
+  else
+  { os << vec.x() << " " << vec.y() << " " << vec.z(); }
   G4String vl = os.str();
   return vl;
 }
@@ -416,8 +429,10 @@ G4String G4UIcommand::ConvertToString(G4ThreeVector vec,const char* unitName)
   G4double uv = ValueOf(unitName);
 
   std::ostringstream os;
-  os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv
-     << " " << unitName;
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv << " " << unitName; }
+  else
+  { os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv << " " << unitName; }
   G4String vl = os.str();
   return vl;
 }
@@ -649,8 +664,8 @@ RangeCheck(const char* t) {
         switch ( type ) {
             case 'D':  is >> newVal[i].D;  break;
             case 'I':  is >> newVal[i].I;  break;
-            case 'S':
-            case 'B':
+            case 'S':  is >> newVal[i].S;  break;
+            case 'B':  is >> newVal[i].C;  break;
             default:  ;
         }
    }
@@ -927,6 +942,19 @@ Eval2(yystype arg1, G4int op, yystype arg2)
             case 'I': 
                 if( arg2.type == CONSTINT ) {
                     return CompareInt( newVal[i].I, op, arg2.I );
+//===================================================================
+// MA - 2018.07.23
+                } else if( arg2.type == IDENTIFIER ) {
+                  unsigned iii = IndexOf( arg2.S );
+                  char newValtype2 = toupper(parameter[iii]->GetParameterType());
+                  if( newValtype2 == 'I' ) {
+                    return CompareInt( newVal[i].I, op, newVal[iii].I );
+                  } else if( newValtype2 == 'D' ) {
+                    G4cerr << "Warning : Integer is compared with double : "
+                           << rangeString << G4endl;
+                    return CompareDouble( newVal[i].I, op, newVal[iii].D );
+                  }
+//===================================================================
                 } else {
                     G4cerr << "integer operand expected for "
                          <<  rangeString 
@@ -935,9 +963,19 @@ Eval2(yystype arg1, G4int op, yystype arg2)
             case 'D':
                 if( arg2.type == CONSTDOUBLE ) {
                     return CompareDouble( newVal[i].D, op, arg2.D );
-                } else
-                if ( arg2.type == CONSTINT ) {  // integral promotion
+                } else if ( arg2.type == CONSTINT ) {  // integral promotion
                     return CompareDouble( newVal[i].D, op, arg2.I );
+//===================================================================
+// MA - 2018.07.23
+                } else if( arg2.type == IDENTIFIER ) {
+                  unsigned iii = IndexOf( arg2.S );
+                  char newValtype2 = toupper(parameter[iii]->GetParameterType());
+                  if( newValtype2 == 'I' ) {
+                    return CompareDouble( newVal[i].D, op, newVal[iii].I );
+                  } else if( newValtype2 == 'D' ) {
+                    return CompareDouble( newVal[i].D, op, newVal[iii].D );
+                  }
+//===================================================================
                 } break;
             default: ;
         }

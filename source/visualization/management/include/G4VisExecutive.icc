@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // John Allison 24th January 1998.
@@ -87,6 +86,10 @@
 #ifdef G4VIS_USE_OIX
 #include "G4OpenInventorX.hh"
 #include "G4OpenInventorXtExtended.hh"
+#endif
+
+#ifdef G4VIS_USE_OIQT
+#include "G4OpenInventorQt.hh"
 #endif
 
 #ifdef G4VIS_USE_OIWIN32
@@ -197,6 +200,10 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OPENGLQT
   ogliwin32->AddNickname("OGLIQt_FALLBACK");
   oglswin32->AddNickname("OGLSQt_FALLBACK");
+#else
+  ogliwin32->AddNickname("OGLI");
+  oglswin32->AddNickname("OGL");
+  oglswin32->AddNickname("OGLS");
 #endif
 #endif
 
@@ -223,6 +230,10 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorXtExtended);
 #endif
 
+#ifdef G4VIS_USE_OIQT
+  RegisterGraphicsSystem(new G4OpenInventorQt);
+#endif
+
 #ifdef G4VIS_USE_RAYTRACERX
   RegisterGraphicsSystem (new G4RayTracerX);
 #endif
@@ -235,16 +246,18 @@ G4VisExecutive::RegisterModelFactories()
 {
    // Trajectory draw models
    RegisterModelFactory(new G4TrajectoryGenericDrawerFactory());       
+   RegisterModelFactory(new G4TrajectoryDrawByAttributeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
+   RegisterModelFactory(new G4TrajectoryDrawByOriginVolumeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByParticleIDFactory());
-   RegisterModelFactory(new G4TrajectoryDrawByOriginVolumeFactory());  
-   RegisterModelFactory(new G4TrajectoryDrawByAttributeFactory());  
+   RegisterModelFactory(new G4TrajectoryDrawByEncounteredVolumeFactory());
 
    // Trajectory filter models
-   RegisterModelFactory(new G4TrajectoryChargeFilterFactory());
-   RegisterModelFactory(new G4TrajectoryParticleFilterFactory());
-   RegisterModelFactory(new G4TrajectoryOriginVolumeFilterFactory());
    RegisterModelFactory(new G4TrajectoryAttributeFilterFactory());
+   RegisterModelFactory(new G4TrajectoryChargeFilterFactory());
+   RegisterModelFactory(new G4TrajectoryOriginVolumeFilterFactory());
+   RegisterModelFactory(new G4TrajectoryParticleFilterFactory());
+   RegisterModelFactory(new G4TrajectoryEncounteredVolumeFilterFactory());
 
    // Hit filter models
    RegisterModelFactory(new G4HitAttributeFilterFactory());

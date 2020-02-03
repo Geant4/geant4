@@ -1,0 +1,69 @@
+
+///\file "physicslists/factory/.README.txt"
+///\brief Example factory README page
+
+/*! \page Examplefactory Example factory
+
+\author  I. Hrivnacova  \n
+Institut de Physique Nucléaire (IPNO), Université Paris-Sud, CNRS-IN2P3 \n
+(Based on Hadr00 by V. Ivantchenko, CERN)
+
+Examples in the physicslist category show the possible ways how to define
+a physics list from Geant4 physics constructors. This example demonstrates 
+the usage of G4PhysListFactory to build  the concrete physics list.
+
+Physics List can be defined by its name given by the -p argument of the of the 
+run command or by  the PHYSLIST environment variable. 
+
+\verbatim      
+./factory -m my.macro [ -p QGSP_BERT ]
+\endverbatim      
+
+By default, FTFP_BERT Physics List will be instantiated if 
+-p argument is not set and the PHYSLIST environment variable is not defined.
+
+The same experimental setup is used for all examples in the physicslist category:
+
+\section factory_s1  Detector description
+
+The geometry (defined in the DetectorConstruction class) consists in a box of scintillator material (CsI) followed by a thin box of air (screen) which is used to simplify scoring.
+ 
+\section factory_s2  Primary generator
+
+The primary generator is defined with usage of G4ParticleGun.
+The default particle is proton which hits the box perpendicular to the input face. 
+The type of the particle and its energy are set in the PrimaryGeneratorAction class, and can
+be changed via the G4 built-in commands of the G4ParticleGun class.
+
+ 
+\section factory_s3  Scoring (ntuples)
+
+The screen volume is associated with a sensitive detector, ScreenSD,
+which accounts the following particle properties:
+- trackID
+- particle PDG encoding
+- particle kinetic energy
+- particle X,Y position
+- particle time
+
+The scored quantities are filled in the Screen ntuple, which is defined using G4AnalysisManager
+in RunAction class. The ntuple is saved in a Root file, which name is set to be equal to the
+example name in main () function.
+
+\section factory_s4  How to build
+
+An additional step is needed when building the example with GNUmake
+due to using the extra shared directory: 
+\verbatim      
+ % cd path_to_example/example
+ % gmake setup
+ % gmake
+\endverbatim      
+
+This will copy the files from shared in the example include and src;
+to remove these files:
+\verbatim      
+ % gmake clean_setup
+\endverbatim      
+
+*/

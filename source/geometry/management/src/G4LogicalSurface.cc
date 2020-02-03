@@ -23,28 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4LogicalSurface class implementation
 //
-// $Id: G4LogicalSurface.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-////////////////////////////////////////////////////////////////////////
-// G4LogicalSurface Class Implementation
-////////////////////////////////////////////////////////////////////////
+// Created: John Apostolakis & Peter Gumplinger, 26-06-1997
+// ------------------------------------------------------------------------
 
 #include "G4LogicalSurface.hh"
 
-  ////////////////////////////
-  // Constructors & Destructor
-  ////////////////////////////
-
 G4LogicalSurface::G4LogicalSurface(const G4String& name,
                                          G4SurfaceProperty* surfaceProperty) 
-  : theName(name), theSurfaceProperty(surfaceProperty), theTransRadSurface(0)
-{
-}
-
-G4LogicalSurface::G4LogicalSurface(const G4LogicalSurface &r)
-  : theName(r.theName), theSurfaceProperty(r.theSurfaceProperty),
-    theTransRadSurface(r.theTransRadSurface)
+  : theName(name), theSurfaceProperty(surfaceProperty)
 {
 }
 

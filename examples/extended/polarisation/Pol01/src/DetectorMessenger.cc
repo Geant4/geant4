@@ -26,7 +26,10 @@
 /// \file polarisation/Pol01/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
+<<<<<<< HEAD
 // $Id: DetectorMessenger.cc 68753 2013-04-05 10:26:04Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

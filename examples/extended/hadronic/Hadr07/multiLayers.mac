@@ -1,0 +1,26 @@
+#
+# multiLayers
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setNbOfAbsor  5
+/testhadr/det/setAbsor 1 Water  13 cm
+/testhadr/det/setAbsor 2 G4_AIR  1 cm
+/testhadr/det/setAbsor 3 Water   1 cm
+/testhadr/det/setAbsor 4 G4_B-100_BONE   3 cm
+/testhadr/det/setAbsor 5 Water  12 cm
+/testhadr/det/setSizeYZ  30 cm
+#
+/run/initialize
+#
+/testhadr/gun/setDefault
+/gun/particle gamma
+/gun/energy 6 MeV
+#
+/analysis/setFileName bone
+/analysis/h1/set 10 300 0. 300. mm		#edep profile
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

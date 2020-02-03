@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04MuonSD.cc 78055 2013-12-03 08:27:48Z gcosmo $
 //
-/// \file parallel/ParN04/src/ExN04MuonSD.cc
+/// \file ExN04MuonSD.cc
 /// \brief Implementation of the ExN04MuonSD class
 //
 

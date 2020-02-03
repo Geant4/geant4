@@ -24,8 +24,6 @@
 #ifdef _MSC_VER
 #include <direct.h>
 #include <io.h>
-// disable the warning about the usage of "this" in the constructor.
-#pragma warning(disable:4355)
 #else
 #include <unistd.h>
 #endif
@@ -34,13 +32,15 @@ namespace tools {
 namespace wroot {
 
 class file : public virtual ifile {
+  file& get_me() {return *this;} //_MSC_VER : to avoid warning about the usage of "this" in the constructor.
+  static int not_open() {return -1;}
+  static uint32 kBegin() {return 64;}
+public:
   static const std::string& s_class() {
     static const std::string s_v("tools::wroot::file");
     return s_v;
   }
-  static int not_open() {return -1;}
-  static uint32 kBegin() {return 64;}
-  static uint32 START_BIG_FILE() {return 2000000000;}
+  virtual const std::string& s_cls() const {return s_class();}
 public: //ifile
   virtual bool verbose() const {return m_verbose;}
   virtual std::ostream& out() const {return m_out;}
@@ -166,8 +166,7 @@ public: //ifile
     return true;
   }
   virtual uint32 compression() const {return m_compress;}
-  virtual void compress_buffer(const buffer& a_buffer,
-                                    char*& a_kbuf,uint32& a_klen,bool& a_kdel){
+  virtual void compress_buffer(const buffer& a_buffer,char*& a_kbuf,uint32& a_klen,bool& a_kdel) {
     //NOTE : if(kdelete) delete [] kbuf;
 
     a_kbuf = 0;
@@ -177,7 +176,7 @@ public: //ifile
     uint32 nbytes = a_buffer.length();
     uint32 cxlevel = m_compress;
     if(cxlevel && (nbytes>256)) {
-      tools::compress_func func;
+      compress_func func;
       if(!ziper('Z',func)) {
         //m_out << "tools::wroot::directory::write_object :" 
         //      << " zlib ziper not found."
@@ -225,7 +224,7 @@ public:
   ,m_verbose(a_verbose)
   ,m_file(not_open())
   //,m_bytes_write(0)
-  ,m_root_directory(*this,nosuffix(a_path),m_title)
+  ,m_root_directory(get_me(),nosuffix(a_path),m_title)
   // begin of record :
   ,m_version(0)
   ,m_BEGIN(0)
@@ -279,7 +278,7 @@ public:
       key::std_string_record_size(m_path) + 
       key::std_string_record_size(m_title);
     uint32 nbytes = namelen + m_root_directory.record_size();
-    wroot::key key(*this,0,m_path,m_title,"TFile",nbytes); //set m_END.
+    wroot::key key(m_out,*this,0,m_path,m_title,"TFile",nbytes); // It does a (*this).set_END().
 
     // m_nbytes_name = start point of directory info from key head.
     m_nbytes_name = key.key_length() + namelen; 
@@ -317,7 +316,7 @@ public:
     }
 
     key.set_cycle(1);
-    if(!key.write_self()) {
+    if(!key.write_self(*this)) {
       m_out << "tools::wroot::file::file :"
             << " key.write_self() failed."
             << std::endl;
@@ -327,7 +326,7 @@ public:
     //the below write at kBegin + nbytes.
     //64+52
     uint32 n;
-    if(!key.write_file(n)) {
+    if(!key.write_file(*this,n)) {
       m_out << "tools::wroot::file::file :"
             << " can't write key in file."
             << std::endl;
@@ -346,7 +345,7 @@ protected:
   file(const file& a_from)
   :ifile(a_from)
   ,m_out(a_from.m_out)
-  ,m_root_directory(*this)
+  ,m_root_directory(get_me())
   { 
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -354,6 +353,8 @@ protected:
   }
   file& operator=(const file&){return *this;}
 public:
+  const std::string& path() const {return m_path;}
+
   void set_compression(uint32 a_level) {
     // level = 0 objects written to this file will not be compressed.
     // level = 1 minimal compression level but fast.
@@ -363,9 +364,7 @@ public:
     if(m_compress>9) m_compress = 9;
   }
 
-  bool is_open() const {
-    return (m_file==not_open()?false:true);
-  }
+  bool is_open() const {return (m_file==not_open()?false:true);}
 
   void close() {
     if(m_file==not_open()) return;
@@ -542,7 +541,7 @@ protected:
   }
 
   bool write_streamer_infos() {
-    List<StreamerInfo> sinfos;
+    obj_list<streamer_info> sinfos;
     fill_infos(sinfos,m_out);
 
     if(sinfos.empty()) return false;
@@ -551,17 +550,17 @@ protected:
 
     if(!sinfos.stream(bref)) {
       m_out << "tools::wroot::file::write_streamer_infos :" 
-            << " cannot stream List<StreamerInfo>."
+            << " cannot stream obj_list<streamer_info>."
             << std::endl;
       return false;
     }
     uint32 nbytes = bref.length();
 
-    wroot::key key(*this,
+    wroot::key key(m_out,*this,
                    m_root_directory.seek_directory(),
                    "StreamerInfo","",
                    sinfos.store_cls(),
-                   nbytes); //set m_END
+                   nbytes); // It does a (*this).set_END().
     if(!key.seek_key()) return false;
 
     if(!bref.displace_mapped(key.key_length())) return false;
@@ -569,7 +568,7 @@ protected:
     ::memcpy(key.data_buffer(),bref.buf(),nbytes);
 
     //key.set_cycle(1);
-    if(!key.write_self()) {
+    if(!key.write_self(*this)) {
       m_out << "tools::wroot::file::write_streamer_infos :" 
             << " key.write_self() failed."
             << std::endl;
@@ -581,7 +580,7 @@ protected:
     //FIXME sumBuffer(key.objectSize());
 
     uint32 n;
-    if(!key.write_file(n)) return false;
+    if(!key.write_file(*this,n)) return false;
     if(!n) return false;
 
     return true;
@@ -636,8 +635,7 @@ protected:
   }
 
   bool write_free_segments(){
-    //  The linked list of FREE segments (fFree) is written as a single data
-    //  record.
+    //  The linked list of FREE segments (fFree) is written as a single data record.
 
     // Delete old record if it exists :
     if(m_seek_free){
@@ -659,10 +657,10 @@ protected:
     }}
     if(!nbytes) return true;
 
-    wroot::key key(*this,
+    wroot::key key(m_out,*this,
                    m_root_directory.seek_directory(),
                    m_path,m_title,"TFile",
-                   nbytes); //set m_END
+                   nbytes); // It does a (*this).set_END().
     if(!key.seek_key()) return false;
 
    {char* pos = key.data_buffer();
@@ -672,7 +670,7 @@ protected:
     }}
 
     //key.set_cycle(1);
-    if(!key.write_self()) {
+    if(!key.write_self(*this)) {
       m_out << "tools::wroot::file::write_free_segments :" 
             << " key.write_self() failed."
             << std::endl;
@@ -687,32 +685,32 @@ protected:
     }
 
     uint32 n;
-    if(!key.write_file(n)) return false;
+    if(!key.write_file(*this,n)) return false;
     if(!n) return false;
 
     return true;
   }
 
   static bool zip(std::ostream& a_out,
-                         tools::compress_func a_func,
-                         int a_level,
-                         uint32 a_srcsize,char* a_src,
-                         uint32 a_tgtsize,char* a_tgt,
-                         uint32& a_irep){
+                  compress_func a_func,
+                  int a_level,
+                  uint32 a_srcsize,char* a_src,
+                  uint32 a_tgtsize,char* a_tgt,
+                  uint32& a_irep){
 
     // from Rio/Bits/R__zip using zlib.
 
     const uint32 HDRSIZE = 9;
 
     if(a_tgtsize<HDRSIZE) {
-      a_out << "tools::rroot::directory::zip :"
+      a_out << "tools::wroot::directory::zip :"
             << " target buffer too small."
             << std::endl;
       a_irep = 0; 
       return false;
     }
     if(a_srcsize>0xffffff) {
-      a_out << "tools::rroot::directory::zip :"
+      a_out << "tools::wroot::directory::zip :"
             << " source buffer too big."
             << std::endl;
       a_irep = 0; 
@@ -724,14 +722,14 @@ protected:
                a_srcsize,a_src,
                a_tgtsize,a_tgt+HDRSIZE,
                out_size)) {
-      a_out << "tools::rroot::directory::zip :"
+      a_out << "tools::wroot::directory::zip :"
             << " zipper failed."
             << std::endl;
       a_irep = 0; 
       return false;
     }
     if((HDRSIZE+out_size)>a_tgtsize) {
-      a_out << "tools::rroot::directory::zip :"
+      a_out << "tools::wroot::directory::zip :"
             << " target buffer overflow."
             << std::endl;
       a_irep = 0; 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataSet.cc 70904 2013-06-07 10:34:25Z gcosmo $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -336,7 +335,7 @@ size_t G4DataSet::FindLowerBound(G4double x, G4DataVector* values) const
 
 G4String G4DataSet::FullFileName(const G4String& name) const
 {
-  char* path = getenv("G4PIIDATA");
+  char* path = std::getenv("G4PIIDATA");
   if (!path)
     G4Exception("G4DataSet::FullFileName",
 		"pii00000160",

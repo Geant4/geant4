@@ -1,4 +1,3 @@
-$Id: History 94080 2015-11-05 15:04:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,71 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 October 2019: I.Semeniouk (emhighenergy-V10-05-06)
+- G4GammaConversionToMuons - initialisation of the 5D model cuts size
+
+18 October 2019: V.Ivantchenko (emhighenergy-V10-05-05)
+- G4GammaConversionToMuons - added initialisation of the 5D model 
+
+08 October 2019: V.Ivantchenko (emhighenergy-V10-05-04)
+- G4GammaConversionToMuons - fixed DeRegister; added optional
+    possibility to use 5D model for the sampling of the final state
+
+02 July 2019: V.Ivantchenko (emhighenergy-V10-05-03)
+- G4mplIonisationWithDeltaModel, G4mplIonisationModel - fixed 
+    dEdx for electron gas model (beta<0.01) - problem #2169
+
+03 April 2019: V.Ivantchenko (emhighenergy-V10-05-02)
+- G4GammaConversionToMuons, G4AnnihiToMuPair - added Register/DeRegister
+    mechanism
+
+21 March 2019: V.Ivantchenko (emhighenergy-V10-05-01)
+- G4GammaConversionToMuons - fixed low-energy part of the model by adding
+    of intermediate limit 5*MuMass, below which an approximation of
+    x-section similar to the Bethe-Heitler model is used; fixed bug
+    in energy sampling for low-energy 
+
+01 March 2019: V.Ivantchenko (emhighenergy-V10-05-00)
+- G4mplIonisation, G4mplIonisationWithDeltaModel - added low limit
+    for delta-electron production threshold (fixing problem #2126)
+
+17 Sept 2018: D.Sawkey (emhighenergy-V10-04-02)
+- G4eeToHadrons, G4eeToHadronsMultiModel, G4hBremsstrahlung, G4hPairProduction,
+  G4hhIonisation, G4mplIonisation: automatic documentation format now rST
+
+01 May 2018: V.Ivant (emhighenergy-V10-04-01)
+- G4eeToHadronsMultiModel - cleanup of headers
+- G4eeToHadronsModel, G4mplIonisationWithDeltaModel - minor cleanup
+
+28 Feb 2018: V.Ivant (emhighenergy-V10-04-00)
+- G4AnnihiToMuPair - H.Burkhardt added Coulomb correction to the 
+    cross section at the threshold
+
+08 Nov 2017: D.Sawkey (emhighenergy-V10-03-05)
+- G4hBremsstrahlung, G4hPairProduction - update ProcessDescription text
+
+27 Oct 2017: V.Ivant (emhighenergy-V10-03-04)
+- G4GammaConversionToMuons - changed parameterisation of nuclear
+    elastic formfactor (A.Sokolov); use integer Z; speed-up
+    sampling algorithm
+
+19 Oct 2017: D.Sawkey (emhighenergy-V10-03-03)
+- add dummy ProcessDescription for html doc
+
+12 Oct 2017: V.Ivant (emhighenergy-V10-03-02)
+- G4eeToHadrons - switched from ProcessDescription to StreamProcessInfo
+
+11 Oct 2017: V.Ivant (emhighenergy-V10-03-01)
+- G4eeToHadrons, G4eeToHadronsMultiModel - implemented new method
+    Description(..) instead of PrintInfo()
+
+03 Aug 2017: V.Ivant (emhighenergy-V10-03-00)
+- G4eeToHadrons, G4hhIonisation, G4mplIonisation - make coherent
+    model initialisation
+
+1 Jun 2016: D.Sawkey (emhighenergy-V10-02-00)
+- Most files: use C++11 features explicit, override, delete, nullptr
 
 05 Now 2015: G.Cosmo (emhighenergy-V10-01-04)
 - Replaced use of variable 'L' in G4eeToHadronsModel.cc to avoid

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelModel.hh 79067 2014-02-14 09:48:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,129 +54,51 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4VMscModel.hh"
-#include "G4MaterialCutsCouple.hh"
-#include "G4WentzelVIRelXSection.hh"
-
-class G4ParticleDefinition;
-class G4LossTableManager;
-class G4NistManager;
-class G4Pow;
+#include "G4WentzelVIModel.hh"
+#include "G4Threading.hh"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4WentzelVIRelModel : public G4VMscModel
+class G4NistManager;
+
+class G4WentzelVIRelModel : public G4WentzelVIModel
 {
 
 public:
 
-  G4WentzelVIRelModel(G4bool combined = true);
+  explicit G4WentzelVIRelModel();
 
   virtual ~G4WentzelVIRelModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  void StartTracking(G4Track*);
+  
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double KineticEnergy,
 					      G4double AtomicNumber,
 					      G4double AtomicWeight=0., 
 					      G4double cut = DBL_MAX,
-					      G4double emax= DBL_MAX);
+					      G4double emax= DBL_MAX) override;
 
-  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
-					  G4double safety);
-
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
-					      G4double& currentMinimalStep);
-
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
-
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+  virtual void DefineMaterial(const G4MaterialCutsCouple* cup);
 
 private:
 
-  G4double ComputeXSectionPerVolume();
-
-  inline void SetupParticle(const G4ParticleDefinition*);
-
-  inline void DefineMaterial(const G4MaterialCutsCouple*);
+  void ComputeEffectiveMass();
 
   //  hide assignment operator
-  G4WentzelVIRelModel & operator=(const  G4WentzelVIRelModel &right);
-  G4WentzelVIRelModel(const  G4WentzelVIRelModel&);
+  G4WentzelVIRelModel & operator=(const  G4WentzelVIRelModel &right) = delete;
+  G4WentzelVIRelModel(const  G4WentzelVIRelModel&) = delete;
 
-  G4LossTableManager*       theManager;
-  G4NistManager*            fNistManager;
-  G4ParticleChangeForMSC*   fParticleChange;
-  G4WentzelVIRelXSection* wokvi;
-  G4Pow*                    fG4pow;
+  static std::vector<G4double> effMass;
+  G4NistManager* fNistManager;
 
-  const G4DataVector*       currentCuts;
-
-  G4double tlimitminfix;
-  G4double invsqrt12;
-
-  // cache kinematics
-  G4double preKinEnergy;
-  G4double tPathLength;
-  G4double zPathLength;
-  G4double lambdaeff;
-  G4double currentRange; 
-
-  // data for single scattering mode
-  G4double xtsec;
-  std::vector<G4double> xsecn;
-  std::vector<G4double> prob;
-  G4int    nelments;
-
-  G4double numlimit;
-
-  // cache material
-  G4int    currentMaterialIndex;
-  const G4MaterialCutsCouple* currentCouple;
-  const G4Material* currentMaterial;
-
-  // single scattering parameters
-  G4double cosThetaMin;
-  G4double cosThetaMax;
-  G4double cosTetMaxNuc;
-
-  // projectile
-  const G4ParticleDefinition* particle;
-  G4double lowEnergyLimit;
-
-  // flags
-  G4bool   isCombined;
-  G4bool   inside;
-  G4bool   singleScatteringMode;
+#ifdef G4MULTITHREADED
+  static G4Mutex WentzelVIRelModelMutex;
+#endif
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void G4WentzelVIRelModel::DefineMaterial(const G4MaterialCutsCouple* cup) 
-{ 
-  if(cup != currentCouple) {
-    currentCouple = cup;
-    SetCurrentCouple(cup); 
-    currentMaterial = cup->GetMaterial();
-    currentMaterialIndex = currentCouple->GetIndex(); 
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4WentzelVIRelModel::SetupParticle(const G4ParticleDefinition* p)
-{
-  // Initialise mass and charge
-  if(p != particle) {
-    particle = p;
-    wokvi->SetupParticle(p);
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

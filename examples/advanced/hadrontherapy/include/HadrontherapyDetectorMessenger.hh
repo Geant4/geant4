@@ -35,31 +35,47 @@
 class HadrontherapyDetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWith3VectorAndUnit;
+<<<<<<< HEAD
 class G4UIcmdWithoutParameter; 
 class G4UIcmdWithAString;        
+=======
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithAString;
+class G4UIcmdWithABool;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 class HadrontherapyDetectorMessenger: public G4UImessenger
 {
 public:
-  HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
-  ~HadrontherapyDetectorMessenger();
+    HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
+    ~HadrontherapyDetectorMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String);
     
 private:
-
-  // Pointer to the phantom/detector 
-  HadrontherapyDetectorConstruction* hadrontherapyDetector;
-
-  G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir;
-
-  G4UIcmdWithoutParameter   *updateCmd;
-  G4UIcmdWithAString        *changeThePhantomMaterialCmd; 
-  G4UIcmdWith3VectorAndUnit *changeThePhantomSizeCmd,
-    *changeThePhantomPositionCmd, 
-    *changeTheDetectorSizeCmd, 
+    
+    // Pointer to the phantom/detector
+    HadrontherapyDetectorConstruction* hadrontherapyDetector;
+    
+    G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir;
+    
+    G4UIcmdWithoutParameter   *updateCmd;
+    G4UIcmdWithAString        *changeThePhantomMaterialCmd;
+    G4UIcmdWith3VectorAndUnit *changeThePhantomSizeCmd,
+    *changeThePhantomPositionCmd,
+    *changeTheDetectorSizeCmd,
     *changeTheDetectorToPhantomPositionCmd,
+<<<<<<< HEAD
     *changeTheDetectorVoxelCmd;
+=======
+    *changeTheDetectorVoxelCmd,
+    *VirtualLayerPosition;
+    
+    G4UIcmdWithABool *VirtualLayer;
+    G4UIdirectory* changeTheSource;
+    
+    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 #endif
 

@@ -53,10 +53,12 @@ public:
   // supply angle of rotation 
 
   inline HepRotationX(const HepRotationX & orig);
-  // Copy constructor.
+  inline HepRotationX(HepRotationX && orig) = default;
+  // Copy and move constructors.
 
   inline HepRotationX & operator = (const HepRotationX & r);
-  // Assignment from a Rotation, which must be RotationX
+  inline HepRotationX & operator = (HepRotationX && r) = default;
+  // Copy and move assignments from a Rotation, which must be RotationX
 
   HepRotationX & set ( double delta );
   // set angle of rotation 

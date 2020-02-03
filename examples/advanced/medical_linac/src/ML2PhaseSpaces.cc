@@ -42,61 +42,63 @@
 
 
 #include "ML2PhaseSpaces.hh"
-#include "ML2ReadOutGeometry.hh"
 
-CML2PhaseSpaces::CML2PhaseSpaces():sensDetParticle(0)
+CML2PhaseSpaces::CML2PhaseSpaces()
 {}
 
 CML2PhaseSpaces::~CML2PhaseSpaces(void)
 {}
 
-bool CML2PhaseSpaces::createPlane(G4VPhysicalVolume  *PVWorld, G4String name, G4ThreeVector centre, G4ThreeVector halfSize)
+/* NOT implemented at the moment
+bool CML2PhaseSpaces::createPlane(G4VPhysicalVolume  *, G4String , G4ThreeVector , G4ThreeVector )
 {
+ G4cout << " Not implemented at the moment" << G4endl;
+
 	// constructor for killer plane
-	bool bCreated=false;
-	G4Material *Vacum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+	bool bCreated = false;
+	G4Material *Vacum = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 	G4Box *box;
 	G4LogicalVolume *logVol;
 	box = new G4Box("KBox", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, Vacum, name+"KLV", 0, 0, 0);
-	phVol= new G4PVPlacement(0, centre, name+"KPV", logVol, PVWorld, false, 0);
+	phVol = new G4PVPlacement(0, centre, name+"KPV", logVol, PVWorld, false, 0);
 
-	G4Colour color(0.,1.,1.,0.5);
-	G4VisAttributes* simplePhSpVisAtt= new G4VisAttributes(color);
+	G4VisAttributes* simplePhSpVisAtt = new G4VisAttributes(G4Colour::Cyan());
 	simplePhSpVisAtt->SetVisibility(true);
 	simplePhSpVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simplePhSpVisAtt);
 
-
-	sensDetParticle=new CML2SDWithParticle();
-	G4SDManager *SDManager=G4SDManager::GetSDMpointer();
-	SDManager->AddNewDetector(sensDetParticle);
-	logVol->SetSensitiveDetector(sensDetParticle);
-	bCreated=true;
+	bCreated = true;
 	return bCreated;
 }
 
-bool CML2PhaseSpaces::createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4VPhysicalVolume  *PVWorld, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, G4ThreeVector centre, G4ThreeVector halfSize, SPrimaryParticle *primaryParticleData, G4double  accTargetZPosition)
+bool CML2PhaseSpaces::createPlane(G4int, //idSD_Type, 
+G4int,//max_N_particles_in_PhSp_File,
+G4int, //seed,
+G4int,// nMaxParticlesInRamPhaseSpace, 
+G4VPhysicalVolume*,//  *PVWorld, 
+G4String, //name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, G4ThreeVector centre, G4ThreeVector halfSize, SPrimaryParticle *primaryParticleData, G4double  accTargetZPosition)
 {
 	// constructor for phase space plane
-	bool bCreated=false;
-	G4Material *Vacum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+	bool bCreated = false;
+	G4Material *Vacum = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 	G4Box *box;
 	G4LogicalVolume *logVol;
 	box = new G4Box(name+"Box", halfSize.getX(), halfSize.getY(), halfSize.getZ());
 	logVol = new G4LogicalVolume(box, Vacum, name+"LV", 0, 0, 0);
 	phVol= new G4PVPlacement(0, centre, name+"PV", logVol, PVWorld, false, 0);
 
-	G4VisAttributes* simplePhSpVisAtt= new G4VisAttributes(G4Colour::Yellow());
-	simplePhSpVisAtt->SetVisibility(true);
-	simplePhSpVisAtt->SetForceSolid(true);
-	logVol->SetVisAttributes(simplePhSpVisAtt);
+	G4VisAttributes* simplePhSpVisAtt = new G4VisAttributes(G4Colour::Yellow());
+	simplePhSpVisAtt -> SetVisibility(true);
+	simplePhSpVisAtt -> SetForceSolid(true);
+	logVol -> SetVisAttributes(simplePhSpVisAtt);
 
-	sensDetParticle=new CML2SDWithParticle(idSD_Type, max_N_particles_in_PhSp_File, seed, nMaxParticlesInRamPhaseSpace, name, PhaseSpaceOutFile, bSavePhaseSpace, bStopAtPhaseSpace, primaryParticleData, accTargetZPosition);
-	G4SDManager *SDManager=G4SDManager::GetSDMpointer();
-	SDManager->AddNewDetector(sensDetParticle);
-	logVol->SetSensitiveDetector(sensDetParticle);
-	bCreated=true;
+	sensDetParticle = new CML2SDWithParticle(idSD_Type, max_N_particles_in_PhSp_File, seed, nMaxParticlesInRamPhaseSpace, name, PhaseSpaceOutFile, bSavePhaseSpace, bStopAtPhaseSpace, primaryParticleData, accTargetZPosition);
+	G4SDManager *SDManager = G4SDManager::GetSDMpointer();
+	SDManager -> AddNewDetector(sensDetParticle);
+	logVol -> SetSensitiveDetector(sensDetParticle);
+	bCreated = true;
 	return bCreated;
-}
 
+}
+*/

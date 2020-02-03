@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from
 //   G4OpenGLWin32Viewer and G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
 
 #ifndef G4OPENGLSTOREDWIN32VIEWER_HH
 #define G4OPENGLSTOREDWIN32VIEWER_HH

@@ -25,7 +25,6 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: G4HepRepFileXMLWriter.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).

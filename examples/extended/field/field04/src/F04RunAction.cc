@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04RunAction.cc 78002 2013-12-02 08:25:49Z gcosmo $
 //
 /// \file field/field04/src/F04RunAction.cc
 /// \brief Implementation of the F04RunAction class

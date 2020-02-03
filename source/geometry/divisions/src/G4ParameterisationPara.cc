@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ParameterisationPara.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// class G4ParameterisationPara Implementation file
+// class G4ParameterisationPara[X,Y,Z] implementation
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection

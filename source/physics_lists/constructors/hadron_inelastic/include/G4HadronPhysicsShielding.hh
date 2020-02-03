@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShielding.hh 93878 2015-11-03 08:18:00Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,6 +31,8 @@
 // Author: 2007  tatsumi Koi, Gunter Folger
 //   created from G4HadronPhysicsFTFP_BERT
 // Modified:
+// 2019.08.01 A.Ribon replaced explicit numbers for the energy transition
+//                    region with values taken from G4HadronicParameters
 // 2014.08.05 K.L.Genser added provisions for modifing the Bertini to
 //            FTF transition energy region
 //
@@ -42,85 +43,46 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VPhysicsConstructor.hh"
-
-#include "G4PiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4BertiniProtonBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4BertiniNeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4NeutronPHPBuilder.hh"
-
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
-
-class G4ComponentGGHadronNucleusXsc;
+#include "G4HadronicParameters.hh"
 
 
 class G4HadronPhysicsShielding : public G4VPhysicsConstructor
 {
   public: 
-    //G4HadronPhysicsShielding(G4int verbose =1,G4bool blend=false);
     explicit G4HadronPhysicsShielding(G4int verbose=1);
     explicit G4HadronPhysicsShielding(const G4String& name, G4bool );
     explicit G4HadronPhysicsShielding(const G4String& name, G4int verbose=1,
-                                      G4double minFTFPEnergy=9.5*GeV, G4double maxBertiniEnergy=9.9*GeV);
+      G4double minFTFPEnergy=G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade(),
+      G4double maxBertiniEnergy=G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade());
+
     virtual ~G4HadronPhysicsShielding();
 
   public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-    void UseLEND( G4String ss="" ){useLEND_=true;evaluation_=ss;};
-    void UnuseLEND(){useLEND_=false;};
+    virtual void ConstructParticle() override;
+    virtual void ConstructProcess() override;
+    void UseLEND( G4String ss="" ){ useLEND_=true; evaluation_=ss; };
+    void UnuseLEND(){ useLEND_=false; };
 
   private:
-    void CreateModels();
-    
-    struct ThreadPrivate { 
-      G4NeutronBuilder * theNeutrons;
-      //G4NeutronPHPBuilder * theHPNeutron;
-      G4VNeutronBuilder * theLENeutron;
-      G4BertiniNeutronBuilder * theBertiniNeutron;
-      G4FTFPNeutronBuilder * theFTFPNeutron;
- 
-      G4PiKBuilder * thePiK;
-      G4BertiniPiKBuilder * theBertiniPiK;
-      G4FTFPPiKBuilder * theFTFPPiK;
-    
-      G4ProtonBuilder * thePro;
-      G4BertiniProtonBuilder * theBertiniPro;
-      G4FTFPProtonBuilder * theFTFPPro;    
+    virtual void CreateModels();
+    virtual void Neutron();
+    virtual void Proton();
+    virtual void Pion();
+    virtual void Kaon();
+    virtual void Others();
+    virtual void DumpBanner();
+    //This contains extra configurataion specific to this PL
+    virtual void ExtraConfiguration();
 
-      G4HyperonFTFPBuilder * theHyperon;
-    
-      G4AntiBarionBuilder * theAntiBaryon;
-      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * theBGGxsNeutron;
-      G4VCrossSectionDataSet * theNeutronHPJENDLHEInelastic;
-      G4VCrossSectionDataSet * theBGGxsProton;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate* tpdata;
-
-    // G4bool QuasiElastic;
     G4bool useLEND_;
     G4String evaluation_;
 
     const G4double minFTFPEnergy_;
     const G4double maxBertiniEnergy_;
     const G4double minNonHPNeutronEnergy_;
-
 };
 
 #endif

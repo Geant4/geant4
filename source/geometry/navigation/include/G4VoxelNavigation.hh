@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4VoxelNavigation.hh 97507 2016-06-03 12:48:42Z gcosmo $
-//
 // 
 // class G4VoxelNavigation
 //
@@ -35,7 +31,7 @@
 // daughter volumes for which voxels have been constructed.
 
 // History:
-// - Created. Paul Kent, Aug 96
+// - Created: Paul Kent, Aug 96
 // --------------------------------------------------------------------
 #ifndef G4VOXELNAVIGATION_HH
 #define G4VOXELNAVIGATION_HH
@@ -91,24 +87,24 @@ class G4VoxelNavigation
                                         G4ThreeVector& exitNormal,
                                         G4bool& exiting,
                                         G4bool& entering,
-                                        G4VPhysicalVolume *(*pBlockedPhysical),
+                                        G4VPhysicalVolume* (*pBlockedPhysical),
                                         G4int& blockedReplicaNo );
 
     virtual G4double ComputeSafety( const G4ThreeVector& globalpoint,
                                     const G4NavigationHistory& history,
-                                    const G4double pMaxLength=DBL_MAX );
+                                    const G4double pMaxLength = DBL_MAX );
 
     inline G4int GetVerboseLevel() const;
     void  SetVerboseLevel(G4int level);
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 
-    inline void  CheckMode(G4bool mode);
+    inline void CheckMode(G4bool mode);
       // Run navigation in "check-mode", therefore using additional
       // verifications and more strict correctness conditions.
       // Is effective only with G4VERBOSE set.
 
-    inline void  EnableBestSafety( G4bool flag= false );
+    inline void EnableBestSafety( G4bool flag = false );
       // Enable best-possible evaluation of isotropic safety
 
   protected:
@@ -154,7 +150,7 @@ class G4VoxelNavigation
     //  BEGIN Voxel Stack information
     //
 
-    G4int fVoxelDepth;
+    G4int fVoxelDepth = -1;
       // Note: fVoxelDepth==0+ => fVoxelAxisStack(0+) contains axes of voxel
       //       fVoxelDepth==-1 -> not in voxel
 
@@ -173,21 +169,21 @@ class G4VoxelNavigation
     std::vector<G4SmartVoxelHeader*> fVoxelHeaderStack;
       // Voxel headers at each level
 
-    G4SmartVoxelNode* fVoxelNode;
+    G4SmartVoxelNode* fVoxelNode = nullptr;
       // Node containing last located point
 
     //
     //  END Voxel Stack information
     //
 
-    G4VoxelSafety  *fpVoxelSafety;
+    G4VoxelSafety* fpVoxelSafety = nullptr;
       // Helper object for Voxel Safety
 
     G4double fHalfTolerance;
       // Surface tolerance
 
-    G4bool fCheck;
-    G4bool fBestSafety; 
+    G4bool fCheck = false;
+    G4bool fBestSafety = false; 
 
     G4NavigationLogger* fLogger;
       // Verbosity logger

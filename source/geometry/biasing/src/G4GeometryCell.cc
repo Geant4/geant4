@@ -23,29 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GeometryCell implementation
 //
-// $Id: G4GeometryCell.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GeometryCell.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCell.hh"
 
-G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume &aVolume,
+G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume& aVolume,
                                      G4int RepNum)
- : fVPhysicalVolume(&aVolume),
-   fRepNum(RepNum)
+ : fVPhysicalVolume(&aVolume), fRepNum(RepNum)
 {}
 
 G4GeometryCell::~G4GeometryCell()
 {}
 
 
-const G4VPhysicalVolume &G4GeometryCell::GetPhysicalVolume() const
+const G4VPhysicalVolume& G4GeometryCell::GetPhysicalVolume() const
 {
   return *fVPhysicalVolume;
 }
@@ -56,14 +50,15 @@ G4int G4GeometryCell::GetReplicaNumber() const
 }
 
 
-G4GeometryCell::G4GeometryCell(const G4GeometryCell &rhs)
- : fVPhysicalVolume(rhs.fVPhysicalVolume),
-   fRepNum(rhs.fRepNum)
+G4GeometryCell::G4GeometryCell(const G4GeometryCell& rhs)
+ : fVPhysicalVolume(rhs.fVPhysicalVolume), fRepNum(rhs.fRepNum)
 {
 }
 
-G4GeometryCell &G4GeometryCell::operator=(const G4GeometryCell &rhs){
-  if (this != &rhs) {
+G4GeometryCell& G4GeometryCell::operator=(const G4GeometryCell& rhs)
+{
+  if (this != &rhs)
+  {
     fVPhysicalVolume = rhs.fVPhysicalVolume; // this is treated 
                                              // as identifyer
     fRepNum = rhs.fRepNum;
@@ -72,26 +67,30 @@ G4GeometryCell &G4GeometryCell::operator=(const G4GeometryCell &rhs){
 }
 
 
-G4bool operator==(const G4GeometryCell &k1, const G4GeometryCell &k2)
+G4bool operator==(const G4GeometryCell& k1, const G4GeometryCell& k2)
 {
-  G4bool equal=true;
-  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume())) {
+  G4bool equal = true;
+  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume()))
+  {
     equal = false;
   }
-  else if (k1.GetReplicaNumber() != k2.GetReplicaNumber()) {
+  else if (k1.GetReplicaNumber() != k2.GetReplicaNumber())
+  {
     equal = false;
   }
   return equal;
 }
 
-G4bool operator!=(const G4GeometryCell &k1, const G4GeometryCell &k2)
+G4bool operator!=(const G4GeometryCell& k1, const G4GeometryCell& k2)
 {
   G4bool unequal = false;
-  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume())) {
-    unequal =  true;
+  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume()))
+  {
+    unequal = true;
   }
-  else if (k1.GetReplicaNumber() != k2.GetReplicaNumber()) {
-    unequal =  true;
+  else if (k1.GetReplicaNumber() != k2.GetReplicaNumber())
+  {
+    unequal = true;
   }
   return unequal;  
 }

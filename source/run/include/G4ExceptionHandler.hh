@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExceptionHandler.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 // 
 // ------------------------------------------------------------
@@ -60,8 +59,8 @@ public:
 
   G4ExceptionHandler();
   virtual ~G4ExceptionHandler();
-  G4int operator==(const G4ExceptionHandler &right) const;
-  G4int operator!=(const G4ExceptionHandler &right) const;
+  G4bool operator==(const G4ExceptionHandler &right) const;
+  G4bool operator!=(const G4ExceptionHandler &right) const;
 
 public: // with description
 
@@ -79,6 +78,8 @@ private:
   G4ExceptionHandler(const G4ExceptionHandler &right);
   G4ExceptionHandler& operator=(const G4ExceptionHandler &right);
 
+private:
+  void DumpTrackInfo();
 };
 
 #endif

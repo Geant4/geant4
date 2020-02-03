@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04MuonSD.cc
 /// \brief Implementation of the ExN04MuonSD class
 //
-// $Id: ExN04MuonSD.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4HCofThisEvent.hh"
@@ -40,11 +39,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonSD::ExN04MuonSD(G4String name)
-  : G4VSensitiveDetector(name)
+  : G4VSensitiveDetector(name), 
+    fMuonCollection(NULL), fPositionResolution(5*cm)
 {
   G4String HCname;
   collectionName.insert(HCname="muonCollection");
-  positionResolution = 5*cm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,11 +53,11 @@ ExN04MuonSD::~ExN04MuonSD(){;}
 void ExN04MuonSD::Initialize(G4HCofThisEvent*HCE)
 {
   static int HCID = -1;
-  muonCollection = new ExN04MuonHitsCollection
+  fMuonCollection = new ExN04MuonHitsCollection
                    (SensitiveDetectorName,collectionName[0]);
   if(HCID<0)
   { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,muonCollection);
+  HCE->AddHitsCollection(HCID,fMuonCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,14 +68,14 @@ G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
   if(edep==0.) return true;
 
   ExN04MuonHit* aHit;
-  int nHit = muonCollection->entries();
+  int nHit = fMuonCollection->entries();
   G4ThreeVector hitpos = aStep->GetPreStepPoint()->GetPosition();
   for(int i=0;i<nHit;i++) {
-    aHit = (*muonCollection)[i];
+    aHit = (*fMuonCollection)[i];
     G4ThreeVector pos = aHit->GetPos();
     G4double dist2 = sqr(pos.x()-hitpos.x())
                     +sqr(pos.y()-hitpos.y())+sqr(pos.z()-hitpos.z());
-    if(dist2<=sqr(positionResolution))
+    if(dist2<=sqr(fPositionResolution))
     aHit->AddEdep(edep);
     return true;
   }
@@ -84,7 +83,7 @@ G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
   aHit = new ExN04MuonHit();
   aHit->SetEdep( edep );
   aHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  muonCollection->insert( aHit );
+  fMuonCollection->insert( aHit );
 
   return true;
 }

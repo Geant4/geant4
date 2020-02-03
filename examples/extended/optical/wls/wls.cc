@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: wls.cc 78066 2013-12-03 11:08:36Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/wls/wls.cc
 /// \brief Main program of the optical/wls example
@@ -42,9 +45,10 @@
 
 #include "G4UImanager.hh"
 
-#include "Randomize.hh"
+#include "FTFP_BERT.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 
-#include "WLSPhysicsList.hh"
 #include "WLSDetectorConstruction.hh"
 
 #include "WLSActionInitialization.hh"
@@ -80,6 +84,7 @@ int main(int argc,char** argv)
   G4RunManager * runManager = new G4RunManager;
 #endif
 
+<<<<<<< HEAD
   G4String physName = "QGSP_BERT_HP";
 
 #ifndef WIN32
@@ -103,22 +108,27 @@ int main(int argc,char** argv)
   }
 #endif
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // Set mandatory initialization classes
   //
   // Detector construction
   WLSDetectorConstruction* detector = new WLSDetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
-  runManager->SetUserInitialization(new WLSPhysicsList(physName));
+
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  physicsList->RegisterPhysics(opticalPhysics);
+  runManager->SetUserInitialization(physicsList);
+
   // User action initialization
   runManager->SetUserInitialization(new WLSActionInitialization(detector));
 
 #ifdef G4VIS_USE
   // Initialize visualization
-  //
   G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
 

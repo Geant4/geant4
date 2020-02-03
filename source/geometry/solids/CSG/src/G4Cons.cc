@@ -23,35 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Cons.cc 102294 2017-01-20 11:41:52Z gcosmo $
-// GEANT4 tag $Name: $
-//
-//
-// class G4Cons
-//
 // Implementation for G4Cons class
 //
-// History:
-//
-// 04.09.14 T.Nikitina: Fix typo error in GetPointOnSurface() when 
-//                      GetRadiusInRing() was introduced
-//                      Fix DistanceToIn(p,v) for points on the Surface,
-//                      error was reported by OpticalEscape test
-// 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in sqrt(r)
+// ~1994    P.Kent: Created, as main part of the geometry prototype
+// 13.09.96 V.Grichine: Review and final modifications
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 12.10.09 T.Nikitina: Added to DistanceToIn(p,v) check on the direction in
 //                      case of point on surface
-// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 13.09.96 V.Grichine: Review and final modifications
-// ~1994    P.Kent: Created, as main part of the geometry prototype
+// 03.10.16 E.Tcherniaev: use G4BoundingEnvelope for CalculateExtent(),
+//                      removed CreateRotatedVertices()
 // --------------------------------------------------------------------
 
 #include "G4Cons.hh"
 
 #if !defined(G4GEOM_USE_UCONS)
 
+#include "G4GeomTools.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4GeometryTolerance.hh"
 
 #include "G4VPVParameterisation.hh"
@@ -77,7 +67,7 @@ enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 //////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
-//               - note if pDPhi>2PI then reset to 2PI
+//             - note if pDPhi>2PI then reset to 2PI
 
 G4Cons::G4Cons( const G4String& pName,
                       G4double  pRmin1, G4double pRmax1,
@@ -132,10 +122,10 @@ G4Cons::G4Cons( const G4String& pName,
 G4Cons::G4Cons( __void__& a )
   : G4CSGSolid(a), kRadTolerance(0.), kAngTolerance(0.),
     fRmin1(0.), fRmin2(0.), fRmax1(0.), fRmax2(0.), fDz(0.),
-    fSPhi(0.), fDPhi(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.),
-    cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
-    fPhiFullCone(false), halfCarTolerance(0.), halfRadTolerance(0.),
-    halfAngTolerance(0.)
+    fSPhi(0.), fDPhi(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhi(0.),
+    cosHDPhiOT(0.), cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.),
+    sinEPhi(0.), cosEPhi(0.),
+    halfCarTolerance(0.), halfRadTolerance(0.), halfAngTolerance(0.)
 {
 }
 
@@ -156,9 +146,9 @@ G4Cons::G4Cons(const G4Cons& rhs)
     kAngTolerance(rhs.kAngTolerance), fRmin1(rhs.fRmin1), fRmin2(rhs.fRmin2),
     fRmax1(rhs.fRmax1), fRmax2(rhs.fRmax2), fDz(rhs.fDz), fSPhi(rhs.fSPhi),
     fDPhi(rhs.fDPhi), sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
-    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
-    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi), sinEPhi(rhs.sinEPhi),
-    cosEPhi(rhs.cosEPhi), fPhiFullCone(rhs.fPhiFullCone),
+    cosHDPhi(rhs.cosHDPhi), cosHDPhiOT(rhs.cosHDPhiOT),
+    cosHDPhiIT(rhs.cosHDPhiIT), sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
+    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullCone(rhs.fPhiFullCone),
     halfCarTolerance(rhs.halfCarTolerance),
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
@@ -186,7 +176,7 @@ G4Cons& G4Cons::operator = (const G4Cons& rhs)
    fRmin1 = rhs.fRmin1; fRmin2 = rhs.fRmin2;
    fRmax1 = rhs.fRmax1; fRmax2 = rhs.fRmax2;
    fDz = rhs.fDz; fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
-   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi; cosHDPhi = rhs.cosHDPhi;
    cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
@@ -264,221 +254,160 @@ void G4Cons::ComputeDimensions(      G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep) ;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
 
-///////////////////////////////////////////////////////////////////////////
+void G4Cons::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double rmin = std::min(GetInnerRadiusMinusZ(),GetInnerRadiusPlusZ());
+  G4double rmax = std::max(GetOuterRadiusMinusZ(),GetOuterRadiusPlusZ());
+  G4double dz   = GetZHalfLength();
+
+  // Find bounding box
+  //
+  if (GetDeltaPhiAngle() < twopi)
+  {
+    G4TwoVector vmin,vmax;
+    G4GeomTools::DiskExtent(rmin,rmax,
+                            GetSinStartPhi(),GetCosStartPhi(),
+                            GetSinEndPhi(),GetCosEndPhi(),
+                            vmin,vmax);
+    pMin.set(vmin.x(),vmin.y(),-dz);
+    pMax.set(vmax.x(),vmax.y(), dz);
+  }
+  else
+  {
+    pMin.set(-rmax,-rmax,-dz);
+    pMax.set( rmax, rmax, dz);
+  }
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Cons::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+///////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
 
 G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
-              const G4VoxelLimits&     pVoxelLimit,
-              const G4AffineTransform& pTransform,
-                    G4double&          pMin,
-                    G4double&          pMax  ) const
+                                const G4VoxelLimits&     pVoxelLimit,
+                                const G4AffineTransform& pTransform,
+                                      G4double&          pMin,
+                                      G4double&          pMax ) const
 {
-  if ( !pTransform.IsRotated() && (fDPhi == twopi)
-    && (fRmin1 == 0) && (fRmin2 == 0) )
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Get bounding box
+  BoundingLimits(bmin,bmax);
+
+  // Check bounding box
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    // Special case handling for unrotated solid cones
-    // Compute z/x/y mins and maxs for bounding box respecting limits,
-    // with early returns if outside limits. Then switch() on pAxis,
-    // and compute exact x and y limit for x/y case
-      
-    G4double xoffset, xMin, xMax ;
-    G4double yoffset, yMin, yMax ;
-    G4double zoffset, zMin, zMax ;
-
-    G4double diff1, diff2, delta, maxDiff, newMin, newMax, RMax ;
-    G4double xoff1, xoff2, yoff1, yoff2 ;
-      
-    zoffset = pTransform.NetTranslation().z();
-    zMin    = zoffset - fDz ;
-    zMax    = zoffset + fDz ;
-
-    if (pVoxelLimit.IsZLimited())
-    {
-      if( (zMin > pVoxelLimit.GetMaxZExtent() + kCarTolerance) || 
-          (zMax < pVoxelLimit.GetMinZExtent() - kCarTolerance)  )
-      {
-        return false ;
-      }
-      else
-      {
-        if ( zMin < pVoxelLimit.GetMinZExtent() )
-        {
-          zMin = pVoxelLimit.GetMinZExtent() ;
-        }
-        if ( zMax > pVoxelLimit.GetMaxZExtent() )
-        {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
-        }
-      }
-    }
-    xoffset = pTransform.NetTranslation().x() ;
-    RMax    = (fRmax2 >= fRmax1) ?  zMax : zMin  ;                  
-    xMax    = xoffset + (fRmax1 + fRmax2)*0.5 + 
-              (RMax - zoffset)*(fRmax2 - fRmax1)/(2*fDz) ;
-    xMin    = 2*xoffset-xMax ;
-
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin > pVoxelLimit.GetMaxXExtent() + kCarTolerance) || 
-           (xMax < pVoxelLimit.GetMinXExtent() - kCarTolerance)  )
-      {
-        return false ;
-      }
-      else
-      {
-        if ( xMin < pVoxelLimit.GetMinXExtent() )
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if ( xMax > pVoxelLimit.GetMaxXExtent() )
-        {
-          xMax=pVoxelLimit.GetMaxXExtent() ;
-        }
-      }
-    }
-    yoffset = pTransform.NetTranslation().y() ;
-    yMax    = yoffset + (fRmax1 + fRmax2)*0.5 + 
-              (RMax - zoffset)*(fRmax2 - fRmax1)/(2*fDz) ;
-    yMin    = 2*yoffset-yMax ;
-    RMax    = yMax - yoffset ;  // = max radius due to Zmax/Zmin cuttings
-
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ( (yMin > pVoxelLimit.GetMaxYExtent() + kCarTolerance) || 
-           (yMax < pVoxelLimit.GetMinYExtent() - kCarTolerance)  )
-      {
-        return false ;
-      }
-      else
-      {
-        if ( yMin < pVoxelLimit.GetMinYExtent() )
-        {
-          yMin = pVoxelLimit.GetMinYExtent() ;
-        }
-        if ( yMax > pVoxelLimit.GetMaxYExtent() )
-        {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
-        }
-      }
-    }    
-    switch (pAxis) // Known to cut cones
-    {
-      case kXAxis:
-        yoff1 = yoffset - yMin ;
-        yoff2 = yMax - yoffset ;
-
-        if ((yoff1 >= 0) && (yoff2 >= 0)) // Y limits cross max/min x
-        {                                 // => no change
-          pMin = xMin ;
-          pMax = xMax ;
-        }
-        else
-        {
-          // Y limits don't cross max/min x => compute max delta x,
-          // hence new mins/maxs
-          delta=RMax*RMax-yoff1*yoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=RMax*RMax-yoff2*yoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1>diff2) ? diff1:diff2 ;
-          newMin  = xoffset - maxDiff ;
-          newMax  = xoffset + maxDiff ;
-          pMin    = ( newMin < xMin ) ? xMin : newMin  ;
-          pMax    = ( newMax > xMax) ? xMax : newMax ;
-        } 
-      break ;
-
-      case kYAxis:
-        xoff1 = xoffset - xMin ;
-        xoff2 = xMax - xoffset ;
-
-        if ((xoff1 >= 0) && (xoff2 >= 0) ) // X limits cross max/min y
-        {                                  // => no change
-          pMin = yMin ;
-          pMax = yMax ;
-        }
-        else
-        {
-          // X limits don't cross max/min y => compute max delta y,
-          // hence new mins/maxs
-          delta=RMax*RMax-xoff1*xoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=RMax*RMax-xoff2*xoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1 > diff2) ? diff1:diff2 ;
-          newMin  = yoffset - maxDiff ;
-          newMax  = yoffset + maxDiff ;
-          pMin    = (newMin < yMin) ? yMin : newMin ;
-          pMax    = (newMax > yMax) ? yMax : newMax ;
-        }
-      break ;
-
-      case kZAxis:
-        pMin = zMin ;
-        pMax = zMax ;
-      break ;
-      
-      default:
-      break ;
-    }
-    pMin -= kCarTolerance ;
-    pMax += kCarTolerance ;
-
-    return true ;
+    return exist = (pMin < pMax) ? true : false;
   }
-  else   // Calculate rotated vertex coordinates
+
+  // Get parameters of the solid
+  G4double rmin1 = GetInnerRadiusMinusZ();
+  G4double rmax1 = GetOuterRadiusMinusZ();
+  G4double rmin2 = GetInnerRadiusPlusZ();
+  G4double rmax2 = GetOuterRadiusPlusZ();
+  G4double dz    = GetZHalfLength();
+  G4double dphi  = GetDeltaPhiAngle();
+
+  // Find bounding envelope and calculate extent
+  //
+  const G4int NSTEPS = 24;            // number of steps for whole circle
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
+  G4int    ksteps = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
+  G4double ang    = dphi/ksteps;
+
+  G4double sinHalf = std::sin(0.5*ang);
+  G4double cosHalf = std::cos(0.5*ang);
+  G4double sinStep = 2.*sinHalf*cosHalf;
+  G4double cosStep = 1. - 2.*sinHalf*sinHalf;
+  G4double rext1   = rmax1/cosHalf;
+  G4double rext2   = rmax2/cosHalf;
+
+  // bounding envelope for full cone without hole consists of two polygons,
+  // in other cases it is a sequence of quadrilaterals
+  if (rmin1 == 0 && rmin2 == 0 && dphi == twopi)
   {
-    G4int i, noEntries, noBetweenSections4 ;
-    G4bool existsAfterClip = false ;
-    G4ThreeVectorList* vertices = CreateRotatedVertices(pTransform) ;
+    G4double sinCur = sinHalf;
+    G4double cosCur = cosHalf;
 
-    pMin = +kInfinity ;
-    pMax = -kInfinity ;
+    G4ThreeVectorList baseA(NSTEPS),baseB(NSTEPS);
+    for (G4int k=0; k<NSTEPS; ++k)
+    {
+      baseA[k].set(rext1*cosCur,rext1*sinCur,-dz);
+      baseB[k].set(rext2*cosCur,rext2*sinCur, dz);
 
-    noEntries          = vertices->size() ;
-    noBetweenSections4 = noEntries-4 ;
-      
-    for ( i = 0 ; i < noEntries ; i += 4 )
-    {
-      ClipCrossSection(vertices, i, pVoxelLimit, pAxis, pMin, pMax) ;
+      G4double sinTmp = sinCur;
+      sinCur = sinCur*cosStep + cosCur*sinStep;
+      cosCur = cosCur*cosStep - sinTmp*sinStep;
     }
-    for ( i = 0 ; i < noBetweenSections4 ; i += 4 )
-    {
-      ClipBetweenSections(vertices, i, pVoxelLimit, pAxis, pMin, pMax) ;
-    }    
-    if ( (pMin != kInfinity) || (pMax != -kInfinity) )
-    {
-      existsAfterClip = true ;
-        
-      // Add 2*tolerance to avoid precision troubles
-
-      pMin -= kCarTolerance ;
-      pMax += kCarTolerance ;
-    }
-    else
-    {
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-       
-      G4ThreeVector clipCentre(
-      (pVoxelLimit.GetMinXExtent() + pVoxelLimit.GetMaxXExtent())*0.5,
-      (pVoxelLimit.GetMinYExtent() + pVoxelLimit.GetMaxYExtent())*0.5,
-      (pVoxelLimit.GetMinZExtent() + pVoxelLimit.GetMaxZExtent())*0.5  ) ;
-        
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
-      {
-        existsAfterClip = true ;
-        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
-      }
-    }
-    delete vertices ;
-    return existsAfterClip ;
+    std::vector<const G4ThreeVectorList *> polygons(2);
+    polygons[0] = &baseA;
+    polygons[1] = &baseB;
+    G4BoundingEnvelope benv(bmin,bmax,polygons);
+    exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
   }
+  else
+  {
+    G4double sinStart = GetSinStartPhi();
+    G4double cosStart = GetCosStartPhi();
+    G4double sinEnd   = GetSinEndPhi();
+    G4double cosEnd   = GetCosEndPhi();
+    G4double sinCur   = sinStart*cosHalf + cosStart*sinHalf;
+    G4double cosCur   = cosStart*cosHalf - sinStart*sinHalf;
+
+    // set quadrilaterals
+    G4ThreeVectorList pols[NSTEPS+2];
+    for (G4int k=0; k<ksteps+2; ++k) pols[k].resize(4);
+    pols[0][0].set(rmin2*cosStart,rmin2*sinStart, dz);
+    pols[0][1].set(rmin1*cosStart,rmin1*sinStart,-dz);
+    pols[0][2].set(rmax1*cosStart,rmax1*sinStart,-dz);
+    pols[0][3].set(rmax2*cosStart,rmax2*sinStart, dz);
+    for (G4int k=1; k<ksteps+1; ++k)
+    {
+      pols[k][0].set(rmin2*cosCur,rmin2*sinCur, dz);
+      pols[k][1].set(rmin1*cosCur,rmin1*sinCur,-dz);
+      pols[k][2].set(rext1*cosCur,rext1*sinCur,-dz);
+      pols[k][3].set(rext2*cosCur,rext2*sinCur, dz);
+
+      G4double sinTmp = sinCur;
+      sinCur = sinCur*cosStep + cosCur*sinStep;
+      cosCur = cosCur*cosStep - sinTmp*sinStep;
+    }
+    pols[ksteps+1][0].set(rmin2*cosEnd,rmin2*sinEnd, dz);
+    pols[ksteps+1][1].set(rmin1*cosEnd,rmin1*sinEnd,-dz);
+    pols[ksteps+1][2].set(rmax1*cosEnd,rmax1*sinEnd,-dz);
+    pols[ksteps+1][3].set(rmax2*cosEnd,rmax2*sinEnd, dz);
+
+    // set envelope and calculate extent
+    std::vector<const G4ThreeVectorList *> polygons;
+    polygons.resize(ksteps+2);
+    for (G4int k=0; k<ksteps+2; ++k) polygons[k] = &pols[k];
+    G4BoundingEnvelope benv(bmin,bmax,polygons);
+    exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  }
+  return exist;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -531,8 +460,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       distSPhi = 0.; 
       distEPhi = 0.; 
     }
-    nPs = G4ThreeVector(std::sin(fSPhi), -std::cos(fSPhi), 0);
-    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0);
+    nPs = G4ThreeVector( sinSPhi, -cosSPhi, 0 );
+    nPe = G4ThreeVector( -sinEPhi, cosEPhi, 0 );
   }
   if ( rho > halfCarTolerance )   
   {
@@ -545,30 +474,30 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
 
   if( distRMax <= halfCarTolerance )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   if( (fRmin1 || fRmin2) && (distRMin <= halfCarTolerance) )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nr;
   }
   if( !fPhiFullCone )   
   {
     if (distSPhi <= halfAngTolerance)
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= halfAngTolerance) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
   if (distZ <= halfCarTolerance)  
   {
-    noSurfaces ++;
+    ++noSurfaces;
     if ( p.z() >= 0.)  { sumnorm += nZ; }
     else               { sumnorm -= nZ; }
   }
@@ -666,29 +595,41 @@ G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   switch (side)
   {
     case kNRMin:      // Inner radius
+    {
       rho *= secRMin ;
       norm = G4ThreeVector(-p.x()/rho, -p.y()/rho, tanRMin/secRMin) ;
       break ;
+    }
     case kNRMax:      // Outer radius
+    {
       rho *= secRMax ;
       norm = G4ThreeVector(p.x()/rho, p.y()/rho, -tanRMax/secRMax) ;
       break ;
+    }
     case kNZ:         // +/- dz
+    {
       if (p.z() > 0)  { norm = G4ThreeVector(0,0,1);  }
       else            { norm = G4ThreeVector(0,0,-1); }
       break ;
+    }
     case kNSPhi:
-      norm = G4ThreeVector(std::sin(fSPhi), -std::cos(fSPhi), 0) ;
+    {
+      norm = G4ThreeVector(sinSPhi, -cosSPhi, 0) ;
       break ;
+    }
     case kNEPhi:
-      norm=G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0) ;
+    {
+      norm = G4ThreeVector(-sinEPhi, cosEPhi, 0) ;
       break ;
+    }
     default:          // Should never reach this case...
+    {
       DumpInfo();
       G4Exception("G4Cons::ApproxSurfaceNormal()",
                   "GeomSolids1002", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;    
+    }
   }
   return norm ;
 }
@@ -1137,7 +1078,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           }
           else
           {
-	    if (b>0) { sd = -b - std::sqrt(d);   }
+            if (b>0) { sd = -b - std::sqrt(d);   }
             else     { sd = c/(-b+std::sqrt(d)); }
             zi = p.z() + sd*v.z() ;
             ri = rMinAv + zi*tanRMin ;
@@ -1426,11 +1367,11 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
 
     cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/rho ;
 
-    if ( cosPsi < std::cos(fDPhi*0.5) ) // Point lies outside phi range
+    if ( cosPsi < cosHDPhi ) // Point lies outside phi range
     {
       if ( (p.y()*cosCPhi - p.x()*sinCPhi) <= 0.0 )
       {
-        safePhi = std::fabs(p.x()*std::sin(fSPhi)-p.y()*std::cos(fSPhi));
+        safePhi = std::fabs(p.x()*sinSPhi-p.y()*cosSPhi);
       }
       else
       {
@@ -1452,8 +1393,8 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
 G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
                                 const G4ThreeVector& v,
                                 const G4bool calcNorm,
-                                      G4bool *validNorm,
-                                      G4ThreeVector *n) const
+                                      G4bool* validNorm,
+                                      G4ThreeVector* n) const
 {
   ESide side = kNull, sider = kNull, sidephi = kNull;
 
@@ -1557,7 +1498,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3
                 - fRmax2*(fRmax2 + kRadTolerance*secRMax);
   }
-  else if ( v.z() < 0.0 )
+  else if (v.z() < 0.0)
   {
     deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3
                 - fRmax1*(fRmax1 + kRadTolerance*secRMax);
@@ -1980,8 +1921,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     }      
     if ( sphi < snxt )  // Order intersecttions
     {
-      snxt=sphi ;
-      side=sidephi ;
+      snxt = sphi ;
+      side = sidephi ;
     }
   }
   if ( srd < snxt )  // Order intersections
@@ -2146,100 +2087,6 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
   return safe ;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fDz cross section
-//          [4-7] +fDz cross section such that [0] is below [4],
-//                                             [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
-//  Potential improvement: For last slice, use actual ending angle
-//                         to avoid rounding error problems.
-
-G4ThreeVectorList*
-G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
-{
-  G4ThreeVectorList* vertices ;
-  G4ThreeVector vertex0, vertex1, vertex2, vertex3 ;
-  G4double meshAngle, meshRMax1, meshRMax2, crossAngle;
-  G4double cosCrossAngle, sinCrossAngle, sAngle ;
-  G4double rMaxX1, rMaxX2, rMaxY1, rMaxY2, rMinX1, rMinX2, rMinY1, rMinY2 ;
-  G4int crossSection, noCrossSections ;
-
-  // Compute no of cross-sections necessary to mesh cone
-    
-  noCrossSections = G4int(fDPhi/kMeshAngleDefault) + 1 ;
-
-  if (noCrossSections < kMinMeshSections)
-  {
-    noCrossSections = kMinMeshSections ;
-  }
-  else if (noCrossSections > kMaxMeshSections)
-  {
-    noCrossSections = kMaxMeshSections ;
-  }
-  meshAngle = fDPhi/(noCrossSections - 1) ;
-
-  meshRMax1 = fRmax1/std::cos(meshAngle*0.5) ;
-  meshRMax2 = fRmax2/std::cos(meshAngle*0.5) ;
-
-  // If complete in phi, set start angle such that mesh will be at RMax
-  // on the x axis. Will give better extent calculations when not rotated.
-
-  if ( fPhiFullCone && (fSPhi == 0.0) )
-  {
-    sAngle = -meshAngle*0.5 ;
-  }
-  else
-  {
-    sAngle = fSPhi ;
-  } 
-  vertices = new G4ThreeVectorList();
-
-  if (vertices)
-  {
-    vertices->reserve(noCrossSections*4) ;
-    for (crossSection = 0 ; crossSection < noCrossSections ; crossSection++)
-    {
-      // Compute coordinates of cross section at section crossSection
-
-      crossAngle    = sAngle + crossSection*meshAngle ;
-      cosCrossAngle = std::cos(crossAngle) ;
-      sinCrossAngle = std::sin(crossAngle) ;
-
-      rMaxX1 = meshRMax1*cosCrossAngle ;
-      rMaxY1 = meshRMax1*sinCrossAngle ;
-      rMaxX2 = meshRMax2*cosCrossAngle ;
-      rMaxY2 = meshRMax2*sinCrossAngle ;
-        
-      rMinX1 = fRmin1*cosCrossAngle ;
-      rMinY1 = fRmin1*sinCrossAngle ;
-      rMinX2 = fRmin2*cosCrossAngle ;
-      rMinY2 = fRmin2*sinCrossAngle ;
-        
-      vertex0 = G4ThreeVector(rMinX1,rMinY1,-fDz) ;
-      vertex1 = G4ThreeVector(rMaxX1,rMaxY1,-fDz) ;
-      vertex2 = G4ThreeVector(rMaxX2,rMaxY2,+fDz) ;
-      vertex3 = G4ThreeVector(rMinX2,rMinY2,+fDz) ;
-
-      vertices->push_back(pTransform.TransformPoint(vertex0)) ;
-      vertices->push_back(pTransform.TransformPoint(vertex1)) ;
-      vertices->push_back(pTransform.TransformPoint(vertex2)) ;
-      vertices->push_back(pTransform.TransformPoint(vertex3)) ;
-    }
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Cons::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-
-  return vertices ;
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 // GetEntityType
@@ -2290,37 +2137,50 @@ std::ostream& G4Cons::StreamInfo(std::ostream& os) const
 // GetPointOnSurface
 
 G4ThreeVector G4Cons::GetPointOnSurface() const
-{   
+{
   // declare working variables
   //
-  G4double Aone, Atwo, Athree, Afour, Afive, slin, slout, phi;
-  G4double zRand, cosu, sinu, rRand1, rRand2, chose, rone, rtwo, qone, qtwo;
-  rone = (fRmax1-fRmax2)/(2.*fDz);
-  rtwo = (fRmin1-fRmin2)/(2.*fDz);
-  qone=0.; qtwo=0.;
-  if(fRmax1!=fRmax2) { qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2); }
-  if(fRmin1!=fRmin2) { qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2); }
-  slin   = std::sqrt(sqr(fRmin1-fRmin2)+sqr(2.*fDz));
-  slout  = std::sqrt(sqr(fRmax1-fRmax2)+sqr(2.*fDz));
-  Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*slout;       
-  Atwo   = 0.5*fDPhi*(fRmin2 + fRmin1)*slin;
-  Athree = 0.5*fDPhi*(fRmax1*fRmax1-fRmin1*fRmin1); 
-  Afour  = 0.5*fDPhi*(fRmax2*fRmax2-fRmin2*fRmin2);
-  Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2);
-  
-  phi    = G4RandFlat::shoot(fSPhi,fSPhi+fDPhi);
-  cosu   = std::cos(phi);  sinu = std::sin(phi);
-  rRand1 = GetRadiusInRing(fRmin1, fRmax1);
-  rRand2 = GetRadiusInRing(fRmin2, fRmax2);
+  G4double rone = (fRmax1-fRmax2)/(2.*fDz);
+  G4double rtwo = (fRmin1-fRmin2)/(2.*fDz);
+  G4double qone = (fRmax1 == fRmax2) ? 0. : fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
+  G4double qtwo = (fRmin1 == fRmin2) ? 0. : fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
+
+  G4double slin   = std::hypot(fRmin1-fRmin2, 2.*fDz);
+  G4double slout  = std::hypot(fRmax1-fRmax2, 2.*fDz);
+  G4double Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*slout; // outer surface
+  G4double Atwo   = 0.5*fDPhi*(fRmin2 + fRmin1)*slin;  // inner surface
+  G4double Athree = 0.5*fDPhi*(fRmax1*fRmax1-fRmin1*fRmin1); // base at -Dz
+  G4double Afour  = 0.5*fDPhi*(fRmax2*fRmax2-fRmin2*fRmin2); // base at +Dz
+  G4double Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2); // phi section
+
+  G4double phi    = G4RandFlat::shoot(fSPhi,fSPhi+fDPhi);
+  G4double cosu   = std::cos(phi);
+  G4double sinu   = std::sin(phi);
+  G4double rRand1 = GetRadiusInRing(fRmin1, fRmax1);
+  G4double rRand2 = GetRadiusInRing(fRmin2, fRmax2);
   
   if ( (fSPhi == 0.) && fPhiFullCone )  { Afive = 0.; }
-  chose  = G4RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);
- 
-  if( (chose >= 0.) && (chose < Aone) )
+  G4double chose  = G4RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);
+
+  if( (chose >= 0.) && (chose < Aone) ) // outer surface
+  {
+    if(fRmax1 != fRmax2)
+    {
+      G4double zRand = G4RandFlat::shoot(-1.*fDz,fDz);
+      return G4ThreeVector (rone*cosu*(qone-zRand),
+                            rone*sinu*(qone-zRand), zRand);
+    }
+    else
+    {
+      return G4ThreeVector(fRmax1*cosu, fRmax2*sinu,
+                           G4RandFlat::shoot(-1.*fDz,fDz));
+    }
+  }
+  else if( (chose >= Aone) && (chose < Aone + Atwo) )  // inner surface
   {
     if(fRmin1 != fRmin2)
     {
-      zRand = G4RandFlat::shoot(-1.*fDz,fDz); 
+      G4double zRand = G4RandFlat::shoot(-1.*fDz,fDz);
       return G4ThreeVector (rtwo*cosu*(qtwo-zRand),
                             rtwo*sinu*(qtwo-zRand), zRand);
     }
@@ -2330,45 +2190,31 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
                            G4RandFlat::shoot(-1.*fDz,fDz));
     }
   }
-  else if( (chose >= Aone) && (chose <= Aone + Atwo) )
-  {
-    if(fRmax1 != fRmax2)
-    {
-      zRand = G4RandFlat::shoot(-1.*fDz,fDz); 
-      return G4ThreeVector (rone*cosu*(qone-zRand),
-                            rone*sinu*(qone-zRand), zRand);
-    }    
-    else
-    {
-      return G4ThreeVector(fRmax1*cosu, fRmax2*sinu,
-                           G4RandFlat::shoot(-1.*fDz,fDz));
-    }
-  }
-  else if( (chose >= Aone + Atwo) && (chose < Aone + Atwo + Athree) )
+  else if( (chose >= Aone + Atwo) && (chose < Aone + Atwo + Athree) ) // base at -Dz
   {
     return G4ThreeVector (rRand1*cosu, rRand1*sinu, -1*fDz);
   }
   else if( (chose >= Aone + Atwo + Athree)
-        && (chose < Aone + Atwo + Athree + Afour) )
+        && (chose < Aone + Atwo + Athree + Afour) ) // base at +Dz
   {
     return G4ThreeVector (rRand2*cosu,rRand2*sinu,fDz);
   }
-  else if( (chose >= Aone + Atwo + Athree + Afour)
+  else if( (chose >= Aone + Atwo + Athree + Afour) // SPhi section
         && (chose < Aone + Atwo + Athree + Afour + Afive) )
   {
-    zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
+    G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
     rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
-                             fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
-    return G4ThreeVector (rRand1*std::cos(fSPhi),
-                          rRand1*std::sin(fSPhi), zRand);
+                               fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2));
+    return G4ThreeVector (rRand1*cosSPhi,
+                          rRand1*sinSPhi, zRand);
   }
-  else
-  { 
-    zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
+  else // SPhi+DPhi section
+  {
+    G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
     rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
-                             fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
-    return G4ThreeVector (rRand1*std::cos(fSPhi+fDPhi),
-                          rRand1*std::sin(fSPhi+fDPhi), zRand);
+                               fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
+    return G4ThreeVector (rRand1*cosEPhi,
+                          rRand1*sinEPhi, zRand);
   }
 }
 

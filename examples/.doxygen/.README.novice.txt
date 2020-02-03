@@ -1,4 +1,3 @@
-// $Id: .README 66536 2012-12-19 14:32:36Z ihrivnac $
 
 ///\file ".README.novice.txt"
 ///\brief Geant4 Old Novice Examples README page

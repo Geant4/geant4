@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc 92921 2015-09-21 15:06:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,32 +35,7 @@
 //
 // Creation date: 07.05.2002
 //
-// Modifications:
-//
-// 23-12-02 V.Ivanchenko change interface in order to move
-//                           to cut per region
-// 20-01-03 Migrade to cut per region (V.Ivanchenko)
-// 24-01-03 Make models region aware (V.Ivanchenko)
-// 13-02-03 The set of models is defined for region (V.Ivanchenko)
-// 06-03-03 Fix in energy intervals for models (V.Ivanchenko)
-// 13-04-03 Add startFromNull (V.Ivanchenko)
-// 13-05-03 Add calculation of precise range (V.Ivanchenko)
-// 16-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
-//          calculation (V.Ivanchenko)
-// 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
-// 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
-// 26-01-04 Fix in energy range conditions (V.Ivanchenko)
-// 24-03-05 Remove check or IsInCharge (V.Ivanchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 18-08-05 Fix cut for e+e- pair production (V.Ivanchenko)
-// 29-11-05 Add protection for arithmetic operations with cut=DBL_MAX (V.Ivanchenko)
-// 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
-// 13-05-06 Add GetModel by index method (VI)
-// 15-03-07 Add maxCutInRange (V.Ivanchenko)
-// 12-04-07 Add verbosity at destruction (V.Ivanchenko)
-// 08-04-08 Fixed and simplified initialisation of G4RegionModel (VI)
-// 03-08-09 Create internal vectors only it is needed (VI)
-// 14-07-11 Use pointer to the vector of cuts and not local copy (VI)
+// Modifications: V.Ivanchenko
 //
 // Class Description:
 //
@@ -162,7 +136,7 @@ void G4EmModelManager::Clear()
   if(n > 0) {
     for(size_t i=0; i<n; ++i) {
       delete setOfRegionModels[i];
-      setOfRegionModels[i] = 0;
+      setOfRegionModels[i] = nullptr;
     }
   }
 }
@@ -210,15 +184,32 @@ void G4EmModelManager::UpdateEmModel(const G4String& nam,
 G4VEmModel* G4EmModelManager::GetModel(G4int i, G4bool ver)
 {
   G4VEmModel* model = nullptr;
-  if(i >= 0 && i < nEmModels) { model = models[i]; }
+  if(i < nEmModels) { model = models[i]; }
   else if(verboseLevel > 0 && ver) { 
     G4cout << "G4EmModelManager::GetModel WARNING: "
            << "index " << i << " is wrong Nmodels= "
            << nEmModels;
-    if(particle) G4cout << " for " << particle->GetParticleName(); 
+    if(particle) { G4cout << " for " << particle->GetParticleName(); } 
     G4cout<< G4endl;
   }
   return model;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4EmModelManager::GetRegionModel(G4int k, size_t idx)
+{
+  G4RegionModels* rm = setOfRegionModels[idxOfRegionModels[idx]];
+  G4VEmModel* mod = models[rm->ModelIndex(k)];
+  return mod;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4EmModelManager::NumberOfRegionModels(size_t idx) const
+{
+  G4RegionModels* rm = setOfRegionModels[idxOfRegionModels[idx]];
+  return rm->NumberOfModels();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -231,11 +222,9 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 {
   verboseLevel = val;
   G4String partname = p->GetParticleName();
-  //  if(partname == "proton") verboseLevel = 2;
-  //else verboseLevel = 0;
   if(1 < verboseLevel) {
     G4cout << "G4EmModelManager::Initialise() for "
-           << partname << G4endl;
+           << partname << "  Nmodels= " << nEmModels << G4endl;
   }
   // Are models defined?
   if(nEmModels < 1) {
@@ -335,9 +324,12 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
                  << " tmin(MeV)= " << tmin/MeV
                  << "; tmax(MeV)= " << tmax/MeV
                  << "; order= " << ord
+		 << "; tminAct= " << model->LowEnergyActivationLimit()/MeV
+		 << "; tmaxAct= " << model->HighEnergyActivationLimit()/MeV
                  << G4endl;
         }
         
+	static const G4double limitdelta = 0.01*eV;
         if(n > 0) {
 
           // extend energy range to previous models
@@ -346,7 +338,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
           //G4cout << "tmin= " << tmin << "  tmax= " 
           //           << tmax << "  ord= " << ord <<G4endl;
           // empty energy range
-          if( tmax - tmin <= eV) push = false;
+          if( tmax - tmin <= limitdelta) { push = false; }
           // low-energy model
           else if (tmax == eLow[0]) {
             push = false;
@@ -356,53 +348,96 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
           } else if(tmin < eHigh[n-1]) { 
             // compare order
             for(G4int k=0; k<n; ++k) {
-              // new model has lower application 
+              // new model has higher order parameter, 
+	      // so, its application area may be reduced
+	      // to avoid intersections
               if(ord >= modelOrd[k]) {
-                if(tmin < eHigh[k]  && tmin >= eLow[k]) tmin = eHigh[k];
-                if(tmax <= eHigh[k] && tmax >  eLow[k]) tmax = eLow[k];
+                if(tmin < eHigh[k]  && tmin >= eLow[k]) { tmin = eHigh[k]; }
+                if(tmax <= eHigh[k] && tmax >  eLow[k]) { tmax = eLow[k]; }
                 if(tmax > eHigh[k] && tmin < eLow[k]) {
-                  if(tmax - eHigh[k] > eLow[k] - tmin) tmin = eHigh[k];
-                  else tmax = eLow[k];
+                  if(tmax - eHigh[k] > eLow[k] - tmin) { tmin = eHigh[k]; }
+                  else { tmax = eLow[k]; }
                 }
-                if( tmax - tmin <= eV) {
+                if( tmax - tmin <= limitdelta) {
                   push = false;
                   break;
                 }
               }
             }
-            //G4cout << "tmin= " << tmin << "  tmax= " 
-            //     << tmax << "  push= " << push << " idx= " << idx <<G4endl;
-            if(push) {
-              if (tmax == eLow[0]) {
-                push = false;
-                insert = true;
-                idx = 0;
-                // continue resolve intersections
-              } else if(tmin < eHigh[n-1]) { 
-                // last energy interval
-                if(tmin > eLow[n-1] && tmax >= eHigh[n-1]) {
-                  eHigh[n-1] = tmin;
-                  // first energy interval
-                } else if(tmin <= eLow[0] && tmax < eHigh[0]) {
-                  eLow[0] = tmax;
-                  push = false;
-                  insert = true;
-                  idx = 0;
-                } else {
-                  // find energy interval to replace
-                  for(G4int k=0; k<n; ++k) { 
-                    if(tmin <= eLow[k] && tmax >= eHigh[k]) {
+	    // this model has lower order parameter than possible
+	    // other models, with which there may be intersections
+	    // so, appliction area of such models may be reduced
+
+	    // insert below the first model
+	    if (tmax <= eLow[0]) {
+	      push = false;
+	      insert = true;
+	      idx = 0;
+	      // resolve intersections
+	    } else if(tmin < eHigh[n-1]) { 
+	      // last energy interval
+	      if(tmin > eLow[n-1] && tmax >= eHigh[n-1]) {
+		eHigh[n-1] = tmin;
+		// first energy interval
+	      } else if(tmin <= eLow[0] && tmax < eHigh[0]) {
+		eLow[0] = tmax;
+		push = false;
+		insert = true;
+		idx = 0;
+		// loop over all models
+	      } else {
+		for(G4int k=n-1; k>=0; --k) { 
+		  if(tmin <= eLow[k] && tmax >= eHigh[k]) {
+		    // full overlap exclude previous model
+		    isUsed[modelAtRegion[k]] = 0;
+		    idx = k;
+		    if(k < n-1) {
+		      // shift upper models and change index
+		      for(G4int kk=k; kk<n-1; ++kk) {    
+			modelAtRegion[kk] = modelAtRegion[kk+1];
+			modelOrd[kk] = modelOrd[kk+1];
+			eLow[kk] = eLow[kk+1];
+			eHigh[kk] = eHigh[kk+1];
+		      }
+                      ++k;
+		    }
+		    --n;
+		  } else {
+		    // partially reduce previous model area
+		    if(tmin <= eLow[k] && tmax > eLow[k]) { 
+		      eLow[k] = tmax;
+                      idx = k;
+                      insert = true;
                       push = false;
-                      modelAtRegion[k] = ii;
-                      modelOrd[k] = ord;
-                      isUsed[ii] = 1;
-                    } 
+		    } else if(tmin < eHigh[k] && tmax >= eHigh[k]) { 
+		      eHigh[k] = tmin;
+                      idx = k + 1;
+                      if(idx < n) { 
+			insert = true; 
+			push = false;
+		      }
+		    } else if(tmin > eLow[k] && tmax < eHigh[k]) {
+		      if(eHigh[k] - tmax > tmin - eLow[k]) {
+			eLow[k] = tmax;
+                        idx = k;
+                        insert = true;
+			push = false;
+		      } else {
+			eHigh[k] = tmin;
+			idx = k + 1;
+			if(idx < n) { 
+			  insert = true; 
+			  push = false;
+			}
+		      }
+		    }
                   }
                 }
               }
             }
           }
         }
+	// provide space for the new model
         if(insert) {
           for(G4int k=n-1; k>=idx; --k) {    
             modelAtRegion[k+1] = modelAtRegion[k];
@@ -412,7 +447,8 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
           }
         }
         //G4cout << "push= " << push << " insert= " << insert 
-        //<< " idx= " << idx <<G4endl;
+	//       << " idx= " << idx <<G4endl;
+	// the model is added
         if (push || insert) {
           ++n;
           modelAtRegion[idx] = ii;
@@ -421,16 +457,32 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
           eHigh[idx] = tmax;
           isUsed[ii] = 1;
         }
+	// exclude models with zero energy range
+	for(G4int k=n-1; k>=0; --k) {
+	  if(eHigh[k] - eLow[k] <= limitdelta) {
+	    isUsed[modelAtRegion[k]] = 0;
+	    if(k < n-1) {
+	      for(G4int kk=k; kk<n-1; ++kk) {    
+		modelAtRegion[kk] = modelAtRegion[kk+1];
+		modelOrd[kk] = modelOrd[kk+1];
+		eLow[kk] = eLow[kk+1];
+		eHigh[kk] = eHigh[kk+1];
+	      }
+	    }
+	    --n;
+	  }
+	}
       }
     }
     eLow[0] = 0.0;
     eLow[n] = eHigh[n-1];
 
     if(1 < verboseLevel) {
-      G4cout << "New G4RegionModels set with " << n << " models for region <";
+      G4cout << "### New G4RegionModels set with " << n 
+             << " models for region <";
       if (region) { G4cout << region->GetName(); }
       G4cout << ">  Elow(MeV)= ";
-      for(G4int ii=0; ii<=n; ++ii) {G4cout << eLow[ii]/MeV << " ";}
+      for(G4int iii=0; iii<=n; ++iii) {G4cout << eLow[iii]/MeV << " ";}
       G4cout << G4endl;
     }
     G4RegionModels* rm = new G4RegionModels(n, modelAtRegion, eLow, region);
@@ -710,14 +762,14 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
              << " modelIdx= " << regModels->ModelIndex(k)
              << G4endl;
     }
-    if(cross < 0.0) { cross = 0.0; }
+    cross = std::max(cross, 0.0);
     aVector->PutValue(j, cross);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmModelManager::DumpModelList(G4int verb)
+void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
 {
   if(verb == 0) { return; }
   for(G4int i=0; i<nRegions; ++i) {
@@ -725,47 +777,48 @@ void G4EmModelManager::DumpModelList(G4int verb)
     const G4Region* reg = r->Region();
     G4int n = r->NumberOfModels();  
     if(n > 0) {
-      G4cout << "      ===== EM models for the G4Region  " << reg->GetName()
-             << " ======" << G4endl;;
+      out << "      ===== EM models for the G4Region  " << reg->GetName()
+	  << " ======" << G4endl;
       for(G4int j=0; j<n; ++j) {
         G4VEmModel* model = models[r->ModelIndex(j)];
         G4double emin = 
           std::max(r->LowEdgeEnergy(j),model->LowEnergyActivationLimit());
         G4double emax = 
           std::min(r->LowEdgeEnergy(j+1),model->HighEnergyActivationLimit());
-        G4cout << std::setw(20);
-        G4cout << model->GetName() << " :  Emin= " 
-               << std::setw(8) << G4BestUnit(emin,"Energy")
-               << "   Emax= " 
-               << std::setw(8) << G4BestUnit(emax,"Energy");
-        G4PhysicsTable* table = model->GetCrossSectionTable();
-        if(table) {
-          size_t kk = table->size();
-          for(size_t k=0; k<kk; ++k) {
-            G4PhysicsVector* v = (*table)[k];
-            if(v) {
-              G4int nn = v->GetVectorLength() - 1;
-              G4cout << "  Table with " << nn << " bins Emin= "
-                     << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
-                     << "   Emax= " 
-                     << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
-              break;
-            }
+        if(emax > emin) {
+	  out << std::setw(20);
+	  out << model->GetName() << " : Emin=" 
+	      << std::setw(5) << G4BestUnit(emin,"Energy")
+	      << " Emax=" 
+	      << std::setw(5) << G4BestUnit(emax,"Energy");
+	  G4PhysicsTable* table = model->GetCrossSectionTable();
+	  if(table) {
+	    size_t kk = table->size();
+	    for(size_t k=0; k<kk; ++k) {
+	      G4PhysicsVector* v = (*table)[k];
+	      if(v) {
+		G4int nn = v->GetVectorLength() - 1;
+		out << " Nbins=" << nn << " "
+		    << std::setw(3) << G4BestUnit(v->Energy(0),"Energy")
+		    << " - " 
+		    << std::setw(3) << G4BestUnit(v->Energy(nn),"Energy");
+		break;
+	      }
+	    }
           }
-        }
-        G4VEmAngularDistribution* an = model->GetAngularDistribution();
-        if(an) { G4cout << "   " << an->GetName(); }
-        if(fluoFlag && model->DeexcitationFlag()) { 
-          G4cout << "  FluoActive"; 
-        }
-        G4cout << G4endl;
+	  G4VEmAngularDistribution* an = model->GetAngularDistribution();
+	  if(an) { out << "  " << an->GetName(); }
+	  if(fluoFlag && model->DeexcitationFlag()) { 
+	    out << " Fluo"; 
+	  }
+	  out << G4endl;
+	}
       }  
     }
     if(1 == nEmModels) { break; }
   }
   if(theCutsNew) {
-    G4cout << "      ===== Limit on energy threshold has been applied " 
-           << G4endl;
+    out << "      ===== Limit on energy threshold has been applied " << G4endl;
   }
 }
 

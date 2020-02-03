@@ -1,5 +1,8 @@
 -------------------------------------------------------------------
+<<<<<<< HEAD
 $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +12,55 @@ $Id: History 93898 2015-11-03 08:39:38Z gcosmo $
                       Example History file
                       ---------------------
 
+<<<<<<< HEAD
+=======
+18.11.2019 - G.Cosmo (ccal-V10-05-01)
+- Fixed cases of type conversions from size_t to G4int in CCaloSD.
+- Some code cleanup.
+
+31.01.2019 - I.Hrivnacova (ccal-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+13.11.2018 - V.Ivanchenko (ccal-V10-04-07)
+- General clean-up of the example including user actions and SD classes
+
+13.09.2018 - S. Guatelli (ccal-V10-04-06)
+- G4VIS_USE and G4UI_USE deleted (consistency with the other examples)
+
+18.06.2018 - A.Ribon (ccal-V10-04-05)
+- Fixed compilation warning on gcc-8 in CCalRunAction
+  (replacing  sprintf  with  strings manipulations).
+
+27.03.2018 - L.Pandola (ccal-V10-04-04)
+- restore version of ccal-V10-04-00
+
+26.03.2018 -  L.Pandola (ccal-V10-04-03)
+- continue testing of ccal-V10-04-02: fix compiler warning.
+
+23.03.2018 -  L.Pandola (ccal-V10-04-02)
+- Added try/catch, as an attempt to debug the FPE on CDash
+
+22.03.2018 - L.Pandola (ccal-V10-04-01)
+- Added try/catch, as an attempt to debug the FPE on CDash
+
+05.02.2018 - L.Pandola  (ccal-V10-04-00)
+- Try to fix erratic crashes seen in SST-MT
+- Create an ActionInitialization, as preparation for MT migration
+- Dump singleton CCalAnalysis class and employ g4analysis only
+
+11.05.2017 - G. Cosmo   (ccal-V10-03-00)
+- Fixed compilation warning on gcc-7.1 in CCalAnalysis constructor.
+
+01.08.2016 - A. Dotti   (ccal-V10-02-02)
+- Fix issues with a char* length 
+
+02.11.2016 - L. Garnier (ccal-V10-02-01)
+- Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+03.03.2016 - L. Pandola (ccal-V10-02-00)
+- Replace std::exp with G4Exp()
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 02.11.2015 - A. Ribon (ccal-V10-01-00)
 - Migrated to ParticleHP.
 

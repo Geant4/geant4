@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.cc,v 1.6 2006-06-29 19:08:33 gunter Exp $
 //
 
 #include "G4GenericMessenger.hh"
@@ -207,8 +206,8 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
   G4String range = command->GetRange();
   std::vector<G4String> guidance;
   G4String par_name = command->GetParameter(0)->GetParameterName();
-  bool par_omitable = command->GetParameter(0)->IsOmittable();
-  for (G4int i = 0; i < command->GetGuidanceEntries(); i++) guidance.push_back(command->GetGuidanceLine(i));
+  G4bool par_omitable = command->GetParameter(0)->IsOmittable();
+  for (size_t i = 0; i < command->GetGuidanceEntries(); ++i) guidance.push_back(command->GetGuidanceLine(i));
   // Before deleting the command we need to add a fake one to avoid deleting the directory entry and with its guidance
   G4UIcommand tmp((cmdpath+"_tmp").c_str(), messenger);
   delete command;

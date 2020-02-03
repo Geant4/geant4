@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 // G4VPrimitiveScorer
 #include "G4VPrimitiveScorer.hh"

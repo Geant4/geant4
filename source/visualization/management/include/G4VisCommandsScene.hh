@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh 66373 2012-12-18 09:41:34Z gcosmo $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -136,6 +135,18 @@ private:
   G4VisCommandSceneSelect (const G4VisCommandSceneSelect&);
   G4VisCommandSceneSelect& operator = (const G4VisCommandSceneSelect&);
   G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandSceneShowExtents: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneShowExtents ();
+  virtual ~G4VisCommandSceneShowExtents ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneShowExtents (const G4VisCommandSceneShowExtents&);
+  G4VisCommandSceneShowExtents& operator = (const G4VisCommandSceneShowExtents&);
+  G4UIcmdWithoutParameter* fpCommand;
 };
 
 #endif

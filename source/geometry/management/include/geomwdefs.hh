@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: $
-//
-//
 // Defines for Windows DLLs import/export
 //
-
+// --------------------------------------------------------------------
 #ifndef GEOMWDEFS_HH
 #define GEOMWDEFS_HH
 

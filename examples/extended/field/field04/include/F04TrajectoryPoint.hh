@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04TrajectoryPoint.hh 76690 2013-11-14 08:45:07Z gcosmo $
 //
 /// \file field/field04/include/F04TrajectoryPoint.hh
 /// \brief Definition of the F04TrajectoryPoint class
@@ -62,7 +61,7 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
 
     inline void *operator new(size_t);
     inline void operator delete(void *aTrajectoryPoint);
-    inline int operator==(const F04TrajectoryPoint& right) const
+    inline G4bool operator==(const F04TrajectoryPoint& right) const
     { return (this==&right); };
 
 // Get/Set functions

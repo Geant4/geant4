@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundIon.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -42,15 +41,15 @@
 
 #include "G4PreCompoundIon.hh"
 #include "G4PhysicalConstants.hh"
-
-const G4double sixoverpi2 = 6.0/CLHEP::pi2;
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 
 G4PreCompoundIon::
 G4PreCompoundIon(const G4ParticleDefinition* part,
 		 G4VCoulombBarrier* aCoulombBarrier)
   : G4PreCompoundFragment(part,aCoulombBarrier)
 {
-  G4double r0 = theParameters->Getr0();
+  G4double r0 = theParameters->GetR0();
   fact = 0.75*CLHEP::millibarn/(CLHEP::pi*r0*r0*r0);
 }
 
@@ -70,8 +69,9 @@ ProbabilityDistributionFunction(G4double eKin,
   G4int A = GetA();
   G4int N = P + H;
 
-  G4double g0 = sixoverpi2*theFragA*theParameters->GetLevelDensity();
-  G4double g1 = sixoverpi2*theResA*theParameters->GetLevelDensity();
+  static const G4double sixoverpi2 = 6.0/CLHEP::pi2;
+  G4double g0 = sixoverpi2*fNucData->GetLevelDensity(theFragZ, theFragA, U);
+  G4double g1 = sixoverpi2*fNucData->GetLevelDensity(theResZ, theResA, 0.0);
 
   G4double gj = g1;
 
@@ -92,8 +92,8 @@ ProbabilityDistributionFunction(G4double eKin,
   G4double pA = fact*eKin*xs*rj 
     * CoalescenceFactor(theFragA) * FactorialFactor(N,P)
     * std::sqrt(2.0/(theReducedMass*efinal)) 
-    * g4pow->powN(g1*E1/(g0*E0), N-A-1)
-    * g4pow->powN(gj*Ej/(g0*E0), A-1)*gj*g1/(g0*g0*E0*theResA); 
+    * g4calc->powN(g1*E1/(g0*E0), N-A-1)
+    * g4calc->powN(gj*Ej/(g0*E0), A-1)*gj*g1/(g0*g0*E0*theResA); 
    
   return pA;
 }

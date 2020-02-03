@@ -26,7 +26,6 @@
 /// \file processes/phonon/include/G4PhononPolarization.hh
 /// \brief Definition of the G4PhononPolarization enum
 //
-// $Id: G4PhononPolarization.hh 75725 2013-11-05 16:52:30Z mkelsey $
 //
 #ifndef G4PhononPolarization_h
 #define G4PhononPolarization_h 1

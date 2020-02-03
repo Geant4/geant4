@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TypeKey.hh 69802 2013-05-15 14:52:57Z gcosmo $
 //
 // Base type key class
 //
@@ -53,10 +52,10 @@ public:
   
   // Operators
   Key operator()() const {return fMyKey;}  
-  bool operator==(const G4TypeKey& rhs) const {return fMyKey == rhs.fMyKey;}
-  bool operator!=(const G4TypeKey& rhs) const {return !operator==(rhs);}
-  bool operator<(const G4TypeKey& rhs) const {return fMyKey < rhs.fMyKey;}
-  bool operator>(const G4TypeKey& rhs) const {return fMyKey > rhs.fMyKey;}
+  G4bool operator==(const G4TypeKey& rhs) const {return fMyKey == rhs.fMyKey;}
+  G4bool operator!=(const G4TypeKey& rhs) const {return !operator==(rhs);}
+  G4bool operator<(const G4TypeKey& rhs) const {return fMyKey < rhs.fMyKey;}
+  G4bool operator>(const G4TypeKey& rhs) const {return fMyKey > rhs.fMyKey;}
 
   friend std::ostream& operator<<(std::ostream& out, const G4TypeKey& key){ 
     return out<< key.fMyKey;

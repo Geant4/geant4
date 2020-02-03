@@ -27,7 +27,10 @@
 /// \brief Main program of the electromagnetic/TestEm17 example
 //
 //
+<<<<<<< HEAD
 // $Id: TestEm17.cc 66241 2012-12-13 18:34:42Z gunter $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -58,10 +61,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
+<<<<<<< HEAD
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
+=======
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     

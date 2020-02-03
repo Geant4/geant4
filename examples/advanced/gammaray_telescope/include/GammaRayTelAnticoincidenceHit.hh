@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceHit.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -56,7 +55,7 @@ public:
   GammaRayTelAnticoincidenceHit(const GammaRayTelAnticoincidenceHit&);
   const GammaRayTelAnticoincidenceHit& operator=(const
 						GammaRayTelAnticoincidenceHit&);
-  int operator==(const GammaRayTelAnticoincidenceHit&) const;
+  G4bool operator==(const GammaRayTelAnticoincidenceHit&) const;
   
   inline void* operator new(size_t);
   inline void  operator delete(void*);

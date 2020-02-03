@@ -27,7 +27,6 @@
 /// \brief Definition of the ExP01SteppingVerbose class
 //
 //
-// $Id: ExP01SteppingVerbose.hh 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

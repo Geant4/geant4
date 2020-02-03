@@ -1,0 +1,36 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+May 20th, 2018 J. Allison - GB06-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive nearer to start of main.
+
+May 8, 2018 B. Morgan - GB06-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Nov 18, 2016 G. Folger  - biasingGB06-V10-02-01
+- correct name in GNUmakefile
+
+Nov 02, 2016 I. Hrivnacova
+- Added files description (for Doxygen)
+
+Nov 02, 2016 M. Verderi - biasingGB06-V10-02-00
+- Creation
+

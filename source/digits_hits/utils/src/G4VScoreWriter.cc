@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #include "G4VScoreWriter.hh"
@@ -76,7 +75,7 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
   }
   ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
 
-  
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   // retrieve the map
   MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
   
@@ -89,7 +88,7 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
   }
 
 
-  std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
+  std::map<G4int, G4StatDouble*> * score = msMapItr->second->GetMap();
   ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
 
 
@@ -102,9 +101,9 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
 	<< ", i" << divisionAxisNames[1]
 	<< ", i" << divisionAxisNames[2];
   // unit of scored value
-  ofile << ", value ";
+  ofile << ", total(value) ";
   if(unit.size() > 0) ofile << "[" << unit << "]";
-  ofile << G4endl;
+  ofile << ", total(val^2), entry" << G4endl;
 
   // "sequence" option: write header info 
   if(opt.find("sequence") != std::string::npos) {
@@ -123,11 +122,13 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
 	if(opt.find("csv") != std::string::npos)
 	  ofile << x << "," << y << "," << z << ",";
 
-	std::map<G4int, G4double*>::iterator value = score->find(idx);
+	std::map<G4int, G4StatDouble*>::iterator value = score->find(idx);
 	if(value == score->end()) {
-	  ofile << 0.;
+	  ofile << 0. << "," << 0. << "," << 0;
 	} else {
-	  ofile << *(value->second)/unitValue;
+	  ofile << (value->second->sum_wx())/unitValue << ","
+                << (value->second->sum_wx2())/unitValue/unitValue << ","
+                << value->second->n();
 	}
 
 	if(opt.find("csv") != std::string::npos) {
@@ -173,9 +174,10 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
   ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
 
   // retrieve the map
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
   MeshScoreMap::const_iterator msMapItr = fSMap.begin();
-  std::map<G4int, G4double*> * score;
+  std::map<G4int, G4StatDouble*> * score;
   for(; msMapItr != fSMap.end(); msMapItr++) {
 
     G4String psname = msMapItr->first;
@@ -192,9 +194,9 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
 	  << ", i" << divisionAxisNames[1]
 	  << ", i" << divisionAxisNames[2];
     // unit of scored value
-    ofile << ", value ";
+    ofile << ", total(value) ";
     if(unit.size() > 0) ofile << "[" << unit << "]";
-    ofile << G4endl;
+    ofile << ", total(val^2), entry" << G4endl;
 
 
     // "sequence" option: write header info 
@@ -214,11 +216,13 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
 	  if(opt.find("csv") != std::string::npos)
 	    ofile << x << "," << y << "," << z << ",";
 	  
-	  std::map<G4int, G4double*>::iterator value = score->find(idx);
-	  if(value == score->end()) {
-	    ofile << 0.;
+	  std::map<G4int, G4StatDouble*>::iterator value = score->find(idx);
+  	  if(value == score->end()) {
+	    ofile << 0. << "," << 0. << "," << 0;
 	  } else {
-	    ofile << *(value->second)/unitValue;
+	    ofile << (value->second->sum_wx())/unitValue << ","
+                  << (value->second->sum_wx2())/unitValue/unitValue << ","
+                  << value->second->n();
 	  }
 
 	  if(opt.find("csv") != std::string::npos) {

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: DicomPhantomZSliceMerged.hh 83429 2014-08-21 15:47:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/DICOM/include/DicomPhantomZSliceMerged.hh
 /// \brief Definition of the DicomPhantomZSliceMerged class

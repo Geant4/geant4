@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc 82310 2014-06-14 00:27:39Z adotti $
 //
 /// @file RunAction.cc
 /// @brief Describe run actions

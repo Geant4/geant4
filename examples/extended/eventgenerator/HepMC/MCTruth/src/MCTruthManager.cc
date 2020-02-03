@@ -27,7 +27,10 @@
 /// \brief Implementation of the MCTruthManager class
 //
 //
+<<<<<<< HEAD
 // $Id: MCTruthManager.cc 73446 2013-08-27 11:32:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------
@@ -37,6 +40,7 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+<<<<<<< HEAD
 
 #include "MCTruthManager.hh"
 
@@ -48,6 +52,29 @@ MCTruthManager::MCTruthManager() : event(0), config(0)
 MCTruthManager::~MCTruthManager() 
 {} 
 
+=======
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "MCTruthManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+static MCTruthManager* instance = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+MCTruthManager::MCTruthManager() : fEvent(0), fConfig(0) 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+MCTruthManager::~MCTruthManager() 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 MCTruthManager* MCTruthManager::GetInstance()
 {
   if( instance == 0 )
@@ -57,6 +84,11 @@ MCTruthManager* MCTruthManager::GetInstance()
   return instance;
 }
 
+<<<<<<< HEAD
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 void MCTruthManager::NewEvent()
 {
   // first delete the old event
@@ -65,6 +97,11 @@ void MCTruthManager::NewEvent()
   event = new HepMC::GenEvent();
 }
 
+<<<<<<< HEAD
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 void MCTruthManager::AddParticle(G4LorentzVector& momentum,
                                  G4LorentzVector& prodpos, 
                                  G4LorentzVector& endpos,
@@ -246,6 +283,11 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   } 
 }
 
+<<<<<<< HEAD
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 void MCTruthManager::PrintEvent()
 {
   event->print();
@@ -259,7 +301,13 @@ void MCTruthManager::PrintEvent()
   }
 }
 
+<<<<<<< HEAD
 void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void MCTruthManager::PrintTree(HepMC::GenParticle* particle, G4String offset)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 {
   G4cout << offset << "---  barcode: " << particle->barcode() << " pdg: " 
          << particle->pdg_id() << " energy: " << particle->momentum().e() 
@@ -287,3 +335,8 @@ void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
     printTree((*it), offset + deltaoffset);
   } 
 }
+<<<<<<< HEAD
+=======
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

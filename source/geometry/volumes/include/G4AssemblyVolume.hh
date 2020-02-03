@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AssemblyVolume.hh 66872 2013-01-15 01:25:57Z japost $
-//
-// 
 // Class G4AssemblyVolume
 //
 // Class description:
@@ -40,12 +36,9 @@
 // when placement is done. They are seen as independent physical volumes in
 // space.
 
-// Author:      Radovan Chytracek, John Apostolakis, Gabriele Cosmo
-// Date:        November 2000
-//
-// History:
-// March 2006, I.Hrivnacova - Extended to support assembly of assemblies
-//             of volumes and reflections
+// Radovan Chytracek, John Apostolakis, Gabriele Cosmo: created - November 2000
+// Ivana Hrivnacova: extended to support assembly of assemblies
+//                   of volumes and reflections - March 2006
 // ----------------------------------------------------------------------
 #ifndef G4_ASSEMBLYVOLUME_H
 #define G4_ASSEMBLYVOLUME_H 
@@ -71,10 +64,10 @@ class G4AssemblyVolume
     // At destruction all the generated physical volumes and associated
     // rotation matrices of the imprints will be destroyed.
     //
-    // The rotation matrix passed as argument can be 0 (identity) or an address
-    // even of an object on the upper stack frame. During assembly imprint, a
-    // new matrix is created anyway and it is kept track of it so it can be
-    // automatically deleted later at the end of the application.
+    // The rotation matrix passed as argument can be nullptr (identity) or an
+    // address even of an object on the upper stack frame. During assembly
+    // imprint, a new matrix is created anyway and it is kept track of it so
+    // it can be automatically deleted later at the end of the application.
     // This policy is adopted since user has no control on the way the
     // rotations are combined.
 
@@ -103,10 +96,10 @@ class G4AssemblyVolume
     //   Every next volume being added into the assembly will be placed
     //   w.r.t to the previous one.
     //
-    // The rotation matrix passed as argument can be 0 (identity) or an address
-    // even of an object on the upper stack frame. During assembly imprint, a
-    // new matrix is created anyway and it is kept track of it so it can be
-    // automatically deleted later at the end of the application.
+    // The rotation matrix passed as argument can be nullptr (identity) or an
+    // address even of an object on the upper stack frame. During assembly
+    // imprint, a new matrix is created anyway and it is kept track of it so
+    // it can be automatically deleted later at the end of the application.
     // This policy is adopted since user has no control on the way the
     // rotations are combined.
 
@@ -146,11 +139,18 @@ class G4AssemblyVolume
     // transformation in space as its argument.
 
   inline std::vector<G4VPhysicalVolume*>::iterator GetVolumesIterator();
-  inline unsigned int TotalImprintedVolumes() const;
+  inline std::size_t TotalImprintedVolumes() const;
     //
     // Methods to access the physical volumes imprinted with the assembly.
+  inline G4Transform3D& GetImprintTransformation(unsigned int imprintID);
+    // Method to access transformation for each imprint
 
-  unsigned int GetImprintsCount() const;
+  inline std::vector<G4AssemblyTriplet>::iterator GetTripletsIterator();
+  inline std::size_t TotalTriplets() const;
+    //
+    // Methods to access the triplets which are part of the assembly
+  
+  inline unsigned int GetImprintsCount() const;
     //
     // Return the number of made imprints.
 
@@ -158,21 +158,21 @@ class G4AssemblyVolume
     //
     // Return the number of existing instance of G4AssemblyVolume class.
 
-  unsigned int GetAssemblyID()    const;
+  inline unsigned int GetAssemblyID()    const;
     //
     // Return instance number of this concrete object.
   
  protected:
      
-  void SetInstanceCount( unsigned int value );
-  void SetAssemblyID( unsigned int value );
+  inline void SetInstanceCount( unsigned int value );
+  inline void SetAssemblyID( unsigned int value );
  
   void InstanceCountPlus();
   void InstanceCountMinus();
 
-  void SetImprintsCount( unsigned int value );
-  void ImprintsCountPlus();
-  void ImprintsCountMinus();
+  inline void SetImprintsCount( unsigned int value );
+  inline void ImprintsCountPlus();
+  inline void ImprintsCountMinus();
     //
     // Internal counting mechanism, used to compute unique the names of
     // physical volumes created by MakeImprint() methods.
@@ -214,10 +214,13 @@ class G4AssemblyVolume
     //
     // Class instance counter.
 
-  unsigned int fAssemblyID;
+  unsigned int fAssemblyID = 0;
     //
     // Assembly object ID derived from instance counter at construction time.
 
+  std::map<unsigned int, G4Transform3D> fImprintsTransf;
+    //
+    // Container of transformations for each imprint (used by GDML persistency)
 };
 
 #include "G4AssemblyVolume.icc"

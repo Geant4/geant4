@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.hh 89550 2015-04-17 08:38:15Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -34,6 +33,7 @@
 #define G4FissionParameters_h 1
 
 #include "globals.hh"
+#include "G4Exp.hh"
 
 class G4FissionParameters 
 {
@@ -58,6 +58,11 @@ public:
   inline G4double GetW(void) const { return w; }
 
 private:
+
+  inline G4double LocalExp(G4double x) const
+  {
+    return (std::abs(x) < 8.) ? G4Exp(-0.5*x*x) : 0.0;
+  }
 
   G4FissionParameters(const G4FissionParameters &right);
   const G4FissionParameters & operator=(const G4FissionParameters &right);

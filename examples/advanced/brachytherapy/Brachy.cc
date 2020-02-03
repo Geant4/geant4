@@ -53,9 +53,7 @@
 #include "BrachyAnalysisManager.hh"
 #endif
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
@@ -68,10 +66,7 @@
 #include "G4UImessenger.hh"
 
 #include "G4ScoringManager.hh"
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "G4ScoringManager.hh"
 #include "BrachyUserScoreWriter.hh"
@@ -87,6 +82,12 @@ int main(int argc ,char ** argv)
  G4RunManager* pRunManager = new G4RunManager;
 #endif
 
+<<<<<<< HEAD
+=======
+  G4cout << "***********************" << G4endl;
+  G4cout << "*** Seed: " << G4Random::getTheSeed() << " ***" << G4endl;
+  G4cout << "***********************" << G4endl;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
  // Access to the Scoring Manager pointer
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
 
@@ -113,6 +114,7 @@ int main(int argc ,char ** argv)
   pRunManager->SetUserInitialization(actions);
  
   //Initialize G4 kernel
+<<<<<<< HEAD
   pRunManager -> Initialize();
  
 //// Initialize the Visualization component 
@@ -127,12 +129,23 @@ int main(int argc ,char ** argv)
   if (argc == 1)   // Define UI session for interactive mode.
     { 
 #ifdef G4UI_USE
+=======
+ // pRunManager -> Initialize();
+
+  // Visualization manager
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  if (argc == 1)   // Define UI session for interactive mode.
+    {
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       G4cout << " UI session starts ..." << G4endl;
       UImanager -> ApplyCommand("/control/execute VisualisationMacro.mac");    
       ui -> SessionStart();
       delete ui;
-#endif
     }
   else           // Batch mode
     { 
@@ -142,9 +155,9 @@ int main(int argc ,char ** argv)
     }  
 
   // Job termination
-#ifdef G4VIS_USE
+
   delete visManager;
-#endif
+
 
 #ifdef ANALYSIS_USE
 // Close the output ROOT file with the results

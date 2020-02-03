@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: CMakeLists.txt 86065 2014-11-07 08:51:15Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #----------------------------------------------------------------------------
 # Setup the project
@@ -50,6 +53,11 @@ set(EXAMPLEB4A_SCRIPTS
   gui.mac
   run.png
   init_vis.mac
+<<<<<<< HEAD
+=======
+  plotHisto.C
+  plotNtuple.C
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   run1.mac
   run2.mac
   vis.mac

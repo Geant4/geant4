@@ -27,7 +27,10 @@
 /// \brief Main program of the g3tog4/clGeometry example
 //
 //
+<<<<<<< HEAD
 // $Id: clGeometry.cc 82227 2014-06-12 09:43:33Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

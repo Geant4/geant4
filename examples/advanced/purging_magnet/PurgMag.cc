@@ -32,7 +32,10 @@
 //    *                   *
 //    *********************
 //
+<<<<<<< HEAD
 // $Id: PurgMag.cc 84477 2014-10-16 08:44:04Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // Comments: Main program for the Purgin Magnet example. 
 //
@@ -45,18 +48,12 @@
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
-
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagPhysicsList.hh"
 #include "PurgMagActionInitializer.hh"
+#include "PurgMagAnalysisManager.hh"
 
 int main(int argc,char** argv) {
 
@@ -75,6 +72,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PurgMagDetectorConstruction);
   runManager->SetUserInitialization(new PurgMagPhysicsList);  
   runManager->SetUserInitialization(new PurgMagActionInitializer());
+<<<<<<< HEAD
     
 
 #ifdef G4VIS_USE
@@ -83,6 +81,13 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 #endif
   
+=======
+
+  // visualization manager
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   //Initialize G4 kernel
   runManager->Initialize();
     
@@ -92,14 +97,16 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI session for interactive mode.
     {
-#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+<<<<<<< HEAD
 #ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
+=======
+      UImanager->ApplyCommand("/control/execute vis.mac");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ui->SessionStart();
       delete ui;
-#endif
     }
   else           // Batch mode
     { 
@@ -108,10 +115,14 @@ int main(int argc,char** argv) {
       UImanager->ApplyCommand(command+fileName);
     }
 
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+
   // job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
+
   delete runManager;
 
   return 0;

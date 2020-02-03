@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITTimeStepComputer.hh 88348 2015-02-16 08:43:34Z gcosmo $
 ////
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 ////
 // The code is developed in the framework of the ESA AO7146
 //

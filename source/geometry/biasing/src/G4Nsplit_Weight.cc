@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Nsplit_Weight implementation
 //
-// $Id: G4Nsplit_Weight.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4Nsplit_Weight.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #include "G4Nsplit_Weight.hh"
 
-std::ostream& operator<<(std::ostream &out, 
-			   const G4Nsplit_Weight &nw)
+std::ostream& operator<<(std::ostream& out, const G4Nsplit_Weight& nw)
 {
   out << "nw.fN = " << nw.fN << ", nw.fW = " << nw.fW;
   return out;

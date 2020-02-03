@@ -26,8 +26,11 @@
 /// \file radioactivedecay/rdecay01/src/SteppingVerbose.cc
 /// \brief Implementation of the SteppingVerbose class
 //
+<<<<<<< HEAD
 //
 // $Id: SteppingVerbose.cc 71662 2013-06-20 08:27:55Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

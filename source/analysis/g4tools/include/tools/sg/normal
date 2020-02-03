@@ -5,7 +5,7 @@
 #define tools_sg_normal
 
 #include "node"
-#include "sf_vec"
+#include "sf_vec3f"
 #include "render_action"
 
 #include <vector>
@@ -16,15 +16,13 @@ namespace sg {
 class normal : public node {
   TOOLS_NODE(normal,tools::sg::normal,node)
 public:
-  sf_vec<tools::vec3f,float> vec;
+  sf_vec3f vec;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::normal)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(vec)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(vec)
+    );
     return s_v;
   }
 private:
@@ -38,7 +36,7 @@ public:
 public:
   normal()
   :parent()
-  ,vec(tools::vec3f(0,0,1))
+  ,vec(vec3f(0,0,1))
   {
     add_fields();
   }

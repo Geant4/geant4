@@ -23,15 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicalVolumeStore implementation for singleton container
 //
-// $Id: G4PhysicalVolumeStore.cc 66872 2013-01-15 01:25:57Z japost $
-//
-// G4PhysicalVolumeStore
-//
-// Implementation for singleton container
-//
-// History:
-// 25.07.95 P.Kent Initial version
+// 25.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 
 #include "G4Types.hh"
@@ -43,8 +37,8 @@
 // Static class variables
 // ***************************************************************************
 //
-G4PhysicalVolumeStore* G4PhysicalVolumeStore::fgInstance = 0;
-G4ThreadLocal G4VStoreNotifier* G4PhysicalVolumeStore::fgNotifier = 0;
+G4PhysicalVolumeStore* G4PhysicalVolumeStore::fgInstance = nullptr;
+G4ThreadLocal G4VStoreNotifier* G4PhysicalVolumeStore::fgNotifier = nullptr;
 G4ThreadLocal G4bool G4PhysicalVolumeStore::locked = false;
 
 // ***************************************************************************
@@ -64,7 +58,8 @@ G4PhysicalVolumeStore::G4PhysicalVolumeStore()
 //
 G4PhysicalVolumeStore::~G4PhysicalVolumeStore()
 {
-  Clean();
+  Clean();  // Delete all volumes in the store
+  G4VPhysicalVolume::Clean();  // Delete allocated sub-instance data
 }
 
 // ***************************************************************************
@@ -75,7 +70,7 @@ void G4PhysicalVolumeStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
+  if (G4GeometryManager::IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the physical volume store"
            << " while geometry closed !" << G4endl;
@@ -90,17 +85,15 @@ void G4PhysicalVolumeStore::Clean()
 
   size_t i=0;
   G4PhysicalVolumeStore* store = GetInstance();
-  std::vector<G4VPhysicalVolume*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Physical Volumes ... ";
 #endif
 
-  for(pos=store->begin(); pos!=store->end(); pos++)
+  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    if (*pos) { delete *pos; }
-    i++;
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
+    delete *pos; ++i;
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -143,10 +136,10 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
+    if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
     G4LogicalVolume* motherLogical = pVolume->GetMotherLogical();
-    if (motherLogical) { motherLogical->RemoveDaughter(pVolume); }
-    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+    if (motherLogical != nullptr) { motherLogical->RemoveDaughter(pVolume); }
+    for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
     {
       if (**i==*pVolume)
       {
@@ -164,7 +157,7 @@ void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 G4VPhysicalVolume*
 G4PhysicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
 {
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
   {
     if ((*i)->GetName() == name) { return *i; }
   }
@@ -177,7 +170,7 @@ G4PhysicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
      G4Exception("G4PhysicalVolumeStore::GetVolume()",
                  "GeomMgt1001", JustWarning, message);
   }
-  return 0;
+  return nullptr;
 }
 
 // ***************************************************************************
@@ -187,7 +180,7 @@ G4PhysicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
 G4PhysicalVolumeStore* G4PhysicalVolumeStore::GetInstance()
 {
   static G4PhysicalVolumeStore worldStore;
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = &worldStore;
   }

@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDShellVacancy.hh
-// GEANT4 tag $Name: 
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //

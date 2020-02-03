@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GRSSolid.cc 87615 2014-12-12 15:23:11Z gcosmo $
-//
-// 
 // class G4GRSSolid Implementation
 //
 // ----------------------------------------------------------------------
@@ -36,36 +32,4 @@
 G4GRSSolid::~G4GRSSolid()
 {
   delete frot;            // safe if null
-}
-
-G4GRSSolid::G4GRSSolid(const G4GRSSolid& right)
-  : G4VTouchable(), fsolid(0)
-{
-  if (frot) { delete frot; }
-  frot = 0;
-  fsolid = right.fsolid;
-  ftlate = right.ftlate;
-  if (right.frot)
-  {
-    frot = new G4RotationMatrix(*(right.frot));
-  }
-}
-
-G4GRSSolid& G4GRSSolid::operator=(const G4GRSSolid& right)
-{
-  if (&right == this)  { return *this; }
-
-  fsolid = right.fsolid;
-  ftlate = right.ftlate;
-  if (frot)
-  {
-    delete frot;
-    frot = 0;
-  }
-  if (right.frot)
-  {
-    frot = new G4RotationMatrix(*(right.frot));
-  }
-
-  return *this;
 }

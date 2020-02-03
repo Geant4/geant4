@@ -11,7 +11,6 @@
 #
 # Generated on : 29/9/2010
 #
-# $Id: sources.cmake 75774 2013-11-06 09:16:47Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -28,16 +27,28 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 #
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4magneticfield
-    HEADERS
+    HEADERS 
+        G4BFieldIntegrationDriver.hh
+        G4BogackiShampine23.hh
+        G4BogackiShampine45.hh
+        G4BulirschStoer.hh
+        G4BulirschStoer.icc
+        G4BulirschStoerDriver.hh
+        G4BulirschStoerDriver.icc
         G4CachedMagneticField.hh
         G4CashKarpRKF45.hh
         G4ChargeState.hh
         G4ChordFinder.hh
         G4ChordFinder.icc
-        G4ChordFinderSaf.hh
+        G4ChordFinderDelegate.hh
+        G4ChordFinderDelegate.icc
         G4ClassicalRK4.hh
         G4ConstRK4.hh
         G4DELPHIMagField.hh
+        G4DoLoMcPriRK34.hh
+        G4DormandPrince745.hh
+        G4DormandPrinceRK56.hh
+        G4DormandPrinceRK78.hh
         G4ElectricField.hh
         G4ElectroMagneticField.hh
         G4EqEMFieldWithEDM.hh
@@ -55,6 +66,14 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4FieldManagerStore.hh
         G4FieldTrack.hh
         G4FieldTrack.icc
+        G4FieldUtils.hh
+        G4FieldUtils.icc
+        G4FSALBogackiShampine45.hh
+        G4FSALDormandPrince745.hh
+        G4FSALIntegrationDriver.hh
+        G4FSALIntegrationDriver.icc
+        G4VFSALIntegrationStepper.hh
+        G4VFSALIntegrationStepper.icc
         G4HarmonicPolMagField.hh
         G4HelixExplicitEuler.hh
         G4HelixHeum.hh
@@ -62,6 +81,10 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4HelixMixedStepper.hh
         G4HelixSimpleRunge.hh
         G4ImplicitEuler.hh
+        G4IntegrationDriver.hh
+        G4IntegrationDriver.icc
+        G4InterpolationDriver.hh
+        G4InterpolationDriver.icc
         G4LineCurrentMagField.hh
         G4LineSection.hh
         G4MagErrorStepper.hh
@@ -75,28 +98,46 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4Mag_EqRhs.hh
         G4Mag_SpinEqRhs.hh
         G4Mag_UsualEqRhs.hh
+        G4ModifiedMidpoint.hh
+        G4ModifiedMidpoint.icc
         G4MonopoleEq.hh
         G4MagneticField.hh
         G4NystromRK4.hh
+        G4NystromRK4.icc
         G4QuadrupoleMagField.hh
         G4RepleteEofM.hh
+        G4SextupoleMagField.hh
         G4RKG3_Stepper.hh
+        G4RK547FEq1.hh
+        G4RK547FEq2.hh
+        G4RK547FEq3.hh
+        G4RKIntegrationDriver.hh
+        G4RKIntegrationDriver.icc
         G4SimpleHeum.hh
         G4SimpleRunge.hh
         G4TrialsCounter.hh
         G4TrialsCounter.icc
+        G4TsitourasRK45.hh
         G4UniformElectricField.hh
         G4UniformGravityField.hh
         G4UniformMagField.hh
+        G4VIntegrationDriver.hh
     SOURCES
+        G4BFieldIntegrationDriver.cc
+        G4BogackiShampine23.cc
+        G4BogackiShampine45.cc
+        G4BulirschStoer.cc
         G4CachedMagneticField.cc
         G4CashKarpRKF45.cc
         G4ChargeState.cc
         G4ChordFinder.cc
-        G4ChordFinderSaf.cc
         G4ClassicalRK4.cc
         G4ConstRK4.cc
         G4DELPHIMagField.cc
+        G4DoLoMcPriRK34.cc
+        G4DormandPrince745.cc
+        G4DormandPrinceRK56.cc
+        G4DormandPrinceRK78.cc
         G4ElectricField.cc
         G4ElectroMagneticField.cc
         G4EqEMFieldWithEDM.cc
@@ -111,6 +152,10 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4FieldManager.cc
         G4FieldManagerStore.cc
         G4FieldTrack.cc
+        G4FieldUtils.cc
+        G4FSALBogackiShampine45.cc
+        G4FSALDormandPrince745.cc
+        G4VFSALIntegrationStepper.cc
         G4HarmonicPolMagField.cc
         G4HelixExplicitEuler.cc
         G4HelixHeum.cc
@@ -128,17 +173,24 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4Mag_SpinEqRhs.cc
         G4Mag_UsualEqRhs.cc
         G4MagneticField.cc
+        G4ModifiedMidpoint.cc
         G4MonopoleEq.cc
         G4NystromRK4.cc
         G4QuadrupoleMagField.cc
         G4RepleteEofM.cc
+        G4SextupoleMagField.cc
         G4RKG3_Stepper.cc
+        G4RK547FEq1.cc
+        G4RK547FEq2.cc
+        G4RK547FEq3.cc
         G4SimpleHeum.cc
         G4SimpleRunge.cc
         G4TrialsCounter.cc
+        G4TsitourasRK45.cc
         G4UniformElectricField.cc
         G4UniformGravityField.cc
         G4UniformMagField.cc
+        G4VIntegrationDriver.cc	
     GRANULAR_DEPENDENCIES
         G4globman
     GLOBAL_DEPENDENCIES

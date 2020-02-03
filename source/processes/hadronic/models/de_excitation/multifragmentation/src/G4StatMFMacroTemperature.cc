@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -34,7 +33,7 @@
 //          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
 //          Moscow, pshenich@fias.uni-frankfurt.de) make algorithm closer to
 //          original MF model
-// 16.04.10 V.Ivanchenko improved logic of solving equation for tempetature
+// 16.04.10 V.Ivanchenko improved logic of solving equation for temperature
 //          to protect code from rare unwanted exception; moved constructor 
 //          and destructor to source  
 // 28.10.10 V.Ivanchenko defined members in constructor and cleaned up
@@ -152,9 +151,9 @@ G4double G4StatMFMacroTemperature::FragsExcitEnergy(const G4double T)
 // multiplicity and entropy
 {
   // Model Parameters
-  G4Pow* g4pow = G4Pow::GetInstance();
-  G4double R0 = G4StatMFParameters::Getr0()*g4pow->Z13(theA);
-  G4double R = R0*g4pow->A13(1.0+G4StatMFParameters::GetKappaCoulomb());
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double R0 = G4StatMFParameters::Getr0()*g4calc->Z13(theA);
+  G4double R = R0*g4calc->A13(1.0+G4StatMFParameters::GetKappaCoulomb());
   G4double FreeVol = _Kappa*(4.*pi/3.)*R0*R0*R0; 
  
   // Calculate Chemical potentials

@@ -32,7 +32,6 @@
 //    *                            *
 //    ******************************
 //
-// $Id: PurgMagRunAction.cc 84393 2014-10-15 07:11:25Z gcosmo $
 //
 
 #include "PurgMagRunAction.hh"
@@ -60,9 +59,7 @@ PurgMagRunAction::~PurgMagRunAction()
 void PurgMagRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   //Analysis must be handled by master and workers
-  PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
-  analysis->book();
-  
+  Book();  
   
   if (IsMaster())    
     G4cout << "---> Run " << aRun->GetRunID() << " (master) start." 
@@ -85,11 +82,7 @@ void PurgMagRunAction::BeginOfRunAction(const G4Run* aRun)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PurgMagRunAction::EndOfRunAction(const G4Run* aRun)
-{     
-  
-  PurgMagAnalysisManager* analysis = PurgMagAnalysisManager::getInstance();
-  analysis->finish();
-  
+{      
   if (IsMaster())    
     G4cout << "Total number of event = " << aRun->GetNumberOfEvent() << G4endl;
   else
@@ -110,9 +103,56 @@ void PurgMagRunAction::EndOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void PurgMagRunAction::Book() 
+{
+  // Get/create analysis manager
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+ 
+  // Open an output file
+  man->OpenFile("purgmag"); 
+  man->SetFirstNtupleId(1);
+  
+  // Create 1st ntuple (id = 1)
+  //    
+  man->CreateNtuple("n101", "Electron");
+  man->CreateNtupleDColumn("ex");
+  man->CreateNtupleDColumn("ey");
+  man->CreateNtupleDColumn("ez");
+  man->CreateNtupleDColumn("ee");
+  man->CreateNtupleDColumn("epx");
+  man->CreateNtupleDColumn("epy");
+  man->CreateNtupleDColumn("epz");
+  man->FinishNtuple();
+  G4cout << "Ntuple-1 created" << G4endl;
 
+  // Create 2nd ntuple (id = 2)
+  //    
+  man->CreateNtuple("n102", "Gamma");
+  man->CreateNtupleDColumn("gx");
+  man->CreateNtupleDColumn("gy");
+  man->CreateNtupleDColumn("gz");
+  man->CreateNtupleDColumn("ge");
+  man->CreateNtupleDColumn("gpx");
+  man->CreateNtupleDColumn("gpy");
+  man->CreateNtupleDColumn("gpz");
+  man->FinishNtuple();
+  G4cout << "Ntuple-2 created" << G4endl;
+ 
+  // Create 3rd ntuple (id = 3)
+  //
+  man->CreateNtuple("n103", "Positron");
+  man->CreateNtupleDColumn("px");
+  man->CreateNtupleDColumn("py");
+  man->CreateNtupleDColumn("pz");
+  man->CreateNtupleDColumn("pe");
+  man->CreateNtupleDColumn("ppx");
+  man->CreateNtupleDColumn("ppy");
+  man->CreateNtupleDColumn("ppz");
+  man->FinishNtuple();
+  G4cout << "Ntuple-3 created" << G4endl;
 
-
+  return;
+}
 
 
 

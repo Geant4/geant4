@@ -1,4 +1,3 @@
-$Id: History 93027 2015-09-30 16:07:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,43 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 01 November 2019 Vladimir Ivanchenko (decay-V10-05-01)
+- G4Decay.cc : Extended printout in the case of G4Exception DECAY101
+    and DECAY102
+
+- 14 December 2018 Makoto Asai (decay-V10-05-00)
+- G4Decay.cc, G4UnknownDecay : Allowing absolute zero proper decay time.
+  Co-working with event-V10-05-00 and particles-V10-05-00
+
+- 12 September 2017 Krzysztof Genser (decay-V10-03-04)
+- Moved Muonic Atom files to processes/hadronic/stopping
+- Replaced DECAY_MuonicAtomDecay process type with DECAY_MuAtom
+
+- Aug. 15, 2017 Hisaya Kurashige (decay-V10-03-03)
+- clean up NULL and 0 pointer and use nullptr
+- remove tests/test01
+- add tests/tst_dcy_01
+
+- Aug. 14, 2017 Hisaya Kurashige (decay-V10-03-02)
+- Modified to suppress Compiler Warning (clang80)
+
+- Aug. 14, 2017 Hisaya Kurashige (decay-V10-03-00)
+- Add ProcessDescription
+
+- October 18, 2016 Gabriele Cosmo (decay-V10-02-03)
+- Corrected CMake and GNUMake scripts to include new dependency on
+  particles/hadrons/ions submodule...
+
+- October 17, 2016 Kevin Lynch (for Lynch and Genser) (decay-V10-02-02)
+- Add G4MuonicAtomDecay for decay of muonic atoms
+
+- June 10, 16 Gunter Folger     (decay-V10-02-01)
+  - G4Decay::DecayIt(): better format and info on IsOK... in exception DECAY003
+  
+- June 10, 16 Gunter Folger     (decay-V10-02-00)
+  - In G4Decay::DecayIt(): add more information in exception DECAY003
+  
 - Sep. 29, 15 Hisaya Kurashige  (decay-V10-01-04)
 - fix problem #1783 of spin treatment for in-filght decay 
   (co-work tags: track-V10-01-10, particles-V10-01-10)

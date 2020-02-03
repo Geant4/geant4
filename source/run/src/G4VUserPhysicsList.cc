@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc 102337 2017-01-23 13:20:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -85,6 +84,7 @@
 #define G4MT_thePLHelper ((this->subInstanceManager.offset[this->g4vuplInstanceID])._thePLHelper)
 #define fIsPhysicsTableBuilt ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fIsPhysicsTableBuilt)
 #define fDisplayThreshold ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fDisplayThreshold)
+#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
 
 // This field helps to use the class G4VUPLManager
 //
@@ -149,6 +149,12 @@ void G4VUserPhysicsList::InitializeWorker()
     G4MT_theMessenger = new G4UserPhysicsListMessenger(this);
 }
 
+void G4VUserPhysicsList::TerminateWorker()
+{
+  RemoveProcessManager();
+  delete G4MT_theMessenger;
+  G4MT_theMessenger = nullptr;
+}
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::~G4VUserPhysicsList()
 {
@@ -237,8 +243,8 @@ void G4VUserPhysicsList::InitializeProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
-  G4ParticleTable::lockCount++;
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex());
+  G4ParticleTable::lockCount()++;
 #endif
   G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
 
@@ -284,7 +290,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
 
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
 #endif
 //  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
@@ -296,8 +302,8 @@ void G4VUserPhysicsList::RemoveProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
-  G4ParticleTable::lockCount++;
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex());
+  G4ParticleTable::lockCount()++;
 #endif
 //  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
@@ -305,7 +311,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace)
+    if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace())
     {
       if(particle->GetParticleSubType()!="generic" || particle->GetParticleName()=="GenericIon")
       {
@@ -325,7 +331,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
 #endif
 //  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
@@ -595,11 +601,11 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
   }
   if (fRetrievePhysicsTable) {
     if ( !fIsRestoredCutValues){
-      // fail to retreive cut tables
+      // fail to retrieve cut tables
 #ifdef G4VERBOSE
       if (verboseLevel>0){
 	G4cout << "G4VUserPhysicsList::BuildPhysicsTable  "
-	       << "Physics table can not be retreived and will be calculated "
+	       << "Physics table can not be retrieved and will be calculated "
 	       << G4endl;
       }
 #endif
@@ -666,16 +672,16 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
     if (verboseLevel>2){
       G4cout << "G4VUserPhysicsList::BuildPhysicsTable %%%%%% " << particle->GetParticleName() << G4endl;
       G4cout << " ProcessManager : " << pManager << " ProcessManagerShadow : " << pManagerShadow << G4endl;
-      for(G4int iv1=0;iv1<pVector->size();iv1++)
+      for(std::size_t iv1=0;iv1<pVector->size();++iv1)
       { G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl; }
       G4cout << "--------------------------------------------------------------" << G4endl;
       G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
-      for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
+      for(std::size_t iv2=0;iv2<pVectorShadow->size();++iv2)
       { G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl; }
     }
 #endif
-    for (G4int j=0; j < pVector->size(); ++j) {
+    for (std::size_t j=0; j < pVector->size(); ++j) {
         //Andrea July 16th 2013 : migration to new interface...
         //Infer if we are in a worker thread or master thread
         //Master thread is the one in which the process manager
@@ -740,7 +746,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
 		  "No process Vector");
       return;
     }
-    for (G4int j=0; j < pVector->size(); ++j) {
+    for (std::size_t j=0; j < pVector->size(); ++j) {
 
         //Andrea July 16th 2013 : migration to new interface...
         //Infer if we are in a worker thread or master thread
@@ -851,8 +857,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     G4ParticleDefinition* particle = theParticleIterator->value();
     // Store physics tables for every process for this particle type
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-    G4int  j;
-    for ( j=0; j < pVector->size(); ++j) {
+    for (std::size_t j=0; j < pVector->size(); ++j) {
       if (!(*pVector)[j]->StorePhysicsTable(particle,dir,ascii)){   
 	G4String comment =  "Fail to store physics table for "; 
 	comment += (*pVector)[j]->GetProcessName();
@@ -887,11 +892,10 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
 					      const G4String& directory,
 					      G4bool          ascii)
 {
-  G4int  j;
   G4bool success[100];  
   // Retrieve physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->size(); ++j) {
+  for (std::size_t j=0; j < pVector->size(); ++j) {
     success[j] = 
        (*pVector)[j]->RetrievePhysicsTable(particle,directory,ascii);
 
@@ -908,7 +912,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
       (*pVector)[j]->BuildPhysicsTable(*particle);
     }
   }
-  for ( j=0; j < pVector->size(); ++j) {
+  for (std::size_t j=0; j < pVector->size(); ++j) {
     // temporary addition to make the integral schema
     if (!success[j]) BuildIntegralPhysicsTable((*pVector)[j], particle); 
   }

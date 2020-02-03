@@ -42,9 +42,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 12-05-14, adopted from Stefan Heule (PSI) Thesis by P.Gumplinger
-//           http://ucn.web.psi.ch/papers/stefanheule_thesis2008.pdf
 //           reported in F. Atchison et al., Eur. Phys. J. A 44, 23–29 (2010)
+//                       DOI:  10.1140/epja/i2010-10926-x
 //           Thanks to Geza Zsigmond
+//
+// 02-11-19  Stefan Heule's thesis is available from PSI UCN group pages at
+//           https://www.psi.ch/en/ltp-ucn-physics/papers-and-theses
+//           or directly at https://opac.nebis.ch/ediss/20080426_002127549.pdf
 
 #ifndef G4MICROROUGHNESSHELPER_HH
 #define G4MICROROUGHNESSHELPER_HH 1

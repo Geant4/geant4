@@ -41,7 +41,8 @@ class CCalPrimaryGeneratorAction;
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
-class CCalPrimaryGeneratorMessenger: public G4UImessenger {
+class CCalPrimaryGeneratorMessenger: public G4UImessenger
+{
 public:
   CCalPrimaryGeneratorMessenger(CCalPrimaryGeneratorAction* myGun);
   ~CCalPrimaryGeneratorMessenger();
@@ -66,4 +67,3 @@ private:
 };
 
 #endif
-

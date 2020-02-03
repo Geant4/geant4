@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonModel.cc 93316 2015-10-16 12:36:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +70,7 @@ static const G4int nlooplim = 10000;
 
 G4PolarizedComptonModel::G4PolarizedComptonModel(const G4ParticleDefinition*,
 						 const G4String& nam)
-  : G4KleinNishinaCompton(0,nam),
+  : G4KleinNishinaCompton(nullptr,nam),
     verboseLevel(0)
 {
   crossSectionCalculator = new G4PolarizedComptonCrossSection();
@@ -91,7 +90,7 @@ G4double G4PolarizedComptonModel::ComputeAsymmetryPerAtom
   G4double asymmetry = 0.0 ;
 
   G4double k0 = gammaEnergy / electron_mass_c2 ;
-  G4double k1 = 1 + 2*k0 ;
+  G4double k1 = 1. + 2.*k0 ;
 
   asymmetry = -k0;
   asymmetry *= (k0 + 1.)*sqr(k1)*G4Log(k1) - 2.*k0*(5.*sqr(k0) + 4.*k0 + 1.);

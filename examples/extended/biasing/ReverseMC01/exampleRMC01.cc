@@ -27,7 +27,10 @@
 /// \brief Main program of the biasing/ReverseMC01 example
 //
 //
+<<<<<<< HEAD
 // $Id: exampleRMC01.cc 76253 2013-11-08 11:26:50Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 // --------------------------------------------------------------

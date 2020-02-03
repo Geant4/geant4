@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPNeutronBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +34,7 @@
 // 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
 //             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -44,12 +44,14 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4FTFPNeutronBuilder::
 G4FTFPNeutronBuilder(G4bool quasiElastic) 
 {
-  theMin =   4*GeV;
-  theMax = 100*TeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
   theStringModel = new G4FTFModel;
@@ -69,7 +71,7 @@ G4FTFPNeutronBuilder(G4bool quasiElastic)
   {  theQuasiElastic=0;}  
 
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 }
 
 G4FTFPNeutronBuilder::
@@ -82,21 +84,6 @@ G4FTFPNeutronBuilder::
 }
 
 void G4FTFPNeutronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-void G4FTFPNeutronBuilder::
-Build(G4HadronFissionProcess * )
-{
-}
-
-void G4FTFPNeutronBuilder::
-Build(G4HadronCaptureProcess * )
-{
-}
-
-void G4FTFPNeutronBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
@@ -106,4 +93,3 @@ Build(G4NeutronInelasticProcess * aP)
     
 }
 
- // 2002 by J.P. Wellisch

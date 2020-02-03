@@ -26,7 +26,6 @@
 /// \file field/field02/include/F02CalorHit.hh
 /// \brief Definition of the F02CalorHit class
 //
-// $Id: F02CalorHit.hh 76247 2013-11-08 11:18:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +48,7 @@ class F02CalorHit : public G4VHit
       virtual ~F02CalorHit();
 
       const F02CalorHit& operator=(const F02CalorHit&);
-      G4int operator==(const F02CalorHit&) const;
+      G4bool operator==(const F02CalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

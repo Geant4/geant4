@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
@@ -49,13 +56,19 @@ public:
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event*);
 
-  inline void AddEdep(G4double edep)
+  inline void AddCytoEdep(G4double edep)
   {
-    fTotalEdep += edep;
+    fCytoEdep += edep;
+  }
+
+  inline void AddNuclEdep(G4double edep)
+  {
+    fNuclEdep += edep;
   }
 
 private:
-  G4double fTotalEdep;
+  G4double fCytoEdep;
+  G4double fNuclEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerSD.cc
 /// \brief Implementation of the ExN04TrackerSD class
 //
-// $Id: ExN04TrackerSD.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "ExN04TrackerSD.hh"
@@ -50,11 +49,11 @@ ExN04TrackerSD::~ExN04TrackerSD(){;}
 void ExN04TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  trackerCollection = new ExN04TrackerHitsCollection
+  fTrackerCollection = new ExN04TrackerHitsCollection
                       (SensitiveDetectorName,collectionName[0]);
   if(HCID<0)
   { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,trackerCollection);
+  HCE->AddHitsCollection(HCID,fTrackerCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +65,7 @@ G4bool ExN04TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   ExN04TrackerHit* newHit = new ExN04TrackerHit();
   newHit->SetEdep( edep );
   newHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  trackerCollection->insert( newHit );
+  fTrackerCollection->insert( newHit );
 
   return true;
 }

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeScintHit.hh 72250 2013-07-12 08:59:26Z gcosmo $
 //
 /// \file optical/LXe/include/LXeScintHit.hh
 /// \brief Definition of the LXeScintHit class
@@ -52,7 +51,7 @@ class LXeScintHit : public G4VHit
     virtual ~LXeScintHit();
     LXeScintHit(const LXeScintHit &right);
     const LXeScintHit& operator=(const LXeScintHit &right);
-    G4int operator==(const LXeScintHit &right) const;
+    G4bool operator==(const LXeScintHit &right) const;
 
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

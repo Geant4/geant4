@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microelectronics.cc,v 1.5 2010-11-18 11:48:21 allison Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -39,10 +38,7 @@
 
 #include "G4UIExecutive.hh"
 
-#ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
-#endif
-
+#include "G4VisExecutive.hh"
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"

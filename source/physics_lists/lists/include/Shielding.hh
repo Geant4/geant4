@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.hh 83413 2014-08-21 15:21:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -38,34 +37,23 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TShielding_h
-#define TShielding_h 1
-
-#include <CLHEP/Units/SystemOfUnits.h>
+#ifndef Shielding_h
+#define Shielding_h 1
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TShielding: public T
+class Shielding : public G4VModularPhysicsList
 {
 public:
-  //TShielding(G4int ver = 1);
-  //TShielding(G4int ver = 1, G4bool rad=true, G4bool lend=false);
-  explicit TShielding( G4int verbose = 1 , G4String low_energy_neutron_model = "HP", 
-                       G4String HadrPhysVariant = "");
-  virtual ~TShielding();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
+  explicit Shielding(G4int verb = 1 , const G4String& n_model = "HP", 
+                     const G4String& HadrPhysVariant = "");
+  virtual ~Shielding()=default;  
 
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+  //delete copy constructor and assignment operator
+  Shielding(const Shielding &)=delete;
+  Shielding & operator=(const Shielding &right)=delete;
 };
-#include "Shielding.icc"
-typedef TShielding<G4VModularPhysicsList> Shielding;
 
 #endif
 

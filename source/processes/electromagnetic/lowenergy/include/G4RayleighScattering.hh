@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayleighScattering.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //------------------ G4RayleighScattering physics process -----------------------
 //
@@ -53,24 +52,30 @@ class G4RayleighScattering : public G4VEmProcess
 {
 public:  // with description
 
-  G4RayleighScattering(const G4String& processName ="Rayl",
-		      G4ProcessType type = fElectromagnetic);
+  explicit G4RayleighScattering(const G4String& processName ="Rayl",
+		                G4ProcessType type = fElectromagnetic);
 
   virtual ~G4RayleighScattering();
 
   // true for Gamma only.  
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) final;
   
   // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
      
+  // hide assignment operator
+  G4RayleighScattering & operator=(const G4RayleighScattering &right) = delete;
+  G4RayleighScattering(const G4RayleighScattering&) = delete;
+
   G4bool       isInitialised;
 };
 

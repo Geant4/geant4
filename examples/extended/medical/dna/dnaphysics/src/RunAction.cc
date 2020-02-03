@@ -29,7 +29,6 @@
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
@@ -43,17 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(): G4UserRunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::BeginOfRunAction(const G4Run*)
-{  
+{
   // Book histograms, ntuple
   
   // Create analysis manager
@@ -61,8 +50,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // in Analysis.hh
 
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
   
+  analysisManager->SetNtupleMerging(true);
+    
   G4cout << "Using " << analysisManager->GetType()
       << " analysis manager"
       << G4endl;
@@ -73,11 +64,6 @@ void RunAction::BeginOfRunAction(const G4Run*)
   //analysisManager->SetNtupleDirectoryName("ntuple");
   analysisManager->SetVerboseLevel(1);
   
-  // Open an output file
-  
-  G4String fileName = "dna";
-  analysisManager->OpenFile(fileName);
-
   // Creating ntuple
   
   analysisManager->CreateNtuple("dna", "dnaphysics");
@@ -91,6 +77,26 @@ void RunAction::BeginOfRunAction(const G4Run*)
   analysisManager->CreateNtupleDColumn("kineticEnergyDifference");
   analysisManager->CreateNtupleIColumn("event");
   analysisManager->FinishNtuple();
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::~RunAction()
+{
+  delete G4AnalysisManager::Instance(); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BeginOfRunAction(const G4Run*)
+{  
+  auto analysisManager = G4AnalysisManager::Instance();
+
+  // Open an output file
+  
+  G4String fileName = "dna";
+  analysisManager->OpenFile(fileName);
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,14 +107,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   // print histogram statistics
   
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
   
   // save histograms 
   
   analysisManager->Write();
   analysisManager->CloseFile();
-  
-  // complete cleanup
-  
-  delete G4AnalysisManager::Instance();  
 }

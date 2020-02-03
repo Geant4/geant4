@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCaptureCascade.cc 91836 2015-08-07 07:25:54Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -64,12 +63,12 @@ G4EmCaptureCascade::G4EmCaptureCascade()
   // Calculate the Energy of K Mesoatom Level for this Element using
   // the Energy of Hydrogen Atom taken into account finite size of the
   // nucleus 
-  const G4int nlevels = 28;
-  const G4int listK[nlevels] = {
+  static const G4int nlevels = 28;
+  static const G4int listK[nlevels] = {
       1, 2,  4,  6,  8, 11, 14, 17, 18, 21, 24,
      26, 29, 32, 38, 40, 41, 44, 49, 53, 55,
      60, 65, 70, 75, 81, 85, 92};
-  const G4double listKEnergy[nlevels] = {
+  static const G4double listKEnergy[nlevels] = {
      0.00275, 0.011, 0.043, 0.098, 0.173, 0.326,
      0.524, 0.765, 0.853, 1.146, 1.472,
      1.708, 2.081, 2.475, 3.323, 3.627, 
@@ -94,7 +93,7 @@ G4EmCaptureCascade::G4EmCaptureCascade()
     fKLevelEnergy[z2] = listKEnergy[i];
     idx = i;  
   }
-  for( G4int i = 0; i<14; ++i) { fLevelEnergy[i] = 0.0; }
+  for(G4int i = 0; i<14; ++i) { fLevelEnergy[i] = 0.0; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,18 +115,18 @@ G4EmCaptureCascade::ApplyYourself(const G4HadProjectile& projectile,
   G4int A = targetNucleus.GetA_asInt(); 
   G4double massA = G4NucleiProperties::GetNuclearMass(A, Z);
   G4double mass = fMuMass * massA / (fMuMass + massA) ;
-  G4double e = 13.6 * eV * Z * Z * mass/ electron_mass_c2;
+  G4double e = 13.6 * eV * (Z * Z) * mass/ electron_mass_c2;
 
   // precise corrections of energy only for K-shell
-  fLevelEnergy[0] = fKLevelEnergy[Z];
-  for( G4int i = 2; i < 15; ++i) {
-    fLevelEnergy[i-1] = e/G4double(i*i);
+  fLevelEnergy[0] = fKLevelEnergy[std::min(Z, 92)];
+  for(G4int i=1; i<14; ++i) {
+    fLevelEnergy[i] = e/(G4double)((i+1)*(i+1));
   }
 
-  G4int nElec  = G4int(Z);
+  G4int nElec  = Z;
   G4int nAuger = 1;
   G4int nLevel = 13;
-  G4double pGamma = Z*Z*Z*Z;
+  G4double pGamma = (Z*Z*Z*Z);
 
   // Capture on 14-th level
   G4double edep = fLevelEnergy[13];

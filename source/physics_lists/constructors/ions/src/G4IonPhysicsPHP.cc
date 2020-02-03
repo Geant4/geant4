@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,6 +61,10 @@
 #include "G4ParticleHPInelastic.hh"
 #include "G4ParticleHPInelasticData.hh"
 
+#include "G4HadronicParameters.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "G4NuclearLevelData.hh"
+
 using namespace std;
 
 // factory
@@ -69,54 +72,28 @@ using namespace std;
 
 G4_DECLARE_PHYSCONSTR_FACTORY( G4IonPhysicsPHP );
 
-G4ThreadLocal G4VCrossSectionDataSet*    G4IonPhysicsPHP::theNuclNuclData = 0; 
-G4ThreadLocal G4VComponentCrossSection*  G4IonPhysicsPHP::theGGNuclNuclXS = 0;
-G4ThreadLocal G4ParticleHPInelasticData* G4IonPhysicsPHP::theDeuteronHPInelasticData = 0;
-G4ThreadLocal G4ParticleHPInelasticData* G4IonPhysicsPHP::theTritonHPInelasticData = 0;
-G4ThreadLocal G4ParticleHPInelasticData* G4IonPhysicsPHP::theHe3HPInelasticData = 0;
-G4ThreadLocal G4ParticleHPInelasticData* G4IonPhysicsPHP::theAlphaHPInelasticData = 0;
-G4ThreadLocal G4BinaryLightIonReaction*  G4IonPhysicsPHP::theIonBC1 = 0;
-G4ThreadLocal G4BinaryLightIonReaction*  G4IonPhysicsPHP::theIonBC2 = 0;
-G4ThreadLocal G4HadronicInteraction*     G4IonPhysicsPHP::theFTFP = 0;
-G4ThreadLocal G4FTFBuilder*              G4IonPhysicsPHP::theBuilder = 0;
-G4ThreadLocal G4HadronicInteraction*     G4IonPhysicsPHP::modelDeuteronPHP = 0;
-G4ThreadLocal G4HadronicInteraction*     G4IonPhysicsPHP::modelTritonPHP = 0;
-G4ThreadLocal G4HadronicInteraction*     G4IonPhysicsPHP::modelHe3PHP = 0;
-G4ThreadLocal G4HadronicInteraction*     G4IonPhysicsPHP::modelAlphaPHP = 0;
-G4ThreadLocal G4bool                     G4IonPhysicsPHP::wasActivated = false;
-
+G4ThreadLocal G4FTFBuilder* G4IonPhysicsPHP::theBuilder = nullptr;
 
 G4IonPhysicsPHP::G4IonPhysicsPHP( G4int ver )
-  : G4VPhysicsConstructor( "ionInelasticFTFP_BIC" ), verbose( ver ) {
-  SetPhysicsType( bIons );
-  if ( verbose > 1 ) G4cout << "### G4IonPhysicsPHP" << G4endl;
+  : G4IonPhysicsPHP( "ionInelasticFTFP_BIC_PHP" )
+{
+  verbose = ver;
 }
 
-
 G4IonPhysicsPHP::G4IonPhysicsPHP( const G4String& nname )
-  : G4VPhysicsConstructor( nname ), verbose( 1 ) {
+  : G4VPhysicsConstructor( nname ), verbose( 1 ) 
+{
   SetPhysicsType( bIons );
-  if ( verbose > 1 ) G4cout << "### G4IonPhysicsPHP" << G4endl;
+  G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
+  param->SetDeexChannelsType(fCombined);
+  if ( verbose > 1 ) G4cout << "### G4IonPhysics: " << nname << G4endl;
 }
 
 
 G4IonPhysicsPHP::~G4IonPhysicsPHP() {
   //Explictly setting pointers to zero is actually needed.
   //These are static variables, in case we restart threads we need to re-create objects
-  delete modelAlphaPHP;              modelAlphaPHP = 0;
-  delete modelHe3PHP;                modelHe3PHP = 0;
-  delete modelTritonPHP;             modelTritonPHP = 0;
-  delete modelDeuteronPHP;           modelDeuteronPHP = 0;
-  delete theBuilder;                 theBuilder = 0;
-  delete theFTFP;                    theFTFP = 0;
-  delete theIonBC2;                  theIonBC2 = 0;
-  delete theIonBC1;                  theIonBC1 = 0;
-  delete theAlphaHPInelasticData;    theAlphaHPInelasticData = 0;
-  delete theHe3HPInelasticData;      theHe3HPInelasticData = 0;
-  delete theTritonHPInelasticData;   theTritonHPInelasticData = 0;
-  delete theDeuteronHPInelasticData; theDeuteronHPInelasticData = 0;
-  delete theGGNuclNuclXS;            theGGNuclNuclXS = 0;
-  delete theNuclNuclData;            theNuclNuclData = 0;
+  delete theBuilder;  theBuilder = nullptr;
 }
 
 
@@ -128,14 +105,12 @@ void G4IonPhysicsPHP::ConstructParticle() {
 
 
 void G4IonPhysicsPHP::ConstructProcess() {
-  if ( wasActivated ) return;
-  wasActivated = true;
 
   const G4double maxPHP = 200.0*MeV;
   const G4double overlapPHP_BIC = 10.0*MeV;
-  const G4double maxBIC = 4.0*GeV;
-  const G4double minFTF = 2.0* GeV;
-  const G4double maxFTF = 100.0*TeV;
+  const G4double maxBIC = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  const G4double minFTF = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  const G4double maxFTF = G4HadronicParameters::Instance()->GetMaxEnergy();
 
   G4HadronicInteraction* p =
     G4HadronicInteractionRegistry::Instance()->FindModel( "PRECO" );
@@ -143,60 +118,76 @@ void G4IonPhysicsPHP::ConstructProcess() {
   if ( ! thePreCompound ) thePreCompound = new G4PreCompoundModel;
 
   // Binary Cascade
-  theIonBC1 = new G4BinaryLightIonReaction( thePreCompound );
+  G4HadronicInteraction* theIonBC1 = new G4BinaryLightIonReaction( thePreCompound );
   theIonBC1->SetMinEnergy( 0.0 );  // Used for generic ions
   theIonBC1->SetMaxEnergy( maxBIC );
 
-  theIonBC2 = new G4BinaryLightIonReaction( thePreCompound );
+  G4HadronicInteraction* theIonBC2 = new G4BinaryLightIonReaction( thePreCompound );
   theIonBC2->SetMinEnergy( maxPHP - overlapPHP_BIC );  // Used for d, t, He3, alpha
   theIonBC2->SetMaxEnergy( maxBIC );
 
   // FTFP
-  theBuilder = new G4FTFBuilder( "FTFP", thePreCompound );
-  theFTFP = theBuilder->GetModel();
-  theFTFP->SetMinEnergy( minFTF );
-  theFTFP->SetMaxEnergy( maxFTF );
+  G4HadronicInteraction* theFTFP = nullptr;
+  if(maxFTF > maxBIC) {
+    theBuilder = new G4FTFBuilder( "FTFP", thePreCompound );
+    theFTFP = theBuilder->GetModel();
+    theFTFP->SetMinEnergy( minFTF );
+    theFTFP->SetMaxEnergy( maxFTF );
+  }
 
-  theNuclNuclData = 
-    new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
+  G4CrossSectionInelastic* theNuclNuclData = 
+    new G4CrossSectionInelastic( new G4ComponentGGNuclNuclXsc() );
 
   // ParticleHP : deuteron
-  modelDeuteronPHP = new G4ParticleHPInelastic( G4Deuteron::Deuteron(), "ParticleHPInelastic" );
+  G4HadronicInteraction* modelDeuteronPHP = 
+    new G4ParticleHPInelastic( G4Deuteron::Deuteron(), "ParticleHPInelastic" );
   modelDeuteronPHP->SetMinEnergy( 0.0 );
   modelDeuteronPHP->SetMaxEnergy( maxPHP );
-  theDeuteronHPInelasticData = new G4ParticleHPInelasticData( G4Deuteron::Deuteron() );
+  G4ParticleHPInelasticData* theDeuteronHPInelasticData = 
+    new G4ParticleHPInelasticData( G4Deuteron::Deuteron() );
   theDeuteronHPInelasticData->SetMinKinEnergy( 0.0 );
   theDeuteronHPInelasticData->SetMaxKinEnergy( maxPHP );
 
   // ParticleHP : triton
-  modelTritonPHP = new G4ParticleHPInelastic( G4Triton::Triton(), "ParticleHPInelastic" );
+  G4HadronicInteraction* modelTritonPHP = 
+    new G4ParticleHPInelastic( G4Triton::Triton(), "ParticleHPInelastic" );
   modelTritonPHP->SetMinEnergy( 0.0 );
   modelTritonPHP->SetMaxEnergy( maxPHP );
-  theTritonHPInelasticData = new G4ParticleHPInelasticData( G4Triton::Triton() );
+  G4ParticleHPInelasticData* theTritonHPInelasticData = 
+    new G4ParticleHPInelasticData( G4Triton::Triton() );
   theTritonHPInelasticData->SetMinKinEnergy( 0.0 );
   theTritonHPInelasticData->SetMaxKinEnergy( maxPHP );
 
   // ParticleHP : 3He
-  modelHe3PHP = new G4ParticleHPInelastic( G4He3::He3(), "ParticleHPInelastic" );
+  G4HadronicInteraction* modelHe3PHP = 
+    new G4ParticleHPInelastic( G4He3::He3(), "ParticleHPInelastic" );
   modelHe3PHP->SetMinEnergy( 0.0 );
   modelHe3PHP->SetMaxEnergy( maxPHP );
-  theHe3HPInelasticData = new G4ParticleHPInelasticData( G4He3::He3() );
+  G4ParticleHPInelasticData* theHe3HPInelasticData = 
+    new G4ParticleHPInelasticData( G4He3::He3() );
   theHe3HPInelasticData->SetMinKinEnergy( 0.0 );
   theHe3HPInelasticData->SetMaxKinEnergy( maxPHP );
 
   // ParticleHP : alpha
-  modelAlphaPHP = new G4ParticleHPInelastic( G4Alpha::Alpha(), "ParticleHPInelastic" );
+  G4HadronicInteraction* modelAlphaPHP = 
+    new G4ParticleHPInelastic( G4Alpha::Alpha(), "ParticleHPInelastic" );
   modelAlphaPHP->SetMinEnergy( 0.0 );
   modelAlphaPHP->SetMaxEnergy( maxPHP );
-  theAlphaHPInelasticData = new G4ParticleHPInelasticData( G4Alpha::Alpha() );
+  G4ParticleHPInelasticData* theAlphaHPInelasticData = 
+    new G4ParticleHPInelasticData( G4Alpha::Alpha() );
   theAlphaHPInelasticData->SetMinKinEnergy( 0.0 );
   theAlphaHPInelasticData->SetMaxKinEnergy( maxPHP );
 
-  AddProcess( "dInelastic", G4Deuteron::Deuteron(), theDeuteronHPInelasticData, modelDeuteronPHP, theIonBC2, theFTFP );
-  AddProcess( "tInelastic", G4Triton::Triton(), theTritonHPInelasticData, modelTritonPHP, theIonBC2, theFTFP );
-  AddProcess( "He3Inelastic", G4He3::He3(), theHe3HPInelasticData, modelHe3PHP, theIonBC2, theFTFP );
-  AddProcess( "alphaInelastic", G4Alpha::Alpha(), theAlphaHPInelasticData, modelAlphaPHP, theIonBC2, theFTFP );
-  AddProcess( "ionInelastic", G4GenericIon::GenericIon(), 0, 0, theIonBC1, theFTFP );
+  AddProcess( "dInelastic", G4Deuteron::Deuteron(), theDeuteronHPInelasticData, 
+	      modelDeuteronPHP, theIonBC2, theFTFP, theNuclNuclData);
+  AddProcess( "tInelastic", G4Triton::Triton(), theTritonHPInelasticData, 
+	      modelTritonPHP, theIonBC2, theFTFP, theNuclNuclData);
+  AddProcess( "He3Inelastic", G4He3::He3(), theHe3HPInelasticData, 
+	      modelHe3PHP, theIonBC2, theFTFP, theNuclNuclData);
+  AddProcess( "alphaInelastic", G4Alpha::Alpha(), theAlphaHPInelasticData, 
+	      modelAlphaPHP, theIonBC2, theFTFP, theNuclNuclData);
+  AddProcess( "ionInelastic", G4GenericIon::GenericIon(), nullptr, 
+	      nullptr, theIonBC1, theFTFP, theNuclNuclData);
 
   if ( verbose > 1 ) G4cout << "G4IonPhysicsPHP::ConstructProcess done! " << G4endl;
 }
@@ -204,8 +195,10 @@ void G4IonPhysicsPHP::ConstructProcess() {
 
 void G4IonPhysicsPHP::AddProcess( const G4String& name, G4ParticleDefinition* part, 
                                   G4ParticleHPInelasticData* xsecPHP, G4HadronicInteraction* aPHP, 
-                                  G4BinaryLightIonReaction* aBIC,
-                                  G4HadronicInteraction* aFTFP ) {
+                                  G4HadronicInteraction* aBIC,
+                                  G4HadronicInteraction* aFTFP,
+				  G4VCrossSectionDataSet* theNuclNuclData) 
+{
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess( name, part );
   G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess( hadi );    
@@ -217,6 +210,6 @@ void G4IonPhysicsPHP::AddProcess( const G4String& name, G4ParticleDefinition* pa
     }
   }
   hadi->RegisterMe( aBIC );
-  hadi->RegisterMe( aFTFP );
+  if(aFTFP) { hadi->RegisterMe( aFTFP ); }
 }
 

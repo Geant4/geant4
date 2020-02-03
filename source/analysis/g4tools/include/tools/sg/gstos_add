@@ -1,0 +1,120 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_gstos_add
+#define tools_sg_gstos_add
+
+#include "../vmanip"
+#include "../vdata"
+#include "../glprims"
+#include "../lina/mat4f"
+
+namespace tools {
+namespace sg {
+
+class gstos_add {
+public:
+  gstos_add(){}
+  virtual ~gstos_add(){}
+public:
+  gstos_add(const gstos_add&) {}
+  gstos_add& operator=(const gstos_add&){return *this;}
+public:
+  void clear() {m_xyzs.clear();m_nms.clear();}
+  
+  void add_points(size_t a_floatn,const float* a_xyzs) {
+    append(m_xyzs,a_floatn,a_xyzs);
+  }
+  void add_lines(size_t a_floatn,const float* a_xyzs) {
+    append(m_xyzs,a_floatn,a_xyzs);
+  }
+  void add_line_strip(size_t a_floatn,const float* a_xyzs) {
+    size_t num = a_floatn/3;
+    if(num<2) return;
+    size_t nxyzs = (num-1)*2*3;
+    size_t offset = m_xyzs.size();
+    m_xyzs.resize(offset+nxyzs);
+    float* pxyzs = vec_data<float>(m_xyzs)+offset;
+    gl::line_strip_to_lines(num,a_xyzs,pxyzs);
+  }
+  void add_line_loop(size_t a_floatn,const float* a_xyzs) {
+    size_t num = a_floatn/3;
+    if(num<2) return;
+    size_t nxyzs = num*2*3;
+    size_t offset = m_xyzs.size();
+    m_xyzs.resize(offset+nxyzs);
+    float* pxyzs = vec_data<float>(m_xyzs)+offset;
+    gl::line_loop_to_lines(num,a_xyzs,pxyzs);
+  }
+  void add_triangles(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
+    append(m_xyzs,a_floatn,a_xyzs);
+    append(m_nms,a_floatn,a_nms);
+  }
+  void add_triangle_strip(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
+    size_t num = a_floatn/3;
+    if(num<3) return;
+    size_t nxyzs = (num-2)*3*3;
+    size_t offset = m_xyzs.size();
+    m_xyzs.resize(offset+nxyzs);
+    float* pxyzs = vec_data<float>(m_xyzs)+offset;
+    offset = m_nms.size();
+    m_nms.resize(offset+nxyzs);
+    float* pnms = vec_data<float>(m_nms)+offset;
+    gl::triangle_strip_to_triangles(num,a_xyzs,a_nms,pxyzs,pnms);
+  }
+  void add_triangle_fan(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
+    size_t num = a_floatn/3;
+    if(num<3) return;
+    size_t nxyzs = (num-2)*3*3;
+    size_t offset = m_xyzs.size();
+    m_xyzs.resize(offset+nxyzs);
+    float* pxyzs = vec_data<float>(m_xyzs)+offset;
+    offset = m_nms.size();
+    m_nms.resize(offset+nxyzs);
+    float* pnms = vec_data<float>(m_nms)+offset;
+    gl::triangle_fan_to_triangles(num,a_xyzs,a_nms,pxyzs,pnms);
+  }
+
+  void add_triangle_strip_as_triangles(size_t a_floatn,const float* a_xyzs,const float* a_nms) { //used in sg::sphere, icosahedron_sphere.
+    add_triangle_strip(a_floatn,a_xyzs,a_nms);
+  }
+/*
+  /////////////////////////////////////////////////////////
+  /// for sg::markers and gstos : /////////////////////////
+  /////////////////////////////////////////////////////////
+  void add_lines(const std::vector<float>& a_xyzs) {
+    append(m_xyzs,a_xyzs.size(),vec_data(a_xyzs));
+  }
+  void add_triangles(const std::vector<float>& a_xyzs,const std::vector<float>& a_nms) { //for sg::markers.
+    if(a_xyzs.size()!=a_nms.size()) return;
+    append(m_xyzs,a_xyzs.size(),vec_data(a_xyzs));
+    append(m_nms,a_nms.size(),vec_data(a_nms));
+  }
+  bool project_point(const mat4f& a_model_matrix,const mat4f& a_projection_matrix,
+                     float& a_x,float& a_y,float& a_z,float& a_w) {
+    a_w = 1;
+    a_model_matrix.mul_4f(a_x,a_y,a_z,a_w);
+    a_projection_matrix.mul_4f(a_x,a_y,a_z,a_w);
+    if(a_w==0.0F) return false;
+    a_x /= a_w;
+    a_y /= a_w;
+    a_z /= a_w;
+    return true;
+  }
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+*/
+public:
+  std::vector<float> m_xyzs;
+  std::vector<float> m_nms;
+  
+  size_t m_gsto_points_sz;
+  size_t m_gsto_lines_sz;
+  size_t m_gsto_tris_sz;
+  size_t m_gsto_nms_sz;
+};
+
+}}
+
+#endif

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1SteppingAction.hh 80449 2014-04-22 08:35:50Z gcosmo $
 //
 /// \file B1SteppingAction.hh
 /// \brief Definition of the B1SteppingAction class

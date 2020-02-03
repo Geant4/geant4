@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 70601 2013-06-03 11:20:53Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,10 +51,6 @@ if(GEANT4_USE_QT)
     list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Qt.hh)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Qt.cc)
     
-    # Stuff for Moc etc, plus LINK_LIBRARIES here
-    #  !!! ONLY QT4 to be comment with QT5
-    include(${QT_USE_FILE})
-    
     # Must enable Qt source with a def...
     GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES G4Qt.cc
         COMPILE_DEFINITIONS G4INTY_BUILD_QT)
@@ -73,9 +68,6 @@ if(GEANT4_USE_WT)
     list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Wt.hh)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Wt.cc)
         
-    # Must have Wt includes...
-    include_directories(${Wt_INCLUDE_DIR})
-
     # Source needs to have a compile definition
     GEANT4_ADD_COMPILE_DEFINITIONS(
         SOURCES G4Wt.cc
@@ -84,7 +76,7 @@ if(GEANT4_USE_WT)
 
     # It uses Wt libs
     list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
-        "${Wt_LIBRARY}") 
+        Wt::Wt Wt::HTTP) 
 endif()
 
 #
@@ -111,9 +103,6 @@ if(UNIX)
     list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Xt.hh)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Xt.cc)
 
-    # Must have X11 includes...
-    include_directories(${X11_INCLUDE_DIR})
-
     # Source needs to have a compile definition
     GEANT4_ADD_COMPILE_DEFINITIONS(
         SOURCES G4Xt.cc
@@ -122,7 +111,7 @@ if(UNIX)
 
     # It uses the X11 libs?
     list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
-        "${X11_LIBRARIES}"
+      X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu X11::Xt 
     )
   endif()
 endif()

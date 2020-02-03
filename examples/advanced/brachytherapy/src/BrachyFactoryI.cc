@@ -32,7 +32,6 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryI.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
 #include "BrachyFactoryI.hh"
 #include "BrachyDetectorConstructionI.hh"

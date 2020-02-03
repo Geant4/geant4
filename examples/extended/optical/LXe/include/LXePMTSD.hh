@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXePMTSD.hh 73915 2013-09-17 07:32:26Z gcosmo $
 //
 /// \file optical/LXe/include/LXePMTSD.hh
 /// \brief Definition of the LXePMTSD class
@@ -61,13 +60,13 @@ class LXePMTSD : public G4VSensitiveDetector
     void PrintAll();
  
     //Initialize the arrays to store pmt possitions
-    inline void InitPMTs(G4int nPMTs){
+    inline void InitPMTs(){
       if(fPMTPositionsX)delete fPMTPositionsX;
       if(fPMTPositionsY)delete fPMTPositionsY;
       if(fPMTPositionsZ)delete fPMTPositionsZ;
-      fPMTPositionsX=new G4DataVector(nPMTs);
-      fPMTPositionsY=new G4DataVector(nPMTs);
-      fPMTPositionsZ=new G4DataVector(nPMTs);
+      fPMTPositionsX = new G4DataVector();
+      fPMTPositionsY = new G4DataVector();
+      fPMTPositionsZ = new G4DataVector();
     }
 
     //Store a pmt position

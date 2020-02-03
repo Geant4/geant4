@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -67,9 +66,6 @@ void G4OpenGLStoredWin32Viewer::Initialise () {
 
 void G4OpenGLStoredWin32Viewer::DrawView () {
 
-  //Make sure current viewer is attached and clean...
-  //Win32 version needed
-  //  glXMakeCurrent (dpy, win, cx);
   glViewport (0, 0, getWinWidth(), getWinHeight());
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();

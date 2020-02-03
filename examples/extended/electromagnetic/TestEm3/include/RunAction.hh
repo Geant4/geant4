@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm3/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.hh 85280 2014-10-27 09:20:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

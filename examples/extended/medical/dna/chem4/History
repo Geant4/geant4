@@ -1,0 +1,90 @@
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example chem4 History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+11.09.2019 - Ivana Hrivnacova   - chem4-V10-05-03
+- Create the analysis manager (in ScoreSpecies) via the new factory
+  function.
+
+10.03.2019 MK                   - chem4-V10-05-02
+- Species hides a pointer
+  Make Species alias of const G4MolecularConfiguration
+
+08.02.2019 VI, WGS, SI          - chem4-V10-05-01
+- Fixed PhysicsList
+
+05 Feb 2018 - Sebastien Incerti - chem4-V10-05-00
+- added UI commands for one step thermalization model selection in macro
+beam.in
+
+27 Nov 2018 - Vladimir Ivanchenko- chem4-V10-04-02
+- Fixed nightly problem in PhysicsList
+
+19 Nov 2018 - Ivana Hrivnacova   - chem4-V10-04-01
+- Fixed Cmake build
+
+26 Feb 2018 - R. Hatcher         - chem4-V10-04-00
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
+28 Nov 2017 - Ivana Hrivnacova   - chem4-V10-03-00
+- Fixed Doxygen warnings
+
+19 Nov 2016 - Andrea Dotti       - chem4-V10-02-06
+- Explicit set of SD to manager
+
+14 Nov 2016 - Mathieu Karamitros - chem4-V10-02-05
+- ScoreSpecies.cc: Add preproc protection to avoid warning
+
+12 Nov 2016 - Mathieu Karamitros - chem4-V10-02-04
+- ScoreSpecies: fix computation of standard error of the mean
+- ActInit: fix initialization: remove H2O from counter
+- Add CanvasInTab::GetNCanvas
+- update primary generator: add verbose
+- add inner separators
+- RunAction: indentation
+- DetConst: change order of scorer declaration + modify comments
+
+21 Oct 2016 - Mathieu Karamitros - chem4-V10-02-03
+    -- General info --
+    The G-values are computing for a range of deposited energy [A;B]. 
+    We are in an infinite volume. Therefore the energy lost by the 
+    primary equals the deposited energy since all secondary particles 
+    will finally slow down to the thermal energy. 
+    The primary is killed once it has deposited more energy than the 
+    minimum threshold A. 
+    However, when the particle looses more energy in few interaction 
+    steps than the maximum allowed thresold B, the event is 
+    disregarded (=aborted).
+    
+    Note that if the upper boundary of the energy lost by the primary is 
+    not set, the chemistry may take a lot of time to compute. 
+    
+- Abort event if the energy lost by the primary is larger than a
+user chosen threshold
+- Update README and .README.txt for new UI commands
+
+28 Sept 2016 - Ivana Hrivnacova - chem4-V10-02-02
+- Fixed text formatting in .README.txt
+
+19 Sept 2016 - Mathieu Karamitros - chem4-V10-02-01
+- More correction of cmake version requirement (3.4 -> 2.8)
+- Correct name of tag
+
+15 Sept 2016 - Mathieu Karamitros - chem-V10-02-01
+- Modifies cmake version requirement (3.4 -> 2.8)
+
+12 Sept 2016 - Mathieu Karamitros - chem4-V10-02-00
+- intial tag

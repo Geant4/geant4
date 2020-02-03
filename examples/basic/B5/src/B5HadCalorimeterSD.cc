@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B5HadCalorimeterSD.cc 97634 2016-06-06 14:10:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B5HadCalorimeterSD.cc
 /// \brief Implementation of the B5HadCalorimeterSD class

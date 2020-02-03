@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -107,9 +106,13 @@
 #include "G4Types.hh"
 #include "G4ios.hh"
 
+#include <chrono>
+
 class G4Timer
 {
-  public:
+    typedef std::chrono::high_resolution_clock clock_type;
+
+public:
 
     G4Timer();
 
@@ -121,17 +124,15 @@ class G4Timer
     G4double GetSystemElapsed() const;
     G4double GetUserElapsed() const;
 
-  private:
+private:
 
     G4bool fValidTimes;
-    clock_t fStartRealTime,fEndRealTime;
+    std::chrono::time_point<clock_type> fStartRealTime, fEndRealTime;
     tms fStartTimes,fEndTimes;
 };
 
 std::ostream& operator << (std::ostream& os, const G4Timer& t);
 
 #include "G4Timer.icc"
-
-#define times ostimes
 
 #endif

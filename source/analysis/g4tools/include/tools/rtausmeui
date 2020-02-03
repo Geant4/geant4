@@ -4,6 +4,10 @@
 #ifndef tools_rtausmeui
 #define tools_rtausmeui
 
+// G.Barrand : not so clear if 0 and tools::uint32_max() are included.
+//             A simple program shows that "if(r.shoot()==tools::uint32_max())" shows hits. 
+//             (But we did not see hits for "if(r.shoot()==0)"). (See inlib/tests/rand.cpp).
+
 // tausme is for Tausworthe maxmally equidistributed.
 
 // From logic and code of CERN-ROOT/TRandom2 class.

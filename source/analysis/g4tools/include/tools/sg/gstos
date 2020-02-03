@@ -4,7 +4,7 @@
 #ifndef tools_sg_gstos
 #define tools_sg_gstos
 
-#include "gl_manager"
+#include "render_manager"
 #include <vector>
 #include <ostream>
 
@@ -24,8 +24,10 @@ protected:
     clean_gstos();
     return *this;
   }
+public:
+  size_t num_gstos() const {return m_gstos.size();}
 protected:
-  unsigned int get_tex_id(std::ostream& a_out,gl_manager& a_mgr,const img_byte& a_img) {
+  unsigned int get_tex_id(std::ostream& a_out,render_manager& a_mgr,const img_byte& a_img,bool a_NEAREST) {
     unsigned int _id = _find(&a_mgr);
     if(_id && !a_mgr.is_gsto_id_valid(_id)){
 #ifdef TOOLS_SG_GSTOS_DEBUG
@@ -38,24 +40,24 @@ protected:
 #ifdef TOOLS_SG_GSTOS_DEBUG
       a_out << "debug : tools::sg::gstos::get_tex_id : create_texture ... " << std::endl;
 #endif
-      _id = a_mgr.create_texture(a_img);
+      _id = a_mgr.create_texture(a_img,a_NEAREST);
 #ifdef TOOLS_SG_GSTOS_DEBUG
       a_out << "debug : tools::sg::gstos::get_tex_id : create_texture : _id " << _id << "." << std::endl;
 #endif
       if(!_id) {
         a_out << "tools::sg::gstos::get_tex_id :"
-              << " gl_manager.create_texture() failed."
+              << " render_manager.create_texture() failed."
               << std::endl;
       } else {
-        m_gstos.push_back(std::pair<unsigned int,gl_manager*>(_id,&a_mgr));
+        m_gstos.push_back(std::pair<unsigned int,render_manager*>(_id,&a_mgr));
       }
     }
     return _id;
   }
 protected:
-  virtual unsigned int create_gsto(std::ostream&,gl_manager&) {return 0;}
+  virtual unsigned int create_gsto(std::ostream&,render_manager&) {return 0;}
 
-  unsigned int get_gsto_id(std::ostream& a_out,gl_manager& a_mgr){
+  unsigned int get_gsto_id(std::ostream& a_out,render_manager& a_mgr){
     unsigned int _id = _find(&a_mgr);
     if(_id && !a_mgr.is_gsto_id_valid(_id)){
 #ifdef TOOLS_SG_GSTOS_DEBUG
@@ -78,21 +80,21 @@ protected:
         //      << " create_gsto() failed."
         //      << std::endl;
       } else {
-        m_gstos.push_back(std::pair<unsigned int,gl_manager*>(_id,&a_mgr));    
+        m_gstos.push_back(std::pair<unsigned int,render_manager*>(_id,&a_mgr));    
       }
     }
     return _id;
   }  
 protected:
   void clean_gstos() {
-    std::vector< std::pair<unsigned int,gl_manager*> >::iterator it;
+    std::vector< std::pair<unsigned int,render_manager*> >::iterator it;
     for(it=m_gstos.begin();it!=m_gstos.end();){
       (*it).second->delete_gsto((*it).first);
       it = m_gstos.erase(it);      
     }
   }
-  void clean_gstos(gl_manager* a_mgr) {
-    std::vector< std::pair<unsigned int,gl_manager*> >::iterator it;
+  void clean_gstos(render_manager* a_mgr) {
+    std::vector< std::pair<unsigned int,render_manager*> >::iterator it;
     for(it=m_gstos.begin();it!=m_gstos.end();){
       if((*it).second==a_mgr) {
         (*it).second->delete_gsto((*it).first);
@@ -103,8 +105,8 @@ protected:
     }
   }
 protected:
-  unsigned int _find(gl_manager* a_mgr) {
-    std::vector< std::pair<unsigned int,gl_manager*> >::iterator it;
+  unsigned int _find(render_manager* a_mgr) {
+    std::vector< std::pair<unsigned int,render_manager*> >::iterator it;
     for(it=m_gstos.begin();it!=m_gstos.end();++it){
       if((*it).second==a_mgr) return (*it).first;
     }
@@ -112,7 +114,7 @@ protected:
   }
 
 protected:
-  std::vector< std::pair<unsigned int,gl_manager*> > m_gstos;
+  std::vector< std::pair<unsigned int,render_manager*> > m_gstos;
 };
 
 }}

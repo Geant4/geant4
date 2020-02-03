@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VPVParameterisation.hh 73434 2013-08-27 11:06:16Z gcosmo $
-//
-// class G4VPVParamterisation
+// G4VPVParamterisation
 //
 // Class description:
 //
@@ -34,11 +31,10 @@
 // (indirectly) the dimensions of parameterised volumes, given a
 // replication number.
 
-// History:
-// 25.07.96 P.Kent        Initial stub version
-// 20.09.96 V.Grichine    Modifications for G4Trap/Cons/Sphere
-// 31.10.96 V.Grichine    Modifications for G4Torus/Para
-// 17.02.98 J.Apostolakis Allowing the parameterisation of Solid type
+// 25.07.96, P.Kent        - Initial stub version
+// 20.09.96, V.Grichine    - Modifications for G4Trap/Cons/Sphere
+// 31.10.96, V.Grichine    - Modifications for G4Torus/Para
+// 17.02.98, J.Apostolakis - Allowing the parameterisation of solid type
 // --------------------------------------------------------------------
 #ifndef G4VPVPARAMETERISATION_HH
 #define G4VPVPARAMETERISATION_HH
@@ -84,8 +80,8 @@ class G4VPVParameterisation
     virtual G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
 				       
     virtual G4Material* ComputeMaterial(const G4int repNo, 
-                                        G4VPhysicalVolume *currentVol,
-                                        const G4VTouchable *parentTouch=0);
+                                    G4VPhysicalVolume* currentVol,
+                                    const G4VTouchable* parentTouch = nullptr);
        //  Refined method, enabling nested parameterisations
 
     virtual G4bool IsNested() const;

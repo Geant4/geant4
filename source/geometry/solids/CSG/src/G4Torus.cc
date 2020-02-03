@@ -23,43 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Torus implementation
 //
-// $Id: G4Torus.cc 102294 2017-01-20 11:41:52Z gcosmo $
-//
-// 
-// class G4Torus
-//
-// Implementation
-//
-// 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
-// 02.10.07 T.Nikitina: Bug fixed in SolveNumericJT(), b.969:segmentation fault.
-//                      rootsrefined is used only if the number of refined roots
-//                      is the same as for primary roots. 
-// 02.10.07 T.Nikitina: Bug fixed in CalculateExtent() for case of non-rotated
-//                      full-phi torus:protect against negative value for sqrt,
-//                      correct  formula for delta.  
-// 20.11.05 V.Grichine: Bug fixed in Inside(p) for phi sections, b.810 
-// 25.08.05 O.Link: new methods for DistanceToIn/Out using JTPolynomialSolver
-// 07.06.05 V.Grichine: SurfaceNormal(p) for rho=0, Constructor as G4Cons 
-// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
-// 18.03.04 V.Grichine: bug fixed in DistanceToIn(p)
-// 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
-// 03.10.00 E.Medernach: SafeNewton added
-// 31.08.00 E.Medernach: numerical computation of roots wuth bounding
-//                       volume technique
-// 26.05.00 V.Grichine: new fuctions developed by O.Cremonesi were added
-// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 19.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
 // 30.10.96 V.Grichine: first implementation with G4Tubs elements in Fs
-//
+// 26.05.00 V.Grichine: added new fuctions developed by O.Cremonesi
+// 31.08.00 E.Medernach: numerical computation of roots with bounding volume
+// 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
+// 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
+// 25.08.05 O.Link: new methods for DistanceToIn/Out using JTPolynomialSolver
+// 28.10.16 E.Tcherniaev: new CalculateExtent(); removed CreateRotatedVertices()
+// 16.12.16 H.Burkhardt: use radius differences and hypot to improve precision
+// --------------------------------------------------------------------
 
 #include "G4Torus.hh"
 
 #if !(defined(G4GEOM_USE_UTORUS) && defined(G4GEOM_USE_SYS_USOLIDS))
 
+#include "G4GeomTools.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4JTPolynomialSolver.hh"
 
@@ -201,7 +184,7 @@ G4Torus::~G4Torus()
 
 G4Torus::G4Torus(const G4Torus& rhs)
   : G4CSGSolid(rhs), fRmin(rhs.fRmin),fRmax(rhs.fRmax),
-    fRtor(rhs.fRtor),fSPhi(rhs.fSPhi),fDPhi(rhs.fDPhi),
+    fRtor(rhs.fRtor), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
     fRminTolerance(rhs.fRminTolerance), fRmaxTolerance(rhs.fRmaxTolerance),
     kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
     halfCarTolerance(rhs.halfCarTolerance),
@@ -268,18 +251,18 @@ void G4Torus::TorusRootsJT( const G4ThreeVector& p,
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
   G4double pRad2 = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
 
+  G4double d=pRad2 - Rtor2;
   c[0] = 1.0 ;
   c[1] = 4*pDotV ;
-  c[2] = 2*(pRad2 + 2*pDotV*pDotV - Rtor2 - r2 + 2*Rtor2*v.z()*v.z()) ;
-  c[3] = 4*(pDotV*(pRad2 - Rtor2 - r2) + 2*Rtor2*p.z()*v.z()) ;
-  c[4] = pRad2*pRad2 - 2*pRad2*(Rtor2+r2) 
-       + 4*Rtor2*p.z()*p.z() + (Rtor2-r2)*(Rtor2-r2) ;
-  
+  c[2] = 2*( (d + 2*pDotV*pDotV  - r2) + 2*Rtor2*v.z()*v.z());
+  c[3] = 4*(pDotV*(d - r2) + 2*Rtor2*p.z()*v.z()) ;
+  c[4] = (d-r2)*(d-r2) +4*Rtor2*(p.z()*p.z()-r2);
+
   G4JTPolynomialSolver  torusEq;
 
   num = torusEq.FindRoots( c, 4, srd, si );
   
-  for ( i = 0; i < num; i++ ) 
+  for ( i = 0; i < num; ++i ) 
   {
     if( si[i] == 0. )  { roots.push_back(srd[i]) ; }  // store real roots
   }  
@@ -314,7 +297,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
 
   // determine the smallest non-negative solution
   //
-  for ( size_t k = 0 ; k<roots.size() ; k++ )
+  for ( size_t k = 0 ; k<roots.size() ; ++k )
   {
     t = roots[k] ;
 
@@ -361,10 +344,8 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
           // compute scalar product at position p : v.n
           // ( n taken from SurfaceNormal, not normalized )
 
-          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
-                                   p.y()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
+          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::hypot(p.x(),p.y())),
+                                   p.y()*(1-fRtor/std::hypot(p.x(),p.y())),
                                    p.z() );
 
           // change sign in case of inner radius
@@ -383,10 +364,8 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
         {
           // compute scalar product at position p : v.n   
           //
-          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
-                                   p.y()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
+          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::hypot(p.x(),p.y())),
+                                   p.y()*(1-fRtor/std::hypot(p.x(),p.y())),
                                    p.z() );
 
           // change sign in case of inner radius
@@ -411,6 +390,51 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4Torus::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double rmax = GetRmax();
+  G4double rtor = GetRtor();
+  G4double rint = rtor - rmax;
+  G4double rext = rtor + rmax;
+  G4double dz   = rmax;
+
+  // Find bounding box
+  //
+  if (GetDPhi() >= twopi)
+  {
+    pMin.set(-rext,-rext,-dz);
+    pMax.set( rext, rext, dz);
+  }
+  else
+  {
+    G4TwoVector vmin,vmax;
+    G4GeomTools::DiskExtent(rint,rext,
+                            GetSinStartPhi(),GetCosStartPhi(),
+                            GetSinEndPhi(),GetCosEndPhi(),
+                            vmin,vmax);
+    pMin.set(vmin.x(),vmin.y(),-dz);
+    pMax.set(vmax.x(),vmax.y(), dz);
+  }
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Torus::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 
 G4bool G4Torus::CalculateExtent( const EAxis pAxis,
@@ -418,215 +442,133 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
                                  const G4AffineTransform& pTransform,
                                        G4double& pMin, G4double& pMax) const
 {
-  if ((!pTransform.IsRotated()) && (fDPhi==twopi) && (fRmin==0))
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Get bounding box
+  BoundingLimits(bmin,bmax);
+
+  // Check bounding box
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    // Special case handling for unrotated solid torus
-    // Compute x/y/z mins and maxs for bounding box respecting limits,
-    // with early returns if outside limits. Then switch() on pAxis,
-    // and compute exact x and y limit for x/y case
-      
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
-
-    G4double RTorus,delta,diff1,diff2,maxDiff,newMin,newMax;
-    G4double xoff1,xoff2,yoff1,yoff2;
-
-    xoffset = pTransform.NetTranslation().x();
-    xMin    = xoffset - fRmax - fRtor ;
-    xMax    = xoffset + fRmax + fRtor ;
-
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance)
-        || (xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance) )
-        return false ;
-      else
-      {
-        if (xMin < pVoxelLimit.GetMinXExtent())
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if (xMax > pVoxelLimit.GetMaxXExtent())
-        {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
-        }
-      }
-    }
-    yoffset = pTransform.NetTranslation().y();
-    yMin    = yoffset - fRmax - fRtor ;
-    yMax    = yoffset + fRmax + fRtor ;
-
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ( (yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance)
-        || (yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance) )
-      {
-        return false ;
-      }
-      else
-      {
-        if (yMin < pVoxelLimit.GetMinYExtent() )
-        { 
-          yMin = pVoxelLimit.GetMinYExtent() ;
-        }
-        if (yMax > pVoxelLimit.GetMaxYExtent() )
-        {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
-        }
-      }
-    }
-    zoffset = pTransform.NetTranslation().z() ;
-    zMin    = zoffset - fRmax ;
-    zMax    = zoffset + fRmax ;
-
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance)
-        || (zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance) )
-      {
-        return false ;
-      }
-      else
-      {
-        if (zMin < pVoxelLimit.GetMinZExtent() )
-        {
-          zMin = pVoxelLimit.GetMinZExtent() ;
-        }
-        if (zMax > pVoxelLimit.GetMaxZExtent() )
-        {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
-        }
-      }
-    }
-
-    // Known to cut cylinder
-    
-    switch (pAxis)
-    {
-      case kXAxis:
-        yoff1=yoffset-yMin;
-        yoff2=yMax-yoffset;
-        if ( yoff1 >= 0 && yoff2 >= 0 )
-        {
-          // Y limits cross max/min x => no change
-          //
-          pMin = xMin ;
-          pMax = xMax ;
-        }
-        else
-        {
-          // Y limits don't cross max/min x => compute max delta x,
-          // hence new mins/maxs
-          //
-       
-          RTorus=fRmax+fRtor;
-          delta   = RTorus*RTorus - yoff1*yoff1;
-          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
-          delta   = RTorus*RTorus - yoff2*yoff2;
-          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1 > diff2) ? diff1:diff2 ;
-          newMin  = xoffset - maxDiff ;
-          newMax  = xoffset + maxDiff ;
-          pMin    = (newMin < xMin) ? xMin : newMin ;
-          pMax    = (newMax > xMax) ? xMax : newMax ;
-        }
-        break;
-
-      case kYAxis:
-        xoff1 = xoffset - xMin ;
-        xoff2 = xMax - xoffset ;
-        if (xoff1 >= 0 && xoff2 >= 0 )
-        {
-          // X limits cross max/min y => no change
-          //
-          pMin = yMin ;
-          pMax = yMax ;
-        } 
-        else
-        {
-          // X limits don't cross max/min y => compute max delta y,
-          // hence new mins/maxs
-          //
-          RTorus=fRmax+fRtor;
-          delta   = RTorus*RTorus - xoff1*xoff1;
-          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
-          delta   = RTorus*RTorus - xoff2*xoff2;
-          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
-          newMin  = yoffset - maxDiff ;
-          newMax  = yoffset + maxDiff ;
-          pMin    = (newMin < yMin) ? yMin : newMin ;
-          pMax    = (newMax > yMax) ? yMax : newMax ;
-        }
-        break;
-
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-
-      default:
-        break;
-    }
-    pMin -= kCarTolerance ;
-    pMax += kCarTolerance ;
-
-    return true;
+    return exist = (pMin < pMax) ? true : false;
   }
-  else
+
+  // Get parameters of the solid
+  G4double rmin = GetRmin();
+  G4double rmax = GetRmax();
+  G4double rtor = GetRtor();
+  G4double dphi = GetDPhi();
+  G4double sinStart = GetSinStartPhi();
+  G4double cosStart = GetCosStartPhi();
+  G4double sinEnd   = GetSinEndPhi();
+  G4double cosEnd   = GetCosEndPhi();
+  G4double rint = rtor - rmax;
+  G4double rext = rtor + rmax;
+
+  // Find bounding envelope and calculate extent
+  //
+  static const G4int NPHI  = 24; // number of steps for whole torus
+  static const G4int NDISK = 16; // number of steps for disk
+  static const G4double sinHalfDisk = std::sin(pi/NDISK);
+  static const G4double cosHalfDisk = std::cos(pi/NDISK);
+  static const G4double sinStepDisk = 2.*sinHalfDisk*cosHalfDisk;
+  static const G4double cosStepDisk = 1. - 2.*sinHalfDisk*sinHalfDisk;
+
+  G4double astep = (360/NPHI)*deg; // max angle for one slice in phi
+  G4int    kphi  = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
+  G4double ang   = dphi/kphi;
+
+  G4double sinHalf = std::sin(0.5*ang);
+  G4double cosHalf = std::cos(0.5*ang);
+  G4double sinStep = 2.*sinHalf*cosHalf;
+  G4double cosStep = 1. - 2.*sinHalf*sinHalf;
+
+  // define vectors for bounding envelope
+  G4ThreeVectorList pols[NDISK+1];
+  for (G4int k=0; k<NDISK+1; ++k) pols[k].resize(4);
+
+  std::vector<const G4ThreeVectorList *> polygons;
+  polygons.resize(NDISK+1);
+  for (G4int k=0; k<NDISK+1; ++k) polygons[k] = &pols[k];
+
+  // set internal and external reference circles
+  G4TwoVector rzmin[NDISK];
+  G4TwoVector rzmax[NDISK];
+
+  if ((rtor-rmin*sinHalfDisk)/cosHalf > (rtor+rmin*sinHalfDisk)) rmin = 0;
+  rmax /= cosHalfDisk;
+  G4double sinCurDisk = sinHalfDisk;
+  G4double cosCurDisk = cosHalfDisk;
+  for (G4int k=0; k<NDISK; ++k)
   {
-    G4int i, noEntries, noBetweenSections4 ;
-    G4bool existsAfterClip = false ;
+    G4double rmincur = rtor + rmin*cosCurDisk;
+    if (cosCurDisk < 0 && rmin > 0) rmincur /= cosHalf;
+    rzmin[k].set(rmincur,rmin*sinCurDisk);
 
-    // Calculate rotated vertex coordinates
+    G4double rmaxcur = rtor + rmax*cosCurDisk;
+    if (cosCurDisk > 0) rmaxcur /= cosHalf;
+    rzmax[k].set(rmaxcur,rmax*sinCurDisk);
 
-    G4ThreeVectorList *vertices ;
-    G4int noPolygonVertices ;  // will be 4 
-    vertices = CreateRotatedVertices(pTransform,noPolygonVertices) ;
+    G4double sinTmpDisk = sinCurDisk;
+    sinCurDisk = sinCurDisk*cosStepDisk + cosCurDisk*sinStepDisk;
+    cosCurDisk = cosCurDisk*cosStepDisk - sinTmpDisk*sinStepDisk;
+  }
 
-    pMin = +kInfinity ;
-    pMax = -kInfinity ;
-
-    noEntries          = vertices->size() ;
-    noBetweenSections4 = noEntries - noPolygonVertices ;
-      
-    for (i=0;i<noEntries;i+=noPolygonVertices)
+  // Loop along slices in Phi. The extent is calculated as cumulative
+  // extent of the slices
+  pMin =  kInfinity;
+  pMax = -kInfinity;
+  G4double eminlim = pVoxelLimit.GetMinExtent(pAxis);
+  G4double emaxlim = pVoxelLimit.GetMaxExtent(pAxis);
+  G4double sinCur1 = 0, cosCur1 = 0, sinCur2 = 0, cosCur2 = 0;
+  for (G4int i=0; i<kphi+1; ++i)
+  {
+    if (i == 0)
     {
-      ClipCrossSection(vertices,i,pVoxelLimit,pAxis,pMin,pMax);
-    }    
-    for (i=0;i<noBetweenSections4;i+=noPolygonVertices)
-    {
-      ClipBetweenSections(vertices,i,pVoxelLimit,pAxis,pMin,pMax);
-    }
-    if (pMin!=kInfinity||pMax!=-kInfinity)
-    {
-      existsAfterClip = true ; // Add 2*tolerance to avoid precision troubles
-      pMin           -= kCarTolerance ;
-      pMax           += kCarTolerance ;
+      sinCur1 = sinStart;
+      cosCur1 = cosStart;
+      sinCur2 = sinCur1*cosHalf + cosCur1*sinHalf;
+      cosCur2 = cosCur1*cosHalf - sinCur1*sinHalf;
     }
     else
     {
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-
-      G4ThreeVector clipCentre(
-          (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-          (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-          (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5  ) ;
-        
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside )
-      {
-        existsAfterClip = true ;
-        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
-      }
+      sinCur1 = sinCur2;
+      cosCur1 = cosCur2;
+      sinCur2 = (i == kphi) ? sinEnd : sinCur1*cosStep + cosCur1*sinStep;
+      cosCur2 = (i == kphi) ? cosEnd : cosCur1*cosStep - sinCur1*sinStep;
     }
-    delete vertices;
-    return existsAfterClip;
+    for (G4int k=0; k<NDISK; ++k)
+    {
+      G4double r1 = rzmin[k].x(), r2 = rzmax[k].x();
+      G4double z1 = rzmin[k].y(), z2 = rzmax[k].y();
+      pols[k][0].set(r1*cosCur1,r1*sinCur1,z1);
+      pols[k][1].set(r2*cosCur1,r2*sinCur1,z2);
+      pols[k][2].set(r2*cosCur2,r2*sinCur2,z2);
+      pols[k][3].set(r1*cosCur2,r1*sinCur2,z1);
+    }
+    pols[NDISK] = pols[0];
+
+    // get bounding box of current slice
+    G4TwoVector vmin,vmax;
+    G4GeomTools::
+      DiskExtent(rint,rext,sinCur1,cosCur1,sinCur2,cosCur2,vmin,vmax);
+    bmin.setX(vmin.x()); bmin.setY(vmin.y());
+    bmax.setX(vmax.x()); bmax.setY(vmax.y());
+
+    // set bounding envelope for current slice and adjust extent
+    G4double emin,emax;
+    G4BoundingEnvelope benv(bmin,bmax,polygons);
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
+    if (emin < pMin) pMin = emin;
+    if (emax > pMax) pMax = emax;
+    if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
   }
+  return (pMin < pMax);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -635,14 +577,14 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
 
 EInside G4Torus::Inside( const G4ThreeVector& p ) const
 {
-  G4double r2, pt2, pPhi, tolRMin, tolRMax ;
+  G4double r, pt2, pPhi, tolRMin, tolRMax ;
 
   EInside in = kOutside ;
 
   // General precals
   //
-  r2  = p.x()*p.x() + p.y()*p.y() ;
-  pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*std::sqrt(r2) ;
+  r   = std::hypot(p.x(),p.y());
+  pt2 = p.z()*p.z() + (r-fRtor)*(r-fRtor);
 
   if (fRmin) tolRMin = fRmin + fRminTolerance ;
   else       tolRMin = 0 ;
@@ -747,7 +689,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
-  G4double rho2, rho, pt2, pt, pPhi;
+  G4double rho, pt, pPhi;
   G4double distRMin = kInfinity;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
 
@@ -760,11 +702,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   G4ThreeVector nR, nPs, nPe;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
 
-  rho2 = p.x()*p.x() + p.y()*p.y();
-  rho = std::sqrt(rho2);
-  pt2 = rho2+p.z()*p.z() +fRtor * (fRtor-2*rho);
-  pt2 = std::max(pt2, 0.0); // std::fabs(pt2);
-  pt = std::sqrt(pt2) ;
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
 
   G4double  distRMax = std::fabs(pt - fRmax);
   if(fRmin) distRMin = std::fabs(pt - fRmin);
@@ -795,12 +734,12 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   } 
   if( distRMax <= delta )
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm += nR;
   }
   else if( fRmin && (distRMin <= delta) ) // Must not be on both Outer and Inner
   {
-    noSurfaces ++;
+    ++noSurfaces;
     sumnorm -= nR;
   }
 
@@ -811,12 +750,12 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   {
     if (distSPhi <= dAngle)
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPs;
     }
     if (distEPhi <= dAngle) 
     {
-      noSurfaces ++;
+      ++noSurfaces;
       sumnorm += nPe;
     }
   }
@@ -854,7 +793,7 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
      {
         G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
                     JustWarning, ed,
-                    "Failing to find normal, even though point is on surface!" );
+                    "Failing to find normal, even though point is on surface!");
      }
      else
      {
@@ -869,8 +808,6 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   else if ( noSurfaces == 1 )  { norm = sumnorm; }
   else                         { norm = sumnorm.unit(); }
 
-  // G4cout << "G4Torus::SurfaceNormal p= " << p << " returns norm= " << norm << G4endl;
-
   return norm ;
 }
 
@@ -883,13 +820,11 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   ENorm side ;
   G4ThreeVector norm;
-  G4double rho2,rho,pt2,pt,phi;
+  G4double rho,pt,phi;
   G4double distRMin,distRMax,distSPhi,distEPhi,distMin;
 
-  rho2 = p.x()*p.x() + p.y()*p.y();
-  rho = std::sqrt(rho2) ;
-  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
-  pt = std::sqrt(pt2) ;
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
 
 #ifdef G4CSGDEBUG
   G4cout << " G4Torus::ApproximateSurfaceNormal called for point " << p
@@ -991,7 +926,37 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
                                 const G4ThreeVector& v ) const
 {
+  // Get bounding box of full torus
+  //
+  G4double boxDx  = fRtor + fRmax;
+  G4double boxDy  = boxDx;
+  G4double boxDz  = fRmax;
+  G4double boxMax = boxDx;
+  G4double boxMin = boxDz;
 
+  // Check if point is traveling away
+  //
+  G4double distX = std::abs(p.x()) - boxDx;
+  G4double distY = std::abs(p.y()) - boxDy;
+  G4double distZ = std::abs(p.z()) - boxDz;
+  if (distX >= -halfCarTolerance && p.x()*v.x() >= 0) return kInfinity;
+  if (distY >= -halfCarTolerance && p.y()*v.y() >= 0) return kInfinity;
+  if (distZ >= -halfCarTolerance && p.z()*v.z() >= 0) return kInfinity;
+
+  // Calculate safety distance to bounding box
+  // If point is too far, move it closer and calculate distance
+  //
+  G4double Dmax = 32*boxMax; 
+  G4double safe = std::max(std::max(distX,distY),distZ);
+  if (safe > Dmax)
+  {
+    G4double dist = safe - 1.e-8*safe - boxMin; // stay outside after the move
+    dist += DistanceToIn(p + dist*v, v);
+    return (dist >= kInfinity) ? kInfinity : dist;
+  }
+
+  // Find intersection with torus
+  //
   G4double snxt=kInfinity, sphi=kInfinity; // snxt = default return value
 
   G4double  sd[4] ;
@@ -1006,7 +971,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4double tolORMin2;  // `generous' radii squared
   G4double tolORMax2;
 
-  G4double Dist,xi,yi,zi,rhoi2,it2; // Intersection point variables
+  G4double Dist,xi,yi,zi,rhoi,it2; // Intersection point variables
 
   G4double Comp;
   G4double cosSPhi,sinSPhi;       // Trig for phi start intersect
@@ -1038,8 +1003,6 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   tolORMax2 = (fRmax + fRmaxTolerance)*(fRmax + fRmaxTolerance) ;
 
   // Intersection with Rmax (possible return) and Rmin (must also check phi)
-
-  G4double Rtor2 = fRtor*fRtor ;
 
   snxt = SolveNumericJT(p,v,fRmax,true);
 
@@ -1079,8 +1042,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
           xi    = p.x() + sphi*v.x() ;
           yi    = p.y() + sphi*v.y() ;
           zi    = p.z() + sphi*v.z() ;
-          rhoi2 = xi*xi + yi*yi ;
-          it2   = std::fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*std::sqrt(rhoi2)) ;
+          rhoi = std::hypot(xi,yi);
+          it2 = zi*zi + (rhoi-fRtor)*(rhoi-fRtor);
 
           if ( it2 >= tolORMin2 && it2 <= tolORMax2 )
           {
@@ -1112,8 +1075,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
           xi    = p.x() + sphi*v.x() ;
           yi    = p.y() + sphi*v.y() ;
           zi    = p.z() + sphi*v.z() ;
-          rhoi2 = xi*xi + yi*yi ;
-          it2   = std::fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*std::sqrt(rhoi2)) ;
+          rhoi = std::hypot(xi,yi);
+          it2 = zi*zi + (rhoi-fRtor)*(rhoi-fRtor);
 
           if (it2 >= tolORMin2 && it2 <= tolORMax2)
           {
@@ -1142,13 +1105,10 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
 {
   G4double safe=0.0, safe1, safe2 ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi, cosPsi ;
-  G4double rho2, rho, pt2, pt ;
-    
-  rho2 = p.x()*p.x() + p.y()*p.y() ;
-  rho  = std::sqrt(rho2) ;
-  pt2  = std::fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
-  pt   = std::sqrt(pt2) ;
-
+  G4double rho, pt ;
+  
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
   safe1 = fRmin - pt ;
   safe2 = pt - fRmax ;
 
@@ -1189,8 +1149,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
 G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
                                  const G4ThreeVector& v,
                                  const G4bool calcNorm,
-                                       G4bool *validNorm,
-                                       G4ThreeVector  *n  ) const
+                                       G4bool* validNorm,
+                                       G4ThreeVector* n ) const
 {
   ESide    side = kNull, sidephi = kNull ;
   G4double snxt = kInfinity, sphi, sd[4] ;
@@ -1211,18 +1171,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   // To be done: Check the precision of this calculation.
   // If you want return always validNorm = false, then take the version below
   
-  G4double rho2  = p.x()*p.x()+p.y()*p.y();
-  G4double rho   = std::sqrt(rho2) ;
-
-  G4double pt2   = rho2 + p.z()*p.z() + fRtor * (fRtor - 2.0*rho);
-    // Regroup for slightly better FP accuracy
-
-  if( pt2 < 0.0)
-  {
-     pt2= std::fabs( pt2 );
-  }
-     
-  G4double pt    = std::sqrt(pt2) ;
+  
+  G4double rho = std::hypot(p.x(),p.y());
+  G4double pt = hypot(p.z(),rho-fRtor);
 
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
 
@@ -1231,7 +1182,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   G4double vDotNmax   = pDotV - fRtor*(v.x()*p.x() + v.y()*p.y())/rho ;
   G4double pDotxyNmax = (1 - fRtor/rho) ;
 
-  if( (pt2 > tolRMax*tolRMax) && (vDotNmax >= 0) )
+  if( (pt*pt > tolRMax*tolRMax) && (vDotNmax >= 0) )
   {
     // On tolerant boundary & heading outwards (or perpendicular to) outer
     // radial surface -> leaving immediately with *n for really convex part
@@ -1257,7 +1208,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   {
     G4double tolRMin = fRmin + fRminTolerance ;
 
-    if ( (pt2 < tolRMin*tolRMin) && (vDotNmax < 0) )
+    if ( (pt*pt < tolRMin*tolRMin) && (vDotNmax < 0) )
     {
       if (calcNorm)  { *validNorm = false ; } // Concave surface of the torus
       return  snxt = 0 ;                      // Leaving by Rmin immediately
@@ -1445,7 +1396,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
     }     
   }
 
-  G4double rhoi2,rhoi,it2,it,iDotxyNmax ;
+  G4double rhoi,it,iDotxyNmax ;
   // Note: by numerical computation we know where the ray hits the torus
   // So I propose to return the side where the ray hits
 
@@ -1455,12 +1406,11 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
     {
       case kRMax:                     // n is unit vector 
         xi    = p.x() + snxt*v.x() ;
-        yi    =p.y() + snxt*v.y() ;
+        yi    = p.y() + snxt*v.y() ;
         zi    = p.z() + snxt*v.z() ;
-        rhoi2 = xi*xi + yi*yi ;
-        rhoi  = std::sqrt(rhoi2) ;
-        it2   = std::fabs(rhoi2 + zi*zi + fRtor*fRtor - 2*fRtor*rhoi) ;
-        it    = std::sqrt(it2) ;
+        rhoi = std::hypot(xi,yi);
+        it = hypot(zi,rhoi-fRtor);
+
         iDotxyNmax = (1-fRtor/rhoi) ;
         if(iDotxyNmax >= -2.*fRmaxTolerance) // really convex part of Rmax
         {                       
@@ -1541,13 +1491,12 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 {
   G4double safe=0.0,safeR1,safeR2;
-  G4double rho2,rho,pt2,pt ;
+  G4double rho,pt ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi;
-  rho2 = p.x()*p.x() + p.y()*p.y() ;
-  rho  = std::sqrt(rho2) ;
-  pt2  = std::fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
-  pt   = std::sqrt(pt2) ;
-
+  
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
+  
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
@@ -1579,7 +1528,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 
   // Check if phi divided, Calc distances closest phi plane
   //
-  if (fDPhi<twopi) // Above/below central phi of Torus?
+  if (fDPhi < twopi) // Above/below central phi of Torus?
   {
     phiC    = fSPhi + fDPhi*0.5 ;
     cosPhiC = std::cos(phiC) ;
@@ -1598,92 +1547,6 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
   }
   if (safe < 0)  { safe = 0 ; }
   return safe ;  
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fRtor cross section
-//          [4-7] +fRtor cross section such that [0] is below [4],
-//                                             [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
-//  Potential improvement: For last slice, use actual ending angle
-//                         to avoid rounding error problems.
-
-G4ThreeVectorList*
-G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
-                                      G4int& noPolygonVertices ) const
-{
-  G4ThreeVectorList *vertices;
-  G4ThreeVector vertex0,vertex1,vertex2,vertex3;
-  G4double meshAngle,meshRMax,crossAngle,cosCrossAngle,sinCrossAngle,sAngle;
-  G4double rMaxX,rMaxY,rMinX,rMinY;
-  G4int crossSection,noCrossSections;
-
-  // Compute no of cross-sections necessary to mesh tube
-  //
-  noCrossSections = G4int (fDPhi/kMeshAngleDefault) + 1 ;
-
-  if (noCrossSections < kMinMeshSections)
-  {
-    noCrossSections = kMinMeshSections ;
-  }
-  else if (noCrossSections>kMaxMeshSections)
-  {
-    noCrossSections=kMaxMeshSections;
-  }
-  meshAngle = fDPhi/(noCrossSections - 1) ;
-  meshRMax  = (fRtor + fRmax)/std::cos(meshAngle*0.5) ;
-
-  // If complete in phi, set start angle such that mesh will be at fRmax
-  // on the x axis. Will give better extent calculations when not rotated
-
-  if ( (fDPhi == twopi) && (fSPhi == 0) )
-  {
-    sAngle = -meshAngle*0.5 ;
-  }
-  else
-  {
-    sAngle = fSPhi ;
-  }
-  vertices = new G4ThreeVectorList();
-  
-  if (vertices)
-  {
-    vertices->reserve(noCrossSections*4) ;
-    for (crossSection=0;crossSection<noCrossSections;crossSection++)
-    {
-      // Compute coordinates of cross section at section crossSection
-
-      crossAngle=sAngle+crossSection*meshAngle;
-      cosCrossAngle=std::cos(crossAngle);
-      sinCrossAngle=std::sin(crossAngle);
-
-      rMaxX=meshRMax*cosCrossAngle;
-      rMaxY=meshRMax*sinCrossAngle;
-      rMinX=(fRtor-fRmax)*cosCrossAngle;
-      rMinY=(fRtor-fRmax)*sinCrossAngle;
-      vertex0=G4ThreeVector(rMinX,rMinY,-fRmax);
-      vertex1=G4ThreeVector(rMaxX,rMaxY,-fRmax);
-      vertex2=G4ThreeVector(rMaxX,rMaxY,+fRmax);
-      vertex3=G4ThreeVector(rMinX,rMinY,+fRmax);
-
-      vertices->push_back(pTransform.TransformPoint(vertex0));
-      vertices->push_back(pTransform.TransformPoint(vertex1));
-      vertices->push_back(pTransform.TransformPoint(vertex2));
-      vertices->push_back(pTransform.TransformPoint(vertex3));
-    }
-    noPolygonVertices = 4 ;
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Torus::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFilter.hh 66376 2012-12-18 09:42:59Z gcosmo $
 //
 // Abstract filter class.
 //

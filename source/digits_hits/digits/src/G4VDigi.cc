@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigi.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 // G4VDigi
@@ -37,7 +36,7 @@ G4VDigi::G4VDigi()
 G4VDigi::~G4VDigi()
 {;}
 
-G4int G4VDigi::operator==(const G4VDigi &right) const
+G4bool G4VDigi::operator==(const G4VDigi &right) const
 { return (this==&right); }
 
 void G4VDigi::Draw() 

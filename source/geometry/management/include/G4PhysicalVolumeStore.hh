@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PhysicalVolumeStore.hh 66872 2013-01-15 01:25:57Z japost $
-//
-// class G4PhysicalVolume
+// G4PhysicalVolumeStore
 //
 // Class description:
 //
@@ -47,9 +44,8 @@
 // static G4PhysicalVolumeStore*
 //   - Ptr to the single G4PhysicalVolumeStore.
 
-// History:
-// 18.04.01 G.Cosmo Migrated to STL vector
-// 25.07.95 P.Kent  Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
+// 25.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4PHYSICALVOLUMESTORE_HH
 #define G4PHYSICALVOLUMESTORE_HH
@@ -76,7 +72,7 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
       // are automatically notified and have their daughters de-registered.
 
     G4VPhysicalVolume* GetVolume(const G4String& name,
-                                 G4bool verbose=true) const;
+                                 G4bool verbose = true) const;
       // Return the pointer of the first volume in the collection having
       // that name.
 

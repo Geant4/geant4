@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85358 2014-10-28 10:02:44Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +30,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
@@ -75,19 +75,20 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MSSteppingAction.hh
         G4MatScanMessenger.hh
         G4MaterialScanner.hh
-	G4PhysicsListHelper.hh
-	G4PhysicsListOrderingParameter.hh
+    	G4PhysicsListHelper.hh
+	    G4PhysicsListOrderingParameter.hh
         G4PhysicsListWorkspace.hh
         G4Run.hh
         G4RunManager.hh
-	G4MTRunManager.hh
-	G4WorkerRunManager.hh
+	    G4MTRunManager.hh
+	    G4WorkerRunManager.hh
         G4RunManagerKernel.hh
         G4MTRunManagerKernel.hh
         G4WorkerRunManagerKernel.hh
         G4RunMessenger.hh
         G4UserPhysicsListMessenger.hh
         G4UserRunAction.hh
+        G4MultiRunAction.hh
         G4UserWorkerInitialization.hh
         G4UserWorkerThreadInitialization.hh
         G4VModularPhysicsList.hh
@@ -98,10 +99,11 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VUserParallelWorld.hh
         G4VUserPhysicsList.hh
         G4VUserPrimaryGeneratorAction.hh
-	G4WorkerThread.hh
+    	G4WorkerThread.hh
         G4VUPLSplitter.hh
         rundefs.hh
         G4RNGHelper.hh 
+        G4PhysicsBuilderInterface.hh
    SOURCES
         G4AdjointPrimaryGeneratorAction.cc
         G4AdjointSimManager.cc
@@ -110,19 +112,20 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MSSteppingAction.cc
         G4MatScanMessenger.cc
         G4MaterialScanner.cc
-	G4PhysicsListHelper.cc
-	G4PhysicsListOrderingParamater.cc
+	    G4PhysicsListHelper.cc
+	    G4PhysicsListOrderingParamater.cc
         G4PhysicsListWorkspace.cc
         G4Run.cc
         G4RunManager.cc
-	G4MTRunManager.cc
-	G4WorkerRunManager.cc
+	    G4MTRunManager.cc
+	    G4WorkerRunManager.cc
         G4RunManagerKernel.cc
         G4MTRunManagerKernel.cc
         G4WorkerRunManagerKernel.cc
         G4RunMessenger.cc
         G4UserPhysicsListMessenger.cc
         G4UserRunAction.cc
+        G4MultiRunAction.cc
         G4UserWorkerInitialization.cc
         G4UserWorkerThreadInitialization.cc
         G4VModularPhysicsList.cc
@@ -147,6 +150,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4geometrymng
         G4globman
         G4graphics_reps
+        G4hepnumerics
         G4hits
         G4intercoms
         G4magneticfield
@@ -159,7 +163,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4tracking
         G4transportation
         G4volumes
-	G4specsolids
+        G4specsolids
     GLOBAL_DEPENDENCIES
         G4digits_hits
         G4event
@@ -173,6 +177,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4track
         G4tracking
     LINK_LIBRARIES
+        ${timemory_LIBRARIES}
 )
 
 # List any source specific properties here

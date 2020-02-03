@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TritonEvaporationProbability.hh 89518 2015-04-15 14:43:30Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -63,7 +62,6 @@ private:
   G4bool operator==(const G4TritonEvaporationProbability &right) const;
   G4bool operator!=(const G4TritonEvaporationProbability &right) const;
 
-  G4TritonCoulombBarrier theCoulombBarrier;
 };
 
 #endif

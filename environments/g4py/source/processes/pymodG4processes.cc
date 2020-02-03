@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: pymodG4processes.cc 66892 2013-01-17 10:57:59Z gunter $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // ====================================================================
 //   pymodG4processes.cc
 //

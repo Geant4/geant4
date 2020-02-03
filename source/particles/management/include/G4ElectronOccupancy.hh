@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.hh 79357 2014-02-25 10:06:54Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -78,8 +77,8 @@ class G4ElectronOccupancy
  
   //- operators
      G4ElectronOccupancy & operator=(const G4ElectronOccupancy &right);
-     G4int operator==(const G4ElectronOccupancy &right) const;
-     G4int operator!=(const G4ElectronOccupancy &right) const;
+     G4bool operator==(const G4ElectronOccupancy &right) const;
+     G4bool operator!=(const G4ElectronOccupancy &right) const;
    
  public: // With Description
    // The following methods returns
@@ -102,7 +101,7 @@ class G4ElectronOccupancy
 
 };
 
-extern G4PART_DLL G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator;
+extern G4PART_DLL G4Allocator<G4ElectronOccupancy>*& aElectronOccupancyAllocator();
 
 // ------------------------
 // Inlined operators
@@ -110,16 +109,16 @@ extern G4PART_DLL G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccup
 
 inline void * G4ElectronOccupancy::operator new(size_t)
 {
-  if (!aElectronOccupancyAllocator)
+  if (!aElectronOccupancyAllocator())
   {
-    aElectronOccupancyAllocator = new G4Allocator<G4ElectronOccupancy>;
+    aElectronOccupancyAllocator() = new G4Allocator<G4ElectronOccupancy>;
   }
-  return (void *) aElectronOccupancyAllocator->MallocSingle();
+  return (void *) aElectronOccupancyAllocator()->MallocSingle();
 }
 
 inline void G4ElectronOccupancy::operator delete(void * aElectronOccupancy)
 {
-  aElectronOccupancyAllocator->FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
+  aElectronOccupancyAllocator()->FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
 }
 
 inline

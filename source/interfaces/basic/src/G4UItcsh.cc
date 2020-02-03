@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 
 #ifndef WIN32
@@ -74,7 +73,7 @@ G4UItcsh::G4UItcsh(const G4String& prompt, G4int maxhist)
   tcgetattr(0, &tios);
 
   // read a shell history file
-  const char* path = getenv("HOME");
+  const char* path = std::getenv("HOME");
   if( path == NULL ) return;
 
   G4String homedir= path;
@@ -100,7 +99,7 @@ G4UItcsh::~G4UItcsh()
 /////////////////////
 {
   // store a shell history
-  const char* path = getenv("HOME");
+  const char* path = std::getenv("HOME");
   if( path == NULL ) return;
 
   G4String homedir= path;

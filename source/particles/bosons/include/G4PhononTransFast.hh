@@ -26,7 +26,6 @@
 /// \file particles/phonons/include/G4PhononTransFast.hh
 /// \brief Definition of the G4PhononTransFast class
 //
-// $Id: G4PhononTransFast.hh 75122 2013-10-28 09:51:40Z gcosmo $
 //
 
 #ifndef G4PhononTransFast_h

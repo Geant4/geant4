@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.hh 83772 2014-09-15 07:18:08Z gcosmo $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -41,32 +40,16 @@ class G4EnergyRangeManager
 {     
 public:
     
-  G4EnergyRangeManager();
+  explicit G4EnergyRangeManager();
  
   ~G4EnergyRangeManager();
+        
+  void RegisterMe(G4HadronicInteraction* a);
     
-  G4EnergyRangeManager(const G4EnergyRangeManager& right);
-    
-  G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
-    
-  inline G4bool operator==( const G4EnergyRangeManager &right ) const
-    { return ( this == (G4EnergyRangeManager *) &right ); }
-    
-  inline G4bool operator!=( const G4EnergyRangeManager &right ) const
-    { return ( this != (G4EnergyRangeManager *) &right ); }
-    
-  void RegisterMe( G4HadronicInteraction *a );
-    
-  G4HadronicInteraction *GetHadronicInteraction(const G4HadProjectile & aHadProjectile, 
+  G4HadronicInteraction* GetHadronicInteraction(const G4HadProjectile & aHadProjectile, 
                                                 G4Nucleus & aTargetNucleus,
 						const G4Material *aMaterial,
 						const G4Element *anElement ) const;
-  // This is the new one to be used.
-
-  G4HadronicInteraction *GetHadronicInteraction(const G4double kineticEnergy,
-						const G4Material *aMaterial,
-						const G4Element *anElement ) const;
-  // This is the old, deprecated one, which will be removed later on.
 
   std::vector<G4HadronicInteraction*>& GetHadronicInteractionList();
     
@@ -75,6 +58,11 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition&);
     
 private:
+
+  G4EnergyRangeManager(const G4EnergyRangeManager& right);    
+  G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
+  G4bool operator==( const G4EnergyRangeManager &right ) const;
+  G4bool operator!=( const G4EnergyRangeManager &right ) const;
      
   G4int theHadronicInteractionCounter;
   std::vector<G4HadronicInteraction*> theHadronicInteraction;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4XmlAnalysisManager.cc 93815 2015-11-02 11:32:20Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -310,7 +309,7 @@ G4bool G4XmlAnalysisManager::OpenFileImpl(const G4String& fileName)
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("open", "analysis file", name);
+    fState.GetVerboseL1()->Message("open", "analysis file", name, finalResult);
 #endif
   
   return finalResult;
@@ -384,7 +383,7 @@ G4bool G4XmlAnalysisManager::WriteImpl()
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::CloseFileImpl()
+G4bool G4XmlAnalysisManager::CloseFileImpl(G4bool reset)
 {
   auto finalResult = true;
 
@@ -406,7 +405,12 @@ G4bool G4XmlAnalysisManager::CloseFileImpl()
   finalResult = finalResult && result;
 
   // reset data
-  result = Reset();
+  if ( reset ) {
+    result = Reset();
+  } else {
+    // ntuple must be reset 
+    result = fNtupleManager->Reset(true);
+  }
   if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "Resetting data failed";

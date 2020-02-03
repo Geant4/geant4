@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE01/include/RE01DetectorParameterDef.hh
 /// \brief Definition of the RE01DetectorParameterDef class
 //
-// $Id: RE01DetectorParameterDef.hh 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
      G4double fExpHall_x;

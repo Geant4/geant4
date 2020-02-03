@@ -23,74 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4QuadrupoleMagField implementation
 //
-// $Id: G4QuadrupoleMagField.cc 97486 2016-06-03 10:45:04Z gcosmo $
-//
+// 03.02.1997, V.Grichine - Created
+// 11.05.2012, B.Riese  - Allow displaced origin and rotation
 // -------------------------------------------------------------------
 
 #include "G4QuadrupoleMagField.hh"
 #include "G4RotationMatrix.hh"
 
-static G4RotationMatrix IdentityMatrix; 
+namespace
+{
+   G4RotationMatrix IdentityMatrix; 
+}
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient)
 {
-   fGradient = pGradient ;
-   fOrigin   = G4ThreeVector( 0.0, 0.0, 0.0) ;
+   fGradient = pGradient;
    fpMatrix  = &IdentityMatrix;
 }
 
-
-/////////////////////////////////////////////////////////////////////////
+// -------------------------------------------------------------------
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient,
                                            G4ThreeVector pOrigin,
                                            G4RotationMatrix* pMatrix)
 {
-   fGradient    = pGradient ;
-   fOrigin      = pOrigin ;
-   fpMatrix     = pMatrix ;
+   fGradient = pGradient ;
+   fOrigin   = pOrigin ;
+   fpMatrix  = pMatrix ;
 }
+
+// -------------------------------------------------------------------
 
 G4Field* G4QuadrupoleMagField::Clone() const
 {
-    return new G4QuadrupoleMagField(fGradient, fOrigin, fpMatrix);
+   return new G4QuadrupoleMagField(fGradient, fOrigin, fpMatrix);
 }
 
-/////////////////////////////////////////////////////////////////////////
+// -------------------------------------------------------------------
 
 G4QuadrupoleMagField::~G4QuadrupoleMagField()
 {
 }
 
-////////////////////////////////////////////////////////////////////////
-//  Allow displaced origin and rotation 
-//  Extensions by Björn Riese (GSI)
+// -------------------------------------------------------------------
 
 void G4QuadrupoleMagField::GetFieldValue( const G4double y[7],
-                                                G4double B[3]  ) const  
+                                                G4double B[3]  ) const
 {
-   G4ThreeVector r_global = G4ThreeVector(
-        y[0] - fOrigin.x(), 
-        y[1] - fOrigin.y(), 
-        y[2] - fOrigin.z());
+  //  with displaced origin and rotation
 
-   G4ThreeVector r_local = G4ThreeVector(
-           fpMatrix->colX() * r_global,
-           fpMatrix->colY() * r_global,
-           fpMatrix->colZ() * r_global);
+  G4ThreeVector r_global = G4ThreeVector(y[0] - fOrigin.x(),
+                                         y[1] - fOrigin.y(),
+                                         y[2] - fOrigin.z());
+  
+  const G4ThreeVector r_local = (*fpMatrix) * r_global;
+  const G4ThreeVector B_local( fGradient * r_local.y(),
+                               fGradient * r_local.x(), 0);
+  const G4ThreeVector B_global = fpMatrix->inverse() * B_local;
 
-   G4ThreeVector B_local = G4ThreeVector(
-           fGradient * r_local.y(),
-        fGradient * r_local.x(),
-        0);
-
-   G4ThreeVector B_global = G4ThreeVector(
-           fpMatrix->inverse().rowX() * B_local,
-           fpMatrix->inverse().rowY() * B_local,
-           fpMatrix->inverse().rowZ() * B_local);
-
-   B[0] = B_global.x() ;
-   B[1] = B_global.y() ;
-   B[2] = B_global.z() ;
+  B[0] = B_global.x();
+  B[1] = B_global.y();
+  B[2] = B_global.z();
 }

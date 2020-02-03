@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.cc 83749 2014-09-12 12:14:59Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -70,7 +69,7 @@ G4TauPlus* G4TauPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,     1.77682*GeV,  2.267e-9*MeV,     1.*eplus, 
+                 name,     1.77686*GeV,  2.267e-9*MeV,     1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,         -15,

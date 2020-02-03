@@ -26,20 +26,21 @@
 // GEANT4 physics class: G4HadronElasticDataSet -- header file
 // F.W. Jones, TRIUMF, 28-JAN-97
 //
-// Class Description
+// Modified: V.Ivanchenko
+//
+// Class Description:
 // Baseline data-set for hadron nucleaus elastic cross-section. This does not 
 // need to be registered, but provides part of the general cross-section 
 // baseline
-// Class Description - End
 
 #ifndef G4HadronElasticDataSet_h
 #define G4HadronElasticDataSet_h 1
 
 #include "G4VCrossSectionDataSet.hh"
-#include "G4HadronCrossSections.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Element.hh"
 
+class G4ParticleDefinition;
+class G4NistManager;
+class G4HadronCrossSections;
 
 class G4HadronElasticDataSet : public G4VCrossSectionDataSet
 {
@@ -61,7 +62,12 @@ public:
 
 private:
 
-  G4HadronCrossSections* theHadronCrossSections;
+  G4int theZ;
+  G4double fElasticXS;
+  G4double fKinEnergy;
+  const G4ParticleDefinition* fParticle;
+  G4HadronCrossSections* fGheishaXS;
+  G4NistManager* fNIST;
 };
 
 #endif

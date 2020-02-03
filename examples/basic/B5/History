@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 97634 2016-06-06 14:10:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +18,53 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 10 March 2016 Alberto Ribon (exampleB5-V10-01-01)
+=======
+18 Nov 2019  Gabriele Cosmo (exampleB5-V10-05-01)
+- Fixed cases of type conversions from size_t to G4int in B5HodoscopeSD.
+
+10 Sep 2019  Ivana Hrivnacova (exampleB5-V10-05-00)
+- Use a new factory method to create G4AnalysisManager.
+  Removed B5Analysis.hh, which is not needed anymore.
+
+20 May 2018  John Allison (exampleB5-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive nearer to start of main.
+
+19 February 2017  Ivana Hrivnacova (exampleB5-V10-04-00)
+- Fix filling ntuple 
+  (there was omitted call to AddNtupleRow() in the previous update)
+
+14 April 2017  Ivana Hrivnacova Cosmo (exampleB5-V10-03-01)
+- Use std::array for related data members in B5EventAction to reduce the code
+- Added data members for histogram Ids and the code to retrieve them by histogram
+  names via G4AnalysisManager
+- Corrected the list of 2D histograms in README  
+
+24 March 2017  Gabriele Cosmo (exampleB5-V10-03-00)
+- Do not use G4AutoDelete utility for thread-local magnetic-field and
+  its manager, since not necessary as not automatically deleted by the kernel.
+
+07 November 2016  Laurent Garnier (exampleB5-V10-02-04)
+- Fix a missing /gui/defaultIcons false
+
+03 November 2016 Ivana Hrivnacova (exampleB5-V10-02-03)
+- Added C++11 features
+- Code improvements
+
+10 October 2016 Ivana Hrivnacova (exampleB5-V10-02-02)
+- Activate merging of ntuples
+
+08 October 2016 Ivana Hrivnacova (exampleB5-V10-02-01)
+- Fix in gui.mac by Helmut Burkhard:
+  Replace undefined /globalField/setValue by  /B5/field/value
+- Updated B5ActionInitialization (Ivana)  
+  Event action is instantiated also on master - needed for ntuple merging
+  (as its deta define the vectors refernced from ntuple)
+
+10 March 2016 Alberto Ribon (exampleB5-V10-02-00)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - Fixed wrong determination of the copy number in replicas
   (thanks to Anna Zaborowska for reporting the problem).
 

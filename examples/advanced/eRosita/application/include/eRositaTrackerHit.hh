@@ -24,7 +24,10 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id$
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #ifndef eRositaTrackerHit_h
@@ -37,9 +40,6 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
-
-
 
 class eRositaTrackerHit : public G4VHit
 {
@@ -49,7 +49,7 @@ public:
   ~eRositaTrackerHit();
   eRositaTrackerHit(const eRositaTrackerHit&);
   const eRositaTrackerHit& operator=(const eRositaTrackerHit&);
-  G4int operator==(const eRositaTrackerHit&) const;
+  G4bool operator==(const eRositaTrackerHit&) const;
 
   inline void* operator new(size_t);
   inline void  operator delete(void*);

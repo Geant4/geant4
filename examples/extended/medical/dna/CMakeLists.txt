@@ -2,13 +2,33 @@
 
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
+## chem4/plot requires ROOT built with GUI
+#option(BUILD_CHEM4_PLOT "Build chem4/plot" OFF)
+#find_package(ROOT COMPONENTS Gui QUIET)
+#if(ROOT_FOUND AND ROOT_USE_FILE)
+#  set(BUILD_CHEM4_PLOT ON)
+#endif
+
 add_subdirectory(chem1)
 add_subdirectory(chem2)
 add_subdirectory(chem3)
+add_subdirectory(chem4)
+add_subdirectory(chem5)
+add_subdirectory(dnadamage1)
 add_subdirectory(dnaphysics)
+add_subdirectory(icsd)
+add_subdirectory(mfp)
 add_subdirectory(microdosimetry)
+add_subdirectory(microprox)
 add_subdirectory(microyz)
+add_subdirectory(neuron)
 add_subdirectory(pdb4dna)
-add_subdirectory(wholeNuclearDNA)
+add_subdirectory(range)
+add_subdirectory(slowing)
+add_subdirectory(splitting)
+add_subdirectory(spower)
 add_subdirectory(svalue)
+add_subdirectory(wholeNuclearDNA)
 add_subdirectory(wvalue)
+
+

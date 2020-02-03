@@ -39,18 +39,16 @@
 //Comment/Uncomment to hide/show some more debug information
 //#define ddebug
 
-
-
 CCalDetector::CCalDetector(const G4String &name): detectorName(name) 
 {
-  if (getenv("CCAL_GEOMPATH"))    
-      pathName = getenv("CCAL_GEOMPATH");
+  if (std::getenv("CCAL_GEOMPATH"))    
+      pathName = std::getenv("CCAL_GEOMPATH");
   else
     G4Exception("CCalDetector::CCalDetector","ccal001",
-		FatalException,
-		"Environment variable CCAL_GEOMPATH not defined");
+                FatalException,
+                "Environment variable CCAL_GEOMPATH not defined");
       
-#ifdef ddebug
+#ifdef debug
     G4cout << "CCAL_GEOMPATH=" << pathName << G4endl;
 #endif
     fileName      = 
@@ -60,8 +58,7 @@ CCalDetector::CCalDetector(const G4String &name): detectorName(name)
 }
 
 CCalDetector::~CCalDetector() {
-  CCalDetectorTable::iterator ite;
-  for (ite=theDetectorsInside.begin(); ite !=theDetectorsInside.end(); ite++) {
+  for (auto ite=theDetectorsInside.begin(); ite !=theDetectorsInside.end(); ++ite) {
     delete *ite;
   }
   theDetectorsInside.clear();
@@ -71,7 +68,7 @@ void CCalDetector::construct() {
 #ifdef debug
   G4cout << "===> Entering CCalDetector::construct() for " << Name() << G4endl;
 #endif
-  int isgood = 0;
+  G4int isgood = 0;
 
   //If constructFlag is unset we don't go into all this bussines
   if (constructFlag!=0) {
@@ -81,8 +78,8 @@ void CCalDetector::construct() {
     
     if (isgood) {
       constructDaughters();
-      for (unsigned int i=0; i < theDetectorsInside.size(); i++) {
-	theDetectorsInside[i]->constructHierarchy();
+      for (std::size_t i=0; i < theDetectorsInside.size(); ++i) {
+        theDetectorsInside[i]->constructHierarchy();
       }
     }
   }
@@ -91,20 +88,15 @@ void CCalDetector::construct() {
 #endif
 }
 
-
 void CCalDetector::addDetector(CCalDetector* det) {
   theDetectorsInside.push_back(det);
 }
 
-
-
 //========================================================================
 //Protected and private methods.
-int CCalDetector::buildFromFile() {
+G4int CCalDetector::buildFromFile() {
   return readFile();
 }
-
-
 
 //========================================================================
 //Global operators
@@ -115,17 +107,10 @@ std::ostream& operator<<(std::ostream& os, const CCalDetector& det) {
   os << "With " << det.theDetectorsInside.size() 
      << " detectors inside { "<< G4endl;
 
-  for (unsigned int i=0; i<det.theDetectorsInside.size(); i++)
+  for (std::size_t i=0; i<det.theDetectorsInside.size(); ++i)
     os << det.theDetectorsInside[i] << G4endl;
 
   os << "}" << G4endl;
 
   return os;
 }
-
-
-
-
-
-
-

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileCTtoDensityMap.hh 70733 2013-06-05 10:05:57Z gcosmo $
 //
 //
 // Created:  Oct. 12, 2009  Akinori Kimura  

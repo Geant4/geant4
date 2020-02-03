@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/include/ExN04SteppingVerbose.hh
+/// \file ExN04SteppingVerbose.hh
 /// \brief Definition of the ExN04SteppingVerbose class
 //
 //
-// $Id: ExN04SteppingVerbose.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

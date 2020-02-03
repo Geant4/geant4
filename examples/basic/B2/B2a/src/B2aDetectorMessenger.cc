@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2aDetectorMessenger.cc 69706 2013-05-13 09:12:40Z gcosmo $
 // 
 /// \file B2aDetectorMessenger.cc
 /// \brief Implementation of the B2aDetectorMessenger class

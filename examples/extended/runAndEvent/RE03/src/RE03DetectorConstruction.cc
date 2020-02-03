@@ -26,7 +26,10 @@
 /// \file runAndEvent/RE03/src/RE03DetectorConstruction.cc
 /// \brief Implementation of the RE03DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: RE03DetectorConstruction.cc 68780 2013-04-05 13:06:07Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "RE03DetectorConstruction.hh"

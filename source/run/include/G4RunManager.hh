@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh 94222 2015-11-09 08:28:49Z gcosmo $
 //
 // 
 
@@ -325,6 +324,7 @@ public: // with description
     G4int numberOfEventProcessed;
     G4String selectMacro;
     G4bool fakeRun;
+    G4bool isScoreNtupleWriter;
 
   public:
     virtual void rndmSaveThisRun();
@@ -332,6 +332,17 @@ public: // with description
     virtual void RestoreRandomNumberStatus(const G4String& fileN);
 
   public: // with description
+    //The following set user-actions and user-initialization to the kernel
+    //In MT mode, actions are shared among all threads, and should be set
+    //in the master thread, while user-actions are thread-private and each      `
+    //thread has private instances. Master thread does not have user-actions
+    //except for the (optional) run-action.
+    //User should instantiate the user-actions in the action-initialization
+    //and use that class set method to set user-actions and not directly
+    //the methods provided here.
+    //Multiple Run,Event,Tracking, and Stepping actions are allowed, set
+    //multiple instances and these will be appended to the current configuration
+    //Multiple Stacking and PrimaryGeneration are not allowed
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userInit);
     virtual void SetUserInitialization(G4VUserPhysicsList* userInit);
     virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
@@ -583,6 +594,10 @@ public: // with description
     //that are event specific. Not implemented for sequential since run seed
     //defines event seeds
     virtual void RestoreRndmEachEvent(G4bool) { /*No effect in SEQ */ }
+  protected:
+    G4bool geometryDirectlyUpdated;
+  public:
+    void GeometryDirectlyUpdated(G4bool val=true) { geometryDirectlyUpdated = val; }
 };
 
 #endif

@@ -1,0 +1,437 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_plottables
+#define tools_sg_plottables
+
+#include "plottable"
+#include "enums"
+
+namespace tools {
+namespace sg {
+
+class bins1D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::bins1D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<bins1D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~bins1D(){}
+public:
+  virtual void bins_Sw_range(float&,float&) const = 0;
+public:
+  // axis :
+  virtual unsigned int bins() const = 0;
+  virtual float axis_min() const = 0;
+  virtual float axis_max() const = 0;
+  // bins on axis :
+  virtual float bin_lower_edge(int) const = 0;
+  virtual float bin_upper_edge(int) const = 0;
+  // bins :
+  virtual float bin_Sw(int) const = 0;
+  virtual float bin_error(int) const = 0;
+public:
+  virtual bool is_profile() const = 0;
+};
+
+class bins2D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::bins2D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<bins2D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~bins2D(){}
+public:
+  virtual void bins_Sw_range(float&,float&) const = 0;
+public:
+  // x axis :
+  virtual unsigned int x_bins() const = 0;
+  virtual float x_axis_min() const = 0;
+  virtual float x_axis_max() const = 0;
+  // y axis :
+  virtual unsigned int y_bins() const = 0;
+  virtual float y_axis_min() const = 0;
+  virtual float y_axis_max() const = 0;
+  // bins on x axis :
+  virtual float bin_lower_edge_x(int) const = 0;
+  virtual float bin_upper_edge_x(int) const = 0;
+  // bins on y axis :
+  virtual float bin_lower_edge_y(int) const = 0;
+  virtual float bin_upper_edge_y(int) const = 0;
+  // bins :
+  virtual bool has_entries_per_bin() const = 0;
+  virtual unsigned int bin_entries(int,int) const = 0;
+  virtual float bin_Sw(int,int) const = 0;
+  virtual float bin_error(int,int) const = 0;
+};
+
+class func1D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::func1D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<func1D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~func1D(){}
+public:
+  virtual bool value(float,float&) const = 0;
+  virtual unsigned int x_steps() const = 0;
+  virtual float x_min() const = 0;
+  virtual float x_max() const = 0;
+};
+
+class func2D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::func2D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<func2D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~func2D(){}
+public:
+  virtual bool value(float,float,float&) const = 0;
+  virtual unsigned int x_steps() const = 0;
+  virtual float x_min() const = 0;
+  virtual float x_max() const = 0;
+  virtual unsigned int y_steps() const = 0;
+  virtual float y_min() const = 0;
+  virtual float y_max() const = 0;
+/*
+  //For "inside" functions :
+  virtual unsigned int number_of_points() const = 0;
+  virtual bool ith_point(int,float&,float&,bool&) const = 0;
+  virtual bool set_ith_point(int,float,float) = 0;
+  virtual bool dragger_update_points() const = 0;
+*/
+};
+
+class points2D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::points2D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<points2D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~points2D(){}
+public:
+  virtual float x_axis_min() const = 0;
+  virtual float x_axis_max() const = 0;
+  virtual float y_axis_min() const = 0;
+  virtual float y_axis_max() const = 0;
+
+  virtual unsigned int points() const = 0;
+  virtual bool ith_point(unsigned int,float&,float&) const = 0;
+};
+
+class points3D : public virtual plottable {
+public:
+  TOOLS_SCLASS(tools::sg::points3D)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<points3D>(this,a_class)) {return p;}
+    return plottable::cast(a_class);
+  }
+public:
+  virtual ~points3D(){}
+public:
+  virtual float x_axis_min() const = 0;
+  virtual float x_axis_max() const = 0;
+  virtual float y_axis_min() const = 0;
+  virtual float y_axis_max() const = 0;
+  virtual float z_axis_min() const = 0;
+  virtual float z_axis_max() const = 0;
+
+  virtual unsigned int points() const = 0;
+  virtual bool ith_point(unsigned int,float&,float&,float&) const = 0;
+};
+
+inline const std::string& s_tools_sg_fit2plot() {
+  static const std::string s_v("tools::sg::fit2plot");
+  return s_v;
+}
+
+}}
+
+////////////////////////////////////////////////////////////////////////////////
+/// primitives : ///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+#include "../colorf"
+
+namespace tools {
+namespace sg {
+
+class plottable_text : public virtual plotprim {
+  typedef plotprim parent;
+public:
+  TOOLS_SCLASS(plottable_text)  
+public: //tools::sg::plotprim
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<plottable_text>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual plotprim* copy() const {return new plottable_text(*this);}
+public:
+  enum text_mode {
+    text_as_it,
+    text_enforce_width,
+    text_enforce_height
+  };
+public:
+  plottable_text(const std::string& a_TEXT,float a_X,float a_Y,
+                 float a_SIZE,text_mode a_text_mode,
+  /*
+                 float a_ANGLE = 0,
+                 char a_HJUST = 'L',char a_VJUST = 'B',
+                 const std::string& a_FONT = "Hershey",const colorf& a_TXCI = colorf(0,0,0,1),
+                 float a_SCALE = 1,bool a_SMOOTHING = false,bool a_HINTING = false,float a_line_width = 1,
+                 font_modeling a_font_modeling = font_filled
+		 */
+                 float a_ANGLE,
+                 char a_HJUST,char a_VJUST,
+                 const std::string& a_FONT,const colorf& a_TXCI,
+                 float a_SCALE,bool a_SMOOTHING,bool a_HINTING,float a_line_width,
+                 font_modeling a_font_modeling
+		 )
+  :m_TEXT(a_TEXT),m_X(a_X),m_Y(a_Y)
+  ,m_SIZE(a_SIZE),m_text_mode(a_text_mode)
+  ,m_ANGLE(a_ANGLE)
+  ,m_HJUST(a_HJUST)
+  ,m_VJUST(a_VJUST)
+  ,m_FONT(a_FONT),m_TXCI(a_TXCI)
+  ,m_SCALE(a_SCALE),m_SMOOTHING(a_SMOOTHING),m_HINTING(a_HINTING),m_line_width(a_line_width)
+  ,m_font_modeling(a_font_modeling)
+  {}
+public:
+  plottable_text(const plottable_text& a_from)
+  :parent(a_from)
+  ,m_TEXT(a_from.m_TEXT)
+  ,m_X(a_from.m_X),m_Y(a_from.m_Y)
+  ,m_SIZE(a_from.m_SIZE),m_text_mode(a_from.m_text_mode)
+  ,m_ANGLE(a_from.m_ANGLE)
+  ,m_HJUST(a_from.m_HJUST)
+  ,m_VJUST(a_from.m_VJUST)
+  ,m_FONT(a_from.m_FONT),m_TXCI(a_from.m_TXCI)
+  ,m_SCALE(a_from.m_SCALE),m_SMOOTHING(a_from.m_SMOOTHING),m_HINTING(a_from.m_HINTING),m_line_width(a_from.m_line_width)
+  ,m_font_modeling(a_from.m_font_modeling)
+  {}
+  plottable_text& operator=(const plottable_text& a_from) {
+    m_TEXT = a_from.m_TEXT;
+    m_X = a_from.m_X;
+    m_Y = a_from.m_Y;
+    m_SIZE = a_from.m_SIZE;
+    m_text_mode = a_from.m_text_mode;
+    m_ANGLE = a_from.m_ANGLE;
+    m_HJUST = a_from.m_HJUST;
+    m_VJUST = a_from.m_VJUST;
+    m_FONT = a_from.m_FONT;
+    m_TXCI = a_from.m_TXCI;
+    m_SCALE = a_from.m_SCALE;
+    m_SMOOTHING = a_from.m_SMOOTHING;
+    m_HINTING = a_from.m_HINTING;
+    m_line_width = a_from.m_line_width;
+    m_font_modeling = a_from.m_font_modeling;
+    return *this;
+  }
+public:
+  std::string m_TEXT;
+  float m_X;
+  float m_Y;
+  float m_SIZE;
+  text_mode m_text_mode;
+  float m_ANGLE;
+  char m_HJUST;
+  char m_VJUST;
+  std::string m_FONT;
+  colorf m_TXCI;
+  float m_SCALE;
+  bool m_SMOOTHING;
+  bool m_HINTING;
+  float m_line_width; //used if font is hershey.
+  font_modeling m_font_modeling;
+};
+
+class plottable_box : public virtual plotprim {
+  typedef plotprim parent;
+public:
+  TOOLS_SCLASS(plottable_box)  
+public: //tools::sg::plotprim
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<plottable_box>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual plotprim* copy() const {return new plottable_box(*this);}
+public:
+  enum fill_area_style {
+    HOLLOW = 0,
+    SOLID = 1,
+    PATTERN = 2,
+    HATCHED = 3
+  };
+public:
+  plottable_box(float a_X1,float a_Y1,float a_X2,float a_Y2,
+                fill_area_style a_FAIS,const colorf& a_FACI,
+                int a_FASI,
+                bool a_BORD,const colorf& a_PLCI,float a_LWID)
+  :m_X1(a_X1),m_Y1(a_Y1),m_X2(a_X2),m_Y2(a_Y2)
+  ,m_FAIS(a_FAIS),m_FACI(a_FACI),m_FASI(a_FASI),m_BORD(a_BORD),m_PLCI(a_PLCI),m_LWID(a_LWID)
+  {}
+public:
+  plottable_box(const plottable_box& a_from)
+  :parent(a_from)
+  ,m_X1(a_from.m_X1),m_Y1(a_from.m_Y1)
+  ,m_X2(a_from.m_X2),m_Y2(a_from.m_Y2)
+  ,m_FAIS(a_from.m_FAIS),m_FACI(a_from.m_FACI),m_FASI(a_from.m_FASI),m_BORD(a_from.m_BORD),m_PLCI(a_from.m_PLCI)
+  ,m_LWID(a_from.m_LWID)
+  {}
+  plottable_box& operator=(const plottable_box& a_from) {
+    m_X1 = a_from.m_X1;
+    m_Y1 = a_from.m_Y1;
+    m_X2 = a_from.m_X2;
+    m_Y2 = a_from.m_Y2;
+    m_FAIS = a_from.m_FAIS;
+    m_FACI = a_from.m_FACI;
+    m_FASI = a_from.m_FASI;
+    m_BORD = a_from.m_BORD;
+    m_PLCI = a_from.m_PLCI;
+    m_LWID = a_from.m_LWID;
+    return *this;
+  }
+public:
+  float m_X1;
+  float m_Y1;
+  float m_X2;
+  float m_Y2;
+  fill_area_style m_FAIS;
+  colorf m_FACI;
+  int m_FASI;
+  bool m_BORD;
+  colorf m_PLCI;
+  float m_LWID;
+};
+
+class plottable_ellipse : public virtual plotprim {
+  typedef plotprim parent;
+public:
+  TOOLS_SCLASS(plottable_ellipse)  
+public: //tools::sg::plotprim
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<plottable_ellipse>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual plotprim* copy() const {return new plottable_ellipse(*this);}
+public:
+  enum fill_area_style {
+    HOLLOW = 0,
+    SOLID = 1,
+    PATTERN = 2,
+    HATCHED = 3
+  };
+public:
+  plottable_ellipse(float a_X,float a_Y,float a_R1,float a_R2,
+                fill_area_style a_FAIS,const colorf& a_FACI,
+                int a_FASI,
+                bool a_BORD,const colorf& a_PLCI,float a_LWID)
+  :m_X(a_X),m_Y(a_Y),m_R1(a_R1),m_R2(a_R2)
+  ,m_FAIS(a_FAIS),m_FACI(a_FACI),m_FASI(a_FASI),m_BORD(a_BORD),m_PLCI(a_PLCI),m_LWID(a_LWID)
+  {}
+public:
+  plottable_ellipse(const plottable_ellipse& a_from)
+  :parent(a_from)
+  ,m_X(a_from.m_X),m_Y(a_from.m_Y)
+  ,m_R1(a_from.m_R1),m_R2(a_from.m_R2)
+  ,m_FAIS(a_from.m_FAIS),m_FACI(a_from.m_FACI),m_FASI(a_from.m_FASI),m_BORD(a_from.m_BORD),m_PLCI(a_from.m_PLCI)
+  ,m_LWID(a_from.m_LWID)
+  {}
+  plottable_ellipse& operator=(const plottable_ellipse& a_from) {
+    m_X = a_from.m_X;
+    m_Y = a_from.m_Y;
+    m_R1 = a_from.m_R1;
+    m_R2 = a_from.m_R2;
+    m_FAIS = a_from.m_FAIS;
+    m_FACI = a_from.m_FACI;
+    m_FASI = a_from.m_FASI;
+    m_BORD = a_from.m_BORD;
+    m_PLCI = a_from.m_PLCI;
+    m_LWID = a_from.m_LWID;
+    return *this;
+  }
+public:
+  float m_X;
+  float m_Y;
+  float m_R1;
+  float m_R2;
+  fill_area_style m_FAIS;
+  colorf m_FACI;
+  int m_FASI;
+  bool m_BORD;
+  colorf m_PLCI;
+  float m_LWID;
+};
+
+}}
+
+#include "../img"
+#include "../typedefs"
+
+namespace tools {
+namespace sg {
+
+class plottable_img : public virtual plotprim {
+  typedef plotprim parent;
+public:
+  TOOLS_SCLASS(plottable_img)  
+public: //tools::sg::plotprim
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<plottable_img>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual plotprim* copy() const {return new plottable_img(*this);}
+public:
+  plottable_img(const img<byte>& a_img,float a_X,float a_Y,float a_WIDTH,float a_HEIGHT,float a_THETA,float a_PHI)
+  :m_img(a_img)
+  ,m_X(a_X),m_Y(a_Y)
+  ,m_WIDTH(a_WIDTH),m_HEIGHT(a_HEIGHT),m_THETA(a_THETA),m_PHI(a_PHI)
+  {}
+public:
+  plottable_img(const plottable_img& a_from)
+  :parent(a_from)
+  ,m_img(a_from.m_img)
+  ,m_X(a_from.m_X),m_Y(a_from.m_Y)
+  ,m_WIDTH(a_from.m_WIDTH),m_HEIGHT(a_from.m_HEIGHT),m_THETA(a_from.m_THETA),m_PHI(a_from.m_PHI)
+  {}
+  plottable_img& operator=(const plottable_img& a_from) {
+    m_img = a_from.m_img;
+    m_X = a_from.m_X;
+    m_Y = a_from.m_Y;
+    m_WIDTH = a_from.m_WIDTH;
+    m_HEIGHT = a_from.m_HEIGHT;
+    m_THETA = a_from.m_THETA;
+    m_PHI = a_from.m_PHI;
+    return *this;
+  }
+public:
+  img<byte> m_img;
+  float m_X;
+  float m_Y;
+  float m_WIDTH;
+  float m_HEIGHT;
+  float m_THETA;
+  float m_PHI;
+};
+
+}}
+
+
+#endif

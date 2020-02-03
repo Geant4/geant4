@@ -11,19 +11,20 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 93451 2015-10-22 14:53:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${FREETYPE_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/analysis/g4tools/include)
 
+if(GEANT4_USE_FREETYPE)
+  set(G4analysismng_LINK_LIBRARIES Freetype::Freetype)
+endif()
 #
 # Define the Geant4 Module.
 #
@@ -36,6 +37,8 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4AnalysisUtilities.hh
         G4BaseAnalysisManager.hh
         G4BaseFileManager.hh
+        G4BaseNtupleManager.hh
+        G4BaseRNtupleManager.hh
         G4BinScheme.hh
         G4Fcn.hh
         G4AnalysisMessengerHelper.hh
@@ -57,6 +60,9 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4TNtupleDescription.hh
         G4TNtupleManager.hh
         G4TNtupleManager.icc
+        G4TRNtupleDescription.hh
+        G4TRNtupleManager.hh
+        G4TRNtupleManager.icc
         G4VAnalysisManager.hh
         G4VAnalysisManager.icc
         G4VAnalysisReader.hh
@@ -69,13 +75,14 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4VP1Manager.hh
         G4VP2Manager.hh
         G4VRNtupleManager.hh
-        g4analysis_defs.hh
     SOURCES
         G4AnalysisVerbose.cc
         G4AnalysisManagerState.cc
         G4AnalysisMessenger.cc
         G4BaseAnalysisManager.cc
         G4BaseFileManager.cc
+        G4BaseNtupleManager.cc
+        G4BaseRNtupleManager.cc
         G4AnalysisUtilities.cc
         G4BinScheme.cc
         G4Fcn.cc
@@ -95,7 +102,6 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4VAnalysisManager.cc
         G4VAnalysisReader.cc
         G4VFileManager.cc
-        G4VNtupleManager.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms
@@ -103,7 +109,7 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4global
         G4intercoms
     LINK_LIBRARIES
-        ${FREETYPE_LIBRARIES}
+        ${G4analysismng_LINK_LIBRARIES}
 )
 
 # List any source specific properties here

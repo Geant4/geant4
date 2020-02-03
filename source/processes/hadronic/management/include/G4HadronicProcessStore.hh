@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh 90394 2015-05-27 12:14:48Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -82,7 +81,7 @@ public:
     G4double kineticEnergy,
     const G4VProcess* process,
     const G4Element*  element,
-    const G4Material* material=0);
+    const G4Material* material=nullptr);
       
   G4double GetCrossSectionPerVolume(
     const G4ParticleDefinition* particle,
@@ -98,7 +97,8 @@ public:
   G4double GetInelasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement, const G4Material* mat=0);
+    const G4Element *anElement, 
+    const G4Material* mat=nullptr);
 
   G4double GetInelasticCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -128,7 +128,8 @@ public:
   G4double GetCaptureCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement, const G4Material* mat=0);
+    const G4Element *anElement, 
+    const G4Material* mat=nullptr);
 
   G4double GetCaptureCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -143,7 +144,8 @@ public:
   G4double GetFissionCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement, const G4Material* mat=0);
+    const G4Element *anElement, 
+    const G4Material* mat=nullptr);
 
   G4double GetFissionCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -158,7 +160,8 @@ public:
   G4double GetChargeExchangeCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement, const G4Material* mat=0);
+    const G4Element *anElement, 
+    const G4Material* mat=nullptr);
 
   G4double GetChargeExchangeCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -183,6 +186,10 @@ public:
 				       const G4ParticleDefinition*); 
 
   void DeRegisterExtraProcess(G4VProcess*); 
+
+  void SetBuildXSTable(G4bool val);
+
+  G4bool GetBuildXSTable() const;
 
   void PrintInfo(const G4ParticleDefinition*); 
 
@@ -243,6 +250,7 @@ private:
 
   G4int  verbose;
   G4bool buildTableStart;
+  G4bool buildXSTable;
 
   // cache
   HP   currentProcess;

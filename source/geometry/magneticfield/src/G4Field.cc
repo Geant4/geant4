@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Field implementation
 //
-// First implementation class for G4Field 
-//  J. Apostolakis,  4 Nov 2011 - to add fGravityActive data member
+// Created: John Apostolakis, 10.03.1997
 // -------------------------------------------------------------------
 
 #include "G4Field.hh"
 
-G4Field::G4Field( G4bool gravityOn):
-  fGravityActive( gravityOn )
+G4Field::G4Field( G4bool gravityOn )
+  : fGravityActive( gravityOn )
 {
 }
  
@@ -39,7 +39,7 @@ G4Field::~G4Field()
 {
 }
 
-G4Field& G4Field::operator = (const G4Field &p)
+G4Field& G4Field::operator = (const G4Field& p)
 {
    if (&p == this) return *this;
    fGravityActive= p.fGravityActive;
@@ -58,6 +58,7 @@ G4Field* G4Field::Clone() const
         << "but Clone method called.\n"
         << "Cannot continue;";
     G4Exception("G4Field::Clone", "GeomField004", FatalException,msg );
-    return NULL;
+    return nullptr;
 }
+
 // ------------------------------------------------------------------------

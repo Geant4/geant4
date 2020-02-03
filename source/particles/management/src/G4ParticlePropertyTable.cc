@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyTable.cc 72955 2013-08-14 14:23:14Z gcosmo $
 //
 // class G4ParticlePropertyTable
 //
@@ -40,12 +39,12 @@
 #include "G4ParticlePropertyTable.hh"
 
 // Static class variable: ptr to single instance of class
-G4ThreadLocal G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticlePropertyTable =0;
+G4ThreadLocal G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticlePropertyTable = nullptr;
 
 ////////////////////
 G4ParticlePropertyTable* G4ParticlePropertyTable::GetParticlePropertyTable()
 {
-  if (!fgParticlePropertyTable)
+  if (fgParticlePropertyTable == nullptr)
   {
     fgParticlePropertyTable = new  G4ParticlePropertyTable;
   }
@@ -86,13 +85,13 @@ G4ParticlePropertyTable & G4ParticlePropertyTable::operator=(const G4ParticlePro
 }
   
 ////////////////////////
-G4int G4ParticlePropertyTable::operator==(const G4ParticlePropertyTable &) const
+G4bool G4ParticlePropertyTable::operator==(const G4ParticlePropertyTable &) const
 {
   return true;
 }
 
 ////////////////////////
-G4int G4ParticlePropertyTable::operator!=(const G4ParticlePropertyTable &) const
+G4bool G4ParticlePropertyTable::operator!=(const G4ParticlePropertyTable &) const
 {
   return false;
 }
@@ -110,7 +109,7 @@ void G4ParticlePropertyTable::Clear()
 G4ParticlePropertyData* G4ParticlePropertyTable::GetParticleProperty(const G4String& aParticleName)
 {
   G4ParticleDefinition* aParticle = fParticleTable->FindParticle(aParticleName);
-  if (aParticle ==0 ) return 0;
+  if (aParticle == nullptr ) return nullptr;
 
   return GetParticleProperty(aParticle);
 }
@@ -118,7 +117,7 @@ G4ParticlePropertyData* G4ParticlePropertyTable::GetParticleProperty(const G4Str
 //////////////////////////////////////
 G4ParticlePropertyData*  G4ParticlePropertyTable::GetParticleProperty(const G4ParticleDefinition* aParticle)
 {
-  if (aParticle ==0 ) return 0;
+  if (aParticle == nullptr ) return nullptr;
   G4ParticlePropertyData* pData = new G4ParticlePropertyData(aParticle->GetParticleName());
   pData->thePDGMass        = aParticle->GetPDGMass();
   pData->thePDGWidth       = aParticle->GetPDGWidth();
@@ -162,7 +161,7 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
   } 
 
   G4ParticleDefinition* aParticle = fParticleTable->FindParticle(pData.theParticleName);
-  if (aParticle ==0 ) {
+  if (aParticle == nullptr ) {
 #ifdef G4VERBOSE
     if (verboseLevel>1){
       G4cout << "G4ParticlePropertyTable::GetParticleProperty() ";

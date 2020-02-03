@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/src/RunActionMessenger.cc
 /// \brief Implementation of the RunActionMessenger class
 //
-// $Id: RunActionMessenger.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +35,6 @@
 #include "RunAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,8 +42,7 @@ RunActionMessenger::RunActionMessenger(RunAction * ra)
  : G4UImessenger(),
    fRunAction(ra),
    fActDir(0),    
-   fBinSizeCmd(0),
-   fVerboseCmd(0)
+   fBinSizeCmd(0)
 {   
   fActDir = new G4UIdirectory("/testex/run/");
   fActDir->SetGuidance("run commands");
@@ -54,11 +51,6 @@ RunActionMessenger::RunActionMessenger(RunAction * ra)
   fBinSizeCmd->SetGuidance("Set bin size.");
   fBinSizeCmd->SetParameterName("binSize", false);
   fBinSizeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fVerboseCmd = new G4UIcmdWithAnInteger("/testex/run/verbose", this);
-  fVerboseCmd->SetGuidance("Set verbose level.");
-  fVerboseCmd->SetParameterName("verbose", false);
-  fVerboseCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +58,6 @@ RunActionMessenger::RunActionMessenger(RunAction * ra)
 RunActionMessenger::~RunActionMessenger()
 {
   delete fBinSizeCmd;
-  delete fVerboseCmd;
   delete fActDir;
 }
 
@@ -76,10 +67,6 @@ void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == fBinSizeCmd )
    { fRunAction->SetBinSize(fBinSizeCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fVerboseCmd )
-   { fRunAction->SetVerbose(fVerboseCmd->GetNewIntValue(newValue));}
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

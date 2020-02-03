@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94435 2015-11-17 14:24:19Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -60,6 +59,8 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4LENDCapture.hh
         G4LENDCaptureCrossSection.hh
         G4LENDCrossSection.hh
+        G4LENDCombinedCrossSection.hh
+        G4LENDCombinedModel.hh
         G4LENDElastic.hh
         G4LENDElasticCrossSection.hh
         G4LENDFission.hh
@@ -100,6 +101,8 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4GIDI_target.cc
         G4LENDCapture.cc
         G4LENDCaptureCrossSection.cc
+        G4LENDCombinedCrossSection.cc
+        G4LENDCombinedModel.cc
         G4LENDCrossSection.cc
         G4LENDElastic.cc
         G4LENDElasticCrossSection.cc

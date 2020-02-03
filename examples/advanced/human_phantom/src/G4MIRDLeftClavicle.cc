@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
+// Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli, University of Wollongong, Australia
 // 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
 //
 #include "G4MIRDLeftClavicle.hh"
 
@@ -83,7 +79,7 @@ G4VPhysicalVolume* G4MIRDLeftClavicle::Construct(const G4String& volumeName, G4V
   
   
   G4VPhysicalVolume* physLeftClavicle = new G4PVPlacement(0,
-							  G4ThreeVector(0.*cm,0.*cm,33.25*cm),
+							  G4ThreeVector(0.*cm,2. *cm,33.25*cm),
 							  "physicalLeftClavicle",
 							  logicLeftClavicle,
 							  mother,

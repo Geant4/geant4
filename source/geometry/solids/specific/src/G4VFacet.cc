@@ -24,18 +24,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VFacet.cc 92024 2015-08-13 14:16:00Z gcosmo $
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// CHANGE HISTORY
-// --------------
+// G4VFacet implementation.
 //
 // 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
 // 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// --------------------------------------------------------------------
 
 #include "G4VFacet.hh"
 #include "globals.hh"
@@ -45,8 +38,13 @@
 using namespace std;
 
 const G4double G4VFacet::dirTolerance = 1.0E-14;
-const G4double G4VFacet::kCarTolerance =
-      G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4VFacet::G4VFacet()
+{
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -56,7 +54,7 @@ G4VFacet::~G4VFacet()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4VFacet::operator== (const G4VFacet &right) const
+G4bool G4VFacet::operator== (const G4VFacet& right) const
 {
   G4double tolerance = kCarTolerance*kCarTolerance/4.0;
 
@@ -95,7 +93,7 @@ void G4VFacet::ApplyTranslation(const G4ThreeVector v)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-std::ostream &G4VFacet::StreamInfo(std::ostream &os) const
+std::ostream& G4VFacet::StreamInfo(std::ostream& os) const
 {
   os << G4endl;
   os << "*********************************************************************"
@@ -111,9 +109,9 @@ std::ostream &G4VFacet::StreamInfo(std::ostream &os) const
   return os;
 }
 
-G4bool G4VFacet::IsInside (const G4ThreeVector &p) const
+G4bool G4VFacet::IsInside (const G4ThreeVector& p) const
 {
-  G4ThreeVector d =  p - GetVertex(0);
+  G4ThreeVector d =  p-GetVertex(0);
   G4double displacement = d.dot(GetSurfaceNormal());
   return displacement <= 0.0;
 }

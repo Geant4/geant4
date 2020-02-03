@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm18/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 82401 2014-06-18 14:43:54Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

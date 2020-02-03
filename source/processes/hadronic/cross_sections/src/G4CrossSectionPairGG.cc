@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc 93682 2015-10-28 10:09:49Z gcosmo $
-// $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
 //
@@ -46,7 +44,6 @@
 #include "G4NistManager.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh"
 
-
 G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
       G4double Etransit) :
       G4VCrossSectionDataSet("G4CrossSectionPairGG"), theLowX(low), ETransition(
@@ -57,8 +54,6 @@ G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
 }
 
 G4CrossSectionPairGG::~G4CrossSectionPairGG() {
-   delete theHighX;
-   // The cross section registry will delete theLowX
 }
 
 void G4CrossSectionPairGG::CrossSectionDescription(
@@ -98,7 +93,7 @@ G4double G4CrossSectionPairGG::GetElementCrossSection(
 
       std::vector<ParticleXScale>::iterator iter = scale_factors.begin();
       const G4ParticleDefinition * pDef = aParticle->GetDefinition();
-      while (iter != scale_factors.end() && (*iter).first != pDef)
+      while (iter != scale_factors.end() && (*iter).first != pDef)  /* Loop checking, 08.01.2016, W. Pokorski */
       {
          ++iter;
       }
@@ -137,9 +132,10 @@ void G4CrossSectionPairGG::BuildPhysicsTable(const G4ParticleDefinition& pDef) {
    const G4ParticleDefinition * myDef = &pDef;
    std::vector<ParticleXScale>::iterator iter;
    iter = scale_factors.begin();
-   while (iter != scale_factors.end() && (*iter).first != myDef) {
-      ++iter;
-   }
+   while (iter != scale_factors.end() && (*iter).first != myDef)  /* Loop checking, 08.01.2016, W. Pokorski */
+     {
+       ++iter;
+     }
 
    //  new particle, initialise
 

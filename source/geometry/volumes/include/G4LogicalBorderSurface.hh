@@ -23,20 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LogicalBorderSurface.hh 80067 2014-03-31 13:48:09Z gcosmo $
-//
-// class G4LogicalBorderSurface
+// G4LogicalBorderSurface
 //
 // Class description:
 //
 // A Logical Surface class for surfaces defined by the boundary
 // of two physical volumes.
 
-// History:
-// -------
-// Created:     1997-06-17
-// Author:      John Apostolakis (John.Apostolakis@cern.ch)
+// Author: John Apostolakis (John.Apostolakis@cern.ch), 17-06-1997
 //
 // --------------------------------------------------------------------
 #ifndef G4LogicalBorderSurface_h
@@ -50,7 +44,7 @@
 class G4VPhysicalVolume;
 class G4LogicalBorderSurface;
 
-typedef std::vector<G4LogicalBorderSurface*> G4LogicalBorderSurfaceTable;
+using G4LogicalBorderSurfaceTable = std::vector<G4LogicalBorderSurface*>;
 
 class G4LogicalBorderSurface : public G4LogicalSurface
 {
@@ -63,6 +57,14 @@ class G4LogicalBorderSurface : public G4LogicalSurface
                                   G4SurfaceProperty* surfaceProperty );
     ~G4LogicalBorderSurface();
       // Constructor and destructor
+
+    G4LogicalBorderSurface(const G4LogicalBorderSurface&) = delete;
+    G4LogicalBorderSurface& operator=(const G4LogicalBorderSurface&) = delete;
+      // Copy constructor and assignment operator not allowed.
+
+    G4bool operator==( const G4LogicalBorderSurface& right ) const;
+    G4bool operator!=( const G4LogicalBorderSurface& right ) const;
+      // Operators.
 
     static G4LogicalBorderSurface* GetSurface( const G4VPhysicalVolume* vol1,
                                                const G4VPhysicalVolume* vol2 );
@@ -81,15 +83,6 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     static size_t GetNumberOfBorderSurfaces();
     static void DumpInfo(); 
       // To handle the table of surfaces.
-
-    G4int operator==( const G4LogicalBorderSurface &right ) const;
-    G4int operator!=( const G4LogicalBorderSurface &right ) const;
-      // Operators.
-
-  private:
-
-    G4LogicalBorderSurface(const G4LogicalBorderSurface &right);
-    G4LogicalBorderSurface& operator=(const G4LogicalBorderSurface &right);
 
   private:
 

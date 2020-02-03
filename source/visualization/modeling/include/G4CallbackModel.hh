@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CallbackModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -60,7 +59,7 @@ template <class F> class G4CallbackModel: public G4VModel {
     fFunction(function) {}
   ~G4CallbackModel() {}
   void DescribeYourselfTo(G4VGraphicsScene& sceneHandler) {
-    (*fFunction)(sceneHandler, fTransform);
+    (*fFunction)(sceneHandler, fTransform, fpMP);
   }
 
 protected:

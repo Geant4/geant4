@@ -27,7 +27,10 @@
 /// \brief Definition of the RunAction class
 //
 //
+<<<<<<< HEAD
 // $Id: RunAction.hh 68015 2013-03-13 13:27:27Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

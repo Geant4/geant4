@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomActionInitialization.cc 68058 2013-07-22 14:47:43Z jmadsen $
 //
 /// \file DicomActionInitialization.cc
 /// \brief Implementation of the DicomActionInitialization class
@@ -60,7 +59,6 @@ void DicomActionInitialization::Build() const
     SetUserAction(new DicomPrimaryGeneratorAction);
     SetUserAction(new DicomRunAction);
     SetUserAction(new DicomEventAction);
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

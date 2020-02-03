@@ -1,0 +1,98 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_cloud2plot_cp
+#define tools_sg_cloud2plot_cp
+
+#include "cloud2plot"
+
+namespace tools {
+namespace sg {
+
+class c2d2plot_cp : public c2d2plot {
+public:
+  TOOLS_SCLASS(tools::sg::c2d2plot_cp)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<c2d2plot_cp>(this,a_class)) {return p;}
+    return c2d2plot::cast(a_class);
+  }
+public:
+  virtual plottable* copy() const {return new c2d2plot_cp(*this);}
+public:
+  c2d2plot_cp(const histo::c2d& a_data)
+  :c2d2plot(m_cp)
+  ,m_cp(a_data)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~c2d2plot_cp(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  c2d2plot_cp(const c2d2plot_cp& a_from)
+  :plottable(a_from),points2D(a_from),c2d2plot(m_cp)
+  ,m_cp(a_from.m_cp)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }  
+  c2d2plot_cp& operator=(const c2d2plot_cp& a_from){
+    c2d2plot::operator=(a_from);    
+    m_cp = a_from.m_cp;
+    return *this;
+  }
+protected:
+  histo::c2d m_cp;
+};
+
+class c3d2plot_cp : public c3d2plot {
+public:
+  TOOLS_SCLASS(tools::sg::c3d2plot_cp)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<c3d2plot_cp>(this,a_class)) {return p;}
+    return c3d2plot::cast(a_class);
+  }
+public:
+  virtual plottable* copy() const {return new c3d2plot_cp(*this);}
+public:
+  c3d2plot_cp(const histo::c3d& a_data)
+  :c3d2plot(m_cp)
+  ,m_cp(a_data)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~c3d2plot_cp(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  c3d2plot_cp(const c3d2plot_cp& a_from)
+  :plottable(a_from),points3D(a_from),c3d2plot(m_cp)
+  ,m_cp(a_from.m_cp)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }  
+  c3d2plot_cp& operator=(const c3d2plot_cp& a_from){
+    c3d2plot::operator=(a_from);    
+    m_cp = a_from.m_cp;
+    return *this;
+  }
+protected:
+  histo::c3d m_cp;
+};
+
+}}
+
+#endif

@@ -1,4 +1,3 @@
-$Id: History 95505 2016-02-12 11:07:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +16,57 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27th January 2016 M. Asai (tracking-V10-01-02)
+Nov 26, 2019, G.Cosmo (tracking-V10-05-02)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+Mar 11, 2019, G.Cosmo (tracking-V10-05-01)
+- Fixed typos in printouts and comments.
+
+Jan 31, 2019, I.Hrivnacova (tracking-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+Oct 12, 2018, G.Cosmo (tracking-V10-04-02)
+- G4VSteppingVerbose: reset singleton pointer in destructor.
+  Addressing problem report #2095.
+
+May 17, 2018, J.Madsen (tracking-V10-04-01)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+Apr 2, 2018, M.Asai (tracking-V10-04-00)
+- G4SteppingManager : remove unnecessary checks of process manager for
+  generic ion and muonic atom.
+
+Oct 23, 2017, K.L.Genser (tracking-V10-03-02)
+- G4SteppingManager added #ifdef for the case when a particle IsMuonicAtom
+
+Sep 12, 2017, K.L.Genser (tracking-V10-03-01)
+- G4SteppingManager added a case when a particle IsMuonicAtom
+
+Dec 22, 2016 L.Desorgher  (tracking-V10-03-00)
+- Modification in G4AdjointSteppingAction for correction of a bug in the case of reverse
+  track splitting.
+
+Nov 17, 2016 L.Desorgher  (tracking-V10-02-05)
+- G4AdjointSteppingAction remove a test on weight with FPE issue.
+     
+Oct 27, 2016 L.Desorgher  (tracking-V10-02-04)
+- G4AdjointSteppingAction remove a print info on the weight, when stopping reverse tracking.
+for the implementation of the splitting of the reverse MC tracking.
+
+Jul 21, 2016 L.Desorgher  (tracking-V10-02-03)
+- Modification of G4AdjointTrackingAction and G4AdjointSteppingAction
+for the implementation of the splitting of the reverse MC tracking.
+
+30th Jan  2016 A. Dotti   (tracking-V10-02-02)
+- G4VTrajectory.cc: Added std::endl at end of ShowTrajectory.
+
+18th Jan  2016 A. Dotti   (tracking-V10-02-01)
+- New G4Multi{Stepping,Tracking}Action to allow multiple user-actions in 
+ the same job
+
+27th January 2016 M. Asai (tracking-V10-02-00)
 - G4SteppingManager.cc: Set OriginTouchableHandle for primary track.
   Addressing to Bug report #1773.
 

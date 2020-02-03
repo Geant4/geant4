@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm8/include/Histo.hh
 /// \brief Definition of the Histo class
 //
+<<<<<<< HEAD
 // $Id: Histo.hh 82278 2014-06-13 14:42:11Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #ifndef Histo_h
 #define Histo_h 1

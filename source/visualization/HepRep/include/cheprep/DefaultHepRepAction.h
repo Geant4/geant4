@@ -10,7 +10,6 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepAction.h 66373 2012-12-18 09:41:34Z gcosmo $
  */
 namespace cheprep {
 

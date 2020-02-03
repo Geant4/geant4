@@ -1,0 +1,73 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadr07 History file
+                    -------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+07-10-18 mma (exhadr07-V10-04-05)
+- PhysicsList : use G4IonPhysicsXS
+
+25-06-18 mma (exhadr07-V10-04-04)
+- envHadronic : add env variables for particleHP (PHP)
+
+04-06-18 mma (exhadr07-V10-04-03)
+- SteppingAction.cc : Photoelectric, edep at end of step
+
+09-05-18 B. Morgan (exhadr07-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+05-04-18 mma (exhadr07-V10-04-01)
+- Hadr07.cc : set visualisation only in interactive session.
+
+16-03-18 mma (exhadr07-V10-04-00)
+- Hadr07.cc : remove G4UI_USE and G4VIS_USE
+
+28-11-17 I. Hrivnacova  (exhadr07-V10-03-02)
+- Fixed Doxygen warnings
+
+27-04-17 mma  (exhadr07-V10-03-01)
+- Update Readme
+
+12-04-17 mma  (exhadr07-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+22-10-16 mma  (exhadr07-V10-02-07)
+- add alpha.mac ionC12.mac
+
+14-10-16 G.Folger (exhadr07-V10-02-06)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+	 
+09-09-16 mma  (exhadr07-V10-02-05)
+- rename GammaPhysics --> GammaNuclearPhysics
+         EmStandardPhysics --> ElectromagneticPhysics
+
+27-08-16 mma  (exhadr07-V10-02-04)
+- remove PhysListEmStandard
+
+11-08-16 V.Ivanchenko  (exhadr07-V10-02-03)
+- fixed local EM phys list
+
+02-08-16 mma  (exhadr07-V10-02-02)
+- coding conventions : kMaxAbsor
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
+
+13-04-16 mma  (exhadr07-V10-02-01)
+- EmStandardPhysics: use G4EmParameters
+
+01-04-16 michel maire (exhadr07-V10-02-00)
+- created, from TestEm11 and Hadr06

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ----------------------------------------------------
 
      =========================================================
@@ -15,7 +18,41 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 14-10-16 G.Folger
+=======
+26-11-19 I. Hrivnacova (testem2-V10-05-01)
+- Fixed Doxygen warnings
+
+07-11-19 V.Ivant (testem2-V10-05-00)
+- applied coding guidelines
+
+27-07-18 V.Ivant (testem2-V10-04-05)
+- Run - added protection for division by zero
+
+30-03-18 V.Ivant (testem2-V10-04-04)
+- testem2.cc : minor cleanup
+
+26-03-18 V.Ivant (testem2-V10-04-03)
+- StepMax - use thread safe instantiation, mesenger merged with 
+    PhysicsListMessenger
+- DetectorConstruction - improved method names, not allow to clear 
+    geometry between runs
+- PhysicsList - make Opt0 default, removed local instantiation of G4Decay
+- Use MixMax default random number generator 
+
+15-03-18 V.Ivant (testem2-V10-04-02)
+- PhysListEm5DStandard - experimental PhysList with the new 
+    5D gamma conversion model
+
+12-03-18 mma (testem2-V10-04-01)
+- testem2.cc : remove G4UI_USE and G4VIS_USE
+
+14-12-17 V.Ivant (testem2-V10-04-00)
+- corrected TestEm2.in, run03.mac to optimise output
+
+14-10-16 G.Folger (testem2-V10-02-04)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 

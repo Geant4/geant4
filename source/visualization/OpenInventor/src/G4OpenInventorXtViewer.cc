@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc 97678 2016-06-07 08:47:29Z gcosmo $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -203,6 +202,7 @@ void G4OpenInventorXtViewer::Initialise() {
     fInteractorManager->FlushAndWaitExecution ();
   }
   fInteractorManager->SetCreatedInteractor (fViewer -> getWidget());
+  fViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD);
 }
 
 G4OpenInventorXtViewer::~G4OpenInventorXtViewer () {

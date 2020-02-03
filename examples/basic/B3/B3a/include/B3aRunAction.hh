@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B3aRunAction.hh 94031 2015-11-05 11:54:38Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B3aRunAction.hh
 /// \brief Definition of the B3aRunAction class

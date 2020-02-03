@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr03/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 71404 2013-06-14 16:56:38Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

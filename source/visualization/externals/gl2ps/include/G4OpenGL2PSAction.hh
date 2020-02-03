@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL2PSAction.hh 88190 2015-02-02 17:24:54Z gcosmo $
 //
 
 #ifndef G4OpenGL2PSAction_h
 #define G4OpenGL2PSAction_h 
 
-
-#include <string>
+#include "globals.hh"
 #include "Geant4_gl2ps.h"
 
 class G4OpenGL2PSAction {
@@ -56,7 +54,7 @@ public:
 
 protected:
  bool G4gl2psBegin();
- const char * fFileName;
+ G4String fFileName;
  FILE* fFile;
  GLint fViewport[4];
  GLint fBufferSize;

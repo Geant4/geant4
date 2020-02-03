@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh 70745 2013-06-05 10:54:00Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -71,8 +70,8 @@ class G4VRangeToEnergyConverter
   virtual ~G4VRangeToEnergyConverter();
 
   // equal opperators
-  G4int operator==(const G4VRangeToEnergyConverter &right) const;
-  G4int operator!=(const G4VRangeToEnergyConverter &right) const;
+  G4bool operator==(const G4VRangeToEnergyConverter &right) const;
+  G4bool operator!=(const G4VRangeToEnergyConverter &right) const;
 
   public: // with description 
   // calculate energy cut from given range cut for the material

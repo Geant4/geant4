@@ -1,4 +1,3 @@
-$Id$
 
 ///\file "eventgenerator/HepMC/HepMCEx02/.README.txt"
 ///\brief Example HepMCEx02 README page

@@ -27,7 +27,6 @@
 /// \brief Definition of the F05SteppingVerbose class
 //
 //
-// $Id$
 //
 //  
 //---------------------------------------------------------------

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBremsstrahlungCrossSection.hh 77295 2013-11-22 11:02:41Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -58,13 +57,13 @@ class G4PolarizedBremsstrahlungCrossSection : public G4VPolarizedCrossSection
   virtual void Initialize(G4double eps, G4double X, G4double phi,
 			  const G4StokesVector & p0,
 			  const G4StokesVector & p1,
-			  G4int flag=0); 
+			  G4int flag=0) override;
   virtual G4double XSection(const G4StokesVector & pol2,
-			    const G4StokesVector & pol3); 
+			    const G4StokesVector & pol3) override; 
 
   // return expected mean polarisation
-  G4StokesVector GetPol2();  // electron/positron
-  G4StokesVector GetPol3();  // photon
+  G4StokesVector GetPol2() override;  // electron/positron
+  G4StokesVector GetPol3() override;  // photon
  private:
 
   G4StokesVector  theFinalLeptonPolarization;

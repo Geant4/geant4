@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonElasticPhysics.cc 73281 2013-08-23 08:21:37Z gcosmo $
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4IonElasticPhysics 
@@ -42,9 +40,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
+#include "G4GenericIon.hh"
 
 #include "G4HadronElasticProcess.hh"
 #include "G4NuclNuclDiffuseElastic.hh"
@@ -56,7 +52,6 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonElasticPhysics);
 //
-G4ThreadLocal G4bool G4IonElasticPhysics::wasActivated = false;
 
 G4IonElasticPhysics::G4IonElasticPhysics(G4int ver)
   : G4VPhysicsConstructor("IonElasticPhysics"), verbose(ver)
@@ -72,41 +67,30 @@ G4IonElasticPhysics::~G4IonElasticPhysics()
 
 void G4IonElasticPhysics::ConstructParticle()
 {
-  // G4cout << "G4IonElasticPhysics::ConstructParticle" << G4endl;
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  G4IonConstructor pConstructor;
-  pConstructor.ConstructParticle();  
+  G4GenericIon::GenericIon();
 }
 
 void G4IonElasticPhysics::ConstructProcess()
 {
-  if(wasActivated) { return; }
-  wasActivated = true;
+  // Elastic process for other ions
+  G4HadronElasticProcess* ionElasticProcess = new G4HadronElasticProcess("ionElastic");
 
-// Elastic process for other ions
-   G4HadronElasticProcess* ionElasticProcess = new G4HadronElasticProcess("ionElastic");
+  //Model
+  G4NuclNuclDiffuseElastic* ionElastic = new G4NuclNuclDiffuseElastic;
+  ionElastic->SetMinEnergy(0.0);
+  ionElasticProcess->RegisterMe(ionElastic);
 
-   //Model
-   G4NuclNuclDiffuseElastic* ionElastic = new G4NuclNuclDiffuseElastic;
-   ionElastic->SetMinEnergy(0.0);
-   ionElasticProcess->RegisterMe(ionElastic);
+  //Cross Section
+  G4ComponentGGNuclNuclXsc* ionElasticXS = new G4ComponentGGNuclNuclXsc;
+  G4VCrossSectionDataSet* ionElasticXSDataSet = new G4CrossSectionElastic(ionElasticXS);
+  ionElasticXSDataSet->SetMinKinEnergy(0.0);
+  ionElasticProcess->AddDataSet(ionElasticXSDataSet);
 
-   //Cross Section
-   G4ComponentGGNuclNuclXsc* ionElasticXS = new G4ComponentGGNuclNuclXsc;
-   G4VCrossSectionDataSet* ionElasticXSDataSet = new G4CrossSectionElastic(ionElasticXS);
-   ionElasticXSDataSet->SetMinKinEnergy(0.0);
-   ionElasticProcess->AddDataSet(ionElasticXSDataSet);
+  G4ProcessManager* ionManager = G4GenericIon::GenericIon()->GetProcessManager();
+  ionManager->AddDiscreteProcess( ionElasticProcess );
 
-   G4ProcessManager* ionManager = G4GenericIon::GenericIon()->GetProcessManager();
-                     ionManager->AddDiscreteProcess( ionElasticProcess );
-
-   if ( verbose > 1 ) {
-      G4cout << "### IonElasticPhysics: " << ionElasticProcess->GetProcessName()
-             << " added for " << G4GenericIon::GenericIon()->GetParticleName() << G4endl;
-   }
+  if ( verbose > 1 ) {
+    G4cout << "### IonElasticPhysics: " << ionElasticProcess->GetProcessName()
+	   << " added for " << G4GenericIon::GenericIon()->GetParticleName() << G4endl;
+  }
 }

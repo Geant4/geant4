@@ -1,0 +1,43 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                       icsd History file
+                       ------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+26-11-19 I. Hrivnacova - tag exicsd-V10-05-01
+- Fixed formatting in .README.txt and Doxygen warnings
+
+01-11-19 V. Ivanchenko - tag exicsd-V10-05-00
+- icsd.mac - reduce statistics to 75 in order not to hit time 
+    limit nightly
+
+07-11-18 I. Hrivnacova - tag exicsd-V10-04-04
+- Updated plot.C for reading ntuples merged with row-wise mode
+  (now default)
+
+26-07-18 S. Incerti - tag exicsd-V10-04-03
+- added ntuple merging
+
+22-07-18 S. Incerti - tag exicsd-V10-04-02
+- removed obsolete RanecuEngine.
+
+20-05-18 J. Allison tag exicsd-V10-04-01
+- Remove G4UI_USE.
+
+09-05-18 B. Morgan tag exicsd-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+06-06-2017 C. Villagrasa & S. Meylan tag exicsd-V10-03-01
+- New extended example using DNA materials

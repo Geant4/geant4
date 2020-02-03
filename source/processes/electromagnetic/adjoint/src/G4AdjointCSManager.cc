@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointCSManager.cc 93569 2015-10-26 14:53:21Z gcosmo $
 //
 
 #include <fstream>

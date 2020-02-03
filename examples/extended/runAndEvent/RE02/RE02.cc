@@ -27,7 +27,10 @@
 /// \brief Main program of the runAndEvent/RE02 example
 //
 //
+<<<<<<< HEAD
 // $Id: RE02.cc 76292 2013-11-08 13:10:20Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

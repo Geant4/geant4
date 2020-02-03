@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4NormalNavigation.icc 90009 2015-05-08 07:42:39Z gcosmo $
-//
 // 
 // G4NormalNavigation Inline Implementation
 //
@@ -63,16 +59,16 @@ G4NormalNavigation::LevelLocate( G4NavigationHistory& history,
   
   targetPhysical = history.GetTopVolume();
   targetLogical = targetPhysical->GetLogicalVolume();
-  targetNoDaughters = targetLogical->GetNoDaughters();
+  targetNoDaughters = G4int(targetLogical->GetNoDaughters());
   
   G4bool found = false;
 
-  if (targetNoDaughters!=0)
+  if ( targetNoDaughters!=0 )
   {
     //
     // Search daughters in volume
     //
-    for ( G4int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
+    for ( auto sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
     {
       samplePhysical = targetLogical->GetDaughter(sampleNo);
       if ( samplePhysical!=blockedVol )

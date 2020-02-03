@@ -1,0 +1,41 @@
+
+     =========================================================
+ 		      Geant4 - neuron example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+26 Nov 2019 I. Hrivnacova - tag neuron-V10-05-00
+- Fixed Doxygen warnings
+
+27 Nov 2018 V. Ivanchenko - tag neuron-V10-04-03
+- Fixed nightly problem in PhysicsList
+
+22 Jul 18 S. Incerti - tag neuron-V10-04-02
+- removed obsolete RanecuEngine
+
+09 May 2018 - B. Morgan - tag neuron-V10-04-01
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+26 February 2018 - R. Hatcher - tag neuron-V10-04-00
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
+28 November 2017 - I. Hrivnacova - tag neuron-V10-03-05
+- Fixed Doxygen warnings
+
+09 November 2017 - S. Incerti - tag neuron-V10-03-04
+- Removed warning
+
+07 November 2017 - S. Incerti - tag neuron-V10-03-03
+- Messaging update by Oleg and Batmunkh
+
+20 April 2017 - S. Incerti - tag neuron-V10-03-01
+- Windows fix by Oleg and Batmunkh
+
+10 February 2017 - M. Batmunkh, O.V. Belov - tag neuron-V10-03-00
+- Package created
+

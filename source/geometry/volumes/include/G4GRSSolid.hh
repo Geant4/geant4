@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GRSSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
 // class G4GRSSolid
 //
 // Class description:
@@ -36,8 +32,7 @@
 //
 // NOTE: The (optional) rotation matrix is copied
 
-// History:
-// - Created. Paul Kent, August 1996
+// Created: Paul Kent - August 1996
 // ----------------------------------------------------------------------
 #ifndef G4GRSSOLID_HH
 #define G4GRSSOLID_HH
@@ -60,20 +55,18 @@ class G4GRSSolid : public G4VTouchable
          const G4ThreeVector &tlate);
     ~G4GRSSolid();
 
+    G4GRSSolid(const G4GRSSolid&) = delete;
+    G4GRSSolid& operator=(const G4GRSSolid&) = delete;
+      // Copy constructor and assignment operator not allowed
+
     inline G4VSolid* GetSolid(G4int depth=0) const;
     inline const G4ThreeVector& GetTranslation(G4int depth=0) const;
     inline const G4RotationMatrix*  GetRotation(G4int depth=0) const;
 
   private:
-
-    G4GRSSolid(const G4GRSSolid&);
-    G4GRSSolid& operator=(const G4GRSSolid&);
-      // Copy constructor and assignment operator NOT public
-
-  private:
   
-    G4VSolid *fsolid;
-    G4RotationMatrix *frot;
+    G4VSolid* fsolid = nullptr;
+    G4RotationMatrix* frot = nullptr;
     G4ThreeVector ftlate;
 };
 

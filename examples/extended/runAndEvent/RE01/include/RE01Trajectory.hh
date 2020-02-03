@@ -27,7 +27,6 @@
 /// \brief Definition of the RE01Trajectory class
 //
 //
-// $Id: RE01Trajectory.hh 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #ifndef RE01Trajectory_h

@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Cons.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Cons.icc
-//
 // Implementation of inline methods of G4Cons
 // --------------------------------------------------------------------
 
@@ -77,6 +69,30 @@ G4double G4Cons::GetDeltaPhiAngle() const
 }
 
 inline
+G4double G4Cons::GetSinStartPhi() const
+{
+  return sinSPhi;
+}
+
+inline
+G4double G4Cons::GetCosStartPhi() const
+{
+  return cosSPhi;
+}
+
+inline
+G4double G4Cons::GetSinEndPhi() const
+{
+  return sinEPhi;
+}
+
+inline
+G4double G4Cons::GetCosEndPhi() const
+{
+  return cosEPhi;
+}
+
+inline
 void G4Cons::Initialize()
 {
   fCubicVolume = 0.;
@@ -93,6 +109,7 @@ void G4Cons::InitializeTrigonometry()
 
   sinCPhi    = std::sin(cPhi);
   cosCPhi    = std::cos(cPhi);
+  cosHDPhi   = std::cos(hDPhi);
   cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
   cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
   sinSPhi = std::sin(fSPhi);

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm12/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,9 +51,9 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* aStep)
+void SteppingAction::UserSteppingAction(const G4Step* step)
 {
- G4double edep = aStep->GetTotalEnergyDeposit();
+ G4double edep = step->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  
  //total energy deposit in absorber
@@ -63,9 +62,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  
  //longitudinal profile of deposited energy
  //        
- G4ThreeVector prePoint  = aStep->GetPreStepPoint() ->GetPosition();
- G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
+ G4ThreeVector prePoint  = step->GetPreStepPoint() ->GetPosition();
+ G4ThreeVector postPoint = step->GetPostStepPoint()->GetPosition();
  G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);
+ if (step->GetTrack()->GetDefinition()->GetPDGCharge() == 0) point = postPoint;
  G4double r = point.mag();
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
  analysisManager->FillH1(1, r, edep);
@@ -78,8 +78,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  
  //step size of primary particle or charged secondaries
  //
- G4double steplen = aStep->GetStepLength();
- const G4Track* track = aStep->GetTrack();
+ G4double steplen = step->GetStepLength();
+ const G4Track* track = step->GetTrack();
  if      (track->GetTrackID() == 1) analysisManager->FillH1(4, steplen);
  else if (track->GetDefinition()->GetPDGCharge() != 0.)
                                     analysisManager->FillH1(7, steplen); 

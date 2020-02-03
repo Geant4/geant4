@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm16/TestEm16.cc
 /// \brief Main program of the electromagnetic/TestEm16 example
 //
+<<<<<<< HEAD
 // $Id: TestEm16.cc 85257 2014-10-27 08:50:30Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,10 +60,18 @@
 
 int main(int argc,char** argv) {
 
+<<<<<<< HEAD
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
+=======
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
+  //construct the default run manager
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
     G4int nThreads = G4Threading::G4GetNumberOfCores();
@@ -80,6 +91,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new ActionInitialization(det));
 
   //get the pointer to the User Interface manager
+<<<<<<< HEAD
   G4UImanager* UI = G4UImanager::GetUIpointer();
 
   if (argc!=1)   // batch mode  
@@ -95,6 +107,24 @@ int main(int argc,char** argv) {
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
+=======
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+    //interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+    // define icons before SessionStart
+    if (ui->IsGUI()) { UImanager->ApplyCommand("/control/execute gui.mac"); }
+    ui->SessionStart();
+    delete ui;
+  } else  {
+    //batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #ifdef G4UI_USE
   G4UIExecutive * ui = new G4UIExecutive(argc,argv);      

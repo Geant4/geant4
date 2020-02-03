@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -30,7 +29,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
 #

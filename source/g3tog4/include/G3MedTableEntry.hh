@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTableEntry.hh 67982 2013-03-13 10:36:03Z gcosmo $
 //
 // ----------------------
 // Class description:
@@ -57,8 +56,8 @@ class G3MedTableEntry
     
     // operators
     G3MedTableEntry& operator=(const G3MedTableEntry& right);
-    G4int operator==(const G3MedTableEntry& right) const;
-    G4int operator!=(const G3MedTableEntry& right) const;
+    G4bool operator==(const G3MedTableEntry& right) const;
+    G4bool operator!=(const G3MedTableEntry& right) const;
 
     // set methods
     void SetMaterial(G4Material* material);

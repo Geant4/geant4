@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm15/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 68315 2013-03-21 18:26:24Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,6 +42,8 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+
+#include "G4NistManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
@@ -227,8 +228,10 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) {
+    G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+if (pttoMaterial) {
     fMaterial = pttoMaterial;
     UpdateGeometry();
   } else {

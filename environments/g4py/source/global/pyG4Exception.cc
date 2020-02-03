@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Exception.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4Exception.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4ios.hh"
 #include "G4StateManager.hh"
 #include "G4ExceptionSeverity.hh"
 
@@ -79,7 +79,7 @@ void f2_G4Exception(const char* originOfException,
              << e_banner;
       break;
     default:
-      G4cout << w_banner << message.str() 
+      G4cout << w_banner << message.str()
              << "*** This is just a warning message. ***"
              << w_banner;
       toBeAborted = false;
@@ -94,7 +94,7 @@ void f2_G4Exception(const char* originOfException,
       PyErr_Print();
     } else {
       G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
-             << G4endl << "*** No guarantee for further execution ***" 
+             << G4endl << "*** No guarantee for further execution ***"
              << G4endl;
     }
   }

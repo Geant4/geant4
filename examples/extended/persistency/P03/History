@@ -14,6 +14,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+March 25th 2019 G.Cosmo (exampleP03-V10-05-00)
+-------------------------- 
+- Fixed compilation warnings on unused local iterators.
+
+May 19th 2018 J.Allison (exampleP03-V10-04-00)
+-------------------------- 
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+19 November 2016 A. Dotti (exampleP03-V10-02-00)
+-------------------------- 
+- Explicit set of SD to manager
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 17 September 2015 P. Arce (exampleP03-V10-01-01)
 -------------------------- 
 - Remove ExTGPhysicsList

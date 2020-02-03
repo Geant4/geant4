@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashHitMaker.cc 102305 2017-01-20 14:20:07Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -48,6 +47,7 @@ GFlashHitMaker::GFlashHitMaker()
   fTouchableHandle   = new G4TouchableHistory(); // talk to ?@@@
   fpNavigator        = new G4Navigator();
   fNaviSetup         = false;
+  fWorldWithSdName   = "";
 }
 
 GFlashHitMaker::~GFlashHitMaker()
@@ -60,9 +60,14 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
   // Locate the spot
   if (!fNaviSetup)
   {
-    fpNavigator->
-      SetWorldVolume(G4TransportationManager::GetTransportationManager()->
-                     GetNavigatorForTracking()->GetWorldVolume() );
+    // Choose the world volume that contains the sensitive detector based on its name (empty name for mass geometry)
+    G4VPhysicalVolume* worldWithSD = nullptr;
+    if(fWorldWithSdName.empty()) {
+      worldWithSD = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
+      } else {
+      worldWithSD = G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorldWithSdName);
+    }
+    fpNavigator->SetWorldVolume(worldWithSD);
     fpNavigator->
       LocateGlobalPointAndUpdateTouchable(aSpot->GetPosition(),
                                           fTouchableHandle(), false);

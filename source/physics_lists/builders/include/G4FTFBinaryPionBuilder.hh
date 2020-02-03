@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPionBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -31,6 +30,8 @@
 //
 // Author: 2011 G.Folger
 //
+// Modificed:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -51,7 +52,7 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4VCrossSectionDataSet.hh"
+
 
 class G4FTFBinaryPionBuilder : public G4VPionBuilder
 {
@@ -59,13 +60,14 @@ class G4FTFBinaryPionBuilder : public G4VPionBuilder
     G4FTFBinaryPionBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFBinaryPionBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VPionBuilder::Build; //Prevent compiler warning
 
   private:
     G4TheoFSGenerator * theModel;
@@ -73,8 +75,6 @@ class G4FTFBinaryPionBuilder : public G4VPionBuilder
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-
-    G4VCrossSectionDataSet* thePiData;
     G4double theMin;
     G4double theMax;
 };

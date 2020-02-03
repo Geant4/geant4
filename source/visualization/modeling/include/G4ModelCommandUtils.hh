@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandUtils.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay September 2006
 //
@@ -46,7 +45,8 @@ namespace G4ModelCommandUtils {
     messengers.push_back(new G4ModelCmdSetDrawLine<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetLineVisible<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetLineColour<G4VisTrajContext>(context, placement));
-    
+    messengers.push_back(new G4ModelCmdSetLineWidth<G4VisTrajContext>(context, placement));
+
     messengers.push_back(new G4ModelCmdSetDrawStepPts<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetStepPtsVisible<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetStepPtsColour<G4VisTrajContext>(context, placement));

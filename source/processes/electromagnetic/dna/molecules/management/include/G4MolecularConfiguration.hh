@@ -196,25 +196,25 @@ public:
 
   /** Method used in Geant4-DNA to excite water molecules
    */
-  G4MolecularConfiguration* ExciteMolecule(G4int);
+  G4MolecularConfiguration* ExciteMolecule(G4int) const;
 
   /** Method used in Geant4-DNA to ionize water molecules
    */
-  G4MolecularConfiguration* IonizeMolecule(G4int);
+  G4MolecularConfiguration* IonizeMolecule(G4int) const;
 
   /** Add n electrons to a given orbit.
    * Note : You can add as many electrons to a given orbit, the result
    * may be unrealist.
    */
-  G4MolecularConfiguration* AddElectron(G4int orbit, G4int n = 1);
+  G4MolecularConfiguration* AddElectron(G4int orbit, G4int n = 1) const;
 
   /** Remove n electrons to a given orbit.
    */
-  G4MolecularConfiguration* RemoveElectron(G4int, G4int number = 1);
+  G4MolecularConfiguration* RemoveElectron(G4int, G4int number = 1) const;
 
   /** Move one electron from an orbit to another.
    */
-  G4MolecularConfiguration* MoveOneElectron(G4int /*orbit*/, G4int /*orbit*/);
+  G4MolecularConfiguration* MoveOneElectron(G4int /*orbit*/, G4int /*orbit*/) const;
 
   /** Returns the number of electron.
    */
@@ -224,8 +224,7 @@ public:
    */
   void PrintState() const;
 
-  const std::vector<const G4MolecularDissociationChannel*>*
-  GetDecayChannel() const;
+  const std::vector<const G4MolecularDissociationChannel*>* GetDissociationChannels() const;
 
   G4int GetFakeParticleID() const;
 
@@ -327,8 +326,8 @@ protected:
   G4MolecularConfiguration(const G4MolecularConfiguration&);
   G4MolecularConfiguration & operator=(G4MolecularConfiguration &right);
   ~G4MolecularConfiguration();
-  G4MolecularConfiguration* ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy);
-  G4MolecularConfiguration* ChangeConfiguration(int charge);
+  G4MolecularConfiguration* ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy) const;
+  G4MolecularConfiguration* ChangeConfiguration(int charge) const;
 
   void CheckElectronOccupancy(const char* line) const;
   void MakeExceptionIfFinalized();
@@ -352,9 +351,6 @@ public:
     {
       return fLastMoleculeID+1;
     }
-
-    // TODO: TO BE IMPLEMENTED
-//    void InsertMolecularConfiguration(G4MolecularConfiguration*);
 
     //------------------------------------------------------------------------
     // CALLED FROM CONSTRUCTORS

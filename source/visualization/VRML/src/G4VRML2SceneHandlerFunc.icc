@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandlerFunc.icc 97698 2016-06-07 10:26:53Z gcosmo $
 //
 // G4VRML2SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -595,9 +594,10 @@ void G4VRML2SCENEHANDLER::VRMLEndModeling()
 	}
 }
 
-void      G4VRML2SCENEHANDLER::SendMarkerColor ( const G4VMarker& mark ) 
+void      G4VRML2SCENEHANDLER::SendMarkerColor ( const G4VMarker& marker )
 {
-	const G4Color& color = GetColor( mark );
+	fpVisAttribs = marker.GetVisAttributes();
+	const G4Color& color = GetColor();
 
 	fDest << "\t\t"     << "appearance Appearance {" << "\n";
 	fDest << "\t\t\t"   <<      "material Material {" << "\n";
@@ -712,11 +712,11 @@ G4double      G4VRML2SCENEHANDLER::SetPVTransparency ()
 
 	G4double	TRANSPARENCY = 0.7   ;	// initialization
 						
-	if( getenv( "G4VRML_TRANSPARENCY" ) != NULL ) {
+	if( std::getenv( "G4VRML_TRANSPARENCY" ) != NULL ) {
 
 		// get a value from the env value
 //		sscanf( getenv("G4VRML_TRANSPARENCY"), "%lg", &TRANSPARENCY ) ;
-          std::istringstream iss( getenv("G4VRML_TRANSPARENCY") );
+          std::istringstream iss( std::getenv("G4VRML_TRANSPARENCY") );
           iss >> TRANSPARENCY;
 
 		// truncation

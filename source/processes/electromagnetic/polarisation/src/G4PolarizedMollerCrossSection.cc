@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerCrossSection.cc 68046 2013-03-13 14:31:38Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -91,23 +90,23 @@ void G4PolarizedMollerCrossSection::Initialize(
     //    G4cout<<"Polarized differential moller cross section"<<G4endl;
     //    G4cout<<"Initial state polarisation contributions"<<G4endl;
     //    G4cout<<"Diagonal Matrix Elements"<<G4endl;
-    G4double xx = (gamma - f*e*gmo*(3 + gamma))/(4*f*e*gamma2);
-    G4double yy = (-1 + f*e*gmo2 + 2*gamma)/(4*f*e*gamma2);
-    G4double zz = (-(e*gmo*(3 + gamma)) + e2*gmo*(3 + gamma) + 
-		   gamma*(-1 + 2*gamma))/(4*f*e*gamma2);
+    G4double xx = (gamma - f*e*gmo*(3. + gamma))/(4.*f*e*gamma2);
+    G4double yy = (-1. + f*e*gmo2 + 2.*gamma)/(4.*f*e*gamma2);
+    G4double zz = (-(e*gmo*(3. + gamma)) + e2*gmo*(3. + gamma) + 
+		   gamma*(-1. + 2.*gamma))/(4.*f*e*gamma2);
 
     phi0 += xx*pol0.x()*pol1.x() + yy*pol0.y()*pol1.y() + zz*pol0.z()*pol1.z();
 
     if (usephi==1.) {
       //    G4cout<<"Non-diagonal Matrix Elements"<<G4endl;
-      G4double xy = 0;
-      G4double xz = -((-1 + 2*e)*gmo)/(2*sqrttwo*gamma2*
+      G4double xy = 0.;
+      G4double xz = -((-1. + 2.*e)*gmo)/(2.*sqrttwo*gamma2*
 				       std::sqrt(-((f*e)/gpo)));
-      G4double yx = 0;
-      G4double yz = 0;
-      G4double zx = -((-1 + 2*e)*gmo)/(2*sqrttwo*gamma2*
+      G4double yx = 0.;
+      G4double yz = 0.;
+      G4double zx = -((-1. + 2.*e)*gmo)/(2.*sqrttwo*gamma2*
 				       std::sqrt(-((f*e)/gpo)));
-      G4double zy = 0;
+      G4double zy = 0.;
       phi0+=yx*pol0.y()*pol1.x() + xy*pol0.x()*pol1.y();
       phi0+=zx*pol0.z()*pol1.x() + xz*pol0.x()*pol1.z();
       phi0+=zy*pol0.z()*pol1.y() + yz*pol0.y()*pol1.z();
@@ -124,38 +123,38 @@ void G4PolarizedMollerCrossSection::Initialize(
 
     // initial electron K1
     if (!pol0.IsZero()) {
-      G4double xxP1K1 = (std::sqrt(gpo/(1 + e2*gmo + gamma - 2*e*gamma))*
-			 (gamma - e*gpo))/(4*e2*gamma);
-      G4double xyP1K1 = 0;
-      G4double xzP1K1 = (-1 + 2*e*gamma)/(2*sqrttwo*f*gamma*
-					  std::sqrt(e*e2*(1 + e + gamma - e*gamma)));
-      G4double yxP1K1 = 0;
-      G4double yyP1K1 = (-gamma2 + e*(-1 + gamma*(2 + gamma)))/(4*f*e2*gamma2);
-      G4double yzP1K1 = 0;
-      G4double zxP1K1 = (1 + 2*e2*gmo - 2*e*gamma)/(2*sqrttwo*f*e*gamma*
-						    std::sqrt(e*(1 + e + gamma - e*gamma)));
-      G4double zyP1K1 = 0;
-      G4double zzP1K1 = (-gamma + e*(1 - 2*e*gmo + gamma))/(4*f*e2*gamma*
-							    std::sqrt(1 - (2*e)/(f*gpo)));
+      G4double xxP1K1 = (std::sqrt(gpo/(1. + e2*gmo + gamma - 2.*e*gamma))*
+			 (gamma - e*gpo))/(4.*e2*gamma);
+      G4double xyP1K1 = 0.;
+      G4double xzP1K1 = (-1. + 2.*e*gamma)/(2.*sqrttwo*f*gamma*
+					  std::sqrt(e*e2*(1. + e + gamma - e*gamma)));
+      G4double yxP1K1 = 0.;
+      G4double yyP1K1 = (-gamma2 + e*(-1. + gamma*(2. + gamma)))/(4.*f*e2*gamma2);
+      G4double yzP1K1 = 0.;
+      G4double zxP1K1 = (1. + 2.*e2*gmo - 2.*e*gamma)/(2.*sqrttwo*f*e*gamma*
+						    std::sqrt(e*(1. + e + gamma - e*gamma)));
+      G4double zyP1K1 = 0.;
+      G4double zzP1K1 = (-gamma + e*(1. - 2.*e*gmo + gamma))/(4.*f*e2*gamma*
+							    std::sqrt(1. - (2.*e)/(f*gpo)));
       phi2[0] += xxP1K1*pol0.x() + xyP1K1*pol0.y() + xzP1K1*pol0.z();
       phi2[1] += yxP1K1*pol0.x() + yyP1K1*pol0.y() + yzP1K1*pol0.z();
       phi2[2] += zxP1K1*pol0.x() + zyP1K1*pol0.y() + zzP1K1*pol0.z();
     }
     // initial electron K2
     if (!pol1.IsZero()) {
-      G4double xxP1K2 = ((1 + e*(-3 + gamma))*std::sqrt(gpo/(1 + e2*gmo + gamma - 
-							     2*e*gamma)))/(4*f*e*gamma);
-      G4double xyP1K2 = 0;
-      G4double xzP1K2 = (-2 + 2*e + gamma)/(2*sqrttwo*f2*gamma*
-					    std::sqrt(e*(1 + e + gamma - e*gamma)));
-      G4double yxP1K2 = 0;
-      G4double yyP1K2 = (1 - 2*gamma + e*(-1 + gamma*(2 + gamma)))/(4*f2*e*gamma2);
-      G4double yzP1K2 = 0;
-      G4double zxP1K2 = (2*e*(1 + e*gmo - 2*gamma) + gamma)/(2*sqrttwo*f2*gamma*
-							     std::sqrt(e*(1 + e + gamma - e*gamma)));
-      G4double zyP1K2 = 0;
-      G4double zzP1K2 = (1 - 2*gamma + e*(-1 - 2*e*gmo + 3*gamma))/
-	(4*f2*e*gamma*std::sqrt(1 - (2*e)/(f*gpo)));
+      G4double xxP1K2 = ((1. + e*(-3. + gamma))*std::sqrt(gpo/(1. + e2*gmo + gamma - 
+							     2.*e*gamma)))/(4.*f*e*gamma);
+      G4double xyP1K2 = 0.;
+      G4double xzP1K2 = (-2. + 2.*e + gamma)/(2.*sqrttwo*f2*gamma*
+					    std::sqrt(e*(1. + e + gamma - e*gamma)));
+      G4double yxP1K2 = 0.;
+      G4double yyP1K2 = (1. - 2.*gamma + e*(-1. + gamma*(2. + gamma)))/(4.*f2*e*gamma2);
+      G4double yzP1K2 = 0.;
+      G4double zxP1K2 = (2.*e*(1. + e*gmo - 2.*gamma) + gamma)/(2.*sqrttwo*f2*gamma*
+							     std::sqrt(e*(1. + e + gamma - e*gamma)));
+      G4double zyP1K2 = 0.;
+      G4double zzP1K2 = (1. - 2.*gamma + e*(-1. - 2.*e*gmo + 3.*gamma))/
+	(4.*f2*e*gamma*std::sqrt(1. - (2.*e)/(f*gpo)));
       phi2[0] += xxP1K2*pol1.x() + xyP1K2*pol1.y() + xzP1K2*pol1.z();
       phi2[1] += yxP1K2*pol1.x() + yyP1K2*pol1.y() + yzP1K2*pol1.z();
       phi2[2] += zxP1K2*pol1.x() + zyP1K2*pol1.y() + zzP1K2*pol1.z();
@@ -168,19 +167,19 @@ void G4PolarizedMollerCrossSection::Initialize(
     if (!pol0.IsZero()) {
 
 
-      G4double xxP2K1 = (-1 + e + e*gamma)/(4*f2*gamma*
-					    std::sqrt((e*(2 + e*gmo))/gpo));
-      G4double xyP2K1 = 0;
-      G4double xzP2K1 = -((1 + 2*f*gamma)*std::sqrt(f/(-2 + e - e*gamma)))/
-	(2*sqrttwo*f2*e*gamma);
-      G4double yxP2K1 = 0;
-      G4double yyP2K1 = (1 - 2*gamma + e*(-1 + gamma*(2 + gamma)))/(4*f2*e*gamma2);
-      G4double yzP2K1 = 0;
-      G4double zxP2K1 = (1 + 2*e*(-2 + e + gamma - e*gamma))/(2*sqrttwo*f*e*
-							      std::sqrt(-(f*(2 + e*gmo)))*gamma);
-      G4double zyP2K1 = 0;
-      G4double zzP2K1 = (std::sqrt((e*gpo)/(2 + e*gmo))*
-			 (-3 + e*(5 + 2*e*gmo - 3*gamma) + 2*gamma))/(4*f2*e*gamma);
+      G4double xxP2K1 = (-1. + e + e*gamma)/(4.*f2*gamma*
+					    std::sqrt((e*(2. + e*gmo))/gpo));
+      G4double xyP2K1 = 0.;
+      G4double xzP2K1 = -((1. + 2.*f*gamma)*std::sqrt(f/(-2. + e - e*gamma)))/
+	(2.*sqrttwo*f2*e*gamma);
+      G4double yxP2K1 = 0.;
+      G4double yyP2K1 = (1. - 2.*gamma + e*(-1. + gamma*(2. + gamma)))/(4.*f2*e*gamma2);
+      G4double yzP2K1 = 0.;
+      G4double zxP2K1 = (1. + 2.*e*(-2. + e + gamma - e*gamma))/(2.*sqrttwo*f*e*
+							      std::sqrt(-(f*(2. + e*gmo)))*gamma);
+      G4double zyP2K1 = 0.;
+      G4double zzP2K1 = (std::sqrt((e*gpo)/(2. + e*gmo))*
+			 (-3. + e*(5. + 2.*e*gmo - 3.*gamma) + 2.*gamma))/(4.*f2*e*gamma);
 
       phi3[0] += xxP2K1*pol0.x() + xyP2K1*pol0.y() + xzP2K1*pol0.z();
       phi3[1] += yxP2K1*pol0.x() + yyP2K1*pol0.y() + yzP2K1*pol0.z();
@@ -189,19 +188,19 @@ void G4PolarizedMollerCrossSection::Initialize(
     // initial electron K2
     if (!pol1.IsZero()) {
 
-      G4double xxP2K2 = (-2 - e*(-3 + gamma) + gamma)/
-	(4*f*e*gamma* std::sqrt((e*(2 + e*gmo))/gpo));
-      G4double xyP2K2 = 0;
-      G4double xzP2K2 = ((-2*e + gamma)*std::sqrt(f/(-2 + e - e*gamma)))/
-	(2*sqrttwo*f*e2*gamma);
-      G4double yxP2K2 = 0;
-      G4double yyP2K2 = (-gamma2 + e*(-1 + gamma*(2 + gamma)))/(4*f*e2*gamma2);
-      G4double yzP2K2 = 0;
-      G4double zxP2K2 = (gamma + 2*e*(-1 + e - e*gamma))/
-	(2*sqrttwo*e2* std::sqrt(-(f*(2 + e*gmo)))*gamma);
-      G4double zyP2K2 = 0;
-      G4double zzP2K2 = (std::sqrt((e*gpo)/(2 + e*gmo))*
-			 (-2 + e*(3 + 2*e*gmo - gamma) + gamma))/(4*f*e2*gamma);
+      G4double xxP2K2 = (-2. - e*(-3. + gamma) + gamma)/
+	(4.*f*e*gamma* std::sqrt((e*(2. + e*gmo))/gpo));
+      G4double xyP2K2 = 0.;
+      G4double xzP2K2 = ((-2.*e + gamma)*std::sqrt(f/(-2. + e - e*gamma)))/
+	(2.*sqrttwo*f*e2*gamma);
+      G4double yxP2K2 = 0.;
+      G4double yyP2K2 = (-gamma2 + e*(-1. + gamma*(2. + gamma)))/(4.*f*e2*gamma2);
+      G4double yzP2K2 = 0.;
+      G4double zxP2K2 = (gamma + 2.*e*(-1. + e - e*gamma))/
+	(2.*sqrttwo*e2* std::sqrt(-(f*(2. + e*gmo)))*gamma);
+      G4double zyP2K2 = 0.;
+      G4double zzP2K2 = (std::sqrt((e*gpo)/(2. + e*gmo))*
+			 (-2. + e*(3. + 2.*e*gmo - gamma) + gamma))/(4.*f*e2*gamma);
       phi3[0] += xxP2K2*pol1.x() + xyP2K2*pol1.y() + xzP2K2*pol1.z();
       phi3[1] += yxP2K2*pol1.x() + yyP2K2*pol1.y() + yzP2K2*pol1.z();
       phi3[2] += zxP2K2*pol1.x() + zyP2K2*pol1.y() + zzP2K2*pol1.z();

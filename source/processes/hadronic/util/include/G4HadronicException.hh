@@ -27,39 +27,24 @@
 #define G4HadronicException_h
 
 #include <exception>
-#include <iostream>
 #include "globals.hh"
 
-class G4HadronicException : public std::exception
-{
-  public:
-  G4HadronicException(G4String in, G4int at, G4String mess)
-  {
-    theMessage = mess;
-    theName = in;
-    theLine = at;
-    
-    Report(G4cout);
+class G4HadronicException : public std::exception {
+public:
+  G4HadronicException(G4String in, G4int at, G4String mess);
 
-    if(getenv("DumpCoreOnHadronicException") )
-      {
-	G4Exception("G4HadronicException", "007", FatalException,
-		    "Fatal problem in above location");
-      }
-    
-  }
-  virtual ~G4HadronicException() throw () {}
-  
-  void Report(std::ostream & aS)
-  {
-    aS<< "In " <<theName<<", line "<<theLine<<": "<<std::endl;
-    aS<< "===> "<<theMessage<<std::endl;
-  }
-  
-  private:
-  G4String theMessage;
-  G4String theName;
-  G4int theLine;
+  virtual ~G4HadronicException() throw();
+
+  const char *what() const noexcept override;
+
+  void Report(std::ostream &aS) const;
+
+private:
+  const G4String theMessage;
+  const G4String theName;
+  const G4int theLine;
+
+  G4String whatString;
 };
 
 #endif

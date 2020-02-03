@@ -22,17 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4LogicalVolume.icc 102288 2017-01-20 10:57:03Z gcosmo $
-//
 // 
-// class G4LogicalVolume Inline Implementation file
+// class G4LogicalVolume inline implementation
 //
 // 15.01.13 - G.Cosmo, A.Dotti: Modified for thread-safety for MT
 // 10.20.97 - P. MoraDeFreitas : Added SetFastSimulation method
 // 05.11.98 - M. Verderi: Add Get/Set methods for fBiasWeight
-// 09.11.98 - J. Apostolakis:  Changed MagneticField to FieldManager
+// 09.11.98 - J.Apostolakis:  Changed MagneticField to FieldManager
 // 12.02.99 - S.Giani: Added set/get methods for voxelization quality
 // 18.04.01 - G.Cosmo: Migrated to STL vector
 // 17.05.02 - G.Cosmo: Added IsToOptimise() method
@@ -83,7 +79,7 @@ G4FieldManager* G4LogicalVolume::GetMasterFieldManager() const
 // ********************************************************************
 //
 inline
-G4int G4LogicalVolume::GetNoDaughters() const
+size_t G4LogicalVolume::GetNoDaughters() const
 {
   return fDaughters.size();
 }
@@ -105,8 +101,8 @@ G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const G4int i) const
 inline
 G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const 
 {
-  G4FastSimulationManager* fFSM = 0;
-  if(fRegion) fFSM = fRegion->GetFastSimulationManager();
+  G4FastSimulationManager* fFSM = nullptr;
+  if(fRegion != nullptr) fFSM = fRegion->GetFastSimulationManager();
   return fFSM;
 }
 
@@ -117,8 +113,7 @@ G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const
 inline
 G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
 {
-  G4PhysicalVolumeList::const_iterator i;
-  for ( i=fDaughters.begin(); i!=fDaughters.end(); ++i )
+  for (auto i=fDaughters.cbegin(); i!=fDaughters.cend(); ++i)
   {
     if (**i==*p) return true;
   }
@@ -132,17 +127,23 @@ G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
 inline
 EVolume G4LogicalVolume::CharacteriseDaughters() const
 {
-  EVolume type;
-  G4VPhysicalVolume *pVol;
+  return fDaughtersVolumeType;
+}
 
-  if ( GetNoDaughters()==1 )
+// ********************************************************************
+// DeduceDaughtersType
+// ********************************************************************
+//
+inline
+EVolume G4LogicalVolume::DeduceDaughtersType() const
+{
+  EVolume type= kNormal;
+  G4VPhysicalVolume* pVol;
+    
+  if ( GetNoDaughters() >= 1 )
   {
     pVol = GetDaughter(0);
     type = pVol->VolumeType();
-  }
-  else
-  {
-    type = kNormal;
   }
   return type;
 }
@@ -174,9 +175,9 @@ G4VSensitiveDetector* G4LogicalVolume::GetMasterSensitiveDetector() const
 inline
 G4UserLimits* G4LogicalVolume::GetUserLimits() const
 {
-  if(fUserLimits) return fUserLimits;
-  if(fRegion) return fRegion->GetUserLimits();
-  return 0;
+  if(fUserLimits != nullptr) return fUserLimits;
+  if(fRegion != nullptr) return fRegion->GetUserLimits();
+  return nullptr;
 }
 
 // ********************************************************************
@@ -277,7 +278,7 @@ inline
 G4bool G4LogicalVolume::IsRegion() const
 {
   G4bool reg = false;
-  if (fRegion) reg = true;
+  if (fRegion != nullptr) reg = true;
   return reg;
 }
 

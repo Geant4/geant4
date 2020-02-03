@@ -27,7 +27,6 @@
 /// \brief Definition of the F02DetectorMessenger class
 //
 //
-// $Id: F02DetectorMessenger.hh 77123 2013-11-21 16:13:28Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

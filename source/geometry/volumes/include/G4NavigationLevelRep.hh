@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NavigationLevelRep.hh 85846 2014-11-05 15:45:28Z gcosmo $
-//
-// class G4NavigationLevelRep
+// G4NavigationLevelRep
 //
 // Class description:
 //
@@ -37,9 +34,7 @@
 // reference counting for NavigationLevels.
 // The corresponding handle class is G4NavigationLevel
 
-// History:
-//
-// - 1 October 1997, J.Apostolakis: initial version. 
+// 1 October 1997, J.Apostolakis: initial version
 // ----------------------------------------------------------------------
 #ifndef G4NAVIGATIONLEVELREP_HH
 #define G4NAVIGATIONLEVELREP_HH
@@ -60,13 +55,13 @@ class G4NavigationLevelRep
    inline G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
                           const G4AffineTransform&  newT,
                                 EVolume             newVolTp,
-                                G4int               newRepNo= -1 );
+                                G4int               newRepNo = -1 );
 
    inline G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
                           const G4AffineTransform&  levelAbove,
                           const G4AffineTransform&  relativeCurrent,
                                 EVolume             newVolTp,
-                                G4int               newRepNo= -1 );
+                                G4int               newRepNo = -1 );
      // As the previous constructor, but instead of giving Transform, give 
      // the AffineTransform to the level above and the current level's 
      // Transform relative to that.
@@ -76,7 +71,7 @@ class G4NavigationLevelRep
 
    inline ~G4NavigationLevelRep();
 
-   inline G4NavigationLevelRep& operator=(const G4NavigationLevelRep &right);
+   inline G4NavigationLevelRep& operator=(const G4NavigationLevelRep& right);
 
    inline G4VPhysicalVolume* GetPhysicalVolume();
 
@@ -90,9 +85,9 @@ class G4NavigationLevelRep
    inline G4bool RemoveAReference(); 
      // Take care of the reference counts.
 
-   inline void *operator new(size_t);
+   inline void* operator new(size_t);
      // Override "new"    to use "G4Allocator".
-   inline void operator delete(void *aTrack);
+   inline void operator delete(void* aTrack);
      // Override "delete" to use "G4Allocator".
 
  private:
@@ -101,14 +96,14 @@ class G4NavigationLevelRep
      // Compounded global->local transformation (takes a point in the 
      // global reference system to the system of the volume at this level)
 
-   G4VPhysicalVolume* sPhysicalVolumePtr;
+   G4VPhysicalVolume* sPhysicalVolumePtr = nullptr;
      // Physical volume ptrs, for this level's volume
 
-   G4int              sReplicaNo;
+   G4int              sReplicaNo = -1;
    EVolume            sVolumeType;
      // Volume `type' 
 
-   G4int              fCountRef; 
+   G4int              fCountRef = 1; 
 
 };
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticleLargerEkin.hh 70080 2013-05-22 22:46:28Z mkelsey $
 //
 // Implements a *reverse* sorting: std::sort expects a less-than operator
 // which returns true if arg1<arg2.  This function returns true if arg1>=arg2.

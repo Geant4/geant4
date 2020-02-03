@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/include/HIJINGNeutronBuilder.hh
 /// \brief Definition of the HIJINGNeutronBuilder class
 //
-// $Id: HIJINGNeutronBuilder.hh,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

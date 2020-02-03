@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B4cCalorimeterSD.cc 87359 2014-12-01 16:04:27Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B4cCalorimeterSD.cc
 /// \brief Implementation of the B4cCalorimeterSD class
@@ -126,7 +129,7 @@ void B4cCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
        << G4endl 
        << "-------->Hits Collection: in this event they are " << nofHits 
        << " hits in the tracker chambers: " << G4endl;
-     for ( G4int i=0; i<nofHits; i++ ) (*fHitsCollection)[i]->Print();
+     for ( std::size_t i=0; i<nofHits; ++i ) (*fHitsCollection)[i]->Print();
   }
 }
 

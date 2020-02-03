@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
-// $Id: StackingMessenger.cc 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //

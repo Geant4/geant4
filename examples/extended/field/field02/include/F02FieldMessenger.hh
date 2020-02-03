@@ -27,7 +27,6 @@
 /// \brief Definition of the F02FieldMessenger class
 //
 //
-// $Id: F02FieldMessenger.hh 76247 2013-11-08 11:18:52Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +41,7 @@ class F02ElectricFieldSetup;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,8 @@ class F02FieldMessenger: public G4UImessenger
 
     G4UIdirectory*             fFieldDir;
     G4UIcmdWithAnInteger*      fStepperCmd;
-    G4UIcmdWithADoubleAndUnit* fElFieldCmd;
+    G4UIcmdWithADoubleAndUnit* fElFieldZCmd;
+    G4UIcmdWith3VectorAndUnit* fElFieldCmd;
     G4UIcmdWithADoubleAndUnit* fMinStepCmd;
     G4UIcmdWithoutParameter*   fUpdateCmd;
 };

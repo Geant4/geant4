@@ -27,7 +27,6 @@
 /// \brief Definition of the F03DetectorConstruction class
 //
 //
-// $Id: F03DetectorConstruction.hh 77485 2013-11-25 10:12:45Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

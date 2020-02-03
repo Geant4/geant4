@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 83391 2014-08-21 14:35:11Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +20,34 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+01-28-19 M. Asai       (exampleRE05-V10-05-00)
+- Reduce the number of events in pythia_event.data to make it
+  smaller than 2 MB. Number of events executed by the macro
+  exampleRE05.in is also reduced accordingly.
+
+10-05-18 J. Allison    (exampleRE05-V10-04-02)
+- Move deletion of vis manager to top scope. For batch jobs it was
+  not being deleted.
+
+10-05-18 J. Allison    (exampleRE05-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+05-05-17 M. Asai       (exampleRE05-V10-03-00)
+- RE05PrimaryGeneratorAction.cc : fix potential rare race condition
+  issue.
+
+19-11-16 A. Dotti      (exampleRE05-V10-02-01)
+- Explicit setting of SD to manager
+
+19-07-16 I. Hrivnacova (exampleRE05-V10-02-00)
+- Coding guidelines and code clean-up
+- Renamed RE05CalorimeterROGeometry in E05CalorimeterParallelWorld
+- Updated README
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 18-08-14 M.Asai (exampleRE05-V10-00-00)
 - Reduce the amount of print-out.
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyTable.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -60,8 +59,8 @@ class G4ParticlePropertyTable
   G4ParticlePropertyTable & operator=(const G4ParticlePropertyTable &right);
   
  public:
-  G4int operator==(const G4ParticlePropertyTable &right) const;
-  G4int operator!=(const G4ParticlePropertyTable &right) const;
+  G4bool operator==(const G4ParticlePropertyTable &right) const;
+  G4bool operator!=(const G4ParticlePropertyTable &right) const;
 
  public:
   virtual ~G4ParticlePropertyTable();

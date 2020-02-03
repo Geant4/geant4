@@ -27,7 +27,10 @@
 /// \brief Main program of the electromagnetic/TestEm10 example
 //
 //
+<<<<<<< HEAD
 // $Id: TestEm10.cc 73033 2013-08-15 09:24:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

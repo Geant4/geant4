@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ToolsAnalysisReader.hh 91012 2015-06-15 10:38:07Z ihrivnac $
 
 // The common implementation of analysis reader classes.
 

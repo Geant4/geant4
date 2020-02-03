@@ -11,7 +11,6 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 92688 2015-09-14 07:01:13Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -25,6 +24,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/analysis/g4tools/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/analysis/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/analysis/hntools/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 
 #
 # Define the Geant4 Module.
@@ -37,9 +37,11 @@ GEANT4_DEFINE_MODULE(NAME G4root
         G4RootAnalysisReader.hh
         G4RootAnalysisReader.icc
         G4RootFileManager.hh
+        G4RootMainNtupleManager.hh
         G4RootNtupleManager.hh
+        G4RootPNtupleDescription.hh
+        G4RootPNtupleManager.hh
         G4RootRFileManager.hh
-        G4RootRNtupleDescription.hh
         G4RootRNtupleManager.hh
        g4root_defs.hh
         g4root.hh
@@ -47,7 +49,9 @@ GEANT4_DEFINE_MODULE(NAME G4root
         G4RootAnalysisManager.cc
         G4RootAnalysisReader.cc
         G4RootFileManager.cc
+        G4RootMainNtupleManager.cc
         G4RootNtupleManager.cc
+        G4RootPNtupleManager.cc
         G4RootRFileManager.cc
         G4RootRNtupleManager.cc
     GRANULAR_DEPENDENCIES

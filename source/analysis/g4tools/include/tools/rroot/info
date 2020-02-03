@@ -7,6 +7,8 @@
 //#include "buffer"
 //#include "element"
 #include "named"
+#include "obj_array"
+#include "../forit"
 
 namespace tools {
 namespace rroot {
@@ -105,6 +107,7 @@ public:
       a_s += cdim;
     }
   }
+  const std::string& type_name() const {return fTypeName;}
 protected: //Named
   std::string fName;
   std::string fTitle;
@@ -147,28 +150,28 @@ protected:
   }
 };
 
-class StreamerInfo : public virtual iro {
+class streamer_info : public virtual iro {
   static const std::string& s_store_class() {
     static const std::string s_v("TStreamerInfo");
     return s_v;
   }
 public:
   static const std::string& s_class() {
-    static const std::string s_v("tools::rroot::StreamerInfo");
+    static const std::string s_v("tools::rroot::streamer_info");
     return s_v;
   }
-  static cid id_class() {return StreamerInfo_cid();}
+  static cid id_class() {return streamer_info_cid();}
 public: //iro
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = cmp_cast<StreamerInfo>(this,a_class)) return p;
+    if(void* p = cmp_cast<streamer_info>(this,a_class)) return p;
     return 0;
   }
   virtual void* cast(cid a_class) const {
-    if(void* p = cmp_cast<StreamerInfo>(this,a_class)) {return p;}
+    if(void* p = cmp_cast<streamer_info>(this,a_class)) {return p;}
     else return 0;
   }
   virtual const std::string& s_cls() const {return s_class();}
-  virtual iro* copy() const {return new StreamerInfo(*this);}
+  virtual iro* copy() const {return new streamer_info(*this);}
 
   virtual bool stream(buffer& a_buffer) {
     short v;
@@ -180,47 +183,48 @@ public: //iro
     if(!a_buffer.read(m_streamed_class_version)) return false;
 
     //TObjArray        *fElements;       //Array of TStreamerElements
-   {ObjArray<streamer_element>* obj;
+   {obj_array<streamer_element>* obj;
     ifac::args args;
     args[ifac::arg_class()] = (void*)&(streamer_element::s_class());
-    if(!pointer_stream(a_buffer,m_fac,args,obj)) {
-      a_buffer.out() << "tools::rroot::StreamerInfo::stream : "
+    bool obj_created;
+    if(!pointer_stream(a_buffer,m_fac,args,obj,obj_created)) {
+      a_buffer.out() << "tools::rroot::streamer_info::stream : "
                      << "can't read fElements."
                      << std::endl;
       return false;
     }
-    m_elements.operator=(*obj);
-    delete obj;}
+    if(obj) m_elements.operator=(*obj);
+    if(obj_created) delete obj;}
 
     return a_buffer.check_byte_count(s,c,s_store_class());
   }
 public:
   void out(std::ostream& a_out) const {
-    a_out << "StreamerInfo for class :" 
+    a_out << "streamer_info for class :" 
           << " " << m_name << ", version=" << m_streamed_class_version
           << std::endl;
     tools_vforcit(streamer_element*,m_elements,it) (*it)->out(a_out);
   }
 public:
-  StreamerInfo(ifac& a_fac)
+  streamer_info(ifac& a_fac)
   :m_fac(a_fac)
   ,m_name()
   ,m_title()
   ,m_check_sum(0)
   ,m_streamed_class_version(0)
-  ,m_elements(a_fac,true)
+  ,m_elements(a_fac)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
   }
-  virtual ~StreamerInfo(){
+  virtual ~streamer_info(){
 #ifdef TOOLS_MEM
     mem::decrement(s_class().c_str());
 #endif
   }
 protected:
-  StreamerInfo(const StreamerInfo& a_from)
+  streamer_info(const streamer_info& a_from)
   :iro(a_from)
   ,m_fac(a_from.m_fac)
   ,m_name(a_from.m_name)
@@ -233,7 +237,7 @@ protected:
     mem::increment(s_class().c_str());
 #endif
   }
-  StreamerInfo& operator=(const StreamerInfo& a_from){
+  streamer_info& operator=(const streamer_info& a_from){
     m_name = a_from.m_name;
     m_title = a_from.m_name;
     m_check_sum = a_from.m_check_sum;
@@ -242,6 +246,11 @@ protected:
     return *this;
   }  
 public:
+  const std::string& name() const {return m_name;}
+  streamer_element* find_streamer_element(size_t a_index) const {
+    if(a_index>=m_elements.size()) return 0;
+    return m_elements[a_index];
+  }    
 protected:
   ifac& m_fac;
 protected: //Named
@@ -251,7 +260,7 @@ protected:
   unsigned int m_check_sum;    //checksum of original class
   int m_streamed_class_version; //Class version identifier
   //int fNumber;               //!Unique identifier
-  ObjArray<streamer_element> m_elements; //Array of TStreamerElements
+  obj_array<streamer_element> m_elements; //Array of TStreamerElements
 };
 
 }}

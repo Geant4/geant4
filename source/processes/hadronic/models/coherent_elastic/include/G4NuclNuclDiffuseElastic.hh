@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh 94676 2015-12-02 09:51:20Z gunter $
 //
 //
 // G4 Model: optical elastic scattering with 4-momentum balance 
@@ -95,7 +94,9 @@ public:
   G4double SampleTableT(const G4ParticleDefinition* aParticle, 
                          G4double p, G4double Z, G4double A);
 
-  G4double SampleThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double A);
+  G4double SampleThetaCMS( const G4ParticleDefinition* aParticle, G4double p, G4double A);
+
+  G4double SampleCoulombMuCMS( const G4ParticleDefinition* aParticle, G4double p);
 
   G4double SampleTableThetaCMS(const G4ParticleDefinition* aParticle, G4double p, 
                                      G4double Z, G4double A);
@@ -358,6 +359,7 @@ private:
   G4double fEtaRatio;
 
   G4double fReZ;
+  G4double fCoulombMuC;
 
 };
 

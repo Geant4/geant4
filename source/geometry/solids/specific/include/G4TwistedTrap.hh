@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TwistedTrap.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4TwistedTrap
 //
 // Class description:
@@ -58,13 +50,10 @@
 //  with polar,azimuthal and tilt angles set to zero.
 //
  
-// Author:
-//
-//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
-#ifndef __G4TWISTEDTRAP__
-#define __G4TWISTEDTRAP__
+#ifndef G4TWISTEDTRAP_HH
+#define G4TWISTEDTRAP_HH
 
 #include "G4VTwistedFaceted.hh"
 
@@ -72,7 +61,7 @@ class G4TwistedTrap : public G4VTwistedFaceted
 {
   public:  // with description
 
-    G4TwistedTrap(const G4String &pName,
+    G4TwistedTrap(const G4String& pName,
                         G4double  pPhiTwist,
                         G4double  pDx1,  // half x length at -pDz,-pDy
                         G4double  pDx2,  // half x length at -pDz,+pDy
@@ -80,7 +69,7 @@ class G4TwistedTrap : public G4VTwistedFaceted
                         G4double  pDz);
 
 
-    G4TwistedTrap(const G4String &pName,       // Name of instance
+    G4TwistedTrap(const G4String& pName,       // Name of instance
                         G4double  pPhiTwist,   // twist angle
                         G4double  pDz,     // half z length
                         G4double  pTheta,  // direction between end planes
@@ -126,7 +115,6 @@ class G4TwistedTrap : public G4VTwistedFaceted
     G4TwistedTrap(const G4TwistedTrap& rhs);
     G4TwistedTrap& operator=(const G4TwistedTrap& rhs); 
       // Copy constructor and assignment operator.
-
 } ;
 
 #endif

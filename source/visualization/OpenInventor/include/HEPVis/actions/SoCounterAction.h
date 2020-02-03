@@ -42,7 +42,7 @@ public:
   enum LookFor { NODE = 1,TYPE = 2, NAME = 3 };
   void setLookFor(LookFor);
   void setType(const SoType,SbBool = TRUE);
-  void setName(const SbName);
+//  void setName(const SbName);
 public:
   int getCount() const;
 protected:

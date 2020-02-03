@@ -1,0 +1,72 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_image_reader
+#define tools_image_reader
+
+#include "forit"
+
+#include <string>
+#include <vector>
+
+namespace tools {
+namespace image {
+
+class ireader {
+public:
+  virtual ~ireader() {}
+public:
+  virtual ireader* copy() const = 0;
+  virtual bool is(const std::string&) const = 0;
+  virtual bool infos(std::ostream& a_out,const std::string& a_file,
+                     unsigned int& a_width,unsigned int& a_height,
+                     unsigned int& a_bpp) const = 0;
+  virtual unsigned char* read(std::ostream& a_out,const std::string& a_file,
+                              unsigned int& a_width,unsigned int& a_height,
+                              unsigned int& a_bpp) const = 0;
+  virtual unsigned char* read_part(std::ostream& a_out,
+                                   const std::string& a_file,
+                                   unsigned int a_sx,unsigned int a_sy,
+                                   unsigned int a_sw,unsigned int a_sh,
+                                   unsigned int& a_rw,unsigned int& a_rh,
+                                   unsigned int& a_rbpp) const = 0;
+};
+
+class readers {
+public:
+  typedef std::pair<std::string,ireader*> named_reader;
+public:
+  readers(){}
+  virtual ~readers(){_clear();}
+public:
+  readers(const readers& a_from) {
+    _copy(a_from.m_readers);
+  }
+  readers& operator=(const readers& a_from){
+    if(&a_from==this) return *this;
+    _copy(a_from.m_readers);
+    return *this;
+  }
+public:
+  void add_reader(const std::string& a_name,ireader* a_reader) {
+    m_readers.push_back(named_reader(a_name,a_reader)); //take ownership of a_reader.
+  }
+  const std::vector<named_reader>& named_readers() const {return m_readers;}
+protected:
+  void _clear(){
+    tools_vforit(named_reader,m_readers,it) delete (*it).second;
+    m_readers.clear();
+  }
+  void _copy(const std::vector<named_reader>& a_from) {
+    _clear();
+    tools_vforcit(named_reader,a_from,it) {
+      m_readers.push_back(named_reader((*it).first,(*it).second->copy()));
+    }
+  }
+protected:
+  std::vector<named_reader> m_readers;  //have a vector (and not a map) since the order is important.
+};
+
+}}
+
+#endif

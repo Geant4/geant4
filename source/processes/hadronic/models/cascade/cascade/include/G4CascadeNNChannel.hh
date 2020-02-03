@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeNNChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
+//
 
 #ifndef G4_CASCADE_NN_CHANNEL_HH
 #define G4_CASCADE_NN_CHANNEL_HH
@@ -33,9 +33,10 @@
 #include "G4PionNucSampler.hh"
 
 struct G4CascadeNNChannelData {
-  typedef G4CascadeData<30,1,6,18,32,7,8,10,11> data_t;
+  typedef G4CascadeData<30,1,6,18,32,48,63,73,79> data_t;
   static const data_t data;
 };
+
 
 class G4CascadeNNChannel
   : public G4CascadeFunctions<G4CascadeNNChannelData,G4PionNucSampler> {
@@ -45,7 +46,7 @@ public:
   virtual ~G4CascadeNNChannel() {;}
 
   // Will replace interpolation of 0-10 MeV bin on total and elastic
-  virtual G4double
+  virtual G4double 
   findCrossSection(G4double ke, const G4double (&xsec)[30]) const;
 };
 

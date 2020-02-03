@@ -23,25 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ParameterisationCons.hh 73433 2013-08-27 11:05:39Z gcosmo $
-//
-// classes G4ParameterisationConsRho,
-//         G4ParameterisationConsPhi,
-//         G4ParameterisationConsZ
+// G4ParameterisationCons[Rho/Phi/Z]
 //
 // Class description:
 //
 // These classes represent the parameterised positioning equivalent to 
 // dividing a G4Cons along one of each axis Rho, Phi, Z.
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
 // --------------------------------------------------------------------
-#ifndef G4ParameterisationCons_H
-#define G4ParameterisationCons_H 1
+#ifndef G4PARAMETERISATIONCONS_HH
+#define G4PARAMETERISATIONCONS_HH 1
 
 #include "G4VDivisionParameterisation.hh"
 

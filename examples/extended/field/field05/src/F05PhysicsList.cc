@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: F05PhysicsList.cc 89451 2015-04-10 08:39:38Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file field/field05/src/F05PhysicsList.cc
 /// \brief Implementation of the F05PhysicsList class

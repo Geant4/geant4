@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/include/ParRunManager.hh
+/// \file ParRunManager.hh
 /// \brief Definition of the ParRunManager class
 //
-// $Id: ParRunManager.hh 78055 2013-12-03 08:27:48Z gcosmo $
 //
 // --------------------------------------------------------------------
 //                   Parallel Library for Geant4

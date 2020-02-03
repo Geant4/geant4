@@ -1,0 +1,144 @@
+# G.A.P.Cirrone,
+# pablo.cirrone@lns.infn.it
+#
+# Default macro file. It is called if no argument is provided at run
+# and when the PHYSLIST enviroment variable is OFF
+# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!>
+
+#########################
+# Set of the verboses
+#
+/control/verbose 0
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+##########################
+# Set of the physic models
+#
+#/Physics/addPhysics QGSP_BIC_EMY
+
+/Physics/addPhysics HADRONTHERAPY_1
+/run/numberOfThreads 1
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+##########################
+# Visualisation
+#
+/vis/open OGLI 600x600-0+0
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoom 1
+/vis/viewer/pan -10  0 cm
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+####################################################
+# Set here the CUT and the STEP MAX for the tracking.
+# Suggested values of cut and step
+#
+# Set cuts OUTSIDE the detector
+#
+/run/setCut 1 m
+
+# Set cuts ONLY inside the detector
+#
+/run/setCutForRegion DetectorLog 0.1 mm
+
+
+/run/setCutForAGivenParticle e- 0.1 mm
+/run/setCutForAGivenParticle e+ 0.1 mm
+/run/setCutForAGivenParticle proton 0.1 mm
+#/Step/waterPhantomStepMax 0.1 mm
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+
+#---------------------------gps-----------------
+/gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2. mm
+/gps/particle proton
+#/gps/particle ion
+#/gps/ion 6 12 6
+/gps/pos/type Beam
+
+# the incident surface is in the y-z plane
+#
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/ang/type beam1d
+/gps/ang/sigma_r 0.028 deg
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 60.0 MeV
+#/gps/ene/sigma 0.25 MeV
+#/gps/ene/mono 744 MeV
+#/gps/ene/sigma 0.740 MeV
+
+###################################################
+#		DETECTOR DESCRIPTION
+########################################################
+# USE THE FOLLOWING FOUR LINES FOR DEFINITION OF PHANTOM
+########################################################
+#
+#/changePhantom/position 20. 0. 0. cm
+#/changePhantom/update
+
+/changePhantom/size 40 40 40  cm
+/changePhantom/position 20 0 0 cm
+
+###################################################
+# USE THE FOLLOWING FOR A VOXELLIZED DETECTOR
+###################################################
+#
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize .1 40 40 mm
+
+# Put the detector in the lower left corner of the phantom
+#
+/changeDetector/displacement 0 18 18 cm
+/changePhantom/update
+
+#########################
+# Display the event number
+# during the run
+#
+/event/printEventNumber 100
+
+#########################
+# Start of the run
+#
+# If secondary particles dose & fluence are needed
+/analysis/secondary true
+/analysis/computeLet
+
+# Default material is water liquid
+/changePhantom/material G4_WATER
+
+/run/printProgress 1000
+/run/beamOn 1000
+/tracking/verbose 0

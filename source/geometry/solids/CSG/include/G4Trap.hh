@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Trap.hh 83851 2014-09-19 10:12:12Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Trap
 //
 // Class description:
@@ -85,24 +78,22 @@
 //      TrapSidePlane fPlanes[4]   Plane equations of the faces not at +/-fDz
 //                                 NOTE: order is important !!!
 
-// History:
-//
 // 23.3.94 P.Kent: Old C++ code converted to tolerant geometry
-// 9.9.96  V.Grichine: Final modifications before to commit 
-// 1.11.96 V.Grichine: Costructors for Right Angular Wedge from STEP, G4Trd/Para
-// 8.12.97 J.Allison: Added "nominal" contructor and method SetAllParameters.
+// 9.9.96  V.Grichine: Final modifications before to commit
+// 8.12.97 J.Allison: Added "nominal" contructor and method SetAllParameters
 // --------------------------------------------------------------------
-
-#ifndef G4Trap_HH
-#define G4Trap_HH
+#ifndef G4TRAP_HH
+#define G4TRAP_HH
 
 #include "G4Types.hh"
 
 struct TrapSidePlane
 {
     G4double a,b,c,d;    // Normal unit vector (a,b,c)  and offset (d)
-        // => Ax+By+Cz+D=0  
+        // => Ax+By+Cz+D=0
 };
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UTRAP 1
@@ -148,7 +139,7 @@ class G4Trap : public G4CSGSolid
                   G4double pDy1,  G4double pDy2,
                   G4double pDz );
       //
-      // Constructor for G4Trd       
+      // Constructor for G4Trd
 
      G4Trap(const G4String& pName,
                   G4double pDx, G4double pDy, G4double pDz,
@@ -178,7 +169,7 @@ class G4Trap : public G4CSGSolid
     inline G4double GetTanAlpha2()    const;
       //
       // Returns coordinates of unit vector along straight
-      // line joining centers of -/+fDz planes   
+      // line joining centers of -/+fDz planes
 
     inline TrapSidePlane GetSidePlane( G4int n ) const;
     inline G4ThreeVector GetSymAxis() const;
@@ -196,33 +187,36 @@ class G4Trap : public G4CSGSolid
                             G4double pDx3,
                             G4double pDx4,
                             G4double pAlp2 );
-                                
+
   // Methods for solid
-    
-    inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
-                                  G4double& pMin, G4double& pMax ) const;    
-        
+                                  G4double& pMin, G4double& pMax ) const;
+
     EInside Inside( const G4ThreeVector& p ) const;
-    
+
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
 
     G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
-    
+
     G4double DistanceToIn( const G4ThreeVector& p ) const;
-    
+
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=false,
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
-         
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
+
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
     G4GeometryType GetEntityType() const;
@@ -246,51 +240,39 @@ class G4Trap : public G4CSGSolid
       // persistifiable objects.
 
     G4Trap(const G4Trap& rhs);
-    G4Trap& operator=(const G4Trap& rhs); 
+    G4Trap& operator=(const G4Trap& rhs);
       // Copy constructor and assignment operator.
 
   protected:  // with description
 
-    G4bool MakePlanes();
+    void MakePlanes();
+    void MakePlanes(const G4ThreeVector pt[8]);
     G4bool MakePlane( const G4ThreeVector& p1,
                       const G4ThreeVector& p2,
-                      const G4ThreeVector& p3, 
+                      const G4ThreeVector& p3,
                       const G4ThreeVector& p4,
                             TrapSidePlane& plane ) ;
 
-    G4ThreeVectorList*
-    CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4CSGSolid:: ClipCrossSection and ClipBetweenSections
-
   private:
+
+    void CheckParameters();
+      // Check parameters
+
+    void GetVertices(G4ThreeVector pt[8]) const;
+      // Compute coordinates of the trap vertices from planes
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
-    inline G4double GetFaceArea(const G4ThreeVector& p1,
-                                const G4ThreeVector& p2, 
-                                const G4ThreeVector& p3,
-                                const G4ThreeVector& p4);
-      //
-      // Provided four corners of plane in clockwise fashion,
-      // it returns the area of finite face
-
-    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-                                  G4ThreeVector p2, G4ThreeVector p3, 
-                                  G4double& area) const;
-      //
-      // Returns a random point on the surface of one of the faces
-
   private:
 
+    G4double halfCarTolerance;
     G4double fDz,fTthetaCphi,fTthetaSphi;
     G4double fDy1,fDx1,fDx2,fTalpha1;
     G4double fDy2,fDx3,fDx4,fTalpha2;
     TrapSidePlane fPlanes[4];
-
+    G4int fTrapType;
 };
 
 #include "G4Trap.icc"

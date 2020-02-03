@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.hh 93113 2015-10-07 07:49:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,23 +64,23 @@ class G4eplusPolarizedAnnihilation : public G4eplusAnnihilation
 
 public:
 
-  G4eplusPolarizedAnnihilation(const G4String& name = "pol-annihil");
+  explicit G4eplusPolarizedAnnihilation(const G4String& name = "pol-annihil");
 
   virtual ~G4eplusPolarizedAnnihilation();
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
   virtual G4double GetMeanFreePath(const G4Track& track,
 				   G4double previousStepSize,
-				   G4ForceCondition* condition);
+				   G4ForceCondition* condition) override;
 
   virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition);
+                             G4ForceCondition* condition) override;
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
 private:
 
@@ -106,7 +105,7 @@ private:
   G4PolarizedAnnihilationModel* emModel;
   G4ThreeVector theTargetPolarization;
 
-  G4PhysicsTable* theAsymmetryTable;          // table for cross section assym.
+  G4PhysicsTable* theAsymmetryTable;           // table for cross section assym.
   G4PhysicsTable* theTransverseAsymmetryTable; // table for transverse cross section assym.
 };
 

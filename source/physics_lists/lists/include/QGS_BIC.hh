@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGS_BIC.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,31 +35,23 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQGS_BIC_h
-#define TQGS_BIC_h 1
-
-#include <CLHEP/Units/SystemOfUnits.h>
+#ifndef QGS_BIC_h
+#define QGS_BIC_h 1
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TQGS_BIC: public T
+
+class QGS_BIC: public G4VModularPhysicsList
 {
 public:
-  TQGS_BIC(G4int ver = 1);
-  virtual ~TQGS_BIC();
+  QGS_BIC(G4int ver = 1);
+  virtual ~QGS_BIC()=default;
   
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+  QGS_BIC(const QGS_BIC &) = delete;
+  QGS_BIC & operator=(const QGS_BIC &)=delete;
+  
 };
-#include "QGS_BIC.icc"
-typedef TQGS_BIC<G4VModularPhysicsList> QGS_BIC;
 
 #endif
 

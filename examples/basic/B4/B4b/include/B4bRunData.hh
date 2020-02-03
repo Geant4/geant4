@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B4bRunData.hh 69223 2013-04-23 12:36:10Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 /// \file B4bRunData.hh
 /// \brief Definition of the B4bRunData class

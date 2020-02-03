@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 77567 2013-11-26 09:40:31Z gcosmo $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/constructors/electromagnetic library.  
 #  Gunter Folger 10-Jan-2012.
@@ -32,6 +31,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/run/include \
 	    -I$(G4BASE)/physics_lists/builders/include \
+	    -I$(G4BASE)/physics_lists/constructors/electromagnetic/include \
 	    -I$(G4BASE)/physics_lists/constructors/factory/include \
 	    -I$(G4BASE)/physics_lists/util/include \
             -I$(G4BASE)/processes/management/include \
@@ -60,6 +60,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+	    -I$(G4BASE)/processes/hadronic/models/gamma_nuclear/include \
+            -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \

@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 73633 2013-09-03 09:56:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -66,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4SimpleLocator.hh
         G4TransportationManager.hh
         G4TransportationManager.icc
+        G4VExternalNavigation.hh
         G4VIntersectionLocator.hh
         G4VIntersectionLocator.icc
         G4VoxelNavigation.hh
@@ -95,6 +95,7 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4SafetyHelper.cc
         G4SimpleLocator.cc
         G4TransportationManager.cc
+        G4VExternalNavigation.cc
         G4VIntersectionLocator.cc
         G4VoxelNavigation.cc
         G4VoxelSafety.cc

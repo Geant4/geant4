@@ -9,6 +9,8 @@
 #include "lpat"
 #include "sf_enum"
 #include "render_action"
+#include "pick_action"
+#include "bbox_action"
 
 namespace tools {
 namespace sg {
@@ -16,33 +18,23 @@ namespace sg {
 class draw_style : public node {
   TOOLS_NODE(draw_style,tools::sg::draw_style,node)
 public:
-  enum e_style {
-    filled,
-    lines,
-    points,
-    invisible
-  };
-
-  sf_enum<e_style> style;
+  sf_enum<draw_type> style;
   sf<float> line_width;
   sf<lpat> line_pattern;
   sf<float> point_size;
   sf<bool> cull_face;
   sf<bool> winding_ccw;
-
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::draw_style)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(style)
-      TOOLS_ADD_FIELD_DESC(line_width)
-      TOOLS_ADD_FIELD_DESC(line_pattern)
-      TOOLS_ADD_FIELD_DESC(point_size)
-      TOOLS_ADD_FIELD_DESC(cull_face)
-      TOOLS_ADD_FIELD_DESC(winding_ccw)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),6, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(style),
+      TOOLS_ARG_FIELD_DESC(line_width),
+      TOOLS_ARG_FIELD_DESC(line_pattern),
+      TOOLS_ARG_FIELD_DESC(point_size),
+      TOOLS_ARG_FIELD_DESC(cull_face),
+      TOOLS_ARG_FIELD_DESC(winding_ccw)
+    );
     return s_v;
   }
 private:
@@ -57,29 +49,26 @@ private:
 public:
   virtual void render(render_action& a_action) {
     state& state = a_action.state();
-    state.m_line_width = line_width;
-    state.m_line_pattern = line_pattern;
-    state.m_point_size = point_size;
-    state.m_GL_CULL_FACE = cull_face;
-    state.m_winding =
-      winding_ccw.value()?tools::sg::winding_ccw:tools::sg::winding_cw;
+    _set_state(state);
 
-    if(style.value()==lines) {
+    if(style.value()==draw_lines) {
       //no LINE_STIPPLE in GLES.
       //::glEnable(GL_LINE_STIPPLE); //done in viewer::render()
       //::glLineStipple(1,line_pattern.value());
       a_action.line_width(state.m_line_width);
-    } else if(style.value()==points) {
+    } else if(style.value()==draw_points) {
       a_action.point_size(state.m_point_size);
-    } else if(style.value()==filled) {
+    } else if(style.value()==draw_filled) {
       a_action.set_cull_face(state.m_GL_CULL_FACE);
       a_action.set_winding(state.m_winding);
     }
   }
+  virtual void pick(pick_action& a_action) {_set_state(a_action.state());}
+  virtual void bbox(bbox_action& a_action) {_set_state(a_action.state());}
 public:
   draw_style()
   :parent()
-  ,style(filled)
+  ,style(draw_filled)
   ,line_width(1) //NOTE : 0 induces a 501 gl error.
   ,line_pattern(line_solid)
   ,point_size(1)
@@ -112,6 +101,15 @@ public:
     winding_ccw = a_from.winding_ccw;
 
     return *this;
+  }
+protected:
+  void _set_state(state& a_state) {
+    a_state.m_draw_type = style;
+    a_state.m_line_width = line_width;
+    a_state.m_line_pattern = line_pattern;
+    a_state.m_point_size = point_size;
+    a_state.m_GL_CULL_FACE = cull_face;
+    a_state.m_winding = winding_ccw.value()?sg::winding_ccw:sg::winding_cw;
   }
 };
 

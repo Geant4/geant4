@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc 95478 2016-02-12 09:45:33Z gcosmo $
 //
 // G4VTransitionRadiation class -- implementation file
 
@@ -42,20 +41,23 @@
 #include "G4Region.hh"
 #include "G4TransportationManager.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4LossTableManager.hh"
 
 ///////////////////////////////////////////////////////////////////////
 
 G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
                                                       G4ProcessType type )
   : G4VDiscreteProcess(processName, type),
-    region(0),
-    model(0),
+    region(nullptr),
+    model(nullptr),
   nSteps(0),
-  gammaMin(100),
+  gammaMin(100.),
   cosDThetaMax(std::cos(0.1))
 {
   SetProcessSubType(fTransitionRadiation);
   Clear();
+  theManager = G4LossTableManager::Instance();
+  theManager->Register(this);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -63,6 +65,7 @@ G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
 G4VTransitionRadiation::~G4VTransitionRadiation()
 {
   Clear();
+  theManager->DeRegister(this);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -164,6 +167,24 @@ void G4VTransitionRadiation::SetModel(G4VTRModel* mod)
 void G4VTransitionRadiation::PrintInfoDefinition()
 {
   if(model) model->PrintInfo();
+}
+
+///////////////////////////////////////////////////////////////////////
+
+G4double G4VTransitionRadiation::GetMeanFreePath(
+                                const G4Track& track, G4double,
+                                G4ForceCondition* condition)
+{
+  if(nSteps > 0) {
+    *condition = StronglyForced;
+  } else {
+    *condition = NotForced;
+    if(track.GetKineticEnergy()/track.GetDefinition()->GetPDGMass() + 1.0 > gammaMin &&
+       track.GetVolume()->GetLogicalVolume()->GetRegion() == region) {
+         *condition = StronglyForced;
+    }
+  }
+  return DBL_MAX;      // so TR doesn't limit mean free path
 }
 
 ///////////////////////////////////////////////////////////////////////

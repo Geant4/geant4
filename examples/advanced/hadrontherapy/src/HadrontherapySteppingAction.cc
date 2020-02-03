@@ -125,6 +125,7 @@ G4Track* theTrack = aStep->GetTrack();
   
 
     
+<<<<<<< HEAD
    
   //if( (aStep->GetTLocateGlobalPointAndSeturack()->GetVolume()->GetName() == "PVirtualMag") 
  if((aStep->GetTrack()->GetVolume()->GetName()=="PVirtualMag") && aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-")
@@ -234,6 +235,33 @@ if ((namePre=="PhysicEntranceWindow")   &&
      }
 }
 
+=======
+    // The followings are calls to usefuls information retrieved at the step level
+    // Please, comment out them if want to use
+    
+   // G4Track* theTrack = aStep->GetTrack();
+    
+    G4StepPoint* PreStep = aStep->GetPreStepPoint();
+    G4StepPoint* PostStep = aStep->GetPostStepPoint();
+    
+    G4TouchableHandle touchPreStep = PreStep->GetTouchableHandle();
+    G4TouchableHandle touchPostStep = PostStep->GetTouchableHandle();
+    
+    //G4double PreStepX =PreStep->GetPosition().x();
+    //G4double PreStepY =PreStep->GetPosition().y();
+    //G4double PreStepZ =PreStep->GetPosition().z();
+    
+    //G4double PostStepX =PostStep->GetPosition().x();
+    //G4double PostStepY =PostStep->GetPosition().y();
+    //G4double PostStepZ  =PostStep->GetPosition().z();
+    
+    //To get the current volume:
+    G4VPhysicalVolume* volumePre = touchPreStep->GetVolume();
+    //G4VPhysicalVolume* volumePost =touchPostStep->GetVolume();
+    
+    //To get its name:
+    G4String namePre = volumePre->GetName();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 
                                                            /////////////////////////////////////////  proton in window //////////////////////////////////////////////////
@@ -316,6 +344,7 @@ if ((namePre=="PhysicGuardRing")  &&
        
      }
     
+<<<<<<< HEAD
    else
      {
       
@@ -514,6 +543,21 @@ if ((namePre=="PhysicVirtualOverBottom")  &&
 			<< G4endl;
        
      }
+=======
+    G4double eKin = aStep -> GetPreStepPoint() -> GetKineticEnergy();
+    
+    G4double PosX = aStep->GetTrack()->GetPosition().x();
+    G4double PosY = aStep->GetTrack()->GetPosition().y();
+    G4double PosZ = aStep->GetTrack()->GetPosition().z();
+    
+    G4String volume=  aStep->GetTrack()->GetVolume()->GetName();
+    G4Track* theTrack = aStep->GetTrack();
+    
+    //G4String material= aStep -> GetTrack() -> GetMaterial() -> GetName();
+    //G4cout << "material   " << material << G4endl;
+    //G4String volume=  aStep->GetTrack()->GetVolume()->GetName();
+    //G4String pvname= pv-> GetName();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     
    else
      {
@@ -535,6 +579,7 @@ if ((namePre=="PhysicVirtualOverBottom")  &&
      
 }
 
+<<<<<<< HEAD
 
                                                     /////////////////////////////////////////////  VIRTUAL LATERAL  ///////////////////////////////////////////////////////////////
    
@@ -684,9 +729,42 @@ if (((namePost=="PhysicVirtualLateral") && (namePre!="PhysicVirtualLateral"))&&
 #endif
 	}
     }
+=======
+    G4double momentumX =  aStep->GetTrack()->GetMomentumDirection().x();
+    G4double momentumY =  aStep->GetTrack()->GetMomentumDirection().y();
+    G4double momentumZ =  aStep->GetTrack()->GetMomentumDirection().z();
+    
+    
+    G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
+    G4int pdg = particleDef ->GetPDGEncoding();
+    
+    if(namePre == "VirtualLayer")
+    {
+        std::ofstream WriteDataIn("Virtual_Layer.txt", std::ios::app);
+        WriteDataIn
+        
+        <<   eKin             <<" " //  1
+        <<   PosX             <<" " //  2
+        <<   PosY             <<" " //  3
+        <<   PosZ             <<" " //  4
+        <<   momentumX        <<" " //  5
+        <<   momentumY        <<" " //  6
+        <<   momentumZ        <<" " //  7
+        <<   pdg
+        //<<   theTrack         << '\t' << "   "
+        
+        <<   G4endl;
+        
+        theTrack -> SetTrackStatus(fKillTrackAndSecondaries);
+        
+        
+    }
+    
+    
+    
+  
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
-
-
 
 
 

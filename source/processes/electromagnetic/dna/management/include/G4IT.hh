@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -51,6 +50,7 @@
 #include "G4ITType.hh"
 #include "G4ThreeVector.hh"
 #include "G4VUserTrackInformation.hh"
+#include "G4KDNode.hh"
 
 ///
 // To implement your own IT class, you should use
@@ -60,6 +60,9 @@
 ///
 
 class G4IT;
+template<>
+G4KDNode<G4IT>::~G4KDNode();
+
 class G4TrackingInformation;
 //template<typename PointT> class G4KDNode;
 class G4KDNode_Base;

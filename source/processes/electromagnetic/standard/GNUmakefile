@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 66810 2013-01-12 16:01:59Z gcosmo $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -30,6 +29,10 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/materials/include
+
+ifdef G4LIB_BUILD_ZLIB
+  CPPFLAGS += -I$(G4BASE)/externals/zlib/include
+endif
 
 include $(G4INSTALL)/config/common.gmk
 

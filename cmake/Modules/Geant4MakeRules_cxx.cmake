@@ -24,15 +24,28 @@ endfunction()
 #-----------------------------------------------------------------------
 # GNU C++ or Clang/AppleClang Compiler on all(?) platforms
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+<<<<<<< HEAD
   set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe")
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g -DG4FPE_DEBUG")
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
+=======
+  # Warnings
+  set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow")
+  # Use pipes rather than temp files
+  set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -pipe")
+
+  # Additional per-mode flags
+  set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g")
+  set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG")
+  # Assist auto-vectorization
+  set(CMAKE_CXX_FLAGS_RELEASE_INIT "${CMAKE_CXX_FLAGS_RELEASE_INIT} -fno-trapping-math -ftree-vectorize -fno-math-errno")
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
-  # Remove superfluous "unused argument" "warnings" from Clang
+  # Remove superfluous "unused argument" and "GL deprecation" "warnings" from Clang
   if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-    set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -Qunused-arguments")
+    set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -Qunused-arguments -DGL_SILENCE_DEPRECATION")
   endif()
 
   # Though it should be the default, always use libc++ with AppleClang
@@ -41,6 +54,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   endif()
 
   # Extra Geant4 modes
+  # - Debug_FPE: Core Debug mode plus FPE)
+  set(CMAKE_CXX_FLAGS_DEBUG_FPE_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} -DG4FPE_DEBUG")
+
   # - TestRelease
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-g -DG4DEBUG_VERBOSE -DG4FPE_DEBUG")
 
@@ -67,7 +83,6 @@ if(MSVC)
   # Extra modes
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-MDd -Zi -G4DEBUG_VERBOSE")
   set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-MDd -Zi")
-
 endif()
 
 #-----------------------------------------------------------------------

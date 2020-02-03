@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -97,14 +96,13 @@ G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
 {
   if (IsMaster() || fLocalTable)
     {
-      std::map <G4int,G4PhysicsTable*>::iterator i;
       if (logAtomicShellXS)
 	{
-	  for (i=logAtomicShellXS->begin();i != logAtomicShellXS->end();i++)
+	  for (auto& item : (*logAtomicShellXS))
 	    {
-	      G4PhysicsTable* tab = i->second;
+	      //G4PhysicsTable* tab = item.second;
 	      //tab->clearAndDestroy();
-	      delete tab;
+	      delete item.second;
 	    }
 	}
       delete logAtomicShellXS;
@@ -408,11 +406,19 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
 		{
 		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
-		  bindingEnergy -= itsEnergy;
-		  if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
-		    energyInFluorescence += itsEnergy;
-		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
-		    energyInAuger += itsEnergy;
+		  if (itsEnergy < bindingEnergy) // valid secondary, generate it
+		    {
+		      bindingEnergy -= itsEnergy;
+		      if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
+			energyInFluorescence += itsEnergy;
+		      else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
+			energyInAuger += itsEnergy;
+		    }
+		  else //invalid secondary: takes more than the available energy: delete it
+		    {
+		      delete (*fvect)[j];
+		      (*fvect)[j] = nullptr;
+		    }		    
 		}
 	    }
 	}
@@ -421,11 +427,10 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   //Residual energy is deposited locally
   localEnergyDeposit += bindingEnergy;
 
-  if (localEnergyDeposit < 0)
+  if (localEnergyDeposit < 0) //Should not be: issue a G4Exception (warning)
     {
-      G4cout << "WARNING - "
-	     << "G4PenelopePhotoElectricModel::SampleSecondaries() - Negative energy deposit"
-	     << G4endl;
+      G4Exception("G4PenelopePhotoElectricModel::SampleSecondaries()",
+		  "em2099",JustWarning,"WARNING: Negative local energy deposit");
       localEnergyDeposit = 0;
     }
 
@@ -535,7 +540,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
       G4cout << "Going to read PhotoElectric data files for Z=" << Z << G4endl;
     }
 
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     {
       G4String excep = "G4PenelopePhotoElectricModel - G4LEDATA environment variable not set!";

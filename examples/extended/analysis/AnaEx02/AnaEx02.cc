@@ -27,7 +27,10 @@
 /// \brief Main program of the analysis/AnaEx02 example
 //
 //
+<<<<<<< HEAD
 // $Id: AnaEx02.cc 81444 2014-05-28 14:28:20Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

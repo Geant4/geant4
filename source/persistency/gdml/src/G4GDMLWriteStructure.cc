@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc 91789 2015-08-06 08:14:46Z gcosmo $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -55,8 +54,14 @@
 #include "G4Positron.hh"
 #include "G4Proton.hh"
 
+#include "G4VSensitiveDetector.hh"
+#include "G4AssemblyStore.hh"
+#include "G4AssemblyVolume.hh"
+
+G4int G4GDMLWriteStructure::levelNo = 0;  // Counter for level being exported
+
 G4GDMLWriteStructure::G4GDMLWriteStructure()
-  : G4GDMLWriteParamvol(), cexport(false)
+  : G4GDMLWriteParamvol(), cexport(false), maxLevel(INT_MAX)
 {
   reflFactory = G4ReflectionFactory::Instance();
 }
@@ -226,6 +231,63 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    volumeElement->appendChild(replicavolElement);
 }
 
+
+void G4GDMLWriteStructure::AssemblyWrite(xercesc::DOMElement* volumeElement,
+					const int assemblyID)
+{
+
+  G4AssemblyStore* assemblies = G4AssemblyStore::GetInstance();
+  G4AssemblyVolume* myassembly = assemblies->GetAssembly(assemblyID);
+  
+  xercesc::DOMElement* assemblyElement = NewElement("assembly");
+  G4String name = "Assembly_" + std::to_string(assemblyID);
+  
+  assemblyElement->setAttributeNode(NewAttribute("name",name));
+  
+  std::vector<G4AssemblyTriplet>::iterator vit = myassembly->GetTripletsIterator();
+  
+  int depth = 0;
+  const G4String ModuleName;
+  
+  for (size_t i5=0; i5<myassembly->TotalTriplets(); i5++)
+    {
+      TraverseVolumeTree((*vit).GetVolume(),depth+1);
+
+      const G4ThreeVector rot = GetAngles((*vit).GetRotation()->inverse());
+      const G4ThreeVector pos = (*vit).GetTranslation();
+  
+      const G4String pname = GenerateName((*vit).GetVolume()->GetName()+"_pv", &(*vit));
+  
+      xercesc::DOMElement* physvolElement = NewElement("physvol");
+      physvolElement->setAttributeNode(NewAttribute("name",pname));
+  
+      assemblyElement->appendChild(physvolElement);
+  
+      const G4String volumeref = GenerateName((*vit).GetVolume()->GetName(), (*vit).GetVolume());
+  
+      xercesc::DOMElement* volumerefElement = NewElement("volumeref");
+      volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
+      physvolElement->appendChild(volumerefElement);
+  
+      if (std::fabs(pos.x()) > kLinearPrecision
+	  || std::fabs(pos.y()) > kLinearPrecision
+	  || std::fabs(pos.z()) > kLinearPrecision)
+	{
+	  PositionWrite(physvolElement,"Position_" + std::to_string(i5), pos);
+	}
+      if (std::fabs(rot.x()) > kAngularPrecision
+	  || std::fabs(rot.y()) > kAngularPrecision
+	  || std::fabs(rot.z()) > kAngularPrecision)
+	{
+	  RotationWrite(physvolElement,"Rotation_" + std::to_string(i5), rot);
+	}            
+      vit++;
+    }
+
+  volumeElement->appendChild(assemblyElement);
+}
+
+
 void G4GDMLWriteStructure::
 BorderSurfaceCache(const G4LogicalBorderSurface* const bsurf)
 {
@@ -235,10 +297,11 @@ BorderSurfaceCache(const G4LogicalBorderSurface* const bsurf)
 
    // Generate the new element for border-surface
    //
+   const G4String& bsname = GenerateName(bsurf->GetName(), bsurf);
+   const G4String& psname = GenerateName(psurf->GetName(), psurf);
    xercesc::DOMElement* borderElement = NewElement("bordersurface");
-   borderElement->setAttributeNode(NewAttribute("name", bsurf->GetName()));
-   borderElement->setAttributeNode(NewAttribute("surfaceproperty",
-                                                psurf->GetName()));
+   borderElement->setAttributeNode(NewAttribute("name", bsname));
+   borderElement->setAttributeNode(NewAttribute("surfaceproperty", psname));
 
    const G4String volumeref1 = GenerateName(bsurf->GetVolume1()->GetName(),
                                             bsurf->GetVolume1());
@@ -276,10 +339,11 @@ SkinSurfaceCache(const G4LogicalSkinSurface* const ssurf)
 
    // Generate the new element for border-surface
    //
+   const G4String& ssname = GenerateName(ssurf->GetName(), ssurf);
+   const G4String& psname = GenerateName(psurf->GetName(), psurf);
    xercesc::DOMElement* skinElement = NewElement("skinsurface");
-   skinElement->setAttributeNode(NewAttribute("name", ssurf->GetName()));
-   skinElement->setAttributeNode(NewAttribute("surfaceproperty",
-                                              psurf->GetName()));
+   skinElement->setAttributeNode(NewAttribute("name", ssname));
+   skinElement->setAttributeNode(NewAttribute("surfaceproperty", psname));
 
    const G4String volumeref = GenerateName(ssurf->GetLogicalVolume()->GetName(),
                                            ssurf->GetLogicalVolume());
@@ -348,8 +412,9 @@ G4GDMLWriteStructure::GetBorderSurface(const G4VPhysicalVolume* const pvol)
     for (pos = btable->begin(); pos != btable->end(); pos++)
     {
       if (pvol == (*pos)->GetVolume1())  // just the first in the couple 
-      {                                  // is enough
-        surf = *pos; break;
+      {                                  // could be enough?
+        surf = *pos; // break;
+        BorderSurfaceCache(surf);
       }
     }
   }
@@ -358,8 +423,9 @@ G4GDMLWriteStructure::GetBorderSurface(const G4VPhysicalVolume* const pvol)
 
 void G4GDMLWriteStructure::SurfacesWrite()
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Writing surfaces..." << G4endl;
-
+#endif
    std::vector<xercesc::DOMElement*>::const_iterator pos;
    for (pos = skinElementVec.begin(); pos != skinElementVec.end(); pos++)
    {
@@ -373,8 +439,34 @@ void G4GDMLWriteStructure::SurfacesWrite()
 
 void G4GDMLWriteStructure::StructureWrite(xercesc::DOMElement* gdmlElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Writing structure..." << G4endl;
+#endif
 
+   // filling the list of phys volumes that are parts of assemblies
+
+   G4AssemblyStore* assemblies = G4AssemblyStore::GetInstance();
+
+   for(G4AssemblyStore::iterator it=assemblies->begin(); it!=assemblies->end(); it++)
+     {
+       
+       std::vector<G4VPhysicalVolume*>::iterator vit = (*it)->GetVolumesIterator();
+       
+       for (size_t i5=0; i5<(*it)->TotalImprintedVolumes(); i5++)
+	 {
+	   G4String pvname = (*vit)->GetName();   
+	   std::size_t pos = pvname.find("_impr_") + 6;
+	   G4String impID = pvname.substr(pos);
+	   
+	   pos = impID.find("_");
+	   impID = impID.substr(0, pos);
+	   	   	   
+	   assemblyVolMap[*vit] = (*it)->GetAssemblyID();
+	   imprintsMap[*vit] = std::atoi(impID.c_str());
+	   vit++;
+	 }
+     }
+   
    structureElement = NewElement("structure");
    gdmlElement->appendChild(structureElement);
 }
@@ -392,6 +484,8 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
    G4int trans=0;
 
    std::map<const G4LogicalVolume*, G4GDMLAuxListType>::iterator auxiter; 
+
+   levelNo++;
 
    while (true) // Solve possible displacement/reflection
    {            // of the referenced solid!
@@ -442,12 +536,18 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    const G4String name
      = GenerateName(tmplv->GetName(), tmplv);
-   const G4String materialref
-         = GenerateName(volumePtr->GetMaterial()->GetName(),
-                        volumePtr->GetMaterial());
-   const G4String solidref
-         = GenerateName(solidPtr->GetName(),solidPtr);
 
+   G4String materialref = "NULL";
+     
+   if(volumePtr->GetMaterial())
+     {
+       materialref = GenerateName(volumePtr->GetMaterial()->GetName(),
+				  volumePtr->GetMaterial());
+     }
+   
+   const G4String solidref
+     = GenerateName(solidPtr->GetName(),solidPtr);
+       
    xercesc::DOMElement* volumeElement = NewElement("volume");
    volumeElement->setAttributeNode(NewAttribute("name",name));
    xercesc::DOMElement* materialrefElement = NewElement("materialref");
@@ -457,8 +557,15 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
    solidrefElement->setAttributeNode(NewAttribute("ref",solidref));
    volumeElement->appendChild(solidrefElement);
 
-   const G4int daughterCount = volumePtr->GetNoDaughters();
-       
+   G4int daughterCount = volumePtr->GetNoDaughters();
+
+   if (levelNo == maxLevel)  // Stop exporting if reached levels limit
+   {
+     daughterCount = 0;
+   }
+
+   std::vector<int> addedImprints;
+   
    for (G4int i=0;i<daughterCount;i++)   // Traverse all the children!
      {
        const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
@@ -511,23 +618,111 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 		 }
 	       ReplicavolWrite(volumeElement,physvol); 
 	     }
-	   else   // Is it a physvol?
+	   else // Is it a physvol or an assembly?
 	     {
-	       G4RotationMatrix rot;
-	       if (physvol->GetFrameRotation() != 0)
+	       if(assemblyVolMap.find(physvol) != assemblyVolMap.end())
 		 {
-		   rot = *(physvol->GetFrameRotation());
+		   int assemblyID = assemblyVolMap[physvol];
+		   
+		   G4String assemblyref = "Assembly_" + std::to_string(assemblyID);
+
+		   // here I need to retrieve the imprint ID
+
+		   G4int imprintID = imprintsMap[physvol];
+
+		   // there are 2 steps:
+		   //
+		   // 1) add assembly to the structure if that has not yet been done
+		   // (but after the constituents volumes have been added)
+		   //
+
+		   if(std::find(addedAssemblies.begin(), addedAssemblies.end(), assemblyID) == addedAssemblies.end())
+		     {
+		       AssemblyWrite(structureElement, assemblyID);
+		       addedAssemblies.push_back(assemblyID);
+		     }
+
+		   // 2) add the assembly (as physical volume) to the mother volume (but only once),
+		   // using it's original position and rotation.
+		   //
+
+		   // here I need a check if assembly has been already added to the mother volume
+		   if(std::find(addedImprints.begin(), addedImprints.end(), imprintID) == addedImprints.end())
+		     {
+		       G4String imprintname = "Imprint_" + std::to_string(imprintID);
+		       imprintname = GenerateName(imprintname, physvol);
+		       
+		       // I need to get those two from the  container of imprints from the assembly
+		       // I have the imprint ID, I need to get pos and rot
+		       //
+		       G4Transform3D& transf =
+			 G4AssemblyStore::GetInstance()->GetAssembly(assemblyID)->GetImprintTransformation(imprintID);
+
+		       HepGeom::Scale3D scale;
+		       HepGeom::Rotate3D rotate;
+		       HepGeom::Translate3D translate;
+
+		       transf.getDecomposition(scale,rotate,translate);
+
+		       const G4ThreeVector scl(scale(0,0),scale(1,1),scale(2,2));
+		       const G4ThreeVector rot = GetAngles(rotate.getRotation().inverse());
+		       const G4ThreeVector pos = transf.getTranslation();
+		       		       
+		       // here I need a normal physvol referencing to my assemblyref
+		       
+		       xercesc::DOMElement* physvolElement = NewElement("physvol");
+		       physvolElement->setAttributeNode(NewAttribute("name",imprintname));
+		       
+		       xercesc::DOMElement* volumerefElement = NewElement("volumeref");
+		       volumerefElement->setAttributeNode(NewAttribute("ref",assemblyref));
+		       physvolElement->appendChild(volumerefElement);
+		       
+		       if (std::fabs(pos.x()) > kLinearPrecision
+			   || std::fabs(pos.y()) > kLinearPrecision
+			   || std::fabs(pos.z()) > kLinearPrecision)
+			 {
+			   PositionWrite(physvolElement,imprintname+"_pos",pos);
+			 }
+		       if (std::fabs(rot.x()) > kAngularPrecision
+			   || std::fabs(rot.y()) > kAngularPrecision
+			   || std::fabs(rot.z()) > kAngularPrecision)
+			 {
+			   RotationWrite(physvolElement,imprintname+"_rot",rot);
+			 }
+		       if (std::fabs(scl.x()-1.0) > kRelativePrecision
+			   || std::fabs(scl.y()-1.0) > kRelativePrecision
+			   || std::fabs(scl.z()-1.0) > kRelativePrecision)
+			 {
+			   ScaleWrite(physvolElement,name+"_scl",scl);
+			 }
+		       
+		       volumeElement->appendChild(physvolElement);
+		       //
+		       addedImprints.push_back(imprintID);
+		     }
 		 }
-	       G4Transform3D P(rot,physvol->GetObjectTranslation());
+	       else // not part of assembly, so a normal physical volume
+		 {
+		   G4RotationMatrix rot;
+		   if (physvol->GetFrameRotation() != 0)
+		     {
+		       rot = *(physvol->GetFrameRotation());
+		     }
+		   G4Transform3D P(rot,physvol->GetObjectTranslation());
                    
-	       PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
+		   PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
+		 }
 	     }
-       BorderSurfaceCache(GetBorderSurface(physvol));
+       //       BorderSurfaceCache(GetBorderSurface(physvol));
+       GetBorderSurface(physvol);
      }
 
    if (cexport)  { ExportEnergyCuts(volumePtr); }
    // Add optional energy cuts
-       
+
+   if (sdexport)  { ExportSD(volumePtr); }
+   // Add optional SDs
+ 
    // Here write the auxiliary info
    //
    auxiter = auxmap.find(volumePtr);  
@@ -537,9 +732,9 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
      }
 
    structureElement->appendChild(volumeElement);
-   // Append the volume AFTER traversing the children so that
-   // the order of volumes will be correct!
-       
+     // Append the volume AFTER traversing the children so that
+     // the order of volumes will be correct!
+
    VolumeMap()[tmplv] = R;
        
    AddExtension(volumeElement, volumePtr);
@@ -606,4 +801,45 @@ G4GDMLWriteStructure::ExportEnergyCuts(const G4LogicalVolume* const lvol)
   AddVolumeAuxiliary(eminusinfo, lvol);
   AddVolumeAuxiliary(eplusinfo, lvol);
   AddVolumeAuxiliary(protinfo, lvol);
+}
+
+void
+G4GDMLWriteStructure::SetSDExport(G4bool fsd)
+{
+  sdexport = fsd;
+}
+
+
+void
+G4GDMLWriteStructure::ExportSD(const G4LogicalVolume* const lvol)
+{
+  G4VSensitiveDetector* sd = lvol->GetSensitiveDetector();
+  
+  if(sd)
+    {
+      G4String SDname = sd->GetName();
+      
+      G4GDMLAuxStructType SDinfo = {"SensDet", SDname, "", 0};
+      AddVolumeAuxiliary(SDinfo, lvol);
+    }
+}
+
+G4int
+G4GDMLWriteStructure::GetMaxExportLevel() const
+{
+  return maxLevel;
+}
+
+void
+G4GDMLWriteStructure::SetMaxExportLevel(G4int level)
+{
+  if (level <= 0)
+  {
+    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+                "InvalidSetup", FatalException,
+                "Levels to export must be greater than zero!");
+    return;
+  }
+  maxLevel = level;
+  levelNo = 0;
 }

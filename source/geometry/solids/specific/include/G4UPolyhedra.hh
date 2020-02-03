@@ -23,31 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UPolyhedra
 //
 // Class description:
 //
-//   Wrapper class for UPolyhedra to make use of it from USolids module.
+// Wrapper class for G4Polyhedra to make use of VecGeom Polyhedron.
 
-// History:
-// 31.10.13 G.Cosmo, CERN/PH
+// 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UPOLYHEDRA_HH
 #define G4UPOLYHEDRA_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UPolyhedra.hh"
+#include <volumes/UnplacedPolyhedron.h>
+
+#include "G4TwoVector.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyhedraHistorical.hh"
 #include "G4Polyhedron.hh"
@@ -55,8 +48,11 @@
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 
-class G4UPolyhedra : public G4USolid
+class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
 {
+  using Shape_t = vecgeom::UnplacedPolyhedron;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedPolyhedron>;
+
   public:  // with description
 
     G4UPolyhedra( const G4String& name, 
@@ -84,14 +80,16 @@ class G4UPolyhedra : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UPolyhedra* GetShape() const;
-
-    G4int GetNumSide()     const;
-    G4double GetStartPhi() const;
-    G4double GetEndPhi()   const;
-    G4bool IsOpen()        const;
-    G4bool IsGeneric()     const;
-    G4int GetNumRZCorner() const;
+    G4int GetNumSide()        const;
+    G4double GetStartPhi()    const;
+    G4double GetEndPhi()      const;
+    G4double GetSinStartPhi() const;
+    G4double GetCosStartPhi() const;
+    G4double GetSinEndPhi()   const;
+    G4double GetCosEndPhi()   const;
+    G4bool IsOpen()           const;
+    G4bool IsGeneric()        const;
+    G4int GetNumRZCorner()    const;
     G4PolyhedraSideRZ GetCorner( const G4int index ) const;
     G4PolyhedraHistorical* GetOriginalParameters() const;
     void SetOriginalParameters(G4PolyhedraHistorical* pars);
@@ -107,20 +105,37 @@ class G4UPolyhedra : public G4USolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4UPolyhedra( const G4UPolyhedra &source );
-    G4UPolyhedra &operator=( const G4UPolyhedra &source );
+    G4UPolyhedra( const G4UPolyhedra& source );
+    G4UPolyhedra& operator=( const G4UPolyhedra& source );
       // Copy constructor and assignment operator.
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                           G4double& pMin, G4double& pMax) const;
+
     G4Polyhedron* CreatePolyhedron() const;
+
+  protected:
+
+    void SetOriginalParameters();
+
+    G4bool fGenericPgon; // true if created through the 2nd generic constructor
+    G4PolyhedraHistorical fOriginalParameters; // original input parameters
+
+  private:
+
+    G4double wrStart;
+    G4double wrDelta;
+    G4int    wrNumSide;
+    std::vector<G4TwoVector> rzcorners;
 };
 
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UPolyhedra* G4UPolyhedra::GetShape() const
-{
-  return (UPolyhedra*) fShape;
-}
 
 inline G4GeometryType G4UPolyhedra::GetEntityType() const
 {

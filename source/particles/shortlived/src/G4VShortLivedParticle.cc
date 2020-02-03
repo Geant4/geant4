@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VShortLivedParticle.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -62,12 +61,12 @@ G4VShortLivedParticle::G4VShortLivedParticle(const G4String&  aName,
 
 G4VShortLivedParticle::~G4VShortLivedParticle() {}
 
-G4int G4VShortLivedParticle::operator==(const G4VShortLivedParticle &right) const
+G4bool G4VShortLivedParticle::operator==(const G4VShortLivedParticle &right) const
 {
   return (this->GetParticleName() == right.GetParticleName());
 }
 
-G4int G4VShortLivedParticle::operator!=(const G4VShortLivedParticle &right) const
+G4bool G4VShortLivedParticle::operator!=(const G4VShortLivedParticle &right) const
 {
   return (this->GetParticleName() != right.GetParticleName());
 }

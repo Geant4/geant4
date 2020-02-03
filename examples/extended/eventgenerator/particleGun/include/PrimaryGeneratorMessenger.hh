@@ -26,7 +26,10 @@
 /// \file eventgenerator/particleGun/include/PrimaryGeneratorMessenger.hh
 /// \brief Definition of the PrimaryGeneratorMessenger class
 //
+<<<<<<< HEAD
 // $Id: PrimaryGeneratorMessenger.hh 68024 2013-03-13 13:42:01Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,204 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_Xt_tools
+#define tools_Xt_tools
+
+#include <X11/Intrinsic.h>
+#include <X11/StringDefs.h>
+#include <string>
+
+inline Widget XWidgetGetShell(Widget aWidget){
+  Widget widget = aWidget;
+  while(1) {
+    if(!widget) return 0;
+    if(XtIsShell(widget)) return widget;
+    widget = XtParent(widget);
+  }
+}
+
+inline Pixel XWidgetGetPixelResource(Widget aWidget,const std::string& aName){
+  Pixel pixel = 0L;
+  Arg args[1];
+  XtSetArg(args[0],(char*)aName.c_str(),&pixel);
+  XtGetValues(aWidget,args,1);
+  return pixel;
+}
+
+inline Pixel XWidgetConvertStringToPixel(Widget aWidget,const std::string& aString){
+  if(aString.empty()) return 0L;
+  if( (aString=="None") || (aString=="none") ) 
+    return XWidgetGetPixelResource(aWidget,std::string(XtNbackground));
+  XrmValue from,to;
+  from.size = aString.size()+1;
+  from.addr = (XPointer)aString.c_str();
+  XtConvert(aWidget,XtRString,&from,XtRPixel,&to);
+  if(to.addr==NULL) return 0L;
+  return (*((Pixel*)to.addr));
+}
+inline void XWidgetSetString(Widget aWidget,const std::string& aName,const std::string& aValue,bool aFreePrevious = false){
+  if(aFreePrevious) {
+    char* s = NULL;
+    Arg args[1];
+    XtSetArg(args[0],(char*)aName.c_str(),&s);
+    XtGetValues(aWidget,args,1);
+    if(s!=NULL) XtFree(s);
+  }
+  Arg args[1];
+  XtSetArg(args[0],(char*)aName.c_str(),XtNewString(aValue.c_str()));
+  XtSetValues(aWidget,args,1);
+}
+inline bool XWidgetGetString(Widget aWidget,const std::string& aName,std::string& a_value){
+  // XtNgeometry, XtNtitle.
+  char* s = NULL;
+  Arg args[1];
+  XtSetArg(args[0],(char*)aName.c_str(),&s);
+  XtGetValues(aWidget,args,1);
+  if(s==NULL) {a_value.clear();return false;}
+  a_value = std::string(s);
+  return true;
+}
+
+#include <X11/Xatom.h>
+
+inline bool XWidgetSendMessage(Widget aWidget,long a_1,long a_2) {
+  XClientMessageEvent event;
+  if(!XtIsRealized(aWidget)) return 0;
+  event.type           = ClientMessage;
+  event.display        = XtDisplay(aWidget);
+  event.window         = XtWindow(aWidget);
+  event.message_type   = XA_INTEGER;
+  event.format         = 8;
+  event.data.l[0]      = a_1;
+  event.data.l[1]      = a_2;
+  event.data.l[2]      = 0L;
+  event.data.l[3]      = 0L;
+  event.data.l[4]      = 0L;
+  if(XSendEvent(event.display,event.window,False,0L,(XEvent*)&event)==0) 
+    return false;
+  XFlush(event.display);
+  return true;
+}
+
+#include <X11/IntrinsicP.h>
+
+inline void XClassGetName(WidgetClass aClass,std::string& a_value){
+  a_value = std::string((char*)aClass->core_class.class_name);
+}
+inline Boolean XClassIsSubclass(WidgetClass aClass,WidgetClass aParent){
+  for (WidgetClass wc = aClass; wc != NULL; wc = wc->core_class.superclass) 
+    if (wc == aParent) return True;
+  return False;
+}
+
+inline Position XWidgetGetX(Widget aWidget){return aWidget->core.x;}
+inline Position XWidgetGetY(Widget aWidget){return aWidget->core.y;}
+inline Dimension XWidgetGetWidth(Widget aWidget){return aWidget->core.width;}
+inline Dimension XWidgetGetHeight(Widget aWidget){return aWidget->core.height;}
+inline void XWidgetGetClassName(Widget aWidget,std::string& a_value) {
+  WidgetClass wc = XtClass(aWidget);
+  a_value = std::string((char*)wc->core_class.class_name);
+}
+inline void XWidgetCompellResize(Widget aWidget){
+  if(aWidget->core.widget_class->core_class.resize==NULL) return;
+  (aWidget->core.widget_class->core_class.resize)(aWidget);
+}
+
+#include <X11/CompositeP.h>
+inline int XWidgetGetChildrenNumber(Widget aWidget){
+  if(!XtIsComposite(aWidget)) return 0;
+  CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
+  return cwp->num_children;
+}
+inline Widget XWidgetGetChild(Widget aWidget,unsigned int aIndex){
+  if(!XtIsComposite(aWidget)) return 0;
+  CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
+  if(aIndex>=cwp->num_children) return 0;
+  return cwp->children[aIndex];
+}
+inline Widget XWidgetGetFirstChild(Widget aWidget){
+  if(!XtIsComposite(aWidget)) return 0;
+  CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
+  return (cwp->num_children?cwp->children[0]:0);
+}
+
+#include <vector>
+
+inline void XWidgetGetChildren(Widget aWidget,std::vector<Widget>& aList){
+  aList.clear();
+  if(!XtIsComposite(aWidget)) return;
+  CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
+  for (unsigned int count=0;count<cwp->num_children;count++) 
+    aList.push_back(cwp->children[count]);
+}
+inline void XWidgetGetPopupChildren(Widget aWidget,std::vector<Widget>& aList){
+  aList.clear();
+  if(!XtIsWidget(aWidget)) return;
+  for(int count=0;count<aWidget->core.num_popups;count++) {
+    aList.push_back(aWidget->core.popup_list[count]);
+  }
+}
+inline Widget XWidgetFindChild(Widget aWidget,const std::string& aName){
+  if(!XtIsComposite(aWidget)) return 0;
+  CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
+  for (unsigned int count=0;count<cwp->num_children;count++) {
+    if(aName==std::string(XtName(cwp->children[count]))) 
+      return cwp->children[count];
+  }
+  return 0;
+}
+
+#include <ostream>
+
+inline void XWidgetPrintChildren(Widget aWidget,std::ostream& a_out){
+  int number = XWidgetGetChildrenNumber(aWidget); 
+  a_out << "XWidgetPrintChildren :"
+        << " " <<  (unsigned long)aWidget
+        << " number " << number
+        << std::endl;
+  std::string scls;
+  for(int index=0;index<number;index++) {
+    Widget child = XWidgetGetChild(aWidget,index);
+    XWidgetGetClassName(child,scls);
+    a_out << " index = " << index
+          << ", child = " << (unsigned long)child
+          << ", class = " << scls
+          << std::endl;
+  }
+}
+
+inline void XWidgetDumpPopupChildren(Widget aWidget,std::ostream& a_out){
+  a_out << "XWidgetDumpPopupChildren :"
+        << " " << std::string(XtName(aWidget))
+        << std::endl;
+  if(!XtIsWidget(aWidget)) return;
+  a_out << " " << aWidget->core.num_popups << " popup children." << std::endl;
+  std::string scls;
+  for (unsigned int count=0;count<aWidget->core.num_popups;count++) {
+    Widget w = aWidget->core.popup_list[count];
+    XWidgetGetClassName(w,scls);
+    a_out << "   " << count
+          << " child class " << scls
+          << " name " << std::string(XtName(w))
+          << std::endl;
+  }
+}
+inline void XWidgetDumpChildren(Widget aWidget,std::ostream& a_out){
+  a_out << "XWidgetDumpChildren :"
+        << " " << std::string(XtName(aWidget))
+        << std::endl;
+  if(!XtIsComposite(aWidget)) return;
+  CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
+  a_out << " " << cwp->num_children << " children." << std::endl;
+  std::string scls;
+  for (unsigned int count=0;count<cwp->num_children;count++) {
+    Widget w = cwp->children[count];
+    XWidgetGetClassName(w,scls);
+    a_out << "   " << count
+          << " child class " << scls
+          << " name " << std::string(XtName(w))
+          << std::endl;
+  }
+}
+
+#endif

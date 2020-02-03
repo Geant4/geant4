@@ -1,4 +1,3 @@
-$Id: History 91743 2015-08-04 11:49:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,72 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 August 19:  V.Ivanchenko (emmuons-V10-05-01)
+- G4TablesForExtrapolator - created G4LossTableBuilder and 
+    destruct end of run 
+
+07 February 19:  V.Ivanchenko (emmuons-V10-05-00)
+- G4MuMultipleSacttering - reduced length of printout (fix problem #2105)
+
+17 September 18: D.Sawkey (emmuons-V10-04-05)
+- G4MuMultipleScattering, G4MuPairProduction, G4eePairProduction, 
+  G4MuBremsstrahlung, G4MuIonisation: automatic documenation format now rST
+
+22 August 18: V.Ivant (emmuons-V10-04-04)
+- G4EnergyLossForExtrapolator - fixed MT initialisation and destruction
+
+30 May 18: V.Ivant (emmuons-V10-04-02)
+- G4MuPairProductionModel - added minor protection
+
+25 April 18: V.Ivant (emmuons-V10-04-01)
+- G4ePairProduction - fixed model name
+
+12 February 18: V.Ivant (emmuons-V10-04-00)
+- G4MuMultipleScattering, G4MuPairProduction, G4MuIonisation,
+  G4ePairProduction, G4MuBremsstrahlungModel, G4MuBremsstrahlung,
+  G4MuBetheBlochModel - use default destructor
+
+08 November 17: D.Sawkey (emmuons-V10-03-06)
+- G4MuMultipleScattering - modify ProcessDescription text
+
+31 October 17: D.Sawkey (emmuons-V10-03-05)
+- G4MuMultipleScattering, G4MuBremsstrahlung, G4MuIonisation,
+  G4MuPairProduction, G4ePairProduction
+    - modify Process Description
+
+19 October 17: D.Sawkey (emmuons-V10-03-04)
+- G4ePairProduction, G4MuBremsstrahlung, G4MuIonisation, G4MuPairProduction
+  - add dummy ProcessDescription for html output
+
+12 October 17: V.Ivant (emmuons-V10-03-03)
+- G4MuMultipleScattering, G4MuPairProduction,
+  G4ePairProduction - switched from ProcessDescription to StreamProcessInfo
+
+03 August 17: V.Ivant (emmuons-V10-03-01)
+- G4MuIonisation, G4MuMultipleScattering, G4MuPairProduction,
+  G4ePairProduction - make coherent model initialisation
+
+22 March 17: V.Ivant (emmuons-V10-03-00)
+-  G4MuBremmstrahlungModel, G4MuPairProductionModel - make all data
+     members protected allowing to reuse these classes as based
+     for dark matter photons
+
+07 June 16: V.Ivant (emmuons-V10-02-04)
+- G4MuMultipleScattering - roll back previous 
+    version to avoid necessity to change user code
+
+02 June 16: V.Ivant (emmuons-V10-02-03)
+- G4MuMultipleScattering - fixed model initialisation (do not 
+    create extra unneccesary objects)
+
+1 June 16: D.Sawkey (emmuons-V10-02-02)
+- Most files: use C++11 features explicit, override, delete, nullptr
+
+18 March 16: V.Ivant (emmuons-V10-02-01)
+18 March 16: V.Ivant (emmuons-V10-02-00)
+- G4ePairProduction - new process e+e- pair production by e+-
+- G4MuPairProduction, G4MuPairProductionModel - c++11 keywards added
 
 03 August 15: V.Ivant (emmuons-V10-01-01)
 - Technical tag: substitute tabs by spaces,

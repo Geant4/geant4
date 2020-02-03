@@ -27,7 +27,6 @@
 /// \brief Definition of the F03SteppingVerbose class
 //
 //
-// $Id: F03SteppingVerbose.hh 76602 2013-11-13 08:33:35Z gcosmo $
 //
 //
 //---------------------------------------------------------------

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteMesonBaryonToResonance.hh,v 1.3 2006-06-29 20:34:47 gunter Exp $ //
 
 #ifndef G4ConcreteMesonBaryonToResonance_h
 #define G4ConcreteMesonBaryonToResonance_h

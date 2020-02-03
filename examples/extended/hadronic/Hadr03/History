@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 94619 2015-11-26 13:57:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,7 +16,53 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
 	 
+=======
+
+03-10-18 mma (exhadr03-V10-04-06)
+- PhysicsList : add G4HadronElasticPhysicsXS
+
+28-09-18 mma (exhadr03-V10-04-05)
+- PhysicsList : use G4IonPhysicsXS
+- Run.cc : complete Merge() for fNbGamma and fPbalance 
+
+24-06-18 mma (exhadr03-V10-04-04)
+- envHadronic : add env variables for particleHP (PHP)
+
+09-05-18 B. Morgan (exhadr03-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+05-04-18 mma (exhadr03-V10-04-02)
+- Hadr03.cc : set visualisation only in interactive session.
+
+16-03-18 mma (exhadr03-V10-04-01)
+- Hadr03.cc : C++ 11 feature
+
+15-03-18 mma (exhadr03-V10-04-00)
+- Hadr03.cc : remove G4UI_USE and G4VIS_USE
+
+04-07-17 mma  (exhadr03-V10-03-04)
+- SteppingAction() : take into account e- from internal conversion
+
+11-04-17 mma  (exhadr03-V10-03-03)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+10-09-16 mma (exhadr03-V10-02-02)
+- change name : GammaPhysics --> GammaNuclearPhysics.
+
+15-08-16 mma (exhadr03-V10-02-01)
+- PhysicsList : rm G4HadronElasticPhysicsPHP  (not needed)
+
+28-07-16 mma (exhadr03-V10-02-00)
+- PhysicsList : add particleHP constructors
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 25-11-15 gum (exhadr03-V10-01-00)
 - fix G4HadronicProcess* hproc = dynamic_cast<G4HadronicProcess*>(process)
   in SteppingAction

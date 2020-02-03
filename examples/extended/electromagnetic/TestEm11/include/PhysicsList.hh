@@ -27,7 +27,10 @@
 /// \brief Definition of the PhysicsList class
 //
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.hh 94269 2015-11-10 07:55:24Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

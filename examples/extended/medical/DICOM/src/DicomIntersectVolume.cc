@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomIntersectVolume.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomIntersectVolume.cc
 /// \brief Implementation of the DicomIntersectVolume class
@@ -83,8 +82,8 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
 { 
   G4AffineTransform theVolumeTransform;
 
-  if (command == fUserVolumeCmd) {
-
+  if (command == fUserVolumeCmd)
+  {
     std::vector<G4String> params = GetWordsInString( newValues );
     if( params.size() < 8 ) {
       G4Exception("DicomIntersectVolume::SetNewValue",
@@ -104,13 +103,15 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
                        G4UIcommand::ConvertToDouble(params[1]),
                        G4UIcommand::ConvertToDouble(params[2]) );
     G4RotationMatrix* rotmat = new G4RotationMatrix;
-    std::vector<double> angles; 
+    std::vector<G4double> angles; 
     rotmat->rotateX( G4UIcommand::ConvertToDouble(params[3]) );
     rotmat->rotateY( G4UIcommand::ConvertToDouble(params[4]) );
     rotmat->rotateY( G4UIcommand::ConvertToDouble(params[5]) );
     theVolumeTransform = G4AffineTransform( rotmat, pos ).Invert();
 
-  } else if (command == fG4VolumeCmd) {
+  }
+  else if (command == fG4VolumeCmd)
+  {
     std::vector<G4String> params = GetWordsInString( newValues );
     if( params.size() !=1 ) 
       G4Exception("DicomIntersectVolume::SetNewValue",
@@ -153,14 +154,15 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
   fout.open(thePhantomFileName);
   std::vector<G4Material*> materials = thePhantomParam->GetMaterials();
   fout << materials.size() << G4endl;
-  for( unsigned int ii = 0; ii < materials.size(); ii++ ) {
+  for( unsigned int ii = 0; ii < materials.size(); ++ii )
+  {
     fout << ii << " " << materials[ii]->GetName() << G4endl;
   }
 
   //----- Loop to pantom voxels
-  G4int nx = thePhantomParam->GetNoVoxelX();
-  G4int ny = thePhantomParam->GetNoVoxelY();
-  G4int nz = thePhantomParam->GetNoVoxelZ();
+  G4int nx = G4int(thePhantomParam->GetNoVoxelX());
+  G4int ny = G4int(thePhantomParam->GetNoVoxelY());
+  G4int nz = G4int(thePhantomParam->GetNoVoxelZ());
   G4int nxy = nx*ny;
   fVoxelIsInside = new G4bool[nx*ny*nz];
   G4double voxelHalfWidthX = thePhantomParam->GetVoxelHalfX();
@@ -176,14 +178,14 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
   fout << -voxelHalfWidthZ*nz+thePhantomTransform.NetTranslation().z() << " " 
        << voxelHalfWidthZ*nz+thePhantomTransform.NetTranslation().z() << G4endl;
 
-  for( G4int iz = 0; iz < nz; iz++ ){
-    for( G4int iy = 0; iy < ny; iy++) {
+  for( G4int iz = 0; iz < nz; ++iz ){
+    for( G4int iy = 0; iy < ny; ++iy) {
 
       G4bool bPrevVoxelInside = true;
       G4bool b1VoxelFoundInside = false;
       G4int firstVoxel = -1;
       G4int lastVoxel = -1;
-      for(G4int ix = 0; ix < nx; ix++ ){
+      for(G4int ix = 0; ix < nx; ++ix ){
         G4ThreeVector voxelCentre( (-nx+ix*2+1)*voxelHalfWidthX, 
                    (-ny+iy*2+1)*voxelHalfWidthY, (-nz+iz*2+1)*voxelHalfWidthZ);
         theTransform.ApplyPointTransform(voxelCentre);
@@ -230,12 +232,11 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
   }
 
   //-----  Now write the materials
-  for( G4int iz = 0; iz < nz; iz++ ){
-    for( G4int iy = 0; iy < ny; iy++) {
+  for( G4int iz = 0; iz < nz; ++iz ){
+    for( G4int iy = 0; iy < ny; ++iy) {
       G4bool b1xFound = false; 
-      for(G4int ix = 0; ix < nx; ix++ ){
+      for(G4int ix = 0; ix < nx; ++ix ){
         size_t copyNo = ix + ny*iy + nxy*iz;
-        //        fout << " iz " << iz << " i " << iy << " ix " << ix << G4endl;
         if( fVoxelIsInside[copyNo] ) {
           fout << thePhantomParam->GetMaterialIndex(copyNo)<< " ";
           b1xFound = true;
@@ -246,10 +247,10 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
   }
 
   // Now write densities
-  for( G4int iz = 0; iz < nz; iz++ ){
-    for( G4int iy = 0; iy < ny; iy++) {
+  for( G4int iz = 0; iz < nz; ++iz ){
+    for( G4int iy = 0; iy < ny; ++iy) {
       G4bool b1xFound = false; 
-      for(G4int ix = 0; ix < nx; ix++ ){
+      for(G4int ix = 0; ix < nx; ++ix ){
         size_t copyNo = ix + ny*iy + nxy*iz;
         if( fVoxelIsInside[copyNo] ) {
           fout <<thePhantomParam->GetMaterial(copyNo)->GetDensity()/g*cm3<< " ";
@@ -265,7 +266,7 @@ void DicomIntersectVolume::SetNewValue(G4UIcommand * command,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomIntersectVolume::BuildUserSolid( std::vector<G4String> params )
 {
-  for( G4int ii = 0; ii < 6; ii++ ) params.erase( params.begin() ); 
+  for( G4int ii = 0; ii < 6; ++ii ) params.erase( params.begin() ); 
   // take otu position and rotation angles
   params.insert( params.begin(), ":SOLID");
   params.insert( params.begin(), params[1] );
@@ -283,14 +284,14 @@ void DicomIntersectVolume::BuildG4Solid( std::vector<G4String> params )
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4PhantomParameterisation* DicomIntersectVolume::GetPhantomParam(G4bool bMustExist)
+G4PhantomParameterisation*
+DicomIntersectVolume::GetPhantomParam(G4bool bMustExist)
 {
   G4PhantomParameterisation* paramreg = 0;
 
   G4PhysicalVolumeStore* pvs = G4PhysicalVolumeStore::GetInstance();
-  std::vector<G4VPhysicalVolume*>::iterator cite;
-  for( cite = pvs->begin(); cite != pvs->end(); cite++ ) {
-
+  for( auto cite = pvs->cbegin(); cite != pvs->cend(); ++cite )
+  {
     if( IsPhantomVolume( *cite ) ) {
       const G4PVParameterised* pvparam = 
         static_cast<const G4PVParameterised*>(*cite);
@@ -315,33 +316,40 @@ G4PhantomParameterisation* DicomIntersectVolume::GetPhantomParam(G4bool bMustExi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 std::vector<G4VPhysicalVolume*> DicomIntersectVolume::GetPhysicalVolumes(
-                 const G4String& name, bool exists, G4int nVols )
+                 const G4String& name, G4bool exists, G4int nVols )
 {
   std::vector<G4VPhysicalVolume*> vvolu;
   std::string::size_type ial = name.rfind(":");
   G4String volname = "";
   G4int volcopy = 0;
-  if( ial != std::string::npos ) {
+  if( ial != std::string::npos )
+  {
     std::string::size_type ial2 = name.rfind(":",ial-1);
-    if( ial2 != std::string::npos ) {
+    if( ial2 != std::string::npos )
+    {
       G4Exception("DicomIntersectVolume::GetPhysicalVolumes",
                   "",
                   FatalErrorInArgument,
                   G4String("Name corresponds to a touchable " + name).c_str());
-    }else { 
-      volname = name.substr( 0, ial );
-      volcopy = G4UIcommand::ConvertToInt( name.substr( ial+1, name.length() ).c_str() );
     }
-  } else {
+    else
+    { 
+      volname = name.substr( 0, ial );
+      volcopy = G4UIcommand::ConvertToInt( name.substr(ial+1, name.length()).c_str() );
+    }
+  }
+  else
+  {
     volname = name;
     volcopy = -1;
   }
 
   G4PhysicalVolumeStore* pvs = G4PhysicalVolumeStore::GetInstance();
-  std::vector<G4VPhysicalVolume*>::iterator citepv;
-  for( citepv = pvs->begin(); citepv != pvs->end(); citepv++ ) {
+  for( auto citepv = pvs->cbegin(); citepv != pvs->cend(); ++citepv )
+  {
     if( volname == (*citepv)->GetName() 
-        && ( (*citepv)->GetCopyNo() == volcopy || -1 == volcopy ) ){
+        && ( (*citepv)->GetCopyNo() == volcopy || -1 == volcopy ) )
+    {
       vvolu.push_back( *citepv );
     }
   }
@@ -390,11 +398,11 @@ G4bool DicomIntersectVolume::IsPhantomVolume( G4VPhysicalVolume* pv )
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 std::vector<G4LogicalVolume*> DicomIntersectVolume::GetLogicalVolumes( 
-const G4String& name, bool exists, G4int nVols )
+const G4String& name, G4bool exists, G4int nVols )
 {
   //  G4cout << "GetLogicalVolumes " << name << " " << exists << G4endl;
   std::vector<G4LogicalVolume*> vvolu;
-  G4int ial = name.rfind(":");
+  G4int ial = G4int(name.rfind(":"));
   if( ial != -1 ) {
     G4Exception("DicomIntersectVolume::GetLogicalVolumes",
                 "",
@@ -404,8 +412,8 @@ const G4String& name, bool exists, G4int nVols )
   }
 
   G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
-  std::vector<G4LogicalVolume*>::iterator citelv;
-  for( citelv = lvs->begin(); citelv != lvs->end(); citelv++ ) {
+  for( auto citelv = lvs->cbegin(); citelv != lvs->cend(); ++citelv )
+  {
     if( name == (*citelv)->GetName() ) {
       vvolu.push_back( *citelv );
     }
@@ -446,12 +454,13 @@ std::vector<G4String> DicomIntersectVolume::GetWordsInString(
   //----- Clear wordlist
   G4int ii;
   const char* cstr = stemp.c_str();
-  int siz = stemp.length();
-  int istart = 0;
-  int nQuotes = 0;
-  bool lastIsBlank = false;
-  bool lastIsQuote = false;
-  for( ii = 0; ii < siz; ii++ ){
+  G4int siz = G4int(stemp.length());
+  G4int istart = 0;
+  G4int nQuotes = 0;
+  G4bool lastIsBlank = false;
+  G4bool lastIsQuote = false;
+  for( ii = 0; ii < siz; ++ii )
+  {
     if(cstr[ii] == '\"' ){
       if( lastIsQuote ){
         G4Exception("GmGenUtils:GetWordsFromString","",FatalException,
@@ -466,7 +475,7 @@ std::vector<G4String> DicomIntersectVolume::GetWordsInString(
       } else {
         istart = ii+1;
       }
-      nQuotes++;
+      ++nQuotes;
       lastIsQuote = true;
       lastIsBlank = false;
     } else if(cstr[ii] == ' ' ){

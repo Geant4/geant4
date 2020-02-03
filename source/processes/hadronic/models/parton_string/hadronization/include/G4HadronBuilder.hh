@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.hh 69569 2013-05-08 13:19:50Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -45,20 +44,18 @@
 
 class G4HadronBuilder
 {
-public:
-	
-
+  public:
      G4ParticleDefinition * Build(G4ParticleDefinition * black, G4ParticleDefinition * white);
      G4ParticleDefinition * BuildLowSpin(G4ParticleDefinition * black, G4ParticleDefinition * white);
      G4ParticleDefinition * BuildHighSpin(G4ParticleDefinition * black, G4ParticleDefinition * white);
 
-//  ctor
+     //  ctor
      G4HadronBuilder(G4double mesonMix, G4double barionMix,
 		     std::vector<double> scalarMesonMix,
-		     std::vector<double> vectorMesonMix); 
+		     std::vector<double> vectorMesonMix,
+                     G4double Eta_cProb, G4double Eta_bProb);
 
-private:
-
+  private:
      G4HadronBuilder(); // no default ctor
 
      enum Spin { SpinZero=1, SpinHalf=2, SpinOne=3, SpinThreeHalf=4 };
@@ -71,8 +68,9 @@ private:
      G4double barionSpinMix;
      std::vector<double> scalarMesonMixings;
      std::vector<double> vectorMesonMixings;
-          
+     
+     G4double ProbEta_c, ProbEta_b;
 };
 
-
 #endif
+

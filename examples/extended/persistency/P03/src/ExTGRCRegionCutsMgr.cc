@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionCutsMgr.cc 76943 2013-11-19 09:57:34Z gcosmo $
 //
 /// \file persistency/P03/src/ExTGRCRegionCutsMgr.cc
 /// \brief Implementation of the ExTGRCRegionCutsMgr class
@@ -90,7 +89,7 @@ void ExTGRCRegionCutsMgr::AddRegionCuts( const std::vector<G4String>& rc )
   }
 
   // Find region
-  std::vector<ExTGRCRegionData*>::const_iterator iter;
+  // std::vector<ExTGRCRegionData*>::const_iterator iter;
   std::vector<ExTGRCRegionData*> regs = FindRegionData(rc[0]);
 
   if( regs.size() == 0 )
@@ -126,7 +125,7 @@ void ExTGRCRegionCutsMgr::BuildRegions()
 {
   std::vector<ExTGRCRegionData*>::const_iterator iter;
   std::vector<G4String>::const_iterator ites;
-  std::vector<G4LogicalVolume*>::const_iterator itelv;
+  // std::vector<G4LogicalVolume*>::const_iterator itelv;
   for( iter = fRegionDatae.begin(); iter != fRegionDatae.end(); iter++ )
   {
     G4Region* reg = new G4Region( (*iter)->GetRegionName() );

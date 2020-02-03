@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimMessenger.hh 81773 2014-06-05 08:35:38Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:		G4AdjointSimMessenger.hh
@@ -167,6 +166,8 @@ class G4AdjointSimMessenger: public G4UImessenger
     G4UIcmdWithAString*  NeglectParticleAsPrimaryCmd;
 
     G4UIcmdWithAnInteger*  setNbOfPrimaryFwdGammasPerEventCmd;
+    G4UIcmdWithAnInteger*  setNbOfPrimaryAdjGammasPerEventCmd;
+    G4UIcmdWithAnInteger*  setNbOfPrimaryAdjElectronsPerEventCmd;
 
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

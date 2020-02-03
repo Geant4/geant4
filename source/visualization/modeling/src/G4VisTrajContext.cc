@@ -28,6 +28,7 @@
 // Default configuration
 G4VisTrajContext::G4VisTrajContext(const G4String& name)
   :fName(name)
+  ,fLineWidth(1.)
   ,fLineColour(G4Colour::Grey())
   ,fLineVisible(true)
   ,fDrawLine(true)

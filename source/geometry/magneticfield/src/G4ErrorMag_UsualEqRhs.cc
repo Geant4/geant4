@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ErrorMag_UsualEqRhs implementation
 //
-// $Id: G4ErrorMag_UsualEqRhs.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file 
+// Created: P.Arce, September 2004.
 // --------------------------------------------------------------------
 
 #include "G4ErrorMag_UsualEqRhs.hh"
@@ -46,6 +43,7 @@ G4ErrorMag_UsualEqRhs::~G4ErrorMag_UsualEqRhs()
 }
 
 //---------------------------------------------------------------------
+
 void
 G4ErrorMag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
                                           const G4double B[3],

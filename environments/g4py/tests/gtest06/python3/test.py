@@ -19,7 +19,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
     self.air= gNistManager.FindOrBuildMaterial("G4_AIR")
     self.lv_object= None
     self.world= self.ConstructWorld()
-    
+
     self.va_red= G4VisAttributes(G4Color(1.,0.,0.))
     self.va_cyan= G4VisAttributes(G4Color(0.,1.,1.))
     self.va_green= G4VisAttributes(G4Color(0.,1.,0.))
@@ -36,7 +36,7 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
     global sld_world, lv_world, pv_world, va_world
 
     sld_world= G4Box("world", 1.*m, 1.*m, 1.*m)
-    lv_world= G4LogicalVolume(sld_world, self.air, "world")    
+    lv_world= G4LogicalVolume(sld_world, self.air, "world")
     pv_world= G4PVPlacement(G4Transform3D(), lv_world, "world",
                             None, False, 0)
 
@@ -56,16 +56,16 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
   # -----------------------------------------------------------------
   def ConstructUnion(self):
     global sld_union
-    sld_union= G4UnionSolid("box+cylinder", self.sld_box, self.sld_cyl); 
- 
+    sld_union= G4UnionSolid("box+cylinder", self.sld_box, self.sld_cyl);
+
     self.lv_object.SetSolid(sld_union)
     self.lv_object.SetVisAttributes(self.va_blue)
     gRunManager.GeometryHasBeenModified()
-    
+
   # -----------------------------------------------------------------
   def ConstructIntersection(self):
     offset= G4ThreeVector(20.*cm, 20.*cm, 0.)
-    global sld_intersection  
+    global sld_intersection
     sld_intersection= G4IntersectionSolid("box*cylinder",
                                           self.sld_box, self.sld_cyl,
                                           None, offset)
@@ -76,18 +76,18 @@ class MyDetectorConstruction(G4VUserDetectorConstruction):
 
   # -----------------------------------------------------------------
   def ConstructSubtraction(self):
-    global sld_subtraction  
+    global sld_subtraction
     sld_subtraction= G4SubtractionSolid("box-cylinder",
                                         self.sld_box, self.sld_cyl)
 
     self.lv_object.SetSolid(sld_subtraction)
     self.lv_object.SetVisAttributes(self.va_red)
     gRunManager.GeometryHasBeenModified()
-            
+
   # -----------------------------------------------------------------
   def Construct(self): # return the world volume
-    return self.world  
-  
+    return self.world
+
 # ==================================================================
 # main
 # ==================================================================
@@ -122,5 +122,5 @@ for s,f in f_list:
   fname= "%s.jpg" % (s)
   cmdstr= "/vis/rayTracer/trace " + fname
   gApplyUICommand(cmdstr)
-  
 
+gTerminate()

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4TDigiCollection_h
@@ -51,16 +50,16 @@ class G4DigiCollection : public G4VDigiCollection
       G4DigiCollection();
       G4DigiCollection(G4String detName,G4String colNam);
       virtual ~G4DigiCollection();
-      G4int operator==(const G4DigiCollection &right) const;
+      G4bool operator==(const G4DigiCollection &right) const;
 
   protected:
       void* theCollection;
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4DigiCollection> *aDCAllocator_G4MT_TLS_;
+  extern G4DLLEXPORT G4Allocator<G4DigiCollection>*& aDCAllocator_G4MT_TLS_();
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4DigiCollection> *aDCAllocator_G4MT_TLS_;
+  extern G4DLLIMPORT G4Allocator<G4DigiCollection>*& aDCAllocator_G4MT_TLS_();
 #endif
 
 template <class T> class G4TDigiCollection : public G4DigiCollection 
@@ -72,7 +71,7 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
       // Constructor.
   public:
       virtual ~G4TDigiCollection();
-      G4int operator==(const G4TDigiCollection &right) const;
+      G4bool operator==(const G4TDigiCollection &right) const;
       
       inline void *operator new(size_t);
       inline void operator delete(void* aDC);
@@ -85,19 +84,19 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
   public: // with description
       inline T* operator[](size_t i) const
       {
-        if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+        if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         return (*((std::vector<T*>*)theCollection))[i];
       }
       //  Returns a pointer to a concrete digi object.
       inline std::vector<T*>* GetVector() const
       {
-        if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+        if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         return (std::vector<T*>*)theCollection;
       }
       //  Returns a collection vector.
-      inline G4int insert(T* aHit)
+      inline size_t insert(T* aHit)
       {
-        if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+        if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         std::vector<T*>*theDigiCollection
         = (std::vector<T*>*)theCollection;
         theDigiCollection->push_back(aHit);
@@ -105,9 +104,9 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
       }
       //  Insert a digi object. Total number of digi objects stored in this
       // collection is returned.
-      inline G4int entries() const
+      inline size_t entries() const
       {
-        if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+        if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         std::vector<T*>*theDigiCollection
           = (std::vector<T*>*)theCollection;
         return theDigiCollection->size();
@@ -117,12 +116,12 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
   public:
       virtual G4VDigi* GetDigi(size_t i) const
       {
-        if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+        if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         return (*((std::vector<T*>*)theCollection))[i];
       }
       virtual size_t GetSize() const
       {
-        if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+        if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
         return ((std::vector<T*>*)theCollection)->size();
       }
 
@@ -130,8 +129,8 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
 
 template <class T> inline void* G4TDigiCollection<T>::operator new(size_t)
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
-    G4Allocator<G4DigiCollection> &aDCAllocator = *aDCAllocator_G4MT_TLS_;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
+    G4Allocator<G4DigiCollection> &aDCAllocator = *aDCAllocator_G4MT_TLS_();
     void* aDC;
     aDC = (void*)aDCAllocator.MallocSingle();
     return aDC;
@@ -139,14 +138,14 @@ template <class T> inline void* G4TDigiCollection<T>::operator new(size_t)
 
 template <class T> inline void G4TDigiCollection<T>::operator delete(void* aDC)
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
-    G4Allocator<G4DigiCollection> &aDCAllocator = *aDCAllocator_G4MT_TLS_;  ;;;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
+    G4Allocator<G4DigiCollection> &aDCAllocator = *aDCAllocator_G4MT_TLS_();  ;;;
     aDCAllocator.FreeSingle((G4DigiCollection*)aDC);
 }
 
 template <class T> G4TDigiCollection<T>::G4TDigiCollection()
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
     std::vector<T*> * theDigiCollection = new std::vector<T*>;
     theCollection = (void*)theDigiCollection;
 }
@@ -154,7 +153,7 @@ template <class T> G4TDigiCollection<T>::G4TDigiCollection()
 template <class T> G4TDigiCollection<T>::G4TDigiCollection(G4String detName,G4String colNam)
 : G4DigiCollection(detName,colNam)
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
     
     std::vector<T*> * theDigiCollection = new std::vector<T*>;
     theCollection = (void*)theDigiCollection;
@@ -162,7 +161,7 @@ template <class T> G4TDigiCollection<T>::G4TDigiCollection(G4String detName,G4St
 
 template <class T> G4TDigiCollection<T>::~G4TDigiCollection()
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
     std::vector<T*> * theDigiCollection = (std::vector<T*>*)theCollection;
   //theDigiCollection->clearAndDestroy();
     for(size_t i=0;i<theDigiCollection->size();i++)
@@ -171,15 +170,15 @@ template <class T> G4TDigiCollection<T>::~G4TDigiCollection()
     delete theDigiCollection;
 }
 
-template <class T> G4int G4TDigiCollection<T>::operator==(const G4TDigiCollection<T> &right) const
+template <class T> G4bool G4TDigiCollection<T>::operator==(const G4TDigiCollection<T> &right) const
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
     return (collectionName==right.collectionName);
 }
 
 template <class T> void G4TDigiCollection<T>::DrawAllDigi() 
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
     std::vector<T*> * theDigiCollection = (std::vector<T*>*)theCollection;
     size_t n = theDigiCollection->size();
     for(size_t i=0;i<n;i++)
@@ -188,7 +187,7 @@ template <class T> void G4TDigiCollection<T>::DrawAllDigi()
 
 template <class T> void G4TDigiCollection<T>::PrintAllDigi() 
 {
-    if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>;
+    if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
     std::vector<T*> * theDigiCollection = (std::vector<T*>*)theCollection;
     size_t n = theDigiCollection->size();
     for(size_t i=0;i<n;i++)

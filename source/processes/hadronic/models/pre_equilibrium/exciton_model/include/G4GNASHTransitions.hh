@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 #ifndef G4GNASHTransitions_hh
 #define G4GNASHTransitions_hh 1
@@ -31,13 +30,13 @@
 #include "G4VPreCompoundTransitions.hh"
 #include "G4Fragment.hh"
 
-class G4PreCompoundParameters;
+class G4DeexPrecoParameters;
 
 class G4GNASHTransitions : public G4VPreCompoundTransitions
 {
 public:
 
-  G4GNASHTransitions();
+  explicit G4GNASHTransitions();
 
   virtual ~G4GNASHTransitions();
 
@@ -47,14 +46,12 @@ public:
 
 private:
 
-G4GNASHTransitions(const G4GNASHTransitions &);
-const G4GNASHTransitions& operator=(const G4GNASHTransitions &right);
+  G4GNASHTransitions(const G4GNASHTransitions &) = delete;
+  const G4GNASHTransitions& operator=(const G4GNASHTransitions &right) = delete;
+  G4bool operator==(const G4GNASHTransitions &right) const = delete;
+  G4bool operator!=(const G4GNASHTransitions &right) const = delete;
 
-  G4bool operator==(const G4GNASHTransitions &right) const;
-
-  G4bool operator!=(const G4GNASHTransitions &right) const;
-
-  G4PreCompoundParameters* theParameters;
+  G4DeexPrecoParameters* theParameters;
 
 };
 

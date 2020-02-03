@@ -1,5 +1,4 @@
 // -*- C++ -*-
-// $Id:$
 // ---------------------------------------------------------------------------
 //
 // This file is a part of the CLHEP - a Class Library for High Energy Physics.
@@ -44,7 +43,7 @@ namespace HepGeom {
   public:
     /**
      * Default constructor. */
-    Point3D() {}
+    Point3D() = default;
 
     /**
      * Constructor from three numbers. */
@@ -57,7 +56,11 @@ namespace HepGeom {
 
     /**
      * Copy constructor. */
-    Point3D(const Point3D<float> & v) : BasicVector3D<float>(v) {}
+    Point3D(const Point3D<float> &) = default;
+
+    /**
+     * Move constructor. */
+    Point3D(Point3D<float> &&) = default;
 
     /**
      * Constructor from BasicVector3D<float>. */
@@ -65,19 +68,22 @@ namespace HepGeom {
 
     /**
      * Destructor. */
-    ~Point3D() {}
+    ~Point3D() = default;
 
     /**
      * Assignment. */
-    Point3D<float> & operator=(const Point3D<float> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
-    }
+    Point3D<float> & operator=(const Point3D<float> &) = default;
 
     /**
      * Assignment from BasicVector3D<float>. */
     Point3D<float> & operator=(const BasicVector3D<float> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
+      this->BasicVector3D<float>::operator=(v);
+      return *this;
     }
+
+    /**
+     * Move assignment. */
+    Point3D<float> & operator=(Point3D<float> &&) = default;
 
     /**
      * Returns distance to the origin squared. */
@@ -123,7 +129,7 @@ namespace HepGeom {
   public:
     /**
      * Default constructor. */
-    Point3D() {}
+    Point3D() = default;
 
     /**
      * Constructor from three numbers. */
@@ -141,7 +147,11 @@ namespace HepGeom {
 
     /**
      * Copy constructor. */
-    Point3D(const Point3D<double> & v) : BasicVector3D<double>(v) {}
+    Point3D(const Point3D<double> &) = default;
+
+    /**
+     * Move constructor. */
+    Point3D(Point3D<double> &&) = default;
 
     /**
      * Constructor from BasicVector3D<float>. */
@@ -153,7 +163,7 @@ namespace HepGeom {
 
     /**
      * Destructor. */
-    ~Point3D() {}
+    ~Point3D() = default;
 
     /**
      * Constructor from CLHEP::Hep3Vector.
@@ -167,26 +177,30 @@ namespace HepGeom {
      * Conversion (cast) to CLHEP::Hep3Vector.
      * This operator is needed only for backward compatibility and
      * in principle should not exit.
-     */ 
+     */
     operator CLHEP::Hep3Vector () const { return CLHEP::Hep3Vector(x(),y(),z()); }
 
     /**
      * Assignment. */
-    Point3D<double> & operator=(const Point3D<double> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
-    }
+    Point3D<double> & operator=(const Point3D<double> &) = default;
 
     /**
      * Assignment from BasicVector3D<float>. */
     Point3D<double> & operator=(const BasicVector3D<float> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
+      this->BasicVector3D<double>::operator=(v);
+      return *this;
     }
 
     /**
      * Assignment from BasicVector3D<double>. */
     Point3D<double> & operator=(const BasicVector3D<double> & v) {
-      set(v.x(),v.y(),v.z()); return *this;
+      this->BasicVector3D<double>::operator=(v);
+      return *this;
     }
+
+    /**
+     * Move assignment. */
+    Point3D<double> & operator=(Point3D<double> &&) = default;
 
     /**
      * Returns distance to the origin squared. */

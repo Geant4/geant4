@@ -29,7 +29,6 @@
 
 #include "G4PiData.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadronicException.hh"
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -54,9 +53,7 @@ G4PiData::G4PiData(const G4double * aT, const G4double * aIn,
 
 G4bool G4PiData::AppliesTo(G4double kineticEnergy)
 {
-  G4bool result = true;
-  if(kineticEnergy>back().first) result = false;
-  return result;
+  return (kineticEnergy<=back().first);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,8 +65,10 @@ G4double G4PiData::ReactionXSection(G4double kineticEnergy)
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
   if(it==end()) 
   {
-    throw G4HadronicException(__FILE__, __LINE__,
-        "G4PiData::ReactionXSection: used outside validity range");
+    G4ExceptionDescription ed;
+    ed << "This cross section is applied for E(MeV)= " << kineticEnergy
+       << " outside allowed energy interval" << G4endl; 
+    G4Exception("G4PiData::ReactionXSection", "had001", FatalException, ed);
   }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;
@@ -90,8 +89,10 @@ G4double G4PiData::ElasticXSection(G4double kineticEnergy)
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
   if(it==end()) 
   {
-    throw G4HadronicException(__FILE__, __LINE__,
-        "G4PiData::ElasticXSection: used outside validity range");
+    G4ExceptionDescription ed;
+    ed << "This cross section is applied for E(MeV)= " << kineticEnergy
+       << " outside allowed energy interval" << G4endl; 
+    G4Exception("G4PiData::ElasticXSection", "had001", FatalException, ed);
   }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;
@@ -112,8 +113,10 @@ G4double G4PiData::TotalXSection(G4double kineticEnergy)
   while(it!=end()&&kineticEnergy>(*it).first) {it++;}
   if(it==end()) 
   {
-    throw G4HadronicException(__FILE__, __LINE__,
-        "G4PiData::TotalXSection: used outside validity range");
+    G4ExceptionDescription ed;
+    ed << "This cross section is applied for E(MeV)= " << kineticEnergy
+       << " outside allowed energy interval" << G4endl; 
+    G4Exception("G4PiData::TotalXSection", "had001", FatalException, ed);
   }
   if(it==begin()) it++;
   G4double x1,x2,e1,e2;

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.46 2010-11-10 17:11:20 allison Exp $
 //
 // 
 // Laurent Garnier  27th October 2011
@@ -72,7 +71,7 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
     // the path of the current drawn (non-culled) volume in terms of
-    // drawn (non-culled) ancesters.  Each node is identified by a
+    // drawn (non-culled) ancestors.  Each node is identified by a
     // PVNodeID object, which is a physical volume and copy number.  It
     // is a vector of PVNodeIDs corresponding to the geometry hierarchy
     // actually selected, i.e., not culled.

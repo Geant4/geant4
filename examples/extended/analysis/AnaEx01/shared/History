@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 92318 2015-08-27 14:49:47Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +18,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+15-10-18 G. Cosmo (analysisShared-V10-04-02)
+- Added missing include of G4SteateManager.hh in DetectorConstruction source.
+
+04-07-18 I. Hrivnacova (analysisShared-V10-04-01)
+- Fixed compilation error introduced in previous tag
+
+03-07-18 I. Hrivnacova (analysisShared-V10-04-00)
+- Macro & commands review:
+  - Removed obsolete /N03 top command directory
+  - Added protection against warnings issued from ReinitializeGeometry() if 
+    called in PreInit phase
+
+04-07-16 I. Hrivnacova (analysisShared-V10-02-01)
+- Fixes for Doxygen documentation
+
+01-07-16 I. Hrivnacova (analysisShared-V10-02-00)
+- Coding guidelines (function names)
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 27-08-15 I. Hrivnacova (analysisShared-V10-01-00)
 - Updated histogram ids in FillHiso (now starting from 0);
   updated for changed function names in HistoManager classes

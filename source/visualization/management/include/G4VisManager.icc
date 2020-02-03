@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc 93026 2015-09-30 16:07:07Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -87,8 +86,20 @@ inline G4bool G4VisManager::GetTransientsDrawnThisRun() const {
   return fTransientsDrawnThisRun;
 }
 
+inline G4bool G4VisManager::GetDrawEventOnlyIfToBeKept() const {
+  return fDrawEventOnlyIfToBeKept;
+}
+
 inline const G4Event* G4VisManager::GetRequestedEvent() const {
   return fpRequestedEvent;
+}
+
+inline G4int G4VisManager::GetNKeepRequests () const {
+  return fNKeepRequests;
+}
+
+inline G4bool G4VisManager::GetReviewingKeptEvents() const {
+  return fReviewingKeptEvents;
 }
 
 inline G4bool G4VisManager::GetAbortReviewKeptEvents() const {
@@ -110,12 +121,6 @@ inline G4bool G4VisManager::GetWaitOnEventQueueFull () const {
 }
 
 #endif
-
-inline void G4VisManager::SetUserAction
-(G4VUserVisAction* pVisAction,
- const G4VisExtent& extent) {
-  RegisterRunDurationUserVisAction("SetUserAction",pVisAction,extent);
-}
 
 inline G4SceneList& G4VisManager::SetSceneList () {
   return fSceneList;
@@ -146,10 +151,17 @@ inline void G4VisManager::SetTransientsDrawnThisEvent (G4bool b) {
   fTransientsDrawnThisEvent = b;
 }
 
+inline void G4VisManager::SetDrawEventOnlyIfToBeKept (G4bool b) {
+  fDrawEventOnlyIfToBeKept = b;
+}
+
 inline void G4VisManager::SetRequestedEvent (const G4Event* event) {
   fpRequestedEvent = event;
 }
 
+inline void G4VisManager::SetReviewingKeptEvents (G4bool reveiwing) {
+  fReviewingKeptEvents = reveiwing;
+}
 inline void G4VisManager::SetAbortReviewKeptEvents (G4bool abort) {
   fAbortReviewKeptEvents = abort;
 }

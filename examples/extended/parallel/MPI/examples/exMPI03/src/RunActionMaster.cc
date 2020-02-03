@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMaster.cc 82310 2014-06-14 00:27:39Z adotti $
 //
 /// @file RunActionMaster.cc
 /// @brief Describe run actions
@@ -110,9 +109,60 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
     {
       G4MPIscorerMerger sm(G4ScoringManager::GetScoringManagerIfExist());
       sm.SetVerbosity(ver);
+<<<<<<< HEAD
+=======
+      //Debug!
+      auto debugme = [&scor](){
+        for ( size_t idx = 0 ; idx < scor->GetNumberOfMesh() ; ++idx) {
+            const auto m = scor->GetMesh(idx);
+            const auto map = m->GetScoreMap();
+            std::for_each(map.begin(),map.end(),
+              [](const G4VScoringMesh::MeshScoreMap::value_type& e) {
+                G4cout<<e.first<<"("<<e.second<<"):"<<G4endl;
+                const auto data = e.second->GetMap();
+                for( auto it = data->begin() ; it != data->end() ; ++it ) {
+                    G4cout<<it->first<<" => G4StatDouble(n,sum_w,sum_w2,sum_wx,sum_wx2): "
+                    <<it->second->n()<<" "<<it->second->sum_w()<<" "
+                    <<it->second->sum_w2()<<" "<<it->second->sum_wx()<<" "
+                    <<it->second->sum_wx2()<<G4endl;
+                }
+            });
+        }
+      };
+      //Debug!
+      if ( ver > 4 ) {
+          G4cout<<"Before merging: Meshes dump"<<G4endl;
+          debugme();
+      }
+      //Write partial scorers from single ranks *before* merging
+      //Do not rely on UI command to write out scorers, because rank-specific
+      //files will have same file name: need to add rank # to file name
+      if ( true ) {
+       for ( size_t idx = 0 ; idx < scor->GetNumberOfMesh() ; ++idx) {
+              const auto m = scor->GetMesh(idx);
+              const auto& mn = m->GetWorldName();
+              std::ostringstream fname;
+              fname<<"scorer-"<<mn<<"-rank"<<rank<<".csv";
+              scor->DumpAllQuantitiesToFile(mn,fname.str());
+       }
+      }
+
+      //Now reduce all scorers to rank #0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       sm.Merge();
     }
 
+<<<<<<< HEAD
+=======
+  //Save histograms *before* MPI merging for rank #0
+  if (rank == 0)
+    {
+      G4String fname("dose-rank0");
+      Analysis* myana = Analysis::GetAnalysis();
+      myana-> Save(fname);
+      myana-> Close(false); // close file withour resetting data
+    }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   //Merge of g4analysis objects
   ver=0;
   G4MPIhistoMerger hm(G4AnalysisManager::Instance());

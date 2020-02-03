@@ -51,7 +51,7 @@ G4String CCalMaterialFactory::mixturefile = "";
 
 
 CCalMaterialFactory* CCalMaterialFactory::getInstance(const G4String& matfile,
-						      const G4String& mixfile){
+                                                      const G4String& mixfile){
   if ((matfile=="" || matfile==elementfile) &&
       (mixfile=="" || mixfile==mixturefile))
     return getInstance();
@@ -79,8 +79,8 @@ CCalMaterialFactory* CCalMaterialFactory::getInstance(const G4String& matfile){
 CCalMaterialFactory* CCalMaterialFactory::getInstance(){
   if (elementfile=="" || mixturefile=="") {
     G4cerr << "ERROR: You haven't defined files to be used for materials in "
-	 << "CCalMaterialFactory::getInstance(const G4String&,const G4String&)"
-	 << G4endl;
+         << "CCalMaterialFactory::getInstance(const G4String&,const G4String&)"
+         << G4endl;
     return 0;
   }
 
@@ -114,24 +114,24 @@ G4Material* CCalMaterialFactory::findMaterial(const G4String & mat) const {
   if (theMat) {
 #ifdef ddebug
     G4cout << "Material " << mat << " already defined. Returning previous "
-	 << "instance." << G4endl;
+         << "instance." << G4endl;
 #endif
     return theMat;
   } else { 
     CCalMaterial* CCalmat=findCCalMaterial(mat);
     if (CCalmat){
       G4Material* G4Mat = new G4Material(CCalmat->Name(),
-					 CCalmat->Density()*g/cm3, 
-					 CCalmat->NElements());
+                                         CCalmat->Density()*g/cm3, 
+                                         CCalmat->NElements());
       for(G4int i=0; i<CCalmat->NElements(); i++) {
-	G4Element* elem = findElement(CCalmat->Element(i));
-	if (!elem) {
-	  G4ExceptionDescription ed;
-	  ed << "   Could not build material " << mat << "." << G4endl;
-	  G4Exception("CCalMaterialFactory::findMaterial()","ccal001",
-		      FatalException,ed);
-	}
-	G4Mat->AddElement(elem, CCalmat->Weight(i));
+        G4Element* elem = findElement(CCalmat->Element(i));
+        if (!elem) {
+          G4ExceptionDescription ed;
+          ed << "   Could not build material " << mat << "." << G4endl;
+          G4Exception("CCalMaterialFactory::findMaterial()","ccal001",
+                      FatalException,ed);
+        }
+        G4Mat->AddElement(elem, CCalmat->Weight(i));
       }
 #ifdef ddebug
     G4cout << "Material " << mat << " has been built successfully." << G4endl;
@@ -139,7 +139,7 @@ G4Material* CCalMaterialFactory::findMaterial(const G4String & mat) const {
       return G4Mat;
     } else {
       G4cerr << "ERROR: Material " << mat << " not found in CCal database!!!" 
-	   << G4endl;
+           << G4endl;
       return 0;
     }
   }
@@ -160,9 +160,9 @@ G4Element* CCalMaterialFactory::findElement(const G4String & mat) const {
 
 
 G4Element* CCalMaterialFactory::addElement(const G4String & name,
-					   const G4String & symbol,
-					   G4double Z, G4double A,
-					   G4double density) {
+                                           const G4String & symbol,
+                                           G4double Z, G4double A,
+                                           G4double density) {
 
   G4Element* theEl = new G4Element(name, symbol, Z, A*g/mole);
   //Make it also as a material.
@@ -177,11 +177,11 @@ G4Element* CCalMaterialFactory::addElement(const G4String & name,
 
 
 G4Material* CCalMaterialFactory::addMaterial(const G4String& name,
-					     G4double density,
-					     G4int nconst,
-					     G4String mats[],
-					     G4double prop[],
-					     MatDescription md){
+                                             G4double density,
+                                             G4int nconst,
+                                             G4String mats[],
+                                             G4double prop[],
+                                             MatDescription md){
   addCCalMaterial(name, density, nconst, mats, prop, md);
   return findMaterial(name);
 }
@@ -190,12 +190,12 @@ G4Material* CCalMaterialFactory::addMaterial(const G4String& name,
 void CCalMaterialFactory::readElements(const G4String& matfile) {
 
   G4String path = "NULL";
-  if (getenv("CCAL_GLOBALPATH"))
-    path = getenv("CCAL_GLOBALPATH");
+  if (std::getenv("CCAL_GLOBALPATH"))
+    path = std::getenv("CCAL_GLOBALPATH");
 
   G4cout << " ==> Opening file " << matfile << " to read elements..." << G4endl;
   std::ifstream is;
-  bool ok = openGeomFile(is, path, matfile);
+  G4bool ok = openGeomFile(is, path, matfile);
   if (!ok) {
     G4cerr << "ERROR: Could not open file " << matfile << G4endl;
     return;
@@ -213,8 +213,8 @@ void CCalMaterialFactory::readElements(const G4String& matfile) {
 void CCalMaterialFactory::readMaterials(const G4String& matfile) {
 
   G4String path = "NULL";
-  if (getenv("CCAL_GLOBALPATH"))
-    path = getenv("CCAL_GLOBALPATH");
+  if (std::getenv("CCAL_GLOBALPATH"))
+    path = std::getenv("CCAL_GLOBALPATH");
 
   G4cout << " ==> Opening file " << matfile << " to read materials..." << G4endl;
   std::ifstream is;
@@ -275,11 +275,11 @@ CCalAMaterial* CCalMaterialFactory::findCCalAMaterial(const G4String & mat)
 
 
 CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name, 
-						   G4double density,
-						   G4int nconst,
-						   G4String mats[], 
-						   G4double prop[],
-						   MatDescription md){
+                                                   G4double density,
+                                                   G4int nconst,
+                                                   G4String mats[], 
+                                                   G4double prop[],
+                                                   MatDescription md){
   ptrCCalMaterial* matcol=0;
   ptrCCalAMaterial* amatcol=0;
 
@@ -292,25 +292,25 @@ CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name,
     if (md==byAtomic) {
       CCalAMaterial* amat = findCCalAMaterial(mats[i]);
       if (amat)
-	amatcol[i]=amat;
+        amatcol[i]=amat;
       else {
-	G4cerr << "ERROR: Trying to build" << name << " out of unknown " 
-	     << mats[i] << "." << G4endl 
-	     << "Skiping this material!" << G4endl;
-	delete[] amatcol;
-	return 0;
+        G4cerr << "ERROR: Trying to build" << name << " out of unknown " 
+             << mats[i] << "." << G4endl 
+             << "Skiping this material!" << G4endl;
+        delete[] amatcol;
+        return 0;
       }
     } //by Atomic fractions
     else {
       CCalMaterial* mat = findCCalMaterial(mats[i]);
       if (mat)
-	matcol[i]=mat;
+        matcol[i]=mat;
       else {
-	G4cerr << "ERROR: Trying to build" <<name << " out of unknown " 
-	     << mats[i] << "." << G4endl 
-	     << "Skiping this material!" << G4endl;
-	delete[] matcol;
-	return 0;
+        G4cerr << "ERROR: Trying to build" <<name << " out of unknown " 
+             << mats[i] << "." << G4endl 
+             << "Skiping this material!" << G4endl;
+        delete[] matcol;
+        return 0;
       }
     }
   } //for
@@ -318,7 +318,7 @@ CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name,
   //Let's do the CCalMaterial!
   if (md==byAtomic) {
     CCalAMaterial* amaterial = new CCalAMaterial(name, density, nconst, 
-						 amatcol, prop);
+                                                 amatcol, prop);
     delete[] amatcol;
     theCCalAMaterials.push_back(amaterial);
 #ifdef ddebug
@@ -332,7 +332,7 @@ CCalMaterial* CCalMaterialFactory::addCCalMaterial(const G4String& name,
     else
       ft=CCalMaterial::FTVolume;
     CCalMaterial* material = new CCalMaterial(name, density, nconst, 
-					    matcol, prop, ft);
+                                            matcol, prop, ft);
     delete[] matcol;
     theCCalMaterials.push_back(material);
 #ifdef ddebug
@@ -360,7 +360,7 @@ void CCalMaterialFactory::readElements(std::ifstream& is){
     is >> symbol >> A >> Z >> density >> jump;    
 #ifdef debug
     G4cout << "       " << name << "    \t" << symbol << "\t" 
-	 << A << "\t" << Z << "\t" << density << G4endl;
+         << A << "\t" << Z << "\t" << density << G4endl;
 #endif    
     addElement(name, symbol, Z, A, density);
     readName(is,name);
@@ -383,7 +383,7 @@ void CCalMaterialFactory::readMaterials(std::ifstream& is){
   G4double pressure = 1.E-19*pascal;
   G4double temperature = 0.1*kelvin;
   new G4Material("Vacuum", /*Z=*/ 1., /*A=*/ 1.01*g/mole,
-		 density, kStateGas, temperature, pressure);
+                 density, kStateGas, temperature, pressure);
 
   //There should come the list of materials. #. Defines a comment
   //*ENDDO defines the block.
@@ -397,9 +397,9 @@ void CCalMaterialFactory::readMaterials(std::ifstream& is){
 
 #ifdef debug
     G4cout <<"       " << matname
-	   << " made of " << nElem 
-	   << " elements. Density=" << dens
-	   << G4endl;
+           << " made of " << nElem 
+           << " elements. Density=" << dens
+           << G4endl;
 #endif
 
     G4int absnelem = std::abs(nElem);

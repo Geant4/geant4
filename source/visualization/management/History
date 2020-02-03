@@ -1,4 +1,3 @@
-$Id: History 102380 2017-01-24 11:32:15Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -26,14 +25,876 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-15th September 2016  John Allison (visman-V10-01-22)
+29 October 2019  Gabriele Cosmo (visman-V10-05-14)
+- G4VisCommandsViewer.cc:
+  o Replaced use of std::experimental::filesystem with std::filesystem
+    for WIN32 target. Forcing c++17 default builds on Windows and allow for
+    porting on Visual Studio 2019.
+
+20 September 2019  John Allison (visman-V10-05-13)
+- G4ViewParameters.cc:
+  o Catmull-Rom cubic spline interpolation:
+    . Use log interpolation for explode factor and zoom factor.
+- G4VisCommandsSceneAdd.cc:
+  o Enhance global description of some models to avoid ambiguities in
+    scene list.
+  o Improve some message printing.
+- G4VisCommandsSet.cc:
+  o Improve guidance for /vis/set/volumeForField.
+- G4VisCommandsViewerDefault.cc:
+  o Improve code readability.
+- G4VisCommandsViewerSet.cc:
+  o Fix bug in /vis/viewer/set/style:
+    . Bug was: could not return from cloud to wireframe or solid.
+  o Improve code readability.
+
+19 September 2019  Makoto Asai (visman-V10-05-12)
+- G4VSceneHandler.cc
+  o Namespace scope is added to MeshScoreMap
+  o Co-working with detutils-V10-05-01
+
+29 August 2019  John Allison (visman-V10-05-11)
+- Part of vis-V10-05-24.
+- Add G4TessellatedSolid to list of solids that may be specially treated
+
+22 August 2019  John Allison (visman-V10-05-10)
+- Part of vis-V10-05-23.
+- G4VisManager:
+  o Add flag for reviewing kept events.
+  o Improve a message.
+- G4VisCommandsSceneAdd.hh/.cc, G4VisCommands.cc:
+  o Rework /vis/scene/add/eventID:
+    . Just writes a summary at end of run.
+    . Except when reviewing kept events one by one, in which case it
+      writes run and event no for each event.
+- G4VisCommandsCompound.cc: /vis/drawTree:
+  o Ensure vis is enabled (and restore ableness after). This is so that
+    the command works even if vis is disabled.
+
+17 August 2019  John Allison (visman-V10-05-09)
+- G4VisManager.cc:
+  o Clear graphics stores and viewer screen if scene contains no
+    run duration models. E.g., after geometry has changed.
+
+16 July 2019  John Allison (visman-V10-05-08)
+- Part of vis-V10-05-22.
+- Co-works with modeling-V10-05-07.
+- G4VisCommandsSceneAdd:
+  o Follow changes in modeling-V10-05-07.
+- G4VUserVisAction:
+  o Store for use by the derived class:
+    G4VGraphicsScene* fpSceneHandler;
+    const G4Transform3D* fpTransform;
+    const G4ModelingParameters* fpMP;
+
+06 July 2019  John Allison (visman-V10-05-07)
+- Part of vis-V10-05-21.
+- G4VGraphicsSystem.cc: Improve output message.
+- G4VSceneHandler::GetDrawingStyle: Fix bug for cloud drawing.
+
+13 June 2019  John Allison (visman-V10-05-06)
+- Part of vis-V10-05-20.
+- G4VSceneHandler:
+  o Final changes for introduction of cloud drawing.
+  o Add GetNumberOfCloudPoints:
+    Returns no of cloud points from current view parameters, unless the user
+    has forced through the vis attributes, thereby over-riding the
+    current view parameter.
+- G4ViewParameters:
+  o Add accessors for number of cloud points.
+- G4VisCommandsGeometrySet: Tidy.
+- G4VisCommandsTouchableSet: Add commands for cloud style.
+- G4VisCommandsViewerSet: Add commands for cloud style.
+- G4VisCommandsCompound.cc: Tidy.
+- G4VisCommandsGeometrySet.cc: Tidy.
+- G4VisCommandsTouchable.cc: Improve printing.
+
+29 May 2019  John Allison (visman-V10-05-05)
+- G4VisManager.cc:
+  o Removed the word "WARNING" from message about number of events
+    kept for refreshing and/or reviewing.
+
+04 April 2019  John Allison (visman-V10-05-04)
+- Co-works modeling-V10-05-01.
+- Final (for now) corrections to /vis/viewer/set/sectionPlane.
+  Still some strange behaviour in small fraction of cases. See
+  comments in G4PhysicalVolumeModel::DescribeSolid around line 748.
+
+29 March 2019  John Allison (visman-V10-05-03)
+- G4VSceneHandler.hh:
+  o BeginPrimitives/2D: Added default argument G4Transform3D() to
+    correspond to base class G4VGraphicsScene.
+- G4ViewParameters.hh:
+  o Improved comments.
+- G4Scene.cc: Improved operator<<.
+
+24 March 2019  John Allison (visman-V10-05-02)
+- Fix bug in /vis/viewer/set/sectionPlane.
+  Involves using G4DisplacedSolid instead of plain G4VSolid.
+
+18 March 2019  Gabriele Cosmo (visman-V10-05-01)
+- Corrected few typos in printout/comments.
+
+10 March 2019  John Allison  (visman-V10-05-00)
+- Introduce cloud drawing style:
+  New parameter candidate in /vis/viewer/set/style:
+    /vis/viewer/set/style cloud
+  Cloud drawing uses solid->GetPointOnSurface, i.e., it uses kernel
+  algorithms and by-passes polyhedral representations. The solid is
+  represented by a polymarker of dots. The default number of points
+  is 1000. This can be changed with
+    /vis/viewer/set/numberOfCloudPoints
+  (The minimum number is 100.)
+  Note that OpenGL has a fast algorithm for polymarker.
+- This allows us to use cloud style both as a choice or as fallback when the
+  polyhedral representation fails, for example, when BooleanProcessor fails.
+- Many files affected:
+  o G4ViewParameters.hh/icc/cc
+  enum DrawingStyle {
+    wireframe,  // Draw edges    - no hidden line removal.
+    hlr,        // Draw edges    - hidden lines removed.
+    hsr,        // Draw surfaces - hidden surfaces removed.
+    hlhsr,      // Draw surfaces and edges - hidden removed.
+    cloud       // Draw volume as a cloud of dots.
+  };
+    and consequential augmentation of access function, test functions and
+    stream output functions.
+  o G4VisCommandsViewerSet.hh/cc
+    . Add /vis/viewer/set/numberOfCloudPoints.
+    . Augment /vis/viewer/set/style to handle "c[loud]".
+    . Note: G4VisCommandsViewerSet.cc: Indentations recomputed (Xcode has
+      a slightly different algorithm to emacs). Many hundreds of lines changed.
+  o G4VSceneHandler::RequestPrimitives: Augmented to handle cloud.
+  o G4VisCommandsCompound.cc: Augment message from /vis/drawLogicalVolume.
+  o G4VisCommandsViewerDefault: Augment /vis/viewer/default/style.
+- Other developments:
+  o void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+    Functionally unchanged but algorithmetically improved.
+    Note, as stated above, OpenGL does not use this default function -
+    it has its own version.
+
+24 February 2019  John Allison
+- Included in vis-V10-05-13
+- Add /vis/touchable/extentForField and volumeForField.
+
+19 February 2019  John Allison
+- Included in vis-V10-05-12
+- G4VVisCommand:
+  o Introduced fCurrrentPVFindingsForField.
+  o Added DrawExtent to utility functions.
+- G4VisCommandsScene: Add /vis/scene/showExtents.
+- G4VisCommandsSet: Add /vis/set/volumeForField.
+- G4VisCommandsTouchable:
+  o Add /vis/touchable/showExtent.
+  o Add copy number parameter to /vis/touchable/findPath.
+- G4Scene:
+  o Use G4BoundingExtentScene instead of G4BoundingSphereScene.
+  o Use G4VisExtent::GetTransformedExtent to correct for fix to bug in
+    G4PhysicalVolumeModel - see modeling/History.
+- G4ViewParameters: Improve message.
+- G4VisManager: Register the new commands.
+
+13 February 2019  John Allison
+- Included in vis-V10-05-11
+- Implement /vis/set/extentForField - see visualisation/History.
+
+10 February 2019  John Allison
+- Included in vis-V10-05-10
+- G4VisCommandsViewer:
+  o Improved /vis/viewer/centreOn (it does not zoom).
+  o Introduced /vis/viewer/centreAndZoomInOn.
+- G4VisCommandsTouchable:
+  o Improved /vis/touchable/centreOn (it does not zoom).
+  o Introduced /vis/touchable/centreAndZoomInOn.
+- G4VVisCommand:
+  o Introduced utility functions CopyGuidanceFrom and CopyParametersFrom.
+- G4VisCommandsCompound:
+  o Made use of above-mentioned utility functions.
+
+08 February 2019  John Allison
+- Included in vis-V10-05-09
+- Fix Coverity warnings.
+
+31 January 2019  Michael Kelsey
+- Included in vis-V10-05-08
+- Provide ability to draw electric fields, and eventually any other field.
+  Refactor G4MagneticFieldModel to have an intermediate base class, which
+  implements DescribeYourselfTo().  Concrete class only implements a utility
+  function to get value from field.  Add new G4ElectricFieldModel which does
+  the same thing.  Add commands for the latter.
+
+29 January 2019  John Allison
+- Included in vis-V10-05-06
+- G4VisCommandsTochable:
+  o Add /vis/touchable/draw.
+- G4VisCommandsViewer: /vis/viewer/centreOn:
+  o Add copy number to parameter list.
+- CheckSceneAndNotifyHandlers: move from xx to G4VVisCommand so that it
+  can be used by any messenger.
+
+26 January 2019  John Allison
+- Included in vis-V10-05-06
+- Fix calculation of vis extent for parameterisations.
+- Some minor tidying.
+
+25 January 2019  John Allison
+- Included in vis-V10-05-06
+- Rationalise view interpolation
+  Encapsulate algorithm into base class G4VVisCommand. The commands
+    /vis/viewer/interpolate
+    /vis/viewer/centreOn
+    /vis/touchable/centerOn
+  now use this. Might consider use by all view changing commands.
+
+25 January 2019  John Allison
+- Included in vis-V10-05-05
+- Include parameterised volumes in overlap checking and visualisation
+  in G4LogicalVolumeModel (in addition to ordinary placements).
+
+22 January 2019  John Allison
+- Included in vis-V10-05-04
+- Introduce /vis/viewer/centreOn and /vis/touchable/centreOn
+  This allows one to centre the view (zoom in) on a volume.
+  Reset with /vis/viewer/reset.
+- Moved
+    void SetViewParameters(G4VViewer* viewer, const G4ViewParameters& viewParams);
+    void RefreshIfRequired(G4VViewer* viewer);
+  from G4VisCommandsViewer to the higher level G4VVisCommand so that all
+  vis commands may make use. In so doing eliminated the intermediate class
+  G4VVisCommandViewer (which did not have a .hh file of its own and was anyhow
+  obscurely buried in G4VisComandsViewer). Much cleaner now.
+
+21 January 2019  John Allison
+- Included in vis-V10-05-03.
+- Pick up default number of line-segments-per-circle from G4Polyhedron.
+
+08 January 2019  John Allison
+- Correct History files after merge
+
+02 January 2019  John Allison
+- Included in vis-V10-05-01.
+- Minor improvements to vis manager.
+- Added confirmation printing when registering models with the scene.
+- At start of run:
+  // Check to see if the user has created a trajectory model. If not, create
+  // a default one. To avoid code duplication the following function is used
+  // and its result (a const G4VTrajectoryModel*) is thrown away at this point.
+  // The function is called again later when needed.
+
+02 January 2019  John Allison
+- Included in vis-V10-05-00.
+- G4VisCommandsSceneAdd.cc: Improve guidance for /vis/scene/add/volume.
+
+14 November 2018  John Allison  (visman-V10-04-28)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/userAction:
+  o Fix bug whereby success was branded unsuccessful when verbosity <= warnings.
+- G4VisCommandsCompound.cc: /vis/drawLogicalVolume:
+  o Warn the user if style and/or hidden marker condition is changed.
+
+08 November 2018  John Allison  (visman-V10-04-26)
+- G4VisCommandsSceneAdd.cc:
+  o /vis/scene/add/logicalVolume:
+    . Overlap checking now in text and drawing.
+
+07 November 2018  John Allison  (visman-V10-04-25)
+- G4VisCommandsTouchable.cc:
+  o /vis/touchable/findPath: Correct a bug in guidance.
+- G4VisCommandsSceneAdd.cc:
+  o /vis/scene/add/logicalVolume:
+    . Overlap checking only in text output at present.
+
+24 October 2018  John Allison  (visman-V10-04-24)
+- G4VVisCommand:
+  o Replace fCurrentTouchablePath by fCurrentTouchableProperties.
+- G4VisCommandsTouchableSet:
+  o /vis/touchable/set/...:
+    . Replace fCurrentTouchablePath by
+      fCurrentTouchableProperties.fTouchablePath.
+- G4VisCommandsTouchable:
+  o /vis/touchable/dump: Simplify.
+  o /vis/touchable/findPath: Add (see guidance for description).
+- G4VisCommandSet:
+  o /vis/set/touchable: Add validity check.
+- G4VViewer:::TouchableSetColour, TouchableSetVisibility:
+  o Conform to modeling-V10-04-15.
+
+19 October 2018  John Allison  (visman-V10-04-23)
+- Requires greps-V10-04-08: G4VisExtent::GetNullExtent().
+- G4VSceneHandler::ProcessScene: Use G4VisExtent::GetNullExtent().
+- G4VVisCommand: Replace
+    UpdateVisManagerScene(const G4String& sceneName)
+  by
+    CheckSceneAndNotifyHandlers(G4Scene* pScene)
+  and fix minor bug.
+- G4VisCommandsScene.cc, G4VisCommandsSceneAdd.cc, G4VisCommandsViewer.cc:
+  Migrate to CheckSceneAndNotifyHandlers.
+
+17 October 2018  John Allison  (visman-V10-04-22)
+- /vis/scene/add/volume (and, consequently, /vis/drawVolume):
+  o Improve guidance: describe the use of a regular expression.
+    If physical-volume-name is "world" (the default), the top of the
+    main geometry tree (material world) is added.  If "worlds", the
+    top of all worlds - material world and parallel worlds, if any - are
+    added.  Otherwise a search of all worlds is made.
+    In the last case (a search of all worlds) all physical volume names are
+    matched against the first argument of this command.  If this is of the
+    form "/regexp/", where regexp is a regular expression (see C++ regex),
+    the physical volume name is matched against regexp by the usual rules
+    of regular expression matching. Otherwise an exact match is required.
+    For example, "/Shap/" matches "Shape1" and "Shape2".
+
+15 October 2018  John Allison  (visman-V10-04-21)
+- G4VSceneHandler.cc: Tidy.
+
+8 October 2018  John Allison  (visman-V10-04-20)
+- Fix bug in visman-V10-04-19.
+  o Change G4UIcmdWithAString to G4UIcommand in /vis/drawVolume.
+
+6 October 2018  John Allison  (visman-V10-04-19)
+- G4VisManager.cc: Move creation of top level commands to end.
+- /vis/drawVolume and /vis/draw/logicalVolume:
+  o Pick up guidance and parameters from /vis/scene/add/...
+- /vis/scene/add/trajectories: avoid adding new model if one exists.
+  o If no trajectories model exists in the scene create a new one...
+    ...else it already exists and there is no need to add a new one
+    because G4TrajectoriesModel simply describes trajectories in the
+    trajectories store whatever the type.
+
+10 September 2018  John Allison  (visman-V10-04-18)
+- G4VSceneHandler.cc: Tidy.
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/volume:
+  o Change to G4PhysicalVolumesSearchScene, which returns ALL occurrences
+    of a physical volume.
+
+29 August 2018  John Allison  (visman-V10-04-17)
+- G4VisCommandsTouchable.cc:
+  o Fix bug for multiple worlds in /vis/touchable/dump.
+
+14 August 2018  John Allison  (visman-V10-04-16)
+- G4VViewer::G4Spline: Reinstate.
+
+12 August 2018  John Allison  (visman-V10-04-15)
+- G4ViewParameters:
+  o Small bug fix in operator << (std::ostream& os, const G4ViewParameters& v).
+
+11 August 2018  John Allison  (visman-V10-04-14)
+- G4VViewer::G4Spline: Remove.
+- /vis/viewer/set/timeWindow/displayLightFront: change defaults.
+- /vis/viewer/colourByDensity: change defaults.
+ 
+24 July 2018  John Allison  (visman-V10-04-13)
+- G4VisCommandsViewer.cc:
+  o /vis/viewer/interpolate: Fix gcc8 warnings.
+  o /vis/viewer/colourByDensity: Change defaults:
+    . Algorithm 1 is default.
+    . gm/cm3 is default unit.
+    . Subsequent parameters are not omitable.
+
+12 July 2018  Gabriele Cosmo (visman-V10-04-12)
+- G4VisManager: obtain geometry and solids workspaces through calls to
+  the templated workspace pool class.
+- Coworks with tags in geometry and run.
+
+25 May 2018  John Allison (visman-V10-04-11)
+- Introduce /vis/drawLogicalVolume:
+  o Synonymous with /vis/specify.
+  o Both commands create a new scene and invoke /vis/scene/add/logicalVolume.
+
+24 May 2018  John Allison (visman-V10-04-10)
+- /vis/specify, /vis/scene/add/logicalVolume:
+  o Include overlap checking.
+
+08 May 2018 Ben Morgan (visman-V10-04-09)
+- G4VisCommandsMultithreading.cc:
+  - Explicitly #include G4Types header before use
+    of G4MULTITHREADED symbol. This prepares visman
+    for migration from -D flags to explicit header-set
+    #defines. It is backward compatible with old system.
+
+25 April 2018  John Allison (visman-V10-04-08)
+- G4VSceneHandler::CreateModelingParameters:
+  o Copy colour-by-density to modeling parameters.
+
+24 April 2018  John Allison (visman-V10-04-07)
+- G4ViewParameters.cc: Small bug fix.
+
+24 April 2018  John Allison (visman-V10-04-06)
+- Co-works greps-V10-04-04.
+
+23 April 2018  John Allison (visman-V10-04-05)
+- Co-works greps-V10-04-03.
+- G4VisCommandsViewerSet.cc: /vis/viewer/set/timeWindow/ commands:
+  o Migrate to greps-V10-04-03.
+- G4VisCommandsViewer.cc: Fix small error in guidance.
+- G4ViewParameters.cc:
+  o Complete implementation of /vis/viewer/colourByDensity, e.g.,
+    operator<<, etc.
+  o Migrate to greps-V10-04-03.
+
+22 April 2018  John Allison
+- G4VisCommandsViewer, G4ViewParameters:
+  o Add /vis/viewer/colourByDensity.
+
+22 April 2018  John Allison (visman-V10-04-04)
+- G4VSceneHandler.cc: Reduced repetitive error messages.
+
+31st March 2018  John Allison
+- /vis/viewer/set/culling density: further cosmetic improvement.
+
+30th March 2018  John Allison
+- /vis/viewer/set/culling density: cosmetic improvement.
+
+28th March 2018  John Allison  (visman-V10-04-03)
+- Introduce G4VVisCommand::ProvideValueOfUnit.
+- /vis/viewer/set/culling density:
+  o Use G4VVisCommand::ProvideValueOfUnit.
+  o Fix bug and improve parsing.
+- /vis/drawTree: Improve guidance.
+
+11th March 2018  John Allison  (visman-V10-04-02)
+- G4VViewer.hh: Improve comments about switching threads.
+
+8th January 2018  John Allison  (visman-V10-04-01)
+- Merged timemovebranch:
+  o Moved time window parameters from G4OpenGLStoredViewer to
+    G4ViewParameters. Now one can interpolate time window parameters (using
+    /vis/viewer/interpolate) and make a movie of particles moving through time.
+  o See vis-V10-04-00 History for more details.
+
+12th December 2017  John Allison  (visman-V10-04-00)
+- G4ViewParameters.cc: Minor cosmetic.
+
+29th October 2017  John Allison  (visman-V10-03-16)
+- G4VisManager.cc: Protect /vis/enable issued before run established.
+
+6th October 2017  John Allison  (visman-V10-03-15)
+- Needs greps-V10-03-07.
+- G4VisManager:
+  o Remove
+      if (!GetConcreteInstance()) return;
+    from Begin/EndOfRun so that even if the user
+      /vis/disable
+    the vis manager will still report fully, for example, with information
+    about the number of kept events for reviewing or redrawing.
+  o Introduce InitialiseG4ColourMap, which initialises G4Colour's colour map
+    and adds Guy Barrand's 65 X11 colours.
+  o Improve some messages.
+- G4VisCommands:
+  o Change /vis/drawOnlyKeptEvents to /vis/drawOnlyToBeKeptEvents and
+    improve the guidance for improved clarity.
+
+13th September 2017  John Allison  (visman-V10-03-14)
+- G4ViewParameters.cc, G4VisCommandsViewerSet.cc:
+  Reverted default number of line segments per circle to 24.
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
+
+21st June 2017  John Allison  (visman-V10-03-13)
+- Implement /vis/drawOnlyKeptEvents.
+  To draw selected events the user should set this flag, then in a user action:
+    if ( some criterion ) {
+      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+    }
+
+15th May 2017  John Allison
+- Cosmetic.
+
+14th May 2017  John Allison  (visman-V10-03-12)
+- Needs modeling-V10-03-07.
+- Add user-selected colour to /vis/scene/add/gps.
+
+12th May 2017  John Allison  (visman-V10-03-11)
+- Added G4VVisCommand::ConvertToColourGuidance.  This avoids having to
+  repeat it for every command that uses it.
+- /vis/viewer/save: Add .g4view if an extension is not supplied by the user.
+- /vis/viewer/set/defaultTextColour: Changed default to blue and opaque to
+  agree with default text vis attributes.
+
+11th May 2017  John Allison  (visman-V10-03-10)
+- Added #include <cctype> for Windows compiler and removed where no
+  longer necessary because isalpha is now encapsulated in
+  G4VVisCommand::ConverToColour.
+
+10th May 2017  John Allison  (visman-V10-03-09)
+- Needs greps-V10-03-04.
+- Added G4VVisCommand::ConvertToColour.
+- Now used throughout vis commands.
+
+1st May 2017  John Allison  (visman-V10-03-08)
+- G4VisCommandsViewer.cc:
+  o /vis/viewer/interpolate:
+    Add ShowView to be sure file-writing viewers close the file.
+
+1st May 2017  John Allison  (visman-V10-03-07)
+- Added /vis/scene/add/gps.
+
+23rd April 2017  John Allison  (visman-V10-03-05)
+- Improved command guidance.
+
+18th April 2017  John Allison  (visman-V10-03-04)
+- G4VisManager.cc: Improved error trapping in G4VisManager::CreateViewer.
+
+22nd February 2017  John Allison  (visman-V10-03-03)
+- Replaced G4VisExtent::NullExtent by G4VisExtent() throughout.
+
+12th December 2016  Brian Smith, Laurent Garnier  (visman-V10-03-02)
+- /vis/viewer/interpolate: Now works for WIN32.
+
+7th December 2016  John Allison (visman-V10-03-01)
+- G4VisManager:
+  o Moved SetUserAction out of line and added warning message:
+    "Deprecated.  Use RegisterRunDurationUserVisAction."
+ 
+9th December 2016  John Allison (visman-V10-03-00)
+- Coworks with modeling-V10-03-00.
+- G4VVisCommand:
+  o Added fCurrentArrow3DLineSegmentsPerCircle.
+  o Improved ConvertToDoublePair to return false if unit is not recognised.
+- G4VisCommandsSet:
+  o Introduced /vis/set/arrow3DLineSegmentsPerCircle.
+- G4Scene.cc: Improved user messages in AddRunDurationModel.
+- G4VisCommandsSceneAdd.cc:
+  o Adapted to augmented G4ArrowModel and G4MagneticFieldModel in
+    modeling-V10-03-00.
+- G4VisCommandsViewerSet.cc:
+  o Uses new ConvertToDoublePair.  Prevents crash is user inadvertently
+    enters unrecognised unit.
+- G4VisManager.cc: Registered /vis/set/arrow3DLineSegmentsPerCircle.
+
+27th November 2016  John Allison (visman-V10-02-37)
+- G4VisManager.cc: Fix for OpenGLXm.  An extra refresh should come
+  BEFORE ShowView.  Should not affect other viewers.
+
+18th November 2016  John Allison (visman-V10-02-36)
+- Fixed the GetColour() problem.
+
+17th November 2016  John Allison (visman-V10-02-35)
+- G4VisManager.cc:
+  o Moved ShowView from end of vis thread to EndOfRun()
+    for MT mode, where it now becomes the same as sequential mode.
+    Fixes display problem at end of run in Qt.
+  o Added extra Refresh() for auto-refresh viewers.
+    Fixes display problem at end of run in X and Xm.
+
+3rd November 2016  John Allison (visman-V10-02-33)
+- G4ViewParameters.cc, G4VisCommandsViewerSet.cc:
+  Changed default number of line segments per circle from 24 to 72.
+- G4VisCommandsViewerSet.cc:
+  Limited WARNING about up-Vector to first time only.
+
+26th October 2016  John Allison (visman-V10-02-32)
+- G4VisManager.cc: Fixed inappropriate warning message in MT batch mode.
+
+2nd October 2016  John Allison (visman-V10-02-31)
+- G4VViewer.cc: Fixed warnings.  Tidied.
+
+29th September 2016  John Allison (visman-V10-02-30)
+- G4VSceneHandler::RequestPrimitives:
+  o Tidied and improved error message for the case that a polyhedron
+    pointer is null:
+"\n  This means it cannot be visualized on most systems (try RayTracer)."
+"\n  1) The solid may not have implemented the CreatePolyhedron method."
+"\n  2) For Boolean solids, the BooleanProcessor, which attempts to create"
+"\n     the resultant polyhedron, may have failed."
+- G4VViewer:
+  o Moved G4Spline into G4VViewer to avoid polluting global namespace.
+  o Fixed Coverity warnings.
+
+23rd September 2016  John Allison (visman-V10-02-29)
+- G4ViewParameters.cc: Removed accidental duplicate function, correctly
+  defined in G4ModelingParameters.
+std::ostream& operator <<
+(std::ostream& os,
+ const std::vector<G4ModelingParameters::VisAttributesModifier>& vams)
+
+20th September 2016  John Allison (visman-V10-02-28)
+- G4VisCommandsViewer.cc:
+  /vis/viewer/save and /vis/viewer/interpolate:
+  Default filename extension changed to .g4view.
+
+19th September 2016  John Allison (visman-V10-02-27)
+- Tidied and tagged.
+
+19th September 2016  John Allison (r99341)
+- Moved Vis Attributes Modifiers (VAMs) back to G4ModelingParameters,
+  reversing visman-V10-02-22.
+
+15th September 2016  John Allison (visman-V10-02-26)
+- G4VViewer:
+  o Introduced TouchableSetVisibility and TouchableSetColour.
+    They change the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+    (Used by Qt Viewer.)
 - G4Scene:
   o Replaced warning reference to obsolete G4VisAttributes::Invisible to
     G4VisAttributes::GetInvisible().  (B.Smith)
 
-2nd May 2016  John Allison  (visman-V10-01-21)
+13th September 2016  John Allison (visman-V10-02-25)
+- Replace all r-value references, e.g., auto&&, with simple
+  l-value references, e.g., const auto&, until I understand
+  r-value references.  I think we do not yet have a need for
+  r-value references!
+
+12th September 2016  John Allison (visman-V10-02-24)
+- G4VViewer:
+  o Introduced
+     void G4VViewer::SetTouchable
+     (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
+     fullPath)
+  // Set the touchable for /vis/touchable/set/... commands.
+  // This is harmless but useful if the user wishes immediately to
+  // change or undo an operation on a touchable.
+
+11th September 2016  John Allison (visman-V10-02-23)
+- GetColour/GetColor no longer takes an argument.
+- Make sure applicable vis attributes are obtained.
+  // Get and check applicable vis attributes.
+  //   fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  // Note: the vis attributes may have been modified by the viewer.  See
+  // code in G4VViewer::GetApplicableVisAttributes.
+
+9th September 2016  John Allison (visman-V10-02-22)
+- Needs modeling-V10-02-11.
+- Moved Vis Attributes Modifiers (VAMs) from G4ModelingParameters
+  to G4ViewParameters.
+
+8th September 2016  John Allison
+- G4VViewer::GetApplicableVisAttributes:
+  o Ported VAM code from G4PhysicalVolumeModel.
+
+31st August 2016  John Allison (visman-V10-02-21)
+- G4ViewParameters.cc: Fix warning.
+
+31st August 2016  John Allison (visman-V10-02-20)
+- Co-works greps-V10-02-05.
+- G4VisManager.cc: Minor improvement to an informational.
+- G4VSceneHandler:
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Implemented auxiliary edge drawing for:
+      G4Orb, G4Sphere, G4Torus and G4Ellipsoid
+    unless otherwise specified.
+  o Tidied.
+- G4ViewParameters.cc:
+  o G4ViewParameters::CatmullRomCubicSplineInterpolation:
+    Improved interpolation of vis attributes modifiers.
+    
+14th August 2016  John Allison (visman-V10-02-19)
+-  Ooops.  Now as stated.
+
+14th August 2016  John Allison (visman-V10-02-18)
+- G4VSceneHandler.cc:
+  o G4VSceneHandler:: AddSolid (const G4Sphere& sphere):
+    . Prototype code for drawing auxiliary edges (commented out).
+  o G4VSceneHandler::CreateCutawaySolid: Improved comments.
+- G4ViewParameters.cc: Fixed warning.
+- G4VisCommandsViewer.cc: Fixed warning.
+
+G4VisCommandViewerClone::SetNewValue
+7th August 2016  John Allison (visman-V10-02-17 needs greps-V10-02-02)
+- G4VSceneHandler.cc:
+  o Improved GetAuxEdgeVisible to take account of new flag
+    IsForceDrawingStyle.
+- G4ViewParameters.cc:
+  o Takes account of new flag IsForceDrawingStyle.
+  o G4ViewParameters::TouchableCommands:
+    Suppressed the saving of the following commands when not forced:
+    /vis/touchable/set/forceWireframe
+    /vis/touchable/set/forceSolid
+    /vis/touchable/set/forceAuxEdgeVisible
+    /vis/touchable/set/lineSegmentsPerCircle
+- G4VisCommandsGeometrySet.cc:
+  o Changed default to "true" for:
+    /vis/geometry/set/daughtersInvisible
+    /vis/geometry/set/forceAuxEdgeVisible
+    /vis/geometry/set/forceSolid
+    /vis/geometry/set/forceWireframe
+    /vis/geometry/set/visibility (default was already "true")
+  o Changed default from -1 to 0 for:
+    /vis/geometry/set/forceLineSegmentsPerCircle
+    (<= 0 means use global default value, so should not change anything.)
+- G4VisCommandsTouchableSet.cc:
+  o Changed default to "true" for:
+    /vis/touchable/set/daughtersInvisible
+    /vis/touchable/set/forceAuxEdgeVisible
+    /vis/touchable/set/forceSolid
+    /vis/touchable/set/forceWireframe
+    /vis/touchable/set/visibility
+  o Changed default from -1 to 0 for:
+    /vis/touchable/set/lineSegmentsPerCircle
+    (<= 0 means use global default value, so should not change anything.)
+
+20th July 2016  John Allison  (visman-V10-02-16)
+- G4VisExecutive.icc: Replaced TouchedVolume by EncounteredVolume
+  in trajectory drawing and filtering.  Functionally identical.
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/axes: Fixed bug in guidance.
+- G4VSceneHandler::AddPrimitive (const G4Scale& scale):
+  Scale annotations now pick up current text colour.
+
+30th June 2016  John Allison  (visman-V10-02-15)
+- G4VisCommandsSceneAdd.cc:
+  o Added comments to explain strategy for /vis/scene/add/logo.
+- G4VisCommandsViewer.cc: Fixed Coverity warning.
+
+14th June 2016  John Allison  (visman-V10-02-14)
+- G4VisManager.cc:  Improved informational printing:
+  o at end of run for reviewing kept events;
+  o for /vis/disable and /vis/enable.
+- G4VisCommandsViewer.cc:
+  o Improved /vis/viewer/list.
+- G4VisCommandsSceneAdd:
+  o Improved guidance regarding local axes for
+    /vis/scene/add/logicalVolume
+- G4VisCommandsCompound:
+  o Improved guidance regarding local axes for /vis/specify.
+
+3rd June 2016  John Allison  (visman-V10-02-13)
+- G4ViewParameters.cc: Fixed compilation warnings on gcc-6.1.
+
+1st June 2016  John Allison  (visman-V10-02-12)
+- Fixed compiler error on Windows. /vis/viewer/interpolate is not
+  available on Windows because it uses popen, a way of getting
+  output from a system command. _popen (with an underscore) is
+  said to be available in Windows but this has not been tried.
+ 
+1st June 2016  John Allison  (visman-V10-02-11)
+- Introduced /vis/viewer/interpolate.  See History from development
+  branch visman-V10-02-02-branch as follows:
+17th February 2016  John Allison  (visman-V10-02-02-branch-12)
+- G4ViewParameters::CatmullRomCubicSplineInterpolation:
+  o Protected some parameters from going negative, as appropriate.
+- G4VisCommandsViewer.cc: /vis/viewer/interpolate:
+  o Changed first argument to Unix-style pattern.  From the guidance:
+    Interpolate views defined by the first argument, which can
+    contain Unix-shell-style pattern matching characters such as
+    '*', '?' and '[' - see "man sh" and look for "Pattern Matching".
+    The contents of each file are assumed to be "/vis/viewer"
+    commands that specify a particular view. The files are
+    processed in alphanumeric order of filename. The files may be
+    written by hand or produced by the "/vis/viewer/save" command.
+    The default is to search the working directory for files with a
+    .view (updated to .g4view, visman-V10-02-28) extension. Another
+    procedure is to assemble view files in a subdirectory, e.g.,
+    "myviews"; then they can be interpolated with
+    "/vis/viewer/interpolate myviews/*".
+16th February 2016  John Allison  (visman-V10-02-02-branch-11)
+- /vis/viewer/interpolate:
+  Added safety check to while and do loops.
+- Restored mysteriously lost G4VisCommandViewerClearVisAttributesModifiers.
+28th January 2016  John Allison  (visman-V10-02-02-branch-10)
+- Interpolation: Added vis attributes modifiers (colours only).
+- Tidied.
+28th January 2016  John Allison  (visman-V10-02-02-branch-09)
+- Tidied.
+28th January 2016  John Allison  (visman-V10-02-02-branch-08)
+- Interpolation: Added cutaway planes.
+27th January 2016  John Allison  (visman-V10-02-02-branch-07)
+- Interpolation: Added planes and colours.
+27th January 2016  John Allison  (visman-V10-02-02-branch-06)
+- /vis/viewer/interpolate:
+  o Allow export of files for possible movie. Write \"export\" as
+    5th parameter (OpenGL only).
+27th January 2016  John Allison  (visman-V10-02-02-branch-05)
+- Needs modeling-V10-02-01.
+- G4VisManager.cc: Added instantiation of
+  G4VisCommandViewerClearVisAttributesModifiers.
+- G4VisCommandsViewer: Added /vis/viewer/clearVisAttributesModifiers.
+- G4VisCommandsTouchable.cc: Improved guidance.
+- G4ViewParameters:
+  o Added ClearVisAttributesModifiers.
+  o Augmented AddVisAttributesModifier so that if a target already
+    exists the modifier is not added, only the vis attributes of the
+    existing modifier are changed.
+26th January 2016  John Allison
+- Merged visman-V10-02-03: G4VisManager::G4VisSubThread:
+  GetNavigatorForTracking -> SetWorldVolume
+  This is required for OriginVolume drawing and filtering. 
+24th January 2016  John Allison  (visman-V10-02-02-branch-04)
+- Refinements.
+23rd January 2016  John Allison  (visman-V10-02-02-branch-01)
+- Improved /vis/viewer/interpolate.
+22nd January 2016  John Allison  (visman-V10-02-02-branch-00)
+- Introduced G4ViewParameters::CatmullRomCubicSplineInterpolation.
+- Moved the following:
+    #ifndef __MIC__
+    #define G4VIS_USE_STD11
+    #endif
+  from G4VisManager.cc to G4VisManager.hh.
+- G4VisManager.cc: Instantiated G4VisCommandViewerInterpolate.
+- G4VisCommandsViewer:
+  o Introduced /vis/viewer/interpolate.  Note this command is not
+    available on Windows.  Code is protected by #ifndef WIN32.
+    This is because popen, which allows one to retrieve output
+    from a system shell command, is not available on Windows.
+  o Improved guidance for /vis/viewer/save.
+
+30th May 2016  John Allison  (visman-V10-02-10)
+- G4VisManager::SetCurrentViewer: Added fpViewer->SetView().
+- G4VisCommandsViewer.cc:
+  o /vis/viewer/select: Added comment: Calling the above calls SetView().
+  o /vis/viewer/clear: Added viewer->SetView().
+
+4th May 2016  John Allison  (visman-V10-02-09)
+- G4VisExecutive.icc: Win32 now opens with "/vis/open OGL" if Qt
+  is not built.
+
+2nd May 2016  John Allison  (visman-V10-02-08)
 - G4VisCommandsSceneAdd.cc: Fixed gcc-6.1 warnings.
 
+2nd May 2016  John Allison  (visman-V10-02-07)
+- G4VisManager: MT mode: moved end of run instructions (ShowView,
+  etc.) to end of vis thread.  This is so that all trajectories are
+  flushed from vis thread before switching back to master thread.
+  Also fixes picking in MT mode.
+
+30th March 2016  John Allison
+- Gave fallback trajectory model the name "DefaultModel".
+
+29th March 2016  John Allison  (visman-V10-02-06)
+- G4VisManager.cc: Cosmetic. Change of name of fallback traj. model.
+- G4VisCommandsSceneAdd.cc:
+  o /vis/scene/add/volume: Removed incorrect check on existing models.
+    It was preventing parallel worlds being added individually.  There
+    are enough checks in G4Scene::AddRunDurationModel.
+
+11th March 2016  John Allison  (visman-V10-02-05)
+- Fixed mistake in introductory vis manager message.
+- Inhibited use of BeginRun, BeginEvent, EndEvent and EndRun
+  when vis is not enabled, for example after /vis/disable.
+  In particular this prevents the start of the vis thread in
+  multithreading mode.
+
+15th February 2016  John Allison  (visman-V10-02-04)
+- Requires modeling-V10-02-02.
+- G4VisExecutive.icc:
+  Registered drawing and filtering by touched volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByTouchedVolume
+    /vis/filtering/trajectories/create/touchedVolumeFilter
+
+26th January 2016  John Allison  (visman-V10-02-03)
+- G4VisManager::G4VisSubThread:
+  GetNavigatorForTracking -> SetWorldVolume
+  This is required for OriginVolume drawing and filtering. 
+
+14th January 2016  John Allison  (visman-V10-02-02)
+- Improved /vis/viewer/save.
+
+14th January 2016  John Allison  (visman-V10-02-01)
+- Fixed unused variable problem.
+
+14th January 2016  John Allison  (visman-V10-02-00)
+- Improved error tracking:
+  o G4VVisCommand: Introduced error code to track error conditions.
+  o G4VisCommandsCompound.cc: Tracked error conditions for
+    /vis/open and /vis/drawTree.
+- G4VisCommandsSceneHandler.cc: Code tidying.
+
+11th December 2015 Laurent Garnier
+- G4VViewer:
+  o Add ComputeFlyThrough method (beta)
+  o Add an G4Spline class for testing
+    
 1st November 2015  John Allison  (visman-V10-01-20)
 - Introduced (again!) <chrono> for queue handling in MT mode.
   o Except for Xeon Phi, which is protected by #ifndef __MIC__

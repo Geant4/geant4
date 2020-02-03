@@ -1,6 +1,5 @@
-# $Id: GNUmakefile 94089 2015-11-05 15:12:13Z gcosmo $
 # ---------------------------------------------------------------------------
-# GNUmakefile for physics_lists/constructors/factory library.  
+# GNUmakefile for physics_lists/constructors/factory library.
 #  Gunter Folger 10-Jan-2012.
 # ---------------------------------------------------------------------------
 
@@ -17,6 +16,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/geometry/biasing/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/magneticfield/include \
@@ -31,16 +31,17 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/run/include \
-	    -I$(G4BASE)/physics_lists/builders/include \
-	    -I$(G4BASE)/physics_lists/constructors/decay/include \
-	    -I$(G4BASE)/physics_lists/constructors/electromagnetic/include \
-	    -I$(G4BASE)/physics_lists/constructors/gamma_lepto_nuclear/include \
-	    -I$(G4BASE)/physics_lists/constructors/hadron_elastic/include \
-	    -I$(G4BASE)/physics_lists/constructors/hadron_inelastic/include \
-	    -I$(G4BASE)/physics_lists/constructors/limiters/include \
-	    -I$(G4BASE)/physics_lists/constructors/ions/include \
-	    -I$(G4BASE)/physics_lists/constructors/stopping/include \
-	    -I$(G4BASE)/physics_lists/util/include \
+            -I$(G4BASE)/physics_lists/builders/include \
+            -I$(G4BASE)/physics_lists/constructors/decay/include \
+            -I$(G4BASE)/physics_lists/constructors/electromagnetic/include \
+            -I$(G4BASE)/physics_lists/constructors/gamma_lepto_nuclear/include \
+            -I$(G4BASE)/physics_lists/constructors/hadron_elastic/include \
+            -I$(G4BASE)/physics_lists/constructors/hadron_inelastic/include \
+            -I$(G4BASE)/physics_lists/constructors/limiters/include \
+            -I$(G4BASE)/physics_lists/constructors/ions/include \
+            -I$(G4BASE)/physics_lists/constructors/stopping/include \
+            -I$(G4BASE)/physics_lists/util/include \
+            -I$(G4BASE)/processes/biasing/importance/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
@@ -67,7 +68,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-	    -I$(G4BASE)/processes/hadronic/models/qmd/include \
+            -I$(G4BASE)/processes/hadronic/models/qmd/include \
             -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \

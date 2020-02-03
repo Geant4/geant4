@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 68346 2013-03-22 09:51:24Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,6 +43,8 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4RunManager.hh"
+#include "G4NistManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
@@ -57,7 +58,7 @@ DetectorConstruction::DetectorConstruction()
 {
   fBoxSize = 1*m;
   DefineMaterials();
-  SetMaterial("Iron");  
+  SetMaterial("G4_Fe");  
   fDetectorMessenger = new DetectorMessenger(this);
 }
 
@@ -126,11 +127,7 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
-  // Cleanup old geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
+  if(fPBox) { return fPBox; }
 
   G4Box*
   sBox = new G4Box("Container",                           //its name
@@ -165,11 +162,17 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) fMaterial = pttoMaterial;
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if(pttoMaterial &&  fMaterial != pttoMaterial) {
+    fMaterial = pttoMaterial;
+    if(fLBox) { fLBox->SetMaterial(fMaterial); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,8 +183,6 @@ void DetectorConstruction::SetSize(G4double value)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
 
 void DetectorConstruction::UpdateGeometry()
 {

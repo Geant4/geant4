@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCoulombBarrier.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -38,15 +37,14 @@ class G4NeutronCoulombBarrier : public G4CoulombBarrier
 {
 public:
 
-  G4NeutronCoulombBarrier();
+  explicit G4NeutronCoulombBarrier();
   virtual ~G4NeutronCoulombBarrier();
 
 private:
-  G4NeutronCoulombBarrier(const G4NeutronCoulombBarrier & right);
-
-  const G4NeutronCoulombBarrier & operator=(const G4NeutronCoulombBarrier & right);
-  G4bool operator==(const G4NeutronCoulombBarrier & right) const;
-  G4bool operator!=(const G4NeutronCoulombBarrier & right) const;
+  G4NeutronCoulombBarrier(const G4NeutronCoulombBarrier & right) = delete;
+  const G4NeutronCoulombBarrier & operator=(const G4NeutronCoulombBarrier & right) = delete;
+  G4bool operator==(const G4NeutronCoulombBarrier & right) const = delete;
+  G4bool operator!=(const G4NeutronCoulombBarrier & right) const = delete;
   
 };
 

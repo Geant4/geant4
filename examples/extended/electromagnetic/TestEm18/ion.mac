@@ -1,0 +1,32 @@
+#
+# macro file for TestEm18.cc
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSize 1 cm
+#
+/testem/phys/addPhysics standard
+#
+/run/setCut 1 mm
+#
+/run/initialize
+/process/list
+#
+/gun/particle ion
+/gun/ion 6 12
+/gun/energy 4 GeV
+#
+/analysis/setFileName C12
+#
+/analysis/h1/set  1 100   0    1 cm   #step size
+/analysis/h1/set  2 100 100  150 MeV  #continuous Edeposited 
+/analysis/h1/set  3 100   0   20 MeV  #Etransfered by ionisation
+/analysis/h1/set  6 100   0   20 MeV  #total Etransfered
+/analysis/h1/set  7 100 100  150 MeV  #total Elost
+/analysis/h1/set  8 100 100  150 MeV  #energy balance
+/analysis/h1/set 12 100   0 1000 keV  #e- energy spectrum
+#
+/run/printProgress 10000
+/run/beamOn 100000

@@ -25,7 +25,6 @@
 //
 //
 //
-// $Id: G4KineticTrack.hh,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -74,9 +73,9 @@ class G4KineticTrack : public G4VKineticNucleon
 
       G4KineticTrack& operator=(const G4KineticTrack& right);
 
-      G4int operator==(const G4KineticTrack& right) const;
+      G4bool operator==(const G4KineticTrack& right) const;
 
-      G4int operator!=(const G4KineticTrack& right) const;
+      G4bool operator!=(const G4KineticTrack& right) const;
 /*
       inline void *operator new(size_t);
       inline void operator delete(void *aTrack);

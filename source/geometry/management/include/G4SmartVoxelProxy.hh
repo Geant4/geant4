@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SmartVoxelProxy.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// class G4SmartVoxelProxy
+// G4SmartVoxelProxy
 //
 // Class description:
 //
@@ -37,10 +34,7 @@
 // Note that the proxy does NOT gain deletion responsibility for proxied
 // objects.
 
-// History:
-// 12.07.95 P.Kent Initial version
-// 03.08.95 P.Kent Updated to become non abstract class, removing
-//                 HeaderProxy and NodeProxy derived classes
+// 12.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELPROXY_HH
 #define G4SMARTVOXELPROXY_HH
@@ -57,11 +51,11 @@ class G4SmartVoxelProxy
   public:  // with description
 
     G4SmartVoxelProxy(G4SmartVoxelHeader *pHeader)
-      : fHeader(pHeader), fNode(0) {}
+      : fHeader(pHeader) {}
       // Proxy for the specified header.
 
     G4SmartVoxelProxy(G4SmartVoxelNode *pNode)
-      : fHeader(0), fNode(pNode) {}
+      : fNode(pNode) {}
       // Proxy for the specified node.
 
     ~G4SmartVoxelProxy();
@@ -85,8 +79,8 @@ class G4SmartVoxelProxy
 
   private:
 
-    G4SmartVoxelHeader* fHeader;
-    G4SmartVoxelNode* fNode;
+    G4SmartVoxelHeader* fHeader = nullptr;
+    G4SmartVoxelNode* fNode = nullptr;
 };
 
 #include "G4SmartVoxelProxy.icc"

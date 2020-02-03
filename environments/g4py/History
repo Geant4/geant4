@@ -11,6 +11,35 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+1 Dec. 2019 K. Murakami
+- update for 10.6 release
+- update for Python3 support
+- boost_python library name can be specified in cmake (BZ-2059)
+
+31 Jan. 2019, I.Hrivnacova
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+30 Nov. 2017 K. Murakami
+ - update for 10.5 release
+ - fix CMAKE_INSTALL_PREFIX does not work (id 1924)
+
+24 Nov. 2017 K. Murakami
+ - update for 10.4 release
+
+7 Dec. 2016 K. Murakami
+ - remove G4VisAttributes::Invisible as deprecated
+
+21 Nov. 2016 K. Murakami
+ - fix version strings in __init__.py
+
+18 Nov. 2016 K. Murakami
+ - update for 10.3 release
+ - CMake modified for unit/integration tests with CTest
+ - remove ExN03 physics list
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 19 Nov. 2015 K. Murakami
  - update CMakeLists.txt, change minimum version requirement to 3.3
  - add exported methods requested by enhansment-id 1613

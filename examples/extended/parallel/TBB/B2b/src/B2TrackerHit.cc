@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2TrackerHit.cc 69505 2013-05-07 01:57:27Z asaim $
 //
 /// \file B2TrackerHit.cc
 /// \brief Implementation of the B2TrackerHit class
@@ -78,9 +77,9 @@ const B2TrackerHit& B2TrackerHit::operator=(const B2TrackerHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int B2TrackerHit::operator==(const B2TrackerHit& right) const
+G4bool B2TrackerHit::operator==(const B2TrackerHit& right) const
 {
-  return ( this == &right ) ? 1 : 0;
+  return ( this == &right ) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

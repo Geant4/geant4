@@ -1,5 +1,8 @@
 Hi-------------------------------------------------------------------
+<<<<<<< HEAD
 $Id: History 89572 2015-04-20 07:18:15Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +12,26 @@ $Id: History 89572 2015-04-20 07:18:15Z gcosmo $
                       Category History file
                       ---------------------
 
+<<<<<<< HEAD
+=======
+31.01.2019 - I.Hrivnacova (lAr_calorimeter-V10-05-00)
+             Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+09.11.2018 - G. Cosmo (lAr_calorimeter-V10-04-02)
+             FCALTBEventAction: fixed typo in printout.
+
+21.10.2018 - F. Romano (lAr_calorimeter-V10-04-01)
+             G4VIS_USE and G4UI_USE deleted
+
+10.05.2018 - B. Morgan (lAr_calorimeter-V10-04-00)
+             Include G4Types before use of G4MULTITHREADED. For forward 
+             compatibility with move to #defines over -D for G4 preprocessor 
+             symbols.
+
+02.11.2016 - L. Garnier (lAr_calorimeter-V10-02-00)
+             Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 20.04.2015 - V.Ivanhenko Tag (lAr_calorimeter-V10-01-00)
              Fixed internal array overflow in FCALTestSetupSD, which
              provides crashes in MT mode, which are  difficult to explain

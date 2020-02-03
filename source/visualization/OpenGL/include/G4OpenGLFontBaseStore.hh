@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGLFontBaseStore.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // J.Allison  Apr 2005.
 

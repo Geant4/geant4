@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 80655 2014-05-06 08:30:34Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -62,9 +61,17 @@ GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
     HEADERS
         G4ElectroVDNuclearModel.hh
         G4MuonVDNuclearModel.hh
+        G4NeutrinoElectronCcModel.hh
+        G4NeutrinoNucleusModel.hh
+        G4NuMuNucleusCcModel.hh
+        G4NuMuNucleusNcModel.hh
     SOURCES
         G4ElectroVDNuclearModel.cc
         G4MuonVDNuclearModel.cc
+        G4NeutrinoElectronCcModel.cc
+        G4NeutrinoNucleusModel.cc
+        G4NuMuNucleusCcModel.cc
+        G4NuMuNucleusNcModel.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

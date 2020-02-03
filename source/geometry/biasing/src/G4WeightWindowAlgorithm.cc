@@ -23,73 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WeightWindowAlgorithm implementation
 //
-// $Id: G4WeightWindowAlgorithm.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4WeightWindowAlgorithm.cc
-//
+// Author: Michael Dressel (CERN), 2003
 // ----------------------------------------------------------------------
 #include "G4WeightWindowAlgorithm.hh"
 #include "Randomize.hh"
 
-
 G4WeightWindowAlgorithm::
-G4WeightWindowAlgorithm(G4double upperLimitFaktor,
-			G4double survivalFaktor,
-			G4int maxNumberOfSplits) :
-  fUpperLimitFaktor(upperLimitFaktor),
-  fSurvivalFaktor(survivalFaktor),
-  fMaxNumberOfSplits(maxNumberOfSplits)
-{}
+G4WeightWindowAlgorithm(G4double upperLimitFactor,
+                        G4double survivalFactor,
+                        G4int maxNumberOfSplits)
+  : fUpperLimitFactor(upperLimitFactor),
+    fSurvivalFactor(survivalFactor),
+    fMaxNumberOfSplits(maxNumberOfSplits)
+{
+}
 
 G4WeightWindowAlgorithm::~G4WeightWindowAlgorithm()
-{}
-
-
+{
+}
 
 G4Nsplit_Weight 
 G4WeightWindowAlgorithm::Calculate(G4double init_w,
-				   G4double lowerWeightBound) const {
-
-  G4double survivalWeight = lowerWeightBound * fSurvivalFaktor;
-  G4double upperWeight = lowerWeightBound * fUpperLimitFaktor;
+                                   G4double lowerWeightBound) const
+{
+  G4double survivalWeight = lowerWeightBound * fSurvivalFactor;
+  G4double upperWeight = lowerWeightBound * fUpperLimitFactor;
 
   // initialize return value for case weight in window
+  //
   G4Nsplit_Weight nw;
   nw.fN = 1;
   nw.fW = init_w;
 
-  if (init_w > upperWeight) {
+  if (init_w > upperWeight)
+  {
     // splitting
-
-    //TB    G4double wi_ws = init_w/survivalWeight;
-    //TB
+    //
     G4double temp_wi_ws = init_w/upperWeight;
-    G4int split_i = static_cast<int>(temp_wi_ws);
-    if(split_i != temp_wi_ws) split_i++;
+    G4int split_i = static_cast<G4int>(temp_wi_ws);
+    if(split_i != temp_wi_ws)  { ++split_i; }
     G4double wi_ws = init_w/split_i;
-
-    //TB
-//TB    G4int int_wi_ws = static_cast<int>(wi_ws);
 
     // values in case integer mode or in csae of double
     // mode and the lower number of splits will be diced
-    //TB    nw.fN = int_wi_ws;
-    //TB    nw.fW = survivalWeight;	
+    //
     nw.fN = split_i;
-    nw.fW = wi_ws;	
+    nw.fW = wi_ws;        
 
 //TB     if (wi_ws <= fMaxNumberOfSplits) {
 //TB       if (wi_ws > int_wi_ws) {
-//TB 	// double mode
-//TB 	G4double p2 =  wi_ws - int_wi_ws;
-//TB 	G4double r = G4UniformRand();
-//TB 	if (r<p2) {
-//TB 	  nw.fN = int_wi_ws + 1;
-//TB 	}
+//TB         // double mode
+//TB         G4double p2 =  wi_ws - int_wi_ws;
+//TB         G4double r = G4UniformRand();
+//TB         if (r<p2) {
+//TB           nw.fN = int_wi_ws + 1;
+//TB         }
 //TB       }
 //TB     }
 //TB     else {
@@ -98,23 +88,25 @@ G4WeightWindowAlgorithm::Calculate(G4double init_w,
 //TB       nw.fW = init_w/fMaxNumberOfSplits;
 //TB     }
 
-
-  } else if (init_w < lowerWeightBound) {
-    // Russian roulette
+  }
+  else if (init_w < lowerWeightBound)  // Russian roulette
+  {
     G4double wi_ws = init_w/survivalWeight;
     G4double p = std::max(wi_ws,1./fMaxNumberOfSplits);
     G4double r = G4UniformRand();
-    if (r<p){
+    if (r<p)
+    {
       nw.fW = init_w/p;
       nw.fN = 1;
-    } else {
+    }
+    else
+    {
       nw.fW = 0;
       nw.fN = 0;
     }
   } 
   // else do nothing
-  
-  
+
   return nw;
 }
 

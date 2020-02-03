@@ -147,17 +147,19 @@ namespace G4INCL {
     G4double theNewEnergy = theEnergy;
     G4int theNewA = theA;
     G4int theNewZ = theZ;
+    G4int theNewS = theS;
     for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
-// assert((*p)->isNucleon());
+// assert((*p)->isNucleonorLambda());
       // Add the initial (off-shell) momentum and energy to the projectile remnant
       theNewMomentum += getStoredMomentum(*p);
       theNewEnergy += (*p)->getEnergy();
       theNewA += (*p)->getA();
       theNewZ += (*p)->getZ();
+      theNewS += (*p)->getS();
     }
 
     // Check that the excitation energy of the new projectile remnant is non-negative
-    const G4double theNewMass = ParticleTable::getTableMass(theNewA,theNewZ);
+    const G4double theNewMass = ParticleTable::getTableMass(theNewA,theNewZ,theNewS);
     const G4double theNewExcitationEnergy = computeExcitationEnergyWith(pL);
     const G4double theNewEffectiveMass = theNewMass + theNewExcitationEnergy;
 
@@ -182,6 +184,7 @@ namespace G4INCL {
 
     theA = theNewA;
     theZ = theNewZ;
+    theS = theNewS;
     theMomentum = theNewMomentum * scalingFactor;
     theEnergy = theNewEnergy;
 
@@ -199,17 +202,19 @@ namespace G4INCL {
     G4double theNewEnergy = theEnergy;
     G4int theNewA = theA;
     G4int theNewZ = theZ;
+    G4int theNewS = theS;
     for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
-// assert((*p)->isNucleon());
+// assert((*p)->isNucleonorLambda());
       // Add the initial (off-shell) momentum and energy to the projectile remnant
       theNewMomentum += getStoredMomentum(*p);
       theNewEnergy += (*p)->getEnergy();
       theNewA += (*p)->getA();
       theNewZ += (*p)->getZ();
+      theNewS += (*p)->getS();
     }
 
     // Check that the excitation energy of the new projectile remnant is non-negative
-    const G4double theNewMass = ParticleTable::getTableMass(theNewA,theNewZ);
+    const G4double theNewMass = ParticleTable::getTableMass(theNewA,theNewZ,theNewS);
     const G4double theNewInvariantMassSquared = theNewEnergy*theNewEnergy-theNewMomentum.mag2();
 
     G4bool positiveExcitationEnergy = false;
@@ -226,7 +231,7 @@ namespace G4INCL {
       ParticleMutableIter best = pL.end();
       ThreeVector bestMomentum;
       G4double bestEnergy = -1.;
-      G4int bestA = -1, bestZ = -1;
+      G4int bestA = -1, bestZ = -1, bestS = 0;
       for(ParticleList::iterator p=pL.begin(), e=pL.end(); p!=e; ++p) {
         // Subtract the initial (off-shell) momentum and energy from the new
         // projectile remnant
@@ -234,8 +239,9 @@ namespace G4INCL {
         const G4double theNewerEnergy = theNewEnergy - (*p)->getEnergy();
         const G4int theNewerA = theNewA - (*p)->getA();
         const G4int theNewerZ = theNewZ - (*p)->getZ();
+        const G4int theNewerS = theNewS - (*p)->getS();
 
-        const G4double theNewerMass = ParticleTable::getTableMass(theNewerA,theNewerZ);
+        const G4double theNewerMass = ParticleTable::getTableMass(theNewerA,theNewerZ,theNewerS);
         const G4double theNewerInvariantMassSquared = theNewerEnergy*theNewerEnergy-theNewerMomentum.mag2();
 
         if(theNewerInvariantMassSquared>=-1.e-5) {
@@ -250,6 +256,7 @@ namespace G4INCL {
             bestEnergy = theNewerEnergy;
             bestA = theNewerA;
             bestZ = theNewerZ;
+            bestS = theNewerS;
           }
         }
       }
@@ -264,6 +271,7 @@ namespace G4INCL {
       theNewEnergy = bestEnergy;
       theNewA = bestA;
       theNewZ = bestZ;
+      theNewS = bestS;
 
       if(maxExcitationEnergy>0.) {
         // Stop here
@@ -277,6 +285,7 @@ namespace G4INCL {
     }
     theA = theNewA;
     theZ = theNewZ;
+    theS = theNewS;
     theMomentum = theNewMomentum;
     theEnergy = theNewEnergy;
 
@@ -293,7 +302,7 @@ namespace G4INCL {
     const G4double theNewEnergy = theEnergy + oldEnergy;
 
     // Check that the excitation energy of the new projectile remnant is non-negative
-    const G4double theNewMass = ParticleTable::getTableMass(theA+p->getA(),theZ+p->getZ());
+    const G4double theNewMass = ParticleTable::getTableMass(theA+p->getA(),theZ+p->getZ(),theS+p->getS());
     const G4double theNewInvariantMassSquared = theNewEnergy*theNewEnergy-theNewMomentum.mag2();
 
     if(theNewInvariantMassSquared<0.)

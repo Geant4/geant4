@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AuxiliaryNavServices.cc 90009 2015-05-08 07:42:39Z gcosmo $
+// class G4AuxiliaryNavServices implementation
 //
 // --------------------------------------------------------------------
 
@@ -38,13 +38,16 @@
 
 void G4AuxiliaryNavServices::ReportTolerances()
 {
-   G4int oldPrec= G4cout.precision(16);
+   G4int oldPrec = G4cout.precision(16);
    
-   G4cout << " Cartesian Tolerance (kCarTolerance): " << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()
+   G4cout << " Cartesian Tolerance (kCarTolerance): "
+          << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()
           << " (global) " << G4endl;
-   G4cout << " Radial Tolerance (kRadTolerance): " << G4GeometryTolerance::GetInstance()->GetRadialTolerance()
+   G4cout << " Radial Tolerance (kRadTolerance): "
+          << G4GeometryTolerance::GetInstance()->GetRadialTolerance()
           << " (global) " << G4endl;
-   G4cout << " Angular Tolerance (kAngTolerance): " << G4GeometryTolerance::GetInstance()->GetAngularTolerance()
+   G4cout << " Angular Tolerance (kAngTolerance): "
+          << G4GeometryTolerance::GetInstance()->GetAngularTolerance()
           << " (global) " << G4endl;
    G4cout.precision(oldPrec); 
 }

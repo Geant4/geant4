@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +17,38 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
 	 
 14-10-16 G.Folger
+=======
+     
+26-11-19 I. Hrivnacova (testem13-V10-05-01)
+- Fixed Doxygen warnings
+
+10-09-19 mma  (testem13-V10-05-00)
+- update PhysListEmStandard, livermore, penelope
+  go back to V10-03-00 : register only post step part of the processes.
+- PhysicsList::SetCuts() : set lower limit = 100 eV
+     
+09-05-18 B.Morgan (testem13-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+09-04-18 mma (testem13-V10-04-02)
+- testem13.cc : set visualisation only in interactive mode
+
+19-03-18 mma (testem13-V10-04-01)
+- testem13.cc : remove G4UI_USE and G4VIS_USE
+
+21-12-17 mma  (testem13-V10-04-00)
+- update PhysListEmStandard, livermore, penelope
+
+19-04-17 mma  (testem13-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+14-10-16 G.Folger (testem13-V10-02-03)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
 

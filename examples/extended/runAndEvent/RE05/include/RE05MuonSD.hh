@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: RE05MuonSD.hh 68698 2013-04-05 08:41:22Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file RE05/include/RE05MuonSD.hh
 /// \brief Definition of the RE05MuonSD class

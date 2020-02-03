@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 /// \file electromagnetic/TestEm11/src/Run.cc
+=======
+/// \file Run.cc
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

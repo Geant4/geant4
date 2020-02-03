@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomHit.hh 76254 2013-11-08 11:27:57Z gcosmo $
 //
 
 #ifndef G4HumanPhantomHit_h
@@ -44,7 +43,7 @@ public:
   ~G4HumanPhantomHit();
   G4HumanPhantomHit(const G4HumanPhantomHit&);
   const G4HumanPhantomHit& operator=(const G4HumanPhantomHit&);
-  G4int operator==(const G4HumanPhantomHit&) const;
+  G4bool operator==(const G4HumanPhantomHit&) const;
 
   inline void* operator new(size_t);
   inline void  operator delete(void*);

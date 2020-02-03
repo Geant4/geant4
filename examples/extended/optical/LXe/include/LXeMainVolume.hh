@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeMainVolume.hh 77486 2013-11-25 10:14:16Z gcosmo $
 //
 /// \file optical/LXe/include/LXeMainVolume.hh
 /// \brief Definition of the LXeMainVolume class

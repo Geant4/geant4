@@ -54,6 +54,7 @@
 
 #include "G4Exp.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "Randomize.hh"
 #include "G4AutoLock.hh"
 #include "G4Threading.hh"
@@ -1734,6 +1735,15 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
     params.cept = cept;
     params.weight = weight;
     //particle_energy = -1.;
+    if((EnergyDisType == "Mono") && ((MonoEnergy>Emax)||(MonoEnergy<Emin)))
+    {
+      G4ExceptionDescription ed;
+      ed << "MonoEnergy " << G4BestUnit(MonoEnergy,"Energy") << " is outside of [Emin,Emax] = ["
+         << G4BestUnit(Emin,"Energy") << ", " << G4BestUnit(Emax,"Energy") << ". MonoEnergy is used anyway.";
+      G4Exception("G4SPSEneDistribution::GenerateOne()","GPS0001",JustWarning,ed);
+      params.particle_energy=MonoEnergy;
+      return params.particle_energy;
+    }
     while ((EnergyDisType == "Arb") ? (params.particle_energy < ArbEmin || params.particle_energy > ArbEmax) : (params.particle_energy < params.Emin|| params.particle_energy > params.Emax))
     {
         if (Biased)

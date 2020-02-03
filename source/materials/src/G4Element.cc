@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc 93568 2015-10-26 14:52:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,6 +63,7 @@
 #include "G4NistManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
 
 G4ElementTable G4Element::theElementTable;
 
@@ -210,7 +210,6 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
       fNbOfShellElectrons[j] = G4AtomicShells::GetNumberOfElectrons(iz, j);
     }         
     ComputeDerivedQuantities();
-
   }
 }
 
@@ -218,11 +217,11 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 
 void G4Element::InitializePointers()
 {
-  theIsotopeVector = 0;
-  fRelativeAbundanceVector = 0;
-  fAtomicShells = 0;
-  fNbOfShellElectrons = 0;
-  fIonisation = 0;
+  theIsotopeVector = nullptr;
+  fRelativeAbundanceVector = nullptr;
+  fAtomicShells = nullptr;
+  fNbOfShellElectrons = nullptr;
+  fIonisation = nullptr;
   fNumberOfIsotopes = 0;
   fNaturalAbundance = false;
 
@@ -234,6 +233,7 @@ void G4Element::InitializePointers()
   fIndexInTable = 0;
   fCoulomb = 0.0;
   fRadTsai = 0.0;
+  fZ = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,8 +251,6 @@ G4Element::G4Element( __void__& )
 
 G4Element::~G4Element()
 {
-  //  G4cout << "### Destruction of element " << fName << " started" <<G4endl;
-
   if (theIsotopeVector)         { delete theIsotopeVector; }
   if (fRelativeAbundanceVector) { delete [] fRelativeAbundanceVector; }
   if (fAtomicShells)            { delete [] fAtomicShells; }
@@ -280,6 +278,7 @@ void G4Element::ComputeDerivedQuantities()
   // parameters for energy loss by ionisation 
   if (fIonisation) { delete fIonisation; }  
   fIonisation = new G4IonisParamElm(fZeff);
+  fZ = G4lrint(fZeff);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -308,12 +307,14 @@ void G4Element::ComputeLradTsaiFactor()
   static const G4double Lrad_light[]  = {5.31  , 4.79  , 4.74 ,  4.71} ;
   static const G4double Lprad_light[] = {6.144 , 5.621 , 5.805 , 5.924} ;
   
-  const G4double logZ3 = std::log(fZeff)/3.;
+  const G4double logZ3 = G4Log(fZeff)/3.;
 
   G4double Lrad, Lprad;
-  G4int iz = (G4int)(fZeff+0.5) - 1 ;
+  G4int iz = G4lrint(fZeff) - 1 ;
+  static const G4double log184 = G4Log(184.15);
+  static const G4double log1194 = G4Log(1194.);
   if (iz <= 3) { Lrad = Lrad_light[iz] ;  Lprad = Lprad_light[iz] ; }
-    else { Lrad = std::log(184.15) - logZ3 ; Lprad = std::log(1194.) - 2*logZ3;}
+  else { Lrad = log184 - logZ3 ; Lprad = log1194 - 2*logZ3;}
 
   fRadTsai = 4*alpha_rcl2*fZeff*(fZeff*(Lrad-fCoulomb) + Lprad); 
 }
@@ -384,7 +385,8 @@ G4int G4Element::GetNbOfShellElectrons(G4int i) const
     ed << "Invalid argument " << i << " for G4Element " << fName 
        << " with Z= " << fZeff 
        << " and Nshells= " << fNbOfAtomicShells;
-    G4Exception("G4Element::GetNbOfShellElectrons()", "mat016", FatalException, ed);
+    G4Exception("G4Element::GetNbOfShellElectrons()", "mat016", 
+		FatalException, ed);
     return 0;
   }
   return fNbOfShellElectrons[i];
@@ -409,7 +411,7 @@ size_t G4Element::GetNumberOfElements()
 G4Element* G4Element::GetElement(G4String elementName, G4bool warning)
 {  
   // search the element by its name 
-  for (size_t J=0 ; J<theElementTable.size() ; J++)
+  for (size_t J=0; J<theElementTable.size(); ++J)
    {
      if (theElementTable[J]->GetName() == elementName)
        return theElementTable[J];
@@ -421,77 +423,7 @@ G4Element* G4Element::GetElement(G4String elementName, G4bool warning)
 	   << elementName << " does not exist in the table. Return NULL pointer."
 	   << G4endl;
   }   
-  return 0;   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Element::G4Element(G4Element& right)
-{
-  InitializePointers();
-  *this = right;
-
-  // Store this new element in table and set the index
-  theElementTable.push_back(this);
-  fIndexInTable = theElementTable.size() - 1; 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const G4Element& G4Element::operator=(const G4Element& right)
-{
-  if (this != &right)
-    {
-      fName                    = right.fName;
-      fSymbol                  = right.fSymbol;
-      fZeff                    = right.fZeff;
-      fNeff                    = right.fNeff;
-      fAeff                    = right.fAeff;
-      
-      if (fAtomicShells) delete [] fAtomicShells;      
-      fNbOfAtomicShells = right.fNbOfAtomicShells; 
-      fAtomicShells     = new G4double[fNbOfAtomicShells];
-
-      if (fNbOfShellElectrons) delete [] fNbOfShellElectrons;
-      fNbOfAtomicShells   = right.fNbOfAtomicShells;            
-      fNbOfShellElectrons = new G4int[fNbOfAtomicShells];
-
-      for ( G4int i = 0; i < fNbOfAtomicShells; i++ ) 
-      {     
-         fAtomicShells[i]     = right.fAtomicShells[i];
-         fNbOfShellElectrons[i] = right.fNbOfShellElectrons[i];
-      } 
-      if (theIsotopeVector) delete theIsotopeVector;
-      if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
-	      	 
-      fNumberOfIsotopes        = right.fNumberOfIsotopes;
-      if (fNumberOfIsotopes > 0)
-        {
-	 theIsotopeVector = new G4IsotopeVector((unsigned int)fNumberOfIsotopes,0);
-	 fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
-	 for (G4int i=0;i<fNumberOfIsotopes;i++)
-	    {
-             (*theIsotopeVector)[i]      = (*right.theIsotopeVector)[i];
-             fRelativeAbundanceVector[i] = right.fRelativeAbundanceVector[i];
-	    }
-	}   
-      ComputeDerivedQuantities();
-     } 
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int G4Element::operator==(const G4Element& right) const
-{
-  return (this == (G4Element*) &right);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int G4Element::operator!=(const G4Element& right) const
-{
-  return (this != (G4Element*) &right);
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -505,7 +437,8 @@ std::ostream& operator<<(std::ostream& flux, const G4Element* element)
   flux
     << " Element: " << element->fName   << " (" << element->fSymbol << ")"
     << "   Z = " << std::setw(4) << std::setprecision(1) <<  element->fZeff 
-    << "   N = " << std::setw(5) << std::setprecision(1) <<  G4lrint(element->fNeff)
+    << "   N = " << std::setw(5) << std::setprecision(1) 
+    <<  G4lrint(element->fNeff)
     << "   A = " << std::setw(6) << std::setprecision(3)
                  << (element->fAeff)/(g/mole) << " g/mole";
    
@@ -532,14 +465,14 @@ std::ostream& operator<<(std::ostream& flux, const G4Element* element)
      
 std::ostream& operator<<(std::ostream& flux, G4ElementTable ElementTable)
 {
- //Dump info for all known elements
-   flux << "\n***** Table : Nb of elements = " << ElementTable.size() 
-        << " *****\n" << G4endl;
+  //Dump info for all known elements
+  flux << "\n***** Table : Nb of elements = " << ElementTable.size() 
+       << " *****\n" << G4endl;
         
-   for (size_t i=0; i<ElementTable.size(); i++) flux << ElementTable[i] 
-						     << G4endl << G4endl;
+  for (size_t i=0; i<ElementTable.size(); i++) flux << ElementTable[i] 
+						    << G4endl << G4endl;
 
-   return flux;
+  return flux;
 }
       
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

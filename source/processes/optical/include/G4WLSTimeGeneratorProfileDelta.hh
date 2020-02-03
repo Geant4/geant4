@@ -52,23 +52,23 @@ class G4WLSTimeGeneratorProfileDelta : public G4VWLSTimeGeneratorProfile
 
 public:
 
-  G4WLSTimeGeneratorProfileDelta(const G4String& name);
+  explicit G4WLSTimeGeneratorProfileDelta(const G4String& name);
 
-  ~G4WLSTimeGeneratorProfileDelta();
+  virtual ~G4WLSTimeGeneratorProfileDelta();
 
-  G4double GenerateTime(const G4double time_constant);
+  virtual G4double GenerateTime(const G4double time_constant) override;
 
-  G4double GenerateTime(const G4MaterialPropertiesTable*);
+  virtual G4double GenerateTime(const G4MaterialPropertiesTable*) override;
 
 protected:
 
 private:
 
   // hide assignment operator
- 
-     G4WLSTimeGeneratorProfileDelta & operator=
-                             (const  G4WLSTimeGeneratorProfileDelta &right);
-     G4WLSTimeGeneratorProfileDelta(const  G4WLSTimeGeneratorProfileDelta&);
+
+  G4WLSTimeGeneratorProfileDelta & operator=
+                          (const  G4WLSTimeGeneratorProfileDelta &right) = delete;
+  G4WLSTimeGeneratorProfileDelta(const  G4WLSTimeGeneratorProfileDelta&) = delete;
 
 };
 

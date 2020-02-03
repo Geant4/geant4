@@ -23,13 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // Thread Local Storage typedefs
 
 // History:
 // 01.10.2012 G.Cosmo - Created
- 
+
+// Fundamental definitions
+#ifndef G4GMAKE
+#include "G4GlobalConfig.hh"
+#endif
+
 #ifndef G4_TLS
 #define G4_TLS
 
@@ -86,7 +90,7 @@
   #endif
 #else
   #  define G4ThreadLocalStatic static
-  #  define G4ThreadLocal 
+  #  define G4ThreadLocal
 #endif
 
 #endif

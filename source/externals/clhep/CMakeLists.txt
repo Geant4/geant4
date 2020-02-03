@@ -56,8 +56,9 @@ set(G4clhep_HEADERS
     include/CLHEP/Random/EngineFactory.h
     include/CLHEP/Random/engineIDulong.h
     include/CLHEP/Random/JamesRandom.h
-    include/CLHEP/Random/mixmax.h
-    include/CLHEP/Random/mixmax_skip_N256.icc
+    include/CLHEP/Random/mixmax_skip_N8.icc
+    include/CLHEP/Random/mixmax_skip_N17.icc
+    include/CLHEP/Random/mixmax_skip_N240.icc
     include/CLHEP/Random/MixMaxRng.h
     include/CLHEP/Random/MTwistEngine.h
     include/CLHEP/Random/NonRandomEngine.h
@@ -109,6 +110,7 @@ set(G4clhep_HEADERS
     include/CLHEP/Utility/keywords.h
     include/CLHEP/Utility/memory.h
     include/CLHEP/Utility/noncopyable.h
+    include/CLHEP/Utility/use_atomic.h
     include/CLHEP/Vector/AxisAngle.h
     include/CLHEP/Vector/AxisAngle.icc
     include/CLHEP/Vector/Boost.h
@@ -168,7 +170,6 @@ set(G4clhep_SOURCES
     src/LorentzVectorK.cc
     src/LorentzVectorL.cc
     src/LorentzVectorR.cc
-    src/mixmax.cc
     src/MixMaxRng.cc
     src/MTwistEngine.cc
     src/NonRandomEngine.cc
@@ -227,6 +228,16 @@ set(G4clhep_SOURCES
 #
 include(Geant4MacroLibraryTargets)
 GEANT4_LIBRARY_TARGET(NAME G4clhep SOURCES ${G4clhep_SOURCES} ${G4clhep_HEADERS})
+
+# Interface usage requirements (build time clients only)
+foreach(__g4clhep_target G4clhep G4clhep-static)
+  if(TARGET ${__g4clhep_target})
+    target_include_directories(${__g4clhep_target}
+      PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      )
+  endif()
+endforeach()
 
 #----------------------------------------------------------------------------
 # Ensure the header directory gets added to the list of ones to export

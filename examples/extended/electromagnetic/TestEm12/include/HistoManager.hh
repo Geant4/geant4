@@ -27,7 +27,10 @@
 /// \brief Definition of the HistoManager class
 //
 //
+<<<<<<< HEAD
 // $Id: HistoManager.hh 78723 2014-01-20 10:32:17Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticleLargerBeta.hh 70080 2013-05-22 22:46:28Z mkelsey $
 //
 // 20100112  M. Kelsey -- Add additional operator() which uses pointers,
 //		also fix bug which returns wrong result

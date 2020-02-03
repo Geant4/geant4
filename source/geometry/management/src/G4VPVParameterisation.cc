@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VPVParameterisation.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
 // Default implementations for Parameterisations that do not
 // parameterise solid and/or material.
+//
+// 25.07.96, P.Kent - Initial stub version
 // --------------------------------------------------------------------
 
 #include "G4VPVParameterisation.hh"
@@ -45,14 +44,14 @@ G4VPVParameterisation::~G4VPVParameterisation()
 
 G4VSolid*
 G4VPVParameterisation::ComputeSolid(const G4int,
-                                    G4VPhysicalVolume *pPhysicalVol) 
+                                    G4VPhysicalVolume* pPhysicalVol) 
 {
   return pPhysicalVol->GetLogicalVolume()->GetSolid();
 }
        
 G4Material*
 G4VPVParameterisation::ComputeMaterial(const G4int,
-                                       G4VPhysicalVolume *pPhysicalVol,
+                                       G4VPhysicalVolume* pPhysicalVol,
 				       const G4VTouchable *) 
 {
   return pPhysicalVol->GetLogicalVolume()->GetMaterial();
@@ -67,6 +66,6 @@ G4bool G4VPVParameterisation::IsNested() const
 G4VVolumeMaterialScanner* 
 G4VPVParameterisation::GetMaterialScanner()
 {
-  return 0;
+  return nullptr;
 }
 //   These enable material scan for nested parameterisations

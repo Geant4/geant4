@@ -449,7 +449,7 @@
         <volume name="vCrystalRow">
             <materialref ref="G4_AIR"/>
             <solidref ref="sCrystalRow"/>
-            <replicavol number="NCrystalsHor">
+            <replicavol number="6">
                 <volumeref ref="vCrystal"/>
                 <replicate_along_axis>
                     <direction x="1"/>
@@ -461,7 +461,7 @@
         <volume name="vCalorimeter">
             <materialref ref="G4_AIR"/>
             <solidref ref="sCalorimeter"/>
-            <replicavol number="NCrystalsVert">
+            <replicavol number="4">
                 <volumeref ref="vCrystalRow"/>
                 <replicate_along_axis>
                     <direction y="1"/>

@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/include/HIJING.hh
 /// \brief Definition of the HIJING class
 //
-// $Id: HIJING.hh,v 1.1 2007-10-19 15:35:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

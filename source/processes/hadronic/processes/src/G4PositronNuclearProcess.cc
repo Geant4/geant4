@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PositronNuclearProcess.cc 66499 2012-12-19 09:16:35Z gcosmo $
 //
 
 #include "G4PositronNuclearProcess.hh" 
@@ -48,7 +47,8 @@ G4PositronNuclearProcess::~G4PositronNuclearProcess()
 
 void G4PositronNuclearProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles inelastic positron scattering from\n" 
-          << "nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4PositronNuclearProcess handles inelastic positron scattering\n"                 
+          << "from nuclei by invoking one hybrid electromagnetic-hadronic\n"
+          << "model and one hybrid electromagnetic-hadronic cross section set.\n";
 }
+

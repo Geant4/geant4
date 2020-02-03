@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeOmegaMinusPChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // Author:  D.H. Wright (SLAC)
 // Date:    1 October 2012

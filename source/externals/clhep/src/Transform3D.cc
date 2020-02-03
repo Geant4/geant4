@@ -1,5 +1,4 @@
 // -*- C++ -*-
-// $Id:$
 // ---------------------------------------------------------------------------
 //
 // This file is a part of the CLHEP - a Class Library for High Energy Physics.
@@ -43,7 +42,7 @@ namespace HepGeom {
       if (j == 2) { return 0.0; } 
       if (j == 3) { return 1.0; } 
     } 
-    std::cerr << "Transform3D subscripting: bad indeces "
+    std::cerr << "Transform3D subscripting: bad indices "
 	      << "(" << i << "," << j << ")" << std::endl;
     return 0.0;
   }

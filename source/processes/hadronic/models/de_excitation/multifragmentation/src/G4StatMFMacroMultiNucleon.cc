@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -47,7 +46,7 @@ G4StatMFMacroMultiNucleon::
 G4StatMFMacroMultiNucleon() :
     G4VStatMFMacroCluster(0)  // Beacuse the def. constr. of base class is private
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::default_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::default_constructor meant to not be accessible");
 }
 
 // Copy constructor
@@ -55,7 +54,7 @@ G4StatMFMacroMultiNucleon::
 G4StatMFMacroMultiNucleon(const G4StatMFMacroMultiNucleon & ) :
     G4VStatMFMacroCluster(0)  // Beacuse the def. constr. of base class is private
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::copy_constructor meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::copy_constructor meant to not be accessible");
 }
 
 // Operators
@@ -63,19 +62,19 @@ G4StatMFMacroMultiNucleon(const G4StatMFMacroMultiNucleon & ) :
 G4StatMFMacroMultiNucleon & G4StatMFMacroMultiNucleon::
 operator=(const G4StatMFMacroMultiNucleon & ) 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator= meant to not be accessible");
     return *this;
 }
 
 G4bool G4StatMFMacroMultiNucleon::operator==(const G4StatMFMacroMultiNucleon & ) const
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator== meant to not be accessible");
     return false;
 }
  
 G4bool G4StatMFMacroMultiNucleon::operator!=(const G4StatMFMacroMultiNucleon & ) const
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiNucleon::operator!= meant to not be accessible");
     return true;
 }
 
@@ -86,8 +85,8 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 {
   G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);	
   G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
-  G4Pow* g4pow = G4Pow::GetInstance();
-  G4double A23 = g4pow->Z23(theA);
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double A23 = g4calc->Z23(theA);
 	
   G4double exponent = (mu + nu*theZARatio+ G4StatMFParameters::GetE0() 
 		       + T*T/_InvLevelDensity 
@@ -115,8 +114,8 @@ G4double G4StatMFMacroMultiNucleon::CalcZARatio(const G4double nu)
 
 G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
-  G4double A23 = g4pow->Z23(theA);
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double A23 = g4calc->Z23(theA);
 
   // Volume term 
   G4double EVol = theA * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntraNuclearTransportModel.hh 69717 2013-05-13 09:47:57Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -65,8 +64,8 @@ class G4VIntraNuclearTransportModel : public G4HadronicInteraction
 {
 public:
 
-  G4VIntraNuclearTransportModel(const G4String& modelName = "CascadeModel",
-				G4VPreCompoundModel* ptr = 0);
+  explicit G4VIntraNuclearTransportModel(const G4String& mName = "CascadeModel",
+					 G4VPreCompoundModel* ptr = nullptr);
 
   virtual ~G4VIntraNuclearTransportModel();
 
@@ -92,10 +91,10 @@ public:
 
 private:
 
-  G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right);
-  const G4VIntraNuclearTransportModel& operator=(const G4VIntraNuclearTransportModel &right);
-  int operator==(const G4VIntraNuclearTransportModel& right) const;
-  int operator!=(const G4VIntraNuclearTransportModel& right) const;
+  G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) = delete;
+  const G4VIntraNuclearTransportModel& operator=(const G4VIntraNuclearTransportModel &right) = delete;
+  G4bool operator==(const G4VIntraNuclearTransportModel& right) const = delete;
+  G4bool operator!=(const G4VIntraNuclearTransportModel& right) const = delete;
 
 protected:
 

@@ -31,8 +31,6 @@
 #include <fstream>
 #include <vector>
 
-using namespace std;
-
 class TabulatedField3D
 
 #ifndef STANDALONE
@@ -49,12 +47,12 @@ public:
 		       double *Bfield          ) const;
 
 private:
+    
+  std::vector< std::vector< std::vector< double > > > fXField;
   
-  vector< vector< vector< double > > > fXField;
+  std::vector< std::vector< std::vector< double > > > fYField;
   
-  vector< vector< vector< double > > > fYField;
-  
-  vector< vector< vector< double > > > fZField;
+  std::vector< std::vector< std::vector< double > > > fZField;
   
   G4int fNx,fNy,fNz; 
   

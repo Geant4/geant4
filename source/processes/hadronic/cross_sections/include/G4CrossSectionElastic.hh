@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElastic.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +62,7 @@ class G4CrossSectionElastic : public G4VCrossSectionDataSet
 public:
 
   G4CrossSectionElastic(G4VComponentCrossSection*,
-			G4int zmin = 0, G4int zmax = 256, 
+			G4int zmin = 1, G4int zmax = 256, 
 			G4double Emin = 0.0, G4double Emax = DBL_MAX);
 
   virtual ~G4CrossSectionElastic();

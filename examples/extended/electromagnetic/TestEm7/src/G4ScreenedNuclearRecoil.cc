@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm7/src/G4ScreenedNuclearRecoil.cc
 /// \brief Implementation of the G4ScreenedNuclearRecoil class
 //
+<<<<<<< HEAD
 // $Id: G4ScreenedNuclearRecoil.cc 91266 2015-06-29 06:48:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // Class Description
@@ -1114,9 +1117,16 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
                   G4double x0=0;
                   try {
                     x0=x0_solution(2*q-q*q);
+<<<<<<< HEAD
                   } catch(c2_exception e) {
                     //G4Exception(G4String("G4ScreenedNuclearRecoil: failure 
                     //in inverse solution to generate MFP Tables: ")+e.what());
+=======
+                  } catch(c2_exception&) {
+                    G4Exception("G4ScreenedNuclearRecoil::LoadData",
+                      "em0003",FatalException,
+                      "failure in inverse solution to generate MFP tables");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
                   }
                   G4double betasquared=x0*x0 - x0*phiau(x0)/eps;        
                   G4double sigma=pi*betasquared*au*au;

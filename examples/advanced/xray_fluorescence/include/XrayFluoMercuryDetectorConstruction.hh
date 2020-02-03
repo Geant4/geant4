@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoMercuryDetectorConstruction.hh
-// GEANT4 tag $Name:XrayFluo-V05-02-06 
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //

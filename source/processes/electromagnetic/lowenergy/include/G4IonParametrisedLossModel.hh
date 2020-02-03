@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonParametrisedLossModel.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // ===========================================================================
 // GEANT4 class header file
@@ -180,7 +179,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 
    // Function which allows to switch off scaling of stopping powers of heavy
    // ions from existing ICRU 73 data
-   void DeactivateICRU73Scaling();
+   // void DeactivateICRU73Scaling();
 
    // Function checking the applicability of physics tables to ion-material
    // combinations (Note: the energy range of tables is not checked)
@@ -324,7 +323,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    G4DataVector cutEnergies;
 
    // Pointer to generic ion and mass of generic ion
-   G4ParticleDefinition* genericIon;
+   const G4ParticleDefinition* genericIon;
    G4double genericIonPDGMass;
 
    // ######################################################################
@@ -357,6 +356,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                                             // values in the transition region
    G4double dedxCacheGenIonMassRatio;       // Ratio of generic ion mass       
                                             // and current particle mass
+   G4bool isInitialised;
 };
 
 

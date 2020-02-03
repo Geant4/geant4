@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr02/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 81932 2014-06-06 15:39:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

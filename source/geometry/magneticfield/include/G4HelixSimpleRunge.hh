@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HelixSimpleRunge.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// class G4HelixSimpleRunge
+// G4HelixSimpleRunge
 //
 // Class description:
 //
@@ -38,30 +34,28 @@
 //  Take the derivative at a position to be assumed at the middle of the
 //  Step and add it to the current position.
 
-// W. Wander <wwc@mit.edu> 03/12/98
+// Author: W. Wander <wwc@mit.edu>, 03.12.1998
 // -------------------------------------------------------------------
-
 #ifndef G4HELIXSIMPLERUNGE_HH
 #define G4HELIXSIMPLERUNGE_HH
+
 #include "G4MagHelicalStepper.hh"
 
 class G4HelixSimpleRunge : public G4MagHelicalStepper
 {
+
   public:  // with description
 
-    G4HelixSimpleRunge(G4Mag_EqRhs *EqRhs)
-      : G4MagHelicalStepper(EqRhs){}
+    G4HelixSimpleRunge(G4Mag_EqRhs* EqRhs);
 
-    ~G4HelixSimpleRunge(){}
+    ~G4HelixSimpleRunge();
   
-    void  DumbStepper(  const G4double y[],
-                              G4ThreeVector   Bfld,
-                              G4double        h,
-                              G4double        yout[]);
+    void  DumbStepper( const G4double y[],
+                             G4ThreeVector Bfld,
+                             G4double      h,
+                             G4double      yout[] );
 
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const { return 2; }
 };
 
-#endif /* G4HELIXSIMPLERUNGE_HH */
+#endif

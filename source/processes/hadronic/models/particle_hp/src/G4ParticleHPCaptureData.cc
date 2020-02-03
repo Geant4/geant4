@@ -143,7 +143,7 @@ void G4ParticleHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
   for( size_t i=0; i<numberOfElements; ++i )
   {
-     if(getenv("CaptureDataIndexDebug"))
+     if(std::getenv("CaptureDataIndexDebug"))
      {
        G4int index_debug = ((*theElementTable)[i])->GetIndex();
        G4cout << "IndexDebug "<< i <<" "<<index_debug<<G4endl;

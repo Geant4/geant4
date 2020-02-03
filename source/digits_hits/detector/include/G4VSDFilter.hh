@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSDFilter.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4VSDFilter_h
@@ -36,7 +35,7 @@ class G4Step;
 // class description:
 //
 //  This is the abstract base class of a filter to be associated with a
-// sensitive detector. 
+// sensitive detector or a primitive scorer. 
 
 class G4VSDFilter 
 {

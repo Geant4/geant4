@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66373 2012-12-18 09:41:34Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -129,6 +128,10 @@ GEANT4_DEFINE_MODULE(NAME G4zlib
         ${ZLIB_PUBLIC_HDRS}
     SOURCES
 	     ${ZLIB_PRIVATE_HDRS}
+        ${ZLIB_SRCS}
+    HEADERS_EXCLUDE_FORMAT
+        ${ZLIB_PUBLIC_HDRS}
+    SOURCES_EXCLUDE_FORMAT
         ${ZLIB_SRCS}
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES

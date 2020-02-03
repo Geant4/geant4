@@ -14,7 +14,160 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 November 2019 A. Ribon (hadr-man-V10-05-07)
+---------------------------------------------------
+- G4HadronicProcess : in the method CheckResult, a short-lived secondary
+  particle is allowed to have a dynamic mass which differ from the PDG mass
+  by less than three times the particle's width.
+
+17 October 2019 V. Ivanchenko (hadr-man-V10-05-06)
+---------------------------------------------------
+- G4HadronicProcess : for particle out of the mass shell correct
+    kinetic energy in a way, that it is always above 10 keV;
+    use std::getenv method recommended for concurrency
+
+12 September 2019 V. Ivanchenko (hadr-man-V10-05-05)
+---------------------------------------------------
+- G4HadronicProcess : fixed Coverity warnings
+
+21 August 2019 V. Ivanchenko (hadr-man-V10-05-04)
+---------------------------------------------------
+- G4EnergyRangeManager : move operators to be private, removed
+    obsolete method, removed G4HadronicException, instead in case of 
+    problem return nullptr
+- G4HadronicProcess : do not use try/catch pattern to choose hadronic 
+    interaction; decrease limit on check of offshell mass from 1.5 MeV 
+    to 10 keV - fixed problem 2175; removed unused headers
+
+13 July 2019 V. Ivanchenko (hadr-man-V10-05-03)
+---------------------------------------------------
+- G4EnergyRangeManager : added short  cut - if only one model registered 
+    for a process no check is applied; implemented C++11 paterns
+
+11 June 2019 A. Ribon (hadr-man-V10-05-02)
+---------------------------------------------------
+- G4EnergyRangeManager : fixed bug regarding the kinetic energy per nucleon
+  in the case of anti-nuclei (the bug was harmless because one single model,
+  FTFP, is used for all energies in the case of anti-nuclei projectiles).
+
+03 June 2019 V. Ivanchenko (hadr-man-V10-05-01)
+---------------------------------------------------
+- G4HadronicProcess - removed try/couch pattern from computation of mean
+    free path, removed final state random rotation  
+ 
+08 May 2019 V. Ivanchenko (hadr-man-V10-05-00)
+---------------------------------------------------
+- G4HadronicInelasticProcess - removed default GHEISHA cross section
+
+08 November 2018 V. Ivanchenko (hadr-man-V10-04-12)
+07 November 2018 V. Ivanchenko (hadr-man-V10-04-10)
+06 November 2018 V. Ivanchenko (hadr-man-V10-04-09)
+---------------------------------------------------
+- G4HadronicProcess - added check if secondary particle is on the mass
+    shell, if its mass differ from the PDG mass more for 1.5 MeV then mass
+    is forced to the mass shell, energy concerved, but momentum is changed
+
+20 August 2018 V. Ivanchenko (hadr-man-V10-04-08)
+---------------------------------------------------
+- G4HadronicInteractionWrapper - removed as obsolete class
+
+10 August 2018 A. Ribon (hadr-man-V10-04-07)
+---------------------------------------------------
+- sources.cmake, G4HadronicParameters : moved away class G4HadronicParameters
+  in hadronic/util/ to avoid circular dependency between hadronic/management/
+  and hadronic/cross_sections/ (the former has to depend on the latter, but
+  not vice versa; hadronic/util/ does not depend on either).
+
+6 August 2018 A. Ribon (hadr-man-V10-04-06)
+---------------------------------------------------
+- G4HadronicParameters : created new singleton to keep global hadronic
+  parameters. For the time being, it has only the high-energy limit of
+  hadronic physics (instead of spreading this value in many different
+  files, as done up to now). The default value is set to 100 TeV.
+
+14 July 2018 M.Maire (hadr-man-V10-04-05)
+---------------------------------------------------
+- add function G4HadronicProcess::GetHadronicModel(modelName)
+  which return a G4HadronicInteraction*
+
+8 June 2018 J. Yarba (hadr-man-V10-04-04)
+---------------------------------------------------
+- G4HadronicProcess - use correct return type when calling CheckResult
+  (from PostStepDoIt); otherwise the value of pointer 'result' does not
+  get properly reset to NULL in case a non-conservation is detected,
+  thus "bad" interaction does not get re-sampled
+
+31 May 2017 V. Ivanchenko (hadr-man-V10-04-03)
+---------------------------------------------------
+- G4HadronicProcess, G4HadronInelasticProcess - added keyword 
+    "override", cleanup cross section scale factor and weights
+- G4HadronicProcessStore - use "nullptr", added flag buildXSTable
+    and get/set methods
+
+30 May 2017 V. Ivanchenko (hadr-man-V10-04-02)
+---------------------------------------------------
+- G4HadronicProcess, G4VLeadingParticleBiasing, G4HadLeadBias
+    fixed compilation warning of CMSSW at gcc7.0.0
+
+29 May 2017 V. Ivanchenko (hadr-man-V10-04-01)
+---------------------------------------------------
+- G4HadronicProcess - use const pointers and "nullptr" for
+    G4Material and G4Element, use ComputeCrossSection(...) method,
+    remove creation of new materials in run time inside
+    GetElementCrossSection(..) method, all materials should
+    be created in user code
+
+09 May 2018  Alberto Ribon (hadr-man-V10-04-00)
+---------------------------------------------------
+- G4HadronicProcess : fixed warnings in gcc 8 regarding catching 
+    polymorphic type by value, instead of by reference.
+
+12 September 2017  Krzysztof Genser (hadr-man-V10-03-06)
+---------------------------------------------------
+- G4HadronicProcessType.hh added fMuAtomicCapture
+
+31 August 2017  Dennis Wright  (hadr-man-V10-03-05)
+---------------------------------------------------
+- G4HadronicProcessStore.cc: remove circular dependence on G4RadioactiveDecay
+
+17 July 2017  Dennis Wright  (hadr-man-V10-03-04)
+-------------------------------------------------
+- G4HadronicProcessStore::DumpHtml(): add PrintHtml for generic ion
+- G4HadronicProcessStore::PrintHtml(): add loop to print descriptions
+   of "extra" processes, including radioactive decay.
+- G4HadronicProcessStore::Clean(): add exception to prevent deletion 
+   of G4RadioactiveDecay - already deleted somwhere else. 
+
+11 May 2017 V. Ivanchenko (hadr-man-V10-03-03)
+10 May 2017 V. Ivanchenko (hadr-man-V10-03-00)
+---------------------------------------------------
+- G4HadronicProcess - correctly check charge and energy balance
+    in the case of e- internal convertion; improved initialisation
+    for constructors 
+
+01 July 2016 V. Ivanchenko (hadr-man-V10-02-03)
+---------------------------------------------------
+- G4EnergyRangeManager - fixed Coverity warning
+
+24 June 2016  Alberto Ribon  (hadr-man-V10-02-02)
+---------------------------------------------------
+- G4HadronicProcess - added check on the final-state secondaries to see
+  if kaon0 or anti_kaon0 are present: if this the case, they are transformed
+  into either kaon0S or kaon0L, with equal (50%) probability.
+
+27 May 2016 V. Ivanchenko (hadr-man-V10-02-01)
+---------------------------------------------------
+- G4HadronicProcess - added flag of "integral" approach to take into
+    account cross section change at a step; use nullptr;
+    do not create new materials in the method GetElementCrossSection(),
+    istead only try to find existing simple G4Material 
+
+18 April 2016 V. Ivanchenko (hadr-man-V10-02-00)
+---------------------------------------------------
+- G4HadronicProcessStore - call initialisation of all G4HadronicInteractions
+
 30 October 2015  Gunter Folger    (hadr-man-V10-01-06)
+---------------------------------------------------
 - while loop check: G4HadronicProcess.cc has one loops, already checked with
     counter
 

@@ -1,0 +1,273 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   RegisterPhysicsConstructors.icc
+//
+// Author: R. Hatcher 2018-02-06
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+
+#if defined(WIN32) && !defined(USING_STATIC_LIBS)
+// WIN32 linker/loader works differently than on unix
+// these G4_REFERENCE_PHYSCONSTR_FACTORY macro calls in fact can't be used
+// in "shared" link mode.  In principle they _should_ be called
+// in "static" link mode (that's the point of this file).
+// Currently there is no build -D flag that distinquishes the two cases...
+// but users can set USING_STATIC_LIBS
+#define G4RegisterPhysicsConstructors_icc 1
+#endif // WIN32
+
+//
+#ifndef G4RegisterPhysicsConstructors_icc
+#define G4RegisterPhysicsConstructors_icc 1
+
+#include "G4PhysicsConstructorFactory.hh"
+//
+// External reference to phy ctor factories for running with 'static'
+// libraries to pull the references of the declared factories into the
+// same compilation unit as the registry itself.
+// No harm having them in the non-static case.
+//
+// Using the G4_REFERENCE_PHYSCONSTR_FACTORY macro does _not_ require
+// including the headers (using G4_DECLARE_PHYSCONSTR_FACTORY does,
+// but those are done in each phys_ctor's implementation itself).
+//
+// For static builds this needs to be included in a compilation unit
+// for something that is going to use the G4PhysicsConstructorRegistry
+// as a source of physics constructors (but not in the registration
+// of the constructors themselves; that is via the G4_DECLARE_PHYSCONSTR_FACTORY
+// macro).  This is necessary when using static libraries in order that the
+// individual phys_ctor compilation units to be included in the final
+// executable, and thus available to self-register w/ the
+// G4PhysicsConstructorRegistry to make themselves available.
+//
+// For granular builds this needs to be included at a higher level
+// than any of the phys_ctor_X libraries in order to avoid introducing
+// an effective ciruclar link.
+
+//#include "G4ChargeExchangePhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4ChargeExchangePhysics);
+
+//#include "G4DecayPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4DecayPhysics);
+
+//#include "G4EmDNAChemistry.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAChemistry);
+
+//#include "G4EmDNAPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics);
+
+//#include "G4EmDNAPhysics_option1.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option1);
+
+//#include "G4EmDNAPhysics_option2.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option2);
+
+//#include "G4EmDNAPhysics_option3.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option3);
+
+//#include "G4EmDNAPhysics_option4.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option4);
+
+//#include "G4EmDNAPhysics_option5.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option5);
+
+//#include "G4EmDNAPhysics_option6.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option6);
+
+//#include "G4EmDNAPhysics_option7.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option7);
+
+//#include "G4EmDNAPhysics_stationary.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary);
+
+//#include "G4EmDNAPhysics_stationary_option2.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary_option2);
+
+//#include "G4EmDNAPhysics_stationary_option4.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary_option4);
+
+//#include "G4EmDNAPhysics_stationary_option6.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary_option6);
+
+//#include "G4EmExtraPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmExtraPhysics);
+
+//#include "G4EmLivermorePhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmLivermorePhysics);
+
+//#include "G4EmLivermorePolarizedPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmLivermorePolarizedPhysics);
+
+//#include "G4EmLowEPPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmLowEPPhysics);
+
+//#include "G4EmPenelopePhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmPenelopePhysics);
+
+//#include "G4EmStandardPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics);
+
+//#include "G4EmStandardPhysicsGS.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsGS);
+
+//#include "G4EmStandardPhysicsSS.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsSS);
+
+//#include "G4EmStandardPhysicsWVI.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsWVI);
+
+//#include "G4EmStandardPhysics_option1.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option1);
+
+//#include "G4EmStandardPhysics_option2.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option2);
+
+//#include "G4EmStandardPhysics_option3.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option3);
+
+//#include "G4EmStandardPhysics_option4.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option4);
+
+//#include "G4GenericBiasingPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4GenericBiasingPhysics);
+
+//#include "G4HadronDElasticPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronDElasticPhysics);
+
+//#include "G4HadronElasticPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysics);
+
+//#include "G4HadronElasticPhysicsHP.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsHP);
+
+//#include "G4HadronElasticPhysicsLEND.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLEND);
+
+//#include "G4HadronElasticPhysicsXS.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsXS);
+
+//#include "G4HadronHElasticPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronHElasticPhysics);
+
+//#include "G4HadronInelasticQBBC.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
+
+//#include "G4HadronPhysicsFTFP_BERT.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT);
+
+//#include "G4HadronPhysicsFTFP_BERT_ATL.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_ATL);
+
+//#include "G4HadronPhysicsFTFP_BERT_HP.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_HP);
+
+//#include "G4HadronPhysicsFTFP_BERT_TRV.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_TRV);
+
+//#include "G4HadronPhysicsFTF_BIC.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTF_BIC);
+
+//#include "G4HadronPhysicsINCLXX.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsINCLXX);
+
+//#include "G4HadronPhysicsNuBeam.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsNuBeam);
+
+//#include "G4HadronPhysicsQGSP_BERT.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BERT);
+
+//#include "G4HadronPhysicsQGSP_BERT_HP.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BERT_HP);
+
+//#include "G4HadronPhysicsQGSP_BIC.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BIC);
+
+//#include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BIC_AllHP);
+
+//#include "G4HadronPhysicsQGSP_BIC_HP.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BIC_HP);
+
+//#include "G4HadronPhysicsQGSP_FTFP_BERT.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_FTFP_BERT);
+
+//#include "G4HadronPhysicsQGS_BIC.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGS_BIC);
+
+//#include "G4HadronPhysicsShielding.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsShielding);
+
+//#include "G4ImportanceBiasing.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4ImportanceBiasing);
+
+//#include "G4IonBinaryCascadePhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonBinaryCascadePhysics);
+
+//#include "G4IonElasticPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonElasticPhysics);
+
+//#include "G4IonINCLXXPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonINCLXXPhysics);
+
+//#include "G4IonPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonPhysics);
+
+//#include "G4IonQMDPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
+
+//#include "G4NeutronCrossSectionXS.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4NeutronCrossSectionXS);
+
+//#include "G4NeutronTrackingCut.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
+
+//#include "G4OpticalPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
+
+//#include "G4ParallelWorldPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4ParallelWorldPhysics);
+
+//#include "G4RadioactiveDecayPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
+
+//#include "G4SpinDecayPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4SpinDecayPhysics);
+
+//#include "G4StepLimiterPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4StepLimiterPhysics);
+
+//#include "G4StoppingPhysics.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4StoppingPhysics);
+
+//#include "G4WeightWindowBiasing.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4WeightWindowBiasing);
+
+#endif // G4RegisterPhysicsConstructors_icc

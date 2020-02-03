@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXeEventAction.cc 68752 2013-04-05 10:23:47Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/src/LXeEventAction.cc
 /// \brief Implementation of the LXeEventAction class
@@ -34,7 +37,13 @@
 #include "LXePMTHit.hh"
 #include "LXeUserEventInformation.hh"
 #include "LXeTrajectory.hh"
+<<<<<<< HEAD
 #include "LXeRecorderBase.hh"
+=======
+#include "LXeRun.hh"
+#include "LXeHistoManager.hh"
+#include "LXeDetectorConstruction.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #include "G4EventManager.hh"
 #include "G4SDManager.hh"
@@ -50,8 +59,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+<<<<<<< HEAD
 LXeEventAction::LXeEventAction(LXeRecorderBase* r)
   : fRecorder(r),fSaveThreshold(0),fScintCollID(-1),fPMTCollID(-1),fVerbose(0),
+=======
+LXeEventAction::LXeEventAction(const LXeDetectorConstruction* det)
+  : fDetector(det),fScintCollID(-1),fPMTCollID(-1),fVerbose(0),
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
    fPMTThreshold(1),fForcedrawphotons(false),fForcenophotons(false)
 {
   fEventMessenger = new LXeEventMessenger(this);
@@ -197,22 +211,32 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent){
                eventInformation->GetBoundaryAbsorptionCount())
            << G4endl;
   }
+<<<<<<< HEAD
   //If we have set the flag to save 'special' events, save here
   if(fSaveThreshold&&eventInformation->GetPhotonCount() <= fSaveThreshold)
     G4RunManager::GetRunManager()->rndmSaveThisEvent();
 
   if(fRecorder)fRecorder->RecordEndOfEvent(anEvent);
+=======
+
+  // update the run statistics
+  LXeRun* run = static_cast<LXeRun*>(
+    G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  run->IncHitCount(fHitCount);
+  run->IncPhotonCount_Scint(fPhotonCount_Scint);
+  run->IncPhotonCount_Ceren(fPhotonCount_Ceren);
+  run->IncEDep(fTotE);
+  run->IncAbsorption(fAbsorptionCount);
+  run->IncBoundaryAbsorption(fBoundaryAbsorptionCount);
+  run->IncHitsAboveThreshold(fPMTsAboveThreshold);
+
+  //If we have set the flag to save 'special' events, save here
+  if(fPhotonCount_Scint + fPhotonCount_Ceren < fDetector->GetSaveThreshold())
+  {
+    G4RunManager::GetRunManager()->rndmSaveThisEvent();
+  }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void LXeEventAction::SetSaveThreshold(G4int save){
-/*Sets the save threshold for the random number seed. If the number of photons
-generated in an event is lower than this, then save the seed for this event
-in a file called run###evt###.rndm
-*/
-  fSaveThreshold=save;
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
-  //  G4UImanager::GetUIpointer()->ApplyCommand("/random/setSavingFlag 1");
-}

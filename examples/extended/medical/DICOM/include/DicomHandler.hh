@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomHandler.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomHandler.hh
 /// \brief Definition of the DicomHandler class
@@ -72,8 +71,6 @@ class DicomHandler
 {
 public:
     
-    DicomHandler();
-    
     ~DicomHandler();
     
     // static accessor
@@ -88,15 +85,20 @@ public:
     
     void CheckFileFormat();
     
+    static G4String GetDicomDataPath();
+    static G4String GetDicomDataFile();
+
 private:
+    DicomHandler();
+    
     template <class Type> void GetValue(char *, Type &);
     
 private:
     static DicomHandler* fInstance;
  
-    const int DATABUFFSIZE;
-    const int LINEBUFFSIZE;
-    const int FILENAMESIZE;
+    const G4int DATABUFFSIZE;
+    const G4int LINEBUFFSIZE;
+    const G4int FILENAMESIZE;
     
     void ReadCalibration();
     void GetInformation(G4int &, char *);
@@ -131,7 +133,7 @@ private:
     G4int fNbrequali;
     G4double* fValueDensity;
     G4double* fValueCT;
-    bool fReadCalibration;
+    G4bool fReadCalibration;
     DicomPhantomZSliceMerged* fMergedSlices;
 
     G4String fDriverFile;

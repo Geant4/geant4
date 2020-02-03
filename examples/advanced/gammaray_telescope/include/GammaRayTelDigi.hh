@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigi.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -56,7 +55,7 @@ public:
   ~GammaRayTelDigi();
   GammaRayTelDigi(const GammaRayTelDigi&);
   const GammaRayTelDigi& operator=(const GammaRayTelDigi&);
-  int operator==(const GammaRayTelDigi&) const;
+  G4bool operator==(const GammaRayTelDigi&) const;
   
   inline void* operator new(size_t);
   inline void  operator delete(void*);

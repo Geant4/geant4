@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.cc 66785 2013-01-12 15:10:13Z gcosmo $
 //
 #include "G4V3DNucleus.hh"
 #include "G4HadronicException.hh"
@@ -45,20 +44,20 @@ G4V3DNucleus::~G4V3DNucleus()
 
 const G4V3DNucleus & G4V3DNucleus::operator=(const G4V3DNucleus &)
 {
-  G4String text = "G4V3DNucleus::operator= meant to not be accessable";
+  G4String text = "G4V3DNucleus::operator= meant to not be accessible";
   throw G4HadronicException(__FILE__, __LINE__, text); 
   return *this;
 }
 
 
-int G4V3DNucleus::operator==(const G4V3DNucleus &) const
+G4bool G4V3DNucleus::operator==(const G4V3DNucleus &) const
 {
-  return 0;
+  return false;
 }
 
-int G4V3DNucleus::operator!=(const G4V3DNucleus &) const
+G4bool G4V3DNucleus::operator!=(const G4V3DNucleus &) const
 {
-  return 1;
+  return true;
 }
 
 

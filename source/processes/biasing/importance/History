@@ -1,4 +1,3 @@
-$Id: History 88804 2015-03-10 17:12:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+February 26th, 2018  A.Howard
+- G4ImportanceConfigurator: cleaned up unnecessary G4cout and removed
+  copy of G4String - thanks to Gabriele
+
+February 21st, 2018  A.Howard
+- G4ImportanceConfigurator: put back clear in the destructor
+
+February 21st, 2018  A.Howard
+- G4ImportanceConfigurator: introduced AutoLock (G4Mutex) to protect
+  instantiation of the biasing process against a threadrace
+
+March 7th, 2017  A.Howard
+- G4GeometrySampler: removed unnecessary ClearSampling from the destructor
+
+March 7th, 2017  A.Howard
+- G4ImportanceConfigurator: adjusted the ProcessPlacer in the destructor
+  of the G4ImportanceConfigurator so that it didn't cause an error in MT-mode
 
 March 10th, 2015  G.Cosmo
 - G4ImportanceProcess, G4WeightCutOffProcess: made static thread-local

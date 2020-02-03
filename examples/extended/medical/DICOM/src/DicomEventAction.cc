@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomEventAction.cc 74857 2013-10-23 07:55:55Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomEventAction.cc
 /// \brief Implementation of the DicomEventAction class
@@ -46,8 +45,6 @@
 
 #include "DicomEventAction.hh"
 #include "G4Event.hh"
-#include "DicomRunAction.hh"
-#include "DicomRun.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomEventAction::DicomEventAction()
@@ -62,7 +59,8 @@ DicomEventAction::~DicomEventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  G4cout << "EV: " << evt->GetEventID() << G4endl;
+  //G4cout << "EV: " << evt->GetEventID() << G4endl;
+    G4ConsumeParameters(evt);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

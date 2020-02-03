@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Ellipsoid.hh 83572 2014-09-01 15:23:27Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Ellipsoid
 //
 // Class description:
@@ -44,13 +37,22 @@
 //      zBottomCut      lower cut plane level, z (solid lies above this plane)
 //      zTopCut         upper cut plane level, z (solid lies below this plane)
 
-// History:
-// -------
 // 10.11.1999  G.Horton-Smith (Caltech, USA) - First implementation
 // 10.02.2005  G.Guerrieri (INFN Genova, Italy) - Revision
 // --------------------------------------------------------------------
-#ifndef G4Ellipsoid_HH
-#define G4Ellipsoid_HH
+#ifndef G4ELLIPSOID_HH
+#define G4ELLIPSOID_HH
+
+#include "G4GeomTypes.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UELLIPSOID 1
+#endif
+
+#if (defined(G4GEOM_USE_UELLIPSOID) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UEllipsoid G4Ellipsoid
+  #include "G4UEllipsoid.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -65,13 +67,16 @@ class G4Ellipsoid : public G4VSolid
                       G4double  pxSemiAxis,
                       G4double  pySemiAxis,
                       G4double  pzSemiAxis,
-                      G4double  pzBottomCut=0,
-                      G4double  pzTopCut=0);
+                      G4double  pzBottomCut = 0,
+                      G4double  pzTopCut = 0);
 
     virtual ~G4Ellipsoid();
 
     // Access functions
    
+    inline G4double GetDx() const;
+    inline G4double GetDy() const;
+    inline G4double GetDz() const;
     inline G4double GetSemiAxisMax (G4int i) const;
     inline G4double GetZBottomCut() const;
     inline G4double GetZTopCut() const;
@@ -86,6 +91,7 @@ class G4Ellipsoid : public G4VSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
@@ -97,9 +103,9 @@ class G4Ellipsoid : public G4VSolid
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
@@ -130,23 +136,22 @@ class G4Ellipsoid : public G4VSolid
 
   protected:  // without description
  
-    G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,
-                                                   G4int& noPV) const;
-
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
   private:
 
     G4double kRadTolerance;
     G4double halfCarTolerance, halfRadTolerance;
 
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
+    G4double fCubicVolume = 0.0;
+    G4double fSurfaceArea = 0.0;
     G4double xSemiAxis, ySemiAxis, zSemiAxis,
              semiAxisMax, zBottomCut, zTopCut;
 };
 
 #include "G4Ellipsoid.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UELLIPSOID) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+#endif // G4ELLIPSOID_HH

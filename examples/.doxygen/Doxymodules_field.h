@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: Doxymodules_field.h 76473 2013-11-11 10:35:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_field.h

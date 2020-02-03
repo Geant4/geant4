@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +32,7 @@
 //
 // Modified:
 // 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -41,32 +41,26 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4BGGPionInelasticXS.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4BinaryPiKBuilder::
 G4BinaryPiKBuilder() 
 {
-  thePiData = (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name());
-  theMin = 0*GeV;
-  theMax = 1.3*GeV;
+  theMin = 0.0;
+  theMax = 1.5*GeV;
   theModel = new G4BinaryCascade();
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax); 
 }
-
-G4BinaryPiKBuilder::
-~G4BinaryPiKBuilder() 
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4BinaryPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
   aP->RegisterMe(theModel);
 }
 
@@ -75,27 +69,7 @@ Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
   aP->RegisterMe(theModel);
 }
 
-void G4BinaryPiKBuilder::
-Build(G4KaonPlusInelasticProcess * )
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4KaonMinusInelasticProcess * )
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4KaonZeroLInelasticProcess * )
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4KaonZeroSInelasticProcess * )
-{
-}
-
-// 2002 by J.P. Wellisch

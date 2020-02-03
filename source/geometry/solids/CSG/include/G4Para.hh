@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Para.hh 79491 2014-03-05 15:24:29Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Para
 //
 // Class description:
@@ -62,14 +55,22 @@
 //      fTthetaCphi   Tan theta * Cos phi
 //      fTthetaSphi   Tan theta * Sin phi
 
-// History:
 // 21.3.94 P.Kent Old C++ code converted to tolerant geometry
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
-// 18.11.99 V.Grichine , kUndefined was added to ESide
 // --------------------------------------------------------------------
+#ifndef G4PARA_HH
+#define G4PARA_HH
 
-#ifndef G4Para_HH
-#define G4Para_HH
+#include "G4GeomTypes.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UPARA 1
+#endif
+
+#if defined(G4GEOM_USE_UPARA)
+  #define G4UPara G4Para
+  #include "G4UPara.hh"
+#else
 
 #include "G4CSGSolid.hh"
 #include "G4Polyhedron.hh"
@@ -81,21 +82,21 @@ class G4Para : public G4CSGSolid
     G4Para(const G4String& pName,
                  G4double pDx, G4double pDy, G4double pDz,
                  G4double pAlpha, G4double pTheta, G4double pPhi);
-     
+
     G4Para(const G4String& pName,
            const G4ThreeVector pt[8]);
 
     virtual ~G4Para();
-    
-  // Accessors
+
+    // Accessors
 
     inline G4double GetZHalfLength()  const;
     inline G4ThreeVector GetSymAxis() const;
     inline G4double GetYHalfLength()  const;
     inline G4double GetXHalfLength()  const;
     inline G4double GetTanAlpha()     const;
-    
-  // Modifiers
+
+    // Modifiers
 
     inline void SetXHalfLength(G4double val);
     inline void SetYHalfLength(G4double val);
@@ -104,23 +105,25 @@ class G4Para : public G4CSGSolid
     inline void SetTanAlpha(G4double val);
     inline void SetThetaAndPhi(double pTheta, double pPhi);
 
-    void SetAllParameters(G4double pDx, G4double pDy, G4double pDz, 
+    void SetAllParameters(G4double pDx, G4double pDy, G4double pDz,
                           G4double pAlpha, G4double pTheta, G4double pPhi);
-    
-  // Other methods of solid
-    
-    inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+
+    // Methods of solid
+
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;    
-        
+                                 G4double& pMin, G4double& pMax) const;
+
     EInside Inside(const G4ThreeVector& p) const;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
@@ -128,21 +131,22 @@ class G4Para : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p,
                           const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
-    
+
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
 
-    G4ThreeVector GetPointOnSurface() const; 
+    G4ThreeVector GetPointOnSurface() const;
 
     G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
-  // Visualisation functions
+    // Visualisation functions
 
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron   () const;
@@ -152,34 +156,34 @@ class G4Para : public G4CSGSolid
     G4Para(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
+      // persistifiable objects
 
     G4Para(const G4Para& rhs);
-    G4Para& operator=(const G4Para& rhs); 
-      // Copy constructor and assignment operator.
-
-  protected:  // without description
-
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
+    G4Para& operator=(const G4Para& rhs);
+      // Copy constructor and assignment operator
 
   private:
+
+    void CheckParameters();
+      // Check parameters
+
+    void MakePlanes();
+      // Set side planes
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
-    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-                                  G4ThreeVector p2, G4ThreeVector p3, 
-                                  G4double& area) const;
-      // Returns a random point on the surface of one of the faces.
+  private:
 
- private:
-
+    G4double halfCarTolerance;
     G4double fDx,fDy,fDz;
     G4double fTalpha,fTthetaCphi,fTthetaSphi;
+    struct { G4double a,b,c,d; } fPlanes[4];
 };
 
 #include "G4Para.icc"
+
+#endif
 
 #endif

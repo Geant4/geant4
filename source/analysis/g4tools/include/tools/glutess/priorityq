@@ -104,7 +104,7 @@ inline PriorityQ *pqNewPriorityQ( int (*leq)(PQkey key1, PQkey key2) )
      return NULL;
   }
 
-  pq->initialized = GLU_FALSE;
+  pq->initialized = TOOLS_GLU_FALSE;
   pq->freeList = 0;
   pq->leq = leq;
 
@@ -184,7 +184,7 @@ inline void pqInit( PriorityQ *pq )
   for( i = pq->size; i >= 1; --i ) {
     static_FloatDown( pq, i );
   }
-  pq->initialized = GLU_TRUE;
+  pq->initialized = TOOLS_GLU_TRUE;
 }
 
 /* really __gl_pqHeapInsert */
@@ -376,7 +376,7 @@ inline PriorityQ *pqNewPriorityQ( int (*leq)(PQkey key1, PQkey key2) )
 
   pq->size = 0;
   pq->max = INIT_SIZE();
-  pq->initialized = GLU_FALSE;
+  pq->initialized = TOOLS_GLU_FALSE;
   pq->leq = leq;
   return pq;
 }
@@ -464,7 +464,7 @@ inline int pqInit( PriorityQ *pq )
     }
   }
   pq->max = pq->size;
-  pq->initialized = GLU_TRUE;
+  pq->initialized = TOOLS_GLU_TRUE;
   __gl_pqHeapInit( pq->heap );	/* always succeeds */
 
 #ifndef NDEBUG

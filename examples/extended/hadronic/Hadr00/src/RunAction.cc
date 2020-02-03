@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr00/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
 //
 // -------------------------------------------------------------
 //  

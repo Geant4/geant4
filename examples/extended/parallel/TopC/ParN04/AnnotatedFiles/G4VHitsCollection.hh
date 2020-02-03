@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN04/AnnotatedFiles/G4VHitsCollection.hh
+/// \file G4VHitsCollection.hh
 /// \brief Definition of the G4VHitsCollection class
 //
 //
-// $Id: G4VHitsCollection.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 
 #ifndef G4VHitsCollection_h
@@ -52,7 +51,7 @@ class G4VHitsCollection
       G4VHitsCollection();
       G4VHitsCollection(G4String detName,G4String colNam);
       virtual ~G4VHitsCollection();
-      G4int operator==(const G4VHitsCollection &right) const;
+      G4bool operator==(const G4VHitsCollection &right) const;
 
       virtual void DrawAllHits();
       virtual void PrintAllHits();

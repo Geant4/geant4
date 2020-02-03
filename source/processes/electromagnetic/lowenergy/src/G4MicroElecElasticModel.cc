@@ -143,7 +143,7 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
 
     // For final state
 
-    char *path = getenv("G4LEDATA");
+    char *path = std::getenv("G4LEDATA");
 
     if (!path)
     {

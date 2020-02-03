@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: readHits.cc 93305 2015-10-16 07:34:53Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file persistency/P01/readHits.cc
 /// \brief Main program of the persistency/P01 example

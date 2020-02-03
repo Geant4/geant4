@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H1Messenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
 // The messenger class for H1 management.
 // It implements commands in /analysis/h1 directory.
@@ -70,6 +69,8 @@ class G4H1Messenger : public G4UImessenger
     std::unique_ptr<G4UIcommand>  fSetH1TitleCmd;   
     std::unique_ptr<G4UIcommand>  fSetH1XAxisCmd;   
     std::unique_ptr<G4UIcommand>  fSetH1YAxisCmd;   
+    std::unique_ptr<G4UIcommand>  fSetH1XAxisLogCmd;
+    std::unique_ptr<G4UIcommand>  fSetH1YAxisLogCmd;
 };
   
 #endif

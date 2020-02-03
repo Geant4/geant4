@@ -57,16 +57,16 @@ ifeq ($(G4SYSTEM),Linux-icc)
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
+    X11LIBS   := -L/usr/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
-    XMFLAGS   := -I/usr/X11R6/include
+    XMFLAGS   := -I/usr/include
   endif
   ifndef XMLIBS
     XMLIBS    := -lXm -lXpm
   endif
   ifndef XAWFLAGS
-    XAWFLAGS   := -I/usr/X11R6/include
+    XAWFLAGS   := -I/usr/include
   endif
   ifndef XAWLIBS
     XAWLIBS    := -lXaw
@@ -74,6 +74,9 @@ ifeq ($(G4SYSTEM),Linux-icc)
   DLDLIBS   := -ldl
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLHOME
+    OGLHOME     := /usr
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL

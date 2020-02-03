@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc 84216 2014-10-10 14:51:51Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Author: Alexander Bagulya
@@ -122,7 +120,7 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
 
     // Access to elements
 
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable = 
       G4ProductionCutsTable::GetProductionCutsTable();
@@ -195,7 +193,7 @@ void G4LivermoreComptonModel::ReadData(size_t Z, const char* path)
   const char* datadir = path;
   if(!datadir) 
   {
-    datadir = getenv("G4LEDATA");
+    datadir = std::getenv("G4LEDATA");
     if(!datadir) 
     {
       G4Exception("G4LivermoreComptonModel::ReadData()",

@@ -91,7 +91,7 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
   //Mother volume
   G4Material* matter = matfact->findMaterial(getGenMat());
   G4VSolid*   solid  = new G4Box (Name(), getDx_2Cal()*mm, getDy_2Cal()*mm,
-				  getDy_2Cal()*mm);
+                                  getDy_2Cal()*mm);
   G4LogicalVolume* logh = new G4LogicalVolume(solid, matter, Name());
   setVisType(CCalVisualisable::PseudoVolumes,logh);
 #ifdef debug
@@ -101,7 +101,7 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
 #endif
 
   G4PVPlacement* hcal = new G4PVPlacement(0,G4ThreeVector(getXposCal()*mm,0,0),
-					  Name(), logh, mother, false, 1);
+                                          Name(), logh, mother, false, 1);
   G4String name("Null");
 #ifdef pdebug
   if (mother != 0) name = mother->GetName();
@@ -111,7 +111,7 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
 
   //Wall of the Boxes
   solid  = new G4Box (name, 0.5*getWallThickBox()*mm, getDy_2Box()*mm, 
-		      getDy_2Box()*mm);
+                      getDy_2Box()*mm);
   matter = matfact->findMaterial(getBoxMat());
   name   = Name() + "Wall";
   G4LogicalVolume* logw = new G4LogicalVolume(solid, matter, name);
@@ -128,35 +128,35 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
   for (i=0; i<getNBox(); i++) {
     name   = Name() + "Box" + i;
     solid  = new G4Box (name, getDx_2Box()*mm, getDy_2Box()*mm, 
-			getDy_2Box()*mm);
+                        getDy_2Box()*mm);
     logb[i]= new G4LogicalVolume(solid, matter, name);
     setVisType(CCalVisualisable::PseudoVolumes,logb[i]);
 #ifdef debug
     G4cout << tab << name << " Box made of " << getGenMat()
-	 << " of dimension " << getDx_2Box()*mm << " " << getDy_2Box()*mm
+         << " of dimension " << getDx_2Box()*mm << " " << getDy_2Box()*mm
          << " " << getDy_2Box()*mm << G4endl;
 #endif
 
     G4double xpos = -(getDx_2Box() - 0.5*getWallThickBox());
     new G4PVPlacement (0, G4ThreeVector(xpos*mm,0,0), logw, logw->GetName(), 
-		       logb[i], false, 1);
+                       logb[i], false, 1);
 #ifdef pdebug
     G4cout << logw->GetName() << " Number 1 positioned in " << name
-	 << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
+         << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
 #endif
     xpos = (getDx_2Box() - 0.5*getWallThickBox());
     new G4PVPlacement (0, G4ThreeVector(xpos*mm,0,0), logw, logw->GetName(), 
-		       logb[i], false, 2);
+                       logb[i], false, 2);
 #ifdef pdebug
     G4cout << logw->GetName() << " Number 2 positioned in " << name
-	 << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
+         << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
 #endif
 
     new G4PVPlacement (0, G4ThreeVector(getXposBox(i)*mm,0,0), logb[i], name, 
-		       logh, false, i+1);
+                       logh, false, i+1);
 #ifdef pdebug
     G4cout << name << " Number " << i+1 << " positioned in " << logh->GetName()
-	 << " at (" << getXposBox(i)*mm << ",0,0) with no rotation" << G4endl;
+         << " at (" << getXposBox(i)*mm << ",0,0) with no rotation" << G4endl;
 #endif
   }
 
@@ -172,11 +172,11 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
     }
     G4double xpos = getXposScnt(i);
     new G4PVPlacement (0, G4ThreeVector(xpos*mm,0,0), sclLog[lay], 
-		       sclLog[lay]->GetName(), logw, false, i+1);
+                       sclLog[lay]->GetName(), logw, false, i+1);
 #ifdef pdebug
     G4cout << sclLog[lay]->GetName() << " Number " << i+1 << " positioned in " 
-	 << logw->GetName() << " at (" << xpos*mm << ",0,0) with no rotation" 
-	 << G4endl;
+         << logw->GetName() << " at (" << xpos*mm << ",0,0) with no rotation" 
+         << G4endl;
 #endif
   }
 
@@ -192,11 +192,11 @@ G4VPhysicalVolume* CCalG4Hcal::constructIn(G4VPhysicalVolume* mother) {
     }
     G4double xpos = getXposAbs(i);
     new G4PVPlacement (0, G4ThreeVector(xpos*mm,0,0), absLog[lay], 
-		       absLog[lay]->GetName(), logw, false, i+1);
+                       absLog[lay]->GetName(), logw, false, i+1);
 #ifdef pdebug
     G4cout << absLog[lay]->GetName() << " Number " << i+1 << " positioned in " 
-	 << logw->GetName() << " at (" << xpos*mm << ",0,0) with no rotation" 
-	 << G4endl;
+         << logw->GetName() << " at (" << xpos*mm << ",0,0) with no rotation" 
+         << G4endl;
 #endif
   }
 
@@ -217,8 +217,8 @@ G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
   G4Material* matter = matfact->findMaterial(getGenMat());
   G4String    name   = Name() + "ScntLayer" + lay;
   G4VSolid*   solid  = new G4Box (name, getDx_2ScntLay(lay)*mm, 
-				  getDy_2ScntLay(lay)*mm,
-				  getDy_2ScntLay(lay)*mm);
+                                  getDy_2ScntLay(lay)*mm,
+                                  getDy_2ScntLay(lay)*mm);
   G4LogicalVolume* log = new G4LogicalVolume(solid, matter, name);
   setVisType(CCalVisualisable::PseudoVolumes,log);
 #ifdef debug
@@ -234,25 +234,25 @@ G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
     name   = Name() + "ScntWrapper" + lay;
     matter = matfact->findMaterial(getWrapMat());
     solid  = new G4Box (name, getDx_2Wrap(lay)*mm, 
-			getDy_2ScntLay(lay)*mm, getDy_2ScntLay(lay)*mm);
+                        getDy_2ScntLay(lay)*mm, getDy_2ScntLay(lay)*mm);
     logd   = new G4LogicalVolume(solid, matter, name);
     setVisType(CCalVisualisable::Support,logd);
 #ifdef debug
     G4cout << tab << name << " Box made of " << getWrapMat() << " of dimension " 
-	 << getDx_2Wrap(lay)*mm << " " << getDy_2ScntLay(lay)*mm << " " 
-	 << getDy_2ScntLay(lay)*mm << G4endl;
+         << getDx_2Wrap(lay)*mm << " " << getDy_2ScntLay(lay)*mm << " " 
+         << getDy_2ScntLay(lay)*mm << G4endl;
 #endif
     xpos   =-(getDx_2ScntLay(lay)-getDx_2Wrap(lay));
     new G4PVPlacement(0, G4ThreeVector(xpos*mm,0,0), logd, name, log, false,1);
 #ifdef pdebug
     G4cout << logd->GetName() << " Number 1 positioned in " << log->GetName() 
-	 << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
+         << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
 #endif
     xpos   = (getDx_2ScntLay(lay)-getDx_2Wrap(lay));
     new G4PVPlacement(0, G4ThreeVector(xpos*mm,0,0), logd, name, log, false,2);
 #ifdef pdebug
     G4cout << logd->GetName() << " Number 2 positioned in " << log->GetName() 
-	 << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
+         << " at (" << xpos*mm << ",0,0) with no rotation" << G4endl;
 #endif
   }
 
@@ -260,7 +260,7 @@ G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
   matter = matfact->findMaterial(getPlasMat());
   name   = Name() + "FrontPlastic" + lay;
   solid  = new G4Box (name, getDx_2FrontP(lay)*mm, getDy_2ScntLay(lay)*mm, 
-		      getDy_2ScntLay(lay)*mm);
+                      getDy_2ScntLay(lay)*mm);
   logd   = new G4LogicalVolume(solid, matter, name);
   setVisType(CCalVisualisable::Cable,logd);
 #ifdef debug
@@ -276,7 +276,7 @@ G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
 #endif
   name   = Name() + "BackPlastic" + lay;
   solid  = new G4Box (name, getDx_2BackP(lay)*mm, getDy_2ScntLay(lay)*mm, 
-		      getDy_2ScntLay(lay)*mm);
+                      getDy_2ScntLay(lay)*mm);
   logd   = new G4LogicalVolume(solid, matter, name);
   setVisType(CCalVisualisable::Cable,logd);
 #ifdef debug
@@ -296,7 +296,7 @@ G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
   matter = matfact->findMaterial(getScntMat());
   name   = Name() + "Scintillator" + lay;
   solid  = new G4Box (name, getDx_2Scnt(lay)*mm, getDy_2ScntLay(lay)*mm, 
-		      getDy_2ScntLay(lay)*mm);
+                      getDy_2ScntLay(lay)*mm);
   logd   = new G4LogicalVolume(solid, matter, name);
   setVisType(CCalVisualisable::Sensitive,logd);
   allSensitiveLogs.push_back(logd);
@@ -306,7 +306,7 @@ G4LogicalVolume* CCalG4Hcal::constructScintillatorLayer(G4int lay) {
        << getDy_2ScntLay(lay)*mm << G4endl;
 #endif
   xpos   =(-getDx_2ScntLay(lay)+2.*getDx_2Wrap(lay)+2.*getDx_2FrontP(lay)+
-	   getDx_2Scnt(lay));
+           getDx_2Scnt(lay));
   new G4PVPlacement(0, G4ThreeVector(xpos*mm,0,0), logd, name, log, false,1);
 #ifdef pdebug
   G4cout << logd->GetName() << " Number 1 positioned in " << log->GetName() 
@@ -326,7 +326,7 @@ G4LogicalVolume* CCalG4Hcal::constructAbsorberLayer(G4int lay) {
   G4Material* matter = matfact->findMaterial(getAbsMat());
   G4String    name   = Name() + "Absorber" + lay;
   G4VSolid*   solid  = new G4Box (name, getDx_2Abs(lay)*mm, getDy_2Abs()*mm,
-				  getDy_2Abs()*mm);
+                                  getDy_2Abs()*mm);
   G4LogicalVolume* log = new G4LogicalVolume(solid, matter, name);
   setVisType(CCalVisualisable::Absorber,log);
 #ifdef debug
@@ -349,12 +349,12 @@ void CCalG4Hcal::constructSensitive(){
       sensDets->registerVolume(SDname, (*iter));
 #ifdef sdebug
       G4cout << "Register volume " << (*iter)->GetName() << " for" << SDname 
-	   << G4endl;
+           << G4endl;
 #endif
     }
   } else {
     G4cerr << "CCalG4Hcal ERROR: Could not construct Sensitive Detector" 
-	   << G4endl;
+           << G4endl;
   }
 }
 

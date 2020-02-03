@@ -24,7 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id: GammaRayTel.cc 82630 2014-07-01 09:43:00Z gcosmo $
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 // ------------------------------------------------------------
@@ -47,14 +51,19 @@
 
 #include "G4UImanager.hh" 
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+<<<<<<< HEAD
 #endif 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
+<<<<<<< HEAD
 #endif
  
+=======
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelPhysicsList.hh"
 #include "GammaRayTelActionInitializer.hh"
@@ -95,12 +104,15 @@ int main(int argc, char** argv)
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
     
   // Set visualization and user interface
-#ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
+<<<<<<< HEAD
 #endif
   
+=======
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // Initialize G4 kernel
   //  runManager->Initialize();
   
@@ -114,7 +126,6 @@ int main(int argc, char** argv)
     }
   else
     {
-#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       if (ui->IsGUI())
 	{
@@ -123,12 +134,13 @@ int main(int argc, char** argv)
 	  ui->SessionStart();
 	}
       delete ui;
+<<<<<<< HEAD
 #endif  
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     }
   // Job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete analysis;
   delete runManager;
   return 0;

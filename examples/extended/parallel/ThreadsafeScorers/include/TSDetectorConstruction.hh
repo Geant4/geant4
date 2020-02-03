@@ -27,7 +27,6 @@
 /// \brief Definition of the TSDetectorConstruction class
 //
 //
-// $Id: TSDetectorConstruction.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// Construction of a target material (default = boron) surrounded by a
@@ -89,6 +88,8 @@ public:
     inline const ScoringVolumes_t& GetScoringVolumes() const
     { return fScoringVolumes; }
     inline const G4String& GetMFDName() const { return fMfdName; }
+    inline G4int GetTotalTargets() const 
+    { return fTargetSections.x() * fTargetSections.y() * fTargetSections.z(); }
 
 protected:
     virtual MaterialCollection_t ConstructMaterials();

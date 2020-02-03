@@ -23,71 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EllipticalTube.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4EllipticalTube.icc
-//
 // Implementation of inline methods of G4EllipticalTube
 // --------------------------------------------------------------------
 
 inline
 G4double G4EllipticalTube::GetDx() const
 {
-  return dx;
+  return fDx;
 }
 
 inline
 G4double G4EllipticalTube::GetDy() const
 {
-  return dy;
+  return fDy;
 }
 
 inline
 G4double G4EllipticalTube::GetDz() const
 {
-  return dz;
+  return fDz;
 }
 
-inline  
-void G4EllipticalTube::SetDx( const G4double newDx )
+inline
+void G4EllipticalTube::SetDx(G4double Dx)
 {
-  dx = newDx;
+  fDx = Dx;
+  CheckParameters();
   fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
 }
 
 inline
-void G4EllipticalTube::SetDy( const G4double newDy )
+void G4EllipticalTube::SetDy( G4double Dy )
 {
-  dy = newDy;
+  fDy = Dy;
+  CheckParameters();
   fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
 }
 
 inline
-void G4EllipticalTube::SetDz( const G4double newDz )
+void G4EllipticalTube::SetDz( G4double Dz )
 {
-  dz = newDz;
+  fDz = Dz;
+  CheckParameters();
   fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
-}
-  
-inline
-G4double G4EllipticalTube::CheckXY( const G4double x,
-                                    const G4double y,
-                                    const G4double toler ) const
-{
-  G4double rx = x/(dx+toler), ry = y/(dy+toler);
-  return rx*rx + ry*ry;
-}
-
-inline
-G4double G4EllipticalTube::CheckXY( const G4double x, const G4double y ) const
-{
-  G4double rx = x/dx, ry = y/dy;
-  return rx*rx + ry*ry;
 }

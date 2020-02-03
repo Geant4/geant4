@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: Doxymodules_medical.h 94561 2015-11-24 09:17:12Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_medical.h
@@ -31,6 +34,17 @@
   class DicomRegularDetectorConstruction {};
   class DicomRunAction {};
   class DicomRun {};
+
+/** @} */
+
+/** @defgroup extended_medical_DICOM2 DICOM2
+ *  Medical example DICOM2
+ *  @ingroup extended_medical
+ *  @{
+ */
+
+  class Dicom2ActionInitialization {};
+  class Dicom2PrimaryGeneratorAction {};
 
 /** @} */
 
@@ -111,6 +125,45 @@
 
 /** @} */
 
+<<<<<<< HEAD
+=======
+/** @defgroup extended_medical_dna_chem4 chem4
+ *  Medical dna chem4 example has its
+ *  <a href="../html_chem4/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_chem5 chem5
+ *  Medical dna chem5 example has its
+ *  <a href="../html_chem5/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_clustering clustering
+ *  Medical dna clustering example has its
+ *  <a href="../html_clustering/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_dnadamage1 dnadamage1
+ *  Medical dna dnadamage1 example has its
+ *  <a href="../html_dnadamage1/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /** @defgroup extended_medical_dna_dnaphysics dnaphysics
  *  Medical dna dnaphysics example has its
  *  <a href="../html_dnaphysics/html/index.html">standalone documentation </a>
@@ -123,6 +176,15 @@
 /** @defgroup extended_medical_dna_microdosimetry microdosimetry
  *  Medical dna microdosimetry example has its
  *  <a href="../html_microdosimetry/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_microprox microprox
+ *  Medical dna microprox example has its
+ *  <a href="../html_microprox/html/index.html">standalone documentation </a>
  *  @ingroup extended_medical_dna
  *  @{
  */
@@ -147,6 +209,45 @@
 
 /** @} */
 
+<<<<<<< HEAD
+=======
+/** @defgroup extended_medical_dna_range range
+ *  Medical dna range example has its
+ *  <a href="../html_range/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_slowing slowing
+ *  Medical dna slowing example has its
+ *  <a href="../html_slowing/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_splitting splitting
+ *  Medical dna splitting example has its
+ *  <a href="../html_splitting/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_spower spower
+ *  Medical dna spower example has its
+ *  <a href="../html_spower/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /** @defgroup extended_medical_dna_svalue svalue
  *  Medical dna svalue example has its
  *  <a href="../html_svalue/html/index.html">standalone documentation </a>

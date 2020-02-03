@@ -47,6 +47,20 @@ inline const std::string& encoding_PAW() {
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
+
+inline const std::string& s_font_outline() {static const std::string s_v("font_outline");return s_v;}
+inline const std::string& s_font_filled()  {static const std::string s_v("font_filled");return s_v;}
+inline const std::string& s_font_pixmap()  {static const std::string s_v("font_pixmap");return s_v;}
+
+inline const std::string& s_anim_mode_0()  {static const std::string s_v("anim_mode_0");return s_v;}
+inline const std::string& s_anim_mode_1()  {static const std::string s_v("anim_mode_1");return s_v;}
+inline const std::string& s_anim_mode_2()  {static const std::string s_v("anim_mode_2");return s_v;}
+inline const std::string& s_anim_mode_3()  {static const std::string s_v("anim_mode_3");return s_v;}
+inline const std::string& s_anim_mode_4()  {static const std::string s_v("anim_mode_4");return s_v;}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 inline const std::string& modeling_boxes() {
   static const std::string s_v("boxes");
   return s_v;
@@ -70,6 +84,10 @@ inline const std::string& modeling_points() {
 }
 inline const std::string& modeling_top_lines() {
   static const std::string s_v("top_lines");
+  return s_v;
+}
+inline const std::string& modeling_top_lines_boxes() {
+  static const std::string s_v("top_lines_boxes");
   return s_v;
 }
 inline const std::string& modeling_texts() {
@@ -116,6 +134,21 @@ inline const std::string& modeling_plus() {
   static const std::string s_v("plus");
   return s_v;
 }
+inline const std::string& modeling_markers() { //used in sg::plotter.
+  static const std::string s_v("markers");
+  return s_v;
+}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+inline const std::string& modeling_arrow() { //used in EsbRootView.
+  static const std::string s_v("arrow");
+  return s_v;
+}
+inline const std::string& modeling_cone() { //used in EsbRootView.
+  static const std::string s_v("cone");
+  return s_v;
+}
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -132,44 +165,31 @@ inline const std::string& light_model_phong() {
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-inline const std::string& font_hershey() {
-  static const std::string s_v("hershey");
-  return s_v;
-}
-inline const std::string& font_arial_ttf() {
-  static const std::string s_v("arial.ttf");
-  return s_v;
-}
-inline const std::string& font_arialbd_ttf() {
-  static const std::string s_v("arialbd.ttf");
-  return s_v;
-}
-inline const std::string& font_timesbd_ttf() {
-  static const std::string s_v("timesbd.ttf");
-  return s_v;
-}
-inline const std::string& font_symbol_ttf() {
-  static const std::string s_v("symbol.ttf");
-  return s_v;
-}
-inline const std::string& font_stixgeneral_otf() {
-  static const std::string s_v("stixgeneral.otf");
-  return s_v;
-}
-inline const std::string& font_helvetica_ttf() {
-  static const std::string s_v("helvetica.ttf");
-  return s_v;
-}
-inline const std::string& font_times_roman_ttf() {
-  static const std::string s_v("times_roman.ttf");
-  return s_v;
+inline const std::string& font_hershey() {static const std::string s_v("hershey");return s_v;}
+
+#define TOOLS_FONT_TTF(a__name) \
+inline const std::string& font_##a__name##_ttf() {\
+  static const std::string s_v(std::string(#a__name)+".ttf");\
+  return s_v;\
 }
 
-inline const std::string& gui_font() {
-  //static const std::string s_v("arial.ttf");
-  static const std::string s_v("arialbd.ttf");
-  return s_v;
-}
+TOOLS_FONT_TTF(arial)
+TOOLS_FONT_TTF(arialbd)
+TOOLS_FONT_TTF(timesbd)
+TOOLS_FONT_TTF(symbol)
+TOOLS_FONT_TTF(helvetica)
+TOOLS_FONT_TTF(helveticabd)
+TOOLS_FONT_TTF(times_roman)
+TOOLS_FONT_TTF(cour)
+TOOLS_FONT_TTF(courbd)
+TOOLS_FONT_TTF(couri)
+TOOLS_FONT_TTF(courbi)
+TOOLS_FONT_TTF(lucidagrandebd)
+
+#undef TOOLS_FONT_TTF
+
+inline const std::string& font_stixgeneral_otf() {static const std::string s_v("stixgeneral.otf");return s_v;}
+inline const std::string& font_STIX2Text_Regular_otf() {static const std::string s_v("STIX2Text-Regular.otf");return s_v;}
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -190,25 +210,20 @@ inline const std::string& gui_font() {
 //*-*     13 : times-medium-r-normal      "Times New Roman"      0           4
 //*-*     14 :                            "Wingdings"            0           4
 
-//#define SbFont_ROOT_12  "TTF/timesi"
-//#define SbFont_ROOT_22  "TTF/timesbd"
-//#define SbFont_ROOT_32  "TTF/timesbi"
-//#define SbFont_ROOT_42  "TTF/arial"
-//#define SbFont_ROOT_52  "TTF/ariali"
-//#define SbFont_ROOT_62  "TTF/arialbd"
-//#define SbFont_ROOT_72  "TTF/arialbi"
-//#define SbFont_ROOT_82  "TTF/cour"
-//#define SbFont_ROOT_92  "TTF/couri"
-//#define SbFont_ROOT_102 "TTF/courbd"
-//#define SbFont_ROOT_112 "TTF/courbi"
-//#define SbFont_ROOT_122 "TTF/symbol"
-//#define SbFont_ROOT_132 "TTF/times"
-//#define SbFont_ROOT_142 "TTF/wingding"
-
-inline const std::string& font_ROOT_62() {
-  static const std::string s_v("arialbd.ttf");
-  return s_v;
-}
+inline const std::string& font_ROOT_12() {static const std::string s_v("timesi.ttf");return s_v;}
+inline const std::string& font_ROOT_22() {static const std::string s_v("timesbd.ttf");return s_v;}
+inline const std::string& font_ROOT_32() {static const std::string s_v("timesbi.ttf");return s_v;}
+inline const std::string& font_ROOT_42() {static const std::string s_v("arial.ttf");return s_v;}
+inline const std::string& font_ROOT_52() {static const std::string s_v("ariali.ttf");return s_v;}
+inline const std::string& font_ROOT_62() {static const std::string s_v("arialbd.ttf");return s_v;}
+inline const std::string& font_ROOT_72() {static const std::string s_v("arialbi.ttf");return s_v;}
+inline const std::string& font_ROOT_82() {static const std::string s_v("cour.ttf");return s_v;}
+inline const std::string& font_ROOT_92() {static const std::string s_v("couri.ttf");return s_v;}
+inline const std::string& font_ROOT_102() {static const std::string s_v("courbd.fff");return s_v;}
+inline const std::string& font_ROOT_112() {static const std::string s_v("courbi.fff");return s_v;}
+inline const std::string& font_ROOT_122() {static const std::string s_v("symbol.fff");return s_v;}
+inline const std::string& font_ROOT_132() {static const std::string s_v("times.ttf");return s_v;}
+inline const std::string& font_ROOT_142() {static const std::string s_v("wingding.fff");return s_v;}
 
 }}
 
@@ -231,12 +246,17 @@ TOOLS_GLOBAL_STRING(movable)
 
 TOOLS_GLOBAL_STRING(1D)
 TOOLS_GLOBAL_STRING(2D)
+TOOLS_GLOBAL_STRING(3D)
 
 //TOOLS_GLOBAL_STRING(whole)
 TOOLS_GLOBAL_STRING(col)
 TOOLS_GLOBAL_STRING(row)
 
 TOOLS_GLOBAL_STRING_VALUE(white_jpg,white.jpg)
+
+// for <scenario> EsbRootView.scenarios
+TOOLS_GLOBAL_STRING(rotation)
+TOOLS_GLOBAL_STRING(translation)
 
 //slides :
 TOOLS_GLOBAL_STRING(pos_x_wcam)
@@ -253,6 +273,61 @@ TOOLS_GLOBAL_STRING(class)
 TOOLS_GLOBAL_STRING(camera_height)
 
 TOOLS_GLOBAL_STRING(none)
+
+// send sg options :
+TOOLS_GLOBAL_STRING_VALUE(send_placement,placement)
+TOOLS_GLOBAL_STRING_VALUE(placement_static,static)
+TOOLS_GLOBAL_STRING_VALUE(placement_dynamic,dynamic)
+TOOLS_GLOBAL_STRING_VALUE(placement_static_blend,static_blend)
+TOOLS_GLOBAL_STRING_VALUE(placement_screen,screen)
+TOOLS_GLOBAL_STRING_VALUE(send_radius,radius)
+TOOLS_GLOBAL_STRING_VALUE(send_scale,scale)
+TOOLS_GLOBAL_STRING_VALUE(send_clear,clear)
+//TOOLS_GLOBAL_STRING_VALUE(send_height,height)
+
+TOOLS_GLOBAL_STRING_VALUE(protocol_start,start)
+TOOLS_GLOBAL_STRING_VALUE(protocol_disconnect,disconnect)
+TOOLS_GLOBAL_STRING_VALUE(protocol_zdoc,zdoc)
+TOOLS_GLOBAL_STRING_VALUE(protocol_get_wall_params,get_wall_params)
+
+TOOLS_GLOBAL_STRING_VALUE(protocol_arg_sep,;)
+
+TOOLS_GLOBAL_STRING_VALUE(protocol_rwc,rwc)
+TOOLS_GLOBAL_STRING_VALUE(protocol_set_params,rwc_set_params)
+TOOLS_GLOBAL_STRING_VALUE(protocol_set_camera,rwc_set_camera)
+TOOLS_GLOBAL_STRING_VALUE(protocol_clear_static_sg,rwc_clear_static_scene)
+TOOLS_GLOBAL_STRING_VALUE(protocol_clear_dynamic_sg,rwc_clear_dynamic_scene)
+TOOLS_GLOBAL_STRING_VALUE(protocol_clear_screen_sg,rwc_clear_screen_scene)
+
+TOOLS_GLOBAL_STRING(protocol_view_all)
+TOOLS_GLOBAL_STRING(protocol_set_background_black)
+TOOLS_GLOBAL_STRING(protocol_set_background_white)
+TOOLS_GLOBAL_STRING(protocol_disable_anim)
+TOOLS_GLOBAL_STRING(protocol_reset_camera)
+
+/* if adding protocols, think to declare corresponding methods to SWIG.
+protocol_set_plane_viewer(bool)
+protocol_set_scene_light_on(bool)
+protocol_hide_main_menu
+protocol_hide_meta_zone
+protocol_show_camera_menu
+*/
+
+TOOLS_GLOBAL_STRING_VALUE(dir_diaporama,diaporama)
+
+// sg_serv params :
+TOOLS_GLOBAL_STRING_VALUE(sg_serv_ww,ww)
+TOOLS_GLOBAL_STRING_VALUE(sg_serv_wh,wh)
+TOOLS_GLOBAL_STRING_VALUE(sg_serv_bw,bw)
+TOOLS_GLOBAL_STRING_VALUE(sg_serv_bh,bh)
+TOOLS_GLOBAL_STRING_VALUE(sg_serv_cols,cols)
+TOOLS_GLOBAL_STRING_VALUE(sg_serv_rows,rows)
+
+
+// view_evd insh commands :
+TOOLS_GLOBAL_STRING_VALUE(insh_clear_static_scene,clear_static_scene)
+TOOLS_GLOBAL_STRING_VALUE(insh_clear_dynamic_scene,clear_dynamic_scene)
+TOOLS_GLOBAL_STRING_VALUE(insh_clear_screen_scene,clear_screen_scene)
 
 }}
 

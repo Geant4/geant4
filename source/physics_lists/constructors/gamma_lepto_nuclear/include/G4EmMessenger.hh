@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.hh 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,7 +33,8 @@
 // Modified:
 // 09.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
-//
+// 31.01.2018 V.Grichine, activation of neutrino-electron process
+// 03.10.2018 V Grichine activation of total nneutrino-electron process 
 //----------------------------------------------------------------------------
 //
 
@@ -46,6 +46,10 @@ class G4EmExtraPhysics;
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithAString.hh"
+
+//////////////////////////////////////
 
 class G4EmMessenger: public G4UImessenger
 {
@@ -57,10 +61,28 @@ public:
 
 private:
   G4EmExtraPhysics*   theB;
+
   G4UIcmdWithABool*   theSynch;
   G4UIcmdWithABool*   theSynchAll;
   G4UIcmdWithABool*   theGN;
+  G4UIcmdWithABool*   theGLENDN;
+  G4UIcmdWithABool*   theEN;
   G4UIcmdWithABool*   theMUN;
+  G4UIcmdWithABool*   theGMM;
+  G4UIcmdWithABool*   thePMM;
+  G4UIcmdWithABool*   thePH;
+  G4UIcmdWithABool*   theNu;
+  G4UIcmdWithABool*   theNuETX;
+
+  G4UIcmdWithADouble* theGMM1;
+  G4UIcmdWithADouble* thePMM1;
+  G4UIcmdWithADouble* thePH1;
+  G4UIcmdWithADouble* theNuEleCcBF;
+  G4UIcmdWithADouble* theNuEleNcBF;
+  G4UIcmdWithADouble* theNuNucleusBF;
+
+  G4UIcmdWithAString* theNuDN;
+
   G4UIdirectory*      aDir1;
   G4UIdirectory*      aDir2;
 };

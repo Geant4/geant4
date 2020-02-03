@@ -3,12 +3,23 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+<<<<<<< HEAD
 *************************************************************
  Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
+=======
+**************************************************************
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 
 ***** Table : Nb of materials = 1 *****
@@ -49,12 +60,10 @@ RayTracer (RayTracer)
 VRML1FILE (VRML1FILE)
 VRML2FILE (VRML2FILE)
 gMocrenFile (gMocrenFile)
-OpenGLImmediateQt (OGLIQt, OGLI)
-OpenGLStoredQt (OGLSQt, OGL, OGLS)
-OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+OpenGLImmediateXm (OGLIXm, OGLI)
+OpenGLStoredXm (OGLSXm, OGL, OGLS)
+OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
 RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -85,6 +94,10 @@ Available colours:
 /event/verbose 1
 /tracking/verbose 1
 #
+# Initialize G4 kernel
+/run/initialize
+#
+# Run one event
 /run/beamOn 1
 
 ========= Table of registered couples ==============================
@@ -98,6 +111,8 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 =====================================
   G4EventManager::ProcessOneEvent()  
@@ -2299,13 +2314,21 @@ Terminate current event processing.
  Run terminated.
 Run Summary
   Number of events processed : 1
+<<<<<<< HEAD
   User=0.02s Real=0.03s Sys=0.01s
 #
+=======
+  User=0.010000s Real=0.020700s Sys=0.000000s
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<<<<<<< HEAD
  Maximum number of tracks in the urgent stack : 1
+=======
+ Maximum number of tracks in the urgent stack : 576460752303423487
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

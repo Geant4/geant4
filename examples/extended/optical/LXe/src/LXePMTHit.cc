@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXePMTHit.cc 72250 2013-07-12 08:59:26Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/src/LXePMTHit.cc
 /// \brief Implementation of the LXePMTHit class
@@ -70,7 +73,7 @@ const LXePMTHit& LXePMTHit::operator=(const LXePMTHit &right){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int LXePMTHit::operator==(const LXePMTHit &right) const{
+G4bool LXePMTHit::operator==(const LXePMTHit &right) const{
   return (fPmtNumber==right.fPmtNumber);
 }
 

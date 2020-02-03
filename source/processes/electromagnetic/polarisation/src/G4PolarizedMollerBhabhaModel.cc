@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.cc 91742 2015-08-04 11:48:51Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -70,7 +69,7 @@ G4PolarizedMollerBhabhaModel::G4PolarizedMollerBhabhaModel(const G4ParticleDefin
   //   G4cout<<" particle==electron "<<(p==theElectron)<<G4endl;
   isElectron=(p==theElectron);  // necessary due to wrong order in G4MollerBhabhaModel constructor!
 
-  if (p==0) { 
+  if (p==nullptr) { 
     
   }
   if (!isElectron) {
@@ -106,7 +105,7 @@ G4double G4PolarizedMollerBhabhaModel::ComputeCrossSectionPerElectron(
 //   G4cout<<"calc eIoni xsec "<<xs<<G4endl;
 //   G4cout<<" "<<kinEnergy<<" "<<cut<<" "<<emax<<G4endl;
   G4double factor=1.;
-  if (xs!=0) {
+  if (xs!=0.) {
     //    G4cout<<"calc asym"<<G4endl;
     G4double tmax = MaxSecondaryEnergy(pd, kinEnergy);
     tmax = std::min(emax, tmax);

@@ -1,0 +1,10 @@
+/run/verbose 2
+/control/verbose 2
+/run/numberOfThreads 2
+/run/initialize 
+/gun/particle proton
+/gun/energy 5 keV
+/scheduler/maxNullTimeSteps 50
+#/scheduler/verbose 2
+#/scheduler/whyDoYouStop
+/run/beamOn 2

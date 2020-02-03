@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 87359 2014-12-01 16:04:27Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+21/11/19 G. Cosmo (exampleB2-V10-05-00)
+- Use default MixMax random engine.
+
+13/03/18 I. Hrivnacova  (exampleB2-V10-04-00)
+- Modified exampleB2.in test to reduce the output
+
+19/11/16 A. Dotti   (exampleB2-V10-02-01)
+- explitic set of SD to manager
+
+01/11/16 L. Garnier (exampleB2-V10-02-00)
+- Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 29/11/14 I. Hrivnacova
 - Use G4endl instead of \n in G4cout;
   this makes each new line in the output on threads preceded with

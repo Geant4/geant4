@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE01/src/RE01CalorimeterParametrisation.cc
 /// \brief Implementation of the RE01CalorimeterParametrisation class
 //
-// $Id: RE01CalorimeterParametrisation.cc 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
 #include "RE01CalorimeterParametrisation.hh"

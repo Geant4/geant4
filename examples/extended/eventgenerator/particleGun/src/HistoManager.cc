@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr03/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
+<<<<<<< HEAD
 // $Id: HistoManager.cc 83919 2014-09-23 08:40:35Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

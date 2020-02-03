@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc 81060 2014-05-20 09:12:39Z gcosmo $
-// GEANT4 tag $ Name:  $
-// 
 // class G4SafetyHelper Implementation
 //
 // Original author: John Apostolakis, 2006
-//
 // --------------------------------------------------------------------
 
 #include "G4SafetyHelper.hh"
@@ -40,25 +36,13 @@
 #include "globals.hh"
 
 G4SafetyHelper::G4SafetyHelper()
- : fUseParallelGeometries(false),     // By default, one geometry only
-   fFirstCall(true),
-   fVerbose(0), 
-   fLastSafetyPosition(0.0,0.0,0.0),
-   fLastSafety(0.0)
-   // fRecomputeFactor(0.0)
+  : fLastSafetyPosition(0.0,0.0,0.0)
 {
-  fpPathFinder= 0; //  Cannot initialise this yet - a loop results
-
-  // Initialization of the Navigator pointer is postponed, and must
-  // be undertaken by another class calling InitialiseHelper()
-  //
-  fpMassNavigator= 0;  
-  fMassNavigatorId= -1; 
 }
 
 void G4SafetyHelper::InitialiseNavigator()
 {
-  fpPathFinder= G4PathFinder::GetInstance();
+  fpPathFinder = G4PathFinder::GetInstance();
  
   G4TransportationManager* pTransportMgr= 
     G4TransportationManager::GetTransportationManager();
@@ -68,10 +52,10 @@ void G4SafetyHelper::InitialiseNavigator()
   // Check
   //
   G4VPhysicalVolume* worldPV = fpMassNavigator->GetWorldVolume(); 
-  if( worldPV == 0 )
+  if( worldPV == nullptr )
   { 
     G4Exception("G4SafetyHelper::InitialiseNavigator",
-                "InvalidNavigatorWorld", FatalException, 
+                "GeomNav0003", FatalException, 
                 "Found that existing tracking Navigator has NULL world"); 
   }
 
@@ -91,8 +75,8 @@ G4SafetyHelper::~G4SafetyHelper()
 }
 
 G4double   
-G4SafetyHelper::CheckNextStep(const G4ThreeVector &position, 
-                              const G4ThreeVector &direction,
+G4SafetyHelper::CheckNextStep(const G4ThreeVector& position, 
+                              const G4ThreeVector& direction,
                               const G4double currentMaxStep,
                                     G4double& newSafety )
 {  
@@ -111,10 +95,11 @@ G4SafetyHelper::CheckNextStep(const G4ThreeVector &position,
   return linstep;
 }
 
-G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double maxLength )
+G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position,
+                                              G4double maxLength )
 {
   G4double newSafety;
-
+  
   // Only recompute (calling Navigator/PathFinder) if 'position'
   // is  *not* the safety location and has moved 'significantly'
   //
@@ -125,19 +110,23 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double 
     {
       // Safety for mass geometry
       newSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
+
+      // Only store a 'true' safety - one that was not restricted by maxLength
+      if( newSafety < maxLength )
+      {
+         fLastSafety= newSafety;
+         fLastSafetyPosition = position;
+      }
     }
     else
     {
       // Safety for all geometries
-      newSafety = fpPathFinder->ComputeSafety(position); 
+      newSafety = fpPathFinder->ComputeSafety(position);
+
+      fLastSafety= newSafety;
+      fLastSafetyPosition = position;
     } 
  
-    // We can only store a 'true' safety - one that was not restricted by maxLength
-    if( newSafety < maxLength )
-    {
-       fLastSafety= newSafety;
-       fLastSafetyPosition = position;
-    }
   }
   else
   {
@@ -146,26 +135,31 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double 
     // G4double moveLength = 0;
     // if( moveLengthSq > 0.0 ) { moveLength= std::sqrt(moveLengthSq); }
     newSafety = fLastSafety; // -moveLength;
-  } 
+  }
+  
   return newSafety;
 }
 
-void G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
+void G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector& newPosition )
 {
 #ifdef G4VERBOSE
-  if( fVerbose > 0 ) { 
-    // There is an opportunity - and need - to check whether the proposed move is safe
-    G4ThreeVector moveVec= newPosition - fLastSafetyPosition;
+  if( fVerbose > 0 )
+  {
+    // There is an opportunity - and need - to check whether
+    // the proposed move is safe
+    G4ThreeVector moveVec = newPosition - fLastSafetyPosition;
     if( moveVec.mag2() > sqr(fLastSafety) )
     {
       // A problem exists - we are proposing to move outside 'Safety Sphere'
       G4ExceptionDescription ed;
+      ed << "Unsafe Move> Asked to relocate beyond 'Safety sphere'.  Details: "
+         << G4endl;
       ed << " Safety Sphere:  Radius = " << fLastSafety;
       ed << " Center   = " << fLastSafetyPosition << G4endl;
-      ed << " New Location :  Move   = " << moveVec.mag2();
+      ed << " New Location :  Move   = " << moveVec.mag();
       ed << " Position = " << newPosition << G4endl;
-      G4Exception("G4SafetyHelper::ReLocateWithinVolume", "GeomNav999", JustWarning,
-                 "Unsafe Move> Asked to relocate beyond 'Safety sphere'.");
+      G4Exception("G4SafetyHelper::ReLocateWithinVolume",
+                  "GeomNav1001", JustWarning, ed);
     }
   }
 #endif
@@ -183,7 +177,7 @@ void G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
 void  G4SafetyHelper::Locate( const G4ThreeVector& newPosition, 
                               const G4ThreeVector& newDirection)
 {
-  if( !fUseParallelGeometries)
+  if( !fUseParallelGeometries )
   {
     fpMassNavigator->LocateGlobalPointAndSetup(newPosition, &newDirection,
                                                true, false); 
@@ -195,33 +189,28 @@ void  G4SafetyHelper::Locate( const G4ThreeVector& newPosition,
 }
 
 G4bool G4SafetyHelper::RecheckDistanceToCurrentBoundary(
-                                        const G4ThreeVector &pGlobalPoint,
-                                        const G4ThreeVector &pDirection,
+                                        const G4ThreeVector& pGlobalPoint,
+                                        const G4ThreeVector& pDirection,
                                         const G4double aProposedMove,
-                                        G4double  *prDistance,
-                                        G4double  *prNewSafety) const
+                                        G4double* prDistance,
+                                        G4double* prNewSafety) const
 {
   G4bool retval;
-  if( !fUseParallelGeometries)
+  if( !fUseParallelGeometries )
   {
-    retval= fpMassNavigator->RecheckDistanceToCurrentBoundary(
-                                                              pGlobalPoint,
-                                                              pDirection,
-                                                              aProposedMove,
-                                                              prDistance,
-                                                              prNewSafety);
+    retval = fpMassNavigator->RecheckDistanceToCurrentBoundary(pGlobalPoint,
+                                                               pDirection,
+                                                               aProposedMove,
+                                                               prDistance,
+                                                               prNewSafety);
   }
   else
   {
-    //G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()", "GeomNav0001",
-    //  JustWarning, "Method NOT Available (yet) in case of Multiple Geometries (where PathFinder is involved.).");
-    retval= fpPathFinder->RecheckDistanceToCurrentBoundary(
-                                                              pGlobalPoint,
-                                                               pDirection,
-                                                              aProposedMove,
-                                                              prDistance,
-                                                              prNewSafety);
+    retval = fpPathFinder->RecheckDistanceToCurrentBoundary(pGlobalPoint,
+                                                            pDirection,
+                                                            aProposedMove,
+                                                            prDistance,
+                                                            prNewSafety);
   }
   return retval;
 }
-

@@ -23,37 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SmartVoxelProxy.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// G4SmartVoxelProxy Inline implementation
+// G4SmartVoxelProxy inline implementation
 //
 // --------------------------------------------------------------------
 
 inline
 G4bool G4SmartVoxelProxy::IsHeader() const
 {
-  return (fHeader) ? true:false;
+  return (fHeader) ? true : false;
 }   
 
 inline
 G4bool G4SmartVoxelProxy::IsNode() const
 {
-  return (fNode) ? true:false;
+  return (fNode) ? true : false;
 }
 
 inline
 G4SmartVoxelNode* G4SmartVoxelProxy::GetNode() const
 {
-  assert(fNode != 0);
+  assert(fNode != nullptr);
   return fNode;
 }
 
 inline
 G4SmartVoxelHeader* G4SmartVoxelProxy::GetHeader() const
 {
-  assert(fHeader != 0);
+  assert(fHeader != nullptr);
   return fHeader;
 }
 

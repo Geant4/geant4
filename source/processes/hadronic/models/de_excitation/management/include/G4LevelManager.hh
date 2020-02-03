@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LevelManager.hh 88516 2015-02-25 11:00:16Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -48,10 +47,8 @@
 
 #include "globals.hh"
 #include "G4NucLevel.hh"
-#include <assert.h>
 #include <vector>
-
-static const G4float tolerance = 0.0001f;
+#include <iostream>
 
 class G4LevelManager 
 {
@@ -61,11 +58,11 @@ public:
   //          level has NULL pointer
   // energies - list of excitation energies of nuclear levels starting
   //            from the ground state with energy zero 
-  G4LevelManager(const std::vector<G4float>& energies,
-		 const std::vector<G4float>& lifetime,
-		 const std::vector<G4float>& lifetimegamma,
-		 const std::vector<G4int>& spin,
-		 const std::vector<const G4NucLevel*>& levels); 
+  // spin - 2J, where J is the full angular momentum of the state 
+  explicit G4LevelManager(G4int Z, G4int A, size_t nlev,
+			  const std::vector<G4double>& energies,
+			  const std::vector<G4int>& spin,
+			  const std::vector<const G4NucLevel*>& levels); 
 
   ~G4LevelManager();
 
@@ -77,35 +74,59 @@ public:
 
   inline const G4NucLevel* GetLevel(size_t i) const;
 
-  inline G4float LevelEnergy(size_t i) const;
+  inline G4double LevelEnergy(size_t i) const;
 
-  inline G4float MaxLevelEnergy() const;
+  inline G4double MaxLevelEnergy() const;
 
-  inline size_t NearestLevelIndex(G4double energy, size_t index=0) const;
+  size_t NearestLevelIndex(G4double energy, size_t index=0) const;
+
+  inline size_t NearestLowEdgeLevelIndex(G4double energy) const;
 
   inline const G4NucLevel* NearestLevel(G4double energy, size_t index=0) const;
 
-  inline G4float NearestLevelEnergy(G4double energy, size_t index=0) const;
+  inline G4double NearestLevelEnergy(G4double energy, size_t index=0) const;
 
-  inline G4float LifeTime(size_t i) const;
+  inline G4double NearestLowEdgeLevelEnergy(G4double energy) const;
 
-  inline G4float LifeTimeGamma(size_t i) const;
-   
-  inline G4int Spin(size_t i) const;
+  // for stable isotopes life time is -1
+  inline G4double LifeTime(size_t i) const;
+
+  inline G4int SpinTwo(size_t i) const;
+
+  inline G4int Parity(size_t i) const;
+
+  inline G4int FloatingLevel(size_t i) const;
+
+  inline G4double ShellCorrection() const;
+
+  inline G4double LevelDensity(G4double U) const;
+
+  const G4String& FloatingType(size_t i) const;
+
+  void StreamInfo(std::ostream& os) const;
 
 private:
 
-  G4LevelManager(const G4LevelManager & right);  
-  const G4LevelManager& operator=(const G4LevelManager &right);
-  G4bool operator==(const G4LevelManager &right) const;
-  G4bool operator!=(const G4LevelManager &right) const;
+#ifdef G4VERBOSE
+  void PrintError(size_t idx, const G4String&) const;  
+#endif
 
-  const std::vector<G4float>  fLevelEnergy;
-  const std::vector<G4float>  fLifeTime;
-  const std::vector<G4float>  fLifeTimeGamma;
-  const std::vector<G4int>    fSpin;
-  const std::vector<const G4NucLevel*> fLevels;
+  G4LevelManager(const G4LevelManager & right) = delete;  
+  const G4LevelManager& operator=(const G4LevelManager &right) = delete;
+  G4bool operator==(const G4LevelManager &right) const = delete;
+  G4bool operator!=(const G4LevelManager &right) const = delete;
+
+  std::vector<G4double>  fLevelEnergy;
+  std::vector<G4int>     fSpin;
+  std::vector<const G4NucLevel*> fLevels;
+  
+  G4double fShellCorrection;
+  G4double fLevelDensity;
+
   size_t nTransitions;
+
+  static const G4int nfloting = 13;
+  static G4String fFloatingLevels[nfloting];
 
 };
 
@@ -116,45 +137,31 @@ inline size_t G4LevelManager::NumberOfTransitions() const
 
 inline const G4NucLevel* G4LevelManager::GetLevel(size_t i) const
 {
-  assert(i <= nTransitions);
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "GetLevel(idx)"); }
+#endif
   return fLevels[i]; 
 }
 
-inline G4float G4LevelManager::LevelEnergy(size_t i) const
+inline G4double G4LevelManager::LevelEnergy(size_t i) const
 {
-  assert(i <= nTransitions);
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "LevelEnergy(idx)"); }
+#endif
   return fLevelEnergy[i]; 
 }
 
-inline G4float G4LevelManager::MaxLevelEnergy() const
+inline G4double G4LevelManager::MaxLevelEnergy() const
 {
   return fLevelEnergy[nTransitions]; 
 }
 
-inline size_t  
-G4LevelManager::NearestLevelIndex(G4double ener, size_t index) const
+inline size_t G4LevelManager::NearestLowEdgeLevelIndex(G4double energy) const
 {
-  //G4cout << "index= " << index << " max= " << nTransitions << " exc= " << ener 
-  //	 << " Emax= " << fLevelEnergy[nTransitions] << G4endl;
-  size_t idx = std::min(index, nTransitions);
-  G4float energy = (G4float)ener; 
-  if(std::fabs(energy - fLevelEnergy[idx]) > tolerance) {
-    // ground state
-    if(energy <= tolerance)  
-      { idx = 0; }
-    else if(energy <= fLevelEnergy[1])  
-      { idx = 1; }
-    else if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5f <= energy) 
-      { idx = nTransitions; }
-
-    // if shortcuts are not working, make binary search
-    else {
-      idx = std::lower_bound(fLevelEnergy.begin(), fLevelEnergy.end(), energy)
-          - fLevelEnergy.begin() - 1;
-      if(energy - fLevelEnergy[idx] > fLevelEnergy[idx+1] - energy) { ++idx; }
-      //G4cout << "E= " << energy << " " << fLevelEnergy[idx-1] 
-      //<< " " << fLevelEnergy[idx] << G4endl;
-    }
+  size_t idx = nTransitions;
+  if(energy < fLevelEnergy[nTransitions]) {
+    idx = std::lower_bound(fLevelEnergy.begin(), fLevelEnergy.end(), energy)
+      - fLevelEnergy.begin() - 1;
   }
   return idx;
 }
@@ -165,28 +172,57 @@ G4LevelManager::NearestLevel(G4double energy, size_t index) const
   return GetLevel(NearestLevelIndex(energy, index));
 }
 
-inline G4float
+inline G4double
 G4LevelManager::NearestLevelEnergy(G4double energy, size_t index) const
 {   
   return LevelEnergy(NearestLevelIndex(energy, index));
 }
 
-inline G4float G4LevelManager::LifeTime(size_t i) const
-{
-  assert(i <= nTransitions);
-  return fLifeTime[i]; 
+inline G4double G4LevelManager::NearestLowEdgeLevelEnergy(G4double energy) const
+{   
+  return LevelEnergy(NearestLowEdgeLevelIndex(energy));
 }
 
-inline G4float G4LevelManager::LifeTimeGamma(size_t i) const
+inline G4double G4LevelManager::LifeTime(size_t i) const
 {
-  assert(i <= nTransitions);
-  return fLifeTimeGamma[i]; 
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "LifeTime"); }
+#endif
+  return (fLevels[i]) ? fLevels[i]->GetTimeGamma() : 0.0;
 }
    
-inline G4int G4LevelManager::Spin(size_t i) const
+inline G4int G4LevelManager::SpinTwo(size_t i) const
 {
-  assert(i <= nTransitions);
-  return fSpin[i]; 
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "SpinTwo"); }
+#endif
+  return std::abs(fSpin[i]%100000 - 100); 
+}
+
+inline G4int G4LevelManager::Parity(size_t i) const
+{
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "SpinTwo"); }
+#endif
+  return (fSpin[i]%100000 - 100 > 0) ? 1 : -1; 
+}
+
+inline G4int G4LevelManager::FloatingLevel(size_t i) const
+{
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "Floating"); }
+#endif
+  return fSpin[i]/100000; 
+}
+
+inline G4double G4LevelManager::ShellCorrection() const
+{
+  return fShellCorrection;
+}
+
+inline G4double G4LevelManager::LevelDensity(G4double) const
+{
+  return fLevelDensity;
 }
 
 #endif

@@ -1,0 +1,15 @@
+
+
+
+/accelerator/idEnergy 6             # no units
+/accelerator/aperture1X -15 mm      
+/accelerator/aperture2X 15 mm       
+/accelerator/aperture1Y -15 mm      
+/accelerator/aperture2Y 15 mm       
+
+/accelerator/leavesA 200            
+
+/accelerator/leavesB 200            
+
+
+

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04PhysicsListMessenger.cc 68021 2013-03-13 13:36:07Z gcosmo $
 //
 /// \file field/field04/src/F04PhysicsListMessenger.cc
 /// \brief Implementation of the F04PhysicsListMessenger class
@@ -55,40 +54,6 @@ F04PhysicsListMessenger::F04PhysicsListMessenger(F04PhysicsList* pPhys)
 {
     fDirectory = new G4UIdirectory("/exp/phys/");
     fDirectory->SetGuidance("Control the physics lists");
-
-    fGammaCutCMD = new G4UIcmdWithADoubleAndUnit("/exp/phys/gammaCut",this);  
-    fGammaCutCMD->SetGuidance("Set gamma cut");
-    fGammaCutCMD->SetParameterName("Gcut",false);
-    fGammaCutCMD->SetUnitCategory("Length");
-    fGammaCutCMD->SetRange("Gcut>0.0");
-    fGammaCutCMD->SetDefaultUnit("mm");
-    fGammaCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fElectCutCMD = new G4UIcmdWithADoubleAndUnit("/exp/phys/electronCut",
-                                                 this);
-    fElectCutCMD->SetGuidance("Set electron cut");
-    fElectCutCMD->SetParameterName("Ecut",false);
-    fElectCutCMD->SetUnitCategory("Length");
-    fElectCutCMD->SetRange("Ecut>0.0");
-    fElectCutCMD->SetDefaultUnit("mm");
-    fElectCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fPosCutCMD = new G4UIcmdWithADoubleAndUnit("/exp/phys/positronCut",
-                                               this);
-    fPosCutCMD->SetGuidance("Set positron cut");
-    fPosCutCMD->SetParameterName("Pcut",false);
-    fPosCutCMD->SetUnitCategory("Length");
-    fPosCutCMD->SetRange("Pcut>0.0");
-    fPosCutCMD->SetDefaultUnit("mm");
-    fPosCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fAllCutCMD = new G4UIcmdWithADoubleAndUnit("/exp/phys/allCuts",this);
-    fAllCutCMD->SetGuidance("Set cut for all");
-    fAllCutCMD->SetParameterName("cut",false);
-    fAllCutCMD->SetUnitCategory("Length");
-    fAllCutCMD->SetRange("cut>0.0");
-    fAllCutCMD->SetDefaultUnit("mm");
-    fAllCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
     fStepMaxCMD = new G4UIcmdWithADoubleAndUnit("/exp/phys/stepMax",this);
     fStepMaxCMD->SetGuidance("Set max. step length in the detector");
@@ -124,10 +89,6 @@ F04PhysicsListMessenger::F04PhysicsListMessenger(F04PhysicsList* pPhys)
 
 F04PhysicsListMessenger::~F04PhysicsListMessenger()
 {
-    delete fGammaCutCMD;
-    delete fElectCutCMD;
-    delete fPosCutCMD;
-    delete fAllCutCMD;
 /*
     delete fClearPhysicsCMD;
     delete fRemovePhysicsCMD;
@@ -163,24 +124,6 @@ void F04PhysicsListMessenger::SetNewValue(G4UIcommand* command,
        fParticleDef->SetDecayTable(fTable);
     }
 
-    if (command == fGammaCutCMD) {
-        fPhysicsList->SetCutForGamma(fGammaCutCMD
-                                     ->GetNewDoubleValue(newValue));
-    }
-    else if (command == fElectCutCMD) {
-        fPhysicsList->SetCutForElectron(fElectCutCMD
-                                     ->GetNewDoubleValue(newValue));
-    }
-    else if (command == fPosCutCMD) {
-        fPhysicsList->SetCutForPositron(fPosCutCMD
-                                     ->GetNewDoubleValue(newValue));
-    }
-    else if (command == fAllCutCMD) {
-        G4double cut = fAllCutCMD->GetNewDoubleValue(newValue);
-        fPhysicsList->SetCutForGamma(cut);
-        fPhysicsList->SetCutForElectron(cut);
-        fPhysicsList->SetCutForPositron(cut);
-    }
     else if (command == fStepMaxCMD) {
         fPhysicsList->SetStepMax(fStepMaxCMD
                                      ->GetNewDoubleValue(newValue));

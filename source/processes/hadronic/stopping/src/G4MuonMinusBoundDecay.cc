@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusBoundDecay.cc 91836 2015-08-07 07:25:54Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -43,7 +42,8 @@
 //                          to take both Z & A into account
 //                          Improved GetMuonDecayRate by using Zeff instead of Z
 //                          Extracted Zeff into GetMuonZeff
-//                          
+// 10/08/2018  K.Genser     Improved accuracy of the bound decay rate
+// 
 //----------------------------------------------------------------------
 
 #include "G4MuonMinusBoundDecay.hh"
@@ -52,6 +52,9 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
+#include "G4NistManager.hh"
+#include "G4NucleiProperties.hh"
+#include "G4IonTable.hh"
 #include "G4MuonMinus.hh"
 #include "G4Electron.hh"
 #include "G4NeutrinoMu.hh"
@@ -83,7 +86,8 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
 
   // Decide on Decay or Capture, and doit.
   G4double lambdac  = GetMuonCaptureRate(Z, A);
-  G4double lambdad  = GetMuonDecayRate(Z);
+  G4double lambdad  = GetMuonDecayRate(Z, A, fMuMass, 
+                                       targetNucleus.AtomicMass(A,Z));
   G4double lambda   = lambdac + lambdad;
 
   // ===  sample capture  time and change time of projectile
@@ -197,7 +201,7 @@ G4double G4MuonMinusBoundDecay::GetMuonCaptureRate(G4int Z, G4int A)
   // loop once Z is above the stored value; cRErr are not used now but
   // are included for completeness and future use
 
-  const capRate capRates [] = {
+  static const capRate capRates [] = {
     {  1,   1,  0.000725, 0.000017 },
     {  2,   3,  0.002149, 0.00017 }, 
     {  2,   4,  0.000356, 0.000026 },
@@ -306,10 +310,10 @@ G4double G4MuonMinusBoundDecay::GetMuonCaptureRate(G4int Z, G4int A)
 
     // ==  Mu capture lifetime (Goulard and Primakoff PRC10(1974)2034.
 
-    const G4double b0a = -0.03;
-    const G4double b0b = -0.25;
-    const G4double b0c =  3.24;
-    const G4double t1 = 875.e-9; // -10-> -9  suggested by user
+    static const G4double b0a = -0.03;
+    static const G4double b0b = -0.25;
+    static const G4double b0c =  3.24;
+    static const G4double t1 = 875.e-9; // -10-> -9  suggested by user
     G4double r1 = GetMuonZeff(Z);
     G4double zeff2 = r1 * r1;
 
@@ -330,7 +334,7 @@ G4double G4MuonMinusBoundDecay::GetMuonCaptureRate(G4int Z, G4int A)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4double G4MuonMinusBoundDecay::GetMuonZeff(G4int Z)
+G4double G4MuonMinusBoundDecay::GetMuonZeff(G4int ZZ)
 {
 
   // ==  Effective charges from 
@@ -339,9 +343,8 @@ G4double G4MuonMinusBoundDecay::GetMuonZeff(G4int Z)
   // and if not present from
   // Ford and Wills Nucl Phys 35(1962)295 or interpolated
 
-
-  const size_t maxZ = 100;
-  const G4double zeff[maxZ+1] = 
+  static const G4int maxZ = 100;
+  static const G4double zeff[] = 
     {  0.,
        1.00, 1.98, 2.94, 3.89, 4.81, 5.72, 6.61, 7.49, 8.32, 9.14,
        9.95,10.69,11.48,12.22,12.90,13.64,14.24,14.89,15.53,16.15,
@@ -354,28 +357,36 @@ G4double G4MuonMinusBoundDecay::GetMuonZeff(G4int Z)
        34.21,34.18,34.00,34.10,34.21,34.31,34.42,34.52,34.63,34.73,
        34.84,34.94,35.05,35.16,35.25,35.36,35.46,35.57,35.67,35.78 };
 
-  if (Z<0) {Z=0;}
-  if (Z>G4int(maxZ)) {Z=maxZ;}
-
+  G4int Z = std::max(std::min(ZZ, maxZ), 1);
   return zeff[Z];
-
 }
-
 
 G4double G4MuonMinusBoundDecay::GetMuonDecayRate(G4int Z)
 {
-  // Decay time on K-shell 
-  // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
+  G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  return GetMuonDecayRate(Z, A, G4MuonMinus::MuonMinus()->GetPDGMass(),
+                          G4NucleiProperties::GetNuclearMass(A,Z));
+}
 
-  // this is the "small Z" approximation formula (2.9)
-  // Lambda(bound)/Lambda(free) = 1-beta(Z*alpha)**2 with beta~=2.5
-  // we assume that Z is Zeff
+G4double G4MuonMinusBoundDecay::GetMuonDecayRate(G4int Z, G4int A,
+                                                 G4double muMass, 
+                                                 G4double nuclMass)
+{
+  // Decay time correction based on 
+  // H. C. Von Baeyer and D. Leiter, Phys. Rev. A 19, 1371 (1979).
+  // replacing N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
+  // for Z < 14 inspired by report 2049
+  // Lambda(bound)/Lambda(free) = 1-(0.5+0.06*Mu_Mass/NuclMass)(Z*alpha)^2
 
-  // PDG 2012 muon lifetime value is 2.1969811(22) 10e-6s
-  // which when inverted gives       0.45517005    10e+6/s
+  // PDG 2012 muon lifetime value is 2.1969811(22) 1e-6s
+  // which when inverted gives       0.45517005    1e+6/s
+
+  // we pass known alraedy in ApplyYourself muon and nucleus masses to
+  // avoid refetching/recalculations
 
   struct decRate {
     G4int         Z;
+    G4int         A;
     G4double  dRate;
     G4double  dRErr;
   };
@@ -383,53 +394,58 @@ G4double G4MuonMinusBoundDecay::GetMuonDecayRate(G4int Z)
   // this struct has to be sorted by Z when initialized as we exit the
   // loop once Z is above the stored value
 
-  const decRate decRates [] = {
-    {  1,  0.4558514, 0.0000151 }
+  static const decRate decRates [] = {
+    {  0,  0, 0.45517005, 0.00000046 } // free muon
   };
 
   G4double lambda = -1.;
+  if (Z == 0 && A == 0) {lambda =  decRates[0].dRate/microsecond;}  // free muon
 
   // size_t nDecRates = sizeof(decRates)/sizeof(decRates[0]);
   // for (size_t j = 0; j < nDecRates; ++j) {
-  //   if( decRates[j].Z == Z ) {
-  //     lambda = decRates[j].dRate / microsecond;
+  //   if( decRates[j].Z == Z && decRates[j].A == A ) {
+  //     lambda = decRates[j].cRate / microsecond;
   //     break;
   //   }
-  //   // make sure the data is sorted for the next statement to work
+  //   // make sure the data is sorted for the next statement to work correctly
   //   if (decRates[j].Z > Z) {break;}
   // }
 
-  // we'll use the above code once we have more data
-  // since we only have one value we just assign it
-  if (Z == 1) {lambda =  decRates[0].dRate/microsecond;}
+  // we'll use the above code once we have the data
+  // if we had one value we would just assign it
+  // if (Z == 1 && A == 1) {lambda =  decRates[1].dRate/microsecond;}
 
   if (lambda < 0.) {
     const G4double freeMuonDecayRate =  0.45517005 / microsecond;
     lambda = 1.0;
-    G4double x = GetMuonZeff(Z)*fine_structure_const;
-    lambda -= 2.5 * x * x;
+    G4double x = Z*fine_structure_const;
+    if (Z<14) {
+      // using the Phys. Rev. formula
+      lambda -= x * x * (0.5 + 0.06 * muMass/nuclMass);
+    } else {
+      // based on a fit to the data ref. in Phys.Rev. C35 (1987) 2212
+      lambda -=  x * x * (0.868699 - x * 0.708985);
+    }
     lambda *= freeMuonDecayRate;
   }
-
   return lambda;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuonMinusBoundDecay::ModelDescription(std::ostream& outFile) const
 {
-  outFile << "Sample probabilities of mu- nuclear capture of decay"
-          << " from K-shell orbit.\n"
-          << "   Time of projectile is changed taking into account life time"
-          << " of muonic atom.\n"
-          << "   If decay is sampled primary state become stopAndKill,"
-          << " else - isAlive.\n"
-          << "  Based of reviews:\n"
-          << "  N.C.Mukhopadhyay Phy. Rep. 30 (1977) 1.\n"
-          << "  T. Suzuki, D. F. Measday, J.P. Roalsvig Phys.Rev. C35 (1987) 2212\n"; 
-
+  outFile << " Sample probabilities of mu- nuclear capture of decay"
+          << "  from K-shell orbit.\n"
+          << " Time of projectile is changed taking into account life time"
+          << "  of muonic atom.\n"
+          << " If decay is sampled primary state become stopAndKill,"
+          << "  else - isAlive.\n"
+          << " Mainly based on:\n"
+          << "  H.C. Von Baeyer and D.Leiter, Phys. Rev. A 19, 1371 (1979)\n"
+          << "  T.Suzuki, D.F.Measday, J.P.Roalsvig Phys.Rev. C35 (1987) 2212\n"
+          << " with an emprical fit to the Huff factors for Z >= 14\n"
+          << " from the above review\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

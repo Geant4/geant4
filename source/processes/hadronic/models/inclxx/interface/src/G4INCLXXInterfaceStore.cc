@@ -222,7 +222,7 @@ void G4INCLXXInterfaceStore::SetINCLPhysics(const G4String &option) {
   if(option == "default") {
     theConfig.init();
   } else if(option == "incl42") {
-    const G4String message = "Changing INCL++ physics to mimick INCL4.2. Do this ONLY if you fully understand the implications!";
+    const G4String message = "Changing INCL++ physics to mimic INCL4.2. Do this ONLY if you fully understand the implications!";
     EmitBigWarning(message);
 
     theConfig.setPotentialType(G4INCL::ConstantPotential);

@@ -27,7 +27,10 @@
 /// \brief Implementation of the RE02DetectorConstruction class
 //
 //
+<<<<<<< HEAD
 // $Id: RE02DetectorConstruction.cc 75682 2013-11-05 09:11:19Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
  
 #include "RE02DetectorConstruction.hh"

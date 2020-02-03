@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysicsWVI.cc 78932 2014-02-04 12:30:52Z vnivanch $
 //
 //---------------------------------------------------------------------------
 //
@@ -60,6 +59,8 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4WentzelVIRelModel.hh"
+#include "G4hCoulombScatteringModel.hh"
 
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4MuPairProductionModel.hh"
@@ -80,7 +81,14 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
+#include "G4AtimaEnergyLossModel.hh"
+#include "G4AtimaFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
+#include "G4BraggIonModel.hh"
+#include "G4NuclearStopping.hh"
+#include "G4eplusTo2GammaOKVIModel.hh"
 
+#include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -97,6 +105,7 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
+
 
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
@@ -115,10 +124,14 @@ G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(verbose);
+  param->SetMinEnergy(10*eV);
   param->SetLowestElectronEnergy(10*eV);
-  //  param->SetLatDisplacementBeyondSafety(true);
-  param->SetMuHadLateralDisplacement(false);
+  param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetStepFunction(0.2, 100*um);
+  param->SetStepFunctionMuHad(0.2, 50*um);
+  param->SetUseMottCorrection(true);
+  param->SetMuHadLateralDisplacement(true);
   param->SetMscThetaLimit(0.15);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
@@ -158,10 +171,6 @@ void G4EmStandardPhysicsWVI::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,40 +194,41 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
 
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
-  mumsc->SetEmModel(new G4WentzelVIModel());
+  mumsc->SetEmModel(new G4WentzelVIRelModel());
   G4CoulombScattering* muss = new G4CoulombScattering();
+  muss->SetEmModel(new G4hCoulombScatteringModel());
 
-  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
-  pimsc->SetEmModel(new G4WentzelVIModel());
+  G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+  pimsc->SetEmModel(new G4WentzelVIRelModel());
   G4CoulombScattering* piss = new G4CoulombScattering();
+  piss->SetEmModel(new G4hCoulombScatteringModel());
 
-  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
-  kmsc->SetEmModel(new G4WentzelVIModel());
+  G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+  kmsc->SetEmModel(new G4WentzelVIRelModel());
   G4CoulombScattering* kss = new G4CoulombScattering();
-
-  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
-  pmsc->SetEmModel(new G4WentzelVIModel());
-  G4CoulombScattering* pss = new G4CoulombScattering();
+  kss->SetEmModel(new G4hCoulombScatteringModel());
 
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
-  // Add standard EM Processes
-  auto myParticleIterator=GetParticleIterator();
-  myParticleIterator->reset();
-  while( (*myParticleIterator)() ){
-    G4ParticleDefinition* particle = myParticleIterator->value();
-    G4String particleName = particle->GetParticleName();
+  // nuclear stopping
+  G4NuclearStopping* pnuc = new G4NuclearStopping();
+  pnuc->SetMaxKinEnergy(MeV);
 
+  // Add standard EM Processes
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for(const auto& particleName : partList.PartNames()) {
+    G4ParticleDefinition* particle = table->FindParticle(particleName);
+    if (!particle) { continue; }
     if (particleName == "gamma") {
 
-      G4ComptonScattering* cs = new G4ComptonScattering;
-      cs->SetEmModel(new G4KleinNishinaModel(), 1);
-
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
-      pee->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+      pee->SetEmModel(new G4LivermorePhotoElectricModel());
 
-      ph->RegisterProcess(cs, particle);
+      G4ComptonScattering* cs = new G4ComptonScattering;
+      cs->SetEmModel(new G4KleinNishinaModel());
+
       ph->RegisterProcess(pee, particle);
+      ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
       ph->RegisterProcess(new G4RayleighScattering(), particle);
 
@@ -239,10 +249,13 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
       msc->SetEmModel(new G4WentzelVIModel());
       G4CoulombScattering* ss = new G4CoulombScattering();
 
+      G4eplusAnnihilation* ann = new G4eplusAnnihilation();
+      ann->SetEmModel(new G4eplusTo2GammaOKVIModel());
+
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      ph->RegisterProcess(ann, particle);
       ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||
@@ -257,19 +270,25 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
     } else if (particleName == "alpha" ||
                particleName == "He3") {
 
-      //ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "GenericIon") {
 
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetEmModel(new G4BraggIonModel(),0);
+      ionIoni->SetEmModel(new G4AtimaEnergyLossModel(),1);
+      ionIoni->SetFluctModel(new G4AtimaFluctuations());
+      ionIoni->SetStepFunction(0.1, 1*um);
+
       ph->RegisterProcess(hmsc, particle);
-      ph->RegisterProcess(new G4ionIonisation(), particle);
+      ph->RegisterProcess(ionIoni, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
 
-      //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
       ph->RegisterProcess(pimsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pib, particle);
@@ -279,7 +298,6 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
 
-      //G4hMultipleScattering* kmsc = new G4hMultipleScattering();
       ph->RegisterProcess(kmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(kb, particle);
@@ -289,7 +307,11 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
-      //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      pmsc->SetEmModel(new G4WentzelVIRelModel());
+      G4CoulombScattering* pss = new G4CoulombScattering();
+      pss->SetEmModel(new G4hCoulombScatteringModel());
+
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pb, particle);
@@ -329,6 +351,7 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(pnuc, particle);
     }
   }
 
@@ -337,8 +360,7 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

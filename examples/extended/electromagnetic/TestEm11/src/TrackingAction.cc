@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm11/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 74997 2013-10-25 10:52:13Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

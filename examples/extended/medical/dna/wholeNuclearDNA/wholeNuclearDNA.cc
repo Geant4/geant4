@@ -29,7 +29,6 @@
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $ID$
 /// \file wholeNuclearDNA.cc
 /// \brief Implementation of the microdosimetry example
 //
@@ -62,10 +61,13 @@ void Parse(int& argc, char** argv);
 
 int main(int argc,char** argv) 
 {
+<<<<<<< HEAD
   // Choose the Random engine
   
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   //////////
   // Parse options given in commandLine
   //

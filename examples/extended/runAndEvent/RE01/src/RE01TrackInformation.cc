@@ -27,7 +27,10 @@
 /// \brief Implementation of the RE01TrackInformation class
 //
 //
+<<<<<<< HEAD
 // $Id: RE01TrackInformation.cc 75295 2013-10-30 09:32:52Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "RE01TrackInformation.hh"

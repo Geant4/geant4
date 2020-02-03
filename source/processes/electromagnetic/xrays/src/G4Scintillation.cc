@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -24,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc 95478 2016-02-12 09:45:33Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -74,36 +72,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTypes.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4ScintillationTrackInformation.hh"
 
 #include "G4Scintillation.hh"
-
-/////////////////////////
-// Class Implementation
-/////////////////////////
-
-        //////////////////////
-        // static data members
-        //////////////////////
-
-
-//G4bool G4Scintillation::fTrackSecondariesFirst = false;
-//G4bool G4Scintillation::fFiniteRiseTime = false;
-//G4double G4Scintillation::fYieldFactor = 1.0;
-//G4double G4Scintillation::fExcitationRatio = 1.0;
-//G4bool G4Scintillation::fScintillationByParticleType = false;
-//G4EmSaturation* G4Scintillation::fEmSaturation = NULL;
-
-        //////////////
-        // Operators
-        //////////////
-
-// G4Scintillation::operator=(const G4Scintillation &right)
-// {
-// }
-
-        /////////////////
-        // Constructors
-        /////////////////
 
 G4Scintillation::G4Scintillation(const G4String& processName,
                                        G4ProcessType type)
@@ -113,6 +84,9 @@ G4Scintillation::G4Scintillation(const G4String& processName,
     fYieldFactor(1.0),
     fExcitationRatio(1.0),
     fScintillationByParticleType(false),
+    fScintillationTrackInfo(false),
+    fStackingFlag(true),
+    fNumPhotons(0),
     fEmSaturation(nullptr)
 {
         SetProcessSubType(fScintillation);
@@ -130,10 +104,6 @@ G4Scintillation::G4Scintillation(const G4String& processName,
         }
 }
 
-        ////////////////
-        // Destructors
-        ////////////////
-
 G4Scintillation::~G4Scintillation()
 {
 	if (fFastIntegralTable != nullptr) {
@@ -146,9 +116,11 @@ G4Scintillation::~G4Scintillation()
         }
 }
 
-        ////////////
-        // Methods
-        ////////////
+G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
+{
+       return (aParticleType.GetPDGCharge() == 0.0 || 
+	       aParticleType.IsShortLived()) ? false : true;
+}
 
 void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 {
@@ -192,6 +164,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 {
         aParticleChange.Initialize(aTrack);
+        fNumPhotons = 0;
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();
@@ -211,9 +184,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
              return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
         G4MaterialPropertyVector* Fast_Intensity =
-                aMaterialPropertiesTable->GetProperty("FASTCOMPONENT");
+                aMaterialPropertiesTable->GetProperty(kFASTCOMPONENT);
         G4MaterialPropertyVector* Slow_Intensity =
-                aMaterialPropertiesTable->GetProperty("SLOWCOMPONENT");
+                aMaterialPropertiesTable->GetProperty(kSLOWCOMPONENT);
 
         if (!Fast_Intensity && !Slow_Intensity )
              return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -233,14 +206,14 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         } else {
 
            ScintillationYield = aMaterialPropertiesTable->
-                                      GetConstProperty("SCINTILLATIONYIELD");
+                                      GetConstProperty(kSCINTILLATIONYIELD);
 
            // Units: [# scintillation photons / MeV]
            ScintillationYield *= fYieldFactor;
         }
 
         G4double ResolutionScale    = aMaterialPropertiesTable->
-                                      GetConstProperty("RESOLUTIONSCALE");
+                                      GetConstProperty(kRESOLUTIONSCALE);
 
         // Birks law saturation:
 
@@ -261,19 +234,17 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         else
            MeanNumberOfPhotons = ScintillationYield*TotalEnergyDeposit;
 
-        G4int NumPhotons;
-
         if (MeanNumberOfPhotons > 10.)
         {
           G4double sigma = ResolutionScale * std::sqrt(MeanNumberOfPhotons);
-          NumPhotons = G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
+          fNumPhotons=G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
         }
         else
         {
-          NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
+          fNumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
         }
 
-        if (NumPhotons <= 0)
+        if ( fNumPhotons <= 0 || !fStackingFlag )
         {
            // return unchanged particle and no secondaries
 
@@ -284,7 +255,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         ////////////////////////////////////////////////////////////////
 
-        aParticleChange.SetNumberOfSecondaries(NumPhotons);
+        aParticleChange.SetNumberOfSecondaries(fNumPhotons);
 
         if (fTrackSecondariesFirst) {
            if (aTrack.GetTrackStatus() == fAlive )
@@ -298,34 +269,37 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         // Retrieve the Scintillation Integral for this material
         // new G4PhysicsOrderedFreeVector allocated to hold CII's
 
-        G4int Num = NumPhotons;
+        G4int Num = fNumPhotons;
 
         for (G4int scnt = 1; scnt <= nscnt; scnt++) {
 
             G4double ScintillationTime = 0.*ns;
             G4double ScintillationRiseTime = 0.*ns;
             G4PhysicsOrderedFreeVector* ScintillationIntegral = nullptr;
+            G4ScintillationType ScintillationType = Slow;
 
             if (scnt == 1) {
                if (nscnt == 1) {
                  if (Fast_Intensity) {
                    ScintillationTime   = aMaterialPropertiesTable->
-                                           GetConstProperty("FASTTIMECONSTANT");
+                                           GetConstProperty(kFASTTIMECONSTANT);
                    if (fFiniteRiseTime) {
                       ScintillationRiseTime = aMaterialPropertiesTable->
-                                  GetConstProperty("FASTSCINTILLATIONRISETIME");
+                                  GetConstProperty(kFASTSCINTILLATIONRISETIME);
                    }
+                   ScintillationType = Fast;
                    ScintillationIntegral =
                    (G4PhysicsOrderedFreeVector*)
                                        ((*fFastIntegralTable)(materialIndex));
                  }
                  if (Slow_Intensity) {
                    ScintillationTime   = aMaterialPropertiesTable->
-                                           GetConstProperty("SLOWTIMECONSTANT");
+                                           GetConstProperty(kSLOWTIMECONSTANT);
                    if (fFiniteRiseTime) {
                       ScintillationRiseTime = aMaterialPropertiesTable->
-                                  GetConstProperty("SLOWSCINTILLATIONRISETIME");
+                                  GetConstProperty(kSLOWSCINTILLATIONRISETIME);
                    }
+                   ScintillationType = Slow;
                    ScintillationIntegral =
                    (G4PhysicsOrderedFreeVector*)
                                        ((*fSlowIntegralTable)(materialIndex));
@@ -333,32 +307,34 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                }
                else {
                  G4double yieldRatio = aMaterialPropertiesTable->
-                                          GetConstProperty("YIELDRATIO");
+                                          GetConstProperty(kYIELDRATIO);
                  if ( fExcitationRatio == 1.0 || fExcitationRatio == 0.0) {
-                    Num = G4int (std::min(yieldRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(yieldRatio,1.0) * fNumPhotons);
                  }
                  else {
-                    Num = G4int (std::min(fExcitationRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(fExcitationRatio,1.0) * fNumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
-                                          GetConstProperty("FASTTIMECONSTANT");
+                                          GetConstProperty(kFASTTIMECONSTANT);
                  if (fFiniteRiseTime) {
                       ScintillationRiseTime = aMaterialPropertiesTable->
-                                 GetConstProperty("FASTSCINTILLATIONRISETIME");
+                                 GetConstProperty(kFASTSCINTILLATIONRISETIME);
                  }
+                 ScintillationType = Fast;
                  ScintillationIntegral =
                  (G4PhysicsOrderedFreeVector*)
                                       ((*fFastIntegralTable)(materialIndex));
                }
             }
             else {
-               Num = NumPhotons - Num;
+               Num = fNumPhotons - Num;
                ScintillationTime   =   aMaterialPropertiesTable->
-                                          GetConstProperty("SLOWTIMECONSTANT");
+                                          GetConstProperty(kSLOWTIMECONSTANT);
                if (fFiniteRiseTime) {
                     ScintillationRiseTime = aMaterialPropertiesTable->
-                                 GetConstProperty("SLOWSCINTILLATIONRISETIME");
+                                 GetConstProperty(kSLOWSCINTILLATIONRISETIME);
                }
+               ScintillationType = Slow;
                ScintillationIntegral =
                (G4PhysicsOrderedFreeVector*)
                                       ((*fSlowIntegralTable)(materialIndex));
@@ -469,6 +445,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 
+                if (fScintillationTrackInfo) aSecondaryTrack->
+                   SetUserInformation(new G4ScintillationTrackInformation(ScintillationType));
+
                 aParticleChange.AddSecondary(aSecondaryTrack);
 
             }
@@ -521,7 +500,7 @@ void G4Scintillation::BuildThePhysicsTable()
                 if (aMaterialPropertiesTable) {
 
                    G4MaterialPropertyVector* theFastLightVector =
-                   aMaterialPropertiesTable->GetProperty("FASTCOMPONENT");
+                   aMaterialPropertiesTable->GetProperty(kFASTCOMPONENT);
 
                    if (theFastLightVector) {
 
@@ -575,7 +554,7 @@ void G4Scintillation::BuildThePhysicsTable()
                    }
 
                    G4MaterialPropertyVector* theSlowLightVector =
-                   aMaterialPropertiesTable->GetProperty("SLOWCOMPONENT");
+                   aMaterialPropertiesTable->GetProperty(kSLOWCOMPONENT);
 
                    if (theSlowLightVector) {
 
@@ -639,28 +618,6 @@ void G4Scintillation::BuildThePhysicsTable()
         }
 }
 
-void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
-{
-        fTrackSecondariesFirst = state;
-}
-
-void G4Scintillation::SetFiniteRiseTime(const G4bool state)
-{
-        fFiniteRiseTime = state;
-}
-
-void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
-{
-        fYieldFactor = yieldfactor;
-}
-
-void G4Scintillation::SetScintillationExcitationRatio(const G4double excitationratio) {
-        fExcitationRatio = excitationratio;
-}
-
-// Called by the user to set the scintillation yield as a function
-// of energy deposited by particle type
-
 void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
 {
         if (fEmSaturation) {
@@ -669,16 +626,6 @@ void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
            RemoveSaturation();
         }
         fScintillationByParticleType = scintType;
-}
-
-void G4Scintillation::AddSaturation(G4EmSaturation* sat)
-{
-        fEmSaturation = sat;
-}
-
-void G4Scintillation::RemoveSaturation()
-{
-        fEmSaturation = nullptr;
 }
 
 // GetMeanFreePath
@@ -750,47 +697,47 @@ GetScintillationYieldByParticleType(const G4Track &aTrack, const G4Step &aStep)
   // Protons
   if(pDef==G4Proton::ProtonDefinition())
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("PROTONSCINTILLATIONYIELD");
+      GetProperty(kPROTONSCINTILLATIONYIELD);
 
   // Deuterons
   else if(pDef==G4Deuteron::DeuteronDefinition())
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("DEUTERONSCINTILLATIONYIELD");
+      GetProperty(kDEUTERONSCINTILLATIONYIELD);
 
   // Tritons
   else if(pDef==G4Triton::TritonDefinition())
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("TRITONSCINTILLATIONYIELD");
+      GetProperty(kTRITONSCINTILLATIONYIELD);
 
   // Alphas
   else if(pDef==G4Alpha::AlphaDefinition())
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("ALPHASCINTILLATIONYIELD");
+      GetProperty(kALPHASCINTILLATIONYIELD);
 
   // Ions (particles derived from G4VIon and G4Ions) and recoil ions
   // below the production cut from neutrons after hElastic
   else if(pDef->GetParticleType()== "nucleus" ||
 	  pDef==G4Neutron::NeutronDefinition())
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("IONSCINTILLATIONYIELD");
+      GetProperty(kIONSCINTILLATIONYIELD);
 
   // Electrons (must also account for shell-binding energy
   // attributed to gamma from standard photoelectric effect)
   else if(pDef==G4Electron::ElectronDefinition() ||
 	  pDef==G4Gamma::GammaDefinition())
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("ELECTRONSCINTILLATIONYIELD");
+      GetProperty(kELECTRONSCINTILLATIONYIELD);
 
   // Default for particles not enumerated/listed above
   else
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("ELECTRONSCINTILLATIONYIELD");
+      GetProperty(kELECTRONSCINTILLATIONYIELD);
 
   // If the user has specified none of the above particles then the
   // default is the electron scintillation yield
   if(!Scint_Yield_Vector)
     Scint_Yield_Vector = aMaterialPropertiesTable->
-      GetProperty("ELECTRONSCINTILLATIONYIELD");
+      GetProperty(kELECTRONSCINTILLATIONYIELD);
 
   // Throw an exception if no scintillation yield vector is found
   if (!Scint_Yield_Vector) {
@@ -874,4 +821,29 @@ GetScintillationYieldByParticleType(const G4Track &aTrack, const G4Step &aStep)
 #endif
 
   return ScintillationYield;
+}
+
+void G4Scintillation::DumpPhysicsTable() const
+{
+        if (fFastIntegralTable) {
+           G4int PhysicsTableSize = fFastIntegralTable->entries();
+           G4PhysicsOrderedFreeVector *v;
+
+           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
+           {
+        	v = (G4PhysicsOrderedFreeVector*)(*fFastIntegralTable)[i];
+        	v->DumpValues();
+           }
+         }
+
+        if (fSlowIntegralTable) {
+           G4int PhysicsTableSize = fSlowIntegralTable->entries();
+           G4PhysicsOrderedFreeVector *v;
+
+           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
+           {
+                v = (G4PhysicsOrderedFreeVector*)(*fSlowIntegralTable)[i];
+                v->DumpValues();
+           }
+         }
 }

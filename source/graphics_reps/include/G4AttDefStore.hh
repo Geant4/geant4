@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh 78306 2013-12-11 10:53:30Z gcosmo $
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH
@@ -49,8 +48,7 @@ namespace G4AttDefStore {
   // Returns true and assigns key if definitions are amongst those
   // maintained in the store.
 
-  extern G4ThreadLocal
-  std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps;
+  extern std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps;
 
 }
 

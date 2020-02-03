@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr01/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.cc 77255 2013-11-22 10:09:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -85,10 +88,40 @@ DetectorConstruction::DetectorConstruction()
 
   fRadius = 10.*cm;
 
+<<<<<<< HEAD
   fTargetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
   fWorldMaterial = 
     G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 
+=======
+  G4NistManager* nist = G4NistManager::Instance();
+  fTargetMaterial = nist->FindOrBuildMaterial("G4_Al");
+  fWorldMaterial  = nist->FindOrBuildMaterial("G4_Galactic");
+
+  //
+  // define battery material using Bugzilla 2175 data
+  //
+  G4Element* elH  = nist->FindOrBuildElement(1);
+  G4Element* elLi = nist->FindOrBuildElement(3);
+  G4Element* elC  = nist->FindOrBuildElement(6);
+  G4Element* elO  = nist->FindOrBuildElement(8);
+  G4Element* elAl = nist->FindOrBuildElement(13);
+  G4Element* elTi = nist->FindOrBuildElement(22);
+  G4Element* elCo = nist->FindOrBuildElement(27);
+  G4Element* elCu = nist->FindOrBuildElement(29);
+  G4Material* bat = new G4Material("Battery",2.165*CLHEP::g/CLHEP::cm3,8);
+  bat->AddElement(elC,  0.19518445618745);
+  bat->AddElement(elAl, 0.398);
+  bat->AddElement(elTi, 0.02);
+  bat->AddElement(elCu, 0.084);
+  bat->AddElement(elLi, 0.0170098229419813);
+  bat->AddElement(elCo, 0.144570016541753);
+  bat->AddElement(elO,  0.134206611504321);
+  bat->AddElement(elH,  0.0070290928244947);
+  bat->GetIonisation()->SetMeanExcitationEnergy(144.88*eV);
+
+  ComputeGeomParameters();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,11 +179,19 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                       fLogicCheck,false,i);
     z += 2.0*sliceZ;
   }
+<<<<<<< HEAD
   G4cout << "### Target consist of " << nSlices
          << " of " << fTargetMaterial->GetName() 
          << " disks with R(mm)= " << fRadius/mm
          << "  Width(mm)= " << 2.0*sliceZ/mm
          << "  Total Length(mm)= " << 2.0*targetZ/mm
+=======
+  G4cout << "### Target consist of " << fSlices
+         << " disks of " << fTargetMaterial->GetName() 
+         << " with R(mm)= " << fRadius/mm
+         << "  Width(mm)= " << 2.0*fSliceZ/mm
+         << "  Total Length(mm)= " << 2.0*fTargetZ/mm
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
          <<  "  ###" << G4endl;
 
   // colors

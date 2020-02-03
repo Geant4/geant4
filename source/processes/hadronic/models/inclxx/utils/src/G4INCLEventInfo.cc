@@ -68,7 +68,7 @@ namespace G4INCL {
                   << "  A=" << A[i] << ", Z=" << Z[i] << '\n'
                   << "  EKin=" << EKin[i] << ", px=" << px[i] << ", py=" << py[i] << ", pz=" << pz[i] << '\n'
                   << "  Falling back to the mass from the INCL ParticleTable" << '\n');
-        mass = ParticleTable::getRealMass(A[i], Z[i]);
+        mass = ParticleTable::getRealMass(A[i], Z[i], S[i]);
       }
 
       const Double_t ETot = EKin[i] + mass;

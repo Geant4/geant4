@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id$
 // GEANT4 tag $Name:  $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

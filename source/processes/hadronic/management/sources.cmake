@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -49,7 +48,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_mgt
         G4HadLeadBias.hh
         G4HadronInelasticProcess.hh
         G4HadronicEPTestMessenger.hh
-        G4HadronicInteractionWrapper.hh
         G4HadronicProcess.hh
         G4HadronicProcessStore.hh
         G4HadronicProcessType.hh
@@ -60,7 +58,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_mgt
         G4HadLeadBias.cc
         G4HadronInelasticProcess.cc
         G4HadronicEPTestMessenger.cc
-        G4HadronicInteractionWrapper.cc
         G4HadronicProcess.cc
         G4HadronicProcessStore.cc
     GRANULAR_DEPENDENCIES

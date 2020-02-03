@@ -1,0 +1,948 @@
+
+                  Geant4 10.5-beta-01 Release Notes
+                  ---------------------------------
+
+                                                            29 June 2018
+
+                 Migration Notes & Main New Features
+                 -----------------------------------
+
+  o Replaced POSIX threading with C++11 threading, allowing for use of
+    multi-threading on Windows for use with either static or dynamic
+    libraries.
+  o Added track/step/volume information in G4ExceptionHandler when an
+    exception happens while event is being processed.
+  o Enabled VecGeom wrappers for G4ExtrudedSolid, G4TessellatedSolid and G4Hype.
+    Updated to VecGeom version 1.0 for optional solids modeling.
+  o Correction in G4MagneticField to no longer inherit from
+    G4ElectroMagneticField. Introduced Bulirsch-Stoer method of integration,
+    an alternative to Runge-Kutta based on the mid-point method.
+  o Improved reporting of looping particle, adding info on density and
+    fraction (%) of proposed step that was completed, and momentum.
+    Changed default values for thresholds related to the killing of
+    looping particles by transportation processes.
+  o Use new parameter MscEnergyLimit() (default is 100 MeV) in EM physics
+    constructors, allowing to customise transition from low-energy multiple
+    scattering to high energy combination of multiple and single scattering.
+  o New lateral displacement algorithm in G4UrbanMscModel; faster version
+    used by default; more accurate distribution is used for Opt3 EM physics.
+  o New gamma conversion model G4BetheHeitler5DModel.
+  o New ion ionisation models G4LindhardSorensenIonModel, 
+    G4AtimaEnergyLossModel, G4AtimaFluctuations.
+  o Revisions of G4BetheHeitlerModel and G4PairProductionRelModel with
+    improved screening function approximation, improved LPM function
+    approximation, angular generation and efficiency of sampling 
+    of the final state.
+  o Extended strange pair production channels in Bertini Cascade.
+  o Extended upper limit of applicability (from 1 to 100 TeV) for the
+    diffuse-elastic processes.
+  o New tuning of the FTF model parameters; introduced smearing of delta-isobar
+    mass and improved di-quark fragmentation into baryons in Lund string
+    fragmentation. First implementation of rotating strings in FTF with
+    introduction of Mt distribution of hadrons.
+    Improved process probability parameterizations for Pi-Nucleon interactions;
+    corrected calculation of nuclear residual excitation energy; tuning of the
+    Lund string fragmentation.
+  o Major revision of the QGS final-state model (note: this was already
+    included in 10.4.beta, but was not included in the final 10.4 release):
+    implemented Reggeon cascading and "Fermi motion"; new algorithm for the
+    determination of the kinematical properties of partons; improved formation
+    of the residual nucleus. Tuning the parameters related to both string
+    formation and string fragmentation to improve the description of
+    thin-target data.
+  o For both string models (FTF and QGS): first implementation of alpha
+    cluster structure of carbon nuclei (affecting only hadron-Carbon
+    interactions), according to P.Bozek et al., Phys.Rev.C90, 064902 (2014).
+  o New class for diffuse-elastic process, where the underlying physics model
+    code has been revised and significantly improved in performance.
+  o G4LindhardSorensenIonModel, G4LindhardSorensenData: new relativistic ion 
+    ionisation model.
+  o Introduced switch in cross-sections to allow transuranic elements.
+  o Removed unnecessary checks of process manager for generic ion and muonic
+    atom in G4SteppingManager.
+  o Implemented simple algorithm in visualization to allow colouring of
+    detector elements based on materials density.
+  o RayTracer now visualizes layered-mass-geometry volumes defined in 
+    parallel worlds.
+  o Porting of code on gcc-8.1 series.
+  o Updated to CLHEP version 2.4.1.0.
+  o New data sets G4NEUTRONXS-2.0 and G4EMLOW-7.4.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o Tested platforms:
+    + Linux, gcc-4.8.4.
+      Tested on 64 bit architectures (Intel or AMD) with CERN CentOS
+      Linux 7 (CC7) (based on CentOS Linux 7).
+      Versions of Geant4 have also been compiled successfully on other
+      Linux distributions, Ubuntu, Debian, Suse or other RedHat systems.
+    + MacOSX 10.13, clang-4.0 (Apple LLVM/Clang-9.1.0)
+    + Windows/10 with Visual C++ 14.11 (Visual Studio 2017)
+
+  o More verified configurations:
+    + Linux, gcc-4.9.3/5.4.0/6.3.0/7.3.0/8.1.0, clang-3.9/5.0.
+    + Linux, Intel-icc 18.0.
+    + MacOSX 10.11/12 with clang-3.7/3.9
+
+  o Geant4 10.5-beta-01 has been tested using CLHEP-2.4.1.0, required
+    for external installation of the CLHEP library.
+
+ Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+ for further information about using Geant4.
+
+ ----------------------------------------------------------------------------
+
+List of features and fixes included in this Beta release since 10.4.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added "auto" dummy Thread Local Storage model; when "auto" is used,
+        no explicit compiler flag is being set to select the TLS model;
+        selection is left to compiler default.
+      o Added configuration for optional profiling package TiMemory.
+      o Skip validation checking for external zlib sources.
+      o Added TESSELLATEDSOLID flag to enable optional wrapping of
+        G4TessellatedSolid with VecGeom implementation.
+      o Added configuration support for MT on Windows; removed restrictions
+        and warnings on enabling MT on Windows.
+      o Support use of WINDOWS_EXPORT_ALL_SYMBOLS for DLL builds with
+        cmake >=3.4 retaining old capability for CMake 3.3.
+      o Updated version of data sets: G4NEUTRONXS-2.0, G4EMLOW-7.4.
+        Updated tags for 10.5-beta.
+    + GNUMake:
+      o In geomconf.gmk, added G4GEOM_USE_UTESSELLATEDSOLID flag to enable
+        VecGeom wrapper for G4TessellatedSolid.
+
+  o Analysis:
+    --------
+    + Updated to g4tools 4.2.3: fixed compilation warnings on gcc-8.1.0.
+      See History_tools for the complete list of modifications.
+    + Fixed a deadlock issue with G4RootPNtupleManager where the mutex
+      was locked before being passed to Root.
+
+  o Digits & Hits:
+    -------------
+    + Updated use of thread-local static variables to function returning
+      a thread-local static reference. New model for allowing support of
+      multi-threading on Windows DLLs.
+
+  o Event:
+    -----
+    + Code cleanup in G4StackManager to remove branches for muonic atom
+      settings.
+    + Updated use of thread-local static variables to function returning
+      a thread-local static reference. New model for allowing support of
+      multi-threading on Windows DLLs.
+
+  o Externals:
+    ---------
+    + Updated to Zlib version 1.2.11:
+      o Use original files format and adopt C Compiler for installation.
+        Addressing compilation warnings on gcc-8.1.0.
+    + Updated CLHEP module to version 2.4.1.0:
+      o Enabled thread-local storage and atomics on Windows and clang,
+        as now all supported by c++11.
+      o Ranlux64Engine: fixed compilation warning on Windows for shift count
+        negative or too big.
+      o Fixed compilation warnings from gcc-8.1.0 when using
+        -Woverloaded-virtual compilation option.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o Correction in G4MagneticField to no longer inherit from
+        G4ElectroMagneticField; this allowed a user to provide a full EM field,
+        but obtain the force only from the B-field when using the equation
+        created in the G4ChordFinder constructor.
+        It is no longer possible to use the equation of motion for a pure
+        magnetic field for the case of a mixed electromagnetic field. Instead
+        the full chain of classes for equation of full EM field, steppers and
+        driver must be used for the case of the 'full' EM field.
+      o Introduced Bulirsch-Stoer method of integration, an alternative to
+        Runge-Kutta based on the mid-point method. Separate driver derived from
+        G4VIntegrationDriver and implemented, using specialisation of
+        G4IntegrationDriver template class.
+      o Change in G4FieldManager::CreateChordFinder() to cope better with case
+        where field argument is null.
+      o Fix for missing interface method in G4VIntegrationDriver; added method
+        RenewStepperAndAdjust() which used to exist in G4MagInt_Driver. This
+        method must be defined in those derived driver classes which accept
+        a Runge Kutta stepper.
+      o Defined default implementation of the method in G4IntegrationDriver
+        and G4FSALIntegrationDriver, and implementations in the templated
+        classes G4IntegrationDriver and G4FSALIntegrationDriver.
+      o Removed static data from G4FSALIntegrationDriver, G4IntegrationDriver
+        and G4MagIntegratorDriver and moved to base class as normal data
+        members. Fix required for allowing proper symbol exporting on
+        Windows DLLs.
+      o Use G4Exception warnings instead of streaming to cerr.
+      o Added override final for virtual methods in G4UniformMagField.
+    + management:
+      o G4AffineTransform: added explicit copy constructor, assignment and
+        destructor; InverseProduct() has been optimised, now it does 36
+        multiplications instead of 45; optimised also for the case of pure
+        translation; added methods for inverse transformation:
+        InverseTransformPoint(), InverseTransformAxis(), InverseNetRotation()
+        and InverseNetTranslation().
+        Minor optimisation to multiplication of matrix by vector, to make use
+        of temporaries in accessing vector components.
+      o G4GeomSplitter: replaced use or realloc()/free() and memcpy() with
+        normal allocation/deallocation through G4Allocator. Also addressing
+        compilation warnings on gcc-8.1.0.
+    + navigation:
+      o G4Navigator::ComputeLocalAxis(): removed unnecessary check for
+        IsRotated().
+      o Replaced use of Inverse() from G4AffineTransform with new dedicated
+        methods, to avoid creation of temporaries in G4RegularNavigation,
+        G4Navigator and G4ReplicaNavigation.
+      o G4PropagatorInField: fix for case of finishing integration in last
+        iteration (so a looping particle will not be signalled incorrectly in
+        that case). Improved reporting of looping particle, adding info on
+        density and fraction (%) of proposed step that was completed, and
+        momentum.
+      o Use G4Exception instead of streaming to cerr in various classes.
+      o Fixed Coverity defect in diagnostic report in G4MultiLevelLocator.
+    + solids/Boolean:
+      o G4MultiUnion: added protection for normal initialisation in
+        DistanceToOutVoxels(). Minor optimisation in DistanceToOut(p,v,..).
+    + solids/CSG:
+      o Make G4UCons wrapper inheriting from vecgeom::GenericUnplacedCone,
+        following the latest changes in VecGeom.
+    + solids/specific:
+      o Enabled VecGeom wrappers for G4ExtrudedSolid, G4TessellatedSolid
+        and G4Hype.
+      o Minor cleanup in G4TessellatedSolid::CreatePolyhedron(), no functional
+        changes.
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+    + volumes:
+      o Replaced use of Inverse() from G4AffineTransform with new dedicated
+        methods, to avoid creation of temporaries in G4TouchableHistory,
+        G4PVPlacement and G4PVParameterised.
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+      o G4PVPlacement: added copy number to G4Exception printing in
+        CheckOverlaps().
+
+  o Global:
+    ------
+    + G4Threading: replaced POSIX threading with C++11 threading
+      (std::condition_variable, std::mutex + std::recursive_mutex, std::thread).
+      Many of the former macros are now dummy macros (e.g. G4MUTEXINIT,
+      G4MUTEX_INITIALIZER, etc.). Updated pin affinity
+    + G4AutoLock is now a thin wrapper around std::unique_lock providing
+      previous functionality + more features (e.g. try_lock, try_lock_until,
+      etc.). Overloaded G4AutoLock member functions in sequential mode to not
+      execute locking/unlocking.
+    + Added G4RecursiveAutoLock for recursive mutexes.
+    + Extended G4TemplateAutoLock to take advantage of the features
+      std::unique_lock offers.
+    + G4MTBarrier: removed WIN32 specifics, updated G4CONDITIONWAIT to use
+      G4AutoLock (std::unique_lock) instead of G4Mutex, removed
+      G4MUTEX_INITIALIZER from constructor.
+    + Added G4TypeMutex<T> and G4TypeRecursiveMutex<T> function to threading
+      for safely obtaining a static mutex that is unique to the template type T.
+    + Replaced static G4Mutex in G4Cache<T> with calls to G4TypeMutex<G4Cache<T>>
+      function calls to safely initialize mutexes on Windows.
+    + Expanded DEFINED_PPC and DEFINED_INTEL in G4FPEDetection.
+    + Migrated G4Timer real (wall) time to use std::chrono::high_precision_clock
+      from C++11.
+    + Removed obsolete MT wrappers for random numbers, no longer necessary.
+      Simplified definition of G4Random types in Randomize.hh accordingly.
+    + Full support for thread-local storage on clang (also MacOS clang) now
+      enabled; updated tls.hh definitions accordingly; removed use of the
+      G4USE_STD11 flag, now always enabled by default.
+    + Use thread_local keyword on Windows, instead of __declspec(thread) in
+      tls.hh. Avoid exporting symbols for Windows DLLs in multi-threaded builds.
+    + Removed no longer necessary windefs.hh header.
+    + Updated G4cout_p and G4cerr_p to point to std::cout and std::cerr before
+      and after library load. G4cout before G4RunManager creation has been
+      seen to fail on Windows.
+    + Improvement to G4AutoLock in non-MT mode + bug fix (void try_lock() ->
+      bool try_lock()) plus error handling within G4AutoLock if static mutex
+      is attempted to be used at application cleanup (previously handled in
+      G4Cache). Using atomics in G4Cache.
+    + Define G4ThisThread, G4Promise, G4Future, and G4SharedFuture in
+      G4Threading the promises and futures are not currently used but will be
+      used in future.
+    + G4TypeMutex and G4RecursiveTypeMutex now accept an index, e.g.
+      G4AutoLock l(G4TypeMutex<G4SomeClass>(0)) and
+      G4AutoLock l(G4TypeMutex<G4SomeClass>(1))
+    + G4DummyThread typedef std::thread::id as id instead of id_type.
+    + Updated use of thread-local static variables to function returning
+      a thread-local static reference. New model for allowing support of
+      multi-threading on Windows DLLs.
+    + Added G4TiMemory header which defines an dummy initializer and empty
+      macros when the profiling package TiMemory is disabled, while it includes
+      the TiMemory headers and defines an initializer when built with TiMemory
+      support enabled. Removed obsolete definition in G4Timer and G4SliceTimer,
+      causing conflicts with TiMemory. Updated CMake scripts.
+    + Increased accuracy of G4Pow::A13 in the most critical [1/4,4] interval.
+    + Moved G4Exception functions to inline and extracted banner front/end
+      strings for use in Qt parsing.
+    + Minor code cleanup in G4UniformRandPool.
+    + Changed date for release 10.5-beta.
+
+  o Graphics Representations:
+    ------------------------
+    + Replaced DBL_MAX by G4VisAttributes::veryLargeTime = 1.e100*ns,
+      (i.e. about 1.e75 billion years), to avoid for consistency DBL_MAX
+      which is dimensionless.
+    + Added G4GREPS_ALLOC_EXPORT flag for DLL symbols export and apply it to
+      data in G4VisAttributes.
+    + Disabled deprecated static data member G4VisAttributes::Invisible for
+      Windows systems.
+
+  o Intercoms
+    ---------
+    + Updated use of thread-local static variables to function returning
+      a thread-local static reference. New model for allowing support of
+      multi-threading on Windows DLLs.
+    + Fixed compilation warnings for not used return parameters.
+
+  o Interfaces:
+    ----------
+    + G4Xt: fixed compilation warnings for casts on gcc-8.1.0.
+    + Fixed compilation warnings for not used return parameters.
+
+  o Particles:
+    ---------
+    + Removed obsolete MaxNumberOfProducts enumerator in G4DecayProducts.
+    + Removed G4MUTEX_INITIALIZER from constructor in G4VDecayChannel.
+    + Updated use of thread-local static variables to function returning
+      a thread-local static reference. New model for allowing support of
+      multi-threading on Windows DLLs.
+
+  o Persistency:
+    -----------
+    + GDML:
+      o Clear auxiliary map information in G4GDMLReadStructure::Clear().
+        Addressing problem report #2064.
+
+  o Physics Lists:
+    -------------
+    + Constructors:
+      o electromagnetic:
+        - G4EmStandardPhysics, G4EmStandardPhysics_option1/2/4, G4EmLowEPPhysics,
+          G4EmPenelopePhysics, G4EmLivermorePhysics, G4EmStandardPhysicsGS,
+          G4EmLivermorePolarizedPhysics: use new parameter MscEnergyLimit()
+          (default is 100 MeV) allowing to customise transition from low-energy
+          multiple scattering to high energy combination of multiple and single
+          scattering.
+        - G4EmStandardPhysics_option1/2: use Livermore photo-effect model.
+        - G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+          G4EmPenelopePhysics: set upper energy limit to 100 TeV.
+        - G4EmLowEPPhysics: use new 5D gamma conversion model below 80 GeV,
+          use new Lindhard-Sorensen ion ionisation model above 20 MeV/u.
+      o gamma_lepto_nuclear:
+        - G4EmExtraPhysics, G4EmMessenger: added extra UI commands and modifiers
+          to define flags for neutrinos and for neutrino-electron interactions.
+        - Removed G4MUTEX_INITIALIZER from constructor in G4EmExtraPhysics.
+      o hadron_inelastic:
+        - G4HadronInelasticQBBC: use G4ParticleInelasticXS both for neutrons
+          and protons.
+      o factory:
+        - Moved G4_REFERENCE_PHYSCONSTR_FACTORY macro calls out of
+          G4PhysicsConstructorRegistry., where they cause an implicit circular
+          dependency when building granular libraries; moved into inline source
+          where they can be included as necessary in a higher level compilation
+          unit. REFERENCE macro calls can be made unique.
+        - Allow override of exclusion of G4RegisterPhysicsConstructors
+          definitions when using WIN32 by setting USING_STATIC_LIBS.
+        - Code cleanup.
+    + Lists:
+      o Use new G4RegisterPhysicsConstructors inline definitions to ensure that
+        for static builds G4PhysicsConstructorRegistry is populated.
+      o No longer register ShieldingLEND as a wrapper, but use explicit one.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + DNA:
+      o Updated G4DNAOneStepThermalizationModel and other classes for chemistry.
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+      o Fixed compilation warnings for not used return parameters.
+    + High Energy:
+      o G4AnnihiToMuPair: added Coulomb correction to cross-section at threshold.
+      o Minor code cleanup in G4eeToHadronsMultiModel, G4eeToHadronsModel and
+        G4mplIonisationWithDeltaModel.
+    + Muons:
+      o G4MuMultipleScattering, G4MuPairProduction, G4MuIonisation,
+        G4ePairProduction, G4MuBremsstrahlungModel, G4MuBremsstrahlung,
+        G4MuBetheBlochModel: use default destructor.
+      o Added minor protection in G4MuPairProductionModel.
+      o G4ePairProduction: fixed model name.
+    + Polarisation:
+      o G4PolarizedAnnihilationModel: implemented sampling of final state
+        at-rest.
+      o Code cleanup; removed unused headers and methods.
+    + Standard:
+      o G4GoudsmitSaundersonMscModel: implemented interface method for
+        macroscopic first transport cross-section computation per volume
+        (used only for testing).
+      o G4GSMottCorrection, G4GSPWACorrections: fixed initialization of first
+        moment correction factor.
+      o G4WentzelOKandVIxSection: fixed form-factor for proton.
+        Added Mott corrections to e+-.
+      o G4BetheBlochModel: use form-factor for projectile ion as in formulation
+        of NIM A 488 (2002) 282.
+      o G4LindhardSorensenIonModel, G4LindhardSorensenData: new ion ionisation 
+        model for moderate and high energies.
+      o G4UrbanMscModel: new lateral displacement algorithm, faster version
+        is used as default, more accurate version is used as a second type of 
+        parameterisation in all EM physics.
+      o G4BetheHeitler5DModel: new 5D model.
+      o Added new models, G4eplusTo2GammaOKVIModel and G4eplusTo3GammaOKVIModel.
+      o G4AtimaEnergyLossModel, G4AtimaFluctuations: new ion ionisation model.
+      o G4ScreeningMottCrossSection: added extra method for more CPU effective 
+        computation of the Mott correction.
+      o G4BetheHeitlerModel, G4PairProductionRelModel: new versions with
+        improved screening function approximation, improved LPM function
+        approximation, efficiency, documentation and cleanup.
+        Corrected call to selecting target atom in final state sampling.
+      o G4PairProductionRelModel, G4BetheHeitlerModel: use G4ModifiedTsai
+        angular generator for the final state sampling.
+      o G4PairProductionRelModel: fixed computation of cross-section in the
+        new version of the high energy model.
+      o G4DipBustGenerator, G4ModifiedTsai: implemented new interface for
+        sampling of directions of e+e- pair.
+      o G4GoudsmitSaundersonTable: fixed gcc-8.1.0 compilation warnings.
+      o G4eplusAnnihilation: moved sampling of final state from AtRestDoIt()
+        method to SamplingSecondaries()
+      o Code cleanup in G4eeToTwoGammaModel, G4BetheHeitlerModel and
+        G4NISTStoppingData.
+      o G4eBremsstrahlungRelModel, G4PairProductionRelModel, G4PAIySection,
+        G4PAIxSection, G4ICRU73QOModel: moved inline method which use static
+        constants to source. Improved code formatting.
+   + Utils:
+      o G4EmCorrections, G4VEmModel, G4ionEffectiveCharge, G4VAtomDeexcitation:
+        avoid use of static class members in inline methods; moved long methods
+        to source; added thread safe definition of model index for atomic 
+        de-excitation.
+      o G4EmCalculator: fixed GetCrossSectionPerVolume() method in case of
+        multiple scattering process; the proper value of the first transport
+        cross-section is retrieved now.
+      o G4EmParameters, G4EmParametersMessenger: added 5D gamma conversion
+        model parameters; added MscEnergyLimit() and corresponding UI command;
+        addressing problem report #2045; added extra DNA UI directory
+        and command; improved dump of EM parameters.
+      o G4VEmAngularDistribution: added SamplePairDirections() method for
+        sampling of e+e- pair production.
+      o Added new enumerator G4DNAModelSubType.
+      o G4LossTableManager: moved inline run time method to source.
+      o Minor code cleanup in G4VMscModel and G4VEmModel.
+      o G4VEmProcess: moved few private members to protected.
+    + Xrays:
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+
+  o Generic Processes:
+    -----------------
+    - Biasing:
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+    + Optical:
+      o G4OpMieHG: changed GetProperty() to use enum indeces instead of strings.
+    + Scoring:
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+    + Transportation:
+      o G4Transportation, G4CoupledTransportation: changed default values of
+        two thresholds related to the killing of looping particles: 
+        Important_Energy: particles with MORE energy are killed ONLY after
+                    multiple steps (fThresholdTrials) marked as 'looping'.
+        Warning_Energy: particles with LESS energy are killed SILENTLY.
+        Intermediate value: particles between these energies are killed after
+                    one 'looping step' (with warning.)
+        New values:  Warning_Energy = 1.0 KeV
+                     Important_Energy = 1.0 MeV
+        NOTES:
+        This can happen if a track's propagation in field requires a large
+        number of integration steps (default number is 1000, and it is
+        controlled by G4PropagatorInField's Get/SetMaxLoopCount() methods).
+        Usually the material is vacuum or very low density material and
+        particles have either low momentum or momentum with a very small
+        component along the direction of the magnetic field (zero or nearly
+        zero).
+        Improved reporting of the issue of dropped particles (above 'warning
+        threshold'): now providing the type of particle, position, momentum,
+        material density and step length in addition to the energy; added
+        recommendations for users along with the warning (printed only for
+        the first 5 warnings).
+        Addressing problem report #2063.
+      o New class G4TransportationLogger to consolidate reports from the
+        Transportation processes.
+      o Fixed Coverity defects.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections
+      o G4NeutrinoElectronTotXsc: new class for total (i.e. neutral current
+        plus charged current) cross-section for neutrino-electron interactions.
+      o Introduced switch to allow transuranic elements.
+      o G4NeutrinoElectronCcXsc, G4NeutrinoElectronNcXsc: added method.
+      o G4PiNuclearCrossSection: for transuranic elements, scale the
+        cross-sections from those of Uranium (using the ratio of atomic
+        weights), instead of using directly the latter.
+      o G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS:
+        adopting new data structure from G4NEUTRONXS-2.0 data set,
+        incompatible with previous.
+      o G4ParticleInelasticXS: new inelastic cross sections for neutrons, 
+        protons and light ions based on G4NEUTRONXS-2.0. 
+      o G4HadronXSDataTable: new class for cross-section handling.
+      o G4CrossSectionDataStore: added new method ComputeCrossSection(); reduced
+        number of type conversions, number of computation of cross-sections and
+        code branches; use const pointers to G4Material, G4Element and 
+        G4Isotope; fixed selection of isotope, for energy below 20 MeV use
+        isotope cross-sections, above 20 MeV - isotope abundaces.
+      o G4VCrossSectionDataSet: added new flag 'isForAllAtomsAndEnergies' and 
+        get/set methods allowing to reduce the list of cross-sections per
+        particle.
+      o Commented out debug printouts in G4ProjectileFragmentCrossSection
+        header.
+      o Replaced file-scoped mutexes in G4CrossSectionFactoryRegistry to use
+        G4TypeMutex<G4CrossSectionFactoryRegistry> which addresses a static
+        mutex initialization bug on Windows.
+    + management
+      o G4HadronicProcess: fixed compilation warnings on gcc-8.1.0 regarding
+        catching polymorphic type by value, instead of by reference.
+        Use const pointers and "nullptr" for G4Material and G4Element; use
+        ComputeCrossSection() method; removed creation of new materials at run-
+        time inside GetElementCrossSection(), all materials should be created
+        in the user code.
+        Use correct return type when calling CheckResult() from PostStepDoIt():
+        fixes case when the value of pointer 'result' does not get properly
+        reset to NULL in case a non-conservation is detected, thus "bad"
+        interaction does not get re-sampled.
+      o Code cleanup in G4HadronicProcess, G4VLeadingParticleBiasing and
+        G4HadLeadBias. G4HadronicProcess, G4HadronInelasticProcess: added
+        keyword  "override"; cleanup of cross-section scale factor and weights;
+        G4HadronicProcessStore: use "nullptr" and added flag 'buildXSTable'
+        with get/set methods.
+    + models/abla
+      o Updated some parameters; code cleanup.
+    + models/cascade
+      o Added strange pair production channels to list of 6, 7, 8 and 9-body 
+        final states in classes G4CascadeT31piNChannel and
+        G4CascadeT33piNChannel. Modified template values accordingly.
+      o G4CascadeT11pizNChannel: extended strange pair production channels to
+        6,7,8 and 9 body final states.
+      o Fixes in G4ElementaryParticleCollider methods generateSCMpionAbsorption()
+        and generateSCMmuonAbsorption(), as they did not produce correct nucleon
+        pairs when pion or muon was absorbed. Added quantum number conservation
+        test added to method collide().
+      o Fixed implementation of nuclear_rad_2par configurable key in
+        G4CascadeParamMessenger.
+    + models/coherent_elastic
+      o Update to G4hhElastic to take into account recent TOTEM data for
+        proton-proton at 13 TeV.
+      o Added new class G4DiffuseElasticV2. The underlying physics model is
+        the same as in G4DiffuseElastic, however, the code has been revised,
+        cleanup and significantly improved in a number of places.
+        The performance has been improved by a factor of ~2 with respect
+        to the original implementation. The approximation of small angles
+        has been dropped (replaced by exact calculation) as it was not
+        bringing any visible benefits.
+      o Set to 100 TeV (instead of 1 TeV) the upper limit of applicability
+        for the model G4DiffuseElastic and G4DiffuseElasticV2 (the number of
+        equally-sized logarithmic energy bins has been increased from 200 to
+        250 to keep the same bin size, 0.04).
+        The model has been validated with experimental data up to 300 GeV,
+        but it should not give meaningless results well above this energy.
+    + models/de_excitation
+      o G4ChatterjeeCrossSection, G4KalbachCrossSection: moved implementation
+        to source.
+      o G4VEmissionProbability, G4EvaporationProbability: fixed integration 
+        of probabilities for neutron emission for OPT=1,2.
+      o G4DeexPrecoParameters: fixed checks on parameter values.
+    + models/lepto_nuclear
+      o G4NeutrinoElectronCcModel: added extra interfaces.
+        Also fixed Coverity defect.
+    + models/particle_hp
+      o G4ENDFTapeRead, G4FissionProductYieldDist: fixed compilation warnings
+        on gcc 8.1.0, regarding catching polymorphic type by value, instead of
+        by reference.
+    + models/parton_string
+      o In the string fragmentation part of FTF, first implementation of
+        rotating strings with introduction of Mt distribution of hadrons.
+        Parameters are tuned using NA49 experimental data on pp-interactions.
+        Good results are obtained for Pi+-, K+-.
+        For P and Pbar <Pt> - xF correlations need still improvement.
+      o Major revision of QGS model; implemented Reggeon cascading and
+        associated "Fermi motion". Implemented new algorithm of parton
+        kinematical properties determination and calculation of residual
+        nucleus properties. Adjusted G4GammaParticipants to the revised
+        model.
+      o Improved energy-momentum conservation in the QGS model, especially
+        in the case of diffraction interactions.
+      o Major improvement to QGSM: Pomeron parameters are set up according to
+        A.Kaidalov and M.Poghosyan (2009-2010). Non-vacuum reggeons: f and
+        omega, are included in the calculations using parameters by A.Kaidalov
+        and M.Poghosyan (2009-2010).
+      o New class G4Reggeons for calculations of X-sections.
+      o Cut non-vacuum reggeons are interpreted as a creation of a single
+        string, or as a single string creation and one "stable" hadron.
+        Such processes are described by RRR diagram of Reggeon phenomenology.
+      o Introduced new class G4QuarkExchange for implementation of the
+        processes.
+      o G4QGSParticipants: implementation of Quark exchange simulation.
+        Fix for nucleon state counter. Minor fix to avoid FPE observed only
+        in optimized mode.
+      o G4VPartonStringModel: throw exception for the case when string
+        fragmentation does not produce hadrons.
+      o Cleaned and improved G4SingleDiffractiveExcitation and
+        G4QGSDiffractiveExcitation. Correction in G4SingleDiffractiveExcitation
+        to treat h+N and Gamma + N diffraction.
+      o Changed G4MesonSplitter probabilities UUbar DDbar (0.5, 0.5) to
+        (0.8, 0.2) for gamma projectile.
+      o G4QGSMSplitableHadron: fixed bug in the case of gamma projectile with
+        P_minus = 0.
+      o G4ExcitedStringDecay: bug-fix in FragmentStrings() method (access
+        to the first element of an empty vector). Increased the number of max
+        attempts to fragment strings from 10 to 100.
+      o New tuning of FTF model parameters.
+      o Introduced various <Pt^2> for diffractive and non-diffractive
+        interactions in G4FTFModel, for NA49 and NA61/SHINE experimental data.
+      o Fine tuning in G4DiffractiveExcitation for the FTF model, to describe
+        NA49 experimental data, especially, <Pt> on Xf.
+      o Fix to address the baryon puzzle of NA49 data; <Pt> of baryons 1/2 at a
+        string fragmentation setting up at 435 MeV/c, and <Pt> for baryons 3/2
+        production at 900 MeV/c.
+      o Fine tuning of G4LundStringFragmentation. <Pt> of mesons created at 
+        quark fragmentation is decreased. <Pt> of baryons created at quark and
+        di-quark is increased. Corrected fragmentation functions of qq-> B(1/2)
+        and B(3/2).
+        Re-organized and cleaned up code ; the variant is tuned using NA49
+        experimental data on pp->p/pi/K +X.
+      o Introduced smearing of delta-isobar mass; delta-isobars are now treated
+        as a kinetic track; improved parameterisation of the quark exchange
+        process with excitation.
+        NA61/SHINE exp. data on Pi+, Pi-, K+, K- and protons in PP interactions
+        at 20, 31, 40, 80 and 158 GeV/c are now described. Now reproducing the
+        ratio of <Strane Q>/<Normal Q> in PP interactions. Not describing kink
+        in AA interactions.
+      o Improved di-quark fragmentation into baryons in Lund string
+        fragmentation. Improved description of NA49 and NA61/SHINE exp. data
+        on p+p->p+X. Improvements in method SetMinimalStringMass(), relevant
+        for Pbar P annihilation.
+      o Improved process probability parameterizations for Pi - Nucleon
+        interactions. Good results are obtained for HARP data (p/Pi+/Pi- + A at
+        3, 5, 8, 12 GeV/c) and for Pi N inclusive reactions.
+      o Corrected calculation of nuclear residual excitation energy.
+        Fine tuning of the model parameters.
+      o Set to false the switches for the A-dependence in nuclear destruction
+        for baryon projectile in G4FTFParameters. Uncommented checks for
+        these switches in the code. No changes in the random number sequence.
+      o Improved versions and tuning of Lund and QGS fragmentations
+        (used, respectively, by FTF and QGS string models).
+      o G4LundStringFragmentation: bug fixes related to rotating strings.
+      o G4VLongitudinalStringDecay: removed useless caching in the method
+        FragmentationMass() which was causing rare irreproducibilities in
+        gamma-nuclear reactions (i.e. involving QGS).
+      o Improved QGSM and fixed issue of event reproducibility in
+        gammma-nuclear.
+      o Fixed leak in G4QGSParticipants::GetList() for targets not deleted
+        after interaction.
+      o G4QGSParticipants: introduced protection against negative squared mass
+        in method PutOnMassShell(), which was causing some rare crashes.
+        If a negative squared mass occurs, a "JustWarning" exception is thrown
+        and the squared mass is set to 0, before calling the square root (which
+        is now computed only once).
+      o Moved G4PomeronCrossSection class to 'qgsm' module.
+      o G4FTFAnnihilation: fix to get flat cos(theta) and phi distributions for
+        antiproton annihilation at rest. Added also a protection for the
+        evaluation of rapidity.
+      o G4FTFModel, G4DiffractiveExcitation, G4FTFAnnihilation: code
+        improvements. No changes in physics output, but with possible
+        differences in the random sequence, due to numerical effects caused
+        by re-ordering of operations.
+    + models/pre_equilibrium
+      o G4PreCompoundEmission, G4PreCompoundFragment, G4PreCompoundNucleon:
+        fixed computations for OPT=1,2.
+      o G4PreCompoundModel: fixed initialisation.
+      o G4PreCompoundFragmentVector: moved inlined methods to source.
+    + models/quasi_elastic
+      o G4QuasiElRatios: removed unnecessary protection against heavy elements.
+    + models/radioactive_decay
+      o G4ECCapture, G4RadioactiveDecay, G4RadioactiveDecayMode: added electron
+        capture channel from the N Shell.
+      o G4ECCapture: added tables of PL2/PL1 PM2/PM1 and PN2/PN1 based on bound
+        electrons radial wave amplitudes, taken from Bambynek et al., Rev. Mod.
+        Phys., vol. 49, 1977.
+        Compute partial probabilities of subshells PL1,PL2,PM1,PM2,PN1,PN2 from 
+        the tables PL2/PL1, PM2/PM1, and PN2/PN1. Valid for allowed transitions.
+    + models/rpg
+      o G4RPGAntiKZeroInelastic, G4RPGInelastic: fixed compilation warnings on
+        gcc-8.1.0, regarding catching polymorphic type by value, instead of by
+        reference.
+    + models/util
+      o First implementation of alpha cluster structure of carbon nuclei in
+        G4Fancy3DNucleus, according to P.Bozek et al., Phys.Rev.C90, 064902
+        (2014).
+        Fixed issue of event reproducibility; added loop checks and general
+        cleanup. In case of difficulties in the method ChooseFermiMomenta(),
+        emit a "JustWarning" exception instead of writing to cerr.
+      o Minor improvement to code in G4Nucleon and cleanup.
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+    + processes
+      o G4HadronElasticProcess, G4NeutrinoElectronProcess: fixed compilation
+        warnings on gcc 8.1.0, regarding catching polymorphic type by value,
+        instead of by reference.
+        Use const pointers and "nullptr" for G4Material and G4Element.
+      o Updated G4NeutrinoElectronProcess; modified constructor.
+    + stopping
+      o G4HadronStoppingProcess, G4MuonicAtomDecay: fixed compilation warnings
+        on gcc 8.1.0, regarding catching polymorphic type by value, instead of
+        by reference.
+    + util
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+
+  o Run
+    ---
+    + Replaced pthread-style <void*(void*)> function signatures with
+      <void(G4WorkerThread*)> as it is now unnecessary
+    + Removed WIN32 conditional for G4THREADCREATE in
+      G4UserWorkerThreadInitialization, no longer needed.
+    + Changed G4Thread to G4NativeThread when setting pin affinity in
+      G4WorkerThread.
+    + Updated use of thread-local static variables to function returning
+      a thread-local static reference. New model for allowing support of
+      multi-threading on Windows DLLs.
+    + Added TiMemory auto-timer macros to some key functions in G4RunManager,
+      G4RunManagerKernel, G4MTRunManager, and G4MTRunManagerKernel
+    + Added TiMemory libraries and includes to CMake script for optional use.
+
+  o Track & Tracking
+    ----------------
+    + G4SteppingManager: remove unnecessary checks of process manager for
+      generic ion and muonic atom.
+    + Updated use of thread-local static variables to function returning
+      a thread-local static reference. New model for allowing support of
+      multi-threading on Windows DLLs.
+
+  o Visualization:
+    -------------
+    + Fixed compilation warnings on gcc-8.1.0.
+    + management:
+      o Implemented UI command /vis/viewer/set/colourByDensity: simple
+        algorithm to allow colouring of detector elements based on materials
+        density.
+      o Introduced UI command "/vis/drawLogicalVolume", synonymous with
+        "/vis/specify". Both commands create a new scene and invoke
+        "/vis/scene/add/logicalVolume". Include overlap checking.
+      o Moved time window parameters from G4OpenGLStoredViewer to
+        G4ViewParameters. Now one can interpolate time window parameters (using
+        /vis/viewer/interpolate) and make a movie of particles moving through
+        time. To do this, see guidance on /vis/viewer/set/timeWindow/ commands.
+      o G4ViewParameters: fix for /vis/viewer/save.
+        Completed PrintDifferences(), operator<<() and operator!=() for time
+        window parameters. Provide proper Get and Set functions for time
+        parameters.
+      o Moved time window commands to /vis/viewer/set/timeWindow/.
+        Deprecated the equivalent /vis/ogl/set/ commands.
+        Copied /vis/ogl/set time window commands to /vis/viewer/set.
+      o G4VSceneHandler: reduced repetitive error messages.
+      o Improved some UI commands.
+    + modeling:
+      o Implemented UI command /vis/viewer/set/colourByDensity.
+      o G4LogicalVolumeModel: added overlap checking.
+        Fixed Coverity warning for unnecessary check on pointer.
+    + OpenGL:
+      o Implemented G4OpenGLStoredViewer::AddPrimitiveForASingleFrame().
+      o Updated G4CONDITIONWAIT(...) to new C++11 requirements.
+      o G4OpenGLQtViewer: replaced explicit usage of G4Mutex locking/unlocking
+        with G4AutoLock pointers initialized with std::defer_lock as this
+        enables one to avoid any deadlock or non-locked condition_variable
+        waits by using G4AutoLock::owns_mutex().
+    + OpenInventor:
+      o Implemented kernel visit for "colour by density".
+    + RayTracer:
+      o Use HyperStep of G4ParallelWorldProcess to draw volumes defined in a
+        parallel world.
+      o Updated use of thread-local static variables to function returning
+        a thread-local static reference. New model for allowing support of
+        multi-threading on Windows DLLs.
+
+  o Data Sets:
+    ---------
+    + G4EMLOW-7.4:
+      o Updated microelec elastic cross-section files.
+    + G4NEUTRONXS-2.0:
+      o Updated data from G4NDL-4.5 for neutrons and from G4TENDL-1.3.2 for
+        p, d, t, He3, He4. New data structure.
+
+  o Examples:
+    --------
+    + Updated reference outputs, macros, READMEs and scripts.
+    + Updated vis/UI setup. Removed no longer needed G4VIS/UI_USE.
+    + Added inclusion of G4Types.hh in files for self-consistency.
+    + advanced/composite_calorimeter
+      o Created ActionInitialization class, in preparation for MT migration.
+      o Removed CCalAnalysis class and employ g4analysis only.
+      o Fixed compilation warning on gcc-8.1.0.
+    + advanced/gammaray_telescope
+      o Fixed issues reported by Valgrind.
+        Addressing problem report #1981.
+      o Fixed compilation warning on gcc-8.1.0.
+    + advanced/hadrontherapy
+      o Replaced obsolete use if G4VisAttributes::Invisible with
+        G4VisAttributes::GetInvisible().
+    + basic/B2
+      o Modified default input macro exampleB2.in to reduce the output.
+    + basic/B4
+      o Replaced deprecated "/vis/ogl/set/" with "/vis/viewer/set/timeWindow/"
+        command in visualization macros.
+    + extended/electromagnetic/TestEm2
+      o DetectorConstruction: improved method names, do not allow to clear
+        geometry between runs.
+      o StepMax: use thread safe instantiation, messenger merged with 
+        PhysicsListMessenger.
+      o Use MixMax default random number generator.
+      o PhysicsList: make Opt0 default, removed local instantiation of G4Decay.
+      o PhysListEm5DStandard: experimental PhysList with the new 5D gamma
+        conversion model.
+      o Corrected input macros to optimise output.
+    + extended/electromagnetic/TestEm3
+      o DetectorConstruction: improved method names, do not allow to clear
+        geometry between runs.
+      o StepMax: use thread safe instantiation, messenger merged with 
+        PhysicsListMessenger.
+      o Use MixMax default random number generator.
+      o Removed radioactive.mac input macro,
+      o PhysicsList: make Opt0 default, removed local instantiation of G4Decay.
+      o Corrected input macros to optimise output.
+    + extended/electromagnetic/TestEm5
+      o PhysListEm5DStandard: experimental PhysList with the new 5D gamma
+        conversion model.
+      o Added test of new ion ionisation model, which is included in the new
+        physics constructor PhysListEm19DStandard; added atima.mac macro file
+        to compare results with known data.
+      o StepMax: use thread safe instantiation, messenger merged with 
+        PhysicsListMessenger.
+      o Use MixMax default random number generator.
+      o Removed obsloete class PhysListEmStandardSSM.
+      o PhysicsList: make Opt4 default, removed local instantiation of G4Decay.
+      o Corrected input macros to optimise output.
+    + extended/electromagnetic/TestEm7
+      o SteppingAction: added edep at end of step for photo-electric.
+      o Fixed compilation warning on gcc-8.1.0.
+    + extended/electromagnetic/TestEm8
+      o Fix for thread safety in PrimaryGeneratorAction.
+      o Disabled tracking cuts in input macro TestEm8.in.
+      o Corrected input macros to optimise output.
+    + extended/electromagnetic/TestEm11
+      o SteppingAction: added edep at end of step for photo-electric.
+    + extended/electromagnetic/TestEm15
+      o Extended with gamma -> e+ e- 5D conversion code.
+      o PhysicsList: added G4EmStandardPhysicsWVI, GS, SS.
+      o Use G4RotationMatrix to convert to gamma reference system.
+      o Use default random number generator.
+    + extended/electromagnetic/TestEm18
+      o Updated PhysListEmStandard, livermore, penelope.
+    + extended/errorpropagation
+      o Use implicit destructor in ExErrorMagneticField.
+    + extended/exoticphysics/monopole
+      o Changed G4MonopoleEquation to use G4MagneticField instead of
+        not use G4ElectroMagneticField, as equations of motion do not use
+        electric field.
+    + extended/exoticphysics/phonon
+      o Update references for caustic and timing.
+    + extended/field/BlineTracer
+      o Fixed compilation error for missing header inclusion.
+    + extended/hadronic/Hadr00
+      o DetectorConstruction: cleanup geometry.
+      o Use FTFP_BERT as default physics-list.
+    + extended/hadronic/Hadr01
+      o Cleaned up geometry definition.
+    + extended/hadronic/Hadr07
+      o SteppingAction: added edep at end of step for photo-electric.
+    + extended/medical/DICOM
+      o Enabled CMake package configuration. Added DICOM_USE_DCMTK and
+        DICOM_USE_HEAD options backwards compatible with environment variables.
+      o Updated READMEs.
+    + extended/medical/DICOM2
+      o New example demonstrating how to inherit from DICOM example.
+    + extended/medical/dna/chem1
+    + extended/medical/dna/chem2
+    + extended/medical/dna/chem3
+    + extended/medical/dna/chem4
+    + extended/medical/dna/mfp
+    + extended/medical/dna/neuron
+      o Use G4RegisterPhysicsConstructors inline definitions to ensure
+        G4PhysicsConstructorRegisty is filled when using static libraries.
+    + extended/medical/dna/pdb4dna
+      o Use G4RegisterPhysicsConstructors inline definitions to ensure
+        G4PhysicsConstructorRegisty is filled when using static libraries.
+      o Fixed analysis code.
+    + extended/medical/dna/slowing
+      o Updated input script and code cleanup.
+    + extended/medical/dna/spower
+      o Use G4RegisterPhysicsConstructors inline definitions to ensure
+        G4PhysicsConstructorRegisty is filled when using static libraries.
+    + extended/medical/fanoCavity
+      o ActionInitialization: added printout of Run::EndOfRun().
+    + extended/optical/LXe
+      o LXeDetectorConstruction: moved DefineMaterials() to constructor.
+      o Replaced local physics configuration with FTFP_BERT + G4OpticalPhysics
+        Deleted LXeEMPhysics, LXeGeneralPhysics, LXeMuonPhysics and
+        LXePhysicsList.
+      o Removed class LXeSteppingVerbose.
+      o In input macros, removed /LXe/detector/update and added /run/initialize.
+        General cleanup.
+      o Addressing problem report #2042.
+      o Replaced local physics with FTFP_BERT + G4OpticalPhysics; deleted
+        custom lists LXeEMPhysics, LXeGeneralPhysics, LXeMuonPhysics and
+        LXePhysicsList; use G4EmStandard_option4 EM physics.
+      o Added LXeRun to record and print results at the end.
+      o Removed LXeSteppingVerbose and cleanup of macros.
+      o Removed LXeUserEventInformation, use LXeEventAction instead;
+        removed LXeRecorderBase, replaced with LXeHistoManager.
+    + extended/optical/OpNovice2
+      o New example OpNovice2 for investigation of optical properties and
+        parameters. Details of optical photon boundary interactions on a surface
+        are recorded, as well as the details of optical photon generation and
+        transport.
+    + extended/parallel/ThreadsafeScorers
+      o TSPhysicsLists no longer declares G4VPhysicsConstructors in header.
+      o Added TiMemory timing to TSPrimaryGeneratorAction and G4Run.
+      o Added TiMemory ASCII output and serialization to main().
+      o Fixed shadowing warnings in G4atomic.hh header.
+      o Removed G4MUTEX_INITIALIZER from constructors of
+        G4TAtomicHits{Collection,Map}.
+    + extended/persistency/gdml/G02
+    + extended/persistency/gdml/G03
+      o RunAction: removed visualisation command.
+    + extended/persistency/P02
+      o Updated selection.xml file with new members of G4MaterialPropertiesTable.
+      o Fixed crash on reading due to duplication of materials in .root file.
+        Addressing problem report #2065.
+    + extended/physicslists/shared
+      o Copy script works whether include/src directories exist or not.
+    + extended/radioactivedecay/rdecay02
+      o PhysicsList: in constructor, set nuclide table half-life threshold to
+        0.1 picosecond and level tolerance to 1.0 eV, to not miss short-lived
+        nuclides
+      o HistoManager, TrackingAction: added two histograms to look at 0-0.1 MeV,
+        and 0-1 MeV ranges in particle emission spectra.
+      o Input macros: updated to latest UserEvapData_z83.a210,
+        UserRadData_z82.a210, UserEvapData_z102.a252 database formats.
+        Removed energy unit (keV) from call to /gun/ion in u238b.mac,
+        po201m.mac and UserEvapDataBiTest.mac.
+
+ ----------------------------------------------------------------------------
+ 

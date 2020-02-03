@@ -8,6 +8,12 @@
 
 #include "../vdata"
 
+// for texture :
+#include "../lina/vec2f"
+#include "../lina/vec3f"
+#include "../img"
+#include "../lina/geom2"
+
 namespace tools {
 namespace sg {
 
@@ -50,6 +56,11 @@ public:
     float w;
     project(a_x,a_y,a_z,w);
     add_point(a_x,a_y,a_z,w);    
+  }
+  void add_one_point(float a_x,float a_y,float a_z,float a_r,float a_g,float a_b,float a_a) {
+    float w;
+    project(a_x,a_y,a_z,w);
+    add_point(a_x,a_y,a_z,w,a_r,a_g,a_b,a_a);    
   }
 
   bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
@@ -1034,6 +1045,96 @@ public:
     return add_triangle_strip(a_floatn,a_xyzs,false);
   }
 
+  bool add_triangle_strip_as_triangles(size_t a_floatn,const float* a_xyzs,const float* /*a_nms*/) { //used in sg::sphere, icosahedron_sphere.
+    return add_triangle_strip(a_floatn,a_xyzs,false); //already do a per triangle treatement.
+  }
+public:
+  void add_texture(std::ostream& a_out,size_t a_xyzn,const float* a_xyzs,const img_byte& a_img,const float* a_tcs) {
+    if(a_img.is_empty()) return;
+
+    unsigned int imw = a_img.width();
+    unsigned int imh = a_img.height();
+    unsigned int imn = a_img.bpp();
+    if((imn!=3)&&(imn!=4)) {
+      a_out << "tools::sg::primitive_visitor::add_texture :"
+            << " not a 3 or 4 bytes per pixel image."
+            << std::endl;
+      return;
+    }
+
+    if(a_xyzn!=12) {
+      a_out << "tools::sg::primitive_visitor::add_texture :"
+            << " primitive has not four points."
+            << std::endl;
+      return;
+    }
+
+  //::printf("debug : zb_action : tcs : %g %g, %g %g, %g %g, %g %g\n",
+  //   a_tcs[0],a_tcs[1],a_tcs[2],a_tcs[3],a_tcs[4],a_tcs[5],a_tcs[6],a_tcs[7]);
+
+    vec3f p1(a_xyzs[0],a_xyzs[ 1],a_xyzs[ 2]);
+    vec3f p2(a_xyzs[3],a_xyzs[ 4],a_xyzs[ 5]);
+  //vec3f p3(a_xyzs[6],a_xyzs[ 7],a_xyzs[ 8]);
+    vec3f p4(a_xyzs[9],a_xyzs[10],a_xyzs[11]);
+
+    vec3f dx = p2-p1;
+    vec3f dy = p4-p1;
+
+    vec2f t1(a_tcs[0],a_tcs[1]);
+    vec2f t2(a_tcs[2],a_tcs[3]);
+    vec2f t3(a_tcs[4],a_tcs[5]);
+    vec2f t4(a_tcs[6],a_tcs[7]);
+    vec2f tdx = t2-t1;
+    vec2f tdy = t4-t1;
+    if(!tdx.length()) {
+      a_out << "tools::sg::primitive_visitor::add_texture :"
+            << " tdx is null."
+            << std::endl;
+      return;
+    }
+    if(!tdy.length()) {
+      a_out << "tools::sg::primitive_visitor::add_texture :"
+            << " tdy is null."
+            << std::endl;
+      return;
+    }
+    std::vector<vec2f> poly;
+    poly.push_back(t1);
+    poly.push_back(t2);
+    poly.push_back(t3);
+    poly.push_back(t4);
+    poly.push_back(t1);
+
+   {float r,g,b,a,tx,ty;
+    vec3f p;
+    vec2f t;
+    unsigned char* pos = a_img.buffer();
+    for(unsigned int row=0;row<imh;row++) {
+      for(unsigned int col=0;col<imw;col++) {
+        r = (*pos)/255.0f;pos++;
+        g = (*pos)/255.0f;pos++;
+        b = (*pos)/255.0f;pos++;
+        a = 1;
+        if(imn==4) {
+          a = (*pos)/255.0f;pos++;
+        }
+
+        tx = float(col)/float(imw-1); //[0,1]
+        ty = float(row)/float(imh-1); //[0,1]
+
+        t.set_value(tx,ty);
+
+        if(!is_inside(t,poly)) continue;
+
+        t = t - t1;
+
+        p = p1+dx*t.x()/tdx.length()+dy*t.y()/tdy.length();
+
+        add_one_point(p.x(),p.y(),p.z(),r,g,b,a);
+      }
+    }}
+
+  }
 protected:
   gl::mode_t m_mode;
 };

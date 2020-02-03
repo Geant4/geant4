@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: RE05CalorimeterSD.cc 69920 2013-05-17 13:36:37Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file RE05/src/RE05CalorimeterSD.cc
 /// \brief Implementation of the RE05CalorimeterSD class

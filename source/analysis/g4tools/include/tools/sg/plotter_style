@@ -1,0 +1,71 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_plotter_style
+#define tools_sg_plotter_style
+
+#include "../xml/styles"
+
+#include "plotter"
+
+namespace tools {
+namespace sg {
+
+inline void style_from_res(const xml::styles& a_styles,const std::string& a_path,axis& a_axis,bool a_verbose) {
+ {typedef xml::styles::style_t style_t;
+  const style_t* style = a_styles.find_style(a_path);
+  if(style){
+    a_axis.set_from_style(a_styles.out(),*style);
+  } else {
+    if(a_verbose) {
+      a_styles.out() << "tools::sg::style_from_res(axis) :"
+                     << " style " << sout(a_path) << " not found."
+                     << std::endl;
+    }
+  }}
+
+  a_styles.res_sg_style<line_style>(a_path+".line_style",a_axis.line_style());
+  a_styles.res_sg_style<line_style>(a_path+".ticks_style",a_axis.ticks_style());
+  a_styles.res_sg_style<text_style>(a_path+".labels_style",a_axis.labels_style());
+  a_styles.res_sg_style<text_style>(a_path+".mag_style",a_axis.mag_style());
+  a_styles.res_sg_style<text_style>(a_path+".title_style",a_axis.title_style());
+}
+
+inline void style_from_res(const xml::styles& a_styles,const std::string& a_path,plotter& a_plotter,bool a_verbose) {
+  //sg::fields of plotter :
+ {typedef xml::styles::style_t style_t;
+  const style_t* _style = a_styles.find_style(a_path);
+  if(_style){
+    a_plotter.set_from_style(a_styles.out(),*_style);
+  } else {
+    if(a_verbose) {
+      a_styles.out() << "tools::sg::style_from_res :"
+                     << " style " << sout(a_path) << " not found."
+                     << std::endl;
+    }
+  }}
+
+  //sg::fields of various xml::styles :
+  a_styles.res_sg_style<style>(a_path+".bins_style.0",a_plotter.bins_style(0));
+  a_styles.res_sg_style<style>(a_path+".errors_style.0",a_plotter.errors_style(0));
+  a_styles.res_sg_style<style>(a_path+".func_style.0",a_plotter.func_style(0));
+  a_styles.res_sg_style<style>(a_path+".points_style.0",a_plotter.points_style(0));
+
+  a_styles.res_sg_style<style>(a_path+".background_style",a_plotter.background_style());
+  a_styles.res_sg_style<text_style>(a_path+".title_style",a_plotter.title_style());
+  a_styles.res_sg_style<text_style>(a_path+".infos_style",a_plotter.infos_style());
+  a_styles.res_sg_style<text_style>(a_path+".title_box_style",a_plotter.title_box_style());
+  a_styles.res_sg_style<style>(a_path+".inner_frame_style",a_plotter.inner_frame_style());
+  a_styles.res_sg_style<style>(a_path+".grid_style",a_plotter.grid_style());
+  a_styles.res_sg_style<style>(a_path+".wall_style",a_plotter.wall_style());
+
+  style_from_res(a_styles,a_path+".x_axis",a_plotter.x_axis(),a_verbose);
+  style_from_res(a_styles,a_path+".y_axis",a_plotter.y_axis(),a_verbose);
+  style_from_res(a_styles,a_path+".z_axis",a_plotter.z_axis(),a_verbose);
+  style_from_res(a_styles,a_path+".colormap_axis",a_plotter.colormap_axis(),a_verbose);
+
+}
+
+}}
+
+#endif

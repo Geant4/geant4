@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm9/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // -------------------------------------------------------------

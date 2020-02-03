@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
 // OpenGL viewer - opens window, hard copy, etc.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLVIEWER_HH
 #define G4OPENGLVIEWER_HH
@@ -153,7 +152,7 @@ protected:
   void ResizeGLView();
   void ResizeWindow(unsigned int, unsigned int);
   virtual G4String Pick(GLdouble x, GLdouble y);
-  std::vector < G4OpenGLViewerPickMap* > GetPickDetails(GLdouble x, GLdouble y);
+  const std::vector < G4OpenGLViewerPickMap* > & GetPickDetails(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy);
   void rotateSceneToggle (G4double dx, G4double dy);
@@ -180,6 +179,8 @@ protected:
   void addExportImageFormat(std::string format);
   // add a image format to the available export format list
   G4bool isGl2psWriting();
+  G4bool isFramebufferReady();
+  
   void g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
                        GLint viewport[4]);
   // MESA implementation of gluPickMatrix
@@ -207,16 +208,6 @@ protected:
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
-  G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
-  G4double fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
-  G4bool fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
-  G4double fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
-  G4double fDisplayHeadTimeSize;  // Screen size.
-  G4double fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
-  G4bool fDisplayLightFront;// Display light front at head time originating at
-  G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
-    fDisplayLightFrontT;
-  G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
   G4OpenGL2PSAction* fGL2PSAction;
 
   G4double     fRot_sens;        // Rotation sensibility in degrees
@@ -260,7 +251,7 @@ private :
   
 #ifdef G4OPENGL_VERSION_2
 public:
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   inline Wt::WGLWidget::Program getShaderProgram() {
     return fShaderProgram;
   }
@@ -283,19 +274,19 @@ public:
   inline GLuint getShaderViewModelMatrix() {
     return fmvMatrixUniform;
   }
-#endif
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
 
 protected :
   
   // define the keyword shader to handle it in a better way for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
 #define Shader Wt::WGLWidget::Shader
 #else
 #define Shader GLuint
-#endif
-  
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
+
   // define some attributes and variables for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   Wt::WGLWidget::Program fShaderProgram;
   
   // Program and related variables
@@ -317,8 +308,8 @@ protected :
   GLuint fmvMatrixUniform;
   GLuint fnMatrixUniform;
   GLuint ftMatrixUniform;
-#endif
-  
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
+
 #endif
 };
 

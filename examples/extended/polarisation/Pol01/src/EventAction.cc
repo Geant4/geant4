@@ -26,7 +26,10 @@
 /// \file polarisation/Pol01/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
+<<<<<<< HEAD
 // $Id: EventAction.cc 86418 2014-11-11 10:39:38Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

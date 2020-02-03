@@ -175,7 +175,7 @@ namespace G4INCL {
             }
 
             nucleus->setMomentum(pBalance);
-            const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
+            const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ(),nucleus->getS()) + nucleus->getExcitationEnergy();
             const G4double pRem2 = pBalance.mag2();
             const G4double recoilEnergy = pRem2/
               (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
@@ -235,7 +235,7 @@ namespace G4INCL {
           ThreeVector theIncomingMomentum;
           /// \brief List of final-state particles.
           ParticleList outgoingParticles;
-          // \brief Reference to the EventInfo object
+          /// \brief Reference to the EventInfo object
           EventInfo const &theEventInfo;
           /// \brief Initial CM momenta of the outgoing particles
           std::list<ThreeVector> particleCMMomenta;
@@ -258,7 +258,7 @@ namespace G4INCL {
             }
 
             nucleus->setMomentum(remnantMomentum);
-            const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
+            const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ(),nucleus->getS()) + nucleus->getExcitationEnergy();
             const G4double pRem2 = remnantMomentum.mag2();
             const G4double recoilEnergy = pRem2/
               (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);

@@ -70,8 +70,8 @@ private:
       G4ExcitedString& operator= (const G4ExcitedString &right);
 
 public:
-      int operator==(const G4ExcitedString &right) const;
-      int operator!=(const G4ExcitedString &right) const;
+      G4bool operator==(const G4ExcitedString &right) const;
+      G4bool operator!=(const G4ExcitedString &right) const;
 
 public:
       G4double GetTimeOfCreation() const;
@@ -122,13 +122,13 @@ public:
 };
 
 inline
-int G4ExcitedString::operator==(const G4ExcitedString &right) const
+G4bool G4ExcitedString::operator==(const G4ExcitedString &right) const
 {
 	return this == &right;
 }
 
 inline
-int G4ExcitedString::operator!=(const G4ExcitedString &right) const
+G4bool G4ExcitedString::operator!=(const G4ExcitedString &right) const
 {
 	return this != &right;
 }

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +17,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
+=======
+     
+26-11-19 I. Hrivnacova (testem14-V10-05-01)
+- Fixed Doxygen warnings
+
+10-09-19 mma  (testem14-V10-05-00)
+- update PhysListEmStandard, livermore, penelope
+  go back to V10-03-01 : register only post step part of the processes. 
+- PhysicsList::SetCuts() : set lower limit = 100 eV
+     
+09-05-18 B.Morgan (testem14-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 14-10-16 G.Folger
 - remove direct use of aParticleIterator, use GetParticleTableIterator().

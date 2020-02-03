@@ -11,7 +11,6 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 97612 2016-06-06 12:08:18Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -47,8 +46,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/stopping/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
@@ -77,6 +74,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/radioactive_decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 #
@@ -89,12 +87,14 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_ions
         G4IonINCLXXPhysics.hh
         G4IonPhysics.hh
         G4IonPhysicsPHP.hh
+        G4IonPhysicsXS.hh
         G4IonQMDPhysics.hh
     SOURCES
         G4IonBinaryCascadePhysics.cc
         G4IonINCLXXPhysics.cc
         G4IonPhysics.cc
         G4IonPhysicsPHP.cc
+        G4IonPhysicsXS.cc
         G4IonQMDPhysics.cc
     GRANULAR_DEPENDENCIES
         G4baryons

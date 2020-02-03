@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.hh 93568 2015-10-26 14:52:36Z gcosmo $
 //
 
 // class description
@@ -39,6 +38,7 @@
 // 28-10-02: add setMeanExcitationEnergy (V.Ivanchenko)
 // 27-09-07: add computation of parameters for ions (V.Ivanchenko)
 // 04-03-08: add fBirks constant (mma)
+// 16-01-19, add exact computation of the density effect (M. Strait)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -49,29 +49,27 @@
 #include "globals.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4Threading.hh"
 
-class G4Material;                        // forward declaration
+class G4Material;
 class G4DensityEffectData;
+class G4DensityEffectCalculator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-class G4IonisParamMat  // with description
+class G4IonisParamMat
 {
 public:
 
-  G4IonisParamMat(G4Material*); 
-  virtual ~G4IonisParamMat();
+  G4IonisParamMat(const G4Material*); 
+  ~G4IonisParamMat();
 
-  //
-  // retrieval methods
-  //
-     
   // parameters for mean energy loss calculation:
   inline
   G4double  GetMeanExcitationEnergy()   const {return fMeanExcitationEnergy;};
 
   void      SetMeanExcitationEnergy(G4double value);
-  G4double  FindMeanExcitationEnergy(const G4String& chFormula);
+  G4double  FindMeanExcitationEnergy(const G4Material*) const;
 
   inline
   G4double  GetLogMeanExcEnergy()       const {return fLogMeanExcEnergy;};
@@ -97,10 +95,25 @@ public:
   G4double  GetX1density()              const {return fX1density;};
   inline
   G4double  GetD0density()              const {return fD0density;};
-    
+
+  // user defined density correction parameterisation
+  void SetDensityEffectParameters(G4double cd, G4double md, G4double ad,
+                                  G4double x0, G4double x1, G4double d0);
+
+  // defined density correction parameterisation via base material
+  void SetDensityEffectParameters(const G4Material* bmat);
+
+  void ComputeDensityEffectOnFly(G4bool);
+
   // compute density correction as a function of the kinematic variable
   // x = log10(beta*gamma)  
-  inline G4double DensityCorrection(G4double x);
+  G4double DensityCorrection(G4double x);
+
+  inline G4DensityEffectCalculator* GetDensityEffectCalculator()
+  { return fDensityEffectCalc; }
+    
+  // use parameterisation
+  inline G4double GetDensityCorrection(G4double x);
 
   static G4DensityEffectData* GetDensityEffectData();
 
@@ -155,7 +168,7 @@ private:
   void ComputeMeanParameters();
 
   // Compute parameters for the density effect
-  void ComputeDensityEffect();
+  void ComputeDensityEffectParameters();
 
   // Compute parameters for the energy fluctuation model
   void ComputeFluctModel();
@@ -164,21 +177,23 @@ private:
   void ComputeIonParameters();
 
   // operators
-  G4IonisParamMat& operator=(const G4IonisParamMat&);          
-  G4int operator==(const G4IonisParamMat&) const;
-  G4int operator!=(const G4IonisParamMat&) const;
+  G4IonisParamMat& operator=(const G4IonisParamMat&);
+  G4bool operator==(const G4IonisParamMat&) const;
+  G4bool operator!=(const G4IonisParamMat&) const;
   G4IonisParamMat(const G4IonisParamMat&);
 
   //
   // data members
   //
-  G4Material* fMaterial;                    // this material
+  const G4Material* fMaterial;             // this material
+
+  G4DensityEffectCalculator* fDensityEffectCalc; // calculator of the density effect
+  G4double* fShellCorrectionVector;        // shell correction coefficients
 
   // parameters for mean energy loss calculation
-  G4double  fMeanExcitationEnergy;          // 
-  G4double  fLogMeanExcEnergy;              // 
-  G4double* fShellCorrectionVector;         // shell correction coefficients
-  G4double  fTaul;                          // lower limit of Bethe-Bloch formula
+  G4double  fMeanExcitationEnergy;         // 
+  G4double  fLogMeanExcEnergy;             // 
+  G4double  fTaul;                         // lower limit of Bethe-Bloch formula
 
   // parameters of the density correction
   G4double fCdensity;                      // mat.constant
@@ -215,14 +230,16 @@ private:
   // static data created only once
   static G4DensityEffectData* fDensityData;
   G4double twoln10;
+#ifdef G4MULTITHREADED
+  static G4Mutex ionisMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-inline G4double G4IonisParamMat::DensityCorrection(G4double x)
+inline G4double G4IonisParamMat::GetDensityCorrection(G4double x)
 {
   // x = log10(beta*gamma)  
-
   G4double y = 0.0;
   if(x < fX0density) {
     if(fD0density > 0.0) { y = fD0density*G4Exp(twoln10*(x - fX0density)); }
@@ -230,5 +247,7 @@ inline G4double G4IonisParamMat::DensityCorrection(G4double x)
   else {y = twoln10*x - fCdensity + fAdensity*G4Exp(G4Log(fX1density - x)*fMdensity);}
   return y;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #endif

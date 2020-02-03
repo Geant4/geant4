@@ -1,0 +1,73 @@
+
+///\file "dna/microyz/.README.txt"
+///\brief Example microyz README page
+
+/*! \page Examplemicroyz Example microyz
+
+Author: S. Incerti et al.
+Date: 17 Apr. 2015
+Email: incerti@cenbg.in2p3.fr
+
+(c) The Geant4-DNA collaboration.
+
+This examples shows how to compute microdosimetry 
+distributions y, z in liquid water using exclusively Geant4-DNA
+physics processes and models.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+J. Appl. Phys. 122 (2017) 024303
+
+\section Examplemicroyz_s1 Geometry
+
+A box of liquid water.
+
+\section Examplemicroyz_s2 Incident particles
+
+Particles can be selected from the mycroyz.in macro
+as well as their incident energy.
+They are shot from the center of the box.
+
+\section Examplemicroyz_s3 Physics
+
+The default Geant4-DNA physics constructor 2 is used in
+the PhysicsList class. Alternative constructor can be
+selected from microyz.in
+
+\section Examplemicroyz_s4 Scoring of enery deposition
+
+Energy depositions are scored in spheres randomly
+placed along the incident particle track, 
+using a weighted sampling.
+
+The user can select in the TrackerSD class 
+the radius of the sphere (5 nm by default)
+
+\section Examplemicroyz_s5 Run
+
+The code can be run using:
+\verbatim
+./microyz microyz.in
+\endverbatim
+
+\section Examplemicroyz_s6 Results
+
+Results can be analyzed after the run using:
+\verbatim
+root plot.C
+\endverbatim
+
+The distribution of y is shown by default.
+
+The following quantities are calculated: yF and yD.
+
+
+*/
+

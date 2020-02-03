@@ -25,7 +25,7 @@
 //
 //
 // Code developed by:
-//  S.Guatelli
+//  S.Guatelli, A. Le
 //
 //    *********************************
 //    *                               *
@@ -34,7 +34,10 @@
 //    *********************************
 //
 //
+<<<<<<< HEAD
 // $Id: BrachyDetectorMessenger.cc 69765 2013-05-14 10:11:22Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 
@@ -58,7 +61,11 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   sourceCmd -> SetGuidance("Assign the selected geometry to G4RunManager."); 
   sourceCmd -> SetParameterName("choice",true);
   sourceCmd -> SetDefaultValue(" ");
+<<<<<<< HEAD
   sourceCmd -> SetCandidates("Iridium Iodium Leipzig ");
+=======
+  sourceCmd -> SetCandidates("TG186 Flexi Iodine Leipzig Oncura");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   sourceCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
@@ -78,7 +85,11 @@ void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
   // Switch the source in the phantom
   if( command == sourceCmd )
    {
+<<<<<<< HEAD
     if(newValue=="Iodium" || newValue=="Iridium"|| newValue=="Leipzig")
+=======
+    if(newValue=="Iodine" || newValue=="TG186"|| newValue=="Leipzig" || newValue== "Flexi" || newValue== "Oncura")
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
      { 
        detector -> SelectBrachytherapicSeed(newValue); 
        detector -> SwitchBrachytherapicSeed();

@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr03/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 70755 2013-06-05 12:17:48Z ihrivnac $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

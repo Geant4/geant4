@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryProtonBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,12 +41,13 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4HadronicParameters.hh"
 
 
 G4QGSBinaryProtonBuilder::
 G4QGSBinaryProtonBuilder(G4bool quasiElastic) 
  {
-   theMin = 12*GeV;
+   theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
    theModel = new G4TheoFSGenerator("QGSB");
 
    theStringModel = new G4QGSModel< G4QGSParticipants >;
@@ -71,13 +71,8 @@ Build(G4ProtonInelasticProcess * aP)
  {
      aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
+   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
    aP->RegisterMe(theModel);
- }
-
-void G4QGSBinaryProtonBuilder::
-Build(G4HadronElasticProcess * )
- {
  }
 
 G4QGSBinaryProtonBuilder::~G4QGSBinaryProtonBuilder() 

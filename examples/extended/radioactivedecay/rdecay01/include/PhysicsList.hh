@@ -26,8 +26,11 @@
 /// \file radioactivedecay/rdecay01/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
+<<<<<<< HEAD
 //
 // $Id: PhysicsList.hh 68017 2013-03-13 13:29:53Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

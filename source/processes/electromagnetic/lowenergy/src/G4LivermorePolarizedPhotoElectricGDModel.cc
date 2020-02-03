@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedPhotoElectricGDModel.hh,v 1.2 2010-11-23 16:42:15 flongo Exp $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -122,7 +121,7 @@ G4LivermorePolarizedPhotoElectricGDModel::Initialise(
     
     if(!fShellCrossSection) { fShellCrossSection = new G4ElementData(); }
     
-    char* path = getenv("G4LEDATA");
+    char* path = std::getenv("G4LEDATA");
     
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
@@ -443,7 +442,7 @@ void G4LivermorePolarizedPhotoElectricGDModel::ReadData(G4int Z, const char* pat
   
   if(!datadir) 
     {
-      datadir = getenv("G4LEDATA");
+      datadir = std::getenv("G4LEDATA");
       if(!datadir) 
 	{
 	  G4Exception("G4LivermorePhotoElectricModel::ReadData()",

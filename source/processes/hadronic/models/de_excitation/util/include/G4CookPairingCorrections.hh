@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CookPairingCorrections.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -40,10 +39,8 @@ class G4CookPairingCorrections
 {
 public:
 
-  G4CookPairingCorrections();
+  explicit G4CookPairingCorrections();
 	
-  ~G4CookPairingCorrections();
-
   inline G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
   {
     G4bool res = false;
@@ -58,6 +55,9 @@ public:
 	  NTableMin = 33, NTableMax = 150 };
 private:
   
+  G4CookPairingCorrections(const G4CookPairingCorrections & right) = delete;
+  const G4CookPairingCorrections & operator=(const G4CookPairingCorrections & right) = delete;
+
   static G4double PairingZTable[ZTableSize];
   static G4double PairingNTable[NTableSize];
   

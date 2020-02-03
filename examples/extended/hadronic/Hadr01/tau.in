@@ -1,0 +1,21 @@
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 2
+#
+/testhadr/TargetMat        G4_Al 
+/testhadr/TargetRadius     1  cm
+/testhadr/TargetLength     0.001 mm
+/testhadr/NumberDivZ       10
+/testhadr/PrintModulo      1
+#
+/run/setCut                1 mm
+/testhadr/Physics          FTFP_BERT
+#
+/run/initialize
+#
+/gun/particle tau+
+/gun/energy 20. GeV
+/gun/direction 0 0 -1
+/run/beamOn 200
+#

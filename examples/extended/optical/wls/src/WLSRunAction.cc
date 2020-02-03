@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSRunAction.cc 70603 2013-06-03 11:23:16Z gcosmo $
 //
 /// \file optical/wls/src/WLSRunAction.cc
 /// \brief Implementation of the WLSRunAction class
@@ -63,8 +62,7 @@ void WLSRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
   if (fAutoSeed) {
      // automatic (time-based) random seeds for each run

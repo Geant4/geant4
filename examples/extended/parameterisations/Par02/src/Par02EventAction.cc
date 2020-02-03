@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 /// \file Par02EventAction.cc
 /// \brief Implementation of the Par02EventAction class

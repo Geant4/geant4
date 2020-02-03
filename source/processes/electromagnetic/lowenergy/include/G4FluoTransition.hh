@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FluoTransition.hh,v 1.2 ????
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //

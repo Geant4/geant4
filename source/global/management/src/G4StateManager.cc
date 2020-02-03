@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -40,6 +39,7 @@
 // Initialization of the static pointer of the single class instance
 //
 G4ThreadLocal G4StateManager* G4StateManager::theStateManager = 0;
+G4int G4StateManager::verboseLevel = 0;
 
 G4StateManager::G4StateManager()
  : theCurrentState(G4State_PreInit),
@@ -75,7 +75,8 @@ G4StateManager::~G4StateManager()
       }
     } 
     if ( state )  { delete state; }
-  } 
+  }
+  theStateManager = 0;
 #ifdef G4MULTITHREADED_DEACTIVATE
   G4iosFinalization();
 #endif
@@ -113,13 +114,13 @@ G4StateManager::operator=(const G4StateManager &right)
    return *this;
 }
 
-G4int
+G4bool
 G4StateManager::operator==(const G4StateManager &right) const
 {
    return (this == &right);
 }
 
-G4int
+G4bool
 G4StateManager::operator!=(const G4StateManager &right) const
 {
    return (this != &right);
@@ -176,24 +177,25 @@ G4StateManager::DeregisterDependent(G4VStateDependent* aDependent)
   return (tmp != 0);
 }
 
-G4ApplicationState
+const G4ApplicationState&
 G4StateManager::GetCurrentState() const
 {
    return theCurrentState;
 }
 
-G4ApplicationState
+const G4ApplicationState&
 G4StateManager::GetPreviousState() const
 {
    return thePreviousState;
 }
 
 G4bool
-G4StateManager::SetNewState(G4ApplicationState requestedState)
+G4StateManager::SetNewState(const G4ApplicationState& requestedState)
 { return SetNewState(requestedState,0); }
 
 G4bool
-G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
+G4StateManager::SetNewState(const G4ApplicationState& requestedState,
+                            const char* msg)
 {
    if(requestedState==G4State_Abort && suppressAbortion>0)
    {
@@ -205,6 +207,7 @@ G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
    G4bool ack = true;
    G4ApplicationState savedState = thePreviousState;
    thePreviousState = theCurrentState;
+   
    while ((ack) && (i<theDependentsList.size()))
    {
      ack = theDependentsList[i]->Notify(requestedState);
@@ -218,7 +221,15 @@ G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
    if(!ack)
    { thePreviousState = savedState; }
    else
-   { theCurrentState = requestedState; }
+   {
+     theCurrentState = requestedState;
+     if(verboseLevel>0)
+     {
+       G4cout<<"#### G4StateManager::SetNewState from "
+             <<GetStateString(thePreviousState)<<" to "
+             <<GetStateString(requestedState)<<G4endl;
+     }
+   }
    msgptr = 0;
    return ack;
 }
@@ -244,7 +255,7 @@ G4StateManager::RemoveDependent(const G4VStateDependent* aDependent)
 }
 
 G4String
-G4StateManager::GetStateString(G4ApplicationState aState) const
+G4StateManager::GetStateString(const G4ApplicationState& aState) const
 {
   G4String stateName;
   switch(aState)
@@ -269,18 +280,8 @@ G4StateManager::GetStateString(G4ApplicationState aState) const
   return stateName;
 }
 
-//void G4StateManager::Pause()
-//{
-//  Pause("G4_pause> ");
-//}
-//
-//void G4StateManager::Pause(const char* msg)
-//{
-//  G4String msgS = msg;
-//  Pause(msgS);
-//}
-//
-//void G4StateManager::Pause(G4String msg)
-//{
-//  G4UImanager::GetUIpointer()->PauseSession(msg);
-//}
+void
+G4StateManager::SetVerboseLevel(G4int val)
+{
+  verboseLevel = val;
+}

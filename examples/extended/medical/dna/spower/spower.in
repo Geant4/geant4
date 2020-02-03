@@ -1,0 +1,33 @@
+#
+/run/numberOfThreads 8
+#
+/spower/det/setMat G4_WATER
+/spower/det/setRadius 1 m
+#
+# Register physics constructor
+#/spower/phys/addPhysics  dna_stat
+/spower/phys/addPhysics  dna_stat_opt2
+#/spower/phys/addPhysics  dna_stat_opt4
+#/spower/phys/addPhysics  dna_stat_opt6
+#
+/run/initialize
+#
+/tracking/verbose 0
+#
+/gun/particle e-
+#
+/gun/energy 50 eV
+/run/beamOn 10000
+#
+/gun/energy 100 eV
+/run/beamOn 10000
+#
+/gun/energy 200 eV
+/run/beamOn 10000
+#
+/gun/energy 500 eV
+/run/beamOn 10000
+#
+/gun/energy 1000 eV
+/run/beamOn 10000
+

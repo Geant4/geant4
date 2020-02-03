@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity2/include/StepMaxMessenger.hh
 /// \brief Definition of the StepMaxMessenger class
 //
-// $Id: StepMaxMessenger.hh 68763 2013-04-05 12:36:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

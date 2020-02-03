@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HumanPhantomHit.cc 76254 2013-11-08 11:27:57Z gcosmo $
+// Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli,University of Wollongong, Australia
+// Contributions by F. Ambroglini INFN Perugia, Italy
 //
 
 #include "G4HumanPhantomHit.hh"
@@ -56,9 +57,9 @@ const G4HumanPhantomHit& G4HumanPhantomHit::operator=(const G4HumanPhantomHit& r
   return *this;
 }
 
-G4int G4HumanPhantomHit::operator==(const G4HumanPhantomHit& right) const
+G4bool G4HumanPhantomHit::operator==(const G4HumanPhantomHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 void G4HumanPhantomHit::Draw()

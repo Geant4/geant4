@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm1/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 82762 2014-07-08 14:21:21Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

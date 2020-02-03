@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc 93113 2015-10-07 07:49:04Z gcosmo $
 // 
 //
 // File name:     G4PolarizedCompton
@@ -120,15 +119,15 @@ void G4PolarizedCompton::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialised) {
     isInitialised = true;
     if(0 == mType) {
-      if(!EmModel(1)) { SetEmModel(new G4KleinNishinaCompton(), 1); }
+      if(!EmModel(0)) { SetEmModel(new G4KleinNishinaCompton()); }
     } else {
       emModel = new G4PolarizedComptonModel();
-      SetEmModel(emModel, 1); 
+      SetEmModel(emModel); 
     }
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(1, EmModel(1));
+    EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(1, EmModel(0));
   } 
 }
 
@@ -138,7 +137,7 @@ void G4PolarizedCompton::PrintInfo()
 {
   G4cout << " Total cross sections has a good parametrisation"
          << " from 10 KeV to (100/Z) GeV" 
-         << "\n      Sampling according " <<  EmModel(1)->GetName() << " model" 
+         << "\n      Sampling according " <<  EmModel(0)->GetName() << " model" 
 	 << G4endl;
 }         
 
@@ -175,26 +174,34 @@ G4double G4PolarizedCompton::PostStepGetPhysicalInteractionLength(
 				   G4double   previousStepSize,
 				   G4ForceCondition* condition)
 {
-  // save previous value
+  // save previous values
   G4double nLength = theNumberOfInteractionLengthLeft;
+  G4double iLength = currentInteractionLength;
 
-  // *** compute uppolarized step limit ***
+  // *** compute unpolarized step limit ***
+  // this changes theNumberOfInteractionLengthLeft and currentInteractionLength
   G4double x = G4VEmProcess::PostStepGetPhysicalInteractionLength(aTrack, 
 								  previousStepSize, 
 								  condition);
-
+  G4double x0 = x;
+  G4double satFact = 1.0;
+  
   // *** add corrections on polarisation ***
   if (theAsymmetryTable && useAsymmetryTable && x < DBL_MAX) {
-    G4double curLength = currentInteractionLength*ComputeSaturationFactor(aTrack);
+    satFact = ComputeSaturationFactor(aTrack);
+    G4double curLength = currentInteractionLength*satFact;
+    G4double prvLength = iLength*satFact;
     if(nLength > 0.0) {
       theNumberOfInteractionLengthLeft = 
-	std::max(nLength - previousStepSize/curLength, 0.0);
+        std::max(nLength - previousStepSize/prvLength, 0.0);
     }
     x = theNumberOfInteractionLengthLeft * curLength;
   }
   if (verboseLevel>=2) {
-    G4cout << "G4PolarizedCompton::PostStepGetPhysicalInteractionLength:  " 
-	   << x/mm << " mm " << G4endl;
+    G4cout << "G4PolarizedCompton::PostStepGPIL: " 
+           << std::setprecision(8) << x/mm  << " mm;" << G4endl 
+           << "               unpolarized value: " 
+           << std::setprecision(8) << x0/mm << " mm." << G4endl;
   }
   return x;
 }
@@ -297,8 +304,8 @@ void G4PolarizedCompton::BuildAsymmetryTable(const G4ParticleDefinition& part)
   G4int nbins = LambdaBinning();
   G4double emin = MinKinEnergy();
   G4double emax = MaxKinEnergy();
-  G4PhysicsLogVector* aVector = 0;
-  G4PhysicsLogVector* bVector = 0;
+  G4PhysicsLogVector* aVector = nullptr;
+  G4PhysicsLogVector* bVector = nullptr;
 
   for(size_t i=0; i<numOfCouples; ++i) {
     if (theAsymmetryTable->GetFlag(i)) {

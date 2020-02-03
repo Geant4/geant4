@@ -60,11 +60,7 @@
 
 UltraPrimaryGeneratorAction::UltraPrimaryGeneratorAction()
 {
-
   particleGun = new G4GeneralParticleSource();
-
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,11 +84,8 @@ void UltraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 
 // Check if optical photon wavelength is within limits set for material optical properties tables. 
-
-   
-
-
-}
+  }
+  
   particleGun->GeneratePrimaryVertex(anEvent);
 
     if (particleGun->GetParticleDefinition()->GetParticleName() == "opticalphoton"){

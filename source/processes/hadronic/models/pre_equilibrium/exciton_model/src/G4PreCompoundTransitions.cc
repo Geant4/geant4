@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc 89523 2015-04-16 09:56:35Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,21 +48,20 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "G4PreCompoundParameters.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4Fragment.hh"
 #include "G4Proton.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
 
-static const G4double sixdpi2 = 6.0/CLHEP::pi2;
-
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {
   proton = G4Proton::Proton();
-  G4PreCompoundParameters param;
-  FermiEnergy = param.GetFermiEnergy();
-  r0 = param.GetTransitionsr0();
-  aLDP = param.GetLevelDensity();
+  fNuclData = G4NuclearLevelData::GetInstance();
+  G4DeexPrecoParameters* param = fNuclData->GetParameters();
+  FermiEnergy = param->GetFermiEnergy();
+  r0 = param->GetTransitionsR0();
 }
 
 G4PreCompoundTransitions::~G4PreCompoundTransitions() 
@@ -86,9 +84,11 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double U = aFragment.GetExcitationEnergy();
   TransitionProb2 = 0.0;
   TransitionProb3 = 0.0;
-
-  //G4cout << aFragment << G4endl;
-  
+  /*
+  G4cout << "G4PreCompoundTransitions::CalculateProbability H/P/N/Z/A= " 
+	 << H << " " << P << " " << N << " " << Z << " " << A <<G4endl;
+  G4cout << aFragment << G4endl;
+  */
   if(U < 10*eV || 0==N) { return 0.0; }
   
   //J. M. Quesada (Feb. 08) new physics
@@ -96,6 +96,8 @@ CalculateProbability(const G4Fragment & aFragment)
   //       (original in G4PreCompound from VL) 
   // OPT=2 Transitions are calculated according to Gupta's formulae
   //
+  static const G4double sixdpi2 = 6.0/CLHEP::pi2;
+  G4double GE = sixdpi2*U*fNuclData->GetLevelDensity(Z,A,U);
   if (useCEMtr) {
     // Relative Energy (T_{rel})
     G4double RelativeEnergy = 1.6*FermiEnergy + U/G4double(N);
@@ -162,7 +164,6 @@ CalculateProbability(const G4Fragment & aFragment)
     //   TransitionProb1 *= factor;
     
     // GE = g*E where E is Excitation Energy
-    G4double GE = sixdpi2*aLDP*A*U;
     G4double Fph = G4double(P*P+H*H+P-3*H)*0.25;
     
     if(!useNGB) { 
@@ -173,7 +174,7 @@ CalculateProbability(const G4Fragment & aFragment)
       static const G4double plimit = 100;
 
       //JMQ/AH  bug fixed: if (U-Fph < 0.0) 
-      if (GE-Fph1 > 0.0) { 
+      if (GE > Fph1) { 
         G4double x0 = GE-Fph;
 	G4double x1 = (N+1)*G4Log(x0/(GE-Fph1));
 	if(x1 < plimit) {
@@ -195,8 +196,7 @@ CalculateProbability(const G4Fragment & aFragment)
     TransitionProb1 = std::max(0.0, U*(4.2e+12 - 3.6e+10*U/G4double(N+1)))
       /(16*CLHEP::c_light); 
 
-    if (!useNGB && N > 1) {
-      G4double GE = sixdpi2*aLDP*A*U; 
+    if (!useNGB && N > 1) { 
       TransitionProb2 = ((N-1)*(N-2)*P*H)*TransitionProb1/(GE*GE);  
     }
   }

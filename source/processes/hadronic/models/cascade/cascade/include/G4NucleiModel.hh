@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleiModel.hh 71940 2013-06-28 19:04:44Z mkelsey $
-// GEANT4 tag: $Name:  $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
 //		move ctor to .cc file
@@ -212,10 +210,6 @@ protected:
     return (p2.second > p1.second);
   }
 
-  static G4bool invSortPartners(const partner& p1, const partner& p2) {
-    return (p2.second < p1.second);
-  }
-
   // Functions used to generate model nuclear structure
   void fillBindingEnergies();
 
@@ -280,7 +274,6 @@ private:
   std::vector<G4double> binding_energies;
   G4double nuclei_radius;
   G4double nuclei_volume;
-  G4double dinucDensityScale;
   G4int number_of_zones;
 
   G4int A;
@@ -312,7 +305,7 @@ private:
   const G4double fermiMomentum;
   const G4double R_nucleon;
   const G4double gammaQDscale;		// Gamma/cluster scattering rescaling
-  const G4double potentialThickness;		// Thickness of potential barriers, for purpose of low p_r, high L barrier penetration
+  const G4double potentialThickness;    // Defaulted to 1.0
 
   // Cutoffs for extreme values
   static const G4double small;
@@ -328,8 +321,6 @@ private:
   // Neutrons and protons, for computing trajectory placements
   const G4InuclElementaryParticle neutronEP;
   const G4InuclElementaryParticle protonEP;
-
-  void setDinucDensityScale();
 };        
 
 #endif // G4NUCLEI_MODEL_HH 

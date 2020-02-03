@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/include/PhysicsList.hh
+/// \file PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 82439 2014-06-20 10:37:29Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -56,7 +55,8 @@ class PhysicsList: public G4VModularPhysicsList
     virtual void ConstructParticle();
     virtual void ConstructProcess();
     void AddPhysicsList(const G4String& name);
-      
+    virtual void SetCuts();
+         
   private:    
     G4VPhysicsConstructor* fEmPhysicsList;
     G4String               fEmName;

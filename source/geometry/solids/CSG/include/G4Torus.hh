@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Torus.hh 92393 2015-08-31 14:07:30Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Torus
 //
 // Class description:
@@ -56,15 +49,6 @@
 //     - Construct a torus with the given name and dimensions.
 //       The angles are provided is radians. pRtor >= pRmax
 //
-//
-//   Protected:
-//
-//     G4ThreeVectorList*
-//     CreateRotatedVertices(const G4AffineTransform& pTransform) const
-//
-//     - Create the List of transformed vertices in the format required
-//       for G4VSolid:: ClipCrossSection and ClipBetweenSections.
-//   
 //   Member Data:
 //
 //  fRmin  Inside radius
@@ -82,18 +66,14 @@
 //   similar to rho for G4Tubs and is used for definiton of the point
 //   relative to fRmin and fRmax, i.e. for solution of inside/outside
 //   problems
- 
-// History:
-// 30.10.96 V.Grichine: first version of G4Torus
-// 21.04.98 J.Apostolakis: added SetAllParameters() function
-// 26.05.00 V.Grichine: added new SolveBiQuadratic/Cubic() developed
-//                      by O.Cremonesi 
-// 31.08.00 E.Medernach: added SolveNumeric functions, migrated to
-//                       numeric solutions
-// --------------------------------------------------------------------
 
+// 30.10.96 V.Grichine: first version
+// 31.08.00 E.Medernach: migrated to numeric solutions
+// --------------------------------------------------------------------
 #ifndef G4TORUS_HH
 #define G4TORUS_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UTORUS 1
@@ -121,7 +101,7 @@ class G4Torus : public G4CSGSolid
                   G4double pDPhi);
 
    ~G4Torus();
-    
+
     // Accessors
 
     inline G4double GetRmin() const;
@@ -129,6 +109,10 @@ class G4Torus : public G4CSGSolid
     inline G4double GetRtor() const;
     inline G4double GetSPhi() const;
     inline G4double GetDPhi() const;
+    inline G4double GetSinStartPhi () const;
+    inline G4double GetCosStartPhi () const;
+    inline G4double GetSinEndPhi   () const;
+    inline G4double GetCosEndPhi   () const;
 
     // Methods of solid
 
@@ -136,6 +120,7 @@ class G4Torus : public G4CSGSolid
     inline G4double GetSurfaceArea();
 
     EInside Inside(const G4ThreeVector& p) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
@@ -147,8 +132,9 @@ class G4Torus : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
@@ -168,14 +154,14 @@ class G4Torus : public G4CSGSolid
 
     void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
                           G4double pSPhi, G4double pDPhi);
- 
+
     G4Torus(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
     G4Torus(const G4Torus& rhs);
-    G4Torus& operator=(const G4Torus& rhs); 
+    G4Torus& operator=(const G4Torus& rhs);
       // Copy constructor and assignment operator.
 
   private:
@@ -190,10 +176,6 @@ class G4Torus : public G4CSGSolid
                                   G4double r,
                                   G4bool IsDistanceToIn) const;
 
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform,
-                                G4int& noPolygonVertices) const;
-
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
@@ -207,7 +189,7 @@ class G4Torus : public G4CSGSolid
 
     // used by normal
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
-    
+
     G4double fRminTolerance, fRmaxTolerance, kRadTolerance, kAngTolerance;
       // Radial and angular tolerances
 

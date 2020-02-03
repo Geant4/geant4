@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceHit.cc 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -80,7 +79,7 @@ const GammaRayTelAnticoincidenceHit& GammaRayTelAnticoincidenceHit::operator=(co
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int GammaRayTelAnticoincidenceHit::operator==(const GammaRayTelAnticoincidenceHit& right) const
+G4bool GammaRayTelAnticoincidenceHit::operator==(const GammaRayTelAnticoincidenceHit& right) const
 {
    return((EdepACD==right.EdepACD)&&(ACDTileNumber==right.ACDTileNumber)&&(IsACDPlane==right.IsACDPlane)&& (pos==right.pos));
 }

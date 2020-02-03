@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -59,25 +58,23 @@
 
 class G4PhysicsLinearVector : public G4PhysicsVector  
 {
-  public:
+public:// with description
 
-    G4PhysicsLinearVector();
-    explicit G4PhysicsLinearVector(size_t theNbin);
-      // Constructors
+  G4PhysicsLinearVector();
+       // the vector will be filled from external file using Retrieve method
 
-  public: // with description
+  G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
+       // Energy vector will be computed and filled at construction, 
+       // number of elements 'theNbin+1'. Use PutValue() to fill the data vector
 
-    G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
-      // Constructor
+  virtual ~G4PhysicsLinearVector();
 
-    virtual ~G4PhysicsLinearVector();
-      // Destructor
+  virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii) final;
+       // To retrieve persistent data from a file stream.
 
-    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
-
-    virtual void ScaleVector(G4double factorE, G4double factorV);
-      // Scale all values of the vector and second derivatives
-      // by factorV, energies by vectorE. 
+  virtual void ScaleVector(G4double factorE, G4double factorV) final;
+       // Scale all values of the vector and second derivatives
+       // by factorV, energies - by vectorE. 
 
 };
 

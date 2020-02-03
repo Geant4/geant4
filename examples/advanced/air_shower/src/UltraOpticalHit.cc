@@ -79,9 +79,9 @@ const UltraOpticalHit& UltraOpticalHit::operator=(const UltraOpticalHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int UltraOpticalHit::operator==(const UltraOpticalHit& right) const
+G4bool UltraOpticalHit::operator==(const UltraOpticalHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

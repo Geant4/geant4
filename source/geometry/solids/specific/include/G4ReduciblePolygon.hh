@@ -23,15 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ReduciblePolygon.hh 72091 2013-07-09 09:55:52Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
-// G4ReduciblePolygon.hh
+// G4ReduciblePolygon
 //
 // Class description:
 //
@@ -50,11 +42,10 @@
 //   The set of manipulations is limited currently to what
 //   is needed for G4Polycone and G4Polyhedra.
 
-// Author: 
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-#ifndef G4ReduciblePolygon_hh
-#define G4ReduciblePolygon_hh
+#ifndef G4REDUCIBLEPOLYGON_HH
+#define G4REDUCIBLEPOLYGON_HH
 
 #include "G4Types.hh"
 
@@ -129,7 +120,7 @@ class G4ReduciblePolygon
     // Below are member values that are *always* kept up to date (please!)
     //
     G4double aMin, aMax, bMin, bMax;
-    G4int   numVertices;
+    G4int numVertices = 0;
   
     //
     // A subclass which holds the vertices in a single-linked list
@@ -146,7 +137,7 @@ class G4ReduciblePolygon
       ABVertex *next;
     };
   
-    ABVertex *vertexHead;
+    ABVertex* vertexHead = nullptr;
 
     private:
 
@@ -155,8 +146,6 @@ class G4ReduciblePolygon
       // Private copy constructor and assignment operator.
 };
 
-
-//
 // A companion class for iterating over the vertices of our polygon.
 // It is simple enough that all routines are declared inline here.
 //
@@ -164,21 +153,25 @@ class G4ReduciblePolygonIterator
 {
   public:
 
-    G4ReduciblePolygonIterator( const G4ReduciblePolygon *theSubject )
-     { subject = theSubject; current=0; }
+    G4ReduciblePolygonIterator( const G4ReduciblePolygon* theSubject )
+     { subject = theSubject; current = nullptr; }
   
     void  Begin() { current = subject->vertexHead; }  
-    G4bool  Next()  { if (current) current=current->next; return Valid(); }
+    G4bool  Next()
+    {
+      if (current != nullptr) current=current->next;
+      return Valid();
+    }
   
-    G4bool  Valid() const { return current!=0; }  
+    G4bool  Valid() const { return current != nullptr; }  
   
     G4double GetA() const { return current->a; }
     G4double GetB() const { return current->b; }
   
   protected:
 
-    const G4ReduciblePolygon  *subject;      // Who are we iterating over
-    G4ReduciblePolygon::ABVertex  *current;  // Current vertex
+    const G4ReduciblePolygon* subject = nullptr;  // Who are we iterating over
+    G4ReduciblePolygon::ABVertex* current = nullptr;  // Current vertex
 };
 
 #endif

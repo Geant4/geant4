@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoSensorHit.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -82,9 +80,9 @@ const XrayFluoSensorHit& XrayFluoSensorHit::operator=(const XrayFluoSensorHit& r
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int XrayFluoSensorHit::operator==(const XrayFluoSensorHit&) const
+G4bool XrayFluoSensorHit::operator==(const XrayFluoSensorHit&) const
 {
-  return 0;
+  return false;
 }
 
 

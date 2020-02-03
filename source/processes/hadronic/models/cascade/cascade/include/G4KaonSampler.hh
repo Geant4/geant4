@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KaonHypSampler.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20150323  Split KaonHypSampler to allow different energy binning
 // 20150713  Change binning arguments to match new K+p etc. tables

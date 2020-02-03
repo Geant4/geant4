@@ -27,7 +27,6 @@
 /// \brief Definition of the F03CalorHit class
 //
 //
-// $Id: F03CalorHit.hh 76602 2013-11-13 08:33:35Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +50,7 @@ class F03CalorHit : public G4VHit
       virtual ~F03CalorHit();
 
       const F03CalorHit& operator=(const F03CalorHit&);
-      G4int operator==(const F03CalorHit&) const;
+      G4bool operator==(const F03CalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

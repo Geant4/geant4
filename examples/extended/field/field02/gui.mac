@@ -3,6 +3,7 @@
 # the menu bar of the G4UIXm, G4UIQt, G4UIWin32 sessions.
 # It has no effect with G4UIterminal.
 #
+<<<<<<< HEAD
 # Process vis.mac (and draw geometry)
 #
 /control/execute vis.mac
@@ -11,6 +12,8 @@
 #
 /control/execute icons.mac
 #
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 # File menu :
 /gui/addMenu file File
 /gui/addButton file Quit exit
@@ -18,6 +21,7 @@
 # Run menu :
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
+/gui/addButton run "beamOn 10" "/run/beamOn 10"
 #/gui/addButton run run1 "/control/execute run1.mac"
 #/gui/addButton run run2 "/control/execute run2.mac"
 #

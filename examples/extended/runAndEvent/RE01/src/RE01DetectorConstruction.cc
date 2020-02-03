@@ -26,7 +26,10 @@
 /// \file runAndEvent/RE01/src/RE01DetectorConstruction.cc
 /// \brief Implementation of the RE01DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: RE01DetectorConstruction.cc 75598 2013-11-04 13:00:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "RE01DetectorConstruction.hh"

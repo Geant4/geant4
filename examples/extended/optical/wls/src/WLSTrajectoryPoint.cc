@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSTrajectoryPoint.cc 72065 2013-07-05 09:54:59Z gcosmo $
 //
 /// \file optical/wls/src/WLSTrajectoryPoint.cc
 /// \brief Implementation of the WLSTrajectoryPoint class

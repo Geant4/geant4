@@ -27,7 +27,6 @@
 /// \brief Implementation of the B02ImportanceDetectorConstruction class
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc 77336 2013-11-22 15:04:18Z ahoward$
 //
 
 #include "globals.hh"

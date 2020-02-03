@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Analyser.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100726  M. Kelsey -- Use references for fetched lists
 // 20101010  M. Kelsey -- Migrate to integer A and Z
@@ -219,7 +218,7 @@ void G4Analyser::printResultsSimple() {
 							     1.0e-10) << G4endl;
   if (withNuclei) {
     G4cout		   
-      << " average Exitation Energy " << 
+      << " average Excitation Energy " << 
       averageExitationEnergy / averageOutgoingNuclei << G4endl
       << " average num of fragments " << averageOutgoingNuclei / eventNumber << G4endl;
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<
@@ -254,7 +253,7 @@ void G4Analyser::printResults() {
     G4cout
       << " average A " << averageA / eventNumber << G4endl 		   
       << " average Z " << averageZ / eventNumber << G4endl 		   
-      << " average Exitation Energy " << 
+      << " average Excitation Energy " << 
       averageExitationEnergy / averageOutgoingNuclei << G4endl
       << " average num of fragments " << averageOutgoingNuclei / eventNumber << G4endl;
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<

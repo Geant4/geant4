@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Generic model messenges. 
 //
@@ -686,22 +685,41 @@ protected:
 };
 
 ////////////////////////////////////////////////////////////////////////
+// SetLineWidth command
+template <typename M>
+class G4ModelCmdSetLineWidth : public G4ModelCmdApplyDouble<M> {
+
+public:
+
+  G4ModelCmdSetLineWidth(M* model, const G4String& placement,
+                         const G4String& cmdName="""setLineWidth")
+  :G4ModelCmdApplyDouble<M>(model, placement, cmdName){}
+
+protected:
+
+  void Apply(const G4double& width) {
+    G4VModelCommand<M>::Model()->SetLineWidth(width);
+  }
+
+};
+
+////////////////////////////////////////////////////////////////////////
 // SetLineColour command
 template <typename M>
 class G4ModelCmdSetLineColour : public G4ModelCmdApplyColour<M> {
-  
+
 public:
 
   G4ModelCmdSetLineColour(M* model, const G4String& placement,
-			  const G4String& cmdName="""setLineColour")
-    :G4ModelCmdApplyColour<M>(model, placement, cmdName){}
-  
+                          const G4String& cmdName="""setLineColour")
+  :G4ModelCmdApplyColour<M>(model, placement, cmdName){}
+
 protected:
 
   void Apply(const G4Colour& colour) {
     G4VModelCommand<M>::Model()->SetLineColour(colour);
   }
-  
+
 };
 
 ////////////////////////////////////////////////////////////////////////

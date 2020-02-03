@@ -50,10 +50,10 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
 
   //Let's open the file
   G4cout << " ==> Opening file " << filename << " to read magnetic field..."
-	 << G4endl;
-  G4String pathName = getenv("CCAL_GLOBALPATH");
+         << G4endl;
+  G4String pathName = std::getenv("CCAL_GLOBALPATH");
   std::ifstream is;
-  bool ok = openGeomFile(is, pathName, filename);
+  G4bool ok = openGeomFile(is, pathName, filename);
   
   if (ok) {
     findDO(is, G4String("FLDM"));
@@ -61,8 +61,8 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
 
     if (fVerbosity)
       G4cout << "Field value " << fval << " # points " << npts << 
-	" offset in x "
-	     << xoff*mm << G4endl;
+        " offset in x "
+             << xoff*mm << G4endl;
 
     if (npts > 0) {
       pos       = new G4double[npts];
@@ -70,10 +70,10 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
       intercept = new G4double[npts];
 
       for (G4int i = 0; i < npts; i++) {
-	is >> pos[i] >> slope[i] >> intercept[i];
-	if (fVerbosity)
-	  G4cout << tab << "Position " << i << " " << pos[i] << " Slope "
-		 << slope[i] << " Intercept " << intercept[i] << G4endl;
+        is >> pos[i] >> slope[i] >> intercept[i];
+        if (fVerbosity)
+          G4cout << tab << "Position " << i << " " << pos[i] << " Slope "
+                 << slope[i] << " Intercept " << intercept[i] << G4endl;
       }
     }
 
@@ -97,7 +97,7 @@ CCalMagneticField::~CCalMagneticField() {
 
 // Member functions
 
-void CCalMagneticField::MagneticField(const double x[3], double B[3]) const 
+void CCalMagneticField::MagneticField(const G4double x[3], G4double B[3]) const 
 {
   G4int i=0;
   for (i=0; i<2; i++) {
@@ -110,7 +110,7 @@ void CCalMagneticField::MagneticField(const double x[3], double B[3]) const
   if (npts > 0) {
     for (i=0; i<npts; i++) {
       if (xnew > pos[i]*mm) {
-	m1 = slope[i];
+        m1 = slope[i];
         c1 = intercept[i];
       }
     }
@@ -124,10 +124,10 @@ void CCalMagneticField::MagneticField(const double x[3], double B[3]) const
     {
 
       G4cout << "Field at x: " << x[0]/mm << "mm (" << xnew << ") = " << 
-	B[2]/tesla
-	     << "T (m = " << m1 << ", c = " << 
-	c1 << ", scale = " << scor << ")"
-	     << G4endl;
+        B[2]/tesla
+             << "T (m = " << m1 << ", c = " << 
+        c1 << ", scale = " << scor << ")"
+             << G4endl;
     }
 }
 
@@ -149,7 +149,7 @@ MagneticField(const CLHEP::Hep3Vector point) const {
 }
 
 
-void CCalMagneticField::GetFieldValue(const double x[3], double* B) const {
+void CCalMagneticField::GetFieldValue(const G4double x[3], G4double* B) const {
   CCalMagneticField::MagneticField(x, B);
 }
 

@@ -32,10 +32,8 @@
 #include "G4ParticleHPReactionWhiteBoard.hh"
 #include "G4HadronicException.hh"
 
-G4ThreadLocal G4ParticleHPThreadLocalManager* G4ParticleHPThreadLocalManager::instance = NULL;
-
 G4ParticleHPThreadLocalManager::G4ParticleHPThreadLocalManager()
-:RWB(NULL)
+:RWB(0)
 {
 ;
 }
@@ -44,25 +42,43 @@ G4ParticleHPThreadLocalManager::~G4ParticleHPThreadLocalManager()
 {
 ;
 }
+
+G4ParticleHPThreadLocalManager::
+G4ParticleHPThreadLocalManager( const G4ParticleHPThreadLocalManager& )
+{
+;
+}
+
+G4ParticleHPThreadLocalManager* G4ParticleHPThreadLocalManager::GetInstance()
+{
+  static G4ThreadLocalSingleton<G4ParticleHPThreadLocalManager> instance;
+  return instance.Instance();
+}
+
 void G4ParticleHPThreadLocalManager::OpenReactionWhiteBoard()
 {
-   if ( RWB != NULL ) {
+   if ( RWB )
+   {
       G4cout << "Warning: G4ParticleHPReactionWhiteBoard is tried doubly opening" << G4endl;
-      RWB = new G4ParticleHPReactionWhiteBoard();
+      return;
    }
    
    RWB = new G4ParticleHPReactionWhiteBoard();
 }
-G4ParticleHPReactionWhiteBoard* G4ParticleHPThreadLocalManager::GetReactionWhiteBoard()
+
+G4ParticleHPReactionWhiteBoard*
+G4ParticleHPThreadLocalManager::GetReactionWhiteBoard()
 {
-   if ( RWB == NULL ) {
+   if ( !RWB )
+   {
       G4cout << "Warning: try to access G4ParticleHPReactionWhiteBoard before opening" << G4endl;
       RWB = new G4ParticleHPReactionWhiteBoard();
    }
    return RWB; 
 }
+
 void G4ParticleHPThreadLocalManager::CloseReactionWhiteBoard()
 {  
    delete RWB; 
-   RWB=NULL;
+   RWB=0;
 }

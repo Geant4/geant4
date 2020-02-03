@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 88154 2015-02-02 12:25:20Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,53 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+06-08-19   A. Ribon   (exhadr02-V10-05-03)
+- HadronPhysicsCRMC_FTFP_BERT : use G4HadronicParameters for the energy
+  transition region between FTF and BERT models.
+
+02-08-19   G. Folger   (exhadr02-V10-05-02)
+- remove use of G4DataQuestionaire, following cleanup in
+   physicslists, see phys-lists-V10-05-02 and phys-util-V10-04-02
+   
+12-06-19  A. Ribon  (exhadr02-V10-05-01)
+- G4CRMCModel : some improvements (e.g. considered the energy-per-nucleon,
+  instead of the whole projectile, in the case of nucleus projectile) and
+  better documentation (in the form of comments in the class).
+
+17-01-19  A. Ribon  (exhadr02-V10-05-00)
+- Fixed bug in the energe range of the transition between FTFP and BERT
+  for the recently created CRMC_FTFP_BERT physics list.
+
+24-10-18  A. Ribon  (exhadr02-V10-04-03)
+- Introduced CRMC (Cosmic Ray Monte Carlo) interface and created a
+  physics list which uses this interface for very high energy
+  hadronic interactions, while using FTFP_BERT for the rest.
+  See the README file for more information.
+
+09-08-18  A. Ribon  (exhadr02-V10-04-02)
+- UrQMDProtonBuilder, IonUrQMDPhysics, UrQMDPiKBuilder, 
+  UrQMDAntiBarionBuilder, UrQMDNeutronBuilder, 
+  HIJINGProtonBuilder, IonHIJINGPhysics, HIJINGNeutronBuilder :
+  replaced the explicit high-energy limit of hadronic
+  physics with the one from G4HadronicParameters .
+
+03-05-18  J.Allison (exhadr02-V10-04-01)
+- RunAction.cc:
+  o Remove G4VIS_USE.
+  o Remove /vis/ commands - not necessary now and causes
+    problem in Qt with in multithreaded mode.
+- DetectorConstruction.cc: Pass vis attributes as objects, not pointers.
+- vis.mac: Remove "/testhadr/DrawTracks" (no longer exists).
+
+22-03-18  M.Maire (exhadr02-V10-04-00)
+- Hadr02.cc : remove G4UI_USE and G4VIS_USE
+
+01-11-16  I. Hrivnacova (exhadr02-V10-02-00)
+- Coding guidelines (class data member names)
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 30-01-15  V.Ivanchenko (exhadr02-V10-01-00)
 - DPMJET interface is dropped according to decision of the
   Hadronic working group January,28 2015

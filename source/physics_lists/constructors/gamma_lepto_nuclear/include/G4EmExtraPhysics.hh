@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.hh 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +34,7 @@
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
 // 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
+// 31.01.2018 V. Grichine: add neutrino-electron process and xsc
 //
 //----------------------------------------------------------------------------
 //
@@ -47,8 +47,8 @@
 
 #include "G4EmMessenger.hh"
 
-class G4BertiniElectroNuclearBuilder;
-class G4SynchrotronRadiation;
+class G4CascadeInterface;
+class G4PhotoNuclearProcess;
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -67,17 +67,50 @@ public:
   void Synch(G4bool val);
   void SynchAll(G4bool val);
   void GammaNuclear(G4bool val);
+  void LENDGammaNuclear(G4bool val);
+  void ElectroNuclear(G4bool val);
   void MuonNuclear(G4bool val);
+  void GammaToMuMu(G4bool val);
+  void PositronToMuMu(G4bool val);
+  void PositronToHadrons(G4bool val);
+  void GammaToMuMuFactor(G4double val);
+  void PositronToMuMuFactor(G4double val);
+  void PositronToHadronsFactor(G4double val);
+
+  void NeutrinoActivated(G4bool val);
+  void NuETotXscActivated(G4bool val);
+  void SetNuEleCcBias(G4double bf);
+  void SetNuEleNcBias(G4double bf);
+  void SetNuNucleusBias(G4double bf);
+  void SetNuDetectorName(const G4String& dn);
 
 private:
 
-  static G4bool gnActivated;
-  static G4bool munActivated;
-  static G4bool synActivated;
-  static G4bool synActivatedForAll;
+  void ConstructGammaElectroNuclear();
 
-  static G4ThreadLocal G4BertiniElectroNuclearBuilder* theGNPhysics;
-  static G4ThreadLocal G4SynchrotronRadiation* theSynchRad;
+  void ConstructLENDGammaNuclear(G4CascadeInterface* cascade,
+                                 G4PhotoNuclearProcess* gnuc);
+
+  G4bool gnActivated;
+  G4bool eActivated;
+  G4bool gLENDActivated;
+  G4bool munActivated;
+  G4bool synActivated;
+  G4bool synActivatedForAll;
+  G4bool gmumuActivated;
+  G4bool pmumuActivated;
+  G4bool phadActivated;
+  G4bool fNuActivated;
+  G4bool fNuETotXscActivated;
+
+  G4double gmumuFactor;
+  G4double pmumuFactor;
+  G4double phadFactor;
+  G4double fNuEleCcBias;
+  G4double fNuEleNcBias;
+  G4double fNuNucleusBias;
+
+  G4String fNuDetectorName;
 
   G4EmMessenger* theMessenger;
   G4int verbose;

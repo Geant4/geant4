@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNeutron.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -59,8 +58,8 @@ private:
   G4PreCompoundNeutron(const G4PreCompoundNeutron &right);
   const G4PreCompoundNeutron& 
   operator= (const G4PreCompoundNeutron &right);
-  G4int operator==(const G4PreCompoundNeutron &right) const;
-  G4int operator!=(const G4PreCompoundNeutron &right) const;    
+  G4bool operator==(const G4PreCompoundNeutron &right) const;
+  G4bool operator!=(const G4PreCompoundNeutron &right) const;    
 
   G4NeutronCoulombBarrier theNeutronCoulombBarrier;
 };

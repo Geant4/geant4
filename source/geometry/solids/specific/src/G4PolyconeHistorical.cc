@@ -23,37 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4PolyconeHistorical, polycone data
 //
-// $Id:$
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4PolyconeHistorical.cc
-//
-// Implementation of polycone data
-//
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4PolyconeHistorical.hh"
 
 G4PolyconeHistorical::G4PolyconeHistorical()
-  : Start_angle(0.), Opening_angle(0.), Num_z_planes(0),
-    Z_values(0), Rmin(0), Rmax(0)
 {
 }
 
 G4PolyconeHistorical::
 G4PolyconeHistorical( G4int z_planes )
-  : Start_angle(0.), Opening_angle(0.), Num_z_planes(z_planes)
+  : Num_z_planes(z_planes)
 {
   Z_values  = new G4double[z_planes];
   Rmin      = new G4double[z_planes];
   Rmax      = new G4double[z_planes];
   
-  for( G4int i = 0; i < z_planes; i++)
+  for( G4int i = 0; i < z_planes; ++i)
   {
     Z_values[i] = 0.0;
     Rmin[i]     = 0.0;
@@ -69,7 +58,7 @@ G4PolyconeHistorical::~G4PolyconeHistorical()
 }
 
 G4PolyconeHistorical::
-G4PolyconeHistorical( const G4PolyconeHistorical &source )
+G4PolyconeHistorical( const G4PolyconeHistorical& source )
 {
   Start_angle   = source.Start_angle;
   Opening_angle = source.Opening_angle;
@@ -79,7 +68,7 @@ G4PolyconeHistorical( const G4PolyconeHistorical &source )
   Rmin      = new G4double[Num_z_planes];
   Rmax      = new G4double[Num_z_planes];
   
-  for( G4int i = 0; i < Num_z_planes; i++)
+  for( G4int i = 0; i < Num_z_planes; ++i)
   {
     Z_values[i] = source.Z_values[i];
     Rmin[i]     = source.Rmin[i];
@@ -103,7 +92,7 @@ G4PolyconeHistorical::operator=( const G4PolyconeHistorical& right )
   Rmin      = new G4double[Num_z_planes];
   Rmax      = new G4double[Num_z_planes];
   
-  for( G4int i = 0; i < Num_z_planes; i++)
+  for( G4int i = 0; i < Num_z_planes; ++i)
   {
     Z_values[i] = right.Z_values[i];
     Rmin[i]     = right.Rmin[i];

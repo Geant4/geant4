@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -241,7 +240,7 @@ void G4ShellData::LoadData(const G4String& fileName)
   
   G4String name(ost.str());
   
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4ShellData::LoadData()");

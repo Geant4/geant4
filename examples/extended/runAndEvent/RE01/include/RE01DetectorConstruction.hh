@@ -26,7 +26,10 @@
 /// \file runAndEvent/RE01/include/RE01DetectorConstruction.hh
 /// \brief Definition of the RE01DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: RE01DetectorConstruction.hh 75295 2013-10-30 09:32:52Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #ifndef RE01DetectorConstruction_h

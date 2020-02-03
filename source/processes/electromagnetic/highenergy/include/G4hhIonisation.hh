@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -63,34 +62,37 @@ class G4hhIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4hhIonisation(const G4String& name = "hhIoni");
+  explicit G4hhIonisation(const G4String& name = "hhIoni");
 
   virtual ~G4hhIonisation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut);
+				    const G4Material*, G4double cut) override;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
+
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+					   const G4ParticleDefinition*) override;
 
 private:
 
   // hide assignment operator
-  G4hhIonisation & operator=(const G4hhIonisation &right);
-  G4hhIonisation(const G4hhIonisation&);
+  G4hhIonisation & operator=(const G4hhIonisation &right) = delete;
+  G4hhIonisation(const G4hhIonisation&) = delete;
 
   G4double   mass;
   G4double   ratio;
 
   const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
+  //const G4ParticleDefinition* theBaseParticle;
   G4VEmFluctuationModel*      flucModel;
 
   G4bool                      isInitialised;

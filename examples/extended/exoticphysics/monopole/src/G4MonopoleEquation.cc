@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/src/G4MonopoleEquation.cc
 /// \brief Implementation of the G4MonopoleEquation class
 //
+<<<<<<< HEAD
 // $Id: G4MonopoleEquation.cc 69705 2013-05-13 09:09:52Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +67,9 @@
 
 G4MonopoleEquation::G4MonopoleEquation(G4ElectroMagneticField *emField )
       : G4EquationOfMotion( emField ) 
-{}
+{
+  G4cout << "G4MonopoleEquation::G4MonopoleEquation" << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

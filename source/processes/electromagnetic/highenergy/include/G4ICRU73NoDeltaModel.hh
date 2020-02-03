@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73NoDeltaModel.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +55,7 @@ class G4ICRU73NoDeltaModel : public G4ICRU73QOModel
 
 public:
 
-  G4ICRU73NoDeltaModel(const G4ParticleDefinition* p = 0,
+  explicit G4ICRU73NoDeltaModel(const G4ParticleDefinition* p = nullptr,
 		       const G4String& nam = "ICRU73QONoD");
 
   virtual ~G4ICRU73NoDeltaModel();
@@ -64,18 +63,19 @@ public:
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
-					G4double cutEnergy);
+					G4double cutEnergy) override;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy,
-					 G4double maxEnergy);
+					 G4double maxEnergy) override;
 private:
 
   // hide assignment operator
-  G4ICRU73NoDeltaModel & operator=(const  G4ICRU73NoDeltaModel &right);
-  G4ICRU73NoDeltaModel(const  G4ICRU73NoDeltaModel&);
+  G4ICRU73NoDeltaModel & 
+    operator=(const  G4ICRU73NoDeltaModel &right) = delete;
+  G4ICRU73NoDeltaModel(const  G4ICRU73NoDeltaModel&) = delete;
 
 };
 

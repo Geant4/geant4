@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.cc 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
 //	     as temporary final-state fragments.

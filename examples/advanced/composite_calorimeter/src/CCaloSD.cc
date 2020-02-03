@@ -49,20 +49,16 @@ CCaloSD::CCaloSD(G4String name, CCalVOrganization* numberingScheme):
   
   G4cout << "*******************************************************" << G4endl;
   G4cout << "*                                                     *" << G4endl;
-  G4cout << "* Constructing a CCaloSD  with name " << name            << G4endl;  
+  G4cout << "* Constructing a CCaloSD  with name " << name            << G4endl;
   G4cout << "*                                                     *" << G4endl;
   G4cout << "*******************************************************" << G4endl;
 
   CCalSDList::getInstance()->addCalo(name);
 }
 
-
 CCaloSD::~CCaloSD() {
-  G4cout << "CCaloSD: " << SDname << " deleted" << G4endl;
-  if (theDescription) 
-    delete theDescription;
+  delete theDescription;
 }
-
 
 void CCaloSD::Initialize(G4HCofThisEvent*HCE) {
 
@@ -73,8 +69,9 @@ void CCaloSD::Initialize(G4HCofThisEvent*HCE) {
   //------------------------------------------------------------
 
   theHC = new CCalG4HitCollection(SDname, collectionName[0]);
-  if (HCID<0) 
+  if (HCID<0) {
     HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+  }
   HCE->AddHitsCollection( HCID, theHC );
 
   TSID = -2;
@@ -82,91 +79,77 @@ void CCaloSD::Initialize(G4HCofThisEvent*HCE) {
   /////PrimaryID = -99;  <--- initialized by StackingAction.
 }
 
+G4bool CCaloSD::ProcessHits(G4Step*aStep, G4TouchableHistory*) {
 
-G4bool CCaloSD::ProcessHits(G4Step*aStep,G4TouchableHistory*) {
-
-  if (aStep == NULL) return true;
-   
-  getStepInfo(aStep);
-  if (hitExists() == false && EdepositEM+EdepositEHAD>0.) 
-    createNewHit();
-
+  if(aStep->GetTotalEnergyDeposit() > CLHEP::eV) {
+    getStepInfo(aStep);
+    if (hitExists() == false && EdepositEM+EdepositEHAD>0.f) {
+      createNewHit();
+    }
+  }
   return true;
 } 
 
-
-void CCaloSD::getStepInfo(G4Step* aStep) {
+void CCaloSD::getStepInfo(const G4Step* aStep) {
   
   PreStepPoint = aStep->GetPreStepPoint(); 
   PostStepPoint= aStep->GetPostStepPoint(); 
-  HitPoint     = PreStepPoint->GetPosition();	
+  HitPoint     = PreStepPoint->GetPosition();        
 
   theTrack = aStep->GetTrack();   
   CurrentPV= PreStepPoint->GetPhysicalVolume();
 
-  G4String     particleType =  theTrack->GetDefinition()->GetParticleName();
+  G4String pname = theTrack->GetDefinition()->GetParticleName();
+  G4double de = aStep->GetTotalEnergyDeposit();
+  //G4cout << "##### Process new step dE= " << de
+  //         << "  " << pname << " inside " << GetName() << G4endl;
 
   const G4VTouchable* touch = aStep->GetPreStepPoint()->GetTouchable();
-  G4double weight;
-  if (touch->GetVolume(0)->GetName() == "CrystalMatrixCrystal")
+  G4double weight = 1.;
+  if (touch->GetVolume(0)->GetName() == "CrystalMatrixCrystal") {
     weight = curve_LY(PreStepPoint);
-  else
-    weight = 1.;
-
-  if (particleType == "e-" ||
-      particleType == "e+" ||
-      particleType == "gamma" ){
-    EdepositEM   = weight*(aStep->GetTotalEnergyDeposit());
-    EdepositEHAD = 0.;
-  } else {
-    EdepositEM   = 0.;
-    EdepositEHAD = weight*(aStep->GetTotalEnergyDeposit());
   }
 
-  TSlice = PostStepPoint->GetGlobalTime() / nanosecond;
+  if (pname == "e-" || pname == "e+" || pname == "gamma" ){
+    EdepositEM   = weight*de;
+    EdepositEHAD = 0.f;
+  } else {
+    EdepositEM   = 0.f;
+    EdepositEHAD = weight*de;
+  }
 
-  if ( TSlice > 1.0E9 ) TSliceID = 999999999;
-  else                  TSliceID = (int) TSlice;
+  TSlice = (PostStepPoint) ? PostStepPoint->GetGlobalTime()/nanosecond : 0.;
+  //G4cout << "     W= " << weight << " T= " << TSlice << G4endl;
+  G4int it = (G4int)TSlice;
+  TSliceID = std::min(it, 10000);
+  //G4cout << " tID= " <<  TSliceID << G4endl;
 
-  if (theDescription!=0) 
-    UnitID = theDescription->GetUnitID(aStep);
-  else
-    UnitID = 0;
-   
+  UnitID = (theDescription) ? theDescription->GetUnitID(aStep) : 0;
 }
-
 
 G4bool CCaloSD::hitExists() {
    
-  if (PrimaryID<1) {
-    G4cerr << "***** CCaloSD error: PrimaryID = " << PrimaryID
-	   << " Maybe detector name changed"
-	   << G4endl;
-  }
-   
-      
   if ( CurrentPV==PreviousPV && PrimaryID == PrimID && TSliceID == TSID &&
        UnitID==PreviousUnitID) {
     updateHit();
     return true;
   }
    
-
-  if (PrimaryID != PrimID)
-    ResetForNewPrimary();
+  if (PrimaryID != PrimID) { ResetForNewPrimary(); }
    
-
-  //look in HC whether a hit with the same primID,UnitID,TSliceID exists already:
+  // look in HC whether a hit with the same primID,UnitID,TSliceID 
+  // exists already:
    
   G4bool found = false;
-  for (G4int j=0; j<theHC->entries()&&!found; j++) {
+  for (std::size_t j=0; j<theHC->entries(); ++j) {
 
     CCalG4Hit* aPreviousHit = (*theHC)[j];
     if (aPreviousHit->getTrackID()  == PrimaryID &&
-	aPreviousHit->getTimeSliceID() == TSliceID  &&
-	aPreviousHit->getUnitID()== UnitID       ) {
+        aPreviousHit->getTimeSliceID() == TSliceID  &&
+        aPreviousHit->getUnitID()== UnitID       ) {
       CurrentHit = aPreviousHit;
       found = true;
+      break;
     }
   }          
 
@@ -178,14 +161,12 @@ G4bool CCaloSD::hitExists() {
   }    
 }
 
-
 void CCaloSD::ResetForNewPrimary() {
   
   EntrancePoint = SetToLocal(HitPoint);
   IncidentEnergy = PreStepPoint->GetKineticEnergy();
 
 }
-
 
 void CCaloSD::StoreHit(CCalG4Hit* hit){
 
@@ -197,7 +178,6 @@ void CCaloSD::StoreHit(CCalG4Hit* hit){
 
   theHC->insert( hit );
 }
-
 
 void CCaloSD::createNewHit() {
 
@@ -221,7 +201,7 @@ void CCaloSD::createNewHit() {
          << " time slice " << TSliceID 
          << " For Track  " << theTrack->GetTrackID()
          << " which is a " <<  theTrack->GetDefinition()->GetParticleName();
-	   
+           
   if (theTrack->GetTrackID()==1) {
     G4cout << " of energy "     << theTrack->GetTotalEnergy();
   } else {
@@ -236,7 +216,6 @@ void CCaloSD::createNewHit() {
   G4cout << G4endl;
 #endif          
     
-
   CurrentHit = new CCalG4Hit;
   CurrentHit->setTrackID(PrimaryID);
   CurrentHit->setTimeSlice(TSlice);
@@ -247,15 +226,14 @@ void CCaloSD::createNewHit() {
   
   StoreHit(CurrentHit);
 
-}	 
-
+}         
 
 void CCaloSD::updateHit() {
   if (EdepositEM+EdepositEHAD != 0) {
     CurrentHit->addEnergyDeposit(EdepositEM,EdepositEHAD);
 #ifdef debug
     G4cout << "Energy deposit in Unit " << UnitID << " em " << EdepositEM/MeV
-	 << " hadronic " << EdepositEHAD/MeV << " MeV" << G4endl;
+         << " hadronic " << EdepositEHAD/MeV << " MeV" << G4endl;
 #endif
   }
 
@@ -266,40 +244,32 @@ void CCaloSD::updateHit() {
   PreviousUnitID = UnitID;
 }
 
-
-G4ThreeVector CCaloSD::SetToLocal(G4ThreeVector global){
+G4ThreeVector CCaloSD::SetToLocal(const G4ThreeVector& global) const{
 
   G4ThreeVector localPoint;
   const G4VTouchable*   touch= PreStepPoint->GetTouchable();
   localPoint=touch->GetHistory()->GetTopTransform().TransformPoint(global);
   
   return localPoint;  
-
 }
      
-
 void CCaloSD::EndOfEvent(G4HCofThisEvent*) {
   summarize();
 }
      
-
 void CCaloSD::summarize() {
 }
-
 
 void CCaloSD::clear() {
 } 
 
-
 void CCaloSD::DrawAll() {
 } 
-
 
 void CCaloSD::PrintAll() {
   G4cout << "CCaloSD: Collection " << theHC->GetName() << G4endl;
   theHC->PrintAllHits();
 } 
-
 
 void CCaloSD::SetOrganization(CCalVOrganization* org){
 
@@ -308,27 +278,26 @@ void CCaloSD::SetOrganization(CCalVOrganization* org){
   theDescription = org;
 }
 
-
-G4double CCaloSD::curve_LY(G4StepPoint* stepPoint) {
+G4double CCaloSD::curve_LY(const G4StepPoint* stepPoint) {
 
   G4double weight = 1.;
-  G4ThreeVector  localPoint = SetToLocal(stepPoint->GetPosition());
-  G4double crlength = 230.;
+  G4ThreeVector localPoint = SetToLocal(stepPoint->GetPosition());
+  const G4double crlength = 230.;
   G4double dapd = 0.5 * crlength - localPoint.z();
   if (dapd >= -0.1 || dapd <= crlength+0.1) {
     if (dapd <= 100.)
       weight = 1.05 - dapd * 0.0005;
   } else {
     G4cout << "CCaloSD, light coll curve : wrong distance to APD " << dapd 
-	   << " crlength = " << crlength
-	   << " z of localPoint = " << localPoint.z() 
-	   << " take weight = " << weight << G4endl;
+           << " crlength = " << crlength
+           << " z of localPoint = " << localPoint.z() 
+           << " take weight = " << weight << G4endl;
   }
 #ifdef ddebug
   G4cout << "CCaloSD, light coll curve : " << dapd 
-	 << " crlength = " << crlength
-	 << " z of localPoint = " << localPoint.z() 
-	 << " take weight = " << weight << G4endl;
+         << " crlength = " << crlength
+         << " z of localPoint = " << localPoint.z() 
+         << " take weight = " << weight << G4endl;
 #endif
   return weight;
 }

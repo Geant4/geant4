@@ -23,10 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 /// \file electromagnetic/TestEm3/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
 // $Id: PhysicsListMessenger.cc 82038 2014-06-10 07:58:08Z gcosmo $
+=======
+/// \file PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

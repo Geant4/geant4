@@ -169,7 +169,7 @@ namespace G4INCL {
   G4double gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin) {
     G4double mass;
     if(p.theType==Composite)
-      mass = ParticleTable::getTableMass(p.theA, p.theZ);
+      mass = ParticleTable::getTableMass(p.theA, p.theZ, p.theS);
     else
       mass = ParticleTable::getTableParticleMass(p.theType);
     return (1.+EKin/mass);

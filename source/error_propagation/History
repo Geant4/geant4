@@ -1,4 +1,3 @@
-$Id: History 102284 2017-01-20 09:43:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-Oct-2016, Gunter Folger (error-propagation-V10-01-01)
+19-Dec-2017 - G.Cosmo (error-propagation-V10-04-00)
+- Fixed self-consistency in headers (missing #include) in G4ErrorMatrix,
+  G4ErrorRunManagerHelper and G4ErrorSymMatrix.
+  Thanks to Raphael Isemann for reporting these.
+
+10-Nov-2017 - P.Arce (error-propagation-V10-03-02)
+- Bug report 2010: precision correction in G4ErrorFreeTrajState.cc 
+
+ 1-Nov-2017 - J. Apostolakis, D. Sorokin (error-propagation-V10-03-01)
+                            same code as (error-propagation-V10-03-00)
+- Co-works with field-V10-03-19
+
+23-Oct-2017 - J. Apostolakis, D. Sorokin (error-propagation-V10-03-00)
+- migrate to use of new types for G4(Mag)IntegrationDriver and
+    use its new GetEquation method (not stepper's).
+
+12-Oct-2016 - Gunter Folger              (error-propagation-V10-02-01)
 - replace direct use of aParticleIterator by GetParticleIterator().
     fix required by clang39 on Windows and MAC
 	 
@@ -26,7 +41,7 @@ committal in the CVS repository !
   problem is required to be applied in conjunction with "run" category for
   the treatment of splitters symbols by physics-lists.
 
-20 September 2016 - G.Cosmo
+20 September 2016 - G.Cosmo (error-propagation-V10-02-00)
 - Explicitly initialise templated data in G4ErrorPhysicsList source.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 

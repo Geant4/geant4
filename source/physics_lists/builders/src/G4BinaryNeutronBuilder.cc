@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryNeutronBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,7 +31,8 @@
 // Author: 2002 H.P. Wellisch
 //
 // Modified:
-// 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+// 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -41,12 +41,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4BinaryNeutronBuilder::
 G4BinaryNeutronBuilder() 
  {
-   theMin = 0;
-   theMax = 9.9*GeV;
+   theMin = 0.0;
+   theMax = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
    theModel = new G4BinaryCascade();
  }
 
@@ -58,23 +60,3 @@ G4BinaryNeutronBuilder()
    aP->RegisterMe(theModel);
  }
 
-G4BinaryNeutronBuilder::~G4BinaryNeutronBuilder() 
-{
-}
-
-void G4BinaryNeutronBuilder::
-Build(G4HadronElasticProcess * )
- {
- }
-
-void G4BinaryNeutronBuilder::
-Build(G4HadronFissionProcess * )
- {
- }
-
-void G4BinaryNeutronBuilder::
-Build(G4HadronCaptureProcess * )
- {
- }
-
- // 2002 by J.P. Wellisch

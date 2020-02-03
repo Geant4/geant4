@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.16 2010-03-12 15:45:18 gunter Exp $ //
 //
 
 #include <vector>
@@ -363,7 +362,7 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
 	 chargeBalance-=G4lrint(products->operator[](hpw)->GetDefinition()->GetPDGCharge());
          baryonBalance-=products->operator[](hpw)->GetDefinition()->GetBaryonNumber();
        }
-       if(getenv("ScattererEnergyBalanceCheck"))
+       if(std::getenv("ScattererEnergyBalanceCheck"))
          std::cout << "DEBUGGING energy balance A: "
 	           <<energyBalance<<" "
 	           <<pxBalance<<" "

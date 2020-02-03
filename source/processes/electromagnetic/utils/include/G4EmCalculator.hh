@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh 97616 2016-06-06 12:37:57Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -44,6 +43,7 @@
 // 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
 // 29.09.2006 Add member loweModel (V.Ivanchenko)
 // 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
+// 02.02.2018 Add parameter to FindLambdaTable to store process type (M. Novak)
 //
 // Class Description:
 //
@@ -95,7 +95,7 @@ public:
 
   G4double GetDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
 		   const G4Material*,
-                   const G4Region* r = 0);
+                   const G4Region* r = nullptr);
   inline G4double GetDEDX(G4double kinEnergy, const G4String& part, 
 		   const G4String& mat,
                    const G4String& s = "world");
@@ -103,7 +103,7 @@ public:
   G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 				     const G4ParticleDefinition*, 
 				     const G4Material*,
-				     const G4Region* r = 0);
+				     const G4Region* r = nullptr);
   inline G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 					    const G4String& part, 
 					    const G4String& mat,
@@ -111,21 +111,21 @@ public:
 
   G4double GetCSDARange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
-			const G4Region* r = 0);
+			const G4Region* r = nullptr);
   inline G4double GetCSDARange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
 			const G4String& s = "world");
 
   G4double GetRange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
-			const G4Region* r = 0);
+			const G4Region* r = nullptr);
   inline G4double GetRange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
 			const G4String& s = "world");
 
   G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, 
 			const G4Material*,
-			const G4Region* r = 0);
+			const G4Region* r = nullptr);
   inline G4double GetKinEnergy(G4double range, const G4String& part, 
 			const G4String& mat,
 			const G4String& s = "world");
@@ -133,7 +133,7 @@ public:
   G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4ParticleDefinition*,
                    const G4String& processName,  const G4Material*,
-		   const G4Region* r = 0);
+		   const G4Region* r = nullptr);
   inline G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4String& part, const G4String& proc,
                    const G4String& mat, const G4String& s = "world");
@@ -145,7 +145,7 @@ public:
 
   G4double GetMeanFreePath(G4double kinEnergy, const G4ParticleDefinition*,
 			   const G4String& processName,  const G4Material*,
-			   const G4Region* r = 0);
+			   const G4Region* r = nullptr);
   inline G4double GetMeanFreePath(G4double kinEnergy, const G4String& part, 
 				  const G4String& proc, const G4String& mat, 
 				  const G4String& s = "world");
@@ -226,7 +226,7 @@ public:
                    const G4String& part, G4int Z, 
 		   G4AtomicShellEnumerator shell,
                    G4double kinEnergy,
-                   const G4Material* mat = 0);
+                   const G4Material* mat = nullptr);
 
   G4double ComputeMeanFreePath(
                        G4double kinEnergy, const G4ParticleDefinition*,
@@ -256,7 +256,7 @@ public:
   const G4Region* FindRegion(const G4String&);
 
   const G4MaterialCutsCouple* FindCouple(const G4Material*, 
-					 const G4Region* r = 0);
+					 const G4Region* r = nullptr);
 
   G4VProcess* FindProcess(const G4ParticleDefinition* part,
 			  const G4String& processName);
@@ -278,8 +278,8 @@ private:
   G4bool UpdateCouple(const G4Material*, G4double cut);
 
   void FindLambdaTable(const G4ParticleDefinition*, 
-		       const G4String& processName,
-		       G4double kinEnergy);
+                       const G4String& processName,
+		                   G4double kinEnergy, G4int& proctype);
 
   G4bool FindEmModel(const G4ParticleDefinition*, 
                      const G4String& processName,
@@ -302,8 +302,8 @@ private:
   void CheckMaterial(G4int Z);
 
   // hide copy and assign
-  G4EmCalculator & operator=(const  G4EmCalculator &right);
-  G4EmCalculator(const  G4EmCalculator&);
+  G4EmCalculator & operator=(const  G4EmCalculator &right) = delete;
+  G4EmCalculator(const  G4EmCalculator&) = delete;
 
   std::vector<const G4Material*>            localMaterials;
   std::vector<const G4MaterialCutsCouple*>  localCouples;
@@ -327,9 +327,11 @@ private:
   const G4ParticleDefinition*  lambdaParticle;
   const G4ParticleDefinition*  baseParticle;
   const G4PhysicsTable*        currentLambda;
-        G4VEmModel*            currentModel;
-        G4VEmModel*            loweModel;
-        G4VEnergyLossProcess*  currentProcess;
+
+  G4VEmModel*                  currentModel;
+  G4VEmModel*                  loweModel;
+  G4VEnergyLossProcess*        currentProcess;
+  G4VProcess*                  curProcess;
 
   const G4ParticleDefinition*  theGenericIon;
   G4ionEffectiveCharge*        ionEffCharge;
@@ -527,7 +529,7 @@ inline G4double G4EmCalculator::ComputeCrossSectionPerShell(
                        G4int shellIdx, G4double cut)
 {
   return ComputeCrossSectionPerShell(kinEnergy, FindParticle(part), 
-				     processName, G4lrint(elm->GetZ()), 
+				     processName, elm->GetZasInt(), 
 				     shellIdx, cut);
 }
 

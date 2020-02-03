@@ -27,7 +27,6 @@
 /// \brief Definition of the TSPhysicsList class
 //
 //
-// $Id: TSPhysicsList.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// This is a very, very extensive physics list and step-limiters are applied

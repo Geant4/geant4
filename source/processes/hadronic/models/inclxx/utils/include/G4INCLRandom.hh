@@ -48,10 +48,12 @@
 #include <iostream>
 #include <cmath>
 #include <utility>
+#include <limits>
 #include "G4INCLIRandomGenerator.hh"
 #include "G4INCLThreeVector.hh"
 #include "G4INCLGlobals.hh"
 #include "G4INCLConfig.hh"
+#include "Randomize.hh"
 
 namespace G4INCL {
 
@@ -101,6 +103,14 @@ namespace G4INCL {
      * Generate random numbers using gaussian distribution.
      */
     G4double gauss(G4double sigma=1.);
+
+#ifdef INCLXX_IN_GEANT4_MODE
+    /**
+     * Generate random numbers using gaussian distribution to be used only
+     * for correlated pairs
+     */
+      G4double gaussWithMemory(G4double sigma=1.);
+#endif
 
     /**
      * Generate isotropically-distributed ThreeVectors of given norm.
@@ -156,7 +166,21 @@ namespace G4INCL {
 
     class Adapter {
       public:
-        G4int operator()(const G4int n) const;
+        using result_type = unsigned long;
+
+        static constexpr result_type min() {
+          return std::numeric_limits<Adapter::result_type>::min();
+        }
+
+        static constexpr result_type max() {
+          return std::numeric_limits<Adapter::result_type>::max();
+        }
+
+        result_type operator()() const {
+//          return shootInteger(max());
+          return G4RandFlat::shootInt(INT_MAX);
+        }
+
     };
 
     Adapter const &getAdapter();

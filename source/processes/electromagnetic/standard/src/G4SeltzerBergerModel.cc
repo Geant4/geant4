@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -34,149 +32,173 @@
 //
 // Author:        Vladimir Ivanchenko use inheritance from Andreas Schaelicke
 //                base class implementing ultra relativistic bremsstrahlung
-//                model 
+//                model
 //
 // Creation date: 04.10.2011
 //
 // Modifications:
 //
+// 24.07.2018 Introduced possibility to use sampling tables to sample the
+//            emitted photon energy (instead of using rejectio) from the 
+//            Seltzer-Berger scalled DCS for bremsstrahlung photon emission. 
+//            Using these sampling tables option gives faster(30-70%) final 
+//            state generation than the original rejection but takes some 
+//            extra memory (+ ~6MB in the case of the full CMS detector). 
+//            (M Novak)
+//
 // -------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4SeltzerBergerModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4SBBremTable.hh"
 #include "G4ModifiedTsai.hh"
+//#include "G4DipBustGenerator.hh"
+#include "G4EmParameters.hh"
+#include  "G4ProductionCutsTable.hh"
 
 #include "G4Physics2DVector.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
 
 #include "G4ios.hh"
+
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4Physics2DVector* G4SeltzerBergerModel::gSBDCSData[]     = { nullptr };
+G4SBBremTable*     G4SeltzerBergerModel::gSBSamplingTable =   nullptr;
+G4double           G4SeltzerBergerModel::gYLimitData[]    = { 0.0     };
+G4String           G4SeltzerBergerModel::gDataDirectory   = "";
 
-using namespace std;
+#ifdef G4MULTITHREADED
+  G4Mutex G4SeltzerBergerModel::theSBMutex = G4MUTEX_INITIALIZER;
+#endif
 
-G4Physics2DVector* G4SeltzerBergerModel::dataSB[] = {nullptr};
-G4double G4SeltzerBergerModel::ylimit[] = {0.0};
-G4double G4SeltzerBergerModel::expnumlim = -12.;
-
-static const G4double emaxlog = 4*G4Log(10.);
-static const G4double alpha = CLHEP::twopi*CLHEP::fine_structure_const; 
-static const G4double epeaklimit= 300*CLHEP::MeV; 
-static const G4double elowlimit = 20*CLHEP::keV; 
+static const G4double kMC2   = CLHEP::electron_mass_c2;
+static const G4double kAlpha = CLHEP::twopi*CLHEP::fine_structure_const;
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
                                            const G4String& nam)
-  : G4eBremsstrahlungRelModel(p,nam),useBicubicInterpolation(false)
+: G4eBremsstrahlungRelModel(p,nam), fIsUseBicubicInterpolation(false),
+  fIsUseSamplingTables(true), fNumWarnings(0), fIndx(0), fIndy(0)
 {
-  SetLowestKinEnergy(1.0*keV);
-  SetLowEnergyLimit(LowestKinEnergy());
+  fLowestKinEnergy = 1.0*keV;
+  SetLowEnergyLimit(fLowestKinEnergy);
   SetLPMFlag(false);
-  nwarn = 0;
-  idx = idy = 0;
+  SetAngularDistribution(new G4ModifiedTsai());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4SeltzerBergerModel::~G4SeltzerBergerModel()
 {
-  if(IsMaster()) {
-    for(size_t i=0; i<101; ++i) { 
-      if(dataSB[i]) {
-        delete dataSB[i]; 
-        dataSB[i] = nullptr;
-      } 
+  // delete SB-DCS data per Z
+  if (IsMaster()) {
+    for (size_t iz = 0; iz < gMaxZet; ++iz) {
+      if (gSBDCSData[iz]) {
+        delete gSBDCSData[iz];
+        gSBDCSData[iz] = nullptr;
+      }
+    }
+    if (gSBSamplingTable) {
+      delete gSBSamplingTable;
+      gSBSamplingTable = nullptr;
     }
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
                                       const G4DataVector& cuts)
 {
+  if (p) {
+    SetParticle(p);
+  }
+  fIsUseSamplingTables = G4EmParameters::Instance()->EnableSamplingTable();
   // Access to elements
-  if(IsMaster()) {
+  if (IsMaster()) {
 
-    // check environment variable
-    // Build the complete string identifying the file with the data set
-    char* path = getenv("G4LEDATA");
-
-    const G4ElementTable* theElmTable = G4Element::GetElementTable();
-    size_t numOfElm = G4Element::GetNumberOfElements();
-    if(numOfElm > 0) {
-      for(size_t i=0; i<numOfElm; ++i) {
-        G4int Z = G4lrint(((*theElmTable)[i])->GetZ());
-        if(Z < 1)        { Z = 1; }
-        else if(Z > 100) { Z = 100; }
-        //G4cout << "Z= " << Z << G4endl;
-        // Initialisation
-        if(nullptr == dataSB[Z]) { ReadData(Z, path); }
+    auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
+    size_t numOfCouples = theCoupleTable->GetTableSize();
+    for(size_t j=0; j<numOfCouples; ++j) {
+      auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
+      auto elmVec = mat->GetElementVector();
+      size_t numOfElem = mat->GetNumberOfElements();
+      for (size_t ie = 0; ie < numOfElem; ++ie) {
+	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), gMaxZet-1));
+	// load SB-DCS data for this atomic number if it has not been loaded yet
+	InitialiseForElement(nullptr, Z);
       }
     }
-  }
-
-  G4eBremsstrahlungRelModel::Initialise(p, cuts);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4String G4SeltzerBergerModel::DirectoryPath() const
-{
-  return "/brem_SB/br";
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4SeltzerBergerModel::ReadData(G4int Z, const char* path)
-{
-  //  G4cout << "ReadData Z= " << Z << G4endl;
-  // G4cout << "Status for Z= " << dataSB[Z] << G4endl;
-  //if(path) { G4cout << path << G4endl; }
-  if(dataSB[Z]) { return; }
-  const char* datadir = path;
-
-  if(!datadir) {
-    datadir = getenv("G4LEDATA");
-    if(!datadir) {
-      G4Exception("G4SeltzerBergerModel::ReadData()","em0006",FatalException,
-                  "Environment variable G4LEDATA not defined");
-      return;
+    // elem.selectr. only for master: base class init-local will set for workers
+    if (LowEnergyLimit() < HighEnergyLimit()) {
+      InitialiseElementSelectors(p,cuts);
+    }
+    // init sampling tables if it was requested
+    if (fIsUseSamplingTables) {
+      if (!gSBSamplingTable) {
+        gSBSamplingTable = new G4SBBremTable();
+      }
+      gSBSamplingTable->Initialize(std::max(fLowestKinEnergy,LowEnergyLimit()),
+                                   HighEnergyLimit());
     }
   }
+  //
+  if (!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if (GetTripletModel()) {
+    GetTripletModel()->Initialise(p, cuts);
+    fIsScatOffElectron = true;
+  }
+}
+
+const G4String& G4SeltzerBergerModel::FindDirectoryPath()
+{
+  // check environment variable
+  // build the complete string identifying the file with the data set
+  if(gDataDirectory.empty()) {
+    const char* path = std::getenv("G4LEDATA");
+    if (path) {
+      std::ostringstream ost;
+      ost << path << "/brem_SB/br";
+      gDataDirectory = ost.str();
+    } else {
+      G4Exception("G4SeltzerBergerModel::FindDirectoryPath()","em0006",
+                  FatalException,
+                  "Environment variable G4LEDATA not defined");
+    }
+  }
+  return gDataDirectory;
+}
+
+void G4SeltzerBergerModel::ReadData(G4int Z) {
+  // return if it has been already loaded
+  if (gSBDCSData[Z]) {
+    return;
+  }
   std::ostringstream ost;
-  ost << datadir << DirectoryPath() << Z;
+  ost << FindDirectoryPath() << Z;
   std::ifstream fin(ost.str().c_str());
-  if( !fin.is_open()) {
+  if (!fin.is_open()) {
     G4ExceptionDescription ed;
     ed << "Bremsstrahlung data file <" << ost.str().c_str()
        << "> is not opened!";
     G4Exception("G4SeltzerBergerModel::ReadData()","em0003",FatalException,
                 ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
     return;
-  } 
-  //G4cout << "G4SeltzerBergerModel read from <" << ost.str().c_str() 
+  }
+  //G4cout << "G4SeltzerBergerModel read from <" << ost.str().c_str()
   //         << ">" << G4endl;
   G4Physics2DVector* v = new G4Physics2DVector();
-  if(v->Retrieve(fin)) { 
-    if(useBicubicInterpolation) { v->SetBicubicInterpolation(true); }
-    dataSB[Z] = v; 
-    ylimit[Z] = v->Value(0.97, emaxlog, idx, idy);
+  if (v->Retrieve(fin)) {
+    v->SetBicubicInterpolation(fIsUseBicubicInterpolation);
+    static const G4double emaxlog = 4*G4Log(10.);
+    gYLimitData[Z] = v->Value(0.97, emaxlog, fIndx, fIndy);
+    gSBDCSData[Z]  = v;
   } else {
     G4ExceptionDescription ed;
     ed << "Bremsstrahlung data file <" << ost.str().c_str()
@@ -185,163 +207,98 @@ void G4SeltzerBergerModel::ReadData(G4int Z, const char* path)
                 ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
     delete v;
   }
-  // G4cout << dataSB[Z] << G4endl;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
 {
-
-  if(gammaEnergy < 0.0 || kinEnergy <= 0.0) { return 0.0; }
-  G4double x = gammaEnergy/kinEnergy;
-  G4double y = G4Log(kinEnergy/MeV);
-  G4int Z = G4lrint(currentZ);
-
-  //G4cout << "G4SeltzerBergerModel::ComputeDXSectionPerAtom Z= " << Z
-  //         << " x= " << x << " y= " << y << " " << dataSB[Z] << G4endl;
-  if(nullptr == dataSB[Z]) { InitialiseForElement(0, Z); }
-  /*
-    G4ExceptionDescription ed;
-    ed << "Bremsstrahlung data for Z= " << Z
-       << " are not initialized!";
-    G4Exception("G4SeltzerBergerModel::ComputeDXSectionPerAtom()","em0005",
-                FatalException, ed,
-                "G4LEDATA version should be G4EMLOW6.23 or later.");
+  G4double dxsec = 0.0;
+  if (gammaEnergy < 0.0 || fPrimaryKinEnergy <= 0.0) {
+    return dxsec;
   }
-  */
-  G4double invb2 = 
-    totalEnergy*totalEnergy/(kinEnergy*(kinEnergy + 2*particleMass));
-  G4double cross = dataSB[Z]->Value(x,y,idx,idy)*invb2*millibarn/bremFactor;
-  
-  if(!isElectron) {
-    G4double invbeta1 = sqrt(invb2);
-    G4double e2 = kinEnergy - gammaEnergy;
-    if(e2 > 0.0) {
-      G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
-      G4double xxx = alpha*currentZ*(invbeta1 - invbeta2);
-      if(xxx < expnumlim) { cross = 0.0; }
-      else { cross *= G4Exp(xxx); }
+  // reduced photon energy
+  const G4double x = gammaEnergy/fPrimaryKinEnergy;
+  // l-kinetic energy of the e-/e+
+  const G4double y = G4Log(fPrimaryKinEnergy/CLHEP::MeV);
+  // make sure that the Z-related SB-DCS are loaded
+  // NOTE: fCurrentIZ should have been set before.
+  fCurrentIZ = std::max(std::min(fCurrentIZ, gMaxZet-1), 1);
+  if (!gSBDCSData[fCurrentIZ]) {
+    InitialiseForElement(nullptr, fCurrentIZ);
+  }
+  // NOTE: SetupForMaterial should have been called before!
+  const G4double pt2   = fPrimaryKinEnergy*(fPrimaryKinEnergy+2.*kMC2);
+  const G4double invb2 = fPrimaryTotalEnergy*fPrimaryTotalEnergy/pt2;
+  G4double val = gSBDCSData[fCurrentIZ]->Value(x,y,fIndx,fIndy);
+  dxsec = val*invb2*CLHEP::millibarn/gBremFactor;
+  // e+ correction
+  if (!fIsElectron) {
+    const G4double invbeta1 = std::sqrt(invb2);
+    const G4double e2       = fPrimaryKinEnergy-gammaEnergy;
+    if (e2 > 0.0) {
+      const G4double invbeta2 = (e2+kMC2)/std::sqrt(e2*(e2+2.0*kMC2));
+      const G4double dum0     = kAlpha*fCurrentIZ*(invbeta1-invbeta2);
+      if (dum0 < gExpNumLimit) {
+        dxsec = 0.0;
+      } else {
+        dxsec *= G4Exp(dum0);
+      }
     } else {
-      cross = 0.0;
+      dxsec = 0.0;
     }
   }
-  
-  return cross;
+  return dxsec;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void 
-G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp, 
-                                        const G4MaterialCutsCouple* couple,
-                                        const G4DynamicParticle* dp,
-                                        G4double cutEnergy,
-                                        G4double maxEnergy)
+void
+G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+                                         const G4MaterialCutsCouple* couple,
+                                         const G4DynamicParticle* dp,
+                                         G4double cutEnergy,
+                                         G4double maxEnergy)
 {
-  G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double cut  = std::min(cutEnergy, kineticEnergy);
-  G4double emax = std::min(maxEnergy, kineticEnergy);
-  if(cut >= emax) { return; }
-
-  SetupForMaterial(particle, couple->GetMaterial(), kineticEnergy);
-
-  const G4Element* elm = 
-    SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
-  SetCurrentElement(elm->GetZ());
-  G4int Z = G4int(currentZ);
-
-  totalEnergy = kineticEnergy + particleMass;
-  densityCorr = densityFactor*totalEnergy*totalEnergy;
-  G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
+  const G4double kinEnergy    = dp->GetKineticEnergy();
+  const G4double logKinEnergy = dp->GetLogKineticEnergy();
+  const G4double tmin = std::min(cutEnergy, kinEnergy);
+  const G4double tmax = std::min(maxEnergy, kinEnergy);
+  if (tmin >= tmax) {
+    return;
+  }
+  // set local variables and select target element
+  SetupForMaterial(fPrimaryParticle, couple->GetMaterial(), kinEnergy);
+  const G4Element* elm = SelectTargetAtom(couple, fPrimaryParticle, kinEnergy,
+                                          logKinEnergy, tmin, tmax);
+  fCurrentIZ = std::max(std::min(elm->GetZasInt(),gMaxZet-1), 1);
+  //
+  const G4double totMomentum = std::sqrt(kinEnergy*(fPrimaryTotalEnergy+kMC2));
   /*
-  G4cout << "G4SeltzerBergerModel::SampleSecondaries E(MeV)= " 
-         << kineticEnergy/MeV
-         << " Z= " << Z << " cut(MeV)= " << cut/MeV 
-         << " emax(MeV)= " << emax/MeV << " corr= " << densityCorr << G4endl;
+  G4cout << "G4SeltzerBergerModel::SampleSecondaries E(MeV)= "
+         << kinEnergy/MeV
+         << " Z= " << fCurrentIZ << " cut(MeV)= " << tmin/MeV
+         << " emax(MeV)= " << tmax/MeV << " corr= " << fDensityCorr << G4endl;
   */
-  G4double xmin = G4Log(cut*cut + densityCorr);
-  G4double xmax = G4Log(emax*emax  + densityCorr);
-  G4double y = G4Log(kineticEnergy/MeV);
-
-  G4double gammaEnergy, v; 
-
-  // majoranta
-  G4double x0 = cut/kineticEnergy;
-  G4double vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.02;
-  //  G4double invbeta1 = 0;
-
-  // majoranta corrected for e-
-  if(isElectron && x0 < 0.97 && 
-     ((kineticEnergy > epeaklimit) || (kineticEnergy < elowlimit))) {
-    G4double ylim = std::min(ylimit[Z],1.1*dataSB[Z]->Value(0.97,y,idx,idy));
-    if(ylim > vmax) { vmax = ylim; }
+  // sample emitted photon energy either by rejection or from samplign tables
+  const G4double gammaEnergy = !fIsUseSamplingTables
+        ? SampleEnergyTransfer(kinEnergy, logKinEnergy, tmin, tmax)
+        : gSBSamplingTable->SampleEnergyTransfer(kinEnergy, logKinEnergy, tmin, 
+                     fDensityCorr, fCurrentIZ, couple->GetIndex(), fIsElectron);
+  // should never happen under normal conditions but protect it
+  if (gammaEnergy <= 0.) {
+    return;
   }
-  if(x0 < 0.05) { vmax *= 1.2; }
-
-  //G4cout<<"y= "<<y<<" xmin= "<<xmin<<" xmax= "<<xmax
-  //<<" vmax= "<<vmax<<G4endl;
-  static const G4int ncountmax = 100;
-  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
-  G4double rndm[2];
-
-  for(G4int nn=0; nn<ncountmax; ++nn) {
-    rndmEngine->flatArray(2, rndm);
-    G4double x = G4Exp(xmin + rndm[0]*(xmax - xmin)) - densityCorr;
-    if(x < 0.0) { x = 0.0; }
-    gammaEnergy = sqrt(x);
-    G4double x1 = gammaEnergy/kineticEnergy;
-    v = dataSB[Z]->Value(x1, y, idx, idy);
-
-    // correction for positrons        
-    if(!isElectron) {
-      G4double e1 = kineticEnergy - cut;
-      G4double invbeta1 = (e1 + particleMass)/sqrt(e1*(e1 + 2*particleMass));
-      G4double e2 = kineticEnergy - gammaEnergy;
-      G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
-      G4double xxx = twopi*fine_structure_const*currentZ*(invbeta1 - invbeta2);
-
-      if(xxx < expnumlim) { v = 0.0; }
-      else { v *= G4Exp(xxx); }
-    }
-   
-    if (v > 1.05*vmax && nwarn < 5) {
-      ++nwarn;
-      G4ExceptionDescription ed;
-      ed << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
-         << v << " > " << vmax << " by " << v/vmax
-         << " Niter= " << nn 
-         << " Egamma(MeV)= " << gammaEnergy
-         << " Ee(MeV)= " << kineticEnergy
-         << " Z= " << Z << "  " << particle->GetParticleName();
-     
-      if ( 20 == nwarn ) {
-        ed << "\n ### G4SeltzerBergerModel Warnings stopped";
-      }
-      G4Exception("G4SeltzerBergerModel::SampleScattering","em0044",
-                  JustWarning, ed,"");
-
-    }
-    if(v >= vmax*rndm[1]) { break; }
-  }
-
   //
-  // angles of the emitted gamma. ( Z - axis along the parent particle)
-  // use general interface
-  //
-
-  G4ThreeVector gammaDirection = 
-    GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
-                                              Z, couple->GetMaterial());
-
-  // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* gamma = 
-    new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
+  // angles of the emitted gamma. ( Z - axis along the parent particle) use
+  // general interface
+  G4ThreeVector gamDir = GetAngularDistribution()->SampleDirection(dp,
+            fPrimaryTotalEnergy-gammaEnergy, fCurrentIZ, couple->GetMaterial());
+  // create G4DynamicParticle object for the emitted Gamma
+  G4DynamicParticle* gamma = new G4DynamicParticle(fGammaParticle, gamDir,
+                                                   gammaEnergy);
   vdp->push_back(gamma);
-  
-  G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
-                             - gammaEnergy*gammaDirection).unit();
-
+  //
+  // compute post-interaction kinematics of the primary e-/e+
+  G4ThreeVector dir = 
+    (totMomentum*dp->GetMomentumDirection()-gammaEnergy*gamDir).unit();
+  const G4double finalE = kinEnergy - gammaEnergy;
   /*
   G4cout << "### G4SBModel: v= "
          << " Eg(MeV)= " << gammaEnergy
@@ -349,37 +306,125 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
          << " DirE " << direction << " DirG " << gammaDirection
          << G4endl;
   */
-  // energy of primary
-  G4double finalE = kineticEnergy - gammaEnergy;
-
-  // stop tracking and create new secondary instead of primary
-  if(gammaEnergy > SecondaryThreshold()) {
+  // if secondary gamma energy is higher than threshold(very high by default)
+  // then stop tracking the primary particle and create new secondary e-/e+
+  // instead of the primary
+  if (gammaEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
-    G4DynamicParticle* el = 
-      new G4DynamicParticle(const_cast<G4ParticleDefinition*>(particle),
-                            direction, finalE);
+    G4DynamicParticle* el = new G4DynamicParticle(
+             const_cast<G4ParticleDefinition*>(fPrimaryParticle), dir, finalE);
     vdp->push_back(el);
-
-    // continue tracking
-  } else {
-    fParticleChange->SetProposedMomentumDirection(direction);
+  } else { // continue tracking the primary e-/e+ otherwise
+    fParticleChange->SetProposedMomentumDirection(dir);
     fParticleChange->SetProposedKineticEnergy(finalE);
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4AutoLock.hh"
-namespace { G4Mutex SeltzerBergerModelMutex = G4MUTEX_INITIALIZER; }
-void G4SeltzerBergerModel::InitialiseForElement(const G4ParticleDefinition*, 
-                                                G4int Z)
+// sample emitted photon energy by usign rejection
+G4double
+G4SeltzerBergerModel::SampleEnergyTransfer(const G4double kinEnergy,
+                                           const G4double logKinEnergy,
+                                           const G4double tmin,
+                                           const G4double tmax)
 {
-  G4AutoLock l(&SeltzerBergerModelMutex);
-  // G4cout << "G4SeltzerBergerModel::InitialiseForElement Z= " << Z << G4endl;
-  if(nullptr == dataSB[Z]) { ReadData(Z); }
+  // min max of the transformed variable: x(k) = ln(k^2+k_p^2) that is in
+  // [ln(k_c^2+k_p^2), ln(E_k^2+k_p^2)]
+  const G4double xmin   = G4Log(tmin*tmin+fDensityCorr);
+  const G4double xrange = G4Log(tmax*tmax+fDensityCorr)-xmin;
+  const G4double y      = logKinEnergy;
+  // majoranta
+  const G4double x0 = tmin/kinEnergy;
+  G4double vmax;
+  if (!gSBDCSData[fCurrentIZ]) {
+    InitialiseForElement(nullptr, fCurrentIZ);
+  }
+  vmax = gSBDCSData[fCurrentIZ]->Value(x0, y, fIndx, fIndy)*1.02;
+  //
+  static const G4double kEPeakLim = 300.*CLHEP::MeV;
+  static const G4double kELowLim  =  20.*CLHEP::keV;
+  // majoranta corrected for e-
+  if (fIsElectron && x0 < 0.97 && 
+      ((kinEnergy>kEPeakLim) || (kinEnergy<kELowLim))) {
+    G4double ylim = std::min(gYLimitData[fCurrentIZ],
+                         1.1*gSBDCSData[fCurrentIZ]->Value(0.97,y,fIndx,fIndy));
+    vmax = std::max(vmax, ylim);
+  }
+  if (x0 < 0.05) {
+    vmax *= 1.2;
+  }
+  //G4cout<<"y= "<<y<<" xmin= "<<xmin<<" xmax= "<<xmax
+  //<<" vmax= "<<vmax<<G4endl;
+  static const G4int kNCountMax = 100;
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
+  G4double rndm[2];
+  G4double gammaEnergy, v;
+  for (G4int nn = 0; nn < kNCountMax; ++nn) {
+    rndmEngine->flatArray(2, rndm);
+    gammaEnergy = 
+      std::sqrt(std::max(G4Exp(xmin + rndm[0]*xrange)-fDensityCorr,0.));
+    v = gSBDCSData[fCurrentIZ]->Value(gammaEnergy/kinEnergy, y, fIndx, fIndy);
+    // e+ correction
+    if (!fIsElectron) {
+      const G4double       e1 = kinEnergy - tmin;
+      const G4double invbeta1 = (e1+kMC2)/std::sqrt(e1*(e1+2.*kMC2));
+      const G4double       e2 = kinEnergy-gammaEnergy;
+      const G4double invbeta2 = (e2+kMC2)/std::sqrt(e2*(e2+2.*kMC2));
+      const G4double     dum0 = kAlpha*fCurrentIZ*(invbeta1-invbeta2);
+      if (dum0 < gExpNumLimit) {
+        v = 0.0;
+      } else {
+        v *= G4Exp(dum0);
+      }
+    }
+    if (v > 1.05*vmax && fNumWarnings < 11) {
+      ++fNumWarnings;
+      G4ExceptionDescription ed;
+      ed << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
+         << v << " > " << vmax << " by " << v/vmax
+         << " Niter= " << nn
+         << " Egamma(MeV)= " << gammaEnergy
+         << " Ee(MeV)= " << kinEnergy
+         << " Z= " << fCurrentIZ << "  " << fPrimaryParticle->GetParticleName();
+      //
+      if (10 == fNumWarnings) {
+        ed << "\n ### G4SeltzerBergerModel Warnings stopped";
+      }
+      G4Exception("G4SeltzerBergerModel::SampleScattering","em0044",
+                  JustWarning, ed,"");
+    }
+    if (v >= vmax*rndm[1]) {
+      break;
+    }
+  }
+  return gammaEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4SeltzerBergerModel::InitialiseForElement(const G4ParticleDefinition*,
+                                                G4int Z)
+{
+  if (!gSBDCSData[Z]) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&theSBMutex);
+    if (!gSBDCSData[Z]) {
+#endif
+      ReadData(Z);
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&theSBMutex);
+#endif
+  } 
+}
 
+void G4SeltzerBergerModel::SetupForMaterial(const G4ParticleDefinition*,
+                                            const G4Material* mat,
+                                            G4double kineticEnergy)
+{
+  fDensityFactor      = gMigdalConstant*mat->GetElectronDensity();
+  // calculate threshold for density effect: gamma*k_p = sqrt(fDensityCorr)
+  fPrimaryKinEnergy   = kineticEnergy;
+  fPrimaryTotalEnergy = kineticEnergy+CLHEP::electron_mass_c2;
+  fDensityCorr        = fDensityFactor*fPrimaryTotalEnergy*fPrimaryTotalEnergy;
+  fIsLPMActive        = LPMFlag();
+}
 

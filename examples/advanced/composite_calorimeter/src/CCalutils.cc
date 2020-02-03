@@ -34,7 +34,7 @@
 #include <sstream>
 
 
-G4String operator+(const G4String& str, const int i) {
+G4String operator+(const G4String& str, const G4int i) {
   std::ostringstream os;
   os << str << i <<'\0';
   G4String back = os.str();  
@@ -42,7 +42,7 @@ G4String operator+(const G4String& str, const int i) {
 }
 
 
-G4String operator+(const G4String& str, const double i) {
+G4String operator+(const G4String& str, const G4double i) {
   std::ostringstream os;
   os << str << i <<'\0';
   G4String back = os.str();  
@@ -113,8 +113,8 @@ std::istream& jump(std::istream& is) {
 }
 
 
-bool openGeomFile(std::ifstream& is, 
-		  const G4String& pathname, const G4String& filename) {
+G4bool openGeomFile(std::ifstream& is, 
+                    const G4String& pathname, const G4String& filename) {
   G4String fullname = pathname+"/"+filename;
   is.open( fullname.c_str() );
   if (!is) {

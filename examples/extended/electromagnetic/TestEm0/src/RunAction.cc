@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm0/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 93512 2015-10-23 13:45:07Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,6 +132,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
      }  
   }
   
+<<<<<<< HEAD
+=======
+  // write html documentation, if requested
+  char* htmlDocName = std::getenv("G4PhysListName");   // file name 
+  char* htmlDocDir  = std::getenv("G4PhysListDocDir"); // directory
+  if (htmlDocName && htmlDocDir) {
+    G4LossTableManager::Instance()->DumpHtml();
+  }
+  
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // print list of processes
   G4cout << "\n  processes :                ";
   for (size_t j=0; j<emName.size();j++)

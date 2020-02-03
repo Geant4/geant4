@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Orb.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Orb.icc
-//
 // Implementation of inline methods of G4Orb
 // --------------------------------------------------------------------
 
@@ -41,10 +33,18 @@ G4double G4Orb::GetRadius() const
 }
 
 inline
+G4double G4Orb::GetRadialTolerance() const
+{
+  return 2*halfRmaxTol;
+}
+
+inline
 void G4Orb::SetRadius(G4double newRmax)
 {
   fRmax=newRmax;
-  fCubicVolume= 0.;
+  Initialize();
+ 
+  fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
 }

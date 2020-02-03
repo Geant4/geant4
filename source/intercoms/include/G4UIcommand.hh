@@ -23,13 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4UIcommand.hh 77563 2013-11-26 09:03:18Z gcosmo $
-//
-//
+// G4UIcommand
 
-#ifndef G4UIcommand_h
-#define G4UIcommand_h 1
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
+#ifndef G4UIcommand_hh
+#define G4UIcommand_hh 1
 
 #include "G4UIparameter.hh"
 class G4UImessenger;
@@ -64,8 +63,8 @@ class G4UIcommand
   public:
       virtual ~G4UIcommand();
 
-      G4int operator==(const G4UIcommand &right) const;
-      G4int operator!=(const G4UIcommand &right) const;
+      G4bool operator==(const G4UIcommand &right) const;
+      G4bool operator!=(const G4UIcommand &right) const;
 
       virtual G4int DoIt(G4String parameterList);
       G4String GetCurrentValue();
@@ -132,7 +131,7 @@ class G4UIcommand
   public:
       inline const G4String & GetRange() const
       { return rangeString; };
-      inline G4int GetGuidanceEntries() const
+      inline size_t GetGuidanceEntries() const
       { return commandGuidance.size(); }
       inline const G4String & GetGuidanceLine(G4int i) const
       { return commandGuidance[i]; }
@@ -140,7 +139,7 @@ class G4UIcommand
       { return commandPath; }
       inline const G4String & GetCommandName() const
       { return commandName; }
-      inline G4int GetParameterEntries() const
+      inline size_t GetParameterEntries() const
       { return parameter.size(); }
       inline G4UIparameter * GetParameter(G4int i) const
       { return parameter[i]; }
@@ -151,8 +150,8 @@ class G4UIcommand
   public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
       {
-  parameter.push_back( newParameter );
-  newVal.resize( parameter.size() );
+        parameter.push_back( newParameter );
+        newVal.resize( parameter.size() );
       }
       //  Defines a parameter. This method is used by the derived command classes
       // but the user can directly use this command when he/she defines a command
@@ -169,10 +168,10 @@ class G4UIcommand
   public:
       inline const G4String GetTitle() const
       {
-      if(commandGuidance.size() == 0)
-      { return G4String("...Title not available..."); }
-      else
-      { return commandGuidance[0]; }
+        if(commandGuidance.size() == 0)
+          { return G4String("...Title not available..."); }
+        else
+          { return commandGuidance[0]; }
       }
 
   protected:
@@ -195,9 +194,28 @@ class G4UIcommand
     { return workerThreadOnly; }
 
   protected:
+    G4int commandFailureCode;
+    G4String failureDescription;
+
+  public:
+    inline void CommandFailed( G4int errCode, G4ExceptionDescription& ed )
+    { commandFailureCode = errCode; failureDescription = ed.str(); }
+    inline void CommandFailed( G4ExceptionDescription& ed )
+    { commandFailureCode = 1; failureDescription = ed.str(); }
+    inline G4int IfCommandFailed() 
+    { return commandFailureCode; }
+    inline G4String& GetFailureDescription()
+    { return failureDescription; }
+    inline void ResetFailure()
+    { commandFailureCode = 0; failureDescription = ""; }
+    
+  protected:
     G4int CheckNewValue(const char* newValue);
 
     // --- the following is used by CheckNewValue() --------
+  protected:
+    using yystype = G4UItokenNum::yystype;
+    using tokenNum = G4UItokenNum::tokenNum;
   private:
     G4int TypeCheck(const char* t);
     G4int RangeCheck(const char* t);

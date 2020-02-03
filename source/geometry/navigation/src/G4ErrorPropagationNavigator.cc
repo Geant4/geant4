@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// class G4ErrorPropagationNavigator implementation
 //
-// $Id: G4ErrorPropagationNavigator.cc 87697 2014-12-17 09:40:21Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file
+// Author: Pedro Arce, CIEMAT
 // --------------------------------------------------------------------
 
 #include "G4ErrorPropagationNavigator.hh"
@@ -63,24 +60,24 @@ ComputeStep ( const G4ThreeVector &pGlobalPoint,
               const G4double pCurrentProposedStepLength,
                     G4double &pNewSafety )
 {
-  G4double safetyGeom= DBL_MAX;
+  G4double safetyGeom = DBL_MAX;
    
   G4double Step = G4Navigator::ComputeStep(pGlobalPoint, pDirection,
                                            pCurrentProposedStepLength,
                                            safetyGeom);
   
-  G4ErrorPropagatorData * g4edata
+  G4ErrorPropagatorData* g4edata
     = G4ErrorPropagatorData::GetErrorPropagatorData();
 
-  if (g4edata !=0)
+  if ( g4edata != nullptr )
   {
     const G4ErrorTarget* target = g4edata->GetTarget();
-    if( target != 0 )
+    if( target != nullptr )
     {
-      G4double StepPlane= target->GetDistanceFromPoint(pGlobalPoint,pDirection);
+      G4double StepPlane=target->GetDistanceFromPoint(pGlobalPoint,pDirection);
 
-      if( StepPlane < 0. ) // Negative means target is crossed, will not be found
-      {
+      if( StepPlane < 0. ) // Negative means target is crossed,
+      {                    // will not be found
         StepPlane = DBL_MAX; 
       }
 #ifdef G4VERBOSE
@@ -93,7 +90,7 @@ ComputeStep ( const G4ThreeVector &pGlobalPoint,
       }
 #endif
 
-      if(StepPlane<Step)
+      if( StepPlane < Step )
       {
 #ifdef G4VERBOSE
         if( G4ErrorPropagatorData::verbose() >= 2 )
@@ -113,8 +110,10 @@ ComputeStep ( const G4ThreeVector &pGlobalPoint,
     }
   }
   G4double safetyTarget = TargetSafetyFromPoint(pGlobalPoint);
-   // Avoid call to G4Navigator::ComputeSafety - which could have side effects
-  pNewSafety= std::min(safetyGeom, safetyTarget); 
+
+  // Avoid call to G4Navigator::ComputeSafety - which could have side effects
+  //
+  pNewSafety = std::min(safetyGeom, safetyTarget); 
 
 #ifdef G4VERBOSE
   if( G4ErrorPropagatorData::verbose() >= 3 )
@@ -131,17 +130,17 @@ ComputeStep ( const G4ThreeVector &pGlobalPoint,
 //-------------------------------------------------------------------
 
 G4double G4ErrorPropagationNavigator::
-TargetSafetyFromPoint( const G4ThreeVector &pGlobalpoint )
+TargetSafetyFromPoint( const G4ThreeVector& pGlobalpoint )
 {
-  G4double safety= DBL_MAX;
+  G4double safety = DBL_MAX;
 
-  G4ErrorPropagatorData *g4edata
+  G4ErrorPropagatorData* g4edata
     = G4ErrorPropagatorData::GetErrorPropagatorData();
 
-  if (g4edata !=0)
+  if ( g4edata != nullptr )
   {
     const G4ErrorTarget* target = g4edata->GetTarget();
-    if( target != 0 )
+    if( target != nullptr )
     {
        safety = target->GetDistanceFromPoint(pGlobalpoint);
     }
@@ -167,30 +166,30 @@ ComputeSafety( const G4ThreeVector &pGlobalPoint,
 //-------------------------------------------------------------------
 
 G4ThreeVector G4ErrorPropagationNavigator::
-GetGlobalExitNormal(const G4ThreeVector& point, G4bool* valid)
+GetGlobalExitNormal( const G4ThreeVector& point, G4bool* valid )
 {
-  G4ErrorPropagatorData *g4edata
+  G4ErrorPropagatorData* g4edata
         = G4ErrorPropagatorData::GetErrorPropagatorData();
-  const G4ErrorTarget* target = 0;
+  const G4ErrorTarget* target = nullptr;
 
   G4ThreeVector normal(0.0, 0.0, 0.0);
   G4double      distance= 0;
   
   // Determine which 'geometry' limited the step
-  if (g4edata)
+  if ( g4edata != nullptr )
   {
     target = g4edata->GetTarget();
-    if(target)
+    if( target != nullptr )
     {
       distance = target->GetDistanceFromPoint(point);
     }
   }
   
-  if( distance > kCarTolerance   // Not reached the target.
-     || (!target) )
-            //  If a target does not exist, this seems the best we can do
+  if( distance > kCarTolerance || (target == nullptr) )
+    // Not reached the target or if a target does not exist,
+    // this seems the best we can do
   {
-    normal= G4Navigator::GetGlobalExitNormal(point, valid);
+    normal = G4Navigator::GetGlobalExitNormal(point, valid);
   }
   else
   {
@@ -198,11 +197,11 @@ GetGlobalExitNormal(const G4ThreeVector& point, G4bool* valid)
     {
       case G4ErrorTarget_GeomVolume:
         // The volume is in the 'real' mass geometry
-        normal= G4Navigator::GetGlobalExitNormal(point, valid);
+        normal = G4Navigator::GetGlobalExitNormal(point, valid);
         break;
       case G4ErrorTarget_TrkL:
-        normal= G4ThreeVector( 0.0, 0.0, 0.0);
-        *valid= false;
+        normal = G4ThreeVector( 0.0, 0.0, 0.0);
+        *valid = false;
         G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal",
                     "Geometry1003",
                     JustWarning, "Unexpected value of Target type");
@@ -211,17 +210,16 @@ GetGlobalExitNormal(const G4ThreeVector& point, G4bool* valid)
       case G4ErrorTarget_CylindricalSurface:
         const G4ErrorSurfaceTarget* surfaceTarget=
           static_cast<const G4ErrorSurfaceTarget*>(target);
-        normal= surfaceTarget->GetTangentPlane(point).normal().unit();
-        *valid= true;
+        normal = surfaceTarget->GetTangentPlane(point).normal().unit();
+        *valid = true;
         break;
 
 //      default:
-//        normal= G4ThreeVector( 0.0, 0.0, 0.0);
-//        *valid= false;
+//        normal= G4ThreeVector( 0.0, 0.0, 0.0 );
+//        *valid = false;
 //        G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal",
 //                    "Geometry:003",
 //                    FatalException, "Impossible value of Target type");
-//        exit(1);
 //        break;
     }
   }

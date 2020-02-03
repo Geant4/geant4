@@ -26,7 +26,10 @@
 /// \file biasing/ReverseMC01/src/RMC01DoubleWithWeightHit.cc
 /// \brief Implementation of the RMC01DoubleWithWeightHit class
 //
+<<<<<<< HEAD
 // $Id: RMC01DoubleWithWeightHit.cc 71233 2013-06-12 13:16:05Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01DoubleWithWeightHit
@@ -79,7 +82,7 @@ const RMC01DoubleWithWeightHit& RMC01DoubleWithWeightHit::operator=(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int RMC01DoubleWithWeightHit::operator==
+G4bool RMC01DoubleWithWeightHit::operator==
                                          (const RMC01DoubleWithWeightHit &right) const
 {
  return(fValue == right.fValue && fWeight == right.fWeight);

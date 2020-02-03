@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EqEMFieldWithEDM.hh 69699 2013-05-13 08:50:30Z gcosmo $
-//
-//
-// class G4EqEMFieldWithEDM
+// G4EqEMFieldWithEDM
 //
 // Class description:
 //
@@ -35,12 +31,10 @@
 // electric and magnetic field, with spin tracking for both MDM and
 // EDM terms.
 
-// History:
-// - Created. Kevin Lynch, 19.02.2009, based on G4EqEMFieldWithSpin
+// Created: Kevin Lynch, 19.02.2009 - Based on G4EqEMFieldWithSpin
 // -------------------------------------------------------------------
-
-#ifndef G4EQEMFIELDWITHEDM_hh
-#define G4EQEMFIELDWITHEDM_hh
+#ifndef G4EQEMFIELDWITHEDM_HH
+#define G4EQEMFIELDWITHEDM_HH
 
 #include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
@@ -51,7 +45,7 @@ class G4EqEMFieldWithEDM : public G4EquationOfMotion
 {
   public:  // with description
 
-    G4EqEMFieldWithEDM(G4ElectroMagneticField *emField );
+    G4EqEMFieldWithEDM(G4ElectroMagneticField* emField );
 
     ~G4EqEMFieldWithEDM();
   
@@ -85,4 +79,4 @@ class G4EqEMFieldWithEDM : public G4EquationOfMotion
 
 };
 
-#endif /* G4EQEMFIELDWITHEDM */
+#endif

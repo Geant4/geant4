@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: test09.cc 86624 2014-11-14 08:59:40Z kmura $
 // ====================================================================
 //   test09.cc
 //
@@ -47,7 +46,7 @@ public:
 
   AClass operator+(const AClass& aclass) {
     AClass atemp;
-    atemp.ival= ival + aclass.ival;    
+    atemp.ival= ival + aclass.ival;
     return atemp;
   }
 
@@ -85,4 +84,3 @@ BOOST_PYTHON_MODULE(test09)
     .def(self_ns::str(self))
     ;
 }
-

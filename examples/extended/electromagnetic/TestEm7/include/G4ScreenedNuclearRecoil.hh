@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm7/include/G4ScreenedNuclearRecoil.hh
 /// \brief Definition of the G4ScreenedNuclearRecoil class
 //
+<<<<<<< HEAD
 // $Id: G4ScreenedNuclearRecoil.hh 91266 2015-06-29 06:48:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // G4ScreenedNuclearRecoil.hh,v 1.24 2008/05/01 19:58:59 marcus Exp

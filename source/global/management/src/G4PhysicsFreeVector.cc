@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -45,18 +44,17 @@
 
 #include "G4PhysicsFreeVector.hh"
 
-
 G4PhysicsFreeVector::G4PhysicsFreeVector() 
   : G4PhysicsVector()
 {
   type = T_G4PhysicsFreeVector;
 }
 
-G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
+G4PhysicsFreeVector::G4PhysicsFreeVector(size_t length)
   : G4PhysicsVector()
 {
   type = T_G4PhysicsFreeVector;
-  numberOfNodes = theNbin;
+  numberOfNodes = length;
 
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
@@ -70,6 +68,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
 
 G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector, 
                                          const G4DataVector& theDataVector)
+  : G4PhysicsVector()
 {
   type = T_G4PhysicsFreeVector;
   numberOfNodes = theBinVector.size();
@@ -79,32 +78,16 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
 
   for (size_t i=0; i<numberOfNodes; ++i)
   {
-     binVector.push_back(theBinVector[i]);
-     dataVector.push_back(theDataVector[i]);
+    binVector.push_back(theBinVector[i]);
+    dataVector.push_back(theDataVector[i]);
   }
-
-  edgeMin = binVector[0];
-  edgeMax = binVector[numberOfNodes-1];
+  if(numberOfNodes > 0) 
+  {
+    edgeMin = binVector[0];
+    edgeMax = binVector[numberOfNodes-1];
+  }
 }  
 
 G4PhysicsFreeVector::~G4PhysicsFreeVector()
-{
-}
+{}
 
-void G4PhysicsFreeVector::PutValue( size_t theBinNumber, 
-				    G4double theBinValue, 
-                                    G4double theDataValue )
-{
-  binVector[theBinNumber]  = theBinValue;
-  dataVector[theBinNumber] = theDataValue;
-
-  if( theBinNumber == numberOfNodes-1 )
-  {
-     edgeMax = binVector[numberOfNodes-1];
-  }
-
-  if( theBinNumber == 0 )
-  {
-     edgeMin = binVector[0];
-  }
-}

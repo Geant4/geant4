@@ -1,5 +1,4 @@
 // -*- C++ -*-
-// $Id:$
 // ---------------------------------------------------------------------------
 
 #include "CLHEP/Vector/ThreeVector.h"
@@ -27,20 +26,20 @@ const Transform3D::Transform3D_row Transform3D::operator[](int i) const {
 }
 
 inline
-Transform3D::Transform3D(const CLHEP::HepRotation & m, const CLHEP::Hep3Vector & v) {
-  xx_= m.xx(); xy_= m.xy(); xz_= m.xz();
-  yx_= m.yx(); yy_= m.yy(); yz_= m.yz();
-  zx_= m.zx(); zy_= m.zy(); zz_= m.zz();
+Transform3D::Transform3D(const CLHEP::HepRotation & mt, const CLHEP::Hep3Vector & v) {
+  xx_= mt.xx(); xy_= mt.xy(); xz_= mt.xz();
+  yx_= mt.yx(); yy_= mt.yy(); yz_= mt.yz();
+  zx_= mt.zx(); zy_= mt.zy(); zz_= mt.zz();
   dx_= v.x();  dy_= v.y();  dz_= v.z();
 }
 
 inline
 CLHEP::HepRotation
 Transform3D::getRotation() const {
-  CLHEP::HepRotation m;
-  return m.rotateAxes(CLHEP::Hep3Vector(xx_,yx_,zx_),
-		      CLHEP::Hep3Vector(xy_,yy_,zy_),
-                      CLHEP::Hep3Vector(xz_,yz_,zz_));
+  CLHEP::HepRotation mt;
+  return mt.rotateAxes(CLHEP::Hep3Vector(xx_,yx_,zx_),
+                       CLHEP::Hep3Vector(xy_,yy_,zy_),
+                       CLHEP::Hep3Vector(xz_,yz_,zz_));
 }
 
 inline
@@ -52,10 +51,10 @@ Transform3D::getTranslation() const {
 //   I N L I N E S   F O R   R O T A T I O N
 
 inline
-Rotate3D::Rotate3D(const CLHEP::HepRotation & m) {
-  xx_= m.xx(); xy_= m.xy(); xz_= m.xz();
-  yx_= m.yx(); yy_= m.yy(); yz_= m.yz();
-  zx_= m.zx(); zy_= m.zy(); zz_= m.zz();
+Rotate3D::Rotate3D(const CLHEP::HepRotation & mt) {
+  xx_= mt.xx(); xy_= mt.xy(); xz_= mt.xz();
+  yx_= mt.yx(); yy_= mt.yy(); yz_= mt.yz();
+  zx_= mt.zx(); zy_= mt.zy(); zz_= mt.zz();
   dx_= 0;      dy_= 0;      dz_= 0;
 }
 

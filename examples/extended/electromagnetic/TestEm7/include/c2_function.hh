@@ -36,7 +36,10 @@
  */
 
 //
+<<<<<<< HEAD
 // $Id: c2_function.hh 66587 2012-12-21 11:06:44Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #ifndef __has_c2_function_hh
 #define __has_c2_function_hh 1
@@ -132,7 +135,7 @@ public:
     as well as the template functions
     inverse_integrated_density_function().
  
- For a discussion of memory management, see \ref memory_management
+ For a discussion of memory management, see ref memory_management
  
  */
 template <typename float_type=double> class c2_function {
@@ -185,6 +188,7 @@ public:
     inline float_type operator () (float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
         { return value_with_derivatives(x, yprime, yprime2); } 
         
+<<<<<<< HEAD
         /// \brief solve f(x)==value very efficiently, with explicit knowledge of derivatives of the function
         ///
     /// find_root solves by iterated inverse quadratic extrapolation for a solution to f(x)=y.  It
@@ -290,6 +294,194 @@ public:
         /// \param [in,out] yvals vector of function values corresponding to \a xvals (if non-null)
         /// \return a new, sampled representation, if \a derivs is 2.  A null pointer if \a derivs is 0 or 1.
         c2_piecewise_function_p<float_type> *adaptively_sample(float_type amin, float_type amax,
+=======
+  /// \brief solve f(x)==value very efficiently, with explicit knowledge 
+  /// of derivatives of the function
+  ///
+  /// find_root solves by iterated inverse quadratic extrapolation 
+  /// for a solution 
+  /// to f(x)=y.  It includes checks against bad convergence, so it should 
+  /// never be 
+  /// able to fail.  Unlike typical secant method or fancier Brent's 
+  /// method finders, 
+  /// this does not depend in any strong wasy on the brackets, 
+  /// unless the finder has 
+  /// to resort to successive approximations to close in on a root. 
+  /// Often, it is possible 
+  /// to make the brackets equal to the domain of the function, if there is
+  /// any clue as to where the root lies, as given by the parameter \a start.  
+  /// \param lower_bracket the lower bound for the search
+  /// \param upper_bracket the upper bound for the search.  
+  /// Function sign must be 
+  /// opposite to that at \a lower_bracket
+  /// \param start starting value for the search
+  /// \param value the value of the function being sought 
+  /// (solves f(x) = \a value)
+  /// \param[out] error If pointer is zero, errors raise exception. 
+  /// Otherwise, returns error here.
+  /// \param[out] final_yprime If pointer is not zero, 
+  /// return derivative of function 
+  /// at root
+  /// \param[out] final_yprime2 If pointer is not zero, 
+  /// return second derivative of 
+  /// function at root
+  /// \return the position of the root.
+  /// \see ref rootfinder_subsec "Root finding sample" 
+  float_type find_root(float_type lower_bracket, float_type upper_bracket, 
+                       float_type start, 
+                       float_type value, int *error=0, 
+                       float_type *final_yprime=0, 
+                       float_type *final_yprime2=0 ) const /* throw(c2_exception) */; 
+  /// solve f(x)=value
+  /// partial_integrals uses a method with an error O(dx**10) with 
+  /// full information from 
+  /// the derivatives, and falls back to lower order methods 
+  /// if informed of incomplete 
+  /// derivatives. It uses exact midpoint splitting of the intervals 
+  /// for recursion, 
+  /// resulting in no recomputation of the function during recursive 
+  /// descent at previously 
+  /// computed points.
+  /// \param xgrid points between which to evaluate definite integrals.  
+  /// \param partials if non-NULL, a vector in which to receive the 
+  /// partial integrals.
+  /// It will automatically be sized apprpropriately, 
+  /// if provided, to contain \a n - 1 
+  /// elements where \a n is the length of \a xgrid  
+  /// \param abs_tol the absolute error bound for each segment
+  /// \param rel_tol the fractional error bound for each segment.  
+  /// If the error is smaller than either the relative or absolute tolerance, 
+  /// the integration step is finished.
+  /// \param derivs number of derivatives to trust, 
+  /// which sets the order of the integrator.  
+  /// The order is 3*\a derivs + 4. \a derivs can be 0, 1, or 2.
+  /// \param adapt if true, use recursive adaptation, 
+  /// otherwise do simple evaluation on 
+  /// the grid provided with no error checking.
+  /// \param extrapolate if true, use simple Richardson 
+  /// extrapolation on the final 2 steps 
+  /// to reduce the error. \return sum of partial integrals, 
+  /// which is the definite integral 
+  /// from the first value in \a xgrid to the last.
+  float_type partial_integrals(std::vector<float_type> xgrid, 
+                               std::vector<float_type> *partials = 0,
+                               float_type abs_tol=1e-12, 
+                               float_type rel_tol=1e-12, 
+                               int derivs=2, bool adapt=true, 
+                               bool extrapolate=true) 
+    const /* throw(c2_exception) */;
+        
+  /// \brief a fully-automated integrator which uses the information 
+  /// provided by the 
+  /// get_sampling_grid() function to figure out what to do.
+  ///
+  /// It returns the integral of the function over the domain requested
+  /// with error tolerances as specified.  It is just a front-end 
+  /// to partial_integrals()
+  /// 
+  /// \param amin lower bound of the domain for integration
+  /// \param amax upper bound of the domain for integration
+  /// \param partials if non-NULL, a vector in which to receive 
+  /// the partial integrals.
+  /// It will automatically be sized appropriately, 
+  /// if provided, to contain \a n - 1 
+  /// elements where \a n is the length of \a xgrid  
+  /// \param abs_tol the absolute error bound for each segment
+  /// \param rel_tol the fractional error bound for each segment.  
+  /// If the error is smaller than either the relative or absolute tolerance, 
+  /// the integration 
+  /// step is finished.
+  /// \param derivs number of derivatives to trust, which sets the 
+  /// order of the integrator.  
+  /// The order is 3*\a derivs + 4. \a derivs can be 0, 1, or 2.
+  /// \param adapt if true, use recursive adaptation, 
+  /// otherwise do simple evaluation on 
+  /// the grid provided with no error checking.
+  /// \param extrapolate if true, use simple Richardson 
+  /// extrapolation on the final 2 steps 
+  /// to reduce the error. \return sum of partial integrals, 
+  /// which is the definite integral 
+  /// from the first value in \a xgrid to the last.
+  float_type integral(float_type amin, float_type amax, 
+                      std::vector<float_type> *partials = 0,
+                      float_type abs_tol=1e-12, float_type rel_tol=1e-12, 
+                      int derivs=2, bool adapt=true, bool extrapolate=true) 
+    const /* throw(c2_exception) */;
+
+  /// \brief create a c2_piecewise_function_p from 
+  /// c2_connector_function_p segments which 
+  /// is a representation of the parent function to the specified accuracy, 
+  /// but maybe much cheaper to evaluate
+  ///
+  /// This method has three modes, depending on the \a derivs flag. 
+  ///
+  /// If \a derivs is 2,
+  /// it computes a c2_piecewise_function_p representation of its 
+  /// parent function, 
+  /// which may be a much faster 
+  /// function to use in codes if the parent function is expensive.  
+  /// If \a xvals 
+  /// and \a yvals are non-null,
+  /// it will also fill them in with the function values at each grid point the 
+  /// adaptive algorithm chooses.
+  ///
+  /// If \a derivs is 1, this does not create the connectors, 
+  /// and returns an null pointer, but will fill in the \a xvals and \a yvals 
+  /// vectors with values of the function at points such that the 
+  /// linear interpolation 
+  /// error between the points
+  /// is bounded by the tolerance values given.  
+  /// Because it uses derivative information 
+  /// from the function to manage the 
+  /// error control, it is almost completely free of issues with 
+  /// missing periods of oscillatory functions,
+  /// even with no information provided in the sampling grid.
+  /// This is typically useful for sampling a function for plotting.
+  ///
+  /// If \a derivs is 0, this does something very like what it does 
+  /// if \a derivs = 1, 
+  /// but without derivatives.  
+  /// Instead, to compute the intermediate value of the function 
+  /// for error control, 
+  /// it just uses 
+  /// 3-point parabolic interpolation.  
+  /// This is useful amost exclusively for converting 
+  /// a non-c2_function,
+  /// with no derivatives, but wrapped in a c2_classic_function wrapper, 
+  /// into a table 
+  /// of values to seed an interpolating_function_p.
+  /// Note, however, that without derivatives, this is very 
+  /// susceptible to missing 
+  /// periods of oscillatory 
+  /// functions, so it is important to set a sampling grid 
+  /// which isn't too much coarser 
+  /// than the typical oscillations.
+  ///
+  /// \note the \a sampling_grid of the returned function matches the 
+  /// \a sampling_grid of its parent.
+  /// \see ref sample_function_for_plotting "Adaptive Sampling Examples"
+  /// \param amin lower bound of the domain for sampling
+  /// \param amax upper bound of the domain for sampling
+  /// \param abs_tol the absolute error bound for each segment
+  /// \param rel_tol the fractional error bound for each segment. 
+  /// \param derivs if 0 or 1, return a useless function, 
+  /// but fill in the \a xvals and 
+  /// \a yvals vectors (if non-null).
+  /// Also, if 0 or 1, tolerances refer to linear interpolation, not high-order 
+  /// interpolation. 
+  /// If 2, return a full piecewise collection of 
+  /// c2_connector_function_p segments.  
+  /// See discussion above.
+  /// \param [in,out] xvals vector of abscissas at which the function 
+  /// was actually 
+  /// sampled (if non-null)
+  /// \param [in,out] yvals vector of function values corresponding to \a xvals 
+  /// (if non-null)
+  /// \return a new, sampled representation, if \a derivs is 2.  
+  /// A null pointer if \a derivs is 0 or 1.
+  c2_piecewise_function_p<float_type> *adaptively_sample(
+                 float_type amin, float_type amax,
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
                  float_type abs_tol=1e-12, float_type rel_tol=1e-12,
                  int derivs=2, std::vector<float_type> *xvals=0, std::vector<float_type> *yvals=0) const throw(c2_exception);
         
@@ -1479,7 +1671,44 @@ public:
                 const std::vector<float_type> &bins, const std::vector<float_type> &binheights, bool splined=true)
                 throw(c2_exception);
         
+<<<<<<< HEAD
         virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception);
+=======
+  /// \brief initialize from a grid of points and a 
+  /// c2_function (un-normalized) to an 
+  /// interpolator which, when evaluated with a 
+  /// uniform random variate on [0,1] returns 
+  /// random numbers
+  /// distributed as the input function.
+  /// \see  ref random_subsec "Arbitrary random generation"
+  /// inverse_integrated_density starts with a probability density  
+  /// std::vector, 
+  /// generates the integral, 
+  /// and generates an interpolating_function_p  of the inverse function which, 
+  /// when evaluated using a uniform random on [0,1] returns values
+  /// with a density distribution equal to the input distribution
+  /// If the data are passed in reverse order (large X first), 
+  /// the integral is carried out 
+  /// from the big end.
+  /// \param bincenters the positions at which to sample the 
+  /// function \a binheights
+  /// \param binheights a function which describes the density 
+  /// of the random number 
+  /// distribution to be produced.
+  /// \return an initialized interpolator, which 
+  /// if evaluated randomly with a uniform variate on [0,1] produces numbers
+  /// distributed according to \a binheights
+  interpolating_function_p<float_type> & load_random_generator_function(
+     const std::vector<float_type> &bincenters, 
+     const c2_function<float_type> &binheights)
+    /* throw(c2_exception) */;
+
+  interpolating_function_p<float_type> & load_random_generator_bins(
+    const std::vector<float_type> &bins, 
+    const std::vector<float_type> &binheights, 
+    bool splined=true)
+    /* throw(c2_exception) */;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
         
         /// \brief destructor
         virtual ~interpolating_function_p() { delete &fTransform; } 
@@ -1900,7 +2129,7 @@ protected:
  derivatives, too, unlike the case of a simple root-finding inverse.  This means
  it can be integrated (for example) quite efficiently.
 
- \see \ref combined_inversion_hinting_sampling
+ \see ref combined_inversion_hinting_sampling
 
  The factory function c2_factory::inverse_function() creates *new c2_inverse_function_p
 */
@@ -1921,6 +2150,7 @@ public:
     ///  It is used in value_with_derivatives() to guess where to start the root finder.
     /// \param x the abscissa for which an estimate is needed
     virtual float_type get_start_hint(float_type x) const 
+<<<<<<< HEAD
                 { return hinting_function.valid()? hinting_function(x) : start_hint; } 
 
         /// \brief set or unset the approximate function used to start the root finder
@@ -1947,6 +2177,43 @@ public:
         /// \param hint_func the container holding the function
         void set_hinting_function(const c2_const_ptr<float_type> hint_func) 
                 { hinting_function=hint_func; }
+=======
+  { return hinting_function.valid()? hinting_function(x) : start_hint; } 
+
+  /// \brief set or unset the approximate function used to start the root finder
+  /// \anchor set_hinting_function_discussion
+  /// A hinting function is mostly useful if the evaluation of this inverse is
+  /// going to be carried out in very non-local order, 
+  /// so the root finder has to start over 
+  /// for each step.  If most evaluations are going to be made 
+  /// in fairly localized clusters 
+  /// (scanning through the function, for example), the default mechanism used 
+  /// (which just remembers the last point)
+  /// is almost certainly faster.
+  /// 
+  /// Typically, the hinting function is likely to be set up by 
+  /// creating the inverse function,
+  /// and then adaptively sampling an interpolating function from it, 
+  /// and then using the result
+  /// to hint it.  Another way, if the parent function is already 
+  /// an interpolating function, 
+  /// is just to create a version of the parent with the x & y 
+  /// coordinates reversed.
+  /// 
+  /// \see ref combined_inversion_hinting_sampling
+  ///
+  /// \param hint_func the function that is an approximate inverse 
+  /// of the parent of 
+  /// this inverse_function
+  void set_hinting_function(const c2_function<float_type> *hint_func) 
+  { hinting_function.set_function(hint_func); }
+  /// \brief set the hinting function from a pointer.
+  /// 
+  /// See \ref set_hinting_function_discussion "discussion"
+  /// \param hint_func the container holding the function
+  void set_hinting_function(const c2_const_ptr<float_type> hint_func) 
+  { hinting_function=hint_func; }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
         
 protected:
         c2_inverse_function_p() {} // do not allow naked construction... it is usually an accident.
@@ -1990,7 +2257,12 @@ public:
 ///
 /// This is usually used in conjunction with c2_piecewise_function_p to assemble an apparently seamless 
 /// function from a series of segments. 
+<<<<<<< HEAD
 /// \see \ref piecewise_applications_subsec "Sample Applications" and \ref c2_function::adaptively_sample() "Adaptive sampling"
+=======
+/// \see ref piecewise_applications_subsec "Sample Applications" 
+/// and \ref c2_function::adaptively_sample() "Adaptive sampling"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ///
 /// The factory function c2_factory::connector_function() creates *new c2_connector_function_p
 template <typename float_type=double> class c2_connector_function_p : public c2_function<float_type> {
@@ -2059,7 +2331,7 @@ protected:
 /// If this is used with functions with a large domain, or which generate very dense sampling grids,
 /// it could eat a lot of memory.  Do not abuse this by using functions which can generate gigantic grids.
 /// 
-/// \see \ref piecewise_applications_subsec "Sample Applications" \n
+/// \see ref piecewise_applications_subsec "Sample Applications" \n
 /// c2_plugin_function_p page \n
 /// c2_connector_function_p page \n
 /// \ref c2_function::adaptively_sample() "Adaptive sampling"

@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm1/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
+<<<<<<< HEAD
 // $Id: SteppingAction.cc 81776 2014-06-05 08:41:01Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,12 +43,21 @@
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 #include "G4UnitsTable.hh"
+#include "G4NIELCalculator.hh"
+#include "G4ICRU49NuclearStoppingModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(EventAction* event)
-:G4UserSteppingAction(), fEventAction(event)
-{ }
+  :G4UserSteppingAction(), fEventAction(event)
+{
+  fNIELCalculator = new G4NIELCalculator(new G4ICRU49NuclearStoppingModel(),1);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::~SteppingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,10 +68,24 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
    
   G4double EdepStep = aStep->GetTotalEnergyDeposit();
+<<<<<<< HEAD
   if (EdepStep > 0.) {         run->AddEdep(EdepStep);
                       fEventAction->AddEdep(EdepStep);
+=======
+
+  if (EdepStep > 0.) {
+    run->AddEdep(EdepStep);
+    fEventAction->AddEdep(EdepStep);
   }
- const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+  G4double niel = fNIELCalculator->ComputeNIEL(aStep);
+  if(niel > 0.) {
+    run->AddNIEL(niel);
+    fEventAction->AddNIEL(niel);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+  }
+
+  const G4VProcess* process = 
+    aStep->GetPostStepPoint()->GetProcessDefinedStep();
   if (process) run->CountProcesses(process->GetProcessName());
 
   // step length of primary particle

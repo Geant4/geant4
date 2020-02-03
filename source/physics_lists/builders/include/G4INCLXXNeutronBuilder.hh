@@ -82,7 +82,5 @@ class G4INCLXXNeutronBuilder : public G4VNeutronBuilder
 
 };
 
-// 2011 by P. Kaitaniemi
-
 #endif
 

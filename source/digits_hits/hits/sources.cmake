@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -32,6 +31,7 @@ GEANT4_DEFINE_MODULE(NAME G4hits
         G4HCofThisEvent.hh
         G4THitsCollection.hh
         G4THitsMap.hh
+        G4THitsVector.hh
         G4VHit.hh
         G4VHitsCollection.hh
     SOURCES

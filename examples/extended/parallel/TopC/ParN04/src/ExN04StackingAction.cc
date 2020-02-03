@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04StackingAction.cc 78055 2013-12-03 08:27:48Z gcosmo $
 //
-/// \file parallel/ParN04/src/ExN04StackingAction.cc
+/// \file ExN04StackingAction.cc
 /// \brief Implementation of the ExN04StackingAction class
 //
 

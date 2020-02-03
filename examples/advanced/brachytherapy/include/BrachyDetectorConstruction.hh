@@ -30,6 +30,7 @@
 //    ****************************************
 // This class manages the geometry of the simulation experimental set-up
 //
+// S. Guatelli, A. Le
 
 #ifndef BrachyDetectorConstruction_H
 #define BrachyDetectorConstruction_H 1

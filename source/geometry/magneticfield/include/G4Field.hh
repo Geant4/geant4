@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Field.hh 97486 2016-06-03 10:45:04Z gcosmo $
-//
-//
-// class G4Field
+// G4Field
 //
 // Class description:
 //
@@ -47,15 +43,9 @@
 // enable the integration of a particle's position, momentum and, optionally, 
 // spin.  For this a field and its equation of motion must follow the
 // same convention for the order of field components in the array "fieldArr"
-// -------------------------------------------------------------------
-// History:
-// - Created:  John Apostolakis, 10.03.1997
-// - Modified: 
-//   V. Grichine     8 Nov 2001: Extended "Point" arg to [4] array to add time
-//   J. Apostolakis  5 Nov 2003: Added virtual method DoesFieldChangeEnergy()
-//   J. Apostolakis 31 Aug 2004: Information on convention for components
-// -------------------------------------------------------------------
 
+// Created: John Apostolakis, 10.03.1997
+// -------------------------------------------------------------------
 #ifndef G4FIELD_HH
 #define G4FIELD_HH
 
@@ -66,8 +56,13 @@ class G4Field
 {
   public:  // with description
 
-      virtual void  GetFieldValue( const  double Point[4],
-                                          double *fieldArr ) const = 0;
+      G4Field( G4bool gravityOn = false);
+      G4Field( const G4Field& );
+      virtual ~G4Field();
+      G4Field& operator = (const G4Field& p); 
+
+      virtual void GetFieldValue( const G4double Point[4],
+                                        G4double* fieldArr ) const = 0;
        // Given the position time vector 'Point', 
        // return the value of the field in the array fieldArr.
        //  Notes: 
@@ -80,35 +75,37 @@ class G4Field
        //      array 'fieldArr' are determined by the type of field.
        //      See for example the class G4ElectroMagneticField.
 
-      G4Field( G4bool gravityOn= false);
-      G4Field( const G4Field & );
-      virtual ~G4Field();
-      G4Field& operator = (const G4Field &p); 
+      virtual G4bool DoesFieldChangeEnergy() const = 0;
+        // Each type/class of field should respond this accordingly
+        // For example:
+        //   - an electric field     should return "true"
+        //   - a pure magnetic field should return "false"
 
-     // A field signature function that can be used to insure
-     // that the Equation of motion object and the G4Field object
-     // have the same "field signature"?
- 
-      virtual G4bool   DoesFieldChangeEnergy() const= 0 ;
-       //  Each type/class of field should respond this accordingly
-       //  For example:
-       //    - an electric field     should return "true"
-       //    - a pure magnetic field should return "false"
+      inline G4bool IsGravityActive() const;
+        //  Does this field include gravity?
 
-      G4bool   IsGravityActive() const { return fGravityActive;}
-       //  Does this field include gravity?
       inline void SetGravityActive( G4bool OnOffFlag );
     
       virtual G4Field* Clone() const;
-       // Implements cloning, needed by G4 MT
+        // Implements cloning, needed by multi-threading
+
+      static constexpr G4int MAX_NUMBER_OF_COMPONENTS = 24;
 
   private:
 
-      G4bool  fGravityActive;
+      G4bool fGravityActive = false;
 };
 
-inline void  G4Field::SetGravityActive( G4bool OnOffFlag )
+// Inline methods ...
+
+inline G4bool G4Field::IsGravityActive() const
+{
+  return fGravityActive;
+}
+
+inline void G4Field::SetGravityActive( G4bool OnOffFlag )
 { 
-  fGravityActive= OnOffFlag; 
-} 
-#endif /* G4FIELD_HH */
+  fGravityActive = OnOffFlag; 
+}
+ 
+#endif

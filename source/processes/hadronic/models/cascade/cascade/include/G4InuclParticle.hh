@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticle.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
@@ -86,11 +85,11 @@ public:
   G4InuclParticle& operator=(const G4InuclParticle& right);
 
   // Equality (comparison) operator -- NOT SORTING
-  bool operator==(const G4InuclParticle& right) {
+  G4bool operator==(const G4InuclParticle& right) {
     return ( (&right == this) || (pDP == right.pDP) );	// Ignore model code
   }
 
-  bool operator!=(const G4InuclParticle& right) {
+  G4bool operator!=(const G4InuclParticle& right) {
     return !operator==(right);
   }
 

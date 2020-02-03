@@ -1,4 +1,3 @@
-$Id: History 97466 2016-06-03 09:59:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +16,173 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 20, 2016, G.Cosmo (digits_hits-V10-01-02)
+November 19th, 2019 G. Cosmo (digits_hits-V10-05-07)
+- Fixed more cases of implicit type conversions.
+
+November 15th, 2019 G. Cosmo (digits_hits-V10-05-06)
+- Fixed implicit type conversions from size_t to G4int in digits and hits
+  classes (collections, vectors, maps).
+- Pass G4String by const reference in digits and hist collections base classes.
+
+July 4th, 2019 S. Wenzel (digits_hits-V10-05-05)
+- G4SDStructure : pass G4String by reference
+
+May 29th, 2019 M. Asai (digits_hits-V10-05-04)
+- G4PSSphereSurfaceFlux : fix track weight forgotten from SphereSurfaceFlux.
+
+March 13th, 2019 M. Asai (digits_hits-V10-05-03)
+- Defining unit categories for UI commands that take units. Co-working with
+  intercoms-V10-05-02.
+
+March 10th, 2019 M. Asai (digits_hits-V10-05-02)
+- G4SDManager, G4VSDFilter :
+    Cleanly deleting all the G4VSDFilter objects at the end of program.
+
+January 31st, 2019 I. Hrivnacova (digits_hits-V10-05-01)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+December 20th, 2018 G. Cosmo (digits_hits-V10-05-00)
+- Fixed shadowing compilation warning in G4ScoringBox and G4ScoringCylinder.
+
+October 30th, 2018 I. Hrivnacova (digits_hits-V10-04-11,12)
+- Removed the dependence on analysis:
+  Introduced a new interface class, G4VScoreNtupleWriter, in 
+  digits_hits/utils and moved the G4ScoreNtupleWriter, G4ScoreNtupleWriterMessenger 
+  classes in a new extended example analysis/B3aScoreWriter.
+
+October 27th, 2018 I. Hrivnacova (digits_hits-V10-04-10)
+- Fixed utils/GNUmakefile: added analysis includes
+
+October 26th, 2018 I. Hrivnacova (digits_hits-V10-04-08,09)
+- Removed digiwdefs.hh (added in digits_hits-V10-04-06) - not used 
+
+October 26th, 2018 J. Madsen (digits_hits-V10-04-07)
+- Fix to Windows problems for G4ScoreNtupleWriter, it turns out that
+  the issue was curiously not directly a DLL import/export problem but instead
+  functions declared as static within the class being implemented outside
+  the class (in the header) as inline -- which caused missing symbols on
+  Windows similar to when DLLs are not exported/imported correctly
+
+October 25th, 2018 I. Hrivnacova (digits_hits-V10-04-05,06)
+- Added  DLLs import/export definitions for Windows
+
+October 25th, 2018 I. Hrivnacova (digits_hits-V10-04-04)
+- Avoid using static data of enum type in G4ScoreNtupleWriter
+  (which seems to be causing problems on windows)
+
+Oct 25th, 2018 J. Madsen (digits_hits-V10-04-03)
+- updated G4THitsMap:
+  - generic GetContainer(), size(), GetIndex(...), GetObject(...),
+    begin(), end(), cbegin(), and cend()
+- added G4THitsVector
+  - generic GetContainer(), size(), GetIndex(...), GetObject(...),
+    begin(), end(), cbegin(), and cend()
+  - compatible with G4THitsMap such that vectors can be used to score
+    over the course of a run (saving memory)
+  - allows the underlying container to store data as non-pointer types
+    e.g., G4VTHitsVector<T, std::vector<T>> with the default being
+    G4VTHitsVector<T, std::vector<T*>>
+
+October 25th, 2018 I. Hrivnacova (digits_hits-V10-04-02)
+- Added G4ScoreNtupleWriter and its messenger which implement
+  automated storing of hits collections of G4THitsMap<G4double>
+  type (user by primitive scorers) vith Geant4 analysis tools.
+
+May 17th, 2018 J. Madsen (digits_hits-V10-04-01)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+January 19, 2018 M. Asai (digits_hits-V10-04-00)
+- G4ScoringMessenger G4ScoreQuantityMessenger:
+- UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
+
+August 1, 2017 M. Asai (digits_hits-V10-03-02)
+- G4SDStructure.cc : fix propagating warning flag. Addressing bug
+  report #1993.
+
+May 2, 2017 J. Madsen (digits_hits-V10-03-01)
+- Update to G4THitsMap to fix issue where G4Colour was
+  using G4THitsMap<G4StatDouble> and the allocation
+  was causing += to white instead of += to black
+  
+April 20, 2017 J. Madsen (digit_hits-V10-03-00)
+- Files modified : hits/include/G4THitsMap.hh
+- Extension of the G4THitsMap class + bug fix
+  - Renamed G4THitsMap to G4VTHitsMap
+    - although G4VTHitsMap is not a pure virtual class
+      it has an additional template parameter for the map
+      type, so it is not intended to be used directly
+  - Made G4VTHitsMap more generic in accepting the type
+    of data stored (with more generic template overloads not
+    specific to G4double and G4StatDouble)
+  - Fixed a bug in initializing G4StatDouble entries
+    - G4StatDouble(0) is not the same as G4StatDouble().
+      The former starts off with a count = 1, and the
+      latter starts with a count = 0.
+  - Added G4THitsMap
+    - deriving from G4VTHitsMap and having the same
+      functionality as before
+  - Added G4THitsMultiMap
+    - which functions like G4THitsMap but all entries are
+      stored
+  - Added G4THitsUnorderedMap
+    - which functions like G4THitsMap but uses an
+      unordered_map
+  - Added G4THitsUnorderedMultiMap
+    - which functions like G4THitsMap but stores all
+      entries in an unordered multimap
+  - typedef for map_type, value_type, iterator, and const_iterator
+    for future generic usage
+    - e.g. replacing
+      std::map<G4int, G4double*> theMap = this->GetMap()
+      with
+      map_type theMap = this->GetMap()
+  - defined begin(), end(), cbegin(), cend() so now
+    G4VTHitsMap can be used in range-based loops
+    - e.g. for(auto itr : hitMap) { ... }
+  
+Nov 15, 2016, A.Dotti (digits_hits-V10-02-09,-10)
+- Fix bug #1908, remove implicit addition to manager of 
+  SD passed via G4MultiSD proxy
+
+Sep 8, 2016, G.Cosmo (digits_hits-V10-02-08)
+- G4THitsMap, G4VScoringMesh : further clean up with C++11 template
+
+Sep 7, 2016, G.Cosmo (digits_hits-V10-02-07)
+- Fixed utils/GNUmakefile for missing dependency on global/HEPNumerics,
+  now required.
+
+Sep 6, 2016, M.Asai (digits_hits-V10-02-06)
+- Further refinements.
+
+Sep 2, 2016, M.Asai (digits_hits-V10-02-05)
+- Built-in scorer now uses G4StatDouble.
+  Files modified :
+        utils/include/G4ScoringBox.hh
+        utils/include/G4ScoringCylinder.hh
+        utils/include/G4VScoringMesh.hh
+        utils/sources.cmake
+        utils/src/G4ScoringBox.cc
+        utils/src/G4ScoringCylinder.cc
+        utils/src/G4VScoreWriter.cc
+        utils/src/G4VScoringMesh.cc
+
+Apr 20, 2016, G.Cosmo (digits_hits-V10-02-04)
 - Fixed shadowing compilation warnings in G4VScoringMesh for 'ps'.
 
-Apr 15, 2016, G.Cosmo
-- Fixed typo in printing on cout in G4SDManager::AddNewDetector().
+Apr 15, 2016, G.Cosmo (digits_hits-V10-02-03)
+- Fixed type in printing on cout in G4SDManager::AddNewDetector().
 
-Dec 18, 2015, M.Asai
+Dec 18, 2015, M.Asai (digits_hits-V10-02-02)
 - While-loop check.
 
-Dec 8, 2015, M.Asai
+Dec 8, 2015, M.Asai (digits_hits-V10-02-01)
 - Further code clean up with C++11 features
 
-Dec 7, 2015, M.Asai
+Dec 7, 2015, M.Asai (digits_hits-V10-02-00)
 - Code clean up with C++11 features
 
 Sept 4, 2015, A.Dotti (digits_hits-V10-01-01)

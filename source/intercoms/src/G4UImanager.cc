@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc 94366 2015-11-13 08:15:49Z gcosmo $
 //
 //
 // ---------------------------------------------------------------------
@@ -49,34 +48,49 @@
 #include <sstream>
 #include <fstream>
 
-G4ThreadLocal G4UImanager * G4UImanager::fUImanager = 0;
-G4ThreadLocal G4bool G4UImanager::fUImanagerHasBeenKilled = false;
-G4UImanager * G4UImanager::fMasterUImanager = 0;
+G4UImanager*& G4UImanager::fUImanager()
+{
+    G4ThreadLocalStatic G4UImanager* _instance = nullptr;
+    return _instance;
+}
+
+G4bool& G4UImanager::fUImanagerHasBeenKilled()
+{
+    G4ThreadLocalStatic bool _instance = false;
+    return _instance;
+}
+
+G4UImanager*& G4UImanager::fMasterUImanager()
+{
+    static G4UImanager* _instance = nullptr;
+    return _instance;
+}
+G4bool G4UImanager::doublePrecisionStr = false;
 
 G4int G4UImanager::igThreadID = -1;
 
 G4UImanager * G4UImanager::GetUIpointer()
 {
-  if(!fUImanager)
+  if(!fUImanager())
   {
-    if(!fUImanagerHasBeenKilled)
+    if(!fUImanagerHasBeenKilled())
     {
-      fUImanager = new G4UImanager;
-      fUImanager->CreateMessenger();
+      fUImanager() = new G4UImanager;
+      fUImanager()->CreateMessenger();
     }
   }
-  return fUImanager;
+  return fUImanager();
 }
 
 G4UImanager * G4UImanager::GetMasterUIpointer()
-{ return fMasterUImanager; }
+{ return fMasterUImanager(); }
 
 G4UImanager::G4UImanager()
   : G4VStateDependent(true),
     UImessenger(0), UnitsMessenger(0), CoutMessenger(0),
     isMaster(false),bridges(0),
     ignoreCmdNotFound(false), stackCommandsForBroadcast(false),
-    threadID(-1), threadCout(0) 
+    threadID(-1), threadCout(0), lastRC(0)
 {
   savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
@@ -85,8 +99,8 @@ G4UImanager::G4UImanager()
   savedParameters = nullString;
   verboseLevel = 0;
   saveHistory = false;
-  session = NULL;
-  g4UIWindow = NULL;
+  session = nullptr;
+  g4UIWindow = nullptr;
   SetCoutDestination(session);
   pauseAtBeginOfEvent = false;
   pauseAtEndOfEvent = false;
@@ -111,7 +125,7 @@ G4UImanager::~G4UImanager()
     { delete *itr; }
     delete bridges;
   }
-  SetCoutDestination(NULL);
+  SetCoutDestination(nullptr);
   histVec.clear();
   if(saveHistory) historyFile.close();
   delete CoutMessenger;
@@ -119,8 +133,8 @@ G4UImanager::~G4UImanager()
   delete UImessenger;
   delete treeTop;
   delete aliasList;
-  fUImanagerHasBeenKilled = true;
-  fUImanager = NULL;
+  fUImanagerHasBeenKilled() = true;
+  fUImanager() = nullptr;
   if(commandStack)
   {
     commandStack->clear();
@@ -162,16 +176,21 @@ G4UImanager::G4UImanager(const G4UImanager& ui)
 
 const G4UImanager & G4UImanager::operator=(const G4UImanager &right)
 { return right; }
-G4int G4UImanager::operator==(const G4UImanager &right) const
+G4bool G4UImanager::operator==(const G4UImanager &right) const
 { return (this==&right); }
-G4int G4UImanager::operator!=(const G4UImanager &right) const
+G4bool G4UImanager::operator!=(const G4UImanager &right) const
 { return (this!=&right); }
+
+void G4UImanager::UseDoublePrecisionStr(G4bool val)
+{ doublePrecisionStr = val; }
+G4bool G4UImanager::DoublePrecisionStr()
+{ return doublePrecisionStr; }
 
 G4String G4UImanager::GetCurrentValues(const char * aCommand)
 {
   G4String theCommand = aCommand;
   savedCommand = treeTop->FindPath( theCommand );
-  if( savedCommand == NULL )
+  if( savedCommand == nullptr )
   {
     G4cerr << "command not found" << G4endl;
     return G4String();
@@ -182,7 +201,7 @@ G4String G4UImanager::GetCurrentValues(const char * aCommand)
 G4String G4UImanager::GetCurrentStringValue(const char * aCommand,
 G4int parameterNumber, G4bool reGet)
 {
-  if(reGet || savedCommand == NULL)
+  if(reGet || savedCommand == nullptr)
   {
     savedParameters = GetCurrentValues( aCommand );
   }
@@ -204,11 +223,11 @@ G4int parameterNumber, G4bool reGet)
 G4String G4UImanager::GetCurrentStringValue(const char * aCommand,
 const char * aParameterName, G4bool reGet)
 {
-  if(reGet || savedCommand == NULL)
+  if(reGet || savedCommand == nullptr)
   {
     G4String parameterValues = GetCurrentValues( aCommand );
   }
-  for(G4int i=0;i<savedCommand->GetParameterEntries();i++)
+  for(size_t i=0;i<savedCommand->GetParameterEntries();++i)
   {
     if( aParameterName ==
       savedCommand->GetParameter(i)->GetParameterName() )
@@ -268,8 +287,8 @@ G4int parameterNumber, G4bool reGet)
 void G4UImanager::AddNewCommand(G4UIcommand * newCommand)
 {
   treeTop->AddNewCommand( newCommand );
-  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
-  { fMasterUImanager->AddWorkerCommand(newCommand); }
+  if(fMasterUImanager()!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager()->AddWorkerCommand(newCommand); }
 }
 
 void G4UImanager::AddWorkerCommand(G4UIcommand * newCommand)
@@ -280,8 +299,8 @@ void G4UImanager::AddWorkerCommand(G4UIcommand * newCommand)
 void G4UImanager::RemoveCommand(G4UIcommand * aCommand)
 {
   treeTop->RemoveCommand( aCommand );
-  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
-  { fMasterUImanager->RemoveWorkerCommand(aCommand); }
+  if(fMasterUImanager()!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager()->RemoveWorkerCommand(aCommand); }
 }
 
 void G4UImanager::RemoveWorkerCommand(G4UIcommand * aCommand)
@@ -293,7 +312,9 @@ void G4UImanager::ExecuteMacroFile(const char * fileName)
 {
   G4UIsession* batchSession = new G4UIbatch(fileName,session);
   session = batchSession;
+  lastRC = 0;
   G4UIsession* previousSession = session->SessionStart();
+  lastRC = session->GetLastReturnCode();
   delete session;
   session = previousSession;
 }
@@ -384,6 +405,14 @@ void G4UImanager::Foreach(const char * macroFile,const char * variableName,
     vl += cd;
     SetAlias(vl);
     ExecuteMacroFile(FindMacroPath(macroFile));
+    if(lastRC!=0)
+    {
+      G4ExceptionDescription ed;
+      ed << "Loop aborted due to a command execution error - "
+         << "error code " << lastRC;
+      G4Exception("G4UImanager::Foreach","UIMAN0201",JustWarning,ed);
+      break;
+    }
   }
 }
 
@@ -404,7 +433,7 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
         G4cerr << aCommand << G4endl;
         for(G4int i=0;i<ia;i++) G4cerr << " ";
         G4cerr << "^" << G4endl;
-        G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
+        G4cerr << "Unmatched alias parenthesis -- command ignored" << G4endl;
         G4String nullStr;
         return nullStr;
       }
@@ -451,8 +480,8 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   G4String commandString;
   G4String commandParameter;
 
-  G4int i = aCommand.index(" ");
-  if( i != G4int(std::string::npos) )
+  size_t i = aCommand.index(" ");
+  if( i != std::string::npos )
   {
     commandString = aCommand(0,i);
     commandParameter = aCommand(i+1,aCommand.length()-(i+1));
@@ -497,7 +526,7 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   }
 
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );
-  if( targetCommand == NULL )
+  if( targetCommand == nullptr )
   {
     if(ignoreCmdNotFound)
     {
@@ -520,7 +549,22 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   { histVec.erase(histVec.begin()); }
   histVec.push_back(aCommand);
 
-  return targetCommand->DoIt( commandParameter );
+  targetCommand->ResetFailure();
+  G4int commandFailureCode = targetCommand->DoIt( commandParameter );
+  if(commandFailureCode==0)
+  {
+    G4int additionalFailureCode = targetCommand->IfCommandFailed();
+    if(additionalFailureCode > 0)
+    {
+      G4ExceptionDescription msg;
+      msg << targetCommand->GetFailureDescription() << "\n"
+          << "Error code : " << additionalFailureCode;
+      G4Exception("G4UImanager::ApplyCommand","UIMAN0123",
+                   JustWarning,msg);
+      commandFailureCode += additionalFailureCode;
+    }
+  }
+  return commandFailureCode;
 }
 
 void G4UImanager::StoreHistory(const char* fileName)
@@ -572,8 +616,8 @@ G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
     G4int i = targetDir.index("/",idx);
     G4String targetDirString = targetDir(0,i+1);
     comTree = comTree->GetTree(targetDirString);
-    if( comTree == NULL )
-    { return NULL; }
+    if( comTree == nullptr )
+    { return nullptr; }
     idx = i+1;
   }
   return comTree;

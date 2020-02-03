@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc 78932 2014-02-04 12:30:52Z vnivanch $
 //
 //---------------------------------------------------------------------------
 //
@@ -229,6 +228,9 @@ void G4EmStandardPhysicsSS::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4CoulombScattering* ss = new G4CoulombScattering();
+      if(G4EmParameters::Instance()->UseMottCorrection()) {
+	ss->SetEmModel(new G4eSingleCoulombScatteringModel());
+      }
 
       ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);

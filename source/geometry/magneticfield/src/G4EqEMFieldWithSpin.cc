@@ -23,16 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EqEMFieldWithSpin implementation
 //
-// $Id: G4EqEMFieldWithSpin.cc 95824 2016-02-26 08:45:54Z gcosmo $
-//
-//
-//  This is the standard right-hand side for equation of motion.
-//
-//  30.08.2007 Chris Gong, Peter Gumplinger
-//  14.02.2009 Kevin Lynch
-//  06.11.2009 Hiromi Iinuma
-//
+// Created: Chris Gong & Peter Gumplinger, 30.08.2007
 // -------------------------------------------------------------------
 
 #include "G4EqEMFieldWithSpin.hh"
@@ -55,8 +48,8 @@ G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin()
 
 void  
 G4EqEMFieldWithSpin::SetChargeMomentumMass(G4ChargeState particleCharge,
-                                            G4double MomentumXc,
-                                            G4double particleMass)
+                                           G4double MomentumXc,
+                                           G4double particleMass)
 {
    charge    = particleCharge.GetCharge();
    mass      = particleMass;
@@ -113,7 +106,7 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
 
    G4double inverse_velocity = Energy * pModuleInverse / c_light;
 
-   G4double cof1     = fElectroMagCof*pModuleInverse ;
+   G4double cof1 = fElectroMagCof*pModuleInverse ;
 
    dydx[0] = y[3]*pModuleInverse ;                         
    dydx[1] = y[4]*pModuleInverse ;                         
@@ -145,13 +138,19 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
    G4double pcharge;
-   if (charge == 0.) pcharge = 1.;
-   else pcharge = charge;
+   if (charge == 0.)
+   {
+     pcharge = 1.;
+   }
+   else
+   {
+     pcharge = charge;
+   }
 
    G4ThreeVector dSpin(0.,0.,0.);
-   if (Spin.mag2() != 0.) {
-      dSpin =
-      pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
+   if (Spin.mag2() != 0.)
+   {
+      dSpin = pcharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
                            // from Jackson
                            // -uce*Spin.cross(u.cross(EField)) );
                            // but this form has one less operation
@@ -162,5 +161,5 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    dydx[10] = dSpin.y();
    dydx[11] = dSpin.z();
 
-   return ;
+   return;
 }

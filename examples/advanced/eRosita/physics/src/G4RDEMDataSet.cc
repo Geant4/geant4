@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id$
 // GEANT4 tag $Name:  $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -314,7 +317,7 @@ size_t G4RDEMDataSet::FindLowerBound(G4double x, G4DataVector* values) const
 
 G4String G4RDEMDataSet::FullFileName(const G4String& name) const
 {
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     G4Exception("G4RDEMDataSet::FullFileName()", "InvalidSetup",
                 FatalException, "G4LEDATA environment variable not set!");

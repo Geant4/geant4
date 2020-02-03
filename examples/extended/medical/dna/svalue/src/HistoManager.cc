@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
@@ -64,16 +71,21 @@ void HistoManager::Book()
   // enable inactivation of histograms
 
   // Define histograms start values
-  const G4int kMaxHisto = 8;
-  const G4String id[] = {"0", "1", "2", "3", "4", "5", "6", "7"};
+  const G4int kMaxHisto = 11;
+  const G4String id[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-  const G4String title[] = {"dummy",                                       //0
-                            "dummy2",                                      //1
-                            "total energy deposited in absorber",          //2
-                            "true track length of the primary particle",   //3
-                            "true step size of the primary particle",      //4
-                            "projected range of the primary particle",     //5
-                            "true track length of charged secondaries",    //6
+  const G4String title[] = {
+                            "kinetic energy of new e- track",              //0
+                            "kinetic energy of new e- track (log)",        //1
+                            "kinetic energy of new gamma track",           //2
+                            "kinetic energy of new gamma track (log)",     //3
+                            "charge of new track",                         //4
+                            "total energy deposited in cytoplasm",         //5
+                            "total energy deposited in nucleus",           //6
+                            "true track length of the primary particle",   //7
+                            "true step size of the primary particle",      //8
+                            "projected range of the primary particle",     //9
+                            "true track length of charged secondaries",    //10
                             "true step size of charged secondaries"};
 
   // Default values (to be reset via /analysis/h1/set command)               

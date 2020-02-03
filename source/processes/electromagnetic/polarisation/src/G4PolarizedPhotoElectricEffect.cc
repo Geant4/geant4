@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPhotoElectricEffect.cc 85018 2014-10-23 09:51:37Z gcosmo $
 //
 //
 //------------------ G4PolarizedPhotoElectricEffect physics process --
@@ -31,20 +30,19 @@
 //
 // -----------------------------------------------------------------------------
 
-#ifndef NOIONIZATIONAS
-
 #include "G4PolarizedPhotoElectricEffect.hh"
 #include "G4PolarizedPEEffectModel.hh"
 #include "G4Electron.hh"
+#include "G4Gamma.hh"
 #include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
-G4PolarizedPhotoElectricEffect::G4PolarizedPhotoElectricEffect(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+G4PolarizedPhotoElectricEffect::G4PolarizedPhotoElectricEffect(
+  const G4String& processName, G4ProcessType type)
+ : G4VEmProcess (processName, type), isInitialised(false)
 {
   SetBuildTableFlag(false);
   SetSecondaryParticle(G4Electron::Electron());
@@ -58,11 +56,20 @@ G4PolarizedPhotoElectricEffect::~G4PolarizedPhotoElectricEffect()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4PolarizedPhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
+G4bool 
+G4PolarizedPhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Gamma::Gamma());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void 
+G4PolarizedPhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!EmModel()) SetEmModel(new G4PolarizedPEEffectModel);
+    if(!EmModel()) { SetEmModel(new G4PolarizedPEEffectModel); }
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
@@ -76,4 +83,4 @@ void G4PolarizedPhotoElectricEffect::PrintInfo()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#endif // NOIONIZATIONAS
+

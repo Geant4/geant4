@@ -27,7 +27,10 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 93512 2015-10-23 13:45:07Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,40 +50,7 @@
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList(),
-  fEmPhysicsList(0),fEmName("local"),fMessenger(0)
-{    
-  G4LossTableManager::Instance();
-  
-  // set default cut value
-  SetDefaultCutValue(1.0*mm); 
-
-  fMessenger = new PhysicsListMessenger(this);
-
-  SetVerboseLevel(1);
-
-  // EM physics
-  fEmName = G4String("local");
-  fEmPhysicsList = new PhysListEmStandard(fEmName);
-  
-  //add new units for cross sections
-  // 
-  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
-  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{
-  delete fMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4EmParameters.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -124,6 +94,34 @@ PhysicsList::~PhysicsList()
 #include "G4Triton.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysicsList::PhysicsList() : G4VModularPhysicsList(),
+  fEmPhysicsList(nullptr), fEmName(""),
+  fMessenger(new PhysicsListMessenger(this))
+{    
+  // set default cut value
+  SetDefaultCutValue(1.0*mm); 
+
+  SetVerboseLevel(1);
+
+  AddPhysicsList("emstandard_opt0");
+  
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV,1*GeV);
+
+  //add new units for cross sections
+  // 
+  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
+  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysicsList::~PhysicsList()
+{
+  delete fMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -189,6 +187,7 @@ void PhysicsList::ConstructProcess()
   // Electromagnetic physics list
   //
   fEmPhysicsList->ConstructProcess();
+<<<<<<< HEAD
   
   // Em options
   //
@@ -211,6 +210,8 @@ void PhysicsList::ConstructProcess()
   //emOptions.SetSplineFlag(true);        //default
      
   emOptions.SetVerbose(0);  
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -270,6 +271,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
+<<<<<<< HEAD
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -288,6 +290,13 @@ void PhysicsList::SetCuts()
   G4VUserPhysicsList::SetCuts();
 
   DumpCutValuesTable();
+=======
+  
+  // Em options
+  //
+  G4EmParameters::Instance()->SetBuildCSDARange(true);    
+  G4EmParameters::Instance()->SetGeneralProcessActive(false);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -5,7 +5,7 @@
 #define tools_mat
 
 #ifdef TOOLS_MEM
-#include "mem"
+#include "../mem"
 #endif
 
 #include "MATCOM"
@@ -30,9 +30,13 @@ private:
   }
 #endif
 public:
-  mat() {
+  mat(
 #ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
+      bool a_inc = true
+#endif      
+      ) {
+#ifdef TOOLS_MEM
+    if(a_inc) mem::increment(s_class().c_str());
 #endif
 #ifdef TOOLS_MAT_NEW
     m_vec = new T[D*D];
@@ -159,21 +163,144 @@ inline nmat<T> copy(const mat<T,D>& a_from) {
   return v;
 }
 
+template <class VECTOR>
+inline void multiply(VECTOR& a_vec,const typename VECTOR::value_type& a_mat) {
+  //typedef typename VECTOR::size_type sz_t;
+  //sz_t number = a_vec.size();
+  //for(sz_t index=0;index<number;index++) a_vec[index] *= a_mat;
+  typedef typename VECTOR::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it *= a_mat;
+}
+
+template <class VECTOR>
+inline void multiply(VECTOR& a_vec,const typename VECTOR::value_type::elem_t& a_value) {
+  typedef typename VECTOR::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) (*it).multiply(a_value);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+/// related to complex numbers : //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
 template <class MAT> 
-inline void conjugate(MAT& a_m) {
+inline void conjugate(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT::elem_t&)) {
   typedef typename MAT::elem_t T;
   T* pos = const_cast<T*>(a_m.data());
   unsigned int D2 = a_m.dimension()*a_m.dimension();
   for(unsigned int i=0;i<D2;i++,pos++) {
-    *pos = _conj(*pos); //T = std::complex<>
+    *pos = a_conj(*pos); //T = std::complex<>
   }
 }
 
 template <class MAT> 
-inline void dagger(MAT& a_m) {
-  conjugate<MAT>(a_m);
+inline bool is_real(MAT& a_m,typename MAT::elem_t::value_type (*a_imag)(const typename MAT::elem_t&)) {
+  typedef typename MAT::elem_t T;
+  T* pos = const_cast<T*>(a_m.data());
+  unsigned int D2 = a_m.dimension()*a_m.dimension();
+  for(unsigned int i=0;i<D2;i++,pos++) {if(a_imag(*pos)) return false;}
+  return true;
+}
+
+template <class MAT,class PREC> 
+inline bool is_real_prec(MAT& a_m,typename MAT::elem_t::value_type (*a_imag)(const typename MAT::elem_t&),
+                         const PREC& a_prec,PREC(*a_fabs)(const typename MAT::elem_t::value_type&)) {\
+  typedef typename MAT::elem_t T;
+  T* pos = const_cast<T*>(a_m.data());
+  unsigned int D2 = a_m.dimension()*a_m.dimension();
+  for(unsigned int i=0;i<D2;i++,pos++) {if(a_fabs(a_imag(*pos))>=a_prec) return false;}
+  return true;
+}
+
+template <class MAT>
+inline bool is_imag(MAT& a_m,typename MAT::elem_t::value_type (*a_real)(const typename MAT::elem_t&)) {
+  typedef typename MAT::elem_t T;
+  T* pos = const_cast<T*>(a_m.data());
+  unsigned int D2 = a_m.dimension()*a_m.dimension();
+  for(unsigned int i=0;i<D2;i++,pos++) {if(a_real(*pos)) return false;}
+  return true;
+}
+
+template <class CMAT,class RMAT> 
+inline bool to_real(const CMAT& a_c,RMAT& a_r,typename CMAT::elem_t::value_type (*a_real)(const typename CMAT::elem_t&)) {
+  if(a_r.dimension()!=a_c.dimension()) return false;
+  typedef typename CMAT::elem_t CT;
+  const CT* cpos = a_c.data();
+  typedef typename RMAT::elem_t RT;
+  RT* rpos = const_cast<RT*>(a_r.data());
+  unsigned int D2 = a_c.dimension()*a_c.dimension();
+  for(unsigned int i=0;i<D2;i++,cpos++,rpos++) *rpos = a_real(*cpos);
+  return true;
+}
+
+template <class RMAT,class CMAT> 
+inline bool to_complex(const RMAT& a_r,CMAT& a_c) {
+  if(a_c.dimension()!=a_r.dimension()) return false;
+  typedef typename RMAT::elem_t RT;
+  const RT* rpos = a_r.data();
+  typedef typename CMAT::elem_t CT;
+  CT* cpos = const_cast<CT*>(a_c.data());
+  unsigned int D2 = a_r.dimension()*a_r.dimension();
+  for(unsigned int i=0;i<D2;i++,rpos++,cpos++) *cpos = CT(*rpos);
+  return true;
+}
+
+template <class MAT> 
+inline void dagger(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT::elem_t&)) {
+  conjugate<MAT>(a_m,a_conj);
   a_m.transpose();
 }
+
+template <class CMAT,class RMAT>
+inline bool decomplex(const CMAT& a_c,RMAT& a_r,
+                      typename CMAT::elem_t::value_type (*a_real)(const typename CMAT::elem_t&),
+                      typename CMAT::elem_t::value_type (*a_imag)(const typename CMAT::elem_t&)) {
+  //  CMAT = X+iY
+  //  RMAT = |  X  Y |
+  //         | -Y  X |
+  typedef typename CMAT::elem_t CT; //std::complex<double>
+  typedef typename RMAT::elem_t RT; //double
+  
+  unsigned int cdim = a_c.dimension();
+  if(a_r.dimension()!=2*cdim) {a_r.set_zero();return false;}  
+  RT value;unsigned int r,c;  
+  for(r=0;r<cdim;r++) {
+    for(c=0;c<cdim;c++) {
+      const CT& cvalue = a_c.value(r,c);
+      value = a_real(cvalue);      
+      a_r.set_value(r,c,value);
+      a_r.set_value(r+cdim,c+cdim,value);
+      value = a_imag(cvalue);      
+      a_r.set_value(r,c+cdim,value);
+      a_r.set_value(r+cdim,c,-value);
+    }
+  }
+  return true;
+}
+
+template <class VEC_CMAT,class VEC_RMAT>
+inline bool decomplex(
+ const VEC_CMAT& a_vc,VEC_RMAT& a_vr
+,typename VEC_CMAT::value_type::elem_t::value_type (*a_real)(const typename VEC_CMAT::value_type::elem_t&)
+,typename VEC_CMAT::value_type::elem_t::value_type (*a_imag)(const typename VEC_CMAT::value_type::elem_t&)
+) {
+  //  CMAT = X+iY
+  //  RMAT = |  X  Y |
+  //         | -Y  X |
+  typedef typename VEC_CMAT::size_type sz_t;
+  sz_t number = a_vc.size();
+  a_vr.resize(number);
+  for(sz_t index=0;index<number;index++) {
+    if(!decomplex(a_vc[index],a_vr[index],a_real,a_imag)) {
+      a_vr.clear();
+      return false;
+    }
+  }
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
 //for sf, mf :
 //template <class T,unsigned int D>
@@ -339,18 +466,52 @@ inline nmat<T> operator*(const nmat<T>& a_m,const T& a_fac) {
 }
 */
 
+template <class MAT,class REAL> 
+inline bool mat_fabs(const MAT& a_in,MAT& a_ou,REAL(*a_fabs)(const typename MAT::elem_t&)) {
+  if(a_in.dimension()!=a_ou.dimension()) {a_ou.set_zero();return false;}
+  typedef typename MAT::elem_t T;
+  T* in_pos = const_cast<T*>(a_in.data());
+  T* ou_pos = const_cast<T*>(a_ou.data());
+  unsigned int D2 = a_in.dimension()*a_in.dimension();
+  for(unsigned int i=0;i<D2;i++,in_pos++,ou_pos++) {*ou_pos = a_fabs(*in_pos);}
+  return true;
 }
 
+}
+
+/*
+#include <cstdarg>
+
 namespace tools {
+
+template <class MAT>
+inline void matrix_va_set(MAT& a_m,size_t a_dummy,...) {
+  typedef typename MAT::elem_t T;
+  va_list args;
+  va_start(args,a_dummy);
+  unsigned int D = a_m.dimension();
+  for(unsigned int r=0;r<D;r++) {
+    for(unsigned int c=0;c<D;c++) {
+      a_m.set_value(r,c,va_arg(args,T));
+    }
+  }
+  va_end(args);
+}
+
+}
+*/
+
+namespace tools {
+
+#define TOOLS_MELEM const typename MAT::elem_t&
 
 ////////////////////////////////////////////////
 /// specific D=2 ///////////////////////////////
 ////////////////////////////////////////////////
-
 template <class MAT>
 inline void matrix_set(MAT& a_m
-,const typename MAT::elem_t& a_00,const typename MAT::elem_t& a_01
-,const typename MAT::elem_t& a_10,const typename MAT::elem_t& a_11
+,TOOLS_MELEM a_00,TOOLS_MELEM a_01
+,TOOLS_MELEM a_10,TOOLS_MELEM a_11
 ){
   //a_<R><C>
   //vec[R + C * 2];
@@ -359,45 +520,14 @@ inline void matrix_set(MAT& a_m
   vec[1] = a_10;vec[3] = a_11;
 }
 
-template <class MAT>
-inline void set_epsilon(MAT& a_m) {
-  matrix_set<MAT>(a_m, 0, 1,
-                      -1, 0);
-}
-
-//  Pauli matrices :
-//  P1      P2      P3
-//    0  1    0 -i    1  0
-//    1  0    i  0    0 -1
-template <class MAT>
-inline void set_P1(MAT& a_m) {
-  matrix_set<MAT>(a_m,  0, 1,
-                        1, 0);
-}
-
-template <class MAT>
-inline void set_P2(MAT& a_m) {
-  typedef typename MAT::elem_t T;
-  //T i;set_i(i); //with inlib::symbol
-  T i(0,1);
-  T _i = T(-1)*i;
-  matrix_set<MAT>(a_m,  0, _i,
-                        i, 0);
-}
-template <class MAT>
-inline void set_P3(MAT& a_m) {
-  matrix_set<MAT>(a_m, 1, 0,
-                       0,-1);
-}
-
 ////////////////////////////////////////////////
 /// specific D=3 ///////////////////////////////
 ////////////////////////////////////////////////
 template <class MAT>
 inline void matrix_set(MAT& a_m
-,const typename MAT::elem_t& a_00,const typename MAT::elem_t& a_01,const typename MAT::elem_t& a_02 //1 row
-,const typename MAT::elem_t& a_10,const typename MAT::elem_t& a_11,const typename MAT::elem_t& a_12 //2 row
-,const typename MAT::elem_t& a_20,const typename MAT::elem_t& a_21,const typename MAT::elem_t& a_22 //3 row
+,TOOLS_MELEM a_00,TOOLS_MELEM a_01,TOOLS_MELEM a_02 //1 row
+,TOOLS_MELEM a_10,TOOLS_MELEM a_11,TOOLS_MELEM a_12 //2 row
+,TOOLS_MELEM a_20,TOOLS_MELEM a_21,TOOLS_MELEM a_22 //3 row
 ){
   //a_<R><C>
   //vec[R + C * 3];
@@ -407,36 +537,15 @@ inline void matrix_set(MAT& a_m
   vec[2] = a_20;vec[5] = a_21;vec[8] = a_22;
 }
 
-// Generators of rotation group :
-// Rk(i,j) = epsilon(k,i,j)  i,j,k=1,2,3
-template <class MAT>
-inline void set_R1(MAT& a_m) {
-  matrix_set<MAT>(a_m, 0, 0, 0,
-                       0, 0, 1,
-                       0,-1, 0);
-}
-template <class MAT>
-inline void set_R2(MAT& a_m) {
-  matrix_set<MAT>(a_m, 0, 0,-1,
-                       0, 0, 0,
-                       1, 0, 0);
-}
-template <class MAT>
-inline void set_R3(MAT& a_m) {
-  matrix_set<MAT>(a_m, 0, 1, 0,
-                      -1, 0, 0,
-                       0, 0, 0);
-}
-
 ////////////////////////////////////////////////
 /// specific D=4 ///////////////////////////////
 ////////////////////////////////////////////////
 template <class MAT>
 inline void matrix_set(MAT& a_m
-,const typename MAT::elem_t& a_00,const typename MAT::elem_t& a_01,const typename MAT::elem_t& a_02,const typename MAT::elem_t& a_03 //1 row
-,const typename MAT::elem_t& a_10,const typename MAT::elem_t& a_11,const typename MAT::elem_t& a_12,const typename MAT::elem_t& a_13 //2 row
-,const typename MAT::elem_t& a_20,const typename MAT::elem_t& a_21,const typename MAT::elem_t& a_22,const typename MAT::elem_t& a_23 //3 row
-,const typename MAT::elem_t& a_30,const typename MAT::elem_t& a_31,const typename MAT::elem_t& a_32,const typename MAT::elem_t& a_33 //4 row
+,TOOLS_MELEM a_00,TOOLS_MELEM a_01,TOOLS_MELEM a_02,TOOLS_MELEM a_03 //1 row
+,TOOLS_MELEM a_10,TOOLS_MELEM a_11,TOOLS_MELEM a_12,TOOLS_MELEM a_13 //2 row
+,TOOLS_MELEM a_20,TOOLS_MELEM a_21,TOOLS_MELEM a_22,TOOLS_MELEM a_23 //3 row
+,TOOLS_MELEM a_30,TOOLS_MELEM a_31,TOOLS_MELEM a_32,TOOLS_MELEM a_33 //4 row
 ){
   //a_<R><C>
   //vec[R + C * 4];
@@ -447,56 +556,83 @@ inline void matrix_set(MAT& a_m
   vec[3] = a_30;vec[7] = a_31;vec[11] = a_32;vec[15] = a_33;
 }
 
-template <class MAT,class RANDOM>
-inline void set_random_antisym(MAT& a_m,RANDOM& a_rd) {
-  typedef typename MAT::elem_t T;
-  T v01 = a_rd.shoot();
-  T v02 = a_rd.shoot();
-  T v03 = a_rd.shoot();
-  T v12 = a_rd.shoot();
-  T v13 = a_rd.shoot();
-  T v23 = a_rd.shoot();
-  matrix_set(a_m,
-                    0, v01, v02, v03,
-                 -v01,   0, v12, v13,
-                 -v02,-v12,   0, v23,
-                 -v03,-v13,-v23,   0);
-}
-
+////////////////////////////////////////////////
+/// specific D=5 ///////////////////////////////
+////////////////////////////////////////////////
 template <class MAT>
-inline void set_eta(MAT& a_m) {
-  a_m.set_zero();
-  a_m.set_value(0,0, 1);
-  a_m.set_value(1,1,-1);
-  a_m.set_value(2,2,-1);
-  a_m.set_value(3,3,-1);
+inline void matrix_set(MAT& a_m
+,TOOLS_MELEM a_00,TOOLS_MELEM a_01,TOOLS_MELEM a_02,TOOLS_MELEM a_03,TOOLS_MELEM a_04 //1 row
+,TOOLS_MELEM a_10,TOOLS_MELEM a_11,TOOLS_MELEM a_12,TOOLS_MELEM a_13,TOOLS_MELEM a_14 //2 row
+,TOOLS_MELEM a_20,TOOLS_MELEM a_21,TOOLS_MELEM a_22,TOOLS_MELEM a_23,TOOLS_MELEM a_24 //3 row
+,TOOLS_MELEM a_30,TOOLS_MELEM a_31,TOOLS_MELEM a_32,TOOLS_MELEM a_33,TOOLS_MELEM a_34 //4 row
+,TOOLS_MELEM a_40,TOOLS_MELEM a_41,TOOLS_MELEM a_42,TOOLS_MELEM a_43,TOOLS_MELEM a_44 //5 row
+){
+  //a_<R><C>
+  //vec[R + C * 5];
+  typename MAT::elem_t* vec = const_cast<typename MAT::elem_t*>(a_m.data());
+  vec[0] = a_00;vec[5] = a_01;vec[10] = a_02;vec[15] = a_03;vec[20] = a_04;
+  vec[1] = a_10;vec[6] = a_11;vec[11] = a_12;vec[16] = a_13;vec[21] = a_14;
+  vec[2] = a_20;vec[7] = a_21;vec[12] = a_22;vec[17] = a_23;vec[22] = a_24;
+  vec[3] = a_30;vec[8] = a_31;vec[13] = a_32;vec[18] = a_33;vec[23] = a_34;
+  vec[4] = a_40;vec[9] = a_41;vec[14] = a_42;vec[19] = a_43;vec[24] = a_44;
 }
 
 ////////////////////////////////////////////////
 /// specific D=6 ///////////////////////////////
 ////////////////////////////////////////////////
-
-/*
-template <class T>
-inline void set_matrix(mat<T,6>& a_m
-,const T& a_00,const T& a_01,const T& a_02,const T& a_03,const T& a_04,const T& a_05 //1 row
-,const T& a_10,const T& a_11,const T& a_12,const T& a_13,const T& a_14,const T& a_15 //2 row
-,const T& a_20,const T& a_21,const T& a_22,const T& a_23,const T& a_24,const T& a_25 //3 row
-,const T& a_30,const T& a_31,const T& a_32,const T& a_33,const T& a_34,const T& a_35 //4 row
-,const T& a_40,const T& a_41,const T& a_42,const T& a_43,const T& a_44,const T& a_45 //5 row
-,const T& a_50,const T& a_51,const T& a_52,const T& a_53,const T& a_54,const T& a_55 //6 row
+template <class MAT>
+inline void matrix_set(MAT& a_m
+,TOOLS_MELEM a_00,TOOLS_MELEM a_01,TOOLS_MELEM a_02,TOOLS_MELEM a_03,TOOLS_MELEM a_04,TOOLS_MELEM a_05 //1 row
+,TOOLS_MELEM a_10,TOOLS_MELEM a_11,TOOLS_MELEM a_12,TOOLS_MELEM a_13,TOOLS_MELEM a_14,TOOLS_MELEM a_15 //2 row
+,TOOLS_MELEM a_20,TOOLS_MELEM a_21,TOOLS_MELEM a_22,TOOLS_MELEM a_23,TOOLS_MELEM a_24,TOOLS_MELEM a_25 //3 row
+,TOOLS_MELEM a_30,TOOLS_MELEM a_31,TOOLS_MELEM a_32,TOOLS_MELEM a_33,TOOLS_MELEM a_34,TOOLS_MELEM a_35 //4 row
+,TOOLS_MELEM a_40,TOOLS_MELEM a_41,TOOLS_MELEM a_42,TOOLS_MELEM a_43,TOOLS_MELEM a_44,TOOLS_MELEM a_45 //5 row
+,TOOLS_MELEM a_50,TOOLS_MELEM a_51,TOOLS_MELEM a_52,TOOLS_MELEM a_53,TOOLS_MELEM a_54,TOOLS_MELEM a_55 //6 row
 ){
   //a_<R><C>
   //vec[R + C * 6];
-  T* vec = const_cast<T*>(a_m.data());
-  vec[0] = a_00;vec[6]  = a_01;vec[12] = a_02;vec[18] = a_03;vec[24] = a_04;vec[30] = a_05;
-  vec[1] = a_10;vec[7]  = a_11;vec[13] = a_12;vec[19] = a_13;vec[25] = a_14;vec[31] = a_15;
-  vec[2] = a_20;vec[8]  = a_21;vec[14] = a_22;vec[20] = a_23;vec[26] = a_24;vec[32] = a_25;
-  vec[3] = a_30;vec[9]  = a_31;vec[15] = a_32;vec[21] = a_33;vec[27] = a_34;vec[33] = a_35;
+  typename MAT::elem_t* vec = const_cast<typename MAT::elem_t*>(a_m.data());
+  vec[0] = a_00;vec[ 6] = a_01;vec[12] = a_02;vec[18] = a_03;vec[24] = a_04;vec[30] = a_05;
+  vec[1] = a_10;vec[ 7] = a_11;vec[13] = a_12;vec[19] = a_13;vec[25] = a_14;vec[31] = a_15;
+  vec[2] = a_20;vec[ 8] = a_21;vec[14] = a_22;vec[20] = a_23;vec[26] = a_24;vec[32] = a_25;
+  vec[3] = a_30;vec[ 9] = a_31;vec[15] = a_32;vec[21] = a_33;vec[27] = a_34;vec[33] = a_35;
   vec[4] = a_40;vec[10] = a_41;vec[16] = a_42;vec[22] = a_43;vec[28] = a_44;vec[34] = a_45;
   vec[5] = a_50;vec[11] = a_51;vec[17] = a_52;vec[23] = a_53;vec[29] = a_54;vec[35] = a_55;
 }
-*/
+
+////////////////////////////////////////////////
+/// specific D=10 //////////////////////////////
+////////////////////////////////////////////////
+template <class MAT>
+inline void matrix_set(MAT& a_m
+,TOOLS_MELEM a_00,TOOLS_MELEM a_01,TOOLS_MELEM a_02,TOOLS_MELEM a_03,TOOLS_MELEM a_04,TOOLS_MELEM a_05,TOOLS_MELEM a_06,TOOLS_MELEM a_07,TOOLS_MELEM a_08,TOOLS_MELEM a_09 //1 row
+,TOOLS_MELEM a_10,TOOLS_MELEM a_11,TOOLS_MELEM a_12,TOOLS_MELEM a_13,TOOLS_MELEM a_14,TOOLS_MELEM a_15,TOOLS_MELEM a_16,TOOLS_MELEM a_17,TOOLS_MELEM a_18,TOOLS_MELEM a_19 //2 row
+,TOOLS_MELEM a_20,TOOLS_MELEM a_21,TOOLS_MELEM a_22,TOOLS_MELEM a_23,TOOLS_MELEM a_24,TOOLS_MELEM a_25,TOOLS_MELEM a_26,TOOLS_MELEM a_27,TOOLS_MELEM a_28,TOOLS_MELEM a_29 //3 row
+,TOOLS_MELEM a_30,TOOLS_MELEM a_31,TOOLS_MELEM a_32,TOOLS_MELEM a_33,TOOLS_MELEM a_34,TOOLS_MELEM a_35,TOOLS_MELEM a_36,TOOLS_MELEM a_37,TOOLS_MELEM a_38,TOOLS_MELEM a_39 //4 row
+,TOOLS_MELEM a_40,TOOLS_MELEM a_41,TOOLS_MELEM a_42,TOOLS_MELEM a_43,TOOLS_MELEM a_44,TOOLS_MELEM a_45,TOOLS_MELEM a_46,TOOLS_MELEM a_47,TOOLS_MELEM a_48,TOOLS_MELEM a_49 //5 row
+,TOOLS_MELEM a_50,TOOLS_MELEM a_51,TOOLS_MELEM a_52,TOOLS_MELEM a_53,TOOLS_MELEM a_54,TOOLS_MELEM a_55,TOOLS_MELEM a_56,TOOLS_MELEM a_57,TOOLS_MELEM a_58,TOOLS_MELEM a_59 //6 row
+,TOOLS_MELEM a_60,TOOLS_MELEM a_61,TOOLS_MELEM a_62,TOOLS_MELEM a_63,TOOLS_MELEM a_64,TOOLS_MELEM a_65,TOOLS_MELEM a_66,TOOLS_MELEM a_67,TOOLS_MELEM a_68,TOOLS_MELEM a_69 //7 row
+,TOOLS_MELEM a_70,TOOLS_MELEM a_71,TOOLS_MELEM a_72,TOOLS_MELEM a_73,TOOLS_MELEM a_74,TOOLS_MELEM a_75,TOOLS_MELEM a_76,TOOLS_MELEM a_77,TOOLS_MELEM a_78,TOOLS_MELEM a_79 //8 row
+,TOOLS_MELEM a_80,TOOLS_MELEM a_81,TOOLS_MELEM a_82,TOOLS_MELEM a_83,TOOLS_MELEM a_84,TOOLS_MELEM a_85,TOOLS_MELEM a_86,TOOLS_MELEM a_87,TOOLS_MELEM a_88,TOOLS_MELEM a_89 //9 row
+,TOOLS_MELEM a_90,TOOLS_MELEM a_91,TOOLS_MELEM a_92,TOOLS_MELEM a_93,TOOLS_MELEM a_94,TOOLS_MELEM a_95,TOOLS_MELEM a_96,TOOLS_MELEM a_97,TOOLS_MELEM a_98,TOOLS_MELEM a_99 //10 row
+
+){
+  //a_<R><C>
+  //vec[R + C * 10];
+  typename MAT::elem_t* vec = const_cast<typename MAT::elem_t*>(a_m.data());
+  vec[0] = a_00;vec[10] = a_01;vec[20] = a_02;vec[30] = a_03;vec[40] = a_04;vec[50] = a_05;vec[60] = a_06;vec[70] = a_07;vec[80] = a_08;vec[90] = a_09;
+  vec[1] = a_10;vec[11] = a_11;vec[21] = a_12;vec[31] = a_13;vec[41] = a_14;vec[51] = a_15;vec[61] = a_16;vec[71] = a_17;vec[81] = a_18;vec[91] = a_19;
+  vec[2] = a_20;vec[12] = a_21;vec[22] = a_22;vec[32] = a_23;vec[42] = a_24;vec[52] = a_25;vec[62] = a_26;vec[72] = a_27;vec[82] = a_28;vec[92] = a_29;
+  vec[3] = a_30;vec[13] = a_31;vec[23] = a_32;vec[33] = a_33;vec[43] = a_34;vec[53] = a_35;vec[63] = a_36;vec[73] = a_37;vec[83] = a_38;vec[93] = a_39;
+  vec[4] = a_40;vec[14] = a_41;vec[24] = a_42;vec[34] = a_43;vec[44] = a_44;vec[54] = a_45;vec[64] = a_46;vec[74] = a_47;vec[84] = a_48;vec[94] = a_49;
+  vec[5] = a_50;vec[15] = a_51;vec[25] = a_52;vec[35] = a_53;vec[45] = a_54;vec[55] = a_55;vec[65] = a_56;vec[75] = a_57;vec[85] = a_58;vec[95] = a_59;
+  vec[6] = a_60;vec[16] = a_61;vec[26] = a_62;vec[36] = a_63;vec[46] = a_64;vec[56] = a_65;vec[66] = a_66;vec[76] = a_67;vec[86] = a_68;vec[96] = a_69;
+  vec[7] = a_70;vec[17] = a_71;vec[27] = a_72;vec[37] = a_73;vec[47] = a_74;vec[57] = a_75;vec[67] = a_76;vec[77] = a_77;vec[87] = a_78;vec[97] = a_79;
+  vec[8] = a_80;vec[18] = a_81;vec[28] = a_82;vec[38] = a_83;vec[48] = a_84;vec[58] = a_85;vec[68] = a_86;vec[78] = a_87;vec[88] = a_88;vec[98] = a_89;
+  vec[9] = a_90;vec[19] = a_91;vec[29] = a_92;vec[39] = a_93;vec[49] = a_94;vec[59] = a_95;vec[69] = a_96;vec[79] = a_97;vec[89] = a_98;vec[99] = a_99;
+}
+
+#undef TOOLS_MELEM
 
 }
 

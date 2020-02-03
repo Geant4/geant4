@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWtViewer.cc 86360 2014-11-10 08:34:16Z gcosmo $
 //
 // 
 // G4OpenGLWtViewer : Class to provide Wt specific

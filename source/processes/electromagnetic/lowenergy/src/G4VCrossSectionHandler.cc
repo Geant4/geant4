@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -193,7 +192,7 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char* path = getenv("G4LEDATA");
+      char* path = std::getenv("G4LEDATA");
       if (!path)
 	{ 
           G4Exception("G4VCrossSectionHandler::LoadData",
@@ -270,7 +269,7 @@ void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
 
       // Build the complete string identifying the file with the data set
       
-      char* path = getenv("G4LEDATA");
+      char* path = std::getenv("G4LEDATA");
       if (!path)
 	{ 
           G4Exception("G4VCrossSectionHandler::LoadNonLogData",

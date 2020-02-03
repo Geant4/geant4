@@ -23,26 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc 102297 2017-01-20 13:33:54Z gcosmo $
-//
 // class G4Ellipsoid
 //
 // Implementation for G4Ellipsoid class
 //
-// History:
-//
-// 10.11.99 G.Horton-Smith  -- first writing, based on G4Sphere class
-// 25.02.05 G.Guerrieri -- Modified for future Geant4 release
-//
+// 10.11.99 G.Horton-Smith: first writing, based on G4Sphere class
+// 25.02.05 G.Guerrieri: Revised
 // --------------------------------------------------------------------
 
-#include "globals.hh"
-
 #include "G4Ellipsoid.hh"
+
+#if !(defined(G4GEOM_USE_UELLIPSOID) && defined(G4GEOM_USE_SYS_USOLIDS))
+
+#include "globals.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "meshdefs.hh"
 #include "Randomize.hh"
@@ -72,8 +70,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
                                G4double pzSemiAxis,
                                G4double pzBottomCut,
                                G4double pzTopCut)
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0),
-    fCubicVolume(0.), fSurfaceArea(0.), zBottomCut(0.), zTopCut(0.)
+  : G4VSolid(pName), zBottomCut(0.), zTopCut(0.)
 {
   // note: for users that want to use the full ellipsoid it is useful
   // to include a default for the cuts 
@@ -117,9 +114,8 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Ellipsoid::G4Ellipsoid( __void__& a )
-  : G4VSolid(a), fRebuildPolyhedron(false), fpPolyhedron(0), kRadTolerance(0.),
-    halfCarTolerance(0.), halfRadTolerance(0.), fCubicVolume(0.),
-    fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
+  : G4VSolid(a), kRadTolerance(0.), halfCarTolerance(0.), halfRadTolerance(0.),
+    xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
     semiAxisMax(0.), zBottomCut(0.), zTopCut(0.)
 {
 }
@@ -130,7 +126,7 @@ G4Ellipsoid::G4Ellipsoid( __void__& a )
 
 G4Ellipsoid::~G4Ellipsoid()
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,7 +135,6 @@ G4Ellipsoid::~G4Ellipsoid()
 
 G4Ellipsoid::G4Ellipsoid(const G4Ellipsoid& rhs)
   : G4VSolid(rhs),
-    fRebuildPolyhedron(false), fpPolyhedron(0),
     kRadTolerance(rhs.kRadTolerance),
     halfCarTolerance(rhs.halfCarTolerance),
     halfRadTolerance(rhs.halfRadTolerance),
@@ -174,7 +169,7 @@ G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
    zSemiAxis = rhs.zSemiAxis; semiAxisMax = rhs.semiAxisMax;
    zBottomCut = rhs.zBottomCut; zTopCut = rhs.zTopCut;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
@@ -193,6 +188,35 @@ void G4Ellipsoid::ComputeDimensions(G4VPVParameterisation* p,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4Ellipsoid::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double dx = GetDx();
+  G4double dy = GetDy();
+  G4double dz = GetDz();
+  G4double zmin = std::max(-dz,GetZBottomCut());
+  G4double zmax = std::min( dz,GetZTopCut());
+  pMin.set(-dx,-dy,zmin);
+  pMax.set( dx, dy,zmax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Ellipsoid::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 
 G4bool
@@ -201,239 +225,14 @@ G4Ellipsoid::CalculateExtent(const EAxis pAxis,
                              const G4AffineTransform& pTransform,
                                    G4double& pMin, G4double& pMax) const
 {
-  if (!pTransform.IsRotated())
-  {
-    // Special case handling for unrotated solid ellipsoid
-    // Compute x/y/z mins and maxs for bounding box respecting limits,
-    // with early returns if outside limits. Then switch() on pAxis,
-    // and compute exact x and y limit for x/y case
+  G4ThreeVector bmin, bmax;
 
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
+  // Get bounding box
+  BoundingLimits(bmin,bmax);
 
-    G4double maxDiff,newMin,newMax;
-    G4double xoff,yoff;
-
-    xoffset=pTransform.NetTranslation().x();
-    xMin=xoffset - xSemiAxis;
-    xMax=xoffset + xSemiAxis;
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
-        || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin<pVoxelLimit.GetMinXExtent())
-        {
-          xMin=pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax>pVoxelLimit.GetMaxXExtent())
-        {
-          xMax=pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-
-    yoffset=pTransform.NetTranslation().y();
-    yMin=yoffset - ySemiAxis;
-    yMax=yoffset + ySemiAxis;
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
-        || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin<pVoxelLimit.GetMinYExtent())
-        {
-          yMin=pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax>pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-
-    zoffset=pTransform.NetTranslation().z();
-    zMin=zoffset + (-zSemiAxis > zBottomCut ? -zSemiAxis : zBottomCut);
-    zMax=zoffset + ( zSemiAxis < zTopCut ? zSemiAxis : zTopCut);
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
-        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (zMin<pVoxelLimit.GetMinZExtent())
-        {
-          zMin=pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax>pVoxelLimit.GetMaxZExtent())
-        {
-          zMax=pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-
-    // if here, then known to cut bounding box around ellipsoid
-    //
-    xoff = (xoffset < xMin) ? (xMin-xoffset)
-         : (xoffset > xMax) ? (xoffset-xMax) : 0.0;
-    yoff = (yoffset < yMin) ? (yMin-yoffset)
-         : (yoffset > yMax) ? (yoffset-yMax) : 0.0;
-
-    // detailed calculations
-    // NOTE: does not use X or Y offsets to adjust Z range,
-    // and does not use Z offset to adjust X or Y range,
-    // which is consistent with G4Sphere::CalculateExtent behavior
-    //
-    switch (pAxis)
-    {
-      case kXAxis:
-        if (yoff==0.)
-        {
-          // YZ limits cross max/min x => no change
-          //
-          pMin=xMin;
-          pMax=xMax;
-        }
-        else
-        {
-          // YZ limits don't cross max/min x => compute max delta x,
-          // hence new mins/maxs
-          //
-          maxDiff= 1.0-sqr(yoff/ySemiAxis);
-          if (maxDiff < 0.0) { return false; }
-          maxDiff= xSemiAxis * std::sqrt(maxDiff);
-          newMin=xoffset-maxDiff;
-          newMax=xoffset+maxDiff;
-          pMin=(newMin<xMin) ? xMin : newMin;
-          pMax=(newMax>xMax) ? xMax : newMax;
-        }
-        break;
-      case kYAxis:
-        if (xoff==0.)
-        {
-          // XZ limits cross max/min y => no change
-          //
-          pMin=yMin;
-          pMax=yMax;
-        }
-        else
-        {
-          // XZ limits don't cross max/min y => compute max delta y,
-          // hence new mins/maxs
-          //
-          maxDiff= 1.0-sqr(xoff/xSemiAxis);
-          if (maxDiff < 0.0) { return false; }
-          maxDiff= ySemiAxis * std::sqrt(maxDiff);
-          newMin=yoffset-maxDiff;
-          newMax=yoffset+maxDiff;
-          pMin=(newMin<yMin) ? yMin : newMin;
-          pMax=(newMax>yMax) ? yMax : newMax;
-        }
-        break;
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-      default:
-        break;
-    }
-  
-    pMin-=kCarTolerance;
-    pMax+=kCarTolerance;
-    return true;
-  }
-  else  // not rotated
-  {
-    G4int i,j,noEntries,noBetweenSections;
-    G4bool existsAfterClip=false;
-
-    // Calculate rotated vertex coordinates
-
-    G4int noPolygonVertices=0;
-    G4ThreeVectorList* vertices =
-      CreateRotatedVertices(pTransform,noPolygonVertices);
-
-    pMin=+kInfinity;
-    pMax=-kInfinity;
-
-    noEntries=vertices->size(); // noPolygonVertices*noPhiCrossSections
-    noBetweenSections=noEntries-noPolygonVertices;
-    
-    G4ThreeVectorList ThetaPolygon;
-    for (i=0;i<noEntries;i+=noPolygonVertices)
-    {
-      for(j=0;j<(noPolygonVertices/2)-1;j++)
-      {
-        ThetaPolygon.push_back((*vertices)[i+j]);  
-        ThetaPolygon.push_back((*vertices)[i+j+1]);  
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-2-j]);
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1-j]);
-        CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-        ThetaPolygon.clear();
-      }
-    }
-    for (i=0;i<noBetweenSections;i+=noPolygonVertices)
-    {
-      for(j=0;j<noPolygonVertices-1;j++)
-      {
-        ThetaPolygon.push_back((*vertices)[i+j]);  
-        ThetaPolygon.push_back((*vertices)[i+j+1]);  
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j+1]);
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j]);
-        CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-        ThetaPolygon.clear();
-      }
-      ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1]);
-      ThetaPolygon.push_back((*vertices)[i]);
-      ThetaPolygon.push_back((*vertices)[i+noPolygonVertices]);
-      ThetaPolygon.push_back((*vertices)[i+2*noPolygonVertices-1]);
-      CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-      ThetaPolygon.clear();
-    }
-    if ( (pMin!=kInfinity) || (pMax!=-kInfinity) )
-    {
-      existsAfterClip=true;
-    
-      // Add 2*tolerance to avoid precision troubles
-      //
-      pMin-=kCarTolerance;
-      pMax+=kCarTolerance;
-
-    }
-    else
-    {
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-      //
-      G4ThreeVector
-      clipCentre((pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-                 (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-                 (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-      {
-        existsAfterClip=true;
-        pMin=pVoxelLimit.GetMinExtent(pAxis);
-        pMax=pVoxelLimit.GetMaxExtent(pAxis);
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
-  }
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -572,8 +371,8 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
       distMin = distR;
     }
     else if( (distR >- halfRadTolerance)
-	    && (intZ >= zBottomCut-halfRadTolerance)
-	    && (intZ <= zTopCut+halfRadTolerance) )
+            && (intZ >= zBottomCut-halfRadTolerance)
+            && (intZ <= zTopCut+halfRadTolerance) )
     {
       // p is on the curved surface, DistanceToIn returns 0 or kInfinity:
       // DistanceToIn returns 0, if second root is positive (means going inside)
@@ -657,8 +456,8 @@ G4double G4Ellipsoid::DistanceToIn(const G4ThreeVector& p) const
 G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
                                     const G4ThreeVector& v,
                                     const G4bool calcNorm,
-                                          G4bool *validNorm,
-                                          G4ThreeVector *n  ) const
+                                          G4bool* validNorm,
+                                          G4ThreeVector* n  ) const
 {
   G4double distMin;
   enum surface_e {kPlaneSurf, kCurvedSurf, kNoSurf} surface;
@@ -831,130 +630,6 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p) const
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fDz cross section
-//          [4-7] +fDz cross section such that [0] is below [4],
-//                                             [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
-//  Potential improvement: For last slice, use actual ending angle
-//                         to avoid rounding error problems.
-
-G4ThreeVectorList*
-G4Ellipsoid::CreateRotatedVertices(const G4AffineTransform& pTransform,
-                                         G4int& noPolygonVertices) const
-{
-  G4ThreeVectorList *vertices;
-  G4ThreeVector vertex;
-  G4double meshAnglePhi, meshRMaxFactor,
-           crossAnglePhi, coscrossAnglePhi, sincrossAnglePhi, sAnglePhi;
-  G4double meshTheta, crossTheta, startTheta;
-  G4double rMaxX, rMaxY, rMaxZ, rMaxMax, rx, ry, rz;
-  G4int crossSectionPhi, noPhiCrossSections, crossSectionTheta, noThetaSections;
-
-  // Phi cross sections
-  //
-  noPhiCrossSections=G4int (twopi/kMeshAngleDefault)+1;  // = 9!
-    
-/*
-  if (noPhiCrossSections<kMinMeshSections)        // <3
-  {
-    noPhiCrossSections=kMinMeshSections;
-  }
-  else if (noPhiCrossSections>kMaxMeshSections)   // >37
-  {
-    noPhiCrossSections=kMaxMeshSections;
-  }
-*/
-  meshAnglePhi=twopi/(noPhiCrossSections-1);
-    
-  // Set start angle such that mesh will be at fRMax
-  // on the x axis. Will give better extent calculations when not rotated.
-    
-  sAnglePhi = -meshAnglePhi*0.5;
-
-  // Theta cross sections
-    
-  noThetaSections = G4int(pi/kMeshAngleDefault)+3;  //  = 7!
-
-/*
-  if (noThetaSections<kMinMeshSections)       // <3
-  {
-    noThetaSections=kMinMeshSections;
-  }
-  else if (noThetaSections>kMaxMeshSections)  // >37
-  {
-    noThetaSections=kMaxMeshSections;
-  }
-*/
-  meshTheta= pi/(noThetaSections-2);
-    
-  // Set start angle such that mesh will be at fRMax
-  // on the z axis. Will give better extent calculations when not rotated.
-    
-  startTheta = -meshTheta*0.5;
-
-  meshRMaxFactor =  1.0/std::cos(0.5*
-                    std::sqrt(meshAnglePhi*meshAnglePhi+meshTheta*meshTheta));
-  rMaxMax= (xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis);
-  if (zSemiAxis > rMaxMax) rMaxMax= zSemiAxis;
-  rMaxX= xSemiAxis + rMaxMax*(meshRMaxFactor-1.0);
-  rMaxY= ySemiAxis + rMaxMax*(meshRMaxFactor-1.0);
-  rMaxZ= zSemiAxis + rMaxMax*(meshRMaxFactor-1.0);
-  G4double* cosCrossTheta = new G4double[noThetaSections];
-  G4double* sinCrossTheta = new G4double[noThetaSections];    
-  vertices=new G4ThreeVectorList(noPhiCrossSections*noThetaSections);
-  if (vertices && cosCrossTheta && sinCrossTheta)
-  {
-    for (crossSectionTheta=0; crossSectionTheta<noThetaSections;
-         crossSectionTheta++)
-    {
-      // Compute sine and cosine table (for historical reasons)
-      //
-      crossTheta=startTheta+crossSectionTheta*meshTheta;
-      cosCrossTheta[crossSectionTheta]=std::cos(crossTheta);
-      sinCrossTheta[crossSectionTheta]=std::sin(crossTheta);
-    }
-    for (crossSectionPhi=0; crossSectionPhi<noPhiCrossSections;
-         crossSectionPhi++)
-    {
-      crossAnglePhi=sAnglePhi+crossSectionPhi*meshAnglePhi;
-      coscrossAnglePhi=std::cos(crossAnglePhi);
-      sincrossAnglePhi=std::sin(crossAnglePhi);
-      for (crossSectionTheta=0; crossSectionTheta<noThetaSections;
-           crossSectionTheta++)
-      {
-        // Compute coordinates of cross section at section crossSectionPhi
-        //
-        rx= sinCrossTheta[crossSectionTheta]*coscrossAnglePhi*rMaxX;
-        ry= sinCrossTheta[crossSectionTheta]*sincrossAnglePhi*rMaxY;
-        rz= cosCrossTheta[crossSectionTheta]*rMaxZ;
-        if (rz < zBottomCut)
-          { rz= zBottomCut; }
-        if (rz > zTopCut)
-          { rz= zTopCut; }
-        vertex= G4ThreeVector(rx,ry,rz);
-        vertices->push_back(pTransform.TransformPoint(vertex));
-      }    // Theta forward     
-    }    // Phi
-    noPolygonVertices = noThetaSections ;
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Ellipsoid::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-
-  delete[] cosCrossTheta;
-  delete[] sinCrossTheta;
-
-  return vertices;
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 // G4EntityType
@@ -1013,7 +688,7 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   else if (max1 == ySemiAxis) { max2 = xSemiAxis; max3 = zSemiAxis; }
   else                        { max2 = xSemiAxis; max3 = ySemiAxis; }
 
-  phi   = G4RandFlat::shoot(0.,twopi);
+  phi = G4RandFlat::shoot(0.,twopi);
   
   cosphi = std::cos(phi);   sinphi = std::sin(phi);
   costheta = G4RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;
@@ -1092,7 +767,7 @@ G4Polyhedron* G4Ellipsoid::CreatePolyhedron () const
 
 G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
@@ -1105,3 +780,5 @@ G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
     }
   return fpPolyhedron;
 }
+
+#endif // !defined(G4GEOM_USE_UELLIPSOID) || !defined(G4GEOM_USE_SYS_USOLIDS)

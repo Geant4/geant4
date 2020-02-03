@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.hh 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -52,67 +51,76 @@
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Threading.hh"
 
 class G4ComponentGGHadronNucleusXsc;
 class G4UPiNuclearCrossSection;
 class G4HadronNucleonXsc;
-class G4ComponentSAIDTotalXS;
 class G4Material;
 class G4Element;
 class G4Isotope;
+class G4Pow;
 
 class G4BGGPionElasticXS : public G4VCrossSectionDataSet
 {
 public:
 
-  G4BGGPionElasticXS (const G4ParticleDefinition*);
+  explicit G4BGGPionElasticXS (const G4ParticleDefinition*);
 
-  virtual ~G4BGGPionElasticXS();
+  ~G4BGGPionElasticXS() final;
    
-  virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
-			     const G4Material*);
+			     const G4Material*) final;
 
-  virtual
   G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
-			 const G4Element* elm = 0,
-			 const G4Material* mat = 0);
+			 const G4Element* elm,
+			 const G4Material* mat) final;
 
-  virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
-				  const G4Material* mat = 0);
+				  const G4Material* mat) final;
 
-  virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
-			      const G4Isotope* iso = 0,
-			      const G4Element* elm = 0,
-			      const G4Material* mat = 0);
+			      const G4Isotope* iso=nullptr,
+			      const G4Element* elm=nullptr,
+			      const G4Material* mat=nullptr) final;
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void CrossSectionDescription(std::ostream&) const final;
 
 private:
+
+  G4double CoulombFactorPiPlus(G4double kinEnergy, G4int Z);
+
+  G4double FactorPiMinus(G4double kinEnergy);
 
   G4BGGPionElasticXS & operator=(const G4BGGPionElasticXS &right);
   G4BGGPionElasticXS(const G4BGGPionElasticXS&);
 
   G4double fGlauberEnergy;  
-  G4double fLowEnergy;  
-  G4double fSAIDHighEnergyLimit;
-  G4double theGlauberFac[93];
-  G4double theCoulombFac[93];
-  G4int    theA[93];
+  G4double fLowEnergy;
+  G4double fLowestEnergy;
 
-  const G4ParticleDefinition*     particle;
+  static G4double theGlauberFacPiPlus[93];
+  static G4double theCoulombFacPiPlus[93];
+  static G4double theGlauberFacPiMinus[93];
+  static G4double theCoulombFacPiMinus[93];
+  static G4int    theA[93];
+
   const G4ParticleDefinition*     theProton;
+  const G4ParticleDefinition*     thePiPlus;
+
+  G4Pow*                          fG4pow;
+
   G4ComponentGGHadronNucleusXsc*  fGlauber;
   G4UPiNuclearCrossSection*       fPion;
   G4HadronNucleonXsc*             fHadron;
-  G4ComponentSAIDTotalXS*         fSAID;
   G4bool                          isPiplus;
-  G4bool                          isInitialized;
+  G4bool                          isMaster;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex pionElasticXSMutex;
+#endif
 };
 
 #endif

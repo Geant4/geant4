@@ -22,12 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4PVParameterised.hh 73250 2013-08-22 13:22:23Z gcosmo $
-//
 // 
-// class G4PVParameterised
+// G4PVParameterised
 //
 // Class description:
 //
@@ -36,8 +32,7 @@
 // of a G4VParameterisation object. The positioning is assumed to
 // be dominant along a cartesian axis (specified).
 
-// History:
-// 29.07.95 P.Kent First non-stub version
+// 29.07.95, P.Kent - first non-stub version
 // ----------------------------------------------------------------------
 #ifndef G4PVPARAMETERISED_HH
 #define G4PVPARAMETERISED_HH
@@ -53,8 +48,8 @@ class G4PVParameterised : public G4PVReplica
                             G4LogicalVolume* pMotherLogical,
                       const EAxis pAxis,
                       const G4int nReplicas,
-                            G4VPVParameterisation *pParam,
-                            G4bool pSurfChk=false);
+                            G4VPVParameterisation* pParam,
+                            G4bool pSurfChk = false);
       // Replicate the volume nReplicas Times using the paramaterisation pParam,
       // within the mother volume pMotherLogical.
       // The positioning of the replicas is dominant along the specified axis.
@@ -67,8 +62,8 @@ class G4PVParameterised : public G4PVReplica
                             G4VPhysicalVolume* pMother,
                       const EAxis pAxis,
                       const G4int nReplicas,
-                            G4VPVParameterisation *pParam,
-                            G4bool pSurfChk=false);
+                            G4VPVParameterisation* pParam,
+                            G4bool pSurfChk = false);
       // Almost exactly similar to first constructor, changing only mother 
       // pointer's type to PhysicalVolume.
 
@@ -85,6 +80,8 @@ class G4PVParameterised : public G4PVReplica
     G4bool IsParameterised() const;
       // Returns true to identify it is a parameterised physical volume.
 
+    EVolume VolumeType() const final;
+   
     G4VPVParameterisation* GetParameterisation() const;
       // Returns the current pointer to the parameterisation.
 
@@ -94,11 +91,12 @@ class G4PVParameterised : public G4PVReplica
                             G4double& offset,
                             G4bool& consuming) const;
       // Fills arguments with the attributes from the base replica.
-    virtual void SetRegularStructureId( G4int Code ); 
+
+    virtual void SetRegularStructureId( G4int code ); 
       // Method sets code and can prepare for special type of regular volumes.
 
-    G4bool CheckOverlaps(G4int res=1000, G4double tol=0.,
-                         G4bool verbose=true, G4int maxErr=1);
+    G4bool CheckOverlaps(G4int res = 1000, G4double tol = 0.,
+                         G4bool verbose = true, G4int maxErr = 1);
       // Verifies if each instance of the parameterised volume is overlapping
       // with other instances or with the mother volume. Provides default
       // resolution for the number of points to be generated and verified.
@@ -109,7 +107,7 @@ class G4PVParameterised : public G4PVReplica
 
   private:
 
-    G4VPVParameterisation *fparam; 
+    G4VPVParameterisation* fparam = nullptr; 
 };
 
 #endif

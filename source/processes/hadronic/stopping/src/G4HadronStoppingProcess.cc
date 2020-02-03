@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronStoppingProcess.cc 94351 2015-11-12 15:35:32Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -212,7 +211,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
 	resultNuc = model->ApplyYourself(thePro, *nucleus);
 	++reentryCount;
       }
-      catch(G4HadronicException aR) {
+      catch(G4HadronicException & aR) {
 	G4ExceptionDescription ed;
 	ed << "Call for " << model->GetModelName() << G4endl;
 	ed << "Target element "<<elm->GetName()<<"  Z= " 

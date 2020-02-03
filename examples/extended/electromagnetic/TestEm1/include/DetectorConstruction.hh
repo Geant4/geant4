@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm1/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.hh 84815 2014-10-21 12:19:02Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,41 +54,54 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
+<<<<<<< HEAD
    ~DetectorConstruction();
 
   public:
+=======
+    virtual ~DetectorConstruction();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
      
-     void SetSize     (G4double);              
-     void SetMaterial (G4String);
-
-  public:
+    void SetSize     (G4double);              
+    void SetMaterial (const G4String&);
   
-     const
-     G4VPhysicalVolume* GetWorld()      {return fPBox;};           
-                    
-     G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
+    inline const G4VPhysicalVolume* GetWorld() const {return fPBox;};
+    inline G4double GetSize() const                  {return fBoxSize;};      
+    inline const G4Material* GetMaterial() const     {return fMaterial;};
      
+<<<<<<< HEAD
      void               PrintParameters();
                        
   private:
   
      G4VPhysicalVolume*    fPBox;
      G4LogicalVolume*      fLBox;
+=======
+    void   PrintParameters();
+    void   DefineMaterials();
+                       
+  private:
+  
+    G4VPhysicalVolume*    fPBox;
+    G4LogicalVolume*      fLBox;
+    G4Box*                fBox;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
      
-     G4double              fBoxSize;
-     G4Material*           fMaterial;
+    G4double              fBoxSize;
+    G4Material*           fMaterial;
 
-     DetectorMessenger* fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-
+<<<<<<< HEAD
   private:
     
      void               DefineMaterials();
      G4VPhysicalVolume* ConstructVolumes();     
+=======
+    DetectorMessenger* fDetectorMessenger;
+    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

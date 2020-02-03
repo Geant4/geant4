@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H1Messenger.cc 66310 2012-12-17 11:56:35Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
 //
@@ -71,6 +70,8 @@ G4H1Messenger::G4H1Messenger(G4VAnalysisManager* manager)
   fSetH1TitleCmd = fHelper->CreateSetTitleCommand(this);
   fSetH1XAxisCmd = fHelper->CreateSetAxisCommand("x", this);
   fSetH1YAxisCmd = fHelper->CreateSetAxisCommand("y", this);
+  fSetH1XAxisLogCmd = fHelper->CreateSetAxisLogCommand("x", this);
+  fSetH1YAxisLogCmd = fHelper->CreateSetAxisLogCommand("y", this);
 }
 
 //_____________________________________________________________________________
@@ -201,7 +202,7 @@ void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
   std::vector<G4String> parameters;
   G4Analysis::Tokenize(newValues, parameters);
   // check consistency
-  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+  if ( parameters.size() != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
     fHelper->WarnAboutParameters(command, parameters.size());
     return;
@@ -256,4 +257,16 @@ void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     auto yaxis = parameters[counter++];
     fManager->SetH1YAxisTitle(id, yaxis);     
   }
-}  
+  else if ( command == fSetH1XAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto xaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH1XAxisIsLog(id, xaxisLog);
+  }
+  else if ( command == fSetH1YAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto yaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH1YAxisIsLog(id, yaxisLog);
+  }
+}

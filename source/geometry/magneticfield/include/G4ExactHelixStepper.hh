@@ -23,21 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExactHelixStepper.hh 66356 2012-12-18 09:02:32Z gcosmo $ 
+// G4ExactHelixStepper
 //
-//
-// class G4ExactHelixStepper
-//       -------------------
 // Class description:
 //
 // Concrete class for particle motion in constant magnetic field.
+// Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
+// with helix(h) being a helix piece of length h.
+// simplest approach for solving linear differential equations.
+// Take the current derivative and add it to the current position.
+//
+// As the field is assumed constant, an error is not calculated.
 
-// History:
-// - 28.Jan.05  J.Apostolakis   Creation of new concrete class
+// Author: J.Apostolakis, 28.01.2005.
+//         Implementation adapted from ExplicitEuler by W.Wander 
 // --------------------------------------------------------------------
-
-#ifndef G4ExactHelixStepper_hh
-#define G4ExactHelixStepper_hh
+#ifndef G4EXACTHELIXSTEPPER_HH
+#define G4EXACTHELIXSTEPPER_HH
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
@@ -50,9 +52,12 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
 {
   public:  // with description
 
-    G4ExactHelixStepper(G4Mag_EqRhs *EqRhs);
+    G4ExactHelixStepper(G4Mag_EqRhs* EqRhs);
     ~G4ExactHelixStepper();
   
+    G4ExactHelixStepper(const G4ExactHelixStepper&) = delete;
+    G4ExactHelixStepper& operator=(const G4ExactHelixStepper&) = delete;
+
     void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
@@ -75,17 +80,8 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
 
   private:
 
-    G4ExactHelixStepper(const G4ExactHelixStepper&);
-    G4ExactHelixStepper& operator=(const G4ExactHelixStepper&);
-      // Private copy constructor and assignment operator.
-   
-  private:
-
-    G4ThreeVector    fBfieldValue;
+    G4ThreeVector fBfieldValue;
       //  Initial value of field at last step
-    G4Mag_EqRhs*  fPtrMagEqOfMot;
 };
 
-
-
-#endif  /* G4ExactHelixStepper_hh */
+#endif

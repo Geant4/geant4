@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcTblElement.cc 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -40,7 +39,7 @@
 
 // default constructor ////////////////////////
 G4ProcTblElement::G4ProcTblElement()
-   :pProcess(0),pProcMgrVector(0)
+   :pProcess(nullptr),pProcMgrVector(nullptr)
 {
 }
 
@@ -53,7 +52,7 @@ G4ProcTblElement::G4ProcTblElement(G4VProcess* aProcess):
 
 // copy constructor //////////////////////////
 G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
-  :pProcess(0),pProcMgrVector(0)
+  :pProcess(nullptr),pProcMgrVector(nullptr)
 {
   *this = right;
 }
@@ -62,7 +61,7 @@ G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
 // destructor ////////////////////////
 G4ProcTblElement::~G4ProcTblElement()
 {
-  if (pProcMgrVector != 0) {
+  if (pProcMgrVector != nullptr) {
     pProcMgrVector->clear();
     delete pProcMgrVector;
   }
@@ -75,7 +74,7 @@ G4ProcTblElement & G4ProcTblElement::operator=(const G4ProcTblElement &right)
   if (this != &right) {
     pProcess       = right.pProcess;
     // copy all contents in  pProcMgrVector
-    if (pProcMgrVector != 0) {
+    if (pProcMgrVector != nullptr) {
       pProcMgrVector->clear();
       delete pProcMgrVector;
     }
@@ -90,14 +89,14 @@ G4ProcTblElement & G4ProcTblElement::operator=(const G4ProcTblElement &right)
 
 
 //////////////////////////
-G4int G4ProcTblElement::operator==(const G4ProcTblElement &right) const
+G4bool G4ProcTblElement::operator==(const G4ProcTblElement &right) const
 {
   return (this == &right);
 }
 
 
 //////////////////////////
-G4int G4ProcTblElement::operator!=(const G4ProcTblElement &right) const
+G4bool G4ProcTblElement::operator!=(const G4ProcTblElement &right) const
 {
   return (this != &right);
 }

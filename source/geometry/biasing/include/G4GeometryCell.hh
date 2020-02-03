@@ -23,24 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GeometryCell.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// Class G4GeometryCell
+// G4GeometryCell
 //
 // Class description:
 //
-// This class is usde by scoring and importance sampling.
-// It serves to address a "cell". A "cell" is somewhat
-// related to a touchable in Geant4. It is identified by a reference
-// to a G4VPhysicalVolume and a number (replica number).
-// Only simple replicas are supported.
+// This class is used by scoring and importance sampling.
+// It serves to address a "cell". A "cell" is somewhat related to a
+// touchable. It is identified by a reference to a G4VPhysicalVolume
+// and a number (replica number). Only simple replicas are supported.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4GeometryCell_hh
-#define G4GeometryCell_hh G4GeometryCell_hh 
+#ifndef G4GEOMETRYCELL_HH
+#define G4GEOMETRYCELL_HH 1
 
 #include "globals.hh"
 
@@ -48,34 +43,34 @@ class G4VPhysicalVolume;
 
 class G4GeometryCell
 {
-public:  // with description
+  public:  // with description
 
-  G4GeometryCell(const G4VPhysicalVolume &aVolume, G4int RepNum);
+    G4GeometryCell(const G4VPhysicalVolume& aVolume, G4int RepNum);
+      // initialise volume and replica number
 
-  G4GeometryCell(const G4GeometryCell &rhs);
-    // initialise volume and replica number
+    G4GeometryCell(const G4GeometryCell& rhs);
+    G4GeometryCell& operator=(const G4GeometryCell& rhs);
+      // copy constructor and assignment operator
 
-  ~G4GeometryCell();
-    // simple destruction
+    ~G4GeometryCell();
+      // simple destruction
   
-  const G4VPhysicalVolume &GetPhysicalVolume() const;
-    // return the physical volume of the cell
+    const G4VPhysicalVolume& GetPhysicalVolume() const;
+      // return the physical volume of the cell
 
-  G4int GetReplicaNumber() const;
-    // returns the replica number of the cell
+    G4int GetReplicaNumber() const;
+      // returns the replica number of the cell
+ 
+  private:
 
-  G4GeometryCell &operator=(const G4GeometryCell &rhs);
-  
-private:
-  const G4VPhysicalVolume *fVPhysicalVolume;
-    // pointer to the G4VPhysicalVolume of the "cell" 
-    // it is treated as identifyer 
+    const G4VPhysicalVolume* fVPhysicalVolume = nullptr;
+      // pointer to the G4VPhysicalVolume of the "cell"; treated as identifyer 
 
-  G4int fRepNum;
-    // replica number of the "cell"
+    G4int fRepNum = 0;
+      // replica number of the "cell"
 };
 
-G4bool operator==(const G4GeometryCell &k1, const G4GeometryCell &k2);
-G4bool operator!=(const G4GeometryCell &k1, const G4GeometryCell &k2);
+G4bool operator==(const G4GeometryCell& k1, const G4GeometryCell& k2);
+G4bool operator!=(const G4GeometryCell& k1, const G4GeometryCell& k2);
 
 #endif

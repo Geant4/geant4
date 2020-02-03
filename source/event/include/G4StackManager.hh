@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //  Last Modification : 04/Oct/11 P. Mato - making use of G4TrackStack with value semantics
 ///
@@ -67,8 +66,8 @@ class G4StackManager
 
   private:
       const G4StackManager& operator=(const G4StackManager &right);
-      G4int operator==(const G4StackManager &right) const;
-      G4int operator!=(const G4StackManager &right) const;
+      G4bool operator==(const G4StackManager &right) const;
+      G4bool operator!=(const G4StackManager &right) const;
 
   public:
       G4int PushOneTrack(G4Track *newTrack, G4VTrajectory *newTrajectory = 0);

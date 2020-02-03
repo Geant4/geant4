@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcTblElement.hh 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -68,8 +67,8 @@ class G4ProcTblElement
     G4ProcTblElement & operator=(const G4ProcTblElement &right);
     // Assignment operator
 
-    G4int operator==(const G4ProcTblElement &right) const;
-    G4int operator!=(const G4ProcTblElement &right) const;
+    G4bool operator==(const G4ProcTblElement &right) const;
+    G4bool operator!=(const G4ProcTblElement &right) const;
     // equal / unequal operator
 
   protected:

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.hh 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -41,6 +40,7 @@
 
 #include "globals.hh"
 class G4DecayTable;
+#include "G4Ions.hh"
 class G4IsotopeProperty
 {
  // Class Description
@@ -57,8 +57,8 @@ class G4IsotopeProperty
   G4IsotopeProperty & operator=(G4IsotopeProperty& right);
  
   // equal / unequal operator
-  G4int operator==(const G4IsotopeProperty &right) const;
-  G4int operator!=(const G4IsotopeProperty &right) const;
+  G4bool operator==(const G4IsotopeProperty &right) const;
+  G4bool operator!=(const G4IsotopeProperty &right) const;
 
   // destructor
   virtual ~G4IsotopeProperty();
@@ -89,6 +89,11 @@ class G4IsotopeProperty
   G4int         GetIsomerLevel() const;
   void          SetIsomerLevel(G4int  level);
 
+  // Set/Get floating level base
+  G4Ions::G4FloatLevelBase GetFloatLevelBase() const;
+  void                     SetFloatLevelBase(G4Ions::G4FloatLevelBase flb);
+  void                     SetFloatLevelBase(G4int flbIndex);
+
   // Set/Get life time
   G4double      GetLifeTime() const;
   void          SetLifeTime(G4double  T);
@@ -109,6 +114,7 @@ class G4IsotopeProperty
   G4DecayTable* fDecayTable;       // decay Table
   G4double      fMagneticMoment;   // magnetic moment 
   G4int         fIsomerLevel;      // isomer level 
+  G4Ions::G4FloatLevelBase fFloatLevelBase; // floating level base
 };
 
 inline 
@@ -205,9 +211,26 @@ inline
 {
     fDecayTable = table;
 }
+
+inline 
+ G4Ions::G4FloatLevelBase G4IsotopeProperty::GetFloatLevelBase() const
+{ 
+  return fFloatLevelBase; 
+}
+
+inline 
+ void G4IsotopeProperty::SetFloatLevelBase(G4Ions::G4FloatLevelBase flb)
+{
+  fFloatLevelBase = flb;
+}
+
+inline 
+ void G4IsotopeProperty::SetFloatLevelBase(G4int flbIndex)
+{
+  fFloatLevelBase = G4Ions::FloatLevelBase(flbIndex);
+}
+
 #endif
-
-
 
 
 

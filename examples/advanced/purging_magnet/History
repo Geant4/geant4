@@ -1,5 +1,8 @@
 -------------------------------------------------------------------
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,9 +12,32 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
                       Category History file
                       ---------------------
 
+<<<<<<< HEAD
 28.11.2016 - G. Folger
 - Remove direct use of theParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
+=======
+20.11.2019 G. Folger     (purmag-V10-05-00)
+- remove using namespace std from header file PurgMagTabulatedField3D.hh
+   and correct follow-on problems.
+
+7.11.2018 - I. Hrivnacova (purmag-V10-04-02)
+- Switch back to csv output format.
+
+29.10.2018 - L. Pandola (purmag-V10-04-01)
+- Remove the useless buffer singleton PurgMagAnalysisManager class, 
+  and call directly G4AnalysisManager tools. Clean-up in the SteppingAction. 
+  Use root instead of csv as output format.
+  
+10.05.2018 - B. Morgan     (purmag-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+28.11.2016 - G. Folger      (purmag-V10-02-00)
+            Remove direct use of theParticleIterator, use GetParticleTableIterator().
+             fix required by clang39 on Linux and MAC
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 16.10.2014 - Luciano Pandola (purmag-V10-00-02)
 - Prevent the threads to read the B-map file at the same time

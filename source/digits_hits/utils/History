@@ -1,4 +1,3 @@
-$Id: History 89185 2015-03-23 16:11:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23rd, 2019  M.Asai (detutils-V10-05-04)
+- Revising utils/src/G4ScoringQuantiryMessenger.cc to better handle
+  ther error cases.
+
+September 30th, 2019  I. Hrivnacova (detutils-V10-05-03)
+- Added 'ntuple' subdirectory for score ntuple writer UI commands
+
+September 30th, 2019  M.Asai (detutils-V10-05-02)
+- Revising utils/src/G4ScoringMessenger.cc to better handle the error
+  cases.
+
+September 19th, 2019  M.Asai (detutils-V10-05-01)
+- Introducing G4ScoringRealWorld that allows to define command-based
+  scorers to a logical volume in the mass world. 
+- Co-working with run-V10-05-05.
+
+July 8th, 2019  I. Hrivnacova (detutils-V10-05-00)
+- Added G4TScoreNtupleWriter and G4TScoreNtupleWriterMessenger
+  which implements storing hits collections of G4THitsMap<G4double>
+  type vith Geant4 analysis tools, define in G4VcoreNtupleWriter
+  The dependency on the analysis category is avoided via template.
 
 March 20, 2015  A.Kimura (detutils-V10-01-02)
 - fixed type convertion warnigs at l.132 and l.157 of G4VScoreColorMap.cc

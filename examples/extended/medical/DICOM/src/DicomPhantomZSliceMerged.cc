@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceMerged.cc 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomPhantomZSliceMerged.cc
 /// \brief Implementation of the DicomPhantomZSliceMerged class
@@ -83,13 +82,14 @@ void DicomPhantomZSliceMerged::CheckSlices()
         }
       }
     } else {
-      std::map<G4double,DicomPhantomZSliceHeader*>::iterator ite0 = fSlices.begin();
-      std::map<G4double,DicomPhantomZSliceHeader*>::iterator ite1 = fSlices.begin();
-      std::map<G4double,DicomPhantomZSliceHeader*>::iterator ite2 = fSlices.begin();
+      auto ite0 = fSlices.begin();
+      auto ite1 = fSlices.begin();
+      auto ite2 = fSlices.begin();
       ++ite1;
       ++ite2; ++ite2;
       
-      for(; ite2 != fSlices.end(); ++ite0, ++ite1, ++ite2) {
+      for(; ite2 != fSlices.end(); ++ite0, ++ite1, ++ite2)
+      {
         DicomPhantomZSliceHeader* prev = ite0->second;
         DicomPhantomZSliceHeader* slice = ite1->second;
         DicomPhantomZSliceHeader* next = ite2->second;
@@ -100,7 +100,7 @@ void DicomPhantomZSliceMerged::CheckSlices()
         G4double real_distance = real_max_distance + real_min_distance;
         G4double stated_distance = slice->GetMaxZ()-slice->GetMinZ();
         if(real_distance != stated_distance) {
-          unsigned int sliceNum = std::distance(fSlices.begin(),ite1);
+          uintmax_t sliceNum = std::distance(fSlices.begin(),ite1);
           G4cout << "\tDicomPhantomZSliceMerged::CheckSlices - \
                     Slice Distance Error in slice [" << sliceNum 
                  << "]: Real Distance = "
@@ -131,8 +131,7 @@ void DicomPhantomZSliceMerged::CheckSlices()
   }
   G4cout << G4endl;
   
-  std::map<G4double,DicomPhantomZSliceHeader*>::iterator ite = fSlices.begin();
-  for(ite = fSlices.begin(); ite != fSlices.end(); ++ite) {
+  for(auto ite = fSlices.cbegin(); ite != fSlices.cend(); ++ite) {
     ite->second->DumpToFile();
   }
   

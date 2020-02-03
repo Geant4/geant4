@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionInitialState.hh 89688 2015-04-27 10:06:44Z gcosmo $
 //
-// $Id: G4CollisionInitialState.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -59,10 +57,10 @@ public:
   G4CollisionInitialState(const G4CollisionInitialState & right);
   G4CollisionInitialState & operator=(const G4CollisionInitialState & right);
 
-  int operator<(const G4CollisionInitialState & right) const
+  G4bool operator<(const G4CollisionInitialState & right) const
     {return (theCollisionTime < right.theCollisionTime);}
 
-  int operator==(const G4CollisionInitialState& right) const
+  G4bool operator==(const G4CollisionInitialState& right) const
     {return (theCollisionTime == right.theCollisionTime);}
 
 

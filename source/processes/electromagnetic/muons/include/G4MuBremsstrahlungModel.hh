@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh 72114 2013-07-10 09:37:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,41 +73,43 @@ class G4MuBremsstrahlungModel : public G4VEmModel
 
 public:
 
-  G4MuBremsstrahlungModel(const G4ParticleDefinition* p = 0,
+  explicit G4MuBremsstrahlungModel(const G4ParticleDefinition* p = nullptr,
                           const G4String& nam = "MuBrem");
 
-  virtual ~G4MuBremsstrahlungModel();
+  ~G4MuBremsstrahlungModel() = default;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*,
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
+				const G4MaterialCutsCouple*) override;
 			      
   virtual G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 			       
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,
                                 G4double kineticEnergy,
-                                G4double cutEnergy);
+                                G4double cutEnergy) override;
 			      
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline void SetLowestKineticEnergy(G4double e);
 
   virtual G4double MinPrimaryEnergy(const G4Material*,
-                                    const G4ParticleDefinition*, G4double);
+         const G4ParticleDefinition*, 
+         G4double) override;
 
 protected:
 
@@ -127,8 +128,9 @@ protected:
 private:
 
   // hide assignment operator
-  G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
-  G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&);
+  G4MuBremsstrahlungModel & 
+    operator=(const  G4MuBremsstrahlungModel &right) = delete;
+  G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&) = delete;
 
 protected:
 
@@ -143,8 +145,6 @@ protected:
   G4double bh1;
   G4double btf;
   G4double btf1;
-
-private:
 
   G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;

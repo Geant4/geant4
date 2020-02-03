@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleiModel.cc 71989 2013-07-02 17:12:22Z mkelsey $
 //
 // For the best approximation to a physical-units model, set the following:
 //	setenv G4NUCMODEL_XSEC_SCALE   0.1
@@ -142,7 +141,7 @@
 //		Check zone argument to inverseMFP() to ensure within range.
 // 20130611  M. Kelsey -- Undo "spath<=path" change (20130511), replace with
 //		explicit check on spath==0.
-// 20130619  A. Ribon -- Fixed reproducibility problem in the method
+// 20130619  A. Ribon  -- Fixed reproducibility problem in the method
 //              generateParticleFate
 // 20130627  M. Kelsey -- Check "path==0.", rather than spath.
 // 20130628  M. Kelsey -- Print deuteron type code, rather than array index,
@@ -158,16 +157,7 @@
 // 20141001  M. Kelsey -- Change sign of "dv" in boundaryTransition
 // 20150608  M. Kelsey -- Label all while loops as terminating.
 // 20150622  M. Kelsey -- Use G4AutoDelete for _TLS_ buffers.
-
-// 20180530  N. Toro -- updated quasideuteron cross-section based on conservative
-//              bounds from CLAS data (Mirazita et al 2004)
-// 20180530  N. Toro -- scale calculated dinucleon densities to reproduce total number of 
-//              quasideuterons predicted in LDA model; added combinatoric factor
-//              to calculation of dineutron/diproton densities
-// 20180601  N. Toro -- restructure calculation of interaction paths to use
-//              total invmfp to pick interaction point, then relative rates to
-//              select target.  This is needed to achieve correct relative rates
-//              when forcing interactions for incident photon or muon
+// 20180227  A. Ribon  -- Replaced obsolete std::bind2nd with std::bind
 
 #include "G4NucleiModel.hh"
 #include "G4AutoDelete.hh"
@@ -220,22 +210,21 @@ const G4double G4NucleiModel::kaon_vp       = 0.015;
 const G4double G4NucleiModel::hyperon_vp    = 0.030;
 
 namespace {
-  const G4double kebins[] =
-    {  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
-       0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
-       2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
+  // Quasideuteron absorption cross section is taken to be the 
+  // deuteron photo-disintegration cross section (gam + D -> p + n)
+  // Values taken from smooth curve drawn through data from 2.4 - 500 MeV, 
+  // plus angle integration of JLab data from 0.5 - 3 GeV
+  //    M. Mirazita et al., Phys. Rev. C 70, 014005 (2004)
+  // Points above 3 GeV are extrapolated.
+  const G4double kebins[] = {
+      0.0,  0.0024, 0.0032, 0.0042, 0.0056, 0.0075, 0.01,  0.024, 0.075, 0.1,
+      0.13, 0.18,   0.24,   0.32,   0.42,   0.56,   0.75,  1.0,   1.3,   1.8,
+      2.4,  3.2,    4.2,    5.6,    7.5,   10.0,   13.0,  18.0,  24.0,  32.0 };
 
-
-  // up to 0.56: match Kossov 2002 (10.1140/epja/i2002-10008-x) g1+g2
-  // above 0.56: based on exclusive deuteron dissociation data from CLAS  Mirazita et al 2004 (10.1103/PhysRevC.70.014005), which covers ~0.5 to 3 GeV.
-  // 0.56 to 1.8: use highest central-value of differential cross-section from CLAS, in any angular bin, multiplied by 4pi.  This overestimates TOTAL cross-section by a factor of 2-10 to avoid under-producing on the tails.
-  // 1.8 to 18.0: a rough fit to the 1-2 GeV CLAS data: (delta_t/s^8 * 10000 mb), extrapolated.  Falls slower than the expected s^11/t scaling.  Note like above, overestimates total xsec by a significant factor.
-  // > 18: zero
-
-  const G4double gammaQDxsec[30] =
-    { 2.8,    1.3,    0.89,   0.56,   0.38,   0.27,   0.19,   0.14,   0.098, 0.071, 
-      0.054,  0.037, 0.028, 0.021, 0.016, 0.01,  0.004, 0.0015, 0.0006, 0.0002,
-      0.00007, 0.000015, 3.7e-6, 7.4e-7, 1.3e-7, 2.2e-8, 4.2e-9, 5.0e-10, 0.00, 0.00 };
+  const G4double gammaQDxsec[30] = {
+     0.0,     0.7,    2.0,    2.2,    2.1,    1.8,    1.3,     0.4,     0.098,   0.071,
+     0.055,   0.055,  0.065,  0.045,  0.017,  0.007,  2.37e-3, 6.14e-4, 1.72e-4, 4.2e-5,
+     1.05e-5, 3.0e-6, 7.0e-7, 1.3e-7, 2.3e-8, 3.2e-9, 4.9e-10, 0.0,     0.0,     0.0 };
 }
 
 
@@ -255,7 +244,7 @@ G4NucleiModel::G4NucleiModel()
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
-    potentialThickness(G4CascadeParameters::potentialThickness()),
+    potentialThickness(1.0),
     neutronEP(neutron), protonEP(proton) {}
 
 G4NucleiModel::G4NucleiModel(G4int a, G4int z)
@@ -273,7 +262,7 @@ G4NucleiModel::G4NucleiModel(G4int a, G4int z)
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
-    potentialThickness(G4CascadeParameters::potentialThickness()),
+    potentialThickness(1.0),
     neutronEP(neutron), protonEP(proton) {
   generateModel(a,z);
 }
@@ -293,7 +282,7 @@ G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
-    potentialThickness(G4CascadeParameters::potentialThickness()),
+    potentialThickness(1.0),
     neutronEP(neutron), protonEP(proton) {
   generateModel(nuclei);
 }
@@ -380,8 +369,6 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   fillPotentials(proton, tot_vol);		// Protons
   fillPotentials(neutron, tot_vol);		// Neutrons
 
-  setDinucDensityScale();
-
   // Additional flat zone potentials for other hadrons
   const std::vector<G4double> vp(number_of_zones, (A>4)?pion_vp:pion_vp_small);
   const std::vector<G4double> kp(number_of_zones, kaon_vp);
@@ -395,7 +382,6 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   nuclei_volume = std::accumulate(zone_volumes.begin(),zone_volumes.end(),0.);
 
   if (verboseLevel > 3) printModel();
-
 }
 
 
@@ -413,40 +399,6 @@ void G4NucleiModel::fillBindingEnergies() {
   binding_energies.push_back(std::fabs(bindingEnergy(A-1,Z)-dm)/GeV);
 }
 
-
-// Compute correction to dinucleon densities to get correct total number
-
-void G4NucleiModel::setDinucDensityScale()
-{
-  if(A<5) {
-    dinucDensityScale = 1.0;
-    return;  // don't do this for light nuclei -- just calculate number of dinuclei.
-  }
-
-  double naiveNumQD = 0;
-
-  double zoneQD = 0;
-  for (G4int i = 0; i < number_of_zones; i++) { 
-    zoneQD = getVolume(i) * getVolume(i) * 
-      getDensity(proton, i) * getDensity(neutron, i);
-    naiveNumQD += zoneQD;
-    if(verboseLevel>4 )
-	G4cout << " zone " << i << " : " << zoneQD << " naive quasideuterons" << G4endl;
-  }
-
-  // from eqn. (36) of Benhar et al arXiv:nucl-th/0301091v1
-  double L_LDA = 10.83 - 9.73 * std::pow(A, -1/3.);
-  double NumQD_LDA = L_LDA * Z * (A-Z) / A;
-
-  dinucDensityScale =NumQD_LDA / naiveNumQD;
-
-  if(verboseLevel>4 ){
-    G4cout << " total:  " << naiveNumQD << " naive quasideuterons" << G4endl;
-    G4cout << "  vs. Levinger L = " << L_LDA << " => " << NumQD_LDA << " quasideuterons" << G4endl;
-    G4cout << " => dinucleon numbers being rescaled by " << dinucDensityScale << G4endl;
-
-  }
-}
 // Load zone boundary radius array for current nucleus
 
 void G4NucleiModel::fillZoneRadii(G4double nuclearRadius) {
@@ -744,11 +696,6 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     G4cout << " >>> G4NucleiModel::generateInteractionPartners" << G4endl;
   }
 
-
-  std::vector<partner> candidatePartners(0);		// Buffer for output below
-  // NT: use candidatePartners as a buffer of <particle, INVMFP>
-  // for candidates.  Then choose which one to execute later.
-
   thePartners.clear();		// Reset buffer for next cycle
 
   G4int ptype = cparticle.getParticle().type();
@@ -796,9 +743,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   G4double invmfp = 0.;			// Buffers for interaction probability
-  G4double total_invmfp = 0.;
   G4double spath  = 0.;
-
   for (G4int ip = 1; ip < 3; ip++) {
     // Only process nucleons which remain active in target
     if (ip==proton  && protonNumberCurrent < 1) continue;
@@ -808,23 +753,19 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     // All nucleons are assumed to be at rest when colliding
     G4InuclElementaryParticle particle = generateNucleon(ip, zone);
     invmfp = inverseMeanFreePath(cparticle, particle);
+    spath  = generateInteractionLength(cparticle, path, invmfp);
 
-    //    spath  = generateInteractionLength(cparticle, path, invmfp);
-
-    //    if (path<small || spath < path) {  // NT: put everything in this stack, not just selected.
-    if (verboseLevel > 3) {
-      G4cout << " adding partner[" << candidatePartners.size() << "]: "
-	     << particle 
-	     << " invmfp = " << invmfp << G4endl;
+    if (path<small || spath < path) {
+      if (verboseLevel > 3) {
+	G4cout << " adding partner[" << thePartners.size() << "]: "
+	       << particle << G4endl;
+      }
+      thePartners.push_back(partner(particle, spath));
     }
-    candidatePartners.push_back(partner(particle, invmfp));
-    total_invmfp += invmfp;
-
-    //}
   }	// for (G4int ip...
   
   if (verboseLevel > 2) {
-    G4cout << " after nucleons " << candidatePartners.size() << " path " << path << G4endl;
+    G4cout << " after nucleons " << thePartners.size() << " path " << path << G4endl;
   }
 
   // Absorption possible for pions or photons interacting with dibaryons
@@ -836,8 +777,10 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   
     // Initialize buffers for quasi-deuteron results
     qdeutrons.clear();
-    //    acsecs.clear();
+    acsecs.clear();
   
+    G4double tot_invmfp = 0.0;		// Total inv. mean-free-path for all QDs
+
     // Proton-proton state interacts with pi-, mu- or neutrals
     if (protonNumberCurrent >= 2 && ptype != pip) {
       G4InuclElementaryParticle ppd = generateQuasiDeuteron(pro, pro, zone);
@@ -845,16 +788,9 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 	G4cout << " ptype=" << ptype << " using pp target\n" << ppd << G4endl;
       
       invmfp = inverseMeanFreePath(cparticle, ppd);      
-      candidatePartners.push_back(partner(ppd, invmfp));
-      total_invmfp += invmfp;
-
-      if(verboseLevel > 3)
-	G4cout << " adding partner[" << candidatePartners.size() << "]: "
-	       << ppd  
-	       << " invmfp = " << invmfp << G4endl;
-
-      //      acsecs.push_back(invmfp);
-      //      qdeutrons.push_back(ppd);
+      tot_invmfp += invmfp;
+      acsecs.push_back(invmfp);
+      qdeutrons.push_back(ppd);
     }
     
     // Proton-neutron state interacts with any pion type or photon
@@ -864,18 +800,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 	G4cout << " ptype=" << ptype << " using np target\n" << npd << G4endl;
       
       invmfp = inverseMeanFreePath(cparticle, npd);
-      candidatePartners.push_back(partner(npd, invmfp));
-      total_invmfp += invmfp;
-
-      if(verboseLevel > 3)
-	G4cout << " adding partner[" << candidatePartners.size() << "]: "
-	       << npd  
-	       << " invmfp = " << invmfp << G4endl;
-
-      //      tot_invmfp += invmfp;
-      //      acsecs.push_back(invmfp);
-      //      qdeutrons.push_back(ppd);
-
+      tot_invmfp += invmfp;
       acsecs.push_back(invmfp);
       qdeutrons.push_back(npd);
     }
@@ -887,89 +812,52 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 	G4cout << " ptype=" << ptype << " using nn target\n" << nnd << G4endl;
       
       invmfp = inverseMeanFreePath(cparticle, nnd);
-      candidatePartners.push_back(partner(nnd, invmfp));
-      total_invmfp += invmfp;
-
-      if(verboseLevel > 3)
-	G4cout << " adding partner[" << candidatePartners.size() << "]: "
-	       << nnd  
-	       << " invmfp = " << invmfp << G4endl;
-
-      //      tot_invmfp += invmfp;
-      //      acsecs.push_back(invmfp);
-      //      qdeutrons.push_back(ppd);
+      tot_invmfp += invmfp;
+      acsecs.push_back(invmfp);
+      qdeutrons.push_back(nnd);
     } 
     
-    // Select interaction from non-zero cross-section choices
+    // Select quasideuteron interaction from non-zero cross-section choices
     if (verboseLevel > 2) {
-      for (size_t i=0; i<candidatePartners.size(); i++) {
-	G4cout << " csecs[" << candidatePartners[i].first.getDefinition()->GetParticleName()
-	       << "] " << candidatePartners[i].second;
+      for (size_t i=0; i<qdeutrons.size(); i++) {
+	G4cout << " acsecs[" << qdeutrons[i].getDefinition()->GetParticleName()
+	       << "] " << acsecs[i];
       }
       G4cout << G4endl;
     }
-    
-  if (verboseLevel > 2) {
-    G4cout << " after deuterons " << candidatePartners.size() << " partners"
-	   << G4endl;
-  }
+  
+    if (tot_invmfp > small) {		// Must have absorption cross-section
+      G4double apath = generateInteractionLength(cparticle, path, tot_invmfp);
+      
+      if (path<small || apath < path) {		// choose the qdeutron
+	G4double sl = inuclRndm() * tot_invmfp;
+	G4double as = 0.0;
+	
+	for (size_t i = 0; i < qdeutrons.size(); i++) {
+	  as += acsecs[i];
+	  if (sl < as) { 
+	    if (verboseLevel > 2)
+	      G4cout << " deut type " << qdeutrons[i] << G4endl; 
 
+	    thePartners.push_back(partner(qdeutrons[i], apath));
+	    break;
+	  }
+	}	// for (qdeutrons...
+      }		// if (apath < path)
+    }		// if (tot_invmfp > small)
   }		// if (useQuasiDeuteron) [pion, muon or photon]
   
-  if (total_invmfp > small   // Must have scattering or absorption cross-section
-      && candidatePartners.size()>1) {	
-    
-    // choose interaction point.  Hadrons may have intpath>path, photons and muons
-    // are forced to interact so intpath<path.
-    // note this mean free path includes both scattering and absorption
-
-    if(verboseLevel>3)
-      G4cout <<  " with total_invmfp " << total_invmfp << " and " << candidatePartners.size() << " possible partners, attempting to generate interaction" << G4endl;
-
-    G4double intPath = generateInteractionLength(cparticle, path, total_invmfp);
-
-    if(verboseLevel>3)
-      G4cout <<  " interaction length = " << intPath << G4endl;
-
-    if (path<small || intPath < path) {		// interaction happens -- choose partner
-    
-      if(verboseLevel>3)
-	G4cout <<  " sort possible partners before selecting one " << G4endl;
-
-      std::sort(candidatePartners.begin(), candidatePartners.end(), invSortPartners);
-
-      if(verboseLevel>3)
-	for(std::vector<partner>::const_iterator i=candidatePartners.begin(); i != candidatePartners.end(); ++i) 
-	  G4cout <<  " partner " << i->first << " invmfp " << i->second << G4endl;
-          
-      G4double sl = inuclRndm() * total_invmfp;
-      
-      if(verboseLevel > 3)
-	G4cout <<  " choose process based on running-sum invmfp = " << sl << G4endl;
-
-      G4double sumcsecs = 0.0;
-      
-      for (std::vector<partner>::const_iterator i=candidatePartners.begin(); i != candidatePartners.end(); ++i) {
-	sumcsecs += i->second;
-	if (sl < sumcsecs) { 
-	  if (verboseLevel > 2)
-	    G4cout << " interact with type " << i->first << G4endl; 
-	  
-	  thePartners.push_back(partner(i->first,intPath));
-	  break;
-	} 
-      }	// for (candidatePartners...
-    }		// if (intPath < path)
-  }		// if (total_invmfp > small)
-
+  if (verboseLevel > 2) {
+    G4cout << " after deuterons " << thePartners.size() << " partners"
+	   << G4endl;
+  }
   
   if (thePartners.size() > 1) {		// Sort list by path length
-    G4cerr << " >> G4NucleiModel::generateInteractionPartners: thePartners.size() > 1 SHOULD NEVER BE REALIZED!" << G4endl;
     std::sort(thePartners.begin(), thePartners.end(), sortPartners);
   }
   
-  G4InuclElementaryParticle dummyParticle;		// Total path at end of list
-  thePartners.push_back(partner(dummyParticle, path));
+  G4InuclElementaryParticle particle;		// Total path at end of list
+  thePartners.push_back(partner(particle, path));
 }
 
 
@@ -1153,7 +1041,6 @@ generateParticleFate(G4CascadParticle& cparticle,
     outgoing_cparticles.push_back(cparticle);
     
     // Check conservation for simple scattering (ignore target nucleus!)
-
 #ifdef G4CASCADE_CHECK_ECONS
     if (verboseLevel > 2) {
       balance.collide(&prescatCP, 0, outgoing_cparticles);
@@ -1161,7 +1048,7 @@ generateParticleFate(G4CascadParticle& cparticle,
     }
 #endif
   }	// if (no_interaction)
-  
+
   return;
 }
 
@@ -1239,24 +1126,14 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 
   G4LorentzVector mom = cparticle.getMomentum();
   G4ThreeVector pos = cparticle.getPosition();
-
-  if (verboseLevel > 4) {
-    G4cout << "p = {" << mom.x() << ", " << mom.y() << ", " << mom.z() << "}" << G4endl;
-    G4cout << "r = {" << pos.x() << ", " << pos.y() << ", " << pos.z() << G4endl;
-  }
+  
   G4int type = cparticle.getParticle().type();
   
   G4double r = pos.mag();
-  G4double p = mom.vect().mag();
+  G4double p = mom.vect().mag();           // NAT
   G4double pr = pos.dot(mom.vect()) / r;
-  G4double pperp2 = p*p-pr*pr;
+  G4double pperp2 = p*p - pr*pr;           // NAT
 
-  if (verboseLevel > 4) {
-    G4cout << "r = " << r << " pr = " << pr << " pperp = " << std::sqrt(pperp2) << G4endl;
-    G4cout << "|p| = " << p << " mom^2 = " << p*p << " pr2 = " << pr*pr << G4endl;
-  }
-
-  
   G4int next_zone = cparticle.movingInsideNuclei() ? zone - 1 : zone + 1;
 
   // NOTE:  dv is the height of the wall seen by the particle  
@@ -1265,80 +1142,63 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
     G4cout << "Potentials for type " << type << " = " 
 	   << getPotential(type,zone) << " , "
   	   << getPotential(type,next_zone) << G4endl;
-    G4cout << " dv = " << dv << G4endl;
-    G4cout << " potential thickness = " << potentialThickness << G4endl;
   }
 
-  G4double qv = dv * dv + 2.0 * dv * mom.e() + pr * pr;
-  //  G4double qv = dv * dv + 2.0 * dv * mom.m() + pr * pr;  // Potential change suggested by Natalia -- Yukawa potential should be proportional to mass not energy in relativistic regime.  But commenting out for now -- want to understand effects of changing one thing at a time.
+  G4double qv = dv*dv + 2.0*dv*mom.e() + pr*pr;
+  //  G4double qv = dv*dv + 2.0*dv*mom.m() + pr*pr;    // more correct? NAT
+  G4double p1r = 0.; 
 
-  G4double qperp = 2*pperp2*potentialThickness/r; // perpendicular contribution to pr^2 after penetrating potential, to leading order in thickness
-  
-  G4double p1r = 0.;
-  
+  // Perpendicular contribution to pr^2 after penetrating     // NAT
+  // potential, to leading order in thickness                 // NAT
+  G4double qperp = 2.0*pperp2*potentialThickness/r;           // NAT 
+
   if (verboseLevel > 3) {
     G4cout << " type " << type << " zone " << zone << " next " << next_zone
-	   << " qv " << qv 
-	   << " qr " << pr*pr << "qv " << dv * dv + 2.0*dv*mom.e() << " qperp " << qperp << G4endl;
+	   << " qv " << qv << " dv " << dv << G4endl;
   }
 
-  bool adjustpperp=false;
-  double smallish = 0.001; 
+  G4bool adjustpperp = false;                                   // NAT
+  G4double smallish = 0.001;                                    // NAT
 
-  if (qv <= 0.0 && qv+qperp <=0 ) { 	// reflection
+//  if (qv <= 0.0) { 	// reflection
+  if (qv <= 0.0 && qv+qperp <=0 ) {     // reflection         // NAT
     if (verboseLevel > 3) G4cout << " reflects off boundary" << G4endl;
     p1r = -pr;
     cparticle.incrementReflectionCounter();
-  } else if ( qv > 0.0 )  {		// standard transition
+//  } else {            // transition
+
+  } else if (qv > 0.0) {		// standard transition  // NAT
     if (verboseLevel > 3) G4cout << " passes thru boundary" << G4endl;
     p1r = std::sqrt(qv);
     if (pr < 0.0) p1r = -p1r;
-
     cparticle.updateZone(next_zone);
     cparticle.resetReflection();
-  } else {		// transition via transverse kinetic energy (allowed for thick walls)
+
+  } else {   // transition via transverse kinetic energy (allowed for thick walls)  // NAT
     if (verboseLevel > 3) G4cout << " passes thru boundary due to angular momentum" << G4endl;
     p1r = smallish * pr; // don't want exactly tangent momentum
-    adjustpperp=true;
+    adjustpperp = true;
 
     cparticle.updateZone(next_zone);
     cparticle.resetReflection();
   }
   
-  G4double prr = (p1r - pr) / r; // change to radial momentum, divided by r  
-
+  G4double prr = (p1r - pr)/r;  // change to radial momentum, divided by r
+  
   if (verboseLevel > 3) {
     G4cout << " prr " << prr << " delta px " << prr*pos.x() << " py "
 	   << prr*pos.y()  << " pz " << prr*pos.z() << " mag "
 	   << std::fabs(prr*r) << G4endl;
   }
 
-  if(adjustpperp){
-    G4ThreeVector old_pperp=mom.vect()-pos*(pr/r);
-    if(verboseLevel > 4) {
-      G4cout << " pperp_x  " << old_pperp.x() 
-	     << " pperp_y  " << old_pperp.y() 
-	     << " pperp_z  " << old_pperp.z() 
-	     << " pperp.r " << old_pperp.dot(pos)
-	     << " |pperp|" << old_pperp.mag() << " =? " << std::sqrt(pperp2) << G4endl;
-	}
-    G4double new_pperp_mag=std::sqrt(pperp2 + qv - p1r*p1r);
-    if(verboseLevel > 4) {
-      G4cout << " |pperp|_new  " << new_pperp_mag << G4endl;
-    }
-    mom.setVect(old_pperp * new_pperp_mag/std::sqrt(pperp2)); // new total momentum found by rescaling p_perp
-    mom.setVect(mom.vect() + pos* p1r/r); // add a small radial component to make sure that we propagate into new zone.
-
-    if(verboseLevel > 3) {
-      G4cout << " newp_x  " << mom.x()
-	     << " newp_y  " << mom.y() 
-	     << " newp_z  " << mom.z() 
-	     << " newp.r " << mom.vect().dot(pos)
-	     << " |newp|" << mom.vect().mag() << G4endl;
-    }
-    
-  }
-  else {
+  if (adjustpperp) {                       // NAT
+    G4ThreeVector old_pperp = mom.vect() - pos*(pr/r);
+    G4double new_pperp_mag = std::sqrt(std::max(0.0, pperp2 + qv - p1r*p1r) );
+    // new total momentum found by rescaling p_perp
+    mom.setVect(old_pperp * new_pperp_mag/std::sqrt(pperp2));
+    // add a small radial component to make sure that we propagate into new zone
+    mom.setVect(mom.vect() + pos*p1r/r);
+  } else {
     mom.setVect(mom.vect() + pos*prr);
   }
 
@@ -1441,7 +1301,7 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
 
   // Normalize CDF to unit integral
   std::transform(wtlen.begin(), wtlen.end(), wtlen.begin(),
-		 std::bind2nd(std::divides<G4double>(), wtlen.back()));
+		 std::bind(std::divides<G4double>(), std::placeholders::_1, wtlen.back()));
   
   if (verboseLevel > 3) {
     G4cout << " weights";
@@ -1535,7 +1395,7 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
 }
 
 G4double G4NucleiModel::getCurrentDensity(G4int ip, G4int izone) const {
-  const G4double combinatoric = 0.5;		// Scale factor for pn vs. pp/nn
+  const G4double pn_spec = 1.0;		// Scale factor for pn vs. pp/nn
   //const G4double pn_spec = 0.5;
 
   G4double dens = 0.;
@@ -1544,13 +1404,13 @@ G4double G4NucleiModel::getCurrentDensity(G4int ip, G4int izone) const {
   else {	// For dibaryons, remove extra 1/volume term in density product
     switch (ip) {
     case diproton:  
-      dens = getDensity(proton,izone) * getDensity(proton,izone) * combinatoric * dinucDensityScale;
+      dens = getDensity(proton,izone) * getDensity(proton,izone);
       break;
     case unboundPN: 
-      dens = getDensity(proton,izone) * getDensity(neutron,izone) *  dinucDensityScale;
+      dens = getDensity(proton,izone) * getDensity(neutron,izone) * pn_spec;
       break;
     case dineutron:
-      dens = getDensity(neutron,izone) * getDensity(neutron,izone) * combinatoric * dinucDensityScale;
+      dens = getDensity(neutron,izone) * getDensity(neutron,izone);
       break;
     default: dens = 0.;
     }
@@ -2061,7 +1921,8 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
 
 G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
   if (!useQuasiDeuteron(type)) {
-    G4cerr << " absorptionCrossSection only valid for incident pions" << G4endl;
+    G4cerr << "absorptionCrossSection() only valid for incident pions or gammas" 
+           << G4endl;
     return 0.;
   }
 
@@ -2076,8 +1937,6 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
     else if (ke < 1.0) csec = 3.6735 * (1.0-ke)*(1.0-ke);     
   }
 
-  // Photon cross-section is binned from parametrization by Mi. Kossov
-  // See below for initialization of gammaQDinterp, gammaQDxsec
   if (type == photon) {
     csec = gammaQDinterp.interpolate(ke, gammaQDxsec) * gammaQDscale;
   }

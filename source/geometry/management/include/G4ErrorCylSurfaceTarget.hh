@@ -23,22 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ErrorCylSurfaceTarget.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class header file 
-// --------------------------------------------------------------------
+// G4ErrorCylSurfaceTarget
 //
 // Class Description:
 //
-// G4ErrorTarget class: limits step when track reaches a cylindrical surface.
+// Limits step when track reaches a cylindrical surface.
 
-// History:
-// - Created. P. Arce, September 2004
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-
 #ifndef G4ErrorCylSurfaceTarget_hh
 #define G4ErrorCylSurfaceTarget_hh
 

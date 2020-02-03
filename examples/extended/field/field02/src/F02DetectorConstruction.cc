@@ -27,7 +27,10 @@
 /// \brief Implementation of the F02DetectorConstruction class
 //
 //
+<<<<<<< HEAD
 // $Id: F02DetectorConstruction.cc 77654 2013-11-27 08:51:29Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -32,6 +32,49 @@
 #include "globals.hh"
 #include <vector>
 #include <fstream>
+<<<<<<< HEAD
+=======
+//#include "g4csv.hh"
+
+
+#ifndef HADRONTHERAPYANALYSISMANAGER_HH
+#define HADRONTHERAPYANALYSISMANAGER_HH 1
+
+class HadrontherapyAnalysisFileMessenger;
+
+/**
+ * A class for connecting the simulation to an analysis package.
+ */
+class HadrontherapyAnalysis
+{
+private:
+    /**
+     * Analysis manager is a singleton object (there is only one instance).
+     * The pointer to this object is available through the use of the method GetInstance();
+     *
+     * @see GetInstance
+     */
+    HadrontherapyAnalysis();
+    
+    
+    
+public:
+    ~HadrontherapyAnalysis();
+    
+    /**
+     * Get the pointer to the analysis manager.
+     */
+    static HadrontherapyAnalysis* GetInstance();
+    
+    
+    
+    static HadrontherapyAnalysis* instance;
+    HadrontherapyAnalysisFileMessenger* fMess;
+    
+};
+
+#endif
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 // The information: energy deposit and position in the phantom
 // is stored in a matrix
@@ -48,7 +91,7 @@ struct ion
   G4int A; 		 // mass number
   G4double *dose; 	 // pointer to dose matrix
   unsigned int    *fluence;  // pointer to fluence matrix
-  //friend bool operator<(const ion& a, const ion& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
+  //friend G4bool operator<(const ion& a, const ion& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
   G4bool operator<(const ion& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
 };
 
@@ -71,6 +114,11 @@ public:
 
   static G4bool secondary;
   // Full list of generated nuclides
+<<<<<<< HEAD
+=======
+    
+    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   void PrintNuclides(); 
   // Hit array marker (useful to avoid multiple counts of fluence)
   void ClearHitTrack();

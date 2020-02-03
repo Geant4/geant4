@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSymMatrix.cc 91809 2015-08-06 13:00:09Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

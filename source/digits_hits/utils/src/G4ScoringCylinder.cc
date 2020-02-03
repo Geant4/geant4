@@ -24,13 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc 89031 2015-03-18 08:40:48Z gcosmo $
 //
 
 #include "G4ScoringCylinder.hh"
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -50,12 +47,15 @@
 #include "G4PSTrackLength.hh"
 #include "G4PSNofStep.hh"
 #include "G4ScoringManager.hh"
+#include "G4StatDouble.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4ScoringCylinder::G4ScoringCylinder(G4String wName)
   :G4VScoringMesh(wName)
 {
-  fShape = cylinderMesh;
+  fShape = MeshShape::cylinder;
 
   fDivisionAxisNames[0] = "Z";
   fDivisionAxisNames[1] = "PHI";
@@ -206,7 +206,7 @@ void G4ScoringCylinder::List() const {
 }
 
 
-void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map,
+void G4ScoringCylinder::Draw(RunScore * map,
                              G4VScoreColorMap* colorMap, G4int axflg) {
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
@@ -224,16 +224,16 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map,
     
     // projections
     G4int q[3];
-    std::map<G4int, G4double*>::iterator itr = map->begin();
-    for(; itr != map->end(); itr++) {
+    std::map<G4int, G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    for(; itr != map->GetMap()->end(); itr++) {
       if(itr->first < 0) {
         G4cout << itr->first << G4endl;
         continue;
       }
       GetRZPhi(itr->first, q);
       
-      zphicell[q[IZ]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
-      rphicell[q[IR]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+      zphicell[q[IZ]][q[IPHI]] += (itr->second->sum_wx())/fDrawUnitValue;
+      rphicell[q[IR]][q[IPHI]] += (itr->second->sum_wx())/fDrawUnitValue;
     }
     
     // search min./max. values
@@ -353,7 +353,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map,
   }
 }
 
-void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+void G4ScoringCylinder::DrawColumn(RunScore * map, G4VScoreColorMap* colorMap, 
 				   G4int idxProj, G4int idxColumn) 
 {
   G4int projAxis = 0;
@@ -399,8 +399,8 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
     
     // projections
     G4int q[3];
-    std::map<G4int, G4double*>::iterator itr = map->begin();
-    for(; itr != map->end(); itr++) {
+    std::map<G4int,G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    for(; itr != map->GetMap()->end(); itr++) {
       if(itr->first < 0) {
         G4cout << itr->first << G4endl;
         continue;
@@ -408,13 +408,13 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
       GetRZPhi(itr->first, q);
       
       if(projAxis == IR && q[IR] == idxColumn) { // zphi plane
-        zphicell[q[IZ]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+        zphicell[q[IZ]][q[IPHI]] += (itr->second->sum_wx())/fDrawUnitValue;
       }
       if(projAxis == IZ && q[IZ] == idxColumn) { // rphi plane
-        rphicell[q[IR]][q[IPHI]] += *(itr->second)/fDrawUnitValue;
+        rphicell[q[IR]][q[IPHI]] += (itr->second->sum_wx())/fDrawUnitValue;
       }
       if(projAxis == IPHI && q[IPHI] == idxColumn) { // rz plane
-        rzcell[q[IR]][q[IZ]] += *(itr->second)/fDrawUnitValue;
+        rzcell[q[IR]][q[IZ]] += (itr->second->sum_wx())/fDrawUnitValue;
       }
     }
     

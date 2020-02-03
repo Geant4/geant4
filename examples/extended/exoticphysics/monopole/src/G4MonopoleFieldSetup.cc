@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/src/G4MonopoleFieldSetup.cc
 /// \brief Implementation of the G4MonopoleFieldSetup class
 //
+<<<<<<< HEAD
 // $Id: G4MonopoleFieldSetup.cc 68036 2013-03-13 14:13:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,6 +83,10 @@ G4MonopoleFieldSetup::G4MonopoleFieldSetup()
    fStepper(0),
    fMonopoleStepper(0),
    fMinStep(0.0),
+<<<<<<< HEAD
+=======
+   fZmagFieldValue(0.2*tesla),
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
    fMonopoleFieldMessenger(0)
 {
   fMonopoleFieldMessenger = new G4MonopoleFieldMessenger(this);
@@ -111,18 +118,40 @@ G4MonopoleFieldSetup::~G4MonopoleFieldSetup()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+<<<<<<< HEAD
 void G4MonopoleFieldSetup::SetMagField(G4double fieldValue)
 {
+=======
+void G4MonopoleFieldSetup::SetZMagFieldValue (G4double val)
+{
+  //set new magnetic field value and rebuild the field
+  fZmagFieldValue = val;
+
+  ConstructMagField();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MonopoleFieldSetup::ConstructMagField()
+{
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   //apply a global uniform magnetic field along Z axis  
   if (fMagneticField) { delete fMagneticField; }  //delete the existing magn field
 
   if (fieldValue != 0.)     // create a new one if non nul
     {
+<<<<<<< HEAD
       fMagneticField = new G4UniformMagField(G4ThreeVector(0., 0., fieldValue));        
+=======
+      // G4cout << "Go to create new field ..." << G4endl;
+      fMagneticField = new G4UniformMagField(G4ThreeVector(0., 0., 
+                                                           fZmagFieldValue));        
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       InitialiseAll();
     }
    else
     {
+      // G4cout << "Set field = 0 ..." << G4endl;
       fMagneticField = 0;
       fFieldManager->SetDetectorField(fMagneticField);
     }

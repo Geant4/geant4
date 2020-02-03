@@ -22,15 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
-// 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
-//
+// Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli,University of Wollongong, Australia
+// Contributions by F. Ambroglini, INFN Perugia, Italy
 
 #include <stdexcept>
 
@@ -39,14 +33,9 @@
 #include "G4UImanager.hh"
 #include "G4UIsession.hh"
 #include "G4TransportationManager.hh"
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+
 
 #include "G4HumanPhantomConstruction.hh"
 #include "G4HumanPhantomPhysicsList.hh"
@@ -73,27 +62,23 @@ int main(int argc,char** argv)
 
   runManager->SetUserInitialization(new G4HumanPhantomPhysicsList);
 
-#ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
  
-
   G4HumanPhantomActionInitialization* actions = new G4HumanPhantomActionInitialization();
   runManager->SetUserInitialization(actions);
-
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (argc==1)   // Define UI session for interactive mode.
     { 
-#ifdef G4UI_USE
+
       G4cout << " UI session starts ..." << G4endl;
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       UImanager->ApplyCommand("/control/execute default.mac");     
       ui->SessionStart();
       delete ui;
-#endif
+
     }
   else           // Batch mode
     { 
@@ -102,10 +87,7 @@ int main(int argc,char** argv)
       UImanager -> ApplyCommand(command+fileName);
     }     
 
-  // job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
 
 delete runManager;
 

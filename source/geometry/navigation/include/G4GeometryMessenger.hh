@@ -23,13 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GeometryMessenger.hh 73253 2013-08-22 13:24:02Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// G4GeometryMessenger
+// class G4GeometryMessenger
 //
 // Class description:
 //
@@ -81,11 +75,11 @@ class G4GeometryMessenger : public G4UImessenger
     G4UIcmdWithADoubleAndUnit *tolCmd;
     G4UIcmdWithAnInteger      *verbCmd, *rslCmd, *rcsCmd, *rcdCmd, *errCmd;
 
-    G4double      tol;
-    G4int         recLevel, recDepth;
+    G4double tol = 0.0;
+    G4int recLevel = 0, recDepth = -1;
 
     G4TransportationManager* tmanager;
-    G4GeomTestVolume* tvolume;
+    G4GeomTestVolume* tvolume = nullptr;
 };
 
 #endif

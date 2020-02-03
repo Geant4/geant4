@@ -35,23 +35,21 @@
 #include <map>
 #include "CCalutils.hh"
 
-class CCalSensitiveConfiguration {
-
+class CCalSensitiveConfiguration
+{
   struct GCInfo { 
     G4String FileName;
-    int      SensitiveFlag;
+    G4int    SensitiveFlag;
   };
 
-   typedef std::map<G4String, GCInfo, std::less<G4String> > CCalSensitiveConfTable;
-   typedef std::map<G4String, GCInfo, std::less<G4String> >::iterator CCalSensitiveConfIterator;
-		    
+  typedef std::map<G4String, GCInfo, std::less<G4String> > CCalSensitiveConfTable;
   
 public:
   ~CCalSensitiveConfiguration() {}
 
   static CCalSensitiveConfiguration* getInstance();
 
-  int      getSensitiveFlag(const G4String& n) /*const*/;
+  G4int    getSensitiveFlag(const G4String& n) /*const*/;
   G4String getFileName(const G4String& n) /*const*/;
 
 private:

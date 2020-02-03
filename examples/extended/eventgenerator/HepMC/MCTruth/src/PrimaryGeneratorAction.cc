@@ -27,7 +27,10 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
+<<<<<<< HEAD
 // $Id: PrimaryGeneratorAction.cc 73446 2013-08-27 11:32:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------
@@ -37,6 +40,12 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+<<<<<<< HEAD
+=======
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
@@ -46,30 +55,52 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 
+<<<<<<< HEAD
 PrimaryGeneratorAction::PrimaryGeneratorAction()
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+PrimaryGeneratorAction::PrimaryGeneratorAction() :
+  G4VUserPrimaryGeneratorAction()
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 {
   G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
   // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("kaon0S");
   
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(3.0*GeV);
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(3.0*GeV);
 }
 
+<<<<<<< HEAD
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
+<<<<<<< HEAD
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
   G4double position = 0.0;
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
+<<<<<<< HEAD
+=======
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

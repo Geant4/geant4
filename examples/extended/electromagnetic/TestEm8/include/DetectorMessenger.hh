@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm8/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
+<<<<<<< HEAD
 // $Id: DetectorMessenger.hh 67268 2013-02-13 11:38:40Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /////////////////////////////////////////////////////////////////////////
 //

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: run01.mac 74997 2013-10-25 10:52:13Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # limit the step size from histo 1
 #

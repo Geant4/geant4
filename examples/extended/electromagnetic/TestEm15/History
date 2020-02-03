@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +17,45 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
 	 
 14-10-16 G.Folger
+=======
+30-10-2019 IgS (testem15-V10-05-01)
+- SteppingAction, PhysList5DStandard : added G4GammaConversionToMuons process
+
+01-02-2019 IgS (testem15-V10-05-00)
+- SteppingAction.cc : not fill hist #11,#12 when no recoil returned
+
+23-10-2018 IgS (testem15-V10-04-08)
+- cosmetics in DetectorConstruction and SteppingAction.cc
+
+24-07-2018 IgS (testem15-V10-04-07)
+- SteppingAction.cc : no conversion case protection,
+use CLHEP::Hep3Vector::orthogonal() for coordinate axis definition
+- DetectorConstruction.cc : G4NistManager to allow predefined Geant4 materials
+         
+13-06-18 mma  (testem15-V10-04-06)
+- PhysicsList: add G4EmStandardPhysicsWVI, GS, SS
+
+24-05-18 IgS (testem15-V10-04-05)
+- extended README, added README.gamma
+
+22-05-18 IgS (testem15-V10-04-03)
+- Use G4RotationMarix to convert to gamma reference system 
+- Use default random number generator
+
+17-04-18 IgS (testem15-V10-04-02)
+- Extended testem15 with  gamma -> e+ e- 5D conversion code.
+
+09-04-18 mma (testem15-V10-04-01)
+- testem15.cc : set visualisation only in interactive mode
+
+20-03-18 mma (testem15-V10-04-00)
+- testem15.cc : remove G4UI_USE and G4VIS_USE
+
+14-10-16 G.Folger (testem15-V10-02-02)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 

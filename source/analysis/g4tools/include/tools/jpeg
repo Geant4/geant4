@@ -1,0 +1,702 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_jpeg
+#define tools_jpeg
+
+#include <cstdio> //FILE,size_t
+
+//#define TOOLS_JPEG_OUT_ERR
+
+extern "C" { //Needed on Windows.
+#ifdef TOOLS_USE_NATIVE_JPEG
+#include <jpeglib.h>
+#else
+#include <ourex_jpeglib.h> //enforce ourex jpeg
+#endif
+}
+
+#include <csetjmp>
+#include <cstring> //memcpy
+#include <tools/mnmx>
+
+namespace tools {
+namespace jpeg {
+
+inline bool write_file(FILE* a_file,int a_quality,unsigned char* a_buffer,unsigned int a_width,unsigned int a_height,unsigned int a_bpp) {
+
+  struct jpeg_compress_struct cinfo;
+
+  struct jpeg_error_mgr jerr;
+  cinfo.err = ::jpeg_std_error(&jerr);
+
+  ::jpeg_create_compress(&cinfo);
+
+  ::jpeg_stdio_dest(&cinfo,a_file);
+
+  cinfo.image_width = a_width;
+  cinfo.image_height = a_height;
+  cinfo.input_components = a_bpp; // # of color components per pixel.
+  cinfo.in_color_space = JCS_RGB; 	// colorspace of input image.
+
+  ::jpeg_set_defaults(&cinfo);
+  ::jpeg_set_quality(&cinfo,a_quality,TRUE);
+
+  ::jpeg_start_compress(&cinfo,TRUE);
+
+  int row_stride = a_width * cinfo.input_components;
+
+  while (cinfo.next_scanline < cinfo.image_height) {
+    JSAMPROW row_pointer = 
+      a_buffer+(cinfo.image_height-1-cinfo.next_scanline) * row_stride;
+    ::jpeg_write_scanlines(&cinfo, &row_pointer, 1);
+  }
+
+  ::jpeg_finish_compress(&cinfo);
+  ::jpeg_destroy_compress(&cinfo);
+
+  return true;
+}
+
+inline bool write_file_100(FILE* a_file,unsigned char* a_buffer,unsigned int a_width,unsigned int a_height,unsigned int a_bpp) {
+  return tools::jpeg::write_file(a_file,100,a_buffer,a_width,a_height,a_bpp);
+}
+
+struct error_mgr {
+  struct jpeg_error_mgr pub;
+  jmp_buf setjmp_buffer;
+};
+
+typedef struct error_mgr* error_ptr;
+
+extern "C" {
+inline void exlib_jpeg_error_exit(j_common_ptr cinfo){
+  error_ptr myerr = (error_ptr) cinfo->err;
+  //(*cinfo->err->output_message) (cinfo);
+  //printf("debug : error_exit\n");
+  //NSLog(@"debug : jpeg::error_exit");
+  ::longjmp(myerr->setjmp_buffer, 1);
+}
+}
+
+inline bool infos_file(FILE* a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+  //NOTE : G.Barrand : not sure that in case of error, we cleanup properly !
+
+  struct jpeg_decompress_struct cinfo;
+  struct error_mgr jerr;
+
+  cinfo.err = ::jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = exlib_jpeg_error_exit;
+  if(::setjmp(jerr.setjmp_buffer)) {
+    //printf("debug : out of setjmp\n");
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  ::jpeg_create_decompress(&cinfo);
+  ::jpeg_stdio_src(&cinfo,a_file);
+  ::jpeg_read_header(&cinfo, TRUE);
+
+  ::jpeg_start_decompress(&cinfo);
+
+  a_width = cinfo.output_width;
+  a_height = cinfo.output_height;
+  a_bpp = cinfo.output_components;
+
+  ::jpeg_abort_decompress(&cinfo);
+  ::jpeg_destroy_decompress(&cinfo);
+
+  return true;
+}
+
+inline unsigned char* read_file(FILE* a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+  // the returned buffer must be delete with "delete []".
+
+  //NOTE : G.Barrand : not sure that in case of error, we cleanup properly !
+
+  struct jpeg_decompress_struct cinfo;
+  struct error_mgr jerr;
+
+  cinfo.err = ::jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = exlib_jpeg_error_exit;
+  if(::setjmp(jerr.setjmp_buffer)) {
+#ifdef TOOLS_JPEG_OUT_ERR
+    ::printf("tools::jpeg::read_file : out of setjmp\n");
+#endif
+    //NOTE : how to be sure to delete the below new if having been done ?
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  ::jpeg_create_decompress(&cinfo);
+  ::jpeg_stdio_src(&cinfo,a_file);
+  ::jpeg_read_header(&cinfo, TRUE);
+
+  ::jpeg_start_decompress(&cinfo);
+
+  int row_stride = cinfo.output_width * cinfo.output_components;
+
+  if((!cinfo.output_width)||
+     (!cinfo.output_height)||
+     (cinfo.output_components<=0)) {
+#ifdef TOOLS_JPEG_OUT_ERR
+    ::printf("tools::jpeg::read_file : bad size, w %u h %u cpnts %d\n",
+             cinfo.output_width,cinfo.output_height,cinfo.output_components);
+#endif
+    ::jpeg_abort_decompress(&cinfo);
+    ::jpeg_destroy_decompress(&cinfo);
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  a_width = cinfo.output_width;
+  a_height = cinfo.output_height;
+  a_bpp = cinfo.output_components;
+
+  unsigned char* image_buffer = new unsigned char[row_stride * cinfo.output_height];
+  if(!image_buffer) {
+#ifdef TOOLS_JPEG_OUT_ERR
+    ::printf("tools::jpeg::read_file : alloc of %d bytes failed\n",
+        row_stride * cinfo.output_height);
+#endif
+    ::jpeg_abort_decompress(&cinfo);
+    ::jpeg_destroy_decompress(&cinfo);
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }  
+
+  //FIXME : iPad : the below crashes on LHCb_artist_16384_4096_80.jpg.
+
+ {JSAMPROW buffer[1];
+  unsigned char* pos = image_buffer + row_stride * cinfo.output_height;
+  while (cinfo.output_scanline<cinfo.output_height) {
+    pos -= row_stride;
+    buffer[0] = pos;
+    if(::jpeg_read_scanlines(&cinfo, buffer, 1)!=1) {
+#ifdef TOOLS_JPEG_OUT_ERR
+      ::printf("tools::jpeg::read_file : jpeg_read_scanlines failed\n");
+#endif
+      ::jpeg_abort_decompress(&cinfo);
+      ::jpeg_destroy_decompress(&cinfo);
+      a_width = 0;
+      a_height = 0;
+      a_bpp = 0;
+      delete [] image_buffer;
+      return 0;
+    }
+  }}
+
+  if(cinfo.output_scanline<cinfo.output_height)
+    ::jpeg_abort_decompress(&cinfo);
+  else
+    ::jpeg_finish_decompress(&cinfo);
+
+  ::jpeg_destroy_decompress(&cinfo);
+
+  return image_buffer;
+}
+
+}}
+
+#include <string>
+#include <ostream>
+#include <tools/sout>
+
+namespace tools {
+namespace jpeg {
+
+inline bool is(const std::string& a_file){
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) return false; //if file does not exist, then it is not a jpeg !
+  unsigned char head[4];
+  size_t nitem = ::fread(head,1,4,file);
+  ::fclose(file);
+  if(nitem!=4) return false;
+  if(head[0]!=255) return false;
+  if(head[1]!=216) return false;
+  if(head[2]!=255) return false;
+  //if(head[3]!=224) return false; //LRI.jpg is 225 !
+  return true;
+}
+
+inline bool infos(std::ostream& a_out,const std::string& a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+  if(!is(a_file)) {
+    a_out << "tools::jpeg::infos :"
+          << " file " << a_file << " is not jpeg."
+          << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  } 
+
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_out << "tools::jpeg::infos :"
+          << " can't open " << a_file
+          << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  unsigned int w,h,bpp;
+  bool status = infos_file(file,w,h,bpp);
+
+  ::fclose(file);
+
+  if(!status) {
+    a_out << "tools::jpeg::infos :"
+              << " problem reading " << a_file
+              << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return false;
+  }
+
+  a_width = w;
+  a_height = h;
+  a_bpp = bpp;
+  return true;
+}
+
+inline unsigned char* read(std::ostream& a_out,const std::string& a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+  if(!is(a_file)) {
+    a_out << "tools::jpeg::read :"
+          << " file " << a_file << " is not jpeg."
+          << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  } 
+
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_out << "tools::jpeg::read :"
+          << " can't open " << a_file
+          << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  unsigned int w,h,bpp;
+  unsigned char* buffer = read_file(file,w,h,bpp);
+
+  ::fclose(file);
+
+  if(!buffer) {
+    a_out << "tools::jpeg::read :"
+              << " problem reading " << a_file
+              << std::endl;
+    a_width = 0;
+    a_height = 0;
+    a_bpp = 0;
+    return 0;
+  }
+
+  a_width = w;
+  a_height = h;
+  a_bpp = bpp;
+  return buffer;  
+}
+
+inline unsigned char* read_part(std::ostream& a_out,
+                                const std::string& a_file,
+                                unsigned int a_sx,unsigned int a_sy,
+                                unsigned int a_sw,unsigned int a_sh,
+                                unsigned int& a_rw,unsigned int& a_rh,
+                                unsigned int& a_rbpp) {
+  if(!is(a_file)) {
+    a_out << "tools::jpeg::read_part :"
+          << " file " << a_file << " is not jpeg."
+          << std::endl;
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  } 
+
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_out << "tools::jpeg::read_part :"
+          << " can't open " << a_file
+          << std::endl;
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }
+
+  struct jpeg_decompress_struct cinfo;
+  struct error_mgr jerr;
+
+  cinfo.err = ::jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = exlib_jpeg_error_exit;
+  if(::setjmp(jerr.setjmp_buffer)) {
+    //printf("debug : out of setjmp\n");
+    ::fclose(file);
+    //NOTE : how to be sure to delete the below news if having been done ?
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }
+
+  ::jpeg_create_decompress(&cinfo);
+  ::jpeg_stdio_src(&cinfo,file);
+  ::jpeg_read_header(&cinfo,TRUE);
+
+  ::jpeg_start_decompress(&cinfo);
+
+  int row_stride = cinfo.output_width * cinfo.output_components;
+
+  unsigned int w = cinfo.output_width;
+  unsigned int h = cinfo.output_height;
+
+  if((a_sx>=w)||(a_sy>=h)){
+    ::jpeg_abort_decompress(&cinfo);
+    ::jpeg_destroy_decompress(&cinfo);
+    ::fclose(file);
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }
+
+  // 012345
+  a_rw = tools::mn<unsigned int>(w-a_sx,a_sw); 
+  a_rh = tools::mn<unsigned int>(h-a_sy,a_sh); 
+  a_rbpp = cinfo.output_components;
+
+  if(!a_rw||!a_rh||!a_rbpp){
+    ::jpeg_abort_decompress(&cinfo);
+    ::jpeg_destroy_decompress(&cinfo);
+    ::fclose(file);
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }
+
+  unsigned char* image_buffer = new unsigned char[a_rw*a_rh*a_rbpp];
+  if(!image_buffer) {
+    ::jpeg_abort_decompress(&cinfo);
+    ::jpeg_destroy_decompress(&cinfo);
+    ::fclose(file);
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }  
+
+  unsigned char* line = new unsigned char[row_stride];
+  if(!line) {
+    ::jpeg_abort_decompress(&cinfo);
+    ::jpeg_destroy_decompress(&cinfo);
+    ::fclose(file);
+    delete [] image_buffer;
+    a_rw = 0;
+    a_rh = 0;
+    a_rbpp = 0;
+    return 0;
+  }  
+
+  //FIXME : iPad : the below crashes on LHCb_artist_16384_4096_80.jpg.
+
+  unsigned int hbeg = a_sy;
+  unsigned int hend = a_sy+a_rh;
+
+ {JSAMPROW buffer[1];
+  buffer[0] = line;
+  unsigned char* pos = image_buffer+a_rh*a_rw*a_rbpp;
+  while(cinfo.output_scanline<cinfo.output_height) {
+    if(jpeg_read_scanlines(&cinfo, buffer, 1)!=1) {
+      ::jpeg_abort_decompress(&cinfo);
+      ::jpeg_destroy_decompress(&cinfo);
+      ::fclose(file);
+      delete [] line;
+      delete [] image_buffer;
+      a_rw = 0;
+      a_rh = 0;
+      a_rbpp = 0;
+      return 0;
+    }
+    if((hbeg<=cinfo.output_scanline)&&(cinfo.output_scanline<hend)){
+      pos -= a_rw*a_rbpp;
+      ::memcpy(pos,line+a_sx*a_rbpp,a_rw*a_rbpp);
+    }
+  }}
+
+  if(cinfo.output_scanline<cinfo.output_height)
+    ::jpeg_abort_decompress(&cinfo);
+  else
+    ::jpeg_finish_decompress(&cinfo);
+
+  ::jpeg_destroy_decompress(&cinfo);
+
+  ::fclose(file);
+
+  delete [] line;
+
+  return image_buffer;  
+}
+
+inline bool write(std::ostream& a_out,
+                  const std::string& a_file,                      
+                  unsigned char* a_buffer,
+                  unsigned int a_width,
+                  unsigned int a_height,
+                  unsigned int a_bpp,
+                  int a_quality) {
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) {
+    a_out << "tools::jpeg::write :"
+          << " can't open file " << tools::sout(a_file) << "."
+          << std::endl;
+    return false;
+  }
+  if(!write_file(file,a_quality,a_buffer,a_width,a_height,a_bpp)) {
+    ::fclose(file);
+    a_out << "tools::jpeg::write :"
+          << " can't write file " << tools::sout(a_file) << "."
+          << std::endl;
+    return false;
+  }
+  ::fclose(file);
+  return true;
+}
+
+}}
+
+#include <tools/xpm>
+
+namespace tools {
+namespace jpeg {
+
+inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::string& a_name,bool a_verbose = false) {
+  return tools::xpm::to_xpm(a_out,a_file,a_name,read,a_verbose);
+}
+
+}}
+
+#include <tools/image>
+#include <vector>
+
+namespace tools {
+namespace jpeg {
+
+inline bool concatenate(std::ostream& a_out,
+                        const std::vector<std::string>& a_files,
+                        unsigned int a_cols,unsigned int a_rows,
+                        unsigned int a_bw,unsigned int a_bh,
+                        unsigned char a_bc,
+                        const std::string& a_file,int a_quality) {
+  unsigned int wa,ha,bppa;
+  unsigned char* ba = 
+    tools::image::concatenate
+      (a_out,a_files,a_cols,a_rows,a_bw,a_bh,a_bc,read,wa,ha,bppa);
+  if(!ba) {
+    a_out << "tools::jpeg::concatenate :"
+          << " failed to concatenate all buffers."
+          << std::endl;
+    delete [] ba;
+    return false;
+  } 
+
+  FILE* file = ::fopen(a_file.c_str(),"wb");
+  if(!file) {
+    a_out << "tools::jpeg::concatenate :"
+          << " can't open " << file << " for writing."
+          << std::endl;
+    delete [] ba;
+    return false;
+  }
+
+  if(!write_file(file,a_quality,ba,wa,ha,bppa)) {
+    a_out << "tools::jpeg::concatenate :"
+          << " can't write " << a_file << "."
+          << std::endl;
+    delete [] ba;
+    ::fclose(file);
+    return false;
+  }
+
+  delete [] ba;
+  ::fclose(file);
+  return true;
+}
+
+class reader : public virtual tools::image::ireader {
+public:
+  virtual tools::image::ireader* copy() const {return new reader(*this);}
+  virtual bool is(const std::string& a_file) const {
+    return tools::jpeg::is(a_file);
+  }
+  virtual bool infos(std::ostream& a_out,const std::string& a_file,
+             unsigned int& a_width,unsigned int& a_height,
+             unsigned int& a_bpp) const {
+    return tools::jpeg::infos(a_out,a_file,a_width,a_height,a_bpp);
+  }
+  virtual unsigned char* read(std::ostream& a_out,const std::string& a_file,
+                      unsigned int& a_width,unsigned int& a_height,
+                      unsigned int& a_bpp) const {
+    return tools::jpeg::read(a_out,a_file,a_width,a_height,a_bpp);
+  }
+  virtual unsigned char* read_part(std::ostream& a_out,
+                                  const std::string& a_file,
+                           unsigned int a_sx,unsigned int a_sy,
+                           unsigned int a_sw,unsigned int a_sh,
+                           unsigned int& a_rw,unsigned int& a_rh,
+                           unsigned int& a_rbpp) const {
+    return tools::jpeg::read_part(a_out,a_file,
+                                 a_sx,a_sy,
+                                 a_sw,a_sh,
+                                 a_rw,a_rh,
+                                 a_rbpp);
+  }
+public:
+  reader(){}
+  virtual ~reader(){}
+public:
+  reader(const reader&):ireader(){}
+  reader& operator=(const reader&){return *this;}
+};
+
+}}
+
+//#include <tools/img>
+//
+//namespace tools {
+//namespace jpeg {
+//
+//class jpeg_data : public tools::img_byte {
+//public:
+//  jpeg_data(std::ostream& a_out)
+//  :tools::img_byte(3)
+//  ,m_out(a_out)
+//  ,m_FILE(0)
+//  ,m_row_stride(0)
+//  ,m_pos(0)
+//  {}
+//  virtual ~jpeg_data(){
+//    if(m_FILE) ::fclose(m_FILE);
+//  }
+//protected: //don't copy
+//  jpeg_data(const jpeg_data& a_from)
+//  :tools::img_byte(a_from)
+//  ,m_out(a_from.m_out)
+//  {}
+//  jpeg_data& operator=(const jpeg_data& a_from){
+//    tools::img_byte::operator=(a_from);
+//    return *this;
+//  }
+//public:
+//  bool open(const std::string& a_file) {
+//    if(m_FILE) return false;
+//
+//    if(!tools::jpeg::is(a_file)) {
+//      m_out << "tools::jpeg::jpeg_data::open :"
+//            << " file " << a_file << " is not jpeg."
+//            << std::endl;
+//      return false;
+//    } 
+//    m_FILE = ::fopen(a_file.c_str(),"rb");
+//    if(!m_FILE) {
+//      m_out << "tools::jpeg::jpeg_data::open :"
+//            << " can't open " << a_file
+//            << std::endl;
+//      return false;
+//    }
+//  
+//    m_cinfo.err = ::jpeg_std_error(&m_jerr.pub);
+//    m_jerr.pub.error_exit = exlib_jpeg_exlib_jpeg_exlib_jpeg_error_exit;
+//    if(::setjmp(m_jerr.setjmp_buffer)) {
+//      m_out << "tools::jpeg::jpeg_data::open :"
+//            << " setjmp failed." << a_file
+//            << std::endl;
+//      ::fclose(m_FILE);
+//      m_FILE = 0;
+//      return false;
+//    }
+//
+//    ::jpeg_create_decompress(&m_cinfo);
+//    ::jpeg_stdio_src(&m_cinfo,m_FILE);
+//    ::jpeg_read_header(&m_cinfo,TRUE);
+//
+//    ::jpeg_start_decompress(&m_cinfo);
+//  
+//    if(m_cinfo.output_components!=3) {
+//      m_out << "tools::jpeg::jpeg_data::open :"
+//            << " file " << a_file << " dont't have three components."
+//            << std::endl;
+//      ::fclose(m_FILE);
+//      m_FILE = 0;
+//      return false;
+//    }
+//  
+//    m_row_stride = m_cinfo.output_width * m_cinfo.output_components;
+//  
+//    unsigned char* buffer = 
+//      new unsigned char[m_row_stride * m_cinfo.output_height];
+//    if(!buffer) {
+//      m_out << "tools::jpeg::jpeg_data::open :"
+//            << " can't alloc " << m_row_stride * m_cinfo.output_height
+//            << std::endl;
+//      ::fclose(m_FILE);
+//      m_FILE = 0;
+//      return false;
+//    }
+//  
+//    tools::img_byte::set(m_cinfo.output_width,m_cinfo.output_height,
+//                         buffer,true);
+//    m_pos = buffer + m_row_stride * m_cinfo.output_height;
+//    return true;
+//  }
+//  bool read_row() {
+//    if(!m_FILE) return false;
+//    //::printf("debug : read_row %d\n",m_cinfo.output_scanline);
+//    if(m_cinfo.output_scanline<m_cinfo.output_height) {
+//      m_pos -= m_row_stride;
+//      m_jbuffer[0] = m_pos;
+//      if(::jpeg_read_scanlines(&m_cinfo,m_jbuffer,1)!=1) {
+//        tools::img_byte::clear();
+//        ::fclose(m_FILE);
+//        m_FILE = 0;
+//        return false;
+//      }
+//      m_h = m_cinfo.output_scanline; //in case we have to stop before end.
+//      return true; //continue reading.
+//    } else { //done.
+//      ::jpeg_finish_decompress(&m_cinfo);
+//      ::jpeg_destroy_decompress(&m_cinfo);
+//      ::fclose(m_FILE);
+//      m_FILE = 0;
+//      return false; //stop reading.
+//    }
+//  }
+//protected:
+//  std::ostream& m_out;
+//  FILE* m_FILE;
+//  struct jpeg_decompress_struct m_cinfo;
+//  struct tools::jpeg::error_mgr m_jerr;
+//  int m_row_stride;
+//  JSAMPROW m_jbuffer[1];
+//  unsigned char* m_pos;
+//};
+//
+//}}
+
+#endif

@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 90848 2015-06-10 13:44:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.cc 83684 2014-09-09 12:37:39Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -48,7 +47,7 @@ G4VParticipants::G4VParticipants() : theNucleus(NULL),
 
 G4VParticipants::~G4VParticipants()
 {
-// G4cout << "G4VParticipants::~G4VParticipants()" << G4endl;
+  // G4cout << "G4VParticipants::~G4VParticipants()" << G4endl;
   if ( theNucleus != NULL ) delete theNucleus;
   if ( theProjectileNucleus != NULL ) delete theProjectileNucleus;
 }
@@ -81,3 +80,4 @@ void G4VParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
   if (theProjectileNucleus != NULL) delete theProjectileNucleus;
   theProjectileNucleus = aNucleus;
 }
+

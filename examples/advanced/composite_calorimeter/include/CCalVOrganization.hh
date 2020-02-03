@@ -28,20 +28,20 @@
 // Description: Base class for definition of sensitive unit numbering schema
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CCalVOrganization_h
-#define CCalVOrganization_h
+#define CCalVOrganization_h 1
 
 #include "G4Step.hh"
 #include "CCaloOrganization.hh"
 
-class CCalVOrganization {
-
+class CCalVOrganization
+{
 public:
-  CCalVOrganization(){};
-  virtual ~CCalVOrganization(){};
-	 
+  CCalVOrganization(){}
+  virtual ~CCalVOrganization(){}
+ 
   virtual unsigned int GetUnitID(const G4Step* aStep) const = 0;
-  virtual int  Levels(const G4Step*) const;
-  virtual void DetectorLevel(const G4Step*, int&, int*, G4String*) const;
+  virtual G4int  Levels(const G4Step*) const;
+  virtual void DetectorLevel(const G4Step*, G4int&, G4int*, G4String*) const;
      
 protected:
   CCaloOrganization theOrg;

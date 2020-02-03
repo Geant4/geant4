@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 /// \file GB03BOptnSplitOrKillOnBoundary.hh
 /// \brief Definition of the GB03BOptnSplitOrKillOnBoundary class

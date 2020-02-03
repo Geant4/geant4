@@ -23,21 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4BooleanSolid.hh 83572 2014-09-01 15:23:27Z gcosmo $
-//
-//
-// class G4BooleanSolid
+// G4BooleanSolid
 //
 // Class description:
 //
 // Abstract base class for solids created by boolean operations
 // between other solids.
 
-// History:
-//
-// 10.09.98 V.Grichine, created
-//
+// 10.09.98 V.Grichine - created
 // --------------------------------------------------------------------
 #ifndef G4BOOLEANSOLID_HH
 #define G4BOOLEANSOLID_HH
@@ -110,34 +103,35 @@ class G4BooleanSolid : public G4VSolid
 
   protected:
   
+    void GetListOfPrimitives(std::vector<std::pair<G4VSolid *,G4Transform3D>>&,
+                             const G4Transform3D&) const;
+      // Get list of constituent primitives of the solid and their placements.
+
     G4Polyhedron* StackPolyhedron(HepPolyhedronProcessor&,
                                   const G4VSolid*) const;
       // Stack polyhedra for processing. Return top polyhedron.
 
-    inline G4double GetAreaRatio() const;
-      // Ratio of surface areas of SolidA to total A+B
-
   protected:
   
-    G4VSolid* fPtrSolidA;
-    G4VSolid* fPtrSolidB;
-
-    mutable G4double fAreaRatio; // Calculation deferred to GetPointOnSurface()
+    G4VSolid* fPtrSolidA = nullptr;
+    G4VSolid* fPtrSolidB = nullptr;
 
   private:
 
-    G4int    fStatistics;
-    G4double fCubVolEpsilon;
-    G4double fAreaAccuracy;
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
+    G4int    fStatistics = 1000000;
+    G4double fCubVolEpsilon = 0.001;
+    G4double fAreaAccuracy = -1;
+    G4double fCubicVolume = -1.0;
+    G4double fSurfaceArea = -1.0;
 
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
-    G4bool  createdDisplacedSolid;
+    mutable std::vector<std::pair<G4VSolid *,G4Transform3D>> fPrimitives;
+    mutable G4double fPrimitivesSurfaceArea = 0.0;
+
+    G4bool  createdDisplacedSolid = false;
       // If & only if this object created it, it must delete it
-
 } ;
 
 #include "G4BooleanSolid.icc"

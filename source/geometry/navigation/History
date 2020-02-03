@@ -1,4 +1,3 @@
-$Id: History 102290 2017-01-20 11:19:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +16,285 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 23, 2016 - G.Cosmo (geomnav-V10-01-38)
+November 29, 2019 - J.Apostolakis  (geomnav-V10-05-19)
+---------------------------------
+- Added method to PropagatorInField to Get/Set new parameter that
+  controls after how many integration substeps (in one physics step)
+  the Increase of Chord Distance is trigerred.
+  The new method
+       SetIterationsToIncreaseChordDistance()
+  provides control of 'increase' feature introduced in geomnav-V10-05-10.
+  This control is necessary to allow the user to either
+    - disable this change (setting to 0 or large value) or to
+    - change the parameter's value, for earlier/later increase of delta chord.
+
+  This parameter allows the temporary 'relaxation' of the constraint 
+  which ensure that each 'chords' is close enough to the section of the
+  curved trajectory that it is approximating.
+
+  ( See further explanation of feature & parameter in note for
+    geomnav-V10-05-10. )
+
+November 19, 2019 - G.Cosmo  (geomnav-V10-05-18) 
+---------------------------
+- Fixed more cases of implicit type conversions.
+
+November 15, 2019 - G.Cosmo  (geomnav-V10-05-17) 
+---------------------------
+- Attempt to fix cases of implicit type conversions from size_t to G4int...
+
+November 14, 2019 - J.Apostolakis  (geomnav-V10-05-16)
+---------------------------------
+- G4MultiLevelLocator: Avoid re-estimating endpoint if driver does not
+     ReIntegrate when AccurateAdvance is called.
+  Requires field-V10-05-17
+
+November 5, 2019 - J.Apostolakis  (geomnav-V10-05-15)
+--------------------------------
+- G4TransportationManager: Enable worker threads to clone G4Navigator if needed.
+  * Keep first Navigator created for a TM object. By convention that will be
+    the Navigator object of the Master thread (or the only thread).
+  * Other (worker) threads will clone first Navigator, if it has an external
+    sub-navigator registered. This ensures that they clone the ability to 
+    navigate in 'external' volume description.
+- G4VExternalNavigation: added new method for relocation within volume.
+  G4Navigator will call it in LocateGlobalPointWithinVolume().
+
+November 1, 2019 - P.Arce  (geomnav-V10-05-14)
+--------------------------------
+- G4PhantomParameterisation: Reverted precision checks to the code in
+  geant4.10.02.p02 to address problem report.
+  Fixes bug #2192
+  
+October 29, 2019 - J.Apostolakis  (geomnav-V10-05-13)
+--------------------------------
+- Fixed G4Navigator::CharacteriseDaughters:
+  * Use only logical volume's CharacteriseDaughters.
+    Do not check/use whether External Navigator is present.
+- Added 'direction' back to External Navigation's Inside method.
+
+October 28, 2019 - G.Cosmo (geomnav-V10-05-12)
+--------------------------
+- G4Navigator: define Clone() function to be used instead of copy-constructor
+  (which is kept deleted) for use of explicit cloning.
+
+October 25, 2019 - J.Apostolakis, G.Cosmo, V.Vlachoudis (geomnav-V10-05-11)
+-------------------------------------------------------
+- Added hooks for capability to navigate in 'external' geometry:
+  * base class for external 'sub'-navigator;
+  * new type of 'External' physical volume, to flag volumes for
+    external sub-navigator;
+  * an 'external' sub-navigator can be registered with G4Navigator;
+  * revisions to G4Navigator to dispatch logical volumes with
+    daughters which are of 'external' PV type to that object of
+    type G4VExternalNavigation.
+  Note: 'placement' and 'external' physical volumes cannot be currently mixed
+        inside the same logical volume.
+- New copy constructor of G4Navigator
+  * needed to 'clone' navigator for G4VIntersectionLocator's 'helper',
+    and potentially for worker threads.
+
+August 23, 2019 - D.Sorokin (geomnav-V10-05-10)
+---------------------------
+- Try to relax delta chord condition to solve looping particle issue.
+
+  Introduces temporary 'relaxation' (increase) of the value of delta-chord,
+  to enable larger steps, after a threshold number of iterations (parameter).
+  
+  Delta chord ensures that the set of 'chords' approximate the curved trajectory
+  adequately.  Each integration step is broken up into segments or substeps
+  for which the sagitta is smaller than 'delta chord.'
+
+  For some tracks this constraint can force a large number of short integration
+  steps, and once the number of steps exceed the 'maximum' they are classed
+  as looping tracks.  ( This can occur when the radius of curvature is just
+  larger than  delta_chord and a particle is hardly interacting, e.g. if
+  travelling in vacuum or is a muon in a large gas volume. )
+
+  To address this, we increase the value of delta-chord temporarily,
+  after the number of iterations substeps reach a multiple of this threshold.
+  In particular the value of 'delta chord' is doubled when the iterations 
+  reach twice this threshold number, and it is doubled again every time the
+  iteration count reaches every other multiple of this value.
+  ( Note that delta chord is not changed when the iteration count reaches
+  the threshold number, only its multiples. )
+
+  The initial value of the parameter IterationsChordDistanceThreshold is 100.
+
+  Note: delta-chord is reset to its original value at the end of
+        each call to G4PropagatorInField's ComputeStep method.
+
+August 22, 2019 - G.Cosmo (geomnav-V10-05-09)
+-------------------------
+- Use pre-increment wherever possible.
+
+July 9, 2019 - G.Cosmo (geomnav-V10-05-08)
+----------------------
+- Enable UI command "/geometry/navigator/push_notify" which was not
+  setup properly. Addressing problem report #2173.
+
+July 8, 2019 - G.Cosmo (geomnav-V10-05-07)
+----------------------
+- Use constant iterator when possible in G4TransportationManager and
+  G4PartialPhantomParameterisation.
+
+July 4, 2019 - G.Cosmo (geomnav-V10-05-06)
+----------------------
+- Implemented c++11 revision: nullptr, auto, inline data initialisation,
+  alias using statements.
+- Made G4RegularNavigationHelper a G4ThreadLocalSingleton.
+- Fixed builds with debug flags.
+- Code formatting and cleanup.
+
+July 2, 2019 - J.Apostolakis (geomnav-V10-05-05)
+----------------------------
+- G4Navigator: further fix to avoid creating ostringstream object.
+  Now it is created for each step only when the G4DEBUG_NAVIGATION flag
+  is set.
+  ( To clarify: the warning was created in ostringstream object if 
+    G4VERBOSE was set, but only printed if  G4DEBUG_NAVIGATION was set.
+    Now the latter flag is used for both creating and printing. )
+
+  Created to address memory churn reported by memory profiling 
+  (Julia/Soon @FNAL).
+
+June 19, 2019 - G.Cosmo (geomnav-V10-05-04)
+-----------------------
+- Fixed compilation warning for unused variable when G4VERBOSE is not set.
+
+June 18, 2019 - J.Apostolakis (geomnav-V10-05-03)
+-----------------------------
+- Revised (recent) code for Exceptions to avoid creating ostringstream
+  when it is not needed / used.
+  Seen only in 'stuck tracks' that are trying to recover from more than 
+  10 zero steps in a row (fixes problem seen in one benchmark). 
+
+June 5, 2019 - J.Apostolakis (geomnav-V10-05-02)
+----------------------------
+- Improved information in Exceptions for particles stuck due to multiple
+  zero steps in G4Navigator.
+
+April 1, 2019 - G.Cosmo (geomnav-V10-05-01)
+------------------------
+- Protected report for looping particles under verbosity flag.
+
+March 11, 2019 - G.Cosmo (geomnav-V10-05-00)
+------------------------
+- Fixed typos in printouts in G4NavigationLogger.
+
+September 26, 2018 - D.Sorokin (geomnav-V10-04-12)
+------------------------------
+- Notify G4ChordFinder at the beginning of each ComputeStep() call. 
+
+June 15, 2018 - G.Cosmo (geomnav-V10-04-11)
+-----------------------
+- Fixed Coverity defect in diagnostic report in G4MultiLevelLocator.
+
+June 13, 2018 - G.Cosmo (geomnav-V10-04-10, 09)
+-----------------------
+- Use G4Exception instead of streaming to cerr in various classes.
+
+June 8, 2018 - J.Apostolakis (geomnav-V10-04-08, 07)
+----------------------------
+- G4PropagatorInField: fix for case of finishing integration in last iteration
+  (so a looping particle will not be signalled incorrectly in that case.)
+  Improved reporting of looping particle, adding info on density and
+  fraction (%) of proposed step that was completed, and momentum (-08).
+
+May 11, 2018 - E.Tcherniaev (geomnav-V10-04-06)
+---------------------------
+- G4Navigator::ComputeLocalAxis(): removed unnecessary check for IsRotated().
+
+May 9, 2018 - E.Tcherniaev (geomnav-V10-04-05)
+--------------------------
+- Replaced use of Inverse() from G4AffineTransform with new dedicated
+  methods, to avoid creation of temporaries in G4Navigator, G4RegularNavigation
+  and G4ReplicaNavigation.
+
+May 4, 2018 - J.Apostolakis (geomnav-V10-04-04)
+---------------------------
+- G4Navigator::GetLocalExitNormal(): fix for normal calculated at the endpoint
+  of current step, on a 'candidate' next volume. Adds missing transformation to
+  the frame of the current volume.
+  Addresses problem report #2054.
+
+April 17, 2018 - J.Apostolakis (geomnav-V10-04-02,03)
+------------------------------
+- G4Navigator::Set/RestoreSavedState(): fix for save/restore of ReplicaNumber
+  (Thanks to Helmut Burkhardt).
+
+April 11, 2018 - J.Apostolakis (geomnav-V10-04-01)
+------------------------------
+- G4PathFinder::DoNextLinearStep():
+  * Use 'Relocated Point' flag to signal move from call to ReLocate, and
+    ensure that new point is used in cross-checks in subsequent Locate.
+  * Revert change of geomnav-V10-03-09, keeping fMinStep as 'logical'
+    value, which can be kInfinity when step is not limited by Navigators
+    (it was meant to cope with zero proposed step in RE03, however it
+    caused problems in multiple cases when PathFinder was used).
+
+- G4SafetyHelper:
+  * Do not limit memorisation of safety in case of parallel
+    geometries (when a length is not passed to safety method).
+  * Fix to including full message in Exception.
+
+February 26, 2018 - J.Apostolakis (geomnav-V10-04-00)
+---------------------------------
+- Fix for momentum value in G4PathFinder::SetChargeMomentumMass
+  Was passing magnitude square, instead of magnitude.
+  Corrects bug report 2037.   
+    Thanks to Renee Fatemi (Univ. of Kentucky, mu-to-e experim.)
+
+November 23, 2017 - J.Apostolakis (geomnav-V10-03-09)
+---------------------------------
+- Fix in G4PathFinder to cope with zero proposed step.
+  Correction ensures that the 'physical' length of a step is used
+  in minimum, rather than 'logical' value (i.e. kInfinity).
+
+November 2, 2017 - G.Cosmo (geomnav-V10-03-08)
+--------------------------
+- Correction to use G4 types in G4Navigator after previous tags...
+
+November 2, 2017 - J.Apostolakis (geomnav-V10-03-07)
+--------------------------------
+- test/CMakeLists.txt: fixed to enable use with unit test infrastructure.
+
+November 1, 2017 - J.Apostolakis (geomnav-V10-03-06)
+--------------------------------
+- G4Navigator - loosened check on normal vector, whether it is a unit
+    vector.  Warn only if | norm - 1 | > 10^-3  ( not 10^-6 ).
+    Improved clarity by using a constant to define it.
+
+August 25, 2017 - J.Apostolakis (geomnav-V10-03-05)
+-------------------------------
+- G4PathFinder, G4PropagatorInField and all Locator classes (source files)
+  G4PropagatorInField.icc ( GetCurrentEquationOfMotion method ) 
+  *  Moved to using IntegrationDriver's direct method to Get Equation of motion
+     ( for cleaner code and future proofing - introducing non-RK drivers.)
+  * Used 'auto' for type of driver (to pave way for non-RK drivers.)
+
+- G4Navigator:  use 'perThousand' in check for unity of normal vector
+    ( issue was too noisy for no good reason otherwise. )
+    
+March 22, 2017 - G.Cosmo (geomnav-V10-03-04)
+------------------------
+- Avoid deletion of field-manager pointer in destructor of
+  G4TransportationManager, as it is being deleted by G4FieldManagerStore.
+
+March 21, 2017 - G.Cosmo (geomnav-V10-03-03, 02, 01)
+------------------------
+- Provide simple accessor GetInstanceIfExist() for G4PathFinder and
+  G4TransportationManager singletons.
+
+March 17, 2017 - G.Cosmo (geomnav-V10-03-00)
+------------------------
+- Correction in destructors of G4TransportationManager and G4PathFinder.
+
+October 23, 2016 - G.Cosmo (geomnav-V10-02-21)
 --------------------------
 - Fixed recursion test in G4GeomTestVolume to iterate on all daughters.
 
-October 19, 2016 - G.Cosmo
+October 19, 2016 - G.Cosmo (geomnav-V10-02-20)
 --------------------------
 - G4ReplicaNavigation: use Cartesian tolerance in distance evaluation
   in DistanceToOutPhi(). Addressing problem report #1902.
@@ -29,16 +302,16 @@ October 19, 2016 - G.Cosmo
   show also local coordinates.
 - Fixed shadowing compilation warnings in unit tests.
 
-October 11, 2016 - G.Cosmo
+October 11, 2016 - G.Cosmo (geomnav-V10-02-19)
 --------------------------
 - Code formatting and fixed compilation error for left-over includes
   in G4PhantomParameterisation.
 
-October 11, 2016 - P.Arce
+October 11, 2016 - P.Arce (geomnav-V10-02-18)
 -------------------------
 - G4PhantomParameterisation: revisiting precision checks.
 
-October 7, 2016 - J.Apostolakis
+October 7, 2016 - J.Apostolakis (geomnav-V10-02-17, 16)
 -------------------------------
 - Checked loops for terminationof infinite loops and annotated them with
   "Loop checking" comment.
@@ -46,78 +319,78 @@ October 7, 2016 - J.Apostolakis
   analysis: G4ParameterisedNavigation, G4RegularNavigation, G4VoxelNavigation,
   G4VoxelSafety.
 
-October 5, 2016 - G.Cosmo
+October 5, 2016 - G.Cosmo (geomnav-V10-02-15)
 -------------------------
 - G4Navigator: still force abortion of event if track gets really stuck,
   but avoid check for overlaps if push-verbosity is set to false.
 
-October 5, 2016 - G.Cosmo
+October 5, 2016 - G.Cosmo (geomnav-V10-02-14)
 -------------------------
 - G4Navigator: allow to disable overlap checks and warnings in ComputeStep()
   by setting push-verbosity to false with SetPushVerbosity().
 - G4PhantomParameterisation: correction in use of std::copysign()
   introduced in previous tag.
 
-October 4, 2016 - P.Arce
+October 4, 2016 - P.Arce (geomnav-V10-02-13)
 ------------------------
 - G4PhantomParameterisation: revisiting precision checks (some were
   unreasonably tight).
 
-August 30, 2016 - G.Cosmo
+August 30, 2016 - G.Cosmo (geomnav-V10-02-12)
 -------------------------
 - G4Navigator: more diagnostics in G4VERBOSE mode in GetGlobalExitNormal().
 
-August 25, 2016 - D.Sorokin
+August 25, 2016 - D.Sorokin (geomnav-V10-02-11)
 ---------------------------
 - G4PropagatorInField: fix to pass accuracy values to Intersection Locator
    after re-evaluating epsilon (not before.)
    [ Dmitrii Sorokin was supported by Google during GSoC 2016. ]
    [ Recorded by J. Apostolakis ]
 
-August 15, 2016 - G.Cosmo
+August 15, 2016 - G.Cosmo (geomnav-V10-02-10)
 -------------------------
 - G4Navigator: more diagnostics in G4VERBOSE mode in GetGlobalExitNormal().
 
-July 8, 2016 - G.Cosmo
+July 8, 2016 - G.Cosmo (geomnav-V10-02-09)
 ----------------------
 - Fix in G4Navigator::GetGlobalExitNormal() to synchronise caching of
   'fExitNormalGlobalFrame' before returning (thanks to P.Gumplinger for
   spotting this). Addressing problem report #1750.
 
-May 18, 2016 - G.Cosmo (geomnav-V10-01-37)
+May 18, 2016 - G.Cosmo (geomnav-V10-02-08)
 ----------------------
 - Fixed compilation warning on gcc-6.1 in G4Navigator::PrintState().
 
-May 3, 2016 - G.Cosmo
+May 3, 2016 - G.Cosmo (geomnav-V10-02-07)
 ---------------------
 - Reinstated check on anomalous mother-step with corrective action, previously
   moved only in check-mode in G4VoxelNavigation and G4NormalNavigation.
 
-April 15, 2016 - G.Cosmo
+April 15, 2016 - G.Cosmo (geomnav-V10-02-06, 05)
 ------------------------
 - Avoid static constant definition of surface tolerance in G4VoxelNavigation
   in method LocateNextVoxel() to clear spurious warnings for data-race
   conflicts from Valgrind/DRD tool; defined as class data member.
 - Cleared up use of static constants also in other navigation classes.
 
-April 12, 2016 - G.Cosmo
+April 12, 2016 - G.Cosmo (geomnav-V10-02-04)
 ------------------------
 - Improved diagnostic in G4Navigator. Moved some debug checks in "check-mode".
 - Minor code cleanup.
 
-February 1, 2016 - G.Cosmo (geomnav-V10-01-36)
+February 1, 2016 - G.Cosmo (geomnav-V10-02-03, 02)
 --------------------------
 - Relax condition for zero or almost-zero steps in G4ReplicaNavigation and
   G4Navigator, to allow for faster progression in case of stuck tracks in
   3D scoring meshes. Addressed old problem report #1432.
 
-January 29, 2016 - G.Cosmo
+January 29, 2016 - G.Cosmo (geomnav-V10-02-01)
 --------------------------
 - Fix in G4ReplicaNavigation::ComputeStep() for correct setting of copyNo
   for particle entering. Fixes issue of negative copyNo observed in nested
   replica setups. Addressing problem report #1634. 
 
-January 11, 2016 - G.Cosmo
+January 11, 2016 - G.Cosmo (geomnav-V10-02-00)
 --------------------------
 - Move check for overlaps in G4Navigator::ComputeStep() within G4VERBOSE.
   Addressing problem report #1811.

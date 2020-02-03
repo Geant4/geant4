@@ -1,0 +1,13 @@
+# Example 3 : defining the following : pure Ni64
+/changeTarget/designedMaterial/materialDensity 8.85 g/cm3
+/changeTarget/designedMaterial/MaterialNComponents 1
+/changeTarget/designedMaterial/ElementName Ni64
+/changeTarget/designedMaterial/MaterialFractionMass 1.
+/changeTarget/designedMaterial/ElementSymbole Ni64
+/changeTarget/designedMaterial/ElementNComponents 1
+/changeTarget/designedMaterial/isotopeName Ni64			
+/changeTarget/designedMaterial/IsotopeAbundanceInElement 1.
+/changeTarget/designedMaterial/isotopeZ 28.
+/changeTarget/designedMaterial/isotopeN 64
+/changeTarget/designedMaterial/isotopeA 64.
+/changeTarget/designedMaterial/update

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc 73760 2013-09-10 12:49:34Z gcosmo $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -76,9 +75,9 @@ G4StackManager::~G4StackManager()
 
 const G4StackManager & G4StackManager::operator=
 (const G4StackManager &) { return *this; }
-G4int G4StackManager::operator==(const G4StackManager &) 
+G4bool G4StackManager::operator==(const G4StackManager &)
 const{ return false; }
-G4int G4StackManager::operator!=(const G4StackManager &) 
+G4bool G4StackManager::operator!=(const G4StackManager &)
 const{ return true; }
 
 #include "G4ParticleDefinition.hh"
@@ -94,73 +93,23 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
   const G4ParticleDefinition* pd = newTrack->GetParticleDefinition();
   if(pd->GetParticleDefinitionID() < 0)
   {
-#ifdef G4VERBOSE
     G4ExceptionDescription ED;
-    if(verboseLevel>0) {
-      ED << "A track without proper process manager is pushed into the track stack.\n"
-         << " Particle name : " << pd->GetParticleName() << " -- ";
-      if(newTrack->GetParentID()<0)
-      { ED << "created by a primary particle generator."; }
-      else
-      { 
-        const G4VProcess* vp = newTrack->GetCreatorProcess();
-        if(vp)
-        { ED << "created by " << vp->GetProcessName() << "."; }
-        else
-        { ED << "creaded by unknown process."; }
-      }
-    }
-#endif
-////  Temporal care of setting process manager for general ion.
-    if(pd->IsGeneralIon())
-    {
-#ifdef G4VERBOSE
-      if( verboseLevel > 0 ) {
-        ED << "\n Process manager is temporally set, but this operation is thread-unsafe\n"
-           << "and will be replaced with other methods at version 10.0.";
-        G4Exception("G4StackManager::PushOneTrack","Event10051",JustWarning,ED);
-      }
-#endif
-      G4ParticleDefinition* genericIon = G4ParticleTable::GetParticleTable()->GetGenericIon();
-      G4ProcessManager* pman=0;
-      if (genericIon!=0) pman = genericIon->GetProcessManager();
-      if ((genericIon ==0) || (pman==0)){
-        G4Exception( "G4IonTable::AddProcessManager()","PART10052", FatalException,
-                   "Can not define process manager. GenericIon is not available.");
-      }
-      G4ParticleDefinition* ion = const_cast<G4ParticleDefinition*>(pd);
-      ion->SetParticleDefinitionID(genericIon->GetParticleDefinitionID());
-#ifdef G4VERBOSE
-      if( verboseLevel > 1 )
-      {
-        G4ProcessManager* ionPman = ion->GetProcessManager();
-        G4cout << "Now " << ion->GetParticleName() << " has a process manaegr at " << ionPman
-               << " that is equivalent to " << pman << G4endl;
-        G4ProcessVector* ionPvec = ionPman->GetProcessList();
-        for(G4int ip1=0;ip1<ionPvec->size();ip1++)
-        {
-          G4cout << " " << ip1 << " - " << (*ionPvec)[ip1]->GetProcessName()
-                 << " AtRest " << ionPman->GetAtRestIndex((*ionPvec)[ip1])
-                 << ", AlongStep " << ionPman->GetAlongStepIndex((*ionPvec)[ip1])
-                 << ", PostStep " << ionPman->GetPostStepIndex((*ionPvec)[ip1])
-                 << G4endl;
-        }
-      }
-#endif
-    }
-////  End of temporal care of setting process manager
+    ED << "A track without proper process manager is pushed into the track stack.\n"
+       << " Particle name : " << pd->GetParticleName() << " -- ";
+    if(newTrack->GetParentID()<0)
+    { ED << "created by a primary particle generator."; }
     else
-    {
-#ifdef G4VERBOSE
-      if( verboseLevel > 0 ) {
-        ED << "\nThis track is deleted.";
-        G4Exception("G4StackManager::PushOneTrack","Event10051",
-                 JustWarning,ED);
-      }
-#endif
-      delete newTrack;
-      return GetNUrgentTrack();
+    { 
+      const G4VProcess* vp = newTrack->GetCreatorProcess();
+      if(vp)
+      { ED << "created by " << vp->GetProcessName() << "."; }
+      else
+      { ED << "creaded by unknown process."; }
     }
+    G4Exception("G4StackManager::PushOneTrack","Event10051",
+                 FatalException,ED);
+    delete newTrack;
+    return GetNUrgentTrack();
   }
     
   G4ClassificationOfNewTrack classification = DefaultClassification( newTrack ); 

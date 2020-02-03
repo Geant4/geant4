@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Polycone.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Polycone.icc
-//
 // Implementation of inline methods of G4Polycone
 // --------------------------------------------------------------------
 
@@ -44,6 +36,30 @@ inline
 G4double G4Polycone::GetEndPhi() const
 {
   return endPhi;
+}
+
+inline
+G4double G4Polycone::GetSinStartPhi() const
+{
+  return IsOpen() ? std::sin(startPhi) : 0.0;
+}
+
+inline
+G4double G4Polycone::GetCosStartPhi() const
+{
+  return IsOpen() ? std::cos(startPhi) : 1.0;
+}
+
+inline
+G4double G4Polycone::GetSinEndPhi() const
+{
+  return IsOpen() ? std::sin(endPhi) : 0.0;
+}
+
+inline
+G4double G4Polycone::GetCosEndPhi() const
+{
+  return IsOpen() ? std::cos(endPhi) : 1.0;
 }
 
 inline
@@ -73,7 +89,7 @@ G4PolyconeHistorical* G4Polycone::GetOriginalParameters() const
 inline
 void G4Polycone::SetOriginalParameters(G4PolyconeHistorical* pars)
 {
-  if (!pars)
+  if (pars == nullptr)
     G4Exception("G4Polycone::SetOriginalParameters()", "GeomSolids0002",
                 FatalException, "NULL pointer to parameters!");
   *original_parameters = *pars;

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EllipticalCone.hh 83572 2014-09-01 15:23:27Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4EllipticalCone
 //
 // Class description:
@@ -55,27 +48,36 @@
 // *                                                                         *
 // ***************************************************************************
 //
-// In case you want to construct G4EllipticalCone from :
+// In case you want to construct G4EllipticalCone from:
 //   1. halflength in Z = zTopCut
 //   2. Dx and Dy =  halflength of ellipse axis  at  z = -zTopCut
-//   3. dx and dy =  halflength of ellipse axis  at  z =  zTopCut 
+//   3. dx and dy =  halflength of ellipse axis  at  z =  zTopCut
 //      ! Attention :  dx/dy=Dx/Dy 
 //
 // You need to find xSemiAxis,ySemiAxis and zheight:
 //
-//  xSemiAxis = (Dx-dx)/(2*zTopCut)  
+//  xSemiAxis = (Dx-dx)/(2*zTopCut)
 //  ySemiAxis = (Dy-dy)/(2*zTopCut)
 //    zheight = (Dx+dx)/(2*xSemiAxis)
-//
-// Author:
-//   Dionysios Anninos, 8.9.2005
-// 
-// Revision:
-//   Lukas Lindroos, Tatiana Nikitina 20.08.2007
-//  
+
+// Author: Dionysios Anninos, 8.9.2005
+// Revisions:
+//   Lukas Lindroos, Tatiana Nikitina, 20.08.2007
+//   Evgueni Tcherniaev, 20.07.2017
 // --------------------------------------------------------------------
-#ifndef G4EllipticalCone_HH
-#define G4EllipticalCone_HH
+#ifndef G4ELLIPTICALCONE_HH
+#define G4ELLIPTICALCONE_HH
+
+#include "G4GeomTypes.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UELLIPTICALCONE 1
+#endif
+
+#if (defined(G4GEOM_USE_UELLIPTICALCONE) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UEllipticalCone G4EllipticalCone
+  #include "G4UEllipticalCone.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -96,6 +98,7 @@ class G4EllipticalCone : public G4VSolid
 
     // Access functions
     //
+    inline G4double GetSemiAxisMin () const;
     inline G4double GetSemiAxisMax () const;
     inline G4double GetSemiAxisX () const;
     inline G4double GetSemiAxisY () const;
@@ -104,15 +107,17 @@ class G4EllipticalCone : public G4VSolid
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCut (G4double newzTopCut);
 
-    inline G4double GetCubicVolume(); 
-    inline G4double GetSurfaceArea();
+    G4double GetCubicVolume(); 
+    G4double GetSurfaceArea();
 
     // Solid standard methods
     //
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pMin, G4double& pMax) const;
 
     EInside Inside(const G4ThreeVector& p) const;
 
@@ -125,9 +130,9 @@ class G4EllipticalCone : public G4VSolid
 
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
@@ -159,23 +164,26 @@ class G4EllipticalCone : public G4VSolid
 
   protected:  // without description
  
-    G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,
-                                                   G4int& noPV) const;
-
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 
   private:
 
-    G4double kRadTolerance;
-    G4double halfRadTol, halfCarTol;
+    G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
 
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
-    G4double xSemiAxis, ySemiAxis, zheight,
-             semiAxisMax, zTopCut;
+  private:
+
+    G4double halfCarTol;
+    G4double fCubicVolume = 0.0;
+    G4double fSurfaceArea = 0.0;
+    G4double xSemiAxis, ySemiAxis, zheight, zTopCut;
+    G4double cosAxisMin, invXX, invYY;
 };
 
 #include "G4EllipticalCone.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UELLIPTICALCONE) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+#endif // G4ELLIPTICALCONE_HH

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm17/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +36,7 @@
 #include "G4UserRunAction.hh"
 #include "ProcessesCount.hh"
 #include "globals.hh"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,6 +46,7 @@ class HistoManager;
 
 class G4Run;
 class G4Material;
+class MuCrossSections;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,17 +60,17 @@ class RunAction : public G4UserRunAction
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
-    void     CountProcesses(G4String);
+    void CountProcesses(const G4String&);
     
-   private:    
-    G4double ComputeTheory (G4String, G4int); 
-    G4double GetEnergyCut  (G4Material*, G4int);
+  private:    
+    G4double ComputeTheory (const G4String&, G4int); 
+    G4double GetEnergyCut  (const G4Material*, G4int);
                         
-  private:
     DetectorConstruction*   fDetector;
     PrimaryGeneratorAction* fPrimary;
     ProcessesCount*         fProcCounter;
     HistoManager*           fHistoManager;
+    MuCrossSections*        fMucs;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

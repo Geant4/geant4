@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNucleon.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -62,8 +61,8 @@ private:
   G4PreCompoundNucleon(const G4PreCompoundNucleon &right);
   const G4PreCompoundNucleon& 
   operator= (const G4PreCompoundNucleon &right);
-  G4int operator==(const G4PreCompoundNucleon &right) const;
-  G4int operator!=(const G4PreCompoundNucleon &right) const;    
+  G4bool operator==(const G4PreCompoundNucleon &right) const;
+  G4bool operator!=(const G4PreCompoundNucleon &right) const;    
 
 };
 

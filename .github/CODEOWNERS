@@ -1,0 +1,79 @@
+# Codeowners for Geant4 (GitHub Version)
+# Maps directories to Working Group Coordinators
+
+# Software Management
+/CMakeLists.txt @drbenmorgan
+/cmake/         @drbenmorgan @gunterfolger
+/config/        @gcosmo
+/ReleaseNotes/  @gcosmo
+/source/global/ @gcosmo @drbenmorgan @gunterfolger
+
+# Run, Event, and Detector Response
+/source/run/              @makotoasai @jrmadsen
+/source/event/            @makotoasai @jrmadsen
+/source/digits_hits/      @makotoasai @jrmadsen
+/source/processes/scoring @makotoasai @jrmadsen
+
+# Tracking
+/source/tracking/ @ts-kek @amakoG4AI @makotoasai
+
+# Particles and Track
+# TBA: Hisaya Kurashige
+/source/track/     @makotoasai
+/source/particles/ @makotoasai
+
+# Geometry and Transport
+/source/geometry/                 @gcosmo @jonapost
+/source/processes/transportation/ @gcosmo @jonapost
+
+# Generic Processes and Materials
+/source/materials/                  @marcverderi @civanch
+/source/parameterisations/          @marcverderi
+/source/processes/biasing/          @marcverderi @civanch
+/source/processes/parameterisation/ @marcverderi @civanch
+
+# Electromagnetic Standard Physics
+/source/processes/electromagnetic/highenergy/   @civanch @dsawkey
+/source/processes/electromagnetic/muons/        @civanch @dsawkey
+/source/processes/electromagnetic/polarisation/ @civanch @dsawkey
+/source/processes/electromagnetic/standard/     @civanch @dsawkey
+/source/processes/electromagnetic/xrays/        @civanch @dsawkey
+/source/processes/optical/                      @civanch @dsawkey
+
+# Low Energy Electromagnetic Physics
+/source/processes/electromagnetic/dna/       @sincerti @pandola
+/source/processes/electromagnetic/lowenergy/ @sincerti @pandola
+/source/processes/electromagnetic/pii/       @sincerti @pandola
+
+# Hadronic Physics
+# TBA: Dennis Wright
+/source/processes/hadronic/ @AlbertoRibon
+
+# Persistency
+/source/persistency/ @gcosmo @WitekPokorski
+/source/analysis/    @ihrivnac
+
+# User and Category Interfaces
+# TBA: Hajime Yoshida
+/source/intercoms/  @koichi-murakami @makotoasai
+/source/interfaces/ @koichi-murakami @laurent-garnier
+/environments/      @koichi-murakami
+
+# Visualization
+/source/graphics_reps/ @laurent-garnier @jiperl @johna1941
+/source/visualization/ @laurent-garnier @jiperl @johna1941
+
+# Physics Lists
+/source/physics_lists/ @gunterfolger @hanswenzel
+
+# Novice+Extended Examples (Individual Examples assigned to Responsibles)
+/examples/basic/    @ihrivnac @ashoward
+/examples/novice/   @ihrivnac @ashoward
+/examples/extended/ @ihrivnac @ashoward
+
+# Advanced Examples (Can be extended with responsibles per example)
+/examples/advanced/ @guatelli @romanofrancesco
+
+# Testing
+/tests/ @gunterfolger @whokion
+

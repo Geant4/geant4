@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #ifndef G4VScoringMesh_h
@@ -33,6 +32,7 @@
 #include "globals.hh"
 #include "G4THitsMap.hh"
 #include "G4RotationMatrix.hh"
+#include "G4StatDouble.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -44,34 +44,41 @@ class G4ParallelWorldProcess;
 
 #include <map>
 
-enum MeshShape { boxMesh, cylinderMesh, sphereMesh , undefinedMesh = -1};
-typedef std::map<G4String,G4THitsMap<G4double>* > MeshScoreMap;
 // class description:
 //
-//  This class represents a parallel world for interactive scoring purposes.
+//  This class represents a multi-functional detector to be used by command-based scorer
+//  For parallel world scorer, this class creates a parallel world mesh geometry
 //
 
 class G4VScoringMesh
 {
-  public:
+public:
+  enum class MeshShape { box, cylinder, sphere, realWorldLogVol, undefined = -1};
+  using EventScore = G4THitsMap< G4double >;
+  using RunScore = G4THitsMap< G4StatDouble >;
+  using MeshScoreMap = std::map< G4String, RunScore* >;
+
+public:
   G4VScoringMesh(const G4String& wName);
   virtual ~G4VScoringMesh();
 
-  public: // with description
+public: // with description
   // a pure virtual function to construct this mesh geometry
   void Construct(G4VPhysicalVolume* fWorldPhys);
 
   void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
 
-  protected:
+protected:
   virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys) = 0;
 
-  public: // with description
+public: // with description
   // list infomration of this mesh 
   virtual void List() const;
   
-  public: // with description
+public: // with description
   // get the world name
+  // If this ScoringMesh is for parallel world, it returns the name of the parallel world
+  // If this ScoringMesh is for real world logical volume, it returns name of logical volume
   inline const G4String& GetWorldName() const
   { return fWorldName; }
   // get whether this mesh is active or not
@@ -85,6 +92,7 @@ class G4VScoringMesh
   { return fShape; }
   // accumulate hits in a registered primitive scorer
   void Accumulate(G4THitsMap<G4double> * map);
+  void Accumulate(G4THitsMap<G4StatDouble> * map);
   // merge same kind of meshes
   void Merge(const G4VScoringMesh * scMesh);
   // dump information of primitive socrers registered in this mesh
@@ -94,13 +102,14 @@ class G4VScoringMesh
   // draw a column of a quantity on a current viewer
   void DrawMesh(const G4String& psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
   // draw a projected quantity on a current viewer
-  virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
+  virtual void Draw(RunScore * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
   // draw a column of a quantity on a current viewer
-  virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap,
+  virtual void DrawColumn(RunScore * map, G4VScoreColorMap* colorMap,
 			  G4int idxProj, G4int idxColumn) = 0;
   // reset registered primitive scorers
   void ResetScore();
 
+  // Following set/get methods make sense only for parallel world scoring mesh
   // set size of this mesh
   void SetSize(G4double size[3]);
   // get size of this mesh
@@ -120,6 +129,7 @@ class G4VScoringMesh
     if(fRotationMatrix) return *fRotationMatrix;
     else return G4RotationMatrix::IDENTITY;
   }
+
   // set number of segments of this mesh
   void SetNumberOfSegments(G4int nSegment[3]);
   // get number of segments of this mesh
@@ -180,7 +190,7 @@ protected:
   G4RotationMatrix * fRotationMatrix;
   G4int fNSegment[3];
 
-  std::map<G4String, G4THitsMap<G4double>* > fMap;
+  MeshScoreMap fMap;
   G4MultiFunctionalDetector * fMFD;
 
   G4int verboseLevel;
@@ -215,6 +225,16 @@ public:
     fGeometryHasBeenDestroyed = true;
     fMeshElementLogical = nullptr;
   }
+
+protected:
+  G4int copyNumberLevel;
+public:
+  // Geometry hirarchy level (bottom = 0) to be used as the copy number
+  // This is used only for real-world scorer
+  inline void SetCopyNumberLevel(G4int val)
+  { copyNumberLevel = val; }
+  inline G4int GetCopyNumberLevel() const
+  { return copyNumberLevel; }
 };
 
 #endif

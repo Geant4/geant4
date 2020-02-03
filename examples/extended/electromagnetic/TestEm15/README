@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: README 66241 2012-12-13 18:34:42Z gunter $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -110,3 +113,13 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
  		....
  		Idle> exit
  
+<<<<<<< HEAD
+=======
+8 - MACROS
+       The examples of macros for Multiple Scattering:
+       electron.mac muon.mac  proton.mac
+
+       The example of Gamma Conversion macro :
+       gamma.mac - gamma to e+ e- 
+       gamma2mumu.mac gamma to mu+ mu- 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

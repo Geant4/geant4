@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronKiller.hh 68048 2013-03-13 14:34:07Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -75,19 +74,19 @@ public:
 
   virtual ~G4NeutronKiller();
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
   void  SetTimeLimit(G4double);
 
   void  SetKinEnergyLimit(G4double);
 
-  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-						 G4double previousStepSize,
-						 G4ForceCondition* condition);
+  virtual G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+							 G4double previousStepSize,
+							 G4ForceCondition* condition);
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*);
+  virtual G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*);
 
 private:
 
@@ -100,39 +99,6 @@ private:
      
   G4NeutronKillerMessenger* pMess;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4NeutronKiller::PostStepGetPhysicalInteractionLength( 
-				 const G4Track& aTrack,
-				 G4double, G4ForceCondition* condition)
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  
-  G4double limit = DBL_MAX; 
-  if(aTrack.GetGlobalTime() > timeThreshold || 
-     aTrack.GetKineticEnergy() < kinEnergyThreshold) limit = 0.0;
-  return limit;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4NeutronKiller::GetMeanFreePath(const G4Track&,G4double,
-						 G4ForceCondition*)
-{
-  return DBL_MAX;
-}    
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4VParticleChange* G4NeutronKiller::PostStepDoIt(const G4Track& aTrack, 
-							const G4Step&)
-{
-  pParticleChange->Initialize(aTrack);
-  pParticleChange->ProposeTrackStatus(fStopAndKill);
-  return pParticleChange;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

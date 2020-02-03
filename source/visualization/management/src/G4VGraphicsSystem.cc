@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.cc 93025 2015-09-30 16:02:12Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -74,7 +73,7 @@ G4bool G4VGraphicsSystem::IsUISessionCompatible () const
 std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs)
 {
   os << "Graphics System: " << gs.GetName ();
-  os << ", nicknames:"; for (auto&& nickname: gs.GetNicknames())
+  os << ", nicknames:"; for (const auto& nickname: gs.GetNicknames())
   {os << ' ' << nickname;}
   os << "\n  Description: " << gs.GetDescription ();
   os << "\n  Functionality: ";
@@ -95,7 +94,7 @@ std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs)
       os << "threeD: Passive 3D (with stored structures)";
       break;
     case G4VGraphicsSystem::threeDInteractive:
-      os << "threeDInteractive: 3D with \"pick\" functionality.";
+      os << "threeDInteractive: 3D with mouse control and \"pick\" functionality.";
       break;
     case G4VGraphicsSystem::virtualReality:
       os << "virtualReality";

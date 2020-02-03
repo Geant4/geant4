@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStateDependent.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -61,12 +60,12 @@ G4VStateDependent& G4VStateDependent::operator=(const G4VStateDependent &right)
    return *this;
 }
 
-G4int G4VStateDependent::operator==(const G4VStateDependent &right) const
+G4bool G4VStateDependent::operator==(const G4VStateDependent &right) const
 {
    return (this == &right);
 }
 
-G4int G4VStateDependent::operator!=(const G4VStateDependent &right) const
+G4bool G4VStateDependent::operator!=(const G4VStateDependent &right) const
 {
    return (this != &right);
 }

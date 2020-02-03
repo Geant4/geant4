@@ -3,6 +3,7 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+<<<<<<< HEAD
 *************************************************************
  Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
@@ -10,6 +11,62 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+=======
+**************************************************************
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateXm (OGLIXm, OGLI)
+OpenGLStoredXm (OGLSXm, OGL, OGLS)
+OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ... open Root analysis file : pol01.root - done
 /run/verbose 2
 #
@@ -48,8 +105,9 @@ theBox : (0,0,0.08)
  buildBhabha cross section 0
 G4PolarizedPEEffectCrossSection() init
 
-pol-phot:   for  gamma    SubType= 12  BuildTable= 0
+pol-phot:  for gamma SubType=12 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+<<<<<<< HEAD
 Polarized-PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
 
 pol-compt:   for  gamma    SubType= 13  BuildTable= 1
@@ -64,10 +122,25 @@ pol-conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              polConv :  Emin=        0 eV    Emax=       10 TeV
+=======
+Polarized-PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
 
-msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+pol-compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   Polarized-Compton : Emin=    0 eV  Emax=  100 TeV
+
+pol-conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             polConv : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+
+msc:  for e-  SubType= 10
+      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+<<<<<<< HEAD
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 pol-eIoni:   for  e-    SubType= 2
@@ -82,10 +155,27 @@ pol-eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PolBrem :  Emin=        0 eV    Emax=       10 TeV   DipBustGen
+=======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
 
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+pol-eIoni:  for e-  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+PolarizedMollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+pol-eBrem:  for e-  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PolBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+
+msc:  for e+  SubType= 10
+      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+<<<<<<< HEAD
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 pol-eIoni:   for  e+    SubType= 2
@@ -105,6 +195,26 @@ pol-annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       Polarized model for annihilation into 2 photons
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 Polarized-Annihilation :  Emin=        0 eV    Emax=       10 TeV
+=======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+
+pol-eIoni:  for e+  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+PolarizedMollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+pol-eBrem:  for e+  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PolBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+pol-annihil:  for e+, integral:1  SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+Polarized-Annihilation : Emin=    0 eV  Emax=  100 TeV
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -142,6 +252,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
 --> Event 0 starts.
@@ -149,11 +261,16 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
+<<<<<<< HEAD
   User=1.35s Real=1.36s Sys=0s
+=======
+  User=0.080000s Real=0.074662s Sys=0.000000s
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
+<<<<<<< HEAD
 	Transportation = 57532
 	pol-compt = 11819
 	msc = 46504
@@ -174,13 +291,41 @@ Mean Polarization :-0.82222 +- 0.25063
 Mean Number per Event :0.0031
 Mean Energy :3.2484 MeV +- 1.8025 MeV
 Mean Polarization :-0.70748 +- 0.27491
+=======
+	Transportation = 31198
+	pol-compt = 273
+	pol-eBrem = 339
+	pol-phot = 157
+	pol-eIoni = 590
+	pol-conv = 218
+	msc = 1682
+	pol-annihil = 66
+ Gamma: 
+Mean Number per Event :1.0089
+Mean Energy :9.568 MeV +- 1.9382 MeV
+Mean Polarization :-0.96282 +- 0.18587
+ Electron: 
+Mean Number per Event :0.0352
+Mean Energy :5.3354 MeV +- 2.5102 MeV
+Mean Polarization :-0.72706 +- 0.29245
+ Positron: 
+Mean Number per Event :0.0158
+Mean Energy :4.1553 MeV +- 2.0307 MeV
+Mean Polarization :-0.61047 +- 0.28026
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ... write Root file : pol01.root - done
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
+<<<<<<< HEAD
  float_seed_table[] = 0.175692 0.385647 0.861036 0.507748 0.269676 0.314197 0.610989 0.106925 0.553456 0.136075 0.80907 0.772456 0.556632 0.525917 0.667838 0.656322 0.0480373 0.802785 0.581367 0.841234 0.00786269 0.865653 0.343942 0.702005 
  i_lag = 17, j_lag = 3
  carry = 5.96046e-08, count24 = 10
+=======
+ float_seed_table[] = 0.564175 0.55382 0.0379403 0.494735 0.891048 0.0179662 0.910863 0.559054 0.95513 0.295018 0.274368 0.484574 0.365144 0.950522 0.00705117 0.114351 0.394937 0.928496 0.103677 0.535047 0.32307 0.576281 0.181624 0.931424 
+ i_lag = 7, j_lag = 17
+ carry = 5.96046e-08, count24 = 4
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
  luxury = 3 nskip = 199
 ----------------------------------------
 #

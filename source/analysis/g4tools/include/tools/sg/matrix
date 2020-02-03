@@ -21,13 +21,11 @@ class matrix : public node {
 public:
   sf_mat4f mtx;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::matrix)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(mtx)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(mtx)
+    );
     return s_v;
   }
 private:
@@ -87,53 +85,37 @@ public:
   // shortcuts :
   void set_identity() {mtx.set_identity();}
 
-  void set_translate(float a_x,float a_y,float a_z) {
-    mtx.set_translate(a_x,a_y,a_z);
-  }
+  void set_translate(float a_x,float a_y,float a_z) {mtx.set_translate(a_x,a_y,a_z);}
   void set_translate(const vec3f& a_v) {mtx.set_translate(a_v);}
 
   void set_scale(float a_x,float a_y,float a_z) {mtx.set_scale(a_x,a_y,a_z);}
   void set_scale(float a_s) {mtx.set_scale(a_s);}
 
-  void set_rotate(float a_x,float a_y,float a_z,float a_angle) {
-    mtx.set_rotate(a_x,a_y,a_z,a_angle);
-  }
-  void set_rotate(const vec3f& a_v,float a_angle) {
-    mtx.set_rotate(a_v,a_angle);
-  }
+  void set_rotate(float a_x,float a_y,float a_z,float a_angle) {mtx.set_rotate(a_x,a_y,a_z,a_angle);}
+  void set_rotate(const vec3f& a_v,float a_angle) {mtx.set_rotate(a_v,a_angle);}
+  bool set_rotate(const vec3f& a_from,const vec3f& a_to) {return mtx.set_rotate(a_from,a_to,m_tmp);}
 
   void mul_mtx(const mat4f& a_m) {mtx.mul_mtx(a_m,m_tmp);}
 
-  void mul_translate(float a_x,float a_y,float a_z) {
-    mtx.mul_translate(a_x,a_y,a_z);
-  }
+  void mul_translate(float a_x,float a_y,float a_z) {mtx.mul_translate(a_x,a_y,a_z);}
   void mul_translate(const vec3f& a_v) {mtx.mul_translate(a_v);}
   void mul_scale(float a_x,float a_y,float a_z) {mtx.mul_scale(a_x,a_y,a_z);}
   void mul_scale(float a_s) {mtx.mul_scale(a_s);}
 
-  void mul_rotate(float a_x,float a_y,float a_z,float a_angle) {
-    mtx.mul_rotate(a_x,a_y,a_z,a_angle);
-  }
+  void mul_rotate(float a_x,float a_y,float a_z,float a_angle) {mtx.mul_rotate(a_x,a_y,a_z,a_angle);}
 
   void mul_rotate(const vec3f& a_v,float a_angle) {mtx.mul_rotate(a_v,a_angle);}
+  void mul_rotate(const vec4f& a_v) {mtx.mul_rotate(a_v.v0(),a_v.v1(),a_v.v2(),a_v.v3());}
 
-  void left_mul_rotate(float a_x,float a_y,float a_z,float a_angle) {
-    mtx.left_mul_rotate(a_x,a_y,a_z,a_angle);
-  }
+  void left_mul_rotate(float a_x,float a_y,float a_z,float a_angle) {mtx.left_mul_rotate(a_x,a_y,a_z,a_angle);}
 
-  void left_mul_scale(float a_x,float a_y,float a_z) {
-    mtx.left_mul_scale(a_x,a_y,a_z);
-  }
+  void left_mul_scale(float a_x,float a_y,float a_z) {mtx.left_mul_scale(a_x,a_y,a_z);}
 
-  void left_mul_translate(float a_x,float a_y,float a_z) {
-    mtx.left_mul_translate(a_x,a_y,a_z);
-  }
+  void left_mul_translate(float a_x,float a_y,float a_z) {mtx.left_mul_translate(a_x,a_y,a_z);}
 
   void left_mul_translate(const vec3f& a_v) {mtx.left_mul_translate(a_v);}
 
-  bool mul_rotate(const vec3f& a_from,const vec3f& a_to) {
-    return mtx.mul_rotate(a_from,a_to,m_tmp);
-  }
+  bool mul_rotate(const vec3f& a_from,const vec3f& a_to) {return mtx.mul_rotate(a_from,a_to,m_tmp);}
 protected:
   float m_tmp[16]; //OPTIMIZATION
 };

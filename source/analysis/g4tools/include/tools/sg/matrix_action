@@ -111,8 +111,9 @@ protected:
                                 0, 0,0,1);
     }
     m_models[m_cur].set_identity();
-    m_state.m_proj = m_projs[m_cur];
-    m_state.m_model = m_models[m_cur];
+    sg::state& _state = state();
+    _state.m_proj = m_projs[m_cur];
+    _state.m_model = m_models[m_cur];
   }
 protected:
   std::vector<mat4f> m_projs;

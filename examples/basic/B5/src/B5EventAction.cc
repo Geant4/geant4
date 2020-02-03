@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: B5EventAction.cc 94486 2015-11-19 08:33:37Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file B5EventAction.cc
 /// \brief Implementation of the B5EventAction class
@@ -33,7 +36,11 @@
 #include "B5DriftChamberHit.hh"
 #include "B5EmCalorimeterHit.hh"
 #include "B5HadCalorimeterHit.hh"
+<<<<<<< HEAD
 #include "B5Analysis.hh"
+=======
+#include "B5Constants.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #include "G4Event.hh"
 #include "G4RunManager.hh"
@@ -43,6 +50,7 @@
 #include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
+#include "g4analysis.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

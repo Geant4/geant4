@@ -1,0 +1,47 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    spower History file
+                    --------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+26-11-19 I. Hrivnacova (spower-V10-05-00)
+- Fixed Doxygen warnings
+
+06-11-18 S. Incerti (spower-V10-04-05)
+- updated PhysicsList and spower.cc, replacing spower-V10-04-00
+
+04-11-18 S. Incerti (spower-V10-04-04)
+- rewrite of physics list and macro spower.in to avoid factory usage
+
+? ? (spower-V10-04-03)
+
+22-07-18 S. Incerti (spower-V10-04-02)
+- removed obsolete RanecuEngine
+
+09-05-18 B. Morgan (spower-V10-04-01)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+26-02-18  R. Hatcher (spower-V10-04-00)
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
+03-05-17 SI (spower-V10-03-02)
+- updated README
+
+30-04-17 SI (spower-V10-03-01)
+- moved stationary constructors to physics_lists
+
+16-03-17 SI (spower-V10-03-00)
+- created

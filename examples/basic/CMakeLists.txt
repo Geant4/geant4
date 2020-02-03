@@ -1,4 +1,3 @@
-# $Id: CMakeLists.txt 76474 2013-11-11 10:36:34Z gcosmo $
 
 #---Adding examples subdirectories explicitly 
 #   and a custom target to for building all basic examples -------------

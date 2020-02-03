@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.cc 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -117,6 +116,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4HadronicException.hh"
 #include "G4InuclCollider.hh"
+#include "G4LightTargetCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -144,11 +144,13 @@ typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 // Constructor and destrutor
 
 G4CascadeInterface::G4CascadeInterface(const G4String& name)
-  : G4VIntraNuclearTransportModel(name), 
-    randomFile(G4CascadeParameters::randomFile()),
-    maximumTries(20), numberOfTries(0),
-    collider(new G4InuclCollider), balance(new G4CascadeCheckBalance(name)),
-    bullet(0), target(0), output(new G4CollisionOutput) {
+ : G4VIntraNuclearTransportModel(name), 
+   randomFile(G4CascadeParameters::randomFile()),
+   maximumTries(20), numberOfTries(0),
+   collider(new G4InuclCollider), balance(new G4CascadeCheckBalance(name)), 
+   ltcollider(new G4LightTargetCollider),
+   bullet(0), target(0), output(new G4CollisionOutput)
+{
   // Set up global objects for master thread or sequential build
   if (G4Threading::IsMasterThread()) Initialize();
 
@@ -279,54 +281,71 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     return NoInteraction(aTrack, theNucleus);
   }
 
-  // Make conversion between native Geant4 and Bertini cascade classes.
-  if (!createBullet(aTrack)) {
-    if (verboseLevel) G4cerr << " Unable to create usable bullet" << G4endl;
-    return NoInteraction(aTrack, theNucleus);
-  }
+  // If target A < 3 skip all cascade machinery and do scattering on
+  // nucleons
 
-  if (!createTarget(theNucleus)) {
-    if (verboseLevel) G4cerr << " Unable to create usable target" << G4endl;
-    return NoInteraction(aTrack, theNucleus);
-  }
-
-  // Different retry conditions for proton target vs. nucleus
-  const G4bool isHydrogen = (theNucleus.GetA_asInt() == 1);
-
-  numberOfTries = 0;
-  do {   			// we try to create inelastic interaction
-    if (verboseLevel > 1)
-      G4cout << " Generating cascade attempt " << numberOfTries << G4endl;
-    
+  if (aTrack.GetDefinition() == G4Gamma::Gamma() &&
+      theNucleus.GetA_asInt() < 3) {
     output->reset();
-    collider->collide(bullet, target, *output);
-    balance->collide(bullet, target, *output);
+    createBullet(aTrack);
+    createTarget(theNucleus);
+    // Due to binning, gamma-p cross sections between 130 MeV and the inelastic threshold
+    // (144 for pi0 p, 152 for pi+ n) are non-zero, causing energy non-conservation
+    // So, if Egamma is between 144 and 152, only pi0 p is allowed.  
+
+    // Also, inelastic gamma-p cross section from G4PhotoNuclearCrossSection seems to be
+    // non-zero below between pi0 mass (135 MeV) and threshold (144 MeV) 
+    ltcollider->collide(bullet, target, *output);
+
+  } else {
+
+    // Make conversion between native Geant4 and Bertini cascade classes.
+    if (!createBullet(aTrack)) {
+      if (verboseLevel) G4cerr << " Unable to create usable bullet" << G4endl;
+      return NoInteraction(aTrack, theNucleus);
+    }
+
+    if (!createTarget(theNucleus)) {
+      if (verboseLevel) G4cerr << " Unable to create usable target" << G4endl;
+      return NoInteraction(aTrack, theNucleus);
+    }
+
+    // Different retry conditions for proton target vs. nucleus
+    const G4bool isHydrogen = (theNucleus.GetA_asInt() == 1);
+
+    numberOfTries = 0;
+    do {   			// we try to create inelastic interaction
+      if (verboseLevel > 1)
+        G4cout << " Generating cascade attempt " << numberOfTries << G4endl;
     
-    numberOfTries++;
-    /* Loop checking 08.06.2015 MHK */
-  } while ( isHydrogen ? retryInelasticProton() : retryInelasticNucleus() );
+      output->reset();
+      collider->collide(bullet, target, *output);
+      balance->collide(bullet, target, *output);
+    
+      numberOfTries++;
+      /* Loop checking 08.06.2015 MHK */
+    } while ( isHydrogen ? retryInelasticProton() : retryInelasticNucleus() );
 
-  // Null event if unsuccessful
-  if (numberOfTries >= maximumTries) {
-    if (verboseLevel) 
-      G4cout << " Cascade aborted after trials " << numberOfTries << G4endl;
-    return NoInteraction(aTrack, theNucleus);
-  }
+    // Null event if unsuccessful
+    if (numberOfTries >= maximumTries) {
+      if (verboseLevel) 
+        G4cout << " Cascade aborted after trials " << numberOfTries << G4endl;
+      return NoInteraction(aTrack, theNucleus);
+    }
 
-  // Abort job if energy or momentum are not conserved
-  if (!balance->okay()) {
-    throwNonConservationFailure();
-    return NoInteraction(aTrack, theNucleus);
-  }
+    // Abort job if energy or momentum are not conserved
+    if (!balance->okay()) {
+      throwNonConservationFailure();
+      return NoInteraction(aTrack, theNucleus);
+    }
 
-  // Successful cascade -- clean up and return
-  if (verboseLevel) {
-    G4cout << " Cascade output after trials " << numberOfTries << G4endl;
-    if (verboseLevel > 1) output->printCollisionOutput();
-  }
+    // Successful cascade -- clean up and return
+    if (verboseLevel) {
+      G4cout << " Cascade output after trials " << numberOfTries << G4endl;
+      if (verboseLevel > 1) output->printCollisionOutput();
+    }
 
-  // Rotate event to put Z axis along original projectile direction
-  output->rotateEvent(bulletInLabFrame);
+  }  // end cascade-style collisions
 
   copyOutputToHadronicResult();
 
@@ -464,12 +483,14 @@ G4bool G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
 
   // Code momentum and energy -- Bertini wants z-axis and GeV units
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum()/GeV;
-  
+
   // Rotation/boost to get from z-axis back to original frame
-  bulletInLabFrame = G4LorentzRotation::IDENTITY;	// Initialize
-  bulletInLabFrame.rotateZ(-projectileMomentum.phi());
-  bulletInLabFrame.rotateY(-projectileMomentum.theta());
-  bulletInLabFrame.invert();
+  // According to bug report #1990 this rotation is unnecessary and causes
+  // irreproducibility.  Verifed and fixed by DHW 27 Nov 2017
+  // bulletInLabFrame = G4LorentzRotation::IDENTITY;	// Initialize
+  // bulletInLabFrame.rotateZ(-projectileMomentum.phi());
+  // bulletInLabFrame.rotateY(-projectileMomentum.theta());
+  // bulletInLabFrame.invert();
 
   G4LorentzVector momentumBullet(0., 0., projectileMomentum.rho(),
 				 projectileMomentum.e());
@@ -730,7 +751,7 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 	 << "\n retryInelasticNucleus: AND collision type (COULOMB_DEV) "
 	 << ((npart+nfrag > 2) ? "INELASTIC (t)" : "ELASTIC (f)")
 #else
-	 << "\n retryInelasticNucleus: AND collsion type "
+	 << "\n retryInelasticNucleus: AND collision type "
 	 << ((npart+nfrag < 3) ? "ELASTIC (t)" : "INELASTIC (f)")
 	 << "\n retryInelasticNucleus: AND Leading particle bullet "
 	 << ((firstOut == bullet->getDefinition()) ? "YES (t)" : "NO (f)")

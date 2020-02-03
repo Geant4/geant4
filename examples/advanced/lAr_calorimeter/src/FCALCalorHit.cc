@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALCalorHit.cc 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -67,9 +66,9 @@ const FCALCalorHit& FCALCalorHit::operator=(const FCALCalorHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int FCALCalorHit::operator==(const FCALCalorHit& right) const
+G4bool FCALCalorHit::operator==(const FCALCalorHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

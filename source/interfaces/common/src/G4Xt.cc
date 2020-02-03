@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Xt.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // G.Barrand
 
@@ -127,7 +126,9 @@ G4Xt::G4Xt (
   }
   SetArguments      (argn,args);
   SetMainInteractor (topWidget);
-  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
+  AddDispatcher(xt_dispatch_event);
+  // Coverity gcc8 cast warning
+  //  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
 }
 /***************************************************************************/
 G4Xt::~G4Xt (

@@ -13,6 +13,40 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06-Nov-2019, Alberto Ribon          had-binary-V10-05-01
+- G4GeneratorPrecompoundInterface: trivial fix.
+
+15-Oct-2019, Alberto Ribon          had-binary-V10-05-00
+- G4GeneratorPrecompoundInterface: extended by Vladimir Uzhinsky to
+  include a simple coalescence model for nucleus-nucleus interactions
+  (in the interface between string and precompound models).
+  This allows to improve the nucleon spectra and produce fast deuterons
+  in ion-ion collisions.
+
+09-Nov-2018, Gabriele Cosmo         had-binary-V10-04-00
+- G4GeneratorPrecompoundInterface: fixed printout typo.
+
+23-Jun-2017, Gunter Folger          had-binary-V10-03-04
+- fix memory leak introduced in BIC and BLIR by changes for 
+    passing creator model.
+
+31-May-2017, Gunter Folger          had-binary-V10-03-03
+- retag to include History
+
+31-May-2017, Gunter Folger          had-binary-V10-03-02
+- pass through time info
+
+19-May 2017, Gunter Folger
+- small improvements, and corrections for Creator model in error condictions.
+
+19-May 2017, Gunter Folger           had-binary-V10-03-01
+- fix compilation problems.
+
+18-May 2017, Gunter Folger           had-binary-V10-03-00
+- pass through CreatorModel. 
+- Binary Cascade also sets creator model for particles it creates,
+    BLIR not yet.  
+
 9-September 2015, Gunter Folger      had-binary-V10-01-08
 - migrate to G4Exp, G4Log, and G4Pow for std::exp, std::log, and std::pow.
 

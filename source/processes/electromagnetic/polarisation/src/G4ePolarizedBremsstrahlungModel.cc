@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlungModel.cc 75601 2013-11-04 13:08:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +55,7 @@
 G4ePolarizedBremsstrahlungModel::G4ePolarizedBremsstrahlungModel(
   const G4ParticleDefinition* p, const G4String& nam)
   : G4SeltzerBergerModel(p,nam),
-    crossSectionCalculator(0)
+    crossSectionCalculator(nullptr)
 {
 }
 

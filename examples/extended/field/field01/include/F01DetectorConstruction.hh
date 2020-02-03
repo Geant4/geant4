@@ -27,7 +27,6 @@
 /// \brief Definition of the F01DetectorConstruction class
 //
 //
-// $Id: F01DetectorConstruction.hh 90341 2015-05-26 08:38:36Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,6 +94,9 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      const G4VPhysicalVolume* GetAbsorber()   {return fPhysiAbsorber;}
      G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;}
 
+     void    SetUseFSALstepper( G4bool val ) { fUseFSALstepper = val; }
+     G4bool  AreUsingFSALstepper() { return fUseFSALstepper; }
+   
   private:
 
      F01DetectorMessenger* fDetectorMessenger;  // pointer -> Messenger
@@ -120,6 +122,8 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4double           fWorldSizeR;
      G4double           fWorldSizeZ;
 
+     G4bool             fUseFSALstepper= false;
+   
   private:
  
      void DefineMaterials();

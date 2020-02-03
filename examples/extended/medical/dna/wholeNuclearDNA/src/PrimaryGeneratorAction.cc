@@ -32,7 +32,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-// $ID$
 /// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 

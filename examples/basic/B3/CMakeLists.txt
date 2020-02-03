@@ -1,4 +1,3 @@
-# $Id: CMakeLists.txt 94093 2015-11-05 15:16:06Z gcosmo $
 
 #---Adding example B2 subdirectories explicitly 
 #   and a custom target to for building all example B2 options ----------

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.hh 66264 2012-12-14 10:17:44Z allison $
 
 // /vis/touchable/set commands - John Allison  14th May 2014
 
@@ -33,7 +32,9 @@
 
 #include "G4VisCommands.hh"
 
+class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
 
 class G4VisCommandsTouchable: public G4VVisCommand {
 public:
@@ -44,7 +45,14 @@ public:
 private:
   G4VisCommandsTouchable (const G4VisCommandsTouchable&);
   G4VisCommandsTouchable& operator = (const G4VisCommandsTouchable&);
-  G4UIcmdWithoutParameter*          fpCommandDump;
+  G4UIcmdWithoutParameter* fpCommandCentreOn;
+  G4UIcmdWithoutParameter* fpCommandCentreAndZoomInOn;
+  G4UIcmdWithoutParameter* fpCommandDraw;
+  G4UIcmdWithoutParameter* fpCommandDump;
+  G4UIcmdWithABool*        fpCommandExtentForField;
+  G4UIcommand*             fpCommandFindPath;
+  G4UIcmdWithABool*        fpCommandShowExtent;
+  G4UIcmdWithABool*        fpCommandVolumeForField;
 };
 
 #endif

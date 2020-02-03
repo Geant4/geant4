@@ -36,8 +36,10 @@
 //
 #ifndef G4ParticleHPPhotonDist_h
 #define G4ParticleHPPhotonDist_h 1
-#include "globals.hh"
+
 #include <fstream>
+
+#include "globals.hh"
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4ParticleHPVector.hh"
@@ -74,6 +76,7 @@ public:
      energy = 0;
      theYield = 0;
      thePartialXsec = 0;
+     theReactionXsec = 0;
      isPrimary = 0;
      theShells = 0;
      theGammas = 0;
@@ -83,8 +86,7 @@ public:
      distribution = 0;
      probs = 0;
      partials = 0;
-     //actualMult = 0;
-     actualMult.Put( NULL );
+     actualMult.Put( 0 );
 
      theLevelEnergies = 0;
      theTransitionProbabilities = 0;
@@ -98,6 +100,7 @@ public:
      delete [] energy;
      delete [] theYield;
      delete [] thePartialXsec;
+     delete [] theReactionXsec;
      delete [] isPrimary;
      delete [] theShells;
      delete [] theGammas;
@@ -106,10 +109,10 @@ public:
      delete [] distribution;
      delete [] probs;
 
-     if ( theLegendre != NULL )
+     if ( theLegendre != 0 )
      {
         for ( G4int i = 0 ; i < (nDiscrete2-nIso) ; i++ )
-           if ( theLegendre[i] != NULL ) delete[] theLegendre[i]; 
+           if ( theLegendre[i] != 0 ) delete[] theLegendre[i]; 
 
         delete [] theLegendre;
      }
@@ -122,15 +125,10 @@ public:
         delete [] partials;
      }
 
-     //delete [] actualMult;
-
-     // delete theLevelEnergies;
-     // delete theTransitionProbabilities;
-     // delete thePhotonTransitionFraction;
-// TKDB
      delete [] theLevelEnergies;
      delete [] theTransitionProbabilities;
      delete [] thePhotonTransitionFraction;
+     if (actualMult.Get() != 0) delete actualMult.Get();
   }
   
   G4bool InitMean(std::istream & aDataFile);
@@ -139,7 +137,7 @@ public:
   
   void InitEnergies(std::istream & aDataFile);
   
-  void InitPartials(std::istream & aDataFile);
+  void InitPartials(std::istream& aDataFile, G4ParticleHPVector* theXsec = 0);
   
   G4ReactionProductVector * GetPhotons(G4double anEnergy);
   
@@ -155,12 +153,13 @@ private:
    G4double targetMass;
    
    G4int nDiscrete;  //number of discrete photons 
-   G4int * disType;  // discrete, or continuum photons
-   G4double * energy;  // photon energies
-   G4ParticleHPVector * theYield; // multiplicity as a function of neutron energy.
+   G4int* disType;  // discrete, or continuum photons
+   G4double* energy;  // photon energies
+   G4ParticleHPVector* theYield; // multiplicity as a function of neutron energy.
    G4ParticleHPVector theTotalXsec;
-   G4ParticleHPVector * thePartialXsec;
-   G4int * isPrimary;
+   G4ParticleHPVector* thePartialXsec;
+   G4ParticleHPVector* theReactionXsec;
+   G4int* isPrimary;
   
    G4int isoFlag; // isotropic or not?
    G4int tabulationType;
@@ -178,7 +177,6 @@ private:
    G4ParticleHPVector *  probs; // probabilities for the partial distributions.
    G4ParticleHPPartial ** partials; // the partials, parallel to the above
 
-   //G4int * actualMult;
    G4Cache< std::vector<G4int>* > actualMult;
    
     // for transition prob arrays start

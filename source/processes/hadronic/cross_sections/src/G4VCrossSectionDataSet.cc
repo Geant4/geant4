@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc 89024 2015-03-18 08:17:25Z gcosmo $
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
-//
 //
 // File name:    G4VCrossSectionDataSet
 //
@@ -42,17 +39,17 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
-#include "G4DynamicParticle.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4NistManager.hh"
-#include "G4HadronicException.hh"
-#include "G4HadTmpUtil.hh"
 #include "Randomize.hh"
+#include "G4HadronicParameters.hh"
 
 G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
-  verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(100*TeV),name(nam) 
+  verboseLevel(0),minKinEnergy(0.0),
+  maxKinEnergy(G4HadronicParameters::Instance()->GetMaxEnergy()),
+  isForAllAtomsAndEnergies(false),name(nam) 
 {
   registry = G4CrossSectionDataSetRegistry::Instance();
   registry->Register(this);
@@ -85,7 +82,7 @@ G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part,
 					    const G4Element* elm,
 					    const G4Material* mat)
 {
-  G4int Z = G4lrint(elm->GetZ());
+  G4int Z = elm->GetZasInt();
 
   if (IsElementApplicable(part, Z, mat)) { 
     return GetElementCrossSection(part, Z, mat);
@@ -94,42 +91,23 @@ G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part,
   // isotope-wise cross section making sum over available
   // isotope cross sections, which may be incomplete, so
   // the result is corrected 
-  G4int nIso = elm->GetNumberOfIsotopes();    
+  size_t nIso = elm->GetNumberOfIsotopes();    
   G4double fact = 0.0;
   G4double xsec = 0.0;
-  G4Isotope* iso = 0;
 
-  if (0 < nIso) { 
+  // user-defined isotope abundances        
+  const G4IsotopeVector* isoVector = elm->GetIsotopeVector();
+  const G4double* abundVector = elm->GetRelativeAbundanceVector();
 
-    // user-defined isotope abundances        
-    G4IsotopeVector* isoVector = elm->GetIsotopeVector();
-    G4double* abundVector = elm->GetRelativeAbundanceVector();
-
-    for (G4int j = 0; j<nIso; ++j) {
-      iso = (*isoVector)[j];
-      G4int A = iso->GetN();
-      if(abundVector[j] > 0.0 && IsIsoApplicable(part, Z, A, elm, mat)) {
-        fact += abundVector[j];
-	xsec += abundVector[j]*GetIsoCrossSection(part, Z, A, iso, elm, mat);
-      }
-    }
-
-  } else {
-
-    // natural isotope abundances
-    G4NistManager* nist = G4NistManager::Instance();
-    G4int n0 = nist->GetNistFirstIsotopeN(Z);
-    G4int nn = nist->GetNumberOfNistIsotopes(Z);
-    for (G4int A = n0; A < n0+nn; ++A) {
-      G4double abund = nist->GetIsotopeAbundance(Z, A);
-      if(abund > 0.0 && IsIsoApplicable(part, Z, A, elm, mat)) {
-        fact += abund;
-	xsec += abund*GetIsoCrossSection(part, Z, A, iso, elm, mat);
-      }
+  for (size_t j=0; j<nIso; ++j) {
+    const G4Isotope* iso = (*isoVector)[j];
+    G4int A = iso->GetN();
+    if(abundVector[j] > 0.0 && IsIsoApplicable(part, Z, A, elm, mat)) {
+      fact += abundVector[j];
+      xsec += abundVector[j]*GetIsoCrossSection(part, Z, A, iso, elm, mat);
     }
   }
-  if(fact > 0.0) { xsec /= fact; }
-  return xsec;
+  return (fact > 0.0) ? xsec/fact : 0.0; 
 }
 
 G4double 
@@ -137,14 +115,14 @@ G4VCrossSectionDataSet::GetElementCrossSection(const G4DynamicParticle* dynPart,
 					       G4int Z,
 					       const G4Material* mat)
 {
-  G4cout << "G4VCrossSectionDataSet::GetCrossSection per element ERROR: "
-	 << " there is no cross section for "
-	 << dynPart->GetDefinition()->GetParticleName()
-	 << "  E(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
-  if(mat) { G4cout << "  inside " << mat->GetName(); }
-  G4cout << " for Z= " << Z << G4endl;
-  throw G4HadronicException(__FILE__, __LINE__,
-        "G4VCrossSectionDataSet::GetElementCrossSection is absent");
+  G4ExceptionDescription ed;
+  ed << "GetElementCrossSection is not implemented in <" << name << ">\n"
+     << "Particle: " << dynPart->GetDefinition()->GetParticleName()
+     << "  Ekin(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
+  if(mat) { ed << "  material: " << mat->GetName(); }
+  ed << " target Z= " << Z << G4endl;
+  G4Exception("G4VCrossSectionDataSet::GetElementCrossSection", "had001", 
+              FatalException, ed);
   return 0.0;
 }
 
@@ -155,34 +133,34 @@ G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* dynPart,
 					   const G4Element* elm,
 					   const G4Material* mat)
 {
-  G4cout << "G4VCrossSectionDataSet::GetCrossSection per isotope ERROR: "
-	 << " there is no cross section for "
-	 << dynPart->GetDefinition()->GetParticleName()
-	 << "  E(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
-  if(mat) { G4cout << "  inside " << mat->GetName(); }
-  if(elm) { G4cout << " for " << elm->GetName(); }
-  G4cout << "  Z= " << Z << " A= " << A << G4endl;
-  throw G4HadronicException(__FILE__, __LINE__,
-        "G4VCrossSectionDataSet::GetIsoCrossSection is absent");
+  G4ExceptionDescription ed;
+  ed << "GetIsoCrossSection is not implemented in <" << name << ">\n"
+     << "Particle: " << dynPart->GetDefinition()->GetParticleName()
+     << "  Ekin(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
+  if(mat) { ed << "  material: " << mat->GetName(); }
+  if(elm) { ed << " element: " << elm->GetName(); }
+  ed << " target Z= " << Z << " A= " << A << G4endl;
+  G4Exception("G4VCrossSectionDataSet::GetIsoCrossSection", "had001", 
+              FatalException, ed);
   return 0.0;
 }
 
-G4Isotope* 
-G4VCrossSectionDataSet::SelectIsotope(const G4Element* anElement, G4double)
+const G4Isotope* 
+G4VCrossSectionDataSet::SelectIsotope(const G4Element* anElement, 
+                                      G4double, G4double)
 {
-  G4int nIso = anElement->GetNumberOfIsotopes();
-  G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-  G4Isotope* iso = (*isoVector)[0];
+  size_t nIso = anElement->GetNumberOfIsotopes();
+  const G4Isotope* iso = anElement->GetIsotope(0);
 
   // more than 1 isotope
   if(1 < nIso) {
-    G4double* abundVector = anElement->GetRelativeAbundanceVector();
+    const G4double* abundVector = anElement->GetRelativeAbundanceVector();
     G4double sum = 0.0;
     G4double q = G4UniformRand();
-    for (G4int j = 0; j<nIso; ++j) {
+    for (size_t j=0; j<nIso; ++j) {
       sum += abundVector[j];
       if(q <= sum) {
-	iso = (*isoVector)[j];
+	iso = anElement->GetIsotope(j);
 	break;
       }
     }

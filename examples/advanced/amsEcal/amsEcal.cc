@@ -27,7 +27,10 @@
 /// \brief Main program of the advanced/amsEcal example
 //
 //
+<<<<<<< HEAD
 // $Id: amsEcal.cc 83418 2014-08-21 15:30:47Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DELPHIMagField.hh 97486 2016-06-03 10:45:04Z gcosmo $
-//
-//
-// class G4DELPHIMagField
+// G4DELPHIMagField
 //
 // Class description:
 //
@@ -38,10 +34,8 @@
 //   P.Billoir, Precise tracking in a quasi-honogeneous magnetic field,
 //              DELPHI 87-6 PROG 65, 1987.
 
-// History:
-// 3.2.97 - V. Grichine, created.
+// Created: V.Grichine - 03.02.1997
 // -------------------------------------------------------------------
-
 #ifndef G4DELPHIMAGFIELD_HH
 #define G4DELPHIMAGFIELD_HH
 

@@ -23,18 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ErrorPlaneSurfaceTarget class implementation
 //
-// $Id: G4ErrorPlaneSurfaceTarget.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file 
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
 
 #include "G4ErrorPlaneSurfaceTarget.hh"
 
 #ifdef G4VERBOSE
-#include "G4ErrorPropagatorData.hh" //for verbosity checking
+#include "G4ErrorPropagatorData.hh" // for verbosity checking
 #endif
 
 #include "G4Point3D.hh"
@@ -148,8 +145,7 @@ G4double G4ErrorPlaneSurfaceTarget::
 GetDistanceFromPoint( const G4ThreeVector& pt ) const
 {
   G4ThreeVector vec = point() - pt;
-  G4double alpha = std::acos( vec * normal() / vec.mag() / normal().mag() );
-  G4double dist = std::fabs(vec.mag() * std::cos( alpha ));
+  G4double dist = std::fabs(vec * normal() / normal().mag());
   
 #ifdef G4VERBOSE
   if(G4ErrorPropagatorData::verbose() >= 3 )
@@ -171,6 +167,7 @@ GetTangentPlane( const G4ThreeVector& ) const
   return *this;
 }
 
+//---------------------------------------------------------------------
 
 void G4ErrorPlaneSurfaceTarget::Dump( const G4String& msg ) const
 {

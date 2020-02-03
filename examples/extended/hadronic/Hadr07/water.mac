@@ -1,0 +1,23 @@
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setNbOfAbsor  1
+/testhadr/det/setAbsor 1 Water  3 cm
+/testhadr/det/setSizeYZ 3 cm
+#
+/run/initialize
+#
+/run/setCut 100 um
+#
+/testhadr/gun/setDefault
+/gun/particle e-
+/gun/energy 4 MeV
+#
+/analysis/setFileName water
+/analysis/h1/set 10 120 0.  24. mm		#edep profile
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

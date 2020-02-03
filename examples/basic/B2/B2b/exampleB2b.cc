@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \file exampleB2b.cc
 /// \brief Main program of the B2b example
@@ -57,8 +56,8 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // Optionally: choose a different Random engine...
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
   
   // Construct the default run manager
   //

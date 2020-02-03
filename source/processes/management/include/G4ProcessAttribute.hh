@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessAttribute.hh 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -66,8 +65,8 @@ class G4ProcessAttribute
     G4ProcessAttribute & operator=(const G4ProcessAttribute &right);
     // Assignment operator
 
-    G4int operator==(const G4ProcessAttribute &right) const;
-    G4int operator!=(const G4ProcessAttribute &right) const;
+    G4bool operator==(const G4ProcessAttribute &right) const;
+    G4bool operator!=(const G4ProcessAttribute &right) const;
     // equal / unequal operator
 
   
@@ -102,13 +101,13 @@ inline
 }
 
 inline 
- G4int  G4ProcessAttribute::operator==(const G4ProcessAttribute &right) const
+ G4bool  G4ProcessAttribute::operator==(const G4ProcessAttribute &right) const
 {
     return this->pProcess == right.pProcess;
 }
 
 inline 
- G4int  G4ProcessAttribute::operator!=(const G4ProcessAttribute &right) const
+ G4bool  G4ProcessAttribute::operator!=(const G4ProcessAttribute &right) const
 {
     return this->pProcess != right.pProcess;
 }

@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr00/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 81073 2014-05-20 10:23:13Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

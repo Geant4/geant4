@@ -23,27 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TwistTrapFlatSide.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4FlatTrapSurface
 //
 // Class description:
 //
-//  Class describing a flat boundary surface for a trapezoid.
+// Class describing a flat boundary surface for a trapezoid.
 
-// Author:
-//
-//   27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
-#ifndef __G4TWISTTRAPFLATSIDE__
-#define __G4TWISTTRAPFLATSIDE__
+#ifndef G4TWISTTRAPFLATSIDE_HH
+#define G4TWISTTRAPFLATSIDE_HH
 
 #include "G4VTwistSurface.hh"
 
@@ -63,24 +52,24 @@ class G4TwistTrapFlatSide : public G4VTwistSurface
                               G4int     handedness  );
    virtual ~G4TwistTrapFlatSide();
 
-   virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
+   virtual G4ThreeVector  GetNormal(const G4ThreeVector& /* xx */ ,
                                           G4bool isGlobal = false);
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
-                                   const G4ThreeVector &gv,
+   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
+                                   const G4ThreeVector& gv,
                                          G4ThreeVector  gxx[],
                                          G4double       distance[],
                                          G4int          areacode[],
                                          G4bool         isvalid[],
                                          EValidate validate = kValidateWithTol);
 
-   virtual G4int DistanceToSurface(const G4ThreeVector &gp,
+   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
                                          G4ThreeVector  gxx[],
                                          G4double       distance[],
                                          G4int          areacode[]);
 
 
    virtual G4ThreeVector SurfacePoint(G4double x, G4double y,
-                                             G4bool isGlobal = false);  
+                                      G4bool isGlobal = false);  
    virtual G4double GetBoundaryMin(G4double u);
    virtual G4double GetBoundaryMax(G4double u);
    virtual G4double GetSurfaceArea();
@@ -96,7 +85,7 @@ class G4TwistTrapFlatSide : public G4VTwistSurface
 
   protected:  // with description
 
-   virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+   virtual G4int GetAreaCode(const G4ThreeVector& xx, 
                                    G4bool withTol = true);
 
   private:
@@ -141,15 +130,15 @@ G4TwistTrapFlatSide::SurfacePoint(G4double x, G4double y, G4bool isGlobal)
 }
 
 inline
-G4double G4TwistTrapFlatSide::GetBoundaryMin(G4double y )
+G4double G4TwistTrapFlatSide::GetBoundaryMin(G4double y)
 {
-  return -xAxisMax(y, -fTAlph ) ;
+  return -xAxisMax(y, -fTAlph) ;
 }
 
 inline
-G4double G4TwistTrapFlatSide::GetBoundaryMax(G4double y )
+G4double G4TwistTrapFlatSide::GetBoundaryMax(G4double y)
 {
-  return xAxisMax(y, fTAlph ) ; 
+  return xAxisMax(y, fTAlph) ; 
 }
 
 inline

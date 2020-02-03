@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94076 2015-11-05 14:59:19Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -32,6 +31,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
@@ -50,15 +50,19 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4ChargeExchange.hh
         G4ChargeExchangeProcess.hh
         G4DiffuseElastic.hh
+        G4DiffuseElasticV2.hh
         G4ElasticHadrNucleusHE.hh
         G4HadronElastic.hh
         G4LEHadronProtonElastic.hh
+        G4LowEHadronElastic.hh
         G4hhElastic.hh
         G4LEnp.hh
         G4LEnpData.hh
         G4LEpp.hh
         G4LEppData.hh
         G4LMsdGenerator.hh
+        G4NeutrinoElectronNcModel.hh
+        G4NeutronElectronElModel.hh
         G4NuclNuclDiffuseElastic.hh
     SOURCES
         G4AntiNuclElastic.cc
@@ -66,17 +70,22 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4ChargeExchange.cc
         G4ChargeExchangeProcess.cc
         G4DiffuseElastic.cc
+        G4DiffuseElasticV2.cc
         G4ElasticHadrNucleusHE.cc
         G4HadronElastic.cc
         G4LEHadronProtonElastic.cc
+        G4LowEHadronElastic.cc
         G4hhElastic.cc
         G4LEnp.cc
         G4LEpp.cc
         G4LMsdGenerator.cc
+        G4NeutrinoElectronNcModel.cc
+        G4NeutronElectronElModel.cc
         G4NuclNuclDiffuseElastic.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
+        G4cuts
         G4geometrymng
         G4globman
         G4had_mod_man

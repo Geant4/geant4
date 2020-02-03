@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnboundPN.cc 69389 2013-05-02 15:54:09Z mkelsey $
 //
 // ------------------------------------------------------------
 //      Bertini Cascade unboundPN class implementation file

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.hh 95473 2016-02-12 09:36:21Z gcosmo $
 //
 // ----------------------------------------------------------------------------
 //
@@ -73,12 +72,41 @@
 //            fUseDistanceToBoundary corresponds to Urban fUseDistanceToBoundary
 //            fUseSafety  corresponds to EGSnrc error-free stepping algorithm
 //            Range factor can be significantly higher at each case than in Urban.
+// 23.08.2017 M. Novak: added corrections to account spin effects (Mott-correction).
+//            It can be activated by setting the fIsMottCorrection flag to be true
+//            before initialization using the SetOptionMottCorrection() public method.
+//            The fMottCorrection member is responsible to handle pre-computed Mott
+//            correction (rejection) functions obtained by numerically computing
+//            Goudsmit-Saunderson agnular distributions based on a DCS accounting spin
+//            effects and screening corrections. The DCS used to compute the accurate
+//            GS angular distributions is: DCS_{cor} = DCS_{SR}x[ DCS_{R}/DCS_{Mott}] where :
+//               # DCS_{SR} is the relativistic Screened-Rutherford DCS (first Born approximate
+//                 solution of the Klein-Gordon i.e. relativistic Schrodinger equation =>
+//                 scattering of spinless e- on exponentially screened Coulomb potential)
+//                 note: the default (without using Mott-correction) GS angular distributions
+//                 are based on this DCS_{SR} with Moliere's screening parameter!
+//               # DCS_{R} is the Rutherford DCS which is the same as above but without
+//                 screening
+//               # DCS_{Mott} is the Mott DCS i.e. solution of the Dirac equation with a bare
+//                 Coulomb potential i.e. scattering of particles with spin (e- or e+) on a
+//                 point-like unscreened Coulomb potential
+//               # moreover, the screening parameter of the DCS_{cor} was determined such that
+//                 the DCS_{cor} with this corrected screening parameter reproduce the first
+//                 transport cross sections obtained from the corresponding most accurate DCS
+//                 (i.e. from elsepa [4])
+//            Unlike the default GS, the Mott-corrected angular distributions are particle type
+//            (different for e- and e+ <= the DCS_{Mott} and the screening correction) and target
+//            (Z and material) dependent.
+// 02.02.2018 M. Novak: implemented CrossSectionPerVolume interface method (used only for testing)
 //
 // Class description:
-//   Kawrakow-Bielajew Goudsmit-Saunderson MSC model based on the screened
-//   Rutherford DCS for elastic scattering of electrons/positrons. Step limitation
-//   algorithm as well as true to geomerty and geometry to true step length
-//   computations are adopted from Urban model[5].
+//   Kawrakow-Bielajew Goudsmit-Saunderson MSC model based on the screened Rutherford DCS
+//   for elastic scattering of e-/e+. Option, to include (Mott) correction (see above), is
+//   also available now (SetOptionMottCorrection(true)). An EGSnrc like error-free stepping
+//   algorithm (UseSafety) is available beyond the usual Geant4 step limitation algorithms
+//   and true to geomerty and geometry to true step length computations that were adopted
+//   from the Urban model[5]. The most accurate setting: error-free stepping (UseSafety)
+//   with Mott-correction (SetOptionMottCorrection(true)).
 //
 // References:
 //   [1] A.F.Bielajew, NIMB 111 (1996) 195-208
@@ -105,8 +133,7 @@ class G4DataVector;
 class G4ParticleChangeForMSC;
 class G4LossTableManager;
 class G4GoudsmitSaundersonTable;
-class G4PWATotalXsecTable;
-
+class G4GSPWACorrections;
 
 class G4GoudsmitSaundersonMscModel : public G4VMscModel
 {
@@ -118,26 +145,42 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void StartTracking(G4Track*);
+  virtual void InitialiseLocal(const G4ParticleDefinition* p, G4VEmModel* masterModel);
 
-  G4double GetTransportMeanFreePath(const G4ParticleDefinition*, G4double);
-  void SingleScattering(G4double &cost, G4double &sint);
-  void SampleMSC();
 
-  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&,
-					  G4double safety);
+  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double safety);
 
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
-					      G4double& currentMinimalStep);
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track, G4double& currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
   virtual G4double ComputeTrueStepLength(G4double geomStepLength);
 
-  void SetOptionPWAScreening(G4bool opt){fIsUsePWATotalXsecData=opt;}
+  // method to compute first transport cross section per Volume (i.e. macroscropic first transport cross section; this 
+  // method is used only for testing and not during a normal simulation) 
+  virtual G4double CrossSectionPerVolume(const G4Material*, const G4ParticleDefinition*, G4double kineticEnergy,
+                                         G4double cutEnergy = 0.0, G4double maxEnergy = DBL_MAX);
+
+  void     StartTracking(G4Track*);
+
+  void     SampleMSC();
+
+  G4double GetTransportMeanFreePath(const G4ParticleDefinition*, G4double);
+
+  void SetOptionPWACorrection(G4bool opt)    { fIsUsePWACorrection = opt; }
+
+  G4bool GetOptionPWACorrection() const      { return fIsUsePWACorrection; }
+
+  void   SetOptionMottCorrection(G4bool opt) { fIsUseMottCorrection = opt; }
+
+  G4bool GetOptionMottCorrection() const     { return fIsUseMottCorrection; }
+
+  G4GoudsmitSaundersonTable* GetGSTable()          { return fGSTable; }
+
+  G4GSPWACorrections*        GetPWACorrection()    { return fPWACorrection; }
 
 private:
-  inline void SetParticle(const G4ParticleDefinition* p);
+  inline void     SetParticle(const G4ParticleDefinition* p);
 
   inline G4double GetLambda(G4double);
 
@@ -149,44 +192,59 @@ private:
   inline G4double Randomizetlimit();
 
 private:
-  CLHEP::HepRandomEngine*     rndmEngineMod;
-
-
-  G4double lowKEnergy;
-  G4double highKEnergy;
+  CLHEP::HepRandomEngine* rndmEngineMod;
+  //
   G4double currentKinEnergy;
   G4double currentRange;
-
-  G4double fr,rangeinit,geombig,geomlimit;
-  G4double lambdalimit,tlimit,tgeom;
-  G4int    charge,currentMaterialIndex;
-
+  //
+  G4double fr;
+  G4double rangeinit;
+  G4double geombig;
+  G4double geomlimit;
+  G4double tlimit;
+  G4double tgeom;
+  //
+  G4double par1;
+  G4double par2;
+  G4double par3;
+  G4double tlimitminfix2;
+  G4double tausmall;
+  G4double mass;
+  G4double taulim;
+  //
+  //
+  G4double presafety;
+  G4double fZeff;
+  //
+  G4int    charge;
+  G4int    currentMaterialIndex;
+  //
   G4bool   firstStep;
-
-  G4double par1,par2,par3,tlimitminfix2,tausmall,mass,taulim;
-
+  //
   G4LossTableManager*         theManager;
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
   const G4MaterialCutsCouple* currentCouple;
 
-  static G4GoudsmitSaundersonTable* fgGSTable;
-  static G4PWATotalXsecTable*       fgPWAXsecTable;
+  G4GoudsmitSaundersonTable*  fGSTable;
+  G4GSPWACorrections*         fPWACorrection;
 
-  G4bool fIsUsePWATotalXsecData;
-
-  G4double presafety;
-  G4double fZeff;
-
+  G4bool   fIsUsePWACorrection;
+  G4bool   fIsUseMottCorrection;
   //
   G4double fLambda0; // elastic mean free path
   G4double fLambda1; // first transport mean free path
   G4double fScrA;    // screening parameter
   G4double fG1;      // first transport coef.
+  // in case of Mott-correction
+  G4double fMCtoScrA;
+  G4double fMCtoQ1;
+  G4double fMCtoG2PerG1;
   //
-  G4double      fTheTrueStepLenght;
-  G4double      fTheTransportDistance;
-  G4double      fTheZPathLenght;
+  G4double fTheTrueStepLenght;
+  G4double fTheTransportDistance;
+  G4double fTheZPathLenght;
+  //
   G4ThreeVector fTheDisplacementVector;
   G4ThreeVector fTheNewDirection;
   //
@@ -200,8 +258,8 @@ private:
   G4bool fIsWasOnBoundary;
   G4bool fIsFirstRealStep;
   //
-  static G4bool fgIsUseAccurate;
-  static G4bool fgIsOptimizationOn;
+  static G4bool gIsUseAccurate;
+  static G4bool gIsOptimizationOn;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -222,8 +280,8 @@ G4double G4GoudsmitSaundersonMscModel::Randomizetlimit()
 {
   G4double temptlimit = tlimit;
     do {
-         temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.3*tlimit);
-       } while ( (temptlimit<0.) || (temptlimit > 2.*tlimit));
+         temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.1*tlimit);
+       } while ( (temptlimit<0.) || (temptlimit>2.*tlimit));
 
   return temptlimit;
 }

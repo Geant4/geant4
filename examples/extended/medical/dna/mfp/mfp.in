@@ -1,0 +1,110 @@
+#
+/run/numberOfThreads 8
+#
+/mfp/det/setMat G4_WATER
+/mfp/det/setRadius 10 m
+#
+# Register physics constructor
+#/mfp/phys/addPhysics  dna
+/mfp/phys/addPhysics  dna_opt2
+#/mfp/phys/addPhysics  dna_opt4
+#/mfp/phys/addPhysics  dna_opt6
+#
+/run/initialize
+#
+#/run/printProgress 10000
+#
+/tracking/verbose 0
+#
+## uncomment for inelastic mfp
+#/process/inactivate e-_G4DNAElastic
+#
+## uncomment if sub-excitation processes not needed
+#/process/inactivate e-_G4DNAAttachment
+#/process/inactivate e-_G4DNAVibExcitation
+#
+/gun/particle e-
+#
+/gun/energy 10 eV
+/run/beamOn 10000
+#
+/gun/energy 20 eV
+/run/beamOn 10000
+#
+/gun/energy 30 eV
+/run/beamOn 10000
+#
+/gun/energy 40 eV
+/run/beamOn 10000
+#
+/gun/energy 50 eV
+/run/beamOn 10000
+#
+/gun/energy 60 eV
+/run/beamOn 10000
+#
+/gun/energy 70 eV
+/run/beamOn 10000
+#
+/gun/energy 80 eV
+/run/beamOn 10000
+#
+/gun/energy 90 eV
+/run/beamOn 10000
+#
+/gun/energy 100 eV
+/run/beamOn 10000
+#
+/gun/energy 200 eV
+/run/beamOn 10000
+#
+/gun/energy 300 eV
+/run/beamOn 10000
+#
+/gun/energy 400 eV
+/run/beamOn 10000
+#
+/gun/energy 500 eV
+/run/beamOn 10000
+#
+/gun/energy 600 eV
+/run/beamOn 10000
+#
+/gun/energy 700 eV
+/run/beamOn 10000
+#
+/gun/energy 800 eV
+/run/beamOn 10000
+#
+/gun/energy 900 eV
+/run/beamOn 10000
+#
+/gun/energy 1000 eV
+/run/beamOn 10000
+#
+/gun/energy 2000 eV
+/run/beamOn 10000
+#
+/gun/energy 3000 eV
+/run/beamOn 10000
+#
+/gun/energy 4000 eV
+/run/beamOn 10000
+#
+/gun/energy 5000 eV
+/run/beamOn 10000
+#
+/gun/energy 6000 eV
+/run/beamOn 10000
+#
+/gun/energy 7000 eV
+/run/beamOn 10000
+#
+/gun/energy 8000 eV
+/run/beamOn 10000
+#
+/gun/energy 9000 eV
+/run/beamOn 10000
+#
+/gun/energy 9999 eV
+/run/beamOn 10000

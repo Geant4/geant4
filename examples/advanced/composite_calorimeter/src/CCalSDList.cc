@@ -51,21 +51,21 @@ void CCalSDList::addTracker(nameType name){
   theList->trackerSD.push_back(name);
 } 
 
-nameType CCalSDList::getCaloSDName(int i){
+nameType CCalSDList::getCaloSDName(G4int i){
   
   if (i>=theList->getNumberOfCaloSD() || i<0) {
     G4cout << "CCalSDList invalid calo SD no: " << i << " max is "
-	   << theList->getNumberOfCaloSD() << G4endl;
+           << theList->getNumberOfCaloSD() << G4endl;
     return " ";
   } else 
     return theList->caloSD[i];
 }
 
-nameType CCalSDList::getTrackerSDName(int i){
+nameType CCalSDList::getTrackerSDName(G4int i){
 
   if (i>=theList->getNumberOfTrackerSD() || i<0) {
     G4cout << "CCalSDList invalid tracker SD no: " << i << " max is "
-	   << theList->getNumberOfTrackerSD() << G4endl;
+           << theList->getNumberOfTrackerSD() << G4endl;
     return " ";
   }   
   else 
@@ -73,12 +73,12 @@ nameType CCalSDList::getTrackerSDName(int i){
 }
 
       
-int CCalSDList::getNumberOfCaloSD(){
+G4int CCalSDList::getNumberOfCaloSD(){
   
   return theList->caloSD.size();
 }
 
-int CCalSDList::getNumberOfTrackerSD(){
+G4int CCalSDList::getNumberOfTrackerSD(){
 
   return theList->trackerSD.size();
 }

@@ -146,7 +146,7 @@ inline/*static*/ int static_FixUpperEdge( ActiveRegion *reg, GLUhalfEdge *newEdg
 {
   assert( reg->fixUpperEdge );
   if ( !__gl_meshDelete( reg->eUp ) ) return 0;
-  reg->fixUpperEdge = GLU_FALSE;
+  reg->fixUpperEdge = TOOLS_GLU_FALSE;
   reg->eUp = newEdge;
   newEdge->activeRegion = reg;
 
@@ -203,9 +203,9 @@ inline/*static*/ ActiveRegion *static_AddRegionBelow( GLUtesselator *tess,
   /* __gl_dictListInsertBefore */
   regNew->nodeUp = dictInsertBefore( tess->dict, regAbove->nodeUp, regNew );
   if (regNew->nodeUp == NULL) longjmp(tess->env,1);
-  regNew->fixUpperEdge = GLU_FALSE;
-  regNew->sentinel = GLU_FALSE;
-  regNew->dirty = GLU_FALSE;
+  regNew->fixUpperEdge = TOOLS_GLU_FALSE;
+  regNew->sentinel = TOOLS_GLU_FALSE;
+  regNew->dirty = TOOLS_GLU_FALSE;
 
   eNewUp->activeRegion = regNew;
   return regNew;
@@ -226,9 +226,9 @@ inline/*static*/ GLUboolean static_IsWindingInside( GLUtesselator *tess, int n )
     return (n >= 2) || (n <= -2);
   }
   /*LINTED*/
-  assert( GLU_FALSE );
+  assert( TOOLS_GLU_FALSE );
   /*NOTREACHED*/
-  return GLU_FALSE;  /* avoid compiler complaints */
+  return TOOLS_GLU_FALSE;  /* avoid compiler complaints */
 }
 
 
@@ -278,7 +278,7 @@ inline/*static*/ GLUhalfEdge *static_FinishLeftRegions( GLUtesselator *tess,
   regPrev = regFirst;
   ePrev = regFirst->eUp;
   while( regPrev != regLast ) {
-    regPrev->fixUpperEdge = GLU_FALSE;	/* placement was OK */
+    regPrev->fixUpperEdge = TOOLS_GLU_FALSE;	/* placement was OK */
     reg = RegionBelow( regPrev );
     e = reg->eUp;
     if( e->Org != ePrev->Org ) {
@@ -329,7 +329,7 @@ inline/*static*/ void static_AddRightEdges( GLUtesselator *tess, ActiveRegion *r
 {
   ActiveRegion *reg, *regPrev;
   GLUhalfEdge *e, *ePrev;
-  int firstTime = GLU_TRUE;
+  int firstTime = TOOLS_GLU_TRUE;
 
   /* Insert the new right-going edges in the dictionary */
   e = eFirst;
@@ -365,17 +365,17 @@ inline/*static*/ void static_AddRightEdges( GLUtesselator *tess, ActiveRegion *r
     /* Check for two outgoing edges with same slope -- process these
      * before any intersection tests (see example in __gl_computeInterior).
      */
-    regPrev->dirty = GLU_TRUE;
+    regPrev->dirty = TOOLS_GLU_TRUE;
     if( ! firstTime && static_CheckForRightSplice( tess, regPrev )) {
       AddWinding( e, ePrev );
       static_DeleteRegion( tess, regPrev );
       if ( !__gl_meshDelete( ePrev ) ) longjmp(tess->env,1);
     }
-    firstTime = GLU_FALSE;
+    firstTime = TOOLS_GLU_FALSE;
     regPrev = reg;
     ePrev = e;
   }
-  regPrev->dirty = GLU_TRUE;
+  regPrev->dirty = TOOLS_GLU_TRUE;
   assert( regPrev->windingNumber - e->winding == reg->windingNumber );
 
   if( cleanUp ) {
@@ -406,7 +406,7 @@ inline/*static*/ void static_CallCombine( GLUtesselator *tess, GLUvertex *isect,
        * generated intersection points.
        */
       CALL_ERROR_OR_ERROR_DATA( GLU_TESS_NEED_COMBINE_CALLBACK );
-      tess->fatalError = GLU_TRUE;
+      tess->fatalError = TOOLS_GLU_TRUE;
     }
   }
 }
@@ -423,7 +423,7 @@ inline/*static*/ void static_SpliceMergeVertices( GLUtesselator *tess, GLUhalfEd
 
   data[0] = e1->Org->data;
   data[1] = e2->Org->data;
-  static_CallCombine( tess, e1->Org, data, weights, GLU_FALSE );
+  static_CallCombine( tess, e1->Org, data, weights, TOOLS_GLU_FALSE );
   if ( !__gl_meshSplice( e1, e2 ) ) longjmp(tess->env,1);
 }
 
@@ -469,7 +469,7 @@ inline/*static*/ void static_GetIntersectData( GLUtesselator *tess, GLUvertex *i
   static_VertexWeights( isect, orgUp, dstUp, &weights[0] );
   static_VertexWeights( isect, orgLo, dstLo, &weights[2] );
 
-  static_CallCombine( tess, isect, data, weights, GLU_TRUE );
+  static_CallCombine( tess, isect, data, weights, TOOLS_GLU_TRUE );
 }
 
 inline/*static*/ int static_CheckForRightSplice( GLUtesselator *tess, ActiveRegion *regUp )
@@ -504,14 +504,14 @@ inline/*static*/ int static_CheckForRightSplice( GLUtesselator *tess, ActiveRegi
   GLUhalfEdge *eLo = regLo->eUp;
 
   if( VertLeq( eUp->Org, eLo->Org )) {
-    if( EdgeSign( eLo->Dst, eUp->Org, eLo->Org ) > 0 ) return GLU_FALSE;
+    if( EdgeSign( eLo->Dst, eUp->Org, eLo->Org ) > 0 ) return TOOLS_GLU_FALSE;
 
     /* eUp->Org appears to be below eLo */
     if( ! VertEq( eUp->Org, eLo->Org )) {
       /* Splice eUp->Org into eLo */
       if ( __gl_meshSplitEdge( eLo->Sym ) == NULL) longjmp(tess->env,1);
       if ( !__gl_meshSplice( eUp, eLo->Oprev ) ) longjmp(tess->env,1);
-      regUp->dirty = regLo->dirty = GLU_TRUE;
+      regUp->dirty = regLo->dirty = TOOLS_GLU_TRUE;
 
     } else if( eUp->Org != eLo->Org ) {
       /* merge the two vertices, discarding eUp->Org */
@@ -519,14 +519,14 @@ inline/*static*/ int static_CheckForRightSplice( GLUtesselator *tess, ActiveRegi
       static_SpliceMergeVertices( tess, eLo->Oprev, eUp );
     }
   } else {
-    if( EdgeSign( eUp->Dst, eLo->Org, eUp->Org ) < 0 ) return GLU_FALSE;
+    if( EdgeSign( eUp->Dst, eLo->Org, eUp->Org ) < 0 ) return TOOLS_GLU_FALSE;
 
     /* eLo->Org appears to be above eUp, so splice eLo->Org into eUp */
-    RegionAbove(regUp)->dirty = regUp->dirty = GLU_TRUE;
+    RegionAbove(regUp)->dirty = regUp->dirty = TOOLS_GLU_TRUE;
     if (__gl_meshSplitEdge( eUp->Sym ) == NULL) longjmp(tess->env,1);
     if ( !__gl_meshSplice( eLo->Oprev, eUp ) ) longjmp(tess->env,1);
   }
-  return GLU_TRUE;
+  return TOOLS_GLU_TRUE;
 }
 
 inline/*static*/ int static_CheckForLeftSplice( GLUtesselator *tess, ActiveRegion *regUp )
@@ -557,25 +557,25 @@ inline/*static*/ int static_CheckForLeftSplice( GLUtesselator *tess, ActiveRegio
   assert( ! VertEq( eUp->Dst, eLo->Dst ));
 
   if( VertLeq( eUp->Dst, eLo->Dst )) {
-    if( EdgeSign( eUp->Dst, eLo->Dst, eUp->Org ) < 0 ) return GLU_FALSE;
+    if( EdgeSign( eUp->Dst, eLo->Dst, eUp->Org ) < 0 ) return TOOLS_GLU_FALSE;
 
     /* eLo->Dst is above eUp, so splice eLo->Dst into eUp */
-    RegionAbove(regUp)->dirty = regUp->dirty = GLU_TRUE;
+    RegionAbove(regUp)->dirty = regUp->dirty = TOOLS_GLU_TRUE;
     e = __gl_meshSplitEdge( eUp );
     if (e == NULL) longjmp(tess->env,1);
     if ( !__gl_meshSplice( eLo->Sym, e ) ) longjmp(tess->env,1);
     e->Lface->inside = regUp->inside;
   } else {
-    if( EdgeSign( eLo->Dst, eUp->Dst, eLo->Org ) > 0 ) return GLU_FALSE;
+    if( EdgeSign( eLo->Dst, eUp->Dst, eLo->Org ) > 0 ) return TOOLS_GLU_FALSE;
 
     /* eUp->Dst is below eLo, so splice eUp->Dst into eLo */
-    regUp->dirty = regLo->dirty = GLU_TRUE;
+    regUp->dirty = regLo->dirty = TOOLS_GLU_TRUE;
     e = __gl_meshSplitEdge( eLo );
     if (e == NULL) longjmp(tess->env,1);
     if ( !__gl_meshSplice( eUp->Lnext, eLo->Sym ) ) longjmp(tess->env,1);
     e->Rface->inside = regUp->inside;
   }
-  return GLU_TRUE;
+  return TOOLS_GLU_TRUE;
 }
 
 
@@ -585,7 +585,7 @@ inline/*static*/ int static_CheckForIntersect( GLUtesselator *tess, ActiveRegion
  * they intersect.  If so, create the intersection and add it
  * to the data structures.
  *
- * Returns GLU_TRUE if adding the new intersection resulted in a recursive
+ * Returns TOOLS_GLU_TRUE if adding the new intersection resulted in a recursive
  * call to AddRightEdges(); in this case all "dirty" regions have been
  * checked for intersections, and possibly regUp has been deleted.
  */
@@ -607,16 +607,16 @@ inline/*static*/ int static_CheckForIntersect( GLUtesselator *tess, ActiveRegion
   assert( orgUp != tess->event && orgLo != tess->event );
   assert( ! regUp->fixUpperEdge && ! regLo->fixUpperEdge );
 
-  if( orgUp == orgLo ) return GLU_FALSE;	/* right endpoints are the same */
+  if( orgUp == orgLo ) return TOOLS_GLU_FALSE;	/* right endpoints are the same */
 
   tMinUp = GLU_MIN( orgUp->t, dstUp->t );
   tMaxLo = GLU_MAX( orgLo->t, dstLo->t );
-  if( tMinUp > tMaxLo ) return GLU_FALSE;	/* t ranges do not overlap */
+  if( tMinUp > tMaxLo ) return TOOLS_GLU_FALSE;	/* t ranges do not overlap */
 
   if( VertLeq( orgUp, orgLo )) {
-    if( EdgeSign( dstLo, orgUp, orgLo ) > 0 ) return GLU_FALSE;
+    if( EdgeSign( dstLo, orgUp, orgLo ) > 0 ) return TOOLS_GLU_FALSE;
   } else {
-    if( EdgeSign( dstUp, orgLo, orgUp ) < 0 ) return GLU_FALSE;
+    if( EdgeSign( dstUp, orgLo, orgUp ) < 0 ) return TOOLS_GLU_FALSE;
   }
 
   /* At this point the edges intersect, at least marginally */
@@ -654,7 +654,7 @@ inline/*static*/ int static_CheckForIntersect( GLUtesselator *tess, ActiveRegion
   if( VertEq( &isect, orgUp ) || VertEq( &isect, orgLo )) {
     /* Easy case -- intersection at one of the right endpoints */
     (void) static_CheckForRightSplice( tess, regUp );
-    return GLU_FALSE;
+    return TOOLS_GLU_FALSE;
   }
 
   if(	 (! VertEq( dstUp, tess->event )
@@ -674,8 +674,8 @@ inline/*static*/ int static_CheckForIntersect( GLUtesselator *tess, ActiveRegion
       if (regUp == NULL) longjmp(tess->env,1);
       eUp = RegionBelow(regUp)->eUp;
       static_FinishLeftRegions( tess, RegionBelow(regUp), regLo );
-      static_AddRightEdges( tess, regUp, eUp->Oprev, eUp, eUp, GLU_TRUE );
-      return GLU_TRUE;
+      static_AddRightEdges( tess, regUp, eUp->Oprev, eUp, eUp, TOOLS_GLU_TRUE );
+      return TOOLS_GLU_TRUE;
     }
     if( dstUp == tess->event ) {
       /* Splice dstUp into eLo, and process the new region(s) */
@@ -686,27 +686,27 @@ inline/*static*/ int static_CheckForIntersect( GLUtesselator *tess, ActiveRegion
       e = RegionBelow(regUp)->eUp->Rprev;
       regLo->eUp = eLo->Oprev;
       eLo = static_FinishLeftRegions( tess, regLo, NULL );
-      static_AddRightEdges( tess, regUp, eLo->Onext, eUp->Rprev, e, GLU_TRUE );
-      return GLU_TRUE;
+      static_AddRightEdges( tess, regUp, eLo->Onext, eUp->Rprev, e, TOOLS_GLU_TRUE );
+      return TOOLS_GLU_TRUE;
     }
     /* Special case: called from ConnectRightVertex.  If either
      * edge passes on the wrong side of tess->event, split it
      * (and wait for ConnectRightVertex to splice it appropriately).
      */
     if( EdgeSign( dstUp, tess->event, &isect ) >= 0 ) {
-      RegionAbove(regUp)->dirty = regUp->dirty = GLU_TRUE;
+      RegionAbove(regUp)->dirty = regUp->dirty = TOOLS_GLU_TRUE;
       if (__gl_meshSplitEdge( eUp->Sym ) == NULL) longjmp(tess->env,1);
       eUp->Org->s = tess->event->s;
       eUp->Org->t = tess->event->t;
     }
     if( EdgeSign( dstLo, tess->event, &isect ) <= 0 ) {
-      regUp->dirty = regLo->dirty = GLU_TRUE;
+      regUp->dirty = regLo->dirty = TOOLS_GLU_TRUE;
       if (__gl_meshSplitEdge( eLo->Sym ) == NULL) longjmp(tess->env,1);
       eLo->Org->s = tess->event->s;
       eLo->Org->t = tess->event->t;
     }
     /* leave the rest for ConnectRightVertex */
-    return GLU_FALSE;
+    return TOOLS_GLU_FALSE;
   }
 
   /* General case -- split both edges, splice into new vertex.
@@ -729,8 +729,8 @@ inline/*static*/ int static_CheckForIntersect( GLUtesselator *tess, ActiveRegion
      longjmp(tess->env,1);
   }
   static_GetIntersectData( tess, eUp->Org, orgUp, dstUp, orgLo, dstLo );
-  RegionAbove(regUp)->dirty = regUp->dirty = regLo->dirty = GLU_TRUE;
-  return GLU_FALSE;
+  RegionAbove(regUp)->dirty = regUp->dirty = regLo->dirty = TOOLS_GLU_TRUE;
+  return TOOLS_GLU_FALSE;
 }
 
 inline/*static*/ void static_WalkDirtyRegions( GLUtesselator *tess, ActiveRegion *regUp )
@@ -760,7 +760,7 @@ inline/*static*/ void static_WalkDirtyRegions( GLUtesselator *tess, ActiveRegion
 	return;
       }
     }
-    regUp->dirty = GLU_FALSE;
+    regUp->dirty = TOOLS_GLU_FALSE;
     eUp = regUp->eUp;
     eLo = regLo->eUp;
 
@@ -859,7 +859,7 @@ inline/*static*/ void static_ConnectRightVertex( GLUtesselator *tess, ActiveRegi
   ActiveRegion *regLo = RegionBelow(regUp);
   GLUhalfEdge *eUp = regUp->eUp;
   GLUhalfEdge *eLo = regLo->eUp;
-  int degenerate = GLU_FALSE;
+  int degenerate = TOOLS_GLU_FALSE;
 
   if( eUp->Dst != eLo->Dst ) {
     (void) static_CheckForIntersect( tess, regUp );
@@ -874,15 +874,15 @@ inline/*static*/ void static_ConnectRightVertex( GLUtesselator *tess, ActiveRegi
     if (regUp == NULL) longjmp(tess->env,1);
     eTopLeft = RegionBelow( regUp )->eUp;
     static_FinishLeftRegions( tess, RegionBelow(regUp), regLo );
-    degenerate = GLU_TRUE;
+    degenerate = TOOLS_GLU_TRUE;
   }
   if( VertEq( eLo->Org, tess->event )) {
     if ( !__gl_meshSplice( eBottomLeft, eLo->Oprev ) ) longjmp(tess->env,1);
     eBottomLeft = static_FinishLeftRegions( tess, regLo, NULL );
-    degenerate = GLU_TRUE;
+    degenerate = TOOLS_GLU_TRUE;
   }
   if( degenerate ) {
-    static_AddRightEdges( tess, regUp, eBottomLeft->Onext, eTopLeft, eTopLeft, GLU_TRUE );
+    static_AddRightEdges( tess, regUp, eBottomLeft->Onext, eTopLeft, eTopLeft, TOOLS_GLU_TRUE );
     return;
   }
 
@@ -900,8 +900,8 @@ inline/*static*/ void static_ConnectRightVertex( GLUtesselator *tess, ActiveRegi
   /* Prevent cleanup, otherwise eNew might disappear before we've even
    * had a chance to mark it as a temporary edge.
    */
-  static_AddRightEdges( tess, regUp, eNew, eNew->Onext, eNew->Onext, GLU_FALSE );
-  eNew->Sym->activeRegion->fixUpperEdge = GLU_TRUE;
+  static_AddRightEdges( tess, regUp, eNew, eNew->Onext, eNew->Onext, TOOLS_GLU_FALSE );
+  eNew->Sym->activeRegion->fixUpperEdge = TOOLS_GLU_TRUE;
   static_WalkDirtyRegions( tess, regUp );
 }
 
@@ -912,7 +912,7 @@ inline/*static*/ void static_ConnectRightVertex( GLUtesselator *tess, ActiveRegi
  * TOLERANCE_NONZERO will be useful.  They were debugged before the
  * code to merge identical vertices in the main loop was added.
  */
-//#define TOLERANCE_NONZERO	GLU_FALSE
+//#define TOLERANCE_NONZERO	TOOLS_GLU_FALSE
 
 inline/*static*/ void static_ConnectLeftDegenerate( GLUtesselator *tess,
 				   ActiveRegion *regUp, GLUvertex *vEvent )
@@ -930,7 +930,7 @@ inline/*static*/ void static_ConnectLeftDegenerate( GLUtesselator *tess,
     /* e->Org is an unprocessed vertex - just combine them, and wait
      * for e->Org to be pulled from the queue
      */
-    assert( /*TOLERANCE_NONZERO*/ GLU_FALSE );
+    assert( /*TOLERANCE_NONZERO*/ TOOLS_GLU_FALSE );
     static_SpliceMergeVertices( tess, e, vEvent->anEdge );
     return;
   }
@@ -941,7 +941,7 @@ inline/*static*/ void static_ConnectLeftDegenerate( GLUtesselator *tess,
     if( regUp->fixUpperEdge ) {
       /* This edge was fixable -- delete unused portion of original edge */
       if ( !__gl_meshDelete( e->Onext ) ) longjmp(tess->env,1);
-      regUp->fixUpperEdge = GLU_FALSE;
+      regUp->fixUpperEdge = TOOLS_GLU_FALSE;
     }
     if ( !__gl_meshSplice( vEvent->anEdge, e ) ) longjmp(tess->env,1);
     static_SweepEvent( tess, vEvent ); /* recurse */
@@ -951,7 +951,7 @@ inline/*static*/ void static_ConnectLeftDegenerate( GLUtesselator *tess,
   /* vEvent coincides with e->Dst, which has already been processed.
    * Splice in the additional right-going edges.
    */
-  assert( /*TOLERANCE_NONZERO*/ GLU_FALSE );
+  assert( /*TOLERANCE_NONZERO*/ TOOLS_GLU_FALSE );
   regUp = static_TopRightRegion( regUp );
   reg = RegionBelow( regUp );
   eTopRight = reg->eUp->Sym;
@@ -970,7 +970,7 @@ inline/*static*/ void static_ConnectLeftDegenerate( GLUtesselator *tess,
     /* e->Dst had no left-going edges -- indicate this to AddRightEdges() */
     eTopLeft = NULL;
   }
-  static_AddRightEdges( tess, regUp, eTopRight->Onext, eLast, eTopLeft, GLU_TRUE );
+  static_AddRightEdges( tess, regUp, eTopRight->Onext, eLast, eTopLeft, TOOLS_GLU_TRUE );
 }
 
 
@@ -1036,7 +1036,7 @@ inline/*static*/ void static_ConnectLeftVertex( GLUtesselator *tess, GLUvertex *
     /* The new vertex is in a region which does not belong to the polygon.
      * We don''t need to connect this vertex to the rest of the mesh.
      */
-    static_AddRightEdges( tess, regUp, vEvent->anEdge, vEvent->anEdge, NULL, GLU_TRUE );
+    static_AddRightEdges( tess, regUp, vEvent->anEdge, vEvent->anEdge, NULL, TOOLS_GLU_TRUE );
   }
 }
 
@@ -1089,7 +1089,7 @@ inline/*static*/ void static_SweepEvent( GLUtesselator *tess, GLUvertex *vEvent 
     /* No right-going edges -- add a temporary "fixable" edge */
     static_ConnectRightVertex( tess, regUp, eBottomLeft );
   } else {
-    static_AddRightEdges( tess, regUp, eBottomLeft->Onext, eTopLeft, eTopLeft, GLU_TRUE );
+    static_AddRightEdges( tess, regUp, eBottomLeft->Onext, eTopLeft, eTopLeft, TOOLS_GLU_TRUE );
   }
 }
 
@@ -1126,10 +1126,10 @@ inline/*static*/ void static_AddSentinel( GLUtesselator *tess, GLUdouble t )
 
   reg->eUp = e;
   reg->windingNumber = 0;
-  reg->inside = GLU_FALSE;
-  reg->fixUpperEdge = GLU_FALSE;
-  reg->sentinel = GLU_TRUE;
-  reg->dirty = GLU_FALSE;
+  reg->inside = TOOLS_GLU_FALSE;
+  reg->fixUpperEdge = TOOLS_GLU_FALSE;
+  reg->sentinel = TOOLS_GLU_TRUE;
+  reg->dirty = TOOLS_GLU_FALSE;
   reg->nodeUp = dictInsert( tess->dict, reg ); /* __gl_dictListInsertBefore */
   if (reg->nodeUp == NULL) longjmp(tess->env,1);
 }
@@ -1289,7 +1289,7 @@ inline int __gl_computeInterior( GLUtesselator *tess )
 {
   GLUvertex *v, *vNext;
 
-  tess->fatalError = GLU_FALSE;
+  tess->fatalError = TOOLS_GLU_FALSE;
 
   /* Each vertex defines an event for our sweep line.  Start by inserting
    * all the vertices in a priority queue.  Events are processed in

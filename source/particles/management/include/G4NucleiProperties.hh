@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -43,9 +42,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4NucleiPropertiesTableAME03.hh"
-#include "G4NucleiPropertiesTheoreticalTable.hh"
-#include "G4ParticleTable.hh"
 
 class G4NucleiProperties
 {
@@ -59,7 +55,7 @@ public:
   ~G4NucleiProperties() { };
 
   // Default constructor ()
-  G4NucleiProperties(){};
+  G4NucleiProperties() { };
 
 
 public:  // With Description

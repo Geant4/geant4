@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc 92144 2015-08-19 14:25:18Z gcosmo $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -41,7 +40,7 @@
 // Copy constructor
 G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & )
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::copy_constructor meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::copy_constructor meant to not be accessible");
 }
 
 // Operators
@@ -49,21 +48,21 @@ G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & )
 G4StatMFMicroPartition & G4StatMFMicroPartition::
 operator=(const G4StatMFMicroPartition & )
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator= meant to not be accessible");
   return *this;
 }
 
 
 G4bool G4StatMFMicroPartition::operator==(const G4StatMFMicroPartition & ) const
 {
-  //throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator== meant to not be accessable");
+  //throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator== meant to not be accessible");
   return false;
 }
  
 
 G4bool G4StatMFMicroPartition::operator!=(const G4StatMFMicroPartition & ) const
 {
-  //throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator!= meant to not be accessable");
+  //throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroPartition::operator!= meant to not be accessible");
   return true;
 }
 
@@ -95,16 +94,16 @@ void G4StatMFMicroPartition::CoulombFreeEnergy(G4int anA)
 
 G4double G4StatMFMicroPartition::GetCoulombEnergy(void)
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
-  G4double  CoulombFactor = 1.0/g4pow->A13(1.0+G4StatMFParameters::GetKappaCoulomb());	
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double  CoulombFactor = 1.0/g4calc->A13(1.0+G4StatMFParameters::GetKappaCoulomb());	
 			
   G4double CoulombEnergy = elm_coupling*0.6*theZ*theZ*CoulombFactor/
-    (G4StatMFParameters::Getr0()*g4pow->Z13(theA));
+    (G4StatMFParameters::Getr0()*g4calc->Z13(theA));
 	
   G4double ZA = G4double(theZ)/G4double(theA);
   for (unsigned int i = 0; i < _thePartition.size(); i++) 
     CoulombEnergy += _theCoulombFreeEnergy[i] - elm_coupling*0.6*
-      ZA*ZA*_thePartition[i]*g4pow->Z23(_thePartition[i])/
+      ZA*ZA*_thePartition[i]*g4calc->Z23(_thePartition[i])/
       G4StatMFParameters::Getr0();
 		
   return CoulombEnergy;
@@ -112,8 +111,8 @@ G4double G4StatMFMicroPartition::GetCoulombEnergy(void)
 
 G4double G4StatMFMicroPartition::GetPartitionEnergy(G4double T)
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
-  G4double  CoulombFactor = 1.0/g4pow->A13(1.0+G4StatMFParameters::GetKappaCoulomb());	
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double  CoulombFactor = 1.0/g4calc->A13(1.0+G4StatMFParameters::GetKappaCoulomb());	
   
   G4double PartitionEnergy = 0.0;
   
@@ -157,7 +156,7 @@ G4double G4StatMFMicroPartition::GetPartitionEnergy(G4double T)
             
             // Surface term
             (G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T))*
-            g4pow->Z23(_thePartition[i]) +
+            g4calc->Z23(_thePartition[i]) +
             
             // Coulomb term 
             _theCoulombFreeEnergy[i];
@@ -165,7 +164,7 @@ G4double G4StatMFMicroPartition::GetPartitionEnergy(G4double T)
     }
 	
   PartitionEnergy += elm_coupling*0.6*theZ*theZ*CoulombFactor/
-    (G4StatMFParameters::Getr0()*g4pow->Z13(theA))
+    (G4StatMFParameters::Getr0()*g4calc->Z13(theA))
     + 1.5*T*(_thePartition.size()-1);
   
   return PartitionEnergy;
@@ -234,7 +233,7 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(G4double U,
   if ( T <= 0.0) return _Probability = 0.0;
   _Temperature = T;
   
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
   
   // Factorial of fragment multiplicity
   G4double Fact = 1.0;
@@ -273,7 +272,7 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(G4double U,
         {
           PartitionEntropy += 
             2.0*T*_thePartition[i]/InvLevelDensity(_thePartition[i])
-            - G4StatMFParameters::DBetaDT(T) * g4pow->Z23(_thePartition[i]);
+            - G4StatMFParameters::DBetaDT(T) * g4calc->Z23(_thePartition[i]);
         } 
     }
 	
@@ -282,8 +281,8 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(G4double U,
   ThermalWaveLenght3 = ThermalWaveLenght3*ThermalWaveLenght3*ThermalWaveLenght3;
   
   // Translational Entropy
-  G4double kappa = 1. + elm_coupling*(g4pow->Z13(_thePartition.size())-1.0)
-                    /(G4StatMFParameters::Getr0()*g4pow->Z13(theA));
+  G4double kappa = 1. + elm_coupling*(g4calc->Z13(_thePartition.size())-1.0)
+                    /(G4StatMFParameters::Getr0()*g4calc->Z13(theA));
   kappa = kappa*kappa*kappa;
   kappa -= 1.;
   G4double V0 = (4./3.)*pi*theA*G4StatMFParameters::Getr0()*G4StatMFParameters::Getr0()*
@@ -291,7 +290,7 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(G4double U,
   G4double FreeVolume = kappa*V0;
   G4double TranslationalS = std::max(0.0, G4Log(ProbA32/Fact) +
       (_thePartition.size()-1.0)*G4Log(FreeVolume/ThermalWaveLenght3) +
-      1.5*(_thePartition.size()-1.0) - 1.5*g4pow->logZ(theA));
+      1.5*(_thePartition.size()-1.0) - 1.5*g4calc->logZ(theA));
   
   PartitionEntropy += G4Log(ProbDegeneracy) + TranslationalS;
   _Entropy = PartitionEntropy;

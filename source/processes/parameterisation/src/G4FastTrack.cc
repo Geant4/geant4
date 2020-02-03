@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.cc 68056 2013-03-13 14:44:48Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -48,11 +47,14 @@
 // Constructor
 // -----------
 //
-G4FastTrack::G4FastTrack(G4Envelope *anEnvelope,
-                         G4bool IsUnique) :
-  fAffineTransformationDefined(false),   fEnvelope(anEnvelope),
-  fIsUnique(IsUnique), fEnvelopeLogicalVolume(0), fEnvelopePhysicalVolume(0),
-  fEnvelopeSolid(0)
+G4FastTrack::G4FastTrack(G4Envelope *anEnvelope, G4bool IsUnique)
+  : fTrack                      ( nullptr    ),
+    fAffineTransformationDefined( false      ),
+    fEnvelope                   ( anEnvelope ),
+    fIsUnique                   ( IsUnique   ),
+    fEnvelopeLogicalVolume      ( nullptr    ),
+    fEnvelopePhysicalVolume     ( nullptr    ),
+    fEnvelopeSolid              ( nullptr    )
 {}
 
 // -----------

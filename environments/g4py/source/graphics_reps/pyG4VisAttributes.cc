@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: pyG4VisAttributes.cc 76884 2013-11-18 12:54:03Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // ====================================================================
 //   pyG4VisAttributes.cc
 //

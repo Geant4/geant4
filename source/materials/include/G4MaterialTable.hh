@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialTable.hh 66811 2013-01-12 16:04:23Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -37,6 +36,8 @@
  
 #ifndef G4MATERIALTABLE_HH
 #define G4MATERIALTABLE_HH
+
+#include <vector>
 
 class G4Material;
 

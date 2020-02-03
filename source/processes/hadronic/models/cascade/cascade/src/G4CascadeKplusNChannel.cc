@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeKplusNChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -38,10 +37,10 @@ namespace {
   // Outgoing particle types of a given multiplicity
  
   static const G4int kpn2bfs[2][2] =
-    {{neu,kpl}, {pro,k0}};
+    {{kpl,neu}, {k0,pro}};
  
   static const G4int kpn3bfs[8][3] =
-    {{neu,pi0,kpl}, {pro,pim,kpl}, {pro,pi0,k0}, {neu,pip,k0},
+    {{kpl,neu,pi0}, {kpl,pro,pim}, {k0,pro,pi0}, {k0,neu,pip},
      {kpl,k0,lam},  {kpl,k0,s0},   {k0,k0,sp},   {kpl,kpl,sm}};
 
   static const G4int kpn4bfs[20][4] =

@@ -84,6 +84,11 @@ public:
 	inline void setSaving_in_Selected_Voxels_every_events(G4int val){inputData.generalData.saving_in_Selected_Voxels_every_events=val;}
 	inline void setSaving_in_ROG_Voxels_every_events(G4int val){inputData.generalData.saving_in_ROG_Voxels_every_events=val;}
 	inline void setMax_N_particles_in_PhSp_File(G4int val){inputData.generalData.max_N_particles_in_PhSp_File=val;}
+       
+        // SUSANNA: methods to fix the voxelisation in x,y and z
+        inline void setVoxelsX(G4int val) {inputData.voxelSegmentation.nX=val;}
+        inline void setVoxelsY(G4int val) {inputData.voxelSegmentation.nY=val;}
+        inline void setVoxelsZ(G4int val) {inputData.voxelSegmentation.nZ=val;}
 
 	G4bool bOnlyVisio;
 	SInputData inputData;

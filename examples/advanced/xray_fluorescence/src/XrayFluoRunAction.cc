@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoRunAction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -189,13 +187,13 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
   G4String name = ost.str();
   char* path;
   
-  if (!(getenv("XRAYDATA"))) { 
+  if (!(std::getenv("XRAYDATA"))) { 
     
-    path = getenv("PWD");    
+    path = std::getenv("PWD");    
   }
   
   else {    
-    path = getenv("XRAYDATA");
+    path = std::getenv("XRAYDATA");
   }
   
   

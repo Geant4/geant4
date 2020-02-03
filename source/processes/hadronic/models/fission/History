@@ -14,6 +14,17 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
+3 April 2019  Dennis Wright (hadr-fission-V10-05-00)
+----------------------------------------------------
+- G4SmpIsoDir.cc: remove use of G4Pow for squaring cospolang - sometimes 
+  causes crash
+
+19 December 2017  Gabriele Cosmo (hadr-fission-V10-04-00)
+-------------------------------------------------------
+- Fixed self-consistency in G4LLNLFission header (missing #include).
+  Added missing #ifdef guards in G4fissionEvent header.
+  Thanks to Raphael Isemann for reporting these.
+
 5 November 2015  Alberto Ribon (hadr-fission-V10-01-07)
 -------------------------------------------------------
 - Removed neutron_hp/

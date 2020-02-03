@@ -3,6 +3,7 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+<<<<<<< HEAD
 *************************************************************
  Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
@@ -57,6 +58,17 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
+=======
+**************************************************************
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ***** Table : Nb of materials = 4 *****
 
@@ -75,10 +87,15 @@ Available colours:
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
+<<<<<<< HEAD
  Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
                        Imean: 166.000 eV 
+=======
+ Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.880 cm 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
-   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
+   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
@@ -120,6 +137,56 @@ Available colours:
 
 
 
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateXm (OGLIXm, OGLI)
+OpenGLStoredXm (OGLSXm, OGL, OGLS)
+OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 0
+/run/initialize
+userDetector->Construct() start.
 
  
  
@@ -157,12 +224,20 @@ Available colours:
 #                                                    #
 #                                                    #
 ######################################################
+<<<<<<< HEAD
 No reflecting surface used
 >>>>>>>>>>>>>> AddDiscreteProcess to OpticalPhoton 
 /run/verbose 2
 /event/verbose 0
 /tracking/verbose 0
 /run/initialize
+=======
+World is registered to the default region.
+physicsList->Construct() start.
+### Birks coefficients used in run time
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 /gps/particle mu-
 /gps/direction 0.0 0.0 -1.0
 /gps/pos/centre 0.0 0.0 100. cm
@@ -401,12 +476,22 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       52.31          0k         1       13         26         0.00    LensMotherLV
       47.69          0k         3        9         22         0.00    World
+<<<<<<< HEAD
+=======
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ### Run 0 starts.
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
+<<<<<<< HEAD
  Initial seed = 1485359289
  float_seed_table[] = 0.131983 0.316989 0.1055 0.656285 0.723241 0.888098 0.37069 0.967939 0.185518 0.387449 0.38827 0.373476 0.330573 0.752242 0.20178 0.208947 0.984691 0.497871 0.940918 0.094232 0.708002 0.177318 0.372896 0.161464 
+=======
+ Initial seed = 1575548249
+ float_seed_table[] = 0.636971 0.80368 0.477473 0.77956 0.386704 0.678484 0.893229 0.819829 0.749979 0.779605 0.210427 0.0392667 0.297203 0.429559 0.550057 0.0868152 0.840908 0.125298 0.800472 0.247863 0.0465301 0.967462 0.0514111 0.299733 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -417,7 +502,11 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
+<<<<<<< HEAD
   User=2.45s Real=2.45s Sys=0s
+=======
+  User=1.900000s Real=1.911033s Sys=0.000000s
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -431,9 +520,16 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
+<<<<<<< HEAD
 Total navigation history collections cleaned: 11
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.0154 MB
+=======
+TransportationManager deleted.
+Total navigation history collections cleaned: 9
+================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 0.0115 MB
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
@@ -444,9 +540,13 @@ Pool ID '17G4DynamicParticle', size : 0.221 MB
 Pool ID '7G4Track', size : 0.441 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.00481 MB
+Pool ID '15UltraOpticalHit', size : 0.00385 MB
 Number of memory pools allocated: 12 of which, static: 0
+<<<<<<< HEAD
 Dynamic pools deleted: 12 / Total memory freed: 0.69 MB
+=======
+Dynamic pools deleted: 12 / Total memory freed: 0.097 MB
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

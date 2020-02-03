@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ElectricField implementation
 //
-// $Id: G4ElectricField.cc 97486 2016-06-03 10:45:04Z gcosmo $
-//
+// Created: J.Apostolakis - 04.11.2003
 // --------------------------------------------------------------------
 
 #include "G4ElectricField.hh"
@@ -38,12 +38,12 @@ G4ElectricField::~G4ElectricField()
 {
 }
 
-G4ElectricField::G4ElectricField(const G4ElectricField &p)
+G4ElectricField::G4ElectricField(const G4ElectricField& p)
   : G4ElectroMagneticField(p)
 {
 }
 
-G4ElectricField& G4ElectricField::operator = (const G4ElectricField &p)
+G4ElectricField& G4ElectricField::operator = (const G4ElectricField& p)
 {
   if (&p == this) return *this;
   G4ElectroMagneticField::operator=(p);

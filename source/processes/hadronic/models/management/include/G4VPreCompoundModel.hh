@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh 80131 2014-04-02 14:35:47Z gcosmo $
 //
 
 #ifndef G4VPreCompoundModel_h
@@ -60,37 +59,27 @@ class G4VPreCompoundModel : public G4HadronicInteraction
 {
 public:
 
-  G4VPreCompoundModel(G4ExcitationHandler* ptr = 0, 
-                      const G4String& modelName = "PrecompoundModel");
+  explicit G4VPreCompoundModel(G4ExcitationHandler* ptr = nullptr, 
+			       const G4String& modelName = "PrecompoundModel");
 
   virtual ~G4VPreCompoundModel();
   
-private:
-
-  // default constructor
-  //G4VPreCompoundModel();
-  // copy constructor
-  G4VPreCompoundModel(const G4VPreCompoundModel &);
-  // operators
-  const G4VPreCompoundModel& operator=(const G4VPreCompoundModel &right);
-  G4bool operator==(const G4VPreCompoundModel &right) const;
-  G4bool operator!=(const G4VPreCompoundModel &right) const;
-
 public:
 
-  virtual G4HadFinalState * 
-          ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus) = 0;
-  
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) = 0;
 
-  virtual void DeExciteModelDescription(std::ostream& outFile) const ;
-
+  virtual void DeExciteModelDescription(std::ostream& outFile) const = 0;
 
   inline void SetExcitationHandler(G4ExcitationHandler* ptr);
     
   inline G4ExcitationHandler* GetExcitationHandler() const;
   
 private:
+
+  G4VPreCompoundModel(const G4VPreCompoundModel &) = delete;
+  const G4VPreCompoundModel& operator=(const G4VPreCompoundModel &right) = delete;
+  G4bool operator==(const G4VPreCompoundModel &right) const = delete;
+  G4bool operator!=(const G4VPreCompoundModel &right) const = delete;
 
   G4ExcitationHandler* theExcitationHandler;
 };

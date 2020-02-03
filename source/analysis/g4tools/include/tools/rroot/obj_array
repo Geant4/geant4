@@ -1,0 +1,211 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_obj_array
+#define tools_rroot_obj_array
+
+#include "object"
+#include "../vmanip"
+#include "../scast"
+
+#include "cids"
+
+namespace tools {
+namespace rroot {
+
+template <class T>
+class obj_array : public virtual iro,public std::vector<T*> {
+  typedef typename std::vector<T*> parent;
+private:
+  static const std::string& s_store_class() {
+    static const std::string s_v("TObjArray");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::obj_array<"+T::s_class()+">");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< obj_array<T> >(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return obj_array_cid()+T::id_class();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<obj_array>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual iro* copy() const {return new obj_array<T>(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    ifac::args args;
+    bool accept_null = false;
+    return stream(a_buffer,args,accept_null);
+  }
+public:
+  obj_array(ifac& a_fac)
+  :m_fac(a_fac)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~obj_array(){
+    _clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  obj_array(const obj_array& a_from)
+  :iro(a_from)
+  ,parent()
+  ,m_fac(a_from.m_fac)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    typedef typename parent::const_iterator it_t;
+    for(it_t it=a_from.begin();it!=a_from.end();++it) {
+      if(!(*it)) {
+        parent::push_back(0);
+        m_owns.push_back(false);
+      } else {
+        iro* _obj = (*it)->copy();
+        T* obj = safe_cast<iro,T>(*_obj);
+        if(!obj) {
+          m_fac.out() << "tools::rroot::obj_array::obj_array :"
+                      << " inlib::cast failed."
+                      << std::endl;
+          delete _obj;
+          parent::push_back(0);
+          m_owns.push_back(false);
+        } else {
+          parent::push_back(obj);
+          m_owns.push_back(true);
+        }
+      }
+    }
+  }
+  obj_array& operator=(const obj_array& a_from){
+    if(&a_from==this) return *this;
+
+    _clear();
+
+    typedef typename parent::const_iterator it_t;
+    for(it_t it=a_from.begin();it!=a_from.end();++it) {
+      if(!(*it)) {
+        parent::push_back(0);
+        m_owns.push_back(false);
+      } else {
+        iro* _obj = (*it)->copy();
+        T* obj = safe_cast<iro,T>(*_obj);
+        if(!obj) {
+          m_fac.out() << "tools::rroot::obj_array::operator= :"
+                      << " inlib::cast failed."
+                      << std::endl;
+          delete _obj;
+          parent::push_back(0);
+          m_owns.push_back(false);
+        } else {
+          parent::push_back(obj);
+          m_owns.push_back(true);
+        }
+      }
+    }
+
+    return *this;
+  }
+public:
+  void cleanup() {_clear();}
+public:
+  bool stream(buffer& a_buffer,const ifac::args& a_args,bool a_accept_null = false) {
+    _clear();
+
+    //::printf("debug : obj_array::stream : %lu : begin\n",(unsigned long)this);
+
+    short v;
+    unsigned int sp, bc;
+    if(!a_buffer.read_version(v,sp,bc)) return false;
+
+    //::printf("debug : obj_array::stream : version %d, byte count %d\n",v,bc);
+
+   {uint32 id,bits;
+    if(!Object_stream(a_buffer,id,bits)) return false;}
+    std::string name;
+    if(!a_buffer.read(name)) return false;
+    int nobjects;
+    if(!a_buffer.read(nobjects)) return false;
+    int lowerBound;
+    if(!a_buffer.read(lowerBound)) return false;
+
+    //::printf("debug : obj_array : name \"%s\", nobject %d, lowerBound %d\n",name.c_str(),nobjects,lowerBound);
+
+    for (int i=0;i<nobjects;i++) {
+      //::printf("debug : obj_array::stream : %lu : n=%d i=%d ...\n",(unsigned long)this,nobjects,i);
+
+      iro* obj;
+      bool created;
+      if(!a_buffer.read_object(m_fac,a_args,obj,created)){
+        a_buffer.out() << "tools::rroot::obj_array::stream : can't read object"
+                       << " in obj_array : name " << sout(name)
+                       << ", nobjects " << nobjects << ", iobject " << i << std::endl;
+        return false;
+      }
+      //::printf("debug : obj_array::stream : %lu : n=%d i=%d : ok, obj %lu\n",(unsigned long)this,
+      //    nobjects,i,(unsigned long)obj);
+      if(obj) {
+        T* to = safe_cast<iro,T>(*obj);
+        if(!to) {
+          a_buffer.out() << "tools::rroot::obj_array::stream :"
+                         << " inlib::cast failed."
+                         << " " << obj->s_cls() << " is not a " << T::s_class() << "."
+                         << std::endl;
+          if(created) {
+            if(a_buffer.map_objs()) a_buffer.remove_in_map(obj);
+            delete obj;
+          }
+        } else {
+          if(created) {
+            parent::push_back(to);
+            m_owns.push_back(true);
+          } else { //someone else manage this object.
+            parent::push_back(to);
+            m_owns.push_back(false);
+          }
+        }
+      } else {
+        //a_accept_null for branch::stream m_baskets.
+        if(a_accept_null) {
+	  parent::push_back(0);
+          m_owns.push_back(false);
+        }
+      }
+    }
+
+    return a_buffer.check_byte_count(sp,bc,s_store_class());
+  }
+protected:
+  void _clear() {
+    typedef typename parent::iterator it_t;
+    typedef std::vector<bool>::iterator itb_t;
+    while(!parent::empty()) {
+      it_t it = parent::begin();
+      itb_t itb = m_owns.begin();
+      T* entry  = (*it);
+      bool own = (*itb);
+      parent::erase(it);
+      m_owns.erase(itb);
+      if(own) delete entry;    
+    }
+  }
+protected:
+  ifac& m_fac;
+  std::vector<bool> m_owns;
+};
+
+}}
+
+#endif

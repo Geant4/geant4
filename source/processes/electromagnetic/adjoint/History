@@ -1,4 +1,3 @@
-$Id: History 93569 2015-10-26 14:53:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+11 Mar 2019: G. Cosmo (emadjoint-V10-05-00)
+-Fixed typos in printouts and comments.
+
+06 Nov 2017: V. Ivanchenko (emadjoint-V10-03-01)
+-Extended correction of occurrence of FPE in G4AdjointForcedInteractionForGamma.
+-G4eAdjointMultipleScattering - change index of the default accourding to recent 
+   modifications in emutils
+
+27 Jan 2017: L. Desorgher (emadjoint-V10-03-00)
+-Correction of occurrence of FPE in G4AdjointForcedInteractionForGamma.
+ 
+27 Octb 2016: L. Desorgher (emadjoint-V10-02-03)
+-Correction in  G4AdjointForcedInteractionForGamma to avoid high weight of forced gamma
+ when only the brem is used.
+-Modification in G4AdjointBremsstrahlungModel to use the  direcet angular model to compute the direction of the 
+ adjoint secondary
+-Add G4UrbanAdjointMscModel.cc and G4eAdjointMultipleScattering.cc
+   
+18 Octb 2016: L. Desorgher (emadjoint-V10-02-02)
+-Correct use of logical or in  G4AdjointForcedInteractionForGamma for compilation
+  error under windows.     
+      
+17 Octb 2016: L. Desorgher (emadjoint-V10-02-01)
+-Correct G4AdjointForcedInteractionForGamma for compilation error under windows. 
+
+26 Sept 2016: L. Desorgher (emadjoint-V10-02-00)
+-Add new adjoint process G4AdjointForcedInteractionForGamma to force the 
+ reverse interaction of adjoint gamma.
+-Slight modifications of G4VEmAdjointModel for new forced interaction
+-Some corrections in G4AdjointBremsstrahlungModel
 
 24 Oct 2015: V.Ivanchenko (emadjoint-V10-01-03)
 - G4AdjointCSManager - use G4ThreadLocalSingleton pattern, 

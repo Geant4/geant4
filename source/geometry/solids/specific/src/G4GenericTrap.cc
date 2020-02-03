@@ -23,22 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GenericTrap.cc 102296 2017-01-20 13:21:03Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GenericTrap.cc
+// G4GenericTrap implementation
 //
 // Authors:
 //   Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
 //   Adapted from Root Arb8 implementation by Andrei Gheata, CERN 
-//
-// History :
-// 04 August 2011 T.Nikitina Add SetReferences() and InvertFacets()
-//                to CreatePolyhedron() for Visualisation of Boolean       
 // --------------------------------------------------------------------
 
 #include "G4GenericTrap.hh"
@@ -49,11 +38,11 @@
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4TessellatedSolid.hh"
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
@@ -75,19 +64,8 @@ const G4double G4GenericTrap::fgkTolerance = 1E-3;
 
 G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
                               const std::vector<G4TwoVector>&  vertices )
-  : G4VSolid(name),
-    fRebuildPolyhedron(false),
-    fpPolyhedron(0),
-    fDz(halfZ),
-    fVertices(),
-    fIsTwisted(false),
-    fTessellatedSolid(0),
-    fMinBBoxVector(G4ThreeVector(0,0,0)),
-    fMaxBBoxVector(G4ThreeVector(0,0,0)),
-    fVisSubdivisions(0),
-    fSurfaceArea(0.),
-    fCubicVolume(0.)
-   
+  : G4VSolid(name), fDz(halfZ), fVertices(),
+    fMinBBoxVector(G4ThreeVector(0,0,0)), fMaxBBoxVector(G4ThreeVector(0,0,0))
 {
   // General constructor
   const G4double min_length=5*1.e-6;
@@ -123,15 +101,15 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
   }
   else
   { 
-    for (G4int i=0; i <4; ++i) {fVertices.push_back(vertices[3-i]);}
-    for (G4int i=0; i <4; ++i) {fVertices.push_back(vertices[7-i]);}
+    for (auto i=0; i <4; ++i) {fVertices.push_back(vertices[3-i]);}
+    for (auto i=0; i <4; ++i) {fVertices.push_back(vertices[7-i]);}
   }
 
    // Check length of segments and Adjust
   // 
-  for (G4int j=0; j < 2; j++)
+  for (auto j=0; j<2; ++j)
   {
-    for (G4int i=1; i<4; ++i)
+    for (auto i=1; i<4; ++i)
     {
       k = j*4+i;
       length = (fVertices[k]-fVertices[k-1]).mag();
@@ -150,7 +128,7 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
 
   // Compute Twist
   //
-  for( G4int i=0; i<4; i++) { fTwist[i]=0.; }
+  for( auto i=0; i<4; ++i) { fTwist[i]=0.; }
   fIsTwisted = ComputeIsTwisted();
 
   // Compute Bounding Box 
@@ -168,19 +146,8 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
 // --------------------------------------------------------------------
 
 G4GenericTrap::G4GenericTrap( __void__& a )
-  : G4VSolid(a),
-    fRebuildPolyhedron(false),
-    fpPolyhedron(0),
-    halfCarTolerance(0.),
-    fDz(0.),
-    fVertices(),
-    fIsTwisted(false),
-    fTessellatedSolid(0),
-    fMinBBoxVector(G4ThreeVector(0,0,0)),
-    fMaxBBoxVector(G4ThreeVector(0,0,0)),
-    fVisSubdivisions(0),
-    fSurfaceArea(0.),
-    fCubicVolume(0.)
+  : G4VSolid(a), halfCarTolerance(0.), fDz(0.), fVertices(),
+    fMinBBoxVector(G4ThreeVector(0,0,0)), fMaxBBoxVector(G4ThreeVector(0,0,0))
 {
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
@@ -190,7 +157,6 @@ G4GenericTrap::G4GenericTrap( __void__& a )
 
 G4GenericTrap::~G4GenericTrap()
 {
-  // Destructor
   delete fTessellatedSolid;
 }
 
@@ -198,15 +164,14 @@ G4GenericTrap::~G4GenericTrap()
 
 G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
   : G4VSolid(rhs),
-    fRebuildPolyhedron(false), fpPolyhedron(0),
     halfCarTolerance(rhs.halfCarTolerance),
     fDz(rhs.fDz), fVertices(rhs.fVertices),
-    fIsTwisted(rhs.fIsTwisted), fTessellatedSolid(0),
+    fIsTwisted(rhs.fIsTwisted),
     fMinBBoxVector(rhs.fMinBBoxVector), fMaxBBoxVector(rhs.fMaxBBoxVector),
     fVisSubdivisions(rhs.fVisSubdivisions),
     fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume) 
 {
-   for (size_t i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
+   for (auto i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
 #ifdef G4TESS_TEST
    if (rhs.fTessellatedSolid && !fIsTwisted )
    { fTessellatedSolid = CreateTessellatedSolid(); } 
@@ -229,18 +194,18 @@ G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs)
    //
    halfCarTolerance = rhs.halfCarTolerance;
    fDz = rhs.fDz; fVertices = rhs.fVertices;
-   fIsTwisted = rhs.fIsTwisted; fTessellatedSolid = 0;
+   fIsTwisted = rhs.fIsTwisted; fTessellatedSolid = nullptr;
    fMinBBoxVector = rhs.fMinBBoxVector; fMaxBBoxVector = rhs.fMaxBBoxVector;
    fVisSubdivisions = rhs.fVisSubdivisions;
    fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
 
-   for (size_t i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
+   for (auto i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
 #ifdef G4TESS_TEST
    if (rhs.fTessellatedSolid && !fIsTwisted )
    { delete fTessellatedSolid; fTessellatedSolid = CreateTessellatedSolid(); } 
 #endif
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
@@ -255,7 +220,7 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
   G4double cross, len2;
   G4int count=0;
 
-  for (G4int i = 0; i < 4; i++)
+  for (G4int i=0; i<4; ++i)
   {
     G4int j = (i+1) % 4;
 
@@ -331,7 +296,7 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
     }
     else
     {
-      count++;
+      ++count;
     }
   }
 
@@ -339,9 +304,10 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
   //
   if(count==4)
   { 
-    if ( (std::fabs(p.x()-poly[0].x())+std::fabs(p.y()-poly[0].y())) > halfCarTolerance )
+    if ( (std::fabs(p.x()-poly[0].x())
+         +std::fabs(p.y()-poly[0].y())) > halfCarTolerance )
     {
-      in=kOutside;
+      in = kOutside;
     }
   }
   return in;
@@ -368,7 +334,7 @@ EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
     // Compute intersection between Z plane containing point and the shape
     //
     G4double cf = 0.5*(fDz-p.z())/fDz;
-    for (G4int i=0; i<4; i++)
+    for (auto i=0; i<4; ++i)
     {
       xy.push_back(fVertices[i+4]+cf*( fVertices[i]-fVertices[i+4]));
     }
@@ -415,21 +381,21 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
     {
       sumnorm=G4ThreeVector(0,0,-1);
     }
-    noSurfaces ++;
+    ++noSurfaces;
   } 
 
   // Check lateral planes
   //
   std:: vector<G4TwoVector> vertices;  
   G4double cf = 0.5*(fDz-p.z())/fDz;
-  for (G4int i=0; i<4; i++)
+  for (auto i=0; i<4; ++i)
   {
     vertices.push_back(fVertices[i+4]+cf*(fVertices[i]-fVertices[i+4]));
   }
 
   // Compute distance for lateral planes
   //
-  for (G4int q=0; q<4; q++)
+  for (G4int q=0; q<4; ++q)
   {
     p0=G4ThreeVector(vertices[q].x(),vertices[q].y(),p.z());
     if(zPlusSide)
@@ -485,7 +451,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
     distxy=std::fabs((p0-p).dot(lnorm));
     if ( distxy<halfCarTolerance )
     {
-      noSurfaces ++;
+      ++noSurfaces;
 
       // Negative sign for Normal is taken for Outside Normal
       //
@@ -779,7 +745,7 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
   // Check lateral faces
   //
   G4int i;
-  for (i=0; i<4; i++)
+  for (i=0; i<4; ++i)
   {
     dist[i]=DistToPlane(p, v, i);  
   }
@@ -819,7 +785,7 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
     }
   }   
   G4double distmin = dist[0];
-  for (i=1;i<5;i++)
+  for (i=1; i<5 ; ++i)
   {
     if (dist[i] < distmin)  { distmin = dist[i]; }
   }
@@ -849,7 +815,7 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p) const
   G4double safe  = safz;
   G4double safxy = safz;
  
-  for (iseg=0; iseg<4; iseg++)
+  for (iseg=0; iseg<4; ++iseg)
   { 
     safxy = SafetyToFace(p,iseg);
     if (safxy>safe)  { safe=safxy; }
@@ -950,9 +916,9 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
 
   G4double distmin;
   G4bool lateral_cross = false;
-  ESide side = kUndefined;
+  ESide side = kUndef;
  
-  if (calcNorm)  { *validNorm=true; } // All normals are valid
+  if (calcNorm)  { *validNorm = true; } // All normals are valid
 
   if (v.z() < 0)
   {
@@ -973,7 +939,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
   G4double xa,xb,xc,xd;
   G4double ya,yb,yc,yd;
 
-  for (G4int ipl=0; ipl<4; ipl++)
+  for (G4int ipl=0; ipl<4; ++ipl)
   {
     G4int j = (ipl+1)%4;
     xa=fVertices[ipl].x();
@@ -1196,7 +1162,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p) const
   G4double safe  = safz;
   G4double safxy = safz;
  
-  for (G4int iseg=0; iseg<4; iseg++)
+  for (G4int iseg=0; iseg<4; ++iseg)
   { 
     safxy = std::fabs(SafetyToFace(p,iseg));
     if (safxy < safe)  { safe = safxy; }
@@ -1207,219 +1173,85 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p) const
 
 // --------------------------------------------------------------------
 
-G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
-                                      const G4VoxelLimits& pVoxelLimit,
-                                      const G4AffineTransform& pTransform,
-                                      G4double& pMin, G4double& pMax) const
+void G4GenericTrap::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
 {
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  {
-    return fTessellatedSolid->CalculateExtent(pAxis, pVoxelLimit,
-                                              pTransform, pMin, pMax);
-  }     
-#endif 
+  pMin = GetMinimumBBox();
+  pMax = GetMaximumBBox();
 
-  // Computes bounding vectors for a shape
+  // Check correctness of the bounding box
   //
-  G4ThreeVector minVec = GetMinimumBBox();
-  G4ThreeVector maxVec = GetMaximumBBox();
-
-  if (!pTransform.IsRotated())
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
   {
-    // Special case handling for unrotated shapes
-    // Compute x/y/z mins and maxs respecting limits, with early returns
-    // if outside limits. Then switch() on pAxis
-    //
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
-
-    xoffset=pTransform.NetTranslation().x();
-    xMin=xoffset+minVec.x();
-    xMax=xoffset+maxVec.x();
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
-        || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin<pVoxelLimit.GetMinXExtent())
-        {
-          xMin=pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax>pVoxelLimit.GetMaxXExtent())
-        {
-          xMax=pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-
-    yoffset=pTransform.NetTranslation().y();
-    yMin=yoffset+minVec.y();
-    yMax=yoffset+maxVec.y();
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
-        || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin<pVoxelLimit.GetMinYExtent())
-        {
-          yMin=pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax>pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-
-    zoffset=pTransform.NetTranslation().z();
-    zMin=zoffset+minVec.z();
-    zMax=zoffset+maxVec.z();
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
-        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (zMin<pVoxelLimit.GetMinZExtent())
-        {
-          zMin=pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax>pVoxelLimit.GetMaxZExtent())
-        {
-          zMax=pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-
-    switch (pAxis)
-    {
-      case kXAxis:
-        pMin = xMin;
-        pMax = xMax;
-        break;
-      case kYAxis:
-        pMin = yMin;
-        pMax = yMax;
-        break;
-      case kZAxis:
-        pMin = zMin;
-        pMax = zMax;
-        break;
-      default:
-        break;
-    }
-    pMin-=kCarTolerance;
-    pMax+=kCarTolerance;
-
-    return true;
-  }
-  else
-  {
-    // General rotated case - create and clip mesh to boundaries
-
-    G4bool existsAfterClip=false;
-    G4ThreeVectorList *vertices;
-
-    pMin=+kInfinity;
-    pMax=-kInfinity;
-
-    // Calculate rotated vertex coordinates
-    //
-    vertices=CreateRotatedVertices(pTransform);
-    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
-    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-
-    if ( (pMin!=kInfinity) || (pMax!=-kInfinity) )
-    {
-      existsAfterClip=true;
-    
-      // Add 2*tolerance to avoid precision troubles
-      //
-      pMin-=kCarTolerance;
-      pMax+=kCarTolerance;
-    }
-    else
-    {
-      // Check for case where completely enveloping clipping volume.
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-      //
-      G4ThreeVector clipCentre(
-              (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-              (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-              (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-      {
-        existsAfterClip=true;
-        pMin=pVoxelLimit.GetMinExtent(pAxis);
-        pMax=pVoxelLimit.GetMaxExtent(pAxis);
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4GenericTrap::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
   }
 }
 
 // --------------------------------------------------------------------
 
-G4ThreeVectorList*
-G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
+G4bool
+G4GenericTrap::CalculateExtent(const EAxis pAxis,
+                               const G4VoxelLimits& pVoxelLimit,
+                               const G4AffineTransform& pTransform,
+                                     G4double& pMin, G4double& pMax) const
 {
-  // Create a List containing the transformed vertices
-  // Ordering [0-3] -fDz cross section
-  //          [4-7] +fDz cross section such that [0] is below [4],
-  //                                             [1] below [5] etc.
-  // Note: caller has deletion responsibility
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
 
-  G4ThreeVector Min = GetMinimumBBox();
-  G4ThreeVector Max = GetMaximumBBox();
-
-  G4ThreeVectorList *vertices;
-  vertices=new G4ThreeVectorList();
-    
-  if (vertices)
+  // Check bounding box (bbox)
+  //
+  BoundingLimits(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    vertices->reserve(8);
-    G4ThreeVector vertex0(Min.x(),Min.y(),Min.z());
-    G4ThreeVector vertex1(Max.x(),Min.y(),Min.z());
-    G4ThreeVector vertex2(Max.x(),Max.y(),Min.z());
-    G4ThreeVector vertex3(Min.x(),Max.y(),Min.z());
-    G4ThreeVector vertex4(Min.x(),Min.y(),Max.z());
-    G4ThreeVector vertex5(Max.x(),Min.y(),Max.z());
-    G4ThreeVector vertex6(Max.x(),Max.y(),Max.z());
-    G4ThreeVector vertex7(Min.x(),Max.y(),Max.z());
+    return exist = (pMin < pMax) ? true : false;
+  }
 
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-    vertices->push_back(pTransform.TransformPoint(vertex4));
-    vertices->push_back(pTransform.TransformPoint(vertex5));
-    vertices->push_back(pTransform.TransformPoint(vertex6));
-    vertices->push_back(pTransform.TransformPoint(vertex7));
-  }
-  else
+  // Set bounding envelope (benv) and calculate extent
+  //
+  // To build the bounding envelope with plane faces each side face of
+  // the trapezoid is subdivided in triangles. Subdivision is done by
+  // duplication of vertices in the bases in a way that the envelope be
+  // a convex polyhedron (some faces of the envelope can be degenerate)
+  //
+  G4double dz = GetZHalfLength();
+  G4ThreeVectorList baseA(8), baseB(8);
+  for (G4int i=0; i<4; ++i)
   {
-    G4Exception("G4GenericTrap::CreateRotatedVertices()", "FatalError",
-                FatalException, "Out of memory - Cannot allocate vertices!");
+    G4TwoVector va = GetVertex(i);
+    G4TwoVector vb = GetVertex(i+4);
+    baseA[2*i].set(va.x(),va.y(),-dz);
+    baseB[2*i].set(vb.x(),vb.y(), dz);
   }
-  return vertices;
+  for (G4int i=0; i<4; ++i)
+  {
+    G4int k1=2*i, k2=(2*i+2)%8;
+    G4double ax = (baseA[k2].x()-baseA[k1].x());
+    G4double ay = (baseA[k2].y()-baseA[k1].y());
+    G4double bx = (baseB[k2].x()-baseB[k1].x());
+    G4double by = (baseB[k2].y()-baseB[k1].y());
+    G4double znorm = ax*by - ay*bx;
+    baseA[k1+1] = (znorm < 0.0) ? baseA[k2] : baseA[k1];
+    baseB[k1+1] = (znorm < 0.0) ? baseB[k1] : baseB[k2];
+  }
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
   
 // --------------------------------------------------------------------
@@ -1477,11 +1309,11 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
   G4int ipl,j;
  
   std::vector<G4ThreeVector> vertices;
-  for (G4int i=0; i<4;i++)
+  for (auto i=0; i<4; ++i)
   {
     vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
   }
-  for (G4int i=4; i<8;i++)
+  for (auto i=4; i<8; ++i)
   {
     vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
   }
@@ -1549,58 +1381,70 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
 
 // --------------------------------------------------------------------
 
-G4double G4GenericTrap::GetCubicVolume()
+G4double G4GenericTrap::GetSurfaceArea()
 {
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = G4VSolid::GetCubicVolume(); }
-  return fCubicVolume;
+  if (fSurfaceArea == 0.0)
+  {
+    if(fIsTwisted)
+    {
+      fSurfaceArea = G4VSolid::GetSurfaceArea();
+    }
+     else
+    {
+      // Set vertices
+      G4ThreeVector vertix0(fVertices[0].x(),fVertices[0].y(),-fDz);
+      G4ThreeVector vertix1(fVertices[1].x(),fVertices[1].y(),-fDz);
+      G4ThreeVector vertix2(fVertices[2].x(),fVertices[2].y(),-fDz);
+      G4ThreeVector vertix3(fVertices[3].x(),fVertices[3].y(),-fDz);
+      G4ThreeVector vertix4(fVertices[4].x(),fVertices[4].y(), fDz);
+      G4ThreeVector vertix5(fVertices[5].x(),fVertices[5].y(), fDz);
+      G4ThreeVector vertix6(fVertices[6].x(),fVertices[6].y(), fDz);
+      G4ThreeVector vertix7(fVertices[7].x(),fVertices[7].y(), fDz);
+
+      // Find Surface Area
+      fSurfaceArea = GetFaceSurfaceArea(vertix0,vertix1,vertix2,vertix3)  // -fDz plane
+                   + GetFaceSurfaceArea(vertix1,vertix0,vertix4,vertix5)  //  Lat plane
+                   + GetFaceSurfaceArea(vertix2,vertix1,vertix5,vertix6)  //  Lat plane 
+                   + GetFaceSurfaceArea(vertix3,vertix2,vertix6,vertix7)  //  Lat plane
+                   + GetFaceSurfaceArea(vertix0,vertix3,vertix7,vertix4)  //  Lat plane
+                   + GetFaceSurfaceArea(vertix7,vertix6,vertix5,vertix4); // +fDz plane 
+    }
+  }
+  return fSurfaceArea;
 }
 
 // --------------------------------------------------------------------
 
-G4double G4GenericTrap::GetSurfaceArea()
+G4double G4GenericTrap::GetCubicVolume()
 {
-  if(fSurfaceArea != 0.) {;}
-  else
+  if (fCubicVolume == 0.0)
   {
-    std::vector<G4ThreeVector> vertices;
-    for (G4int i=0; i<4;i++)
+    if(fIsTwisted)
     {
-      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
-    }
-    for (G4int i=4; i<8;i++)
-    {
-      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
-    }
-
-    // Surface Area of Planes(only estimation for twisted)
-    //
-    G4double fSurface0=GetFaceSurfaceArea(vertices[0],vertices[1],
-                                          vertices[2],vertices[3]);//-fDz plane
-    G4double fSurface1=GetFaceSurfaceArea(vertices[0],vertices[1],
-                                          vertices[5],vertices[4]);// Lat plane
-    G4double fSurface2=GetFaceSurfaceArea(vertices[3],vertices[0],
-                                          vertices[4],vertices[7]);// Lat plane 
-    G4double fSurface3=GetFaceSurfaceArea(vertices[2],vertices[3],
-                                          vertices[7],vertices[6]);// Lat plane
-    G4double fSurface4=GetFaceSurfaceArea(vertices[2],vertices[1],
-                                          vertices[5],vertices[6]);// Lat plane
-    G4double fSurface5=GetFaceSurfaceArea(vertices[4],vertices[5],
-                                          vertices[6],vertices[7]);// fDz plane 
-
-    // Total Surface Area
-    //
-    if(!fIsTwisted)
-    {
-      fSurfaceArea = fSurface0+fSurface1+fSurface2
-                   + fSurface3+fSurface4+fSurface5;
+      fCubicVolume = G4VSolid::GetCubicVolume();
     }
     else
     {
-      fSurfaceArea = G4VSolid::GetSurfaceArea();
+      // Set vertices
+      G4ThreeVector vertix0(fVertices[0].x(),fVertices[0].y(),-fDz);
+      G4ThreeVector vertix1(fVertices[1].x(),fVertices[1].y(),-fDz);
+      G4ThreeVector vertix2(fVertices[2].x(),fVertices[2].y(),-fDz);
+      G4ThreeVector vertix3(fVertices[3].x(),fVertices[3].y(),-fDz);
+      G4ThreeVector vertix4(fVertices[4].x(),fVertices[4].y(), fDz);
+      G4ThreeVector vertix5(fVertices[5].x(),fVertices[5].y(), fDz);
+      G4ThreeVector vertix6(fVertices[6].x(),fVertices[6].y(), fDz);
+      G4ThreeVector vertix7(fVertices[7].x(),fVertices[7].y(), fDz);
+
+      // Find Cubic Volume
+      fCubicVolume = GetFaceCubicVolume(vertix0,vertix1,vertix2,vertix3)  // -fDz plane
+                   + GetFaceCubicVolume(vertix1,vertix0,vertix4,vertix5)  //  Lat plane
+                   + GetFaceCubicVolume(vertix2,vertix1,vertix5,vertix6)  //  Lat plane 
+                   + GetFaceCubicVolume(vertix3,vertix2,vertix6,vertix7)  //  Lat plane
+                   + GetFaceCubicVolume(vertix0,vertix3,vertix7,vertix4)  //  Lat plane
+                   + GetFaceCubicVolume(vertix7,vertix6,vertix5,vertix4); // +fDz plane 
     }
   }
-  return fSurfaceArea;
+  return fCubicVolume;
 }
 
 // --------------------------------------------------------------------
@@ -1610,23 +1454,20 @@ G4double G4GenericTrap::GetFaceSurfaceArea(const G4ThreeVector& p0,
                                            const G4ThreeVector& p2,
                                            const G4ThreeVector& p3) const
 {
-  // Auxiliary method for Get Surface Area of Face
-  
-  G4double aOne, aTwo;
-  G4ThreeVector t, u, v, w, Area, normal;
+  // Returns area of the facet 
+  return (((p2-p0).cross(p3-p1)).mag()) / 2.;
+}
 
-  t = p2 - p1;
-  u = p0 - p1;
-  v = p2 - p3;
-  w = p0 - p3;
-  
-  Area = w.cross(v);
-  aOne = 0.5*Area.mag();
-  
-  Area = t.cross(u);
-  aTwo = 0.5*Area.mag();
- 
-  return aOne + aTwo;
+// --------------------------------------------------------------------
+
+G4double G4GenericTrap::GetFaceCubicVolume(const G4ThreeVector& p0,
+                                           const G4ThreeVector& p1, 
+                                           const G4ThreeVector& p2,
+                                           const G4ThreeVector& p3) const
+{
+  // Returns contribution of the facet to the volume of the solid.
+  // Orientation of the facet is important, normal should point to outside. 
+  return (((p2-p0).cross(p3-p1)).dot(p0)) / 6.;
 }
 
 // --------------------------------------------------------------------
@@ -1640,7 +1481,7 @@ G4bool G4GenericTrap::ComputeIsTwisted()
   G4double dx1, dy1, dx2, dy2;
   G4int nv = fgkNofVertices/2;
 
-  for ( G4int i=0; i<4; i++ )
+  for ( G4int i=0; i<4; ++i )
   {
     dx1 = fVertices[(i+1)%nv].x()-fVertices[i].x();
     dy1 = fVertices[(i+1)%nv].y()-fVertices[i].y();
@@ -1689,7 +1530,7 @@ G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
   G4double sum2 = 0.;
   G4int j;
 
-  for (G4int i=0; i<4; i++)
+  for (G4int i=0; i<4; ++i)
   {
     j = (i+1)%4;
     sum1 += vertices[i].x()*vertices[j].y() - vertices[j].x()*vertices[i].y();
@@ -1766,7 +1607,7 @@ void G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
 
   std::vector<G4ThreeVector> oldVertices(vertices);
 
-  for ( G4int i=0; i < G4int(oldVertices.size()); ++i )
+  for ( size_t i=0; i<oldVertices.size(); ++i )
   {
     vertices[i] = oldVertices[oldVertices.size()-1-i];
   }  
@@ -1961,7 +1802,7 @@ G4GenericTrap::MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices,
   //
   if ( (fromVertices[ind1] == fromVertices[ind2]) ||
        (fromVertices[ind2] == fromVertices[ind3]) ||
-       (fromVertices[ind1] == fromVertices[ind3]) )  { return 0; }
+       (fromVertices[ind1] == fromVertices[ind3]) )  { return nullptr; }
 
   std::vector<G4ThreeVector> vertices;
   vertices.push_back(fromVertices[ind1]);
@@ -1998,7 +1839,7 @@ G4GenericTrap::MakeSideFacet(const G4ThreeVector& downVertex0,
 
   if ( (downVertex0 == downVertex1) && (upVertex0 == upVertex1) )
   {
-    return 0;
+    return nullptr;
   }
 
   if ( downVertex0 == downVertex1 )
@@ -2023,14 +1864,14 @@ G4TessellatedSolid* G4GenericTrap::CreateTessellatedSolid() const
   //
   G4int nv = fgkNofVertices/2;
   std::vector<G4ThreeVector> downVertices;
-  for ( G4int i=0; i<nv; i++ )
+  for ( G4int i=0; i<nv; ++i )
   { 
     downVertices.push_back(G4ThreeVector(fVertices[i].x(),
                                          fVertices[i].y(), -fDz));
   }
 
   std::vector<G4ThreeVector> upVertices;
-  for ( G4int i=nv; i<2*nv; i++ )
+  for ( G4int i=nv; i<2*nv; ++i )
   { 
     upVertices.push_back(G4ThreeVector(fVertices[i].x(),
                                        fVertices[i].y(), fDz));
@@ -2109,7 +1950,7 @@ G4Polyhedron* G4GenericTrap::GetPolyhedron () const
   }
 #endif  
   
-  if ( (!fpPolyhedron)
+  if ( (fpPolyhedron == nullptr)
     || fRebuildPolyhedron
     || (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
         fpPolyhedron->GetNumberOfRotationSteps()) )
@@ -2145,7 +1986,7 @@ G4VisExtent G4GenericTrap::GetExtent() const
   // Computes bounding vectors for the shape
 
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
+  if ( fTessellatedSolid != nullptr )
   { 
     return fTessellatedSolid->GetExtent();
   } 
@@ -2164,7 +2005,7 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
 {
 
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
+  if ( fTessellatedSolid != nullptr )
   { 
     return fTessellatedSolid->CreatePolyhedron();
   }  
@@ -2189,7 +2030,7 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
       // Estimation of Number of Subdivisions for smooth visualisation
       //
       G4double maxTwist=0.;
-      for(i=0; i<4; i++)
+      for(i=0; i<4; ++i)
       {
         if(GetTwistAngle(i)>maxTwist) { maxTwist=GetTwistAngle(i); }
       }
@@ -2216,12 +2057,12 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
 
   // Add Vertex
   //
-  for (i=0;i<4;i++)
+  for (i=0; i<4; ++i)
   {
     polyhedron->AddVertex(G4ThreeVector(fVertices[i].x(),
                                         fVertices[i].y(),-fDz));
   }
-  for( i=0;i<subdivisions;i++)
+  for( i=0; i<subdivisions; ++i)
   {
     for(G4int j=0;j<4;j++)
     {
@@ -2229,7 +2070,7 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
       polyhedron->AddVertex(G4ThreeVector(u.x(),u.y(),-fDz+cf*2*fDz*(i+1)));
     }    
   }
-  for (i=4;i<8;i++)
+  for (i=4; i<8; ++i)
   {
     polyhedron->AddVertex(G4ThreeVector(fVertices[i].x(),
                                         fVertices[i].y(),fDz));
@@ -2238,7 +2079,7 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
   // Add Facets
   //
   polyhedron->AddFacet(1,4,3,2);  //Z-plane
-  for (i=0;i<subdivisions+1;i++)
+  for (i=0; i<subdivisions+1; ++i)
   {
     G4int is=i*4;
     polyhedron->AddFacet(5+is,8+is,4+is,1+is);

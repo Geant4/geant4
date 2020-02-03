@@ -27,7 +27,10 @@
 /// \brief Implementation of the G3toG4DetectorConstruction class
 //
 //
+<<<<<<< HEAD
 // $Id: G3toG4DetectorConstruction.cc 84605 2014-10-17 07:49:11Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in

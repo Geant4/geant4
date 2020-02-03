@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 93359 2015-10-19 13:42:18Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -89,6 +88,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4IonParametrisedLossModel.hh
         G4IonParametrisedLossModel.icc
         G4IonYangFluctuationModel.hh
+        G4JAEAElasticScattering.hh
+        G4JAEAElasticScatteringModel.hh
         G4LinInterpolation.hh
         G4LinLogInterpolation.hh
         G4LinLogLogInterpolation.hh
@@ -208,6 +209,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4IonDEDXScalingICRU73.cc
         G4IonParametrisedLossModel.cc
         G4IonYangFluctuationModel.cc
+        G4JAEAElasticScattering.cc
+        G4JAEAElasticScatteringModel.cc
         G4LinInterpolation.cc
         G4LinLogInterpolation.cc
         G4LinLogLogInterpolation.cc

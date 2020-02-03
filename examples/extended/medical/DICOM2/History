@@ -1,0 +1,57 @@
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - DICOM2 example
+     =========================================================
+
+                      Category History file
+
+26.11.2019 - I. Hrivnacova (DICOM2-V10-05-04)
+             Fixed Doxygen warnings
+
+19.11.2019 - Gabriele Cosmo (DICOM2-V10-05-03)
+             Fixed more cases of implicit type conversions.
+
+15.11.2019 - Gabriele Cosmo (DICOM2-V10-05-02)
+             Fixed cases of implicit type conversions from size_t to G4int.
+
+12.11.2019 - Gunter Folger  (DICOM2-V10-05-01)
+             Use updated DicomHandler singleton;
+	     DICOM2 was crashing on Windows
+
+23.04.2019 - Ben Morgan (DICOM2-V10-05-00)
+             Explicitly include G4Types.hh to pick up G4MULTITHREADED
+
+15.11.2018 - Jonathan Madsen (DICOM2-V10-04-04)
+             Fixed serial execution
+
+12.11.2018 - Jonathan Madsen (DICOM2-V10-04-03)
+             Improved default search paths for DICOMConfig.cmake
+             to assist in general and when testing
+             Removed pre-allocating Dicom2RunVector based on the
+             number of voxels defined in DicomDetectorConstruction
+             since DicomDetectorConstruction::Instance was removed
+
+09.11.2018 - Jonathan Madsen (DICOM2-V10-04-02)
+             Implemented custom Dicom2Run and Dicom2RunAction
+             Randomization in PGA
+             Switched RNG is MixMax
+             Demonstrates usage of G4StatAnalysis
+               (per-voxel statistics)
+             Demonstrates usage of G4VTHitsVector
+               (memory savings and performance)
+             Demonstrates usage of G4VTHitsVector with objects
+               instead of pointers to objects
+               (memory savings and performance)
+             Demonstrates generic iteration over G4THits containers
+               using GetIndex(...) and GetObject(...)
+             Provides output from traditional DICOM scoring in
+               addition to output with statistics
+             Updated README
+
+22.06.2018 - Jonathan Madsen (DICOM2-V10-04-01)
+             Updated CMakeLists.txt to force setting DICOM_DIR cache entry
+             to Geant4_DIR if not defined
+
+20.03.2018 - Jonathan Madsen (DICOM2-V10-04-00)
+             First public release of the example

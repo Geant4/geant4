@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc 88761 2015-03-09 12:23:46Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -77,15 +76,20 @@ void G4ASCIITreeSceneHandler::BeginModeling () {
     fpOutFile = &fOutFile;
   }
 
-  G4cout << "G4ASCIITreeSceneHandler::BeginModeling: writing to ";
-  if (outFileName == "G4cout") {
-    G4cout << "G4 standard output (G4cout)";
-  } else {
-    G4cout << "file \"" << outFileName << "\"";
-  }
-  G4cout << G4endl;
+  static G4bool firstTime = true;
+  if (firstTime) {
+    firstTime = false;
+    G4cout << "G4ASCIITreeSceneHandler::BeginModeling: writing to ";
+    if (outFileName == "G4cout") {
+      G4cout << "G4 standard output (G4cout)";
+    } else {
+      G4cout << "file \"" << outFileName << "\"";
+    }
+    G4cout << G4endl;
 
-  WriteHeader (G4cout); G4cout << G4endl;
+    WriteHeader (G4cout); G4cout << G4endl;
+  }
+  
   if (outFileName != "G4cout") {
     WriteHeader (fOutFile); fOutFile << std::endl;
   }
@@ -143,38 +147,34 @@ void G4ASCIITreeSceneHandler::EndModeling () {
       G4PhysicalVolumeModel* pvModel =
 	dynamic_cast<G4PhysicalVolumeModel*>(i->fpModel);
       if (pvModel) {
-	if (pvModel->GetTopPhysicalVolume() ==
-	    G4TransportationManager::GetTransportationManager()
-	    ->GetNavigatorForTracking()->GetWorldVolume()) {
-	  const G4ModelingParameters* tempMP =
-	    pvModel->GetModelingParameters();
-	  G4ModelingParameters mp;  // Default - no culling.
-	  pvModel->SetModelingParameters (&mp);
-	  G4PhysicalVolumeMassScene massScene(pvModel);
-	  pvModel->DescribeYourselfTo (massScene);
-	  G4double volume = massScene.GetVolume();
-	  G4double mass = massScene.GetMass();
+        const G4ModelingParameters* tempMP =
+        pvModel->GetModelingParameters();
+        G4ModelingParameters mp;  // Default - no culling.
+        pvModel->SetModelingParameters (&mp);
+        G4PhysicalVolumeMassScene massScene(pvModel);
+        pvModel->DescribeYourselfTo (massScene);
+        G4double volume = massScene.GetVolume();
+        G4double mass = massScene.GetMass();
 
-	  G4cout << "Overall volume of \""
-		 << pvModel->GetTopPhysicalVolume()->GetName()
-		 << "\":"
-		 << pvModel->GetTopPhysicalVolume()->GetCopyNo()
-		 << ", is "
-		 << G4BestUnit (volume, "Volume")
-		 << " and the daughter-included mass";
-	  G4int requestedDepth = pvModel->GetRequestedDepth();
-	  if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
-	    G4cout << " to unlimited depth";
-	  } else {
-	    G4cout << ", ignoring daughters at depth "
-		   << requestedDepth
-		   << " and below,";
-	  }
-	  G4cout << " is " << G4BestUnit (mass, "Mass")
-		 << G4endl;
-
-	  pvModel->SetModelingParameters (tempMP);
-	}
+        G4cout << "Overall volume of \""
+        << pvModel->GetTopPhysicalVolume()->GetName()
+        << "\":"
+        << pvModel->GetTopPhysicalVolume()->GetCopyNo()
+        << ", is "
+        << G4BestUnit (volume, "Volume")
+        << " and the daughter-included mass";
+        G4int requestedDepth = pvModel->GetRequestedDepth();
+        if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
+          G4cout << " to unlimited depth";
+        } else {
+          G4cout << ", ignoring daughters at depth "
+          << requestedDepth
+          << " and below,";
+        }
+        G4cout << " is " << G4BestUnit (mass, "Mass")
+        << G4endl;
+        
+        pvModel->SetModelingParameters (tempMP);
       }
     }
   }
@@ -197,7 +197,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 
   // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
   // the path of the current drawn (non-culled) volume in terms of
-  // drawn (non-culled) ancesters.  Each node is identified by a
+  // drawn (non-culled) ancestors.  Each node is identified by a
   // PVNodeID object, which is a physical volume and copy number.  It
   // is a vector of PVNodeIDs corresponding to the geometry hierarchy
   // actually selected, i.e., not culled.
@@ -207,6 +207,8 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
   //G4int currentDepth = pPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+  const G4String& currentPVName = pCurrentPV->GetName();
+  const G4int currentCopyNo = pCurrentPV->GetCopyNo();
   G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
   G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();
 
@@ -214,41 +216,49 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   G4int verbosity = pSystem->GetVerbosity();
   G4int detail = verbosity % 10;
 
-  if (verbosity < 10 && pCurrentPV->IsReplicated()) {
-    // See if this has been a replica found before with same mother LV...
+  // If verbosity < 10 suppress unnecessary repeated printing.
+  // Repeated simple replicas can always be suppressed.
+  // Paramaterisations can only be suppressed if verbosity < 3, since their
+  // size, density, etc., are in principle different.
+  const G4bool isParameterised = pCurrentPV->GetParameterisation();
+  const G4bool isSimpleReplica = pCurrentPV->IsReplicated() && !isParameterised;
+  const G4bool isAmenableToSupression =
+  (verbosity < 10 && isSimpleReplica) || (verbosity < 3 && isParameterised);
+  if (isAmenableToSupression) {
+    // See if this has been found before with same mother LV...
     PVPath::const_reverse_iterator thisID = drawnPVPath.rbegin();
     PVPath::const_reverse_iterator motherID = ++drawnPVPath.rbegin();
     G4bool ignore = false;
     for (ReplicaSetIterator i = fReplicaSet.begin(); i != fReplicaSet.end();
-	 ++i) {
+         ++i) {
       if (i->back().GetPhysicalVolume()->GetLogicalVolume() ==
-	  thisID->GetPhysicalVolume()->GetLogicalVolume()) {
-	// For each one previously found (if more than one, they must
-	// have different mothers)...
-	// To avoid compilation errors on VC++ .Net 7.1...
-	// Previously:
-	//   PVNodeID previousMotherID = ++(i->rbegin());
-	// (Should that have been: PVNodeID::const_iterator previousMotherID?)
-	// Replace
-	//   previousMotherID == i->rend()
-	// by
-	//   i->size() <= 1
-	// Replace
-	//   previousMotherID != i->rend()
-	// by
-	//   i->size() > 1
-	// Replace
-	//   previousMotherID->
-	// by
-	//   (*i)[i->size() - 2].
-	if (motherID == drawnPVPath.rend() &&
-	    i->size() <= 1)
-	  ignore = true;  // Both have no mother.
-	if (motherID != drawnPVPath.rend() &&
-	    i->size() > 1 &&
-	    motherID->GetPhysicalVolume()->GetLogicalVolume() ==
-	    (*i)[i->size() - 2].GetPhysicalVolume()->GetLogicalVolume())
-	  ignore = true;  // Same mother LV...
+          thisID->GetPhysicalVolume()->GetLogicalVolume()) {
+        // For each one previously found (if more than one, they must
+        // have different mothers)...
+        // To avoid compilation errors on VC++ .Net 7.1...
+        // Previously:
+        //   PVNodeID previousMotherID = ++(i->rbegin());
+        // (Should that have been: PVNodeID::const_iterator previousMotherID?)
+        // Replace
+        //   previousMotherID == i->rend()
+        // by
+        //   i->size() <= 1
+        // Replace
+        //   previousMotherID != i->rend()
+        // by
+        //   i->size() > 1
+        // Replace
+        //   previousMotherID->
+        // by
+        //   (*i)[i->size() - 2].
+        if (motherID == drawnPVPath.rend() &&
+            i->size() <= 1)
+          ignore = true;  // Both have no mother.
+        if (motherID != drawnPVPath.rend() &&
+            i->size() > 1 &&
+            motherID->GetPhysicalVolume()->GetLogicalVolume() ==
+            (*i)[i->size() - 2].GetPhysicalVolume()->GetLogicalVolume())
+          ignore = true;  // Same mother LV...
       }
     }
     if (ignore) {
@@ -257,20 +267,19 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     }
   }
 
-  const G4String& currentPVName = pCurrentPV->GetName();
-  const G4int currentCopyNo = pCurrentPV->GetCopyNo();
-
-  if (verbosity < 10 && 
+  // Now suppress printing for volumes with the same name but different
+  // copy number - but not if they are parameterisations that have not been
+  // taken out above (those that are "amenable to suppression" will have been
+  // taken out).
+  if (verbosity < 10 && !isParameterised &&
       currentPVName == fLastPVName &&
       currentCopyNo != fLastCopyNo) {
-    // For low verbosity, trap series of G4PVPlacements with the same name but
-    // different copy number (replicas should have been taken out above)...
     // Check...
-    if (pCurrentPV->IsReplicated()) {
+    if (isAmenableToSupression) {
       G4Exception("G4ASCIITreeSceneHandler::RequestPrimitives",
 		  "vistree0001",
 		  JustWarning,
-		  "Replica unexpected");
+		  "Volume amenable to suppressed printing unexpected");
     }
     // Check mothers are identical...
     else if (pCurrentLV == (fpLastPV? fpLastPV->GetLogicalVolume(): 0)) {
@@ -286,7 +295,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   }
   fpLastPV = pCurrentPV;
 
-  // High verbosity or a new G4VPhysicalVolume...
+  // High verbosity or a new or otherwise non-amenable volume...
   // Output copy number, if any, from previous invocation...
   if (fLastCopyNo != fLastNonSequentialCopyNo) {
     if (fLastCopyNo == fLastNonSequentialCopyNo + 1) *fpOutFile << ',';
@@ -299,9 +308,9 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   fLastPVName = currentPVName;
   fLastCopyNo = currentCopyNo;
   fLastNonSequentialCopyNo = currentCopyNo;
+  // Start next line...
   // Indent according to drawn path depth...
   for (size_t i = 0; i < drawnPVPath.size(); i++ ) *fpOutFile << "  ";
-  // Start next line...
   *fpOutFile << "\"" << currentPVName
 	     << "\":" << currentCopyNo;
 

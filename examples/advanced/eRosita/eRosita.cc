@@ -24,7 +24,10 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id$
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 
@@ -39,13 +42,9 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 
 int main(int argc,char** argv)
@@ -98,21 +97,17 @@ int main(int argc,char** argv)
     
   else           // interactive mode : define visualization and UI terminal
     { 
-#ifdef G4VIS_USE
+
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
+
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       UImanager->ApplyCommand("/control/execute vis.mac");     
       ui->SessionStart();
       delete ui;
-#endif
 
-#ifdef G4VIS_USE
       delete visManager;
-#endif     
+
     }
 
   // Free the store: user actions, physics_list and detector_description are

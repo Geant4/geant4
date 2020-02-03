@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VUserRegionInformation.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//
 // G4VUserRegionInformation
 //
 // Class Description:
@@ -41,11 +35,10 @@
 // The concrete class object is deleted by Geant4 kernel when
 // associated G4Region object is deleted.
 
-// History:
 // 21/10/2003 - M.Asai, Created.
 // --------------------------------------------------------------------
-#ifndef G4VUserRegionInformation_H
-#define G4VUserRegionInformation_H 1
+#ifndef G4VUserRegionInformation_HH
+#define G4VUserRegionInformation_HH 1
 
 class G4VUserRegionInformation
 {

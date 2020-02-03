@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.hh 72074 2013-07-06 06:28:53Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.

@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Navigator.icc 73164 2013-08-21 08:55:28Z gcosmo $
-//
-// 
 // class G4Navigator Inline implementation
 //
 // ********************************************************************
@@ -52,8 +48,7 @@ G4ThreeVector G4Navigator::GetCurrentLocalCoordinate() const
 inline
 G4ThreeVector G4Navigator::ComputeLocalAxis(const G4ThreeVector& pVec) const
 {
-  return (fHistory.GetTopTransform().IsRotated())
-         ? fHistory.GetTopTransform().TransformAxis(pVec) : pVec ;
+  return fHistory.GetTopTransform().TransformAxis(pVec);
 }
 
 // ********************************************************************
@@ -66,7 +61,7 @@ inline
 G4ThreeVector
 G4Navigator::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
 {
-  return ( fHistory.GetTopTransform().TransformPoint(pGlobalPoint) ) ;
+  return fHistory.GetTopTransform().TransformPoint(pGlobalPoint);
 }
 
 // ********************************************************************
@@ -90,7 +85,7 @@ G4VPhysicalVolume* G4Navigator::GetWorldVolume() const
 inline
 void G4Navigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
 {
-  if ( !(pWorld->GetTranslation()==G4ThreeVector(0,0,0)) )
+  if ( !(pWorld->GetTranslation() == G4ThreeVector(0,0,0)) )
   {
     G4Exception ("G4Navigator::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must be centered on the origin.");
@@ -115,7 +110,7 @@ void G4Navigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
 inline
 void G4Navigator::SetGeometricallyLimitedStep()
 {
-  fWasLimitedByGeometry=true;
+  fWasLimitedByGeometry = true;
 }
 
 // ********************************************************************
@@ -162,7 +157,7 @@ GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const
   G4int regId = 0;
   G4VPhysicalVolume *pVol;
 
-  if ( pLog->GetNoDaughters()==1 )
+  if ( pLog->GetNoDaughters() == 1 )
   {
     pVol = pLog->GetDaughter(0);
     regId = pVol->GetRegularStructureId();
@@ -193,9 +188,7 @@ const G4AffineTransform& G4Navigator::GetGlobalToLocalTransform() const
 inline
 const G4AffineTransform G4Navigator::GetLocalToGlobalTransform() const
 {
-  G4AffineTransform  tempTransform;
-  tempTransform = fHistory.GetTopTransform().Inverse(); 
-  return tempTransform;
+  return fHistory.GetTopTransform().Inverse(); 
 }
 
 // ********************************************************************
@@ -207,8 +200,7 @@ const G4AffineTransform G4Navigator::GetLocalToGlobalTransform() const
 inline
 G4ThreeVector G4Navigator::NetTranslation() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
-  return tf.NetTranslation();
+  return fHistory.GetTopTransform().InverseNetTranslation();
 }
 
 // ********************************************************************
@@ -220,8 +212,7 @@ G4ThreeVector G4Navigator::NetTranslation() const
 inline
 G4RotationMatrix G4Navigator::NetRotation() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
-  return tf.NetRotation();
+  return fHistory.GetTopTransform().InverseNetRotation();
 }
 
 // ********************************************************************
@@ -233,10 +224,10 @@ G4RotationMatrix G4Navigator::NetRotation() const
 inline
 G4GRSVolume* G4Navigator::CreateGRSVolume() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  const G4AffineTransform& tf = fHistory.GetTopTransform();
   return new G4GRSVolume(fHistory.GetTopVolume(),
-                         tf.NetRotation(),
-                         tf.NetTranslation());
+                         tf.InverseNetRotation(),
+                         tf.InverseNetTranslation());
 }
 
 // ********************************************************************
@@ -248,10 +239,10 @@ G4GRSVolume* G4Navigator::CreateGRSVolume() const
 inline
 G4GRSSolid* G4Navigator::CreateGRSSolid() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  const G4AffineTransform& tf = fHistory.GetTopTransform();
   return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
-                        tf.NetRotation(),
-                        tf.NetTranslation());
+                        tf.InverseNetRotation(),
+                        tf.InverseNetTranslation());
 }
 
 // ********************************************************************
@@ -295,10 +286,10 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
   if( fEnteredDaughter || fExitedMother )
   {
      oldTouchableToUpdate = CreateTouchableHistory();
-     if( pPhysVol == 0 )
+     if( pPhysVol == nullptr )
      {
        // We want to ensure that the touchable is correct in this case.
-       //  The method below should do this and recalculate a lot more ....
+       // The method below should do this and recalculate a lot more ....
        //
        oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
      }
@@ -362,6 +353,7 @@ void G4Navigator::SetVerboseLevel(G4int level)
   fparamNav.SetVerboseLevel(level);
   freplicaNav.SetVerboseLevel(level);
   fregularNav.SetVerboseLevel(level);
+  if (fpExternalNav != nullptr) fpExternalNav->SetVerboseLevel(level);
 }
 
 // ********************************************************************
@@ -419,6 +411,7 @@ void  G4Navigator::CheckMode(G4bool mode)
   fparamNav.CheckMode(mode);
   freplicaNav.CheckMode(mode);
   fregularNav.CheckMode(mode);
+  if (fpExternalNav != nullptr) fpExternalNav->CheckMode(mode);
 }
 
 // ********************************************************************
@@ -451,9 +444,11 @@ void G4Navigator::SetPushVerbosity(G4bool mode)
 inline 
 G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const 
 {
-  G4int severity=0, noZeros= fNumberZeroSteps;
-  if( noZeroSteps) *noZeroSteps = fNumberZeroSteps;
-
+  G4int severity = 0, noZeros = fNumberZeroSteps;
+  if( noZeroSteps )
+  {
+    *noZeroSteps = fNumberZeroSteps;
+  }
   if( noZeros >= fAbandonThreshold_NoZeroSteps )
   {
     severity = 10;
@@ -485,4 +480,40 @@ G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const
 inline void G4Navigator::EnableBestSafety( G4bool value )
 {
   fvoxelNav.EnableBestSafety( value );
+}
+
+// ********************************************************************
+// SetExternalNavigation
+// ********************************************************************
+//
+inline
+G4VExternalNavigation* G4Navigator::GetExternalNavigation() const
+{
+  return fpExternalNav;
+} 
+
+// ********************************************************************
+// SetExternalNavigation
+// ********************************************************************
+//
+inline
+void G4Navigator::SetExternalNavigation(G4VExternalNavigation* externalNav)
+{
+  fpExternalNav = externalNav;
+}
+   
+// ********************************************************************
+// Clone
+// ********************************************************************
+//
+inline
+G4Navigator* G4Navigator::Clone() const
+{
+  G4Navigator* clone_nav = new G4Navigator();
+  clone_nav->SetWorldVolume(fTopPhysical);
+  if( fpExternalNav != nullptr )
+  {
+    clone_nav->SetExternalNavigation(fpExternalNav->Clone());
+  }
+  return clone_nav;
 }

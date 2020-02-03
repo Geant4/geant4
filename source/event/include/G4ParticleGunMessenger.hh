@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.hh 72940 2013-08-14 13:29:44Z gcosmo $
 //
 // 
 
@@ -91,6 +90,7 @@ class G4ParticleGunMessenger: public G4UImessenger
     G4int    fAtomicMass;
     G4int    fIonCharge;
     G4double fIonExciteEnergy;
+    char     fIonFloatingLevelBase;
     G4int    fIonEnergyLevel;
 };
 

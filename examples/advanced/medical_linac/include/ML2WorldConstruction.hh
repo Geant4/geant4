@@ -78,16 +78,16 @@ public:
 	G4VPhysicalVolume* Construct();
 	bool create(SInputData *inputData, bool bOnlyVisio);
 	static CML2WorldConstruction* GetInstance(void);
-	G4int getNParticleBackScattered(){return backScatteredPlane->getCML2SensDetNParticle();}
-	G4int getNParticlePhaseSpace(){return phaseSpace->getCML2SensDetNParticle();}
-	inline G4int getTotalNumberOfEventsInPhantom(){return phantomEnv->getTotalNumberOfEvents();}
+	//G4int getNParticleBackScattered(){return backScatteredPlane->getCML2SensDetNParticle();}
+	//G4int getNParticlePhaseSpace(){return phaseSpace->getCML2SensDetNParticle();}
+	//inline G4int getTotalNumberOfEventsInPhantom(){return phantomEnv->getTotalNumberOfEvents();}
 	inline CML2AcceleratorConstruction * getCML2AcceleratorConstruction(){return acceleratorEnv;}
 
 	bool newGeometry();
 	bool getWorldCreated(){return bWorldCreated;}
 	
-	inline void savePhantomData(){if (phantomEnv!=0){phantomEnv->saveData();}}
-	inline void savePhaseSpaceData(){if (phaseSpace!=0){phaseSpace->save();}}
+	//inline void savePhantomData(){if (phantomEnv!=0){phantomEnv->saveData();}}
+	//inline void savePhaseSpaceData(){if (phaseSpace!=0){phaseSpace->save();}}
 	inline CML2PhantomConstruction * getPhantomWorld(){return phantomEnv;}
 	inline CML2AcceleratorConstruction * getAcceleratorWorld(){return acceleratorEnv;}
 	void checkVolumeOverlap();

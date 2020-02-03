@@ -23,17 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SimpleHeum implementation
 //
-// $Id: G4SimpleHeum.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//  Simple Heum:
-//        x_1 = x_0 + h *
-//                1/4 * dx(t0,x0)  +
-//                3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
-//
-// Third order solver.
-//
-//  W.Wander <wwc@mit.edu> 12/09/97 
+// Created: W.Wander <wwc@mit.edu>, 12/09/1997 
 // -------------------------------------------------------------------
 
 #include "G4SimpleHeum.hh"
@@ -42,10 +34,10 @@
 ///////////////////////////////////////////////////////////////////////////
 //
 // Constructor
-
-G4SimpleHeum::G4SimpleHeum(G4EquationOfMotion *EqRhs, G4int num_variables): 
-  G4MagErrorStepper(EqRhs, num_variables),
-  fNumberOfVariables(num_variables)
+//
+G4SimpleHeum::G4SimpleHeum(G4EquationOfMotion* EqRhs, G4int num_variables)
+  : G4MagErrorStepper(EqRhs, num_variables),
+    fNumberOfVariables(num_variables)
 {
   dydxTemp  = new G4double[fNumberOfVariables] ; 
   dydxTemp2 = new G4double[fNumberOfVariables] ;
@@ -53,46 +45,43 @@ G4SimpleHeum::G4SimpleHeum(G4EquationOfMotion *EqRhs, G4int num_variables):
   yTemp2    = new G4double[fNumberOfVariables] ;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Destructor
-
+//
 G4SimpleHeum::~G4SimpleHeum()
 {
-  delete[] dydxTemp;
-  delete[] dydxTemp2;
-  delete[] yTemp;
-  delete[] yTemp2;
+  delete [] dydxTemp;
+  delete [] dydxTemp2;
+  delete [] yTemp;
+  delete [] yTemp2;
 }
-
 
 //////////////////////////////////////////////////////////////////////
 //
+// DumbStepper
 //
-
 void
-G4SimpleHeum::DumbStepper( const G4double  yIn[],
-                           const G4double  dydx[],
-                                 G4double  h,
-                                 G4double  yOut[])
+G4SimpleHeum::DumbStepper( const G4double yIn[],
+                           const G4double dydx[],
+                                 G4double h,
+                                 G4double yOut[] )
 {
-  G4int i;
-  for( i = 0; i < fNumberOfVariables; i++ ) 
+  for( G4int i = 0; i < fNumberOfVariables; ++i ) 
   {
     yTemp[i] = yIn[i] + (1.0/3.0) * h *  dydx[i] ;
   }
   
   RightHandSide(yTemp,dydxTemp);
 
-  for( i = 0; i < fNumberOfVariables; i++ ) 
+  for( G4int i = 0; i < fNumberOfVariables; ++i ) 
   {
     yTemp2[i] = yIn[i] + (2.0/3.0) * h * dydxTemp[i] ;
   }
 
   RightHandSide(yTemp2,dydxTemp2);
 
-  for( i = 0; i < fNumberOfVariables; i++ ) 
+  for( G4int i = 0; i < fNumberOfVariables; ++i ) 
   {
     yOut[i] = yIn[i] + h * (0.25 * dydx[i] + 0.75 * dydxTemp2[i]);
   }

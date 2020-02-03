@@ -27,7 +27,6 @@
 /// \brief Definition of the TSRunAction class
 //
 //
-// $Id: TSRunAction.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 //

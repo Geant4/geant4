@@ -23,22 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.cc 93357 2015-10-19 13:40:13Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
 // Modified:
-// 24.04.2010 (V.Ivanchenko) moved constructor and destructor to source; added two
-//                          new virtual methods EmittedFragment(s) to allow more optimal
-//                          work with G4Fragment objects; removed unnecesary exceptions
+// 24.04.2010 (V.Ivanchenko) moved constructor and destructor to source; 
+//   added two new virtual methods EmittedFragment(s) to allow more 
+//   optimal work with G4Fragment objects; removed unnecesary exceptions
 // 28.10.2010 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4VEvaporationChannel.hh"
 
 G4VEvaporationChannel::G4VEvaporationChannel(const G4String &) 
-  :OPTxs(3),useSICB(false),photonEvaporation(nullptr)
-{}
+  :OPTxs(3),useSICB(true)
+{
+  //G4cout << "New G4VEvaporationChannel " << this << G4endl;
+}
 
 G4VEvaporationChannel::~G4VEvaporationChannel() 
 {}
@@ -57,23 +58,7 @@ void G4VEvaporationChannel::SetICM(G4bool)
 void G4VEvaporationChannel::RDMForced(G4bool)
 {}
 
-G4double 
-G4VEvaporationChannel::GetFinalLevelEnergy(G4int, G4int, G4double energy)
-{
-  return energy;
-}
-
-G4double G4VEvaporationChannel::GetUpperLevelEnergy(G4int, G4int)
-{
-  return 0.0;
-}
-
 G4Fragment* G4VEvaporationChannel::EmittedFragment(G4Fragment*)
-{
-  return nullptr;
-}
-
-G4FragmentVector* G4VEvaporationChannel::BreakUpFragment(G4Fragment*)
 {
   return nullptr;
 }

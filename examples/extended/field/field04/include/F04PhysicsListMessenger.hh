@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04PhysicsListMessenger.hh 68021 2013-03-13 13:36:07Z gcosmo $
 //
 /// \file field/field04/include/F04PhysicsListMessenger.hh
 /// \brief Definition of the F04PhysicsListMessenger class
@@ -60,10 +59,6 @@ private:
     G4UIdirectory* fDirectory;
     G4UIdirectory* fDecayDirectory;
 
-    G4UIcmdWithADoubleAndUnit* fGammaCutCMD;
-    G4UIcmdWithADoubleAndUnit* fElectCutCMD;
-    G4UIcmdWithADoubleAndUnit* fPosCutCMD;
-    G4UIcmdWithADoubleAndUnit* fAllCutCMD;
     G4UIcmdWithADoubleAndUnit* fStepMaxCMD;
 /*
     G4UIcmdWithAString*        fRemovePhysicsCMD;

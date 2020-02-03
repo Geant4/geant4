@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.cc 67990 2013-03-13 10:56:28Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -75,23 +74,34 @@ G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) { return; }
-  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel(), 1); }
-  AddEmModel(1, EmModel(1));
+  if(!EmModel(0)) { SetEmModel(new G4UrbanMscModel()); }
+  AddEmModel(1, EmModel(0));
+  if(EmModel(1))  { AddEmModel(1, EmModel(1)); }
   isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4eMultipleScattering::PrintInfo()
+void G4eMultipleScattering::StreamProcessInfo(std::ostream& out) const
 {
-  G4cout << "      RangeFactor= " << RangeFactor()
-	 << ", stepLimitType: " << StepLimitType()
-         << ", latDisplacement: " << LateralDisplasmentFlag();
+  out << "      RangeFactor= " << RangeFactor()
+      << ", stepLimType: " << StepLimitType()
+      << ", latDisp: " << LateralDisplasmentFlag();
   if(StepLimitType() == fUseDistanceToBoundary) {
-    G4cout  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
+    out  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
   }  
-  G4cout << G4endl;
+  out << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4eMultipleScattering::ProcessDescription(std::ostream& out) const
+{
+  out << 
+  "  Multiple scattering. Simulates combined effects of elastic scattering\n"<< 
+  "    at the end of the step, to save computing time. May be combined with\n"<<
+  "    Coulomb scattering in a 'mixed' scattering algorithm.";
+  G4VMultipleScattering::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

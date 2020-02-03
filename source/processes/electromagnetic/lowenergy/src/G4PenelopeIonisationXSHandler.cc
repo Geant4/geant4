@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationXSHandler.cc 83584 2014-09-02 08:45:37Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -69,37 +68,33 @@ G4PenelopeIonisationXSHandler::G4PenelopeIonisationXSHandler(size_t nb)
  
 G4PenelopeIonisationXSHandler::~G4PenelopeIonisationXSHandler()
 {
-  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>::iterator i;
   if (XSTableElectron)
     {
-      for (i=XSTableElectron->begin(); i != XSTableElectron->end(); i++)
-	{
-	  G4PenelopeCrossSection* tab = i->second;
-	  delete tab;
+      for (auto& item : (*XSTableElectron))
+	{	  
+	  //G4PenelopeCrossSection* tab = i->second;
+	  delete item.second;
 	}
       delete XSTableElectron;
-      XSTableElectron = 0;
+      XSTableElectron = nullptr;
     }
 
   if (XSTablePositron)
     {
-      for (i=XSTablePositron->begin(); i != XSTablePositron->end(); i++)
+      for (auto& item : (*XSTablePositron))
 	{
-	  G4PenelopeCrossSection* tab = i->second;
-	  delete tab;
+	  //G4PenelopeCrossSection* tab = i->second;
+	  delete item.second;
 	}
       delete XSTablePositron;
-      XSTablePositron = 0;
+      XSTablePositron = nullptr;
     }
-
-  std::map<const G4Material*,G4PhysicsFreeVector*>::iterator k;
   if (theDeltaTable)
     {      
-      for (k=theDeltaTable->begin();k!=theDeltaTable->end();k++)	
- 	delete k->second;
-     
+      for (auto& item : (*theDeltaTable))
+ 	delete item.second;     
       delete theDeltaTable;
-      theDeltaTable = 0;
+      theDeltaTable = nullptr;
     } 
   if (energyGrid)
     delete energyGrid;
@@ -122,7 +117,7 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
       ed << "Invalid particle: " << part->GetParticleName() << G4endl;
       G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
 		  "em0001",FatalException,ed);
-      return NULL;
+      return nullptr;
     }
 
   if (part == G4Electron::Electron())
@@ -132,13 +127,13 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
 	  G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
 		      "em0028",FatalException,  
 		      "The Cross Section Table for e- was not initialized correctly!");
-	  return NULL;
+	  return nullptr;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTableElectron->count(theKey)) //table already built	
 	return XSTableElectron->find(theKey)->second;
       else	 
-        return NULL;	 
+        return nullptr;	 
     }
   
   if (part == G4Positron::Positron())
@@ -148,15 +143,15 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
 	  G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
 		      "em0028",FatalException,  
 		      "The Cross Section Table for e+ was not initialized correctly!");
-	  return NULL;
+	  return nullptr;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTablePositron->count(theKey)) //table already built	
 	return XSTablePositron->find(theKey)->second;
       else
-        return NULL;  
+        return nullptr;  
    }
-  return NULL;
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

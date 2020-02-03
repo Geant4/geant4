@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: paraMaker.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
 // 20100517  M. Kelsey -- BUG FIX:  Must check for array boundary "if (Z>=70)"

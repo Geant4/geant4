@@ -51,12 +51,12 @@ G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4Str
     G4ParticleHPManager::GetInstance()->GetDataStream(filename,theChannel);
 
 #ifdef G4PHPDEBUG
-    if(getenv("G4ParticleHPDebug")) G4cout << "G4ParticleHPIsoData::Init = "<< filename <<" "<< A << " " << Z <<G4endl;
+    if(std::getenv("G4ParticleHPDebug")) G4cout << "G4ParticleHPIsoData::Init = "<< filename <<" "<< A << " " << Z <<G4endl;
 #endif
     
     if(Z==1 && (aFile.GetZ()!=Z || std::abs(aFile.GetA()-A)>0.0001) )
     {
-      if(getenv("G4ParticleHPDebug")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
+      if(std::getenv("G4ParticleHPDebug")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
       //080901 TKDB No more necessary below protection, cross sections set to 0 in G4ParticleHPNames
       //And below two lines causes trouble with G4PhysicsVector
       //theChannel.close();
@@ -82,11 +82,42 @@ G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4Str
   }
   
   //void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4double abun) //fill PhysicsVector for this Isotope
+#include "G4Proton.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
 void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M,G4double abun, G4ParticleDefinition* projectile, const char* dataDirVariable ) //fill PhysicsVector for this Isotope
   {
-    G4String dirName;
 
-    G4String baseName = getenv(dataDirVariable);
+  G4String particleName;
+  if ( projectile == G4Neutron::Neutron() ) {
+     ;
+  } else if ( projectile == G4Proton::Proton() ) {
+     particleName = "Proton";
+  } else if ( projectile == G4Deuteron::Deuteron() ) {
+     particleName = "Deuteron";
+  } else if ( projectile == G4Triton::Triton() ) {
+     particleName = "Triton";
+  } else if ( projectile == G4He3::He3() ) {
+     particleName = "He3";
+  } else if ( projectile == G4Alpha::Alpha() ) {
+     particleName = "Alpha";
+  } else {
+     G4String message("G4ParticleHPInelastic may only be called for neutron, proton, deuteron, triton, He3 or alpha, while it is called for " + projectile->GetParticleName());
+     throw G4HadronicException(__FILE__, __LINE__,message.c_str());
+  }
+
+  G4String baseName;
+  if ( std::getenv( dataDirVariable ) ) {
+     baseName = std::getenv( dataDirVariable );
+  } else {
+     baseName = std::getenv( "G4PARTICLEHPDATA" );
+     baseName += "/" + particleName;
+  }
+    
+   // G4String baseName = getenv(dataDirVariable);
+    G4String dirName;
     if( projectile == G4Neutron::Neutron() ){
       dirName = baseName+"/Fission";
     //if(Z>89) 

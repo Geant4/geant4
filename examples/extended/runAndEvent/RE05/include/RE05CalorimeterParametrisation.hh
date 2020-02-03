@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: RE05CalorimeterParametrisation.hh 73444 2013-08-27 11:28:21Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file RE05/include/RE05CalorimeterParametrisation.hh
 /// \brief Definition of the RE05CalorimeterParametrisation class

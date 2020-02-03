@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXt.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -41,6 +40,11 @@
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4OpenInventorXtViewer.hh"
 
+// Work around for gcc8 Coverity cast warning
+inline bool soxt_dispatch_event(void* a_event) {
+   return SoXt::dispatchEvent((XEvent*)a_event);
+}
+
 G4OpenInventorXt::G4OpenInventorXt ()
 :G4OpenInventor("OpenInventorXt","OIX",G4VGraphicsSystem::threeD)
 ,fInited(false)
@@ -53,13 +57,17 @@ void G4OpenInventorXt::Initialize()
 
   SetInteractorManager (G4Xt::getInstance ());
   GetInteractorManager () -> 
-    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);  
+     RemoveDispatcher(G4Xt::xt_dispatch_event);
+  // Coverity gcc8 cast warning
+  //    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);  
   GetInteractorManager () -> 
-    AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
+     AddDispatcher(soxt_dispatch_event);
+  // Coverity gcc8 cast warning
+  //    AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
 
   Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
 
-  if(getenv("XENVIRONMENT")==NULL) {
+  if(std::getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
     if(database!=NULL) {
       XrmPutLineResource(&database,"*topShadowColor:white");

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UCNAbsorption.cc 69576 2013-05-08 13:48:13Z gcosmo $
 //
 ///////////////////////////////////////////////////////////////////////
 // UCN Absorption Class Implementation

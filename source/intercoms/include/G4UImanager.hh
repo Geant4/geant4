@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh 85249 2014-10-27 08:28:57Z gcosmo $
 //
 
 #ifndef G4UImanager_h
@@ -34,8 +33,10 @@
 
 #include <vector>
 #include <fstream>
+#include "icomsdefs.hh"
 #include "G4VStateDependent.hh"
 #include "G4UIcommandStatus.hh"
+
 class G4UIcommandTree;
 class G4UIcommand;
 class G4UIsession;
@@ -68,8 +69,8 @@ class G4UImanager : public G4VStateDependent
   private:
       G4UImanager(const G4UImanager &right);
       const G4UImanager & operator=(const G4UImanager &right);
-      G4int operator==(const G4UImanager &right) const;
-      G4int operator!=(const G4UImanager &right) const;
+      G4bool operator==(const G4UImanager &right) const;
+      G4bool operator!=(const G4UImanager &right) const;
 
   public: // with description
       G4String GetCurrentValues(const char * aCommand);
@@ -145,9 +146,9 @@ class G4UImanager : public G4VStateDependent
   //    void Interact(const char * promptCharacters);
 
   private:
-      static G4ThreadLocal G4UImanager * fUImanager;
-      static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
-      static G4UImanager * fMasterUImanager;
+      G4ICOMS_DLL static G4UImanager*& fUImanager(); // thread-local
+      G4ICOMS_DLL static G4bool& fUImanagerHasBeenKilled(); // thread-local
+      G4ICOMS_DLL static G4UImanager*& fMasterUImanager();
       G4UIcommandTree * treeTop;
       G4UIsession * session;
       G4UIsession * g4UIWindow;
@@ -169,17 +170,17 @@ class G4UImanager : public G4VStateDependent
 
   public: // with description
       G4String GetCurrentStringValue(const char * aCommand,
-      G4int parameterNumber=1, G4bool reGet=true);
+        G4int parameterNumber=1, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand,
-      G4int parameterNumber=1, G4bool reGet=true);
+        G4int parameterNumber=1, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-      G4int parameterNumber=1, G4bool reGet=true);
+        G4int parameterNumber=1, G4bool reGet=true);
       G4String GetCurrentStringValue(const char * aCommand,
-      const char * aParameterName, G4bool reGet=true);
+        const char * aParameterName, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand,
-      const char * aParameterName, G4bool reGet=true);
+        const char * aParameterName, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-      const char * aParameterName, G4bool reGet=true);
+        const char * aParameterName, G4bool reGet=true);
       //  These six methods returns the current value of a parameter of the
       // given command. For the first three methods, the ordering number of
       // the parameter (1 is the first parameter) can be given, whereas,
@@ -227,7 +228,7 @@ class G4UImanager : public G4VStateDependent
       inline G4int GetVerboseLevel() const
       { return verboseLevel; }
       inline G4int GetNumberOfHistory() const
-      { return histVec.size(); }
+      { return G4int(histVec.size()); }
       inline G4String GetPreviousCommand(G4int i) const
       {
         G4String st;
@@ -263,7 +264,7 @@ class G4UImanager : public G4VStateDependent
         if(val&&!bridges)
         {
            bridges = new std::vector<G4UIbridge*>;
-           fMasterUImanager = this;
+           fMasterUImanager() = this;
         }
       }
       inline void SetIgnoreCmdNotFound(G4bool val)
@@ -282,7 +283,7 @@ class G4UImanager : public G4VStateDependent
   private:
       G4int threadID;
       G4MTcoutDestination* threadCout;
-      static G4int igThreadID;
+      G4ICOMS_DLL static G4int igThreadID;
 
   public:
       void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
@@ -293,6 +294,19 @@ class G4UImanager : public G4VStateDependent
       void SetThreadIgnoreInit(G4bool flg = true);
       inline G4MTcoutDestination* GetThreadCout() {return threadCout;};
  
+  private:
+      G4ICOMS_DLL static G4bool doublePrecisionStr;
+
+  public:
+      static void UseDoublePrecisionStr(G4bool val);
+      static G4bool DoublePrecisionStr();
+ 
+  private:
+      G4int lastRC;
+  public:
+      G4int GetLastReturnCode() const
+      { return lastRC; }
+
 };
 
 #endif

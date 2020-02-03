@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc 85582 2014-10-31 09:07:30Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -69,7 +68,7 @@ void G4VTreeSceneHandler::PreAddSolid
 
   // This call comes from a G4PhysicalVolumeModel, drawnPVPath is
   // the path of the current drawn (non-culled) volume in terms of
-  // drawn (non-culled) ancesters.  Each node is identified by a
+  // drawn (non-culled) ancestors.  Each node is identified by a
   // PVNodeID object, which is a physical volume and copy number.  It
   // is a vector of PVNodeIDs corresponding to the geometry hierarchy
   // actually selected, i.e., not culled.
@@ -101,7 +100,7 @@ void G4VTreeSceneHandler::PreAddSolid
       // G4PhysicalVolumeModel sends volumes as it encounters them,
       // i.e., mothers before daughters, in its descent of the
       // geometry tree.  Error!
-      G4cerr << "ERROR: G4XXXSceneHandler::PreAddSolid: Mother "
+      G4cerr << "ERROR: G4VTreeSceneHandler::PreAddSolid: Mother "
 	     << ri->GetPhysicalVolume()->GetName()
 	     << ':' << ri->GetCopyNo()
 	     << " not previously encountered."

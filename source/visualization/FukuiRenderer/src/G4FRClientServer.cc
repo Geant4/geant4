@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRClientServer.cc 79795 2014-03-14 10:13:31Z gcosmo $
 //
 // Satoshi TANAKA, Wed Jul  3 14:14:29 JST 1996
 ////////////////////////////////
@@ -227,10 +226,10 @@ int G4FRClientServer::ConnectINET()
 	}
 
 		//----- get IP address of server from its name
-	if( getenv( FR_ENV_SERVER_HOST_NAME ) != NULL ) 
+	if( std::getenv( FR_ENV_SERVER_HOST_NAME ) != NULL ) 
 	{
 			//----- get server name
-		strcpy( server_hostname, getenv( FR_ENV_SERVER_HOST_NAME ) );
+		strcpy( server_hostname, std::getenv( FR_ENV_SERVER_HOST_NAME ) );
 
 			//----- get IP address of server from its name,
 			//..... reading /etc/hosts

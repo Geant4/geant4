@@ -11,6 +11,7 @@ namespace tools {
 namespace rroot {
 
 class key;
+class streamer_info;
 
 class ifile {
 public:
@@ -32,6 +33,8 @@ public:
   virtual bool unziper(char,decompress_func&) const = 0;
 
   virtual key& sinfos_key() = 0;
+
+  virtual streamer_info* find_streamer_info(const std::string&) = 0;
 };
 
 }}

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh 81373 2014-05-27 13:06:32Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -43,6 +42,8 @@
 //                             17 AUg. 1999   H.Kurashige  
 //      Add thePreAssignedDecayTime   18 Jan. 2001 H.Kurashige
 //      Added  MagneticMoment               Mar. 2007
+//      Added GetLogKineticEnergy: the log-kinetic energy value is computed only 
+ //     on demand if its stored value is not up-to-date. 15 March 2019 M. Novak
 // ------------------------------------------------------------
 
 #ifndef G4DynamicParticle_h
@@ -50,6 +51,7 @@
 
 #include <cmath>
 #include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -57,6 +59,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Allocator.hh"
 #include "G4LorentzVector.hh"
+#include "G4Log.hh"
 
 #include "G4ParticleMomentum.hh"
 //  G4ParticleMomentum is "momentum direction" not "momentum vector"
@@ -65,10 +68,8 @@
 
 #include "G4ElectronOccupancy.hh"
 
-
 class G4PrimaryParticle;
-class  G4VProcess;
-class  G4DecayProducts;
+class G4DecayProducts;
 
 class G4DynamicParticle 
 {
@@ -105,8 +106,8 @@ class G4DynamicParticle
 
   //- operators
      G4DynamicParticle & operator=(const G4DynamicParticle &right);
-     G4int operator==(const G4DynamicParticle &right) const;
-     G4int operator!=(const G4DynamicParticle &right) const;
+     G4bool operator==(const G4DynamicParticle &right) const;
+     G4bool operator!=(const G4DynamicParticle &right) const;
 
   //  new/delete operators are oberloded to use G4Allocator
      inline void *operator new(size_t);
@@ -114,167 +115,162 @@ class G4DynamicParticle
 
   //- Set/Get methods
  
-     const G4ThreeVector& GetMomentumDirection() const;
+     inline const G4ThreeVector& GetMomentumDirection() const;
       //  Returns the normalized direction of the momentum
-     void SetMomentumDirection(const G4ThreeVector &aDirection);
+     inline void SetMomentumDirection(const G4ThreeVector &aDirection);
       //  Sets the normalized direction of the momentum
-     void SetMomentumDirection(G4double px, G4double py, G4double pz);
+     inline void SetMomentumDirection(G4double px, G4double py, G4double pz);
       //  Sets the normalized direction of the momentum by coordinates
 
-     G4ThreeVector GetMomentum() const;
+     inline G4ThreeVector GetMomentum() const;
       //  Returns the current particle momentum vector
      void SetMomentum( const G4ThreeVector &momentum);
       //  set the current particle momentum vector
 
-     G4LorentzVector Get4Momentum() const;
+     inline G4LorentzVector Get4Momentum() const;
       //  Returns the current particle energy-momentum 4vector
      void Set4Momentum( const G4LorentzVector &momentum);
       //  Set the current particle energy-momentum 4vector
 
-
-     G4double GetTotalMomentum() const;
+     inline G4double GetTotalMomentum() const;
       //  Returns the module of the momentum vector
-     G4double GetTotalEnergy() const;
+     inline G4double GetTotalEnergy() const;
       //  Returns the total energy of the particle
 
-     G4double GetKineticEnergy() const;
+     inline G4double GetKineticEnergy() const;
       //  Returns the kinetic energy of a particle
-     void SetKineticEnergy(G4double aEnergy);
+     inline G4double GetLogKineticEnergy() const;
+      //  Returns:
+      //   - natural logarithm of the particle kinetic energy (E_k) if E_k > 0
+      //   - LOG_EKIN_MIN otherwise
+     inline void SetKineticEnergy(G4double aEnergy);
       //  Sets the kinetic energy of a particle
 
-
-     G4double GetProperTime() const;
+     inline G4double GetProperTime() const;
       //  Returns the current particle proper time
-     void SetProperTime( G4double );
+     inline void SetProperTime( G4double );
       //  Set the current particle Proper Time
 
-
-     const G4ThreeVector& GetPolarization() const;
-     void SetPolarization(G4double polX, G4double polY, G4double polZ);
+     inline const G4ThreeVector& GetPolarization() const;
+     inline void SetPolarization(const G4ThreeVector&);
+     inline void SetPolarization(G4double polX, G4double polY, G4double polZ);
       //   Set/Get polarization vector       
 
-
-     G4double GetMass() const;
-     void     SetMass(G4double mass);
+     inline G4double GetMass() const;
+     inline void     SetMass(G4double mass);
      // set/get dynamical mass
      // the dynamical mass is set to PDG mass in default
 
-
-     G4double GetCharge() const;
-     void     SetCharge(G4double charge);
-     void     SetCharge(G4int    chargeInUnitOfEplus);
+     inline G4double GetCharge() const;
+     inline void     SetCharge(G4double charge);
+     inline void     SetCharge(G4int    chargeInUnitOfEplus);
      // set/get dynamical charge 
      // the dynamical mass is set to PDG charge in default
 
-     G4double GetSpin() const;
-     void     SetSpin(G4double spin);
-     void     SetSpin(G4int    spinInUnitOfHalfInteger);
+     inline G4double GetSpin() const;
+     inline void     SetSpin(G4double spin);
+     inline void     SetSpin(G4int    spinInUnitOfHalfInteger);
      // set/get dynamical spin
      // the dynamical spin is set to PDG spin in default
 
-     G4double GetMagneticMoment() const;
-     void     SetMagneticMoment(G4double magneticMoment);
+     inline G4double GetMagneticMoment() const;
+     inline void     SetMagneticMoment(G4double magneticMoment);
      // set/get dynamical MagneticMoment  
      // the dynamical mass is set to PDG MagneticMoment in default
 
-
-     const G4ElectronOccupancy* GetElectronOccupancy() const;
+     inline const G4ElectronOccupancy* GetElectronOccupancy() const;
      // Get electron occupancy 
      // ElectronOccupancy is valid only if the particle is ion
-     G4int  GetTotalOccupancy() const;
-     G4int  GetOccupancy(G4int orbit) const;
-     void   AddElectron(G4int orbit, G4int number = 1);
-     void   RemoveElectron(G4int orbit, G4int number = 1);
- 
- 
-     const G4ParticleDefinition* GetParticleDefinition() const;
+     inline G4int  GetTotalOccupancy() const;
+     inline G4int  GetOccupancy(G4int orbit) const;
+     inline void   AddElectron(G4int orbit, G4int number = 1);
+     inline void   RemoveElectron(G4int orbit, G4int number = 1);
+  
+     inline const G4ParticleDefinition* GetParticleDefinition() const;
      void SetDefinition(const G4ParticleDefinition * aParticleDefinition);
      //   Set/Get particle definition  
      //  following method of GetDefinition remains 
      //  because of backward compatiblity. It will be removed in future 
-     G4ParticleDefinition* GetDefinition() const;
- 
+     inline G4ParticleDefinition* GetDefinition() const;
      
-     const G4DecayProducts *GetPreAssignedDecayProducts() const;
-     void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);
+     inline const G4DecayProducts *GetPreAssignedDecayProducts() const;
+     inline void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);
       //   Set/Get pre-assigned decay channel
 
-     G4double GetPreAssignedDecayProperTime() const;
-     void SetPreAssignedDecayProperTime(G4double);
+     inline G4double GetPreAssignedDecayProperTime() const;
+     inline void SetPreAssignedDecayProperTime(G4double);
       //   Set/Get pre-assigned proper time when the particle will decay
- 
    
-  //- print out information
+     //- print out information
      void DumpInfo(G4int mode= 0) const;
      //    mode 0 : default )(minimum)
      //    mode 1 : 0 + electron occupancy
 
-   protected:
+ protected:
      void      AllocateElectronOccupancy(); 
      G4double  GetElectronMass() const;
 
-   protected:
-     G4ThreeVector theMomentumDirection;
-      //  The normalized momentum vector
-
-     const G4ParticleDefinition *theParticleDefinition;
-      //  Contains the static information of this particle.
-
-     G4ThreeVector thePolarization;
-
-     G4double theKineticEnergy;
-
-     G4double theProperTime;
-
-     G4double theDynamicalMass;
-
-     G4double theDynamicalCharge;
-
-     G4double theDynamicalSpin;
-
-     G4double theDynamicalMagneticMoment;
-
-     G4ElectronOccupancy* theElectronOccupancy;          
-  
-     G4DecayProducts *thePreAssignedDecayProducts;
-
-     G4double thePreAssignedDecayTime;
-
- protected:
-   G4int verboseLevel;
- 
  public:  // With Description
-   void  SetVerboseLevel(G4int value);
-   G4int GetVerboseLevel() const;
+   inline void  SetVerboseLevel(G4int value);
+   inline G4int GetVerboseLevel() const;
    // Set/Get controle flag for output message
    //  0: Silent
    //  1: Warning message
    //  2: More
 
- protected:
-   G4PrimaryParticle* primaryParticle;
-   // This void pointer is used by G4EventManager to maintain the
-   // link between pre-assigned decay products and corresponding
-   // primary particle.
-
- public:
-   void SetPrimaryParticle(G4PrimaryParticle* p);
-   void SetPDGcode(G4int c);
+   inline void SetPrimaryParticle(G4PrimaryParticle* p);
+   inline void SetPDGcode(G4int c);
 
  public: // With Description
-   G4PrimaryParticle* GetPrimaryParticle() const;
+   inline G4PrimaryParticle* GetPrimaryParticle() const;
    // Return the pointer to the corresponding G4PrimaryParticle object
    // if this particle is a primary particle OR is defined as a pre-assigned
    // decay product. Otherwise return null.
 
-   G4int GetPDGcode() const;
+   inline G4int GetPDGcode() const;
    // Return the PDG code of this particle. If the particle is known to Geant4
    // its PDG code defined in G4ParticleDefinition is returned. If it is unknown
    // (i.e. PDG code in G4ParticleDefinition is 0), PDG code defined in the
    // corresponding primary particle or pre-assigned decay product will be
    // returned if available. Otherwise (e.g. for geantino) returns 0.
 
- protected:
+ private:
+
+   G4ThreeVector theMomentumDirection;
+   //  The normalized momentum vector
+
+   G4ThreeVector thePolarization;
+
+   const G4ParticleDefinition *theParticleDefinition;
+   //  Contains the static information of this particle.
+
+   G4ElectronOccupancy* theElectronOccupancy;          
+  
+   G4DecayProducts *thePreAssignedDecayProducts;
+
+   G4PrimaryParticle* primaryParticle;
+   // This void pointer is used by G4EventManager to maintain the
+   // link between pre-assigned decay products and corresponding
+   // primary particle.
+
+   G4double theKineticEnergy;
+
+   mutable G4double theLogKineticEnergy;
+
+   G4double theProperTime;
+
+   G4double theDynamicalMass;
+
+   G4double theDynamicalCharge;
+
+   G4double theDynamicalSpin;
+
+   G4double theDynamicalMagneticMoment;
+
+   G4double thePreAssignedDecayTime;
+
+   G4int verboseLevel;
+
    G4int thePDGcode;
 };
 

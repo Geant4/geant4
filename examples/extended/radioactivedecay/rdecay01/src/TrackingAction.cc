@@ -26,8 +26,11 @@
 /// \file radioactivedecay/rdecay01/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
+<<<<<<< HEAD
 //
 // $Id: TrackingAction.cc 87827 2015-01-14 17:17:27Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,7 +106,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     // 
     //full chain: put at rest; if not: kill secondary      
     G4Track* tr = (G4Track*) track;
-    if (fFullChain)  tr->SetTrackStatus(fStopButAlive);
+    if (fFullChain) { tr->SetKineticEnergy(0.);
+                      tr->SetTrackStatus(fStopButAlive);}
       else if (ID>1) tr->SetTrackStatus(fStopAndKill);
   }
   
@@ -165,7 +169,14 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //  
   if (!nbtrk) {
     run->EventTiming(time);                     //total time of life
+<<<<<<< HEAD
     analysis->FillH1(8,time);
+=======
+    G4double weight = track->GetWeight();
+    analysis->FillH1(8,time,weight);
+////    analysis->FillH1(8,time);    
+    fTime_end = DBL_MAX;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   }
 }
 

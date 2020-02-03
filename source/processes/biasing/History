@@ -1,4 +1,3 @@
-$Id: History 88804 2015-03-10 17:12:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 15th, 2019   Gabriele Cosmo (procbiasing-V10-05-01)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+March 11th, 2019   Gabriele Cosmo (procbiasing-V10-05-00)
+- Fixed typos in printouts and comments.
+
+May 17th, 2018   Jonathan Madsen (procbiasing-V10-04-03)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+February 26th, 2018  Alexander Howard (procbiasing-V10-04-02)
+- G4ImportanceConfigurator: cleaned up unnecessary G4cout and removed
+  copy of G4String - thanks to Gabriele
+
+February 21st, 2018  Alexander Howard (procbiasing-V10-04-01)
+- G4ImportanceConfigurator: put back clear() in the destructor
+
+February 21st, 2018  Alexander Howard (procbiasing-V10-04-00)
+- G4ImportanceConfigurator: introduced AutoLock (G4Mutex) to protect
+  instantiation of the biasing process against a threadrace
+
+August 29th, 2017  Gabriele Cosmo (procbiasing-V10-03-03)
+- Removed duplicate class definition G4TrackTerminator.hh, which is part
+  of the processes/transportation module.
+
+July 14th, 2017  Gabriele Cosmo (procbiasing-V10-03-02)
+- G4ImportanceConfigurator: removed debug printout in destructor.
+
+March 7th, 2017  Alexander Howard (procbiasing-V10-03-01)
+- G4GeometrySampler: removed unnecessary ClearSampling from the destructor
 
 Mar 10th, 2015 Gabriele Cosmo (procbiasing-V10-01-00)
 - G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess: made

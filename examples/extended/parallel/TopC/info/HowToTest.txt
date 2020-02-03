@@ -1,0 +1,41 @@
+------------------------------------------------------------------------------
+A short summary how to build & test the provided examples
+(I. Hrivnacova 09/09/2019)
+
+Note: the location path (Geant4, Top-X, Examples build may need to be adapted
+to your use case.
+
+1) Install Top-C from:
+
+   1.1) Download from:
+   http://www.ccs.neu.edu/home/gene/top-c/
+
+   1.2) Build & install via
+   ./configure --prefix=mypath
+   make 
+   make && install
+
+   1.3) Create a script with PATH, DYLD_LIBRARY_PATH setting:
+   (~/work/etc/topc/setup.sh in my case):
+
+   #!/bin/bash
+   # I. Hrivnacova, 07.07.2019
+   PACK_PATH=$HOME/work/packages 
+   ETC_PATH=$HOME/work/etc
+   export PATH=$PATH:$PACK_PATH/topc/topc-2.5.2_install/bin
+   export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$PACK_PATH/topc/topc-2.5.2_install/lib
+
+2) Install examples via GNUmake build
+   (in may case this is in examples_test directory)
+
+   cd ~/examples_test
+   mkdir topc_N02
+   cd topc_N02/
+   cp -r ~/work/packages/geant4/geant4-dev/examples/extended/parallel/TopC/ParN02 .
+   cd ParN02
+   . ~/work/etc/topc/setup.sh 
+   make
+
+3) Run example
+
+   make run

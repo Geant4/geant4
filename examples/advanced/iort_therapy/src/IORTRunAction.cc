@@ -33,57 +33,33 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "IORTRunAction.hh"
-#include "IORTEventAction.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "IORTDetectorConstruction.hh"
-#include "G4SDManager.hh"
 #include "G4Timer.hh"
 #include "IORTRunAction.hh"
-
-
-#include "IORTAnalysisManager.hh"   
-#include "IORTMatrix.hh"            
+#include "G4SystemOfUnits.hh" 
 
 IORTRunAction::IORTRunAction()
-{
-}
+{}
 
 IORTRunAction::~IORTRunAction()
-{ 
-}
+{ }
 
 void IORTRunAction::BeginOfRunAction(const G4Run* aRun)
 { 	
     G4RunManager::GetRunManager()-> SetRandomNumberStore(true);
     G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
-
-    electromagnetic = 0;
-    hadronic = 0;
 }
 
 void IORTRunAction::EndOfRunAction(const G4Run*)
-{
-    //G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
-    //G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
-    // 	   << electromagnetic << G4endl;
-    //G4cout << "Number of hadronic processes of primary particles in the phantom:"
-    //	   << hadronic << G4endl;
-}
-void IORTRunAction::AddEMProcess()
-{
- electromagnetic += 1;
-}
-void IORTRunAction::AddHadronicProcess()
-{
-  hadronic += 1;
-}
+{}
 

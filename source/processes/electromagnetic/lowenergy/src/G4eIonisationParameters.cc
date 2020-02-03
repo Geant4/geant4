@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -174,7 +173,7 @@ void G4eIonisationParameters::LoadData()
     }
   }
   
-  char* path = getenv("G4LEDATA");
+  char* path = std::getenv("G4LEDATA");
   if (!path)
     { 
       G4Exception("G4BremsstrahlungParameters::LoadData",

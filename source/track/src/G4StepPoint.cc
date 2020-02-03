@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc 68795 2013-04-05 13:24:46Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -48,9 +47,11 @@
 G4StepPoint::G4StepPoint()
 //////////////////////////
   : fGlobalTime(0.), fLocalTime(0.), fProperTime(0.),
-    fKineticEnergy(0.), fVelocity(0.), fpTouchable(0), fpMaterial(0),
-    fpMaterialCutsCouple(0), fpSensitiveDetector(0), fSafety(0.),
-    fStepStatus(fUndefined),fpProcessDefinedStep(0), 
+    fKineticEnergy(0.), fVelocity(0.), 
+    fpTouchable(0), fpMaterial(nullptr), fpMaterialCutsCouple(nullptr), 
+    fpSensitiveDetector(nullptr), 
+    fSafety(0.),
+    fStepStatus(fUndefined), fpProcessDefinedStep(nullptr), 
     fMass(0.), fCharge(0.), fMagneticMoment(0.),
     fWeight(0.)
 {

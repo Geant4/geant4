@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh 90237 2015-05-21 09:04:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,18 +52,18 @@
 #include "G4EnergyRangeManager.hh"
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
-#include <vector>
-#include "G4VCrossSectionDataSet.hh"
-#include "G4VLeadingParticleBiasing.hh"
-
-#include "G4CrossSectionDataStore.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4CrossSectionDataStore.hh"
+#include <vector>
 
 class G4Track;
 class G4Step;
 class G4Element;
 class G4ParticleChange;
+class G4HadronicInteraction;
 class G4HadronicProcessStore;
+class G4VCrossSectionDataSet;
+class G4VLeadingParticleBiasing;
 
 class G4HadronicProcess : public G4VDiscreteProcess
 {
@@ -76,7 +75,7 @@ public:
   G4HadronicProcess(const G4String& processName, 
 		    G4HadronicProcessType subType);    
 
-  virtual ~G4HadronicProcess();
+  ~G4HadronicProcess() override;
 
   // register generator of secondaries
   void RegisterMe(G4HadronicInteraction* a);
@@ -84,40 +83,40 @@ public:
   // get cross section per element
   G4double GetElementCrossSection(const G4DynamicParticle * part, 
 				  const G4Element * elm, 
-				  const G4Material* mat = 0);
+				  const G4Material* mat = nullptr);
 
   // obsolete method to get cross section per element
   inline
   G4double GetMicroscopicCrossSection(const G4DynamicParticle * part, 
 				      const G4Element * elm, 
-				      const G4Material* mat = 0)
+				      const G4Material* mat = nullptr)
   { return GetElementCrossSection(part, elm, mat); }
 
   // generic PostStepDoIt recommended for all derived classes
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-					  const G4Step& aStep);
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+				  const G4Step& aStep) override;
 
   // initialisation of physics tables and G4HadronicProcessStore
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
   // build physics tables and print out the configuration of the process
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   // dump physics tables 
-  inline void DumpPhysicsTable(const G4ParticleDefinition& p)
-  { theCrossSectionDataStore->DumpPhysicsTable(p); }
+  void DumpPhysicsTable(const G4ParticleDefinition& p);
 
   // add cross section data set
-  inline void AddDataSet(G4VCrossSectionDataSet * aDataSet)
-  { theCrossSectionDataStore->AddDataSet(aDataSet);}
+  void AddDataSet(G4VCrossSectionDataSet * aDataSet);
 
   // access to the list of hadronic interactions
-  std::vector<G4HadronicInteraction*>& GetHadronicInteractionList()
-  { return theEnergyRangeManager.GetHadronicInteractionList(); }
-          
+  std::vector<G4HadronicInteraction*>& GetHadronicInteractionList();
+
+  // access to an hadronic interaction by name
+  G4HadronicInteraction* GetHadronicModel(const G4String&);
+  
   // get inverse cross section per volume
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
-			   G4ForceCondition *);
+			   G4ForceCondition *) override;
 
   // access to the target nucleus
   inline const G4Nucleus* GetTargetNucleus() const
@@ -127,15 +126,15 @@ public:
   inline const G4Isotope* GetTargetIsotope()
   { return targetNucleus.GetIsotope(); }
   
-  virtual void ProcessDescription(std::ostream& outFile) const;
+  void ProcessDescription(std::ostream& outFile) const override;
  
 protected:    
 
   // generic method to choose secondary generator 
   // recommended for all derived classes
   inline G4HadronicInteraction* ChooseHadronicInteraction(
-      const G4HadProjectile & aHadProjectile, G4Nucleus & aTargetNucleus,
-      G4Material* aMaterial, G4Element* anElement)
+      const G4HadProjectile & aHadProjectile, G4Nucleus& aTargetNucleus,
+      const G4Material* aMaterial, const G4Element* anElement)
   { return theEnergyRangeManager.GetHadronicInteraction(aHadProjectile, 
                                                         aTargetNucleus,
 							aMaterial,anElement);
@@ -147,7 +146,15 @@ protected:
   
 public:
 
+  // scale cross section
   void BiasCrossSectionByFactor(G4double aScale);
+  void MultiplyCrossSectionBy(G4double factor);
+  inline G4double CrossSectionFactor() const
+  { return aScaleFactor; }
+
+  // Integral option 
+  inline void SetIntegral(G4bool val)
+  { useIntegralXS = val; }
 
   // Energy-momentum non-conservation limits and reporting
   inline void SetEpReportLevel(G4int level)
@@ -165,9 +172,6 @@ public:
   // access to the cross section data store
   inline G4CrossSectionDataStore* GetCrossSectionDataStore()
     {return theCrossSectionDataStore;}
-
-  inline void MultiplyCrossSectionBy(G4double factor)
-  { aScaleFactor = factor; }
 
 protected:
 
@@ -193,6 +197,9 @@ protected:
   void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
 
 private:
+
+  void InitialiseLocal();
+
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
@@ -203,14 +210,13 @@ private:
   // Set E/p conservation check levels from environment variables
   void GetEnergyMomentumCheckEnvvars();
 
-  // The Nist manager builds or finds a simple material from the Z of an element
-  G4Material* InitialiseMaterial(G4int Z);
-
 protected:
 
   G4HadProjectile thePro;
 
   G4ParticleChange* theTotalResult; 
+
+  G4double fWeight;
 
   G4int epReportLevel;
 
@@ -228,11 +234,19 @@ private:
 
   bool G4HadronicProcess_debug_flag;
 
+  bool useIntegralXS;
+
+  G4int nMatWarn;
+
+  G4int nICelectrons;
+
+  G4int idxIC;
+
   // Energy-momentum checking
   std::pair<G4double, G4double> epCheckLevels;
   G4bool levelsSetByProcess;
 
-  std::vector<G4VLeadingParticleBiasing *> theBias;
+  std::vector<G4VLeadingParticleBiasing*> theBias;
   
   G4double theInitialNumberOfInteractionLength;   
 

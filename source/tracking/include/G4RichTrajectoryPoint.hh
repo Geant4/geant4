@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.hh 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -93,7 +92,7 @@ public:
   // Operators
   inline void *operator new(size_t);
   inline void operator delete(void *aRichTrajectoryPoint);
-  inline int operator==(const G4RichTrajectoryPoint& right) const
+  inline G4bool operator==(const G4RichTrajectoryPoint& right) const
   { return (this==&right); }
 
   // Get methods for HepRep style attributes
@@ -117,19 +116,18 @@ private:
   G4double fPostStepPointWeight;
 };
 
-extern G4TRACKING_DLL G4ThreadLocal
-G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator;
+extern G4TRACKING_DLL G4Allocator<G4RichTrajectoryPoint>*& aRichTrajectoryPointAllocator();
 
 inline void* G4RichTrajectoryPoint::operator new(size_t)
 {
-  if (!aRichTrajectoryPointAllocator)
-  { aRichTrajectoryPointAllocator = new G4Allocator<G4RichTrajectoryPoint>; }
-  return (void *) aRichTrajectoryPointAllocator->MallocSingle();
+  if (!aRichTrajectoryPointAllocator())
+  { aRichTrajectoryPointAllocator() = new G4Allocator<G4RichTrajectoryPoint>; }
+  return (void *) aRichTrajectoryPointAllocator()->MallocSingle();
 }
 
 inline void G4RichTrajectoryPoint::operator delete(void *aRichTrajectoryPoint)
 {
-  aRichTrajectoryPointAllocator->FreeSingle
+  aRichTrajectoryPointAllocator()->FreeSingle
     ((G4RichTrajectoryPoint *) aRichTrajectoryPoint);
 }
 

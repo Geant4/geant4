@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 /// @file exMPI02.cc
-// $Id: exMPI02.cc 88353 2015-02-16 08:54:08Z gcosmo $
 //
 /// @brief A MPI example code
 
@@ -38,9 +37,7 @@
 
 #include "G4UImanager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -81,11 +78,9 @@ int main(int argc, char** argv)
 
   runManager-> Initialize();
 
-#ifdef G4VIS_USE
   G4VisExecutive* visManager = new G4VisExecutive;
   visManager-> Initialize();
   G4cout << G4endl;
-#endif
 
   // --------------------------------------------------------------------
   // ready for go
@@ -97,9 +92,7 @@ int main(int argc, char** argv)
   // --------------------------------------------------------------------
   // termination
   // --------------------------------------------------------------------
-#ifdef G4VIS_USE
   delete visManager;
-#endif
 
   delete g4MPI;
 

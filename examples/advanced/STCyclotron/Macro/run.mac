@@ -1,0 +1,12 @@
+#
+# Macro file for myProgram
+#
+# set verbose level for this run
+#
+/control/execute Macro/init_parameters.mac
+/control/verbose  2
+/run/verbose      2
+/event/verbose    0
+/tracking/verbose 0
+#
+/run/beamOn 10

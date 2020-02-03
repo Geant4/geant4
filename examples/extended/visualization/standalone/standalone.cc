@@ -27,7 +27,10 @@
 /// \brief Main program of the visualization/standalone example
 //
 //
+<<<<<<< HEAD
 // $Id: standalone.cc 69587 2013-05-08 14:26:03Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

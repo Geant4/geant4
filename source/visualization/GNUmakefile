@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 68732 2013-04-05 09:44:10Z gcosmo $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.

@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04TrackingAction.hh
 /// \brief Definition of the RE04TrackingAction class
 //
-// $Id: $
 //
 #ifndef RE04TrackingAction_h
 #define RE04TrackingAction_h 1

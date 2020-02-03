@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASmoluchowskiReactionModel.cc 94218 2015-11-09 08:24:48Z gcosmo $
 //
 #include "G4DNASmoluchowskiReactionModel.hh"
 #include "Randomize.hh"
@@ -31,154 +30,108 @@
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4UnitsTable.hh"
 #include "G4Molecule.hh"
-//#include "G4Scheduler.hh"
+#include "G4Exp.hh"
 
-G4DNASmoluchowskiReactionModel::G4DNASmoluchowskiReactionModel() :
-    G4VDNAReactionModel()
+G4DNASmoluchowskiReactionModel::G4DNASmoluchowskiReactionModel()
+    : G4VDNAReactionModel()
+    , fpReactionData(nullptr)
 {
-  fReactionData = 0;
 }
 
-G4DNASmoluchowskiReactionModel::G4DNASmoluchowskiReactionModel(const G4DNASmoluchowskiReactionModel& __right) :
-    G4VDNAReactionModel(__right)
-{
-  fReactionData = 0;
-}
+G4DNASmoluchowskiReactionModel::~G4DNASmoluchowskiReactionModel() = default;
 
-G4DNASmoluchowskiReactionModel& G4DNASmoluchowskiReactionModel::operator=(const G4DNASmoluchowskiReactionModel& right)
-{
-  if (this == &right) return *this;
-  fReactionData = 0;
-  return *this;
-}
-
-G4DNASmoluchowskiReactionModel::~G4DNASmoluchowskiReactionModel()
-{
-  fReactionData = 0;
-}
-
-void G4DNASmoluchowskiReactionModel::Initialise(G4MolecularConfiguration* __molecule,
+void G4DNASmoluchowskiReactionModel::Initialise(const G4MolecularConfiguration* pMolecule,
                                                 const G4Track&)
 {
-  fReactionData = fReactionTable->GetReactionData(__molecule);
+    fpReactionData = fpReactionTable->GetReactionData(pMolecule);
 }
 
-void
-G4DNASmoluchowskiReactionModel::
-InitialiseToPrint(G4MolecularConfiguration* __molecule)
+void G4DNASmoluchowskiReactionModel::InitialiseToPrint(const G4MolecularConfiguration* pMolecule)
 {
-  fReactionData = fReactionTable->GetReactionData(__molecule);
+    fpReactionData = fpReactionTable->GetReactionData(pMolecule);
 }
 
-G4double
-G4DNASmoluchowskiReactionModel::GetReactionRadius(G4MolecularConfiguration* __mol1,
-                                                  G4MolecularConfiguration* __mol2)
+G4double G4DNASmoluchowskiReactionModel::GetReactionRadius(const G4MolecularConfiguration* pMol1,
+                                                           const G4MolecularConfiguration* pMol2)
 {
-  G4double __output = fReactionTable->GetReactionData(__mol1, __mol2)
-      ->GetEffectiveReactionRadius();
-  return __output;
+    G4double __output = fpReactionTable->GetReactionData(pMol1, pMol2)->GetEffectiveReactionRadius();
+    return __output;
 }
 
 G4double G4DNASmoluchowskiReactionModel::GetReactionRadius(const G4int __i)
 {
-  G4double __output = (*fReactionData)[__i]->GetEffectiveReactionRadius();
-  return __output;
+    G4double __output = (*fpReactionData)[__i]->GetEffectiveReactionRadius();
+    return __output;
 }
 
 G4bool G4DNASmoluchowskiReactionModel::FindReaction(const G4Track& __trackA,
                                                     const G4Track& __trackB,
-                                                    const G4double __R,
-                                                    G4double& __r,
+                                                    const G4double __reactionRadius,
+                                                    G4double& __separationDistance,
                                                     const G4bool __alongStepReaction)
 {
-  G4double postStepSeparation = 0;
-  bool do_break = false;
-  G4double R2 = __R * __R;
-  int k = 0;
+    const G4double R2 = __reactionRadius * __reactionRadius;
+    G4double postStepSeparation = 0.;
+    bool do_break = false;
+    int k = 0;
 
-  for (; k < 3; k++)
-  {
-    postStepSeparation += std::pow(
-        __trackA.GetPosition()[k] - __trackB.GetPosition()[k], 2);
-
-    if (postStepSeparation > R2)
+    for (; k < 3; ++k)
     {
-      do_break = true;
-      break;
-    }
-  }
+        postStepSeparation += std::pow(
+            __trackA.GetPosition()[k] - __trackB.GetPosition()[k], 2);
 
-  if (do_break == false)
-  {
-    // The loop was not break
-    // => __r^2 < __R^2
-    __r = std::sqrt(postStepSeparation);
-    return true;
-  }
-  else if (__alongStepReaction == true)
-  {
-    //G4cout << "alongStepReaction==true" << G4endl;
-    //Along step cheack and
-    // the loop has break
-
-    // Continue loop
-    for (; k < 3; k++)
-    {
-      postStepSeparation += std::pow(
-          __trackA.GetPosition()[k] - __trackB.GetPosition()[k], 2);
-    }
-    // Use Green approach : the Brownian bridge
-    __r = (postStepSeparation = std::sqrt(postStepSeparation));
-
-    G4Molecule* __moleculeA = GetMolecule(__trackA);
-    G4Molecule* __moleculeB = GetMolecule(__trackB);
-
-    G4double __D = __moleculeA->GetDiffusionCoefficient()
-        + __moleculeB->GetDiffusionCoefficient();
-
-    G4ThreeVector __preStepPositionA = __trackA.GetStep()->GetPreStepPoint()
-        ->GetPosition();
-    G4ThreeVector __preStepPositionB = __trackB.GetStep()->GetPreStepPoint()
-        ->GetPosition();
-
-    if (__preStepPositionA == __trackA.GetPosition())
-    {
-      G4ExceptionDescription exceptionDescription;
-      exceptionDescription << "The molecule : " << __moleculeA->GetName();
-      exceptionDescription << " with track ID :" << __trackA.GetTrackID();
-      exceptionDescription << " did not move since the previous step." << G4endl;
-      exceptionDescription << "Current position : "
-                           << G4BestUnit(__trackA.GetPosition(), "Length")
-                           << G4endl;
-      exceptionDescription << "Previous position : "
-                           << G4BestUnit(__preStepPositionA, "Length") << G4endl;
-      G4Exception("G4DNASmoluchowskiReactionModel::FindReaction",
-                  "G4DNASmoluchowskiReactionModel", FatalErrorInArgument,
-                  exceptionDescription);
+        if (postStepSeparation > R2)
+        {
+            do_break = true;
+            break;
+        }
     }
 
-    G4double __preStepSeparation =
-        (__preStepPositionA - __preStepPositionB).mag();
+    if (do_break == false)
+    {
+        // The loop was not break
+        // => r^2 < R^2
+        __separationDistance = std::sqrt(postStepSeparation);
+        return true;
+    }
+    else if (__alongStepReaction == true)
+    {
+        //Along step check and the loop has break
 
-    //===================================
-    // Brownian bridge
+        // Continue loop
+        for (; k < 3; ++k)
+        {
+            postStepSeparation += std::pow(
+                __trackA.GetPosition()[k] - __trackB.GetPosition()[k], 2);
+        }
+        // Use Green approach : the Brownian bridge
+        __separationDistance = (postStepSeparation = std::sqrt(postStepSeparation));
 
+        auto pMoleculeA = GetMolecule(__trackA);
+        auto pMoleculeB = GetMolecule(__trackB);
 
-//    if(G4Scheduler::Instance()->GetTimeStep() != __trackB.GetStep()->GetDeltaTime())
-//    {
-//      G4cout << G4Scheduler::Instance()->GetTimeStep() << G4endl;
-//      G4cout << __trackB.GetStep()->GetDeltaTime() << G4endl;
-//      assert(G4Scheduler::Instance()->GetTimeStep() == __trackB.GetStep()->GetDeltaTime());
-//    }
+        G4double D = pMoleculeA->GetDiffusionCoefficient()
+                     + pMoleculeB->GetDiffusionCoefficient();
 
-    G4double __probabiltyOfEncounter = std::exp(
-        -(__preStepSeparation - __R) * (postStepSeparation - __R) / (__D
-            * (__trackB.GetStep()->GetDeltaTime())));
-    G4double __selectedPOE = G4UniformRand();
+        const auto& preStepPositionA = __trackA.GetStep()->GetPreStepPoint()->GetPosition();
+        const auto& preStepPositionB = __trackB.GetStep()->GetPreStepPoint()->GetPosition();
 
-    if (__selectedPOE <= __probabiltyOfEncounter) return true;
-    //===================================
-  }
+        G4double preStepSeparation = (preStepPositionA - preStepPositionB).mag();
 
-  return false;
+        //===================================
+        // Brownian bridge
+        G4double __probabiltyOfEncounter = G4Exp(-(preStepSeparation - __reactionRadius)
+                                                    * (postStepSeparation - __reactionRadius)
+                                                 / (D * (__trackB.GetStep()->GetDeltaTime()))
+                                            );
+        G4double __selectedPOE = G4UniformRand();
+
+        if (__selectedPOE <= __probabiltyOfEncounter)
+        {
+            return true;
+        }
+        //===================================
+    }
+
+    return false;
 }

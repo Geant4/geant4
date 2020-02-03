@@ -128,7 +128,7 @@ void G4MicroElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
   
   G4double scaleFactor = 1e-18 * cm *cm;
   
-  char *path = getenv("G4LEDATA");
+  char *path = std::getenv("G4LEDATA");
   
   // *** ELECTRON
   electron = electronDef->GetParticleName();

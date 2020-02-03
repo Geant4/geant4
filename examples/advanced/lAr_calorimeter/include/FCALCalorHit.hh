@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALCalorHit.hh 84371 2014-10-14 12:51:18Z gcosmo $
 //
 // 
 
@@ -47,7 +46,7 @@ class FCALCalorHit : public G4VHit
      ~FCALCalorHit();
       FCALCalorHit(const FCALCalorHit&);
       const FCALCalorHit& operator=(const FCALCalorHit&);
-      int operator==(const FCALCalorHit&) const;
+      G4bool operator==(const FCALCalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

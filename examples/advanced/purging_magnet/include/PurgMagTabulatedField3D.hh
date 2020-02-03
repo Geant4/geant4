@@ -32,7 +32,6 @@
 //    *                                   *
 //    *************************************
 //
-// $Id: PurgMagTabulatedField3D.hh 69086 2013-04-18 07:29:59Z gcosmo $
 //
 
 #include "globals.hh"
@@ -43,8 +42,6 @@
 #include <vector>
 #include <cmath>
 
-using namespace std;
-
 class PurgMagTabulatedField3D
 #ifndef STANDALONE
  : public G4MagneticField
@@ -52,9 +49,9 @@ class PurgMagTabulatedField3D
 {
   
   // Storage space for the table
-  vector< vector< vector< double > > > xField;
-  vector< vector< vector< double > > > yField;
-  vector< vector< vector< double > > > zField;
+  std::vector< std::vector< std::vector< double > > > xField;
+  std::vector< std::vector< std::vector< double > > > yField;
+  std::vector< std::vector< std::vector< double > > > zField;
   // The dimensions of the table
   int nx,ny,nz; 
   // The physical limits of the defined region

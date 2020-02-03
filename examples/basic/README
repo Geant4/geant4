@@ -1,4 +1,3 @@
-$Id: README 76474 2013-11-11 10:36:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,7 @@ $Id: README 76474 2013-11-11 10:36:34Z gcosmo $
    - Simple geometry with a few solids 
    - Geometry with simple placements (G4PVPlacement)
    - Scoring total dose in a selected volume user action classes
+   - Using G4Accumulable for automatic merging of scored values in multi-threading mode
    - Geant4 physics list (QBBC)
    
  ExampleB2
@@ -31,6 +31,8 @@ $Id: README 76474 2013-11-11 10:36:34Z gcosmo $
    - Geometry with simple placements with rotation (G4PVPlacement)
    - Radioactive source 
    - Scoring within Crystals via G4 scorers
+   - Using G4Accumulable for automatic merging of scored values in multi-threading mode (a) 
+     and G4StatAnalysis for accumulating statistics (b)
    - Modular physics list built via builders provided in Geant4
 
  ExampleB4

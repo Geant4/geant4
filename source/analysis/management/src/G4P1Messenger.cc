@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Author: Ivana Hrivnacova, 24/07/2014  (ivana@ipno.in2p3.fr)
 
@@ -65,6 +64,8 @@ G4P1Messenger::G4P1Messenger(G4VAnalysisManager* manager)
   fSetP1TitleCmd = fHelper->CreateSetTitleCommand(this);
   fSetP1XAxisCmd = fHelper->CreateSetAxisCommand("x", this);
   fSetP1YAxisCmd = fHelper->CreateSetAxisCommand("y", this);
+  fSetP1XAxisLogCmd = fHelper->CreateSetAxisLogCommand("x", this);
+  fSetP1YAxisLogCmd = fHelper->CreateSetAxisLogCommand("y", this);
 }
 
 //_____________________________________________________________________________
@@ -106,7 +107,7 @@ void G4P1Messenger::CreateP1Cmd()
   auto p1xValFcn0 = new G4UIparameter("xvalFcn0", 's', true);
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
   fcnxGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnxGuidance += "but none value should be used insted.";
+  fcnxGuidance += "but none value should be used instead.";
   p1xValFcn0->SetGuidance(fcnxGuidance);
   p1xValFcn0->SetParameterCandidates("log log10 exp none");
   p1xValFcn0->SetDefaultValue("none");
@@ -116,7 +117,7 @@ void G4P1Messenger::CreateP1Cmd()
   p1xValBinScheme0->SetParameterCandidates("linear log");
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   p1xValBinScheme0->SetGuidance(binSchemeGuidance);
   p1xValBinScheme0->SetDefaultValue("linear");
   
@@ -137,7 +138,7 @@ void G4P1Messenger::CreateP1Cmd()
   auto p1yValFcn0 = new G4UIparameter("yvalFcn0", 's', true);
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).\n";
   fcnyGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnyGuidance += "but none value should be used insted.";
+  fcnyGuidance += "but none value should be used instead.";
   p1yValFcn0->SetGuidance(fcnyGuidance);
   p1yValFcn0->SetParameterCandidates("log log10 exp none");
   p1yValFcn0->SetDefaultValue("none");
@@ -184,7 +185,7 @@ void G4P1Messenger::SetP1Cmd()
   p1xValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
   fcnxGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnxGuidance += "but none value should be used insted.";
+  fcnxGuidance += "but none value should be used instead.";
   p1xValFcn->SetGuidance(fcnxGuidance);
   p1xValFcn->SetDefaultValue("none");
  
@@ -193,7 +194,7 @@ void G4P1Messenger::SetP1Cmd()
   p1xValBinScheme->SetParameterCandidates("linear log");
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   p1xValBinScheme->SetGuidance(binSchemeGuidance);
   p1xValBinScheme->SetDefaultValue("linear");
   
@@ -211,7 +212,7 @@ void G4P1Messenger::SetP1Cmd()
   p1yValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).\n";
   fcnyGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnyGuidance += "but none value should be used insted.";
+  fcnyGuidance += "but none value should be used instead.";
   p1yValFcn->SetGuidance(fcnyGuidance);
   p1yValFcn->SetDefaultValue("none");
  
@@ -244,7 +245,7 @@ void G4P1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
   std::vector<G4String> parameters;
   G4Analysis::Tokenize(newValues, parameters);
   // check consistency
-  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+  if ( parameters.size() != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
     fHelper->WarnAboutParameters(command, parameters.size());
     return;
@@ -327,4 +328,16 @@ void G4P1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     auto yaxis = parameters[counter++];
     fManager->SetP1YAxisTitle(id, yaxis);     
   }
-}  
+  else if ( command == fSetP1XAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto xaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetP1XAxisIsLog(id, xaxisLog);
+  }
+  else if ( command == fSetP1YAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto yaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetP1YAxisIsLog(id, yaxisLog);
+  }
+}

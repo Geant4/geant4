@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 // 
 // Andrew Walkden  16th April 1997

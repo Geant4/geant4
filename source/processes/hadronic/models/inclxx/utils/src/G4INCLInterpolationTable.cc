@@ -67,14 +67,14 @@ namespace G4INCL {
   std::vector<G4double> InterpolationTable::getNodeAbscissae() const {
     std::vector<G4double> x(nodes.size());
     std::transform(nodes.begin(), nodes.end(), x.begin(),
-                   std::mem_fun_ref(&InterpolationNode::getX));
+                   std::mem_fn(&InterpolationNode::getX));
     return x;
   }
 
   std::vector<G4double> InterpolationTable::getNodeValues() const {
     std::vector<G4double> y(nodes.size());
     std::transform(nodes.begin(), nodes.end(), y.begin(),
-                   std::mem_fun_ref(&InterpolationNode::getY));
+                   std::mem_fn(&InterpolationNode::getY));
     return y;
   }
 

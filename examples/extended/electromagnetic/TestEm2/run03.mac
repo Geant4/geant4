@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # $Id: run03.mac 81771 2014-06-05 08:32:57Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)

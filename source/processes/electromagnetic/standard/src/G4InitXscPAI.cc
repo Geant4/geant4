@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InitXscPAI.cc 68797 2013-04-05 13:27:11Z gcosmo $
 //
 // 
 // G4InitXscPAI.cc -- class implementation file
@@ -68,12 +67,12 @@ const G4double G4InitXscPAI::fSolidDensity = 0.05*g/cm3 ; // ~gas-solid border
 using namespace std;
 
 G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
-  : fPAIxscVector(NULL),
-    fPAIdEdxVector(NULL),
-    fPAIphotonVector(NULL),
-    fPAIelectronVector(NULL),
-    fChCosSqVector(NULL),
-    fChWidthVector(NULL)
+  : fPAIxscVector(nullptr),
+    fPAIdEdxVector(nullptr),
+    fPAIphotonVector(nullptr),
+    fPAIelectronVector(nullptr),
+    fChCosSqVector(nullptr),
+    fChWidthVector(nullptr)
 {
   G4int i, j, matIndex;
  

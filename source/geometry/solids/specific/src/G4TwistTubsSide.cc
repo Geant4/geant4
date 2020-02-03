@@ -23,23 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TwistTubsSide implementation
 //
-// $Id: G4TwistTubsSide.cc 72937 2013-08-14 13:20:38Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4TwistTubsSide.cc
-//
-// Author: 
-//   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
-//
-// History:
-//   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//                 from original version in Jupiter-2.5.02 application.
-//   29-Apr-2004 - O.Link. Bug fixed in GetAreaCode
+// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
+// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+//               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
 #include "G4TwistTubsSide.hh"
@@ -47,22 +35,23 @@
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4TwistTubsSide::G4TwistTubsSide(const G4String         &name,
-                                   const G4RotationMatrix &rot,
-                                   const G4ThreeVector    &tlate,
-                                         G4int             handedness,
-                                   const G4double          kappa,
-                                   const EAxis             axis0,
-                                   const EAxis             axis1,
-                                         G4double          axis0min,
-                                         G4double          axis1min,
-                                         G4double          axis0max,
-                                         G4double          axis1max)
+G4TwistTubsSide::G4TwistTubsSide(const G4String&         name,
+                                 const G4RotationMatrix& rot,
+                                 const G4ThreeVector&    tlate,
+                                       G4int             handedness,
+                                 const G4double          kappa,
+                                 const EAxis             axis0,
+                                 const EAxis             axis1,
+                                       G4double          axis0min,
+                                       G4double          axis1min,
+                                       G4double          axis0max,
+                                       G4double          axis1max)
    : G4VTwistSurface(name, rot, tlate, handedness, axis0, axis1,
-                axis0min, axis1min, axis0max, axis1max),
+                     axis0min, axis1min, axis0max, axis1max),
      fKappa(kappa)
 {
-   if (axis0 == kZAxis && axis1 == kXAxis) {
+   if (axis0 == kZAxis && axis1 == kXAxis)
+   {
       G4Exception("G4TwistTubsSide::G4TwistTubsSide()", "GeomSolids0002",
                   FatalErrorInArgument, "Should swap axis0 and axis1!");
    }
@@ -71,16 +60,16 @@ G4TwistTubsSide::G4TwistTubsSide(const G4String         &name,
    SetBoundaries();
 }
 
-G4TwistTubsSide::G4TwistTubsSide(const G4String     &name,
-                                         G4double      EndInnerRadius[2],
-                                         G4double      EndOuterRadius[2],
-                                         G4double      DPhi,
-                                         G4double      EndPhi[2],
-                                         G4double      EndZ[2], 
-                                         G4double      InnerRadius,
-                                         G4double      OuterRadius,
-                                         G4double      Kappa,
-                                         G4int         handedness)
+G4TwistTubsSide::G4TwistTubsSide(const G4String& name,
+                                       G4double  EndInnerRadius[2],
+                                       G4double  EndOuterRadius[2],
+                                       G4double  DPhi,
+                                       G4double  EndPhi[2],
+                                       G4double  EndZ[2], 
+                                       G4double  InnerRadius,
+                                       G4double  OuterRadius,
+                                       G4double  Kappa,
+                                       G4int     handedness)
   : G4VTwistSurface(name)
 {  
    fHandedness = handedness;   // +z = +ve, -z = -ve
@@ -102,7 +91,6 @@ G4TwistTubsSide::G4TwistTubsSide(const G4String     &name,
    SetBoundaries();
 }
 
-
 //=====================================================================
 //* Fake default constructor ------------------------------------------
 
@@ -122,7 +110,7 @@ G4TwistTubsSide::~G4TwistTubsSide()
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
 
-G4ThreeVector G4TwistTubsSide::GetNormal(const G4ThreeVector &tmpxx, 
+G4ThreeVector G4TwistTubsSide::GetNormal(const G4ThreeVector& tmpxx, 
                                                 G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
@@ -130,14 +118,19 @@ G4ThreeVector G4TwistTubsSide::GetNormal(const G4ThreeVector &tmpxx,
    // If isGlobal=true, it returns the normal in global coordinate.
    //
    G4ThreeVector xx;
-   if (isGlobal) {
+   if (isGlobal)
+   {
       xx = ComputeLocalPoint(tmpxx);
-      if ((xx - fCurrentNormal.p).mag() < 0.5 * kCarTolerance) {
+      if ((xx - fCurrentNormal.p).mag() < 0.5 * kCarTolerance)
+      {
          return ComputeGlobalDirection(fCurrentNormal.normal);
       }
-   } else {
+   }
+   else
+   {
       xx = tmpxx;
-      if (xx == fCurrentNormal.p) {
+      if (xx == fCurrentNormal.p)
+      {
          return fCurrentNormal.normal;
       }
    }
@@ -146,9 +139,12 @@ G4ThreeVector G4TwistTubsSide::GetNormal(const G4ThreeVector &tmpxx,
    G4ThreeVector ez(0, fKappa * xx.x(), 1);
    G4ThreeVector normal = fHandedness*(er.cross(ez));
 
-   if (isGlobal) {
+   if (isGlobal)
+   {
       fCurrentNormal.normal = ComputeGlobalDirection(normal.unit());
-   } else {
+   }
+   else
+   {
       fCurrentNormal.normal = normal.unit();
    }
    return fCurrentNormal.normal;
@@ -157,13 +153,13 @@ G4ThreeVector G4TwistTubsSide::GetNormal(const G4ThreeVector &tmpxx,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
-                                          const G4ThreeVector &gv,
-                                                G4ThreeVector  gxx[],
-                                                G4double       distance[],
-                                                G4int          areacode[],
-                                                G4bool         isvalid[],
-                                                EValidate      validate)
+G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
+                                         const G4ThreeVector& gv,
+                                               G4ThreeVector  gxx[],
+                                               G4double       distance[],
+                                               G4int          areacode[],
+                                               G4bool         isvalid[],
+                                               EValidate      validate)
 {
    // Coordinate system:
    //
@@ -211,19 +207,21 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
       
    fCurStatWithV.ResetfDone(validate, &gp, &gv);
 
-   if (fCurStatWithV.IsDone()) {
-      G4int i;
-      for (i=0; i<fCurStatWithV.GetNXX(); i++) {
+   if (fCurStatWithV.IsDone())
+   {
+      for (G4int i=0; i<fCurStatWithV.GetNXX(); ++i)
+      {
          gxx[i] = fCurStatWithV.GetXX(i);
          distance[i] = fCurStatWithV.GetDistance(i);
          areacode[i] = fCurStatWithV.GetAreacode(i);
          isvalid[i]  = fCurStatWithV.IsValid(i);
       }
       return fCurStatWithV.GetNXX();
-   } else {
-      // initialize
-      G4int i;
-      for (i=0; i<2; i++) {
+   }
+   else  // initialize
+   {
+      for (auto i=0; i<2; ++i)
+      {
          distance[i] = kInfinity;
          areacode[i] = sOutside;
          isvalid[i]  = false;
@@ -235,7 +233,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector v = ComputeLocalDirection(gv);
    G4ThreeVector xx[2]; 
 
-
    // 
    // special case! 
    // p is origin or
@@ -243,7 +240,8 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
 
    G4double absvz = std::fabs(v.z());
 
-   if ((absvz < DBL_MIN) && (std::fabs(p.x() * v.y() - p.y() * v.x()) < DBL_MIN)) {
+   if ((absvz<DBL_MIN) && (std::fabs(p.x() * v.y() - p.y() * v.x())<DBL_MIN))
+   {
       // no intersection
 
       isvalid[0] = false;
@@ -256,38 +254,48 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    // special case end
    //
 
-   
    G4double a = fKappa * v.x() * v.z();
    G4double b = fKappa * (v.x() * p.z() + v.z() * p.x()) - v.y();
    G4double c = fKappa * p.x() * p.z() - p.y();
    G4double D = b * b - 4 * a * c;             // discriminant
    G4int vout = 0;
 
-   if (std::fabs(a) < DBL_MIN) {
-      if (std::fabs(b) > DBL_MIN) { 
-
+   if (std::fabs(a) < DBL_MIN)
+   {
+      if (std::fabs(b) > DBL_MIN)
+      {
          // single solution
 
          distance[0] = - c / b;
          xx[0]       = p + distance[0]*v;
          gxx[0]      = ComputeGlobalPoint(xx[0]);
 
-         if (validate == kValidateWithTol) {
+         if (validate == kValidateWithTol)
+         {
             areacode[0] = GetAreaCode(xx[0]);
-            if (!IsOutside(areacode[0])) {
+            if (!IsOutside(areacode[0]))
+            {
                if (distance[0] >= 0) isvalid[0] = true;
             }
-         } else if (validate == kValidateWithoutTol) {
+         }
+         else if (validate == kValidateWithoutTol)
+         {
             areacode[0] = GetAreaCode(xx[0], false);
-            if (IsInside(areacode[0])) {
+            if (IsInside(areacode[0]))
+            {
                if (distance[0] >= 0) isvalid[0] = true;
             }
-         } else { // kDontValidate                       
+         }
+         else  // kDontValidate
+         { 
             // we must omit x(rho,z) = rho(z=0) < 0
-            if (xx[0].x() > 0) {
+            if (xx[0].x() > 0)
+            {
                areacode[0] = sInside;
                if (distance[0] >= 0) isvalid[0] = true;
-            } else {
+            }
+            else
+            {
                distance[0] = kInfinity;
                fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
                                               areacode[0], isvalid[0],
@@ -299,8 +307,9 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 1, validate, &gp, &gv);
          vout = 1;
-
-      } else {
+      }
+      else
+      {
          // if a=b=0 , v.y=0 and (v.x=0 && p.x=0) or (v.z=0 && p.z=0) .
          //    if v.x=0 && p.x=0, no intersection unless p is on z-axis
          //    (in that case, v is paralell to surface). 
@@ -311,9 +320,9 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                         isvalid[0], 0, validate, &gp, &gv);
       }
-      
-   } else if (D > DBL_MIN) {   
-
+   }
+   else if (D > DBL_MIN)
+   {
       // double solutions
 
       D = std::sqrt(D);
@@ -322,39 +331,50 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
       G4ThreeVector tmpxx[2];
       G4int         tmpareacode[2] = {sOutside, sOutside};
       G4bool        tmpisvalid[2]  = {false, false};
-      G4int i;
 
-      for (i=0; i<2; i++) {
+      for (auto i=0; i<2; ++i)
+      {
          G4double bminusD = - b - D;
 
          // protection against round off error  
          //G4double protection = 1.0e-6;
          G4double protection = 0;
-         if ( b * D < 0 && std::fabs(bminusD / D) < protection ) {
+         if ( b * D < 0 && std::fabs(bminusD / D) < protection )
+         {
             G4double acovbb = (a*c)/(b*b);
             tmpdist[i] = - c/b * ( 1 - acovbb * (1 + 2*acovbb));
-         } else { 
+         }
+         else
+         { 
             tmpdist[i] = factor * bminusD;
          }
 
          D = -D;
          tmpxx[i] = p + tmpdist[i]*v;
          
-         if (validate == kValidateWithTol) {
+         if (validate == kValidateWithTol)
+         {
             tmpareacode[i] = GetAreaCode(tmpxx[i]);
-            if (!IsOutside(tmpareacode[i])) {
+            if (!IsOutside(tmpareacode[i]))
+            {
                if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
             }
-         } else if (validate == kValidateWithoutTol) {
+         }
+         else if (validate == kValidateWithoutTol)
+         {
             tmpareacode[i] = GetAreaCode(tmpxx[i], false);
-            if (IsInside(tmpareacode[i])) {
+            if (IsInside(tmpareacode[i]))
+            {
                if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
             }
-         } else { // kDontValidate
+         }
+         else  // kDontValidate
+         {
             // we must choose x(rho,z) = rho(z=0) > 0
-            if (tmpxx[i].x() > 0) {
+            if (tmpxx[i].x() > 0)
+            {
                tmpareacode[i] = sInside;
                if (tmpdist[i] >= 0) tmpisvalid[i] = true;
                continue;
@@ -365,7 +385,8 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
          }
       }
       
-      if (tmpdist[0] <= tmpdist[1]) {
+      if (tmpdist[0] <= tmpdist[1])
+      {
          distance[0] = tmpdist[0];
          distance[1] = tmpdist[1];
          xx[0]       = tmpxx[0];
@@ -376,7 +397,9 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
          areacode[1] = tmpareacode[1];
          isvalid[0]  = tmpisvalid[0];
          isvalid[1]  = tmpisvalid[1];
-      } else {
+      }
+      else
+      {
          distance[0] = tmpdist[1];
          distance[1] = tmpdist[0];
          xx[0]       = tmpxx[1];
@@ -396,48 +419,47 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
 
       // protection against roundoff error
 
-      for (G4int k=0; k<2; k++) {
+      for (G4int k=0; k<2; ++k)
+      {
          if (!isvalid[k]) continue;
 
          G4ThreeVector xxonsurface(xx[k].x(), fKappa * std::fabs(xx[k].x())
                                               * xx[k].z() , xx[k].z());
          G4double      deltaY  =  (xx[k] - xxonsurface).mag();
 
-         if ( deltaY > 0.5*kCarTolerance ) {
-
+         if ( deltaY > 0.5*kCarTolerance )
+         {
            G4int maxcount = 10;
            G4int l;
-           G4double      lastdeltaY = deltaY; 
-           for (l=0; l<maxcount; l++) {
+           G4double lastdeltaY = deltaY; 
+           for (l=0; l<maxcount; ++l)
+           {
              G4ThreeVector surfacenormal = GetNormal(xxonsurface); 
              distance[k] = DistanceToPlaneWithV(p, v, xxonsurface,
                                                 surfacenormal, xx[k]);
              deltaY      = (xx[k] - xxonsurface).mag();
-             if (deltaY > lastdeltaY) {
-               
-             }
+             if (deltaY > lastdeltaY) { }   // ???
              gxx[k]      = ComputeGlobalPoint(xx[k]);
 
-               if (deltaY <= 0.5*kCarTolerance) {
-            
-                 break;
-               }
-               xxonsurface.set(xx[k].x(),
-                               fKappa * std::fabs(xx[k].x()) * xx[k].z(),
-                               xx[k].z());
-            }
-            if (l == maxcount) {
-               std::ostringstream message;
-               message << "Exceeded maxloop count!" << G4endl
-                      << "        maxloop count " << maxcount;
-               G4Exception("G4TwistTubsFlatSide::DistanceToSurface(p,v)",
-                           "GeomSolids0003",  FatalException, message);
-            }
+             if (deltaY <= 0.5*kCarTolerance) break;
+             xxonsurface.set(xx[k].x(),
+                             fKappa * std::fabs(xx[k].x()) * xx[k].z(),
+                             xx[k].z());
+           }
+           if (l == maxcount)
+           {
+             std::ostringstream message;
+             message << "Exceeded maxloop count!" << G4endl
+                     << "        maxloop count " << maxcount;
+             G4Exception("G4TwistTubsFlatSide::DistanceToSurface(p,v)",
+                         "GeomSolids0003",  FatalException, message);
+           }
          }
-
       }
       vout = 2;
-   } else {
+   }
+   else
+   {
       // if D<0, no solution
       // if D=0, just grazing the surfaces, return kInfinity
 
@@ -451,23 +473,26 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
-                                                G4ThreeVector  gxx[],
-                                                G4double       distance[],
-                                                G4int          areacode[])
+G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
+                                               G4ThreeVector  gxx[],
+                                               G4double       distance[],
+                                               G4int          areacode[])
 {  
    fCurStat.ResetfDone(kDontValidate, &gp);
-   G4int i = 0;
-   if (fCurStat.IsDone()) {
-      for (i=0; i<fCurStat.GetNXX(); i++) {
+   if (fCurStat.IsDone())
+   {
+      for (G4int i=0; i<fCurStat.GetNXX(); ++i)
+      {
          gxx[i] = fCurStat.GetXX(i);
          distance[i] = fCurStat.GetDistance(i);
          areacode[i] = fCurStat.GetAreacode(i);
       }
       return fCurStat.GetNXX();
-   } else {
-      // initialize
-      for (i=0; i<2; i++) {
+   }
+   else  // initialize
+   {
+      for (auto i=0; i<2; ++i)
+      {
          distance[i] = kInfinity;
          areacode[i] = sOutside;
          gxx[i].set(kInfinity, kInfinity, kInfinity);
@@ -488,12 +513,14 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    //
    
    G4ThreeVector  lastgxx[2];
-   for (i=0; i<2; i++) {
+   for (auto i=0; i<2; ++i)
+   {
       lastgxx[i] = fCurStatWithV.GetXX(i);
    } 
 
    if  ((gp - lastgxx[0]).mag() < halftol
-     || (gp - lastgxx[1]).mag() < halftol) { 
+     || (gp - lastgxx[1]).mag() < halftol)
+   { 
       // last winner, or last poststep point is on the surface.
       xx = p;
       distance[0] = 0;
@@ -505,16 +532,20 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
       return 1;
    }
           
-   if (p.getRho() == 0) { 
+   if (p.getRho() == 0)
+   { 
       // p is on z-axis. Namely, p is on twisted surface (invalid area).
       // We must return here, however, returning distance to x-minimum
       // boundary is better than return 0-distance.
       //
       G4bool isvalid = true;
-      if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
+      if (fAxis[0] == kXAxis && fAxis[1] == kZAxis)
+      {
          distance[0] = DistanceToBoundary(sAxis0 & sAxisMin, xx, p);
          areacode[0] = sInside;
-      } else {
+      }
+      else
+      {
          distance[0] = 0;
          xx.set(0., 0., 0.);
       }
@@ -542,16 +573,25 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    
    // is p.z between a.z and c.z?
    // p.z must be bracketed a.z and c.z.
-   if (A.z() > C.z()) {
-      if (p.z() > A.z()) {
+   if (A.z() > C.z())
+   {
+      if (p.z() > A.z())
+      {
          A = GetBoundaryAtPZ(sAxis0 & sAxisMin, p);
-      } else if (p.z() < C.z()) {
+      }
+      else if (p.z() < C.z())
+      {
          C = GetBoundaryAtPZ(sAxis0 & sAxisMax, p);
       }
-   } else {
-      if (p.z() > C.z()) {
+   }
+   else
+   {
+      if (p.z() > C.z())
+      {
          C = GetBoundaryAtPZ(sAxis0 & sAxisMax, p);
-      } else if (p.z() < A.z()) {
+      }
+      else if (p.z() < A.z())
+      {
          A = GetBoundaryAtPZ(sAxis0 & sAxisMin, p);
       }
    }
@@ -560,12 +600,16 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector  x0[2];    // foot of normal from line to p 
    G4int          btype[2]; // boundary type
 
-   for (i=0; i<2; i++) {
-      if (i == 0) {
+   for (auto i=0; i<2; ++i)
+   {
+      if (i == 0)
+      {
          GetBoundaryParameters((sAxis0 & sAxisMax), d[i], x0[i], btype[i]);
          B = x0[i] + ((A.z() - x0[i].z()) / d[i].z()) * d[i]; 
          // x0 + t*d , d is direction unit vector.
-      } else {
+      }
+      else
+      {
          GetBoundaryParameters((sAxis0 & sAxisMin), d[i], x0[i], btype[i]);
          D = x0[i] + ((C.z() - x0[i].z()) / d[i].z()) * d[i]; 
       }
@@ -578,8 +622,10 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    G4int         pside = AmIOnLeftSide(pt, surfacevector); 
    G4double      test  = (A.z() - C.z()) * parity * pside;  
 
-   if (test == 0) {
-      if (pside == 0) {
+   if (test == 0)
+   {
+      if (pside == 0)
+      {
          // p is on surface.
          xx = p;
          distance[0] = 0;
@@ -587,9 +633,11 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
 
          G4bool isvalid = true;
          fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
+                                   isvalid, 1, kDontValidate, &gp);
          return 1;
-      } else {
+      }
+      else
+      {
          // A.z = C.z(). return distance to line.
          d[0] = C - A;
          distance[0] = DistanceToLine(p, A, d[0], xx);
@@ -597,14 +645,12 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
          gxx[0] = ComputeGlobalPoint(xx);
          G4bool isvalid = true;
          fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
+                                   isvalid, 1, kDontValidate, &gp);
          return 1;
       } 
-
-   } else if (test < 0) {
-
-      // wrong diagonal. vector AC is crossing the surface!  
-      // swap A and D, C and B
+   }
+   else if (test < 0)  // wrong diagonal. vector AC is crossing the surface! 
+   {                   // swap A and D, C and B
       G4ThreeVector tmp;
       tmp = A;
       A = D;
@@ -613,11 +659,12 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
       C = B;
       B = tmp; 
 
-   } else {
-      // correct diagonal. nothing to do.  
+   }
+   else  // correct diagonal. nothing to do.  
+   {
    }
 
-   // Now, we chose correct diaglnal.
+   // Now, we chose correct diagonal.
    // First try. divide quadrangle into double triangle by diagonal and 
    // calculate distance to both surfaces.
 
@@ -628,12 +675,14 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector AB(A.x(), A.y(), 0);
    G4ThreeVector DC(C.x(), C.y(), 0);
 
-   G4double distToACB = G4VTwistSurface::DistanceToPlane(p, A, C-A, AB, xxacb, nacb) * parity;
-   G4double distToCAD = G4VTwistSurface::DistanceToPlane(p, C, C-A, DC, xxcad, ncad) * parity;
-
+   G4double distToACB = G4VTwistSurface::DistanceToPlane(p, A, C-A, AB,
+                                                         xxacb, nacb) * parity;
+   G4double distToCAD = G4VTwistSurface::DistanceToPlane(p, C, C-A, DC,
+                                                         xxcad, ncad) * parity;
    // if calculated distance = 0, return  
 
-   if (std::fabs(distToACB) <= halftol || std::fabs(distToCAD) <= halftol) {
+   if (std::fabs(distToACB) <= halftol || std::fabs(distToCAD) <= halftol)
+   {
       xx = (std::fabs(distToACB) < std::fabs(distToCAD) ? xxacb : xxcad); 
       areacode[0] = sInside;
       gxx[0] = ComputeGlobalPoint(xx);
@@ -644,34 +693,45 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
       return 1;
    }
    
-   if (distToACB * distToCAD > 0 && distToACB < 0) {
+   if (distToACB * distToCAD > 0 && distToACB < 0)
+   {
       // both distToACB and distToCAD are negative.
       // divide quadrangle into double triangle by diagonal
       G4ThreeVector normal;
       distance[0] = DistanceToPlane(p, A, B, C, D, parity, xx, normal);
-   } else {
-      if (distToACB * distToCAD > 0) {
+   }
+   else
+   {
+      if (distToACB * distToCAD > 0)
+      {
          // both distToACB and distToCAD are positive.
          // Take smaller one.
-         if (distToACB <= distToCAD) {
+         if (distToACB <= distToCAD)
+         {
             distance[0] = distToACB;
             xx   = xxacb;
-         } else {
-            distance[0] = distToCAD;
-            xx   = xxcad;
          }
-      } else {
-         // distToACB * distToCAD is negative.
-         // take positive one
-         if (distToACB > 0) {
-            distance[0] = distToACB;
-            xx   = xxacb;
-         } else {
+         else
+         {
             distance[0] = distToCAD;
             xx   = xxcad;
          }
       }
-      
+      else
+      {
+         // distToACB * distToCAD is negative.
+         // take positive one
+         if (distToACB > 0)
+         {
+            distance[0] = distToACB;
+            xx   = xxacb;
+         }
+         else
+         {
+            distance[0] = distToCAD;
+            xx   = xxcad;
+         }
+      }
    }
    areacode[0] = sInside;
    gxx[0]      = ComputeGlobalPoint(xx);
@@ -684,14 +744,14 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToPlane ---------------------------------------------------
 
-G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector &p,
-                                           const G4ThreeVector &A,
-                                           const G4ThreeVector &B,
-                                           const G4ThreeVector &C,
-                                           const G4ThreeVector &D,
-                                           const G4int          parity,
-                                                 G4ThreeVector &xx,
-                                                 G4ThreeVector &n)
+G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector& p,
+                                          const G4ThreeVector& A,
+                                          const G4ThreeVector& B,
+                                          const G4ThreeVector& C,
+                                          const G4ThreeVector& D,
+                                          const G4int          parity,
+                                                G4ThreeVector& xx,
+                                                G4ThreeVector& n)
 {
    const G4double halftol = 0.5 * kCarTolerance;
    
@@ -702,44 +762,59 @@ G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector &p,
    G4ThreeVector xxcmn;  // foot of normal from p to plane CMN
    G4ThreeVector ncmn;   // normal of plane CMN
 
-   G4double distToanm = G4VTwistSurface::DistanceToPlane(p, A, (N - A), (M - A), xxanm, nanm) * parity;
-   G4double distTocmn = G4VTwistSurface::DistanceToPlane(p, C, (M - C), (N - C), xxcmn, ncmn) * parity;
-
+   G4double distToanm = G4VTwistSurface::DistanceToPlane(p, A, (N - A), (M - A),
+                                                         xxanm, nanm) * parity;
+   G4double distTocmn = G4VTwistSurface::DistanceToPlane(p, C, (M - C), (N - C),
+                                                         xxcmn, ncmn) * parity;
+#ifdef G4SPECSDEBUG
    // if p is behind of both surfaces, abort.
-   if (distToanm * distTocmn > 0 && distToanm < 0) {
+   if (distToanm * distTocmn > 0 && distToanm < 0)
+   {
      G4Exception("G4TwistTubsSide::DistanceToPlane()",
                  "GeomSolids0003", FatalException,
                  "Point p is behind the surfaces.");
    }
-
+#endif
    // if p is on surface, return 0.
-   if (std::fabs(distToanm) <= halftol) {
+   if (std::fabs(distToanm) <= halftol)
+   {
       xx = xxanm;
       n  = nanm * parity;
       return 0;
-   } else if (std::fabs(distTocmn) <= halftol) {
+   }
+   else if (std::fabs(distTocmn) <= halftol)
+   {
       xx = xxcmn;
       n  = ncmn * parity;
       return 0;
    }
    
-   if (distToanm <= distTocmn) {
-      if (distToanm > 0) {
+   if (distToanm <= distTocmn)
+   {
+      if (distToanm > 0)
+      {
          // both distanses are positive. take smaller one.
          xx = xxanm;
          n  = nanm * parity;
          return distToanm;
-      } else {
+      }
+      else
+      {
          // take -ve distance and call the function recursively.
          return DistanceToPlane(p, A, M, N, D, parity, xx, n);
       }
-   } else {
-      if (distTocmn > 0) {
+   }
+   else
+   {
+      if (distTocmn > 0)
+      {
          // both distanses are positive. take smaller one.
          xx = xxcmn;
          n  = ncmn * parity;
          return distTocmn;
-      } else {
+      }
+      else
+      {
          // take -ve distance and call the function recursively.
          return DistanceToPlane(p, C, N, M, B, parity, xx, n);
       }
@@ -749,8 +824,8 @@ G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector &p,
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
 
-G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector &xx, 
-                                          G4bool withTol)
+G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector& xx, 
+                                         G4bool withTol)
 {
    // We must use the function in local coordinate system.
    // See the description of DistanceToSurface(p,v).
@@ -758,38 +833,45 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector &xx,
    const G4double ctol = 0.5 * kCarTolerance;
    G4int areacode = sInside;
    
-   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
+   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis)
+   {
       G4int xaxis = 0;
       G4int zaxis = 1;
       
-      if (withTol) {
-
+      if (withTol)
+      {
          G4bool isoutside   = false;
 
          // test boundary of xaxis
 
-         if (xx.x() < fAxisMin[xaxis] + ctol) {
+         if (xx.x() < fAxisMin[xaxis] + ctol)
+         {
             areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary; 
             if (xx.x() <= fAxisMin[xaxis] - ctol) isoutside = true;
 
-         } else if (xx.x() > fAxisMax[xaxis] - ctol) {
+         }
+         else if (xx.x() > fAxisMax[xaxis] - ctol)
+         {
             areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
             if (xx.x() >= fAxisMax[xaxis] + ctol)  isoutside = true;
          }
 
          // test boundary of z-axis
 
-         if (xx.z() < fAxisMin[zaxis] + ctol) {
+         if (xx.z() < fAxisMin[zaxis] + ctol)
+         {
             areacode |= (sAxis1 & (sAxisZ | sAxisMin)); 
 
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner
             else                        areacode |= sBoundary;
             if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
 
-         } else if (xx.z() > fAxisMax[zaxis] - ctol) {
+         }
+         else if (xx.z() > fAxisMax[zaxis] - ctol)
+         {
             areacode |= (sAxis1 & (sAxisZ | sAxisMax));
 
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner
             else                        areacode |= sBoundary; 
             if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
          }
@@ -797,42 +879,54 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector &xx,
          // if isoutside = true, clear inside bit.             
          // if not on boundary, add axis information.             
          
-         if (isoutside) {
+         if (isoutside)
+         {
             G4int tmpareacode = areacode & (~sInside);
             areacode = tmpareacode;
-         } else if ((areacode & sBoundary) != sBoundary) {
+         }
+         else if ((areacode & sBoundary) != sBoundary)
+         {
             areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisZ);
-         }           
-         
-      } else {
-
+         }
+      }
+      else
+      {
          // boundary of x-axis
 
-         if (xx.x() < fAxisMin[xaxis] ) {
+         if (xx.x() < fAxisMin[xaxis] )
+         {
             areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary;
-         } else if (xx.x() > fAxisMax[xaxis]) {
+         }
+         else if (xx.x() > fAxisMax[xaxis])
+         {
             areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
          }
          
          // boundary of z-axis
 
-         if (xx.z() < fAxisMin[zaxis]) {
+         if (xx.z() < fAxisMin[zaxis])
+         {
             areacode |= (sAxis1 & (sAxisZ | sAxisMin));
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is oncorner
             else                        areacode |= sBoundary; 
            
-         } else if (xx.z() > fAxisMax[zaxis]) {
+         }
+         else if (xx.z() > fAxisMax[zaxis])
+         {
             areacode |= (sAxis1 & (sAxisZ | sAxisMax)) ;
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on the corner.
+            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner
             else                        areacode |= sBoundary; 
          }
 
-         if ((areacode & sBoundary) != sBoundary) {
+         if ((areacode & sBoundary) != sBoundary)
+         {
             areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisZ);
          }           
       }
       return areacode;
-   } else {
+   }
+   else
+   {
       G4Exception("G4TwistTubsSide::GetAreaCode()",
                   "GeomSolids0001", FatalException,
                   "Feature NOT implemented !");
@@ -843,16 +937,15 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector &xx,
 //=====================================================================
 //* SetCorners( arglist ) -------------------------------------------------
 
-void G4TwistTubsSide::SetCorners(
-                                  G4double      endInnerRad[2],
-                                  G4double      endOuterRad[2],
-                                  G4double      endPhi[2],
-                                  G4double      endZ[2])
+void G4TwistTubsSide::SetCorners( G4double endInnerRad[2],
+                                  G4double endOuterRad[2],
+                                  G4double endPhi[2],
+                                  G4double endZ[2] )
 {
    // Set Corner points in local coodinate.   
 
-   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
-   
+   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis)
+   {
       G4int zmin = 0 ;  // at -ve z
       G4int zmax = 1 ;  // at +ve z
 
@@ -882,7 +975,9 @@ void G4TwistTubsSide::SetCorners(
       z = endZ[zmax];
       SetCorner(sC0Min1Max, x, y, z);
 
-   } else {
+   }
+   else
+   {
       std::ostringstream message;
       message << "Feature NOT implemented !" << G4endl
               << "        fAxis[0] = " << fAxis[0] << G4endl
@@ -911,8 +1006,8 @@ void G4TwistTubsSide::SetBoundaries()
    //   
    G4ThreeVector direction;
    
-   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
-      
+   if (fAxis[0] == kXAxis && fAxis[1] == kZAxis)
+   {
       // sAxis0 & sAxisMin
       direction = GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min);
       direction = direction.unit();
@@ -937,7 +1032,9 @@ void G4TwistTubsSide::SetBoundaries()
       SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
                   GetCorner(sC0Min1Max), sAxisX);
                   
-   } else {
+   }
+   else
+   {
       std::ostringstream message;
       message << "Feature NOT implemented !" << G4endl
               << "        fAxis[0] = " << fAxis[0] << G4endl
@@ -953,7 +1050,6 @@ void G4TwistTubsSide::SetBoundaries()
 void G4TwistTubsSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
                                  G4int faces[][4], G4int iside ) 
 {
-
   G4double z ;     // the two parameters for the surface equation
   G4double x,xmin,xmax ;
 
@@ -964,23 +1060,23 @@ void G4TwistTubsSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
 
   // calculate the (n-1)*(k-1) vertices
 
-  G4int i,j ;
-
-  for ( i = 0 ; i<n ; i++ )
+  for ( G4int i = 0 ; i<n ; ++i )
   {
-
     z = fAxisMin[1] + i*(fAxisMax[1]-fAxisMin[1])/(n-1) ;
 
-    for ( j = 0 ; j<k ; j++ ) {
-
+    for ( G4int j = 0 ; j<k ; ++j )
+    {
       nnode = GetNode(i,j,k,n,iside) ;
 
       xmin = GetBoundaryMin(z) ; 
       xmax = GetBoundaryMax(z) ;
 
-      if (fHandedness < 0) { 
+      if (fHandedness < 0)
+      { 
         x = xmin + j*(xmax-xmin)/(k-1) ;
-      } else {               
+      }
+      else
+      {               
         x = xmax - j*(xmax-xmin)/(k-1) ;
       }
 
@@ -990,15 +1086,18 @@ void G4TwistTubsSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
       xyz[nnode][1] = p.y() ;
       xyz[nnode][2] = p.z() ;
 
-      if ( i<n-1 && j<k-1 ) {   // clock wise filling
-        
+      if ( i<n-1 && j<k-1 )   // clock wise filling
+      {
         nface = GetFace(i,j,k,n,iside) ;
 
- 	faces[nface][0] = GetEdgeVisibility(i,j,k,n,0,1) * ( GetNode(i  ,j  ,k,n,iside)+1) ;  
-	faces[nface][1] = GetEdgeVisibility(i,j,k,n,1,1) * ( GetNode(i+1,j  ,k,n,iside)+1) ;
-	faces[nface][2] = GetEdgeVisibility(i,j,k,n,2,1) * ( GetNode(i+1,j+1,k,n,iside)+1) ;
-	faces[nface][3] = GetEdgeVisibility(i,j,k,n,3,1) * ( GetNode(i  ,j+1,k,n,iside)+1) ;
-
+ 	faces[nface][0] = GetEdgeVisibility(i,j,k,n,0,1)
+                        * ( GetNode(i  ,j  ,k,n,iside)+1) ;  
+	faces[nface][1] = GetEdgeVisibility(i,j,k,n,1,1)
+                        * ( GetNode(i+1,j  ,k,n,iside)+1) ;
+	faces[nface][2] = GetEdgeVisibility(i,j,k,n,2,1)
+                        * ( GetNode(i+1,j+1,k,n,iside)+1) ;
+	faces[nface][3] = GetEdgeVisibility(i,j,k,n,3,1)
+                        * ( GetNode(i  ,j+1,k,n,iside)+1) ;
       }
     }
   }

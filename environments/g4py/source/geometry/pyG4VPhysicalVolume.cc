@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VPhysicalVolume.cc 76884 2013-11-18 12:54:03Z gcosmo $
 // ====================================================================
 //   pyG4VPhysicalVolume.cc
 //
@@ -62,33 +61,29 @@ void export_G4VPhysicalVolume()
     // ---
     .def("SetTranslation",       &G4VPhysicalVolume::SetTranslation)
     .def("GetTranslation",       &G4VPhysicalVolume::GetTranslation,
-	 return_internal_reference<>())
+         return_value_policy<return_by_value>())
     .def("GetObjectTranslation", &G4VPhysicalVolume::GetObjectTranslation)
     .def("GetFrameTranslation",  &G4VPhysicalVolume::GetObjectTranslation)
     // ---
     .def("SetRotation",          &G4VPhysicalVolume::SetRotation)
     .def("GetRotation",          f1_GetRotation,
-      return_internal_reference<>())
+         return_internal_reference<>())
     .def("GetRotation",          f2_GetRotation,
-      return_internal_reference<>())
+         return_internal_reference<>())
     .def("GetObjectRotationValue", &G4VPhysicalVolume::GetObjectRotationValue)
     .def("GetFrameRotation",       &G4VPhysicalVolume::GetFrameRotation,
-	 return_internal_reference<>())
+	       return_internal_reference<>())
     // ---
     .def("SetLogicalVolume",     &G4VPhysicalVolume::SetLogicalVolume)
     .def("SetMotherLogical",     &G4VPhysicalVolume::SetMotherLogical)
     .def("GetLogicalVolume",     &G4VPhysicalVolume::GetLogicalVolume,
-	 return_internal_reference<>())
+	       return_internal_reference<>())
     .def("GetMotherLogical",     &G4VPhysicalVolume::GetMotherLogical,
-	 return_internal_reference<>())
+	       return_internal_reference<>())
     // ---
     .def("SetName",             &G4VPhysicalVolume::SetName)
-#if G4VERSION_NUMBER <= 801
-    .def("GetName",             &G4VPhysicalVolume::GetName)
-#else
     .def("GetName",             &G4VPhysicalVolume::GetName,
          return_value_policy<return_by_value>())
-#endif
     .def("SetCopyNo",           &G4VPhysicalVolume::SetCopyNo)
     .def("GetCopyNo",           &G4VPhysicalVolume::GetCopyNo)
     // ---
@@ -97,7 +92,6 @@ void export_G4VPhysicalVolume()
     .def("IsParameterised",     &G4VPhysicalVolume::IsParameterised)
     .def("GetMultiplicity",     &G4VPhysicalVolume::GetMultiplicity)
     .def("GetParameterisation", &G4VPhysicalVolume::GetParameterisation,
-	 return_value_policy<reference_existing_object>())
+	       return_value_policy<reference_existing_object>())
     ;
 }
-

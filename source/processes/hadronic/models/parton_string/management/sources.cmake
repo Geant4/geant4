@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -46,20 +45,14 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_string_man
     HEADERS
-        G4EventGenerator.hh
-        G4InteractionCode.hh
         G4InteractionContent.hh
-        G4PomeronCrossSection.hh
         G4StringModel.hh
         G4VParticipants.hh
         G4VPartonStringModel.hh
         G4VSplitableHadron.hh
         G4VStringFragmentation.hh
-        G4VertexCode.hh
     SOURCES
-        G4EventGenerator.cc
         G4InteractionContent.cc
-        G4PomeronCrossSection.cc
         G4StringModel.cc
         G4VParticipants.cc
         G4VPartonStringModel.cc

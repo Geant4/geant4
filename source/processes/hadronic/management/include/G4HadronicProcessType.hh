@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicProcessType.hh 67989 2013-03-13 10:54:03Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -44,6 +43,7 @@ enum G4HadronicProcessType
   fHadronElastic =    111,
   fHadronInelastic =  121,
   fCapture =          131,
+  fMuAtomicCapture =  132,
   fFission =          141,
   fHadronAtRest =     151,
   fLeptonAtRest =     152,

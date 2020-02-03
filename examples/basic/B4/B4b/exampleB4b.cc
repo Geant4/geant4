@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: exampleB4b.cc 95508 2016-02-12 13:52:06Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file exampleB4b.cc
 /// \brief Main program of the B4b example
@@ -94,9 +97,9 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv, session);
   }
   
-  // Choose the Random engine
+  // Optionally: choose a different Random engine...
   //
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
   
   // Construct the default run manager
   //

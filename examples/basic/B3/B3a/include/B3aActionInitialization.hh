@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3aActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file B3aActionInitialization.hh
 /// \brief Definition of the B3aActionInitialization class

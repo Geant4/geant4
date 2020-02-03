@@ -26,7 +26,6 @@
 /// \file materials/src/G4LatticePhysical.cc
 /// \brief Implementation of the G4LatticePhysical class
 //
-// $Id: G4LatticePhysical.cc 76883 2013-11-18 12:50:08Z gcosmo $
 //
 // 20131115  Save rotation results in local variable, report verbosely
 // 20131116  Replace G4Transform3D with G4RotationMatrix

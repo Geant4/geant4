@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4VoxelNavigation.icc 80287 2014-04-10 09:49:49Z gcosmo $
-//
 // 
 // class G4VoxelNavigation Inline implementation
 //
@@ -40,19 +36,19 @@ G4SmartVoxelNode*
 G4VoxelNavigation::VoxelLocate( G4SmartVoxelHeader* pHead,
                                 const G4ThreeVector& localPoint )
 {
-  G4SmartVoxelHeader *targetVoxelHeader=pHead;
-  G4SmartVoxelNode *targetVoxelNode=0;
-  G4SmartVoxelProxy *sampleProxy;
+  G4SmartVoxelHeader* targetVoxelHeader = pHead;
+  G4SmartVoxelNode* targetVoxelNode = nullptr;
+  G4SmartVoxelProxy* sampleProxy;
   EAxis targetHeaderAxis;
   G4double targetHeaderMin, targetHeaderNodeWidth;
   G4int targetHeaderNoSlices, targetNodeNo;
 
   fVoxelDepth = 0;
 
-  while ( !targetVoxelNode )
+  while ( targetVoxelNode == nullptr )
   {
     targetHeaderAxis = targetVoxelHeader->GetAxis();
-    targetHeaderNoSlices = targetVoxelHeader->GetNoSlices();
+    targetHeaderNoSlices = G4int(targetVoxelHeader->GetNoSlices());
     targetHeaderMin = targetVoxelHeader->GetMinExtent();
     targetHeaderNodeWidth = (targetVoxelHeader->GetMaxExtent()-targetHeaderMin)
                           / targetHeaderNoSlices;
@@ -84,7 +80,7 @@ G4VoxelNavigation::VoxelLocate( G4SmartVoxelHeader* pHead,
     else
     {
       targetVoxelHeader = sampleProxy->GetHeader();
-      fVoxelDepth++;
+      ++fVoxelDepth;
     }
   }
   fVoxelNode = targetVoxelNode;
@@ -121,14 +117,14 @@ G4VoxelNavigation::LevelLocate( G4NavigationHistory& history,
   //
   targetVoxelNode = VoxelLocate(targetVoxelHeader,localPoint);
 
-  targetNoDaughters=targetVoxelNode->GetNoContained();
+  targetNoDaughters = G4int(targetVoxelNode->GetNoContained());
   if ( targetNoDaughters==0 ) return false;
 
   //
   // Search daughters in volume
   //
 
-  for ( G4int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
+  for ( auto sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     samplePhysical = targetLogical->
                      GetDaughter(targetVoxelNode->GetVolume(sampleNo));

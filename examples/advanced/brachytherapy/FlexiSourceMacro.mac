@@ -1,0 +1,28 @@
+/run/initialize
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+#### Define the geometry of the Flexi source
+/source/switch Flexi
+###### Generation of primary field
+#### Generate gamma deriving from radioactive decay
+/control/execute iridium_source_primary.mac
+# Scoring mesh is used to calculate
+#  the energy deposition in the phantom
+/score/create/boxMesh boxMesh_4
+#
+# the voxels are 0.25 mm wide.
+/score/mesh/boxSize 10.0125 10.0125 0.0125 cm
+/score/mesh/nBin 801 801 1
+/score/quantity/energyDeposit eDep
+#
+/score/close
+#
+/score/list                                             
+/run/beamOn 5000
+#
+# Dump scores to a file
+#
+/score/dumpQuantityToFile boxMesh_4 eDep EnergyDeposition_Flexi.out
+#

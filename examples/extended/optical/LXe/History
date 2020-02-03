@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +18,97 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 October 14, 2016 G.Folger
 - remove direct use of aParticleIterator, use GetParticleTableIterator().
+=======
+November 28, 2019 I. Hrivnacova (LXe-V10-05-05)
+- Fixed Doxygen warnings in .README.txt 
+
+November 26, 2019 I. Hrivnacova (LXe-V10-05-04)
+- Fixed formatting in .README.txt and Doxygen warnings
+
+October 29, 2019 D. Sawkey (LXe-V10-05-03)
+- wls.mac, cerenkov.mac: unique analysis filenames
+
+October 28, 2019 D. Sawkey (LXe-V10-05-02)
+- LXePMTSD.cc, LXeDetectorConstruction.cc - update PMT positions when changing
+  number of PMTs
+
+October 15, 2019 D. Sawkey (LXe-V10-05-01)
+- wls.mac, cerenkov.mac - fewer particles
+
+May 24, 2019 D. Sawkey (LXe-V10-05-00)
+- LXeDetectorConstruction - remove protection against rebuilding detector
+- LXeEventAction - randomSaveEvent not working so comment out
+
+November 10, 2018 V.Ivanchenko (LXe-V10-04-11)
+- LXeDetectorConstruction - removed definition of random number
+  directory from the code, user may define thisvia UI command
+
+November 09, 2018 V.Ivanchenko (LXe-V10-04-10)
+- Fixed MT issue - random directory should not be set via Event
+  action, this functionality is moved to DetectorConstruction
+
+October 26, 2018 D. Sawkey (LXe-V10-04-09)
+- Restore .README.txt
+- removed unneeded direction named random
+
+May 17, 2018 J. Allison (LXe-V10-04-08)
+- LXe.cc: Removed remaining G4UI_USE and G4VIS_USE.
+
+May 17, 2018 J. Allison (LXe-V10-04-07)
+- LXe.cc: Instantiate vis manager always (including batch).
+
+May 15, 2018 D. Sawkey (LXe-V10-04-06)
+- update README, remove WALKTHROUGH
+- update LXe.cc use vis.mac, gui.mac if no command line args
+- update vis.mac
+- use nullptr throughout
+- remove redundant 'this'
+
+May 8, 2018 D. Sawkey (LXe-V10-04-05)
+- remove LXeRecorderBase, replace with LXeHistoManager
+
+May 8, 2018 B. Morgan (LXe-V10-04-04)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+May 3, 2018 D. Sawkey (LXe-V10-04-03)
+- Add LXeRun to record, print results at end
+- Remove LXeUserEventInformation, use LXeEventAction instead
+- Use G4EmStandard_option4 EM physics
+
+May 1, 2018 D. Sawkey (LXe-V10-04-02)
+- replace local physics with FTFP_BERT + G4OpticalPhysics
+  - deleted LXeEMPhysics, LXeGeneralPhysics,LXeMuonPhysics,LXePhysicsList
+- remove LXeSteppingVerbose
+- cleaning of macros
+
+April 4, 2018 D. Sawkey (LXe-V10-04-01)
+- problem report 2042. 
+   Macros: remove /LXe/detector/update, add /run/initialize
+   LXeDetectorConstruction: move DefineMaterials to ctor
+   LXeGeneralPhysics, LXeEMPhysics, LXeMuonPhysics: construct particles in
+     LXeGeneralPhysics using G4BosonConstructor etc
+
+March 6, 2018 P. Gumplinger (LXe-V10-04-00)
+- address problem report 2041
+
+May 31, 2017 P. Gumplinger (LXe-V10-03-00)
+- address problem report:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/651/1/1/1.html
+
+November 19, 2016 A.Dotti  (LXe-V10-02-03)
+- explici set of SD to manager
+
+November 2, 2016 G.Folger (LXe-V10-02-02)
+- Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+October 14, 2016 G.Folger (LXe-V10-02-01)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     fix required by clang39 on Linux and MAC
 
 May 22, 2015 P. Gumplinger (LXe-V10-01-00)

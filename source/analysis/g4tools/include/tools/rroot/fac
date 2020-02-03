@@ -5,82 +5,85 @@
 #define tools_rroot_fac
 
 #include "../sout"
+#include "../S_STRING"
 
 #include "branch_element"
+#include "branch_object"
 #include "leaf"
 #include "basket"
 #include "tree_index"
 #include "stl_vector"
 #include "dummy"
+#include "obj_list"
+#include "vector3"
+#include "matrix"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
 
 namespace tools {
 namespace rroot {
 
 class fac : public virtual ifac {
 public:
-  static const std::string& s_class() {
-    static const std::string s_v("tools::rroot::fac");
-    return s_v;
-  }
+  TOOLS_SCLASS(tools::rroot::fac)
 public: //ifac
-  virtual iro* create(const std::string& a_class,const args& a_args) {
-    //m_file.out() << "tools::rroot::fac::create :"
+  virtual std::ostream& out() const {return m_out;}
+  virtual iro* create(const std::string& a_class,const args&) {
+    //m_out << "tools::rroot::fac::create :"
     //      << " create object of class " << a_class << "..."
     //      << std::endl;
     if(a_class=="TBranch") {
-      return new branch(m_file,*this);
+      return new branch(m_out,*this);
     } else if(a_class=="TBranchElement") {
-      return new branch_element(m_file,*this);
+      return new branch_element(m_out,*this);
+    } else if(a_class=="TBranchObject") {
+      return new branch_object(m_out,*this);
 
     } else if(a_class=="TLeafB") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf<char>(m_file.out(),*b,*this);
+      return new leaf<char>(m_out,*this);
 
     } else if(a_class=="TLeafS") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf<short>(m_file.out(),*b,*this);
+      return new leaf<short>(m_out,*this);
 
     } else if(a_class=="TLeafI") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf<int>(m_file.out(),*b,*this);
+      return new leaf<int>(m_out,*this);
 
     } else if(a_class=="TLeafF") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf<float>(m_file.out(),*b,*this);
+      return new leaf<float>(m_out,*this);
 
     } else if(a_class=="TLeafD") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf<double>(m_file.out(),*b,*this);
+      return new leaf<double>(m_out,*this);
 
     } else if(a_class=="TLeafO") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf<bool>(m_file.out(),*b,*this);
+      return new leaf<bool>(m_out,*this);
 
     } else if(a_class=="TLeafC") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf_string(m_file.out(),*b,*this);
+      return new leaf_string(m_out,*this);
 
     } else if(a_class=="TLeafElement") {
-      branch* b = arg_branch(a_args);
-      if(!b) return 0;
-      return new leaf_element(m_file.out(),*b,*this);
+      return new leaf_element(m_out,*this);
+
+    } else if(a_class=="TLeafObject") {
+      return new leaf_object(m_out,*this);
 
     } else if(a_class=="TBasket") {
-      return new basket(m_file);
+      return new basket(m_out);
 
     // L.Duflot ATLAS file :
     } else if(a_class=="TTreeIndex") {
       return new tree_index();
 
     } else if(a_class=="TList") {
-      return new List(*this,true);
+      return new obj_list(*this);
+    } else if(a_class=="TVector3") {
+      return new vector3();
+    } else if(a_class=="TMatrix") {
+      return new matrix();
+
+    } else if(a_class=="TNamed") {
+      return new named();
 
     } else if(a_class=="vector<unsigned short>") {
       return new stl_vector<unsigned short>();
@@ -118,33 +121,46 @@ public: //ifac
       return new dummy();
 
     } else {
-      m_file.out() << "tools::rroot::fac::create :"
+      m_out << "tools::rroot::fac::create :"
                    << " unknown class " << sout(a_class) << "."
                    << " Create a tools::rroot::dummy object."
                    << std::endl;
       return new dummy();
     }
   }
-  virtual void destroy(iro*& a_obj) {delete a_obj;a_obj = 0;}
 public:
-  fac(ifile& a_file):m_file(a_file){}
-  virtual ~fac(){}
+  fac(std::ostream& a_out):m_out(a_out){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~fac(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
 public:
-  fac(const fac& a_from): ifac(a_from),m_file(a_from.m_file){}
+  fac(const fac& a_from):ifac(a_from),m_out(a_from.m_out){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
   fac& operator=(const fac&){return *this;}
 protected:
+/*
   branch* arg_branch(const args& a_args) {
     void* p = ifac::find_args(a_args,ifac::arg_branch());
     if(!p) {
-      m_file.out() << "tools::rroot::fac::arg_branch :"
+      m_out << "tools::rroot::fac::arg_branch :"
                    << " branch not found in args."
                    << std::endl;
       return 0;
     }
     return (branch*)p;
   }
+*/
 protected:
-  ifile& m_file;
+  std::ostream& m_out;
 };
 
 }}

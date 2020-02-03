@@ -7,8 +7,49 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
+<<<<<<< HEAD
 28.11.2016 - G.Folger
              Remove direct use of theParticleIterator, use GetParticleTableIterator().
+=======
+13.11.2018 - G. Cosmo tag iort_therapy-V10-04-06
+             IORTDetectorConstruction: fixed initialisation setting of inner
+             radius also for "DiscoIORT0" component.
+
+12.11.2018 - G. Cosmo tag iort_therapy-V10-04-05
+             IORTDetectorConstruction: fixed initialisation setting of inner
+             radius for "DiscoIORT1" component.
+
+09.11.2018 - G. Cosmo tag iort_therapy-V10-04-04
+             IORTDetectorConstruction: fixed typos in printout.
+
+18.09.2018 - S. Guatelli tag iort_therapy-V10-04-03
+             unused variable deleted
+
+17.09.2018 - S. Guatelli tag iort_therapy-V10-04-02
+             CMakeList.txt updated 
+
+17.09.2018 - S. Guatelli tag iort_therapy-V10-04-01
+             delete macro directory. 
+
+12.09.2018 - S. Guatelli tag iort_therapy-V10-04-00
+             removed RO geometry together with Hit class. Scoring mesh included.  
+             G4_UI_USE and G4_VIS_USE removed.
+             How to delete the geometry of the disk has been changed (bug eliminated). 
+             Analysis class deleted (no analysis directly connected with the IORT example)
+             G4Decay and IORTMatrix deleted as they are not needed.
+             Protontherapy removed as it is out of the scope.
+             G4SystemOfUnits.hh included 
+             README updated accordingly to changes. 
+     
+28.11.2017 - B.Morgan tag iort_therapy-V10-03-01
+             Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+
+31.10.2017 - L.Pandola tag iort_therapy-V10-03-00
+             Clean up visualization from batch.mac
+
+28.11.2016 - G.Folger tag iort_therapy-V10-02-00
+            Remove direct use of theParticleIterator, use GetParticleTableIterator().
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
              fix required by clang39 on Linux and MAC
 22.09.2015 - L.Pandola: tag iort_therapy-V10-01-00
 	     Migraeted to g4tools

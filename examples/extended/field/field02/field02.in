@@ -1,16 +1,13 @@
 #
-# Macro file for the initialization phase of field02.
+# Macro file for the test of field02 example
 #
 # It creates the default geometry (simple absorber cylinder )        
 #
 /tracking/verbose 1
 /run/verbose 1
 #
-#
-#
 /field/setStepperType 4
 /field/setMinStep 10 mm
-#
 /field/update
 #
 /run/initialize
@@ -23,3 +20,23 @@
 /run/printProgress 50
 /run/beamOn 100
 #
+# Test commands defined in this example
+/control/verbose 2
+#
+/calor/setAbsMat Air          # default Kr20CO2
+/calor/setWorldMat Xe20CO2    # default Air
+/calor/setAbsThick  38 mm     # default 40 mm
+/calor/setAbsRad 12 cm        # default 10 cm
+/calor/setAbsZpos 40 cm       # default 36 cm
+/calor/setWorldZ  100 cm      # default 80*cm
+/calor/setWorldR  25 cm       # default 20*cm
+#/rndm/save is NOT USED in macro.  # to remove
+#/rndm/read is NOT USED in macro.  # to remove
+#
+/gun/random   on       # default "off"
+/gun/xvertex  10 mm    # default 0
+/gun/yvertex  10 mm    # default 0
+/gun/zvertex  10 mm    # default 0
+#
+/run/beamOn 1
+

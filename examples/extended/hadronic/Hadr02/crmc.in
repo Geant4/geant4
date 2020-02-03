@@ -1,0 +1,19 @@
+#============================================================================
+# 24-Oct-2018  Alberto Ribon  : Macro file for Hadr02
+#============================================================================
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat    G4_Al 
+/testhadr/TargetRadius 20 cm
+/testhadr/TargetLength 10 cm
+/run/printProgress 100
+#
+/run/initialize
+#
+/run/setCut 1 km
+/gun/particle proton
+/gun/energy 200.0 GeV
+/run/beamOn 100
+

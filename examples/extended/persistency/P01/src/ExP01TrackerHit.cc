@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExP01TrackerHit class
 //
 //
-// $Id: ExP01TrackerHit.cc 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +38,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-G4Allocator<ExP01TrackerHit> ExP01TrackerHitAllocator;
+G4ThreadLocal G4Allocator<ExP01TrackerHit>* ExP01TrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,9 +73,9 @@ const ExP01TrackerHit& ExP01TrackerHit::operator=(const ExP01TrackerHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int ExP01TrackerHit::operator==(const ExP01TrackerHit& right) const
+G4bool ExP01TrackerHit::operator==(const ExP01TrackerHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

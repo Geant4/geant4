@@ -1,0 +1,810 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_Windows_WinTk
+#define tools_Windows_WinTk
+
+#include "../Windows/tools"  //and not "tools", because this fancy VisualC++ will not find the file!
+
+#include <tools/touplow>
+#include <tools/words>
+#ifdef TOOLS_MEM
+#include <tools/mem>
+#endif
+
+#include <vector>
+
+namespace tools {
+namespace WinTk {
+
+class Component;
+
+class CallbackData {
+public:
+  CallbackData():x(0),y(0),wparam(0),lparam(0){}
+public:
+  std::string value;
+  int x;
+  int y;
+  WPARAM wparam;
+  LPARAM lparam;
+};
+
+typedef void (*Callback)(Component&,CallbackData&,void*);
+
+class Component {
+  typedef std::vector< std::pair<Callback,void*> > Callbacks;
+  typedef std::pair<std::string,Callbacks> NamedCallbacks;
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(exlib::WinTk::Component)
+#endif  
+public:
+  Component(const std::string& aType):fType(aType),fWindow(0),fParent(0){
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  Component(const std::string& aType,Component& aParent):fType(aType),fWindow(0),fParent(&aParent) {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~Component() {
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  Component(Component&) {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  Component& operator=(Component&) {return *this;}
+public:
+  std::string name() const {return fName;}
+  void setName(const std::string& aName) {fName = aName;}
+
+  const std::string& type() const {return fType;}
+  HWND nativeWindow() {return fWindow;}
+  Component* parent() const {return fParent;}
+  virtual void show() { 
+    //if(!fWindow) return;
+    //::ShowWindow(fWindow,SW_SHOWDEFAULT);
+  }
+  void hide() { 
+    if(!fWindow) return;
+    ::ShowWindow(fWindow,SW_HIDE);
+  }
+  
+  virtual bool size(unsigned int& aWidth,unsigned int& aHeight) { 
+    aWidth = 0;
+    aHeight = 0;
+    if(!fWindow) return false;
+    RECT rect;
+    ::GetClientRect(fWindow,&rect);
+    aWidth = rect.right-rect.left;
+    aHeight = rect.bottom-rect.top;
+    return true;
+  }
+  virtual bool position(int& aX,int& aY) { 
+    aX = 0;
+    aY = 0;
+    if(!fWindow) return false;
+    RECT rect;
+    ::GetClientRect(fWindow,&rect);
+    aX = rect.left;
+    aY = rect.top;
+    return true;
+  }
+  Component* findFather(const std::string& aType) { 
+    if(aType==type()) return this;
+    Component* parent = fParent;
+    while(parent) {
+      if(aType==parent->type()) return parent;
+      parent = parent->fParent;
+    }
+    return 0;
+  }
+
+  bool setBackground(double aR,double aG,double aB){ 
+    if(!fWindow) return false;
+
+    int r = int(aR*255.0);
+    if((r<0)||(r>255)) return false;
+    int g = int(aG*255.0);
+    if((g<0)||(g>255)) return false;
+    int b = int(aB*255.0);
+    if((b<0)||(b>255)) return false;
+ 
+/*
+    //COLORREF cr = RGB(r,g,b);
+    HBRUSH brush = ::CreateSolidBrush(RGB(r,g,b));
+    ::printf("debug : WinTk::Component::setBackground : brush  %lu\n",brush);
+  
+    HBRUSH prev = (HBRUSH)::GetClassLongPtr(fWindow,GCLP_HBRBACKGROUND);
+    ::printf("debug : WinTk::Component::setBackground : prev brush  %lu\n",prev);
+  
+   {WNDCLASSEX wc;
+    ::GetClassInfoEx(::GetModuleHandle(NULL),WC_STATIC,&wc);
+    ::printf("debug : prev brush xxx %lu\n",wc.hbrBackground);}
+  
+    ULONG_PTR stat = 
+      ::SetClassLongPtr(fWindow,GCLP_HBRBACKGROUND,(LONG_PTR)brush);
+    if(prev && !stat) {
+      ::printf("debug : WinTk::Component::setBackground : SetClassLongPtr failed.\n");
+      return false;
+    }
+  
+   {ULONG_PTR stat = 
+    ::SetClassLongPtr(fWindow,GCLP_HBRBACKGROUND,(LONG_PTR)brush);
+    ::printf("debug : WinTk::Component::setBackground : SetClassLongPtr failed.yyy %lu.\n",stat);}
+  
+   {WNDCLASSEX wc;
+    ::GetClassInfoEx(::GetModuleHandle(NULL),WC_STATIC,&wc);
+    ::printf("debug : prev brush yyy %lu\n",wc.hbrBackground);}
+  
+    if(!::InvalidateRect(fWindow,NULL,TRUE)) {
+      ::printf("debug : WinTk::Component::setBackground : InvalidateRect failed.\n");
+      return false;
+    }
+  
+    //::DeleteObject(brush);
+    return true;
+  */
+    return false;
+  }
+public:  
+  void addCallback(const std::string& aName,Callback aFunction,void* aTag) {
+    NamedCallbacks* cbks = 0;
+    std::vector<NamedCallbacks>::iterator it;
+    for(it=fCallbacks.begin();it!=fCallbacks.end();++it) {
+      if(aName==(*it).first) {
+        cbks = &(*it);
+        break;
+      }
+    }
+    if(!cbks) {
+      fCallbacks.push_back(std::pair<std::string,Callbacks>(aName,Callbacks()));
+      cbks = &(fCallbacks.back());
+    }
+    cbks->second.push_back(std::pair<Callback,void*>(aFunction,aTag));
+  }
+  void removeCallback(const std::string& aName,Callback aFunction,void* aTag) {
+    NamedCallbacks* cbks = 0;
+    std::vector<NamedCallbacks>::iterator it;
+    for(it=fCallbacks.begin();it!=fCallbacks.end();++it) {
+      if(aName==(*it).first) {
+        cbks = &(*it);
+        break;
+      }
+    }
+    if(cbks) {
+      Callbacks::iterator it;
+      for(it=cbks->second.begin();it!=cbks->second.end();++it) {
+        if( (aFunction==(*it).first) && (aTag==(*it).second) ) {
+          cbks->second.erase(it);
+          return;
+        }
+      }
+    }
+  }
+
+  bool executeCallbacks(const std::string& aName,CallbackData& aData) {
+    std::vector<NamedCallbacks>::const_iterator it;
+    for(it=fCallbacks.begin();it!=fCallbacks.end();++it) {
+      if(aName==(*it).first) {
+        const Callbacks& cbks = (*it).second;
+        Callbacks::const_iterator it2;
+        for(it2=cbks.begin();it2!=cbks.end();++it2) {
+          Callback cbk = (*it2).first;
+          if(cbk) {
+            HWND back_fWindow = fWindow;
+            cbk(*this,aData,(*it2).second);
+            // The callback may have destroyed the Component and
+            // the native HWND. The below checks that.
+            // In a proc, it is better to not use the HWND
+            // (or the Component) after calling executeCallbacks.
+            if(back_fWindow && !::GetWindowLongPtr(back_fWindow,GWLP_USERDATA)) {
+              //::printf("WinTk::Component::executeCallbacks : WARNING : A callback destroyed the native HWND window !\n");
+              return false;
+            }
+          }
+        }      
+        return true;
+      }
+    }
+    return false;
+  }
+  bool hasCallbacks(const std::string& aName) const {
+    std::vector<NamedCallbacks>::const_iterator it;
+    for(it=fCallbacks.begin();it!=fCallbacks.end();++it) {
+      if(aName==(*it).first) return true;
+    }
+    return false;
+  }
+protected:
+  static void wm__destroy(HWND aWindow) { 
+    Component* This = (Component*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+    if(This) { //How to be sure that we have a Component* ???
+      if(This->fWindow!=aWindow) {
+        ::printf("WinTk::Component::wm_destroy : HWND mismatch !\n");
+      }
+      if(This->hasCallbacks("WM_DESTROY")) {
+        CallbackData data;
+        This->executeCallbacks("WM_DESTROY",data);
+      }
+      This->fWindow = 0;
+    }
+    ::SetWindowLongPtr(aWindow,GWLP_USERDATA,LONG_PTR(NULL));
+  }
+protected:
+  // WM_PARENTNOTIFY is sent within the CreateWindow of the child.
+  // When received by the parent, the parent Post (not Send) to itself
+  // a WM_TK_CHILDCREATED in order to be notify of the child creation
+  // out of any CreateWindow.
+#define WM_TK_CHILDCREATED ((WM_USER)+888)
+#define WM_TK_CHILDDELETED ((WM_USER)+889)
+#define TK_KEY 127 // To be sure that it is a message of our own.
+  static LRESULT CALLBACK containerProc(HWND aWindow,UINT aMessage,WPARAM aWParam,LPARAM aLParam) {
+    //////////////////////////////////////////////////////////////////////////////
+    //  Some child send notification message to their parent (instead of sending
+    // the message to themselves !). This procedure is used by containers 
+    // to forward these messages to the child.
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+    switch(aMessage) { 
+    case WM_PARENTNOTIFY:{
+      if(aWParam==WM_CREATE) {
+        ::PostMessage(aWindow,WM_TK_CHILDCREATED,TK_KEY,0);
+        return 0;
+      } else if(aWParam==WM_DESTROY) {
+        ::PostMessage(aWindow,WM_TK_CHILDDELETED,TK_KEY,0);
+        return 0;
+      }
+    }break;
+    case WM_TK_CHILDCREATED:{
+      if(aWParam==TK_KEY) {
+        RECT rect;
+        ::GetClientRect(aWindow,&rect);
+        LPARAM size = MAKELPARAM(rect.right-rect.left,rect.bottom-rect.top);
+        ::SendMessage(aWindow,WM_SIZE,(WPARAM)0,size);
+        return 0;
+      }
+    }break;
+    case WM_TK_CHILDDELETED:{
+      if(aWParam==TK_KEY) {
+      }
+    }break;
+    case WM_NOTIFY:{ //Coming from a child (combobox, scrollbar, toolbar).
+      NMHDR* nmhdr = (NMHDR*)aLParam;
+      HWND from_win = nmhdr->hwndFrom;
+      if(from_win!=aWindow) {
+        ::SendMessage(from_win,aMessage,aWParam,aLParam);
+      }
+    }return 0;
+    case WM_COMMAND:
+    case WM_VSCROLL: 
+    case WM_HSCROLL:{ 
+      ::SendMessage((HWND)aLParam,aMessage,aWParam,(LPARAM)0);
+    }return 0;
+    }
+    return TRUE; //Not handled.
+  }
+#undef WM_TK_CHILDCREATED
+#undef WM_TK_CHILDDELETED
+#undef TK_KEY
+protected:
+  void destroy() { 
+    if(hasCallbacks("delete")) {
+      CallbackData data;
+      executeCallbacks("delete",data);
+    }
+    if(fWindow) {
+      ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG_PTR(NULL));
+      ::DestroyWindow(fWindow);
+      fWindow = 0;
+    }
+  }
+  void rubberDrawLine(POINT& aBegin,POINT& aEnd) { 
+    if(!fWindow) return;
+    HPEN pen = ::CreatePen(PS_SOLID,5,RGB(0,0,0));
+    HDC hdc = ::GetWindowDC(fWindow);
+    HPEN oldPen = SelectPen(hdc,pen);
+    int oldROP = ::SetROP2(hdc,R2_NOT);
+    POINT pt;
+    ::MoveToEx(hdc,aBegin.x,aBegin.y,&pt);
+    ::LineTo(hdc,aEnd.x,aEnd.y);
+    ::SetROP2(hdc,oldROP);
+    SelectPen(hdc,oldPen);
+    ::ReleaseDC(fWindow,hdc);
+    ::DeletePen(pen);
+  }
+  void rubberDrawRect(POINT& aBegin,POINT& aEnd) { 
+    if(!fWindow) return;
+    HPEN pen = ::CreatePen(PS_SOLID,0,RGB(0,0,0));
+    HDC hdc = ::GetWindowDC(fWindow);
+    HPEN oldPen = SelectPen(hdc,pen);
+    int oldROP = ::SetROP2(hdc,R2_NOT);
+    POINT pt;
+    ::MoveToEx(hdc,aBegin.x,aBegin.y,&pt);
+    ::LineTo(hdc,aBegin.x,aEnd.y);
+    ::LineTo(hdc,aEnd.x,aEnd.y);
+    ::LineTo(hdc,aEnd.x,aBegin.y);
+    ::LineTo(hdc,aBegin.x,aBegin.y);
+    ::SetROP2(hdc,oldROP);
+    SelectPen(hdc,oldPen);
+    ::ReleaseDC(fWindow,hdc);
+    ::DeletePen(pen);
+  }
+private:
+  std::string fType;
+protected:
+  HWND fWindow;
+  Component* fParent;
+  std::vector<NamedCallbacks> fCallbacks;
+  std::string fName;
+};
+
+class Shell;
+typedef void(*SetFocusCallback)(Shell*,void*);
+
+class Shell : public Component {
+public:
+  Shell(unsigned int aMask)
+  :Component("Shell")
+  ,fFocusWindow(0)
+  ,fSetFocusCallback(0)
+  ,fSetFocusTag(0)
+  ,fAcceleratorTable(0)
+  {
+    static char sWindowClassName[] = "WinTk::Shell";
+    static bool done = false;
+    if(!done) {
+      WNDCLASS         wc;
+      wc.style         = CS_HREDRAW | CS_VREDRAW;
+      wc.lpfnWndProc   = (WNDPROC)Shell::proc;
+      wc.cbClsExtra    = 0;
+      wc.cbWndExtra    = 0;
+      wc.hInstance     = ::GetModuleHandle(NULL);
+      wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
+      wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
+      wc.hbrBackground = GetSysColorBrush(COLOR_BTNFACE);
+      wc.lpszMenuName  = sWindowClassName;
+      wc.lpszClassName = sWindowClassName;
+      ::RegisterClass(&wc);
+      done = true;
+    }
+  
+    fWindow = ::CreateWindow(sWindowClassName,
+                             NULL,
+                             aMask, //WS_OVERLAPPEDWINDOW,
+                             CW_USEDEFAULT,CW_USEDEFAULT, 
+                             400,400,
+                             NULL,NULL,
+                             ::GetModuleHandle(NULL),
+                             NULL);
+    if(!fWindow) return;
+    ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG_PTR(this));
+  }
+  virtual ~Shell() { 
+    if(fAcceleratorTable) {
+      ::DestroyAcceleratorTable(fAcceleratorTable);
+      fAcceleratorTable = 0;
+    }
+    destroy();
+  }
+protected:
+  Shell(Shell& a_from):Component(a_from) {}
+  Shell& operator=(Shell&) {return *this;}
+public:  
+  virtual void show()  { 
+    if(!fWindow) return;
+    ::SetForegroundWindow(fWindow);
+    ::ShowWindow(fWindow,SW_SHOWDEFAULT);
+    ::UpdateWindow(fWindow);
+    ::DrawMenuBar(fWindow);
+  }
+  void setTitle(const std::string& aString) { 
+    if(!fWindow) return;
+    ::SetWindowText(fWindow,aString.c_str());
+  }
+  void setGeometry(int aX,int aY,unsigned int aWidth,unsigned int aHeight) { 
+    //////////////////////////////////////////////////////////////////////////////
+    // Given width, height is the desired client area.
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+    if(!fWindow) return;
+    int hborder = ::GetSystemMetrics(SM_CYCAPTION);
+    if(::GetWindowLongPtr(fWindow,GWLP_ID)) // Has a menubar.
+      hborder += ::GetSystemMetrics(SM_CYMENU);
+    ::MoveWindow(fWindow,aX,aY,aWidth,hborder + aHeight,TRUE);
+  }
+  void setSize(unsigned int aWidth,unsigned int aHeight) { 
+    //////////////////////////////////////////////////////////////////////////////
+    // Given width, height is the desired client area.
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+    if(!fWindow) return;
+    int hborder = ::GetSystemMetrics(SM_CYCAPTION);
+    RECT rect;
+    ::GetWindowRect(fWindow,&rect);
+    ::MoveWindow(fWindow,rect.left,rect.top,aWidth,hborder + aHeight,TRUE);
+  }
+  void setFocusWindow(HWND aWindow) {fFocusWindow = aWindow;}
+  HWND focusWindow() {return fFocusWindow;}
+
+  void setSetFocusCallback(SetFocusCallback aCallback,void* aTag) { 
+    fSetFocusCallback = aCallback;
+    fSetFocusTag = aTag;
+  }
+  void callSetFocusCallback() { 
+    if(!fSetFocusCallback) return;
+    fSetFocusCallback(this,fSetFocusTag);
+  }
+  HACCEL nativeAcceleratorTable() {return fAcceleratorTable;}
+
+  bool addAccelerator(const std::string& aString,int aID) { 
+    //printf("debug : accel : %s %d\n",aString.c_str(),aID);
+    // aString should be of the form : "a" or "Ctrl+a".
+    ACCEL acc;
+    //acc.fVirt : FALT, FCONTROL, FNOINVERT, FSHIFT, FVIRTKEY
+   {acc.cmd = aID;
+    std::vector<std::string> words;
+    std::string s(aString);
+    tools::touppercase(s);
+    tools::words(s,"+",false,words);
+    if(words.size()==1) {
+      acc.fVirt = FVIRTKEY;
+      if(!string_to_VK(words[0],acc.key)) return false;
+    } else if((words.size()==2)&&(words[1].size())) {
+      if(words[0]=="CTRL") {
+        acc.fVirt = FCONTROL;
+      } else if(words[0]=="ALT") {
+        acc.fVirt = FALT;
+      } else if(words[0]=="SHIFT") {
+        acc.fVirt = FSHIFT;
+      } else {
+        return false;
+      }
+      acc.fVirt |= FVIRTKEY;
+      if(!string_to_VK(words[1],acc.key)) return false;
+    } else {
+      return false;
+    }}
+  
+    if(!fAcceleratorTable) {
+      fAcceleratorTable = ::CreateAcceleratorTable(&acc,1);
+    } else {
+      int n = ::CopyAcceleratorTable(fAcceleratorTable,NULL,0);
+      ACCEL* tbl = new ACCEL[n+1];
+      ::CopyAcceleratorTable(fAcceleratorTable,tbl,n);
+      ACCEL& tacc = tbl[n];
+      tacc.fVirt = acc.fVirt;
+      tacc.key = acc.key;
+      tacc.cmd = acc.cmd;
+      ::DestroyAcceleratorTable(fAcceleratorTable);
+      fAcceleratorTable = ::CreateAcceleratorTable(tbl,n+1);
+      delete [] tbl;
+    }
+
+    return true;
+  }
+private:
+
+  static bool string_to_VK(const std::string& aString,WORD& a_VK) {
+    //VK_xxx are defined in WinUser.h
+    if(aString.size()==1) { a_VK = aString[0];return true;} //WM_W is 'W'
+
+#define S_VK(aWhat) \
+  if(!::strcmp(aString.c_str(),#aWhat)) { a_VK = VK_##aWhat;return true;}
+
+    S_VK(BACK)
+    S_VK(TAB)
+    S_VK(CLEAR)
+    S_VK(RETURN)
+    S_VK(ESCAPE)
+    S_VK(SPACE)
+
+    S_VK(UP)
+    S_VK(DOWN)
+    S_VK(LEFT)
+    S_VK(RIGHT)
+
+    S_VK(F1)
+    S_VK(F2)
+    S_VK(F3)
+    S_VK(F4)
+    S_VK(F5)
+    S_VK(F6)
+    S_VK(F7)
+    S_VK(F8)
+    S_VK(F9)
+    S_VK(F10)
+    S_VK(F11)
+    S_VK(F12)
+    S_VK(F13)
+    S_VK(F14)
+    S_VK(F15)
+    S_VK(F16)
+    S_VK(F17)
+    S_VK(F18)
+    S_VK(F19)
+    S_VK(F20)
+    S_VK(F21)
+    S_VK(F22)
+    S_VK(F23)
+    S_VK(F24)
+  
+    //FIXME : handle other keys ? NUMPAD[0-9]
+  
+#undef S_VK
+
+    return false;
+  }
+
+  static LRESULT CALLBACK proc(HWND aWindow,UINT aMessage,WPARAM aWParam,LPARAM aLParam) {
+    switch (aMessage) { 
+    // Same logic as containerProc :
+    case WM_NOTIFY:{ //Coming from a child (combobox, scrollbar, toolbar).
+      NMHDR* nmhdr = (NMHDR*)aLParam;
+      HWND from_win = nmhdr->hwndFrom;
+      if(from_win!=aWindow) {
+        ::SendMessage(from_win,aMessage,aWParam,aLParam);
+      }
+    }return 0;
+    // Else :
+    case WM_SIZE:{ // Assume one child window ! FIXME : have a message if not.
+      int width = LOWORD(aLParam);
+      int height = HIWORD(aLParam);
+      HWND hwnd = GetFirstChild(aWindow);
+      if(hwnd) {
+        //FIXME : have to treat the case of TOOLBAR not being the first.
+        if(GetClassName(hwnd)==std::string(TOOLBARCLASSNAME)) {
+          HWND next = GetNextSibling(hwnd);
+          // Share area between toolbar and second child :
+          RECT rect;
+          ::GetWindowRect(hwnd,&rect);
+          int htb = rect.bottom-rect.top;
+          SetGeometry(next,0,htb,width,height-htb);
+        } else {
+          SetGeometry(hwnd,0,0,width,height);
+        }
+      }
+    }return 0;
+    case WM_SETFOCUS:{
+      Shell* This = (Shell*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+      if(This) {
+        This->callSetFocusCallback();
+        HWND win = This->focusWindow();
+        if(win) ::SetFocus(win);
+      }
+    }return 0;
+    case WM_INITMENUPOPUP:{ //0x0117
+      //aWParam is the HMENU (from CreatePopupMenu)
+      //aLParam is the MenuItemCount
+      Shell* This = (Shell*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+      if(This) {
+        CallbackData data;
+        data.wparam = aWParam;
+        This->executeCallbacks("cascading",data);
+      }
+      } return 0;
+    case WM_COMMAND:{ //Coming from a menu item, a toolbar !
+      if(aLParam) {
+        // From a toolbar ; send it back to it :   
+        ::SendMessage((HWND)aLParam,aMessage,aWParam,0);
+      } else {
+        //if(HIWORD(aWParam)==1) { //From an accelerator.
+        //}
+        // From a menu item :
+        Shell* This = (Shell*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+        if(This) {
+          CallbackData data;
+          data.wparam = LOWORD(aWParam);
+          This->executeCallbacks("activate",data);
+        }
+      }
+    }return 0;
+    case WM_CLOSE:{
+      Shell* This = (Shell*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+      if(This) {
+        if(This->hasCallbacks("close")) {
+          CallbackData data;
+          This->executeCallbacks("close",data);
+        }
+      }
+    }break; //NOTE : can't be return 0.
+    case WM_DESTROY:wm__destroy(aWindow);return 0;
+    }
+    return (DefWindowProc(aWindow,aMessage,aWParam,aLParam));
+  }
+private:
+  HWND fFocusWindow;
+  SetFocusCallback fSetFocusCallback;
+  void* fSetFocusTag;
+  HACCEL fAcceleratorTable;
+};
+
+class OpenGLArea : public Component {
+public:
+  OpenGLArea(Component& aParent)
+  :Component("OpenGLArea",aParent)
+  ,fContext(0)
+  ,fHDC(0)
+  {
+    if(!fParent || !fParent->nativeWindow()) return;
+    HWND parent = fParent->nativeWindow();
+
+    static char sOpenGLAreaClassName[] = "WinTk::OpenGLArea";
+    static bool done = false;
+    if(!done) {
+      WNDCLASS         wc;
+      wc.style         = CS_HREDRAW | CS_VREDRAW;
+      wc.lpfnWndProc   = (WNDPROC)OpenGLArea::proc;
+      wc.cbClsExtra    = 0;
+      wc.cbWndExtra    = 0;
+      wc.hInstance     = GetWindowInstance(parent),
+      wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
+      wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
+      wc.hbrBackground = GetSysColorBrush(COLOR_BTNFACE);
+      wc.lpszMenuName  = sOpenGLAreaClassName;
+      wc.lpszClassName = sOpenGLAreaClassName;
+      ::RegisterClass(&wc);
+      done = true;
+    }
+    
+    // The WS_BORDER is needed. Else probleme of size at startup.
+    RECT rect;
+    ::GetClientRect(parent,&rect);
+    fWindow = ::CreateWindow(sOpenGLAreaClassName,
+                             NULL,
+                             WS_CHILD | WS_VISIBLE,
+                             0,0,
+                             rect.right-rect.left,
+                             rect.bottom-rect.top,
+                             parent,NULL,
+                             GetWindowInstance(parent),
+                             NULL);
+    if(!fWindow) return;
+    ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG_PTR(this));
+  
+    // initialize OpenGL rendering :
+    fHDC = ::GetDC(fWindow);
+    if( fHDC && SetWindowPixelFormat(fHDC) ) {
+      fContext = ::wglCreateContext(fHDC);
+    }
+  }
+  virtual ~OpenGLArea() { 
+    if(wglGetCurrentContext()!=NULL) wglMakeCurrent(NULL,NULL);
+    if(fContext)        {
+      wglDeleteContext(fContext);
+      fContext = 0;
+    }
+    destroy();
+  }
+protected:
+  OpenGLArea(OpenGLArea& a_from):Component(a_from) {}
+  OpenGLArea& operator=(OpenGLArea&) {return *this;}
+public:
+  bool write_gl2ps(const std::string&,const std::string&);
+private:
+  static LRESULT CALLBACK proc(HWND aWindow,UINT aMessage,WPARAM aWParam,LPARAM aLParam) {
+    switch (aMessage) { 
+    case WM_PAINT:{
+      PAINTSTRUCT ps;
+      HDC hDC = BeginPaint(aWindow,&ps);
+      OpenGLArea* This = (OpenGLArea*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+      if(This) {
+        HDC hdc = This->fHDC;
+        HGLRC context = This->fContext;
+        if(hdc && context) {
+          ::wglMakeCurrent(hdc,context);
+          // User OpenGL paint code :
+  
+          CallbackData data;
+          data.wparam = aWParam;
+          data.lparam = aLParam;
+          This->executeCallbacks("paint",data);
+  
+          ::SwapBuffers(hdc);
+        }
+      }
+      EndPaint(aWindow,&ps);
+    }return 0;
+    case WM_LBUTTONDOWN:{
+      OpenGLArea* This = (OpenGLArea*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+      if(This) {
+        CallbackData data;
+        data.wparam = aWParam;
+        data.lparam = aLParam;
+        data.value = "ButtonPress";
+        data.x = LOWORD(aLParam);
+        data.y = HIWORD(aLParam);
+        This->executeCallbacks("event",data);
+      }
+    }return 0;
+    case WM_LBUTTONUP:{
+      OpenGLArea* This = (OpenGLArea*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+      if(This) {
+        CallbackData data;
+        data.wparam = aWParam;
+        data.lparam = aLParam;
+        data.value = "ButtonRelease";
+        data.x = LOWORD(aLParam);
+        data.y = HIWORD(aLParam);
+        This->executeCallbacks("event",data);
+      }
+    } return 0;
+    case WM_MOUSEMOVE:{
+      unsigned int state = aWParam;
+      if((state & MK_LBUTTON)==MK_LBUTTON) {
+        OpenGLArea* This = (OpenGLArea*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
+        if(This) {
+          CallbackData data;
+          data.wparam = aWParam;
+          data.lparam = aLParam;
+          data.value = "MotionNotify";
+          data.x = LOWORD(aLParam);
+          data.y = HIWORD(aLParam);
+          This->executeCallbacks("event",data);
+        }
+      }
+    }return 0;
+    case WM_DESTROY:wm__destroy(aWindow);return 0;
+    }
+    return (DefWindowProc(aWindow,aMessage,aWParam,aLParam));
+  }
+  static bool SetWindowPixelFormat(HDC aHdc) {
+    PIXELFORMATDESCRIPTOR pfd;
+    pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+    pfd.nVersion = 1;
+    pfd.dwFlags = 
+      PFD_DRAW_TO_WINDOW | 
+      PFD_SUPPORT_OPENGL | 
+      PFD_DOUBLEBUFFER | 
+      PFD_STEREO_DONTCARE;  
+    pfd.iPixelType = PFD_TYPE_RGBA;
+    pfd.cColorBits = 32;
+    pfd.cRedBits = 8;
+    pfd.cRedShift = 16;
+    pfd.cGreenBits = 8;
+    pfd.cGreenShift = 8;
+    pfd.cBlueBits        = 8;
+    pfd.cBlueShift = 0;
+    pfd.cAlphaBits = 0;
+    pfd.cAlphaShift = 0;
+    pfd.cAccumBits = 64;        
+    pfd.cAccumRedBits = 16;
+    pfd.cAccumGreenBits = 16;
+    pfd.cAccumBlueBits = 16;
+    pfd.cAccumAlphaBits = 0;
+    pfd.cDepthBits = 32;
+    pfd.cStencilBits = 8;
+    pfd.cAuxBuffers = 0;
+    pfd.iLayerType = PFD_MAIN_PLANE;
+    pfd.bReserved        = 0;
+    pfd.dwLayerMask = 0;
+    pfd.dwVisibleMask = 0;
+    pfd.dwDamageMask = 0;
+    
+    int pixelIndex = ::ChoosePixelFormat(aHdc,&pfd);
+    if (pixelIndex==0) {
+      // Let's choose a default index.
+      pixelIndex = 1;        
+      if (::DescribePixelFormat(aHdc, 
+                                pixelIndex, 
+                                sizeof(PIXELFORMATDESCRIPTOR), 
+                                &pfd)==0) {
+        return false;
+      }
+    }
+  
+    if (::SetPixelFormat(aHdc,pixelIndex,&pfd)==FALSE) return false;
+    return true;
+  }
+private:
+  HGLRC fContext;
+  HDC fHDC;
+};
+
+}}
+
+#endif

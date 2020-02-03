@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -58,6 +57,10 @@
 #include <sstream>
 
 void G4OpenGLXmViewer::ShowView () {
+
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propagated before progressing.
+  glFlush ();
 
   G4Xt::getInstance () -> SecondaryLoop ();
 
@@ -244,10 +247,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   menubar = XmVaCreateSimpleMenuBar (main_win,
 				     (char*)"menubar",
-				     XmVaCASCADEBUTTON, style_str, 'S',
-				     XmVaCASCADEBUTTON, actions_str, 'A',
-				     XmVaCASCADEBUTTON, misc_str, 'M',
-				     XmVaCASCADEBUTTON, spec_str, 'p',
+				     XmVaCASCADEBUTTON, style_str,   (KeySym)XK_S,  /*G.Barrand : cast to KeySym and use XK_*/
+				     XmVaCASCADEBUTTON, actions_str, (KeySym)XK_A,
+				     XmVaCASCADEBUTTON, misc_str,    (KeySym)XK_M,
+				     XmVaCASCADEBUTTON, spec_str,    (KeySym)XK_p,
 				     XtNvisual, vi -> visual, 
 				     XtNdepth, vi -> depth, 
 				     XtNcolormap, cmap, 
@@ -272,8 +275,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"style",
      0,
      NULL,
-     XmVaCASCADEBUTTON, draw_str, 'D',
-     XmVaCASCADEBUTTON, bgnd_str, 'B',
+     XmVaCASCADEBUTTON, draw_str, (KeySym)XK_D,
+     XmVaCASCADEBUTTON, bgnd_str, (KeySym)XK_B,
      XtNvisual, vi -> visual, 
      XtNdepth, vi -> depth, 
      XtNcolormap, cmap, 
@@ -297,10 +300,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"drawing_style",
      1,
      drawing_style_callback,
-     XmVaRADIOBUTTON, wireframe_str, 'W', NULL, NULL,
-     XmVaRADIOBUTTON, hlr_str, 'L', NULL, NULL,
-     XmVaRADIOBUTTON, hsr_str, 'S', NULL, NULL,
-     XmVaRADIOBUTTON, hlhsr_str, 'H', NULL, NULL,
+     XmVaRADIOBUTTON, wireframe_str, (KeySym)XK_W, NULL, NULL,
+     XmVaRADIOBUTTON, hlr_str,       (KeySym)XK_L, NULL, NULL,
+     XmVaRADIOBUTTON, hsr_str,       (KeySym)XK_S, NULL, NULL,
+     XmVaRADIOBUTTON, hlhsr_str,     (KeySym)XK_H, NULL, NULL,
      XmNradioBehavior, True, 
      XmNradioAlwaysOne, True, 
      XmNuserData, this,
@@ -359,8 +362,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"background_color",
      2,
      background_color_callback,
-     XmVaRADIOBUTTON, white_str, 'W', NULL, NULL,
-     XmVaRADIOBUTTON, black_str, 'B', NULL, NULL,
+     XmVaRADIOBUTTON, white_str, (KeySym)XK_W, NULL, NULL,
+     XmVaRADIOBUTTON, black_str, (KeySym)XK_B, NULL, NULL,
      XmNradioBehavior, True, 
      XmNradioAlwaysOne, True, 
      XmNuserData, this,
@@ -400,9 +403,9 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"actions",
      1,
      actions_callback,
-     XmVaPUSHBUTTON, rot_str, 'R', NULL, NULL,
-     XmVaPUSHBUTTON, pan_str, 'P', NULL, NULL,
-     XmVaPUSHBUTTON, set_str, 'S', NULL, NULL,
+     XmVaPUSHBUTTON, rot_str, (KeySym)XK_R, NULL, NULL,
+     XmVaPUSHBUTTON, pan_str, (KeySym)XK_P, NULL, NULL,
+     XmVaPUSHBUTTON, set_str, (KeySym)XK_S, NULL, NULL,
      XmNuserData, this, 
      XtNvisual, vi -> visual, 
      XtNdepth, vi -> depth, 
@@ -426,9 +429,9 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"miscellany",
      2,
      misc_callback,
-     XmVaPUSHBUTTON, misc_str, 'M', NULL, NULL,
-     XmVaPUSHBUTTON, exit_str, 'E', NULL, NULL,
-     XmVaPUSHBUTTON, print_str, 'P', NULL, NULL,
+     XmVaPUSHBUTTON, misc_str,  (KeySym)XK_M, NULL, NULL,
+     XmVaPUSHBUTTON, exit_str,  (KeySym)XK_E, NULL, NULL,
+     XmVaPUSHBUTTON, print_str, (KeySym)XK_P, NULL, NULL,
      XmNuserData, this,
      XtNvisual, vi -> visual, 
      XtNdepth, vi -> depth, 
@@ -453,10 +456,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"special",
      3,
      NULL,
-     XmVaCASCADEBUTTON, trans_str, 'T',
-     XmVaCASCADEBUTTON, anti_str, 'A',
-     XmVaCASCADEBUTTON, halo_str, 'H',
-     XmVaCASCADEBUTTON, aux_edge_str, 'E',
+     XmVaCASCADEBUTTON, trans_str,    (KeySym)XK_T,
+     XmVaCASCADEBUTTON, anti_str,     (KeySym)XK_A,
+     XmVaCASCADEBUTTON, halo_str,     (KeySym)XK_H,
+     XmVaCASCADEBUTTON, aux_edge_str, (KeySym)XK_E,
      XtNvisual, vi -> visual, 
      XtNdepth, vi -> depth, 
      XtNcolormap, cmap, 
@@ -480,8 +483,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"transparency",
      0,
      transparency_callback,
-     XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
-     XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
+     XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
+     XmVaRADIOBUTTON, on_str,  (KeySym)XK_n, NULL, NULL,
      XmNradioBehavior, True, 
      XmNradioAlwaysOne, True, 
      XmNuserData, this,
@@ -515,8 +518,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"antialias",
      1,
      antialias_callback,
-     XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
-     XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
+     XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
+     XmVaRADIOBUTTON, on_str,  (KeySym)XK_n, NULL, NULL,
      XmNradioBehavior, True, 
      XmNradioAlwaysOne, True, 
      XmNuserData, this,
@@ -550,8 +553,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"haloing",
      2,
      haloing_callback,
-     XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
-     XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
+     XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
+     XmVaRADIOBUTTON, on_str,  (KeySym)XK_n, NULL, NULL,
      XmNradioBehavior, True, 
      XmNradioAlwaysOne, True, 
      XmNuserData, this,
@@ -585,8 +588,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"aux_edge",
      3,
      aux_edge_callback,
-     XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
-     XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
+     XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
+     XmVaRADIOBUTTON, on_str,  (KeySym)XK_n, NULL, NULL,
      XmNradioBehavior, True, 
      XmNradioAlwaysOne, True, 
      XmNuserData, this,

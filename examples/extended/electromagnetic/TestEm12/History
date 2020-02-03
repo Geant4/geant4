@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +17,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
+=======
+
+09-09-18 SI (testem12-V10-04-04)
+- updated dna.mac
+	 
+04-06-18 mma (testem12-V10-04-03)
+- SteppingAction.cc : Photoelectric, edep at end of step
+
+09-05-18 B.Morgan (testem12-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 17-10-16 G.Folger
 - fix typo, i.e. add missing declaration of particleIterator in Decay.

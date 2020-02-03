@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLTransform3D.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Andrew Walkden  24th October 1996
 // G4OpenGLTransform3D provides OpenGL style transformation matrix
 // from G4Transform3D.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLTRANSFORM3D_HH
 #define G4OPENGLTRANSFORM3D_HH

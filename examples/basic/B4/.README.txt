@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 //$Id: .README.txt 95508 2016-02-12 13:52:06Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ///\file "B4/.README.txt"
 ///\brief Example B4 README page
@@ -175,6 +178,10 @@
    G4PSEnergyDeposit and G4PSTrackLength primitive scores are used (see
    B4dDetectorConstruction::ConstructSDandField()).
    
+   The scorers hits are saved in form of ntuples in a Root file using Geant4
+   analysis tools. This feature is activated in the main () function with instantiating
+   G4TScoreNtupleWriter.
+
    Also with this approach, the quantities per each layer are available 
    in addition to the total quantities.
               				

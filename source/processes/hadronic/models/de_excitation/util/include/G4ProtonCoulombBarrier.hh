@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonCoulombBarrier.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -39,19 +38,18 @@ class G4ProtonCoulombBarrier : public G4CoulombBarrier
 {
 public:
 
-  G4ProtonCoulombBarrier();
+  explicit G4ProtonCoulombBarrier();
   virtual ~G4ProtonCoulombBarrier();
 
 private:
-  G4ProtonCoulombBarrier(const G4ProtonCoulombBarrier & right);
-
-  const G4ProtonCoulombBarrier & operator=(const G4ProtonCoulombBarrier & right);
-  G4bool operator==(const G4ProtonCoulombBarrier & right) const;
-  G4bool operator!=(const G4ProtonCoulombBarrier & right) const;
+  G4ProtonCoulombBarrier(const G4ProtonCoulombBarrier & right) = delete;
+  const G4ProtonCoulombBarrier & operator=(const G4ProtonCoulombBarrier & right) = delete;
+  G4bool operator==(const G4ProtonCoulombBarrier & right) const = delete;
+  G4bool operator!=(const G4ProtonCoulombBarrier & right) const = delete;
   
 private:
 
-  virtual G4double BarrierPenetrationFactor(G4double aZ) const;
+  virtual G4double BarrierPenetrationFactor(G4int aZ) const;
 
 };
 

@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity2/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 71035 2013-06-10 09:17:35Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +92,7 @@ Run::Run(DetectorConstruction* det,PrimaryGeneratorAction *kin,bool isMaster)
 
     //check radius
     //
-    G4double worldRadius =fDetector->GetWorldRadius();
+    G4double worldRadius =fDetector->GetWallRadius();
     G4double RangeCavity =emCal.GetCSDARange(fEnergyGun,particleGun,mateCavity);
 
     //G4String partName    = particleGun->GetParticleName();
@@ -121,7 +120,7 @@ Run::Run(DetectorConstruction* det,PrimaryGeneratorAction *kin,bool isMaster)
            << " --> massRatio = "<< std::setprecision(6) << massRatio << G4endl;
 
     G4cout.precision(3);
-    G4cout << " World radius: " << G4BestUnit(worldRadius,"Length")
+    G4cout << " Wall radius: " << G4BestUnit(worldRadius,"Length")
            << "; range in cavity: " << G4BestUnit(RangeCavity,"Length")
            << G4endl;
 
@@ -225,13 +224,13 @@ void Run::SurveyConvergence(G4int NbofEvents)
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int prec = G4cout.precision(5);
 
-  G4cout << "\n--->evntNb= " << NbofEvents
+  G4cout << "--->evntNb= " << NbofEvents
          << " Nwall= " << Nwall
          << " Ncav= "  << Ncavity
          << " Ic/Iw= " << Iratio
          << " Ne-_cav= " << fPartFlowCavity[0]
          << " doseCavity/Ebeam= " << ratio
-         << "  (100*(ratio-1) = " << err << " %)"
+         << "  (100*(ratio-1) = " << err << " %) \n"
          << G4endl;
 
   // reset default formats

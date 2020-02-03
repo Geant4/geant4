@@ -23,7 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
+=======
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
@@ -42,13 +51,16 @@ class G4VSteppingVerbose;
 class ActionInitialization: public G4VUserActionInitialization
 {
 public:
-  ActionInitialization();
+  ActionInitialization(DetectorConstruction*);
   virtual ~ActionInitialization();
 
   virtual void BuildForMaster() const;
   virtual void Build() const;
 
   virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+
+private:
+    DetectorConstruction* fDetectorConstruction;
 };
 
 #endif

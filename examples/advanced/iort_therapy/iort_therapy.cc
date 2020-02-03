@@ -46,7 +46,7 @@
 //
 // (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
 //
-// (e) University of Wallongong, Australia
+// (e) University of Wollongong, Australia
 //
 //
 //  *Corresponding Author, email to carlo.casarino@polooncologicocefalu.it
@@ -58,31 +58,20 @@
 #include "G4VModularPhysicsList.hh"
 #include "IORTEventAction.hh"
 #include "IORTPhysicsList.hh"
-#include "IORTDetectorSD.hh"
 #include "IORTPrimaryGeneratorAction.hh"
 #include "IORTRunAction.hh"
-#include "IORTMatrix.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4UImessenger.hh"
 #include "globals.hh"
 #include "IORTSteppingAction.hh"
-#include "IORTAnalysisManager.hh"
 #include "IORTGeometryController.hh"
 #include "IORTGeometryMessenger.hh"
-#include "IORTInteractionParameters.hh"
+#include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
+#include <ctime>
 #include "G4ScoringManager.hh"
 
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
-
-#include <ctime>
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc ,char ** argv)
@@ -90,12 +79,14 @@ int main(int argc ,char ** argv)
   // Set the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
-  //imported from eliot_geant4.9.3p01// to create a different seed
-  G4int seed = time(NULL); 
-  CLHEP::HepRandom::setTheSeed(seed);
-  //imported from eliot_geant4.9.3p01
-        
-   G4RunManager* runManager = new G4RunManager;
+//  G4int seed = time(NULL); 
+ // CLHEP::HepRandom::setTheSeed(seed);
+  
+  G4RunManager* runManager = new G4RunManager;
+
+  G4ScoringManager::GetScoringManager();
+  // Scoring mesh
+
   // Geometry controller is responsible for instantiating the
   // geometries. All geometry specific setup tasks are now in class
   // IORTGeometryController.
@@ -103,36 +94,11 @@ int main(int argc ,char ** argv)
 	
   // Connect the geometry controller to the G4 user interface
   IORTGeometryMessenger *geometryMessenger = new IORTGeometryMessenger(geometryController);
-	
-  G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
-  scoringManager->SetVerboseLevel(1);
-
-	
+		
   // Initialize the default IORT geometry
-  geometryController->SetGeometry("default");   
-	
-  // Initialize command based scoring
-  G4ScoringManager::GetScoringManager();
-	
-  // Initialize the physics 
-  G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = 0;
-  G4String physName = "";
+  geometryController->SetGeometry("default");  
 
-  // Physics List name defined via environment variable
-  char* path = getenv("PHYSLIST");
-  if (path) { physName = G4String(path); }
-
- if(factory.IsReferencePhysList(physName)) 
-    {
-      phys = factory.GetReferencePhysList(physName);
-    } 
-
-  if(!phys) { phys = new IORTPhysicsList(); }
-
-  runManager->SetUserInitialization(phys);
-  
-  //  runManager -> SetUserInitialization(new IORTPhysicsList());
+  runManager->SetUserInitialization(new IORTPhysicsList());
 
   // Initialize the primary particles
   IORTPrimaryGeneratorAction *pPrimaryGenerator = new IORTPrimaryGeneratorAction();
@@ -147,20 +113,10 @@ int main(int argc ,char ** argv)
 	
   IORTSteppingAction* steppingAction = new IORTSteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
-	
-  // Interaction data: stopping powers
-  IORTInteractionParameters* pInteraction = new IORTInteractionParameters(true);
-	
-  // Initialize analysis
-  IORTAnalysisManager* analysis = IORTAnalysisManager::GetInstance();
-  analysis -> book();
 
-
-#ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
-#endif 
 	
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (argc!=1)   // batch mode
@@ -171,47 +127,21 @@ int main(int argc ,char ** argv)
     }
   else
     {  // interactive mode : define UI session
-
        
-#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      if(factory.IsReferencePhysList(physName)) 
-	{
-	  UImanager->ApplyCommand("/control/execute defaultMacroWithReferencePhysicsList.mac");
-	}
-      else
-	{     
-	  UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
-	}
-      
-#endif
+  
+      UImanager->ApplyCommand("/control/execute defaultMacro.mac"); 
+
       if (ui->IsGUI())
       ui->SessionStart();
       delete ui;
-#endif 
-    }
-
-  // Job termination
-    // Store dose & fluence data to ASCII & ROOT files 
-    if ( IORTMatrix * pMatrix = IORTMatrix::GetInstance() )
-    {
-	pMatrix -> TotalEnergyDeposit(); 
-	pMatrix -> StoreDoseFluenceAscii();
-        pMatrix -> StoreDoseFluenceRoot();
     }
 
 
-  analysis -> flush();     // Finalize & write the root file 
-
-#ifdef G4VIS_USE
-  delete visManager;
-#endif                
-
+  delete visManager;           
 
   delete geometryMessenger;
   delete geometryController;
-  delete pInteraction; 
   delete runManager;
   return 0;
   

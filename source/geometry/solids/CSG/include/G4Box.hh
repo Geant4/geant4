@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Box.hh 79491 2014-03-05 15:24:29Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// 
 // G4Box
 //
 // Class description:
@@ -37,17 +30,15 @@
 //   A Box is a cuboid of given half lengths dx,dy,dz. The Box is
 //   centred on the origin with sides parallel to the x/y/z axes.
 
-// History:
 // 30.06.95 P.Kent: Converted from source code developed end 94
 // 27.03.96 J.Allison: Added virtual functions DescribeYourselfTo() and
 //                     SendWireframeTo(G4VGraphicsModel&)
-// 22.07.96 J.Allison: Changed G4VGraphicsModel to G4VGraphicsScene
-//                     and SendPolyhedronTo() to CreatePolyhedron()
 // 27.03.98 J.Apostolakis: Inherit from G4CSGSolid (not G4VSolid)
-// 18.11.99 J.Apostolakis, V.Grichine: kUndefined was added to ESide
 // --------------------------------------------------------------------
 #ifndef G4BOX_HH
 #define G4BOX_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UBOX 1
@@ -61,7 +52,7 @@
 #include "G4CSGSolid.hh"
 #include "G4Polyhedron.hh"
 
-class G4Box : public G4CSGSolid 
+class G4Box : public G4CSGSolid
 {
   public:  // with description
 
@@ -70,15 +61,16 @@ class G4Box : public G4CSGSolid
 
     virtual ~G4Box();
 
-
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pMin, G4double& pMax) const;
 
   // Accessors and modifiers
 
@@ -100,12 +92,13 @@ class G4Box : public G4CSGSolid
     G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                           const G4bool calcNorm=false,
-                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
-    G4ThreeVector GetPointOnSurface() const; 
+    G4ThreeVector GetPointOnSurface() const;
 
     G4VSolid* Clone() const;
 
@@ -125,20 +118,8 @@ class G4Box : public G4CSGSolid
       // persistifiable objects.
 
     G4Box(const G4Box& rhs);
-    G4Box& operator=(const G4Box& rhs); 
+    G4Box& operator=(const G4Box& rhs);
       // Copy constructor and assignment operator.
-
-  protected:  // with description
-
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
-      // Create the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
-
-  protected:  // without description
-
-    enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
-      // Codes for faces (kPX= +x face, kMY= -y face, etc...)
 
   private:
 
@@ -148,7 +129,7 @@ class G4Box : public G4CSGSolid
 
   private:
 
-    G4double fDx,fDy,fDz;
+    G4double fDx = 0.0, fDy = 0.0, fDz = 0.0;
     G4double delta;  // Cached half Cartesian tolerance
 };
 

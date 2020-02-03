@@ -27,7 +27,10 @@
 /// \brief Definition of the B02RunAction class
 //
 //
+<<<<<<< HEAD
 // $Id: B02RunAction.hh 72953 2013-08-14 14:13:36Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 
 #ifndef B02RunAction_h

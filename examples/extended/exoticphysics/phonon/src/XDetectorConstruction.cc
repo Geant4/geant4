@@ -26,7 +26,10 @@
 /// \file exoticphysics/phonon/src/XDetectorConstruction.cc
 /// \brief Implementation of the XDetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: XDetectorConstruction.cc 84197 2014-10-10 14:33:03Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 20141006  For MT compatibility, move SD handling to ConstructSDandField()
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochIonGasModel.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -57,22 +56,23 @@ class G4BetheBlochIonGasModel : public G4BetheBlochModel
 
 public:
 
-  G4BetheBlochIonGasModel(const G4ParticleDefinition* p = 0,
-			  const G4String& nam = "BetheBlochGasIon");
+  explicit G4BetheBlochIonGasModel(const G4ParticleDefinition* p = 0,
+				   const G4String& nam = "BetheBlochGasIon");
 
   virtual ~G4BetheBlochIonGasModel();
 
-  virtual G4double ChargeSquareRatio(const G4Track& track);
+  virtual G4double ChargeSquareRatio(const G4Track& track) final;
 
   virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
 				     const G4Material* mat,
-				     G4double kineticEnergy);
+				     G4double kineticEnergy) final;
 
 private:
 
   // hide assignment operator
-  G4BetheBlochIonGasModel & operator=(const  G4BetheBlochIonGasModel &right);
-  G4BetheBlochIonGasModel(const  G4BetheBlochIonGasModel&);
+  G4BetheBlochIonGasModel & operator=
+  (const  G4BetheBlochIonGasModel &right) = delete;
+  G4BetheBlochIonGasModel(const  G4BetheBlochIonGasModel&) = delete;
 
   G4double currentCharge;
 };

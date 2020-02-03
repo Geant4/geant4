@@ -22,12 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4VTouchable.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
 // 
-// class G4VTouchable
+// G4VTouchable
 //
 // Class description:
 //
@@ -89,7 +85,6 @@
 //   8) UpdateYourself takes a physical volume pointer and can additionally
 //      take a NavigationHistory.
 
-// History:
 // Created: Paul Kent, August 1996
 // --------------------------------------------------------------------
 #ifndef G4VTOUCHABLE_HH
@@ -127,7 +122,7 @@ class G4VTouchable
     // Methods for touchables with history.
 
   virtual void  UpdateYourself(G4VPhysicalVolume* pPhysVol,
-			       const G4NavigationHistory* history=0); 
+			       const G4NavigationHistory* history = nullptr); 
     // Update method.
 
  public:  // without description

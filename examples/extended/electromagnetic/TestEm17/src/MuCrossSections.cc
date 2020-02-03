@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm17/src/MuCrossSections.cc
 /// \brief Implementation of the MuCrossSections class
 //
-// $Id: MuCrossSections.cc 67148 2013-02-01 18:16:32Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +50,8 @@ MuCrossSections::~MuCrossSections()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double MuCrossSections::CR_Macroscopic(const G4String& process, G4Material* material,
+G4double MuCrossSections::CR_Macroscopic(const G4String& process, 
+                                         const G4Material* material,
                                          G4double tkin, G4double ep)
                                           
 // return the macroscopic cross section (1/L) in GEANT4 internal units
@@ -59,11 +59,11 @@ G4double MuCrossSections::CR_Macroscopic(const G4String& process, G4Material* ma
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
 
-  G4double SIGMA = 0 ;
-
-  for ( size_t i=0 ; i < material->GetNumberOfElements() ; i++ )
+  G4double SIGMA = 0.;
+  G4int nelm = material->GetNumberOfElements(); 
+  for (G4int i=0; i < nelm; ++i)
   {
-    G4Element* element = (*theElementVector)[i];
+    const G4Element* element = (*theElementVector)[i];
     SIGMA += NbOfAtomsPerVolume[i] * CR_PerAtom(process, element, tkin, ep);
   }
   return SIGMA;
@@ -71,12 +71,13 @@ G4double MuCrossSections::CR_Macroscopic(const G4String& process, G4Material* ma
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double MuCrossSections::CR_PerAtom(const G4String& process, G4Element* element,
+G4double MuCrossSections::CR_PerAtom(const G4String& process, 
+                                     const G4Element* element,
                                      G4double tkin, G4double ep)
 {
  G4double z = element->GetZ();
  G4double a = element->GetA();
- 
+
  G4double sigma = 0.;
  if (process == "muBrems")
    sigma = CRB_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
@@ -112,22 +113,22 @@ double MuCrossSections::CRB_Mephi(double z,double a,double tkin,double ep)
 //***        Bugaev's inelatic nuclear correction (28) for Z > 1.
 //***********************************************************************
 {
-//    double Z,A,Tkin,EP;
-    double crb_g4;
-    double e,v,delta,rab0,z_13,dn,b,b1,dn_star,rab1,fn,epmax1,fe,rab2;
+//    G4double Z,A,Tkin,EP;
+    G4double crb_g4;
+    G4double e,v,delta,rab0,z_13,dn,b,b1,dn_star,rab1,fn,epmax1,fe,rab2;
 //    
-    double ame=0.51099907e-3; // GeV
-    double lamu=0.105658389;        // GeV
-    double re=2.81794092e-13; // cm
-    double avno=6.022137e23;
-    double alpha=1./137.036;
-    double rmass=lamu/ame; // "207"
-    double coeff=16./3.*alpha*avno*(re/rmass)*(re/rmass); // cm^2
-    double sqrte=1.64872127; // sqrt(2.71828...)
-    double btf=183.;
-    double btf1=1429.;
-    double bh=202.4;
-    double bh1=446.;
+    G4double ame=0.51099907e-3; // GeV
+    G4double lamu=0.105658389;        // GeV
+    G4double re=2.81794092e-13; // cm
+    G4double avno=6.022137e23;
+    G4double alpha=1./137.036;
+    G4double rmass=lamu/ame; // "207"
+    G4double coeff=16./3.*alpha*avno*(re/rmass)*(re/rmass); // cm^2
+    G4double sqrte=1.64872127; // sqrt(2.71828...)
+    G4double btf=183.;
+    G4double btf1=1429.;
+    G4double bh=202.4;
+    G4double bh1=446.;
 //***
         if(ep >= tkin)
         {
@@ -175,7 +176,7 @@ label10:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-double MuCrossSections::CRK_Mephi(double z,double a,double tkin,double ep)
+G4double MuCrossSections::CRK_Mephi(G4double z,G4double a,G4double tkin,G4double ep)
  
 //***********************************************************************
 //***        Cross section for knock-on electron production by fast muons
@@ -186,38 +187,42 @@ double MuCrossSections::CRK_Mephi(double z,double a,double tkin,double ep)
 //***        (a bit simplified Kelner's version of Eq.30 - with 2 logarithms).
 //***
 {
-//    double Z,A,Tkin,EP;
-    double crk_g4;
-    double e,epmax,v,sigma0,a1,a3;
+//    G4double Z,A,Tkin,EP;
+    G4double crk_g4;
+    G4double v,sigma0,a1,a3;
 //
-    double ame=0.51099907e-3; // GeV
-    double lamu=0.105658389; // GeV
-    double re=2.81794092e-13; // cm
-    double avno=6.022137e23;
-    double alpha=1./137.036;
-    double lpi=3.141592654;
-    double bmu=lamu*lamu/(2.*ame);
-    double coeff0=avno*2.*lpi*ame*re*re;
-    double coeff1=alpha/(2.*lpi);
+    G4double ame=0.51099907e-3; // GeV
+    G4double lamu=0.105658389; // GeV
+    G4double re=2.81794092e-13; // cm
+    G4double avno=6.022137e23;
+    G4double alpha=1./137.036;
+    G4double lpi=3.141592654;
+    G4double bmu=lamu*lamu/(2.*ame);
+    G4double coeff0=avno*2.*lpi*ame*re*re;
+    G4double coeff1=alpha/(2.*lpi);
 //***
-        e=tkin+lamu;
-        epmax=e/(1.+bmu/e);
-        if(ep >= epmax)
+
+    G4double e=tkin+lamu;
+    if(e < 0.) {
+      G4cout << "CRK: " << tkin << "  " << ep << "  " << e << G4endl;
+    }
+    G4double epmax=e/(1.+bmu/e);
+    if(ep >= epmax)
         {
           crk_g4=0.;
           return crk_g4;
         }
-        v=ep/e;
-        sigma0=coeff0*(z/a)*(1.-ep/epmax+0.5*v*v)/(ep*ep);
-        a1=log(1.+2.*ep/ame);
-        a3=log(4.*e*(e-ep)/(lamu*lamu));
-        crk_g4=sigma0*(1.+coeff1*a1*(a3-a1));
-        return crk_g4;
+    v=ep/e;
+    sigma0=coeff0*(z/a)*(1.-ep/epmax+0.5*v*v)/(ep*ep);
+    a1=std::log(1.+2.*ep/ame);
+    a3=std::log(4.*e*(e-ep)/(lamu*lamu));
+    crk_g4=sigma0*(1.+coeff1*a1*(a3-a1));
+    return crk_g4;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-double MuCrossSections::CRN_Mephi(double /* z */,double a,double tkin,double ep)
+G4double MuCrossSections::CRN_Mephi(G4double /* z */,G4double a,G4double tkin,G4double ep)
 
 //***********************************************************************
 //***        Differential cross section for photonuclear muon interaction.
@@ -228,20 +233,20 @@ double MuCrossSections::CRN_Mephi(double /* z */,double a,double tkin,double ep)
 //***        CRN_G4_1.inc        January 31st, 1998        R.P.Kokoulin
 //***********************************************************************
 {
-//    double Z,A,Tkin,EP;
-    double crn_g4;
-    double e,aeff,sigph,v,v1,v2,amu2,up,down;
+//    G4double Z,A,Tkin,EP;
+    G4double crn_g4;
+    G4double e,aeff,sigph,v,v1,v2,amu2,up,down;
 //***
-    double lamu=0.105658389; // GeV
-    double avno=6.022137e23;
-    double amp=0.9382723; // GeV
-    double lpi=3.14159265;
-    double alpha=1./137.036;
+    G4double lamu=0.105658389; // GeV
+    G4double avno=6.022137e23;
+    G4double amp=0.9382723; // GeV
+    G4double lpi=3.14159265;
+    G4double alpha=1./137.036;
 //***
-    double epmin_phn=0.20; // GeV
-    double alam2=0.400000; // GeV**2
-    double alam =0.632456; // sqrt(alam2)
-    double coeffn=alpha/lpi*avno*1e-30; // cm^2/microbarn
+    G4double epmin_phn=0.20; // GeV
+    G4double alam2=0.400000; // GeV**2
+    G4double alam =0.632456; // sqrt(alam2)
+    G4double coeffn=alpha/lpi*avno*1e-30; // cm^2/microbarn
 //***
         e=tkin+lamu;
         crn_g4=0.;
@@ -262,7 +267,7 @@ double MuCrossSections::CRN_Mephi(double /* z */,double a,double tkin,double ep)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
+G4double MuCrossSections::CRP_Mephi(G4double z,G4double a,G4double tkin,G4double ep)
 
 //**********************************************************************
 //***        crp_g4_1.inc        in comparison with crp_m.inc, following
@@ -278,28 +283,28 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
 //***        By R.P.Kokoulin, December 1997
 //***        Formulae from Kokoulin & Petrukhin 1971, Hobart, Eqs.(1,8,9,10)
 {
-//    double Z,A,Tkin,EP;
-    double crp_g4;
-    double bbbtf,bbbh,g1tf,g2tf,g1h,g2h,e,z13,e1,alf,a3,bbb;
-    double g1,g2,zeta1,zeta2,zeta,z2,screen0,a0,a1,bet,xi0,del;
-    double tmn,sum,a4,a5,a6,a7,a9,xi,xii,xi1,screen,yeu,yed,ye1;
-    double ale,cre,be,fe,ymu,ymd,ym1,alm_crm,a10,bm,fm;
+//    G4double Z,A,Tkin,EP;
+    G4double crp_g4;
+    G4double bbbtf,bbbh,g1tf,g2tf,g1h,g2h,e,z13,e1,alf,a3,bbb;
+    G4double g1,g2,zeta1,zeta2,zeta,z2,screen0,a0,a1,bet,xi0,del;
+    G4double tmn,sum,a4,a5,a6,a7,a9,xi,xii,xi1,screen,yeu,yed,ye1;
+    G4double ale,cre,be,fe,ymu,ymd,ym1,alm_crm,a10,bm,fm;
 //
-    double ame=0.51099907e-3; // GeV
-    double lamu=0.105658389; // GeV
-    double re=2.81794092e-13; // cm
-    double avno=6.022137e23;
-    double lpi=3.14159265;
-    double alpha=1./137.036;
-    double rmass=lamu/ame; // "207"
-    double coeff=4./(3.*lpi)*(alpha*re)*(alpha*re)*avno; // cm^2
-    double sqrte=1.64872127; // sqrt(2.71828...)
-    double c3=3.*sqrte*lamu/4.; // for limits
-    double c7=4.*ame; // -"-
-    double c8=6.*lamu*lamu; // -"-
+    G4double ame=0.51099907e-3; // GeV
+    G4double lamu=0.105658389; // GeV
+    G4double re=2.81794092e-13; // cm
+    G4double avno=6.022137e23;
+    G4double lpi=3.14159265;
+    G4double alpha=1./137.036;
+    G4double rmass=lamu/ame; // "207"
+    G4double coeff=4./(3.*lpi)*(alpha*re)*(alpha*re)*avno; // cm^2
+    G4double sqrte=1.64872127; // sqrt(2.71828...)
+    G4double c3=3.*sqrte*lamu/4.; // for limits
+    G4double c7=4.*ame; // -"-
+    G4double c8=6.*lamu*lamu; // -"-
 
-    double xgi[8]={.0199,.1017,.2372,.4083,.5917,.7628,.8983,.9801}; // Gauss, 8
-    double wgi[8]={.0506,.1112,.1569,.1813,.1813,.1569,.1112,.0506}; // Gauss, 8
+    G4double xgi[8]={.0199,.1017,.2372,.4083,.5917,.7628,.8983,.9801}; // Gauss, 8
+    G4double wgi[8]={.0506,.1112,.1569,.1813,.1813,.1569,.1112,.0506}; // Gauss, 8
     bbbtf=183.; // for the moment...
     bbbh=202.4; // for the moment...
     g1tf=1.95e-5;

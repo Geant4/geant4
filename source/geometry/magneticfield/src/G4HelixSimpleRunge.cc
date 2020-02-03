@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4HelixSimpleRunge.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
+// G4HelixSimpleRunge implementation
 //
 //  Simple Runge:
 //        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
@@ -34,17 +32,26 @@
 //  Take the derivative at a position to be assumed at the middle of the
 //  Step and add it to the current position.
 //
-//  W.Wander <wwc@mit.edu> 12/09/97 
+// Author: W. Wander <wwc@mit.edu>, 03.12.1998
 // -------------------------------------------------------------------------
 
 #include "G4HelixSimpleRunge.hh"
 #include "G4ThreeVector.hh"
 
+G4HelixSimpleRunge::G4HelixSimpleRunge(G4Mag_EqRhs* EqRhs)
+  : G4MagHelicalStepper(EqRhs)
+{
+}
+
+G4HelixSimpleRunge::~G4HelixSimpleRunge()
+{
+}
+
 void
-G4HelixSimpleRunge::DumbStepper( const G4double  yIn[],
-				 G4ThreeVector   Bfld,
-				 G4double        h,
-				 G4double        yOut[])
+G4HelixSimpleRunge::DumbStepper( const G4double      yIn[],
+                                       G4ThreeVector Bfld,
+                                       G4double      h,
+                                       G4double      yOut[] )
 {
   const G4int nvar = 6 ;
   G4double yTemp[nvar];   // , yAdd[nvar];
@@ -53,6 +60,7 @@ G4HelixSimpleRunge::DumbStepper( const G4double  yIn[],
   AdvanceHelix( yIn, Bfld, 0.5 * h, yTemp);
   
   // now obtain the new field value at the new point
+  //
   MagFieldEvaluate(yTemp, Bfld_midpoint);      
 
   AdvanceHelix( yIn, Bfld_midpoint, h, yOut);

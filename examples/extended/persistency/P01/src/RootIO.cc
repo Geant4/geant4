@@ -26,7 +26,10 @@
 /// \file persistency/P01/src/RootIO.cc
 /// \brief Implementation of the RootIO class
 //
+<<<<<<< HEAD
 // $Id: RootIO.cc 93305 2015-10-16 07:34:53Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

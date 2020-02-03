@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 102308 2017-01-20 14:54:21Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -48,6 +47,7 @@
 //
 //      modify FillQuarkContents() to use G4PDGCodeChecker 17 Aug. 99 H.Kurashige
 //      modified for thread-safety for MT - G.Cosmo, A.Dotti - January 2013
+//      added support for MuonicAtom - K.L.Genser - June 2017
 // --------------------------------------------------------------
 
 
@@ -68,69 +68,64 @@ G4PDefManager G4ParticleDefinition::subInstanceManager;
 // This macro changes the references to fields that are now encapsulated
 // in the class G4PDefData.
 //
-#define G4MT_pmanager ((subInstanceManager.offset[g4particleDefinitionInstanceID]).theProcessManager)
-
-// Returns the private data instance manager.
-//
-const G4PDefManager& G4ParticleDefinition::GetSubInstanceManager()
-{
-  return subInstanceManager;
-}
+#define G4MT_pmanager ((subInstanceManager.offset()[g4particleDefinitionInstanceID]).theProcessManager)
 
 G4ParticleDefinition::G4ParticleDefinition(
-		     const G4String&     aName,  
-		     G4double            mass,
-		     G4double            width,
-                     G4double            charge,   
-		     G4int               iSpin,
-                     G4int               iParity,    
-		     G4int               iConjugation,
-                     G4int               iIsospin,   
-		     G4int               iIsospin3, 
-		     G4int               gParity,
-		     const G4String&     pType,
-                     G4int               lepton,      
-		     G4int               baryon,
-		     G4int               encoding,
-		     G4bool              stable,
-		     G4double            lifetime,
-		     G4DecayTable        *decaytable,
-		     G4bool              shortlived,
-                     const G4String&     subType,
-                     G4int               anti_encoding,
-		     G4double            magneticMoment)
+        const G4String&     aName,
+        G4double            mass,
+        G4double            width,
+        G4double            charge,
+        G4int               iSpin,
+        G4int               iParity,
+        G4int               iConjugation,
+        G4int               iIsospin,
+        G4int               iIsospin3,
+        G4int               gParity,
+        const G4String&     pType,
+        G4int               lepton,
+        G4int               baryon,
+        G4int               encoding,
+        G4bool              stable,
+        G4double            lifetime,
+        G4DecayTable        *decaytable,
+        G4bool              shortlived,
+        const G4String&     subType,
+        G4int               anti_encoding,
+        G4double            magneticMoment)
 
-		 : theParticleName(aName), 
-		   thePDGMass(mass),
-		   thePDGWidth(width),
-		   thePDGCharge(charge),
-		   thePDGiSpin(iSpin),
-		   thePDGSpin(iSpin*0.5),
-		   thePDGiParity(iParity), 
-		   thePDGiConjugation(iConjugation),
-		   thePDGiGParity(gParity),
-		   thePDGiIsospin(iIsospin),
-		   thePDGiIsospin3(iIsospin3),
-		   thePDGIsospin(iIsospin*0.5),
-		   thePDGIsospin3(iIsospin3*0.5),
-		   thePDGMagneticMoment(magneticMoment),
-		   theLeptonNumber(lepton),
-		   theBaryonNumber(baryon),
-		   theParticleType(pType), 
-		   theParticleSubType(subType), 
-		   thePDGEncoding(encoding),
-		   theAntiPDGEncoding(-1*encoding),
-		   fShortLivedFlag(shortlived),
-		   thePDGStable(stable), 
-		   thePDGLifeTime(lifetime), 
-                   theDecayTable(decaytable),
-                   theAtomicNumber(0),
-                   theAtomicMass(0),
-                   verboseLevel(1),
-  		   fApplyCutsFlag(false),
-		   isGeneralIon(false)
+    : theParticleName(aName),
+      thePDGMass(mass),
+      thePDGWidth(width),
+      thePDGCharge(charge),
+      thePDGiSpin(iSpin),
+      thePDGSpin(iSpin*0.5),
+      thePDGiParity(iParity),
+      thePDGiConjugation(iConjugation),
+      thePDGiGParity(gParity),
+      thePDGiIsospin(iIsospin),
+      thePDGiIsospin3(iIsospin3),
+      thePDGIsospin(iIsospin*0.5),
+      thePDGIsospin3(iIsospin3*0.5),
+      thePDGMagneticMoment(magneticMoment),
+      theLeptonNumber(lepton),
+      theBaryonNumber(baryon),
+      theParticleType(pType),
+      theParticleSubType(subType),
+      thePDGEncoding(encoding),
+      theAntiPDGEncoding(-1*encoding),
+      fShortLivedFlag(shortlived),
+      thePDGStable(stable),
+      thePDGLifeTime(lifetime),
+      theDecayTable(decaytable),
+      theAtomicNumber(0),
+      theAtomicMass(0),
+      verboseLevel(1),
+      fApplyCutsFlag(false),
+      isGeneralIon(false),
+      isMuonicAtom(false)
 {
-   static G4String nucleus("nucleus");
+   static const G4String nucleus("nucleus");
+   static const G4String muAtom("MuonicAtom"); 
 
    g4particleDefinitionInstanceID = -1;
    theProcessManagerShadow = 0;
@@ -158,7 +153,7 @@ G4ParticleDefinition::G4ParticleDefinition(
    // check initialization is in Pre_Init state except for ions
    G4ApplicationState currentState = G4StateManager::GetStateManager()->GetCurrentState();
 
-   if ( !fShortLivedFlag && (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
+   if ( !fShortLivedFlag && (theParticleType!=nucleus) && (theParticleType!=muAtom) && (currentState!=G4State_PreInit)){
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>0) {
        G4cout << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
@@ -234,15 +229,30 @@ const G4ParticleDefinition & G4ParticleDefinition::operator=(const G4ParticleDef
   return *this;
 }
 
-G4int G4ParticleDefinition::operator==(const G4ParticleDefinition &right) const
+G4bool G4ParticleDefinition::operator==(const G4ParticleDefinition &right) const
 {
   return (this->theParticleName == right.theParticleName);
 }
 
-G4int G4ParticleDefinition::operator!=(const G4ParticleDefinition &right) const
+G4bool G4ParticleDefinition::operator!=(const G4ParticleDefinition &right) const
 {
   return (this->theParticleName != right.theParticleName);
 }
+
+
+const G4PDefManager& G4ParticleDefinition::GetSubInstanceManager()
+  // Returns the private data instance manager.
+{
+  return subInstanceManager;
+}
+
+
+void G4ParticleDefinition::Clean()
+  // Clears memory allocated by sub-instance manager
+{
+  subInstanceManager.FreeSlave();
+}
+
 
 G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
 {
@@ -428,11 +438,11 @@ void G4ParticleDefinition::SetParticleDefinitionID(G4int id)
   if(id<0)
   {
     g4particleDefinitionInstanceID = subInstanceManager.CreateSubInstance(); 
-    G4MT_pmanager = 0;
+    G4MT_pmanager = nullptr;
   }
   else
   {
-    if(isGeneralIon)
+    if( isGeneralIon || isMuonicAtom )
     { g4particleDefinitionInstanceID = id; }
     else
     {

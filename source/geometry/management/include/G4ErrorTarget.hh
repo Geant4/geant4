@@ -23,22 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ErrorTarget.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class header file 
-// --------------------------------------------------------------------
+// G4ErrorTarget
 //
 // Class Description:
 //
 // Base class for all error propagation targets.
 
-// History:
-// - Created. P. Arce, September 2004
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-
 #ifndef G4ErrorTarget_hh
 #define G4ErrorTarget_hh
 

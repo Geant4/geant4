@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 svn log $Id: History 97454 2016-06-03 09:15:24Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +19,129 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 25th April 2016  Gabriele Cosmo  (config-V10-01-10)
+=======
+20th Nov 2019 Gabriele Cosmo (config-V10-05-08)
+- interactivity.gmk: added -DQT_NO_DEPRECATED_WARNINGS to Qt compilation
+  settings, to silence warnings from Qt for use of deprecated features.
+
+22nd Oct 2019 Gabriele Cosmo (config-V10-05-07)
+- Force use of c++17 in WIN32 targets.
+
+9th Oct 2019 Gabriele Cosmo (config-V10-05-06)
+- Corrected default path for XM in Darwin targets.
+
+13th Sep 2019 Ivana Hrivnacova (config-V10-05-05)
+- Added new analysis/factory subdirectory in includes in  binmake.gmk;
+  removed analysis/parameters which does not exist anymore.
+
+4th Sep 2019 Gabriele Cosmo (config-V10-05-04)
+- Fixed compilation warning on gcc-9.2 for liblist.c; replaced use
+  of strncat() with strcat().
+
+13th Aug 2019 Gabriele Cosmo (config-V10-05-03)
+- geomconf.gmk: added VecGeom wrappers flags for G4EllipticalTube,
+  G4EllipticalCone and G4Ellipsoid.
+
+28th Jun 2019 Gabriele Cosmo (config-V10-05-02)
+- Fixed default paths for Linux architectures.
+
+16th May 2019 Gabriele Cosmo (config-V10-05-01)
+- Hard-code Qt version through QT_VERSION flag.
+  Corrected Qt5 setup for Linux-g++ and Linux-clang.
+
+26th April 2019 Ben Morgan (config-V10-05-00)
+- Add -DG4GMAKE to CPPFLAGS to indicate use, or not, of Geant4Make.
+  This is to protect use or not of the new G4GlobalConfig header
+  introduced in cmake-V10-05-02.
+
+28th September 2018 Gabriele Cosmo  (config-V10-04-09)
+- Added -DGL_SILENCE_DEPRECATION to CPPFLAGS to Darwin setups to silence
+  deprecation compilation warnings on MacOS 10.14 Mojave.
+
+18th September 2018 Gabriele Cosmo  (config-V10-04-08)
+- Cleanup settings for GL in Darwin-clang.gmk and Darwin-g++.gmk.
+
+12th September 2018 Gabriele Cosmo  (config-V10-04-07)
+- Withdraw changes of last tag for Linux-g++ and corrected use of
+  G4RUNPATHOPTION in binmake.gmk for installed kernel libraries.
+
+7th September 2018 Gabriele Cosmo  (config-V10-04-06)
+- Fixed setting of G4RUNPATHOPTION in Darwin/Linux-clang/g++ and binmake.cmk.
+  Addressing problem report #2086.
+
+12th April 2018 Gabriele Cosmo  (config-V10-04-05)
+- WIN32-VC.gmk: updated obsolete configuration for Qt5.
+
+20th March 2018 Gabriele Cosmo  (config-V10-04-04)
+- architecture.gmk: corrected default path for external expat and zlib.
+
+19th March 2018 Gabriele Cosmo  (config-V10-04-03)
+- architecture.gmk: corrected settings for external expat and zlib.
+
+9th March 2018 Gabriele Cosmo  (config-V10-04-02)
+- Darwing-clang.gmk: removed -pthread and -fPIC compilation options.
+
+14th February 2018 Gabriele Cosmo  (config-V10-04-01)
+- Disable "-Wl,-force_load" global linker flag for static libraries in macro
+  Darwing-clang.gmk.
+
+11th January 2018 Gabriele Cosmo  (config-V10-04-00)
+- geomconf.gmk: added G4GEOM_USE_UTESSELLATEDSOLID flag to enable VecGeom
+  wrapper for G4TessellatedSolid.
+
+16th November 2017 Gabriele Cosmo  (config-V10-03-07)
+- architecture.gmk: removed references to old USolids library; just use VecGeom.
+
+16th October 2017 Gabriele Cosmo  (config-V10-03-06)
+- geomconf.gmk: added G4GEOM_USE_UHYPE flag to enable VecGeom wrapper for G4Hype.
+
+10th October 2017 Gabriele Cosmo  (config-V10-03-05)
+- binmake.gmk: added hadronic/models/gamma_nuclear module to include paths.
+
+11th July 2017 Gabriele Cosmo  (config-V10-03-04)
+- geomconf.gmk: updated flags for Scalar build of VecGeom.
+
+11th July 2017 Gabriele Cosmo  (config-V10-03-03)
+- geomconf.gmk: added selector for G4GEOM_USE_UPARA flag, to enable
+  wrapping of G4Para for USolids/VecGeom.
+  Coworks with tag geom-csg-V10-03-29.
+
+10th July 2017 Gabriele Cosmo  (config-V10-03-02)
+- geomconf.gmk: added selector for G4GEOM_USE_UCTUBS flag, to enable
+  wrapping of G4CutTubs for USolids/VecGeom.
+  Coworks with tag geom-csg-V10-03-28.
+
+20th April 2017 Gabriele Cosmo  (config-V10-03-01)
+- binmake-gmk: added 'processses/solidstate' module include path.
+
+14th March 2017 Gabriele Cosmo  (config-V10-03-00)
+- Corrected order of linkage in binmake.gmk for analysis global library.
+
+18th November 2016 Gunter Folger  (config-V10-02-07)
+- add include for analysis/accumulables
+- revert change forcing load of libraries
+
+9th November 2016 Gunter Folger  (config-V10-02-06)  *tag REJECTED*
+- Force loading of symbols for physics_lists/constructor and builders 
+   libraries in granular mode for static libs
+	
+17th October 2016 Gabriele Cosmo  (config-V10-02-05)
+- Changed default optimisation settings to -O3 for g++, clang and icc.
+- Added -fno-trapping-math -ftree-vectorize -fno-math-errno to g++ and
+  clang settings.
+- Better factorise -std options in scripts.
+
+8th June 2016 Gunter Folger  (config-V10-02-04)
+- Reverted previous change for G4{,NO}STATIC_MODE
+
+8th June 2016 Gunter Folger  (config-V10-02-03)
+- Deleted G4STATIC_MODE and G4NOSTATIC_MODE options in sys/Darwin*
+  and sys/linux*. This is not a complete removal of the option yet...
+
+25th April 2016  Gabriele Cosmo  (config-V10-02-02)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - Added Linux-clang.gmk script for use of clang compiler on Linux system.
 
 14th April 2016  Gabriele Cosmo

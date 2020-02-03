@@ -1,0 +1,37 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    mfp History file
+                    --------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+26-11-19 I. Hrivnacova - tag mfp-V10-05-00
+- Fixed Doxygen warnings
+
+04-11-18 S. Incerti - tag mfp-V10-04-03
+- rewrite of physics list and macro mfp.in to avoid factory usage
+
+22-07-18 S. Incerti - tag mfp-V10-04-02
+- removed obsolete RanecuEngine.
+
+09-05-18 B. Morgan - tag mfp-V10-04-01
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+26-02-18  R. Hatcher - tag mfp-V10-04-00
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
+15-06-17 SI - tag mfp-V10-03-00
+- created
+

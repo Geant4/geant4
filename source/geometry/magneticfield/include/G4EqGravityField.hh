@@ -23,25 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
-// class G4EqGravityField
+// G4EqGravityField
 //
 // Class description:
 //
-// This is the right-hand side of equation of motion in a 
-// gravity field.
-//
-// History:
-// - 14.06.11 P.Gumplinger, Created.
-// -------------------------------------------------------------------
-// Adopted from G4EqMagElectricField.hh
-//
-// Thanks to Peter Fierlinger (PSI) and
-// A. Capra and A. Fontana (INFN Pavia)
-// -------------------------------------------------------------------
+// This is the right-hand side of equation of motion in a gravity field.
 
-#ifndef G4EQGRAVITYFIELD_hh
-#define G4EQGRAVITYFIELD_hh
+// Created: P.Gumplinger, 14.06.11 - Adopted from G4EqMagElectricField
+//          Thanks to P.Fierlinger (PSI) and A.Capra and A.Fontana (INFN Pavia)
+// -------------------------------------------------------------------
+#ifndef G4EQGRAVITYFIELD_HH
+#define G4EQGRAVITYFIELD_HH
 
 #include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
@@ -51,10 +43,9 @@ class G4EqGravityField : public G4EquationOfMotion
 {
   public:  // with description
 
-    G4EqGravityField(G4UniformGravityField *gField ) 
-      : G4EquationOfMotion( gField ) {;}
+    G4EqGravityField(G4UniformGravityField* gField);
 
-    ~G4EqGravityField() {;}
+    ~G4EqGravityField();
 
     void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                G4double MomentumXc,
@@ -68,8 +59,8 @@ class G4EqGravityField : public G4EquationOfMotion
 
   private:
 
-    G4double  fMass;
+    G4double fMass = 0.0;
 
 };
 
-#endif /* G4EQGRAVITYFIELD */
+#endif

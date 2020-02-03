@@ -25,7 +25,6 @@
 //
 #ifndef G4CASCADE_DEEXCITATION_HH
 #define G4CASCADE_DEEXCITATION_HH
-// $Id: G4CascadeDeexcitation.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.

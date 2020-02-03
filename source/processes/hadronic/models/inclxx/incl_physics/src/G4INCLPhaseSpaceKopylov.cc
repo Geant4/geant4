@@ -69,7 +69,7 @@ namespace G4INCL {
     const size_t N = particles.size();
     masses.resize(N);
     sumMasses.resize(N);
-    std::transform(particles.begin(), particles.end(), masses.begin(), std::mem_fun(&Particle::getMass));
+    std::transform(particles.begin(), particles.end(), masses.begin(), std::mem_fn(&Particle::getMass));
     std::partial_sum(masses.begin(), masses.end(), sumMasses.begin());
 
     G4double PFragMagCM = 0.0;

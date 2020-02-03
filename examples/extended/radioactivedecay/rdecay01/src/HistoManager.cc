@@ -24,7 +24,10 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id: HistoManager.cc 95541 2016-02-12 14:33:23Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

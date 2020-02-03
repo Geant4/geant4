@@ -23,22 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ErrorPlaneSurfaceTarget.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class header file 
-// --------------------------------------------------------------------
+// G4ErrorPlaneSurfaceTarget
 //
 // Class Description:
 //
-// G4ErrorTarget class: limits step when track reaches a plane surface.
+// Limits step when track reaches a plane surface.
 
-// History:
-// - Created. P. Arce, September 2004
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-
 #ifndef G4ErrorPlaneSurfaceTarget_hh
 #define G4ErrorPlaneSurfaceTarget_hh
 
@@ -51,17 +43,17 @@ class G4ErrorPlaneSurfaceTarget : public G4ErrorSurfaceTarget, G4Plane3D
 {
   public:  // with description
 
-    G4ErrorPlaneSurfaceTarget(G4double a=0, G4double b=0,
-                              G4double c=0, G4double d=0);
+    G4ErrorPlaneSurfaceTarget(G4double a=0., G4double b=0.,
+                              G4double c=0., G4double d=0.);
       // Constructs plane by parameters: ax+by+cz+d = 0
 
-    G4ErrorPlaneSurfaceTarget(const G4Normal3D &n,
-                              const G4Point3D &p);
+    G4ErrorPlaneSurfaceTarget(const G4Normal3D& n,
+                              const G4Point3D& p);
       // Constructs plane by point and normal
 
-    G4ErrorPlaneSurfaceTarget(const G4Point3D &p1,
-                              const G4Point3D &p2,
-                              const G4Point3D &p3);
+    G4ErrorPlaneSurfaceTarget(const G4Point3D& p1,
+                              const G4Point3D& p2,
+                              const G4Point3D& p3);
       // Constructs plane by three points
 
     ~G4ErrorPlaneSurfaceTarget();

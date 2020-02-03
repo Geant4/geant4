@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr03/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
+<<<<<<< HEAD
 // $Id: SteppingAction.cc 94619 2015-11-26 13:57:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

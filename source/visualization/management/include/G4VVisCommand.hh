@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh 83403 2014-08-21 15:07:30Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -39,53 +38,115 @@
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
 #include "G4ModelingParameters.hh"
+#include "G4PhysicalVolumesSearchScene.hh"
 #include <vector>
 
 class G4UIcommand;
 class G4UIcmdWithAString;
 
-class G4VVisCommand: public G4UImessenger {
+class G4VVisCommand: public G4UImessenger
+{
 public:
+  
   // Uses compiler defaults for copy constructor and assignment.
   G4VVisCommand ();
   virtual ~G4VVisCommand ();
-  static void SetVisManager (G4VisManager*);
-  static const G4Colour& GetCurrentColour() {return fCurrentColour;}
-  //static G4VMarker::FillStyle GetCurrentFillStyle() {return fCurrentFillStyle;}
-  //static G4VMarker::SizeType  GetCurrentSizeType() {return fCurrentSizeType;}
-  static G4double GetCurrentLineWidth() {return fCurrentLineWidth;}
-  //static G4VisAttributes::LineStyle GetCurrentLineStyle() {return fCurrentLineStyle;}
-  static const G4Colour& GetCurrentTextColour() {return fCurrentTextColour;}
-  static G4Text::Layout GetCurrentTextLayout() {return fCurrentTextLayout;}
-  static G4double GetCurrentTextSize() {return fCurrentTextSize;}
+
+  static void SetVisManager (G4VisManager* pVisManager)
+  {fpVisManager = pVisManager;}
+
+  static const G4Colour& GetCurrentTextColour()
+  {return fCurrentTextColour;}
 
 protected:
 
+  // Utility functions
+
+  void SetViewParameters(G4VViewer* viewer, const G4ViewParameters& viewParams);
+
+  void RefreshIfRequired(G4VViewer* viewer);
+
+  void InterpolateViews
+  (G4VViewer* currentViewer,
+   std::vector<G4ViewParameters> viewVector,
+   const G4int nInterpolationPoints = 50,
+   const G4int waitTimePerPointmilliseconds = 20,
+   const G4String exportString = "");
+
+  void InterpolateToNewView
+  (G4VViewer* currentViewer,
+   const G4ViewParameters& oldVP,
+   const G4ViewParameters& newVP,
+   const G4int nInterpolationPoints = 50,
+   const G4int waitTimePerPointmilliseconds = 20,
+   const G4String exportString = "");
+
   // Conversion routines augmenting those in G4UIcommand.
+
   static G4String ConvertToString(G4double x, G4double y,
 				  const char * unitName);
-  static void  ConvertToDoublePair(const G4String& paramString,
-				   G4double& xval,
-				   G4double& yval);
 
-  // Other utilities.
-  void UpdateVisManagerScene (const G4String& sceneName = "");
+  static G4bool ConvertToDoublePair(const G4String& paramString,
+                                    G4double& xval,
+                                    G4double& yval);
+  // Return false if problem parsing paramString.
 
-  // Data members.
+  const G4String& ConvertToColourGuidance();
+  void ConvertToColour
+  (G4Colour& colour,
+   const G4String& redOrString,
+   G4double green,
+   G4double blue,
+   G4double opacity);
+  // Note: colour is supplied by the caller and becomes the default if the
+  // remaining parameters cannot be parsed.
+  // Note: redOrString is either a number or string.  If a string it must be
+  // one of the recognised colours.
+  // Thus the arguments can be, for example:
+  // (colour,"red",...,...,0.5): will give the colour red with opacity 0.5 (the
+  // third and fourth arguments are ignored), or
+  // (1.,0.,0.,0.5): this also will be red with opacity 0.5.
+
+  G4bool ProvideValueOfUnit
+  (const G4String& where,
+   const G4String& unit,
+   const G4String& category,
+   G4double& value);
+  // Return false if there's a problem
+
+  // Other utilities
+
+  void CheckSceneAndNotifyHandlers (G4Scene* = nullptr);
+
+  void G4VisCommandsSceneAddUnsuccessful(G4VisManager::Verbosity verbosity);
+
+  void CopyGuidanceFrom
+  (const G4UIcommand* fromCmd, G4UIcommand* toCmd, G4int startLine = 0);
+
+  void CopyParametersFrom
+  (const G4UIcommand* fromCmd, G4UIcommand* toCmd);
+
+  void DrawExtent(const G4VisExtent&);
+
+  // Data members
+
   static G4VisManager* fpVisManager;
 
+  static G4int fErrorCode;
+
   // Current quantities for use in appropriate commands
+  static G4int fCurrentArrow3DLineSegmentsPerCircle;
   static G4Colour                   fCurrentColour;
-  //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
-  //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
   static G4double                   fCurrentLineWidth;
   //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
+  //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
+  //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
   static G4Colour                   fCurrentTextColour;
   static G4Text::Layout             fCurrentTextLayout;
   static G4double                   fCurrentTextSize;
-  static G4ModelingParameters::PVNameCopyNoPath fCurrentTouchablePath;
+  static G4PhysicalVolumeModel::TouchableProperties fCurrentTouchableProperties;
+  static G4VisExtent                fCurrentExtentForField;
+  static std::vector<G4PhysicalVolumesSearchScene::Findings> fCurrrentPVFindingsForField;
 };
-
-#include "G4VVisCommand.icc"
 
 #endif

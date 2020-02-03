@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.hh 89523 2015-04-16 09:56:35Z gcosmo $
 //
 // by V. Lara
 // 01.05.2008 J. M. Quesada . New methods for accessing to individual transition 
@@ -46,6 +45,7 @@
 
 class G4ParticleDefinition;
 class G4Fragment;
+class G4NuclearLevelData;
 
 class G4PreCompoundTransitions : public G4VPreCompoundTransitions
 {
@@ -67,10 +67,10 @@ private:
   G4bool operator!=(const G4PreCompoundTransitions &right) const;
 
   const G4ParticleDefinition* proton;
+  G4NuclearLevelData* fNuclData;  
 
   G4double FermiEnergy;
   G4double r0;  // Nuclear radius
-  G4double aLDP;// Level density parameter
 };
 
 #endif

@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Hype.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Hype.icc
-//
 // Implementation of inline methods of G4Hype
 // --------------------------------------------------------------------
 
@@ -67,10 +59,10 @@ G4double G4Hype::GetOuterStereo () const
 inline
 void G4Hype::SetInnerRadius (G4double newIRad) 
   { 
-    innerRadius= newIRad;
-    innerRadius2= newIRad*newIRad;
-    endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=std::sqrt(endInnerRadius2);
+    innerRadius = newIRad;
+    innerRadius2 = newIRad*newIRad;
+    endInnerRadius2 = HypeInnerRadius2(halfLenZ);
+    endInnerRadius = std::sqrt(endInnerRadius2);
     fCubicVolume = 0.;
     fRebuildPolyhedron = true;
   }
@@ -78,10 +70,10 @@ void G4Hype::SetInnerRadius (G4double newIRad)
 inline
 void G4Hype::SetOuterRadius (G4double newORad) 
   { 
-    outerRadius= newORad;
-    outerRadius2=newORad*newORad;
-    endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=std::sqrt(endOuterRadius2);
+    outerRadius = newORad;
+    outerRadius2 = newORad*newORad;
+    endOuterRadius2 = HypeOuterRadius2(halfLenZ);
+    endOuterRadius = std::sqrt(endOuterRadius2);
     fCubicVolume = 0.;
     fRebuildPolyhedron = true;
   } 
@@ -89,7 +81,7 @@ void G4Hype::SetOuterRadius (G4double newORad)
 inline
 void G4Hype::SetZHalfLength (G4double newHLZ)
   {
-    halfLenZ   = newHLZ ;
+    halfLenZ = newHLZ ;
     fCubicVolume = 0.;
     fRebuildPolyhedron = true;
   }
@@ -97,11 +89,11 @@ void G4Hype::SetZHalfLength (G4double newHLZ)
 inline
 void G4Hype::SetInnerStereo (G4double newISte) 
   { 
-    innerStereo= std::fabs(newISte);
-    tanInnerStereo=std::tan(innerStereo);
-    tanInnerStereo2=tanInnerStereo*tanInnerStereo;
-    endInnerRadius2=HypeInnerRadius2(halfLenZ);
-    endInnerRadius=std::sqrt(endInnerRadius2);
+    innerStereo = std::fabs(newISte);
+    tanInnerStereo = std::tan(innerStereo);
+    tanInnerStereo2 = tanInnerStereo*tanInnerStereo;
+    endInnerRadius2 = HypeInnerRadius2(halfLenZ);
+    endInnerRadius = std::sqrt(endInnerRadius2);
     fCubicVolume = 0.;
     fRebuildPolyhedron = true;
   }
@@ -109,11 +101,11 @@ void G4Hype::SetInnerStereo (G4double newISte)
 inline
 void G4Hype::SetOuterStereo (G4double newOSte)
   { 
-    outerStereo= std::fabs(newOSte);
-    tanOuterStereo=std::tan(outerStereo);
-    tanOuterStereo2=tanOuterStereo*tanOuterStereo;
-    endOuterRadius2=HypeOuterRadius2(halfLenZ);
-    endOuterRadius=std::sqrt(endOuterRadius2);
+    outerStereo = std::fabs(newOSte);
+    tanOuterStereo = std::tan(outerStereo);
+    tanOuterStereo2 = tanOuterStereo*tanOuterStereo;
+    endOuterRadius2 = HypeOuterRadius2(halfLenZ);
+    endOuterRadius = std::sqrt(endOuterRadius2);
     fCubicVolume = 0.;
     fRebuildPolyhedron = true;
   }

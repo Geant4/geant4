@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VPhysicalVolume.cc 102288 2017-01-20 10:57:03Z gcosmo $
-//
-// 
 // class G4VPhysicalVolume Implementation
 //
+// 15.01.13, G.Cosmo, A.Dotti: Modified for thread-safety for MT
+// 28.08.96, P.Kent: Replaced transform by rotmat + vector
+// 25.07.96, P.Kent: Modified interface for new `Replica' capable geometry 
+// 24.07.95, P.Kent: First non-stub version
 // --------------------------------------------------------------------
 
 #include "G4VPhysicalVolume.hh"
@@ -44,18 +44,19 @@ G4PVManager G4VPhysicalVolume::subInstanceManager;
 // in the class G4PVData.
 //
 #define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
-#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
+#define G4MT_tx ((subInstanceManager.offset[instanceID]).tx)
+#define G4MT_ty ((subInstanceManager.offset[instanceID]).ty)
+#define G4MT_tz ((subInstanceManager.offset[instanceID]).tz)
 #define G4MT_pvdata (subInstanceManager.offset[instanceID])
 
 // Constructor: init parameters and register in Store
 //
-G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
-                                const G4ThreeVector &tlate,
+G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix* pRot,
+                                const G4ThreeVector& tlate,
                                 const G4String& pName,
                                       G4LogicalVolume* pLogical,
                                       G4VPhysicalVolume* )
-  : flogical(pLogical),
-    fname(pName), flmother(0)
+  : flogical(pLogical), fname(pName)
 {
   instanceID = subInstanceManager.CreateSubInstance();
 
@@ -65,7 +66,9 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
   // Initialize 'Shadow' data structure - for use by object persistency
   pvdata = new G4PVData();
   pvdata->frot = pRot;
-  pvdata->ftrans = G4ThreeVector(tlate);
+  pvdata->tx = tlate.x();
+  pvdata->ty = tlate.y();
+  pvdata->tz = tlate.z();
 
   G4PhysicalVolumeStore::Register(this);
 }
@@ -74,7 +77,7 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
 //                            for usage restricted to object persistency.
 //
 G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
-  : flogical(0), fname(""), flmother(0), pvdata(0)
+  : fname("")
 {
   // Register to store
   //
@@ -109,6 +112,13 @@ InitialiseWorker( G4VPhysicalVolume* /*pMasterObject*/,
   //  G4PhysicalVolumeStore::Register(this);
 }
 
+// Release memory allocated for offset
+//
+void G4VPhysicalVolume::Clean()
+{
+  subInstanceManager.FreeSlave();
+}
+
 // This method is similar to the destructor. It is used by each worker
 // thread to achieve the partial effect as that of the master thread.
 // For G4VPhysicalVolume instances, nothing more to do here.
@@ -129,14 +139,14 @@ G4int G4VPhysicalVolume::GetMultiplicity() const
   return 1;
 }
 
-const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
+const G4ThreeVector G4VPhysicalVolume::GetTranslation() const
 {
-  return G4MT_trans;
+  return G4ThreeVector(G4MT_tx, G4MT_ty, G4MT_tz);
 }
 
 void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &vec)
 {
-  G4MT_trans=vec;
+  G4MT_tx=vec.x(); G4MT_ty=vec.y(); G4MT_tz=vec.z();
 }
 
 const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
@@ -151,7 +161,7 @@ G4RotationMatrix* G4VPhysicalVolume::GetRotation()
 
 void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
 {
-  G4MT_rot=pRot;
+  G4MT_rot = pRot;
 }
 
 G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
@@ -172,19 +182,19 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 
 G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 {
-  G4RotationMatrix  aRotM;   // Initialised to identity
+  G4RotationMatrix aRotM;   // Initialised to identity
 
   // Insure against G4MT_rot being a null pointer
   if(G4MT_rot)
   {
-     aRotM= G4MT_rot->inverse();
+     aRotM = G4MT_rot->inverse();
   }
   return aRotM;
 }
 
 G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
 {
-  return G4MT_trans;
+  return G4ThreeVector(G4MT_tx, G4MT_ty, G4MT_tz);
 }
 
 const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
@@ -194,7 +204,7 @@ const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
 
 G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
 {
-  return -G4MT_trans;
+  return -G4ThreeVector(G4MT_tx, G4MT_ty, G4MT_tz);
 }
 
 // Only implemented for placed and parameterised volumes.

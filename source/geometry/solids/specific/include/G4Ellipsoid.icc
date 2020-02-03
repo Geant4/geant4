@@ -23,17 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Ellipsoid.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Ellipsoid.icc
+// G4Ellipsoid
 //
 // Implementation of inline methods of G4Ellipsoid
 // --------------------------------------------------------------------
+
+inline
+G4double G4Ellipsoid::GetDx() const
+{
+  return xSemiAxis;
+}
+
+inline
+G4double G4Ellipsoid::GetDy() const
+{
+  return ySemiAxis;
+}
+
+inline
+G4double G4Ellipsoid::GetDz() const
+{
+  return zSemiAxis;
+}
 
 inline
 G4double G4Ellipsoid::GetSemiAxisMax (G4int i) const

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCtable.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4HCtable_H
@@ -64,7 +63,7 @@ class G4HCtable
 
   public:
     inline G4int entries() const
-    { return HClist.size(); }
+    { return G4int(HClist.size()); }
     inline G4String GetSDname(G4int i) const
     {
       if(i<0||i>entries()) return "***Not Defined***";

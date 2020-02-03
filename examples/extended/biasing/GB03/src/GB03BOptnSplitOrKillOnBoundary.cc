@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \file GB03BOptnSplitOrKillOnBoundary.cc
 /// \brief Implementation of the GB03BOptnSplitOrKillOnBoundary class
@@ -139,9 +138,9 @@ GB03BOptnSplitOrKillOnBoundary::GenerateBiasingFinalState( const G4Track* track,
               // Shoot a random number (in ]0,1[ segment):
               G4double random = G4UniformRand();
               
-              // Decide to kill with  1/fSplittingFactor probability:
-              G4double killingProbability = 1.0/fSplittingFactor;
-              if ( random < killingProbability )
+              // Decide to kill, keeping 1/fSplittingFactor of tracks:
+              G4double survivingProbability = 1.0/fSplittingFactor;
+              if ( random > survivingProbability )
                 {
                   // We ask for the the track to be killed:
                   fParticleChange.ProposeTrackStatus(fStopAndKill);

@@ -20,3 +20,34 @@ add_subdirectory(test13/module)
 
 # tests for g4py
 add_subdirectory(gtest01/module)
+<<<<<<< HEAD
+=======
+
+# testing
+add_subdirectory(test00)
+add_subdirectory(test01)
+
+if (${PYTHON_VERSION_MAJOR} MATCHES "2")
+  add_subdirectory(test02)
+  add_subdirectory(test03)
+  add_subdirectory(test04)
+  add_subdirectory(test05)
+  add_subdirectory(test06)
+  add_subdirectory(test07)
+  add_subdirectory(test08)
+  add_subdirectory(test09)
+  add_subdirectory(test10)
+  add_subdirectory(test11)
+  add_subdirectory(test12)
+  add_subdirectory(test13)
+endif()
+
+#
+add_subdirectory(gtest01)
+add_subdirectory(gtest02)
+add_subdirectory(gtest03)
+add_subdirectory(gtest04)
+add_subdirectory(gtest05)
+add_subdirectory(gtest06)
+add_subdirectory(gtest07)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

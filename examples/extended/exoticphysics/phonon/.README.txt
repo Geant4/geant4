@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 //$Id: .README.txt 94710 2015-12-03 16:15:05Z gunter $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ///\file "exoticphysics/phonon/.README.txt"
 ///\brief Example phonon README page

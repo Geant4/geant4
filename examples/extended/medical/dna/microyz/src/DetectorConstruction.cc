@@ -35,6 +35,7 @@
 /// \brief Implementation of the DetectorConstruction class
  
 #include "DetectorConstruction.hh"
+#include "DetectorMessenger.hh"
 #include "TrackerSD.hh"
 
 #include "G4Material.hh"
@@ -51,14 +52,30 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction()
+:G4VUserDetectorConstruction(),
+fDetectorMessenger(0)
 {
+<<<<<<< HEAD
+=======
+  // Default tracking cut
+  fpTrackingCut = 11.*eV; 
+    
+  // Default maximum step size
+  fpMaxStepSize = DBL_MAX; 
+    
+  // Create commands for interactive definition of the detector  
+  fDetectorMessenger = new DetectorMessenger(this);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 DetectorConstruction::~DetectorConstruction()
 {
+<<<<<<< HEAD
+=======
+ delete fDetectorMessenger;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,6 +139,14 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                  0,               // copy number
                  false); // checking overlaps 
   
+<<<<<<< HEAD
+=======
+  worldLV->SetUserLimits(new G4UserLimits(fpMaxStepSize,DBL_MAX,DBL_MAX,
+                             fpTrackingCut));    
+
+  PrintParameters();
+  
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   return worldPV;
 }
 
@@ -141,3 +166,35 @@ void DetectorConstruction::ConstructSDandField()
   SetSensitiveDetector("World_LV", aTrackerSD, true);
 
 }  
+<<<<<<< HEAD
+=======
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetTrackingCut(G4double value)
+{
+  fpTrackingCut = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetMaxStepSize(G4double value)
+{
+  fpMaxStepSize = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::PrintParameters() const
+{
+  G4cout << "\n---------------------------------------------------------\n";
+  G4cout << "---> The tracking cut is set to " 
+         << G4BestUnit(fpTrackingCut,"Energy") << G4endl;
+  G4cout << "---> The maximum step size is set to " 
+         << G4BestUnit(fpMaxStepSize,"Length") << G4endl;
+  G4cout << "\n---------------------------------------------------------\n";
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

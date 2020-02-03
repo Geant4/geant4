@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \file B2bDetectorConstruction.cc
 /// \brief Implementation of the B2bDetectorConstruction class

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.hh 71042 2013-06-10 09:28:44Z gcosmo $
-// GRAS tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,7 +31,6 @@
 // Author:    V.Ivanchenko  02.03.2011
 //
 // Modified: 
-// 16.10.2012 A.Ribon: renamed G4IonFTFPBinaryCascadePhysics as G4IonPhysics     
 //
 //---------------------------------------------------------------------------
 //
@@ -46,9 +43,7 @@
 
 class G4HadronicInteraction;
 class G4VCrossSectionDataSet;
-class G4VComponentCrossSection;
 class G4FTFBuilder;
-class G4BinaryLightIonReaction;
 
 class G4IonPhysics : public G4VPhysicsConstructor
 {
@@ -61,22 +56,20 @@ public:
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
-  void ConstructParticle();
-  void ConstructProcess();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
 private:
 
-  void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
+  virtual void AddProcess(const G4String&, G4ParticleDefinition*,
+			  G4HadronicInteraction*, G4HadronicInteraction*, 
+			  G4VCrossSectionDataSet*);
 
-  static G4ThreadLocal G4VCrossSectionDataSet* theNuclNuclData; 
-  static G4ThreadLocal G4VComponentCrossSection* theGGNuclNuclXS;
+  static G4ThreadLocal G4FTFBuilder* theBuilder;
 
-  static G4ThreadLocal G4BinaryLightIonReaction* theIonBC;
-  static G4ThreadLocal G4HadronicInteraction*    theFTFP;
-  static G4ThreadLocal G4FTFBuilder*             theBuilder;
+protected:
 
-  G4int  verbose;
-  static G4ThreadLocal G4bool wasActivated;
+  G4int verbose;
 };
 
 

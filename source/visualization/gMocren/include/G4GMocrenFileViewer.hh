@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura : release for the gMocrenFile driver

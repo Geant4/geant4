@@ -53,7 +53,6 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpWatt.cc 68799 2013-04-05 13:29:46Z gcosmo $
 //
 
 #define nZAfis 39    /* 38 fissionable isotopes in ENDL + U-232 from ENDF7 */

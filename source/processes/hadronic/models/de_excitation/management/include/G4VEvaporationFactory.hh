@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VEvaporationFactory.hh 67983 2013-03-13 10:42:03Z gcosmo $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 //
@@ -43,7 +40,7 @@ class G4VEvaporationFactory
 {
 public:
 
-  G4VEvaporationFactory(G4VEvaporationChannel* photoEvaporation);
+  explicit G4VEvaporationFactory(G4VEvaporationChannel* ptr);
 
   virtual ~G4VEvaporationFactory();
 

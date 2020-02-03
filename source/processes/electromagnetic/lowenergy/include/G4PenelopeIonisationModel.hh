@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh 91228 2015-06-26 10:37:01Z gcosmo $
 //
 // Author: Luciano Pandola
 //

@@ -1,4 +1,3 @@
-$Id: History 102312 2017-01-20 15:33:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,23 +16,137 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18 November 2016 Witek Pokorski (gdml-V10-01-27)
-- Fixing check for correctness of the units for replicas in case of angular axis.
+13 November 2019 Makoto Asai (gdml-V10-05-09)
+- G4GDMLRead.cc : avoid double-definition of units.
 
-13 September Gabriele Cosmo
+25th September 2019 Ben Morgan (gdml-V10-05-08)
+- sources.cmake: Replace use of XercesC include/library by imported 
+  XercesC::XercesC target
+
+18,19 July 2019 Makoto Asai (gdml-V10-05-06, -07)
+- G4GDMLMessenger.cc : avoid UI commands from being broadcasted to worker
+  threads.
+
+17 May 2019 Witek Pokorski (gdml-V10-05-05)
+- Adding support for writing out assemblies.
+
+2 May 2019 Witek Pokorski (gdml-V10-05-04)
+- Improvement in the optical properties reader allowing to reuse the same
+G4MaterialPropertyVector object for identical properties.
+
+12 April 2019 Witek Pokorski (gdml-V10-05-03)
+- Fixes to BorderSurface and OpticalSurface writer provided by Binbin Qi.
+  Addressing problem reports #2143 and #2142.
+
+2 April 2019 Gabriele Cosmo (gdml-V10-05-02)
+- Added more protections for workers also for writing modules and read.
+
+1 April 2019 Gabriele Cosmo (gdml-V10-05-01)
+- Added protection to G4GDMLParser::Write() to dump geometry only through
+  the master thread. Addressing problem report #2156.
+
+4 March 2019 Gabriele Cosmo (gdml-V10-05-00)
+- Fix in G4GDMLReadStructure::PhysvolRead() to allow correct import of
+  recursive assembly structures. Thanks to B.Qi for the suggested fix.
+  Addressing problem report #2141.
+
+5 October 2018 Gabriele Cosmo (gdml-V10-04-04)
+- Added stripping of invalid characters for names generation in writer classes
+  to prevent invalid NCName strings in exported GDML files. Adopt properly
+  stripped generated strings for exporting names of optical surfaces.
+  Patch provided courtesy of B.Couturier (LHCb).
+
+7 June 2018 Gabriele Cosmo (gdml-V10-04-03)
+- Clear also auxiliary map information in G4GDMLReadStructure::Clear().
+  Addressing problem report #2064.
+
+15 March 2018 Gabriele Cosmo (gdml-V10-04-02)
+- Protect printout of progress in reading/writing by G4VERBOSE. 
+
+7 February 2018 Daren Sawkey (gdml-V10-04-01)
+- Updates to changes in G4Material[Const]PropertiesTable in 
+  G4GDMLWriteSolids and G4GDMLWriteMaterials.
+  Addressing problem report #2030.
+
+19 December 2017 Gabriele Cosmo (gdml-V10-04-00)
+- Fixed self-consistency in G4GDMLAuxStructType header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+02 October 2017 Witek Pokorski (gdml-V10-03-09)
+- Added handling of null pointer to material in case of parallel geometries
+
+15 September 2017 Soon Yung Jun (gdml-V10-03-08)
+- use GetPropertyMap and GetConstPropertyMap instead of GetPropertiesMap 
+  and GetPropertiesCMap in G4GDMLWriteMaterials and G4GDMLWriteSolids
+
+11 September 2017 Soon Yung Jun (gdml-V10-03-07)
+- corresponding updates due to changes in G4MaterialPropertiesTable maps
+  in G4GDMLWriteMaterials and G4GDMLWriteSolids
+
+23 August 2017 Gabriele Cosmo (gdml-V10-03-06)
+- Handle all possible variants for G4TwistedTubs, included asymmetric ones.
+  Updated TwistedtubsRead/Write() in G4GDMLRead/WriteSolids accordingly.
+  Extended schema for coping with all possible parameters for G4TwistedTubs
+  shape (updated file gdml_solids.xsd). New GDML schema version 3.1.6.
+  Thanks to Yimin Wang (MIT) for reporting this.
+
+17 August 2017 Gabriele Cosmo (gdml-V10-03-05)
+- Fix in G4GDMLWriteSolids::TwistedtubsWrite() to correctly export
+  end-inner/outer radii for G4TwistedTubs shape.
+
+13 July 2017 Gabriele Cosmo (gdml-V10-03-04)
+- Added commands to G4GDMLMessenger for enable/disable stripping of names
+  for reading and for appending or not pointers to names for writing.
+
+20 June 2017 Witek Pokorski (gdml-V10-03-03)
+- Added optical surface properties to the schema
+
+12 June 2017 Gabriele Cosmo (gdml-V10-03-02)
+- Added ability to export limited number of levels in the geometry hierarchy,
+  by specifying this through the G4GDMLParser::SetMaxExportLevel(G4int) method.
+
+7 April 2017 Gabriele Cosmo (gdml-V10-03-01)
+- Enabled import/export of G4MultiUnion as a native type, no longer bound
+  to USolids module only. Requires co-working tags in geometry.
+
+23 March 2017 Witek Pokorski (gdml-V10-03-00)
+- Fixed schema for replicas along angular axis.
+  Changing the schema to GDML version 3.1.5.
+  Addressing problem report #1917.
+- Added possibility to specify material properties tables for optical
+  surfaces (Wouter Deconinck). Addressing enhancement request #1947.
+
+18 November 2016 Witek Pokorski (gdml-V10-02-09)
+- Fixing check for correctness of the units for replicas in case of angular
+  axis.
+
+13 September Gabriele Cosmo (gdml-V10-02-08)
 - Replaced obsolete call to 'Invisible' with 'G4VisAttributes::GetInvisible()'
   in G4GDMLReadStructure::GetWorldVolume().
 
-26 July 2016 Witek Pokorski
+26 July 2016 Witek Pokorski (gdml-V10-02-07)
 - Fixing check for correctness of the units for divisions along angular axis.
 
-22 March 2016 Witek Pokorski (gdml-V10-01-26)
-- Adding check for correctness of the units.
+29 April 2016 Gabriele Cosmo (gdml-V10-02-06)
+- Added missing new dependency on digits_hits/detector in GNUmakefile.
 
-21 March 2016 Witek Pokorski
-- Increasing max_chars in the transcode() calls in G4GDMLWrite (bug #1847).
+28 April 2016 Witek Pokorski (gdml-V10-02-05)
+- Added ability to automatically export the names of sensitive detectors
+  as the auxiliary information.
 
-14 December 2015 Gabriele Cosmo (gdml-V10-01-25)
+22 March 2016 Witek Pokorski (gdml-V10-02-04)
+- adding check for correctness of the units
+
+21 March 2016 Witek Pokorski (gdml-V10-02-03)
+- increasing max_chars in the transcode() calls in G4GDLWrite (bug #1847)
+
+16 March 2016 Gabriele Cosmo (gdml-V10-02-02, 01)
+- Added ability to import and export scaled shapes.
+  Extended GDML schema by adding "scaledSolid" tag supporting scaled shapes.
+  New GDML schema version 3.1.4 (files: gdml.xsd, gdml_solids.xsd).
+  Requires tags "geommng-V10-02-00" and "geom-bool-V10-02-01".
+
+14 December 2015 Gabriele Cosmo (gdml-V10-02-00)
 - Corrected broken URLs and version number to schema.
 
 07 October 2015 Gabriele Cosmo (gdml-V10-01-24)

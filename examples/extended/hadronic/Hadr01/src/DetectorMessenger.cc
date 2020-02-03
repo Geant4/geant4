@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr01/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
+<<<<<<< HEAD
 // $Id: DetectorMessenger.cc 77255 2013-11-22 10:09:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /////////////////////////////////////////////////////////////////////////
 //

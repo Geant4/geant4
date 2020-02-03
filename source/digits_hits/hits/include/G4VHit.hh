@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHit.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4VHit_h
@@ -52,7 +51,7 @@ class G4VHit
       G4VHit();
       virtual ~G4VHit();
 
-      G4int operator==(const G4VHit &right) const;
+      G4bool operator==(const G4VHit &right) const;
 
       virtual void Draw();
       virtual void Print();

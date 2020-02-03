@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // Hadronic Inelastic Process Class
 // J.L. Chuma, TRIUMF, 24-Mar-1997
 // Last modified: 27-Mar-1997
@@ -44,17 +43,14 @@
 #include "G4ParticleDefinition.hh"
   
 G4HadronInelasticProcess::G4HadronInelasticProcess(const G4String& processName,
-                                                   G4ParticleDefinition* aParticle):
+                                                   const G4ParticleDefinition*):
   G4HadronicProcess(processName,fHadronInelastic)
-{
-  AddDataSet(new G4HadronInelasticDataSet());
-  theParticle = aParticle;
-}
+{}
 
 G4HadronInelasticProcess::~G4HadronInelasticProcess() 
 {}
 
-G4bool G4HadronInelasticProcess::IsApplicable(const G4ParticleDefinition& aP)
+G4bool G4HadronInelasticProcess::IsApplicable(const G4ParticleDefinition&)
 {
-  return  theParticle == &aP || theParticle == G4GenericIon::GenericIon();
+  return  true;
 }

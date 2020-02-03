@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryProtonBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,12 +43,14 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4FTFBinaryProtonBuilder::
 G4FTFBinaryProtonBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
-  theMax = 100*TeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+  theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -90,7 +91,3 @@ G4FTFBinaryProtonBuilder::
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 
-void G4FTFBinaryProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
-}

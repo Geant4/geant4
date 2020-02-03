@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04TrackerHit.cc 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// \file parallel/ParN04/src/ExN04TrackerHit.cc
+/// \file ExN04TrackerHit.cc
 /// \brief Implementation of the ExN04TrackerHit class
 //
 
@@ -58,9 +57,9 @@ const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit &right)
   return *this;
 }
 
-G4int ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
+G4bool ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 void ExN04TrackerHit::Draw()

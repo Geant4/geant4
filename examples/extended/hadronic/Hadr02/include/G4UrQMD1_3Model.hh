@@ -32,7 +32,6 @@
 /// \file hadronic/Hadr02/include/G4UrQMD1_3Model.hh
 /// \brief Definition of the G4UrQMD1_3Model class
 //
-// $Id: G4UrQMD1_3Model.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 
 #ifndef G4UrQMD1_3Model_hh
@@ -91,8 +90,8 @@ public:
     
 private: 
 
-  G4int operator==(G4UrQMD1_3Model& right);
-  G4int operator!=(G4UrQMD1_3Model& right);
+  G4bool operator==(G4UrQMD1_3Model& right);
+  G4bool operator!=(G4UrQMD1_3Model& right);
                                     
   void InitialiseDataTables();
 

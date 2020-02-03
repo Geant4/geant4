@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.hh 93357 2015-10-19 13:40:13Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -51,8 +50,10 @@ class G4VEvaporationChannel
 {
 public:
 
-  G4VEvaporationChannel(const G4String & aName = "");
+  explicit G4VEvaporationChannel(const G4String & aName = "");
   virtual ~G4VEvaporationChannel();
+
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus) = 0;
 
   // option definition
   virtual void Initialise();
@@ -64,44 +65,23 @@ public:
   // and not deleted
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
-  // return vector of emitted fragments, initial fragment is modified
-  // but not included in this vector
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
-
   // returns "true" if primary fragment is decayed and deleted
   // returns "false" if primary fragment is modified but stay alive
   // emitted fragments are added to the vector of results
   virtual G4bool 
   BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
 
-  // old method initial fragment is not modified, its copy included 
-  // in the list of emitted fragments
-  virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus) = 0;
-
-  virtual G4double GetEmissionProbability(G4Fragment* theNucleus) = 0;
+  // return vector of emitted fragments, initial fragment is modified
+  // but not included in this vector
+  inline G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
   virtual void Dump() const;
 
   // enable internal conversion
-  virtual void SetICM (G4bool);
+  virtual void SetICM(G4bool);
 
   // flag of the radioactive decay module
-  virtual void RDMForced (G4bool);
-
-  // get energy of final level if this channel is photon evaporation 
-  virtual G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy);
-
-  // get energy of the upper level if this channel is photon evaporation
-  virtual G4double GetUpperLevelEnergy(G4int Z, G4int A);
-
-  // get energy of the upper level in level DB for any decay channel
-  inline G4double GetMaxLevelEnergy(G4int Z, G4int A);
-
-  // get energy of nearest level for any decay channel
-  inline G4double GetNearestLevelEnergy(G4int Z, G4int A, G4double energy);
-
-  // set pointer to photon evaporation in order to access level data
-  inline void SetPhotonEvaporation(G4VEvaporationChannel* p);
+  virtual void RDMForced(G4bool);
 
   // for cross section selection
   inline void SetOPTxs(G4int opt);
@@ -116,47 +96,24 @@ protected:
 private:
 
   G4VEvaporationChannel(const G4VEvaporationChannel & right);
-  const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right);
+  const G4VEvaporationChannel & operator=
+  (const G4VEvaporationChannel & right);
   G4bool operator==(const G4VEvaporationChannel & right) const;
   G4bool operator!=(const G4VEvaporationChannel & right) const;
-
-  G4VEvaporationChannel* photonEvaporation;
 };
 
-inline G4double 
-G4VEvaporationChannel::GetNearestLevelEnergy(G4int Z, G4int A, G4double energy)
+inline G4FragmentVector* 
+G4VEvaporationChannel::BreakUpFragment(G4Fragment* theNucleus)
 {
-  G4double E = energy;
-  if(photonEvaporation) { 
-    E = photonEvaporation->GetFinalLevelEnergy(Z, A, E);
-  }
-  return E;
+  G4FragmentVector* results = new G4FragmentVector();
+  BreakUpChain(results, theNucleus);
+  return results;
 }
 
-inline G4double 
-G4VEvaporationChannel::GetMaxLevelEnergy(G4int Z, G4int A)
-{
-  G4double E = 0.0;
-  if(photonEvaporation) { 
-    E = photonEvaporation->GetUpperLevelEnergy(Z, A);
-  }
-  return E;
-}
+inline void G4VEvaporationChannel::SetOPTxs(G4int) 
+{}
 
-inline void 
-G4VEvaporationChannel::SetPhotonEvaporation(G4VEvaporationChannel* p)
-{
-  photonEvaporation = p;
-}
-
-inline void G4VEvaporationChannel::SetOPTxs(G4int opt) 
-{ 
-  OPTxs = opt; 
-}
-
-inline void G4VEvaporationChannel::UseSICB(G4bool use) 
-{ 
-  useSICB = use; 
-}
+inline void G4VEvaporationChannel::UseSICB(G4bool) 
+{}
 
 #endif

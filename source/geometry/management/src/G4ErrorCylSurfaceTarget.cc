@@ -23,19 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ErrorCylSurfaceTarget.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class implementation file 
+// G4ErrorCylSurfaceTarget class implementation
+// 
+// Created: P.Arce, September 2004
 // --------------------------------------------------------------------
 
 #include "G4ErrorCylSurfaceTarget.hh"
 #include "G4GeometryTolerance.hh"
 
 #ifdef G4VERBOSE
-#include "G4ErrorPropagatorData.hh" //for verbosity checking
+#include "G4ErrorPropagatorData.hh" // for verbosity checking
 #endif
 
 #include "geomdefs.hh"
@@ -53,7 +50,8 @@ G4ErrorCylSurfaceTarget( const G4double& radius,
 
   ftransform = G4AffineTransform( rotm.inverse(), -trans );
 #ifdef G4VERBOSE
-  if(G4ErrorPropagatorData::verbose() >= 2 ) { 
+  if(G4ErrorPropagatorData::verbose() >= 2 )
+  { 
     Dump( " $$$ creating G4ErrorCylSurfaceTarget ");
   }
 #endif

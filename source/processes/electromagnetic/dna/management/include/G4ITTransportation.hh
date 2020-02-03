@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportation.hh 94218 2015-11-09 08:24:48Z gcosmo $
 //
 /// \brief This class is a slightly modified version of G4Transportation
 ///        initially written by John Apostolakis and colleagues (1997)
@@ -37,7 +36,7 @@
 // It might strongly evolve or even disapear in the next releases.
 //
 // -------------------------------------------------------------------
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //

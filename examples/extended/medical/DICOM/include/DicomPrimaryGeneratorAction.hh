@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: DicomPrimaryGeneratorAction.hh 73076 2013-08-16 07:45:30Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/DICOM/include/DicomPrimaryGeneratorAction.hh
 /// \brief Definition of the DicomPrimaryGeneratorAction class

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessAttribute.cc 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -39,37 +38,40 @@
 
 #include "G4ProcessAttribute.hh"
 
+// default constructor //////////////////////////
 G4ProcessAttribute::G4ProcessAttribute():
-	 isActive(true)
+         pProcess(nullptr),
+	 isActive(true),
+	 idxProcessList(-1)
 {
-  pProcess = 0;
-  idxProcessList = -1;
   // clear 
   for (G4int idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; idx++){
     idxProcVector[idx] = -1;
     ordProcVector[idx] = -1;
   }
 }
+
 // copy constructor //////////////////////////
-G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right)
-         :isActive(true)
+G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right):
+         pProcess(right.pProcess),
+	 isActive(right.isActive),
+	 idxProcessList(right.idxProcessList)
 {
-  pProcess       = right.pProcess;
-  idxProcessList = right.idxProcessList;
   // copy all contents in idxProcVector[] and ordProcVector[]
   //   deep copy 
   for (G4int idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; idx++){
     idxProcVector[idx] = right.idxProcVector[idx];
     ordProcVector[idx] = right.ordProcVector[idx];
   }
-  isActive = right.isActive;
 }
 
- G4ProcessAttribute::~G4ProcessAttribute()
+// destructor   ///////////////////////
+G4ProcessAttribute::~G4ProcessAttribute()
 {
    // do nothing
 }
 
+// assignment operator //////////
 G4ProcessAttribute & G4ProcessAttribute::operator=(const G4ProcessAttribute &right)
 {
   if (this != &right) {

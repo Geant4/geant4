@@ -23,23 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// class G4UniformGravifyField
+// G4UniformGravifyField
 //
 // Class description:
 //
 // Class for creation of Uniform Gravitation Field.
-//
 
-// History:
-// - 14.06.11 P.Gumplinger, Created.
+// Created: P.Gumplinger, 14.06.2011 - Adapted from G4UniformElectricField
+//          Thanks to P.Fierlinger (PSI), A.Capra and A.Fontana (INFN Pavia)
 // -------------------------------------------------------------------
-// Adapted from G4UniformElectricField.hh
-//
-// Thanks to Peter Fierlinger (PSI) and
-// A. Capra and A. Fontana (INFN Pavia)
-// -------------------------------------------------------------------
-//
 #ifndef G4UNIFORMGRAVITYFIELD_HH
 #define G4UNIFORMGRAVITYFIELD_HH
 
@@ -53,7 +45,7 @@ class G4UniformGravityField : public G4Field
 {
   public:  // with description
 
-    G4UniformGravityField(const G4ThreeVector FieldVector );
+    G4UniformGravityField(const G4ThreeVector& FieldVector );
       // A field with value equal to FieldVector.
 
     G4UniformGravityField(const G4double gy = -9.81*CLHEP::m/CLHEP::s/CLHEP::s);
@@ -61,14 +53,14 @@ class G4UniformGravityField : public G4Field
 
     virtual ~G4UniformGravityField();
 
-    G4UniformGravityField(const G4UniformGravityField &p);
-    G4UniformGravityField& operator = (const G4UniformGravityField &p);
+    G4UniformGravityField(const G4UniformGravityField& p);
+    G4UniformGravityField& operator=(const G4UniformGravityField& p);
       // Copy constructor and assignment operator
 
-    G4bool   DoesFieldChangeEnergy() const { return true; }
+    inline G4bool DoesFieldChangeEnergy() const { return true; }
       // Since a gravitational field can change track energy
 
-    virtual void GetFieldValue(const G4double Point[4], G4double *field) const;
+    virtual void GetFieldValue(const G4double Point[4], G4double* field) const;
     
     virtual G4Field* Clone() const;
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc 87062 2014-11-24 11:45:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,13 +61,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4TablesForExtrapolator* G4EnergyLossForExtrapolator::tables = 0;
+#ifdef G4MULTITHREADED
+G4Mutex G4EnergyLossForExtrapolator::extrapolatorMutex = G4MUTEX_INITIALIZER;
+#endif
+
+G4TablesForExtrapolator* G4EnergyLossForExtrapolator::tables = nullptr;
 
 G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
   : maxEnergyTransfer(DBL_MAX), verbose(verb)
 {
-  currentParticle = 0;
-  currentMaterial = 0;
+  currentParticle = nullptr;
+  currentMaterial = nullptr;
 
   linLossLimit = 0.01;
   emin         = 1.*MeV;
@@ -86,7 +89,25 @@ G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
     = idxInvRangeElectron = idxInvRangePositron = idxInvRangeMuon
     = idxInvRangeProton = idxMscElectron = 0;
  
-  electron = positron = proton = muonPlus = muonMinus = 0;
+  electron = positron = proton = muonPlus = muonMinus = nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4EnergyLossForExtrapolator::~G4EnergyLossForExtrapolator()
+{
+  if(tables) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&extrapolatorMutex);
+    if (tables) {
+#endif
+      delete tables;
+      tables = nullptr;
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&extrapolatorMutex);
+#endif
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -220,7 +241,7 @@ G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part,
 const G4ParticleDefinition* 
 G4EnergyLossForExtrapolator::FindParticle(const G4String& name)
 {
-  const G4ParticleDefinition* p = 0;
+  const G4ParticleDefinition* p = nullptr;
   if(name != currentParticleName) {
     p = G4ParticleTable::GetParticleTable()->FindParticle(name);
     if(!p) {
@@ -307,8 +328,8 @@ void G4EnergyLossForExtrapolator::Initialisation()
   if(verbose>1) {
     G4cout << "### G4EnergyLossForExtrapolator::Initialisation" << G4endl;
   }
-  currentParticle = 0;
-  currentMaterial = 0;
+  currentParticle = nullptr;
+  currentMaterial = nullptr;
   kineticEnergy   = 0.0;
 
   electron = G4Electron::Electron();
@@ -317,37 +338,33 @@ void G4EnergyLossForExtrapolator::Initialisation()
   muonPlus = G4MuonPlus::MuonPlus();
   muonMinus= G4MuonMinus::MuonMinus();
 
-  nmat = G4Material::GetNumberOfMaterials();
   currentParticleName = "";
   BuildTables(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex G4EnergyLossForExtrapolatorMutex = G4MUTEX_INITIALIZER; }
-
 void G4EnergyLossForExtrapolator::BuildTables()
 {
-  G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
-
-  if(!tables) {
-    if(verbose > 0) {
-      G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
-	     << nmat << " materials Nbins= " << nbins 
-	     << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax << G4endl;
-    }
-    tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&extrapolatorMutex);
+#endif
+  if(verbose > 0) {
+    G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
+	   << G4Material::GetNumberOfMaterials() << " materials Nbins= " 
+           << nbins << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax 
+           << G4endl;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4EnergyLossForExtrapolator::~G4EnergyLossForExtrapolator()
-{
-  G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
-  delete tables;
-  tables = 0;
+  G4int newmat = G4Material::GetNumberOfMaterials();
+  if(!tables) {
+    tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
+  } else if(nmat != newmat) {
+    tables->Initialisation();
+  }
+  nmat = newmat;
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&extrapolatorMutex);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

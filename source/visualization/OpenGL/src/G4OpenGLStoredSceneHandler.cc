@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -50,6 +49,12 @@
 #include "G4AttHolder.hh"
 
 #include <typeinfo>
+
+G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
+
+G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
+G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
 
 G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
@@ -96,8 +101,8 @@ G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
 G4OpenGLStoredSceneHandler::TO::TO():
   fDisplayListId(0),
   fPickName(0),
-  fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX),
+  fStartTime(-G4VisAttributes::fVeryLongTime),
+  fEndTime(G4VisAttributes::fVeryLongTime),
   fpG4TextPlus(0),
   fMarkerOrPolyline(false)
 {}
@@ -117,8 +122,8 @@ G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fDisplayListId(id),
   fTransform(tr),
   fPickName(0),
-  fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX),
+  fStartTime(-G4VisAttributes::fVeryLongTime),
+  fEndTime(G4VisAttributes::fVeryLongTime),
   fpG4TextPlus(0),
   fMarkerOrPolyline(false)
 {}
@@ -197,17 +202,20 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Polyhedron& visi
   return AddPrimitivePreambleInternal(visible, false, false);
 }
 
-G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline)
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal
+(const G4Visible& visible, bool isMarker, bool isPolyline)
 {
-  const G4Colour& c = GetColour (visible);
+// Get applicable vis attributes for all primitives.
+  fpVisAttribs = fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
+  const G4Colour& c = GetColour ();
   G4double opacity = c.GetAlpha ();
 
   G4bool transparency_enabled = true;
   G4bool isMarkerNotHidden = true;
-  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if (pViewer) {
-    transparency_enabled = pViewer->transparency_enabled;
-    isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
+  G4OpenGLViewer* pOGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pOGLViewer) {
+    transparency_enabled = pOGLViewer->transparency_enabled;
+    isMarkerNotHidden = pOGLViewer->fVP.IsMarkerNotHidden();
   }
   
   G4bool isTransparent = opacity < 1.;
@@ -252,7 +260,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible&
     if (fThirdPassForNonHiddenMarkers) {
       if (!treatAsNotHidden) {
         return false;  // No further processing.
-        
       }
     }
   }  // fThreePassCapable
@@ -267,64 +274,69 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible&
     fPickMap[fPickName] = holder;
   }
   
-  // Can we re-use a display list?
   const G4VSolid* pSolid = 0;
-  G4PhysicalVolumeModel* pPVModel =
-  dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+
+  // Can we re-use a display list?
+  if (isMarker)
+    // It is a marker, which may have its own position relative to fObjectTransformation
+    goto end_of_display_list_reuse_test;
   if (fpViewer->GetViewParameters().GetVisAttributesModifiers().size())
     // Touchables have been modified - don't risk re-using display list.
     goto end_of_display_list_reuse_test;
-  if (pPVModel) {
-    // Check that it isn't a G4LogicalVolumeModel (which is a sub-class of
-    // G4PhysicalVolumeModel).
-    G4LogicalVolumeModel* pLVModel =
-    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
-    if (pLVModel)
-      // Logical volume model - don't re-use.
-      goto end_of_display_list_reuse_test;
-    // If part of the geometry hierarchy, i.e., from a
-    // G4PhysicalVolumeModel, check if a display list already exists for
-    // this solid, re-use it if possible.  We could be smarter, and
-    // recognise repeated branches of the geometry hierarchy, for
-    // example.  But this algorithm should be secure, I think...
-    G4VPhysicalVolume* pPV = pPVModel->GetCurrentPV();
-    if (!pPV)
-      // It's probably a dummy model, e.g., for a user-drawn hit?
-      goto end_of_display_list_reuse_test;
-    G4LogicalVolume* pLV = pPV->GetLogicalVolume();
-    if (!pLV)
-      // Dummy model again?
-      goto end_of_display_list_reuse_test;
-    pSolid = pLV->GetSolid();
-    EAxis axis = kRho;
-    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-    if (pCurrentPV -> IsReplicated ()) {
-      G4int nReplicas;
-      G4double width;
-      G4double offset;
-      G4bool consuming;
-      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-    }
-    // Provided it is not parametrised (because if so, the
-    // solid's parameters might have been changed)...
-    if (!(pCurrentPV -> IsParameterised ()) &&
-        // Provided it is not replicated radially (because if so, the
-        // solid's parameters will have been changed)...
-        !(pCurrentPV -> IsReplicated () && axis == kRho) &&
-        // ...and if the solid has already been rendered...
-        (fSolidMap.find (pSolid) != fSolidMap.end ())) {
-      fDisplayListId = fSolidMap [pSolid];
-      PO po(fDisplayListId,fObjectTransformation);
-      if (isPicking) po.fPickName = fPickName;
-      po.fColour = c;
-      po.fMarkerOrPolyline = isMarkerOrPolyline;
-      fPOList.push_back(po);
-      // No need to test if gl commands are used (result of
-      // ExtraPOProcessing) because we have already decided they will
-      // not, at least not here.  Also, pass a dummy G4Visible since
-      // not relevant for G4PhysicalVolumeModel.
-      (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
-      return false;  // No further processing.
+  {  // It is a viable candidate for display list re-use
+    G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (pPVModel) {
+      // Check that it isn't a G4LogicalVolumeModel (which is a sub-class of
+      // G4PhysicalVolumeModel).
+      G4LogicalVolumeModel* pLVModel =
+      dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+      if (pLVModel)
+        // Logical volume model - don't re-use.
+        goto end_of_display_list_reuse_test;
+      // If part of the geometry hierarchy, i.e., from a
+      // G4PhysicalVolumeModel, check if a display list already exists for
+      // this solid, re-use it if possible.  We could be smarter, and
+      // recognise repeated branches of the geometry hierarchy, for
+      // example.  But this algorithm should be secure, I think...
+      G4VPhysicalVolume* pPV = pPVModel->GetCurrentPV();
+      if (!pPV)
+        // It's probably a dummy model, e.g., for a user-drawn hit?
+        goto end_of_display_list_reuse_test;
+      G4LogicalVolume* pLV = pPV->GetLogicalVolume();
+      if (!pLV)
+        // Dummy model again?
+        goto end_of_display_list_reuse_test;
+      pSolid = pLV->GetSolid();
+      EAxis axis = kRho;
+      G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+      if (pCurrentPV -> IsReplicated ()) {
+        G4int nReplicas;
+        G4double width;
+        G4double offset;
+        G4bool consuming;
+        pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      }
+      // Provided it is not parametrised (because if so, the
+      // solid's parameters might have been changed)...
+      if (!(pCurrentPV -> IsParameterised ()) &&
+          // Provided it is not replicated radially (because if so, the
+          // solid's parameters will have been changed)...
+          !(pCurrentPV -> IsReplicated () && axis == kRho) &&
+          // ...and if the solid has already been rendered...
+          (fSolidMap.find (pSolid) != fSolidMap.end ())) {
+        fDisplayListId = fSolidMap [pSolid];
+        PO po(fDisplayListId,fObjectTransformation);
+        if (isPicking) po.fPickName = fPickName;
+        po.fColour = c;
+        po.fMarkerOrPolyline = isMarkerOrPolyline;
+        fPOList.push_back(po);
+        // No need to test if gl commands are used (result of
+        // ExtraPOProcessing) because we have already decided they will
+        // not, at least not here.  Also, pass a dummy G4Visible since
+        // not relevant for G4PhysicalVolumeModel.
+        (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
+        return false;  // No further processing.
+      }
     }
   }
 end_of_display_list_reuse_test:
@@ -341,7 +353,7 @@ end_of_display_list_reuse_test:
       "********************* WARNING! ********************"
       "\n*  Display list limit reached in OpenGL."
       "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
-      "\n*  Current limit: " << fDisplayListLimit <<
+      "\n*  Current limit: " << fDisplayListLimit << " primitives"
       ".  Change with \"/vis/ogl/set/displayListLimit\"."
       "\n***************************************************"
       << G4endl;
@@ -356,10 +368,8 @@ end_of_display_list_reuse_test:
       TO to(fDisplayListId, fObjectTransformation);
       if (isPicking) to.fPickName = fPickName;
       to.fColour = c;
-      const G4VisAttributes* pVA =
-	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
-      to.fStartTime = pVA->GetStartTime();
-      to.fEndTime = pVA->GetEndTime();
+      to.fStartTime = fpVisAttribs->GetStartTime();
+      to.fEndTime = fpVisAttribs->GetEndTime();
       to.fMarkerOrPolyline = isMarkerOrPolyline;
       fTOList.push_back(to);
       // For transient objects, colour, transformation, are kept in
@@ -389,7 +399,7 @@ end_of_display_list_reuse_test:
       // For permanent objects, colour is kept in the PO, so should
       // *not* be in the display list.  This is so that sub-classes
       // may implement colour modifications according to their own
-      // criteria, e.g., scen tree slider in Qt.  But for now set
+      // criteria, e.g., scene tree slider in Qt.  But for now set
       // colour for immediate display.
       if (transparency_enabled) {
         glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
@@ -410,7 +420,6 @@ end_of_display_list_reuse_test:
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {  // Out of memory (or being used when display lists not required).
-    glDrawBuffer (GL_FRONT);
     glPushMatrix();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
@@ -427,8 +436,8 @@ end_of_display_list_reuse_test:
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    if (pViewer) {
-      pViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+    if (pOGLViewer) {
+      pOGLViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
     }
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
@@ -437,7 +446,11 @@ end_of_display_list_reuse_test:
     glMultMatrixd (oglt.GetGLMatrix ());
     glDisable (GL_LIGHTING);
   } else {
-    glEnable (GL_LIGHTING);
+    if (isMarker) {
+      glDisable (GL_LIGHTING);
+    } else {
+      glEnable (GL_LIGHTING);
+    }
   }
 
   return true;
@@ -626,10 +639,5 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore ()
   }
 }
 
-G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
-
-G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
-G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
-G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
 
 #endif

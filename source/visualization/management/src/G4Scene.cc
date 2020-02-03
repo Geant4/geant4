@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc 102380 2017-01-24 11:32:15Z gcosmo $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -32,10 +31,12 @@
 #include "G4Scene.hh"
 
 #include "G4Vector3D.hh"
-#include "G4BoundingSphereScene.hh"
+#include "G4BoundingExtentScene.hh"
 #include "G4VisAttributes.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4TransportationManager.hh"
+
+#include <set>
 
 G4Scene::G4Scene (const G4String& name):
   fName (name),
@@ -46,7 +47,8 @@ G4Scene::G4Scene (const G4String& name):
 
 G4Scene::~G4Scene () {}
 
-G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
+G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn)
+{
   std::vector<Model>::const_iterator i;
   for (i = fRunDurationModelList.begin ();
        i != fRunDurationModelList.end (); ++i) {
@@ -64,33 +66,58 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
     }
     return false;
   }
+
+  for (i = fRunDurationModelList.begin ();
+       i != fRunDurationModelList.end (); ++i) {
+    if (pModel -> GetGlobalTag () ==
+        i->fpModel->GetGlobalTag ()) break;
+  }
+  if (i != fRunDurationModelList.end ()) {
+    if (warn) {
+      G4cout
+      << "G4Scene::AddRunDurationModel: The tag \""
+      << pModel->GetGlobalTag()
+      << "\"\n  duplicates one already in scene \""
+      << fName
+      <<
+  "\".\n  This may be intended but if not, you may inspect the scene with"
+  "\n  \"/vis/scene/list\" and deactivate unwanted models with"
+  "\n  \"/vis/scene/activateModel\". Or create a new scene."
+      << G4endl;
+    }
+  }
+
   fRunDurationModelList.push_back (Model(pModel));
+
   CalculateExtent ();
+
   return true;
+}
+
+namespace {
+  void PrintInvalidModel(const G4VModel* model)
+  {
+    G4ExceptionDescription ed;
+    ed << "Invalid model \"" << model->GetGlobalDescription()
+    << "\".\n  Not included in extent calculation.";
+    G4Exception
+    ("G4Scene::CalculateExtent",
+     "visman0201", JustWarning, ed);
+  }
 }
 
 void G4Scene::CalculateExtent ()
 {
-  G4BoundingSphereScene boundingSphereScene;
+  G4BoundingExtentScene boundingExtentScene;
 
   for (size_t i = 0; i < fRunDurationModelList.size(); i++) {
     if (fRunDurationModelList[i].fActive) {
       G4VModel* model = fRunDurationModelList[i].fpModel;
       if (model -> Validate()) {  // Validates and also recomputes extent.
-	const G4VisExtent& thisExtent = model -> GetExtent ();
-	G4double thisRadius = thisExtent.GetExtentRadius ();
-	if (thisRadius > 0.) {
-	  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
-	  thisCentre.transform (model -> GetTransformation ());
-	  boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
-	}
+        const G4VisExtent& thisExtent = model -> GetTransformedExtent ();
+        boundingExtentScene.AccrueBoundingExtent(thisExtent);
       } else {
-	G4ExceptionDescription ed;
-	ed << "Invalid model \"" << model->GetGlobalDescription()
-	   << "\".\n  Not included in extent calculation.";
-	G4Exception
-	  ("G4Scene::CalculateExtent",
-	   "visman0201", JustWarning, ed);
+        PrintInvalidModel(model);
       }
     }
   }
@@ -99,20 +126,10 @@ void G4Scene::CalculateExtent ()
     if (fEndOfEventModelList[i].fActive) {
       G4VModel* model = fEndOfEventModelList[i].fpModel;
       if (model -> Validate()) {  // Validates and also recomputes extent.
-	const G4VisExtent& thisExtent = model -> GetExtent ();
-	G4double thisRadius = thisExtent.GetExtentRadius ();
-	if (thisRadius > 0.) {
-	  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
-	  thisCentre.transform (model -> GetTransformation ());
-	  boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
-	}
+        const G4VisExtent& thisExtent = model -> GetTransformedExtent ();
+        boundingExtentScene.AccrueBoundingExtent(thisExtent);
       } else {
-	G4ExceptionDescription ed;
-	ed << "Invalid model \"" << model->GetGlobalDescription()
-	   << "\".\n  Not included in extent calculation.";
-	G4Exception
-	  ("G4Scene::CalculateExtent",
-	   "visman0201", JustWarning, ed);
+        PrintInvalidModel(model);
       }
     }
   }
@@ -121,25 +138,15 @@ void G4Scene::CalculateExtent ()
     if (fEndOfRunModelList[i].fActive) {
       G4VModel* model = fEndOfRunModelList[i].fpModel;
       if (model -> Validate()) {  // Validates and also recomputes extent.
-	const G4VisExtent& thisExtent = model -> GetExtent ();
-	G4double thisRadius = thisExtent.GetExtentRadius ();
-	if (thisRadius > 0.) {
-	  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
-	  thisCentre.transform (model -> GetTransformation ());
-	  boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
-	}
+        const G4VisExtent& thisExtent = model -> GetTransformedExtent ();
+        boundingExtentScene.AccrueBoundingExtent(thisExtent);
       } else {
-	G4ExceptionDescription ed;
-	ed << "Invalid model \"" << model->GetGlobalDescription()
-	   << "\".\n  Not included in extent calculation.";
-	G4Exception
-	  ("G4Scene::CalculateExtent",
-	   "visman0201", JustWarning, ed);
+        PrintInvalidModel(model);
       }
     }
   }
 
-  fExtent = boundingSphereScene.GetBoundingSphereExtent ();
+  fExtent = boundingExtentScene.GetBoundingExtent ();
   fStandardTargetPoint = fExtent.GetExtentCentre ();
   if (fExtent.GetExtentRadius() <= 0.) {
 	G4Exception
@@ -170,7 +177,7 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
 	    "\n  For a better view of the contents, mark the world as"
 	    " invisible, e.g.,"
 	    "\n  myWorldLogicalVol ->"
-	    " SetVisAttributes (G4VisAttributes::GetInvisible());"
+		" SetVisAttributes (G4VisAttributes::GetInvisible());"
 		 << G4endl;
 	}
       }
@@ -236,6 +243,9 @@ std::ostream& operator << (std::ostream& os, const G4Scene& scene) {
   os << "Scene data:";
 
   os << "\n  Run-duration model list:";
+  if (scene.fRunDurationModelList.size () == 0) {
+    os << " none";
+  }
   for (i = 0; i < scene.fRunDurationModelList.size (); i++) {
     if (scene.fRunDurationModelList[i].fActive) os << "\n  Active:   ";
     else os << "\n  Inactive: ";
@@ -243,6 +253,9 @@ std::ostream& operator << (std::ostream& os, const G4Scene& scene) {
   }
 
   os << "\n  End-of-event model list:";
+  if (scene.fEndOfEventModelList.size () == 0) {
+    os << " none";
+  }
   for (i = 0; i < scene.fEndOfEventModelList.size (); i++) {
     if (scene.fEndOfEventModelList[i].fActive) os << "\n  Active:   ";
     else os << "\n  Inactive: ";
@@ -250,13 +263,16 @@ std::ostream& operator << (std::ostream& os, const G4Scene& scene) {
   }
 
   os << "\n  End-of-run model list:";
+  if (scene.fEndOfRunModelList.size () == 0) {
+    os << " none";
+  }
   for (i = 0; i < scene.fEndOfRunModelList.size (); i++) {
     if (scene.fEndOfRunModelList[i].fActive) os << "\n  Active:   ";
     else os << "\n  Inactive: ";
     os << *(scene.fEndOfRunModelList[i].fpModel);
   }
 
-  os << "\n  Extent or bounding box: " << scene.fExtent;
+  os << "\n  Overall extent or bounding box: " << scene.fExtent;
 
   os << "\n  Standard target point:  " << scene.fStandardTargetPoint;
 

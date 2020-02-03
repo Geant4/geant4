@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -34,6 +33,7 @@ GEANT4_DEFINE_MODULE(NAME G4partadj
         G4AdjointAlpha.hh
         G4AdjointDeuteron.hh
         G4AdjointElectron.hh
+        G4AdjointElectronFI.hh
         G4AdjointGamma.hh
         G4AdjointGenericIon.hh
         G4AdjointHe3.hh
@@ -45,6 +45,7 @@ GEANT4_DEFINE_MODULE(NAME G4partadj
         G4AdjointAlpha.cc
         G4AdjointDeuteron.cc
         G4AdjointElectron.cc
+        G4AdjointElectronFI.cc
         G4AdjointGamma.cc
         G4AdjointGenericIon.cc
         G4AdjointHe3.cc

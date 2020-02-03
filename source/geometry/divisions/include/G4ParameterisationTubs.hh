@@ -23,25 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ParameterisationTubs.hh 73433 2013-08-27 11:05:39Z gcosmo $
-//
-// classes G4ParameterisationTubsRho
-//         G4ParameterisationTubsPhi
-//         G4ParameterisationTubsZ
+// G4ParameterisationTubs[Rho/Phi/Z]
 //
 // Class description:
 //
 // This class represents the parameterised positioning equivalent to 
 // dividing a G4Tubs along one of each axis Rho, Phi, Z.
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
 // --------------------------------------------------------------------
-#ifndef G4ParameterisationTubsRho_H
-#define G4ParameterisationTubsRho_H 1
+#ifndef G4PARAMETERISATIONTUBS_HH
+#define G4PARAMETERISATIONTUBS_HH 1
 
 #include "G4VDivisionParameterisation.hh"
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DummyModel.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -51,7 +50,10 @@
 
 G4DummyModel::G4DummyModel(const G4String& nam)
   : G4VMscModel(nam)
-{}
+{
+  // Dummy model by default cover all energies
+  SetLowEnergyLimit(0.0);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -72,6 +74,35 @@ void G4DummyModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				     G4double,
 				     G4double)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ThreeVector& 
+G4DummyModel::SampleScattering(const G4ThreeVector&, G4double)
+{
+  return fDisplacement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DummyModel::ComputeTruePathLengthLimit(const G4Track&, G4double&)
+{
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DummyModel::ComputeGeomPathLength(G4double truePathLength)
+{
+  return truePathLength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DummyModel::ComputeTrueStepLength(G4double geomPathLength)
+{
+  return geomPathLength;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

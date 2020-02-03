@@ -95,9 +95,9 @@ void SoCounterAction::setType(const SoType aType,SbBool aCheckDerived) {
   fType = aType;
   fCheckDerived = aCheckDerived;
 }
-void SoCounterAction::setName(const SbName aName){
-  fName = aName;
-}
+//void SoCounterAction::setName(const SbName aName){
+//  fName = aName;
+//}
 int SoCounterAction::getCount() const {
   return fCount;
 }

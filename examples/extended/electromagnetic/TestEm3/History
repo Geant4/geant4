@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +17,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
+=======
+
+26-11-19 I. Hrivnacova (testem3-V10-05-00)
+- Fixed Doxygen warnings
+
+09-05-18 B.Morgan (testem3-V10-04-06)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 14-10-16 G.Folger
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

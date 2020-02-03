@@ -105,11 +105,11 @@ public:
   G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound = 0);
   ~G4INCLXXInterface(); // Destructor
 
-  G4int operator==(G4INCLXXInterface& right) {
+  G4bool operator==(G4INCLXXInterface& right) {
     return (this == &right);
   }
 
-  G4int operator!=(G4INCLXXInterface& right) {
+  G4bool operator!=(G4INCLXXInterface& right) {
     return (this != &right);
   }
 

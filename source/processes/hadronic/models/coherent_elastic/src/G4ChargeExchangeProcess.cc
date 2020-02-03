@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 //
 // Geant4 Hadron Charge Exchange Process -- source file

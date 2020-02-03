@@ -23,28 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VDNAReactionModel.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 #include "G4VDNAReactionModel.hh"
 
 G4VDNAReactionModel::G4VDNAReactionModel()
+    : fpReactionTable(nullptr)
 {
-  fReactionTable = 0;
 }
 
-G4VDNAReactionModel::G4VDNAReactionModel(const G4VDNAReactionModel& right)
+G4VDNAReactionModel::~G4VDNAReactionModel() = default;
+
+void G4VDNAReactionModel::SetReactionTable(const G4DNAMolecularReactionTable* pReactionTable)
 {
-  fReactionTable = right.fReactionTable;
+    fpReactionTable = pReactionTable;
 }
 
-G4VDNAReactionModel::~G4VDNAReactionModel()
+const G4DNAMolecularReactionTable* G4VDNAReactionModel::GetReactionTable()
 {
-  fReactionTable = 0;
-}
-
-G4VDNAReactionModel& G4VDNAReactionModel::operator=(const G4VDNAReactionModel& right)
-{
-  if (this == &right) return *this;
-  fReactionTable = right.fReactionTable;
-  return *this;
+    return fpReactionTable;
 }

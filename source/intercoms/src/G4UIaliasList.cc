@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.cc 67965 2013-03-13 09:35:29Z gcosmo $
 //
 
 #include "G4UIaliasList.hh"
@@ -42,12 +41,12 @@ G4UIaliasList::~G4UIaliasList()
     delete value[i]; }
 }
 
-G4int G4UIaliasList::operator==(const G4UIaliasList &right) const
+G4bool G4UIaliasList::operator==(const G4UIaliasList &right) const
 {
   return ( this == &right );
 }
 
-G4int G4UIaliasList::operator!=(const G4UIaliasList &right) const
+G4bool G4UIaliasList::operator!=(const G4UIaliasList &right) const
 {
   return ( this != &right );
 }

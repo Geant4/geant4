@@ -9,6 +9,55 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+21 October 2019 I. Hrivnacova (MPI-V10-05-02)
+- Fixed exMPI03, exMPI04, G4MPIscorerMerger.cc compilation which was broken
+  after changes in scorers
+- Added new option ('rowMode') for ntuple merging:
+  - Added 'rowMode' parameter in the G4MPIntupleMerger constructor
+  - Changed the default merging mode to the new one (column-wise with preserved rows)
+  - Updated the analysis classes for the new merging mode
+
+09 July 2019 I. Hrivnacova (MPI-V10-05-01)
+- Removed G4VIS_USE from exMPI04
+
+14 May 2019 I. Hrivnacova (MPI-V10-05-00)
+- Fixed compilation of G4MPIextraWorker.cc.
+  This fixes problem report #2163.
+
+23 November 2018 I. Hrivnacova (MPI-V10-04-01)
+- Adapted g4mpi to allow to define an extra worker for collecting data 
+  from processing workers (needed for merging ntuples)
+- Added classes for ntuple merging (in source/analysis)
+- Added exMPI04 demonstrating merging ntuples via MPI
+  (with Root output only)
+- In exMPI03: fixed warning from analysis when opening the second output 
+  file (dose-merged) within the same run 
+
+02 May 2018 J.Allison (MPI-V10-04-00)
+- Removed G4VIS_USE and G4UI_USE.
+
+28 November 2017 B.Morgan (MPI-V10-03-02)
+- Repace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+
+20 Sep 2017 B. Morgan (MPI-V10-03-01)
+- Migrate ctests definitions file to base directory
+- Update to provide tests to build/test G4mpi and each
+  example without requiring obsolete GEANT4_BUILD_EXAMPLES
+  switch.
+- COWORKS with ctests-V10-03-12
+
+5 Oct 2016 A. Dotti (MPI-V10-02-02)
+- Porting of scoring merging to new G4StatDouble based hits
+ 
+20 Jul 2016 I. Hrivnacova (MPI-V10-02-01)
+- Coding guidelines (class data member names, separators)
+
+04 Jul 2016 I. Hrivnacova (MPI-V10-02-00) 
+- Fixes for Doxygen documentation
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 18 Nov 2015 A.Dotti (MPI-V10-01-23) 
 - Support for both static and shared at the same time
 

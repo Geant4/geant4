@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PartialPhantomParameterisation.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
 // class G4PartialPhantomParameterisation implementation
 //
 // May 2007 Pedro Arce (CIEMAT), first version
-//
 // --------------------------------------------------------------------
 
 #include "G4PartialPhantomParameterisation.hh"
@@ -59,7 +54,7 @@ G4PartialPhantomParameterisation::~G4PartialPhantomParameterisation()
 
 //------------------------------------------------------------------
 void G4PartialPhantomParameterisation::
-ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol ) const
+ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 {
   // Voxels cannot be rotated, return translation
   //
@@ -74,9 +69,7 @@ GetTranslation(const G4int copyNo ) const
 {
   CheckCopyNo( copyNo );
 
-  size_t nx;
-  size_t ny;
-  size_t nz;
+  size_t nx, ny, nz;
   ComputeVoxelIndices( copyNo, nx, ny, nz );
 
   G4ThreeVector trans( (2*nx+1)*fVoxelHalfX - fContainerWallX,
@@ -88,10 +81,10 @@ GetTranslation(const G4int copyNo ) const
 
 //------------------------------------------------------------------
 G4Material* G4PartialPhantomParameterisation::
-ComputeMaterial(const G4int copyNo, G4VPhysicalVolume *, const G4VTouchable *) 
+ComputeMaterial( const G4int copyNo, G4VPhysicalVolume*, const G4VTouchable* ) 
 { 
   CheckCopyNo( copyNo );
-  size_t matIndex = GetMaterialIndex(copyNo);
+  auto matIndex = GetMaterialIndex(copyNo);
 
   return fMaterials[ matIndex ];
 }
@@ -103,7 +96,7 @@ GetMaterialIndex( size_t copyNo ) const
 {
   CheckCopyNo( copyNo );
 
-  if( !fMaterialIndices ) { return 0; }
+  if( fMaterialIndices == nullptr ) { return 0; }
 
   return *(fMaterialIndices+copyNo);
 }
@@ -141,18 +134,20 @@ ComputeVoxelIndices(const G4int copyNo, size_t& nx,
 {
   CheckCopyNo( copyNo );
 
-  std::multimap<G4int,G4int>::const_iterator ite =
-    fFilledIDs.lower_bound(size_t(copyNo));
-  G4int dist = std::distance( fFilledIDs.begin(), ite );
-  nz = size_t(dist/fNoVoxelY);
+  auto ite = fFilledIDs.lower_bound(size_t(copyNo));
+  G4int dist = std::distance( fFilledIDs.cbegin(), ite );
+  nz = size_t( dist/fNoVoxelY );
   ny = size_t( dist%fNoVoxelY );
 
   G4int ifmin = (*ite).second;
   G4int nvoxXprev;
-  if( dist != 0 ) {
+  if( dist != 0 )
+  {
     ite--;
     nvoxXprev = (*ite).first;
-  } else {
+  }
+  else
+  {
     nvoxXprev = -1;
   } 
 
@@ -295,18 +290,17 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
 
   G4int nyz = nz*fNoVoxelY+ny;
-  std::multimap<G4int,G4int>::iterator ite = fFilledIDs.begin();
+  auto ite = fFilledIDs.cbegin();
 /*
-  for( ite = fFilledIDs.begin(); ite != fFilledIDs.end(); ite++ )
+  for( ite = fFilledIDs.cbegin(); ite != fFilledIDs.cend(); ++ite )
   {
     G4cout << " G4PartialPhantomParameterisation::GetReplicaNo filled "
            << (*ite).first << " , " << (*ite).second << std::endl;
   }
 */
-  ite = fFilledIDs.begin();
 
   advance(ite,nyz);
-  std::multimap<G4int,G4int>::iterator iteant = ite; iteant--;
+  auto iteant = ite; iteant--;
   G4int copyNo = (*iteant).first + 1 + ( nx - (*ite).second );
 /*
   G4cout << " G4PartialPhantomParameterisation::GetReplicaNo getting copyNo "

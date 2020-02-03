@@ -23,28 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
-// Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
-// 
-// If you use this example, please cite the following publication:
-// Rad. Prot. Dos. 133 (2009) 2-11
+/// \file electromagnetic/TestEm5/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
-#include "PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "PhysicsList.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:fPhysicsList(pPhys)
+  :G4UImessenger(),fPhysicsList(pPhys),fMaxChargedStep(1*CLHEP::mm)
 {
-  fPhysDir = new G4UIdirectory("/microbeam/phys/");
+  fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
+<<<<<<< HEAD
    
   fGammaCutCmd = new G4UIcmdWithADoubleAndUnit("/microbeam/phys/setGCut",this);  
   fGammaCutCmd->SetGuidance("Set gamma cut.");
@@ -75,9 +76,21 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fAllCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
   fListCmd = new G4UIcmdWithAString("/microbeam/phys/addPhysics",this);  
+=======
+
+  fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   fListCmd->SetGuidance("Add modula physics list.");
   fListCmd->SetParameterName("PList",false);
-  fListCmd->AvailableForStates(G4State_PreInit);  
+  fListCmd->AvailableForStates(G4State_PreInit);
+  fListCmd->SetToBeBroadcasted(false);      
+
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  fStepMaxCmd->SetGuidance("Set max allowed step length");
+  fStepMaxCmd->SetParameterName("mxStep",false);
+  fStepMaxCmd->SetRange("mxStep>0.");
+  fStepMaxCmd->SetUnitCategory("Length");
+  fStepMaxCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,11 +102,13 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete fProtoCutCmd;
   delete fAllCutCmd;
   delete fListCmd;
-  delete fPhysDir;    
+  delete fPhysDir;
+  delete fStepMaxCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+<<<<<<< HEAD
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
@@ -114,7 +129,14 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
      fPhysicsList->SetCutForPositron(cut);
    } 
 
+=======
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   if( command == fListCmd )
-   { fPhysicsList->AddPhysicsList(newValue);}
+    { fPhysicsList->AddPhysicsList(newValue); }
+  if (command == fStepMaxCmd)
+    { fMaxChargedStep = fStepMaxCmd->GetNewDoubleValue(newValue); }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

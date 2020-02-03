@@ -71,7 +71,7 @@ CCalHcal::~CCalHcal() {
     delete[] dx_2Scintillator;
 }
 
-int CCalHcal::readFile() {
+G4int CCalHcal::readFile() {
   ///////////////////////////////////////////////////////////////
   //Let's open the file
   G4cout << " ==> Opening file " << File() << " to read elements..."
@@ -96,8 +96,8 @@ int CCalHcal::readFile() {
   // Boxes
   readName(is,boxMaterial);
   is >> nBox >> dy_2Box >> dx_2Box >> wallThickBox;
-  int i = 0;
-  xposBox = new double[nBox];
+  G4int i = 0;
+  xposBox = new G4double[nBox];
   for (i=0; i<nBox; i++)
     is >> xposBox[i];
 #ifdef debug
@@ -113,9 +113,9 @@ int CCalHcal::readFile() {
   G4String rubbish;
   readName(is,rubbish);
   is >> nLayerScnt;
-  typeLayerScnt = new int[nLayerScnt];
-  mothLayerScnt = new int[nLayerScnt];
-  xposLayerScnt = new double[nLayerScnt];
+  typeLayerScnt = new G4int[nLayerScnt];
+  mothLayerScnt = new G4int[nLayerScnt];
+  xposLayerScnt = new G4double[nLayerScnt];
   for (i=0; i<nLayerScnt; i++)
     is >> typeLayerScnt[i] >> mothLayerScnt[i] >> xposLayerScnt[i];
 #ifdef debug
@@ -123,15 +123,15 @@ int CCalHcal::readFile() {
        << "position" << G4endl;
   for (i=0; i<nLayerScnt; i++)
     G4cout << tab << i << " " << typeLayerScnt[i] << " " << mothLayerScnt[i] 
-	 << " " << xposLayerScnt[i] << G4endl;
+         << " " << xposLayerScnt[i] << G4endl;
 #endif
 
   // Layers of absorbers
   readName(is,rubbish);
   is >> nLayerAbs;
-  typeLayerAbs = new int[nLayerAbs];
-  mothLayerAbs = new int[nLayerAbs];
-  xposLayerAbs = new double[nLayerAbs];
+  typeLayerAbs = new G4int[nLayerAbs];
+  mothLayerAbs = new G4int[nLayerAbs];
+  xposLayerAbs = new G4double[nLayerAbs];
   for (i=0; i<nLayerAbs; i++)
     is >> typeLayerAbs[i] >> mothLayerAbs[i] >> xposLayerAbs[i];
 #ifdef debug
@@ -139,13 +139,13 @@ int CCalHcal::readFile() {
        << "position" << G4endl;
   for (i=0; i<nLayerAbs; i++)
     G4cout << tab << i << " " << typeLayerAbs[i] << " " << mothLayerAbs[i] 
-	 << " " << xposLayerAbs[i] << G4endl;
+         << " " << xposLayerAbs[i] << G4endl;
 #endif
 
   // Absorber parameters
   readName(is,absMaterial);
   is >> nAbsorber >> dy_2Absorber;
-  dx_2Absorber = new double[nAbsorber];
+  dx_2Absorber = new G4double[nAbsorber];
   for (i=0; i<nAbsorber; i++)
     is >> dx_2Absorber[i];
 #ifdef debug
@@ -161,12 +161,12 @@ int CCalHcal::readFile() {
   readName(is,wrapMaterial);
   readName(is,plasMaterial);
   is >> nScintillator;
-  dy_2ScntLayer    = new double[nScintillator];
-  dx_2ScntLayer    = new double[nScintillator];
-  dx_2Wrapper      = new double[nScintillator];
-  dx_2FrontPlastic = new double[nScintillator];
-  dx_2BackPlastic  = new double[nScintillator];
-  dx_2Scintillator = new double[nScintillator];
+  dy_2ScntLayer    = new G4double[nScintillator];
+  dx_2ScntLayer    = new G4double[nScintillator];
+  dx_2Wrapper      = new G4double[nScintillator];
+  dx_2FrontPlastic = new G4double[nScintillator];
+  dx_2BackPlastic  = new G4double[nScintillator];
+  dx_2Scintillator = new G4double[nScintillator];
   for (i=0; i<nScintillator; i++)
     is >> dy_2ScntLayer[i] >> dx_2ScntLayer[i] >> dx_2Wrapper[i]
        >> dx_2FrontPlastic[i] >> dx_2BackPlastic[i] >> dx_2Scintillator[i];
@@ -176,8 +176,8 @@ int CCalHcal::readFile() {
        << " of sizes " << G4endl;
   for (i=0; i<nScintillator; i++)
     G4cout << tab << i << " " << dy_2ScntLayer[i] << " " << dx_2ScntLayer[i] 
-	 << " " << dx_2Wrapper[i] << " " << dx_2FrontPlastic[i] << " " 
-	 << dx_2BackPlastic[i] << " " << dx_2Scintillator[i] << G4endl;
+         << " " << dx_2Wrapper[i] << " " << dx_2FrontPlastic[i] << " " 
+         << dx_2BackPlastic[i] << " " << dx_2Scintillator[i] << G4endl;
 #endif
   
   ///////////////////////////////////////////////////////////////

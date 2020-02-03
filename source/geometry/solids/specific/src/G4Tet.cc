@@ -27,41 +27,18 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc 102297 2017-01-20 13:33:54Z gcosmo $
-//
-// class G4Tet
-//
 // Implementation for G4Tet class
 //
-// History:
-//
-//  20040903 - Marcus Mendenhall, created G4Tet
-//  20041101 - Marcus Mendenhall, optimized constant dot products with
-//             fCdotNijk values
-//  20041101 - MHM removed tracking error by clipping DistanceToOut to 0
-//             for surface cases
-//  20041101 - MHM many speed optimizations in if statements
-//  20041101 - MHM changed vdotn comparisons to 1e-12 instead of 0.0 to
-//             avoid nearly-parallel problems
-//  20041102 - MHM Added extra distance into solid to DistanceToIn(p,v)
-//             hit testing
-//  20041102 - MHM added ability to check for degeneracy without throwing
-//             G4Exception
-//  20041103 - MHM removed many unused variables from class
-//  20040803 - Dionysios Anninos, added GetPointOnSurface() method
-//  20061112 - MHM added code for G4VSolid GetSurfaceArea()
-//  20100920 - Gabriele Cosmo added copy-ctor and operator=()
-//
+// 03.09.2004 - Marcus Mendenhall, created
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
 
 #if !defined(G4GEOM_USE_UTET)
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc 102297 2017-01-20 13:33:54Z gcosmo $";
-
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -92,13 +69,13 @@ using namespace CLHEP;
 // which may become important in situations imported from mesh generators,
 // in which a very large number of G4Tets are created.
 // A Tet has all of its geometrical information precomputed
-
+//
 G4Tet::G4Tet(const G4String& pName,
                    G4ThreeVector anchor,
                    G4ThreeVector p2,
                    G4ThreeVector p3,
-                   G4ThreeVector p4, G4bool *degeneracyFlag)
-  : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0), warningFlag(0)
+                   G4ThreeVector p4, G4bool* degeneracyFlag)
+  : G4VSolid(pName)
 {
   // fV<x><y> is vector from vertex <y> to vertex <x>
   //
@@ -150,7 +127,7 @@ G4Tet::G4Tet(const G4String& pName,
 
   fTol=1e-9*(std::fabs(fXMin)+std::fabs(fXMax)+std::fabs(fYMin)
             +std::fabs(fYMax)+std::fabs(fZMin)+std::fabs(fZMax));
-  //fTol=kCarTolerance;
+  // fTol=kCarTolerance;
 
   fAnchor=anchor;
   fP2=p2;
@@ -194,11 +171,10 @@ G4Tet::G4Tet(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Tet::G4Tet( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0),
+  : G4VSolid(a),
     fAnchor(0,0,0), fP2(0,0,0), fP3(0,0,0), fP4(0,0,0), fMiddle(0,0,0),
     fNormal123(0,0,0), fNormal142(0,0,0), fNormal134(0,0,0),
-    fNormal234(0,0,0), warningFlag(0),
+    fNormal234(0,0,0),
     fCdotN123(0.), fCdotN142(0.), fCdotN134(0.), fCdotN234(0.),
     fXMin(0.), fXMax(0.), fYMin(0.), fYMax(0.), fZMin(0.), fZMax(0.),
     fDx(0.), fDy(0.), fDz(0.), fTol(0.), fMaxSize(0.)
@@ -208,20 +184,20 @@ G4Tet::G4Tet( __void__& a )
 //////////////////////////////////////////////////////////////////////////
 //
 // Destructor
-
+//
 G4Tet::~G4Tet()
 {
-  delete fpPolyhedron;  fpPolyhedron = 0;
+  delete fpPolyhedron;  fpPolyhedron = nullptr;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
-
+//
 G4Tet::G4Tet(const G4Tet& rhs)
   : G4VSolid(rhs),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fRebuildPolyhedron(false), fpPolyhedron(0), fAnchor(rhs.fAnchor),
+    fAnchor(rhs.fAnchor),
     fP2(rhs.fP2), fP3(rhs.fP3), fP4(rhs.fP4), fMiddle(rhs.fMiddle),
     fNormal123(rhs.fNormal123), fNormal142(rhs.fNormal142),
     fNormal134(rhs.fNormal134), fNormal234(rhs.fNormal234),
@@ -238,7 +214,7 @@ G4Tet::G4Tet(const G4Tet& rhs)
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
-
+//
 G4Tet& G4Tet::operator = (const G4Tet& rhs) 
 {
    // Check assignment to self
@@ -263,7 +239,7 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
    fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz; fTol = rhs.fTol;
    fMaxSize = rhs.fMaxSize;
    fRebuildPolyhedron = false;
-   delete fpPolyhedron; fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
@@ -271,14 +247,14 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
 //////////////////////////////////////////////////////////////////////////
 //
 // CheckDegeneracy
-
+//
 G4bool G4Tet::CheckDegeneracy( G4ThreeVector anchor,
                                G4ThreeVector p2,
                                G4ThreeVector p3,
                                G4ThreeVector p4 )
 {
   G4bool result;
-  G4Tet *object=new G4Tet("temp",anchor,p2,p3,p4,&result);
+  G4Tet* object=new G4Tet("temp",anchor,p2,p3,p4,&result);
   delete object;
   return result;
 }
@@ -287,112 +263,93 @@ G4bool G4Tet::CheckDegeneracy( G4ThreeVector anchor,
 //
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
-
+//
 void G4Tet::ComputeDimensions(G4VPVParameterisation* ,
                               const G4int ,
                               const G4VPhysicalVolume* )
 {
+  G4Exception("G4Tet::ComputeDimensions()",
+              "GeomSolids0001", FatalException,
+              "G4Tet does not support Parameterisation.");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+//
+void G4Tet::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  pMin.set(fXMin,fYMin,fZMin);
+  pMax.set(fXMax,fYMax,fZMax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Tet::BoundingLimits()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
-
+//
 G4bool G4Tet::CalculateExtent(const EAxis pAxis,
                               const G4VoxelLimits& pVoxelLimit,
                               const G4AffineTransform& pTransform,
                                     G4double& pMin, G4double& pMax) const
 {
-  G4double xMin,xMax;
-  G4double yMin,yMax;
-  G4double zMin,zMax;
+  G4ThreeVector bmin, bmax;
 
-  if (pTransform.IsRotated())
+  // Check bounding box (bbox)
+  //
+  BoundingLimits(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+
+  // Use simple bounding-box to help in the case of complex 3D meshes
+  //
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+
+#if 0
+  // Precise extent computation (disabled by default for this shape)
+  //
+  G4bool exist;
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    G4ThreeVector pp0=pTransform.TransformPoint(fAnchor);
-    G4ThreeVector pp1=pTransform.TransformPoint(fP2);
-    G4ThreeVector pp2=pTransform.TransformPoint(fP3);
-    G4ThreeVector pp3=pTransform.TransformPoint(fP4);
-
-    xMin    = std::min(std::min(std::min(pp0.x(), pp1.x()),pp2.x()),pp3.x());
-    xMax    = std::max(std::max(std::max(pp0.x(), pp1.x()),pp2.x()),pp3.x());
-    yMin    = std::min(std::min(std::min(pp0.y(), pp1.y()),pp2.y()),pp3.y());
-    yMax    = std::max(std::max(std::max(pp0.y(), pp1.y()),pp2.y()),pp3.y());
-    zMin    = std::min(std::min(std::min(pp0.z(), pp1.z()),pp2.z()),pp3.z());
-    zMax    = std::max(std::max(std::max(pp0.z(), pp1.z()),pp2.z()),pp3.z());
-
-  }
-  else
-  {
-    G4double xoffset = pTransform.NetTranslation().x() ;
-    xMin    = xoffset + fXMin;
-    xMax    = xoffset + fXMax;
-    G4double yoffset = pTransform.NetTranslation().y() ;
-    yMin    = yoffset + fYMin;
-    yMax    = yoffset + fYMax;
-    G4double zoffset = pTransform.NetTranslation().z() ;
-    zMin    = zoffset + fZMin;
-    zMax    = zoffset + fZMax;
+    return exist = (pMin < pMax) ? true : false;
   }
 
-  if (pVoxelLimit.IsXLimited())
-  {
-    if ( (xMin > pVoxelLimit.GetMaxXExtent()+fTol) || 
-         (xMax < pVoxelLimit.GetMinXExtent()-fTol)  )  { return false; }
-    else
-    {
-      xMin = std::max(xMin, pVoxelLimit.GetMinXExtent());
-      xMax = std::min(xMax, pVoxelLimit.GetMaxXExtent());
-    }
-  }
+  // Set bounding envelope (benv) and calculate extent
+  //
+  std::vector<G4ThreeVector> vec = GetVertices();
 
-  if (pVoxelLimit.IsYLimited())
-  {
-    if ( (yMin > pVoxelLimit.GetMaxYExtent()+fTol) ||
-         (yMax < pVoxelLimit.GetMinYExtent()-fTol)  )  { return false; }
-    else
-    {
-      yMin = std::max(yMin, pVoxelLimit.GetMinYExtent());
-      yMax = std::min(yMax, pVoxelLimit.GetMaxYExtent());
-    }
-    }
+  G4ThreeVectorList anchor(1);
+  anchor[0].set(vec[0].x(),vec[0].y(),vec[0].z());
 
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin > pVoxelLimit.GetMaxZExtent()+fTol) ||
-           (zMax < pVoxelLimit.GetMinZExtent()-fTol)  )  { return false; }
-    else
-    {
-      zMin = std::max(zMin, pVoxelLimit.GetMinZExtent());
-      zMax = std::min(zMax, pVoxelLimit.GetMaxZExtent());
-    }
-  }
+  G4ThreeVectorList base(3);
+  base[0].set(vec[1].x(),vec[1].y(),vec[1].z());
+  base[1].set(vec[2].x(),vec[2].y(),vec[2].z());
+  base[2].set(vec[3].x(),vec[3].y(),vec[3].z());
 
-  switch (pAxis)
-  {
-    case kXAxis:
-      pMin=xMin;
-      pMax=xMax;
-      break;
-    case kYAxis:
-      pMin=yMin;
-      pMax=yMax;
-      break;
-    case kZAxis:
-      pMin=zMin;
-      pMax=zMax;
-      break;
-    default:
-      break;
-  }
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &anchor;
+  polygons[1] = &base;
 
-  return true;
-} 
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  return exists = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+}
 
 /////////////////////////////////////////////////////////////////////////
 //
 // Return whether point inside/outside/on surface, using tolerance
-
+//
 EInside G4Tet::Inside(const G4ThreeVector& p) const
 {
   G4double r123, r134, r142, r234;
@@ -423,7 +380,7 @@ EInside G4Tet::Inside(const G4ThreeVector& p) const
 // If two sides are equidistant, normal of first side (x/y/z) 
 // encountered returned.
 // This assumes that we are looking from the inside!
-
+//
 G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
 {
   G4double r123=std::fabs(p.dot(fNormal123)-fCdotN123);
@@ -437,24 +394,24 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
 
   if (r123 <= delta)         
   {
-     noSurfaces ++; 
+     ++noSurfaces; 
      sumnorm= fNormal123; 
   }
 
   if (r134 <= delta)    
   {
-     noSurfaces ++; 
+     ++noSurfaces; 
      sumnorm += fNormal134; 
   }
  
   if (r142 <= delta)    
   {
-     noSurfaces ++; 
+     ++noSurfaces; 
      sumnorm += fNormal142;
   }
   if (r234 <= delta)    
   {
-     noSurfaces ++; 
+     ++noSurfaces; 
      sumnorm += fNormal234;
   }
   
@@ -483,7 +440,7 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
 // Calculate distance to box from an outside point
 // - return kInfinity if no intersection.
 // All this is very unrolled, for speed.
-
+//
 G4double G4Tet::DistanceToIn(const G4ThreeVector& p,
                              const G4ThreeVector& v) const
 {
@@ -564,7 +521,7 @@ G4double G4Tet::DistanceToIn(const G4ThreeVector& p,
 // Approximate distance to tet.
 // returns distance to sphere centered on bounding box
 // - If inside return 0
-
+//
 G4double G4Tet::DistanceToIn(const G4ThreeVector& p) const
 {
   G4double dd=(p-fMiddle).mag() - fMaxSize - fTol;
@@ -576,10 +533,10 @@ G4double G4Tet::DistanceToIn(const G4ThreeVector& p) const
 // Calcluate distance to surface of box from inside
 // by calculating distances to box's x/y/z planes.
 // Smallest distance is exact distance to exiting.
-
+//
 G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
                                const G4bool calcNorm,
-                                     G4bool *validNorm, G4ThreeVector *n) const
+                                     G4bool* validNorm, G4ThreeVector* n) const
 {
     G4ThreeVector vu(v.unit());
     G4double t1=kInfinity,t2=kInfinity,t3=kInfinity,t4=kInfinity, vdotn, tt;
@@ -626,7 +583,7 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
         *validNorm=false; // flag normal as meaningless
       }
     }
-    else if(calcNorm && n)
+    else if(calcNorm && n != nullptr)
     {
       G4ThreeVector normal;
       if(tt==t1)        { normal=fNormal123; }
@@ -644,8 +601,8 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 ////////////////////////////////////////////////////////////////////////////
 //
 // Calculate exact shortest distance to any boundary from inside
-// - If outside return 0
-
+// - If outside return zero
+//
 G4double G4Tet::DistanceToOut(const G4ThreeVector& p) const
 {
   G4double t1,t2,t3,t4;
@@ -661,43 +618,10 @@ G4double G4Tet::DistanceToOut(const G4ThreeVector& p) const
   return (tmin < fTol)? 0:tmin;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Note: Caller has deletion responsibility
-
-G4ThreeVectorList*
-G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
-{
-  G4ThreeVectorList* vertices = new G4ThreeVectorList();
-
-  if (vertices)
-  {
-    vertices->reserve(4);
-    G4ThreeVector vertex0(fAnchor);
-    G4ThreeVector vertex1(fP2);
-    G4ThreeVector vertex2(fP3);
-    G4ThreeVector vertex3(fP4);
-
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Tet::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices;
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 // GetEntityType
-
+//
 G4GeometryType G4Tet::GetEntityType() const
 {
   return G4String("G4Tet");
@@ -706,7 +630,7 @@ G4GeometryType G4Tet::GetEntityType() const
 //////////////////////////////////////////////////////////////////////////
 //
 // Make a clone of the object
-
+//
 G4VSolid* G4Tet::Clone() const
 {
   return new G4Tet(*this);
@@ -715,7 +639,7 @@ G4VSolid* G4Tet::Clone() const
 //////////////////////////////////////////////////////////////////////////
 //
 // Stream object contents to an output stream
-
+//
 std::ostream& G4Tet::StreamInfo(std::ostream& os) const
 {
   G4int oldprc = os.precision(16);
@@ -738,13 +662,12 @@ std::ostream& G4Tet::StreamInfo(std::ostream& os) const
   return os;
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // GetPointOnFace
 //
 // Auxiliary method for get point on surface
-
+//
 G4ThreeVector G4Tet::GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2,
                                     G4ThreeVector p3, G4double& area) const
 {
@@ -765,7 +688,7 @@ G4ThreeVector G4Tet::GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2,
 ////////////////////////////////////////////////////////////////////////////
 //
 // GetPointOnSurface
-
+//
 G4ThreeVector G4Tet::GetPointOnSurface() const
 {
   G4double chose,aOne,aTwo,aThree,aFour;
@@ -786,7 +709,7 @@ G4ThreeVector G4Tet::GetPointOnSurface() const
 ////////////////////////////////////////////////////////////////////////
 //
 // GetVertices
-
+//
 std::vector<G4ThreeVector> G4Tet::GetVertices() const 
 {
   std::vector<G4ThreeVector> vertices(4);
@@ -801,7 +724,7 @@ std::vector<G4ThreeVector> G4Tet::GetVertices() const
 ////////////////////////////////////////////////////////////////////////
 //
 // GetCubicVolume
-
+//
 G4double G4Tet::GetCubicVolume()
 {
   return fCubicVolume;
@@ -810,7 +733,7 @@ G4double G4Tet::GetCubicVolume()
 ////////////////////////////////////////////////////////////////////////
 //
 // GetSurfaceArea
-
+//
 G4double G4Tet::GetSurfaceArea()
 {
   return fSurfaceArea;
@@ -821,7 +744,7 @@ G4double G4Tet::GetSurfaceArea()
 ////////////////////////////////////////////////////////////////////////
 //
 // DescribeYourselfTo
-
+//
 void G4Tet::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
   scene.AddSolid (*this);
@@ -830,7 +753,7 @@ void G4Tet::DescribeYourselfTo (G4VGraphicsScene& scene) const
 ////////////////////////////////////////////////////////////////////////
 //
 // GetExtent
-
+//
 G4VisExtent G4Tet::GetExtent() const 
 {
   return G4VisExtent (fXMin, fXMax, fYMin, fYMax, fZMin, fZMax);
@@ -839,10 +762,10 @@ G4VisExtent G4Tet::GetExtent() const
 ////////////////////////////////////////////////////////////////////////
 //
 // CreatePolyhedron
-
-G4Polyhedron* G4Tet::CreatePolyhedron () const 
+//
+G4Polyhedron* G4Tet::CreatePolyhedron() const 
 {
-  G4Polyhedron *ph=new G4Polyhedron;
+  G4Polyhedron* ph = new G4Polyhedron;
   G4double xyz[4][3];
   const G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
   xyz[0][0]=fAnchor.x(); xyz[0][1]=fAnchor.y(); xyz[0][2]=fAnchor.z();
@@ -858,10 +781,10 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
 ////////////////////////////////////////////////////////////////////////
 //
 // GetPolyhedron
-
-G4Polyhedron* G4Tet::GetPolyhedron () const
+//
+G4Polyhedron* G4Tet::GetPolyhedron() const
 {
-  if (!fpPolyhedron ||
+  if (fpPolyhedron == nullptr ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())

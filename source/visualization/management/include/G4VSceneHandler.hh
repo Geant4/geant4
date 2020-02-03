@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh 73126 2013-08-19 08:01:37Z gcosmo $
 //
 //
 // John Allison  19th July 1996.
@@ -57,6 +56,7 @@ class G4VPhysicalVolume;
 class G4Material;
 class G4Event;
 class G4AttHolder;
+class G4DisplacedSolid;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -104,17 +104,25 @@ public: // With description
   //   G4VSceneHandler::PostAddSolid ();
   // }
 
+  // From geometry/solids/CSG
   virtual void AddSolid (const G4Box&);
   virtual void AddSolid (const G4Cons&);
-  virtual void AddSolid (const G4Tubs&);
-  virtual void AddSolid (const G4Trd&);
-  virtual void AddSolid (const G4Trap&);
-  virtual void AddSolid (const G4Sphere&);
+  virtual void AddSolid (const G4Orb&);
   virtual void AddSolid (const G4Para&);
+  virtual void AddSolid (const G4Sphere&);
   virtual void AddSolid (const G4Torus&);
+  virtual void AddSolid (const G4Trap&);
+  virtual void AddSolid (const G4Trd&);
+  virtual void AddSolid (const G4Tubs&);
+
+  // From geometry/solids/specific
+  virtual void AddSolid (const G4Ellipsoid&);
   virtual void AddSolid (const G4Polycone&);
   virtual void AddSolid (const G4Polyhedra&);
-  virtual void AddSolid (const G4VSolid&);  // For solids not above.
+  virtual void AddSolid (const G4TessellatedSolid&);
+
+  // For solids not above.
+  virtual void AddSolid (const G4VSolid&);
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding "compound" GEANT4 objects to the scene
@@ -130,6 +138,7 @@ public: // With description
   virtual void AddCompound (const G4VHit&);
   virtual void AddCompound (const G4VDigi&);
   virtual void AddCompound (const G4THitsMap<G4double>&);
+  virtual void AddCompound (const G4THitsMap<G4StatDouble>&);
 
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.
@@ -149,7 +158,7 @@ public: // With description
   // }
 
   virtual void BeginPrimitives
-  (const G4Transform3D& objectTransformation);
+  (const G4Transform3D& objectTransformation = G4Transform3D());
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
@@ -165,7 +174,7 @@ public: // With description
   // }
 
   virtual void BeginPrimitives2D
-  (const G4Transform3D& objectTransformation);
+  (const G4Transform3D& objectTransformation = G4Transform3D());
   // The x,y coordinates of the primitives passed to AddPrimitive are
   // intrepreted as screen coordinates, -1 < x,y < 1.  The
   // z-coordinate is ignored.
@@ -226,9 +235,9 @@ public: // With description
   //////////////////////////////////////////////////////////////
   // Public utility functions.
 
-  const G4Colour& GetColour (const G4Visible&);
-  const G4Colour& GetColor  (const G4Visible&);
-  // Returns colour of G4Visible object, or default global colour.
+  const G4Colour& GetColour ();
+  const G4Colour& GetColor  ();
+  // Returns colour - checks fpVisAttribs and gets applicable colour.
 
   const G4Colour& GetTextColour (const G4Text&);
   const G4Colour& GetTextColor  (const G4Text&);
@@ -239,6 +248,11 @@ public: // With description
 
   G4ViewParameters::DrawingStyle GetDrawingStyle (const G4VisAttributes*);
   // Returns drawing style from current view parameters, unless the user
+  // has forced through the vis attributes, thereby over-riding the
+  // current view parameter.
+
+  G4int GetNumberOfCloudPoints (const G4VisAttributes*) const;
+  // Returns no of cloud points from current view parameters, unless the user
   // has forced through the vis attributes, thereby over-riding the
   // current view parameter.
 
@@ -279,6 +293,9 @@ public: // With description
   //////////////////////////////////////////////////////////////
   // Administration functions.
 
+  template <class T> void AddSolidT (const T& solid);
+  template <class T> void AddSolidWithAuxiliaryEdges (const T& solid);
+
   G4int IncrementViewCount ();
 
   virtual void ClearStore ();
@@ -305,8 +322,8 @@ protected:
   //////////////////////////////////////////////////////////////
   // Other internal routines...
 
-  virtual G4VSolid* CreateSectionSolid ();
-  virtual G4VSolid* CreateCutawaySolid ();
+  virtual G4DisplacedSolid* CreateSectionSolid ();
+  virtual G4DisplacedSolid* CreateCutawaySolid ();
   // Generic clipping using the BooleanProcessor in graphics_reps is
   // implemented in this class.  Subclasses that implement their own
   // clipping should provide an override that returns zero.

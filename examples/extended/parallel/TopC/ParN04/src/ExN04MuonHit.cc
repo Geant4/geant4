@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04MuonHit.cc 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// \file parallel/ParN04/src/ExN04MuonHit.cc
+/// \file ExN04MuonHit.cc
 /// \brief Implementation of the ExN04MuonHit class
 //
 
@@ -58,9 +57,9 @@ const ExN04MuonHit& ExN04MuonHit::operator=(const ExN04MuonHit &right)
   return *this;
 }
 
-G4int ExN04MuonHit::operator==(const ExN04MuonHit &right) const
+G4bool ExN04MuonHit::operator==(const ExN04MuonHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 void ExN04MuonHit::Draw()

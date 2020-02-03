@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc 90446 2015-05-29 07:39:20Z gcosmo $
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -60,16 +58,28 @@
 #include "G4NistManager.hh"
 #include "G4NistMessenger.hh"
 #include "G4Isotope.hh"
+#include "G4Threading.hh"
 
-G4NistManager* G4NistManager::instance = 0;
+G4NistManager* G4NistManager::instance = nullptr;
+#ifdef G4MULTITHREADED
+  G4Mutex G4NistManager::nistManagerMutex = G4MUTEX_INITIALIZER;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4NistManager* G4NistManager::Instance()
 {
-  if (instance == 0) {
-    static G4NistManager manager;
-    instance = &manager;
+  if (instance == nullptr) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nistManagerMutex);
+    if (instance == nullptr) {
+#endif
+      static G4NistManager manager;
+      instance = &manager;
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
   }
   return instance;
 }
@@ -100,7 +110,8 @@ G4NistManager::~G4NistManager()
   //  G4cout << "NistManager: end isotope destruction" << G4endl;
   delete messenger;
   delete matBuilder;
-  delete elmBuilder;  
+  delete elmBuilder;
+  delete fICRU90;
   // G4cout << "NistManager: end destruction" << G4endl;
 }
 
@@ -125,7 +136,8 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
   bmat = FindOrBuildMaterial(basename);
   if(!bmat) {
     G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
-    G4cout << " New material <" << name << "> cannot be built because " << G4endl;
+    G4cout << " New material <" << name << "> cannot be built because " 
+	   << G4endl;
     G4cout << " base material <" << basename << "> does not exist" << G4endl;
     G4Exception("G4NistManager::BuildMaterialWithNewDensity()", "mat102",
                  FatalException, "Wrong material name");    
@@ -146,7 +158,7 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::PrintElement(const G4String& symbol)
+void G4NistManager::PrintElement(const G4String& symbol) const
 {
   if (symbol == "all") { elmBuilder->PrintElement(0); }
   else                 { elmBuilder->PrintElement(elmBuilder->GetZ(symbol)); }
@@ -154,7 +166,7 @@ void G4NistManager::PrintElement(const G4String& symbol)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::PrintG4Element(const G4String& name)
+void G4NistManager::PrintG4Element(const G4String& name) const
 {
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   size_t nelm = theElementTable->size();
@@ -168,7 +180,7 @@ void G4NistManager::PrintG4Element(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::PrintG4Material(const G4String& name)
+void G4NistManager::PrintG4Material(const G4String& name) const
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   size_t nmat = theMaterialTable->size();
@@ -184,22 +196,21 @@ void G4NistManager::PrintG4Material(const G4String& name)
 
 void G4NistManager::SetVerbose(G4int val)
 {
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&nistManagerMutex);
+#endif
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Threading.hh"
-
 G4NistManager::G4NistManager()
 {
-  if(G4Threading::IsWorkerThread() == true) { 
-    G4Exception ("G4NistMaterial::G4NistManager()", "mat090", FatalException, 
-                 "Attempt to instantiate G4NistManager in worker thread");
-  }
-
   nElements  = 0;
   nMaterials = 0;
   verbose    = 0;
@@ -218,6 +229,53 @@ G4NistManager::G4NistManager()
   }
   POWERA27[0] = 1.0;
   LOGAZ[0]    = 0.0;
+  fICRU90 = nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ICRU90StoppingData* G4NistManager::GetICRU90StoppingData()
+{
+  if (!fICRU90) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nistManagerMutex);
+    if (!fICRU90) {
+#endif
+      fICRU90 = new G4ICRU90StoppingData();
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
+  }
+  return fICRU90;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistManager::SetDensityEffectCalculatorFlag(const G4String& mname,
+                                                   G4bool val)
+{
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&nistManagerMutex);
+#endif
+  if(mname == "all") {
+    for(auto mat : materials) {
+      SetDensityEffectCalculatorFlag(mat, val);
+    }
+  } else {
+    G4Material* mat = FindMaterial(mname);
+    SetDensityEffectCalculatorFlag(mat, val);
+  }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistManager::SetDensityEffectCalculatorFlag(G4Material* mat, G4bool val)
+{
+  if(mat) { mat->ComputeDensityEffectOnFly(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

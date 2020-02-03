@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
+<<<<<<< HEAD
 // $Id: TrackingAction.hh 90848 2015-06-10 13:44:30Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

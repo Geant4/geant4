@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ExceptionHandler.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4ExceptionHandler.cc
 //
 //                                         2005 Q
 // ====================================================================
+#include <stdlib.h>
 #include <boost/python.hpp>
+#include "G4ios.hh"
 #include "G4VExceptionHandler.hh"
 #include "G4StateManager.hh"
-#include <stdlib.h>
 
 using namespace boost::python;
 
@@ -56,7 +56,7 @@ public:
     message << "*** G4Exception : " << exceptionCode << G4endl
             << "      issued by : " << originOfException << G4endl
             << description << G4endl;
-    
+
     switch(severity) {
     case FatalException:
       PyErr_SetString(PyExc_AssertionError,

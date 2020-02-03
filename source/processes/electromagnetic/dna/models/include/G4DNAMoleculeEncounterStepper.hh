@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMoleculeEncounterStepper.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -44,8 +43,7 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4MOLECULEENCOUNTERSTEPPER_H
-#define G4MOLECULEENCOUNTERSTEPPER_H
+#pragma once
 
 #include "G4VITTimeStepComputer.hh"
 #include "G4KDTreeResult.hh"
@@ -70,73 +68,53 @@ class G4Molecule;
 class G4DNAMoleculeEncounterStepper : public G4VITTimeStepComputer
 {
 public:
-  G4DNAMoleculeEncounterStepper();
-  virtual ~G4DNAMoleculeEncounterStepper();
-  G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&);
-  G4IT_ADD_CLONE(G4VITTimeStepComputer,G4DNAMoleculeEncounterStepper)
+    G4DNAMoleculeEncounterStepper();
+    virtual ~G4DNAMoleculeEncounterStepper();
+    G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&) = delete;
+    G4DNAMoleculeEncounterStepper& operator=(const G4DNAMoleculeEncounterStepper&) = delete;
 
-  virtual void Prepare();
-  //    virtual void PrepareForAllProcessors();
-  virtual G4double CalculateStep(const G4Track&, const G4double&);
+    virtual void Prepare();
+    virtual G4double CalculateStep(const G4Track&, const G4double&);
 
-  inline void SetReactionModel(G4VDNAReactionModel*);
-  inline G4VDNAReactionModel* GetReactionModel();
+    void SetReactionModel(G4VDNAReactionModel*);
+    G4VDNAReactionModel* GetReactionModel();
 
-  inline void SetVerbose(int);
-  // Final time returned when reaction is avalaible in the reaction table = 1
-  // All details = 2
+    void SetVerbose(int);
+    // Final time returned when reaction is available in the reaction table = 1
+    // All details = 2
 
 private:
-  void InitializeForNewTrack();
+    void InitializeForNewTrack();
 
-  class Utils;
-  void CheckAndRecordResults(const Utils&,
+    class Utils;
+    void CheckAndRecordResults(const Utils&,
 #ifdef G4VERBOSE
-                             const G4double reactionRange,
+                               const G4double reactionRange,
 #endif
-                             G4KDTreeResultHandle&);
+                               G4KDTreeResultHandle&);
 
-  G4bool fHasAlreadyReachedNullTime;
+    G4bool fHasAlreadyReachedNullTime;
 
-  G4DNAMoleculeEncounterStepper& operator=(const G4DNAMoleculeEncounterStepper&);
-  const G4DNAMolecularReactionTable*& fMolecularReactionTable;
-  G4VDNAReactionModel* fReactionModel;
-  G4int fVerbose;
+    const G4DNAMolecularReactionTable*& fMolecularReactionTable;
+    G4VDNAReactionModel* fReactionModel;
+    G4int fVerbose;
 
-  class Utils
-  {
-  public:
-    Utils(const G4Track& tA, G4MolecularConfiguration* mB);
-    ~Utils(){;}
-
-    G4double GetConstant() const
+    class Utils
     {
-      return Constant;
-    }
+    public:
+        Utils(const G4Track& tA, const G4MolecularConfiguration* mB);
+        ~Utils() = default;
 
-    const G4Track& trackA;
-    G4MolecularConfiguration* moleculeB;
-    const G4Molecule* moleculeA;
-    G4double DA;
-    G4double DB;
-    G4double Constant;
-  };
+        G4double GetConstant() const
+        {
+            return fConstant;
+        }
 
+        const G4Track& fpTrackA;
+        const G4MolecularConfiguration* fpMoleculeB;
+        const G4Molecule* fpMoleculeA;
+        G4double fDA;
+        G4double fDB;
+        G4double fConstant;
+    };
 };
-
-inline void G4DNAMoleculeEncounterStepper::SetReactionModel(G4VDNAReactionModel* reactionModel)
-{
-  fReactionModel = reactionModel;
-}
-
-inline G4VDNAReactionModel* G4DNAMoleculeEncounterStepper::GetReactionModel()
-{
-  return fReactionModel;
-}
-
-inline void G4DNAMoleculeEncounterStepper::SetVerbose(int flag)
-{
-  fVerbose = flag;
-}
-
-#endif // G4MOLECULEENCOUNTERSTEPPER_H

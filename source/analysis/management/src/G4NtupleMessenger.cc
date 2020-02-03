@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Author: Ivana Hrivnacova, 05/05/2015  (ivana@ipno.in2p3.fr)
 
@@ -104,7 +103,7 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     std::vector<G4String> parameters;
     G4Analysis::Tokenize(newValues, parameters);
     // check consistency
-    if ( G4int(parameters.size()) == command->GetParameterEntries() ) {
+    if ( parameters.size() == command->GetParameterEntries() ) {
       auto counter = 0;
       auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
       auto activation = G4UIcommand::ConvertToBool(parameters[counter++]);

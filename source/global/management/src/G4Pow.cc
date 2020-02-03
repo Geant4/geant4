@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.cc 93311 2015-10-16 10:16:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,15 +37,15 @@
 //
 // Modifications:
 // 08.01.2011 V.Ivanchenko extended maxZ from 256 to 512
-// 02.05.2013 V.Ivanchenko added expA and logX methods, 
+// 02.05.2013 V.Ivanchenko added expA and logX methods,
 //            revised A13, logA, powZ, powA to improved accuracy
+// 23.03.2018 M.Novak increased accuracy of A13 on the most critical
+//            [1/4,4] interval by introducing a denser(0.25) grid
 //
 // -------------------------------------------------------------------
 
 #include "G4Pow.hh"
-#ifdef G4MULTITHREADED
 #include "G4Threading.hh"
-#endif
 
 G4Pow* G4Pow::fpInstance = 0;
 
@@ -66,25 +65,28 @@ G4Pow* G4Pow::GetInstance()
 
 G4Pow::G4Pow()
   : onethird(1.0/3.0), max2(5)
-{  
+{
 #ifdef G4MULTITHREADED
   if(G4Threading::IsWorkerThread())
-  { 
-    G4Exception ("G4Pow::G4Pow()", "InvalidSetup", FatalException, 
+  {
+    G4Exception ("G4Pow::G4Pow()", "InvalidSetup", FatalException,
                  "Attempt to instantiate G4Pow in worker thread!");
   }
 #endif
-  const G4int maxZ = 512; 
-  const G4int maxZfact = 170; 
+  const G4int maxZ     = 512;
+  const G4int maxZfact = 170;
+  const G4int numLowA  =  17;
 
   maxA    = -0.6 + maxZ;
-  maxA2   = 1.25 + max2*0.2;
+  maxLowA =  4.0;
+  maxA2   =  1.25 + max2*0.2;
   maxAexp = -0.76+ maxZfact*0.5;
 
   ener.resize(max2+1,1.0);
   logen.resize(max2+1,0.0);
   lz2.resize(max2+1,0.0);
   pz13.resize(maxZ,0.0);
+  lowa13.resize(numLowA,0.0);
   lz.resize(maxZ,0.0);
   fexp.resize(maxZfact,0.0);
   fact.resize(maxZfact,0.0);
@@ -97,8 +99,8 @@ G4Pow::G4Pow()
 
   for(G4int i=1; i<=max2; ++i)
   {
-    ener[i] = powN(500.,i); 
-    logen[i]= G4Log(ener[i]); 
+    ener[i] = powN(500.,i);
+    logen[i]= G4Log(ener[i]);
     lz2[i]  = G4Log(1.0 + i*0.2);
   }
 
@@ -108,20 +110,64 @@ G4Pow::G4Pow()
     pz13[i] = std::pow(x,onethird);
     lz[i]   = G4Log(x);
     if(i < maxZfact)
-    { 
-      f *= x; 
+    {
+      f *= x;
       fact[i] = f;
       fexp[i] = G4Exp(0.5*i);
     }
     logf += lz[i];
     logfact[i] = logf;
   }
+
+  for (G4int i=4; i<numLowA; ++i) {
+    lowa13[i] = std::pow(0.25*i,onethird);
+  }
+
 }
 
 // -------------------------------------------------------------------
 
 G4Pow::~G4Pow()
 {}
+
+// -------------------------------------------------------------------
+
+G4double G4Pow::A13(G4double A) const {
+  G4double res = 0.;
+  if (A>0.) {
+    const bool invert = (A<1.);
+    const G4double  a = invert ? 1./A : A;
+    res = (a<maxLowA) ? A13Low(a, invert) : A13High(a, invert);
+  }
+  return res;
+}
+
+// -------------------------------------------------------------------
+
+G4double G4Pow::A13High(const G4double a, const bool invert) const {
+  G4double res;
+  if (a<maxA) {
+    const G4int    i = static_cast<G4int>(a+0.5);
+    const G4double x = (a/i-1.)*onethird;
+    res = pz13[i]*(1.+x-x*x*(1.-1.666667*x));
+  } else {
+    res = G4Exp(G4Log(a)*onethird);
+  }
+  res = invert ? 1./res : res;
+  return res;
+}
+
+// -------------------------------------------------------------------
+
+G4double G4Pow::A13Low(const G4double a, const bool invert) const {
+  G4double res;
+  const G4int    i = static_cast<G4int>(4.*(a+0.125));
+  const G4double y = 0.25*i;
+  const G4double x = (a/y-1.)*onethird;
+  res = lowa13[i]*(1.+x-x*x*(1.-1.666667*x));
+  res = invert ? 1./res : res;
+  return res;
+}
 
 // -------------------------------------------------------------------
 

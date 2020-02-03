@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // ---------------------------------------------------------------
 // GEANT 4 class header file
@@ -31,59 +30,68 @@
 // Class Description:
 //      Helper classes for Geant4 Multi-Threaded.
 //      The classes defined in this header file provide a thread-private
-//      cache to store, in a class instance shared among threads,
-//      a thread-local variable V.
+//      cache to store a thread-local variable V in a class instance
+//      shared among threads.
 //      These are templated classes on the to-be-stored object.
 //
 // Example:
 //      Let's assume an instance myObject of class G4Shared is sharead between
 //      threads. Still a data member of this class needs to be thread-private.
 //      A typical example of this being a "cache" for a local calculation.
-//      The helper here defined can be used to guarantee thread-safe operations
+//      The helper defined here can be used to guarantee thread-safe operations
 //      on the thread-private object.
 //      Example:
-//      class G4Shared {
-//          G4double sharedData;
-//          G4Cache<G4double> threadPrivate;
-//          void foo() {
-//              G4double priv = threadPrivate.Get();
-//              if ( priv < 10 ) priv += sharedData;
-//              threadPrivate.Put( priv );
-//          }
-//      };
+//         class G4Shared
+//         {
+//           G4double sharedData;
+//           G4Cache<G4double> threadPrivate;
+//           void foo()
+//           {
+//             G4double priv = threadPrivate.Get();
+//             if ( priv < 10 ) priv += sharedData;
+//             threadPrivate.Put( priv );
+//           }
+//         }
 //
-//      Two variants of the base G4Cache exists. The first one being
-//      G4VectorCache similar to std::vector
+//      Two variants of the base G4Cache exist. The first one being
+//      G4VectorCache similar to std::vector.
 //      Example:
-//          G4VectorCache<G4double> aVect;
-//          aVect.Push_back( 3.2 );
-//          aVect.Push_back( 4.1 );
-//          cout<<aVect[0]<<endl;
+//         G4VectorCache<G4double> aVect;
+//         aVect.Push_back( 3.2 );
+//         aVect.Push_back( 4.1 );
+//         std::cout << aVect[0] << std::endl;
 //      The second one being:
-//      G4MapCache    similar to std::map
+//      G4MapCache, similar to std::map.
 //      Example:
-//          G4MapCache<G4int,G4double> aMap;
-//          aMap[320]=1.234;
+//         G4MapCache<G4int, G4double> aMap;
+//         aMap[320]=1.234;
 //
 //      See classes definition for details.
-//      See testG4Cache unit test for details on usage
-//
+
 // History:
 //  21 October 2013: A. Dotti - First implementation
+// ---------------------------------------------------------------
 
 #ifndef G4CACHE_HH
 #define G4CACHE_HH
 
-//Debug this code
-//#define g4cdebug 1
+// Debug this code
+// #define g4cdebug 1
 
-//Thread Local storage details are in this header file
-#include "G4CacheDetails.hh"
+#include <system_error>
+#include <atomic>
+#include <map>
+
+#include "G4AutoLock.hh"
+#include "G4CacheDetails.hh"  // Thread Local storage details are here
 
 // A templated cache to store a thread-private data of type VALTYPE.
+//
 template<class VALTYPE>
-class G4Cache {
-public:
+class G4Cache
+{
+  public:
+
     typedef VALTYPE value_type;
     // The stored type
   
@@ -108,29 +116,35 @@ public:
     G4Cache(const G4Cache& rhs);
     G4Cache& operator=(const G4Cache& rhs);
 
-protected:
-  const int& GetId() const { return id; }
-private:
-  int id;
-  mutable G4CacheReference<value_type> theCache;
-  static G4Mutex gMutex;
-  static unsigned int instancesctr;
-  static unsigned int dstrctr;
+  protected:
 
-  inline value_type& GetCache() const {
-    theCache.Initialize(id);
-    return theCache.GetCache(id);
-  }
+    const G4int& GetId() const { return id; }
 
+  private:
+
+    G4int id;
+    mutable G4CacheReference<value_type> theCache;
+    static std::atomic<unsigned int> instancesctr;
+    static std::atomic<unsigned int> dstrctr;
+
+    inline value_type& GetCache() const
+    {
+      theCache.Initialize(id);
+      return theCache.GetCache(id);
+    }
 };
 
 
 // A vector version of the cache. Implements vector interface.
 // Can be used directly as a std::vector would be used.
+//
 template<class VALTYPE>
-class G4VectorCache : public G4Cache< std::vector<VALTYPE> > {
-public:
-    //Some useful defintions
+class G4VectorCache : public G4Cache< std::vector<VALTYPE> >
+{
+  public:
+
+    // Some useful definitions
+    //
     typedef VALTYPE value_type;
     typedef typename std::vector<value_type> vector_type;
     typedef typename vector_type::size_type size_type;
@@ -149,25 +163,30 @@ public:
     virtual ~G4VectorCache();
     // Default destructor
 
-    // Interface with funxtionalities of similar name of std::vector
+    // Interface with functionalities of similar name of std::vector
+    //
     inline void Push_back( const value_type& val );
     inline value_type Pop_back();
     inline value_type& operator[](const G4int& idx);
     inline iterator Begin();
     inline iterator End();
     inline void Clear();
-    inline size_type Size() { return G4Cache<vector_type>::Get().size(); } //Needs to be here for a VC9 compilation problem
+    inline size_type Size() { return G4Cache<vector_type>::Get().size(); }
+    //  Needs to be here for a VC9 compilation problem
 };
 
 
-// a Map version of the cache. Implemetns std::map interface.
+// a Map version of the cache. Implements std::map interface.
 // Can be used directly as a std::map would be used.
 // KEYTYPE being the key type and VALTYPE the value type.
-#include <map>
+//
 template<class KEYTYPE, class VALTYPE>
-class G4MapCache : public G4Cache<std::map<KEYTYPE,VALTYPE> > {
-public:
-    //Some useful definitions
+class G4MapCache : public G4Cache<std::map<KEYTYPE,VALTYPE> >
+{
+  public:
+
+    // Some useful definitions
+    //
     typedef KEYTYPE key_type;
     typedef VALTYPE value_type;
     typedef typename std::map<key_type,value_type> map_type;
@@ -182,99 +201,123 @@ public:
     // Returns true if map contains element corresponding to key k
     
     // Interface with functionalities of similar name of std::map
-    inline std::pair<iterator,G4bool> Insert( const key_type& k , const value_type& v );
+    //
+    inline std::pair<iterator,G4bool> Insert( const key_type& k ,
+                                              const value_type& v );
     inline iterator Begin();
     inline iterator End();
     inline iterator Find(const key_type& k );
     inline value_type& Get(const key_type& k );
     inline size_type Erase(const key_type& k );
     inline value_type& operator[](const key_type& k);
-    inline size_type Size() { return G4Cache<map_type>::Get().size(); } //Needs to be here for a VC9 compilation problem
+    inline size_type Size() { return G4Cache<map_type>::Get().size(); }
+    //  Needs to be here for a VC9 compilation problem
 };
 
 
-
-//=============================================================
-// Implementation details follow
-//=============================================================
-
-
-
-#ifdef g4cdebug
-#include <iostream>
-#include <sstream>
-using std::cout;
-using std::endl;
-#endif
-
-#include "G4AutoLock.hh"
-
-
-//========= Implementation: G4Cache<V>
+//========= Implementation: G4Cache<V> ====================================
 
 template<class V>
 G4Cache<V>::G4Cache()
 {
-    G4AutoLock l(&gMutex);
+    G4AutoLock l(G4TypeMutex<G4Cache<V>>());
     id = instancesctr++;
 #ifdef g4cdebug
-    cout<<"G4Cache id: "<<id<<endl;
+    std::cout << "G4Cache id: " << id << std::endl;
 #endif
 }
 
 template<class V>
 G4Cache<V>::G4Cache(const G4Cache<V>& rhs)
 {
-	//Copy is special, we need to copy the content
-	//of the cache, not the cache object
-	if ( this == &rhs ) return;
-	G4AutoLock l(&gMutex);
-	id = instancesctr++;
-	//Force copy of cached data
-	V aCopy = rhs.GetCache();
-	Put( aCopy );
+    // Copy is special, we need to copy the content
+    // of the cache, not the cache object
+
+    if ( this == &rhs ) return;
+    G4AutoLock l(G4TypeMutex<G4Cache<V>>());
+    id = instancesctr++;
+
+    // Force copy of cached data
+    //
+    V aCopy = rhs.GetCache();
+    Put( aCopy );
+
 #ifdef g4cdebug
-	cout<<"Copy constructor with id: "<<id<<endl;
+    std::cout << "Copy constructor with id: " << id << std::endl;
 #endif
 }
 
 template<class V>
 G4Cache<V>& G4Cache<V>::operator=(const G4Cache<V>& rhs)
 {
-	if (this == &rhs) return *this;
-	//Force copy of cached data
-	V aCopy = rhs.GetCache();
-	Put(aCopy);
+    if (this == &rhs) return *this;
+
+    // Force copy of cached data
+    //
+    V aCopy = rhs.GetCache();
+    Put(aCopy);
+
 #ifdef g4cdebug
-	cout<<"Assignement operator with id: "<<id<<endl;
+    std::cout << "Assignement operator with id: " << id << std::endl;
 #endif
-	return *this;
+    return *this;
 }
 
 template<class V>
 G4Cache<V>::G4Cache(const V& v)
 {
-    G4AutoLock l(&gMutex);
+    G4AutoLock l(G4TypeMutex<G4Cache<V>>());
     id = instancesctr++;
     Put(v);
+
 #ifdef g4cdebug
-    cout<<"G4Cache id: "<<id<<" "<<endl;
+    std::cout << "G4Cache id: " << id << std::endl;
 #endif
 }
 
 template<class V>
 G4Cache<V>::~G4Cache()
-{ //Move base calss
+{
 #ifdef g4cdebug
-    cout<<"~G4Cache id: "<<id<<" "<<endl;
+    std::cout << "~G4Cache id: " << id << std::endl;
 #endif
-    G4AutoLock l(&gMutex);
+    // don't automatically lock --> wait until we can catch an error
+    // without scoping the G4AutoLock
+    //
+    G4AutoLock l(G4TypeMutex<G4Cache<V>>(), std::defer_lock);
+
+    // sometimes the mutex is unavailable in destructors so
+    // try to lock the associated mutex, but catch if it fails
+    try
+    {
+       // a system_error in lock means that the mutex is unavailable
+       // we want to throw the error that comes from locking an unavailable
+       // mutex so that we know there is a memory leak
+       // if the mutex is valid, this will hold until the other thread finishes
+       //
+       l.lock();
+    }
+    catch (std::system_error& e)
+    {
+       // the error that comes from locking an unavailable mutex
+#ifdef G4VERBOSE
+       G4cout << "Non-critical error: mutex lock failure in ~G4Cache<"
+              << typeid(V).name() << ">. " << G4endl
+              << "If the RunManagerKernel has been deleted, it failed to "
+              << "delete an allocated resource" << G4endl
+              << "and this destructor is being called after the statics "
+              << "were destroyed." << G4endl;
+       G4cout << "Exception: [code: " << e.code() << "] caught: "
+              << e.what() << G4endl;
+#endif
+    }
     ++dstrctr;
     G4bool last = ( dstrctr == instancesctr );
-    theCache.Destroy(id,last);
-    if (last) {
-        instancesctr = 0;
-        dstrctr = 0;
+    theCache.Destroy(id, last);
+    if (last)
+    {
+       instancesctr.store(0);
+       dstrctr.store(0);
     }
 }
 
@@ -286,43 +329,47 @@ template<class V>
 void G4Cache<V>::Put( const V& val ) const
 { GetCache() = val; }
 
-//Should here remove from cache element?
+// Should here remove from cache element?
 template<class V>
 V G4Cache<V>::Pop()
 { return GetCache(); }
 
 template<class V>
-unsigned int G4Cache<V>::instancesctr = 0;
+std::atomic<unsigned int> G4Cache<V>::instancesctr(0);
 
 template<class V>
-unsigned int G4Cache<V>::dstrctr = 0;
+std::atomic<unsigned int> G4Cache<V>::dstrctr(0);
 
-template<class V>
-G4Mutex G4Cache<V>::gMutex = G4MUTEX_INITIALIZER;
 
-//========== Implementation: G4VectorCache<V>
+//========== Implementation: G4VectorCache<V> ===========================
+
 template<class V>
 G4VectorCache<V>::G4VectorCache()
 { }
 
 template<class V>
-G4VectorCache<V>::~G4VectorCache() {
+G4VectorCache<V>::~G4VectorCache()
+{
 #ifdef g4cdebug
-    cout<<"~G4VectorCache "<<G4Cache<G4VectorCache<V>::vector_type>::GetId()<<" with size: "<<Size()<<"->";
+    std::cout << "~G4VectorCache "
+              << G4Cache<G4VectorCache<V>::vector_type>::GetId()
+              << " with size: " << Size() << "->";
     for ( size_type i = 0 ; i < Size() ; ++i )
-        cout<<operator[](i)<<",";
-    cout<<"<-"<<endl;
+        std::cout << operator[](i) << ",";
+    std::cout << "<-" << std::endl;
 #endif
 }
 
 template<class V>
-G4VectorCache<V>::G4VectorCache(G4int nElems ) {
+G4VectorCache<V>::G4VectorCache(G4int nElems )
+{
     vector_type& cc = G4Cache<vector_type>::Get();
     cc.resize(nElems);
 }
 
 template<class V>
-G4VectorCache<V>::G4VectorCache(G4int nElems , V* vals ) {
+G4VectorCache<V>::G4VectorCache(G4int nElems , V* vals )
+{
     vector_type& cc = G4Cache<vector_type>::Get();
     cc.resize(nElems);
     for ( G4int idx = 0 ; idx < nElems ; ++idx )
@@ -375,25 +422,25 @@ void G4VectorCache<V>::Clear()
 //    return G4Cache<vector_type>::Get().size();
 //}
 
-//======== Implementation: G4MapType<K,V>
+//======== Implementation: G4MapType<K,V> ===========================
+
 template<class K, class V>
 G4MapCache<K,V>::~G4MapCache()
 {
 #ifdef g4cdebug
-    cout<<"~G4MacCache "<<G4Cache<map_type>::GetId()<<" with size: "<<Size()<<"->";
+    std::cout << "~G4MacCache " << G4Cache<map_type>::GetId()
+              << " with size: " << Size() << "->";
     for ( iterator it = Begin() ; it != End() ; ++it )
-        cout<<it->first<<":"<<it->second<<",";
-    cout<<"<-"<<endl;
+        std::cout<<it->first << ":" << it->second << ",";
+    std::cout << "<-" << std::endl;
 #endif
 }
 
 template<class K, class V>
-std::pair<typename G4MapCache<K,V>::iterator,G4bool> G4MapCache<K,V>::Insert(
-                                                                            const K& k,
-                                                                            const V& v
-                                                                             )
+std::pair<typename G4MapCache<K,V>::iterator,G4bool>
+G4MapCache<K,V>::Insert(const K& k, const V& v)
 {
-    return G4Cache<map_type>::Get().insert( std::pair<key_type,value_type>(k,v) );
+    return G4Cache<map_type>::Get().insert(std::pair<key_type,value_type>(k,v));
 }
 
 //template<class K, class V>

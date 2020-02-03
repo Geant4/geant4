@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/GammaTherapy/.README.txt"
 ///\brief Example GammaTherapy README page

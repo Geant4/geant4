@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ExN02DetectorConstruction.hh
+/// \file ExN02DetectorConstruction.hh
 /// \brief Definition of the ExN02DetectorConstruction class
 //
 //
-// $Id: ExN02DetectorConstruction.hh 78055 2013-12-03 08:27:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

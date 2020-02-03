@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -109,23 +108,6 @@ private:
       delete ptr;
     }
   };
-
-  class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
-  {
-  public:
-    SumProbabilities() : total(0.0) {}
-    G4double operator() (G4double& /* probSoFar*/, G4StatMFMicroManager*& manager)
-    { 
-      total += manager->GetProbability();
-      return total;
-    }
-    
-    G4double GetTotal() { return total; }
-  public:
-    G4double total;
-    
-  };
-
 
 };
 

@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
@@ -56,18 +63,28 @@
 
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fAbsorMaterial(0),
-   fAbsor(0),
+   fNuclMaterial(0),
+   fCytoMaterial(0),
+   fWorldMaterial(0),
+   fNucl(0),
+   fCyto(0),
+   fWorld(0),
    fDetectorMessenger(0)
+      
 {
   //default tracking cut  
   fTrackingCut = 7.4*eV;
   
   // default parameter values
-  fAbsorRadius = 10*nm;
+  fWorldRadius = 10*m;
+  fCytoThickness = 20*nm;
+  fNuclRadius = 10*nm;
   
   DefineMaterials();
-  SetMaterial("G4_WATER");
+  SetWorldMaterial("G4_WATER");
+  //SetWorldMaterial("G4_Galactic");
+  SetCytoMaterial("G4_WATER");
+  SetNuclMaterial("G4_WATER");
 
   // create commands for interactive definition of the detector  
   fDetectorMessenger = new DetectorMessenger(this);
@@ -92,7 +109,11 @@ void DetectorConstruction::DefineMaterials()
   G4NistManager* man = G4NistManager::Instance();
   
   man->FindOrBuildMaterial("G4_WATER");
+<<<<<<< HEAD
   
+=======
+  man->FindOrBuildMaterial("G4_Galactic");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,33 +125,91 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
                    
-  // Sphereical absorber
+  // Spherical world
   //
   G4Sphere* 
-  sAbsor = new G4Sphere("Absorber",                           //name
-                     0., fAbsorRadius, 0., twopi, 0., pi);    //size
+  sWorld = new G4Sphere("World",                           
+                        0., 
+                        1000*fNuclRadius, 
+                        0., 
+                        twopi, 
+                        0., 
+                        pi);    
 
-  fLogicalAbsor = new G4LogicalVolume(sAbsor,                        //solid
-                                     fAbsorMaterial,          //material
-                                    "Absorber");              //name
+  fLogicalWorld = new G4LogicalVolume(sWorld,                        
+                                      fWorldMaterial,          
+                                      "World");              
                                    
-  fAbsor = new G4PVPlacement(0,                         //no rotation
-                             G4ThreeVector(),           //at (0,0,0)
-                             fLogicalAbsor,                    //logical volume
-                            "Absorber",                 //name
-                             0,                         //mother  volume
-                             false,                     //no boolean operation
-                             0);                        //copy number
+  fWorld = new G4PVPlacement(0,                         
+                             G4ThreeVector(),           
+                             fLogicalWorld,                    
+                             "World",                 
+                             0,                         
+                             false,                     
+                             0);                        
 
+  // Spherical nucleus
+  //
+  G4Sphere* 
+  sNucl = new G4Sphere("Nucl",                           
+                       0., 
+                       fNuclRadius, 
+                       0., 
+                       twopi, 
+                       0., 
+                       pi);    
+
+  fLogicalNucl = new G4LogicalVolume(sNucl,                        
+                                     fNuclMaterial,          
+                                    "Nucl");              
+                                   
+  fNucl = new G4PVPlacement(0,                         
+                            G4ThreeVector(),          
+                            "Nucl",                 
+                            fLogicalNucl,                         
+                            fWorld,
+                            false,                     
+                            0);                       
+
+  // Spherical shell for cytoplasm
+  //
+  G4Sphere* 
+  sCyto = new G4Sphere("Cyto",                           
+                        fNuclRadius, 
+                        fNuclRadius+fCytoThickness, 
+                        0., 
+                        twopi, 
+                        0., 
+                        pi);
+
+  fLogicalCyto = new G4LogicalVolume(sCyto,                    
+                                     fCytoMaterial,       
+                                    "Cyto");       
+                                   
+  fCyto = new G4PVPlacement(0,                         
+                            G4ThreeVector(),           
+                            "Cyto",                
+                            fLogicalCyto,
+                            fWorld,                       
+                            false,                   
+                            0);               
+  //
+  
   PrintParameters();
     
-  fLogicalAbsor->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,
+  // Tracking cut
+  //
+  fLogicalNucl->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,
+    fTrackingCut));
+  fLogicalCyto->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,
+    fTrackingCut));
+  fLogicalWorld->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,
     fTrackingCut));
     
   //
   //always return the root volume
   //  
-  return fAbsor;
+  return fWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -140,10 +219,17 @@ void DetectorConstruction::PrintParameters() const
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << "---> The tracking cut is set to " 
          << G4BestUnit(fTrackingCut,"Energy") << G4endl;
-  G4cout << "---> The Absorber is a sphere of " 
-         << G4BestUnit(fAbsorRadius,"Length") << " radius of "
-         << fAbsorMaterial->GetName() << " made of"
-         << "\n \n" << fAbsorMaterial << G4endl;
+  G4cout << "---> The World is a sphere of " 
+         << G4BestUnit(1000*fNuclRadius,"Length") << "radius of "
+         << fWorldMaterial->GetName() << G4endl;
+  G4cout << "---> The Nucleus is a sphere of " 
+         << G4BestUnit(fNuclRadius,"Length") << "radius of "
+         << fWorldMaterial->GetName() << " of mass "
+  << G4BestUnit(GetNuclMass(),"Mass") << G4endl;
+  G4cout << "---> The Cytoplasm is a spherical shell of thickness " 
+         << G4BestUnit(fCytoThickness,"Length") << "of "
+         << fWorldMaterial->GetName() << " of mass "
+  << G4BestUnit(GetCytoMass(),"Mass") << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
 
@@ -157,20 +243,58 @@ void DetectorConstruction::SetTrackingCut(G4double value)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetRadius(G4double value)
+void DetectorConstruction::SetNuclRadius(G4double value)
 {
-  fAbsorRadius = value;
+  fNuclRadius = value;
   G4RunManager::GetRunManager()->ReinitializeGeometry();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetCytoThickness(G4double value)
+{
+  fCytoThickness = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial) fWorldMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetCytoMaterial(G4String materialChoice)
+{
+  // search the material by its name   
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+<<<<<<< HEAD
   if (pttoMaterial) fAbsorMaterial = pttoMaterial;
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+=======
+  if (pttoMaterial) fCytoMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetNuclMaterial(G4String materialChoice)
+{
+  // search the material by its name   
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial) fNuclMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+}
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

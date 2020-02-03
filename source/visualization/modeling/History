@@ -1,4 +1,3 @@
-$Id: History 97704 2016-06-07 10:43:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,8 +19,434 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-2nd May 2016  John Allison  (modeling-V10-01-06)
+19 November 2019 Gabriele Cosmo (modeling-V10-05-11)
+- Fixed more cases of implicit type conversions.
+
+15 November 2019 Gabriele Cosmo (modeling-V10-05-10)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+19 September 2019  Makoto Asai (modeling-V10-05-09)
+- G4PSHitsModel.cc
+  o Namespace scope is added to MeshScoreMap
+  o Co-working with detutils-V10-05-01
+
+29 August 2019  John Allison (modeling-V10-05-08)
+- Part of vis-V10-05-24.
+- Add G4TessellatedSolid to list of solids that may be specially treated
+
+16 July 2019  John Allison  (modeling-V10-05-07)
+- Part of vis-V10-05-22.
+- G4CallbackModel.hh:
+  o Include modelling parameters in passed arguments.
+
+05 July 2019  John Allison  (modeling-V10-05-06)
+- Part of vis-V10-05-21.
+- Rationalise trajectory line drawing.
+  o There is a flag - DrawLine - which controls whether a trajectory
+    should be drawn at all:
+      /vis/modeling/trajectories/drawByCharge-0/default/setDrawLine 
+    but there is also a lineVisible command, which should do the same.:
+      /vis/modeling/trajectories/drawByCharge-0/default/setLineVisible
+    This is fixed in this tag.
+  o I think there was some confusion between "visible" as used by filtering
+    and "visible" as used in drawing. For example in
+      G4TrajectoryDrawByCharge::Draw
+      (const G4VTrajectory& traj, const G4bool& /*visible*/)
+    the argument visible is the former sense but it is (was) interpreted as
+    visible in the latter sense. As you see, I have suppressed its use in
+    this and similar functions.
+
+13 June 2019  John Allison  (modeling-V10-05-04)
+- Part of vis-V10-05-20.
+- G4ModelingParameters:
+  o Add cloud to enum options and updated operators != and <<:
+  o Similarly added to VisAttributesSignifier
+- G4PhysicalVolumeModel.cc:
+  o Handle new VisAttributesSignifiers.
+
+10 June 2019  John Allison  (modeling-V10-05-03)
+- Part of vis-V10-05-19.
+- G4ArrowModel: Further use of const and introduce further protection.
+- G4VFieldModel.cc: Further use of const.
+
+29 May 2019  John Allison  (modeling-V10-05-02)
+- Improve field modelling:
+  o G4VFieldModel: Improve so even the smallest non-zero sample is visible:
+    . Values < 10% max are drawn as lines of width 2.
+    . Values < 1% max have their length fixed at 1% max.
+    . Reverse colour code. Now, where f = fieldStrength/maxStrength:
+        0 -> f/2 -> f is coded as red -> green -> blue.
+      For a uniform field this means arrows are now blue instead of red.
+  o G4ArrowModel:
+    . Place checks on dimensions to prevent G4Exceptions in used solids.
+    . Model arrow head as G4Tet.
+- G4PhysicalVolumeModel.cc:
+  o Improve printing from operator<< for nodeID path.
+
+04 April 2019  John Allison  (modeling-V10-05-01)
+- Co-works visman-V10-05-04.
+- Final (for now) corrections to /vis/viewer/set/sectionPlane.
+  Still some strange behaviour in small fraction of cases. See
+  comments in G4PhysicalVolumeModel::DescribeSolid around line 748.
+
+24 March 2019  John Allison  (modeling-V10-05-00)
+- Fix bug in /vis/viewer/set/sectionPlane.
+  Involves using G4DisplacedSolid instead of plain G4VSolid.
+
+18 March 2019  Gabriele Cosmo
+- Included in vis-V10-05-15
+- Corrected few typos comments.
+
+24 February 2019  John Allison
+- Included in vis-V10-05-13
+- Add constructor to G4PhysicalVolumesSearchScene::Findings from
+  G4PhysicalVolumeModel::TouchableProperties.
+- Fix bug in overlap drawing of parameterised volumes.
+
+19 February 2019  John Allison
+- Included in vis-V10-05-12
+- Introduced G4BoundingExtentScene. This allows one to accumulate extents
+  using the newly introduced G4VisExtent::Transform and is a better way
+  of determining the overall extent of a scene (or of any set of extents)
+  than by the bounding sphere approach.
+- G4VFieldModel, G4ElectricFieldModel, G4MagneticFieldModel:
+  o Introduced volume for field.
+- G4VModel: Introduced GetTransformedExtent. This calculates the extent as
+  it appears to the user, based on the local extent and the transformation.
+- G4PhysicalVolumeModel:
+  o Use G4BoundingExtentScene instead of G4BoundingSphereScene.
+  o Fix bug whereby the local extent was incorrectly calculated - in fact
+    it was the transformed extent. Corresponding corrections to all cases
+    where the extent is needed, for example, in defining the view
+    parameters, have been made in this commit.
+
+13 February 2019  John Allison
+- Included in vis-V10-05-11
+- Implement /vis/set/extentForField - see visualisation/History.
+
+08 February 2019  John Allison
+- Included in vis-V10-05-09
+- Fix Coverity warnings.
+
+31 January 2019  Michael Kelsey
+- Included in vis-V01-05-08
+
+- G4VFieldModel.hh/cc: NEW intermediate base class for magnetic, electric
+  and gravitational fields.  Contains all of DescribeYourselfTo() moved from
+  G4MagneticFieldModel, plus a pure virtual function (GetFieldAtLocation) to
+  fetch the field vector (differently by each subclass).  Constructor now
+  takes two strings to let subclasses customize diagnostics and arrow labels.
+
+- G4ElectricFieldModel:  NEW concrete class implementing GetFieldAtLocation()
+  for electric field access.
+
+- G4MagneticFieldModel:  Move all of DescribeYourselfTo() to new base class
+  G4VFieldModel.  Implement old contents of "if (field) { ..." block as new
+  GetFieldAtLocation() function.
+
+29 January 2019  John Allison
+- Included in vis-V10-05-06
+- G4PhysicalVolumeModel.cc:
+  o If the top volume is parameterised or a replica describe only one
+    of them, namely the one specified by the copy number.
+
+26 January 2019  John Allison
+- Included in vis-V10-05-06
+- Fix calculation of vis extent for parameterisations. This involved
+  extending G4PhysicalVolumeModel::TouchableProperties to include copy
+  number and initialising the copy number in the constructor. Then in
+  G4PhysicalVolumeModel::CalculateExtent solid->ComputeDimensions is
+  invoked if it is a parameterised volume.
+- Some minor tidying.
+
+02 January 2019  John Allison
+- Included in vis-V10-05-00.
+- G4PhysicalVolumeModel.cc: Add volume count (but comment out printing).
+
+14 November 2018  John Allison  (modeling-V10-04-18)
+- G4PhysicalVolumeModel.cc: Fix Coverity warning.
+
+08 November 2018  John Allison  (modeling-V10-04-17)
+- G4LogicalVolumeModel.cc:
+  o Overlap checking now in text and drawing.
+
+07 November 2018  John Allison  (modeling-V10-04-16)
+- G4PhysicalVolumeModel.cc:
+  o Add BasePVPath to G4Atts.
+  o Tidied.
+- G4LogicalVolumeModel.cc:
+  o Overlap checking only in text output at present.
+
+24 October 2018  John Allison  (modeling-V10-04-15)
+- G4TouchableUtils:
+  o Remove FindGlobalTransform, introduce FindTouchableProperties. The
+    global transform is in properties.fTouchableGlobalTransform. 
+- Add G4TouchablePropertiesScene.
+- Delete G4TouchableDumpScene, G4TouchableGlobalTransformScene.
+- sources.cmake: Modify for above additions and deletions.
+- G4PhysicalVolumesSearchScene::Matcher:
+  o Improve logic and safety.
+  o Add G4Exception(...JustWarning...)
+- G4PhysicalVolumeModel:
+  o Comment out resets at end of DescribeYourselfTo(). Shouldn't be
+    necessary - they should all be maintained. In fact, zeroing the LV
+    pointer is plain wrong and causes error in GetAttvalues
+  o Introduce a static function GetPVNameCopyNoPath  to convert PVPath
+    to PVNameCopyNoPath:
+  o Add BasePVPath to G4Atts.
+- G4ModelingParameters:
+  o Remove constructors that take PVPath as an argument. Caused circular
+    dependency with G4PhysicalVolumeModel.
+- G4AxesModel: Correct exception number.
+
+17 October 2018  John Allison  (modeling-V10-04-14)
+- G4PhysicalVolumesSearchScene: Attempt fix for Windows compiler error.
+
+15 October 2018  John Allison  (modeling-V10-04-13)
+- G4PhysicalVolumesSearchScene: Add regex search.
+  o Match the string with the required match. The latter can be of the form
+    "/regexp/", where regexp is a regular expression (see C++ regex),
+    or a plain string, in which case there must be an exact match.
+
+8 October 2018  John Allison
+- G4MagneticFieldModel: Improve global description.
+
+6 October 2018  John Allison  (modeling-V10-04-12)
+- G4TrajectoriesModel: Improve description.
+
+11 September 2018  John Allison  (modeling-V10-04-11)
+- G4VisTrajContext.cc: Initialise fLineWidth(1.).
+
+10 September 2018  John Allison  (modeling-V10-04-10)
+- Add G4PhysicalVolumesSearchScene.
+  o This returns all occurrences of a physical volume.
+
+5 September 2018  John Allison
+- G4PhysicalVolumeModel: More minor tidying.
+
+4 September 2018  John Allison
+- G4PhysicalVolumeModel: Minor tidying.
+
+3 September 2018  John Allison  (modeling-V10-04-09)
+- G4PhysicalVolumeSearchScene:
+  o Remove fetch and store of unused logical volume pointer.
+
+31 August 2018  John Allison  (modeling-V10-04-08)
+- Add setLineWidth for trajectory models.
+
+29 August 2018  John Allison  (modeling-V10-04-07)
+- G4LogicalVolumeModel:
+  o Add overlap checking (printing only for now).
+    . Avoid multiple printing of overlaps. Print only first time for
+      a given instantiation of G4LogicalVolume.
+- Add G4TouchableGlobalTransformScene:
+  o Return a pointer to the global transform of a touchable.
+- Add G4TouchableUtils:
+  o Implement G4TouchableUtils::FindGlobalTransform. (Uses
+    G4TouchableGlobalTransformScene.) Typical use:
+      G4ModelingParameters::PVNameCopyNoPath path;
+      // Specify the complete path of the touchable by a succession of
+      // name,copyNo pairs or pointer,copyNo pairs.
+      path.push_back(G4ModelingParameters::PVNameCopyNo("World",0));
+      path.push_back(G4ModelingParameters::PVNameCopyNo("Envelope",0));
+      .. etc., until touchable completely specified
+      const G4Transform3D* pGlobalTransform =
+      G4TouchableUtils::FindGlobalTransform(path);
+
+11 June 2018  John Allison  (modeling-V10-04-06)
+- G4PhysicalVolumeModel.cc: Fix Coverity warning.
+  o Unnecessary check on pointer.
+
+24 May 2018  John Allison  (modeling-V10-04-05)
+- G4LogicalVolumeModel:
+  o Add fCheckOverlaps flag. Calls CheckOverlaps for each G4PVPlacement.
+  o Note: G4PVParameterised not coded in this tag.
+- G4TrajectoryDrawByEncounteredVolume.cc,
+  G4TrajectoryEncounteredVolumeFilter.cc:
+  o Fix gcc-8 warnings.
+
+30 April 2018  John Allison
+- G4PhysicalVolumeModel.cc: Colour by density: improved comments.
+
+24 April 2018  John Allison  (modeling-V10-04-04)
+- G4ModelingParameters.cc: Small bug fix.
+
+24 April 2018  John Allison  (modeling-V10-04-03)
+- Implement /vis/viewer/set/colourByDensity.
+
+11th March 2018  John Allison  (modeling-V10-04-02)
+- G4PhysicalVolumeMassScene.cc: Protect case of no material in parallel world.
+
+19th December 2017  Gabriele Cosmo  (modeling-V10-04-01)
+- Fixed self-consistency in G4AttValueFilterT header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+12th December 2017  John Allison  (modeling-V10-04-00)
+- G4TrajectoryDrawerUtils.cc: Improvement to an informational message.
+
+13th September 2017  John Allison  (modeling-V10-03-08)
+- G4ModelingParameters.cc, G4PhysicalVolumeModel.cc:
+  Reverted default number of line segments per circle to 24.
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
+
+14th May 2017  John Allison (modeling-V10-03-07)
+- G4GPSModel: Added user-selectable colour.
+
+3rd May 2017  John Allison (modeling-V10-03-06)
+- Needs event-V10-03-01.
+- Completed G4GPSModel for visualisation of General Particle Source. Can
+  be used with command /vis/scene/add/gps.
+
+3rd May 2017  John Allison (modeling-V10-03-05)
+- Added prototype/skeleton G4GPSModel.
+- G4PhysicalVolumeModel::Validate:
+  o Check world pointer (can be null if geometry has been cleared/destroyed).
+
+19th April 2017  John Allison (modeling-V10-03-01)
+- Added G4ModelingParameters::PVPointerCopyNo.
+
+9th December 2016  John Allison (modeling-V10-03-00)
+- Coworks with visman-V10-03-00.
+- G4MagneticFieldModel: Augmented to take lineSegmentsPerCircle.
+  Default is 6 for rapid yet adequate drawing, but this my be changed
+  with /vis/set/arrow3DLineSegmentsPerCircle.
+
+3rd November 2016  John Allison (modeling-V10-02-17)
+- G4ModelingParameters and G4PhysicalVolumeModel:
+  Changed default number of line segments per circle from 24 to 72.
+
+2nd November 2016  John Allison (modeling-V10-02-16)
+- G4ArrowModel: Default lines per circle = 6.
+  But... there is no way to change this at run time with a
+  UI command.  The following commands would have to be augmented:
+    /vis/scene/add/arrow
+    /vis/scene/add/axes
+    /vis/scene/add/magneticField
+  or a new general command added such as
+    /vis/set/arrowLineSegmentsPerCircle
+
+29th September 2016  John Allison (modeling-V10-02-15)
+- G4PhysicalVolumeModel:
+  o Delayed creation of modifiedVisAtts so that not created at all
+    if there are no vis attributes modifiers.
+  o Added std::ostream& operator<< (std::ostream& os,
+    const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path)
+  o Modified so path can be copied and pasted into
+   /vis/set/touchable command:
+    std::ostream& operator<< (std::ostream& os,
+    const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& node)
+
+19th September 2016  John Allison (modeling-V10-02-14)
+- G4PhysicalVolumeModel.cc:
+  o Used static to ensure a plausible vis attributes pointer.
+    Note: G4VSceneHandler::PreAddSolid requires a G4VisAttributes
+    object, so we have to provide one - we choose the default
+    G4VisAttributes if no other is specified.
+
+19th September 2016  John Allison (modeling-V10-02-13)
+- Moved Vis Attributes Modifiers (VAMs) back from G4ViewParameters,
+  reversing modeling-V10-02-11.
+- Reversed modeling-V10-02-12.
+
+12th September 2016  John Allison (modeling-V10-02-12)
+- G4ModelingParameters.cc:
+  o Changed output of 
+    std::ostream& operator <<
+    (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
+    to correspond to arguments of /vis/set/touchable.
+
+11th September 2016  John Allison (modeling-V10-02-11)
+- G4ModelingParameters:
+  o Removed Vis Attributes Modifiers (VAMs).
+  o VAMs are now entirely in G4ViewParameters and dealt with
+    in G4VViewer::GetApplicableVisAttributes.
+- G4PhysicalVolumeModel.cc: Removed VAM code.
+
+8th September 2016  John Allison
+- G4PhysicalVolumeModel.cc: Commented out VAM code.
+
+31st August 2016  John Allison (modeling-V10-02-10)
+- Co-works greps-V10-02-05.
+- G4PseudoScene.hh:
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Tidied.
+- G4PhysicalVolumeMassScene:
+  o Changed to inherit G4PseudoScene.
+  o Changed AccrueMass to ProcessVolume to conform to G4PseudoScene.
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Tidied.
+
+14th August 2016  John Allison  (modeling-V10-02-07)
+- G4TrajectoriesModel::DescribeYourselfTo:
+  o Return if run or event not found.
+
+7th August 2016  John Allison  (modeling-V10-02-06 needs greps-V10-02-02)
+- G4ModelingParameters:
+  o Added changes in Vis Att Modifiers for new flag IsForceDrawingStyle.
+- G4PhysicalVolumeModel:
+  o Takes account of new flag IsForceDrawingStyle.
+
+20th July 2016  John Allison  (modeling-V10-02-05)
+- Introduced drawing and filtering by encountered volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByEncounteredVolume
+    /vis/filtering/trajectories/create/encounteredVolumeFilter
+  and their associated commands.  They replace the TouchedVolume
+  commands introduced in modeling-V10-02-02.
+
+2nd May 2016  John Allison  (modeling-V10-02-04)
 - G4PhysicalVolumeModel.cc: Fixed gcc-6.1 warning.
+
+5th April 2016  John Allison  (modeling-V10-02-03)
+- G4TrajectoryDrawByOriginVolume.cc: Tidied #include statements.
+
+15th February 2016  John Allison  (modeling-V10-02-02)
+- Introduced drawing and filtering by touched volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByTouchedVolume
+    /vis/filtering/trajectories/create/touchedVolumeFilter
+  and their associated commands.  Note that this
+  selects only by a single string, the physical volume name.  If there
+  are more than one physical volumes with that name then any trajectory
+  touching any one of those volumes will be selected.  If the user sets
+  more than one physical volume name (by using the set command more than
+  once) the trajectory will be selected if it touches either of those
+  volumes and which of the attributes (e.g., colour) associated with
+  those volumes is chosen is undefined, but one will be chosen.
+  A more comprehensive facility would allow the user to select by
+  touched touchable, i.e., by the full path and copy numbers of the
+  physical volume - but that is a job for the future if a use case arises.
+  o G4TrajectoryModelFactories.hh/cc:
+    Added G4TrajectoryDrawByTouchedVolumeFactory.
+  o G4TrajectoryFilterFactories.hh/cc:
+    Added G4TrajectoryTouchedVolumeFilterFactory.
+  o Added new files and classes:
+    G4TrajectoryDrawByTouchedVolume.hh/cc
+    G4TrajectoryTouchedVolumeFilter.hh/cc  
+  o G4ModelColourMap.hh: Added new access function:
+    const std::map<T, G4Colour>& GetBasicMap() const;
+    to allow access to the T objects (which are G4String objects,
+    physical volume name(s) in this case) that have been set.
+  o sources.make: Added:
+    G4TrajectoryDrawByTouchedVolume.hh
+    G4TrajectoryTouchedVolumeFilter.hh
+    G4TrajectoryDrawByTouchedVolume.cc
+    G4TrajectoryTouchedVolumeFilter.cc
+- G4TrajectoryDrawByOriginVolume.cc: Tidied.
+
+26th January 2016  John Allison  (modeling-V10-02-01)
+- G4ModelingParameters.hh: Added VisAttributesModifier Set commands.
+
+26th January 2016  John Allison  (modeling-V10-02-00)
+- G4TrajectoryDrawByOriginVolume::Draw and
+  G4TrajectoryOriginVolumeFilter::Evaluate:
+  Added specific arguments to LocateGlobalPointAndSetup to handle
+  multithreading mode.
 
 2nd October 2015  John Allison  (modeling-V10-01-05)
 - G4MagneticFieldModel.cc: Cosmetic improvements.
@@ -683,7 +1108,7 @@ History file for visualization/modeling
 26th January 2006  John Allison (modeling-V08-00-01)
 - G4PhysicalVolumeModel: Added capability of maintaining path of the
   current drawn (non-culled) volume in terms of drawn (non-culled)
-  ancesters.  See G4PhysicalVolumeModel.hh for detailed description.
+  ancestors.  See G4PhysicalVolumeModel.hh for detailed description.
 - Removed some unnecessary data members and other small tidying.
 
 11th January 2006  John Allison (modeling-V08-00-00)

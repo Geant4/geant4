@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.hh 74627 2013-10-17 07:04:38Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 
 #ifndef G4DiffractiveSplitableHadron_h
@@ -45,7 +43,6 @@
 
 
 class G4DiffractiveSplitableHadron : public G4VSplitableHadron {
-
   public:
     G4DiffractiveSplitableHadron();
     G4DiffractiveSplitableHadron( const G4ReactionProduct& aPrimary );
@@ -63,15 +60,15 @@ class G4DiffractiveSplitableHadron : public G4VSplitableHadron {
   private:
     G4DiffractiveSplitableHadron( const G4DiffractiveSplitableHadron& );
     G4DiffractiveSplitableHadron& operator=( const G4DiffractiveSplitableHadron& );
-    int operator==( const G4DiffractiveSplitableHadron& right ) const;
-    int operator!=( const G4DiffractiveSplitableHadron& right ) const;
+    G4bool operator==( const G4DiffractiveSplitableHadron& right ) const;
+    G4bool operator!=( const G4DiffractiveSplitableHadron& right ) const;
 
     G4int Diquark( G4int aquark, G4int bquark, G4int Spin ) const;
     void ChooseStringEnds( G4int PDGcode, G4int* aEnd, G4int* bEnd ) const;
 
     G4Parton* Parton[2];
     G4int PartonIndex; 
-
 };
 
 #endif
+

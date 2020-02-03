@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PVDivisionFactory Implementation file
 //
-// $Id: G4PVDivisionFactory.cc 68718 2013-04-05 09:16:24Z gcosmo $
-//
-// class G4PVDivisionFactory Implementation file
-//
-// Author: Ivana Hrivnacova, 4.5.2004  (Ivana.Hrivnacova@cern.ch)
+// Author: Ivana Hrivnacova, 04.05.2004  (Ivana.Hrivnacova@cern.ch)
 // --------------------------------------------------------------------
 
 #include "G4PVDivisionFactory.hh"
@@ -54,7 +51,7 @@ G4PVDivisionFactory::~G4PVDivisionFactory()
 
 G4PVDivisionFactory* G4PVDivisionFactory::GetInstance()
 {
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance =  new G4PVDivisionFactory;
   }
@@ -129,12 +126,12 @@ G4PVDivisionFactory::CreatePVDivision(const G4String& pName,
   const G4VDivisionParameterisation* divParam
     = dynamic_cast<const G4VDivisionParameterisation*>(param);
 
-  if (!divParam)
+  if (divParam == nullptr)
   {
     G4Exception("G4PVDivisionFactory::CreatePVDivision()",
                 "GeomDiv0001", FatalException,
                 "Unexpected parameterisation type!");
-    return 0;
+    return nullptr;
   }
   else
   {
@@ -155,9 +152,6 @@ G4bool G4PVDivisionFactory::IsPVDivision(const G4VPhysicalVolume* pv) const
   // Returns true if pv is division
   // ---
 
-  if (dynamic_cast<const G4PVDivision*>(pv))
-    return true;
-  else
-    return false;  
+  return (dynamic_cast<const G4PVDivision*>(pv) != nullptr) ? true : false;
 }
 

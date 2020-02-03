@@ -23,18 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VPVDivisionFactory.hh 66872 2013-01-15 01:25:57Z japost $
-//
-//
-// class G4VPVDivisionFactory
+// G4VPVDivisionFactory
 //
 // Class description:
 //
 // Abstract factory that defines interfaces for creating 
 // volumes divisions. 
 
-// Author: Ivana Hrivnacova, 4.5.2004  (Ivana.Hrivnacova@cern.ch)
+// Author: Ivana Hrivnacova, 4.5.2004
 // ------------------------------------------------------------------------
 #ifndef G4VPVDIVISION_FACTORY_HH
 #define G4VPVDIVISION_FACTORY_HH

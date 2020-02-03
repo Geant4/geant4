@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "analysis/AnaEx03/.README.OpenScientist.txt"
 ///\brief Example AnaEx03 README.OpenScientist page
@@ -39,7 +38,7 @@ sh> unzip -q osc_vis<platform>.zip
 sh> cd osc_vis/<version>
 sh> ./install
 \endverbatim 
-  Then to browse the AnaEx03.<format> file (for exa from an UNIX sh shell) :
+  Then to browse the AnaEx03.[format] file (for exa from an UNIX sh shell) :
 \verbatim 
 <create another terminal>
 sh> . /usr/local/osc_vis/<version>/setup.sh

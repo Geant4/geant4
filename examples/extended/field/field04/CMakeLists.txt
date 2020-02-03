@@ -40,7 +40,11 @@ target_link_libraries(field04 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(field04_SCRIPTS
+<<<<<<< HEAD
     field04.in field04.out vis.mac gui.mac icons.mac run.png
+=======
+    field04.in field04.out init_vis.mac vis.mac gui.mac
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   )
 
 foreach(_script ${field04_SCRIPTS})

@@ -27,7 +27,6 @@
 /// \brief Definition of the F03PrimaryGeneratorAction class
 //
 //
-// $Id: F03PrimaryGeneratorAction.hh 77892 2013-11-29 08:56:08Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,7 +27,6 @@
 /// \brief Implementation of the PrimaryGenerator1 class
 //
 //
-// $Id: PrimaryGenerator.cc 89705 2015-04-27 17:15:27Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

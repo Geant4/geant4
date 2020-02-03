@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel2.cc 90054 2015-05-11 18:47:32Z matkara $
 //
 
 #include "G4DNABornExcitationModel2.hh"
@@ -43,7 +42,7 @@ using namespace std;
 
 G4DNABornExcitationModel2::G4DNABornExcitationModel2(const G4ParticleDefinition*,
                                                      const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false), fTableData(0)
+G4VEmModel(nam), isInitialised(false), fTableData(0)
 {
   fpMolWaterDensity = 0;
   fHighEnergy = 0;
@@ -127,13 +126,13 @@ void G4DNABornExcitationModel2::Initialise(const G4ParticleDefinition* particle,
   SetLowEnergyLimit(fLowEnergy);
   SetHighEnergyLimit(fHighEnergy);
 
-//    G4double scaleFactor = (1.e-22 / 3.343) * m*m;
+  //G4double scaleFactor = (1.e-22 / 3.343) * m*m;
 
   fTableData = new G4PhysicsTable();
   fTableData->RetrievePhysicsTable(fullFileName.str().c_str(), true);
   for(size_t level = 0; level<fTableData->size(); ++level)
   {
-//      (*fTableData)(level)->ScaleVector(1,scaleFactor);
+    //(*fTableData)(level)->ScaleVector(1,scaleFactor);
     (*fTableData)(level)->SetSpline(true);
   }
 
@@ -155,14 +154,14 @@ void G4DNABornExcitationModel2::Initialise(const G4ParticleDefinition* particle,
       finalXS += (*fTableData)(level)->Value(energy);
     }
     fTotalXS->PutValue(energy_i, finalXS);
-//      G4cout << "energy = " << energy << " " << fTotalXS->Value(energy)
-//             << " " << energy_i << " " << finalXS << G4endl;
+    //G4cout << "energy = " << energy << " " << fTotalXS->Value(energy)
+    //       << " " << energy_i << " " << finalXS << G4endl;
   }
 
-//    for(energy = LowEnergyLimit() ; energy < HighEnergyLimit() ; energy += 1*pow(10,log10(energy)))
-//    {
-//      G4cout << "energy = " << energy << " " << fTotalXS->Value(energy) << G4endl;
-//    }
+  //    for(energy = LowEnergyLimit() ; energy < HighEnergyLimit() ; energy += 1*pow(10,log10(energy)))
+  //    {
+  //      G4cout << "energy = " << energy << " " << fTotalXS->Value(energy) << G4endl;
+  //    }
 
   if( verboseLevel>0 )
   {
@@ -205,34 +204,27 @@ G4double G4DNABornExcitationModel2::CrossSectionPerVolume(const G4Material* mate
 
   G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
 
-  if(waterDensity!= 0.0)
+  if (ekin >= fLowEnergy && ekin <= fHighEnergy)
   {
-    if (ekin >= fLowEnergy && ekin < fHighEnergy)
+    sigma = fTotalXS->Value(ekin, fLastBinCallForFinalXS);
+
+    // for(size_t i = 0; i < 5; ++i)
+    // sigma += (*fTableData)[i]->Value(ekin);
+
+    if(sigma == 0)
     {
-      sigma = fTotalXS->Value(ekin, fLastBinCallForFinalXS);
-
-//      for(size_t i = 0; i < 5; ++i)
-//      sigma += (*fTableData)[i]->Value(ekin);
-
-      if(sigma == 0)
-      {
-        G4cerr << "PROBLEM SIGMA = 0 at " << G4BestUnit(ekin, "Energy")<< G4endl;
-      }
+      G4cerr << "PROBLEM SIGMA = 0 at " << G4BestUnit(ekin, "Energy")<< G4endl;
     }
+  }
 
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "G4DNABornExcitationModel2 - XS INFO START" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "G4DNABornExcitationModel2 - XS INFO END" << G4endl;
-    }
-  } // if (waterMaterial)
-  else
+  if (verboseLevel > 2)
   {
-    G4cerr << "PROBLEM NO WATER MATERIAL ?" << G4endl;
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "G4DNABornExcitationModel2 - XS INFO START" << G4endl;
+    G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
+    G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+    G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+    G4cout << "G4DNABornExcitationModel2 - XS INFO END" << G4endl;
   }
 
   return sigma*waterDensity;
@@ -250,7 +242,7 @@ void G4DNABornExcitationModel2::SampleSecondaries(std::vector<G4DynamicParticle*
   if (verboseLevel > 3)
   {
     G4cout << "Calling SampleSecondaries() of G4DNABornExcitationModel2"
-        << G4endl;
+           << G4endl;
   }
 
   G4double k = aDynamicParticle->GetKineticEnergy();

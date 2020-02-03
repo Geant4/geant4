@@ -27,8 +27,13 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
+<<<<<<< HEAD
 // Code developed by:
 // S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+=======
+// Code developed by: S. Guatelli, D. Cutajar, A. Le
+// Past developers: S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //    ****************************************
@@ -56,6 +61,11 @@
 #include "BrachyFactoryLeipzig.hh"
 #include "BrachyFactoryIr.hh"
 #include "BrachyFactoryI.hh"
+<<<<<<< HEAD
+=======
+#include "BrachyFactoryFlexi.hh"
+#include "BrachyFactoryOncura6711.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "BrachyDetectorMessenger.hh"
 #include "BrachyDetectorConstruction.hh"
 
@@ -125,6 +135,9 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
    case 3:
       factory = new BrachyFactoryIr();
       break;
+   case 5:
+   	  factory = new BrachyFactoryOncura6711();
+   	  break;
    default:
       factory = new BrachyFactoryIr();
       break;
@@ -140,6 +153,7 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 
 void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
 {
+<<<<<<< HEAD
   if (val == "Iodium") detectorChoice = 1;
   else{
        if(val=="Leipzig") detectorChoice = 2;
@@ -148,6 +162,32 @@ void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
              else G4cout << val <<  "is not available!!!!"  <<G4endl;              
             }
        }
+=======
+	if (val == "Iodine") 
+		detectorChoice = 1;
+  		else
+  		{
+       		if(val=="Leipzig") 
+       			detectorChoice = 2;
+       			else
+       			{
+	            	if(val=="TG186") 
+	            		detectorChoice = 3;
+	             		else
+             			{ 
+		  					if(val=="Flexi") 
+		  						detectorChoice = 4;
+		  						else
+		  						{
+		  							if(val=="Oncura") 
+		  								detectorChoice = 5;
+		  		                  		else 
+		  		                  			G4cout << val <<  "is not available!!!!"  << G4endl;  
+		  						}            
+            			}
+       	}		
+  }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
  G4cout << "Now the source is " << val << G4endl;
 }
 

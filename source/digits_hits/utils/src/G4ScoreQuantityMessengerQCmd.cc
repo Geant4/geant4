@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessengerQCmd.cc 73819 2013-09-12 15:52:52Z gcosmo $
 //
 // ---------------------------------------------------------------------
 // Modifications
@@ -77,6 +76,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
 
@@ -104,31 +104,31 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qeDepCmd = new G4UIcommand("/score/quantity/energyDeposit",this);
   qeDepCmd->SetGuidance("Energy deposit scorer.");
   qeDepCmd->
-  SetGuidance("[usage] /score/quantiy/energyDeposit qname unit");
+  SetGuidance("[usage] /score/quantity/energyDeposit qname unit");
   qeDepCmd->SetGuidance("  qname  :(String) scorer name");
   qeDepCmd->SetGuidance("  unit   :(String) unit");
   param = new G4UIparameter("qname",'s',false);
   qeDepCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("MeV");
+  param->SetDefaultUnit("MeV");
   qeDepCmd->SetParameter(param);
   //
   qCellChgCmd  = new G4UIcommand("/score/quantity/cellCharge",this);
   qCellChgCmd->SetGuidance("Cell charge scorer.");
   qCellChgCmd->
-  SetGuidance("[usage] /score/quantiy/cellCharge qname unit");
+  SetGuidance("[usage] /score/quantity/cellCharge qname unit");
   qCellChgCmd->SetGuidance("  qname  :(String) scorer name");
   qCellChgCmd->SetGuidance("  unit   :(String) unit");
   param = new G4UIparameter("qname",'s',false);
   qCellChgCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("e+");
+  param->SetDefaultUnit("e+");
   qCellChgCmd->SetParameter(param);
   //
   qCellFluxCmd = new G4UIcommand("/score/quantity/cellFlux",this);
   qCellFluxCmd->SetGuidance("Cell flux scorer.");
   qCellFluxCmd->
-  SetGuidance("[usage] /score/quantiy/cellFlux qname unit");
+  SetGuidance("[usage] /score/quantity/cellFlux qname unit");
   qCellFluxCmd->SetGuidance("  qname  :(String) scorer name");
   qCellFluxCmd->SetGuidance("  unit   :(String) unit");
   param = new G4UIparameter("qname",'s',false);
@@ -140,7 +140,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qPassCellFluxCmd = new G4UIcommand("/score/quantity/passageCellFlux",this);
   qPassCellFluxCmd->SetGuidance("Passage cell flux scorer");
   qPassCellFluxCmd->
-  SetGuidance("[usage] /score/quantiy/passageCellFlux qname unit");
+  SetGuidance("[usage] /score/quantity/passageCellFlux qname unit");
   qPassCellFluxCmd->SetGuidance("  qname  :(String) scorer name");
   qPassCellFluxCmd->SetGuidance("  unit   :(String) unit");
   param = new G4UIparameter("qname",'s',false);
@@ -152,21 +152,21 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qdoseDepCmd = new G4UIcommand("/score/quantity/doseDeposit",this);
   qdoseDepCmd->SetGuidance("Dose deposit scorer.");
   qdoseDepCmd->
-  SetGuidance("[usage] /score/quantiy/doseDeposit qname unit");
+  SetGuidance("[usage] /score/quantity/doseDeposit qname unit");
   qdoseDepCmd->SetGuidance("  qname  :(String) scorer name");
   qdoseDepCmd->SetGuidance("  unit   :(String) unit");
   param = new G4UIparameter("qname",'s',false);
   qdoseDepCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("Gy");
+  param->SetDefaultUnit("Gy");
   qdoseDepCmd->SetParameter(param);
   //
   qnOfStepCmd = new G4UIcommand("/score/quantity/nOfStep",this);
   qnOfStepCmd->SetGuidance("Number of step scorer.");
   qnOfStepCmd->
-  SetGuidance("[usage] /score/quantiy/nOfStep qname");
+  SetGuidance("[usage] /score/quantity/nOfStep qname");
   qnOfStepCmd->
-  SetGuidance("[usage] /score/quantiy/nOfStep qname  bflag"); 
+  SetGuidance("[usage] /score/quantity/nOfStep qname  bflag"); 
   qnOfStepCmd->SetGuidance("  qname  :(String) scorer name");
   qnOfStepCmd->SetGuidance("  bflag  :(Bool) Skip zero step ");
   qnOfStepCmd->SetGuidance("          at geometry boundary if true");
@@ -179,7 +179,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qnOfSecondaryCmd = new G4UIcommand("/score/quantity/nOfSecondary",this);
   qnOfSecondaryCmd->SetGuidance("Number of secondary scorer.");
   qnOfSecondaryCmd->
-  SetGuidance("[usage] /score/quantiy/nOfSecondary qname"); 
+  SetGuidance("[usage] /score/quantity/nOfSecondary qname"); 
   qnOfSecondaryCmd->SetGuidance("  qname  :(String) scorer name");
   param = new G4UIparameter("qname",'s',false);
   qnOfSecondaryCmd->SetParameter(param);
@@ -187,7 +187,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qTrackLengthCmd = new G4UIcommand("/score/quantity/trackLength",this);
   qTrackLengthCmd->SetGuidance("Track length scorer.");
   qTrackLengthCmd->
-  SetGuidance("[usage] /score/quantiy/trackLength qname wflag kflag vflag unit");
+  SetGuidance("[usage] /score/quantity/trackLength qname wflag kflag vflag unit");
   qTrackLengthCmd->SetGuidance("  qname  :(String) scorer name");
   qTrackLengthCmd->SetGuidance("  wflag  :(Bool) weighted");
   qTrackLengthCmd->SetGuidance("  kflag  :(Bool) multiply kinetic energy");
@@ -205,13 +205,13 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("false");
   qTrackLengthCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("mm");
+  param->SetDefaultUnit("mm");
   qTrackLengthCmd->SetParameter(param);
   //
   qPassCellCurrCmd = new G4UIcommand("/score/quantity/passageCellCurrent",this);
   qPassCellCurrCmd->SetGuidance("Passage cell current scorer.");
   qPassCellCurrCmd->
-  SetGuidance("[usage] /score/quantiy/passageCellCurrent qname wflag");
+  SetGuidance("[usage] /score/quantity/passageCellCurrent qname wflag");
   qPassCellCurrCmd->SetGuidance("  qname  :(String) scorer name");
   qPassCellCurrCmd->SetGuidance("  wflag  :(Bool) weighted");
   param = new G4UIparameter("qname",'s',false);
@@ -223,7 +223,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qPassTrackLengthCmd = new G4UIcommand("/score/quantity/passageTrackLength",this);
   qPassTrackLengthCmd->SetGuidance("Passage track length scorer.");
   qPassTrackLengthCmd->
-  SetGuidance("[usage] /score/quantiy/passageTrackLength qname wflag unit");
+  SetGuidance("[usage] /score/quantity/passageTrackLength qname wflag unit");
   qPassTrackLengthCmd->SetGuidance("  qname  :(String) scorer name");
   qPassTrackLengthCmd->SetGuidance("  wflag  :(Bool) weighted");
   qPassTrackLengthCmd->SetGuidance("  unit   :(Bool) unit");
@@ -233,13 +233,13 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("true");
   qPassTrackLengthCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("mm");
+  param->SetDefaultUnit("mm");
   qPassTrackLengthCmd->SetParameter(param);
   //
   qFlatSurfCurrCmd = new G4UIcommand("/score/quantity/flatSurfaceCurrent",this);
   qFlatSurfCurrCmd->SetGuidance("Flat surface current Scorer.");
   qFlatSurfCurrCmd->
-  SetGuidance("[usage] /score/quantiy/flatSurfaceCurrent qname dflag wflag aflag unit");
+  SetGuidance("[usage] /score/quantity/flatSurfaceCurrent qname dflag wflag aflag unit");
   qFlatSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
   qFlatSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
   qFlatSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
@@ -247,7 +247,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qFlatSurfCurrCmd->SetGuidance("         : 2 = Out only");
   qFlatSurfCurrCmd->SetGuidance("  wflag  :(Bool) weighted");
   qFlatSurfCurrCmd->SetGuidance("  aflag  :(Bool) divide by area");
-  qFlatSurfCurrCmd->SetGuidance("  unit   :(Bool) unit");
+  qFlatSurfCurrCmd->SetGuidance("  unit   :(String) unit");
   param = new G4UIparameter("qname",'s',false);
   qFlatSurfCurrCmd->SetParameter(param);
   param = new G4UIparameter("dflag",'i',true);
@@ -266,7 +266,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qFlatSurfFluxCmd = new G4UIcommand("/score/quantity/flatSurfaceFlux",this);
   qFlatSurfFluxCmd->SetGuidance("Flat surface flux scorer.");
   qFlatSurfFluxCmd->
-  SetGuidance("[usage] /score/quantiy/flatSurfaceFlux qname dflag unit");
+  SetGuidance("[usage] /score/quantity/flatSurfaceFlux qname dflag unit");
   qFlatSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
   qFlatSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
   qFlatSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
@@ -293,7 +293,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
 //  qSphereSurfCurrCmd = new G4UIcommand("/score/quantity/sphereSurfaceCurrent",this);
 //  qSphereSurfCurrCmd->SetGuidance("Sphere surface current Scorer.");
 //  qSphereSurfCurrCmd->
-//      SetGuidance("[usage] /score/quantiy/sphereSurfaceCurrent qname dflag wflag aflag unit");
+//      SetGuidance("[usage] /score/quantity/sphereSurfaceCurrent qname dflag wflag aflag unit");
 //  qSphereSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
 //  qSphereSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
 //  qSphereSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
@@ -321,7 +321,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
 //  qSphereSurfFluxCmd = new G4UIcommand("/score/quantity/sphereSurfaceFlux",this);
 //  qSphereSurfFluxCmd->SetGuidance("Sphere surface Flux Scorer.");
 //  qSphereSurfFluxCmd->
-//  SetGuidance("[usage] /score/quantiy/sphereSurfaceFlux qname dflag unit");
+//  SetGuidance("[usage] /score/quantity/sphereSurfaceFlux qname dflag unit");
 //  qSphereSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
 //  qSphereSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
 //  qSphereSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
@@ -349,7 +349,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
 //  qCylSurfCurrCmd = new G4UIcommand("/score/quantity/cylinderSurfaceCurrent",this);
 //  qCylSurfCurrCmd->SetGuidance("Cylinder surface current Scorer.");
 //  qCylSurfCurrCmd->
-//  SetGuidance("[usage] /score/quantiy/cylinderSurfaceCurrent qname dflag wflag aflag unit");
+//  SetGuidance("[usage] /score/quantity/cylinderSurfaceCurrent qname dflag wflag aflag unit");
 //  qCylSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
 //  qCylSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
 //  qCylSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
@@ -376,7 +376,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
 //  qCylSurfFluxCmd = new G4UIcommand("/score/quantity/cylinderSurfaceFlux",this);
 //  qCylSurfFluxCmd->SetGuidance("Cylinder surface Flux Scorer.");
 //  qCylSurfFluxCmd->
-//  SetGuidance("[usage] /score/quantiy/cylinderSurfaceFlux qname dflag unit");
+//  SetGuidance("[usage] /score/quantity/cylinderSurfaceFlux qname dflag unit");
 //  qCylSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
 //  qCylSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
 //  qCylSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
@@ -404,7 +404,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qNofCollisionCmd = new G4UIcommand("/score/quantity/nOfCollision",this);
   qNofCollisionCmd->SetGuidance("Number of collision scorer.");
   qNofCollisionCmd->
-  SetGuidance("[usage] /score/quantiy/nOfCollision qname wflag");
+  SetGuidance("[usage] /score/quantity/nOfCollision qname wflag");
   qNofCollisionCmd->SetGuidance("  qname  :(String) scorer name");
   param = new G4UIparameter("qname",'s',false);
   qNofCollisionCmd->SetParameter(param);
@@ -415,7 +415,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qPopulationCmd = new G4UIcommand("/score/quantity/population",this);
   qPopulationCmd->SetGuidance("Population scorer.");
   qPopulationCmd->
-   SetGuidance("[usage] /score/quantiy/population qname wflag");
+   SetGuidance("[usage] /score/quantity/population qname wflag");
   qPopulationCmd->SetGuidance("  qname  :(String) scorer name");
   qPopulationCmd->SetGuidance("  wflag  :(Bool) weighted");
   param = new G4UIparameter("qname",'s',false);
@@ -428,7 +428,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qTrackCountCmd = new G4UIcommand("/score/quantity/nOfTrack",this);
   qTrackCountCmd->SetGuidance("Number of track scorer.");
   qTrackCountCmd->
-  SetGuidance("[usage] /score/quantiy/nOfTrack qname dflag wflag");
+  SetGuidance("[usage] /score/quantity/nOfTrack qname dflag wflag");
   qTrackCountCmd->SetGuidance("  qname  :(String) scorer name");
   qTrackCountCmd->SetGuidance("  dflag  :(Int) direction");
   qTrackCountCmd->SetGuidance("         : 0 = Both In and Out");
@@ -448,7 +448,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qTerminationCmd = new G4UIcommand("/score/quantity/nOfTerminatedTrack",this);
   qTerminationCmd->SetGuidance("Number of terminated tracks scorer.");
   qTerminationCmd->
-      SetGuidance("[usage] /score/quantiy/nOfTerminatedTrack qname wflag");
+      SetGuidance("[usage] /score/quantity/nOfTerminatedTrack qname wflag");
   qTerminationCmd->SetGuidance("  qname  :(String) scorer name");
   qTerminationCmd->SetGuidance("  wflag  :(Bool) weighted");
   param = new G4UIparameter("qname",'s',false);
@@ -461,19 +461,19 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qMinKinEAtGeneCmd = new G4UIcommand("/score/quantity/minKinEAtGeneration",this);
   qMinKinEAtGeneCmd->SetGuidance("Min Kinetic Energy at Generation");
   qMinKinEAtGeneCmd->
-  SetGuidance("[usage] /score/quantiy/minKinEAtGeneration qname unit");
+  SetGuidance("[usage] /score/quantity/minKinEAtGeneration qname unit");
   qMinKinEAtGeneCmd->SetGuidance("  qname  :(String) scorer name");
   qMinKinEAtGeneCmd->SetGuidance("  unit   :(String) unit name");
   param = new G4UIparameter("qname",'s',false);
   qMinKinEAtGeneCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("MeV");
+  param->SetDefaultUnit("MeV");
   qMinKinEAtGeneCmd->SetParameter(param);
   //
   qStepCheckerCmd = new G4UIcommand("/score/quantity/stepChecker",this);
   qStepCheckerCmd->SetGuidance("Display a comment when this PS is invoked");
   qStepCheckerCmd->
-  SetGuidance("[usage] /score/quantiy/stepChecker qname");
+  SetGuidance("[usage] /score/quantity/stepChecker qname");
   qStepCheckerCmd->SetGuidance("  qname  :(String) scorer name");
   param = new G4UIparameter("qname",'s',false);
   qStepCheckerCmd->SetParameter(param);

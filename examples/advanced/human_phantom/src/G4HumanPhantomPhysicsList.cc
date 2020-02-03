@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-// S. Guatelli, G. Guerrieri and M. G. Pia
+// Previous authors: G. Guerrieri and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli, University of Wollongong, Australia
 //
 // 
 //
@@ -35,7 +35,6 @@
 //    *                                *
 //    **********************************
 //
-// $Id: G4HumanPhantomPhysicsList.cc 84279 2014-10-13 07:19:58Z gcosmo $
 //
 #include "G4HumanPhantomPhysicsList.hh"
 

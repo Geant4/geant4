@@ -23,24 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4PolyconeHistorical
 //
 // Class description:
 //
-//   Data structure for G4Polycone
+// Data structure for G4Polycone
 
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
-#ifndef G4Polycone_historical_hh
-#define G4Polycone_historical_hh
+#ifndef G4POLYCONEHISTORICAL_HH
+#define G4POLYCONEHISTORICAL_HH
 
 #include "G4Types.hh"
 
@@ -53,12 +45,12 @@ class G4PolyconeHistorical
     G4PolyconeHistorical( const G4PolyconeHistorical& source );
     G4PolyconeHistorical& operator=( const G4PolyconeHistorical& right );
 
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
+    G4double Start_angle = 0.0;
+    G4double Opening_angle = 0.0;
+    G4int    Num_z_planes = 0;
+    G4double* Z_values = nullptr;
+    G4double* Rmin = nullptr;
+    G4double* Rmax = nullptr;
 };
 
 #endif

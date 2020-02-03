@@ -27,7 +27,6 @@
 /// \brief Main program of the eventgenerator/particleGun example
 //
 //
-// $Id: particleGun.cc 84868 2014-10-21 21:18:58Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

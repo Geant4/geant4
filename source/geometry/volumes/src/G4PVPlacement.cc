@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4PVPlacement.cc 85846 2014-11-05 15:45:28Z gcosmo $
-//
 // 
 // class G4PVPlacement Implementation
 //
@@ -40,16 +36,16 @@
 // ----------------------------------------------------------------------
 // Constructor
 //
-G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
-                        const G4ThreeVector &tlate,
+G4PVPlacement::G4PVPlacement( G4RotationMatrix* pRot,
+                        const G4ThreeVector& tlate,
                         const G4String& pName,
-                              G4LogicalVolume *pLogical,
-                              G4VPhysicalVolume *pMother,
+                              G4LogicalVolume* pLogical,
+                              G4VPhysicalVolume* pMother,
                               G4bool pMany,
                               G4int pCopyNo,
                               G4bool pSurfChk )
-  : G4VPhysicalVolume(pRot,tlate,pName,pLogical,pMother),
-    fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
+  : G4VPhysicalVolume(pRot, tlate, pName, pLogical, pMother),
+    fmany(pMany), fcopyNo(pCopyNo)
 {
   if (pMother)
   {
@@ -68,15 +64,15 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
 // ----------------------------------------------------------------------
 // Constructor
 //
-G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
+G4PVPlacement::G4PVPlacement( const G4Transform3D& Transform3D,
                               const G4String& pName,
-                                    G4LogicalVolume *pLogical,
-                                    G4VPhysicalVolume *pMother,
+                                    G4LogicalVolume* pLogical,
+                                    G4VPhysicalVolume* pMother,
                                     G4bool pMany,
                                     G4int pCopyNo,
                                     G4bool pSurfChk )
   : G4VPhysicalVolume(NewPtrRotMatrix(Transform3D.getRotation().inverse()),
-                      Transform3D.getTranslation(),pName,pLogical,pMother),
+                      Transform3D.getTranslation(), pName, pLogical, pMother),
     fmany(pMany), fcopyNo(pCopyNo)
 {
   fallocatedRotM = (GetRotation() != 0);
@@ -97,16 +93,16 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
 //
 // The logical volume of the mother is utilised (not the physical)
 //
-G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
-                        const G4ThreeVector &tlate,
-                              G4LogicalVolume *pCurrentLogical,
+G4PVPlacement::G4PVPlacement( G4RotationMatrix* pRot,
+                        const G4ThreeVector& tlate,
+                              G4LogicalVolume* pCurrentLogical,
                         const G4String& pName,
-                              G4LogicalVolume *pMotherLogical,
+                              G4LogicalVolume* pMotherLogical,
                               G4bool pMany,
                               G4int pCopyNo,
                               G4bool pSurfChk )
-  : G4VPhysicalVolume(pRot,tlate,pName,pCurrentLogical,0),
-    fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
+  : G4VPhysicalVolume(pRot, tlate, pName, pCurrentLogical, nullptr),
+    fmany(pMany), fcopyNo(pCopyNo)
 {
   if (pCurrentLogical == pMotherLogical)
   {
@@ -122,14 +118,15 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
 // ----------------------------------------------------------------------
 // Constructor
 //
-G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
-                                    G4LogicalVolume *pCurrentLogical,
+G4PVPlacement::G4PVPlacement( const G4Transform3D& Transform3D,
+                                    G4LogicalVolume* pCurrentLogical,
                               const G4String& pName,
-                                    G4LogicalVolume *pMotherLogical,
+                                    G4LogicalVolume* pMotherLogical,
                                     G4bool pMany,
                                     G4int pCopyNo,
                                     G4bool pSurfChk )
-  : G4VPhysicalVolume(0,Transform3D.getTranslation(),pName,pCurrentLogical,0),
+  : G4VPhysicalVolume(nullptr, Transform3D.getTranslation(),
+                      pName, pCurrentLogical, nullptr),
     fmany(pMany), fcopyNo(pCopyNo)
 {
   if (pCurrentLogical == pMotherLogical)
@@ -138,7 +135,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
                 FatalException, "Cannot place a volume inside itself!");
   }
   SetRotation( NewPtrRotMatrix(Transform3D.getRotation().inverse()) );
-  fallocatedRotM = (GetRotation() != 0);
+  fallocatedRotM = (GetRotation() != nullptr);
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical) { pMotherLogical->AddDaughter(this); }
   if ((pSurfChk) && (pMotherLogical)) { CheckOverlaps(); }
@@ -149,7 +146,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
 //                            for usage restricted to object persistency.
 //
 G4PVPlacement::G4PVPlacement( __void__& a )
-  : G4VPhysicalVolume(a), fmany(false), fallocatedRotM(0), fcopyNo(0)
+  : G4VPhysicalVolume(a)
 {
 }
 
@@ -174,7 +171,7 @@ G4bool G4PVPlacement::IsMany() const
 //
 void G4PVPlacement::SetCopyNo(G4int newCopyNo)
 {
-  fcopyNo= newCopyNo;
+  fcopyNo = newCopyNo;
 }
 
 // ----------------------------------------------------------------------
@@ -198,7 +195,7 @@ G4bool G4PVPlacement::IsParameterised() const
 //
 G4VPVParameterisation* G4PVPlacement::GetParameterisation() const
 {
-  return 0;
+  return nullptr;
 }
 
 // ----------------------------------------------------------------------
@@ -231,59 +228,257 @@ G4int G4PVPlacement::GetRegularStructureId() const
 }           
 
 // ----------------------------------------------------------------------
+// VolumeType
+//
+// Information to help identify sub-navigator which will be used
+//
+EVolume G4PVPlacement::VolumeType() const
+{
+  return kNormal;
+}
+
+// ----------------------------------------------------------------------
 // CheckOverlaps
 //
 G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
                                     G4bool verbose, G4int maxErr)
 {
-  if (res<=0) { return false; }
+  if (res <= 0) { return false; }
 
   G4VSolid* solid = GetLogicalVolume()->GetSolid();
   G4LogicalVolume* motherLog = GetMotherLogical();
-  if (!motherLog) { return false; }
+  if (motherLog == nullptr) { return false; }
 
   G4int trials = 0;
   G4bool retval = false;
 
-  G4VSolid* motherSolid = motherLog->GetSolid();
-
   if (verbose)
   {
-    G4cout << "Checking overlaps for volume " << GetName() << " ... ";
+    G4cout << "Checking overlaps for volume " << GetName()
+           << " (" << solid->GetEntityType() << ") ... ";
   }
 
-  // Create the transformation from daughter to mother
+  // Check that random points are gererated correctly
   //
-  G4AffineTransform Tm( GetRotation(), GetTranslation() );
-
-  for (G4int n=0; n<res; n++)
+  G4ThreeVector ptmp = solid->GetPointOnSurface();
+  if (solid->Inside(ptmp) != kSurface)
   {
-    // Generate a random point on the solid's surface
-    //
-    G4ThreeVector point = solid->GetPointOnSurface();
+    G4String position[3] = { "outside", "surface", "inside" };
+    std::ostringstream message;
+    message << "Sample point is not on the surface !" << G4endl
+            << "          The issue is detected for volume "
+            << GetName() << ':' << GetCopyNo()
+            << " (" << solid->GetEntityType() << ")" << G4endl
+            << "          generated point " << ptmp
+            << " is " << position[solid->Inside(ptmp)];
+    G4Exception("G4PVPlacement::CheckOverlaps()",
+                "GeomVol1002", JustWarning, message);
+    return false;
+  }
 
-    // Transform the generated point to the mother's coordinate system
-    //
-    G4ThreeVector mp = Tm.TransformPoint(point);
+  // Generate random points on the surface of the solid,
+  // transform them into the mother volume coordinate system
+  // and find the bonding box
+  //
+  std::vector<G4ThreeVector> points(res);
+  G4double xmin =  kInfinity, ymin =  kInfinity, zmin =  kInfinity;
+  G4double xmax = -kInfinity, ymax = -kInfinity, zmax = -kInfinity;
+  G4AffineTransform Tm(GetRotation(), GetTranslation());
+  for (G4int i = 0; i < res; ++i)
+  {
+    points[i] = Tm.TransformPoint(solid->GetPointOnSurface());
+    xmin = std::min(xmin, points[i].x());
+    ymin = std::min(ymin, points[i].y());
+    zmin = std::min(zmin, points[i].z());
+    xmax = std::max(xmax, points[i].x());
+    ymax = std::max(ymax, points[i].y());
+    zmax = std::max(zmax, points[i].z());
+  }
 
-    // Checking overlaps with the mother volume
-    //
-    if (motherSolid->Inside(mp)==kOutside)
+  // Check overlap with the mother volume
+  //
+  G4VSolid* motherSolid = motherLog->GetSolid();
+  for (G4int i = 0; i < res; ++i)
+  {
+    G4ThreeVector mp = points[i];
+    if (motherSolid->Inside(mp) != kOutside) continue;
+    G4double distin = motherSolid->DistanceToIn(mp);
+    if (distin > tol)
     {
-      G4double distin = motherSolid->DistanceToIn(mp);
-      if (distin > tol)
+      ++trials;
+      retval = true;
+      std::ostringstream message;
+      message << "Overlap with mother volume !" << G4endl
+              << "          Overlap is detected for volume "
+              << GetName() << ':' << GetCopyNo()
+              << " (" << solid->GetEntityType() << ")" << G4endl
+              << "          with its mother volume " << motherLog->GetName()
+              << " (" << motherSolid->GetEntityType() << ")" << G4endl
+              << "          at mother local point " << mp << ", "
+              << "overlapping by at least: "
+              << G4BestUnit(distin, "Length");
+      if (trials >= maxErr)
       {
-        trials++; retval = true;
+        message << G4endl
+                << "NOTE: Reached maximum fixed number -" << maxErr
+                << "- of overlaps reports for this volume !";
+      }
+      G4Exception("G4PVPlacement::CheckOverlaps()",
+                  "GeomVol1002", JustWarning, message);
+      if (trials >= maxErr)  { return true; }
+      break;
+    }
+  }
+
+  // Checking overlaps with each 'sister' volume
+  //
+  for (size_t k = 0; k < motherLog->GetNoDaughters(); ++k)
+  {
+    G4VPhysicalVolume* daughter = motherLog->GetDaughter(k);
+    if (daughter == this) continue;
+    G4VSolid* daughterSolid = daughter->GetLogicalVolume()->GetSolid();
+    G4AffineTransform Td(daughter->GetRotation(), daughter->GetTranslation());
+
+    G4double distout = -kInfinity;
+    G4ThreeVector plocal;
+    if (!Td.IsRotated()) {
+      G4ThreeVector offset = Td.NetTranslation();
+      G4ThreeVector pmin, pmax;
+      daughterSolid->BoundingLimits(pmin, pmax);
+      pmin += offset;
+      pmax += offset;
+      if (pmin.x() >= xmax) continue;
+      if (pmin.y() >= ymax) continue;
+      if (pmin.z() >= zmax) continue;
+      if (pmax.x() <= xmin) continue;
+      if (pmax.y() <= ymin) continue;
+      if (pmax.z() <= zmin) continue;
+      for (G4int i = 0; i < res; ++i)
+      {
+        G4ThreeVector p = points[i];
+        if (p.x() <= pmin.x()) continue;
+        if (p.x() >= pmax.x()) continue;
+        if (p.y() <= pmin.y()) continue;
+        if (p.y() >= pmax.y()) continue;
+        if (p.z() <= pmin.z()) continue;
+        if (p.z() >= pmax.z()) continue;
+        G4ThreeVector md = p - offset;
+        if (daughterSolid->Inside(md) == kInside)
+	{
+          G4double dtmp = daughterSolid->DistanceToOut(md);
+          if (dtmp <= tol) continue;
+          distout = dtmp;
+          plocal = md;
+          break;
+        }
+      }
+    } else {
+      G4ThreeVector pmin, pmax;
+      daughterSolid->BoundingLimits(pmin, pmax);
+      G4ThreeVector pbox[8] = {
+        G4ThreeVector(pmin.x(), pmin.y(), pmin.z()),
+        G4ThreeVector(pmax.x(), pmin.y(), pmin.z()),
+        G4ThreeVector(pmin.x(), pmax.y(), pmin.z()),
+        G4ThreeVector(pmax.x(), pmax.y(), pmin.z()),
+        G4ThreeVector(pmin.x(), pmin.y(), pmax.z()),
+        G4ThreeVector(pmax.x(), pmin.y(), pmax.z()),
+        G4ThreeVector(pmin.x(), pmax.y(), pmax.z()),
+        G4ThreeVector(pmax.x(), pmax.y(), pmax.z())
+      };
+      G4double dxmin =  kInfinity, dymin =  kInfinity, dzmin =  kInfinity;
+      G4double dxmax = -kInfinity, dymax = -kInfinity, dzmax = -kInfinity;
+      for (G4int i = 0; i < 8; ++i)
+      {
+        G4ThreeVector p = Td.TransformPoint(pbox[i]);
+        dxmin = std::min(dxmin, p.x());
+        dymin = std::min(dymin, p.y());
+        dzmin = std::min(dzmin, p.z());
+        dxmax = std::max(dxmax, p.x());
+        dymax = std::max(dymax, p.y());
+        dzmax = std::max(dzmax, p.z());
+      }
+      if (dxmin >= xmax) continue;
+      if (dymin >= ymax) continue;
+      if (dzmin >= zmax) continue;
+      if (dxmax <= xmin) continue;
+      if (dymax <= ymin) continue;
+      if (dzmax <= zmin) continue;
+      for (G4int i = 0; i < res; ++i)
+      {
+        G4ThreeVector p = points[i];
+        if (p.x() >= dxmax) continue;
+        if (p.x() <= dxmin) continue;
+        if (p.y() >= dymax) continue;
+        if (p.y() <= dymin) continue;
+        if (p.z() >= dzmax) continue;
+        if (p.z() <= dzmin) continue;
+        G4ThreeVector md = Td.InverseTransformPoint(p);
+        if (daughterSolid->Inside(md) == kInside)
+	{
+          G4double dtmp = daughterSolid->DistanceToOut(md);
+          if (dtmp <= tol) continue;
+          distout = dtmp;
+          plocal = md;
+          break;
+	}
+      }
+    }
+
+    if (distout > tol)
+    {
+      ++trials;
+      retval = true;
+      std::ostringstream message;
+      message << "Overlap with volume already placed !" << G4endl
+              << "          Overlap is detected for volume "
+              << GetName() << ':' << GetCopyNo()
+              << " (" << solid->GetEntityType() << ")" << G4endl
+              << "          with " << daughter->GetName()
+              << ':' << daughter->GetCopyNo()
+              << " (" << daughterSolid->GetEntityType() << ")"
+              << " volume's" << G4endl
+              << "          local point " << plocal << ", "
+              << "overlapping by at least: "
+              << G4BestUnit(distout, "Length");
+      if (trials >= maxErr)
+      {
+        message << G4endl
+                << "NOTE: Reached maximum fixed number -" << maxErr
+                << "- of overlaps reports for this volume !";
+      }
+      G4Exception("G4PVPlacement::CheckOverlaps()",
+                  "GeomVol1002", JustWarning, message);
+      if (trials >= maxErr)  { return true; }
+    }
+    else if (distout == kInfinity)
+    {
+      // Now checking that 'sister' volume is not totally included
+      // and overlapping. Generate a single point on the surface of
+      // the 'sister' volume and verify that the point in NOT inside
+      // the current volume
+      //
+      G4ThreeVector dPoint = daughterSolid->GetPointOnSurface();
+
+      // Transform the generated point to the mother's coordinate system
+      // and then to current volume's coordinate system
+      //
+      G4ThreeVector mp2 = Td.TransformPoint(dPoint);
+      G4ThreeVector msi = Tm.InverseTransformPoint(mp2);
+
+      if (solid->Inside(msi) == kInside)
+      {
+        ++trials;
+        retval = true;
         std::ostringstream message;
-        message << "Overlap with mother volume !" << G4endl
+        message << "Overlap with volume already placed !" << G4endl
                 << "          Overlap is detected for volume "
-                << GetName() << G4endl
-                << "          with its mother volume "
-                << motherLog->GetName() << G4endl
-                << "          at mother local point " << mp << ", "
-                << "overlapping by at least: "
-                << G4BestUnit(distin, "Length");
-        if (trials>=maxErr)
+                << GetName() << ':' << GetCopyNo()
+                << " (" << solid->GetEntityType() << ")" << G4endl
+                << "          apparently fully encapsulating volume "
+                << daughter->GetName() << ':' << daughter->GetCopyNo()
+                << " (" << daughterSolid->GetEntityType() << ")"
+                << " at the same level !";
+        if (trials >= maxErr)
         {
           message << G4endl
                   << "NOTE: Reached maximum fixed number -" << maxErr
@@ -291,91 +486,12 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
         }
         G4Exception("G4PVPlacement::CheckOverlaps()",
                     "GeomVol1002", JustWarning, message);
-        if (trials>=maxErr)  { return true; }
-      }
-    }
-
-    // Checking overlaps with each 'sister' volume
-    //
-    for (G4int i=0; i<motherLog->GetNoDaughters(); i++)
-    {
-      G4VPhysicalVolume* daughter = motherLog->GetDaughter(i);
-
-      if (daughter == this) { continue; }
-
-      // Create the transformation for daughter volume and transform point
-      //
-      G4AffineTransform Td( daughter->GetRotation(),
-                            daughter->GetTranslation() );
-      G4ThreeVector md = Td.Inverse().TransformPoint(mp);
-
-      G4VSolid* daughterSolid = daughter->GetLogicalVolume()->GetSolid();
-      if (daughterSolid->Inside(md)==kInside)
-      {
-        G4double distout = daughterSolid->DistanceToOut(md);
-        if (distout > tol)
-        {
-          trials++; retval = true;
-          std::ostringstream message;
-          message << "Overlap with volume already placed !" << G4endl
-                  << "          Overlap is detected for volume "
-                  << GetName() << G4endl
-                  << "          with " << daughter->GetName() << " volume's"
-                  << G4endl
-                  << "          local point " << md << ", "
-                  << "overlapping by at least: "
-                  << G4BestUnit(distout,"Length");
-          if (trials>=maxErr)
-          {
-            message << G4endl
-                    << "NOTE: Reached maximum fixed number -" << maxErr
-                    << "- of overlaps reports for this volume !";
-          }
-          G4Exception("G4PVPlacement::CheckOverlaps()",
-                      "GeomVol1002", JustWarning, message);
-          if (trials>=maxErr)  { return true; }
-        }
-      }
-
-      // Now checking that 'sister' volume is not totally included and
-      // overlapping. Do it only once, for the first point generated
-      //
-      if (n==0)
-      {
-        // Generate a single point on the surface of the 'sister' volume
-        // and verify that the point is NOT inside the current volume
-
-        G4ThreeVector dPoint = daughterSolid->GetPointOnSurface();
-
-        // Transform the generated point to the mother's coordinate system
-        // and finally to current volume's coordinate system
-        //
-        G4ThreeVector mp2 = Td.TransformPoint(dPoint);
-        G4ThreeVector msi = Tm.Inverse().TransformPoint(mp2);
-
-        if (solid->Inside(msi)==kInside)
-        {
-          trials++; retval = true;
-          std::ostringstream message;
-          message << "Overlap with volume already placed !" << G4endl
-                  << "          Overlap is detected for volume "
-                  << GetName() << G4endl
-                  << "          apparently fully encapsulating volume "
-                  << daughter->GetName() << G4endl
-                  << "          at the same level !";
-          G4Exception("G4PVPlacement::CheckOverlaps()",
-                      "GeomVol1002", JustWarning, message);
-          if (trials>=maxErr)  { return true; }
-        }
+        if (trials >= maxErr)  { return true; }
       }
     }
   }
 
-  if (verbose)
-  {
-    G4cout << "OK! " << G4endl;
-  }
-
+  if (verbose && trials == 0) { G4cout << "OK! " << G4endl; }
   return retval;
 }
 
@@ -392,16 +508,14 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
 G4RotationMatrix*
 G4PVPlacement::NewPtrRotMatrix(const G4RotationMatrix &RotMat)
 {
-  G4RotationMatrix *pRotMatrix; 
+  G4RotationMatrix* pRotMatrix; 
   if ( RotMat.isIdentity() )
   {
-     pRotMatrix = 0;
+     pRotMatrix = nullptr;
   }
   else
   {
      pRotMatrix = new G4RotationMatrix(RotMat);
-  }
-  // fallocatedRotM= ! (RotMat.isIdentity());
-    
+  }    
   return pRotMatrix;
 }

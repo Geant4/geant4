@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -30,6 +29,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
@@ -45,23 +45,31 @@ GEANT4_DEFINE_MODULE(NAME G4detutils
     HEADERS
         G4DefaultLinearColorMap.hh
         G4ScoreLogColorMap.hh
+        G4VScoreNtupleWriter.hh
+        G4TScoreNtupleWriter.hh
+        G4TScoreNtupleWriter.icc
+        G4TScoreNtupleWriterMessenger.hh
+        G4TScoreNtupleWriterMessenger.icc
         G4ScoreQuantityMessenger.hh
         G4ScoringBox.hh
         G4ScoringCylinder.hh
         G4ScoringManager.hh
         G4ScoringMessenger.hh
+        G4ScoringRealWorld.hh
         G4VScoreColorMap.hh
         G4VScoreWriter.hh
         G4VScoringMesh.hh
     SOURCES
         G4DefaultLinearColorMap.cc
         G4ScoreLogColorMap.cc
+        G4VScoreNtupleWriter.cc
         G4ScoreQuantityMessenger.cc
         G4ScoreQuantityMessengerQCmd.cc
         G4ScoringBox.cc
         G4ScoringCylinder.cc
         G4ScoringManager.cc
         G4ScoringMessenger.cc
+        G4ScoringRealWorld.cc
         G4VScoreColorMap.cc
         G4VScoreWriter.cc
         G4VScoringMesh.cc

@@ -23,28 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4RegularNavigationHelper.cc 68709 2013-04-05 09:03:07Z gcosmo $
-// GEANT4 tag $ Name:$
-//
 // class G4RegularNavigationHelper implementation
 //
 // Author: Pedro Arce, November 2008
-//
 // --------------------------------------------------------------------
 
 #include "G4RegularNavigationHelper.hh"
 
-G4ThreadLocal G4RegularNavigationHelper*
-G4RegularNavigationHelper::theInstance = 0;
-
 G4RegularNavigationHelper* G4RegularNavigationHelper::Instance()
 {
-  if(!theInstance)
-  {
-    theInstance = new G4RegularNavigationHelper;
-  }
-  return theInstance;
+  static G4ThreadLocalSingleton<G4RegularNavigationHelper> theInstance;
+  return theInstance.Instance();
 }
 
 // --------------------------------------------------------------------
@@ -57,7 +46,6 @@ G4RegularNavigationHelper::G4RegularNavigationHelper()
 //
 G4RegularNavigationHelper::~G4RegularNavigationHelper()
 {
-  if (theInstance)  { delete theInstance; theInstance=0; }
 }
 
 // --------------------------------------------------------------------
@@ -76,7 +64,8 @@ void G4RegularNavigationHelper::AddStepLength( G4int copyNo, G4double slen )
 
 // --------------------------------------------------------------------
 //
-const std::vector< std::pair<G4int,G4double> > & G4RegularNavigationHelper::GetStepLengths()
+const std::vector< std::pair<G4int,G4double> > &
+G4RegularNavigationHelper::GetStepLengths()
 {
   return theStepLengths;
 }

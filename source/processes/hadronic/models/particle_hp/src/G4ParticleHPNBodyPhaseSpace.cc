@@ -84,6 +84,9 @@ G4ReactionProduct * G4ParticleHPNBodyPhaseSpace::Sample(G4double anEnergy, G4dou
    // in CMS
    // P = Cn*std::sqrt(E')*(Emax-E')**(3*n/2-4)
    G4double maxE = GetEmax(anEnergy, result->GetMass());
+   if(maxE<=0){
+     maxE=1.*CLHEP::eV;
+   }
    G4double energy;
    G4double max(0);
    if(theTotalCount<=3)

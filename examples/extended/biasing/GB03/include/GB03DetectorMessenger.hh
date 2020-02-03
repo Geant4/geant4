@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \file GB03DetectorMessenger.hh
 /// \brief Definition of the GB03DetectorMessenger class

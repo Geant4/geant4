@@ -1,4 +1,3 @@
-$Id: History 94590 2015-11-25 11:12:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +22,1002 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+04 November 2019  John Allison  (vis-V10-05-26)
+- opengl-V10-05-11: Extend glFlush scaling to all circumstances.
+- visman-V10-05-14: G4VisCommandsViewer.cc (Gabriele Cosmo):
+  o Replaced use of std::experimental::filesystem with std::filesystem
+    for WIN32 target. Forcing c++17 default builds on Windows and allow for
+    porting on Visual Studio 2019.
+
+22 October 2019  Gabriele Cosmo
+- opengl-V10-05-10:
+  o Rationalise headers inclusion in G4OpenGLQtViewer.cc.
+
+20 September 2019  John Allison  (vis-V10-05-25)
+- visman-V10-05-13: Several small improvements and fixes.
+- opengl-V10-05-09 (Laurent Garnier): Remove default font size.
+
+19 September 2019  Makoto Asai
+- visman-V10-05-12: G4VSceneHandler.cc:
+  o Namespace scope is added to MeshScoreMap
+  o Co-working with detutils-V10-05-01
+
+17 September 2019 Laurent Garnier
+- visexternalgl2ps-V10-05-02:
+  o gl2ps.cc: fix Continous warnings
+- visexternalgl2ps-V10-05-01:
+  o gl2ps.cc gl2ps.h: Update library to 1.4.0 applying Geant4 patches
+
+29 August 2019  John Allison  (vis-V10-05-24)
+- Part of greps-V10-05-04.
+- visman-V10-05-11, DAWN-V10-05-00, gMocren-V10-05-01, VRML-V10-05-00,
+  vis-HepRep-V10-05-00, visXXX-V10-05-03, modeling-V10-05-08:
+  o Add G4TessellatedSolid to list of solids that may be specially treated
+
+22 August 2019  John Allison  (vis-V10-05-23)
+- visman-V10-05-10:
+  o Rework /vis/scene/add/eventID:
+    . Just writes a summary at end of run.
+    . Except when reviewing kept events one by one, in which case it
+      writes run and event no for each event.
+  o Ensure /vis/drawTree works even if vis is disabled.
+
+17 August 2019  John Allison
+- visman-V10-05-09:
+  o Clear if scene contains no run duration models.
+    . E.g., after geometry has changed.
+
+16 July 2019  John Allison  (vis-V10-05-22)
+- modeling-V10-05-07:
+  o G4CallbackModel: Include modeling parameters in passed arguments.
+- visman-V10-05-08:
+  o Follow changes in modeling-V10-05-07.
+  o Augment G4VUserVisAction to give access to:
+    G4VGraphicsScene* fpSceneHandler;
+    const G4Transform3D* fpTransform;
+    const G4ModelingParameters* fpMP;
+- opengl-V10-05-08:
+  o Revert fix in OpenGL-V10-05-05. The fix in OpenGL-V10-05-07 is better.
+
+
+06 July 2019  John Allison  (vis-V10-05-21)
+- modeling-V10-05-06: Fix setLineVisible in /vis/modeling.
+- visman-V10-05-07: Fix bug in cloud drawing.
+- OpenGL-V10-05-07: Improve X window opening (Guy Barrand).
+- vistree-V10-05-01: Fix typo in output message.
+
+13 June 2019  John Allison  (vis-V10-05-20)
+- modeling-V10-05-04: Add cloud parameters.
+- visman-V10-05-06: Final changes for introduction of cloud drawing.
+- OpenGL-V10-05-06: Final changes for introduction of cloud drawing.
+- visXXX-V10-05-02: Final changes for introduction of cloud drawing.
+- openinventor-V10-05-05: Test number of cloud points for kernel visit.
+
+10 June 2019  John Allison  (vis-V10-05-19)
+- modeling-V10-05-03:
+  o Arrows and field models: Introduce further protection.
+- OpenGL-V10-05-05:
+  o Force double buffer context for OGLIX.
+  o Force kernel visit on change of number of cloud points.
+- openinventor-V10-05-04:
+  o Add missing #ifdef G4VIS_BUILD_OIX_DRIVER.
+- visXXX-V10-05-01:
+  o Force kernel visit on change of number of cloud points
+
+30 May 2019  John Allison  (vis-V10-05-18)
+- modeling-V10-05-02: Improve field modelling.
+- visman-V10-05-05: Improve message.
+
+04 April 2019  John Allison  (vis-V10-05-17)
+- Co-working tags visman-V10-05-04 and modeling-V10-05-01.
+  o Final (for now) corrections to /vis/viewer/set/sectionPlane.
+    Still some strange behaviour in small fraction of cases. See
+    comments in G4PhysicalVolumeModel::DescribeSolid around line 748.
+
+29 March 2019  John Allison
+- opengl-V10-05-04: Fix Coverity warning and bug in section plane.
+- visman-V10-05-03: Minor tidying.
+
+24 March 2019  John Allison  (vis-V10-05-16)
+- modeling-V10-05-00, visman-V10-05-02, opengl-V10-05-03:
+  o Fix bug in /vis/viewer/set/sectionPlane.
+
+18 March 2019  Gabriele Cosmo (vis-V10-05-15)
+- Corrected few typos in printout/comments.
+
+10 February 2019  John Allison (vis-V10-05-14)
+- visman-V10-05-00:  Introduce cloud drawing style
+  New parameter candidate in /vis/viewer/set/style:
+    /vis/viewer/set/style cloud
+  Cloud drawing uses solid->GetPointOnSurface, i.e., it uses kernel
+  algorithms and by-passes polyhedral representations. The solid is
+  represented by a polymarker of dots. The default number of points
+  is 1000. This can be changed with
+    /vis/viewer/set/numberOfCloudPoints
+  (The minimum number is 100.)
+  Note that OpenGL has a fast algorithm for polymarker.
+- This allows us to use cloud style both as a choice or as fallback when the
+  polyhedral representation fails, for example, when BooleanProcessor fails.
+- See management/History for details.
+- opengl-V10-05-00 and opengl-V10-05-01:
+  o Avoid re-using display lists for markers. They may have their own
+    position relative to the overall object transformation.
+
+24 February 2019  John Allison (vis-V10-05-13)
+- Remove Get/SetDrawOverlapsFlag from G4VVisManager.
+- Fix bug in overlap drawing of parameterised volumes.
+- Add /vis/touchable/extentForField and volumeForField.
+
+19 February 2019  John Allison (vis-V10-05-12)
+- In graphics reps (see graphics_reps/History for details):
+  o Implemented G4VisExtent::Transform(const G4Transform3D&).
+- In modeling (see modeling/History for details):
+  o Introduced G4BoundingExtentScene. This allows one to accumulate extents
+    using the newly introduced G4VisExtent::Transform and is a better way
+    of determining the overall extent of a scene (or of any set of extents)
+    than by the bounding sphere approach.
+  o G4VFieldModel, G4ElectricFieldModel, G4MagneticFieldModel:
+    . Introduced volume for field.
+  o G4VModel: Introduced GetTransformedExtent.
+  o G4PhysicalVolumeModel:
+    . Use G4BoundingExtentScene instead of G4BoundingSphereScene.
+    . Fix bug whereby the local extent was incorrectly calculated - in fact
+      it was the transformed extent.
+- In management (see management/History for details):
+  o Add /vis/scene/showExtents.
+  o Add /vis/set/volumeForField.
+  o Add /vis/touchable/showExtent.
+  o Add copy number parameter to /vis/touchable/findPath.
+  o Correct for fix to bug in G4PhysicalVolumeModel - see modeling/History.
+
+13 February 2019  John Allison (vis-V10-05-11)
+- Implement /vis/set/extentForField
+  o The default is a null extent, which is to be interpreted by the field
+    model as the whole extent of the current scene. Otherwise, with this
+    command, you can limit the extent over which the field is drawn. This
+    would help, for example, if drawing over the whole scene produced so
+    many arrows or lines that it clutters the scene.
+  o Changed the default spacing - the parameter nDataPointsPerHalfExtent
+    is changed from 10 to 3 - so as not to clutter the scene. See
+    guidance of /vis/scene/add/*Field commands for further explanation.
+
+10 February 2019  John Allison (vis-V10-05-10)
+- See manegement/History for details.
+- New and improved commands:
+  o /vis/viewer/centreOn: Improved - it does not zoom.
+  o /vis/viewer/centreAndZoomInOn: New.
+  o /vis/touchable/centreOn: Improved - it does not zoom.
+  o /vis/touchable/centreAndZoomInOn: New.
+
+08 February 2019  John Allison (vis-V10-05-09)
+- Fix Coverity warnings.
+
+03 February 2019  Michael Kelsey (vis-V10-05-08)
+- See modeling/History and management/History for details.
+  o Add /vis/scene/add/electricField by analogy to existing .../magneticField.
+  o Refactor MagneticFieldModel class with new base to handle all kinds of
+    vector fields; existing, and new ElectricFieldModel only have to
+    implement a simple function to get the field vector at a location.
+
+31 January 2019  Ivana Hrivnacova (vis-V10-05-07)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+29 January 2019  John Allison  (vis-V10-05-06)
+- See modeling/History and management/History for details.
+- Add /vis/touchable/draw.
+- /vis/viewer/centreOn: Add copy number to parameter list.
+- Several fixes to handle paramaterisations and replicas.
+
+26 January 2019  John Allison
+- Fix calculation of vis extent for parameterisations. See
+  modeling/History and management/History for details.
+
+25 January 2019  John Allison
+- Rationalise view interpolation
+  Encapsulate algorithm into base class G4VVisCommand. The commands
+    /vis/viewer/interpolate
+    /vis/viewer/centreOn
+    /vis/touchable/centerOn
+  now use this. Might consider use by all view changing commands.
+
+25 January 2019  John Allison  (vis-V10-05-05)
+- Include parameterised volumes in overlap checking and visualisation
+  in G4LogicalVolumeModel
+
+22 January 2019  John Allison  (vis-V10-05-04)
+- Introduce /vis/viewer/centreOn and /vis/touchable/centreOn
+  This allows one to centre the view (zoom in) on a volume.
+  Reset with /vis/viewer/reset.
+
+21 January 2019  John Allison  (vis-V10-05-03)
+- Pick up default number of line-segments-per-circle from G4Polyhedron.
+
+08 January 2019  John Allison  (vis-V10-05-02)
+- Correct History files after merge.
+
+02 January 2019  John Allison  (vis-V10-05-01)
+- Minor improvements to vis manager - see management/History for details.
+
+02 January 2019  John Allison  (vis-V10-05-00)
+- Improve volume handling.
+  o modeling: Add volume count (but comment out printing).
+  o management: Improve guidance for /vis/scene/add/volume.
+
+14 November 2018  John Allison  (vis-V10-04-25)
+- modeling-V10-04-18: Fix Coverity warning.
+
+14 November 2018  John Allison  (vis-V10-04-24)
+- visman-V10-04-28: /vis/scene/add/userAction, /vis/drawLogicalVolume:
+  o Minor bug fixes.
+
+09 November 2018  Gabriele Cosmo
+- raytracer-V10-04-04: G4RTMessenger: fixed printout typos.
+
+08 November 2018  John Allison  (vis-V10-04-23)
+- modeling-V10-04-17: G4LogicalVolumeModel.cc:
+  o Overlap checking now in text and drawing.
+- visman-V10-04-26: /vis/scene/add/logicalVolume:
+  o Overlap checking now in text and drawing.
+
+07 November 2018  John Allison  (vis-V10-04-22)
+- modeling-V10-04-16:
+  o Overlap checking only in text output at present.
+- visman-V10-04-25: /vis/scene/add/logicalVolume:
+  o Overlap checking only in text output at present.
+
+24 October 2018  John Allison  (vis-V10-04-21)
+- modeling-V10-04-15: Extensive revision of handling of touchables.
+- visman-V10-04-24:
+  o Conform to modeling-V10-04-15.
+  o Add /vis/touchable/findPath.
+  o Improve several other facilities for accessing touchables.
+- raytracer-V10-04-03: Conform to modeling-V10-04-15.
+
+19 October 2018  John Allison
+- Requires greps-V10-04-08.
+- visman-V10-04-23: Simplify scene checking and fix minor bug.
+
+17 October 2018  John Allison  (vis-V10-04-20)
+- modeling-V10-04-14: Attempt fix for Windows compiler error.
+- visman-V10-04-22:
+  /vis/scene/add/volume (and, consequently, /vis/drawVolume):
+  Improve guidance: Describe the use of a regular expression.
+  If physical-volume-name is "world" (the default), the top of the
+  main geometry tree (material world) is added.  If "worlds", the
+  top of all worlds - material world and parallel worlds, if any - are
+  added.  Otherwise a search of all worlds is made.
+  In the last case (a search of all worlds) all physical volume names are
+  matched against the first argument of this command.  If this is of the
+  form "/regexp/", where regexp is a regular expression (see C++ regex),
+  the physical volume name is matched against regexp by the usual rules
+  of regular expression matching. Otherwise an exact match is required.
+  For example, "/Shap/" matches "Shape1" and "Shape2".
+
+15 October 2018  John Allison  (vis-V10-04-19)
+- Requires greps-V10-04-07.
+- modeling-V10-04-13: Add regex search.
+  o Match the string with the required match. The latter can be of the form
+    "/regexp/", where regexp is a regular expression (see C++ regex),
+    or a plain string, in which case there must be an exact match.
+- visman-V10-04-21: Tidy.
+
+8 October 2018  John Allison  (vis-V10-04-17)
+- visman-V10-04-20: Fix bug in visman-V10-04-19.
+
+6 October 2018  John Allison  (vis-V10-04-16)
+- modeling-V10-04-12: Improve description of G4TrajectoriesModel.
+- visman-V10-04-19:
+  o G4VisManager.cc: Move creation of top level commands to end so that
+    they may pick up guidance and parameters from invoked commands.
+  o /vis/drawVolume and /vis/draw/logicalVolume:
+    . Pick up guidance and parameters from /vis/scene/add/...
+  o /vis/scene/add/trajectories: avoid adding new model if one exists.
+    . If no trajectories model exists in the scene create a new one...
+      ...else it already exists and there is no need to add a new one
+      because G4TrajectoriesModel simply describes trajectories in the
+      trajectories store whatever the type.
+
+5 October 2018  John Allison  (vis-V10-04-15)
+- opengl-V10-04-10: Open header files to users. In all header files, change
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
+  to
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
+  and similarly for OPENGLX, XM, QT, WT and WIN32. This is so that a user
+  may include the OpenGL headers and use the OpenGL library. This will be
+  useful if a user (or a developer) wishes to write a new vis driver
+  based on the existing OpenGL code.
+
+11 September 2018  John Allison
+- modeling-V10-04-11: Initialise line width.
+- opengl-V10-04-09: Fix shadowing of variable in namespace CLHEP.
+
+10 September 2018  John Allison  (vis-V10-04-14)
+- modeling-V10-04-10 and visman-V10-04-18:
+  o /vis/drawVolume and /vis/scene/add/volume now draw ALL occurrences of
+    a physical volume.
+
+3 September 2018  John Allison
+- modeling-V10-04-09: G4PhysicalVolumeSearchScene:Tidy.
+
+31 August 2018  John Allison
+- modeling-V10-04-08: Add setLineWidth for trajectory models.
+
+29 August 2018  John Allison  (vis-V10-04-13)
+- modeling-V10-04-07:
+  o G4LogicalVolumeModel:
+    . Add overlap checking (printing only for now).
+    . Avoid multiple printing of overlaps. Print only first time for
+      a given instantiation of G4LogicalVolume.
+  o Add G4TouchableGlobalTransformScene:
+    . Return a pointer to the global transform of a touchable.
+  o Add G4TouchableUtils:
+    . Implement G4TouchableUtils::FindGlobalTransform. (Uses
+      G4TouchableGlobalTransformScene.) Typical use:
+        G4ModelingParameters::PVNameCopyNoPath path;
+        // Specify the complete path of the touchable by a succession of
+        // name,copyNo pairs or pointer,copyNo pairs.
+        path.push_back(G4ModelingParameters::PVNameCopyNo("World",0));
+        path.push_back(G4ModelingParameters::PVNameCopyNo("Envelope",0));
+        .. etc., until touchable completely specified
+        const G4Transform3D* pGlobalTransform =
+        G4TouchableUtils::FindGlobalTransform(path);
+- visman-V10-04-17:
+  o Fix bug for multiple worlds in /vis/touchable/dump.
+
+20 August 2018  John Allison  (vis-V10-04-12)
+- openinventor-V10-04-07: Fix spelling mistake.
+
+20 August 2018  Frederick Jones and John Allison  (vis-V10-04-11)
+- openinventor-V10-04-06: Minor bug fixes.
+
+14 August 2018  John Allison
+- visman-V10-04-16: Reinstate G4VViewer::G4Spline.
+
+12 August 2018  John Allison  (vis-V10-04-10)
+- opengl-V10-04-08: Small bug fixes, including light front.
+- visman-V10-04-15: Small bug fix in G4ViewParameters operator<<.
+
+11 August 2018  John Allison  (vis-V10-04-09)
+- opengl-V10-04-07:
+  o Disable GL_LIGHTING for 3D markers.
+- openinventor-V10-04-05:
+  o Consolidate Fred's work. Add to sources.cmake.
+- visman-V10-04-14:
+  o Remove G4VViewer::G4Spline.
+  o /vis/viewer/set/timeWindow/displayLightFront: change defaults.
+  o /vis/viewer/colourByDensity: change defaults.
+
+24 July 2018  John Allison  (vis-V10-04-08)
+- visman-V10-04-13:
+  o /vis/viewer/interpolate: Fix gcc-8 warnings.
+  o /vis/viewer/colourByDensity: Change defaults:
+    . Algorithm 1 is default.
+    . gm/cm3 is default unit.
+    . Subsequent parameters are not omitable.
+
+13 July 2018  Gabriele Cosmo
+- gMocren-V10-04-01: Fixed remaining gcc-8 compilation warnings.
+
+15 June 2018  Fred Jones
+- openinventor-V10-04-03: Fix gcc8.1 warnings for casts.
+
+11 June 2018  John Allison
+- modeling-V10-04-06: Fix Coverity warning.
+
+05 June 2018  John Allison  (vis-V10-04-07)
+- openinventor-V10-04-02: Fix compilation error.
+- raytracer-V10-04-01: Update "thread-local-static-var" model.
+- visexternals-V10-04-01: Corrected GNUmakefile.
+
+26 May 2018  John Allison  (vis-V10-04-06)
+- visexternals-V10-04-00, visexternalgl2ps-V10-04-00,
+  VRML-V10-04-00, gMocren-V10-04-00, DAWN-V10-04-00:
+  o Fix gcc-8 warnings.
+
+25 May 2018  John Allison
+- visman-V10-04-11: Introduce /vis/drawLogicalVolume:
+  o Synonymous with /vis/specify.
+  o Both commands create a new scene and invoke /vis/scene/add/logicalVolume.
+
+24 May 2018  John Allison  (vis-V10-04-05)
+- modeling-V10-04-05:
+  o G4LogicalVolumeModel: Add overlap checking,
+  o Fix gcc-8 warnings.
+- visman-V10-04-10:
+  o /vis/specify, /vis/scene/add/logicalVolume: Include overlap checking.
+- opengl-V10-04-06:
+  o Fix gcc-8 warnings.
+
+08 May 2018 Ben Morgan
+- visman-V10-04-09: Explicitly #include G4Types header.
+
+26 April 2018  John Allison
+- openinventor-V10-04-01: Fix compilation errors.
+
+25 April 2018  John Allison  (vis-V10-04-04)
+- visXXX-V10-04-00, openinventor-V10-04-00, opengl-V10-04-05:
+  o Implement kernel visit for "colour by density".
+- visman-V10-04-08:
+  o Complete development for /vis/viewer/colourByDensity:
+    . Copy colour-by-density parameters from view parameters to
+      modeling parameters.
+    . Colour volumes according to density if the user has not specified
+      vis attributes. Useful for drawing geometry from GDML.
+
+24 April 2018  John Allison
+- modeling-V10-04-04: Small bug fix.
+- modeling-V10-04-03: Implement /vis/viewer/colourByDensity.
+- visman-V10-04-07: Small bug fix.
+- visman-V10-04-06, opengl-V10-04-04:
+  o Migrate to greps-V10-04-04.
+
+23 April 2018  John Allison
+- visman-V10-04-05:
+  o Migrate to greps-V10-04-03.
+  o Complete implementation of /vis/viewer/colourByDensity.
+
+22 April 2018  John Allison
+- visman-V10-04-04: Several small cosmetic improvements.
+
+28th March 2018  John Allison  (vis-V10-04-03)
+- visman-V10-04-03: Improve some vis commands.
+
+20th March 2018  Makoto Asai
+- raytracer-V10-04-00:
+  o Use HyperStep of G4ParallelWorldProcess to draw volumes
+    defined in a parallel world.
+
+11th March 2018  John Allison  (vis-V10-04-02)
+- modeling-V10-04-02: Fix bug calculating mass of parallel world.
+- visman-V10-04-02: Improve comments.
+- vistree-V10-04-00:
+  o Fix bug in suppressed writing of repeated parameterised volumes.
+
+13 February 2018 Jonathan Madsen
+- opengl-V10-04-03:
+  o Replaced explicit usage of G4Mutex locking/unlocking with
+    G4AutoLock pointers initialized with std::defer_lock as this
+    enables one to avoid any deadlock or non-locked condition_variable
+    waits by using G4AutoLock::owns_mutex()
+
+12 February 2018 Jonathan Madsen
+- opengl-V10-04-02:
+  o Updated G4CONDITIONWAIT(...) to new C++11 requirements
+  o Found probable bug in G4OpenGLQtViewer with condition wait -- not locked
+    prior to entering condition, which is an undefined behavior. Adapted
+    G4AutoLock to accept std::defer_lock_t (doesn't lock upon construction)
+    to prevent deadlock that occurs when the mutex is locked
+
+31st January 2017  John Allison  (vis-V10-04-01)
+- Tidy History files.
+
+8th January 2017  John Allison  (vis-V10-04-00)
+- Merged timemovebranch: visman-V10-04-01, opengl-V10-04-01:
+  o Moved time window parameters from G4OpenGLStoredViewer to
+    G4ViewParameters. Now one can interpolate time window parameters (using
+    /vis/viewer/interpolate) and make a movie of particles moving through time.
+  o To do this, see guidance on /vis/viewer/set/timeWindow/ commands. Briefly:
+      /vis/scene/add/trajectories rich
+      /vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.01 ns
+    then typically
+      /vis/viewer/set/timeWindow/displayLightFront true 0 0 -50 cm -0.5 ns
+      /vis/viewer/set/timeWindow/displayHeadTime true
+      /vis/viewer/set/timeWindow/fadeFactor 1
+      /run/beamOn # or several until you get a good event or events
+      /vis/viewer/set/timeWindow/startTime 0 ns 1 ns
+      /vis/viewer/save
+      /vis/viewer/set/timeWindow/startTime 1 ns 1 ns
+    then zoom, pan etc to a view of interest and
+      /vis/viewer/save
+    then repeat with next start time, another view and a save, then try
+      /vis/viewer/interpolate
+
+3rd January 2017  John Allison  (timemovebranch-09)
+- G4ViewParameters:: TimeWindowCommands: Fix for /vis/viewer/save.
+
+2nd January 2017  John Allison  (timemovebranch-08)
+- Moved time window commands to /vis/viewer/set/timeWindow/.
+- DEPRECATED the equivalent /vis/ogl/set/ commands.
+
+2nd January 2017  John Allison  (timemovebranch-07)
+- Copied /vis/ogl/set time window commands to /vis/viewer/set.
+
+1st January 2017  John Allison  (timemovebranch-06)
+- G4ViewParameters: Completed PrintDifferences, operator<< and operator!= for
+  time window parameters.
+
+31st December 2017  John Allison  (timemovebranch-05)
+- G4ViewParameters: Provide proper Get and Set functions for time parameters.
+
+31st December 2017  John Allison  (timemovebranch-04)
+- Implement G4OpenGLStoredViewer::AddPrimitiveForASingleFrame.
+
+19th December 2017  Gabriele Cosmo
+- modeling-V10-04-01:
+  o Fixed self-consistency in G4AttValueFilterT header (missing #include).
+    Thanks to Raphael Isemann for reporting this.
+
+14th December 2017  John Allison  (timemovebranch-03)
+- Merged changes from trunk up to -r107990.
+
+14th December 2017  John Allison  (timemovebranch-02)
+- Time move: Tested light front drawing. Some small changes required.
+
+14th December 2017  John Allison  (timemovebranch-01)
+- Time move: First working version. Much tidying to do.
+
+14th December 2017  John Allison
+- opengl-V10-04-00: Fix display list memory being exceeded.
+
+13th December 2017  John Allison  (timemovebranch-00)
+- Move start time etc. from G4OpenGLViewer to G4Viewparameters:
+  o First stage (data are public members of G4Viewparameters).
+
+12th December 2017  John Allison
+- visman-V10-04-00: Minor cosmetic.
+- modeling-V10-04-00: Improve an informational message.
+
+7th November 2017  John Allison (vis-V10-03-10)
+- opengl-V10-03-04: Refine content of output of picking.
+
+29th October 2017  John Allison
+- visman-V10-03-16: Protect /vis/enable issued before run established.
+
+6th October 2017  John Allison (vis-V10-03-09)
+- Needs greps-V10-03-07.
+- visman-V10-03-15:
+  o Improve end of run printing when /vis/disable.
+  o Initialise G4Colour colour map.
+
+14th September 2017  John Allison
+- vis-HepRep-V10-03-01: Fix Coverity warning.
+
+13th September 2017  John Allison (vis-V10-03-08)
+- modeling-V10-03-08 and visman-V10-03-14:
+  Reverted default number of line segments per circle to 24.
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
+
+1st September 2017  Laurent Garnier (vis-V10-03-07)
+- opengl-V10-03-03: Add patch affecting repaint for external applications. See bugzilla #1959.
+
+21st June 2017  John Allison (vis-V10-03-06)
+- visman-V10-03-13: Implement /vis/drawOnlyKeptEvents.
+  To draw selected events the user should set this flag, then in a user action:
+    if ( some criterion ) {
+      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+    }
+
+23rd May 2017  John Allison
+- VRML-V10-03-01: Fixes for gcc-7.1 warnings.
+- gMocren-V10-03-00: Fixes for gcc-7.1 warnings.
+- vis-HepRep-V10-03-00: Fixes for gcc-7.1 warnings.
+- opengl-V10-03-02: Hopefully fix gcc-7.1 warnings.
+- visexternal-V10-03-00: Fix gcc-7.1 warning.
+
+14th May 2017  John Allison
+- modeling-V10-03-07: G4GPSModel: Added user-selectable colour.
+- visman-V10-03-12: Add user-selected colour to /vis/scene/add/gps.
+
+12th May 2017  John Allison
+- visman-V10-03-11:
+  o Improved guidance.
+  o /vis/viewer/save: Add .g4view if an extension us not supplied by the user.
+  o /vis/viewer/set/defaultTextColour: Changed default to blue and opaque to
+  agree with default text vis attributes.
+
+11th May 2017  John Allison
+- visman-V10-03-10: Fixed Windows compilation isse.
+
+10th May 2017  John Allison
+- visman-V10-03-09: Needs greps-V10-03-04. Added G4VVisCommand::ConvertToColour.
+
+7th May 2017  John Allison (vis-V10-03-05)
+- visman-V10-03-08: Fix /vis/viewer/interpolate for file writing viewers.
+- DAWN-V10-03-00:
+  o Expand filename numbering to 4 digits, e.g., g4_0000.prim, g4_0001.prim,...
+  o You may need
+    export G4DAWNFILE_MAX_FILE_NUM=9999
+    or setenv G4DAWNFILE_MAX_FILE_NUM 9999
+  o Useful if producing many files for a movie.
+- raytracer-V10-03-04:
+  o Expand filename numbering to 4 digits, zero filled, e.g.,
+      g4RayTracer.viewer-1_0000.jpeg
+      g4RayTracer.viewer-1_0001.jpeg
+    etc.
+  o Useful for producing many files for a movie.
+
+3rd May 2017  John Allison
+- modeling-V10-03-06 (needs event-V10-03-01):
+  o Completed G4GPSModel for visualisation of General Particle Source. Can
+    be used with command /vis/scene/add/gps.
+
+3rd May 2017  John Allison (vis-V10-03-04)
+- modeling-V10-03-05:
+  o Add prototype/skeleton G4GPSModel.
+  o Improve checking of G4PhysicalVolumeModel.
+
+1st May 2017  John Allison
+- visman-V10-03-07: Added /vis/scene/add/gps.
+
+23rd April 2017  John Allison
+- visman-V10-03-05: Improved command guidance.
+
+19th April 2017  John Allison
+- modeling-V10-03-01: Added G4ModelingParameters::PVPointerCopyNo.
+- raytracer-V10-03-02:
+  o Changed back to XA_RGB_BEST_MAP (seems OK now).
+  o Simplified passing of ray tracer pointer.
+  o Fixed a bug whereby the jpeg for RayTracer was always 600x600.
+
+18th April 2017  John Allison
+- visman-V10-03-04: Improved error trapping.
+
+22nd February 2017  John Allison
+- raytracer-V10-03-00:
+  G4RTXScanner.cc: Changed XA_RGB_BEST_MAP to XA_RGB_DEFAULT_MAP.
+  (It seems XA_RGB_BEST_MAP no longer available on Mac XQuartz 2.7.11.)
+- visman-V10-03-03: Replaced G4VisExtent::NullExtent by G4VisExtent().
+
+12th January 2017  John Allison
+- opengl-V10-03-01: Tidied.
+- visman-V10-03-02: Brian Smith, Laurent Garnier:
+  o /vis/viewer/interpolate: Now works for WIN32.
+
+12th January 2017  John Allison  (vis-V10-03-01)
+- Tagged.
+
+10th January 2017  Fred Jones
+- openinventor-V10-03-00:
+  o G4OpenInventorXtExtendedViewer: fixes and improvements.
+
+7th December 2016  John Allison
+- visman-V10-03-01:
+  o Deprecated SetUserAction. Use RegisterRunDurationUserVisAction."
+
+6th January 2017  John Allison
+- opengl-V10-03-00: Fixed bug in ScaledFlush.
+
+9th December 2016  John Allison  (vis-V10-03-00)
+- modeling-V10-03-00 and visman-V10-03-00:
+  o Improved arrow drawing.  Reduced default lineSegmentsPerCircle
+    to 6 for rapid yet adequate drawing.
+  o Similar improvement to magnetic field drawing.
+  o Default can be changed with new command:
+    /vis/set/arrow3DLineSegmentsPerCircle.
+
+27th November 2016  John Allison
+- visman-V10-02-37: Fix for OpenGLXm.
+
+21th November 2016  Laurent Garnier (vis-V10-02-30)
+- opengl-V10-02-26: Go back on the glCheckFramebufferStatus(): comment out this command
+
+21th November 2016  Laurent Garnier (vis-V10-02-29)
+- opengl-V10-02-25 :Fix the glCheckFramebufferStatus() :
+
+20th November 2016  John Allison
+- opengl-V10-02-24: Safer fix to colour problem with transparent
+  volumes in DrawDisplayLists (DEV-261). Fixes the same problem
+  as tag opengl-V10-02-22.
+
+19th November 2016  John Allison
+- DAWN-V10-02-02, VRML-V10-02-03:
+  Fixed the GetColour() problem.
+
+19th November 2016  Laurent Garnier (vis-V10-02-28)
+- opengl-V10-02-23:
+  o Fix the gray/white/black screen when launching a new viewer.
+  o Fix DEV-176 and perhaps a few others
+
+19th November 2016  Laurent Garnier (vis-V10-02-27)
+- opengl-V10-02-22 : Fis a color problem on transparent volumes (DEV-261)
+
+18th November 2016  John Allison
+- visman-V10-02-36, vis-HepRep-V10-02-04:
+  Fixed the GetColour() problem.
+
+18th November 2016  Laurent Garnier (vis-V10-02-26)
+- visman-V10-02-35: Fixes display at end of run in Qt/Extra refresh for auto-refresh viewers. Fixes same in X and Xm.
+
+17th November 2016  Laurent Garnier  (vis-V10-02-25)
+ vis-HepRep-V10-02-03, opengl-V10-02-21 : restore color to trajectories in HepRep, avoid two different OpenGL version
+ in case of Qt+X
+
+7th November 2016  John Allison
+- vis-HepRep-V10-02-02: Fixed Coverity warning.
+
+6th November 2016 Laurent Garnier (vis-V10-02-24)
+- Fix a CDash warning in gl2ps
+
+4th November 2016 Laurent Garnier (vis-V10-02-23)
+- Co-works with interfaces-V10-02-09
+- Remove (multiple) scene tree/pick and viewer parameters from a tab to put it in a single, auto-update widget
+- Fix a bad signal/slot connection for the filter of the scene tree (perhaps a bug in some cases)
+
+3rd November 2016  John Allison (vis-V10-02-22)
+- modeling-V10-02-17, visman-V10-02-33:
+  Changed default number of line segments per circle from 24 to 72.
+- visman-V10-02-33:
+  Limited WARNING about up-Vector to first time only.
+
+2nd November 2016  John Allison
+- modeling-V10-02-16: G4ArrowModel: Default lines per circle = 6.
+
+26th October 2016  John Allison
+- visman-V10-02-32: Fixed inappropriate warning message in MT batch mode.
+
+2nd October 2016  John Allison (vis-V10-02-21)
+- visman-V10-02-31: Fixed warnings.
+
+29th September 2016  John Allison (vis-V10-02-20)
+- modeling-V10-02-15:
+  o G4PhysicalVolumeModel:
+    . Improved efficiency for the case that there are no vis attributes
+      modifiers.
+    . Added new operator<< for vector<G4PhysicalVolumeNodeID>.
+- visman-V10-02-30:
+  o G4VSceneHandler::RequestPrimitives:
+    . Tidied and improved error message for the case that a polyhedron
+      pointer is null:
+  o G4VViewer: Fixed Coverity warnings.
+
+23rd September 2016  John Allison (vis-V10-02-19)
+- visman-V10-02-29: Removed duplicate operator<<.
+- opengl-V10-02-19: Tidied.
+
+21st September 2016  John Allison (vis-V10-02-18)
+- opengl-V10-02-17: Fix warnings on Windows.
+
+21st September 2016  John Allison (vis-V10-02-17)
+- opengl-V10-02-16: Introduced /vis/ogl/flushAt.
+
+19th September 2016  John Allison
+- modeling-V10-02-14:
+  o G4PhysicalVolumeModel.cc:
+    Use static to ensure a plausible vis attributes pointer.
+- visman-V10-02-28:
+  o /vis/viewer/save and /vis/viewer/interpolate:
+    Default filename extension changed to .g4view.
+
+19th September 2016  John Allison (vis-V10-02-16)
+- modeling-V10-02-13:
+  o Moved Vis Attributes Modifiers (VAMs) back from G4ViewParameters.
+- visman-V10-02-27:
+  o Moved Vis Attributes Modifiers (VAMs) back to G4ModelingParameters.
+- opengl-V10-02-15:
+  o Adapted to the move of Vis Attributes Modifiers back to
+    G4ModelingParameters.
+  o Added flag to handle scene tree interaction better.
+
+15th September 2016  John Allison
+- visman-V10-02-26:
+  o G4VViewer: Introduced TouchableSetVisibility and TouchableSetColour.
+  o G4Scene: Replaced warning reference to obsolete
+    G4VisAttributes::Invisible to G4VisAttributes::GetInvisible()
+   (B.Smith)
+- opengl-V10-02-14:
+  o Re-instated G4OpenGLStoredQtViewer::CompareForKernelVisit:
+  o Uses G4VViewer::TouchableSetVisibility and TouchableSetColour.
+
+13th September 2016  John Allison
+- visman-V10-02-25:
+  o Replace all r-value references, e.g., auto&&, with simple
+    l-value references, e.g., const auto&, until I understand
+    r-value references.  I think we do not yet have a need for
+    r-value references!
+
+12th September 2016  John Allison (vis-V10-02-15)
+- modeling-V10-02-12:
+  o G4ModelingParameters.cc: Improved output of PVNameCopyNoPath.
+- visman-V10-02-24:
+  o Introduced
+      void G4VViewer::SetTouchable
+    to set the touchable for /vis/touchable/set/... commands.
+- opengl-V10-02-13:
+  o Added calls to SetTouchable.
+
+11th September 2016  John Allison (vis-V10-02-14)
+- modeling-V10-02-11:
+  o Removed Vis Attributes Modifiers (VAMs).
+  o VAMs are now entirely in G4ViewParameters and dealt with
+    in G4VViewer::GetApplicableVisAttributes.
+- visman-V10-02-22:
+  o Needs modeling-V10-02-11.
+  o Moved Vis Attributes Modifiers (VAMs) from G4ModelingParameters
+    to G4ViewParameters.
+- visman-V10-02-23, DAWN-V10-02-01, vis-HepRep-V10-01-03,
+  VRML-V10-02-02, opengl-V10-02-12:
+  o GetColour/GetColor no longer takes an argument.
+  o Make sure applicable vis attributes are obtained.
+  // Get and check applicable vis attributes.
+       fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  // Note: the vis attributes may have been modified by the viewer.  See
+  // code in G4VViewer::GetApplicableVisAttributes.
+
+7th September 2016  Gabriele Cosmo (vis-V10-02-13)
+- Fixed GNUmakefile in management, modeling and gMocren for missing
+  dependency on global/HEPNumerics, now required.
+
+6th September 2016  Makoto Asai (vis-V10-02-12)
+- Further refinements. Co-works greps-V10-02-07, digits_hits-V10-02-06
+
+2nd September 2016  Makoto Asai (vis-V10-02-11)
+- Co-works greps-V10-02-06, digits_hits-V10-02-05
+- Build-in scorer now uses G4THitsMap<G4StatDouble> instead of
+  G4THitsMap<G4double>. Affected files are :
+     management/include/G4VSceneHandler.hh
+     management/sources.cmake
+     management/src/G4VSceneHandler.cc
+     modeling/include/G4PSHitsModel.hh
+     modeling/include/G4PseudoScene.hh
+     modeling/sources.cmake
+     VRML/include/G4VRML1FileSceneHandler.hh
+     VRML/include/G4VRML1SceneHandler.hh
+     VRML/include/G4VRML2FileSceneHandler.hh
+     VRML/include/G4VRML2SceneHandler.hh
+     HepRep/include/G4HepRepFileSceneHandler.hh
+     HepRep/include/G4HepRepSceneHandler.hh
+     OpenGL/include/G4OpenGLSceneHandler.hh
+     OpenGL/src/G4OpenGLSceneHandler.cc
+     FukuiRenderer/include/G4DAWNFILESceneHandler.hh
+     gMocren/include/G4GMocrenFileSceneHandler.hh
+     gMocren/sources.cmake
+     gMocren/src/G4GMocrenFileSceneHandler.cc
+     RayTracer/include/G4RayTracerSceneHandler.hh
+     XXX/include/G4XXXFileSceneHandler.hh
+     XXX/include/G4XXXSGSceneHandler.hh
+     XXX/include/G4XXXStoredSceneHandler.hh
+
+31st August 2016  John Allison (vis-V10-02-10)
+- visman-V10-02-21: Fix warning.
+- DAWN-V10-02-00, vis-HepRep-V10-02-00, opengl-V10-02-10,
+  raytracer-V10-02-01, VRML-V10-02-01, visXXX-V10-02-01,
+  gMocren-V10-02-02
+  o Fix G4Orb and G4Ellipsoid hiding warnings.
+
+31st August 2016  John Allison (vis-V10-02-09)
+- Co-works greps-V10-02-05.
+- modeling-V10-02-10: Conform to greps-V10-02-05.
+- visman-V10-02-20:
+  o Conform to greps-V10-02-05.
+  o Implemented auxiliary edge drawing for:
+      G4Orb, G4Sphere, G4Torus and G4Ellipsoid
+    unless otherwise specified.
+- vistree-V10-02-02: Improved printing and guidance.
+
+14th August 2016  John Allison (vis-V10-02-08)
+- modeling-V10-02-07: Improved safety.
+- visman-V10-02-19: Improved comments.
+- opengl-V10-02-09: Improved comments.
+- vistree-V10-02-01: G4ASCIITree:
+  o Changed default verbosity to 1 (shows logical volume names).
+
+9th August 2016  John Allison (vis-V10-02-06 needs greps-V10-02-03)
+- Tagged.
+
+7th August 2016  John Allison (vis-V10-02-05 needs greps-V10-02-02)
+- modeling-V10-02-06: Takes account of new flag IsForceDrawingStyle.
+- visman-V10-02-17:
+  o Takes account of new flag IsForceDrawingStyle.
+  o Changed defaults of some command parameters to reflect obvious
+    meaning in the command name.
+
+20th July 2016  John Allison (vis-V10-02-04)
+- modeling-V10-02-05 and visman-V10-02-16:
+  Replaced TouchedVolume by EncounteredVolume in trajectory drawing
+  and filtering.  Functionally identical.
+- visman-V10-02-16: Minor improvements to scale and axes.
+
+30th June 2016  John Allison
+- visman-V10-02-15: Added comments and fixed Coverity warning.
+
+14th June 2016  John Allison
+- visman-V10-02-14: Improved informationals and guidance.
+
+3rd June 2016  John Allison
+- visman-V10-02-13: Fixed compilation warnings on gcc-6.1.
+
+1st June 2016  Laurent Garnier (vis-V10-02-03)
+- gMocren-V10-02-01: Fixed coverity Win64 warning.
+
+1st June 2016  John Allison
+- visman-V10-02-11: Introduced /vis/viewer/interpolate.
+- visman-V10-02-12:
+  o Fixed compiler error on Windows. /vis/viewer/interpolate is not
+    available on Windows because it uses popen, a way of getting
+    output from a system command. _popen (with an underscore) is
+    said to be available in Windows but this has not been tried.
+- opengl-V10-02-06: Fixed bug in picking output text.
+- openinventor-V10-02-03: Fixed Coverity warning.
+
+30th May 2016  John Allison  (vis-V10-02-02)
+- visman-V10-02-10: Added some calls to SetView for security.
+- opengl-V10-02-05: G4OpenGLXViewer: Added thread awareness regarding
+  glXMakeCurrent.  NOTE: This will have to be done for Win32
+  for multithreading on Windows.
+- openinventor-V10-02-02:
+  o Fixed dispatching (Guy Barrand, Tom Roberts).
+  o setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD).
+
+19th May 2016  John Allison
+- VRML-V10-02-00, gMocren-V10-02-00
+  Fixed gcc-6.1 warnings.
+
+4th May 2016  John Allison
+- visman-V10-02-09: Win32 now opens with "/vis/open OGL" if Qt
+  is not built.
+
+2nd May 2016  John Allison  (vis-V10-02-01)
+- modeling-V10-02-04: Fixed gcc-6.1 warning.
+- visman-V10-02-08: Fixed gcc-6.1 warnings.
+- raytracer-V10-02-00: Fixed gcc-6.1 warning.
+
+2nd May 2016  John Allison  (vis-V10-02-00)
+- Tagged: consolidates the below improvements.
+
+2nd May 2016  John Allison
+- visman-V10-02-07:
+  MT mode: moved flush to end of vis thread.  This is so that all
+  trajectories are flushed from vis thread before switching back to
+  master thread.  Also fixes picking in MT mode.
+- opengl-V10-02-04: Xm: Ensure all items get flushed to screen, even
+  when eventsDrawInterval is set >1.
+
+23rd April 2016  John Allison
+- opengl-V10-02-03:
+  /vis/ogl/set/eventsDrawInterval and /vis/ogl/set/displayListLimit:
+  Fixed some inconsistencies.
+
+5th April 2016  John Allison
+- modeling-V10-02-03: Tidied #include statements.
+- vistree-V10-02-00:
+  o Prevented multiple writing of the informational header on
+    the output file.
+
+22 Mar 2016  Gabriele Cosmo
+- openinventor-V10-02-00
+  o Corrected delete statement in
+    G4OpenInventorXtExaminerViewer::sortBookmarksCB().
+  o Multiple improvements: 18 Dec 2015  Frederick Jones
+
+29th March 2016  John Allison
+- visman-V10-02-06: Fixed bug in /vis/scene/add/volume. It was
+  preventing parallel worlds being added individually.
+
+11th March 2016  John Allison
+- visman-V10-02-05:
+  o Inhibited use of BeginRun, BeginEvent, EndEvent and EndRun
+    when vis is not enabled, for example after /vis/disable.
+    In particular this prevents the start of the vis thread in
+    multithreading mode.
+
+15th February 2016  John Allison
+- modeling-V10-02-02:
+  Introduced drawing and filtering by touched volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByTouchedVolume
+    /vis/filtering/trajectories/create/touchedVolumeFilter
+- visman-V10-02-04:
+  Registered drawing and filtering by touched volume.
+
+10th February 2016  John Allison, Laurent Garnier, Andrea Dotti
+- opengl-V10-02-00:
+  o Various small fixes and improvements.
+
+26th January 2016  John Allison
+- modeling-V10-02-01: Added some Set commands.
+- visXXX-V10-02-00: Improved CompareForKernelVisit.
+
+26th January 2016  John Allison
+- modeling-V10-02-00 and visman-V10-02-03:
+  Fix problem with OriginVolume drawing and filtering in
+  multithreading mode. 
+
+19th January 2016  John Allison
+- visman-V10-02-02: Improved /vis/viewer/save.
+
+14th January 2016  John Allison
+- visman-V10-02-01: Improved error tracking:
 
 25th November 2015  Laurent Garnier (vis-V10-01-19)
 - HepRep tagged : vis-HepRep-V10-01-02
@@ -1717,7 +2712,8 @@ Rolling openinventor back to: openinventor-V09-05-14
 
 4th June 2010  Joseph Perl  (vis-V09-03-07)
 - vis-HepRep-V09-03-02
-  o Added command renderCylAsPolygon- opengl-V09-03-07
+  o Added command renderCylAsPolygon
+- opengl-V09-03-07
   o G4OpenGLImmediate/StoredQtViewer : Add protection against multiple
   repaint call. Add protection against resizeGl with bad values
 
@@ -2985,7 +3981,7 @@ To be included:
 
 7th December 2004 Joseph Perl (vis-V06-02-08)
 - Tagged right after migration to cmath
-- All occurences of include <math.h> have now become include <cmath>.
+- All occurrences of include <math.h> have now become include <cmath>.
 - All math functions are now prefaced with std::
 
 7th December 2004 Joseph Perl (vis-V06-02-07)

@@ -416,7 +416,7 @@ class G4GHEKinematicsVector
          a = (momentum.x()*p.momentum.x() +
               momentum.y()*p.momentum.y() +
               momentum.z()*p.momentum.z()) / a;
-         if( std::fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
+         if( std::abs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
        }
      return a;
    }
@@ -429,7 +429,7 @@ class G4GHEKinematicsVector
          a = (momentum.x()*p.momentum.x() +
               momentum.y()*p.momentum.y() +
               momentum.z()*p.momentum.z()) / a;
-         if( std::fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
+         if( std::abs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
        }
      return std::acos(a);
    }      
@@ -583,7 +583,7 @@ class G4GHEKinematicsVector
         {
           G4double ph, px, py, pz;
           G4double cost  = p2.momentum.z()/p2.momentum.mag(); 
-          G4double sint  = 0.5 * (  std::sqrt(std::fabs((1.-cost)*(1.+cost))) 
+          G4double sint  = 0.5 * (  std::sqrt(std::abs((1.-cost)*(1.+cost))) 
                                   + std::sqrt(pt2)/p2.momentum.mag());
           (p2.momentum.y() < 0.) ? ph = 1.5*CLHEP::pi : ph = CLHEP::halfpi;
           if( p2.momentum.x() != 0.0) 

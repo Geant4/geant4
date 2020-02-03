@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 102333 2017-01-23 10:47:30Z gcosmo $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -16,7 +15,111 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-04 October 2016 Peter Gumplinger (hadr-proc-V10-01-05)
+11 July 2019 Alberto Ribon (hadr-proc-V10-05-06)
+-----------------------------------------------------
+- Created new inelastic processes for heavy hadron - nucleus interactions:
+  G4DMesonMinusInelasticProcess,  G4DMesonPlusInelasticProcess,
+  G4DMesonZeroInelasticProcess,   G4AntiDMesonZeroInelasticProcess,
+  G4DsMesonMinusInelasticProcess, G4DsMesonPlusInelasticProcess,
+  G4BMesonMinusInelasticProcess,  G4BMesonPlusInelasticProcess,
+  G4BMesonZeroInelasticProcess,   G4AntiBMesonZeroInelasticProcess,
+  G4BsMesonZeroInelasticProcess,  G4AntiBsMesonZeroInelasticProcess,
+  G4BcMesonMinusInelasticProcess, G4BcMesonPlusInelasticProcess,
+  G4LambdacPlusInelasticProcess,  G4AntiLambdacPlusInelasticProcess,
+  G4LambdabInelasticProcess,      G4AntiLambdabInelasticProcess,
+  G4XicPlusInelasticProcess,      G4AntiXicPlusInelasticProcess,
+  G4XicZeroInelasticProcess,      G4AntiXicZeroInelasticProcess,
+  G4XibMinusInelasticProcess,     G4AntiXibMinusInelasticProcess,
+  G4XibZeroInelasticProcess,      G4AntiXibZeroInelasticProcess,
+  G4OmegacZeroInelasticProcess,   G4AntiOmegacZeroInelasticProcess,
+  G4OmegabMinusInelasticProcess,  G4AntiOmegabMinusInelasticProcess.
+  Notes:
+  * There is no need to create similar processes for elastic
+    heavy hadron - nucleus interactions.
+  * Only hadrons (mesons and baryons) that can fly macroscopic distances are
+    considered (that's why Sigmac's and Sigmab's are not included).
+  * For the time being, only the (Glauber-Gribov) (elastic and inelastic)
+    cross sections exist for these heavy hadrons, but not yet final-state
+    models. Therefore, currently none of these processes is used in any
+    physics list.
+
+19 May 2019 V. Grichine (hadr-proc-V10-05-05)
+-----------------------------------------------------
+- G4MuNeutrinoNucleusProcess : change process type to fHadronInelastic
+
+12 May 2019 Vladimir Ivanchenko (hadr-proc-V10-05-04)
+-----------------------------------------------------
+- G4HadronElasticProcess : removed final state rotation
+
+08 May 2019 Vladimir Ivanchenko (hadr-proc-V10-05-03)
+-----------------------------------------------------
+- G4HadronElasticProcess : removed default GHEISHA cross section
+
+06 May 2019 V. Grichine (hadr-proc-V10-05-02)
+-----------------------------------------------------
+- G4MuNeutrinoNucleusProcess : new process managing 
+    G4NuMuNucleusCc(Nc)Model models
+
+30 April 2019 Vladimir Ivanchenko (hadr-proc-V10-05-01)
+-----------------------------------------------------
+- G4HadronElasticProcess : added protection for zero energy primary
+
+19 April 2019 Vladimir Ivanchenko (hadr-proc-V10-05-00)
+-----------------------------------------------------
+- G4HadronElasticProcess : removed tracking cut for all particles (charged
+  particles may be stopped by the tracking cut of ionisation process,
+  neutrons should be stopped by G4NeutronKiller); clean up sampling
+  of final state; improved description and comments; added C++11 keywords;
+  removed unused local members
+
+03 October 2018 Vladimir Ivanchenko (hadr-proc-V10-04-09)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess : V.Grichine added cross section biasing
+
+18 July 2018 Vladimir Ivanchenko (hadr-proc-V10-04-08)
+-----------------------------------------------------
+- G4HadronCaptureProcess : revised description, added C++11 keywards
+
+29 May 2018 Vladimir Ivanchenko (hadr-proc-V10-04-07)
+-----------------------------------------------------
+- G4HadronElasticProcess, G4NeutrinoElectronProcess : use const pointers
+    and "nullptr" for  G4Material and G4Element
+
+09 May 2018 Alberto Ribon (hadr-proc-V10-04-06)
+-----------------------------------------------------
+- G4HadronElasticProcess, G4NeutrinoElectronProcess : fixed warnings in gcc 8
+    regarding catching polymorphic type by value, instead of by reference.
+
+13 February 2018 Vladimir Ivanchenko (hadr-proc-V10-04-05)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess: V.Grichine update
+
+02 February 2018 Vladimir Ivanchenko (hadr-proc-V10-04-04)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess: V.Grichine change constructor
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-03)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess: added missing definition of method 
+                             SetLowestEnergy.
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-02)
+-----------------------------------------------------
+- Fixed mistake in sources.cmake .
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-01)
+-----------------------------------------------------
+- Forgot to update sources.cmake .
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-00)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess : added new process created by V. Grichine.
+
+18 July 2017 Dennis Wright  (hadr-proc-V10-03-00)
+-------------------------------------------------
+- use class name in process description 
+
+04 October 2016 Peter Gumplinger (hadr-proc-V10-02-00)
 ------------------------------------------------------
 - Fix incorrectly calculated MicroRoughness correction to absorption
   probability (thanks to W. Schreyer/Technische Universität München)

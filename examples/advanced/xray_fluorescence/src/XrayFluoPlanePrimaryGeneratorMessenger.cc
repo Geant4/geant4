@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoPlanePrimarygeneratorMessenger.cc
-// GEANT4 tag $Name: 
 //
 // Author: Alfonso Mantero (Alfonso.mantero@ge.infn.it)
 //

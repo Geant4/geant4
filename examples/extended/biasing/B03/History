@@ -1,4 +1,3 @@
-$Id: History 75090 2013-10-25 23:25:51Z dwright $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +16,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 October 14th, 2016 G.Folger
+=======
+May 29th, 2019 V. Ivanchenko  - B03-V10-05-01
+- B03PhysicsList : use G4NeutronInelasticXS cross section
+
+May 10th, 2019 V. Ivanchenko  - B03-V10-05-00
+- B03PhysicsList : explicitly defined hadronic x-sections
+
+Aug 9th, 2018 A. Ribon  - B03-V10-04-02
+- B03PhysicsList : replaced the explicit high-energy limit of hadronic
+  physics with the one from G4HadronicParameters .
+
+May 8th, 2018 B. Morgan - B03-V10-04-01
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Feb 15th, 2018 A. Howard - B03-V10-04-00
+- Removed parallel geometry setting directly from main - created a data-race
+  in MT mode. Now everything is handled with B03PhysicsList.cc
+
+Mar 8th, 2017 A. Howard - B03-V10-03-01
+- B03PhysicsList - removed obsolete unnececssary instantiation of 
+  de-excitation sub-models
+
+Mar 7th, 2017 A. Howard - B03-V10-03-00
+- Removed unnecessary clear sampling from B03
+
+October 14th, 2016 G.Folger   - B03-V10-02-01
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 

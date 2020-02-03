@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh 82961 2014-07-21 09:20:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,8 +53,8 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4TrackStatus.hh"
 #include "Randomize.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
-#include "CLHEP/Units/PhysicalConstants.h"
+#include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/Units/PhysicalConstants.h>
 #include <vector>
 
 class G4eeCrossSections;
@@ -66,33 +65,35 @@ class G4eeToHadronsMultiModel : public G4VEmModel
 
 public:
 
-  G4eeToHadronsMultiModel(G4int ver=0, const G4String& nam = "eeToHadrons");
+  explicit G4eeToHadronsMultiModel(G4int ver=0, 
+                                   const G4String& nam = "eeToHadrons");
 
   virtual ~G4eeToHadronsMultiModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy,
-					 G4double maxEnergy);
+					 G4double maxEnergy) override;
 
   virtual G4double ComputeCrossSectionPerAtom(
-                                         const G4ParticleDefinition*,
-                                         G4double kineticEnergy,
-                                         G4double Z, G4double A,
-                                         G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
+                                     const G4ParticleDefinition*,
+                                     G4double kineticEnergy,
+                                     G4double Z, G4double A,
+                                     G4double cutEnergy = 0.0,
+                                     G4double maxEnergy = DBL_MAX) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin = 0.0,
-				 G4double maxEnergy = DBL_MAX);
+				 G4double maxEnergy = DBL_MAX) override;
 
-  virtual void PrintInfo();
-
+  virtual void ModelDescription(std::ostream& outFile) const override;
+  
   // Set the factor to artificially increase the crossSection (default 1)
   void SetCrossSecFactor(G4double fac);
 

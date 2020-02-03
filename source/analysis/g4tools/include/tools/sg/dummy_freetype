@@ -16,7 +16,7 @@ class dummy_freetype : public base_freetype {
 public:
   TOOLS_NODE(dummy_freetype,tools::sg::dummy_freetype,base_freetype)
 protected: //gstos
-  virtual unsigned int create_gsto(std::ostream& a_out,gl_manager&) {
+  virtual unsigned int create_gsto(std::ostream& a_out,render_manager&) {
     a_out << "tools::sg::dummy_freetype::create_gsto : dummy" << std::endl;
     return 0;
   }

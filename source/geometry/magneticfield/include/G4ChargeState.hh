@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ChargeState.hh $
-//
-//
-// class G4ChargeState
+// G4ChargeState
 //
 // Class description:
 //
-// History
-// - First version: Apr 10, 2013  John Apostolakis, Peter Gumplinger
-// - Modified:
-// -------------------------------------------------------------------
+// Container for magnetic charge and moments.
 
-#ifndef G4ChargeState_HH
-#define G4ChargeState_HH
+// Authors: J.Apostolakis, P.Gumplinger - 10 April 2013  
+// -------------------------------------------------------------------
+#ifndef G4CHARGESTATE_HH
+#define G4CHARGESTATE_HH
 
 #include "globals.hh"
 
@@ -59,14 +54,16 @@ class  G4ChargeState  // Charge & moments
                                G4double magnetic_dipole_moment= DBL_MAX,
                                G4double electric_dipole_moment= DBL_MAX,
                                G4double magnetic_charge= DBL_MAX );
-     //  Revise the charge, pdgSpin, and optionally both moments and magnetic charge 
+       // Revise the charge, pdgSpin, and optionally both moments
+       // and magnetic charge 
 
      void SetCharge(G4double charge){ fCharge = charge; }
      G4double GetCharge() const { return fCharge; }
-     // Revise the charge (in units of the positron charge)
+       // Revise the charge (in units of the positron charge)
 
 
-     //  Basic Get / Set methods 
+     // Basic Get / Set methods 
+
      void     SetPDGSpin(G4double spin){ fSpin = spin; }
      G4double GetPDGSpin() const { return fSpin; }
 
@@ -91,7 +88,8 @@ class  G4ChargeState  // Charge & moments
      inline void SetChargeSpin(G4double charge,
                                G4double pdgSpin); 
 
-     //  Revise the charge, spin and all both moments
+     // Revise the charge, spin and all both moments
+
      inline void SetChargeDipoleMoments(G4double charge,
                                  G4double magnetic_dipole_moment,
                                  G4double electric_dipole_moment); 
@@ -101,10 +99,8 @@ class  G4ChargeState  // Charge & moments
                                G4double electric_dipole_moment,
                                G4double magnetic_charge );
    
-
-
-
    public: // Obsolete
+
      inline void     SetSpin(G4double spin){ SetPDGSpin( spin); } 
      inline G4double GetSpin() const { return GetPDGSpin(); }
 
@@ -120,10 +116,10 @@ class  G4ChargeState  // Charge & moments
 // Inline methods implementation
 
 inline G4ChargeState::G4ChargeState(G4double charge,
-                             G4double magnetic_dipole_moment,
-                             G4double spin,
-                             G4double electric_dipole_moment,
-                             G4double magnetic_charge)
+                                    G4double magnetic_dipole_moment,
+                                    G4double spin,
+                                    G4double electric_dipole_moment,
+                                    G4double magnetic_charge)
 {
    fCharge         = charge;
    fSpin           = spin;
@@ -154,15 +150,15 @@ inline G4ChargeState& G4ChargeState::operator = ( const G4ChargeState& right )
   return *this;
 }
 
-inline void G4ChargeState::SetChargeMdm(G4double charge, G4double mag_dipole_moment)
+inline void G4ChargeState::SetChargeMdm(G4double charge, G4double mdipole_mom)
 { 
    SetCharge( charge ); 
-   SetMagneticDipoleMoment( mag_dipole_moment); 
+   SetMagneticDipoleMoment( mdipole_mom ); 
 } 
 
 inline void G4ChargeState::SetChargeMdmSpin(G4double charge,
-                                  G4double magDipoleMoment,
-                                  G4double pdgSpin)
+                                            G4double magDipoleMoment,
+                                            G4double pdgSpin)
 {
    SetChargeMdm( charge, magDipoleMoment ); 
    SetPDGSpin( pdgSpin ); 
@@ -193,4 +189,4 @@ G4ChargeState::SetChargesAndMoments(G4double charge,
    SetChargeDipoleMoments( charge, magneticDM, electricDM); 
    SetMagneticCharge( magnetic_charge ); 
 }
-#endif  /* End of ifndef G4ChargeState_HH */
+#endif

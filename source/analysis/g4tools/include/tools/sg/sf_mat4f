@@ -115,6 +115,14 @@ public:
     m_touched = true;
   }
 
+  bool set_rotate(const vec3f& a_from,const vec3f& a_to,float []) {
+    rotf qr;
+    if(!qr.set_value(a_from,a_to)) return false;
+    qr.value(m_value);
+    m_touched = true;
+    return true;
+  }
+  
   bool mul_rotate(const vec3f& a_from,const vec3f& a_to,float a_tmp[]) {
     rotf qr;
     if(!qr.set_value(a_from,a_to)) return false;

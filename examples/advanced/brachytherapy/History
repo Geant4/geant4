@@ -1,5 +1,8 @@
 -------------------------------------------------------------------
+<<<<<<< HEAD
 $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +12,56 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
                       Category History file
                       ---------------------
 
+<<<<<<< HEAD
+=======
+20.09.2019 - M. Asai;brachy-V10-05-00
+             Add G4VScoringMesh:: scope identifier to BrachyUserScoreWriter.cc
+             Co-working with detutils-V10-05-01
+
+30.11.2018 - G. Cosmo;brachy-V10-04-07.
+             Fixed compilation warning for shadowing variables/parameters
+             in BrachyAnalysisManager, BrachyPrimaryGeneratorAction and
+             BrachyUserScoreWriter.
+
+29.11.2018 - G. Folger;brachy-V10-04-06.
+             Fix Visualisation.mac to leave verbosity at errors
+	      (warning is a 'magic' word failing a test
+	      
+29.11.2018 - G. Folger;brachy-V10-04-05.
+             Attempt to use Root optionally in CMakeLists.txt.
+	     
+28.11.2018 - S. Guatelli;brachy-V10-04-04. 
+             Added directory test_macro and included more ROOT analysis files.
+
+25.10.2018 - S. Guatelli;brachy-V10-04-03. CMakeList updated
+
+24.10.2018 - S. Guatelli;brachy-V10-04-02.
+             Included macros for the regression testing of Geant4.
+             Option to switch EM physics list included
+
+04.09.2018 - S. Guatelli and A. Le;brachy-V10-04-01.
+             Included new brachy source (I-125 Oncura 6711 source). 
+             G4_VIS_USE and G4_UI_USE deleted.
+
+10.05.2018 - B. Morgan; brachy-V10-04-00
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+10.11.2017 - G. Cosmo; brachy-V10-03-01
+             Avoid setting the initial seed to zero.
+
+1.11.2016  - S. Guatelli; brachy-V10-02-02
+             Added comparison to reference data for the Flexisource
+             Added Flexisurce and TG186 reference source; added method to calculate relative dose rate to compare to reference data
+
+06.09.2016 -  M. Asai; brachy-V10-02-01
+
+04.09.2016 -  M. Asai; brachy-V10-02-00
+              Modify std::map<G4int, G4double*> to
+              std::map<G4int, G4StatDouble*>
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 06.03.2015 -  A. Dotti; brachy-V10-01-00
               Removing unnecessary instantiation of GPS in master
 

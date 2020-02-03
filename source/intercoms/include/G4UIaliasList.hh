@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.hh 67965 2013-03-13 09:35:29Z gcosmo $
 //
 
 #ifndef G4UIaliasList_h
@@ -47,8 +46,8 @@ class G4UIaliasList
       ~G4UIaliasList();
 
   private:
-      G4int operator==(const G4UIaliasList &right) const;
-      G4int operator!=(const G4UIaliasList &right) const;
+      G4bool operator==(const G4UIaliasList &right) const;
+      G4bool operator!=(const G4UIaliasList &right) const;
 
   public:
       void RemoveAlias(const char* aliasName);

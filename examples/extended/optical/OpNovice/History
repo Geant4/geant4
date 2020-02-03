@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +18,42 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 Oct 14, 2016 G.Folger
+=======
+October 29, 2019 D. Sawkey (OpNovice-V10-05-00)
+- Use G4OpticalPhysics and G4SteppingVerbose
+- remove unused surface parameters
+
+July 31, 2018 I. Hrivnacova (OpNovice-V10-04-02)
+- Macro review: 
+  - Added test for /OpNovice/phys/cerenkovMaxPhotons command at the end 
+    of OpNovice.in macro
+  - Updated README files
+
+May 17, 2018 J. Allison (OpNovice-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+May 08, 2018 B. Morgan (OpNovice-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+August 18, 2017 J.Allison (OpNovice-V10-03-02)
+- Fix gui.mac, which executed vis.mac (it should not!).
+
+Mar 22, 2017 P.Gumplinger (OpNovice-V10-03-00/OpNovice-V10-03-01)
+- exercise the new DAVIS LUT surface model
+
+Nov 02, 2016 L.Garnier (OpNovice-V10-02-01)
+- Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+Nov 02, 2016 I. Hrivnacova (OpNovice-V10-02-00)
+- Added file descriptions for Doxygen documentation
+
+Oct 14, 2016 G.Folger (OpNovice-V10-00-00) - not tagged
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 

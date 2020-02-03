@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,12 +31,14 @@
 // Author: 2012 G.Folger
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4HyperonFTFPBuilder_h
 #define G4HyperonFTFPBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4LambdaInelasticProcess.hh"
@@ -60,15 +61,17 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4CascadeInterface.hh"
 
-#include "G4ChipsHyperonInelasticXS.hh"
-class G4HyperonFTFPBuilder 
+
+class G4VCrossSectionDataSet;
+
+
+class G4HyperonFTFPBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4HyperonFTFPBuilder();
     virtual ~G4HyperonFTFPBuilder();
 
-  public: 
-    void Build();
+    virtual void Build() final override;
 
   private:
  
@@ -90,10 +93,11 @@ class G4HyperonFTFPBuilder
     G4XiMinusInelasticProcess*  theXiMinusInelastic;
     G4AntiXiMinusInelasticProcess*  theAntiXiMinusInelastic;
     G4OmegaMinusInelasticProcess*  theOmegaMinusInelastic;
-  G4AntiOmegaMinusInelasticProcess*  theAntiOmegaMinusInelastic;
+    G4AntiOmegaMinusInelasticProcess*  theAntiOmegaMinusInelastic;
   
-  //  G4QHadronInelasticDataSet * theCHIPSInelastic;
-  G4VCrossSectionDataSet* theCHIPSInelastic;
+    G4VCrossSectionDataSet* theInelasticCrossSection;
     G4bool wasActivated;
 };
+
 #endif
+

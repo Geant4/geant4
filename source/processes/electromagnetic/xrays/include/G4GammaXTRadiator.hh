@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaXTRadiator.hh 68037 2013-03-13 14:15:08Z gcosmo $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -58,7 +57,7 @@ class G4GammaXTRadiator : public G4VXTRenergyLoss
 {
 public:
 
-   G4GammaXTRadiator (G4LogicalVolume *anEnvelope,
+   explicit G4GammaXTRadiator (G4LogicalVolume *anEnvelope,
                            G4double,G4double,
                            G4Material*,G4Material*,
                         G4double,G4double,G4int,
@@ -67,7 +66,8 @@ public:
 
   // Pure virtual function from base class
 
-  G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
+  G4double GetStackFactor( G4double energy, G4double gamma, 
+                           G4double varAngle) override;
 
 private:
 

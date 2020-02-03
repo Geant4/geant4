@@ -23,15 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TransportationManager.icc 78308 2013-12-11 10:56:58Z gcosmo $
-// ------------------------------------------------------------
-//  GEANT 4  inlined function members implementation
-// ------------------------------------------------------------
+//  G4TransportationManager inlined function members implementation
 //
 // Created :  10 March 1997, J. Apostolakis
 // Reviewed:  26 April 2006, G. Cosmo
-//  
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------

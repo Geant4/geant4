@@ -1,0 +1,30 @@
+#
+# Macro file for "TestEm11.cc"
+#
+# limit the step size from histo 1
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 Water  20 cm
+/testem/det/setSizeYZ 20 cm
+#
+/testem/phys/addPhysics  local	# em physics
+###/testem/phys/addPhysics  emstandard_opt3  # em physics 
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 2.4 GeV
+#
+/analysis/setFileName ionC12
+/analysis/h1/set 1 100  80. 90. mm	#edep profile
+/analysis/h1/set 3 100  80. 90. mm	#true track length
+#
+/testem/applyAutomaticStepMax true
+#
+/run/printProgress 1000
+/run/beamOn 10000

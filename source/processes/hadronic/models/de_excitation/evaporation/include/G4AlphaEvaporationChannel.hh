@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AlphaEvaporationChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
 //
@@ -35,29 +32,25 @@
 #define G4AlphaEvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
-#include "G4AlphaCoulombBarrier.hh"
 #include "G4AlphaEvaporationProbability.hh"
 
 class G4AlphaEvaporationChannel : public G4EvaporationChannel
 {
 public:
   // only available constructor
-  G4AlphaEvaporationChannel();
+  explicit G4AlphaEvaporationChannel();
 
   // destructor
-  virtual ~G4AlphaEvaporationChannel();
+  ~G4AlphaEvaporationChannel() override;
 
 private:
-  const G4AlphaEvaporationChannel & operator=(const G4AlphaEvaporationChannel & right);  
-
+  const G4AlphaEvaporationChannel & operator=
+  (const G4AlphaEvaporationChannel & right);  
   G4AlphaEvaporationChannel(const G4AlphaEvaporationChannel & right);
-
   G4bool operator==(const G4AlphaEvaporationChannel & right) const;
   G4bool operator!=(const G4AlphaEvaporationChannel & right) const;
 
-  G4AlphaCoulombBarrier theCoulombBarrier;	
-
-  G4AlphaEvaporationProbability theEvaporationProbability;
-
+  G4AlphaEvaporationProbability pr;
 };
+
 #endif

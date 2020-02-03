@@ -23,19 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LineSection.hh 85845 2014-11-05 15:43:58Z gcosmo $
-//
-//
-// class G4LineSection
+// G4LineSection
 //
 // Class description:
 //
 // A utility class that calculates the distance of a point from a 
 // line section.
 
-// History:
-// - Created. J. Apostolakis.
+// Created: J.Apostolakis, 1999
 // --------------------------------------------------------------------
 
 #ifndef G4LineSection_hh
@@ -48,7 +43,8 @@ class G4LineSection
 {
   public:  // with description
 
-     inline G4LineSection( const G4ThreeVector& PntA, const G4ThreeVector& PntB );
+     G4LineSection( const G4ThreeVector& PntA,
+                    const G4ThreeVector& PntB );
 
      G4double Dist( G4ThreeVector OtherPnt ) const;
 
@@ -59,20 +55,12 @@ class G4LineSection
                                       const G4ThreeVector& LinePntB );
   private:
 
-     G4ThreeVector   EndpointA;
-     G4ThreeVector   VecAtoB;
-     G4double fABdistanceSq ;
+     G4ThreeVector EndpointA;
+     G4ThreeVector VecAtoB;
+     G4double fABdistanceSq = 0.0;
 };
 
 // Inline methods implementations
-
-inline
-G4LineSection::G4LineSection( const G4ThreeVector& PntA, 
-			      const G4ThreeVector& PntB )
-  : EndpointA(PntA), VecAtoB(PntB-PntA)
-{ 
-  fABdistanceSq = VecAtoB.mag2();  
-}
 
 inline
 G4double G4LineSection::GetABdistanceSq() const
@@ -82,8 +70,8 @@ G4double G4LineSection::GetABdistanceSq() const
 
 inline
 G4double G4LineSection::Distline( const G4ThreeVector& OtherPnt, 
-				  const G4ThreeVector& LinePntA, 
-				  const G4ThreeVector& LinePntB )
+                                  const G4ThreeVector& LinePntA, 
+                                  const G4ThreeVector& LinePntB )
 {
   G4LineSection LineAB( LinePntA, LinePntB );  // Line from A to B
   return LineAB.Dist( OtherPnt );

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh 93818 2015-11-02 11:34:19Z gcosmo $
 //
 // 20110805  M. Kelsey -- Change nucleon vector to use objects, not pointers
 
@@ -48,8 +47,8 @@ class G4V3DNucleus
   private:
       G4V3DNucleus(const G4V3DNucleus &right);
       const G4V3DNucleus & operator=(const G4V3DNucleus &right);
-      int operator==(const G4V3DNucleus &right) const;
-      int operator!=(const G4V3DNucleus &right) const;
+      G4bool operator==(const G4V3DNucleus &right) const;
+      G4bool operator!=(const G4V3DNucleus &right) const;
 
   public:
       virtual void Init(G4int theA, G4int theZ) = 0;

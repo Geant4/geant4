@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
@@ -89,12 +88,12 @@ G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetecto
   return *this;
 }
 
-G4int G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
+G4bool G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
 {
    return (this==&right);
 }
 
-G4int G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
+G4bool G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
 {
    return (this!=&right);
 }

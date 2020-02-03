@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDelta1930.cc,v 1.4 2010-03-12 15:45:18 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToDeltaDelta1930.hh"

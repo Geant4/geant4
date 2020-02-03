@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc 77356 2013-11-22 17:10:29Z gcosmo $
 //
 //
 // class G4tgbVolume
@@ -35,8 +34,6 @@
 
 #include "G4tgbVolume.hh"
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4tgbVolumeMgr.hh"
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgbRotationMatrixMgr.hh"
@@ -104,6 +101,9 @@
 #include "G4tgrMessenger.hh"
 #include "G4UIcommand.hh"
 #include "G4GeometryTolerance.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //-------------------------------------------------------------------
 G4tgbVolume::G4tgbVolume()

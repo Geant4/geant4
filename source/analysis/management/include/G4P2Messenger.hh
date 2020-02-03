@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The messenger class for P2 management.
 // It implements commands in /analysis/p2 directory.
@@ -69,6 +68,9 @@ class G4P2Messenger : public G4UImessenger
     std::unique_ptr<G4UIcommand>  fSetP2XAxisCmd;   
     std::unique_ptr<G4UIcommand>  fSetP2YAxisCmd;   
     std::unique_ptr<G4UIcommand>  fSetP2ZAxisCmd;   
+    std::unique_ptr<G4UIcommand>  fSetP2XAxisLogCmd;
+    std::unique_ptr<G4UIcommand>  fSetP2YAxisLogCmd;
+    std::unique_ptr<G4UIcommand>  fSetP2ZAxisLogCmd;
 
     G4int  fXId;
     G4int  fYId;

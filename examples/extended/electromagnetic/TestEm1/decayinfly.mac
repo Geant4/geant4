@@ -1,0 +1,23 @@
+#
+# Macro file for "TestEm1.cc"
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testem/det/setMat Galactic 
+/testem/det/setSize 10000 km
+#
+/testem/phys/addPhysics  local
+/run/setCut 1 km
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/testem/gun/rndm 0.7
+/gun/particle ion
+/gun/ion 7 16
+/gun/energy 100 keV
+#
+/control/execute vis.mac
+/tracking/verbose 2
+/run/beamOn 4

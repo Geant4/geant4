@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXeDetectorConstruction.cc 82853 2014-07-14 09:07:11Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/src/LXeDetectorConstruction.cc
 /// \brief Implementation of the LXeDetectorConstruction class
@@ -77,6 +80,7 @@ LXeDetectorConstruction::LXeDetectorConstruction()
 
   fN = fO = fC = fH = NULL;
 
+  fSaveThreshold = 0;
   SetDefaults();
 
   fDetectorMessenger = new LXeDetectorMessenger(this);
@@ -241,6 +245,7 @@ void LXeDetectorConstruction::DefineMaterials(){
 
 G4VPhysicalVolume* LXeDetectorConstruction::Construct(){
 
+<<<<<<< HEAD
   if (fExperimentalHall_phys) {
      G4GeometryManager::GetInstance()->OpenGeometry();
      G4PhysicalVolumeStore::GetInstance()->Clean();
@@ -258,6 +263,8 @@ G4VPhysicalVolume* LXeDetectorConstruction::Construct(){
 
 G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
 {
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   //The experimental hall walls are all 1m away from housing walls
   G4double expHall_x = fScint_x+fD_mtl+1.*m;
   G4double expHall_y = fScint_y+fD_mtl+1.*m;
@@ -323,16 +330,25 @@ void LXeDetectorConstruction::ConstructSDandField() {
 
   // PMT SD
 
-  if (!fPmt_SD.Get()) {
+  LXePMTSD* pmt = fPmt_SD.Get();
+  if (!pmt) {
     //Created here so it exists as pmts are being placed
     G4cout << "Construction /LXeDet/pmtSD" << G4endl;
     LXePMTSD* pmt_SD = new LXePMTSD("/LXeDet/pmtSD");
     fPmt_SD.Put(pmt_SD);
 
-    pmt_SD->InitPMTs((fNx*fNy+fNx*fNz+fNy*fNz)*2); //let pmtSD know # of pmts
+    pmt_SD->InitPMTs();
     pmt_SD->SetPmtPositions(fMainVolume->GetPmtPositions());
   }
+<<<<<<< HEAD
 
+=======
+  else {
+    pmt->InitPMTs();
+    pmt->SetPmtPositions(fMainVolume->GetPmtPositions());
+  }
+  G4SDManager::GetSDMpointer()->AddNewDetector(fPmt_SD.Get());
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   //sensitive detector is not actually on the photocathode.
   //processHits gets done manually by the stepping action.
   //It is used to detect when photons hit and get absorbed&detected at the
@@ -356,44 +372,70 @@ void LXeDetectorConstruction::ConstructSDandField() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetDimensions(G4ThreeVector dims) {
+<<<<<<< HEAD
   this->fScint_x=dims[0];
   this->fScint_y=dims[1];
   this->fScint_z=dims[2];
+=======
+  fScint_x=dims[0];
+  fScint_y=dims[1];
+  fScint_z=dims[2];
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetHousingThickness(G4double d_mtl) {
+<<<<<<< HEAD
   this->fD_mtl=d_mtl;
+=======
+  fD_mtl=d_mtl;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNX(G4int nx) {
+<<<<<<< HEAD
   this->fNx=nx;
+=======
+  fNx=nx;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNY(G4int ny) {
+<<<<<<< HEAD
   this->fNy=ny;
+=======
+  fNy=ny;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNZ(G4int nz) {
+<<<<<<< HEAD
   this->fNz=nz;
+=======
+  fNz=nz;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetPMTRadius(G4double outerRadius_pmt) {
+<<<<<<< HEAD
   this->fOuterRadius_pmt=outerRadius_pmt;
+=======
+  fOuterRadius_pmt=outerRadius_pmt;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -478,3 +520,16 @@ void LXeDetectorConstruction::SetMainScintYield(G4double y) {
 void LXeDetectorConstruction::SetWLSScintYield(G4double y) {
   fMPTPStyrene->AddConstProperty("SCINTILLATIONYIELD",y/MeV);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeDetectorConstruction::SetSaveThreshold(G4int save){
+/*Sets the save threshold for the random number seed. If the number of photons
+generated in an event is lower than this, then save the seed for this event
+in a file called run###evt###.rndm
+*/
+  fSaveThreshold=save;
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

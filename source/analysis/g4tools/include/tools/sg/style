@@ -10,7 +10,7 @@
 
 #include "style_parser"
 #include "sf_string"
-#include "sf_vec"
+#include "sf_vec3f"
 #include "sf_enum"
 
 namespace tools {
@@ -24,7 +24,10 @@ public:
   sf_vec<colorf,float> back_color;
   sf<float> line_width;
   sf<float> marker_size;
+  sf<float> point_size;
   sf<float> font_size;
+  sf_enum<sg::font_modeling> font_modeling;
+  sf_enum<winding_type> front_face;
   sf<lpat> line_pattern;
   sf_enum<sg::marker_style> marker_style;
   sf_enum<sg::area_style> area_style;
@@ -51,55 +54,68 @@ public:
   sf<float> bar_offset;
   sf<float> bar_width;
   sf<bool> editable;
+  sf<bool> pickable;
   sf<bool> automated;
   sf_string options;
   sf_string color_mapping;
   sf<bool> enforced;
-  sf_vec<vec3f,float> translation;
+  sf_vec3f translation;
+  sf_string coloring;
+  sf_string filling;
+  sf_string title;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::style)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(color)
-      TOOLS_ADD_FIELD_DESC(highlight_color)
-      TOOLS_ADD_FIELD_DESC(back_color)
-      TOOLS_ADD_FIELD_DESC(line_width)
-      TOOLS_ADD_FIELD_DESC(marker_size)
-      TOOLS_ADD_FIELD_DESC(font_size)
-      TOOLS_ADD_FIELD_DESC(line_pattern)
-      TOOLS_ADD_FIELD_DESC(marker_style)
-      TOOLS_ADD_FIELD_DESC(area_style)
-      TOOLS_ADD_FIELD_DESC(modeling)
-      TOOLS_ADD_FIELD_DESC(light_model);
-      TOOLS_ADD_FIELD_DESC(tick_modeling);
-      TOOLS_ADD_FIELD_DESC(encoding)
-      TOOLS_ADD_FIELD_DESC(smoothing)
-      TOOLS_ADD_FIELD_DESC(hinting)
-      TOOLS_ADD_FIELD_DESC(cut)
-      TOOLS_ADD_FIELD_DESC(painting)
-      TOOLS_ADD_FIELD_DESC(hatching)
-      TOOLS_ADD_FIELD_DESC(projection)
-      TOOLS_ADD_FIELD_DESC(font)
-      TOOLS_ADD_FIELD_DESC(multi_node_limit)
-      TOOLS_ADD_FIELD_DESC(divisions)
-      TOOLS_ADD_FIELD_DESC(rotation_steps)
-      TOOLS_ADD_FIELD_DESC(spacing)
-      TOOLS_ADD_FIELD_DESC(angle)
-      TOOLS_ADD_FIELD_DESC(scale)
-      TOOLS_ADD_FIELD_DESC(offset)
-      TOOLS_ADD_FIELD_DESC(strip_width)
-      TOOLS_ADD_FIELD_DESC(visible)
-      TOOLS_ADD_FIELD_DESC(bar_offset)
-      TOOLS_ADD_FIELD_DESC(bar_width)
-      TOOLS_ADD_FIELD_DESC(editable)
-      TOOLS_ADD_FIELD_DESC(automated)
-      TOOLS_ADD_FIELD_DESC(options)
-      TOOLS_ADD_FIELD_DESC(color_mapping)
-      TOOLS_ADD_FIELD_DESC(enforced)
-      TOOLS_ADD_FIELD_DESC(translation)
-    }
+    static const desc_fields s_v(parent::node_desc_fields(),44, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(color),
+      TOOLS_ARG_FIELD_DESC(highlight_color),
+      TOOLS_ARG_FIELD_DESC(back_color),
+      TOOLS_ARG_FIELD_DESC(line_width),
+      TOOLS_ARG_FIELD_DESC(marker_size),
+      TOOLS_ARG_FIELD_DESC(point_size),
+      TOOLS_ARG_FIELD_DESC(font_size),
+      TOOLS_ARG_FIELD_DESC(font_modeling),
+      TOOLS_ARG_FIELD_DESC(front_face),
+      TOOLS_ARG_FIELD_DESC(line_pattern),   //10
+
+      TOOLS_ARG_FIELD_DESC(marker_style),
+      TOOLS_ARG_FIELD_DESC(area_style),
+      TOOLS_ARG_FIELD_DESC(modeling),
+      TOOLS_ARG_FIELD_DESC(light_model),
+      TOOLS_ARG_FIELD_DESC(tick_modeling),
+      TOOLS_ARG_FIELD_DESC(encoding),
+      TOOLS_ARG_FIELD_DESC(smoothing),
+      TOOLS_ARG_FIELD_DESC(hinting),
+      TOOLS_ARG_FIELD_DESC(cut),
+      TOOLS_ARG_FIELD_DESC(painting),  //20
+
+      TOOLS_ARG_FIELD_DESC(hatching),
+      TOOLS_ARG_FIELD_DESC(projection),
+      TOOLS_ARG_FIELD_DESC(font),
+      TOOLS_ARG_FIELD_DESC(multi_node_limit),
+      TOOLS_ARG_FIELD_DESC(divisions),
+      TOOLS_ARG_FIELD_DESC(rotation_steps),
+      TOOLS_ARG_FIELD_DESC(spacing),
+      TOOLS_ARG_FIELD_DESC(angle),
+      TOOLS_ARG_FIELD_DESC(scale),
+      TOOLS_ARG_FIELD_DESC(offset),  //30
+
+      TOOLS_ARG_FIELD_DESC(strip_width),
+      TOOLS_ARG_FIELD_DESC(visible),
+      TOOLS_ARG_FIELD_DESC(bar_offset),
+      TOOLS_ARG_FIELD_DESC(bar_width),
+      TOOLS_ARG_FIELD_DESC(editable),
+      TOOLS_ARG_FIELD_DESC(pickable),
+      TOOLS_ARG_FIELD_DESC(automated),
+      TOOLS_ARG_FIELD_DESC(options),
+      TOOLS_ARG_FIELD_DESC(color_mapping),
+      TOOLS_ARG_FIELD_DESC(enforced),   //40
+
+      TOOLS_ARG_FIELD_DESC(translation),
+      TOOLS_ARG_FIELD_DESC(coloring),
+      TOOLS_ARG_FIELD_DESC(filling),
+      TOOLS_ARG_FIELD_DESC(title)
+    );
     return s_v;
   }
 private:
@@ -109,7 +125,10 @@ private:
     add_field(&back_color);
     add_field(&line_width);
     add_field(&marker_size);
+    add_field(&point_size);
     add_field(&font_size);
+    add_field(&font_modeling);
+    add_field(&front_face);
     add_field(&line_pattern);
     add_field(&marker_style);
     add_field(&area_style);
@@ -136,11 +155,15 @@ private:
     add_field(&bar_offset);
     add_field(&bar_width);
     add_field(&editable);
+    add_field(&pickable);
     add_field(&automated);
     add_field(&options);
     add_field(&color_mapping);
     add_field(&enforced);
     add_field(&translation);
+    add_field(&coloring);
+    add_field(&filling);
+    add_field(&title);
   }
 public:
   style()
@@ -150,7 +173,10 @@ public:
   ,back_color(colorf::white())
   ,line_width(1)
   ,marker_size(1)
+  ,point_size(1)
   ,font_size(10)
+  ,font_modeling(font_filled)
+  ,front_face(winding_ccw)
   ,line_pattern(line_solid)
   ,marker_style(marker_dot)
   ,area_style(area_solid)
@@ -160,7 +186,7 @@ public:
   ,encoding(encoding_none())
   ,smoothing(false)
   ,hinting(false)
-  ,cut("")
+  ,cut()
   ,painting(painting_uniform)
   ,hatching(hatching_none)
   ,projection(projection_none)
@@ -177,11 +203,15 @@ public:
   ,bar_offset(0.25F)
   ,bar_width(0.5F)
   ,editable(false)
+  ,pickable(false)
   ,automated(true)
-  ,options("")
-  ,color_mapping("")
+  ,options()
+  ,color_mapping()
   ,enforced(false)
   ,translation(vec3f(0,0,0))
+  ,coloring()
+  ,filling()
+  ,title()
   {
     add_fields();
   }
@@ -194,7 +224,10 @@ public:
   ,back_color(a_from.back_color)
   ,line_width(a_from.line_width)
   ,marker_size(a_from.marker_size)
+  ,point_size(a_from.point_size)
   ,font_size(a_from.font_size)
+  ,font_modeling(a_from.font_modeling)
+  ,front_face(a_from.front_face)
   ,line_pattern(a_from.line_pattern)
   ,marker_style(a_from.marker_style)
   ,area_style(a_from.area_style)
@@ -221,11 +254,15 @@ public:
   ,bar_offset(a_from.bar_offset)
   ,bar_width(a_from.bar_width)
   ,editable(a_from.editable)
+  ,pickable(a_from.pickable)
   ,automated(a_from.automated)
   ,options(a_from.options)
   ,color_mapping(a_from.color_mapping)
   ,enforced(a_from.enforced)
   ,translation(a_from.translation)
+  ,coloring(a_from.coloring)
+  ,filling(a_from.filling)
+  ,title(a_from.title)
   {
     add_fields();
   }
@@ -237,7 +274,10 @@ public:
     back_color = a_from.back_color;
     line_width = a_from.line_width;
     marker_size = a_from.marker_size;
+    point_size = a_from.point_size;
     font_size = a_from.font_size;
+    font_modeling = a_from.font_modeling;
+    front_face = a_from.front_face;
     line_pattern = a_from.line_pattern;
     marker_style = a_from.marker_style;
     area_style = a_from.area_style;
@@ -264,17 +304,67 @@ public:
     bar_offset = a_from.bar_offset;
     bar_width = a_from.bar_width;
     editable = a_from.editable;
+    pickable = a_from.pickable;
     automated = a_from.automated;
     options = a_from.options;
     color_mapping = a_from.color_mapping;
     enforced = a_from.enforced;
     translation = a_from.translation;
+    coloring = a_from.coloring;
+    filling = a_from.filling;
+    title = a_from.title;
 
     return *this;
   }
 public:
-  bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,
-                          const std::string& a_s){
+  void reset() {
+    color = colorf_black();
+    highlight_color = colorf_black();
+    back_color = colorf_white();
+    line_width = 1;
+    marker_size = 1;
+    point_size = 1;
+    font_size = 10;
+    font_modeling = font_filled;
+    front_face = winding_ccw;
+    line_pattern = line_solid;
+    marker_style = marker_dot;
+    area_style = area_solid;
+    modeling = modeling_boxes();
+    light_model = light_model_phong();
+    tick_modeling = tick_modeling_hippo();
+    encoding = encoding_none();
+    smoothing = false;
+    hinting = false;
+    cut = "";
+    painting = painting_uniform;
+    hatching = hatching_none;
+    projection = projection_none;
+    font = font_hershey();
+    multi_node_limit = style_parser::no_limit();
+    divisions = 510;
+    rotation_steps = 24;
+    spacing = 0.05F;
+    angle = fpi()/4.0F;
+    scale = 1;
+    offset = 0;
+    strip_width = 0;
+    visible = true;
+    bar_offset = 0.25F;
+    bar_width = 0.5F;
+    editable = false;
+    pickable = false;
+    automated = true;
+    options = "";
+    color_mapping = "";
+    enforced = false;
+    translation = vec3f(0,0,0);
+    coloring = "";
+    filling = ""; 
+    title = "";
+  }
+  
+  bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s) {
     style_parser sp;
 
     sp.color(color.value());
@@ -282,7 +372,10 @@ public:
     sp.back_color(back_color.value());
     sp.line_width(line_width.value());
     sp.marker_size(marker_size.value());
+    sp.point_size(point_size.value());
     sp.font_size(font_size.value());
+    sp.font_modeling(font_modeling.value());
+    sp.front_face(front_face.value());
     sp.line_pattern(line_pattern.value());
     sp.marker_style(marker_style.value());
     sp.area_style(area_style.value());
@@ -311,11 +404,15 @@ public:
     sp.bar_offset(bar_offset.value());
     sp.bar_width(bar_width.value());
     sp.editable(editable.value());
+    sp.pickable(pickable.value());
     sp.automated(automated.value());
     sp.options(options.value());
     sp.color_mapping(color_mapping.value());
     sp.enforced(enforced.value());
     sp.translation(translation.value());
+    sp.coloring(coloring.value());
+    sp.filling(filling.value());
+    sp.title(title.value());
 
     //if(!sp.parse(a_s,style_parser::def_error_func)) 
     //  return false;
@@ -332,7 +429,10 @@ public:
     back_color.value(sp.back_color());
     line_width.value(sp.line_width());
     marker_size.value(sp.marker_size());
+    point_size.value(sp.point_size());
     font_size.value(sp.font_size());
+    font_modeling.value(sp.font_modeling());
+    front_face = sp.front_face();
     line_pattern.value(sp.line_pattern());
     marker_style.value(sp.marker_style());
     area_style.value(sp.area_style());
@@ -361,11 +461,15 @@ public:
     bar_offset.value(sp.bar_offset());
     bar_width.value(sp.bar_width());
     editable.value(sp.editable());
+    pickable.value(sp.pickable());
     automated.value(sp.automated());
     options.value(sp.options());
     color_mapping.value(sp.color_mapping());
     enforced.value(sp.enforced());
     translation.value(sp.translation());
+    coloring.value(sp.coloring());
+    filling.value(sp.filling());
+    title.value(sp.title());
 
     return true;
   }

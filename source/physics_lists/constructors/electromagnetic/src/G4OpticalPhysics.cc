@@ -38,12 +38,11 @@
 
 #include "G4OpticalPhysics.hh"
 
+//#include "G4OpticalPhoton.hh"
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
 #include "G4OpMieHG.hh"
-
 #include "G4OpBoundaryProcess.hh"
-
 #include "G4OpWLS.hh"
 #include "G4Scintillation.hh"
 #include "G4Cerenkov.hh"
@@ -51,26 +50,45 @@
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
 
-#include "G4GenericMessenger.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
-//
 G4_DECLARE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
 
+G4ThreadLocal G4Scintillation*     G4OpticalPhysics::fScintillationProcess = nullptr;
+G4ThreadLocal G4Cerenkov*          G4OpticalPhysics::fCerenkovProcess = nullptr;
+G4ThreadLocal G4OpWLS*             G4OpticalPhysics::fWLSProcess = nullptr;
+G4ThreadLocal G4OpAbsorption*      G4OpticalPhysics::fAbsorptionProcess = nullptr;
+G4ThreadLocal G4OpRayleigh*        G4OpticalPhysics::fRayleighProcess = nullptr;
+G4ThreadLocal G4OpMieHG*           G4OpticalPhysics::fMieProcess = nullptr;
+G4ThreadLocal G4OpBoundaryProcess* G4OpticalPhysics::fBoundaryProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
   : G4VPhysicsConstructor(name),
 
-    fMaxNumPhotons(100),
-    fMaxBetaChange(10.0),
     fYieldFactor(1.),
     fExcitationRatio(0.0),
-    fProfile("delta"),
     fFiniteRiseTime(false),
-    fScintillationByParticleType(false)
+    fScintillationByParticleType(false),
+    fScintillationTrackInfo(false),
+    fScintillationStackPhotons(true),
+    fScintillationVerbosity(0),
+    fMaxNumPhotons(100),
+    fMaxBetaChange(10.0),
+    fCerenkovStackPhotons(true),
+    fCerenkovVerbosity(0),
+    fWLSTimeProfileName("delta"),
+    fWLSVerbosity(0),
+    fAbsorptionVerbosity(0),
+    fRayleighVerbosity(0),
+    fMieVerbosity(0),
+    fInvokeSD(true),
+    fBoundaryVerbosity(0)
+
 {
   verboseLevel = verbose;
   fMessenger = new G4OpticalPhysicsMessenger(this);
@@ -86,6 +104,7 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
 G4OpticalPhysics::~G4OpticalPhysics()
 {
   delete fMessenger;
+  fMessenger = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,7 +126,7 @@ void G4OpticalPhysics::PrintStatistics() const
         if ( fProcessTrackSecondariesFirst[kCerenkov] ) {
           G4cout << "    Track secondaries first:  activated" << G4endl;
         }
-        else {  
+        else {
           G4cout << "    Track secondaries first:  inactivated" << G4endl;
         }
       }
@@ -119,12 +138,12 @@ void G4OpticalPhysics::PrintStatistics() const
         if ( fProcessTrackSecondariesFirst[kScintillation] ) {
           G4cout << "    Track secondaries first:  activated" << G4endl;
         }
-        else {  
+        else {
           G4cout << "    Track secondaries first:  inactivated" << G4endl;
         }
       }
       if ( i == kWLS ) {
-        G4cout << "     WLS process time profile: " << fProfile << G4endl;
+        G4cout << "     WLS process time profile: " << fWLSTimeProfileName << G4endl;
       }
     }
   }
@@ -132,171 +151,50 @@ void G4OpticalPhysics::PrintStatistics() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4OpticalPhoton.hh"
-
 void G4OpticalPhysics::ConstructParticle()
 {
-/// Instantiate particles.
-
-  // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#define DIR_CMDS "/process/optical"
-#define GUIDANCE "Commands related to the optical physics simulation engine for "
-
-namespace UIhelpers {
-    //Helper functions to create UI commands for processes
-
-    template<class T>
-    void buildCommands(T* proc,const char* dir, const char* guidance)
-    {
-        //Generic function to add a "verbose" command for a process
-        G4GenericMessenger* mess = new G4GenericMessenger(proc,dir,guidance);
-        G4AutoDelete::Register(mess);
-        G4GenericMessenger::Command& wlscmd4 = mess->DeclareMethod("verbose",&T::SetVerboseLevel,
-                                                                   "Set the verbose level");
-        wlscmd4.SetParameterName("ver",true);
-        wlscmd4.SetDefaultValue("1");
-        wlscmd4.SetStates(G4State_Idle);
-    }
-
-    void buildCommands( G4OpWLS* op )
-    {
-        //Build UI commands for WLS
-        G4GenericMessenger* mess = new G4GenericMessenger(op,DIR_CMDS"/wls/",GUIDANCE" for WLS process.");
-        G4AutoDelete::Register(mess);
-        //Here, more correctly DeclareProperty should be used, but to do that, I would need public/friend
-        //access of G4GenericMessenger to private members of G4Scintillation. Thus I use the approach
-        //of DeclareMethod, that has a draw back: range checking does not work
-        G4GenericMessenger::Command& wlscmd1 = mess->DeclareMethod("setTimeProfile",&G4OpWLS::UseTimeProfile,
-                                                                   "Set the WLS time profile (delta or exponential)");
-        wlscmd1.SetParameterName("profile",false);
-        wlscmd1.SetCandidates("delta exponential");
-        wlscmd1.SetStates(G4State_Idle);
-        buildCommands(op,DIR_CMDS"/wls/",GUIDANCE" for WLS process.");
-    }
-    
-    void buildCommands(G4Scintillation* ScintillationProcess)
-    {
-        //Build UI commands for scintillation
-        G4GenericMessenger* mess = new G4GenericMessenger(ScintillationProcess,DIR_CMDS"/scintillation/",GUIDANCE" for scintillation process.");
-        G4AutoDelete::Register(mess);
-        G4GenericMessenger::Command& sccmd1 = mess->DeclareMethod("setFiniteRiseTime",
-                                                                  &G4Scintillation::SetFiniteRiseTime,
-                                                                  "Set option of a finite rise-time for G4Scintillation - If set, the G4Scintillation process expects the user to have set the constant material property FAST/SLOWSCINTILLATIONRISETIME");
-        sccmd1.SetParameterName("time",false);
-        sccmd1.SetStates(G4State_Idle);
-        
-        G4GenericMessenger::Command& sccmd2 = mess->DeclareMethod("setYieldFactor",
-                                                                  &G4Scintillation::SetScintillationYieldFactor,
-                                                                  "Set scintillation yield factor");
-        sccmd2.SetParameterName("factor",false);
-        //sccmd2.SetRange("factor>=0."); //LIMITATION: w/ DeclareMethod range checking does not work
-        sccmd2.SetStates(G4State_Idle);
-        
-        G4GenericMessenger::Command& sccmd3 = mess->DeclareMethod("setExcitationRatio",
-                                                                  &G4Scintillation::SetScintillationExcitationRatio,
-                                                                  "Set scintillation excitation ratio");
-        sccmd3.SetParameterName("ratio",false);
-        //sccmd3.SetRange("ratio>=0.&&ratio<=1.");//LIMITATION: w/ DeclareMethod range checking does not work
-        sccmd3.SetStates(G4State_Idle);
-        G4GenericMessenger::Command& sccmd4 = mess->DeclareMethod("setByParticleType",
-                                                                  &G4Scintillation::SetScintillationByParticleType,
-                                                                  "Activate/Inactivate scintillation process by particle type");
-        sccmd4.SetParameterName("flag", false);
-        sccmd4.SetStates(G4State_Idle);
-        
-        G4GenericMessenger::Command& sccmd5 = mess->DeclareMethod("setTrackSecondariesFirst",
-                                                                  &G4Scintillation::SetTrackSecondariesFirst,
-                                                                  "Set option to track secondaries before finishing their parent track");
-        sccmd5.SetParameterName("flag",false);
-        sccmd5.SetStates(G4State_Idle);
-        
-        buildCommands(ScintillationProcess,DIR_CMDS"/scintillation/",GUIDANCE" for scintillation process.");
-    }
-    
-    void buildCommands(G4Cerenkov* CerenkovProcess)
-    {
-        //BUild UI commands for cerenkov
-        G4GenericMessenger* mess = new G4GenericMessenger(CerenkovProcess,DIR_CMDS"/cerenkov/",GUIDANCE" for Cerenkov process.");
-        G4AutoDelete::Register(mess);
-        G4GenericMessenger::Command& cecmd1 = mess->DeclareMethod("setMaxPhotons",
-                                                                  &G4Cerenkov::SetMaxNumPhotonsPerStep,
-                                                                  "Set maximum number of photons per step");
-        cecmd1.SetParameterName("max",false);
-        //cecmd1.SetRange("max>=0");//LIMITATION: w/ DeclareMethod range checking does not work
-        cecmd1.SetStates(G4State_Idle);
-        
-        G4GenericMessenger::Command& cecmd2 = mess->DeclareMethod("setMaxBetaChange",
-                                                                  &G4Cerenkov::SetMaxBetaChangePerStep,
-                                                                  "Set maximum change of beta of parent particle per step");
-        cecmd2.SetParameterName("max",false);
-        //cecmd2.SetRange("max>=0.");//LIMITATION: w/ DeclareMethod range checking does not work
-        cecmd2.SetStates(G4State_Idle);
-        
-        G4GenericMessenger::Command& cecmd3 = mess->DeclareMethod("setTrackSecondariesFirst",
-                                                                  &G4Cerenkov::SetTrackSecondariesFirst,
-                                                                  "Set option to track secondaries before finishing their parent track");
-        cecmd3.SetParameterName("flag",false);
-        cecmd3.SetStates(G4State_Idle);
-        
-        buildCommands(CerenkovProcess,DIR_CMDS"/cerenkov/",GUIDANCE" for Cerenkov process.");
-    }
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Threading.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4AutoDelete.hh"
 
 void G4OpticalPhysics::ConstructProcess()
 {
-// Construct optical processes.
-
   if(verboseLevel>0)
          G4cout <<"G4OpticalPhysics:: Add Optical Physics Processes"<< G4endl;
 
   // A vector of optical processes
   std::vector<G4VProcess*> OpProcesses;
 
-  for ( G4int i=0; i<kNoProcess; i++ ) OpProcesses.push_back(NULL);
+  for ( G4int i=0; i<kNoProcess; i++ ) OpProcesses.push_back(nullptr);
 
   // Add Optical Processes
 
-  G4OpAbsorption* OpAbsorptionProcess  = new G4OpAbsorption();
-  UIhelpers::buildCommands(OpAbsorptionProcess,DIR_CMDS"/absorption/",GUIDANCE" for absorption process");
-  OpProcesses[kAbsorption] = OpAbsorptionProcess;
+  fAbsorptionProcess  = new G4OpAbsorption();
+  OpProcesses[kAbsorption] = fAbsorptionProcess;
 
-  G4OpRayleigh* OpRayleighScatteringProcess = new G4OpRayleigh();
-  UIhelpers::buildCommands(OpRayleighScatteringProcess,DIR_CMDS"/rayleigh/",GUIDANCE" for Reyleigh scattering process");
-  OpProcesses[kRayleigh] = OpRayleighScatteringProcess;
-    
-  G4OpMieHG* OpMieHGScatteringProcess = new G4OpMieHG();
-  UIhelpers::buildCommands(OpMieHGScatteringProcess,DIR_CMDS"/mie/",GUIDANCE" for Mie cattering process");
-  OpProcesses[kMieHG] = OpMieHGScatteringProcess;
+  fRayleighProcess = new G4OpRayleigh();
+  OpProcesses[kRayleigh] = fRayleighProcess;
 
-  G4OpBoundaryProcess* OpBoundaryProcess = new G4OpBoundaryProcess();
-  UIhelpers::buildCommands(OpBoundaryProcess,DIR_CMDS"/boundary/",GUIDANCE" for boundary process");
-  OpProcesses[kBoundary] = OpBoundaryProcess;
+  fMieProcess = new G4OpMieHG();
+  OpProcesses[kMieHG] = fMieProcess;
 
-  G4OpWLS* OpWLSProcess = new G4OpWLS();
-  OpWLSProcess->UseTimeProfile(fProfile);
-  UIhelpers::buildCommands(OpWLSProcess);
-  OpProcesses[kWLS] = OpWLSProcess;
+  fBoundaryProcess = new G4OpBoundaryProcess();
+  fBoundaryProcess->SetInvokeSD(fInvokeSD);
+  OpProcesses[kBoundary] = fBoundaryProcess;
 
-  G4ProcessManager * pManager = 0;
+  fWLSProcess = new G4OpWLS();
+  fWLSProcess->UseTimeProfile(fWLSTimeProfileName);
+  OpProcesses[kWLS] = fWLSProcess;
+
+  G4ProcessManager* pManager = nullptr;
   pManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
 
   if (!pManager) {
-     std::ostringstream o;
-     o << "Optical Photon without a Process Manager";
+     G4ExceptionDescription ed;
+     ed << "Optical Photon without a Process Manager";
      G4Exception("G4OpticalPhysics::ConstructProcess()","",
-                  FatalException,o.str().c_str());
+                  FatalException,ed);
      return;
   }
 
@@ -306,23 +204,24 @@ void G4OpticalPhysics::ConstructProcess()
       }
   }
 
-  G4Scintillation* ScintillationProcess = new G4Scintillation();
-  ScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
-  ScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
-  ScintillationProcess->SetFiniteRiseTime(fFiniteRiseTime);
-  ScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
-  ScintillationProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
+  fScintillationProcess = new G4Scintillation();
+  fScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
+  fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
+  fScintillationProcess->SetFiniteRiseTime(fFiniteRiseTime);
+  fScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
+  fScintillationProcess->SetScintillationTrackInfo(fScintillationTrackInfo);
+  fScintillationProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
+  fScintillationProcess->SetStackPhotons(fScintillationStackPhotons);
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
-  ScintillationProcess->AddSaturation(emSaturation);
-  UIhelpers::buildCommands(ScintillationProcess);
-  OpProcesses[kScintillation] = ScintillationProcess;
-    
-  G4Cerenkov* CerenkovProcess = new G4Cerenkov();
-  CerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
-  CerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
-  CerenkovProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
-  UIhelpers::buildCommands(CerenkovProcess);
-  OpProcesses[kCerenkov] = CerenkovProcess;
+  fScintillationProcess->AddSaturation(emSaturation);
+  OpProcesses[kScintillation] = fScintillationProcess;
+
+  fCerenkovProcess = new G4Cerenkov();
+  fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
+  fCerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
+  fCerenkovProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
+  fCerenkovProcess->SetStackPhotons(fCerenkovStackPhotons);
+  OpProcesses[kCerenkov] = fCerenkovProcess;
 
   auto myParticleIterator=GetParticleIterator();
   myParticleIterator->reset();
@@ -334,25 +233,28 @@ void G4OpticalPhysics::ConstructProcess()
 
     pManager = particle->GetProcessManager();
     if (!pManager) {
-       std::ostringstream o;
-       o << "Particle " << particleName << "without a Process Manager";
+       G4ExceptionDescription ed;
+       ed << "Particle " << particleName << "without a Process Manager";
        G4Exception("G4OpticalPhysics::ConstructProcess()","",
-                    FatalException,o.str().c_str());
-       return;                 // else coverity complains for pManager use below	    
+                    FatalException, ed);
+       return;                 // else coverity complains for pManager use below
     }
 
-    if( CerenkovProcess->IsApplicable(*particle) &&
+    if( fCerenkovProcess->IsApplicable(*particle) &&
         fProcessUse[kCerenkov] ) {
-          pManager->AddProcess(CerenkovProcess);
-          pManager->SetProcessOrdering(CerenkovProcess,idxPostStep);
+          pManager->AddProcess(fCerenkovProcess);
+          pManager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
     }
-    if( ScintillationProcess->IsApplicable(*particle) &&
-        fProcessUse[kScintillation] ){
-          pManager->AddProcess(ScintillationProcess);
-          pManager->SetProcessOrderingToLast(ScintillationProcess,idxAtRest);
-          pManager->SetProcessOrderingToLast(ScintillationProcess,idxPostStep);
+    if( fScintillationProcess->IsApplicable(*particle) &&
+        fProcessUse[kScintillation] ) {
+          pManager->AddProcess(fScintillationProcess);
+          pManager->SetProcessOrderingToLast(fScintillationProcess,idxAtRest);
+          pManager->SetProcessOrderingToLast(fScintillationProcess,idxPostStep);
     }
-
+    if( fBoundaryProcess->IsApplicable(*particle) &&
+        fProcessUse[kBoundary] ) {
+          pManager->SetProcessOrderingToLast(fBoundaryProcess,idxPostStep);
+    }
   }
 
   // Add verbose
@@ -365,55 +267,146 @@ void G4OpticalPhysics::ConstructProcess()
     G4cout << "### " << namePhysics << " physics constructed." << G4endl;
 }
 
-void G4OpticalPhysics::SetScintillationYieldFactor(G4double yieldFactor)
+void G4OpticalPhysics::SetScintillationYieldFactor(G4double val)
 {
-/// Set the scintillation yield factor
-
-  fYieldFactor = yieldFactor;
-  //G4Scintillation::SetScintillationYieldFactor(yieldFactor);
+   fYieldFactor = val;
+   if (fScintillationProcess) {
+    fScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
+  }
 }
 
-void G4OpticalPhysics::SetScintillationExcitationRatio(G4double excitationRatio)
+void G4OpticalPhysics::SetScintillationExcitationRatio(G4double val)
 {
-/// Set the scintillation excitation ratio
-
-  fExcitationRatio = excitationRatio;
-//  G4Scintillation::SetScintillationExcitationRatio(excitationRatio);
+  fExcitationRatio = val;
+  if (fScintillationProcess) {
+    fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
+  }
 }
 
-void G4OpticalPhysics::SetMaxNumPhotonsPerStep(G4int maxNumPhotons)
+void G4OpticalPhysics::SetMaxNumPhotonsPerStep(G4int val)
 {
-/// Limit step to the specified maximum number of Cherenkov photons
-
-  fMaxNumPhotons = maxNumPhotons;
-//  G4Cerenkov::SetMaxNumPhotonsPerStep(maxNumPhotons);
+/// Limit step to the specified maximum number of Cerenkov photons
+  fMaxNumPhotons = val;
+  if (fCerenkovProcess) {
+    fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
+  }
 }
 
-void G4OpticalPhysics::SetMaxBetaChangePerStep(G4double maxBetaChange)
+void G4OpticalPhysics::SetMaxBetaChangePerStep(G4double val)
 {
 /// Limit step to the specified maximum change of beta of the parent particle
-
-  fMaxBetaChange = maxBetaChange;
-//  G4Cerenkov::SetMaxBetaChangePerStep(maxBetaChange);
+  fMaxBetaChange = val;
+  if (fCerenkovProcess) {
+    fCerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
+  }
 }
 
-void G4OpticalPhysics::SetWLSTimeProfile(G4String profile)
+void G4OpticalPhysics::SetCerenkovStackPhotons(G4bool val)
+{
+  fCerenkovStackPhotons = val;
+  if (fCerenkovProcess) {
+    fCerenkovProcess->SetStackPhotons(fCerenkovStackPhotons);
+  }
+}
+
+void G4OpticalPhysics::SetCerenkovTrackSecondariesFirst(G4bool val)
+{
+  fProcessTrackSecondariesFirst[kCerenkov] = val;
+  if (fCerenkovProcess) {
+    fCerenkovProcess->
+      SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
+  }
+}
+
+void G4OpticalPhysics::SetCerenkovVerbosity(G4int ver)
+{
+  fCerenkovVerbosity = ver;
+  if (fCerenkovProcess) {
+    fCerenkovProcess->SetVerboseLevel(fCerenkovVerbosity);
+  }
+}
+
+void G4OpticalPhysics::SetWLSTimeProfile(G4String name)
 {
 /// Set the WLS time profile (delta or exponential)
-  fProfile = profile;
+  fWLSTimeProfileName = name;
+  if (fWLSProcess) {
+    fWLSProcess->UseTimeProfile(fWLSTimeProfileName);
+  }
 }
 
-//void G4OpticalPhysics::AddScintillationSaturation(G4EmSaturation* saturation)
-//{
-///// Adds Birks Saturation to the G4Scintillation Process
-//  G4Scintillation::AddSaturation(saturation);
-//}
-
-void G4OpticalPhysics::
-             SetScintillationByParticleType(G4bool scintillationByParticleType)
+void G4OpticalPhysics::SetWLSVerbosity(G4int ver)
 {
-  fScintillationByParticleType = scintillationByParticleType;
-  //G4Scintillation::SetScintillationByParticleType(scintillationByParticleType);
+  fWLSVerbosity = ver;
+  if (fWLSProcess) {
+    fWLSProcess->SetVerboseLevel(fWLSVerbosity);
+  }
+}
+
+void G4OpticalPhysics::SetScintillationByParticleType(G4bool val)
+{
+  fScintillationByParticleType = val;
+  if (fScintillationProcess) {
+    fScintillationProcess->
+      SetScintillationByParticleType(fScintillationByParticleType);
+  }
+}
+
+void G4OpticalPhysics::SetScintillationTrackSecondariesFirst(G4bool val)
+{
+  fProcessTrackSecondariesFirst[kScintillation] = val;
+  if (fScintillationProcess) {
+    fScintillationProcess->
+      SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
+  }
+}
+
+void G4OpticalPhysics::SetScintillationTrackInfo(G4bool val)
+{
+  fScintillationTrackInfo = val;
+  if (fScintillationProcess) {
+    fScintillationProcess->SetScintillationTrackInfo(fScintillationTrackInfo);
+  }
+}
+
+void G4OpticalPhysics::SetScintillationVerbosity(G4int ver)
+{
+  fScintillationVerbosity = ver;
+  if (fScintillationProcess) {
+    fScintillationProcess->SetVerboseLevel(fScintillationVerbosity);
+  }
+}
+
+void G4OpticalPhysics::SetAbsorptionVerbosity(G4int ver)
+{
+  fAbsorptionVerbosity = ver;
+  if (fAbsorptionProcess) {
+    fAbsorptionProcess->SetVerboseLevel(fAbsorptionVerbosity);
+  }
+}
+
+void G4OpticalPhysics::SetRayleighVerbosity(G4int ver)
+{
+  fRayleighVerbosity = ver;
+  if (fRayleighProcess) {
+    fRayleighProcess->SetVerboseLevel(fRayleighVerbosity);
+  }
+}
+
+void G4OpticalPhysics::SetMieVerbosity(G4int ver)
+{
+  fMieVerbosity = ver;
+  if (fMieProcess) {
+    fMieProcess->SetVerboseLevel(fMieVerbosity);
+  }
+}
+
+void G4OpticalPhysics::SetBoundaryVerbosity(G4int ver)
+{
+  fBoundaryVerbosity = ver;
+  if (fBoundaryProcess) {
+    fBoundaryProcess->SetVerboseLevel(fBoundaryVerbosity);
+  }
 }
 
 void G4OpticalPhysics::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
@@ -422,18 +415,31 @@ void G4OpticalPhysics::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
   if ( index >= kNoProcess ) return;
   if ( fProcessTrackSecondariesFirst[index] == trackSecondariesFirst ) return;
   fProcessTrackSecondariesFirst[index] = trackSecondariesFirst;
-
-//  if ( index == kCerenkov )
-//     G4Cerenkov::SetTrackSecondariesFirst(trackSecondariesFirst);
-//  if ( index == kScintillation)
-//      G4Scintillation::SetTrackSecondariesFirst(trackSecondariesFirst);
 }
 
-void G4OpticalPhysics::SetFiniteRiseTime(G4bool finiteRiseTime)
+void G4OpticalPhysics::SetFiniteRiseTime(G4bool b)
 {
-  fFiniteRiseTime = finiteRiseTime;
-  //G4Scintillation::SetFiniteRiseTime(finiteRiseTime);
-} 
+  fFiniteRiseTime = b;
+  if (fScintillationProcess) {
+    fScintillationProcess->SetFiniteRiseTime(fFiniteRiseTime);
+  }
+}
+
+void G4OpticalPhysics::SetInvokeSD(G4bool b)
+{
+  fInvokeSD = b;
+  if (fBoundaryProcess) {
+    fBoundaryProcess->SetInvokeSD(fInvokeSD);
+  }
+}
+
+void G4OpticalPhysics::SetScintillationStackPhotons(G4bool stackingFlag)
+{
+  fScintillationStackPhotons = stackingFlag;
+  if (fScintillationProcess) {
+    fScintillationProcess->SetStackPhotons(fScintillationStackPhotons);
+  }
+}
 
 void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
 {

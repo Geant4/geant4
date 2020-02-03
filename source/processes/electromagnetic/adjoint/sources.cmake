@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -64,11 +63,14 @@ GEANT4_DEFINE_MODULE(NAME G4emadjoint
         G4InversePEEffect.hh
         G4IonInverseIonisation.hh
         G4VAdjointReverseReaction.hh
+        G4AdjointForcedInteractionForGamma.hh
         G4VEmAdjointModel.hh
         G4eInverseBremsstrahlung.hh
         G4eInverseCompton.hh
         G4eInverseIonisation.hh
         G4hInverseIonisation.hh
+        G4UrbanAdjointMscModel.hh
+        G4eAdjointMultipleScattering.hh
     SOURCES
         G4AdjointAlongStepWeightCorrection.cc
         G4AdjointBremsstrahlungModel.cc
@@ -86,11 +88,14 @@ GEANT4_DEFINE_MODULE(NAME G4emadjoint
         G4InversePEEffect.cc
         G4IonInverseIonisation.cc
         G4VAdjointReverseReaction.cc
+        G4AdjointForcedInteractionForGamma.cc
         G4VEmAdjointModel.cc
         G4eInverseBremsstrahlung.cc
         G4eInverseCompton.cc
         G4eInverseIonisation.cc
         G4hInverseIonisation.cc
+        G4UrbanAdjointMscModel.cc
+        G4eAdjointMultipleScattering.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

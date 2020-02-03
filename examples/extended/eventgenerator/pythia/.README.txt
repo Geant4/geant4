@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "eventgenerator/pythia/.README.txt"
 ///\brief Examples pythia README page

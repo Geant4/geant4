@@ -1,4 +1,3 @@
-$Id: History 71654 2013-06-19 18:20:04Z maire $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,7 +12,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
 	 
+=======
+
+25-06-18 mma (exhadr04-V10-04-04)
+- envHadronic : add env variables for particleHP (PHP)
+
+09-05-18 B. Morgan (exhadr04-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+05-04-18 mma (exhadr04-V10-04-02)
+- Hadr04.cc : set visualisation only in interactive session.
+
+16-03-18 mma (exhadr04-V10-04-01)
+- Hadr04.cc : remove G4UI_USE and G4VIS_USE
+
+17-12-17 mma  (exhadr04-V10-04-00)
+- NeutronHPphysics : use pManager->GetProcess(processName)
+
+11-04-17 mma  (exhadr04-V10-03-01)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+12-07-16 mma (exhadr04-V10-02-00)
+- DetectorConstruction : add HeavyWater
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 02-11-15 A. Ribon (exhadr04-V10-01-00)
 - Migrated to ParticleHP
 	 

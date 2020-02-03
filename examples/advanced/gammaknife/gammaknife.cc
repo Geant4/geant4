@@ -51,12 +51,9 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
-#ifdef G4VIS_USE
-	#include "G4VisExecutive.hh"
-#endif
-#ifdef G4UI_USE
-	#include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
+
+#include "G4UIExecutive.hh"
 
 #include "GammaKnifeDetectorConstruction.hh"
 #include "GammaKnifePhysicsList.hh"
@@ -99,7 +96,7 @@ int main(int argc ,char ** argv)
   G4String physName = "";
 
   // Physics List name defined via environment variable
-  char* path = getenv("PHYSLIST");
+  char* path = std::getenv("PHYSLIST");
   if (path) { physName = G4String(path); }
 
   if(physName != "" && factory.IsReferencePhysList(physName))
@@ -121,12 +118,15 @@ int main(int argc ,char ** argv)
   // Initialize G4 kernel
   //
   runManager->Initialize();
+<<<<<<< HEAD
   
 #ifdef G4VIS_USE
+=======
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
-#endif
 
   // Get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
@@ -139,22 +139,27 @@ int main(int argc ,char ** argv)
   }
   else {
     // interactive mode : define UI session
-#ifdef G4UI_USE
+
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+<<<<<<< HEAD
 #ifdef G4VIS_USE
     UImanager->ApplyCommand("/control/execute defaultMacro.mac"); 
 #else
     UImanager->ApplyCommand("/control/execute batch.mac"); 
 #endif
+=======
+
+    UImanager->ApplyCommand("/control/execute defaultMacro.mac");
+
+    UImanager->ApplyCommand("/control/execute batch.mac");
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     ui->SessionStart();
     delete ui;
-#endif
+
   }
 
-  // Job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
 
   delete runManager;
   delete controller;

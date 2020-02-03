@@ -1,0 +1,73 @@
+#This macro file is where the user can set up the different parameters one can modify.
+
+/run/initialize
+##############################################
+#
+# PART1: Set the values for the beam
+#
+/gps/particle proton     #incoming particles = proton
+/gps/direction 0 0 1     #oriented along the Z axis
+/gps/ene/type Mono       #monoenergetic
+/gps/ene/mono 18. MeV    #at 18 MeV
+/gps/pos/type Beam       
+/gps/pos/shape Circle    #the beam geometry is a circle
+/gps/pos/radius 3. mm    #of diameter of 3 mm
+#
+/setBeamCurrent/beamCurrent 30.E-6     #set the value of beam current in ampere
+/setTimeOfIrradiation/time 6.          # Set the irradiation time (in hours)
+#
+#
+#
+##############################################
+#
+# PART 2 : Set the values for the Target
+#
+/changeTarget/diameter 6. mm
+/changeTarget/thickness 0.6 mm
+#control/execute Macro/Material/Target/Ni64_enriched_95.mac
+#
+#
+#
+###############################################
+#
+# PART 3 : Set the values for the Foil
+#
+#/changeFoil/thickness 0.32 mm
+/changeFoil/thickness 0.32 mm
+#
+#
+#
+##############################################
+# PART 4 : Set the edges of histograms
+#
+#Beam data
+/analysis/setFileName STCyclotron
+/analysis/h1/set 0  32  12. 19. MeV	#energy primary particles when reaching the target (in MeV). By default equal or lower than the beam energy.
+/analysis/h1/set 1  16  16. 19. MeV	#energy primary particles when reaching the foil (in MeV). By default equal or lower than the beam energy.
+/analysis/h1/set 2  72  0.0 18. MeV	#energy spectrum of primaries going out of the target (MeV)
+/analysis/h1/set 3  32  12. 19. MeV	#energy of primary particles when going out of the foil (MeV)
+/analysis/h1/set 4  30  185. 188. mm	#depth of isotope creation in the target.
+/analysis/h1/set 5  72  0. 18. MeV	#energy spectrum of positrons created in the target (MeV)
+/analysis/h1/set 6  72  0. 18. MeV     	#energy spectrum of electrons created in the target (MeV)
+/analysis/h1/set 7  72  0. 18. MeV	#energy spectrum of gammas created in the target (MeV)
+/analysis/h1/set 8  72  0. 18. MeV	#energy spectrum of neutrons created in the target (MeV)
+/analysis/h1/set 9  72  0. 18. MeV	#energy spectrum of positrons created in the target via decay (MeV)
+/analysis/h1/set 10  72  0. 18. MeV	#energy spectrum of electrons created in the target via decay (MeV)
+/analysis/h1/set 11  72  0. 18. MeV	#energy spectrum of gammas created in the target via decay (MeV)
+/analysis/h1/set 12  72  0. 18. MeV	#energy spectrum of neutrons created in the target via decay (MeV)
+/analysis/h1/set 13  72  0. 18. MeV	#energy spectrum of nu_e created in the target via decay (MeV)
+/analysis/h1/set 14  72  0. 18. MeV	#energy spectrum of anti_nu_e created in the target via decay (MeV)
+#
+#
+/analysis/h2/setX 0  100 -7.5 7.5 mm 	#beam intensity before hiting the target (mm)
+/analysis/h2/setY 0  100 -7.5 7.5 mm 	#beam intensity before hiting the target (mm)
+/analysis/h2/setX 1  100 -7.5 7.5 mm    #beam intensity before hiting the foil (mm)
+/analysis/h2/setY 1  100 -7.5 7.5 mm	#beam intensity before hiting the foil (mm)
+/analysis/h2/setX 2  21 14.5 35.5       #radioisotopes produced
+/analysis/h2/setY 2  30 44.5 74.5       #radioisotopes produced
+/analysis/h2/setX 3  100 185. 188. mm   #depth = f(energy (MeV))
+/analysis/h2/setY 3  100 0. 19. MeV     #depth = f(energy (MeV))
+/analysis/h2/setX 4  100 -7.5 7.5 mm    #beam intensity going out from the target (mm)
+/analysis/h2/setY 4  100 -7.5 7.5 mm    #beam intensity going out from the target (mm)
+/analysis/h2/setX 5  100 -7.5 7.5 mm    #beam intensity going out from the foil (mm)
+/analysis/h2/setY 5  100 -7.5 7.5 mm    #beam intensity going out from the foil (mm)

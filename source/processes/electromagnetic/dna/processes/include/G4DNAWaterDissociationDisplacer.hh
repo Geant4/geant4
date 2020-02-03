@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAWaterDissociationDisplacer.hh 94010 2015-11-05 10:08:33Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -50,37 +49,41 @@
 
 #include "G4VMolecularDissociationDisplacer.hh"
 #include "G4DNARevertProbability.hh"
+#include "G4DNAModelSubType.hh"
 
-class G4DNAWaterDissociationDisplacer : public G4VMolecularDecayDisplacer
+#define _WATER_DISPLACER_USE_TERRISOL_
+//#define _WATER_DISPLACER_USE_KREIPL_
+
+class G4DNAWaterDissociationDisplacer: public G4VMolecularDissociationDisplacer
 {
-public :
-    G4DNAWaterDissociationDisplacer();
-    virtual ~G4DNAWaterDissociationDisplacer() ;
-
-    virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDissociationChannel*) const;
-    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const;
-    G4ThreeVector radialDistributionOfElectron() const;
-    G4ThreeVector radialDistributionOfProducts(G4double r_rms) const;
-    static G4double ElectronProbaDistribution(G4double r);
-
-#if defined G4EM_ALLOC_EXPORT
-    G4DLLEXPORT static const DisplacementType Ionisation_DissociationDecay;
-    G4DLLEXPORT static const DisplacementType A1B1_DissociationDecay;
-    G4DLLEXPORT static const DisplacementType B1A1_DissociationDecay;
-    G4DLLEXPORT static const DisplacementType AutoIonisation;
-    G4DLLEXPORT static const DisplacementType DissociativeAttachment;
-#else
-    G4DLLIMPORT static const DisplacementType Ionisation_DissociationDecay;
-    G4DLLIMPORT static const DisplacementType A1B1_DissociationDecay;
-    G4DLLIMPORT static const DisplacementType B1A1_DissociationDecay;
-    G4DLLIMPORT static const DisplacementType AutoIonisation;
-    G4DLLIMPORT static const DisplacementType DissociativeAttachment;
-#endif
-
-private :
-    std::function<G4double(G4double)> fProba1DFunction;
-    std::vector<G4double> fElectronThermalization;
-    G4DNARevertProbability fFastElectronDistrib;
+public:
+  G4DNAWaterDissociationDisplacer();
+  virtual ~G4DNAWaterDissociationDisplacer();
+  
+  std::vector<G4ThreeVector>
+  GetProductsDisplacement(const G4MolecularDissociationChannel*) const
+  override;
+  
+  G4ThreeVector
+  GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const
+  override;
+  
+  G4ThreeVector radialDistributionOfElectron() const;
+  G4ThreeVector radialDistributionOfProducts(G4double r_rms) const;
+  static G4double ElectronProbaDistribution(G4double r);
+  
+  G4CT_COUNT_DEF(Ionisation_DissociationDecay)
+  G4CT_COUNT_DEF(A1B1_DissociationDecay)
+  G4CT_COUNT_DEF(B1A1_DissociationDecay)
+  G4CT_COUNT_DEF(AutoIonisation)
+  G4CT_COUNT_DEF(DissociativeAttachment)
+  
+private:
+  G4double ke;
+  G4DNAModelSubType dnaSubType;
+//  std::function<G4double(G4double)> fProba1DFunction;
+//  std::vector<G4double> fElectronThermalization;
+//  G4DNARevertProbability fFastElectronDistrib;
 };
 #endif
 

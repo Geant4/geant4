@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
 # --------------------------------------------------------------
 # GNUmakefile for  processes/decay library.  G.Folger 9/12/97
 # --------------------------------------------------------------
@@ -22,6 +21,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
  	    -I$(G4BASE)/track/include \
 	    -I$(G4BASE)/processes/management/include \
 	    -I$(G4BASE)/particles/management/include \
+	    -I$(G4BASE)/particles/hadrons/ions/include \
 	    -I$(G4BASE)/intercoms/include \
 	    -I$(G4BASE)/materials/include
 

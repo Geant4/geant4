@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc 94337 2015-11-12 10:02:04Z gcosmo $
 //
 
 #include "G4RunMessenger.hh"
@@ -142,21 +141,21 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   evModCmd->SetGuidance("The value N may affect on the computing performance in particular");
   evModCmd->SetGuidance("if N is too small compared to the total number of events.");
   evModCmd->SetGuidance("The second parameter seedOnce specifies how frequently each worker");
-  evModCmd->SetGuidance("thread is seeded by the random number sequence contrally managed");
+  evModCmd->SetGuidance("thread is seeded by the random number sequence centrally managed");
   evModCmd->SetGuidance("by the master G4MTRunManager.");
   evModCmd->SetGuidance(" - If seedOnce is set to 0 (default), seeds that are centrally managed");
   evModCmd->SetGuidance("   by G4MTRunManager are set for every event of every worker thread.");
-  evModCmd->SetGuidance("   This option guarantees event reproducability regardless of number");
+  evModCmd->SetGuidance("   This option guarantees event reproducibility regardless of number");
   evModCmd->SetGuidance("   of threads.");
   evModCmd->SetGuidance(" - If seedOnce is set to 1, seeds are set only once for the first");
-  evModCmd->SetGuidance("   event of each run of each worker thread. Event reproducability is");
+  evModCmd->SetGuidance("   event of each run of each worker thread. Event reproducibility is");
   evModCmd->SetGuidance("   guaranteed only if the same number of worker threads are used.");
   evModCmd->SetGuidance("   On the other hand, this option offers better computing performance");
   evModCmd->SetGuidance("   in particular for applications with relatively small primary");
   evModCmd->SetGuidance("   particle energy and large number of events."); 
   evModCmd->SetGuidance(" - If seedOnce is set to 2, seeds are set only for the first event of");
   evModCmd->SetGuidance("   group of N events. This option is reserved for the future use when");
-  evModCmd->SetGuidance("   Geant4 allows number of threads to be dynatically changed during an");
+  evModCmd->SetGuidance("   Geant4 allows number of threads to be dynamically changed during an");
   evModCmd->SetGuidance("   event loop.");
   evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
   evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
@@ -194,7 +193,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   optCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   brkBoECmd = new G4UIcmdWithABool("/run/breakAtBeginOfEvent",this);
-  brkBoECmd->SetGuidance("Set a break point at the begining of every event.");
+  brkBoECmd->SetGuidance("Set a break point at the beginning of every event.");
   brkBoECmd->SetParameterName("flag",true);
   brkBoECmd->SetDefaultValue(true);
   
@@ -238,7 +237,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   physCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
-  constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
+  constScoreCmd->SetGuidance("Construct scoring parallel world(s) if defined.");
   constScoreCmd->SetGuidance("This command is not mandatory, but automatically called when a run starts.");
   constScoreCmd->SetGuidance("But the user may use this to visualize the scoring world(s) before a run to start.");
   constScoreCmd->AvailableForStates(G4State_Idle);
@@ -268,8 +267,8 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   
   savingFlagCmd = new G4UIcmdWithABool("/random/setSavingFlag",this);
   savingFlagCmd->SetGuidance("The randomNumberStatus will be saved at :");
-  savingFlagCmd->SetGuidance("begining of run (currentRun.rndm) and "
-                             "begining of event (currentEvent.rndm) ");  
+  savingFlagCmd->SetGuidance("beginning of run (currentRun.rndm) and "
+                             "beginning of event (currentEvent.rndm) ");  
   savingFlagCmd->SetParameterName("flag",true);
   savingFlagCmd->SetDefaultValue(true);
   
@@ -321,9 +320,15 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randEvtCmd->SetGuidance("for the case of simplest geometry and small number of tracks per event.");
   randEvtCmd->SetParameterName("flag",true);
   randEvtCmd->SetDefaultValue(0);
-  randEvtCmd->SetRange("flag>=0 && flag<3");
+  randEvtCmd->SetRange("flag>=0 && flag<=3");
   randEvtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
+  procUICmds = new G4UIcmdWithoutParameter("/run/workersProcessCmds",this);
+  procUICmds->SetToBeBroadcasted(false);
+  procUICmds->SetGuidance("Force workers to process current stack of UI commands.");
+  procUICmds->SetGuidance("This commands is meaningful only in MT mode.");
+  procUICmds->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
+
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -334,6 +339,7 @@ G4RunMessenger::~G4RunMessenger()
   delete printProgCmd;
   delete nThreadsCmd;
   delete maxThreadsCmd;
+  delete pinAffinityCmd;
   delete evModCmd;
   delete optCmd;
   delete dumpRegCmd;
@@ -348,6 +354,7 @@ G4RunMessenger::~G4RunMessenger()
   delete physCmd;
   delete randEvtCmd;
   delete constScoreCmd;
+  delete procUICmds;
   
   delete seedCmd;
   delete savingFlagCmd;
@@ -356,7 +363,7 @@ G4RunMessenger::~G4RunMessenger()
   delete restoreRandCmd;
   delete randomDirectory;
   delete saveEachEventCmd;
-    
+ 
   delete randDirCmd;
   delete runDirectory;
 
@@ -526,6 +533,24 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->ConstructScoringWorlds(); }
   else if( command==restoreRandCmdMT)
   { runManager->RestoreRndmEachEvent(restoreRandCmdMT->GetNewBoolValue(newValue)); }
+  else if ( command==procUICmds)
+    {
+      G4RunManager::RMType rmType = runManager->GetRunManagerType();
+      if( rmType==G4RunManager::masterRM ) {
+          auto rm = dynamic_cast<G4MTRunManager*>(runManager);
+          if ( rm != nullptr ) {
+              rm->RequestWorkersProcessCommandsStack();
+          }
+          else { G4Exception("G4RunManager::ApplyNewCommand","Run0128",FatalException,"/run/workersProcessCmds command issued on a non-G4MTRunManager class instance."); }
+      } else if ( rmType==G4RunManager::sequentialRM ) {
+          G4cout<<"*** /run/workersProcessCmds command is issued in sequential mode."
+                <<"\nCommand is ignored."<<G4endl;
+      } else {
+          G4Exception("G4RunMessenger::ApplyNewCommand","Run0129",FatalException,
+          "/run/workersProcessCmds command is issued to local thread.");
+      }
+    }
+
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)

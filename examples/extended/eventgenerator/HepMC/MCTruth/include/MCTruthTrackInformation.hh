@@ -27,7 +27,10 @@
 /// \brief Definition of the MCTruthTrackInformation class
 //
 //
+<<<<<<< HEAD
 // $Id: MCTruthTrackInformation.hh 73446 2013-08-27 11:32:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------

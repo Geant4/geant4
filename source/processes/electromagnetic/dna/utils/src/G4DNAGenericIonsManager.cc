@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAGenericIonsManager.cc 87449 2014-12-04 14:13:06Z gunter $
 
 #include "G4DNAGenericIonsManager.hh"
 #include "G4PhysicalConstants.hh"
@@ -87,7 +86,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 			0.0);
 
  silicon=  new G4DNAIons(
-            "silicon",    28.085*GeV,       0.0*MeV,  +14.0*eplus,
+            "silicon",    26.161011669*GeV,       0.0*MeV,  +14.0*eplus,
             0,              +1,             0,
             0,               0,             0,
             "DNAion",              +14,            +28,           0,
@@ -95,6 +94,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
             false,		      "",               0,
             0.0);
 
+  // mass is average for all Si isotopes
 
  oxygen=   new G4DNAIons(
 			"oxygen",    15.0074*GeV,       0.0*MeV,  +8.0*eplus,

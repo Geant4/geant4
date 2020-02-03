@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeSteppingMessenger.cc 70256 2013-05-28 07:29:30Z gcosmo $
 //
 /// \file optical/LXe/src/LXeSteppingMessenger.cc
 /// \brief Implementation of the LXeSteppingMessenger class

@@ -1,4 +1,3 @@
-$Id: History 95453 2016-02-11 09:50:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +16,66 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+November 15th, 2019 M. Verderi
+- Introduce leading particle biasing proc-biasgen-V10-05-00
+  This is made implementing the new biasing operation:
+  include/G4BOptnLeadingParticle.hh
+  src/G4BOptnLeadingParticle.cc
+- G4BOptnChangeCrossSection:
+  add argument to:
+      void     SetBiasedCrossSection(G4double xst);
+  as option to update the interaction length when
+  setting a new cross-section value:
+      void     SetBiasedCrossSection(G4double xst, bool updateInteractionLength = false);
+  default value makes the change backward compatible.
+  
+
+November 24th, 2017 M. Verderi
+- Fix G4BiasingProcessInterface for wrong setting of first/last
+  GPIL/DoIt flags in case charged particles. As the msc became
+  a pure along, this broke the initial logic based on the fact
+  that, before, physics processes always had a PostStepDoIt method.
+- proc-biasgen-V10-03-00
+  
+
+November 15th, 2016, M. Verderi
+- Fix one Coverity warning in G4ParallelGeometriesLimiterProcess.
+- proc-biasgen-V10-02-06
+
+November 3rd, 2016, M. Verderi
+- Remove reference to obsolete G4BiasingAppliedCase BAC_DenyInteraction enum value
+  and related logic. DenyProcessPostStepDoIt(..) method in G4BOptnForceFreeFlight
+  was concerned by this logic change. (The related case has been merged and
+  is handled by ApplyFinalStateBiasing(...) in a more general manner since
+  proc-biasgen-V10-00-00.)
+- proc-biasgen-V10-02-05
+
+October 26th, 2016, M. Verderi
+- Development tag for introducing parallel geometry capability in generic biasing:
+  - G4BiasingProcessInterface : checks for biasing operator in mass and parallel geometries
+  - G4ParallelGeometriesLimiterProcess : a new process that limits the step on the boundaries
+    of the parallel geometries (one instance handles all parallel geometries)
+  - G4BiasingProcessSharedData : data shared among biasing processes related to a same
+    G4ParticleDefinition ; extended to cary information related to parallel geometries.
+    G4BiasingProcessSharedData now also holds the static map of shared data and process
+    managers, this was held before by G4BiasingProcessInterface.
+  - G4BiasingHelper : extended to handle addition of G4ParallelGeometriesLimiterProcess
+    to process manager.
+- proc-biasgen-V10-02-04
+
+March 8th, 2016, M. Verderi
+- Clean up for unused variable fParticleChange in G4BiasingProcessInterface
+- proc-biasgen-V10-02-03
+
+March 7th, 2016, M. Verderi
+- Fix coverity warnings in src/G4BiasingProcessInterface.cc
+- proc-biasgen-V10-02-02
+
 January 20th, 2016, M. Verderi
 - fix compilation warning in order initialization of data members
   in src/G4BiasingProcessInterface.cc.
-- proc-biasgen-V10-01-02
+- proc-biasgen-V10-02-01
 
 January 19th, 2016, M. Verderi
 - fix various coverity warnings (unitialized variables). Should have no
@@ -35,6 +90,7 @@ January 19th, 2016, M. Verderi
   and minor cosmetics in:
       include/G4BOptnCloning.hh
       include/G4BOptnForceFreeFlight.hh
+- proc-biasgen-V10-02-00
 
 November 6th, 2015, M. Verderi
 - fix non initialization of model IDs in MT mode.
@@ -44,7 +100,7 @@ November 6th, 2015, M. Verderi
 - proc-biasgen-V10-01-01
 
 November 6th, 2015, M. Verderi
-- adaptation to using G4VAuxuliaryTrackInformation:
+- adaptation to using G4VAuxiliaryTrackInformation:
     o creation of G4BOptrForceCollisionTrackData
     o quite rewriting of G4BOptrForceCollision biasing operator,
       removing many state variables used for bookeeping of tracks

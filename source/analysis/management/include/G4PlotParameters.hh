@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The data class which defined the configuration parameters for plotting 
 // which can be modified via UI commands.

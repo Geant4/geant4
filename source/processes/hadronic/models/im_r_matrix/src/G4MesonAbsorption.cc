@@ -224,7 +224,7 @@ GetFinalState(G4KineticTrack * projectile,
     chargeBalance-=G4lrint(result->operator[](hpw)->GetDefinition()->GetPDGCharge());
     baryonBalance-=result->operator[](hpw)->GetDefinition()->GetBaryonNumber();
   }
-  if(getenv("AbsorptionEnergyBalanceCheck"))
+  if(std::getenv("AbsorptionEnergyBalanceCheck"))
     std::cout << "DEBUGGING energy balance B: "
               <<energyBalance<<" "
 	      <<chargeBalance<<" "

@@ -27,7 +27,6 @@
 /// \brief Implementation of the RE02PSFlatSurfaceCurrent class
 //
 //
-// $Id: RE02PSFlatSurfaceCurrent.cc 72957 2013-08-14 14:27:23Z gcosmo $
 //
 // RE02PSFlatSurfaceCurrent
 #include "RE02PSFlatSurfaceCurrent.hh"

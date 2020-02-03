@@ -23,21 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VWeightWindowAlgorithm implementation
 //
-// $Id: G4VWeightWindowAlgorithm.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4VWeightWindowAlgorithm.cc
-//
+// Author: Michael Dressel (CERN), 2003
 // ----------------------------------------------------------------------
 
 #include "G4VWeightWindowAlgorithm.hh"
 
 G4VWeightWindowAlgorithm::G4VWeightWindowAlgorithm()
-{}
+{
+}
 
 G4VWeightWindowAlgorithm::~G4VWeightWindowAlgorithm()
-{}
-
+{
+}

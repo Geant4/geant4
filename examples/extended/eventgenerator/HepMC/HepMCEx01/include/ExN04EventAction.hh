@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04EventAction.hh
 /// \brief Definition of the ExN04EventAction class
 //
-// $Id: ExN04EventAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04EventAction_h

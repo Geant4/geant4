@@ -23,22 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4UniformMagField.hh 97486 2016-06-03 10:45:04Z gcosmo $
-//
-// 
-// class G4UniformMagField
+// G4UniformMagField
 //
 // Class description:
 //
 // Class for creation of Uniform Magnetic Field.
 
-// History:
-// - 30.01.97 V.Grichine, Created.
-// - 01.08.97 J.Apostolakis, cleanup, new 3-vector constructor, 
-//            and removal of helix-stepper (to separate file).
-// - 05.11.97 G.Cosmo, added copy constructor and assignment operator.
-
+// Created: V.Grichine, 30.01.1997
+// -------------------------------------------------------------------
 #ifndef G4UNIFORMMAGFIELD_HH
 #define G4UNIFORMMAGFIELD_HH
 
@@ -50,32 +42,32 @@ class G4UniformMagField : public G4MagneticField
 {
   public:  // with description
   
-    G4UniformMagField(const G4ThreeVector& FieldVector );
+    G4UniformMagField(const G4ThreeVector& FieldVector);
       // A field with value equal to FieldVector.
 
     G4UniformMagField(G4double vField,
                       G4double vTheta,
-                      G4double vPhi     ) ;
+                      G4double vPhi);
 
-    virtual ~G4UniformMagField() ;
+    virtual ~G4UniformMagField() override;
 
-    G4UniformMagField(const G4UniformMagField &p);
-    G4UniformMagField& operator = (const G4UniformMagField &p);
+    G4UniformMagField(const G4UniformMagField& p);
+    G4UniformMagField& operator = (const G4UniformMagField& p);
       // Copy constructor and assignment operator.
 
     virtual void GetFieldValue(const G4double yTrack[4],
-                                     G4double *MagField) const ;
+                               G4double* MagField) const override final;
 
     void SetFieldValue(const G4ThreeVector& newFieldValue);
 
     G4ThreeVector GetConstantFieldValue() const;
       // Return the field value
     
-    virtual G4Field* Clone() const;
+    virtual G4Field* Clone() const override;
 
   private:
 
-    G4double fFieldComponents[3] ;
+    G4double fFieldComponents[3];
 };
 
 #endif

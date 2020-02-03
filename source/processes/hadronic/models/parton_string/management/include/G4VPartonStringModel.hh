@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.hh 83684 2014-09-09 12:37:39Z gcosmo $
 //
 #ifndef G4VPartonStringModel_h
 #define G4VPartonStringModel_h 1
@@ -49,37 +48,34 @@
 #include "G4KineticTrackVector.hh"
 
 class G4VPartonStringModel : public G4VHighEnergyGenerator
-
 {
   public:
-      G4VPartonStringModel(const G4String& modelName = "Parton String Model");
-      virtual ~G4VPartonStringModel();
+    G4VPartonStringModel(const G4String& modelName = "Parton String Model");
+    virtual ~G4VPartonStringModel();
 
   private:
-      G4VPartonStringModel(const G4VPartonStringModel &right);
-      const G4VPartonStringModel & operator=(const G4VPartonStringModel &right);
-      int operator==(const G4VPartonStringModel &right) const;
-      int operator!=(const G4VPartonStringModel &right) const;
+    G4VPartonStringModel(const G4VPartonStringModel &right);
+    const G4VPartonStringModel & operator=(const G4VPartonStringModel &right);
+    G4bool operator==(const G4VPartonStringModel &right) const;
+    G4bool operator!=(const G4VPartonStringModel &right) const;
 
   public:
-      void SetFragmentationModel(G4VStringFragmentation * aModel);
-      G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, const G4DynamicParticle &thePrimary);
-      virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
-      virtual void ModelDescription(std::ostream& outFile) const;
-      virtual G4V3DNucleus * GetProjectileNucleus() const;
-  protected:
-        
-      virtual void Init(const G4Nucleus &theNucleus, const G4DynamicParticle &thePrimary) = 0;
-      virtual G4ExcitedStringVector * GetStrings() = 0;
-      void SetThisPointer(G4VPartonStringModel * aPointer);
+    void SetFragmentationModel(G4VStringFragmentation * aModel);
+    G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, const G4DynamicParticle &thePrimary);
+    virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
+    virtual void ModelDescription(std::ostream& outFile) const;
+    virtual G4V3DNucleus * GetProjectileNucleus() const;
 
-      G4bool EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalCollisionMomentum);   
+  protected:        
+    virtual void Init(const G4Nucleus &theNucleus, const G4DynamicParticle &thePrimary) = 0;
+    virtual G4ExcitedStringVector * GetStrings() = 0;
+    void SetThisPointer(G4VPartonStringModel * aPointer);
+
+    G4bool EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalCollisionMomentum);   
 
   private:
-  
-      G4VStringFragmentation * stringFragmentationModel;
-      G4VPartonStringModel * theThis;
-
+    G4VStringFragmentation * stringFragmentationModel;
+    G4VPartonStringModel * theThis;
 };
 
 inline void G4VPartonStringModel::SetFragmentationModel(G4VStringFragmentation * aModel)
@@ -87,11 +83,10 @@ inline void G4VPartonStringModel::SetFragmentationModel(G4VStringFragmentation *
   stringFragmentationModel = aModel;
 }
 
-inline
-void G4VPartonStringModel::SetThisPointer(G4VPartonStringModel * aPointer)
+inline void G4VPartonStringModel::SetThisPointer(G4VPartonStringModel * aPointer)
 {
-	theThis=aPointer;
+  theThis=aPointer;
 }
-#endif
 
+#endif
 

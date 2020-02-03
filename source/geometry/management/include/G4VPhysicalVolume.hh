@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VPhysicalVolume.hh 102288 2017-01-20 10:57:03Z gcosmo $
-//
-//
-// class G4VPhysicalVolume
+// G4VPhysicalVolume
 //
 // Class description:
 //
@@ -36,12 +32,10 @@
 // system.  Either a single positioned volume or many positioned volume can 
 // be represented by a particular G4VPhysicalVolume.
 
-// History:
-// 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
-// 09.11.99 J.Apostolakis: Added GetObjectRotationValue() method & comments
-// 28.08.96 P.Kent: Replaced transform by rotmat + vector
-// 25.07.96 P.Kent: Modified interface for new `Replica' capable geometry 
-// 24.07.95 P.Kent: First non-stub version
+// 15.01.13, G.Cosmo, A.Dotti: Modified for thread-safety for MT
+// 28.08.96, P.Kent: Replaced transform by rotmat + vector
+// 25.07.96, P.Kent: Modified interface for new `Replica' capable geometry 
+// 24.07.95, P.Kent: First non-stub version
 // --------------------------------------------------------------------
 #ifndef G4VPHYSICALVOLUME_HH
 #define G4VPHYSICALVOLUME_HH
@@ -61,19 +55,21 @@ class G4VPVParameterisation;
 class G4PVData
 {
   // Encapsulates the fields associated to G4VPhysicalVolume
-  //  that are not read-only - they will change during simulation
-  //  and must have a per-thread state.
+  // that are not read-only - they will change during simulation
+  // and must have a per-thread state.
 
   public:
-    G4PVData():frot(0) {}
 
-    void initialize() {
-      frot = 0;
-      ftrans = G4ThreeVector(0,0,0);
+    G4PVData() {}
+
+    void initialize()
+    {
+      frot = nullptr;
+      tx = 0.; ty = 0.; tz = 0.;
     }
 
-    G4RotationMatrix *frot;
-    G4ThreeVector ftrans;
+    G4RotationMatrix* frot = nullptr;
+    G4double tx = 0., ty = 0., tz = 0.;
 };
 
 typedef G4GeomSplitter<G4PVData> G4PVManager;
@@ -83,11 +79,11 @@ class G4VPhysicalVolume
 {
   public:  // with description
 
-    G4VPhysicalVolume(G4RotationMatrix *pRot,
-                const G4ThreeVector &tlate,
-                const G4String &pName,
-                      G4LogicalVolume *pLogical,
-                      G4VPhysicalVolume *pMother);
+    G4VPhysicalVolume(G4RotationMatrix* pRot,
+                const G4ThreeVector& tlate,
+                const G4String& pName,
+                      G4LogicalVolume* pLogical,
+                      G4VPhysicalVolume* pMother);
       // Initialise volume, positioned in a frame which is rotated by *pRot, 
       // relative to the coordinate system of the mother volume pMother.
       // The center of the object is then placed at tlate in the new
@@ -104,6 +100,10 @@ class G4VPhysicalVolume
     virtual ~G4VPhysicalVolume();
       // Destructor, will be subclassed. Removes volume from volume Store.
 
+    G4VPhysicalVolume(const G4VPhysicalVolume&) = delete;
+    G4VPhysicalVolume& operator=(const G4VPhysicalVolume&) = delete;
+      // No copy constructor and assignment operator.
+
     inline G4bool operator == (const G4VPhysicalVolume& p) const;
       // Equality defined by equal addresses only.
 
@@ -114,25 +114,25 @@ class G4VPhysicalVolume
     // frame or the object/volume that is being placed.
     // (They are the inverse of each other).
 
-    G4RotationMatrix* GetObjectRotation() const;              //  Obsolete 
+    G4RotationMatrix* GetObjectRotation() const;       //  Obsolete 
     G4RotationMatrix  GetObjectRotationValue() const;  //  Replacement
     G4ThreeVector  GetObjectTranslation() const;
       // Return the rotation/translation of the Object relative to the mother.
     const G4RotationMatrix* GetFrameRotation() const;
-    G4ThreeVector  GetFrameTranslation() const;
+    G4ThreeVector GetFrameTranslation() const;
       // Return the rotation/translation of the Frame used to position 
       // this volume in its mother volume (opposite of object rot/trans).
 
     // Older access functions, that do not distinguish between frame/object!
 
-    const G4ThreeVector& GetTranslation() const;
+    const G4ThreeVector GetTranslation() const;
     const G4RotationMatrix* GetRotation() const;
       // Old access functions, that do not distinguish between frame/object!
       // They return the translation/rotation of the volume.
 
     // Set functions
 
-    void SetTranslation(const G4ThreeVector &v);
+    void SetTranslation(const G4ThreeVector& v);
     G4RotationMatrix* GetRotation();
     void SetRotation(G4RotationMatrix*);
       // NOT INTENDED FOR GENERAL USE.
@@ -141,12 +141,12 @@ class G4VPhysicalVolume
 
     inline G4LogicalVolume* GetLogicalVolume() const;
       // Return the associated logical volume.
-    inline void SetLogicalVolume(G4LogicalVolume *pLogical);
+    inline void SetLogicalVolume(G4LogicalVolume* pLogical);
       // Set the logical volume. Must not be called when geometry closed.
 
     inline G4LogicalVolume* GetMotherLogical() const;
       // Return the current mother logical volume pointer.
-    inline void SetMotherLogical(G4LogicalVolume *pMother);
+    inline void SetMotherLogical(G4LogicalVolume* pMother);
       // Set the mother logical volume. Must not be called when geometry closed.
 
     inline const G4String& GetName() const;
@@ -154,15 +154,14 @@ class G4VPhysicalVolume
     inline void SetName(const G4String& pName);
       // Set the volume's name.
 
-    inline EVolume VolumeType() const;
-      // Characterise the `type' of volume - normal/replicated/parameterised.
-
     virtual G4int GetMultiplicity() const;
       // Returns number of object entities (1 for normal placements,
       // n for replicas or parameterised).
 
     // Functions required of subclasses
 
+    virtual EVolume VolumeType() const = 0;
+      // Characterise the type of volume - normal/replicated/parameterised.
     virtual G4bool IsMany() const = 0;
       // Return true if the volume is MANY (not implemented yet).
     virtual G4int GetCopyNo() const = 0;
@@ -184,9 +183,9 @@ class G4VPhysicalVolume
                                     G4double& offset,
                                     G4bool& consuming) const = 0;
       // Return replication information. No-op for no replicated volumes.
-    virtual G4bool  IsRegularStructure() const = 0;
+    virtual G4bool IsRegularStructure() const = 0;
       // Returns true if the underlying volume structure is regular.
-    virtual G4int  GetRegularStructureId() const = 0;
+    virtual G4int GetRegularStructureId() const = 0;
       // Returns non-zero code in case the underlying volume structure 
       //  is regular, voxel-like.  Value is id for structure type.
       //  If non-zero the volume is a candidate for specialised 
@@ -212,14 +211,21 @@ class G4VPhysicalVolume
     static const G4PVManager& GetSubInstanceManager();
       // Returns the private data instance manager.
 
+    static void Clean();
+      // Clear memory allocated by sub-instance manager.
+
+    inline EVolume DeduceVolumeType() const;
+      // Old VolumeType() method, replaced by virtual method,
+      // kept for checking
+      
   protected:
 
-    void InitialiseWorker(G4VPhysicalVolume *pMasterObject,
-                          G4RotationMatrix *pRot, const G4ThreeVector &tlate);
+    void InitialiseWorker(G4VPhysicalVolume* pMasterObject,
+                          G4RotationMatrix* pRot, const G4ThreeVector& tlate);
       // This method is similar to the constructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
-    void TerminateWorker(G4VPhysicalVolume *pMasterObject);
+    void TerminateWorker(G4VPhysicalVolume* pMasterObject);
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
@@ -233,19 +239,13 @@ class G4VPhysicalVolume
 
   private:
 
-    G4VPhysicalVolume(const G4VPhysicalVolume&);
-    G4VPhysicalVolume& operator=(const G4VPhysicalVolume&);
-      // Private copy constructor and assignment operator.
+    G4LogicalVolume* flogical = nullptr; // The logical volume representing the
+                                         // physical and tracking attributes of
+                                         // the volume
+    G4String fname;                      // The name of the volume
+    G4LogicalVolume* flmother = nullptr; // The current mother logical volume
 
-  private:
-
-    G4LogicalVolume* flogical;   // The logical volume representing the
-                                 // physical and tracking attributes of
-                                 // the volume
-    G4String fname;              // The name of the volume
-    G4LogicalVolume* flmother;   // The current mother logical volume
-
-    G4PVData* pvdata;  // Shadow pointer for use of object persistency
+    G4PVData* pvdata = nullptr; // Shadow pointer for use of object persistency
 };
 
 // NOTE: 

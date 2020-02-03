@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm1/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 78397 2013-12-16 16:38:53Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,24 +43,22 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4EmCalculator.hh"
-
 #include "Randomize.hh"
-#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:G4UserRunAction(),fDetector(det),fPrimary(kin),fRun(0),fHistoManager(0)
+RunAction::RunAction(const DetectorConstruction* det, 
+                     PrimaryGeneratorAction* kin)
+  : G4UserRunAction(),fDetector(det),fPrimary(kin),fRun(nullptr)
 { 
- fHistoManager = new HistoManager();
+  fHistoManager = new HistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
- delete fHistoManager;
+  delete fHistoManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

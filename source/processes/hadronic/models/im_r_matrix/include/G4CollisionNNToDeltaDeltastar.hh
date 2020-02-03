@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDeltastar.hh,v 1.3 2006-06-29 20:33:54 gunter Exp $ //
 
 #ifndef G4CollisionNNToDeltaDeltastar_h
 #define G4CollisionNNToDeltaDeltastar_h

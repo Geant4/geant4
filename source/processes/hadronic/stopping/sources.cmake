@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85517 2014-10-30 15:53:26Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -43,6 +42,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
@@ -67,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4ElementSelector.hh
         G4EmCaptureCascade.hh
         G4HadronicAbsorptionFritiof.hh
+        G4HadronicAbsorptionFritiofWithBinaryCascade.hh
         G4HadronStoppingProcess.hh
         G4MuMinusCapturePrecompound.hh
         G4MuonMinusBoundDecay.hh
@@ -75,16 +76,21 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4PiMinusAbsorptionBertini.hh
         G4KaonMinusAbsorptionBertini.hh
         G4SigmaMinusAbsorptionBertini.hh
+        G4MuonMinusAtomicCapture.hh
+        G4MuonicAtomDecay.hh
     SOURCES
         G4AntiNeutronAnnihilationAtRest.cc
         G4ElementSelector.cc
         G4EmCaptureCascade.cc
         G4HadronicAbsorptionFritiof.cc
+        G4HadronicAbsorptionFritiofWithBinaryCascade.cc
         G4HadronStoppingProcess.cc
         G4MuMinusCapturePrecompound.cc
         G4MuonMinusBoundDecay.cc
         G4MuonMinusCapture.cc
         G4HadronicAbsorptionBertini.cc
+        G4MuonMinusAtomicCapture.cc
+        G4MuonicAtomDecay.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

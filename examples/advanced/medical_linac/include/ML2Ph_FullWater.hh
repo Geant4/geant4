@@ -51,10 +51,10 @@
 #include "G4VisAttributes.hh"
 #include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
-
-#include "ML2SDWithParticle.hh"
-#include "ML2SDWithVoxels.hh"
-#include "ML2ReadOutGeometry.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4PSDoseDeposit3D.hh"
+#include "ML2Ph_FullWaterMessenger.hh"
 
 #include "G4SDManager.hh"
 #include "G4ProductionCuts.hh"
@@ -65,18 +65,28 @@ class CML2Ph_FullWater
 public:
     CML2Ph_FullWater();
     ~CML2Ph_FullWater(void);
-    bool Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
-    inline G4int getTotalNumberOfEvents(){return sensDet->getTotalNumberOfEvents();}
-    inline CML2SDWithVoxels* getSensDet(){return  sensDet;}
+    bool Construct(G4VPhysicalVolume *PVWorld, 
+                   G4int voxelX, G4int voxelY, G4int voxelZ);
+   // inline G4int getTotalNumberOfEvents(){return sensDet->getTotalNumberOfEvents();}
     inline G4VPhysicalVolume *getPhysicalVolume(){return PVWorld;}
     inline G4ThreeVector getHalfContainerSize(){return halfSize;}
     void writeInfo();
+
+   // void SetNxVoxels(G4int val){fNx = val;}
+   // void SetNyVoxels(G4int val){fNy = val;}
+   // void SetNzVoxels(G4int val){fNz = val;}
+   // void GetNumberOfSegmentsInPhantom(G4int& nx, G4int& ny, G4int& nz) 
+    //    const{ nx=fNx; ny = fNy; nz = fNz; }
+
 private:
+    CML2Ph_FullWaterMessenger *fullWaterMessenger;
+
     G4VPhysicalVolume *PVWorld;
     G4VPhysicalVolume *fullWaterPhantomPV;
 
-    CML2SDWithVoxels *sensDet;
     G4ThreeVector centre, halfSize;
+    G4ThreeVector fPhantomSize;   // Size of Water Phantom
+   // G4LogicalVolume* fLVPhantomSens;
 };
 
 

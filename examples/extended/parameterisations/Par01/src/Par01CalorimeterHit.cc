@@ -24,7 +24,11 @@
 // ********************************************************************
 //
 //
+<<<<<<< HEAD
 // $Id: Par01CalorimeterHit.cc 90093 2015-05-13 11:59:54Z gcosmo $
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "Par01CalorimeterHit.hh"
@@ -65,9 +69,15 @@ const Par01CalorimeterHit& Par01CalorimeterHit::operator=(const Par01Calorimeter
   return *this;
 }
 
+<<<<<<< HEAD
 G4int Par01CalorimeterHit::operator==(const Par01CalorimeterHit &right) const
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool Par01CalorimeterHit::operator==(const Par01CalorimeterHit &right) const
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 void Par01CalorimeterHit::Draw()

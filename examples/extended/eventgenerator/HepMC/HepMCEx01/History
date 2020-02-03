@@ -1,4 +1,3 @@
-$Id: History 77801 2013-11-28 13:33:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 4th 2018 I. Hrivnacova (HepMCEx01-V10-04-00)
+- Coding guidelines
+- Updated CMake: removed gfortran (obsolete)
+
+May 15th 2018 J.Allison
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
 
 November 13th 2013 K. Murakami
 - new coding guideline

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh 71938 2013-06-28 19:01:00Z mkelsey $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
@@ -80,6 +79,7 @@ class G4CollisionOutput;
 class G4DynamicParticle;
 class G4HadFinalState;
 class G4InuclCollider;
+class G4LightTargetCollider;
 class G4InuclParticle;
 class G4ParticleDefinition;
 class G4V3DNucleus;
@@ -151,11 +151,11 @@ protected:
 
 
 private:
-  G4int operator==(const G4CascadeInterface& right) const {
+  G4bool operator==(const G4CascadeInterface& right) const {
     return (this == &right);
   }
 
-  G4int operator!=(const G4CascadeInterface& right) const {
+  G4bool operator!=(const G4CascadeInterface& right) const {
     return (this != &right);
   }
 
@@ -166,6 +166,8 @@ private:
 
   G4InuclCollider* collider;
   G4CascadeCheckBalance* balance;
+
+  G4LightTargetCollider* ltcollider;
 
   G4InuclParticle* bullet;		// Pointers to last filled versions
   G4InuclParticle* target;

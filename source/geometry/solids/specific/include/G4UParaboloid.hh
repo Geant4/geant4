@@ -23,36 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UParaboloid
 //
 // Class description:
 //
-//   Wrapper class for UParaboloid to make use of it from USolids module.
+// Wrapper class for G4Paraboloid to make use of VecGeom Paraboloid.
 
-// History:
 // 19.08.15 Guilherme Lima, FNAL
 // --------------------------------------------------------------------
 #ifndef G4UPARABOLOID_HH
 #define G4UPARABOLOID_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UParaboloid.hh"
+#include <volumes/UnplacedParaboloid.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UParaboloid : public G4USolid
+class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
 {
+  using Shape_t = vecgeom::UnplacedParaboloid;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedParaboloid>;
 
   public:  // with description
 
@@ -63,11 +56,13 @@ class G4UParaboloid : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UParaboloid* GetShape() const;
-
     G4double GetZHalfLength() const;
     G4double GetRadiusMinusZ() const;
     G4double GetRadiusPlusZ() const;
+
+    void SetZHalfLength(G4double dz);
+    void SetRadiusMinusZ(G4double r1);
+    void SetRadiusPlusZ(G4double r2);
 
     inline G4GeometryType GetEntityType() const;
 
@@ -78,20 +73,21 @@ class G4UParaboloid : public G4USolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4UParaboloid( const G4UParaboloid &source );
-    G4UParaboloid &operator=( const G4UParaboloid &source );
+    G4UParaboloid( const G4UParaboloid& source );
+    G4UParaboloid& operator=( const G4UParaboloid& source );
       // Copy constructor and assignment operator.
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                           G4double& pmin, G4double& pmax) const;
     G4Polyhedron* CreatePolyhedron() const;
 };
 
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UParaboloid* G4UParaboloid::GetShape() const
-{
-  return (UParaboloid*) fShape;
-}
 
 inline G4GeometryType G4UParaboloid::GetEntityType() const
 {

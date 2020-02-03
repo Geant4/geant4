@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1ConRun.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
 /// \file B1ConRun.hh
 /// \brief Definition of the B1ConRun class

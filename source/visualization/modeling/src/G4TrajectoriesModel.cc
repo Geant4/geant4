@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc 87360 2014-12-01 16:07:16Z gcosmo $
 //
 // 
 // John Allison  26th August 1998.
@@ -53,7 +52,7 @@ G4TrajectoriesModel::G4TrajectoriesModel ()
 ,fEventID(-1)
 {
   fType = "G4TrajectoriesModel";
-  fGlobalTag = "G4TrajectoriesModel for all trajectories.";
+  fGlobalTag = "G4TrajectoriesModel for any type of trajectory";
   fGlobalDescription = fGlobalTag;
 }
 
@@ -73,6 +72,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     fRunID = currentRun->GetRunID();
   } else {
     fRunID = -1;
+    return;
   }
 
   const G4Event* event = fpMP->GetEvent();
@@ -80,6 +80,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     fEventID = event->GetEventID();
   } else {
     fEventID = -1;
+    return;
   }
 
   G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
@@ -93,7 +94,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
   // speed) assumes all trajectories are drawn with the same
   // transformation.  If not, a fatal exception with be raised in
   // G4VisManager::DrawT.
-  for (G4int iT = 0; iT < TC->entries(); iT++) {
+  for (std::size_t iT = 0; iT < TC->entries(); ++iT) {
     fpCurrentTrajectory = (*TC) [iT];
     // Debug trajectory:
     // fpCurrentTrajectory->ShowTrajectory(); G4cout << G4endl;
@@ -153,7 +154,7 @@ void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory* pTraj)
     }
   }
   // Trajectory point attributes
-  for (G4int i = 0; i < pTraj->GetPointEntries(); i++) {
+  for (G4int i = 0; i < pTraj->GetPointEntries(); ++i) {
     G4VTrajectoryPoint* aPoint = pTraj->GetPoint(i);
     std::vector<G4AttValue>* attValues = aPoint->CreateAttValues();
     if (attValues) {

@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm7/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
+<<<<<<< HEAD
 // $Id: PhysListEmStandard.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

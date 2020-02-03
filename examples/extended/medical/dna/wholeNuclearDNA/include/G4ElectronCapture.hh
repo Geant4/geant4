@@ -53,7 +53,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-// $ID$
 /// \file G4ElectronCapture.hh
 /// \brief Definition of the G4ElectronCapture class
 

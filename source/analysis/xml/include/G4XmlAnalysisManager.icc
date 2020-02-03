@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4XmlAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 #include "G4XmlNtupleManager.hh"
 #include "G4XmlFileManager.hh"

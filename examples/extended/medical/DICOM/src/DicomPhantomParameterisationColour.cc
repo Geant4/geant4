@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id:DicomPhantomParameterisationColour.cc 74592 2013-10-15 21:20:11Z jmadsen $
 //
 /// \file DicomPhantomParameterisationColour.cc
 /// \brief Implementation of the DicomPhantomParameterisationColour class
 
 #include "DicomPhantomParameterisationColour.hh"
+#include "DicomHandler.hh"
 
 #include "globals.hh"
 #include "G4VisAttributes.hh"
@@ -36,11 +36,20 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
+#include "G4VisAttributes.hh"
+#include "G4VVisManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomPhantomParameterisationColour::DicomPhantomParameterisationColour()
+
+G4String DicomPhantomParameterisationColour::defaultColorFile =
+        DicomHandler::GetDicomDataPath() + "/ColourMap.dat";
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+DicomPhantomParameterisationColour::DicomPhantomParameterisationColour(
+    G4String colourFile)
 : G4PhantomParameterisation()
 {
-    ReadColourData();
+    ReadColourData(colourFile);
     SetSkipEqualMaterials(false);
 }
 
@@ -50,51 +59,90 @@ DicomPhantomParameterisationColour::~DicomPhantomParameterisationColour()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomPhantomParameterisationColour::ReadColourData()
+void DicomPhantomParameterisationColour::ReadColourData(G4String colourFile)
 {
     //----- Add a G4VisAttributes for materials not defined in file;
     G4VisAttributes* blankAtt = new G4VisAttributes;
     blankAtt->SetVisibility( FALSE );
     fColours["Default"] = blankAtt;
-    
+
     //----- Read file
+<<<<<<< HEAD
     G4String colourFile = "ColourMap.dat";
     std::ifstream fin(colourFile.c_str());
+=======
+   std::ifstream fin(colourFile.c_str());
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     G4int nMate;
     G4String mateName;
     G4double cred, cgreen, cblue, copacity;
     fin >> nMate;
-    for( G4int ii = 0; ii < nMate; ii++ ){
-        fin >> mateName >> cred >> cgreen >> cblue >> copacity;
+    for( G4int ii = 0; ii < nMate; ii++ )
+    {
+        fin >> mateName;
+        if(fin.eof())
+            break;
+        fin >> cred >> cgreen >> cblue >> copacity;
         G4Colour colour( cred, cgreen, cblue, copacity );
         G4VisAttributes* visAtt = new G4VisAttributes( colour );
-        //visAtt->SetForceSolid(true);
+        visAtt->SetVisibility(true);
         fColours[mateName] = visAtt;
+        mColours[ii] = new G4VisAttributes(*visAtt);
     }
-    
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* DicomPhantomParameterisationColour::
-ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol, const G4VTouchable *)
+ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol,
+                const G4VTouchable *)
 {
-    G4Material* mate = G4PhantomParameterisation::ComputeMaterial( copyNo, physVol, 0 );
-    if( physVol ) {
+    G4Material* mate = G4PhantomParameterisation::ComputeMaterial(
+        copyNo, physVol, 0 );
+
+    if(G4VVisManager::GetConcreteInstance() && physVol)
+    {
         G4String mateName = mate->GetName();
         std::string::size_type iuu = mateName.find("__");
-        if( iuu != std::string::npos ) {
+        if( iuu != std::string::npos )
             mateName = mateName.substr( 0, iuu );
-        }
-        std::map<G4String,G4VisAttributes*>::const_iterator ite =
-          fColours.find(mateName);
-        if( ite != fColours.end() ){
-            physVol->GetLogicalVolume()->SetVisAttributes( (*ite).second );
-        } else {
-            physVol->GetLogicalVolume()->SetVisAttributes( 
-                                  (*(fColours.begin()) ).second );
-            // set it as unseen
+
+        if(0 < fColours.count(mateName))
+            physVol->GetLogicalVolume()->SetVisAttributes(
+                fColours.find(mateName)->second);
+        else
+        {
+            bool found = false;
+            for(const auto& itr : fColours)
+            {
+                G4String mat_color = itr.first;
+                auto len = mat_color.length();
+                if(mateName.find(mat_color) == 0 &&
+                   mateName.length() > len && mateName[len] == '_')
+                {
+                    physVol->GetLogicalVolume()->SetVisAttributes(
+                        fColours.find(mat_color)->second);
+                    found = true;
+                }
+                if(found)
+                    break;
+            }
+            if(!found)
+            {
+                G4int matIndex = G4int(GetMaterialIndex(copyNo));
+                static uintmax_t n = 0;
+                if(n++ < 100)
+                    G4cout << "Unknown material name " << mateName
+                           << " for index " << matIndex << G4endl;
+                if(mColours.find(matIndex) != mColours.end())
+                    physVol->GetLogicalVolume()->SetVisAttributes(
+                        mColours.find(matIndex)->second);
+                else
+                    physVol->GetLogicalVolume()->SetVisAttributes(
+                        fColours.begin()->second);
+            }
         }
     }
-    
+
     return mate;
 }

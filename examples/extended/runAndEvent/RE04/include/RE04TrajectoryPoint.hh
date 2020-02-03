@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04TrajectoryPoint.hh
 /// \brief Definition of the RE04TrajectoryPoint class
 //
-// $Id: $
 //
 #ifndef RE04TrajectoryPoint_h
 #define RE04TrajectoryPoint_h 1
@@ -72,7 +71,7 @@ public:
 // Operators
    inline void *operator new(size_t);
    inline void operator delete(void *aTrajectoryPoint);
-   inline int operator==(const RE04TrajectoryPoint& right) const
+   inline G4bool operator==(const RE04TrajectoryPoint& right) const
    { return (this==&right); };
 
 // Get/Set functions

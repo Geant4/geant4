@@ -26,7 +26,10 @@
 /// \file RE06/src/RE06DetectorConstruction.cc
 /// \brief Implementation of the RE06DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: RE06DetectorConstruction.cc 83381 2014-08-21 14:18:13Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 
 #include "RE06DetectorConstruction.hh"

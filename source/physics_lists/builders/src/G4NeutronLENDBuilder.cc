@@ -124,3 +124,4 @@ Build(G4NeutronInelasticProcess * aP)
   aP->AddDataSet(theLENDInelasticCrossSection);
   aP->RegisterMe(theLENDInelastic);
 }
+

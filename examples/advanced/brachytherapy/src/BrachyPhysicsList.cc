@@ -35,6 +35,11 @@ Author: Susanna Guatelli
 //
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmPenelopePhysics.hh"
@@ -49,11 +54,13 @@ Author: Susanna Guatelli
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "BrachyPhysicsListMessenger.hh"
 
 BrachyPhysicsList::BrachyPhysicsList():  G4VModularPhysicsList()
 {
 SetVerboseLevel(1); 
  
+<<<<<<< HEAD
 // EM physics: 3 alternatives
 
 emPhysicsList = new G4EmStandardPhysics_option4(1);
@@ -65,33 +72,92 @@ emPhysicsList = new G4EmStandardPhysics_option4(1);
 //
 // Penelope physics
 //emPhysicsList = new G4EmPenelopePhysics();
+=======
+// EM physics: default
+fEmPhysicsList = new G4EmLivermorePhysics();
+fEmName="emlivermore";
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 // Add Decay
-decPhysicsList = new G4DecayPhysics();
-radDecayPhysicsList = new G4RadioactiveDecayPhysics();
-
+fDecPhysicsList = new G4DecayPhysics();
+fRadDecayPhysicsList = new G4RadioactiveDecayPhysics();
+fMessenger = new BrachyPhysicsListMessenger(this);
 }
 
 BrachyPhysicsList::~BrachyPhysicsList()
 {  
-delete decPhysicsList;
-delete radDecayPhysicsList;
-delete emPhysicsList;
+delete fMessenger;
+delete fDecPhysicsList;
+delete fRadDecayPhysicsList;
+delete fEmPhysicsList;
 }
 
 void BrachyPhysicsList::ConstructParticle()
 {
-decPhysicsList -> ConstructParticle();
+fDecPhysicsList -> ConstructParticle();
 }
 
 void BrachyPhysicsList::ConstructProcess()
 {
 AddTransportation();
-emPhysicsList -> ConstructProcess();
+fEmPhysicsList -> ConstructProcess();
 
 // decay physics list
-decPhysicsList -> ConstructProcess();
-radDecayPhysicsList -> ConstructProcess();
+fDecPhysicsList -> ConstructProcess();
+fRadDecayPhysicsList -> ConstructProcess();
+}
+
+
+void BrachyPhysicsList::AddPhysicsList(const G4String& name)
+{
+  
+  if (name == fEmName) return;
+
+  if (name == "emstandard_opt0"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+
+  } else if (name == "emstandard_opt1"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  } else if (name == "emstandard_opt2"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  } else if (name == "emstandard_opt3"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  } else if (name == "emstandard_opt4"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  } else if (name == "empenelope"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  } else if (name == "emlivermore"){
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;  
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
+  G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is activated"
+           << G4endl;
 }
 
 void BrachyPhysicsList::SetCuts()

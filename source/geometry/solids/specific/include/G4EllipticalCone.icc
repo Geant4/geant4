@@ -23,24 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EllipticalCone.icc 83572 2014-09-01 15:23:27Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4EllipticalCone.icc
-//
 // Implementation of inline methods of G4EllipticalCone
-// --------------------------------------------------------------------
-// Author: Dionysios Anninos
+//
+// Author: Dionysios Anninos, 8.9.2005
 // --------------------------------------------------------------------
 
 inline
 G4double G4EllipticalCone::GetSemiAxisMax () const
 {
-  return ySemiAxis > xSemiAxis ? ySemiAxis : xSemiAxis;
+  return std::max(xSemiAxis,ySemiAxis);
+}
+
+inline
+G4double G4EllipticalCone::GetSemiAxisMin () const
+{
+  return std::min(xSemiAxis,ySemiAxis);
 }
 
 inline
@@ -72,48 +69,20 @@ void G4EllipticalCone::SetSemiAxis (G4double newxSemiAxis,
                                     G4double newySemiAxis,
                                     G4double newzMax)
 {
-  xSemiAxis = newxSemiAxis; 
-  ySemiAxis = newySemiAxis; 
+  xSemiAxis = newxSemiAxis;
+  ySemiAxis = newySemiAxis;
   zheight   = newzMax;
-  semiAxisMax = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
   if (zTopCut > +zheight) { zTopCut = +zheight; }
+  G4double axmin = std::min(xSemiAxis,ySemiAxis);
+  cosAxisMin = axmin/std::sqrt(1. + axmin*axmin);
+  invXX = 1/(xSemiAxis*xSemiAxis);
+  invYY = 1/(ySemiAxis*ySemiAxis);
   fRebuildPolyhedron = true;
 }
 
 inline
 void G4EllipticalCone::SetZCut (G4double newzTopCut)
 {
-  if (newzTopCut > +zheight)
-    { zTopCut = +zheight; }
-  else
-    { zTopCut = newzTopCut; }
+  zTopCut = std::min(newzTopCut,zheight);
   fRebuildPolyhedron = true;
-}
-
-inline
-G4double G4EllipticalCone::GetCubicVolume()
-{
-  if(fCubicVolume != 0 ) {;}
-  else
-  {
-    if (zTopCut > +zheight )
-    {
-      fCubicVolume = (8./3.)*CLHEP::pi*xSemiAxis*
-                     ySemiAxis*zheight*zheight*zheight;
-    }
-    else 
-    {   
-      fCubicVolume = CLHEP::pi*xSemiAxis*ySemiAxis*
-                    (2./3.*std::pow(zTopCut,3.)+2.*sqr(zheight)*zTopCut);
-    }
-  }
-  return fCubicVolume;
-}
-
-inline
-G4double G4EllipticalCone::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
-  return fSurfaceArea;
 }

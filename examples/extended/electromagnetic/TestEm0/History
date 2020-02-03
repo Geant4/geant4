@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +18,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
+=======
+
+03-10-19 V.Ivant (testem0-V10-05-02)
+- PhysicsList : define options, specific for this example after
+    new EM physics is selected; clean-up constructor; Opt0 is the 
+    default
+     
+20-09-19 mma (testem0-V10-05-01)
+- PhysicsList : BuildCSDARange(true)
+
+13-08-19 V.Ivant (testem0-V10-05-00)
+- PhysicsList - disable GeneralProcess for all EM physics
+	 
+11-03-18 mma (testem0-V10-04-00)
+- Testem0.cc : remove G4UI_USE
+
+07-11-17 D.Sawkey (testem0-V10-03-01)
+- RunAction: write html documentation of physics list if envvars
+    G4PhysListName, G4PhysListDocDir set
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 14-10-16 G.Folger
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

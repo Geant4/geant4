@@ -28,83 +28,83 @@ public:
   bn_t bins() const {return m_number_of_bins;}
   const std::vector<TC>& edges() const {return m_edges;}
 
-  TC bin_width(int aBin) const {
-    if(aBin==UNDERFLOW_BIN) {
+  TC bin_width(int a_bin) const {
+    if(a_bin==UNDERFLOW_BIN) {
       return 0; //FIXME return DBL_MAX;
-    } else if(aBin==OVERFLOW_BIN) {
+    } else if(a_bin==OVERFLOW_BIN) {
       return 0; //FIXME return DBL_MAX;
-    } else if((aBin<0) ||(aBin>=(int)m_number_of_bins)) {
+    } else if((a_bin<0) ||(a_bin>=(int)m_number_of_bins)) {
       return 0;
     } else {
       if(m_fixed) {
         return m_bin_width;
       } else {
-        return (m_edges[aBin+1]-m_edges[aBin]);
+        return (m_edges[a_bin+1]-m_edges[a_bin]);
       }
     }
   }
 
-  TC bin_lower_edge(int aBin) const {
-    if(aBin==UNDERFLOW_BIN) {
+  TC bin_lower_edge(int a_bin) const {
+    if(a_bin==UNDERFLOW_BIN) {
       return 0; //FIXME return -DBL_MAX;
-    } else if(aBin==OVERFLOW_BIN) {
+    } else if(a_bin==OVERFLOW_BIN) {
       return 0; //FIXME return bin_upper_edge(m_number_of_bins-1);
-    } else if((aBin<0) ||(aBin>=(int)m_number_of_bins)) {
+    } else if((a_bin<0) ||(a_bin>=(int)m_number_of_bins)) {
       return 0;
     } else {
       if(m_fixed) {
-        return (m_minimum_value + aBin * m_bin_width);
+        return (m_minimum_value + a_bin * m_bin_width);
       } else {
-        return m_edges[aBin];
+        return m_edges[a_bin];
       }
     }
   }
 
-  TC bin_upper_edge(int aBin) const {
-    if(aBin==UNDERFLOW_BIN) {
+  TC bin_upper_edge(int a_bin) const {
+    if(a_bin==UNDERFLOW_BIN) {
       return 0; //FIXME bin_lower_edge(0)
-    } else if(aBin==OVERFLOW_BIN) {
+    } else if(a_bin==OVERFLOW_BIN) {
       return 0; //FIXME return DBL_MAX;
-    } else if((aBin<0) ||(aBin>=(int)m_number_of_bins)) {
+    } else if((a_bin<0) ||(a_bin>=(int)m_number_of_bins)) {
       return 0;
     } else {
       if(m_fixed) {
-        return (m_minimum_value + (aBin + 1) * m_bin_width);
+        return (m_minimum_value + (a_bin + 1) * m_bin_width);
       } else {
-        return m_edges[aBin+1];
+        return m_edges[a_bin+1];
       }
     }
   }
 
-  TC bin_center(int aBin) const {
-    if(aBin==UNDERFLOW_BIN) {
+  TC bin_center(int a_bin) const {
+    if(a_bin==UNDERFLOW_BIN) {
       return 0; //FIXME : -INF
-    } else if(aBin==OVERFLOW_BIN) {
+    } else if(a_bin==OVERFLOW_BIN) {
       return 0; //FIXME : +INF
-    } else if(aBin<0) {
+    } else if(a_bin<0) {
       return 0; //FIXME : -INF
-    } else if(aBin>=(int)m_number_of_bins) {
+    } else if(a_bin>=(int)m_number_of_bins) {
       return 0; //FIXME : +INF
     } else {
       if(m_fixed) {
-        return (m_minimum_value + (aBin + 0.5) * m_bin_width);
+        return (m_minimum_value + (a_bin + 0.5) * m_bin_width);
       } else {
-        return (m_edges[aBin] + m_edges[aBin+1])/2.;
+        return (m_edges[a_bin] + m_edges[a_bin+1])/2.;
       }
     }
   }
 
-  int coord_to_index(TC aValue) const {
-    if( aValue <  m_minimum_value) {
+  int coord_to_index(TC a_value) const {
+    if( a_value <  m_minimum_value) {
       return UNDERFLOW_BIN;
-    } else if( aValue >= m_maximum_value) {
+    } else if( a_value >= m_maximum_value) {
       return OVERFLOW_BIN;
     } else {
       if(m_fixed) {
-        return (int)((aValue - m_minimum_value)/m_bin_width);
+        return (int)((a_value - m_minimum_value)/m_bin_width);
       } else {
         for(bn_t index=0;index<m_number_of_bins;index++) {
-          if((m_edges[index]<=aValue)&&(aValue<m_edges[index+1])) {
+          if((m_edges[index]<=a_value)&&(a_value<m_edges[index+1])) {
             return index;
           }
         }
@@ -114,20 +114,20 @@ public:
     }
   }
 
-  bool coord_to_absolute_index(TC aValue,bn_t& a_index) const {
-    if( aValue <  m_minimum_value) {
+  bool coord_to_absolute_index(TC a_value,bn_t& a_index) const {
+    if( a_value <  m_minimum_value) {
       a_index = 0;
       return true;
-    } else if( aValue >= m_maximum_value) {
+    } else if( a_value >= m_maximum_value) {
       a_index = m_number_of_bins+1;
       return true; 
     } else {
       if(m_fixed) {
-        a_index = (bn_t)((aValue - m_minimum_value)/m_bin_width)+1;
+        a_index = (bn_t)((a_value - m_minimum_value)/m_bin_width)+1;
         return true;
       } else {
         for(bn_t index=0;index<m_number_of_bins;index++) {
-          if((m_edges[index]<=aValue)&&(aValue<m_edges[index+1])) {
+          if((m_edges[index]<=a_value)&&(a_value<m_edges[index+1])) {
             a_index = index+1;
             return true;
           }

@@ -104,8 +104,8 @@ public:
   double upper_edge() const { 
     return (m_histo ? m_histo->axis().upper_edge() : m_upper_x);
   }
-  double value(unsigned int aIndex) const {return (m_histo ?0:m_xs[aIndex]);}
-  double weight(unsigned int aIndex) const {return (m_histo ?0:m_ws[aIndex]);}
+  double value(unsigned int a_index) const {return (m_histo ?0:m_xs[a_index]);}
+  double weight(unsigned int a_index) const {return (m_histo ?0:m_ws[a_index]);}
   double mean() const {
     return (m_histo ? m_histo->mean() : (m_Sw?m_Sxw/m_Sw:0));
   }
@@ -123,9 +123,9 @@ public:
     return _rms;
   }
 
-  bool convert(unsigned int aBins,double aLowerEdge,double aUpperEdge){
+  bool convert(unsigned int a_bins,double a_lower_edge,double a_upper_edge){
     if(m_histo) return true;
-    m_histo = new histo::h1d(base_cloud::title(),aBins,aLowerEdge,aUpperEdge);
+    m_histo = new histo::h1d(base_cloud::title(),a_bins,a_lower_edge,a_upper_edge);
     if(!m_histo) return false;
     bool status = fill_histogram(*m_histo);
     clear();

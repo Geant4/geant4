@@ -23,43 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field01/include/F01RunAction.hh
-/// \brief Definition of the F01RunAction class
-//
-//
-// $Id: F01RunAction.hh 76248 2013-11-08 11:19:52Z gcosmo $
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef F01RunAction_h
-#define F01RunAction_h 1
+#define F01RunAction_h
 
 #include "G4UserRunAction.hh"
 
-class F01RunMessenger;
+class G4ParticleDefinition;
+class G4Transportation;
+class G4CoupledTransportation;
+
 class G4Run;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class F01RunAction: public G4UserRunAction {
 
-class F01RunAction : public G4UserRunAction
-{
-  public:
-    F01RunAction();
-    virtual ~F01RunAction();
+public:
 
-  public:
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+  F01RunAction();
+  virtual ~F01RunAction();
+      
+  virtual void BeginOfRunAction( const G4Run* aRun );    
+  virtual void EndOfRunAction( const G4Run* aRun );    
 
-    void  SetRndmFreq(G4int val) {fSaveRndm = val;}
-    G4int GetRndmFreq() const    {return fSaveRndm;}
+  // Helper method to change the Transportation's 'looper' parameters 
+  void ChangeLooperParameters(const G4ParticleDefinition* particleDef );
 
-  private:
+  // Helper method to find the Transportation process for a particle type
+  std::pair<G4Transportation*, G4CoupledTransportation*>
+     findTransportation( const G4ParticleDefinition * particleDef,
+                         bool reportError= true );
 
-    F01RunMessenger* fMessenger;
-    G4int fSaveRndm;
+public:
+  void     SetNumberOfTrials( G4int val )   { theNumberOfTrials  =  val; }
+  void     SetWarningEnergy( double val )   { theWarningEnergy = val; }
+  void     SetImportantEnergy( double val ) { theImportantEnergy = val; }   
+  G4int    GetNumberOfTrials() { return theNumberOfTrials; }
+  G4double GetWarningEnergy()  { return theWarningEnergy; }
+  G4double GetImportantEnergy() { return theImportantEnergy; }   
+   
+private:
+
+  // Values for initialising 'loopers' parameters of Transport process
+  G4int    theNumberOfTrials  =  0;    // Default will not overwrite
+  G4double theWarningEnergy   = -1.0;  // Default values - non operational 
+  G4double theImportantEnergy = -1.0;  // Default - will not overwrite
+
+  int    theVerboseLevel = 0;
 };
 
 #endif

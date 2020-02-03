@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc 79626 2014-03-10 11:18:47Z gcosmo $
 //
 
 #include "G4UIparameter.hh"
@@ -33,6 +32,8 @@
 #include "G4ios.hh"
 #include <sstream>
 
+#include "G4UItokenNum.hh"
+using namespace G4UItokenNum;
 
 G4UIparameter::G4UIparameter():paramERR(0)
 {
@@ -85,12 +86,12 @@ G4UIparameter::G4UIparameter(const char * theName, char theType, G4bool theOmitt
 G4UIparameter::~G4UIparameter()
 { }
 
-G4int G4UIparameter::operator==(const G4UIparameter &right) const
+G4bool G4UIparameter::operator==(const G4UIparameter &right) const
 {
   return ( this == &right );
 }
 
-G4int G4UIparameter::operator!=(const G4UIparameter &right) const
+G4bool G4UIparameter::operator!=(const G4UIparameter &right) const
 {
   return ( this != &right );
 }
@@ -129,7 +130,27 @@ void G4UIparameter::SetDefaultValue(G4double theDefaultValue)
   defaultValue = os.str();
 }
 
-
+#include "G4UIcommand.hh"
+void G4UIparameter::SetDefaultUnit(const char * theDefaultUnit)
+{
+  char type = toupper( parameterType );
+  if( type != 'S' )
+  {
+    G4ExceptionDescription ed;
+    ed << "This method can be used only for a string-type parameter that is used to specify a unit.\n"
+       << "This parameter <" << parameterName << "> is defined as ";
+    switch(type) {
+        case 'D': ed <<"double."; break;
+        case 'I': ed <<"integer."; break;
+        case 'B': ed <<"bool."; break;
+        default: ed <<"undefined.";
+    }
+    G4Exception("G4UIparameter::SetDefaultUnit","INTERCOM2010",FatalException,ed);
+  }
+  SetDefaultValue(theDefaultUnit);
+  SetParameterCandidates(G4UIcommand::UnitsList(G4UIcommand::CategoryOf(theDefaultUnit)));
+}
+  
 // ---------- CheckNewValue() related routines -----------
 #include <ctype.h>
 #include "G4UItokenNum.hh"

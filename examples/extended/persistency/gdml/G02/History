@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 92201 2015-08-21 10:04:19Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +20,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+November 28th, 2019 I. Hrivnacova G02-V10-05-00
+- Fixed Doxygen warning in .README.txt
+
+May 19th, 2018  Gabriele Cosmo G02-V10-04-00
+- G02RunAction.cc: Removed vis command.
+
+June 12th, 2017  Gabriele Cosmo G02-V10-03-01
+- Added commented block in G02DetectorConstruction to show how to limit
+  the number of levels in the geometry hierarchy to be exported.
+
+March 23rd, 2017  Gabriele Cosmo G02-V10-03-00
+- Updated setup for visualization in main program.
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 August 20th, 2015  John Allison G02-V10-01-00
 - CMakeLists.txt: Added mbb.geom mbb.tree to G02_SCRIPTS.
 

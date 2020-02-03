@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Cons.hh 79491 2014-03-05 15:24:29Z gcosmo $
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4Cons
 //
 // Class description:
@@ -59,12 +52,13 @@
 //      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
 //      made with (say) Phi of a point.
 
-// History:
 // 19.3.94 P.Kent: Old C++ code converted to tolerant geometry
 // 13.9.96 V.Grichine: Final modifications to commit
 // --------------------------------------------------------------------
-#ifndef G4Cons_HH
-#define G4Cons_HH
+#ifndef G4CONS_HH
+#define G4CONS_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UCONS 1
@@ -105,7 +99,11 @@ class G4Cons : public G4CSGSolid
     inline G4double GetZHalfLength()       const;
     inline G4double GetStartPhiAngle()     const;
     inline G4double GetDeltaPhiAngle()     const;
-  
+    inline G4double GetSinStartPhi()       const;
+    inline G4double GetCosStartPhi()       const;
+    inline G4double GetSinEndPhi()         const;
+    inline G4double GetCosEndPhi()         const;
+
     // Modifiers
 
     inline void SetInnerRadiusMinusZ (G4double Rmin1 );
@@ -125,10 +123,12 @@ class G4Cons : public G4CSGSolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
-                                  G4double& pmin, G4double& pmax ) const;         
+                                  G4double& pMin, G4double& pMax ) const;
 
     EInside Inside( const G4ThreeVector& p ) const;
 
@@ -139,15 +139,15 @@ class G4Cons : public G4CSGSolid
     G4double DistanceToIn (const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;             
+                           const G4bool calcNorm = false,
+                                 G4bool* validNorm = nullptr,
+                                 G4ThreeVector* n = nullptr) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
-        
-    G4ThreeVector GetPointOnSurface() const; 
-        
+
+    G4ThreeVector GetPointOnSurface() const;
+
     G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -158,7 +158,7 @@ class G4Cons : public G4CSGSolid
     G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
-       
+
     G4Cons(__void__&);
       //
       // Fake default constructor for usage restricted to direct object
@@ -166,7 +166,7 @@ class G4Cons : public G4CSGSolid
       // persistifiable objects.
 
     G4Cons(const G4Cons& rhs);
-    G4Cons& operator=(const G4Cons& rhs); 
+    G4Cons& operator=(const G4Cons& rhs);
       // Copy constructor and assignment operator.
 
     //  Old access functions
@@ -180,10 +180,7 @@ class G4Cons : public G4CSGSolid
     inline G4double    GetDPhi() const;
 
   private:
- 
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
-  
+
     inline void Initialize();
       //
       // Reset relevant values to zero
@@ -208,7 +205,7 @@ class G4Cons : public G4CSGSolid
     // Used by distanceToOut
     //
     enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
-  
+
     // used by normal
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
@@ -221,12 +218,12 @@ class G4Cons : public G4CSGSolid
       //
       // Radial and angular dimensions
 
-    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+    G4double sinCPhi, cosCPhi, cosHDPhi, cosHDPhiOT, cosHDPhiIT,
              sinSPhi, cosSPhi, sinEPhi, cosEPhi;
       //
       // Cached trigonometric values
 
-    G4bool fPhiFullCone;
+    G4bool fPhiFullCone = false;
       //
       // Flag for identification of section or full cone
 

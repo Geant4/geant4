@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmParameters.cc 69320 2013-04-30 15:59:36Z vnivanch $
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
-//
 //
 // File name:     G4EmParameters
 //
@@ -37,8 +34,6 @@
 // Creation date: 18.05.2013
 //
 // Modifications:
-//
-//
 //
 // -------------------------------------------------------------------
 //
@@ -49,18 +44,39 @@
 #include "G4PhysicalConstants.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4VEmProcess.hh"
+#include "G4VEnergyLossProcess.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4EmExtraParameters.hh"
+#include "G4EmLowEParameters.hh"
 #include "G4EmParametersMessenger.hh"
 #include "G4NistManager.hh"
+#include "G4RegionStore.hh"
+#include "G4Region.hh"
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
 
-G4EmParameters* G4EmParameters::theInstance = 0;
+G4EmParameters* G4EmParameters::theInstance = nullptr;
+
+#ifdef G4MULTITHREADED
+  G4Mutex G4EmParameters::emParametersMutex = G4MUTEX_INITIALIZER;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4EmParameters* G4EmParameters::Instance()
 {
-  if(0 == theInstance) {
-    static G4EmParameters manager;
-    theInstance = &manager;
+  if(nullptr == theInstance) { 
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&emParametersMutex);
+    if(nullptr == theInstance) {
+#endif
+      static G4EmParameters manager;
+      theInstance = &manager;
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&emParametersMutex);
+#endif
   }
   return theInstance;
 }
@@ -70,6 +86,9 @@ G4EmParameters* G4EmParameters::Instance()
 G4EmParameters::~G4EmParameters()
 {
   delete theMessenger;
+  delete fBParameters;
+  delete fCParameters;
+  delete emSaturation;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -78,66 +97,84 @@ G4EmParameters::G4EmParameters()
 {
   G4NistManager::Instance();
   theMessenger = new G4EmParametersMessenger(this);
+  Initialise();
 
-  SetDefaults();
+  fBParameters = new G4EmExtraParameters();
+  fCParameters = new G4EmLowEParameters();
+
+  fStateManager = G4StateManager::GetStateManager();
+  emSaturation = nullptr;
 }
-
-#include "G4AutoLock.hh"
-namespace { G4Mutex EmParametersMutex = G4MUTEX_INITIALIZER; }
 
 void G4EmParameters::SetDefaults()
 {
-  G4AutoLock l(&EmParametersMutex);
-  
+  if(!IsLocked()) { 
+    Initialise();
+    fBParameters->Initialise();
+    fCParameters->Initialise();
+  }
+}
+
+void G4EmParameters::Initialise()
+{
   lossFluctuation = true;
   buildCSDARange = false;
   flagLPM = true;
   spline = true;
-  finalRange = false;
+  cutAsFinalRange = false;
   applyCuts = false;
-  fluo = false;
-  beardenFluoDir = false;
-  auger = false;
-  augerCascade = false;
-  pixe = false;
-  deexIgnoreCut = false;
   lateralDisplacement = true;
+  lateralDisplacementAlg96 = true;
   muhadLateralDisplacement = false;
   latDisplacementBeyondSafety = false;
   useAngGeneratorForIonisation = false;
   useMottCorrection = false;
+  integral = true;
+  birks = false;
+  fICRU90 = false;
+  gener = false;
+  onIsolated = false;
+  fSamplingTable = false;
+  fPolarisation = false;
+  fDNA = false;
 
   minSubRange = 1.0;
-  minKinEnergy = 0.1*keV;
-  maxKinEnergy = 10.0*TeV;
-  maxKinEnergyCSDA = 1.0*GeV;
-  lowestElectronEnergy = 1.0*keV;
-  lowestMuHadEnergy = 1.0*keV;
+  minKinEnergy = 0.1*CLHEP::keV;
+  maxKinEnergy = 100.0*CLHEP::TeV;
+  maxKinEnergyCSDA = 1.0*CLHEP::GeV;
+  max5DEnergyForMuPair = 0.0;
+  lowestElectronEnergy = 1.0*CLHEP::keV;
+  lowestMuHadEnergy = 1.0*CLHEP::keV;
+  lowestTripletEnergy = 1.0*CLHEP::MeV;
+  maxNIELEnergy = 0.0;
   linLossLimit = 0.01;
   bremsTh = maxKinEnergy;
   lambdaFactor = 0.8;
   factorForAngleLimit = 1.0;
   thetaLimit = CLHEP::pi;
+  energyLimit = 100.0*CLHEP::MeV;
   rangeFactor = 0.04;
   rangeFactorMuHad = 0.2;
   geomFactor = 2.5;
   skin = 1.0;
+  safetyFactor = 0.6;
+  lambdaLimit  = 1.0*CLHEP::mm;
+  factorScreen = 1.0;
 
-  nbins  = 77;
+  nbins  = 84;
   nbinsPerDecade = 7;
   verbose = 1;
   workerVerbose = 0;
+  tripletConv = 0;
 
   mscStepLimit = fUseSafety;
   mscStepLimitMuHad = fMinimal;
-
-  namePIXE = "Empirical";
-  nameElectronPIXE = "Livermore";
+  nucFormfactor = fExponentialNF;
 }
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   lossFluctuation = val;
 }
 
@@ -148,7 +185,7 @@ G4bool G4EmParameters::LossFluctuation() const
 
 void G4EmParameters::SetBuildCSDARange(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   buildCSDARange = val;
 }
 
@@ -159,7 +196,7 @@ G4bool G4EmParameters::BuildCSDARange() const
 
 void G4EmParameters::SetLPM(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   flagLPM = val;
 }
 
@@ -170,7 +207,7 @@ G4bool G4EmParameters::LPM() const
 
 void G4EmParameters::SetSpline(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   spline = val;
 }
 
@@ -181,18 +218,18 @@ G4bool G4EmParameters::Spline() const
 
 void G4EmParameters::SetUseCutAsFinalRange(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  finalRange = val;
+  if(IsLocked()) { return; }
+  cutAsFinalRange = val;
 }
 
 G4bool G4EmParameters::UseCutAsFinalRange() const
 {
-  return finalRange;
+  return cutAsFinalRange;
 }
 
 void G4EmParameters::SetApplyCuts(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   applyCuts = val;
 }
 
@@ -203,76 +240,73 @@ G4bool G4EmParameters::ApplyCuts() const
 
 void G4EmParameters::SetFluo(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  fluo = val;
+  if(IsLocked()) { return; }
+  fCParameters->SetFluo(val);
 }
 
 G4bool G4EmParameters::Fluo() const
 {
-  return fluo;
+  return fCParameters->Fluo();
 }
 
 void G4EmParameters::SetBeardenFluoDir(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  beardenFluoDir = val;
+  if(IsLocked()) { return; }
+  fCParameters->SetBeardenFluoDir(val);
 }
 
 G4bool G4EmParameters::BeardenFluoDir() const
 {
-  return beardenFluoDir;
+  return fCParameters->BeardenFluoDir();
 }
 
 void G4EmParameters::SetAuger(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  auger = val;
-  if(val) { fluo = true; }
+  if(IsLocked()) { return; }
+  fCParameters->SetAuger(val);
 }
 
 G4bool G4EmParameters::Auger() const
 {
-  return auger;
+  return fCParameters->Auger();
 }
 
 void G4EmParameters::SetAugerCascade(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  augerCascade = val;
-  if(val) { fluo = true; auger = true; }
+  if(IsLocked()) { return; }
+  fCParameters->SetAuger(val);
 }
 
 G4bool G4EmParameters::AugerCascade() const
 {
-  return augerCascade;
+  return fCParameters->Auger();
 }
 
 void G4EmParameters::SetPixe(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  pixe = val;
-  if(val) { fluo = true; }
+  if(IsLocked()) { return; }
+  fCParameters->SetPixe(val);
 }
 
 G4bool G4EmParameters::Pixe() const
 {
-  return pixe;
+  return fCParameters->Pixe();
 }
 
 void G4EmParameters::SetDeexcitationIgnoreCut(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  deexIgnoreCut = val;
+  if(IsLocked()) { return; }
+  fCParameters->SetDeexcitationIgnoreCut(val);
 }
 
 G4bool G4EmParameters::DeexcitationIgnoreCut() const
 {
-  return deexIgnoreCut;
+  return fCParameters->DeexcitationIgnoreCut();
 }
 
 void G4EmParameters::SetLateralDisplacement(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   lateralDisplacement = val;
 }
 
@@ -281,9 +315,20 @@ G4bool G4EmParameters::LateralDisplacement() const
   return lateralDisplacement;
 }
 
+void G4EmParameters::SetLateralDisplacementAlg96(G4bool val)
+{
+  if(IsLocked()) { return; }
+  lateralDisplacementAlg96 = val;
+}
+
+G4bool G4EmParameters::LateralDisplacementAlg96() const
+{
+  return lateralDisplacementAlg96;
+}
+
 void G4EmParameters::SetMuHadLateralDisplacement(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   muhadLateralDisplacement = val;
 }
 
@@ -294,7 +339,7 @@ G4bool G4EmParameters::MuHadLateralDisplacement() const
 
 void G4EmParameters::SetLatDisplacementBeyondSafety(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   latDisplacementBeyondSafety = val;
 }
 
@@ -305,6 +350,7 @@ G4bool G4EmParameters::LatDisplacementBeyondSafety() const
 
 void G4EmParameters::ActivateAngularGeneratorForIonisation(G4bool val)
 {
+  if(IsLocked()) { return; }
   useAngGeneratorForIonisation = val;
 }
 
@@ -315,6 +361,7 @@ G4bool G4EmParameters::UseAngularGeneratorForIonisation() const
 
 void G4EmParameters::SetUseMottCorrection(G4bool val)
 {
+  if(IsLocked()) { return; }
   useMottCorrection = val;
 }
 
@@ -323,9 +370,154 @@ G4bool G4EmParameters::UseMottCorrection() const
   return useMottCorrection;
 }
 
+void G4EmParameters::SetIntegral(G4bool val)
+{
+  if(IsLocked()) { return; }
+  integral = val;
+}
+
+G4bool G4EmParameters::Integral() const
+{
+  return integral;
+}
+
+void G4EmParameters::SetEnablePolarisation(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fPolarisation = val;
+}
+
+G4bool G4EmParameters::EnablePolarisation() const
+{
+  return fPolarisation;
+}
+
+void G4EmParameters::SetBirksActive(G4bool val)
+{
+  birks = val;
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4EmParameters::emParametersMutex);
+#endif
+  if(birks) {
+    if(!emSaturation) { emSaturation = new G4EmSaturation(1); }
+    emSaturation->InitialiseG4Saturation();
+  }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4EmParameters::emParametersMutex);
+#endif
+}
+
+G4bool G4EmParameters::BirksActive() const
+{
+  return birks;
+}
+
+void G4EmParameters::SetUseICRU90Data(G4bool val)
+{
+  fICRU90 = val;
+}
+
+G4bool G4EmParameters::UseICRU90Data() const
+{
+  return fICRU90;
+}
+
+void G4EmParameters::SetDNAFast(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetDNAFast(val);
+  if(val) { ActivateDNA(); }
+}
+
+G4bool G4EmParameters::DNAFast() const
+{
+  return fCParameters->DNAFast();
+}
+
+void G4EmParameters::SetDNAStationary(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetDNAStationary(val);
+  if(val) { ActivateDNA(); }
+}
+
+G4bool G4EmParameters::DNAStationary() const
+{
+  return fCParameters->DNAStationary();
+}
+
+void G4EmParameters::SetDNAElectronMsc(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetDNAElectronMsc(val);
+  if(val) { ActivateDNA(); }
+}
+
+G4bool G4EmParameters::DNAElectronMsc() const
+{
+  return fCParameters->DNAElectronMsc();
+}
+
+void G4EmParameters::SetGeneralProcessActive(G4bool val)
+{
+  if(IsLocked()) { return; }
+  gener = val;
+  // if general interaction is enabled then sub-cutoff and 
+  // force interaction options should be disabled
+  if(gener) { fBParameters->Initialise(); }
+}
+
+G4bool G4EmParameters::GeneralProcessActive() const
+{
+  return gener;
+}
+
+void G4EmParameters::SetEmSaturation(G4EmSaturation* ptr)
+{
+  if(emSaturation != ptr) {
+    delete emSaturation;
+    emSaturation = ptr;
+    SetBirksActive(true);
+  }
+}
+
+void G4EmParameters::SetOnIsolated(G4bool val)
+{
+  if(IsLocked()) { return; }
+  onIsolated = val;
+}
+
+G4bool G4EmParameters::OnIsolated() const
+{
+  return onIsolated;
+}
+
+void G4EmParameters::SetEnableSamplingTable(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fSamplingTable = val;
+}
+
+G4bool G4EmParameters::EnableSamplingTable() const
+{
+  return fSamplingTable;
+}
+
+void G4EmParameters::ActivateDNA()
+{
+  if(IsLocked()) { return; }
+  fDNA = true;
+}
+
+G4EmSaturation* G4EmParameters::GetEmSaturation()
+{
+  if(!emSaturation) { SetBirksActive(true); }
+  return emSaturation;
+}
+
 void G4EmParameters::SetMinSubRange(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
     minSubRange = val;
   } else {
@@ -343,13 +535,13 @@ G4double G4EmParameters::MinSubRange() const
 
 void G4EmParameters::SetMinEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 1.e-3*eV && val < maxKinEnergy) {
     minKinEnergy = val;
     nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
   } else {
     G4ExceptionDescription ed;
-    ed << "Value of MinKinEnergy is out of range: " << val/MeV 
+    ed << "Value of MinKinEnergy - is out of range: " << val/MeV 
        << " MeV is ignored"; 
     PrintWarning(ed);
   }
@@ -362,14 +554,14 @@ G4double G4EmParameters::MinKinEnergy() const
 
 void G4EmParameters::SetMaxEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  if(val > minKinEnergy && val < 1.e+7*TeV) {
+  if(IsLocked()) { return; }
+  if(val > std::max(minKinEnergy,9.99*MeV) && val < 1.e+7*TeV) {
     maxKinEnergy = val;
     nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
   } else {
     G4ExceptionDescription ed;
     ed << "Value of MaxKinEnergy is out of range: " 
-       << val/GeV << " GeV is ignored"; 
+       << val/GeV << " GeV is ignored; allowed range 10 MeV - 1.e+7 TeV"; 
     PrintWarning(ed);
   }
 }
@@ -381,13 +573,14 @@ G4double G4EmParameters::MaxKinEnergy() const
 
 void G4EmParameters::SetMaxEnergyForCSDARange(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > minKinEnergy && val <= 100*TeV) {
     maxKinEnergyCSDA = val;
   } else {
     G4ExceptionDescription ed;
     ed << "Value of MaxKinEnergyCSDA is out of range: " 
-       << val/GeV << " GeV is ignored"; 
+       << val/GeV << " GeV is ignored; allowed range "
+       << minKinEnergy << " MeV - 100 TeV"; 
     PrintWarning(ed);
   }
 }
@@ -399,15 +592,8 @@ G4double G4EmParameters::MaxEnergyForCSDARange() const
 
 void G4EmParameters::SetLowestElectronEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  if(val >= 0.0) {
-    lowestElectronEnergy = val;
-  } else {
-    G4ExceptionDescription ed;
-    ed << "Value of lowestElectronEnergy is out of range: " 
-       << val/MeV << " MeV is ignored"; 
-    PrintWarning(ed);
-  }
+  if(IsLocked()) { return; }
+  if(val >= 0.0) { lowestElectronEnergy = val; }
 }
 
 G4double G4EmParameters::LowestElectronEnergy() const
@@ -417,15 +603,8 @@ G4double G4EmParameters::LowestElectronEnergy() const
 
 void G4EmParameters::SetLowestMuHadEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  if(val >= 0.0) {
-    lowestMuHadEnergy = val;
-  } else {
-    G4ExceptionDescription ed;
-    ed << "Value of lowestMuHadEnergy is out of range: " 
-       << val/MeV << " MeV is ignored"; 
-    PrintWarning(ed);
-  }
+  if(IsLocked()) { return; }
+  if(val >= 0.0) { lowestMuHadEnergy = val; }
 }
 
 G4double G4EmParameters::LowestMuHadEnergy() const
@@ -433,9 +612,42 @@ G4double G4EmParameters::LowestMuHadEnergy() const
   return lowestMuHadEnergy; 
 }
 
+void G4EmParameters::SetLowestTripletEnergy(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val > 0.0) { lowestTripletEnergy = val; }
+}
+
+G4double G4EmParameters::LowestTripletEnergy() const
+{
+  return lowestTripletEnergy;
+}
+
+void G4EmParameters::SetMaxNIELEnergy(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val >= 0.0) { maxNIELEnergy = val; }
+}
+
+G4double G4EmParameters::MaxNIELEnergy() const
+{
+  return maxNIELEnergy;
+}
+
+void G4EmParameters::SetMaxEnergyFor5DMuPair(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val > 0.0) { max5DEnergyForMuPair = val; }
+}
+
+G4double G4EmParameters::MaxEnergyFor5DMuPair() const
+{
+  return max5DEnergyForMuPair;
+}
+
 void G4EmParameters::SetLinearLossLimit(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 0.5) {
     linLossLimit = val;
   } else {
@@ -453,7 +665,7 @@ G4double G4EmParameters::LinearLossLimit() const
 
 void G4EmParameters::SetBremsstrahlungTh(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0) {
     bremsTh = val;
   } else {
@@ -471,7 +683,7 @@ G4double G4EmParameters::BremsstrahlungTh() const
 
 void G4EmParameters::SetLambdaFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
     lambdaFactor = val;
   } else {
@@ -489,7 +701,7 @@ G4double G4EmParameters::LambdaFactor() const
 
 void G4EmParameters::SetFactorForAngleLimit(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0) {
     factorForAngleLimit = val;
   } else {
@@ -507,7 +719,7 @@ G4double G4EmParameters::FactorForAngleLimit() const
 
 void G4EmParameters::SetMscThetaLimit(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 0.0 && val <= pi) {
     thetaLimit = val;
   } else {
@@ -523,11 +735,28 @@ G4double G4EmParameters::MscThetaLimit() const
   return thetaLimit;
 }
 
+void G4EmParameters::SetMscEnergyLimit(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val >= 0.0) {
+    energyLimit = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of msc energy limit is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::MscEnergyLimit() const
+{
+  return energyLimit;
+}
+
 void G4EmParameters::SetMscRangeFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
-    //G4cout << " G4EmParameters::SetMscRangeFactor: " << val << G4endl;
     rangeFactor = val;
   } else {
     G4ExceptionDescription ed;
@@ -544,7 +773,7 @@ G4double G4EmParameters::MscRangeFactor() const
 
 void G4EmParameters::SetMscMuHadRangeFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
     rangeFactorMuHad = val;
   } else {
@@ -562,7 +791,7 @@ G4double G4EmParameters::MscMuHadRangeFactor() const
 
 void G4EmParameters::SetMscGeomFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 1.0) {
     geomFactor = val;
   } else {
@@ -578,9 +807,45 @@ G4double G4EmParameters::MscGeomFactor() const
   return geomFactor;
 }
 
+void G4EmParameters::SetMscSafetyFactor(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val >= 0.1) {
+    safetyFactor = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of safetyFactor is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::MscSafetyFactor() const 
+{
+  return safetyFactor;
+}
+
+void G4EmParameters::SetMscLambdaLimit(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val >= 0.0) {
+    lambdaLimit = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of lambdaLimit is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::MscLambdaLimit() const 
+{
+  return lambdaLimit;
+}
+
 void G4EmParameters::SetMscSkin(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 1.0) {
     skin = val;
   } else {
@@ -596,9 +861,39 @@ G4double G4EmParameters::MscSkin() const
   return skin;
 }
 
+void G4EmParameters::SetScreeningFactor(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val > 0.0) {
+    factorScreen = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of factorScreen is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::ScreeningFactor() const
+{
+  return factorScreen;
+}
+
+void G4EmParameters::SetStepFunction(G4double v1, G4double v2)
+{
+  if(IsLocked()) { return; }
+  fBParameters->SetStepFunction(v1, v2);
+}
+
+void G4EmParameters::SetStepFunctionMuHad(G4double v1, G4double v2)
+{
+  if(IsLocked()) { return; }
+  fBParameters->SetStepFunctionMuHad(v1, v2);
+}
+
 void G4EmParameters::SetNumberOfBins(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 5 && val < 10000000) {
     nbins = val;
     nbinsPerDecade = G4lrint(nbins/std::log10(maxKinEnergy/minKinEnergy));
@@ -617,7 +912,7 @@ G4int G4EmParameters::NumberOfBins() const
 
 void G4EmParameters::SetNumberOfBinsPerDecade(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 5 && val < 1000000) {
     nbinsPerDecade = val;
     nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
@@ -636,7 +931,7 @@ G4int G4EmParameters::NumberOfBinsPerDecade() const
 
 void G4EmParameters::SetVerbose(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   verbose = val;
   workerVerbose = std::min(workerVerbose, verbose);
 }
@@ -648,7 +943,7 @@ G4int G4EmParameters::Verbose() const
 
 void G4EmParameters::SetWorkerVerbose(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   workerVerbose = val;
 }
 
@@ -659,7 +954,7 @@ G4int G4EmParameters::WorkerVerbose() const
 
 void G4EmParameters::SetMscStepLimitType(G4MscStepLimitType val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   mscStepLimit = val;
 }
 
@@ -670,7 +965,7 @@ G4MscStepLimitType G4EmParameters::MscStepLimitType() const
 
 void G4EmParameters::SetMscMuHadStepLimitType(G4MscStepLimitType val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   mscStepLimitMuHad = val;
 }
 
@@ -679,30 +974,64 @@ G4MscStepLimitType G4EmParameters::MscMuHadStepLimitType() const
   return mscStepLimitMuHad;
 }
 
+void 
+G4EmParameters::SetNuclearFormfactorType(G4NuclearFormfactorType val)
+{
+  if(IsLocked()) { return; }
+  nucFormfactor = val;
+}
+
+G4NuclearFormfactorType G4EmParameters::NuclearFormfactorType() const
+{
+  return nucFormfactor;
+}
+
+void G4EmParameters::SetDNAeSolvationSubType(G4DNAModelSubType val)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetDNAeSolvationSubType(val);
+  ActivateDNA();
+}
+
+G4DNAModelSubType G4EmParameters::DNAeSolvationSubType() const
+{
+  return fCParameters->DNAeSolvationSubType();
+}
+
+void G4EmParameters::SetConversionType(G4int val)
+{
+  if(IsLocked()) { return; }
+  tripletConv = val;
+}
+
+G4int G4EmParameters::GetConversionType() const
+{
+  return tripletConv;
+}
+
 void G4EmParameters::SetPIXECrossSectionModel(const G4String& sss)
 {
-  G4cout << "G4EmParameters::SetPIXECrossSectionModel " << sss << G4endl;
-  G4AutoLock l(&EmParametersMutex);
-  namePIXE = sss;
+  if(IsLocked()) { return; }
+  fCParameters->SetPIXECrossSectionModel(sss);
 }
 
 const G4String& G4EmParameters::PIXECrossSectionModel()
 {
-  return namePIXE;
+  return fCParameters->PIXECrossSectionModel();
 }
 
 void G4EmParameters::SetPIXEElectronCrossSectionModel(const G4String& sss)
 {
-  G4AutoLock l(&EmParametersMutex);
-  nameElectronPIXE = sss;
+  if(IsLocked()) { return; }
+  fCParameters->SetPIXEElectronCrossSectionModel(sss);
 }
 
 const G4String& G4EmParameters::PIXEElectronCrossSectionModel()
 {
-  return nameElectronPIXE;
+  return fCParameters->PIXEElectronCrossSectionModel();
 }
 
-void G4EmParameters::PrintWarning(G4ExceptionDescription& ed)
+void G4EmParameters::PrintWarning(G4ExceptionDescription& ed) const
 {
   G4Exception("G4EmParameters", "em0044", JustWarning, ed);
 }
@@ -711,157 +1040,317 @@ void G4EmParameters::AddPAIModel(const G4String& particle,
                                  const G4String& region,
                                  const G4String& type)
 {
-  G4String r = region;
-  if(r == "" || r == "world" || r == "World") r = "DefaultRegionForTheWorld";
-  G4int nreg =  m_regnamesPAI.size();
-  for(G4int i=0; i<nreg; ++i) {
-    if((m_particlesPAI[i] == particle || 
-        m_particlesPAI[i] == "all" || 
-        particle == "all") && 
-       (m_regnamesPAI[i] == r || 
-        m_regnamesPAI[i] == "DefaultRegionForTheWorld" || 
-        r == "DefaultRegionForTheWorld") ) {
-
-      m_typesPAI[i] = type;
-      if(particle == "all") m_particlesPAI[i] = particle;
-      if(r == "DefaultRegionForTheWorld") { m_regnamesPAI[i] = r; }
-      return;
-    }
-  }
-  m_particlesPAI.push_back(particle);
-  m_regnamesPAI.push_back(r);
-  m_typesPAI.push_back(type);
+  if(IsLocked()) { return; }
+  fBParameters->AddPAIModel(particle, region, type);
 }
 
 const std::vector<G4String>& G4EmParameters::ParticlesPAI() const
 {
-  return m_particlesPAI;
+  return fBParameters->ParticlesPAI();
 }
 
 const std::vector<G4String>& G4EmParameters::RegionsPAI() const
 {
-  return m_regnamesPAI;
+  return fBParameters->RegionsPAI();
 }
 
 const std::vector<G4String>& G4EmParameters::TypesPAI() const
 {
-  return m_typesPAI;
+  return fBParameters->TypesPAI();
 }
 
 void G4EmParameters::AddMicroElec(const G4String& region)
 {
-  G4String r = region;
-  if(r == "" || r == "world" || r == "World") r = "DefaultRegionForTheWorld";
-  G4int nreg =  m_regnamesME.size();
-  for(G4int i=0; i<nreg; ++i) {
-    if(r == m_regnamesME[i]) { return; }
-  }
-  m_regnamesME.push_back(r);
+  if(IsLocked()) { return; }
+  fCParameters->AddMicroElec(region);
 }
 
 const std::vector<G4String>& G4EmParameters::RegionsMicroElec() const
 {
-  return m_regnamesME;
+  return fCParameters->RegionsMicroElec();
 }
 
 void G4EmParameters::AddDNA(const G4String& region, const G4String& type)
 {
-  G4String r = region;
-  if(r == "" || r == "world" || r == "World") r = "DefaultRegionForTheWorld";
-  G4int nreg =  m_regnamesDNA.size();
-  for(G4int i=0; i<nreg; ++i) {
-    if(r == m_regnamesDNA[i]) { return; }
-  }
-  m_regnamesDNA.push_back(r);
-  m_typesDNA.push_back(type);
+  if(IsLocked()) { return; }
+  fCParameters->AddDNA(region, type);
+  ActivateDNA();
 }
 
 const std::vector<G4String>& G4EmParameters::RegionsDNA() const
 {
-  return m_regnamesDNA;
+  return fCParameters->RegionsDNA();
 }
 
 const std::vector<G4String>& G4EmParameters::TypesDNA() const
 {
-  return m_typesDNA;
+  return fCParameters->TypesDNA();
 }
 
-std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
+void G4EmParameters::AddPhysics(const G4String& region, const G4String& type)
+{
+  if(IsLocked()) { return; }
+  fBParameters->AddPhysics(region, type);
+}
+
+const std::vector<G4String>& G4EmParameters::RegionsPhysics() const
+{
+  return fBParameters->RegionsPhysics();
+}
+
+const std::vector<G4String>& G4EmParameters::TypesPhysics() const
+{
+  return fBParameters->TypesPhysics();
+}
+
+void G4EmParameters::SetSubCutoff(G4bool val, const G4String& region)
+{
+  if(IsLocked() && !gener) { return; }
+  fBParameters->SetSubCutoff(val, region);
+}
+
+void 
+G4EmParameters::SetDeexActiveRegion(const G4String& region, G4bool adeex,
+                                    G4bool aauger, G4bool apixe)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetDeexActiveRegion(region, adeex, aauger, apixe);
+}
+
+void 
+G4EmParameters::SetProcessBiasingFactor(const G4String& procname, 
+                                        G4double val, G4bool wflag)
+{
+  if(IsLocked()) { return; }
+  fBParameters->SetProcessBiasingFactor(procname, val, wflag);
+}
+
+void 
+G4EmParameters::ActivateForcedInteraction(const G4String& procname, 
+                                          const G4String& region,
+                                          G4double length, 
+                                          G4bool wflag)
+{
+  if(IsLocked() && !gener) { return; }
+  fBParameters->ActivateForcedInteraction(procname, region, length, wflag);
+}
+
+void 
+G4EmParameters::ActivateSecondaryBiasing(const G4String& procname,
+                                         const G4String& region, 
+                                         G4double factor,
+                                         G4double energyLim)
+{
+  if(IsLocked()) { return; }
+  fBParameters->ActivateSecondaryBiasing(procname, region, factor, energyLim);
+}
+
+void G4EmParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr, 
+                                           G4bool isElectron) const
+{
+  fBParameters->DefineRegParamForLoss(ptr, isElectron);
+}
+
+void G4EmParameters::DefineRegParamForEM(G4VEmProcess* ptr) const
+{
+  fBParameters->DefineRegParamForEM(ptr);
+}
+
+G4bool G4EmParameters::QuantumEntanglement()
+{
+  return fBParameters->QuantumEntanglement(); 
+}
+
+void G4EmParameters::SetQuantumEntanglement(G4bool v)
+{
+  if(IsLocked()) { return; }
+  fBParameters->SetQuantumEntanglement(v); 
+}
+
+G4bool G4EmParameters::GetDirectionalSplitting() { 
+  return fBParameters->GetDirectionalSplitting(); 
+}
+
+void G4EmParameters::SetDirectionalSplitting(G4bool v) 
+{ 
+  if(IsLocked()) { return; }
+  fBParameters->SetDirectionalSplitting(v); 
+}
+
+void G4EmParameters::SetDirectionalSplittingTarget(const G4ThreeVector& v)
+{ 
+  if(IsLocked()) { return; }
+  fBParameters->SetDirectionalSplittingTarget(v);
+}
+
+G4ThreeVector G4EmParameters::GetDirectionalSplittingTarget() const
+{ 
+  return fBParameters->GetDirectionalSplittingTarget(); 
+}
+
+void G4EmParameters::SetDirectionalSplittingRadius(G4double r)
+{ 
+  if(IsLocked()) { return; }
+  fBParameters->SetDirectionalSplittingRadius(r); 
+}
+
+G4double G4EmParameters::GetDirectionalSplittingRadius()
+{ 
+  return fBParameters->GetDirectionalSplittingRadius(); 
+}
+
+void G4EmParameters::DefineRegParamForDeex(G4VAtomDeexcitation* ptr) const
+{
+  fCParameters->DefineRegParamForDeex(ptr); 
+}
+
+void G4EmParameters::StreamInfo(std::ostream& os) const
 {
   G4int prec = os.precision(5);
   os << "=======================================================================" << "\n";
   os << "======                 Electromagnetic Physics Parameters      ========" << "\n";
   os << "=======================================================================" << "\n";
-  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
-  os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
   os << "LPM effect enabled                                 " <<flagLPM << "\n";
   os << "Spline of EM tables enabled                        " <<spline << "\n";
-  os << "Use cut as a final range enabled                   " <<finalRange << "\n";
+  os << "Enable creation and use of sampling tables         " <<fSamplingTable << "\n";
   os << "Apply cuts on all EM processes                     " <<applyCuts << "\n";
-  os << "Fluorescence enabled                               " <<fluo << "\n";
-  os << "Fluorescence Bearden data files enabled            " <<beardenFluoDir << "\n";
-  os << "Auger electron production enabled                  " <<auger << "\n";
-  os << "Auger cascade enabled                              " <<augerCascade << "\n";
-  os << "PIXE atomic de-excitation enabled                  " <<pixe << "\n";
-  os << "De-excitation module ignores cuts                  " <<deexIgnoreCut << "\n";
-  os << "Msc lateraral displacement for e+- enabled         " <<lateralDisplacement << "\n";
-  os << "Msc lateraral displacement for muons and hadrons   " <<muhadLateralDisplacement << "\n";
-  os << "Msc lateraral displacement beyond geometry safety  " <<latDisplacementBeyondSafety << "\n";
-  os << "Enable angular generator interface                 " 
-     <<useAngGeneratorForIonisation << "\n";
-  os << "Use Mott correction for e- scattering              " 
-     <<useMottCorrection << "\n";
-
-  os << "Factor of cut reduction for sub-cutoff method      " <<minSubRange << "\n";
+  os << "Use integral approach for tracking                 " <<integral << "\n";
+  os << "Use general process                                " <<gener << "\n";
+  os << "Enable linear polarisation for gamma               " <<fPolarisation << "\n";
+  os << "Enable sampling of quantum entanglement            " 
+     <<fBParameters->QuantumEntanglement()  << "\n";
+  os << "X-section factor for integral approach             " <<lambdaFactor << "\n";
   os << "Min kinetic energy for tables                      " 
      <<G4BestUnit(minKinEnergy,"Energy") << "\n";
   os << "Max kinetic energy for tables                      " 
      <<G4BestUnit(maxKinEnergy,"Energy") << "\n";
-  os << "Max kinetic energy for CSDA tables                 " 
-     <<G4BestUnit(maxKinEnergyCSDA,"Energy") << "\n";
-  os << "Lowest e+e- kinetic energy                         " 
-     <<G4BestUnit(lowestElectronEnergy,"Energy") << "\n";
-  os << "Lowest muon/hadron kinetic energy                  " 
-     <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
-  os << "Linear loss limit " <<linLossLimit << "\n";
-  os << "Bremsstrahlung energy threshold above which \n" 
-     << "  primary is added to the list of secondary        " 
-     <<G4BestUnit(bremsTh,"Energy") << "\n";
-  os << "X-section factor for integral approach             " <<lambdaFactor << "\n";
-  os << "Factor used for dynamic computation of angular \n" 
-     << "  limit between single and multiple scattering     " << factorForAngleLimit << "\n";
-  os << "Fixed angular limit between single \n"
-     << "  and multiple scattering                          " 
-     <<thetaLimit/rad << " rad" << "\n";
-  os << "Range factor for msc step limit for e+-            " <<rangeFactor << "\n";
-  os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
-  os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";
-  os << "Skin parameter for msc step limitation of e+-      " <<skin << "\n";
-
   os << "Number of bins in tables                           " <<nbins   << "\n";
   os << "Number of bins per decade of a table               " <<nbinsPerDecade << "\n";
   os << "Verbose level                                      " <<verbose << "\n";
   os << "Verbose level for worker thread                    " <<workerVerbose << "\n";
+  os << "Bremsstrahlung energy threshold above which \n" 
+     << "  primary is added to the list of secondary        " 
+     <<G4BestUnit(bremsTh,"Energy") << "\n";
+  os << "Lowest triplet kinetic energy                      " 
+     <<G4BestUnit(lowestTripletEnergy,"Energy") << "\n";
+  os << "Enable sampling of gamma linear polarisation       " <<fPolarisation << "\n";
+  os << "5D gamma conversion model type                     " <<tripletConv << "\n";
+  os << "5D gamma conversion model on isolated ion          " <<onIsolated << "\n";
+  if(max5DEnergyForMuPair>0.0) {
+  os << "5D gamma conversion limit for muon pair            " 
+     << max5DEnergyForMuPair/CLHEP::GeV << " GeV\n";
+  }
 
+  os << "=======================================================================" << "\n";
+  os << "======                 Ionisation Parameters                   ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Step function for e+-                              " 
+     <<"("<<fBParameters->GetStepFunctionP1() << ", " 
+     << fBParameters->GetStepFunctionP2()/CLHEP::mm << " mm)\n";
+  os << "Step function for muons/hadrons                    " 
+     <<"("<<fBParameters->GetStepFunctionMuHadP1() << ", " 
+     << fBParameters->GetStepFunctionMuHadP2()/CLHEP::mm << " mm)\n";
+  os << "Lowest e+e- kinetic energy                         " 
+     <<G4BestUnit(lowestElectronEnergy,"Energy") << "\n";
+  os << "Lowest muon/hadron kinetic energy                  " 
+     <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
+  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
+  os << "Use ICRU90 data                                    " << fICRU90 << "\n";
+  os << "Use built-in Birks satuaration                     " << birks << "\n";
+  os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
+  os << "Use cut as a final range enabled                   " <<cutAsFinalRange << "\n";
+  os << "Enable angular generator interface                 " 
+     <<useAngGeneratorForIonisation << "\n";
+  os << "Factor of cut reduction for sub-cutoff method      " << minSubRange << "\n";
+  os << "Max kinetic energy for CSDA tables                 " 
+     <<G4BestUnit(maxKinEnergyCSDA,"Energy") << "\n";
+  os << "Max kinetic energy for NIEL computation            " 
+     <<G4BestUnit(maxNIELEnergy,"Energy") << "\n";
+  os << "Linear loss limit " <<linLossLimit << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Multiple Scattering Parameters          ========" << "\n";
+  os << "=======================================================================" << "\n";
   os << "Type of msc step limit algorithm for e+-           " <<mscStepLimit << "\n";
   os << "Type of msc step limit algorithm for muons/hadrons " <<mscStepLimitMuHad << "\n";
-
-  os << "Type of PIXE cross section for hadrons             " <<namePIXE << "\n";
-  os << "Type of PIXE cross section for e+-                 " <<nameElectronPIXE << "\n";
+  os << "Msc lateral displacement for e+- enabled           " <<lateralDisplacement << "\n";
+  os << "Msc lateral displacement for muons and hadrons     " <<muhadLateralDisplacement << "\n";
+  os << "Urban msc model lateral displacement alg96         " <<lateralDisplacementAlg96 << "\n";
+  os << "Msc lateral displacement beyond geometry safety    " <<latDisplacementBeyondSafety << "\n";
+  os << "Range factor for msc step limit for e+-            " <<rangeFactor << "\n";
+  os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
+  os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";
+  os << "Safety factor for msc step limit for e+-           " <<safetyFactor << "\n";
+  os << "Skin parameter for msc step limitation of e+-      " <<skin << "\n";
+  os << "Lambda limit for msc step limit for e+-            " <<lambdaLimit/CLHEP::mm << " mm\n";
+  os << "Use Mott correction for e- scattering              " << useMottCorrection << "\n";
+  os << "Factor used for dynamic computation of angular \n" 
+     << "  limit between single and multiple scattering     " << factorForAngleLimit << "\n";
+  os << "Fixed angular limit between single \n"
+     << "  and multiple scattering                          " 
+     << thetaLimit/CLHEP::rad << " rad\n";
+  os << "Upper energy limit for e+- multiple scattering     " 
+     << energyLimit/CLHEP::MeV << " MeV\n";
+  os << "Type of nuclear form-factor                        " <<nucFormfactor << "\n";
+  os << "Screening factor                                   " <<factorScreen << "\n";
   os << "=======================================================================" << "\n";
+
+  if(fCParameters->Fluo()) {
+  os << "======                 Atomic Deexcitation Parameters          ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Fluorescence enabled                               " <<fCParameters->Fluo() << "\n";
+  os << "Fluorescence Bearden data files enabled            " 
+     <<fCParameters->BeardenFluoDir() << "\n";
+  os << "Auger electron cascade enabled                     " 
+     <<fCParameters->Auger() << "\n";
+  os << "PIXE atomic de-excitation enabled                  " <<fCParameters->Pixe() << "\n";
+  os << "De-excitation module ignores cuts                  " 
+     <<fCParameters->DeexcitationIgnoreCut() << "\n";
+  os << "Type of PIXE cross section for hadrons             " 
+     <<fCParameters->PIXECrossSectionModel() << "\n";
+  os << "Type of PIXE cross section for e+-                 " 
+     <<fCParameters->PIXEElectronCrossSectionModel() << "\n";
+  os << "=======================================================================" << "\n";
+  }
+  if(fDNA) {
+  os << "======                 DNA Physics Parameters                  ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Use fast sampling in DNA models                    " 
+     << fCParameters->DNAFast() << "\n";
+  os << "Use Stationary option in DNA models                " 
+     << fCParameters->DNAStationary() << "\n";
+  os << "Use DNA with multiple scattering of e-             " 
+     << fCParameters->DNAElectronMsc() << "\n";
+  os << "Use DNA e- solvation model type                    " 
+     << fCParameters->DNAeSolvationSubType() << "\n";
+  os << "=======================================================================" << "\n";
+  }
   os.precision(prec);
-  return os;
 }
 
 void G4EmParameters::Dump() const
 {
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&emParametersMutex);
+#endif
   StreamInfo(G4cout);
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&emParametersMutex);
+#endif
 }
 
 std::ostream& operator<< (std::ostream& os, const G4EmParameters& par)
 {
-  return par.StreamInfo(os);
+  par.StreamInfo(os);
+  return os;
+}
+
+G4bool G4EmParameters::IsLocked() const
+{
+  return (!G4Threading::IsMasterThread() ||
+	  (fStateManager->GetCurrentState() != G4State_PreInit &&
+       	   fStateManager->GetCurrentState() != G4State_Init &&
+	   fStateManager->GetCurrentState() != G4State_Idle));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-

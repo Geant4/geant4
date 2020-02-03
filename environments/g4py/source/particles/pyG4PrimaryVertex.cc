@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4PrimaryVertex.cc 94509 2015-11-20 10:14:44Z gcosmo $
 // ====================================================================
 //   pyG4PrimaryVertex.cc
 //

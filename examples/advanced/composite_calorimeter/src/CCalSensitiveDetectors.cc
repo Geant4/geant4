@@ -35,15 +35,16 @@
 CCalSensitiveDetectors* CCalSensitiveDetectors::theInstance = 0;
 
 
-CCalSensitiveDetectors* CCalSensitiveDetectors::getInstance() {
+CCalSensitiveDetectors* CCalSensitiveDetectors::getInstance()
+{
  if (!theInstance) theInstance = new CCalSensitiveDetectors;
  return theInstance;
 }
 
 
 void CCalSensitiveDetectors::registerVolume (const G4String& string, 
-					     G4LogicalVolume* logv) {
-
+                                             G4LogicalVolume* logv)
+{
   theLVs.insert(mmslv::value_type(string, logv));
 #ifdef debug
   G4cout << "CCalSensitiveDetectors : Register " << logv->GetName() 
@@ -51,9 +52,9 @@ void CCalSensitiveDetectors::registerVolume (const G4String& string,
 #endif
 }
 
-std::vector<G4LogicalVolume*> CCalSensitiveDetectors::getVolumes (const G4String& string, 
-							     bool exist) {
-
+std::vector<G4LogicalVolume*>
+CCalSensitiveDetectors::getVolumes (const G4String& string, G4bool exist)
+{
   mmslv::const_iterator mmscite;
   std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
   mmsdi = theLVs.equal_range(string);
@@ -63,16 +64,16 @@ std::vector<G4LogicalVolume*> CCalSensitiveDetectors::getVolumes (const G4String
   }
 
   if (exist) G4cout << "CCalSensitiveDetector : " << lvs.size() 
-		  << " detectors for " << string << G4endl;
+                  << " detectors for " << string << G4endl;
   
   return lvs;
 }
 
 
-bool CCalSensitiveDetectors::setSensitive(const G4String& string, 
-					  G4VSensitiveDetector* sens) {
-
-  bool result=false;
+G4bool CCalSensitiveDetectors::setSensitive(const G4String& string, 
+                                          G4VSensitiveDetector* sens)
+{
+  G4bool result=false;
   mmslv::const_iterator mmscite;
   std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
   mmsdi = theLVs.equal_range(string);
@@ -82,9 +83,8 @@ bool CCalSensitiveDetectors::setSensitive(const G4String& string,
     result = true;
 #ifdef debug
     G4cout << " Associate SD " << sens->GetName() << " to " << lv->GetName() 
-	 << G4endl;
+         << G4endl;
 #endif
   }
   return result;
-
 }

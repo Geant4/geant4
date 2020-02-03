@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackingMessenger.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // --------------------------------------------------------------------
 
@@ -89,9 +88,11 @@ void G4StackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     switch (vc)
     { 
       case 2:
-        fContainer->ClearPostponeStack();
+        fContainer->ClearPostponeStack(); // fallthrough
+        /* no break */
       case 1:
-        fContainer->ClearUrgentStack();
+        fContainer->ClearUrgentStack(); // fallthrough
+        /* no break */
       case 0:
         fContainer->ClearWaitingStack();
         break;

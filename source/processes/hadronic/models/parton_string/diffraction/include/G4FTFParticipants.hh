@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh 89632 2015-04-23 12:19:33Z gcosmo $
 //
 
 #ifndef G4FTFParticipants_h
@@ -49,13 +48,12 @@
 
 
 class G4FTFParticipants : public G4VParticipants {
-
   public:
     G4FTFParticipants();
     const G4FTFParticipants& operator=( const G4FTFParticipants& right );
     ~G4FTFParticipants();
-    int operator==( const G4FTFParticipants& right ) const;
-    int operator!=( const G4FTFParticipants& right ) const;
+    G4bool operator==( const G4FTFParticipants& right ) const;
+    G4bool operator!=( const G4FTFParticipants& right ) const;
 
     void GetList( const G4ReactionProduct& thePrimary, G4FTFParameters* theParameters );
     void StartLoop();
@@ -69,7 +67,6 @@ class G4FTFParticipants : public G4VParticipants {
   private:
     G4FTFParticipants( const G4FTFParticipants& right );
     G4int currentInteraction;
-
 };
 
 
@@ -88,3 +85,4 @@ inline G4InteractionContent& G4FTFParticipants::GetInteraction() {
 }
 
 #endif
+

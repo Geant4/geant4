@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsINCLXX.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -58,31 +57,57 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionInelastic.hh"
+#include "G4PionBuilder.hh"
+#include "G4KaonBuilder.hh"
+#include "G4QGSPPionBuilder.hh"
+#include "G4FTFPPionBuilder.hh"
+#include "G4QGSPKaonBuilder.hh"
+#include "G4FTFPKaonBuilder.hh"
+#include "G4INCLXXPionBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
+
+#include "G4ProtonBuilder.hh"
+#include "G4QGSPProtonBuilder.hh"
+#include "G4FTFPProtonBuilder.hh"
+#include "G4INCLXXProtonBuilder.hh"
+
+#include "G4NeutronBuilder.hh"
+#include "G4QGSPNeutronBuilder.hh"
+#include "G4FTFPNeutronBuilder.hh"
+#include "G4INCLXXNeutronBuilder.hh"
+#include "G4NeutronPHPBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
+
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4ParticleHPCaptureData.hh"
 #include "G4LFission.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4PhysListUtil.hh"
+#include "G4ProcessManager.hh"
+
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsINCLXX);
 
-G4ThreadLocal G4HadronPhysicsINCLXX::ThreadPrivate* 
-G4HadronPhysicsINCLXX::tpdata = 0;
+//Constant for configuration
+namespace {
+  const G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
+  const G4bool quasiElasticQGS= true;    // For QGS, it must use it.
+}
 
 G4HadronPhysicsINCLXX::G4HadronPhysicsINCLXX(G4int)
-    :  G4VPhysicsConstructor("hInelastic INCLXX")
-    , QuasiElastic(true)
-    , withNeutronHP(false)
-    , withFTFP(false)
+    : G4HadronPhysicsINCLXX("hInelastic INCLXX")
 {
 }
 
@@ -96,108 +121,138 @@ G4HadronPhysicsINCLXX::G4HadronPhysicsINCLXX(const G4String& name, const G4bool 
 
 void G4HadronPhysicsINCLXX::CreateModels()
 {
-  G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
-  G4bool quasiElasticQGS= true;    // For QGS, it must use it.
+  Neutron();
+  Proton();
+  Pion();
+  Kaon();
+  Others();
+}
 
-// initialise fields in tpdata where assignment is optional below.
-  tpdata->theNeutronHP=0;
-  tpdata->theQGSPNeutron=0;
-  tpdata->theQGSPPro=0;
-  tpdata->theQGSPPion=0;
-  tpdata->theQGSPKaon=0;
-  tpdata->theFTFPNeutron=0;
-  tpdata->theFTFPPro=0;
-  tpdata->theFTFPPion=0;
-  tpdata->theFTFPKaon=0;
 
-  tpdata->theNeutrons=new G4NeutronBuilder( withNeutronHP );
+void G4HadronPhysicsINCLXX::Neutron()
+{
+  //General schema:
+  // 1) Create a builder
+  // 2) Call AddBuilder
+  // 3) Configure the builder, possibly with sub-builders
+  // 4) Call builder->Build()
+  auto neu = new G4NeutronBuilder( withNeutronHP );
+  AddBuilder(neu);
+  G4PhysicsBuilderInterface* string = nullptr;
   if(withFTFP) {
-    tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF));
-    tpdata->theFTFPNeutron->SetMinEnergy(15.*GeV);
+      string = new G4FTFPNeutronBuilder(quasiElasticFTF);
   } else {
-    tpdata->theNeutrons->RegisterMe(tpdata->theQGSPNeutron=new G4QGSPNeutronBuilder(quasiElasticQGS));
-    tpdata->theQGSPNeutron->SetMinEnergy(15.*GeV);
+      string = new G4QGSPNeutronBuilder(quasiElasticQGS);
   }
-  tpdata->theNeutrons->RegisterMe(tpdata->theINCLXXNeutron=new G4INCLXXNeutronBuilder);
-  tpdata->theINCLXXNeutron->SetMaxEnergy(20.0*GeV);
+  string->SetMinEnergy(15.*GeV);
+  AddBuilder(string);
+  neu->RegisterMe(string);
+
+  auto inclxxn = new G4INCLXXNeutronBuilder;
+  inclxxn->SetMaxEnergy(20.*GeV);
+  AddBuilder(inclxxn);
+  neu->RegisterMe(inclxxn);
+
   if(withNeutronHP) {
-    tpdata->theINCLXXNeutron->UsePreCompound(false);
-    tpdata->theINCLXXNeutron->SetMinEnergy(19.9*MeV);
-    tpdata->theNeutrons->RegisterMe(tpdata->theNeutronHP=new G4NeutronPHPBuilder);
+      inclxxn->UsePreCompound(false);
+      inclxxn->SetMinEnergy(19.9*MeV);
+      auto hpn = new G4NeutronPHPBuilder;
+      AddBuilder(hpn);
+      neu->RegisterMe(hpn);
   } else {
-    tpdata->theINCLXXNeutron->UsePreCompound(true);
-    tpdata->theINCLXXNeutron->SetMinPreCompoundEnergy(0.0*MeV);
-    tpdata->theINCLXXNeutron->SetMaxPreCompoundEnergy(2.0*MeV);
-    tpdata->theINCLXXNeutron->SetMinEnergy(1.0*MeV);
+      inclxxn->UsePreCompound(true);
+      inclxxn->SetMinPreCompoundEnergy(0.0*MeV);
+      inclxxn->SetMaxPreCompoundEnergy(2.0*MeV);
+      inclxxn->SetMinEnergy(1.0*MeV);
   }
 
-  tpdata->thePro=new G4ProtonBuilder;
+  neu->Build();
+}
+
+void G4HadronPhysicsINCLXX::Proton()
+{
+  auto pro =new G4ProtonBuilder;
+  AddBuilder(pro);
+  G4PhysicsBuilderInterface* string = nullptr;
   if(withFTFP) {
-    tpdata->thePro->RegisterMe(tpdata->theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF));
-    tpdata->theFTFPPro->SetMinEnergy(15.*GeV);
+      string = new G4FTFPProtonBuilder(quasiElasticFTF);
   } else {
-    tpdata->thePro->RegisterMe(tpdata->theQGSPPro=new G4QGSPProtonBuilder(quasiElasticQGS));
-    tpdata->theQGSPPro->SetMinEnergy(15.*GeV);
+      string = new G4QGSPProtonBuilder(quasiElasticQGS);
   }
-  tpdata->thePro->RegisterMe(tpdata->theINCLXXPro=new G4INCLXXProtonBuilder);
-  tpdata->theINCLXXPro->SetMinEnergy(1.0*MeV);
-  tpdata->theINCLXXPro->SetMaxEnergy(20.0*GeV);
+  string->SetMinEnergy(15.*GeV);
+  AddBuilder(string);
+  pro->RegisterMe(string);
 
-  tpdata->thePion=new G4PionBuilder;
+  auto inclxxp = new G4INCLXXProtonBuilder;
+  AddBuilder(inclxxp);
+  inclxxp->SetMinEnergy(1.0*MeV);
+  inclxxp->SetMaxEnergy(20.0*GeV);
+  pro->RegisterMe(inclxxp);
+  pro->Build();
+}
+
+void G4HadronPhysicsINCLXX::Pion()
+{
+  auto pi = new G4PionBuilder;
+  AddBuilder(pi);
+  G4PhysicsBuilderInterface* string = nullptr;
   if(withFTFP) {
-    tpdata->thePion->RegisterMe(tpdata->theFTFPPion=new G4FTFPPionBuilder(quasiElasticFTF));
-    tpdata->theFTFPPion->SetMinEnergy(15.*GeV);
+      string = new G4FTFPPionBuilder(quasiElasticFTF);
   } else {
-    tpdata->thePion->RegisterMe(tpdata->theQGSPPion=new G4QGSPPionBuilder(quasiElasticQGS));
-    tpdata->theQGSPPion->SetMinEnergy(15.*GeV);
+      string = new G4QGSPPionBuilder(quasiElasticQGS);
   }
-  tpdata->thePion->RegisterMe(tpdata->theINCLXXPion=new G4INCLXXPionBuilder);
-  tpdata->theINCLXXPion->SetMinEnergy(0.0*GeV);
-  tpdata->theINCLXXPion->SetMaxEnergy(20.0*GeV);
+  string->SetMinEnergy(15.*GeV);
+  AddBuilder(string);
+  pi->RegisterMe(string);
 
-  tpdata->theKaon=new G4KaonBuilder;
+  auto inclxx = new G4INCLXXPionBuilder;
+  inclxx->SetMinEnergy(0.0*GeV);
+  inclxx->SetMaxEnergy(20.*GeV);
+  AddBuilder(inclxx);
+  pi->RegisterMe(inclxx);
+
+  pi->Build();
+}
+
+void G4HadronPhysicsINCLXX::Kaon()
+{
+  auto k = new G4KaonBuilder;
+  AddBuilder(k);
+  G4PhysicsBuilderInterface* string = nullptr;
   if(withFTFP) {
-    tpdata->theKaon->RegisterMe(tpdata->theFTFPKaon=new G4FTFPKaonBuilder(quasiElasticFTF));
-    tpdata->theFTFPKaon->SetMinEnergy(14.*GeV);
+      string = new G4FTFPKaonBuilder(quasiElasticFTF);
   } else {
-    tpdata->theKaon->RegisterMe(tpdata->theQGSPKaon=new G4QGSPKaonBuilder(quasiElasticQGS));
-    tpdata->theQGSPKaon->SetMinEnergy(14.*GeV);
+      string = new G4QGSPKaonBuilder(quasiElasticQGS);
   }
-  tpdata->theKaon->RegisterMe(tpdata->theBertiniKaon=new G4BertiniKaonBuilder);
-  tpdata->theBertiniKaon->SetMinEnergy(0.0*GeV);
-  tpdata->theBertiniKaon->SetMaxEnergy(15.0*GeV);
+  string->SetMinEnergy(14.*GeV);
+  AddBuilder(string);
+  k->RegisterMe(string);
 
-  tpdata->theHyperon=new G4HyperonFTFPBuilder;
+  auto bert = new G4BertiniKaonBuilder;
+  bert->SetMinEnergy(0.0*GeV);
+  bert->SetMaxEnergy(15.0*GeV);
+  AddBuilder(bert);
+  k->RegisterMe(bert);
 
-  tpdata->theAntiBaryon=new G4AntiBarionBuilder;
-  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
+  k->Build();
+}
+
+void G4HadronPhysicsINCLXX::Others()
+{
+  auto hyp = new G4HyperonFTFPBuilder;
+  AddBuilder(hyp);
+  hyp->Build();
+
+  auto abar = new G4AntiBarionBuilder;
+  AddBuilder(abar);
+  auto ftfpabar = new G4FTFPAntiBarionBuilder(quasiElasticFTF);
+  AddBuilder(ftfpabar);
+  abar->RegisterMe(ftfpabar);
+  abar->Build();
 }
 
 G4HadronPhysicsINCLXX::~G4HadronPhysicsINCLXX()
-{
-  if(tpdata) {
-    delete tpdata->theFTFPNeutron;
-    delete tpdata->theQGSPNeutron;
-    delete tpdata->theINCLXXNeutron;
-    delete tpdata->theNeutronHP;
-    delete tpdata->theFTFPPro;
-    delete tpdata->theQGSPPro;
-    delete tpdata->thePro;
-    delete tpdata->theINCLXXPro;
-    delete tpdata->theFTFPPion;
-    delete tpdata->theQGSPPion;
-    delete tpdata->theFTFPKaon;
-    delete tpdata->theQGSPKaon;
-    delete tpdata->theINCLXXPion;
-    delete tpdata->thePion;
-    delete tpdata->theKaon;
-    delete tpdata->theHyperon;
-    delete tpdata->theAntiBaryon;
-    delete tpdata->theFTFPAntiBaryon;
-
-    delete tpdata; tpdata = 0;
-  }
-}
+{}
 
 void G4HadronPhysicsINCLXX::ConstructParticle()
 {
@@ -214,56 +269,30 @@ void G4HadronPhysicsINCLXX::ConstructParticle()
   pIonConstructor.ConstructParticle();
 }
 
-#include "G4ProcessManager.hh"
 void G4HadronPhysicsINCLXX::ConstructProcess()
 {
-  if ( tpdata == 0 ) tpdata = new ThreadPrivate;
   CreateModels();
-  tpdata->theNeutrons->Build();
-  tpdata->thePro->Build();
-  tpdata->thePion->Build();
-  tpdata->theKaon->Build();
+  ExtraConfiguration();
+}
 
-  // --- Kaons ---
-  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
-  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
-
-  tpdata->theHyperon->Build();
-  tpdata->theAntiBaryon->Build();
-
+void G4HadronPhysicsINCLXX::ExtraConfiguration()
+{
   // --- Neutrons ---
-  G4HadronicProcess* capture = 0;
-  G4HadronicProcess* fission = 0;
-  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
-  G4ProcessVector*  pv = pmanager->GetProcessList();
-  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
-    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
-      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
-    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
-      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
+  if (capture) {
+    G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
+    capture->RegisterMe(theNeutronRadCapture);
+    if ( withNeutronHP ) {
+      capture->AddDataSet( new G4ParticleHPCaptureData );
+      theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
     }
   }
-  if ( ! capture ) {
-    capture = new G4HadronCaptureProcess("nCapture");
-    pmanager->AddDiscreteProcess(capture);
-  }
-  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
-  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
-  G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
-  capture->RegisterMe( theNeutronRadCapture );
-  if ( withNeutronHP ) {
-    capture->AddDataSet( new G4ParticleHPCaptureData );
-    theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
-    if ( ! fission ) {
-      fission = new G4HadronFissionProcess("nFission");
-      pmanager->AddDiscreteProcess(fission);
-    }
+  G4HadronicProcess* fission = G4PhysListUtil::FindFissionProcess(neutron);
+  if (fission && withNeutronHP) {
     G4LFission* theNeutronLEPFission = new G4LFission();
     theNeutronLEPFission->SetMinEnergy( 19.9*MeV );
+    theNeutronLEPFission->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
     fission->RegisterMe( theNeutronLEPFission );
   }
 }

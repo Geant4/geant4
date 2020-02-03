@@ -11,16 +11,12 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 89398 2015-04-09 09:56:29Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${USOLIDS_INCLUDE_DIRS})
-
-# Need XercesC
-include_directories(${XERCESC_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/digits/include)
@@ -49,6 +45,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
 
 #
 # Define the Geant4 Module.
@@ -137,7 +134,7 @@ GEANT4_DEFINE_MODULE(NAME G4gdml
         G4track
         G4tracking
     LINK_LIBRARIES
-        ${XERCESC_LIBRARIES}
+        XercesC::XercesC
 )
 
 # List any source specific properties here

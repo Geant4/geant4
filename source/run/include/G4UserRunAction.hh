@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserRunAction.hh 68845 2013-04-08 07:22:19Z gcosmo $
 //
 
 #ifndef G4UserRunAction_h
@@ -64,7 +63,7 @@ class G4UserRunAction
     G4bool isMaster;
 
   public:
-    inline void SetMaster(G4bool val=true)
+    inline virtual void SetMaster(G4bool val=true)
     { isMaster = val; }
     inline G4bool IsMaster() const
     { return isMaster; }

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterHit.hh 82268 2014-06-13 13:47:30Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -56,7 +55,7 @@ public:
   GammaRayTelCalorimeterHit(const GammaRayTelCalorimeterHit&);
   const GammaRayTelCalorimeterHit& operator=(const
 						GammaRayTelCalorimeterHit&);
-  int operator==(const GammaRayTelCalorimeterHit&) const;
+  G4bool operator==(const GammaRayTelCalorimeterHit&) const;
   
   inline void* operator new(size_t);
   inline void  operator delete(void*);

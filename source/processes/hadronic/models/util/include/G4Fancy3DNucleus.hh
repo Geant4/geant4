@@ -61,8 +61,8 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   private:
       G4Fancy3DNucleus(const G4Fancy3DNucleus &right);
       const G4Fancy3DNucleus & operator=(const G4Fancy3DNucleus &right);
-      int operator==(const G4Fancy3DNucleus &right) const;
-      int operator!=(const G4Fancy3DNucleus &right) const;
+      G4bool operator==(const G4Fancy3DNucleus &right) const;
+      G4bool operator!=(const G4Fancy3DNucleus &right) const;
       
 
 //  Implementation 

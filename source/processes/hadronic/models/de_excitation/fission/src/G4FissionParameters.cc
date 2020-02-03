@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc 89550 2015-04-17 08:38:15Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -34,7 +33,6 @@
 
 #include "G4FissionParameters.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Exp.hh"
 
 G4FissionParameters::G4FissionParameters()
   : A1(134),A2(141),A3((A1 + A2)*0.5),As(0.0),Sigma1(0.0),Sigma2(0.0),
@@ -48,7 +46,7 @@ void G4FissionParameters::DefineParameters(G4int A, G4int Z, G4double ExEnergy,
 					   G4double FissionBarrier)
 {
   // to avoid usage of units
-  G4double U = ExEnergy/CLHEP::MeV; 
+  G4double U = std::min(200., ExEnergy/CLHEP::MeV); 
 
   As = A*0.5;
     
@@ -62,14 +60,7 @@ void G4FissionParameters::DefineParameters(G4int A, G4int Z, G4double ExEnergy,
   //   SigmaS*=1.3;
   //JMQ 301009: retuning (after CEM transition prob.have been chosen as default)
   SigmaS = 0.8*G4Exp(0.00553*U + 2.1386); 
-    
-  G4double x1 = (A1-As)/Sigma1;
-  G4double x2 = (A2-As)/Sigma2;
-  G4double FasymAsym = 2*G4Exp(-0.5*x2*x2) + G4Exp(-0.5*x1*x1);
-    
-  G4double x3 = (As-A3)/SigmaS;
-  G4double FsymA1A2 = G4Exp(-0.5*x3*x3);
-    
+        
   G4double wa = 0.0;
   w = 0.0;
   if (Z >= 90) {  
@@ -84,13 +75,20 @@ void G4FissionParameters::DefineParameters(G4int A, G4int Z, G4double ExEnergy,
     w = 1001.0;
   }
     
-  if (w == 0.0) {
+  if (Z >= 82) {
+    G4double x1 = (A1-As)/Sigma1;
+    G4double x2 = (A2-As)/Sigma2;
+    G4double FasymAsym = 2*LocalExp(x2) + LocalExp(x1);
+    
+    G4double x3 = (As-A3)/SigmaS;
+    G4double FsymA1A2 = LocalExp(x3);
+
     G4double w1 = std::max(1.03*wa - FasymAsym, 0.0001);
     G4double w2 = std::max(1.0 - FsymA1A2*wa,   0.0001);
     
     w = w1/w2;
       
-    if (82 <= Z && Z < 89 && A < 227) { w *= G4Exp(0.3*(227-A)); }
+    if (A < 227) { w *= G4Exp(0.3*(227-A)); }
   }
 }
 

@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm5/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
+<<<<<<< HEAD
 // $Id: PhysicsListMessenger.cc 81528 2014-06-02 16:21:24Z vnivanch $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

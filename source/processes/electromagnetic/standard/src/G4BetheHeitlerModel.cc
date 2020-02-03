@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,21 +35,12 @@
 //
 // Creation date: 15.03.2005
 //
-// Modifications:
-// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
-// 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
-// 16-11-05 replace shootBit() by G4UniformRand()  mma
-// 04-12-05 SetProposedKineticEnergy(0.) for the killed photon (mma)
-// 20-02-07 SelectRandomElement is called for any initial gamma energy 
-//          in order to have selected element for polarized model (VI)
-// 25-10-10 Removed unused table, added element selector (VI) 
+// Modifications by Vladimir Ivanchenko, Michel Maire, Mihaly Novak
 //
 // Class Description:
 //
 // -------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4BetheHeitlerModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -61,106 +51,115 @@
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Pow.hh"
+#include "G4Exp.hh"
+#include "G4ModifiedTsai.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+const G4int G4BetheHeitlerModel::gMaxZet = 120; 
+std::vector<G4BetheHeitlerModel::ElementData*> G4BetheHeitlerModel::gElementData;
 
-using namespace std;
-
-static const G4double GammaEnergyLimit = 1.5*MeV;
-static const G4double Egsmall=2.*MeV;
-static const G4double
-    a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
-    a3=-2.0028e+2*microbarn, a4= 1.2575e+1*microbarn, a5=-2.8333e-1*microbarn;
-
-static const G4double
-    b0=-1.0342e+1*microbarn, b1= 1.7692e+1*microbarn, b2=-8.2381   *microbarn,
-    b3= 1.3063   *microbarn, b4=-9.0815e-2*microbarn, b5= 2.3586e-3*microbarn;
-
-static const G4double
-    c0=-4.5263e+2*microbarn, c1= 1.1161e+3*microbarn, c2=-8.6749e+2*microbarn,
-    c3= 2.1773e+2*microbarn, c4=-2.0467e+1*microbarn, c5= 6.5372e-1*microbarn;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
-					 const G4String& nam)
-  : G4VEmModel(nam)
+G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*, 
+                                         const G4String& nam)
+: G4VEmModel(nam), 
+  fG4Calc(G4Pow::GetInstance()), fTheGamma(G4Gamma::Gamma()),
+  fTheElectron(G4Electron::Electron()), fThePositron(G4Positron::Positron()),
+  fParticleChange(nullptr) 
 {
-  fParticleChange = 0;
-  theGamma    = G4Gamma::Gamma();
-  thePositron = G4Positron::Positron();
-  theElectron = G4Electron::Electron();
-  g4pow = G4Pow::GetInstance();
+  SetAngularDistribution(new G4ModifiedTsai());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BetheHeitlerModel::~G4BetheHeitlerModel()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p,
-				     const G4DataVector& cuts)
 {
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
-  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
+  if (IsMaster()) {
+    // clear ElementData container
+    for (size_t iz = 0; iz < gElementData.size(); ++iz) {
+      if (gElementData[iz]) delete gElementData[iz];
+    }
+    gElementData.clear(); 
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p, 
+                                     const G4DataVector& cuts)
+{
+  if (IsMaster()) {
+    InitialiseElementData();
+  }
+  if (!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+  if (IsMaster()) { 
+    InitialiseElementSelectors(p, cuts); 
+  }
+}
 
-void G4BetheHeitlerModel::InitialiseLocal(const G4ParticleDefinition*,
-					  G4VEmModel* masterModel)
+void G4BetheHeitlerModel::InitialiseLocal(const G4ParticleDefinition*, 
+                                          G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double 
-G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-						G4double GammaEnergy, G4double Z,
-						G4double, G4double, G4double)
 // Calculates the microscopic cross section in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate
 // the total cross section.
 // It gives a good description of the data from 1.5 MeV to 100 GeV.
 // below 1.5 MeV: sigma=sigma(1.5MeV)*(GammaEnergy-2electronmass)
 //                                   *(GammaEnergy-2electronmass) 
+G4double 
+G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*, 
+                                                G4double gammaEnergy, G4double Z, 
+                                                G4double, G4double, G4double)
 {
   G4double xSection = 0.0 ;
-  if ( Z < 0.9 || GammaEnergy <= 2.0*electron_mass_c2 ) { return xSection; }
-
-
-  G4double GammaEnergySave = GammaEnergy;
-  if (GammaEnergy < GammaEnergyLimit) { GammaEnergy = GammaEnergyLimit; }
-
-  G4double X=G4Log(GammaEnergy/electron_mass_c2), X2=X*X, X3=X2*X, X4=X3*X, X5=X4*X;
-
-  G4double F1 = a0 + a1*X + a2*X2 + a3*X3 + a4*X4 + a5*X5,
-           F2 = b0 + b1*X + b2*X2 + b3*X3 + b4*X4 + b5*X5,
-           F3 = c0 + c1*X + c2*X2 + c3*X3 + c4*X4 + c5*X5;     
-
+  // short versions
+  static const G4double kMC2  = CLHEP::electron_mass_c2;
+  // zero cross section below the kinematical limit: Eg<2mc^2
+  if (Z < 0.9 || gammaEnergy <= 2.0*kMC2) { return xSection; }
+  //
+  static const G4double gammaEnergyLimit = 1.5*CLHEP::MeV;
+  // set coefficients a, b c
+  static const G4double a0 =  8.7842e+2*CLHEP::microbarn;
+  static const G4double a1 = -1.9625e+3*CLHEP::microbarn; 
+  static const G4double a2 =  1.2949e+3*CLHEP::microbarn;
+  static const G4double a3 = -2.0028e+2*CLHEP::microbarn; 
+  static const G4double a4 =  1.2575e+1*CLHEP::microbarn; 
+  static const G4double a5 = -2.8333e-1*CLHEP::microbarn;
+  
+  static const G4double b0 = -1.0342e+1*CLHEP::microbarn;
+  static const G4double b1 =  1.7692e+1*CLHEP::microbarn;
+  static const G4double b2 = -8.2381   *CLHEP::microbarn;
+  static const G4double b3 =  1.3063   *CLHEP::microbarn;
+  static const G4double b4 = -9.0815e-2*CLHEP::microbarn;
+  static const G4double b5 =  2.3586e-3*CLHEP::microbarn;
+  
+  static const G4double c0 = -4.5263e+2*CLHEP::microbarn;
+  static const G4double c1 =  1.1161e+3*CLHEP::microbarn; 
+  static const G4double c2 = -8.6749e+2*CLHEP::microbarn;
+  static const G4double c3 =  2.1773e+2*CLHEP::microbarn; 
+  static const G4double c4 = -2.0467e+1*CLHEP::microbarn;
+  static const G4double c5 =  6.5372e-1*CLHEP::microbarn;
+  // check low energy limit of the approximation (1.5 MeV)
+  G4double gammaEnergyOrg = gammaEnergy;
+  if (gammaEnergy < gammaEnergyLimit) { gammaEnergy = gammaEnergyLimit; }
+  // compute gamma energy variables
+  const G4double x  = G4Log(gammaEnergy/kMC2);
+  const G4double x2 = x *x; 
+  const G4double x3 = x2*x;
+  const G4double x4 = x3*x;
+  const G4double x5 = x4*x;
+  //
+  const G4double F1 = a0 + a1*x + a2*x2 + a3*x3 + a4*x4 + a5*x5;
+  const G4double F2 = b0 + b1*x + b2*x2 + b3*x3 + b4*x4 + b5*x5;
+  const G4double F3 = c0 + c1*x + c2*x2 + c3*x3 + c4*x4 + c5*x5;     
+  // compute the approximated cross section 
   xSection = (Z + 1.)*(F1*Z + F2*Z*Z + F3);
-
-  if (GammaEnergySave < GammaEnergyLimit) {
-
-    X = (GammaEnergySave  - 2.*electron_mass_c2)
-      / (GammaEnergyLimit - 2.*electron_mass_c2);
-    xSection *= X*X;
+  // check if we are below the limit of the approximation and apply correction
+  if (gammaEnergyOrg < gammaEnergyLimit) {
+    const G4double dum = (gammaEnergyOrg-2.*kMC2)/(gammaEnergyLimit-2.*kMC2);
+    xSection *= dum*dum;
   }
-
-  if (xSection < 0.) { xSection = 0.; }
+  // make sure that the cross section is never negative
+  xSection = std::max(xSection, 0.); 
   return xSection;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					    const G4MaterialCutsCouple* couple,
-					    const G4DynamicParticle* aDynamicGamma,
-					    G4double,
-					    G4double)
 // The secondaries e+e- energies are sampled using the Bethe - Heitler
 // cross sections with Coulomb correction.
 // A modified version of the random number techniques of Butcher & Messel
@@ -173,137 +172,149 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 // Note 2 : The differential cross section implicitly takes account of 
 //          pair creation in both nuclear and atomic electron fields.
 //          However triplet prodution is not generated.
+void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+                                            const G4MaterialCutsCouple* couple,
+                                            const G4DynamicParticle* aDynamicGamma,
+                                            G4double, G4double)
 {
-  const G4Material* aMaterial = couple->GetMaterial();
+  // set some constant values
+  const G4double    gammaEnergy = aDynamicGamma->GetKineticEnergy();
+  const G4double    eps0        = CLHEP::electron_mass_c2/gammaEnergy;
+  //
+  // check kinematical limit: gamma energy(Eg) must be at least 2 e- rest mass
+  if (eps0 > 0.5) { return; }
+  //
+  // select target element of the material (probs. are based on partial x-secs)
+  const G4Element* anElement = SelectTargetAtom(couple, fTheGamma, gammaEnergy,
+                                          aDynamicGamma->GetLogKineticEnergy());
 
-  G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
-  G4ParticleMomentum GammaDirection = aDynamicGamma->GetMomentumDirection();
-
-  G4double epsil ;
-  G4double epsil0 = electron_mass_c2/GammaEnergy ;
-  if(epsil0 > 1.0) { return; }
-
-  // do it fast if GammaEnergy < Egsmall
-  // select randomly one element constituing the material
-  const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
-
+  // 
+  // get the random engine
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
-
-  if (GammaEnergy < Egsmall) {
-
-    epsil = epsil0 + (0.5-epsil0)*rndmEngine->flat();
-
+  //
+  // 'eps' is the total energy transferred to one of the e-/e+ pair in initial
+  // gamma energy units Eg. Since the corresponding DCS is symmetric on eps=0.5,
+  // the kinematical limits for eps0=mc^2/Eg <= eps <= 0.5 
+  // 1. 'eps' is sampled uniformly on the [eps0, 0.5] inteval if Eg<Egsmall 
+  // 2. otherwise, on the [eps_min, 0.5] interval according to the DCS (case 2.) 
+  G4double eps;
+  // case 1.
+  static const G4double Egsmall = 2.*CLHEP::MeV;
+  if (gammaEnergy < Egsmall) {
+    eps = eps0 + (0.5-eps0)*rndmEngine->flat();
   } else {
-    // now comes the case with GammaEnergy >= 2. MeV
-
-    // Extract Coulomb factor for this Element
-    G4double FZ = 8.*(anElement->GetIonisation()->GetlogZ3());
-    if (GammaEnergy > 50.*MeV) { FZ += 8.*(anElement->GetfCoulomb()); }
-
-    // limits of the screening variable
-    G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3());
-    G4double screenmax = exp ((42.24 - FZ)/8.368) - 0.952 ;
-    G4double screenmin = min(4.*screenfac,screenmax);
-
-    // limits of the energy sampling
-    G4double epsil1 = 0.5 - 0.5*sqrt(1. - screenmin/screenmax) ;
-    G4double epsilmin = max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
-
+  // case 2.
+    // get the Coulomb factor for the target element (Z) and gamma energy (Eg)
+    // F(Z) = 8*ln(Z)/3           if Eg <= 50 [MeV] => no Coulomb correction
+    // F(Z) = 8*ln(Z)/3 + 8*fc(Z) if Eg  > 50 [MeV] => fc(Z) is the Coulomb cor.
     //
-    // sample the energy rate of the created electron (or positron)
+    // The screening variable 'delta(eps)' = 136*Z^{-1/3}*eps0/[eps(1-eps)]
+    // Due to the Coulomb correction, the DCS can go below zero even at 
+    // kinematicaly allowed eps > eps0 values. In order to exclude this eps 
+    // range with negative DCS, the minimum eps value will be set to eps_min = 
+    // max[eps0, epsp] with epsp is the solution of SF(delta(epsp)) - F(Z)/2 = 0 
+    // with SF being the screening function (SF1=SF2 at high value of delta). 
+    // The solution is epsp = 0.5 - 0.5*sqrt[ 1 - 4*136*Z^{-1/3}eps0/deltap] 
+    // with deltap = Exp[(42.038-F(Z))/8.29]-0.958. So the limits are:
+    // - when eps=eps_max = 0.5            => delta_min = 136*Z^{-1/3}*eps0/4
+    // - epsp = 0.5 - 0.5*sqrt[ 1 - delta_min/deltap]
+    // - and eps_min = max[eps0, epsp]  
+    static const G4double midEnergy = 50.*CLHEP::MeV;
+    const  G4int           iZet = std::min(gMaxZet, anElement->GetZasInt());   
+    const  G4double deltaFactor = 136.*eps0/anElement->GetIonisation()->GetZ3();
+    G4double           deltaMax = gElementData[iZet]->fDeltaMaxLow;
+    G4double                 FZ = 8.*anElement->GetIonisation()->GetlogZ3();
+    if (gammaEnergy > midEnergy) { 
+      FZ      += 8.*(anElement->GetfCoulomb()); 
+      deltaMax = gElementData[iZet]->fDeltaMaxHigh;
+    }
+    const G4double deltaMin = 4.*deltaFactor; 
+    // 
+    // compute the limits of eps
+    const G4double epsp     = 0.5 - 0.5*std::sqrt(1. - deltaMin/deltaMax) ;
+    const G4double epsMin   = std::max(eps0,epsp);
+    const G4double epsRange = 0.5 - epsMin;
     //
-    //G4double epsil, screenvar, greject ;
-    G4double  screenvar, greject ;
-
-    G4double F10 = ScreenFunction1(screenmin) - FZ;
-    G4double F20 = ScreenFunction2(screenmin) - FZ;
-    G4double NormF1 = max(F10*epsilrange*epsilrange,0.); 
-    G4double NormF2 = max(1.5*F20,0.);
-
+    // sample the energy rate (eps) of the created electron (or positron)
+    G4double F10, F20;
+    ScreenFunction12(deltaMin, F10, F20); 
+    F10 -= FZ;
+    F20 -= FZ; 
+    const G4double NormF1   = std::max(F10 * epsRange * epsRange, 0.); 
+    const G4double NormF2   = std::max(1.5 * F20                , 0.);
+    const G4double NormCond = NormF1/(NormF1 + NormF2); 
+    // we will need 3 uniform random number for each trial of sampling 
+    G4double rndmv[3];
+    G4double greject = 0.;
     do {
-      if ( NormF1/(NormF1+NormF2) > rndmEngine->flat()) {
-	epsil = 0.5 - epsilrange*g4pow->A13(rndmEngine->flat());
-	screenvar = screenfac/(epsil*(1-epsil));
-	greject = (ScreenFunction1(screenvar) - FZ)/F10;
-              
+      rndmEngine->flatArray(3, rndmv);
+      if (NormCond > rndmv[0]) {
+        eps = 0.5 - epsRange * fG4Calc->A13(rndmv[1]);
+        const G4double delta = deltaFactor/(eps*(1.-eps));
+        greject = (ScreenFunction1(delta)-FZ)/F10;
       } else { 
-	epsil = epsilmin + epsilrange*rndmEngine->flat();
-	screenvar = screenfac/(epsil*(1-epsil));
-	greject = (ScreenFunction2(screenvar) - FZ)/F20;
+        eps = epsMin + epsRange*rndmv[1];
+        const G4double delta = deltaFactor/(eps*(1.-eps));
+        greject = (ScreenFunction2(delta)-FZ)/F20;
       }
-
       // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-    } while( greject < rndmEngine->flat());
-
-  }   //  end of epsil sampling
-   
+    } while (greject < rndmv[2]);
+  } //  end of eps sampling
   //
-  // fixe charges randomly
-  //
-
-  G4double ElectTotEnergy, PositTotEnergy;
+  // select charges randomly
+  G4double eTotEnergy, pTotEnergy;
   if (rndmEngine->flat() > 0.5) {
-
-    ElectTotEnergy = (1.-epsil)*GammaEnergy;
-    PositTotEnergy = epsil*GammaEnergy;
-     
+    eTotEnergy = (1.-eps)*gammaEnergy;
+    pTotEnergy = eps*gammaEnergy; 
   } else {
-    
-    PositTotEnergy = (1.-epsil)*GammaEnergy;
-    ElectTotEnergy = epsil*GammaEnergy;
+    pTotEnergy = (1.-eps)*gammaEnergy;
+    eTotEnergy = eps*gammaEnergy;
   }
-
   //
-  // scattered electron (positron) angles. ( Z - axis along the parent photon)
+  // sample pair kinematics
+  const G4double eKinEnergy = std::max(0.,eTotEnergy - CLHEP::electron_mass_c2);
+  const G4double pKinEnergy = std::max(0.,pTotEnergy - CLHEP::electron_mass_c2);
   //
-  //  universal distribution suggested by L. Urban 
-  // (Geant3 manual (1993) Phys211),
-  //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
-
-  G4double u= - G4Log(rndmEngine->flat()*rndmEngine->flat());
-
-  if (9. > 36.*rndmEngine->flat()) { u *= 1.6; }
-  else                             { u *= 0.53333; } 
-
-  G4double TetEl = u*electron_mass_c2/ElectTotEnergy;
-  G4double TetPo = u*electron_mass_c2/PositTotEnergy;
-  G4double Phi  = twopi * rndmEngine->flat();
-  G4double dxEl= sin(TetEl)*cos(Phi),dyEl= sin(TetEl)*sin(Phi),dzEl=cos(TetEl);
-  G4double dxPo=-sin(TetPo)*cos(Phi),dyPo=-sin(TetPo)*sin(Phi),dzPo=cos(TetPo);
-   
+  G4ThreeVector eDirection, pDirection;
   //
-  // kinematic of the created pair
-  //
-  // the electron and positron are assumed to have a symetric
-  // angular distribution with respect to the Z axis along the parent photon.
-
-  G4double ElectKineEnergy = max(0.,ElectTotEnergy - electron_mass_c2);
-
-  G4ThreeVector ElectDirection (dxEl, dyEl, dzEl);
-  ElectDirection.rotateUz(GammaDirection);   
-
-  // create G4DynamicParticle object for the particle1  
+  GetAngularDistribution()->SamplePairDirections(aDynamicGamma, 
+                                                 eKinEnergy, pKinEnergy,
+                                                 eDirection, pDirection);
+  // create G4DynamicParticle object for the particle1
   G4DynamicParticle* aParticle1= new G4DynamicParticle(
-		     theElectron,ElectDirection,ElectKineEnergy);
-  
-  // the e+ is always created (even with Ekine=0) for further annihilation.
-
-  G4double PositKineEnergy = max(0.,PositTotEnergy - electron_mass_c2);
-
-  G4ThreeVector PositDirection (dxPo, dyPo, dzPo);
-  PositDirection.rotateUz(GammaDirection);   
-
-  // create G4DynamicParticle object for the particle2 
+                     fTheElectron,eDirection,eKinEnergy);
+  // create G4DynamicParticle object for the particle2
   G4DynamicParticle* aParticle2= new G4DynamicParticle(
-                      thePositron,PositDirection,PositKineEnergy);
-
+                     fThePositron,pDirection,pKinEnergy);
   // Fill output vector
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
-
   // kill incident photon
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// should be called only by the master and at initialisation
+void G4BetheHeitlerModel::InitialiseElementData() 
+{
+  G4int size = gElementData.size();
+  if (size < gMaxZet+1) {
+    gElementData.resize(gMaxZet+1, nullptr);
+  }
+  // create for all elements that are in the detector
+  const G4ElementTable* elemTable = G4Element::GetElementTable();
+  size_t numElems = (*elemTable).size();
+  for (size_t ie = 0; ie < numElems; ++ie) {
+    const G4Element* elem = (*elemTable)[ie];
+    const G4int        iz = std::min(gMaxZet, elem->GetZasInt());
+    if (!gElementData[iz]) { // create it if doesn't exist yet
+      G4double FZLow     = 8.*elem->GetIonisation()->GetlogZ3();
+      G4double FZHigh    = FZLow + 8.*elem->GetfCoulomb();
+      ElementData* elD   = new ElementData(); 
+      elD->fDeltaMaxLow  = G4Exp((42.038 - FZLow )/8.29) - 0.958;
+      elD->fDeltaMaxHigh = G4Exp((42.038 - FZHigh)/8.29) - 0.958;
+      gElementData[iz]   = elD;
+    }
+  }
+}
+

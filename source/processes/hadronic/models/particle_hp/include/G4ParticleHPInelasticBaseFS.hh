@@ -44,50 +44,63 @@ class G4ParticleHPInelasticBaseFS : public G4ParticleHPFinalState
 {
   public:
     
-  G4ParticleHPInelasticBaseFS()
-  {
-    hasXsec = true; 
-    theXsection = new G4ParticleHPVector;
+    G4ParticleHPInelasticBaseFS()
+    {
+      hasXsec = true; 
+      theXsection = new G4ParticleHPVector;
     
-    theEnergyDistribution = 0;
-    theFinalStatePhotons = 0;
-    theEnergyAngData = 0;
-    theAngularDistribution = 0;
+      theEnergyDistribution = 0;
+      theFinalStatePhotons = 0;
+      theEnergyAngData = 0;
+      theAngularDistribution = 0;
 
-  }
-  virtual ~G4ParticleHPInelasticBaseFS()
-  {
-    delete theXsection;
-    if(theEnergyDistribution!=0) delete theEnergyDistribution;
-    if(theFinalStatePhotons!=0) delete theFinalStatePhotons;
-    if(theEnergyAngData!=0) delete theEnergyAngData;
-    if(theAngularDistribution!=0) delete theAngularDistribution;
-  }
-  
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & bit, G4ParticleDefinition*);
-  void BaseApply(const G4HadProjectile & theTrack, G4ParticleDefinition ** theDefs, G4int nDef);
-  void InitGammas(G4double AR, G4double ZR);
-  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) = 0;
-  virtual G4ParticleHPFinalState * New() = 0;
-  
-  virtual G4double GetXsec(G4double anEnergy)
-  {
-    return std::max(0., theXsection->GetY(anEnergy));
-  }
-  virtual G4ParticleHPVector * GetXsec() { return theXsection; }
+      theNuclearMassDifference = 0.0;
+      Qvalue = 0.0;
+    }
 
- protected:
+    virtual ~G4ParticleHPInelasticBaseFS()
+    {
+      delete theXsection;
+      if (theEnergyDistribution != 0) delete theEnergyDistribution;
+      if (theFinalStatePhotons != 0) delete theFinalStatePhotons;
+      if (theEnergyAngData != 0) delete theEnergyAngData;
+      if (theAngularDistribution != 0) delete theAngularDistribution;
+    }
   
-  G4ParticleHPVector * theXsection;
-  G4ParticleHPEnergyDistribution * theEnergyDistribution;
-  G4ParticleHPAngular * theAngularDistribution;
-  G4ParticleHPEnAngCorrelation * theEnergyAngData;
+    void Init (G4double A, G4double Z, G4int M, G4String& dirName,
+               G4String& bit, G4ParticleDefinition*);
+
+    void BaseApply(const G4HadProjectile& theTrack,
+                   G4ParticleDefinition** theDefs, G4int nDef);
+
+    void InitGammas(G4double AR, G4double ZR);
+
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) = 0;
+
+    virtual G4ParticleHPFinalState* New() = 0;
   
-  G4ParticleHPPhotonDist * theFinalStatePhotons;
-  G4double theNuclearMassDifference;
-  G4ParticleHPDeExGammas theGammas;
-  G4String gammaPath;
+    virtual G4double GetXsec(G4double anEnergy)
+    {
+      return std::max(0., theXsection->GetY(anEnergy));
+    }
+
+    virtual G4ParticleHPVector* GetXsec() {return theXsection;}
+
+  protected:
+  
+    G4ParticleHPVector* theXsection;
+    G4ParticleHPEnergyDistribution* theEnergyDistribution;
+    G4ParticleHPAngular* theAngularDistribution;
+    G4ParticleHPEnAngCorrelation* theEnergyAngData;
+  
+    G4ParticleHPPhotonDist* theFinalStatePhotons;
+    G4double theNuclearMassDifference;
+    G4ParticleHPDeExGammas theGammas;
+    G4String gammaPath;
+
+    G4double Qvalue;
 
   private:
 };
+
 #endif

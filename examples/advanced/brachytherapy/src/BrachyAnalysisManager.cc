@@ -30,10 +30,14 @@ Author: Susanna Guatelli
 // The analysis was included in this application following the extended Geant4
 // example analysis/AnaEx01
 
+<<<<<<< HEAD
 #include <stdlib.h>
 #include "BrachyAnalysisManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+=======
+#include "BrachyAnalysisManager.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 BrachyAnalysisManager* BrachyAnalysisManager::instance = 0;
 
@@ -99,15 +103,3 @@ void BrachyAnalysisManager::save()
     }
 #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmBox.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 //Box container class
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
 
 #ifndef G4OPENGLXMBOX_HH
 #define G4OPENGLXMBOX_HH

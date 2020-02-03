@@ -23,25 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LogicalBorderSurface.cc 87615 2014-12-12 15:23:11Z gcosmo $
-//
-// --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation
-// --------------------------------------------------------------------
 //
 // A Logical Surface class for surfaces defined by the boundary
 // of two physical volumes.
 //
-// Created:     1997-06-26
-// Author:      John Apostolakis (John.Apostolakis@cern.ch)
-//
+// Author: John Apostolakis (John.Apostolakis@cern.ch), 26-06-1997
 // ----------------------------------------------------------------------
 
 #include "G4LogicalBorderSurface.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4LogicalBorderSurfaceTable *G4LogicalBorderSurface::theBorderSurfaceTable = 0;
+G4LogicalBorderSurfaceTable*
+G4LogicalBorderSurface::theBorderSurfaceTable = nullptr;
 
 //
 // Constructor & destructor
@@ -65,51 +59,21 @@ G4LogicalBorderSurface(const G4String& name,
   theBorderSurfaceTable->push_back(this);
 }
 
-G4LogicalBorderSurface::
-G4LogicalBorderSurface(const G4LogicalBorderSurface& right)
-  : G4LogicalSurface(right.GetName(), right.GetSurfaceProperty())
-{
-  if (!theBorderSurfaceTable)
-  {
-    theBorderSurfaceTable = new G4LogicalBorderSurfaceTable;
-  }
-  SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
-  Volume1 = right.Volume1;
-  Volume2 = right.Volume2;
-  (*theBorderSurfaceTable) = (*right.theBorderSurfaceTable);
-}
-
 G4LogicalBorderSurface::~G4LogicalBorderSurface()
 {
-//  delete theBorderSurfaceTable; theBorderSurfaceTable=0;
 }
 
 //
 // Operators
 //
 
-G4LogicalBorderSurface&
-G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
-{
-  if (&right == this) return *this;
-
-  SetSurfaceProperty(right.GetSurfaceProperty());
-  SetName(right.GetName());
-  SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
-  Volume1 = right.Volume1;
-  Volume2 = right.Volume2;
-  (*theBorderSurfaceTable) = (*right.theBorderSurfaceTable);
-
-  return *this;
-}
-
-G4int
+G4bool
 G4LogicalBorderSurface::operator==(const G4LogicalBorderSurface &right) const
 {
   return (this == (G4LogicalBorderSurface *) &right);
 }
 
-G4int
+G4bool
 G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) const
 {
   return (this != (G4LogicalBorderSurface *) &right);
@@ -121,7 +85,7 @@ G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) const
 
 const G4LogicalBorderSurfaceTable* G4LogicalBorderSurface::GetSurfaceTable()
 {
-  if (!theBorderSurfaceTable)
+  if (theBorderSurfaceTable == nullptr)
   {
     theBorderSurfaceTable = new G4LogicalBorderSurfaceTable;
   }
@@ -130,7 +94,7 @@ const G4LogicalBorderSurfaceTable* G4LogicalBorderSurface::GetSurfaceTable()
 
 size_t G4LogicalBorderSurface::GetNumberOfBorderSurfaces()
 {
-  if (theBorderSurfaceTable)
+  if (theBorderSurfaceTable != nullptr)
   {
     return theBorderSurfaceTable->size();
   }
@@ -141,13 +105,13 @@ G4LogicalBorderSurface*
 G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
                                    const G4VPhysicalVolume* vol2)
 {
-  if (theBorderSurfaceTable)
+  if (theBorderSurfaceTable != nullptr)
   {
-    for (size_t i=0; i<theBorderSurfaceTable->size(); i++)
+    for(auto pos = theBorderSurfaceTable->cbegin();
+        pos != theBorderSurfaceTable->cend(); ++pos)
     {
-      if( ((*theBorderSurfaceTable)[i]->GetVolume1() == vol1) &&
-          ((*theBorderSurfaceTable)[i]->GetVolume2() == vol2) )
-        return (*theBorderSurfaceTable)[i];
+      if( (*pos)->GetVolume1() == vol1 && (*pos)->GetVolume2() == vol2 )
+      { return *pos; }
     }
   }
   return 0;
@@ -160,15 +124,15 @@ void G4LogicalBorderSurface::DumpInfo()
   G4cout << "***** Surface Table : Nb of Surfaces = "
          << GetNumberOfBorderSurfaces() << " *****" << G4endl;
 
-  if (theBorderSurfaceTable)
+  if (theBorderSurfaceTable != nullptr)
   {
-    for (size_t i=0; i<theBorderSurfaceTable->size(); i++)
+    for(auto pos = theBorderSurfaceTable->cbegin();
+        pos != theBorderSurfaceTable->cend(); ++pos)
     {
-      G4LogicalBorderSurface* pBorderSurface = (*theBorderSurfaceTable)[i];
-      G4cout << pBorderSurface->GetName() << " : " << G4endl
+      G4cout << (*pos)->GetName() << " : " << G4endl
              << " Border of volumes "
-             << pBorderSurface->GetVolume1()->GetName() << " and " 
-             << pBorderSurface->GetVolume2()->GetName()
+             << (*pos)->GetVolume1()->GetName() << " and " 
+             << (*pos)->GetVolume2()->GetName()
              << G4endl;
     }
   }
@@ -177,11 +141,10 @@ void G4LogicalBorderSurface::DumpInfo()
 
 void G4LogicalBorderSurface::CleanSurfaceTable()
 {
-  if (theBorderSurfaceTable)
+  if (theBorderSurfaceTable != nullptr)
   {
-    G4LogicalBorderSurfaceTable::iterator pos;
-    for(pos=theBorderSurfaceTable->begin();
-        pos!=theBorderSurfaceTable->end(); pos++)
+    for(auto pos = theBorderSurfaceTable->cbegin();
+        pos != theBorderSurfaceTable->cend(); ++pos)
     {
       if (*pos)  { delete *pos; }
     }

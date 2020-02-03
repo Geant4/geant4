@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKineticNucleon.hh 80499 2014-04-24 13:54:26Z gcosmo $
 //
 #ifndef G4VKineticNucleon_h
 #define G4VKineticNucleon_h 1
@@ -48,9 +47,9 @@ class G4VKineticNucleon
 
       const G4VKineticNucleon& operator=(const G4VKineticNucleon& right);
 
-      int operator==(const G4VKineticNucleon& right) const;
+      G4bool operator==(const G4VKineticNucleon& right) const;
 
-      int operator!=(const G4VKineticNucleon& right) const;
+      G4bool operator!=(const G4VKineticNucleon& right) const;
 
       virtual G4KineticTrackVector* Decay();
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
@@ -60,12 +59,14 @@
 #include "G4InuclParticle.hh"
 #include "G4CollisionOutput.hh"
 #include "G4LorentzVector.hh"
+#include "G4Electron.hh"
+#include "G4SystemOfUnits.hh"
 #include <vector>
 
 
 // Constructor sets acceptance limits
 
-const G4double G4CascadeCheckBalance::tolerance = 1e-6;	// How small is zero?
+ const G4double G4CascadeCheckBalance::tolerance = 1e-6;	// How small is zero?
 
 G4CascadeCheckBalance::G4CascadeCheckBalance(const G4String& owner)
   : G4VCascadeCollider(owner), relativeLimit(G4CascadeCheckBalance::tolerance),
@@ -144,13 +145,23 @@ void G4CascadeCheckBalance::collide(const G4Fragment& fragment,
 	   << G4endl;
 
   // Copy initial state directly from fragment (no bullet/target sums)
-  initial = fragment.GetMomentum();
+  initial = fragment.GetMomentum()/GeV;         // G4Fragment returns MeV
   initialCharge = fragment.GetZ_asInt();
   initialBaryon = fragment.GetA_asInt();
-  initialStrange = 0;				// No hypernuclei at present
+  initialStrange = 0;                           // No hypernuclei at present
 
   // Final state totals are computed for us
   final = output.getTotalOutputMomentum();
+  
+  // Remove electron masses when internal conversion occurs
+  G4double elMass = 0.;
+  std::vector<G4InuclElementaryParticle> outParts = output.getOutgoingParticles();
+  for (G4int i = 0; i < output.numberOfOutgoingParticles(); i++) {
+    if (outParts[i].getDefinition() == G4Electron::Electron() )
+                       elMass += outParts[i].getDefinition()->GetPDGMass();
+  }
+
+  final.setE(final.e() - elMass/GeV);
   finalBaryon = output.getTotalBaryonNumber();
   finalCharge = output.getTotalCharge();
   finalStrange = output.getTotalStrangeness();
@@ -196,7 +207,6 @@ void G4CascadeCheckBalance::collide(const G4Fragment& target,
 
 
 // Take list of nuclear fragments directly (e.g., from G4Fissioner internals)
-
 void G4CascadeCheckBalance::collide(const G4Fragment& target,
     const std::vector<G4InuclNuclei>& fragments) {
   if (verboseLevel)
@@ -210,7 +220,6 @@ void G4CascadeCheckBalance::collide(const G4Fragment& target,
 
 
 // Take list of "cparticles" (e.g., from G4NucleiModel internals)
-
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target,
 		    const std::vector<G4CascadParticle>& particles) {
@@ -225,7 +234,6 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 
 
 // Take lists of both G4InuclEP & G4CP (e.g., from G4IntraNucleiCascader)
-
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				   G4InuclParticle* target,
 				    G4CollisionOutput& output,
@@ -239,7 +247,6 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   tempOutput.addOutgoingParticles(cparticles);
   collide(bullet, target, tempOutput);
 }
-
 
 // Compare relative and absolute violations to limits, and report
 
@@ -260,6 +267,7 @@ G4bool G4CascadeCheckBalance::energyOkay() const {
   return (relokay && absokay);
 }
 
+
 G4bool G4CascadeCheckBalance::ekinOkay() const {
   G4bool relokay = (std::abs(relativeKE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaKE()) < absoluteLimit);
@@ -278,9 +286,10 @@ G4bool G4CascadeCheckBalance::ekinOkay() const {
   return (relokay && absokay);
 }
 
+
 G4bool G4CascadeCheckBalance::momentumOkay() const {
-  G4bool relokay = (std::abs(relativeP()) < relativeLimit);
-  G4bool absokay = (std::abs(deltaP()) < absoluteLimit);
+  G4bool relokay = (std::abs(relativeP()) < 10.*relativeLimit);
+  G4bool absokay = (std::abs(deltaP()) < 10.*absoluteLimit);
 
   if (verboseLevel && (!relokay || !absokay)) {
     G4cerr << theName << ": Momentum conservation: relative " << relativeP()
@@ -295,12 +304,12 @@ G4bool G4CascadeCheckBalance::momentumOkay() const {
   return (relokay && absokay);
 }
 
+
 G4bool G4CascadeCheckBalance::baryonOkay() const {
   G4bool bokay = (deltaB() == 0);	// Must be perfect!
 
   if (verboseLevel && !bokay)
     G4cerr << theName << ": Baryon number VIOLATED " << deltaB() << G4endl;
-
   return bokay;
 }
 
@@ -310,7 +319,6 @@ G4bool G4CascadeCheckBalance::chargeOkay() const {
   if (verboseLevel && !qokay)
     G4cerr << theName << ": Charge conservation VIOLATED " << deltaQ()
 	   << G4endl;
-
   return qokay;
 }
 

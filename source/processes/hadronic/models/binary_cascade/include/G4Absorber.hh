@@ -48,8 +48,8 @@ private:
   // hide copy ctor, =, == and != operators
   G4Absorber(const  G4Absorber &right);
   const G4Absorber & operator=(const G4Absorber & right);
-  int operator==(const G4Absorber & right) const;
-  int operator!=(const G4Absorber & right) const;
+  G4bool operator==(const G4Absorber & right) const;
+  G4bool operator!=(const G4Absorber & right) const;
 
 
 private:

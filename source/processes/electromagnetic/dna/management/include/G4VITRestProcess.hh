@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITRestProcess.hh 91584 2015-07-27 13:01:48Z gcosmo $
 //
 /// \brief Identical to G4VRestProcess with dependency from G4VITProcess
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -112,10 +111,10 @@ protected:
   virtual G4double GetMeanLifeTime(const G4Track& aTrack,
                                    G4ForceCondition* condition)=0;
   //  Calculates the mean life-time (i.e. for decays) of the
-  //  particle at rest due to the occurence of the given process,
+  //  particle at rest due to the occurrence of the given process,
   //  or converts the probability of interaction (i.e. for
   //  annihilation) into the life-time of the particle for the
-  //  occurence of the given process.
+  //  occurrence of the given process.
 
 protected:
   // hide default constructor and assignment operator as private

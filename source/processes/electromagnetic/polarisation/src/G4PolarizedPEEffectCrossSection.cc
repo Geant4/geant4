@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPEEffectCrossSection.cc 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -78,7 +77,7 @@ void G4PolarizedPEEffectCrossSection::Initialize(G4double aGammaE,
 // ************  added by Karim   Polarization transfer to e- in PhotoelectricEffect.
 // ************ 
 // ***********************************************************
-    G4double Gfactor   = aLept0E/electron_mass_c2+1;
+    G4double Gfactor   = aLept0E/electron_mass_c2+1.;
     G4double Gfactor_2 = Gfactor * Gfactor;
 
     G4double BETA    = sqrt(1. - 1./(Gfactor_2));
@@ -86,7 +85,7 @@ void G4PolarizedPEEffectCrossSection::Initialize(G4double aGammaE,
     G4double Stokes_P3  = beamPol.z()   ;                       
     
     G4double m0_c2  = electron_mass_c2; 
-    G4double Lept0E = aLept0E/m0_c2+1,   Lept0E2 = Lept0E * Lept0E ;
+    G4double Lept0E = aLept0E/m0_c2+1.,   Lept0E2 = Lept0E * Lept0E ;
     G4double GammaE = aGammaE/m0_c2;
 
 
@@ -142,7 +141,7 @@ G4double G4PolarizedPEEffectCrossSection::XSection(const G4StokesVector & /*pol2
 						   const G4StokesVector & /*pol3*/)
 {
   cout<<"ERROR dummy routine G4PolarizedPEEffectCrossSection::XSection() called\n";
-  return 0;
+  return 0.;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

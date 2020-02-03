@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04StackingActionMessenger.cc 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// \file parallel/ParN04/src/ExN04StackingActionMessenger.cc
+/// \file ExN04StackingActionMessenger.cc
 /// \brief Implementation of the ExN04StackingActionMessenger class
 //
 

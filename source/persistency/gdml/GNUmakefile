@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 89398 2015-04-09 09:56:29Z gcosmo $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -18,6 +17,7 @@ CPPFLAGS += \
 	    -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/digits_hits/hits/include \
             -I$(G4BASE)/digits_hits/digits/include \
+            -I$(G4BASE)/digits_hits/detector/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/particles/hadrons/barions/include \

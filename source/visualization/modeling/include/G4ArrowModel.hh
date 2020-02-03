@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ArrowModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  15th July 2012
@@ -52,7 +51,8 @@ public: // With description
   G4ArrowModel(G4double x1, G4double y1, G4double z1,
 	       G4double x2, G4double y2, G4double z2,
 	       G4double width, const G4Colour& colour,
-	       const G4String& description = "");
+	       const G4String& description = "",
+               G4int lineSegmentsPerCircle = 6);
   virtual ~G4ArrowModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);

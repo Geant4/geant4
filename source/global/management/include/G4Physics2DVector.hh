@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // 
 //---------------------------------------------------------------
@@ -64,8 +63,10 @@ class G4Physics2DVector
 public:  // with description
 
   G4Physics2DVector();
+  // Vector will be filled via Retrieve method
+
   explicit G4Physics2DVector(size_t nx, size_t ny);
-  // constructors
+  // Vector will be filled via Put methods
 
   G4Physics2DVector(const G4Physics2DVector&);
   G4Physics2DVector& operator=(const G4Physics2DVector&);
@@ -123,13 +124,11 @@ public:  // with description
   inline void SetBicubicInterpolation(G4bool);
   // Activate/deactivate bicubic interpolation.
 
-  void Store(std::ofstream& fOut);
+  void Store(std::ofstream& fOut) const;
   G4bool Retrieve(std::ifstream& fIn);
   // To store/retrieve persistent data to/from file streams.
 
   inline void SetVerboseLevel(G4int value);
-  inline G4int GetVerboseLevel() const;
-  // Set/Get Verbose level
 
 protected:
 
@@ -138,10 +137,6 @@ protected:
   void ClearVectors();
 
   void CopyData(const G4Physics2DVector& vec);
-
-  // void ComputeValue(G4double x, G4double y) const;
-  // Main method to interpolate 2D vector 
-  //   by default by linear interpolation
 
   G4double BicubicInterpolation(G4double x, G4double y,
 				size_t idx, size_t idy) const;
@@ -162,8 +157,8 @@ private:
   inline G4double DerivativeXY(size_t idx, size_t idy, G4double fac) const;
   // computation of derivatives
 
-  G4int operator==(const G4Physics2DVector &right) const ;
-  G4int operator!=(const G4Physics2DVector &right) const ;
+  G4bool operator==(const G4Physics2DVector &right) const = delete;
+  G4bool operator!=(const G4Physics2DVector &right) const = delete;
 
   G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)    
 

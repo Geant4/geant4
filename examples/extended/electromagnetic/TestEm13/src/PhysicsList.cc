@@ -27,7 +27,10 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 85259 2014-10-27 08:52:40Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -157,6 +160,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
+void PhysicsList::SetCuts()
+{ 
+ // fixe lower limit for cut
+ G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
+
+ // call base class method to set cuts which default value can be
+ // modified via /run/setCut/* commands
+ G4VUserPhysicsList::SetCuts();
+
+ DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

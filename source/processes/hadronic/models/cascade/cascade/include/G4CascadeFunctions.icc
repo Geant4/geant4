@@ -25,7 +25,6 @@
 //
 #ifndef G4_CASCADE_FUNCTIONS_ICC
 #define G4_CASCADE_FUNCTIONS_ICC
-// $Id: G4CascadeFunctions.icc 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // 20100512  M. Kelsey -- Pass std::vector<> buffer as argument to
 //		getOutgoingPartTypes().

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModifiedModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 //
 // Author: Sebastien Incerti

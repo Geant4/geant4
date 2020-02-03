@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/include/HIJINGProtonBuilder.hh
 /// \brief Definition of the HIJINGProtonBuilder class
 //
-// $Id: HIJINGProtonBuilder.hh,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

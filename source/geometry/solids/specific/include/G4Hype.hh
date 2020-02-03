@@ -23,15 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Hype.hh 83572 2014-09-01 15:23:27Z gcosmo $
-// $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4Hype
 //
 // Class description:
@@ -42,20 +33,30 @@
 //   the z-axis. The solid has a specified half-length along the z axis,
 //   about which it is centered, and a given minimum and maximum radius.
 //   A minimum radius of 0 signifies a filled Hype (with hyperbolical
-//   inner surface). To have a filled Hype the user must specify 
+//   inner surface). To have a filled Hype the user must specify
 //   inner radius = 0 AND inner stereo angle = 0.
-// 
+//
 //   The inner and outer hyperbolical surfaces can have different
 //   stereo angles. A stereo angle of 0 gives a cylindrical surface.
 
-// Authors: 
+// Authors:
 //      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
 //      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
 //      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
-//
 // --------------------------------------------------------------------
 #ifndef G4HYPE_HH
 #define G4HYPE_HH
+
+#include "G4GeomTypes.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UHYPE 1
+#endif
+
+#if (defined(G4GEOM_USE_UHYPE) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UHype G4Hype
+  #include "G4UHype.hh"
+#else
 
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
@@ -76,15 +77,17 @@ class G4Hype : public G4VSolid
                G4double  newHalfLenZ);
 
   virtual ~G4Hype();
-    
+
   void ComputeDimensions(G4VPVParameterisation* p,
                          const G4int n,
                          const G4VPhysicalVolume* pRep);
 
+  void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
   G4bool CalculateExtent(const EAxis pAxis,
                          const G4VoxelLimits& pVoxelLimit,
                          const G4AffineTransform& pTransform,
-                         G4double& pmin, G4double& pmax) const;
+                               G4double& pMin, G4double& pMax) const;
 
   inline G4double GetInnerRadius () const;
   inline G4double GetOuterRadius () const;
@@ -105,8 +108,9 @@ class G4Hype : public G4VSolid
   G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
   G4double DistanceToIn(const G4ThreeVector& p) const;
   G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-                         const G4bool calcNorm=G4bool(false),
-                         G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                         const G4bool calcNorm = false,
+                               G4bool* validNorm = nullptr,
+                               G4ThreeVector* n = nullptr) const;
   G4double DistanceToOut(const G4ThreeVector& p) const;
 
   G4GeometryType  GetEntityType() const;
@@ -114,7 +118,7 @@ class G4Hype : public G4VSolid
   G4VSolid* Clone() const;
 
   std::ostream& StreamInfo(std::ostream& os) const;
-  
+
   G4double GetCubicVolume();
   G4double GetSurfaceArea();
 
@@ -133,11 +137,11 @@ class G4Hype : public G4VSolid
     // persistifiable objects.
 
   G4Hype(const G4Hype& rhs);
-  G4Hype& operator=(const G4Hype& rhs); 
+  G4Hype& operator=(const G4Hype& rhs);
     // Copy constructor and assignment operator.
 
  protected:  // without description
-  
+
   inline G4bool InnerSurfaceExists() const;
     // whether we have an inner surface or not
 
@@ -145,23 +149,15 @@ class G4Hype : public G4VSolid
                                      G4double r0, G4double tanPhi );
   static G4double ApproxDistInside( G4double pr, G4double pz,
                                     G4double r0, G4double tan2Phi );
-    // approximate isotropic distance to hyperbolic surface 
+    // approximate isotropic distance to hyperbolic surface
 
   inline G4double HypeInnerRadius2(G4double zVal) const;
   inline G4double HypeOuterRadius2(G4double zVal) const;
     // values of hype radius at a given Z
 
-  static G4int IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v, 
+  static G4int IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
                               G4double r2, G4double tan2Phi, G4double s[2] );
     // intersection with hyperbolic surface
-
-  static void AddPolyToExtent( const G4ThreeVector &v0,
-                               const G4ThreeVector &v1,
-                               const G4ThreeVector &w1,
-                               const G4ThreeVector &w0,
-                               const G4VoxelLimits &voxelLimit,
-                               const EAxis axis,
-                               G4SolidExtentList &extentList );
 
  protected:
 
@@ -183,7 +179,7 @@ class G4Hype : public G4VSolid
   G4double endOuterRadius2; // squared endcap Outer Radius
   G4double endInnerRadius; // endcap Inner Radius
   G4double endOuterRadius; // endcap Outer Radius
-  
+
   // Used by distanceToOut
 
   enum ESide {outerFace,innerFace,leftCap, rightCap};
@@ -193,16 +189,18 @@ class G4Hype : public G4VSolid
   G4double asinh(G4double arg);
 
  private:
-  
-  G4double fCubicVolume;
-  G4double fSurfaceArea;
+
+  G4double fCubicVolume = 0.0;
+  G4double fSurfaceArea = 0.0;
 
   G4double fHalfTol;
 
-  mutable G4bool fRebuildPolyhedron;
-  mutable G4Polyhedron* fpPolyhedron;
+  mutable G4bool fRebuildPolyhedron = false;
+  mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 #include "G4Hype.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UHYPE) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+#endif // G4HYPE_HH

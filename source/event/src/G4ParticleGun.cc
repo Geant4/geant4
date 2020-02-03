@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc 97477 2016-06-03 10:13:42Z gcosmo $
 //
 
 // G4ParticleGun
@@ -86,13 +85,13 @@ G4ParticleGun::~G4ParticleGun()
 //  "G4ParticleGun : Equal operator should not be used.");
 //  return right; }
 //
-//G4int G4ParticleGun::operator==(const G4ParticleGun& /*right*/) const
+//G4bool G4ParticleGun::operator==(const G4ParticleGun& /*right*/) const
 //{ G4Exception(
 //  "G4ParticleGun::operator==","Event0193",FatalException,
 //  "G4ParticleGun : == operator should not be used.");
 //  return true; }
 //
-//G4int G4ParticleGun::operator!=(const G4ParticleGun& /*right*/) const
+//G4bool G4ParticleGun::operator!=(const G4ParticleGun& /*right*/) const
 //{ G4Exception(
 //  "G4ParticleGun::operator!=","Event0193",FatalException,
 //  "G4ParticleGun : != operator should not be used.");

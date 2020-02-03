@@ -392,7 +392,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
         }
         if( !bWordOK )
         {
-          G4String ErrMess = "String word is not a parameter, nor a unit\n";
+          G4String ErrMess = "String word is not a parameter, nor a unit\n"
                            + G4String("definition nor a function: ") + word
                            + G4String(" in string: ") + str;
           G4Exception("G4tgrUtils::GetDouble()", "ParseError",

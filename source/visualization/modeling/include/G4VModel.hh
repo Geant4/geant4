@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -80,6 +79,9 @@ public: // With description
 
   const G4VisExtent& GetExtent () const;
   // Extent of visible objects in local coordinate system.
+
+  const G4VisExtent& GetTransformedExtent () const;
+  // Extent of visible objects in transformed coordinate system.
 
   const G4String& GetGlobalDescription () const;
   // A description which does not change and lasts the life of the model.

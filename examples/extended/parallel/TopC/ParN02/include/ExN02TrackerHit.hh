@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ExN02TrackerHit.hh
+/// \file ExN02TrackerHit.hh
 /// \brief Definition of the ExN02TrackerHit class
 //
 //
-// $Id: ExN02TrackerHit.hh 66241 2012-12-13 18:34:42Z gunter $
 // 
 // --------------------------------------------------------------
 
@@ -55,7 +54,7 @@ class ExN02TrackerHit : public G4VHit
 
       ExN02TrackerHit(const ExN02TrackerHit&);
       const ExN02TrackerHit& operator=(const ExN02TrackerHit&);
-      G4int operator==(const ExN02TrackerHit&) const;
+      G4bool operator==(const ExN02TrackerHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

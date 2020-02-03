@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh 82042 2014-06-10 08:02:58Z gcosmo $
 //
 /// \file medical/electronScattering2/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class

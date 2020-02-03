@@ -47,7 +47,7 @@ G4bool G4MPIrandomSeedGenerator::CheckDoubleCount()
 {
   G4MPImanager* g4mpi = G4MPImanager::GetManager();
 
-  G4int nsize = g4mpi-> GetSize();
+  G4int nsize = g4mpi-> GetActiveSize();
 
   for ( G4int i = 0; i < nsize; i++ ) {
     for ( G4int j = 0; j < nsize; j++ ) {
@@ -67,7 +67,7 @@ void G4MPIrandomSeedGenerator::GenerateSeeds()
 {
   G4MPImanager* g4mpi = G4MPImanager::GetManager();
 
-  G4int nsize = g4mpi-> GetSize();
+  G4int nsize = g4mpi-> GetActiveSize();
 
   seed_list_.clear();
 

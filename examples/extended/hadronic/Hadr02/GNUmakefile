@@ -1,8 +1,6 @@
-# $Id: GNUmakefile 88154 2015-02-02 12:25:20Z gcosmo $
-# GEANT4 tag $Name: 
-# --------------------------------------------------------------
-# GNUmakefile for examples module with DPMJET interface 
-# --------------------------------------------------------------
+# ----------------------------------------------------------------
+# GNUmakefile for examples module with external Fortran generators
+# ----------------------------------------------------------------
 
 name := Hadr02
 G4TARGET := $(name)
@@ -10,6 +8,7 @@ G4EXLIB := true
 
 URQMDDIR= urqmd1_3
 HIJINGDIR= hijing1_383
+CRMCDIR= crmc_interface
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
@@ -18,7 +17,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all
-all: urqmd hijing lib bin
+all: urqmd hijing crmc lib bin
 
 
 urqmd:
@@ -46,7 +45,19 @@ ifdef G4_USE_HIJING
   CPPFLAGS += -DG4_USE_HIJING
   EXTRALIBS = -lgfortran 
               -lgmp -lmpfr \
-	      -L${CERNROOT}/cernlib -lmathlib -lkernlib -lpacklib -lpawlib
+	      -L${CERNROOT}/lib -lmathlib -lkernlib -lpacklib -lpawlib
+endif
+
+crmc:
+ifdef G4_USE_CRMC
+	(cp ${CRMCDIR}/Build/lib/*.so ${G4TMPDIR});
+	(cp ${CRMCDIR}/Build/crmc.param .);
+endif
+
+ifdef G4_USE_CRMC
+  CPPFLAGS += -DG4_USE_CRMC -I${CRMCDIR}/Build/src -I${CRMCDIR}/src
+  EXTRALIBS = -lgfortran -lgmp -lmpfr \
+              -L${CRMCDIR}/Build/lib/ -lCrmc 
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
@@ -60,5 +71,4 @@ histclean:
 visclean:
 	@rm -f g4*.prim g4*.eps g4*.wrl
 	@rm -f .DAWN_*
-
 #

@@ -33,7 +33,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4RadioactiveDecay;
+class G4RadioactiveDecayBase;
 
 class G4RadioactiveDecayPhysics : public G4VPhysicsConstructor
 {
@@ -52,7 +52,6 @@ public:
   virtual void ConstructProcess();
 
 private:
-  //G4RadioactiveDecay*  theRadioactiveDecay;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

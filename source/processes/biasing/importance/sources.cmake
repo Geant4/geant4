@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 77477 2013-11-25 09:42:24Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -50,7 +49,6 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_imp
         G4ImportanceProcess.hh
         G4PlaceOfAction.hh
         G4SamplingPostStepAction.hh
-        G4TrackTerminator.hh
         G4VSampler.hh
         G4VSamplerConfigurator.hh
         G4WeightCutOffConfigurator.hh

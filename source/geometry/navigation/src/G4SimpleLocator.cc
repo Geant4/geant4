@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleLocator.cc 97507 2016-06-03 12:48:42Z gcosmo $
-//
 // Class G4SimpleLocator implementation
 //
 // 27.10.08 - Tatiana Nikitina, extracted from G4PropagatorInField class
@@ -155,22 +153,22 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
      }
 #endif
 
-     G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
+     G4ThreeVector CurrentF_Point = ApproxIntersecPointV.GetPosition();
 
      // First check whether EF is small - then F is a good approx. point 
      // Calculate the length and direction of the chord AF
      //
-     G4ThreeVector  ChordEF_Vector = CurrentF_Point - CurrentE_Point;
+     G4ThreeVector ChordEF_Vector = CurrentF_Point - CurrentE_Point;
 
-     G4ThreeVector  NewMomentumDir= ApproxIntersecPointV.GetMomentumDir(); 
-     G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
+     G4ThreeVector NewMomentumDir = ApproxIntersecPointV.GetMomentumDir(); 
+     G4double MomDir_dot_Norm = NewMomentumDir.dot( NormalAtEntry ) ;
 
-     G4ThreeVector  ChordAB           = Point_B - Point_A;
+     G4ThreeVector ChordAB = Point_B - Point_A;
 
 #ifdef G4DEBUG_FIELD
      G4VIntersectionLocator::
        ReportTrialStep( substep_no, ChordAB, ChordEF_Vector, 
-                      NewMomentumDir, NormalAtEntry, validNormalAtE ); 
+                        NewMomentumDir, NormalAtEntry, validNormalAtE ); 
 #endif
      // Check Sign is always exiting !! TODO
      // Could ( > -epsilon) be used instead?
@@ -199,7 +197,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
                                    last_AF_intersection, IP, NewSafety,
                                    fPreviousSafety, fPreviousSftOrigin );
 
-         if(goodCorrection)
+         if ( goodCorrection )
          {
            IntersectedOrRecalculatedFT = ApproxIntersecPointV;
            IntersectedOrRecalculatedFT.SetPosition(IP);
@@ -258,7 +256,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
          // By moving point B, must take care if current
          // AF has no intersection to try current FB!!
          //
-         final_section= false; 
+         final_section = false; 
           
 #ifdef G4VERBOSE
          if( fVerboseLevel > 3 )
@@ -280,7 +278,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
          G4double stepLengthFB;
          G4ThreeVector PointH;
-         G4bool usedNavigatorFB=false; 
+         G4bool usedNavigatorFB = false; 
 
          // Check whether any volumes are encountered by the chord FB
          // ---------------------------------------------------------
@@ -413,7 +411,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
                      "GeomNav0003", FatalException, message);
        }
 
-       if(restoredFullEndpoint)
+       if ( restoredFullEndpoint )
        {
          final_section = restoredFullEndpoint;
          restoredFullEndpoint = false;
@@ -443,7 +441,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
                     -1.0, NewSafety, substep_no);
      }
 #endif
-     substep_no++; 
+     ++substep_no; 
 
   } while ( ( ! found_approximate_intersection )
            && ( ! there_is_no_intersection )     

@@ -1,0 +1,16 @@
+#
+/gun/direction 0 0 1
+#
+/gun/particle proton
+#
+/gun/energy 10 GeV
+/run/beamOn 20
+#
+/gun/particle gamma
+#
+/gun/energy 10 GeV
+/run/beamOn 20
+#
+
+
+

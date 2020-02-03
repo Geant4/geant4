@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04PrimaryGeneratorAction.hh
 /// \brief Definition of the RE04PrimaryGeneratorAction class
 //
-// $Id: $
 //
 #ifndef RE04PrimaryGeneratorAction_h
 #define RE04PrimaryGeneratorAction_h 1

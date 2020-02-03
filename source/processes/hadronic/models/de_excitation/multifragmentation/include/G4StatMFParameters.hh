@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFParameters.hh 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

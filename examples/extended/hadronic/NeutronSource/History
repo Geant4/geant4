@@ -1,0 +1,71 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    NeutronSourcd History file
+                    --------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+07-10-18 mma (NeutronSource-V10-04-07)
+- PhysicsList : use G4IonElasticPhysics and G4IonPhysicsXS
+
+07-08-18 mma (NeutronSource-V10-04-06)
+- PhysicsList::ConstructProcess() : activate the use of GetHadronicModel(modelName)
+
+17-07-18 mma (NeutronSource-V10-04-05)
+- PhysicsList::ConstructProcess() : example to use GetHadronicModel(modelName)
+
+05-07-18 mma (NeutronSource-V10-04-04)
+- PhysicsList : modifications to use method ConstructProcess()
+
+25-06-18 mma (NeutronSource-V10-04-03)
+- envHadronic : add env variables for particleHP (PHP)
+
+09-05-18 B. Morgan (NeutronSource-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+05-04-18 mma (NeutronSource-V10-04-01)
+- NeutronSource.cc : set visualisation only in interactive session.
+
+17-03-18 mma (NeutronSource-V10-04-00)
+- NeutronSource.cc : remove G4UI_USE and G4VIS_USE
+
+28-11-17 I. Hrivnacova  (NeutronSource-V10-03-04)
+- Fixed Doxygen warnings
+
+27-04-17 mma  (NeutronSource-V10-03-03)
+- Update Readme
+
+12-04-17 mma  (NeutronSource-V10-03-02)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+19-02-17 mma  (NeutronSource-V10-03-01)
+- HistoManager.cc : add a comment
+
+17-02-17 mma  (NeutronSource-V10-03-00)
+- Run.cc : remove normalisation of all histos
+
+14-10-16 G.Folger (NeutronSource-V10-02-01)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+	 
+26-09-16 mma (NeutronSource-V10-02-00)
+- change name : AmBe --> NeutronSource
+
+22-09-16 mma (AmBe-V10-02-02)
+- update GNUmakefile
+
+18-09-16 mma (AmBe-V10-02-01)
+- decrease statistic
+
+01-07-16 Michel Maire (AmBe-V10-02-00)
+- created from Hadr06

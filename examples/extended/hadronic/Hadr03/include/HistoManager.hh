@@ -26,7 +26,10 @@
 /// \file hadronic/Hadr03/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
+<<<<<<< HEAD
 // $Id: HistoManager.hh 66586 2012-12-21 10:48:39Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

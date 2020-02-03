@@ -224,3 +224,15 @@ differences:
 - It also shows how to merge G4Run objects from different ranks and 
   how to merge scorers
 - MT is enabled.
+
+exMPI04 (merging of ntuples via MPI)
+---------------------------------------
+This example is the same as exMPI03 with added ntuple.
+- It uses g4tools for histogramming and ntuples.
+- It shows how to merge, using g4tools, ntuples via MPI in sequential mode,
+  so that the entire statistics is accumulated in a single output file.
+- If MT is enabled, the ntuples are merged from threads to 
+  files per ranks.
+- Combined MT + MPI merging is not yet supported.
+- Merging ntuples is actually supported only with Root output format.
+

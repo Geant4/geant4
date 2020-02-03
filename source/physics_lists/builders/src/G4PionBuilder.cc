@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +32,7 @@
 //  devired from G4PiKBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -47,9 +47,6 @@ G4PionBuilder(): wasActivated(false)
   thePionPlusInelastic=new G4PionPlusInelasticProcess;
   thePionMinusInelastic=new G4PionMinusInelasticProcess;
 }
-
-G4PionBuilder::~G4PionBuilder()
-{}
 
 void G4PionBuilder::
 Build()
@@ -70,3 +67,13 @@ Build()
   theProcMan = G4PionMinus::PionMinus()->GetProcessManager();
   theProcMan->AddDiscreteProcess(thePionMinusInelastic);
 }
+
+void G4PionBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
+  auto bld = dynamic_cast<G4VPionBuilder*>(aB);
+  if ( bld != nullptr ) {
+      theModelCollections.push_back(bld);
+  } else {
+      G4PhysicsBuilderInterface::RegisterMe(aB);
+  }
+}
+

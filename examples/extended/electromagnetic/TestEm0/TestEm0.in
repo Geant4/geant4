@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 # $Id: TestEm0.in 93512 2015-10-23 13:45:07Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 # Macro file for "TestEm0.cc"
 #
 /control/verbose 0
-/run/verbose 0
+/run/verbose 1
 #
 #/testem/phys/addPhysics local
+<<<<<<< HEAD
 ###/testem/phys/addPhysics emstandard_opt3
+=======
+/testem/phys/addPhysics emstandard_opt3
+#
+/process/eLoss/verbose 0
+/process/em/printParameters 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #
 /run/initialize
 /process/eLoss/verbose 0

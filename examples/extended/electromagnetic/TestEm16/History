@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +17,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+<<<<<<< HEAD
+=======
+
+28-11-19 I. Hrivnacova  (testem16-V10-05-02)
+- Fixed a link in .README.txt
+
+06-04-19 V.Ivanchenko (testem16-V10-05-01)
+- TestEm16.in - minor update
+
+04-04-19 V.Ivanchenko (testem16-V10-05-00)
+- PhysicsList - use G4DecayPhysics and drop G4AutoDelete
+- TestEm16.cc - drop RanecuEngine
+
+09-05-18 B.Morgan (testem16-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 14-10-16 G.Folger
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

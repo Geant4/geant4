@@ -23,114 +23,134 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FieldManager.icc 93661 2015-10-28 09:47:47Z gcosmo $
-//
-//
 // G4FieldManager inline implementation 
 //
+// Author: John Apostolakis, 10.03.97 - design and implementation
 // -------------------------------------------------------------------
 
 inline
 const G4Field* G4FieldManager::GetDetectorField() const
 { 
    // If pointer is null, should this raise an exception ??
+
    return fDetectorField;
 } 
 
 inline
 G4bool G4FieldManager::DoesFieldExist() const
 { 
-   return (fDetectorField != 0);
+   return (fDetectorField != nullptr);
 } 
 
 inline  
-void G4FieldManager::SetChordFinder(G4ChordFinder *aChordFinder)
+void G4FieldManager::SetChordFinder(G4ChordFinder* aChordFinder)
 {
-     fChordFinder= aChordFinder;
+   fChordFinder= aChordFinder;
 }
 
 inline  
-G4ChordFinder*  G4FieldManager::GetChordFinder()
+G4ChordFinder* G4FieldManager::GetChordFinder()
 {  
-     return fChordFinder;
+   return fChordFinder;
 }
 
 inline  
-const G4ChordFinder*  G4FieldManager::GetChordFinder() const
+const G4ChordFinder* G4FieldManager::GetChordFinder() const
 {
-     return fChordFinder;
+   return fChordFinder;
 }
 
 inline
 G4double G4FieldManager::GetDeltaIntersection() const
 {
-     return fDelta_Intersection_Val;
+   return fDelta_Intersection_Val;
 }
 
 inline
 G4double G4FieldManager::GetDeltaOneStep() const
 {
-     return fDelta_One_Step_Value;
+   return fDelta_One_Step_Value;
 }
 
 inline
 void G4FieldManager::SetDeltaOneStep(G4double valDeltaOneStep)
 { 
-     fDelta_One_Step_Value= valDeltaOneStep;  
+   fDelta_One_Step_Value= valDeltaOneStep;  
 }
 
 inline
 void G4FieldManager::SetDeltaIntersection(G4double valDeltaIntersection)
 {
-      fDelta_Intersection_Val = valDeltaIntersection;
+   fDelta_Intersection_Val = valDeltaIntersection;
 }
 
 inline
 void G4FieldManager::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
 { 
-      fDelta_One_Step_Value= valDeltaOneStep;  
-      fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
+   fDelta_One_Step_Value= valDeltaOneStep;  
+   fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
 }
 
-inline G4bool   G4FieldManager::DoesFieldChangeEnergy() const
-{ return fFieldChangesEnergy;}
-
-inline void     G4FieldManager::SetFieldChangesEnergy(G4bool value)
-{ fFieldChangesEnergy = value; }
-
-
-
-// Minimum for Relative accuracy of any Step 
-inline 
-G4double  G4FieldManager::GetMinimumEpsilonStep() const
+inline G4bool G4FieldManager::DoesFieldChangeEnergy() const
 {
-  return fEpsilonMin; 
+   return fFieldChangesEnergy;
 }
 
-inline 
-void      G4FieldManager::SetMinimumEpsilonStep( G4double newEpsMin )
+inline void G4FieldManager::SetFieldChangesEnergy(G4bool value)
 {
-  if( (newEpsMin > 0.0) && (std::fabs(1.0+newEpsMin) > 1.0) )
-  {
-    fEpsilonMin = newEpsMin;
-  }
+   fFieldChangesEnergy = value;
 }
 
-// Maximum for Relative accuracy of any Step 
+// Minimum for Relative accuracy of any Step
+//
 inline 
-G4double  G4FieldManager::GetMaximumEpsilonStep() const
+G4double G4FieldManager::GetMinimumEpsilonStep() const
 {
-  return fEpsilonMax; 
+   return fEpsilonMin; 
 }
 
 inline 
-void      G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
+void G4FieldManager::SetMinimumEpsilonStep( G4double newEpsMin )
 {
-  if(    (newEpsMax > 0.0) 
-      && (newEpsMax >= fEpsilonMin ) 
-      && (std::fabs(1.0+newEpsMax)>1.0) )
-  {
-    fEpsilonMax = newEpsMax;
-  }
+   if( (newEpsMin > 0.0) && (std::fabs(1.0+newEpsMin) > 1.0) )
+   {
+     fEpsilonMin = newEpsMin;
+   }
+}
+
+// Maximum for Relative accuracy of any Step
+//
+inline 
+G4double G4FieldManager::GetMaximumEpsilonStep() const
+{
+   return fEpsilonMax; 
+}
+
+inline 
+void G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
+{
+   if(    (newEpsMax > 0.0) 
+       && (newEpsMax >= fEpsilonMin ) 
+       && (std::fabs(1.0+newEpsMax)>1.0) )
+   {
+     fEpsilonMax = newEpsMax;
+   }
+}
+
+inline
+void G4FieldManager::ChangeDetectorField(G4Field* detectorField)
+{
+   G4int errorType = 2; // Fatal !
+   SetDetectorField( detectorField, errorType ); 
+}
+
+inline
+void G4FieldManager::ProposeDetectorField(G4Field* detectorField)
+{
+  // Note: this is equivalent to 
+  //       this->SetDetectorField( detectorField, 0 );
+  //       but simpler!
+
+  fDetectorField = detectorField;
+  InitialiseFieldChangesEnergy();
 }

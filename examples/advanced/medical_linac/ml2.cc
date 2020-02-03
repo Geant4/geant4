@@ -23,24 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// The code was written by :
-//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
-//      *Barbara Caccia barbara.caccia@iss.it
-//      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
-//	with the contribute of Alessandro Occhigrossi*
-//
-// ^INAIL DIPIA - ex ISPESL  and INFN Roma, gruppo collegato SanitÃ , Italy
-// *Istituto Superiore di SanitÃ  and INFN Roma, gruppo collegato SanitÃ , Italy
-//  Viale Regina Elena 299, 00161 Roma (Italy)
-//  tel (39) 06 49902246
-//  fax (39) 06 49387075
-//
-// more information:
-// http://g4advancedexamples.lngs.infn.it/Examples/medical-linac
-//
-//*******************************************************//
-
-
 #include "ML2Main.hh"
 
 #include "ML2PrimaryGenerationAction.hh"
@@ -50,51 +32,51 @@
 #include "ML2EventAction.hh"
 #include "ML2TrackingAction.hh"
 
+#include "G4ios.hh"
 #include "G4UImanager.hh"
+#include "G4ScoringManager.hh"
 #include "G4Timer.hh"
 	
-
-#ifdef G4VIS_USE
-	#include "G4VisExecutive.hh"
-#endif
-#ifdef G4UI_USE
-	#include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
 
 
-
-#ifdef G4VIS_USE
 void visio(int argc, char* argv[])
 {
-		G4VisManager *visManager=new G4VisExecutive;
-		visManager->Initialize();
-#ifdef G4UI_USE
-		G4UIExecutive *ui = new G4UIExecutive(argc, argv);
-                G4UImanager *UImanager = G4UImanager::GetUIpointer();
-		UImanager->ApplyCommand("/control/execute vis.mac");     
-		ui->SessionStart();
-		delete ui;
-#endif
-		delete visManager;
+	G4VisManager *visManager=new G4VisExecutive;
+	visManager -> Initialize();
+	G4UIExecutive *ui = new G4UIExecutive(argc, argv);
+			G4UImanager *UImanager = G4UImanager::GetUIpointer();
+	UImanager -> ApplyCommand("/control/execute macroAndData/macro_files/main/vis.mac");
+	ui -> SessionStart();
+	delete ui;
+	delete visManager;
 }
-#endif
 
 int main(int argc, char* argv[])
 {
+	G4RunManager *runManager = new G4RunManager();
 	// instantiate the world class
 	CML2WorldConstruction *myWorld=CML2WorldConstruction::GetInstance(); 
 
-	G4RunManager *runManager=new G4RunManager();
-	ML2PhysicsList *physics=new ML2PhysicsList();
-	runManager->SetUserInitialization(physics);
+	// read the main mac file and execute the commands
+	G4UImanager* UImanager = G4UImanager::GetUIpointer();
+        UImanager->ApplyCommand("/control/verbose 2");
+        UImanager->ApplyCommand("/run/verbose 2");
+
+	ML2PhysicsList *physics = new ML2PhysicsList();
+	runManager -> SetUserInitialization(physics);
+
+	// instantiate the scoring manager
+	G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
+	scoringManager->SetVerboseLevel(1);
 	
 	// build the primary generator
 	CML2PrimaryGenerationAction *gun;
 	gun = CML2PrimaryGenerationAction::GetInstance();
 
 	// build the main messenger class for the input data
-	CML2CInputData *myInputData;
-	myInputData=new CML2CInputData();
+	CML2CInputData *myInputData = new CML2CInputData();
 
 	// initialize the primary generator variables
 	gun->inizialize(&myInputData->inputData.primaryParticleData);
@@ -102,103 +84,114 @@ int main(int argc, char* argv[])
 	// according to the number of the launching line
 	if (argc==1)
 	{
-		myInputData->inputData.generalData.seed=1;
-		myInputData->inputData.generalData.StartFileInputData="ml2.mac";
+	  myInputData->inputData.generalData.seed = 1;
+	  myInputData->inputData.generalData.StartFileInputData = "macroAndData/macro_files/main/ml2.mac";
 	}
 	if (argc==2)
 	{
-		myInputData->inputData.generalData.seed=1;
-		myInputData->inputData.generalData.StartFileInputData=(G4String)argv[1];
+	  myInputData->inputData.generalData.seed = 1;
+	  myInputData->inputData.generalData.StartFileInputData = (G4String)argv[1];
 	}
 	if (argc==3)
 	{
-		sscanf(argv[2],"%d", &myInputData->inputData.generalData.seed);
-		myInputData->inputData.generalData.StartFileInputData=(G4String)argv[1];
+	  sscanf(argv[2],"%d", &myInputData->inputData.generalData.seed);
+	  myInputData->inputData.generalData.StartFileInputData = (G4String)argv[1];
 	}
 
-	// read the main mac file and execute the commands
-	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 	G4String command = "/control/execute ";
-	UImanager->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData); 
+	UImanager->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData);
 
 
 	// set and initialize the random generator
 	CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-	CLHEP::HepRandom :: setTheSeed(myInputData->inputData.generalData.seed);
+	CLHEP::HepRandom::setTheSeed(myInputData->inputData.generalData.seed);
+	G4cout << "Using seed " << CLHEP::HepRandom::getTheSeed() << G4endl;
 
 	// create the world class
 	if (!myWorld->create(&myInputData->inputData, myInputData->getbOnlyVisio()))
 	{
-		return 1; // if it fails to create the world
+	  return 1; // if it fails to create the world
 	}
 	else
 	{
-		// initialize the primary generator according to the choosen particle source
-		gun->design(myWorld->getCML2AcceleratorConstruction()->getAcceleratorIsoCentre());
-	}
+	  // initialize the primary generator according to the chosen particle source
+	  gun->design(myWorld->getCML2AcceleratorConstruction()->getAcceleratorIsoCentre());
+        }
 
 	// instantiate the convergence control class and assign it to myStepAction
-	CML2Convergence *convergence=new CML2Convergence(myInputData->inputData.generalData.seed, myInputData->inputData.generalData.saving_in_Selected_Voxels_every_events, myInputData->inputData.generalData.fileExperimentalData, myInputData->inputData.generalData.fileExperimentalDataOut, myInputData->inputData.generalData.bCompareExp, myInputData->inputData.generalData.maxNumberOfEvents, gun->getNrecycling(), myInputData->inputData.generalData.nMaxLoop);
+	CML2Convergence *convergence = new CML2Convergence(myInputData->inputData.generalData.seed,
+			myInputData->inputData.generalData.saving_in_Selected_Voxels_every_events,
+			myInputData->inputData.generalData.fileExperimentalData,
+			myInputData->inputData.generalData.fileExperimentalDataOut,
+			myInputData->inputData.generalData.bCompareExp,
+			myInputData->inputData.generalData.maxNumberOfEvents,
+			gun->getNrecycling(),
+			myInputData->inputData.generalData.nMaxLoop);
 
 
 	// build the ML2RunAction to assign the single phantom name at each run 
-	CML2RunAction *myRunAction=new CML2RunAction(convergence, myInputData->inputData.generalData.nBeam, myInputData->bOnlyVisio);
+	CML2RunAction *myRunAction = new CML2RunAction(convergence, myInputData->inputData.generalData.nBeam,
+			myInputData->bOnlyVisio,
+                        myInputData->inputData.voxelSegmentation.nX,
+                        myInputData->inputData.voxelSegmentation.nY,
+                        myInputData->inputData.voxelSegmentation.nZ );
 	
-	CML2SteppingAction *myStepAction=new CML2SteppingAction(convergence);
-	CML2EventAction *ML2EventAction = new CML2EventAction();
+	CML2SteppingAction *myStepAction = new CML2SteppingAction(convergence);
+	CML2EventAction *ML2EventAction  = new CML2EventAction();
 
-	runManager->SetUserInitialization(myWorld);
-	runManager->SetUserAction(myRunAction);
-	runManager->SetUserAction(gun);
-	runManager->SetUserAction(myStepAction);
-	runManager->SetUserAction(ML2EventAction);
-	runManager->SetUserAction(new CML2TrackingAction);
-	runManager->Initialize();
+	runManager -> SetUserInitialization(myWorld);
+	runManager -> SetUserAction(myRunAction);
+	runManager -> SetUserAction(gun);
+	runManager -> SetUserAction(myStepAction);
+	runManager -> SetUserAction(ML2EventAction);
+	runManager -> SetUserAction(new CML2TrackingAction);
+	runManager -> Initialize();
 
 	// performances info 
-	int nLoop=0;
+	int nLoop = 0;
 	G4Timer MyFullTime;
 	G4double loopElapsedTime;
-	G4bool bStopRun=false;
-	G4bool bNewGeometry=true;
+	G4bool bStopRun = false;
+	G4bool bNewGeometry = true;
+
 	if (myInputData->bOnlyVisio)
 	{
-#ifdef G4VIS_USE
-		// visualization
-		myWorld->newGeometry();
-		convergence->setNewGeometry();
-		visio(argc, argv);
-#endif
+	  // visualization
+	  myWorld -> newGeometry();
+	  convergence -> setNewGeometry();
+	  visio(argc, argv);
 	}
 	else
 	{
-		MyFullTime.Start();
-		// compute 
-		while (bNewGeometry)
+	  MyFullTime.Start();
+	  // compute 
+	  while (bNewGeometry)
+	    {
+	      bNewGeometry = myWorld -> newGeometry();
+	      convergence -> setNewGeometry();
+
+	      if (bNewGeometry)
 		{
-			bNewGeometry=myWorld->newGeometry();
-			convergence->setNewGeometry();
-			if (bNewGeometry)
-			{
-				if (CML2PhantomConstruction::GetInstance()->getPhantomName()!="Dicom1")
-				{CML2WorldConstruction::GetInstance()->checkVolumeOverlap();}
-				std::cout<<"################ START NEW GEOMETRY ########################"<<'\n';
-				myRunAction->setActualLoop(nLoop);
-				while (!bStopRun)
-				{
-					runManager->BeamOn(myInputData->inputData.generalData.nBeam);
-					// check if the run has to be reapeted
-					bStopRun=convergence->stopRun(); 
-				}
-				nLoop=0;
-			std::cout<<"################ END NEW GEOMETRY ########################"<<'\n';
-			}
-			bStopRun=false;
+		  runManager -> Initialize();
+		  CML2WorldConstruction::GetInstance()->checkVolumeOverlap();
+
+		  G4cout << "################ START NEW GEOMETRY ########################" << G4endl;
+		  myRunAction->setActualLoop(nLoop);
+
+		  while (!bStopRun)
+		    {
+		      runManager->BeamOn(myInputData->inputData.generalData.nBeam);
+		      // check if the run has to be repeated
+		      bStopRun = convergence->stopRun();
+		    }
+		  nLoop = 0;
+		  G4cout << "################ END NEW GEOMETRY ########################" << G4endl;
 		}
-		MyFullTime.Stop();
-		loopElapsedTime=MyFullTime.GetUserElapsed();
-		std::cout << "loop elapsed time [s] : "<< loopElapsedTime << '\n';
-		std::cout <<'\n';
+	      bStopRun = false;
+	    }
+	  MyFullTime.Stop();
+	  loopElapsedTime = MyFullTime.GetUserElapsed();
+	  G4cout << "loop elapsed time [s] : "<< loopElapsedTime << '\n' << G4endl;
 	}
         delete runManager;
         return 0;

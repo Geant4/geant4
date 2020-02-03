@@ -32,17 +32,17 @@
 //
 // Author:      Cristina Consolandi
 //
-// Creation date: 20.10.2012  
-//                           
+// Creation date: 20.10.2012
+//
 //	Class Description:
 //	Single Scattering model for electron-nuclei interaction.
 //	Suitable for high energy electrons and low scattering angles.
 //
 //
 // Reference:
-//      M.J. Boschini et al. "Non Ionizing Energy Loss induced by Electrons 
-//      in the Space Environment" Proc. of the 13th International Conference 
-//      on Particle Physics and Advanced Technology 
+//      M.J. Boschini et al. "Non Ionizing Energy Loss induced by Electrons
+//      in the Space Environment" Proc. of the 13th International Conference
+//      on Particle Physics and Advanced Technology
 //
 //	(13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
 //	Available at: http://arxiv.org/abs/1111.4042v4
@@ -66,7 +66,7 @@
 #include "G4IonTable.hh"
 
 #include "G4UnitsTable.hh"
-
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,27 +78,31 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
 {
   fNistManager = G4NistManager::Instance();
   theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
-  pCuts=0;
-  currentMaterial = 0;
-  currentElement  = 0;
-  currentCouple = 0;
+  pCuts=nullptr;
+  currentMaterial = nullptr;
+  currentElement  = nullptr;
+  currentCouple = nullptr;
 
   lowEnergyLimit  = 0*keV;
   recoilThreshold = 0.*eV;
-  particle = 0;
-  mass=0;
+  XSectionModel = 1;
+  FormFactor = 0;
+  particle = nullptr;
+  mass=0.0;
   currentMaterialIndex = -1;
 
-  Mottcross = new G4ScreeningMottCrossSection(); 
+  Mottcross = new G4ScreeningMottCrossSection();
+  //G4cout <<"## G4eSingleCoulombScatteringModel: " << this << "  " << Mottcross << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eSingleCoulombScatteringModel::~G4eSingleCoulombScatteringModel()
-{ 
-  delete  Mottcross;
+{
+  //G4cout <<"## G4eSingleCoulombScatteringModel: delete " << this << "  " << Mottcross << G4endl;
+  delete Mottcross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,22 +110,24 @@ G4eSingleCoulombScatteringModel::~G4eSingleCoulombScatteringModel()
 void G4eSingleCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 						 const G4DataVector&  cuts)
 {
+  G4EmParameters* param = G4EmParameters::Instance();
+
   SetupParticle(p);
-  currentCouple = 0;
+  currentCouple = nullptr;
   currentMaterialIndex = -1;
   //cosThetaMin = cos(PolarAngleLimit());
   Mottcross->Initialise(p,cosThetaMin);
- 
-  pCuts = &cuts; 
+
+  pCuts = &cuts;
   //G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
-   
+
   /*
-  G4cout << "!!! G4eSingleCoulombScatteringModel::Initialise for " 
-         << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
+  G4cout << "!!! G4eSingleCoulombScatteringModel::Initialise for "
+         << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin
          << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   G4cout << "cut= " << (*pCuts)[0] << "  cut1= " << (*pCuts)[1] << G4endl;
   */
-  
+
   if(!fParticleChange) {
     fParticleChange = GetParticleChangeForGamma();
   }
@@ -129,25 +135,45 @@ void G4eSingleCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   if(IsMaster()) {
     InitialiseElementSelectors(p,cuts);
   }
+
+  FormFactor=param->NuclearFormfactorType();
+
+  //G4cout<<"NUCLEAR FORM FACTOR: "<<FormFactor<<G4endl;
 }
 
-void G4eSingleCoulombScatteringModel::InitialiseLocal(const G4ParticleDefinition*,
-                                                G4VEmModel* masterModel)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4eSingleCoulombScatteringModel::InitialiseLocal(const G4ParticleDefinition*,
+                                                 G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eSingleCoulombScatteringModel::SetXSectionModel(const G4String& model)
+{
+  if(model == "Fast" || model == "fast")            { XSectionModel=1; }
+  else if(model == "Precise" || model == "precise") { XSectionModel=0; }
+  else { 
+    G4cout<<"G4eSingleCoulombScatteringModel WARNING: "<<model
+	  <<" is not a valid model name"<<G4endl;
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition* p,
-				G4double kinEnergy, 
-				G4double Z, 
-				G4double , 
-				G4double, 
+				G4double kinEnergy,
+				G4double Z,
+				G4double ,
+				G4double,
 				G4double )
 {
   SetupParticle(p);
- 
+
   G4double cross =0.0;
   if(kinEnergy < lowEnergyLimit) return cross;
 
@@ -155,9 +181,11 @@ G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   //Total Cross section
   Mottcross->SetupKinematic(kinEnergy, Z);
-  cross = Mottcross->NuclearCrossSection();
+  cross = Mottcross->NuclearCrossSection(FormFactor,XSectionModel);
 
   //cout<< "Compute Cross Section....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<" Z: "<<Z<<" kinEnergy: "<<kinEnergy<<endl;
+
+  //G4cout<<"Energy: "<<kinEnergy/MeV<<" Total Cross: "<<cross<<G4endl;
   return cross;
 }
 
@@ -167,76 +195,77 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 			       std::vector<G4DynamicParticle*>* fvect,
 			       const G4MaterialCutsCouple* couple,
 			       const G4DynamicParticle* dp,
-			       G4double cutEnergy, 
+			       G4double cutEnergy,
 			       G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
   //cout<<"--- kinEnergy "<<kinEnergy<<endl;
 
   if(kinEnergy < lowEnergyLimit) return;
-	
+
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
 
   // Choose nucleus
   //last two :cutEnergy= min e kinEnergy=max
-  currentElement = SelectRandomAtom(couple,particle,
-				    kinEnergy,cutEnergy,kinEnergy);
-
-  G4double Z  = currentElement->GetZ();
-  G4int iz    = G4int(Z);
+  currentElement = SelectTargetAtom(couple, particle, kinEnergy, 
+                               dp->GetLogKineticEnergy(), cutEnergy, kinEnergy);
+  G4int iz    = currentElement->GetZasInt();
   G4int ia = SelectIsotopeNumber(currentElement);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
   //G4cout<<"..Z: "<<Z<<" ..iz: "<<iz<<" ..ia: "<<ia<<" ..mass2: "<<mass2<<G4endl;
-  
-  Mottcross->SetupKinematic(kinEnergy, Z);
-  G4double cross= Mottcross->NuclearCrossSection(); //MODIFY TO LOAD TABLE
+
+  Mottcross->SetupKinematic(kinEnergy, iz);
+  G4double cross= Mottcross->NuclearCrossSection(FormFactor,XSectionModel);
   if(cross == 0.0) { return; }
   //cout<< "Energy: "<<kinEnergy/MeV<<" Z: "<<Z<<"....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;
 
-  G4double z1 = Mottcross->GetScatteringAngle();
+  G4double z1 = Mottcross->GetScatteringAngle(FormFactor,XSectionModel);
   G4double sint = sin(z1);
-  G4double cost = sqrt(1.0 - sint*sint);
+  G4double cost = cos(z1);
   G4double phi  = twopi* G4UniformRand();
 
   // kinematics in the Lab system
-  G4double ptot = dp->GetTotalMomentum();
-  G4double e1   = dp->GetTotalEnergy();
-  // Lab. system kinematics along projectile direction
-  G4LorentzVector v0 = G4LorentzVector(0, 0, ptot, e1);
-  G4double bet  = ptot/(v0.e() + mass2);
-  G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
-
-  //CM Projectile 	
-  G4double momCM = gam*(ptot - bet*e1); 
-  G4double eCM   = gam*(e1 - bet*ptot); 
-  //energy & momentum after scattering of incident particle
-  G4double pxCM = momCM*sint*cos(phi);
-  G4double pyCM = momCM*sint*sin(phi);
-  G4double pzCM = momCM*cost;
-
-  //CM--->Lab
-  G4LorentzVector v1(pxCM , pyCM, gam*(pzCM + bet*eCM), gam*(eCM + bet*pzCM));
+  G4double ptot = sqrt(kinEnergy*(kinEnergy + 2.0*mass));
+  G4double e1   = mass + kinEnergy;
   
+  // Lab. system kinematics along projectile direction
+  G4LorentzVector v0 = G4LorentzVector(0, 0, ptot, e1+mass2);
+  G4LorentzVector v1 = G4LorentzVector(0, 0, ptot, e1);
+  G4ThreeVector bst = v0.boostVector();
+  v1.boost(-bst);
+  // CM projectile
+  G4double momCM = v1.pz(); 
+  
+  // Momentum after scattering of incident particle
+  v1.setX(momCM*sint*cos(phi));
+  v1.setY(momCM*sint*sin(phi));
+  v1.setZ(momCM*cost);
+
+  // CM--->Lab
+  v1.boost(bst);
+
   // Rotate to global system
-  G4ThreeVector dir = dp->GetMomentumDirection(); 
+  G4ThreeVector dir = dp->GetMomentumDirection();
   G4ThreeVector newDirection = v1.vect().unit();
   newDirection.rotateUz(dir);
-  
-  fParticleChange->ProposeMomentumDirection(newDirection);   
+
+  fParticleChange->ProposeMomentumDirection(newDirection);
 
   // recoil
   v0 -= v1;
-  G4double trec = v0.e();
+  G4double trec = std::max(v0.e() - mass2, 0.0);
   G4double edep = 0.0;
 
   G4double tcut = recoilThreshold;
 
   //G4cout<<" Energy Transfered: "<<trec/eV<<G4endl;
-  
-  if(pCuts) { 
-    tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); 
+
+  if(pCuts) {
+    tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]);
+    //G4cout<<"Cuts: "<<(*pCuts)[currentMaterialIndex]/eV<<" eV"<<G4endl;
+    //G4cout<<"Threshold: "<<tcut/eV<<" eV"<<G4endl;
   }
 
   if(trec > tcut) {
@@ -249,14 +278,14 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
     edep = trec;
     fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
   }
-  
+
   // finelize primary energy and energy balance
   G4double finalT = v1.e() - mass;
   //G4cout<<"Final Energy: "<<finalT/eV<<G4endl;
-  if(finalT <= lowEnergyLimit) { 
-    edep += finalT;  
+  if(finalT <= lowEnergyLimit) {
+    edep += finalT;
     finalT = 0.0;
-  } 
+  }
   edep = std::max(edep, 0.0);
   fParticleChange->SetProposedKineticEnergy(finalT);
   fParticleChange->ProposeLocalEnergyDeposit(edep);
@@ -264,4 +293,3 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-		

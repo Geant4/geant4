@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 /// \file electromagnetic/TestEm2/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
 // $Id: StepMax.hh 74994 2013-10-25 10:47:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,8 +72,12 @@ public:
 private:
 
   G4double fMaxChargedStep;
+<<<<<<< HEAD
      
   StepMaxMessenger* fMess;
+=======
+  G4bool fInitialised;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

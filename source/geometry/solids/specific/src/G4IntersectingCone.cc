@@ -23,89 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Implementation of G4IntersectingCone, a utility class which calculates
+// the intersection of an arbitrary line with a fixed cone
 //
-// $Id: G4IntersectingCone.cc 97516 2016-06-03 14:01:05Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4IntersectingCone.cc
-//
-// Implementation of a utility class which calculates the intersection
-// of an arbitrary line with a fixed cone
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #include "G4IntersectingCone.hh"
 #include "G4GeometryTolerance.hh"
 
-//
 // Constructor
 //
 G4IntersectingCone::G4IntersectingCone( const G4double r[2],
                                         const G4double z[2] )
-{ 
+{
   const G4double halfCarTolerance
     = 0.5 * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
-  //
   // What type of cone are we?
   //
-  type1 = (std::fabs(z[1]-z[0]) > std::fabs(r[1]-r[0]));
-  
-  if (type1)
+  type1 = (std::abs(z[1]-z[0]) > std::abs(r[1]-r[0]));
+
+  if (type1) // tube like
   {
-    B = (r[1]-r[0])/(z[1]-z[0]);      // tube like
-    A = 0.5*( r[1]+r[0] - B*(z[1]+z[0]) );
+    B = (r[1] - r[0]) / (z[1] - z[0]);
+    A = (r[0]*z[1] - r[1]*z[0]) / (z[1] -z[0]);
   }
-  else
+  else // disk like
   {
-    B = (z[1]-z[0])/(r[1]-r[0]);      // disk like
-    A = 0.5*( z[1]+z[0] - B*(r[1]+r[0]) );
+    B = (z[1] - z[0]) / (r[1] - r[0]);
+    A = (z[0]*r[1] - z[1]*r[0]) / (r[1] - r[0]);
   }
-  //
+
   // Calculate extent
   //
-  if (r[0] < r[1])
-  {
-    rLo = r[0]-halfCarTolerance; rHi = r[1]+halfCarTolerance;
-  }
-  else
-  {
-    rLo = r[1]-halfCarTolerance; rHi = r[0]+halfCarTolerance;
-  }
-  
-  if (z[0] < z[1])
-  {
-    zLo = z[0]-halfCarTolerance; zHi = z[1]+halfCarTolerance;
-  }
-  else
-  {
-    zLo = z[1]-halfCarTolerance; zHi = z[0]+halfCarTolerance;
-  }
+  rLo = std::min(r[0], r[1]) - halfCarTolerance;
+  rHi = std::max(r[0], r[1]) + halfCarTolerance;
+  zLo = std::min(z[0], z[1]) - halfCarTolerance;
+  zHi = std::max(z[0], z[1]) + halfCarTolerance;
 }
 
-
-//
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
 G4IntersectingCone::G4IntersectingCone( __void__& )
-  : zLo(0.), zHi(0.), rLo(0.), rHi(0.), type1(false), A(0.), B(0.)
+  : zLo(0.), zHi(0.), rLo(0.), rHi(0.), A(0.), B(0.)
 {
 }
 
-
-//
 // Destructor
 //
 G4IntersectingCone::~G4IntersectingCone()
 {
 }
 
-
-//
 // HitOn
 //
 // Check r or z extent, as appropriate, to see if the point is possibly
@@ -130,16 +101,14 @@ G4bool G4IntersectingCone::HitOn( const G4double r,
   return true;
 }
 
-
-//
 // LineHitsCone
 //
 // Calculate the intersection of a line with our conical surface, ignoring
 // any phi division
 //
-G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
-                                        const G4ThreeVector &v,
-                                              G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector& p,
+                                        const G4ThreeVector& v,
+                                              G4double* s1, G4double* s2 )
 {
   if (type1)
   {
@@ -151,8 +120,6 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
   }
 }
 
-
-//
 // LineHitsCone1
 //
 // Calculate the intersections of a line with a conical surface. Only
@@ -172,11 +139,11 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
 //
 // where:
 //
-//  a = x0**2 + y0**2 - (A + B*z0)**2
+//  a = tx**2 + ty**2 - (B*tz)**2
 //
-//  b = 2*( x0*tx + y0*ty - (A*B - B*B*z0)*tz)
+//  b = 2*( px*vx + py*vy - B*(A + B*pz)*vz )
 //
-//  c = tx**2 + ty**2 - (B*tz)**2
+//  c = x0**2 + y0**2 - (A + B*z0)**2
 //
 // Notice, that if a < 0, this indicates that the two solutions (assuming
 // they exist) are in opposite cones (that is, given z0 = -A/B, one z < z0
@@ -192,7 +159,7 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
 // This should be rare.
 //
 // For b*b - 4*a*c = 0, we also have one solution, which is almost always
-// a line just grazing the surface of a the cone, which we want to ignore. 
+// a line just grazing the surface of a the cone, which we want to ignore.
 // However, there are two other, very rare, possibilities:
 // a line intersecting the z axis and either:
 //       1. At the same angle std::atan(B) to just miss one side of the cone, or
@@ -205,29 +172,49 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
 //
 // Now: x0*tx + y0*ty = 0 in terms of roundoff error. We can write:
 //             Delta = x0*tx + y0*ty
-//             b = 2*( Delta - (A*B + B*B*z0)*tz )
+//             b = 2*( Delta - B*(A + B*z0)*tz )
 // For:
 //             b*b - 4*a*c = epsilon
 // where epsilon is small, then:
 //             Delta = epsilon/2/B
-// 
-G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
-                                         const G4ThreeVector &v,
-                                               G4double *s1, G4double *s2 )
+//
+G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector& p,
+                                         const G4ThreeVector& v,
+                                               G4double* s1, G4double* s2 )
 {
   static const G4double EPS = DBL_EPSILON; // Precision constant,
                                            // originally it was 1E-6
   G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
   G4double tx = v.x(), ty = v.y(), tz = v.z();
 
-  G4double a = tx*tx + ty*ty - sqr(B*tz);
-  G4double b = 2*( x0*tx + y0*ty - (A*B + B*B*z0)*tz);
-  G4double c = x0*x0 + y0*y0 - sqr(A + B*z0);
-  
-  G4double radical = b*b - 4*a*c;
- 
-  if (radical < -EPS*std::fabs(b))  { return 0; }    // No solution
-  
+  // Value of radical can be inaccurate due to loss of precision
+  // if to calculate the coefficiets a,b,c like the following:
+  //     G4double a = tx*tx + ty*ty - sqr(B*tz);
+  //     G4double b = 2*( x0*tx + y0*ty - B*(A + B*z0)*tz);
+  //     G4double c = x0*x0 + y0*y0 - sqr(A + B*z0);
+  //
+  // For more accurate calculation of radical the coefficients
+  // are splitted in two components, radial and along z-axis
+  //
+  G4double ar = tx*tx + ty*ty;
+  G4double az = sqr(B*tz);
+  G4double br = 2*(x0*tx + y0*ty);
+  G4double bz = 2*B*(A + B*z0)*tz;
+  G4double cr = x0*x0 + y0*y0;
+  G4double cz = sqr(A + B*z0);
+
+  // Instead radical = b*b - 4*a*c
+  G4double arcz = 4*ar*cz;
+  G4double azcr = 4*az*cr;
+  G4double radical = (br*br - 4*ar*cr) + ((std::max(arcz,azcr) - 2*bz*br) + std::min(arcz,azcr));
+
+  // Find the coefficients
+  G4double a = ar - az;
+  G4double b = br - bz;
+  G4double c = cr - cz;
+
+  if (radical < -EPS*std::fabs(b))  { return 0; } // No solution
+
   if (radical < EPS*std::fabs(b))
   {
     //
@@ -248,7 +235,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   {
     radical = std::sqrt(radical);
   }
-  
+
   if (a > 1/kInfinity)
   {
     G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
@@ -278,8 +265,6 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   }
 }
 
-  
-//
 // LineHitsCone2
 //
 // See comments under LineHitsCone1. In this routine, case2, we have:
@@ -298,40 +283,60 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
 //
 // a > 0 now means we intersect only once in the correct hemisphere.
 //
-// a > 0 ? We only want solution which produces R > 0. 
+// a > 0 ? We only want solution which produces R > 0.
 // since R = (z0+s*tz-A)/B, for tz/B > 0, this is the largest s
 //          for tz/B < 0, this is the smallest s
 // thus, same as in case 1 ( since sign(tz/B) = sign(tz*B) )
 //
-G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
-                                         const G4ThreeVector &v,
-                                               G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector& p,
+                                         const G4ThreeVector& v,
+                                               G4double* s1, G4double* s2 )
 {
   static const G4double EPS = DBL_EPSILON; // Precision constant,
                                            // originally it was 1E-6
   G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
   G4double tx = v.x(), ty = v.y(), tz = v.z();
-  
+
   // Special case which might not be so rare: B = 0 (precisely)
   //
   if (B==0)
   {
     if (std::fabs(tz) < 1/kInfinity)  { return 0; }
-    
+
     *s1 = (A-z0)/tz;
     return 1;
   }
 
+  // Value of radical can be inaccurate due to loss of precision
+  // if to calculate the coefficiets a,b,c like the following:
+  //   G4double a = tz*tz - B2*(tx*tx + ty*ty);
+  //   G4double b = 2*( (z0-A)*tz - B2*(x0*tx + y0*ty) );
+  //   G4double c = sqr(z0-A) - B2*( x0*x0 + y0*y0 );
+  //
+  // For more accurate calculation of radical the coefficients
+  // are splitted in two components, radial and along z-axis
+  //
   G4double B2 = B*B;
 
-  G4double a = tz*tz - B2*(tx*tx + ty*ty);
-  G4double b = 2*( (z0-A)*tz - B2*(x0*tx + y0*ty) );
-  G4double c = sqr(z0-A) - B2*( x0*x0 + y0*y0 );
-  
-  G4double radical = b*b - 4*a*c;
- 
-  if (radical < -EPS*std::fabs(b)) { return 0; }   // No solution
-  
+  G4double az = tz*tz;
+  G4double ar = B2*(tx*tx + ty*ty);
+  G4double bz = 2*(z0-A)*tz;
+  G4double br = 2*B2*(x0*tx + y0*ty);
+  G4double cz = sqr(z0-A);
+  G4double cr = B2*(x0*x0 + y0*y0);
+
+  // Instead radical = b*b - 4*a*c
+  G4double arcz = 4*ar*cz;
+  G4double azcr = 4*az*cr;
+  G4double radical = (br*br - 4*ar*cr) + ((std::max(arcz,azcr) - 2*bz*br) + std::min(arcz,azcr));
+
+  // Find the coefficients
+  G4double a = az - ar;
+  G4double b = bz - br;
+  G4double c = cz - cr;
+
+  if (radical < -EPS*std::fabs(b)) { return 0; } // No solution
+
   if (radical < EPS*std::fabs(b))
   {
     //
@@ -351,7 +356,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   {
     radical = std::sqrt(radical);
   }
-  
+
   if (a < -1/kInfinity)
   {
     G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );

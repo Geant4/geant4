@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NormalNavigation.cc 97507 2016-06-03 12:48:42Z gcosmo $
-//
-//
 // class G4NormalNavigation Implementation
 //
 // Author: P.Kent, 1996
@@ -42,7 +38,6 @@
 // ********************************************************************
 //
 G4NormalNavigation::G4NormalNavigation()
-   : fCheck(false)
 {
   fLogger = new G4NavigationLogger("G4NormalNavigation");
 }
@@ -66,26 +61,27 @@ G4NormalNavigation::~G4NormalNavigation()
 //  On exit
 //    exitNormal, validExitNormal:  for mother, if exiting it (else unchanged)
 G4double
-G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
-                                const G4ThreeVector &localDirection,
+G4NormalNavigation::ComputeStep(const G4ThreeVector& localPoint,
+                                const G4ThreeVector& localDirection,
                                 const G4double currentProposedStepLength,
-                                      G4double &newSafety,
-                                      G4NavigationHistory &history,
-                                      G4bool &validExitNormal,
-                                      G4ThreeVector &exitNormal,
-                                      G4bool &exiting,
-                                      G4bool &entering,
-                                      G4VPhysicalVolume *(*pBlockedPhysical),
-                                      G4int &blockedReplicaNo)
+                                      G4double& newSafety,
+                                      G4NavigationHistory& history,
+                                      G4bool& validExitNormal,
+                                      G4ThreeVector& exitNormal,
+                                      G4bool& exiting,
+                                      G4bool& entering,
+                                      G4VPhysicalVolume* (*pBlockedPhysical),
+                                      G4int& blockedReplicaNo)
 {
-  G4VPhysicalVolume *motherPhysical, *samplePhysical, *blockedExitedVol=0;
+  G4VPhysicalVolume *motherPhysical, *samplePhysical,
+                    *blockedExitedVol = nullptr;
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid;
   G4ThreeVector sampleDirection;
-  G4double ourStep=currentProposedStepLength, ourSafety;
-  G4double motherSafety, motherStep=DBL_MAX;
+  G4double ourStep = currentProposedStepLength, ourSafety;
+  G4double motherSafety, motherStep = DBL_MAX;
   G4int localNoDaughters, sampleNo;
-  G4bool motherValidExitNormal=false;
+  G4bool motherValidExitNormal = false;
   G4ThreeVector motherExitNormal; 
 
   motherPhysical = history.GetTopVolume();
@@ -110,7 +106,7 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
 
   // Exiting normal optimisation
   //
-  if ( exiting&&validExitNormal )
+  if ( exiting && validExitNormal )
   {
     if ( localDirection.dot(exitNormal)>=kMinExitingNormalCosine )
     {
@@ -144,17 +140,17 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
     
       ourStep = motherStep = 0.0;
    
-      exiting= true;
-      entering= false;
+      exiting = true;
+      entering = false;
     
       // If we are outside the solid does the normal make sense?
-      validExitNormal= motherValidExitNormal;
-      exitNormal= motherExitNormal;
+      validExitNormal = motherValidExitNormal;
+      exitNormal = motherExitNormal;
     
-      *pBlockedPhysical= 0; // or motherPhysical ?
-      blockedReplicaNo= 0;  // or motherReplicaNumber ?
+      *pBlockedPhysical = nullptr; // or motherPhysical ?
+      blockedReplicaNo = 0;  // or motherReplicaNumber ?
     
-      newSafety= 0.0;
+      newSafety = 0.0;
       return ourStep;
     }
   }
@@ -203,7 +199,8 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
           if( fCheck )
           {
             fLogger->AlongComputeStepLog(sampleSolid, samplePoint,
-              sampleDirection, localDirection, sampleSafety, sampleStep);
+                                         sampleDirection, localDirection,
+                                         sampleSafety, sampleStep);
           }
 #endif          
         }
@@ -216,15 +213,15 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
            fLogger->CheckDaughterEntryPoint(sampleSolid,
                                             samplePoint, sampleDirection,
                                             motherSolid,
-                                            localPoint,  localDirection,
-                                            motherStep,  sampleStep);
+                                            localPoint, localDirection,
+                                            motherStep, sampleStep);
         }
 #endif
       } // end of if ( sampleSafety <= ourStep ) 
 #ifdef G4VERBOSE
-      else if( fCheck )
+      else if ( fCheck )
       {
-         fLogger->PrintDaughterLog(sampleSolid,  samplePoint,
+         fLogger->PrintDaughterLog(sampleSolid, samplePoint,
                                    sampleSafety, false,
                                    G4ThreeVector(0.,0.,0.), -1.0 );
       }
@@ -237,7 +234,7 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
     //
     entering = false;
     exiting  = false;
-    *pBlockedPhysical = 0;
+    *pBlockedPhysical = nullptr;
     ourStep = kInfinity;
   }
   else
@@ -288,8 +285,8 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
         //  The normal could be useful - but only if near the mother
         //  But it could be unreliable!
         validExitNormal = false;
-        *pBlockedPhysical= 0; // or motherPhysical ?
-        blockedReplicaNo= 0;  // or motherReplicaNumber ?
+        *pBlockedPhysical = nullptr; // or motherPhysical ?
+        blockedReplicaNo = 0;  // or motherReplicaNumber ?
         newSafety= 0.0;
         return ourStep;
       }
@@ -299,8 +296,8 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
         ourStep  = motherStep;
         exiting  = true;
         entering = false;
-        validExitNormal= motherValidExitNormal;
-        exitNormal= motherExitNormal;
+        validExitNormal = motherValidExitNormal;
+        exitNormal = motherExitNormal;
         
         if ( motherValidExitNormal )
         {
@@ -332,8 +329,8 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
 // ComputeSafety
 // ********************************************************************
 //
-G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector &localPoint,
-                                           const G4NavigationHistory &history,
+G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector& localPoint,
+                                           const G4NavigationHistory& history,
                                            const G4double)
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
@@ -380,8 +377,8 @@ G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector &localPoint,
 #ifdef G4VERBOSE
     if(fCheck)
     {
-      fLogger->ComputeSafetyLog(sampleSolid,samplePoint,
-                                sampleSafety,false,false);
+      fLogger->ComputeSafetyLog(sampleSolid, samplePoint,
+                                sampleSafety, false, false);
         // Not mother, no banner
     }
 #endif
@@ -390,8 +387,8 @@ G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector &localPoint,
 }
 
 // The following methods have been imported to this source file
-//  in order to avoid dependency of the header file on the
-//  header implementation of G4NavigationLogger.
+// in order to avoid dependency of the header file on the
+// header implementation of G4NavigationLogger.
 
 // ********************************************************************
 // GetVerboseLevel
@@ -410,4 +407,3 @@ void G4NormalNavigation::SetVerboseLevel(G4int level)
 {
   fLogger->SetVerboseLevel(level);
 }
-

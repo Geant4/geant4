@@ -26,7 +26,10 @@
 /// \file runAndEvent/RE03/src/RE03UserScoreWriter.cc
 /// \brief Implementation of the RE03UserScoreWriter class
 //
+<<<<<<< HEAD
 // $Id: RE03UserScoreWriter.cc 68026 2013-03-13 13:45:22Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "RE03UserScoreWriter.hh"
@@ -52,7 +55,7 @@ RE03UserScoreWriter::~RE03UserScoreWriter()
 void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, 
                                              const G4String & fileName, 
                                              const G4String & option) {
-
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   //
   if(verboseLevel > 0) {
     G4cout << "User-defined DumpQuantityToFile() method is invoked."

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh 71200 2013-06-12 08:19:59Z ihrivnac $
 //
 /// \file eventgenerator/exgps/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm2/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 77897 2013-11-29 09:23:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +71,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fRBinCmd->SetRange("nRtot>=1 && dRradl>0");
   fRBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fRBinCmd->SetToBeBroadcasted(false);
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

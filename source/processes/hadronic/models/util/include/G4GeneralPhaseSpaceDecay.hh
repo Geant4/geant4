@@ -25,7 +25,6 @@
 //
 //
 //
-//$Id: G4GeneralPhaseSpaceDecay.hh,v 1.1 1997/05/21
 // ----------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -123,7 +122,7 @@ inline
    // calculate momentum of daughter particles in two-body decay
    if (e-p1-p2 < 0 )
    {  
-        G4HadronicException(__FILE__, __LINE__, "G4GeneralPhaseSpaceDecay::Pmx energy in cms > mass1+mass2");	
+     throw G4HadronicException(__FILE__, __LINE__, "G4GeneralPhaseSpaceDecay::Pmx energy in cms < mass1+mass2");	
    }
    G4double ppp = (e+p1+p2)*(e+p1-p2)*(e-p1+p2)*(e-p1-p2)/(4.0*e*e);
    if (ppp>0) return std::sqrt(ppp);

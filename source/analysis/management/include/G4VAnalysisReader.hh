@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAnalysisReader.hh 71635 2013-06-19 13:48:28Z ihrivnac $
 
 // The nonvirtual public interface reader class for g4tools based analysis.
 // It is defined as a composite of object manager base classes.

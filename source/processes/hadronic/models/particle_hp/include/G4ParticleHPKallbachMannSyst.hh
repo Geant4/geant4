@@ -26,6 +26,8 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
+// June-2019 - E. Mendoza --> perform some corrections
+
 #ifndef G4ParticleHPKallbachMannSyst_h
 #define G4ParticleHPKallbachMannSyst_h 1
 
@@ -39,7 +41,8 @@ class G4ParticleHPKallbachMannSyst
                                G4double anIncidentEnergy, G4double anIncidentMass,
                                G4double aProductEnergy, G4double aProductMass,
                                G4double aResidualMass, G4int aResidualA, G4int aResidualZ,
-                               G4double aTargetMass, G4int aTargetA, G4int aTargetZ)
+      			       G4double aTargetMass, G4int aTargetA, G4int aTargetZ,
+			       G4int aProjectileA,G4int aProjectileZ,G4int aProductA,G4int aProductZ)
   {
     theCompoundFraction = aCompoundFraction;
     theIncidentEnergy = anIncidentEnergy;
@@ -52,6 +55,10 @@ class G4ParticleHPKallbachMannSyst
     theTargetMass = aTargetMass;
     theTargetA = aTargetA;
     theTargetZ = aTargetZ;
+    theProjectileA=aProjectileA;
+    theProjectileZ=aProjectileZ;
+    theProductA=aProductA;
+    theProductZ=aProductZ;
   }
   
   ~G4ParticleHPKallbachMannSyst() {};
@@ -64,7 +71,7 @@ class G4ParticleHPKallbachMannSyst
   
   G4double A(G4double anEnergy);
   
-  G4double SeparationEnergy(G4int Ac, G4int Nc, G4int AA, G4int ZA);
+  G4double SeparationEnergy(G4int Ac, G4int Nc, G4int AA, G4int ZA,G4int Abinding,G4int Zbinding);
   
   private:
   
@@ -79,6 +86,10 @@ class G4ParticleHPKallbachMannSyst
   G4int theResidualZ;
   G4int theTargetA;
   G4int theTargetZ;
+  G4int theProjectileA;
+  G4int theProjectileZ;
+  G4int theProductA;
+  G4int theProductZ;
 };
 
 #endif

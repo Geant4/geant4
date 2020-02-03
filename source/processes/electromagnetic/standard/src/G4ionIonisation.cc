@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -83,12 +82,11 @@ using namespace std;
 
 G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
+    theParticle(nullptr),
     isInitialised(false),
     stopDataActive(false)
 {
   SetLinearLossLimit(0.02);
-  SetStepFunction(0.1, 0.01*mm);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
   corr = G4LossTableManager::Instance()->EmCorrections();
@@ -131,39 +129,40 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     theParticle = part;
 
     // define base particle
-    const G4ParticleDefinition* theBaseParticle = 0;
+    const G4ParticleDefinition* theBaseParticle = nullptr;
 
-    if(part == ion)     { theBaseParticle = 0; }
-    else if(bpart == 0) { theBaseParticle = ion; }
-    else                { theBaseParticle = bpart; }
+    if(part == ion)           { theBaseParticle = nullptr; }
+    else if(bpart == nullptr) { theBaseParticle = ion; }
+    else                      { theBaseParticle = bpart; }
 
     SetBaseParticle(theBaseParticle);
 
-    if (!EmModel(1)) { SetEmModel(new G4BraggIonModel(), 1); }
+    if (!EmModel(0)) { SetEmModel(new G4BraggIonModel()); }
 
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
 
     // model limit defined for protons
-    eth = (EmModel(1)->HighEnergyLimit())*part->GetPDGMass()/proton_mass_c2;
-    EmModel(1)->SetHighEnergyLimit(eth);
+    eth = (EmModel(0)->HighEnergyLimit())*part->GetPDGMass()/proton_mass_c2;
+    EmModel(0)->SetHighEnergyLimit(eth);
 
     if (!FluctModel()) { SetFluctModel(new G4IonFluctuations()); }
-    AddEmModel(1, EmModel(1), FluctModel());
+    AddEmModel(1, EmModel(0), FluctModel());
 
     G4double emax = param->MaxKinEnergy();
     if(eth < emax) {
-      if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }  
-      EmModel(2)->SetLowEnergyLimit(eth);
-      EmModel(2)->SetHighEnergyLimit(emax);
-      AddEmModel(2, EmModel(2), FluctModel());    
+      if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
+      EmModel(1)->SetLowEnergyLimit(eth);
+      EmModel(1)->SetHighEnergyLimit(emax);
+      AddEmModel(2, EmModel(1), FluctModel());    
 
       // Add ion stoping tables for Generic Ion if the default 
       // model is used (with eth ~= 2 MeV)
-      if(part == ion) {
+      if(part == ion && (EmModel(1)->GetName() == "BetheBloch" ||
+			 EmModel(1)->GetName() == "BetheBlochGasIon")) {
 	stopDataActive = true;
 	G4WaterStopping  ws(corr);
-	corr->SetIonisationModels(EmModel(1),EmModel(2));
+	corr->SetIonisationModels(EmModel(0),EmModel(1));
       }
     }
     isInitialised = true;
@@ -174,13 +173,12 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::PrintInfo()
+void G4ionIonisation::StreamProcessInfo(std::ostream& out) const
 {
   if (stopDataActive && G4GenericIon::GenericIon() == theParticle) {
-    G4cout << "      Stopping Power data for " 
-           << corr->GetNumberOfStoppingVectors()
-	   << " ion/material pairs "
-           << G4endl;
+    out << "      Stopping Power data for " 
+	<< corr->GetNumberOfStoppingVectors()
+	<< " ion/material pairs" << G4endl;
   }
 }
 
@@ -194,3 +192,11 @@ void G4ionIonisation::AddStoppingData(G4int Z, G4int A,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4ionIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "  Ion ionisation";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

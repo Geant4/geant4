@@ -51,7 +51,6 @@
 #endif
 #include <G4UImanager.hh>
 #include <G4String.hh>
-#ifdef G4UI_USE
 #include <G4UIsession.hh>
 #include <G4UIterminal.hh>
 #ifdef G4UI_USE_TCSH
@@ -60,10 +59,7 @@
 #ifdef G4UI_USE_QT
 #include <G4UIQt.hh>
 #endif
-#endif
-#ifdef G4VIS_USE
 #include <G4VisExecutive.hh>
-#endif
 #include "CexmcRunManager.hh"
 #include "CexmcHistoManager.hh"
 #include "CexmcSetup.hh"
@@ -295,9 +291,9 @@ G4bool  parseArgs( int  argc, char **  argv, CexmcCmdLineData &  cmdLineData )
 
 int  main( int  argc, char **  argv )
 {
-#ifdef G4UI_USE
+
     G4UIsession *     session( NULL );
-#endif
+
 
     CexmcCmdLineData  cmdLineData;
 #ifdef CEXMC_USE_PERSISTENCY
@@ -339,9 +335,9 @@ int  main( int  argc, char **  argv )
 
     CexmcRunManager *  runManager( NULL );
     CexmcMessenger::Instance();
-#ifdef G4VIS_USE
+
     G4VisManager *     visManager( NULL );
-#endif
+
 #ifdef CEXMC_USE_ROOT
     CexmcHistoManager::Instance();
 #endif
@@ -423,13 +419,13 @@ int  main( int  argc, char **  argv )
         CexmcHistoManager::Instance()->Initialize();
 #endif
 
-#ifdef G4VIS_USE
+
         if ( cmdLineData.isInteractive )
         {
             visManager = new G4VisExecutive( CexmcVisManagerVerboseLevel );
             visManager->Initialize();
         }
-#endif
+
 
 #ifdef CEXMC_USE_PERSISTENCY
         if ( runManager->ProjectIsRead() )
@@ -446,7 +442,7 @@ int  main( int  argc, char **  argv )
         if ( cmdLineData.isInteractive )
             productionModel->PrintInitialData();
 
-#ifdef G4UI_USE
+
         if ( cmdLineData.isInteractive )
         {
             if ( cmdLineData.startQtSession )
@@ -474,7 +470,6 @@ int  main( int  argc, char **  argv )
             if ( session )
                 session->SessionStart();
         }
-#endif
 
 #ifdef CEXMC_USE_PERSISTENCY
         if ( runManager->ProjectIsSaved() )
@@ -507,14 +502,14 @@ int  main( int  argc, char **  argv )
 #ifdef CEXMC_USE_ROOT
     CexmcHistoManager::Destroy();
 #endif
-#ifdef G4VIS_USE
+
     delete visManager;
-#endif
+
     CexmcMessenger::Destroy();
     delete runManager;
-#ifdef G4UI_USE
+
     delete session;
-#endif
+
 
     return 0;
 }

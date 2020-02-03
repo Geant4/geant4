@@ -1,4 +1,3 @@
-# $Id: run2.mac 85993 2014-11-06 16:34:10Z ihrivnac $
 #
 # Macro file of "exampleB3.cc"
 # To be run preferably in batch, without graphics:
@@ -16,4 +15,5 @@
 /gun/particle ion
 /gun/ion 6 11
 #
+/run/printProgress 10000
 /run/beamOn 40000

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryProtonBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,13 +40,15 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4BinaryProtonBuilder::
 G4BinaryProtonBuilder() 
 {
   theModel = new G4BinaryCascade();
-  theMin = 0;
-  theMax = 9.9*GeV;
+  theMin = 0.0;
+  theMax = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
 }
 
 void G4BinaryProtonBuilder::
@@ -58,14 +59,3 @@ Build(G4ProtonInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-G4BinaryProtonBuilder::
-~G4BinaryProtonBuilder() 
-{
-}
-
-void G4BinaryProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-// 2002 by J.P. Wellisch

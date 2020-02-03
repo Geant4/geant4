@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusBoundDecay.hh 69573 2013-05-08 13:35:53Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -53,6 +52,7 @@
 //                          GetMuonDecayRate public static
 // 04/30/2013  K.Genser     Added GetMuonZeff
 //
+// 10/08/2018  K.Genser     Added nother GetMuonDecayRate
 //
 //-----------------------------------------------------------------------------
 
@@ -83,7 +83,11 @@ public:
 
   static G4double GetMuonCaptureRate(G4int Z, G4int A);
 
-  static G4double GetMuonDecayRate(G4int Z);
+  static G4double GetMuonDecayRate(G4int Z, G4int A,
+                                   G4double muMass,
+                                   G4double nuclMass);
+
+  static G4double GetMuonDecayRate(G4int Z); // to be deprecated
 
   static G4double GetMuonZeff(G4int Z);
 

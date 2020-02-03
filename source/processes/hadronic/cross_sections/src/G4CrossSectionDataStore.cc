@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc 94008 2015-11-05 10:06:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -45,8 +44,6 @@
 #include "G4CrossSectionDataStore.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-#include "G4HadronicException.hh"
-#include "G4HadTmpUtil.hh"
 #include "Randomize.hh"
 #include "G4Nucleus.hh"
 
@@ -65,9 +62,9 @@ G4CrossSectionDataStore::G4CrossSectionDataStore() :
   counters(),fastPathCache()
 {
   nist = G4NistManager::Instance();
-  currentMaterial = elmMaterial = 0;
-  currentElement = 0;  //ALB 14-Aug-2012 Coverity fix.
-  matParticle = elmParticle = 0;
+  currentMaterial = elmMaterial = nullptr;
+  currentElement = nullptr;  //ALB 14-Aug-2012 Coverity fix.
+  matParticle = elmParticle = nullptr;
   matKinEnergy = elmKinEnergy = matCrossSection = elmCrossSection = 0.0;
 }
 
@@ -123,11 +120,10 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
 	// cache is created during the run initialization via calls to this method.
 	//
 	//fastPathFlags contains control flags for the fast-path algorithm:
-	// 	           .prevCalcUsedFastPath == true => Previous call to GetCrossSection used the fast-path
-	//												it is used in the decision to assess if xsecelem is
-	//												correctly set-up
-	//			   .useFastPathIfAvailable == true => User requested the use of fast-path algorithm
-	//			   .initializationPhase == true => If true we are in Geant4 Init phase before the event-loop
+	// 	       .prevCalcUsedFastPath == true => Previous call to GetCrossSection used the fast-path
+	//             it is used in the decision to assess if xsecelem is correctly set-up
+	//	       .useFastPathIfAvailable == true => User requested the use of fast-path algorithm
+	//	       .initializationPhase == true => If true we are in Geant4 Init phase before the event-loop
 
 	//Check user-request, does he want fast-path? if not
 	// OR
@@ -268,6 +264,34 @@ G4CrossSectionDataStore::DumpFastPath(const G4ParticleDefinition* pd, const G4Ma
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+G4double 
+G4CrossSectionDataStore::ComputeCrossSection(const G4DynamicParticle* part,
+					     const G4Material* mat)
+{
+  if(mat == currentMaterial && part->GetDefinition() == matParticle
+     && part->GetKineticEnergy() == matKinEnergy) {
+    return matCrossSection;
+  }
+  currentMaterial = mat;
+  matParticle = part->GetDefinition();
+  matKinEnergy = part->GetKineticEnergy();
+  matCrossSection = 0.0;
+
+  size_t nElements = mat->GetNumberOfElements();
+  const G4double* nAtomsPerVolume = mat->GetVecNbOfAtomsPerVolume();
+
+  if(xsecelm.size() < nElements) { xsecelm.resize(nElements); }
+
+  for(size_t i=0; i<nElements; ++i) {
+    matCrossSection += nAtomsPerVolume[i] *
+      GetCrossSection(part, mat->GetElement(i), mat);
+    xsecelm[i] = matCrossSection;
+  }
+  return matCrossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 G4double
 G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
                                          const G4Element* elm,
@@ -285,7 +309,7 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
   elmCrossSection = 0.0;
 
   G4int i = nDataSetList-1;  
-  G4int Z = G4lrint(elm->GetZ());
+  G4int Z = elm->GetZasInt();
   if (elm->GetNaturalAbundanceFlag() &&
       dataSetList[i]->IsElementApplicable(part, Z, mat)) {
 
@@ -300,16 +324,14 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
 
   } else {
     // isotope wise cross section
-    G4int nIso = elm->GetNumberOfIsotopes();    
-    G4Isotope* iso = 0;
+    size_t nIso = elm->GetNumberOfIsotopes();    
 
     // user-defined isotope abundances        
-    G4IsotopeVector* isoVector = elm->GetIsotopeVector();
-    G4double* abundVector = elm->GetRelativeAbundanceVector();
+    const G4double* abundVector = elm->GetRelativeAbundanceVector();
 
-    for (G4int j = 0; j<nIso; ++j) {
+    for (size_t j=0; j<nIso; ++j) {
       if(abundVector[j] > 0.0) {
-	iso = (*isoVector)[j];
+	const G4Isotope* iso = elm->GetIsotope(j);
 	elmCrossSection += abundVector[j]*
 	  GetIsoCrossSection(part, Z, iso->GetN(), iso, elm, mat, i);
 	//G4cout << "Isotope wise " << elmParticle->GetParticleName() 
@@ -351,18 +373,15 @@ G4CrossSectionDataStore::GetIsoCrossSection(const G4DynamicParticle* part,
       }
     }
   }
-  G4cout << "G4CrossSectionDataStore::GetCrossSection ERROR: "
-	 << " no isotope cross section found"
-	 << G4endl;
-  G4cout << "  for " << part->GetDefinition()->GetParticleName() 
-	 << " off Element " << elm->GetName()
-         << "  in " << mat->GetName() 
-	 << " Z= " << Z << " A= " << A
-	 << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
-  throw G4HadronicException(__FILE__, __LINE__, 
-                      " no applicable data set found for the isotope");
+  G4ExceptionDescription ed;
+  ed << "No isotope cross section found for " 
+     << part->GetDefinition()->GetParticleName() 
+     << " off Element " << elm->GetName()
+     << "  in " << mat->GetName() << " Z= " << Z << " A= " << A
+     << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
+  G4Exception("G4CrossSectionDataStore::GetIsoCrossSection", "had001", 
+              FatalException, ed);
   return 0.0;
-  //return dataSetList[idx]->ComputeCrossSection(part, elm, mat);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -379,101 +398,77 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
       return dataSetList[i]->GetIsoCrossSection(part, Z, A, iso, elm, mat);
     }
   }
-  G4cout << "G4CrossSectionDataStore::GetCrossSection ERROR: "
-	 << " no isotope cross section found"
-	 << G4endl;
-  G4cout << "  for " << part->GetDefinition()->GetParticleName() 
-	 << " off Element " << elm->GetName()
-         << "  in " << mat->GetName() 
-	 << " Z= " << Z << " A= " << A
-	 << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
-  throw G4HadronicException(__FILE__, __LINE__, 
-                      " no applicable data set found for the isotope");
+  G4ExceptionDescription ed;
+  ed << "No isotope cross section found for " 
+     << part->GetDefinition()->GetParticleName() 
+     << " off Element " << elm->GetName()
+     << "  in " << mat->GetName() << " Z= " << Z << " A= " << A
+     << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
+  G4Exception("G4CrossSectionDataStore::GetCrossSection", "had001", 
+              FatalException, ed);
   return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4Element*
+const G4Element*
 G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part, 
                                      const G4Material* mat,
 				     G4Nucleus& target)
 {
-  counters.SampleZandA();
+  size_t nElements = mat->GetNumberOfElements();
+  const G4Element* anElement = mat->GetElement(0);
 
-  G4int nElements = mat->GetNumberOfElements();
-  const G4ElementVector* theElementVector = mat->GetElementVector();
-  G4Element* anElement = (*theElementVector)[0];
-
-  G4double cross = GetCrossSection(part, mat , true);
   // select element from a compound 
   if(1 < nElements) {
-    cross *= G4UniformRand();
-    for(G4int i=0; i<nElements; ++i) {
+    G4double cross = matCrossSection*G4UniformRand();
+    for(size_t i=0; i<nElements; ++i) {
       if(cross <= xsecelm[i]) {
-	anElement = (*theElementVector)[i];
+	anElement = mat->GetElement(i);
         break;
       }
     }
   }
 
-  G4int Z = G4lrint(anElement->GetZ());
-  G4Isotope* iso = 0;
+  G4int Z = anElement->GetZasInt();
+  const G4Isotope* iso = nullptr;
 
-  G4int i = nDataSetList-1; 
+  G4int i = nDataSetList-1;
   if (dataSetList[i]->IsElementApplicable(part, Z, mat)) {
 
     //----------------------------------------------------------------
     // element-wise cross section
     // isotope cross section is not computed
     //----------------------------------------------------------------
-    G4int nIso = anElement->GetNumberOfIsotopes();
-    if (0 >= nIso) { 
-      G4cout << " Element " << anElement->GetName() << " Z= " << Z 
-	     << " has no isotopes " << G4endl; 
-      throw G4HadronicException(__FILE__, __LINE__, 
-                      " Isotope vector is not defined");
-      return anElement;
-    }
-    // isotope abundances        
-    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-    iso = (*isoVector)[0];
+    size_t nIso = anElement->GetNumberOfIsotopes();
+    iso = anElement->GetIsotope(0);
 
     // more than 1 isotope
     if(1 < nIso) { 
-      iso = dataSetList[i]->SelectIsotope(anElement, part->GetKineticEnergy());
+      iso = dataSetList[i]->SelectIsotope(anElement, 
+                                          part->GetKineticEnergy(),
+					  part->GetLogKineticEnergy());
     }
-
   } else {
 
     //----------------------------------------------------------------
     // isotope-wise cross section
     // isotope cross section is computed
     //----------------------------------------------------------------
-    G4int nIso = anElement->GetNumberOfIsotopes();
-    cross = 0.0;
-
-    if (0 >= nIso) { 
-      G4cout << " Element " << anElement->GetName() << " Z= " << Z 
-	     << " has no isotopes " << G4endl; 
-      throw G4HadronicException(__FILE__, __LINE__, 
-                      " Isotope vector is not defined");
-      return anElement;
-    }
-
-    // user-defined isotope abundances        
-    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-    iso = (*isoVector)[0];
+    size_t nIso = anElement->GetNumberOfIsotopes();
+    iso = anElement->GetIsotope(0);
 
     // more than 1 isotope
     if(1 < nIso) {
-      G4double* abundVector = anElement->GetRelativeAbundanceVector();
-      if(G4int(xseciso.size()) < nIso) { xseciso.resize(nIso); }
+      const G4double* abundVector = anElement->GetRelativeAbundanceVector();
+      if(xseciso.size() < nIso) { xseciso.resize(nIso); }
 
-      for (G4int j = 0; j<nIso; ++j) {
+      G4double cross = 0.0;
+      size_t j;
+      for (j = 0; j<nIso; ++j) {
 	G4double xsec = 0.0;
 	if(abundVector[j] > 0.0) {
-	  iso = (*isoVector)[j];
+	  iso = anElement->GetIsotope(j);
 	  xsec = abundVector[j]*
 	    GetIsoCrossSection(part, Z, iso->GetN(), iso, anElement, mat, i);
 	}
@@ -481,9 +476,9 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
 	xseciso[j] = cross;
       }
       cross *= G4UniformRand();
-      for (G4int j = 0; j<nIso; ++j) {
+      for (j = 0; j<nIso; ++j) {
 	if(cross <= xseciso[j]) {
-	  iso = (*isoVector)[j];
+	  iso = anElement->GetIsotope(j);
 	  break;
 	}
       }
@@ -498,12 +493,14 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
 void
 G4CrossSectionDataStore::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-  if (nDataSetList == 0) 
-    {
-      throw G4HadronicException(__FILE__, __LINE__, 
-				"G4CrossSectionDataStore: no data sets registered");
-      return;
-    }
+  if (nDataSetList == 0) {
+    G4ExceptionDescription ed;
+    ed << "No cross section is registered for " 
+       << aParticleType.GetParticleName() << G4endl;
+    G4Exception("G4CrossSectionDataStore::BuildPhysicsTable", "had001", 
+                FatalException, ed);
+    return;
+  }
   for (G4int i=0; i<nDataSetList; ++i) {
     dataSetList[i]->BuildPhysicsTable(aParticleType);
   } 
@@ -531,16 +528,19 @@ G4CrossSectionDataStore::BuildPhysicsTable(const G4ParticleDefinition& aParticle
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4CrossSectionDataStore::ActivateFastPath( const G4ParticleDefinition* pdef, const G4Material* mat, G4double min_cutoff)
+void G4CrossSectionDataStore::ActivateFastPath( const G4ParticleDefinition* pdef, 
+     const G4Material* mat, G4double min_cutoff)
 {
-	assert(pdef!=nullptr&&mat!=nullptr);
-	G4FastPathHadronicCrossSection::G4CrossSectionDataStore_Key key={pdef,mat};
-	if ( requests.insert( { key , min_cutoff } ).second ) {
-		std::ostringstream msg;
-		msg<<"Attempting to request FastPath for couple: "<<pdef->GetParticleName()<<","<<mat->GetName();
-		msg<<" but combination already exists";
-		G4HadronicException(__FILE__,__LINE__,msg.str());
-	}
+  assert(pdef!=nullptr&&mat!=nullptr);
+  G4FastPathHadronicCrossSection::G4CrossSectionDataStore_Key key={pdef,mat};
+  if ( requests.insert( { key , min_cutoff } ).second ) {
+    G4ExceptionDescription ed;
+    ed << "Attempting to request FastPath for couple: <"
+       << pdef->GetParticleName() << ", " <<mat->GetName() 
+       << "> but combination already exists" << G4endl;
+    G4Exception("G4CrossSectionDataStore::ActivateFastPath", "had001", 
+                FatalException, ed);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -581,7 +581,7 @@ void G4CrossSectionDataStore::DumpHtml(const G4ParticleDefinition& /* pD */,
 
   G4double ehi = 0;
   G4double elo = 0;
-  G4String physListName(getenv("G4PhysListName"));
+  G4String physListName(std::getenv("G4PhysListName"));
   for (G4int i = nDataSetList-1; i > 0; i--) {
     elo = dataSetList[i]->GetMinKinEnergy()/GeV;
     ehi = dataSetList[i]->GetMaxKinEnergy()/GeV;
@@ -607,8 +607,8 @@ void G4CrossSectionDataStore::DumpHtml(const G4ParticleDefinition& /* pD */,
 
 void G4CrossSectionDataStore::PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const
 {
-   G4String dirName(getenv("G4PhysListDocDir"));
-	G4String physListName(getenv("G4PhysListName"));
+  G4String dirName(std::getenv("G4PhysListDocDir"));
+  G4String physListName(std::getenv("G4PhysListName"));
 
 	G4String pathName = dirName + "/" + physListName + "_" + HtmlFileName(cs->GetName());
 	std::ofstream outCS;
@@ -631,20 +631,41 @@ void G4CrossSectionDataStore::PrintCrossSectionHtml(const G4VCrossSectionDataSet
 G4String G4CrossSectionDataStore::HtmlFileName(const G4String & in) const
 {
    G4String str(in);
-    // replace blanks by _  C++11 version:
-#ifdef G4USE_STD11
-	std::transform(str.begin(), str.end(), str.begin(), [](char ch) {
-     return ch == ' ' ? '_' : ch;
+   // replace blanks by _  C++11 version:
+   std::transform(str.begin(), str.end(), str.begin(), [](char ch) {
+       return ch == ' ' ? '_' : ch;
    });
-#else	
-	  // and now in ancient language
-	   for(std::string::iterator it = str.begin(); it != str.end(); ++it) {
-        if(*it == ' ') *it = '_';
-      }
-#endif
    str=str + ".html";		
    return str;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p)
+{
+  if(p->ForAllAtomsAndEnergies()) { 
+    dataSetList.clear();
+    nDataSetList = 0;
+  }
+  dataSetList.push_back(p);
+  ++nDataSetList;
+}
+
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p, size_t i )  
+{
+  if(p->ForAllAtomsAndEnergies()) {
+    dataSetList.clear();
+    dataSetList.push_back(p);
+    nDataSetList = 1;
+  } else {
+    if ( i > dataSetList.size() ) i = dataSetList.size(); 
+    std::vector< G4VCrossSectionDataSet* >::iterator it = dataSetList.end() - i;
+    dataSetList.insert(it , p);
+    ++nDataSetList;
+  }
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

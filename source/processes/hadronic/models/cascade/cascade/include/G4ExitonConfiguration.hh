@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExitonConfiguration.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z
@@ -68,7 +67,7 @@ public:
 
   void fill(const G4Fragment& frag);	// Initialize from G4Fragment data
 
-  bool operator==(const G4ExitonConfiguration& right) const {
+  G4bool operator==(const G4ExitonConfiguration& right) const {
     return ( (&right == this) ||
 	     (protonQuasiParticles == right.protonQuasiParticles &&
 	      neutronQuasiParticles == right.neutronQuasiParticles &&
@@ -76,7 +75,7 @@ public:
 	      neutronHoles == right.neutronHoles) );
   }
 
-  bool operator!=(const G4ExitonConfiguration& right) const {
+  G4bool operator!=(const G4ExitonConfiguration& right) const {
     return !operator==(right);
   }
 

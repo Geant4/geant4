@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSymMatrix.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 // Class Description:
 //
@@ -37,6 +36,7 @@
 #define G4ErrorSymMatrix_hh
 
 #include <vector>
+#include "globals.hh"
 
 class G4ErrorMatrix;
 

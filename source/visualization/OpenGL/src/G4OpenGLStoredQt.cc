@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // OpenGLStoredQt graphics system factory.

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc 94206 2015-11-09 08:11:59Z gcosmo $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -52,6 +51,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLStoredViewer (sceneHandler),             // FIXME : gerer le pb du parent !
   QGLWidget()
 {
+  fQGLWidgetInitialiseCompleted = false;
 
     // Indicates that the widget has no background, i.e. when the widget receives paint events, the background is not automatically repainted. Note: Unlike WA_OpaquePaintEvent, newly exposed areas are never filled with the background (e.g., after showing a window for the first time the user can see "through" it until the application processes the paint events). This flag is set or cleared by the widget's author.
   QGLWidget::setAttribute (Qt::WA_NoSystemBackground);
@@ -60,8 +60,6 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   fHasToRepaint = false;
   fPaintEventLock = false;
   fUpdateGLLock = false;
-
-  resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -115,11 +113,14 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   // modifiers (fTreeItemModels, etc.).
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.GetCBDAlgorithmNumber() !=
+       fVP.GetCBDAlgorithmNumber())                               ||
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
       // Section (DCUT) implemented locally.  But still need to visit
       // kernel if status changes so that back plane culling can be
@@ -134,28 +135,34 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.IsPicking ()          != fVP.IsPicking ())
-//      ||
-//      (lastVP.GetVisAttributesModifiers().size() !=
-//       fVP.GetVisAttributesModifiers().size())
-      )
+      (lastVP.IsPicking ()          != fVP.IsPicking ()))
     return true;
+
+  // Don't check VisAttributesModifiers if this comparison has been
+  // initiated by a mouse interaction on the scene tree.
+  if (fMouseOnSceneTree) {
+    // Reset the flag.
+    fMouseOnSceneTree = false;
+  } else {
+    // Not initiated by a mouse so compare for kernel visit.
+    if (lastVP.GetVisAttributesModifiers() != fVP.GetVisAttributesModifiers()) {
+      return true;
+    }
+  }
 
   if (lastVP.IsDensityCulling () &&
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
 
-  /**************************************************************
-   Section (DCUT) implemented locally.  No need to visit kernel if
-   section plane itself changes.
-   if (lastVP.IsSection () &&
-   (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
-   return true;
-   ***************************************************************/
+//  /**************************************************************
+//   If section (DCUT) is implemented locally, comment this out.
+  if (lastVP.IsSection () &&
+      (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
+    return true;
+//   ***************************************************************/
 
   /**************************************************************
-   Cutaways implemented locally.  No need to visit kernel if cutaway
-   planes themselves change.
+   If cutaways are implemented locally, comment this out.
    if (lastVP.IsCutaway ()) {
    if (lastVP.GetCutawayPlanes ().size () !=
    fVP.GetCutawayPlanes ().size ()) return true;
@@ -164,6 +171,11 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
    return true;
    }
    ***************************************************************/
+
+  if (lastVP.GetCBDAlgorithmNumber() > 0) {
+    if (lastVP.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (lastVP.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  }
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
@@ -203,9 +215,10 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
    
-  if (fNeedKernelVisit) {
+  if (kernelVisitWasNeeded) {
     displaySceneTreeComponent();
   }
+
   if(dstyle!=G4ViewParameters::hlr &&
      haloing_enabled) {
 
@@ -320,6 +333,8 @@ void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
   if (! fQGLWidgetInitialiseCompleted) {
     return;
   }
+  // Force a repaint next time if the FRAMEBUFFER is not READY
+  fHasToRepaint = isFramebufferReady();
   if ( fHasToRepaint) {
     // Will really update the widget by calling CGLFlushDrawable
     // The widget's rendering context will become the current context and initializeGL()
@@ -385,15 +400,21 @@ void G4OpenGLStoredQtViewer::updateQWidget() {
   if (fUpdateGLLock) {
     return;
   }
+  
+  if (! isCurrentWidget()){
+    return;
+  }
+
   fUpdateGLLock = true;
   fHasToRepaint= true;
   // Will really update the widget by calling CGLFlushDrawable
   // The widget's rendering context will become the current context and initializeGL()
   // will be called if it hasn't already been called.
   // Copies the back buffer of a double-buffered context to the front buffer.
-  updateGL();
-  updateSceneTreeComponentTreeWidgetInfos();
-  fHasToRepaint= false;
+  repaint(); // will read scene tree state
+  // updateGL() // From J.Allison picking branch
+  updateViewerPropertiesTableWidget();
+  updateSceneTreeWidget();
   fUpdateGLLock = false;
 }
 
@@ -402,11 +423,13 @@ void G4OpenGLStoredQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  //  glFlush ();  // Tentativley offered by JA 29/04/16.
+  
   // Some X servers fail to draw all trajectories, particularly Mac
   // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
   // extra...
-  ClearView();
-  DrawView();
+  //  ClearView();  // Necessary?  JA 29/04/16 
+  //  DrawView();   // Necessary?  JA 29/04/16
   activateWindow();
   //  glFlush(); // NO NEED and as drawView will already cause a flush
   // that could do a double flush

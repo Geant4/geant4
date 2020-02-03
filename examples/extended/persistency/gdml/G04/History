@@ -1,4 +1,3 @@
-$Id: History 93506 2015-10-23 12:30:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 28th, 2019 I. Hrivnacova G04-V10-05-00
+- Fixed Doxygen warning in .README.txt
 
 October 23, 2015 I. Hrivnacova  (G04-V10-01-01)
 - Finished MT migration

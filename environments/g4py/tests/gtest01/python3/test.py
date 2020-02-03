@@ -69,7 +69,7 @@ class MyField(G4MagneticField):
     bfield.y= 5.*tesla
     bfield.z= 0.
     return bfield
-    
+
 # ==================================================================
 # main
 # ==================================================================
@@ -89,7 +89,7 @@ gRunManager.SetUserAction(myPGA)
 
 #myRA= MyRunAction()
 #gRunManager.SetUserAction(myRA)
-  
+
 myEA= MyEventAction()
 gRunManager.SetUserAction(myEA)
 
@@ -113,9 +113,6 @@ fieldMgr.CreateChordFinder(myField)
 
 gRunManager.Initialize()
 
-# visualization
-gControlExecute("vis.mac")
-  
 # beamOn
 gRunManager.BeamOn(10)
-
+gTerminate()

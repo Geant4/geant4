@@ -1,5 +1,4 @@
 
-$Id: History 102292 2017-01-20 11:27:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,16 +19,138 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- August 17, 2016 G. Cosmo                geom-bool-V10-01-05
+ November 26, 2019 G.Cosmo               geom-bool-V10-05-04
+ - G4MultiUnion: fixed cases of implicit type conversions from size_t to G4int.
+
+ September 14, 2019 E.Tcherniaev         geom-bool-V10-05-03
+ - G4BooleanSolid::GetPointOnSurface(): Use G4QuickRand(), reduced
+   max number of tries to generate a point to 100k.
+
+ September 2, 2019 G.Cosmo               geom-bool-V10-05-02
+ - Fixed defect in G4ScaledSolid detected by Coverity.
+
+ August 22, 2019 G.Cosmo                 geom-bool-V10-05-01
+ - Use pre-increment wherever possible.
+
+ August 16, 2019 G.Cosmo                 geom-bool-V10-05-00
+ - Implemented minor c++11 revision: nullptr, auto, inline data
+   initialisation...
+
+ October 4, 2018 E.Tcherniaev            geom-bool-V10-04-08
+ - G4ScaledSolid: return back using EstimateSurfaceArea() from G4VSolid,
+   as it was originally, but now adopting the more precise algorithm
+   implemented in G4VSolid.
+
+ October 4, 2018 E.Tcherniaev            geom-bool-V10-04-07
+ - G4ScaledSolid: improved approximated computation for surface area.
+
+ October 3, 2018 E.Tcherniaev            geom-bool-V10-04-06, 05
+ - Minor optimisations to G4SubtractionSolid and G4IntersectionSolid
+   for use of early returns.
+ - G4ScaledSolid: implemented approximated computation for surface
+   area and cubic volume.
+
+ June 1, 2018 G. Cosmo                   geom-bool-V10-04-04
+ - G4MultiUnion: added protection for normal initialisation in
+   DistanceToOutVoxels(). (M.Gheata)
+   Minor optimisation in DistanceToOut(p,v,..).
+
+ April 24, 2018 E. Tcherniaev            geom-bool-V10-04-03
+ - G4UnionSolid: define simple bounding-box and make use of early returns
+   in Inside() for points laying outside.
+
+ April 11, 2018 E. Tcherniaev            geom-bool-V10-04-02
+ - G4BooleanSolid: Use -1 instead of 0 as default initialisation value
+   for area and capacity, so to distinguish cases when values are zero
+   referring to NULL Boolean constructs.
+
+ April 11, 2018 G. Cosmo                 geom-bool-V10-04-01
+ - G4BooleanSolid: enhanced warning message for the case of an invalid
+   (NULL) Boolean construct in GetPointOnSurface() and StackPolyhedron().
+ - Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+ February 28, 2018 E. Tcherniaev         geom-bool-V10-04-00
+ - Improved contruction of G4DiplaceSolid to combine transformations for
+   nested displaced types.
+
+ June 13, 2017 J. Allison
+ - G4BooleanSolid.cc, G4DisplacedSolid.cc, G4ScaledSolid.cc:
+   Added protection and a warning message in the case of a null
+   polyhedron pointer.
+
+ May 24, 2017 G. Cosmo                   geom-bool-V10-03-04
+ - Renamed ambiguous name Extent() in all shapes to BoundingLimits().
+   Change required in order to avoid signature conflict with VecGeom in
+   G4U* wrappers. Requires tag geommng-V10-03-16.
+
+ May 15, 2017 G. Cosmo                   geom-bool-V10-03-03
+ - Fixed minor Coverity defects to G4MultiUnion.
+
+ April 17, 2017 G. Cosmo                 geom-bool-V10-03-02
+ - Added G4MultiUnion class, importing original implementation for a
+   multiple-union structure from the USolids library.
+   Removed no longer necessary wrapper G4UMultiUnion.
+   Requires coworking tags in geometry solids and persistency/gdml.
+
+ March 16, 2017 E. Tcherniaev            geom-bool-V10-03-01
+ - Revised SurfaceNormal() in G4UnionSolid, to correctly return average
+   normal if point is on common surface.
+
+ February 2, 2017 G. Cosmo               geom-bool-V10-03-00
+ - Return normal from solid being subtracted, in case point is located
+   outside in G4SubtractionSolid::SurfaceNormal().
+ - Code formatting and minor cleanup in G4IntersectionSolid.
+
+ November 4, 2016 E. Tcherniaev          geom-bool-V10-02-11
+ - Implemented Extent() method for all shapes/constructs and use it
+   in CalculateExtent().
+
+ August 17, 2016 G. Cosmo                geom-bool-V10-02-10
  - G4SubtractionSolid: directly return previously computed distance in
    DistanceToIn(p,v) if no progress is made (zero step).
 
- May 20, 2016 G. Cosmo                   geom-bool-V10-01-04
+ June 28, 2016 E. Tcherniaev             geom-bool-V10-02-09
+ - Removed tolerance argument to call to G4BoundingEnvelope in
+   G4ScaledSolid::CalculateExtent().
+   Coworks with tag "geommng-V10-02-14".
+
+ June 6, 2016 E. Tcherniaev              geom-bool-V10-02-08
+ - Reimplemented CalculateExtent() in G4ScaledSolid to use new class
+   G4BoundingEnvelope. Use accessors in implementation.
+
+ June 1, 2016 G. Cosmo                   geom-bool-V10-02-07
+ - Corrected treatment of polyhedron for G4DiplacedSolid and G4ScaledSolid
+   to avoid thread contention.
+ - Added warning in G4BooleanSolid::GetPointOnSurface() in case of non
+   convergence after fixed number of trials.
+
+ May 27, 2016 G. Cosmo                   geom-bool-V10-02-06
+ - Fixed Coverity defects for uninitialised data in G4BooleanSolid.
+
+ May 26, 2016 E. Tcherniaev
+ - Replaced while loop for for-loop in G4BooleanSolid::GetPointOnSurface().
+
+ May 20, 2016 G. Cosmo                   geom-bool-V10-02-05
  - Moved accessors and modifiers in UMultiUnion wrapper to be not inlined.
    Required modification in order to allow correct dispatching to VecGeom
    types.
 
- February 8, 2016 G.Cosmo                geom-bool-V10-01-03
+ May 17, 2016 E. Tcherniaev              geom-bool-V10-02-04
+ - Boosted computation of GetPointOnSurface() for G4BooleanSolid;
+   reimplemented algorithm, using cached list of primitives.
+
+ May 13, 2016 G.Cosmo                    geom-bool-V10-02-03
+ - Fixed GetPolyhedron() in G4ScaledSolid and G4DisplacedSolid for MT.
+
+ May 12, 2016 E.Tcherniaev               geom-bool-V10-02-02
+ - Use transformations for normals from G4ScaleTransform in G4ScaledSolid.
+
+ March 16, 2016 G.Cosmo                  geom-bool-V10-02-01
+ - Added new class G4ScaledSolid providing ability to scale dimensions of
+   a shape in X, Y or Z.
+   Requires tag "geommng-V10-02-00".
+
+ February 8, 2016 G.Cosmo                geom-bool-V10-02-00
  - Minor optimisation in Inside(p) for G4UnionSolid and G4SubtractionSolid.
 
  October 7, 2015 G.Cosmo                 geom-bool-V10-01-02
@@ -357,7 +478,7 @@ committal in the CVS repository !
 
  Aug 13  2001  Vladimir Grichine    geom-solid-bool-V03-02-00
   - Introduced G4BOOLDEBUG flag and replaced G4Exception statements with
-    simple warnings to G4cerr for rare occurences of anomalous conditions.
+    simple warnings to G4cerr for rare occurrences of anomalous conditions.
 
  May 30  2001  Vladimir Grichine    geom-solid-bool-V03-01-00
   - G4IntersectionSolid: fix in DistanceToIn(p,v) resolving bug observed

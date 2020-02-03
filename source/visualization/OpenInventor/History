@@ -1,4 +1,3 @@
-$Id: History 97679 2016-06-07 08:48:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,12 +19,124 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
-27 May 2016  Gabriele Cosmo (openinventor-V10-01-03)
+23rd October 2019 Ben Morgan (openinventor-V10-05-07)
+- Remove inclusion of QT_USE_FILE from CMake scripts.
+  All usage is now through the qtX_ macros and imported targets
+
+14 June 2019  Gabriele Cosmo (openinventor-V10-05-06)
+- Fixed compilation error in G4OpenInventorViewer::CompareForKernelVisit()
+  for typo introduced in previous tag...
+
+13 June 2019  John Allison (openinventor-V10-05-05)
+- Part of vis-V10-05-20.
+- Test number of cloud points for kernel visit.
+
+10 June 2019  John Allison (openinventor-V10-05-04)
+- Part of vis-V10-05-19.
+- G4OpenInventorXtExaminerViewer.cc and wheelmouse.cc:
+  Add #ifdef G4VIS_BUILD_OIX_DRIVER
+
+16 May 2019  Gabriele Cosmo (openinventor-V10-05-03)
+- Fixed compilation warning from gcc-9.1 in SoCounterAction for setting
+  of name, apparently not allowed in OpenInventor.
+
+18 March 2019  Gabriele Cosmo (openinventor-V10-05-02)
+- Corrected typo in comments.
+
+12 March 2019  John Allison (openinventor-V10-05-01)
+- Fix compiler warnings about new cloud style.
+  Note: this does not yet mean that OI can handle cloud style. In fact
+  I think it will render in wireframe if cloud is selected.
+
+11 March 2019  Gabriele Cosmo (openinventor-V10-05-00)
+- Fixed typos in printouts in SbPainterPS.
+
+22 August 2018  Gabriele Cosmo (openinventor-V10-04-08)
+- sources.cmake: make OIQT driver installation optional when QT is
+  selected for CMake configuration (SoQt library is not mandatory
+  for Inventor). Requires introduction of GEANT4_USE_INVENTOR_QT flag
+  in main CMake module of Geant4 for optional build associated to Qt.
+  Corrected paths for Moc sources and added INVENTOR_SOQT_LIBRARY
+  to link list.
+
+20 August 2018  John Allison (openinventor-V10-04-07)
+- sources.cmake: Fix spelling mistake.
+
+20 August 2018  John Allison (openinventor-V10-04-06)
+- sources.cmake: Protected Qt files with if(GEANT4_USE_QT).
+
+19 August 2018  Frederick Jones
+- Added missing G4VIS_BUILD_OIQT_DRIVER to G4OpenInventorQt.hh
+  and G4OpenInventorQtExaminerViewer.hh.
+
+17 August 2018  John Allison
+- G4OpenInventorQtViewer constructor: Initialise fViewer to keep Coverity happy.
+
+11 August 2018  John Allison (openinventor-V10-04-05)
+- Consolidate Fred's updates.
+- Update sources.cmake for CDash.
+
+15 June 2018  Fred Jones (openinventor-V10-04-03)
+- Fixed compilation warnings for casts on gcc-8.1.
+
+28 May 2018  Gabriele Cosmo (openinventor-V10-04-02)
+- Fixed compilation error in SoGL2PSAction, induced after last changes in
+  visualization.
+
+26 April 2018  John Allison (openinventor-V10-04-01)
+- Fix compilation errors.
+
+25 April 2018  John Allison (openinventor-V10-04-00)
+- G4OpenInventorViewer::CompareForKernelVisit:
+  o Implement comparison for "colour by density".
+
+13 January 2017  Frederick Jones
+- G4OpenInventorXtExaminerViewer:
+  In lookAtSceneElementCB disabled default height setting for
+  ortho camera prior to moveCamera().
+  In moveCamera removed unnecessary distance calculation
+  for ortho camera and fixed incorrect camera position
+  setting to preserve the focal distance.
+  Restored focal distance setting to maintain correct
+  target point (center of rotation) for perspective camera.
+
+10 January 2017  Fred Jones (openinventor-V10-03-00)
+- G4OpenInventorXtExtendedViewer:
+  Added viewer button for Wireframe/Solid switching.
+  Added workaround to prevent empty second page in
+  PS and PDF output (due to superimposed scene).
+
+01 June 2016  Fred Jones (openinventor-V10-02-03)
+- G4OpenInventorXtExtendedViewer.hh:
+  Removed fPDFButton - not used.  Fixes Coverity warning.
+
+30 May 2016  John Allison (openinventor-V10-02-02)
+- G4OpenInventorWin.cc: Fixed dispatching (Guy Barrand, Tom Roberts).
+- G4OpenInventorXtViewer.cc, G4OpenInventorWinViewer.cc:
+  setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD).
+
+27 May 2016  Gabriele Cosmo (openinventor-V10-02-01)
 - Fixed compilation warnings on MacOS for conversion to char* in
   G4OpenInventorXtExtendedViewer and G4OpenInventorXtViewer sources.
 
-22 Mar 2016  Gabriele Cosmo
+22 Mar 2016  Gabriele Cosmo (openinventor-V10-02-00)
 - Corrected delete statement in G4OpenInventorXtExaminerViewer::sortBookmarksCB().
+
+18 Dec 2015  Frederick Jones
+- G4OpenInventorXtExaminerViewer:
+  o Designed new icons (XPM) for the "Extended Pick Mode" and
+    "Pick Reference Trajectory" buttons.
+  o Modified the mouse-over-trajectory output to make it
+    more clear.
+  o Modifications for Coverity fault 48023 "Resource leak"
+  o Modifications for Coverity fault 48027 "Freed internal location"
+  o Improved diagnostics for Bookmark file handling.
+  o New approach for determining distance along the reference
+    path, using element centers instead of bounding boxes.
+    Solves problems with spurious bounding box warnings and
+    incorrect distance values.
+- G4OpenInventorXtExtended & G4OpenInventorXtExtendedViewer
+  o Suppressed some unwanted diagnostic output.
 
 30th July 2015  John Allison  (openinventor-V10-01-02)
 - G4OpenInventor:

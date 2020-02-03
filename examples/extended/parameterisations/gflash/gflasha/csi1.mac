@@ -1,0 +1,28 @@
+#
+# Macro file gflasha example
+# when runing in batch mode
+#
+
+
+# set calo material
+/exgflash/det/setMat G4_CESIUM_IODIDE
+
+/gps/pos/centre 0 0 0
+/gps/particle  e-
+/gps/energy    50 GeV
+/gps/direction  0. 0. 1.0
+
+/run/initialize
+# Paramatrisation on 
+/GFlash/flag 1
+/analysis/setFileName gfl_CsI01
+
+
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+/tracking/storeTrajectory 0
+
+#/vis/scene/endOfEventAction accumulate
+/tracking/verbose 0
+
+/run/beamOn 10

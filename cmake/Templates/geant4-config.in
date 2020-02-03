@@ -88,9 +88,22 @@ have_multithreading="@G4_BUILTWITH_MULTITHREADING@"
 feature_list="${feature_list} multithreading[${have_multithreading}]"
 if test "x${have_multithreading}" = "xyes" ; then
   geant4_tls_model="@GEANT4_BUILD_TLS_MODEL@"
+<<<<<<< HEAD
   cflags="${cflags} -DG4MULTITHREADED"
+=======
+  if test "x${geant4_tls_model}" = "xauto" ; then
+    geant4_tls_model=""
+  fi
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 else
   geant4_tls_model=""
+fi
+
+# - smart stacking
+have_smartstack="@G4_BUILTWITH_SMARTSTACK@"
+feature_list="${feature_list} smartstack[${have_smartstack}]"
+if test "x${have_smartstack}" = "xyes" ; then
+  cflags="-DG4_USESMARTSTACK ${cflags}"
 fi
 
 # - Includes and Libs
@@ -362,7 +375,7 @@ install_datasets()
       # - Download bundle to cache
       dataset_file=$(echo $ds | cut -d "|" -f4)
       echo "+ downloading ${dataset_file}"
-      ${G4CURL} -f -m ${dataset_timeout} -o ${g4downloaddir}/${dataset_file} ${dataset_url}/${dataset_file}
+      ${G4CURL} -L -f -m ${dataset_timeout} -o ${g4downloaddir}/${dataset_file} ${dataset_url}/${dataset_file}
       curl_status="$?"
       if [ "$curl_status" != "0" ] ; then
         echo "- download of '${dataset_file}' failed : CURL error $?"
@@ -545,6 +558,9 @@ while test $# -gt 0 ; do
           ;;
         multithreading)
           echo ${have_multithreading}
+          ;;
+        smartstack)
+          echo ${have_smartstack}
           ;;
         clhep)
           echo ${have_clhep}

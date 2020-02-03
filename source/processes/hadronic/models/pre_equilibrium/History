@@ -14,6 +14,99 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22-August-2019 V.Ivanchenko hadr-pre-V10-05-03
+- G4PreCompoundModel: remove added warning instead send highly excited
+    fragment to de-excitation module, where similar warning exists;
+    code clean-up
+
+14-August-2019 V.Ivanchenko hadr-pre-V10-05-02
+- G4PreCompoundModel: added check on excitation energy per nucleon
+    for initial fragment (30 MeV) and issue warning 
+
+16-May-2019 V.Ivanchenko hadr-pre-V10-05-01
+- G4LowEGammaNuclearModel - new model based on pre-compound de-excitation
+
+30-Apr-2019 V.Ivanchenko hadr-pre-V10-05-00
+- G4PreCompoundEmission, G4PreCompoundFragment, G4VPreCompoundFragment
+  setup minimum number of points for probability integration 4;
+  minor code clean-up
+
+09-Nov-2018 G.Cosmo hadr-pre-V10-04-02
+- G4PreCompoundModel: fixed printout typos.
+
+18-Oct-2018 V.Ivanchenko hadr-pre-V10-04-01
+- G4VPreCompoundFragment, G4HETCChargedFragment, G4HETCFragment, 
+  G4HETCNeutron, G4PreCompoundFragment, G4PreCompoundIon, 
+  G4PreCompoundNucleon, G4PreCompoundModel, G4PreCompoundEmission,
+  G4PreCompoundTransitions, G4GNASHTransitions - updaed usage
+    of level density parameterisation according de-excitation
+    sub-library
+
+26-Feb-2018 V.Ivanchenko hadr-pre-V10-04-00
+- G4PreCompoundEmission, G4PreCompoundFragment, G4PreCompoundNucleon
+    fixed computations for OPT=1,2
+- G4PreCompoundModel - fixed initialisation
+- G4PreCompoundFragmentVector - moved inlined methods to the source
+
+31-Oct-2017 V.Ivanchenko hadr-pre-V10-03-03
+- G4PreCompoundEmission - used G4RandomDirection() if angular sampling
+    is disabled
+
+22-Sept-2017 V.Ivanchenko hadr-pre-V10-03-02
+- G4PreCompoundModel - added isActive flag, which can be defined via
+    G4DeexPrecoParameters interface
+
+23-Jun-2017 Gunter Folger hadr-pre-V10-03-01
+- Fix memory leak introduced in tag below.
+
+12-Jun-2017 Gunter Folger hadr-pre-V10-03-00
+- G4PreCompoundModel::ApplyYourself(): pass creator model and time
+
+22-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-09
+- G4VPreCompoundFragment, G4PreCompoundFragment - minor performance
+    improvement
+
+19-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-08
+- G4PreCompoundEmission, G4VPreCompoundFragment, G4HETCFragment,
+  G4PreCompoundIon, G4PreCompoundNucleon - changed identificator 
+    names in order to have more clean code
+
+11-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-07
+- G4VPreCompoundFragment, G4PreCompoundEmission, G4PreCompoundFragment,
+  G4PreCompoundNucleon - use Coulomb barrier from standard 
+    parametersation instead of hard-coded one in computation of 
+    probability of a fragment emission
+
+23-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-06
+- G4PreCompoundFragment - fixed problem of the previous tag
+
+22-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-05
+- G4GNASHTransitions - fixed problem in computation of probability
+- G4PreCompoundFragment, G4PreCompoundFragmentVector,
+  G4PreCompoundIon, G4PreCompoundModel, G4PreCompoundNucleon,
+  G4PreCompoundTransitions, G4VPreCompoundEmissionFactory,
+  G4VPreCompoundFragment - use nullptr, all internal cost are static
+
+19-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-04
+19-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-02
+-------------------------------------------------
+- G4GNASHTransitions, G4PreCompoundModel, G4VPreCompoundFragment,
+  G4HETCFragment, G4PreCompoundIon, G4HETCChargedFragment,
+  G4PreCompoundEmission, G4PreCompoundTransitions - migration from 
+  G4PreCompoundParameters to G4DeexPrecoParameters
+- G4PreCompoundParameters - removed
+
+21-Mar-2016 V.Ivanchenko  hadr-pre-V10-02-01
+-------------------------------------------------
+- Fixed division by zero due to the previous tag
+
+21-Mar-2016 V.Ivanchenko  hadr-pre-V10-02-00
+-------------------------------------------------
+- G4PreCompoundModel, G4PreCompoundParameters - changed non-equilibrium
+    condition to switch to the de-excitation - instead check (Z<9 || A<17)
+    check A<=5 || excitation<=A*Elimit (default Elimit = 0.1MeV);
+    This allows to perform pre-equilibrium emission for light nuclei.
+
 10-Nov-2015 V.Ivanchenko  hadr-pre-V10-01-06
 -------------------------------------------------
 - G4PreCompoundFragment - an attempt to fix icc compillation problem

@@ -1,0 +1,35 @@
+
+#
+# macro file for TestEm5
+#
+/control/cout/ignoreThreadsExcept 0
+/control/verbose 1
+/run/verbose 1
+#
+/testem/det/setAbsMat G4_Al
+#
+/testem/det/setAbsThick 10 mm
+/testem/det/setAbsYZ    1 m
+#
+#/testem/phys/addPhysics  emstandard
+/testem/phys/addPhysics  emstandardATIMA
+#
+/run/setCut 0.01 mm
+#
+/run/initialize
+#
+/gun/particle e+
+/gun/energy 5 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+
+/analysis/setFileName posi
+/analysis/h1/set 1 100 0. 10. MeV
+/analysis/h1/set 3 100 0.  5. MeV
+/analysis/h1/set 5 100 -4  1  MeV
+
+#
+/tracking/verbose 0
+#
+/run/beamOn 10000
+#

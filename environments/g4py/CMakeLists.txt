@@ -6,7 +6,10 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(Geant4Py)
 #------------------------------------------------------------------------------
 # installation prefixes for libraries
-set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX  ${PROJECT_SOURCE_DIR} CACHE
+      STRING "Install prefix" FORCE)
+endif()
 
 # debug mode
 set(DEBUG FALSE CACHE BOOL "Debug Mode (Debug On)")
@@ -33,6 +36,14 @@ find_package(ROOT)
 
 if(NOT GEANT4_FOUND)
   message(FATAL_ERROR "NOT Found Geant4.")
+endif()
+
+if(NOT DEFINED BOOST_PYTHON_LIB)
+  if (${PYTHON_VERSION_MAJOR} MATCHES "2")
+    set(BOOST_PYTHON_LIB boost_python)
+  elseif (${PYTHON_VERSION_MAJOR} MATCHES "3")
+    set(BOOST_PYTHON_LIB boost_python3)
+  endif()
 endif()
 
 #------------------------------------------------------------------------------

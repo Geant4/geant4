@@ -1,4 +1,3 @@
-$Id: History 102405 2017-01-25 08:40:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,72 +16,289 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 9 January 2017 Hisaya Kurashige (particles-V10-01-24)
-- Fix a bug in G4MuonRadiativeDecayWithSpin (#1928)
+- 05 November 2019 Vladimir Ivanchenko (particles-V10-05-10)
+  G4NucleiProperties - in some hadronic models a fragment may be
+  produced consisting of only neutrons or only protons; 
+  parameterisation used inside this class provides too high mass 
+  value, which not allow decay such fragment; a simplified
+  variant is proposed; also light ion masses computation is more
+  thread safe after change of the order of mass computation
 
-- 4 November 2016 Gunter Folger (particles-V10-01-23)
+- 29 October 2019 Vladimir Ivanchenko (particles-V10-05-09)
+  fixed History
+- 17 October 2019 Vladimir Ivanchenko (particles-V10-05-08)
+  G4DynamicParticle: changed SetMass method - it is now inlined and 
+    allow setting mass of a particle to PDG value, which is needed
+    in order to recover secondary hadrons to the mass shell;
+    marked "inline" all inline methods in the header
+
+- 09 October 2019 Alberto Ribon (particles-V10-05-07)
+  G4ShortLivedConstructor : the method ConstructQuarks() has been extended
+  by Vladimir Uzhinsky to include diquarks made of charm and/or bottom
+  quarks. The new, heavy diquarks and anti-diquarks have been defined with
+  basic, rough properties (just those currently needed by the hadronic
+  string models): future refinements are expected.
+
+- 03 July 2019 Vladimir Ivanchenko (particles-V10-05-06)
+  G4DynamicParticle: restore 10.5 definition and use of PDG code variable
+  in order to preserve handling of exotic particles; keep formatting
+  of the class in one style, removed extra empty lines
+
+- 24 May 2019 Vladimir Ivanchenko (particles-V10-05-05)
+  G4DynamicParticle: make members of the class private; removed boolean
+    flag; alined class members 3-vectors, doubles, integer; added
+    initialisation of PDG code and polarization in all constructors;
+    added method SetPolarisation(const G4ThreeVector&); use CLHEP electron
+    mass; removed unused forward declarations and headers   
+
+- 09 April 2019 Gabriele Cosmo (particles-V10-05-04)
+- Fixed typo in G4ElectronOccupancy::operator==().
+
+- 17 March 2019 Mihaly Novak (particles-V10-05-03)
+- G4DynamicParticle: functionality to provide log-kinetic energy value (computed 
+  only on demand if its stored value is not up-to-date with the kinetic energy).
+
+- 13 Mar 2019 Makoto Asai (particles-V10-05-02)
+- G4NuclideTableMessenger.cc : fixing a typo.
+
+- 31 Jan 2019 Ivana Hrivnacova (particles-V10-05-01)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+- 14 Dec 2018 Makoto Asai (particles-V10-05-00)
+- G4PrimaryParticle.cc: Allowing absolute zero proper decay time.
+  Co-working with event-V10-05-00 and decay-V10-05-00.
+
+- 09 Nov 2018 Gabriele Cosmo (particles-V10-04-12)
+- G4PrimaryVertex: fixed typo in class description.
+
+- 08 Sep 2018 Hisaya Kurashige (particles-V10-04-11)
+- fix a bug in G4NeutronBetaDecay (problem#2088)
+
+- 31 Aug 2018 Hisaya Kurashige (particles-V10-04-10)
+- change UI command directory for G4NuclideTable
+
+- 15 Aug 2018 Hisaya Kurashige (particles-V10-04-09)
+- remove obsolete G4NucleiPropertiesTableAME03
+
+- 14 Aug 2018 Hisaya Kurashige (particles-V10-04-08)
+- fix compiler warning in G4ParticleTable
+
+- 14 Aug 2018 Hisaya Kurashige (particles-V10-04-06)
+- clean up source codes under management
+
+- 8 Aug 2018 Hisaya Kurashige (particles-V10-04-04)
+- Fixed bugs(bug report #2072) in muon decay channel with spin
+
+- 17 May 2018 Jonathan Madsen (particles-V10-04-03)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+- 09 April 2018 Makoto Asai (particles-V10-04-02)
+- G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
+  Fix incorrect indexing. Addressing bug report #2053.
+
+- 12 February 2018 Jonathan Madsen (particles-V10-04-01)
+- Removed G4MUTEX_INITIALIZER from constructor in G4VDecayChannel
+
+- 07 February 2018 Hisaya Kurashige  ( particles-V10-04-00 )
+- remove obsolete enum of MaxNumberOfProducts in G4DecayProducts
+
+- 13 September 2017 Krzysztof Genser ( particles-V10-03-16 )
+- moved G4MuonicAtom & G4MuonicAtomHelper to management
+  to avoid circular reference in the granular lib case
+
+- 12 September 2017 Krzysztof Genser ( particles-V10-03-15 )
+- corrected warning in G4MuonicAtom
+
+- 12 September 2017 Krzysztof Genser ( particles-V10-03-14 )
+- Moved Muonic Atom files to hadrons/ions; introduced G4GenericMuonicAtom
+- revised G4MuonicAtomHelper, added G4MuonicAtom support
+
+- 16 Aug. 2017 Hisaya Kurashige ( particles-V10-03-13 )
+- Fix problem of G4DecayTable::SelectADecayChannel 
+   in case of sum of BR is not equal to 1.0
+- Add protection to protect BR<0 or BR>1 for G4VDecayChannel
+
+
+- 14 Aug. 2017 Hisaya Kurashige ( particles-V10-03-11 )
+- Fix G4PDGCodeChecker to solve Coverity defect #94101
+
+- 11 Aug. 2017 Hisaya Kurashige ( particles-V10-03-10 )
+- Modify test projects 
+
+- 11 Aug. 2017 Hisaya Kurashige ( particles-V10-03-09 )
+- Update mass, width and life time according to PDG2017
+
+- 1 May 2017 Tatsumi Koi  ( particles-V10-03-08 )
+- Fix inconsistency between enum definition of G4FloatLevelBase 
+  and initialization of G4Ions::G4FloatLevelBase flb[].
+
+- 16 March 2017 Gabriele Cosmo  ( particles-V10-03-07 )
+- Fixed leak at construction for data allocated through G4ParticleDefinition
+  for the sub-instance offset in the splitter. Added static method Clean() to
+  G4ParticleDefinition, called as last in the destructor of G4ParticleTable.
+
+- 2 March 2017 Hisaya Kurashige  ( particles-V10-03-06 )
+- Fix Coverity defects(68969, 62788)
+
+- 1 March 2017 Hisaya Kurashige  ( particles-V10-03-05 )
+- Update width of Bc+,Bc- according to PDG2016 
+
+- 28 February 2017 Hisaya Kurashige  ( particles-V10-03-04 )
+- Update particle properties according to PDG2016 
+ 
+- 27 February 2017 Hisaya Kurashige  ( particles-V10-03-03)
+- Set life time to -1.0 for all stable particles
+
+- 8 February 2017 Hisaya Kurashige
+- Reverted head to particles-V10-03-00
+
+- 6 February 2017 Krzysztof Genser ( particles-V10-03-02 )
+- Corrected G4MuonicAtom Channels to avoid warning 
+
+- 6 February 2017 Krzysztof Genser ( particles-V10-03-01 )
+- Added muatoms and placed G4MuonicAtom and G4GenericMuonicAtom there
+- Defined preliminary API for G4MuonicAtom Channels
+- Expanded G4MuonicAtomHelper
+- Allowed creation of muatoms in non 'PreInit' states
+
+- 9 January 2017 Hisaya Kurashige ( particles-V10-03-00 )
+- Fix a bug in G4MuonRadiativeDecayWithSpin (#1928)
+- Add G4AdjointElectronFI (partadjoint-V10-03-00)
+
+- 4 November 2016 Gunter Folger ( particles-V10-02-34)
+- Remove G4PDefSplitter.
 - Reformat G4PDefManager.cc, and move G4PDefData::initialize() to .cc
 
-- 3 November 2016 Gunter Folger
+- 3 November 2016 Gunter Folger ( particles-V10-02-33)
 - Obsolete G4PDefSplitter, and replace 
-    "typedef G4PDefManager G4PDefSplitter<PDefData>" by concrete class,
-    with implementation. This addresses initialistaion problems of 
-    static data previously in template.
+  "typedef G4PDefManager G4PDefSplitter<PDefData>" by concrete class,
+  with implementation. This addresses initialistaion problems of 
+  static data previously in template.
  
-- 26 October 2016 Gunter Folger
-- Protect initialisation of G4PDefSplitter to be done only in particles
+- 2 November 2016 Tatsumi Koi (particles-V10-02-32)
+- Improve error message for potentially using a wrong version of ENSDFSTATE data in use.
+
+- 26 October 2016 Gunter Folger  (particles-V10-02-31) - rejected
+- protect initialisation of G4PDefSplitter to be done only in particles
    in attempt to correct windows compilation error.
 
-- 21 October 2016 Gabriele Cosmo
+- 21 October 2016 Gabriele Cosmo (particles-V10-02-30)
 - Moved initialisation of G4PDefSplitter thread-local data to be inline
   along with generic template type.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-- 9 September 2016 Gabriele Cosmo
+- 17 October 2016 Kevin Lynch (particles-V10-02-29)
+- Added decay channel placeholders for G4MuonicAtom DIO and Nuclear
+  Capture physics
+
+- 29 September 2016 Tatsumi Koi (particles-V10-02-28)
+- Migration to ENSDFSTATE2.0
+- Fix bug the case of two or more levels have a same excitation energy
+
+- 28 September 2016 Tatsumi Koi (particles-V10-02-27)
+- Fix circular dependency between management and leptons
+
+- 27 September 2016 Tatsumi Koi for Kevin Lynch (particles-V10-02-26)
+- 22 September 2016 Kevin Lynch 
+- Added G4MuonicAtom class, along with minimal changes to G4IonTable
+  to allow creation of muonic atoms.
+
+- 9 September 2016 Gabriele Cosmo (particles-V10-02-25)
 - Moved accessors/modifiers for splitter data to non-inline in
   G4ParticleDefinition.
   Explicitly initialise G4PDefSplitter data in G4ParticlesWorkspace
   translation unit.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-- 2 September 2016 Makoto Asai (particles-V10-01-22)
+- 2 September 2016 Makoto Asai (particles-V10-02-24)
 - Changed the way of deleting G4PrimaryVertex and G4PrimaryParticle
   objects to avoid stack overflow for very large number of primary
   vertices or primary particles.
 
-- 7 July 2016 Gabriele Cosmo
+- 2 September 2016 Tatsumi Koi (particles-V10-02-23)
+- Fix problem in the previosu tag 
+
+- 29 August 2016 Tatsumi Koi (particles-V10-02-22)
+- AME12 is used by default in NucleiProperties
+
+- 19 August 2016 Tatsumi Koi (particles-V10-02-21)
+- Introducing G4NucleiPropertiesTableAME12
+
+- 8 August 2016 Makoto Asai (particles-V10-02-20)
+- Ground-level ion with floating level base now has a name with
+  its floating level base.
+
+- 27 July 2016 Makoto Asai (particles-V10-02-19)
+- Floating level base is updated for G4Ions, G4IonTable and related
+  classes.
+
+- 7 July 2016 Gabriele Cosmo (particles-V10-02-18)
 - Removed redundant check in G4PDefSplitter::UseWorkArea().
   Addressing problem report #1876.
 
-- 1 Match 2016 Andrea Dotti (particles-V10-01-21)
+- 7 July 2016 Hisaya Kurashige (particles-V10-02-17)
+- Skip check for one body decay in G4VDecayChannel::IsOKWithParentMass
+- Fix a bug (implemented in the previous tag) in G4DynamicParticle::Set4Momentum
+
+- 6 July 2016 Hisaya Kurashige (particles-V10-02-15)
+- Fix G4DynamicParticle in case that difference between the PDG mass and dynamical mass 
+  is very small (<10 eV)
+- Skip check daughter mass and parent mass in case of one body decay
+  in G4VDecayChannel::FillDaughters
+- Minor Fix for G4PhaseSpaceDecayChannel
+
+- 5 May 2016 Hisaya Kurashige (particles-V10-02-14)
+- Fix Coverity defects (43015,62787,62788)
+- Modify G4IonTable::GetIon with non-zero lvl 
+  (Coverity 63524)
+
+- 5 April 2016 Makoto Asai (particles-V10-02-13)
+- G4IsotopeMagneticMomentTable: Ignoring floating level base for
+  the time being.
+
+- 4 April 2016 Makoto Asai (particles-V10-02-12)
+- G4NuclideTable has migrated to the new floating level base scheme.
+
+- 31 March 2016 Makoto Asai (particles-V10-02-11)
+- Introducing floating level base to G4Ions and related classes.
+
+- 2 March 2016 Hisaya Kurashige (particles-V10-02-10)
+- Update properties of particles according to PDG
+
+- 1 Match 2016 Andrea Dotti (particles-V10-02-09)
 - Fix for WIN: removing constexpr
 
-- 29 February 2016 Andrea Dotti
+- 29 February 2016 Andrea Dotti  (particles-V10-02-08)
 - Fix for bug #1834: MT data-race in G4VDecayTable class
 
-- 25 February 2016 Andrea Dotti
-- Preliminary tag to review of MT treatment for SetDaughter in 
+- 25 February 2016 Andrea Dotti  (particles-V10-02-07)
+- Preliminary tag to review of MT treatment for SetDaugheter in 
   G4VDecayChannel: raise exception if re-definition of daughters
   is requested
 
-- 27 January 2016  Hisaya Kurashige (particles-V10-01-20)
+- 4 February  2016 Tatsumi Koi (particles-V10-02-06)
+- Change default life of ion and hyper nucleus from -1 to 0
+
+- 27 January 2016  Hisaya Kurashige(particles-V10-02-05)
 - Fix the bug(#1820) in G4PhaseSpaceDecayChannel
 
-- 21 January 2016  Hisaya Kurashige
+- 21 January 2016  Hisaya Kurashige(particles-V10-02-04)
 - Fix G4DecayTable::SelectADecayChannel
 
-- 28 December 2015  Makoto Asai
+- 28 December 2015  Makoto Asai (particles-V10-02-03)
 - Fix wrong argument order CreateIon(A,Z,LL,0.0) of line #485 in
   G4IonTable.cc to CreateIon(Z,A,LL,0.0).
 
-- 18 December 2015  Tatsumi Koi
+- 18 December 2015  Tatsumi Koi (particles-V10-02-02)
 - Fix problem on previous tag
 
-- 17 December 2015  Tatsumi Koi
+- 17 December 2015  Tatsumi Koi (particles-V10-02-01)
 - Revert default value of level tolerance in NuclideTable to 1 eV
 - Turn out rounding of excitation energy to avoid potential conservation problem  
 
-- 3 December 2015  Dennis Wright (particles-V10-01-19)
+- 3 December 2015  Dennis Wright (particles-V10-01-19) 
 - In G4IonTable remove static const tolerance and replace it with 
   pNuclideTable->GetLevelTolerance() in all locations.
   This recovers missed levels when they are closer together than 2 keV

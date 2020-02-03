@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDAugerTransition.cc,v 1.2 ????
 // 
 // Based on G4AtomicTransition.cc by 
 // Elena Guardincerri (Elena.Guardincerri@ge.infn.it)

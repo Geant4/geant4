@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/src/XAluminumElectrodeHit.cc
 /// \brief Implementation of the XAluminumElectrodeHit class
 //
-// $Id: XAluminumElectrodeHit.cc 84197 2014-10-10 14:33:03Z gcosmo $
 //
 // 20141008  Allocators must be thread-local, and must be pointers
 
@@ -82,9 +81,9 @@ const XAluminumElectrodeHit& XAluminumElectrodeHit::operator=(const XAluminumEle
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int XAluminumElectrodeHit::operator==(const XAluminumElectrodeHit &/*right*/) const
+G4bool XAluminumElectrodeHit::operator==(const XAluminumElectrodeHit &/*right*/) const
 {
-  return 0;
+  return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

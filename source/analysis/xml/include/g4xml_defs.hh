@@ -23,51 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: g4xml_defs.hh 92688 2015-09-14 07:01:13Z gcosmo $
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
 #ifndef g4xml_defs_h
 #define g4xml_defs_h
 
-#include "tools/histo/h1d"
-#include "tools/histo/h2d"
-#include "tools/histo/h3d"
-#include "tools/histo/p1d"
-#include "tools/histo/p2d"
 #include "tools/waxml/ntuple"
 #include "G4XmlAnalysisManager.hh"
 #include "G4XmlAnalysisReader.hh"
+#include "g4hntools_defs.hh"
 
-namespace G4Xml {
-
-  // H1 types
-  using G4AnaH1 = tools::histo::h1d; // keep for backward compatibility
-  using G4H1 = tools::histo::h1d;
-  using G4H1Iterator  = std::vector<tools::histo::h1d*>::iterator;
-  using G4H1ConstIterator = std::vector<tools::histo::h1d*>::const_iterator;
-
-  // H2 types
-  using G4AnaH2 = tools::histo::h2d; // keep for backward compatibility    
-  using G4H2 = tools::histo::h2d;
-  using G4H2Iterator = std::vector<tools::histo::h2d*>::iterator;
-  using G4H2ConstIterator = std::vector<tools::histo::h2d*>::const_iterator;
-
-  // H3 types
-  using G4H3 = tools::histo::h3d;    
-  using G4H3Iterator = std::vector<tools::histo::h3d*>::iterator;
-  using G4H3ConstIterator = std::vector<tools::histo::h3d*>::const_iterator;
-
-  // P1 types
-  using G4P1 = tools::histo::p1d;
-  using G4P1Iterator = std::vector<tools::histo::p1d*>::iterator;
-  using G4P1ConstIterator = std::vector<tools::histo::p1d*>::const_iterator;
-
-  // P2 types
-  using G4P2 = tools::histo::p2d;    
-  using G4P2Iterator = std::vector<tools::histo::p2d*>::iterator;
-  using G4P2ConstIterator = std::vector<tools::histo::p2d*>::const_iterator;
-
+namespace G4Xml
+{
   // Ntuple types
   using G4Ntuple = tools::waxml::ntuple; 
   using G4NtupleIterator = std::vector<tools::waxml::ntuple*>::iterator;

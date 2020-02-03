@@ -27,7 +27,10 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
+<<<<<<< HEAD
 // $Id: PrimaryGeneratorAction.cc 68015 2013-03-13 13:27:27Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

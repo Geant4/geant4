@@ -23,32 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EllipticalTube.hh 83572 2014-09-01 15:23:27Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
 // G4EllipticalTube
 //
 // Class description:
 //
 //   Declaration of a CSG volume representing a tube with elliptical
 //   cross section (geant3 solid 'ELTU'):
-//   
-//   G4EllipticalTube( const G4String& name, 
+//
+//   G4EllipticalTube( const G4String& name,
 //                           G4double  Dx,
 //                           G4double  Dy,
 //                           G4double  Dz )
 //
-//   The equation of the surface in x/y is 1.0 = (x/dx)**2 + (y/dy)**2
+//   The equation of the lateral surface : (x/dx)^2 + (y/dy)^2 = 1
 
-// Author: 
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Revision: Evgueni Tcherniaev (evgueni.tcherniaev@cern.ch), 23.12.2019
 // --------------------------------------------------------------------
+#ifndef G4ELLIPTICALTUBE_HH
+#define G4ELLIPTICALTUBE_HH
 
-#ifndef G4EllipticalTube_hh
-#define G4EllipticalTube_hh
+#include "G4GeomTypes.hh"
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UELLIPTICALTUBE 1
+#endif
+
+#if (defined(G4GEOM_USE_UELLIPTICALTUBE) && defined(G4GEOM_USE_SYS_USOLIDS))
+  #define G4UEllipticalTube G4EllipticalTube
+  #include "G4UEllipticalTube.hh"
+#else
 
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
@@ -57,32 +61,37 @@ class G4EllipticalTube : public G4VSolid
 {
   public:  // with description
 
-    G4EllipticalTube( const G4String &name, 
-                            G4double theDx,
-                            G4double theDy,
-                            G4double theDz );
+    G4EllipticalTube( const G4String& name,
+                            G4double Dx,
+                            G4double Dy,
+                            G4double Dz );
 
     virtual ~G4EllipticalTube();
 
-    // Standard solid methods
+    // Standard methods
+    //
+    void BoundingLimits( G4ThreeVector& pMin, G4ThreeVector& pMax ) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
                                   G4double& pmin, G4double& pmax ) const;
-  
+
     EInside Inside( const G4ThreeVector& p ) const;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
 
     G4double DistanceToIn( const G4ThreeVector& p,
                            const G4ThreeVector& v ) const;
+
     G4double DistanceToIn( const G4ThreeVector& p ) const;
+
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
-                            const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0 ) const;
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const;
+
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
     G4GeometryType GetEntityType() const;
@@ -97,61 +106,73 @@ class G4EllipticalTube : public G4VSolid
     G4ThreeVector GetPointOnSurface() const;
 
     // Visualisation methods
-
+    //
     G4Polyhedron* CreatePolyhedron() const;
     G4Polyhedron* GetPolyhedron () const;
     void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
     G4VisExtent GetExtent() const;
 
     // Accessors
-
+    //
     inline G4double GetDx() const;
     inline G4double GetDy() const;
     inline G4double GetDz() const;
   
-    inline void SetDx( const G4double newDx );
-    inline void SetDy( const G4double newDy );
-    inline void SetDz( const G4double newDz );
+    inline void SetDx( G4double Dx );
+    inline void SetDy( G4double Dy );
+    inline void SetDz( G4double Dz );
  
   public:  // without description
 
     G4EllipticalTube(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
+      // persistifiable objects
 
     G4EllipticalTube(const G4EllipticalTube& rhs);
-    G4EllipticalTube& operator=(const G4EllipticalTube& rhs); 
-      // Copy constructor and assignment operator.
-
-  protected:  // without description
-
-    G4double dx, dy, dz;
-  
-    // Utility
-
-    inline G4double CheckXY( const G4double x,
-                             const G4double y,
-                             const G4double toler ) const;
-    inline G4double CheckXY( const G4double x, const G4double y ) const;
-
-    G4int IntersectXY( const G4ThreeVector &p,
-                       const G4ThreeVector &v, G4double s[2] ) const;
+    G4EllipticalTube& operator=(const G4EllipticalTube& rhs);
+      // Copy constructor and assignment operator
 
   private:
 
+    void CheckParameters();
+      // Check parameters and set pre-calculated values
+
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
-      // specification for points not on the surface.
+      // specification for points not on the surface
 
-    G4double halfTol;
+    G4double GetCachedSurfaceArea() const;
+      // Calculate surface area and cache it
 
-    G4double fCubicVolume;
-    G4double fSurfaceArea;
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
+  private:
+
+    G4double halfTolerance;
+
+    G4double fDx; // semi-axis in X
+    G4double fDy; // semi-axis in Y
+    G4double fDz; // half length in Z
+
+    G4double fCubicVolume = 0.0; // volume
+    G4double fSurfaceArea = 0.0; // surface area  
+
+    // Cached pre-calculated values
+    G4double fRsph;    // R of bounding sphere
+    G4double fDDx;     // Dx squared
+    G4double fDDy;     // Dy squared
+    G4double fSx;      // X scale factor
+    G4double fSy;      // Y scale factor
+    G4double fR;       // resulting Radius, after scaling elipse to circle
+    G4double fQ1;      // distance approximation : dist = Q1*(x^2 + y^2) - Q2
+    G4double fQ2;      // distance approximation : dist = Q1*(x^2 + y^2) - Q2
+    G4double fScratch; // half length of scratching segment squared
+
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
 #include "G4EllipticalTube.icc"
 
-#endif
+#endif  // defined(G4GEOM_USE_UELLIPTICALTUBE) && defined(G4GEOM_USE_SYS_USOLIDS)
+
+#endif // G4ELLIPTICALTUBE_HH

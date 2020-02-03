@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr00/include/HistoManagerMessenger.hh
 /// \brief Definition of the HistoManagerMessenger class
 //
-// $Id: HistoManagerMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //
 /////////////////////////////////////////////////////////////////////////

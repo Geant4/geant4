@@ -27,7 +27,6 @@
 /// \brief Implementation of the TSDetectorConstruction class
 //
 //
-// $Id: TSDetectorConstruction.cc 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// Construction of a target material (default = boron) surrounded by a
@@ -137,7 +136,7 @@ TSDetectorConstruction::ConstructWorld(const MaterialCollection_t& materials)
 {
     G4UserLimits* steplimit = new G4UserLimits(0.1*(fTargetDim.z()
                                                     /fTargetSections.z()));
-    G4bool check_overlap = true;
+    G4bool check_overlap = false;
 
     G4Box* world_solid = new G4Box("World",
                                    0.5*fWorldDim.x(),

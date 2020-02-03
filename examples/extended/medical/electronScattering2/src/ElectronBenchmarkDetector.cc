@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: ElectronBenchmarkDetector.cc 93389 2015-10-20 07:04:35Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/electronScattering2/src/ElectronBenchmarkDetector.cc
 /// \brief Implementation of the ElectronBenchmarkDetector class
@@ -418,8 +421,13 @@ void ElectronBenchmarkDetector::ConstructSDandField()
         primitive->SetFilter(electronFilter);
         sensitiveDetector->RegisterPrimitive(primitive);
     }
+<<<<<<< HEAD
     
     SetSensitiveDetector("scorerRingLog",sensitiveDetector);
+=======
+    G4SDManager::GetSDMpointer()->AddNewDetector(sensitiveDetector);
+    fScorerRingLog->SetSensitiveDetector(sensitiveDetector);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

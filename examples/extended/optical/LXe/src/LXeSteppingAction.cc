@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXeSteppingAction.cc 73915 2013-09-17 07:32:26Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/src/LXeSteppingAction.cc
 /// \brief Implementation of the LXeSteppingAction class

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IntraNucleiCascader.hh 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()

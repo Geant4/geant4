@@ -23,19 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SmartVoxelStat.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// class G4SmartVoxelStat
+// G4SmartVoxelStat class implementation
 //
 // Stores information on the performance of the smart voxel algorithm
 // for an individual logical volume.
 //
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
-//
 // --------------------------------------------------------------------
 
 #include "G4SmartVoxelStat.hh"
@@ -46,31 +39,27 @@
 //
 // Constructor
 //
-G4SmartVoxelStat::G4SmartVoxelStat( const G4LogicalVolume *theVolume,
-                                    const G4SmartVoxelHeader *theVoxel,
+G4SmartVoxelStat::G4SmartVoxelStat( const G4LogicalVolume* theVolume,
+                                    const G4SmartVoxelHeader* theVoxel,
                                           G4double theSysTime,
                                           G4double theUserTime )
     : volume(theVolume),
       voxel(theVoxel),
       sysTime(theSysTime),
-      userTime(theUserTime),
-      heads(1),
-      nodes(0),
-      pointers(0)
+      userTime(theUserTime)
 {
   CountHeadsAndNodes( voxel );
 }
 
-
 //
 // Simple Accessors
 //
-const G4LogicalVolume *G4SmartVoxelStat::GetVolume() const
+const G4LogicalVolume* G4SmartVoxelStat::GetVolume() const
 {
   return volume;
 }
 
-const G4SmartVoxelHeader *G4SmartVoxelStat::GetVoxel() const
+const G4SmartVoxelHeader* G4SmartVoxelStat::GetVoxel() const
 {
   return voxel;
 }
@@ -105,7 +94,6 @@ G4long G4SmartVoxelStat::GetNumberPointers() const
   return pointers;
 }
 
-
 //
 // Return approximate memory use
 //
@@ -122,33 +110,34 @@ G4long G4SmartVoxelStat::GetMemoryUse() const
   return nodes*nodeSize + heads*headSize + pointers*pointerSize;
 }
 
-
-
 //
 // CountHeadsAndNodes
 //
 // Recursively count the number of voxel headers and nodes,
 // updating class member variables heads and nodes on the way.
 //
-void G4SmartVoxelStat::CountHeadsAndNodes( const G4SmartVoxelHeader *head ) 
+void G4SmartVoxelStat::CountHeadsAndNodes( const G4SmartVoxelHeader* head ) 
 {
   G4int numSlices = head->GetNoSlices();
   
   pointers += numSlices;
   
-  const G4SmartVoxelProxy *lastProxy = 0;
+  const G4SmartVoxelProxy* lastProxy = nullptr;
   
-  for(G4int i=0;i<numSlices;++i) {
+  for(auto i=0; i<numSlices; ++i)
+  {
     const G4SmartVoxelProxy *proxy = head->GetSlice(i);
     if (proxy == lastProxy) continue;
     
     lastProxy = proxy;
     
-    if (proxy->IsNode()) {
-      nodes++;
+    if (proxy->IsNode())
+    {
+      ++nodes;
     }
-    else {
-      heads++;
+    else
+    {
+      ++heads;
       CountHeadsAndNodes(proxy->GetHeader());
     }
   }

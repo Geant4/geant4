@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsKaonMinusElasticXS.cc 93203 2015-10-12 07:42:34Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsKaonMinusElasticXS for pA elastic cross sections
@@ -748,7 +747,10 @@ G4double G4ChipsKaonMinusElasticXS::GetTabValues(G4double lp, G4int PDG, G4int t
                                                     G4int tgN)
 {
   if(PDG!=-321)G4cout<<"*Warning*G4ChipsKaonMinusElasticXS::GetTV:PDG="<<PDG<<G4endl;
-  if(tgZ<0 || tgZ>92)
+
+  //AR-24Apr2018 Switch to allow transuranic elements
+  const G4bool isHeavyElementAllowed = true;
+  if(tgZ<0 || ( !isHeavyElementAllowed && tgZ>92))
   {
     G4cout<<"*Warning*G4QKaonMinusElasticCS::GetTabV:(1-92)NoIsotopes for Z="<<tgZ<<G4endl;
     return 0.;

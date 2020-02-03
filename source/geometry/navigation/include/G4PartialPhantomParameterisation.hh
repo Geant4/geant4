@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PartialPhantomParameterisation.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
 // class G4PartialPhantomParameterisation
 //
 // Class description:
@@ -35,9 +31,8 @@
 // completely fill the container in the three dimensions
 
 // History:
-// - Created.    P. Arce, September 2010
-// *********************************************************************
-
+// - Created: P.Arce, September 2010
+// --------------------------------------------------------------------
 #ifndef G4PartialPhantomParameterisation_HH
 #define G4PartialPhantomParameterisation_HH
 
@@ -65,7 +60,7 @@ class G4PartialPhantomParameterisation : public G4PhantomParameterisation
   
     G4Material* ComputeMaterial(const G4int repNo, 
                                       G4VPhysicalVolume *currentVol,
-                                const G4VTouchable *parentTouch=0);
+                                const G4VTouchable *parentTouch = nullptr);
 
     G4int GetReplicaNo( const G4ThreeVector& localPoint,
                         const G4ThreeVector& localDir );
@@ -80,11 +75,13 @@ class G4PartialPhantomParameterisation : public G4PhantomParameterisation
     G4Material* GetMaterial( size_t nx, size_t ny, size_t nz) const;
     G4Material* GetMaterial( size_t copyNo ) const;
 
-    void SetFilledIDs(   std::multimap<G4int,G4int> fid ){
+    void SetFilledIDs( std::multimap<G4int,G4int> fid )
+    {
       fFilledIDs = fid; 
     }
 
-    void SetFilledMins( std::map< G4int, std::map<G4int,G4int> > fmins ) {
+    void SetFilledMins( std::map< G4int, std::map<G4int,G4int> > fmins )
+    {
       fFilledMins = fmins;
     }
 

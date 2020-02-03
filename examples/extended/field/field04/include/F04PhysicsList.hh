@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04PhysicsList.hh 85915 2014-11-06 09:05:23Z gcosmo $
 //
 /// \file field/field04/include/F04PhysicsList.hh
 /// \brief Definition of the F04PhysicsList class
@@ -47,11 +46,6 @@ public:
     F04PhysicsList(G4String);
     virtual ~F04PhysicsList();
 
-    virtual void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-
     void SetStepMax(G4double);
     F04StepMax* GetStepMaxProcess();
     void AddStepMax();
@@ -66,10 +60,6 @@ public:
     virtual void ConstructProcess();
 
 private:
-
-    G4double fCutForGamma;
-    G4double fCutForElectron;
-    G4double fCutForPositron;
 
     G4double fMaxChargedStep;
     static G4ThreadLocal F04StepMax* fStepMaxProcess;

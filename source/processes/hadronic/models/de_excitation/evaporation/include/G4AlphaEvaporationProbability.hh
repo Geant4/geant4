@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AlphaEvaporationProbability.hh 89518 2015-04-15 14:43:30Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -38,33 +37,29 @@
 
 
 #include "G4EvaporationProbability.hh"
-#include "G4AlphaCoulombBarrier.hh"
 
 class G4AlphaEvaporationProbability : public G4EvaporationProbability
 {
 public:
 
-  G4AlphaEvaporationProbability();
+  explicit G4AlphaEvaporationProbability();
 
-  virtual ~G4AlphaEvaporationProbability();
+  ~G4AlphaEvaporationProbability() override;
 
 protected:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+  G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment);
+  G4double CalcBetaParam(const G4Fragment & fragment) override;
 
 private:  
 
   G4AlphaEvaporationProbability(const G4AlphaEvaporationProbability &right);
-
-  const G4AlphaEvaporationProbability & operator=(const G4AlphaEvaporationProbability &right);
+  const G4AlphaEvaporationProbability & operator=
+  (const G4AlphaEvaporationProbability &right);
   G4bool operator==(const G4AlphaEvaporationProbability &right) const;
   G4bool operator!=(const G4AlphaEvaporationProbability &right) const;
-
-  G4AlphaCoulombBarrier theCoulombBarrier;
 };
-
 
 #endif
 

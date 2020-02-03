@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // Multibody "phase space" generator using GENBOD (CERNLIB W515) method.
 //

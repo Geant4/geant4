@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "analysis/AnaEx03/.README.txt"
 ///\brief Example AnaEx03 README page
@@ -129,5 +128,33 @@
 \verbatim      
 % gmake clean_setup
 \endverbatim
- 
+
+\section AnaEx03_s8 HOW TO RUN
+
+- Execute AnaEx03 in the 'interactive mode' with visualization
+\verbatim
+% ./AnaEx03
+and type in the commands from run.mac line by line:
+Idle> /control/verbose 2
+Idle> /tracking/verbose 1
+Idle> /run/beamOn 10 
+Idle> ...
+Idle> exit
+\endverbatim                
+      or
+\verbatim
+Idle> /control/execute run.mac
+....
+Idle> exit
+\endverbatim                
+
+- Execute AnaEx03 in the 'batch' mode from macro files 
+(without visualization)
+\verbatim
+% ./AnaEx03 run.mac
+% ./AnaEx03 run.mac > run.out
+\endverbatim                
+
+The AnaEx03.in macro is used in Geant4 testing.
+
 */

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SliceTimer.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -35,8 +34,6 @@
 
 #include "G4SliceTimer.hh"
 #include "G4ios.hh"
-
-#undef times
 
 #if defined(IRIX6_2)
 #  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED==1)

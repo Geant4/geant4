@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc 81087 2014-05-20 15:44:27Z gcosmo $
-// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSDoseDeposit
 #include "G4PSDoseDeposit.hh"

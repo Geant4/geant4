@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.hh 74048 2013-09-20 09:34:57Z gcosmo $
 //
 
 #ifndef G4SDStructure_h
@@ -47,22 +46,22 @@ class G4HCofThisEvent;
 class G4SDStructure 
 {
   public:
-      G4SDStructure(G4String aPath);
+      G4SDStructure(const G4String &aPath);
       ~G4SDStructure();
 
-      G4int operator==(const G4SDStructure &right) const;
+      G4bool operator==(const G4SDStructure &right) const;
 
-      void AddNewDetector(G4VSensitiveDetector*aSD, G4String treeStructure);
-      void Activate(G4String aName, G4bool sensitiveFlag);
+      void AddNewDetector(G4VSensitiveDetector*aSD, const G4String &treeStructure);
+      void Activate(const G4String &aName, G4bool sensitiveFlag);
       void Initialize(G4HCofThisEvent*HCE);
       void Terminate(G4HCofThisEvent*HCE);
-      G4VSensitiveDetector* FindSensitiveDetector(G4String aName, G4bool warning = true);
-      G4VSensitiveDetector* GetSD(G4String aName);
+      G4VSensitiveDetector* FindSensitiveDetector(const G4String &aName, G4bool warning = true);
+      G4VSensitiveDetector* GetSD(const G4String &aName);
       void ListTree();
 
   private:
-      G4SDStructure* FindSubDirectory(G4String subD);
-      G4String ExtractDirName(G4String aPath);
+      G4SDStructure* FindSubDirectory(const G4String &subD);
+      G4String ExtractDirName(const G4String &aPath);
       void RemoveSD(G4VSensitiveDetector*);
 
   private:

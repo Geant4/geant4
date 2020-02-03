@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
+<<<<<<< HEAD
 // $Id: TrackingAction.cc 68036 2013-03-13 14:13:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

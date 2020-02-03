@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ProtonCoulombBarrier.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -37,20 +36,15 @@ G4ProtonCoulombBarrier::G4ProtonCoulombBarrier() : G4CoulombBarrier(1,1)
 G4ProtonCoulombBarrier::~G4ProtonCoulombBarrier() 
 {}
 
-G4double G4ProtonCoulombBarrier::BarrierPenetrationFactor(G4double aZ) const
+G4double G4ProtonCoulombBarrier::BarrierPenetrationFactor(G4int aZ) const
 {
-    // Data comes from 
-    // Dostrovsky, Fraenkel and Friedlander
-    // Physical Review, vol 116, num. 3 1959
-    // 
-    // const G4int size = 5;
-    // const G4double Zlist[size] = {10.0, 20.0, 30.0, 50.0, 70.0};
-    // const G4double Kprot[size] = {0.42, 0.58, 0.68, 0.77, 0.80};
-    G4double K = 1.0;
-    if (aZ>=70.0) {
-	K = 0.80;
-    } else {
-	K = (((0.2357e-5*aZ) - 0.42679e-3)*aZ + 0.27035e-1)*aZ + 0.19025;
-    }
-    return K;
+  // Data comes from 
+  // Dostrovsky, Fraenkel and Friedlander
+  // Physical Review, vol 116, num. 3 1959
+  // 
+  // const G4int size = 5;
+  // const G4double Zlist[size] = {10.0, 20.0, 30.0, 50.0, 70.0};
+  // const G4double Kprot[size] = {0.42, 0.58, 0.68, 0.77, 0.80};
+  return  (aZ >= 70) ? 0.80 :
+    (((0.2357e-5*aZ) - 0.42679e-3)*aZ + 0.27035e-1)*aZ + 0.19025;
 }

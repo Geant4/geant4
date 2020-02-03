@@ -1,0 +1,26 @@
+#
+# macro file for TestEm18.cc
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSize 5 cm
+#
+/testem/phys/addPhysics standard
+#
+/run/setCut 1 mm
+#
+/run/initialize
+#
+/gun/particle e- 
+/gun/energy 100 MeV
+#
+/testem/trackSecondaries true
+#
+/analysis/setFileName edep
+/analysis/h1/set  7 100 0 100 MeV	  #total Elost
+/analysis/h1/set 10 100 0 100 MeV	  #total Edep
+#
+/run/printProgress 10000
+/run/beamOn 100000

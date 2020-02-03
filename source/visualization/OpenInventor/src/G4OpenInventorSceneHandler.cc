@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -609,7 +608,7 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
     // the path of the current drawn (non-culled) volume in terms of
-    // drawn (non-culled) ancesters.  Each node is identified by a
+    // drawn (non-culled) ancestors.  Each node is identified by a
     // PVNodeID object, which is a physical volume and copy number.  It
     // is a vector of PVNodeIDs corresponding to the geometry hierarchy
     // actually selected, i.e., not culled.
@@ -683,6 +682,9 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
       case (G4ViewParameters::hlhsr):
 	fModelingSolid = true;
 	break;
+      case (G4ViewParameters::cloud):
+        fModelingSolid = false;
+        break;
       }
 
       SoMaterial* material = 
@@ -792,6 +794,9 @@ void G4OpenInventorSceneHandler::AddProperties(const G4VisAttributes* visAtts)
   case (G4ViewParameters::hsr):
   case (G4ViewParameters::hlhsr):
     fModelingSolid = true;
+    break;
+  case (G4ViewParameters::cloud):
+    fModelingSolid = false;
     break;
   }
 

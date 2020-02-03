@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModifiedTsai.cc 91726 2015-08-03 15:41:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,42 +56,29 @@
 //
 
 #include "G4ModifiedTsai.hh"
-#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Log.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ModifiedTsai::G4ModifiedTsai(const G4String&)
-  : G4VEmAngularDistribution("AngularGenUrban")
+  : G4VEmAngularDistribution("ModifiedTsai")
 {}    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ModifiedTsai::~G4ModifiedTsai() 
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ThreeVector& 
 G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
                                 G4double, G4int, const G4Material*)
 {
   // Sample gamma angle (Z - axis along the parent particle).
-  // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
-  // Phys211) derived from Tsai distribution (Rev Mod Phys 49,421(1977))
-
-  G4double uMax = 2*(1. + dp->GetKineticEnergy()/electron_mass_c2);   
-
-  static const G4double a1     = 0.625;
-  static const G4double a2     = 1.875;
-  static const G4double border = 0.25;
-  G4double u;
-
-  do {
-    u = - G4Log(G4UniformRand()*G4UniformRand());
-
-    if ( border > G4UniformRand() ) { u /= a1; }
-    else                            { u /= a2; }
-    
-    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-  } while(u > uMax);
-
-  G4double cost = 1.0 - 2*u*u/(uMax*uMax);
+  G4double cost = SampleCosTheta(dp->GetKineticEnergy());
   G4double sint = std::sqrt((1 - cost)*(1 + cost));
   G4double phi  = CLHEP::twopi*G4UniformRand(); 
 
@@ -101,6 +87,59 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
 
   return fLocalDirection;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ModifiedTsai::SampleCosTheta(G4double kinEnergy)
+{
+  // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
+  // Phys211) derived from Tsai distribution (Rev Mod Phys 49,421(1977))
+
+  G4double uMax = 2*(1. + kinEnergy/CLHEP::electron_mass_c2);   
+
+  static const G4double a1     = 1.6;
+  static const G4double a2     = a1/3.;
+  static const G4double border = 0.25;
+  G4double u;
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
+
+  do {
+    G4double uu = -G4Log(rndmEngine->flat()*rndmEngine->flat());
+    u = (border > rndmEngine->flat()) ? uu*a1 : uu*a2;
+    
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+  } while(u > uMax);
+
+  return 1.0 - 2.0*u*u/(uMax*uMax);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4ModifiedTsai::SamplePairDirections(const G4DynamicParticle* dp,
+					  G4double elecKinEnergy,
+					  G4double posiKinEnergy,
+					  G4ThreeVector& dirElectron,
+					  G4ThreeVector& dirPositron,
+					  G4int, const G4Material*)
+{
+  G4double phi  = CLHEP::twopi * G4UniformRand();
+  G4double sinp = std::sin(phi);
+  G4double cosp = std::cos(phi);
+
+  G4double cost = SampleCosTheta(elecKinEnergy);
+  G4double sint = std::sqrt((1. - cost)*(1. + cost));
+
+  dirElectron.set(sint*cosp, sint*sinp, cost);
+  dirElectron.rotateUz(dp->GetMomentumDirection());
+
+  cost = SampleCosTheta(posiKinEnergy);
+  sint = std::sqrt((1. - cost)*(1. + cost));
+
+  dirPositron.set(-sint*cosp, -sint*sinp, cost);
+  dirPositron.rotateUz(dp->GetMomentumDirection());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ModifiedTsai::PrintGeneratorInformation() const
 {
@@ -111,3 +150,5 @@ void G4ModifiedTsai::PrintGeneratorInformation() const
   G4cout << "Derived from Tsai distribution (Rev Mod Phys 49,421(1977)) \n" 
          << G4endl;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

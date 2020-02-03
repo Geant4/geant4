@@ -152,6 +152,75 @@ public:
     return true;
   }
 
+  bool set_bin_content(bn_t a_ibin,TN a_entries,TW a_Sw,TW a_Sw2,TC a_Sxw,TC a_Sx2w,TC a_Svw,TC a_Sv2w) {
+    if(parent::m_dimension!=1) return false;
+    if(a_ibin>(parent::m_axes[0].m_number_of_bins+1)) return false;
+
+    bool inRange = true;
+    if(a_ibin==0) inRange = false;
+    else if(a_ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
+
+    TO offset = a_ibin;
+
+    parent::m_all_entries -= parent::m_bin_entries[offset];
+    if(inRange) {
+      parent::m_in_range_entries -= parent::m_bin_entries[offset];
+      parent::m_in_range_Sw -= parent::m_bin_Sw[offset];
+      parent::m_in_range_Sw2 -= parent::m_bin_Sw2[offset];
+      parent::m_in_range_Sxw[0] -= parent::m_bin_Sxw[offset][0];
+      parent::m_in_range_Sx2w[0] -= parent::m_bin_Sx2w[offset][0];
+    }
+
+    parent::m_bin_entries[offset] = a_entries;
+    parent::m_bin_Sw[offset] = a_Sw;
+    parent::m_bin_Sw2[offset] = a_Sw2;
+
+    parent::m_bin_Sxw[offset][0] = a_Sxw;
+    parent::m_bin_Sx2w[offset][0] = a_Sx2w;
+
+    parent::m_all_entries += a_entries;
+    if(inRange) {
+      parent::m_in_range_entries += a_entries;
+      parent::m_in_range_Sw += a_Sw;
+      parent::m_in_range_Sw2 += a_Sw2;
+
+      parent::m_in_range_Sxw[0] += a_Sxw;
+      parent::m_in_range_Sx2w[0] += a_Sx2w;
+    }
+
+    // Profile part :
+    m_bin_Svw[offset]  = a_Svw;
+    m_bin_Sv2w[offset] = a_Sv2w;
+    
+    return true;
+  }
+
+  bool get_bin_content(bn_t a_ibin,TN& a_entries,TW& a_Sw,TW& a_Sw2,TC& a_Sxw,TC& a_Sx2w,TC& a_Svw,TC& a_Sv2w) {
+    if(parent::m_dimension!=1) {
+      a_entries = 0;a_Sw = 0;a_Sw2 = 0;a_Sxw = 0;a_Sx2w = 0;
+      return false;
+    }
+    if(a_ibin>(parent::m_axes[0].m_number_of_bins+1)) {
+      a_entries = 0;a_Sw = 0;a_Sw2 = 0;a_Sxw = 0;a_Sx2w = 0;
+      return false;
+    }
+
+    TO offset = a_ibin;
+
+    a_entries = parent::m_bin_entries[offset];
+    a_Sw = parent::m_bin_Sw[offset];
+    a_Sw2 = parent::m_bin_Sw2[offset];
+
+    a_Sxw = parent::m_bin_Sxw[offset][0];
+    a_Sx2w = parent::m_bin_Sx2w[offset][0];
+
+    // Profile part :
+    a_Svw = m_bin_Svw[offset];
+    a_Sv2w = m_bin_Sv2w[offset];
+    
+    return true;
+  }
+
   TV bin_rms_value(int aI) const {
     TO offset;
     if(!parent::_find_offset(aI,offset)) return 0;

@@ -1,4 +1,3 @@
-$Id: History 102286 2017-01-20 10:31:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,23 +15,602 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 14, 2019 J.Apostolakis                  - field-V10-05-17
+-------------------------------
+- Added method / attribute to G4VIntegrationDriver DoesReIntegrate()
+   to inform whether the driver recomputes segment when
+   AccurateAdvance is called.
 
-Oct 7, 2016 D.Sorokin                 - field-V10-01-18
----------------------  Commit: J. Apostolakis
+October 27, 2019 D.Sorokin                       - field-V10-05-16
+----------------------------
+- Remove statistics printouts from destructor of G4BFieldIntegrationDriver
+
+October 24, 2019 H.Burkhardt                       - field-V10-05-15
+----------------------------
+- Standard sextupole magnet first implementation G4SextupoleMagField.cc,.hh
+
+October 18, 2019 D. Sorokin                         - field-V10-05-14
+-----------------------------------------
+- Fix floating point exception in G4BFieldIntegrationDriver.
+
+October 1, 2019 G. Cosmo                         - field-V10-05-13
+-----------------------------------------
+- Fixed unitialised data in G4EqMagElectricField and G4EqGravityField,
+  reported by Coverity.
+
+September 12, 2019 G. Cosmo                      - field-V10-05-12
+-----------------------------------------
+- Minor C++11 revision. Code formatting and cleanup.
+
+July 8, 2019 D. Sorokin                          - field-V10-05-11
+-----------------------------------------
+- G4BFieldIntegrationDriver: an attempt to solve looping particle issue. 
+
+July 3, 2019 D. Sorokin                          - field-V10-05-10
+-----------------------------------------
+- Make G4InterpolationDriver default for performance assessments.
+
+June 25, 2019 D. Sorokin                          - field-V10-05-09
+-----------------------------------------
+- Fix Dormand-Prince 5th order interpolation method
+
+June 20, 2019 D. Sorokin                          - field-V10-05-08
+-----------------------------------------
+- New version of G4InterpolationDriver with multiple steppers for each substep.
+
+June 12, 2019 D. Sorokin & J. Apostolakis         - field-V10-05-07
+-----------------------------------------
+- Revert to use G4IntegrationDriver as default in G4ChordFinder 
+    ( c-tor for magnetic field. ).
+  Change to use concrete type of Stepper as template parameter
+
+June 10, 2019 Dmitry Sorokin                      - field-V10-05-06
+-------------------------
+- Remove division in G4DormandPrince745::Interpolate4thOrder.
+
+June 7, 2019 Dmitry Sorokin                      - field-V10-05-05
+-------------------------
+- Switch to original chord finding algorithm in G4InterpolationDriver
+- Reset step estimate in G4MagInt_Driver only at the beginning of a track
+- Change G4VERBOSE to G4FIELD_DEBUG in G4InterpolationDriver to speed-up
+
+June 4, 2019 Dmitry Sorokin                      - field-V10-05-04
+-------------------------
+- Use FSAL property of G4DormandPrince745 in G4InterpolationDriver.
+
+June 3, 2019 Dmitry Sorokin                      - field-V10-05-03
+-------------------------
+- Fix memory churn in G4InterpolationDriver.
+
+May 20, 2019 Dmitry Sorokin                      - field-V10-05-02
+-------------------------
+- Make interpolation driver default for immediate testing.
+
+April 8, 2019 H.Burkhardt                        - field-V10-05-01
+-------------------------
+- Correcting transformation to local system in G4QuadrupoleMagField.cc
+
+March 20, 2019 G.Cosmo                           - field-V10-05-00
+----------------------
+- Corrected 'RegularStepperName' in G4ChordFinder to refer to the actual
+  default stepper G4DormandPrince745 rather than G4NystromRK4...
+
+November 9, 2018 J.Apostolakis                   - field-V10-04-17
+------------------------------
+- Small fixes for warnings in compilation.
+- Revisions of descriptions of recent tags (for clarification.)
+
+September 26, 2018 D.Sorokin                   - field-V10-04-15, -16
+----------------------------
+- Implemented G4InterpolationDriver. This driver uses a Runge-Kutta
+  stepper with interpolation property to integrate EoM with error control.
+  The field evaluations used to calculate the enpoint of an 'advance' can
+  be reused to obtain one or multiple internal points on the curve (x,p).
+  So in steps in which an intersection is found, the number of field
+  evaluations are expected to be reduced substantially.
+
+September 13, 2018 D.Sorokin                   - field-V10-04-13, -14
+----------------------------
+- G4NystromRK4 creates G4CachedMagneticField if it was not provided.
+- Removed G4MagIntegratorStepper::ComputeRightHandSide() method
+  (all calls now use non-virtual RightHandSide() method instead).
+- Reversed declaration of final for the class G4UniformMagField.
+  Returned to previous status: only GetFieldValue method is final.
+  ( This avoid need to change examples/tests and potentially migrate 
+    users' code. ) 
+
+September 12, 2018 D.Sorokin                   - field-V10-04-11, -12
+----------------------------
+- Created new experimental driver G4BFieldIntegrationDriver for pure
+  magnetic fields.  In QuickAdvance it uses helix stepper when the
+  estimated 'helix' rotation angle is larger than pi/3.
+- G4NystromRK4 uses G4CachedMagneticField for caching values.
+  NOTE: It now the user's responsibility to create G4CachedMagneticField. 
+  ( The alternative is to create G4CachedMagneticField inside G4NystromRK4.
+    But this would have several disadvantages:
+    * It would change the field in the user's equation of motion;
+    * G4NystromRK4 is not able to check whether the user calls the method
+      that changes the equation using SetEquationOfMotion  method. )
+
+July 10, 2018 D. Sorokin              - field-V10-04-08, -09, -10
+------------------------ Tags by J. Apostolakis
+- Corrections in calculation of chord distance in G4DormandPrince745
+  ( use 4th order interpolation from Shampine 1986 for mid-point. )
+- Revised G4FieldUtils: moved copy() method from steppers,
+  added 2 new setValue: simple & variadic methods.
+- Fixes to copy input time in ModifiedMidpoint, CashKarp, G4RK547FEq1/2/3
+  Bogacki-Shampine 4/5 and 2/3  (note: B-S 2/3 largely rewritten )
+  Dormand Prince 4/5, 5/6 and 7/8,  and Tsitouras steppers.
+- Trial revision in G4BulirschStoer to reduce number of division
+  operations (J.A.)
+- Fix for unitialised pIntStepper pointer in G4FSALIntegrationDriver
+  constructor.  Revision of data member variable names.  ( J.A. )
+  
+June 15, 2018 G.Cosmo                   - field-V10-04-07
+---------------------
+- Fixed minor Coverity defects in G4BurlischStoer and G4ModifiedMidPoint.
+  Code cleanup.
+
+June 13, 2018 G.Cosmo                   - field-V10-04-06
+---------------------
+- Leave override final only for clone() method in G4UniformMagField,
+  not in destructor...
+
+June 12, 2018 G.Cosmo                   - field-V10-04-05
+---------------------
+- Use G4Exception warnings instead of streaming to cerr.
+- Added override final for virtual methods in G4UniformMagField (J.Apostolakis).
+- Some code cleanup.
+
+Apr 30, 2018 J. Apostolakis             - field-V10-04-04
+---------------------------
+- G4VIntegrationDriver and derived classes
+
+  Added new virtual method in G4VIntegrationDriver :
+      void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
+  which used to exist in G4MagInt_Driver. 
+  ( Its absence caused a problem in some existing user code since 10.4. )
+
+  This method must be defined in those derived driver classes which accept
+  a Runge Kutta stepper ( i.e. some or any type of G4MagIntegratorStepper )
+
+- G4IntegrationDriver, G4FSALIntegrationDriver
+  Defined default implementation (which throws a Fatal G4Exception), and 
+  implementations in the templated classes G4IntegrationDriver and
+  G4FSALIntegrationDriver which check the type (via dynamic cast) and
+  change the stepper if it is appropriate.
+
+Feb 13, 2018 J. Apostolakis             - field-V10-04-03
+---------------------------
+- Change in G4FieldManager::CreateChordFinder to cope 
+  better with case that field argument is null.
+
+Feb 13, 2018 D. Sorokin                 - field-V10-04-01
+-----------------------                 - field-V10-04-02 (comp. fix)
+- Introduced Bulirsch-Stoer method of integration, an alternative
+  to Runge-Kutta based on the mid-point method.
+  Separate driver derived G4VIntegrationDriver and implemented
+  using specialisation of G4IntegrationDriver template class.
+  Note: this method does not have a RK 'Stepper' !
+
+Jan 31, 2018 J. Apostolakis
+---------------------------
+- G4MagneticField no longer inherits from G4ElectroMagneticField
+  This was incorrect, and allowed a user to provide a full EM 
+  field, but obtain the force only from the B-field when using
+  the equation created in the G4ChordFinder constructor.
+   => potential interface change.
+
+  Result: It is no longer possible to use the equation of motion for a 
+     pure magnetic field for the case of a mixed electromagnetic field.
+     This change is desired, and is a *protection* as that inadvertent
+     use led to incorrect results. 
+  Instead the full chain of classes for equation of full EM field,
+     steppers and driver must be used for the case of the 'full' EM field.
+
+Feb 9, 2017 G.Cosmo                     - field-V10-04-00
+-------------------
+- Removed static data from G4FSALIntegrationDriver, G4IntegrationDriver and
+  G4MagIntegratorDriver and moved to base class as normal data members.
+  Fix required for allowing proper symbol exporting on Windows DLLs.
+
+Nov 17, 2017 J. Apostolakis             - field-V10-03-30
+---------------------------
+- G4ChordFinder: Reinstated old driver G4MagInt_Drv, for use 
+    with G4DormandPrince745 (5th order) in G4ChordFinder's
+    2nd constructor (with magnetic field.)
+  ( Reverses change made in field-V10-03-27 )
+
+Nov 16, 2017 J. Apostolakis             - field-V10-03-29
+---------------------------
+- Suppressed statistics printing in G4ChordFinder and new drivers
+   ( G4IntegrationDriver and G4FSALIntegrationDriver )
+   protecting them by verbosity flags.
+    
+- Minor fix to initialise scalar data member in new steppers
+  G4RK547FEq1, G4RK547FEq2 and G4RK547FEq3. 
+  Fixes coverity issues 97886, 97888 and 97889.
+
+
+Nov 14, 2017 J. Apostolakis             - field-V10-03-28
+---------------------------
+- Suppressed extra verbosity in G4ChordFinder.
+- Fix in G4FSALDormandPrince745 for unitialised variables.
+  Initialise ak8[], ak9[] in constructor. This avoids repeated
+  memory allocation, without deletion - i.e. a memory leak.
+- Initialise fLastStepLength and/or fAuxStepper data members in 
+  in constructors of G4DormandPrince745 and G4FSALDormandPrince745.
+  Coverity issues: 67394 (G4FSALDormandPrince745)
+                   67391     (G4DormandPrince745)
+
+Nov 14, 2017 J. Apostolakis             - field-V10-03-27 (fixed)
+---------------------------             - field-V10-03-26
+- G4ChordFinder: changes in default stepper & driver in 2nd constructor.
+  in which only a magnetic field is provided (used widely) :
+  
+  * Reinstated G4DormandPrince745 (5th order) as default in G4ChordFinder.
+   (corrected -23, which missed to initialise driver.)
+
+  * New templated driver G4IntegrationDriver is chosen for the 
+    the simple constuctors of G4ChordFinder and G4FieldManager
+    which only require a (pure) magnetic field. ( Details below.)
+
+  Additional information and details:
+  * New optional parameter to constructor of G4ChordFinder which
+    allow to create an FSAL stepper and corresponding driver instead.
+    This aims to reuse some derivatives, thus reducing computations
+    of derivatives and thus field evaluations. )
+
+  * The templated 'driver' classes, available and now chosen in 
+    G4ChordFinder's 2nd constructor, are used per type of stepper
+    class:
+     - G4IntegrationDriver      for non-FSAL     steppers
+     - G4FSALIntegrationDriver  for FSAL-capable steppers
+    These make non-virtual calls to the stepper, as they know its type.
+
+- First fix in G4FSALDormandPrince745 for memory leak, missing 
+  delete[] fInitialDyDx in destructor. Coverity issue: 96383.
+
+----------------------------------------------------------------------
+Multiple tags (below) were to better test stepper/driver combinations:
+Date   Tagger         Tag name        Stepper                Driver
+======================================================================
+Nov 3, D. Sorokin     field-V10-03-25 G4FSALBogackiShampine45 FSAL 
+Nov 3, J. Apostolakis field-V10-03-24 G4FSALDormandPrince745  FSAL  ok
+Nov 2, J. Apostolakis field-V10-03-23 G4DormandPrince745      new    
+Nov 2, J. Apostolakis field-V10-03-22 G4RK547FEq1             FSAL  ok
+----------------------------------------------------------------------
+Glossary of drivers:
+   the FSAL driver = using G4FSALIntegrationDriver (templated)
+   the new  driver = using G4IntegrationDriver     (templated)
+===================================================================
+
+Nov  2, 2017 D. Sorokin                 - field-V10-03-21
+---------------------------------------
+- Added new steppers G4RK547FEq{1,2,3} which implement 7 stage embedded 
+  Runge-Kutta 4,5 pairs with:
+     - FSAL property (return derivative at endpoint for use in next step),
+     - stable equilibrium states ( improved handling of difficulties in
+         integration: better stability in choosing step size. )
+  Each one can be used with all existing Runge-Kutta drivers:
+     - G4FSALIntegrationDriver, using its FSAL property;
+     - G4IntegrationDriver    without its FSAL property.
+     - the original G4MagInt_Driver, also ignoring FSAL.
+
+- Reinstated G4DormandPrince745  ( known widely as DOPRI5 ) as
+  the default RK method in G4ChordFinder for pure magnetic fields.
+    ( Withdrew G4BogackiShampine45. )  J. Apostolakis
+  
+Nov  1, 2017 J. Apostolakis             - field-V10-03-20
+---------------------------
+- Made G4BogackiShampine45 the default RK method in G4ChordFinder
+   for pure magnetic fields.
+
+Oct 30, 2017 D. Sorokin/J.Apostolakis   - field-V10-03-19
+---------------------------------------
+- add GetStepper method to G4VIntegrationDriver for backward compatibility
+
+Oct 20, 2017 D. Sorokin                 - field-V10-03-18
+---------------------------------------
+Introduced base class for any driver algorithm (G4VIntegrationDriver)
+New concrete classes added:
+- G4IntegrationDriver: implementation of templated driver algorithm
+  for non-fsal explicit Runge-Kutta steppers
+- G4FSALIntegrationDriver: implementation of driver algorithm for
+  FSAL explicit Runge-Kutta steppers.
+Existing class G4MagInt_Drv remains, deriving from base class.
+
+- Expanded testing in testProElectroMagField (higher precision, new driver)
+   ( J. Apostolakis)
+
+Oct 13, 2017 D. Sorokin                 - field-V10-03-17
+---------------------------------------
+- add G4FieldUtils.hh, G4FieldUtils.icc, G4FieldUtils.cc: 
+  utilities to extract data from arrays in conventions of the 
+  magneticfield integration.
+
+Oct 13, 2017 G. Cosmo                   - field-V10-03-16
+---------------------------------------
+- G4NystromRK4: use consistenly G4 types for double and bool in G4NystromRK4.
+
+Aug 31, 2017 J. Apostolakis             - field-V10-03-15
+---------------------------------------
+- Made G4DormandPrince457 the default Stepper for magnetic fields in
+  G4ChordFinder - when a driver/stepper is not specified.
+
+Aug 31, 2017 J. Apostolakis             - field-V10-03-14
+---------------------------------------
+- G4NystromRK4: used caching of momentum magnitude ( & its inverse)
+  to reduce overhead of fix in field-V10-03-10.
+
+Aug 25, 2017 J. Apostolakis             - field-V10-03-12, 13
+---------------------------------------
+- G4MagInt_Driver: added GetEquationOfMotion method for enabling common
+  code with future develoment.
+
+Aug 24, 2017 D.Sorokin & J. Apostolakis - field-V10-03-11
+---------------------------------------
+- G4NystromRK4: correction in call to getField: needs p[4], not p[3]
+    ( Spotted by D. Sorokin )
+  Also small cleanup of testing code into 2 small new methods.
+    ( J. Apostolakis )
+
+Aug 23, 2017 J.Apostolakis              - field-V10-03-10
+--------------------------
+- G4NystromRK4 - Fix the caching of momentum, field location & value.
+  Fixes issue reported by ALICE ( problem report #1996 ).
+  Thanks to Ruben Shahoyan for identifying and reporting the issue!
+- Temporarly made G4NystromRK4 the default Stepper in G4ChordFinder's 2nd
+  constructor (to ensure adequate testing).
+
+Jul 04, 2017 J.Apostolakis             - field-V10-03-09
+--------------------------
+- G4DormandPrinceRK78: initialise fLastStepLength and/or fAuxStepper data
+  members in constructor. Coverity issue: 67398,
+  Improved description and reference to original 1981 DP paper.
+- G4MagIntegratorDriver: initialised fNoCalls in c-tor. Coverity #15158.
+
+Jul 03, 2017 J.Apostolakis             - field-V10-03-08
+--------------------------
+- G4FSALBogackiShampline45: initialise 'bi[][]' const coefficients only 1 time
+  in method PrepareConstants() called by constructor.
+    ( Similar to G4BogackiShampine => seek consolidation )
+  Small fix: initialise fAuxStepper to nullptr, if not primary.
+    ( Part of Coverity issue 67394 )
+- G4DormandPrinceRK56: fix for significant memory leak of ak10_low buffer
+  space in SetupInterpolate_low(), apparently not seen by Coverity
+  because it was initialised in each use, not in constructor!
+  Improved initialisation of ak10, 11, 12 (moved to constructor)
+  and fixed small memory leak (added deletion in destructor).
+- G4MagIntegratorStepper: initialise fNoRHSCalls & fIntegrationOrder in c-tor.
+  ( fIntegrationOrder is not yet used widely - future migration )
+  Coverity issue 67392.
+- G4VFSALIntegrationStepper: initialise counter in c-tor. Coverity issue 67396.
+- G4BogackiShampine23: initialised fIsFSAL, fIntegrationOrder in c-tor.
+  Suppressed obsolete virtual method isFSAL,
+  Deleted duplicate virtual method 'isFSAL()'. Non-virtual method IsFSAL()
+  now exists in base class G4MagIntegratorStepper.
+  Made copy constructor and equal operator private and not unimplemented.
+  Added explanatory comments in source file; can make this method FSAL easily
+  (it calculates derivative @ endpoint. )
+- Several steppers ( G4DoLoMcPriRK34, G4FSALBogackiShampine45,
+  G4DormandPrince745, G4BogackiShampine45 ): initialise fLastStepLength and/or
+  fAuxStepper data members in constructor.
+  Coverity issues: 67393, 67394, 67391, 67390, 67363
+
+Jul 03, 2017 J.Apostolakis             - field-V10-03-05, -06, -07 
+--------------------------
+- fix for memory leak in Stepper() in two steppers:
+     G4FSALBogackiShampline45 ( Coverity issue 67389 )
+     G4FSALDormandPrince745   ( Coverity issue 67397 )
+- G4BogackiShampline23: fix for memory leak in destructor
+    ( Coverity issue 67355 )
+
+May 17, 2017 J.Apostolakis             - field-V10-03-03, -04 (resubmit)
+--------------------------
+- G4FieldManager::SetDetectorField
+  Fixed default of 'fail mode' parameter in 
+     to 0 (silent) - not 1 which was used for debugging.
+  In case of existing G4ChordFinder, use 'max' (1, failMode) not min.
+
+
+May 11, 2017 J.Apostolakis             - field-V10-03-02
+-------------------------- 
+- Reintroduced changes of field-V10-01-05, 06 and 07  to address
+  issue recalled by ATLAS.
+- New fixes/refinements (since field-V10-01-07)
+  o Extra check for missing equation. (Fix)
+  o Renamed G4FieldManager::SetFieldChangesEnergy() method to
+    InitialiseFieldChangesEnergy() to clarify its utility.
+- Original functionality change (copied from field-V10-01-05, & -07) :
+  o G4FieldManager.cc : Revised behaviour of SetDetector - it now
+    passes the Field to the Equation, as is the natural user expectation
+    The previous behaviour is possible, using extra argument 'failMode' flag.
+            Values: 0           = silent ; 
+                    1 (default) = warning; 
+                    2 or other  = fatal exception.
+
+    This change is to ensure that user expectation is met: 
+    if the field is changed for an existing, working stepper it must 
+    be propagated to the equation of motion.
+    Note: this causes potential conflict between the type of the equation
+          and the field, which will need to be solved in the future.
+    Old behaviour (just set our own pointer) is still available in new method:
+    ProposeDetectorField(G4Field *detectorField) 
+    Note: Error reporting behaviour of SetDetector is 'soft'. It does not 
+          complain by default if ChordFinder is not (yet) set.
+          ( The default values of failMode = 0 i.e. quiet. )
+    If a chord-finder exists, it will still warn for other errors.
+    To obtain have noisy extra checks call SetDetectorField with failMode > 0
+    or by using the new method for an existing field:
+    ChangeDetectorField(G4Field *detectorField)    
+  OLD: Co-works and requires new tag in geometry/navigation: geomnav-V10-01-24.
+
+Mar  22, 2017 G.Cosmo                   - field-V10-03-01
+---------------------
+- Revert change made in previous tag and add simple accessor to return
+  singleton pointer.
+
+Mar  17, 2017 G.Cosmo                   - field-V10-03-00
+---------------------
+- Define G4FieldManagerStore as normal singleton and corrected destructor.
+
+Oct   7, 2016 J.Apostolakis             - field-V10-02-24, 25
+---------------------------
+- Checked loops for termination for infinite loops and annotated 
+   them with "Loop checking" comment
+
+Oct   7, 2016 D.Sorokin                 - field-V10-02-23
+-----------------------  Commit: J. Apostolakis
 - Protection for multiple inclusion of G4ClassicalRK4 
    (thanks to Dmitrii Sorokin, GSoC 2016 student. )
 
-May 4, 2016 G.Cosmo                   - field-V10-01-17
+Aug  16, 2016 J.Apostolakis             - field-V10-02-22
+---------------------------
+- Added initialization of fAuxStepper in constructor of 
+  G4DoLoMcPriRK34, G4DormandPrince745 & G4DormandPrinceRK56.
+
+June 11, 2016 J.Apostolakis             - field-V10-02-21
+---------------------------
+- Restored G4ClassicalRK4 as default stepper for B-field,
+  (due to performance issues reported in benchmarking.)
+    
+June 10, 2016 G.Cosmo                   - field-V10-02-20
+---------------------
+- Fixed code indentation in G4HelixMixedStepper;
+  fixes compilation warnings on gcc-6.1.
+
+June 1, 2016 J.Apostolakis              - field-V10-02-19, 18, 17
+--------------------------
+- Fix in multiple steppers for the size of two C-arrays which hold
+  intermediate values;  they must be at least 8 and at least
+  'fNumberOfStateVariables' long.  
+  Changed: G4CashKarp, 
+           G4BogackiShampine 23 & 34
+           G4DormandPrince 745, RK56 & RK78
+	   G4DoLoMcPriRK34
+           G4FSALBogackiShampine45, G4FSALDormandPrince745
+- Made G4CashKarp the default stepper in G4ChordFinder.
+- Deleted trial class G4NewChordFinder.
+
+June 1, 2016 J.Apostolakis              - field-V10-02-16
+--------------------------
+- Deleted test code (RkTestRun) due to cmake issues
+
+June 1, 2016 J.Apostolakis              - field-V10-02-15 (also -14)
+--------------------------
+- Made G4ClassicalRK4 the default stepper again in G4ChordFinder
+- Fixes in test code (RkTestRun) for new names of classes.
+     
+May 31, 2016 J.Apostolakis              - field-V10-02-13 (also -12)
+--------------------------
+- New class G4NewChordFinder, that uses old G4MagIntegratorDriver or
+    the newer G4FSALIntegratorDriver -- first try, for testing FSAL.
+  Created new test testNewChordFinder.cc to checks this.
+
+- Renamed new Stepper classes to use 'G4' prefix, including
+    DormandPrince{745,RK56,RK67} TsitourasRK45 and DoLoMcPriRK34
+
+- Renamed FSAL base classes to use 'G4' prefix & 'Integrat-ion'
+     FSALMagIntegratorStepper to G4VFSALIntegrationStepper
+     FSALIntegratorDriver     to  G4FSALIntegrationDriver
+  and the experimental FSAL versions of steppers,
+     FBogackiShampine45.hh  to  G4FSALBogackiShampine45.hh
+     FDormandPrince745.hh   to  G4FSALDormandPrince745.hh
+( Note: FSAL steppers remain 'behind' the improved non-FSAL versions.)
+
+- Made DormandPrince745 (DP45) the default stepper (in G4ChordFinder).
+    
+May 26, 2016 J.Apostolakis & Som. Banerjee   - field-V10-02-11
+------------------------------------------
+- First version of FSAL classes (as additional classes)
+    FSAL Integrator Driver  : New *concrete*, stand-alone driver 
+    FSAL Integrator Stepper : New base class (separate from G4MagIntegratorStepper)
+    FBogackiShampine45:  FSAL-version of BogackiShampine45 stepper
+    FDormandPrince745:   FSAL-version of FDormandPrince745 stepper
+  Developed by Somnath Banerjee in GSoC 2015
+
+Context:
+* FSAL Stepper's key 'Stepper()' method for Stepping has additional
+    argument to return the derivative at the end of a step.
+    If the step was successful, this estimate has the same order of
+    accuracy as the stepper (i.e. 5th order for a 5th order stepper.)
+
+- FSAL Driver method uses the revised Stepper interface, using
+    the final (endpoint) derivative for successful steps
+    as the start derivative for the next step, in case of
+    continuing of integration.
+
+- New test (RkTestRun.cc) covering FSAL methods, integration
+   Developed by Somnath Banerjee in GSoC 2015
+
+May 26, 2016 J.Apostolakis                   - field-V10-02-10
+--------------------------
+Preparation for addition of FSAL steppers (& driver)
+- G4MagIntegratorStepper: Added counter for calls to equation RHS, 
+    with Get/Reset methods.
+- Cosmetic fixes in sources.cmake (tabs to spaces)
+
+May 25, 2016 J.Apostolakis & Som. Banerjee   - field-V10-02-09
+------------------------------------------
+- Added new stepper classes embedded RK method:
+  * DoLoMcPriRK34,      6-stage 3/4 RK (interpolation)
+  * DormandPrinceRK56,  9-stage 5/6 RK (interpolation, FSAL-able) "6(5)"
+  * DormandPrinceRK78, 13-stage 7/8 RK (interpolation)        "8(7) 13M"
+  created by Somnath Banerjee as part of GSoC 2015.
+
+May 25, 2016 J.Apostolakis             - field-V10-02-08
+--------------------------
+- Revised testPropagateMagField, to reduce error severity for over-long
+    steps.  An error message is still written if move > (1.+1.0e-9) * step,
+    but test does not stop.
+
+- G4HelixMixedStepper: Fixes & added new (5th order) stepper choices.
+    Included (G4)Bogacki-Shampine 23/45 ,  DormandPrince745,
+    and newest TsitourasRK45.
+
+May 24, 2016 J.Apostolakis             - field-V10-02-06, 07
+--------------------------
+- Added TsitourasRK45 stepper.
+- Made Cash-Karp the default stepper (in G4ChordFinder).
+    
+May 23, 2016 J.Apostolakis             - field-V10-02-05
+--------------------------
+- Made DormandPrince745 (DP45) the default stepper (in G4ChordFinder).
+    
+May 20, 2016 J.Apostolakis             - field-V10-02-04
+-------------------------
+- Added steppers created by Somnath Banerjee as part of GSoC 2015,
+    G4BogackiShampine23 (BS23 below), G4BogackiShampine45 (BS45) and
+    DormandPrince745 (DP45).
+  These implement third order (BS23) and fifth order (BS45, DP45)
+    embedded RK tableaus.
+- DP45 includes interpolation method, to evaluate the interpolant
+    ('y') at intermediate points of a successful step.
+  BS45's interpolation method exists, but is not validated (fails).
+
+ References:
+  - BS45 is embedded pair from paper by P. Bogacki and L. F. Shampine:
+      “An efficient Runge-Kutta (4,5) pair,”
+      Comput. Math. with Appl., vol. 32, no. 6, pp. 15–28, Sep. 1996.
+  - BS23 is four stage RK method from the paper of P. Bogacki and L. F. Shampine,
+      “A 3(2) pair of Runge - Kutta formulas,” 
+      Appl. Math. Lett., vol 2, no 4, p.321 (1989).
+  - DP45 are from Table 2 of  J. R. Dormand and P. J. Prince's 
+      “A family of embedded Runge-Kutta formulae,”
+      Journal of comput. and applied Math., vol. 6, no. 1, pp. 19–26, 1980.    
+
+May 4, 2016 G.Cosmo                   - field-V10-02-03
 -------------------
 - Fixed Clone() signatures in derived Field classes.
   More corrections on implementations of operator=() and copy-ctors.
 
-Apr 29, 2016 G.Cosmo
+Apr 29, 2016 G.Cosmo                  - field-V10-02-02
 --------------------
 - Corrected implementation of operator=() and copy-ctor for G4Field,
   G4ElectroMagneticField, G4ElectricField and G4CachedMagneticField.
 
-Feb 25, 2016 P.Gumplinger             - field-V10-01-16
+Feb 25, 2016 P.Gumplinger             - field-V10-02-01
 -------------------------
 - address Problem Report: 1831
   change: G4Mag_SpinEqRhs, G4EqEMFieldWithSpin, G4EqEMFieldWithEDM and
@@ -40,7 +618,7 @@ Feb 25, 2016 P.Gumplinger             - field-V10-01-16
                            to   g_BMT = (std::abs(magMoment)/muB)/spin
 
 
-Dec 11, 2015 A.Dotti
+Dec 11, 2015 A.Dotti		      - field-V10-02-00
 --------------------------
 Fixing typo in tests/CMakeList.txt file: subdirecotry() 
 instead of add_subdirectory()
@@ -1535,4 +2113,3 @@ May    7th, 1998    J. Apostolakis   -  magfield-06-01
     * G4ChordFinder:           methods to get/set IntegratorDriver
     * G4MagIntegratorDriver:   made OneGoodStep method public
 - created the file.
-

@@ -11,7 +11,6 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 94081 2015-11-05 15:05:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -85,8 +84,10 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_stopping
     HEADERS
         G4StoppingPhysics.hh
+        G4StoppingPhysicsFritiofWithBinaryCascade.hh
     SOURCES
         G4StoppingPhysics.cc
+        G4StoppingPhysicsFritiofWithBinaryCascade.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

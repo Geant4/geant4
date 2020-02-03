@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TritonBuilder.cc,v 1.2 2013/02/26 10:34:24 arce Exp $
-// GEANT4 tag $Name:  $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4TritonBuilder
 //
 // Author: 2013 P. Arce
+//
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -58,7 +59,12 @@
    theTritonInelastic=new G4TritonInelasticProcess;
  }
 
- G4TritonBuilder::
- ~G4TritonBuilder() 
- {}
+void G4TritonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
+  auto bld = dynamic_cast<G4VTritonBuilder*>(aB);
+  if ( bld != nullptr ) {
+      theModelCollections.push_back(bld);
+  } else {
+      G4PhysicsBuilderInterface::RegisterMe(aB);
+  }
+}
 

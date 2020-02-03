@@ -26,8 +26,11 @@
 /// \file analysis/AnaEx02/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
+<<<<<<< HEAD
 // $Id: HistoManager.hh 92322 2015-08-27 14:54:05Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

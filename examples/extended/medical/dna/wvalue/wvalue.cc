@@ -59,11 +59,22 @@ int main(int argc,char** argv) {
  
   //delete output file
   remove ("wvalue.txt");
+<<<<<<< HEAD
   
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
     
   //Construct the default run manager
+=======
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
+  //construct the default run manager
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;

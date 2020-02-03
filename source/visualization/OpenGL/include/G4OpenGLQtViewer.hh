@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -32,7 +31,7 @@
 //
 // 30/06/2014 : M.Kelsey : Change QPixmap objects to pointers
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
 
 #ifndef G4OPENGLQTVIEWER_HH
 #define G4OPENGLQTVIEWER_HH
@@ -41,6 +40,7 @@
 
 #include "G4OpenGLViewer.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4AutoLock.hh"
 
 #include <qobject.h>
 #include <qpoint.h>
@@ -73,7 +73,9 @@ class QColor;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
 class QLineEdit;
+#if QT_VERSION < 0x050600
 class QSignalMapper;
+#endif
 class G4UIQt;
 class QTableWidget;
 class QTableWidgetItem;
@@ -111,7 +113,9 @@ private:
   G4OpenGLQtViewer& operator= (const G4OpenGLQtViewer&);
 public:
   virtual void updateQWidget()=0;
-  void updateSceneTreeComponentTreeWidgetInfos();
+  void updateSceneTreeWidget();
+  void updateViewerPropertiesTableWidget();
+  void updatePickInfosWidget(int, int);
   QString setEncoderPath(QString path);
   QString getEncoderPath();
   QString setTempFolderPath(QString path);
@@ -178,10 +182,10 @@ protected:
   // such as /vis/viewer/set/all and /vis/viewer/save...
   const std::vector<G4ModelingParameters::VisAttributesModifier>*
   GetPrivateVisAttributesModifiers() const;
+  bool isCurrentWidget();
 
 protected:
   QWidget* fGLWidget;
-  bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
 
@@ -189,6 +193,12 @@ protected:
   bool fUpdateGLLock;
   bool fQGLWidgetInitialiseCompleted;
   bool fPaintEventLock;
+
+  // Flag to indicate that action was initiated by interaction (mouse
+  // click) on the scene tree.  It is used and reset in
+  // G4OpenGLStoredQtViewer::CompareForKernelVisit to prevent rebuild
+  // in this case.
+  bool fMouseOnSceneTree;
 
 private:
   enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS,BAD_ENCODER,BAD_OUTPUT,BAD_TMP,SAVE}; 
@@ -213,8 +223,9 @@ private:
                                  int currentPVPOIndex);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
   void createSceneTreeComponent();
-  void createViewerPropertiesComponent();
-  void createPickingComponent();
+  void createSceneTreeWidget();
+  void createViewerPropertiesWidget();
+  void createPickInfosWidget();
   bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
   QTreeWidgetItem* createTreeWidgetItem(const PVPath& fullPath,
                                      const QString& name,
@@ -263,6 +274,7 @@ private:
   QPoint fLastPos1;
   QPoint fLastPos2;
   QPoint fLastPos3;
+  QPoint fLastPickPoint;
 
   // delta of depth move. This delta is put in % of the scene view
   G4double fDeltaDepth;
@@ -301,31 +313,29 @@ private:
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
-  QTabWidget* fUISceneTreeComponentsTBWidget;
+  QWidget* fUISceneTreeWidget;
+  QWidget* fUIViewerPropertiesWidget;
+  QWidget* fUIPickInfosWidget;
   bool fNoKeyPress;
   bool fAltKeyPress;
   bool fControlKeyPress;
   bool fShiftKeyPress;
   bool fBatchMode;
   bool fCheckSceneTreeComponentSignalLock;
+  bool fViewerPropertiesTableWidgetIsInit;
   QTreeWidget* fSceneTreeComponentTreeWidget;
   // This is only use to hold the old "expand" value, see file:///Developer/Documentation/Qt/html/qtreewidgetitem.html#setExpanded 
-  QTreeWidget* fOldSceneTreeComponentTreeWidget;
   QWidget* fSceneTreeWidget;
   bool fPVRootNodeCreate;
   QLineEdit* fFilterOutput;
   QString fFileSavePath;
-  QPushButton* fSceneTreeViewerButton;
-  QPushButton* fViewerPropertiesButton;
-  QPushButton* fViewerPickingButton;
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
   QDialog* fShortcutsDialog;
-  QTableWidget *fSceneTreeComponentTreeWidgetInfos;
-  QWidget* fSceneTreeComponentPickingInfos;
-  QWidget* fSceneTreeViewerInfos;
-  QScrollArea* fSceneTreeComponentPickingScrollArea;
+  QTableWidget *fViewerPropertiesTableWidget;
+  QWidget* fPickInfosWidget;
+  QScrollArea* fPickInfosScrollArea;
   int fTreeWidgetInfosIgnoredCommands;
   QPushButton * fSceneTreeButtonApply;
   QTextEdit *fShortcutsDialogInfos;
@@ -346,10 +356,11 @@ private:
   int fNumber;
   int fMaxPOindexInserted;
   G4UIQt* fUiQt;
+#if QT_VERSION < 0x050600
   QSignalMapper *fSignalMapperMouse;
   QSignalMapper *fSignalMapperSurface;
   QSignalMapper *fSignalMapperPicking;
-
+#endif
   // quick map index to find next item
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIteratorEnd;
@@ -372,7 +383,11 @@ private:
   QThread* fQGLContextVisSubThread;
   QThread* fQGLContextMainThread;
 #endif
-  
+
+  // safe to use in serial mode
+  G4AutoLock* lWaitForVisSubThreadQtOpenGLContextInitialized;
+  G4AutoLock* lWaitForVisSubThreadQtOpenGLContextMoved;
+
 public Q_SLOTS :
   void startPauseVideo();
 
@@ -400,11 +415,9 @@ private Q_SLOTS :
   void processLookForFinished();
   void processEncodeStdout();
   void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
-  void toggleSceneTreeViewerInfos();
-  void toggleSceneTreeComponentTreeWidgetInfos();
-  void toggleSceneTreeComponentPickingInfos();
   void toggleSceneTreeComponentPickingCout(int);
   void togglePicking();
+  void currentTabActivated(int);
 
   // action trigger by a click on a component scene tree
   void sceneTreeComponentSelected();

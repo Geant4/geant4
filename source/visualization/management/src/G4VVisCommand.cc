@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc 85021 2014-10-23 09:53:47Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -35,16 +34,22 @@
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include <sstream>
+#include <cctype>
 
-G4Colour                   G4VVisCommand::fCurrentColour = G4Colour::White();
-G4Colour                   G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
-G4Text::Layout             G4VVisCommand::fCurrentTextLayout = G4Text::left;
-G4double                   G4VVisCommand::fCurrentTextSize = 12.;  // pixels
-G4double                   G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
+G4int G4VVisCommand::fErrorCode = 0;
+
+G4int           G4VVisCommand::fCurrentArrow3DLineSegmentsPerCircle = 6;
+G4Colour        G4VVisCommand::fCurrentColour = G4Colour::White();
+G4Colour        G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
+G4Text::Layout  G4VVisCommand::fCurrentTextLayout = G4Text::left;
+G4double        G4VVisCommand::fCurrentTextSize = 12.;  // pixels
+G4double        G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
 // Not yet used: G4VisAttributes::LineStyle G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
 // Not yet used: G4VMarker::FillStyle       G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
 // Not yet used: G4VMarker::SizeType        G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
-G4ModelingParameters::PVNameCopyNoPath G4VVisCommand::fCurrentTouchablePath;
+G4PhysicalVolumeModel::TouchableProperties          G4VVisCommand::fCurrentTouchableProperties;
+G4VisExtent                                         G4VVisCommand::fCurrentExtentForField;
+std::vector<G4PhysicalVolumesSearchScene::Findings> G4VVisCommand::fCurrrentPVFindingsForField;
 
 G4VVisCommand::G4VVisCommand () {}
 
@@ -62,58 +67,277 @@ G4String G4VVisCommand::ConvertToString
   return oss.str();
 }
 
-void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
+G4bool G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
 					G4double& xval,
 					G4double& yval)
 {
   G4double x, y;
-  char unts[30];
+  G4String unit;
   
   std::istringstream is(paramString);
-  is >> x >> y >> unts;
-  G4String unt = unts;
+  is >> x >> y >> unit;
 
-  xval = x*G4UIcommand::ValueOf(unt);
-  yval = y*G4UIcommand::ValueOf(unt);
+  if (G4UnitDefinition::IsUnitDefined(unit)) {
+    xval = x*G4UIcommand::ValueOf(unit);
+    yval = y*G4UIcommand::ValueOf(unit);
+  } else {
+    G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Unrecognised unit" << G4endl;
+    }
+    return false;
+  }
 
-  return;
+  return true;
 }
 
-void G4VVisCommand::UpdateVisManagerScene
-(const G4String& sceneName) {
+const G4String& G4VVisCommand::ConvertToColourGuidance()
+{
+  static G4String guidance
+  ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
+   "\n (b) string such as \"white\", \"black\", \"grey\", \"red\"...or"
+   "\n (c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
+   "\n     or \"grey ! ! .6\" (note \"!\"'s for unused parameters).");
+  return guidance;
+}
+
+void G4VVisCommand::ConvertToColour
+(G4Colour& colour,
+ const G4String& redOrString, G4double green, G4double blue, G4double opacity)
+{
+  // Note: colour is supplied by the caller and some or all of its components
+  // may act as default.
+  //
+  // Note: redOrString is either a number or string.  If a string it must be
+  // one of the recognised colours.
+  //
+  // Thus the arguments can be, for example:
+  // (colour,"red",...,...,0.5): will give the colour red with opacity 0.5 (the
+  // third and fourth arguments are ignored), or
+  // (1.,0.,0.,0.5): this also will be red with opacity 0.5.
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
-  const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
+  const size_t iPos0 = 0;
+  if (std::isalpha(redOrString[iPos0])) {
 
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
-    if (sceneList [iScene] -> GetName () == sceneName) break;
-  }
+    // redOrString is probably alphabetic characters defining the colour
+    if (!G4Colour::GetColour(redOrString, colour)) {
+      // Not a recognised string
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout << "WARNING: Colour \"" << redOrString
+        << "\" not found.  Defaulting to " << colour
+        << G4endl;
+      }
+      return;
+    } else {
+      // It was a recognised string.  Now add opacity.
+      colour.SetAlpha(opacity);
+      return;
+    }
 
-  G4Scene* pScene = 0;  // Zero unless scene has been found...
-  if (iScene < nScenes) {
-    pScene = sceneList [iScene];
+  } else {
+
+    // redOrString is probably numeric defining the red component
+    std::istringstream iss(redOrString);
+    G4double red;
+    iss >> red;
+    if (iss.fail()) {
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout << "WARNING: String \"" << redOrString
+        << "\" cannot be parsed.  Defaulting to " << colour
+        << G4endl;
+      }
+      return;
+    } else {
+      colour = G4Colour(red,green,blue,opacity);
+      return;
+    }
+    
   }
+}
+
+G4bool G4VVisCommand::ProvideValueOfUnit
+(const G4String& where,
+ const G4String& unit,
+ const G4String& category,
+ G4double& value)
+{
+  // Return false if there's a problem
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4bool success = true;
+  if (!G4UnitDefinition::IsUnitDefined(unit)) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cerr << where
+      << "\n  Unit \"" << unit << "\" not defined"
+      << G4endl;
+    }
+    success = false;
+  } else if (G4UnitDefinition::GetCategory(unit) != category) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cerr << where
+      << "\n  Unit \"" << unit << "\" not a unit of " << category;
+      if (category == "Volumic Mass") G4cerr << " (density)";
+      G4cerr << G4endl;
+    }
+    success = false;
+  } else {
+    value = G4UnitDefinition::GetValueOf(unit);
+  }
+  return success;
+}
+
+void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   if (!pScene) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
-	     << G4endl;
+      G4cout << "WARNING: Scene pointer is null."
+      << G4endl;
     }
     return;
   }
 
-  fpVisManager -> SetCurrentScene (pScene);
+  G4VSceneHandler* pSceneHandler = fpVisManager -> GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene handler not found." << G4endl;
+    }
+    return;
+  }
 
-  // Scene has changed.  Refresh viewers of all sceneHandlers using
-  // this scene...
-  G4VViewer* pViewer = fpVisManager -> GetCurrentViewer();
-  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler();
-  if (sceneHandler && sceneHandler -> GetScene ()) {
-    if (pViewer) {
-      G4UImanager::GetUIpointer () ->
-	ApplyCommand ("/vis/scene/notifyHandlers");
+  // Scene has changed.  If it is the scene of the currrent scene handler
+  // refresh viewers of all scene handlers using this scene. If not, it may be
+  // a scene that the user is building up before attaching to a scene handler,
+  // so do nothing.
+  if (pScene == pSceneHandler->GetScene()) {
+    G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/scene/notifyHandlers");
+  }
+
+}
+
+void G4VVisCommand::G4VisCommandsSceneAddUnsuccessful
+(G4VisManager::Verbosity verbosity) {
+  // Some frequently used error printing...
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout <<
+    "WARNING: For some reason, possibly mentioned above, it has not been"
+    "\n  possible to add to the scene."
+    << G4endl;
+  }
+}
+
+void G4VVisCommand::SetViewParameters
+(G4VViewer* viewer, const G4ViewParameters& viewParams) {
+  viewer->SetViewParameters(viewParams);
+  RefreshIfRequired(viewer);
+}
+
+void G4VVisCommand::RefreshIfRequired(G4VViewer* viewer) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  const G4ViewParameters& viewParams = viewer->GetViewParameters();
+  if (sceneHandler && sceneHandler->GetScene()) {
+    if (viewParams.IsAutoRefresh()) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
+    else {
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+        << G4endl;
+      }
+    }
+  }
+}
+
+void G4VVisCommand::InterpolateViews
+(G4VViewer* currentViewer,
+ std::vector<G4ViewParameters> viewVector,
+ const G4int nInterpolationPoints,
+ const G4int waitTimePerPointmilliseconds,
+ const G4String exportString)
+{
+  const G4int safety = viewVector.size()*nInterpolationPoints;
+  G4int safetyCount = 0;
+  do {
+    G4ViewParameters* vp =
+    G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
+    if (!vp) break;  // Finished.
+    currentViewer->SetViewParameters(*vp);
+    currentViewer->RefreshView();
+    if (exportString == "export" &&
+        currentViewer->GetName().contains("OpenGL")) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/ogl/export");
+    }
+    // File-writing viewers need to close the file
+    currentViewer->ShowView();
+#ifdef G4VIS_USE_STD11
+    if (waitTimePerPointmilliseconds > 0)
+      std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
+#endif
+  } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
+}
+
+void G4VVisCommand::InterpolateToNewView
+(G4VViewer* currentViewer,
+ const G4ViewParameters& oldVP,
+ const G4ViewParameters& newVP,
+ const G4int nInterpolationPoints,
+ const G4int waitTimePerPointmilliseconds,
+ const G4String exportString)
+{
+  std::vector<G4ViewParameters> viewVector;
+  viewVector.push_back(oldVP);
+  viewVector.push_back(oldVP);
+  viewVector.push_back(newVP);
+  viewVector.push_back(newVP);
+  
+  InterpolateViews
+  (currentViewer,
+   viewVector,
+   nInterpolationPoints,
+   waitTimePerPointmilliseconds,
+   exportString);
+}
+
+void G4VVisCommand::CopyGuidanceFrom
+(const G4UIcommand* fromCmd, G4UIcommand* toCmd, G4int startLine)
+{
+  if (fromCmd && toCmd) {
+    const G4int nGuideEntries = fromCmd->GetGuidanceEntries();
+    for (G4int i = startLine; i < nGuideEntries; ++i) {
+      const G4String& guidance = fromCmd->GetGuidanceLine(i);
+      toCmd->SetGuidance(guidance);
+    }
+  }
+}
+
+void G4VVisCommand::CopyParametersFrom
+(const G4UIcommand* fromCmd, G4UIcommand* toCmd)
+{
+  if (fromCmd && toCmd) {
+    const G4int nParEntries = fromCmd->GetParameterEntries();
+    for (G4int i = 0; i < nParEntries; ++i) {
+      G4UIparameter* parameter = new G4UIparameter(*(fromCmd->GetParameter(i)));
+      toCmd->SetParameter(parameter);
+    }
+  }
+}
+
+void G4VVisCommand::DrawExtent(const G4VisExtent& extent)
+{
+  if (fpVisManager) {
+    const G4double halfX = (extent.GetXmax() - extent.GetXmin()) / 2.;
+    const G4double halfY = (extent.GetYmax() - extent.GetYmin()) / 2.;
+    const G4double halfZ = (extent.GetZmax() - extent.GetZmin()) / 2.;
+    if (halfX > 0. && halfY > 0. && halfZ > 0.) {
+      const G4Box box("vis_extent",halfX,halfY,halfZ);
+      const G4VisAttributes visAtts(G4Color::Red());
+      const G4Point3D& centre = extent.GetExtentCenter();
+      fpVisManager->Draw(box,visAtts,G4Translate3D(centre));
     }
   }
 }

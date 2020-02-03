@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05ActionInitialization.hh 66522 2012-12-19 12:26:04Z ihrivnac $
 //
 /// \file RE05/include/RE05ActionInitialization.hh
 /// \brief Definition of the RE05ActionInitialization class

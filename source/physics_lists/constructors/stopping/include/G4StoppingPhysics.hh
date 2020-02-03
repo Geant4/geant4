@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StoppingPhysics.hh 71041 2013-06-10 09:27:06Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +44,8 @@
 // particles, using: Bertini for pi-, K-, Sigma-, Xi-, and Omega-. 
 //                   Fritiof/Precompound for anti-proton and anti-Sigma+;
 //                   another model for mu-.
+// Use Fritiof/Precompound also for the annihilation at rest of neutral
+// anti-hadrons: anti-neutron, anti-Lambda, anti-Sigma0 and anti-Xi0.
 //
 //----------------------------------------------------------------------------
 

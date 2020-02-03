@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4GRSVolume.cc 87615 2014-12-12 15:23:11Z gcosmo $
-//
 // 
 // class G4GRSVolume Implementation
 //
@@ -36,36 +32,4 @@
 G4GRSVolume::~G4GRSVolume()
 {
   delete frot;             // safe if null
-}
-
-G4GRSVolume::G4GRSVolume(const G4GRSVolume& right)
-  : G4VTouchable(), fvol(0)
-{
-  if (frot) { delete frot; }
-  frot = 0;
-  fvol = right.fvol;
-  ftlate = right.ftlate;
-  if (right.frot)
-  {
-    frot = new G4RotationMatrix(*(right.frot));
-  }
-}
-
-G4GRSVolume& G4GRSVolume::operator=(const G4GRSVolume& right)
-{
-  if (&right == this)  { return *this; }
-
-  fvol = right.fvol;
-  ftlate = right.ftlate;
-  if (frot)
-  {
-    delete frot;
-    frot = 0;
-  }
-  if (right.frot)
-  {
-    frot = new G4RotationMatrix(*(right.frot));
-  }
-
-  return *this;
 }

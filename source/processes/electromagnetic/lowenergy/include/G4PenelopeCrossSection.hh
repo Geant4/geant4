@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCrossSection.hh 74626 2013-10-17 07:00:59Z gcosmo $
 //
 // Author: Luciano Pandola
 //

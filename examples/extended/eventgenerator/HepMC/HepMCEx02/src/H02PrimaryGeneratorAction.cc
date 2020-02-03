@@ -25,7 +25,6 @@
 //
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02PrimaryGeneratorAction.cc
 /// \brief Implementation of the H02PrimaryGeneratorAction class
-//   $Id: H02PrimaryGeneratorAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -36,35 +35,36 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02PrimaryGeneratorAction::H02PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction()
 {
   // default generator is particle gun.
-  currentGenerator= particleGun= new G4ParticleGun();
-  currentGeneratorName= "particleGun";
-  hepmcAscii= new HepMCG4AsciiReader();
+  fCurrentGenerator= fParticleGun= new G4ParticleGun();
+  fCurrentGeneratorName= "particleGun";
+  fHepmcAscii= new HepMCG4AsciiReader();
 #ifdef G4LIB_USE_PYTHIA
-  pythiaGen= new HepMCG4PythiaInterface();
+  fPythiaGen= new HepMCG4PythiaInterface();
 #else
-  pythiaGen= 0;
+  fPythiaGen= 0;
 #endif
 
-  gentypeMap["particleGun"]= particleGun;
-  gentypeMap["hepmcAscii"]= hepmcAscii;
-  gentypeMap["pythia"]= pythiaGen;
+  fGentypeMap["particleGun"]= fParticleGun;
+  fGentypeMap["hepmcAscii"]= fHepmcAscii;
+  fGentypeMap["pythia"]= fPythiaGen;
 
-  messenger= new H02PrimaryGeneratorMessenger(this);
+  fMessenger= new H02PrimaryGeneratorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02PrimaryGeneratorAction::~H02PrimaryGeneratorAction()
 {
-  delete messenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(currentGenerator)
-    currentGenerator-> GeneratePrimaryVertex(anEvent);
+  if(fCurrentGenerator)
+    fCurrentGenerator-> GeneratePrimaryVertex(anEvent);
   else
     G4Exception("H02PrimaryGeneratorAction::GeneratePrimaries",
                 "InvalidSetup", FatalException,

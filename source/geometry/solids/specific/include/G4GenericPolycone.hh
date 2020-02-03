@@ -23,33 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GenerciPolycone.hh 72077 2013-07-08 12:31:44Z tnikitin $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4GenericPolycone
 //
 // Class description:
 //
 //   Class implementing a GenericPolycone constructed by points with
-//          (r,z)coordinates, allows Z 'go back' 
+//          (r,z)coordinates, allows Z 'go back'
 //
 //
-//   G4GenericPolycone( const G4String& name, 
+//   G4GenericPolycone( const G4String& name,
 //               G4double phiStart,   // initial phi starting angle
 //               G4double phiTotal,   // total phi angle
 //               G4int    numRZ,      // number corners in r,z space
 //               const G4double r[],  // r coordinate of these corners
 //               const G4double z[])  // z coordinate of these corners
 //
-//  
+
+// Authors: T.Nikitina, G.Cosmo - CERN
 // --------------------------------------------------------------------
-#ifndef G4GenericPolycone_hh
-#define G4GenericPolycone_hh
+#ifndef G4GENERICPOLYCONE_HH
+#define G4GENERICPOLYCONE_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UGENERICPOLYCONE 1
@@ -67,12 +62,12 @@ class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
 
-class G4GenericPolycone : public G4VCSGfaceted 
+class G4GenericPolycone : public G4VCSGfaceted
 {
 
  public:  // with description
 
-  G4GenericPolycone( const G4String& name, 
+  G4GenericPolycone( const G4String& name,
                     G4double phiStart,    // initial phi starting angle
                     G4double phiTotal,    // total phi angle
                     G4int    numRZ,       // number corners in r,z space
@@ -80,12 +75,18 @@ class G4GenericPolycone : public G4VCSGfaceted
                     const G4double z[]       ); // z coordinate of these corners
 
   virtual ~G4GenericPolycone();
-  
+
   // Methods for solid
 
   EInside Inside( const G4ThreeVector &p ) const;
   G4double DistanceToIn( const G4ThreeVector &p, const G4ThreeVector &v ) const;
   G4double DistanceToIn( const G4ThreeVector &p ) const;
+
+  void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+  G4bool CalculateExtent(const EAxis pAxis,
+                         const G4VoxelLimits& pVoxelLimit,
+                         const G4AffineTransform& pTransform,
+                         G4double& pmin, G4double& pmax) const;
 
   G4ThreeVector GetPointOnSurface() const;
 
@@ -101,12 +102,16 @@ class G4GenericPolycone : public G4VCSGfaceted
 
   // Accessors
 
-  inline G4double GetStartPhi()  const;
-  inline G4double GetEndPhi()    const;
-  inline G4bool IsOpen()         const;
-  inline G4int  GetNumRZCorner() const;
+  inline G4double GetStartPhi()    const;
+  inline G4double GetEndPhi()      const;
+  inline G4double GetSinStartPhi() const;
+  inline G4double GetCosStartPhi() const;
+  inline G4double GetSinEndPhi()   const;
+  inline G4double GetCosEndPhi()   const;
+  inline G4bool IsOpen()           const;
+  inline G4int  GetNumRZCorner()   const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
-  
+
  public:  // without description
 
   G4GenericPolycone(__void__&);
@@ -114,21 +119,19 @@ class G4GenericPolycone : public G4VCSGfaceted
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
-  G4GenericPolycone( const G4GenericPolycone &source );
-  G4GenericPolycone &operator=( const G4GenericPolycone &source );
+  G4GenericPolycone( const G4GenericPolycone& source );
+  G4GenericPolycone& operator=( const G4GenericPolycone& source );
     // Copy constructor and assignment operator.
 
  protected:  // without description
 
   // Generic initializer, called by all constructors
 
-  // void SetOriginalParameters(G4ReduciblePolygon *rz);
-
   void Create( G4double phiStart,        // initial phi starting angle
                G4double phiTotal,        // total phi angle
-               G4ReduciblePolygon *rz ); // r/z coordinate of these corners
+               G4ReduciblePolygon* rz ); // r/z coordinate of these corners
 
-  void CopyStuff( const G4GenericPolycone &source );
+  void CopyStuff( const G4GenericPolycone& source );
 
   // Methods for random point generation
 
@@ -136,16 +139,15 @@ class G4GenericPolycone : public G4VCSGfaceted
 
   // Here are our parameters
 
-  G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
-  G4double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
-  G4bool   phiIsOpen;   // true if there is a phi segment
-  G4int   numCorner;    // number RZ points
-  G4PolyconeSideRZ *corners;  // corner r,z points
- 
+  G4double startPhi;            // Starting phi value (0 < phiStart < 2pi)
+  G4double endPhi;              // end phi value (0 < endPhi-phiStart < 2pi)
+  G4bool   phiIsOpen = false;   // true if there is a phi segment
+  G4int    numCorner;           // number RZ points
+  G4PolyconeSideRZ* corners = nullptr;  // corner r,z points
+
   // Our quick test
 
-  G4EnclosingCylinder *enclosingCylinder;
-  
+  G4EnclosingCylinder* enclosingCylinder = nullptr;
 };
 
 #include "G4GenericPolycone.icc"

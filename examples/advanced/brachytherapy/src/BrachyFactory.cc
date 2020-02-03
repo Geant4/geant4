@@ -25,7 +25,7 @@
 //
 //
 // Code developed by:
-//  S.Guatelli
+//  S.Guatelli, A. Le
 
 //
 //    *******************************
@@ -34,7 +34,6 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactory.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
 // Factory of brachytherapic sources
 //

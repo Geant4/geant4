@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.hh 90848 2015-06-10 13:44:30Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

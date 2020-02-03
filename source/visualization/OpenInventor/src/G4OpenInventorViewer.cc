@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc 88190 2015-02-02 17:24:54Z gcosmo $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -159,11 +158,14 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
 
   if (
       (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (vp.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
       (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (vp.IsCulling ()          != fVP.IsCulling ())          ||
       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (vp.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (vp.GetCBDAlgorithmNumber() !=
+       fVP.GetCBDAlgorithmNumber())                           ||
       (vp.IsSection ()          != fVP.IsSection ())          ||
       (vp.IsCutaway ()          != fVP.IsCutaway ())          ||
       // This assumes use of generic clipping (sectioning, slicing,
@@ -184,6 +186,9 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // needs a kernel visit.  (In this respect, it differs from the
       // OpenGL drivers, where it's done in SetView.)
       (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
+      // If G4OpenInventor ever introduces VAMs, the following might need
+      // changing to a complete comparison, i.e., remove ".size()".  See
+      // G4OpenGLStoredViewer::CompareForKernelVisit.
       (vp.GetVisAttributesModifiers().size() !=
        fVP.GetVisAttributesModifiers().size())
       )
@@ -192,6 +197,11 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
   if (vp.IsDensityCulling () &&
       (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
+
+  if (vp.GetCBDAlgorithmNumber() > 0) {
+    if (vp.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (vp.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  }
 
   if (vp.IsSection () &&
       (vp.GetSectionPlane () != fVP.GetSectionPlane ()))
@@ -658,6 +668,9 @@ void G4OpenInventorViewer::SetSolid() {
     break;
   case G4ViewParameters::hlhsr:
     break;
+  case G4ViewParameters::cloud:
+    vp.SetDrawingStyle(G4ViewParameters::hsr);
+    break;
   }
   SetViewParameters(vp);
   DrawDetector();
@@ -675,6 +688,9 @@ void G4OpenInventorViewer::SetWireFrame() {
     break;
   case G4ViewParameters::hlhsr:
     vp.SetDrawingStyle(G4ViewParameters::hlr);
+    break;
+  case G4ViewParameters::cloud:
+    vp.SetDrawingStyle(G4ViewParameters::wireframe);
     break;
   }
   SetViewParameters(vp);
@@ -700,6 +716,9 @@ void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
     break;
   case G4ViewParameters::hlhsr:
     vp.SetDrawingStyle(G4ViewParameters::hlr);
+    break;
+  case G4ViewParameters::cloud:
+    vp.SetDrawingStyle(G4ViewParameters::wireframe);
     break;
   }
   SetViewParameters(vp);

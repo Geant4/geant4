@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc 89893 2015-05-04 07:29:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,19 +76,20 @@ using namespace std;
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
     fVerbose(0),
-    fModelData(0),
-    fParticle(0)
+    fModelData(nullptr),
+    fParticle(nullptr)
 {  
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }
 
   // default generator
   SetAngularDistribution(new G4DeltaAngle());
+  fLowestTcut = 12.5*CLHEP::eV;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -201,6 +201,14 @@ void G4PAIModel::InitialiseLocal(const G4ParticleDefinition* p,
 
 //////////////////////////////////////////////////////////////////////////////
 
+G4double G4PAIModel::MinEnergyCut(const G4ParticleDefinition*,
+				  const G4MaterialCutsCouple*)
+{
+  return fLowestTcut;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
 					  const G4ParticleDefinition* p,
 					  G4double kineticEnergy,
@@ -292,7 +300,9 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   if( deltaTkin > tmax) { deltaTkin = tmax; }
 
-  const G4Element* anElement = SelectRandomAtom(matCC,fParticle,kineticEnergy);
+  const G4Element* anElement = SelectTargetAtom(matCC, fParticle, kineticEnergy,
+                                                dp->GetLogKineticEnergy());
+
   G4int Z = G4lrint(anElement->GetZ());
  
   G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 

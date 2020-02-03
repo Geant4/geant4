@@ -7,6 +7,33 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+<<<<<<< HEAD
+=======
+20.09.2019 M.Asai      Tag: gammaknife-V10-05-01
+           - Add G4VScoringMesh:: scope identifier to GammaKnifeController.hh
+           - Co-working with detutils-V10-05-01
+
+30.08.2019 S. Guatelli Tag:gammaknife-V10-05-00
+           - G4VIS_USE deleted
+
+18.10.2018 S. Guatelli  Tag: gammaknife-V10-04-01
+           - G4VIS_USE and G4UI_USE deleted
+
+10.05.2018 B.Morgan        Tag: gammaknife-V10-04-00
+           - Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+04.11.2016 F.Romano         Tag: gammaknife-V10-02-02
+           - macro files modifeid for correct scorer rotation
+
+06.09.2016 M.Asai         Tag: gammaknife-V10-02-01
+           - Modify sdt::map<G4int, G4double*> to sdt::map<G4int, G4StatDouble*>
+
+04.09.2016 M.Asai         Tag: gammaknife-V10-02-00
+           - Modify sdt::map<G4int, G4double*> to sdt::map<G4int, G4StatDouble*>
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 06.03.2015 A.Dotti        Tag: gammaknife-V10-01-00
 	   - Moving of GPS defaults to master
 

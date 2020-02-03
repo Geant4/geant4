@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoVdetectorType.cc
-// GEANT4 tag $Name:
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
@@ -314,7 +312,7 @@ void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
   ost << fileName<<".dat";
   G4String name = ost.str();
   
-  char* path = getenv("XRAYDATA");
+  char* path = std::getenv("XRAYDATA");
   G4String dirFile;
   if (path) {
     G4String pathString(path);
@@ -322,7 +320,7 @@ void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
     dirFile = pathString + "/" + name;
   }
   else{ 
-    path = getenv("PWD");
+    path = std::getenv("PWD");
     G4String pathString(path);
     pathString += "\0";
     dirFile = pathString + "/" + name;
@@ -399,14 +397,14 @@ void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
 
 void XrayFluoSiLiDetectorType::LoadEfficiencyData(G4String fileName)
 {
-  char* path = getenv("XRAYDATA");
+  char* path = std::getenv("XRAYDATA");
   G4String dirFile;
   if (path) {
     G4String pathString(path);
     dirFile = pathString + "/" + fileName;
   }
   else{ 
-    path = getenv("PWD");
+    path = std::getenv("PWD");
     G4String pathString(path);
     dirFile = pathString + "/" + fileName;
   }

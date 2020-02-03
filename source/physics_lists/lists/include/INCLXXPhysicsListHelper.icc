@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: INCLXXPhysicsListHelper.icc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,6 +47,7 @@
 #include "G4MaterialTable.hh"
 
 #include "G4DecayPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
@@ -56,7 +56,6 @@
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4NeutronTrackingCut.hh"
 
-#include "G4DataQuestionaire.hh"
 #include "G4HadronPhysicsINCLXX.hh"
 
 #include "G4WarnPLStatus.hh"
@@ -71,8 +70,7 @@ template<class T, bool withNeutronHP, bool withFTFP> TINCLXXPhysicsListHelper<T,
   if(withNeutronHP)
     name += "_HP";
 
-  G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: " << name << " 1.0 (based on INCLXXPhysicsListHelper)"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: " << name << " (based on INCLXXPhysicsListHelper)"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*CLHEP::mm;  
@@ -89,6 +87,7 @@ template<class T, bool withNeutronHP, bool withFTFP> TINCLXXPhysicsListHelper<T,
 
   // Decays
   this->RegisterPhysics( new G4DecayPhysics(ver) );
+  if(withNeutronHP) this->RegisterPhysics( new G4RadioactiveDecayPhysics(ver) );
 
   // Hadron Elastic scattering
   if(withNeutronHP)

@@ -53,7 +53,6 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpTerrell.cc 67966 2013-03-13 09:38:38Z gcosmo $
 //
 
 #include <cmath>

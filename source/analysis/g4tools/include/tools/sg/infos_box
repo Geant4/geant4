@@ -28,6 +28,7 @@ public:
 
   sf_vec<colorf,float> color;
   sf_string font;
+  sf_enum<sg::font_modeling> font_modeling;
   sf_string encoding; 
   sf<float> line_width; // for text_hershey.
   sf_enum<winding_type> front_face; //no more used.
@@ -39,28 +40,42 @@ public:
   sf_enum<hjust> rhjust;
   sf<bool> confine;
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::infos_box)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(lstrings)
-      TOOLS_ADD_FIELD_DESC(rstrings)
-      TOOLS_ADD_FIELD_DESC(num_spaces)
+    static const desc_fields s_v(parent::node_desc_fields(),15, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(lstrings),
+      TOOLS_ARG_FIELD_DESC(rstrings),
+      TOOLS_ARG_FIELD_DESC(num_spaces),
+      TOOLS_ARG_FIELD_DESC(color),
+      
+      TOOLS_ARG_FIELD_DESC_OPTS_BEG(font,8)
+        font_hershey().c_str(),
+        font_arial_ttf().c_str(),
+        font_arialbd_ttf().c_str(),
+        font_timesbd_ttf().c_str(),
+        font_symbol_ttf().c_str(),
+        font_stixgeneral_otf().c_str(),
+        font_helvetica_ttf().c_str(),
+        font_times_roman_ttf().c_str()
+      TOOLS_ARG_FIELD_DESC_OPTS_END,
+      
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(font_modeling,3)
+        TOOLS_ARG_ENUM(font_outline),
+        TOOLS_ARG_ENUM(font_filled),
+        TOOLS_ARG_ENUM(font_pixmap)
+      TOOLS_ARG_FIELD_DESC_ENUMS_END,
+      
+      TOOLS_ARG_FIELD_DESC(encoding),
+      TOOLS_ARG_FIELD_DESC(line_width),
+      TOOLS_ARG_FIELD_DESC(front_face),
 
-      TOOLS_ADD_FIELD_DESC(color)
-      TOOLS_ADD_FIELD_DESC(font)
-      TOOLS_ADD_FIELD_DESC(encoding);
-      TOOLS_ADD_FIELD_DESC(line_width)
-      TOOLS_ADD_FIELD_DESC(front_face)
-
-      TOOLS_ADD_FIELD_DESC(back_visible)
-      TOOLS_ADD_FIELD_DESC(wmargin_factor)
-      TOOLS_ADD_FIELD_DESC(hmargin_factor)
-      TOOLS_ADD_FIELD_DESC(lhjust)
-      TOOLS_ADD_FIELD_DESC(rhjust)
-      TOOLS_ADD_FIELD_DESC(confine)
-    }
+      TOOLS_ARG_FIELD_DESC(back_visible), //10
+      TOOLS_ARG_FIELD_DESC(wmargin_factor),
+      TOOLS_ARG_FIELD_DESC(hmargin_factor),
+      TOOLS_ARG_FIELD_DESC(lhjust),
+      TOOLS_ARG_FIELD_DESC(rhjust),
+      TOOLS_ARG_FIELD_DESC(confine)
+    );
     return s_v;
   }
 private:
@@ -71,6 +86,7 @@ private:
 
     add_field(&color);
     add_field(&font);
+    add_field(&font_modeling);
     add_field(&encoding); 
     add_field(&line_width);
     add_field(&front_face);
@@ -140,6 +156,7 @@ public:
 
   ,color(colorf::black())
   ,font(font_hershey())
+  ,font_modeling(font_filled)
   ,encoding(encoding_PAW())
   ,line_width(1)
   ,front_face(winding_ccw)
@@ -166,6 +183,7 @@ public:
 
   ,color(a_from.color)
   ,font(a_from.font)
+  ,font_modeling(a_from.font_modeling)
   ,encoding(a_from.encoding)
   ,line_width(a_from.line_width)
   ,front_face(a_from.front_face)
@@ -190,6 +208,7 @@ public:
 
     color = a_from.color;
     font = a_from.font;
+    font_modeling = a_from.font_modeling;
     encoding = a_from.encoding;
     line_width = a_from.line_width;
     front_face = a_from.front_face;
@@ -229,7 +248,10 @@ public:
         if((*it).size()) {empty = false;break;}
       }
     }
-    if(empty) return;}
+    if(empty) {
+      //parent::update_sg();
+      return;
+    }}
 
     rgba* mat = new rgba();
     mat->color = color;
@@ -237,7 +259,7 @@ public:
 
     if(font==font_hershey()) {
       draw_style* ds = new draw_style;
-      ds->style.value(draw_style::lines);
+      ds->style.value(draw_lines);
       //ds->line_pattern = line_pattern;
       ds->line_width = line_width;
       m_sep.add(ds);
@@ -263,6 +285,7 @@ public:
       //TTNODE* text = new TTNODE;
       ltext = text;
       text->font = font;
+      text->modeling = font_modeling;
       sep->add(text);
     }
     ltext->strings = lstrings;
@@ -288,6 +311,7 @@ public:
       //TTNODE* text = new TTNODE;
       rtext = text;
       text->font = font;
+      text->modeling = font_modeling;
       sep->add(text);
     }
     rtext->strings = rstrings;
@@ -310,6 +334,7 @@ public:
       text->strings.add(s);
       text->hjust = left;
       text->font = font;
+      text->modeling = font_modeling;
     }}
 
     //sf<float> zfront ?

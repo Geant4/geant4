@@ -1,4 +1,3 @@
-$Id: History 97631 2016-06-06 14:06:58Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -17,8 +16,40 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 
-- May 4, 2016 H.Kurashige(track-V10-01-11)
+- November 15, 2019 G.Cosmo (track-V10-05-01)
+- Fixed implicit type conversions from size_t to G4int in G4Step.
+
+- May 24, 2019 V.Ivanchenko (track-V10-05-00)
+  G4Track.hh added forward declaration for G4VProcess
+
+- Nov. 5, 2018 H.Kurashige(track-V10-04-02)
+- Add protection for nullptr access in G4Track.icc
+  Addressing problem report #2097.
+
+- Aug. 15, 2018 H.Kurashige(track-V10-04-01)
+- fix possible memory leaks 
+   in assignment operator and copy ctr of G4Step and G4Track 
+- clean up codes
+
+- May 17, 2018 J.Madsen (track-V10-04-00)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+- November 25, 2017 V.Ivanchenko (track-V10-03-00)
+- G4VelocityTable - use G4ThreadLocalSingletone patern in order
+    to provide correct deletion of these objects end of run;
+    use only G4Log and G4Exp instead of std::log10 which is not
+    needed
+
+- May 4, 2016 H.Kurashige(track-V10-02-01)
 - Use G4Log in G4VelocityTable::Value()
+
+- January 12, 2016 M.Asai (track-V10-02-00)
+- Chnage G4VUserTrackInformation pointer in G4Track to mutable
+  and set-method to be const-method. This allows the user to
+  set his/her G4VUserTrackInformation pointer without casting
+  G4Track const pointer.
 
 - September 29, 2015 H.Kurashige (track-V10-01-10)
 - Add GetNumberOfSecondariesInCurrrentStep method to G4Step

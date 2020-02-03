@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88190 2015-02-02 17:24:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -107,6 +106,9 @@ if(UNIX)
     console.h
     favorites.h
     saveViewPt.h
+    pickext.h
+    pickref.h
+    wireframe.h
     )
 
   list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
@@ -136,6 +138,48 @@ if(UNIX)
    ${X11_LIBRARIES}
    ${X11_Xpm_LIB}
    )
+endif()
+
+
+#----------------------------------------------------------------------------
+# Qt
+#
+if(GEANT4_USE_QT AND GEANT4_USE_INVENTOR_QT)
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
+    G4OpenInventorQt.hh
+    G4OpenInventorQtExaminerViewer.hh
+    G4OpenInventorQtViewer.hh
+    G4SoQt.hh
+    )
+
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
+    G4OpenInventorQt.cc
+    G4OpenInventorQtExaminerViewer.cc
+    G4OpenInventorQtViewer.cc
+    G4SoQt.cc
+    )
+
+    # Add the moc sources - must use absolute path to the files
+    QT4_WRAP_CPP(G4OI_MOC_SOURCES
+        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/include/G4OpenInventorQt.hh
+        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/src/G4OpenInventorQtExaminerViewer.cc
+        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/src/G4OpenInventorQtViewer.cc
+        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/src/G4SoQt.cc
+         OPTIONS -DG4VIS_BUILD_OIQT_DRIVER)
+
+    list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES ${G4OI_MOC_SOURCES})
+
+    # Add the definitions - these will also be used to compile the moc sources
+    # Argh.. Have to remember about INTY and UI because of their use...
+    add_definitions(-DG4VIS_BUILD_OIQT_DRIVER)
+    add_definitions(-DG4INTY_BUILD_QT)
+    add_definitions(-DG4UI_BUILD_QT_SESSION)
+
+    # Add in Qt libraries
+    list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
+      ${INVENTOR_SOQT_LIBRARY}
+      ${QT_LIBRARIES}
+      )
 endif()
 
 

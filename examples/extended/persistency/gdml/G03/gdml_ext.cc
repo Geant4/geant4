@@ -27,7 +27,10 @@
 /// \brief Main program of the persistency/gdml/G03 example
 //
 //
+<<<<<<< HEAD
 // $Id: gdml_ext.cc 68025 2013-03-13 13:43:46Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------

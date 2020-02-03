@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: RE05DetectorConstruction.hh 69764 2013-05-14 09:59:36Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file RE05/include/RE05DetectorConstruction.hh
 /// \brief Definition of the RE05DetectorConstruction class

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh 76600 2013-11-13 08:30:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,35 +59,36 @@ class G4mplIonisationModel : public G4VEmModel, public G4VEmFluctuationModel
 
 public:
 
-  G4mplIonisationModel(G4double mCharge,
+  explicit G4mplIonisationModel(G4double mCharge,
 		       const G4String& nam = "mplIonisation");
 
   virtual ~G4mplIonisationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
-					G4double cutEnergy);
+					G4double cutEnergy) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 
   virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
                                       const G4DynamicParticle*,
                                       G4double tmax,
                                       G4double length,
-                                      G4double meanLoss);
+                                      G4double meanLoss) override;
 
   virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
                               G4double tmax,
-                              G4double length);
+                              G4double length) override;
 
   void SetParticle(const G4ParticleDefinition* p);
 
@@ -97,8 +97,9 @@ private:
   G4double ComputeDEDXAhlen(const G4Material* material, G4double bg2);
 
   // hide assignment operator
-  G4mplIonisationModel & operator=(const  G4mplIonisationModel &right);
-  G4mplIonisationModel(const  G4mplIonisationModel&);
+  G4mplIonisationModel & 
+    operator=(const  G4mplIonisationModel &right) = delete;
+  G4mplIonisationModel(const  G4mplIonisationModel&) = delete;
 
   const G4ParticleDefinition* monopole;
   G4ParticleChangeForLoss*    fParticleChange;

@@ -23,23 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EqMagElectricField.hh 69699 2013-05-13 08:50:30Z gcosmo $
-//
-//
-// class G4EqMagElectricField
+// G4EqMagElectricField
 //
 // Class description:
 //
 // This is the right-hand side of equation of motion in a combined
 // electric and magnetic field.
 
-// History:
-// - Created. V.Grichine, 10.11.98
+// Created: V.Grichine, 10.11.1998
 // -------------------------------------------------------------------
-
-#ifndef G4EQMAGELECTRICFIELD_hh
-#define G4EQMAGELECTRICFIELD_hh
+#ifndef G4EQMAGELECTRICFIELD_HH
+#define G4EQMAGELECTRICFIELD_HH
 
 #include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
@@ -49,10 +43,9 @@ class G4EqMagElectricField : public G4EquationOfMotion
 {
   public:  // with description
 
-    G4EqMagElectricField(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField ) {;}
+    G4EqMagElectricField(G4ElectroMagneticField* emField );
 
-    ~G4EqMagElectricField() {;} 
+    ~G4EqMagElectricField();
 
     void  SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                 G4double MomentumXc,
@@ -66,8 +59,8 @@ class G4EqMagElectricField : public G4EquationOfMotion
 
   private:
 
-    G4double        fElectroMagCof ;
-    G4double        fMassCof;
+    G4double fElectroMagCof = 0.0;
+    G4double fMassCof = 0.0;
 };
 
 #endif

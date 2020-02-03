@@ -30,8 +30,7 @@
  *      Author: kara
  */
 
-#ifndef G4MANYFASTLISTS_HH_
-#define G4MANYFASTLISTS_HH_
+#pragma once
 
 #include "G4FastList.hh"
 #include <set>
@@ -62,7 +61,7 @@ template<class OBJECT>
     {
     }
 
-    virtual ~G4ManyFastLists(){;}
+    virtual ~G4ManyFastLists() = default;
 
     virtual void NotifyDeletingList(G4FastList<OBJECT>* __list)
     {
@@ -71,12 +70,10 @@ template<class OBJECT>
 
     void AddGlobalWatcher(typename G4FastList<OBJECT>::Watcher* watcher)
     {
-      if(fMainListWatchers == 0)
+      if(fMainListWatchers == nullptr)
       {
         fMainListWatchers = new WatcherSet();
       }
-
-      G4cout << watcher->GetWatcherName() << G4endl;
 
       fMainListWatchers->insert(watcher);
 
@@ -184,13 +181,9 @@ template<class OBJECT>
     inline size_t size() const
     {
       size_t __size(0);
-      typename ManyLists::const_iterator __it = fAssociatedLists
-          .begin();
-      typename ManyLists::const_iterator __end = fAssociatedLists
-          .end();
-      for (; __it != __end; __it++)
+      for (auto __it : fAssociatedLists)
       {
-        __size += (*__it)->size();
+        __size += __it->size();
       }
       return __size;
     }
@@ -238,7 +231,6 @@ template<class OBJECT>
 template<class OBJECT>
   struct G4ManyFastLists_iterator
   {
-//    friend class G4ManyFastLists<OBJECT>;
     typedef G4FastList<G4FastList<OBJECT> > ManyLists;
 
     typedef G4ManyFastLists_iterator _Self;
@@ -249,13 +241,9 @@ template<class OBJECT>
     ManyLists* fLists;
 
   private:
-    G4ManyFastLists_iterator() :
-        fIterator(), fLists(0)
-    {
-    }
+    G4ManyFastLists_iterator() = default;
 
   public:
-
     explicit G4ManyFastLists_iterator(G4FastList_iterator<OBJECT> __x,
                                       typename ManyLists::iterator __it,
                                       ManyLists* __lists) :
@@ -263,12 +251,8 @@ template<class OBJECT>
     {
     }
 
-    G4ManyFastLists_iterator(const G4ManyFastLists_iterator& __x) :
-        fIterator(__x.fIterator),
-        fCurrentListIt(__x.fCurrentListIt),
-        fLists(__x.fLists)
-    {
-    }
+    G4ManyFastLists_iterator(const G4ManyFastLists_iterator& __x) = default;
+    _Self& operator=(const G4ManyFastLists_iterator& __x) = default;
 
     _Node* GetNode()
     {
@@ -359,12 +343,12 @@ template<class OBJECT>
       return operator--();
     }
 
-    bool operator==(const _Self& __x) const
+    G4bool operator==(const _Self& __x) const
     {
       return (fIterator == __x.fIterator && fCurrentListIt == __x.fCurrentListIt);
     } // Fast check
 
-    bool operator!=(const _Self& __x) const
+    G4bool operator!=(const _Self& __x) const
     {
       return !(this->operator ==(__x));
     }
@@ -437,4 +421,3 @@ typename G4ManyFastLists<OBJECT>::iterator G4ManyFastLists<OBJECT>::end()
   }
 
 #include "G4ManyFastLists.icc"
-#endif /* G4MANYFASTLISTS_HH_ */

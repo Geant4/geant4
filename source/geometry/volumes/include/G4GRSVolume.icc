@@ -24,24 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.icc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // 
 // class G4GRSVolume inline implementation
 // ----------------------------------------------------------------------
 
 inline
-G4GRSVolume::G4GRSVolume( G4VPhysicalVolume *pVol,
-                    const G4RotationMatrix *pRot,
-                    const G4ThreeVector &tlate )
-  : G4VTouchable(),
-    fvol(pVol),
-    ftlate(tlate)
+G4GRSVolume::G4GRSVolume( G4VPhysicalVolume* pVol,
+                    const G4RotationMatrix* pRot,
+                    const G4ThreeVector& tlate )
+  : G4VTouchable(), fvol(pVol), ftlate(tlate)
 {
-  if ( pRot )
+  if ( pRot != nullptr )
   {
     frot = new G4RotationMatrix(*pRot);
-    if ( !frot )
+    if ( frot == nullptr )
     {
       G4Exception("G4GRSVolume::G4GRSVolume()", "GeomVol0002", FatalException,
                   "Cannot allocate G4RotationMatrix, NULL pointer.");
@@ -49,20 +46,18 @@ G4GRSVolume::G4GRSVolume( G4VPhysicalVolume *pVol,
   }
   else
   {
-    frot = 0;
+    frot = nullptr;
   }
 }
 
 inline
-G4GRSVolume::G4GRSVolume( G4VPhysicalVolume *pVol,
-                    const G4RotationMatrix &rot,
-                    const G4ThreeVector &tlate )
-  : G4VTouchable(),
-    fvol(pVol),
-    ftlate(tlate)
+G4GRSVolume::G4GRSVolume( G4VPhysicalVolume* pVol,
+                    const G4RotationMatrix& rot,
+                    const G4ThreeVector& tlate )
+  : G4VTouchable(), fvol(pVol), ftlate(tlate)
 {
   frot = new G4RotationMatrix(rot);
-  if ( !frot )
+  if ( frot == nullptr )
   {
     G4Exception("G4GRSVolume::G4GRSVolume()", "GeomVol0002", FatalException,
                 "Cannot allocate G4RotationMatrix, NULL pointer.");

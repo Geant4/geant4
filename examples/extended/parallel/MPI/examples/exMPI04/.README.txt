@@ -1,0 +1,58 @@
+/// @file "MPI/examples/exMPI04/.README.txt"
+/// @brief Example exMPI04 README
+
+/*! \page exMPI04 Example : exMPI04
+
+
+Description
+===========
+An example of dosimetry in a water phantom.
+The example is as exMPI03, but adds output in G4analysis ntuple
+and demonstrates ntuple merging.
+
+In difference from merging other data (G4Run, scorers, hitograms),
+the ntuple data are not sent to the collecting rank(s) at the
+end of run but during event processing. That's why (an) extra rank(s)
+have to be reserved for this purpose. The number of extra workers requested 
+is set in G4MPImanager constructor in main(). While G4MPImanager 
+can be created with any number of extra workers (< total number),
+the ntuple merging is at present supported only for one.
+
+The extra worker is connected to the run action class via G4MPIextraWorker
+object which is set to G4MPImanager in main().
+The standard calls to G4AnalysisManager (creating ntuple, open, write and 
+close file) trigger creating all necessary analysis tools object
+for merging ntuple data on flight.
+
+MPI ntuple merging can be activated in sequential mode only;
+this activation is perfomed by creating the G4MPIntupleMerger
+object in the RunActionMaster constructor. 
+The merger must be created before creating G4AnalysisManager
+(= the first call to G4AnalysisManager::Instance())
+and deleted only at the end of program.
+
+If multithreading mode is enabled, the ntuples are merged from 
+threads to files per ranks.
+Combined MT + MPI merging is not yet supported.
+Merging ntuples is actually supported only with Root output format.
+
+How to build
+============
+Use CMake on Geant4 library installed with CMake build.
+
+This example requires G4mpi library to be installed
+(see examples/extended/parallel/MPI/source/REDME.md)
+
+Follow these commands,
+
+    > mkdir build
+    > cd build
+    > cmake -DG4mpi_DIR=<where-G4mpi-wasintalled>/lib[64]/G4mpi -DCMAKE_CXX_COMPILER=mpicxx \
+      -DGeant4_DIR=<your Geant4 install path>/lib[64]/Geant4-V.m.n <path-to-source>
+      (V.m.n is the version of Geant4, eg. Geant4-9.6.0)
+    > make
+    > make install
+
+Replace mpicxx with your MPI-compiler wrapper.
+
+*/

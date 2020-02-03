@@ -23,16 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 94688 2015-12-02 17:15:08Z gunter $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
+// Michael Kelsey  31 Jan 2019 -- Add new command for electric field
 
 #include "G4VisManager.hh"
-
-#ifndef __MIC__
-#define G4VIS_USE_STD11
-#endif
 
 #include "G4VisCommands.hh"
 #include "G4VisCommandsCompound.hh"
@@ -86,8 +82,8 @@
 #include "G4MTRunManager.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
-#include "G4GeometryWorkspacePool.hh"
-#include "G4SolidsWorkspacePool.hh"
+#include "G4GeometryWorkspace.hh"
+#include "G4SolidsWorkspace.hh"
 #include <deque>
 #include <typeinfo>
 #ifdef G4VIS_USE_STD11
@@ -115,7 +111,9 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fNKeepRequests            (0),
   fEventKeepingSuspended    (false),
   fKeptLastEvent            (false),
+  fDrawEventOnlyIfToBeKept  (false),
   fpRequestedEvent          (0),
+  fReviewingKeptEvents      (false),
   fAbortReviewKeptEvents    (false),
   fIsDrawGroup              (false),
   fDrawGroupNestingDepth    (0),
@@ -271,7 +269,7 @@ void G4VisManager::Initialise () {
       "\n  external packages or libraries, and, optionally, drivers under"
       "\n  control of environment variables."
       "\n  Also you should implement RegisterModelFactories()."
-      "\n  See visualization/include/G4VisExecutive.hh/icc, for example."
+      "\n  See visualization/management/include/G4VisExecutive.hh/icc, for example."
       "\n  In your main() you will have something like:"
       "\n  #ifdef G4VIS_USE"
       "\n    G4VisManager* visManager = new G4VisExecutive;"
@@ -354,12 +352,110 @@ void G4VisManager::Initialise () {
     G4cout << G4endl;
   }
 
+  InitialiseG4ColourMap();
+
   if (fVerbosity >= startup) {
-    PrintAvailableColours (fVerbosity);
-    G4cout << G4endl;
+    G4cout <<
+    "Some /vis commands (optionally) take a string to specify colour."
+    "\n\"/vis/list\" to see available colours."
+    << G4endl;
   }
 
   fInitialised = true;
+}
+
+void G4VisManager::InitialiseG4ColourMap() const
+{
+  G4Colour::InitialiseColourMap();  // Initialises (if not already initialised)
+
+  // our forever 65 named colors taken long time ago from X11.
+  // Extracted from g4tools/include/tools/colors
+  // Copyright (C) 2010, Guy Barrand. All rights reserved.
+  // See the file tools.license for terms.
+
+#define TOOLS_COLORS_STAT(name,r,g,b) \
+G4Colour::AddToMap(#name, G4Colour(r,g,b));
+
+  //0-9
+  TOOLS_COLORS_STAT(aquamarine,0.496101F,0.996109F,0.828138F)
+  TOOLS_COLORS_STAT(mediumaquamarine,0.398444F,0.800793F,0.664073F)
+  //  TOOLS_COLORS_STAT(black,0,0,0) (already defined)
+  //  TOOLS_COLORS_STAT(blue,0,0,1) (already defined)
+  TOOLS_COLORS_STAT(cadetblue,0.371099F,0.617197F,0.62501F)
+  TOOLS_COLORS_STAT(cornflowerblue,0.390631F,0.58204F,0.925795F)
+  TOOLS_COLORS_STAT(darkslateblue,0.281254F,0.238285F,0.542977F)
+  TOOLS_COLORS_STAT(lightblue,0.675792F,0.843763F,0.898451F)
+  TOOLS_COLORS_STAT(lightsteelblue,0.68751F,0.765637F,0.867201F)
+  TOOLS_COLORS_STAT(mediumblue,0,0,0.800793F)
+
+  //10-19
+  TOOLS_COLORS_STAT(mediumslateblue,0.480476F,0.406256F,0.929702F)
+  TOOLS_COLORS_STAT(midnightblue,0.0976577F,0.0976577F,0.437507F)
+  TOOLS_COLORS_STAT(navyblue,0,0,0.500008F)
+  TOOLS_COLORS_STAT(navy,0,0,0.500008F)
+  TOOLS_COLORS_STAT(skyblue,0.527352F,0.8047F,0.917983F)
+  TOOLS_COLORS_STAT(slateblue,0.414069F,0.351568F,0.800793F)
+  TOOLS_COLORS_STAT(steelblue,0.273442F,0.50782F,0.703136F)
+  TOOLS_COLORS_STAT(coral,0.996109F,0.496101F,0.312505F)
+  //  TOOLS_COLORS_STAT(cyan,0,1,1) (already defined)
+  TOOLS_COLORS_STAT(firebrick,0.695323F,0.132815F,0.132815F)
+
+  //20-29
+  //  TOOLS_COLORS_STAT(brown,0.644541F,0.164065F,0.164065F) (already defined)
+  TOOLS_COLORS_STAT(gold,0.996109F,0.839857F,0)
+  TOOLS_COLORS_STAT(goldenrod,0.851575F,0.644541F,0.125002F)
+  //  TOOLS_COLORS_STAT(green,0,1,0) (already defined)
+  TOOLS_COLORS_STAT(darkgreen,0,0.390631F,0)
+  TOOLS_COLORS_STAT(darkolivegreen,0.332036F,0.417975F,0.183597F)
+  TOOLS_COLORS_STAT(forestgreen,0.132815F,0.542977F,0.132815F)
+  TOOLS_COLORS_STAT(limegreen,0.195315F,0.800793F,0.195315F)
+  TOOLS_COLORS_STAT(mediumseagreen,0.234379F,0.699229F,0.441413F)
+  TOOLS_COLORS_STAT(mediumspringgreen,0,0.976577F,0.601572F)
+
+  //30-39
+  TOOLS_COLORS_STAT(palegreen,0.593759F,0.980484F,0.593759F)
+  TOOLS_COLORS_STAT(seagreen,0.17969F,0.542977F,0.339849F)
+  TOOLS_COLORS_STAT(springgreen,0,0.996109F,0.496101F)
+  TOOLS_COLORS_STAT(yellowgreen,0.601572F,0.800793F,0.195315F)
+  TOOLS_COLORS_STAT(darkslategrey,0.183597F,0.308598F,0.308598F)
+  TOOLS_COLORS_STAT(dimgrey,0.410163F,0.410163F,0.410163F)
+  TOOLS_COLORS_STAT(lightgrey,0.824231F,0.824231F,0.824231F)
+  //  TOOLS_COLORS_STAT(grey,0.750011F,0.750011F,0.750011F) (already defined)
+  TOOLS_COLORS_STAT(khaki,0.937514F,0.898451F,0.546883F)
+  //  TOOLS_COLORS_STAT(magenta,1,0,1) (already defined)
+
+  //40-49
+  TOOLS_COLORS_STAT(maroon,0.68751F,0.187503F,0.375006F)
+  TOOLS_COLORS_STAT(orange,0.996109F,0.644541F,0)
+  TOOLS_COLORS_STAT(orchid,0.851575F,0.437507F,0.83595F)
+  TOOLS_COLORS_STAT(darkorchid,0.597665F,0.195315F,0.796887F)
+  TOOLS_COLORS_STAT(mediumorchid,0.726574F,0.332036F,0.824231F)
+  TOOLS_COLORS_STAT(pink,0.996109F,0.750011F,0.792981F)
+  TOOLS_COLORS_STAT(plum,0.863294F,0.62501F,0.863294F)
+  //  TOOLS_COLORS_STAT(red,1,0,0) (already defined)
+  TOOLS_COLORS_STAT(indianred,0.800793F,0.35938F,0.35938F)
+  TOOLS_COLORS_STAT(mediumvioletred,0.777356F,0.0820325F,0.519539F)
+
+  //50-59
+  TOOLS_COLORS_STAT(orangered,0.996109F,0.269535F,0)
+  TOOLS_COLORS_STAT(violetred,0.812512F,0.125002F,0.562509F)
+  TOOLS_COLORS_STAT(salmon,0.976577F,0.500008F,0.445319F)
+  TOOLS_COLORS_STAT(sienna,0.62501F,0.320317F,0.175784F)
+  TOOLS_COLORS_STAT(tan,0.820325F,0.703136F,0.546883F)
+  TOOLS_COLORS_STAT(thistle,0.843763F,0.746105F,0.843763F)
+  TOOLS_COLORS_STAT(turquoise,0.250004F,0.875013F,0.812512F)
+  TOOLS_COLORS_STAT(darkturquoise,0,0.8047F,0.816419F)
+  TOOLS_COLORS_STAT(mediumturquoise,0.281254F,0.816419F,0.796887F)
+  TOOLS_COLORS_STAT(violet,0.929702F,0.50782F,0.929702F)
+
+  //60-64
+  TOOLS_COLORS_STAT(blueviolet,0.539071F,0.167971F,0.882826F)
+  TOOLS_COLORS_STAT(wheat,0.957046F,0.867201F,0.699229F)
+  //  TOOLS_COLORS_STAT(white,1,1,1) (already defined)
+  //  TOOLS_COLORS_STAT(yellow,1,1,0) (already defined)
+  TOOLS_COLORS_STAT(greenyellow,0.675792F,0.996109F,0.18359F)
+
+#undef TOOLS_COLORS_STAT
 }
 
 void G4VisManager::RegisterMessengers () {
@@ -368,24 +464,6 @@ void G4VisManager::RegisterMessengers () {
   // always - one command per messenger).
   
   G4UIcommand* directory;
-  
-  // *Basic* top level commands were instantiated in the constructor
-  // so that they can be used immediately after instantiation of the
-  // vis manager.  Other top level and lower level commands are
-  // instantiated here.
-  
-  // Other top level commands...
-  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
-  RegisterMessenger(new G4VisCommandEnable);
-  RegisterMessenger(new G4VisCommandList);
-  RegisterMessenger(new G4VisCommandReviewKeptEvents);
-  
-  // Compound commands...
-  RegisterMessenger(new G4VisCommandDrawTree);
-  RegisterMessenger(new G4VisCommandDrawView);
-  RegisterMessenger(new G4VisCommandDrawVolume);
-  RegisterMessenger(new G4VisCommandOpen);
-  RegisterMessenger(new G4VisCommandSpecify);
   
   directory = new G4UIdirectory ("/vis/geometry/");
   directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
@@ -418,13 +496,16 @@ void G4VisManager::RegisterMessengers () {
   directory -> SetGuidance
     ("Set quantities for use in future commands where appropriate.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSetArrow3DLineSegmentsPerCircle);
   RegisterMessenger(new G4VisCommandSetColour);
+  RegisterMessenger(new G4VisCommandSetExtentForField);
   RegisterMessenger(new G4VisCommandSetLineWidth);
   RegisterMessenger(new G4VisCommandSetTextColour);
   RegisterMessenger(new G4VisCommandSetTextLayout);
   RegisterMessenger(new G4VisCommandSetTextSize);
   RegisterMessenger(new G4VisCommandSetTouchable);
-  
+  RegisterMessenger(new G4VisCommandSetVolumeForField);
+
   directory = new G4UIdirectory ("/vis/scene/");
   directory -> SetGuidance ("Operations on Geant4 scenes.");
   fDirectoryList.push_back (directory);
@@ -435,7 +516,8 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneList);
   RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
   RegisterMessenger(new G4VisCommandSceneSelect);
-  
+  RegisterMessenger(new G4VisCommandSceneShowExtents);
+
   directory = new G4UIdirectory ("/vis/scene/add/");
   directory -> SetGuidance ("Add model to current scene.");
   fDirectoryList.push_back (directory);
@@ -446,7 +528,9 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddExtent);
+  RegisterMessenger(new G4VisCommandSceneAddElectricField);
   RegisterMessenger(new G4VisCommandSceneAddFrame);
+  RegisterMessenger(new G4VisCommandSceneAddGPS);
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLine);
   RegisterMessenger(new G4VisCommandSceneAddLine2D);
@@ -484,15 +568,19 @@ void G4VisManager::RegisterMessengers () {
   directory -> SetGuidance ("Operations on Geant4 viewers.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandViewerAddCutawayPlane);
+  RegisterMessenger(new G4VisCommandViewerCentreOn);
   RegisterMessenger(new G4VisCommandViewerChangeCutawayPlane);
   RegisterMessenger(new G4VisCommandViewerClear);
   RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
   RegisterMessenger(new G4VisCommandViewerClearTransients);
+  RegisterMessenger(new G4VisCommandViewerClearVisAttributesModifiers);
   RegisterMessenger(new G4VisCommandViewerClone);
+  RegisterMessenger(new G4VisCommandViewerColourByDensity);
   RegisterMessenger(new G4VisCommandViewerCopyViewFrom);
   RegisterMessenger(new G4VisCommandViewerCreate);
   RegisterMessenger(new G4VisCommandViewerDolly);
   RegisterMessenger(new G4VisCommandViewerFlush);
+  RegisterMessenger(new G4VisCommandViewerInterpolate);
   RegisterMessenger(new G4VisCommandViewerList);
   RegisterMessenger(new G4VisCommandViewerPan);
   RegisterMessenger(new G4VisCommandViewerRebuild);
@@ -515,6 +603,23 @@ void G4VisManager::RegisterMessengers () {
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandsViewerSet);
   
+  // *Basic* top level commands were instantiated in the constructor
+  // so that they can be used immediately after instantiation of the
+  // vis manager.  Other top level commands, including "compound commands"
+  // (i.e., commands that invoke other commands) are instantiated here.
+
+  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandDrawOnlyToBeKeptEvents);
+  RegisterMessenger(new G4VisCommandDrawTree);
+  RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawLogicalVolume);
+  RegisterMessenger(new G4VisCommandDrawVolume);
+  RegisterMessenger(new G4VisCommandEnable);
+  RegisterMessenger(new G4VisCommandList);
+  RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandSpecify);
+
   // List manager commands
   RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
 		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
@@ -546,6 +651,16 @@ void G4VisManager::Enable() {
     if (fVerbosity >= confirmations) {
       G4cout << "G4VisManager::Enable: visualization enabled." << G4endl;
     }
+    if (fVerbosity >= warnings) {
+      G4int nKeptEvents = 0;
+      const G4Run* run = G4RunManager::GetRunManager()->GetCurrentRun();
+      if (run) nKeptEvents = run->GetEventVector()->size();
+      G4cout <<
+  "There are " << nKeptEvents << " kept events."
+  "\n  \"/vis/reviewKeptEvents\" to review them one by one."
+  "\n  \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+      << G4endl;
+    }
   }
   else {
     if (fVerbosity >= warnings) {
@@ -562,10 +677,23 @@ void G4VisManager::Disable() {
   SetConcreteInstance(0);
   if (fVerbosity >= confirmations) {
     G4cout <<
-      "G4VisManager::Disable: visualization disabled."
-      "\n  The pointer returned by GetConcreteInstance will be zero."
-      "\n  Note that it will become enabled after some valid vis commands."
+    "G4VisManager::Disable: visualization disabled."
+    "\n  The pointer returned by GetConcreteInstance will be zero."
+    "\n  Note that it will become enabled after some valid vis commands."
 	   << G4endl;
+  }
+  if (fVerbosity >= warnings) {
+    G4int currentTrajectoryType =
+    G4RunManagerKernel::GetRunManagerKernel()->GetTrackingManager()->GetStoreTrajectory();
+    if (currentTrajectoryType > 0) {
+    G4cout <<
+      "You may wish to disable trajectory production too:"
+      "\n  \"/tracking/storeTrajectory 0\""
+      "\nbut don't forget to re-enable with"
+      "\n  \"/vis/enable\""
+      "\n  \"/tracking/storeTrajectory " << currentTrajectoryType << '\"'
+      << G4endl;
+    }
   }
 }
 
@@ -621,11 +749,10 @@ G4VisManager::CurrentTrajDrawModel() const
 
   if (0 == model) {
     // No model was registered with the trajectory model manager.
-    // Use G4TrajectoryDrawByCharge as a default.
-    fpTrajDrawModelMgr->Register(new G4TrajectoryDrawByCharge("AutoGenerated"));
-
+    // Use G4TrajectoryDrawByCharge as a fallback.
+    fpTrajDrawModelMgr->Register(new G4TrajectoryDrawByCharge("DefaultModel"));
     if (fVerbosity >= warnings) {
-      G4cout<<"G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model."<<G4endl;
+      G4cout<<"G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model."<<G4endl;
       G4cout<<"See commands in /vis/modeling/trajectories/ for other options."<<G4endl;
     }
   }
@@ -636,7 +763,7 @@ G4VisManager::CurrentTrajDrawModel() const
   return model;
 }
 
-void G4VisManager::RegisterModel(G4VTrajectoryModel* model) 
+void G4VisManager::RegisterModel(G4VTrajectoryModel* model)
 {
   fpTrajDrawModelMgr->Register(model);
 }
@@ -1037,7 +1164,7 @@ void G4VisManager::CreateViewer
 
   if (!p) {
     if (fVerbosity >= errors) {
-      G4cerr << "ERROR in G4VisManager::CreateViewer during "
+      G4cerr << "ERROR in G4VisManager::CreateViewer: null pointer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer creation.\n  No action taken."
 	     << G4endl;
@@ -1049,7 +1176,7 @@ void G4VisManager::CreateViewer
     if (fVerbosity >= errors) {
       G4cerr << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
-	     << " viewer initialisation.\n  No action taken."
+	     << " viewer instantiation.\n  No action taken."
 	     << G4endl;
     }
     return;
@@ -1062,6 +1189,15 @@ void G4VisManager::CreateViewer
   initialvp.SetXGeometryString(XGeometry); //parse string and store parameters
   p -> SetViewParameters(initialvp);
   p -> Initialise ();  // (Viewer itself may change view parameters further.)
+  if (p -> GetViewId() < 0) {
+    if (fVerbosity >= errors) {
+      G4cerr << "ERROR in G4VisManager::CreateViewer during "
+	     << fpGraphicsSystem -> GetName ()
+	     << " viewer initialisation.\n  No action taken."
+	     << G4endl;
+    }
+    return;
+  }
 
   fpViewer = p;                             // Make current.
   fpSceneHandler -> AddViewerToList (fpViewer);
@@ -1172,9 +1308,16 @@ void G4VisManager::GeometryHasChanged () {
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: The current scene \""
 	     << fpScene -> GetName ()
-	     << "\" has no models."
+	     << "\" has no run duration models."
+             << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
 	     << G4endl;
     }
+    fpSceneHandler->ClearTransientStore();
+    fpSceneHandler->ClearStore();
+    fpViewer->NeedKernelVisit();
+    fpViewer->SetView();
+    fpViewer->ClearView();
+    fpViewer->FinishView();
   }
 }
 
@@ -1203,9 +1346,16 @@ void G4VisManager::NotifyHandlers () {
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: The current scene \""
 	     << fpScene -> GetName ()
-	     << "\" has no models."
+	     << "\" has no run duration models."
+             << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
 	     << G4endl;
     }
+    fpSceneHandler->ClearTransientStore();
+    fpSceneHandler->ClearStore();
+    fpViewer->NeedKernelVisit();
+    fpViewer->SetView();
+    fpViewer->ClearView();
+    fpViewer->FinishView();
   }
 }
 
@@ -1250,6 +1400,17 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
   }
 }
 
+void G4VisManager::SetUserAction
+(G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  if (fVerbosity >= warnings) {
+    G4cout <<
+  "WARNING: SetUserAction is deprecated. Use RegisterRunDurationUserVisAction."
+    << G4endl;
+  }
+  RegisterRunDurationUserVisAction("SetUserAction",pVisAction,extent);
+}
+
 void G4VisManager::RegisterRunDurationUserVisAction
 (const G4String& name,
  G4VUserVisAction* pVisAction,
@@ -1263,6 +1424,11 @@ void G4VisManager::RegisterRunDurationUserVisAction
 	"WARNING: No extent set for user vis action \"" << name << "\"."
 	     << G4endl;
     }
+  }
+  if (fVerbosity >= confirmations) {
+    G4cout
+    << "Run duration user vis action \"" << name << "\" registered"
+    << G4endl;
   }
 }
 
@@ -1280,6 +1446,11 @@ void G4VisManager::RegisterEndOfEventUserVisAction
 	     << G4endl;
     }
   }
+  if (fVerbosity >= confirmations) {
+    G4cout
+    << "End of event user vis action \"" << name << "\" registered"
+    << G4endl;
+  }
 }
 
 void G4VisManager::RegisterEndOfRunUserVisAction
@@ -1295,6 +1466,11 @@ void G4VisManager::RegisterEndOfRunUserVisAction
 	"WARNING: No extent set for user vis action \"" << name << "\"."
 	     << G4endl;
     }
+  }
+  if (fVerbosity >= confirmations) {
+    G4cout
+    << "End of run user vis action \"" << name << "\" registered"
+    << G4endl;
   }
 }
 
@@ -1422,6 +1598,7 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
     }
     return;
   }
+  fpViewer->SetView();
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpScene = fpSceneHandler -> GetScene ();
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
@@ -1438,7 +1615,7 @@ void G4VisManager::PrintAvailableGraphicsSystems (Verbosity verbosity) const
 {
   G4cout << "Current available graphics systems are:\n";
   if (fAvailableGraphicsSystems.size ()) {
-    for (auto&& gs: fAvailableGraphicsSystems) {
+    for (const auto& gs: fAvailableGraphicsSystems) {
       const G4String& name = gs->GetName();
       const std::vector<G4String>& nicknames = gs->GetNicknames();
       if (verbosity <= warnings) {
@@ -1615,8 +1792,13 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
 //  G4cout << "G4VisManager::G4VisSubThread: thread: "
 //  << G4Threading::G4GetThreadId() << std::endl;
 
-  G4GeometryWorkspacePool::GetInstance()->CreateAndUseWorkspace();
-  G4SolidsWorkspacePool::GetInstance()->CreateAndUseWorkspace();
+  // Set up geometry and navigation for a thread
+  G4GeometryWorkspace::GetPool()->CreateAndUseWorkspace();
+  G4SolidsWorkspace::GetPool()->CreateAndUseWorkspace();
+  G4Navigator* navigator =
+  G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  navigator->SetWorldVolume
+  (G4MTRunManager::GetMasterRunManagerKernel()->GetCurrentWorld());
 
   pViewer->SwitchToVisSubThread();
 
@@ -1657,11 +1839,9 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
 
       if (pScene->GetRefreshAtEndOfEvent()) {
 
-        // ShowView guarantees the view comes to the screen.  No action
-        // is taken for passive viewers like OGL*X (without picking enabled),
-        // but it passes control to interactive viewers, such as OGL*X (with
-        // picking enabled) or OGL*Xm, and allows file-writing viewers to
-        // close the file.
+        // ShowView guarantees the view is flushed to the screen.  It also
+        // triggers other features such picking (if enabled) and allows
+        // file-writing viewers to close the file.
         pViewer->ShowView();
         pSceneHandler->SetMarkForClearingTransientStore(true);
 
@@ -1682,7 +1862,11 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
     G4MUTEXLOCK(&mtVisSubThreadMutex);
     G4int runInProgress = mtRunInProgress;
     G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-    if (!runInProgress) break;
+    if (!runInProgress) {
+      // EndOfRun on master thread has signalled end of run.  There is
+      // nothing to draw so...
+      break;
+    }
 
     // Run still in progress but nothing to draw, so wait a while.
 #ifdef G4VIS_USE_STD11
@@ -1692,7 +1876,7 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
 #endif
   }
 
-  // Inform viewer that we have finished all sub-thread drawing for now...
+  // Inform viewer that we have finished all sub-thread drawing
   pViewer->DoneWithVisSubThread();
   pViewer->MovingToMasterThread();
 //  G4cout << "G4VisManager::G4VisSubThread: Vis sub-thread: ending" << G4endl;
@@ -1711,6 +1895,7 @@ namespace {
 void G4VisManager::BeginOfRun ()
 {
   if (fIgnoreStateChanges) return;
+
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
@@ -1734,6 +1919,12 @@ void G4VisManager::BeginOfRun ()
   fTransientsDrawnThisRun = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
   fNoOfEventsDrawnThisRun = 0;
+
+  // Check to see if the user has created a trajectory model. If not, create
+  // a default one. To avoid code duplication the following function is used
+  // and its result (a const G4VTrajectoryModel*) is thrown away at this point.
+  // The function is called again later when needed.
+  CurrentTrajDrawModel();
 
 #ifdef G4MULTITHREADED
 //   There is a static method G4Threading::IsMultithreadedApplication()
@@ -1768,6 +1959,9 @@ void G4VisManager::BeginOfRun ()
 void G4VisManager::BeginOfEvent ()
 {
   if (fIgnoreStateChanges) return;
+
+  if (!GetConcreteInstance()) return;
+
 //  G4cout << "G4VisManager::BeginOfEvent: thread: "
 //  << G4Threading::G4GetThreadId() << G4endl;
 
@@ -1814,6 +2008,12 @@ void G4VisManager::EndOfEvent ()
   G4EventManager* eventManager = G4EventManager::GetEventManager();
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
+
+  // Discard event if fDrawEventOnlyIfToBeKept flag is set unless the
+  // user has requested the event to be kept.
+  if (fDrawEventOnlyIfToBeKept) {
+    if (!currentEvent->ToBeKept()) return;
+  }
 
   if (G4Threading::IsMultithreadedApplication()) {
 
@@ -1927,11 +2127,9 @@ void G4VisManager::EndOfEvent ()
 
       // Unless last event (in which case wait end of run)...
       if (eventID < nEventsToBeProcessed - 1) {
-        // ShowView guarantees the view comes to the screen.  No action
-        // is taken for passive viewers like OGL*X (without picking enabled),
-        // but it passes control to interactive viewers, such as OGL*X (with
-        // picking enabled) or OGL*Xm, and allows file-writing viewers to
-        // close the file.
+        // ShowView guarantees the view is flushed to the screen.  It also
+        // triggers other features such picking (if enabled) and allows
+        // file-writing viewers to close the file.
         fpViewer->ShowView();
       } else {  // Last event...
                 // Keep, but only if user has not kept any...
@@ -1989,6 +2187,7 @@ void G4VisManager::EndOfEvent ()
 void G4VisManager::EndOfRun ()
 {
   if (fIgnoreStateChanges) return;
+
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
@@ -2025,7 +2224,11 @@ void G4VisManager::EndOfRun ()
 #endif
 
 #ifdef G4MULTITHREADED
-  if (IsValidView()) {  // I.e., events should have been drawn.
+  // Print warning about discarded events, if any.
+  // Don't call IsValidView unless there is a scene handler.  This
+  // avoids WARNING message from IsValidView() when the user has
+  // not instantiated a scene handler, e.g., in batch mode.
+  if (fpSceneHandler && IsValidView()) {  // Events should have been drawn
     G4int noOfEventsRequested = runManager->GetNumberOfEventsToBeProcessed();
     if (fNoOfEventsDrawnThisRun != noOfEventsRequested) {
       if (!fWaitOnEventQueueFull && fVerbosity >= warnings) {
@@ -2045,7 +2248,7 @@ void G4VisManager::EndOfRun ()
   if (events) nKeptEvents = events->size();
   if (nKeptEvents && !fKeptLastEvent) {
     if (fVerbosity >= warnings) {
-      G4cout << "WARNING: " << nKeptEvents;
+      G4cout << nKeptEvents;
       if (nKeptEvents == 1) G4cout << " event has";
       else G4cout << " events have";
       G4cout << " been kept for refreshing and/or reviewing." << G4endl;
@@ -2060,7 +2263,10 @@ void G4VisManager::EndOfRun ()
         }
         G4cout << " made by the vis manager.)" << G4endl;
       }
-      G4cout << "  \"/vis/reviewKeptEvents\" to review them." << G4endl;
+      G4cout <<
+  "\n  \"/vis/reviewKeptEvents\" to review them one by one."
+  "\n  \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+      << G4endl;
     }
     //    static G4bool warned = false;
     //    if (!valid && fVerbosity >= warnings && !warned) {
@@ -2073,6 +2279,7 @@ void G4VisManager::EndOfRun ()
     //	"\n    \"/vis/scene/add/hits\" or \"/vis/scene/add/digitisations\""
     //	"\n    and, possibly, \"/vis/viewer/flush\"."
     //	"\n  To see all events: \"/vis/scene/endOfEventAction accumulate\"."
+    //  "\n  (You may need \"/vis/viewer/flush\" or even \"/vis/viewer/rebuild\".)"
     //	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
     //	     << G4endl;
     //      warned = true;
@@ -2104,17 +2311,15 @@ void G4VisManager::EndOfRun ()
 //    if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpSceneHandler->DrawEndOfRunModels();
-        // ShowView guarantees the view comes to the screen.  No action
-        // is taken for passive viewers like OGL*X (without picking enabled),
-        // but it passes control to interactive viewers, such as OGL*X (with
-        // picking enabled) or OGL*Xm, and allows file-writing viewers to
-        // close the file.
+        // An extra refresh for auto-refresh viewers.
+        // ???? I DON'T WHY THIS IS NECESSARY ???? JA ????
+        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+          fpViewer->RefreshView();
+        }
+        // ShowView guarantees the view is flushed to the screen.  It also
+        // triggers other features such picking (if enabled) and allows
+        // file-writing viewers to close the file.
         fpViewer->ShowView();
-//        // An extra refresh for auto-refresh viewers.
-//        // ???? I DON'T THINK THIS IS NECESSARY ???? JA ????
-//        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
-//          fpViewer->RefreshView();
-//        }
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       } else {
         if (fpGraphicsSystem->GetFunctionality() ==
@@ -2266,10 +2471,9 @@ G4bool G4VisManager::IsValidView () {
   "WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system"
   "\n  has been instantiated.  Use \"/vis/open\" or \"/vis/sceneHandler/create\"."
   "\n  Alternatively, to avoid this message, suppress instantiation of vis"
-  "\n  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure"
-  "\n  drawing code is executed only if G4VVisManager::GetConcreteInstance()"
-  "\n  is non-zero."
-	       << G4endl;
+  "\n  manager (G4VisExecutive) and ensure drawing code is executed only if"
+  "\n  G4VVisManager::GetConcreteInstance() is non-zero."
+        << G4endl;
       }
     }
     return false;

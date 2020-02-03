@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.hh 78955 2014-02-05 09:45:46Z gcosmo $
 //
 // 
 // A.Walkden 28/11/95
@@ -50,6 +49,7 @@
 
 #include "globals.hh"
 #include "G4Point3D.hh"
+#include "G4Transform3D.hh"
 
 class G4VisExtent
 {
@@ -60,7 +60,18 @@ public: // With description
                G4double zmin = 0., G4double zmax = 0.);
   G4VisExtent (const G4Point3D& centre, G4double radius);
   ~G4VisExtent ();
+  static const G4VisExtent& GetNullExtent ();
   G4bool operator != (const G4VisExtent& e) const;
+  G4bool operator == (const G4VisExtent& e) const {return !operator!=(e);}
+
+  G4VisExtent& Transform (const G4Transform3D&);
+  // The above transforms the box defined by the 6 limits fXmin, fXmax,
+  // etc., and produces a new box that encloses the transformed box. If the
+  // transform includes a rotation the new box will likely be a good deal larger
+  // than the old one, but hey-ho, the concept of G4VisExtent requires the
+  // limits to be along the major axes and thus defines a box whose edges are
+  // parallel to the major axes. So use the above with care.
+
   G4double  GetXmin         () const;
   G4double  GetXmax         () const;
   G4double  GetYmin         () const;
@@ -77,7 +88,6 @@ public: // With description
   void SetZmin (G4double zmin);
   void SetZmax (G4double zmax);
   friend std::ostream& operator << (std::ostream& os, const G4VisExtent& e);
-  static const G4VisExtent NullExtent;
 
 private:
   G4double fXmin, fXmax, fYmin, fYmax, fZmin, fZmax;

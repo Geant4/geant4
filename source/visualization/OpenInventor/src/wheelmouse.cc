@@ -22,6 +22,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef G4VIS_BUILD_OIX_DRIVER
+
 #include <X11/Intrinsic.h>
 #include <X11/Xlib.h>
 #include <Xm/Xm.h>
@@ -140,3 +142,5 @@ void xmAddMouseEventHandler(Widget w)
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif
+
+#endif // G4VIS_BUILD_OIX_DRIVER

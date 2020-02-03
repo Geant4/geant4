@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PVDivision.hh 66356 2012-12-18 09:02:32Z gcosmo $
-// 
-// class G4PVDivision
+// G4PVDivision
 //
 // Class description:
 //
@@ -62,8 +59,6 @@
 //   They have phi of offset+n*width to offset+(n+1)*width where
 //   n=0..nReplicas-1
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // ----------------------------------------------------------------------
 #ifndef G4PVDIVISION_HH
@@ -105,8 +100,6 @@ class G4PVDivision : public G4VPhysicalVolume
                  const G4double offset );
       // Constructor with width
 
-  public:  // without description
-
     G4PVDivision(const G4String& pName,
                        G4LogicalVolume* pLogical,
                        G4VPhysicalVolume* pMother,
@@ -114,16 +107,18 @@ class G4PVDivision : public G4VPhysicalVolume
                  const G4int nReplicas,
                  const G4double width,
                  const G4double offset);
-      // Constructor in mother physical volume
-
-  public:  // with description
+      // Constructor in mother physical volume (same as first constructor)
 
     virtual ~G4PVDivision();
+
+    G4PVDivision(const G4PVDivision&) = delete;
+    G4PVDivision& operator=(const G4PVDivision&) = delete;
 
     virtual G4bool IsMany() const;
     virtual G4int GetCopyNo() const;
     virtual void  SetCopyNo(G4int CopyNo);
     virtual G4bool IsReplicated() const;
+    virtual G4int GetMultiplicity() const;
     virtual G4VPVParameterisation* GetParameterisation() const;
     virtual void GetReplicationData( EAxis& axis,
                                      G4int& nReplicas,
@@ -132,8 +127,9 @@ class G4PVDivision : public G4VPhysicalVolume
                                      G4bool& consuming ) const;
     EAxis  GetDivisionAxis() const;
     G4bool IsParameterised() const;
-
-  public:  // without description
+   
+    virtual EVolume VolumeType() const;
+      // Characterise the type of volume - normal/replicated/parameterised.
 
     G4bool IsRegularStructure() const; 
     G4int  GetRegularStructureId() const; 
@@ -149,9 +145,6 @@ class G4PVDivision : public G4VPhysicalVolume
                                       DivisionType divType,
                                 const G4LogicalVolume* pMotherLogical );
 
-    G4PVDivision(const G4PVDivision&);
-    const G4PVDivision& operator=(const G4PVDivision&);
-
     void SetParameterisation( G4LogicalVolume* motherLogical,
                         const EAxis pAxis,
                         const G4int nReplicas,
@@ -164,10 +157,10 @@ class G4PVDivision : public G4VPhysicalVolume
 
     EAxis faxis;             // axis of optimisation
     EAxis fdivAxis;          // axis of division
-    G4int fnReplicas;
-    G4double fwidth,foffset;
-    G4int    fcopyNo;
-    G4VDivisionParameterisation *fparam; 
+    G4int fnReplicas = 0;
+    G4double fwidth = 0.0, foffset = 0.0;
+    G4int fcopyNo = -1;
+    G4VDivisionParameterisation* fparam = nullptr; 
 };
 
 #endif

@@ -26,7 +26,10 @@
 /// \file exoticphysics/phonon/src/XPhysicsList.cc
 /// \brief Implementation of the XPhysicsList class
 //
+<<<<<<< HEAD
 // $Id: XPhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "XPhysicsList.hh"

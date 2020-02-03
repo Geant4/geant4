@@ -27,7 +27,10 @@
 /// \brief Implementation of the F01DetectorConstruction class
 //
 //
+<<<<<<< HEAD
 // $Id: F01DetectorConstruction.cc 77881 2013-11-29 08:37:53Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -393,7 +396,8 @@ void F01DetectorConstruction::ConstructSDandField()
   // Construct the field creator - this will register the field it creates
   if (!fEmFieldSetup.Get()) {
     F01FieldSetup* fieldSetup
-      = new F01FieldSetup(G4ThreeVector( 3.3*tesla, 0.0, 0.0 ) );
+       = new F01FieldSetup(G4ThreeVector( 3.3*tesla, 0.0, 0.0 ),
+                           fUseFSALstepper );
     G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
     fEmFieldSetup.Put(fieldSetup);
   }

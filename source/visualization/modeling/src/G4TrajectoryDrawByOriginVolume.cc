@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay March 2006
 
@@ -42,16 +41,18 @@ G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& n
 G4TrajectoryDrawByOriginVolume::~G4TrajectoryDrawByOriginVolume() {}
 
 void
-G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& visible) const
+G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& /*visible*/) const
 {
-  G4Colour colour(fDefault);
-  
-  G4Navigator* navigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  
   G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
   assert (0 != aTrajectoryPoint);
+
+  G4Colour colour(fDefault);
   
-  G4VPhysicalVolume* volume = navigator->LocateGlobalPointAndSetup(aTrajectoryPoint->GetPosition());
+  G4Navigator* navigator =
+  G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+
+  G4VPhysicalVolume* volume = navigator->LocateGlobalPointAndSetup
+  (aTrajectoryPoint->GetPosition(), nullptr,false,true);
 
   // Logical volumes form basis.
   G4LogicalVolume* logicalVolume = volume->GetLogicalVolume();
@@ -67,12 +68,11 @@ G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& vi
   G4VisTrajContext myContext(GetContext());
   
   myContext.SetLineColour(colour);
-  myContext.SetVisible(visible);
   
   if (GetVerbose()) {
     G4cout<<"G4TrajectoryDrawByOriginVolume drawer named "<<Name();
     G4cout<<", drawing trajectory originating in logical volume, "<<logicalName;
-    G4cout<<", physical volumed "<<physicalName<<", with configuration:"<<G4endl;
+    G4cout<<", physical volume "<<physicalName<<", with configuration:"<<G4endl;
     myContext.Print(G4cout);
   }
 
@@ -117,11 +117,14 @@ G4TrajectoryDrawByOriginVolume::Set(const G4String& particle, const G4Colour& co
 void
 G4TrajectoryDrawByOriginVolume::Print(std::ostream& ostr) const
 {
-  ostr<<"G4TrajectoryDrawByOriginVolume model "<< Name() <<" colour scheme: "<<std::endl;
-  ostr<<"Default : "<<fDefault<<G4endl;
+  ostr
+  << "G4TrajectoryDrawByOriginVolume model "<< Name()
+  << ", colour scheme: "
+  << ", Default " << fDefault
+  << std::endl;
 
   fMap.Print(ostr);
 
-  ostr<<"Default configuration:"<<G4endl;
-  GetContext().Print(G4cout);
+  ostr << "Default configuration:" << std::endl;
+  GetContext().Print(ostr);
 }

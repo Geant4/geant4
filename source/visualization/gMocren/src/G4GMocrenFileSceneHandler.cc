@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc 97696 2016-06-07 10:23:09Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -39,10 +38,10 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
+#include <sstream>
+#include <iomanip>
 
 #include "globals.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4VisManager.hh"
 
 #include "G4GMocrenFile.hh"
@@ -84,9 +83,13 @@
 #include "G4GMocrenTouchable.hh"
 #include "G4GMocrenFileCTtoDensityMap.hh"
 #include "G4PhantomParameterisation.hh"
+#include "G4PhysicalVolumeSearchScene.hh"
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringBox.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //----- constants
 const char  GDD_FILE_HEADER      [] = "g4_";
@@ -153,9 +156,10 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
   // maximum number of g4.gdd files in the dest directory
   kMaxFileNum = FR_MAX_FILE_NUM ; // initialization
   if ( std::getenv( "G4GMocrenFile_MAX_FILE_NUM" ) != NULL ) {	
-    char * pcFileNum = getenv("G4GMocrenFile_MAX_FILE_NUM");
+    char * pcFileNum = std::getenv("G4GMocrenFile_MAX_FILE_NUM");
     char c10FileNum[10];
-    std::strncpy(c10FileNum, pcFileNum, 10);
+    std::strncpy(c10FileNum, pcFileNum, 9);
+    c10FileNum[9] = '\0';
     kMaxFileNum = std::atoi(c10FileNum);
 
   } else {
@@ -205,10 +209,12 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   const G4int MAX_FILE_INDEX = kMaxFileNum - 1 ;
 
   // dest directory (null if no environmental variables is set)
-  std::strncpy(kGddFileName, kGddDestDir, std::strlen(kGddDestDir)+1);
+  std::strncpy(kGddFileName, kGddDestDir, sizeof(kGddFileName)-1);
+  kGddFileName[sizeof(kGddFileName)-1] = '\0';
 
   // create full path name (default)
-  std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME));
+  std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME,
+                sizeof(kGddFileName) - std::strlen(kGddFileName) - 1);
 
   // Automatic updation of file names
   static G4int currentNumber = 0;
@@ -229,11 +235,12 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
       }
 
     // re-determine file name as G4GMocrenFile_DEST_DIR/g4_XX.gdd 
-    if( i >=  0 && i <= 9 ) { 
-      std::sprintf( kGddFileName, "%s%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, "0", i );
-    } else {
-      std::sprintf( kGddFileName, "%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, i );
-    }
+    std::ostringstream filename;
+    filename
+    << kGddDestDir << GDD_FILE_HEADER
+    << std::setw(2) << std::setfill('0') << i << ".wrl";
+    strncpy(kGddFileName,filename.str().c_str(),sizeof(kGddFileName)-1);
+    kGddFileName[sizeof(kGddFileName)-1] = '\0';
 
     // check validity of the file name
     std::ifstream fin(kGddFileName); 
@@ -833,18 +840,18 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 {
   if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( box )" << G4endl;
-
+  
   if(GFDEBUG_DET > 0)
     G4cout << "G4GMocrenFileSceneHandler::AddSolid(const G4Box&)  : "
 	   << box.GetName() << G4endl;
-
+  
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
-
+  
   //----- Initialize if necessary
   GFBeginModeling();
-
-
+  
+  
   //--
   if(GFDEBUG_DET > 1) {
     G4cout << "-------" << G4endl;
@@ -868,11 +875,12 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     }
     delete poly;
   }
-
-
+  
+  
   // the volume name set by /vis/gMocren/setVolumeName
   G4String volName = kMessenger.getVolumeName();
-
+  
+  
   if(kFlagParameterization != 2) {
     G4ScoringManager * pScrMan = G4ScoringManager::GetScoringManager();
     if(pScrMan) {
@@ -881,17 +889,17 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       if(pScBox != NULL) bMesh = true;
       if(bMesh) kFlagParameterization = 2;
       if(GFDEBUG_DET > 0) G4cout << "   G4ScoringManager::FindMesh() : "
-				 << volName << " - " << bMesh << G4endl;
+        << volName << " - " << bMesh << G4endl;
     }
   }
-
+  
   const G4VModel* pv_model  = GetModel();
-  if (!pv_model) { return ; } 
+  if (!pv_model) { return ; }
   G4PhysicalVolumeModel* pPVModel =
-    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (!pPVModel) { return ; }
 
-
+  
   //-- debug information
   if(GFDEBUG_DET > 0) {
     G4Material * mat = pPVModel->GetCurrentMaterial();
@@ -908,13 +916,13 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4cout << "    Is parameterised?   : " << pPVModel->GetCurrentPV()->IsParameterised() << G4endl;
     G4cout << "    top phys. vol. name : " << pPVModel->GetTopPhysicalVolume()->GetName() << G4endl;
   }
-
+  
   //-- check the parameterised volume
   if(box.GetName() == volName) {
     
     kVolumeTrans3D = fObjectTransformation;
     // coordination system correction for gMocren
-    G4ThreeVector raxis(1., 0., 0.), dummy(0.,0.,0.); 
+    G4ThreeVector raxis(1., 0., 0.), dummy(0.,0.,0.);
     G4RotationMatrix rot(raxis, pi*rad);
     G4Transform3D trot(rot, dummy);
     if(GFDEBUG_DET) {
@@ -924,48 +932,48 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     }
     kVolumeTrans3D = kVolumeTrans3D*trot;
     if(GFDEBUG_DET) G4cout << " Parameterised volume : " << box.GetName() << G4endl;
-
-
-
+    
+    
+    
     //
     G4VPhysicalVolume * pv[3] = {0,0,0};
     pv[0] = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetDaughter(0);
     if(!pv[0]) {
       G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-		  "gMocren0003", FatalException, "Unexpected volume.");
+                  "gMocren0003", FatalException, "Unexpected volume.");
     }
     G4int dirAxis[3] = {-1,-1,-1};
     G4int nDaughters[3] = {0,0,0};
-
-    EAxis axis; G4int nReplicas; G4double width; G4double offset; G4bool consuming;  
+    
+    EAxis axis; G4int nReplicas; G4double width; G4double offset; G4bool consuming;
     pv[0]->GetReplicationData(axis, nReplicas, width, offset, consuming);
     nDaughters[0] = nReplicas;
     switch(axis) {
-    case kXAxis: dirAxis[0] = 0; break;
-    case kYAxis: dirAxis[0] = 1; break;
-    case kZAxis: dirAxis[0] = 2; break;
-    default:
-      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-		  "gMocren0004", FatalException, "Error.");
+      case kXAxis: dirAxis[0] = 0; break;
+      case kYAxis: dirAxis[0] = 1; break;
+      case kZAxis: dirAxis[0] = 2; break;
+      default:
+        G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+                    "gMocren0004", FatalException, "Error.");
     }
     kNestedVolumeNames.push_back(pv[0]->GetName());
-    if(GFDEBUG_DET) 
+    if(GFDEBUG_DET)
       G4cout << "        daughter name :  " << pv[0]->GetName()
 	     << "   # : " << nDaughters[0] << G4endl;
-
+    
     //
     if(GFDEBUG_DET) {
       if(pv[0]->GetLogicalVolume()->GetNoDaughters()) {
-	G4cout << "# of daughters : " 
+        G4cout << "# of daughters : "
 	       << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
       } else {
-	//G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-	//	    "gMocren0005", FatalException, "Error.");
+        //G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+        //	    "gMocren0005", FatalException, "Error.");
       }
     }
-
+    
     // check whether nested or regular parameterization
-    if(GFDEBUG_DET) G4cout << "# of daughters : " 
+    if(GFDEBUG_DET) G4cout << "# of daughters : "
 			   << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
     if(pv[0]->GetLogicalVolume()->GetNoDaughters() == 0) {
       kFlagParameterization = 1;
@@ -974,283 +982,286 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     }
     
     if(kFlagParameterization == 0) {
-
+      
       pv[1] = pv[0]->GetLogicalVolume()->GetDaughter(0);
       if(pv[1]) {
-	pv[1]->GetReplicationData(axis, nReplicas, width, offset, consuming);
-	nDaughters[1] = nReplicas;
-	switch(axis) {
-	case kXAxis: dirAxis[1] = 0; break;
-	case kYAxis: dirAxis[1] = 1; break;
-	case kZAxis: dirAxis[1] = 2; break;
-	default:
-	  G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-		      "gMocren0007", FatalException, "Error.");
-	}
-	kNestedVolumeNames.push_back(pv[1]->GetName());
-	if(GFDEBUG_DET) 
-	  G4cout << "        sub-daughter name :  " << pv[1]->GetName()
-		 << "   # : " << nDaughters[1]<< G4endl;
-
-	//
-	pv[2] = pv[1]->GetLogicalVolume()->GetDaughter(0);
-	if(pv[2]) {
-	  nDaughters[2] = pv[2]->GetMultiplicity();
-	  kNestedVolumeNames.push_back(pv[2]->GetName());
-	  if(GFDEBUG_DET) 
-	    G4cout << "        sub-sub-daughter name :  " << pv[2]->GetName()
-		   << "   # : " << nDaughters[2] << G4endl;
-
-	  if(nDaughters[2] > 1) {
-	    G4VNestedParameterisation * nestPara
-	      = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-	    if(nestPara == NULL)
-	      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-			  "gMocren0008", FatalException, "Non-nested parameterisation");
-
-	    nestPara->ComputeTransformation(0, pv[2]);
-	    G4ThreeVector trans0 = pv[2]->GetObjectTranslation();
-	    nestPara->ComputeTransformation(1, pv[2]);
-	    G4ThreeVector trans1 = pv[2]->GetObjectTranslation();
-	    G4ThreeVector diff(trans0 - trans1);
-	    if(GFDEBUG_DET) 
-	      G4cout << trans0 << " - " << trans1 << " - " << diff << G4endl;
-
-	    if(diff.x() != 0.) dirAxis[2] = 0;
-	    else if(diff.y() != 0.) dirAxis[2] = 1;
-	    else if(diff.z() != 0.) dirAxis[2] = 2;
-	    else
-	      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-			  "gMocren0009", FatalException, "Unexpected nested parameterisation");
-	  }
-	}
+        pv[1]->GetReplicationData(axis, nReplicas, width, offset, consuming);
+        nDaughters[1] = nReplicas;
+        switch(axis) {
+          case kXAxis: dirAxis[1] = 0; break;
+          case kYAxis: dirAxis[1] = 1; break;
+          case kZAxis: dirAxis[1] = 2; break;
+          default:
+            G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+                        "gMocren0007", FatalException, "Error.");
+        }
+        kNestedVolumeNames.push_back(pv[1]->GetName());
+        if(GFDEBUG_DET)
+          G4cout << "        sub-daughter name :  " << pv[1]->GetName()
+          << "   # : " << nDaughters[1]<< G4endl;
+        
+        //
+        pv[2] = pv[1]->GetLogicalVolume()->GetDaughter(0);
+        if(pv[2]) {
+          nDaughters[2] = pv[2]->GetMultiplicity();
+          kNestedVolumeNames.push_back(pv[2]->GetName());
+          if(GFDEBUG_DET)
+            G4cout << "        sub-sub-daughter name :  " << pv[2]->GetName()
+            << "   # : " << nDaughters[2] << G4endl;
+          
+          if(nDaughters[2] > 1) {
+            G4VNestedParameterisation * nestPara
+            = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
+            if(nestPara == NULL)
+              G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+                          "gMocren0008", FatalException, "Non-nested parameterisation");
+            
+            nestPara->ComputeTransformation(0, pv[2]);
+            G4ThreeVector trans0 = pv[2]->GetObjectTranslation();
+            nestPara->ComputeTransformation(1, pv[2]);
+            G4ThreeVector trans1 = pv[2]->GetObjectTranslation();
+            G4ThreeVector diff(trans0 - trans1);
+            if(GFDEBUG_DET)
+              G4cout << trans0 << " - " << trans1 << " - " << diff << G4endl;
+            
+            if(diff.x() != 0.) dirAxis[2] = 0;
+            else if(diff.y() != 0.) dirAxis[2] = 1;
+            else if(diff.z() != 0.) dirAxis[2] = 2;
+            else
+              G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+                          "gMocren0009", FatalException, "Unexpected nested parameterisation");
+          }
+        }
       }
       
       for(G4int i = 0; i < 3; i++) {
-	kNestedVolumeDimension[i] = nDaughters[i];
-	//kNestedVolumeDimension[i] = nDaughters[dirAxis[i]];
-	kNestedVolumeDirAxis[i] = dirAxis[i];
+        kNestedVolumeDimension[i] = nDaughters[i];
+        //kNestedVolumeDimension[i] = nDaughters[dirAxis[i]];
+        kNestedVolumeDirAxis[i] = dirAxis[i];
       }
       //G4cout << "@@@@@@@@@ "
       //       << dirAxis[0] << ", " << dirAxis[1] << ", " << dirAxis[2] << G4endl;
-
+      
       // get densities
       G4VNestedParameterisation * nestPara
-	= dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
+      = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
       if(nestPara != NULL) {
-	G4double prexyz[3] = {0.,0.,0.}, xyz[3] = {0.,0.,0.};
-	for(G4int n0 = 0; n0 < nDaughters[0]; n0++) {
-	  for(G4int n1 = 0; n1 < nDaughters[1]; n1++) {
-	    for(G4int n2 = 0; n2 < nDaughters[2]; n2++) {
-		  
-	      G4GMocrenTouchable * touch = new G4GMocrenTouchable(n1, n0);
-	      if(GFDEBUG_DET) 
-		G4cout << "   retrieve volume : copy # : " << n0
-		       << ", " << n1 << ", " << n2 << G4endl;
-	      G4Material * mat = nestPara->ComputeMaterial(pv[2], n2, touch);
-	      delete touch;
-	      G4double dens = mat->GetDensity()/(g/cm3);
- 
-	      if(GFDEBUG_DET) 
-		G4cout << "           density :" << dens << " [g/cm3]" << G4endl;
-
-	      G4Box tbox(box);
-	      nestPara->ComputeDimensions(tbox, n2, pv[2]);
-	      xyz[0] = tbox.GetXHalfLength()/mm;
-	      xyz[1] = tbox.GetYHalfLength()/mm;
-	      xyz[2] = tbox.GetZHalfLength()/mm;
-	      if(n0 != 0 || n1 != 0 || n2 != 0) {
-		for(G4int i = 0; i < 3; i++) {
-		  if(xyz[i] != prexyz[i])
-		    G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-				"gMocren0010", FatalException, "Unsupported parameterisation");
-		}
-	      }
-	      if(GFDEBUG_DET) 
-		G4cout << "              size : " << tbox.GetXHalfLength()/mm << " x "
-		       << tbox.GetYHalfLength()/mm << " x "
-		       << tbox.GetZHalfLength()/mm << " [mm3]" << G4endl;
-
-	      G4int idx[3];
-	      idx[dirAxis[0]] = n0;
-	      idx[dirAxis[1]] = n1;
-	      idx[dirAxis[2]] = n2;
-	      Index3D i3d(idx[0],idx[1],idx[2]);
-	      kNestedModality[i3d] = dens;
-	      if(GFDEBUG_DET) 
-		G4cout << " index: " << idx[0] << ", " << idx[1] << ", " << idx[2]
-		       << "  density: " << dens << G4endl;
-
-	      for(G4int i = 0; i < 3; i++) prexyz[i] = xyz[i];
-	    }
-	  }
-	}  
-
-	kVolumeSize.set(box.GetXHalfLength()*2/mm,
-			box.GetYHalfLength()*2/mm,
-			box.GetZHalfLength()*2/mm);
-	// mesh size
-	if(!kbSetModalityVoxelSize) {
-	  G4float spacing[3] = {static_cast<G4float>(2*xyz[0]),
-                                static_cast<G4float>(2*xyz[1]),
-                                static_cast<G4float>(2*xyz[2])};
-	  kgMocrenIO->setVoxelSpacing(spacing);
-	  kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
-	  kbSetModalityVoxelSize = true;
-	}
-
+        G4double prexyz[3] = {0.,0.,0.}, xyz[3] = {0.,0.,0.};
+        for(G4int n0 = 0; n0 < nDaughters[0]; n0++) {
+          for(G4int n1 = 0; n1 < nDaughters[1]; n1++) {
+            for(G4int n2 = 0; n2 < nDaughters[2]; n2++) {
+              
+              G4GMocrenTouchable * touch = new G4GMocrenTouchable(n1, n0);
+              if(GFDEBUG_DET)
+                G4cout << "   retrieve volume : copy # : " << n0
+                << ", " << n1 << ", " << n2 << G4endl;
+              G4Material * mat = nestPara->ComputeMaterial(pv[2], n2, touch);
+              delete touch;
+              G4double dens = mat->GetDensity()/(g/cm3);
+              
+              if(GFDEBUG_DET)
+                G4cout << "           density :" << dens << " [g/cm3]" << G4endl;
+              
+              G4Box tbox(box);
+              nestPara->ComputeDimensions(tbox, n2, pv[2]);
+              xyz[0] = tbox.GetXHalfLength()/mm;
+              xyz[1] = tbox.GetYHalfLength()/mm;
+              xyz[2] = tbox.GetZHalfLength()/mm;
+              if(n0 != 0 || n1 != 0 || n2 != 0) {
+                for(G4int i = 0; i < 3; i++) {
+                  if(xyz[i] != prexyz[i])
+                    G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+                                "gMocren0010", FatalException, "Unsupported parameterisation");
+                }
+              }
+              if(GFDEBUG_DET)
+                G4cout << "              size : " << tbox.GetXHalfLength()/mm << " x "
+                << tbox.GetYHalfLength()/mm << " x "
+                << tbox.GetZHalfLength()/mm << " [mm3]" << G4endl;
+              
+              G4int idx[3];
+              idx[dirAxis[0]] = n0;
+              idx[dirAxis[1]] = n1;
+              idx[dirAxis[2]] = n2;
+              Index3D i3d(idx[0],idx[1],idx[2]);
+              kNestedModality[i3d] = dens;
+              if(GFDEBUG_DET)
+                G4cout << " index: " << idx[0] << ", " << idx[1] << ", " << idx[2]
+                << "  density: " << dens << G4endl;
+              
+              for(G4int i = 0; i < 3; i++) prexyz[i] = xyz[i];
+            }
+          }
+        }
+        
+        kVolumeSize.set(box.GetXHalfLength()*2/mm,
+                        box.GetYHalfLength()*2/mm,
+                        box.GetZHalfLength()*2/mm);
+        // mesh size
+        if(!kbSetModalityVoxelSize) {
+          G4float spacing[3] = {static_cast<G4float>(2*xyz[0]),
+            static_cast<G4float>(2*xyz[1]),
+            static_cast<G4float>(2*xyz[2])};
+          kgMocrenIO->setVoxelSpacing(spacing);
+          kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
+          kbSetModalityVoxelSize = true;
+        }
+        
       } else {
-	if(GFDEBUG_DET) 
-	  G4cout << pv[2]->GetName() << G4endl;
-	G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-		    "gMocren0011", FatalException, "Non-nested parameterisation");
+        if(GFDEBUG_DET)
+          G4cout << pv[2]->GetName() << G4endl;
+        G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+                    "gMocren0011", FatalException, "Non-nested parameterisation");
       }
-
-
-
+      
+      
+      
       //-- debug
       if(GFDEBUG_DET > 1) {
-	if(pPVModel->GetCurrentPV()->IsParameterised()) {
-	  G4VPVParameterisation * para = pPVModel->GetCurrentPV()->GetParameterisation();
-	  G4cout << " Is nested parameterisation? : " << para->IsNested() << G4endl;
-
-
-	  G4int npvp = pPVModel->GetDrawnPVPath().size();
-	  G4cout << "     physical volume node id : "
-		 << "size: " << npvp << ", PV name: ";
-	  for(G4int i = 0; i < npvp; i++) {
-	    G4cout << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetName()
-		   << " [param:"
-		   << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsParameterised()
-		   << ",rep:"
-		   << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsReplicated();
-	    if(pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()) {
-	      G4cout << ",nest:"
-		     << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()->IsNested();
-	    }
-	    G4cout << ",copyno:"
-		   << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetCopyNo();
-	    G4cout << "] - ";
-	  }
-	  G4cout << G4endl;
-
-
-	  pPVModel->GetCurrentPV()->GetReplicationData(axis, nReplicas, width, offset, consuming);
-	  G4cout << "     # replicas : " << nReplicas << G4endl;
-	  G4double pareDims[3] = {0.,0.,0.};
-	  G4Box * pbox = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
-	  if(pbox) {
-	    pareDims[0] = 2.*pbox->GetXHalfLength()*mm;
-	    pareDims[1] = 2.*pbox->GetYHalfLength()*mm;
-	    pareDims[2] = 2.*pbox->GetZHalfLength()*mm;
-	    G4cout << "     mother size ["
-		   << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
-		   << "] : "
-		   << pareDims[0] << " x "
-		   << pareDims[1] << " x "
-		   << pareDims[2] << " [mm3]"
-		   << G4endl;
-	  }
-	  G4double paraDims[3];
-	  G4Box * boxP = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
-	  if(boxP) {
-	    paraDims[0] = 2.*boxP->GetXHalfLength()*mm;
-	    paraDims[1] = 2.*boxP->GetYHalfLength()*mm;
-	    paraDims[2] = 2.*boxP->GetZHalfLength()*mm;
-	    G4cout << "     parameterised volume? ["
-		   << pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetName()
-		   << "] : "
-		   << paraDims[0] << " x "
-		   << paraDims[1] << " x "
-		   << paraDims[2] << " [mm3]  : "
-		   << G4int(pareDims[0]/paraDims[0]) << " x "
-		   << G4int(pareDims[1]/paraDims[1]) << " x "
-		   << G4int(pareDims[2]/paraDims[2]) << G4endl;
-	  } else {
-	    G4cout << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
-		   << " isn't a G4Box." << G4endl;
-	  }
-	}
+        if(pPVModel->GetCurrentPV()->IsParameterised()) {
+          G4VPVParameterisation * para = pPVModel->GetCurrentPV()->GetParameterisation();
+          G4cout << " Is nested parameterisation? : " << para->IsNested() << G4endl;
+          
+          
+          G4int npvp = pPVModel->GetDrawnPVPath().size();
+          G4cout << "     physical volume node id : "
+          << "size: " << npvp << ", PV name: ";
+          for(G4int i = 0; i < npvp; i++) {
+            G4cout << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetName()
+            << " [param:"
+            << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsParameterised()
+            << ",rep:"
+            << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsReplicated();
+            if(pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()) {
+              G4cout << ",nest:"
+              << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()->IsNested();
+            }
+            G4cout << ",copyno:"
+            << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetCopyNo();
+            G4cout << "] - ";
+          }
+          G4cout << G4endl;
+          
+          
+          pPVModel->GetCurrentPV()->GetReplicationData(axis, nReplicas, width, offset, consuming);
+          G4cout << "     # replicas : " << nReplicas << G4endl;
+          G4double pareDims[3] = {0.,0.,0.};
+          G4Box * pbox = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
+          if(pbox) {
+            pareDims[0] = 2.*pbox->GetXHalfLength()*mm;
+            pareDims[1] = 2.*pbox->GetYHalfLength()*mm;
+            pareDims[2] = 2.*pbox->GetZHalfLength()*mm;
+            G4cout << "     mother size ["
+            << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
+            << "] : "
+            << pareDims[0] << " x "
+            << pareDims[1] << " x "
+            << pareDims[2] << " [mm3]"
+            << G4endl;
+          }
+          G4double paraDims[3];
+          G4Box * boxP = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
+          if(boxP) {
+            paraDims[0] = 2.*boxP->GetXHalfLength()*mm;
+            paraDims[1] = 2.*boxP->GetYHalfLength()*mm;
+            paraDims[2] = 2.*boxP->GetZHalfLength()*mm;
+            G4cout << "     parameterised volume? ["
+            << pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetName()
+            << "] : "
+            << paraDims[0] << " x "
+            << paraDims[1] << " x "
+            << paraDims[2] << " [mm3]  : "
+            << G4int(pareDims[0]/paraDims[0]) << " x "
+            << G4int(pareDims[1]/paraDims[1]) << " x "
+            << G4int(pareDims[2]/paraDims[2]) << G4endl;
+          } else {
+            G4cout << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
+            << " isn't a G4Box." << G4endl;
+          }
+        }
       }
-
-
+      
+      
     } else if(kFlagParameterization == 1) { // G4PhantomParameterisation based geom. construnction
-
+      
       // get the dimension of the parameterized patient geometry
       G4PhantomParameterisation * phantomPara
-	= dynamic_cast<G4PhantomParameterisation*>(pv[0]->GetParameterisation());
+      = dynamic_cast<G4PhantomParameterisation*>(pv[0]->GetParameterisation());
       if(phantomPara == NULL) {
-	G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
-		    "gMocren0012", FatalException, "no G4PhantomParameterisation");
+        G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+                    "gMocren0012", FatalException, "no G4PhantomParameterisation");
       } else {
-	;
+        ;
       }
-
+      
       kNestedVolumeDimension[0] = phantomPara->GetNoVoxelX();
       kNestedVolumeDimension[1] = phantomPara->GetNoVoxelY();
       kNestedVolumeDimension[2] = phantomPara->GetNoVoxelZ();
       kNestedVolumeDirAxis[0] = 0;
       kNestedVolumeDirAxis[1] = 1;
       kNestedVolumeDirAxis[2] = 2;
-
+      
       // get densities of the parameterized patient geometry
       G4int nX = kNestedVolumeDimension[0];
       G4int nXY = kNestedVolumeDimension[0]*kNestedVolumeDimension[1];
-
+      
       for(G4int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
-	for(G4int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
-	  for(G4int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
-
-	    G4int repNo = n0 + n1*nX + n2*nXY;
-	    G4Material * mat = phantomPara->ComputeMaterial(repNo, pv[0]);
-	    G4double dens = mat->GetDensity()/(g/cm3);
-
-
-	    G4int idx[3];
-	    idx[kNestedVolumeDirAxis[0]] = n0;
-	    idx[kNestedVolumeDirAxis[1]] = n1;
-	    idx[kNestedVolumeDirAxis[2]] = n2;
-	    Index3D i3d(idx[0],idx[1],idx[2]);
-	    kNestedModality[i3d] = dens;
-
-	    if(GFDEBUG_DET) 
-	      G4cout << " index: " << idx[0] << ", " << idx[1] << ", " << idx[2]
-		     << "  density: " << dens << G4endl;
-
-	  }
-	}
+        for(G4int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
+          for(G4int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
+            
+            G4int repNo = n0 + n1*nX + n2*nXY;
+            G4Material * mat = phantomPara->ComputeMaterial(repNo, pv[0]);
+            G4double dens = mat->GetDensity()/(g/cm3);
+            
+            
+            G4int idx[3];
+            idx[kNestedVolumeDirAxis[0]] = n0;
+            idx[kNestedVolumeDirAxis[1]] = n1;
+            idx[kNestedVolumeDirAxis[2]] = n2;
+            Index3D i3d(idx[0],idx[1],idx[2]);
+            kNestedModality[i3d] = dens;
+            
+            if(GFDEBUG_DET)
+              G4cout << " index: " << idx[0] << ", " << idx[1] << ", " << idx[2]
+              << "  density: " << dens << G4endl;
+            
+          }
+        }
       }
-
+      
       kVolumeSize.set(box.GetXHalfLength()*2/mm,
-		      box.GetYHalfLength()*2/mm,
-		      box.GetZHalfLength()*2/mm);
-
+                      box.GetYHalfLength()*2/mm,
+                      box.GetZHalfLength()*2/mm);
+      
       // mesh size
       if(!kbSetModalityVoxelSize) {
-	G4float spacing[3] = {static_cast<G4float>(2*phantomPara->GetVoxelHalfX()),
-			      static_cast<G4float>(2*phantomPara->GetVoxelHalfY()),
-			      static_cast<G4float>(2*phantomPara->GetVoxelHalfZ())};
-	kgMocrenIO->setVoxelSpacing(spacing);
-	kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
-	kbSetModalityVoxelSize = true;
+        G4float spacing[3] = {static_cast<G4float>(2*phantomPara->GetVoxelHalfX()),
+          static_cast<G4float>(2*phantomPara->GetVoxelHalfY()),
+          static_cast<G4float>(2*phantomPara->GetVoxelHalfZ())};
+        kgMocrenIO->setVoxelSpacing(spacing);
+        kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
+        kbSetModalityVoxelSize = true;
       }
     }
-
-  } // if(box.GetName() == volName) 
-
-
+    
+  } // if(box.GetName() == volName)
+  
+  
   // processing geometry construction based on the interactive PS
   if(!kFlagProcessedInteractiveScorer) {
-
-
+    
+    
     // get the dimension of the geometry defined in G4VScoringMesh
     G4ScoringManager * pScrMan = G4ScoringManager::GetScoringManager();
-    if(!pScrMan) return;
+    //if(!pScrMan) return;
+    if(pScrMan) {
     G4ScoringBox * scoringBox
-      = dynamic_cast<G4ScoringBox*>(pScrMan->FindMesh(volName));
-    if(scoringBox == NULL) return;
+    = dynamic_cast<G4ScoringBox*>(pScrMan->FindMesh(volName));
+    //if(scoringBox == NULL) return;
+    if(scoringBox) {
 
-
+    
+    
     G4int nVoxels[3];
     scoringBox->GetNumberOfSegments(nVoxels);
     // this order depends on the G4ScoringBox
@@ -1260,60 +1271,60 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     kNestedVolumeDirAxis[0] = 2;
     kNestedVolumeDirAxis[1] = 1;
     kNestedVolumeDirAxis[2] = 0;
-
+    
     // get densities of the parameterized patient geometry
     for(G4int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
       for(G4int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
-	for(G4int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
-
-	  G4double dens = 0.*(g/cm3);
-
-	  G4int idx[3];
-	  idx[kNestedVolumeDirAxis[0]] = n0;
-	  idx[kNestedVolumeDirAxis[1]] = n1;
-	  idx[kNestedVolumeDirAxis[2]] = n2;
-	  Index3D i3d(idx[0],idx[1],idx[2]);
-	  kNestedModality[i3d] = dens;
-
-	}
+        for(G4int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
+          
+          G4double dens = 0.*(g/cm3);
+          
+          G4int idx[3];
+          idx[kNestedVolumeDirAxis[0]] = n0;
+          idx[kNestedVolumeDirAxis[1]] = n1;
+          idx[kNestedVolumeDirAxis[2]] = n2;
+          Index3D i3d(idx[0],idx[1],idx[2]);
+          kNestedModality[i3d] = dens;
+          
+        }
       }
     }
-
+    
     G4ThreeVector boxSize = scoringBox->GetSize();
     if(GFDEBUG_DET > 1) {
       G4cout << "Interactive Scorer : size - "
-	     << boxSize.x()/cm << " x " 
-	     << boxSize.y()/cm << " x " 
+	     << boxSize.x()/cm << " x "
+	     << boxSize.y()/cm << " x "
 	     << boxSize.z()/cm << " [cm3]" << G4endl;
       G4cout << "Interactive Scorer : # voxels - "
-	     << nVoxels[0] << " x " 
-	     << nVoxels[1] << " x " 
+	     << nVoxels[0] << " x "
+	     << nVoxels[1] << " x "
 	     << nVoxels[2] << G4endl;
     }
     kVolumeSize.set(boxSize.x()*2,
-		    boxSize.y()*2,
-		    boxSize.z()*2);
-
+                    boxSize.y()*2,
+                    boxSize.z()*2);
+    
     // mesh size
     if(!kbSetModalityVoxelSize) {
       G4float spacing[3] = {static_cast<G4float>(boxSize.x()*2/nVoxels[0]),
-			    static_cast<G4float>(boxSize.y()*2/nVoxels[1]),
-			    static_cast<G4float>(boxSize.z()*2/nVoxels[2])};
-
+        static_cast<G4float>(boxSize.y()*2/nVoxels[1]),
+        static_cast<G4float>(boxSize.z()*2/nVoxels[2])};
+      
       kgMocrenIO->setVoxelSpacing(spacing);
       kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
       kbSetModalityVoxelSize = true;
-
+      
     }
-
-
+    
+    
     kVolumeTrans3D = fObjectTransformation;
-
+    
     // translation for the scoring mesh
     G4ThreeVector sbth = scoringBox->GetTranslation();
     G4Translate3D sbtranslate(sbth);
     kVolumeTrans3D = kVolumeTrans3D*sbtranslate;
-
+    
     // rotation matrix for the scoring mesh 
     G4RotationMatrix sbrm;
     sbrm = scoringBox->GetRotationMatrix();
@@ -1322,8 +1333,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       G4Transform3D sbrotate(sbrm.inverse(), sbdummy);
       kVolumeTrans3D = kVolumeTrans3D*sbrotate;
     }
-
-
+    
+    
     // coordination system correction for gMocren
     G4ThreeVector raxisY(0., 1., 0.), dummyY(0.,0.,0.); 
     G4RotationMatrix rotY(raxisY, pi*rad);
@@ -1331,46 +1342,77 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4ThreeVector raxisZ(0., 0., 1.), dummyZ(0.,0.,0.); 
     G4RotationMatrix rotZ(raxisZ, pi*rad);
     G4Transform3D trotZ(rotZ, dummyZ);
-
+    
     kVolumeTrans3D = kVolumeTrans3D*trotY*trotZ;
-
-
+    
+    }
+    }
     //
     kFlagProcessedInteractiveScorer = true;
-  }  
-
-
-
+  }
+  
+  
+  static G4VPhysicalVolume * volPV = NULL;
+  if(pPVModel->GetCurrentPV()->GetName() == volName) {
+    volPV = pPVModel->GetCurrentPV();
+  }
+  
   //-- add detectors
   G4bool bAddDet = true;
   if(!kMessenger.getDrawVolumeGrid()) {
 
     if(kFlagParameterization == 0) { // nested parameterisation
-
-      if(volName == box.GetName()) {
-	bAddDet = false;
+      /*
+      G4String volDSolidName;
+      if(volPV) {
+        G4int nDaughter = volPV->GetLogicalVolume()->GetNoDaughters();
+        G4VPhysicalVolume * volDPV = NULL;
+        if(nDaughter > 0) volDPV = volPV->GetLogicalVolume()->GetDaughter(0);
+        if(volDPV) {
+          nDaughter = volDPV->GetLogicalVolume()->GetNoDaughters();
+          if(nDaughter > 0)
+            volDSolidName = volDPV->GetLogicalVolume()->GetDaughter(0)
+                           ->GetLogicalVolume()->GetSolid()->GetName();
+        }
       }
-
+      */
+      
+      //std::cout << "Parameterization volume: " << volName << " - "
+      //          << box.GetName() << std::endl;
+      
+      if(volName == box.GetName()) {
+        bAddDet = false;
+      }
+      
       std::vector<G4String>::iterator itr = kNestedVolumeNames.begin();
       for(; itr != kNestedVolumeNames.end(); itr++) {
-	if(*itr == box.GetName())  {
-	  bAddDet = false;
-	  break;
-	}
+        if(*itr == box.GetName())  {
+          bAddDet = false;
+          break;
+        }
       }
     } else if(kFlagParameterization == 1) { // phantom paramemterisation
-
-      if(volName != box.GetName()) {
-	bAddDet = false;
+      
+      G4String volDSolidName;
+      if(volPV) {
+        volDSolidName = volPV->GetLogicalVolume()->GetDaughter(0)
+                        ->GetLogicalVolume()->GetSolid()->GetName();
       }
 
+      //std::cout << "Phantom Parameterization volume: " << volDSolidName
+      //          << " - " << box.GetName() << std::endl;
+      
+      if(volDSolidName == box.GetName()) {
+        bAddDet = false;
+      }
+      
     } else if(kFlagParameterization == 2) { // interactive primitive scorer
-      ;
+      //std::cout << "Regular Parameterization volume: " << box.GetName() << std::endl;
     }
-
+    
   }
   if(bAddDet) AddDetector(box);
-
+  
 
 } // void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 
@@ -1730,10 +1772,10 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
 	std::map<G4String, std::map<Index3D, G4double> >::iterator nestedHitsListItr;
 	nestedHitsListItr = kNestedHitsList.find(scorername);
 	if(nestedHitsListItr != kNestedHitsList.end()) {
-	  nestedHitsListItr->second[id] = *itr->second;
+	  nestedHitsListItr->second[id] = *(itr->second);
 	} else {
 	  std::map<Index3D, G4double> hit;
-	  hit.insert(std::map<Index3D, G4double>::value_type(id, *itr->second));
+	  hit.insert(std::map<Index3D, G4double>::value_type(id, *(itr->second)));
 	  kNestedHitsList[scorername] = hit;
 	}
       }
@@ -1763,11 +1805,82 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
       GetNestedVolumeIndex(itr->first, id);
       G4cout << "[" << itr->first << "] "
 	     << "("<< id[0] << "," << id[1] << "," << id[2] << ")"
-	     << *itr->second << ", ";
+	     << *(itr->second) << ", ";
     }
     G4cout << G4endl;
   }
+}
 
+void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4StatDouble> & hits) {
+  if(GFDEBUG_HIT)
+    G4cout << " ::AddCompound(const std::map<G4int, G4StatDouble*> &) >>>>>>>>> " << G4endl;
+
+
+  std::vector<G4String> hitScorerNames = kMessenger.getHitScorerNames();
+  G4int nhitname = (G4int)hitScorerNames.size();
+  G4String scorername = static_cast<G4VHitsCollection>(hits).GetName();
+
+  //-- --//
+  /*
+  std::vector<G4String> hitScorerNames = kMessenger.getHitScorerNames();
+  if(GFDEBUG_HIT) {
+    std::vector<G4String>::iterator itr = hitScorerNames.begin();
+    for(; itr != hitScorerNames.end(); itr++) 
+      G4cout << "  PS name : " << *itr << G4endl;
+  }
+  */
+  
+  {  // Scope bracket to avoid compiler messages about shadowing (JA).
+  //for(G4int i = 0; i < nhitname; i++) {       // this selection trusts
+    //if(scorername == hitScorerNames[i]) {   // thea command /vis/scene/add/psHits hit_name.
+
+      G4int idx[3];
+      std::map<G4int, G4StatDouble*> * map = hits.GetMap();
+      std::map<G4int, G4StatDouble*>::const_iterator itr = map->begin();
+      for(; itr != map->end(); itr++) {
+	GetNestedVolumeIndex(itr->first, idx);
+	Index3D id(idx[0], idx[1], idx[2]);
+	
+	std::map<G4String, std::map<Index3D, G4double> >::iterator nestedHitsListItr;
+	nestedHitsListItr = kNestedHitsList.find(scorername);
+	if(nestedHitsListItr != kNestedHitsList.end()) {
+	  nestedHitsListItr->second[id] = itr->second->sum_wx();
+	} else {
+	  std::map<Index3D, G4double> hit;
+	  hit.insert(std::map<Index3D, G4double>::value_type(id, itr->second->sum_wx()));
+	  kNestedHitsList[scorername] = hit;
+	}
+      }
+ 
+      //break;
+    //}
+  //}
+  }
+
+  if(GFDEBUG_HIT) {
+    G4String meshname = static_cast<G4VHitsCollection>(hits).GetSDname();
+    G4cout << "       >>>>> " << meshname << " : " << scorername  << G4endl;
+
+    for(G4int i = 0; i < nhitname; i++)
+      if(scorername == hitScorerNames[i]) 
+	G4cout << "       !!!! Hit scorer !!!! " << scorername << G4endl;
+
+    G4cout << " dimension: "
+	   << kNestedVolumeDimension[0] << " x "
+	   << kNestedVolumeDimension[1] << " x "
+	   << kNestedVolumeDimension[2] << G4endl;
+
+    G4int id[3];
+    std::map<G4int, G4StatDouble*> * map = hits.GetMap();
+    std::map<G4int, G4StatDouble*>::const_iterator itr = map->begin();
+    for(; itr != map->end(); itr++) {
+      GetNestedVolumeIndex(itr->first, id);
+      G4cout << "[" << itr->first << "] "
+	     << "("<< id[0] << "," << id[1] << "," << id[2] << ")"
+	     << itr->second->sum_wx() << ", ";
+    }
+    G4cout << G4endl;
+  }
 }
 
 //----- 

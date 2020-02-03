@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // G4VRML2FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -37,6 +36,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <cmath>
+#include <sstream>
+#include <iomanip>
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"
@@ -81,18 +82,18 @@ G4VRML2FileSceneHandler::G4VRML2FileSceneHandler(G4VRML2File& system, const G4St
 	strcpy(fVRMLFileName, "");
 
 	// destination directory
-	if ( getenv( VRMLFILE_DEST_DIR ) == NULL ) {
+	if ( std::getenv( VRMLFILE_DEST_DIR ) == NULL ) {
 		strcpy( fVRMLFileDestDir, "" );
 	} else {
-		strcpy( fVRMLFileDestDir, getenv( VRMLFILE_DEST_DIR ) );
+		strcpy( fVRMLFileDestDir, std::getenv( VRMLFILE_DEST_DIR ) );
 	}
 
 
 	// maximum number of g4.prim files in the dest directory
 	fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ; // initialization
-	if ( getenv( "G4VRMLFILE_MAX_FILE_NUM" ) != NULL ) {	
+	if ( std::getenv( "G4VRMLFILE_MAX_FILE_NUM" ) != NULL ) {	
 		
-		sscanf( getenv("G4VRMLFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
+		sscanf( std::getenv("G4VRMLFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
 
 	} else {
 		fMaxFileNum = DEFAULT_MAX_WRL_FILE_NUM ;
@@ -101,10 +102,10 @@ G4VRML2FileSceneHandler::G4VRML2FileSceneHandler(G4VRML2File& system, const G4St
 
 
 	// PV name pickability 	
-	if( getenv( "G4VRML_PV_PICKABLE" ) != NULL ) {
+	if( std::getenv( "G4VRML_PV_PICKABLE" ) != NULL ) {
 
 		int is_pickable ;
-		sscanf( getenv("G4VRML_PV_PICKABLE"), "%d", &is_pickable ) ;
+		sscanf( std::getenv("G4VRML_PV_PICKABLE"), "%d", &is_pickable ) ;
 
 		if ( is_pickable ) { SetPVPickability ( true ) ; }
 	} 
@@ -161,11 +162,12 @@ void G4VRML2FileSceneHandler::connectPort()
 		}
 
 		// re-determine file name as G4VRMLFILE_DEST_DIR/g4_XX.wrl 
-		if( i >=  0 && i <= 9 ) { 
-			sprintf( fVRMLFileName, "%s%s%s%d.wrl" , fVRMLFileDestDir,  WRL_FILE_HEADER, "0", i );
-		} else {
-			sprintf( fVRMLFileName, "%s%s%d.wrl"   , fVRMLFileDestDir,  WRL_FILE_HEADER, i );
-		}
+		std::ostringstream filename;
+		filename
+		<< fVRMLFileDestDir << WRL_FILE_HEADER
+		<< std::setw(2) << std::setfill('0') << i << ".wrl";
+		strncpy(fVRMLFileName,filename.str().c_str(),sizeof(fVRMLFileName)-1);
+                fVRMLFileName[sizeof(fVRMLFileName)-1] = '\0';
 
 		// check validity of the file name
 		std::ifstream  fin ; 
@@ -198,8 +200,8 @@ void G4VRML2FileSceneHandler::closePort()
 	char command[256] ;
 	char viewer [256] ; 
 	strcpy( viewer, NO_VRML_VIEWER ); // initialization
-	if( getenv( ENV_VRML_VIEWER ) ) {
-		strcpy( viewer, getenv( ENV_VRML_VIEWER ) ) ;
+	if( std::getenv( ENV_VRML_VIEWER ) ) {
+		strcpy( viewer, std::getenv( ENV_VRML_VIEWER ) ) ;
 	}
 
 	// close VRML file	
@@ -220,7 +222,10 @@ void G4VRML2FileSceneHandler::closePort()
 		G4cout << "    setenv  " << ENV_VRML_VIEWER << "  vrwave " << G4endl;
 	  }
 	} else {
-		sprintf( command, "%s %s", viewer, fVRMLFileName  );   
+		std::ostringstream ossCommand;
+		ossCommand << viewer << ' ' << fVRMLFileName;
+		strncpy(command,ossCommand.str().c_str(),sizeof(command)-1);
+                command[sizeof(command)-1] = '\0';
 		(void) system( command );
 	}
 }

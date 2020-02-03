@@ -28,6 +28,13 @@ namespace sg {
 class node {
 public:
   TOOLS_SCLASS(tools::sg::node)
+//public:
+//  static bool is_a(const std::string& a_class) {return rcmp(a_class,s_class());}
+// in a derived class:
+//  static bool is_a(const std::string& a_class) {
+//    if(rcmp(a_class,s_class())) return true;
+//    return parent::is_a(a_class);
+//  }
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<node>(this,a_class)) {return p;}
     else return 0;
@@ -37,12 +44,12 @@ public:
   virtual node* copy() const = 0;
 
   virtual unsigned int cls_version() const {return 1;}
-  virtual const std::vector<field_desc>& node_fields() const {
-    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::node)
-    static const std::vector<field_desc> s_v;
+  
+  virtual const desc_fields& node_desc_fields() const {
+    static const desc_fields s_v;
     return s_v;
   }
-
+  
   virtual void render(render_action&) {}
   virtual void pick(pick_action&) {}
   virtual void bbox(bbox_action&) {}
@@ -81,6 +88,20 @@ public:
   virtual void event(event_action&) {}
   virtual bool read(read_action& a_action) {return read_fields(a_action);}
   virtual void is_visible(visible_action&) {}
+  
+  virtual void protocol_one_fields(std::vector<field*>& a_fields) const {a_fields = m_fields;}
+
+  virtual bool draw_in_frame_buffer() const {return false;}  // marker nodes return true.
+public:
+  virtual bool touched() { //virtual for plotter.
+    tools_vforcit(field*,m_fields,it) {
+      if((*it)->touched()) return true;
+    }
+    return false;
+  }
+  virtual void reset_touched() {
+    tools_vforcit(field*,m_fields,it) (*it)->reset_touched();
+  }
 public:
   node(){
 #ifdef TOOLS_MEM
@@ -102,12 +123,6 @@ protected:
 protected:
   void add_field(field* a_field) {
     m_fields.push_back(a_field); //it does not take ownerhship.
-  }
-  bool touched() {
-    tools_vforcit(field*,m_fields,it) {
-      if((*it)->touched()) return true;
-    }
-    return false;
   }
   //TOOLS_CLASS_STRING(fields_end) //for write_bsg, sg::rbsg
   bool write_fields(write_action& a_action) {
@@ -154,7 +169,8 @@ protected:
                        << " : field not found."
                        << "."
                        << std::endl;
-/*
+//#define TOOLS_NODE_DEBUG_READ_FIELD
+#ifdef TOOLS_NODE_DEBUG_READ_FIELD
         check_fields(a_action.out()); //costly.
         dump_field_descs(a_action.out());
        {a_action.out() << "read field descs of node class " << s_cls() << " :" << std::endl;
@@ -171,7 +187,7 @@ protected:
                 << std::endl;
         }}
         ::exit(0);
-*/
+#endif
         fd = a_action.field_factory().create(fdesc.cls());
         if(!fd) {
           a_action.out() << "tools::node::read_fields :"
@@ -214,9 +230,6 @@ public:
     if(m_fields.empty()) return;
     m_fields.front()->touch();
   }
-  void reset_touched() {
-    tools_vforcit(field*,m_fields,it) (*it)->reset_touched();
-  }
 /*
   bool equal(const node& a_node) const {
     if(m_fields.size()!=a_node.m_fields.size()) return false;
@@ -228,16 +241,13 @@ public:
     return true;
   }
 */
-  std::vector<field*>& fields() {return m_fields;}
-  const std::vector<field*>& fields() const {return m_fields;}
-
 public:
   field& field_from_desc(const field_desc& a_desc) const {
     //WARNING : touchy.
     return *((field*)((char*)this+a_desc.offset()));
   }
 protected:
-  tools::sg::field_desc::offset_t field_offset(const field* a_field) const {
+  field_desc::offset_t field_offset(const field* a_field) const {
     //WARNING : touchy.
     return ((char*)(a_field)-(char*)(this));
   }
@@ -252,7 +262,7 @@ protected:
       if(field_offset(*it)==a_rdesc.offset()) return (*it);
     }
 */
-    const std::vector<field_desc>& fds = node_fields();
+    const std::vector<field_desc>& fds = node_desc_fields();
     tools_vforcit(field_desc,fds,it) {
       if((*it).name()==a_rdesc.name()) {
         tools_vforcit(field*,m_fields,itf) {
@@ -266,7 +276,7 @@ protected:
 
   void dump_field_descs(std::ostream& a_out) const {
     a_out << "field descs of node class " << s_cls() << " :" << std::endl;
-    const std::vector<field_desc>& fds = node_fields();
+    const std::vector<field_desc>& fds = node_desc_fields();
     tools_vforcit(field_desc,fds,itd) {
       a_out << "name " << (*itd).name()
             << ", class " << (*itd).cls()
@@ -276,7 +286,7 @@ protected:
   }
 
   void check_fields(std::ostream& a_out) const {
-    const std::vector<field_desc>& fds = node_fields();
+    const std::vector<field_desc>& fds = node_desc_fields();
     tools_vforcit(field*,m_fields,it) {
       bool found = false;
       tools_vforcit(field_desc,fds,itd) {
@@ -328,6 +338,24 @@ public:\
 public:\
   virtual const std::string& s_cls() const {return s_class();}\
   virtual tools::sg::node* copy() const {return new a__class(*this);}\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }
+
+#define TOOLS_NODE_VT2(a__T1,a__T2,a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  static const std::string& s_class() {\
+    static const std::string s_v(std::string(#a__class)+"<"+a__T1::s_class()+","+a__T2::s_class()+">");\
+    return s_v;\
+  }\
+  static void check_class_name() {a__class<a__T1,a__T2>::s_class();}\
+public:\
+  virtual const std::string& s_cls() const {return s_class();}\
+  /*virtual tools::sg::node* copy() const {return new a__class(*this);}*/\
 public:\
   virtual void* cast(const std::string& a_class) const {\
     if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\

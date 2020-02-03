@@ -1,5 +1,31 @@
+<<<<<<< HEAD
+=======
+#
+# Macro file for the test of AnaEx03 example
+#
+
+# reduce output in MT
+/control/cout/ignoreThreadsExcept 0
+
+# initialize
+/run/initialize
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 # e- 500MeV 
 /gun/particle e-
 /gun/energy 500 MeV
 /run/beamOn 1000
+
+# Test commands defined in this example
+/control/verbose 2
+#
+/det/setAbsMat G4_Al
+/det/setGapMat G4_Air
+/det/setAbsThick 20. mm
+/det/setGapThick 10. mm
+/det/setSizeYZ 30. mm
+/det/setNbOfLayers 20
+#
+/run/beamOn 1
+
+

@@ -1,0 +1,23 @@
+#
+# Macro file for "Hadr07.cc"
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testhadr/det/setIsotopeMat Li7 3 7 1.85 g/cm3
+#
+/testhadr/det/setNbOfAbsor  1
+/testhadr/det/setAbsor 1 Li7  30 cm
+/testhadr/det/setSizeYZ 30 cm
+#
+/run/initialize
+#
+/process/list
+#
+/testhadr/gun/setDefault
+/gun/particle neutron
+/gun/energy 14.1 MeV
+#
+/run/printProgress 1000
+#
+/run/beamOn 10000

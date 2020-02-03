@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc 91745 2015-08-04 11:51:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -82,6 +81,7 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
                                        G4double emax,
                                        G4VEmFluctuationModel* fm)
 {
+  if(!mod) { return; }
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::SetExtraEmModel " << mod->GetName()
            << " for " << particleName 
@@ -91,21 +91,18 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
            << " Emax(MeV)= " << emax/MeV
            << G4endl;
   }
-  if(mod) {
-    models.push_back(mod);
-    flucModels.push_back(fm);
-    emax = std::min(emax, mod->HighEnergyLimit());
-    mod->SetActivationHighEnergyLimit(emax);
-  } else {
-    models.push_back(new G4DummyModel());
-    flucModels.push_back(0);
-  }
+
+  models.push_back(mod);
+  flucModels.push_back(fm);
+  G4double emin0 = std::max(emin, mod->LowEnergyLimit());
+  G4double emax0 = std::min(emax, mod->HighEnergyLimit());
+  mod->SetActivationHighEnergyLimit(emax0);
 
   particles.push_back(particleName);
   processes.push_back(processName);
   regions.push_back(regionName);
-  lowEnergy.push_back(emin);
-  highEnergy.push_back(emax);
+  lowEnergy.push_back(emin0);
+  highEnergy.push_back(emax0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,6 +138,7 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
                                          const G4String& processName,
                                          G4double emin, G4double emax)
 {
+  if(!mod) { return; }
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::SetModelForRegion: " << mod->GetName() 
            << G4endl;
@@ -152,15 +150,12 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
     if(fm) { G4cout << " FLmodel " << fm->GetName(); }
     G4cout << G4endl;
   }
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator = 
-    G4ParticleTable::GetParticleTable()->GetIterator(); 
 
   // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ) {
-    const G4ParticleDefinition* part = theParticleIterator->value();
-
-    //G4cout << particleName << " " << part->GetParticleName() << G4endl;
+  auto myParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() ) {
+    const G4ParticleDefinition* part = myParticleIterator->value();
 
     if((part->GetParticleName() == particleName) ||
        (particleName == "all") ||
@@ -171,9 +166,12 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
       G4ProcessVector* plist = pmanager->GetProcessList();
       G4int np = pmanager->GetProcessListLength();
   
-      //G4cout << processName << " in list of " << np << G4endl;
-
-      G4VProcess* proc = 0;
+      if(1 < verbose) {
+	G4cout << "Check process <" << processName << "> for " 
+	       << particleName << " in list of " << np << " processes" 
+	       << G4endl;
+      }
+      G4VProcess* proc = nullptr;
       for(G4int i=0; i<np; ++i) {
         if(processName == (*plist)[i]->GetProcessName()) {
           proc = (*plist)[i];
@@ -186,42 +184,32 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
         return;        
       } 
 
-      if(mod) {
-        if(!UpdateModelEnergyRange(mod, emin, emax)) { return; }
-      }
+      if(!UpdateModelEnergyRange(mod, emin, emax)) { return; }
       // classify process
       G4int ii = proc->GetProcessSubType();
-      if(10 == ii && mod) {
+      if(10 == ii) {
         G4VMultipleScattering* p = static_cast<G4VMultipleScattering*>(proc);
-        p->AddEmModel(index,mod,reg);
-        if(1 < verbose) {
-          G4cout << "### Added msc model order= " << index << " for " 
-                 << particleName << " and " << processName << G4endl;
-        }
-        return;
+	p->AddEmModel(index,mod,reg);
+	if(1 < verbose) {
+	  G4cout << "### Added msc model order= " << index << " for " 
+		 << particleName << " and " << processName << G4endl;
+	}
       } else if(2 <= ii && 4 >= ii) {
         G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
-        if(!mod && fm) {
-          p->SetFluctModel(fm);
-        } else { 
-          p->AddEmModel(index,mod,fm,reg);
-          if(1 < verbose) {
-            G4cout << "### Added eloss model order= " << index << " for " 
-                   << particleName << " and " << processName << G4endl;
-          }
+	p->AddEmModel(index,mod,fm,reg);
+	if(1 < verbose) {
+	  G4cout << "### Added eloss model order= " << index << " for " 
+		 << particleName << " and " << processName << G4endl;
         }
-        return;
-      } else if(mod) {
+      } else {
         G4VEmProcess* p = static_cast<G4VEmProcess*>(proc);
         p->AddEmModel(index,mod,reg);
         if(1 < verbose) {
           G4cout << "### Added em model order= " << index << " for " 
                  << particleName << " and " << processName << G4endl;
         }
-        return;
-      } else {
-        return;
-      }
+      } 
+      return;
     }
   }
 }

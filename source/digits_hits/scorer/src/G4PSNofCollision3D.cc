@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofCollision3D.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSNofCollision3D
 #include "G4PSNofCollision3D.hh"

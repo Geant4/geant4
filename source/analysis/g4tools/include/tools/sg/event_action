@@ -13,9 +13,7 @@ namespace sg {
 
 class event_action : public matrix_action {
 public:
-  event_action(std::ostream& a_out,
-               unsigned int a_ww,unsigned int a_wh,
-               event& a_event)
+  event_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh,event& a_event)
   :matrix_action(a_out,a_ww,a_wh)
   ,m_event(a_event)
   ,m_do_switch_children(false)

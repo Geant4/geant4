@@ -2,9 +2,79 @@
                             LXe Example
                             -----------
 
+<<<<<<< HEAD
 **********
 *Geometry*
 **********
+=======
+------------
+Introduction
+------------
+
+This example demonstrates usage of optical physics. 
+
+-----------------------------
+Geometry and primary particle
+-----------------------------
+
+The main volume is a box of LXe. PMTs are placed around the outside. There
+may be a reflective sphere placed inside the box, and a wavelength shifting
+slab and fibers.
+
+The geometry implementation is different from many of the other examples. 
+See the discussion below.
+
+G4ParticleGun creates the primary particle. The type of particle is selectable
+by the user.
+
+-------
+Physics
+-------
+
+The physics list is FTFP_BERT, with G4EmStandard_option4 electromagnetic
+physics and G4OpticalPhysics.
+
+-----------
+Macro files
+-----------
+
+cerenkov.mac disables scintillation, so the optical photons that are produced
+are Cerenkov photons.
+
+wls.mac implements a scintillating slab and wavelength shifting fibers.
+
+
+---------------------------
+List of built-in histograms
+---------------------------
+
+ 1  "hits per event"
+ 2  "hits per event above threshold"
+ 3  "scintillation photons per event"
+ 4  "Cerenkov photons per event"
+ 5  "absorbed photons per event"
+ 6  "photons absorbed at boundary per event"
+ 7  "energy deposition in scintillator per event"
+
+
+-------------
+How to start?
+-------------
+
+  - execute LXe in 'batch' mode from macro files, e.g.
+    $ ./LXe cerenkov.mac
+
+  - execute LXe in 'interactive' mode with visualization, e.g.
+    $ ./LXe
+    Then type commands, for instance
+    Session: /run/beamOn 1
+
+
+-----------------------------------------------
+Detailed Explanation of Geometry Implementation
+-----------------------------------------------
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 The way the geometry is constructed is an experiment for a new, more object
 oriented, way to construct geometry. It seperates the concept of how a volume
 is built from where it is placed. Each major volume in the geometry is defined

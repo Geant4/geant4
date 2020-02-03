@@ -32,7 +32,6 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id: PurgMagSteppingAction.hh 84366 2014-10-14 12:46:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

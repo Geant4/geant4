@@ -23,35 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4HelixHeum implementation
 //
-// $Id: G4HelixHeum.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-//  Simple Heum:
+// Simple Heum:
 //        x_1 = x_0 + h *
 //                1/4 * dx(t0,x0)  +
 //                3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
 //
 //  Third order solver.
 //
-//  W.Wander <wwc@mit.edu> 12/09/97 
+// Author: W.Wander <wwc@mit.edu>, 03/11/1998
 // -------------------------------------------------------------------
 
 #include "G4HelixHeum.hh"
 #include "G4ThreeVector.hh"
 
+G4HelixHeum::G4HelixHeum(G4Mag_EqRhs* EqRhs)
+  : G4MagHelicalStepper(EqRhs)
+{
+}
+
+G4HelixHeum::~G4HelixHeum()
+{
+}
+  
 void
 G4HelixHeum::DumbStepper( const G4double  yIn[],
-			  G4ThreeVector   Bfld,
-			  G4double        h,
-			  G4double        yOut[])
+                          G4ThreeVector   Bfld,
+                          G4double        h,
+                          G4double        yOut[])
 {
   const G4int nvar = 6 ;
 
   G4ThreeVector Bfield_Temp, Bfield_Temp2;
   G4double yTemp[6], yAdd1[6], yAdd2[6] , yTemp2[6];
-
-  G4int i;
 
   AdvanceHelix( yIn, Bfld, h, yAdd1 );
   
@@ -64,7 +69,8 @@ G4HelixHeum::DumbStepper( const G4double  yIn[],
 
   AdvanceHelix( yIn, Bfield_Temp2, h, yAdd2 );
 
-  for( i = 0; i < nvar; i++ ) {
+  for( G4int i = 0; i < nvar; ++i )
+  {
     yOut[i] = ( 0.25 * yAdd1[i] + 0.75 * yAdd2[i]);
   }
 

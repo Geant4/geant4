@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
 // Class G4OpenGLStoredXmViewer : a class derived from G4OpenGLXmViewer 
 //                                and G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
 
 #ifndef G4OpenGLSTOREDXMVIEWER_HH
 #define G4OpenGLSTOREDXMVIEWER_HH

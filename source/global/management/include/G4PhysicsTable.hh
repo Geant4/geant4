@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -133,8 +132,8 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
 
  private:
 
-  G4PhysicsTable(const G4PhysicsTable&);
-  G4PhysicsTable& operator=(const G4PhysicsTable&);
+  G4PhysicsTable(const G4PhysicsTable&) = delete;
+  G4PhysicsTable& operator=(const G4PhysicsTable&) = delete;
     // Private copy constructor and assignment operator.
 
 };

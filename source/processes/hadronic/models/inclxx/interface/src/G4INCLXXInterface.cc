@@ -76,7 +76,7 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   }
 
   // Use the environment variable G4INCLXX_NO_DE_EXCITATION to disable de-excitation
-  if(getenv("G4INCLXX_NO_DE_EXCITATION")) {
+  if(std::getenv("G4INCLXX_NO_DE_EXCITATION")) {
     G4String message = "de-excitation is completely disabled!";
     theInterfaceStore->EmitWarning(message);
     theDeExcitation = 0;
@@ -104,7 +104,7 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
 
   // use the envvar G4INCLXX_DUMP_REMNANT to dump information about the
   // remnants on stdout
-  if(getenv("G4INCLXX_DUMP_REMNANT"))
+  if(std::getenv("G4INCLXX_DUMP_REMNANT"))
     dumpRemnantInfo = true;
   else
     dumpRemnantInfo = false;

@@ -1,4 +1,3 @@
-/* $Id: liblist.c 66368 2012-12-18 09:20:17Z gcosmo $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -72,7 +71,7 @@ char** parsedir(char *directory,int *argc)
 			     strlen(entry->d_name)+2)*sizeof(char));
       strcpy(buffer,directory);
       strncat(buffer,"/",1);
-      strncat(buffer,entry->d_name,strlen(entry->d_name));
+      strcat(buffer,entry->d_name);
       s=stat(buffer,&status);
       if(s==0)
 	{
@@ -296,7 +295,7 @@ int main (int argc, char** argv) {
           while(ptr&&strcmp(ptr,"GNUmakefile"))
 	    {
 	      strncat(libmapPtr->trigger,"/",1);
-	      strncat(libmapPtr->trigger,ptr,strlen(ptr));
+	      strcat(libmapPtr->trigger,ptr);
 	      ptr=strtok(NULL,"/");
 	    }
           if(!ptr)

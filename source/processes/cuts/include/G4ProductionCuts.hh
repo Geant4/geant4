@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh 70369 2013-05-29 14:59:24Z gcosmo $
-// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -75,8 +73,8 @@ class G4ProductionCuts
   virtual ~G4ProductionCuts();
 
   // equal opperators
-  G4int operator==(const G4ProductionCuts &right) const;
-  G4int operator!=(const G4ProductionCuts &right) const;
+  G4bool operator==(const G4ProductionCuts &right) const;
+  G4bool operator!=(const G4ProductionCuts &right) const;
 
   public: // with description
   // Set Cuts methods

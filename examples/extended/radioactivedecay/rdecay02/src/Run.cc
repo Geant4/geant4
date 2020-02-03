@@ -26,10 +26,7 @@
 /// \file electromagnetic/TestEm11/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
 #include "DetectorConstruction.hh"
@@ -37,7 +34,7 @@
 #include "HistoManager.hh"
 
 #include "G4ProcessTable.hh"
-#include "G4RadioactiveDecay.hh"
+#include "G4Radioactivation.hh"
 #include "G4TwoVector.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -386,8 +383,8 @@ void Run::EndOfRun()
 void Run::WriteActivity(G4int nevent)
 {
  G4ProcessTable *pTable = G4ProcessTable::GetProcessTable();
- G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *)
-         pTable->FindProcess("RadioactiveDecay", "GenericIon");
+ G4Radioactivation* rDecay = (G4Radioactivation *)
+         pTable->FindProcess("Radioactivation", "GenericIon");
    
  // output the induced radioactivities (in VR mode only)
  //

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrRotationMatrixFactory.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //
 // class G4tgrRotationMatrixFactory

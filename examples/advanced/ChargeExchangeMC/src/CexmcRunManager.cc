@@ -127,7 +127,7 @@ CexmcRunManager::CexmcRunManager( const G4String &  projectId,
     if ( rProject != "" && rProject == projectId )
         throw CexmcException( CexmcWeirdException );
 
-    const char *  projectsDirEnv( getenv( "CEXMC_PROJECTS_DIR" ) );
+    const char *  projectsDirEnv( std::getenv( "CEXMC_PROJECTS_DIR" ) );
 
     if ( projectsDirEnv )
         projectsDir = projectsDirEnv;

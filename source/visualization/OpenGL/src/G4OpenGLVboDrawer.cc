@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLVboDrawer.cc 74103 2013-09-23 07:52:38Z lgarnier $
 //
 //
 // G4OpenGLWtViewer : Class to provide Vertex Buffer Object (VBO) specific

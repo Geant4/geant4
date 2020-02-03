@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "analysis/.README.txt"
 ///\brief Examples analysis README page

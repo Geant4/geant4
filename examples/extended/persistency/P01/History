@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 94557 2015-11-24 09:15:09Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,32 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+November 28th, 2019 I. Hrivnacova (exampleP01-V10-05-01)
+- Fixed Doxygen warning in .README.txt
+
+April 24th, 2019 G.Cosmo (exampleP01-V10-05-00)
+- Fixed thread-safety issue in definition of allocator in ExP01TrackerHit.
+
+May 19th, 2017 J.Allison (exampleP01-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+November 29th, 2017 B.Morgan (exampleP01-V10-03-01)
+- Use correct case "RootNewMacros"
+
+November 28th, 2017 B. Morgan (exampleP01-V10-03-00)
+- Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+- Include ROOTNewMacros for reflex_generate_dictionary
+- Update generated source name
+
+July 20th, 2016 I. Hrivnacova (exampleP01-V10-02-00)
+- Coding guidelines 
+  (redundant empty lines, class member functions names)
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 November 23rd, 2015 I. Hrivnacova (exampleP01-V10-01-02)
 - Updated documentation and CMakeLists.tx (requiring ROOT 6)
 

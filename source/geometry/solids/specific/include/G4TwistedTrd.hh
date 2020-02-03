@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TwistedTrd.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4TwistedTrd
 //
 // Class description:
@@ -48,13 +40,10 @@
 //     pDz     Half-length along z axis
 //     pPhiTwist Twist angle
 
-// Author:
-//
-//   Oliver Link (Oliver.Link@cern.ch)
-//
+// Author: Oliver Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
-#ifndef __G4TWISTEDTRD__
-#define __G4TWISTEDTRD__
+#ifndef G4TWISTEDTRD_HH
+#define G4TWISTEDTRD_HH
 
 #include "G4VTwistedFaceted.hh"
 

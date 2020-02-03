@@ -23,21 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VCSGface.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4VCSGface
 //
 // Class description:
 //
 //   Definition of the virtual base class G4VCSGface, one side (or face)
-//   of a CSG-like solid. It should be possible to build a CSG entirely out of
-//   connecting CSG faces.
+//   of a CSG-like solid. It should be possible to build a CSG entirely
+//   out of connecting CSG faces.
 //
 //   Each face has an inside and outside surface, the former represents
 //   the inside of the volume, the latter, the outside.
@@ -45,10 +37,10 @@
 //   Virtual members:
 //
 //  -------------------------------------------------------------------
-//      Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
+//      Intersect( const G4ThreeVector& p, const G4ThreeVector& v,
 //                 G4bool outGoing, G4double surfTolerance,
-//                 G4double &distance, G4double &distFromSurface,
-//                 G4ThreeVector &normal, G4bool &allBehind );
+//                 G4double& distance, G4double& distFromSurface,
+//                 G4ThreeVector& normal, G4bool& allBehind );
 //
 //          p               - (in) position
 //          v               - (in) direction (assumed to be a unit vector)
@@ -67,7 +59,7 @@
 //   Determine the distance along a line to the face.
 //
 //  -------------------------------------------------------------------
-//   Distance( const G4ThreeVector &p, const G4bool outgoing );
+//   Distance( const G4ThreeVector& p, const G4bool outgoing );
 //
 //      p         - (in) position
 //      outgoing  - (in) true, to consider only inside surfaces
@@ -80,8 +72,8 @@
 //   surfaces of the face.
 //
 //  -------------------------------------------------------------------
-//       Inside( const G4ThreeVector &p, const G4double tolerance, 
-//               G4double *bestDistance );
+//       Inside( const G4ThreeVector& p, const G4double tolerance, 
+//               G4double* bestDistance );
 //
 //      p            - (in) position
 //      tolerance    - (in) tolerance defining the bounds of the "kSurface",
@@ -96,7 +88,7 @@
 //   the face.
 //
 //  -------------------------------------------------------------------
-//       Normal( const G4ThreeVector &p,  G4double *bestDistance );
+//       Normal( const G4ThreeVector& p,  G4double* bestDistance );
 //
 //       p            - (in) position
 //       bestDistance - (out) distance to closest surface (in or out)
@@ -115,9 +107,9 @@
 //
 //  -------------------------------------------------------------------
 //       CalculateExtent( const EAxis pAxis,
-//                        const G4VoxelLimit &pVoxelLimit,
-//                        const G4AffineTransform &pTransform,
-//                        G4double &min, G4double &max )
+//                        const G4VoxelLimit& pVoxelLimit,
+//                        const G4AffineTransform& pTransform,
+//                        G4double& min, G4double& max )
 //
 //           pAxis       - (in) The x,y, or z axis in which to check
 //                              the shapes 3D extent against
@@ -255,11 +247,10 @@
 //   and save the answer that is smallest. If there is more than one answer,
 //   or if allBehind is false for the one answer, return validNorm as false.
 
-// Author:
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-#ifndef G4VCSGface_hh
-#define G4VCSGface_hh
+#ifndef G4VCSGFACE_HH
+#define G4VCSGFACE_HH
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
@@ -277,29 +268,29 @@ class G4VCSGface
   G4VCSGface() {}
   virtual ~G4VCSGface() {}
   
-  virtual G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,  
+  virtual G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,  
                             G4bool outgoing, G4double surfTolerance,
-                            G4double &distance, G4double &distFromSurface,
-                            G4ThreeVector &normal, G4bool &allBehind ) = 0;
+                            G4double& distance, G4double& distFromSurface,
+                            G4ThreeVector& normal, G4bool& allBehind ) = 0;
 
-  virtual G4double Distance( const G4ThreeVector &p, G4bool outgoing ) = 0;
+  virtual G4double Distance( const G4ThreeVector& p, G4bool outgoing ) = 0;
   
-  virtual EInside Inside( const G4ThreeVector &p, G4double tolerance, 
-                          G4double *bestDistance ) = 0;
+  virtual EInside Inside( const G4ThreeVector& p, G4double tolerance, 
+                          G4double* bestDistance ) = 0;
     
-  virtual G4ThreeVector Normal( const G4ThreeVector &p,
-                                G4double *bestDistance ) = 0;
+  virtual G4ThreeVector Normal( const G4ThreeVector& p,
+                                G4double* bestDistance ) = 0;
 
   virtual G4double Extent( const G4ThreeVector axis ) = 0;
   
   virtual void CalculateExtent( const EAxis axis, 
-                                const G4VoxelLimits &voxelLimit,
-                                const G4AffineTransform &tranform,
-                                G4SolidExtentList &extentList       ) = 0;
+                                const G4VoxelLimits& voxelLimit,
+                                const G4AffineTransform& tranform,
+                                G4SolidExtentList& extentList       ) = 0;
 
   virtual G4VCSGface* Clone() = 0;
 
-  virtual G4double SurfaceArea( ) = 0;
+  virtual G4double SurfaceArea() = 0;
   virtual G4ThreeVector GetPointOnFace() = 0;
 };
 

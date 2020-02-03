@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -38,11 +37,11 @@
 // In GEANT4 visualization, we have the concept of a "Standard
 // View".  This is the view when the complete set of objects being
 // viewed is comfortably in view from any viewpoint.  It is defined by
-// the "Bounding Sphere" of "visible" objects when initially
+// the "Bounding Extent" of "visible" objects when initially
 // registered in the scene, and by the View Parameters.
 //
 // There is also the "Standard Target Point", which is the centre of
-// the Bounding Sphere (note that this belongs to the scene and is
+// the Bounding Extent (note that this belongs to the scene and is
 // stored in the G4Scene object).  The "Current Target Point", defined
 // relative to the Standard Target Point, is changed by the
 // "dolly" and "zoom" commands, and can be reset to the Standard
@@ -51,7 +50,7 @@
 // Also, the "Standard Camera Position" is the "Standard Camera
 // Distance" along the Viewpoint Direction vector from the Standard
 // Target Point.  The Standard Camera Distance is the radius of the
-// Bounding Sphere divided by fFieldHalfAngle.  It is not stored
+// Bounding Extent divided by fFieldHalfAngle.  It is not stored
 // explicitly because of the singularity at fFieldHalfAngle = 0,
 // which implies parallel projection.
 //
@@ -63,7 +62,8 @@
 // conceptually possible, but which might give some problems when
 // setting up the view matrix - see, for example, G4OpenGLView::SetView ().
 //
-// All viewers are expected to keep the "Up Vector" vertical.
+// All viewers are expected to keep the "Up Vector" vertical unless
+// RotationStyle is freeRotation.
 //
 // Finally, the view is magnified by the "Zoom Factor" which is
 // reset to 1 by the "/vis/viewer/reset" command.
@@ -95,7 +95,8 @@ public: // With description
     wireframe,  // Draw edges    - no hidden line removal.
     hlr,        // Draw edges    - hidden lines removed.
     hsr,        // Draw surfaces - hidden surfaces removed.
-    hlhsr       // Draw surfaces and edges - hidden removed.
+    hlhsr,      // Draw surfaces and edges - hidden removed.
+    cloud       // Draw volume as a cloud of dots.
   };
 
   enum CutawayMode {
@@ -108,11 +109,11 @@ public: // With description
     freeRotation           // Free, Google-like rotation, using mouse-grab.
   };
 
-  friend std::ostream& operator << (std::ostream&,
-				      const DrawingStyle&);
+  friend std::ostream& operator <<
+  (std::ostream&, const DrawingStyle&);
 
-  friend std::ostream& operator << (std::ostream&,
-				      const G4ViewParameters&);
+  friend std::ostream& operator <<
+  (std::ostream&, const G4ViewParameters&);
 
   G4ViewParameters ();
   ~G4ViewParameters ();
@@ -123,12 +124,15 @@ public: // With description
 
   // Get and Is functions.
         DrawingStyle     GetDrawingStyle         () const;
+        G4int            GetNumberOfCloudPoints  () const;
         G4bool           IsAuxEdgeVisible        () const;
         G4bool           IsCulling               () const;
         G4bool           IsCullingInvisible      () const;
         G4bool           IsDensityCulling        () const;
         G4double         GetVisibleDensity       () const;
         G4bool           IsCullingCovered        () const;
+        G4int            GetCBDAlgorithmNumber   () const;
+  const std::vector<G4double>& GetCBDParameters  () const;
         G4bool           IsSection               () const;
   const G4Plane3D&       GetSectionPlane         () const;
         G4bool           IsCutaway               () const;
@@ -179,9 +183,27 @@ public: // With description
         RotationStyle    GetRotationStyle        () const;
   const std::vector<G4ModelingParameters::VisAttributesModifier>&
                          GetVisAttributesModifiers () const;
-  
+        G4double         GetStartTime            () const;
+        G4double         GetEndTime              () const;
+        G4double         GetFadeFactor           () const;
+        G4bool           IsDisplayHeadTime       () const;
+        G4double         GetDisplayHeadTimeX     () const;
+        G4double         GetDisplayHeadTimeY     () const;
+        G4double         GetDisplayHeadTimeSize  () const;
+        G4double         GetDisplayHeadTimeRed   () const;
+        G4double         GetDisplayHeadTimeGreen () const;
+        G4double         GetDisplayHeadTimeBlue  () const;
+        G4bool           IsDisplayLightFront     () const;
+        G4double         GetDisplayLightFrontX   () const;
+        G4double         GetDisplayLightFrontY   () const;
+        G4double         GetDisplayLightFrontZ   () const;
+        G4double         GetDisplayLightFrontT   () const;
+        G4double         GetDisplayLightFrontRed () const;
+        G4double         GetDisplayLightFrontGreen () const;
+        G4double         GetDisplayLightFrontBlue () const;
+
   // Here Follow functions to evaluate useful quantities as a
-  // function of the radius of the Bounding Sphere of the object being
+  // function of the radius of the Bounding Extent of the object being
   // viewed.  Call them in the order given - for efficiency, later
   // functions depend on the results of earlier ones (Store the
   // results of earlier functions in your own temporary variables -
@@ -194,12 +216,15 @@ public: // With description
 
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
+  G4int SetNumberOfCloudPoints (G4int);  // Returns number actually set.
   void SetAuxEdgeVisible       (G4bool);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double visibleDensity);
   void SetCullingCovered       (G4bool);
+  void SetCBDAlgorithmNumber   (G4int);
+  void SetCBDParameters        (const std::vector<G4double>&);
   void SetSectionPlane         (const G4Plane3D& sectionPlane);
   void UnsetSectionPlane       ();
   void SetCutawayMode          (CutawayMode);
@@ -209,7 +234,7 @@ public: // With description
   void SetExplodeFactor        (G4double explodeFactor);
   void UnsetExplodeFactor      ();
   void SetExplodeCentre        (const G4Point3D& explodeCentre);
-  G4int SetNoOfSides           (G4int nSides);  // Returns actual number set.
+  G4int SetNoOfSides           (G4int nSides);  // Returns number actually set.
   void SetViewpointDirection   (const G4Vector3D& viewpointDirection);
   // Calls the following to get lightpoint direction right too.
   void SetViewAndLights        (const G4Vector3D& viewpointDirection);
@@ -248,8 +273,26 @@ public: // With description
   void SetBackgroundColour     (const G4Colour&);
   void SetPicking              (G4bool);
   void SetRotationStyle        (RotationStyle);
-  void AddVisAttributesModifier
-  (const G4ModelingParameters::VisAttributesModifier&);
+  void ClearVisAttributesModifiers ();
+  void AddVisAttributesModifier(const G4ModelingParameters::VisAttributesModifier&);
+  void SetStartTime            (G4double);
+  void SetEndTime              (G4double);
+  void SetFadeFactor           (G4double);
+  void SetDisplayHeadTime      (G4bool);
+  void SetDisplayHeadTimeX     (G4double);
+  void SetDisplayHeadTimeY     (G4double);
+  void SetDisplayHeadTimeSize  (G4double);
+  void SetDisplayHeadTimeRed   (G4double);
+  void SetDisplayHeadTimeGreen (G4double);
+  void SetDisplayHeadTimeBlue  (G4double);
+  void SetDisplayLightFront    (G4bool);
+  void SetDisplayLightFrontX   (G4double);
+  void SetDisplayLightFrontY   (G4double);
+  void SetDisplayLightFrontZ   (G4double);
+  void SetDisplayLightFrontT   (G4double);
+  void SetDisplayLightFrontRed (G4double);
+  void SetDisplayLightFrontGreen (G4double);
+  void SetDisplayLightFrontBlue (G4double);
 
   // Command dumping functions.
   // For camera commands we need to provide the standard target point from
@@ -258,9 +301,23 @@ public: // With description
   G4String DrawingStyleCommands  () const;
   G4String SceneModifyingCommands() const;
   G4String TouchableCommands     () const;
-  
+  G4String TimeWindowCommands    () const;
+
   // Other functions.
   void PrintDifferences (const G4ViewParameters& v) const;
+
+  // Interpolation
+  // Returns a null pointer when no more to be done.  For example:
+  // do {
+  //   G4ViewParameters* vp =
+  //   G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
+  //   if (!vp) break;
+  //     ...
+  // } while (true);
+  // Assumes equal intervals
+  static G4ViewParameters* CatmullRomCubicSplineInterpolation
+  (const std::vector<G4ViewParameters>& views,
+   G4int nInterpolationPoints = 50);  // No of interpolations points per interval
 
 private:
   
@@ -268,12 +325,16 @@ private:
   G4int ReadInteger(char *string, char **NextString);
 
   DrawingStyle fDrawingStyle;    // Drawing style.
+  G4int        fNumberOfCloudPoints; // For drawing in cloud style.
+                                     // <= 0 means use viewer default.
   G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.
   G4bool       fCulling;         // Culling requested.
   G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.
   G4bool       fDensityCulling;  // Density culling requested.  If so...
   G4double     fVisibleDensity;  // ...density lower than this not drawn.
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4int        fCBDAlgorithmNumber; // Colour by density algorithm number.
+  std::vector<G4double> fCBDParameters; // Colour by density parameters.
   G4bool       fSection;         // Section drawing requested (DCUT in GEANT3).
   G4Plane3D    fSectionPlane;    // Cut plane for section drawing (DCUT).
   CutawayMode  fCutawayMode;     // Cutaway mode.
@@ -315,8 +376,17 @@ private:
   G4Colour     fBackgroundColour;
   G4bool       fPicking;         // Request picking.
   RotationStyle fRotationStyle;  // Rotation style.
-  std::vector<G4ModelingParameters::VisAttributesModifier>
-  fVisAttributesModifiers;
+  std::vector<G4ModelingParameters::VisAttributesModifier> fVisAttributesModifiers;
+  G4double     fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
+  G4double     fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
+  G4bool       fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
+  G4double     fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
+  G4double     fDisplayHeadTimeSize;  // Screen size.
+  G4double     fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
+  G4bool       fDisplayLightFront;// Display light front at head time originating at
+  G4double     fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
+               fDisplayLightFrontT;
+  G4double     fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
 
   enum { // Constants for geometry mask in ParseGeometry and related functions.
     fNoValue     = 0,

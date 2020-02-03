@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/fanoCavity2/.README.txt"
 ///\brief Example fanoCavity2 README page

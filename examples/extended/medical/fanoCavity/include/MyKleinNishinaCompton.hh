@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity/include/MyKleinNishinaCompton.hh
 /// \brief Definition of the MyKleinNishinaCompton class
 //
-// $Id: MyKleinNishinaCompton.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

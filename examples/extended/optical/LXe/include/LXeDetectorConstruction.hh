@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorConstruction.hh 77486 2013-11-25 10:14:16Z gcosmo $
 //
 /// \file optical/LXe/include/LXeDetectorConstruction.hh
 /// \brief Definition of the LXeDetectorConstruction class
@@ -68,32 +67,34 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     void SetNZ(G4int );
     void SetPMTRadius(G4double );
     void SetDefaults();
+    void SetSaveThreshold(G4int );
 
     //Get values
-    G4int GetNX(){return fNx;}
-    G4int GetNY(){return fNy;}
-    G4int GetNZ(){return fNz;}
-    G4double GetScintX(){return fScint_x;}
-    G4double GetScintY(){return fScint_y;}
-    G4double GetScintZ(){return fScint_z;}
-    G4double GetHousingThickness(){return fD_mtl;}
-    G4double GetPMTRadius(){return fOuterRadius_pmt;}
-    G4double GetSlabZ(){return fSlab_z;}
+    G4int GetNX() const {return fNx;};
+    G4int GetNY() const {return fNy;};
+    G4int GetNZ() const {return fNz;};
+    G4int GetSaveThreshold() const {return fSaveThreshold;};
+    G4double GetScintX() const {return fScint_x;}
+    G4double GetScintY() const {return fScint_y;}
+    G4double GetScintZ() const {return fScint_z;}
+    G4double GetHousingThickness() const {return fD_mtl;}
+    G4double GetPMTRadius() const {return fOuterRadius_pmt;}
+    G4double GetSlabZ() const {return fSlab_z;}
  
     void SetSphereOn(G4bool );
     static G4bool GetSphereOn(){return fSphereOn;}
 
     void SetHousingReflectivity(G4double );
-    G4double GetHousingReflectivity(){return fRefl;}
+    G4double GetHousingReflectivity() const {return fRefl;}
 
     void SetWLSSlabOn(G4bool b);
-    G4bool GetWLSSlabOn(){return fWLSslab;}
+    G4bool GetWLSSlabOn() const {return fWLSslab;}
 
     void SetMainVolumeOn(G4bool b);
-    G4bool GetMainVolumeOn(){return fMainVolumeOn;}
+    G4bool GetMainVolumeOn() const {return fMainVolumeOn;}
 
     void SetNFibers(G4int n);
-    G4int GetNFibers(){return fNfibers;}
+    G4int GetNFibers() const {return fNfibers;}
 
     void SetMainScintYield(G4double );
     void SetWLSScintYield(G4double );
@@ -101,7 +102,6 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
   private:
 
     void DefineMaterials();
-    G4VPhysicalVolume* ConstructDetector();
 
     LXeDetectorMessenger* fDetectorMessenger;
 
@@ -132,6 +132,7 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     G4int fNx;
     G4int fNy;
     G4int fNz;
+    G4int fSaveThreshold;
     G4double fOuterRadius_pmt;
     G4int fNfibers;
     static G4bool fSphereOn;

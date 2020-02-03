@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ParN02/include/ExN02EventAction.hh
+/// \file ExN02EventAction.hh
 /// \brief Definition of the ExN02EventAction class
 //
 //
-// $Id: ExN02EventAction.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -50,7 +50,6 @@
 //
 // If an electron track is killed then energy deposition is added to the step 
 //
-// $ID$
 /// \file G4ElectronCapture.hh
 /// \brief Definition of the G4ElectronCapture class
 

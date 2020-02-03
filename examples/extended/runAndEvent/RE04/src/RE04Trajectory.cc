@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/src/RE04Trajectory.cc
 /// \brief Implementation of the RE04Trajectory class
 //
-// $Id: $
 //
 #include "RE04Trajectory.hh"
 #include "RE04TrajectoryPoint.hh"

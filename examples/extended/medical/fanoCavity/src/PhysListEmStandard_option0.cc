@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_option0.cc
 /// \brief Implementation of the PhysListEmStandard_option0 class
 //
+<<<<<<< HEAD
 // $Id: PhysListEmStandard_option0.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +44,7 @@
 #include "MyKleinNishinaCompton.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
 
 #include "G4eMultipleScattering.hh"
 
@@ -69,7 +73,7 @@ PhysListEmStandard_option0::PhysListEmStandard_option0(const G4String& name,
   param->SetVerbose(1);
   param->SetMinEnergy(100*eV);
   param->SetMaxEnergy(10*GeV);
-  param->SetLowestElectronEnergy(10*eV);
+  param->SetLowestElectronEnergy(1*keV);
   param->SetBuildCSDARange(true);
   param->SetMaxEnergyForCSDARange(10*GeV);
   SetPhysicsType(bElectromagnetic);
@@ -113,7 +117,7 @@ void PhysListEmStandard_option0::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
                          
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,-1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
             
     } else if (particleName == "e+") {
@@ -122,14 +126,14 @@ void PhysListEmStandard_option0::ConstructProcess()
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
                                
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(pIoni,                     -1, 2, 2);
-      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 3);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,-1);
+      pmanager->AddProcess(pIoni,                     -1, 2, 1);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 2);
              
     } else if( particleName == "proton" ) {
       //proton  
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1,-1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 1);
     }
   }
 }

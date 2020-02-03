@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoMercuryDetectorMessenger.cc
-// GEANT4 tag $Name: 
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
@@ -85,7 +83,7 @@ XrayFluoMercuryDetectorMessenger::XrayFluoMercuryDetectorMessenger(XrayFluoMercu
   latitudeAngleCmd->AvailableForStates(G4State_Idle);
 
   orbitHeightCmd = new G4UIcmdWithADoubleAndUnit( "/apparate/orbitHeight",this );
-  orbitHeightCmd->SetGuidance( "Set height of the spacecraft above Mercuey Surface" );
+  orbitHeightCmd->SetGuidance( "Set height of the spacecraft above Mercury Surface" );
   orbitHeightCmd->SetGuidance( "After this, /apparate/update must be executed before BeamOn" );
   orbitHeightCmd->SetGuidance( "Default: 400 km " );
   orbitHeightCmd->SetParameterName( "Spacecraft Altitude", true, true );

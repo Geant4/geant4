@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm5/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
+<<<<<<< HEAD
 // $Id: StackingAction.cc 88674 2015-03-05 08:29:46Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +43,8 @@
 
 #include "G4RunManager.hh"
 #include "G4Track.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,29 +100,64 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   //energy spectrum of secondaries
   //
   G4double energy = aTrack->GetKineticEnergy();
+  G4double loge   = (energy > 0.) ? std::log10(energy/CLHEP::MeV) : -100.;
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
 
   if (charge != 0.) {
     analysisManager->FillH1(2,energy);
-    analysisManager->FillH1(4,energy);
+    analysisManager->FillH1(4,loge);
     if(idx == fPhotoAuger || idx == fComptAuger) {
+<<<<<<< HEAD
       analysisManager->FillH1(16,energy);
       analysisManager->FillH1(18,energy);
     } else if(idx == fPixeAuger) {
       analysisManager->FillH1(44,energy);
       analysisManager->FillH1(46,energy);
+=======
+      analysisManager->FillH1(50,energy);
+      analysisManager->FillH1(52,loge);
+    } else if(idx == fPixeAuger) {
+      analysisManager->FillH1(54,energy);
+      analysisManager->FillH1(56,loge);
+    } else if(idx == fElectronDNAAuger || 
+              idx == fProtonDNAAuger || 
+              idx == fHydrogenDNAAuger || 
+              idx == fAlphaDNAAuger || 
+              idx == fAlphaPlusDNAAuger || 
+              idx == fHeliumDNAAuger || 
+              idx == fGenericIonDNAAuger) {
+      analysisManager->FillH1(58,energy);
+      analysisManager->FillH1(60,loge);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     }
   }
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
     analysisManager->FillH1(3,energy);
-    analysisManager->FillH1(5,energy);
+    analysisManager->FillH1(5,loge);
     if(idx == fPhotoGamma || idx == fComptGamma) {
+<<<<<<< HEAD
       analysisManager->FillH1(17,energy);
       analysisManager->FillH1(19,energy);
     } else if(idx == fPixeGamma) {
       analysisManager->FillH1(45,energy);
       analysisManager->FillH1(47,energy);
+=======
+      analysisManager->FillH1(51,energy);
+      analysisManager->FillH1(53,loge);
+    } else if(idx == fPixeGamma) {
+      analysisManager->FillH1(55,energy);
+      analysisManager->FillH1(57,loge);
+    } else if(idx == fElectronDNAGamma || 
+              idx == fProtonDNAGamma || 
+              idx == fHydrogenDNAGamma || 
+              idx == fAlphaDNAGamma || 
+              idx == fAlphaPlusDNAGamma || 
+              idx == fHeliumDNAGamma || 
+              idx == fGenericIonDNAGamma) {
+      analysisManager->FillH1(59,energy);
+      analysisManager->FillH1(61,loge);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     }
   }  
 

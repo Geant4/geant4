@@ -27,7 +27,6 @@
 /// \brief Implementation of the F02CalorHit class
 //
 //
-// $Id: F02CalorHit.cc 76247 2013-11-08 11:18:52Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,9 +72,9 @@ const F02CalorHit& F02CalorHit::operator=(const F02CalorHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int F02CalorHit::operator==(const F02CalorHit& right) const
+G4bool F02CalorHit::operator==(const F02CalorHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

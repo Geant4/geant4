@@ -46,11 +46,15 @@
 #include <cmath>
 
 #include "UltraDetectorConstruction.hh"
+#include "UltraDetectorMessenger.hh"
 #include "UltraPMTSD.hh"
 #include "UltraFresnelLens.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
+#include "G4GeometryManager.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
@@ -71,25 +75,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 UltraDetectorConstruction::UltraDetectorConstruction() : 
-  logicalPMT(0)
+  fReflectorOpticalSurface(0),
+  logicalPMT(0),
+  fReflectorLog(0),
+  fIsReflectorConstructed(false)
 {
   // Define wavelength limits for materials definition
   lambda_min = 200*nm ; 
-  lambda_max = 700*nm ;   
+  lambda_max = 700*nm ; 
+
+  fDetectorMessenger = new UltraDetectorMessenger(this);  
+
+  ConstructTableMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-UltraDetectorConstruction::~UltraDetectorConstruction(){;}
+UltraDetectorConstruction::~UltraDetectorConstruction()
+{
+  delete fDetectorMessenger;
+
+  delete fReflectorOpticalSurface;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VPhysicalVolume* UltraDetectorConstruction::Construct()
 {
-  ConstructTableMaterials();
-
-
-
 //	The experimental Hall
 //	---------------------
 
@@ -101,13 +113,12 @@ G4VPhysicalVolume* UltraDetectorConstruction::Construct()
 
   // Get Air pointer from static funcion - (G4Material::GetMaterial)
 
-G4String name;
-G4Material *Air = G4Material::GetMaterial(name = "Air");
-G4LogicalVolume *World_log ;
-World_log  = new G4LogicalVolume(World_box,Air,"World",0,0,0);
+  G4String name;
+  G4Material *Air = G4Material::GetMaterial(name = "Air");
+  G4LogicalVolume *World_log ;
+  World_log  = new G4LogicalVolume(World_box,Air,"World",0,0,0);
 
-G4VPhysicalVolume *World_phys ;
-World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
+  fWorld_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
 
    G4VisAttributes* UniverseVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
    UniverseVisAtt->SetVisibility(true);
@@ -126,14 +137,16 @@ World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
   G4cout << "#                                                    #" << G4endl ;  
   G4cout << "#                                                    #" << G4endl ;  
 
-  ConstructUVscope(World_phys);
+  ConstructUVscope();
 
 
   G4cout << "#                                                    #" << G4endl ;
   G4cout << "#                                                    #" << G4endl ;
   G4cout << "######################################################" << G4endl ;
 
+  fIsReflectorConstructed = false;
 
+<<<<<<< HEAD
 #ifdef ULTRA_MIRROR_USE
 
   G4cout << "Using mirror reflecting surface " << G4endl ;
@@ -155,6 +168,9 @@ World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
 #endif
 
   return World_phys;
+=======
+  return fWorld_phys;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -354,126 +370,79 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VPhysicalVolume* UltraDetectorConstruction::ConstructMirror(G4VPhysicalVolume *World_phys){
+void UltraDetectorConstruction::ConstructReflector()
+{
+  const G4double x = 40.0*cm;
+  const G4double y = 40.0*cm;
+  const G4double z = 1*cm;
 
-  G4double Mirror_x = 40.0*cm;
-  G4double Mirror_y = 40.0*cm;
-  G4double Mirror_z = 1*cm;
-
-  G4Box * boxMirror = new G4Box("Mirror",Mirror_x,Mirror_y,Mirror_z);
-
-  // Get Air pointer from static funcion - (G4Material::GetMaterial)
-
-G4String name;
-G4Material *Al = G4Material::GetMaterial(name = "Aluminum");
-G4LogicalVolume *logMirror ;
-logMirror  = new G4LogicalVolume(boxMirror,Al,"Mirror",0,0,0);
-
-
-G4ThreeVector SurfacePosition = G4ThreeVector(0*m,0*m,1.5*m) ;
-
-// Rotate reflecting surface by 45. degrees around the OX axis.
-
-G4RotationMatrix *Surfrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),-pi/4.);
-
-G4VPhysicalVolume *physMirror ;
-physMirror = new G4PVPlacement(Surfrot,SurfacePosition,"MirrorPV",logMirror,World_phys,false,0);
-
-G4VisAttributes* SurfaceVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-SurfaceVisAtt->SetVisibility(true);
-SurfaceVisAtt->SetForceWireframe(true);
-logMirror->SetVisAttributes(SurfaceVisAtt);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//   Optical properties of the interface between the Air and Reflective Surface
-//   For Mirror, reflectivity is set at 95% and specular reflection is assumed.
-
-
-G4OpticalSurface *OpticalAirMirror = new G4OpticalSurface("AirMirrorSurface");
-OpticalAirMirror->SetModel(unified);
-OpticalAirMirror->SetType(dielectric_dielectric);
-OpticalAirMirror->SetFinish(polishedfrontpainted);
-
-const G4int NUM = 2;
-G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
-G4double ICEREFLECTIVITY[NUM]      = { 0.95, 0.95 };
-
-G4MaterialPropertiesTable *AirMirrorMPT = new G4MaterialPropertiesTable();
-AirMirrorMPT->AddProperty("REFLECTIVITY", XX, ICEREFLECTIVITY,NUM);
-OpticalAirMirror->SetMaterialPropertiesTable(AirMirrorMPT);
-
-
-
-new G4LogicalBorderSurface("Air/Mirror Surface",World_phys,physMirror,OpticalAirMirror);
-
- return physMirror  ; 
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VPhysicalVolume* UltraDetectorConstruction::ConstructGround(G4VPhysicalVolume *World_phys){
-
-  G4double Ground_x = 40.0*cm;
-  G4double Ground_y = 40.0*cm;
-  G4double Ground_z = 1*cm;
-
-  G4Box * boxGround = new G4Box("Ground",Ground_x,Ground_y,Ground_z);
+  G4Box * box = new G4Box("Mirror",x,y,z);
 
   // Get Air pointer from static funcion - (G4Material::GetMaterial)
 
-G4String name;
-G4Material *Al = G4Material::GetMaterial(name = "Aluminum");
-G4LogicalVolume *logGround ;
-logGround  = new G4LogicalVolume(boxGround,Al,"Ground",0,0,0);
+  G4String name;
+  G4Material *Al = G4Material::GetMaterial(name = "Aluminum");
 
+  fReflectorLog = new G4LogicalVolume(box,Al,"Reflector",0,0,0);
 
-G4ThreeVector SurfacePosition = G4ThreeVector(0*m,0*m,1.5*m) ;
+  G4ThreeVector SurfacePosition = G4ThreeVector(0*m,0*m,1.5*m) ;
 
-// Rotate reflecting surface by 45. degrees around the OX axis.
+  // Rotate reflecting surface by 45. degrees around the OX axis.
 
-G4RotationMatrix *Surfrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),-pi/4.);
+  G4RotationMatrix *Surfrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),-pi/4.);
 
-G4VPhysicalVolume *physGround ;
-physGround = new G4PVPlacement(Surfrot,SurfacePosition,"GroundPV",logGround,World_phys,false,0);
+  new G4PVPlacement(Surfrot,SurfacePosition,"MirrorPV",fReflectorLog,fWorld_phys,false,0);
 
-G4VisAttributes* SurfaceVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-SurfaceVisAtt->SetVisibility(true);
-SurfaceVisAtt->SetForceWireframe(true);
-logGround->SetVisAttributes(SurfaceVisAtt);
+  G4VisAttributes* SurfaceVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  SurfaceVisAtt->SetVisibility(true);
+  SurfaceVisAtt->SetForceWireframe(true);
+  fReflectorLog->SetVisAttributes(SurfaceVisAtt);
 
+  fReflectorOpticalSurface = new G4OpticalSurface("ReflectorOpticalSurface");
+  fReflectorOpticalSurface->SetModel(unified);
+  fReflectorOpticalSurface->SetType(dielectric_dielectric);
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//   Optical properties of the interface between the Air and Reflective Surface
-//   For Ground, reflectivity is set to 95% and diffusive reflection is assumed.
+  const G4int NUM = 2;
+  G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
+  G4double ICEREFLECTIVITY[NUM]      = { 0.95, 0.95 };
 
+  G4MaterialPropertiesTable *AirMirrorMPT = new G4MaterialPropertiesTable();
+  AirMirrorMPT->AddProperty("REFLECTIVITY", XX, ICEREFLECTIVITY,NUM);
+  fReflectorOpticalSurface->SetMaterialPropertiesTable(AirMirrorMPT);
 
-G4OpticalSurface *OpticalAirGround = new G4OpticalSurface("AirGroundSurface");
-OpticalAirGround->SetModel(unified);
-OpticalAirGround->SetType(dielectric_dielectric);
-OpticalAirGround->SetFinish(groundfrontpainted);
+  new G4LogicalSkinSurface("ReflectorSurface",fReflectorLog,fReflectorOpticalSurface);
 
- const G4int NUM = 2;
-G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
-G4double ICEREFLECTIVITY[NUM]      = { 0.95, 0.95 };
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = G4MTRunManager::GetMasterRunManager();
+  //runManager->SetNumberOfThreads(2);
+#else
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+#endif
 
-G4MaterialPropertiesTable *AirGroundMPT = new G4MaterialPropertiesTable();
-AirGroundMPT->AddProperty("REFLECTIVITY", XX, ICEREFLECTIVITY,NUM);
-OpticalAirGround->SetMaterialPropertiesTable(AirGroundMPT);
+  runManager->GeometryHasBeenModified();
 
-
-new G4LogicalBorderSurface("Air/Ground Surface",World_phys,physGround,OpticalAirGround);
-
- return physGround  ; 
-
+  fIsReflectorConstructed = true;
 }
 
+
+void UltraDetectorConstruction::SetReflectorOpticalProperties()
+{
+  if (fReflectionType == "ground") {
+    G4cout << "Using ground reflecting surface " << G4endl ;
+    if (fReflectorOpticalSurface)
+      fReflectorOpticalSurface->SetFinish(groundfrontpainted);
+  }
+  else {
+    G4cout << "Using mirror reflecting surface " << G4endl ;
+    if (fReflectorOpticalSurface)
+      fReflectorOpticalSurface->SetFinish(polishedfrontpainted);
+  }
+}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume *World_phys)
+void UltraDetectorConstruction::ConstructUVscope()
 {
 
   //	------------- Volumes --------------
@@ -506,7 +475,7 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
   G4LogicalVolume *logicUVscope =
     new G4LogicalVolume(solidUVscope,Al,"UVscopeLV",0,0,0);
   G4VPhysicalVolume *physicalUVscope =
-    new G4PVPlacement(0,UVscopePosition,"UVSCopePV",logicUVscope,World_phys,false,0);
+    new G4PVPlacement(0,UVscopePosition,"UVSCopePV",logicUVscope,fWorld_phys,false,0);
 
 
   //////////////////////////////////////
@@ -522,7 +491,7 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
   G4ThreeVector UVscopeBackPosition ;
   UVscopeBackPosition =  UVscopePosition+G4ThreeVector(0.0*mm,0.0*mm,-(UVscopeHeight/2.0+UVscopeThickness/2.0)) ;
   G4VPhysicalVolume *physicalUVscopeBack = 
-    new G4PVPlacement(0,UVscopeBackPosition,"UVscopeBack",logicUVscopeBack,World_phys,false,0);
+    new G4PVPlacement(0,UVscopeBackPosition,"UVscopeBack",logicUVscopeBack,fWorld_phys,false,0);
 
 
 
@@ -543,7 +512,7 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
   G4ThreeVector LensPosition        = UVscopePosition+G4ThreeVector(0.0*mm,0.0*mm,UVscopeHeight/2.0-UVscopeBaffle) ;
 
 
-  FresnelLens = new UltraFresnelLens(LensDiameter,LensNumOfGrooves,LensMaterial,World_phys,LensPosition) ;
+  FresnelLens = new UltraFresnelLens(LensDiameter,LensNumOfGrooves,LensMaterial,fWorld_phys,LensPosition) ;
 
 
   ///////////////////////////////////
@@ -557,7 +526,7 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
   LensFramePosition = LensPosition+G4ThreeVector(0.0*mm,0.0*mm,-((FresnelLens->GetThickness())/2.0+solidLensFrame->GetZHalfLength())) ;
 
   G4VPhysicalVolume *physicalLensFrame =
-    new G4PVPlacement(0,LensFramePosition,"LensFramePV",logicLensFrame,World_phys,false,0);
+    new G4PVPlacement(0,LensFramePosition,"LensFramePV",logicLensFrame,fWorld_phys,false,0);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -588,7 +557,7 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
   // Rotate PMT window through the axis OX by an angle = 180. degrees
 
   G4RotationMatrix *PMTrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),pi);
-  new G4PVPlacement(PMTrot,PMTpos,"PMT1",logicalPMT,World_phys,false,0);
+  new G4PVPlacement(PMTrot,PMTpos,"PMT1",logicalPMT,fWorld_phys,false,0);
 
  
   G4VisAttributes* PMTVisAtt   = new G4VisAttributes(true,G4Colour(0.0,0.0,1.0)) ;   
@@ -619,11 +588,11 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
 
   //OpticalAirPaint->DumpInfo();
 
-  new G4LogicalBorderSurface("Air/UVscope Cylinder Surface",World_phys,physicalUVscope,OpticalAirPaint);
+  new G4LogicalBorderSurface("Air/UVscope Cylinder Surface",fWorld_phys,physicalUVscope,OpticalAirPaint);
 
-  new G4LogicalBorderSurface("Air/LensFrame Surface",World_phys,physicalLensFrame,OpticalAirPaint);
+  new G4LogicalBorderSurface("Air/LensFrame Surface",fWorld_phys,physicalLensFrame,OpticalAirPaint);
 
-  new G4LogicalBorderSurface("Air/UVscope Back Cover Surface",World_phys,physicalUVscopeBack,OpticalAirPaint);
+  new G4LogicalBorderSurface("Air/UVscope Back Cover Surface",fWorld_phys,physicalUVscopeBack,OpticalAirPaint);
 
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -650,11 +619,30 @@ G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume
   G4cout << "#               UVscope is built ! ...               #" << G4endl ;  
   G4cout << "#                                                    #" << G4endl ;  
 
-  return physicalUVscope;
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void UltraDetectorConstruction::SetReflectionType(G4String rtype)
+{
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = G4MTRunManager::GetMasterRunManager();
+  //runManager->SetNumberOfThreads(2);
+#else
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+#endif
 
+  fReflectionType = rtype;
 
-
+  if (fReflectionType == "none") {
+    if (fIsReflectorConstructed) {
+      // Cleanup old geometry to delete reflecting surface
+      runManager->ReinitializeGeometry(true);
+    }
+  }
+  else {
+    if (!fIsReflectorConstructed) {
+      ConstructReflector();
+    }
+    SetReflectorOpticalProperties();
+  }
+}

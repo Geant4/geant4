@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "runAndEvent/RE01/.README.txt"
 ///\brief Example RE01 README page

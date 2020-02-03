@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 94124 2015-11-06 09:47:51Z gcosmo $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -11,16 +10,22 @@ endif
 
 GLOBLIBS  = libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
-GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib libG4analysis.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
-GLOBLIBS += libG4expat.lib libG4zlib.lib
+ifdef G4LIB_BUILD_EXPAT
+  GLOBLIBS += libG4expat.lib
+endif
+ifdef G4LIB_BUILD_ZLIB
+  GLOBLIBS += libG4zlib.lib
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
 SUBDIRS  = management 
 SUBDIRS += cuts 
+SUBDIRS += solidstate/channeling
+SUBDIRS += solidstate/phonon
 SUBDIRS += optical 
-SUBDIRS += phonon
 SUBDIRS += decay 
 SUBDIRS += scoring
 SUBDIRS += biasing/management
@@ -47,6 +52,7 @@ SUBDIRS += electromagnetic/polarisation
 SUBLIBS  = G4procman 
 SUBLIBS += G4cuts 
 SUBLIBS += G4optical 
+SUBLIBS += G4channeling
 SUBLIBS += G4phonon
 SUBLIBS += G4decay
 SUBLIBS += G4scoring
@@ -90,6 +96,7 @@ SUBDIRS += hadronic/models/de_excitation/photon_evaporation
 SUBDIRS += hadronic/models/de_excitation/util
 SUBDIRS += hadronic/models/em_dissociation
 SUBDIRS += hadronic/models/fission
+SUBDIRS += hadronic/models/gamma_nuclear
 SUBDIRS += hadronic/models/im_r_matrix
 SUBDIRS += hadronic/models/inclxx/utils
 SUBDIRS += hadronic/models/inclxx/incl_physics
@@ -104,9 +111,9 @@ SUBDIRS += hadronic/models/parton_string/qgsm
 SUBDIRS += hadronic/models/lepto_nuclear
 SUBDIRS += hadronic/models/pre_equilibrium/exciton_model
 SUBDIRS += hadronic/models/qmd
+SUBDIRS += hadronic/models/quasi_elastic
 SUBDIRS += hadronic/models/radioactive_decay
 SUBDIRS += hadronic/models/rpg
-SUBDIRS += hadronic/models/quasi_elastic
 SUBDIRS += hadronic/models/theo_high_energy
 SUBDIRS += hadronic/models/util
 SUBDIRS += hadronic/processes
@@ -125,8 +132,9 @@ SUBLIBS +=  G4hadronic_coherent_elastic
 SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd
-SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_fission
+SUBLIBS +=  G4had_gamm_nuclear
+SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_part_hp
 SUBLIBS +=  G4hadronic_radioactivedecay

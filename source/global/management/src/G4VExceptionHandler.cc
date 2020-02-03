@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VExceptionHandler.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -59,12 +58,12 @@ G4VExceptionHandler& G4VExceptionHandler::operator=(const G4VExceptionHandler &r
    return *this;
 }
 
-G4int G4VExceptionHandler::operator==(const G4VExceptionHandler &right) const
+G4bool G4VExceptionHandler::operator==(const G4VExceptionHandler &right) const
 {
    return (this == &right);
 }
 
-G4int G4VExceptionHandler::operator!=(const G4VExceptionHandler &right) const
+G4bool G4VExceptionHandler::operator!=(const G4VExceptionHandler &right) const
 {
    return (this != &right);
 }

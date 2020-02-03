@@ -23,24 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
-// G4PolyhedraHistorical.hh
+// G4PolyhedraHistorical
 //
 // Class description:
 //
-//   Data structure for G4Polyhedra
+// Data structure for G4Polyhedra
 
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
-#ifndef G4Polyhedra_Historical_hh
-#define G4Polyhedra_Historical_hh
+#ifndef G4POLYHEDRAHISTORICAL_HH
+#define G4POLYHEDRAHISTORICAL_HH
 
 #include "G4Types.hh"
 
@@ -54,13 +46,13 @@ class G4PolyhedraHistorical
     G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
     G4PolyhedraHistorical& operator=( const G4PolyhedraHistorical& right );
 
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   numSide;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
+    G4double Start_angle = 0.0;
+    G4double Opening_angle = 0.0;
+    G4int numSide = 0;
+    G4int Num_z_planes = 0;
+    G4double* Z_values = nullptr;
+    G4double* Rmin = nullptr;
+    G4double* Rmax = nullptr;
 };
 
 #endif

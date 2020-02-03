@@ -23,15 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4FieldManagerStore implementation
 //
-// $Id: G4FieldManagerStore.cc 69589 2013-05-08 14:35:28Z gcosmo $
-//
-// G4FieldManagerStore
-//
-// Implementation for singleton container
-//
-// History:
-// 07.12.07 J.Apostolakis Adapted from G4LogicalVolumeStore
+// Author: J.Apostolakis, 07.12.2007 - Adapted from G4LogicalVolumeStore
 // --------------------------------------------------------------------
 
 #include "G4Types.hh"
@@ -42,7 +36,7 @@
 // Static class variables
 // ***************************************************************************
 //
-G4ThreadLocal G4FieldManagerStore* G4FieldManagerStore::fgInstance = 0;
+G4ThreadLocal G4FieldManagerStore* G4FieldManagerStore::fgInstance = nullptr;
 G4ThreadLocal G4bool G4FieldManagerStore::locked = false;
 
 // ***************************************************************************
@@ -63,7 +57,7 @@ G4FieldManagerStore::G4FieldManagerStore()
 G4FieldManagerStore::~G4FieldManagerStore()
 {
   Clean();
-  if (fgInstance)  { delete fgInstance; fgInstance=0; }
+  fgInstance = nullptr;
 }
 
 // ***************************************************************************
@@ -80,7 +74,7 @@ void G4FieldManagerStore::Clean()
   size_t i=0;
   G4FieldManagerStore* store = GetInstance();
 
-  for(iterator pos=store->begin(); pos!=store->end(); pos++)
+  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
     if (*pos) { delete *pos; }
     i++;
@@ -88,9 +82,13 @@ void G4FieldManagerStore::Clean()
 
 #ifdef G4GEOMETRY_DEBUG
   if (store->size() < i-1)
-    { G4cout << "No field managers deleted. Already deleted by user ?" << G4endl; }
+  {
+    G4cout << "No field managers deleted. Already deleted by user ?" << G4endl;
+  }
   else
-    { G4cout << i-1 << " field managers deleted !" << G4endl; }
+  {
+    G4cout << i-1 << " field managers deleted !" << G4endl;
+  }
 #endif
 
   locked = false;
@@ -114,7 +112,7 @@ void G4FieldManagerStore::DeRegister(G4FieldManager* pFieldMgr)
 {
   if (!locked)    // Do not de-register if locked !
   {
-    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+    for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
     {
       if (*i==pFieldMgr)  //   For LogVol was **i == *pLogVolume ... Reason?
       {
@@ -131,10 +129,19 @@ void G4FieldManagerStore::DeRegister(G4FieldManager* pFieldMgr)
 //
 G4FieldManagerStore* G4FieldManagerStore::GetInstance()
 {
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = new G4FieldManagerStore;
   }
+  return fgInstance;
+}
+
+// ***************************************************************************
+// Return ptr to Store
+// ***************************************************************************
+//
+G4FieldManagerStore* G4FieldManagerStore::GetInstanceIfExist()
+{
   return fgInstance;
 }
 
@@ -145,12 +152,12 @@ G4FieldManagerStore* G4FieldManagerStore::GetInstance()
 void
 G4FieldManagerStore::ClearAllChordFindersState()
 {
-  G4ChordFinder *pChordFnd;
+  G4ChordFinder* pChordFnd;
    
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
   {
     pChordFnd = (*i)->GetChordFinder();
-    if( pChordFnd )
+    if( pChordFnd != nullptr )
     {
       pChordFnd->ResetStepEstimate();
     }

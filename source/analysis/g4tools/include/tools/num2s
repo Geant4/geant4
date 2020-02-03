@@ -9,6 +9,8 @@
 #include "sprintf"
 #include "typedefs"
 
+#include <cstddef> //ptrdiff_t
+
 namespace tools {
 
 /*
@@ -59,6 +61,22 @@ inline bool num2s(double a_value,std::string& a_s){
   return print2s(a_s,32,"%g",a_value);
 }
 
+inline bool size_t2s(size_t a_value,std::string& a_s) {
+  if(sizeof(size_t)==8) {
+    return num2s((uint64)a_value,a_s);
+  } else { //assume 4 :
+    return num2s((uint32)a_value,a_s);
+  }
+}
+
+inline bool ptrdiff_t2s(ptrdiff_t a_value,std::string& a_s) {  //used in write_bsg.
+  if(sizeof(ptrdiff_t)==8) {
+    return num2s((int64)a_value,a_s);
+  } else { //assume 4 :
+    return num2s((int32)a_value,a_s);
+  }
+}
+
 /*
 inline bool num2s(bool a_value,std::string& a_s){
   //a_s = a_value?"true":"false";
@@ -75,6 +93,14 @@ inline bool numas(const T& a_value,std::string& a_s){
   return true;
 }
 
+template <class T>
+inline bool size_tas(const T& a_value,std::string& a_s){
+  std::string stmp;
+  if(!size_t2s(a_value,stmp)) return false;
+  a_s += stmp;
+  return true;
+}
+
 /*
 inline bool num2s(unsigned int a_linen,const char* a_lines[],std::string& a_s) {
   a_s.clear();
@@ -86,7 +112,7 @@ inline bool num2s(unsigned int a_linen,const char* a_lines[],std::string& a_s) {
 }
 */
 
-// for the below std::vector num2s in cast T=std::string :
+// for the below std::vector num2s in case T=std::string :
 inline bool num2s(const std::string& a_value,std::string& a_s){a_s = a_value;return true;}
 
 template <class T>

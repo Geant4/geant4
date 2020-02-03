@@ -32,7 +32,8 @@
 
 #include "CCalVOrganization.hh"
 
-class CCalEcalOrganization: public CCalVOrganization {
+class CCalEcalOrganization: public CCalVOrganization
+{
 
 public:
   CCalEcalOrganization(){};

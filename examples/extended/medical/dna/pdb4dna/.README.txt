@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/pdb4dna/.README.txt"
 ///\brief Examplepdb4dna README page

@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE01/src/RE01StackingAction.cc
 /// \brief Implementation of the RE01StackingAction class
 //
-// $Id: RE01StackingAction.cc 90679 2015-06-08 07:58:19Z gcosmo $
 //
 
 #include "RE01StackingAction.hh"

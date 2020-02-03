@@ -7,6 +7,57 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+<<<<<<< HEAD
+=======
+02.09.2019 - S. Guatelli, Tag ChargeExchangeMC-V10-05-02
+             G4VIS_USE and G4UI_USE deleted
+
+31.01.2019 - G.Cosmo, Tag ChargeExchangeMC-V10-05-01
+             Fixed compilation warnings for unused data when no analysis set.
+             Fixed regular expression error in schema validation for lht.gdml.
+
+31.01.2019 - I.Hrivnacova, Tag ChargeExchangeMC-V10-05-00
+             Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+09.11.2018 - G.Cosmo, Tag ChargeExchangeMC-V10-04-00
+             CexmcException: fixed typo in printout.
+
+29.11.2017 - B.Morgan, Tag ChargeExchangeMC-V10-03-08
+             Use full path to ROOT Qt library, if found
+
+28.11.2017 - B.Morgan, Tag ChargeExchangeMC-V10-03-07
+             Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+
+31.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-06
+             Clean up preinit.mac, to avoid a cerr when 
+              ROOT is not available
+
+26.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-05
+             Edit CMakeLists.txt such to copy mac/gmdl in the 
+              build directory
+
+25.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-04
+             Fix residual shadowing on gcc 4.9
+
+23.10.2017 - A. Radkov, Tag ChargeExchangeMC-V10-03-03
+             Fix shadowed variabiles (and removed flag from 
+              CMakeLists.txt)
+
+12.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-02
+             Fix residual compiler warning on clang
+
+11.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-01
+             Fix compiler warnings in clang
+
+10.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-00
+             Fix CMakeLists.txt to allow for STT integration
+             Fix compilation error in CexmcHistoManager.hh (when
+                CEXMC_USE_ROOTQT is not defined)
+
+02.11.2016 - L. Garnier, Tag ChargeExchangeMC-V10-02-00
+             Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 09.12.2014 - A. Radkov, Tag ChargeExchangeMC-V10-01-00
              CERN ROOT histograming binding. Bug fix for online histogram 
              redrawing and easy online histogram showing from a dedicated 

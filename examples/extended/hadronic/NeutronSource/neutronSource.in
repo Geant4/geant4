@@ -1,0 +1,27 @@
+#
+# Macro file for "NeutronSource.cc"
+#
+/control/verbose 2
+/run/verbose 1
+#
+##/testhadr/det/setAbsorMat BeO
+##/testhadr/det/setContMat Stainless-Steel
+##/testhadr/det/setAbsorRadius 15 mm
+##/testhadr/det/setAbsorLength 60 mm
+##/testhadr/det/setContThick  2.4 mm
+#
+/run/initialize
+#
+/process/list
+/process/inactivate hadElastic
+#
+/gun/particle ion
+/gun/ion 95 241
+/gun/energy 0. eV
+#
+##/analysis/setFileName NeutronSource
+##/analysis/h1/set 6  60  0. 12.  MeV #neutrons
+#
+/run/printProgress 1000
+#
+/run/beamOn 10000

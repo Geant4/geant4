@@ -27,7 +27,6 @@
 /// \brief Definition of the ExP01TrackerHit class
 //
 //
-// $Id: ExP01TrackerHit.hh 71397 2013-06-14 15:05:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +51,7 @@ class ExP01TrackerHit : public G4VHit
      ~ExP01TrackerHit();
       ExP01TrackerHit(const ExP01TrackerHit&);
       const ExP01TrackerHit& operator=(const ExP01TrackerHit&);
-      G4int operator==(const ExP01TrackerHit&) const;
+      G4bool operator==(const ExP01TrackerHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);
@@ -82,24 +81,26 @@ class ExP01TrackerHit : public G4VHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef G4THitsCollection<ExP01TrackerHit> ExP01TrackerHitsCollection;
+using ExP01TrackerHitsCollection = G4THitsCollection<ExP01TrackerHit>;
 
-extern G4Allocator<ExP01TrackerHit> ExP01TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<ExP01TrackerHit>* ExP01TrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* ExP01TrackerHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) ExP01TrackerHitAllocator.MallocSingle();
-  return aHit;
+  if (!ExP01TrackerHitAllocator)
+  {
+    ExP01TrackerHitAllocator = new G4Allocator<ExP01TrackerHit>;
+  }
+  return (void *) ExP01TrackerHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void ExP01TrackerHit::operator delete(void *aHit)
 {
-  ExP01TrackerHitAllocator.FreeSingle((ExP01TrackerHit*) aHit);
+  ExP01TrackerHitAllocator->FreeSingle((ExP01TrackerHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,8 +27,12 @@
 /// \brief Main program of the radioactivedecay/rdecay01 example
 //
 //
+<<<<<<< HEAD
 // $Id: rdecay01.cc 94458 2015-11-18 14:36:25Z gcosmo $
 // 
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,9 +54,14 @@
 #include "G4VisExecutive.hh"
 #endif
 
+<<<<<<< HEAD
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
+=======
+
+int main(int argc,char** argv) {
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -122,5 +131,8 @@ int main(int argc,char** argv) {
   return 0;
 }
 
+<<<<<<< HEAD
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

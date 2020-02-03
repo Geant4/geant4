@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
 // Implementation for G4UParaboloid wrapper class
 //
-// 19-08-2015 Guilherme Lima, FNAL
-//
+// 19.08.2015 Guilherme Lima, FNAL
 // --------------------------------------------------------------------
 
 #include "G4Paraboloid.hh"

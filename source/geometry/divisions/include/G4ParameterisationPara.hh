@@ -23,25 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ParameterisationPara.hh 73433 2013-08-27 11:05:39Z gcosmo $
-// 
-// classes G4ParameterisationParaX,
-//         G4ParameterisationParaY,
-//         G4ParameterisationParaZ
+// G4ParameterisationPara[X,Y,Z]
 //
 // Class description:
 //
 // These classes represent the parameterised positioning equivalent to 
 // dividing a G4Para along one of each axis X, Y, Z.
 
-// History:
-// -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
 // --------------------------------------------------------------------
-#ifndef G4ParameterisationPara_H
-#define G4ParameterisationPara_H 1
+#ifndef G4PARAMETERISATIONPARA_HH
+#define G4PARAMETERISATIONPARA_HH 1
 
 #include "G4VDivisionParameterisation.hh"
 

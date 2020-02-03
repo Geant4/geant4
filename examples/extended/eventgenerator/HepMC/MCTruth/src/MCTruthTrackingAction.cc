@@ -27,7 +27,10 @@
 /// \brief Implementation of the MCTruthTrackingAction class
 //
 //
+<<<<<<< HEAD
 // $Id: MCTruthTrackingAction.cc 73446 2013-08-27 11:32:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------
@@ -46,7 +49,14 @@
 #include "MCTruthTrackingAction.hh"
 #include "MCTruthTrackInformation.hh"
 
+<<<<<<< HEAD
 MCTruthTrackingAction::MCTruthTrackingAction() 
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+MCTruthTrackingAction::MCTruthTrackingAction() :
+  G4UserTrackingAction() 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 {}
 
 MCTruthTrackingAction::~MCTruthTrackingAction() 

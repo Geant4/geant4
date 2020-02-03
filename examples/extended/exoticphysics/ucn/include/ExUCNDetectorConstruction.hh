@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExUCNDetectorConstruction.hh 75296 2013-10-30 09:34:21Z gcosmo $
 //
 /// \file exoticphysics/ucn/include/ExUCNDetectorConstruction.hh
 /// \brief Definition of the ExUCNDetectorConstruction class

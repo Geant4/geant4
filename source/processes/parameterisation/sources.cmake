@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -38,6 +37,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4parameterisation
     HEADERS
+        G4FastSimulationHelper.hh
         G4FastSimulationManager.hh
         G4FastSimulationManagerProcess.hh
         G4FastSimulationMessenger.hh
@@ -50,6 +50,7 @@ GEANT4_DEFINE_MODULE(NAME G4parameterisation
         G4GlobalFastSimulationManager.hh
         G4VFastSimulationModel.hh
     SOURCES
+        G4FastSimulationHelper.cc
         G4FastSimulationManager.cc
         G4FastSimulationManagerProcess.cc
         G4FastSimulationMessenger.cc

@@ -55,77 +55,81 @@ CML2PrimaryGenerationActionMessenger::CML2PrimaryGenerationActionMessenger(CML2P
 
 	calculatedPhaseSpaceFileIN=new G4UIcmdWithAString("/primaryParticleData/calculatedPhaseSpaceFileIN",this);
 	calculatedPhaseSpaceFileIN->SetDefaultValue("");
-	calculatedPhaseSpaceFileIN->SetGuidance("full path and file name of the phase space file to be used as particle generator");
+	calculatedPhaseSpaceFileIN->SetGuidance("full path and name of the phase space file to be used as particle generator");
 
 	sourceTypeName=new G4UIcmdWithAString("/primaryParticleData/sourceTypeName",this);
 	sourceTypeName->SetDefaultValue("");
-	sourceTypeName->SetGuidance("type of particle generator source  (randomTarget, phaseSpace)");
+	sourceTypeName->SetGuidance("type of particle generator source (randomTarget, phaseSpace)");
 
 	nMaxParticlesInRamPhaseSpace=new G4UIcmdWithAnInteger("/primaryParticleData/nMaxParticlesInRamPhaseSpace",this);
 	nMaxParticlesInRamPhaseSpace->SetDefaultValue(10000);
-	nMaxParticlesInRamPhaseSpace->SetGuidance("maximum particle number loaded from the phase space file each time");
+	nMaxParticlesInRamPhaseSpace->SetGuidance("maximum number of particle loaded from the phase space file each time");
 
-	GunMeanEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunMeanEnegy", this);
-	GunMeanEnegy->SetDefaultUnit("MeV");
-	GunMeanEnegy->SetDefaultValue(6.);
-	GunMeanEnegy->SetGuidance("mean energy of the primary particles");
+	GunMeanEnergy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunMeanEnergy", this);
+	GunMeanEnergy->SetDefaultUnit("MeV");
+	GunMeanEnergy->SetDefaultValue(6.);
+	GunMeanEnergy->SetGuidance("mean energy of the beam");
 
-	GunStdEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunStdEnegy", this);
-	GunStdEnegy->SetDefaultUnit("MeV");
-	GunStdEnegy->SetDefaultValue(0.127);
-	GunStdEnegy->SetGuidance("std energy of the primary particles");
+	GunStdEnergy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunStdEnergy", this);
+	GunStdEnergy->SetDefaultUnit("MeV");
+	GunStdEnergy->SetDefaultValue(0.127);
+	GunStdEnergy->SetGuidance("std deviation of energy of the beam");
 
-	GunRadious=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunRadious", this);
-	GunRadious->SetDefaultUnit("mm");
-	GunRadious->SetDefaultValue(10.);
-	GunRadious->SetGuidance("radious primary particles beam");
+	GunRadius=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunRadius", this);
+	GunRadius->SetDefaultUnit("mm");
+	GunRadius->SetDefaultValue(10.);
+	GunRadius->SetGuidance("radius of the beam");
 }
 
 CML2PrimaryGenerationActionMessenger::~CML2PrimaryGenerationActionMessenger(void)
 {
 	delete nRecycling;
 	delete nMaxParticlesInRamPhaseSpace;
-	delete GunMeanEnegy;
-	delete GunStdEnegy;
-	delete GunRadious;
+	delete GunMeanEnergy;
+	delete GunStdEnergy;
+	delete GunRadius;
 	delete calculatedPhaseSpaceFileIN;
 	delete sourceTypeName;
 }
 void CML2PrimaryGenerationActionMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
 {
-	if (cmd==GunMeanEnegy)
+	if (cmd == GunMeanEnergy)
 	{
-		GunMeanEnegy->GetNewUnitValue(newValue);
-		pML2PrimaryGenerationAction->setGunMeanEnergy(GunMeanEnegy->GetNewDoubleValue(newValue));
+		GunMeanEnergy -> GetNewUnitValue(newValue);
+		pML2PrimaryGenerationAction -> setGunMeanEnergy(GunMeanEnergy->GetNewDoubleValue(newValue));
 	}
 
-	if (cmd==GunStdEnegy)
+	if (cmd == GunStdEnergy)
 	{
-		GunStdEnegy->GetNewUnitValue(newValue);
-		pML2PrimaryGenerationAction->setGunStdEnergy(GunStdEnegy->GetNewDoubleValue(newValue));
+		GunStdEnergy -> GetNewUnitValue(newValue);
+		pML2PrimaryGenerationAction -> setGunStdEnergy(GunStdEnergy->GetNewDoubleValue(newValue));
 	}
 
-	if (cmd==GunRadious)
+	if (cmd == GunRadius)
 	{
-		GunRadious->GetNewUnitValue(newValue);
-		pML2PrimaryGenerationAction->setGunRadious(GunRadious->GetNewDoubleValue(newValue));
+		GunRadius -> GetNewUnitValue(newValue);
+		pML2PrimaryGenerationAction -> setGunRadius(GunRadius->GetNewDoubleValue(newValue));
 	}
 
-
-	if (cmd==nMaxParticlesInRamPhaseSpace)
+	if (cmd == nMaxParticlesInRamPhaseSpace)
 	{
-		pML2PrimaryGenerationAction->setNMaxParticlesInRamPhaseSpace(nMaxParticlesInRamPhaseSpace->GetNewIntValue(newValue));
+		pML2PrimaryGenerationAction -> setNMaxParticlesInRamPhaseSpace(nMaxParticlesInRamPhaseSpace->GetNewIntValue(newValue));
 	}
 
+	if (cmd == nRecycling)
+	{
+		pML2PrimaryGenerationAction -> setNRecycling(nRecycling->GetNewIntValue(newValue));
+	}
 
-	if (cmd==nRecycling)
-	{pML2PrimaryGenerationAction->setNRecycling(nRecycling->GetNewIntValue(newValue));}
+	if (cmd == calculatedPhaseSpaceFileIN)
+	{
+		pML2PrimaryGenerationAction -> setCalculatedPhaseSpaceFileIN(newValue);
+	}
 
-	if (cmd==calculatedPhaseSpaceFileIN)
-	{pML2PrimaryGenerationAction->setCalculatedPhaseSpaceFileIN(newValue);}
-
-	if (cmd==sourceTypeName)
-	{pML2PrimaryGenerationAction->setSourceTypeName(newValue);}
+	if (cmd == sourceTypeName)
+	{
+		pML2PrimaryGenerationAction -> setSourceTypeName(newValue);
+	}
 
 
 }

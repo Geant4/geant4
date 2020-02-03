@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessSubType.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //---------------------------------------------------------------
 //
@@ -51,6 +50,7 @@ enum G4EmProcessSubType
   fAnnihilationToMuMu = 6,
   fAnnihilationToHadrons = 7,
   fNuclearStopping = 8,
+  fElectronGeneralProcess = 9,
 
   fMultipleScattering = 10, 
   
@@ -59,6 +59,7 @@ enum G4EmProcessSubType
   fComptonScattering = 13,
   fGammaConversion = 14,
   fGammaConversionToMuMu = 15,
+  fGammaGeneralProcess = 16,
  
   fCerenkov = 21,
   fScintillation = 22,

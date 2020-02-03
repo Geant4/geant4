@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TablesForExtrapolator.hh 74302 2013-10-02 19:33:07Z vnivanch $
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:    G4TablesForExtrapolator
@@ -52,6 +50,7 @@
 class G4ParticleDefinition;
 class G4ProductionCuts;
 class G4MaterialCutsCouple;
+class G4LossTableBuilder;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -82,11 +81,11 @@ public:
 
   const G4PhysicsTable* GetPhysicsTable(ExtTableType type) const; 
 
-private:
-
   void Initialisation();
 
-  G4PhysicsTable* PrepareTable();
+private:
+
+  G4PhysicsTable* PrepareTable(G4PhysicsTable*);
 
   void ComputeElectronDEDX(const G4ParticleDefinition* part, 
 			   G4PhysicsTable* table); 
@@ -113,6 +112,7 @@ private:
 
   G4DataVector             cuts;
 
+  G4LossTableBuilder*      builder;
   G4ProductionCuts*        pcuts;
   std::vector<const G4MaterialCutsCouple*> couples;
 

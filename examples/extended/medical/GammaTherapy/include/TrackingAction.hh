@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: TrackingAction.hh 67994 2013-03-13 11:05:39Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/GammaTherapy/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class

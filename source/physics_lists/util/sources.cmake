@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94094 2015-11-05 15:17:11Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -97,7 +96,6 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4physlist_util
     HEADERS
 	CompileTimeConstraints.hh
-	G4DataQuestionaire.hh
 	G4PhysListUtil.hh
 	G4WarnPLStatus.hh
     SOURCES

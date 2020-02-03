@@ -38,6 +38,8 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
+// June-2019 - E. Mendoza --> redefinition of the residual mass to consider incident particles different than neutrons.
+
 #include "G4ParticleHPContAngularPar.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -60,25 +62,31 @@
 G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* projectile )
 {  
   theAngular = 0;
+  if ( fCache.Get() == 0 ) cacheInit();
   fCache.Get()->currentMeanEnergy = -2;
   fCache.Get()->fresh = true;
   adjustResult = true;
-  if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+  if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
 
   theMinEner = DBL_MAX;
   theMaxEner = -DBL_MAX;
   theProjectile = projectile; 
+
+  theEnergy = 0.0;
+  nEnergies = 0;
+  nDiscreteEnergies = 0;
+  nAngularParameters = 0;
 }
 
   void G4ParticleHPContAngularPar::Init(std::istream & aDataFile, G4ParticleDefinition* projectile)
   { 
     adjustResult = true;
-    if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+    if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
 
     theProjectile = projectile;
 
     aDataFile >> theEnergy >> nEnergies >> nDiscreteEnergies >> nAngularParameters;
-    /*if( getenv("G4PHPTEST") )*/
+    /*if( std::getenv("G4PHPTEST") )*/
     theEnergy *= eV;
     theAngular = new G4ParticleHPList [nEnergies];
     for(G4int i=0; i<nEnergies; i++)
@@ -97,8 +105,8 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
   G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double /*targetMass*/, 
                                     G4int angularRep, G4int /*interpolE*/ )
   {
-    if( getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample " << anEnergy << " " << massCode << " " << angularRep << G4endl; //GDEB
-    if ( fCache.Get() == NULL ) cacheInit();
+    if( std::getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample " << anEnergy << " " << massCode << " " << angularRep << G4endl; //GDEB
+    if ( fCache.Get() == 0 ) cacheInit();
     G4ReactionProduct * result = new G4ReactionProduct;
     G4int Z = static_cast<G4int>(massCode/1000);
     G4int A = static_cast<G4int>(massCode-1000*Z);
@@ -461,7 +469,7 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
       G4double * running = new G4double[nEnergies];
       running[0]=0;
       G4double weighted = 0;
-      if( getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample nEnergies " << nEnergies << G4endl;
+      if( std::getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample nEnergies " << nEnergies << G4endl;
       for(j=1; j<nEnergies; j++)
       {
         if(j!=0) running[j]=running[j-1];
@@ -471,7 +479,7 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
         weighted += theInt.GetWeightedBinIntegral(theManager.GetScheme(j-1),
                              theAngular[j-1].GetLabel(), theAngular[j].GetLabel(),
                              theAngular[j-1].GetValue(0), theAngular[j].GetValue(0));
-	if( getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample " << j << " running " << running[j] 
+	if( std::getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample " << j << " running " << running[j] 
 	       << " " << theManager.GetScheme(j-1) << " " << theAngular[j-1].GetLabel() << " " <<  theAngular[j].GetLabel() << " " << theAngular[j-1].GetValue(0) << " " <<  theAngular[j].GetValue(0) << G4endl; //GDEB
       }
       // cash the mean energy in this distribution
@@ -504,13 +512,16 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
       y2 = theAngular[itt].GetLabel();
       fsEnergy = theInt.Interpolate(theManager.GetInverseScheme(itt-1), 
                                     x, x1,x2,y1,y2);
-      if( getenv("G4PHPTEST") ) G4cout << itt << " G4particleHPContAngularPar fsEnergy " << fsEnergy << " " << theManager.GetInverseScheme(itt-1) << " x " << x << " " << x1 << " " << x2 << " y " << y1 << " " << y2 << G4endl; //GDEB
+      if( std::getenv("G4PHPTEST") ) G4cout << itt << " G4particleHPContAngularPar fsEnergy " << fsEnergy << " " << theManager.GetInverseScheme(itt-1) << " x " << x << " " << x1 << " " << x2 << " y " << y1 << " " << y2 << G4endl; //GDEB
       // for theta interpolate the compoundFractions
       G4double cLow = theAngular[itt-1].GetValue(1);
       G4double cHigh = theAngular[itt].GetValue(1);
       compoundFraction = theInt.Interpolate(theManager.GetScheme(itt),
                                             fsEnergy, y1, y2, cLow,cHigh);
-      if( getenv("G4PHPTEST") )  G4cout << itt << " G4particleHPContAngularPar compoundFraction " << compoundFraction << " E " << fsEnergy << " " << theManager.GetScheme(itt) << " ener " << fsEnergy << " y " << y1 << " " << y2 << " cLH " << cLow << " " << cHigh << G4endl; //GDEB
+
+      if ( compoundFraction > 1.0 ) compoundFraction = 1.0;  // Protection against unphysical interpolation
+
+      if( std::getenv("G4PHPTEST") )  G4cout << itt << " G4particleHPContAngularPar compoundFraction " << compoundFraction << " E " << fsEnergy << " " << theManager.GetScheme(itt) << " ener " << fsEnergy << " y " << y1 << " " << y2 << " cLH " << cLow << " " << cHigh << G4endl; //GDEB
       delete [] running;
       
       // get cosTh
@@ -524,18 +535,19 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
       if ( targetA == 0 ) 
          targetA = G4int ( fCache.Get()->theTarget->GetMass()/amu_c2 + 0.5 );
       G4double targetMass = fCache.Get()->theTarget->GetMass();
-      G4int residualA = targetA+1-A;
-      G4int residualZ = targetZ-Z;
-      G4double residualMass =  residualZ*G4Proton::Proton()->GetPDGMass();
-               residualMass +=(residualA-residualZ)*theProjectile->GetPDGMass();
-               residualMass -= G4NucleiProperties::GetBindingEnergy( residualA , residualZ );
+      G4int incidentA=G4int(incidentMass/amu_c2 + 0.5 );
+      G4int incidentZ=G4int(theProjectile->GetPDGCharge()+ 0.5 );
+      G4int residualA = targetA+incidentA-A;
+      G4int residualZ = targetZ+incidentZ-Z;
+      G4double residualMass =G4NucleiProperties::GetNuclearMass( residualA , residualZ );
       G4ParticleHPKallbachMannSyst theKallbach(compoundFraction,
                                               incidentEnergy, incidentMass,
                                               productEnergy, productMass,
                                               residualMass, residualA, residualZ,
-                                              targetMass, targetA, targetZ);
+                                              targetMass, targetA, targetZ,
+                                              incidentA,incidentZ,A,Z);
       cosTh = theKallbach.Sample(anEnergy);
-      if( getenv("G4PHPTEST") ) G4cout << " G4ParticleHPKallbachMannSyst::Sample resulttest " << cosTh << G4endl; //GDEB
+      if( std::getenv("G4PHPTEST") ) G4cout << " G4ParticleHPKallbachMannSyst::Sample resulttest " << cosTh << G4endl; //GDEB
     }
     else if(angularRep>10&&angularRep<16)
     {
@@ -769,7 +781,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy, G4Inter
 					  angpar1.theEnergy, angpar2.theEnergy,
 					  val1,
 					  val2);
-      if( getenv("G4PHPTEST2") ) G4cout << ie << " " << ip << " G4ParticleHPContAngularPar::Merge DiscreteEnergies  val1 " << val1 << " val2 " << val2 << " value " << value << G4endl; //GDEB
+      if( std::getenv("G4PHPTEST2") ) G4cout << ie << " " << ip << " G4ParticleHPContAngularPar::Merge DiscreteEnergies  val1 " << val1 << " val2 " << val2 << " value " << value << G4endl; //GDEB
       
       theAngular[ie].SetValue(ip, value);
     }
@@ -783,7 +795,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy, G4Inter
   theMinEner = angpar1.GetMinEner() + (theEnergy-angpar1.GetEnergy()) * (angpar2.GetMinEner()-angpar1.GetMinEner())/(angpar2.GetEnergy()-angpar1.GetEnergy());
   theMaxEner = angpar1.GetMaxEner() + (theEnergy-angpar1.GetEnergy()) * (angpar2.GetMaxEner()-angpar1.GetMaxEner())/(angpar2.GetEnergy()-angpar1.GetEnergy());
 
-  if( getenv("G4PHPTEST2") )  G4cout << " G4ParticleHPContAngularPar::Merge E " << anEnergy << " minmax " << theMinEner << " " << theMaxEner << G4endl; //GDEB
+  if( std::getenv("G4PHPTEST2") )  G4cout << " G4ParticleHPContAngularPar::Merge E " << anEnergy << " minmax " << theMinEner << " " << theMaxEner << G4endl; //GDEB
 
   //--- Loop to energies of new set
   std::set<G4double> energiesTransformed = angpar2.GetEnergiesTransformed();
@@ -827,7 +839,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy, G4Inter
 
     //---- Energy corresponding to energy transformed    
     G4double eN = (theMaxEner-theMinEner) * eT + theMinEner;
-    if( getenv("G4PHPTEST2") )  G4cout << ie << " " << ie1 << " " << ie2 << " G4ParticleHPContAngularPar::loop eT " << eT << " -> eN " << eN << " e1 " << e1 << " e2 " << e2 << G4endl; //GDEB
+    if( std::getenv("G4PHPTEST2") )  G4cout << ie << " " << ie1 << " " << ie2 << " G4ParticleHPContAngularPar::loop eT " << eT << " -> eN " << eN << " e1 " << e1 << " e2 " << e2 << G4endl; //GDEB
     
     theAngular[ie].SetLabel(eN);
     
@@ -849,8 +861,13 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy, G4Inter
 					  angpar1.theEnergy, angpar2.theEnergy,
 					  val1,
 					  val2);
-      value /= (theMaxEner-theMinEner); 
-      if( getenv("G4PHPTEST2") ) G4cout << ie << " " << ip << " G4ParticleHPContAngularPar::Merge val1 " << val1 << " val2 " << val2 << " value " << value << G4endl; //GDEB
+      //value /= (theMaxEner-theMinEner); 
+      if ( theMaxEner != theMinEner ) {
+         value /= (theMaxEner-theMinEner); 
+      } else if ( value != 0 ) {
+         throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPContAngularPar::PrepareTableInterpolation theMaxEner == theMinEner and  value != 0.");
+      }
+      if( std::getenv("G4PHPTEST2") ) G4cout << ie << " " << ip << " G4ParticleHPContAngularPar::Merge val1 " << val1 << " val2 " << val2 << " value " << value << G4endl; //GDEB
       //-      val1 = angpar1.theAngular[ie1-1].GetValue(ip) * (maxEner1-minEner1); 
       //-      val2 = angpar2.theAngular[ie2-1].GetValue(ip) * (maxEner2-minEner2); 
       //-      if( getenv("G4PHPTEST2") ) G4cout << ie << " " << ip << " G4ParticleHPContAngularPar::MergeOLD val1 " << val1 << " val2 " << val2 << " value " << value << G4endl; //GDEB
@@ -859,7 +876,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy, G4Inter
     }
   }
 
-  if( getenv("G4PHPTEST2") ) {
+  if( std::getenv("G4PHPTEST2") ) {
     G4cout << " G4ParticleHPContAngularPar::Merge ANGPAR1 " << G4endl; //GDEB
     angpar1.Dump();
     G4cout << " G4ParticleHPContAngularPar::Merge ANGPAR2 " << G4endl;

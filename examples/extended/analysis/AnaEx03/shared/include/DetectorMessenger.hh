@@ -27,7 +27,10 @@
 /// \brief Definition of the DetectorMessenger class
 //
 //
+<<<<<<< HEAD
 // $Id: DetectorMessenger.hh 77206 2013-11-22 01:33:52Z adotti $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 
@@ -60,7 +63,6 @@ class DetectorMessenger: public G4UImessenger
   private:
     DetectorConstruction* fDetector;
     
-    G4UIdirectory*             fN03Dir;
     G4UIdirectory*             fDetDir;
     G4UIcmdWithAString*        fAbsMaterCmd;
     G4UIcmdWithAString*        fGapMaterCmd;

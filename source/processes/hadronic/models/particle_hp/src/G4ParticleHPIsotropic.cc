@@ -95,7 +95,8 @@ G4ReactionProduct * G4ParticleHPIsotropic::Sample(G4double anEnergy, G4double ma
      //throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPIsotropic: Unknown ion case 2");
    }
 
-   G4double cosTh = G4UniformRand();
+   // Bug #1745 DHW G4double cosTh = G4UniformRand();
+   G4double cosTh = 2.*G4UniformRand()-1.;
    G4double phi = twopi*G4UniformRand();
    G4double theta = std::acos(cosTh);
    G4double sinth = std::sin(theta);
@@ -103,7 +104,7 @@ G4ReactionProduct * G4ParticleHPIsotropic::Sample(G4double anEnergy, G4double ma
 // we need the the Q value of the reaction
    result->SetKineticEnergy(std::max(0.001*MeV, anEnergy+GetQValue()));
    G4double mtot = result->GetTotalMomentum(); 
-   G4ThreeVector tempVector(mtot*sinth*std::cos(phi), mtot*sinth*std::sin(phi), mtot*std::cos(theta) );
+   G4ThreeVector tempVector(mtot*sinth*std::cos(phi), mtot*sinth*std::sin(phi), mtot*cosTh);
    result->SetMomentum(tempVector);
 
    return result;

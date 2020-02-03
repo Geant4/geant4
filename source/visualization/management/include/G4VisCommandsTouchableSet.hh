@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.hh 66373 2012-12-18 09:41:34Z gcosmo $
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 
@@ -39,7 +38,7 @@ class G4UIcmdWithADouble;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 
-class G4VisCommandsTouchableSet: public G4VVisCommandViewer {
+class G4VisCommandsTouchableSet: public G4VVisCommand {
 public:
   G4VisCommandsTouchableSet ();
   virtual ~G4VisCommandsTouchableSet ();
@@ -52,10 +51,12 @@ private:
   G4UIcmdWithABool*     fpCommandSetDaughtersInvisible;
   G4UIcmdWithABool*     fpCommandSetForceAuxEdgeVisible;
   G4UIcmdWithAnInteger* fpCommandSetLineSegmentsPerCircle;
+  G4UIcmdWithABool*     fpCommandSetForceCloud;
   G4UIcmdWithABool*     fpCommandSetForceSolid;
   G4UIcmdWithABool*     fpCommandSetForceWireframe;
   G4UIcmdWithAString*   fpCommandSetLineStyle;
   G4UIcmdWithADouble*   fpCommandSetLineWidth;
+  G4UIcmdWithAnInteger* fpCommandSetNumberOfCloudPoints;
   G4UIcmdWithABool*     fpCommandSetVisibility;
 };
 

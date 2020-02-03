@@ -1,0 +1,27 @@
+#
+# limit the step size from histo 1
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 Water  10 cm
+/testem/det/setSizeYZ 10 cm
+#
+/testem/phys/addPhysics  local	# em physics
+###/testem/phys/addPhysics  emstandard_opt3  	# em physics 
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle alpha
+/gun/energy 400 MeV
+#
+/analysis/setFileName alpha
+/analysis/h1/set 1 100 65.  85. mm	#edep profile
+/analysis/h1/set 3 100 75.  85. mm	#true track length
+#
+/testem/applyAutomaticStepMax true
+#
+/run/printProgress 1000
+/run/beamOn 10000

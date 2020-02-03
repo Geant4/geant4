@@ -23,18 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EqMagElectricField implementation
 //
-// $Id: G4EqMagElectricField.cc 69699 2013-05-13 08:50:30Z gcosmo $
+// This is the standard right-hand side for equation of motion.
 //
+// The only case another is required is when using a moving reference
+// frame ... or extending the class to include additional forces,
+// e.g., an electric field
 //
-//  This is the standard right-hand side for equation of motion.
-//
-//  The only case another is required is when using a moving reference
-//  frame ... or extending the class to include additional Forces,
-//  eg an electric field
-//
-//  10.11.98   V.Grichine
-//
+// Created: V.Grichine, 10.11.1998
 // -------------------------------------------------------------------
 
 #include "G4EqMagElectricField.hh"
@@ -42,9 +39,18 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+G4EqMagElectricField::G4EqMagElectricField(G4ElectroMagneticField* emField )
+  : G4EquationOfMotion( emField )
+{
+}
+
+G4EqMagElectricField::~G4EqMagElectricField()
+{
+} 
+
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4ChargeState particleCharge,
-		                            G4double,
+                                            G4double,
                                             G4double particleMass)
 {
    G4double pcharge = particleCharge.GetCharge();
@@ -52,14 +58,11 @@ G4EqMagElectricField::SetChargeMomentumMass(G4ChargeState particleCharge,
    fMassCof = particleMass*particleMass ; 
 }
 
-
-
 void
 G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
-			                const G4double Field[],
-				              G4double dydx[] ) const
+                                        const G4double Field[],
+                                              G4double dydx[] ) const
 {
-
    // Components of y:
    //    0-2 dr/ds, 
    //    3-5 dp/ds - momentum derivatives 
@@ -71,13 +74,9 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
 
    G4double pModuleInverse  = 1.0/std::sqrt(pSquared) ;
 
-   //  G4double inverse_velocity = Energy * c_light * pModuleInverse;
    G4double inverse_velocity = Energy * pModuleInverse / c_light;
 
    G4double cof1     = fElectroMagCof*pModuleInverse ;
-
-   //  G4double vDotE = y[3]*Field[3] + y[4]*Field[4] + y[5]*Field[5] ;
-
 
    dydx[0] = y[3]*pModuleInverse ;                         
    dydx[1] = y[4]*pModuleInverse ;                         
@@ -92,6 +91,8 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
    dydx[6] = 0.;//not used
 
    // Lab Time of flight
+   //
    dydx[7] = inverse_velocity;
-   return ;
+
+   return;
 }

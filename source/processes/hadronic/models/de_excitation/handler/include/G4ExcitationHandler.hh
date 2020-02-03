@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 88849 2015-03-12 16:19:38Z gcosmo $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
 //
@@ -53,56 +51,66 @@
 #include "G4Fragment.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4IonTable.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "G4NistManager.hh"
 
 class G4VMultiFragmentation;
 class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
-class G4FermiFragmentsPool;
-class G4NistManager;
 
 class G4ExcitationHandler 
 {
 public:
 
-  G4ExcitationHandler(); 
+  explicit G4ExcitationHandler(); 
   ~G4ExcitationHandler();
 
   G4ReactionProductVector* BreakItUp(const G4Fragment &theInitialState);
 
-  // user defined sub-models
-  // deletion is responsibility of this handler
-  void SetEvaporation(G4VEvaporation* ptr);
-  void SetMultiFragmentation(G4VMultiFragmentation* ptr);
-  void SetFermiModel(G4VFermiBreakUp* ptr);
-  void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
-
-  // parameters of sub-models
-  void SetMaxZForFermiBreakUp(G4int aZ);
-  void SetMaxAForFermiBreakUp(G4int anA);
-  void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
-  void SetMinEForMultiFrag(G4double anE);
-
   // short model description used for automatic web documentation
   void ModelDescription(std::ostream& outFile) const;
 
+  void Initialise();
+
+  // user defined sub-models
+  // deletion is responsibility of this handler if isLocal=true 
+  void SetEvaporation(G4VEvaporation* ptr, G4bool isLocal=false);
+  void SetMultiFragmentation(G4VMultiFragmentation* ptr);
+  void SetFermiModel(G4VFermiBreakUp* ptr);
+  void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
+  void SetDeexChannelsType(G4DeexChannelType val);
+
+  //======== Obsolete methods to be removed =====
+
+  // parameters of sub-models
+  inline void SetMaxZForFermiBreakUp(G4int aZ);
+  inline void SetMaxAForFermiBreakUp(G4int anA);
+  inline void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
+  inline void SetMinEForMultiFrag(G4double anE);
+
   // access methods
-  inline G4VEvaporation* GetEvaporation();
-  inline G4VMultiFragmentation* GetMultiFragmentation();
-  inline G4VFermiBreakUp* GetFermiModel();
-  inline G4VEvaporationChannel* GetPhotonEvaporation();
+  G4VEvaporation* GetEvaporation();
+  G4VMultiFragmentation* GetMultiFragmentation();
+  G4VFermiBreakUp* GetFermiModel();
+  G4VEvaporationChannel* GetPhotonEvaporation();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt);
   // for superimposed Coulomb Barrir for inverse cross sections
   inline void UseSICB();
 
+  //==============================================
+
 private:
 
   void SetParameters();
 
+  inline void SortSecondaryFragment(G4Fragment*);
+
   G4ExcitationHandler(const G4ExcitationHandler &right);
-  const G4ExcitationHandler & operator=(const G4ExcitationHandler &right);
+  const G4ExcitationHandler & operator
+  =(const G4ExcitationHandler &right);
   G4bool operator==(const G4ExcitationHandler &right) const;
   G4bool operator!=(const G4ExcitationHandler &right) const;
   
@@ -110,20 +118,32 @@ private:
   G4VMultiFragmentation* theMultiFragmentation;
   G4VFermiBreakUp* theFermiModel;
   G4VEvaporationChannel* thePhotonEvaporation;
-
-  G4FermiFragmentsPool* thePool;
-
-  G4int maxZForFermiBreakUp;
-  G4int maxAForFermiBreakUp;
-  G4double minEForMultiFrag;
-  G4double minExcitation;
-
   G4IonTable* theTableOfIons;
   G4NistManager* nist;
 
-  G4int  OPTxs;
-  G4bool useSICB;
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* theNeutron;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theDeuteron;
+  const G4ParticleDefinition* theTriton;
+  const G4ParticleDefinition* theHe3;
+  const G4ParticleDefinition* theAlpha;
+
+  G4int icID;
+
+  G4int maxZForFermiBreakUp;
+  G4int maxAForFermiBreakUp;
+
+  G4int  fVerbose;
+  G4int  fWarnings;
+
+  G4double minEForMultiFrag;
+  G4double minExcitation;
+  G4double maxExcitation;
+
+  G4bool isInitialised;
   G4bool isEvapLocal;
+  G4bool isActive;
 
   // list of fragments to store final result   
   std::vector<G4Fragment*> theResults;
@@ -131,43 +151,58 @@ private:
   // list of fragments to store intermediate result   
   std::vector<G4Fragment*> results;
 
-  // list of fragments to apply PhotonEvaporation 
-  std::vector<G4Fragment*> thePhotoEvapList;
-
   // list of fragments to apply Evaporation or Fermi Break-Up
   std::vector<G4Fragment*> theEvapList;          
 };
 
-inline G4VEvaporation* G4ExcitationHandler::GetEvaporation()
+inline void G4ExcitationHandler::SetMaxZForFermiBreakUp(G4int aZ)
 {
-  return theEvaporation;
+  maxZForFermiBreakUp = aZ;
 }
 
-inline G4VMultiFragmentation* G4ExcitationHandler::GetMultiFragmentation()
+inline void G4ExcitationHandler::SetMaxAForFermiBreakUp(G4int anA)
 {
-  return theMultiFragmentation;
+  maxAForFermiBreakUp = anA;
 }
 
-inline G4VFermiBreakUp* G4ExcitationHandler::GetFermiModel()
+inline void G4ExcitationHandler::SetMaxAandZForFermiBreakUp(G4int anA, G4int aZ)
 {
-  return theFermiModel;
+  SetMaxAForFermiBreakUp(anA);
+  SetMaxZForFermiBreakUp(aZ);
 }
 
-inline G4VEvaporationChannel* G4ExcitationHandler::GetPhotonEvaporation()
+inline void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
 {
-  return thePhotonEvaporation;
+  minEForMultiFrag = anE;
 }
 
-inline void G4ExcitationHandler::SetOPTxs(G4int opt) 
-{ 
-  OPTxs = opt; 
-  SetParameters();
-}
+inline void G4ExcitationHandler::SetOPTxs(G4int) 
+{}
 
 inline void G4ExcitationHandler::UseSICB()
+{}
+
+inline void G4ExcitationHandler::SortSecondaryFragment(G4Fragment* frag)
 { 
-  useSICB = true; 
-  SetParameters();
+  G4int A = frag->GetA_asInt();  
+
+  // gamma, e-, p, n
+  if(A <= 1) { 
+    theResults.push_back(frag); 
+  } else if(frag->GetExcitationEnergy() < minExcitation) {
+    // cold fragments
+    G4int Z = frag->GetZ_asInt(); 
+       
+    // is stable or d, t, He3, He4
+    if(nist->GetIsotopeAbundance(Z, A) > 0.0 || (A == 3 && (Z == 1 || Z == 2)) ) {
+      theResults.push_back(frag); // stable fragment 
+    } else {
+      theEvapList.push_back(frag);
+    }
+    // hot fragments are unstable
+  } else { 
+    theEvapList.push_back(frag);  
+  }
 }
 
 #endif

@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm8/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
+<<<<<<< HEAD
 // $Id: DetectorMessenger.cc 68198 2013-03-18 16:39:51Z maire $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /////////////////////////////////////////////////////////////////////////
 //

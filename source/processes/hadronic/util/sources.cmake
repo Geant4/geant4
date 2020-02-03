@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 92101 2015-08-18 09:06:50Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,9 +51,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadSecondary.hh
         G4HadSignalHandler.hh
         G4HadTmpUtil.hh
-	G4HadronicDeprecate.hh
+        G4HadronicDeprecate.hh
+        G4HadronicDeveloperParameters.hh
         G4HadronicException.hh
-        G4HadronicWhiteBoard.hh
+        G4HadronicParameters.hh
         G4IsoResult.hh
         G4LightMedia.hh
         G4NuclearPolarization.hh
@@ -71,7 +71,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadSecondary.cc
         G4HadSignalHandler.cc
         G4HadTmpUtil.cc
-        G4HadronicWhiteBoard.cc
+        G4HadronicDeveloperParameters.cc
+        G4HadronicException.cc
+        G4HadronicParameters.cc
         G4IsoResult.cc
         G4LightMedia.cc
         G4NuclearPolarization.cc

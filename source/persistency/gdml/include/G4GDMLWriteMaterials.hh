@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.hh 68053 2013-03-13 14:39:51Z gcosmo $
 //
 //
 // class G4GDMLWriteMaterials
@@ -82,6 +81,7 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
    std::vector<const G4Isotope*> isotopeList;
    std::vector<const G4Element*> elementList;
    std::vector<const G4Material*> materialList;
+   std::vector<const G4PhysicsOrderedFreeVector*> propertyList;
    xercesc::DOMElement* materialsElement;
 };
 

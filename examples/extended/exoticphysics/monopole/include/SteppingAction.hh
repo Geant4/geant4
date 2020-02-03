@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
+<<<<<<< HEAD
 // $Id: SteppingAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

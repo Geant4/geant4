@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -56,13 +55,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 
-G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
-  theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0)
+G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) 
+  : G4VEmissionProbability(aZ, anA), Spin(aSpin), 
+    theCoulombBarrierPtr(nullptr)
 {
   theEvapLDPptr = new G4EvaporationLevelDensityParameter;
   fG4pow = G4Pow::GetInstance(); 
   fPlanck= CLHEP::hbar_Planck*fG4pow->logZ(2);
-  fPairCorr = G4PairingCorrection::GetInstance();
+  fNucData = G4NuclearLevelData::GetInstance();
 }
     
 G4GEMProbability::~G4GEMProbability()
@@ -128,7 +128,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   //                       ***RESIDUAL***
   //JMQ (September 2009) the following quantities refer to the RESIDUAL:
   
-  G4double delta0 = fPairCorr->GetPairingCorrection(ResidualA, ResidualZ);  
+  G4double delta0 = fNucData->GetPairingCorrection(ResidualZ, ResidualA);  
   
   G4double a = theEvapLDPptr->
     LevelDensityParameter(ResidualA,ResidualZ,MaximalKineticEnergy+V-delta0);
@@ -142,7 +142,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   //                       ***PARENT***
   //JMQ (September 2009) the following quantities refer to the PARENT:
      
-  G4double deltaCN = fPairCorr->GetPairingCorrection(A, Z); 
+  G4double deltaCN = fNucData->GetPairingCorrection(Z, A); 
   G4double aCN     = theEvapLDPptr->LevelDensityParameter(A, Z, U-deltaCN);
   G4double UxCN    = (2.5 + 150.0/G4double(A))*MeV;
   G4double ExCN    = UxCN + deltaCN;

@@ -1,12 +1,11 @@
 #
 # ------ GNU/WIN32 CYGWIN ------   !!! not supported !!!
-#                             Cygnus CygWin - gcc-3.2 and higher
-#                                       Windows XP
-#
-# Stefano Agostinelli (agos001@pn.itnet.it) - IST Group, Genova
+#                             Cygnus CygWin - gcc-9.2 and higher
+#                                       Windows 10
 #
 ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
+<<<<<<< HEAD
   CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4USE_STD11
@@ -23,6 +22,16 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     CPPFLAGS  += -std=c++17
     CXXFLAGS  += -std=c++17
   endif
+=======
+  CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
+  CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  G4USE_STD11 := 1
+  G4USE_STD17 := 1
+  CPPFLAGS  += -std=c++17
+  CXXFLAGS  += -std=c++17
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O

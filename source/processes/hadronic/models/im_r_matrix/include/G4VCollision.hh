@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCollision.hh,v 1.2 2006-06-29 20:36:04 gunter Exp $ //
 
 #ifndef G4VCollision_h
 #define G4VCollision_h

@@ -18,9 +18,9 @@ namespace wroot {
 // sizeof(TNamed)    = 28  = TObject + 2 * TString.
 // sizeof(TObjArray) = 40
 
-class StreamerInfo : public virtual ibo {
+class streamer_info : public virtual ibo {
   static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::StreamerInfo");
+    static const std::string s_v("tools::wroot::streamer_info");
     return s_v;
   }
 public: //ibo
@@ -45,15 +45,13 @@ public: //ibo
   }
 public:
   virtual void out(std::ostream& a_out) const {
-    a_out << "StreamerInfo for class :" 
+    a_out << "streamer_info for class :" 
           << " " << fName << ", version=" << fStreamedClassVersion
           << std::endl;
     tools_vforcit(streamer_element*,fElements,it) (*it)->out(a_out);
   }
 public:
-  StreamerInfo(const std::string& a_cls_store_name,
-               int a_cls_vers,
-               unsigned int a_cls_check_sum)
+  streamer_info(const std::string& a_cls_store_name,int a_cls_vers,unsigned int a_cls_check_sum)
   :fName(a_cls_store_name)
   ,fTitle("")
   ,fCheckSum(a_cls_check_sum)
@@ -63,14 +61,14 @@ public:
     mem::increment(s_class().c_str());
 #endif
   }
-  virtual ~StreamerInfo(){
+  virtual ~streamer_info(){
 #ifdef TOOLS_MEM
     mem::decrement(s_class().c_str());
 #endif
   }
 protected:
-  StreamerInfo(const StreamerInfo& a_from)
-  : ibo(a_from)
+  streamer_info(const streamer_info& a_from)
+  :ibo(a_from)
   ,fName(a_from.fName)
   ,fTitle(a_from.fName)
   ,fCheckSum(a_from.fCheckSum)
@@ -81,7 +79,7 @@ protected:
     mem::increment(s_class().c_str());
 #endif
   }
-  StreamerInfo& operator=(const StreamerInfo& a_from){
+  streamer_info& operator=(const streamer_info& a_from){
     fName = a_from.fName;
     fTitle = a_from.fName;
     fCheckSum = a_from.fCheckSum;
@@ -98,7 +96,7 @@ protected:
   unsigned int fCheckSum;    //checksum of original class
   int fStreamedClassVersion; //Class version identifier
   //int fNumber;               //!Unique identifier
-  ObjArray<streamer_element> fElements; //Array of TStreamerElements
+  obj_array<streamer_element> fElements; //Array of TStreamerElements
 };
 
 }}

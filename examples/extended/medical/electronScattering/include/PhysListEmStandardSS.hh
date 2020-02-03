@@ -26,7 +26,6 @@
 /// \file medical/electronScattering/include/PhysListEmStandardSS.hh
 /// \brief Definition of the PhysListEmStandardSS class
 //
-// $Id: PhysListEmStandardSS.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

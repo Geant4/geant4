@@ -30,7 +30,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file main.cc
 /// \brief Chem1 example
@@ -78,7 +77,7 @@ int main(int argc, char** argv)
   //////////
   // Construct the run manager according to whether MT is activated or not
   //
-  Command* commandLine(0);
+  Command* commandLine(nullptr);
 
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager= new G4MTRunManager;
@@ -93,9 +92,8 @@ int main(int argc, char** argv)
     {
       nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
-    G4cout << "===== Chem1 is started with "
-    << runManager->GetNumberOfThreads()
-    << " threads =====" << G4endl;
+    G4cout << "===== Chem1 is started with " << nThreads
+           << " threads =====" << G4endl;
 
     runManager->SetNumberOfThreads(nThreads);
   }
@@ -103,64 +101,65 @@ int main(int argc, char** argv)
   G4RunManager* runManager = new G4RunManager();
 #endif
 
+
   //////////
   // Set mandatory user initialization classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
+  DetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ActionInitialization());
 
-  // Initialize G4 kernel
-  runManager->Initialize();
-
   // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
-  visManager->Initialize();
+  G4VisManager* visManager = nullptr;
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  G4UIExecutive* ui(0);
+  G4UIExecutive* ui(nullptr);
 
   // interactive mode : define UI session
   if ((commandLine = parser->GetCommandIfActive("-gui")))
   {
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+
     ui = new G4UIExecutive(argc, argv, commandLine->GetOption());
 
-    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
-
-    if (parser->GetCommandIfActive("-novis") == 0)
-    // visualization is used by default
+    if(parser->GetCommandIfActive("-novis") == 0)
     {
-      if ((commandLine = parser->GetCommandIfActive("-vis")))
-      // select a visualization driver if needed (e.g. HepFile)
+      // visualization is used by default
+      if((commandLine = parser->GetCommandIfActive("-vis")))
       {
-        UImanager->ApplyCommand(
-            G4String("/vis/open ") + commandLine->GetOption());
+        // select a visualization driver if needed (e.g. HepFile)
+        UImanager->ApplyCommand(G4String("/vis/open ")+
+                                commandLine->GetOption());
       }
       else
-      // by default OGL is used
       {
+        // by default OGL is used
         UImanager->ApplyCommand("/vis/open OGL 800x600-0+0");
       }
       UImanager->ApplyCommand("/control/execute vis.mac");
     }
-  }
-  else
-  // to be use visualization file (= store the visualization into
-  // an external file:
-  // ASCIITree ;  DAWNFILE ; HepRepFile ; VRML(1,2)FILE ; gMocrenFile ...
-  {
-    if ((commandLine = parser->GetCommandIfActive("-vis")))
+
+    if(ui->IsGUI()) 
     {
-      UImanager->ApplyCommand(
-          G4String("/vis/open ") + commandLine->GetOption());
-      UImanager->ApplyCommand("/control/execute vis.mac");
+      UImanager->ApplyCommand("/control/execute gui.mac");
     }
   }
+  else if ((commandLine = parser->GetCommandIfActive("-vis")))
+  {
+    // to be use visualization file (= store the visualization into
+    // an external file:
+    // ASCIITree ;  DAWNFILE ; HepRepFile ; VRML(1,2)FILE ; gMocrenFile ...
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
 
+    ui = new G4UIExecutive(argc, argv, commandLine->GetOption());
+    UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption());
+    UImanager->ApplyCommand("/control/execute vis.mac");
+  }
+ 
   if ((commandLine = parser->GetCommandIfActive("-mac")))
   {
     G4String command = "/control/execute ";
@@ -171,7 +170,7 @@ int main(int argc, char** argv)
     UImanager->ApplyCommand("/control/execute beam.in");
   }
 
-  if ((commandLine = parser->GetCommandIfActive("-gui")))
+  if(ui)
   {
     ui->SessionStart();
     delete ui;

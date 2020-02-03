@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -95,3 +94,4 @@ G4HadronicInteraction* G4QGSBuilder::BuildModel()
 
   return theQGSModel;
 }
+

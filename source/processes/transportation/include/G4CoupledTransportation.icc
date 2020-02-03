@@ -24,22 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.icc 84478 2014-10-16 08:49:24Z gcosmo $
-//
-
 // 
 //
 //        Inline function implementation.
-//
+
 // =======================================================================
 // Created:  9 June 1998, J. Apostolakis
 // =======================================================================
-//
 
 #include <CLHEP/Units/SystemOfUnits.h>
+#include "G4TransportationLogger.hh"
+#include "G4FieldManagerStore.hh"
 
-inline void
-G4CoupledTransportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
+inline void G4CoupledTransportation::
+SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
 {
    fFieldPropagator= pFieldPropagator;
 }
@@ -49,24 +47,10 @@ inline G4PropagatorInField* G4CoupledTransportation::GetPropagatorInField()
    return fFieldPropagator;
 }
 
-inline G4bool G4CoupledTransportation::DoesGlobalFieldExist()
+inline G4bool G4CoupledTransportation::DoesAnyFieldExist()
 {
-  G4TransportationManager* transportMgr;
-  transportMgr= G4TransportationManager::GetTransportationManager();
-
-  // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist();
-  // return fFieldExists;
-  return transportMgr->GetFieldManager()->DoesFieldExist();
-}
-
-inline void G4CoupledTransportation::SetVerboseLevel( G4int verboseLev )
-{
-  fVerboseLevel= verboseLev;
-}
-
-inline G4int G4CoupledTransportation::GetVerboseLevel( ) const
-{
-  return fVerboseLevel;
+   G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+   return fieldMgrStore->size() > 0;
 }
 
 inline G4double G4CoupledTransportation::GetThresholdWarningEnergy() const
@@ -87,22 +71,35 @@ inline G4int G4CoupledTransportation::GetThresholdTrials() const
 inline void G4CoupledTransportation::SetThresholdWarningEnergy( G4double newEnWarn )
 {
   fThreshold_Warning_Energy= newEnWarn;
+  if( fpLogger ) {
+     fpLogger->SetThresholdWarningEnergy( newEnWarn );
+  } else {
+     ReportMissingLogger("SetThresholdWarningEnergy");
+  }
+  // Update the information for correct reporting  
 }
 
 inline void G4CoupledTransportation::SetThresholdImportantEnergy( G4double newEnImp )
 {
-  fThreshold_Important_Energy = newEnImp; 
+  fThreshold_Important_Energy = newEnImp;
+  if( fpLogger ) { 
+     fpLogger->SetThresholdImportantEnergy( newEnImp );
+    // Update the information for correct reporting
+  } else {
+     ReportMissingLogger("SetThresholdImportantEnergy");
+  }
 }
 
 inline void G4CoupledTransportation::SetThresholdTrials(G4int newMaxTrials )
 {
-  fThresholdTrials = newMaxTrials; 
+  fThresholdTrials = newMaxTrials;
+  if( fpLogger ) {   
+     fpLogger->SetThresholdTrials(newMaxTrials );
+     // Update the information for correct reporting
+  } else {
+     ReportMissingLogger("SetThresholdTrials");
+  }
 }
-
-     // Get/Set parameters for killing loopers: 
-     //   Above 'important' energy a 'looping' particle in field will 
-     //   *NOT* be abandoned, except after fThresholdTrials attempts.
-     // Below Warning energy, no verbosity for looping particles is issued
 
 inline G4double G4CoupledTransportation::GetMaxEnergyKilled() const
 {
@@ -116,15 +113,29 @@ inline G4double G4CoupledTransportation::GetSumEnergyKilled() const
 
 inline void G4CoupledTransportation::ResetKilledStatistics(G4int report)
 {
-  if( report ) { 
-    G4cout << " G4CoupledTransportation: Statistics for looping particles " << G4endl;
-    G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
-    G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
-  } 
+  // Statistics for tracks killed (currently due to looping in field)
 
+  if( report )
+  { 
+    G4cout << " G4CoupledTransportation: Statistics for looping particles "
+           << G4endl;
+    G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled
+           << G4endl;
+    G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled
+           << G4endl;
+  } 
   fSumEnergyKilled= 0;
   fMaxEnergyKilled= -1.0*CLHEP::GeV;
 }
-     // Statistics for tracks killed (currently due to looping in field)
 
+inline void
+G4CoupledTransportation::PushThresholdsToLogger()
+{
+  if( fpLogger )
+     fpLogger->SetThresholds( GetThresholdWarningEnergy(),
+                              GetThresholdImportantEnergy(),
+                              GetThresholdTrials() );
+  else
+     ReportMissingLogger("PushThresholdsToLogger()");
+}
 

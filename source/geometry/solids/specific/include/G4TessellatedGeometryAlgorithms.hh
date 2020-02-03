@@ -24,11 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// Class G4TessellatedGeometryAlgorithms
+// G4TessellatedGeometryAlgorithms
 //
 // Class description:
 //
@@ -61,16 +57,12 @@
 //     Information about where the intersection occurs is returned in the
 //     variable location.
 
-// CHANGE HISTORY
-// --------------
-//
 // 07 August 2007, P R Truscott, QinetiQ Ltd, UK - Created, with member
 //                 functions based on the work of Rickard Holmberg.
 // 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
-//
-///////////////////////////////////////////////////////////////////////////////
-#ifndef G4TessellatedGeometryAlgorithms_hh
-#define G4TessellatedGeometryAlgorithms_hh 1
+// --------------------------------------------------------------------
+#ifndef G4TESSELLATEDGEOMETRYALGORITHMS_HH
+#define G4TESSELLATEDGEOMETRYALGORITHMS_HH 1
 
 #include "G4TwoVector.hh"
 
@@ -78,18 +70,18 @@ class G4TessellatedGeometryAlgorithms
 {
   public:
 
-    static G4bool IntersectLineAndTriangle2D (const G4TwoVector &p,
-                                              const G4TwoVector &v,
-                                              const G4TwoVector &p0, 
-                                              const G4TwoVector &e0,
-                                              const G4TwoVector &e1,
+    static G4bool IntersectLineAndTriangle2D (const G4TwoVector& p,
+                                              const G4TwoVector& v,
+                                              const G4TwoVector& p0, 
+                                              const G4TwoVector& e0,
+                                              const G4TwoVector& e1,
                                                     G4TwoVector location[2]);
-    static G4int IntersectLineAndLineSegment2D (const G4TwoVector &p0,
-                                                const G4TwoVector &d0,
-                                                const G4TwoVector &p1,
-                                                const G4TwoVector &d1,
+    static G4int IntersectLineAndLineSegment2D (const G4TwoVector& p0,
+                                                const G4TwoVector& d0,
+                                                const G4TwoVector& p1,
+                                                const G4TwoVector& d1,
                                                       G4TwoVector location[2]);
-    static G4double cross(const G4TwoVector &v1, const G4TwoVector &v2);
+    static G4double cross(const G4TwoVector& v1, const G4TwoVector& v2);
 };
 
 #endif

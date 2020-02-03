@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/include/IonHIJINGPhysics.hh
 /// \brief Definition of the IonHIJINGPhysics class
 //
-// $Id: G4IonHIJINGPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
-// GRAS tag $Name: $
 //
 //---------------------------------------------------------------------------
 //

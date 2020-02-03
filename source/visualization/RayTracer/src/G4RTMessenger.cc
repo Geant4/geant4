@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.cc 86973 2014-11-21 11:57:27Z gcosmo $
 //
 //
 //
@@ -75,7 +74,7 @@ G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1)
   columnCmd->SetRange("nPixel > 0");
 
   rowCmd = new G4UIcmdWithAnInteger("/vis/rayTracer/row",this);
-  rowCmd->SetGuidance("Define the number of virtical pixels.");
+  rowCmd->SetGuidance("Define the number of vertical pixels.");
   rowCmd->SetParameterName("nPixel",false);
   rowCmd->SetRange("nPixel > 0");
 
@@ -87,7 +86,7 @@ G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1)
 
   eyePosCmd = new G4UIcmdWith3VectorAndUnit("/vis/rayTracer/eyePosition",this);
   eyePosCmd->SetGuidance("Define the eye position.");
-  eyePosCmd->SetGuidance("Eye direction is calsurated from (target - eyePosition).");
+  eyePosCmd->SetGuidance("Eye direction is calculated from (target - eyePosition).");
   eyePosCmd->SetParameterName("X","Y","Z",true);
   eyePosCmd->SetDefaultValue(G4ThreeVector(0.,0.,0.));
   eyePosCmd->SetDefaultUnit("m");

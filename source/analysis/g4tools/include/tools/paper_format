@@ -1,0 +1,50 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_paper_format
+#define tools_paper_format
+
+#include "path"
+#include "touplow"
+
+namespace tools {
+namespace file {
+
+// file::paper_format_extension() is in file_format.
+// related files : sg/write_paper.
+
+inline bool extension_paper_format(const std::string& a_file,std::string& a_fmt) {
+  std::string path,name,suffix;
+  if(!path_name_suffix(a_file,path,name,suffix)) {a_fmt.clear();return false;}
+  tolowercase(suffix);
+  if((suffix=="ps")||(suffix=="eps")) {
+    a_fmt = "inzb_ps";
+    return true;
+  } else if(suffix=="png") {
+    a_fmt = "inzb_png";
+    return true;
+  } else if((suffix=="jpg")||(suffix=="jpeg")) {
+    a_fmt = "inzb_jpeg";
+    return true;
+
+  } else if(suffix=="pdf") {
+    a_fmt = "gl2ps_pdf";
+    return true;
+  } else if(suffix=="svg") {
+    a_fmt = "gl2ps_svg";
+    return true;
+  } else if(suffix=="pgf") {
+    a_fmt = "gl2ps_pgf";
+    return true;
+  } else if(suffix=="tex") {
+    a_fmt = "gl2ps_tex";
+    return true;
+  }
+  a_fmt.clear();
+  return false;
+}
+
+}}
+
+#endif
+

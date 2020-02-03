@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.cc 95501 2016-02-12 11:01:30Z gcosmo $
-// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
 
@@ -151,6 +149,12 @@ void G4ParallelWorldProcess::StartTracking(G4Track* trk)
   {
     G4StepPoint* realWorldPostStepPoint = trk->GetStep()->GetPostStepPoint();
     SwitchMaterial(realWorldPostStepPoint);
+    G4StepPoint *realWorldPreStepPoint = trk->GetStep()->GetPreStepPoint();
+    SwitchMaterial(realWorldPreStepPoint);
+    G4double velocity = trk->CalculateVelocity();
+    realWorldPostStepPoint->SetVelocity(velocity);
+    realWorldPreStepPoint->SetVelocity(velocity);
+    trk->SetVelocity(velocity);
   }
   *(fpHyperStep->GetPreStepPoint()) = *(fpHyperStep->GetPostStepPoint());
 }
@@ -351,6 +355,7 @@ void G4ParallelWorldProcess::CopyStep(const G4Step & step)
   fGhostStep->SetTotalEnergyDeposit(step.GetTotalEnergyDeposit());
   fGhostStep->SetNonIonizingEnergyDeposit(step.GetNonIonizingEnergyDeposit());
   fGhostStep->SetControlFlag(step.GetControlFlag());
+  fGhostStep->SetSecondary((const_cast<G4Step&>(step)).GetfSecondary());
 
   *fGhostPreStepPoint = *(step.GetPreStepPoint());
   *fGhostPostStepPoint = *(step.GetPostStepPoint());

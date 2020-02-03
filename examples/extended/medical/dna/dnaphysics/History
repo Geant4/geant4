@@ -4,6 +4,100 @@
 
                        Package History file
                        --------------------
+<<<<<<< HEAD
+=======
+
+12 Jan 19 S. Incerti - tag dnaphysics-V10-05-00
+- Updated README (test)
+
+7 Nov 18 I. Hrivnacova - tag dnaphysics-V10-04-04
+- Updated plot.C for reading ntuples merged with row-wise mode
+  (now default)
+
+17 Aug 18 S. Incerti - tag dnaphysics-V10-04-03
+- updated README
+
+26 Jul 18 S. Incerti - tag dnaphysics-V10-04-02
+- activated ntuple merging
+
+22 Jul 18 S. Incerti - tag dnaphysics-V10-04-01
+- removed obsolete RanecuEngine
+
+9 May 18 B. Morgan - tag dnaphysics-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols
+
+7 Nov 17 S. Incerti - tag dnaphysics-V10-03-15
+- updated plot.C
+
+11 Oct 17 S. Incerti - tag dnaphysics-V10-03-14
+- updated flags for EM processes
+
+11 Oct 17 S. Incerti - tag dnaphysics-V10-03-13
+- added more flags for EM processes
+
+02 Oct 17 S. Incerti - tag dnaphysics-V10-03-12
+- added more flags for EM processes
+
+16 Aug 2017 - tag dnaphysics-V10-03-11 - SI
+- updated numbering scheme
+
+12 Aug 2017 - tag dnaphysics-V10-03-10 - SI, VI 
+- updated plot.C with numbering
+
+11 Aug 2017 - tag dnaphysics-V10-03-09 - SI, VI 
+- retag
+
+10 Aug 2017 - tag dnaphysics-V10-03-08 - SI, VI 
+- fixed FPE, improved SteppingAction
+
+09 Aug 2017 - tag dnaphysics-V10-03-07 - S. Incerti
+- added more variables to ntuple
+
+03 Aug 2017 - tag dnaphysics-V10-03-06 - V. Ivanchneko
+- PhysicsList - limit high energy by 1 GeV
+
+26 Jul 2017 - tag dnaphysics-V10-03-05 - S. Incerti
+- applied coding guidelines
+
+15 Jun 2017 - tag dnaphysics-V10-03-04 - S. Incerti
+- added visu. to dnaphysics.in
+
+08 Jun 2017 - tag dnaphysics-V10-03-03 - S. Incerti
+- added flag for Capture
+
+08 Apr 2017 - tag dnaphysics-V10-03-02 - S. Incerti
+- added third plot in plot.C
+
+31 Dec 2016 - tag dnaphysics-V10-03-01 - S. Incerti
+- fixed compilation
+
+30 Dec 2016 - tag dnaphysics-V10-03-00 - S. Incerti
+- updated numbering schemme in SteppingAction & README files
+
+30 Sep 2016 - tag dnaphysics-V10-02-05 - S. Incerti
+- PhysicsList - added explanations
+
+22 July 2016 - tag dnaphysics-V10-02-04 - V. Ivanchenko
+- PhysicsList - use G4EmDNAPhysicsActivator
+
+09 July 2016 - tag dnaphysics-V10-02-03 - S. Incerti
+- updated README
+
+03 June 2016 - tag dnaphysics-V10-02-02 - M. Karamitros
+- SteppingAction: add label for solvation
+- dnaphysics.cc: second arg is nb of threads
+
+02 June 2016 - tag dnaphysics-V10-02-01 - V. Ivanchenko
+- DetectorConstructor, DetectorMessenger - ensure that geometry 
+    is created once, material may be changed for next runs
+- /run/initialise moved from the code to macro
+- DNA physics configuration is moved from the code to macro
+
+28 May 2016 - tag dnaphysics-V10-02-00 - S. Incerti
+- added flagProcess value for electron capture
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 13 November 2015 - tag dnaphysics-V10-01-04 - V. Ivanchenko
 - use G4EmModelActivator to define DNA physics

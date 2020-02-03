@@ -32,15 +32,10 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: PurgMagAnalysisManager.hh 84477 2014-10-16 08:44:04Z gcosmo $
 //
 
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
-
-#include "globals.hh"
-#include <vector>
-#include "G4ThreeVector.hh"
 
 //!Uncomment #include to switch to ROOT or XML output file
 //#include "g4root.hh"
@@ -49,28 +44,6 @@
 //! Default here is a CSV file
 #include "g4csv.hh"
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class PurgMagAnalysisManager
-{
-public:  
-  ~PurgMagAnalysisManager();
-  void book();
-  void finish();
-  static PurgMagAnalysisManager* getInstance();
-  void fill_Tuple_Electrons(G4double,G4double,G4double,G4double,G4double,
-			    G4double,G4double);
-  void fill_Tuple_Gamma(G4double,G4double,G4double,G4double,G4double,
-			G4double,G4double);
-  void fill_Tuple_Positrons(G4double,G4double,G4double,G4double,G4double,
-			    G4double,G4double);
-private:  
-  static PurgMagAnalysisManager* instance;
-  
-private:
-  PurgMagAnalysisManager();
-};
 
 #endif
 

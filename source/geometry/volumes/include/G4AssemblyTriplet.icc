@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4AssemblyTriplet.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
 // 
 // Class G4AssemblyTriplet - inline implementation
 //
@@ -33,7 +29,6 @@
 
 inline
 G4AssemblyTriplet::G4AssemblyTriplet()
-  : fVolume( 0 ), fRotation( 0 ), fAssembly(0), fIsReflection(false)
 {
   G4ThreeVector v(0.,0.,0.);
   fTranslation = v;
@@ -45,7 +40,7 @@ G4AssemblyTriplet::G4AssemblyTriplet( G4LogicalVolume* pVolume,
                                       G4RotationMatrix* pRotation,
                                       G4bool isReflection )
   : fVolume( pVolume ), fTranslation( translation ), fRotation( pRotation ),
-    fAssembly( 0 ), fIsReflection(isReflection)
+    fIsReflection(isReflection)
 {
 }
 
@@ -54,7 +49,7 @@ G4AssemblyTriplet::G4AssemblyTriplet( G4AssemblyVolume* pAssembly,
                                       G4ThreeVector& translation,
                                       G4RotationMatrix* pRotation,
                                       G4bool isReflection )
-  : fVolume( 0 ), fTranslation( translation ), fRotation( pRotation ),
+  : fTranslation( translation ), fRotation( pRotation ),
     fAssembly( pAssembly ), fIsReflection(isReflection) 
 {
 }
@@ -83,14 +78,14 @@ G4LogicalVolume* G4AssemblyTriplet::GetVolume() const
 inline
 void G4AssemblyTriplet::SetVolume( G4LogicalVolume* pVolume )
 {
-  if ( fAssembly ) 
+  if ( fAssembly != nullptr ) 
   {
     G4Exception("G4AssemblyTriplet::SetVolume()",
                 "GeomVol1001", JustWarning,
                 "There is an assembly already set, it will be ignored.");
   }
   fVolume = pVolume;
-  fAssembly = 0;
+  fAssembly = nullptr;
 }
 
 inline
@@ -102,14 +97,14 @@ G4AssemblyVolume* G4AssemblyTriplet::GetAssembly() const
 inline
 void G4AssemblyTriplet::SetAssembly( G4AssemblyVolume* pAssembly )
 {
-  if ( fVolume ) 
+  if ( fVolume != nullptr ) 
   {
     G4Exception("G4AssemblyTriplet::SetAssembly()",
                 "GeomVol1001", JustWarning,
                 "There is a volume already set, it will be ignored.");
   }
   fAssembly = pAssembly;
-  fVolume = 0;
+  fVolume = nullptr;
 }
 
 inline

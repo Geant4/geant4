@@ -1,0 +1,54 @@
+#================================================
+#     Macro file for hadr01
+#     06.06.2006 V.Ivanchneko
+#================================================
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_Al 
+/testhadr/targetElm        Al
+/testhadr/TargetRadius     1  cm
+/testhadr/TargetLength     10 cm
+/run/printProgress         10
+#
+/run/initialize
+/process/em/workerVerbose 0
+#
+/gun/particle pi+
+/gun/energy 100. MeV
+##/testhadr/histo/fileName  pi+al
+/testhadr/particle   pi+
+/testhadr/verbose 1
+/process/eLoss/verbose 0
+/run/beamOn 0
+#
+/testhadr/targetElm  Pb
+/testhadr/histo/fileName  pi+pb
+/run/beamOn 0
+/testhadr/targetElm  Fe
+/testhadr/histo/fileName  pi+fe
+/run/beamOn 0
+/testhadr/targetElm  C
+/testhadr/histo/fileName  pi+c
+/run/beamOn 0
+/testhadr/targetElm  H
+/testhadr/histo/fileName  pi+h
+/run/beamOn 0
+#
+/testhadr/particle   pi-
+/testhadr/histo/fileName  pi-h
+/run/beamOn 0
+/testhadr/targetElm  Pb
+/testhadr/histo/fileName  pi-pb
+/run/beamOn 0
+/testhadr/targetElm  Fe
+/testhadr/histo/fileName  pi-fe
+/run/beamOn 0
+/testhadr/targetElm  C
+/testhadr/histo/fileName  pi-c
+/run/beamOn 0
+/testhadr/targetElm  Al
+/testhadr/histo/fileName  pi-al
+/run/beamOn 0
+#

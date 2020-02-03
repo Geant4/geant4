@@ -3,6 +3,7 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+<<<<<<< HEAD
 *************************************************************
  Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
@@ -10,6 +11,62 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+=======
+**************************************************************
+ Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateXm (OGLIXm, OGLI)
+OpenGLStoredXm (OGLSXm, OGL, OGLS)
+OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 *** /run/numberOfThreads command is issued in sequential mode.
 Command is ignored.
 PhysicsList::RegisterConstructor: <G4EmDNAPhysics>
@@ -38,6 +95,7 @@ PhysicsList::RegisterConstructor: <G4EmDNAPhysics>
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld
 
+<<<<<<< HEAD
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -67,32 +125,78 @@ Rayl:   for  gamma    SubType= 11  BuildTable= 1
 
 e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
  Total cross sections computed from DNAChampionElasticModel model
+=======
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAChampionElasticModel :  Emin=        0 eV    Emax=        1 MeV
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
 
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton : Emin=    0 eV  Emax=  100 TeV Fluo
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion : Emin=    0 eV  Emax=  100 TeV
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 eV  Emax=  7.4 eV 
+
+e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAChampionElasticModel : Emin=    0 eV  Emax=    1 MeV
+
+<<<<<<< HEAD
 e-_G4DNAExcitation:   for  e-    SubType= 52  BuildTable= 0
  Total cross sections computed from DNABornExcitationModel
+=======
+e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNABornExcitationModel :  Emin=        0 eV    Emax=        1 MeV
+DNABornExcitationModel : Emin=    0 eV  Emax=    1 MeV
 
+<<<<<<< HEAD
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
  Total cross sections computed from DNABornIonisationModel
+=======
+e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV   deltaBorn  FluoActive
+DNABornIonisationModel : Emin=    0 eV  Emax=    1 MeV  deltaBorn Fluo
 
+<<<<<<< HEAD
 e-_G4DNAVibExcitation:   for  e-    SubType= 54  BuildTable= 0
  Total cross sections computed from DNASancheExcitationModel
+=======
+e-_G4DNAVibExcitation:  for e- SubType=54 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNASancheExcitationModel :  Emin=        0 eV    Emax=      100 eV 
+DNASancheExcitationModel : Emin=    0 eV  Emax=  100 eV 
 
+<<<<<<< HEAD
 e-_G4DNAAttachment:   for  e-    SubType= 55  BuildTable= 0
  Total cross sections computed from DNAMeltonAttachmentModel
+=======
+e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV 
+DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
 
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+msc:  for e+  SubType= 10
+      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+<<<<<<< HEAD
             UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
@@ -109,308 +213,614 @@ eBrem:   for  e+    SubType= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+=======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
 
-annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+eIoni:  for e+  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+eBrem:  for e+  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+
+annihil:  for e+, integral:1  SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+<<<<<<< HEAD
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
  Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
-DNABornExcitationModel :  Emin=      500 keV   Emax=      100 MeV
+=======
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
 
+proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+
+proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
+DNABornExcitationModel : Emin=  500 keV Emax=  100 MeV
+
+<<<<<<< HEAD
 proton_G4DNAIonisation:   for  proton    SubType= 53  BuildTable= 0
  Total cross sections computed from DNARuddIonisationModel and DNABornIonisationModel models
+=======
+proton_G4DNAIonisation:  for proton SubType=53 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd  FluoActive
-DNABornIonisationModel :  Emin=      500 keV   Emax=      100 MeV   deltaBorn  FluoActive
+DNARuddIonisationModel : Emin=    0 eV  Emax=  500 keV  deltaRudd Fluo
+DNABornIonisationModel : Emin=  500 keV Emax=  100 MeV  deltaBorn Fluo
 
+<<<<<<< HEAD
 proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
+=======
+proton_G4DNAChargeDecrease:  for proton SubType=56 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      100 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  100 MeV
 
+<<<<<<< HEAD
 GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53  BuildTable= 0
  Total cross sections computed from DNARuddIonisationExtendedModel
+=======
+GenericIon_G4DNAIonisation:  for GenericIon SubType=53 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=        1 TeV   deltaRudd  FluoActive
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=    1 TeV  deltaRudd Fluo
 
+<<<<<<< HEAD
 alpha_G4DNAExcitation:   for  alpha    SubType= 52  BuildTable= 0
  Total cross sections computed from DNAMillerGreenExcitationModel
+=======
+alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
 
+alpha_G4DNAExcitation:  for alpha SubType=52 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+
+<<<<<<< HEAD
 alpha_G4DNAIonisation:   for  alpha    SubType= 53  BuildTable= 0
  Total cross sections computed from DNARuddIonisationModel
+=======
+alpha_G4DNAIonisation:  for alpha SubType=53 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
+DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
 
+<<<<<<< HEAD
 alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
+=======
+alpha_G4DNAChargeDecrease:  for alpha SubType=56 BuildTable=0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
 
+<<<<<<< HEAD
+=======
+alpha+_G4DNAElastic:  for alpha+ SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+
+alpha+_G4DNAExcitation:  for alpha+ SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+
+alpha+_G4DNAIonisation:  for alpha+ SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+
+alpha+_G4DNAChargeDecrease:  for alpha+ SubType=56 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
+
+alpha+_G4DNAChargeIncrease:  for alpha+ SubType=57 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
+
+helium_G4DNAElastic:  for helium SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+
+helium_G4DNAExcitation:  for helium SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+
+helium_G4DNAIonisation:  for helium SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+
+helium_G4DNAChargeIncrease:  for helium SubType=57 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
+
+hydrogen_G4DNAElastic:  for hydrogen SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+
+hydrogen_G4DNAExcitation:  for hydrogen SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
+
+hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel : Emin=    0 eV  Emax=  100 MeV  deltaRudd Fluo
+
+hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  100 MeV
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
  ======================= run summary ====================
 
  The run is 1000 e- of 12.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 28.439 nm  +- 17.842 nm 
  Projected range               = 4.120 Ang +- 2.896 nm 
  Penetration                   = 4.219 nm  +- 2.476 nm 
+=======
+ Track length of primary track = 29.002 nm  +- 17.889 nm 
+ Projected range               = 3.820 Ang +- 2.748 nm 
+ Penetration                   = 4.224 nm  +- 2.525 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 14.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 21.777 nm  +- 23.395 nm 
  Projected range               = 4.541 Ang +- 2.412 nm 
  Penetration                   = 3.408 nm  +- 2.694 nm 
+=======
+ Track length of primary track = 21.951 nm  +- 23.987 nm 
+ Projected range               = 4.067 Ang +- 2.479 nm 
+ Penetration                   = 3.440 nm  +- 2.612 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 16.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 11.628 nm  +- 15.660 nm 
  Projected range               = 5.227 Ang +- 1.791 nm 
  Penetration                   = 2.464 nm  +- 1.957 nm 
+=======
+ Track length of primary track = 11.147 nm  +- 14.647 nm 
+ Projected range               = 5.337 Ang +- 1.882 nm 
+ Penetration                   = 2.419 nm  +- 1.932 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 18.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 7.486 nm  +- 7.459 nm 
  Projected range               = 4.267 Ang +- 1.583 nm 
  Penetration                   = 2.062 nm  +- 1.554 nm 
+=======
+ Track length of primary track = 7.016 nm  +- 7.440 nm 
+ Projected range               = 3.868 Ang +- 1.448 nm 
+ Penetration                   = 1.972 nm  +- 1.518 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 20.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 6.367 nm  +- 7.560 nm 
  Projected range               = 5.221 Ang +- 1.350 nm 
  Penetration                   = 1.876 nm  +- 1.397 nm 
+=======
+ Track length of primary track = 6.373 nm  +- 8.381 nm 
+ Projected range               = 5.391 Ang +- 1.496 nm 
+ Penetration                   = 1.861 nm  +- 1.630 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 25.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 13.456 nm  +- 16.714 nm 
  Projected range               = 5.308 Ang +- 2.038 nm 
  Penetration                   = 2.673 nm  +- 2.270 nm 
+=======
+ Track length of primary track = 15.038 nm  +- 18.804 nm 
+ Projected range               = 5.255 Ang +- 2.146 nm 
+ Penetration                   = 2.780 nm  +- 2.277 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 30.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 17.656 nm  +- 19.272 nm 
  Projected range               = 5.553 Ang +- 2.204 nm 
  Penetration                   = 3.167 nm  +- 2.264 nm 
+=======
+ Track length of primary track = 17.395 nm  +- 18.125 nm 
+ Projected range               = 5.239 Ang +- 2.353 nm 
+ Penetration                   = 3.293 nm  +- 2.397 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 35.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 14.943 nm  +- 16.918 nm 
  Projected range               = 6.873 Ang +- 2.253 nm 
  Penetration                   = 3.044 nm  +- 2.137 nm 
+=======
+ Track length of primary track = 15.580 nm  +- 17.445 nm 
+ Projected range               = 5.842 Ang +- 2.199 nm 
+ Penetration                   = 3.042 nm  +- 2.142 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 40.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 12.960 nm  +- 14.599 nm 
  Projected range               = 6.515 Ang +- 2.060 nm 
  Penetration                   = 2.809 nm  +- 1.873 nm 
+=======
+ Track length of primary track = 12.725 nm  +- 13.684 nm 
+ Projected range               = 6.585 Ang +- 1.986 nm 
+ Penetration                   = 2.914 nm  +- 2.017 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 45.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 14.642 nm  +- 17.123 nm 
  Projected range               = 8.131 Ang +- 2.277 nm 
  Penetration                   = 3.142 nm  +- 2.288 nm 
+=======
+ Track length of primary track = 13.662 nm  +- 14.860 nm 
+ Projected range               = 8.018 Ang +- 2.132 nm 
+ Penetration                   = 3.023 nm  +- 2.007 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 50.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 15.703 nm  +- 16.446 nm 
  Projected range               = 8.225 Ang +- 2.407 nm 
  Penetration                   = 3.243 nm  +- 2.126 nm 
+=======
+ Track length of primary track = 15.223 nm  +- 17.136 nm 
+ Projected range               = 7.398 Ang +- 2.380 nm 
+ Penetration                   = 3.215 nm  +- 2.278 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 60.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 16.351 nm  +- 18.017 nm 
  Projected range               = 9.162 Ang +- 2.469 nm 
  Penetration                   = 3.434 nm  +- 2.264 nm 
+=======
+ Track length of primary track = 15.509 nm  +- 15.605 nm 
+ Projected range               = 9.015 Ang +- 2.487 nm 
+ Penetration                   = 3.394 nm  +- 2.132 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 70.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 16.295 nm  +- 16.491 nm 
  Projected range               = 1.068 nm  +- 2.418 nm 
  Penetration                   = 3.508 nm  +- 2.279 nm 
+=======
+ Track length of primary track = 16.108 nm  +- 16.355 nm 
+ Projected range               = 9.540 Ang +- 2.513 nm 
+ Penetration                   = 3.558 nm  +- 2.205 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 80.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 16.754 nm  +- 16.567 nm 
  Projected range               = 1.004 nm  +- 2.674 nm 
  Penetration                   = 3.711 nm  +- 2.191 nm 
+=======
+ Track length of primary track = 16.193 nm  +- 14.905 nm 
+ Projected range               = 1.294 nm  +- 2.449 nm 
+ Penetration                   = 3.695 nm  +- 2.120 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 90.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 17.302 nm  +- 16.738 nm 
  Projected range               = 1.198 nm  +- 2.698 nm 
  Penetration                   = 3.815 nm  +- 2.200 nm 
+=======
+ Track length of primary track = 17.086 nm  +- 15.614 nm 
+ Projected range               = 1.441 nm  +- 2.641 nm 
+ Penetration                   = 3.832 nm  +- 2.185 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 100.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 16.552 nm  +- 15.746 nm 
  Projected range               = 1.475 nm  +- 2.587 nm 
  Penetration                   = 3.829 nm  +- 2.113 nm 
+=======
+ Track length of primary track = 18.346 nm  +- 17.721 nm 
+ Projected range               = 1.347 nm  +- 2.760 nm 
+ Penetration                   = 3.990 nm  +- 2.241 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 150.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 20.088 nm  +- 17.400 nm 
  Projected range               = 2.107 nm  +- 3.164 nm 
  Penetration                   = 4.882 nm  +- 2.540 nm 
+=======
+ Track length of primary track = 20.729 nm  +- 17.414 nm 
+ Projected range               = 2.042 nm  +- 3.359 nm 
+ Penetration                   = 4.955 nm  +- 2.598 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 200.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 22.439 nm  +- 17.220 nm 
  Projected range               = 3.100 nm  +- 3.786 nm 
  Penetration                   = 5.934 nm  +- 2.925 nm 
+=======
+ Track length of primary track = 22.820 nm  +- 17.248 nm 
+ Projected range               = 2.869 nm  +- 3.882 nm 
+ Penetration                   = 5.923 nm  +- 2.897 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 250.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 23.910 nm  +- 16.851 nm 
  Projected range               = 3.799 nm  +- 4.298 nm 
  Penetration                   = 7.069 nm  +- 3.189 nm 
+=======
+ Track length of primary track = 24.655 nm  +- 16.269 nm 
+ Projected range               = 3.955 nm  +- 4.253 nm 
+ Penetration                   = 6.973 nm  +- 3.187 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 300.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 26.956 nm  +- 17.206 nm 
  Projected range               = 4.549 nm  +- 4.948 nm 
  Penetration                   = 8.370 nm  +- 3.735 nm 
+=======
+ Track length of primary track = 27.959 nm  +- 17.884 nm 
+ Projected range               = 4.542 nm  +- 5.080 nm 
+ Penetration                   = 8.393 nm  +- 3.677 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 350.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 29.921 nm  +- 17.382 nm 
  Projected range               = 5.330 nm  +- 6.006 nm 
  Penetration                   = 9.735 nm  +- 4.505 nm 
+=======
+ Track length of primary track = 30.216 nm  +- 17.613 nm 
+ Projected range               = 6.020 nm  +- 5.880 nm 
+ Penetration                   = 10.092 nm  +- 4.375 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 400.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 33.242 nm  +- 17.795 nm 
  Projected range               = 7.261 nm  +- 6.655 nm 
  Penetration                   = 11.761 nm  +- 5.054 nm 
+=======
+ Track length of primary track = 32.679 nm  +- 18.083 nm 
+ Projected range               = 6.712 nm  +- 6.739 nm 
+ Penetration                   = 11.690 nm  +- 5.089 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 450.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 36.485 nm  +- 18.517 nm 
  Projected range               = 8.083 nm  +- 7.596 nm 
  Penetration                   = 13.333 nm  +- 5.769 nm 
+=======
+ Track length of primary track = 36.117 nm  +- 18.561 nm 
+ Projected range               = 8.213 nm  +- 7.413 nm 
+ Penetration                   = 13.440 nm  +- 5.834 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 500.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 39.518 nm  +- 18.055 nm 
  Projected range               = 9.719 nm  +- 7.953 nm 
  Penetration                   = 15.256 nm  +- 6.217 nm 
+=======
+ Track length of primary track = 39.325 nm  +- 18.495 nm 
+ Projected range               = 9.566 nm  +- 8.304 nm 
+ Penetration                   = 15.494 nm  +- 6.215 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 600.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 45.964 nm  +- 19.661 nm 
  Projected range               = 12.764 nm  +- 10.367 nm 
  Penetration                   = 19.616 nm  +- 7.910 nm 
+=======
+ Track length of primary track = 47.208 nm  +- 20.676 nm 
+ Projected range               = 12.115 nm  +- 10.540 nm 
+ Penetration                   = 19.354 nm  +- 7.964 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 700.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 54.609 nm  +- 20.687 nm 
  Projected range               = 16.018 nm  +- 12.630 nm 
  Penetration                   = 24.439 nm  +- 10.133 nm 
+=======
+ Track length of primary track = 53.861 nm  +- 20.324 nm 
+ Projected range               = 15.223 nm  +- 12.696 nm 
+ Penetration                   = 23.771 nm  +- 9.860 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 800.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 63.556 nm  +- 22.754 nm 
  Projected range               = 18.794 nm  +- 14.975 nm 
  Penetration                   = 29.271 nm  +- 11.094 nm 
+=======
+ Track length of primary track = 63.082 nm  +- 21.675 nm 
+ Projected range               = 19.698 nm  +- 15.607 nm 
+ Penetration                   = 29.837 nm  +- 11.756 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 900.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 71.992 nm  +- 23.243 nm 
  Projected range               = 22.621 nm  +- 17.611 nm 
  Penetration                   = 34.880 nm  +- 13.325 nm 
+=======
+ Track length of primary track = 71.176 nm  +- 23.369 nm 
+ Projected range               = 23.688 nm  +- 17.909 nm 
+ Penetration                   = 35.120 nm  +- 13.668 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 80.299 nm  +- 25.381 nm 
  Projected range               = 26.003 nm  +- 20.108 nm 
  Penetration                   = 39.981 nm  +- 15.075 nm 
+=======
+ Track length of primary track = 80.835 nm  +- 26.248 nm 
+ Projected range               = 27.336 nm  +- 19.412 nm 
+ Penetration                   = 40.156 nm  +- 15.309 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 2.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 204.837 nm  +- 51.619 nm 
  Projected range               = 84.529 nm  +- 57.966 nm 
  Penetration                   = 121.320 nm  +- 42.865 nm 
+=======
+ Track length of primary track = 205.471 nm  +- 53.650 nm 
+ Projected range               = 83.424 nm  +- 54.462 nm 
+ Penetration                   = 122.232 nm  +- 43.688 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 3.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 380.939 nm  +- 93.554 nm 
  Projected range               = 160.522 nm  +- 103.623 nm 
  Penetration                   = 233.172 nm  +- 80.859 nm 
+=======
+ Track length of primary track = 379.112 nm  +- 97.994 nm 
+ Projected range               = 157.614 nm  +- 106.343 nm 
+ Penetration                   = 230.086 nm  +- 81.104 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 4.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 590.367 nm  +- 142.883 nm 
  Projected range               = 269.306 nm  +- 160.944 nm 
  Penetration                   = 379.579 nm  +- 123.849 nm 
+=======
+ Track length of primary track = 595.181 nm  +- 142.317 nm 
+ Projected range               = 265.667 nm  +- 164.188 nm 
+ Penetration                   = 379.507 nm  +- 121.351 nm 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  ======================= run summary ====================
 
  The run is 1000 e- of 5.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
+<<<<<<< HEAD
  Track length of primary track = 849.109 nm  +- 206.397 nm 
  Projected range               = 399.784 nm  +- 231.737 nm 
  Penetration                   = 558.877 nm  +- 179.483 nm 
@@ -454,3 +864,10 @@ DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
  Track length of primary track = 2.735 um  +- 610.520 nm 
  Projected range               = 1.311 um  +- 790.330 nm 
  Penetration                   = 1.858 um  +- 558.174 nm 
+=======
+ Track length of primary track = 862.628 nm  +- 202.525 nm 
+ Projected range               = 396.862 nm  +- 238.211 nm 
+ Penetration                   = 559.410 nm  +- 183.300 nm 
+Graphics systems deleted.
+Visualization Manager deleting...
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

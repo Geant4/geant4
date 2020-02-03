@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04MuonHit.cc
 /// \brief Implementation of the ExN04MuonHit class
 //
-// $Id: ExN04MuonHit.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "ExN04MuonHit.hh"
@@ -40,6 +39,7 @@ G4Allocator<ExN04MuonHit> ExN04MuonHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonHit::ExN04MuonHit()
+ : G4VHit(), fedep(0.), fpos()
 {
 }
 
@@ -65,9 +65,9 @@ const ExN04MuonHit& ExN04MuonHit::operator=(const ExN04MuonHit &right)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4int ExN04MuonHit::operator==(const ExN04MuonHit &right) const
+G4bool ExN04MuonHit::operator==(const ExN04MuonHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

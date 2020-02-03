@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4cCalorHit.cc 69586 2013-05-08 14:20:11Z gcosmo $
 //
 /// \file B4cCalorHit.cc
 /// \brief Implementation of the B4cCalorHit class
@@ -72,9 +71,9 @@ const B4cCalorHit& B4cCalorHit::operator=(const B4cCalorHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int B4cCalorHit::operator==(const B4cCalorHit& right) const
+G4bool B4cCalorHit::operator==(const B4cCalorHit& right) const
 {
-  return ( this == &right ) ? 1 : 0;
+  return ( this == &right ) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

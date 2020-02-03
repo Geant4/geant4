@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh 93617 2015-10-27 09:00:41Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,7 +61,7 @@ public:
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
 private:
 
@@ -70,12 +69,7 @@ private:
   G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
   G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
 
-  static G4ThreadLocal G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
-  static G4ThreadLocal G4ComponentGGHadronNucleusXsc* theKaonXS;
-
-  G4String htype;
   G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
 };
 
 #endif

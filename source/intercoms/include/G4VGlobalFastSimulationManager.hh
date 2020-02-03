@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGlobalFastSimulationManager.hh 67965 2013-03-13 09:35:29Z gcosmo $
 //
 // 
 // Abstract interface for GEANT4 Global Fast Simulation Manager.
@@ -54,7 +53,9 @@
 
 #ifndef G4VGLOBALFASTSIMULATIONMANAGER_HH
 #define G4VGLOBALFASTSIMULATIONMANAGER_HH
+
 #include "G4Types.hh"
+#include "icomsdefs.hh"
 
 class G4VFlavoredParallelWorld;
 class G4ParticleDefinition;
@@ -79,7 +80,7 @@ protected:
   static void SetConcreteInstance (G4VGlobalFastSimulationManager*);
     // Sets the pointer to actual Global Fast Simulation manager.
 
-  static G4ThreadLocal G4VGlobalFastSimulationManager* fpConcreteInstance;  
+  G4ICOMS_DLL static G4ThreadLocal G4VGlobalFastSimulationManager* fpConcreteInstance;  
     // Pointer to real G4GlobalFastSimulationManager.
 
 };

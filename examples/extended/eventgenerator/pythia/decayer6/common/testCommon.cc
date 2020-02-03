@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 // 
 /// \file testCommon.cc
 /// \brief Test program for the common classes

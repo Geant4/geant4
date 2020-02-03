@@ -47,8 +47,6 @@
 #include "G4VSensitiveDetector.hh"
 #include "G4TouchableHistory.hh"
 
-#include "G4VReadOutGeometry.hh"
-
 CML2SteppingAction::CML2SteppingAction(CML2Convergence *conv)
 {
 	convergence=conv;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \file parallel/TBB/B2b/exampleB2b.cc
 /// \brief Main program of the B2b example
@@ -42,13 +41,8 @@
 
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //TBB includes
 #include <tbb/task_scheduler_init.h>
@@ -80,6 +74,12 @@ G4ThreadFunReturnType startWork(G4ThreadFunArgType arg)
 
 int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Choose the Random engine
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
@@ -128,7 +128,7 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode
+  if (!ui)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
@@ -136,6 +136,7 @@ int main(int argc,char** argv)
     }
   else
     {  // interactive mode : define UI session
+<<<<<<< HEAD
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
@@ -143,6 +144,13 @@ int main(int argc,char** argv)
 #else
         UImanager->ApplyCommand("/control/execute init.mac");
 #endif
+=======
+#if 1
+      G4int nEvents= 50; 
+      runManager->BeamOn(nEvents); 
+#else     
+      UImanager->ApplyCommand("/control/execute init.mac");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
       if (ui->IsGUI())
          UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
@@ -150,11 +158,12 @@ int main(int argc,char** argv)
 #endif
     }
  //END-G4
-    G4Thread aThread;
-    G4THREADCREATE(&aThread,startWork,static_cast<G4ThreadFunArgType>(&tasks));
+    G4Thread* aThread = new G4Thread;
+    G4THREADCREATE(aThread, startWork, static_cast<G4ThreadFunArgType>(&tasks));
     
     //Wait for work to be finised
-    G4THREADJOIN(aThread);
+    if(aThread)
+        aThread->join();
   
 #ifdef G4VIS_USE
     delete visManager;

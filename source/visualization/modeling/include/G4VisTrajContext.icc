@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisTrajContext.icc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay May 2006
 //
@@ -40,6 +39,9 @@ inline void G4VisTrajContext::SetVisible(const G4bool& visible)
 }
 
 // Line
+inline void G4VisTrajContext::SetLineWidth(const G4double& width) {fLineWidth = width;}
+inline G4double G4VisTrajContext::GetLineWidth() const {return fLineWidth;}
+
 inline void G4VisTrajContext::SetLineColour(const G4Colour& colour) {fLineColour = colour;}
 inline G4Colour G4VisTrajContext::GetLineColour() const {return fLineColour;}
 

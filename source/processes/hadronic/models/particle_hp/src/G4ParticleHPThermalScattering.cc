@@ -859,13 +859,16 @@ E_isoAng G4ParticleHPThermalScattering::create_E_isoAng_from_energy ( G4double e
       for ( G4int i=0 ; i < panEPM_T_EL->n ; i++ )
       { 
          G4double angle;
-         angle = get_linear_interpolated ( energy , std::pair< G4double , G4double > ( energyLH.first , panEPM_T_EL->isoAngle[ i ] ) , std::pair< G4double , G4double > ( energyLH.second , panEPM_T_EH->isoAngle[ i ] ) );  
+         angle = get_linear_interpolated ( energy , std::pair< G4double , G4double > ( energyLH.first , panEPM_T_EL->isoAngle[ i ] )
+                                                  , std::pair< G4double , G4double > ( energyLH.second , panEPM_T_EH->isoAngle[ i ] ) );  
          anEPM_T_E.isoAngle.push_back( angle ); 
       }
    }
    else
    {
-      G4cout << "G4ParticleHPThermalScattering Do not Suuport yet." << G4endl; 
+      G4Exception("G4ParticleHPThermalScattering::create_E_isoAng_from_energy",
+                  "NotSupported", JustWarning,
+                  "G4ParticleHPThermalScattering does not support yet EL->n != EH->n."); 
    }
 
 
@@ -1110,9 +1113,9 @@ void G4ParticleHPThermalScattering::buildPhysicsTable()
       if ( inelasticFSs == NULL ) inelasticFSs = new std::map < G4int , std::map < G4double , std::vector < E_P_E_isoAng* >* >* >;
 
        G4String dirName;
-       if ( !getenv( "G4NEUTRONHPDATA" ) ) 
+       if ( !std::getenv( "G4NEUTRONHPDATA" ) ) 
           throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-       dirName = getenv( "G4NEUTRONHPDATA" );
+       dirName = std::getenv( "G4NEUTRONHPDATA" );
 
    //G4String name;
 
@@ -1184,5 +1187,7 @@ G4bool G4ParticleHPThermalScattering::check_E_isoAng( E_isoAng* anE_IsoAng )
 
 void G4ParticleHPThermalScattering::ModelDescription(std::ostream& outFile) const
 {
-   outFile << "High Precision model based on thermal scattering data in evaluated nuclear data libraries for neutrons below 5eV on specific materials\n";
+   outFile << "High Precision model based on thermal scattering data in\n"
+           << "evaluated nuclear data libraries for neutrons below 5eV\n"
+           << "on specific materials\n";
 }

@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm9/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
+<<<<<<< HEAD
 // $Id: DetectorConstruction.cc 67644 2013-02-28 14:57:35Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 /////////////////////////////////////////////////////////////////////////

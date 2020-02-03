@@ -35,8 +35,6 @@
 #include <vector>
 #include <cmath>
 
-using namespace std;
-
 class HadrontherapyMagneticField3D
 #ifndef STANDALONE
  : public G4MagneticField
@@ -44,9 +42,9 @@ class HadrontherapyMagneticField3D
 {
   
   // Storage space for the table
-  vector< vector< vector< double > > > xField;
-  vector< vector< vector< double > > > yField;
-  vector< vector< vector< double > > > zField;
+  std::vector< std::vector< std::vector< double > > > xField;
+  std::vector< std::vector< std::vector< double > > > yField;
+  std::vector< std::vector< std::vector< double > > > zField;
   // The dimensions of the table
   int nx,ny,nz; 
   // The physical limits of the defined region

@@ -45,10 +45,10 @@
 
 CML2CInputData::CML2CInputData(void)
 {
-	bOnlyVisio=false;
+	bOnlyVisio = false;
 
-// instantiate the messenger for the general and convergence data
-	ML2MainMessenger=new CML2MainMessenger(this);
+	// instantiate the messenger for the general and convergence data
+	ML2MainMessenger = new CML2MainMessenger(this);
 }
 
 CML2CInputData::~CML2CInputData(void)

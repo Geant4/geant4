@@ -1,0 +1,27 @@
+#
+/run/numberOfThreads 2
+#
+/process/em/deexcitationIgnoreCut true
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger true
+/process/em/augerCascade true
+#
+#/svalue/det/setWorldMat G4_Galactic
+/svalue/det/setWorldMat G4_WATER
+/svalue/det/setCytoMat G4_WATER
+/svalue/det/setNuclMat G4_WATER
+#
+/svalue/det/setNuclRadius 50 nm
+/svalue/det/setCytoThickness 3 nm
+#
+/svalue/det/setTrackingCut 12 eV
+#
+/svalue/phys/addPhysics  dna_opt2	        
+#
+/run/initialize
+#
+/gun/particle e-
+#
+/run/beamOn 100
+

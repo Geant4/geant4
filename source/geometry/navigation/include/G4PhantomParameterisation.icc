@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PhantomParameterisation.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// class G4PhantomParameterisation Inline implementation
 //
 //--------------------------------------------------------------------
 inline
@@ -50,7 +49,7 @@ void G4PhantomParameterisation::SetNoVoxel( size_t nx, size_t ny, size_t nz )
   
 //--------------------------------------------------------------------
 inline
-void G4PhantomParameterisation::SetMaterials(std::vector<G4Material*>& mates )
+void G4PhantomParameterisation::SetMaterials( std::vector<G4Material*>& mates )
 {
   fMaterials = mates;
 }

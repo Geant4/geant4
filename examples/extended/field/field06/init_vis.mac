@@ -1,0 +1,13 @@
+# Macro file for the initialization phase of example field06
+# when running in interactive mode
+#
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Initialize G4 kernel
+/run/initialize
+#
+# Visualization setting
+/control/execute vis.mac

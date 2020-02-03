@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSetup.cc 68053 2013-03-13 14:39:51Z gcosmo $
 //
 // class G4GDMLWriteSetup Implementation
 //
@@ -47,8 +46,9 @@ G4GDMLWriteSetup::~G4GDMLWriteSetup()
 void G4GDMLWriteSetup::SetupWrite(xercesc::DOMElement* gdmlElement,
                                   const G4LogicalVolume* const logvol)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Writing setup..." << G4endl;
-
+#endif
    const G4String worldref = GenerateName(logvol->GetName(),logvol);
 
    xercesc::DOMElement* setupElement = NewElement("setup");

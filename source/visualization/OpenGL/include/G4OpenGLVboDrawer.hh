@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLVboDrawer.hh 74103 2014-06-23 07:52:38Z lgarnier $
 //
 //
 // G4OpenGLVboDrawer : Class to provide Wt and Qt specific
@@ -93,7 +92,7 @@
 // +        WT (OpenGL ES) case     +
 // +--------------------------------+
 
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
 
 class G4OpenGLImmediateWtViewer;
 
@@ -297,7 +296,7 @@ public:
   virtual ~G4OpenGLVboDrawer ();
 
 // WT specific
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   void vboGlClear(Wt::WFlags< GLenum > mask);
   void vboGlUniformMatrix4(const Wt::WGLWidget::UniformLocation &location, const Wt::WMatrix4x4 &mat);
   void vboGlUniformMatrix4(const Wt::WGLWidget::UniformLocation &location, const double* matrix);
@@ -338,8 +337,8 @@ public:
 #else
   void vboGlMultMatrixf( const GLfloat *m );
   void vboGlMultMatrixd( const GLdouble *m );
-#endif
-  
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
+
   void vboGlFlush();
   void vboGlOrtho(GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
   void vboGlFrustum(GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
@@ -373,7 +372,7 @@ private:
   std::string fOGLType;
   GLenum fMatrixMode;
   
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   G4OpenGLImmediateWtViewer* fVboViewer;
 #else
   G4OpenGLImmediateQtViewer* fVboViewer;

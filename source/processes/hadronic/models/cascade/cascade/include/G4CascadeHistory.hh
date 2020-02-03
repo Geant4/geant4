@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeHistory.hh 67796 2013-03-08 06:18:39Z mkelsey $
 //
 // G4CascadeHistory: Container to record all particles produced during
 // cascade, with daughters; printout is formatted hierarchically.

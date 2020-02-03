@@ -35,9 +35,7 @@
 #include "G4TouchableHistory.hh"
 
 CCalHcalOrganization::~CCalHcalOrganization() {
-  G4cout << "CCalHcalOrganization deleted" << G4endl;
 }
-
 
 unsigned int CCalHcalOrganization::GetUnitID(const G4Step* aStep) const {
 

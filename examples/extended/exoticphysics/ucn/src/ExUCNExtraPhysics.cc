@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExUCNExtraPhysics.cc 69762 2013-05-14 08:08:54Z gcosmo $
 //
 /// \file exoticphysics/ucn/src/ExUCNExtraPhysics.cc
 /// \brief Implementation of the ExUCNExtraPhysics class
@@ -87,8 +86,8 @@ void ExUCNExtraPhysics::ConstructProcess()
 
     ConstructUCN();
 
-//    G4Transportation::EnableUseMagneticMoment();
-
+    // G4Transportation::EnableMagneticMoment();
+    G4Transportation::EnableGravity();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

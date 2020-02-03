@@ -1,0 +1,58 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example OpNovice2 History file
+                    ------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 26, 2019 I. Hrivnacova (OpNovice2-V10-05-02)
+- Fixed formatting in .README.txt
+
+October 29, 2019 D.Sawkey (OpNovice2-V10-05-01)
+ - macros: give unique analysis filenames
+
+August 30, 2019 D.Sawkey (OpNovice2-V10-05-00)
+ - add surface roughness and polish commands
+ - record scintillation photon creation time
+ - updated macros
+
+October 26, 2018 D.Sawkey (OpNovice2-V10-04-07)
+ - SteppingAction.cc: fix Histo in multithreaded
+ - HistoManager.hh: add commented g4csv include
+
+September 20, 2018 D.Sawkey (OpNovice2-V10-04-06)
+- add scintillation and Cerenkov GetNumPhotons to SteppingAction
+
+August 16, 2018 D.Sawkey (OpNovice2-V10-04-05)
+- messenger command to allow different materials for tank, world
+- fix initialization of material property tables
+
+June 2, 2018 D.Sawkey (OpNovice2-V10-04-04)
+- fix GNUmakefile
+
+June 1, 2018 D.Sawkey (OpNovice2-V10-04-03)
+- add GNUMakeFile
+
+June 1, 2018 D.Sawkey (OpNovice2-V10-04-02)
+- remove unused variables to fix clang warnings
+
+May 30, 2018 D.Sawkey (OpNovice2-V10-04-01)
+- add #include<numeric> to Run.cc
+
+May 30, 2018 G.Cosmo (OpNovice2-V10-04-00)
+- Retagged.
+
+May 29, 2018 D.Sawkey (exOpTest-V10-04-01)
+- rename to OpNovice2
+
+May 24, 2018 D. Sawkey (exOpTest-V10-04-00)
+- Introducing this example
+

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VelocityTable.hh 69005 2013-04-15 09:26:47Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -46,11 +45,14 @@
 #include <iostream>
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 //////////////
 class G4VelocityTable
 ////////////// 
 {
+friend class G4ThreadLocalSingleton<G4VelocityTable>;
+
   // velocity table for massive particles used in CalculateVelocity 
  private:
   typedef std::vector<G4double> G4VTDataVector;

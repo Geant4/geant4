@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TwoBodyAngularDist.cc 71652 2013-06-19 17:20:45Z mkelsey $
 // Author:  Michael Kelsey (SLAC)
 // Date:    21 February 2013
 //

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.cc 80787 2014-05-12 09:06:07Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -38,7 +37,8 @@
 
 G4WrapperProcess::G4WrapperProcess(const G4String& aName,
                                          G4ProcessType   aType)
-  : G4VProcess(aName,aType), pRegProcess((G4VProcess*)(0))
+  : G4VProcess(aName,aType), 
+    pRegProcess(nullptr)
 {
 }
 
@@ -49,7 +49,7 @@ G4WrapperProcess::G4WrapperProcess(const G4WrapperProcess& right)
 
 G4WrapperProcess::~G4WrapperProcess()
 {
-  if (pRegProcess!=0) delete pRegProcess;
+  if (pRegProcess!=nullptr) delete pRegProcess;
 }
 
 void G4WrapperProcess::ResetNumberOfInteractionLengthLeft()

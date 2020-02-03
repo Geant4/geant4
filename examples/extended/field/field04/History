@@ -1,4 +1,3 @@
-// $Id:$
 // ------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +14,43 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 Oct 14, 2016 P.Gumplinger
 - remove direct use of aParticleIterator, use GetParticleTableIterator().
+=======
+November 19, 2019 G.Cosmo - fieldex04-V10-05-00
+- Removed useless double-definition of copy-ctr for F04StepMax and deleted.
+
+July 27, 2018 I.Hrivnacova - fieldex04-V10-04-02
+- Macro review and code clean-up:
+  - Modify handling program according to basic examples
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac and added 'startPhase' program argument
+  - Added test for commands defined in the example at the end 
+    of field04.in macro
+  - Removed SetCut functions and commands from the physics list and
+    physics list messenger (available in G4 kernel) 
+  - Fixed warnings when geometry parameters are set in PreInit phase
+  - Improved visualization of geometry
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
+
+May 15, 2018 J.Allison - fieldex04-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+
+May 09, 2018 B.Morgan - fieldex04-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Nov 02, 2016 L.Garnier (fieldex04-V10-02-03)
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+Oct 14, 2016 P.Gumplinger - (fieldex04-V10-02-02)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     fix required by clang39 on Linux and MAC
 
 May 19, 2016 G.Cosmo - (fieldex04-V10-01-02)

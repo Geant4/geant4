@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm13/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 92997 2015-09-28 08:04:21Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,7 +146,7 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,6 +188,7 @@ void DetectorConstruction::PrintParameters()
 {
   G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
          << " of " << fMaterial->GetName() << G4endl;
+  G4cout << "\n" << fMaterial << G4endl;	 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

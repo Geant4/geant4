@@ -1,0 +1,12 @@
+     =========================================================
+ 		      Geant4 - microprox example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+26/11/2019 - tag microprox-V10-05-01 - I. Hrivnacova
+- Fixed formatting in .README.txt and Doxygen warnings
+
+02/03/2019 - tag microprox-V10-05-00 - S.Incerti
+- created

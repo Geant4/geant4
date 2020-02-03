@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "eventgenerator/.README.txt"
 ///\brief Examples eventgenerator README page

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc 93113 2015-10-07 07:49:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +76,7 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
     theTransverseAsymmetryTable(nullptr)
 {
   emModel = new G4PolarizedAnnihilationModel();
-  SetEmModel(emModel, 1); 
+  SetEmModel(emModel); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,25 +127,34 @@ G4double G4eplusPolarizedAnnihilation::PostStepGetPhysicalInteractionLength(
                               G4double previousStepSize,
                               G4ForceCondition* condition)
 {
-  // save previous value
+  // save previous values
   G4double nLength = theNumberOfInteractionLengthLeft;
+  G4double iLength = currentInteractionLength;
 
-  // *** compute uppolarized step limit ***
+  // *** compute unpolarized step limit ***
+  // this changes theNumberOfInteractionLengthLeft and currentInteractionLength
   G4double x = G4VEmProcess::PostStepGetPhysicalInteractionLength(track, 
 								  previousStepSize, 
 								  condition);
-
+  G4double x0 = x;
+  G4double satFact = 1.0;
+ 
+  // *** add corrections on polarisation ***
   if(theAsymmetryTable && theTransverseAsymmetryTable && x < DBL_MAX) {
-    G4double curLength = currentInteractionLength*ComputeSaturationFactor(track);
+    satFact = ComputeSaturationFactor(track);
+    G4double curLength = currentInteractionLength*satFact;
+    G4double prvLength = iLength*satFact;
     if(nLength > 0.0) {
       theNumberOfInteractionLengthLeft = 
-	std::max(nLength - previousStepSize/curLength, 0.0);
+	std::max(nLength - previousStepSize/prvLength, 0.0);
     }
     x = theNumberOfInteractionLengthLeft * curLength;
   }
   if (verboseLevel>=2) {
-    G4cout << "G4eplusPolarizedAnnihilation::PostStepGetPhysicalInteractionLength:  " 
-	   << x/mm << " mm " << G4endl;
+    G4cout << "G4eplusPolarizedAnnihilation::PostStepGPIL: "
+           << std::setprecision(8) << x/mm  << " mm;" << G4endl
+           << "                         unpolarized value: "
+           << std::setprecision(8) << x0/mm << " mm." << G4endl;
   }
   return x;
 }

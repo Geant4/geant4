@@ -1,0 +1,559 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_gl2ps_action
+#define tools_sg_gl2ps_action
+
+#include "gl2ps_manager"
+#include "../gl2ps"
+
+#include "render_action"
+#include "primitive_visitor"
+#include "../colorfs"
+
+#include <cstdio> //FILE
+
+namespace tools {
+namespace sg {
+
+class gl2ps_action : public render_action {
+  typedef render_action parent;
+  
+  gl2ps_action& get_me() {return *this;}
+
+  static unsigned int _GL2PS_POINT()    {return 2;}
+  static unsigned int _GL2PS_LINE()     {return 3;}
+  static unsigned int _GL2PS_TRIANGLE() {return 5;}
+public:
+  virtual void draw_vertex_array(gl::mode_t a_mode,
+                                 size_t a_floatn,
+                                 const float* a_xyzs){
+    m_pv.add_primitive(a_mode,a_floatn,a_xyzs);
+  }
+
+  virtual void draw_vertex_array_xy(gl::mode_t a_mode,
+                                    size_t a_floatn,
+                                    const float* a_xys){
+    m_pv.add_primitive_xy(a_mode,a_floatn,a_xys);
+  }
+
+  virtual void draw_vertex_color_array(gl::mode_t a_mode,
+                                       size_t a_floatn,
+                                       const float* a_xyzs,
+                                       const float* a_rgbas){
+    m_pv.add_primitive(a_mode,a_floatn,a_xyzs,a_rgbas);
+  }
+
+  virtual void draw_vertex_normal_array(gl::mode_t a_mode,
+                                        size_t a_floatn,
+                                        const float* a_xyzs,
+                                        const float* /*a_nms*/){
+    m_pv.add_primitive(a_mode,a_floatn,a_xyzs);
+  }
+
+  virtual void draw_vertex_color_normal_array(gl::mode_t a_mode,
+                                              size_t a_floatn,
+                                              const float* a_xyzs,
+                                              const float* a_rgbas,
+                                              const float* /*a_nms*/){
+    // We expect a_nms of size : 3*(a_floatn/3)
+    // (then one normal per 3D point).
+    m_pv.add_primitive(a_mode,a_floatn,a_xyzs,a_rgbas);
+  }
+
+  virtual void clear_color(float a_r,float a_g,float a_b,float /*a_a*/){
+    //a_a ?
+    set_background(a_r,a_g,a_b);
+  }
+  virtual void color4f(float a_r,float a_g,float a_b,float a_a){
+    m_color.set_value(a_r,a_g,a_b,a_a);
+  }
+  virtual void line_width(float a_v){m_line_width = a_v;}
+  virtual void point_size(float a_v) {m_point_size = a_v;}
+  virtual void set_polygon_offset(bool a_v) {m_POLYGON_OFFSET_FILL = a_v;}
+  virtual void normal(float a_x,float a_y,float a_z) {
+    m_normal.set_value(a_x,a_y,a_z);
+  }
+
+  virtual void set_winding(winding_type a_v) {
+    m_ccw = (a_v==winding_ccw?true:false);
+  }
+
+  virtual void set_shade_model(shade_type a_v) {
+    if(a_v==shade_smooth) {}
+    else {}
+  }
+  
+  virtual void set_depth_test(bool a_on) {m_DEPTH_TEST = a_on;}
+
+  virtual void set_cull_face(bool a_on) {m_CULL_FACE = a_on;}
+  virtual void set_point_smooth(bool a_on) {m_POINT_SMOOTH = a_on;}
+  virtual void set_line_smooth(bool a_on) {m_LINE_SMOOTH = a_on;}
+
+  virtual void load_proj_matrix(const mat4f& a_mtx) {m_proj = a_mtx;}
+  virtual void load_model_matrix(const mat4f& a_mtx) {m_model = a_mtx;}
+
+  virtual unsigned int max_lights() {return 1000;}
+
+  virtual void enable_light(unsigned int,
+                            float a_dx,float a_dy,float a_dz,
+                            float a_r,float a_g,float a_b,float a_a){
+    m_light_color.set_value(a_r,a_g,a_b,a_a);
+    m_light_direction.set_value(a_dx,a_dy,a_dz);
+    m_light_on = true;
+  }
+
+  virtual void set_lighting(bool a_on) {m_light_on = a_on;}
+  virtual void set_blend(bool) {}
+
+  virtual void restore_state(unsigned int /*a_ret_num_light*/) {
+    const sg::state& _state = state();
+    m_proj = _state.m_proj;
+    m_model = _state.m_model;
+
+    m_color = _state.m_color;
+    m_ccw = (_state.m_winding==winding_ccw?true:false);
+    m_POLYGON_OFFSET_FILL = _state.m_GL_POLYGON_OFFSET_FILL;
+    m_CULL_FACE = _state.m_GL_CULL_FACE;
+    m_POINT_SMOOTH = _state.m_GL_POINT_SMOOTH;
+    m_LINE_SMOOTH = _state.m_GL_LINE_SMOOTH;
+    m_point_size = _state.m_point_size;
+    m_line_width = _state.m_line_width;
+    m_light_on = _state.m_GL_LIGHTING;
+    m_DEPTH_TEST = _state.m_GL_DEPTH_TEST;
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /// texture /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual void draw_vertex_array_texture(gl::mode_t,size_t a_xyzn,const float* a_xyzs,
+                                         gstoid a_id,const float* a_tcs) {
+    img_byte img;
+    if(!m_mgr.find(a_id,img)) return;    
+    m_pv.add_texture(m_out,a_xyzn,a_xyzs,img,a_tcs);
+  }
+
+  virtual void draw_vertex_normal_array_texture(gl::mode_t a_mode,
+                                         size_t a_xyzn,
+                                         const float* a_xyzs,
+                                         const float* /*a_nms*/,
+                                         gstoid a_id,
+                                         const float* a_tcs) {
+    draw_vertex_array_texture(a_mode,a_xyzn,a_xyzs,a_id,a_tcs);
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /// VBO /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual void begin_gsto(gstoid) {}
+  virtual void draw_gsto_v(gl::mode_t,size_t,bufpos){}
+  virtual void draw_gsto_vc(gl::mode_t,size_t,bufpos,bufpos) {}
+  virtual void draw_gsto_vn(gl::mode_t,size_t,bufpos,bufpos) {}
+  virtual void draw_gsto_vcn(gl::mode_t,size_t,bufpos,bufpos,bufpos) {}
+  virtual void end_gsto() {}
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual sg::render_manager& render_manager() {return m_mgr;}
+public:
+  gl2ps_action(gl2ps_manager& a_mgr,std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :parent(a_out,a_ww,a_wh)
+  ,m_mgr(a_mgr)
+  ,m_FILE(0)
+  ,m_pv(get_me())
+  ,m_light_color(colorf_white())
+  ,m_light_direction(vec3f(0,0,-1))
+
+  ,m_ccw(true)
+  ,m_POLYGON_OFFSET_FILL(false)
+  ,m_CULL_FACE(true)
+  ,m_POINT_SMOOTH(false)
+  ,m_LINE_SMOOTH(false)
+  ,m_point_size(1)
+  ,m_line_width(1)
+  ,m_light_on(false)
+  ,m_DEPTH_TEST(true)
+  {
+    m_back[0] = 1;
+    m_back[1] = 1;
+    m_back[2] = 1;
+
+    m_vp_mtx.set_identity();
+    m_vp_mtx.mul_translate(float(m_ww)/2,float(m_wh)/2,0);
+    m_vp_mtx.mul_scale(float(m_ww)/2,float(m_wh)/2,1);
+
+    //m_zb.change_size(a_ww,a_wh);
+//    m_zb.clear_color_buffer(0);
+//    m_zb.clear_depth_buffer();  
+  }
+  virtual ~gl2ps_action(){}
+protected:
+  gl2ps_action(const gl2ps_action& a_from)
+  :parent(a_from)
+  ,m_mgr(a_from.m_mgr)
+  ,m_FILE(0)
+
+  ,m_vp_mtx(a_from.m_vp_mtx)
+  ,m_pv(a_from.m_pv)
+  ,m_light_color(a_from.m_light_color)
+  ,m_light_direction(a_from.m_light_direction)
+  ,m_normal(a_from.m_normal)
+
+  ,m_proj(a_from.m_proj)
+  ,m_model(a_from.m_model)
+  ,m_color(a_from.m_color)
+  ,m_ccw(a_from.m_ccw)
+  ,m_POLYGON_OFFSET_FILL(a_from.m_POLYGON_OFFSET_FILL)
+  ,m_CULL_FACE(a_from.m_CULL_FACE)
+  ,m_POINT_SMOOTH(a_from.m_POINT_SMOOTH)
+  ,m_LINE_SMOOTH(a_from.m_LINE_SMOOTH)
+  ,m_point_size(a_from.m_point_size)
+  ,m_line_width(a_from.m_line_width)
+  ,m_light_on(a_from.m_light_on)
+  ,m_DEPTH_TEST(a_from.m_DEPTH_TEST)
+  {
+    m_back[0] = a_from.m_back[0];
+    m_back[1] = a_from.m_back[1];
+    m_back[2] = a_from.m_back[2];
+  }
+  gl2ps_action& operator=(const gl2ps_action& a_from){
+    parent::operator=(a_from);
+    if(&a_from==this) return *this;
+    close();
+    m_back[0] = a_from.m_back[0];
+    m_back[1] = a_from.m_back[1];
+    m_back[2] = a_from.m_back[2];
+
+    m_vp_mtx = a_from.m_vp_mtx;
+    m_pv = a_from.m_pv;
+    m_light_color = a_from.m_light_color;
+    m_light_direction = a_from.m_light_direction;
+    m_normal = a_from.m_normal;
+
+    m_proj = a_from.m_proj;
+    m_model = a_from.m_model;
+    m_color = a_from.m_color;
+    m_ccw = a_from.m_ccw;
+    m_POLYGON_OFFSET_FILL = a_from.m_POLYGON_OFFSET_FILL;
+    m_CULL_FACE = a_from.m_CULL_FACE;
+    m_POINT_SMOOTH = a_from.m_POINT_SMOOTH;
+    m_LINE_SMOOTH = a_from.m_LINE_SMOOTH;
+    m_point_size = a_from.m_point_size;
+    m_line_width = a_from.m_line_width;
+    m_light_on = a_from.m_light_on;
+    m_DEPTH_TEST = a_from.m_DEPTH_TEST;
+    return *this;
+  }
+public:
+  bool open(const std::string& a_name,int a_format = TOOLS_GL2PS_EPS) {
+    if(m_FILE) return false;
+    m_FILE = ::fopen(a_name.c_str(),"w");
+    if(!m_FILE) {
+      m_out << "tools::sg::gl2ps_action::open :"
+            << " can't open file " << a_name << "."
+            << std::endl;
+      return false;
+    }
+
+    int options = TOOLS_GL2PS_OCCLUSION_CULL 
+      | TOOLS_GL2PS_BEST_ROOT 
+      | TOOLS_GL2PS_SILENT
+      | TOOLS_GL2PS_DRAW_BACKGROUND;
+    //int sort = TOOLS_GL2PS_NO_SORT;
+    //int sort = TOOLS_GL2PS_SIMPLE_SORT;
+    int sort = TOOLS_GL2PS_BSP_SORT;
+          
+    tools_GLint vp[4];
+    vp[0] = 0;
+    vp[1] = 0;
+    vp[2] = m_ww;
+    vp[3] = m_wh;
+      
+    int bufsize = 0;
+    ::tools_gl2psBeginPage("","tools_sg_write_gl2ps", 
+                     vp,a_format,sort,options, 
+                     TOOLS_GL_RGBA,0, NULL,0,0,0,bufsize, 
+                     m_FILE,a_name.c_str());
+
+    ::tools_gl2psSetBackgroundColor(m_back[0],m_back[1],m_back[2]);
+
+    m_vp_mtx.set_identity();
+    m_vp_mtx.mul_translate(float(m_ww)/2,float(m_wh)/2,0);
+    m_vp_mtx.mul_scale(float(m_ww)/2,float(m_wh)/2,1);
+
+    return true;
+  }
+
+  bool close() {
+    if(!m_FILE) return false;
+    ::tools_gl2psEndPage();
+    ::fclose(m_FILE);
+    m_FILE = 0;
+    return true;
+  }
+  void set_background(float a_r,float a_g,float a_b) {
+    m_back[0] = a_r;
+    m_back[1] = a_g;
+    m_back[2] = a_b;
+  }
+protected:
+  bool project_point(float& a_x,float& a_y,float& a_z,float& a_w) {
+    a_w = 1;
+    m_model.mul_4f(a_x,a_y,a_z,a_w);
+    m_proj.mul_4f(a_x,a_y,a_z,a_w);
+    if(a_w==0) return false;
+    a_x /= a_w;
+    a_y /= a_w;
+    a_z /= a_w;
+    return true;
+  }
+
+  static void set_vtx(tools_GL2PSvertex* a_vs,unsigned int a_index,
+                      float a_x,float a_y,float a_z,
+                      float a_r,float a_g,float a_b,float a_a){
+    a_vs[a_index].xyz[0] = a_x;
+    a_vs[a_index].xyz[1] = a_y;
+    a_vs[a_index].xyz[2] = a_z;
+    a_vs[a_index].rgba[0] = a_r;
+    a_vs[a_index].rgba[1] = a_g;
+    a_vs[a_index].rgba[2] = a_b;
+    a_vs[a_index].rgba[3] = a_a;
+  }
+
+  class primvis : public primitive_visitor {
+  protected:
+    virtual bool project(float& a_x,float& a_y,float& a_z,float& a_w) {
+      return m_this.project_point(a_x,a_y,a_z,a_w);
+    }
+    virtual bool add_point(float a_x,float a_y,float a_z,float) {
+      float r = m_this.m_color[0];
+      float g = m_this.m_color[1];
+      float b = m_this.m_color[2];
+      float a = m_this.m_color[3];
+
+      tools_GLint offset = 0;
+      tools_GLfloat ofactor = 0; //
+      tools_GLfloat ounits = 0;  //
+      tools_GLushort pattern = 0;
+      tools_GLint factor = 0;
+      tools_GLfloat sz = m_this.m_point_size;
+      tools_GLint linecap = 0;  //
+      tools_GLint linejoin = 0; //
+      char boundary = 0;  //
+
+      tools_GL2PSvertex vertices[1];
+
+      m_this.m_vp_mtx.mul_3f(a_x,a_y,a_z);
+
+      m_this.set_vtx(vertices,0, a_x,a_y,a_z, r,g,b,a);
+
+      ::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
+      return true;
+    }
+  
+    virtual bool add_point(float a_x,float a_y,float a_z,float,
+                           float a_r,float a_g,float a_b,float a_a) {
+      tools_GLint offset = 0;
+      tools_GLfloat ofactor = 0; //
+      tools_GLfloat ounits = 0;  //
+      tools_GLushort pattern = 0;
+      tools_GLint factor = 0;
+      tools_GLfloat sz = m_this.m_point_size;
+      tools_GLint linecap = 0;  //
+      tools_GLint linejoin = 0; //
+      char boundary = 0;  //
+
+      tools_GL2PSvertex vertices[1];
+
+      m_this.m_vp_mtx.mul_3f(a_x,a_y,a_z);
+
+      m_this.set_vtx(vertices,0, a_x,a_y,a_z, a_r,a_g,a_b,a_a);
+
+      //::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,0,pattern,factor,sz,0);
+      ::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
+      return true;
+    }
+  
+    virtual bool add_line(float a_bx,float a_by,float a_bz,float,
+                          float a_ex,float a_ey,float a_ez,float) {
+      float r = m_this.m_color[0];
+      float g = m_this.m_color[1];
+      float b = m_this.m_color[2];
+      float a = m_this.m_color[3];
+
+      tools_GLint offset = 0;
+      tools_GLfloat ofactor = 0; //
+      tools_GLfloat ounits = 0;  //
+      tools_GLushort pattern = 0;
+      tools_GLint factor = 0;
+      tools_GLfloat lwidth = m_this.m_line_width;
+      tools_GLint linecap = 0;  //
+      tools_GLint linejoin = 0; //
+      char boundary = 0;  //
+      
+      tools_GL2PSvertex vertices[2];
+
+      m_this.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
+      m_this.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
+
+      m_this.set_vtx(vertices,0, a_bx,a_by,a_bz, r,g,b,a);
+      m_this.set_vtx(vertices,1, a_ex,a_ey,a_ez, r,g,b,a);
+
+      //::tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+
+      return true;
+    }
+  
+    virtual bool add_line(float a_bx,float a_by,float a_bz,float,
+                          float a_br,float a_bg,float a_bb,float a_ba,
+                          float a_ex,float a_ey,float a_ez,float,
+                          float a_er,float a_eg,float a_eb,float a_ea){
+
+      tools_GLint offset = 0;
+      tools_GLfloat ofactor = 0; //
+      tools_GLfloat ounits = 0;  //
+      tools_GLushort pattern = 0;
+      tools_GLint factor = 0;
+      tools_GLfloat lwidth = m_this.m_line_width;
+      tools_GLint linecap = 0;  //
+      tools_GLint linejoin = 0; //
+      char boundary = 0;  //
+
+      tools_GL2PSvertex vertices[2];
+
+      m_this.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
+      m_this.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
+
+      m_this.set_vtx(vertices,0, a_bx,a_by,a_bz, a_br,a_bg,a_bb,a_ba);
+      m_this.set_vtx(vertices,1, a_ex,a_ey,a_ez, a_er,a_eg,a_eb,a_ea);
+
+      //tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(_GL2PS_LINE(),2,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+
+      return true;
+    }
+  
+    virtual bool add_triangle(float a_p1x,float a_p1y,float a_p1z,float,
+                              float a_p2x,float a_p2y,float a_p2z,float,
+                              float a_p3x,float a_p3y,float a_p3z,float){
+      float r = m_this.m_color[0];
+      float g = m_this.m_color[1];
+      float b = m_this.m_color[2];
+      float a = m_this.m_color[3];
+
+      tools_GLint offset = 0;
+      tools_GLfloat ofactor = 0; //
+      tools_GLfloat ounits = 0;  //
+      tools_GLushort pattern = 0;
+      tools_GLint factor = 0;
+      tools_GLfloat lwidth = m_this.m_line_width;
+      tools_GLint linecap = 0;  //
+      tools_GLint linejoin = 0; //
+      char boundary = 0;  //
+
+      tools_GL2PSvertex vertices[3];
+
+      m_this.m_vp_mtx.mul_3f(a_p1x,a_p1y,a_p1z);
+      m_this.m_vp_mtx.mul_3f(a_p2x,a_p2y,a_p2z);
+      m_this.m_vp_mtx.mul_3f(a_p3x,a_p3y,a_p3z);
+
+      m_this.set_vtx(vertices,0, a_p1x,a_p1y,a_p1z, r,g,b,a);
+      m_this.set_vtx(vertices,1, a_p2x,a_p2y,a_p2z, r,g,b,a);
+      m_this.set_vtx(vertices,2, a_p3x,a_p3y,a_p3z, r,g,b,a);
+    
+      //tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+      
+      return true;
+    }
+
+    virtual bool add_triangle(
+      float a_p1x,float a_p1y,float a_p1z,float,
+        float a_r1,float a_g1,float a_b1,float a_a1,
+      float a_p2x,float a_p2y,float a_p2z,float,
+        float a_r2,float a_g2,float a_b2,float a_a2,
+      float a_p3x,float a_p3y,float a_p3z,float,
+        float a_r3,float a_g3,float a_b3,float a_a3){
+
+      tools_GLint offset = 0;
+      tools_GLfloat ofactor = 0; //
+      tools_GLfloat ounits = 0;  //
+      tools_GLushort pattern = 0;
+      tools_GLint factor = 0;
+      tools_GLfloat lwidth = m_this.m_line_width;
+      tools_GLint linecap = 0;  //
+      tools_GLint linejoin = 0; //
+      char boundary = 0;  //
+
+      tools_GL2PSvertex vertices[3];
+
+      m_this.m_vp_mtx.mul_3f(a_p1x,a_p1y,a_p1z);
+      m_this.m_vp_mtx.mul_3f(a_p2x,a_p2y,a_p2z);
+      m_this.m_vp_mtx.mul_3f(a_p3x,a_p3y,a_p3z);
+
+      m_this.set_vtx(vertices,0, a_p1x,a_p1y,a_p1z, a_r1,a_g1,a_b1,a_a1);
+      m_this.set_vtx(vertices,1, a_p2x,a_p2y,a_p2z, a_r2,a_g2,a_b2,a_a2);
+      m_this.set_vtx(vertices,2, a_p3x,a_p3y,a_p3z, a_r3,a_g3,a_b3,a_a3);
+    
+      //tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
+      ::tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
+      
+      return true;
+    }
+
+  public:
+    primvis(gl2ps_action& a_this):m_this(a_this){}
+    virtual ~primvis(){}
+  public:
+    primvis(const primvis& a_from)
+    :primitive_visitor(a_from)
+    ,m_this(a_from.m_this)
+    {}
+    primvis& operator=(const primvis& a_from){
+      primitive_visitor::operator=(a_from);
+      return *this;
+    }
+  protected:
+    gl2ps_action& m_this;
+  };
+
+protected:
+  gl2ps_manager& m_mgr;
+  FILE* m_FILE;
+  float m_back[3];
+  mat4f m_vp_mtx;
+  primvis m_pv;
+
+  colorf m_light_color;
+  vec3f m_light_direction;
+  vec3f m_normal;
+
+  // to be restored in restore_state() :
+  mat4f m_proj;
+  mat4f m_model;
+  colorf m_color;  
+  bool m_ccw;
+  bool m_POLYGON_OFFSET_FILL;	
+  bool m_CULL_FACE;
+  bool m_POINT_SMOOTH;
+  bool m_LINE_SMOOTH;
+  float m_point_size;  
+  float m_line_width;
+  bool m_light_on;
+  bool m_DEPTH_TEST;
+};
+
+inline bool s2format(const std::string& a_format,int& a_gl2ps_format) {
+  if(a_format=="gl2ps_eps") {a_gl2ps_format = TOOLS_GL2PS_EPS;return true;}
+  if(a_format=="gl2ps_ps")  {a_gl2ps_format = TOOLS_GL2PS_PS;return true;}
+  if(a_format=="gl2ps_pdf") {a_gl2ps_format = TOOLS_GL2PS_PDF;return true;}
+  if(a_format=="gl2ps_svg") {a_gl2ps_format = TOOLS_GL2PS_SVG;return true;}
+  if(a_format=="gl2ps_tex") {a_gl2ps_format = TOOLS_GL2PS_TEX;return true;}
+  if(a_format=="gl2ps_pgf") {a_gl2ps_format = TOOLS_GL2PS_PGF;return true;}
+  return false;
+}
+
+}}
+
+#endif

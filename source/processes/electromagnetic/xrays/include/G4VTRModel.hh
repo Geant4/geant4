@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTRModel.hh 68037 2013-03-13 14:15:08Z gcosmo $
 //
 // G4VTRModel  -- header file
 //
@@ -38,24 +37,24 @@
 #ifndef G4VTRModel_h
 #define G4VTRModel_h
 
+#include <vector>
 
 #include "globals.hh"
-#include <vector>
+#include "G4ThreeVector.hh"
 
 class G4Material;
 class G4Track;
 class G4VParticleChange;
 
-
 class G4VTRModel
 {
 public:
 
-// Constructors
+  // Constructors
 
-  G4VTRModel( const G4String& modelName) {fName = modelName;};
+  explicit G4VTRModel( const G4String& modelName) {fName = modelName;};
 
-// Destructor
+  // Destructor
 
   virtual ~G4VTRModel() {};
 
@@ -70,19 +69,14 @@ public:
 
   virtual void PrintInfo() { return; };
 
-// private :
+  // disable assignment operator & copy constructor
 
-  // hide assignment operator
-
-  G4VTRModel & operator=(const G4VTRModel &right);
-  G4VTRModel(const G4VTRModel&);
+  G4VTRModel & operator=(const G4VTRModel &right) = delete;
+  G4VTRModel(const G4VTRModel&) = delete;
 
 protected:
 
-
   G4String  fName;
- 
-
 };
 
 #endif   // G4VTRModel_h

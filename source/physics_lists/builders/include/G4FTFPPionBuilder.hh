@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -52,7 +51,6 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
 
-#include "G4VCrossSectionDataSet.hh"
 
 class G4FTFPPionBuilder : public G4VPionBuilder
 {
@@ -75,11 +73,9 @@ class G4FTFPPionBuilder : public G4VPionBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4LundStringFragmentation * theLund;
-
-    G4VCrossSectionDataSet* thePiData;
     G4double theMin;
     G4double theMax;
-
 };
 
 #endif
+

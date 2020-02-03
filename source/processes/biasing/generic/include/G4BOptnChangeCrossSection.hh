@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: $
 //
 //---------------------------------------------------------------
 //
@@ -75,7 +74,7 @@ public:
   // -- return concrete type of interaction law:
   G4InteractionLawPhysical* GetBiasedExponentialLaw() {return fBiasedExponentialLaw;}
   // -- set biased cross-section:
-  void     SetBiasedCrossSection(G4double xst);
+  void     SetBiasedCrossSection(G4double xst, bool updateInteractionLength = false);
   G4double GetBiasedCrossSection() const;
   // -- Sample underneath distribution:
   void Sample();

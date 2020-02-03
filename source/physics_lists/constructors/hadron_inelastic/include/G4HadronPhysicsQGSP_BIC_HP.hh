@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BIC_HP.hh 93878 2015-11-03 08:18:00Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -79,9 +78,8 @@ class G4HadronPhysicsQGSP_BIC_HP : public G4VPhysicsConstructor
     G4HadronPhysicsQGSP_BIC_HP(const G4String& name, G4bool quasiElastic=true);
     virtual ~G4HadronPhysicsQGSP_BIC_HP();
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
   private:
     void CreateModels();
@@ -107,13 +105,8 @@ class G4HadronPhysicsQGSP_BIC_HP : public G4VPhysicsConstructor
 
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;
-
-    // G4bool QuasiElastic;
 };
 
 #endif

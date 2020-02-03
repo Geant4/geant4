@@ -23,15 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4GeometryManager implementation
 //
-// $Id: G4GeometryManager.cc 67975 2013-03-13 10:19:44Z gcosmo $
-//
-// class G4GeometryManager
-//
-// Implementation
-//
-// Author:
-// 26.07.95 P.Kent Initial version, including optimisation Build
+// 26.07.95, P.Kent - Initial version, including optimisation build
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -57,18 +51,28 @@
 #include "G4VSolid.hh"
 
 // ***************************************************************************
-// Static class variable: ptr to single instance of class
+// Static class data
 // ***************************************************************************
 //
-G4ThreadLocal G4GeometryManager* G4GeometryManager::fgInstance = 0;
+G4ThreadLocal G4GeometryManager* G4GeometryManager::fgInstance = nullptr;
+G4ThreadLocal G4bool G4GeometryManager::fIsClosed = false;
 
 // ***************************************************************************
 // Constructor. Set the geometry to be open
 // ***************************************************************************
 //
 G4GeometryManager::G4GeometryManager() 
-  : fIsClosed(false)
 {
+}
+
+// ***************************************************************************
+// Destructor
+// ***************************************************************************
+//
+G4GeometryManager::~G4GeometryManager()
+{
+  fgInstance = nullptr;
+  fIsClosed = false;
 }
 
 // ***************************************************************************
@@ -81,9 +85,9 @@ G4GeometryManager::G4GeometryManager()
 G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose,
                                         G4VPhysicalVolume* pVolume)
 {
-   if (!fIsClosed)
+  if (!fIsClosed)
   {
-    if (pVolume)
+    if (pVolume != nullptr)
     {
       BuildOptimisations(pOptimise, pVolume);
     }
@@ -91,7 +95,7 @@ G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose,
     {
       BuildOptimisations(pOptimise, verbose);
     }
-    fIsClosed=true;
+    fIsClosed = true;
   }
   return true;
 }
@@ -106,7 +110,7 @@ void G4GeometryManager::OpenGeometry(G4VPhysicalVolume* pVolume)
 {
   if (fIsClosed)
   {
-    if (pVolume)
+    if (pVolume != nullptr)
     {
       DeleteOptimisations(pVolume);
     }
@@ -114,7 +118,7 @@ void G4GeometryManager::OpenGeometry(G4VPhysicalVolume* pVolume)
     {
       DeleteOptimisations();
     }
-    fIsClosed=false;
+    fIsClosed = false;
   }
 }
 
@@ -134,11 +138,20 @@ G4bool G4GeometryManager::IsGeometryClosed()
 //
 G4GeometryManager* G4GeometryManager::GetInstance()
 {
-  if (!fgInstance)
+  if (fgInstance == nullptr)
   {
     fgInstance = new G4GeometryManager;
   }
-  return fgInstance;    
+  return fgInstance;
+}
+
+// ***************************************************************************
+// Returns the instance of the singleton.
+// ***************************************************************************
+//
+G4GeometryManager* G4GeometryManager::GetInstanceIfExist()
+{
+  return fgInstance;
 }
 
 // ***************************************************************************
@@ -157,7 +170,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
    G4LogicalVolume* volume;
    G4SmartVoxelHeader* head;
  
-   for (size_t n=0; n<Store->size(); n++)
+   for (size_t n=0; n<Store->size(); ++n)
    {
      if (verbose) timer.Start();
      volume=(*Store)[n];
@@ -179,7 +192,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
               << volume->GetName() << G4endl;
 #endif
        head = new G4SmartVoxelHeader(volume);
-       if (head)
+       if (head != nullptr)
        {
          volume->SetVoxelHeader(head);
        }
@@ -225,24 +238,24 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
 void G4GeometryManager::BuildOptimisations(G4bool allOpts,
                                            G4VPhysicalVolume* pVolume)
 {
-   if (!pVolume) { return; }
+   if (pVolume == nullptr) { return; }
 
    // Retrieve the mother logical volume, if not NULL,
    // otherwise apply global optimisation for the world volume
    //
    G4LogicalVolume* tVolume = pVolume->GetMotherLogical();
-   if (!tVolume) { return BuildOptimisations(allOpts, false); }
+   if (tVolume == nullptr) { return BuildOptimisations(allOpts, false); }
 
    G4SmartVoxelHeader* head = tVolume->GetVoxelHeader();
    delete head;
-   tVolume->SetVoxelHeader(0);
+   tVolume->SetVoxelHeader(nullptr);
    if (    ( (tVolume->IsToOptimise())
           && (tVolume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) )
         || ( (tVolume->GetNoDaughters()==1)
           && (tVolume->GetDaughter(0)->IsReplicated()==true) ) ) 
    {
      head = new G4SmartVoxelHeader(tVolume);
-     if (head)
+     if (head != nullptr)
      {
        tVolume->SetVoxelHeader(head);
      }
@@ -282,13 +295,13 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
 //
 void G4GeometryManager::DeleteOptimisations()
 {
-  G4LogicalVolume* tVolume = 0;
+  G4LogicalVolume* tVolume = nullptr;
   G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
-  for (size_t n=0; n<Store->size(); n++)
+  for (size_t n=0; n<Store->size(); ++n)
   {
     tVolume=(*Store)[n];
     delete tVolume->GetVoxelHeader();
-    tVolume->SetVoxelHeader(0);
+    tVolume->SetVoxelHeader(nullptr);
   }
 }
 
@@ -305,9 +318,9 @@ void G4GeometryManager::DeleteOptimisations(G4VPhysicalVolume* pVolume)
   // otherwise global deletion to world volume.
   //
   G4LogicalVolume* tVolume = pVolume->GetMotherLogical();
-  if (!tVolume) { return DeleteOptimisations(); }
+  if (tVolume == nullptr) { return DeleteOptimisations(); }
   delete tVolume->GetVoxelHeader();
-  tVolume->SetVoxelHeader(0);
+  tVolume->SetVoxelHeader(nullptr);
 
   // Scan recursively the associated logical volume tree
   //
@@ -354,7 +367,7 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   G4int i, nStat = stats.size();
   G4long totalMemory = 0;
  
-  for( i=0;i<nStat;++i )  { totalMemory += stats[i].GetMemoryUse(); }
+  for( i=0; i<nStat; ++i )  { totalMemory += stats[i].GetMemoryUse(); }
  
   G4cout << "    Total memory consumed for geometry optimisation:   "
          << totalMemory/1024 << " kByte" << G4endl;
@@ -365,7 +378,11 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   //
   // First list: sort by total CPU time
   //
-  std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByCpu() );
+  std::sort( stats.begin(), stats.end(),
+    [](const G4SmartVoxelStat& a, const G4SmartVoxelStat& b)
+  {
+    return a.GetTotalTime() > b.GetTotalTime();
+  } );
          
   G4int nPrint = nStat > 10 ? 10 : nStat;
 
@@ -378,7 +395,7 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
     //         12345678901.234567890123.234567890123.234567890123k .
   }
 
-  for(i=0;i<nPrint;++i)
+  for(i=0; i<nPrint; ++i)
   {
     G4double total = stats[i].GetTotalTime();
     G4double system = stats[i].GetSysTime();
@@ -406,7 +423,11 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   //
   // Second list: sort by memory use
   //
-  std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByMemory() );
+  std::sort( stats.begin(), stats.end(),
+    [](const G4SmartVoxelStat& a, const G4SmartVoxelStat& b)
+  {
+    return a.GetMemoryUse() > b.GetMemoryUse();
+  } );
  
   if (nPrint)
   {
@@ -417,7 +438,7 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
     //         12345678901.2345678901k .23456789.23456789.2345678901.234567890123.   .
   }
 
-  for(i=0;i<nPrint;++i)
+  for(i=0; i<nPrint; ++i)
   {
     G4long memory = stats[i].GetMemoryUse();
     G4double totTime = stats[i].GetTotalTime();

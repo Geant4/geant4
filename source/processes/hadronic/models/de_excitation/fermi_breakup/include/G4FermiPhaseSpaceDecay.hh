@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh,v 1.13 2010-11-17 16:20:31 vnivanch Exp $
 //
 // Hadronic Process: Phase space decay for the Fermi BreakUp model
 // by V. Lara
@@ -42,11 +41,10 @@
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
-#include "G4Pow.hh"
 
 #include <vector>
-#include <CLHEP/Units/PhysicalConstants.h>
-#include <CLHEP/Random/RandomEngine.h>
+
+class G4Pow;
 
 class G4FermiPhaseSpaceDecay
 {
@@ -55,80 +53,32 @@ public:
   G4FermiPhaseSpaceDecay();
   ~G4FermiPhaseSpaceDecay();
   
-  inline std::vector<G4LorentzVector*>* 
-  Decay(G4double parent_mass, 
+  std::vector<G4LorentzVector*>* Decay(G4double parent_mass, 
 	const std::vector<G4double>& fragment_masses) const;
 
 private:
 
   inline G4double PtwoBody(G4double E, G4double P1, G4double P2) const;
   
-  inline G4ThreeVector IsotropicVector(G4double Magnitude, 
-				       CLHEP::HepRandomEngine*) const;
-
-  inline G4double BetaKopylov(G4int, CLHEP::HepRandomEngine*) const; 
+  G4double BetaKopylov(G4int, CLHEP::HepRandomEngine*) const; 
 
   std::vector<G4LorentzVector*> * 
   KopylovNBodyDecay(G4double, const std::vector<G4double>&) const;
 
-  void DumpProblem(G4double E, G4double P1, G4double P2, G4double P) const;
+  G4FermiPhaseSpaceDecay(const G4FermiPhaseSpaceDecay&) = delete;
+  const G4FermiPhaseSpaceDecay & operator=
+  (const G4FermiPhaseSpaceDecay &) = delete; 
+  G4bool operator==(const G4FermiPhaseSpaceDecay&) = delete;
+  G4bool operator!=(const G4FermiPhaseSpaceDecay&) = delete;
 
-  G4FermiPhaseSpaceDecay(const G4FermiPhaseSpaceDecay&);
-  const G4FermiPhaseSpaceDecay & operator=(const G4FermiPhaseSpaceDecay &); 
-  G4bool operator==(const G4FermiPhaseSpaceDecay&);
-  G4bool operator!=(const G4FermiPhaseSpaceDecay&);
-
-  G4Pow* g4pow;
+  G4Pow* g4calc;
 };
 
 inline G4double 
 G4FermiPhaseSpaceDecay::PtwoBody(G4double E, G4double P1, G4double P2) const
 {
-  G4double res = 0.0;
   G4double P = (E+P1+P2)*(E+P1-P2)*(E-P1+P2)*(E-P1-P2)/(4.0*E*E);
-  if (P>0.0) { res = std::sqrt(P); }
-  else { DumpProblem(E,P1,P2,P); }
-  return res;
-}
-
-inline std::vector<G4LorentzVector*>* 
-G4FermiPhaseSpaceDecay::Decay(G4double parent_mass, 
-                              const std::vector<G4double>& fragment_masses) const
-{
-  return KopylovNBodyDecay(parent_mass, fragment_masses);
-}
-
-inline G4double 
-G4FermiPhaseSpaceDecay::BetaKopylov(G4int K, 
-                                    CLHEP::HepRandomEngine* rndmEngine) const
-{
-  G4int N = 3*K - 5;
-  G4double xN = G4double(N);
-  G4double F;
-  // VI variant
-  G4double Fmax = std::sqrt(g4pow->powN(xN/(xN + 1),N)/(xN + 1)); 
-  G4double chi;
-  do {
-    chi = rndmEngine->flat();
-    F = std::sqrt(g4pow->powN(chi,N)*(1-chi));      
-    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-   } while ( Fmax*rndmEngine->flat() > F);  
-  return chi;
-}
-
-inline G4ThreeVector 
-G4FermiPhaseSpaceDecay::IsotropicVector(G4double Magnitude, 
-					CLHEP::HepRandomEngine* rndmEngine) const
-  // Samples a isotropic random vectorwith a magnitud given by Magnitude.
-  // By default Magnitude = 1.0
-{
-  G4double CosTheta = 2.0*rndmEngine->flat() - 1.0;
-  G4double SinTheta = std::sqrt((1. - CosTheta)*(1. + CosTheta));
-  G4double Phi = CLHEP::twopi*rndmEngine->flat();
-  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-		       Magnitude*std::sin(Phi)*SinTheta,
-		       Magnitude*CosTheta);
-  return Vector;
+  return (P>0.0) ? std::sqrt(P) : 0.0; 
 }
 
 #endif

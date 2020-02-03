@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSHitsModel.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura
@@ -37,19 +36,22 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Event.hh"
 #include "G4ScoringManager.hh"
+#include "G4VScoringMesh.hh"
 
 G4PSHitsModel::~G4PSHitsModel () {}
 
 G4PSHitsModel::G4PSHitsModel (const G4String& requestedMapName):
-  fRequestedMapName(requestedMapName), fpCurrentHits(0)
+  fRequestedMapName(requestedMapName)
 {
   fType = "G4PSHitsModel";
-  fGlobalTag = "G4PSHitsModel for G4THitsMap<G4double> hits.";
+  fGlobalTag = "G4PSHitsModel for G4THitsMap<G4StatDouble> hits.";
   fGlobalDescription = fGlobalTag;
 }
 
 void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
+  using RunScore = G4VScoringMesh::RunScore;
   G4ScoringManager* scoringManager =
     G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
@@ -62,7 +64,7 @@ void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 	    i != scoreMap.end(); ++i) {
 	  const G4String& name = i->first;
 	  if (fRequestedMapName == "all" || name == fRequestedMapName) {
-	    fpCurrentHits = i->second;
+	    RunScore* fpCurrentHits = i->second;
 	    //G4cout << name << ": " << fpCurrentHits << G4endl;
 	    if (fpCurrentHits) sceneHandler.AddCompound(*fpCurrentHits);
 	  }

@@ -31,7 +31,6 @@
 //
 // Authors: Henri Payno and Yann Perrot
 //
-// $Id$
 //
 /// \file ClusteringAlgo.cc
 /// \brief Implementation of the ClustreringAlgo class

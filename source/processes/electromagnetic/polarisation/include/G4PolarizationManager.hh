@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationManager.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class header file
 //
@@ -52,7 +51,6 @@
 #include <map>
 
 class G4LogicalVolume;
-class G4PolarizationManager;
 class G4PolarizationMessenger;
 
 typedef std::map<G4LogicalVolume*,G4ThreeVector> PolarizationMap;

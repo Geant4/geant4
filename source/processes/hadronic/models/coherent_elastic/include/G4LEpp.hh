@@ -36,16 +36,6 @@
 #define G4LEpp_h 1
  
 #include "globals.hh"
-#include "Randomize.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4ElementTable.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
-#include "G4Gamma.hh"
-#include "G4Step.hh"
-#include "G4TrackStatus.hh"
 #include "G4HadronElastic.hh"
 
 class G4LEpp : public G4HadronElastic
@@ -56,15 +46,15 @@ private:
 
 public:
 
-  G4LEpp();
+  explicit G4LEpp();
 
-  virtual ~G4LEpp();
+  ~G4LEpp() override;
  
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-  				 G4Nucleus& targetNucleus);
+  				 G4Nucleus& targetNucleus) override;
 
   G4double SampleInvariantT(const G4ParticleDefinition* p, 
-			    G4double plab, G4int Z, G4int A);
+			    G4double plab, G4int Z, G4int A) override;
   
 private:
 

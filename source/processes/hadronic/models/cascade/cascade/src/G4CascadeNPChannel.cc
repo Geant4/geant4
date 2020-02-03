@@ -23,14 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeNPChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
-// GEANT4 tag: $Name: not supported by cvs2svn $
 //
-// 20100804  M. Kelsey -- Add name string to ctor
-// 20110719  M. Kelsey -- Add initial state code to ctor
-// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
-// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
-// 20120907  M. Kelsey -- Subclass and overload findCrossSection() function.
 
 #include "G4CascadeNPChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -42,630 +35,2035 @@ namespace {
   {{pro,neu}};
 
   static const G4int np3bfs[9][3] =
-  {{pro,pro,pim}, {pro,neu,pi0}, {neu,neu,pip}, {pro,lam,k0},
-   {pro,s0,k0},   {pro,sm,kpl},  {neu,lam,kpl}, {neu,s0,kpl},
-   {neu,sp,k0}};
+  {{pro,pro,pim}, {pro,neu,pi0}, {neu,neu,pip}, {pro,k0,lam},
+   {neu,kpl,lam}, {pro,k0,s0},   {neu,kpl,s0},  {neu,k0,sp},
+   {pro,kpl,sm}};
 
   static const G4int np4bfs[22][4] =
   {{pro,neu,pip,pim}, {pro,pro,pim,pi0}, {pro,neu,pi0,pi0},
-   {neu,neu,pip,pi0}, {pro,lam,kpl,pim}, {pro,s0,kpl,pim},
-   {pro,lam,k0,pi0},  {pro,s0,k0,pi0},   {pro,sp,k0,pim},
-   {pro,sm,kpl,pi0},  {pro,sm,k0,pip},   {neu,lam,kpl,pi0},
-   {neu,lam,k0,pip},  {neu,sp,kpl,pim},  {neu,sp,k0,pi0},
-   {neu,s0,kpl,pi0},  {neu,s0,k0,pip},   {neu,sm,kpl,pip},
-   {pro,neu,kpl,kmi}, {pro,neu,k0,k0b},  {pro,pro,k0,kmi},
+   {neu,neu,pip,pi0}, {pro,pim,kpl,lam}, {pro,pi0,k0,lam}, 
+   {neu,pi0,kpl,lam}, {neu,pip,k0,lam},  {pro,pim,kpl,s0},
+   {pro,pi0,k0,s0},   {neu,pi0,kpl,s0},  {neu,pip,k0,s0},
+   {pro,pim,k0,sp},   {neu,pim,kpl,sp},  {neu,pi0,k0,sp},
+   {pro,pi0,kpl,sm},  {pro,pip,k0,sm},   {neu,pip,kpl,sm},
+   {pro,neu,kpl,kmi}, {pro,neu,k0,k0b},  {pro,pro,kmi,k0},
    {neu,neu,kpl,k0b}};
 
   static const G4int np5bfs[38][5] =
   {{pro,neu,pip,pim,pi0}, {pro,neu,pi0,pi0,pi0}, {pro,pro,pip,pim,pim},
    {pro,pro,pim,pi0,pi0}, {neu,neu,pip,pip,pim}, {neu,neu,pip,pi0,pi0},
-   {pro,lam,kpl,pim,pi0}, {pro,lam,k0,pip,pim},  {pro,lam,k0,pi0,pi0},
-   {pro,s0,k0,pip,pim},   {pro,s0,k0,pi0,pi0},   {pro,s0,kpl,pim,pi0},
-   {pro,sp,kpl,pim,pim},  {pro,sp,k0,pim,pi0},   {pro,sm,k0,pip,pi0},
-   {pro,sm,kpl,pip,pim},  {pro,sm,kpl,pi0,pi0},  {neu,lam,kpl,pip,pim},
-   {neu,lam,kpl,pi0,pi0}, {neu,lam,k0,pip,pi0},  {neu,s0,kpl,pip,pim},
-   {neu,s0,kpl,pi0,pi0},  {neu,s0,k0,pip,pi0},   {neu,sp,k0,pip,pim},
-   {neu,sp,k0,pi0,pi0},   {neu,sp,kpl,pim,pi0},  {neu,sm,kpl,pip,pi0},
-   {neu,sm,k0,pip,pip},   {pro,neu,kpl,kmi,pi0}, {pro,neu,k0,k0b,pi0},
-   {pro,neu,k0,kmi,pip},  {pro,neu,kpl,k0b,pim}, {pro,pro,k0,k0b,pim},
-   {pro,pro,kpl,kmi,pim}, {pro,pro,k0,kmi,pi0},  {neu,neu,kpl,kmi,pip},
-   {neu,neu,k0,k0b,pip},  {neu,neu,kpl,k0b,pi0}};
+   {pro,pim,pi0,kpl,lam}, {pro,pip,pim,k0,lam},  {pro,pi0,pi0,k0,lam},
+   {neu,pip,pim,kpl,lam}, {neu,pi0,pi0,kpl,lam}, {neu,pip,pi0,k0,lam},
+   {pro,pip,pim,k0,s0},   {pro,pi0,pi0,k0,s0},   {pro,pim,pi0,kpl,s0},
+   {neu,pip,pim,kpl,s0},  {neu,pi0,pi0,kpl,s0},  {neu,pip,pi0,k0,s0},
+   {pro,pim,pim,kpl,sp},  {pro,pim,pi0,k0,sp},   {neu,pip,pim,k0,sp},
+   {neu,pi0,pi0,k0,sp},   {neu,pim,pi0,kpl,sp},  {pro,pip,pi0,k0,sm},
+   {pro,pip,pim,kpl,sm},  {pro,pi0,pi0,kpl,sm},  {neu,pip,pi0,kpl,sm},
+   {neu,pip,pip,k0,sm},   {pro,neu,pi0,kpl,kmi}, {pro,neu,pi0,k0,k0b},
+   {pro,neu,pip,kmi,k0},  {pro,neu,pim,kpl,k0b}, {pro,pro,pim,k0,k0b},
+   {pro,pro,pim,kpl,kmi}, {pro,pro,pi0,kmi,k0},  {neu,neu,pip,kpl,kmi},
+   {neu,neu,pip,k0,k0b},  {neu,neu,pi0,kpl,k0b}};
 
-  static const G4int np6bfs[7][6] =
+  static const G4int np6bfs[53][6] =
   {{pro,neu,pip,pip,pim,pim}, {pro,neu,pip,pim,pi0,pi0},
    {pro,neu,pi0,pi0,pi0,pi0}, {pro,pro,pip,pim,pim,pi0},
    {pro,pro,pim,pi0,pi0,pi0}, {neu,neu,pip,pip,pim,pi0},
-   {neu,neu,pip,pi0,pi0,pi0}};
+   {neu,neu,pip,pi0,pi0,pi0}, {pro,pim,pi0,pi0,kpl,lam},
+   {pro,pip,pim,pim,kpl,lam}, {pro,pi0,pi0,pi0,k0,lam}, 
+   {pro,pip,pim,pi0,k0,lam},  {neu,pi0,pi0,pi0,kpl,lam},
+   {neu,pip,pim,pi0,kpl,lam}, {neu,pip,pi0,pi0,k0,lam},
+   {neu,pip,pip,pim,k0,lam},  {pro,pim,pi0,pi0,kpl,s0},
+   {pro,pip,pim,pim,kpl,s0},  {pro,pi0,pi0,pi0,k0,s0},
+   {pro,pip,pim,pi0,k0,s0},   {neu,pi0,pi0,pi0,kpl,s0},
+   {neu,pip,pim,pi0,kpl,s0},  {neu,pip,pi0,pi0,k0,s0},
+   {neu,pip,pip,pim,k0,s0},   {pro,pim,pim,pi0,kpl,sp},
+   {pro,pim,pi0,pi0,k0,sp},   {pro,pip,pim,pim,k0,sp},
+   {neu,pim,pi0,pi0,kpl,sp},  {neu,pip,pim,pim,kpl,sp}, 
+   {neu,pi0,pi0,pi0,k0,sp},   {neu,pip,pim,pi0,k0,sp},  
+   {pro,pip,pim,pi0,kpl,sm},  {pro,pi0,pi0,pi0,kpl,sm},
+   {pro,pip,pi0,pi0,k0,sm},   {pro,pip,pip,pim,k0,sm}, 
+   {neu,pip,pi0,pi0,kpl,sm},  {neu,pip,pip,pim,kpl,sm},
+   {neu,pip,pip,pi0,k0,sm},   {pro,neu,pim,pi0,kpl,k0b},
+   {pro,neu,pi0,pi0,kpl,kmi}, {pro,neu,pip,pim,kpl,kmi},
+   {pro,neu,pi0,pi0,k0,k0b},  {pro,neu,pip,pim,k0,k0b},
+   {pro,neu,pip,pi0,kmi,k0},  {pro,pro,pim,pi0,kpl,kmi},  
+   {pro,pro,pim,pim,kpl,k0b}, {pro,pro,pim,pi0,k0,k0b},
+   {pro,pro,pi0,pi0,kmi,k0},  {pro,pro,pip,pim,kmi,k0},
+   {neu,neu,pi0,pi0,kpl,k0b}, {neu,neu,pip,pim,kpl,k0b},
+   {neu,neu,pip,pi0,kpl,kmi}, {neu,neu,pip,pi0,k0,k0b},
+   {neu,neu,pip,pip,kmi,k0}};
 
-  static const G4int np7bfs[9][7] =
+  static const G4int np7bfs[69][7] =
   {{pro,neu,pip,pip,pim,pim,pi0}, {pro,neu,pip,pim,pi0,pi0,pi0},
    {pro,neu,pi0,pi0,pi0,pi0,pi0}, {pro,pro,pip,pip,pim,pim,pim},
    {pro,pro,pip,pim,pim,pi0,pi0}, {pro,pro,pim,pi0,pi0,pi0,pi0},
    {neu,neu,pip,pip,pip,pim,pim}, {neu,neu,pip,pip,pim,pi0,pi0},
-   {neu,neu,pip,pi0,pi0,pi0,pi0}};
-
-  static const G4int np8bfs[10][8] =
+   {neu,neu,pip,pi0,pi0,pi0,pi0}, {pro,pip,pim,pim,pi0,kpl,lam},
+   {pro,pim,pi0,pi0,pi0,kpl,lam}, {pro,pi0,pi0,pi0,pi0,k0,lam},
+   {pro,pip,pim,pi0,pi0,k0,lam},  {pro,pip,pip,pim,pim,k0,lam}, 
+   {neu,pip,pim,pi0,pi0,kpl,lam}, {neu,pip,pip,pim,pim,kpl,lam}, 
+   {neu,pi0,pi0,pi0,pi0,kpl,lam}, {neu,pip,pip,pim,pi0,k0,lam},
+   {neu,pip,pi0,pi0,pi0,k0,lam},  {pro,pip,pim,pim,pi0,kpl,s0},
+   {pro,pim,pi0,pi0,pi0,kpl,s0},  {pro,pi0,pi0,pi0,pi0,k0,s0},
+   {pro,pip,pim,pi0,pi0,k0,s0},   {pro,pip,pip,pim,pim,k0,s0}, 
+   {neu,pip,pim,pi0,pi0,kpl,s0},  {neu,pip,pip,pim,pim,kpl,s0},
+   {neu,pi0,pi0,pi0,pi0,kpl,s0},  {neu,pip,pip,pim,pi0,k0,s0},
+   {neu,pip,pi0,pi0,pi0,k0,s0},   {pro,pim,pim,pi0,pi0,kpl,sp},
+   {pro,pip,pim,pim,pim,kpl,sp},  {pro,pim,pi0,pi0,pi0,k0,sp},
+   {pro,pip,pim,pim,pi0,k0,sp},   {neu,pim,pi0,pi0,pi0,kpl,sp},
+   {neu,pip,pim,pim,pi0,kpl,sp},  {neu,pi0,pi0,pi0,pi0,k0,sp},
+   {neu,pip,pim,pi0,pi0,k0,sp},   {neu,pip,pip,pim,pim,k0,sp},
+   {pro,pip,pim,pi0,pi0,kpl,sm},  {pro,pip,pip,pim,pim,kpl,sm},
+   {pro,pi0,pi0,pi0,pi0,kpl,sm},  {pro,pip,pip,pim,pi0,k0,sm},
+   {pro,pip,pi0,pi0,pi0,k0,sm},   {neu,pip,pip,pim,pi0,kpl,sm},
+   {neu,pip,pi0,pi0,pi0,kpl,sm},  {neu,pip,pip,pi0,pi0,k0,sm},
+   {neu,pip,pip,pip,pim,k0,sm},   {pro,neu,pim,pi0,pi0,kpl,k0b},
+   {pro,neu,pip,pim,pim,kpl,k0b}, {pro,neu,pi0,pi0,pi0,kpl,kmi},
+   {pro,neu,pip,pim,pi0,kpl,kmi}, {pro,neu,pi0,pi0,pi0,k0,k0b},
+   {pro,neu,pip,pim,pi0,k0,k0b},  {pro,neu,pip,pi0,pi0,kmi,k0},
+   {pro,neu,pip,pip,pim,kmi,k0},  {pro,pro,pim,pim,pi0,kpl,k0b},
+   {pro,pro,pim,pi0,pi0,kpl,kmi}, {pro,pro,pip,pim,pim,kpl,kmi},
+   {pro,pro,pim,pi0,pi0,k0,k0b},  {pro,pro,pip,pim,pim,k0,k0b},
+   {pro,pro,pi0,pi0,pi0,kmi,k0},  {pro,pro,pip,pim,pi0,kmi,k0},
+   {neu,neu,pip,pim,pi0,kpl,k0b}, {neu,neu,pi0,pi0,pi0,kpl,k0b},
+   {neu,neu,pip,pi0,pi0,kpl,kmi}, {neu,neu,pip,pip,pim,kpl,kmi},
+   {neu,neu,pip,pi0,pi0,k0,k0b},  {neu,neu,pip,pip,pim,k0,k0b},
+   {neu,neu,pip,pip,pi0,kmi,k0}};
+   
+  static const G4int np8bfs[78][8] =
   {{pro,neu,pip,pip,pip,pim,pim,pim}, {pro,neu,pip,pip,pim,pim,pi0,pi0},
    {pro,neu,pip,pim,pi0,pi0,pi0,pi0}, {pro,neu,pi0,pi0,pi0,pi0,pi0,pi0},
    {pro,pro,pip,pip,pim,pim,pim,pi0}, {pro,pro,pip,pim,pim,pi0,pi0,pi0},
    {pro,pro,pim,pi0,pi0,pi0,pi0,pi0}, {neu,neu,pip,pip,pip,pim,pim,pi0},
-   {neu,neu,pip,pip,pim,pi0,pi0,pi0}, {neu,neu,pip,pi0,pi0,pi0,pi0,pi0}};
-
-  static const G4int np9bfs[12][9] =
-  {{pro,neu,pip,pip,pip,pim,pim,pim,pi0},{pro,neu,pip,pip,pim,pim,pi0,pi0,pi0},
-   {pro,neu,pip,pim,pi0,pi0,pi0,pi0,pi0},{pro,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-   {pro,pro,pip,pip,pip,pim,pim,pim,pim},{pro,pro,pip,pip,pim,pim,pim,pi0,pi0},
-   {pro,pro,pip,pim,pim,pi0,pi0,pi0,pi0},{pro,pro,pim,pi0,pi0,pi0,pi0,pi0,pi0},
-   {neu,neu,pip,pip,pip,pip,pim,pim,pim},{neu,neu,pip,pip,pip,pim,pim,pi0,pi0},
-   {neu,neu,pip,pip,pim,pi0,pi0,pi0,pi0},{neu,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0}};
+   {neu,neu,pip,pip,pim,pi0,pi0,pi0}, {neu,neu,pip,pi0,pi0,pi0,pi0,pi0},
+   {pro,pip,pim,pim,pi0,pi0,kpl,lam}, {pro,pip,pip,pim,pim,pim,kpl,lam}, 
+   {pro,pim,pi0,pi0,pi0,pi0,kpl,lam}, {pro,pip,pip,pim,pim,pi0,k0,lam},
+   {pro,pip,pim,pi0,pi0,pi0,k0,lam},  {neu,pip,pip,pim,pim,pi0,kpl,lam}, 
+   {neu,pip,pim,pi0,pi0,pi0,kpl,lam}, {neu,pip,pip,pim,pi0,pi0,k0,lam},
+   {neu,pip,pip,pip,pim,pim,k0,lam},  {neu,pip,pi0,pi0,pi0,pi0,k0,lam},
+   {pro,pip,pim,pim,pi0,pi0,kpl,s0},  {pro,pip,pip,pim,pim,pim,kpl,s0},
+   {pro,pim,pi0,pi0,pi0,pi0,kpl,s0},  {pro,pip,pip,pim,pim,pi0,k0,s0},
+   {pro,pip,pim,pi0,pi0,pi0,k0,s0},   {neu,pip,pip,pim,pim,pi0,kpl,s0},
+   {neu,pip,pim,pi0,pi0,pi0,kpl,s0},  {neu,pip,pip,pim,pi0,pi0,k0,s0},
+   {neu,pip,pip,pip,pim,pim,k0,s0},   {neu,pip,pi0,pi0,pi0,pi0,k0,s0},
+   {pro,pip,pim,pim,pim,pi0,kpl,sp},  {pro,pim,pim,pi0,pi0,pi0,kpl,sp},
+   {pro,pip,pim,pim,pi0,pi0,k0,sp},   {pro,pip,pip,pim,pim,pim,k0,sp},
+   {pro,pim,pi0,pi0,pi0,pi0,k0,sp},   {neu,pip,pim,pim,pi0,pi0,kpl,sp},
+   {neu,pip,pip,pim,pim,pim,kpl,sp},  {neu,pim,pi0,pi0,pi0,pi0,kpl,sp},
+   {neu,pip,pip,pim,pim,pi0,k0,sp},   {neu,pip,pim,pi0,pi0,pi0,k0,sp},
+   {pro,pip,pip,pim,pim,pi0,kpl,sm},  {pro,pip,pim,pi0,pi0,pi0,kpl,sm},
+   {pro,pip,pip,pim,pi0,pi0,k0,sm},   {pro,pip,pip,pip,pim,pim,k0,sm}, 
+   {pro,pip,pi0,pi0,pi0,pi0,k0,sm},   {neu,pip,pip,pip,pim,pim,kpl,sm}, 
+   {neu,pip,pip,pim,pi0,pi0,kpl,sm},  {neu,pip,pi0,pi0,pi0,pi0,kpl,sm},
+   {neu,pip,pip,pip,pim,pi0,k0,sm},   {neu,pip,pip,pi0,pi0,pi0,k0,sm}, 
+   {pro,neu,pip,pim,pim,pi0,kpl,k0b}, {pro,neu,pim,pi0,pi0,pi0,kpl,k0b},
+   {pro,neu,pip,pim,pi0,pi0,kpl,kmi}, {pro,neu,pip,pip,pim,pim,kpl,kmi},
+   {pro,neu,pi0,pi0,pi0,pi0,kpl,kmi}, {pro,neu,pip,pim,pi0,pi0,k0,k0b}, 
+   {pro,neu,pip,pip,pim,pim,k0,k0b},  {pro,neu,pi0,pi0,pi0,pi0,k0,k0b},
+   {pro,neu,pip,pip,pim,pi0,kmi,k0},  {pro,neu,pip,pi0,pi0,pi0,kmi,k0},
+   {pro,pro,pim,pim,pi0,pi0,kpl,k0b}, {pro,pro,pip,pim,pim,pim,kpl,k0b},
+   {pro,pro,pip,pim,pim,pi0,kpl,kmi}, {pro,pro,pim,pi0,pi0,pi0,kpl,kmi},
+   {pro,pro,pip,pim,pim,pi0,k0,k0b},  {pro,pro,pim,pi0,pi0,pi0,k0,k0b},
+   {pro,pro,pip,pim,pi0,pi0,kmi,k0},  {pro,pro,pip,pip,pim,pim,kmi,k0}, 
+   {pro,pro,pi0,pi0,pi0,pi0,kmi,k0},  {neu,neu,pip,pim,pi0,pi0,kpl,k0b}, 
+   {neu,neu,pip,pip,pim,pim,kpl,k0b}, {neu,neu,pi0,pi0,pi0,pi0,kpl,k0b},
+   {neu,neu,pip,pip,pim,pi0,kpl,kmi}, {neu,neu,pip,pi0,pi0,pi0,kpl,kmi},
+   {neu,neu,pip,pip,pim,pi0,k0,k0b},  {neu,neu,pip,pi0,pi0,pi0,k0,k0b},
+   {neu,neu,pip,pip,pi0,pi0,kmi,k0},  {neu,neu,pip,pip,pip,pim,kmi,k0}};
+ 
+  static const G4int np9bfs[86][9] =
+  {{pro,neu,pip,pip,pip,pim,pim,pim,pi0}, {pro,neu,pip,pip,pim,pim,pi0,pi0,pi0},
+   {pro,neu,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pro,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
+   {pro,pro,pip,pip,pip,pim,pim,pim,pim}, {pro,pro,pip,pip,pim,pim,pim,pi0,pi0},
+   {pro,pro,pip,pim,pim,pi0,pi0,pi0,pi0}, {pro,pro,pim,pi0,pi0,pi0,pi0,pi0,pi0},
+   {neu,neu,pip,pip,pip,pip,pim,pim,pim}, {neu,neu,pip,pip,pip,pim,pim,pi0,pi0},
+   {neu,neu,pip,pip,pim,pi0,pi0,pi0,pi0}, {neu,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
+   {pro,pip,pip,pim,pim,pim,pi0,kpl,lam}, {pro,pip,pim,pim,pi0,pi0,pi0,kpl,lam},
+   {pro,pim,pi0,pi0,pi0,pi0,pi0,kpl,lam}, {pro,pip,pip,pim,pim,pi0,pi0,k0,lam},
+   {pro,pip,pim,pi0,pi0,pi0,pi0,k0,lam},  {pro,pip,pip,pip,pim,pim,pim,k0,lam},
+   {neu,pip,pip,pim,pim,pi0,pi0,kpl,lam}, {neu,pip,pim,pi0,pi0,pi0,pi0,kpl,lam},
+   {neu,pip,pip,pip,pim,pim,pim,kpl,lam}, {neu,pip,pip,pip,pim,pim,pi0,k0,lam},
+   {neu,pip,pip,pim,pi0,pi0,pi0,k0,lam},  {neu,pip,pi0,pi0,pi0,pi0,pi0,k0,lam},
+   {pro,pip,pip,pim,pim,pim,pi0,kpl,s0},  {pro,pip,pim,pim,pi0,pi0,pi0,kpl,s0},
+   {pro,pim,pi0,pi0,pi0,pi0,pi0,kpl,s0},  {pro,pip,pip,pim,pim,pi0,pi0,k0,s0},
+   {pro,pip,pim,pi0,pi0,pi0,pi0,k0,s0},   {pro,pip,pip,pip,pim,pim,pim,k0,s0},
+   {neu,pip,pip,pim,pim,pi0,pi0,kpl,s0},  {neu,pip,pim,pi0,pi0,pi0,pi0,kpl,s0},
+   {neu,pip,pip,pip,pim,pim,pim,kpl,s0},  {neu,pip,pip,pip,pim,pim,pi0,k0,s0},
+   {neu,pip,pip,pim,pi0,pi0,pi0,k0,s0},   {neu,pip,pi0,pi0,pi0,pi0,pi0,k0,s0},
+   {pro,pip,pim,pim,pim,pi0,pi0,kpl,sp},  {pro,pim,pim,pi0,pi0,pi0,pi0,kpl,sp}, 
+   {pro,pip,pip,pim,pim,pim,pim,kpl,sp},  {pro,pip,pim,pim,pi0,pi0,pi0,k0,sp},
+   {pro,pip,pip,pim,pim,pim,pi0,k0,sp},   {neu,pip,pim,pim,pi0,pi0,pi0,kpl,sp},
+   {neu,pip,pip,pim,pim,pim,pi0,kpl,sp},  {neu,pip,pip,pim,pim,pi0,pi0,k0,sp},
+   {neu,pip,pim,pi0,pi0,pi0,pi0,k0,sp},   {neu,pip,pip,pip,pim,pim,pim,k0,sp},
+   {pro,pip,pip,pim,pim,pi0,pi0,kpl,sm},  {pro,pip,pim,pi0,pi0,pi0,pi0,kpl,sm},
+   {pro,pip,pip,pip,pim,pim,pim,kpl,sm},  {pro,pip,pip,pip,pim,pim,pi0,k0,sm},
+   {pro,pip,pip,pim,pi0,pi0,pi0,k0,sm},   {neu,pip,pip,pim,pi0,pi0,pi0,kpl,sm}, 
+   {neu,pip,pip,pip,pim,pim,pi0,kpl,sm},  {neu,pip,pip,pip,pim,pi0,pi0,k0,sm},
+   {neu,pip,pip,pi0,pi0,pi0,pi0,k0,sm},   {neu,pip,pip,pip,pip,pim,pim,k0,sm}, 
+   {pro,neu,pip,pim,pim,pi0,pi0,kpl,k0b}, {pro,neu,pip,pip,pim,pim,pim,kpl,k0b},
+   {pro,neu,pim,pi0,pi0,pi0,pi0,kpl,k0b}, {pro,neu,pip,pip,pim,pim,pi0,kpl,kmi},
+   {pro,neu,pip,pim,pi0,pi0,pi0,kpl,kmi}, {pro,neu,pip,pip,pim,pim,pi0,k0,k0b},
+   {pro,neu,pip,pim,pi0,pi0,pi0,k0,k0b},  {pro,neu,pip,pip,pim,pi0,pi0,kmi,k0},
+   {pro,neu,pip,pip,pip,pim,pim,kmi,k0},  {pro,neu,pip,pi0,pi0,pi0,pi0,kmi,k0},
+   {pro,pro,pip,pim,pim,pim,pi0,kpl,k0b}, {pro,pro,pim,pim,pi0,pi0,pi0,kpl,k0b},
+   {pro,pro,pip,pim,pim,pi0,pi0,kpl,kmi}, {pro,pro,pip,pip,pim,pim,pim,kpl,kmi},
+   {pro,pro,pim,pi0,pi0,pi0,pi0,kpl,kmi}, {pro,pro,pip,pim,pim,pi0,pi0,k0,k0b},
+   {pro,pro,pip,pip,pim,pim,pim,k0,k0b},  {pro,pro,pim,pi0,pi0,pi0,pi0,k0,k0b},
+   {pro,pro,pip,pip,pim,pim,pi0,kmi,k0},  {pro,pro,pip,pim,pi0,pi0,pi0,kmi,k0},
+   {neu,neu,pip,pip,pim,pim,pi0,kpl,k0b}, {neu,neu,pip,pim,pi0,pi0,pi0,kpl,k0b},
+   {neu,neu,pip,pip,pim,pi0,pi0,kpl,kmi}, {neu,neu,pip,pip,pip,pim,pim,kpl,kmi},
+   {neu,neu,pip,pi0,pi0,pi0,pi0,kpl,kmi}, {neu,neu,pip,pip,pim,pi0,pi0,k0,k0b},
+   {neu,neu,pip,pip,pip,pim,pim,k0,k0b},  {neu,neu,pip,pi0,pi0,pi0,pi0,k0,k0b},
+   {neu,neu,pip,pip,pip,pim,pi0,kmi,k0},  {neu,neu,pip,pip,pi0,pi0,pi0,kmi,k0}};
 }
 
 namespace {
   // Total n p cross section as a function of kinetic energy
   static const G4double npTotXSec[30] = 
   // Stepanov cross sections below 400 MeV 
-  {20360.0, 302.4, 235.9, 173.3, 132.0, 100.7,  74.9,  51.9,  38.8,  31.6,  
-      27.8,  25.2,  24.0,  23.3,  29.1,  35.0,  37.5,  39.02, 40.29, 40.72,
-      42.36, 41.19, 42.04, 41.67, 40.96, 39.48, 39.79, 39.39, 39.36, 39.34};
+  {20360.0, 302.4,  235.9,  173.3, 132.0, 100.7, 74.9,   51.9,  38.8,   31.6,
+      27.8,  25.2,   24.0,   23.3,  29.1,  35.0, 37.332, 39.0,  40.646, 40.983,
+     41.812, 40.969, 40.185, 39.9,  39.7,  39.4, 39.05,  38.63, 38.45,  38.2};
 
-  static const G4double npCrossSections[108][30] = {
+  static const G4double npCrossSections[356][30] = {
   //
   // multiplicity 2 (1 channel)
   //
   //  p n (p n)
   // Stepanov cross sections below 400 MeV 
-  {20360.0, 302.4, 235.9, 173.3, 132.0, 100.7,  74.9,  51.9,  38.8,  31.6,       
-      27.8,  25.2,  24.0,  23.3,  27.0,  27.0,  23.0,  19.0,  17.0,  15.5,
-      14.0,  13.0,  12.0,  11.0,  10.0,   9.5,   9.0,   8.5,   8.0,   7.7},
+  {20360.0, 302.4, 235.9, 173.3, 132.0, 100.7, 74.9, 51.9, 38.8,  31.6,
+      27.8,  25.2,  24.0,  23.3,  27.0,  27.0, 23.0, 19.0, 17.0,  15.5,
+      14.0,  13.0,  12.0,  11.2,  10.3,   9.7,  9.05, 8.52, 8.05,  7.7},
+
   //
   // multiplicity 3 (9 channels)
   //
-  //  p p pi- (n n pi+)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.2,  0.9,  1.75, 2.3,  2.8,  2.8,
-     2.2,  1.9,  1.6,  1.35, 1.1,  0.95, 0.8,  0.7,  0.6,  0.53 },
+  //  p p pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0,
+     0.0, 0.0, 0.0, 0.0, 0.2, 0.9,  1.75, 2.4, 2.8, 2.65,
+     2.2, 1.9, 1.6, 1.3, 1.1, 0.95, 0.85, 0.7, 0.6, 0.53},
 
-  //  p n pi0 (p n pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  1.2,  4.7,  8.3, 11.3, 12.0, 10.2,
-     8.2,  6.0,  4.9,  3.6,  2.5,  2.0,  1.6,  1.2,  1.0,  0.08 },
+  //  p n pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,  0.0, 0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 1.2,  4.7, 8.3, 11.3,  12.0,  10.2,
+     8.2, 6.0, 4.8, 3.55, 2.6, 2.0, 1.61, 1.206, 0.969, 0.75},
 
-  //  n n pi+ (p p pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.7,  2.4,  4.2,  5.6,  6.1,  5.1,
-     4.1,  3.0,  2.5,  1.8,  1.2,  1.0,  0.8,  0.6,  0.5,  0.41},
+  //  n n pi+
+   { 0.0, 0.0, 0.0, 0.0, 0.0,  0.0, 0.0,  0.0,  0.0, 0.0,
+     0.0, 0.0, 0.0, 0.0, 0.7,  2.4, 4.2,  5.6,  6.1, 5.1,
+     4.1, 3.1, 2.4, 1.8, 1.35, 1.0, 0.82, 0.64, 0.5, 0.41},
 
-  //  p L K0 (n L K+)
-   { 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.01, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01},
+  //  p L K0
+   { 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.002, 0.01, 0.02, 0.024, 0.024, 0.023, 0.02, 0.015, 0.012, 0.01},
 
-  //  p S0 K0 (n S0 K+)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.01, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01},
+  //  n L K+
+   { 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.002, 0.01, 0.02, 0.024, 0.024, 0.023, 0.02, 0.015, 0.012, 0.01},
 
-  //  p S- K+ (n S+ K0)
-   { 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01},
+  //  p S0 K0
+   { 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.001, 0.007, 0.014, 0.017, 0.017, 0.016, 0.014, 0.012, 0.011, 0.01},
 
-  //  n L K+ (p L K0)
-   {  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01},
+  //  n S0 K+
+   { 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.001, 0.007, 0.014, 0.017, 0.017, 0.016, 0.014, 0.012, 0.011, 0.01},
 
-  //  n S0 K+ (p S0 K0)
-   { 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.01, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01},
+  //  n S+ K0
+   { 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.002, 0.01, 0.02, 0.023, 0.024, 0.023, 0.02, 0.016, 0.012, 0.01},
 
-  //  n S+ K0 (p S- K+)
-   { 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01},
+  //  p S- K+
+   { 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.002, 0.01, 0.02, 0.023, 0.024, 0.023, 0.02, 0.016, 0.012, 0.01},
   //
   // multiplicity 4 (22 channels)
   //
-  //  p n pi+ pi- (p n pi+ pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.12, 0.38, 1.1,  3.5,
-     5.9,  5.9,  5.1,  4.2,  3.7,  3.0,  2.6,  2.1,  1.8,  1.4 },
+  //  p n pi+ pi-     (568)
+   { 0.0, 0.0, 0.0, 0.0, 0.0,  0.0, 0.0,  0.0,  0.0, 0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,  0.0, 0.03, 0.33, 1.3, 3.3,
+     5.3, 5.7, 5.1, 4.3, 3.78, 3.2, 2.7,  2.3,  1.9, 1.5},
 
-  //  p p pi- pi0 (n n pi+ pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.03, 0.1,  0.24, 0.55,
-     1.2,  1.5,  1.45, 1.25, 1.0,  0.9,  0.8,  0.7,  0.6,  0.53 },
+  //  p p pi- pi0   (582) 
+   { 0.0, 0.0, 0.0, 0.0,  0.0, 0.0,  0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,  0.0, 0.0,  0.015, 0.082, 0.31, 0.9,
+     1.6, 1.8, 1.7, 1.45, 1.2, 1.05, 0.9,   0.75,  0.65, 0.55},
 
-  //  p n pi0 pi0 (p n pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.07, 0.24, 0.66, 2.1,
-     3.6,  3.6,  3.1,  2.5,  2.2,  1.8,  1.5,  1.2,  1.1,  0.84 },
+  //  p n pi0 pi0
+   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.022, 0.206, 0.805, 2.1,
+     3.45, 3.75, 3.4, 2.88, 2.44, 2.02, 1.7,   1.35,  1.1,   0.88},
 
-  //  n n pi+ pi0 (p p pi- pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.03, 0.1,  0.24, 0.55,
-     1.2,  1.5,  1.45, 1.25, 1.0,  0.9,  0.8,  0.7,  0.6,  0.53 },
+  //  n n pi+ pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0, 0.0,  0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0, 0.0,  0.015, 0.082, 0.31, 0.9,
+     1.6, 1.8, 1.7, 1.465, 1.2, 1.05, 0.91,   0.76, 0.66, 0.55},
 
-  //  p L K+ pi- (n L K0 pi+)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.01, 0.02, 0.04, 0.04, 0.03, 0.03, 0.03, 0.02 },
+  //  p L K+ pi-  (536)
+   { 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.001, 0.004, 0.01, 0.017, 0.022, 0.026, 0.03, 0.031, 0.032, 0.033},
 
-  //  p S0 K+ pi- (n S0 K0 pi+)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.02 },
+  //  p L K0 pi0
+   { 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.001, 0.004, 0.01, 0.017, 0.022, 0.026, 0.03, 0.031, 0.032, 0.033},
 
-  //  p L K0 pi0 (n L K+ pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  n L K+ pi0
+   { 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.001, 0.004, 0.01, 0.017, 0.022, 0.026, 0.03, 0.031, 0.032, 0.033},
 
-  //  p S0 K0 pi0 (n S0 K+ pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.01, 0.01, 0.01, 0.01, 0.0,  0.0 },
+  //  n L K0 pi+ 
+   { 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.001, 0.004, 0.01, 0.017, 0.022, 0.026, 0.03, 0.031, 0.032, 0.033},
 
-  //  p S+ K0 pi- (n S- K+ pi+)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01 },
+  //  p S0 K+ pi-  (554) 
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.001, 0.004, 0.009, 0.014, 0.018, 0.02, 0.022, 0.022, 0.022},
 
-  //  p S- K+ pi0 (n S+ K0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.03, 0.04, 0.04, 0.04, 0.03, 0.02, 0.02 },
+  //  p S0 K0 pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.001, 0.004, 0.009, 0.014, 0.018, 0.02, 0.022, 0.022, 0.022},
 
-  //  p S- K0 pi+ (n S+ K+ pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.03, 0.04, 0.04, 0.04, 0.03, 0.02, 0.02 },
+  //  n S0 K+ pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.001, 0.004, 0.009, 0.014, 0.018, 0.02, 0.022, 0.022, 0.022},
 
-  //  n L K+ pi0 (p L K0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.04, 0.04, 0.03, 0.03, 0.03, 0.02 },
+  //  n S0 K0 pi+
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.001, 0.004, 0.009, 0.014, 0.018, 0.02, 0.022, 0.022, 0.022},
 
-  //  n L K0 pi+ (p L K+ pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p S+ K0 pi-  (548)
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.001, 0.005, 0.012, 0.016, 0.015, 0.014, 0.012, 0.011, 0.01},
 
-  //  n S+ K+ pi- (p S- K0 pi+)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.02 },
+  //  n S+ K+ pi-
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.001, 0.005, 0.012, 0.016, 0.015, 0.014, 0.012, 0.011, 0.01},
 
-  //  n S+ K0 pi0 (p S- K+ pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.0,  0.0 },
+  //  n S+ K0 pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.001, 0.005, 0.012, 0.016, 0.015, 0.014, 0.012, 0.011, 0.01},
 
-  //  n S0 K+ pi0 (p S0 K0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.01, 0.03, 0.04, 0.04, 0.04, 0.03, 0.02, 0.02 },
+  //  p S- K+ pi0  (556)
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.008, 0.022, 0.03, 0.035, 0.033, 0.03, 0.025, 0.02},
 
-  //  n S0 K0 pi+ (p S0 K+ pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.03, 0.04, 0.04, 0.04, 0.03, 0.02, 0.02 },
+  //  p S- K0 pi+
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.008, 0.022, 0.03, 0.035, 0.033, 0.03, 0.025, 0.02},
 
-  //  n S- K+ pi+ (p S+ K0 pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.01, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01 },
+  //  n S- K+ pi+
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.008, 0.022, 0.03, 0.035, 0.033, 0.03, 0.025, 0.02},
 
-  //  p n K+ K- (p n K0 K0bar)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.01, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p n K+ K-
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.024, 0.035, 0.034, 0.03, 0.026, 0.022},
 
-  //  p n K0 K0bar (p n K+ K-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p n K0 K0bar
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.024, 0.035, 0.034, 0.03, 0.026, 0.022},
 
-  //  p p K0 K- (n n K+ K0bar)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p p K0 K- (586)
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.005, 0.012, 0.018, 0.017, 0.015, 0.013, 0.011},
 
-  //  n n K+ K0bar (p p K0 K-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  n n K+ K0bar
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.005, 0.012, 0.018, 0.017, 0.015, 0.013, 0.011},
   //
   // multiplicity 5 (38 channels)
   //
-  //  p n pi+ pi- pi0 (p n pi+ pi- pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.04,
-     0.3,  0.82, 1.35, 1.8,  1.8,  1.65, 1.5,  1.28, 1.12, 0.98 },
+  //  p n pi+ pi- pi0
+   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,
+     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.007, 0.1,
+     0.4,  1.1,  1.8,  2.3,  2.5,  2.4,  2.3,  2.1,  1.9,   1.7},
 
-  //  p n pi0 pi0 pi0 (p n pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.02,
-     0.15, 0.41, 0.68, 0.9,  0.9,  0.82, 0.75, 0.64, 0.55, 0.49 },
+  //  p n pi0 pi0 pi0 
+   { 0.0,   0.0,   0.0, 0.0, 0.0,   0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0,   0.0,   0.0, 0.0, 0.0,   0.0, 0.0,   0.0,   0.002, 0.033,
+     0.133, 0.367, 0.6, 0.8, 0.811, 0.8, 0.733, 0.667, 0.6,   0.533},
 
-  //  p p pi+ pi- pi- (n n pi+ pi+ pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.09, 0.2,
-     0.52, 1.2,  1.8,  2.0,  1.7,  1.5,  1.35, 1.2,  1.05, 0.9 },
+  //  p p pi+ pi- pi- 
+   { 0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,
+     0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.003, 0.05,
+     0.2, 0.55, 0.9, 1.2, 1.3, 1.2, 1.13, 1.01, 0.91,  0.8},
 
-  //  p p pi- pi0 pi0 (n n pi+ pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.04, 0.1,
-     0.26, 0.6,  0.9,  0.98, 0.86, 0.75, 0.68, 0.6,  0.52, 0.45 },
+  //  p p pi- pi0 pi0
+   { 0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,
+     0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.003, 0.05,
+     0.2, 0.55, 0.9, 1.2, 1.3, 1.2, 1.13, 1.01, 0.91,  0.8},
 
-  //  n n pi+ pi+ pi- (p p pi+ pi- pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.04,
-     0.3,  0.82, 1.35, 1.8,  1.8,  1.65, 1.5,  1.28, 1.12, 0.98 },
+  //  n n pi+ pi+ pi-
+   { 0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,
+     0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.003, 0.05,
+     0.2, 0.55, 0.9, 1.2, 1.3, 1.2, 1.13, 1.01, 0.91,  0.8},
 
-  //  n n pi+ pi0 pi0 (p p pi- pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.02,
-     0.15, 0.41, 0.68, 0.9,  0.9,  0.82, 0.75, 0.64, 0.56, 0.49 },
+  //  n n pi+ pi0 pi0 
+   { 0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,
+     0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0,  0.0,  0.003, 0.05,
+     0.2, 0.55, 0.9, 1.2, 1.3, 1.2, 1.13, 1.01, 0.91,  0.8},
 
-  //  p L K+ pi- pi0 (n L K0 pi+ pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.01 },
+  //  p L K+ pi- pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.005, 0.011, 0.015, 0.017, 0.019, 0.02, 0.019, 0.017},
 
-  //  p L K0 pi+ pi- (n L K+ pi+ pi-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.01 },
+  //  p L K0 pi+ pi-  (531)
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.005, 0.011, 0.015, 0.017, 0.019, 0.02, 0.019, 0.017},
 
-  //  p L K0 pi0 pi0 (n L K+ pi0 pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.01, 0.01, 0.01, 0.02, 0.02, 0.02 },
+  //  p L K0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0, 0.0, 0.002, 0.005, 0.007, 0.009, 0.01, 0.01, 0.01, 0.009},
 
-  //  p S0 K0 pi+ pi- (n S0 K+ pi+ pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  n L K+ pi+ pi-
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.005, 0.011, 0.015, 0.017, 0.019, 0.02, 0.019, 0.017},
 
-  //  p S0 K0 pi0 pi0 (n S0 K+ pi0 pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.0 },
+  //  n L K+ pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0, 0.0, 0.002, 0.005, 0.007, 0.009, 0.01, 0.01, 0.01, 0.009},
 
-  //  p S0 K+ pi- pi0 (n S0 K0 pi+ pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  n L K0 pi+ pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.005, 0.011, 0.015, 0.017, 0.019, 0.02, 0.019, 0.017},
 
-  //  p S+ K+ pi- pi- (n S- K0 pi+ pi+)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p S0 K0 pi+ pi-  (549)
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.008, 0.01, 0.012, 0.013, 0.013, 0.012},
 
-  //  p S+ K0 pi- pi0 (n S- K+ pi+ pi0)
-   { 0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p S0 K0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.007, 0.007, 0.007, 0.006},
 
-  //  p S- K0 pi+ pi0 (n S+ K+ pi- pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p S0 K+ pi- pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.008, 0.01, 0.012, 0.013, 0.013, 0.012},
 
-  //  p S- K+ pi+ pi- (n S+ K0 pi+ pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  n S0 K+ pi+ pi- 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.008, 0.01, 0.012, 0.013, 0.013, 0.012},
 
-  //  p S- K+ pi0 pi0 (n S+ K0 pi0 pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.0 },
+  //  n S0 K+ pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.007, 0.007, 0.007, 0.006},
 
-  //  n L K+ pi+ pi- (p L K0 pi+ pi-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.01 },
+  //  n S0 K0 pi+ pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.008, 0.01, 0.012, 0.013, 0.013, 0.012},
 
-  //  n L K+ pi0 pi0 (p L K0 pi0 pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p S+ K+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.007, 0.011, 0.012, 0.012, 0.01, 0.008},
 
-  //  n L K0 pi+ pi0 (p L K+ pi- pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.01, 0.02, 0.03, 0.02, 0.02, 0.02, 0.01 },
+  //  p S+ K0 pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.013, 0.022, 0.024, 0.024, 0.02, 0.016},
 
-  //  n S0 K+ pi+ pi- (p S0 K0 pi+ pi-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  n S+ K0 pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.013, 0.022, 0.024, 0.024, 0.02, 0.016},
 
-  //  n S0 K+ pi0 pi0 (p S0 K0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
-     0.0,  0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
-     0.0,  0.0,  0.0,  0.0, 0.01, 0.01, 0.01, 0.01, 0.0, 0.0 },
+  //  n S+ K0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.007, 0.011, 0.012, 0.012, 0.01, 0.008},
 
-  //  n S0 K0 pi+ pi0 (p S0 K+ pi- pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  n S+ K+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.013, 0.022, 0.024, 0.024, 0.02, 0.016},
 
-  //  n S+ K0 pi+ pi- (p S- K+ pi+ pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p S- K0 pi+ pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.013, 0.022, 0.024, 0.024, 0.02, 0.016},
 
-  //  n S+ K0 pi0 pi0 (p S- K+ pi0 pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.0 },
+  //  p S- K+ pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.013, 0.022, 0.024, 0.024, 0.02, 0.016},
 
-  //  n S+ K+ pi- pi0 (p S- K0 pi+ pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  p S- K+ pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.007, 0.011, 0.012, 0.012, 0.01, 0.008},
 
-  //  n S- K+ pi+ pi0 (p S+ K0 pi- pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  n S- K+ pi+ pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.013, 0.022, 0.024, 0.024, 0.02, 0.016},
 
-  //  n S- K0 pi+ pi+ (p S+ K+ pi- pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01 },
+  //  n S- K0 pi+ pi+ 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.007, 0.011, 0.012, 0.012, 0.01, 0.008},
 
-  //  p n K+ K- pi0 (p n K0 K0bar pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p n K+ K- pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.02, 0.024, 0.024, 0.022},
 
-  //  p n K0 K0bar pi0 (p n K+ K- pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p n K0 K0bar pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.02, 0.024, 0.024, 0.022},
 
-  //  p n K0 K- pi+ (p n K+ K0bar pi-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p n K0 K- pi+
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.02, 0.024, 0.024, 0.022},
 
-  //  p n K+ K0bar pi- (p n K0 K- pi+)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p n K+ K0bar pi-
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.02, 0.024, 0.024, 0.022},
 
-  //  p p K0 K0bar pi- (n n K+ K- pi+)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p p K0 K0bar pi-   (584)
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.012, 0.012, 0.011},
 
-  //  p p K+ K- pi- (n n K0 K0bar pi+)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p p K+ K- pi- 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.012, 0.012, 0.011},
 
-  //  p p K0 K- pi0 (n n K+ K0bar pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  p p K0 K- pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.012, 0.012, 0.011},
 
-  //  n n K+ K- pi+ (p p K0 K0bar pi-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  n n K+ K- pi+ 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.012, 0.012, 0.011},
 
-  //  n n K0 K0bar pi+ (p p K+ K- pi-)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  n n K0 K0bar pi+ 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.012, 0.012, 0.011},
 
-  //  n n K+ K0bar pi0 (p p K0 K- pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.01, 0.01, 0.01, 0.01, 0.01, 0.01 },
+  //  n n K+ K0bar pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.012, 0.012, 0.011},
   //
-  // multiplicity 6 (7 channels)
+  // multiplicity 6 (53 channels)
   //
-  //  p n pi+ pi+ pi- pi- (p n pi+ pi+ pi- pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.06, 0.1,  0.18, 0.38, 0.49, 0.46, 0.43, 0.40, 0.38, 0.36 },
+  //  p n pi+ pi+ pi- pi- 
+   { 0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.003, 0.024, 0.173, 0.45, 0.62, 0.72, 0.76, 0.8, 0.82, 0.84},
 
-  //  p n pi+ pi- pi0 pi0 (p n pi+ pi- pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.03, 0.05, 0.09, 0.19, 0.25, 0.23, 0.22, 0.2,  0.19, 0.18 },
+  //  p n pi+ pi- pi0 pi0 
+   { 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
+     0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
+     0.004, 0.036, 0.23, 0.55, 0.76, 0.88, 0.95, 0.99, 1.0, 1.03},
 
-  //  p n pi0 pi0 pi0 pi0 (p n pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.01, 0.02, 0.05, 0.1,  0.13, 0.12, 0.11, 0.1,  0.1,  0.09 },
+  //  p n pi0 pi0 pi0 pi0 
+   { 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,   0.0,
+     0.0, 0.003, 0.022, 0.05, 0.066, 0.08, 0.09, 0.10, 0.105, 0.105},
 
-  //  p p pi+ pi- pi- pi0 (n n pi+ pi+ pi- pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.06, 0.1,  0.18, 0.38, 0.49, 0.46, 0.43, 0.40, 0.38, 0.36 },
+  //  p p pi+ pi- pi- pi0  
+   { 0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.003, 0.024, 0.173, 0.45, 0.62, 0.72, 0.76, 0.8, 0.82, 0.84},
 
-  //  p p pi- pi0 pi0 pi0 (n n pi+ pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.03, 0.05, 0.09, 0.19, 0.25, 0.23, 0.22, 0.2,  0.19, 0.18 },
+  //  p p pi- pi0 pi0 pi0 
+   { 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.001, 0.012, 0.087, 0.227, 0.31, 0.35, 0.38, 0.4, 0.41, 0.42},
 
-  //  n n pi+ pi+ pi- pi0 (p p pi+ pi- pi- pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.06, 0.1,  0.18, 0.38, 0.49, 0.46, 0.43, 0.40, 0.38, 0.36 },
+  //  n n pi+ pi+ pi- pi0 
+   { 0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.003, 0.024, 0.173, 0.45, 0.62, 0.72, 0.76, 0.8, 0.82, 0.84},
 
-  //  n n pi+ pi0 pi0 pi0 (p p pi- pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.03, 0.05, 0.09, 0.19, 0.25, 0.23, 0.22, 0.2,  0.19, 0.18 },
+  //  n n pi+ pi0 pi0 pi0 
+   { 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,  0.0, 0.0,  0.0,
+     0.001, 0.012, 0.087, 0.227, 0.31, 0.35, 0.38, 0.4, 0.41, 0.42},
+
+  //  p L K+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.02, 0.026, 0.027, 0.028, 0.029, 0.03},
+
+  //  p L K+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.02, 0.026, 0.027, 0.028, 0.029, 0.03},
+
+  //  p L K0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.008, 0.008, 0.008, 0.008},
+
+  //  p L K0 pi+ pi- pi0
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.004, 0.02, 0.04, 0.052, 0.055, 0.057, 0.059, 0.06},
+
+  //  n L K+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.008, 0.008, 0.008, 0.008},
+
+  //  n L K+ pi+ pi- pi0
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.004, 0.02, 0.04, 0.052, 0.055, 0.057, 0.059, 0.06},
+
+  //  n L K0 pi+ pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.02, 0.026, 0.027, 0.028, 0.029, 0.03},
+
+  // n L K0 pi+ pi+ pi-
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.02, 0.026, 0.027, 0.028, 0.029, 0.03},
+
+  //  p S0 K+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.005, 0.01, 0.012, 0.013, 0.013, 0.013, 0.013},
+
+  //  p S0 K+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.005, 0.01, 0.012, 0.013, 0.013, 0.013, 0.013},
+
+  //  p S0 K0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.004, 0.005, 0.005, 0.005, 0.005},
+
+  //  p S0 K0 pi+ pi- pi0
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.02, 0.023, 0.025, 0.026, 0.026, 0.026},
+
+  //  n S0 K+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.004, 0.004, 0.004, 0.004, 0.004},
+
+  //  n S0 K+ pi+ pi- pi0
+   { 0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.01, 0.02, 0.023, 0.025, 0.026, 0.026, 0.026},
+
+  //  n S0 K0 pi+ pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.005, 0.01, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  // n S0 K0 pi+ pi+ pi-
+   { 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.005, 0.01, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  p S+ K+ pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  p S+ K0 pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  p S+ K0 pi+ pi- pi-  (546)
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  n S+ K+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  n S+ K+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  n S+ K0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.004, 0.005, 0.005, 0.005, 0.005},
+
+  //  n S+ K0 pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.005, 0.015, 0.022, 0.025, 0.027, 0.028, 0.029},
+
+  //  p S- K+ pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.005, 0.015, 0.022, 0.025, 0.027, 0.028, 0.029},
+
+  //  p S- K+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.004, 0.005, 0.005, 0.005, 0.005},
+
+  //  p S- K0 pi+ pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  p S- K0 pi+ pi+ pi-  (557)
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  n S- K+ pi+ pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  n S- K+ pi+ pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  n S- K0 pi+ pi+ pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.011, 0.013, 0.014, 0.015, 0.015},
+
+  //  p n K+ K0b pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.013, 0.015, 0.016, 0.017, 0.018},
+
+  //  p n K+ K- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.007, 0.007, 0.007, 0.007, 0.007},
+
+  //  p n K+ K- pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.013, 0.015, 0.016, 0.017, 0.018},
+
+  //  p n K0 K0b pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.007, 0.007, 0.007, 0.007, 0.007},
+
+  //  p n K0 K0b pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.013, 0.015, 0.016, 0.017, 0.018},
+
+  //  p n K0 K- pi+ pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.013, 0.015, 0.016, 0.017, 0.018},
+
+  //  p p K+ K- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.006, 0.01, 0.012, 0.013, 0.013, 0.013},
+
+  //  p p K+ K0b pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.007, 0.008, 0.008},
+
+  //  p p K0 K0b pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.006, 0.01, 0.012, 0.013, 0.013, 0.013},
+
+  //  p p K0 K- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.007, 0.008, 0.008},
+
+  //  p p K0 K- pi+ pi-  (577)
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.006, 0.01, 0.012, 0.013, 0.013, 0.013},
+
+  //  n n K+ K0b pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.007, 0.008, 0.008},
+
+  //  n n K+ K0b pi+ pi- 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.006, 0.01, 0.012, 0.013, 0.013, 0.013},
+
+  //  n n K+ K- pi+ pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.006, 0.01, 0.012, 0.013, 0.013, 0.013},
+
+  //  n n K0 K0b pi+ pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.006, 0.01, 0.012, 0.013, 0.013, 0.013},
+
+  //  n n K0 K- pi+ pi+ 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.007, 0.008, 0.008},
   //
-  // multiplicity 7 (9 channels)
+  // multiplicity 7 (69 channels)
   //
-  //  p n pi+ pi+ pi- pi- pi0 (p n pi+ pi+ pi- pi- pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.06, 0.17, 0.5,  0.7,  0.7,  0.69, 0.66, 0.62 },
+  //  p n pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,   0.0,  0.0, 0.0,
+     0.0, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,   0.0,  0.0, 0.0,
+     0.0, 0.006, 0.045, 0.14, 0.32, 0.52, 0.681, 0.84, 1.0, 1.13},
 
-  //  p n pi+ pi- pi0 pi0 pi0 (p n pi+ pi- pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.03, 0.08, 0.25, 0.35, 0.35, 0.35, 0.33, 0.31 },
+  //  p n pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0,   0.0,  0.0, 0.0,  0.0,  0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,  0.0, 0.0,  0.0,  0.0,   0.0,  0.0,   0.0,
+     0.0, 0.004, 0.03, 0.1, 0.22, 0.34, 0.454, 0.56, 0.667, 0.763},
 
-  //  p n pi0 pi0 pi0 pi0 pi0 (p n pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.02, 0.04, 0.12, 0.17, 0.18, 0.17, 0.16, 0.15 },
+  //  p n pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.002, 0.005, 0.011, 0.017, 0.023, 0.028, 0.033, 0.038},
 
-  //  p p pi+ pi+ pi- pi- pi- (n n pi+ pi+ pi+ pi- pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.06, 0.19, 0.31, 0.41, 0.44, 0.47, 0.45, 0.45 },
+  //  p p pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.008, 0.023, 0.053, 0.087, 0.114, 0.14, 0.167, 0.188},
 
-  //  p p pi+ pi- pi- pi0 pi0 (n n pi+ pi+ pi- pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.03, 0.1,  0.15, 0.2,  0.22, 0.23, 0.22, 0.22 },
+  //  p p pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
+     0.0, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
+     0.0, 0.003, 0.022, 0.07, 0.16, 0.26, 0.34, 0.42, 0.5, 0.565},
 
-  //  p p pi- pi0 pi0 pi0 pi0 (n n pi+ pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.02, 0.05, 0.07, 0.1,  0.11, 0.12, 0.11, 0.11 },
+  //  p p pi- pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.004, 0.012, 0.027, 0.043, 0.057, 0.07, 0.083, 0.094},
 
-  //  n n pi+ pi+ pi+ pi- pi- (p p pi+ pi+ pi- pi- pi-)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.06, 0.17, 0.5,  0.7,  0.7,  0.69, 0.66, 0.62 },
+  //  n n pi+ pi+ pi+ pi- pi- 
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.001, 0.008, 0.023, 0.053, 0.087, 0.114, 0.14, 0.167, 0.188},
 
-  //  n n pi+ pi+ pi- pi0 pi0 (p p pi+ pi- pi- pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.03, 0.08, 0.25, 0.35, 0.35, 0.34, 0.33, 0.31 },
+  //  n n pi+ pi+ pi- pi0 pi0
+   { 0.0, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
+     0.0, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0, 0.0,
+     0.0, 0.003, 0.022, 0.07, 0.16, 0.26, 0.34, 0.42, 0.5, 0.565},
 
-  //  n n pi+ pi0 pi0 pi0 pi0 (p p pi- pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.02, 0.05, 0.07, 0.1,  0.11, 0.12, 0.11, 0.11 },
+  //  n n pi+ pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.004, 0.012, 0.027, 0.043, 0.057, 0.07, 0.083, 0.094},
+
+  //  p L K+ pi+ pi- pi- pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.001, 0.006, 0.021, 0.038, 0.053, 0.07, 0.082, 0.097},
+
+  //  p L K+ pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.013, 0.017, 0.022, 0.027, 0.032},
+
+  //  p L K0 pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007},
+
+  //  p L K0 pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.001, 0.006, 0.021, 0.038, 0.053, 0.07, 0.082, 0.097},
+
+  //  p L K0 pi+ pi+ pi- pi-  (533)
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.014, 0.02, 0.028, 0.036, 0.044},
+
+  //  n L K+ pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.001, 0.006, 0.021, 0.038, 0.053, 0.07, 0.082, 0.097},
+
+  //  n L K+ pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.014, 0.021, 0.028, 0.036, 0.044},
+
+  //  n L K+ pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007},
+
+  //  n L K0 pi+ pi+ pi- pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.001, 0.006, 0.021, 0.038, 0.053, 0.07, 0.082, 0.097},
+
+  //  n L K0 pi+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.013, 0.017, 0.022, 0.027, 0.032},
+
+  //  p S0 K+ pi+ pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.003, 0.01, 0.019, 0.026, 0.033, 0.041, 0.048},
+
+  //  p S0 K+ pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.009, 0.012, 0.014, 0.015},
+
+  //  p S0 K0 pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004, 0.004},
+
+  //  p S0 K0 pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.003, 0.01, 0.019, 0.026, 0.033, 0.041, 0.048},
+
+  //  p S0 K0 pi+ pi+ pi- pi-  (551)
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.011, 0.015, 0.019, 0.022},
+
+  //  n S0 K+ pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.003, 0.01, 0.019, 0.026, 0.033, 0.041, 0.048},
+
+  //  n S0 K+ pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.011, 0.015, 0.019, 0.022},
+
+  //  n S0 K+ pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004, 0.004},
+
+  //  n S0 K0 pi+ pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.003, 0.01, 0.019, 0.026, 0.033, 0.041, 0.048},
+
+  //  n S0 K0 pi+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.009, 0.012, 0.014, 0.015},
+
+  //  p S+ K+ pi- pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.014, 0.015},
+
+  //  p S+ K+ pi+ pi- pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.01, 0.011, 0.012},
+
+  //  p S+ K0 pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.01, 0.011, 0.012},
+
+  //  p S+ K0 pi+ pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.015, 0.02, 0.023, 0.025, 0.027},
+
+  //  n S+ K+ pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.01, 0.011, 0.012},
+
+  //  n S+ K+ pi+ pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.015, 0.02, 0.023, 0.025, 0.027},
+
+  //  n S+ K0 pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.003, 0.003},
+
+  //  n S+ K0 pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.015, 0.02, 0.023, 0.025, 0.027},
+
+  //  n S+ K0 pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.014, 0.015},
+
+  //  p S- K+ pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.015, 0.02, 0.023, 0.025, 0.027},
+
+  //  p S- K+ pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  p S- K+ pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.003, 0.003},
+
+  //  p S- K0 pi+ pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.015, 0.02, 0.023, 0.025, 0.027},
+
+  //  p S- K0 pi+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.01, 0.011, 0.012},
+
+  //  n S- K+ pi+ pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.007, 0.015, 0.02, 0.023, 0.025, 0.027},
+
+  //  n S- K+ pi+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.01, 0.011, 0.012},
+
+  //  n S- K0 pi+ pi+ pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.014, 0.015},
+
+  //  n S- K0 pi+ pi+ pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.008, 0.01, 0.011, 0.012},
+
+  //  p n K+ K0b pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.012, 0.025, 0.033, 0.038, 0.04, 0.04},
+
+  //  p n K+ K0b pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.012, 0.025, 0.033, 0.038, 0.04, 0.04},
+
+  //  p n K+ K- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.01, 0.012, 0.013, 0.013},
+
+  //  p n K+ K- pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.006, 0.024, 0.05, 0.064, 0.072, 0.08, 0.08},
+
+  //  p n K0 K0b pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.01, 0.012, 0.013, 0.013},
+
+  //  p n K0 K0b pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.006, 0.024, 0.05, 0.064, 0.072, 0.08, 0.08},
+
+  //  p n K0 K- pi+ pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.012, 0.025, 0.033, 0.038, 0.04, 0.04},
+
+  //  p n K0 K- pi+ pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.012, 0.025, 0.033, 0.038, 0.04, 0.04},
+
+  //  p p K+ K0b pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  p p K+ K- pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  p p K+ K- pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  p p K0 K0b pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  p p K0 K0b pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  p p K0 K- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004, 0.004},
+
+  //  p p K0 K- pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.012, 0.025, 0.033, 0.038, 0.04, 0.04},
+
+  //  n n K+ K0b pi+ pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.003, 0.012, 0.025, 0.033, 0.038, 0.04, 0.04},
+
+  //  n n K+ K0b pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004, 0.004},
+
+  //  n n K+ K- pi+ pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  n n K+ K- pi+ pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  n n K0 K0b pi+ pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  n n K0 K0b pi+ pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
+
+  //  n n K0 K- pi+ pi+ pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.007, 0.01, 0.012, 0.013, 0.014},
   //
-  // multiplicity 8 (10 channels)
+  // multiplicity 8 (77 channels)
   //
-  //  p n pi+ pi+ pi+ pi- pi- pi- (p n pi+ pi+ pi+ pi- pi- pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.08, 0.18, 0.27, 0.30, 0.27, 0.24 },
+  //  p n pi+ pi+ pi+ pi- pi- pi-
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0, 0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0, 0.0,   0.0,   0.0,
+     0.0, 0.001, 0.005, 0.017, 0.04, 0.073, 0.1, 0.135, 0.164, 0.194},
 
-  //  p n pi+ pi+ pi- pi- pi0 pi0 (p n pi+ pi+ pi- pi- pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.08, 0.18, 0.27, 0.30, 0.27, 0.24 },
+  //  p n pi+ pi+ pi- pi- pi0 pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,  0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,  0.0,
+     0.0, 0.004, 0.024, 0.076, 0.18, 0.328, 0.448, 0.62, 0.75, 0.875},
 
-  //  p n pi+ pi- pi0 pi0 pi0 pi0 (p n pi+ pi- pi0 pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.04, 0.12, 0.15, 0.18, 0.15, 0.15 },
+  //  p n pi+ pi- pi0 pi0 pi0 pi0
+   { 0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0,  0.001, 0.008, 0.025, 0.06, 0.109, 0.16, 0.21, 0.26, 0.292},
 
-  //  p n pi0 pi0 pi0 pi0 pi0 pi0 (p n pi0 pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.01, 0.02, 0.06, 0.09, 0.12, 0.09, 0.09 },
+  //  p n pi0 pi0 pi0 pi0 pi0 pi0
+   { 0.0,  0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0,  0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0,  0.0,  0.0,  0.001, 0.002, 0.004, 0.006, 0.008, 0.009, 0.01 },
 
-  //  p p pi+ pi+ pi- pi- pi- pi0 (n n pi+ pi+ pi+ pi- pi- pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.08, 0.18, 0.27, 0.30, 0.27, 0.24 },
+  //  p p pi+ pi+ pi- pi- pi- pi0
+   { 0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0,  0.001, 0.008, 0.025, 0.06, 0.109, 0.16, 0.21, 0.26, 0.292},
 
-  //  p p pi+ pi- pi- pi0 pi0 pi0 (n n pi+ pi+ pi- pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.04, 0.12, 0.15, 0.18, 0.15, 0.15 },
+  //  p p pi+ pi- pi- pi0 pi0 pi0
+   { 0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0,  0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0,  0.001, 0.008, 0.025, 0.06, 0.109, 0.16, 0.21, 0.26, 0.292},
 
-  //  p p pi- pi0 pi0 pi0 pi0 pi0 (n n pi+ pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.03, 0.06, 0.09, 0.12, 0.09, 0.09 },
+  //  p p pi- pi0 pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.006, 0.011, 0.015, 0.02, 0.025, 0.029},
 
-  //  n n pi+ pi+ pi+ pi- pi- pi0 (p p pi+ pi+ pi- pi- pi- pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.08, 0.18, 0.27, 0.30, 0.27, 0.24 },
+  //  n n pi+ pi+ pi+ pi- pi- pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.004, 0.024, 0.076, 0.18, 0.328, 0.448, 0.62, 0.754, 0.875},
 
-  //  n n pi+ pi+ pi- pi0 pi0 pi0 (p p pi+ pi- pi- pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.04, 0.12, 0.15, 0.18, 0.15, 0.15 },
+  //  n n pi+ pi+ pi- pi0 pi0 pi0
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,  0.0,  0.0,
+     0.0, 0.001, 0.008, 0.025, 0.06, 0.109, 0.16, 0.21, 0.26, 0.292},
 
-  //  n n pi+ pi0 pi0 pi0 pi0 pi0 (p p pi- pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0, 0.01, 0.03, 0.06, 0.09, 0.12, 0.09, 0.09 },
+  //  n n pi+ pi0 pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.006, 0.011, 0.015, 0.02, 0.025, 0.029},
+
+  //  p L K+ pi+ pi- pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.016, 0.024, 0.034, 0.043, 0.053},
+
+  //  p L K+ pi+ pi+ pi- pi- pi-  534    --> 552
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.008, 0.011, 0.014, 0.017},
+
+  //  p L K+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.006, 0.007, 0.008},
+
+  //  p L K0 pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.016, 0.024, 0.034, 0.043, 0.053},
+
+  //  p L K0 pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.016, 0.022, 0.029, 0.035},
+
+  //  p L K0 pi0 pi0 pi0 pi0 pi0   (negligible)
+
+  //  n L K+ pi+ pi+ pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.016, 0.024, 0.034, 0.043, 0.053},
+
+  //  n L K+ pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.016, 0.022, 0.029, 0.035},
+
+  //  n L K+ pi0 pi0 pi0 pi0 pi0   (negligible)
+
+  //  n L K0 pi+ pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.016, 0.024, 0.034, 0.043, 0.053},
+
+  //  n L K0 pi+ pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.008, 0.011, 0.014, 0.017},
+
+  //  n L K0 pi+ pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,  0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.006, 0.007, 0.008},
+
+  //  p S0 K+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.012, 0.017, 0.022, 0.026},
+
+  //  p S0 K+ pi+ pi+ pi- pi- pi-  552
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  p S0 K+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004},
+
+  //  p S0 K0 pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.012, 0.017, 0.022, 0.026},
+
+  //  p S0 K0 pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.008, 0.012, 0.015, 0.018},
+
+  //  p S0 K0 pi0 pi0 pi0 pi0 pi0   (negligible)
+
+  //  n S0 K+ pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  n S0 K+ pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.008, 0.012, 0.015, 0.018},
+
+  //  n S0 K+ pi0 pi0 pi0 pi0 pi0   (negligible)
+
+  //  n S0 K0 pi+ pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  n S0 K0 pi+ pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.007, 0.008},
+
+  //  n S0 K0 pi+ pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004},
+
+  //  p S+ K+ pi+ pi- pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.015, 0.02, 0.024},
+
+  //  p S+ K+ pi- pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012},
+
+  //  p S+ K0 pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.015, 0.022, 0.029, 0.035},
+
+  //  p S+ K0 pi+ pi+ pi- pi- pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012},
+
+  //  p S+ K0 pi- pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  n S+ K+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.015, 0.022, 0.029, 0.035},
+
+  //  n S+ K+ pi+ pi+ pi- pi- pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012},
+
+  //  n S+ K+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  n S+ K0 pi+ pi+ pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.015, 0.022, 0.029, 0.035},
+
+  //  n S+ K0 pi+ pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.015, 0.02, 0.024},
+
+  //  n S+ K0 pi0 pi0 pi0 pi0 pi0  negligible
+
+  //  p S- K+ pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.015, 0.022, 0.029, 0.035},
+
+  //  p S- K+ pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.015, 0.02, 0.024},
+
+  //  p S- K+ pi0 pi0 pi0 pi0 pi0  negligible
+
+  //  p S- K0 pi+ pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.015, 0.022, 0.029, 0.035},
+
+  //  p S- K0 pi+ pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012},
+
+  //  p S- K0 pi+ pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  n S- K+ pi+ pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.009, 0.012, 0.015},
+
+  //  n S- K+ pi+ pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.005, 0.01, 0.016, 0.024, 0.032, 0.038},
+
+  //  n S- K+ pi+ pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  n S- K0 pi+ pi+ pi+ pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.015, 0.02, 0.024},
+
+  //  n S- K0 pi+ pi+ pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012},
+
+  //  p n K+ K0b pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.017, 0.025, 0.034, 0.043, 0.052},
+
+  //  p n K+ K0b pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.009, 0.012, 0.014, 0.016},
+
+  //  p n K+ K- pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.017, 0.025, 0.034, 0.043, 0.052},
+
+  //  p n K+ K- pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  p n K+ K- pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004},
+
+  //  p n K0 K0b pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.017, 0.025, 0.034, 0.043, 0.052},
+
+  //  p n K0 K0b pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  p n K0 K0b pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.004},
+
+  //  p n K0 K- pi+ pi+ pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.002, 0.008, 0.017, 0.025, 0.034, 0.043, 0.052},
+
+  //  p n K0 K- pi+ pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.009, 0.012, 0.014, 0.016},
+
+  //  p p K+ K0b pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.009, 0.011, 0.013},
+
+  //  p p K+ K0b pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.008, 0.009},
+
+  //  p p K+ K- pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  p p K+ K- pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.008, 0.009},
+
+  //  p p K0 K0b pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  p p K0 K0b pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.008, 0.009},
+
+  //  p p K0 K- pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  p p K0 K- pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.009, 0.011, 0.013},
+
+  //  p p K0 K- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.002, 0.002},
+
+  //  n n K+ K0b pi+ pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  n n K+ K0b pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.009, 0.011, 0.013},
+
+  //  n n K+ K0b pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.002, 0.002},
+
+  //  n n K+ K- pi+ pi+ pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.013, 0.019, 0.023, 0.026},
+
+  //  n n K+ K- pi+ pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.008, 0.009},
+
+  //  n n K0 K0b pi+ pi+ pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.001, 0.004, 0.008, 0.012, 0.017, 0.022, 0.026},
+
+  //  n n K0 K0b pi+ pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.008, 0.009},
+
+  //  n n K0 K- pi+ pi+ pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.006, 0.009, 0.011, 0.013},
+
+  //  n n K0 K- pi+ pi+ pi+ pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.006, 0.008, 0.009},
   //
-  // multiplicity 9 (12 channels)
+  // multiplicity 9 (86 channels)
   //
-  //  p n pi+ pi+ pi+ pi- pi- pi- pi0 (p n pi+ pi+ pi+ pi- pi- pi- pi0)
-   { 0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0, 0.0, 0.01, 0.03, 0.07, 0.11, 0.14, 0.15, 0.15, 0.15 },
+  //  p n pi+ pi+ pi+ pi- pi- pi- pi0 
+   { 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.001, 0.004, 0.016, 0.05, 0.107, 0.173, 0.267, 0.367, 0.467},
 
-  //  p n pi+ pi+ pi- pi- pi0 pi0 pi0 (p n pi+ pi+ pi- pi- pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.05, 0.07, 0.08, 0.09, 0.09, 0.09 },
+  //  p n pi+ pi+ pi- pi- pi0 pi0 pi0 
+   { 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0, 0.001, 0.006, 0.024, 0.075, 0.16, 0.26, 0.4, 0.55, 0.7},
 
-  //  p n pi+ pi- pi0 pi0 pi0 pi0 pi0 (p n pi+ pi- pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.01, 0.03, 0.04, 0.05, 0.05, 0.05, 0.05 },
+  //  p n pi+ pi- pi0 pi0 pi0 pi0 pi0
+   { 0.0,  0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,
+     0.0,  0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,  0.0,
+     0.0,  0.0, 0.001, 0.005, 0.015, 0.032, 0.052, 0.08, 0.11, 0.14},
 
-  //  p n pi0 pi0 pi0 pi0 pi0 pi0 pi0 (p n pi0 pi0 pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.01, 0.02, 0.03, 0.03, 0.03, 0.03, 0.03 },
+  //  p n pi0 pi0 pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004},
 
-  //  p p pi+ pi+ pi+ pi- pi- pi- pi- (n n pi+ pi+ pi+ pi+ pi- pi- pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.06, 0.15, 0.19, 0.22, 0.22, 0.22 },
+  //  p p pi+ pi+ pi+ pi- pi- pi- pi- 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.007, 0.013, 0.022, 0.033, 0.046, 0.058},
 
-  //  p p pi+ pi+ pi- pi- pi- pi0 pi0 (n n pi+ pi+ pi+ pi- pi- pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.06, 0.15, 0.19, 0.22, 0.22, 0.22 },
+  //  p p pi+ pi+ pi- pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0, 0.0, 0.003, 0.012, 0.037, 0.08, 0.13, 0.2, 0.27, 0.35},
 
-  //  p p pi+ pi- pi- pi0 pi0 pi0 pi0 (n n pi+ pi+ pi- pi0 pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.01, 0.04, 0.09, 0.12, 0.13, 0.13, 0.13 },
+  //  p p pi+ pi- pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0, 0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0, 0.0,   0.0,
+     0.0, 0.0, 0.001, 0.006, 0.019, 0.04, 0.065, 0.1, 0.138, 0.175},
 
-  //  p p pi- pi0 pi0 pi0 pi0 pi0 pi0 (n n pi+ pi0 pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.01, 0.02, 0.05, 0.07, 0.08, 0.08, 0.08 },
+  //  p p pi- pi0 pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.012},
 
-  //  n n pi+ pi+ pi+ pi+ pi- pi- pi- (p p pi+ pi+ pi+ pi- pi- pi- pi-)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.06, 0.15, 0.19, 0.22, 0.22, 0.22 },
+  //  n n pi+ pi+ pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.001, 0.003, 0.007, 0.013, 0.022, 0.033, 0.046, 0.058},
 
-  //  n n pi+ pi+ pi+ pi- pi- pi0 pi0 (p p pi+ pi+ pi- pi- pi- pi0 pi0)
-   { 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.01, 0.02, 0.06, 0.15, 0.19, 0.22, 0.22, 0.22 },
+  //  n n pi+ pi+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,  0.0, 0.0,  0.0,
+     0.0, 0.0, 0.003, 0.012, 0.037, 0.08, 0.13, 0.2, 0.27, 0.35},
 
-  //  n n pi+ pi+ pi- pi0 pi0 pi0 pi0 (p p pi+ pi- pi- pi0 pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.01, 0.04, 0.09, 0.12, 0.13, 0.13, 0.13 },
+  //  n n pi+ pi+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0, 0.0,   0.0,
+     0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0, 0.0,   0.0,
+     0.0, 0.0, 0.001, 0.006, 0.019, 0.04, 0.065, 0.1, 0.138, 0.175},
 
-  //  n n pi+ pi0 pi0 pi0 pi0 pi0 pi0 (p p pi- pi0 pi0 pi0 pi0 pi0 pi0)
-   { 0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0, 0.0, 0.01, 0.02, 0.05, 0.07, 0.08, 0.08, 0.08 }};
+  //  n n pi+ pi0 pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.012},
+
+  //  p L K+ pi+ pi+ pi- pi- pi- pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.006, 0.009, 0.014, 0.02, 0.025},
+
+  //  p L K+ pi+ pi- pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.006, 0.009, 0.014, 0.02, 0.025},
+
+  //  p L K+ pi- pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004},
+
+  //  p L K0 pi+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.014, 0.021, 0.03, 0.038},
+
+  //  p L K0 pi+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.013},
+
+  //  p L K0 pi+ pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.005, 0.007, 0.009},
+
+  //  p L K0 pi0 pi0 pi0 pi0 pi0 pi0  negligible
+
+  //  n L K+ pi+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.009, 0.014, 0.021, 0.03, 0.038},
+
+  //  n L K+ pi+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.008, 0.011, 0.013},
+
+  //  n L K+ pi+ pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.005, 0.007, 0.009},
+
+  //  n L K+ pi0 pi0 pi0 pi0 pi0 pi0  negligible
+
+  //  n L K0 pi+ pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.006, 0.01, 0.015, 0.021, 0.026},
+
+  //  n L K0 pi+ pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.006, 0.01, 0.015, 0.021, 0.026},
+
+  //  n L K0 pi+ pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004},
+
+  //  p S0 K+ pi+ pi+ pi- pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.007, 0.011, 0.014, 0.017},
+
+  //  p S0 K+ pi+ pi- pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.007, 0.011, 0.014, 0.017},
+
+  //  p S0 K+ pi- pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003},
+
+  //  p S0 K0 pi+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.006, 0.01, 0.015, 0.021, 0.026},
+
+  //  p S0 K0 pi+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.005, 0.007, 0.009},
+
+  //  p S0 K0 pi+ pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.005, 0.006},
+
+  //  p S0 K0 pi0 pi0 pi0 pi0 pi0 pi0  negligible
+
+  //  n S0 K+ pi+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,  0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.006, 0.01, 0.015, 0.02, 0.026},
+
+  //  n S0 K+ pi+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.005, 0.007, 0.009},
+
+  //  n S0 K+ pi+ pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.004, 0.005, 0.006},
+
+  //  n S0 K+ pi0 pi0 pi0 pi0 pi0 pi0  negligible
+
+  //  n S0 K0 pi+ pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.007, 0.011, 0.014, 0.017},
+
+  //  n S0 K0 pi+ pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.004, 0.007, 0.011, 0.014, 0.017},
+
+  //  n S0 K0 pi+ pi0 pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003},
+
+  //  p S+ K+ pi+ pi- pi- pi- pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  p S+ K+ pi- pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.011},
+
+  //  p S+ K+ pi+ pi+ pi- pi- pi- pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.011},
+
+  //  p S+ K0 pi+ pi- pi- pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  p S+ K0 pi+ pi+ pi- pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  p S+ K0 pi- pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  n S+ K+ pi+ pi- pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  n S+ K+ pi+ pi+ pi- pi- pi- pi0  
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  n S+ K+ pi- pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  n S+ K0 pi+ pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.004, 0.011, 0.017, 0.022, 0.027, 0.031},
+
+  //  n S+ K0 pi+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.011},
+
+  //  n S+ K0 pi+ pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  n S+ K0 pi0 pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  p S- K+ pi+ pi+ pi- pi- pi0 pi0  
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,  0.0,
+     0.0, 0.0, 0.0, 0.0, 0.004, 0.011, 0.016, 0.021, 0.027, 0.031},
+
+  //  p S- K+ pi+ pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.011},
+
+  //  p S- K+ pi+ pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  p S- K+ pi0 pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  p S- K0 pi+ pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  p S- K0 pi+ pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  p S- K0 pi+ pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  n S- K+ pi+ pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  n S- K+ pi+ pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  n S- K+ pi+ pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  n S- K0 pi+ pi+ pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.016, 0.019, 0.021},
+
+  //  n S- K0 pi+ pi+ pi0 pi0 pi0 pi0
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.011},
+
+  //  n S- K0 pi+ pi+ pi+ pi+ pi- pi-
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.011},
+
+  //  p n K+ K0b pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.004, 0.012, 0.019, 0.027, 0.036, 0.045},
+
+  //  p n K+ K0b pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.013, 0.016},
+
+  //  p n K+ K0b pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  p n K+ K- pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.004, 0.012, 0.019, 0.027, 0.036, 0.045},
+
+  //  p n K+ K- pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.018, 0.024, 0.031},
+
+  //  p n K+ K- pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  p n K0 K0b pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.004, 0.012, 0.019, 0.027, 0.036, 0.045},
+
+  //  p n K0 K0b pi+ pi- pi0 pi0 pi0  
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.003, 0.008, 0.012, 0.018, 0.024, 0.031},
+
+  //  p n K0 K0b pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  p n K0 K- pi+ pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.004, 0.012, 0.019, 0.027, 0.036, 0.045},
+
+  //  p n K0 K- pi+ pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.013, 0.016},
+
+  //  p n K0 K- pi+ pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  p p K+ K0b pi+ pi- pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.013, 0.016},
+
+  //  p p K+ K0b pi- pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  p p K+ K- pi+ pi- pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.019, 0.023},
+
+  //  p p K+ K- pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  p p K+ K- pi- pi0 pi0 pi0 pi0  
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004},
+
+  //  p p K0 K0b pi+ pi- pi- pi0 pi0  
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.019, 0.023},
+
+  //  p p K0 K0b pi+ pi+ pi- pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  p p K0 K0b pi- pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004},
+
+  //  p p K0 K- pi+ pi+ pi- pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.019, 0.023},
+
+  //  p p K0 K- pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.013, 0.016},
+
+  //  p p K0 K- pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  n n K+ K0b pi+ pi+ pi- pi- pi0  
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.019, 0.023},
+
+  //  n n K+ K0b pi+ pi- pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.013, 0.016},
+
+  //  n n K+ K0b pi0 pi0 pi0 pi0 pi0   negligible
+
+  //  n n K+ K- pi+ pi+ pi- pi0 pi0  
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.019, 0.023},
+
+  //  n n K+ K- pi+ pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  n n K+ K- pi+ pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004},
+
+  //  n n K0 K0b pi+ pi+ pi- pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.002, 0.005, 0.009, 0.014, 0.019, 0.023},
+
+  //  n n K0 K0b pi+ pi+ pi+ pi- pi- 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006},
+
+  //  n n K0 K0b pi+ pi0 pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004},
+
+  //  n n K0 K- pi+ pi+ pi+ pi- pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.003, 0.006, 0.01, 0.013, 0.016},
+
+  //  n n K0 K- pi+ pi+ pi0 pi0 pi0 
+   { 0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+     0.0, 0.0, 0.0, 0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006}};
 }
 
 // Initialize n-p channel

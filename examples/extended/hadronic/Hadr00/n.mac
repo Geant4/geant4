@@ -8,15 +8,14 @@
 /testhadr/TargetMat        G4_C
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
-/run/printProgress      10
-#/testhadr/HistoPrint       3
+/run/printProgress         10
 #
 /run/initialize
 /process/em/workerVerbose 0
 #
 /gun/particle  neutron
 /gun/energy 100. MeV
-###/testhadr/histo/fileName  nC
+###/testhadr/fileName  nC
 /testhadr/particle   neutron
 /testhadr/verbose 1
 /process/eLoss/verbose 0

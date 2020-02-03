@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: geomdefs.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -56,6 +55,7 @@ enum EAxis {kXAxis,kYAxis,kZAxis,kRho,kRadial3D,kPhi,kUndefined};
 // G4VSolid::Inside return codes
 // kSurface => within tolerance of exact surface
 enum EInside {kOutside,kSurface,kInside};
+// enum EInside {kInside=1, kSurface=2, kOutside=3};
 
 // kNormal = (G4PVPlacement) Conventional positioning
 // kReplica = (G4PVReplica)  Consumed parameterised case
@@ -65,7 +65,7 @@ enum EInside {kOutside,kSurface,kInside};
 // kParameterised = (G4PVParameterised) General parameterised volume
 //                           => Distance & location computed to volumes
 //                              after setup/modification via user object
-enum EVolume {kNormal,kReplica,kParameterised};
+enum EVolume {kNormal,kReplica,kParameterised,kExternal};
 
 // Default max size of Navigation history
 //

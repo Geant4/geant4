@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: History 89451 2015-04-10 08:39:38Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // ------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,32 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+July 27, 2018 I.Hrivnacova - fieldex05-V10-04-02
+- Macro review and code clean-up:
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
+
+May 15, 2018 J.Allison - fieldex05-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+
+May 09, 2018 B.Morgan - fieldex05-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Nov 03, 2016 L.Garnier - fieldex05-V10-02-01
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+July 01, 2016 I. Hrivnacova - fieldex05-V10-02-00
+- Replaced F05ExtraPhysics with use of G4StepLimiterPhysics
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 April 09, 2015 P. Gumplinger - fieldex05-V10-01-00
 - use new G4SpinDecayPhysics constructor in F05PhysicsList
 

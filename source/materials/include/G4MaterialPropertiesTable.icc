@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc 95701 2016-02-19 10:04:13Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -45,123 +44,28 @@ void G4MaterialPropertiesTable::AddConstProperty(const char *key,
 {
   // Provides a way of adding a constant property to the Material Properties
   // Table given a key
+  G4String k(key);
+  if (std::find(G4MaterialConstPropertyName.begin(),
+                G4MaterialConstPropertyName.end(), k) ==
+       G4MaterialConstPropertyName.end()) {
+    G4MaterialConstPropertyName.push_back(k);
+  }
+  G4int index = GetConstPropertyIndex(k);
 
-  MPTC [G4String(key)] = PropertyValue;
+  MCP[index] = PropertyValue;
 }
-
-inline
-G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
-                                            const char *key,
-                                            G4double   *PhotonEnergies,
-                                            G4double   *PropertyValues,
-                                            G4int      NumEntries)
-{
-  // Provides a way of adding a property to the Material Properties
-  // Table given a pair of numbers and a key
-
-  G4MaterialPropertyVector *mpv = new G4MaterialPropertyVector(PhotonEnergies, 
-                                                   PropertyValues, NumEntries);
-  MPT [G4String(key)] = mpv;
-
-  return mpv;
-}
-
-inline
-void G4MaterialPropertiesTable::
-AddProperty(const char *key, G4MaterialPropertyVector *mpv)
-{
-  //  Provides a way of adding a property to the Material Properties
-  //  Table given an G4MaterialPropertyVector Reference and a key
-
-  MPT [G4String(key)] = mpv;
-} 
 
 inline
 void G4MaterialPropertiesTable::RemoveConstProperty(const char *key)
 {
-  MPTC.erase(G4String(key));
+  G4int index = GetConstPropertyIndex(G4String(key));
+
+  MCP.erase(index);
 }
 
 inline
 void G4MaterialPropertiesTable::RemoveProperty(const char *key)
 {
-  MPT.erase(G4String(key));
-}
-
-inline
-G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
-{
-  // Returns the constant material property corresponding to a key
-
-  MPTCiterator j;
-  j = MPTC.find(G4String(key));
-  if ( j != MPTC.end() ) return j->second;
-  G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
-              FatalException, "Constant Material Property not found.");
-  return 0.;
-}
-
-inline
-G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key)
-{
-  // Returns true if a const property 'key' exists
-
-  MPTCiterator j;
-  j = MPTC.find(G4String(key));
-  if ( j != MPTC.end() ) return true;
-  return false;
-}
-
-inline G4MaterialPropertyVector*
-G4MaterialPropertiesTable::GetProperty(const char *key)
-{
-  // Returns a Material Property Vector corresponding to a key
-
-  //Important Note for MT. adotti 17 Feb 2016
-  //In previous implementation the following line was at the bottom of the
-  //function causing a rare race-condition.
-  //Moving this line here from the bottom solves the problem because:
-  //1- Map is accessed only via operator[] (to insert) and find() (to search),
-  //   and these are thread safe if done on separate elements.
-  //   See notes on data-races at:
-  //   http://www.cplusplus.com/reference/map/map/operator%5B%5D/
-  //   http://www.cplusplus.com/reference/map/map/find/
-  //2- So we have a data race if two threads access the same element (GROUPVEL)
-  //   one in read and one in write mode. This was happening with the line
-  //   at the bottom of the code, one thread in SetGROUPVEL(), and the other here
-  //3- SetGROUPVEL() is protected by a mutex that ensures that only
-  //   one thread at the time will execute its code
-  //4- The if() statement guarantees that only if two threads are searching
-  //   the same problematic key (GROUPVEL) the mutex will be used.
-  //   Different keys do not lock (good for performances)
-  //5- As soon as a thread acquires the mutex in SetGROUPVEL it checks again
-  //   if the map has GROUPVEL key, if so returns immediately.
-  //   This "double check" allows to execute the heavy code to calculate
-  //   group velocity only once even if two threads enter SetGROUPVEL together
-  if (G4String(key) == "GROUPVEL") return SetGROUPVEL();
-
-  MPTiterator i;
-  i = MPT.find(G4String(key));
-  if ( i != MPT.end() ) return i->second;
-  return NULL;
-}
-
-inline
-void G4MaterialPropertiesTable::AddEntry(const char *key,
-                                         G4double    aPhotonEnergy,
-                                         G4double    aPropertyValue)
-{
-  // Allows to add an entry pair directly to the Material Property Vector
-  // given a key
-
-  G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
-  if (targetVector != 0)
-  {
-    targetVector->InsertValues(aPhotonEnergy, aPropertyValue);
-  }
-  else
-  {
-    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat203",
-                FatalException, "Material Property Vector not found.");
-  }
+  G4int index = GetPropertyIndex(G4String(key));
+  MP.erase(index);
 }

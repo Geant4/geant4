@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H2Messenger.cc 66310 2012-12-17 11:56:35Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -69,6 +68,9 @@ G4H2Messenger::G4H2Messenger(G4VAnalysisManager* manager)
   fSetH2XAxisCmd = fHelper->CreateSetAxisCommand("x", this);
   fSetH2YAxisCmd = fHelper->CreateSetAxisCommand("y", this);
   fSetH2ZAxisCmd = fHelper->CreateSetAxisCommand("z", this);
+  fSetH2XAxisLogCmd = fHelper->CreateSetAxisLogCommand("x", this);
+  fSetH2YAxisLogCmd = fHelper->CreateSetAxisLogCommand("y", this);
+  fSetH2ZAxisLogCmd = fHelper->CreateSetAxisLogCommand("z", this);
 }
 
 //_____________________________________________________________________________
@@ -259,7 +261,7 @@ void G4H2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
   std::vector<G4String> parameters;
   G4Analysis::Tokenize(newValues, parameters);
   // check consistency
-  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+  if ( parameters.size() != command->GetParameterEntries() ) {
     // Should never happen but let's check anyway for consistency
     fHelper->WarnAboutParameters(command, parameters.size());
     return;
@@ -348,4 +350,22 @@ void G4H2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     auto zaxis = parameters[counter++];
     fManager->SetH2ZAxisTitle(id, zaxis);     
   }
-}  
+  else if ( command == fSetH2XAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto xaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH2XAxisIsLog(id, xaxisLog);
+  }
+  else if ( command == fSetH2YAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto yaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH2YAxisIsLog(id, yaxisLog);
+  }
+  else if ( command == fSetH2ZAxisLogCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto zaxisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->SetH2ZAxisIsLog(id, zaxisLog);
+  }
+}

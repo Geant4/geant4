@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94008 2015-11-05 10:06:41Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +30,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
@@ -47,6 +47,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4BGGNucleonInelasticXS.hh
 	G4BGGPionElasticXS.hh
 	G4BGGPionInelasticXS.hh
+	G4BarashenkovData.hh
 	G4ChipsAntiBaryonElasticXS.hh
 	G4ChipsAntiBaryonInelasticXS.hh
 	G4ChipsComponentXS.hh
@@ -88,16 +89,22 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4HadronFissionDataSet.hh
 	G4HadronInelasticDataSet.hh
 	G4HadronNucleonXsc.hh
+        G4HadronXSDataTable.hh
 	G4IonProtonCrossSection.hh
 	G4IonsKoxCrossSection.hh
 	G4IonsShenCrossSection.hh
 	G4IonsSihverCrossSection.hh
 	G4KokoulinMuonNuclearXS.hh
+        G4NeutrinoElectronCcXsc.hh
+        G4NeutrinoElectronNcXsc.hh
+        G4NeutrinoElectronTotXsc.hh
 	G4NeutronCaptureXS.hh
 	G4NeutronElasticXS.hh
+        G4NeutronElectronElXsc.hh
 	G4NeutronInelasticCrossSection.hh
 	G4NeutronInelasticXS.hh
 	G4NucleonNuclearCrossSection.hh
+	G4ParticleInelasticXS.hh
 	G4PhotoNuclearCrossSection.hh
 	G4PiData.hh
 	G4PiNuclearCrossSection.hh
@@ -112,6 +119,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ZeroXS.hh
 	G4CrossSectionFactoryRegistry.hh
 	G4FastPathHadronicCrossSection.hh
+	G4MuNeutrinoNucleusTotXsc.hh
     SOURCES
 	G4BGGNucleonElasticXS.cc
 	G4BGGNucleonInelasticXS.cc
@@ -157,16 +165,22 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4HadronFissionDataSet.cc
 	G4HadronInelasticDataSet.cc
 	G4HadronNucleonXsc.cc
+        G4HadronXSDataTable.cc
 	G4IonProtonCrossSection.cc
 	G4IonsKoxCrossSection.cc
 	G4IonsShenCrossSection.cc
 	G4IonsSihverCrossSection.cc
 	G4KokoulinMuonNuclearXS.cc
+        G4NeutrinoElectronCcXsc.cc
+        G4NeutrinoElectronNcXsc.cc
+        G4NeutrinoElectronTotXsc.cc
 	G4NeutronCaptureXS.cc
 	G4NeutronElasticXS.cc
+        G4NeutronElectronElXsc.cc
 	G4NeutronInelasticCrossSection.cc
 	G4NeutronInelasticXS.cc
 	G4NucleonNuclearCrossSection.cc
+	G4ParticleInelasticXS.cc
 	G4PhotoNuclearCrossSection.cc
 	G4PiData.cc
 	G4PiNuclearCrossSection.cc
@@ -180,9 +194,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ZeroXS.cc
 	G4CrossSectionFactoryRegistry.cc
 	G4FastPathHadronicCrossSection.cc
+	G4MuNeutrinoNucleusTotXsc.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
+        G4cuts
         G4geometrymng
         G4globman
         G4had_mod_man

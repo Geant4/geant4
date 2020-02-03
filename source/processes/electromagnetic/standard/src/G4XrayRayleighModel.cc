@@ -152,19 +152,19 @@ G4double G4XrayRayleighModel::ComputeCrossSectionPerAtom(
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
-					    const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* aDynamicGamma,
-					      G4double,
-					      G4double)
+void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,  
+                                            const G4MaterialCutsCouple* couple,
+                                            const G4DynamicParticle* aDPGamma,
+                                            G4double,
+                                            G4double)
 {
   if ( verboseLevel > 3)
   {
     G4cout << "Calling SampleSecondaries() of G4XrayRayleighModel" << G4endl;
   }
-  G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
+  G4double photonEnergy0 = aDPGamma->GetKineticEnergy();
 
-  G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
+  G4ParticleMomentum photonDirection0 = aDPGamma->GetMomentumDirection();
 
 
   // Sample the angle of the scattered photon
@@ -188,7 +188,8 @@ void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*f
   cosDipole = cofA - 1./cofA;
 
   // select atom
-  const G4Element* elm = SelectRandomAtom(couple, aDynamicGamma->GetParticleDefinition(), photonEnergy0);
+  const G4Element* elm = SelectTargetAtom(couple, aDPGamma->GetParticleDefinition(),
+                                          photonEnergy0,aDPGamma->GetLogKineticEnergy());
   G4double Z = elm->GetZ();
 
   G4double k   = photonEnergy0/hbarc;

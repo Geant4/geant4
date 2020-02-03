@@ -27,7 +27,10 @@
 /// \brief Main program of the electromagnetic/TestEm4 example
 //
 //
+<<<<<<< HEAD
 // $Id: TestEm4.cc 85033 2014-10-23 10:05:41Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

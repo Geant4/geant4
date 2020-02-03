@@ -71,6 +71,7 @@
 #include "G4RadioactivityTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4Threading.hh"
+#include "G4RadioactiveDecayMode.hh"
 
 class G4RadioactiveDecaymessenger;
 
@@ -306,6 +307,9 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     //User define radioactive decay data files replacing some files in the G4RADECAY database
     std::map<G4int, G4String> theUserRadioactiveDataFiles;
 
+    //The last RadDecayMode
+    G4RadioactiveDecayMode theRadDecayMode;
+
     // Library of decay tables
     DecayTableMap* dkmap;
 #ifdef G4MULTITHREADED
@@ -343,6 +347,8 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 #ifdef G4MULTITHREADED
   public:
     static G4Mutex radioactiveDecayMutex;
+  protected:
+    G4int& NumberOfInstances();
 #endif
 };
 

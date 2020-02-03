@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: VoxelParam.hh 76431 2013-11-10 20:28:49Z kmura $
 //
 /// @file VoxelParam.hh
 /// @brief Define voxel parameterization

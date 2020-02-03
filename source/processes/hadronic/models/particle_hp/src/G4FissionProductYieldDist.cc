@@ -1025,7 +1025,7 @@ G4FFG_DATA_FUNCTIONENTER__
 //        // issue /run/particle/addProcManage
 //        G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
 //
-//        // retreive  /control/verbose
+//        // retrieve  /control/verbose
 //        G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
 //    }
 
@@ -1040,7 +1040,7 @@ G4FFG_FUNCTIONENTER__
 
     // Generate the file location starting in the Geant4 data directory
     std::ostringstream DirectoryName;
-    DirectoryName << getenv("G4NEUTRONHPDATA") << G4FFGDefaultValues::ENDFFissionDataLocation;
+    DirectoryName << std::getenv("G4NEUTRONHPDATA") << G4FFGDefaultValues::ENDFFissionDataLocation;
 
     // Return the directory structure
 G4FFG_FUNCTIONLEAVE__

@@ -27,7 +27,10 @@
 /// \brief Implementation of the EventAction class
 //
 //
+<<<<<<< HEAD
 // $Id: EventAction.cc 92318 2015-08-27 14:49:47Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

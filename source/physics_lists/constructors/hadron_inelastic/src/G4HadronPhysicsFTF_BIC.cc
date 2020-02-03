@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTF_BIC.cc 93617 2015-10-27 09:00:41Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,143 +35,148 @@
 //----------------------------------------------------------------------------
 //
 #include <iomanip>   
-
 #include "G4HadronPhysicsFTF_BIC.hh"
-
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
-
+#include "G4PionBuilder.hh"
+#include "G4KaonBuilder.hh"
+#include "G4BinaryPionBuilder.hh"
+#include "G4BertiniPionBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
+#include "G4FTFBinaryPionBuilder.hh"
+#include "G4FTFBinaryKaonBuilder.hh"
+#include "G4ProtonBuilder.hh"
+#include "G4FTFBinaryProtonBuilder.hh"
+#include "G4BinaryProtonBuilder.hh"
+#include "G4NeutronBuilder.hh"
+#include "G4FTFBinaryNeutronBuilder.hh"
+#include "G4BinaryNeutronBuilder.hh"
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
-
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionInelastic.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
-
 #include "G4CrossSectionDataSetRegistry.hh"
-
 #include "G4PhysListUtil.hh"
-
-// factory
+#include "G4HadronicParameters.hh"
 #include "G4PhysicsConstructorFactory.hh"
-//
+
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTF_BIC);
 
-G4ThreadLocal G4HadronPhysicsFTF_BIC::ThreadPrivate* 
-G4HadronPhysicsFTF_BIC::tpdata = 0;
-
 G4HadronPhysicsFTF_BIC::G4HadronPhysicsFTF_BIC(G4int)
-    :  G4VPhysicsConstructor("hInelastic FTF_BIC")
-/*  , theNeutrons(0)
-    , theFTFBinaryNeutron(0)
-    , theBinaryNeutron(0)
-    , thePion(0)
-    , theKaon(0)
-    , theBICPion(0)
-    , theBertiniKaon(0)
-    , theFTFBinaryPion(0)
-    , theFTFBinaryKaon(0)
-    , thePro(0)
-    , theFTFBinaryPro(0)
-    , theBinaryPro(0)
-    , theHyperon(0)
-    , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)
-    , xsKaon(0)
-    , xsNeutronInelasticXS(0)
-    , xsNeutronCaptureXS(0)*/
-    , QuasiElastic(false)
-{}
+    : G4HadronPhysicsFTF_BIC("hInelastic FTF_BIC",false) {}
 
 G4HadronPhysicsFTF_BIC::G4HadronPhysicsFTF_BIC(const G4String& name, G4bool quasiElastic)
     :  G4VPhysicsConstructor(name)
-/*  , theNeutrons(0)
-    , theFTFBinaryNeutron(0)
-    , theBinaryNeutron(0)
-    , thePion(0)
-    , theKaon(0)
-    , theBICPion(0)
-    , theBertiniKaon(0)
-    , theFTFBinaryPion(0)
-    , theFTFBinaryKaon(0)
-    , thePro(0)
-    , theFTFBinaryPro(0)
-    , theBinaryPro(0)
-    , theHyperon(0)
-    , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)
-    , xsKaon(0)
-    , xsNeutronInelasticXS(0)
-    , xsNeutronCaptureXS(0)*/
     , QuasiElastic(quasiElastic)
-{}
+{
+    maxBIC_neutron = maxBIC_proton = maxBERT_kaon = maxBERT_pion =
+       G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+    maxBIC_pion =  1.5*GeV;
+    minBERT_pion = 1.0*GeV;
+}
+
+G4HadronPhysicsFTF_BIC::~G4HadronPhysicsFTF_BIC()
+{} 
 
 void G4HadronPhysicsFTF_BIC::CreateModels()
 {
-  tpdata->theNeutrons=new G4NeutronBuilder;
-
-  tpdata->theNeutrons->RegisterMe(tpdata->theFTFBinaryNeutron=new G4FTFBinaryNeutronBuilder(QuasiElastic));
-
-  tpdata->theNeutrons->RegisterMe(tpdata->theBinaryNeutron=new G4BinaryNeutronBuilder);
-  tpdata->theBinaryNeutron->SetMaxEnergy(5.0*GeV);
-
-  tpdata->thePro=new G4ProtonBuilder;
-  tpdata->thePro->RegisterMe(tpdata->theFTFBinaryPro=new G4FTFBinaryProtonBuilder(QuasiElastic));
-
-  tpdata->thePro->RegisterMe(tpdata->theBinaryPro=new G4BinaryProtonBuilder);
-  tpdata->theBinaryPro->SetMaxEnergy(5.0*GeV);
-  
-  tpdata->thePion=new G4PionBuilder;
-  tpdata->thePion->RegisterMe(tpdata->theFTFBinaryPion=new G4FTFBinaryPionBuilder(QuasiElastic));
-  tpdata->thePion->RegisterMe(tpdata->theBICPion = new G4BinaryPionBuilder);
-  tpdata->theBICPion->SetMaxEnergy(5*GeV);        //  use Binary up to 5GeV for pion
-
-  tpdata->theKaon=new G4KaonBuilder;
-  tpdata->theKaon->RegisterMe(tpdata->theFTFBinaryKaon=new G4FTFBinaryKaonBuilder(QuasiElastic));
-  tpdata->theKaon->RegisterMe(tpdata->theBertiniKaon=new G4BertiniKaonBuilder);
-  tpdata->theBertiniKaon->SetMaxEnergy(5*GeV);
- 
-  tpdata->theHyperon=new G4HyperonFTFPBuilder;
-    
-  tpdata->theAntiBaryon=new G4AntiBarionBuilder;
-  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new  G4FTFPAntiBarionBuilder(QuasiElastic));
+    Neutron();
+    Proton();
+    Pion();
+    Kaon();
+    Others();
 }
 
-G4HadronPhysicsFTF_BIC::~G4HadronPhysicsFTF_BIC() 
+void G4HadronPhysicsFTF_BIC::Neutron()
 {
-  if (!tpdata) return;
+  //General schema:
+  // 1) Create a builder
+  // 2) Call AddBuilder
+  // 3) Configure the builder, possibly with sub-builders
+  // 4) Call builder->Build()
+  auto neu = new G4NeutronBuilder;
+  AddBuilder(neu);
+  auto ftfn = new G4FTFBinaryNeutronBuilder(QuasiElastic);
+  AddBuilder( ftfn );
+  neu->RegisterMe(ftfn);
+  auto bicn = new G4BinaryNeutronBuilder;
+  AddBuilder(bicn);
+  neu->RegisterMe(bicn);
+  bicn->SetMinEnergy(0.0);
+  bicn->SetMaxEnergy(maxBIC_neutron);
+  neu->Build();
+}
 
-   delete tpdata->theFTFBinaryNeutron;
-   delete tpdata->theBinaryNeutron;
-   delete tpdata->theNeutrons;
+void G4HadronPhysicsFTF_BIC::Proton()
+{
+  auto pro = new G4ProtonBuilder;
+  AddBuilder(pro);
+  auto ftfp = new G4FTFBinaryProtonBuilder(QuasiElastic);
+  AddBuilder(ftfp);
+  pro->RegisterMe(ftfp);
+  auto bicp = new G4BinaryProtonBuilder;
+  AddBuilder(bicp);
+  pro->RegisterMe(bicp);
+  bicp->SetMaxEnergy(maxBIC_proton);
+  pro->Build();
+} 
 
-   delete tpdata->theFTFBinaryPro;
-   delete tpdata->theBinaryPro;
-   delete tpdata->thePro;
+void G4HadronPhysicsFTF_BIC::Pion()
+{
+  auto pi = new G4PionBuilder;
+  AddBuilder(pi);
+  auto ftfpi = new G4FTFBinaryPionBuilder(QuasiElastic);
+  AddBuilder(ftfpi);
+  pi->RegisterMe(ftfpi);
+  auto bertpi = new G4BertiniPionBuilder;
+  AddBuilder(bertpi);
+  bertpi->SetMinEnergy(minBERT_pion);
+  bertpi->SetMaxEnergy(maxBERT_pion);
+  pi->RegisterMe(bertpi);
+  auto bicpi = new G4BinaryPionBuilder;
+  AddBuilder(bicpi);
+  pi->RegisterMe(bicpi);
+  bicpi->SetMaxEnergy(maxBIC_pion);
+  pi->Build();
+}
 
-   delete tpdata->theFTFBinaryPion;
-   delete tpdata->theBICPion;
-   delete tpdata->thePion;
+void G4HadronPhysicsFTF_BIC::Kaon()
+{
+  auto k = new G4KaonBuilder;
+  AddBuilder(k);
+  auto ftfk = new G4FTFBinaryKaonBuilder(QuasiElastic);
+  AddBuilder(ftfk);
+  k->RegisterMe(ftfk);
+  auto bertk  = new G4BertiniKaonBuilder;
+  AddBuilder(bertk);
+  k->RegisterMe(bertk);
+  bertk->SetMaxEnergy(maxBERT_kaon);
+  k->Build();
+}  
 
-   delete tpdata->theFTFBinaryKaon;
-   delete tpdata->theBertiniKaon;
-   delete tpdata->theKaon;
+void G4HadronPhysicsFTF_BIC::Others()
+{
+  auto hyp = new G4HyperonFTFPBuilder;
+  AddBuilder(hyp);
+  hyp->Build();
 
-   delete tpdata->theHyperon;
-   delete tpdata->theAntiBaryon;
-   delete tpdata->theFTFPAntiBaryon;
-
-   delete tpdata; tpdata = 0;
+  auto abar = new G4AntiBarionBuilder;
+  AddBuilder(abar);
+  auto ftfpabar = new G4FTFPAntiBarionBuilder(QuasiElastic);
+  AddBuilder(ftfpabar);
+  abar->RegisterMe(ftfpabar);
+  abar->Build();
 }
 
 void G4HadronPhysicsFTF_BIC::ConstructParticle()
@@ -187,46 +191,26 @@ void G4HadronPhysicsFTF_BIC::ConstructParticle()
   pShortLivedConstructor.ConstructParticle();  
 }
 
-//#include "G4ProcessManager.hh"
-#include "G4PhysListUtil.hh"
 void G4HadronPhysicsFTF_BIC::ConstructProcess()
 {
-  if ( tpdata == 0 ) tpdata = new ThreadPrivate;
+  if(G4Threading::IsMasterThread()) {
+      DumpBanner();
+  }
   CreateModels();
-  tpdata->theNeutrons->Build();
-  tpdata->thePro->Build();
-  tpdata->thePion->Build();
-  tpdata->theKaon->Build();
+  ExtraConfiguration();
+}
 
-  // --- Kaons ---
-  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
-  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
-
-  tpdata->theHyperon->Build();
-  tpdata->theAntiBaryon->Build();
-
+//#include "G4ProcessManager.hh"
+#include "G4PhysListUtil.hh"
+void G4HadronPhysicsFTF_BIC::ExtraConfiguration() 
+{
   // --- Neutrons ---
-  tpdata->xsNeutronInelasticXS = (G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name());
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);
-
-  G4HadronicProcess* capture = 0;
-  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
-  G4ProcessVector*  pv = pmanager->GetProcessList();
-  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
-    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
-      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
-    }
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);
+  if(inel) { inel->AddDataSet(new G4NeutronInelasticXS()); }
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
+  if (capture) {
+    capture->RegisterMe(new G4NeutronRadCapture());
   }
-  if ( ! capture ) {
-    capture = new G4HadronCaptureProcess("nCapture");
-    pmanager->AddDiscreteProcess(capture);
-  }
-  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
-  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
-  capture->RegisterMe(new G4NeutronRadCapture());
 }
 

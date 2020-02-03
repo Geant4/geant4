@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc 97543 2016-06-03 15:49:14Z gcosmo $
 //
 // class G4GDMLWrite Implementation
 //
@@ -112,8 +111,9 @@ void G4GDMLWrite::UserinfoWrite(xercesc::DOMElement* gdmlElement)
 {
   if(auxList.size()>0)
   {
+#ifdef G4VERBOSE
     G4cout << "G4GDML: Writing userinfo..." << G4endl;
-      
+#endif
     userinfoElement = NewElement("userinfo");
     gdmlElement->appendChild(userinfoElement);
     AddAuxInfo(&auxList, userinfoElement);
@@ -127,9 +127,14 @@ G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
    if (addPointerToName) { stream << ptr; };
 
    nameOut=G4String(stream.str());
-   if(nameOut.contains(' '))
-   nameOut.erase(std::remove(nameOut.begin(),nameOut.end(),' '),nameOut.end());
-
+   std::vector<char> toremove = { ' ', '/', ':', '#', '+' };
+   for (auto c: toremove)
+   {
+     if(nameOut.contains(c))
+     {
+       std::replace(nameOut.begin(),nameOut.end(),c, '_');
+     }
+   }
    return nameOut;
 }
 
@@ -171,10 +176,10 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
 {
    SchemaLocation = setSchemaLocation;
    addPointerToName = refs;
-
+#ifdef G4VERBOSE
    if (depth==0) { G4cout << "G4GDML: Writing '" << fname << "'..." << G4endl; }
    else   { G4cout << "G4GDML: Writing module '" << fname << "'..." << G4endl; }
-   
+#endif
    if (FileExists(fname))
    {
      G4String ErrorMessage = "File '"+fname+"' already exists!";
@@ -272,7 +277,9 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    }
    else
    {
+#ifdef G4VERBOSE
      G4cout << "G4GDML: Writing module '" << fname << "' done !" << G4endl;
+#endif
    }
 
    return R;

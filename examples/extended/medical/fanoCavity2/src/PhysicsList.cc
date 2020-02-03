@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +39,7 @@
 
 #include "PhysListEmStandard_option0.hh"
 #include "PhysListEmStandard_option3.hh"
+#include "PhysListEmStandard_option4.hh"
 #include "PhysListEmStandard_GS.hh"
 #include "PhysListEmStandard_WVI.hh"
 #include "PhysListEmStandard_SS.hh"
@@ -63,8 +67,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList()
-: G4VModularPhysicsList(), fMessenger(0), fEmPhysicsList(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
   fMessenger = new PhysicsListMessenger(this); 
@@ -76,8 +79,6 @@ PhysicsList::PhysicsList()
   defaultCutValue = 10*km;
 
   SetVerboseLevel(1);  
-  
-  G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,7 +143,7 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel>0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -159,6 +160,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard_option3(name);
+        
+  } else if (name == "standard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard_option4(name);
         
   } else if (name == "standard_GS") {
 
@@ -184,25 +191,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4UnitsTable.hh"
-
-void PhysicsList::SetCuts()
-{
-  if (verboseLevel >0){
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-     
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(defaultCutValue, "gamma");
-  SetCutValue(defaultCutValue, "e-");
-  SetCutValue(defaultCutValue, "e+");
-  SetCutValue(defaultCutValue, "proton");  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Box.icc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 inline definitions file
-//
-// G4Box.icc
-//
 // Implementation of inline methods of G4Box
 // --------------------------------------------------------------------
 

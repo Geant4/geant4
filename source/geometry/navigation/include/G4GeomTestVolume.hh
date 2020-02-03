@@ -23,13 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GeomTestVolume.hh 73253 2013-08-22 13:24:02Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// G4GeomTestVolume
+// class G4GeomTestVolume
 //
 // Class description:
 //
@@ -51,9 +45,9 @@ class G4GeomTestVolume
   public:  // with description
 
     G4GeomTestVolume( G4VPhysicalVolume *theTarget,
-                      G4double theTolerance=0.0,    // mm
-                      G4int numberOfPoints=10000,
-                      G4bool theVerbosity=true);
+                      G4double theTolerance = 0.0,    // mm
+                      G4int numberOfPoints = 10000,
+                      G4bool theVerbosity = true);
     ~G4GeomTestVolume();
       // Constructor and destructor
 
@@ -82,7 +76,7 @@ class G4GeomTestVolume
     G4VPhysicalVolume *target;        // Target volume
     G4double tolerance;               // Error tolerance
     G4int resolution;                 // Number of points to test
-    G4int maxErr;                     // Maximum number of errors to report
+    G4int maxErr = 1;                 // Maximum number of errors to report
     G4bool verbosity;                 // Verbosity level for overlaps check
 };
 

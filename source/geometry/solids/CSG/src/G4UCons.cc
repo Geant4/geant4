@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-//
 // Implementation for G4UCons wrapper class
+//
+// 30.10.13 G.Cosmo, CERN/PH
 // --------------------------------------------------------------------
 
 #include "G4Cons.hh"

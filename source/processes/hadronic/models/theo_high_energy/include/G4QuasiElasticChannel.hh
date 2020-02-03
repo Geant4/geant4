@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 
 // Author : Gunter Folger March 2007
@@ -64,8 +63,8 @@ class G4QuasiElasticChannel
   private:
         G4QuasiElasticChannel(const G4QuasiElasticChannel &);
 	const G4QuasiElasticChannel & operator=(const G4QuasiElasticChannel &);
-	int operator==(const G4QuasiElasticChannel &) const;
-	int operator!=(const G4QuasiElasticChannel &) const;
+	G4bool operator==(const G4QuasiElasticChannel &) const;
+	G4bool operator!=(const G4QuasiElasticChannel &) const;
 
    private:
    	G4QuasiElRatios* theQuasiElastic;

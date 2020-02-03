@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fcn.hh 72292 2013-07-15 12:01:43Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
@@ -39,6 +38,9 @@
 
 enum class G4AnalysisOutput {
   kCsv,
+#ifdef TOOLS_USE_HDF5
+  kHdf5,
+#endif
   kRoot,
   kXml,
   kNone
@@ -87,7 +89,7 @@ std::unique_ptr<T> make_unique(Args&&... args)
 }
 
 // get output type from name
-G4AnalysisOutput GetOutput(const G4String& outputName);
+G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn = true);
 G4String GetOutputName(G4AnalysisOutput outputType);
 
 /*

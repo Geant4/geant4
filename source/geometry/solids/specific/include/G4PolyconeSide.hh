@@ -23,14 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PolyconeSide.hh 102296 2017-01-20 13:21:03Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4PolyconeSide
 //
 // Class description:
@@ -48,12 +40,10 @@
 //   Values for r1,z1 and r2,z2 should be specified in clockwise
 //   order in (r,z).
 
-// Author: 
-//   David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
-#ifndef G4PolyconeSide_hh
-#define G4PolyconeSide_hh
+#ifndef G4POLYCONESIDE_HH
+#define G4POLYCONESIDE_HH
 
 #include "G4VCSGface.hh"
 
@@ -78,11 +68,10 @@ class G4PlSideData
 
     void initialize()
     {
-      fPhi.first = G4ThreeVector(0,0,0);
-      fPhi.second= 0.0;
+      fPhix = 0.; fPhiy = 0.; fPhiz = 0.; fPhik = 0.;
     }
 
-    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
+    G4double fPhix=0., fPhiy=0., fPhiz=0., fPhik=0.;   // Cached values for phi
 };
 
 // The type G4PlSideManager is introduced to 
@@ -90,7 +79,7 @@ class G4PlSideData
 // worker threads to allocate memory space for the fields encapsulated
 // by the class G4PlSideData.
 //
-typedef G4GeomSplitter<G4PlSideData> G4PlSideManager;
+using G4PlSideManager = G4GeomSplitter<G4PlSideData>;
 
 //
 // ----------------------------------------------------------------------------
@@ -99,37 +88,37 @@ class G4PolyconeSide : public G4VCSGface
 {
   public:
 
-    G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
-                    const G4PolyconeSideRZ *tail,
-                    const G4PolyconeSideRZ *head,
-                    const G4PolyconeSideRZ *nextRZ,
+    G4PolyconeSide( const G4PolyconeSideRZ* prevRZ,
+                    const G4PolyconeSideRZ* tail,
+                    const G4PolyconeSideRZ* head,
+                    const G4PolyconeSideRZ* nextRZ,
                           G4double phiStart, G4double deltaPhi, 
-                          G4bool phiIsOpen, G4bool isAllBehind=false );
+                          G4bool phiIsOpen, G4bool isAllBehind = false );
     virtual ~G4PolyconeSide();
   
-    G4PolyconeSide( const G4PolyconeSide &source );
-    G4PolyconeSide& operator=( const G4PolyconeSide &source );
+    G4PolyconeSide( const G4PolyconeSide& source );
+    G4PolyconeSide& operator=( const G4PolyconeSide& source );
   
-    G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,  
+    G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,  
                             G4bool outgoing, G4double surfTolerance,
-                            G4double &distance, G4double &distFromSurface,
-                            G4ThreeVector &normal, G4bool &isAllBehind );
+                            G4double& distance, G4double &distFromSurface,
+                            G4ThreeVector& normal, G4bool& isAllBehind );
 
-    G4double Distance( const G4ThreeVector &p, G4bool outgoing );
+    G4double Distance( const G4ThreeVector& p, G4bool outgoing );
   
-    EInside Inside( const G4ThreeVector &p, G4double tolerance, 
-                          G4double *bestDistance );
+    EInside Inside( const G4ThreeVector& p, G4double tolerance, 
+                          G4double* bestDistance );
   
-    G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance );
+    G4ThreeVector Normal( const G4ThreeVector& p,  G4double* bestDistance );
 
     G4double Extent( const G4ThreeVector axis );
 
     void CalculateExtent( const EAxis axis, 
-                          const G4VoxelLimits &voxelLimit,
-                          const G4AffineTransform &tranform,
-                                G4SolidExtentList &extentList       );
+                          const G4VoxelLimits& voxelLimit,
+                          const G4AffineTransform& tranform,
+                                G4SolidExtentList& extentList );
 
-    G4VCSGface *Clone() { return new G4PolyconeSide( *this ); }
+    G4VCSGface* Clone() { return new G4PolyconeSide( *this ); }
 
     G4double SurfaceArea();
     G4ThreeVector GetPointOnFace();
@@ -149,23 +138,24 @@ class G4PolyconeSide : public G4VCSGface
 
   protected:
 
-    G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
-                                 G4double &distOutside2, G4double *rzNorm=0 );
+    G4double DistanceAway( const G4ThreeVector& p, G4bool opposite,
+                                 G4double& distOutside2,
+                                 G4double* rzNorm = nullptr );
       
-    G4double DistanceAway( const G4ThreeVector &p,
-                                 G4double &distOutside2, G4double *edgeRZnorm );
+    G4double DistanceAway( const G4ThreeVector& p, G4double& distOutside2,
+                                 G4double* edgeRZnorm );
 
-    G4bool PointOnCone( const G4ThreeVector &hit, G4double normSign,
-                        const G4ThreeVector &p,
-                        const G4ThreeVector &v, G4ThreeVector &normal );
+    G4bool PointOnCone( const G4ThreeVector& hit, G4double normSign,
+                        const G4ThreeVector& p,
+                        const G4ThreeVector& v, G4ThreeVector& normal );
 
-    void CopyStuff( const G4PolyconeSide &source );
+    void CopyStuff( const G4PolyconeSide& source );
   
     static void FindLineIntersect( G4double x1, G4double y1,
                                    G4double tx1, G4double ty1,
                                    G4double x2, G4double y2,
-                                 G4double tx2, G4double ty2,
-                                 G4double &x, G4double &y );
+                                   G4double tx2, G4double ty2,
+                                   G4double& x, G4double& y );
 
     G4double GetPhi( const G4ThreeVector& p );
 
@@ -174,10 +164,10 @@ class G4PolyconeSide : public G4VCSGface
     G4double r[2], z[2]; // r, z parameters, in specified order
     G4double startPhi,   // Start phi (0 to 2pi), if phiIsOpen
              deltaPhi;   // Delta phi (0 to 2pi), if phiIsOpen
-    G4bool   phiIsOpen;  // True if there is a phi slice
-    G4bool   allBehind;  // True if the entire solid is "behind" this face
+    G4bool phiIsOpen = false; // True if there is a phi slice
+    G4bool allBehind = false; // True if the entire solid is "behind" this face
   
-    G4IntersectingCone *cone;  // Our intersecting utility class
+    G4IntersectingCone* cone = nullptr;  // Our intersecting utility class
   
     G4double rNorm, zNorm;  // Normal to surface in r,z space
     G4double rS, zS;        // Unit vector along surface in r,z space
@@ -190,13 +180,13 @@ class G4PolyconeSide : public G4VCSGface
     G4double rNormEdge[2],
              zNormEdge[2];  // Normal to edges
 
-    G4int ncorners;
-    G4ThreeVector *corners; // The coordinates of the corners (if phiIsOpen)
-
+    G4int ncorners = 0;
+    G4ThreeVector* corners = nullptr; // The coordinates of the corners
+                                      // (if phiIsOpen)
   private:
 
-    G4double kCarTolerance; // Geometrical surface thickness
-    G4double fSurfaceArea;  // Used for surface calculation 
+    G4double kCarTolerance;       // Geometrical surface thickness
+    G4double fSurfaceArea = 0.0;  // Used for surface calculation 
 
     G4int instanceID;
       // This field is used as instance ID.

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc 97681 2016-06-07 08:59:17Z gcosmo $
 //
 // L. Garnier
 
@@ -36,6 +35,7 @@
 
 #include "G4UIQt.hh"
 #include "G4UImanager.hh"
+#include "G4UIcommand.hh"
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UIcommandStatus.hh"
@@ -55,10 +55,13 @@
 #include <qdialog.h>
 #include <qevent.h>
 #include <qtextedit.h>
+#if QT_VERSION < 0x050600
 #include <qsignalmapper.h>
+#endif
 #include <qtabwidget.h>
 #include <qtabbar.h>
 #include <qstringlist.h>
+#include <qtextstream.h>
 
 #include <qmainwindow.h>
 #include <qmenu.h>
@@ -71,14 +74,15 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qcombobox.h>
-#include <qsignalmapper.h>
 #include <qpainter.h>
 #include <qcolordialog.h>
 #include <qtoolbar.h>
 #include <qfiledialog.h>
 #include <qdesktopwidget.h>
 #include <qtablewidget.h>
-
+#include <qcompleter.h>
+#include <qstandarditemmodel.h>
+#include <qboxlayout.h>
 #include <stdlib.h>
 
 // Pourquoi Static et non  variables de classe ?
@@ -115,13 +119,17 @@ G4UIQt::G4UIQt (
 ,fCoutTBTextArea(NULL)
 ,fUITabWidget(NULL)
 ,fCoutFilter(NULL)
+,fCompleter(NULL)
+,fDefaultIcons(true)
 ,fHistoryTBTableList(NULL)
 ,fHelpTreeWidget(NULL)
 ,fHelpTBWidget(NULL)
 ,fHistoryTBWidget(NULL)
 ,fCoutDockWidget(NULL)
 ,fUIDockWidget(NULL)
-,fSceneTreeComponentsTBWidget(NULL)
+,fSceneTreeWidget(NULL)
+,fViewerPropertiesWidget(NULL)
+,fPickInfosWidget(NULL)
 ,fHelpLine(NULL)
 ,fViewerTabWidget(NULL)
 ,fCoutText("Output")
@@ -135,10 +143,31 @@ G4UIQt::G4UIQt (
 ,fLastOpenPath("")
 ,fSearchIcon(NULL)
 ,fClearIcon(NULL)
+,fSaveIcon(NULL)
+,fOpenIcon(NULL)
+,fMoveIcon(NULL)
+,fRotateIcon(NULL)
+,fPickIcon(NULL)
+,fZoomInIcon(NULL)
+,fZoomOutIcon(NULL)
+,fWireframeIcon(NULL)
+,fSolidIcon(NULL)
+,fHiddenLineRemovalIcon(NULL)
+,fHiddenLineAndSurfaceRemovalIcon(NULL)
+,fPerspectiveIcon(NULL)
+,fOrthoIcon(NULL)
+,fCommandIcon(NULL)
+,fDirIcon(NULL)
+,fRunIcon(NULL)
+,fParamIcon(NULL)
+,fPickTargetIcon(NULL)
 #ifdef G4MULTITHREADED
 ,fThreadsFilterComboBox(NULL)
 #endif
 ,fDefaultViewerFirstPageHTMLText("")
+,fViewerPropertiesDialog(NULL)
+,fPickInfosDialog(NULL)
+,fLastCompleteCommand("")
 ,fMoveSelected(false)
 ,fRotateSelected(true)
 ,fPickSelected(false)
@@ -177,7 +206,10 @@ G4UIQt::G4UIQt (
     }
     return ;
   }
+  CreateIcons();
+  
   fMainWindow = new QMainWindow();
+  fMainWindow->setAttribute(Qt::WA_DeleteOnClose);
 
   fMainWindow->setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
   fMainWindow->setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
@@ -188,13 +220,17 @@ G4UIQt::G4UIQt (
   fMainWindow->addDockWidget(Qt::LeftDockWidgetArea, CreateUITabWidget());
   fMainWindow->addDockWidget(Qt::BottomDockWidgetArea, CreateCoutTBWidget());
 
-  
+
+  // add defaults icons
+  SetDefaultIconsToolbar();
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 
+#ifdef G4MULTITHREADED
   // explicitly request that cout/cerr messages from threads are ALSO propagated to the master.
   masterG4coutDestination = this;
-  
+#endif
+
   fMainWindow->setWindowTitle(QFileInfo( QCoreApplication::applicationFilePath() ).fileName()); 
   fMainWindow->move(QPoint(50,50));
 
@@ -232,13 +268,1115 @@ G4UIQt::~G4UIQt(
     UI->SetSession(NULL);  // TO KEEP
     UI->SetG4UIWindow(NULL);
     UI->SetCoutDestination(0);  // TO KEEP
+#ifdef G4MULTITHREADED 
     masterG4coutDestination = 0; // set to cout when UI is deleted
-  }
-  
-  if (fMainWindow!=NULL) {
-    delete fMainWindow;
+#endif
   }
 }
+
+
+void G4UIQt::DefaultIcons(bool aVal)
+{
+  fDefaultIcons = aVal;
+
+#if QT_VERSION < 0x040200
+  if (!fMainWindow->isHidden()) {
+#else
+  if (!fMainWindow->isVisible()) {
+#endif
+    return;
+  }
+    
+      if (fToolbarApp) {
+    if (aVal) {
+#if QT_VERSION < 0x040200
+      fToolbarApp->show();
+#else
+      fToolbarApp->setVisible(true);
+#endif
+    } else {
+      // Set not visible until session start
+#if QT_VERSION < 0x040200
+      fToolbarApp->hide();
+#else
+    fToolbarApp->setVisible(false);
+#endif
+    }
+  }
+}
+
+
+void G4UIQt::SetDefaultIconsToolbar(
+) {
+  
+  if (fDefaultIcons) {
+    if (fToolbarApp == NULL) {
+      fToolbarApp = new QToolBar();
+      fToolbarApp->setIconSize (QSize(20,20));
+      fMainWindow->addToolBar(Qt::TopToolBarArea, fToolbarApp);
+    }
+
+    // Open/Save Icons
+    AddIcon("Open macro file","open", "/control/execute");
+    AddIcon("Save viewer state", "save", "/vis/viewer/save");
+    
+    // View parameters
+#if QT_VERSION < 0x050600
+    QSignalMapper *signalMapperViewerProperties = new QSignalMapper(this);
+    QAction *actionViewerProperties = fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", signalMapperViewerProperties, SLOT(map()));
+    connect(signalMapperViewerProperties, SIGNAL(mapped(int)),this, SLOT(ViewerPropertiesIconCallback(int)));
+    int intVP = 0;
+    signalMapperViewerProperties->setMapping(actionViewerProperties, intVP);
+#else
+    fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", this, [=](){ this->ViewerPropertiesIconCallback(0); });
+#endif
+
+    // Cursors style icons
+    AddIcon("Move", "move", "");
+    AddIcon("Pick", "pick", "");
+    AddIcon("Zoom out", "zoom_out", "");
+    AddIcon("Zoom in", "zoom_in", "");
+    AddIcon("Rotate", "rotate", "");
+    
+    // Surface Style icons
+    AddIcon("Hidden line removal", "hidden_line_removal", "");
+    AddIcon("Hidden line and hidden surface removal", "hidden_line_and_surface_removal", "");
+    AddIcon("Surfaces", "solid", "");
+    AddIcon("Wireframe", "wireframe", "");
+    
+            // Perspective/Ortho icons
+    AddIcon("Perspective", "perspective","");
+    AddIcon("Orthographic", "ortho","");
+    AddIcon("Run beam on", "runBeamOn","/run/beamOn 1");
+  }
+}
+
+
+void G4UIQt::CreateIcons(
+)
+{
+  const char * const save[]={
+    "32 32 24 1",
+    "       c None",
+    "+      c #000200",
+    "@      c #141E43",
+    "#      c #000C56",
+    "$      c #494A47",
+    "%      c #636662",
+    "&      c #312F2A",
+    "*      c #191B19",
+    "=      c #002992",
+    "-      c #003DFF",
+    ";      c #041DA5",
+    ">      c #A8A9A3",
+    ",      c #FDFFFC",
+    "'      c #DDE0DD",
+    ")      c #818783",
+    "!      c #C9CBC8",
+    "~      c #0116C3",
+    "{      c #C5C8FA",
+    "]      c #6596FC",
+    "^      c #A0B4F9",
+    "/      c #0B2AFD",
+    "(      c #799BE3",
+    "_      c #5F4826",
+    ":      c #D5D8D5",
+    "                                ",
+    "                                ",
+    "   +++++++++++++++++++++++++    ",
+    "  +@##+$%%%%%%%%%%%%%%%&*$%&+   ",
+    "  +=-;@>,,''',,,,,,,',,)&!,)+   ",
+    "  +;-~@>,,,,,,,,,,,,,,,>$!,)+   ",
+    "  +=-~@>,,,,,{]]]]]^,,,>*&$&+   ",
+    "  +=-~@>,,,,,'{^{^^{,,,>*#=#+   ",
+    "  +=-~@>,,,,,,,,,,,,,,,>@~/=+   ",
+    "  +=-~@>,,,{{{''''{',,,>@~-=+   ",
+    "  +=-~@>,,'^]]]]]]({,,,>@~-=+   ",
+    "  +=-~@>,,,{{{{{{{{{,,,>@~-=+   ",
+    "  +=-~@>,,,,,'{^{{^{,,,>@~-=+   ",
+    "  +=-~@>,,,,,]]]]]]],,,>@~-=+   ",
+    "  +=-~*>,,,,,,,,,,,,,,,>@~-=+   ",
+    "  +=-~@>,,,,,,,,,,,,,,,>@~-=+   ",
+    "  +=-/=$%%%%%%%%%%%%%%%$=/-=+   ",
+    "  +=---;###############;---=+   ",
+    "  +=---////////////////----=+   ",
+    "  +=----------------///----=+   ",
+    "  +=---=@##############@#--=+   ",
+    "  +=---@+++++++++++*%))_+~-=+   ",
+    "  +=---#+++++++++++&:,,>@~-=+   ",
+    "  +=---#+++++++++++$',,>@~-=+   ",
+    "  +=---#+++++++++++&!,,>@~-=+   ",
+    "  +=/--#+++++++++++&',,>@~-=+   ",
+    "   @;--#+++++++++++$',,>@~-=+   ",
+    "    @;;@+++++++++++*)!>%@=;#+   ",
+    "     @++++++++++++++*&**++@++   ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fSaveIcon = new QPixmap(save);
+
+  const char * const search[]  = {
+    /* columns rows colors chars-per-pixel */
+    "19 19 8 1",
+    "  c #5C5C5C",
+    ". c #7D7D7D",
+    "X c #9B9B9B",
+    "o c #C3C3C3",
+    "O c None",
+    "+ c #000000",
+    "@ c #000000",
+    "# c None",
+    /* pixels */
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOo.  .oOOOOOO",
+    "OOOOOOX      XOOOOO",
+    "OOOOOo  XOOX  oOOOO",
+    "OOOOO. XOOOOX .OOOO",
+    "OOOOO  OOOOOO  OOOO",
+    "OOOOO  OOOOOO  OOOO",
+    "OOOOO. XOOOOo .OOOO",
+    "OOOOOo  oOOo  oOOOO",
+    "OOOOOOX       XOOOO",
+    "OOOOOOOo.  .   XOOO",
+    "OOOOOOOOOOOOO.  XOO",
+    "OOOOOOOOOOOOOO. XOO",
+    "OOOOOOOOOOOOOOOoOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO"
+  };
+  fSearchIcon = new QPixmap(search);
+  
+  const char * const clear[]  = {
+    /* columns rows colors chars-per-pixel */
+    "20 20 8 1",
+    "  c #020202",
+    ". c #202020",
+    "X c #2C2C2C",
+    "o c #797979",
+    "O c None",
+    "+ c #797979",
+    "@ c #797979",
+    "# c #797979",
+    /* pixels */
+    "OOOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOo    oOOOOOOO",
+    "OOOOOXX      XXOOOOO",
+    "OOOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOOO",
+    "OOOO XXXXXXXXXX OOOO",
+    "OOO XOOOOOOOOOO  OOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOOOOOOOOOO OOOO",
+    "OOOOOooooooooooOOOOO",
+    "OOOOOO........OOOOOO"
+  };
+  
+  fClearIcon = new QPixmap(clear);
+  
+ 
+  const char * const open[]={
+    "32 32 33 1",
+    "       c None",
+    "+      c #09091E",
+    "@      c #191B18",
+    "#      c #5F615F",
+    "$      c #777977",
+    "%      c #AEB1AF",
+    "&      c #929491",
+    "*      c #515250",
+    "=      c #858784",
+    "-      c #333533",
+    ";      c #000100",
+    ">      c #272926",
+    ",      c #424341",
+    "'      c #696C6A",
+    ")      c #5F4927",
+    "!      c #583D18",
+    "~      c #6E6A5B",
+    "{      c #47351D",
+    "]      c #E0A554",
+    "^      c #FFD67B",
+    "/      c #EFB465",
+    "(      c #FDBF6C",
+    "_      c #FFCD76",
+    ":      c #806238",
+    "<      c #362611",
+    "[      c #0B0D0A",
+    "}      c #68471B",
+    "|      c #523E22",
+    "1      c #B78A51",
+    "2      c #A17B44",
+    "3      c #D6A45E",
+    "4      c #C29354",
+    "5      c #A1A3A0",
+    "                                ",
+    "                                ",
+    "                     +@@@#      ",
+    "                    $%   +&   * ",
+    "                   #=     $  -; ",
+    "                           %>;+ ",
+    "                           ,;;+ ",
+    "  &#$''#'                 >;;;+ ",
+    " =)!)!!!!~                *#$'' ",
+    " {]^/((_({-  %%%%%%%%%%%        ",
+    " {(^_^^^^:<{{{{{{{{{{{{{[&      ",
+    " {/_/(((((/]]]]]]]]]]]/]!#      ",
+    " {/^(((((_^^^^^^^^^^^^^^:#      ",
+    " {/^(((_^^____________^^}$      ",
+    " {/^(((((/////////////((!#      ",
+    " {/^/^_:<|||||||||||||||@@****1 ",
+    " {/^/^(<[)||||||||||||||))!!}<; ",
+    " {/^_(:|234444444444444444432)1 ",
+    " {/_^/<)34444444444444444443},  ",
+    " {/^(2{:41111111111111111142|5  ",
+    " {3^3<:31111111111111111143}-   ",
+    " {/^2<:31111111111111111441|'   ",
+    " {_/<:41111111111111111143},    ",
+    " {(4<:31111111111111111144!#    ",
+    " )4))44111111111111111144},     ",
+    " )2<:31111111111111111144{#     ",
+    " @|:14444444444444444444}*      ",
+    " ;@434444444444444444434<#      ",
+    " ;[))))))))))))))))))))!~       ",
+    " ++++++++++++++++++++++;%       ",
+    "                                ",
+    "                                "}
+  ;
+  fOpenIcon = new QPixmap(open);
+  
+  
+  const char * const move[]={
+    "32 32 16 1",
+    "       c None",
+    ".      c #F1F1F1",
+    "+      c #939393",
+    "@      c #282828",
+    "#      c #787878",
+    "$      c #000000",
+    "%      c #CCCCCC",
+    "&      c #1A1A1A",
+    "*      c #0D0D0D",
+    "=      c #5D5D5D",
+    "-      c #AEAEAE",
+    ";      c #BBBBBB",
+    ">      c #C9C9C9",
+    ",      c #D6D6D6",
+    "'      c #FFFFFF",
+    ")      c #999999",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "               ..               ",
+    "               ++               ",
+    "              .@@.              ",
+    "              #$$#              ",
+    "             %&$$*%             ",
+    "             =$$$$=             ",
+    "            -**$$**-            ",
+    "            %;%&*>;%            ",
+    "          -%   @&   %-          ",
+    "        ,=*;   @&   ;*=,        ",
+    "      .#*$$>        >$$*#.      ",
+    "    ')&$$$$*@@    @@*$$$$&)'    ",
+    "    ')&$$$$*@@    @@*$$$$&+'    ",
+    "      .#*$$>        >$$*#.      ",
+    "        ,=*;   @&   ;*=,        ",
+    "          -%   @&   %-          ",
+    "            %;%&*>>%            ",
+    "            -**$$**-            ",
+    "             =$$$$=             ",
+    "             %&$$*%             ",
+    "              #$$#              ",
+    "              .@@.              ",
+    "               ++               ",
+    "               ..               ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fMoveIcon = new QPixmap(move);
+  
+  const char * const rotate[]={
+    "32 32 27 1",
+    "       c None",
+    ".      c #003333",
+    "+      c #000066",
+    "@      c #1A1A1A",
+    "#      c #003399",
+    "$      c #3333CC",
+    "%      c #000033",
+    "&      c #353535",
+    "*      c #434343",
+    "=      c #336699",
+    "-      c #3399FF",
+    ";      c #003366",
+    ">      c #5D5D5D",
+    ",      c #282828",
+    "'      c #3399CC",
+    ")      c #333333",
+    "!      c #3366CC",
+    "~      c #333399",
+    "{      c #505050",
+    "]      c #666666",
+    "^      c #333366",
+    "/      c #0033CC",
+    "(      c #3366FF",
+    "_      c #336666",
+    ":      c #787878",
+    "<      c #868686",
+    "[      c #6B6B6B",
+    "                   .++@         ",
+    "                  #$$%&*        ",
+    "                 =--; *>,       ",
+    "                 '-=  )>&       ",
+    "                !-',  ,>*       ",
+    "             !!=--=    >*       ",
+    "            =------!!~@&)@      ",
+    "             --------!*{{{*&,   ",
+    "             -------=){*{{{>>{) ",
+    "            ,!-----=  ){&  ,&{{@",
+    "          ,*>!----=   &>&     )@",
+    "         ){>)~---=    *])      @",
+    "        @*>,  --!     ,&@       ",
+    "        @{*   '!      ,-!=~^,@  ",
+    "        @&    ==      {/(----!^ ",
+    "         _           ]:;(----'  ",
+    "         ==_         >{+(----~  ",
+    "          !-!!======!!(((---!   ",
+    "           ='--------------!    ",
+    "             =!!!!'!!=; !-!     ",
+    "                   &<*  !~      ",
+    "              @.  *[*   ;       ",
+    "               ;+)>*            ",
+    "                 @@             ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fRotateIcon = new QPixmap(rotate);
+  
+  const char * const pick[]={
+    /* columns rows colors chars-per-pixel */
+    "20 20 12 1 ",
+    "  c #050804",
+    ". c #222321",
+    "X c #3B3C3A",
+    "o c #4C4E4B",
+    "O c #616360",
+    "+ c #747673",
+    "@ c #8A8C89",
+    "# c #9FA19E",
+    "$ c #BABCB9",
+    "% c #CED0CD",
+    "& c #E4E6E3",
+    "* c None",
+    /* pixels */
+    "*********oo*********",
+    "*********oo*********",
+    "******$O.  .O%******",
+    "****&o .O..O  O*****",
+    "***&X @**oo**@ X****",
+    "***o $***oo***$ O***",
+    "**% @**********@ %**",
+    "**O.***********& +**",
+    "**.O*****@@*****o.**",
+    "oo .oo**@  #*&XX. oo",
+    "oo .oo**@  #*&oo. oO",
+    "**.O*****##*****oX**",
+    "**O ***********& +**",
+    "**% @****&&****+ &**",
+    "***O $***Xo***# +***",
+    "****X @&*Xo*&+ o****",
+    "*****O  o..o  +*****",
+    "******%+.  X+&******",
+    "*********oo*********",
+    "*********oO*********"
+  };
+  fPickIcon = new QPixmap(pick);
+  
+  const char * const zoom_in[]={
+    "32 32 11 1",
+    "       c None",
+    ".      c #C9CBC8",
+    "+      c #A8A9A3",
+    "@      c #818783",
+    "#      c #D5D8D5",
+    "$      c #9BCCCC",
+    "%      c #5FC7F4",
+    "&      c #FDFFFC",
+    "*      c #636662",
+    "=      c #9599CE",
+    "-      c #DDE0DD",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "          .++@@++.              ",
+    "         +++..#.+++             ",
+    "       .@+...++++#+@.           ",
+    "       @$.%%+&&&@%..@           ",
+    "      ++.%%%+&&&*%%.++          ",
+    "     .+#%%%%+&&&*%%.#+          ",
+    "     ++..%%%+&&&*%%%.++         ",
+    "     +#.+++++&&&*++++.+         ",
+    "     @.+&&&&&&&&&&&&&+@         ",
+    "     @#+&&&&&&&&&&&&&+@         ",
+    "     @.+&&&&&&&&&&&&&+.         ",
+    "     +++@***+&&&****@+.         ",
+    "     ....++++&&&*++++..         ",
+    "      ++.===+&&&*%=.++          ",
+    "       @..==+&&&*=..@#&         ",
+    "       .@+#.+&&&@-+@@*@         ",
+    "         +++.++++++ *+@*        ",
+    "          .+@@@++.  @**+*       ",
+    "                    .*@*+*      ",
+    "                     .*@*+*     ",
+    "                      +*@@*     ",
+    "                       .**+     ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fZoomInIcon = new QPixmap(zoom_in);
+  
+  const char * const zoom_out[]={
+    "32 32 11 1",
+    "       c None",
+    ".      c #C9CBC8",
+    "+      c #A8A9A3",
+    "@      c #818783",
+    "#      c #D5D8D5",
+    "$      c #5FC7F4",
+    "%      c #9BCCCC",
+    "&      c #FDFFFC",
+    "*      c #636662",
+    "=      c #9599CE",
+    "-      c #DDE0DD",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "          .++@@++.              ",
+    "         +++..#.+++             ",
+    "       .@+..$$$$.#+@.           ",
+    "       @%.$$$$$$$$..@           ",
+    "      ++.$$$$$$$$$$.++          ",
+    "     .+#$$$$$$$$$$$.#+          ",
+    "     ++..$$$$$$$$$$$.++         ",
+    "     +#.+++++++++++++.+         ",
+    "     @.+&&&&&&&&&&&&&+@         ",
+    "     @#+&&&&&&&&&&&&&+@         ",
+    "     @.+&&&&&&&&&&&&&+.         ",
+    "     +++@***********@+.         ",
+    "     ....++++++++++++..         ",
+    "      ++.===$$$$$$=.++          ",
+    "       @..===$$$$=..@#&         ",
+    "       .@+#.$$$..-+@@*@         ",
+    "         +++#--.+++ *+@*        ",
+    "          .+@@@++.  @**+*       ",
+    "                    .*@*+*      ",
+    "                     .*@*+*     ",
+    "                      +*@@*     ",
+    "                       .**+     ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fZoomOutIcon = new QPixmap(zoom_out);
+  
+  const char * const wireframe[]={
+    "32 32 24 1",
+    "       c None",
+    "+      c #E4E4E4",
+    "@      c #D5D5D5",
+    "#      c #E1E1E1",
+    "$      c #E7E7E7",
+    "%      c #D8D8D8",
+    "&      c #A7A7A7",
+    "*      c #000000",
+    "=      c #989898",
+    "-      c #8A8A8A",
+    ";      c #B5B5B5",
+    ">      c #1B1B1B",
+    ",      c #676767",
+    "'      c #959595",
+    ")      c #4A4A4A",
+    "!      c #878787",
+    "~      c #D3D3D3",
+    "{      c #C4C4C4",
+    "]      c #A4A4A4",
+    "^      c #5B5B5B",
+    "/      c #B3B3B3",
+    "(      c #787878",
+    "_      c #C7C7C7",
+    ":      c #585858",
+    "                                ",
+    "                  +@@#          ",
+    "          $%@@@@@&****=+        ",
+    "        +&********&@-***;       ",
+    "   +@@@&**&@@@@@@$  @*-&>&+     ",
+    "  +*****&+          %*@ ,**'#   ",
+    "  @***)!~           @*{&*****+  ",
+    "  @*!]***&+        +-*^**'~!*@  ",
+    "  @*~ +@&**&@@@@@@&****&+  ~*@  ",
+    "  @*@    +&********&-*=    @*@  ",
+    "  @*@      $%@-*-@$ @*@    @*@  ",
+    "  @*@         @*@   %*%    @*@  ",
+    "  @*@         %*%   %*%    @*@  ",
+    "  @*@         %*%   %*%    @*@  ",
+    "  @*@         %*%   %*%    @*@  ",
+    "  @*@         %*%   %*%    @*@  ",
+    "  @*@         %*%   %*%    @*@  ",
+    "  @*@         @*@   %*%    @*@  ",
+    "  @*@         =*-+  @*@    @*@  ",
+    "  @*@    $%@@&****&@-*-+   @*@  ",
+    "  @*@ $@&*****&@@&******&~~!*@  ",
+    "  @*{/***&@@%$    $@-*-&*****+  ",
+    "  @*)*)(-~          @*@ ~)**]   ",
+    "  +*******&@@@@+    %*_+]**]    ",
+    "   +@@@@@&******&@%+_*^**]#     ",
+    "          $%@@@&****:**&+       ",
+    "                +%@&**&         ",
+    "                    ++          ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fWireframeIcon = new QPixmap(wireframe);
+  
+  const char * const solid[]={
+    "32 32 33 1",
+    "       c None",
+    "+      c #C2DEDE",
+    "@      c #B5D7DF",
+    "#      c #ACD6E6",
+    "$      c #60C0EC",
+    "%      c #4EB7EE",
+    "&      c #53B9ED",
+    "*      c #82CEEA",
+    "=      c #CFDDDA",
+    "-      c #94C9E8",
+    ";      c #0960FF",
+    ">      c #0943FF",
+    ",      c #0949FF",
+    "'      c #3CB3F0",
+    ")      c #71C7EB",
+    "!      c #73CBE5",
+    "~      c #D3DDDB",
+    "{      c #C4DDDE",
+    "]      c #B7D5DF",
+    "^      c #2DACF5",
+    "/      c #59C1ED",
+    "(      c #5FC0ED",
+    "_      c #85CEE9",
+    ":      c #096BFF",
+    "<      c #2AACF6",
+    "[      c #5CBEEC",
+    "}      c #7ACAE4",
+    "|      c #73CAEB",
+    "1      c #71C8E5",
+    "2      c #D1DDDA",
+    "3      c #CBDDD9",
+    "4      c #67C1EB",
+    "5      c #80CDEA",
+    "                                ",
+    "                                ",
+    "          +@@@@@@#$%&*=         ",
+    "        +-;>>>>>>>>>,')!~       ",
+    "   {]@@-;>>>>>>>>>>>>^/(_=      ",
+    "  {:>>>>>>>>>>>>>>>>><//[)!=    ",
+    "  ]>>>>>>>>>>>>>>>>>><////[)}   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>><//////|   ",
+    "  @>>>>>>>>>>>>>>>>>></////[1   ",
+    "  @>>>>>>>>>>>>>>>>>><////[*2   ",
+    "  {:>>>>>>>>>>>>>>>>><//[)12    ",
+    "   +@@@@@-;>>>>>>>>>><[)13      ",
+    "          {]@@@-;>>>,'*3        ",
+    "                +@@#452         ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fSolidIcon = new QPixmap(solid);
+  
+  const char * const hidden_line_removal[]={
+    "32 32 15 1",
+    "       c None",
+    "+      c #D5D5D5",
+    "@      c #C7C7C7",
+    "#      c #9C9C9C",
+    "$      c #000000",
+    "%      c #8E8E8E",
+    "&      c #808080",
+    "*      c #A9A9A9",
+    "=      c #D8D8D8",
+    "-      c #CACACA",
+    ";      c #181818",
+    ">      c #9F9F9F",
+    ",      c #ACACAC",
+    "'      c #B9B9B9",
+    ")      c #555555",
+    "                                ",
+    "                  +@@+          ",
+    "          +@@@@@@#$$$$%+        ",
+    "        +#$$$$$$$$#@&$$$*       ",
+    "   =-@@#$$#@@@@@-=  @$&#;>=     ",
+    "  =$$$$$#+          -$@ *$$%+   ",
+    "  -$&@-=            -$-  #$$$=  ",
+    "  -$@               -$-   +&$-  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    @$@  ",
+    "  @$@               @$@    #$=  ",
+    "  -$&@@@-=          -$-  =>;,   ",
+    "  =$$$$$$$#@@@-=    -$'+#$$,    ",
+    "   =-@@@@#$$$$$$#@-+'$)$$#+     ",
+    "          =-@@@#$$$$)$$#+       ",
+    "                +@@#$$#         ",
+    "                    ++          ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fHiddenLineRemovalIcon = new QPixmap(hidden_line_removal);
+  
+  const char * const hidden_line_and_surface_removal[]={
+    "32 32 40 1",
+    "       c None",
+    "+      c #FFFFFF",
+    "@      c #89A2E9",
+    "#      c #5378E3",
+    "$      c #A2B5ED",
+    "%      c #5379E3",
+    "&      c #5076E3",
+    "*      c #3E69E4",
+    "=      c #0C43F8",
+    "-      c #043FFE",
+    ";      c #CDD9ED",
+    ">      c #BDCDE9",
+    ",      c #FBFCFC",
+    "'      c #406AE4",
+    ")      c #0439FE",
+    "!      c #0137FF",
+    "~      c #4F75E3",
+    "{      c #9EB5E3",
+    "]      c #829FE0",
+    "^      c #B6C6E7",
+    "/      c #9DB4E3",
+    "(      c #7E9CE0",
+    "_      c #B2C3E9",
+    ":      c #7E9AE0",
+    "<      c #86A2E1",
+    "[      c #CAD6ED",
+    "}      c #5177E3",
+    "|      c #829CE0",
+    "1      c #BCCCE9",
+    "2      c #3A67E6",
+    "3      c #0A43FA",
+    "4      c #95ACE1",
+    "5      c #BBCBE9",
+    "6      c #A9BBE5",
+    "7      c #96AFE1",
+    "8      c #BDCBE9",
+    "9      c #4067E4",
+    "0      c #6485E5",
+    "a      c #E3EAF3",
+    "b      c #CAD6F3",
+    "                                ",
+    "                                ",
+    "                  ++++          ",
+    "          ++++++++@#$+++        ",
+    "        ++@%####&*=-#+;>,       ",
+    "   +++++@'=)))))))!)~+{]^++     ",
+    "   +$%&*=)!!!!!!!!!)~+/(]_+++   ",
+    "   +#-))!!!!!!!!!!!)~+/(::<[+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/::::{+   ",
+    "   +#)!!!!!!!!!!!!!!}+/:::|1+   ",
+    "   +$#}}~23!!!!!!!!)~+/(]45,    ",
+    "   +++++++@#}}~23!!)~+678++     ",
+    "          ++++++@#~90+a++       ",
+    "                ++++b++         ",
+    "                    ++          ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fHiddenLineAndSurfaceRemovalIcon = new QPixmap(hidden_line_and_surface_removal);
+  
+  const char * const perspective[]={
+    "32 32 3 1",
+    "       c None",
+    ".      c #D5D8D5",
+    "+      c #000000",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "                                ",
+    "           ................     ",
+    "       ....+++++++++++++++.     ",
+    "    ...++++..+.........+++.     ",
+    "   ..++..............++..+.     ",
+    "   .+++++++++++++++++.. .+.     ",
+    "   .+...............+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+.    .+.  .+.     ",
+    "   .+.      .+......+....+.     ",
+    "   .+.     ..++++++.+.++++.     ",
+    "   .+.    .++.......+...+..     ",
+    "   .+.   .++.      .+..++.      ",
+    "   .+. ..+..       .+..+.       ",
+    "   .+..++.         .+.+.        ",
+    "   .+.++.          .+++.        ",
+    "   .+++.............++.         ",
+    "   .+++++++++++++++++.          ",
+    "   ...................          ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fPerspectiveIcon = new QPixmap(perspective);
+  
+  const char * const ortho[]={
+    "32 32 3 1",
+    "       c None",
+    ".      c #D5D8D5",
+    "@      c #000000",
+    "                                ",
+    "                                ",
+    "                                ",
+    "          ...................   ",
+    "         ..@@@@@@@@@@@@@@@@@.   ",
+    "       ..@@@.............@@@.   ",
+    "      ..@@.@.         ..@..@.   ",
+    "    ..@@ ..@.        .@@...@.   ",
+    "   ..@@..............@@.. .@.   ",
+    "   .@@@@@@@@@@@@@@@@@..   .@.   ",
+    "   .@...............@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@.      .@.    .@.   ",
+    "   .@.    .@........@......@.   ",
+    "   .@.   .@@@@@@@@@.@.@@@@@@.   ",
+    "   .@.  .@@+........@....@@..   ",
+    "   .@...@.         .@...@...    ",
+    "   .@.@@.          .@.@@ .      ",
+    "   .@@@.............@@@..       ",
+    "   .@@@@@@@@@@@@@@@@@...        ",
+    "   ...................          ",
+    "                                ",
+    "                                ",
+    "                                "}
+  ;
+  fOrthoIcon = new QPixmap(ortho);
+  
+  const char * const commandIcon[]={
+    "20 20 25 1 ",
+    "  c #4ED17F",
+    ". c #4FD280",
+    "X c #50D381",
+    "o c #5BD181",
+    "O c #5DD382",
+    "+ c #59D48A",
+    "@ c #66D68C",
+    "# c #6FD895",
+    "$ c #85DEA4",
+    "% c #8CE0AC",
+    "& c #96E4B8",
+    "* c #9EE3B8",
+    "= c #A8E5BB",
+    "- c #A7E8C4",
+    "; c #B2EAC8",
+    ": c #B9ECD1",
+    "> c #C2EDD3",
+    ", c #CBF1DF",
+    "< c #D4F3E3",
+    "1 c #DDF4E5",
+    "2 c #DBF5EC",
+    "3 c #E5F7F0",
+    "4 c #EDFAFB",
+    "5 c #F6FBFE",
+    "6 c #FEFFFC",
+    /* pixels */
+    "66666666666666666666",
+    "66%++++++++++++++&56",
+    "6$ o..o......o..o *6",
+    "6+o...o*<441;@.o..+6",
+    "6+..o@1553<354$..o+6",
+    "6+..o<5<@  .*54#o.+6",
+    "6+o.*52X     :5-..@6",
+    "6+..15%      o$+o.+6",
+    "6+.+55@        .o.+6",
+    "6O.#54         .X.+6",
+    "6O #54         .X.+6",
+    "6O.+55@        .o.+6",
+    "6+..25%      @,*o.@6",
+    "6+o.*52X     :5>.o+6",
+    "6+..O25<@  X=54#o.+6",
+    "6+.o.@1553<354$...@6",
+    "6+o..oo*<44<;@o..o+6",
+    "6$ .o..o.....o..o *6",
+    "66%+++++OOOO+++++*66",
+    "66666666666666666666"
+  };
+  fCommandIcon = new QPixmap(commandIcon);
+
+  const char * const dirIcon[]={
+    "20 20 25 1 ",
+    "  c #DF5959",
+    ". c #DD5F5F",
+    "X c #DE7370",
+    "o c #E06360",
+    "O c #E06467",
+    "+ c #E06C6C",
+    "@ c #E57979",
+    "# c #E08886",
+    "$ c #E18D91",
+    "% c #E19D9B",
+    "& c #E99B9D",
+    "* c #E8A2A2",
+    "= c #EEB2B0",
+    "- c #EDBBBC",
+    "; c #EDCBC7",
+    ": c #E9CDD1",
+    "> c #F1D5D6",
+    ", c #F9DFE2",
+    "< c #EFE8E7",
+    "1 c #F3E3E4",
+    "2 c #F8EEEC",
+    "3 c #FCF6F4",
+    "4 c #F6F3F9",
+    "5 c #F2F8FC",
+    "6 c #FEFFFD",
+    /* pixels */
+    "66666666666666666666",
+    "66$oOOOOOOOOOOOOo%66",
+    "6#                %6",
+    "6o  +,666663:+    o6",
+    "6o  =635533666$   o6",
+    "6o  -65:+  +165X  o6",
+    "6o  >6<.     36;  O6",
+    "6o  26-      &6>. o6",
+    "6. o56*      @63. o6",
+    "6. X56&      o66. o6",
+    "6. X56&      +63. o6",
+    "6. o56*      @62. o6",
+    "6o  26-      =61  O6",
+    "6o  >6<.    o36:  o6",
+    "6o  -65:+  @265X  o6",
+    "6o  =635543665#   O6",
+    "6o  +1666662;+    o6",
+    "6#                %6",
+    "66$OOOoo....OOOOo%66",
+    "66666666666666666666"}
+  ;
+  fDirIcon = new QPixmap(dirIcon);
+
+  
+  const char * const runIcon[]={
+    /* columns rows colors chars-per-pixel */
+    "20 20 33 1 ",
+    "  c #5CA323",
+    ". c #5EA03F",
+    "X c #6DB620",
+    "o c #66AD3F",
+    "O c #70B73C",
+    "+ c #7CC13F",
+    "@ c #569B41",
+    "# c #61A14E",
+    "$ c #70A95D",
+    "% c #7EB55C",
+    "& c #85B94E",
+    "* c #90BE49",
+    "= c #81B669",
+    "- c #81B370",
+    "; c #95CA46",
+    ": c #A1CD40",
+    "> c #AED045",
+    ", c #B3D558",
+    "< c #9BC87E",
+    "1 c #AED668",
+    "2 c #A2D075",
+    "3 c #C2DC73",
+    "4 c #A5C98F",
+    "5 c #C1DC9F",
+    "6 c #CAE18E",
+    "7 c #CCE39A",
+    "8 c #C4DCB6",
+    "9 c #E3ECBA",
+    "0 c #EEF3D3",
+    "q c #F0F7DE",
+    "w c #F8FAE9",
+    "e c #FCFFFB",
+    "r c None",
+    /* pixels */
+    "rrrrrrrr%<<2rrrrrrrr",
+    "rrrrr5=$$$$===rrrrrr",
+    "rrrr<##$$$$$---&rrrr",
+    "rrr=###$$$$-----%rrr",
+    "rr=####$$$$------&rr",
+    "r2@####7##$-------rr",
+    "r.@####048$-------Or",
+    "r.@####q4ee=----$@.r",
+    " .@@###w4eee5%$#@@@X",
+    " .@@@..w4eeeeqo..@@X",
+    " .@..ooe<eeee7Oooo@X",
+    " ..oooOe2eee6OOOooo ",
+    "rOooOO+e2ew2+++++O+r",
+    "r:oO+++e30,;;;;;++Or",
+    "r :++;:9,>,,>>:;;1rr",
+    "rr*1;:>,333333,>32rr",
+    "rrr66,1367777637<rrr",
+    "rrrr509799999905rrrr",
+    "rrrrr=8wqwwww8-rrrrr",
+    "rrrrrrrr4444rrrrrrrr"
+  };
+  fRunIcon = new QPixmap(runIcon);
+
+  const char * const paramIcon[]={
+    /* columns rows colors chars-per-pixel */
+    "20 20 35 1 ",
+    "  c #2E2525",
+    ". c #403737",
+    "X c #423A3A",
+    "o c #443C3C",
+    "O c #473F3F",
+    "+ c #4C4444",
+    "@ c #4F4848",
+    "# c #514949",
+    "$ c #544D4D",
+    "% c #595252",
+    "& c #625B5B",
+    "* c #696262",
+    "= c #6D6666",
+    "- c #716B6B",
+    "; c #726C6C",
+    ": c #767171",
+    "> c #7E7878",
+    ", c #8B8787",
+    "< c #8C8787",
+    "1 c #8D8888",
+    "2 c #918D8D",
+    "3 c #928E8E",
+    "4 c #948F8F",
+    "5 c #9C9898",
+    "6 c #9D9999",
+    "7 c #D5D4D4",
+    "8 c #D8D6D6",
+    "9 c #DDDBDB",
+    "0 c #EFEFEF",
+    "q c #F6F6F6",
+    "w c None",
+    "e c None",
+    "r c None",
+    "t c gray99",
+    "y c None",
+    /* pixels */
+    "wwwwwwww5  5wwwwwwww",
+    "wwwwwwww,  ,wwwwwwww",
+    "www&;ww7+  +9ww=-www",
+    "ww&  O#      OX  *ww",
+    "ww;              >ww",
+    "wwwO    .%%X    +www",
+    "www#   3wwww3   Owww",
+    "ww7   3wwwwww3   7ww",
+    "5<+  .wwwwwww0.  +<5",
+    "     %wwwwwwww$     ",
+    "     %wwwwwwww$     ",
+    "5<+  .wwwwwww0X  +<5",
+    "ww9   4wwwwww1   9ww",
+    "wwwO   30ww03   Owww",
+    "wwwX    X#$X    @www",
+    "ww=              =ww",
+    "ww-  +O      ++  :ww",
+    "www*>ww7+  +7ww=:www",
+    "wwwwwwww1  1wwwwwwww",
+    "wwwwwwww5  5wwwwwwww"
+  };
+  fParamIcon = new QPixmap(paramIcon);
+
+}
+
 
 /** Create the History ToolBox Widget
  */
@@ -251,7 +1389,6 @@ QWidget* G4UIQt::CreateHistoryTBWidget(
   fHistoryTBTableList = new QListWidget();
   fHistoryTBTableList->setSelectionMode(QAbstractItemView::SingleSelection);
   connect(fHistoryTBTableList, SIGNAL(itemSelectionChanged()), SLOT(CommandHistoryCallback()));
-  fHistoryTBTableList->installEventFilter(this);
 
   layoutHistoryTB->addWidget(fHistoryTBTableList);
 
@@ -319,86 +1456,12 @@ QWidget* G4UIQt::CreateHelpTBWidget(
 G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
 ) 
 {
-  const char * const search[]  = {
-    /* columns rows colors chars-per-pixel */
-    "19 19 8 1",
-    "  c #5C5C5C",
-    ". c #7D7D7D",
-    "X c #9B9B9B",
-    "o c #C3C3C3",
-    "O c None",
-    "+ c #000000",
-    "@ c #000000",
-    "# c None",
-    /* pixels */
-    "OOOOOOOOOOOOOOOOOOO",
-    "OOOOOOOOOOOOOOOOOOO",
-    "OOOOOOOo.  .oOOOOOO",
-    "OOOOOOX      XOOOOO",
-    "OOOOOo  XOOX  oOOOO",
-    "OOOOO. XOOOOX .OOOO",
-    "OOOOO  OOOOOO  OOOO",
-    "OOOOO  OOOOOO  OOOO",
-    "OOOOO. XOOOOo .OOOO",
-    "OOOOOo  oOOo  oOOOO",
-    "OOOOOOX       XOOOO",
-    "OOOOOOOo.  .   XOOO",
-    "OOOOOOOOOOOOO.  XOO",
-    "OOOOOOOOOOOOOO. XOO",
-    "OOOOOOOOOOOOOOOoOOO",
-    "OOOOOOOOOOOOOOOOOOO",
-    "OOOOOOOOOOOOOOOOOOO",
-    "OOOOOOOOOOOOOOOOOOO",
-    "OOOOOOOOOOOOOOOOOOO"
-  };
-
-  const char * const clear[]  = {
-    /* columns rows colors chars-per-pixel */
-    "20 20 8 1",
-    "  c #020202",
-    ". c #202020",
-    "X c #2C2C2C",
-    "o c #797979",
-    "O c None",
-    "+ c #797979",
-    "@ c #797979",
-    "# c #797979",
-    /* pixels */
-    "OOOOOOOOOOOOOOOOOOOO",
-    "OOOOOOOo    oOOOOOOO",
-    "OOOOOXX      XXOOOOO",
-    "OOOOOOOOOOOOOOOOOOOO",
-    "OOOOOOOOOOOOOOOOOOOO",
-    "OOOO XXXXXXXXXX OOOO",
-    "OOO XOOOOOOOOOO  OOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOooOooOooO OOOO",
-    "OOOOXOOOOOOOOOO OOOO",
-    "OOOOOooooooooooOOOOO",
-    "OOOOOO........OOOOOO"
-  };
-
-  fSearchIcon = new QPixmap(search);
-  fClearIcon = new QPixmap(clear);
-  
   QWidget* coutTBWidget = new QWidget();
 
   QVBoxLayout *layoutCoutTB = new QVBoxLayout();
 
   fCoutTBTextArea = new QTextEdit();
-
-  // set font familly and size
-  fCoutTBTextArea->setFontFamily("Courier");
-  fCoutTBTextArea->setFontPointSize(12);
-
+  
   fCoutFilter = new QLineEdit();
   fCoutFilter->setToolTip("Filter output by...");
   
@@ -407,7 +1470,7 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
   fCoutFilter->setStyleSheet ("border-radius:7px;");
 #else
   QPushButton *coutTBFilterButton = new QPushButton();
-  coutTBFilterButton->setIcon(*fSearchIcon);
+  coutTBFilterButton->setIcon(QIcon(*fSearchIcon));
   coutTBFilterButton->setStyleSheet ("padding-left: 0px; border:0px;");
   fCoutFilter->setStyleSheet ("padding-right: 0px;");
 #endif
@@ -419,6 +1482,12 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
   connect(coutTBClearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
   connect(fCoutFilter, SIGNAL(textEdited ( const QString &)), SLOT(CoutFilterCallback( const QString &)));
 
+  QPushButton *coutTBSaveOutputButton = new QPushButton();
+  coutTBSaveOutputButton->setIcon(*fSaveIcon);
+  coutTBSaveOutputButton->setToolTip("Save console output");
+  coutTBSaveOutputButton->setStyleSheet ("border-radius:7px;");
+  connect(coutTBSaveOutputButton, SIGNAL(clicked()), SLOT(SaveOutputCallback()));
+  
   fCoutTBTextArea->setReadOnly(true);
 
   QWidget* coutButtonWidget = new QWidget();
@@ -442,6 +1511,7 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
   layoutCoutTBButtons->addWidget(coutTBFilterButton);
 #endif
   layoutCoutTBButtons->addWidget(coutTBClearButton);
+  layoutCoutTBButtons->addWidget(coutTBSaveOutputButton);
   coutButtonWidget->setLayout(layoutCoutTBButtons);
 
   // reduce margins
@@ -457,13 +1527,14 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
   // Command line :
   QWidget* commandLineWidget = new QWidget();
   QHBoxLayout *layoutCommandLine = new QHBoxLayout();
-  
+
   // fill them
   
   fCommandLabel = new QLabel("");
-  
   fCommandArea = new QLineEdit();
-  fCommandArea->installEventFilter(this);
+  
+  // The QCompleter will be append at SessionStart()
+
   fCommandArea->activateWindow();
   
   fCommandArea->setFocusPolicy ( Qt::StrongFocus );
@@ -509,7 +1580,7 @@ G4UIDockWidget* G4UIQt::CreateUITabWidget(
   fUITabWidget = new QTabWidget();
 
   // the left dock
-  fUITabWidget->addTab(CreateSceneTreeComponentsTBWidget(),"Scene tree");
+  fUITabWidget->addTab(CreateSceneTreeWidget(),"Scene tree");
   fUITabWidget->addTab(CreateHelpTBWidget(),"Help");
   fUITabWidget->addTab(CreateHistoryTBWidget(),"History");
   fUITabWidget->setCurrentWidget(fHelpTBWidget);
@@ -528,17 +1599,19 @@ G4UIDockWidget* G4UIQt::CreateUITabWidget(
 }
 
 
-QWidget* G4UIQt::CreateSceneTreeComponentsTBWidget(){
+QWidget* G4UIQt::CreateSceneTreeWidget(){
 
-  fSceneTreeComponentsTBWidget = new QTabWidget();
+  fSceneTreeWidget = new QWidget();
+  QVBoxLayout* layout = new QVBoxLayout();
+  fSceneTreeWidget->setLayout(layout);
 
 #if QT_VERSION < 0x040200
-  fSceneTreeComponentsTBWidget->hide();
+  fSceneTreeWidget->hide();
 #else
-  fSceneTreeComponentsTBWidget->setVisible(false);
+  fSceneTreeWidget->setVisible(false);
 #endif
 
-  return fSceneTreeComponentsTBWidget;
+  return fSceneTreeWidget;
 }
 
 
@@ -605,13 +1678,33 @@ void G4UIQt::CreateViewerWidget(){
 
 /** Get the ViewerComponents ToolBox Widget
  */
-QTabWidget* G4UIQt::GetSceneTreeComponentsTBWidget(
+QWidget* G4UIQt::GetSceneTreeWidget(
 )
 {
-  return fSceneTreeComponentsTBWidget;
+  return fSceneTreeWidget;
 }
 
+/** Get the Viewer properties  Widget
+ */
+QWidget* G4UIQt::GetViewerPropertiesWidget(
+)
+{
+  if (!fViewerPropertiesDialog) {
+    CreateViewerPropertiesDialog();
+  }
+  return fViewerPropertiesWidget;
+}
 
+/** Get the Pick Widget
+ */
+QWidget* G4UIQt::GetPickInfosWidget(
+)
+{
+  if (!fPickInfosDialog) {
+    CreatePickInfosDialog();
+  }
+  return fPickInfosWidget;
+}
 
 
 /**   Add a new tab in the viewer
@@ -787,9 +1880,33 @@ G4UIsession* G4UIQt::SessionStart (
       fMainWindow->setVisible(true);
   #endif
 
+  if (fDefaultIcons) {
+#if QT_VERSION < 0x040200
+      fToolbarApp->show();
+#else
+      fToolbarApp->setVisible(true);
+#endif
+  } else {
+    // Set not visible until session start
+#if QT_VERSION < 0x040200
+    fToolbarApp->hide();
+#else
+    fToolbarApp->setVisible(false);
+#endif
+  }
+  // Rebuild help tree (new command could be registered)
+  FillHelpTree();
+  
+  // Rebuild command completion (new command could be registered)
+  UpdateCommandCompleter();
+  
+  // Set event filters
+  fHistoryTBTableList->installEventFilter(this);
+  fCommandArea->installEventFilter(this);
+
   // Focus on command line
   fCommandArea->setFocus();
-  
+
   interactorManager->DisableSecondaryLoop (); // TO KEEP
   if ((QApplication*)interactorManager->GetMainInteractor())
     ((QApplication*)interactorManager->GetMainInteractor())->exec();
@@ -801,8 +1918,6 @@ G4UIsession* G4UIQt::SessionStart (
 
 /**   Display the prompt in the prompt area
    @param aPrompt : string to display as the promt label
-   //FIXME : probablement inutile puisque le seul a afficher qq chose d'autre
-   que "session" est SecondaryLoop()
 */
 void G4UIQt::Prompt (
  G4String aPrompt
@@ -925,6 +2040,9 @@ G4int G4UIQt::ReceiveG4cout (
 #ifdef G4MULTITHREADED
   UpdateCoutThreadFilter();
 #endif
+	
+  // reset error stack
+  fLastErrMessage = aString;
   return 0;
 }
 
@@ -966,7 +2084,14 @@ G4int G4UIQt::ReceiveG4cerr (
     if ((G4StateManager::GetStateManager()->GetCurrentState() == G4State_Abort) ||
         (G4StateManager::GetStateManager()->GetCurrentState() == G4State_Quit )) {
       // In case of Abort or Quit, the useful error message should be in the last error message !
-      QMessageBox::critical(fMainWindow, "Error",QString(fLastErrMessage.data())+"\n"+aString.data());
+		fLastErrMessage += "\n"+aString;
+		QString criticalMessage = fLastErrMessage.data();
+#if QT_VERSION < 0x050000
+		criticalMessage = Qt::escape(criticalMessage);
+#else
+		criticalMessage = criticalMessage.toHtmlEscaped();
+#endif
+      QMessageBox::critical(fMainWindow, "Error",QString(fLastErrMessage));
     }
   }
   QColor previousColor = fCoutTBTextArea->textColor();
@@ -976,7 +2101,7 @@ G4int G4UIQt::ReceiveG4cerr (
   fCoutTBTextArea->ensureCursorVisible ();
 
   if (QString(aString.data()).trimmed() != "") {
-    fLastErrMessage = aString;
+    fLastErrMessage += aString;
   }
 #ifdef G4MULTITHREADED
   UpdateCoutThreadFilter();
@@ -1088,19 +2213,39 @@ void G4UIQt::AddButton (
   }
   
   if(treeTop->FindPath(cmd) == NULL) {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4int verbose = UImanager->GetVerboseLevel();
-    
-    if (verbose >= 2) {
-      G4cout << "Warning: command '"<< cmd <<"' does not exist, please define it before using it."<< G4endl;
+    if(cmd != "ls" &&
+       cmd(0,3) != "ls " &&
+       cmd != "pwd" &&
+       cmd != "cd" &&
+       cmd(0,3) != "cd " &&
+       cmd != "help" &&
+       cmd(0,5) != "help " &&
+       cmd(0) != '?' &&
+       cmd != "hist" &&
+       cmd != "history" &&
+       cmd(0) != '!' &&
+       cmd != "exit" &&
+       cmd != "cont" &&
+       cmd != "continue"){
+      G4UImanager* UImanager = G4UImanager::GetUIpointer();
+      G4int verbose = UImanager->GetVerboseLevel();
+      
+      if (verbose >= 2) {
+        G4cout << "Warning: command '"<< cmd <<"' does not exist, please define it before using it."<< G4endl;
+      }
     }
   }
 
+#if QT_VERSION < 0x050600
   QSignalMapper *signalMapper = new QSignalMapper(this);
   QAction *action = parentTmp->addAction(aLabel, signalMapper, SLOT(map()));
 
   connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
   signalMapper->setMapping(action, QString(aCommand));
+#else
+  QString cmd_tmp = QString(aCommand);
+  parentTmp->addAction(aLabel, this, [=](){ this->ButtonCallback(cmd_tmp); });
+#endif
 }
 
 
@@ -1117,14 +2262,17 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
       return; // TO KEEP
     }
   }
-  QPixmap pix;
+  QPixmap* pix;
   bool userToolBar = false;
 
+  if (!fDefaultIcons) {
+    userToolBar = true;
+  }
   if (std::string(aIconFile) == "user_icon") {
     // try to open a file
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    pix = QPixmap(UImanager->FindMacroPath(aFileName).data());
-    if (pix.isNull()) {
+    pix = new QPixmap(UImanager->FindMacroPath(aFileName).data());
+    if (pix->isNull()) {
       G4int verbose = UImanager->GetVerboseLevel();
       
       if (verbose >= 2) {
@@ -1132,733 +2280,34 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
       }
       return;
     }
-    userToolBar = true; 
   } else if (std::string(aIconFile) == "open") {
-    const char * const xpm[]={
-      "32 32 33 1",                       
-          "       c None",                    
-          "+      c #09091E",                 
-          "@      c #191B18",                 
-          "#      c #5F615F",                 
-          "$      c #777977",                 
-          "%      c #AEB1AF",                 
-          "&      c #929491",                 
-          "*      c #515250",                 
-          "=      c #858784",                 
-          "-      c #333533",                 
-          ";      c #000100",                 
-          ">      c #272926",                 
-          ",      c #424341",                 
-          "'      c #696C6A",                 
-          ")      c #5F4927",                 
-          "!      c #583D18",                 
-          "~      c #6E6A5B",                 
-          "{      c #47351D",                 
-          "]      c #E0A554",                 
-          "^      c #FFD67B",                 
-          "/      c #EFB465",                 
-          "(      c #FDBF6C",                 
-          "_      c #FFCD76",                 
-          ":      c #806238",                 
-          "<      c #362611",                 
-          "[      c #0B0D0A",                 
-          "}      c #68471B",                 
-          "|      c #523E22",                 
-          "1      c #B78A51",                 
-          "2      c #A17B44",                 
-          "3      c #D6A45E",                 
-          "4      c #C29354",                 
-          "5      c #A1A3A0",                 
-          "                                ", 
-          "                                ", 
-          "                     +@@@#      ", 
-          "                    $%   +&   * ", 
-          "                   #=     $  -; ", 
-          "                           %>;+ ", 
-          "                           ,;;+ ", 
-          "  &#$''#'                 >;;;+ ", 
-          " =)!)!!!!~                *#$'' ", 
-          " {]^/((_({-  %%%%%%%%%%%        ", 
-          " {(^_^^^^:<{{{{{{{{{{{{{[&      ", 
-          " {/_/(((((/]]]]]]]]]]]/]!#      ", 
-          " {/^(((((_^^^^^^^^^^^^^^:#      ", 
-          " {/^(((_^^____________^^}$      ", 
-          " {/^(((((/////////////((!#      ", 
-          " {/^/^_:<|||||||||||||||@@****1 ", 
-          " {/^/^(<[)||||||||||||||))!!}<; ", 
-          " {/^_(:|234444444444444444432)1 ", 
-          " {/_^/<)34444444444444444443},  ", 
-          " {/^(2{:41111111111111111142|5  ", 
-          " {3^3<:31111111111111111143}-   ", 
-          " {/^2<:31111111111111111441|'   ", 
-          " {_/<:41111111111111111143},    ", 
-          " {(4<:31111111111111111144!#    ", 
-          " )4))44111111111111111144},     ", 
-          " )2<:31111111111111111144{#     ", 
-          " @|:14444444444444444444}*      ", 
-          " ;@434444444444444444434<#      ", 
-          " ;[))))))))))))))))))))!~       ", 
-          " ++++++++++++++++++++++;%       ", 
-          "                                ", 
-          "                                "}
-    ;
-    pix = QPixmap(xpm);
-
+    pix = fOpenIcon;
   } else if (std::string(aIconFile) == "save") {
-    const char * const xpm[]={
-      "32 32 24 1",                      
-      "       c None",                    
-      "+      c #000200",                
-      "@      c #141E43",                
-      "#      c #000C56",                
-      "$      c #494A47",                
-      "%      c #636662",                
-      "&      c #312F2A",                
-      "*      c #191B19",                
-      "=      c #002992",                
-      "-      c #003DFF",                
-      ";      c #041DA5",                
-      ">      c #A8A9A3",                
-      ",      c #FDFFFC",                
-      "'      c #DDE0DD",                
-      ")      c #818783",                
-      "!      c #C9CBC8",                
-      "~      c #0116C3",                
-      "{      c #C5C8FA",                
-      "]      c #6596FC",                
-      "^      c #A0B4F9",                
-      "/      c #0B2AFD",                
-      "(      c #799BE3",                
-      "_      c #5F4826",                
-      ":      c #D5D8D5",                
-      "                                ",
-      "                                ",
-      "   +++++++++++++++++++++++++    ",
-      "  +@##+$%%%%%%%%%%%%%%%&*$%&+   ",
-      "  +=-;@>,,''',,,,,,,',,)&!,)+   ",
-      "  +;-~@>,,,,,,,,,,,,,,,>$!,)+   ",
-      "  +=-~@>,,,,,{]]]]]^,,,>*&$&+   ",
-      "  +=-~@>,,,,,'{^{^^{,,,>*#=#+   ",
-      "  +=-~@>,,,,,,,,,,,,,,,>@~/=+   ",
-      "  +=-~@>,,,{{{''''{',,,>@~-=+   ",
-      "  +=-~@>,,'^]]]]]]({,,,>@~-=+   ",
-      "  +=-~@>,,,{{{{{{{{{,,,>@~-=+   ",
-      "  +=-~@>,,,,,'{^{{^{,,,>@~-=+   ",
-      "  +=-~@>,,,,,]]]]]]],,,>@~-=+   ",
-      "  +=-~*>,,,,,,,,,,,,,,,>@~-=+   ",
-      "  +=-~@>,,,,,,,,,,,,,,,>@~-=+   ",
-      "  +=-/=$%%%%%%%%%%%%%%%$=/-=+   ",
-      "  +=---;###############;---=+   ",
-      "  +=---////////////////----=+   ",
-      "  +=----------------///----=+   ",
-      "  +=---=@##############@#--=+   ",
-      "  +=---@+++++++++++*%))_+~-=+   ",
-      "  +=---#+++++++++++&:,,>@~-=+   ",
-      "  +=---#+++++++++++$',,>@~-=+   ",
-      "  +=---#+++++++++++&!,,>@~-=+   ",
-      "  +=/--#+++++++++++&',,>@~-=+   ",
-      "   @;--#+++++++++++$',,>@~-=+   ",
-      "    @;;@+++++++++++*)!>%@=;#+   ",
-      "     @++++++++++++++*&**++@++   ",
-      "                                ",
-      "                                ",
-      "                                "}
-    ;
-    pix = QPixmap(xpm);
+    pix = fSaveIcon;
   } else if (std::string(aIconFile) == "move") {
-    const char * const xpm[]={
-        "32 32 16 1",                       
-          "       c None",                    
-          ".      c #F1F1F1",                 
-          "+      c #939393",                 
-          "@      c #282828",                 
-          "#      c #787878",                 
-          "$      c #000000",                 
-          "%      c #CCCCCC",                 
-          "&      c #1A1A1A",                 
-          "*      c #0D0D0D",                 
-          "=      c #5D5D5D",                 
-          "-      c #AEAEAE",                 
-          ";      c #BBBBBB",                 
-          ">      c #C9C9C9",                 
-          ",      c #D6D6D6",                 
-          "'      c #FFFFFF",                 
-          ")      c #999999",                 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "               ..               ", 
-          "               ++               ", 
-          "              .@@.              ", 
-          "              #$$#              ", 
-          "             %&$$*%             ", 
-          "             =$$$$=             ", 
-          "            -**$$**-            ", 
-          "            %;%&*>;%            ", 
-          "          -%   @&   %-          ", 
-          "        ,=*;   @&   ;*=,        ", 
-          "      .#*$$>        >$$*#.      ", 
-          "    ')&$$$$*@@    @@*$$$$&)'    ", 
-          "    ')&$$$$*@@    @@*$$$$&+'    ", 
-          "      .#*$$>        >$$*#.      ", 
-          "        ,=*;   @&   ;*=,        ", 
-          "          -%   @&   %-          ", 
-          "            %;%&*>>%            ", 
-          "            -**$$**-            ", 
-          "             =$$$$=             ", 
-          "             %&$$*%             ", 
-          "              #$$#              ", 
-          "              .@@.              ", 
-          "               ++               ", 
-          "               ..               ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-  pix = QPixmap(xpm);
-
+    pix = fMoveIcon;
   } else if (std::string(aIconFile) == "rotate") {
-    const char * const xpm[]={
-        "32 32 27 1",                       
-          "       c None",                    
-          ".      c #003333",                 
-          "+      c #000066",                 
-          "@      c #1A1A1A",                 
-          "#      c #003399",                 
-          "$      c #3333CC",                 
-          "%      c #000033",                 
-          "&      c #353535",                 
-          "*      c #434343",                 
-          "=      c #336699",                 
-          "-      c #3399FF",                 
-          ";      c #003366",                 
-          ">      c #5D5D5D",                 
-          ",      c #282828",                 
-          "'      c #3399CC",                 
-          ")      c #333333",                 
-          "!      c #3366CC",                 
-          "~      c #333399",                 
-          "{      c #505050",                 
-          "]      c #666666",                 
-          "^      c #333366",                 
-          "/      c #0033CC",                 
-          "(      c #3366FF",                 
-          "_      c #336666",                 
-          ":      c #787878",                 
-          "<      c #868686",                 
-          "[      c #6B6B6B",                 
-          "                   .++@         ", 
-          "                  #$$%&*        ", 
-          "                 =--; *>,       ", 
-          "                 '-=  )>&       ", 
-          "                !-',  ,>*       ", 
-          "             !!=--=    >*       ", 
-          "            =------!!~@&)@      ", 
-          "             --------!*{{{*&,   ", 
-          "             -------=){*{{{>>{) ", 
-          "            ,!-----=  ){&  ,&{{@", 
-          "          ,*>!----=   &>&     )@", 
-          "         ){>)~---=    *])      @", 
-          "        @*>,  --!     ,&@       ", 
-          "        @{*   '!      ,-!=~^,@  ", 
-          "        @&    ==      {/(----!^ ", 
-          "         _           ]:;(----'  ", 
-          "         ==_         >{+(----~  ", 
-          "          !-!!======!!(((---!   ", 
-          "           ='--------------!    ", 
-          "             =!!!!'!!=; !-!     ", 
-          "                   &<*  !~      ", 
-          "              @.  *[*   ;       ", 
-          "               ;+)>*            ", 
-          "                 @@             ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-  pix = QPixmap(xpm);
-
+    pix = fRotateIcon;
   } else if (std::string(aIconFile) == "pick") {
-    const char * const xpm[]={
-        "32 32 2 1",                        
-          "       c None",                    
-          ".      c #000000",                 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "            .                   ", 
-          "            ..                  ", 
-          "            ...                 ", 
-          "            ....                ", 
-          "            .....               ", 
-          "            ......              ", 
-          "            .......             ", 
-          "            .......             ", 
-          "            ........            ", 
-          "            .....               ", 
-          "            ......              ", 
-          "            ..  ..              ", 
-          "            .   ..              ", 
-          "                ...             ", 
-          "                 ..             ", 
-          "                 ..             ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-  pix = QPixmap(xpm);
+     pix = fPickIcon;
   } else if (std::string(aIconFile) == "zoom_in") {
-    const char * const xpm[]={
-        "32 32 11 1",                       
-          "       c None",                    
-          ".      c #C9CBC8",                 
-          "+      c #A8A9A3",                 
-          "@      c #818783",                 
-          "#      c #D5D8D5",                 
-          "$      c #9BCCCC",                 
-          "%      c #5FC7F4",                 
-          "&      c #FDFFFC",                 
-          "*      c #636662",                 
-          "=      c #9599CE",                 
-          "-      c #DDE0DD",                 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "          .++@@++.              ", 
-          "         +++..#.+++             ", 
-          "       .@+...++++#+@.           ", 
-          "       @$.%%+&&&@%..@           ", 
-          "      ++.%%%+&&&*%%.++          ", 
-          "     .+#%%%%+&&&*%%.#+          ", 
-          "     ++..%%%+&&&*%%%.++         ", 
-          "     +#.+++++&&&*++++.+         ", 
-          "     @.+&&&&&&&&&&&&&+@         ", 
-          "     @#+&&&&&&&&&&&&&+@         ", 
-          "     @.+&&&&&&&&&&&&&+.         ", 
-          "     +++@***+&&&****@+.         ", 
-          "     ....++++&&&*++++..         ", 
-          "      ++.===+&&&*%=.++          ", 
-          "       @..==+&&&*=..@#&         ", 
-          "       .@+#.+&&&@-+@@*@         ", 
-          "         +++.++++++ *+@*        ", 
-          "          .+@@@++.  @**+*       ", 
-          "                    .*@*+*      ", 
-          "                     .*@*+*     ", 
-          "                      +*@@*     ", 
-          "                       .**+     ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-  pix = QPixmap(xpm);
+    pix = fZoomInIcon;
   } else if (std::string(aIconFile) == "zoom_out") {
-    const char * const xpm[]={
-        "32 32 11 1",                       
-          "       c None",                    
-          ".      c #C9CBC8",                 
-          "+      c #A8A9A3",                 
-          "@      c #818783",                 
-          "#      c #D5D8D5",                 
-          "$      c #5FC7F4",                 
-          "%      c #9BCCCC",                 
-          "&      c #FDFFFC",                 
-          "*      c #636662",                 
-          "=      c #9599CE",                 
-          "-      c #DDE0DD",                 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "          .++@@++.              ", 
-          "         +++..#.+++             ", 
-          "       .@+..$$$$.#+@.           ", 
-          "       @%.$$$$$$$$..@           ", 
-          "      ++.$$$$$$$$$$.++          ", 
-          "     .+#$$$$$$$$$$$.#+          ", 
-          "     ++..$$$$$$$$$$$.++         ", 
-          "     +#.+++++++++++++.+         ", 
-          "     @.+&&&&&&&&&&&&&+@         ", 
-          "     @#+&&&&&&&&&&&&&+@         ", 
-          "     @.+&&&&&&&&&&&&&+.         ", 
-          "     +++@***********@+.         ", 
-          "     ....++++++++++++..         ", 
-          "      ++.===$$$$$$=.++          ", 
-          "       @..===$$$$=..@#&         ", 
-          "       .@+#.$$$..-+@@*@         ", 
-          "         +++#--.+++ *+@*        ", 
-          "          .+@@@++.  @**+*       ", 
-          "                    .*@*+*      ", 
-          "                     .*@*+*     ", 
-          "                      +*@@*     ", 
-          "                       .**+     ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-  pix = QPixmap(xpm);
+    pix = fZoomOutIcon;
   } else if (std::string(aIconFile) == "wireframe") {
-    const char * const xpm[]={
-        "32 32 24 1",                       
-          "       c None",                    
-          "+      c #E4E4E4",                 
-          "@      c #D5D5D5",                 
-          "#      c #E1E1E1",                 
-          "$      c #E7E7E7",                 
-          "%      c #D8D8D8",                 
-          "&      c #A7A7A7",                 
-          "*      c #000000",                 
-          "=      c #989898",                 
-          "-      c #8A8A8A",                 
-          ";      c #B5B5B5",                 
-          ">      c #1B1B1B",                 
-          ",      c #676767",                 
-          "'      c #959595",                 
-          ")      c #4A4A4A",                 
-          "!      c #878787",                 
-          "~      c #D3D3D3",                 
-          "{      c #C4C4C4",                 
-          "]      c #A4A4A4",                 
-          "^      c #5B5B5B",                 
-          "/      c #B3B3B3",                 
-          "(      c #787878",                 
-          "_      c #C7C7C7",                 
-          ":      c #585858",                 
-          "                                ", 
-          "                  +@@#          ", 
-          "          $%@@@@@&****=+        ", 
-          "        +&********&@-***;       ", 
-          "   +@@@&**&@@@@@@$  @*-&>&+     ", 
-          "  +*****&+          %*@ ,**'#   ", 
-          "  @***)!~           @*{&*****+  ", 
-          "  @*!]***&+        +-*^**'~!*@  ", 
-          "  @*~ +@&**&@@@@@@&****&+  ~*@  ", 
-          "  @*@    +&********&-*=    @*@  ", 
-          "  @*@      $%@-*-@$ @*@    @*@  ", 
-          "  @*@         @*@   %*%    @*@  ", 
-          "  @*@         %*%   %*%    @*@  ", 
-          "  @*@         %*%   %*%    @*@  ", 
-          "  @*@         %*%   %*%    @*@  ", 
-          "  @*@         %*%   %*%    @*@  ", 
-          "  @*@         %*%   %*%    @*@  ", 
-          "  @*@         @*@   %*%    @*@  ", 
-          "  @*@         =*-+  @*@    @*@  ", 
-          "  @*@    $%@@&****&@-*-+   @*@  ", 
-          "  @*@ $@&*****&@@&******&~~!*@  ", 
-          "  @*{/***&@@%$    $@-*-&*****+  ", 
-          "  @*)*)(-~          @*@ ~)**]   ", 
-          "  +*******&@@@@+    %*_+]**]    ", 
-          "   +@@@@@&******&@%+_*^**]#     ", 
-          "          $%@@@&****:**&+       ", 
-          "                +%@&**&         ", 
-          "                    ++          ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-  pix = QPixmap(xpm);
+    pix = fWireframeIcon;
   } else if (std::string(aIconFile) == "solid") {
-    const char * const xpm[]={
-        "32 32 33 1",                       
-          "       c None",                    
-          "+      c #C2DEDE",                 
-          "@      c #B5D7DF",                 
-          "#      c #ACD6E6",                 
-          "$      c #60C0EC",                 
-          "%      c #4EB7EE",                 
-          "&      c #53B9ED",                 
-          "*      c #82CEEA",                 
-          "=      c #CFDDDA",                 
-          "-      c #94C9E8",                 
-          ";      c #0960FF",                 
-          ">      c #0943FF",                 
-          ",      c #0949FF",                 
-          "'      c #3CB3F0",                 
-          ")      c #71C7EB",                 
-          "!      c #73CBE5",                 
-          "~      c #D3DDDB",                 
-          "{      c #C4DDDE",                 
-          "]      c #B7D5DF",                 
-          "^      c #2DACF5",                 
-          "/      c #59C1ED",                 
-          "(      c #5FC0ED",                 
-          "_      c #85CEE9",                 
-          ":      c #096BFF",                 
-          "<      c #2AACF6",                 
-          "[      c #5CBEEC",                 
-          "}      c #7ACAE4",                 
-          "|      c #73CAEB",                 
-          "1      c #71C8E5",                 
-          "2      c #D1DDDA",                 
-          "3      c #CBDDD9",                 
-          "4      c #67C1EB",                 
-          "5      c #80CDEA",                 
-          "                                ", 
-          "                                ", 
-          "          +@@@@@@#$%&*=         ", 
-          "        +-;>>>>>>>>>,')!~       ", 
-          "   {]@@-;>>>>>>>>>>>>^/(_=      ", 
-          "  {:>>>>>>>>>>>>>>>>><//[)!=    ", 
-          "  ]>>>>>>>>>>>>>>>>>><////[)}   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
-          "  @>>>>>>>>>>>>>>>>>></////[1   ", 
-          "  @>>>>>>>>>>>>>>>>>><////[*2   ", 
-          "  {:>>>>>>>>>>>>>>>>><//[)12    ", 
-          "   +@@@@@-;>>>>>>>>>><[)13      ", 
-          "          {]@@@-;>>>,'*3        ", 
-          "                +@@#452         ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-    ;
-    pix = QPixmap(xpm);
+    pix = fSolidIcon;
   } else if (std::string(aIconFile) == "hidden_line_removal") {
-    const char * const xpm[]={
-        "32 32 15 1",                       
-          "       c None",                    
-          "+      c #D5D5D5",                 
-          "@      c #C7C7C7",                 
-          "#      c #9C9C9C",                 
-          "$      c #000000",                 
-          "%      c #8E8E8E",                 
-          "&      c #808080",                 
-          "*      c #A9A9A9",                 
-          "=      c #D8D8D8",                 
-          "-      c #CACACA",                 
-          ";      c #181818",                 
-          ">      c #9F9F9F",                 
-          ",      c #ACACAC",                 
-          "'      c #B9B9B9",                 
-          ")      c #555555",                 
-          "                                ", 
-          "                  +@@+          ", 
-          "          +@@@@@@#$$$$%+        ", 
-          "        +#$$$$$$$$#@&$$$*       ", 
-          "   =-@@#$$#@@@@@-=  @$&#;>=     ", 
-          "  =$$$$$#+          -$@ *$$%+   ", 
-          "  -$&@-=            -$-  #$$$=  ", 
-          "  -$@               -$-   +&$-  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    @$@  ", 
-          "  @$@               @$@    #$=  ", 
-          "  -$&@@@-=          -$-  =>;,   ", 
-          "  =$$$$$$$#@@@-=    -$'+#$$,    ", 
-          "   =-@@@@#$$$$$$#@-+'$)$$#+     ", 
-          "          =-@@@#$$$$)$$#+       ", 
-          "                +@@#$$#         ", 
-          "                    ++          ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-    pix = QPixmap(xpm);
+    pix = fHiddenLineRemovalIcon;
   } else if (std::string(aIconFile) == "hidden_line_and_surface_removal") {
-    const char * const xpm[]={
-        "32 32 40 1",                       
-          "       c None",                    
-          "+      c #FFFFFF",                 
-          "@      c #89A2E9",                 
-          "#      c #5378E3",                 
-          "$      c #A2B5ED",                 
-          "%      c #5379E3",                 
-          "&      c #5076E3",                 
-          "*      c #3E69E4",                 
-          "=      c #0C43F8",                 
-          "-      c #043FFE",                 
-          ";      c #CDD9ED",                 
-          ">      c #BDCDE9",                 
-          ",      c #FBFCFC",                 
-          "'      c #406AE4",                 
-          ")      c #0439FE",                 
-          "!      c #0137FF",                 
-          "~      c #4F75E3",                 
-          "{      c #9EB5E3",                 
-          "]      c #829FE0",                 
-          "^      c #B6C6E7",                 
-          "/      c #9DB4E3",                 
-          "(      c #7E9CE0",                 
-          "_      c #B2C3E9",                 
-          ":      c #7E9AE0",                 
-          "<      c #86A2E1",                 
-          "[      c #CAD6ED",                 
-          "}      c #5177E3",                 
-          "|      c #829CE0",                 
-          "1      c #BCCCE9",                 
-          "2      c #3A67E6",                 
-          "3      c #0A43FA",                 
-          "4      c #95ACE1",                 
-          "5      c #BBCBE9",                 
-          "6      c #A9BBE5",                 
-          "7      c #96AFE1",                 
-          "8      c #BDCBE9",                 
-          "9      c #4067E4",                 
-          "0      c #6485E5",                 
-          "a      c #E3EAF3",                 
-          "b      c #CAD6F3",                 
-          "                                ", 
-          "                                ", 
-          "                  ++++          ", 
-          "          ++++++++@#$+++        ", 
-          "        ++@%####&*=-#+;>,       ", 
-          "   +++++@'=)))))))!)~+{]^++     ", 
-          "   +$%&*=)!!!!!!!!!)~+/(]_+++   ", 
-          "   +#-))!!!!!!!!!!!)~+/(::<[+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
-          "   +#)!!!!!!!!!!!!!!}+/:::|1+   ", 
-          "   +$#}}~23!!!!!!!!)~+/(]45,    ", 
-          "   +++++++@#}}~23!!)~+678++     ", 
-          "          ++++++@#~90+a++       ", 
-          "                ++++b++         ", 
-          "                    ++          ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-    pix = QPixmap(xpm);
+    pix = fHiddenLineAndSurfaceRemovalIcon;
   } else if (std::string(aIconFile) == "perspective") {
-    const char * const xpm[]={
-        "32 32 3 1",                        
-          "       c None",                    
-          ".      c #D5D8D5",                 
-          "+      c #000000",                 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "           ................     ", 
-          "       ....+++++++++++++++.     ", 
-          "    ...++++..+.........+++.     ", 
-          "   ..++..............++..+.     ", 
-          "   .+++++++++++++++++.. .+.     ", 
-          "   .+...............+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+.    .+.  .+.     ", 
-          "   .+.      .+......+....+.     ", 
-          "   .+.     ..++++++.+.++++.     ", 
-          "   .+.    .++.......+...+..     ", 
-          "   .+.   .++.      .+..++.      ", 
-          "   .+. ..+..       .+..+.       ", 
-          "   .+..++.         .+.+.        ", 
-          "   .+.++.          .+++.        ", 
-          "   .+++.............++.         ", 
-          "   .+++++++++++++++++.          ", 
-          "   ...................          ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-    pix = QPixmap(xpm);
+    pix = fPerspectiveIcon;
   } else if (std::string(aIconFile) == "ortho") {
-    const char * const xpm[]={
-        "32 32 3 1",                        
-          "       c None",                    
-          ".      c #D5D8D5",                 
-          "@      c #000000",                 
-          "                                ", 
-          "                                ", 
-          "                                ", 
-          "          ...................   ", 
-          "         ..@@@@@@@@@@@@@@@@@.   ", 
-          "       ..@@@.............@@@.   ", 
-          "      ..@@.@.         ..@..@.   ", 
-          "    ..@@ ..@.        .@@...@.   ", 
-          "   ..@@..............@@.. .@.   ", 
-          "   .@@@@@@@@@@@@@@@@@..   .@.   ", 
-          "   .@...............@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@.      .@.    .@.   ", 
-          "   .@.    .@........@......@.   ", 
-          "   .@.   .@@@@@@@@@.@.@@@@@@.   ", 
-          "   .@.  .@@+........@....@@..   ", 
-          "   .@...@.         .@...@...    ", 
-          "   .@.@@.          .@.@@ .      ", 
-          "   .@@@.............@@@..       ", 
-          "   .@@@@@@@@@@@@@@@@@...        ", 
-          "   ...................          ", 
-          "                                ", 
-          "                                ", 
-          "                                "}
-      ;
-    pix = QPixmap(xpm);
+    pix = fOrthoIcon;
+  } else if (std::string(aIconFile) == "runBeamOn") {
+    pix = fRunIcon;
   } else {
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4int verbose = UImanager->GetVerboseLevel();
@@ -1885,21 +2334,44 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     currentToolbar = fToolbarApp;
   }
 
-  QSignalMapper *signalMapper = new QSignalMapper(this);
-  QAction *action = currentToolbar->addAction(pix,aLabel, signalMapper, SLOT(map()));
+  // Check if already present
   
-
+  QList<QAction*> list = currentToolbar->actions();
+  
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->text() == QString(aLabel)) {
+      G4UImanager* UI = G4UImanager::GetUIpointer();
+      if(UI==NULL) return;
+      G4int verbose =  UI->GetVerboseLevel();
+      if (verbose >= 2) {
+        G4cout << "Warning: A toolBar icon \""<< aLabel<< "\" already exists with the same name!" << G4endl;
+      }
+    }
+  }
+  
+#if QT_VERSION < 0x050600
+  QSignalMapper *signalMapper = new QSignalMapper(this);
+  QAction *action = currentToolbar->addAction(QIcon(*pix),aLabel, signalMapper, SLOT(map()));
+#endif
   // special cases :"open"
   if (std::string(aIconFile) == "open") {
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString &)));
     QString txt = aCommand + fStringSeparator + aLabel;
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString &)));
     signalMapper->setMapping(action, QString(txt));
+#else
+    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->OpenIconCallback(txt); });
+#endif
 
   // special cases :"save"
   } else if (std::string(aIconFile) == "save") {
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
     QString txt = aCommand + fStringSeparator + aLabel;
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
     signalMapper->setMapping(action, QString(txt));
+#else
+    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->SaveIconCallback(txt); });
+#endif
 
   // special cases : cursor style
   } else if ((std::string(aIconFile) == "move") ||
@@ -1907,12 +2379,16 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
              (std::string(aIconFile) == "pick") ||
              (std::string(aIconFile) == "zoom_out") ||
              (std::string(aIconFile) == "zoom_in")) {
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeCursorAction(const QString&)));
+    signalMapper->setMapping(action, QString(aIconFile));
+#else
+    QString txt = QString(aIconFile);
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangeCursorAction(txt); });
+#endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
     action->setData(aIconFile);
-
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeCursorStyle(const QString&)));
-    signalMapper->setMapping(action, QString(aIconFile));
 
     if (std::string(aIconFile) == "move") {
       SetIconMoveSelected();
@@ -1935,11 +2411,16 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
              (std::string(aIconFile) == "hidden_line_and_surface_removal") ||
              (std::string(aIconFile) == "solid") ||
              (std::string(aIconFile) == "wireframe")) {
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeSurfaceStyle(const QString&)));
+    signalMapper->setMapping(action, QString(aIconFile));
+#else
+    QString txt = QString(aIconFile);
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangeSurfaceStyle(txt); });
+#endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
     action->setData(aIconFile);
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeSurfaceStyle(const QString&)));
-    signalMapper->setMapping(action, QString(aIconFile));
 
     if (std::string(aIconFile) == "hidden_line_removal") {
       SetIconHLRSelected();
@@ -1957,11 +2438,16 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     // special case : perspective/ortho
   } else if ((std::string(aIconFile) == "perspective") ||
              (std::string(aIconFile) == "ortho")) {
+#if QT_VERSION < 0x050600
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangePerspectiveOrtho(const QString&)));
+    signalMapper->setMapping(action, QString(aIconFile));
+#else
+    QString txt = QString(aIconFile);
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangePerspectiveOrtho(txt); });
+#endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
     action->setData(aIconFile);
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangePerspectiveOrtho(const QString&)));
-    signalMapper->setMapping(action, QString(aIconFile));
 
     if (std::string(aIconFile) == "perspective") {
       SetIconPerspectiveSelected();
@@ -1977,7 +2463,13 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     if(UI==NULL) return;
     G4UIcommandTree * treeTop = UI->GetTree();
     if (aCommand != NULL) {
-      if(treeTop->FindPath(aCommand) == NULL) {
+      std::string str = aCommand;
+      std::string::size_type pos = str.find(" ");
+      if (pos != std::string::npos)
+      {
+        str = str.substr(0,pos).c_str();
+      }
+      if(treeTop->FindPath(str.c_str()) == NULL) {
         G4UImanager* UImanager = G4UImanager::GetUIpointer();
         G4int verbose = UImanager->GetVerboseLevel();
         
@@ -1987,8 +2479,13 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
       }
     }
     
+#if QT_VERSION < 0x050600
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
     signalMapper->setMapping(action, QString(aCommand));
+#else
+    QString txt = QString(aCommand);
+    currentToolbar->addAction(QIcon(*pix), aCommand, this, [=](){ this->ButtonCallback(txt); });
+#endif
   }
 }
 
@@ -2492,11 +2989,14 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
           gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
 
           // Connect pushButton to ColorDialog in callback
+#if QT_VERSION < 0x050600
           QSignalMapper* signalMapper = new QSignalMapper(this);
           signalMapper->setMapping(input,input);
           connect(input, SIGNAL(clicked()), signalMapper, SLOT(map()));
           connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(ChangeColorCallback(QWidget*)));
-
+#else
+          connect(dynamic_cast<QPushButton*>(input), &QPushButton::clicked , [=](){ this->ChangeColorCallback(input);});
+#endif
           isColorDialogAdded = true;
           isStillColorParameter = false;
         }
@@ -2516,10 +3016,14 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       
       gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,1);
       
+#if QT_VERSION < 0x050600
       QSignalMapper* signalMapper = new QSignalMapper(this);
       signalMapper->setMapping(applyButton, paramWidget);
       connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
       connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
+#else
+      connect(applyButton, &QPushButton::clicked , [=](){ this->VisParameterCallback(paramWidget);});
+#endif
     } else {
       // Apply/Cancel buttons
       
@@ -2531,10 +3035,14 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       gridLayout->addWidget(cancelButton,n_parameterEntry-nbColorParameter,1);
       gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,0);
       
+#if QT_VERSION < 0x050600
       QSignalMapper* signalMapper = new QSignalMapper(this);
       signalMapper->setMapping(applyButton, paramWidget);
       connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
       connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
+#else
+      connect(applyButton, &QPushButton::clicked , [=](){ this->VisParameterCallback(paramWidget);});
+#endif
 
       QWidget * parentCheck = aParent;
       QDialog* parentDialog = NULL;
@@ -2703,12 +3211,26 @@ void G4UIQt::updateHelpArea (
     txt += "<b>Command </b> " + QString((char*)(commandPath).data()) + "<br />";
   }
   txt += "<b>Guidance :</b> ";
-  
+  QString tmpGuidance = "";
   for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
-    txt += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "<br />";
+    tmpGuidance = QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data());
+#if QT_VERSION < 0x050000
+	  tmpGuidance = Qt::escape(tmpGuidance);
+#else
+	  tmpGuidance = tmpGuidance.toHtmlEscaped();
+#endif
+	  tmpGuidance.replace("\n","<br />");
+    txt += tmpGuidance + "<br />";
   }
   if( ! rangeString.isNull() ) {
-    txt += "<b>Range of parameters : </b> " + QString((char*)(rangeString).data()) + "<br />";
+	  QString range = QString((char*)(rangeString).data());
+#if QT_VERSION < 0x050000
+	  range = Qt::escape(range);
+#else
+	  range = range.toHtmlEscaped();
+#endif
+
+	  txt += "<b>Range of parameters : </b> " + range + "<br />";
   } else {
     txt += "<br />";
   }
@@ -2860,6 +3382,7 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
 ,QEvent *aEvent
 )
 {
+  bool tabKeyPress = false;
   bool moveCommandCursor = false;
   if (aObj == NULL) return false;
   if (aEvent == NULL) return false;
@@ -2869,6 +3392,20 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
       fCommandArea->setFocus();
     }
   }
+  
+  if (aObj == fCompleter->popup()) {
+    if (aEvent->type() == QEvent::KeyPress) {
+      QKeyEvent *e = static_cast<QKeyEvent*>(aEvent);
+      if (e->key() == (Qt::Key_Tab)) {
+        tabKeyPress = true;
+      }
+    } else if ( aEvent->type() == QEvent::Hide ) {
+        // Store this value
+        QString c = fCommandArea->text();
+        fLastCompleteCommand = c.left(c.indexOf("<"));
+    }
+  }
+  
   if (aObj == fCommandArea) {
     if (aEvent->type() == QEvent::KeyPress) {
       QKeyEvent *e = static_cast<QKeyEvent*>(aEvent);
@@ -2903,13 +3440,7 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
         }
         moveCommandCursor = true;
       } else if (e->key() == (Qt::Key_Tab)) {
-        G4String ss = Complete(fCommandArea->text().toStdString().c_str());
-        fCommandArea->setText((char*)(ss.data()));
-
-        // do not pass by parent, it will disable widget tab focus !
-        return true;
-        // L.Garnier : MetaModifier is CTRL for MAC, but I don't want to put a MAC 
-        // specific #ifdef
+        tabKeyPress = true;
       } else if (((e->modifiers () == Qt::ControlModifier) || (e->modifiers () == Qt::MetaModifier)) && (e->key() == Qt::Key_A)) {
        fCommandArea->home(false);
        return true;
@@ -2917,8 +3448,23 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
        fCommandArea->end(false);
        return true;
       }
+    } else if (aEvent->type() == QEvent::Paint) {
+        if (fLastCompleteCommand != "") {
+            fCommandArea->setText(fLastCompleteCommand);
+            fLastCompleteCommand = "";
+        }
     }
   }
+  if (tabKeyPress == true) {
+    G4String ss = Complete(fCommandArea->text().toStdString().c_str());
+    fCommandArea->setText((char*)(ss.data()));
+    fCommandArea->setFocus();
+    // do not pass by parent, it will disable widget tab focus !
+    return true;
+    // L.Garnier : MetaModifier is CTRL for MAC, but I don't want to put a MAC
+    // specific #ifdef
+  }
+
   bool res= false;
   // change cursor position if needed
   if (moveCommandCursor == true) {
@@ -2932,6 +3478,179 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
 }
 
 
+void G4UIQt::UpdateCommandCompleter() {
+  if (!fCommandArea) return;
+  
+  // remove previous one
+  fCommandArea->setCompleter(NULL);
+  if (fCompleter) {
+    if (fCompleter->popup()) {
+      fCompleter->popup()->removeEventFilter(this);
+    }
+  }
+  
+  QStandardItemModel* model = CreateCompleterModel("/");
+  fCompleter = new QCompleter(model);
+  
+  // set all dir visibles in completion
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UIcommandTree * commandTreeTop = UI->GetTree();
+  G4UIcommandTree* aTree = commandTreeTop->FindCommandTree("/");
+  if (aTree) {
+    int Ndir= aTree-> GetTreeEntry();
+    fCompleter->setMaxVisibleItems(Ndir);
+  }
+  fCommandArea->setCompleter(fCompleter);
+  fCompleter->popup()->installEventFilter(this);
+}
+
+
+QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
+  
+  QList< QStandardItem*> dirModelList;
+  QList< QStandardItem*> commandModelList;
+  QList< QStandardItem*> subDirModelList;
+  QList< QStandardItem*> subCommandModelList;
+
+  G4String strtmp;
+  G4int nMatch= 0;
+  
+  G4String pName = aCmd;
+  G4String remainingPath = aCmd;
+  G4String empty = "";
+  G4String matchingPath = empty;
+  
+  // find the tree
+  G4int jpre= pName.last('/');
+  if(jpre != G4int(G4String::npos)) pName.remove(jpre+1);
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UIcommandTree * commandTreeTop = UI->GetTree();
+  G4UIcommandTree* aTree = commandTreeTop->FindCommandTree(pName);
+  if (aTree) {
+    int Ndir= aTree-> GetTreeEntry();
+    int Ncmd= aTree-> GetCommandEntry();
+    
+    // directory ...
+    for(G4int idir=1; idir<=Ndir; idir++) {
+      G4String fpdir= aTree-> GetTree(idir)-> GetPathName();
+      // matching test
+      if( fpdir.index(remainingPath, 0) == 0) {
+        if(nMatch==0) {
+          matchingPath = fpdir;
+        } else {
+          matchingPath = aTree->GetFirstMatchedString(fpdir,matchingPath);
+        }
+        nMatch++;
+
+        // append to dir model list
+        QStandardItem* item1 = new QStandardItem(fpdir.data());
+        QIcon i = QIcon(*fDirIcon);
+        item1->setData(1); // dir
+        item1->setIcon(QIcon(*fDirIcon));
+        dirModelList.append(item1);
+        
+        // Go recursively
+        QStandardItemModel* subModel = CreateCompleterModel(fpdir.data());
+        for (int a=0; a< subModel->rowCount(); a++) {
+
+          // copy item (an item could only be part of one model
+          QStandardItem* tempItem = new QStandardItem(subModel->item(a)->text());
+          tempItem->setIcon(subModel->item(a)->icon());
+          tempItem->setToolTip(subModel->item(a)->toolTip());
+          tempItem->setData(subModel->item(a)->data());
+
+          // dir
+          if (tempItem->data() == 1) {
+            subModel->item(a);
+            subDirModelList.append(tempItem);
+          }
+          // command
+          else if (tempItem->data() == 0) {
+            subCommandModelList.append(tempItem);
+          }
+        }
+      }
+    }
+    
+    // command ...
+    G4int n_parameterEntry;
+    G4String rangeString;
+    G4int n_guidanceEntry;
+    G4UIcommand * command;
+    G4UIparameter *param;
+    std::string tooltip;
+    G4String params;
+    
+    for(G4int icmd=1; icmd<=Ncmd; icmd++){
+      tooltip = "";
+      params = " ";
+      command = aTree-> GetCommand(icmd);
+      G4String longCommandName= aTree-> GetPathName() +
+      command -> GetCommandName();
+      rangeString = command->GetRange();
+      n_guidanceEntry = command->GetGuidanceEntries();
+      n_parameterEntry = command->GetParameterEntries();
+      
+      
+      // matching test
+      if( longCommandName.index(remainingPath, 0) ==0) {
+        if(nMatch==0) {
+          matchingPath= longCommandName + " ";
+        } else {
+          strtmp= longCommandName + " ";
+          matchingPath= aTree->GetFirstMatchedString(matchingPath, strtmp);
+        }
+
+        // guidance
+        for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
+          tooltip += std::string((command->GetGuidanceLine(i_thGuidance)).data());
+          if (i_thGuidance < n_guidanceEntry-1 ) {
+           tooltip += "\n";
+          }
+        }
+        
+        // parameters
+        for( G4int a=0; a<n_parameterEntry; a++ ) {
+          param = command->GetParameter(a);
+			if (param->IsOmittable()) {
+				params += "[<" + param->GetParameterName()+">] ";
+			} else {
+				params += "<" + param->GetParameterName()+"> ";
+			}
+        }
+        nMatch++;
+
+        // Append to command model list
+        QStandardItem* item = new QStandardItem(G4String(longCommandName + params).data());
+        item->setData(0); // command
+        item->setIcon(QIcon(*fCommandIcon));
+        item->setToolTip(tooltip.c_str());
+        
+        commandModelList.append(item);
+      }
+    }
+  }
+
+  QStandardItemModel* model = new QStandardItemModel();
+  // initialize the model
+  model->setColumnCount(1);
+
+  // concat models
+  for (int a= 0; a< dirModelList.size(); a++) {
+    model->appendRow(dirModelList.at(a));
+  }
+  for (int a= 0; a< subDirModelList.size(); a++) {
+    model->appendRow(subDirModelList.at(a));
+  }
+  for (int a= 0; a< commandModelList.size(); a++) {
+    model->appendRow(commandModelList.at(a));
+  }
+  for (int a= 0; a< subCommandModelList.size(); a++) {
+    model->appendRow(subCommandModelList.at(a));
+  }
+
+  return model;
+}
 
 
 /***************************************************************************/
@@ -2978,6 +3697,7 @@ void G4UIQt::CommandEnteredCallback (
 )
 {
   // split by any new line character
+  fCommandArea->setText(fCommandArea->text().trimmed());
   QStringList list = fCommandArea->text().split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
 
   // Apply for all commands
@@ -3006,6 +3726,9 @@ void G4UIQt::CommandEnteredCallback (
 
   // Rebuild help tree
   FillHelpTree();
+  
+  // Rebuild command completion
+  UpdateCommandCompleter();
   
   if(exitSession==true)
     SessionTerminate();
@@ -3130,6 +3853,7 @@ void G4UIQt::ButtonCallback (
         menuParameterDialog->exec();
         return;
       }
+      delete menuParameterDialog;
     }
   }
 
@@ -3246,6 +3970,21 @@ const QString &) {
  }
 
 
+void G4UIQt::SaveOutputCallback(){
+  QString fileName = QFileDialog::getSaveFileName(fMainWindow, "Save console output as...", fLastOpenPath, "Save output as...");
+  if (fileName != "") {
+    
+    QFile data(fileName);
+    if (data.open(QFile::WriteOnly | QFile::Truncate)) {
+      QTextStream out(&data);
+      out << fCoutTBTextArea->toPlainText();
+      out.flush();
+    }
+    data.close();
+  }
+}
+
+
 QString G4UIQt::FilterOutput(
  const G4UIOutputString& output
 ,const QString& currentThread
@@ -3308,8 +4047,9 @@ void G4UIQt::FilterAllOutputTextArea() {
 void G4UIQt::LookForHelpStringCallback(
 )
 {
+  fHelpLine->setText(fHelpLine->text().trimmed());
   QString searchText = fHelpLine->text();
-
+  
   fParameterHelpLabel->setText("");
   fParameterHelpTable->setVisible(false);
   if (searchText =="") {
@@ -3548,7 +4288,7 @@ void G4UIQt::ChangeColorCallback(QWidget* widget) {
 }
 
 
-void G4UIQt::ChangeCursorStyle(const QString& action) {
+void G4UIQt::ChangeCursorAction(const QString& action) {
 
   // Theses actions should be in the app toolbar
 
@@ -3565,6 +4305,11 @@ void G4UIQt::ChangeCursorStyle(const QString& action) {
       list.at(i)->setChecked(TRUE);
       if (list.at(i)->data().toString () == "pick") {
         G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/picking true");
+        CreatePickInfosDialog();
+        
+        fPickInfosDialog->show();
+        fPickInfosDialog->raise();
+        fPickInfosDialog->activateWindow();
       }
     } else if (list.at(i)->data().toString () == "move") {
       fMoveSelected = false;
@@ -3573,6 +4318,9 @@ void G4UIQt::ChangeCursorStyle(const QString& action) {
       fPickSelected = false;
       list.at(i)->setChecked(FALSE);
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/picking false");
+      if (fPickInfosDialog) {
+        fPickInfosDialog->hide();
+      }
     } else if (list.at(i)->data().toString () == "rotate") {
       fRotateSelected = false;
       list.at(i)->setChecked(FALSE);
@@ -3661,6 +4409,99 @@ void G4UIQt::SaveIconCallback(const QString& aParam) {
   }
 }
 
+  
+void G4UIQt::CreateViewerPropertiesDialog() {
+  
+  if (fViewerPropertiesDialog != NULL) {
+    return;
+  }
+  fViewerPropertiesDialog = new QDialog();
+  
+  fViewerPropertiesDialog->setWindowTitle("Viewer properties");
+  fViewerPropertiesDialog->setSizePolicy (QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+
+  if (!fViewerPropertiesWidget) {
+    fViewerPropertiesWidget = new QWidget();
+    QVBoxLayout* layoutPropertiesWidget = new QVBoxLayout();
+    fViewerPropertiesWidget->setLayout(layoutPropertiesWidget);
+    
+    CreateEmptyViewerPropertiesWidget();
+  }
+
+  QVBoxLayout* layoutDialog = new QVBoxLayout();
+  
+  layoutDialog->addWidget(fViewerPropertiesWidget);
+  layoutDialog->setContentsMargins(0,0,0,0);
+  fViewerPropertiesDialog->setLayout(layoutDialog);
+}
+
+  
+void G4UIQt::CreatePickInfosDialog() {
+  
+  if (fPickInfosDialog != NULL) {
+    return;
+  }
+  fPickInfosDialog = new QDialog();
+  
+  fPickInfosDialog->setWindowTitle("Pick infos");
+  fPickInfosDialog->setSizePolicy (QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+  
+  if (!fPickInfosWidget) {
+    fPickInfosWidget = new QWidget();
+    QVBoxLayout* layoutPickInfos = new QVBoxLayout();
+    fPickInfosWidget->setLayout(layoutPickInfos);
+    
+    CreateEmptyPickInfosWidget();
+  }
+  
+  QVBoxLayout* layoutDialog = new QVBoxLayout();
+  
+  layoutDialog->addWidget(fPickInfosWidget);
+  layoutDialog->setContentsMargins(0,0,0,0);
+  fPickInfosDialog->setLayout(layoutDialog);
+  fPickInfosDialog->setWindowFlags(Qt::WindowStaysOnTopHint);
+
+}
+
+  
+void G4UIQt::CreateEmptyViewerPropertiesWidget() {
+  QLayoutItem * wItem;
+  if (fViewerPropertiesWidget->layout()->count()) {
+    while ((wItem = fViewerPropertiesWidget->layout()->takeAt(0)) != 0) {
+      delete wItem->widget();
+      delete wItem;
+    }
+  }
+  // Add empty one
+  QLabel* label = new QLabel("No viewer - Please open a viewer first");
+  fViewerPropertiesWidget->layout()->addWidget(label);
+  fViewerPropertiesDialog->setWindowTitle("No viewer");
+}
+  
+  
+void G4UIQt::CreateEmptyPickInfosWidget() {
+  QLayoutItem * wItem;
+  if (fPickInfosWidget->layout()->count()) {
+    while ((wItem = fPickInfosWidget->layout()->takeAt(0)) != 0) {
+      delete wItem->widget();
+      delete wItem;
+    }
+  }
+  // Add empty one
+  QLabel* label = new QLabel("Click on the object you want to pick");
+  fPickInfosWidget->layout()->addWidget(label);
+  fPickInfosDialog->setWindowTitle("Nothing to pick");
+}
+  
+  
+void G4UIQt::ViewerPropertiesIconCallback(int) {
+
+  CreateViewerPropertiesDialog();
+
+  fViewerPropertiesDialog->show();
+  fViewerPropertiesDialog->raise();
+  fViewerPropertiesDialog->activateWindow();
+}
 
   
 void G4UIQt::ChangePerspectiveOrtho(const QString& action) {
@@ -3750,8 +4591,13 @@ void G4UIQt::SetIconPickSelected() {
   fZoomInSelected = false;
   fZoomOutSelected = false;
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+  if (!bar) return;
+  
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "pick") {
       list.at(i)->setChecked(TRUE);
@@ -3776,8 +4622,13 @@ void G4UIQt::SetIconZoomInSelected() {
   fPickSelected = false;
   fZoomOutSelected = false;
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+  if (!bar) return;
+  
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "zoom_in") {
       list.at(i)->setChecked(TRUE);
@@ -3802,8 +4653,13 @@ void G4UIQt::SetIconZoomOutSelected() {
   fPickSelected = false;
   fZoomInSelected = false;
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+  if (!bar) return;
+  
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "zoom_out") {
       list.at(i)->setChecked(TRUE);
@@ -3823,8 +4679,13 @@ void G4UIQt::SetIconZoomOutSelected() {
 void G4UIQt::SetIconSolidSelected() {
   // Theses actions should be in the app toolbar
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+  if (!bar) return;
+
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "solid") {
       list.at(i)->setChecked(TRUE);
@@ -3842,8 +4703,13 @@ void G4UIQt::SetIconSolidSelected() {
 void G4UIQt::SetIconWireframeSelected() {
   // Theses actions should be in the app toolbar
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+  if (!bar) return;
+
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "wireframe") {
       list.at(i)->setChecked(TRUE);
@@ -3861,8 +4727,14 @@ void G4UIQt::SetIconWireframeSelected() {
 void G4UIQt::SetIconHLRSelected() {
   // Theses actions should be in the app toolbar
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+  if (!bar) return;
+  
+
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "hidden_line_removal") {
       list.at(i)->setChecked(TRUE);
@@ -3880,8 +4752,14 @@ void G4UIQt::SetIconHLRSelected() {
 void G4UIQt::SetIconHLHSRSelected() {
   // Theses actions should be in the app toolbar
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+
+  if (!bar) return;
+  
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
       list.at(i)->setChecked(TRUE);
@@ -3899,8 +4777,14 @@ void G4UIQt::SetIconHLHSRSelected() {
 void G4UIQt::SetIconPerspectiveSelected() {
   // Theses actions should be in the app toolbar
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+  if (!bar) return;
+  
+
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "perspective") {
       list.at(i)->setChecked(TRUE);
@@ -3915,8 +4799,14 @@ void G4UIQt::SetIconPerspectiveSelected() {
 void G4UIQt::SetIconOrthoSelected() {
   // Theses actions should be in the app toolbar
 
-  if (fToolbarApp == NULL) return; 
-  QList<QAction *> list = fToolbarApp->actions ();
+  QToolBar* bar = fToolbarApp;
+  if (!fDefaultIcons) {
+    bar = fToolbarUser;
+  }
+
+  if (!bar) return;
+  
+  QList<QAction *> list = bar->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "ortho") {
       list.at(i)->setChecked(TRUE);
@@ -3983,6 +4873,17 @@ void G4UIQt::TabCloseCallback(int a){
   // remove the tab
   fViewerTabWidget->removeTab (a);
 
+  // if last QWidget : Add empty string
+  bool lastTab = true;
+  for (int c=0; c<fViewerTabWidget->count(); c++) {
+    if (fViewerTabWidget->tabText(c).contains("viewer")) {
+      lastTab = false;
+    }
+  }
+        
+  if (lastTab) {
+    CreateEmptyViewerPropertiesWidget();
+  }
   // delete the widget
   delete temp;
 #endif
@@ -3994,11 +4895,11 @@ void G4UIQt::ToolBoxActivated(int a){
   if (fUITabWidget->widget(a) == fHelpTBWidget) {
     // Rebuild the help tree
     FillHelpTree();
-  } else if (fUITabWidget->widget(a) == fSceneTreeComponentsTBWidget) {
+  } else if (fUITabWidget->widget(a) == fSceneTreeWidget) {
 #if QT_VERSION < 0x040200
-    fSceneTreeComponentsTBWidget->show();
+    fSceneTreeWidget->show();
 #else
-    fSceneTreeComponentsTBWidget->setVisible(true);
+    fSceneTreeWidget->setVisible(true);
 #endif
   }
 }
@@ -4049,4 +4950,4 @@ void G4UIDockWidget::closeEvent(QCloseEvent *aEvent) {
   hide();
 }
 
-#endif
+ #endif

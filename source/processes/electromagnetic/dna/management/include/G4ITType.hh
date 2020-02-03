@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITType.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -74,9 +73,9 @@ public :
     inline G4ITType & operator=(const int & rhs) { fValue = rhs; return *this;}
     inline operator int & () { return fValue; }
     inline operator const int & () const { return fValue; }
-    inline bool operator==(const G4ITType & rhs) const { return fValue == rhs.fValue; }
-    inline bool operator==(const int & rhs) const { return fValue == rhs; }
-    inline bool operator<(const G4ITType & rhs) const { return fValue < rhs.fValue; }
+    inline G4bool operator==(const G4ITType & rhs) const { return fValue == rhs.fValue; }
+    inline G4bool operator==(const int & rhs) const { return fValue == rhs; }
+    inline G4bool operator<(const G4ITType & rhs) const { return fValue < rhs.fValue; }
     inline void operator++() { fValue++; }
 };
 

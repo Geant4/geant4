@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.hh 89820 2015-04-30 14:54:53Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +70,7 @@ class G4VEmFluctuationModel
 
 public:
 
-  G4VEmFluctuationModel(const G4String& nam);
+  explicit G4VEmFluctuationModel(const G4String& nam);
 
   virtual ~G4VEmFluctuationModel();
 
@@ -107,8 +106,9 @@ public:
 private:
 
   // hide assignment operator
-  G4VEmFluctuationModel & operator=(const  G4VEmFluctuationModel &right);
-  G4VEmFluctuationModel(const  G4VEmFluctuationModel&);
+  G4VEmFluctuationModel & 
+    operator=(const  G4VEmFluctuationModel &right) = delete;
+  G4VEmFluctuationModel(const  G4VEmFluctuationModel&) = delete;
 
   const G4String      name;
   G4LossTableManager* fManager;

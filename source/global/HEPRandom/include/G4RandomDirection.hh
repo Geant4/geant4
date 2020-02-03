@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RandomDirection.hh 97527 2016-06-03 14:59:04Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -39,6 +38,8 @@
 // providing more performant results.
 
 // History:
+//    19.10.17 E. Tcherniaev, use of G.Marsaglia (1972) method
+//    06.04.17 E. Tcherniaev, added G4RandomDirection(cosTheta)
 //    15.03.16 E. Tcherniaev, removed unnecessary if and unit()
 //    18.03.08 V. Grichine, unit radius sphere surface based algorithm
 //      ~ 2007 M. Kossov, algorithm based on 8 Quadrants technique
@@ -53,10 +54,23 @@
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 
+// G.Marsaglia (1972) method
 inline G4ThreeVector G4RandomDirection()
 {
-  G4double z   = 2.*G4UniformRand() - 1.;  // z = cos(theta)
-  G4double rho = std::sqrt((1.+z)*(1.-z)); // rho = sqrt(1-z*z)
+  G4double u, v, b;
+  do {
+    u = 2.*G4UniformRand() - 1.;
+    v = 2.*G4UniformRand() - 1.;
+    b = u*u + v*v;
+  } while (b > 1.);
+  G4double a = 2.*std::sqrt(1. - b);
+  return G4ThreeVector(a*u, a*v, 2.*b - 1.);
+}
+
+inline G4ThreeVector G4RandomDirection(G4double cosTheta)
+{
+  G4double z   = (1. - cosTheta)*G4UniformRand() + cosTheta;
+  G4double rho = std::sqrt((1.+z)*(1.-z));
   G4double phi = CLHEP::twopi*G4UniformRand();
   return G4ThreeVector(rho*std::cos(phi), rho*std::sin(phi), z);
 }

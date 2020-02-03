@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +19,41 @@ track of all tags.
  
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 Oct 14, 2016 G.Folger
 - remove direct use of aParticleIterator, use GetParticleTableIterator().
+=======
+October 29, 2019 D. Sawkey (WLS-V10-05-01)
+- Use G4OpticalPhysics
+- Use G4SteppingVerbose
+
+October 21, 2019 D.Sawkey (WLS-V10-05-00)
+- Don't store random number seeds
+
+May 17, 2018 J. Allison (WLS-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+May 08, 2018 B.Morgan (WLS-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+May 10, 2017 V.Ivanchenko   (WLS-V10-03-00)
+- WLSDetectorConstruction, WLSSteppingAction - fixed gcc 7.1 warnings
+
+Nov 19, 2016 A.Dotti   (WLS-V10-02-04,-05)
+- Explicit set of SD to manager
+
+Nov 08, 2016 G.Folger  (WLS-V10-02-03)
+- replace use of fPhysicsVector by RegisterPhysics in ctor of WLSPhysicsList.cc
+
+Nov 03, 2016 L.Garnier (WLS-V10-02-02)
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+Oct 14, 2016 G.Folger (WLS-V10-02-01)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     fix required by clang39 on Linux and MAC
 
 May 14, 2015 P. Gumplinger (WLS-V10-01-03)

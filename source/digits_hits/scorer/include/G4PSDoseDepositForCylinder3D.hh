@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDepositForCylinder3D.hh 67992 2013-03-13 10:59:57Z gcosmo $
-// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSDoseDepositForCylinder3D_h

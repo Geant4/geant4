@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc 75600 2013-11-04 13:03:02Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -48,10 +47,11 @@
 #include "G4MaterialTable.hh"
 #include "G4ElementTable.hh"
 #include "G4ElementVector.hh"
+#include "G4Log.hh"
 
 G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
-                  : aProcessManager(0),
-	            pParticleChange(0),
+                  : aProcessManager(nullptr),
+	            pParticleChange(nullptr),
                     theNumberOfInteractionLengthLeft(-1.0),
                     currentInteractionLength(-1.0),
 		    theInitialNumberOfInteractionLength(-1.0),
@@ -63,7 +63,7 @@ G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                     enableAlongStepDoIt(true),
                     enablePostStepDoIt(true),
                     verboseLevel(0),
-                    masterProcessShadow(0)
+                    masterProcessShadow(nullptr)
 
 {
   pParticleChange = &aParticleChange;
@@ -74,8 +74,8 @@ G4VProcess::~G4VProcess()
 }
 
 G4VProcess::G4VProcess(const G4VProcess& right)
-          : aProcessManager(0),
-	    pParticleChange(0),
+          : aProcessManager(nullptr),
+	    pParticleChange(nullptr),
             theNumberOfInteractionLengthLeft(-1.0),
             currentInteractionLength(-1.0),
 	    theInitialNumberOfInteractionLength(-1.0),
@@ -94,7 +94,7 @@ G4VProcess::G4VProcess(const G4VProcess& right)
 
 void G4VProcess::ResetNumberOfInteractionLengthLeft()
 {
-  theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
+  theNumberOfInteractionLengthLeft =  -1.*G4Log( G4UniformRand() );
   theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 }
 
@@ -165,12 +165,12 @@ G4VProcess & G4VProcess::operator=(const G4VProcess &)
   return *this;
 }
 
-G4int G4VProcess::operator==(const G4VProcess &right) const
+G4bool G4VProcess::operator==(const G4VProcess &right) const
 {
   return (this == &right);
 }
 
-G4int G4VProcess::operator!=(const G4VProcess &right) const
+G4bool G4VProcess::operator!=(const G4VProcess &right) const
 {
   return (this !=  &right);
 }
@@ -182,7 +182,11 @@ void G4VProcess::DumpInfo() const
   G4cout << " : SubType[" << theProcessSubType << "]"<< G4endl;
 }
 
-
+void G4VProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "This process has not yet been described\n";
+}
+ 
 const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition* particle,
 						     const G4String& directory,
 						     const G4String& tableName,

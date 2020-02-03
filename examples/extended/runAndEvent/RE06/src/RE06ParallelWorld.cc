@@ -26,7 +26,6 @@
 /// \file RE06/src/RE06ParallelWorld.cc
 /// \brief Implementation of the RE06ParallelWorld class
 //
-// $Id: RE06ParallelWorld.cc 83381 2014-08-21 14:18:13Z gcosmo $
 // 
 
 #include "RE06ParallelWorld.hh"

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc 78776 2014-01-23 11:26:01Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -71,15 +70,15 @@ G4ProductionCutsTable* G4ProductionCutsTable::GetProductionCutsTable()
 
 /////////////////////////////////////////////////////////////
 G4ProductionCutsTable::G4ProductionCutsTable()
-  : firstUse(true),verboseLevel(1),fMessenger(0)
+  : firstUse(true),verboseLevel(1),fMessenger(nullptr)
 {
   for(size_t i=0;i< NumberOfG4CutIndex;i++)
   {
     rangeCutTable.push_back(new G4CutVectorForAParticle);
     energyCutTable.push_back(new G4CutVectorForAParticle);
-    rangeDoubleVector[i] = 0;
-    energyDoubleVector[i] = 0;
-    converters[i] = 0;
+    rangeDoubleVector[i] = nullptr;
+    energyDoubleVector[i] = nullptr;
+    converters[i] = nullptr;
   }
   fG4RegionStore = G4RegionStore::GetInstance();
   defaultProductionCuts = new G4ProductionCuts();
@@ -91,17 +90,17 @@ G4ProductionCutsTable::G4ProductionCutsTable()
 /////////////////////////////////////////////////////////////
 G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
 { 
-  fMessenger=0;
-  defaultProductionCuts=0; 
-  fG4RegionStore =0;
+  fMessenger = nullptr;
+  defaultProductionCuts = nullptr; 
+  fG4RegionStore = nullptr;
 }
 
 /////////////////////////////////////////////////////////////
 G4ProductionCutsTable::~G4ProductionCutsTable()
 {
-  if (defaultProductionCuts !=0) {
+  if (defaultProductionCuts != nullptr) {
     delete defaultProductionCuts;
-    defaultProductionCuts =0;
+    defaultProductionCuts =nullptr;
   }
 
   for(CoupleTableIterator itr=coupleTable.begin();itr!=coupleTable.end();itr++){
@@ -113,13 +112,18 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
     delete rangeCutTable[i];
     delete energyCutTable[i];
     delete converters[i];
-    if(rangeDoubleVector[i]!=0) delete [] rangeDoubleVector[i];
-    if(energyDoubleVector[i]!=0) delete [] energyDoubleVector[i];
+    if(rangeDoubleVector[i] != nullptr) delete [] rangeDoubleVector[i];
+    if(energyDoubleVector[i] != nullptr) delete [] energyDoubleVector[i];
+    rangeCutTable[i] = nullptr;
+    energyCutTable[i] = nullptr;
+    converters[i] = nullptr;
+    rangeDoubleVector[i] = nullptr;
+    energyDoubleVector[i] = nullptr;
   }
-  fG4ProductionCutsTable =0;
+  fG4ProductionCutsTable = nullptr;
 
-  if (fMessenger !=0) delete fMessenger;
-  fMessenger = 0;
+  if (fMessenger != nullptr) delete fMessenger;
+  fMessenger = nullptr;
 }
 
 void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currentWorld*/)
@@ -292,8 +296,25 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
 						     )
 {
   // This method gives energy corresponding to range value  
+
+  // protection against premature call
+  if(firstUse)
+  {
+#ifdef G4VERBOSE
+    if(verboseLevel>0)
+    {
+      G4ExceptionDescription ed;
+      ed << "G4ProductionCutsTable::ConvertRangeToEnergy is invoked prematurely "
+         << "before it is fully initialized.";
+      G4Exception("G4ProductionCutsTable::ConvertRangeToEnergy","CUTS0100",
+                  JustWarning,ed);
+    }
+#endif
+    return -1.0;
+  }
+
   // check material
-  if (material ==0) return -1.0;
+  if (material ==nullptr) return -1.0;
 
   // check range
   if (range ==0.0) return 0.0;
@@ -302,12 +323,19 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
   // check particle
   G4int index = G4ProductionCuts::GetIndex(particle);
 
-  if (index<0) {
-#ifdef G4VERBOSE  
-    if (verboseLevel >1) {
-      G4cout << "G4ProductionCutsTable::ConvertRangeToEnergy" ;
-      G4cout << particle->GetParticleName() << " has no cut value " << G4endl;
-    }  
+  if (index<0 || converters[index] == nullptr) {
+#ifdef G4VERBOSE
+    if(verboseLevel>0)
+    {
+      G4ExceptionDescription ed;
+      ed << "G4ProductionCutsTable::ConvertRangeToEnergy is invoked ";
+      if(particle != nullptr)
+      { ed << "for particle <" << particle->GetParticleName() << ">."; }
+      else
+      { ed << "without valid particle pointer."; }
+      G4Exception("G4ProductionCutsTable::ConvertRangeToEnergy","CUTS0101",
+                  JustWarning,ed);
+    }
 #endif
     return -1.0;
   }
@@ -350,7 +378,7 @@ void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,
                                              G4Region* aRegion)
 {
   //Check whether or not this logical volume belongs to the same region
-  if((aRegion!=0) && aLV->GetRegion()!=aRegion) return;
+  if((aRegion!=nullptr) && aLV->GetRegion()!=aRegion) return;
 
   //Check if this particular volume has a material matched to the couple
   if(aLV->GetMaterial()==aCouple->GetMaterial()) {
@@ -433,7 +461,7 @@ G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir,
 #ifdef G4VERBOSE  
   if (verboseLevel >2) {
     G4cout << "G4ProductionCutsTable::StoreCutsTable " ;
-    G4cout << " Material/Cuts information have been succesfully stored ";
+    G4cout << " Material/Cuts information have been successfully stored ";
     if (ascii) {
       G4cout << " in Ascii mode ";
     }else{
@@ -454,7 +482,7 @@ G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
 #ifdef G4VERBOSE  
   if (verboseLevel >2) {
     G4cout << "G4ProductionCutsTable::RetrieveCutsTable " ;
-    G4cout << " Material/Cuts information have been succesfully retreived ";
+    G4cout << " Material/Cuts information have been successfully retrieved ";
     if (ascii) {
       G4cout << " in Ascii mode ";
     }else{
@@ -684,7 +712,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     }
 
     G4Material* aMaterial = G4Material::GetMaterial(name);
-    if (aMaterial ==0 ) continue;
+    if (aMaterial == nullptr ) continue;
 
     G4double ratio = std::fabs(density/aMaterial->GetDensity() );
     if ((0.999>ratio) || (ratio>1.001) ){
@@ -949,7 +977,7 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
     // Loop over all couples
     CoupleTableIterator cItr;
     G4bool fOK = false;
-    G4MaterialCutsCouple* aCouple =0;
+    G4MaterialCutsCouple* aCouple = nullptr;
     for (cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++){
       aCouple = (*cItr);
       // check material name
@@ -976,17 +1004,17 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
       // debug information 
       if (verboseLevel >1) {
 	G4String regionname(region_name);
-	G4Region* fRegion = 0;
+	G4Region* fRegion = nullptr;
 	if ( regionname != "NONE" ) {
 	  fRegion = fG4RegionStore->GetRegion(region_name);
-	  if (fRegion==0) {
+	  if (fRegion == nullptr) {
 	    G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	    G4cout << "Region " << regionname << " is not found ";	    
 	    G4cout << index << ": in " << fileName  << G4endl;
 	  } 
 	}
 	if ( ( (regionname == "NONE") && (aCouple->IsUsed()) )  ||
-	     ( (fRegion !=0) && !IsCoupleUsedInTheRegion(aCouple, fRegion) ) ) {
+	     ( (fRegion != nullptr) && !IsCoupleUsedInTheRegion(aCouple, fRegion) ) ) {
 	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	  G4cout << "A Couple is used differnt region in the current setup  ";
 	  G4cout << index << ": in " << fileName  << G4endl;

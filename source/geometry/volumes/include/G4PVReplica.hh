@@ -22,12 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4PVReplica.hh 85846 2014-11-05 15:45:28Z gcosmo $
-//
 // 
-// class G4PVReplica
+// G4PVReplica
 //
 // Class description:
 //
@@ -64,10 +60,8 @@
 //   They have phi of offset+n*width to offset+(n+1)*width where
 //   n=0..nReplicas-1
 
-// History:
 // 29.07.95 P.Kent           - First non-stub version
 // 26.10.97 J.Apostolakis    - Added constructor that takes mother LV
-// 16.02.98 J.Apostolakis    - Added copy number
 // 13.01.13 G.Cosmo, A.Dotti - Modified for thread-safety for MT
 // ----------------------------------------------------------------------
 #ifndef G4PVREPLICA_HH
@@ -87,7 +81,7 @@ public:
 
   void initialize() {}
 
-  G4int    fcopyNo;
+  G4int fcopyNo;
 };
 
 // The type G4PVRManager is introduced to encapsulate the methods used by
@@ -126,9 +120,7 @@ class G4PVReplica : public G4VPhysicalVolume
                 const EAxis pAxis,
                 const G4int nReplicas,
                 const G4double width,
-                const G4double offset=0);
-
-  public:  // without description
+                const G4double offset = 0.);
 
     G4PVReplica(const G4String& pName,
                       G4LogicalVolume* pLogical,
@@ -136,16 +128,20 @@ class G4PVReplica : public G4VPhysicalVolume
                 const EAxis pAxis,
                 const G4int nReplicas,
                 const G4double width,
-                const G4double offset=0);
+                const G4double offset = 0.);
 
     G4PVReplica(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-  public:  // with description
+    G4PVReplica(const G4PVReplica&) =  delete;
+    G4PVReplica& operator=(const G4PVReplica&) = delete;
+      // Copy constructor and assignment operator not allowed
 
     virtual ~G4PVReplica();
+
+    virtual EVolume VolumeType() const;
 
     G4bool IsMany() const;
     G4bool IsReplicated() const;
@@ -161,7 +157,7 @@ class G4PVReplica : public G4VPhysicalVolume
                                     G4double& offset,
                                     G4bool& consuming) const;
 
-    virtual void SetRegularStructureId( G4int Code ); 
+    virtual void SetRegularStructureId( G4int code ); 
       // This method must set a unique code for each type of regular structure.
       // - It must be called only during detector construction.
       // - It can also be used to prepare any corresponding special
@@ -179,11 +175,11 @@ class G4PVReplica : public G4VPhysicalVolume
     static const G4PVRManager& GetSubInstanceManager();
       // Returns the private data instance manager.
 
-    void InitialiseWorker(G4PVReplica *pMasterObject);
+    void InitialiseWorker(G4PVReplica* pMasterObject);
       // This method is similar to the constructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
-    void TerminateWorker(G4PVReplica *pMasterObject);
+    void TerminateWorker(G4PVReplica* pMasterObject);
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
@@ -191,19 +187,29 @@ class G4PVReplica : public G4VPhysicalVolume
 
     void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
                                const G4double width, const G4double offset);
-    G4PVReplica(const G4PVReplica&);
-    G4PVReplica& operator=(const G4PVReplica&);
+
+    void CheckOnlyDaughter(G4LogicalVolume* pMotherLogical);
+      // Check that this volume is the only daughter of its proposed mother volume
+   
+  protected:
+    G4PVReplica(const G4String& pName,
+                      G4int nReplicas,
+                      EAxis pAxis,
+                      G4LogicalVolume*  pLogical,
+                      G4LogicalVolume*  pMotherLogical
+       );
+     // Constructor for derived type(s):  PVParameterised
+     //  - does not set mother or register in mother volume -- leaves it to derived type
 
   protected:
 
     EAxis faxis;
     G4int fnReplicas;
-    G4double fwidth,foffset;
+    G4double fwidth, foffset;
  
   private:
 
-    G4int fRegularStructureCode; 
-    G4int fRegularVolsId;
+    G4int fRegularVolsId = 0;
 
     G4int instanceID;
       // This new field is used as instance ID.

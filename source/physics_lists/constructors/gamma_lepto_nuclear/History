@@ -1,4 +1,3 @@
-$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +13,91 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-October-2016 G.Folger
+29 November 2019, A.Ribon (phys-ctor-glnuclear-V10-05-03)
+- Update of the only README file.
+
+19 November 2019, V.Ivanchenko (phys-ctor-glnuclear-V10-05-02)
+- G4EmExtraPhysics - simplified and clean-up model creation;
+    do not use extra builder classes; used std::getenv; use 
+    transition from the cascade to string model 3 - 6 GeV (according
+    to values in G4HadronicParameters class), before there were
+    3 - 3.5 GeV transition; should reduce memory leak at destruction
+- G4BertiniElectroNuclearBuilder - used std::getenv
+
+07 May 2019, V. Grichine (phys-ctor-glnuclear-V10-05-01)
+- G4EmExtraPhysics - add muon-neutrino nucleus interactions
+
+03 April 2019, V.Ivanchenko (phys-ctor-glnuclear-V10-05-00)
+- G4EmExtraPhysics - removed extra static members
+
+26 November 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-08)
+- G4EmMessenger - fixed destructor
+
+04 October 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-07)
+- G4EmExtraPhysics, G4EmMessenger - V.Grichine added possibility 
+    of x-section biasing for neutrino-nuclear process
+
+26 September 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-06)
+- G4EmExtraPhysics, G4BertiniElectroNuclearBuilder - renamed
+    gamma general process class
+
+22 August 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-05)
+- fixed GNUmakefile
+
+21 August 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-04)
+- G4EmExtraPhysics, G4BertiniElectroNuclearBuilder - added enable of
+    super process
+
+06 August 2018 Alberto Ribon (phys-ctor-glnuclear-V10-04-03)
+- G4BertiniElectroNuclearBuilder : replaced the explicit high-energy limit
+  of hadronic physics with the one from G4HadronicParameters .
+
+12 February 2018 Jonathan Madsen (phys-ctor-glnuclear-V10-04-02)
+- Removed G4MUTEX_INITIALIZER from constructor in G4EmExtraPhysics
+
+02-Feb-2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-01)
+- G4EmExtraPhysics, G4EmMessenger - added extra UI commands and Set
+    methods for neutrino-electron interactions (V.Grichine) 
+
+30-Jan-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-04-00)
+- G4EmExtraPhysics, G4EmMessenger - added extra UI commands and Set
+    methods to define flags for neutrinos 
+
+10-November-2017, T.Koi (phys-ctor-glnuclear-V10-03-04)
+-Dumpping LEND target information in G4LENDBertiniGammaElectroNuclearBuilder
+
+30-October-2017, T.Koi (phys-ctor-glnuclear-V10-03-03)
+- Fix problem on GNUMake system
+
+27-October-2017, T.Koi (phys-ctor-glnuclear-V10-03-02)
+- Add G4LENDBertiniGammaElectroNuclearBuilder, which uses LEND 
+for low energy gamma-nuclear interaction 
+- Add option and UI command to use G4LENDBertiniGammaElectroNuclearBuilder 
+in the physics constructor of EmExtraPhysics
+
+06-June-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-03-01)
+- G4EmExtraPhysics, G4EmMessenger - added extra UI commands to define 
+    cross section factors for rare processes (requirement of ShiP 
+    experiment for dark matter search) 
+
+04-May-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-03-00)
+- G4EmExtraPhysics, G4EmMessenger, G4BertiniElectroNuclearBuilder 
+    added option and UI command to enable/disable e+- nuclear process
+
+12-Nov-2016, V.Ivanchenko (phys-ctor-glnuclear-V10-02-04)
+- G4EmExtraPhysics, G4EmMessenger - added rare high energy EM processes, 
+    disabled by default
+
+03-Nov-2016 A.Ribon      (phys-ctor-glnuclear-V10-02-03)
+- Written first draft of the README.
+
+16-October-2016 M.Maire  (phys-ctor-glnuclear-V10-02-02)
+- cosmetic in README
+
+15-October-2016 M.Maire  (phys-ctor-glnuclear-V10-02-01)
+- add README
+  
+12-October-2016 G.Folger  (phys-ctor-glnuclear-V10-02-00)
 - replace direct use of aParticleIterator by GetParticleIterator().
   fix required by clang39 on Windows and MAC
 

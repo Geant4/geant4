@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.hh 69003 2013-04-15 09:25:23Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -74,7 +73,7 @@ public: // without description
 // Operators
    inline void *operator new(size_t);
    inline void operator delete(void *aTrajectoryPoint);
-   inline int operator==(const G4TrajectoryPoint& right) const
+   inline G4bool operator==(const G4TrajectoryPoint& right) const
    { return (this==&right); };
 
 // Get/Set functions
@@ -94,19 +93,19 @@ public: // without description
 
 };
 
-extern G4TRACKING_DLL G4ThreadLocal
-G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator;
+extern G4TRACKING_DLL
+G4Allocator<G4TrajectoryPoint>*& aTrajectoryPointAllocator();
 
 inline void* G4TrajectoryPoint::operator new(size_t)
 {
-  if (!aTrajectoryPointAllocator)
-  { aTrajectoryPointAllocator = new G4Allocator<G4TrajectoryPoint>; }
-  return (void *) aTrajectoryPointAllocator->MallocSingle();
+  if (!aTrajectoryPointAllocator())
+  { aTrajectoryPointAllocator() = new G4Allocator<G4TrajectoryPoint>; }
+  return (void *) aTrajectoryPointAllocator()->MallocSingle();
 }
 
 inline void G4TrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-  aTrajectoryPointAllocator->FreeSingle((G4TrajectoryPoint *) aTrajectoryPoint);
+  aTrajectoryPointAllocator()->FreeSingle((G4TrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif

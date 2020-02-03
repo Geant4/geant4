@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm1/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
+<<<<<<< HEAD
 // $Id: StepMax.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

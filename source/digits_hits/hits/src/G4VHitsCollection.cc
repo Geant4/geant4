@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 // G4VHitsCollection
@@ -48,7 +47,7 @@ G4VHitsCollection::G4VHitsCollection(G4String detName,G4String colNam)
 G4VHitsCollection::~G4VHitsCollection()
 { ; }
 
-G4int G4VHitsCollection::operator==(const G4VHitsCollection &right) const
+G4bool G4VHitsCollection::operator==(const G4VHitsCollection &right) const
 { 
   return ((collectionName==right.collectionName)
         &&(SDname==right.SDname));

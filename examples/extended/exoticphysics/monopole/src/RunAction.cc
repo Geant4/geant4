@@ -26,7 +26,10 @@
 /// \file exoticphysics/monopole/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 68036 2013-03-13 14:13:45Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +44,11 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
+<<<<<<< HEAD
+=======
+#include "Randomize.hh"
+#include "G4ProductionCutsTable.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #include "Histo.hh"
 #include "G4EmCalculator.hh"
@@ -48,6 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+<<<<<<< HEAD
   :G4UserRunAction(),
    fHisto(0),fDetector(det),fKinematic(kin),fRunActionMessenger(0)
 { 
@@ -57,14 +66,30 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   fHisto->SetFileName("monopole");
   // create commands for interactive definition of the detector  
   fRunActionMessenger = new RunActionMessenger(this);
+=======
+  :fDetector(det),fKinematic(kin)
+{
+  fMessenger = new RunActionMessenger(this);
+  fBinLength = 5 * CLHEP::mm;
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  analysisManager->SetFileName("monopole");
+  analysisManager->SetVerboseLevel(1);
+  analysisManager->SetActivation(true);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
+<<<<<<< HEAD
   delete fHisto;
   delete fRunActionMessenger;
+=======
+  if(isMaster && G4Threading::IsMultithreadedApplication()) delete fKinematic;
+
+  delete fMessenger;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,6 +112,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
  
   G4int nbBins = G4lrint(length / fBinLength);
 
+<<<<<<< HEAD
 
   // Create histograms
   fHisto->Add1D("1","Edep (MeV/mm) along absorber (mm)", nbBins, 0, length, mm);
@@ -96,6 +122,17 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   fHisto->Add1D("5","Range(mm) of monopole", 100, -3., 7., mm);
 
   fHisto->Book();
+=======
+void RunAction::BeginOfRunAction(const G4Run* aRun)
+{
+  // Dump production cuts
+  G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
+
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  //histograms
+  //        
+  Book();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,11 +222,36 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 void RunAction::FillHisto(G4int ih, G4double x, G4double weight)
 {
+<<<<<<< HEAD
   if(GetVerbose() > 1) {
     G4cout << "FillHisto " << ih << "  x=" << x << " weight= " << weight 
            << G4endl;
   }
   fHisto->Fill(ih, x, weight);
+=======
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  analysisManager->SetFirstHistoId(1);   
+
+  G4double length = fDetector->GetAbsorSizeX();
+  G4int nbBins = G4lrint(length / fBinLength);
+
+  // Create histograms
+  analysisManager->CreateH1("h1","Edep (MeV/mm) along absorber (mm)", 
+                            nbBins, 0, length);
+  analysisManager->CreateH1("h2","Total DEDX (MeV/mm) of proton",100,-3.,7.);
+  analysisManager->CreateH1("h3","Total DEDX (MeV/mm) of monopole",100,-3., 7.);
+  analysisManager->CreateH1("h4","Range(mm) of proton", 100, -3., 7., "mm");
+  analysisManager->CreateH1("h5","Range(mm) of monopole", 100, -3., 7., "mm");
+  analysisManager->CreateH1("h6","Restricted DEDX (MeV/mm) of proton",
+                            100,-3.,7.);
+  analysisManager->CreateH1("h7","Restricted DEDX (MeV/mm) of monopole",
+                            100,-3., 7.);
+  analysisManager->CreateH1("h8","Delta-electron x-section (1/mm) of proton", 
+                            100, -3., 7., "mm");
+  analysisManager->CreateH1("h9","Delta-electron x-section (1/mm) of monopole", 
+                            100, -3., 7., "mm");
+  analysisManager->OpenFile(); 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

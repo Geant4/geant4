@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh 93264 2015-10-14 09:30:04Z gcosmo $
-// GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
 //
@@ -37,48 +35,7 @@
 //
 // Creation date: 03.01.2002
 //
-// Modifications:
-//
-// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
-// 20-01-03 Migrade to cut per region (V.Ivanchenko)
-// 24-01-03 Make models region aware (V.Ivanchenko)
-// 05-02-03 Fix compilation warnings (V.Ivanchenko)
-// 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
-// 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
-// 26-02-03 Region dependent step limit (V.Ivanchenko)
-// 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
-// 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
-// 13-05-03 Add calculation of precise range (V.Ivanchenko)
-// 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
-// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 14-01-04 Activate precise range calculation (V.Ivanchenko)
-// 10-03-04 Fix problem of step limit calculation (V.Ivanchenko)
-// 30-06-04 make destructor virtual (V.Ivanchenko)
-// 05-07-04 fix problem of GenericIons seen at small cuts (V.Ivanchenko)
-// 03-08-04 Add DEDX table to all processes for control on integral range(VI)
-// 06-08-04 Clear up names of member functions (V.Ivanchenko)
-// 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
-// 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
-// 11-04-05 Use MaxSecondaryEnergy from a model (V.Ivanchenko)
-// 10-01-05 Remove SetStepLimits (V.Ivanchenko)
-// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
-// 13-01-06 Remove AddSubCutSecondaries and cleanup (V.Ivantchenko)
-// 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
-// 26-01-06 Add public method GetCSDARange (V.Ivanchenko)
-// 22-03-06 Add SetDynamicMassCharge (V.Ivanchenko)
-// 23-03-06 Use isIonisation flag (V.Ivanchenko)
-// 13-05-06 Add method to access model by index (V.Ivanchenko)
-// 14-01-07 add SetEmModel(index) and SetFluctModel() (mma)
-// 15-01-07 Add separate ionisation tables and reorganise get/set methods for
-//          dedx tables (V.Ivanchenko)
-// 13-03-07 use SafetyHelper instead of navigator (V.Ivanchenko)
-// 27-07-07 use stl vector for emModels instead of C-array (V.Ivanchenko)
-// 25-09-07 More accurate handling zero xsect in 
-//          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
-// 27-10-07 Virtual functions moved to source (V.Ivanchenko)
-// 15-07-08 Reorder class members for further multi-thread development (VI)
+// Modifications: Vladimir Ivanchenko
 //
 // Class Description:
 //
@@ -139,13 +96,16 @@ private:
   //------------------------------------------------------------------------
 
 public:
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
   
-  virtual void PrintInfo() = 0;
+  // obsolete to be removed
+  virtual void PrintInfo() {};
 
-  virtual void ProcessDescription(std::ostream& outFile) const; // = 0;
+  virtual void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
+
+  virtual void StreamProcessInfo(std::ostream&) const {};
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*) = 0;
@@ -165,10 +125,10 @@ protected:
 public:
 
   // prepare all tables
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
   // build all tables
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   // build a table
   G4PhysicsTable* BuildDEDXTable(G4EmTableType tType = fRestricted);
@@ -176,11 +136,8 @@ public:
   // build a table
   G4PhysicsTable* BuildLambdaTable(G4EmTableType tType = fRestricted);
 
-  // summary printout after initialisation
-  void PrintInfoDefinition(const G4ParticleDefinition& part);
-
   // Called before tracking of each new G4Track
-  virtual void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*) override;
 
   // Step limit from AlongStep 
   virtual G4double AlongStepGetPhysicalInteractionLength(
@@ -188,16 +145,17 @@ public:
                                   G4double  previousStepSize,
                                   G4double  currentMinimumStep,
                                   G4double& currentSafety,
-                                  G4GPILSelection* selection);
+                                  G4GPILSelection* selection) override;
 
   // Step limit from cross section
   virtual G4double PostStepGetPhysicalInteractionLength(
                                   const G4Track& track,
                                   G4double   previousStepSize,
-                                  G4ForceCondition* condition);
+                                  G4ForceCondition* condition) override;
 
   // AlongStep computations
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, 
+                                           const G4Step&) override;
 
   // Sampling of secondaries in vicinity of geometrical boundary
   // Return sum of secodaries energy 
@@ -205,22 +163,28 @@ public:
                                    G4VEmModel* model, G4int matIdx); 
 
   // PostStep sampling of secondaries
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, 
+                                          const G4Step&) override;
 
   // Store all PhysicsTable in files.
   // Return false in case of any fatal failure at I/O  
   virtual G4bool StorePhysicsTable(const G4ParticleDefinition*,
                                    const G4String& directory,
-                                   G4bool ascii = false);
+                                   G4bool ascii = false) override;
 
   // Retrieve all Physics from a files.
   // Return true if all the Physics Table are built.
   // Return false if any fatal failure. 
   virtual G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                                       const G4String& directory,
-                                      G4bool ascii);
+                                      G4bool ascii) override;
 
 private:
+
+  // summary printout after initialisation
+  void StreamInfo(std::ostream& out, const G4ParticleDefinition& part,
+                  G4bool rst=false) const;
+
   // store a table
   G4bool StoreTable(const G4ParticleDefinition* p, 
                     G4PhysicsTable*, G4bool ascii,
@@ -249,6 +213,9 @@ public:
   // Access to cross section table
   G4double CrossSectionPerVolume(G4double kineticEnergy,
                                  const G4MaterialCutsCouple* couple);
+  G4double CrossSectionPerVolume(G4double kineticEnergy,
+                                 const G4MaterialCutsCouple* couple,
+                                 G4double logKineticEnergy);
 
   // access to cross section
   G4double MeanFreePath(const G4Track& track);
@@ -264,13 +231,13 @@ protected:
   // implementation of the pure virtual method
   virtual G4double GetMeanFreePath(const G4Track& track,
                                    G4double previousStepSize,
-                                   G4ForceCondition* condition);
+                                   G4ForceCondition* condition) override;
 
   // implementation of the pure virtual method
   virtual G4double GetContinuousStepLimit(const G4Track& track,
                                           G4double previousStepSize,
                                           G4double currentMinimumStep,
-                                          G4double& currentSafety);
+                                          G4double& currentSafety) override;
 
   //------------------------------------------------------------------------
   // Run time method which may be also used by derived processes
@@ -299,16 +266,17 @@ public:
   // energy interval  
   void AddEmModel(G4int, G4VEmModel*, 
                   G4VEmFluctuationModel* fluc = 0,
-                  const G4Region* region = 0);
+                  const G4Region* region = nullptr);
 
   // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
-  // Assign a model to a process
-  void SetEmModel(G4VEmModel*, G4int index=1);
+  // Assign a model to a process local list, to enable the list in run time 
+  // the derived process should execute AddEmModel(..) for all such models
+  void SetEmModel(G4VEmModel*, G4int index=0);
   
-  // return the assigned model
-  G4VEmModel* EmModel(G4int index=1) const;
+  // return a model from the local list
+  G4VEmModel* EmModel(size_t index=0) const;
   
   // Access to models
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
@@ -316,7 +284,7 @@ public:
   G4int NumberOfModels() const;
 
   // Assign a fluctuation model to a process
-  void SetFluctModel(G4VEmFluctuationModel*);
+  inline void SetFluctModel(G4VEmFluctuationModel*);
   
   // return the assigned fluctuation model
   inline G4VEmFluctuationModel* FluctModel();
@@ -340,13 +308,13 @@ public:
   //------------------------------------------------------------------------
 
   // Add subcutoff option for the region
-  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
+  void ActivateSubCutoff(G4bool val, const G4Region* region = nullptr);
 
   // Activate biasing
   void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
 
-  void ActivateForcedInteraction(G4double length = 0.0, 
-                                 const G4String& region = "",
+  void ActivateForcedInteraction(G4double length, 
+                                 const G4String& region,
                                  G4bool flag = true);
 
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
@@ -367,7 +335,7 @@ public:
 
   // Redefine parameteters for stepping control
   void SetLinearLossLimit(G4double val);
-  void SetStepFunction(G4double v1, G4double v2);
+  void SetStepFunction(G4double v1, G4double v2, G4bool lock=true);
   void SetLowestEnergyLimit(G4double);
 
   inline G4int NumberOfSubCutoffRegions() const;
@@ -400,20 +368,26 @@ public:
   inline G4double CrossSectionBiasingFactor() const;
 
   // Return values for given G4MaterialCutsCouple
-  inline G4double GetDEDX(G4double& kineticEnergy, 
-                          const G4MaterialCutsCouple*);
-  inline G4double GetDEDXForSubsec(G4double& kineticEnergy, 
+  inline G4double GetDEDX(G4double kineticEnergy, const G4MaterialCutsCouple*);
+  inline G4double GetDEDX(G4double kineticEnergy, const G4MaterialCutsCouple*,
+                          G4double logKineticEnergy);
+  inline G4double GetDEDXForSubsec(G4double kineticEnergy, 
                                    const G4MaterialCutsCouple*);
-  inline G4double GetRange(G4double& kineticEnergy, 
-                           const G4MaterialCutsCouple*);
-  inline G4double GetCSDARange(G4double& kineticEnergy, 
+  inline G4double GetRange(G4double kineticEnergy, const G4MaterialCutsCouple*);
+  inline G4double GetRange(G4double kineticEnergy, const G4MaterialCutsCouple*,
+                           G4double logKineticEnergy);
+  inline G4double GetCSDARange(G4double kineticEnergy, 
                                const G4MaterialCutsCouple*);
-  inline G4double GetRangeForLoss(G4double& kineticEnergy, 
+  inline G4double GetRangeForLoss(G4double kineticEnergy, 
                                   const G4MaterialCutsCouple*);
-  inline G4double GetKineticEnergy(G4double& range, 
+  inline G4double GetRangeForLoss(G4double kineticEnergy,
+                                  const G4MaterialCutsCouple*,
+                                  G4double logKineticEnergy);
+  inline G4double GetKineticEnergy(G4double range, 
                                    const G4MaterialCutsCouple*);
-  inline G4double GetLambda(G4double& kineticEnergy, 
-                            const G4MaterialCutsCouple*);
+  inline G4double GetLambda(G4double kineticEnergy,const G4MaterialCutsCouple*);
+  inline G4double GetLambda(G4double kineticEnergy,const G4MaterialCutsCouple*,
+                            G4double logKineticEnergy);
 
   inline G4bool TablesAreBuilt() const;
 
@@ -452,20 +426,28 @@ private:
   //------------------------------------------------------------------------
   // Compute values using scaling relation, mass and charge of based particle
   //------------------------------------------------------------------------
-
   inline G4double GetDEDXForScaledEnergy(G4double scaledKinEnergy);
+  inline G4double GetDEDXForScaledEnergy(G4double scaledKinEnergy,
+                                         G4double logScaledKinEnergy);
   inline G4double GetSubDEDXForScaledEnergy(G4double scaledKinEnergy);
   inline G4double GetIonisationForScaledEnergy(G4double scaledKinEnergy);
   inline G4double GetSubIonisationForScaledEnergy(G4double scaledKinEnergy);
   inline G4double GetScaledRangeForScaledEnergy(G4double scaledKinEnergy);
+  inline G4double GetScaledRangeForScaledEnergy(G4double scaledKinEnergy,
+                                                G4double logScaledKinEnergy);
   inline G4double GetLimitScaledRangeForScaledEnergy(G4double scaledKinEnergy);
+  inline G4double GetLimitScaledRangeForScaledEnergy(G4double scaledKinEnergy,
+                                                   G4double logScaledKinEnergy);
   inline G4double ScaledKinEnergyForLoss(G4double range);
   inline G4double GetLambdaForScaledEnergy(G4double scaledKinEnergy);
-  inline void ComputeLambdaForScaledEnergy(G4double scaledKinEnergy);
+  inline G4double GetLambdaForScaledEnergy(G4double scaledKinEnergy,
+                                           G4double logScaledKinEnergy);
+  void ComputeLambdaForScaledEnergy(G4double scaledKinEnergy,
+                                    G4double logScaledKinEnergy);
 
   // hide  assignment operator
-  G4VEnergyLossProcess(G4VEnergyLossProcess &);
-  G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right);
+  G4VEnergyLossProcess(G4VEnergyLossProcess &) = delete;
+  G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right) = delete;
 
   // ======== Parameters of the class fixed at construction =========
 
@@ -544,6 +526,7 @@ private:
   G4double dRoverRange;
   G4double finalRange;
   G4double lambdaFactor;
+  G4double logLambdafactor;
   G4double biasFactor;
 
   G4bool   lossFluctuationFlag;
@@ -557,6 +540,8 @@ private:
   G4bool   biasFlag;
   G4bool   weightFlag;
   G4bool   isMaster;
+  G4bool   actIntegral;
+  G4bool   actStepFunc;
   G4bool   actLinLossLimit;
   G4bool   actLossFluc;
   G4bool   actBinning;
@@ -565,7 +550,20 @@ private:
 
 protected:
 
-  G4ParticleChangeForLoss          fParticleChange;
+  G4ParticleChangeForLoss     fParticleChange;
+  const G4Material*           currentMaterial;
+  const G4MaterialCutsCouple* currentCouple;
+  size_t                      currentCoupleIndex;
+
+  G4double preStepLambda;
+  G4double fRange;
+  G4double computedRange;
+  G4double preStepKinEnergy;
+  G4double preStepLogKinEnergy;
+  G4double preStepScaledEnergy;
+  G4double preStepLogScaledEnergy;
+  G4double preStepRangeEnergy;
+  G4double mfpKinEnergy;
 
   // ======== Cached values - may be state dependent ================
 
@@ -577,26 +575,14 @@ private:
   const G4ParticleDefinition* particle;
 
   G4VEmModel*                 currentModel;
-  const G4Material*           currentMaterial;
-  const G4MaterialCutsCouple* currentCouple;
-  size_t                      currentCoupleIndex;
   size_t                      basedCoupleIndex;
   size_t                      lastIdx;
 
-  G4int    nWarnings;
-
   G4double massRatio;
+  G4double logMassRatio;
   G4double fFactor;
   G4double reduceFactor;
   G4double chargeSqRatio;
-
-  G4double preStepLambda;
-  G4double fRange;
-  G4double computedRange;
-  G4double preStepKinEnergy;
-  G4double preStepScaledEnergy;
-  G4double preStepRangeEnergy;
-  G4double mfpKinEnergy;
 
   G4GPILSelection  aGPILSelection;
 
@@ -651,6 +637,7 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
                                                        G4double charge2ratio)
 {
   massRatio     = massratio;
+  logMassRatio  = G4Log(massRatio);
   fFactor = charge2ratio*biasFactor*(*theDensityFactor)[currentCoupleIndex];
   chargeSqRatio = charge2ratio;
   reduceFactor  = 1.0/(fFactor*massRatio);
@@ -666,6 +653,19 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
          << " Emin= " << minKinEnergy << "  Factor= " << fFactor 
          << "  " << theDEDXTable << G4endl; */
   G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e, idxDEDX);
+  if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
+  return x;
+}
+
+inline
+G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e, G4double loge)
+{
+  /*
+  G4cout << "G4VEnergyLossProcess::GetDEDX: Idx= " 
+           << basedCoupleIndex << " E(MeV)= " << e 
+         << " Emin= " << minKinEnergy << "  Factor= " << fFactor 
+         << "  " << theDEDXTable << G4endl; */
+  G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->LogVectorValue(e,loge);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -712,7 +712,27 @@ inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
     lastIdx = basedCoupleIndex;
     preStepRangeEnergy = e;
     computedRange = 
-      ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e, idxRange);
+                ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e, idxRange);
+    if(e < minKinEnergy) { computedRange *= std::sqrt(e/minKinEnergy); }
+  }
+  //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
+  //         << basedCoupleIndex << " E(MeV)= " << e 
+  //         << " R=  " << fRange << "  " << theRangeTableForLoss << G4endl; 
+
+  return computedRange;
+}
+
+inline G4double
+G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e, G4double loge)
+{
+  //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
+  //         << basedCoupleIndex << " E(MeV)= " << e 
+  //         << " lastIdx= " << lastIdx << "  " << theRangeTableForLoss << G4endl; 
+  if(basedCoupleIndex != lastIdx || preStepRangeEnergy != e) {
+    lastIdx = basedCoupleIndex;
+    preStepRangeEnergy = e;
+    computedRange = 
+          ((*theRangeTableForLoss)[basedCoupleIndex])->LogVectorValue(e, loge);
     if(e < minKinEnergy) { computedRange *= std::sqrt(e/minKinEnergy); }
   }
   //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
@@ -723,13 +743,27 @@ inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double 
 G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 {
   G4double x;
   if (e < maxKinEnergyCSDA) {
     x = ((*theCSDARangeTable)[basedCoupleIndex])->Value(e, idxCSDA);
+    if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
+  } else {
+    x = theRangeAtMaxEnergy[basedCoupleIndex] +
+      (e - maxKinEnergyCSDA)/theDEDXAtMaxEnergy[basedCoupleIndex];
+  }
+  return x;
+}
+
+inline G4double 
+G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e,
+                                                         G4double loge)
+{
+  G4double x;
+  if (e < maxKinEnergyCSDA) {
+    x = ((*theCSDARangeTable)[basedCoupleIndex])->LogVectorValue(e, loge);
     if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   } else {
     x = theRangeAtMaxEnergy[basedCoupleIndex] +
@@ -763,20 +797,35 @@ inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
   return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e, idxLambda);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double 
-G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
-                              const G4MaterialCutsCouple* couple)
+inline G4double
+G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e, G4double loge)
 {
-  DefineMaterial(couple);
-  return GetDEDXForScaledEnergy(kineticEnergy*massRatio);
+  return fFactor*((*theLambdaTable)[basedCoupleIndex])->LogVectorValue(e,loge);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4VEnergyLossProcess::GetDEDXForSubsec(G4double& kineticEnergy,
+G4VEnergyLossProcess::GetDEDX(G4double kinEnergy,
+                              const G4MaterialCutsCouple* couple)
+{
+  DefineMaterial(couple);
+  return GetDEDXForScaledEnergy(kinEnergy*massRatio);
+}
+
+inline G4double 
+G4VEnergyLossProcess::GetDEDX(G4double kinEnergy,
+                              const G4MaterialCutsCouple* couple,
+                              G4double logKinEnergy)
+{
+  DefineMaterial(couple);
+  return GetDEDXForScaledEnergy(kinEnergy*massRatio, logKinEnergy+logMassRatio);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double 
+G4VEnergyLossProcess::GetDEDXForSubsec(G4double kineticEnergy,
                                        const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -786,16 +835,32 @@ G4VEnergyLossProcess::GetDEDXForSubsec(G4double& kineticEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
+G4VEnergyLossProcess::GetRange(G4double kinEnergy,
                                const G4MaterialCutsCouple* couple)
 {
   G4double x = fRange;
   DefineMaterial(couple);
   if(theCSDARangeTable) {
-    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
-      * reduceFactor;
+    x  = reduceFactor * GetLimitScaledRangeForScaledEnergy(kinEnergy*massRatio);
   } else if(theRangeTableForLoss) {
-    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+    x  = reduceFactor * GetScaledRangeForScaledEnergy(kinEnergy*massRatio);
+  }
+  return x;
+}
+
+inline G4double 
+G4VEnergyLossProcess::GetRange(G4double kinEnergy,
+                               const G4MaterialCutsCouple* couple,
+                               G4double logKinEnergy)
+{
+  G4double x = fRange;
+  DefineMaterial(couple);
+  if(theCSDARangeTable) {
+    x  = reduceFactor * GetLimitScaledRangeForScaledEnergy(kinEnergy*massRatio,
+                                                     logKinEnergy+logMassRatio);
+  } else if(theRangeTableForLoss) {
+    x  = reduceFactor * GetScaledRangeForScaledEnergy(kinEnergy*massRatio,
+                                                     logKinEnergy+logMassRatio);
   }
   return x;
 }
@@ -803,36 +868,41 @@ G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4VEnergyLossProcess::GetCSDARange(G4double& kineticEnergy, 
+G4VEnergyLossProcess::GetCSDARange(G4double kineticEnergy, 
                                    const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4double x = DBL_MAX;
-  if(theCSDARangeTable) {
-    x=GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  }
-  return x;
+  return (theCSDARangeTable) ? 
+    GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor
+    : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
+G4VEnergyLossProcess::GetRangeForLoss(G4double kinEnergy,
                                       const G4MaterialCutsCouple* couple)
 {
   //  G4cout << "GetRangeForLoss: Range from " << GetProcessName() << G4endl;
   DefineMaterial(couple);
-  G4double x = 
-    GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  //G4cout << "GetRangeForLoss: Range from " << GetProcessName() 
-  //         << "  e= " << kineticEnergy << " r= " << x << G4endl;
-  return x;
+  return reduceFactor * GetScaledRangeForScaledEnergy(kinEnergy*massRatio);
+}
+
+inline G4double 
+G4VEnergyLossProcess::GetRangeForLoss(G4double kinEnergy,
+                                      const G4MaterialCutsCouple* couple,
+                                      G4double logKinEnergy)
+{
+  //  G4cout << "GetRangeForLoss: Range from " << GetProcessName() << G4endl;
+  DefineMaterial(couple);
+  return reduceFactor * GetScaledRangeForScaledEnergy(kinEnergy*massRatio,
+                                                     logKinEnergy+logMassRatio);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
+G4VEnergyLossProcess::GetKineticEnergy(G4double range,
                                        const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -842,38 +912,22 @@ G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4VEnergyLossProcess::GetLambda(G4double& kineticEnergy,
+G4VEnergyLossProcess::GetLambda(G4double kinEnergy,
                                 const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4double x = 0.0;
-  if(theLambdaTable) { 
-    x = GetLambdaForScaledEnergy(kineticEnergy*massRatio); 
-  }
-  return x;
+  return theLambdaTable ? GetLambdaForScaledEnergy(kinEnergy*massRatio) : 0.0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
+inline G4double 
+G4VEnergyLossProcess::GetLambda(G4double kinEnergy,
+                                const G4MaterialCutsCouple* couple,
+                                G4double logKinEnergy)
 {
-  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentCoupleIndex];
-  if (e <= mfpKinEnergy) {
-    preStepLambda = GetLambdaForScaledEnergy(e);
-
-  } else {
-    G4double e1 = e*lambdaFactor;
-    if(e1 > mfpKinEnergy) {
-      preStepLambda  = GetLambdaForScaledEnergy(e);
-      G4double preStepLambda1 = GetLambdaForScaledEnergy(e1);
-      if(preStepLambda1 > preStepLambda) {
-        mfpKinEnergy = e1;
-        preStepLambda = preStepLambda1;
-      }
-    } else {
-      preStepLambda = fFactor*theCrossSectionMax[currentCoupleIndex];
-    }
-  }
+  DefineMaterial(couple);
+  return theLambdaTable
+    ?  GetLambdaForScaledEnergy(kinEnergy*massRatio, logKinEnergy+logMassRatio)
+    :  0.0;
 }
 
 // ======== Get/Set inline methods used at initialisation ================
@@ -940,6 +994,7 @@ G4VEnergyLossProcess::SecondaryParticle() const
 inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
   lossFluctuationFlag = val;
+  actLossFluc = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -947,6 +1002,7 @@ inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 inline void G4VEnergyLossProcess::SetIntegral(G4bool val)
 {
   integral = val;
+  actIntegral = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -55,8 +55,8 @@ private:
 
   G4NeutronField(const  G4NeutronField &right);
   const G4NeutronField & operator=(const G4NeutronField & right);
-  int operator==(const G4NeutronField & right) const;
-  int operator!=(const G4NeutronField & right) const;
+  G4bool operator==(const G4NeutronField & right) const;
+  G4bool operator!=(const G4NeutronField & right) const;
 
 public:
 

@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DisplacedSolid.hh 83572 2014-09-01 15:23:27Z gcosmo $
-//
-//
-// class G4DisplacedSolid
+// G4DisplacedSolid
 //
 // Class description:
 //
@@ -35,14 +31,10 @@
 // frame of reference to a new one. It is meant to be used only for
 // simplifying the implementation of "Boolean solids". 
 
-// History:
-//
-// 28.10.98 V.Grichine: created
-// 22.11.00 V.Grichine: new set methods for matrix/vectors
-//
+// 28.10.98 V.Grichine - created
 // --------------------------------------------------------------------
-#ifndef G4DisplacedSolid_HH
-#define G4DisplacedSolid_HH
+#ifndef G4DISPLACEDSOLID_HH
+#define G4DISPLACEDSOLID_HH
 
 #include "G4VSolid.hh"
 #include "G4RotationMatrix.hh"
@@ -75,6 +67,8 @@ class G4DisplacedSolid : public G4VSolid
     // It also has all the methods that a solid requires, eg.
 
     EInside Inside( const G4ThreeVector& p ) const ; 
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -115,27 +109,27 @@ class G4DisplacedSolid : public G4VSolid
       // If the Solid is a "G4DisplacedSolid",
       // return a self pointer else return 0.
 
-    G4VSolid*                GetConstituentMovedSolid() const;
+    G4VSolid* GetConstituentMovedSolid() const;
 
-    G4AffineTransform        GetTransform() const; 
+    G4AffineTransform GetTransform() const; 
     void       SetTransform(G4AffineTransform& ); 
 
-    G4AffineTransform        GetDirectTransform() const; 
+    G4AffineTransform GetDirectTransform() const; 
     void       SetDirectTransform(G4AffineTransform&); 
       // Access/Set methods.
 
-    G4RotationMatrix         GetFrameRotation() const;
-    void  SetFrameRotation(const G4RotationMatrix&);
+    G4RotationMatrix GetFrameRotation() const;
+    void SetFrameRotation(const G4RotationMatrix&);
 
-    G4ThreeVector            GetFrameTranslation() const; 
-    void  SetFrameTranslation(const G4ThreeVector&); 
+    G4ThreeVector GetFrameTranslation() const; 
+    void SetFrameTranslation(const G4ThreeVector&); 
       // Get/Set the rotation/translation, as applied to the frame of reference.
 
-    G4RotationMatrix         GetObjectRotation() const;
-    void  SetObjectRotation(const G4RotationMatrix&);
+    G4RotationMatrix GetObjectRotation() const;
+    void SetObjectRotation(const G4RotationMatrix&);
 
-    G4ThreeVector            GetObjectTranslation() const; 
-    void  SetObjectTranslation(const G4ThreeVector&); 
+    G4ThreeVector GetObjectTranslation() const; 
+    void SetObjectTranslation(const G4ThreeVector&); 
       // Get/Set the rotation/translation, as applied to the object.
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -153,16 +147,16 @@ class G4DisplacedSolid : public G4VSolid
 
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
-    G4Polyhedron* GetPolyhedron    () const ;
+    G4Polyhedron* GetPolyhedron () const ;
       // For creating graphical representations (ie for visualisation).
 
   protected:
 
-    G4VSolid* fPtrSolid ;
-    G4AffineTransform* fPtrTransform ;
-    G4AffineTransform* fDirectTransform ;
-    mutable G4bool fRebuildPolyhedron;
-    mutable G4Polyhedron* fpPolyhedron;
-} ;
+    G4VSolid* fPtrSolid = nullptr;
+    G4AffineTransform* fPtrTransform = nullptr;
+    G4AffineTransform* fDirectTransform = nullptr;
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;
+};
 
 #endif

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXeTrackingAction.hh 68752 2013-04-05 10:23:47Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/include/LXeTrackingAction.hh
 /// \brief Definition of the LXeTrackingAction class

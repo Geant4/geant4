@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_FTFP_BERT.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,34 +34,22 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQGSP_FTFP_BERT_h
-#define TQGSP_FTFP_BERT_h 1
-
-#include <CLHEP/Units/SystemOfUnits.h>
+#ifndef QGSP_FTFP_BERT_h
+#define QGSP_FTFP_BERT_h 1
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TQGSP_FTFP_BERT: public T
+class QGSP_FTFP_BERT: public G4VModularPhysicsList
 {
 public:
-  TQGSP_FTFP_BERT(G4int ver = 1);
-  virtual ~TQGSP_FTFP_BERT();
+  QGSP_FTFP_BERT(G4int ver = 1);
+  virtual ~QGSP_FTFP_BERT()=default;
+
+  QGSP_FTFP_BERT(const QGSP_FTFP_BERT &) = delete;
+  QGSP_FTFP_BERT & operator=(const QGSP_FTFP_BERT &)=delete;  
   
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
-
-#include "QGSP_FTFP_BERT.icc"
-typedef TQGSP_FTFP_BERT<G4VModularPhysicsList> QGSP_FTFP_BERT;
-
-// 2002 by J.P. Wellisch
 
 #endif
 

@@ -40,8 +40,11 @@
 //
 //*******************************************************//
 
+
 #include "ML2AcceleratorConstructionMessenger.hh"
 #include "ML2AcceleratorConstruction.hh"
+
+#include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -50,34 +53,35 @@
 
 CML2AcceleratorConstructionMessenger::CML2AcceleratorConstructionMessenger(CML2AcceleratorConstruction *acceleratorConstructor) : pAcceleratorConstructor (acceleratorConstructor)
 {
-	bOnlyVisio=false;
-	AcceleratorName=new G4UIcmdWithAString("/accelerator/AcceleratorName",this);
-	AcceleratorName->SetDefaultValue("acc1");
-	AcceleratorName->SetGuidance("accelerator name to select among those implemented (acc1)");
-	pAcceleratorConstructor->setAcceleratorName("acc1");
+	bOnlyVisio = false;
 
-	acceleratorMacFileName=new G4UIcmdWithAString("/accelerator/AcceleratorMacFileName",this);
-	acceleratorMacFileName->SetDefaultValue("");
-	acceleratorMacFileName->SetGuidance("full path and macro file name containing specific setup data for the accelerator chosen");
-	pAcceleratorConstructor->setAcceleratorMacFileName("");
+	AcceleratorName = new G4UIcmdWithAString("/accelerator/AcceleratorName",this);
+	AcceleratorName -> SetDefaultValue("acc1");
+	AcceleratorName -> SetGuidance("accelerator name to select among those implemented (acc1, acc2, saturnAcc)");
+	pAcceleratorConstructor -> setAcceleratorName("acc1");
 
-
-	rotationX  =new G4UIcmdWithADoubleAndUnit("/accelerator/rotationX", this);
-	rotationX  ->SetDefaultUnit("deg");
-	rotationX  ->SetDefaultValue(0.);
-	rotationX->SetGuidance("angles of rotation along X [deg]");
-
-	isoCentre=new G4UIcmdWithADoubleAndUnit("/accelerator/isoCentre", this);
-	isoCentre->SetDefaultUnit("mm");
-	isoCentre->SetDefaultValue(1000.);
-	isoCentre->SetGuidance("distance between the isocentre and the target of the accelerator");
-	pAcceleratorConstructor->setIsoCentre(1000.*mm);
+	acceleratorMacFileName = new G4UIcmdWithAString("/accelerator/AcceleratorMacFileName",this);
+	acceleratorMacFileName -> SetDefaultValue("");
+	acceleratorMacFileName -> SetGuidance("full path and macro file name containing specific setup data for the accelerator chosen");
+	pAcceleratorConstructor -> setAcceleratorMacFileName("");
 
 
-	bRotate90Y  =new G4UIcmdWithABool("/accelerator/rotation90Y", this);
-	bRotate90Y  ->SetDefaultValue(false);
-	bRotate90Y->SetGuidance("to rotate the accelerator of 90 deg around the Y axis (true)");
-	pAcceleratorConstructor->setRotation90Y(false);
+	rotationX = new G4UIcmdWithADoubleAndUnit("/accelerator/rotationX", this);
+	rotationX ->SetDefaultUnit("deg");
+	rotationX ->SetDefaultValue(0.);
+	rotationX -> SetGuidance("rotation around X [deg]");
+
+	isoCentre = new G4UIcmdWithADoubleAndUnit("/accelerator/isoCentre", this);
+	isoCentre -> SetDefaultUnit("mm");
+	isoCentre -> SetDefaultValue(1000.);
+	isoCentre -> SetGuidance("distance between the isocentre and the target of the accelerator");
+	pAcceleratorConstructor -> setIsoCentre(1000.*mm);
+
+
+	bRotate90Y = new G4UIcmdWithABool("/accelerator/rotation90Y", this);
+	bRotate90Y -> SetDefaultValue(false);
+	bRotate90Y -> SetGuidance("rotate the accelerator of 90 deg around the Y axis");
+	pAcceleratorConstructor -> setRotation90Y(false);
 }
 
 CML2AcceleratorConstructionMessenger::~CML2AcceleratorConstructionMessenger(void)
@@ -91,39 +95,29 @@ CML2AcceleratorConstructionMessenger::~CML2AcceleratorConstructionMessenger(void
 void CML2AcceleratorConstructionMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
 {
 
-	if (cmd==AcceleratorName)
-	{pAcceleratorConstructor->setAcceleratorName(newValue);}
-
-	if (cmd==acceleratorMacFileName)
-	{pAcceleratorConstructor->setAcceleratorMacFileName(newValue);}
-
-
-	if (cmd==rotationX)
+	if (cmd == AcceleratorName)
 	{
-		if (bOnlyVisio)
-		{
-			G4RotationMatrix *rm=pAcceleratorConstructor->rotateAccelerator(rotationX ->GetNewDoubleValue(newValue));
-			CML2PrimaryGenerationAction::GetInstance()->setRotation(rm);
-			CML2PhantomConstruction::GetInstance()->resetSensDet();
-// what follows seems to be necessary to have a good refresh
-			G4UImanager* UI = G4UImanager::GetUIpointer();
-			G4String command;
-			command = "/run/beamOn 0";
-			UI->ApplyCommand(command); 
-			command = "/vis/viewer/flush";
-			UI->ApplyCommand(command); 
-		}
-		else
-		{
-			pAcceleratorConstructor->addAcceleratorRotationsX(rotationX ->GetNewDoubleValue(newValue));
-		}
+		pAcceleratorConstructor -> setAcceleratorName(newValue);
 	}
 
-	if (cmd==isoCentre)
+	if (cmd == acceleratorMacFileName)
 	{
-		isoCentre->GetNewUnitValue(newValue);
-		pAcceleratorConstructor->setIsoCentre(isoCentre->GetNewDoubleValue(newValue));
+		pAcceleratorConstructor -> setAcceleratorMacFileName(newValue);
 	}
-	if (cmd==bRotate90Y)
-	{pAcceleratorConstructor->setRotation90Y(bRotate90Y->GetNewBoolValue(newValue));}
+
+
+	if (cmd == rotationX)
+	{
+		pAcceleratorConstructor -> addAcceleratorRotationsX(rotationX -> GetNewDoubleValue(newValue));
+	}
+
+	if (cmd == isoCentre)
+	{
+		isoCentre -> GetNewUnitValue(newValue);
+		pAcceleratorConstructor -> setIsoCentre(isoCentre -> GetNewDoubleValue(newValue));
+	}
+	if (cmd == bRotate90Y)
+	{
+		pAcceleratorConstructor -> setRotation90Y(bRotate90Y -> GetNewBoolValue(newValue));
+	}
 }

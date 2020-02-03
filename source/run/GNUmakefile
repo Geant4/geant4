@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 70423 2013-05-30 09:09:21Z gcosmo $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -26,6 +25,7 @@ CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/particles/management/include \

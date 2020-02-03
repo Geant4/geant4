@@ -68,6 +68,7 @@ namespace G4INCL {
 
       const G4double mp = ParticleTable::getINCLMass(Proton);
       const G4double mn = ParticleTable::getINCLMass(Neutron);
+      const G4double ml = ParticleTable::getINCLMass(Lambda);
 
       const G4double theFermiMomentum = ParticleTable::getFermiMomentum(theA,theZ);
 
@@ -99,15 +100,53 @@ namespace G4INCL {
       vDeltaZero = vNeutron;
       vDeltaPlusPlus = std::max(separationEnergyDeltaPlusPlus + tinyMargin, 2.*vDeltaPlus - vDeltaZero);
       vDeltaMinus = std::max(separationEnergyDeltaMinus + tinyMargin, 2.*vDeltaZero - vDeltaPlus);
+      
+      vSigmaMinus = -16.; // Repulsive potential, from Eur. Phys.J.A. (2016) 52:21
+      vSigmaZero = -16.;  // hypothesis: same potential for each sigma
+      vSigmaPlus = -16.;
+
+      vLambda = 28.;
+      const G4double asy = (theA - 2.*theZ)/theA;
+      if(asy>0.11)vLambda = 56.549-678.73*asy+4905.35*std::pow(asy,2.)-9789.1*std::pow(asy,3.); // Jose Luis Rodriguez-Sanchez et al., Rapid Communication PRC
+
+      const G4double theLambdaSeparationEnergy = ParticleTable::getSeparationEnergy(Lambda,theA,theZ);
 
       separationEnergy[PiPlus] = theProtonSeparationEnergy - theNeutronSeparationEnergy;
       separationEnergy[PiZero] = 0.;
       separationEnergy[PiMinus] = theNeutronSeparationEnergy - theProtonSeparationEnergy;
 
+      separationEnergy[Eta]      = 0.;
+      separationEnergy[Omega]    = 0.;
+      separationEnergy[EtaPrime] = 0.;
+      separationEnergy[Photon]   = 0.;
+      
+      separationEnergy[Lambda]		= theLambdaSeparationEnergy;
+      separationEnergy[SigmaPlus]	= theProtonSeparationEnergy + theLambdaSeparationEnergy - theNeutronSeparationEnergy;
+      separationEnergy[SigmaZero]	= theLambdaSeparationEnergy;
+      separationEnergy[SigmaMinus]	= theNeutronSeparationEnergy + theLambdaSeparationEnergy - theProtonSeparationEnergy;
+
+      separationEnergy[KPlus]		= theProtonSeparationEnergy - theLambdaSeparationEnergy;
+      separationEnergy[KZero]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
+      separationEnergy[KZeroBar]	= (theLambdaSeparationEnergy - theNeutronSeparationEnergy);
+      separationEnergy[KMinus]		= 2.*theNeutronSeparationEnergy - theProtonSeparationEnergy-theLambdaSeparationEnergy;
+
+      separationEnergy[KShort]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
+      separationEnergy[KLong]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
+
       fermiEnergy[DeltaPlusPlus] = vDeltaPlusPlus - separationEnergy[DeltaPlusPlus];
       fermiEnergy[DeltaPlus] = vDeltaPlus - separationEnergy[DeltaPlus];
       fermiEnergy[DeltaZero] = vDeltaZero - separationEnergy[DeltaZero];
       fermiEnergy[DeltaMinus] = vDeltaMinus - separationEnergy[DeltaMinus];
+      
+      fermiEnergy[Lambda] = vLambda - separationEnergy[Lambda];
+      if (fermiEnergy[Lambda] <= 0.)
+         fermiMomentum[Lambda]=0.;
+      else
+         fermiMomentum[Lambda]=std::sqrt(std::pow(fermiEnergy[Lambda]+ml,2.0)-ml*ml);
+
+      fermiEnergy[SigmaPlus] = vSigmaPlus - separationEnergy[SigmaPlus];
+      fermiEnergy[SigmaZero] = vSigmaZero - separationEnergy[SigmaZero];
+      fermiEnergy[SigmaMinus] = vSigmaMinus - separationEnergy[SigmaMinus];
 
       INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
             << "  proton:  " << separationEnergy[Proton] << '\n'
@@ -119,6 +158,20 @@ namespace G4INCL {
             << "  pi+:     " << separationEnergy[PiPlus] << '\n'
             << "  pi0:     " << separationEnergy[PiZero] << '\n'
             << "  pi-:     " << separationEnergy[PiMinus] << '\n'
+            << "  eta:     " << separationEnergy[Eta] << '\n'
+            << "  omega:   " << separationEnergy[Omega] << '\n'
+            << "  etaprime:" << separationEnergy[EtaPrime] << '\n'
+            << "  photon:  " << separationEnergy[Photon] << '\n'
+            << "  lambda:  " << separationEnergy[Lambda] << '\n'
+            << "  sigmaplus:  " << separationEnergy[SigmaPlus] << '\n'
+            << "  sigmazero:  " << separationEnergy[SigmaZero] << '\n'
+            << "  sigmaminus:  " << separationEnergy[SigmaMinus] << '\n'
+            << "  kplus:  " << separationEnergy[KPlus] << '\n'
+            << "  kzero:  " << separationEnergy[KZero] << '\n'
+            << "  kzerobar:  " << separationEnergy[KZeroBar] << '\n'
+            << "  kminus:  " << separationEnergy[KMinus] << '\n'
+            << "  kshort:  " << separationEnergy[KShort] << '\n'
+            << "  klong:  " << separationEnergy[KLong] << '\n'
             );
 
       INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
@@ -128,6 +181,10 @@ namespace G4INCL {
             << "  delta+:  " << fermiEnergy[DeltaPlus] << '\n'
             << "  delta0:  " << fermiEnergy[DeltaZero] << '\n'
             << "  delta-:  " << fermiEnergy[DeltaMinus] << '\n'
+            << "  lambda:  " << fermiEnergy[Lambda] << '\n'
+            << "  sigma+:  " << fermiEnergy[SigmaPlus] << '\n'
+            << "  sigma0:  " << fermiEnergy[SigmaZero] << '\n'
+            << "  sigma-:  " << fermiEnergy[SigmaMinus] << '\n'
             );
 
       INCL_DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << '\n'
@@ -151,6 +208,38 @@ namespace G4INCL {
         case PiZero:
         case PiMinus:
           return computePionPotentialEnergy(particle);
+          break;
+        
+        case SigmaPlus:
+          return vSigmaPlus;
+          break;
+        case SigmaZero:
+          return vSigmaZero;
+          break;
+        case Lambda:
+          return vLambda;
+          break;
+        case SigmaMinus:
+          return vSigmaMinus;
+          break;
+
+        case Eta:
+        case Omega:
+		case EtaPrime:
+          return computePionResonancePotentialEnergy(particle);
+          break;
+
+        case KPlus:
+        case KZero:
+        case KZeroBar:
+        case KMinus:
+        case KShort:
+        case KLong:
+          return computeKaonPotentialEnergy(particle);
+          break;
+
+        case Photon:
+          return 0.0;
           break;
 
         case DeltaPlusPlus:

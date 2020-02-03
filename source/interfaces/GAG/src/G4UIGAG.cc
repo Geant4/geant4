@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal
@@ -274,9 +273,9 @@ G4String G4UIGAG::GetCommand()
       { 
 	if ( uiMode == terminal_mode){
 	  G4cerr << "You are now processing RUN." << G4endl;
-	  G4cerr << "Please abrot it using \"/run/abort\" command first" << G4endl;
+	  G4cerr << "Please abort it using \"/run/abort\" command first" << G4endl;
 	  G4cerr << " and use \"continue\" command until the application" << G4endl;
-	  G4cerr << " becomes to Idle." << G4endl;
+	  G4cerr << " gets to Idle." << G4endl;
 	}else{
 	  G4cout << "@@ErrResult \"You are now processing RUN.\"" << G4endl;
 	}

@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/DICOM/.README.txt"
 ///\brief ExampleDICOM README page
@@ -68,8 +67,36 @@ DICOM
    - DICOM_NTHREADS
      - To set the number of threads (when G4MULTITHREADED is defined via GEANT4_BUILD_MULTITHREADED=ON during Geant4 source build)
      - Needs to be set to the number of desired threads, e.g. DICOM_NTHREADS=8 (default is 4 threads)
+<<<<<<< HEAD
      
 \section DICOM_s4 Metadata:
+=======
+   - DICOM_USE_HEAD
+     - set to 1 (export DICOM_USE_HEAD=1) to use the digital head phantom documented in Giacometti, V., Guatelli, S., Bazalova-Carter, M., Rosenfeld, A.B., Schulte, R.W.,
+       "Development of a high resolution voxelised head phantom for medical physics applications", (2017) Physica Medica, 33, pp. 182-188. 
+       To use this option, the DICOM library needs to be downloaded. This is distributed with the other Geant4 data files on the Geant4 Download site.
+       For convenience of use, it is suggested to have the DICOM library directory in the DICOM Geant4 extended example or in the directory containing the DICOM executable.
+       When using this option,
+       1) export DICOM_USE_HEAD=1
+       2) export DICOM_PATH=path/to/DICOM1.1/DICOM_HEAD - to use the full DICOM HEAD project 
+          or
+          export DICOM_PATH=path/to/DICOM1.1/DICOM_HEAD_TEST - to use 4 DICOM files of the DICOM HEAD project. This option is useful for testing purposes.
+       3) THE DICOM_HEAD uses the OLD version of the Metadata files (see point 4a)
+       Note 1: The Conversion of Hounsfield numbers to materials (point 5) is not used. The material is associated to the voxel in the Detector Construction 
+               without using the calibration curve.This happens because the DICOM project has already been segmented and cleaned from artefacts (see publication).
+
+\section DICOM_s5 Metadata file:
+
+The old version of "Data.dat" is found in "Data.dat.old", when the project is configured with DICOM_USE_DCMTK=OFF,
+"Data.dat.old" is copied into the binary directory at "Data.dat".
+  - i.e. cp ${PROJECT_SOURCE_DIR}/Data.dat.old ${PROJECT_BINARY_DIR}/Data.dat
+
+The new version of "Data.dat" is found in "Data.dat.new", when the project is configured with DICOM_USE_DCMTK=ON,
+"Data.dat.new" is copied into the binary directory as "Data.dat".
+  - i.e. cp ${PROJECT_SOURCE_DIR}/Data.dat.new ${PROJECT_BINARY_DIR}/Data.dat
+
+\section DICOM_s5a Metadata file, OLD version:
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
  The file Data.dat has the following information
   - A line with the compression value (used only to create the .g4dcm and .g4dcmb, not to read it)

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm0/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: fDetectorMessenger.cc,v 1.2 2006-06-29 16:35:48 gunter Exp $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

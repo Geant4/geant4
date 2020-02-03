@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.hh 66373 2012-12-18 09:41:34Z gcosmo $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -55,7 +54,18 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandDrawVolume: public G4VVisCommand {
+class G4VisCommandDrawLogicalVolume: public G4VVisCommand {
+public:
+  G4VisCommandDrawLogicalVolume ();
+  virtual ~G4VisCommandDrawLogicalVolume ();
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandDrawLogicalVolume (const G4VisCommandDrawLogicalVolume&);
+  G4VisCommandDrawLogicalVolume& operator = (const G4VisCommandDrawLogicalVolume&);
+  G4UIcommand* fpCommand;
+};
+
+  class G4VisCommandDrawVolume: public G4VVisCommand {
 public:
   G4VisCommandDrawVolume ();
   virtual ~G4VisCommandDrawVolume ();
@@ -63,7 +73,7 @@ public:
 private:
   G4VisCommandDrawVolume (const G4VisCommandDrawVolume&);
   G4VisCommandDrawVolume& operator = (const G4VisCommandDrawVolume&);
-  G4UIcmdWithAString* fpCommand;
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandOpen: public G4VVisCommand {

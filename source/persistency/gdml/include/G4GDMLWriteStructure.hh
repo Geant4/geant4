@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh 89493 2015-04-14 09:22:54Z gcosmo $
 //
 //
 // class G4GDMLWriteStructure
@@ -52,6 +51,7 @@ class G4LogicalSkinSurface;
 class G4OpticalSurface;
 class G4SurfaceProperty;
 class G4ReflectionFactory;
+class G4AssemblyTriplet;
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol
 {
@@ -65,6 +65,10 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    void AddVolumeAuxiliary(G4GDMLAuxStructType myaux, const G4LogicalVolume* const);
 
    void SetEnergyCutsExport(G4bool);
+   void SetSDExport(G4bool);
+
+   G4int GetMaxExportLevel() const;
+   void SetMaxExportLevel(G4int);
 
  protected:
 
@@ -72,6 +76,7 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    void PhysvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const topVol,
                    const G4Transform3D& transform, const G4String& moduleName);
    void ReplicavolWrite(xercesc::DOMElement*, const G4VPhysicalVolume* const);
+   void AssemblyWrite(xercesc::DOMElement*, const int assemblyID);
    G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const topVol,
                                     const G4int depth);
    void SurfacesWrite();
@@ -81,6 +86,7 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    const G4LogicalSkinSurface* GetSkinSurface(const G4LogicalVolume* const);
    G4bool FindOpticalSurface(const G4SurfaceProperty*);
    void ExportEnergyCuts(const G4LogicalVolume* const);
+   void ExportSD(const G4LogicalVolume* const);
 
  protected:
 
@@ -94,6 +100,13 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    std::vector<const G4OpticalSurface*> opt_vec;
    G4ReflectionFactory* reflFactory;
    G4bool cexport;  // Flag for optional export of energy cuts per volume
+   G4bool sdexport; // Flag for optional export of SD per volume
+   G4int maxLevel;  // Maximum number of levels to export
+   static G4int levelNo;  // Counter for level being exported
+   std::map<const G4VPhysicalVolume*, G4int> assemblyVolMap; // Map of phys volumes to assembly IDs
+   std::map<const G4VPhysicalVolume*, G4int> imprintsMap; // Map of phys volumes to imprints IDs
+   std::vector<int> addedAssemblies; // vector of assemblies IDs already added to the structure
+
 };
 
 #endif

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 //$Id: .README.txt 95508 2016-02-12 13:52:06Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ///\file "B3/.README.txt"
 ///\brief Example B3 README page
@@ -84,6 +87,10 @@
    two G4MultiFunctionalDetector objects: one for the Crystal (EnergyDeposit), 
    and one for the Patient (DoseDeposit)
 
+   The scorers hits are saved in form of ntuples in a Root file using Geant4 
+   analysis tools. This feature is activated in the main () function with instantiating
+   G4TScoreNtupleWriter.
+
    Two variants of accumulation event statistics in a run are demonstrated 
    in this example:
 
@@ -107,6 +114,15 @@
    B3bRun::RecordEvent(), called at end of event, collects informations 
    event per event from the hits collections, and accumulates statistic for 
    B3bRunAction::EndOfRunAction().  
+   In addition, results for dose are accumulated in a
+   standard floating-point summation and using a new lightweight statistical
+   class called G4StatAnalysis. The G4StatAnalysis class records four values:
+   (1) the sum, (2) sum^2, (3) number of entries, and (4) the number of entries
+   less than mean * machine-epsilon (the machine epsilon is the difference
+   between 1.0 and the next value representable by the floating-point type).
+   From these 4 values, G4StatAnalysis provides the mean, FOM, relative error,
+   standard deviation, variance, coefficient of variation, efficiency, r2int,
+   and r2eff.
    
    In multi-threading mode the statistics accumulated per workers is merged 
    to the master in B3bRun::Merge().
@@ -184,7 +200,7 @@ The following paragraphs are common to all basic examples
  
    - Execute exampleB3a in the 'interactive mode' with visualization
 \verbatim
-% exampleB3a
+% ./exampleB3a
 and type in the commands from run1.mac line by line:  
 Idle> /control/verbose 2
 Idle> /tracking/verbose 2
@@ -202,8 +218,8 @@ Idle> exit
    - Execute exampleB3a in the 'batch' mode from macro files 
    (without visualization)
 \verbatim
-% exampleB3a run2.mac
-% exampleB3a exampleB3.in > exampleB3.out
+% ./exampleB3a run2.mac
+% ./exampleB3a exampleB3.in > exampleB3.out
 \endverbatim                
 
 */

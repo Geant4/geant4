@@ -23,30 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessVector inline methods implementation
 //
-// $Id: G4ProcessVector.icc 71231 2013-06-12 13:06:28Z gcosmo $
-//
+// --------------------------------------------------------------------
+
 inline G4bool G4ProcessVector::operator==(const G4ProcessVector &right) const
 {
   return (this == (G4ProcessVector *) &right);
 }
 
-inline G4int G4ProcessVector::entries() const
+inline size_t G4ProcessVector::entries() const
 {
   return pProcVector->size();
 }
 
-inline G4int G4ProcessVector::size() const
+inline size_t G4ProcessVector::size() const
 {
   return pProcVector->size();
 }
 
-inline G4int G4ProcessVector::length() const
+inline size_t G4ProcessVector::length() const
 {
   return pProcVector->size();
 }
 
-inline G4int G4ProcessVector::index(G4VProcess* aProcess) const
+inline size_t G4ProcessVector::index(G4VProcess* aProcess) const
 {
   G4ProcVector::iterator it;
   size_t j=0;

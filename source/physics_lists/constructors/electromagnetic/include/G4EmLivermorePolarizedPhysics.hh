@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.hh 66704 2013-01-10 18:20:17Z gunter $
 
 #ifndef G4EmLivermorePolarizedPhysics_h
 #define G4EmLivermorePolarizedPhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,10 +36,8 @@
 class G4EmLivermorePolarizedPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmLivermorePolarizedPhysics(G4int ver = 1);
 
-  // obsolete
-  G4EmLivermorePolarizedPhysics(G4int ver, const G4String&);
+  explicit G4EmLivermorePolarizedPhysics(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmLivermorePolarizedPhysics();
 
@@ -48,6 +46,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

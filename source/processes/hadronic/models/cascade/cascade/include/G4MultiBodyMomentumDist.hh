@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiBodyMomentumDist.hh 71719 2013-06-21 00:01:54Z mkelsey $
 // Author:  Michael Kelsey (SLAC)
 // Date:    7 March 2013
 //

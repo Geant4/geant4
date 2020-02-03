@@ -1,5 +1,4 @@
 // -*- C++ -*-
-// $Id:$
 // ---------------------------------------------------------------------------
 //
 // This file is a part of the CLHEP - a Class Library for High Energy Physics.
@@ -29,7 +28,7 @@ namespace HepGeom {
   class Plane3D {
   protected:
     T a_, b_, c_, d_;
- 
+
   public:
     /**
      *  Default constructor - creates plane z=0. */
@@ -53,24 +52,32 @@ namespace HepGeom {
       a_ = n.x(); b_ = n.y(); c_ = n.z(); d_ = -n*p1;
     }
 
-    /** Copy constructor.
-     * Plane3D<double> has two constructors:
-     * from Plane3D<double> (provided by compiler) and
-     * from Plane3D<float> (defined in this file).
-     * Plane3D<float> has only the last one.
-     */
+    /**
+     * Copy constructor. */
+    Plane3D(const Plane3D<T> &) = default;
+
+    /**
+     * Constructor for Plane3D<double> from Plane3D<float>. */
+    template<typename U = T,
+             typename = typename std::enable_if<!std::is_same<U,float>::value >::type>
     Plane3D(const Plane3D<float> & p)
       : a_(p.a_), b_(p.b_), c_(p.c_), d_(p.d_) {}
 
     /**
+     * Move constructor. */
+    Plane3D(Plane3D<T> &&) = default;
+
+    /**
      * Destructor. */
-    ~Plane3D() {};
+    ~Plane3D() = default;
 
     /**
      * Assignment. */
-    Plane3D<T> & operator=(const Plane3D<T> & p) {
-      a_ = p.a_; b_ = p.b_; c_ = p.c_; d_ = p.d_; return *this;
-    }
+    Plane3D<T> & operator=(const Plane3D<T> &) = default;
+
+    /**
+     * Move assignment. */
+    Plane3D<T> & operator=(Plane3D<T> &&) = default;
 
     /**
      * Returns the a-coefficient in the plane equation: a*x+b*y+c*z+d=0. */

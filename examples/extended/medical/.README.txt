@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/.README.txt"
 ///\brief Examples medical README page
@@ -15,6 +14,11 @@ file, where the Hounsfield numbers are converted to materials and
 densities so that it can be used by GEANT4. It serves also to create 
 a GEANT4 geometry based on the DICOM file information using the 
 G4PhantomParameterisation. 
+
+\link ExampleDICOM2 DICOM2 \endlink
+
+This example demonstrates how to reuse the DICOM example library 
+for another application.
 
 \link Examples_dna dna \endlink
 

@@ -26,7 +26,6 @@
 /// \file RE06/include/RE06DetectorConstruction.hh
 /// \brief Definition of the RE06DetectorConstruction class
 //
-// $Id: RE06DetectorConstruction.hh 83381 2014-08-21 14:18:13Z gcosmo $
 // 
 
 #ifndef RE06DetectorConstruction_h

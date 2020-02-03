@@ -54,7 +54,7 @@ public:
   ~UltraOpticalHit();
   UltraOpticalHit(const UltraOpticalHit&);
   const UltraOpticalHit& operator=(const UltraOpticalHit&);
-  int operator==(const UltraOpticalHit&) const;
+  G4bool operator==(const UltraOpticalHit&) const;
   
   inline void* operator new(size_t);
   inline void  operator delete(void*);

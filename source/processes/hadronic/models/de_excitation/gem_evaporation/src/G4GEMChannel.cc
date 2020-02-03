@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMChannel.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -36,36 +35,40 @@
 // J. M. Quesada (October 2009) fixed bug in CoulombBarrier calculation 
 
 #include "G4GEMChannel.hh"
+#include "G4VCoulombBarrier.hh"
+#include "G4GEMCoulombBarrier.hh"
 #include "G4PairingCorrection.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4RandomDirection.hh"
 
 G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
-                           G4GEMProbability * aEmissionStrategy,
-                           G4VCoulombBarrier * aCoulombBarrier) :
+                           G4GEMProbability * aEmissionStrategy) :
   G4VEvaporationChannel(aName),
   A(theA),
   Z(theZ),
-  theEvaporationProbabilityPtr(aEmissionStrategy),
-  theCoulombBarrierPtr(aCoulombBarrier),
   EmissionProbability(0.0),
-  MaximalKineticEnergy(-CLHEP::GeV)
+  MaximalKineticEnergy(-CLHEP::GeV),
+  theEvaporationProbabilityPtr(aEmissionStrategy)
 { 
+  theCoulombBarrierPtr = new G4GEMCoulombBarrier(theA, theZ);
+  theEvaporationProbabilityPtr->SetCoulomBarrier(theCoulombBarrierPtr);
   theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
   MyOwnLevelDensity = true;
   EvaporatedMass = G4NucleiProperties::GetNuclearMass(A, Z);
   ResidualMass = CoulombBarrier = 0.0;
   fG4pow = G4Pow::GetInstance(); 
   ResidualZ = ResidualA = 0;
-  pairingCorrection = G4PairingCorrection::GetInstance();
+  fNucData = G4NuclearLevelData::GetInstance();
 }
 
 G4GEMChannel::~G4GEMChannel()
 {
   if (MyOwnLevelDensity) { delete theLevelDensityPtr; }
+  delete theCoulombBarrierPtr;
 }
 
 G4double G4GEMChannel::GetEmissionProbability(G4Fragment* fragment)
@@ -84,11 +87,11 @@ G4double G4GEMChannel::GetEmissionProbability(G4Fragment* fragment)
   EmissionProbability = 0.0;
 
   // Only channels which are physically allowed are taken into account 
-  if (ResidualA >= ResidualZ && ResidualZ > 0 && ResidualA >= A) {
+  if (ResidualA >= ResidualZ && ResidualZ >= 0 && ResidualA >= A) {
   
     //Effective excitation energy
     G4double ExEnergy = fragment->GetExcitationEnergy()
-      - pairingCorrection->GetPairingCorrection(anA, aZ);
+      - fNucData->GetPairingCorrection(aZ, anA);
     if(ExEnergy > 0.0) { 
       ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
       G4double FragmentMass = fragment->GetGroundStateMass();
@@ -126,8 +129,8 @@ G4Fragment* G4GEMChannel::EmittedFragment(G4Fragment* theNucleus)
   G4Fragment* evFragment = 0;
   G4double evEnergy = SampleKineticEnergy(*theNucleus) + EvaporatedMass;
 
-  G4ThreeVector momentum(IsotropicVector
-    (std::sqrt((evEnergy - EvaporatedMass)*(evEnergy + EvaporatedMass))));
+  G4ThreeVector momentum = G4RandomDirection()*
+    std::sqrt((evEnergy - EvaporatedMass)*(evEnergy + EvaporatedMass));
   
   G4LorentzVector EvaporatedMomentum(momentum, evEnergy);
   G4LorentzVector ResidualMomentum = theNucleus->GetMomentum();
@@ -141,16 +144,6 @@ G4Fragment* G4GEMChannel::EmittedFragment(G4Fragment* theNucleus)
   return evFragment; 
 } 
 
-G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
-{
-  G4FragmentVector * theResult = new G4FragmentVector();
-  G4Fragment* frag0 = new G4Fragment(theNucleus);
-  G4Fragment* frag1 = EmittedFragment(frag0);
-  if(frag1) { theResult->push_back(frag1); }
-  theResult->push_back(frag0);
-  return theResult;
-} 
-
 G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
 // Samples fragment kinetic energy.
 {
@@ -161,7 +154,7 @@ G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
 
   //                       ***RESIDUAL***
   //JMQ (September 2009) the following quantities  refer to the RESIDUAL:
-  G4double delta0 = pairingCorrection->GetPairingCorrection(ResidualA,ResidualZ);
+  G4double delta0 = fNucData->GetPairingCorrection(ResidualZ,ResidualA);
   G4double Ux = (2.5 + 150.0/ResidualA)*MeV;
   G4double Ex = Ux + delta0;
   G4double InitialLevelDensity;
@@ -170,8 +163,8 @@ G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
   //                       ***PARENT***
   //JMQ (September 2009) the following quantities   refer to the PARENT:
   
-  G4double deltaCN = pairingCorrection->GetPairingCorrection(fragment.GetA_asInt(),
-							     fragment.GetZ_asInt());
+  G4double deltaCN = fNucData->GetPairingCorrection(fragment.GetZ_asInt(),
+						    fragment.GetA_asInt());
   G4double aCN = theLevelDensityPtr->LevelDensityParameter(fragment.GetA_asInt(),
 							   fragment.GetZ_asInt(),
 							   U-deltaCN);   
@@ -196,11 +189,10 @@ G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
   
   G4double Spin = theEvaporationProbabilityPtr->GetSpin();
   //JMQ  BIG BUG fixed: hbarc instead of hbar_Planck !!!!
-  //     it was fixed in total probability (for this channel) but remained still here!!
-  //    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
+  //     it was also fixed in total probability 
   G4double gg = (2.0*Spin+1.0)*EvaporatedMass/(pi2* hbarc*hbarc);
   //
-  //JMQ  fix on Rb and  geometrical cross sections according to Furihata's paper 
+  //JMQ  fix on Rb and geometrical cross sections according to Furihata's paper 
   //                      (JAERI-Data/Code 2001-105, p6)
   G4double Rb = 0.0; 
   if (A > 4) 
@@ -253,19 +245,6 @@ G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
     
   return KineticEnergy;
 } 
-
-G4ThreeVector G4GEMChannel::IsotropicVector(const G4double Magnitude)
-    // Samples a isotropic random vectorwith a magnitude given by Magnitude.
-    // By default Magnitude = 1.0
-{
-  G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
-  G4double Phi = twopi*G4UniformRand();
-  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-		       Magnitude*std::sin(Phi)*SinTheta,
-		       Magnitude*CosTheta);
-  return Vector;
-}
 
 void G4GEMChannel::Dump() const
 {

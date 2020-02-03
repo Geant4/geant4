@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 78112 2013-12-03 15:01:19Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +18,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+November 28th, 2019 I.Hrivnacova (ParN02-V10-05-00)
+- Fixed Doxygen warnings
+
+October 14th, 2016 G.Folger (ParN02-V10-02-00)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 December 3rd, 2013 I.Hrivnacova - ParN02-V09-06-01
 -------------------------
 - Fixed .README.N02

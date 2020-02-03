@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 81623 2014-06-04 08:10:21Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -79,6 +78,7 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4TrackStack.hh
         G4TrajectoryContainer.hh
         G4UserEventAction.hh
+        G4MultiEventAction.hh
         G4UserStackingAction.hh
         G4VPrimaryGenerator.hh
         G4VUserEventInformation.hh
@@ -114,6 +114,7 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4TrackStack.cc
         G4TrajectoryContainer.cc
         G4UserEventAction.cc
+        G4MultiEventAction.cc
         G4UserStackingAction.cc
         G4VPrimaryGenerator.cc
 	G4GeneralParticleSourceData.cc

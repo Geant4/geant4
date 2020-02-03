@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PairingCorrection.hh 69585 2013-05-08 14:17:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -41,15 +40,9 @@
 
 class G4PairingCorrection
 {
-private:
-  
-  G4PairingCorrection();
-  
-  static G4PairingCorrection* theInstance;
-   
 public:
 	
-  static G4PairingCorrection* GetInstance();
+  explicit G4PairingCorrection();
   
   ~G4PairingCorrection();
 

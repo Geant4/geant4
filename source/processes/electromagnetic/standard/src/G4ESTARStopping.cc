@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ESTARStopping.cc 68797 2013-08-07 13:27:11Z  $
 //
 //---------------------------------------------------------------------------
 //
@@ -108,7 +107,7 @@ G4double G4ESTARStopping::GetElectronicDEDX(G4int i, G4double energy)
  
 void G4ESTARStopping::Initialise()
 {
-  dirPath = getenv("G4LEDATA");
+  dirPath = std::getenv("G4LEDATA");
   if(!dirPath) {
     G4Exception("G4ESTARStopping()","em0006",FatalException,
 		"Environment variable G4LEDATA not defined");

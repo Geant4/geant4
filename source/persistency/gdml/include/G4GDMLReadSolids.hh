@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh 82922 2014-07-18 15:56:35Z gcosmo $
 //
 //
 // class G4GDMLReadSolids
@@ -44,11 +43,13 @@
 #include "G4GDMLReadMaterials.hh"
 #include "G4ExtrudedSolid.hh"
 #include "G4MultiUnion.hh"
+#include "G4MaterialPropertiesTable.hh"
 
 class G4VSolid;
 class G4QuadrangularFacet;
 class G4TriangularFacet;
 class G4SurfaceProperty;
+class G4OpticalSurface;
 
 class G4GDMLReadSolids : public G4GDMLReadMaterials
 {
@@ -87,6 +88,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void GenericPolyhedraRead(const xercesc::DOMElement* const);
    G4QuadrangularFacet* QuadrangularRead(const xercesc::DOMElement* const);
    void ReflectedSolidRead(const xercesc::DOMElement* const);
+   void ScaledSolidRead(const xercesc::DOMElement* const);
    G4ExtrudedSolid::ZSection SectionRead(const xercesc::DOMElement* const,G4double);
    void SphereRead(const xercesc::DOMElement* const);
    void TessellatedRead(const xercesc::DOMElement* const);
@@ -106,6 +108,10 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    zplaneType ZplaneRead(const xercesc::DOMElement* const);
    rzPointType RZPointRead(const xercesc::DOMElement* const);
    void OpticalSurfaceRead(const xercesc::DOMElement* const);
+   void PropertyRead(const xercesc::DOMElement* const,G4OpticalSurface*);
+
+private:
+  std::map<G4String, G4MaterialPropertyVector*> mapOfMatPropVects;
   
 };
 

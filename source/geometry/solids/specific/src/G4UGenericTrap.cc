@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-// 
 // Implementation of G4UGenericTrap wrapper class
+//
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4GenericTrap.hh"
@@ -35,11 +33,14 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
+#include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
 #include "G4Polyhedron.hh"
 #include "G4PolyhedronArbitrary.hh"
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex UGenericTrapMutex = G4MUTEX_INITIALIZER; }
+using namespace CLHEP;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -47,16 +48,10 @@ namespace { G4Mutex UGenericTrapMutex = G4MUTEX_INITIALIZER; }
 //
 G4UGenericTrap::G4UGenericTrap(const G4String& name, G4double halfZ,
                                const std::vector<G4TwoVector>& vertices)
-  : G4USolid(name, new UGenericTrap())
+  : Base_t(name), fVisSubdivisions(0)
 {
   SetZHalfLength(halfZ);
-  std::vector<UVector2> v;
-  for (size_t n=0; n<vertices.size(); ++n)
-  {
-    v.push_back(UVector2(vertices[n].x(),vertices[n].y()));
-  }
-  GetShape()->SetName(name);
-  GetShape()->Initialise(v);
+  Initialise(vertices);
 }
 
 
@@ -66,7 +61,7 @@ G4UGenericTrap::G4UGenericTrap(const G4String& name, G4double halfZ,
 //                            for usage restricted to object persistency.
 //
 G4UGenericTrap::G4UGenericTrap(__void__& a)
-  : G4USolid(a)
+  : Base_t(a), fVisSubdivisions(0), fVertices()
 {
 }
 
@@ -84,8 +79,10 @@ G4UGenericTrap::~G4UGenericTrap()
 //
 // Copy constructor
 //
-G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap &source)
-  : G4USolid(source)
+G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap& source)
+  : Base_t(source), fVisSubdivisions(source.fVisSubdivisions),
+    fVertices(source.fVertices)
+    
 {
 }
 
@@ -95,11 +92,13 @@ G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap &source)
 // Assignment operator
 //
 G4UGenericTrap&
-G4UGenericTrap::operator=(const G4UGenericTrap &source)
+G4UGenericTrap::operator=(const G4UGenericTrap& source)
 {
   if (this == &source) return *this;
   
-  G4USolid::operator=( source );
+  Base_t::operator=( source );
+  fVertices = source.fVertices;
+  fVisSubdivisions = source.fVisSubdivisions;
   
   return *this;
 }
@@ -110,49 +109,142 @@ G4UGenericTrap::operator=(const G4UGenericTrap &source)
 //
 G4double G4UGenericTrap::GetZHalfLength() const
 {
-  return GetShape()->GetZHalfLength();
+  return GetDZ();
 }
 G4int G4UGenericTrap::GetNofVertices() const
 {
-  return GetShape()->GetNofVertices();
+  return fVertices.size();
 }
 G4TwoVector G4UGenericTrap::GetVertex(G4int index) const
 {
-  UVector2 v = GetShape()->GetVertex(index);
-  return G4TwoVector(v.x, v.y);
+  return G4TwoVector(GetVerticesX()[index], GetVerticesY()[index]);
 }
 const std::vector<G4TwoVector>& G4UGenericTrap::GetVertices() const
 {
-  G4AutoLock l(&UGenericTrapMutex);
-  std::vector<UVector2> v = GetShape()->GetVertices();
-  static std::vector<G4TwoVector> vertices; vertices.clear();
-  for (size_t n=0; n<v.size(); ++n)
-  {
-    vertices.push_back(G4TwoVector(v[n].x,v[n].y));
-  }
-  return vertices;
+  return fVertices;
 }
 G4double G4UGenericTrap::GetTwistAngle(G4int index) const
 {
-  return GetShape()->GetTwistAngle(index);
+  return GetTwist(index);
 }
 G4bool G4UGenericTrap::IsTwisted() const
 {
-  return GetShape()->IsTwisted();
+  return !IsPlanar();
 }
 G4int G4UGenericTrap::GetVisSubdivisions() const
 {
-  return GetShape()->GetVisSubdivisions();
+  return fVisSubdivisions;
 }
 
 void G4UGenericTrap::SetVisSubdivisions(G4int subdiv)
 {
-  GetShape()->SetVisSubdivisions(subdiv);
+  fVisSubdivisions = subdiv;
 }
 
 void G4UGenericTrap::SetZHalfLength(G4double halfZ)
 {
-  GetShape()->SetZHalfLength(halfZ);
+  SetDZ(halfZ);
+}
+
+void G4UGenericTrap::Initialise(const std::vector<G4TwoVector>& v)
+{
+  G4double verticesx[8], verticesy[8];
+  for (G4int i=0; i<8; ++i)
+  {
+    fVertices.push_back(v[i]);
+    verticesx[i] = v[i].x();
+    verticesy[i] = v[i].y();
+  }
+  Initialize(verticesx, verticesy, GetZHalfLength());
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UGenericTrap::BoundingLimits(G4ThreeVector& pMin,
+                                    G4ThreeVector& pMax) const
+{
+  U3Vector vmin, vmax;
+  Extent(vmin,vmax);
+  pMin.set(vmin.x(),vmin.y(),vmin.z());
+  pMax.set(vmax.x(),vmax.y(),vmax.z());
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UGenericTrap::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    StreamInfo(G4cout);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UGenericTrap::CalculateExtent(const EAxis pAxis,
+                                const G4VoxelLimits& pVoxelLimit,
+                                const G4AffineTransform& pTransform,
+                                      G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  BoundingLimits(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // Set bounding envelope (benv) and calculate extent
+  //
+  // To build the bounding envelope with plane faces each side face of
+  // the trapezoid is subdivided in triangles. Subdivision is done by
+  // duplication of vertices in the bases in a way that the envelope be
+  // a convex polyhedron (some faces of the envelope can be degenerate)
+  //
+  G4double dz = GetZHalfLength();
+  G4ThreeVectorList baseA(8), baseB(8);
+  for (G4int i=0; i<4; ++i)
+  {
+    G4TwoVector va = GetVertex(i);
+    G4TwoVector vb = GetVertex(i+4);
+    baseA[2*i].set(va.x(),va.y(),-dz);
+    baseB[2*i].set(vb.x(),vb.y(), dz);
+  }
+  for (G4int i=0; i<4; ++i)
+  {
+    G4int k1=2*i, k2=(2*i+2)%8;
+    G4double ax = (baseA[k2].x()-baseA[k1].x());
+    G4double ay = (baseA[k2].y()-baseA[k1].y());
+    G4double bx = (baseB[k2].x()-baseB[k1].x());
+    G4double by = (baseB[k2].y()-baseB[k1].y());
+    G4double znorm = ax*by - ay*bx;
+    baseA[k1+1] = (znorm < 0.0) ? baseA[k2] : baseA[k1];
+    baseB[k1+1] = (znorm < 0.0) ? baseB[k1] : baseB[k2];
+  }
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -172,7 +264,7 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
   G4int i;
   if(IsTwisted())
   {
-    if ( GetVisSubdivisions()!= 0 )
+    if ( GetVisSubdivisions() != 0 )
     {
       subdivisions=GetVisSubdivisions();
     }
@@ -181,7 +273,7 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
       // Estimation of Number of Subdivisions for smooth visualisation
       //
       G4double maxTwist=0.;
-      for(i=0; i<4; i++)
+      for(i=0; i<4; ++i)
       {
         if(GetTwistAngle(i)>maxTwist) { maxTwist=GetTwistAngle(i); }
       }
@@ -189,10 +281,8 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
       // Computes bounding vectors for the shape
       //
       G4double Dx,Dy;
-      UVector3 minBox = GetShape()->GetMinimumBBox();
-      UVector3 maxBox = GetShape()->GetMaximumBBox();
-      G4ThreeVector minVec(minBox.x(), minBox.y(), minBox.z());
-      G4ThreeVector maxVec(maxBox.x(), maxBox.y(), maxBox.z());
+      G4ThreeVector minVec, maxVec;
+      BoundingLimits(minVec,maxVec);
       Dx = 0.5*(maxVec.x()- minVec.y());
       Dy = 0.5*(maxVec.y()- minVec.y());
       if (Dy > Dx)  { Dx=Dy; }
@@ -210,20 +300,20 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
 
   // Add Vertex
   //
-  for (i=0;i<4;i++)
+  for (i=0; i<4; ++i)
   {
     polyhedron->AddVertex(G4ThreeVector(GetVertex(i).x(),
                                         GetVertex(i).y(),-fDz));
   }
-  for( i=0;i<subdivisions;i++)
+  for(i=0; i<subdivisions; ++i)
   {
-    for(G4int j=0;j<4;j++)
+    for(G4int j=0; j<4 ; ++j)
     {
       G4TwoVector u=GetVertex(j)+cf*(i+1)*( GetVertex(j+4)-GetVertex(j));
       polyhedron->AddVertex(G4ThreeVector(u.x(),u.y(),-fDz+cf*2*fDz*(i+1)));
     }    
   }
-  for (i=4;i<8;i++)
+  for (i=4; i<8; ++i)
   {
     polyhedron->AddVertex(G4ThreeVector(GetVertex(i).x(),
                                         GetVertex(i).y(),fDz));
@@ -232,7 +322,7 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
   // Add Facets
   //
   polyhedron->AddFacet(1,4,3,2);  //Z-plane
-  for (i=0;i<subdivisions+1;i++)
+  for (i=0; i<subdivisions+1; ++i)
   {
     G4int is=i*4;
     polyhedron->AddFacet(5+is,8+is,4+is,1+is);

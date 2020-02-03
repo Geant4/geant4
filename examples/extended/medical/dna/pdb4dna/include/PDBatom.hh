@@ -37,7 +37,6 @@
 // november 2013
 // --------------------------------------------------------------
 //
-// $Id$
 //
 /// \file PDBatom.hh
 /// \brief Definition of the Atom class

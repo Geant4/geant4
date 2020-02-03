@@ -27,7 +27,10 @@
 /// \brief Implementation of the MCTruthTrackInformation class
 //
 //
+<<<<<<< HEAD
 // $Id: MCTruthTrackInformation.cc 73446 2013-08-27 11:32:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------
@@ -37,14 +40,38 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+<<<<<<< HEAD
 
 #include "MCTruthTrackInformation.hh"
 
+=======
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "MCTruthTrackInformation.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 MCTruthTrackInformation::MCTruthTrackInformation() 
+ : G4VUserTrackInformation(),
+   fDirectParent(true)
 {
+<<<<<<< HEAD
   directParent = true;
 }
 
 MCTruthTrackInformation::~MCTruthTrackInformation() 
 {
 } 
+=======
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+MCTruthTrackInformation::~MCTruthTrackInformation() 
+{
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

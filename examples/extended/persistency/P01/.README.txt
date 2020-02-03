@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "persistency/P01/.README.txt"
 ///\brief Example P01 README page
@@ -76,6 +75,9 @@ The second remark is that there is an unfortunate clash of names as
 far as G4String class is concerned. The header of G4String class
 defines __G4String which happens to be the name of a variable used
 within the generated dictionary code. The solution for that is to do
-#undef __G4String in include/ExP01Classes.hh file.
+\verbatim
+#undef __G4String
+\endverbatim
+in include/ExP01Classes.hh file.
 
 */

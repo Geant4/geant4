@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 92373 2015-08-31 08:51:33Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +18,35 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+26-11-19 I. Hrivnacova (AnaEx03-V10-05-00)
+- Fixed Doxygen warning
+
+15-10-18 G. Cosmo (AnaEx03-V10-04-01)
+- Added missing include of G4SteateManager.hh in DetectorConstruction source.
+
+05-07-18 I. Hrivnacova (AnaEx03-V10-04-00)
+- Macro & commands review:
+  - Removed obsolete /N03 top command directory
+  - Added protection against warnings issued from ReinitializeGeometry() if 
+    called in PreInit phase
+  - Added test for all commands defined in this example in AnaEx01.in
+  - Updated README files
+
+27-07-17 I. Hrivnacova (AnaEx03-V10-03-00)
+- Coding guidelines: removed redundant empty lines
+
+26-10-16 I. Hrivnacova (AnaEx03-V10-02-02)
+- Updated main program according to basic examples
+
+04-07-16 I. Hrivnacova (AnaEx03-V10-02-01)
+- Fixes for Doxygen documentation
+
+01-07-16 I. Hrivnacova (AnaEx03-V10-02-00)
+- Coding guidelines (function, members names)
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 30-08-15 I. Hrivnacova (AnaEx03-V10-01-02)
 - Corrected previous update which caused compilation error
 

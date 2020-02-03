@@ -6,7 +6,7 @@
 
 #include "../lina/vec3f"
 
-#include "sf_vec"
+#include "sf_vec3f"
 #include "sf_string"
 #include "sf_enum"
 #include "node"
@@ -27,6 +27,7 @@ public:
   sf_string modeling; 
   sf_string font;
   sf<float> font_size;
+  sf_enum<sg::font_modeling> font_modeling;
   sf_string encoding; 
   sf<bool> smoothing;
   sf<bool> hinting;
@@ -34,8 +35,8 @@ public:
   sf_enum<sg::vjust> vjust;
   sf<float> scale;
   // For 3D text :
-  sf_vec<vec3f,float> x_orientation;
-  sf_vec<vec3f,float> y_orientation;
+  sf_vec3f x_orientation;
+  sf_vec3f y_orientation;
   // For bitmap text :
   sf<bool> rotated;
 
@@ -43,39 +44,41 @@ public:
   sf<float> line_width;
   sf<lpat> line_pattern;
   sf<bool> enforced;
-  sf_vec<vec3f,float> translation;
+  sf_vec3f translation;
 
   // for text_freetype tessellation :
   sf_enum<winding_type> front_face;
+
+  sf_string options; //for gopaw.
 public:
-  virtual const std::vector<field_desc>& node_fields() const {
+  virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::text_style)
-    static std::vector<field_desc> s_v;
-    if(s_v.empty()) {
-      s_v = parent::node_fields();
-      TOOLS_ADD_FIELD_DESC(visible)
-      TOOLS_ADD_FIELD_DESC(color)
+    static const desc_fields s_v(parent::node_desc_fields(),21, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(visible),
+      TOOLS_ARG_FIELD_DESC(color),
 
-      TOOLS_ADD_FIELD_DESC(modeling);
-      TOOLS_ADD_FIELD_DESC(font)
-      TOOLS_ADD_FIELD_DESC(font_size)
-      TOOLS_ADD_FIELD_DESC(encoding);
-      TOOLS_ADD_FIELD_DESC(smoothing)
-      TOOLS_ADD_FIELD_DESC(hinting)
-      TOOLS_ADD_FIELD_DESC(hjust)
-      TOOLS_ADD_FIELD_DESC(vjust)
-      TOOLS_ADD_FIELD_DESC(scale)
-      TOOLS_ADD_FIELD_DESC(x_orientation)
-      TOOLS_ADD_FIELD_DESC(y_orientation)
-      TOOLS_ADD_FIELD_DESC(rotated)
+      TOOLS_ARG_FIELD_DESC(modeling),
+      TOOLS_ARG_FIELD_DESC(font),
+      TOOLS_ARG_FIELD_DESC(font_size),
+      TOOLS_ARG_FIELD_DESC(font_modeling),
+      TOOLS_ARG_FIELD_DESC(encoding),
+      TOOLS_ARG_FIELD_DESC(smoothing),
+      TOOLS_ARG_FIELD_DESC(hinting),
+      TOOLS_ARG_FIELD_DESC(hjust),
+      TOOLS_ARG_FIELD_DESC(vjust),
+      TOOLS_ARG_FIELD_DESC(scale),
+      TOOLS_ARG_FIELD_DESC(x_orientation),
+      TOOLS_ARG_FIELD_DESC(y_orientation),
+      TOOLS_ARG_FIELD_DESC(rotated),
 
-      TOOLS_ADD_FIELD_DESC(line_width)
-      TOOLS_ADD_FIELD_DESC(line_pattern)
-      TOOLS_ADD_FIELD_DESC(enforced)
-      TOOLS_ADD_FIELD_DESC(translation)
+      TOOLS_ARG_FIELD_DESC(line_width),
+      TOOLS_ARG_FIELD_DESC(line_pattern),
+      TOOLS_ARG_FIELD_DESC(enforced),
+      TOOLS_ARG_FIELD_DESC(translation),
 
-      TOOLS_ADD_FIELD_DESC(front_face)
-    }
+      TOOLS_ARG_FIELD_DESC(front_face),
+      TOOLS_ARG_FIELD_DESC(options)
+    );
     return s_v;
   }
 private:
@@ -86,6 +89,7 @@ private:
     add_field(&modeling); 
     add_field(&font);
     add_field(&font_size);
+    add_field(&font_modeling);
     add_field(&encoding); 
     add_field(&smoothing);
     add_field(&hinting);
@@ -102,17 +106,19 @@ private:
     add_field(&translation);
 
     add_field(&front_face);
+    add_field(&options);
   }
 public:
   text_style()
   :parent()
   ,visible(true)
-  ,color(colorf::black())
-  ,back_color(colorf::white())
+  ,color(colorf_black())
+  ,back_color(colorf_white())
   ,back_shadow(0)
   ,modeling()
   ,font(font_hershey())
   ,font_size(10)
+  ,font_modeling(font_filled)
   ,encoding(encoding_none())
   ,smoothing(false)
   ,hinting(false)
@@ -127,6 +133,7 @@ public:
   ,enforced(false)
   ,translation(vec3f(0,0,0))
   ,front_face(winding_ccw)
+  ,options("")
   {
     add_fields();
   }
@@ -140,6 +147,7 @@ public:
   ,modeling(a_from.modeling)
   ,font(a_from.font)
   ,font_size(a_from.font_size)
+  ,font_modeling(a_from.font_modeling)
   ,encoding(a_from.encoding)
   ,smoothing(a_from.smoothing)
   ,hinting(a_from.hinting)
@@ -154,6 +162,7 @@ public:
   ,enforced(a_from.enforced)
   ,translation(a_from.translation)
   ,front_face(a_from.front_face)
+  ,options(a_from.options)
   {
     add_fields();
   }
@@ -166,6 +175,7 @@ public:
     modeling = a_from.modeling;
     font = a_from.font;
     font_size = a_from.font_size;
+    font_modeling = a_from.font_modeling;
     encoding = a_from.encoding;
     smoothing = a_from.smoothing;
     hinting = a_from.hinting;
@@ -180,11 +190,11 @@ public:
     enforced = a_from.enforced;
     translation = a_from.translation;
     front_face = a_from.front_face;
+    options = a_from.options;
     return *this;
   }
 public:
-  bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,
-                          const std::string& a_s){
+  bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s){
     style_parser sp;
 
     sp.visible(visible.value());
@@ -196,6 +206,7 @@ public:
     sp.modeling(modeling.value());
     sp.font(font.value());
     sp.font_size(font_size.value());
+    sp.font_modeling(font_modeling.value());
     sp.encoding(encoding.value());
     sp.smoothing(smoothing.value());
     sp.hinting(hinting.value());
@@ -209,6 +220,7 @@ public:
     sp.enforced(enforced.value());
     sp.translation(translation.value());
     sp.front_face(front_face.value());
+    sp.options(options.value());
 
     if(!sp.parse(a_out,a_cmaps,a_s)) {
       a_out << "tools::sg::text_style::from_string :"
@@ -226,6 +238,7 @@ public:
     modeling.value(sp.modeling());
     font.value(sp.font());
     font_size.value(sp.font_size());
+    font_modeling.value(sp.font_modeling());
     encoding.value(sp.encoding());
     smoothing.value(sp.smoothing());
     hinting.value(sp.hinting());
@@ -239,6 +252,7 @@ public:
     enforced.value(sp.enforced());
     translation.value(sp.translation());
     front_face = sp.front_face();
+    options = sp.options();
 
     return true;
   }

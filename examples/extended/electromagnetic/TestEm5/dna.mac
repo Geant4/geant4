@@ -1,0 +1,53 @@
+# macro file for TestEm5.cc    
+#     		    
+#/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 8
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat G4_WATER
+/testem/det/setAbsThick 1 mm
+/testem/det/setAbsYZ    1 mm
+#
+/testem/phys/addPhysics dna_opt2
+#/testem/phys/addPhysics dna_opt4
+#/testem/phys/addPhysics dna_opt6
+#
+/run/setCut 1 nm
+#
+/process/em/deexcitationIgnoreCut true
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger true
+/process/em/augerCascade true
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle e-
+# 
+/gun/energy 10 keV
+# 
+/analysis/setFileName dna
+/analysis/h1/set  3 100 0 10 keV            #gamma: energy at vertex
+/analysis/h1/set  5 100 0.001 10 keV log10  #gamma: energy at vertex (log scale)
+/analysis/h1/set  51 100 0 10 keV           #gamma(Fluo): energy at vertex
+/analysis/h1/set  53 100 0.001 10 keV log10 #gamma(Fluo): energy at vertex (log scale)
+/analysis/h1/set  55 100 0 10 keV           #gamma(PIXE): energy at vertex
+/analysis/h1/set  57 100 0.001 10 keV log10 #gamma(PIXE): energy at vertex (log scale)
+/analysis/h1/set  59 100 0 10 keV           #gamma(DNA): energy at vertex
+/analysis/h1/set  61 100 0.001 10 keV log10 #gamma(DNA): energy at vertex (log scale)
+#
+/analysis/h1/set  2 100 0 10 keV            #e-: energy at vertex
+/analysis/h1/set  4 100 0.001 10 keV log10  #e-: energy at vertex (log scale)
+/analysis/h1/set  50 100 0 10 keV           #e-(Fluo): energy at vertex
+/analysis/h1/set  52 100 0.001 10 keV log10 #e-(Fluo): energy at vertex (log scale)
+/analysis/h1/set  54 100 0 10 keV           #e-(PIXE): energy at vertex
+/analysis/h1/set  56 100 0.001 10 keV log10 #e-(PIXE): energy at vertex (log scale)
+/analysis/h1/set  58 100 0 10 keV           #e-(DNA): energy at vertex
+/analysis/h1/set  60 100 0.001 10 keV log10 #e-(DNA): energy at vertex (log scale)
+#
+/run/printProgress 100
+# 
+/run/beamOn 10000

@@ -27,7 +27,10 @@
 /// \brief Implementation of the RunAction class
 //
 //
+<<<<<<< HEAD
 // $Id: RunAction.cc 74272 2013-10-02 14:48:50Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

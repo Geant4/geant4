@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKineticNucleon.cc 66785 2013-01-12 15:10:13Z gcosmo $
 //
 #include "G4VKineticNucleon.hh"
 
@@ -46,12 +45,12 @@ G4VKineticNucleon::~G4VKineticNucleon()
 //{}
 
 
-int G4VKineticNucleon::operator==(const G4VKineticNucleon &right) const
+G4bool G4VKineticNucleon::operator==(const G4VKineticNucleon &right) const
 {
 	return this == &right;
 }
 
-int G4VKineticNucleon::operator!=(const G4VKineticNucleon &right) const
+G4bool G4VKineticNucleon::operator!=(const G4VKineticNucleon &right) const
 {
 	return this != &right;
 

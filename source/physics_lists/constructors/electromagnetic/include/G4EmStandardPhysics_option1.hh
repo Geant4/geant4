@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.hh 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,6 +46,7 @@
 #define G4EmStandardPhysics_option1_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,10 +55,7 @@ class G4EmStandardPhysics_option1 : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmStandardPhysics_option1(G4int ver = 1);
-
-  // obsolete
-  G4EmStandardPhysics_option1(G4int ver, const G4String& name);
+  explicit G4EmStandardPhysics_option1(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmStandardPhysics_option1();
 
@@ -67,6 +64,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

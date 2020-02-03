@@ -27,7 +27,6 @@
 /// \brief Definition of the G4atomic class
 //
 //
-// $Id: G4atomic.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// This is an friendly implementation of the STL atomic class.

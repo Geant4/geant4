@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.hh,v 1.1 2012-09-20 mraine Exp $
 // -------------------------------------------------------------------
 
 #ifndef RunAction_h
@@ -79,6 +78,7 @@ private:
   // Attributes
   //
   TrackingAction* fpTrackingAction;
+  G4String fFileName; 
   bool fInitialized;
   bool fDebug;
   

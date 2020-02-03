@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
-// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Pekka Kaitaniemi, HIP (initial translation of ablav3p)
+// Aleksandra Kelic, GSI (ABLA07 code)
+// Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
 #define ABLAXX_IN_GEANT4_MODE 1
@@ -73,6 +74,21 @@ public:
   G4double dm[PACESIZEROWS][PACESIZECOLS];
 };
 
+#define MASSIZEROWS 154
+#define MASSIZECOLS 13
+
+class G4Mexp {
+
+public:
+  G4Mexp() {};
+
+  ~G4Mexp() {};
+  
+  G4double massexp[MASSIZEROWS][MASSIZECOLS];
+  G4double bind[MASSIZEROWS][MASSIZECOLS];
+  G4int mexpiop[MASSIZEROWS][MASSIZECOLS];
+};
+
 #define EC2SUBROWS 154
 #define EC2SUBCOLS 99
   /**
@@ -115,6 +131,9 @@ public:
 
 #define ECLDROWS 154
 #define ECLDCOLS 99
+
+#define ECLDROWSbeta 251
+#define ECLDCOLSbeta 137
 /**
  * Shell corrections and deformations.
  */
@@ -145,6 +164,21 @@ public:
    * beta2 = std::sqrt(5/(4pi)) * alpha 
    */
   G4double alpha[ECLDROWS][ECLDCOLS];
+
+  /**
+   * RMS function for lcp emission barriers
+   */
+  G4double rms[ECLDROWS][ECLDCOLS];
+
+  /**
+   * Beta2 deformations
+   */
+  G4double beta2[ECLDROWSbeta][ECLDCOLSbeta];
+
+  /**
+   * Beta4 deformations
+   */
+  G4double beta4[ECLDROWSbeta][ECLDCOLSbeta];
 };
 
 class G4Fiss {
@@ -154,13 +188,13 @@ class G4Fiss {
 
 public:
   G4Fiss()
-    :akap(0.0), bet(0.0), homega(0.0), koeff(0.0), ifis(0.0),
-     optshp(0), optxfis(0), optles(0), optcol(0)
+    :bet(0.0), ifis(0.0), ucr(0.0), dcr(0.0), optshp(0), optxfis(0), optct(0), optcol(0), 
+     at(0), zt(0)
   {};
   ~G4Fiss() {};
   
-  G4double akap,bet,homega,koeff,ifis;
-  G4int optshp, optxfis,optles,optcol;
+  G4double bet,ifis,ucr,dcr;
+  G4int optshp, optxfis,optct,optcol,at,zt;
 };
 
 #define FBROWS 101
@@ -187,12 +221,11 @@ class G4Opt {
 
 public:
   G4Opt()
-    :optemd(0), optcha(0), eefac(0.0)
+    :optemd(0), optcha(0), optshpimf(0), optimfallowed(0), nblan0(0)
   {};
   ~G4Opt() {};
   
-  G4int optemd,optcha;
-  G4double eefac;                                  
+  G4int optemd,optcha,optshpimf,optimfallowed,nblan0;                                 
 };
 
 #define EENUCSIZE 2002
@@ -328,10 +361,11 @@ public:
       itypcasc[i] = 0;
       avv[i] = 0;
       zvv[i] = 0;
+      svv[i] = 0;
       enerj[i] = 0.0;
-      plab[i] = 0.0;
-      tetlab[i] = 0.0;
-      philab[i] = 0.0;
+      pxlab[i] = 0.0;
+      pylab[i] = 0.0;
+      pzlab[i] = 0.0;
       full[i] = false;
     }
   }
@@ -420,12 +454,14 @@ public:
     G4int nProton = 0, nNeutron = 0;
     G4int nPiPlus = 0, nPiZero = 0, nPiMinus = 0;
     G4int nH2 = 0, nHe3 = 0, nAlpha = 0;
+    G4int nGamma=0;
     G4int nFragments = 0;
     G4int nParticles = 0;
     for(G4int i = 0; i < ntrack; i++) {
       nParticles++;
       if(avv[i] ==  1 && zvv[i] ==  1) nProton++;  // Count multiplicities
       if(avv[i] ==  1 && zvv[i] ==  0) nNeutron++;
+      if(avv[i] ==  0 && zvv[i] ==  0) nGamma++;
       if(avv[i] == -1 && zvv[i] ==  1) nPiPlus++;
       if(avv[i] == -1 && zvv[i] ==  0) nPiZero++;
       if(avv[i] == -1 && zvv[i] == -1) nPiMinus++;
@@ -600,6 +636,11 @@ public:
   G4int zvv[VARNTPSIZE];
 
   /**
+   * S (-1 for lambda_0).
+   */
+  G4int svv[VARNTPSIZE];
+
+  /**
    * Kinetic energy.
    */
   G4double enerj[VARNTPSIZE];
@@ -608,6 +649,9 @@ public:
    * Momentum.
    */
   G4double plab[VARNTPSIZE];
+  G4double pxlab[VARNTPSIZE];
+  G4double pylab[VARNTPSIZE];
+  G4double pzlab[VARNTPSIZE];
 
   /**
    * Theta angle.

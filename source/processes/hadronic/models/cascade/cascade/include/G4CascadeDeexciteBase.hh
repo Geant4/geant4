@@ -25,7 +25,6 @@
 //
 #ifndef G4CASCADE_DEEXCITE_BASE_HH
 #define G4CASCADE_DEEXCITE_BASE_HH 1
-// $Id$
 //
 // Semi-concrete base class for de-excitation modules, analogous to
 // G4CascadeColliderBase.

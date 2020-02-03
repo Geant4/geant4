@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelData.hh 86536 2014-11-13 19:05:21Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -47,11 +46,16 @@
 #define G4NUCLEARLEVELDATA_HH 1
 
 #include "globals.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4Threading.hh"
 #include <vector>
+#include <iostream>
 
 class G4LevelReader;
 class G4LevelManager;
+class G4PairingCorrection;
+class G4ShellCorrection;
+class G4Pow;
 
 class G4NuclearLevelData 
 {
@@ -68,23 +72,67 @@ public:
   ~G4NuclearLevelData();
 
   // run time call to access or to create level manager
-  const G4LevelManager* GetLevelManager(G4int Z, G4int A);
+  // isLocked flag informs, that the thread is already locked
+  const G4LevelManager* GetLevelManager(G4int Z, G4int A, 
+                                        G4bool isLocked = false);
 
   // add private data to isotope from master thread
   G4bool AddPrivateData(G4int Z, G4int A, const G4String& filename);
-  
+
+  // access to min/max A in the level DB 
+  G4int GetMinA(G4int Z) const;
+  G4int GetMaxA(G4int Z) const;
+
+  // check max energy of a level without upload of the data
+  G4double GetMaxLevelEnergy(G4int Z, G4int A) const;
+  G4float MaxLevelEnergy(G4int Z, G4int A) const;
+
+  // check closest level if the energy is below the max level energy
+  G4double GetLevelEnergy(G4int Z, G4int A, G4double energy);
+
+  // check closest level below given energy 
+  G4double GetLowEdgeLevelEnergy(G4int Z, G4int A, G4double energy);
+
+  // check if residual excitation energy corresponding to
+  // discrete level and if it is the case select closest level
+  G4double FindLevel(G4int Z, G4int A, G4double resMass, G4double Mass,
+                     G4double partMass, G4double T);
+
+  // access to all model parameters
+  G4DeexPrecoParameters* GetParameters();
+  G4PairingCorrection* GetPairingCorrection();
+  G4ShellCorrection* GetShellCorrection();  
+
+  // access to correction values
+  G4double GetLevelDensity(G4int Z, G4int A, G4double U);
+  G4double GetPairingCorrection(G4int Z, G4int A);
+
+  // enable uploading of data for all Z < maxZ
+  void UploadNuclearLevelData(G4int Z);
+
+  // stream only existing levels
+  void StreamLevels(std::ostream& os, G4int Z, G4int A);
+
+  G4NuclearLevelData(G4NuclearLevelData &) = delete;
+  G4NuclearLevelData & operator=(const G4NuclearLevelData &right) = delete;
+
 private:
 
   void InitialiseForIsotope(G4int Z, G4int A);
 
-  G4NuclearLevelData(G4NuclearLevelData &);
-  G4NuclearLevelData & operator=(const G4NuclearLevelData &right);
+  void InitialiseUp(G4int Z);
 
-  G4LevelReader* fLevelReader;
+  G4DeexPrecoParameters* fDeexPrecoParameters;
+  G4LevelReader*         fLevelReader;
+  G4PairingCorrection*   fPairingCorrection;
+  G4ShellCorrection*     fShellCorrection;
+  G4Pow*                 fG4calc;
+  G4bool                 fInitialized;
 
-  static const G4int ZMAX = 103;
+  static const G4int ZMAX = 118;
   static const G4int AMIN[ZMAX];
   static const G4int AMAX[ZMAX];
+  static const G4int LEVELIDX[ZMAX];
 
   std::vector<const G4LevelManager*> fLevelManagers[ZMAX];
   std::vector<G4bool> fLevelManagerFlags[ZMAX];

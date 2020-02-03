@@ -29,7 +29,6 @@
 ///     propagation direction are set properly for phonons created with
 ///     G4ParticleGun
 //
-// $Id: XPhononStackingAction.cc 76246 2013-11-08 11:17:29Z gcosmo $
 //
 
 #include "XPhononStackingAction.hh"

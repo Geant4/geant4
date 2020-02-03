@@ -9,6 +9,9 @@
 
 #include "cids"
 
+#include <ostream>
+#include "forit"
+
 namespace tools {
 
 class column_booking {
@@ -36,6 +39,7 @@ public:
   const std::string& name() const {return m_name;}
   cid cls_id() const {return m_cid;}
   void* user_obj() const {return m_user_obj;}
+  void set_user_obj(void* a_obj) {m_user_obj = a_obj;}
 protected:
   std::string m_name;
   cid m_cid;
@@ -67,6 +71,19 @@ public:
     m_columns.push_back(column_booking(a_name,_cid(T()),0));
   }
   template <class T>
+  void add_column(const std::string& a_name,T& a_user) {
+    m_columns.push_back(column_booking(a_name,_cid(T()),(void*)&a_user));
+  }
+  
+  template <class T>
+  void add_column_vec(const std::string& a_name) {
+    m_columns.push_back(column_booking(a_name,_cid_std_vector<T>(),0));
+  }
+  template <class T>
+  void add_column_vec(const std::string& a_name,std::vector<T>& a_user_vec) {
+    m_columns.push_back(column_booking(a_name,_cid_std_vector<T>(),(void*)&a_user_vec));
+  }
+  template <class T>
   void add_column(const std::string& a_name,std::vector<T>& a_user_vec) {
     m_columns.push_back(column_booking(a_name,_cid_std_vector<T>(),(void*)&a_user_vec));
   }
@@ -74,9 +91,41 @@ public:
   const std::string& name() const {return m_name;}
   const std::string& title() const {return m_title;}
   const std::vector<column_booking>& columns() const {return m_columns;}
+  std::vector<column_booking>& columns() {return m_columns;}
 
   void set_name(const std::string& a_s) {m_name = a_s;}
   void set_title(const std::string& a_s) {m_title = a_s;}
+
+  bool has_similar_layout(std::ostream& a_out,const ntuple_booking& a_nbk) {
+    if(m_columns.size()!=a_nbk.m_columns.size()) {
+      a_out << "tools::ntuple_booking::has_similar_layout :"
+            << " bookings have not the same number of columns."
+            << " (" << m_columns.size() << " != " << a_nbk.m_columns.size() << ")."
+            << std::endl;
+      return false;	    
+    }
+    std::vector<column_booking>::const_iterator ait = a_nbk.m_columns.begin();
+    tools_vforit(tools::column_booking,m_columns,it) {
+      if((*it).name()!=(*ait).name()) {
+        a_out << "tools::ntuple_booking::has_similar_layout :"
+              << " columns don't have same name."
+              << " (" << (*it).name() << " != " << (*ait).name() << ")."
+              << std::endl;
+        return false;	    
+      }
+      if((*it).cls_id()!=(*ait).cls_id()) {
+        a_out << "tools::ntuple_booking::has_similar_layout :"
+              << " columns don't have same class id."
+              << " (" << (*it).cls_id() << " != " << (*ait).cls_id() << ")."
+              << std::endl;
+        return false;	    
+      }
+      
+      ait++;
+    }
+    return true;
+  }
+
 protected:
   std::string m_name;
   std::string m_title;

@@ -38,6 +38,30 @@
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmDNAPhysics_option2.hh"
+<<<<<<< HEAD
+=======
+#include "G4EmDNAPhysics_option3.hh"
+#include "G4EmDNAPhysics_option4.hh"
+#include "G4EmDNAPhysics_option5.hh"
+#include "G4EmDNAPhysics_option6.hh"
+
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+
+#include "G4UserSpecialCuts.hh"
+#include "G4StepLimiter.hh"
+
+// particles
+
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
+#include "G4DNAGenericIonsManager.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,13 +74,115 @@ PhysicsList::PhysicsList()
   //RegisterPhysics(new G4EmDNAPhysics());
   RegisterPhysics(new G4EmDNAPhysics_option2());
   
+<<<<<<< HEAD
   G4ProductionCutsTable::GetProductionCutsTable()->
       SetEnergyRange(1*eV, 1*GeV);
+=======
+  // electromagnetic physics list
+  //
+  fEmPhysicsList->ConstructProcess();
+      
+  // tracking cut
+  //
+  AddTrackingCut();
+
+  // maximum step size
+  //
+  AddMaxStepSize();
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+<<<<<<< HEAD
 PhysicsList::~PhysicsList()
+=======
+void PhysicsList::AddPhysicsList(const G4String& name)
 {
+  if (verboseLevel>-1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
+
+  if (name == fEmName) return;
+
+  if (name == "dna") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics();
+         
+  } else if (name == "dna_opt1") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option1();
+         
+  } else if (name == "dna_opt2") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option2();
+         
+  } else if (name == "dna_opt3") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option3();
+         
+  } else if (name == "dna_opt4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option4();
+         
+  } else if (name == "dna_opt5") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option5();
+         
+  } else if (name == "dna_opt6") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option6();
+         
+  } else if (name == "liv") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
+         
+  } else if (name == "pene") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
+         
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddTrackingCut()
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
+{
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddMaxStepSize()
+{
+
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)())
+  {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4String particleName = particle->GetParticleName();
+
+    if (particleName == "e-") 
+    {
+      ph->RegisterProcess(new G4StepLimiter(), particle); 
+    }
+  }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

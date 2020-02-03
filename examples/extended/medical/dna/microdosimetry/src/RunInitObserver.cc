@@ -34,7 +34,6 @@
  *  Created on: 10 oct. 2014
  *      Author: kara
  */
-// $ID$
 /// \file RunInitObserver.cc
 /// \brief Implementation of the RunInitObserver & RunInitManager classes
 

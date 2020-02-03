@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh 82764 2014-07-08 14:24:04Z gcosmo $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
 #define G4OPENGLVIEWERMESSENGER_HH
@@ -63,6 +62,7 @@ private:
   G4UIcommand* fpCommandEndTime;
   G4UIcmdWithAnInteger* fpCommandEventsDrawInterval;
   G4UIcmdWithADouble* fpCommandFade;
+  G4UIcommand* fpCommandFlushAt;
   G4UIcmdWithAString* fpCommandPrintMode;
   G4UIcommand* fpCommandStartTime;
   G4UIcmdWithABool* fpCommandTransparency;

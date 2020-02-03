@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/src/RE04PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE04PrimaryGeneratorAction class
 //
-// $Id: $
 //
 #include "RE04PrimaryGeneratorAction.hh"
 

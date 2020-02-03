@@ -1,0 +1,86 @@
+
+///\file "physicslists/genericPL/.README.txt"
+///\brief Example genericPL README page
+
+/*! \page ExamplegenericPL Example genericPL
+
+\author  W. Pokorski(1), I. Hrivnacova(2)  \n
+(1) CERN \n
+(2) Institut de Physique Nucléaire (IPNO), Université Paris-Sud, CNRS-IN2P3 \n
+
+Examples in the physicslist category show the possible ways how to define
+a physics list from Geant4 physics constructors. This example demonstrates 
+the usage of G4GenericPhysicsList to build  the concrete physics list at 
+the run time. 
+
+In Geant4 versions < 10.4, the generic physics list was demonstrated in the 
+extended/hadronic/Hadr05 example.
+
+The G4GenericPhysicsList class allows to build the physics list at the run
+time in two possible ways, either by processing a macro file
+containing the 'physics list' or by passing a vector of 'physics
+constructors' names to the constructor of the class.
+
+To run the example you can call
+
+\verbatim
+./genericPL -m run.mac [ -p FTFP_BERT.mac ]
+\endverbatim
+
+where FTFP_BERT.mac is the macro file containing the 'physics list'. 
+
+If you run this example by calling
+
+\verbatim
+./genericPL -m run.mac
+\endverbatim
+
+the physics list will be constructed by using a vector of the names of
+the different physics constructor defined in the genericPL.cc file.
+
+The same experimental setup is used for all examples in the physicslist category:
+
+\section genericPL_s1  Detector description
+
+The geometry (defined in the DetectorConstruction class) consists in a box of scintillator material (CsI) followed by a thin box of air (screen) which is used to simplify scoring.
+ 
+\section genericPL_s2  Primary generator
+
+The primary generator is defined with usage of G4ParticleGun.
+The default particle is proton which hits the box perpendicular to the input face. 
+The type of the particle and its energy are set in the PrimaryGeneratorAction class, and can
+be changed via the G4 built-in commands of the G4ParticleGun class.
+
+ 
+\section genericPL_s3  Scoring (ntuples)
+
+The screen volume is associated with a sensitive detector, ScreenSD,
+which accounts the following particle properties:
+- trackID
+- particle PDG encoding
+- particle kinetic energy
+- particle X,Y position
+- particle time
+
+The scored quantities are filled in the Screen ntuple, which is defined using G4AnalysisManager
+in RunAction class. The ntuple is saved in a Root file, which name is set to be equal to the
+example name in main () function.
+
+\section genericPL_s4  How to build
+
+An additional step is needed when building the example with GNUmake
+due to using the extra shared directory: 
+\verbatim      
+ % cd path_to_example/example
+ % gmake setup
+ % gmake
+\endverbatim      
+
+This will copy the files from shared in the example include and src;
+to remove these files:
+\verbatim      
+ % gmake clean_setup
+\endverbatim      
+
+
+*/

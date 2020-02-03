@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm5/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.hh 82340 2014-06-16 14:13:44Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

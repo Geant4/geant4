@@ -1,6 +1,6 @@
 // This file was generated automatically by marshalgen.
 //
-/// \file parallel/ParN02/AnnotatedFiles/MarshaledG4VHitsCollection.h
+/// \file MarshaledG4VHitsCollection.h
 /// \brief Definition of the MaraledG4VHitsCollection class
 
 #ifndef MarshaledG4VHitsCollection_H

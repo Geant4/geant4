@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HnMessenger.cc 66310 2012-12-17 11:56:35Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -159,7 +158,7 @@ void G4HnMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     std::vector<G4String> parameters;
     G4Analysis::Tokenize(newValues, parameters);
     // check consistency
-    if ( G4int(parameters.size()) == command->GetParameterEntries() ) {
+    if ( parameters.size() == command->GetParameterEntries() ) {
       auto counter = 0;
       auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
       auto activation = G4UIcommand::ConvertToBool(parameters[counter++]);
@@ -179,7 +178,7 @@ void G4HnMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     std::vector<G4String> parameters;
     G4Analysis::Tokenize(newValues, parameters);
     // check consistency
-    if ( G4int(parameters.size()) == command->GetParameterEntries() ) {
+    if ( parameters.size() == command->GetParameterEntries() ) {
       auto counter = 0;
       auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
       auto activation = G4UIcommand::ConvertToBool(parameters[counter++]);

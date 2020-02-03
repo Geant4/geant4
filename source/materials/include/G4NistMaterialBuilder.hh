@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh 95428 2016-02-10 15:00:35Z gcosmo $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -77,6 +76,7 @@ public:
  
   // Find or build a G4Material by name, from dataBase
   //
+  inline G4Material* FindMaterial (const G4String& name) const;
   G4Material* FindOrBuildMaterial (const G4String& name, 
 				   G4bool isotopes=true,
 				   G4bool warning =true);
@@ -84,6 +84,7 @@ public:
 
   // Find or build a simple material via atomic number
   //
+  inline G4Material* FindSimpleMaterial(G4int Z) const;
   G4Material* FindOrBuildSimpleMaterial(G4int Z, G4bool warning);
 
   // construct a G4Material from scratch by atome count
@@ -172,8 +173,7 @@ private:
 		   G4double pot=0.0, G4int ncomp=1,
 		   G4State=kStateSolid, G4bool stp = true);
 
-  void AddGas(const G4String& nameMat, G4double t=NTP_Temperature,
-                                       G4double p=CLHEP::STP_Pressure);
+  void AddGas(const G4String& nameMat, G4double T, G4double P);
 
   void AddElementByWeightFraction(G4int Z, G4double);
   void AddElementByAtomCount     (G4int Z, G4int);
@@ -182,6 +182,7 @@ private:
   void AddElementByAtomCount     (const G4String& name, G4int);
 
   // build a G4Material from dataBase
+  G4Material* BuildNistMaterial(const G4String& matname, G4bool warning);
   G4Material* BuildMaterial(G4int idx);
 
   void DumpElm(G4int) const;
@@ -218,7 +219,6 @@ private:
   std::vector<G4double>  gasTemperature;
   std::vector<G4double>  gasPressure;
 
-  G4bool                 first;
 #ifdef G4MULTITHREADED
   static G4Mutex nistMaterialMutex;
 #endif
@@ -234,17 +234,34 @@ inline const std::vector<G4String>&
 inline G4double 
 G4NistMaterialBuilder::GetMeanIonisationEnergy(G4int index) const
 {
-  G4double res = 10*index;
-  if(index >= 0 && index < nMaterials) { res = ionPotentials[index]; }
-  return res;
+  return (index >= 0 && index < nMaterials) ? ionPotentials[index] : 10.0*index; 
 }
 
 inline G4double 
 G4NistMaterialBuilder::GetNominalDensity(G4int index) const
 {
-  G4double res = 0.0;
-  if(index >= 0 && index < nMaterials) { res = densities[index]; }
-  return res;
+  return (index >= 0 && index < nMaterials) ? densities[index] : 0.0;
+}
+
+inline G4Material* 
+G4NistMaterialBuilder::FindMaterial(const G4String& name) const
+{
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  size_t nmat = theMaterialTable->size();
+  G4Material* ptr = nullptr;
+  for(size_t i=0; i<nmat; ++i) {
+    if(name == ((*theMaterialTable)[i])->GetName()) { 
+      ptr = (*theMaterialTable)[i];
+      break;
+    } 
+  }
+  return ptr;
+}
+
+inline G4Material* 
+G4NistMaterialBuilder::FindSimpleMaterial(G4int Z) const
+{
+  return (Z>0 && Z<nElementary) ? FindMaterial(names[Z]) : nullptr;
 }
 
 #endif

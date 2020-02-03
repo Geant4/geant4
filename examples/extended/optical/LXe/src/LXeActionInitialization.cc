@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file LXeActionInitialization.cc
 /// \brief Implementation of the LXeActionInitialization class
@@ -31,6 +30,7 @@
 #include "LXeActionInitialization.hh"
 
 #include "LXePrimaryGeneratorAction.hh"
+#include "LXeDetectorConstruction.hh"
 
 #include "LXeRunAction.hh"
 #include "LXeEventAction.hh"
@@ -43,8 +43,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+<<<<<<< HEAD
 LXeActionInitialization::LXeActionInitialization(LXeRecorderBase* recorder)
  : G4VUserActionInitialization(), fRecorder(recorder)
+=======
+LXeActionInitialization::LXeActionInitialization(
+   const LXeDetectorConstruction* det)
+  : G4VUserActionInitialization(), fDetector(det)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +71,7 @@ void LXeActionInitialization::Build() const
 {
   SetUserAction(new LXePrimaryGeneratorAction());
 
+<<<<<<< HEAD
   SetUserAction(new LXeStackingAction());
 
   SetUserAction(new LXeRunAction(fRecorder));
@@ -74,6 +81,11 @@ void LXeActionInitialization::Build() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+=======
+  LXeEventAction* eventAction = new LXeEventAction(fDetector);
+  SetUserAction(eventAction);
+  SetUserAction(new LXeStackingAction(eventAction));
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 G4VSteppingVerbose* LXeActionInitialization::InitializeSteppingVerbose() const
 {

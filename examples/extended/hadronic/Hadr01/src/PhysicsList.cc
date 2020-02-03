@@ -27,7 +27,10 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 92421 2015-09-01 07:38:57Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -65,6 +68,8 @@
 #include "G4StoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4IonPhysicsXS.hh"
+#include "G4IonElasticPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmProcessOptions.hh"
 
@@ -258,7 +263,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QGSP_BIC") {
 
     SetBuilderList0(false);
+<<<<<<< HEAD
     fHadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
+=======
+    fHadronPhys.push_back( new G4HadronPhysicsQGSP_BIC(verboseLevel));
+    fHadronPhys.push_back( new G4IonElasticPhysics(verboseLevel));
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
   } else if (name == "QGSP_BIC_EMY") {
 
@@ -321,7 +331,8 @@ void PhysicsList::SetBuilderList2()
   fHadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   fHadronPhys.push_back( new G4HadronElasticPhysicsXS(verboseLevel) );
   fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4IonPhysicsXS(verboseLevel));
+  fHadronPhys.push_back( new G4IonElasticPhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 

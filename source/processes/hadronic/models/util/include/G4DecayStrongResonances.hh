@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DecayStrongResonances.hh 67984 2013-03-13 10:44:01Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,8 +49,8 @@ public:
   ~G4DecayStrongResonances();
 
 private:
-   G4int operator==(G4DecayStrongResonances& right) {return (this == &right);}
-   G4int operator!=(G4DecayStrongResonances& right) {return (this != &right);}
+   G4bool operator==(G4DecayStrongResonances& right) {return (this == &right);}
+   G4bool operator!=(G4DecayStrongResonances& right) {return (this != &right);}
       
 public:
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,

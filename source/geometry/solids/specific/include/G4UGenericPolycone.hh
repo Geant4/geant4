@@ -23,35 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id:$
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-//
 // G4UGenericPolycone
 //
 // Class description:
 //
-//   Wrapper class for G4UGenericPolycone to make use of it from USolids module.
+// Wrapper class for G4GenericPolycone to make use of VecGeom GenericPolycone.
 
-// History:
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
-#ifndef G4UGENERICPOLYCONE_hh
-#define G4UGENERICPOLYCONE_hh
+#ifndef G4UGENERICPOLYCONE_HH
+#define G4UGENERICPOLYCONE_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UGenericPolycone.hh"
+#include <volumes/UnplacedGenericPolycone.h>
+
+#include "G4TwoVector.hh"
 #include "G4PolyconeSide.hh"
 
-class G4UGenericPolycone : public G4USolid 
+class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
 {
+  using Shape_t = vecgeom::UnplacedGenericPolycone;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedGenericPolycone>;
+
   public:  // with description
 
     G4UGenericPolycone(const G4String& name, 
@@ -63,15 +59,19 @@ class G4UGenericPolycone : public G4USolid
 
    ~G4UGenericPolycone();
 
-    inline UGenericPolycone* GetShape() const;
-
-    G4double GetStartPhi()  const;
-    G4double GetEndPhi()    const;
-    G4bool IsOpen()         const;
-    G4int  GetNumRZCorner() const;
+    G4double GetStartPhi()    const;
+    G4double GetEndPhi()      const;
+    G4double GetSinStartPhi() const;
+    G4double GetCosStartPhi() const;
+    G4double GetSinEndPhi()   const;
+    G4double GetCosEndPhi()   const;
+    G4bool IsOpen()           const;
+    G4int  GetNumRZCorner()   const;
     G4PolyconeSideRZ GetCorner(G4int index) const;
   
     inline G4GeometryType GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
   public:  // without description
 
@@ -81,19 +81,28 @@ class G4UGenericPolycone : public G4USolid
       // persistifiable objects.
 
     G4UGenericPolycone( const G4UGenericPolycone& source );
-    G4UGenericPolycone &operator=(const G4UGenericPolycone& source);
+    G4UGenericPolycone& operator=(const G4UGenericPolycone& source);
       // Copy constructor and assignment operator.
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                           G4double& pMin, G4double& pMax) const;
+
     G4Polyhedron* CreatePolyhedron() const;
+
+  private:
+
+    G4double wrStart;
+    G4double wrDelta;
+    std::vector<G4TwoVector> rzcorners;
 };
 
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UGenericPolycone* G4UGenericPolycone::GetShape() const
-{
-  return (UGenericPolycone*) fShape;
-}
 
 inline G4GeometryType G4UGenericPolycone::GetEntityType() const
 {

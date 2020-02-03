@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc 69010 2013-04-15 09:34:16Z gcosmo $
 //
 //
 
 #include "G4HEPEvtParticle.hh"
 
-G4ThreadLocal G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator = 0;
+G4Allocator<G4HEPEvtParticle>*& aHEPEvtParticleAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4HEPEvtParticle>* _instance = nullptr;
+    return _instance;
+}
 
 G4HEPEvtParticle::G4HEPEvtParticle()
   : theParticle(0), ISTHEP(1), JDAHEP1(1), JDAHEP2(1)
@@ -52,12 +55,12 @@ G4HEPEvtParticle& G4HEPEvtParticle::operator=(const G4HEPEvtParticle &)
   return *this;
 }
 
-G4int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
+G4bool G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
 {
   return (this==&right);
 }
 
-G4int G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
+G4bool G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
 {
   return (this!=&right);
 }

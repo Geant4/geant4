@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc 93882 2015-11-03 08:23:54Z gcosmo $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
-// 17-Aug-2012 V.Ivanchenko added hadronic model factories
+// 17-Aug-2012 V.Ivanchenko added methods
 
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicInteraction.hh"
 
-G4ThreadLocal G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::instance = 0;
+G4ThreadLocal G4HadronicInteractionRegistry* 
+G4HadronicInteractionRegistry::instance = nullptr;
 
 G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::Instance()
 {
-  if(!instance) {
+  if(nullptr == instance) {
     static G4ThreadLocalSingleton<G4HadronicInteractionRegistry> inst;
     instance = inst.Instance();
   }
@@ -43,9 +43,7 @@ G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::Instance()
 }
 
 G4HadronicInteractionRegistry::G4HadronicInteractionRegistry()
-{
-  //std::cout << "G4HadronicInteractionRegistry  " << this << std::endl;
-}
+{}
 
 G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 {
@@ -55,34 +53,40 @@ G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 void G4HadronicInteractionRegistry::Clean()
 {
   size_t nModels = allModels.size();
-  //std::cout << "G4HadronicInteractionRegistry::Clean() start " << nModels 
-  //	    << " " << this << std::endl;
+  //G4cout << "G4HadronicInteractionRegistry::Clean() start " << nModels 
+  //	    << " " << this << G4endl;
   for (size_t i=0; i<nModels; ++i) {
     if( allModels[i] ) {
       const char* xxx = (allModels[i]->GetModelName()).c_str();
       G4int len = (allModels[i]->GetModelName()).length();
       len = std::min(len, 9);
       const G4String mname = G4String(xxx, len);
-      //std::cout << "G4HadronicInteractionRegistry: delete " << i << "  "
+      //G4cout << "G4HadronicInteractionRegistry: delete " << i << "  "
       //		<< allModels[i] << " " << mname 
-      //		<< " " << this << std::endl;
+      //		<< " " << this << G4endl;
       if(mname != "NeutronHP" && mname != "ParticleH") {
 	delete allModels[i];
       }
-      // std::cout << "done " << this << std::endl;
+      // G4cout << "done " << this << G4endl;
     }
   }
   allModels.clear();
-  //std::cout <<"G4HadronicInteractionRegistry::Clean() is done "<<std::endl; 
+  //G4cout <<"G4HadronicInteractionRegistry::Clean() is done "<<G4endl; 
+}
+
+void G4HadronicInteractionRegistry::InitialiseModels()
+{
+  for (auto & mod : allModels) {
+    if( mod ) { mod->InitialiseModel(); }
+  }
 }
 
 void 
 G4HadronicInteractionRegistry::RegisterMe(G4HadronicInteraction * aModel)
 {
   if(!aModel) { return; }
-  size_t nModels = allModels.size();
-  for (size_t i=0; i<nModels; ++i) {
-    if( aModel == allModels[i] ) { return; }
+  for (auto & mod : allModels) {
+    if( aModel == mod ) { return; }
   }
   //G4cout << "Register model <" << aModel->GetModelName() 
   //	 << ">  " << nModels+1 << "  " << aModel << G4endl;
@@ -93,12 +97,11 @@ void
 G4HadronicInteractionRegistry::RemoveMe(G4HadronicInteraction * aModel)
 {
   if(!aModel) { return; }
-  size_t nModels = allModels.size();
-  for (size_t i=0; i<nModels; ++i) {
+  for (size_t i=0; i<allModels.size(); ++i) {
     if( aModel == allModels[i] ) {
-      //std::cout << "DeRegister model <" << aModel 
-      //	<< ">  " << i << std::endl;
-      allModels[i] = 0;
+      //G4cout << "DeRegister model <" << aModel 
+      //	<< ">  " << i << G4endl;
+      allModels[i] = nullptr;
       return;
     }
   }
@@ -107,16 +110,11 @@ G4HadronicInteractionRegistry::RemoveMe(G4HadronicInteraction * aModel)
 G4HadronicInteraction* 
 G4HadronicInteractionRegistry::FindModel(const G4String& name)
 {
-  G4HadronicInteraction* model = 0; 
-
-  size_t nModels = allModels.size(); 
-  for (size_t i=0; i<nModels; ++i) {
-    G4HadronicInteraction* p = allModels[i]; 
-    if(p) {
-      if (p->GetModelName() == name) { 
-	model = p;
-	break; 
-      }
+  G4HadronicInteraction* model = nullptr; 
+  for (auto & mod : allModels) {
+    if(mod && mod->GetModelName() == name) { 
+      model = mod;
+      break; 
     }
   }
   return model;
@@ -126,14 +124,9 @@ std::vector<G4HadronicInteraction*>
 G4HadronicInteractionRegistry::FindAllModels(const G4String& name)
 {
   std::vector<G4HadronicInteraction*> models;
-
-  size_t nModels = allModels.size(); 
-  for (size_t i=0; i<nModels; ++i) {
-    G4HadronicInteraction* p = allModels[i]; 
-    if(p) {
-      if (p->GetModelName() == name) { 
-        models.push_back(p);
-      }
+  for (auto & mod : allModels) {
+    if(mod && mod->GetModelName() == name) { 
+      models.push_back(mod);
     }
   }
   return models;

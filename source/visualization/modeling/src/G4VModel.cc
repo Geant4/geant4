@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.cc 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -54,6 +53,13 @@ G4String G4VModel::GetCurrentTag () const {
 G4String G4VModel::GetCurrentDescription () const {
   // Override in concrete class if concept of "current" is meaningful.
   return fGlobalDescription;
+}
+
+const G4VisExtent& G4VModel::GetTransformedExtent () const {
+  static G4VisExtent transformedExtent;
+  transformedExtent = fExtent;
+  transformedExtent.Transform(fTransform);
+  return transformedExtent;
 }
 
 G4bool G4VModel::Validate (G4bool) {

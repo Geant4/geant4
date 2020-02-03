@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr04/src/NeutronHPphysics.cc
 /// \brief Implementation of the NeutronHPphysics class
 //
-// $Id: NeutronHPphysics.cc 66587 2012-12-21 11:06:44Z ihrivnac $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

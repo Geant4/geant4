@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel1.cc 87631 2014-12-14 12:42:05Z matkara $
 //
 
 #include "G4DNABornIonisationModel1.hh"
@@ -35,6 +34,7 @@
 #include "G4DNAMolecularMaterial.hh"
 #include "G4DNABornAngle.hh"
 #include "G4DeltaAngle.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,7 +44,7 @@ using namespace std;
 
 G4DNABornIonisationModel1::G4DNABornIonisationModel1(const G4ParticleDefinition*,
                                                      const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam), isInitialised(false)
 {
   verboseLevel = 0;
   // Verbosity scale:
@@ -59,13 +59,13 @@ G4DNABornIonisationModel1::G4DNABornIonisationModel1(const G4ParticleDefinition*
     G4cout << "Born ionisation model is constructed " << G4endl;
   }
 
-  //Mark this model as "applicable" for atomic deexcitation
+  // Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
   fAtomDeexcitation = 0;
   fParticleChangeForGamma = 0;
   fpMolWaterDensity = 0;
 
-  // define default angular generator
+  // Define default angular generator
   SetAngularDistribution(new G4DNABornAngle());
 
   // Selection of computation method
@@ -160,8 +160,6 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
         FatalException,"Missing data file:/dna/sigmadiff_ionisation_e_born.dat");
   }
 
-  //
-
   // Clear the arrays for re-initialization case (MT mode)
   // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
 
@@ -171,7 +169,7 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
   eVecm.clear();
   pVecm.clear();
 
-  for (int j=0; j<5; j++)
+  for (G4int j=0; j<5; j++)
   {
     eProbaShellMap[j].clear();
     pProbaShellMap[j].clear();
@@ -182,18 +180,19 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
     eNrjTransfData[j].clear();
     pNrjTransfData[j].clear();
   }
+
   //
 
   eTdummyVec.push_back(0.);
   while(!eDiffCrossSection.eof())
   {
-    double tDummy;
-    double eDummy;
+    G4double tDummy;
+    G4double eDummy;
     eDiffCrossSection>>tDummy>>eDummy;
     if (tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
 
-    double tmp;
-    for (int j=0; j<5; j++)
+    G4double tmp;
+    for (G4int j=0; j<5; j++)
     {
       eDiffCrossSection>> tmp;
 
@@ -251,11 +250,11 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
   pTdummyVec.push_back(0.);
   while(!pDiffCrossSection.eof())
   {
-    double tDummy;
-    double eDummy;
+    G4double tDummy;
+    G4double eDummy;
     pDiffCrossSection>>tDummy>>eDummy;
     if (tDummy != pTdummyVec.back()) pTdummyVec.push_back(tDummy);
-    for (int j=0; j<5; j++)
+    for (G4int j=0; j<5; j++)
     {
       pDiffCrossSection>>pDiffCrossSectionData[j][tDummy][eDummy];
 
@@ -297,11 +296,15 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
   }
 
   // Initialize water density pointer
+  
   fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->
   GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
-  //
+  // AD
+  
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+
+  //
 
   if (isInitialised)
   { return;}
@@ -321,7 +324,6 @@ G4double G4DNABornIonisationModel1::CrossSectionPerVolume(const G4Material* mate
   {
     G4cout << "Calling CrossSectionPerVolume() of G4DNABornIonisationModel1"
         << G4endl;
-
   }
 
   if (
@@ -340,66 +342,62 @@ G4double G4DNABornIonisationModel1::CrossSectionPerVolume(const G4Material* mate
 
   G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
 
-  if(waterDensity!= 0.0)
-  //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  const G4String& particleName = particleDefinition->GetParticleName();
+
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
+  pos1 = lowEnergyLimit.find(particleName);
+  if (pos1 != lowEnergyLimit.end())
   {
-    const G4String& particleName = particleDefinition->GetParticleName();
+    lowLim = pos1->second;
+  }
 
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-    pos1 = lowEnergyLimit.find(particleName);
-    if (pos1 != lowEnergyLimit.end())
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
+  pos2 = highEnergyLimit.find(particleName);
+  if (pos2 != highEnergyLimit.end())
+  {
+    highLim = pos2->second;
+  }
+
+  if (ekin >= lowLim && ekin <= highLim)
+  {
+    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+    pos = tableData.find(particleName);
+
+    if (pos != tableData.end())
     {
-      lowLim = pos1->second;
-    }
-
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(particleName);
-    if (pos2 != highEnergyLimit.end())
-    {
-      highLim = pos2->second;
-    }
-
-    if (ekin >= lowLim && ekin < highLim)
-    {
-      std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-      pos = tableData.find(particleName);
-
-      if (pos != tableData.end())
+      G4DNACrossSectionDataSet* table = pos->second;
+      if (table != 0)
       {
-        G4DNACrossSectionDataSet* table = pos->second;
-        if (table != 0)
+        sigma = table->FindValue(ekin);
+
+        // ICRU49 electronic SP scaling - ZF, SI
+
+        if (particleDefinition == G4Proton::ProtonDefinition() && ekin < 70*MeV && spScaling)
         {
-          sigma = table->FindValue(ekin);
-
-          // ICRU49 electronic SP scaling - ZF, SI
-
-          if (particleDefinition == G4Proton::ProtonDefinition() && ekin < 70*MeV && spScaling)
-          {
-           G4double A = 1.39241700556072800000E-009 ;
-           G4double B = -8.52610412942622630000E-002 ;
-           sigma = sigma * std::exp(A*(ekin/eV)+B);
-          }
-          //
-
+         G4double A = 1.39241700556072800000E-009 ;
+         G4double B = -8.52610412942622630000E-002 ;
+         sigma = sigma * G4Exp(A*(ekin/eV)+B);
         }
-      }
-      else
-      {
-        G4Exception("G4DNABornIonisationModel1::CrossSectionPerVolume","em0002",
-            FatalException,"Model not applicable to particle type.");
-      }
-    }
+        //
 
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "G4DNABornIonisationModel1 - XS INFO START" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "G4DNABornIonisationModel1 - XS INFO END" << G4endl;
+      }
     }
-  } // if (waterMaterial)
+    else
+    {
+      G4Exception("G4DNABornIonisationModel1::CrossSectionPerVolume","em0002",
+          FatalException,"Model not applicable to particle type.");
+    }
+  }
+
+  if (verboseLevel > 2)
+  {
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "G4DNABornIonisationModel1 - XS INFO START" << G4endl;
+    G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
+    G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+    G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+    G4cout << "G4DNABornIonisationModel1 - XS INFO END" << G4endl;
+  }
 
   return sigma*waterDensity;
 }
@@ -442,7 +440,7 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
     highLim = pos2->second;
   }
 
-  if (k >= lowLim && k < highLim)
+  if (k >= lowLim && k <= highLim)
   {
     G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
     G4double particleMass = particle->GetDefinition()->GetPDGMass();
@@ -464,50 +462,14 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
     do
     {
       ionizationShell = RandomSelect(k,particleName);
-    }while (k<19*eV && ionizationShell==2 && particle->GetDefinition()==G4Electron::ElectronDefinition());
-
-    // AM: sample deexcitation
-    // here we assume that H_{2}O electronic levels are the same as Oxygen.
-    // this can be considered true with a rough 10% error in energy on K-shell,
-
-    G4int secNumberInit = 0;// need to know at a certain point the energy of secondaries
-    G4int secNumberFinal = 0;// So I'll make the diference and then sum the energies
+    } while (k<19*eV && ionizationShell==2 && particle->GetDefinition()==G4Electron::ElectronDefinition());
 
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
-    //SI: additional protection if tcs interpolation method is modified
+    // SI: additional protection if tcs interpolation method is modified
     if (k<bindingEnergy) return;
     //
-
-    G4int Z = 8;
-    if(fAtomDeexcitation)
-    {
-      G4AtomicShellEnumerator as = fKShell;
-
-      if (ionizationShell <5 && ionizationShell >1)
-      {
-        as = G4AtomicShellEnumerator(4-ionizationShell);
-      }
-      else if (ionizationShell <2)
-      {
-        as = G4AtomicShellEnumerator(3);
-      }
-
-      //	FOR DEBUG ONLY
-      //	if (ionizationShell == 4) {
-      //
-      //	  G4cout << "Z: " << Z << " as: " << as
-      //               << " ionizationShell: " << ionizationShell << " bindingEnergy: "<< bindingEnergy/eV << G4endl;
-      //        G4cout << "Press <Enter> key to continue..." << G4endl;
-      //	  G4cin.ignore();
-      //	}
-
-      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-      secNumberInit = fvect->size();
-      fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
-      secNumberFinal = fvect->size();
-    }
 
     G4double secondaryKinetic=-1000*eV;
 
@@ -515,17 +477,24 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
     {
       secondaryKinetic = RandomizeEjectedElectronEnergy(particle->GetDefinition(),k,ionizationShell);
     }
-    // SI - 01/04/2014
     else
     {
       secondaryKinetic = RandomizeEjectedElectronEnergyFromCumulatedDcs(particle->GetDefinition(),k,ionizationShell);
     }
     //
 
+    G4int Z = 8;
+    
     G4ThreeVector deltaDirection =
     GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic,
         Z, ionizationShell,
         couple->GetMaterial());
+
+    if (secondaryKinetic>0)
+    {
+      G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic);
+      fvect->push_back(dp);
+    }
 
     if (particle->GetDefinition() == G4Electron::ElectronDefinition())
     {
@@ -547,33 +516,84 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
 
     else fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
 
-    // note that secondaryKinetic is the energy of the delta ray, not of all secondaries.
+    // AM: sample deexcitation
+    // here we assume that H_{2}O electronic levels are the same as Oxygen.
+    // this can be considered true with a rough 10% error in energy on K-shell,
+
+    size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
+    size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
+
     G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
-    G4double deexSecEnergy = 0;
-    for (G4int j=secNumberInit; j < secNumberFinal; j++)
+
+    // SI: only atomic deexcitation from K shell is considered
+    if(fAtomDeexcitation && ionizationShell == 4)
     {
-      deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
+      const G4AtomicShell* shell = 
+        fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
+      secNumberInit = fvect->size();
+      fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
+      secNumberFinal = fvect->size();
+
+      //TEST
+      //G4cout << "ionizationShell=" << ionizationShell<< G4endl;
+      //G4cout << "bindingEnergy=" << bindingEnergy/eV<< G4endl;
+
+      if(secNumberFinal > secNumberInit) 
+      {
+	for (size_t i=secNumberInit; i<secNumberFinal; ++i) 
+        {
+          //Check if there is enough residual energy 
+          if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy())
+          {
+             //Ok, this is a valid secondary: keep it
+	     bindingEnergy -= ((*fvect)[i])->GetKineticEnergy();
+       //G4cout << "--deex nrj=" << ((*fvect)[i])->GetKineticEnergy()/eV 
+       //<< G4endl;
+          }
+          else
+          {
+ 	     //Invalid secondary: not enough energy to create it!
+ 	     //Keep its energy in the local deposit
+             delete (*fvect)[i]; 
+             (*fvect)[i]=0;
+          }
+	} 
+      }
+
+    //TEST
+    //G4cout << "k=" << k/eV<< G4endl;
+    //G4cout << "secondaryKinetic=" << secondaryKinetic/eV<< G4endl;
+    //G4cout << "scatteredEnergy=" << scatteredEnergy/eV<< G4endl;
+    //G4cout << "deposited energy=" << bindingEnergy/eV<< G4endl;
+    //
+
     }
 
+    //This should never happen
+    if(bindingEnergy < 0.0) 
+     G4Exception("G4DNABornIonisatioModel1::SampleSecondaries()",
+                 "em2050",FatalException,"Negative local energy deposit");	 
+ 
+    //bindingEnergy has been decreased 
+    //by the amount of energy taken away by deexc. products
     if (!statCode)
     {
       fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
-      fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy-secondaryKinetic-deexSecEnergy);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
     }
     else
     {
       fParticleChangeForGamma->SetProposedKineticEnergy(k);
       fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy);
     }
-    
-    // SI - 01/04/2014
-    if (secondaryKinetic>0)
-    {
-      G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic);
-      fvect->push_back(dp);
-    }
-    //
 
+    // TEST //////////////////////////
+    // if (secondaryKinetic<0) abort();
+    // if (scatteredEnergy<0) abort();
+    // if (k-scatteredEnergy-secondaryKinetic-deexSecEnergy<0) abort();
+    // if (k-scatteredEnergy<0) abort();
+    /////////////////////////////////
+    
     const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
     G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
         ionizationShell,
@@ -599,13 +619,13 @@ G4double G4DNABornIonisationModel1::RandomizeEjectedElectronEnergy(G4ParticleDef
 
     // SI : original method
     /*
-     G4double crossSectionMaximum = 0.;
-     for(G4double value=waterStructure.IonisationEnergy(shell); value<=maximumEnergyTransfer; value+=0.1*eV)
-     {
+    G4double crossSectionMaximum = 0.;
+    for(G4double value=waterStructure.IonisationEnergy(shell); value<=maximumEnergyTransfer; value+=0.1*eV)
+    {
      G4double differentialCrossSection = DifferentialCrossSection(particleDefinition, k/eV, value/eV, shell);
      if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
-     }
-     */
+    }
+    */
 
     // SI : alternative method
     G4double crossSectionMaximum = 0.;
@@ -636,7 +656,7 @@ G4double G4DNABornIonisationModel1::RandomizeEjectedElectronEnergy(G4ParticleDef
     do
     {
       secondaryElectronKineticEnergy = G4UniformRand()* (maximumEnergyTransfer-waterStructure.IonisationEnergy(shell));
-    }while(G4UniformRand()*crossSectionMaximum >
+    } while(G4UniformRand()*crossSectionMaximum >
         DifferentialCrossSection(particleDefinition, k/eV,
             (secondaryElectronKineticEnergy+waterStructure.IonisationEnergy(shell))/eV,shell));
 
@@ -666,7 +686,7 @@ G4double G4DNABornIonisationModel1::RandomizeEjectedElectronEnergy(G4ParticleDef
     do
     {
       secondaryElectronKineticEnergy = G4UniformRand()* maximumKineticEnergyTransfer;
-    }while(G4UniformRand()*crossSectionMaximum >=
+    } while(G4UniformRand()*crossSectionMaximum >=
         DifferentialCrossSection(particleDefinition, k/eV,
             (secondaryElectronKineticEnergy+waterStructure.IonisationEnergy(shell))/eV,shell));
 
@@ -721,14 +741,14 @@ G4double G4DNABornIonisationModel1::RandomizeEjectedElectronEnergy(G4ParticleDef
  */
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-double G4DNABornIonisationModel1::DifferentialCrossSection(G4ParticleDefinition * particleDefinition,
+G4double G4DNABornIonisationModel1::DifferentialCrossSection(G4ParticleDefinition * particleDefinition,
                                                            G4double k,
                                                            G4double energyTransfer,
                                                            G4int ionizationLevelIndex)
 {
   G4double sigma = 0.;
 
-  if (energyTransfer >= waterStructure.IonisationEnergy(ionizationLevelIndex))
+  if (energyTransfer >= waterStructure.IonisationEnergy(ionizationLevelIndex)/eV)
   {
     G4double valueT1 = 0;
     G4double valueT2 = 0;
@@ -744,29 +764,34 @@ double G4DNABornIonisationModel1::DifferentialCrossSection(G4ParticleDefinition 
 
     if (particleDefinition == G4Electron::ElectronDefinition())
     {
+
+      // Protection against out of boundary access - electron case : 1 MeV
+      if (k==eTdummyVec.back()) k=k*(1.-1e-12);
+      //
+
       // k should be in eV and energy transfer eV also
 
-      std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
+      std::vector<G4double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
                                                           eTdummyVec.end(),
                                                           k);
 
-      std::vector<double>::iterator t1 = t2 - 1;
+      std::vector<G4double>::iterator t1 = t2 - 1;
 
       // SI : the following condition avoids situations where energyTransfer >last vector element
       if (energyTransfer <= eVecm[(*t1)].back()
           && energyTransfer <= eVecm[(*t2)].back())
       {
-        std::vector<double>::iterator e12 =
+        std::vector<G4double>::iterator e12 =
             std::upper_bound(eVecm[(*t1)].begin(),
                              eVecm[(*t1)].end(),
                              energyTransfer);
-        std::vector<double>::iterator e11 = e12 - 1;
+        std::vector<G4double>::iterator e11 = e12 - 1;
 
-        std::vector<double>::iterator e22 =
+        std::vector<G4double>::iterator e22 =
             std::upper_bound(eVecm[(*t2)].begin(),
                              eVecm[(*t2)].end(),
                              energyTransfer);
-        std::vector<double>::iterator e21 = e22 - 1;
+        std::vector<G4double>::iterator e21 = e22 - 1;
 
         valueT1 = *t1;
         valueT2 = *t2;
@@ -786,21 +811,25 @@ double G4DNABornIonisationModel1::DifferentialCrossSection(G4ParticleDefinition 
 
     if (particleDefinition == G4Proton::ProtonDefinition())
     {
+      // Protection against out of boundary access - proton case : 100 MeV
+      if (k==pTdummyVec.back()) k=k*(1.-1e-12);
+      //
+
       // k should be in eV and energy transfer eV also
-      std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),
+      std::vector<G4double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),
                                                           pTdummyVec.end(),
                                                           k);
-      std::vector<double>::iterator t1 = t2 - 1;
+      std::vector<G4double>::iterator t1 = t2 - 1;
 
-      std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),
+      std::vector<G4double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),
                                                            pVecm[(*t1)].end(),
                                                            energyTransfer);
-      std::vector<double>::iterator e11 = e12 - 1;
+      std::vector<G4double>::iterator e11 = e12 - 1;
 
-      std::vector<double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),
+      std::vector<G4double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),
                                                            pVecm[(*t2)].end(),
                                                            energyTransfer);
-      std::vector<double>::iterator e21 = e22 - 1;
+      std::vector<G4double>::iterator e21 = e22 - 1;
 
       valueT1 = *t1;
       valueT2 = *t2;
@@ -867,7 +896,7 @@ G4double G4DNABornIonisationModel1::Interpolate(G4double e1,
    G4double d2 = xs2;
    value = (d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
    }
-   */
+  */
 
   // Switch to log-lin interpolation for faster code
   if ((e2 - e1) != 0 && xs1 != 0 && xs2 != 0 && fasterCode)
@@ -1022,7 +1051,7 @@ G4double G4DNABornIonisationModel1::RandomizeEjectedElectronEnergyFromCumulatedD
       - waterStructure.IonisationEnergy(shell);
 
   //G4cout << RandomTransferedEnergy(particleDefinition, k/eV, shell) << G4endl;
-  // SI - 01/04/2014
+  
   if (secondaryElectronKineticEnergy < 0.)
     return 0.;
   //
@@ -1053,11 +1082,15 @@ G4double G4DNABornIonisationModel1::TransferedEnergy(G4ParticleDefinition* parti
 
   if (particleDefinition == G4Electron::ElectronDefinition())
   {
+    // Protection against out of boundary access - electron case : 1 MeV
+    if (k==eTdummyVec.back()) k=k*(1.-1e-12);
+    //
+
     // k should be in eV
-    std::vector<double>::iterator k2 = std::upper_bound(eTdummyVec.begin(),
+    std::vector<G4double>::iterator k2 = std::upper_bound(eTdummyVec.begin(),
                                                         eTdummyVec.end(),
                                                         k);
-    std::vector<double>::iterator k1 = k2 - 1;
+    std::vector<G4double>::iterator k1 = k2 - 1;
 
     /*
      G4cout << "----> k=" << k
@@ -1074,19 +1107,19 @@ G4double G4DNABornIonisationModel1::TransferedEnergy(G4ParticleDefinition* parti
     if (random <= eProbaShellMap[ionizationLevelIndex][(*k1)].back()
         && random <= eProbaShellMap[ionizationLevelIndex][(*k2)].back())
     {
-      std::vector<double>::iterator prob12 =
+      std::vector<G4double>::iterator prob12 =
           std::upper_bound(eProbaShellMap[ionizationLevelIndex][(*k1)].begin(),
                            eProbaShellMap[ionizationLevelIndex][(*k1)].end(),
                            random);
 
-      std::vector<double>::iterator prob11 = prob12 - 1;
+      std::vector<G4double>::iterator prob11 = prob12 - 1;
 
-      std::vector<double>::iterator prob22 =
+      std::vector<G4double>::iterator prob22 =
           std::upper_bound(eProbaShellMap[ionizationLevelIndex][(*k2)].begin(),
                            eProbaShellMap[ionizationLevelIndex][(*k2)].end(),
                            random);
 
-      std::vector<double>::iterator prob21 = prob22 - 1;
+      std::vector<G4double>::iterator prob21 = prob22 - 1;
 
       valueK1 = *k1;
       valueK2 = *k2;
@@ -1114,15 +1147,16 @@ G4double G4DNABornIonisationModel1::TransferedEnergy(G4ParticleDefinition* parti
        */
 
     }
+
     // Avoids cases where cum xs is zero for k1 and is not for k2 (with always k1<k2)
     if (random > eProbaShellMap[ionizationLevelIndex][(*k1)].back())
     {
-      std::vector<double>::iterator prob22 =
+      std::vector<G4double>::iterator prob22 =
           std::upper_bound(eProbaShellMap[ionizationLevelIndex][(*k2)].begin(),
                            eProbaShellMap[ionizationLevelIndex][(*k2)].end(),
                            random);
 
-      std::vector<double>::iterator prob21 = prob22 - 1;
+      std::vector<G4double>::iterator prob21 = prob22 - 1;
 
       valueK1 = *k1;
       valueK2 = *k2;
@@ -1160,13 +1194,17 @@ G4double G4DNABornIonisationModel1::TransferedEnergy(G4ParticleDefinition* parti
   //
   else if (particleDefinition == G4Proton::ProtonDefinition())
   {
+    // Protection against out of boundary access - proton case : 100 MeV
+    if (k==pTdummyVec.back()) k=k*(1.-1e-12);
+    //
+
     // k should be in eV
 
-    std::vector<double>::iterator k2 = std::upper_bound(pTdummyVec.begin(),
+    std::vector<G4double>::iterator k2 = std::upper_bound(pTdummyVec.begin(),
                                                         pTdummyVec.end(),
                                                         k);
 
-    std::vector<double>::iterator k1 = k2 - 1;
+    std::vector<G4double>::iterator k1 = k2 - 1;
 
     /*
      G4cout << "----> k=" << k
@@ -1184,19 +1222,19 @@ G4double G4DNABornIonisationModel1::TransferedEnergy(G4ParticleDefinition* parti
     if (random <= pProbaShellMap[ionizationLevelIndex][(*k1)].back()
         && random <= pProbaShellMap[ionizationLevelIndex][(*k2)].back())
     {
-      std::vector<double>::iterator prob12 =
+      std::vector<G4double>::iterator prob12 =
           std::upper_bound(pProbaShellMap[ionizationLevelIndex][(*k1)].begin(),
                            pProbaShellMap[ionizationLevelIndex][(*k1)].end(),
                            random);
 
-      std::vector<double>::iterator prob11 = prob12 - 1;
+      std::vector<G4double>::iterator prob11 = prob12 - 1;
 
-      std::vector<double>::iterator prob22 =
+      std::vector<G4double>::iterator prob22 =
           std::upper_bound(pProbaShellMap[ionizationLevelIndex][(*k2)].begin(),
                            pProbaShellMap[ionizationLevelIndex][(*k2)].end(),
                            random);
 
-      std::vector<double>::iterator prob21 = prob22 - 1;
+      std::vector<G4double>::iterator prob21 = prob22 - 1;
 
       valueK1 = *k1;
       valueK2 = *k2;
@@ -1228,12 +1266,12 @@ G4double G4DNABornIonisationModel1::TransferedEnergy(G4ParticleDefinition* parti
 
     if (random > pProbaShellMap[ionizationLevelIndex][(*k1)].back())
     {
-      std::vector<double>::iterator prob22 =
+      std::vector<G4double>::iterator prob22 =
           std::upper_bound(pProbaShellMap[ionizationLevelIndex][(*k2)].begin(),
                            pProbaShellMap[ionizationLevelIndex][(*k2)].end(),
                            random);
 
-      std::vector<double>::iterator prob21 = prob22 - 1;
+      std::vector<G4double>::iterator prob21 = prob22 - 1;
 
       valueK1 = *k1;
       valueK2 = *k2;

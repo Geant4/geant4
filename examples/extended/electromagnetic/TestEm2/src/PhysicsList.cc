@@ -23,10 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 /// \file electromagnetic/TestEm2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
 // $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+/// \file PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,16 +116,28 @@ void PhysicsList::ConstructProcess()
   //
   fDecay->ConstructProcess();
 
+<<<<<<< HEAD
   // step limitation (as a full process)
   //  
   AddStepMax();
+=======
+    if (stepMaxProcess->IsApplicable(*particle))
+      {
+        pmanager->AddDiscreteProcess(stepMaxProcess);
+      }
+  }
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
+<<<<<<< HEAD
   if (verboseLevel>0) {
+=======
+  if (verboseLevel>1) {
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 

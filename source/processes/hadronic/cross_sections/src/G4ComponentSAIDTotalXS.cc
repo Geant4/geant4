@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComponentSAIDTotalXS.cc 83409 2014-08-21 15:16:07Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -47,12 +46,16 @@ const G4String G4ComponentSAIDTotalXS::fnames[13] = {
   "gp_pi0p","gp_pi+n","gn_pi-p","gn_pi0n","gp_etap","gp_etapp"
 };
 
+#ifdef G4MULTITHREADED
+  G4Mutex G4ComponentSAIDTotalXS::saidXSMutex = G4MUTEX_INITIALIZER;
+#endif
+
 G4ComponentSAIDTotalXS::G4ComponentSAIDTotalXS() 
   : G4VComponentCrossSection("xsSAID")
 {
   for(G4int i=0; i<numberOfSaidXS; ++i) {
-    elastdata[i] = 0;
-    inelastdata[i] = 0;
+    elastdata[i] = nullptr;
+    inelastdata[i] = nullptr;
   }
 }
 
@@ -61,11 +64,11 @@ G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
   for(G4int i=0; i<numberOfSaidXS; ++i) {
     if(elastdata[i]) {
       delete elastdata[i];
-      elastdata[i] = 0;
+      elastdata[i] = nullptr;
     }
     if(inelastdata[i]) {
       delete inelastdata[i];
-      inelastdata[i] = 0;
+      inelastdata[i] = nullptr;
     }
   }
 }
@@ -164,8 +167,7 @@ G4ComponentSAIDTotalXS::GetChargeExchangeCrossSection(
   return cross;
 }
 
-void 
-G4ComponentSAIDTotalXS::Description() const
+void G4ComponentSAIDTotalXS::Description(std::ostream&) const
 {
 }
 
@@ -213,24 +215,32 @@ G4ComponentSAIDTotalXS::GetType(const G4ParticleDefinition* prim,
 void G4ComponentSAIDTotalXS::Initialise(G4SAIDCrossSectionType tp)
 {
   G4int idx = G4int(tp);
-  // check environment variable 
-  // Build the complete string identifying the file with the data set
-  char* path = getenv("G4SAIDXSDATA");
-  if (!path){
-    G4Exception("G4ComponentSAIDTotalXS::Initialise(..)","had013",
-		FatalException,
-		"Environment variable G4SAIDXSDATA is not defined");
-    return;
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&saidXSMutex);
+  if(!inelastdata[idx]) { 
+#endif
+    // check environment variable 
+    // Build the complete string identifying the file with the data set
+    char* path = std::getenv("G4SAIDXSDATA");
+    if (!path){
+      G4Exception("G4ComponentSAIDTotalXS::Initialise(..)","had013",
+		  FatalException,
+		  "Environment variable G4SAIDXSDATA is not defined");
+      return;
+    }
+    if(idx <= 4) {
+      elastdata[idx] = new G4LPhysicsFreeVector();
+      inelastdata[idx] = new G4LPhysicsFreeVector();
+      ReadData(idx,elastdata[idx],path,"_el.dat");
+      ReadData(idx,inelastdata[idx],path,"_in.dat");
+    } else {
+      inelastdata[idx] = new G4LPhysicsFreeVector();
+      ReadData(idx,inelastdata[idx],path,".dat");
+    }
+#ifdef G4MULTITHREADED
   }
-  if(idx <= 4) {
-    elastdata[idx] = new G4LPhysicsFreeVector();
-    inelastdata[idx] = new G4LPhysicsFreeVector();
-    ReadData(idx,elastdata[idx],path,"_el.dat");
-    ReadData(idx,inelastdata[idx],path,"_in.dat");
-  } else {
-    inelastdata[idx] = new G4LPhysicsFreeVector();
-    ReadData(idx,inelastdata[idx],path,".dat");
-  }
+  G4MUTEXUNLOCK(&saidXSMutex);
+#endif
 }
 
 void G4ComponentSAIDTotalXS::ReadData(G4int index, 

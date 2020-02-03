@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXeScintHit.cc 72250 2013-07-12 08:59:26Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/src/LXeScintHit.cc
 /// \brief Implementation of the LXeScintHit class
@@ -71,7 +74,7 @@ const LXeScintHit& LXeScintHit::operator=(const LXeScintHit &right){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int LXeScintHit::operator==(const LXeScintHit&) const{
+G4bool LXeScintHit::operator==(const LXeScintHit&) const{
   return false;
   //returns false because there currently isnt need to check for equality yet
 }

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: .README.txt 95508 2016-02-12 13:52:06Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ///\file "basic/.README.txt"
 ///\brief Geant4 Basic Examples README page
@@ -13,6 +16,7 @@ development.
    - Simple geometry with a few solids 
    - Geometry with simple placements (G4PVPlacement)
    - Scoring total dose in a selected volume user action classes
+   - Using G4Accumulable for automatic merging of scored values in multi-threading mode 
    - Geant4 physics list (QBBC)
    
 - \ref ExampleB2
@@ -28,6 +32,8 @@ development.
    - Geometry with simple placements with rotation (G4PVPlacement)
    - Radioactive source 
    - Scoring within Crystals via G4 scorers
+   - Using G4Accumulable for automatic merging of scored values in multi-threading mode (a)
+     and G4StatAnalysis for accumulating statistics (b)
    - Modular physics list built via builders provided in Geant4
 
 - \ref ExampleB4

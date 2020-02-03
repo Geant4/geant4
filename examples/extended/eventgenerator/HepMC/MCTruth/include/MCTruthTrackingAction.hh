@@ -27,7 +27,10 @@
 /// \brief Definition of the MCTruthTrackingAction class
 //
 //
+<<<<<<< HEAD
 // $Id: MCTruthTrackingAction.hh 73446 2013-08-27 11:32:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 // --------------------------------------------------------------
@@ -52,8 +55,8 @@ public:
 
   virtual ~MCTruthTrackingAction( );
   
-  void PreUserTrackingAction(const G4Track*);
-  void PostUserTrackingAction(const G4Track*);
+  virtual void PreUserTrackingAction(const G4Track*);
+  virtual void PostUserTrackingAction(const G4Track*);
 
 private:
 

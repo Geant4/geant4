@@ -1,4 +1,3 @@
-// $Id: Doxymodules_parallel.h 94627 2015-11-30 08:17:35Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_parallel.h
@@ -38,6 +37,15 @@
 /** @defgroup extended_parallel_MPI_exMPI03 exMPI03
  *  Parallel MPI exMPI03 example has its 
  *  <a href="../html_exMPI03/html/index.html">standalone documentation </a>
+ *  @ingroup extended_parallel_MPI
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_parallel_MPI_exMPI04 exMPI04
+ *  Parallel MPI exMPI04 example has its 
+ *  <a href="../html_exMPI04/html/index.html">standalone documentation </a>
  *  @ingroup extended_parallel_MPI
  *  @{
  */

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh 83518 2014-08-27 12:57:10Z gcosmo $
 //
 
 #ifndef G4ScoringBox_h
@@ -52,8 +51,8 @@ protected:
 
 public:
   void List() const;
-  void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-  void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+  void Draw(RunScore * map, G4VScoreColorMap* colorMap, G4int axflg=111);
+  void DrawColumn(RunScore * map, G4VScoreColorMap* colorMap, 
 		  G4int idxProj, G4int idxColumn); 
 
   // set a direction to segment this mesh

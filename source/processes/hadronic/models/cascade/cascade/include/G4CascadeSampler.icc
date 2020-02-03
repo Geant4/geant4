@@ -25,7 +25,6 @@
 //
 #ifndef G4CASCADE_SAMPLER_ICC
 #define G4CASCADE_SAMPLER_ICC
-// $Id: G4CascadeSampler.icc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100506 M. Kelsey -- Move functionity of G4CascadeChannel here,
 //		use as base class to G4CascadeFunctions<T>.

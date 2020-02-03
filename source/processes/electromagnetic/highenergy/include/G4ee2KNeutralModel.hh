@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ee2KNeutralModel.hh 82961 2014-07-21 09:20:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,22 +60,22 @@ class G4ee2KNeutralModel : public G4Vee2hadrons
 
 public:
 
-  G4ee2KNeutralModel(G4eeCrossSections*,G4double,G4double);
+  explicit G4ee2KNeutralModel(G4eeCrossSections*,G4double,G4double);
 
   virtual ~G4ee2KNeutralModel();
 
-  virtual G4double PeakEnergy() const;
+  virtual G4double PeakEnergy() const override;
 
-  virtual G4double ComputeCrossSection(G4double) const;
+  virtual G4double ComputeCrossSection(G4double) const override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-              G4double, const G4ThreeVector&);
+              G4double, const G4ThreeVector&) override;
 
 private:
 
   // hide assignment operator
-  G4ee2KNeutralModel & operator=(const  G4ee2KNeutralModel &right);
-  G4ee2KNeutralModel(const  G4ee2KNeutralModel&);
+  G4ee2KNeutralModel & operator=(const  G4ee2KNeutralModel &right) = delete;
+  G4ee2KNeutralModel(const  G4ee2KNeutralModel&) = delete;
 
   G4double massK;
   G4double massPhi;

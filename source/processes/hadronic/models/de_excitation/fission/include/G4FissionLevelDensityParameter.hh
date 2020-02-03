@@ -24,42 +24,36 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.hh 84396 2014-10-15 07:18:24Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitation
 // by V. Lara (Oct 1998) 
 //
 
-
-
 #ifndef G4FissionLevelDensityParameter_h
 #define G4FissionLevelDensityParameter_h 1
 
-
 #include "G4VLevelDensityParameter.hh"
-#include "G4EvaporationLevelDensityParameter.hh"
 
+class G4NuclearLevelData;
 
 class G4FissionLevelDensityParameter : public G4VLevelDensityParameter
 {
 public:
-  G4FissionLevelDensityParameter();
+  explicit G4FissionLevelDensityParameter();
   virtual ~G4FissionLevelDensityParameter();
+
+  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const final;
 
 private:  
   G4FissionLevelDensityParameter(const G4FissionLevelDensityParameter &right);
-
-  const G4FissionLevelDensityParameter & operator=(const G4FissionLevelDensityParameter &right);
+  const G4FissionLevelDensityParameter & operator=
+  (const G4FissionLevelDensityParameter &right);
   G4bool operator==(const G4FissionLevelDensityParameter &right) const;
   G4bool operator!=(const G4FissionLevelDensityParameter &right) const;
   
-public:
-  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const;
-
-  
 private:
   
-  G4EvaporationLevelDensityParameter theEvaporationLevelDensityParameter;
+  G4NuclearLevelData* fNucData;
 
 };
 

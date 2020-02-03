@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,31 +35,24 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TFTFP_BERT_h
-#define TFTFP_BERT_h 1
+#ifndef FTFP_BERT_h
+#define FTFP_BERT_h 1
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TFTFP_BERT: public T
+class FTFP_BERT: public G4VModularPhysicsList 
 {
 public:
-  TFTFP_BERT(G4int ver = 1);
-  virtual ~TFTFP_BERT();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
+  FTFP_BERT(G4int ver = 1);
+  virtual ~FTFP_BERT()=default;
 
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+  FTFP_BERT(const FTFP_BERT &) = delete;
+  FTFP_BERT & operator=(const FTFP_BERT &)=delete;
+  
 };
-#include "FTFP_BERT.icc"
-typedef TFTFP_BERT<G4VModularPhysicsList> FTFP_BERT;
 
 #endif
 

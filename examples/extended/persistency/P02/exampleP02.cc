@@ -27,7 +27,10 @@
 /// \brief Main program of the persistency/P02 example
 //
 //
+<<<<<<< HEAD
 // $Id: exampleP02.cc 82291 2014-06-13 15:20:32Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

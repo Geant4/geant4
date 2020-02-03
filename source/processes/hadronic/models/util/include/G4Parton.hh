@@ -65,9 +65,9 @@ class G4Parton
 
       G4Parton & operator=(const G4Parton &right);
 
-      int operator==(const G4Parton &right) const;
+      G4bool operator==(const G4Parton &right) const;
 
-      int operator!=(const G4Parton &right) const;
+      G4bool operator!=(const G4Parton &right) const;
       
       G4int GetPDGcode() const;
       
@@ -111,12 +111,12 @@ class G4Parton
       
 };
 
-inline int G4Parton::operator==(const G4Parton &right) const
+inline G4bool G4Parton::operator==(const G4Parton &right) const
 {
 	return this==&right;
 }	
 
-inline int G4Parton::operator!=(const G4Parton &right) const
+inline G4bool G4Parton::operator!=(const G4Parton &right) const
 {
 	return this!=&right;
 }

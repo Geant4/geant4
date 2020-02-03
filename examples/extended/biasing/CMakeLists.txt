@@ -9,4 +9,10 @@ add_subdirectory(GB01)
 add_subdirectory(GB02)
 add_subdirectory(GB03)
 add_subdirectory(GB04)
+<<<<<<< HEAD
+=======
+add_subdirectory(GB05)
+add_subdirectory(GB06)
+add_subdirectory(GB07)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 add_subdirectory(ReverseMC01)

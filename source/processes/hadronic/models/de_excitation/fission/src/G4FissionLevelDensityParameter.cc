@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -34,39 +33,24 @@
 // J.M.Quesada (30.10.09):   retuning for IAEA spallation data
 
 #include "G4FissionLevelDensityParameter.hh"
-#include "G4HadronicException.hh"
-
+#include "G4NuclearLevelData.hh"
 
 G4FissionLevelDensityParameter::G4FissionLevelDensityParameter()
-{}
+{
+  fNucData = G4NuclearLevelData::GetInstance();
+}
 
 G4FissionLevelDensityParameter::~G4FissionLevelDensityParameter()
 {}
 
-
 G4double G4FissionLevelDensityParameter::
 LevelDensityParameter(G4int A, G4int Z, G4double U) const 
 {
-  G4double EvapLDP = 
-    theEvaporationLevelDensityParameter.LevelDensityParameter(A,Z,U);
+  G4double EvapLDP = fNucData->GetLevelDensity(Z, A, U); 
 
-  if(Z >= 89)      { EvapLDP *= 1.02; }
-  else if(Z >= 85) { EvapLDP *= (1.02 + 0.004*(89 - Z)); }
-  else             { EvapLDP *= 1.04; }
+  if(Z >= 89)      { EvapLDP *= 1.05; }
+  else if(Z <= 85) { EvapLDP *= 1.03; }
+  else             { EvapLDP *= (1.03 + 0.005*(Z - 85)); }
 
-  /*
-  if(Z >= 89)      { EvapLDP *= 1.01; }
-  else if(Z >= 85) { EvapLDP *= (1.01 + 0.002*(89 - Z)); }
-  else             { EvapLDP *= 1.02; }
-  */
   return EvapLDP;
-
-  /*
-  if(Z >= 89)      EvapLDP *= 1.04;
-  else if(Z >= 85) EvapLDP *= (1.04 + 0.01*(89 - Z));
-  else             EvapLDP *= 1.09;
-
-  //JMQ 310509 
-  return 1.07*EvapLDP;
-  */
 }

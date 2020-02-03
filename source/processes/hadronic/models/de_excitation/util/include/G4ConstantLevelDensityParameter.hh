@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstantLevelDensityParameter.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations (photon evaporation)
 // by C. Dallapiccola (Nov 1998) 
@@ -39,19 +38,17 @@ class G4ConstantLevelDensityParameter : public G4VLevelDensityParameter
 {
 public:
 
-  G4ConstantLevelDensityParameter();
+  explicit G4ConstantLevelDensityParameter();
   virtual ~G4ConstantLevelDensityParameter();
+
+  G4double LevelDensityParameter(G4int A, G4int,G4double) const final; 
 
 private:  
   G4ConstantLevelDensityParameter(const G4ConstantLevelDensityParameter &right);
-
-  const G4ConstantLevelDensityParameter & operator=(const G4ConstantLevelDensityParameter &right);
+  const G4ConstantLevelDensityParameter & operator=
+  (const G4ConstantLevelDensityParameter &right);
   G4bool operator==(const G4ConstantLevelDensityParameter &right) const;
   G4bool operator!=(const G4ConstantLevelDensityParameter &right) const;
-  
-public:
-  G4double LevelDensityParameter(const G4int A,const G4int /*Z*/,const G4double /*U*/) const 
-    {return A * EvapLevelDensityParameter;}
 
 private:
 

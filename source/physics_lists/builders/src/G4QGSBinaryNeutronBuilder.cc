@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryNeutronBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +32,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -42,11 +42,13 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4HadronicParameters.hh"
+
 
 G4QGSBinaryNeutronBuilder::
 G4QGSBinaryNeutronBuilder(G4bool quasiElastic) 
 {
-  theMin = 12*GeV;
+  theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSB");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;
@@ -74,25 +76,10 @@ G4QGSBinaryNeutronBuilder::
 }
 
 void G4QGSBinaryNeutronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-void G4QGSBinaryNeutronBuilder::
-Build(G4HadronFissionProcess * )
-{
-}
-
-void G4QGSBinaryNeutronBuilder::
-Build(G4HadronCaptureProcess * )
-{
-}
-
-void G4QGSBinaryNeutronBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   aP->RegisterMe(theModel);
     aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
 }

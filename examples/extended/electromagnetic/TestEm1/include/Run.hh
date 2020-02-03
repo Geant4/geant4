@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm11/include/Run.hh
 /// \brief Definition of the Run class
 //
-// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,34 +45,34 @@ class G4ParticleDefinition;
 class Run : public G4Run
 {
   public:
-    Run(DetectorConstruction*);
-   ~Run();
+    Run(const DetectorConstruction*);
+    ~Run() override;
 
-  public:
-    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+    void SetPrimary(const G4ParticleDefinition* particle, G4double energy);
       
     void CountTraks0(G4int nt) { fNbOfTraks0 += nt;}
     void CountTraks1(G4int nt) { fNbOfTraks1 += nt;}
     void CountSteps0(G4int ns) { fNbOfSteps0 += ns;}
     void CountSteps1(G4int ns) { fNbOfSteps1 += ns;}
-    void CountProcesses(G4String procName);
+    void CountProcesses(const G4String& procName);
     
     void AddEdep(G4double val)     { fEdep += val;}
+    void AddNIEL(G4double val)     { fNIEL += val;}
     void AddTrueRange (G4double l) { fTrueRange += l; fTrueRange2 += l*l;}
     void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x;}
     void AddTransvDev (G4double y) { fTransvDev += y; fTransvDev2 += y*y;}  
             
-    virtual void Merge(const G4Run*);
+    void Merge(const G4Run*) override;
     void EndOfRun();
      
   private:
-    DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
+    const DetectorConstruction*  fDetector;
+    const G4ParticleDefinition*  fParticle;
     G4double  fEkin;
                            
     G4int           fNbOfTraks0, fNbOfTraks1;
     G4int           fNbOfSteps0, fNbOfSteps1;
-    G4double        fEdep;
+    G4double        fEdep, fNIEL;
     G4double        fTrueRange, fTrueRange2;             
     G4double        fProjRange, fProjRange2;
     G4double        fTransvDev, fTransvDev2;

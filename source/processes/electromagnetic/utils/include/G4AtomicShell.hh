@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AtomicShell.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -59,10 +58,8 @@ public:
   // The data and the methods of this class are relative to
   // a given shell
  
-  G4AtomicShell(G4int id, G4double bindingEnergy);
+  explicit G4AtomicShell(G4int id, G4double e):identifier(id),bindingEnergy(e){};
  
-  ~G4AtomicShell();
-
   // Returns the binding energy of the shell
   inline G4double BindingEnergy() const; 
 
@@ -71,6 +68,9 @@ public:
 
 private:
   
+  G4AtomicShell & operator=(const  G4AtomicShell &right) = delete;
+  G4AtomicShell(const  G4AtomicShell&) = delete;
+
   G4int identifier;
   G4double bindingEnergy;
 

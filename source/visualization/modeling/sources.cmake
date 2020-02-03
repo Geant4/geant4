@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88190 2015-02-02 17:24:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -35,6 +34,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
@@ -55,10 +55,13 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4AttValueFilterT.hh
         G4AttributeFilterT.hh
         G4AxesModel.hh
+        G4BoundingExtentScene.hh
         G4BoundingSphereScene.hh
         G4CallbackModel.hh
         G4DigiFilterFactories.hh
         G4DigiModel.hh
+        G4ElectricFieldModel.hh
+        G4GPSModel.hh
         G4HitFilterFactories.hh
         G4HitsModel.hh
         G4LogicalVolumeModel.hh
@@ -75,23 +78,28 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4PhysicalVolumeMassScene.hh
         G4PhysicalVolumeModel.hh
         G4PhysicalVolumeSearchScene.hh
+        G4PhysicalVolumesSearchScene.hh
         G4PseudoScene.hh
         G4ScaleModel.hh
         G4TextModel.hh
-        G4TouchableDumpScene.hh
+        G4TouchablePropertiesScene.hh
+        G4TouchableUtils.hh
         G4TrajectoriesModel.hh
         G4TrajectoryChargeFilter.hh
         G4TrajectoryDrawByAttribute.hh
         G4TrajectoryDrawByCharge.hh
         G4TrajectoryDrawByOriginVolume.hh
         G4TrajectoryDrawByParticleID.hh
+        G4TrajectoryDrawByEncounteredVolume.hh
         G4TrajectoryDrawerUtils.hh
         G4TrajectoryFilterFactories.hh
         G4TrajectoryGenericDrawer.hh
         G4TrajectoryModelFactories.hh
         G4TrajectoryOriginVolumeFilter.hh
         G4TrajectoryParticleFilter.hh
+        G4TrajectoryEncounteredVolumeFilter.hh
         G4VAttValueFilter.hh
+        G4VFieldModel.hh
         G4VModel.hh
         G4VModel.icc
         G4VModelCommand.hh
@@ -103,9 +111,12 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4ArrowModel.cc
         G4AttFilterUtils.cc
         G4AxesModel.cc
+        G4BoundingExtentScene.cc
         G4BoundingSphereScene.cc
         G4DigiFilterFactories.cc
         G4DigiModel.cc
+        G4ElectricFieldModel.cc
+        G4GPSModel.cc
         G4HitFilterFactories.cc
         G4HitsModel.cc
         G4LogicalVolumeModel.cc
@@ -116,21 +127,26 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4PhysicalVolumeMassScene.cc
         G4PhysicalVolumeModel.cc
         G4PhysicalVolumeSearchScene.cc
+        G4PhysicalVolumesSearchScene.cc
         G4ScaleModel.cc
         G4TextModel.cc
-        G4TouchableDumpScene.cc
+        G4TouchablePropertiesScene.cc
+        G4TouchableUtils.cc
         G4TrajectoriesModel.cc
         G4TrajectoryChargeFilter.cc
         G4TrajectoryDrawByAttribute.cc
         G4TrajectoryDrawByCharge.cc
         G4TrajectoryDrawByOriginVolume.cc
         G4TrajectoryDrawByParticleID.cc
+        G4TrajectoryDrawByEncounteredVolume.cc
         G4TrajectoryDrawerUtils.cc
         G4TrajectoryFilterFactories.cc
         G4TrajectoryGenericDrawer.cc
         G4TrajectoryModelFactories.cc
         G4TrajectoryOriginVolumeFilter.cc
         G4TrajectoryParticleFilter.cc
+        G4TrajectoryEncounteredVolumeFilter.cc
+        G4VFieldModel.cc
         G4VModel.cc
         G4VTrajectoryModel.cc
         G4VisTrajContext.cc
@@ -145,6 +161,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4geometrymng
         G4globman
         G4graphics_reps
+        G4hepnumerics
         G4hits
         G4intercoms
         G4materials

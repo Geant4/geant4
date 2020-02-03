@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
 //
 // 
 // ------------------------------------------------------------------
@@ -49,27 +48,30 @@
 #ifndef G4LPhysicsFreeVector_h
 #define G4LPhysicsFreeVector_h 1
 
-#include "G4PhysicsVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
-class G4LPhysicsFreeVector : public G4PhysicsVector  
+class G4LPhysicsFreeVector : public G4PhysicsFreeVector  
 {
 
 public: // with description
 
-   G4LPhysicsFreeVector();
+  G4LPhysicsFreeVector();
+  // the vector will be filled from external file using Retrieve method
 
-   G4LPhysicsFreeVector(size_t nbin, G4double binmin, G4double binmax);
+  G4LPhysicsFreeVector(size_t length, G4double emin=0.0, G4double emax=0.0);
+  // the vector with 'length' elements will be filled using PutValues method 
+  // by default the vector is initialized with zeros
 
-   virtual ~G4LPhysicsFreeVector();
+  virtual ~G4LPhysicsFreeVector();
 
-   void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
-     // G4PhysicsVector has PutValue() but it is inconvenient.
-     // Want to simultaneously fill the bin and data vectors.
-
-   void DumpValues();
-
+  inline void PutValues(size_t index, G4double e, G4double dataValue);
+  // user code is responsible for correct filling of all elements
 };
 
-#include "G4LPhysicsFreeVector.icc"
+inline
+void G4LPhysicsFreeVector::PutValues(size_t index, G4double e, G4double value)
+{
+  G4PhysicsFreeVector::PutValue(index, e, value);
+}
 
 #endif

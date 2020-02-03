@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc 102312 2017-01-20 15:33:46Z gcosmo $
 //
 // class G4GDMLReadStructure Implementation
 //
@@ -374,6 +373,10 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
 
    if (pAssembly)   // Fill assembly structure
    {
+     if (assembly)   // Case of recursive assemblies
+     {
+       pAssembly->AddPlacedAssembly(assembly, transform);
+     }
      if (!logvol) { return; }
      pAssembly->AddPlacedVolume(logvol, transform);
    }
@@ -794,8 +797,9 @@ Volume_contentRead(const xercesc::DOMElement* const volumeElement)
 void G4GDMLReadStructure::
 StructureRead(const xercesc::DOMElement* const structureElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading structure..." << G4endl;
-
+#endif
    for (xercesc::DOMNode* iter = structureElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
    {
@@ -901,4 +905,5 @@ void G4GDMLReadStructure::Clear()
 {
   eval.Clear();
   setuptoPV.clear();
+  auxMap.clear();
 }

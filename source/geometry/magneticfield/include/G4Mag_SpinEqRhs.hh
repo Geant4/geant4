@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Mag_SpinEqRhs.hh 69699 2013-05-13 08:50:30Z gcosmo $
-//
-//
-// class G4Mag_SpinEqRhs
+// G4Mag_SpinEqRhs
 //
 // Class description:
 //
@@ -35,12 +31,10 @@
 // magnetic field. The three components of the particle's spin are
 // treated utilising BMT equation.
 
-// History:
-// - Created: J.Apostolakis, P.Gumplinger - February 8th, 1999.
+// Created: J.Apostolakis, P.Gumplinger - 08.02.1999
 // --------------------------------------------------------------------
-
-#ifndef G4MAG_SPIN_EQRHS
-#define G4MAG_SPIN_EQRHS
+#ifndef G4MAG_SPIN_EQRHS_HH
+#define G4MAG_SPIN_EQRHS_HH
 
 #include "G4Types.hh"
 #include "G4Mag_EqRhs.hh"
@@ -72,12 +66,9 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
 
    private:
 
-     G4double charge, mass, magMoment, spin;
-
-     G4double omegac, anomaly;
-
-     G4double beta, gamma;
-
+     G4double charge=0.0, mass=0.0, magMoment=0.0, spin=0.0;
+     G4double omegac=0.0, anomaly=0.0011659208;
+     G4double beta=0.0, gamma=0.0;
 };
 
-#endif /* G4MAG_SPIN_EQRHS */
+#endif

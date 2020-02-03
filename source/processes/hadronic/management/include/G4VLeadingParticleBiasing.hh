@@ -23,18 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VLeadingParticleBiasing.hh 67989 2013-03-13 10:54:03Z gcosmo $
 //
 // --------------------------------------------------------------------
 #ifndef G4VLeadingParticleBiasing_h
 #define G4VLeadingParticleBiasing_h
 
-class G4HadFinalState;
+#include "G4HadFinalState.hh"
 
 class G4VLeadingParticleBiasing 
 {
-  public:
-  
+public:
+ 
+  explicit G4VLeadingParticleBiasing() {};
+  virtual ~G4VLeadingParticleBiasing() {};
+
   virtual G4HadFinalState * Bias(G4HadFinalState * result) = 0;
 };
 

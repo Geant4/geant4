@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.hh 70021 2013-05-22 07:55:29Z gcosmo $
 //
 // 
 // ---------------------------------------------------------------
@@ -42,10 +41,10 @@
 
 #ifdef G4MULTITHREADED
 
-  extern G4GLOB_DLL G4ThreadLocal std::ostream *G4cout_p;
-  extern G4GLOB_DLL G4ThreadLocal std::ostream *G4cerr_p;
-  #define G4cout (*G4cout_p)
-  #define G4cerr (*G4cerr_p)
+  extern G4GLOB_DLL std::ostream*& _G4cout_p();
+  extern G4GLOB_DLL std::ostream*& _G4cerr_p();
+  #define G4cout (*_G4cout_p())
+  #define G4cerr (*_G4cerr_p())
 
 #else  // Sequential
 

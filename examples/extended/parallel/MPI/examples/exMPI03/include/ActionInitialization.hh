@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh 66587 2012-12-21 11:06:44Z ihrivnac $
 //
 /// @file PrimaryGeneratrorAction.hh
 /// @brief Define primary generator action

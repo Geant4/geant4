@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.hh 91612 2015-07-29 08:51:51Z gcosmo $
 
 #ifndef G4ASTARStopping_h
 #define G4ASTARStopping_h 1
@@ -49,6 +48,8 @@
 // Data on Stopping Powers of the He atoms from the NIST Data Base  
 // http://physics.nist.gov/PhysRefData/STAR/Text/ASTAR.html
 //
+// Current ASTAR database is available via url:
+// http://physics.nist.gov/PhysRefData/Star/Text/ASTAR.html
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,7 +62,7 @@ class G4ASTARStopping
 { 
 public: 
 
-  G4ASTARStopping();
+  explicit G4ASTARStopping();
 
   ~G4ASTARStopping();
 
@@ -77,15 +78,15 @@ public:
 
 private:
 
-  void AddData(const G4double* s, const G4Material*);
+  void AddData(const G4float* s, const G4Material*);
 
   void FindData(G4int idx, const G4Material*);
 
   void PrintWarning(G4int idx) const;
 
   // hide assignment operator
-  G4ASTARStopping & operator=(const  G4ASTARStopping &right);
-  G4ASTARStopping(const  G4ASTARStopping&);
+  G4ASTARStopping & operator=(const  G4ASTARStopping &right) = delete;
+  G4ASTARStopping(const  G4ASTARStopping&) = delete;
 
   size_t nvectors;
   G4double emin;

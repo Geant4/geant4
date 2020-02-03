@@ -27,7 +27,6 @@
 /// \brief Implementation of the RE01Trajectory class
 //
 //
-// $Id: RE01Trajectory.cc 75295 2013-10-30 09:32:52Z gcosmo $
 //
 
 #include "RE01Trajectory.hh"

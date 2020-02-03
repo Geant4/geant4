@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "polarisation/Pol01/.README.txt"
 ///\brief Example Pol01 README page

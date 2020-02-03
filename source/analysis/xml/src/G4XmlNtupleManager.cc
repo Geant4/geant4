@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4XmlNtupleManager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -88,8 +87,19 @@ void G4XmlNtupleManager::CreateTNtupleFromBooking(
 
 //_____________________________________________________________________________
 void G4XmlNtupleManager::FinishTNtuple(
-  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
+  G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription,
+  G4bool /*fromBooking*/)
+
 {
+  // Do nothing if the base file name was not yet defined
+  if ( ! fFileManager->GetFileName().size() ) return;
+
+  // Create ntuple from booking
+  if ( ! ntupleDescription->fNtuple ) {
+    CreateTNtupleFromBooking(ntupleDescription);
+  }
+
+  // Write header
   G4String path = "/";
   path.append(fFileManager->GetNtupleDirectoryName());
   ntupleDescription->fNtuple

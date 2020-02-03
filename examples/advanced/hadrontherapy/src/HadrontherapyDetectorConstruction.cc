@@ -52,7 +52,14 @@
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyLet.hh"
 #include "PassiveProtonBeamLine.hh"
+<<<<<<< HEAD
 #include "HadrontherapyAnalysisManager.hh"
+=======
+
+#include "HadrontherapyMatrix.hh"
+
+#include "HadrontherapyRBE.hh"
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #include "G4SystemOfUnits.hh"
 
 #include <cmath>
@@ -67,7 +74,7 @@ phantomLogicalVolume(0), detectorLogicalVolume(0),
 phantomPhysicalVolume(0), detectorPhysicalVolume(0),
 aRegion(0)
 {
-    HadrontherapyAnalysisManager::GetInstance();
+    
     
     /* NOTE! that the HadrontherapyDetectorConstruction class
      * does NOT inherit from G4VUserDetectorConstruction G4 class
@@ -96,6 +103,12 @@ aRegion(0)
     
     // Write virtual parameters to the real ones and check for consistency
     UpdateGeometry();
+<<<<<<< HEAD
+=======
+    
+    
+    
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -196,6 +209,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
     detectorLogicalVolume -> SetVisAttributes(skyBlue);
     
     // **************
+    // **************
     // Cut per Region
     // **************
     //
@@ -223,6 +237,42 @@ void HadrontherapyDetectorConstruction::InitializeDetectorROGeometry(
                    numberOfVoxelsAlongY,
                    numberOfVoxelsAlongZ);
 }
+void HadrontherapyDetectorConstruction::VirtualLayer(G4bool Varbool)
+{
+   
+    //Virtual  plane
+    VirtualLayerPosition = G4ThreeVector(0*cm,0*cm,0*cm);
+    NewSource= Varbool;
+    if(NewSource == true)
+    {
+       // std::cout<<"trr"<<std::endl;
+        G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
+        
+        solidVirtualLayer = new G4Box("VirtualLayer",
+                                      1.*um,
+                                      20.*cm,
+                                      40.*cm);
+        
+        logicVirtualLayer = new G4LogicalVolume(
+                                                solidVirtualLayer,
+                                                airNist,
+                                                "VirtualLayer");
+        
+        physVirtualLayer= new G4PVPlacement(0,VirtualLayerPosition,
+                                            "VirtualLayer",
+                                            logicVirtualLayer,
+                                            motherPhys,
+                                            false,
+                                            0);
+        
+        logicVirtualLayer -> SetVisAttributes(skyBlue);
+    }
+    
+    
+    
+    
+}
+
 
 ///////////////////////////////////////////////////////////////////////
 void  HadrontherapyDetectorConstruction::ParametersCheck()
@@ -316,6 +366,13 @@ void HadrontherapyDetectorConstruction::SetDetectorToPhantomPosition(G4ThreeVect
     detectorToPhantomPosition = displ;
 }
 
+void HadrontherapyDetectorConstruction::SetVirtualLayerPosition(G4ThreeVector position)
+{
+    
+    VirtualLayerPosition = position;
+    physVirtualLayer->SetTranslation(VirtualLayerPosition);
+    
+}
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::UpdateGeometry()
 {
@@ -330,20 +387,39 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
         phantom -> SetXHalfLength(phantomSizeX/2);
         phantom -> SetYHalfLength(phantomSizeY/2);
         phantom -> SetZHalfLength(phantomSizeZ/2);
+        
         phantomPhysicalVolume -> SetTranslation(phantomPosition);
     }
     else   ConstructPhantom();
+    
     
     // Get the center of the detector
     SetDetectorPosition();
     if (detector)
     {
+        
         detector -> SetXHalfLength(detectorSizeX/2);
         detector -> SetYHalfLength(detectorSizeY/2);
         detector -> SetZHalfLength(detectorSizeZ/2);
+        
         detectorPhysicalVolume -> SetTranslation(detectorPosition);
     }
     else    ConstructDetector();
+    
+    //std::cout<<NewSource<<std::endl;
+    /*if(NewSource)
+     {
+     std::cout<<"via"<<std::endl;
+     }*/
+    
+    
+    // std::cout<<"i"<<std::endl;
+    // std::cout<<VirtualLayerPosition<<std::endl;
+    // physVirtualLayer->SetTranslation(VirtualLayerPosition);
+    
+    
+    
+    
     
     // Round to nearest integer number of voxel
     
@@ -382,6 +458,9 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
                                               massOfVoxel);
     
     
+    // Initialize RBE
+    HadrontherapyRBE::CreateInstance(numberOfVoxelsAlongX, numberOfVoxelsAlongY, numberOfVoxelsAlongZ, massOfVoxel);
+    
     // Comment out the line below if let calculation is not needed!
     // Initialize LET with energy of primaries and clear data inside
     if ( (let = HadrontherapyLet::GetInstance(this)) )
@@ -401,6 +480,7 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
     G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
     
     PrintParameters();
+    
     // CheckOverlaps();
 }
 
@@ -451,4 +531,5 @@ void HadrontherapyDetectorConstruction::PrintParameters()
     numberOfVoxelsAlongY  <<','  <<
     numberOfVoxelsAlongZ  << ')' << G4endl;
 }
+
 

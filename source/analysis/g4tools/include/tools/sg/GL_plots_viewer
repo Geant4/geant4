@@ -1,0 +1,78 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_GL_plots_viewer
+#define tools_sg_GL_plots_viewer
+
+// used in geant4 plotting.
+
+#include <tools/sg/plots_viewer>
+
+#include "text_freetype"
+
+#include "GL_manager"
+#include "GL_action"
+
+namespace tools {
+namespace sg {
+
+class GL_plots_viewer : public tools::sg::plots_viewer {
+  TOOLS_HEADER(GL_plots_viewer,tools::sg::GL_plots_viewer,tools::sg::plots_viewer)
+//public:
+  //virtual void after_render() {}
+public:
+  void render() {
+    if(!m_ww) return;
+    if(!m_wh) return;
+
+    m_gl_mgr.begin_render(0,0,m_ww,m_wh,
+                          m_clear_color.r(),
+                          m_clear_color.g(),
+                          m_clear_color.b(),
+                          m_clear_color.a());
+
+    GL_action action(m_gl_mgr,m_out,m_ww,m_wh);
+    action.state().m_use_gsto = m_use_gsto;
+
+    m_sg.render(action);
+    if(!action.end()) { //check that matrices stack are ok.
+      m_out << "exib::sg::GL_plots_viewer :" 
+            << " bad gl_action end."
+            << std::endl;
+    }
+
+    //after_render();
+
+    m_gl_mgr.end_render();
+  }
+
+public:
+  GL_plots_viewer(std::ostream& a_out,
+                  unsigned int a_cols = 1,unsigned int a_rows = 1,
+                  unsigned int a_width = 500,unsigned int a_height = 500)
+  :parent(a_out,m_ttf,a_cols,a_rows,a_width,a_height)
+  ,m_gl_mgr(a_out)
+  {}
+  virtual ~GL_plots_viewer(){
+    //WARNING : nodes may refer m_gl_mgr (to handle gstos/texs), then we have to delete them first.
+    m_sg.clear();
+    m_plots.clear_sg();
+  }
+public:
+  GL_plots_viewer(const GL_plots_viewer& a_from)
+  :parent(a_from)
+  ,m_gl_mgr(a_from.m_gl_mgr)
+  {}
+  GL_plots_viewer& operator=(const GL_plots_viewer& a_from){
+    parent::operator=(a_from);
+    m_gl_mgr = a_from.m_gl_mgr;
+    return *this;
+  }
+protected:
+  GL_manager m_gl_mgr;
+  sg::text_freetype m_ttf;
+};
+
+}}
+
+#endif

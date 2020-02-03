@@ -27,7 +27,6 @@
 /// \brief Implementation of the PerspectiveVisAction class
 //
 //
-// $Id: PerspectiveVisAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
 
 #include "PerspectiveVisAction.hh"
 

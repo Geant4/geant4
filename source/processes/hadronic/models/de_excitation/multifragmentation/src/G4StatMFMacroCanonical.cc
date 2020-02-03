@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc 91834 2015-08-07 07:24:22Z gcosmo $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -74,14 +73,14 @@ void G4StatMFMacroCanonical::Initialize(const G4Fragment & theFragment)
   G4int A = theFragment.GetA_asInt();
   G4int Z = theFragment.GetZ_asInt();
   G4double x = 1.0 - 2.0*Z/G4double(A);
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
   
   // Free Internal energy at T = 0
   __FreeInternalE0 = A*( -G4StatMFParameters::GetE0() +     // Volume term (for T = 0)
 			 G4StatMFParameters::GetGamma0()*x*x) // Symmetry term
-    + G4StatMFParameters::GetBeta0()*g4pow->Z23(A) +   // Surface term (for T = 0)
+    + G4StatMFParameters::GetBeta0()*g4calc->Z23(A) +   // Surface term (for T = 0)
     0.6*elm_coupling*Z*Z/(G4StatMFParameters::Getr0()*     // Coulomb term 
-			  g4pow->Z13(A));
+			  g4calc->Z13(A));
   
   CalculateTemperature(theFragment);
   return;
@@ -99,9 +98,9 @@ void G4StatMFMacroCanonical::CalculateTemperature(const G4Fragment & theFragment
   G4double FragMult = std::max((1.0+(2.31/MeV)*(U/A - 3.5*MeV))*A/100.0, 2.0);
 
   // Parameter Kappa
-  G4Pow* g4pow = G4Pow::GetInstance();
-  _Kappa = (1.0+elm_coupling*(g4pow->A13(FragMult)-1)/
-	    (G4StatMFParameters::Getr0()*g4pow->Z13(A)));
+  G4Pow* g4calc = G4Pow::GetInstance();
+  _Kappa = (1.0+elm_coupling*(g4calc->A13(FragMult)-1)/
+	    (G4StatMFParameters::Getr0()*g4calc->Z13(A)));
   _Kappa = _Kappa*_Kappa*_Kappa - 1.0;
 	
   G4StatMFMacroTemperature * theTemp = new	
@@ -211,7 +210,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(G4int & Z,
 						  std::vector<G4int> & FragmentsA)
     // 
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
   std::vector<G4int> FragmentsZ;
   
   G4int DeltaZ = 0;
@@ -238,7 +237,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(G4int & Z,
 	  {
 	    G4double RandZ;
 	    G4double CC = 8.0*G4StatMFParameters::GetGamma0()
-	      + 2*CP*g4pow->Z23(FragmentsA[i]);
+	      + 2*CP*g4calc->Z23(FragmentsA[i]);
 	    G4double ZMean;
 	    if (FragmentsA[i] > 1 && FragmentsA[i] < 5) { ZMean = 0.5*FragmentsA[i]; }
 	    else {

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RDAugerData.hh
-// GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //

@@ -4,10 +4,10 @@
 #ifndef tools_vec3
 #define tools_vec3
 
-#include <cmath> //sqrt
+#include <cstddef> //size_t
 
 #ifdef TOOLS_MEM
-#include "mem"
+#include "../mem"
 #endif
 
 namespace tools {
@@ -40,11 +40,13 @@ public:
     m_data[1] = a_vec[1];
     m_data[2] = a_vec[2];
   }
-  vec3(const T& a0,const T& a1,const T& a2,bool a_inc = true) {
+  vec3(const T& a0,const T& a1,const T& a2
+#ifdef TOOLS_MEM
+       ,bool a_inc = true
+#endif       
+       ) {
 #ifdef TOOLS_MEM
     if(a_inc) mem::increment(s_class().c_str());
-#else
-    (void)a_inc;
 #endif
     m_data[0] = a0;
     m_data[1] = a1;
@@ -71,17 +73,21 @@ public:
     return *this;
   }
 public:
-  T v0() const { return m_data[0];}
-  T v1() const { return m_data[1];}
-  T v2() const { return m_data[2];}
+  const T& v0() const { return m_data[0];}
+  const T& v1() const { return m_data[1];}
+  const T& v2() const { return m_data[2];}
 
   void v0(const T& a_value) { m_data[0] = a_value;}
   void v1(const T& a_value) { m_data[1] = a_value;}
   void v2(const T& a_value) { m_data[2] = a_value;}
 
-  T x() const {return m_data[0];}
-  T y() const {return m_data[1];}
-  T z() const {return m_data[2];}
+  const T& x() const {return m_data[0];}
+  const T& y() const {return m_data[1];}
+  const T& z() const {return m_data[2];}
+
+  T& x() {return m_data[0];}
+  T& y() {return m_data[1];}
+  T& z() {return m_data[2];}
 
   void set_value(const T& a0,const T& a1,const T& a2) {
     m_data[0] = a0;
@@ -105,14 +111,12 @@ public:
   //  return true;
   //}
 
-  T length() const {
-    return (T)::sqrt(m_data[0]*m_data[0]
-                    +m_data[1]*m_data[1]
-                    +m_data[2]*m_data[2]);
+  T length(T(*a_sqrt)(T)) const {
+    return a_sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]+m_data[2]*m_data[2]);
   }
 
-  T normalize() {
-    T norme = length();
+  T normalize(T(*a_sqrt)(T)) {
+    T norme = length(a_sqrt);
     if(norme==T()) return T();
     divide(norme);
     return norme;
@@ -124,10 +128,10 @@ public:
             m_data[2] * aV.m_data[2]);
   }   
 
-  vec3<T> cross(const vec3<T>& aV) const {
-    return vec3<T>(m_data[1] * aV.m_data[2] - m_data[2] * aV.m_data[1],
-                   m_data[2] * aV.m_data[0] - m_data[0] * aV.m_data[2],
-                   m_data[0] * aV.m_data[1] - m_data[1] * aV.m_data[0]);
+  void cross(const vec3<T>& aV,vec3<T>& a_value) const {
+    a_value.set_value(m_data[1] * aV.m_data[2] - m_data[2] * aV.m_data[1],
+                      m_data[2] * aV.m_data[0] - m_data[0] * aV.m_data[2],
+                      m_data[0] * aV.m_data[1] - m_data[1] * aV.m_data[0]);
   }    
 
   bool equal(const vec3& aV) const {
@@ -136,6 +140,23 @@ public:
     if(m_data[2]!=aV.m_data[2]) return false;
     return true;
   }
+
+  template <class PREC>
+  bool equal_prec(const vec3& a_v,PREC a_prec,PREC(*a_fabs)(const T&)) const {
+    if(&a_v==this) return true;
+    for(unsigned int index=0;index<3;index++) {
+      T diff = m_data[index]-a_v.m_data[index];
+      if(a_fabs(diff)>=a_prec) return false;
+    }
+    return true;
+  }
+
+  vec3<T> _cross(const vec3<T>& aV) const {
+    //not effective.
+    return vec3<T>(m_data[1] * aV.m_data[2] - m_data[2] * aV.m_data[1],
+                   m_data[2] * aV.m_data[0] - m_data[0] * aV.m_data[2],
+                   m_data[0] * aV.m_data[1] - m_data[1] * aV.m_data[0]);
+  }    
 
   bool divide(const T& a_T) {
     if(a_T==T()) return false;
@@ -175,29 +196,31 @@ public:
     m_data[2] -= a2;
   }    
 
-  bool cos_angle(const vec3& a_v,T& a_cos) const {
+  bool cos_angle(const vec3& a_v,T& a_cos,T(*a_sqrt)(T)) const {
     //WARNING : if ret false, a_cos is not set.
-    if(length()==T()) return false;
-    if(a_v.length()==T()) return false;
-    a_cos = dot(a_v)/(length()*a_v.length());
+    T this_length = length(a_sqrt);
+    if(this_length==T()) return false;
+    T a_v_length = a_v.length(a_sqrt);
+    if(a_v_length==T()) return false;
+    a_cos = dot(a_v)/(this_length*a_v_length);
     return true;
   }
 
-  bool theta_phi(T& a_theta,T& a_phi) const {    
+  bool theta_phi(T& a_theta,T& a_phi,T(*a_sqrt)(T),T(*a_atan2)(T,T)) const {    
     //WARNING : if ret false, a_theta, a_phi are not set.
-    if(length()==T()) return false;
-    a_phi = (T)::atan2(m_data[1],m_data[0]);
-    T xy = (T)::sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]);
-    a_theta = (T)::atan2(xy,m_data[2]);
+    if(length(a_sqrt)==T()) return false;
+    a_phi = a_atan2(m_data[1],m_data[0]);
+    T xy = a_sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]);
+    a_theta = a_atan2(xy,m_data[2]);
     return true;
   }
 
 public: //operators
-  T& operator[](unsigned int a_index) {
+  T& operator[](size_t a_index) {
     //WARNING : no check on a_index.
     return m_data[a_index];
   }
-  const T& operator[](unsigned int a_index) const {
+  const T& operator[](size_t a_index) const {
     //WARNING : no check on a_index.
     return m_data[a_index];
   }
@@ -241,6 +264,7 @@ public: //for inlib/sg/sf_vec
   typedef unsigned int size_type;
   size_type size() const {return 3;}
   const T* data() const {return m_data;}
+  size_type data_size() const {return 3;} //for eqT.
 public: //for iv2sg
   const T* getValue() const {return m_data;}
   void setValue(const T& a0,const T& a1,const T& a2) {
@@ -273,18 +297,15 @@ public: //for iv2sg
   }
 
 public:
-  static const vec3<T>& s_x() {
-    static const vec3<T> s_v(1,0,0,false);
-    return s_v;
-  }
-  static const vec3<T>& s_y() {
-    static const vec3<T> s_v(0,1,0,false);
-    return s_v;
-  }
-  static const vec3<T>& s_z() {
-    static const vec3<T> s_v(0,0,1,false);
-    return s_v;
-  }
+#if defined(TOOLS_MEM) && !defined(TOOLS_MEM_ATEXIT)
+  static const vec3<T>& s_x() {static const vec3<T> s_v(1,0,0,false);return s_v;}
+  static const vec3<T>& s_y() {static const vec3<T> s_v(0,1,0,false);return s_v;}
+  static const vec3<T>& s_z() {static const vec3<T> s_v(0,0,1,false);return s_v;}
+#else
+  static const vec3<T>& s_x() {static const vec3<T> s_v(1,0,0);return s_v;}
+  static const vec3<T>& s_y() {static const vec3<T> s_v(0,1,0);return s_v;}
+  static const vec3<T>& s_z() {static const vec3<T> s_v(0,0,1);return s_v;}
+#endif
 protected:
   T m_data[3];
 
@@ -296,30 +317,69 @@ template <class T>
 inline const T* get_data(const vec3<T>& a_v) {return a_v.data();}
 
 template <class T>
-inline void normal(const vec3<T>& a_p0,const vec3<T>& a_p1,const vec3<T>& a_p2,vec3<T>& a_nm) {
-  a_nm = (a_p1-a_p0).cross(a_p2-a_p1);
-  a_nm.normalize();
+inline void get_normal(const vec3<T>& a_p0,const vec3<T>& a_p1,const vec3<T>& a_p2,vec3<T>& a_nm,
+                       vec3<T>& a_tmp_1,vec3<T>& a_tmp_2,T(*a_sqrt)(T)) {
+  // Used to optimize sg::bin().
+  //(a_p1-a_p0).cross(a_p2-a_p1,a_nm);
+
+  a_tmp_1 = a_p1;
+  a_tmp_1.subtract(a_p0);
+
+  a_tmp_2 = a_p2;
+  a_tmp_2.subtract(a_p1);
+
+  a_tmp_1.cross(a_tmp_2,a_nm);
+
+  a_nm.normalize(a_sqrt);
 }
 
-template <class T>
-inline vec3<T> direction(const vec3<T>& a_p0,
-                         const vec3<T>& a_p1,
-                         const vec3<T>& a_p2) {
+/*
+template <class VEC3>
+inline void get_normal(const VEC3& a_p0,const VEC3& a_p1,const VEC3& a_p2,VEC3& a_nm) {
+  VEC3 tmp1,tmp2;
+  get_normal(a_p0,a_p1,a_p2,a_nm,tmp1,tmp2);
+}
+*/
+template <class VEC3>
+inline void direction(const VEC3& a_p0,const VEC3& a_p1,const VEC3& a_p2,VEC3& a_value) {
   // Orientation is computed by taking (p1 - p0) x (p2 - p0)
-  vec3<T> P = a_p1;
+  VEC3 P = a_p1;
   P.subtract(a_p0);
-  vec3<T> P2 = a_p2;
+  VEC3 P2 = a_p2;
   P2.subtract(a_p0);
-  return P.cross(P2);
+  P.cross(P2,a_value);
+}
+
+template <class VEC3>
+inline void area(const VEC3& a_p0,const VEC3& a_p1,const VEC3& a_p2,typename VEC3::elem_t& a_value,
+                 VEC3& a_tmp_1,VEC3& a_tmp_2,VEC3& a_tmp_3) {
+  // area of the triangle (a_p0,a_p1,a_p2)
+  typedef typename VEC3::elem_t T;
+
+  a_tmp_1 = a_p1;
+  a_tmp_1.subtract(a_p0);
+
+  a_tmp_2 = a_p2;
+  a_tmp_2.subtract(a_p1);
+
+  a_tmp_1.cross(a_tmp_2,a_tmp_3);
+
+  a_value = a_tmp_3.length()/T(2);
+}
+
+template <class VEC3>
+inline void area(const VEC3& a_p0,const VEC3& a_p1,const VEC3& a_p2,typename VEC3::elem_t& a_value) {
+  VEC3 tmp1,tmp2,tmp3;
+  area(a_p0,a_p1,a_p2,a_value,tmp1,tmp2,tmp3);
 }
 
 template <class T>
-inline vec3<T> direction(const T& a_0_x,const T& a_0_y,const T& a_0_z,
-                         const T& a_1_x,const T& a_1_y,const T& a_1_z,
-                         const T& a_2_x,const T& a_2_y,const T& a_2_z) {
-  return direction(vec3<T>(a_0_x,a_0_y,a_0_z),
-                   vec3<T>(a_1_x,a_1_y,a_1_z),
-                   vec3<T>(a_2_x,a_2_y,a_2_z));
+inline void direction(const T& a_0_x,const T& a_0_y,const T& a_0_z,
+                      const T& a_1_x,const T& a_1_y,const T& a_1_z,
+                      const T& a_2_x,const T& a_2_y,const T& a_2_z,vec3<T>& a_value) {
+  direction(vec3<T>(a_0_x,a_0_y,a_0_z),
+            vec3<T>(a_1_x,a_1_y,a_1_z),
+            vec3<T>(a_2_x,a_2_y,a_2_z),a_value);
 }
 
 }

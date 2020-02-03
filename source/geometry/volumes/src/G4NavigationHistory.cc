@@ -22,10 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4NavigationHistory.cc 102270 2017-01-19 14:42:29Z gcosmo $
-//
 // 
 // G4NavigationHistory Implementation
 //
@@ -36,7 +32,11 @@
 #include "G4ios.hh"
 #include "G4NavigationHistory.hh"
 
-G4ThreadLocal G4Allocator<G4NavigationHistory> *aNavigHistoryAllocator = 0;
+G4Allocator<G4NavigationHistory>*& aNavigHistoryAllocator()
+{
+  G4ThreadLocalStatic G4Allocator<G4NavigationHistory>* _instance = nullptr;
+  return _instance;
+}
 
 G4NavigationHistory::G4NavigationHistory()
   : fStackDepth(0)
@@ -53,11 +53,11 @@ G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
     fNavHistory->resize( h.GetMaxDepth() );
   }
 
-  for ( G4int ilev=h.fStackDepth; ilev>=0; --ilev )
+  for ( G4long ilev=G4long(h.fStackDepth); ilev>=0; --ilev )
   { 
     (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
   }
-  fStackDepth=h.fStackDepth;
+  fStackDepth = h.fStackDepth;
 }
 
 G4NavigationHistory::~G4NavigationHistory()
@@ -69,10 +69,10 @@ std::ostream&
 operator << (std::ostream& os, const G4NavigationHistory& nav)
 {
   os << "History depth=" << nav.GetDepth() << G4endl;
-  for ( G4int i=0; i<=nav.GetDepth(); i++ )
+  for ( size_t i=0; i<=nav.GetDepth(); ++i )
   {
     os << "Level=["<<i<<"]: ";
-    if( nav.GetVolume(i) != 0 )
+    if( nav.GetVolume(i) != nullptr )
     {
       os << "Phys Name=["<< nav.GetVolume(i)->GetName()
          << "] Type=[";
@@ -86,6 +86,9 @@ operator << (std::ostream& os, const G4NavigationHistory& nav)
           break;
         case kParameterised:
           os << "P" << nav.GetReplicaNo(i);
+          break;
+        case kExternal:
+          os << "E" << nav.GetReplicaNo(i);
           break;
       }
       os << "]";

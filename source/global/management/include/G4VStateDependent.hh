@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStateDependent.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -49,7 +48,7 @@
 #ifndef G4VStateDependent_h
 #define G4VStateDependent_h 1
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ApplicationState.hh"
 
 class G4VStateDependent
@@ -59,8 +58,8 @@ public:
 
   explicit G4VStateDependent(G4bool bottom=false);
   virtual ~G4VStateDependent();
-  G4int operator==(const G4VStateDependent &right) const;
-  G4int operator!=(const G4VStateDependent &right) const;
+  G4bool operator==(const G4VStateDependent &right) const;
+  G4bool operator!=(const G4VStateDependent &right) const;
 
 public: // with description
 

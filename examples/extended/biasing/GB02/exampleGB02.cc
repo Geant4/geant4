@@ -23,7 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: $
+=======
+/// \file GB02/exampleGB02.cc
+/// \brief Main program of the GB02 example
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #ifdef G4MULTITHREADED

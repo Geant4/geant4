@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Author: Ivana Hrivnacova, 21/10/2015  (ivana@ipno.in2p3.fr)
 
@@ -78,7 +77,7 @@ void G4PlotParameters::SetLayout(G4int columns, G4int rows)
     G4ExceptionDescription description;
     description 
       << "Layout: " << columns << " x " << rows << " was ignored." << G4endl
-      << "Suported layouts: " << G4endl
+      << "Supported layouts: " << G4endl
       << "  columns <= rows" << G4endl
       << "  columns = 1 .. " << fMaxColumns << G4endl
       << "  rows    = 1 .. " << fMaxRows << G4endl;

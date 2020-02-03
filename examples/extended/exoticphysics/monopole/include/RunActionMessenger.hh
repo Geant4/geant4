@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/include/RunActionMessenger.hh
 /// \brief Definition of the RunActionMessenger class
 //
-// $Id: RunActionMessenger.hh 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +39,6 @@
 class RunAction;
 class G4UIdirectory;
 class G4UIcmdWithADouble;
-class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,7 +57,6 @@ private:
     
   G4UIdirectory*         fActDir;    
   G4UIcmdWithADouble*    fBinSizeCmd;
-  G4UIcmdWithAnInteger*  fVerboseCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

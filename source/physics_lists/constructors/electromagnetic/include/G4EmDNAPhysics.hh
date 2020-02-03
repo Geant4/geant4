@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmDNAPhysics.hh 66704 2013-01-10 18:20:17Z gunter $
 
 #ifndef G4EmDNAPhysics_h
 #define G4EmDNAPhysics_h 1
@@ -38,10 +37,7 @@ class G4EmDNAPhysics : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmDNAPhysics(G4int ver = 1);
-
-  // obsolete
-  G4EmDNAPhysics(G4int ver, const G4String& name);
+  explicit G4EmDNAPhysics(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmDNAPhysics();
 

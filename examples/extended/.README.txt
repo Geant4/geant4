@@ -1,4 +1,3 @@
-$Id$
 
 ///\file "extended/.README.txt"
 ///\brief Geant4 Extended Examples README page
@@ -18,8 +17,7 @@ Webified README pages are not yet available for all examples. </i>
 - \link Examples_biasing biasing \endlink
    - Examples of event biasing, scoring and reverse-MC- 
 - \link Examples_common common \endlink
-   - A set of common classes which can be reused in other examples demonstrating
-     just a particular feature  
+   - A set of common classes which can be reused in other examples demonstrating just a particular feature
 - \link Examples_electromagnetic electromagnetic \endlink
    - Specific EM physics simulation with histogramming
 - \link Exampleerrorpropagation errorpropagation \endlink

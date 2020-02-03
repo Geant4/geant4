@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,9 +63,6 @@ private:
   G4UIcmdWithADoubleAndUnit* fSizeXCmd;
   G4UIcmdWithADoubleAndUnit* fSizeYZCmd;
   G4UIcmdWithADoubleAndUnit* fStepSizeCmd;
-  G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
-    
-  G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

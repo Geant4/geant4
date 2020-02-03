@@ -23,20 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TwistTrapAlphaSide implementation
 //
-// $Id: G4TwistTrapAlphaSide.cc 80289 2014-04-10 09:51:38Z gcosmo $
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-//
-// G4TwistTrapAlphaSide.cc
-//
-// Author:
-//
-//   18/03/2005 - O.Link (Oliver.Link@cern.ch)
-//
+// Author: 18/03/2005 - O.Link (Oliver.Link@cern.ch)
 // --------------------------------------------------------------------
 
 #include <cmath>
@@ -49,7 +38,7 @@
 //* constructors ------------------------------------------------------
 
 G4TwistTrapAlphaSide::
-G4TwistTrapAlphaSide(const G4String     &name,
+G4TwistTrapAlphaSide(const G4String& name,
                      G4double      PhiTwist,  // twist angle
                      G4double      pDz,       // half z lenght
                      G4double      pTheta,    // direction between end planes
@@ -114,7 +103,6 @@ G4TwistTrapAlphaSide(const G4String     &name,
   
   SetCorners() ;
   SetBoundaries() ;
-
 }
 
 
@@ -143,7 +131,7 @@ G4TwistTrapAlphaSide::~G4TwistTrapAlphaSide()
 //* GetNormal ---------------------------------------------------------
 
 G4ThreeVector
-G4TwistTrapAlphaSide::GetNormal(const G4ThreeVector &tmpxx, 
+G4TwistTrapAlphaSide::GetNormal(const G4ThreeVector& tmpxx, 
                                       G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
@@ -197,8 +185,8 @@ G4TwistTrapAlphaSide::GetNormal(const G4ThreeVector &tmpxx,
 //* DistanceToSurface -------------------------------------------------
 
 G4int
-G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
-                                        const G4ThreeVector &gv,
+G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
+                                        const G4ThreeVector& gv,
                                               G4ThreeVector  gxx[],
                                               G4double       distance[],
                                               G4int          areacode[],
@@ -217,7 +205,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
   if (fCurStatWithV.IsDone())
   {
-    for (G4int i=0; i<fCurStatWithV.GetNXX(); i++)
+    for (G4int i=0; i<fCurStatWithV.GetNXX(); ++i)
     {
       gxx[i] = fCurStatWithV.GetXX(i);
       distance[i] = fCurStatWithV.GetDistance(i);
@@ -228,7 +216,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
   }
   else  // initialise
   {
-    for (G4int j=0; j<G4VSURFACENXX ; j++)
+    for (G4int j=0; j<G4VSURFACENXX ; ++j)
     {
       distance[j] = kInfinity;
       areacode[j] = sOutside;
@@ -393,7 +381,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
   G4double factor;  // a scaling factor
   G4int maxint=30;  // number of iterations
 
-  for ( size_t k = 0 ; k<xbuf.size() ; k++ )
+  for ( size_t k = 0 ; k<xbuf.size() ; ++k )
   {
 #ifdef G4TWISTDEBUG
     G4cout << "Solution " << k << " : " 
@@ -406,7 +394,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
     IsConverged = false ;   // no convergence at the beginning
     
-    for ( G4int i = 1 ; i<maxint ; i++ )
+    for ( G4int i = 1 ; i<maxint ; ++i )
     {
       xxonsurface = SurfacePoint(phi,u) ;
       surfacenormal = NormAng(phi,u) ;
@@ -541,7 +529,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
     
     xbuf.push_back(xbuftmp) ;  // store it to xbuf
 
-    for ( size_t k = nxxtmp ; k<xbuf.size() ; k++ )
+    for ( size_t k = nxxtmp ; k<xbuf.size() ; ++k )
     {
 
 #ifdef G4TWISTDEBUG
@@ -555,7 +543,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
       IsConverged = false ;   // no convergence at the beginning
       
-      for ( G4int i = 1 ; i<maxint ; i++ )
+      for ( G4int i = 1 ; i<maxint ; ++i )
       {
         xxonsurface = SurfacePoint(phi,u) ;
         surfacenormal = NormAng(phi,u) ;
@@ -653,7 +641,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 
   nxx = xbuf.size() ;   // determine number of solutions again.
 
-  for ( size_t i = 0 ; i<xbuf.size() ; i++ )
+  for ( size_t i = 0 ; i<xbuf.size() ; ++i )
   {
     distance[i] = xbuf[i].distance;
     gxx[i]      = ComputeGlobalPoint(xbuf[i].xx);
@@ -693,18 +681,18 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 //* DistanceToSurface -------------------------------------------------
 
 G4int
-G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
+G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
                                               G4ThreeVector  gxx[],
                                               G4double       distance[],
                                               G4int          areacode[])
 {  
-  const G4double ctol = 0.5 * kCarTolerance;
+   const G4double ctol = 0.5 * kCarTolerance;
 
-  fCurStat.ResetfDone(kDontValidate, &gp);
+   fCurStat.ResetfDone(kDontValidate, &gp);
 
    if (fCurStat.IsDone())
    {
-      for (G4int i=0; i<fCurStat.GetNXX(); i++)
+      for (G4int i=0; i<fCurStat.GetNXX(); ++i)
       {
          gxx[i] = fCurStat.GetXX(i);
          distance[i] = fCurStat.GetDistance(i);
@@ -714,7 +702,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
    }
    else  // initialize
    {
-      for (G4int i=0; i<G4VSURFACENXX; i++)
+      for (G4int i=0; i<G4VSURFACENXX; ++i)
       {
          distance[i] = kInfinity;
          areacode[i] = sOutside;
@@ -735,7 +723,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
    G4double deltaX, uMax ;
    G4double halfphi = 0.5*fPhiTwist ;
    
-   for ( G4int i = 1 ; i<20 ; i++ )
+   for ( G4int i = 1 ; i<20 ; ++i )
    {
      xxonsurface = SurfacePoint(phiR,uR) ;
      surfacenormal = NormAng(phiR,uR) ;
@@ -794,7 +782,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
 //* GetAreaCode -------------------------------------------------------
 
 G4int
-G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector &xx, G4bool withTol)
+G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector& xx, G4bool withTol)
 {
    // We must use the function in local coordinate system.
    // See the description of DistanceToSurface(p,v).
@@ -1042,7 +1030,7 @@ void G4TwistTrapAlphaSide::SetBoundaries()
 //* GetPhiUAtX --------------------------------------------------------
 
 void
-G4TwistTrapAlphaSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u ) 
+G4TwistTrapAlphaSide::GetPhiUAtX( G4ThreeVector p, G4double& phi, G4double& u ) 
 {
   // find closest point XX on surface for a given point p
   // X0 is a point on the surface,  d is the direction
@@ -1075,7 +1063,7 @@ G4TwistTrapAlphaSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u )
 //* ProjectPoint ------------------------------------------------------
 
 G4ThreeVector
-G4TwistTrapAlphaSide::ProjectPoint(const G4ThreeVector &p, G4bool isglobal) 
+G4TwistTrapAlphaSide::ProjectPoint(const G4ThreeVector& p, G4bool isglobal) 
 {
   // Get Rho at p.z() on Hyperbolic Surface.
 
@@ -1127,13 +1115,13 @@ G4TwistTrapAlphaSide::GetFacets( G4int k, G4int n, G4double xyz[][3],
 
   // calculate the (n-1)*(k-1) vertices
 
-  for ( G4int i = 0 ; i<n ; i++ )
+  for ( G4int i = 0 ; i<n ; ++i )
   {
     z = -fDz+i*(2.*fDz)/(n-1) ;
     phi = z*fPhiTwist/(2*fDz) ;
     b = GetValueB(phi) ;
 
-    for ( G4int j = 0 ; j<k ; j++ )
+    for ( G4int j = 0 ; j<k ; ++j )
     {
       nnode = GetNode(i,j,k,n,iside) ;
       u = -b/2 +j*b/(k-1) ;

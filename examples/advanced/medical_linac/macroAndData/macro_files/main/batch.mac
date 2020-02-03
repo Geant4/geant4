@@ -1,0 +1,82 @@
+########### Launch parameters #########
+###
+
+###  Visualization 
+
+#/OnlyVisio true                                        # switch the visualization mode
+
+
+### Phase space
+
+/general/centrePhaseSpace 0 0 550 mm                    # position of the centre of the phase space plane
+/general/halfSizePhaseSpace 200 200 1 mm                # half size of the phase space plane
+/general/bSavePhaseSpace true                           # save the phase space
+/general/bStopAtPhaseSpace false                        # kill the particle at the phase space
+/general/PhaseSpaceOutFile PhSp_Acc1                    # full path and name of the phase space file
+/general/bForcePhaseSpaceBeforeJaws true
+
+### Simulation oputput
+ 
+/general/bSaveROG true                                  # save the ROG volume
+/general/ROGOutFile ROG_Out  # full path of the ROG file name
+
+
+### Number of primary events
+
+/general/nBeam 100000                                   # number of events to run
+
+
+### Stored particles
+
+/general/nMaxParticlesInRamPlanePhaseSpace 100000       # maximum number of particles stored in RAM before saving phase space file
+/general/saving_in_Selected_Voxels_every_events 10000   # maximum number of particles stored before saving experimental data out file
+/general/saving_in_ROG_Voxels_every_events 10000        # maximum number of particles stored before saving ROG file
+/general/max_N_particles_in_PhSp_File 10000000          # maximum number of particles stored in the phase space file
+
+
+### Primary generator 
+
+/primaryParticleData/nMaxParticlesInRamPhaseSpace 1000  # maximum number of particles loaded from the phase space file each time
+/primaryParticleData/nIdenticalParticles 1              # number of identical particles generated in the primary generator
+/primaryParticleData/GunMeanEnergy 6 MeV                # mean energy of the beam 
+/primaryParticleData/GunStdEnergy 0.127 MeV             # std deviation in energy of the beam
+/primaryParticleData/GunRadius 0.5 mm                   # radius of the beam
+/primaryParticleData/sourceTypeName randomTarget        # type of particle generator source (randomTarget, phaseSpace)
+/primaryParticleData/calculatedPhaseSpaceFileIN PhSp_Acc1_1.txt # full path and file name of the phase space file to be used as particle generator
+
+### Phantom
+
+/phantom/PhantomName fullWater				            # phantom name to select among those implemented (fullWater, boxInBox)
+/phantom/centre 0 0 0                                   # phantom centre coordinates in the world [mm]
+
+### Accelerator
+
+/accelerator/AcceleratorName acc1			            # accelerator name to select among those implemented 
+/accelerator/AcceleratorMacFileName acc1.mac	        # full path and macro file name containing specific setup data for the accelerator chosen
+/accelerator/isoCentre 1000 mm                          # distance between the isocentre and the target of the accelerator
+/accelerator/rotation90Y false                          # to rotate the accelerator of 90 deg around the Y axis (true)
+/accelerator/rotationX 0 deg                            # angles of rotation along X  [deg]
+/accelerator/rotationX 45 deg                           # angles of rotation along X  [deg]
+
+### Physics
+
+#/physics/addPhysics standard_opt3
+/physics/addPhysics LowE_Livermore
+
+/control/verbose 2
+
+####################	INFO   ######################################
+
+# All possible choices
+
+#    Particle sources
+# randomTarget // random from target
+# phaseSpace // from phase space
+
+#    Accelerators
+# acc1 // non real accelearator but working
+
+
+#    Phantoms
+# fullWater // water box
+# boxInBox  // box in a box with a layer of PMMA at the exposed surface

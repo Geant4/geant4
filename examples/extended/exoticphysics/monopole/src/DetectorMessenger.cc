@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,8 +48,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
    fMaterCmd(0),
    fSizeXCmd(0),
    fSizeYZCmd(0),
-   fStepSizeCmd(0),
-   fMagFieldCmd(0)
+   fStepSizeCmd(0)
     
 { 
   fDetDir = new G4UIdirectory("/testex/det/");
@@ -81,20 +79,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
   fStepSizeCmd->SetRange("StepSize>0.");
   fStepSizeCmd->SetUnitCategory("Length");
   fStepSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-
-  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testex/det/setField",this);
-  fMagFieldCmd->SetGuidance("Define magnetic field.");
-  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fMagFieldCmd->SetParameterName("Bz",false);
-  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testex/det/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,8 +89,6 @@ DetectorMessenger::~DetectorMessenger()
   delete fSizeXCmd;
   delete fSizeYZCmd;
   delete fStepSizeCmd;
-  delete fMagFieldCmd;
-  delete fUpdateCmd;
   delete fDetDir;  
 }
 
@@ -123,14 +105,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fSizeYZCmd )
    { fDetector->SetSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}
       
-  if( command == fMagFieldCmd )
-   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
-
   if( command == fStepSizeCmd )
    { fDetector->SetMaxStepSize(fStepSizeCmd->GetNewDoubleValue(newValue));}
-              
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

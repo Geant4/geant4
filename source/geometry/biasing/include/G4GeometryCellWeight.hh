@@ -23,28 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GeometryCellWeight.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// Class G4GeometryCellWeight
+// G4GeometryCellWeight
 //
 // Class description:
 //
-// Used internally by weight window tehnique sampling. 
+// Used internally by weight window technique sampling. 
 // It is a map of geometry cells to maps of upper energy
 // to lower weight bounds.
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
-#ifndef G4GeometryCellWeight_hh
-#define G4GeometryCellWeight_hh G4GeometryCellWeight_hh 
+#ifndef G4GEOMETRYCELLWEIGHT_HH
+#define G4GEOMETRYCELLWEIGHT_HH 1
 
 #include <map>
 #include "globals.hh"
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
-typedef std::map<G4double, G4double, std::less<G4double> > G4UpperEnergyToLowerWeightMap;
-typedef std::map<G4GeometryCell, G4UpperEnergyToLowerWeightMap, G4GeometryCellComp>  G4GeometryCellWeight;
+
+using G4UpperEnergyToLowerWeightMap =
+  std::map<G4double, G4double, std::less<G4double> >;
+using G4GeometryCellWeight =
+  std::map<G4GeometryCell, G4UpperEnergyToLowerWeightMap, G4GeometryCellComp>;
 
 #endif

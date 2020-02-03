@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
 // Class G4OpenGLImmediateXViewer : a class derived from G4OpenGLXViewer and
 //                                  G4OpenGLImmediateViewer.
 
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
+#if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
 
 #ifndef G4OpenGLIMMEDIATEXVIEWER_HH
 #define G4OpenGLIMMEDIATEXVIEWER_HH

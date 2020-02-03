@@ -32,7 +32,6 @@
 //    *                                *
 //    **********************************
 //
-// $Id: PurgMagTrackingAction.hh 72967 2013-08-14 14:57:48Z gcosmo $
 //
 
 #ifndef PurgMagTrackingAction_h

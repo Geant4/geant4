@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Wt.hh,v 1.6 2010-05-20 07:01:03 lgarnier Exp $
 //
 //  To unify Wt event treatment between 
 // G4/interfaces Wt sessions and G4/visualizations Wt drivers.

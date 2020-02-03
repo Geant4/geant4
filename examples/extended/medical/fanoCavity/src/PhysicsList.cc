@@ -26,7 +26,10 @@
 /// \file medical/fanoCavity/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +39,7 @@
 
 #include "PhysListEmStandard_option0.hh"
 #include "PhysListEmStandard_option3.hh"
+#include "PhysListEmStandard_option4.hh"
 #include "PhysListEmStandard_GS.hh"
 #include "PhysListEmStandard_WVI.hh"
 #include "PhysListEmStandard_SS.hh"
@@ -46,6 +50,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -93,8 +98,6 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-
-  G4cout << "DEBUG" << G4endl;
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
@@ -147,7 +150,7 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel>0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -164,6 +167,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard_option3(name,fDetector);
+    
+  } else if (name == "standard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard_option4(name,fDetector);
     
   } else if (name == "standard_GS") {
 
@@ -191,8 +200,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4UnitsTable.hh"
 
 void PhysicsList::SetCuts()
 {

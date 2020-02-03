@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AuxiliaryNavServices.icc 90009 2015-05-08 07:42:39Z gcosmo $
-//
-//
 // class G4AuxiliaryNavServices Inline implementation
 //
 // --------------------------------------------------------------------
@@ -40,23 +36,23 @@ CheckPointOnSurface( const G4VSolid* sampleSolid,
                      const G4bool locatedOnEdge)
 {
   G4ThreeVector localDirection, sampleNormal;
-  G4bool        enter = false;
+  G4bool enter = false;
 
   EInside insideSolid = sampleSolid->Inside(localPoint); 
   if ( insideSolid!=kOutside ) 
   {
-    G4bool checkDirection= locatedOnEdge && (globalDirection!=0);
+    G4bool checkDirection = locatedOnEdge && (globalDirection!=0);
     if( (insideSolid==kSurface) && checkDirection)
     {
       // We are probably located on an edge.
       //
-      localDirection= sampleTransform.TransformAxis(*globalDirection); 
+      localDirection = sampleTransform.TransformAxis(*globalDirection); 
 
       // Check whether we enter the volume
       // 
       sampleNormal = sampleSolid->SurfaceNormal(localPoint);
 
-      G4double dotProd= sampleNormal.dot(localDirection);
+      G4double dotProd = sampleNormal.dot(localDirection);
       
 #ifdef G4DEBUG_AUX_NAVIGATION
       G4cout << " dir.norm= " << dotProd // sampleNormal.dot(localDirection) 
@@ -116,12 +112,12 @@ CheckPointExiting( const G4VSolid* sampleSolid,
   if( !globalDirection )  { return false; }
 
   G4ThreeVector localDirection, sampleNormal;
-  G4bool        exiting = false;
+  G4bool exiting = false;
 
   EInside insideSolid = sampleSolid->Inside(localPoint); 
   if( insideSolid==kSurface )
   {
-    localDirection= sampleTransform.TransformAxis(*globalDirection); 
+    localDirection = sampleTransform.TransformAxis(*globalDirection); 
 
     // Check whether we are exiting the volume
     // 

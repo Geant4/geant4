@@ -1,4 +1,3 @@
-$Id: History 102325 2017-01-23 10:25:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,20 +16,497 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15 July 16: V.Ivant (emutils-V10-01-43)
+16 October 19: D.Sawkey (emutils-V10-05-22)
+- G4EmBiasingManager - delete non-tracked particles
+
+11 October 19: W.G.Shin, S.Incerti (emutils-V10-05-21)
+- G4DNAModelSubType.hh : added Kreipl and Meesungnoen amorphous 
+ice models
+- G4EmLowEParametersMessenger.* : added corresponding commands
+
+10 October 19: V.Ivanchenko (emutils-V10-05-20)
+- G4EmSaturation - do not apply saturation for zero step length,
+    because this is possible only if a tracking cut is applied
+
+08 October 19: V.Ivanchenko (emutils-V10-05-19)
+- G4EmParameters, G4EmParametersMessenger - added new parameter
+- G4LossTableManager - use std::getenv
+
+01 October 19: V.Ivanchenko (emutils-V10-05-18)
+- G4EmParameters, G4EmParametersMessenger - added new parameters
+    for msc FactorSafety and LambdaLimit, until now these parameters
+    were msc model internals, now a user can can customize these 
+    values, default values are used the same as in 10.5
+- G4VMscModel, G4VMultipleScattering - added new method 
+    InitialiseParameters(..), make msc specific methods pure virtual
+- DummyModel - added methods to be consistent with above modifications
+
+11 September 19: V.Ivanchenko (emutils-V10-05-17)
+- G4EmParameters - disable "General Process" for gamma by default
+
+14 August 19: V.Ivanchenko (emutils-V10-05-16)
+- G4LossTableBuilder, G4LossTableManager, G4VEmModel, G4VMscModel, 
+  G4VEmProcess, G4VEnergyLossProcess, G4EmCalculator - allow both 
+  approaches "General Process" and "Base Materials" work together
+  G4EmParameters - enable "General Process" for gamma by default
+
+21 July 19:  M.Novak (emutils-V10-05-15)
+- G4EmElementSelector, G4VEmModel - clean away members not used anymore
+
+18 July 19:  M.Novak (emutils-V10-05-14)
+- G4EmElementSelector - optimised version of element selector (in place linear 
+    interpolation to avoid redundant energy grid related computations; branches,
+    used to handle rare corener cases are eliminated by increased robustness of
+    the algorithm)
+
+17 July 19:  M.Novak (emutils-V10-05-13)
+- G4VEmProcess, G4VEnergyLossProcess, G4VMscModel, G4EmElementSelector 
+    utilise the new, optimised LogVectorValue special (for log-vector) 
+    G4PhysicsVector method in case of EM
+
+31 May 19: V.Ivanchenko (emutils-V10-05-12)
+- G4NIELCalculator - new helper class
+- G4LossTableManager - added access and initialisation of 
+    G4NIELCalculator
+
+17 May 19: V.Ivanchenko (emutils-V10-05-11)
+- G4EmParameters, G4EmParametersMessenger, G4EmExtraParameters, 
+  G4EmExtraParametersMessenger - added extra parameters;
+
+07 May 19: V.Ivanchenko (emutils-V10-05-10)
+- G4EmParameters, G4EmParametersMessenger - split clases keeping the 
+    user interface unchanged;
+  G4EmExtraParameters, G4EmExtraParametersMessenger - new classes for 
+    complex EM parameters;
+  G4EmLowEParameters, G4EmLowEParametersMessenger - new classes for 
+    low-energy and DNA parameters
+
+19 April 19: V.Ivanchenko (emutils-V10-05-09)
+- G4EmParameters - added polarisation flag, move implementation of splitting
+  parameters to source and added check on lock; added 9.99 MeV low limit
+  in the SetMaxEnergy() method, added thread lock to Dump method 
+
+01 April 19: V.Ivanchenko (emutils-V10-05-08)
+- G4LossTableManager - added Register/DeRegister methods and vector
+  of pointers for G4VProcess classes for X-ray and optical processes
+
+17 March 19: M.Novak (emutils-V10-05-07)
+- G4EmElementSelector, G4VEmModel - added extra method to select the target atom
+  by making use of the already known log-energy value in the log-vector access
+
+17 March 19: M.Novak (emutils-V10-05-06)
+- G4VEmProcess, G4VEnergyLossProcess and G4VMscModel - added extra methods to 
+  access log-vector tables by propagating the already known log-energy value
+
+13 March 19: M.Asai (emutils-V10-05-05)
+- G4EmParametersMessenger: Defining unit categories for UI commands
+  that take units. Co-working with intercoms-V10-05-02.
+
+11 March 19: G.Cosmo (emutils-V10-05-04)
+- Fixed typos in printouts in G4EmParametersMessenger.
+
+04 March 19: D.Sawkey (emutils-V10-05-03)
+- G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess - fix
+   weights for biasing. Should be like version 10.4 now for range cut,
+   splitting, roulette
+
+18 February 19: D.Sawkey (emutils-V10-05-02)
+- G4VEmProcess, G4VEnergyLossProcess - make printout information
+    more compact
+
+13 February 19: D.Sawkey (emutils-V10-05-01)
+- G4EmBiasingManager: fix incorrect weights with brem splitting
+    introduced in 10.5 (problem #2125)
+
+31 January 19: V.Ivant (emutils-V10-05-00)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,
+  G4EmModelManager - make info printout at intialisation more 
+    compact (fix problem #2105)
+
+29 October 18: D.Sawkey (emutils-V10-04-25)
+- G4EmBiasingManager - fix Valgrind warning
+
+26 October 18: V.Ivant (emutils-V10-04-24)
+- G4EmParameters - fixed typo in printout
+
+16 October 18: D.Sawkey (emutils-V10-04-23)
+- G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess - move logic
+    for directional splitting to G4EmBiasingManager
+
+03 October 18: D.Sawkey (emutils-V10-04-22)
+- G4EmBiasingManager, G4EmParameters, G4EmParametersMessenger,
+  G4VEnergyLossProcess, G4VEmProcess - enable directional splitting
+
+26 September 18: V.Ivant (emutils-V10-04-21)
+- G4EmParameters, G4EmProcessSubType, G4LossTableManager - renamed
+    general process classes
+- G4EmParametersMessenger - fixed UI command name, which enables 
+    usage of the ICRU90 data (Lucas Norberto Burigo)
+
+17 September 18: D.Sawkey (emutils-V10-04-20)
+- G4EmModelManager, G4VEmModel, G4VEmProcess, G4VEnergyLossProcess,
+  G4VMultipleScattering: Auto-generated documentation no in rST format
+
+31 August 18: V.Ivant (emutils-V10-04-19)
+- G4EmCalculator - fixed computation dEdx for ions
+
+14 August 18: V.Ivant (emutils-V10-04-18)
+14 August 18: V.Ivant (emutils-V10-04-16)
+- G4EmParameters, G4EmParametersMessenger - added extra parameter
+    to enable usage of ICRU90 data; fixed DNA parameters;
+    added checks of EM physics type 
+- G4VEmProcess, G4VEnergyLossProcess - take out attempt of 
+    optimisation introduced previously, return back to 10.4 logic
+
+27 July 18: V.Ivant (emutils-V10-04-15)
+- G4EmParameters - added extra protection to avoid simulteneous
+    definition of options, which should not be enabled together
+- G4VEmProcess - clean-up StorePhysicsTable(..) methods; introduce
+    isTheMaster flag
+- G4EmDataHandler - added public interfaces
+
+25 July 18: V.Ivant (emutils-V10-04-14)
+- G4VEmProcess, G4VEnergyLossProcess - attempt optimise number of 
+    calls to cross sections
+- G4EmParameters, G4EmParametersMessenger - added extra parameters
+- G4EmElementSelector - optimisation
+
+13 July 18: V.Ivant (emutils-V10-04-13)
+- G4VEmProcess, G4VEnergyLossProcess - move few class members from 
+    private to protected, introduced check on energy change between
+    steps with factorDeltaE, allowing skip recomputation of cross 
+    section at a step
+- G4EmDataHandler - added methods  
+
+12 July 18: V.Ivant (emutils-V10-04-12)
+- G4EmParameters, G4EmParameterMessenger, G4LossTableManager - minor
+  update of interfaces
+
+30 May 18: V.Ivant (emutils-V10-04-11)
+30 May 18: V.Ivant (emutils-V10-04-10)
+- G4LossTableManager - moved inline run time method to source
+- G4VMscModel, G4VEmModel, G4EmCorrections - minor cleanup
+
+22 May 18: V.Ivant (emutils-V10-04-09)
+- G4VEmAngularDistribution - added SamplePairDirections method
+    for sampling of e+e- pair production
+
+18 May 18: V.Ivant (emutils-V10-04-08)
+- G4EmParameters, G4EmParametersMessenger - added extra DNA UI directory
+    and DNA comand, improve dump of EM parameters
+- G4DNAModelSubType - new enumerator
+- G4EmCorrections - minor optimisation
+
+01 April 18: V.Ivant (emutils-V10-04-07)
+- G4VEmProcess - moved few private members to protected
+
+28 March 18: V.Ivant (emutils-V10-04-06)
+- G4EmParameters, G4EmParametersMessenger - added MscEnergyLimit()
+    and corresponding UI command (needed for bug fix 2045) 
+
+21 March 18: V.Ivant (emutils-V10-04-05)
+- G4EmParameters, G4EmParametersMessenger - (I.Semeniouk) added 5D
+    gamma conversion model parameters
+
+09 February 18: V.Ivant (emutils-V10-04-04)
+09 February 18: V.Ivant (emutils-V10-04-03)
+- G4EmCorrections, G4VEmModel, G4ionEffectiveCharge, G4VAtomDeexcitation
+    do not use static class members in inline methods, long methods are moved 
+    to the source, add thread safe definition of model index for de-excitation
+
+02 February 18: M.Novak (emutils-V10-04-02)
+- G4EmCalculator - fixed GetCrossSectionPerVolume method in case of multiple 
+    scattering process: the proper value of the 1st transport cross section is 
+    retrived now
+
+14 December 17: V.Ivant (emutils-V10-04-01)
+- G4EmParametersMessenger - use G4Exception for warnings instead 
+    of G4cout, review G4State for UI commands and make a signal to
+    the RunManager about modification of physics if a command
+    is issued in Idle state
+- G4EmParameters, G4VEmProcess, G4VEnergyLossProcess - define the 
+    same default values for few internal members (this is a 
+    cleanup, which does not affect results)
+
+13 December 17: V.Ivant (emutils-V10-04-00)
+- G4EmParameters, G4EmParametersMessenger - fixed printout format
+    and add lock and protection in commands defining physics
+    pre region
+
+08 November 17: D.Sawkey (emutils-V10-03-31)
+ - G4LossTableManager, G4VEmProcess, G4VEnergyLossProcess,
+   G4VMultipleScattering - fix html documentation
+
+07 November 17: V.Ivant (emutils-V10-03-30)
+- G4EmParameters - fixed SetDeexcitationIgnoreCut() method
+
+03 November 17: V.Ivant (emutils-V10-03-28)
+- G4EmParameters - set lateralDisplacementAlg96 true by default,
+    fixed typo in dump of parameters 
+
+03 November 17: V.Ivant (emutils-V10-03-27)
+- G4EmParametersMessenger - atomic de-excitation commands 
+    allowed in G4State_Init
+
+31 October 17: D.Sawkey (emutils-V10-03-26)
+- G4LossTableManager: formatting html documentation
+
+25 October 17: V.Ivant (emutils-V10-03-25)
+- G4VEmProcess - select models for ions by using energy per nucleon
+
+19 October 17: D.Sawkey (emutils-V10-03-24)
+- retry of previous; change PrintHtml to DumpHtml
+
+18 October 17: D.Sawkey (emutils-V10-03-23)
+- G4LossTableManager: add new method PrintHtml to generate html doc.
+- G4VEmProcess, G4VEnergyLossPRocess, G4VMultipleScattering,
+  G4ModelManager, G4VEmModel: modify doc outputs incl. StreamInfo,
+  StreamProcessInfo, DumpModelList, to set end-of-line string.
+
+12 October 17: V.Ivant (emutils-V10-03-22)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - added
+  new protected method StreamProcessInfo(..) to be used by derived 
+  processes
+- G4EmModelManager - use general stream instead of G4cout in the
+  method DumpModelList(..)
+- G4EmModelManager - use optimal header
+
+11 October 17: V.Ivant (emutils-V10-03-21)
+- G4VEmProcess - added method StreamInfo(..) allowing to print in 
+    any stream, initialisation printout does not changed
+- G4EmConfigurator - minor cleanup
+
+10 October 17: V.Ivant (emutils-V10-03-20)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - added
+    initialisation printout for DNA particles 
+
+09 October 17: V.Ivant (emutils-V10-03-19)
+- G4EmParameters, G4EmParametersMessenger - added extra parameters
+
+19 September 17: V.Ivant (emutils-V10-03-18)
+- G4VEnergyLossProcess, G4VEmFluctuationModel - return back to tag 16
+
+31 August 17: V.Ivant (emutils-V10-03-17)
+- G4VMultipleScattering - improved initialisation printout
+- G4VEnergyLossProcess, G4VEmFluctuationModel - added possibility 
+    of smearing of the last step length of low-energy charged particle
+
+21 August 17: V.Ivant (emutils-V10-03-16)
+- G4EmParameters - fully thread safe singleton
+
+18 August 17: V.Ivant (emutils-V10-03-15)
+- G4EmDataHandler - class to keep G4PhysicsTables in easy way
+- G4VMultipleScattering, G4VEmProcess, G4VEnergyLossProcess - code 
+    cleanup/simplification
+
+16 August 17: V.Ivant (emutils-V10-03-14)
+- G4EmParametersMessenger, G4EmParameters - added parameters
+    "DNAFast", "DNAStationary", "DNAMsc" Get/Set methods and UI command
+
+04 August 17: V.Ivant (emutils-V10-03-13)
+- G4VMultipleScattering, G4VMscModel, G4VEnergyLossProcess - improved
+    comments to model interface
+- G4VMultipleScattering - more safe access to models in run time
+
+03 August 17: V.Ivant (emutils-V10-03-12)
+- G4VMultipleScattering, G4VMscModel, G4VEnergyLossProcess,
+  G4VEmProcess, G4EmConfigurator, G4EmConfigurator - make 
+   a new scheme of model initialisation in order do not create
+   extra fake model objects and reduce number of calls in run time
+
+18 July 17: G.Cosmo (emutils-V10-03-11)
+- Mark as 'override' ProcessDescription() method in G4VEmProcess,
+  G4VEnergyLossProcess and G4VMultipleScattering.
+
+31 May 17: V.Ivant (emutils-V10-03-10)
+- G4VEmModel - added triplet model pointer and Get/Set methods
+
+26 May 17: V.Ivant (emutils-V10-03-09)
+- G4EmSaturation - fixed typo in printout
+
+25 May 17: V.Ivant (emutils-V10-03-08)
+- G4VEmProcess - added DNA ionisation process for hydrogen and helium
+    to the list of processes, which have auger and fluo flags
+
+24 May 17: V.Ivant (emutils-V10-03-07)
+- G4VEnergyLossProcess, G4LossTableManager - minor cleanup of inline
+    methods
+
+03 May 17: V.Ivant (emutils-V10-03-06)
+- G4VEmProcess - added DNA ionisation process to the list of 
+    discrete processes, which have auger and fluo flags for 
+    secondary particles
+- G4VEmModel - added extra protected class member for nuclear 
+    stopping
+- G4EmCorrections - removed computation of nuclear stopping power
+- G4EmCalculator - for computation of the nuclear stopping power
+    use concrete model (applied in run time) instead of 
+    G4EmCorrections emulation; to get cross section per volume 
+    for discrete processes use interface of the process, addressing
+    http://hypernews.slac.stanford.edu/HyperNews/geant4/get/hadroprocess/1595/1.html
+
+03 April 17: V.Ivant (emutils-V10-03-05)
+- G4EmParameters - G4EmSaturation may be created at any
+    moment (G4Mutex is used)
+
+24 March 17: V.Ivant (emutils-V10-03-02)
+- G4EmParametersMessenger, G4EmParameters - added parameter 
+    "ScreeningFactor" Get/Set methods and UI command
+
+14 December 16: V.Ivant (emutils-V10-03-00)
+- G4EmParametersMessenger - fixed typo (#1929)
+- G4EmParameters - added method with more correct name AddPhysics() 
+    in order to replace AddMsc in future (no change in functionality)
+
+19 November 16: V.Ivant (emutils-V10-02-38)
+- G4EmParametersMessenger - fixed typo 
+
+09 November 16: V.Ivant (emutils-V10-02-37)
+- G4VAtomDeexcitation - fixed initialisation of de-excitation 
+    module per G4Region
+
+18 October 16: V.Ivant (emutils-V10-02-36)
+- G4EmCorrections, G4ionEffectiveCharge - use more safe name
+    for G4Pow pointer 
+
+18 October 16: V.Ivant (emutils-V10-02-35)
+- G4EmParameters - max energy back to 100 TeV
+- G4EmSaturation - cleanup; make it thread safe; default 
+    printout level set to 1 
+
+07 October 16: V.Ivant (emutils-V10-02-34)
+- G4EmParameters - reduce max energy back to 10 TeV
+
+20 September 16: V.Ivant (emutils-V10-02-33)
+- G4EmParameters - added private method Initialise() additionally 
+    to SetDefaults() to provide more safe initialisation of 
+    custom EM physics lists
+
+15 September 16: M.Asai (emutils-V10-02-32)
+- G4EmParameters - accept changes during the G4State_Init state.
+
+06 September 16: V.Ivant (emutils-V10-02-31)
+- fixed compillation warning and test crash 
+
+06 September 16: V.Ivant (emutils-V10-02-29)
+- G4EmSaturation - make it thread safe, added data for G4_PbWO4,
+   fixed data for G4_lAr using recent report from ATLAS, run time 
+   methods are now "const" 
+- G4EmParameters, G4EmParametersMessenger - added interface and UI 
+    command to enable thread safe built-in Birks saturation 
+    corrections, added access to G4EmSaturation, set by default 
+    Gaussian nuclear form-factor
+- G4LossTableManager - changed initialisation of G4EmSaturation
+
+27 August 16: V.Ivant (emutils-V10-02-28)
+- G4AtomicDeexcitation, G4EmParameters, G4EmParametersMessenger 
+    improved initialisation per region
+
+15 July 16: V.Ivant (emutils-V10-02-27)
 - G4EmBiasingManager - fixed PVS-Studio warning (A.Karpov)
 
-15 March 16: V.Ivant (emutils-V10-01-42)
+15 July 16: V.Ivant (emutils-V10-02-26)
+- G4EmParameters, G4EmParametersMessenger - added new methods and 
+    UI command to define optional EM physics per region
+
+16 July 16: V.Ivant (emutils-V10-02-25)
+13 July 16: V.Ivant (emutils-V10-02-24)
+- G4EmParameters, G4VEmProcess, G4VEnergyLossProcess - default upper
+    energy limits are extended from 10 TeV to 100 TeV of bins
+    per decade is unchanged
+
+07 June 16: V.Ivant (emutils-V10-02-23)
+- G4LossTableManager - removed debug printout
+
+07 June 16: V.Ivant (emutils-V10-02-22)
+- G4VEmModel - fixed destruction in MT mode
+- G4VMultipleScattering, G4EmModelManager, G4LossTableManager 
+    improved debug printout
+
+02 June 16: V.Ivant (emutils-V10-02-21)
+- G4VAtomicDeexcitation - extended printout at initialisation
+
+02 June 16: V.Ivant (emutils-V10-02-20)
+- G4EmModelManager - review and fix model configuration (mainly
+    for DNA models)
+- G4DummyModel - set default low-enegry limit to 0.0 (needed for DNA)
+- G4VMultipleScattering - added method NumberOfModels()
+- G4EmConfigurator - minor cleanup
+
+11 May 16: V.Ivant (emutils-V10-02-19)
+- G4VEmModel, G4VAtomDeexcitation, G4EmCalculator - use new method
+    G4Element::GetZasInt()
+- G4VEmModel - fixed SelectRandomAtomNumber() method
+
+01 May 16: V.Ivant (emutils-V10-02-18)
+29 April 16: V.Ivant (emutils-V10-02-17)
+- G4EmCorrections - fixed Coverity warning
+- G4VAtomDeexcitation - fixed possible data race at initialistion
+
+25 April 16: V.Ivant (emutils-V10-02-16)
+25 April 16: V.Ivant (emutils-V10-02-14)
+- G4AtomicShell - make the class pure inlined, use a default destructors
+- G4LossTableManager, G4VEmModel, G4VMultipleScattering - minor 
+    cleanup of static const data
+- G4EmCorrections - make part of data static, make internal vectors
+    static, shared between threads
+
+15 April 16: V.Ivant (emutils-V10-02-13)
+- G4EmParameters - allow to change parameters only from the master thread 
+  and only at PreInit or Idle states
+
+15 April 16: V.Ivant (emutils-V10-02-12)
+- G4VAtomDeexcitation - complete migration to G4EmParameters interface;
+    addresing data race in MT mode
+
+11 April 16: V.Ivant (emutils-V10-02-11)
+- G4VMultipleScattering - move position change to AlongStep
+
+17 March 16: V.Ivant (emutils-V10-02-10)
+- G4VEnergyLossProcess - return back removed method to fix compillation
+    of reverse MC example  
+
+15 March 16: V.Ivant (emutils-V10-02-09)
+- removed commented lines left from the previous tag
 - G4EmCalculator - added protection against zero cut value - use 
     lowest electron energy (fixed problem #1845)
 
-22 January 16: V.Ivant (emutils-V10-01-41)
+11 March 16: V.Ivant (emutils-V10-02-08)
+- G4EmParameters, G4EmParametersMessenger - moved remaining 
+    parameters from G4EmProcessOptions, which become obsolete
+- G4EmCalculator, G4LossTableBuilder, G4LossTableManager, G4VMscModel,
+  G4VEmModel, G4VEmProcess, G4VEnergyLossProcess - use only 
+    G4EmParameters class interfaces for initialisation
+- G4NuclearFormfactorType - added new enumerator
+
+17 February 16: V.Ivant (emutils-V10-02-07)
+- G4EmMultiModel - changed "override" by "final"
+
+17 February 16: V.Ivant (emutils-V10-02-06)
+- G4VEnegryLossProcess, G4EmCorrections - removed unused class members
+- G4VEmModel, G4EmMultiModel - address clang warnings
+
+16 February 16: D.Sawkey (emutils-V10-02-05)
+- Again, added more overrides, to remove clang warnings in previous tag
+- put deleted copy/assignment operators back in private section
+
+12 February 16: D.Sawkey (emutils-V10-02-04)
+- added more overrides, to remove clang warnings in previous tag
+
+11 February 16: D.Sawkey (emutils-V10-02-03)
+- partial C++11 migration in header files: explicit, override, delete 
+  keywords; nullptr
+
+10 February 16: V.Ivant
+- G4VEmProcess, G4EmModelManager - added extra methods to access models
+
+22 January 16: V.Ivant (emutils-V10-02-01)
 - G4LossTableManager - avoid double addition of He3 and alpha to the
     loss table map (should not have any effect on results)
 - G4EmCalculator - fixed computation of dEdx and range for He3 and 
     alpha (problem #1808)
 
-14 January 16: V.Ivant
+14 January 16: V.Ivant (emutils-V10-02-00)
 - G4EmSaturation - fixed #1807 by changing method name from
     VisibleEnergyDeposition(..) to VisibleEnergyDepositionAtAStep(..)
     This fix change user interface in order to allow overload virtual

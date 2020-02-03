@@ -187,6 +187,44 @@ namespace G4INCL {
       } else
         return mass;
     }
+    
+    G4double getMass(const G4int A, const G4int Z, const G4int S){
+		if(S>=0) return getMass(A,Z);
+		
+// assert(A >= 1);
+// assert(Z < A);
+// assert(S*(-1)<=A);
+		
+		const G4double mL = ParticleTable::getRealMass(Lambda); // mLambda
+		if(A == (-1)*S) return A*mL;
+		
+		if( A==2 && Z == 0) { // No stable hypernuclei with A=2
+			return mL+ParticleTable::getRealMass(Neutron);
+		}
+		else if( Z == 0) { // No stable hypernuclei with Z=0
+			return ParticleTable::getRealMass(Neutron)-mL*S;
+		}
+		else if( A==2 && Z == 1) {
+			return mL+ParticleTable::getRealMass(Proton);
+		}
+
+
+		const G4double b7=25.; // (MeV)
+		const G4double b8=10.5; // Slope
+		const G4double a2=0.13; // BindingEnergy for d+Lambda(MeV)
+		const G4double a3=2.2;  // BindingEnergy for (t/He3)+Lamb(MeV)
+		const G4double eps =0.0001; // security value (MeV)
+
+		G4double mass =  getMass(A+S, Z);
+		
+		G4double bs=0.;
+		if     (A+S ==2) bs=a2;         // for nnL,npL,ppL
+		else if(A+S ==3) bs=a3;         // for 3nL,2npL,n2pL,3pL
+		else if(A+S >3)  bs=b7*std::exp(-b8/(A+S+1.));
+		mass += (-1)*S*(mL-bs) + eps;
+
+		return mass;
+	}
 
     void deleteTable() {
       delete[] ZMaxArray;

@@ -40,11 +40,11 @@
 //#define debug
 //#define ddebug
 
-CCalStackingAction::CCalStackingAction(): isInitialized(false) {}
-
+CCalStackingAction::CCalStackingAction()
+  : fTimeLimit(10000*CLHEP::ns),isInitialized(false) 
+{}
 
 CCalStackingAction::~CCalStackingAction(){}
-
 
 void CCalStackingAction::PrepareNewEvent(){
 
@@ -52,7 +52,6 @@ void CCalStackingAction::PrepareNewEvent(){
   stage = firstStage;
   nurgent = 0;
   acceptSecondaries = 1;
-
 }
 
 void CCalStackingAction::initialize(){
@@ -62,9 +61,9 @@ void CCalStackingAction::initialize(){
   numberOfSD = CCalSDList::getInstance()->getNumberOfCaloSD();
 #ifdef debug
   G4cout << "CCalStackingAction look for " << numberOfSD 
-	 << " calorimeter-like SD" << G4endl;
+         << " calorimeter-like SD" << G4endl;
 #endif
-  int i = 0;
+  G4int i = 0;
   for (i=0; i<numberOfSD; i++) {
     G4String theName(CCalSDList::getInstance()->getCaloSDName(i));
     SDName[i] = theName;
@@ -82,49 +81,38 @@ void CCalStackingAction::initialize(){
       G4VSensitiveDetector* aSD = sd->FindSensitiveDetector(SDName[i]);
       if (aSD==0) {
 #ifdef debug
-	G4cout << "CCalStackingAction::initialize: No SD with name " << SDName[i]
-	       << " in this Setup " << G4endl;
+        G4cout << "CCalStackingAction::initialize: No SD with name " << SDName[i]
+               << " in this Setup " << G4endl;
 #endif
       } else {
-	theCaloSD[i] = dynamic_cast<CCaloSD*>(aSD);
-	theCaloSD[i]->SetPrimaryID(0);
-      }	   
+        theCaloSD[i] = dynamic_cast<CCaloSD*>(aSD);
+        theCaloSD[i]->SetPrimaryID(0);
+      }           
     }
 #ifdef debug
     G4cout << "CCalStackingAction::initialize: Could not get SD Manager !" 
-	   << G4endl;
+           << G4endl;
 #endif
-  }
-   
+  }   
 }
 
 G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* aTrack){
 
   G4ClassificationOfNewTrack classification=fKill;
-  int parentID = aTrack->GetParentID();
+  G4int parentID = aTrack->GetParentID();
 #ifdef ddebug
   G4TrackStatus status = aTrack->GetTrackStatus();
   G4cout << "Classifying track " << aTrack->GetTrackID()
-	 << " with status " << aTrack->GetTrackStatus() << G4endl;  
+         << " with status " << aTrack->GetTrackStatus() << G4endl;  
 #endif
     
-  if (parentID < 0) {
-#ifdef debug     
-    G4cout << "Killing track " << aTrack->GetTrackID() 
-	   << " from previous event. Should not happen" << G4endl;
-    G4cout << "returning classification= " << classification << G4endl;
-#endif
-    return classification= fKill;
-  }
-   
-  if (aTrack->GetDefinition()->GetParticleName() == "gamma" && 
-      aTrack->GetKineticEnergy() < 1.*eV) {
+  if (aTrack->GetGlobalTime() > fTimeLimit) {
 #ifdef debug
     G4cout << "Kills particle " << aTrack->GetDefinition()->GetParticleName() 
-	   << " of energy " << aTrack->GetKineticEnergy()/MeV << " MeV" 
-	   << G4endl;
+           << " of energy " << aTrack->GetKineticEnergy()/MeV << " MeV" 
+           << G4endl;
 #endif
-    return classification= fKill;
+    return classification = fKill;
   }
     
   if (stage<end) {
@@ -133,9 +121,9 @@ G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* a
     /////////////////
     if (parentID == 0 ) {
       if ( nurgent == 0) {
-	nurgent++;
-	classification = fUrgent;
-	setPrimaryID(aTrack->GetTrackID());
+        nurgent++;
+        classification = fUrgent;
+        setPrimaryID(aTrack->GetTrackID());
       }
       else  classification = fWaiting;   
     }
@@ -146,17 +134,17 @@ G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* a
        
     if (parentID > 0) {
       if (acceptSecondaries == 1) {
-	if (trackStartsInCalo(const_cast<G4Track *>(aTrack))!=0 )
-	  classification = fUrgent;
-	else
-	  classification = fWaiting; 
+        if (trackStartsInCalo(const_cast<G4Track *>(aTrack))!=0 )
+          classification = fUrgent;
+        else
+          classification = fWaiting; 
       } else {
-	if(nurgent == 0){                     
-	  nurgent++;
-	  classification = fUrgent;
-	  setPrimaryID(aTrack->GetTrackID());
-	} else
-	  classification = fWaiting;	
+        if(nurgent == 0){                     
+          nurgent++;
+          classification = fUrgent;
+          setPrimaryID(aTrack->GetTrackID());
+        } else
+          classification = fWaiting;        
       }       
     }
        
@@ -166,7 +154,7 @@ G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* a
 
 #ifdef ddebug
   G4cout << " returning classification= " << classification
-	 << " for track "<< aTrack->GetTrackID() << G4endl;
+         << " for track "<< aTrack->GetTrackID() << G4endl;
 #endif
   return classification;
 
@@ -179,7 +167,7 @@ void CCalStackingAction::NewStage(){
   G4cout << "In NewStage with stage = " << stage << G4endl;
 #endif
   if (stage <end) {
-    nurgent = 0;		    
+    nurgent = 0;                    
     setPrimaryID(0);
     acceptSecondaries = 0;
     stackManager->ReClassify();
@@ -187,7 +175,7 @@ void CCalStackingAction::NewStage(){
     if (stackManager->GetNUrgentTrack() == 0) {
       stage = stageLevel(stage+1);
     }
-	
+        
   }
 }
 
@@ -205,7 +193,7 @@ G4bool CCalStackingAction::trackStartsInCalo(const G4Track* ){
 
 void CCalStackingAction::setPrimaryID(G4int id){
   
-  for (int i=0; i<numberOfSD; i++){
+  for (G4int i=0; i<numberOfSD; i++){
     if(theCaloSD[i] != 0)theCaloSD[i]->SetPrimaryID(id);
   }
 

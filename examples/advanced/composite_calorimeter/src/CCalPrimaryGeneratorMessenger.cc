@@ -159,7 +159,7 @@ CCalPrimaryGeneratorMessenger::~CCalPrimaryGeneratorMessenger() {
 }
 
 void CCalPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,
-						G4String newValues)    { 
+                                                G4String newValues)    { 
   if (command == verboseCmd)
     myAction->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));
   else if (command == rndmCmd)

@@ -23,6 +23,9 @@
  sum of these scorers that were updated via mutex locking. If round-off
  errors in thread-local EnergyDeposit are present, they can be viewed
  in "mfd_diff.out" at the end of the simulation
+    This example also provides a demonstration of the TiMemory (timing and
+ memory analysis) package provided in Geant4 -- for documentation of TiMemory
+ see https://github.com/jrmadsen/TiMemory.
 
  1- ATOMICS and the ATOMIC SCORERS
 
@@ -44,10 +47,6 @@
    with the number of threads, simulations with a large number of scoring
    volumes can decrease simulation time by increasing the number of threads 
    beyond what was previously allowed due to the increase in memory consumption.
-   ***************************************************************************
-   *** These classes are intended to be included in the Geant4 source code ***
-   *** release next year                                                   ***
-   ***************************************************************************
    
    The G4TAtomicHitsMap and G4TAtomicHitsCollection work exactly the same way
    as the standard G4THitsMap and G4THitsCollection, respectively, with the
@@ -122,7 +121,41 @@
    In multi-threading mode the energy accumulated in TSRun MFD object per
    workers is merged to the master in TSRun::Merge().
 
-  7- HOW TO RUN
+   TSRun contains five hits collections types:
+       1) a thread-local hits map,
+       2) a global atomic hits map
+       3) a global "mutex" hits map
+       4) a global G4StatAnalysis hits deque
+       5) a global G4ConvergenceTester hits deque
+
+   The thread-local hits map is the same as you will find in many other
+       examples.
+
+   The atomics hits map is the purpose of this example. Code-wise, the
+       implementation looks extremely similar to the thread-local version with
+       3 primary exceptions:
+       (1) construction - there should only be one instance so it should be a
+           static member variable or a pointer/reference to a single instance
+       (2) It does not need to, nor should be, summed in G4Run::Merge()
+       (3) destruction -- it should only be cleared by the master thread since
+           there is only one instance.
+
+   The "mutex" hits map is also included as reference for checking the results
+       accumulated by the thread-local hits maps and atomic hits maps. The
+       differences w.r.t. this hits maps are computed in
+       TSRunAction::EndOfRunAction
+
+   The "G4StatAnalysis" and "G4ConvergenceTester" hits deques are
+       memory-efficient version of the standard G4THitsMap. While maps are
+       ideal for scoring at the G4Event-level, where sparsity w.r.t. indices
+       is common; at the G4Run-level, these data structures require much
+       less memory overhead. Due to a lack of
+       G4ConvergenceTester::operator+=(G4ConvergenceTester), the static version
+       of G4ConvergenceTester is the only valid way to use G4ConvergenceTester
+       in a scoring container. This is not the case for G4StatAnalysis, which
+       can be used in lieu of G4double.
+
+7- HOW TO RUN
 
     - Execute ts_scorers in the 'interactive mode' with visualization:
         % ./ts_scorers
@@ -142,4 +175,16 @@
         % ./ts_scorers run.mac
         % ./ts_scorers run.mac > run.out
 
-  
+8- TIMEMORY USAGE
+
+    This example demonstrates timing and memory analysis with TiMemory
+    (https://github.com/jrmadsen/TiMemory).
+
+    - Compile Geant4 with TiMemory (-DGEANT4_USE_TIMEMORY=ON)
+    - TiMemory auto-timer provide timing within the Geant4 source code
+      and within the example (TSRun::RecordEvent)
+    - Analysis is echoed to stdout, recorded in ts_scorers.out, and
+      serialized in ts_scorers.json
+    - Generates plots:
+      "timemory-plotter -f ts_scorers.json -t "ThreadSafe Scorers" -o plots -e"
+    - Uploads plots to CDash if enabled

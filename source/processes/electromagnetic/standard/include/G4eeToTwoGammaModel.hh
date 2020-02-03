@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -62,18 +61,15 @@ class G4eeToTwoGammaModel : public G4VEmModel
 
 public:
 
-  G4eeToTwoGammaModel(const G4ParticleDefinition* p = 0,
-                      const G4String& nam = "eplus2gg");
+  explicit G4eeToTwoGammaModel(const G4ParticleDefinition* p = 0,
+                               const G4String& nam = "eplus2gg");
 
   virtual ~G4eeToTwoGammaModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
   
-  virtual G4double ComputeCrossSectionPerElectron(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double cutEnergy = 0.,
-                                      G4double maxEnergy = DBL_MAX);
+  virtual G4double ComputeCrossSectionPerElectron(G4double kinEnergy); 
   
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -81,30 +77,29 @@ public:
                                       G4double Z, 
                                       G4double A = 0., 
                                       G4double cutEnergy = 0.,
-                                      G4double maxEnergy = DBL_MAX);
+                                      G4double maxEnergy = DBL_MAX) override;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
-					 G4double cutEnergy,
-					 G4double maxEnergy);
+					 G4double cutEnergy = 0.0,
+					 G4double maxEnergy = DBL_MAX) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 private:
 
   // hide assignment operator
-  G4eeToTwoGammaModel & operator=(const  G4eeToTwoGammaModel &right);
-  G4eeToTwoGammaModel(const  G4eeToTwoGammaModel&);
+  G4eeToTwoGammaModel & operator=(const  G4eeToTwoGammaModel &right) = delete;
+  G4eeToTwoGammaModel(const  G4eeToTwoGammaModel&) = delete;
 
   G4double pi_rcl2;
   G4ParticleDefinition*  theGamma;
   G4ParticleChangeForGamma* fParticleChange;
-  G4bool isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

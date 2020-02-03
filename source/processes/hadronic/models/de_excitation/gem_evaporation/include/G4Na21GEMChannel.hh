@@ -24,47 +24,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4Na21GEMChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
 //
-
-
 #ifndef G4Na21GEMChannel_h
 #define G4Na21GEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4Na21GEMCoulombBarrier.hh"
 #include "G4Na21GEMProbability.hh"
 
 class G4Na21GEMChannel : public G4GEMChannel
 {
 public:
   // only available constructor
-  G4Na21GEMChannel() : G4GEMChannel(21,11,"Na21",
-				   &theEvaporationProbability,
-				   &theCoulombBarrier)
-  {
-    theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
-  }
+  explicit G4Na21GEMChannel() 
+    : G4GEMChannel(21,11,"Na21",&theEvaporationProbability) {}
   
   // destructor
   ~G4Na21GEMChannel() {};
   
 private:
-  const G4Na21GEMChannel & operator=(const G4Na21GEMChannel & right);  
+  const G4Na21GEMChannel & operator=(const G4Na21GEMChannel & right) = delete;  
+  G4Na21GEMChannel(const G4Na21GEMChannel & right) = delete;
+  G4bool operator==(const G4Na21GEMChannel & right) const = delete;
+  G4bool operator!=(const G4Na21GEMChannel & right) const = delete;
     
-  G4Na21GEMChannel(const G4Na21GEMChannel & right);
-  
-public:
-  G4bool operator==(const G4Na21GEMChannel & right) const;
-  G4bool operator!=(const G4Na21GEMChannel & right) const;
-    
-private:
-  
-  G4Na21GEMCoulombBarrier theCoulombBarrier;
-	
   G4Na21GEMProbability theEvaporationProbability;
   
 };

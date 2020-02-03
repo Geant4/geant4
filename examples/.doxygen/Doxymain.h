@@ -1,4 +1,3 @@
-// $Id: Doxymain.h 87170 2014-11-26 09:25:51Z gcosmo $
 
 /// \file Doxymain.h
 /// \brief The main page for Geant4 Examples code documenation

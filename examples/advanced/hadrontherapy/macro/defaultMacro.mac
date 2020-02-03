@@ -8,21 +8,28 @@
 #########################
 # Set of the verboses 
 #
-/control/verbose 1
+/control/verbose 0
 /tracking/verbose 0
-/run/verbose 1
+/run/verbose 0
 /event/verbose 0
 
 ##########################
 # Set of the physic models
 #
+#/Physics/addPhysics QGSP_BIC_EMY
+
 /Physics/addPhysics HADRONTHERAPY_1
+<<<<<<< HEAD
+=======
+/run/numberOfThreads 1
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ##########################
 # Initialisation procedure
 #
 /run/initialize
 
+<<<<<<< HEAD
 ##########################
 # Visualisation
 #
@@ -36,19 +43,34 @@
 /vis/scene/add/trajectories
 /vis/scene/endOfEventAction accumulate
 
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 ####################################################
 # Set here the CUT and the STEP MAX for the tracking. 
 # Suggested values of cut and step
 #
 # Set cuts OUTSIDE the detector
+<<<<<<< HEAD
 # 
 /run/setCut 1 mm
+=======
+#
+/run/setCut 1 m
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 # Set cuts ONLY inside the detector
 #
 /run/setCutForRegion DetectorLog 0.1 mm
 
+<<<<<<< HEAD
 /Step/waterPhantomStepMax 1 mm 
+=======
+
+/run/setCutForAGivenParticle e- 0.1 mm
+/run/setCutForAGivenParticle e+ 0.1 mm
+/run/setCutForAGivenParticle proton 0.1 mm
+#/Step/waterPhantomStepMax 0.1 mm
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #########################
 # Set the primary particle type,
@@ -62,6 +84,8 @@
 /gps/pos/radius 0. mm
 /gps/pos/sigma_r 2. mm
 /gps/particle proton
+#/gps/particle ion
+#/gps/ion 6 12 6
 /gps/pos/type Beam
 
 # the incident surface is in the y-z plane
@@ -80,9 +104,16 @@
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
+<<<<<<< HEAD
 /gps/ene/mono 62 MeV
 /gps/ene/sigma 0.3 MeV
 
+=======
+/gps/ene/mono 60.0 MeV
+#/gps/ene/sigma 0.25 MeV
+#/gps/ene/mono 744 MeV
+#/gps/ene/sigma 0.740 MeV
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 ###################################################
 #		DETECTOR DESCRIPTION
@@ -119,13 +150,24 @@
 # Start of the run
 #
 # If secondary particles dose & fluence are needed
+<<<<<<< HEAD
 #/analysis/secondary true 
+=======
+/analysis/secondary true
+/analysis/computeLet
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 # Default material is water liquid
-#/changePhantom/material G4_PLEXIGLASS
+/changePhantom/material G4_WATER
 
+<<<<<<< HEAD
 /run/beamOn 10
 
 /control/shell mkdir -p SimulationOutputs/proton/BraggPeak
 /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 
+=======
+/run/printProgress 1000
+/run/beamOn 1000
+/tracking/verbose 0
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c

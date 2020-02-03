@@ -78,8 +78,8 @@ GLUAPI void GLUAPIENTRY gluTessVertex (GLUtesselator* tess, GLUdouble *location,
 /* //////////////////////////////////////////////////////////////// */
 
 /* Boolean values */
-#define GLU_FALSE				0x0
-#define GLU_TRUE				0x1
+#define TOOLS_GLU_FALSE   0x0
+#define TOOLS_GLU_TRUE    0x1
 
 /* Primitives */
 #define GLU_LINE_LOOP				0x0002

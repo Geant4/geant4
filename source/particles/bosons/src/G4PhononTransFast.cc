@@ -26,7 +26,6 @@
 /// \file particles/phonons/src/G4PhononTransFast.cc
 /// \brief Implementation of the G4PhononTransFast class
 //
-// $Id: G4PhononTransFast.cc 75122 2013-10-28 09:51:40Z gcosmo $
 //
 
 #include "G4PhononTransFast.hh"
@@ -59,7 +58,7 @@ G4PhononTransFast*  G4PhononTransFast::Definition()
                     0,               0,             0,
                     0,               0,             0,
              "phonon",               0,             0,         0,
-                 true,             0.0,          NULL,
+                 true,            -1.0,          NULL,
                 false,        "phononTF",       0
              );
   }

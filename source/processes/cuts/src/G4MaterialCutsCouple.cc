@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.cc 70369 2013-05-29 14:59:24Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -40,8 +39,8 @@
 
 G4MaterialCutsCouple::G4MaterialCutsCouple() :
   isMaterialModified(false),
-  fMaterial(0),
-  fCuts(0),
+  fMaterial(nullptr),
+  fCuts(nullptr),
   indexNumber(-1),
   isUsedInGeometry(false)
 {
@@ -59,7 +58,7 @@ G4MaterialCutsCouple::G4MaterialCutsCouple(const G4Material* material,
 
 
 G4MaterialCutsCouple::G4MaterialCutsCouple(const G4MaterialCutsCouple& right) 
-  :fMaterial(0), fCuts(0)
+  :fMaterial(nullptr), fCuts(nullptr)
 {
   *this = right;
 }

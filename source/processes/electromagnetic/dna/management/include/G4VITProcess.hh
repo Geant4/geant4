@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITProcess.hh 88348 2015-02-16 08:43:34Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -108,8 +107,8 @@ public:
   G4VITProcess& operator=(const G4VITProcess& other);
 
   // equal opperators
-  G4int operator==(const G4VITProcess &right) const;
-  G4int operator!=(const G4VITProcess &right) const;
+  G4bool operator==(const G4VITProcess &right) const;
+  G4bool operator!=(const G4VITProcess &right) const;
 
   G4IT_TO_BE_CLONED(G4VITProcess)
 
@@ -117,16 +116,6 @@ public:
   {
     return fProcessID;
   }
-
-//    G4ProcessState_Lock* GetProcessState()
-//    {
-//        return fpState;
-//    }
-//
-//    void SetProcessState(G4ProcessState_Lock* aProcInfo)
-//    {
-//        fpState = (G4ProcessState*) aProcInfo;
-//    }
 
   G4shared_ptr<G4ProcessState_Lock> GetProcessState()
   {

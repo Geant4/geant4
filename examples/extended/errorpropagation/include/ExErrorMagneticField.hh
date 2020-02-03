@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: ExErrorMagneticField.hh 68019 2013-03-13 13:32:43Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file errorpropagation/include/ExErrorMagneticField.hh
 /// \brief Definition of the ExErrorMagneticField class

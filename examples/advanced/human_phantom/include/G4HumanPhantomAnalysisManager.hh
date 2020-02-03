@@ -31,7 +31,7 @@
 #include "g4root.hh"
 
 /*
-Author: Susanna Guatelli
+Author: Susanna Guatelli, University of Wollongong, Australia
 
 The class G4HumanPhantomAnalysisManager creates and manages ntuples
 

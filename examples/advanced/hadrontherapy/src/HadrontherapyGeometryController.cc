@@ -30,7 +30,7 @@
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyInteractionParameters.hh"
 #include "HadrontherapyDetectorROGeometry.hh"
-
+#include "HadrontherapyTIFPAPassiveProtonBeamLine.hh"
 #include "PassiveProtonBeamLine.hh"
 #include "PassiveCarbonBeamLine.hh"
 #include "LaserDrivenBeamLine.hh"

@@ -64,12 +64,14 @@ endif()
 #------------------------------------------------------------------------------
 # Define library
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
+                    ${CMAKE_CURRENT_SOURCE_DIR}/analysis/include 
                     ${Geant4_INCLUDE_DIR} 
                     ${MPI_CXX_INCLUDE_PATH})
 link_directories(${MPI_CXX_LIBRARY_DIRS})
 
 set(_sources 
   src/G4MPIbatch.cc
+  src/G4MPIextraWorker.cc
   src/G4MPImanager.cc
   src/G4MPImessenger.cc
   src/G4MPIrandomSeedGenerator.cc
@@ -80,8 +82,12 @@ set(_sources
   src/G4VMPIsession.cc
   src/G4MPIscorerMerger.cc
   src/G4MPIhistoMerger.cc
+  src/G4MPIntupleMerger.cc
   src/G4VUserMPIrunMerger.cc
   src/G4MPIutils.cc
+  analysis/src/G4RootMpiAnalysisManager.cc
+  analysis/src/G4RootMpiNtupleManager.cc
+  analysis/src/G4RootMpiPNtupleManager.cc
 )
 
 #TODO: This works only if both BUILD_STATIC_LIBS=ON && BUILD_SHARED_LIBS=OFF
@@ -107,19 +113,27 @@ endif()
 # headers
 set(HEADERS
   include/G4MPIbatch.hh
+  include/G4MPIextraWorker.hh
   include/G4MPImanager.hh
   include/G4MPImessenger.hh
   include/G4MPIrandomSeedGenerator.hh
   include/G4MPIsession.hh
   include/G4MPIstatus.hh
   include/G4UImpish.hh
+  include/G4VMPIextraWorker.hh
   include/G4VMPIseedGenerator.hh
   include/G4VMPIsession.hh
   include/G4MPIscorerMerger.hh
   include/G4MPIrunMerger.hh
   include/G4MPIhistoMerger.hh
+  include/G4MPIntupleMerger.hh
   include/G4VUserMPIrunMerger.hh
   include/G4MPIutils.hh
+  analysis/include/G4RootMpiAnalysisManager.hh
+  analysis/include/G4RootMpiNtupleManager.hh
+  analysis/include/G4RootMpiPNtupleDescription.hh
+  analysis/include/G4RootMpiPNtupleManager.hh
+
 )
 
 #------------------------------------------------------------------------------

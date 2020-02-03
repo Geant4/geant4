@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh 97537 2016-06-03 15:26:56Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -73,11 +72,11 @@ class G4VDecayChannel
     virtual ~G4VDecayChannel();
 
     // equality operators
-    G4int operator==(const G4VDecayChannel &right) const {return (this == &right);}
-    G4int operator!=(const G4VDecayChannel &right) const {return (this != &right);}
+    G4bool operator==(const G4VDecayChannel &right) const {return (this == &right);}
+    G4bool operator!=(const G4VDecayChannel &right) const {return (this != &right);}
 
     // less-than operator is defined for G4DecayTable
-    G4int operator<(const G4VDecayChannel &right) const;
+    G4bool operator<(const G4VDecayChannel &right) const;
 
     virtual G4DecayProducts* DecayIt(G4double parentMass = -1.0) = 0;
 
@@ -203,7 +202,7 @@ class G4VDecayChannel
 // ------------------------------------------------------------
 
 inline
- G4int G4VDecayChannel::operator<(const G4VDecayChannel &right) const
+ G4bool G4VDecayChannel::operator<(const G4VDecayChannel &right) const
 {
   return (this->rbranch < right.rbranch);
 }
@@ -289,9 +288,6 @@ inline
 
 inline
  const G4String& G4VDecayChannel::GetKinematicsName() const { return kinematics_name; }
-
-inline
- void  G4VDecayChannel::SetBR(G4double value){ rbranch = value; }
 
 inline
  G4double G4VDecayChannel::GetBR() const { return rbranch; }

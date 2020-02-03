@@ -373,15 +373,11 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   // daughter 3 ,4 (neutrinos)
   // create neutrinos in the C.M frame of two neutrinos
 
-  G4double energy2 = parentmass*(1.0 - (x+y)/2.0);
+  G4double energy2 = parentmass-E-G;
 
-  G4double vmass2 = energy2*energy2 -
-                    (daughtermomentum[0]*direction0+daughtermomentum[1]*direction1)*
-                    (daughtermomentum[0]*direction0+daughtermomentum[1]*direction1);
+  G4ThreeVector P34 = -1.*(daughtermomentum[0]*direction0+daughtermomentum[1]*direction1);  
+  G4double vmass2 = energy2*energy2 - P34.mag2();
   G4double vmass = std::sqrt(vmass2);
-
-  G4double beta = (daughtermomentum[0]+daughtermomentum[1])/energy2;
-  beta = -1.0 * std::min(beta,0.99);
 
   G4double costhetan = 2.*G4UniformRand()-1.0;
   G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
@@ -397,11 +393,8 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
     = new G4DynamicParticle( G4MT_daughters[3], direction2*(-1.0*vmass/2.));
 
   // boost to the muon rest frame
-
-  G4ThreeVector direction34(direction0.x()+direction1.x(),
-                            direction0.y()+direction1.y(),
-                            direction0.z()+direction1.z());
-  direction34 = direction34.unit();
+  G4double beta = P34.mag()/energy2;
+  G4ThreeVector direction34 = P34.unit();
 
   G4LorentzVector p4 = daughterparticle2->Get4Momentum();
   p4.boost(direction34.x()*beta,direction34.y()*beta,direction34.z()*beta);
@@ -422,10 +415,20 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
   if (GetVerboseLevel()>1) {
     G4cout << "G4MuonRadiativeDecayChannelWithSpin::DecayIt ";
     G4cout << "  create decay products in rest frame " <<G4endl;
-    products->DumpInfo();
+    G4double TT = daughterparticle0->GetTotalEnergy()
+      + daughterparticle1->GetTotalEnergy()
+      + daughterparticle2->GetTotalEnergy() 
+      + daughterparticle3->GetTotalEnergy(); 
+    G4cout << "e    :" << daughterparticle0->GetTotalEnergy()/MeV << G4endl; 
+    G4cout << "gamma:" << daughterparticle1->GetTotalEnergy()/MeV << G4endl; 
+    G4cout << "nu2  :" << daughterparticle2->GetTotalEnergy()/MeV << G4endl; 
+    G4cout << "nu2  :" << daughterparticle3->GetTotalEnergy()/MeV << G4endl; 
+    G4cout << "total:" << (TT-parentmass)/keV << G4endl;
+    if (GetVerboseLevel()>1) {products->DumpInfo();}
   }
 #endif
-  return products;
+
+ return products;
 }
 
 G4double G4MuonRadiativeDecayChannelWithSpin::fron(G4double Pmu,

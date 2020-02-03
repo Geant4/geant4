@@ -28,13 +28,12 @@
 // cross-sections and the hadron-nucleous cross-section model in 
 // the framework of Glauber-Gribov approach
 //
+// 25.04.12 V. Grichine - first implementation based on 
+//                        G4GlauberGribovCrossSection old interface
 //
-//
-//
-//
-// 25.04.12 V. Grichine - first implementation based on G4GlauberGribovCrossSection old interface
-//
-//
+// 04.09.18 V. Ivantchenko Major revision of interfaces and implementation
+// 01.10.18 V. Grichine strange hyperon xsc
+// 27.05.19 V. Ivantchenko Removed obsolete methods and members 
 
 #ifndef G4ComponentGGHadronNucleusXsc_h
 #define G4ComponentGGHadronNucleusXsc_h 1
@@ -47,74 +46,58 @@
 
 class G4ParticleDefinition;
 class G4HadronNucleonXsc;
+class G4Pow;
 
 class G4ComponentGGHadronNucleusXsc : public G4VComponentCrossSection
 {
 public:
 
-  G4ComponentGGHadronNucleusXsc ();
-  virtual ~G4ComponentGGHadronNucleusXsc ();
+  explicit G4ComponentGGHadronNucleusXsc();
+  ~G4ComponentGGHadronNucleusXsc() final;
 
   static const char* Default_Name() { return "Glauber-Gribov"; }
 
   // virtual interface methods
-
-virtual
-  G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
-				       G4double kinEnergy,
-				       G4int Z, G4int A);
-
-virtual
   G4double GetTotalElementCrossSection(const G4ParticleDefinition* aParticle,
 				       G4double kinEnergy, 
-				       G4int Z, G4double A);
+				       G4int Z, G4double A) final;
 
-virtual
-  G4double GetInelasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
-					   G4double kinEnergy, 
-					   G4int Z, G4int A);
+  G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+				       G4double kinEnergy,
+				       G4int Z, G4int A) final;
 
-virtual
-  G4double GetProductionIsotopeCrossSection(const G4ParticleDefinition* aParticle,
-					   G4double kinEnergy, 
-					   G4int Z, G4int A);
-
-virtual
   G4double GetInelasticElementCrossSection(const G4ParticleDefinition* aParticle,
 					   G4double kinEnergy, 
-					   G4int Z, G4double A);
-virtual
-  G4double GetProductionElementCrossSection(const G4ParticleDefinition* aParticle,
-					   G4double kinEnergy, 
-					   G4int Z, G4double A);
+					   G4int Z, G4double A) final;
 
-virtual
+  G4double GetInelasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+					   G4double kinEnergy, 
+					   G4int Z, G4int A) final;
+
   G4double GetElasticElementCrossSection(const G4ParticleDefinition* aParticle,
 					 G4double kinEnergy, 
-					 G4int Z, G4double A);
+					 G4int Z, G4double A) final;
 
-virtual
   G4double GetElasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 					 G4double kinEnergy, 
-					 G4int Z, G4int A);
+					 G4int Z, G4int A) final;
  
-virtual
   G4double ComputeQuasiElasticRatio(const G4ParticleDefinition* aParticle,
-					 G4double kinEnergy, 
-					 G4int Z, G4int A);
- 
+				    G4double kinEnergy, 
+				    G4int Z, G4int A) final;
 
-   
-  //  virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A, 
-			 const G4Element* elm = 0,
-			 const G4Material* mat = 0);
+  // Glauber-Gribov cross section
+  void ComputeCrossSections(const G4ParticleDefinition* aParticle,
+			    G4double kinEnergy, G4int Z, G4int A);
 
-  //  virtual
-  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
-			      const G4Isotope* iso = 0,
-			      const G4Element* elm = 0,
-			      const G4Material* mat = 0);
+  // additional public methods
+  G4double GetProductionElementCrossSection(const G4ParticleDefinition* aParticle,
+					    G4double kinEnergy, 
+					    G4int Z, G4double A);
+
+  G4double GetProductionIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+					    G4double kinEnergy, 
+					    G4int Z, G4int A);
 
   G4double GetRatioSD(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetRatioQE(const G4DynamicParticle*, G4int At, G4int Zt);
@@ -127,41 +110,32 @@ virtual
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, G4int At, G4int Zt);
 
-  // G4double GetKaonNucleonXscVector(const G4DynamicParticle*, G4int At, G4int Zt);
-
   G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHNinelasticXsc(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4int At, G4int Zt);
 
-  G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
+  void Description(std::ostream&) const final;
 
-  G4double CalcMandelstamS( const G4double , const G4double , const G4double );
-
-  G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
-  G4double GetNucleusRadius(G4int At);
-
-  virtual void CrossSectionDescription(std::ostream&) const;
+  inline G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
+	 		             const G4Isotope* iso = nullptr,
+			             const G4Element* elm = nullptr,
+			             const G4Material* mat = nullptr);
 
   inline G4double GetElasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
   inline G4double GetInelasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
 
-  inline G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
-  inline G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
-  inline G4double GetInelasticGlauberGribovXsc(){ return fInelasticXsc; }; 
-  inline G4double GetProductionGlauberGribovXsc(){ return fProductionXsc; }; 
-  inline G4double GetDiffractionGlauberGribovXsc(){ return fDiffractionXsc; }; 
-  inline G4double GetRadiusConst()              { return fRadiusConst;  }; 
+  inline G4double GetAxsc2piR2() const                   { return fAxsc2piR2; };
+  inline G4double GetModelInLog() const                  { return fModelInLog; };
+  inline G4double GetTotalGlauberGribovXsc() const       { return fTotalXsc; }; 
+  inline G4double GetElasticGlauberGribovXsc() const     { return fElasticXsc; }; 
+  inline G4double GetInelasticGlauberGribovXsc() const   { return fInelasticXsc; }; 
+  inline G4double GetProductionGlauberGribovXsc() const  { return fProductionXsc; }; 
+  inline G4double GetDiffractionGlauberGribovXsc() const { return fDiffractionXsc; }; 
 
   inline G4double GetParticleBarCorTot(const G4ParticleDefinition* theParticle, G4int Z);
   inline G4double GetParticleBarCorIn(const G4ParticleDefinition* theParticle, G4int Z);
 
-  inline void SetEnergyLowerLimit(G4double E ){fLowerLimit=E;};
-
 private:
-
-//  const G4double fUpperLimit;
-  G4double fLowerLimit; 
-  const G4double fRadiusConst;
 
   static const G4double fNeutronBarCorrectionTot[93];
   static const G4double fNeutronBarCorrectionIn[93];
@@ -176,40 +150,26 @@ private:
   static const G4double fPionMinusBarCorrectionIn[93];
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
-//  G4double fHadronNucleonXsc;
+  G4double fAxsc2piR2, fModelInLog;
+  G4double fEnergy; //Cache
  
-  G4ParticleDefinition* theGamma;
-  G4ParticleDefinition* theProton;
-  G4ParticleDefinition* theNeutron;
-  G4ParticleDefinition* theAProton;
-  G4ParticleDefinition* theANeutron;
-  G4ParticleDefinition* thePiPlus;
-  G4ParticleDefinition* thePiMinus;
-  G4ParticleDefinition* thePiZero;
-  G4ParticleDefinition* theKPlus;
-  G4ParticleDefinition* theKMinus;
-  G4ParticleDefinition* theK0S;
-  G4ParticleDefinition* theK0L;
-  G4ParticleDefinition* theL;
-  G4ParticleDefinition* theAntiL;
-  G4ParticleDefinition* theSPlus;
-  G4ParticleDefinition* theASPlus;
-  G4ParticleDefinition* theSMinus;
-  G4ParticleDefinition* theASMinus;
-  G4ParticleDefinition* theS0;
-  G4ParticleDefinition* theAS0;
-  G4ParticleDefinition* theXiMinus;
-  G4ParticleDefinition* theXi0;
-  G4ParticleDefinition* theAXiMinus;
-  G4ParticleDefinition* theAXi0;
-  G4ParticleDefinition* theOmega;
-  G4ParticleDefinition* theAOmega;
-  G4ParticleDefinition* theD;
-  G4ParticleDefinition* theT;
-  G4ParticleDefinition* theA;
-  G4ParticleDefinition* theHe3;
+  const G4ParticleDefinition* theGamma;
+  const G4ParticleDefinition* theProton;
+  const G4ParticleDefinition* theNeutron;
+  const G4ParticleDefinition* theAProton;
+  const G4ParticleDefinition* theANeutron;
+  const G4ParticleDefinition* thePiPlus;
+  const G4ParticleDefinition* thePiMinus;
+  const G4ParticleDefinition* theKPlus;
+  const G4ParticleDefinition* theKMinus;
+  const G4ParticleDefinition* theK0S;
+  const G4ParticleDefinition* theK0L;
 
   G4HadronNucleonXsc* hnXsc;
+
+  // Cache
+  const G4ParticleDefinition* fParticle;
+  G4int fZ, fA;
 
 };
 
@@ -217,23 +177,32 @@ private:
 //
 // Inlines
 
-inline
-G4double
-G4ComponentGGHadronNucleusXsc::GetElasticGlauberGribov(const G4DynamicParticle* dp,
-                                                     G4int Z, G4int A)
+inline G4double 
+G4ComponentGGHadronNucleusXsc::GetIsoCrossSection(const G4DynamicParticle* dp, 
+						  G4int Z, G4int A,  
+						  const G4Isotope*,
+						  const G4Element*,
+						  const G4Material*)
 {
-  GetIsoCrossSection(dp, Z, A);
+  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(), Z, A);
+  return fTotalXsc;
+}
+
+inline G4double
+G4ComponentGGHadronNucleusXsc::GetElasticGlauberGribov(
+           const G4DynamicParticle* dp, G4int Z, G4int A)
+{
+  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(), Z, A);
   return fElasticXsc;
 }
 
 /////////////////////////////////////////////////////////////////
 
-inline
-G4double
-G4ComponentGGHadronNucleusXsc::GetInelasticGlauberGribov(const G4DynamicParticle* dp,
-                                                       G4int Z, G4int A)
+inline G4double
+G4ComponentGGHadronNucleusXsc::GetInelasticGlauberGribov(
+           const G4DynamicParticle* dp, G4int Z, G4int A)
 {
-  GetIsoCrossSection(dp, Z, A);
+  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(), Z, A);
   return fInelasticXsc;
 }
 
@@ -242,19 +211,16 @@ G4ComponentGGHadronNucleusXsc::GetInelasticGlauberGribov(const G4DynamicParticle
 // return correction at Tkin = 90*GeV GG -> Barashenkov tot xsc, when it 
 // is available, else return 1.0
 
-
 inline G4double G4ComponentGGHadronNucleusXsc::GetParticleBarCorTot( 
-                          const G4ParticleDefinition* theParticle, G4int Z)
+                           const G4ParticleDefinition* theParticle, G4int ZZ)
 {
-  if(Z >= 2 && Z <= 92)
-  {
-    if(      theParticle == theProton ) return fProtonBarCorrectionTot[Z]; 
-    else if( theParticle == theNeutron) return fNeutronBarCorrectionTot[Z]; 
-    else if( theParticle == thePiPlus ) return fPionPlusBarCorrectionTot[Z];
-    else if( theParticle == thePiMinus) return fPionMinusBarCorrectionTot[Z];
-    else return 1.0;
-  }
-  else return 1.0;
+  G4double cor = 1.0;
+  G4int z = std::min(92, std::max(ZZ, 1));
+  if(      theParticle == theProton ) cor = fProtonBarCorrectionTot[z]; 
+  else if( theParticle == theNeutron) cor = fNeutronBarCorrectionTot[z]; 
+  else if( theParticle == thePiPlus ) cor = fPionPlusBarCorrectionTot[z];
+  else if( theParticle == thePiMinus) cor = fPionMinusBarCorrectionTot[z];
+  return cor;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -264,17 +230,15 @@ inline G4double G4ComponentGGHadronNucleusXsc::GetParticleBarCorTot(
 
 
 inline G4double G4ComponentGGHadronNucleusXsc::GetParticleBarCorIn( 
-                          const G4ParticleDefinition* theParticle, G4int Z)
+                           const G4ParticleDefinition* theParticle, G4int ZZ)
 {
-  if(Z >= 2 && Z <= 92)
-  {
-    if(      theParticle == theProton ) return fProtonBarCorrectionIn[Z]; 
-    else if( theParticle == theNeutron) return fNeutronBarCorrectionIn[Z]; 
-    else if( theParticle == thePiPlus ) return fPionPlusBarCorrectionIn[Z];
-    else if( theParticle == thePiMinus) return fPionMinusBarCorrectionIn[Z];
-    else return 1.0;
-  }
-  else return 1.0;
+  G4double cor = 1.0;
+  G4int z = std::min(92, std::max(ZZ, 1));
+  if(      theParticle == theProton ) cor = fProtonBarCorrectionIn[z]; 
+  else if( theParticle == theNeutron) cor = fNeutronBarCorrectionIn[z]; 
+  else if( theParticle == thePiPlus ) cor = fPionPlusBarCorrectionIn[z];
+  else if( theParticle == thePiMinus) cor = fPionMinusBarCorrectionIn[z];
+  return cor;
 }
 
 #endif

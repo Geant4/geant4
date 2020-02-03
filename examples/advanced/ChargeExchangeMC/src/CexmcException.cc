@@ -168,7 +168,7 @@ const char *  CexmcException::what( void ) const throw()
                 "custom filter script.";
 #endif
     case CexmcWeirdException :
-        return CEXMC_LINE_START "A weird exception occured. "
+        return CEXMC_LINE_START "A weird exception occurred. "
                 "The world must collapse now.";
     default :
         return CEXMC_LINE_START "Unknown exception.";

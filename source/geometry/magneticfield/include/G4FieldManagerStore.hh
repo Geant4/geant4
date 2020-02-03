@@ -23,30 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4FieldManagerStore.hh 66872 2013-01-15 01:25:57Z japost $
-//
-// class G4FieldManagerStore
+// G4FieldManagerStore
 //
 // Class description:
 //
-// Container for all FieldManagers, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// Container for all FieldManagers, with functionality derived
+// from std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static function
-// G4FieldManagerStore::GetInstance()
+// G4FieldManagerStore::GetInstance().
 //
 // All FieldManagers should be registered with G4FieldManagerStore,
 // and removed on their destruction. 
 // Intended principally to enable resetting of 'state' at start of event.
 // The underlying container initially has a capacity of 100.
-//
-// Member data:
-//
-// static G4FieldManagerStore* fgInstance
-//   - Ptr to the single G4FieldManagerStore.
 
-// History:
-// 07.12.07 J.Apostolakis  Initial version
+// Author: J.Apostolakis, 07.12.2007 - Initial version
 // --------------------------------------------------------------------
 #ifndef G4FIELDMANAGERSTORE_HH
 #define G4FIELDMANAGERSTORE_HH
@@ -65,13 +56,15 @@ class G4FieldManagerStore : public std::vector<G4FieldManager*>
       // Remove the logical volume from the collection.
     static G4FieldManagerStore* GetInstance();
       // Get a ptr to the unique G4FieldManagerStore, creating it if necessary.
+    static G4FieldManagerStore* GetInstanceIfExist();
+      // Get a ptr to the unique G4FieldManagerStore.
     static void Clean();
       // Delete all volumes from the store.
 
     void ClearAllChordFindersState();
       // Looping over all field managers, call each one to reset step estimate
 
-    virtual ~G4FieldManagerStore();
+    ~G4FieldManagerStore();
       // Destructor: takes care to delete allocated field managers.
 
   protected:

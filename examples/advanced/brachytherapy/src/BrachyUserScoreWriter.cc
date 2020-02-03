@@ -33,7 +33,8 @@ Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 #include <map>
 #include <fstream>
 #include "BrachyUserScoreWriter.hh"
-#include "G4SystemOfUnits.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #ifdef ANALYSIS_USE  
 #include "BrachyAnalysisManager.hh"
@@ -63,6 +64,8 @@ void BrachyUserScoreWriter::DumpQuantityToFile(const G4String & psName,
                                                const G4String & fileName, 
                                                const G4String & option) 
 {
+using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
+
 if(verboseLevel > 0) 
   {G4cout << "BrachyUserScorer-defined DumpQuantityToFile() method is invoked."
   << G4endl; 
@@ -111,7 +114,11 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
         G4int numberOfVoxel = fNMeshSegments[0];
         // If the voxel width is changed in the macro file, 
         // the voxel width variable must be updated
+<<<<<<< HEAD
         G4double voxelWidth = 1. *mm;
+=======
+        G4double voxelWidth = 0.25 *CLHEP::mm;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
         //
         G4double xx = ( - numberOfVoxel + 1+ 2*x )* voxelWidth/2;
         G4double yy = ( - numberOfVoxel + 1+ 2*y )* voxelWidth/2;
@@ -123,12 +130,23 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
         {
          // Print in the ASCII output file the information
          ofile << xx << "  " << yy << "  " << zz <<"  " 
+<<<<<<< HEAD
                <<*(value->second)/keV << G4endl;
+=======
+               <<(value->second->sum_wx())/CLHEP::keV << G4endl;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #ifdef ANALYSIS_USE          
         // Save the same information in the output analysis file
        BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
+<<<<<<< HEAD
        analysis -> FillNtupleWithEnergyDeposition(xx, yy, zz, *(value->second)/keV);
+=======
+   
+       if(zz> -0.125 *CLHEP::mm && zz < 0.125*CLHEP::mm)
+         analysis -> FillH2WithEnergyDeposition(xx,yy,
+                       (value->second->sum_wx())/CLHEP::keV);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #endif
 }}}} 
 

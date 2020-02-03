@@ -27,7 +27,6 @@
 /// \brief Main of the ThreadsafeScorers example
 //
 //
-// $Id: ts_scorers.cc 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// ts_scorers example shows how to use global scorers. The benefit of using
@@ -64,9 +63,43 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+<<<<<<< HEAD
+=======
+#include "G4TiMemory.hh"
+
+// for std::system(const char*)
+#include <cstdlib>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void message(RunManager* runmanager)
+{
+#ifdef G4MULTITHREADED
+    runmanager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+    G4cout << "\n\n\t--> Running in multithreaded mode with "
+           << runmanager->GetNumberOfThreads()
+           << " threads\n\n" << G4endl;
+#else
+    // get rid of unused variable warning
+    runmanager->SetVerboseLevel(runmanager->GetVerboseLevel());
+    G4cout << "\n\n\t--> Running in serial mode\n\n" << G4endl;
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 int main(int argc, char** argv)
 {
+    TIMEMORY_INIT(argc, argv);
+
+#if defined(GEANT4_USE_TIMEMORY)
+    // override environment settings
+    tim::settings::json_output() = true;
+    tim::settings::dart_output() = true;
+    tim::settings::dart_type() = "peak_rss";
+    tim::settings::dart_count() = 1;
+#endif
 
     // Detect interactive mode (if no arguments) and define UI session
     //

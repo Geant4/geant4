@@ -18,7 +18,7 @@ set_target_properties(${_TARGET}
 
 
 target_link_libraries (${_TARGET}
-                      ${GEANT4_LIBRARIES_WITH_VIS} boost_python
+                      ${GEANT4_LIBRARIES_WITH_VIS} ${BOOST_PYTHON_LIB}
                       ${PYTHON_LIBRARIES})
 
 # install

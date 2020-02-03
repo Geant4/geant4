@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/RE04.cc
 /// \brief Main program of the runAndEvent/RE04 example
 //
-// $Id: $
 //
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"

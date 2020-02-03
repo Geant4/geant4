@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:  G4RayleighAngularGenerator.hh,v 1.1 2012-12-31 18:34:15 antoni Exp $
-// GEANT4 tag $Name: not supported by svn $
 //
 // -------------------------------------------------------------------
 //

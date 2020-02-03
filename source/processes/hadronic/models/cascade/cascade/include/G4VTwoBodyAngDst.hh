@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwoBodyAngDst.hh 69202 2013-04-23 03:04:29Z mkelsey $
 // Author:  Dennis Wright (SLAC)
 // Date:    28 January 2013
 //

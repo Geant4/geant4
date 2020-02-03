@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
 #
 #------------------------------------------------------------------------------
 
@@ -66,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4HETCNeutron.hh
         G4HETCProton.hh
         G4HETCTriton.hh
+        G4LowEGammaNuclearModel.hh
         G4LowEIonFragmentation.hh
         G4PreCompoundAlpha.hh
         G4PreCompoundDeuteron.hh
@@ -73,13 +73,11 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4PreCompoundEmissionFactory.hh
         G4PreCompoundFragment.hh
         G4PreCompoundFragmentVector.hh
-        G4PreCompoundFragmentVector.icc
         G4PreCompoundHe3.hh
         G4PreCompoundIon.hh
         G4PreCompoundModel.hh
         G4PreCompoundNeutron.hh
         G4PreCompoundNucleon.hh
-        G4PreCompoundParameters.hh
         G4PreCompoundProton.hh
         G4PreCompoundTransitions.hh
         G4PreCompoundTriton.hh
@@ -98,6 +96,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4HETCNeutron.cc
         G4HETCProton.cc
         G4HETCTriton.cc
+        G4LowEGammaNuclearModel.cc
         G4LowEIonFragmentation.cc
         G4PreCompoundAlpha.cc
         G4PreCompoundDeuteron.cc
@@ -110,7 +109,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4PreCompoundModel.cc
         G4PreCompoundNeutron.cc
         G4PreCompoundNucleon.cc
-        G4PreCompoundParameters.cc
         G4PreCompoundProton.cc
         G4PreCompoundTransitions.cc
         G4PreCompoundTriton.cc

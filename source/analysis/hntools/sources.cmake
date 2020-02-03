@@ -11,7 +11,6 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 92688 2015-09-14 07:01:13Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -42,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4hntools
         G4ToolsAnalysisManager.icc
         G4ToolsAnalysisReader.hh
         G4ToolsAnalysisReader.icc
+        g4hntools_defs.hh
     SOURCES
         G4BaseHistoUtilities.cc
         G4H1ToolsManager.cc

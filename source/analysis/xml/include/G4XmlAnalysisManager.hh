@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4XmlAnalysisManager.hh 92972 2015-09-23 14:36:03Z gcosmo $
 
 // The main manager for Xml analysis.
 // It delegates most of functions to the object specific managers. 
@@ -67,7 +66,7 @@ class G4XmlAnalysisManager : public G4ToolsAnalysisManager
     // virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName) final;
     virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl() final; 
+    virtual G4bool CloseFileImpl(G4bool reset) final; 
     virtual G4bool IsOpenFileImpl() const final;
 
   private:

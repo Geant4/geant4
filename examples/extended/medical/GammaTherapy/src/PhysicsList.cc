@@ -26,7 +26,10 @@
 /// \file medical/GammaTherapy/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
+<<<<<<< HEAD
 // $Id: PhysicsList.cc 82277 2014-06-13 14:40:54Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //---------------------------------------------------------------------------
 //

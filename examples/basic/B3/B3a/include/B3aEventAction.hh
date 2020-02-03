@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \file B3aEventAction.hh
 /// \brief Definition of the B3aEventAction class

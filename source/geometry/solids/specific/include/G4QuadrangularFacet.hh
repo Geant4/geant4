@@ -24,11 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QuadrangularFacet.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// Class G4QuadrangularFacet
+// G4QuadrangularFacet
 //
 // Class description:
 //
@@ -38,8 +34,8 @@
 //   supplied in anti-clockwise order looking from the outsider of the solid
 //   where it belongs. Its constructor
 //   
-//     G4QuadrangularFacet (const G4ThreeVector Pt0, const G4ThreeVector vt1,
-//                          const G4ThreeVector vt2, const G4ThreeVector vt3,
+//     G4QuadrangularFacet (const G4ThreeVector& Pt0, const G4ThreeVector& vt1,
+//                          const G4ThreeVector& vt2, const G4ThreeVector& vt3,
 //                          G4FacetVertexType);
 //
 //   takes 5 parameters to define the four fVertices:
@@ -51,15 +47,11 @@
 //        the fourth vertex is Pt0+vt3, in anti-clockwise order when looking 
 //        from the outsider.
 
-// CHANGE HISTORY
-// --------------
-//
 // 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
 // 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
-//
-///////////////////////////////////////////////////////////////////////////////
-#ifndef G4QuadrangularFacet_HH
-#define G4QuadrangularFacet_HH 1
+// --------------------------------------------------------------------
+#ifndef G4QUADRANGULARFACET_HH
+#define G4QUADRANGULARFACET_HH
 
 #include "G4VFacet.hh"
 #include "G4Types.hh"
@@ -70,27 +62,27 @@ class G4QuadrangularFacet : public G4VFacet
 {
   public:  // with description
 
-    G4QuadrangularFacet (const G4ThreeVector &Pt0, const G4ThreeVector &vt1,
-                         const G4ThreeVector &vt2, const G4ThreeVector &vt3,
+    G4QuadrangularFacet (const G4ThreeVector& Pt0, const G4ThreeVector& vt1,
+                         const G4ThreeVector& vt2, const G4ThreeVector& vt3,
                                G4FacetVertexType);
-    G4QuadrangularFacet (const G4QuadrangularFacet &right);
+    G4QuadrangularFacet (const G4QuadrangularFacet& right);
    ~G4QuadrangularFacet ();
 
-    G4QuadrangularFacet &operator=(const G4QuadrangularFacet &right);    
+    G4QuadrangularFacet& operator=(const G4QuadrangularFacet& right);    
 
-    G4VFacet *GetClone ();
+    G4VFacet* GetClone ();
 
-    G4ThreeVector Distance (const G4ThreeVector &p);
-    G4double Distance (const G4ThreeVector &p, G4double minDist);
-    G4double Distance (const G4ThreeVector &p, G4double minDist,
+    G4ThreeVector Distance (const G4ThreeVector& p);
+    G4double Distance (const G4ThreeVector& p, G4double minDist);
+    G4double Distance (const G4ThreeVector& p, G4double minDist,
                        const G4bool outgoing);
     G4double Extent   (const G4ThreeVector axis);
-    G4bool Intersect  (const G4ThreeVector &p, const G4ThreeVector &v,
-                       const G4bool outgoing, G4double &distance,
-                             G4double &distFromSurface, G4ThreeVector &normal);
+    G4bool Intersect  (const G4ThreeVector& p, const G4ThreeVector& v,
+                       const G4bool outgoing, G4double& distance,
+                             G4double& distFromSurface, G4ThreeVector& normal);
     G4ThreeVector GetSurfaceNormal () const;
 
-    G4double GetArea ();
+    G4double GetArea () const;
     G4ThreeVector GetPointOnFace () const;
 
     G4GeometryType GetEntityType () const;
@@ -98,8 +90,8 @@ class G4QuadrangularFacet : public G4VFacet
     inline G4bool IsDefined () const;
     inline G4int GetNumberOfVertices () const;
     inline G4ThreeVector GetVertex (G4int i) const;
-    inline void SetVertex (G4int i, const G4ThreeVector &val);
-    inline void SetVertices(std::vector<G4ThreeVector> *v);
+    inline void SetVertex (G4int i, const G4ThreeVector& val);
+    inline void SetVertices(std::vector<G4ThreeVector>* v);
 
     inline G4double GetRadius () const;
     inline G4ThreeVector GetCircumcentre () const;
@@ -113,15 +105,16 @@ class G4QuadrangularFacet : public G4VFacet
 
   private:
 
-    G4double fRadius;
+    G4double fRadius = 0.0;
+
     G4ThreeVector fCircumcentre;
 
     G4TriangularFacet fFacet1, fFacet2;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 // Inlined Methods
-///////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 
 inline G4int G4QuadrangularFacet::GetNumberOfVertices () const
 {
@@ -165,7 +158,7 @@ inline void G4QuadrangularFacet::SetVertex (G4int i, const G4ThreeVector &val)
     }
 }
 
-inline void G4QuadrangularFacet::SetVertices(std::vector<G4ThreeVector> *v)
+inline void G4QuadrangularFacet::SetVertices(std::vector<G4ThreeVector>* v)
 {
   fFacet1.SetVertices(v);
   fFacet2.SetVertices(v);

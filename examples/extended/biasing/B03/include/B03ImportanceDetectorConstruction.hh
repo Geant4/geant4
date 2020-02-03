@@ -27,7 +27,6 @@
 /// \brief Definition of the B03ImportanceDetectorConstruction class
 //
 //
-// $Id: B03ImportanceDetectorConstruction.hh 70238 2013-05-27 11:59:40Z gcosmo $
 //
 
 #ifndef B03ImportanceDetectorConstruction_hh 

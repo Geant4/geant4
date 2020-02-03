@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // -*- C++ -*-
@@ -115,6 +114,10 @@ typedef float Float;
 #define INT_MIN   std::numeric_limits<int>::min()   // -2147483648
 #endif
 
+#ifndef LOG_EKIN_MIN  /* Min value of the natural logarithm of kin. energy. */
+#define LOG_EKIN_MIN   -30
+#endif
+
 //---------------------------------
 
 template <class T>
@@ -148,18 +151,6 @@ inline T sqr(const T& x)
 }
 #endif
 
-#ifdef G4_ABS_DEFINED
-  #ifdef abs
-    #undef abs
-  #endif
-
-template <class T>
-inline T std::abs(const T& a)
-{
-  return a < 0 ? -a : a;
-}
-#endif
-
 inline int G4lrint(double ad)
 {
   return (ad>0) ? static_cast<int>(ad+.5) : static_cast<int>(ad-.5);
@@ -174,5 +165,46 @@ inline int G4rint(double ad)
 {
   return (ad>0) ? static_cast<int>(ad+1) : static_cast<int>(ad);
 }
+
+//-----------------------------
+
+//  Use the following function to get rid of "unused parameter" warnings
+//  Example:
+//
+//      #ifdef SOME_CONDITION
+//          void doSomething(int val)
+//          {
+//              something = val;
+//          }
+//      #else
+//          void doSomething(int)
+//          { }
+//      #endif
+//
+//  can be simplified to:
+//
+//          void doSomething(int val)
+//          {
+//      #ifdef SOME_CONDITION
+//              something = val;
+//      #else
+//              G4ConsumeParameters(val);
+//      #endif
+//          }
+//
+//  or:
+//
+//          void doSomething(int val)
+//          {
+//      #ifdef SOME_CONDITION
+//              something = val;
+//      #endif
+//              // function call does nothing -- will be "optimized" out
+//              G4ConsumeParameters(val);
+//          }
+//
+template <typename... _Args>
+inline void G4ConsumeParameters(_Args&&...)
+{ }
 
 #endif // templates_h

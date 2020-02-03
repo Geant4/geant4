@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Analysis.cc 76431 2013-11-10 20:28:49Z kmura $
 //
 /// @file Analysis.cc
 /// @brief Define histograms
@@ -114,10 +113,10 @@ Analysis::Save(const G4String& fname)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void
-Analysis::Close()
+Analysis::Close(G4bool reset)
 {
   G4AnalysisManager* mgr = G4AnalysisManager::Instance();
-  mgr->CloseFile();
+  mgr->CloseFile(reset);
   return;
 }
 

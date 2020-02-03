@@ -23,60 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc 102290 2017-01-20 11:19:44Z gcosmo $
-//
-// Class G4BrentLocator implementation
+// class G4BrentLocator implementation
 //
 // 27.10.08 - Tatiana Nikitina.
 // 04.10.11 - John Apostolakis, revised convergence to use Surface Normal
 // ---------------------------------------------------------------------------
 
-#include "G4BrentLocator.hh"
-#include "G4ios.hh"
 #include <iomanip>
 
+#include "G4BrentLocator.hh"
+#include "G4ios.hh"
+
 G4BrentLocator::G4BrentLocator(G4Navigator *theNavigator)
- : G4VIntersectionLocator(theNavigator)
+  : G4VIntersectionLocator(theNavigator)
 {
   // In case of too slow progress in finding Intersection Point
   // intermediates Points on the Track must be stored.
   // Initialise the array of Pointers [max_depth+1] to do this  
   
   G4ThreeVector zeroV(0.0,0.0,0.0);
-  for (G4int idepth=0; idepth<max_depth+1; idepth++ )
+  for (auto idepth=0; idepth<max_depth+1; ++idepth )
   {
     ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
   }
-
-  // Counters for Locator
-
-  // Counter for Maximum Number Of Trial before Intersection Found
-  //
-  maxNumberOfStepsForIntersection=0;
-
-  // Counter for Number Of Calls to ReIntegrationEndPoint Method
-  //
-  maxNumberOfCallsToReIntegration=0; 
-  maxNumberOfCallsToReIntegration_depth=0; 
 }
 
 G4BrentLocator::~G4BrentLocator()
 {
-  for ( G4int idepth=0; idepth<max_depth+1; idepth++)
+  for ( auto idepth=0; idepth<max_depth+1; ++idepth )
   {
     delete ptrInterMedFT[idepth];
   }
-#ifdef G4DEBUG_FIELD
-  if(fVerboseLevel>0)
-  {
-    G4cout << "G4BrentLocator::Location with Max Number of Steps="
-           << maxNumberOfStepsForIntersection<<G4endl;
-    G4cout << "G4BrentLocator::ReIntegrateEndPoint was called "
-           << maxNumberOfCallsToReIntegration
-           << " times and for depth algorithm "
-           << maxNumberOfCallsToReIntegration_depth << " times." << G4endl;
-  }
-#endif
 }
 
 // --------------------------------------------------------------------------
@@ -170,9 +147,9 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   //  until 'max_depth'.
   //--------------------------------------------------------------------------
 
-  const G4int param_substeps=50; // Test value for the maximum number
-                                  // of substeps
-  const G4double fraction_done=0.3;
+  const G4int param_substeps = 50; // Test value for the maximum number
+                                   // of substeps
+  const G4double fraction_done = 0.3;
 
   G4bool Second_half = false;     // First half or second half of divided step
 
@@ -184,11 +161,11 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   // and it becomes false only if we are in the first-half of level
   // depthness or if we are in the first section
 
-  G4int depth=0; // Depth counts how many subdivisions of initial step made
+  G4int depth = 0; // Depth counts how many subdivisions of initial step made
 
 #ifdef G4DEBUG_FIELD
-  const G4double tolerance= 1.0e-8; 
-  G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
+  const G4double tolerance = 1.0e-8; 
+  G4ThreeVector  StartPosition = CurveStartPointVelocity.GetPosition(); 
   if( (TrialPoint - StartPosition).mag() < tolerance * CLHEP::mm ) 
   {
      G4Exception("G4BrentLocator::EstimateIntersectionPoint()", 
@@ -202,16 +179,16 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   // Important is 'ptrInterMedFT[0]', it saves the 'EndCurvePoint'
   //
   *ptrInterMedFT[0] = CurveEndPointVelocity;
-  for (G4int idepth=1; idepth<max_depth+1; idepth++ )
+  for (auto idepth=1; idepth<max_depth+1; ++idepth )
   {
-    *ptrInterMedFT[idepth]=CurveStartPointVelocity;
+    *ptrInterMedFT[idepth] = CurveStartPointVelocity;
   }
 
   //Final_section boolean store
   G4bool fin_section_depth[max_depth];
-  for (G4int idepth=0; idepth<max_depth; idepth++ )
+  for (auto idepth=0; idepth<max_depth; ++idepth )
   {
-    fin_section_depth[idepth]=true;
+    fin_section_depth[idepth] = true;
   }
 
   // 'SubStartPoint' is needed to calculate the length of the divided step
@@ -252,14 +229,14 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       }
 #endif
 
-      G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
+      G4ThreeVector CurrentF_Point = ApproxIntersecPointV.GetPosition();
 
       // First check whether EF is small - then F is a good approx. point 
       // Calculate the length and direction of the chord AF
       //
       G4ThreeVector  ChordEF_Vector = CurrentF_Point - CurrentE_Point;
-      G4ThreeVector  NewMomentumDir= ApproxIntersecPointV.GetMomentumDir(); 
-      G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
+      G4ThreeVector  NewMomentumDir = ApproxIntersecPointV.GetMomentumDir(); 
+      G4double       MomDir_dot_Norm = NewMomentumDir.dot( NormalAtEntry ) ;
      
 #ifdef G4DEBUG_FIELD
       G4ThreeVector  ChordAB = Point_B - Point_A;
@@ -398,7 +375,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
             //   A    <- F 
             //   E    <- H
             //
-            G4FieldTrack InterMed=ApproxIntersecPointV;
+            G4FieldTrack InterMed = ApproxIntersecPointV;
             ApproxIntersecPointV = GetChordFinderFor()->ApproxCurvePointS(
                           CurrentA_PointVelocity,CurrentB_PointVelocity,
                           InterMed,CurrentE_Point,CurrentF_Point,PointH,
@@ -410,7 +387,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
             //
             G4bool validNormalLast; 
             NormalAtEntry = GetSurfaceNormal( PointH, validNormalLast ); 
-            validNormalAtE= validNormalLast;
+            validNormalAtE = validNormalLast;
           }
           else  // not Intersects_FB
           {
@@ -446,7 +423,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
             }
             else
             {
-              if(depth==0)
+              if( depth==0 )
               {
                 // We must restore the original endpoint
                 //
@@ -460,7 +437,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                                                     GetEpsilonStepFor());
 
                 restoredFullEndpoint = true;
-                restartB++; // counter
+                ++restartB; // counter
               }
               else
               {
@@ -475,7 +452,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                                                     CurrentE_Point,
                                                     GetEpsilonStepFor());
                 restoredFullEndpoint = true;
-                restartB++; // counter
+                ++restartB; // counter
               }
             }
           } // Endif (Intersects_FB)
@@ -564,7 +541,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                       "GeomNav0003", FatalException, message);
         }
 
-        if(restoredFullEndpoint)
+        if( restoredFullEndpoint )
         {
           fin_section_depth[depth] = restoredFullEndpoint;
           restoredFullEndpoint = false;
@@ -594,8 +571,8 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                      -1.0, NewSafety, substep_no);
       }
 #endif
-      substep_no++; 
-      substep_no_p++;
+      ++substep_no; 
+      ++substep_no_p;
 
     } while (  ( ! found_approximate_intersection )
             && ( ! there_is_no_intersection )     
@@ -617,14 +594,14 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       // then halve the step if so
       //
       if ( ( did_len < fraction_done*all_len )
-        && (depth<max_depth) && (!sub_final_section) )
+        && (depth < max_depth) && (!sub_final_section) )
       {
         Second_half=false;
-        depth++;
+        ++depth;
 
         G4double Sub_len = (all_len-did_len)/(2.);
         G4FieldTrack start = CurrentA_PointVelocity;
-        G4MagInt_Driver* integrDriver =
+        auto integrDriver =
                          GetChordFinderFor()->GetIntegrationDriver();
         integrDriver->AccurateAdvance(start, Sub_len, GetEpsilonStepFor());
         *ptrInterMedFT[depth] = start;
@@ -648,13 +625,13 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
         {
           last_AF_intersection = Intersects_AB;
           CurrentE_Point = PointGe;
-          fin_section_depth[depth]=true;
+          fin_section_depth[depth] = true;
 
           // Need to recalculate the Exit Normal at the new PointG
           //
           G4bool validNormalAB; 
           NormalAtEntry = GetSurfaceNormal( PointGe, validNormalAB ); 
-          validNormalAtE= validNormalAB;  
+          validNormalAtE = validNormalAB;  
         }
         else
         {
@@ -689,14 +666,14 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
         {
           // Re-integrate to obtain a new B
           //
-          G4FieldTrack newEndPointFT=
+          G4FieldTrack newEndPointFT =
                   ReEstimateEndpoint( CurrentA_PointVelocity,
                                       CurrentB_PointVelocity,
                                       linDistSq,    // to avoid recalculation
                                       curveDist );
           G4FieldTrack oldPointVelB = CurrentB_PointVelocity; 
           CurrentB_PointVelocity = newEndPointFT;
-          if (depth==1)
+          if ( depth==1 )
           {
             recalculatedEndPoint = true;
             IntersectedOrRecalculatedFT = newEndPointFT;

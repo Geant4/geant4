@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94010 2015-11-05 10:08:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -42,6 +41,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/mol
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/types/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
+include_directories(${CMAKE_SOURCE_DIR}/source/analysis/management/include) # for physchemIO
+
 #
 # Define the Geant4 Module.
 #
@@ -49,14 +50,18 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-utils
     HEADERS
         G4DNAChemistryManager.hh
+        G4DNACPA100LogLogInterpolation.hh
+        G4DNACPA100WaterExcitationStructure.hh
+        G4DNACPA100WaterIonisationStructure.hh
         G4DNACrossSectionDataSet.hh
-        G4DNADamages.hh
+        G4DNADamage.hh
         G4DNAGenericIonsManager.hh
         G4DNAIons.hh
         G4DNAMolecularMaterial.hh
         G4DNAMolecularReactionTable.hh
         G4DNAEmfietzoglouWaterExcitationStructure.hh
         G4DNAEmfietzoglouWaterIonisationStructure.hh
+        G4DNAPTBIonisationStructure.hh
         G4DNARevertProbability.hh
         G4DNAWaterExcitationStructure.hh
         G4DNAWaterIonisationStructure.hh
@@ -65,16 +70,23 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4ReactionTableMessenger.hh
         G4VDNAReactionModel.hh
         G4VUserChemistryList.hh
+        # physchemIO
+        G4VPhysChemIO.hh
+        G4PhysChemIO.hh
     SOURCES
         G4DNAChemistryManager.cc
+        G4DNACPA100LogLogInterpolation.cc
+        G4DNACPA100WaterExcitationStructure.cc
+        G4DNACPA100WaterIonisationStructure.cc
         G4DNACrossSectionDataSet.cc
-        G4DNADamages.cc
+        G4DNADamage.cc
         G4DNAGenericIonsManager.cc
         G4DNAIons.cc
         G4DNAMolecularMaterial.cc
         G4DNAMolecularReactionTable.cc
         G4DNAEmfietzoglouWaterExcitationStructure.cc
         G4DNAEmfietzoglouWaterIonisationStructure.cc
+        G4DNAPTBIonisationStructure.cc
         G4DNAWaterExcitationStructure.cc
         G4DNAWaterIonisationStructure.cc
         G4MoleculeGun.cc
@@ -82,6 +94,9 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4ReactionTableMessenger.cc
         G4VDNAReactionModel.cc
         G4VUserChemistryList.cc
+        # physchemIO
+        G4VPhysChemIO.cc
+        G4PhysChemIO.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -104,6 +119,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         # G4emdna-molman
         # G4emdna-moltypes
     GLOBAL_DEPENDENCIES
+        G4analysis
         G4geometry
         G4global
         G4intercoms

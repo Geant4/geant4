@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ShellCorrection.hh 85841 2014-11-05 15:35:06Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -42,21 +41,17 @@
 
 class G4ShellCorrection
 {
-private:
-  
-  G4ShellCorrection();
-  
-  static G4ShellCorrection* theInstance;
-  
 public:
 
-  static G4ShellCorrection* GetInstance();
+  explicit G4ShellCorrection();
 
   ~G4ShellCorrection();
 
-  G4CameronTruranHilfShellCorrections* GetCameronTruranHilfShellCorrections();
+  const G4CameronTruranHilfShellCorrections* 
+        GetCameronTruranHilfShellCorrections() const;
 
-  G4CameronShellPlusPairingCorrections* GetCameronShellPlusPairingCorrections();
+  const G4CameronShellPlusPairingCorrections* 
+        GetCameronShellPlusPairingCorrections() const;
 
   G4double GetShellCorrection(G4int A, G4int Z) const;
 

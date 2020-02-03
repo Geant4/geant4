@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc 83008 2014-07-24 14:49:52Z gcosmo $
 
 //---------------------------------------------------------------------------
 //
@@ -49,6 +48,11 @@
 #include "G4LPhysicsFreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4int G4WaterStopping::Z[17] = {
+  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26};
+const G4double G4WaterStopping::A[17] = {
+  7, 9, 11, 12, 14, 16, 19, 20, 23, 24, 27, 28, 31, 32, 35, 40, 56};
 
 G4WaterStopping::G4WaterStopping(G4EmCorrections* corr, G4bool splineFlag)
 {
@@ -83,7 +87,8 @@ G4double G4WaterStopping::GetElectronicDEDX(G4int iz, G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4WaterStopping::AddData(const G4double* energy, const G4double* stoppower, 
+void G4WaterStopping::AddData(const G4double* energy, 
+			      const G4double* stoppower, 
 			      G4double factor)
 {
   G4LPhysicsFreeVector* pv = 
@@ -99,14 +104,6 @@ void G4WaterStopping::AddData(const G4double* energy, const G4double* stoppower,
 
 void G4WaterStopping::Initialise(G4EmCorrections* corr)
 {
-  G4int i;
-  //..List of ions
-  static const G4int zz[17] = {3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,26};
-  static const G4int aa[17] = {7, 9, 11, 12, 14, 16, 19, 20, 23, 24, 27, 28,31,32, 35,40,56};
-  for(i=0; i<17; ++i) {
-    Z[i] = zz[i];
-    A[i] = G4double(aa[i]);
-  }
   //..Reduced energies
   static const G4double E[53] = {0.025,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100,150,200,250,300,400,500,600,700,800,900,1000};
   emin   = E[0]*MeV;
@@ -149,6 +146,8 @@ void G4WaterStopping::Initialise(G4EmCorrections* corr)
   AddData(E,G4_WATER_Fe,factor);
 
   if(corr) {
-    for(i=0; i<17; ++i) {corr->AddStoppingData(Z[i], aa[i], "G4_WATER", dedx[i]);}
+    for(G4int i=0; i<17; ++i) {
+      corr->AddStoppingData(Z[i], A[i], "G4_WATER", dedx[i]);
+    }
   }
 }

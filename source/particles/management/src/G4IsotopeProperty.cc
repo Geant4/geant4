@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.cc 69557 2013-05-08 12:01:40Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -48,29 +47,33 @@
 G4IsotopeProperty::G4IsotopeProperty():
                    fAtomicNumber(0),fAtomicMass(0),
 		   fISpin(0),fEnergy(0.0),
-		   fLifeTime(-1.0),fDecayTable(0),
+		   fLifeTime(-1.0),
+		   fDecayTable(nullptr),
 		   fMagneticMoment(0.0),
-		   fIsomerLevel(-1)
+		   fIsomerLevel(-1),
+                   fFloatLevelBase(G4Ions::G4FloatLevelBase::no_Float)
 {
 }
 
 
 G4IsotopeProperty::~G4IsotopeProperty()
 {
-  if (fDecayTable != 0) delete fDecayTable;
+  if (fDecayTable != nullptr) delete fDecayTable; 
+  fDecayTable = nullptr;
 }
 
 G4IsotopeProperty::G4IsotopeProperty(const  G4IsotopeProperty& right)
+  :fAtomicNumber(right.fAtomicNumber),
+   fAtomicMass(right.fAtomicMass),
+   fISpin(right.fISpin),
+   fEnergy(right.fEnergy),
+   fLifeTime(right.fLifeTime),
+   fDecayTable(nullptr),
+   fMagneticMoment(right.fMagneticMoment),
+   fIsomerLevel(right.fIsomerLevel),
+   fFloatLevelBase(right.fFloatLevelBase)
 {
-  fAtomicNumber    = right.fAtomicNumber;
-  fAtomicMass      = right.fAtomicMass;
-  fISpin           = right.fISpin;
-  fMagneticMoment  = right.fMagneticMoment;
-  fEnergy          = right.fEnergy;
-  fLifeTime        = right.fLifeTime;
-  fIsomerLevel     = right.fIsomerLevel;
   // decay table is not copied because G4DecayTable has no copy constructor
-  fDecayTable   = 0;
 }
 
 // Assignment operator
@@ -84,15 +87,16 @@ G4IsotopeProperty & G4IsotopeProperty::operator=(G4IsotopeProperty& right)
     fEnergy          = right.fEnergy;
     fLifeTime        = right.fLifeTime;
     fIsomerLevel     = right.fIsomerLevel;
+    fFloatLevelBase  = right.fFloatLevelBase;
     // decay table is not copied because G4DecayTable has no copy constructor
-    fDecayTable   = 0;
+    fDecayTable      = nullptr;
   }
   return *this;
 }
 
  
 // equal / unequal operator
-G4int G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
+G4bool G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
 {
   G4bool value = true;
   value = value && ( fAtomicNumber    == right.fAtomicNumber);
@@ -102,10 +106,11 @@ G4int G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
   value = value && ( fEnergy          == right.fEnergy);
   value = value && ( fLifeTime        == right.fLifeTime);
   value = value && ( fIsomerLevel     == right.fIsomerLevel);
+  value = value && ( fFloatLevelBase  == right.fFloatLevelBase);
   return value;
 }
 
-G4int G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
+G4bool G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
 {
   return !(*this == right);
 }
@@ -126,12 +131,16 @@ void G4IsotopeProperty::DumpInfo() const
 	 << fIsomerLevel
 	 << ", Excited Energy: " 
 	 << std::setprecision(1) 
-	 << fEnergy/keV << "[keV]" 
+	 << fEnergy/keV;
+  if(fFloatLevelBase!=G4Ions::G4FloatLevelBase::no_Float)
+  { G4cout << " +" << G4Ions::FloatLevelBaseChar(fFloatLevelBase); }
+  G4cout << " [keV]" 
 	 << ",   "
 	 << std::setprecision(6)
 	 << "Life Time: " 
-	 << fLifeTime/ns << "[ns]" << G4endl;
-  if (fDecayTable != 0) {
+	 << fLifeTime/ns << "[ns]"
+         << G4endl;
+  if (fDecayTable != nullptr) {
     fDecayTable->DumpInfo();
   } else {
     // G4cout << "Decay Table is not defined !" << G4endl;

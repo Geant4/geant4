@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NavigationLogger.cc 97507 2016-06-03 12:48:42Z gcosmo $
-//
-//
 // class G4NavigationLogger Implementation
 //
 // Author: G.Cosmo, 2010
-//
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -39,11 +34,10 @@
 #include "G4NavigationLogger.hh"
 #include "G4GeometryTolerance.hh"
 
-// const double millimeter = CLHEP::Units::millimeter;
 using CLHEP::millimeter;
 
 G4NavigationLogger::G4NavigationLogger(const G4String& id)
-   : fId(id), fVerbose(0), fMinTriggerDistance( DBL_MAX ), fReportSoftWarnings( false )
+  : fId(id)
 {
 }
 
@@ -62,7 +56,6 @@ G4NavigationLogger::PreComputeStepLog(const G4VPhysicalVolume* motherPhysical,
 {
   G4VSolid* motherSolid = motherPhysical->GetLogicalVolume()->GetSolid();
   G4String fType = fId + "::ComputeStep()";
-  // const double millimeter = CLHEP::millimeter;
   
   if ( fVerbose == 1 || fVerbose > 4 )       
   {
@@ -115,7 +108,7 @@ G4NavigationLogger::PreComputeStepLog(const G4VPhysicalVolume* motherPhysical,
   //
   if ( fVerbose > 1 )
   {
-    static const G4int precVerf= 16;  // Precision 
+    static const G4int precVerf = 16;  // Precision 
     G4int oldprec = G4cout.precision(precVerf);
     G4cout << " - Information on mother / key daughters ..." << G4endl;
     G4cout << "  Type   " << std::setw(12) << "Solid-Name"   << " " 
@@ -151,8 +144,8 @@ G4NavigationLogger::AlongComputeStepLog(const G4VSolid* sampleSolid,
   if ( sampleStep < kInfinity )
   {
     G4ThreeVector intersectionPoint;
-    intersectionPoint= samplePoint + sampleStep * sampleDirection;
-    EInside insideIntPt= sampleSolid->Inside(intersectionPoint); 
+    intersectionPoint = samplePoint + sampleStep * sampleDirection;
+    EInside insideIntPt = sampleSolid->Inside(intersectionPoint); 
     G4String fType = fId + "::ComputeStep()";
 
     G4String solidResponse = "-kInside-";
@@ -170,19 +163,19 @@ G4NavigationLogger::AlongComputeStepLog(const G4VSolid* sampleSolid,
              << ", considered as 'intersection' point." << G4endl;
     }
 
-    G4double safetyIn= -1, safetyOut= -1;  //  Set to invalid values
-    G4double newDistIn= -1,  newDistOut= -1;
+    G4double safetyIn = -1, safetyOut = -1;  //  Set to invalid values
+    G4double newDistIn = -1,  newDistOut = -1;
     if( insideIntPt != kInside )
     {
-      safetyIn= sampleSolid->DistanceToIn(intersectionPoint);
-      newDistIn= sampleSolid->DistanceToIn(intersectionPoint,
-                                           sampleDirection);
+      safetyIn = sampleSolid->DistanceToIn(intersectionPoint);
+      newDistIn = sampleSolid->DistanceToIn(intersectionPoint,
+                                            sampleDirection);
     }
     if( insideIntPt != kOutside )
     {
-      safetyOut= sampleSolid->DistanceToOut(intersectionPoint);
-      newDistOut= sampleSolid->DistanceToOut(intersectionPoint,
-                                             sampleDirection);
+      safetyOut = sampleSolid->DistanceToOut(intersectionPoint);
+      newDistOut = sampleSolid->DistanceToOut(intersectionPoint,
+                                              sampleDirection);
     }
     if( insideIntPt != kSurface )
     {
@@ -303,14 +296,14 @@ G4NavigationLogger::CheckDaughterEntryPoint(const G4VSolid* sampleSolid,
    
   // Check #1) whether the track will re-enter the current mother 
   //           in the extension past its current exit point 
-  G4ThreeVector localExitMotherPos= localPoint+motherStep*localDirection;
-  G4double distExitToReEntry= motherSolid->DistanceToIn(localExitMotherPos,
-                                                        localDirection); 
+  G4ThreeVector localExitMotherPos = localPoint+motherStep*localDirection;
+  G4double distExitToReEntry = motherSolid->DistanceToIn(localExitMotherPos,
+                                                         localDirection); 
    
   // Check #2) whether the 'entry' point in the daughter is inside the mother
   //
   G4ThreeVector localEntryInDaughter = localPoint+sampleStep*localDirection; 
-  EInside insideMother= motherSolid->Inside( localEntryInDaughter ); 
+  EInside insideMother = motherSolid->Inside( localEntryInDaughter ); 
    
   G4String solidResponse = "-kInside-";
   if (insideMother == kOutside)       { solidResponse = "-kOutside-"; }
@@ -325,11 +318,11 @@ G4NavigationLogger::CheckDaughterEntryPoint(const G4VSolid* sampleSolid,
   G4bool EntryIsMotherExit = std::fabs(sampleStep-motherStep) < kCarTolerance;
 
   // Check for more subtle error - is exit point of daughter correct ?
-  G4ThreeVector sampleEntryPoint= samplePoint+sampleStep*sampleDirection;
-  G4double sampleCrossingDist= sampleSolid->DistanceToOut( sampleEntryPoint,
-                                                           sampleDirection );
+  G4ThreeVector sampleEntryPoint = samplePoint+sampleStep*sampleDirection;
+  G4double sampleCrossingDist = sampleSolid->DistanceToOut( sampleEntryPoint,
+                                                            sampleDirection );
   G4double      sampleExitDist = sampleStep+sampleCrossingDist;
-  G4ThreeVector sampleExitPoint= samplePoint+sampleExitDist*sampleDirection;
+  G4ThreeVector sampleExitPoint = samplePoint+sampleExitDist*sampleDirection;
 
   G4bool TransitProblem = ( (sampleStep < motherStep)
                          && (sampleExitDist > motherStep + kCarTolerance) )
@@ -382,7 +375,7 @@ G4NavigationLogger::CheckDaughterEntryPoint(const G4VSolid* sampleSolid,
     {
       msg << "NearMiss> Intersection to Daughter volume is in extension past the"
           <<   " current exit point of the mother volume." << G4endl;
-      msg << "          This is not an error - just an unusual occurence,"
+      msg << "          This is not an error - just an unusual occurrence,"
           <<   " possible in the case of concave volume. " << G4endl;
     }
     msg << "---- Information about intersection with daughter, mother: "
@@ -457,8 +450,8 @@ G4NavigationLogger::PostComputeStepLog(const G4VSolid* motherSolid,
   if( ( motherStep < 0.0 ) || ( motherStep >= kInfinity) )
   {
     G4String fType = fId + "::ComputeStep()";
-    G4int oldPrOut= G4cout.precision(16); 
-    G4int oldPrErr= G4cerr.precision(16);
+    G4int oldPrOut = G4cout.precision(16); 
+    G4int oldPrErr = G4cerr.precision(16);
     std::ostringstream message;
     message << "Current point is outside the current solid !" << G4endl
             << "        Problem in Navigation"  << G4endl
@@ -473,7 +466,7 @@ G4NavigationLogger::PostComputeStepLog(const G4VSolid* motherSolid,
   }
   if ( fVerbose > 1 )
   {
-    static const G4int precVerf= 20;  // Precision 
+    static const G4int precVerf = 20;  // Precision 
     G4int oldprec = G4cout.precision(precVerf);
     G4cout << "  Mother " << std::setw(12) << motherSolid->GetName() << " "
            << std::setw(4+precVerf)       << localPoint   << " "
@@ -532,7 +525,7 @@ G4NavigationLogger::PrintDaughterLog (const G4VSolid* sampleSolid,
 {
   if ( fVerbose >= 1 )
   {
-    G4int oldPrec= G4cout.precision(8);
+    G4int oldPrec = G4cout.precision(8);
     G4cout << "Daughter "
            << std::setw(15) << sampleSafety << " ";
     if (withStep)  // (sampleStep != -1.0 )
@@ -567,12 +560,12 @@ CheckAndReportBadNormal(const G4ThreeVector& unitNormal,
                         const G4VSolid*      solid,
                         const char*          msg ) const
 {
-  G4double  normMag2 = unitNormal.mag2();
+  G4double normMag2 = unitNormal.mag2();
   G4bool badLength = ( std::fabs ( normMag2 - 1.0 ) > CLHEP::perMillion );
 
   if( badLength )
   {
-    G4double  normMag= std::sqrt(normMag2); 
+    G4double  normMag = std::sqrt(normMag2); 
     G4ExceptionDescription message;
     message.precision(10);
     message << "============================================================"
@@ -622,7 +615,7 @@ CheckAndReportBadNormal(const G4ThreeVector& rotatedNormal,
 
   if( badLength )
   {
-    G4double  normMag= std::sqrt(normMag2); 
+    G4double  normMag = std::sqrt(normMag2); 
     G4ExceptionDescription message;
     message.precision(10);
     message << "============================================================"
@@ -670,13 +663,13 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
                                               G4double triggerDist) const                                   
 {
   const G4LogicalVolume* logicalVol = physical
-                                    ? physical->GetLogicalVolume() : 0;
+                                    ? physical->GetLogicalVolume() : nullptr;
   const G4VSolid* solid = logicalVol
-                        ? logicalVol->GetSolid() : 0;
+                        ? logicalVol->GetSolid() : nullptr;
 
   G4String fMethod = fId + "::ComputeStep()";
 
-  if( solid == 0 )
+  if( solid == nullptr )
   {
     G4Exception(fMethod, "GeomNav0003", FatalException,
                 "Erroneous call to ReportOutsideMother: no Solid is available");
@@ -685,15 +678,12 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
   const G4double kCarTolerance = solid->GetTolerance();
 
   // Double check reply - it should be kInfinity
-  const G4double distToOut = solid->DistanceToOut(localPoint, localDirection);
-  // const G4double distToOutNeg = solid->DistanceToOut(localPoint, -localDirection);
-  
+  const G4double distToOut = solid->DistanceToOut(localPoint, localDirection);  
   const EInside  inSolid   = solid->Inside(localPoint);
   const G4double safetyToIn  = solid->DistanceToIn(localPoint);
   const G4double safetyToOut = solid->DistanceToOut(localPoint);
-
-  const G4double distToInPos = solid->DistanceToIn(localPoint, localDirection);
-  // const G4double distToInNeg = solid->DistanceToIn(localPoint, -localDirection);  
+  // const G4double distToInPos =
+  //                solid->DistanceToIn(localPoint, localDirection);
 
   // 1. Check consistency between Safety obtained and report from distance
   //     We must ensure that (mother)Safety <= 0.0
@@ -721,16 +711,15 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
 
   // 2. Inconsistency - Too many distances are zero (or will be rounded to zero)
 
-  G4ExceptionDescription msg2;
-  if( std::fabs(distToOut) < kCarTolerance && std::fabs(distToInPos) < kCarTolerance ) 
-  {
-     // If both distanceToIn and distanceToOut (p,v) are zero for one direction,
-     //  the particle could get stuck!
-  }
+//  if( std::fabs(distToOut) < kCarTolerance
+//   && std::fabs(distToInPos) < kCarTolerance ) 
+//  {
+     // If both distanceToIn and distanceToOut (p,v) are zero for
+     // one direction, the particle could get stuck!
+//  }
 
   G4ExceptionDescription msg;
   msg.precision(10);
-  // G4bool reportIssue= true;
   
   if( std::fabs(distToOut) < kCarTolerance )
   {
@@ -738,10 +727,11 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
     //    Report nothing - except in 'loud' mode
     if( fReportSoftWarnings )
     {
-      // reportIssue= true;
-      msg << " Warning>  DistanceToOut(p,v): Distance from surface is not rounded to zero" << G4endl;
-    } else { 
-      // reportIssue= false;
+      msg << " Warning>  DistanceToOut(p,v): "
+          << "Distance from surface is not rounded to zero" << G4endl;
+    }
+    else
+    { 
       return;
     }
   }
@@ -750,23 +740,25 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
     // 4. General message - complain that the point is outside!
     //     and provide all information about the current location,
     //     direction and the answers of the solid
-    msg << "============================================================" << G4endl;
-    msg << " WARNING>  Current Point appears to be Outside mother volume !! " << G4endl;
-    msg << "   Response of DistanceToOut was negative or kInfinity when called in "
-        << fMethod << G4endl;
+    msg << "============================================================"
+        << G4endl;
+    msg << " WARNING>  Current Point appears to be Outside mother volume !! "
+        << G4endl;
+    msg << "   Response of DistanceToOut was negative or kInfinity"
+        << " when called in " << fMethod << G4endl;
   }
 
   // Generate and 'print'/stream all the information needed
-  this->ReportVolumeAndIntersection( msg, localPoint, localDirection, physical ); 
+  this->ReportVolumeAndIntersection(msg, localPoint, localDirection, physical); 
   
   // Default for distance of 'major' error
-  if( triggerDist <= 0.0 ) {
-     // triggerDist = 1.e+6 * kCarTolerance; // Well beyond tolerance
+  if( triggerDist <= 0.0 )
+  {
     triggerDist = std::max ( 1.0e+6 * kCarTolerance,  // Well beyond tolerance
                              fMinTriggerDistance );
   }
 
-  G4bool majorError = inSolid==kOutside
+  G4bool majorError = inSolid == kOutside
                     ? ( safetyToIn > triggerDist )
                     : ( safetyToOut > triggerDist );
   
@@ -779,32 +771,34 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
   G4Exception( fMethod, "GeomNav0003", exceptionType, msg);
 }
 
-namespace  G4NavigationLogger_Namespace {
+namespace  G4NavigationLogger_Namespace
+{
   const G4String EInsideNames[3] = { "kOutside", "kSurface", "kInside" }; 
 }
 
-void
-G4NavigationLogger::ReportVolumeAndIntersection( std::ostream&      os,
-                                           const G4ThreeVector&     localPoint,
-                                           const G4ThreeVector&     localDirection,
-                                           const G4VPhysicalVolume* physical ) const 
+void G4NavigationLogger::
+ReportVolumeAndIntersection( std::ostream& os,
+                             const G4ThreeVector&     localPoint,
+                             const G4ThreeVector&     localDirection,
+                             const G4VPhysicalVolume* physical ) const 
 {
   G4String fMethod = fId + "::ComputeStep()";   
   const G4LogicalVolume* logicalVol = physical
-                                    ? physical->GetLogicalVolume() : 0;
+                                    ? physical->GetLogicalVolume() : nullptr;
   const G4VSolid* solid = logicalVol
-                        ? logicalVol->GetSolid() : 0;
-  if( solid == 0 )
+                        ? logicalVol->GetSolid() : nullptr;
+  if( solid == nullptr )
   {
-     os << " ERROR> Solid is not available. Logical Volume = " << logicalVol << std::endl;
+     os << " ERROR> Solid is not available. Logical Volume = "
+        << logicalVol << std::endl;
      return;
   }
   const G4double kCarTolerance = solid->GetTolerance();
 
   // Double check reply - it should be kInfinity
   const G4double distToOut = solid->DistanceToOut(localPoint, localDirection);
-  const G4double distToOutNeg = solid->DistanceToOut(localPoint, -localDirection);
-  
+  const G4double distToOutNeg = solid->DistanceToOut(localPoint,
+                                                    -localDirection);
   const EInside  inSolid   = solid->Inside(localPoint);
   const G4double safetyToIn  = solid->DistanceToIn(localPoint);
   const G4double safetyToOut = solid->DistanceToOut(localPoint);
@@ -816,30 +810,35 @@ G4NavigationLogger::ReportVolumeAndIntersection( std::ostream&      os,
 
   // Double check whether points nearby are in/surface/out
   const G4double epsilonDist = 1000.0 * kCarTolerance;
-  const G4ThreeVector PointPlusDir  = localPoint + epsilonDist * localDirection;
+  const G4ThreeVector PointPlusDir = localPoint + epsilonDist * localDirection;
   const G4ThreeVector PointMinusDir = localPoint - epsilonDist * localDirection;
-  const G4ThreeVector PointPlusNorm  = localPoint + epsilonDist * exitNormal;  
+  const G4ThreeVector PointPlusNorm = localPoint + epsilonDist * exitNormal;  
   const G4ThreeVector PointMinusNorm = localPoint - epsilonDist * exitNormal;
 
-  const EInside inPlusDir= solid->Inside(PointPlusDir);
-  const EInside inMinusDir= solid->Inside(PointMinusDir);  
-  const EInside inPlusNorm= solid->Inside(PointPlusNorm);
-  const EInside inMinusNorm= solid->Inside(PointMinusNorm);  
+  const EInside inPlusDir = solid->Inside(PointPlusDir);
+  const EInside inMinusDir = solid->Inside(PointMinusDir);  
+  const EInside inPlusNorm = solid->Inside(PointPlusNorm);
+  const EInside inMinusNorm = solid->Inside(PointMinusNorm);  
 
   // Basic information 
   os << "   Current physical volume = " << physical->GetName() << G4endl;
   os << "   Position (loc)  = " << localPoint << G4endl
-      << "   Direction (dir) = " << localDirection << G4endl;
+     << "   Direction (dir) = " << localDirection << G4endl;
   os << " For confirmation:" << G4endl;
   os << "   Response of DistanceToOut (loc, +dir)= " << distToOut << G4endl;
   os << "   Response of DistanceToOut (loc, -dir)= " << distToOutNeg << G4endl;
   
   os << "   Inside responds = " << inSolid << " , ie: ";
-  if( inSolid == kOutside ) {
+  if( inSolid == kOutside )
+  {
     os << " Outside -- a problem, as observed in " << fMethod << G4endl;
-  } else if( inSolid == kSurface ) {
+  }
+  else if( inSolid == kSurface )
+  {
     os << " Surface -- unexpected / inconsistent response ! " << G4endl;
-  } else {
+  }
+  else
+  {
     os << " Inside  -- unexpected / inconsistent response ! " << G4endl;
   }
   os << "   Obtain safety(ToIn) = " << safetyToIn << G4endl;
@@ -851,11 +850,16 @@ G4NavigationLogger::ReportVolumeAndIntersection( std::ostream&      os,
   os << "     Dir . Normal   = " << exitNormal.dot( localDirection );
   os << G4endl;
 
-  os << " Checking points moved from position by distance/dir.  Solid responses: " << G4endl
-     << "  +eps in direction :    " << G4NavigationLogger_Namespace::EInsideNames[inPlusDir] 
-     << "  +eps in Normal  :    " << G4NavigationLogger_Namespace::EInsideNames[inPlusNorm]  << G4endl
-     << "  -eps in direction :    " << G4NavigationLogger_Namespace::EInsideNames[inMinusDir]
-     << "  -eps in Normal  :    " << G4NavigationLogger_Namespace::EInsideNames[inMinusNorm]  << G4endl;
+  os << " Checking points moved from position by distance/direction." << G4endl
+     << " Solid responses: " << G4endl
+     << "  +eps in direction :    "
+     << G4NavigationLogger_Namespace::EInsideNames[inPlusDir] 
+     << "  +eps in Normal  :    "
+     << G4NavigationLogger_Namespace::EInsideNames[inPlusNorm]  << G4endl
+     << "  -eps in direction :    "
+     << G4NavigationLogger_Namespace::EInsideNames[inMinusDir]
+     << "  -eps in Normal  :    "
+     << G4NavigationLogger_Namespace::EInsideNames[inMinusNorm]  << G4endl;
      
   os << " Parameters of solid:     " << G4endl;
   os << *solid;

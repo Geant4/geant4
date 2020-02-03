@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh 97477 2016-06-03 10:13:42Z gcosmo $
 //
 //
 // class description:
@@ -59,8 +58,8 @@ class G4Event
       inline void *operator new(size_t);
       inline void operator delete(void* anEvent);
 
-      G4int operator==(const G4Event &right) const;
-      G4int operator!=(const G4Event &right) const;
+      G4bool operator==(const G4Event &right) const;
+      G4bool operator!=(const G4Event &right) const;
 
   public: // with description
       void Print() const;
@@ -142,7 +141,7 @@ class G4Event
       { grips--;
         if(grips<0)
         { G4Exception("G4Event::Release()","EVENT91001",FatalException,
-                      "Number of grips becames negative. This cannot be correct."); }
+                      "Number of grips became negative. This cannot be correct."); }
       }
       inline G4int GetNumberOfGrips() const
       { return grips; }
@@ -217,17 +216,17 @@ class G4Event
       }
 };
 
-extern G4EVENT_DLL G4ThreadLocal G4Allocator<G4Event> *anEventAllocator;
+extern G4EVENT_DLL G4Allocator<G4Event>*& anEventAllocator();
 
 inline void* G4Event::operator new(size_t)
 { 
-  if (!anEventAllocator) anEventAllocator = new G4Allocator<G4Event>;
-  return (void*)anEventAllocator->MallocSingle();
+  if (!anEventAllocator()) anEventAllocator() = new G4Allocator<G4Event>;
+  return (void*)anEventAllocator()->MallocSingle();
 }
 
 inline void G4Event::operator delete(void* anEvent)
 {
-  anEventAllocator->FreeSingle((G4Event*)anEvent);
+  anEventAllocator()->FreeSingle((G4Event*)anEvent);
 }
 
 #endif

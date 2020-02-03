@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // John Allison  26th July 1999.
@@ -58,6 +57,7 @@ public: // With description
    G4bool booleans = true,
    G4bool voxels = true,
    G4bool readout = true,
+   G4bool checkOverlaps = true,
    const G4Transform3D& modelTransformation = G4Transform3D(),
    const G4ModelingParameters* = 0);
 
@@ -84,6 +84,8 @@ protected:
   G4bool fBooleans;  // Flag for drawing boolean components.
   G4bool fVoxels;    // Flag for drawing voxels.
   G4bool fReadout;   // Flag for drawing readout geometry.
+  G4bool fCheckOverlaps;   // Flag for checking overlaps.
+  G4bool fOverlapsPrinted; // To avoid multiple printing.
 
 };
 

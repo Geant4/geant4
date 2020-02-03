@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration3D.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSMinKinEAtGeneration3D
 #include "G4PSMinKinEAtGeneration3D.hh"

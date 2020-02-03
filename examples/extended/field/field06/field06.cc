@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: field06.cc 75572 2013-11-04 11:46:08Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file field/field06/field06.cc
 /// \brief Main program of the field/field06 example
@@ -39,6 +42,8 @@
 #endif
 
 #include "F06PhysicsList.hh"
+#include "G4Transportation.hh"
+
 #include "F06DetectorConstruction.hh"
 #include "F06ActionInitialization.hh"
 
@@ -65,7 +70,7 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " field06 [-m macro ] [-u UIsession] [-t nThreads] [-r seed] "
+    G4cerr << " field06 [-m macro ] [-u UIsession] [-t nThreads] [-r randomSeed] "
            << G4endl;
     G4cerr << "   note: -t option is available only for multi-threaded mode."
            << G4endl;
@@ -89,11 +94,11 @@ int main(int argc,char** argv)
   G4int nThreads = 0;
 #endif
 
-  G4long myseed = 1234;
+  G4long randomSeed = 1234;
   for ( G4int i=1; i<argc; i=i+2 ) {
      if      ( G4String(argv[i]) == "-m" ) macro   = argv[i+1];
      else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
-     else if ( G4String(argv[i]) == "-r" ) myseed  = atoi(argv[i+1]);
+     else if ( G4String(argv[i]) == "-r" ) randomSeed  = atoi(argv[i+1]);
 #ifdef G4MULTITHREADED
      else if ( G4String(argv[i]) == "-t" ) {
                     nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
@@ -119,7 +124,7 @@ int main(int argc,char** argv)
 #endif
 
   // Seed the random number generator manually
-  G4Random::setTheSeed(myseed);
+  G4Random::setTheSeed(randomSeed);
 
   // Set mandatory initialization classes
   //
@@ -127,14 +132,21 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new F06DetectorConstruction());
   // Physics list
   runManager->SetUserInitialization(new F06PhysicsList());
+
+  // Ensure that Transportation considers gravity fields.
+  G4Transportation::EnableGravity(true);
+
   // User action initialization
   runManager->SetUserInitialization(new F06ActionInitialization());
 
+<<<<<<< HEAD
   // Initialize G4 kernel
   //
   runManager->Initialize();
 
 #ifdef G4VIS_USE
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
@@ -153,6 +165,7 @@ int main(int argc,char** argv)
      UImanager->ApplyCommand(command+macro); 
   }
   else
+<<<<<<< HEAD
   {  // interactive mode : define UI session
 #ifdef G4UI_USE
      G4UIExecutive* ui = new G4UIExecutive(argc, argv, session);
@@ -161,6 +174,10 @@ int main(int argc,char** argv)
 #else
      UImanager->ApplyCommand("/control/execute field06.in");
 #endif
+=======
+  {
+     UImanager->ApplyCommand("/control/execute init_vis.mac");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
      if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();

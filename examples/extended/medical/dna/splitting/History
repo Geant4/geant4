@@ -1,0 +1,21 @@
+     =========================================================
+ 		      Geant4 - splitting example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+26 Nov 19 - tag splitting-V10-05-00 - I. Hrivnacova
+- Fixed formatting in .README.txt
+
+22 Jul 18 - tag splitting-V10-04-02 - S. Incerti 
+- removed obsolete RanecuEngine.
+
+20 May 2018 - tag splitting-V10-04-01 - J. Allison
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- Always instantiate G4VisManager (it can be used in batch).
+
+14 May 2018 - tag splitting-V10-04-00 - S. Incerti
+- example proposed

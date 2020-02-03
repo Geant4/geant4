@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlungModel.hh 75601 2013-11-04 13:08:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,18 +59,18 @@ class G4ePolarizedBremsstrahlungModel : public G4SeltzerBergerModel
 
 public:
 
-  G4ePolarizedBremsstrahlungModel(const G4ParticleDefinition* p=0, 
+  explicit G4ePolarizedBremsstrahlungModel(const G4ParticleDefinition* p=nullptr,
 				  const G4String& nam = "PolBrem");
   
   virtual ~G4ePolarizedBremsstrahlungModel();
   
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline const G4Element* SelectedAtom();
 

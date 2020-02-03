@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr01/src/CheckVolumeSD.cc
 /// \brief Implementation of the CheckVolumeSD class
 //
-// $Id: CheckVolumeSD.cc 70761 2013-06-05 12:30:51Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //

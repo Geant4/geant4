@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/include/HIJING.icc
 /// \brief Implementation of the HIJING class inline functions
 //
-// $Id: HIJING.icc,v 1.7 2010-08-16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -61,14 +59,12 @@
 #include "G4NeutronTrackingCut.hh"
 #include "G4StoppingPhysics.hh"
 
-#include "G4DataQuestionaire.hh"
 #include "HadronPhysicsHIJING.hh"
 
 template<class T> THIJING<T>::THIJING(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
-  G4DataQuestionaire it(photon);
   G4cout << "<<< Geant4 Physics List simulation engine: HIJING 0.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  

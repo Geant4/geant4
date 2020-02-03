@@ -234,7 +234,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
       return 0.0;
     } else {
       a = ( tx*px + ty*py + tz*pz ) / a;
-      if( std::fabs(a) > 1.0 ) { a<0.0 ? a=-1.0 : a=1.0; }
+      if( std::abs(a) > 1.0 ) { a<0.0 ? a=-1.0 : a=1.0; }
       return std::acos( a );
     }
   }

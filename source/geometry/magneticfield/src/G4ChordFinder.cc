@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ChordFinder implementation
 //
-// $Id: G4ChordFinder.cc 93806 2015-11-02 11:21:01Z gcosmo $
-//
-//
-// 25.02.97 - John Apostolakis - Design and implementation 
+// Author: J.Apostolakis - Design and implementation - 25.02.1997
 // -------------------------------------------------------------------
 
 #include <iomanip>
@@ -36,30 +34,39 @@
 #include "G4SystemOfUnits.hh"
 #include "G4MagneticField.hh"
 #include "G4Mag_UsualEqRhs.hh"
-#include "G4ClassicalRK4.hh"
+#include "G4MagIntegratorDriver.hh"
+// #include "G4ClassicalRK4.hh"
+// #include "G4CashKarpRKF45.hh"
+// #include "G4BogackiShampine23.hh"
+// #include "G4BogackiShampine45.hh"
+#include "G4DormandPrince745.hh"
 
+// New FSAL type driver / steppers -----
+#include "G4FSALIntegrationDriver.hh"
+#include "G4VFSALIntegrationStepper.hh"
+#include "G4RK547FEq1.hh"
+// #include "G4RK547FEq2.hh"
+// #include "G4RK547FEq3.hh"
+#include "G4NystromRK4.hh"
+
+// New FSAL type driver / steppers -----
+#include "G4IntegrationDriver.hh"
+#include "G4InterpolationDriver.hh"
+// #include "G4FSALBogackiShampine45.hh"
+// #include "G4FSALDormandPrince745.hh"
+#include "G4HelixHeum.hh"
+#include "G4BFieldIntegrationDriver.hh"
+
+#include <cassert>
 
 // ..........................................................................
 
-G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
-  : fDefaultDeltaChord( 0.25 * mm ),      // Parameters
-    fDeltaChord( fDefaultDeltaChord ),    //   Internal parameters
-    fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
-    fMultipleRadius(15.0), 
-    fStatsVerbose(0),
-    fDriversStepper(0),                    // Dependent objects 
-    fAllocatedStepper(false),
-    fEquation(0),      
-    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0)
+G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
+  : fDefaultDeltaChord(0.25 * mm), fIntgrDriver(pIntegrationDriver)
 {
   // Simple constructor -- it does not create equation
-  fIntgrDriver= pIntegrationDriver;
-  fAllocatedStepper= false;
 
-  fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
-
-  SetFractions_Last_Next( fFractionLast, fFractionNextEstimate);  
-    // check the values and set the other parameters
+  fDeltaChord = fDefaultDeltaChord;       // Parameters
 }
 
 
@@ -67,42 +74,181 @@ G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
 
 G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
                               G4double                stepMinimum, 
-                              G4MagIntegratorStepper* pItsStepper )
-  : fDefaultDeltaChord( 0.25 * mm ),     // Constants 
-    fDeltaChord( fDefaultDeltaChord ),   // Parameters
-    fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
-    fMultipleRadius(15.0), 
-    fStatsVerbose(0),
-    fDriversStepper(0),                  //  Dependent objects
-    fAllocatedStepper(false),
-    fEquation(0), 
-    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0)  // State - stats
+                              G4MagIntegratorStepper* pItsStepper,
+                              G4bool                  useFSALstepper )
+  : fDefaultDeltaChord(0.25 * mm)
 {
-  //  Construct the Chord Finder
-  //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
+  // Construct the Chord Finder
+  // by creating in inverse order the Driver, the Stepper and EqRhs ...
 
-  G4Mag_EqRhs *pEquation = new G4Mag_UsualEqRhs(theMagField);
+  fDeltaChord = fDefaultDeltaChord;       // Parameters
+
+  using NewFsalStepperType = G4RK547FEq1; // or 2 or 3
+  const char* NewFSALStepperName =
+      "G4RK574FEq1> FSAL 4th/5th order 7-stage 'Equilibrium-type' #1.";
+  using RegularStepperType =
+         G4DormandPrince745; // 5th order embedded method. High efficiency.
+         // G4ClassicalRK4;        // The old default
+         // G4CashKarpRKF45;       // First embedded method in G4
+         // G4BogackiShampine45;   // High efficiency 5th order embedded method
+         // G4NystromRK4;          // Nystrom stepper 4th order 
+         // G4RK547FEq1;  // or 2 or 3 
+  const char* RegularStepperName = 
+      "G4DormandPrince745 (aka DOPRI5): 5th/4th Order 7-stage embedded stepper";
+      // "BogackiShampine 45 (Embedded 5th/4th Order, 7-stage)";
+      // "Nystrom stepper 4th order";
+
+  // Configurable
+  G4bool forceFSALstepper = false; //  Choice - true to enable !!
+  G4bool recallFSALflag  = useFSALstepper;
+  useFSALstepper   = forceFSALstepper || useFSALstepper;
+
+#ifdef G4DEBUG_FIELD
+     G4cout << "G4ChordFinder 2nd Constructor called. " << G4endl;
+     G4cout << " Parameters: " << G4endl;
+     G4cout << "    useFSAL stepper= " << useFSALstepper
+            << " (request = " << recallFSALflag 
+            << " force FSAL = " << forceFSALstepper << " )" << G4endl;
+#endif
+
+  // useHigherStepper = forceHigherEffiencyStepper || useHigherStepper;
+  
+  G4Mag_EqRhs* pEquation = new G4Mag_UsualEqRhs(theMagField);
   fEquation = pEquation;                            
-  fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
-                                                     //    G4FieldTrack ??
 
-  SetFractions_Last_Next( fFractionLast, fFractionNextEstimate);  
-    // check the values and set the other parameters
+  // G4MagIntegratorStepper* regularStepper = nullptr;
+  // G4VFSALIntegrationStepper* fsalStepper = nullptr; // for FSAL steppers only
+  // G4MagIntegratorStepper* oldFSALStepper = nullptr;
 
-  // --->>  Charge    Q = 0 
-  // --->>  Momentum  P = 1       NOMINAL VALUES !!!!!!!!!!!!!!!!!!
+  G4bool errorInStepperCreation = false;
 
-  if( pItsStepper == 0 )
-  { 
-     pItsStepper = fDriversStepper = new G4ClassicalRK4(pEquation);
-     fAllocatedStepper= true;
+  std::ostringstream message;  // In case of failure, load with description !
+
+  if( pItsStepper != nullptr )
+  {
+     // Type is not known - so must use old class
+     fIntgrDriver = new G4IntegrationDriver<G4MagIntegratorStepper>(
+        stepMinimum, pItsStepper, pItsStepper->GetNumberOfVariables());
+  }
+  else if ( !useFSALstepper )
+  {
+     // RegularStepperType* regularStepper = nullptr; // To check the exception
+     auto regularStepper = new RegularStepperType(pEquation);
+     //                    *** ******************
+     //
+     // Alternative - for G4NystromRK4:
+     // = new G4NystromRK4(pEquation, 0.1*mm );
+     fRegularStepperOwned = regularStepper;
+
+     if( regularStepper == nullptr )
+     {
+        message << "Stepper instantiation FAILED." << G4endl;        
+        message << "G4ChordFinder: Attempted to instantiate "
+                << RegularStepperName << " type stepper " << G4endl;
+        G4Exception("G4ChordFinder::G4ChordFinder()",
+                    "GeomField1001", JustWarning, message);
+        errorInStepperCreation = true;
+     }
+     else
+     {
+        using SmallStepDriver = G4InterpolationDriver<G4DormandPrince745>;
+        using LargeStepDriver = G4IntegrationDriver<G4HelixHeum>;
+
+        fLongStepper = std::unique_ptr<G4HelixHeum>(new G4HelixHeum(pEquation));
+        
+        fIntgrDriver = new G4BFieldIntegrationDriver(
+          std::unique_ptr<SmallStepDriver>(new SmallStepDriver(stepMinimum,
+              regularStepper, regularStepper->GetNumberOfVariables())),
+          std::unique_ptr<LargeStepDriver>(new LargeStepDriver(stepMinimum,
+              fLongStepper.get(), regularStepper->GetNumberOfVariables())) );
+        
+        if( fIntgrDriver == nullptr)
+        {        
+           message << "Using G4BFieldIntegrationDriver with "
+                   << RegularStepperName << " type stepper " << G4endl;
+           message << "Driver instantiation FAILED." << G4endl;
+           G4Exception("G4ChordFinder::G4ChordFinder()",
+                       "GeomField1001", JustWarning, message);
+        }
+     }
   }
   else
   {
-     fAllocatedStepper= false; 
+     auto fsalStepper=  new NewFsalStepperType(pEquation);
+     //                 *** ******************
+     fNewFSALStepperOwned = fsalStepper;
+
+     if( fsalStepper == nullptr )
+     {
+        message << "Stepper instantiation FAILED." << G4endl;        
+        message << "Attempted to instantiate "
+                << NewFSALStepperName << " type stepper " << G4endl;
+        G4Exception("G4ChordFinder::G4ChordFinder()",
+                    "GeomField1001", JustWarning, message);
+        errorInStepperCreation = true;
+     }
+     else
+     {
+        fIntgrDriver = new
+           G4FSALIntegrationDriver<NewFsalStepperType>(stepMinimum, fsalStepper,
+                                          fsalStepper->GetNumberOfVariables() );
+           //  ====  Create the driver which knows the class type
+        
+        if( fIntgrDriver == nullptr )
+        {
+           message << "Using G4FSALIntegrationDriver with stepper type: "
+                   << NewFSALStepperName << G4endl;
+           message << "Integration Driver instantiation FAILED." << G4endl;
+           G4Exception("G4ChordFinder::G4ChordFinder()",
+                       "GeomField1001", JustWarning, message);
+        }
+     }
   }
-  fIntgrDriver = new G4MagInt_Driver(stepMinimum, pItsStepper, 
-                                     pItsStepper->GetNumberOfVariables() );
+
+  // -- Main work is now done
+  
+  //    Now check that no error occured, and report it if one did.
+  
+  // To test failure to create driver
+  // delete fIntgrDriver;
+  // fIntgrDriver = nullptr;
+
+  // Detect and report Error conditions
+  //
+  if( errorInStepperCreation || (fIntgrDriver == nullptr ))
+  {
+     std::ostringstream errmsg;
+     
+     if( errorInStepperCreation )
+     {
+        errmsg  << "ERROR> Failure to create Stepper object." << G4endl
+                << "       --------------------------------" << G4endl;
+     }
+     if (fIntgrDriver == nullptr )
+     {
+        errmsg  << "ERROR> Failure to create Integration-Driver object."
+                << G4endl
+                << "       -------------------------------------------"
+                << G4endl;
+     }
+     const std::string BoolName[2]= { "False", "True" }; 
+     errmsg << "  Configuration:  (constructor arguments) " << G4endl        
+            << "    provided Stepper = " << pItsStepper << G4endl
+            << "    use FSAL stepper = " << BoolName[useFSALstepper]
+            << " (request = " << BoolName[recallFSALflag]
+            << " force FSAL = " << BoolName[forceFSALstepper] << " )"
+            << G4endl;
+     errmsg << message.str(); 
+     errmsg << "Aborting.";
+     G4Exception("G4ChordFinder::G4ChordFinder() - constructor 2",
+                 "GeomField0003", FatalException, errmsg);     
+  }
+
+  assert(    ( pItsStepper != nullptr ) 
+          || ( fRegularStepperOwned != nullptr )
+          || ( fNewFSALStepperOwned != nullptr )
+     );
+  assert( fIntgrDriver != nullptr );
 }
 
 
@@ -110,318 +256,12 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
 G4ChordFinder::~G4ChordFinder()
 {
-  delete   fEquation; // fIntgrDriver->pIntStepper->theEquation_Rhs;
-  if( fAllocatedStepper)
-  { 
-     delete fDriversStepper; 
-  }
-  delete   fIntgrDriver; 
-
-  if( fStatsVerbose ) { PrintStatistics(); }
+  delete fEquation;
+  delete fRegularStepperOwned;
+  delete fNewFSALStepperOwned;
+  delete fCachedField;
+  delete fIntgrDriver;
 }
-
-
-// ......................................................................
-
-void   
-G4ChordFinder::SetFractions_Last_Next( G4double fractLast, G4double fractNext )
-{ 
-  // Use -1.0 as request for Default.
-  if( fractLast == -1.0 )   fractLast = 1.0;   // 0.9;
-  if( fractNext == -1.0 )   fractNext = 0.98;  // 0.9; 
-
-  // fFirstFraction  = 0.999; // Orig 0.999 A safe value, range: ~ 0.95 - 0.999
-  // fMultipleRadius = 15.0;  // For later use, range: ~  2 - 20 
-
-  if( fStatsVerbose )
-  { 
-    G4cout << " ChordFnd> Trying to set fractions: "
-           << " first " << fFirstFraction
-           << " last " <<  fractLast
-           << " next " <<  fractNext
-           << " and multiple " << fMultipleRadius
-           << G4endl;
-  } 
-
-  if( (fractLast > 0.0) && (fractLast <=1.0) ) 
-  {
-    fFractionLast= fractLast;
-  }
-  else
-  {
-    G4cerr << "G4ChordFinder::SetFractions_Last_Next: Invalid "
-           << " fraction Last = " << fractLast
-           << " must be  0 <  fractionLast <= 1 " << G4endl;
-  }
-  if( (fractNext > 0.0) && (fractNext <1.0) )
-  {
-    fFractionNextEstimate = fractNext;
-  }
-  else
-  {
-    G4cerr << "G4ChordFinder:: SetFractions_Last_Next: Invalid "
-           << " fraction Next = " << fractNext
-           << " must be  0 <  fractionNext < 1 " << G4endl;
-  }
-}
-
-
-// ......................................................................
-
-G4double 
-G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
-                                    G4double      stepMax,
-                                    G4double      epsStep,
-                                    const G4ThreeVector latestSafetyOrigin,
-                                    G4double       latestSafetyRadius )
-{
-  G4double stepPossible;
-  G4double dyErr;
-  G4FieldTrack yEnd( yCurrent);
-  G4double  startCurveLen= yCurrent.GetCurveLength();
-  G4double nextStep;
-  //            *************
-  stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep,
-                              &nextStep, latestSafetyOrigin, latestSafetyRadius
-                             );
-  //            *************
-
-  G4bool good_advance;
-
-  if ( dyErr < epsStep * stepPossible )
-  {
-     // Accept this accuracy.
-
-     yCurrent = yEnd;
-     good_advance = true; 
-  }
-  else
-  {  
-     // Advance more accurately to "end of chord"
-     //                           ***************
-     good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible,
-                                                  epsStep, nextStep);
-     if ( ! good_advance )
-     { 
-       // In this case the driver could not do the full distance
-       stepPossible= yCurrent.GetCurveLength()-startCurveLen;
-     }
-  }
-  return stepPossible;
-}
-
-
-// ............................................................................
-
-G4double
-G4ChordFinder::FindNextChord( const  G4FieldTrack& yStart,
-                                     G4double     stepMax,
-                                     G4FieldTrack&   yEnd, // Endpoint
-                                     G4double&   dyErrPos, // Error of endpoint
-                                     G4double    epsStep,
-                                     G4double*  pStepForAccuracy, 
-                              const  G4ThreeVector, //  latestSafetyOrigin,
-                                     G4double       //  latestSafetyRadius 
-                                        )
-{
-  // Returns Length of Step taken
-
-  G4FieldTrack yCurrent=  yStart;  
-  G4double    stepTrial, stepForAccuracy;
-  G4double    dydx[G4FieldTrack::ncompSVEC]; 
-
-  //  1.)  Try to "leap" to end of interval
-  //  2.)  Evaluate if resulting chord gives d_chord that is good enough.
-  // 2a.)  If d_chord is not good enough, find one that is.
-  
-  G4bool    validEndPoint= false;
-  G4double  dChordStep, lastStepLength; //  stepOfLastGoodChord;
-
-  fIntgrDriver-> GetDerivatives( yCurrent, dydx );
-
-  unsigned int        noTrials=0;
-  const unsigned int  maxTrials= 300; // Avoid endless loop for bad convergence 
-
-  const G4double safetyFactor= fFirstFraction; //  0.975 or 0.99 ? was 0.999
-
-  stepTrial = std::min( stepMax, safetyFactor*fLastStepEstimate_Unconstrained );
-
-  G4double newStepEst_Uncons= 0.0; 
-  G4double stepForChord;
-  do
-  { 
-     yCurrent = yStart;    // Always start from initial point
-    
-     //            ************
-     fIntgrDriver->QuickAdvance( yCurrent, dydx, stepTrial, 
-                                 dChordStep, dyErrPos);
-     //            ************
-     
-     //  We check whether the criterion is met here.
-     validEndPoint = AcceptableMissDist(dChordStep);
-
-     lastStepLength = stepTrial; 
-
-     // This method estimates to step size for a good chord.
-     stepForChord = NewStep(stepTrial, dChordStep, newStepEst_Uncons );
-
-     if( ! validEndPoint )
-     {
-        if( stepTrial<=0.0 )
-        {
-          stepTrial = stepForChord;
-        }
-        else if (stepForChord <= stepTrial)
-        {
-          // Reduce by a fraction, possibly up to 20% 
-          stepTrial = std::min( stepForChord, fFractionLast * stepTrial);
-        }
-        else
-        {
-          stepTrial *= 0.1;
-        }
-     }
-     noTrials++; 
-  }
-  while( (! validEndPoint) && (noTrials < maxTrials) );   // End of do-while  RKD 
-
-  if( noTrials >= maxTrials )
-  {
-      std::ostringstream message;
-      message << "Exceeded maximum number of trials= " << maxTrials << G4endl
-              << "Current sagita dist= " << dChordStep << G4endl
-              << "Step sizes (actual and proposed): " << G4endl
-              << "Last trial =         " << lastStepLength  << G4endl
-              << "Next trial =         " << stepTrial  << G4endl
-              << "Proposed for chord = " << stepForChord  << G4endl              
-              ;
-      G4Exception("G4ChordFinder::FindNextChord()", "GeomField0003",
-                  JustWarning, message);
-  }
-
-  if( newStepEst_Uncons > 0.0  )
-  {
-     fLastStepEstimate_Unconstrained= newStepEst_Uncons;
-  }
-
-  AccumulateStatistics( noTrials );
-
-  if( pStepForAccuracy )
-  { 
-     // Calculate the step size required for accuracy, if it is needed
-     //
-     G4double dyErr_relative = dyErrPos/(epsStep*lastStepLength);
-     if( dyErr_relative > 1.0 )
-     {
-        stepForAccuracy = fIntgrDriver->ComputeNewStepSize( dyErr_relative,
-                                                            lastStepLength );
-     }
-     else
-     {
-        stepForAccuracy = 0.0;   // Convention to show step was ok 
-     }
-     *pStepForAccuracy = stepForAccuracy;
-  }
-
-#ifdef  TEST_CHORD_PRINT
-  static int dbg=0;
-  if( dbg )
-  {
-    G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
-           << " StepForGoodChord=" << std::setw(10) << stepTrial << G4endl;
-  }
-#endif
-  yEnd=  yCurrent;  
-  return stepTrial; 
-}
-
-
-// ...........................................................................
-
-G4double G4ChordFinder::NewStep(G4double  stepTrialOld, 
-                                G4double  dChordStep, // Curr. dchord achieved
-                                G4double& stepEstimate_Unconstrained )  
-{
-  // Is called to estimate the next step size, even for successful steps,
-  // in order to predict an accurate 'chord-sensitive' first step
-  // which is likely to assist in more performant 'stepping'.
-
-  G4double stepTrial;
-
-#if 1
-
-  if (dChordStep > 0.0)
-  {
-    stepEstimate_Unconstrained =
-                 stepTrialOld*std::sqrt( fDeltaChord / dChordStep );
-    stepTrial =  fFractionNextEstimate * stepEstimate_Unconstrained;
-  }
-  else
-  {
-    // Should not update the Unconstrained Step estimate: incorrect!
-    stepTrial =  stepTrialOld * 2.; 
-  }
-
-  if( stepTrial <= 0.001 * stepTrialOld)
-  {
-     if ( dChordStep > 1000.0 * fDeltaChord )
-     {
-        stepTrial= stepTrialOld * 0.03;   
-     }
-     else
-     {
-        if ( dChordStep > 100. * fDeltaChord )
-        {
-          stepTrial= stepTrialOld * 0.1;   
-        }
-        else   // Try halving the length until dChordStep OK
-        {
-          stepTrial= stepTrialOld * 0.5;   
-        }
-     }
-  }
-  else if (stepTrial > 1000.0 * stepTrialOld)
-  {
-     stepTrial= 1000.0 * stepTrialOld;
-  }
-
-  if( stepTrial == 0.0 )
-  {
-     stepTrial= 0.000001;
-  }
-
-#else
-
-  if ( dChordStep > 1000. * fDeltaChord )
-  {
-        stepTrial= stepTrialOld * 0.03;   
-  }
-  else
-  {
-     if ( dChordStep > 100. * fDeltaChord )
-     {
-        stepTrial= stepTrialOld * 0.1;   
-     }
-     else  // Keep halving the length until dChordStep OK
-     {
-        stepTrial= stepTrialOld * 0.5;   
-     }
-  }
-
-#endif 
-
-  // A more sophisticated chord-finder could figure out a better
-  // stepTrial, from dChordStep and the required d_geometry
-  //   e.g.
-  //      Calculate R, r_helix (eg at orig point)
-  //      if( stepTrial < 2 pi  R )
-  //          stepTrial = R arc_cos( 1 - fDeltaChord / r_helix )
-  //      else    
-  //          ??
-
-  return stepTrial;
-}
-
 
 // ...........................................................................
 
@@ -432,7 +272,7 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
                                   const G4ThreeVector& CurrentE_Point,
                                   const G4ThreeVector& CurrentF_Point,
                                   const G4ThreeVector& PointG,
-                                       G4bool first, G4double eps_step)
+                                        G4bool first, G4double eps_step)
 {
   // ApproxCurvePointS is 2nd implementation of ApproxCurvePoint.
   // Use Brent Algorithm (or InvParabolic) when possible.
@@ -444,7 +284,7 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
   // relative accuracy of each Step.
 
   G4FieldTrack EndPoint(CurveA_PointVelocity);
-  if(!first){EndPoint= ApproxCurveV;}
+  if(!first) { EndPoint = ApproxCurveV; }
 
   G4ThreeVector Point_A,Point_B;
   Point_A=CurveA_PointVelocity.GetPosition();
@@ -473,14 +313,13 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
     yc=-(Point_B-PointG).mag();
     if(xb==0.)
     {
-      EndPoint=
-      ApproxCurvePointV(CurveA_PointVelocity, CurveB_PointVelocity,
-                        CurrentE_Point, eps_step);
+      EndPoint = ApproxCurvePointV(CurveA_PointVelocity, CurveB_PointVelocity,
+                                   CurrentE_Point, eps_step);
       return EndPoint;
     }
   }
 
-  const G4double tolerance= 1.e-12;
+  const G4double tolerance = 1.e-12;
   if(std::abs(ya)<=tolerance||std::abs(yc)<=tolerance)
   {
     ; // What to do for the moment: return the same point as at start
@@ -497,10 +336,10 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
     }
     else
     {
-      test_step=(test_step-xb);
+      test_step = test_step - xb;
       curve=std::abs(EndPoint.GetCurveLength()
                     -CurveB_PointVelocity.GetCurveLength());
-      xb=(CurrentF_Point-Point_B).mag();
+      xb = (CurrentF_Point-Point_B).mag();
     }
       
     if(test_step<=0)    { test_step=0.1*xb; }
@@ -561,7 +400,7 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   curve_length= CurveB_PointVelocity.GetCurveLength()
               - CurveA_PointVelocity.GetCurveLength();  
  
-  G4double  integrationInaccuracyLimit= std::max( perMillion, 0.5*eps_step ); 
+  G4double integrationInaccuracyLimit= std::max( perMillion, 0.5*eps_step ); 
   if( curve_length < ABdist * (1. - integrationInaccuracyLimit) )
   { 
 #ifdef G4DEBUG_FIELD
@@ -589,7 +428,7 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
     // curve_length = ABdist; 
   }
 
-  G4double  new_st_length; 
+  G4double new_st_length; 
 
   if ( ABdist > 0.0 )
   {
@@ -625,7 +464,7 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
      AE_fraction = 0.5;                         // Default value
   }
 
-  new_st_length= AE_fraction * curve_length; 
+  new_st_length = AE_fraction * curve_length; 
 
   if ( AE_fraction > 0.0 )
   { 
@@ -643,55 +482,4 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   return Current_PointVelocity;
 }
 
-
-// ......................................................................
-
-void
-G4ChordFinder::PrintStatistics()
-{
-  // Print Statistics
-
-  G4cout << "G4ChordFinder statistics report: " << G4endl;
-  G4cout 
-    << "  No trials: " << fTotalNoTrials_FNC
-    << "  No Calls: "  << fNoCalls_FNC
-    << "  Max-trial: " <<  fmaxTrials_FNC
-    << G4endl; 
-  G4cout 
-    << "  Parameters: " 
-    << "  fFirstFraction "  << fFirstFraction
-    << "  fFractionLast "   << fFractionLast
-    << "  fFractionNextEstimate " << fFractionNextEstimate
-    << G4endl; 
-}
-
-
 // ...........................................................................
-
-void G4ChordFinder::TestChordPrint( G4int    noTrials, 
-                                    G4int    lastStepTrial, 
-                                    G4double dChordStep, 
-                                    G4double nextStepTrial )
-{
-     G4int oldprec= G4cout.precision(5);
-     G4cout << " ChF/fnc: notrial " << std::setw( 3) << noTrials 
-            << " this_step= "       << std::setw(10) << lastStepTrial;
-     if( std::fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 )
-     {
-       G4cout.precision(8);
-     }
-     else
-     {
-       G4cout.precision(6);
-     }
-     G4cout << " dChordStep=  " << std::setw(12) << dChordStep;
-     if( dChordStep > fDeltaChord ) { G4cout << " d+"; }
-     else                           { G4cout << " d-"; }
-     G4cout.precision(5);
-     G4cout <<  " new_step= "       << std::setw(10)
-            << fLastStepEstimate_Unconstrained
-            << " new_step_constr= " << std::setw(10)
-            << lastStepTrial << G4endl;
-     G4cout << " nextStepTrial = " << std::setw(10) << nextStepTrial << G4endl;
-     G4cout.precision(oldprec);
-}

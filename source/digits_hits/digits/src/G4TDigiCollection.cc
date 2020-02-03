@@ -24,23 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #include "G4TDigiCollection.hh"
 
-G4ThreadLocal G4Allocator<G4DigiCollection> *aDCAllocator_G4MT_TLS_ = 0;
+G4Allocator<G4DigiCollection>*& aDCAllocator_G4MT_TLS_()
+{
+    G4ThreadLocalStatic G4Allocator<G4DigiCollection>* _instance = nullptr;
+    return _instance;
+}
 
 G4DigiCollection::G4DigiCollection() : theCollection((void*)0)
-{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ;;}
+{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ;;}
 
 G4DigiCollection::G4DigiCollection(G4String detName,G4String colNam)
 : G4VDigiCollection(detName,colNam), theCollection((void*)0)
-{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ;;}
+{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ;;}
 
 G4DigiCollection::~G4DigiCollection()
-{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ;;}
+{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ;;}
 
-G4int G4DigiCollection::operator==(const G4DigiCollection &right) const
-{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ; return (collectionName==right.collectionName); }
+G4bool G4DigiCollection::operator==(const G4DigiCollection &right) const
+{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ; return (collectionName==right.collectionName); }
 

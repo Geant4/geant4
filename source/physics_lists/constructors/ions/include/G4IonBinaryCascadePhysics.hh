@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.hh 71042 2013-06-10 09:28:44Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -40,9 +39,7 @@
 #define G4IonBinaryCascadePhysics_h 1
 
 #include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
-
-#include <vector>
+#include "G4IonPhysics.hh"
 
 class G4HadronInelasticProcess;
 class G4HadronicInteraction;
@@ -51,38 +48,13 @@ class G4VComponentCrossSection;
 class G4FTFBuilder;
 class G4BinaryLightIonReaction;
 
-class G4IonBinaryCascadePhysics : public G4VPhysicsConstructor
+class G4IonBinaryCascadePhysics : public G4IonPhysics
 {
 public:
   G4IonBinaryCascadePhysics(G4int ver = 0);
   G4IonBinaryCascadePhysics(const G4String& name, G4int ver = 0);
   virtual ~G4IonBinaryCascadePhysics();
 
-  // This method will be invoked in the Construct() method.
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
-
-private:
-
-  void AddProcess(const G4String&, G4ParticleDefinition*);
-
-  static G4ThreadLocal std::vector<G4HadronInelasticProcess*>* G4MT_p_list;
-  static G4ThreadLocal std::vector<G4HadronicInteraction*>* G4MT_model_list;
-
-  static G4ThreadLocal G4VCrossSectionDataSet* theNuclNuclData; 
-  static G4ThreadLocal G4VComponentCrossSection* theGGNuclNuclXS;
-
-  static G4ThreadLocal G4BinaryLightIonReaction* theIonBC;
-  static G4ThreadLocal G4HadronicInteraction* theFTFP;
-  static G4ThreadLocal G4FTFBuilder* theBuilder;
-
-  G4int  verbose;
-  static G4ThreadLocal G4bool wasActivated;
 };
 
 

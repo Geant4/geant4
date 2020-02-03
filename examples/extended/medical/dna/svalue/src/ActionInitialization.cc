@@ -23,13 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+=======
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
-#include "PrimaryGeneratorAction.hh"
+#include "MyFile.hh"
+
+#ifdef MYFILE
+ #include "MyPrimaryGeneratorActionFromFile.hh"
+#else
+ #include "PrimaryGeneratorAction.hh"
+#endif
+
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "TrackingAction.hh"
@@ -40,8 +56,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
- : G4VUserActionInitialization()
+ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
+ : G4VUserActionInitialization(),
+   fDetectorConstruction(detConstruction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +77,13 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
+
+#ifdef MYFILE
+ MyPrimaryGeneratorActionFromFile* primary = new MyPrimaryGeneratorActionFromFile();
+#else
+ PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
+#endif
+    
   SetUserAction(primary);
   
   SetUserAction(new RunAction());
@@ -70,7 +93,7 @@ void ActionInitialization::Build() const
   
   SetUserAction(new TrackingAction(primary));
   
-  SetUserAction(new SteppingAction(event));
+  SetUserAction(new SteppingAction(event, fDetectorConstruction));
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

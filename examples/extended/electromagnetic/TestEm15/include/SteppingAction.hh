@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm15/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 73022 2013-08-15 09:09:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

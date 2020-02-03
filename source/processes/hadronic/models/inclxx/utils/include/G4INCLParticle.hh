@@ -65,6 +65,8 @@ namespace G4INCL {
       void rotatePosition(const G4double angle, const ThreeVector &axis) const;
       void rotateMomentum(const G4double angle, const ThreeVector &axis) const;
       void boost(const ThreeVector &b) const;
+      G4double getParticleListBias() const;
+      std::vector<G4int> getParticleListBiasVector() const;
   };
 
   typedef ParticleList::const_iterator ParticleIter;
@@ -84,6 +86,7 @@ namespace G4INCL {
     Particle(const Particle &rhs) :
       theZ(rhs.theZ),
       theA(rhs.theA),
+      theS(rhs.theS),
       theParticipantType(rhs.theParticipantType),
       theType(rhs.theType),
       theEnergy(rhs.theEnergy),
@@ -96,6 +99,8 @@ namespace G4INCL {
       thePotentialEnergy(rhs.thePotentialEnergy),
       rpCorrelated(rhs.rpCorrelated),
       uncorrelatedMomentum(rhs.uncorrelatedMomentum),
+      theParticleBias(rhs.theParticleBias),
+      theNKaon(rhs.theNKaon),
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
@@ -111,6 +116,8 @@ namespace G4INCL {
           thePropagationMomentum = &theMomentum;
         // ID intentionally not copied
         ID = nextID++;
+        
+        theBiasCollisionVector = rhs.theBiasCollisionVector;
       }
 
   protected:
@@ -118,6 +125,7 @@ namespace G4INCL {
     void swap(Particle &rhs) {
       std::swap(theZ, rhs.theZ);
       std::swap(theA, rhs.theA);
+      std::swap(theS, rhs.theS);
       std::swap(theParticipantType, rhs.theParticipantType);
       std::swap(theType, rhs.theType);
       if(rhs.thePropagationEnergy == &(rhs.theFrozenEnergy))
@@ -145,6 +153,10 @@ namespace G4INCL {
       std::swap(theMass, rhs.theMass);
       std::swap(rpCorrelated, rhs.rpCorrelated);
       std::swap(uncorrelatedMomentum, rhs.uncorrelatedMomentum);
+      
+      std::swap(theParticleBias, rhs.theParticleBias);
+      std::swap(theBiasCollisionVector, rhs.theBiasCollisionVector);
+
     }
 
   public:
@@ -179,41 +191,104 @@ namespace G4INCL {
         case DeltaPlusPlus:
           theA = 1;
           theZ = 2;
+          theS = 0;
           break;
         case Proton:
         case DeltaPlus:
           theA = 1;
           theZ = 1;
+          theS = 0;
           break;
         case Neutron:
         case DeltaZero:
           theA = 1;
           theZ = 0;
+          theS = 0;
           break;
         case DeltaMinus:
           theA = 1;
           theZ = -1;
+          theS = 0;
           break;
         case PiPlus:
           theA = 0;
           theZ = 1;
+          theS = 0;
           break;
         case PiZero:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           theA = 0;
           theZ = 0;
+          theS = 0;
           break;
         case PiMinus:
           theA = 0;
           theZ = -1;
+          theS = 0;
+          break;
+        case Lambda:
+          theA = 1;
+          theZ = 0;
+          theS = -1;
+          break;
+        case SigmaPlus:
+          theA = 1;
+          theZ = 1;
+          theS = -1;
+          break;
+        case SigmaZero:
+          theA = 1;
+          theZ = 0;
+          theS = -1;
+          break;
+        case SigmaMinus:
+          theA = 1;
+          theZ = -1;
+          theS = -1;
+          break;
+        case KPlus:
+          theA = 0;
+          theZ = 1;
+          theS = 1;
+          break;
+        case KZero:
+          theA = 0;
+          theZ = 0;
+          theS = 1;
+          break;
+        case KZeroBar:
+          theA = 0;
+          theZ = 0;
+          theS = -1;
+          break;
+        case KShort:
+          theA = 0;
+          theZ = 0;
+//        theS should not be defined
+          break;
+        case KLong:
+          theA = 0;
+          theZ = 0;
+//        theS should not be defined
+          break;
+        case KMinus:
+          theA = 0;
+          theZ = -1;
+          theS = -1;
           break;
         case Composite:
          // INCL_ERROR("Trying to set particle type to Composite! Construct a Cluster object instead" << '\n');
           theA = 0;
           theZ = 0;
+          theS = 0;
           break;
         case UnknownParticle:
           theA = 0;
           theZ = 0;
+          theS = 0;
           INCL_ERROR("Trying to set particle type to Unknown!" << '\n');
           break;
       }
@@ -227,9 +302,9 @@ namespace G4INCL {
      */
     G4bool isNucleon() const {
       if(theType == G4INCL::Proton || theType == G4INCL::Neutron)
-	return true;
+    return true;
       else
-	return false;
+    return false;
     };
 
     ParticipantType getParticipantType() const {
@@ -267,20 +342,61 @@ namespace G4INCL {
     /** \brief Is this a pion? */
     G4bool isPion() const { return (theType == PiPlus || theType == PiZero || theType == PiMinus); }
 
+    /** \brief Is this an eta? */
+    G4bool isEta() const { return (theType == Eta); }
+
+    /** \brief Is this an omega? */
+    G4bool isOmega() const { return (theType == Omega); }
+
+    /** \brief Is this an etaprime? */
+    G4bool isEtaPrime() const { return (theType == EtaPrime); }
+
+    /** \brief Is this a photon? */
+    G4bool isPhoton() const { return (theType == Photon); }
+
     /** \brief Is it a resonance? */
     inline G4bool isResonance() const { return isDelta(); }
 
     /** \brief Is it a Delta? */
     inline G4bool isDelta() const {
       return (theType==DeltaPlusPlus || theType==DeltaPlus ||
-          theType==DeltaZero || theType==DeltaMinus);
-    }
+          theType==DeltaZero || theType==DeltaMinus); }
+    
+    /** \brief Is this a Sigma? */
+    G4bool isSigma() const { return (theType == SigmaPlus || theType == SigmaZero || theType == SigmaMinus); }
+    
+    /** \brief Is this a Kaon? */
+    G4bool isKaon() const { return (theType == KPlus || theType == KZero); }
+    
+    /** \brief Is this an antiKaon? */
+    G4bool isAntiKaon() const { return (theType == KZeroBar || theType == KMinus); }
+    
+    /** \brief Is this a Lambda? */
+    G4bool isLambda() const { return (theType == Lambda); }
+
+    /** \brief Is this a Nucleon or a Lambda? */
+    G4bool isNucleonorLambda() const { return (isNucleon() || isLambda()); }
+    
+    /** \brief Is this an Hyperon? */
+    G4bool isHyperon() const { return (isLambda() || isSigma()); }
+    
+    /** \brief Is this a Meson? */
+    G4bool isMeson() const { return (isPion() || isKaon() || isAntiKaon() || isEta() || isEtaPrime() || isOmega()); }
+    
+    /** \brief Is this a Baryon? */
+    G4bool isBaryon() const { return (isNucleon() || isResonance() || isHyperon()); }
+    
+    /** \brief Is this an Strange? */
+    G4bool isStrange() const { return (isKaon() || isAntiKaon() || isHyperon()); }
 
     /** \brief Returns the baryon number. */
     G4int getA() const { return theA; }
 
     /** \brief Returns the charge number. */
     G4int getZ() const { return theZ; }
+    
+    /** \brief Returns the strangeness number. */
+    G4int getS() const { return theS; }
 
     G4double getBeta() const {
       const G4double P = theMomentum.mag();
@@ -342,6 +458,20 @@ namespace G4INCL {
         case PiPlus:
         case PiMinus:
         case PiZero:
+        case Lambda:
+        case SigmaPlus:
+        case SigmaZero:
+        case SigmaMinus:
+        case KPlus:
+        case KZero:
+        case KZeroBar:
+        case KShort:
+        case KLong:
+        case KMinus:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return ParticleTable::getINCLMass(theType);
           break;
 
@@ -353,7 +483,7 @@ namespace G4INCL {
           break;
 
         case Composite:
-          return ParticleTable::getINCLMass(theA,theZ);
+          return ParticleTable::getINCLMass(theA,theZ,theS);
           break;
 
         default:
@@ -371,6 +501,20 @@ namespace G4INCL {
         case PiPlus:
         case PiMinus:
         case PiZero:
+        case Lambda:
+        case SigmaPlus:
+        case SigmaZero:
+        case SigmaMinus:
+        case KPlus:
+        case KZero:
+        case KZeroBar:
+        case KShort:
+        case KLong:
+        case KMinus:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return ParticleTable::getTableParticleMass(theType);
           break;
 
@@ -382,7 +526,7 @@ namespace G4INCL {
           break;
 
         case Composite:
-          return ParticleTable::getTableMass(theA,theZ);
+          return ParticleTable::getTableMass(theA,theZ,theS);
           break;
 
         default:
@@ -400,6 +544,20 @@ namespace G4INCL {
         case PiPlus:
         case PiMinus:
         case PiZero:
+        case Lambda:
+        case SigmaPlus:
+        case SigmaZero:
+        case SigmaMinus:
+        case KPlus:
+        case KZero:
+        case KZeroBar:
+        case KShort:
+        case KLong:
+        case KMinus:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return ParticleTable::getRealMass(theType);
           break;
 
@@ -411,7 +569,7 @@ namespace G4INCL {
           break;
 
         case Composite:
-          return ParticleTable::getRealMass(theA,theZ);
+          return ParticleTable::getRealMass(theA,theZ,theS);
           break;
 
         default:
@@ -442,22 +600,24 @@ namespace G4INCL {
      * \return the correction
      */
     G4double getEmissionQValueCorrection(const G4int AParent, const G4int ZParent) const {
+      const G4int SParent = 0;
       const G4int ADaughter = AParent - theA;
       const G4int ZDaughter = ZParent - theZ;
+      const G4int SDaughter = 0;
 
       // Note the minus sign here
       G4double theQValue;
       if(isCluster())
-        theQValue = -ParticleTable::getTableQValue(theA, theZ, ADaughter, ZDaughter);
+        theQValue = -ParticleTable::getTableQValue(theA, theZ, theS, ADaughter, ZDaughter, SDaughter);
       else {
-        const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent);
-        const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter);
+        const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent,SParent);
+        const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter,SDaughter);
         const G4double massTableParticle = getTableMass();
         theQValue = massTableParent - massTableDaughter - massTableParticle;
       }
 
-      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent);
-      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter);
+      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent,SParent);
+      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter,SDaughter);
       const G4double massINCLParticle = getINCLMass();
 
       // The rhs corresponds to the INCL Q-value
@@ -480,14 +640,18 @@ namespace G4INCL {
      * \return the correction
      */
     G4double getTransferQValueCorrection(const G4int AFrom, const G4int ZFrom, const G4int ATo, const G4int ZTo) const {
+      const G4int SFrom = 0;
+      const G4int STo = 0;
       const G4int AFromDaughter = AFrom - theA;
       const G4int ZFromDaughter = ZFrom - theZ;
+      const G4int SFromDaughter = 0;
       const G4int AToDaughter = ATo + theA;
       const G4int ZToDaughter = ZTo + theZ;
-      const G4double theQValue = ParticleTable::getTableQValue(AToDaughter,ZToDaughter,AFromDaughter,ZFromDaughter,AFrom,ZFrom);
+      const G4int SToDaughter = 0;
+      const G4double theQValue = ParticleTable::getTableQValue(AToDaughter,ZToDaughter,SToDaughter,AFromDaughter,ZFromDaughter,SFromDaughter,AFrom,ZFrom,SFrom);
 
-      const G4double massINCLTo = ParticleTable::getINCLMass(ATo,ZTo);
-      const G4double massINCLToDaughter = ParticleTable::getINCLMass(AToDaughter,ZToDaughter);
+      const G4double massINCLTo = ParticleTable::getINCLMass(ATo,ZTo,STo);
+      const G4double massINCLToDaughter = ParticleTable::getINCLMass(AToDaughter,ZToDaughter,SToDaughter);
       /* Note that here we have to use the table mass in the INCL Q-value. We
        * cannot use theMass, because at this stage the particle is probably
        * still off-shell; and we cannot use getINCLMass(), because it leads to
@@ -498,6 +662,83 @@ namespace G4INCL {
       // The rhs corresponds to the INCL Q-value for particle absorption
       return theQValue - (massINCLToDaughter-massINCLTo-massINCLParticle);
     }
+
+    /**\brief Computes correction on the emission Q-value for hypernuclei
+     *
+     * Computes the correction that must be applied to INCL particles in
+     * order to obtain the correct Q-value for particle emission from a given
+     * nucleus. For absorption, the correction is obviously equal to minus
+     * the value returned by this function.
+     *
+     * \param AParent the mass number of the emitting nucleus
+     * \param ZParent the charge number of the emitting nucleus
+     * \param SParent the strangess number of the emitting nucleus
+     * \return the correction
+     */
+    G4double getEmissionQValueCorrection(const G4int AParent, const G4int ZParent, const G4int SParent) const {
+      const G4int ADaughter = AParent - theA;
+      const G4int ZDaughter = ZParent - theZ;
+      const G4int SDaughter = SParent - theS;
+
+      // Note the minus sign here
+      G4double theQValue;
+      if(isCluster())
+        theQValue = -ParticleTable::getTableQValue(theA, theZ, theS, ADaughter, ZDaughter, SDaughter);
+      else {
+        const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent,SParent);
+        const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter,SDaughter);
+        const G4double massTableParticle = getTableMass();
+        theQValue = massTableParent - massTableDaughter - massTableParticle;
+      }
+
+      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent,SParent);
+      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter,SDaughter);
+      const G4double massINCLParticle = getINCLMass();
+
+      // The rhs corresponds to the INCL Q-value
+      return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
+    }
+
+    /**\brief Computes correction on the transfer Q-value for hypernuclei
+     *
+     * Computes the correction that must be applied to INCL particles in
+     * order to obtain the correct Q-value for particle transfer from a given
+     * nucleus to another.
+     *
+     * Assumes that the receving nucleus is INCL's target nucleus, with the
+     * INCL separation energy.
+     *
+     * \param AFrom the mass number of the donating nucleus
+     * \param ZFrom the charge number of the donating nucleus
+     * \param SFrom the strangess number of the donating nucleus
+     * \param ATo the mass number of the receiving nucleus
+     * \param ZTo the charge number of the receiving nucleus
+     * \param STo the strangess number of the receiving nucleus
+     * \return the correction
+     */
+    G4double getTransferQValueCorrection(const G4int AFrom, const G4int ZFrom, const G4int SFrom, const G4int ATo, const G4int ZTo , const G4int STo) const {
+      const G4int AFromDaughter = AFrom - theA;
+      const G4int ZFromDaughter = ZFrom - theZ;
+      const G4int SFromDaughter = SFrom - theS;
+      const G4int AToDaughter = ATo + theA;
+      const G4int ZToDaughter = ZTo + theZ;
+      const G4int SToDaughter = STo + theS;
+      const G4double theQValue = ParticleTable::getTableQValue(AToDaughter,ZToDaughter,SFromDaughter,AFromDaughter,ZFromDaughter,SToDaughter,AFrom,ZFrom,SFrom);
+
+      const G4double massINCLTo = ParticleTable::getINCLMass(ATo,ZTo,STo);
+      const G4double massINCLToDaughter = ParticleTable::getINCLMass(AToDaughter,ZToDaughter,SToDaughter);
+      /* Note that here we have to use the table mass in the INCL Q-value. We
+       * cannot use theMass, because at this stage the particle is probably
+       * still off-shell; and we cannot use getINCLMass(), because it leads to
+       * violations of global energy conservation.
+       */
+      const G4double massINCLParticle = getTableMass();
+
+      // The rhs corresponds to the INCL Q-value for particle absorption
+      return theQValue - (massINCLToDaughter-massINCLTo-massINCLParticle);
+    }
+
+
 
     /** \brief Get the the particle invariant mass.
      *
@@ -778,8 +1019,65 @@ namespace G4INCL {
         return 1.;
     }
 
+    /// \brief General bias vector function
+    static G4double getTotalBias();
+    static void setINCLBiasVector(std::vector<G4double> NewVector);
+    static void FillINCLBiasVector(G4double newBias);
+    static G4double getBiasFromVector(std::vector<G4int> VectorBias);
+
+    static std::vector<G4int> MergeVectorBias(Particle const * const p1, Particle const * const p2);
+    static std::vector<G4int> MergeVectorBias(std::vector<G4int> p1, Particle const * const p2);
+
+    /// \brief Get the particle bias.
+    G4double getParticleBias() const { return theParticleBias; };
+
+    /// \brief Set the particle bias.
+    void setParticleBias(G4double ParticleBias) { this->theParticleBias = ParticleBias; }
+
+    /// \brief Get the vector list of biased vertices on the particle path.
+    std::vector<G4int> getBiasCollisionVector() const { return theBiasCollisionVector; }
+
+    /// \brief Set the vector list of biased vertices on the particle path.
+    void setBiasCollisionVector(std::vector<G4int> BiasCollisionVector) {
+	  this->theBiasCollisionVector = BiasCollisionVector;
+	  this->setParticleBias(Particle::getBiasFromVector(BiasCollisionVector));
+	  }
+    
+    /** \brief Number of Kaon inside de nucleus
+     * 
+     * Put in the Particle class in order to calculate the
+     * "correct" mass of composit particle.
+     * 
+     */
+     
+    G4int getNumberOfKaon() const { return theNKaon; };
+    void setNumberOfKaon(const G4int NK) { theNKaon = NK; }
+  
+  public:
+    /** \brief Time ordered vector of all bias applied
+     * 
+     * /!\ Caution /!\
+     * methods Assotiated to G4VectorCache<T> are:
+     * Push_back(…),
+     * operator[],
+     * Begin(),
+     * End(),
+     * Clear(),
+     * Size() and 
+     * Pop_back()
+     * 
+     */
+#ifdef INCLXX_IN_GEANT4_MODE
+      static std::vector<G4double> INCLBiasVector;
+      //static G4VectorCache<G4double> INCLBiasVector;
+#else
+      static G4ThreadLocal std::vector<G4double> INCLBiasVector;
+      //static G4VectorCache<G4double> INCLBiasVector;
+#endif
+    static G4ThreadLocal G4int nextBiasedCollisionID;
+    
   protected:
-    G4int theZ, theA;
+    G4int theZ, theA, theS;
     ParticipantType theParticipantType;
     G4INCL::ParticleType theType;
     G4double theEnergy;
@@ -796,16 +1094,23 @@ namespace G4INCL {
 
     G4bool rpCorrelated;
     G4double uncorrelatedMomentum;
+    
+    G4double theParticleBias;
+    /// \brief The number of Kaons inside the nucleus (update during the cascade)
+    G4int theNKaon;
 
   private:
     G4double theHelicity;
     G4double emissionTime;
     G4bool outOfWell;
+    
+    /// \brief Time ordered vector of all biased vertices on the particle path
+    std::vector<G4int> theBiasCollisionVector;
 
     G4double theMass;
     static G4ThreadLocal long nextID;
 
-    INCL_DECLARE_ALLOCATION_POOL(Particle);
+    INCL_DECLARE_ALLOCATION_POOL(Particle)
   };
 }
 

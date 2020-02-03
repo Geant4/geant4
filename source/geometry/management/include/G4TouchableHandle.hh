@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TouchableHandle.hh 66356 2012-12-18 09:02:32Z gcosmo $
-// 
-// Class G4TouchableHandle
+// G4TouchableHandle
 //
 // Class description:
 //
@@ -37,16 +34,14 @@
 // instantiated using 'new').
 // For more details see G4ReferenceCountedHandle.
 
-// Author:      Radovan Chytracek, CERN  (Radovan.Chytracek@cern.ch)
-// Version:     1.0
-// Date:        February 2001
+// Author: Radovan Chytracek, CERN - February 2001
 // ----------------------------------------------------------------------
-#ifndef _G4TOUCHABLEHANDLE_H_
-#define _G4TOUCHABLEHANDLE_H_ 1
+#ifndef G4TOUCHABLEHANDLE_HH
+#define G4TOUCHABLEHANDLE_HH 1
 
 #include "G4VTouchable.hh"
 #include "G4ReferenceCountedHandle.hh"
 
-typedef G4ReferenceCountedHandle<G4VTouchable> G4TouchableHandle;
+using G4TouchableHandle = G4ReferenceCountedHandle<G4VTouchable>;
 
-#endif // _G4TOUCHABLEHANDLE_H_
+#endif // G4TOUCHABLEHANDLE_HH

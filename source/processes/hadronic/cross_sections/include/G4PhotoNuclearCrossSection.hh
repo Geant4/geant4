@@ -49,10 +49,21 @@ public:
     static const char* Default_Name() {return "PhotoNuclearXS";}
     
     virtual void CrossSectionDescription(std::ostream&) const;
+
+    virtual G4bool
+    IsIsoApplicable(const G4DynamicParticle* particle, G4int Z, G4int A,
+                    const G4Element* elm = 0, const G4Material* mat = 0);
     
     virtual G4bool
     IsElementApplicable(const G4DynamicParticle* particle, G4int Z,
                         const G4Material*);
+
+    virtual G4double
+    GetIsoCrossSection(const G4DynamicParticle* dynPart,
+                    G4int Z, G4int A,
+                    const G4Isotope*,
+                    const G4Element* elm,
+                    const G4Material* mat);
     
     virtual G4double
     GetElementCrossSection(const G4DynamicParticle*, G4int Z,
@@ -78,6 +89,12 @@ private:
     
     // Vector of pointers to the GDRPhotonuclearCrossSection
     std::vector <G4double*> GDR;
+
+    // ejc3 // store deuteron XS
+    G4double* deuteron_GDR;
+    G4double* deuteron_HR;
+    G4double deuteron_TH;
+    G4double deuteron_SP;
     
     // Vector of pointers to the HighEnPhotonuclearCrossSect
     std::vector <G4double*> HEN;

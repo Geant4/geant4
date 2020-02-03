@@ -23,13 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4GeomTestVolume.cc 102290 2017-01-20 11:19:44Z gcosmo $
-//
-// --------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GeomTestVolume
+// class G4GeomTestVolume implementation
 //
 // Author: G.Cosmo, CERN
 // --------------------------------------------------------------------
@@ -37,7 +31,6 @@
 #include <set>
 
 #include "G4GeomTestVolume.hh"
-
 #include "G4PhysicalConstants.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -51,7 +44,7 @@ G4GeomTestVolume::G4GeomTestVolume( G4VPhysicalVolume *theTarget,
                                     G4int numberOfPoints,
                                     G4bool theVerbosity )
   : target(theTarget), tolerance(theTolerance),
-    resolution(numberOfPoints), maxErr(1), verbosity(theVerbosity)
+    resolution(numberOfPoints), verbosity(theVerbosity)
 {;}
 
 //
@@ -152,8 +145,7 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
 
   const G4LogicalVolume *logical = target->GetLogicalVolume();
   G4int nDaughter = logical->GetNoDaughters();
-  G4int iDaughter;
-  for( iDaughter=0; iDaughter<nDaughter; ++iDaughter )
+  for( auto iDaughter=0; iDaughter<nDaughter; ++iDaughter )
   {
     G4VPhysicalVolume *daughter = logical->GetDaughter(iDaughter);
     

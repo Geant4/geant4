@@ -27,7 +27,10 @@
 /// \brief Definition of the B02DetectorConstruction class
 //
 //
+<<<<<<< HEAD
 // $Id: B02DetectorConstruction.hh 77475 2013-11-25 09:38:51Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #ifndef B02DetectorConstruction_hh

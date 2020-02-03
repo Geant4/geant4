@@ -10,6 +10,9 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31 January 2019,  I. Hrivnacova (exparallel-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 03 December 2013, I. Hrivnacova (exparallel-V09-06-04)
 - Fixed file descriptions (for Doxygen)
 

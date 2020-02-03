@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ChargeState implementation
 //
-// History
-// - First version: Apr 10, 2013  John Apostolakis, Peter Gumplinger
-// - Modified:
-//
-//
-// $Id: G4FieldTrack.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
+// Authors: J.Apostolakis, P.Gumplinger - 10 April 2013  
 // -------------------------------------------------------------------
 
 #include "G4ChargeState.hh"
@@ -40,8 +35,8 @@ void G4ChargeState::SetChargeSpinMoments(G4double charge,
                                          G4double magnetic_dipole_moment,
                                          G4double electric_dipole_moment,
                                          G4double magnetic_charge )
-   //  Revise the charge and potentially all moments.
-   //   By default do not change mdm, edm, mag charge.
+   // Revise the charge and potentially all moments.
+   // By default do not change mdm, edm, mag charge.
 {
    fCharge = charge;
    fSpin   = spin;

@@ -67,12 +67,15 @@ namespace G4INCL {
     struct EventInfo {
       EventInfo() :
         nParticles(0),
+        eventBias((Float_t)0.0),
         nRemnants(0),
         projectileType(0),
         At(0),
         Zt(0),
+        St(0),
         Ap(0),
         Zp(0),
+        Sp(0),
         Ep((Float_t)0.0),
         impactParameter((Float_t)0.0),
         nCollisions(0),
@@ -90,8 +93,18 @@ namespace G4INCL {
         nBlockedDecays(0),
         effectiveImpactParameter((Float_t)0.0),
         deltasInside(false),
+        sigmasInside(false),
+        kaonsInside(false),
+        antikaonsInside(false),
+        lambdasInside(false),
         forcedDeltasInside(false),
         forcedDeltasOutside(false),
+        forcedPionResonancesOutside(false),
+        absorbedStrangeParticle(false),
+        forcedSigmaOutside(false),
+        forcedStrangeInside(false),
+        emitLambda(0),
+        emitKaon(false),
         clusterDecay(false),
         firstCollisionTime((Float_t)0.0),
         firstCollisionXSec((Float_t)0.0),
@@ -108,6 +121,9 @@ namespace G4INCL {
       {
         std::fill_n(A, maxSizeParticles, 0);
         std::fill_n(Z, maxSizeParticles, 0);
+        std::fill_n(S, maxSizeParticles, 0);
+        std::fill_n(PDGCode, maxSizeParticles, 0);
+        std::fill_n(ParticleBias, maxSizeParticles, (Float_t)0.0);
         std::fill_n(EKin, maxSizeParticles, (Float_t)0.0);
         std::fill_n(px, maxSizeParticles, (Float_t)0.0);
         std::fill_n(py, maxSizeParticles, (Float_t)0.0);
@@ -118,6 +134,7 @@ namespace G4INCL {
         std::fill_n(emissionTime, maxSizeParticles, (Float_t)0.0);
         std::fill_n(ARem, maxSizeRemnants, 0);
         std::fill_n(ZRem, maxSizeRemnants, 0);
+        std::fill_n(SRem, maxSizeRemnants, 0);
         std::fill_n(EStarRem, maxSizeRemnants, (Float_t)0.0);
         std::fill_n(JRem, maxSizeRemnants, (Float_t)0.0);
         std::fill_n(EKinRem, maxSizeRemnants, (Float_t)0.0);
@@ -149,6 +166,14 @@ namespace G4INCL {
       Short_t A[maxSizeParticles];
       /** \brief Particle charge number */
       Short_t Z[maxSizeParticles];
+      /** \brief Particle strangeness number */
+      Short_t S[maxSizeParticles];
+      /** \brief PDG numbering of the particles */
+      Int_t PDGCode[maxSizeParticles];
+      /** \brief Particle weight due to the bias */
+      Float_t ParticleBias[maxSizeParticles];
+      /** \brief Event bias */
+      Float_t eventBias;
       /** \brief Particle kinetic energy [MeV] */
       Float_t EKin[maxSizeParticles];
       /** \brief Particle momentum, x component [MeV/c] */
@@ -193,6 +218,8 @@ namespace G4INCL {
       Short_t ARem[maxSizeRemnants];
       /** \brief Remnant charge number */
       Short_t ZRem[maxSizeRemnants];
+      /** \brief Remnant strangeness number */
+      Short_t SRem[maxSizeRemnants];
       /** \brief Remnant excitation energy [MeV] */
       Float_t EStarRem[maxSizeRemnants];
       /** \brief Remnant spin [\f$\hbar\f$] */
@@ -221,10 +248,14 @@ namespace G4INCL {
       Short_t At;
       /** \brief Charge number of the target nucleus */
       Short_t Zt;
+      /** \brief Strangeness number of the target nucleus */
+      Short_t St;
       /** \brief Mass number of the projectile nucleus */
       Short_t Ap;
       /** \brief Charge number of the projectile nucleus */
       Short_t Zp;
+      /** \brief Strangeness number of the projectile nucleus */
+      Short_t Sp;
       /** \brief Projectile kinetic energy given as input */
       Float_t Ep;
       /** \brief Impact parameter [fm] */
@@ -259,10 +290,30 @@ namespace G4INCL {
       Float_t effectiveImpactParameter;
       /** \brief Event involved deltas in the nucleus at the end of the cascade */
       Bool_t deltasInside;
+      /** \brief Event involved sigmas in the nucleus at the end of the cascade */
+      Bool_t sigmasInside;
+      /** \brief Event involved kaons in the nucleus at the end of the cascade */
+      Bool_t kaonsInside;
+      /** \brief Event involved antikaons in the nucleus at the end of the cascade */
+      Bool_t antikaonsInside;
+      /** \brief Event involved lambdas in the nucleus at the end of the cascade */
+      Bool_t lambdasInside;
       /** \brief Event involved forced delta decays inside the nucleus */
       Bool_t forcedDeltasInside;
       /** \brief Event involved forced delta decays outside the nucleus */
       Bool_t forcedDeltasOutside;
+      /** \brief Event involved forced eta/omega decays outside the nucleus */
+      Bool_t forcedPionResonancesOutside;
+      /** \brief Event involved forced strange absorbtion inside the nucleus */
+      Bool_t absorbedStrangeParticle;
+      /** \brief Event involved forced Sigma Zero decays outside the nucleus */
+      Bool_t forcedSigmaOutside;
+      /** \brief Event involved forced antiKaon/Sigma absorbtion inside the nucleus */
+      Bool_t forcedStrangeInside;
+      /** \brief Number of forced Lambda emit out of the nucleus */
+      Int_t emitLambda;
+      /** \brief Event involved forced Kaon emission */
+      Bool_t emitKaon;
       /** \brief Event involved cluster decay */
       Bool_t clusterDecay;
       /** \brief Time of the first collision [fm/c] */
@@ -297,13 +348,16 @@ namespace G4INCL {
       /** \brief Reset the EventInfo members */
       void reset() {
         nParticles = 0;
+        eventBias = (Float_t)0.0;
         history.clear();
         nRemnants = 0;
         projectileType = 0;
         At = 0;
         Zt = 0;
+        St = 0;
         Ap = 0;
         Zp = 0;
+        Sp = 0;
         Ep = (Float_t)0.0;
         impactParameter = (Float_t)0.0;
         nCollisions = 0;
@@ -321,8 +375,18 @@ namespace G4INCL {
         nBlockedDecays = 0;
         effectiveImpactParameter = (Float_t)0.0;
         deltasInside = false;
+        sigmasInside = false;
+        kaonsInside = false;
+        antikaonsInside = false;
+        lambdasInside = false;
         forcedDeltasInside = false;
         forcedDeltasOutside = false;
+        forcedPionResonancesOutside = false;
+        absorbedStrangeParticle = false;
+        forcedSigmaOutside = false;
+        forcedStrangeInside = false;
+        emitLambda = 0;
+        emitKaon = false;
         clusterDecay = false;
         firstCollisionTime = (Float_t)0.0;
         firstCollisionXSec = (Float_t)0.0;

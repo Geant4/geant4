@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -53,19 +52,16 @@ class G4ChargeExchange : public G4HadronicInteraction
 {
 public:
 
-  G4ChargeExchange();
+  explicit G4ChargeExchange();
 
-  virtual ~G4ChargeExchange();
+  ~G4ChargeExchange() override;
 
-  virtual G4HadFinalState * ApplyYourself(
-                   const G4HadProjectile & aTrack,
-                   G4Nucleus & targetNucleus);
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                 G4Nucleus& targetNucleus) override;
 
   void SetLowestEnergyLimit(G4double value);
 
-  void SetRecoilKinEnergyLimit(G4double value);
-
-  G4double SampleT(G4double p, G4double A);
+  G4double SampleT(G4double p, G4int A);
 
 private:
 
@@ -99,15 +95,8 @@ private:
   G4ParticleDefinition* theA;
   G4ParticleDefinition* theHe3;
 
-  G4double lowEnergyRecoilLimit;
   G4double lowestEnergyLimit;
-
 };
-
-inline void G4ChargeExchange::SetRecoilKinEnergyLimit(G4double value)
-{
-  lowEnergyRecoilLimit = value;
-}
 
 inline void G4ChargeExchange::SetLowestEnergyLimit(G4double value)
 {

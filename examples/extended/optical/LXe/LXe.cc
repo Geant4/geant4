@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: LXe.cc 77782 2013-11-28 08:12:12Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file optical/LXe/LXe.cc
 /// \brief Main program of the optical/LXe example
@@ -41,7 +44,6 @@
 
 #include "LXePhysicsList.hh"
 #include "LXeDetectorConstruction.hh"
-
 #include "LXeActionInitialization.hh"
 
 #include "LXeRecorderBase.hh"
@@ -58,20 +60,41 @@
 
 int main(int argc, char** argv)
 {
+<<<<<<< HEAD
+=======
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
 #else
   G4RunManager * runManager = new G4RunManager;
 #endif
+<<<<<<< HEAD
 
   runManager->SetUserInitialization(new LXeDetectorConstruction());
   runManager->SetUserInitialization(new LXePhysicsList());
+=======
+  LXeDetectorConstruction* det = new LXeDetectorConstruction();
+  runManager->SetUserInitialization(det);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
   LXeRecorderBase* recorder = NULL; //No recording is done in this example
 
   runManager->SetUserInitialization(new LXeActionInitialization(recorder));
 
+<<<<<<< HEAD
 #ifdef G4VIS_USE
+=======
+  physicsList->RegisterPhysics(opticalPhysics);
+  runManager->SetUserInitialization(physicsList);
+
+  runManager->SetUserInitialization(new LXeActionInitialization(det));
+
+  //initialize visualization
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
@@ -83,6 +106,7 @@ int main(int argc, char** argv)
   // get the pointer to the UI manager and set verbosities
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
+<<<<<<< HEAD
   if(argc==1){
 #ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
@@ -96,6 +120,18 @@ int main(int argc, char** argv)
 #endif
   }
   else{
+=======
+  if (ui) {
+    //interactive mode
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    if (ui->IsGUI()) {
+      UImanager->ApplyCommand("/control/execute gui.mac");
+    }
+    ui->SessionStart();
+    delete ui;
+  } else {
+    //batch mode  
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     G4String command = "/control/execute ";
     G4String filename = argv[1];
     UImanager->ApplyCommand(command+filename);

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmSliderBar.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
 

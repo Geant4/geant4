@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisFeaturesOfDAWNFILE.hh 66264 2012-12-14 10:17:44Z allison $
 //
 #ifndef G4VISFEATURESOFDAWNFILE_HH
 #define G4VISFEATURESOFDAWNFILE_HH

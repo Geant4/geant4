@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussChebyshevQ.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 #include "G4GaussChebyshevQ.hh"
 #include "G4PhysicalConstants.hh"

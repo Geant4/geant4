@@ -9,6 +9,10 @@
 
 #ifdef TOOLS_MEM
 #include "mem"
+//#define TOOLS_CSTR_DEBUG_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+#include <cstdio>
+#endif
 #endif
 
 namespace tools {
@@ -23,21 +27,51 @@ inline const std::string& s_cstr() {
 }
 #endif
 
-inline char* str_dup(const char* a_cstr,bool a_inc = true) {
+inline char* str_dup(const char* a_cstr
 #ifdef TOOLS_MEM
-  if(a_inc) mem::increment(s_cstr().c_str());
-#else
-  (void)a_inc;
+                     ,bool a_inc = true
+#endif		     
+		     ) {
+#ifdef TOOLS_MEM
+  if(a_inc) {
+#ifdef TOOLS_CSTR_DEBUG_MEM
+    ::printf("debug : str_dup \"%s\"\n",a_cstr);
+#endif    
+    mem::increment(s_cstr().c_str());
+  }    
 #endif
   return ::strcpy((char*)::malloc(::strlen(a_cstr)+1),a_cstr);
 }
 
+inline char* str_from_buffer(const char* a_buffer,size_t a_len
+#ifdef TOOLS_MEM
+                     ,bool a_inc = true
+#endif		     
+		     ) {
+#ifdef TOOLS_MEM
+  if(a_inc) {
+#ifdef TOOLS_CSTR_DEBUG_MEM
+    ::printf("debug : str_from_buffer.\n");
+#endif    
+    mem::increment(s_cstr().c_str());
+  }    
+#endif
+  char* s = (char*)::malloc(a_len+1);
+  if(s==NULL) return NULL;
+  s = ::strncpy(s,a_buffer,a_len);
+  s[a_len] = 0;
+  return s;
+}
+
 inline void str_del(char*& a_cstr) {
   if(a_cstr==NULL) return;
-  ::free(a_cstr);
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_del \"%s\"\n",a_cstr);
+#endif    
   mem::decrement(s_cstr().c_str());
 #endif
+  ::free(a_cstr);
   a_cstr = NULL;
 }
 
@@ -45,6 +79,9 @@ inline char* str_new(size_t a_l = 0,char a_char = ' ') {
   char* s = (char*)::malloc((a_l+1)*sizeof(char));
   if(s==NULL) return NULL;
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_new : len %lu\n",a_l);
+#endif    
   mem::increment(s_cstr().c_str());
 #endif
   char* pos = s; 
@@ -58,6 +95,9 @@ inline bool str_cat(char*& a_1,const char a_c) {
   char* s = (char*)::malloc(l1+1+1);
   if(!s) return false;
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat \"%s\", char %d\n",a_1,a_c);
+#endif    
   mem::increment(s_cstr().c_str());
 #endif
   ::memcpy(s,a_1,l1);
@@ -65,6 +105,9 @@ inline bool str_cat(char*& a_1,const char a_c) {
   *(s+l1+1) = 0;
   ::free(a_1);
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat : dec\n");
+#endif    
   mem::decrement(s_cstr().c_str());
 #endif
   a_1 = s;
@@ -77,6 +120,9 @@ inline bool str_cat(char*& a_1,const char* a_2) {
   char* s = (char*)::malloc(l1+l2+1);
   if(!s) return false;
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat \"%s\" \"%s\"\n",a_1,a_2);
+#endif    
   mem::increment(s_cstr().c_str());
 #endif
   ::memcpy(s,a_1,l1);
@@ -84,6 +130,9 @@ inline bool str_cat(char*& a_1,const char* a_2) {
   *(s+l1+l2) = 0;
   ::free(a_1);
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_cat : dec\n");
+#endif    
   mem::decrement(s_cstr().c_str());
 #endif
   a_1 = s;
@@ -117,6 +166,9 @@ inline char* str_sub(const char* a_s,
   char* s = (char*)::malloc(ls+1);
   if(!s) return 0;
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_sub \"%s\"\n",a_s);
+#endif    
   mem::increment(s_cstr().c_str());
 #endif
   //abcdefgh  l=8
@@ -141,6 +193,9 @@ inline char* str_rep(const char* a_s,unsigned int a_pos,unsigned int a_sz,const 
   char* s = (char*)::malloc(ls+1);
   if(!s) return 0;
 #ifdef TOOLS_MEM
+#ifdef TOOLS_CSTR_DEBUG_MEM
+  ::printf("debug : str_rep \"%s\"\n",a_s);
+#endif    
   mem::increment(s_cstr().c_str());
 #endif
   ::memcpy(s,a_s,a_pos);
@@ -213,6 +268,84 @@ inline bool str_2d(const char* a_s,double& a_v) {
   return status;
 }
 */
+
+inline size_t str_lcpy(char *dst, const char *src, size_t siz) {
+  // Copy src to string dst of size siz.  At most siz-1 characters
+  // will be copied.  Always NUL terminates (unless siz == 0).
+  // Returns strlen(src); if retval >= siz, truncation occurred.
+  
+  // code taken from CERN-ROOT/core/clib to compile exlib/tests/h2root.cpp.
+  // strlcpy, strlcat are in string.h on BSD based systems.
+  
+  // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
+
+  /*register*/ char* d = dst;
+  /*register*/ const char* s = src;
+  /*register*/ size_t n = siz;
+
+  // Copy as many bytes as will fit :
+  if (n != 0 && --n != 0) {
+    do {
+      if ((*d++ = *s++) == 0) break;
+    } while (--n != 0);
+  }
+
+  // Not enough room in dst, add NUL and traverse rest of src :
+  if (n == 0) {
+    if (siz != 0) *d = '\0';  // NUL-terminate dst.
+    while (*s++);
+  }
+
+  return(s - src - 1); // count does not include NUL.
+}
+
+inline size_t str_lcat(char *dst, const char *src, size_t siz) {
+  // Appends src to string dst of size siz (unlike strncat, siz is the
+  // full size of dst, not space left).  At most siz-1 characters
+  // will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
+  // Returns strlen(src) + MIN(siz, strlen(initial dst)).
+  // If retval >= siz, truncation occurred.
+
+  // code taken from CERN-ROOT/core/clib to compile exlib/tests/h2root.cpp.
+  // strlcpy, strlcat are in string.h on BSD based systems.
+  
+  // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
+
+  /*register*/ char* d = dst;
+  /*register*/ const char* s = src;
+  /*register*/ size_t n = siz;
+  size_t dlen;
+
+  // Find the end of dst and adjust bytes left but don't go past end :
+  while (n-- != 0 && *d != '\0') d++;
+  dlen = d - dst;
+  n = siz - dlen;
+
+  if (n == 0) return(dlen + strlen(s));
+
+  while (*s != '\0') {
+    if (n != 1) {
+      *d++ = *s;
+      n--;
+    }
+    s++;
+  }
+  *d = '\0';
+
+  return(dlen + (s - src)); // count does not include NUL.
+}
+
+template <class VECTOR>
+inline bool str_2ds(char* a_s,const char* a_sep,VECTOR& a_v) {
+  a_v.clear();
+  const char* tok;
+  double d;
+  for (tok = ::strtok(a_s,a_sep);tok && *tok;tok = ::strtok(NULL,a_sep)) {
+    if(!str_2d(tok,d)) {a_v.clear();return false;}
+    a_v.push_back(d);    
+  }
+  return true;
+}
 
 }
 

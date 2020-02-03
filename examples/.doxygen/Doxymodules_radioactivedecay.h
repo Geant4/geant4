@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // $Id: Doxymodules_radioactivedecay.h 60059 2012-06-27 13:00:49Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_radioactivedecay.h

@@ -23,25 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GeometryCellStep implementation
 //
-// $Id: G4GeometryCellStep.cc 66356 2012-12-18 09:02:32Z gcosmo $
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4GeometryCellStep.cc
-//
+// Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCellStep.hh"
 
-G4GeometryCellStep::G4GeometryCellStep(const G4GeometryCell &preCell, 
-		 const G4GeometryCell &postCell)
-  : 
-  fPreGeometryCell(preCell), 
-  fPostGeometryCell(postCell), 
-  fCrossBoundary(false) 
-{}
+G4GeometryCellStep::G4GeometryCellStep(const G4GeometryCell& preCell, 
+                                       const G4GeometryCell& postCell)
+  : fPreGeometryCell(preCell), fPostGeometryCell(postCell)
+{
+}
 
 G4GeometryCellStep::~G4GeometryCellStep()
-{}
+{
+}

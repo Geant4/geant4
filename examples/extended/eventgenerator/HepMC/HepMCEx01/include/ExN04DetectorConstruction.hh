@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DetectorConstruction.hh
 /// \brief Definition of the ExN04DetectorConstruction class
 //
-// $Id: ExN04DetectorConstruction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04DetectorConstruction_h

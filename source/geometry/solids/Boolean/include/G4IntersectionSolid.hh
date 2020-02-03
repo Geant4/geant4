@@ -23,21 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4IntersectionSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
-//
-//
-// class G4IntersectionSolid
+// G4IntersectionSolid
 //
 // Class description:
 //
-// Class for description of intersection of two CSG solids.
+// Class for description of intersection of two solids.
 
-// History: 
-//
 // 12.09.98 V.Grichine: initial design and implementation
-// 28.10.98 V.Grichine: addition of two constructors with G4PlacedSolid
-//
 // --------------------------------------------------------------------
 #ifndef G4INTERSECTIONSOLID_HH
 #define G4INTERSECTIONSOLID_HH
@@ -86,6 +78,8 @@ class G4IntersectionSolid : public G4BooleanSolid
     G4IntersectionSolid& operator=(const G4IntersectionSolid& rhs);
       // Copy constructor and assignment operator.
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
@@ -115,8 +109,7 @@ class G4IntersectionSolid : public G4BooleanSolid
                                    
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
-
-} ;
+};
 
 #endif
 

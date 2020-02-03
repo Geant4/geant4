@@ -45,7 +45,26 @@ class PhysicsList: public G4VModularPhysicsList
 {
   public:
     PhysicsList();
+<<<<<<< HEAD
     virtual ~PhysicsList();
+=======
+   ~PhysicsList();
+
+    virtual void ConstructParticle();
+        
+    void AddPhysicsList(const G4String& name);
+    virtual void ConstructProcess();
+
+    void AddTrackingCut();       
+    void AddMaxStepSize();       
+
+  private:       
+  
+    G4String                      fEmName;
+    G4VPhysicsConstructor*        fEmPhysicsList;    
+    
+    PhysicsListMessenger*         fMessenger;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

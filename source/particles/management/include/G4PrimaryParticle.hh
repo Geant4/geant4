@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh 102267 2017-01-19 10:14:40Z gcosmo $
 //
 //
 
@@ -94,8 +93,8 @@ class G4PrimaryParticle
   G4PrimaryParticle & operator=(const G4PrimaryParticle &right);
   
   // equal operator  returns 'true' only if the same object (i.e comarison by pointer value)
-  G4int operator==(const G4PrimaryParticle &right) const;
-  G4int operator!=(const G4PrimaryParticle &right) const;
+  G4bool operator==(const G4PrimaryParticle &right) const;
+  G4bool operator!=(const G4PrimaryParticle &right) const;
   
  public: // with description
   void Print() const;
@@ -179,20 +178,20 @@ class G4PrimaryParticle
 
 };
 
-extern G4PART_DLL G4ThreadLocal G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator;
+extern G4PART_DLL G4Allocator<G4PrimaryParticle>*& aPrimaryParticleAllocator();
 
 inline void * G4PrimaryParticle::operator new(size_t)
 {
-  if (!aPrimaryParticleAllocator)
+  if (!aPrimaryParticleAllocator())
   {
-    aPrimaryParticleAllocator = new G4Allocator<G4PrimaryParticle>;
+    aPrimaryParticleAllocator() = new G4Allocator<G4PrimaryParticle>;
   }
-  return (void *) aPrimaryParticleAllocator->MallocSingle();
+  return (void *) aPrimaryParticleAllocator()->MallocSingle();
 }
 
 inline void G4PrimaryParticle::operator delete(void * aPrimaryParticle)
 {
-  aPrimaryParticleAllocator->FreeSingle((G4PrimaryParticle *) aPrimaryParticle);
+  aPrimaryParticleAllocator()->FreeSingle((G4PrimaryParticle *) aPrimaryParticle);
 }
 
 inline G4double G4PrimaryParticle::GetMass() const

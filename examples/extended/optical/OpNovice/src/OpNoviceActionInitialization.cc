@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: OpNoviceActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file OpNoviceActionInitialization.cc
 /// \brief Implementation of the OpNoviceActionInitialization class
@@ -33,7 +32,6 @@
 #include "OpNoviceRunAction.hh"
 #include "OpNoviceSteppingAction.hh"
 #include "OpNoviceStackingAction.hh"
-#include "OpNoviceSteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,13 +60,3 @@ void OpNoviceActionInitialization::Build() const
   SetUserAction(new OpNoviceSteppingAction());
   SetUserAction(new OpNoviceStackingAction());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose*
-               OpNoviceActionInitialization::InitializeSteppingVerbose() const
-{
-  return new OpNoviceSteppingVerbose();
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

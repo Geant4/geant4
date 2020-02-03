@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm1/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
+<<<<<<< HEAD
 // $Id: EventAction.cc 76293 2013-11-08 13:11:23Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,18 +46,22 @@
 
 EventAction::EventAction()
 :G4UserEventAction()
-{ }
+{ 
+  fTotalEnergyDeposit = 0.;
+  fNIEL = 0.;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- fTotalEnergyDeposit = 0.;
+  fTotalEnergyDeposit = 0.;
+  fNIEL = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,10 +70,7 @@ void EventAction::EndOfEventAction(const G4Event*)
 {
 
   G4AnalysisManager::Instance()->FillH1(4,fTotalEnergyDeposit);
-  
-  ////G4cout << " Energy deposit: "
-  ////       << G4BestUnit(fTotalEnergyDeposit,"Energy")
-  ////       << G4endl;
+  G4AnalysisManager::Instance()->FillH1(7,fNIEL);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -45,8 +45,8 @@ public:
 private:
   G4RKPropagation(const  G4RKPropagation &right);
   const G4RKPropagation & operator=(const G4RKPropagation & right);
-  G4int operator==(const G4RKPropagation & right) const;
-  G4int operator!=(const G4RKPropagation & right) const;
+  G4bool operator==(const G4RKPropagation & right) const;
+  G4bool operator!=(const G4RKPropagation & right) const;
 
 public:
 

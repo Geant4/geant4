@@ -1,7 +1,9 @@
-# $Id: basic.mac 93258 2015-10-14 08:34:50Z gcosmo $
 #
-/control/verbose 2
-/run/verbose 2
+/control/verbose 1
+/run/verbose 1
+#
+###/testem/det/wallMater Water
+###/testem/det/cavityMater Water_gas
 #
 /run/initialize
 #
@@ -12,5 +14,4 @@
 /analysis/h1/set 9 100  0  1 mm	#step size in wall
 #
 /run/printProgress 10000
-#
 /run/beamOn 200000

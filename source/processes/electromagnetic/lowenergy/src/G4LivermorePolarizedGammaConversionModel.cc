@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedGammaConversionModel.hh,v 1.2 2010-11-23 16:42:15 flongo Exp $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -110,7 +109,7 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
       
       // Access to elements
       
-      char* path = getenv("G4LEDATA");
+      char* path = std::getenv("G4LEDATA");
       
       G4ProductionCutsTable* theCoupleTable =
 	G4ProductionCutsTable::GetProductionCutsTable();
@@ -172,7 +171,7 @@ void G4LivermorePolarizedGammaConversionModel::ReadData(size_t Z, const char* pa
   
   if(!datadir) 
     {
-      datadir = getenv("G4LEDATA");
+      datadir = std::getenv("G4LEDATA");
       if(!datadir) 
 	{
 	  G4Exception("G4LivermorePolarizedGammaConversionModel::ReadData()",

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file LXeActionInitialization.hh
 /// \brief Definition of the LXeActionInitialization class
@@ -33,9 +32,13 @@
 
 #include "G4VUserActionInitialization.hh"
 
+<<<<<<< HEAD
 class LXeRecorderBase;
 
 class B4DetectorConstruction;
+=======
+class LXeDetectorConstruction;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 /// Action initialization class.
 ///
@@ -43,7 +46,11 @@ class B4DetectorConstruction;
 class LXeActionInitialization : public G4VUserActionInitialization
 {
   public:
+<<<<<<< HEAD
     LXeActionInitialization(LXeRecorderBase*);
+=======
+    LXeActionInitialization(const LXeDetectorConstruction* det);
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     virtual ~LXeActionInitialization();
 
     virtual void BuildForMaster() const;
@@ -52,7 +59,12 @@ class LXeActionInitialization : public G4VUserActionInitialization
     virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 
   private:
+<<<<<<< HEAD
     LXeRecorderBase* fRecorder;
+=======
+
+    const LXeDetectorConstruction* fDetector;
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 };
 
 #endif

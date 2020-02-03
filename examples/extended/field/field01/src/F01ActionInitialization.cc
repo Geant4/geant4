@@ -29,8 +29,6 @@
 
 #include "F01ActionInitialization.hh"
 #include "F01PrimaryGeneratorAction.hh"
-#include "F01RunAction.hh"
-#include "F01EventAction.hh"
 #include "F01SteppingVerbose.hh"
 
 #include "F01DetectorConstruction.hh"
@@ -52,7 +50,6 @@ F01ActionInitialization::~F01ActionInitialization()
 
 void F01ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new F01RunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,11 +57,6 @@ void F01ActionInitialization::BuildForMaster() const
 void F01ActionInitialization::Build() const
 {
   SetUserAction(new F01PrimaryGeneratorAction(fDetConstruction));
-
-  F01RunAction* runAction = new F01RunAction();
-  SetUserAction(runAction);
-  F01EventAction* eventAction = new F01EventAction(runAction);
-  SetUserAction(eventAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

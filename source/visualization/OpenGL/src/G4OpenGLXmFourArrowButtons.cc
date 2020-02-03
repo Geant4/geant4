@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmFourArrowButtons.cc 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent
 

@@ -27,7 +27,10 @@
 /// \brief Implementation of the HistoManager class
 //
 //
+<<<<<<< HEAD
 // $Id: HistoManager.cc 72248 2013-07-12 08:56:39Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

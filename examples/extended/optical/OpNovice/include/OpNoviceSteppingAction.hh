@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: OpNoviceSteppingAction.hh 69469 2013-05-05 21:42:35Z ihrivnac $
 //
 /// \file OpNoviceSteppingAction.hh
 /// \brief Definition of the OpNoviceSteppingAction class

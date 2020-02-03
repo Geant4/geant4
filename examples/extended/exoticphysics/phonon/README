@@ -4,7 +4,6 @@
  =================================================================
                          Daniel Brandt - SLAC
                        dbrandt@slac.stanford.edu
- $Id: README 76246 2013-11-08 11:17:29Z gcosmo $
 
 This example demonstrates how phonon propagation in cryogenic crystals
 can be simulated in Geant4.

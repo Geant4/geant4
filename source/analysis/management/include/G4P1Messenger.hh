@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The messenger class for P1 management.
 // It implements commands in /analysis/p1 directory.
@@ -67,6 +66,8 @@ class G4P1Messenger : public G4UImessenger
     std::unique_ptr<G4UIcommand>  fSetP1TitleCmd;   
     std::unique_ptr<G4UIcommand>  fSetP1XAxisCmd;   
     std::unique_ptr<G4UIcommand>  fSetP1YAxisCmd;  
+    std::unique_ptr<G4UIcommand>  fSetP1XAxisLogCmd;
+    std::unique_ptr<G4UIcommand>  fSetP1YAxisLogCmd;
 
     G4int  fXId;
     G4AnalysisMessengerHelper::BinData fXData; 

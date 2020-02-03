@@ -6,18 +6,52 @@
 
 This directory contains a set of dna examples.
 
+  Physics
+
    - dnaphysics 
        The dnaphysics example shows how to simulate track structures in liquid 
        water using the Geant4-DNA physics processes and models.
 
+<<<<<<< HEAD
+=======
+   - clustering 
+       Clustering application for direct damage extraction.
+
+   - icsd
+       This example shows how to use cross section models for DNA materials
+
+   - mfp
+       This example shows how to simulate mean free path in liquid water
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
    - microdosimetry 
        The microdosimetry example simulates the track of a 5 MeV proton in 
        liquid water. 
        Geant4 standard EM models are used in the World volume while Geant4-DNA 
        models are used in a Target volume, declared as a Region.
 
+   - microprox 
+       Computation of proximity functions in liquid water 
+
    - microyz 
+<<<<<<< HEAD
        Simulation of microdosimetry spectra (beta version)
+=======
+       Simulation of microdosimetry spectra
+
+   - range 
+       Simulation of ranges.
+
+   - slowing 
+       Simulation of slowing down spectra.
+
+   - splitting 
+       Use of variance reduction to improve the computational efficiency of
+       ionization.
+
+   - spower 
+       Simulation of stopping power.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
    - svalue
        This example shows how to simulate S-values in spheres of liquid water
@@ -27,9 +61,19 @@ This directory contains a set of dna examples.
        This example shows how to simulate W-values in liquid water
        using the Geant4-DNA physics processes and models.
 
+  Chemistry
+
    - chem1   Simple activation of the chemistry module.
    - chem2   Usage of TimeStepAction in the chemistry module.
    - chem3   Activate the full interactivity with the chemistry module.
+<<<<<<< HEAD
+=======
+   - chem4   Simulation of radiochemical yields with the chemistry module.
+   - chem5   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and 
+             G4EmDNAChemistry_option1    
+
+  Geometry and other
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
    - wholenucleardna 
        Description of the full nucleus
@@ -37,6 +81,19 @@ This directory contains a set of dna examples.
    - pdb4dna         
        Usage of the Protein Data Bank (PDB) file format to build geometries
 
+<<<<<<< HEAD
+=======
+   - wholeNuclearDNA 
+       Geometrical description of a full simplified cell nucleus.
+   
+   - dnadamage1 
+       Damage simulation on a chromatin fiber.
+
+   - neuron 
+       Irradiation of a realistic neuron cell.
+   
+   
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 See the README page inside each example for more detail.
 
 

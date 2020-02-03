@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.hh 82754 2014-07-08 14:06:13Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,8 +58,8 @@ class G4HeatedKleinNishinaCompton : public G4KleinNishinaCompton
 
 public:
 
-  G4HeatedKleinNishinaCompton(const G4ParticleDefinition* p = 0, 
-			      const G4String& nam = "Heated-Klein-Nishina");
+  explicit G4HeatedKleinNishinaCompton(const G4ParticleDefinition* p = nullptr, 
+				       const G4String& nam = "Heated-Klein-Nishina");
 
   virtual ~G4HeatedKleinNishinaCompton();
 
@@ -68,7 +67,7 @@ public:
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) final;
 
   inline void     SetElectronTemperature(G4double t){ fTemperature = t; };
   inline G4double GetElectronTemperature() { return fTemperature; };
@@ -76,8 +75,9 @@ public:
 private:
 
   // hide assignment operator
-  G4HeatedKleinNishinaCompton & operator=(const  G4HeatedKleinNishinaCompton &right);
-  G4HeatedKleinNishinaCompton(const  G4HeatedKleinNishinaCompton&);
+  G4HeatedKleinNishinaCompton & operator=
+  (const  G4HeatedKleinNishinaCompton &right) = delete;
+  G4HeatedKleinNishinaCompton(const  G4HeatedKleinNishinaCompton&) = delete;
 
   G4double fTemperature;  // electron temperature in energy units
 

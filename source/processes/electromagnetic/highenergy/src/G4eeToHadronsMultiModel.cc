@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc 82961 2014-07-21 09:20:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,8 +71,8 @@ G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver,
 {
   thKineticEnergy  = DBL_MAX;
   maxKineticEnergy = 4.521*GeV;  //crresponding to 10TeV in lab
-  fParticleChange  = 0;
-  cross = 0;
+  fParticleChange  = nullptr;
+  cross = nullptr;
   delta = 1.0*MeV;  //for bin width
 }
 
@@ -196,16 +195,15 @@ void G4eeToHadronsMultiModel::SampleSecondaries(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eeToHadronsMultiModel::PrintInfo()
+void G4eeToHadronsMultiModel::ModelDescription(std::ostream& outFile) const
 {
   if(verbose > 0) {
     G4double e1 = 0.5*thKineticEnergy*thKineticEnergy/electron_mass_c2 
       - 2.0*electron_mass_c2; 
     G4double e2 = 0.5*maxKineticEnergy*maxKineticEnergy/electron_mass_c2 
       - 2.0*electron_mass_c2; 
-    G4cout << "      e+ annihilation into hadrons active from "
-           << e1/GeV << " GeV to " << e2/GeV << " GeV"
-           << G4endl;
+    outFile << "      e+ annihilation into hadrons active from "
+	    << e1/GeV << " GeV to " << e2/GeV << " GeV" << G4endl;
   }
 }
 

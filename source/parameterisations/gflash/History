@@ -1,4 +1,3 @@
-$Id: History 102305 2017-01-20 14:20:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,17 +15,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-Nov 2nd, 2016, M. Verderi (gflash-V10-01-02)
------------------------
-- Fixed memory leak in GVFlashShowerParameterisation.
 
-Jul 7th, 2016, G. Cosmo
+Oct 30st, 2019, A. Zaborowska (gflash-V10-05-01)
+- Add possibility to use sensitive detector from parallel world.
+
+Jan 31st, 2019, I.Hrivnacova (gflash-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+Dec 19th, 2017, G.Cosmo (gflash-V10-04-00)
+- Fixed self-consistency in GVFlashHomoShowerTuning header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+Nov 2nd, 2016, M. Verderi (gflash-V10-02-02)
 -----------------------
-- Removed redundant condition in GFlashHitMaker::make().
+- Removend redundant condition in GFlashHitMaker::make().
   Addressing problem report #1876.
 
-Jun 6th, 2016, M. Verderi (gflash-V10-01-01)
+Jul 7th, 2016, G. Cosmo (gflash-V10-02-01)
+-----------------------
+- Removend redundant condition in GFlashHitMaker::make().
+  Addressing problem report #1876.
+
+Jun 6th, 2016, M. Verderi (gflash-V10-02-00)
 -------------------------
 - Fix bug 1867: missing G4VSensitiveDetector include in G4VGFlashSensitiveDetector.
 

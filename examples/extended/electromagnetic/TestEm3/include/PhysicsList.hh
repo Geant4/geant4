@@ -23,10 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 /// \file electromagnetic/TestEm3/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
 // $Id: PhysicsList.hh 82333 2014-06-16 09:57:47Z gcosmo $
+=======
+/// \file PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTrackingManager.cc 91584 2015-07-27 13:01:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -96,7 +95,7 @@ void G4ITTrackingManager::EndTracking(G4Track* track)
     fpTrackingInteractivity->GetSteppingVerbose()->TrackingEnded(track);
 #endif
   }
-  G4TrackList::Pop(track);
+
   G4ITTrackHolder::Instance()->PushToKill(track);
 }
 

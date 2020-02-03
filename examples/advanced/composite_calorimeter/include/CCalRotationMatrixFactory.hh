@@ -52,9 +52,9 @@ public:
 
   G4RotationMatrix* findMatrix(const G4String&);
   G4RotationMatrix* AddMatrix(const G4String& name, 
-			      G4double th1, G4double phi1,  //Axis angles
-			      G4double th2, G4double phi2,  //in rads
-			      G4double th3, G4double phi3); //
+                              G4double th1, G4double phi1,  //Axis angles
+                              G4double th2, G4double phi2,  //in rads
+                              G4double th3, G4double phi3); //
 
 private:
   CCalRotationMatrixFactory();

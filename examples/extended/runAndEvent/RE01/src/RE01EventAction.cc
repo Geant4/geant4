@@ -26,7 +26,10 @@
 /// \file runAndEvent/RE01/src/RE01EventAction.cc
 /// \brief Implementation of the RE01EventAction class
 //
+<<<<<<< HEAD
 // $Id: RE01EventAction.cc 90679 2015-06-08 07:58:19Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "RE01EventAction.hh"

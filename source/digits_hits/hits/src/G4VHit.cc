@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHit.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 // G4VHit
@@ -37,7 +36,7 @@ G4VHit::G4VHit()
 G4VHit::~G4VHit()
 {;}
 
-G4int G4VHit::operator==(const G4VHit &) const
+G4bool G4VHit::operator==(const G4VHit &) const
 { return false; }
 
 void G4VHit::Draw()

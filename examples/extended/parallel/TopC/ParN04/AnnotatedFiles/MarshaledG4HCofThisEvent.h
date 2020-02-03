@@ -1,4 +1,4 @@
-/// \file parallel/ParN04/AnnotatedFiles/MarshaledG4HCofThisEvent.h
+/// \file MarshaledG4HCofThisEvent.h
 /// \brief Definition of the MaraledG4HCofisEvent class
 //
 // This file was generated automatically by marshalgen.

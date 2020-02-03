@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITModelManager.cc 87375 2014-12-02 08:17:28Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -34,112 +33,62 @@
 // -------------------------------------------------------------------
 
 #include "G4ITModelManager.hh"
+#include "G4VITStepModel.hh"
 #include "G4ITType.hh"
 #include "G4UnitsTable.hh"
 
-using namespace std;
 
-G4ITModelManager::G4ITModelManager() :
-    fIsInitialized(FALSE)
+G4ITModelManager::G4ITModelManager()
+    : fIsInitialized(false)
 {
-  ;
 }
 
-G4ITModelManager::~G4ITModelManager()
-{
-  //dtor
-  mapModels::iterator it;
-
-  for (it = fModels.begin(); it != fModels.end(); it++)
-  {
-    delete it->second;
-  }
-  fModels.clear();
-}
-
-G4ITModelManager::G4ITModelManager(const G4ITModelManager& right)
-{
-  mapModels::const_iterator it = right.fModels.begin();
-
-  for (; it != right.fModels.end(); it++)
-  {
-    fModels[it->first] = it->second->Clone();
-  }
-
-  fIsInitialized = right.fIsInitialized;
-}
-
-G4ITModelManager& G4ITModelManager::operator=(const G4ITModelManager& rhs)
-{
-  if (this == &rhs) return *this; // handle self assignment
-  //assignment operator
-  return *this;
-}
+G4ITModelManager::~G4ITModelManager() = default;
 
 void G4ITModelManager::Initialize()
 {
-  mapModels::iterator it = fModels.begin();
+    std::sort(fModelInfoList.begin(), fModelInfoList.end(),
+              [](const ModelInfo& lhs, const ModelInfo& rhs) {
+                  return lhs.fStartingTime < rhs.fStartingTime;
+              });
 
-  for (; it != fModels.end(); it++)
-  {
-    G4VITStepModel* model = it->second;
-    if (model != 0)
+    for (const auto& modelInfo : fModelInfoList)
     {
-      model->Initialize();
+        modelInfo.fpModel->Initialize();
     }
-  }
+
+    fIsInitialized = true;
 }
 
-void G4ITModelManager::SetModel(G4VITStepModel* aModel, G4double startingTime)
+void G4ITModelManager::SetModel(G4VITStepModel* pModel,
+                                const G4double startingTime,
+                                const G4double endTime)
 {
-  assert(fIsInitialized == FALSE);
-  if (fIsInitialized == true)
-  {
-    G4ExceptionDescription exceptionDescription;
-    exceptionDescription
-        << "You are trying to insert a new model after initialization of th model manager.";
-    G4Exception("G4ITModelManager::SetModel", "ITModelManager001",
-                FatalErrorInArgument, exceptionDescription);
-  }
-  fModels[startingTime] = aModel;
-}
-
-G4VITStepModel* G4ITModelManager::GetModel(const G4double globalTime)
-{
-  if (!fModels.empty())
-  {
-    mapModels::reverse_iterator rit = fModels.rbegin();
-    if (rit != fModels.rend())
+    assert(pModel != nullptr);
+    if (fIsInitialized)
     {
-      if (globalTime > rit->first)
-      {
-        return rit->second;
-      }
-      else
-      {
-        mapModels::iterator it = fModels.begin();
+        G4ExceptionDescription exceptionDescription;
+        exceptionDescription
+            << "You are trying to insert a new model after initializing the model manager.";
+        G4Exception("G4ITModelManager::SetModel", "ITModelManager001",
+                    FatalErrorInArgument, exceptionDescription);
+    }
 
-        if (globalTime < it->first)
+    fModelInfoList.emplace_back(ModelInfo({ startingTime, endTime, std::unique_ptr<G4VITStepModel>(pModel) }));
+}
+
+std::vector<G4VITStepModel*> G4ITModelManager::GetActiveModels(G4double globalTime) const
+{
+    std::vector<G4VITStepModel*> activeModels;
+
+    for (const auto& modelInfo : fModelInfoList)
+    {
+        if (modelInfo.fStartingTime < globalTime && modelInfo.fEndTime > globalTime)
         {
-          G4ExceptionDescription exceptionDescription;
-          exceptionDescription << "No model was found at time ";
-          exceptionDescription << G4BestUnit(globalTime, "Time");
-          exceptionDescription << ". The first model is registered at time : ";
-          exceptionDescription << G4BestUnit(it->first, "Time") << ". ";
-          G4Exception("G4ITModelManager::GetModel", "ITModelManager003",
-                      FatalErrorInArgument, exceptionDescription);
+            activeModels.push_back(modelInfo.fpModel.get());
         }
-
-        it = fModels.lower_bound(globalTime);
-
-        if (it != fModels.end()) return it->second;
-      }
     }
-  }
 
-  G4ExceptionDescription exceptionDescription;
-  exceptionDescription << "No model was found.";
-  G4Exception("G4ITModelManager::GetModel", "ITModelManager004",
-              FatalErrorInArgument, exceptionDescription);
-  return 0;
+    return activeModels;
 }
+

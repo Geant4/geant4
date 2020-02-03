@@ -27,7 +27,10 @@
 /// \brief Implementation of the ExP01RunAction class
 //
 //
+<<<<<<< HEAD
 // $Id: ExP01RunAction.cc 71791 2013-06-24 14:08:28Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

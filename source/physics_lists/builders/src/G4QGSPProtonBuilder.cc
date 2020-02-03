@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +34,7 @@
 // 17.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
 //             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -44,12 +44,13 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4HadronicParameters.hh"
 
 
 G4QGSPProtonBuilder::
 G4QGSPProtonBuilder(G4bool quasiElastic) 
  {
-   theMin = 12*GeV;
+   theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
    theModel = new G4TheoFSGenerator("QGSP");
 
    theStringModel = new G4QGSModel< G4QGSParticipants >;
@@ -73,13 +74,8 @@ Build(G4ProtonInelasticProcess * aP)
  {
    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
+   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
    aP->RegisterMe(theModel);
- }
-
-void G4QGSPProtonBuilder::
-Build(G4HadronElasticProcess * )
- {
  }
 
 G4QGSPProtonBuilder::~G4QGSPProtonBuilder() 
@@ -90,4 +86,3 @@ G4QGSPProtonBuilder::~G4QGSPProtonBuilder()
    delete theQGSM;
  }
 
- // 2002 by J.P. Wellisch

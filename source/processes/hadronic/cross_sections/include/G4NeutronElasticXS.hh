@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.hh 93682 2015-10-28 10:09:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -34,12 +33,10 @@
 //
 // Author  Ivantchenko, Geant4, 3-AUG-09
 //
-// Modifications:
-//
  
 // Class Description:
 // This is a base class for neutron elastic hadronic cross section based on
-// data files from G4NEUTRONXSDATA data set 
+// data files from G4PARTICLEXSDATA data set 
 // Class Description - End
 
 #ifndef G4NeutronElasticXS_h
@@ -47,6 +44,7 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include "G4Threading.hh"
 #include <vector>
 
 const G4int MAXZEL = 93;
@@ -56,48 +54,70 @@ class G4ParticleDefinition;
 class G4Element;
 class G4PhysicsVector;
 class G4ComponentGGHadronNucleusXsc;
-class G4HadronNucleonXsc;
+class G4NistManager;
 
 class G4NeutronElasticXS : public G4VCrossSectionDataSet
 {
-public: // With Description
+public: 
 
-  G4NeutronElasticXS();
+  explicit G4NeutronElasticXS();
 
-  virtual ~G4NeutronElasticXS();
+  ~G4NeutronElasticXS() final;
     
   static const char* Default_Name() {return "G4NeutronElasticXS";}
 
-  virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, 
-			     G4int Z, const G4Material*);
+			     G4int Z, const G4Material*) final;
 
-  virtual
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
+			 const G4Element*, const G4Material*) final;
+
   G4double GetElementCrossSection(const G4DynamicParticle*, 
-				  G4int Z, const G4Material* mat=0); 
+			          G4int Z, const G4Material*) final; 
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+                              const G4Isotope* iso,
+                              const G4Element* elm,
+                              const G4Material* mat) final;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  const G4Isotope* SelectIsotope(const G4Element*, 
+                                 G4double kinEnergy, G4double logE) final;
+
+  void BuildPhysicsTable(const G4ParticleDefinition&) final;
+
+  void CrossSectionDescription(std::ostream&) const final;
+
+  G4double IsoCrossSection(G4double ekin, G4double logE, G4int Z, G4int A);
 
 private: 
 
-  void Initialise(G4int Z, G4DynamicParticle* dp = 0, const char* = 0);
+  void Initialise(G4int Z);
+
+  void InitialiseOnFly(G4int Z);
+
+  const G4String& FindDirectoryPath();
+
+  G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4NeutronElasticXS & operator=(const G4NeutronElasticXS &right);
   G4NeutronElasticXS(const G4NeutronElasticXS&);
   
+  G4NistManager* nist;
   G4ComponentGGHadronNucleusXsc* ggXsection;
-  G4HadronNucleonXsc* fNucleon;
+  const G4ParticleDefinition* neutron;
 
-  const G4ParticleDefinition* proton;
+  std::vector<G4double> temp;
 
-  static std::vector<G4PhysicsVector*>* data;
-  static G4double  coeff[MAXZEL];
+  static G4PhysicsVector* data[MAXZEL];
+  static G4double coeff[MAXZEL];
+  static G4double aeff[MAXZEL];
+  static G4String gDataDirectory;
 
   G4bool  isMaster;
 
+#ifdef G4MULTITHREADED
+  static G4Mutex neutronElasticXSMutex;
+#endif
 };
 
 #endif

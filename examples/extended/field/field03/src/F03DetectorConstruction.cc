@@ -27,7 +27,10 @@
 /// \brief Implementation of the F03DetectorConstruction class
 //
 //
+<<<<<<< HEAD
 // $Id: F03DetectorConstruction.cc 77655 2013-11-27 08:51:59Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +78,7 @@ F03DetectorConstruction::F03DetectorConstruction()
    fRadThickness(       100.*mm),
    fGasGap(             100.*mm),
    fDetGap(               1.*mm),
-   fFoilNumber(1)
+   fFoilNumber(2)
 {
   fDetectorMessenger = new F03DetectorMessenger(this);
 
@@ -236,6 +239,8 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
   ComputeCalorParameters();
   PrintCalorParameters();
 
+  G4bool checkOverlaps = true;
+
   fSolidWorld = new G4Tubs("World",                        // its name
                    0.,fWorldSizeR,fWorldSizeZ/2.,0.,twopi);// its size
 
@@ -249,53 +254,48 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
                                   fLogicWorld,             // its logical volume
                                   0,                       // its mother  volume
                                   false,                   // no boolean op.
-                                  0);                      // copy number
+                                  0,                       // copy number
+                                  checkOverlaps);          // checkOverlaps
 
   // TR radiator envelope
-
   G4double radThick = fFoilNumber*(fRadThickness + fGasGap) + fDetGap;
+  G4double zRad = fZAbsorber - 0.5*(radThick + fAbsorberThickness);
 
-  G4double zRad = fZAbsorber - 20*cm - 0.5*radThick;
   G4cout << "zRad = " << zRad/mm << " mm" << G4endl;
-
-  radThick *= 1.02;
   G4cout << "radThick = " << radThick/mm << " mm" << G4endl;
   G4cout << "fFoilNumber = " << fFoilNumber << G4endl;
   G4cout << "fRadiatorMat = " << fRadiatorMat->GetName() << G4endl;
   G4cout << "WorldMaterial = " << fWorldMaterial->GetName() << G4endl;
  
-  fSolidRadiator = new G4Tubs("Radiator",0.0,
-                             1.01*fAbsorberRadius,
-                             0.5*radThick,0.0, twopi);
+  fSolidRadiator = new G4Tubs("Radiator", 0.0, fAbsorberRadius, 0.5*radThick,
+                         0.0, twopi);
 
-  fLogicRadiator = new G4LogicalVolume(fSolidRadiator,
-                                      fWorldMaterial,
-                                      "Radiator");
+  fLogicRadiator = new G4LogicalVolume(fSolidRadiator, fWorldMaterial, 
+                          "Radiator");
 
-  fPhysiRadiator = new G4PVPlacement(0,
-                                    G4ThreeVector(0,0,zRad),
-                                    "Radiator", fLogicRadiator,
-                                    fPhysiWorld, false, 0);
+  fPhysiRadiator = new G4PVPlacement(0, G4ThreeVector(0,0,zRad),
+                          "Radiator", fLogicRadiator, fPhysiWorld, false, 0, 
+                          checkOverlaps);
 
-  fSolidRadSlice = new G4Tubs("RadSlice",0.0,
-                                fAbsorberRadius,0.5*fRadThickness,0.0,twopi);
 
-  fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat,
-                                       "RadSlice",0,0,0);
+  fSolidRadSlice = new G4Tubs("RadSlice",0.0, fAbsorberRadius, 0.5*fRadThickness,
+                          0.0, twopi);
 
-  G4double zModule, zRadiator;
-  zModule = zRad + 0.5*radThick/1.02;
-  G4cout << "zModule = " << zModule/mm << " mm" << G4endl;
+  fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat, "RadSlice");
+
+  // Radiator slice
+  G4double radSliceThick = fRadThickness +fGasGap;
+  G4double zStart = 0.5*(-radThick + radSliceThick) + fDetGap;
+     // start on the board of radiator enevelope + det gap
 
   for (G4int j=0;j<fFoilNumber;j++)
     {
-      zRadiator = zModule - j*(fRadThickness + fGasGap);
-      G4cout << zRadiator/mm << " mm" << "\t";
-      //   G4cout << "j = " << j << "\t";
+      G4double zSlice = zStart + j*radSliceThick;
+      G4cout << zSlice/mm << " mm" << "\t";
 
-      fPhysiRadSlice = new G4PVPlacement(0,G4ThreeVector(0.,0.,zRadiator-zRad),
+      fPhysiRadSlice = new G4PVPlacement(0,G4ThreeVector(0.,0., zSlice),
                                          "RadSlice",fLogicRadSlice,
-                                          fPhysiRadiator,false,j);
+                                          fPhysiRadiator,false,j, checkOverlaps);
     }
   G4cout << G4endl;
 
@@ -316,7 +316,8 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
                                      fLogicAbsorber,
                                      fPhysiWorld,
                                      false,
-                                     0);
+                                     0,
+                                     checkOverlaps);
 
   return fPhysiWorld;
 }

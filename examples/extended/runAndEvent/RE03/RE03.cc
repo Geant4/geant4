@@ -27,8 +27,15 @@
 /// \brief Main program of the runAndEvent/RE03 example
 //
 //
+<<<<<<< HEAD
 // $Id: $
 // 
+=======
+//
+
+#include "G4Types.hh"
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else

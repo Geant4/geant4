@@ -1,4 +1,3 @@
-$Id$
 
 ///\file ".README.HowToRunMT.txt"
 ///\brief Examples Tips How To Run MT README page

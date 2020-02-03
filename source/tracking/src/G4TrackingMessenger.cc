@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingMessenger.cc 77241 2013-11-22 09:55:47Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -91,12 +90,12 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
   VerboseCmd->SetGuidance("Set Verbose level of tracking category.");
   VerboseCmd->SetGuidance(" -1 : Silent.");
   VerboseCmd->SetGuidance(" 0 : Silent.");
-  VerboseCmd->SetGuidance(" 1 : Minium information of each Step.");
+  VerboseCmd->SetGuidance(" 1 : Minimum information of each Step.");
   VerboseCmd->SetGuidance(" 2 : Addition to Level=1, info of secondary particles.");
   VerboseCmd->SetGuidance(" 3 : Addition to Level=1, pre/postStepoint information");
   VerboseCmd->SetGuidance("     after all AlongStep/PostStep process executions.");
   VerboseCmd->SetGuidance(" 4 : Addition to Level=3, pre/postStepoint information");
-  VerboseCmd->SetGuidance("     at each AlongStepPostStep process execuation."); 
+  VerboseCmd->SetGuidance("     at each AlongStepPostStep process execution."); 
   VerboseCmd->SetGuidance(" 5 : Addition to Level=4, proposed Step length information");
   VerboseCmd->SetGuidance("     from each AlongStepPostStep process."); 
   VerboseCmd->SetParameterName("verbose_level",true);

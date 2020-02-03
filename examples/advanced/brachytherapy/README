@@ -7,8 +7,13 @@
                       ---------------------
 
 
+<<<<<<< HEAD
 The brachytherapy example is currently maintained and upgraded by Susanna Guatelli (1), with the support of
 Pablo Cirrone(2), Luciano Pandola (3), Dean Cutajar (1) and Stuart P. George (1)
+=======
+The brachytherapy example is currently maintained and upgraded by Susanna Guatelli (1), Albert Le (1) and Dean Cutajar (1), with the support of
+Luciano Pandola (2)  
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 1. Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia.
 2. LNS, INFN, Catania, Italy.
@@ -27,28 +32,58 @@ S. Agostinelli, F. Foppiano, S. Garelli, S. Guatelli, M. G. Pia, M. Tropeano
 ----> Introduction.                                                     
                                                                        
 Brachytherapy example simulates  the energy deposit in a water phantom, produced by: 
+<<<<<<< HEAD
 1) Iridium source (endocavitary brachytherapy).                         
 2) Iodium  source (interstitial brachytherapy).                         
 3) Leipzig Applicator (superficial brachytherapy).   
+=======
+1) Iridium sources (Flexisource and TG186).                     
+2) Iodine sources (Bebig Isoseed and Oncura 6711 I-125).           
+3) Leipzig Applicator with an iridium source (model from the Istituto Tumori, Genova, Italy).   
+
+The Flexisource, an Ir-192 source manufactured by Nucletron, an Elekta company, is a source commonly used for high dose rate brachytherapy treatments. 
+The geometry of the Flexisource was adapted from D. Granero, J. Pérez-Calatayud, E. Casal, et al, 
+"A dosimetric study on the Ir-192 high dose rate Flexisource", Med. Phys. 33 (12), 2006, 4578-82.
+
+The TG186 source is a generic Ir-192 source created to provide developers of model based dose engines with a method of validating new dose calculation techniques.
+Details of the TG186 source may be obtained from Facundo Ballester, Åsa Carlsson Tedgren, Domingo Granero, et al,
+"A generic high-dose rate 192Ir brachytherapy source for evaluation of model-based dose calculations beyond the TG-43 formalism", Med. Phys. 42, 2015, 3048-62
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 In particular in this example it is shown how to:
 - model a radioactive source  in terms of radiation field and geometry
 - model the radiation field with the General Particle Source   
 - calculate the energy deposition in a phantom by means of the G4 scoring mesh
 - define the physics by means of a Geant4 Modular Physics List
+<<<<<<< HEAD
 - switch different physics approaches to model electromagnetic physics
 - save results in an analysis ROOT file using the Geant4 analysis component.               
+=======
+- save results in an analysis ROOT file              
+- calculate the dose rate distribution along the main axis of the source
+- compare the calculated dose rate distribution to reference data. 
+
+In the case of the example, the dose rate distribution of a Flexisource is compared to D. Granero, 
+J. Pérez-Calatayud, E. Casal, et al,"A dosimetric study on the Ir-192 high dose rate Flexisource", Med. Phys. 33 (12), 2006, 4578-82. 
+The dose rate distribution of the Oncura 6711 I-125 source is compared to J. Dolan, Z. Lia, J. F. Williamson, "Monte Carlo and experimental
+dosimetry of an I-125 brachytherapy seed", Med. Phys. 33(12), 2006.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 The example can be executed in multithreading mode
 
 ------------------------------------------------------------------------
 ----> 1.Experimental set-up.                                            
 
+<<<<<<< HEAD
 The default source is an Ir-131 source set in the center of the phantom.
 The phantom is a box with size 30 cm. The phantom is set in the World volume filled 
 with air.
 
 
+=======
+The default source is a Ir-192 Flexisource set in the center of a water phantom with size 30 cm. 
+The phantom is set in the World volume filled with air.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 The primary radiation field is defined by means of the GeneralParticleSource                           
 -------------------------------------------------------------------------
@@ -71,9 +106,15 @@ in the brachytherapy.root file.
 ----> 3.How to run the example.                                         
 
 - Batch mode:
+<<<<<<< HEAD
+=======
+  $G4WORKDIR/bin/Linux-g++/Brachy FlexiSourceMacro.mac  
+  $G4WORKDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac      
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   $G4WORKDIR/bin/Linux-g++/Brachy IridiumSourceMacro.mac                
-  $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac       
-  $G4WORKDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac  
+  $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac (model of the Bebig Isoseed I-125)  
+  $G4WORKDIR/bin/Linux-g++/Brachy OncuraIodineSourceMacro.mac (model of the Oncura 6711 I-125)         
+  $G4WORKDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac 
                                                                         
 - Interative mode:                                                      
   3) $G4WORKDIR/bin/Linux-g++/Brachy
@@ -93,7 +134,27 @@ This radiation field is defined in:
 iodine_source_primary.mac and iridium_source_primary.mac
 
 2) Model the radioactive Decay. The primary particle is the radionuclide.
+<<<<<<< HEAD
 This option is modelled in iodine_decay.mac and iridium_decay.mac
+=======
+This option is modelled in iodine_decay.mac and TG186_iridium_decay.mac
+
+The GPS macros are executed in VisualisationMacro.mac by default, FlexiSourceMacro.mac, IodineSourceMacro.mac, LeipzigSourceMacro.mac
+
+- The Flexisource is the default source of the example.
+- In VisualisationMacro.mac the source is the default one. iridium_source_primary.mac is executed to define the radiation field emerging from the iridium core.
+- In FlexiSourceMacro.mac the Flexi Ir source geometry is selected via interactive command. The radiation field is defined in the iridium_source_primary.mac.
+- In IodineSourceMacro.mac, the Bebig Isoseed I-125  brachytherapy source  is modelled. The radiation field is modelled in terms of emitted photons in iodine_source_primary.mac. 
+  Alternatively the radioactive decay of I can be modelled using teh macro iodine_decay.mac.
+- In LeipzigSourceMacro.mac, A Leipzig applicator (design provided by Istituto Tumori, Genova) is modelled. The iridium_source_leipzig_primary.mac defines the radiation field of the Ir core.
+- The TG186SourceMacro.mac models the reference bIr brachytherapy source. The radiation field can be either defined with the iridium_source_primary.mac (spectrum of the emitted photons) or with TG186_iridium_decay.mac (model of the Ir decay).
+- OncuraIodineSourceMacro.mac models both the geometry and the radioactive decay of the Oncura 6711 I-125 source.
+--------------------------------------------------------------------------------
+----> 5. Physics List
+
+The electromagnetic Livermore Low Energy physics is active as well as the radioactive decay.
+The cut is 0.05 mm.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 The GPS macros are executed in IridiumSourceMacro.mac, IodiumSourceMacro.mac, LeipzigSourceMacro.mac
 ------------------------------------------------------------------------
@@ -110,20 +171,60 @@ The output is:
 
 - ASCII file EnergyDeposition.out, with xx (mm), yy(mm), zz(mm), and energy deposition (keV), in the phantom.
   By default:
+<<<<<<< HEAD
   EnergyDeposition_iodine.out contains the Edep when Iodine source is selected
   EnergyDeposition_iridium.out contains the Edep when Iridium source is selected
   EnergyDeposition_Leipzig.out contains the Edep when the Iridium source with Leipzig applicator is selected
+=======
+  EnergyDeposition_Flexi.out contains the Edep when the Flexi source is selected.
+  EnergyDeposition_iodine.out contains the Edep when Iodine Bebig Isoseed source is selected.
+  EnergyDeposition_TG186.out contains the Edep when the TG186 source is selected.
+  EnergyDeposition_Leipzig.out contains the Edep when the Iridium source with Leipzig applicator is selected.
+  EnergyDeposition_Oncura.out contains the Edep when the Iodine Oncura 6711 source is selected. 
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 - brachytherapy.root, containing 
   - an ntuple with the 3D energy deposition in the phantom. The macro macro.C is provided as example 
     to open brachytherapy.root in ROOT interactive session and to plot the results of the simulation. 
     The ROOT file will be created if the example is built with the WITH_ANALYSIS_USE=ON option (see section 2).                   
+<<<<<<< HEAD
   - 1D histogram withe the plot of energy spectrum of gamma emitted by the radioactive decay when the Ir or I decay is modelled
    (see section 4). plot_primary.C is provided as example to open brachytherapy.root and to plot the energy    spectra                                                                
 
 -------------------------------------------------------------------------------
 ----> 7.Visualisation                                                     
+=======
+  - 1D histogram withe the plot of energy spectrum of gamma emitted by the radioactive decay when gamma are generated directly as 
+    primary particles or whenthey derive from Radioactive Decay(see section 4). 
+    plot_primary.C is provided as example to open brachytherapy.root and to plot the energy spectra                                                                
+
+-------------------------------------------------------------------------------
+----> 8.Visualisation                                                     
+
+A macro is provided ad example of visualisation:  VisualisationMacro.mac. 
+
+-------------------------------------------------------------------------------
+-----> 9. Comparison to reference data
+
+The ROOT macros macro.C and plot_primary.C are provided to plot the results of the simulation, contained
+in the brachytherapy.root file. 
+
+The ROOT macro TG43_relative_dose.C has brachytherapy.root as input file. It calculates the dose rate distribution along the main axis of 
+the brachytherapy source. The dose rate is normalised to 1 at 1 cm distance from the centre. 
+The output file is geant4_dose.txt with two columns: 
+distance from the centre (cm) dose rate distribution
+
+The user can then compare the dose rate distribution calculated with the example to reference data.
+
+Directory "comparison":
+As an example, the dose rate distribution calculated with the Flexisource is compared to reference data from D. Granero, J. Pérez-Calatayud, E. Casal, et al,  "A dosimetric study on the Ir-192 high dose rate Flexisource", Med. Phys. 33 (12), 2006, 4578-82.
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 a macro is provided ad example of visualisation:  VisualisationMacro.mac 
+
+
+-----> 10. Regression testing of Geant4
+- the macros to run are in test_macro
+- the results should be processed with analysis.C 
 
 

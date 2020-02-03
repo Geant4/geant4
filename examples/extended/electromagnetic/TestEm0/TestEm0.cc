@@ -27,10 +27,17 @@
 /// \brief Main program of the electromagnetic/TestEm0 example
 //
 //
+<<<<<<< HEAD
 // $Id: TestEm0.cc 66241 2012-12-13 18:34:42Z gunter $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+=======
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Electron_aq.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //
@@ -69,7 +68,7 @@ G4Electron_aq* G4Electron_aq::Definition()
     //      );
 
     G4double mass = 1 * g / Avogadro * c_squared;
-    anInstance = new G4MoleculeDefinition(name, mass, 4.9e-9 * (m * m / s), 1,
+    anInstance = new G4MoleculeDefinition(name, mass, 4.9e-9 * (m * m / s), -1,
                                           1, 0.23 * nm);
     // radius from K.D. Jordan, Sciencem vol. 306 p.618
 

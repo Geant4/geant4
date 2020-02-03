@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticProcess.hh 90262 2015-05-22 09:03:22Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -51,15 +50,12 @@ class G4HadronElasticProcess : public G4HadronicProcess
 {
 public:
 
-  G4HadronElasticProcess(const G4String& procName = "hadElastic");
+  explicit G4HadronElasticProcess(const G4String& procName = "hadElastic");
 
-  virtual ~G4HadronElasticProcess();
+  ~G4HadronElasticProcess() override;
  
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-					  const G4Step& aStep);
-
-  // initialise thresholds
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+                                  const G4Step& aStep) override;
 
   // set internal limit
   virtual void SetLowestEnergy(G4double);
@@ -67,7 +63,7 @@ public:
   // obsolete method - will be removed
   virtual void SetLowestEnergyNeutron(G4double);
 
-  virtual void ProcessDescription(std::ostream& outFile) const;
+  void ProcessDescription(std::ostream& outFile) const override;
 
   // enable sampling of low-mass diffraction process
   void SetDiffraction(G4HadronicInteraction*, G4VCrossSectionRatio*);
@@ -78,8 +74,8 @@ private:
   G4HadronElasticProcess& operator=(const G4HadronElasticProcess &right);
   G4HadronElasticProcess(const G4HadronElasticProcess& );
 
-  G4double lowestEnergy;
-  G4bool   isInitialised;
+  void PrintWarning(const G4String&) const;
+
   G4HadronicInteraction* fDiffraction;
   G4VCrossSectionRatio*  fDiffractionRatio;
 };

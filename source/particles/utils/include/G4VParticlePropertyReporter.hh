@@ -29,7 +29,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticlePropertyReporter.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // ---------------------------------------------------------------
@@ -54,10 +53,10 @@ class G4VParticlePropertyReporter
   
  public:
   // equality operators
-  G4int operator==(const G4VParticlePropertyReporter &right) const 
+  G4bool operator==(const G4VParticlePropertyReporter &right) const
   {   return (this == &right);    }
   
-  G4int operator!=(const G4VParticlePropertyReporter &right) const 
+  G4bool operator!=(const G4VParticlePropertyReporter &right) const
   {   return (this != &right);    }
   
  public:

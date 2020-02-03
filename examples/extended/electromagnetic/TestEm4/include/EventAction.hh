@@ -27,7 +27,10 @@
 /// \brief Definition of the EventAction class
 //
 //
+<<<<<<< HEAD
 // $Id: EventAction.hh 75839 2013-11-06 17:27:26Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 

@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SmartVoxelHeader.hh 84209 2014-10-10 14:46:37Z gcosmo $
-//
-// class G4SmartVoxelHeader
+// G4SmartVoxelHeader
 //
 // Class description:
 //
@@ -49,9 +46,8 @@
 //   - Minimum and maximum equivalent slice nos.
 //     [Applies to the level of the header, not its nodes]
 
-// History:
-// 18.04.01 G.Cosmo Migrated to STL vector
-// 13.07.95 P.Kent  Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
+// 13.07.95, P.Kent - Initial version
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELHEADER_HH
 #define G4SMARTVOXELHEADER_HH
@@ -69,17 +65,17 @@ class G4LogicalVolume;
 class G4VoxelLimits;
 class G4VPhysicalVolume;
 
-// Typedefs
-typedef std::vector<G4SmartVoxelProxy*> G4ProxyVector;
-typedef std::vector<G4SmartVoxelNode*> G4NodeVector;
-typedef std::vector<G4int> G4VolumeNosVector;
-typedef std::vector<G4double> G4VolumeExtentVector;
+// Aliases
+using G4ProxyVector = std::vector<G4SmartVoxelProxy*>;
+using G4NodeVector = std::vector<G4SmartVoxelNode*>;
+using G4VolumeNosVector = std::vector<G4int>;
+using G4VolumeExtentVector = std::vector<G4double>;
 
 class G4SmartVoxelHeader
 {
   public:  // with description
 
-    G4SmartVoxelHeader(G4LogicalVolume* pVolume, G4int pSlice=0);
+    G4SmartVoxelHeader(G4LogicalVolume* pVolume, G4int pSlice = 0);
       // Constructor for topmost header, to begin voxel construction at a
       // given logical volume. pSlice is used to set max and min equivalent
       // slice nos for the header - they apply to the level of the header,
@@ -104,7 +100,7 @@ class G4SmartVoxelHeader
     G4double GetMinExtent() const;
       // Return the minimum coordinate limit along the current axis.
     
-    G4int GetNoSlices() const;
+    size_t GetNoSlices() const;
       // Return the no of slices along the current axis.
     
     G4SmartVoxelProxy* GetSlice(G4int n) const;
@@ -124,7 +120,7 @@ class G4SmartVoxelHeader
     G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 		       const G4VoxelLimits& pLimits,
 		       const G4VolumeNosVector* pCandidates,
-		       G4int pSlice=0);
+		       G4int pSlice = 0);
       // Build and refine voxels between specified limits, considering only
       // the physical volumes numbered `pCandidates'. pSlice is used to set max
       // and min equivalent slice nos for the header - they apply to the level

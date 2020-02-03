@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4RegularNavigation.cc 66356 2012-12-18 09:02:32Z gcosmo $
-// GEANT4 tag $ Name:$
-//
 // class G4RegularNavigation implementation
 //
 // Author: Pedro Arce, May 2007
-//
 // --------------------------------------------------------------------
 
 #include "G4RegularNavigation.hh"
@@ -44,7 +39,6 @@
 
 //------------------------------------------------------------------
 G4RegularNavigation::G4RegularNavigation()
-  : fverbose(false), fcheck(false), fnormalNav(0)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
@@ -77,9 +71,9 @@ G4double G4RegularNavigation::
   // problems would make this method to be called
 
   G4ThreeVector globalPoint =
-         history.GetTopTransform().Inverse().TransformPoint(localPoint);
+         history.GetTopTransform().InverseTransformPoint(localPoint);
   G4ThreeVector globalDirection =
-         history.GetTopTransform().Inverse().TransformAxis(localDirection);
+         history.GetTopTransform().InverseTransformAxis(localDirection);
 
   G4ThreeVector localPoint2 = localPoint; // take away constantness
 
@@ -161,11 +155,11 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   // param container volume
   //
   G4int ide = history.GetDepth();
-  G4ThreeVector containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
-
+  G4ThreeVector containerPoint = history.GetTransform(ide)
+                                .InverseTransformPoint(localPoint);
   // Point in global frame
   //
-  containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
+  containerPoint = history.GetTransform(ide).InverseTransformPoint(localPoint);
 
   // Point in voxel parent volume frame
   //
@@ -186,7 +180,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 
   G4int copyNo = param->GetReplicaNo(containerPoint,localDirection);
 
-  G4Material* currentMate = param->ComputeMaterial( copyNo, 0, 0 );
+  G4Material* currentMate = param->ComputeMaterial( copyNo, nullptr, nullptr );
   G4VSolid* voxelBox = pCurrentPhysical->GetLogicalVolume()->GetSolid();
 
   G4VSolid* containerSolid = param->GetContainerSolid();
@@ -239,10 +233,9 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 
     // Get copyNo and translation of new voxel
     //
-    copyNo = param->GetReplicaNo(containerPoint,localDirection);
+    copyNo = param->GetReplicaNo(containerPoint, localDirection);
     G4ThreeVector voxelTranslation = param->GetTranslation( copyNo );
 
-    //    G4cout << " copyNo " << copyNo << " = " << pCurrentPhysical->GetCopyNo() << G4endl;
     // Move local point until wall of voxel and then put it in the new voxel
     // local coordinates
     //
@@ -252,7 +245,8 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     prevVoxelTranslation = voxelTranslation;
 
     // Check if material of next voxel is the same as that of the current voxel
-    nextMate = param->ComputeMaterial( copyNo, 0, 0 );
+    //
+    nextMate = param->ComputeMaterial( copyNo, nullptr, nullptr );
 
     if( currentMate != nextMate ) { break; }
   }

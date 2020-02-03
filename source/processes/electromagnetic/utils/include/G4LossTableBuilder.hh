@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.hh 66241 2012-12-13 18:34:42Z gunter $
-//
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -54,16 +51,18 @@
 #include <vector>
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
+#include "G4Threading.hh"
 
 class G4VEmModel;
 class G4ParticleDefinition;
+class G4EmParameters;
 
 class G4LossTableBuilder
 {
 
 public:
 
-  G4LossTableBuilder();
+  G4LossTableBuilder(G4bool master=true);
 
   virtual ~G4LossTableBuilder();
 
@@ -74,12 +73,12 @@ public:
   // build range
   void BuildRangeTable(const G4PhysicsTable* dedxTable, 
 		       G4PhysicsTable* rangeTable,
-		       G4bool isIonisation = false);
+		       G4bool useBM = false);
 
   // build inverse range
   void BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
 			      G4PhysicsTable* invRangeTable,
-			      G4bool isIonisation = false);
+			      G4bool useBM = false);
 
   // build a table requested by any model class
   G4PhysicsTable* BuildTableForModel(G4PhysicsTable* table, 
@@ -89,15 +88,14 @@ public:
 				     G4bool spline);
 
   // initialise base materials
-  void InitialiseBaseMaterials(G4PhysicsTable* table);
-
+  void InitialiseBaseMaterials(const G4PhysicsTable* table=nullptr);
 
   // access methods
-  inline const std::vector<G4int>* GetCoupleIndexes();
+  const std::vector<G4int>* GetCoupleIndexes() const;
 
-  inline const std::vector<G4double>* GetDensityFactors();
+  const std::vector<G4double>* GetDensityFactors() const;
 
-  inline G4bool GetFlag(size_t idx) const;
+  G4bool GetFlag(size_t idx);
 
   inline void SetSplineFlag(G4bool flag);
 
@@ -105,38 +103,22 @@ public:
  
 private:
 
-  void InitialiseCouples();
-
   G4LossTableBuilder & operator=(const  G4LossTableBuilder &right);
   G4LossTableBuilder(const  G4LossTableBuilder&);
 
+  G4EmParameters* theParameters;
+
   G4bool splineFlag;
   G4bool isInitialized;
+  G4bool isMaster;
 
-  std::vector<G4double>* theDensityFactor;
-  std::vector<G4int>*    theDensityIdx;
-  std::vector<G4bool>*   theFlag;
-
+  static std::vector<G4double>* theDensityFactor;
+  static std::vector<G4int>*    theDensityIdx;
+  static std::vector<G4bool>*   theFlag;
+#ifdef G4MULTITHREADED
+  static G4Mutex ltbMutex;
+#endif
 };
-
-inline const std::vector<G4int>* 
-G4LossTableBuilder::GetCoupleIndexes()
-{
-  if(theDensityIdx->size() == 0) { InitialiseCouples(); }
-  return theDensityIdx;
-}
-
-inline const std::vector<G4double>* 
-G4LossTableBuilder::GetDensityFactors()
-{
-  if(theDensityIdx->size() == 0) { InitialiseCouples(); }
-  return theDensityFactor;
-}
-
-inline G4bool G4LossTableBuilder::GetFlag(size_t idx) const
-{
-  return (*theFlag)[idx];
-}
 
 inline void G4LossTableBuilder::SetSplineFlag(G4bool flag)
 {

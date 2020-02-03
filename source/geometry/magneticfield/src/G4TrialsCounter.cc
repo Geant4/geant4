@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
-// GEANT4 tag $Name:  $
+// G4TrialsCounter implementation
 //
-// class G4TrialsCounter
-//
-// Class inline implementation
-//
-// Author: Dec 8, 2006  John Apostolakis
+// Author: John Apostolakis, CERN - 08.12.2006   
 // -------------------------------------------------------------------
 
 #include "G4TrialsCounter.hh"
@@ -39,8 +34,7 @@
 G4TrialsCounter::G4TrialsCounter( const G4String& nameStats,
                                   const G4String& description,
                                         G4bool printOnExit )
-  : fName(nameStats), fDescription(description),
-    fStatsVerbose(printOnExit), fPrinted(false) 
+  : fName(nameStats), fDescription(description), fStatsVerbose(printOnExit) 
 { 
   ClearCounts(); 
 }
@@ -54,6 +48,7 @@ void
 G4TrialsCounter::PrintStatistics()
 {
   // Print Statistics
+  //
   G4cout << "G4TrialsCounter::PrintStatistics()" << G4endl
          << "Report of counts for " << fDescription  << " : " << G4endl;
   G4cout << "Stats for '" <<  fName << "' > "
@@ -62,23 +57,23 @@ G4TrialsCounter::PrintStatistics()
          << "  Max-trial= " << fmaxTrials
          << "  no-max= "    << fNoTimesMaxTrials 
          << G4endl; 
-  fPrinted= true; 
+  fPrinted = true; 
 }
 
 void G4TrialsCounter::ClearCounts()
 {
-  fTotalNoTrials= 0; 
-  fNumberCalls  = 0; 
-  fmaxTrials    = 0;        // Maximum --> so only unsigned ints expected
-  fNoTimesMaxTrials=0; 
+  fTotalNoTrials = 0; 
+  fNumberCalls   = 0; 
+  fmaxTrials     = 0;        // Maximum --> so only unsigned ints expected
+  fNoTimesMaxTrials = 0; 
 }
 
 G4int
 G4TrialsCounter::ReturnTotals( G4int& calls, G4int& maxTrials, G4int& numMaxT ) 
 {
-  calls    = fNumberCalls; 
-  maxTrials= fmaxTrials;
-  numMaxT  = fNoTimesMaxTrials; 
+  calls     = fNumberCalls; 
+  maxTrials = fmaxTrials;
+  numMaxT   = fNoTimesMaxTrials; 
 
   return fTotalNoTrials; 
 }

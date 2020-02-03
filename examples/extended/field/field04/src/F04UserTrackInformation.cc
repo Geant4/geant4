@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04UserTrackInformation.cc 68021 2013-03-13 13:36:07Z gcosmo $
 //
 /// \file field/field04/src/F04UserTrackInformation.cc
 /// \brief Implementation of the F04UserTrackInformation class

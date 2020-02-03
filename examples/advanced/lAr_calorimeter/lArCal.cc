@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: lArCal.cc 89572 2015-04-20 07:18:15Z gcosmo $
+=======
+//
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 // 
 // --------------------------------------------------------------
@@ -45,13 +49,9 @@
 
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "FCALTestbeamSetup.hh"
 #include "G4PhysListFactory.hh"
@@ -82,24 +82,29 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-#ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
+<<<<<<< HEAD
 #endif
         
+=======
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
   if (argc==1)   // Define UI session for interactive mode.
      {
-#ifdef G4UI_USE
        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+<<<<<<< HEAD
 #ifdef G4VIS_USE
        UImanager->ApplyCommand("/control/execute prerunlArcal.mac");     
 #endif
+=======
+       UImanager->ApplyCommand("/control/execute prerunlArcal.mac");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
        if (ui->IsGUI())
 	 UImanager->ApplyCommand("/control/execute gui.mac");     
        ui->SessionStart();
        delete ui;
-#endif
     }
   else           // Batch mode
     { 
@@ -109,9 +114,7 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;

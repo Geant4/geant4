@@ -15,47 +15,38 @@
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * Vanderbilt University Free Electron Laser Center                 *
-// * Vanderbilt University, Nashville, TN, USA                        *
-// * Development supported by:                                        *
-// * United States MFEL program  under grant FA9550-04-1-0045         *
-// * and NASA under contract number NNG04CT05P.                       *
-// * Written by Marcus H. Mendenhall and Robert A. Weller.            *
-// *                                                                  *
-// * Contributed to the Geant4 Core, January, 2005.                   *
-// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id:$
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
 //
 // G4UTet
 //
 // Class description:
 //
-//   Wrapper class for UTet to make use of UTet from USolids module.
+// Wrapper class for G4Tet to make use of VecGeom Tet.
 
-// History:
-// 1.11.13 G.Cosmo, CERN/PH
+// 1.11.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UTET_HH
 #define G4UTET_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UTet.hh"
+#include <volumes/UnplacedTet.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UTet : public G4USolid
+class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 {
+
+  using Shape_t = vecgeom::UnplacedTet;
+  using Base_t = G4UAdapter<vecgeom::UnplacedTet>;
 
   public:  // with description
 
@@ -64,11 +55,9 @@ class G4UTet : public G4USolid
                  G4ThreeVector p2,
                  G4ThreeVector p3,
                  G4ThreeVector p4, 
-                 G4bool *degeneracyFlag=0);
+                 G4bool* degeneracyFlag = nullptr);
 
    ~G4UTet();
-
-    inline UTet* GetShape() const;
 
     inline G4GeometryType GetEntityType() const;
 
@@ -83,6 +72,13 @@ class G4UTet : public G4USolid
     G4UTet& operator=(const G4UTet& rhs); 
       // Copy constructor and assignment operator.
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;
+
     G4Polyhedron* CreatePolyhedron() const;
 
     std::vector<G4ThreeVector> GetVertices() const;
@@ -92,11 +88,6 @@ class G4UTet : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UTet* G4UTet::GetShape() const
-{
-  return (UTet*) fShape;
-}
 
 inline G4GeometryType G4UTet::GetEntityType() const
 {

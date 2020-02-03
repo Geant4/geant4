@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclWatcher.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100202  M. Kelsey -- Move most code into .cc file
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>

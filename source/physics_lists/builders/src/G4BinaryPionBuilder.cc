@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryPionBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -31,6 +30,8 @@
 //
 // Author: 2011 Gunter Folger
 //
+// Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -39,37 +40,26 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4BGGPionInelasticXS.hh"
+#include "G4HadronicParameters.hh"
 
-#include "G4PiNuclearCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
-
-#include "G4CrossSectionDataSetRegistry.hh"
 
 G4BinaryPionBuilder::
 G4BinaryPionBuilder()
 {
-  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
-  theMin = 0*GeV;
-  theMax = 1.3*GeV;
+  theMin = 0.0;
+  theMax = 1.5*GeV;
   theModel = new G4BinaryCascade;
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax); 
 }
-
-G4BinaryPionBuilder::
-~G4BinaryPionBuilder()
-{
-}
-
-void G4BinaryPionBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4BinaryPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(thePiData);
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
   aP->RegisterMe(theModel);
 }
 
@@ -78,6 +68,7 @@ Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(thePiData);
+  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
   aP->RegisterMe(theModel);
 }
+

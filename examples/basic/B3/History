@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 $Id: History 97640 2016-06-06 14:23:20Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 --------------------------------------------------
 
      =========================================================
@@ -15,7 +18,59 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< HEAD
 24/05/16 I. Hrivnacova (exampleB3-V10-01-02)
+=======
+21/11/19 G. Cosmo (exampleB3-V10-05-02)
+- Use default MixMax random engine.
+
+30/09/19 I. Hrivnacova (exampleB3-V10-05-01)
+- Updated comments in main() for modified score ntuple writer UI commands.
+
+08/07/19 I. Hrivnacova (exampleB3-V10-05-00)
+- Added score ntuple writer.
+
+30/11/18 I. Hrivnacova (exampleB3-V10-04-05)
+- Moved the previous update from B3b in B3 documentation
+  and removed obsolete README files from B3a and B3b. 
+
+16/11/18 J. Madsen (exampleB3-V10-04-04)
+- Updated documentation for example B3b
+
+13/11/18 J. Madsen (exampleB3-V10-04-03)
+- Added StatAnalysis to example B3b according to Lund agreement
+  to demonstrate statistical computations in a basic example
+
+30/10/18 I. Hrivnacova (exampleB3-V10-04-02)
+- Removed usage of G4ScoreNtupleWriter; 
+  will be demonstrated in a new extended analysis example
+
+26/10/18 I. Hrivnacova (exampleB3-V10-04-01)
+- Activated storing hits in Root file using new G4ScoreNtupleWriter
+- Replaced explicit printing of Run ID with /run/printProgress
+- Updated README
+
+08/05/18 B. Morgan     (exampleB3-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+22/12/16 M. Maire      (exampleB3-V10-03-00)
+- PhysicsList : register Electromagnetic before RadioactiveDecay
+
+
+19/11/16 A. Dotti      (exampleB3-V10-02-04)
+- explicit set of SD to manager
+
+02/11/16 I. Hrivnacova (exampleB3-V10-02-03)
+- Fixed comments for Doxygen
+- Removed obsolete B3b/exampleB3.cc
+
+26/09/16 I. Hrivnacova (exampleB3-V10-02-02)
+- Updated for renaming G4Parameter in G4Accumulable
+
+24/05/16 I. Hrivnacova (exampleB3-V10-02-01)
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 - Fixed compiler warning introduced in the previous update
 
 20/05/16 I. Hrivnacova

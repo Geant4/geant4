@@ -23,13 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TrajectoryContainer.cc 69010 2013-04-15 09:34:16Z gcosmo $
-//
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
 
 #include "G4TrajectoryContainer.hh"
 
-G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator = 0;
+G4Allocator<G4TrajectoryContainer>*& aTrajectoryContainerAllocator()
+{
+  G4ThreadLocalStatic G4Allocator<G4TrajectoryContainer>* _instance = nullptr;
+  return _instance;
+}
 
 G4TrajectoryContainer::G4TrajectoryContainer()
 {
@@ -42,12 +45,14 @@ G4TrajectoryContainer::~G4TrajectoryContainer()
   delete vect;
 }
 
-G4int G4TrajectoryContainer::operator==(const G4TrajectoryContainer& right) const
+G4bool
+G4TrajectoryContainer::operator==(const G4TrajectoryContainer& right) const
 { 
   return (this==&right);
 }
 
-G4int G4TrajectoryContainer::operator!=(const G4TrajectoryContainer& right) const
+G4bool
+G4TrajectoryContainer::operator!=(const G4TrajectoryContainer& right) const
 {
   return (this!=&right);
 }

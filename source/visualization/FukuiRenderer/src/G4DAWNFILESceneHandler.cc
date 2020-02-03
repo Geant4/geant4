@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
@@ -38,6 +37,8 @@
 #include <fstream>
 #include <stdlib.h>
 #include <string.h>
+#include <sstream>
+#include <iomanip>
 #include "globals.hh"
 #include "G4VisManager.hh"
 #include "G4FRConst.hh"
@@ -66,7 +67,7 @@
 //----- constants
 const char  FR_ENV_CULL_INVISIBLE_OBJECTS [] = "G4DAWN_CULL_INVISIBLE_OBJECTS";
 const char  G4PRIM_FILE_HEADER      [] = "g4_";
-const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_00.prim";
+const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_0000.prim";
 
 // const int   FR_MAX_FILE_NUM = 1 ;
 // const int   FR_MAX_FILE_NUM = 5 ;
@@ -92,19 +93,19 @@ COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX),
 fPrec (9), fPrec2 (16)
 {
 	// g4.prim filename and its directory
-	if ( getenv( "G4DAWNFILE_DEST_DIR" ) == NULL ) {
+	if ( std::getenv( "G4DAWNFILE_DEST_DIR" ) == NULL ) {
 		strcpy( fG4PrimDestDir , "" )                      ;  // output dir
 		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME );  // filename
 	} else {
-		strcpy( fG4PrimDestDir , getenv( "G4DAWNFILE_DEST_DIR" ) ); // output dir
+		strcpy( fG4PrimDestDir , std::getenv( "G4DAWNFILE_DEST_DIR" ) ); // output dir
 		strcpy( fG4PrimFileName, DEFAULT_G4PRIM_FILE_NAME        ); // filename 
 	}
 		
 	// maximum number of g4.prim files in the dest directory
 	fMaxFileNum = FR_MAX_FILE_NUM ; // initialization
-	if ( getenv( "G4DAWNFILE_MAX_FILE_NUM" ) != NULL ) {	
+	if ( std::getenv( "G4DAWNFILE_MAX_FILE_NUM" ) != NULL ) {	
 		
-		sscanf( getenv("G4DAWNFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
+		sscanf( std::getenv("G4DAWNFILE_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
 
 	} else {
 		fMaxFileNum = FR_MAX_FILE_NUM ;
@@ -113,8 +114,8 @@ fPrec (9), fPrec2 (16)
 
 
 		//----- precision control
-	if( getenv( "G4DAWNFILE_PRECISION" ) != NULL ) {
-		sscanf( getenv("G4DAWNFILE_PRECISION"), "%d", &fPrec ) ;
+	if( std::getenv( "G4DAWNFILE_PRECISION" ) != NULL ) {
+		sscanf( std::getenv("G4DAWNFILE_PRECISION"), "%d", &fPrec ) ;
 	} else {
                 fPrec = 9 ;
 	}
@@ -142,7 +143,7 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 //-----
 void	G4DAWNFILESceneHandler::SetG4PrimFileName() 
 {
-	// g4_00.prim, g4_01.prim, ..., g4_MAX_FILE_INDEX.prim
+	// g4_0000.prim, g4_0001.prim, ..., g4_MAX_FILE_INDEX.prim
 	const int MAX_FILE_INDEX = fMaxFileNum - 1 ;
 
 	// dest directory (null if no environmental variables is set)
@@ -163,17 +164,17 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 		    G4cout << "  This file name is the final one in the   "   << G4endl;
 		    G4cout << "  automatic updation of the output file name." << G4endl; 
 		    G4cout << "  You may overwrite existing files, i.e.   "   << G4endl; 
-		    G4cout << "  g4_XX.prim and g4_XX.eps                 "   << G4endl;
+		    G4cout << "  g4_XXXX.prim and g4_XXXX.eps             "   << G4endl;
 		    G4cout << "==========================================="   << G4endl; 
 		  }
 		}
 
-		// re-determine file name as G4DAWNFILE_DEST_DIR/g4_XX.prim 
-		if( i >=  0 && i <= 9 ) { 
-			sprintf( fG4PrimFileName, "%s%s%s%d.prim" , fG4PrimDestDir,  G4PRIM_FILE_HEADER, "0", i );
-		} else {
-			sprintf( fG4PrimFileName, "%s%s%d.prim" , fG4PrimDestDir,  G4PRIM_FILE_HEADER, i );
-		}
+		// re-determine file name as G4DAWNFILE_DEST_DIR/g4_XXXX.prim
+		std::ostringstream filename; filename
+		<< fG4PrimDestDir << G4PRIM_FILE_HEADER
+		<< std::setw(4) << std::setfill('0') << i << ".prim";
+		strncpy(fG4PrimFileName,filename.str().c_str(),sizeof(fG4PrimFileName)-1);
+                fG4PrimFileName[sizeof(fG4PrimFileName)-1] = '\0';
 
 		// check validity of the file name
 		std::ifstream  fin ; 

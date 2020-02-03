@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReaction.hh 85244 2014-10-27 08:24:13Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -45,8 +44,7 @@
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 
-#ifndef G4MOLECULARREACTION_H
-#define G4MOLECULARREACTION_H
+#pragma once
 
 #include <G4VITReactionProcess.hh>
 
@@ -55,67 +53,30 @@ class G4VDNAReactionModel;
 
 /**
   * G4DNAMolecularReaction is the reaction process
-  * used in G4DNAMolecularStepByStepModel between
-  * two molecules.
-  * After the global track steps, it test whether
-  * the molecules can react. If so, the reaction is made.
+  * used in G4DNAMolecularStepByStepModel.
+  * It test whether molecules can react after testing.
+  * If so, the reaction is made.
+  * \deprecated This class will be removed
   */
-
 class G4DNAMolecularReaction : public G4VITReactionProcess
 {
-    public:
-        /** Default constructor */
-        G4DNAMolecularReaction();
-        /** Default destructor */
-        virtual ~G4DNAMolecularReaction();
-        /** Copy constructor
-         *  \param other Object to copy from
-         */
-        G4DNAMolecularReaction(const G4DNAMolecularReaction& other);
-        /** Assignment operator
-         *  \param other Object to assign from
-         *  \return A reference to this
-         */
-        G4DNAMolecularReaction& operator=(const G4DNAMolecularReaction& other);
+public:
+    G4DNAMolecularReaction();
+    explicit G4DNAMolecularReaction(G4VDNAReactionModel*);
+    ~G4DNAMolecularReaction() override = default;
+    G4DNAMolecularReaction(const G4DNAMolecularReaction& other) = delete;
+    G4DNAMolecularReaction& operator=(const G4DNAMolecularReaction& other) = delete;
 
-        G4IT_ADD_CLONE(G4VITReactionProcess, G4DNAMolecularReaction)
+    G4bool TestReactibility(const G4Track&,
+                            const G4Track&,
+                            double currentStepTime,
+                            bool userStepTimeLimit) override;
 
-        /** Given two tracks, it tells you whether they can react
-         */
-        virtual G4bool TestReactibility(const G4Track&,
-                                        const G4Track&,
-                                        const double currentStepTime,
-                                        const double previousStepTime,
-                                        bool userStepTimeLimit) /*const*/ ;
+    std::unique_ptr<G4ITReactionChange> MakeReaction(const G4Track&, const G4Track&) override;
 
-        /** Will generate the products of the two given tracks
-         */
-        virtual G4ITReactionChange* MakeReaction(const G4Track&, const G4Track&) ;
+    void SetReactionModel(G4VDNAReactionModel*);
 
-        inline void SetReactionModel(G4VDNAReactionModel*);
-        inline void SetReactionTable(const G4DNAMolecularReactionTable*);
-
-        inline void SetVerbose(int);
-        // 1 : only when make reaction is called
-        // 2 : both make reaction + test reactibility are called
-
-    protected:
-        const G4DNAMolecularReactionTable*& fMolReactionTable;
-        G4VDNAReactionModel* fReactionModel;
-        G4int fVerbose;
-        G4double fReactionRadius ;
-        G4double fDistance;
-    private:
+protected:
+    const G4DNAMolecularReactionTable*& fMolReactionTable;
+    G4VDNAReactionModel* fpReactionModel;
 };
-
-inline void G4DNAMolecularReaction::SetReactionModel(G4VDNAReactionModel* model)
-{
-    fReactionModel = model;
-}
-
-inline void G4DNAMolecularReaction::SetVerbose(int verb)
-{
-    fVerbose = verb;
-}
-
-#endif // G4MOLECULARREACTION_H

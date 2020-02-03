@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.hh 67992 2013-03-13 10:59:57Z gcosmo $
 //
 
 #ifndef G4MultiFunctionalDetector_h
@@ -60,7 +59,7 @@ class G4MultiFunctionalDetector : public G4VSensitiveDetector
       G4bool RegisterPrimitive(G4VPrimitiveScorer*);
       G4bool RemovePrimitive(G4VPrimitiveScorer*);
       inline G4int GetNumberOfPrimitives() const
-      { return primitives.size(); }
+      { return G4int(primitives.size()); }
       G4VPrimitiveScorer* GetPrimitive(G4int id) const
       { return primitives[id]; }
 

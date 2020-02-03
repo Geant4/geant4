@@ -65,6 +65,7 @@ namespace G4INCL {
     Particle *particle;
     G4bool isTargetSpectator;
     G4int Z;
+    G4int S;
     ThreeVector position;
     ThreeVector momentum;
     G4double energy;
@@ -74,6 +75,7 @@ namespace G4INCL {
       particle(NULL),
       isTargetSpectator(false),
       Z(0),
+      S(0),
       energy(0.),
       potentialEnergy(0.)
     {}
@@ -82,6 +84,7 @@ namespace G4INCL {
       particle(p),
       isTargetSpectator(particle->isTargetSpectator()),
       Z(particle->getZ()),
+      S(particle->getS()),
       position(particle->getPosition()),
       momentum(particle->getMomentum()),
       energy(particle->getEnergy()),
@@ -96,10 +99,12 @@ namespace G4INCL {
       theNucleus(NULL),
       selectedA(0),
       selectedZ(0),
+      selectedS(0),
       sqtot(0.),
       cascadingEnergyPool(0.),
       protonMass(ParticleTable::getRealMass(Proton)),
       neutronMass(ParticleTable::getRealMass(Neutron)),
+      lambdaMass(ParticleTable::getRealMass(Lambda)),
       runningMaxClusterAlgorithmMass(theConfig->getClusterMaxMass()),
       nConsideredMax(0),
       nConsidered(0),
@@ -143,7 +148,7 @@ namespace G4INCL {
     virtual G4bool clusterCanEscape(Nucleus const * const, Cluster const * const);
 
   private:
-    void findClusterStartingFrom(const G4int oldA, const G4int oldZ);
+    void findClusterStartingFrom(const G4int oldA, const G4int oldZ, const G4int oldS);
     G4double getPhaseSpace(const G4int oldA, ConsideredPartner const &p);
 
     Nucleus *theNucleus;
@@ -160,7 +165,7 @@ namespace G4INCL {
 #error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask, None.
 #endif
 
-    G4int selectedA, selectedZ;
+    G4int selectedA, selectedZ, selectedS;
     G4double sqtot;
 
     G4int clusterZMaxAll, clusterNMaxAll;
@@ -185,6 +190,7 @@ namespace G4INCL {
 
     const G4double protonMass;
     const G4double neutronMass;
+    const G4double lambdaMass;
 
     G4int runningMaxClusterAlgorithmMass;
 

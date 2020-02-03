@@ -83,10 +83,10 @@ G4ExcitedString::~G4ExcitedString()
 //{}
 
 
-//int G4ExcitedString::operator==(const G4ExcitedString &right) const
+//G4bool G4ExcitedString::operator==(const G4ExcitedString &right) const
 //{}
 
-//int G4ExcitedString::operator!=(const G4ExcitedString &right) const
+//G4bool G4ExcitedString::operator!=(const G4ExcitedString &right) const
 //{}
 
 

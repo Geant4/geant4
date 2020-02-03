@@ -27,7 +27,6 @@
 /// \brief Implementation of the TSPrimaryGeneratorAction class
 //
 //
-// $Id: TSPrimaryGeneratorAction.cc 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// Simple PrimaryGeneratorAction that produces a -Z surface flux of 1 MeV
@@ -76,6 +75,10 @@ TSPrimaryGeneratorAction::~TSPrimaryGeneratorAction()
 
 void TSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+<<<<<<< HEAD
+=======
+    TIMEMORY_AUTO_TIMER("");
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     static TSDetectorConstruction* detector
             = TSDetectorConstruction::Instance();
 

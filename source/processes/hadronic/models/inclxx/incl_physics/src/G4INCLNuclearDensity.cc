@@ -42,15 +42,17 @@
 
 namespace G4INCL {
 
-  NuclearDensity::NuclearDensity(const G4int A, const G4int Z, InterpolationTable const * const rpCorrelationTableProton, InterpolationTable const * const rpCorrelationTableNeutron) :
+  NuclearDensity::NuclearDensity(const G4int A, const G4int Z, const G4int S, InterpolationTable const * const rpCorrelationTableProton, InterpolationTable const * const rpCorrelationTableNeutron, InterpolationTable const * const rpCorrelationTableLambda) :
     theA(A),
     theZ(Z),
+    theS(S),
     theMaximumRadius(std::min((*rpCorrelationTableProton)(1.), (*rpCorrelationTableNeutron)(1.))),
     theProtonNuclearRadius(ParticleTable::getNuclearRadius(Proton,theA,theZ))
   {
     std::fill(rFromP, rFromP + UnknownParticle, static_cast<InterpolationTable*>(NULL));
     rFromP[Proton] = rpCorrelationTableProton;
     rFromP[Neutron] = rpCorrelationTableNeutron;
+    rFromP[Lambda] = rpCorrelationTableLambda;
     rFromP[DeltaPlusPlus] = rpCorrelationTableProton;
     rFromP[DeltaPlus] = rpCorrelationTableProton;
     rFromP[DeltaZero] = rpCorrelationTableNeutron;
@@ -60,6 +62,7 @@ namespace G4INCL {
     std::fill(pFromR, pFromR + UnknownParticle, static_cast<InterpolationTable*>(NULL));
     pFromR[Proton] = new InterpolationTable(rFromP[Proton]->getNodeValues(), rFromP[Proton]->getNodeAbscissae());
     pFromR[Neutron] = new InterpolationTable(rFromP[Neutron]->getNodeValues(), rFromP[Neutron]->getNodeAbscissae());
+    pFromR[Lambda] = new InterpolationTable(rFromP[Lambda]->getNodeValues(), rFromP[Lambda]->getNodeAbscissae());
     pFromR[DeltaPlusPlus] = new InterpolationTable(rFromP[DeltaPlusPlus]->getNodeValues(), rFromP[DeltaPlusPlus]->getNodeAbscissae());
     pFromR[DeltaPlus] = new InterpolationTable(rFromP[DeltaPlus]->getNodeValues(), rFromP[DeltaPlus]->getNodeAbscissae());
     pFromR[DeltaZero] = new InterpolationTable(rFromP[DeltaZero]->getNodeValues(), rFromP[DeltaZero]->getNodeAbscissae());
@@ -71,6 +74,10 @@ namespace G4INCL {
           << "Interpolation table for neutron local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
           << '\n'
           << pFromR[Neutron]->print()
+          << '\n'
+          << "Interpolation table for lambda local energy (A=" << theA << ", Z=" << theZ << ", S=" << theS << ") initialised:"
+          << '\n'
+          << pFromR[Lambda]->print()
           << '\n'
           << "Interpolation table for delta++ local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
           << '\n'
@@ -96,6 +103,7 @@ namespace G4INCL {
     // NuclearDensityFactory
     delete pFromR[Proton];
     delete pFromR[Neutron];
+    delete pFromR[Lambda];
     delete pFromR[DeltaPlusPlus];
     delete pFromR[DeltaPlus];
     delete pFromR[DeltaZero];
@@ -105,6 +113,7 @@ namespace G4INCL {
   NuclearDensity::NuclearDensity(const NuclearDensity &rhs) :
     theA(rhs.theA),
     theZ(rhs.theZ),
+    theS(rhs.theS),
     theMaximumRadius(rhs.theMaximumRadius),
     theProtonNuclearRadius(rhs.theProtonNuclearRadius)
   {
@@ -112,6 +121,7 @@ namespace G4INCL {
     std::fill(rFromP, rFromP + UnknownParticle, static_cast<InterpolationTable*>(NULL));
     rFromP[Proton] = rhs.rFromP[Proton];
     rFromP[Neutron] = rhs.rFromP[Neutron];
+    rFromP[Lambda] = rhs.rFromP[Lambda];
     rFromP[DeltaPlusPlus] = rhs.rFromP[DeltaPlusPlus];
     rFromP[DeltaPlus] = rhs.rFromP[DeltaPlus];
     rFromP[DeltaZero] = rhs.rFromP[DeltaZero];
@@ -120,6 +130,7 @@ namespace G4INCL {
     std::fill(pFromR, pFromR + UnknownParticle, static_cast<InterpolationTable*>(NULL));
     pFromR[Proton] = new InterpolationTable(*(rhs.pFromR[Proton]));
     pFromR[Neutron] = new InterpolationTable(*(rhs.pFromR[Neutron]));
+    pFromR[Lambda] = new InterpolationTable(*(rhs.pFromR[Lambda]));
     pFromR[DeltaPlusPlus] = new InterpolationTable(*(rhs.pFromR[DeltaPlusPlus]));
     pFromR[DeltaPlus] = new InterpolationTable(*(rhs.pFromR[DeltaPlus]));
     pFromR[DeltaZero] = new InterpolationTable(*(rhs.pFromR[DeltaZero]));
@@ -136,11 +147,13 @@ namespace G4INCL {
   void NuclearDensity::swap(NuclearDensity &rhs) {
     std::swap(theA, rhs.theA);
     std::swap(theZ, rhs.theZ);
+    std::swap(theS, rhs.theS);
     std::swap(theMaximumRadius, rhs.theMaximumRadius);
     std::swap(theProtonNuclearRadius, rhs.theProtonNuclearRadius);
     std::swap_ranges(transmissionRadius, transmissionRadius+UnknownParticle, rhs.transmissionRadius);
     std::swap(rFromP[Proton], rhs.rFromP[Proton]);
     std::swap(rFromP[Neutron], rhs.rFromP[Neutron]);
+    std::swap(rFromP[Lambda], rhs.rFromP[Lambda]);
     std::swap(rFromP[DeltaPlusPlus], rhs.rFromP[DeltaPlusPlus]);
     std::swap(rFromP[DeltaPlus], rhs.rFromP[DeltaPlus]);
     std::swap(rFromP[DeltaZero], rhs.rFromP[DeltaZero]);
@@ -164,16 +177,21 @@ namespace G4INCL {
     transmissionRadius[DeltaPlus] = theProtonTransmissionRadius;
     transmissionRadius[DeltaMinus] = theProtonTransmissionRadius;
     transmissionRadius[Composite] = theProtonNuclearRadius;
+    transmissionRadius[SigmaPlus] = theProtonTransmissionRadius;
+    transmissionRadius[SigmaMinus] = theProtonTransmissionRadius;
+    transmissionRadius[KPlus] = theProtonNuclearRadius;
+    transmissionRadius[KMinus] = theProtonNuclearRadius;
+    
     // transmission radii for neutral particles intentionally left uninitialised
   }
 
   G4double NuclearDensity::getMaxRFromP(ParticleType const t, const G4double p) const {
-// assert(t==Proton || t==Neutron || t==DeltaPlusPlus || t==DeltaPlus || t==DeltaZero || t==DeltaMinus);
+// assert(t==Proton || t==Neutron || t==Lambda || t==DeltaPlusPlus || t==DeltaPlus || t==DeltaZero || t==DeltaMinus);
     return (*(rFromP[t]))(p);
   }
 
   G4double NuclearDensity::getMinPFromR(ParticleType const t, const G4double r) const {
-// assert(t==Proton || t==Neutron || t==DeltaPlusPlus || t==DeltaPlus || t==DeltaZero || t==DeltaMinus);
+// assert(t==Proton || t==Neutron || t==Lambda || t==DeltaPlusPlus || t==DeltaPlus || t==DeltaZero || t==DeltaMinus);
     return (*(pFromR[t]))(r);
   }
 

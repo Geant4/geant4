@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadePiMinusPChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
 
 #ifndef G4_CASCADE_PIMINUSP_CHANNEL_HH
 #define G4_CASCADE_PIMINUSP_CHANNEL_HH
@@ -33,7 +32,7 @@
 #include "G4PionNucSampler.hh"
 
 struct G4CascadePiMinusPChannelData {
-  typedef G4CascadeData<30,5,13,22,31,6,7,8,9> data_t;
+  typedef G4CascadeData<30,5,13,22,31,39,46,51,58> data_t;
   static const data_t data;
 };
 

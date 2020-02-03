@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITReactionChange.cc 85244 2014-10-27 08:24:13Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -130,8 +129,7 @@ G4VParticleChange* G4ITReactionChange::GetParticleChange(const G4Track* track)
 
 const G4Track* G4ITReactionChange::GetTrackA()
 {
-  std::map<const G4Track*, G4VParticleChange*>::iterator it = fParticleChange
-      .begin();
+  auto it = fParticleChange.begin();
   if (it != fParticleChange.end())
   {
     return it->first;
@@ -147,9 +145,8 @@ const G4Track* G4ITReactionChange::GetTrackA()
 
 const G4Track* G4ITReactionChange::GetTrackB()
 {
-  std::map<const G4Track*, G4VParticleChange*>::iterator it = fParticleChange
-      .begin();
-  std::map<const G4Track*, G4VParticleChange*>::iterator next = it++;
+  auto it = fParticleChange.begin();
+  auto next = it++;
   if (next == fParticleChange.end())
   {
     G4ExceptionDescription exceptionDescription;

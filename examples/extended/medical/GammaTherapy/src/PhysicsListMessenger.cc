@@ -26,7 +26,10 @@
 /// \file medical/GammaTherapy/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
+<<<<<<< HEAD
 // $Id: PhysicsListMessenger.cc 82277 2014-06-13 14:40:54Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

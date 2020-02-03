@@ -26,7 +26,10 @@
 /// \file exoticphysics/phonon/XGeBox.cc
 /// \brief Main program of the exoticphysics/phonon example
 //
+<<<<<<< HEAD
 // $Id: XGeBox.cc 84197 2014-10-10 14:33:03Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 
 #include "G4UImanager.hh"

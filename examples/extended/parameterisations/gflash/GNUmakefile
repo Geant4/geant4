@@ -1,19 +1,21 @@
-# $Id: GNUmakefile 70923 2013-06-07 13:10:39Z gcosmo $
-# --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
-# --------------------------------------------------------------
+# -----------------------------------------------------------------
 
-name := ExGflash
-G4TARGET := $(name)
-G4EXLIB := true
+SUBDIR =  gflash1 gflash2 gflash3 gflasha
 
+.PHONY: all bin clean clean_bin debug
 
-ifndef G4INSTALL
-  G4INSTALL = ../../../..
-endif
+all:
+	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) all); done;:
 
-.PHONY: all
-all: lib bin
-include $(G4INSTALL)/config/architecture.gmk
-include $(G4INSTALL)/config/binmake.gmk
+bin:
+	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) bin); done;:
+
+clean:
+	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) clean); done;:
+
+clean_bin:
+	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) clean_bin); done;:
+
+debug:
+	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) debug); done;:
 

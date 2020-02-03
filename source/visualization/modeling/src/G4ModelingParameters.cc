@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 85020 2014-10-23 09:52:52Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -37,18 +36,22 @@
 #include "G4ExceptionSeverity.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4UnitsTable.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
   fpDefaultVisAttributes (0),
   fDrawingStyle          (wf),
+  fNumberOfCloudPoints   (10000),
   fCulling               (false),
   fCullInvisible         (false),
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
+  fCBDAlgorithmNumber    (0),
   fExplodeFactor         (1.),
   fNoOfSides             (24),
   fpSectionSolid         (0),
@@ -69,11 +72,13 @@ G4ModelingParameters::G4ModelingParameters
   fWarning        (true),
   fpDefaultVisAttributes (pDefaultVisAttributes),
   fDrawingStyle   (drawingStyle),
+  fNumberOfCloudPoints (10000),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
+  fCBDAlgorithmNumber (0),
   fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
   fpSectionSolid  (0),
@@ -87,25 +92,25 @@ G4ModelingParameters::~G4ModelingParameters ()
   delete fpCutawaySolid;
 }
 
-G4ModelingParameters::VisAttributesModifier::VisAttributesModifier
-(const G4VisAttributes& visAtts,
- G4ModelingParameters::VisAttributesSignifier signifier,
- const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path):
-fVisAtts(visAtts), fSignifier(signifier)
-{
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID> PVPath;
-  typedef PVPath::const_iterator PVPathConstIterator;
-  PVPathConstIterator i;
-  for (i = path.begin();
-       i != path.end();
-       ++i) {
-    fPVNameCopyNoPath.push_back
-    (PVNameCopyNo
-     (i->GetPhysicalVolume()->GetName(),
-      i->GetCopyNo()));
-  }
-}
+//G4ModelingParameters::VisAttributesModifier::VisAttributesModifier
+//(const G4VisAttributes& visAtts,
+// G4ModelingParameters::VisAttributesSignifier signifier,
+// const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path):
+//fVisAtts(visAtts), fSignifier(signifier)
+//{
+//  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+//  typedef std::vector<PVNodeID> PVPath;
+//  typedef PVPath::const_iterator PVPathConstIterator;
+//  PVPathConstIterator i;
+//  for (i = path.begin();
+//       i != path.end();
+//       ++i) {
+//    fPVNameCopyNoPath.push_back
+//    (PVNameCopyNo
+//     (i->GetPhysicalVolume()->GetName(),
+//      i->GetCopyNo()));
+//  }
+//}
 
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
@@ -138,13 +143,13 @@ G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
 }
 
 void G4ModelingParameters::SetSectionSolid
-(G4VSolid* pSectionSolid) {
+(G4DisplacedSolid* pSectionSolid) {
   delete fpSectionSolid;
   fpSectionSolid = pSectionSolid;
 }
 
 void G4ModelingParameters::SetCutawaySolid
-(G4VSolid* pCutawaySolid) {
+(G4DisplacedSolid* pCutawaySolid) {
   delete fpCutawaySolid;
   fpCutawaySolid = pCutawaySolid;
 }
@@ -163,16 +168,20 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
 
   os << "\n  Current requested drawing style: ";
   switch (mp.fDrawingStyle) {
-  case G4ModelingParameters::wf:
-    os << "wireframe"; break;
-  case G4ModelingParameters::hlr:
-    os << "hidden line removal (hlr)"; break;
-  case G4ModelingParameters::hsr:
-    os << "surface (hsr)"; break;
-  case G4ModelingParameters::hlhsr:
-    os << "surface and edges (hlhsr)"; break;
-  default: os << "unrecognised"; break;
+    case G4ModelingParameters::wf:
+      os << "wireframe"; break;
+    case G4ModelingParameters::hlr:
+      os << "hidden line removal (hlr)"; break;
+    case G4ModelingParameters::hsr:
+      os << "surface (hsr)"; break;
+    case G4ModelingParameters::hlhsr:
+      os << "surface and edges (hlhsr)"; break;
+    case G4ModelingParameters::cloud:
+      os << "cloud"; break;
+    default: os << "unrecognised"; break;
   }
+
+  os << "\n  Number of cloud points: " << mp.fNumberOfCloudPoints;
 
   os << "\n  Culling: ";
   if (mp.fCulling) os << "on";
@@ -193,17 +202,27 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   if (mp.fCullCovered) os << "on";
   else                os << "off";
 
+  os << "\n  Colour by density: ";
+  if (mp.fCBDAlgorithmNumber <= 0) {
+    os << "inactive";
+  } else {
+    os << "Algorithm " << mp.fCBDAlgorithmNumber << ", Parameters:";
+    for (auto p: mp.fCBDParameters) {
+      os << ' ' << G4BestUnit(p,"Volumic Mass");
+    }
+  }
+
   os << "\n  Explode factor: " << mp.fExplodeFactor
      << " about centre: " << mp.fExplodeCentre;
 
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
-  os << "\n  Section (DCUT) shape (G4VSolid) pointer: ";
+  os << "\n  Section (DCUT) shape (G4DisplacedSolid) pointer: ";
   if (!mp.fpSectionSolid) os << "non-";
   os << "null";
 
-  os << "\n  Cutaway (DCUT) shape (G4VSolid) pointer: ";
+  os << "\n  Cutaway (DCUT) shape (G4DisplacedSolid) pointer: ";
   if (!mp.fpCutawaySolid) os << "non-";
   os << "null";
 
@@ -211,13 +230,13 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
 
   os << "\n  Vis attributes modifiers: ";
   const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
-    mp.fVisAttributesModifiers;
+  mp.fVisAttributesModifiers;
   if (vams.empty()) {
     os << "None";
   } else {
     os << vams;
   }
-  
+
   return os;
 }
 
@@ -227,10 +246,13 @@ G4bool G4ModelingParameters::operator !=
   if (
       (fWarning                != mp.fWarning)                ||
       (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
+      (fDrawingStyle           != mp.fDrawingStyle)           ||
+      (fNumberOfCloudPoints    != mp.fNumberOfCloudPoints)    ||
       (fCulling                != mp.fCulling)                ||
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
       (fCullCovered            != mp.fCullCovered)            ||
+      (fCBDAlgorithmNumber     != mp.fCBDAlgorithmNumber)     ||
       (fExplodeFactor          != mp.fExplodeFactor)          ||
       (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
@@ -243,17 +265,14 @@ G4bool G4ModelingParameters::operator !=
   if (fDensityCulling &&
       (fVisibleDensity != mp.fVisibleDensity)) return true;
 
+  if (fCBDAlgorithmNumber > 0) {
+    if (fCBDParameters.size() != mp.fCBDParameters.size()) return true;
+    else if (fCBDParameters != mp.fCBDParameters) return true;
+  }
+
   if (fVisAttributesModifiers != mp.fVisAttributesModifiers)
     return true;
 
-  return false;
-}
-
-G4bool G4ModelingParameters::PVNameCopyNo::operator!=
-(const G4ModelingParameters::PVNameCopyNo& rhs) const
-{
-  if (fName != rhs.fName) return true;
-  if (fCopyNo != rhs.fCopyNo) return true;
   return false;
 }
 
@@ -285,18 +304,22 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
         return true;
       break;
     case G4ModelingParameters::VASForceWireframe:
+    case G4ModelingParameters::VASForceSolid:
+    case G4ModelingParameters::VASForceCloud:
       if (fVisAtts.GetForcedDrawingStyle() !=
           rhs.fVisAtts.GetForcedDrawingStyle())
         return true;
       break;
-    case G4ModelingParameters::VASForceSolid:
-      if (fVisAtts.GetForcedDrawingStyle() !=
-          rhs.fVisAtts.GetForcedDrawingStyle())
+    case G4ModelingParameters::VASForceNumberOfCloudPoints:
+      if (fVisAtts.GetForcedNumberOfCloudPoints() !=
+          rhs.fVisAtts.GetForcedNumberOfCloudPoints())
         return true;
       break;
     case G4ModelingParameters::VASForceAuxEdgeVisible:
       if (fVisAtts.IsForceAuxEdgeVisible() !=
-          rhs.fVisAtts.IsForceAuxEdgeVisible())
+          rhs.fVisAtts.IsForceAuxEdgeVisible() ||
+          fVisAtts.IsForcedAuxEdgeVisible() !=
+          rhs.fVisAtts.IsForcedAuxEdgeVisible())
         return true;
       break;
     case G4ModelingParameters::VASForceLineSegmentsPerCircle:
@@ -308,16 +331,56 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
   return false;
 }
 
+G4bool G4ModelingParameters::PVNameCopyNo::operator!=
+(const G4ModelingParameters::PVNameCopyNo& rhs) const
+{
+  if (fName != rhs.fName) return true;
+  if (fCopyNo != rhs.fCopyNo) return true;
+  return false;
+}
+
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
 {
-//  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
-  G4ModelingParameters::PVNameCopyNoPathConstIterator i;
+  os << "Touchable path: ";
+  if (path.empty()) {
+    os << "empty";
+  } else {
+    os << "physical-volume-name:copy-number pairs:\n  ";
+    G4ModelingParameters::PVNameCopyNoPathConstIterator i;
+    for (i = path.begin(); i != path.end(); ++i) {
+      if (i != path.begin()) {
+        os << ',';
+      }
+      os << i->GetName() << ':' << i->GetCopyNo();
+    }
+  }
+  return os;
+}
+
+const G4String& G4ModelingParameters::PVPointerCopyNo::GetName() const
+{
+  return fpPV->GetName();
+}
+
+G4bool G4ModelingParameters::PVPointerCopyNo::operator!=
+(const G4ModelingParameters::PVPointerCopyNo& rhs) const
+{
+  if (fpPV != rhs.fpPV) return true;
+  if (fCopyNo != rhs.fCopyNo) return true;
+  return false;
+}
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVPointerCopyNoPath& path)
+{
+  os << "Touchable path: physical-volume-pointer:copy-number pairs:\n  ";
+  G4ModelingParameters::PVPointerCopyNoPathConstIterator i;
   for (i = path.begin(); i != path.end(); ++i) {
     if (i != path.begin()) {
-      os << ", ";
+      os << ',';
     }
-    os << i->GetName() << ':' << i->GetCopyNo();
+    os << '(' << (void*)(i->GetPVPointer()) << ')' << i->GetName() << ':' << i->GetCopyNo();
   }
   return os;
 }
@@ -327,12 +390,12 @@ std::ostream& operator <<
  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams)
 {
   std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator
-    iModifier;
+  iModifier;
   for (iModifier = vams.begin();
        iModifier != vams.end();
        ++iModifier) {
     const G4ModelingParameters::PVNameCopyNoPath& vamPath =
-      iModifier->GetPVNameCopyNoPath();
+    iModifier->GetPVNameCopyNoPath();
     os << '\n' << vamPath;
     const G4VisAttributes& vamVisAtts = iModifier->GetVisAttributes();
     const G4Colour& c = vamVisAtts.GetColour();
@@ -393,12 +456,33 @@ std::ostream& operator <<
           }
         }
         break;
+      case G4ModelingParameters::VASForceCloud:
+        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::cloud) {
+          os << " forceCloud ";
+          if (vamVisAtts.IsForceDrawingStyle()) {
+            os << "true";
+          } else {
+            os << "false";
+          }
+        }
+        break;
+      case G4ModelingParameters::VASForceNumberOfCloudPoints:
+        os << " numberOfCloudPoints "
+        << vamVisAtts.GetForcedNumberOfCloudPoints();
+        break;
       case G4ModelingParameters::VASForceAuxEdgeVisible:
-        os << " forceAuxEdgeVisible ";
+        os << " forceAuxEdgeVisible: ";
+        if (!vamVisAtts.IsForceDrawingStyle()) {
+          os << "not ";
+        }
+        os << " forced";
         if (vamVisAtts.IsForceAuxEdgeVisible()) {
-          os << "true";
-        } else {
-          os << "false";
+          os << ": ";
+          if (vamVisAtts.IsForcedAuxEdgeVisible()) {
+            os << "true";
+          } else {
+            os << "false";
+          }
         }
         break;
       case G4ModelingParameters::VASForceLineSegmentsPerCircle:

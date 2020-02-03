@@ -469,14 +469,14 @@ G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
 
 
 
-G4int G4KineticTrack::operator==(const G4KineticTrack& right) const
+G4bool G4KineticTrack::operator==(const G4KineticTrack& right) const
 {
  return (this == & right);
 }
 
 
 
-G4int G4KineticTrack::operator!=(const G4KineticTrack& right) const
+G4bool G4KineticTrack::operator!=(const G4KineticTrack& right) const
 {
  return (this != & right);
 }
@@ -505,7 +505,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
   if(!theDecayTable)
   {
     G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
-    G4cerr << "  particle definiton has no decay table associated."<<G4endl;
+    G4cerr << "  particle definition has no decay table associated."<<G4endl;
     G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
     return 0;
   }
@@ -697,7 +697,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
          delete theDynamicParticle;
         }
      delete theDecayProducts;
-     if(getenv("DecayEnergyBalanceCheck"))
+     if(std::getenv("DecayEnergyBalanceCheck"))
        std::cout << "DEBUGGING energy balance in cms and lab, charge baryon balance : "
        	         << momentumBalanceCMS << " " 
   	         <<energyMomentumBalance << " " 

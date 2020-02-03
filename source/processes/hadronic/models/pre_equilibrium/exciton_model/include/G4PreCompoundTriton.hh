@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTriton.hh 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -61,8 +60,8 @@ private:
   G4PreCompoundTriton(const G4PreCompoundTriton &right);
   const G4PreCompoundTriton& 
   operator= (const G4PreCompoundTriton &right);
-  G4int operator==(const G4PreCompoundTriton &right) const;
-  G4int operator!=(const G4PreCompoundTriton &right) const;    
+  G4bool operator==(const G4PreCompoundTriton &right) const;
+  G4bool operator!=(const G4PreCompoundTriton &right) const;    
 
   G4TritonCoulombBarrier theTritonCoulombBarrier;
 };

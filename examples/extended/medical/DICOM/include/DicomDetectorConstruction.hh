@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: DicomDetectorConstruction.hh 92820 2015-09-17 15:22:14Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file medical/DICOM/include/DicomDetectorConstruction.hh
 /// \brief Definition of the DicomDetectorConstruction class
@@ -35,6 +38,7 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "DicomPhantomZSliceHeader.hh"
+#include "G4ThreeVector.hh"
 
 #include <set>
 
@@ -55,35 +59,57 @@ class DicomPhantomZSliceMerged;
 /// \author  P. Arce
 //*******************************************************
 
+<<<<<<< HEAD
+=======
+struct matInfo
+{
+  G4double fSumdens;
+  G4int fNvoxels;
+  G4int fId;
+};
+
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 class DicomDetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-
+  public:
     DicomDetectorConstruction();
     ~DicomDetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
     // trigger the construction of the geometry
 
-protected:
+    G4int GetTotalVoxels() const;
+
+  protected:
+
     void InitialisationOfMaterials();
     // create the original materials
 
     void ReadPhantomData();
     // read the DICOM files describing the phantom
+<<<<<<< HEAD
+=======
+    void ReadVoxelDensities( std::ifstream& fin );
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
     void ReadPhantomDataFile(const G4String& fname);
-    // read one of the DICOM files describing the phantom (usually one per Z slice).
+    // read one of the DICOM files describing the phantom
+    // (usually one per Z slice).
     //  Build a DicomPhantomZSliceHeader for each file
 
     void MergeZSliceHeaders();
     // merge the slice headers of all the files
 
-    G4Material* BuildMaterialWithChangingDensity( const G4Material* origMate,
-    float density, G4String newMateName );
-    // build a new material if the density of the voxel is different to the other voxels
+    G4Material* BuildMaterialWithChangingDensity(
+        const G4Material* origMate, G4float density, G4String newMateName );
+    // build a new material if the density of the voxel is different
+    // to the other voxels
 
     void ConstructPhantomContainer();
+<<<<<<< HEAD
+=======
+    void ConstructPhantomContainerNew();
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
     virtual void ConstructPhantom() = 0;
     // construct the phantom volumes.
     //  This method should be implemented for each of the derived classes
@@ -91,8 +117,9 @@ protected:
     void SetScorer(G4LogicalVolume* voxel_logic);
 
     virtual void ConstructSDandField();
-    
-protected:
+
+  protected:
+
     G4Material* fAir;
 
     // World ...
@@ -113,7 +140,8 @@ protected:
     //unsigned int* fMateIDs; // index of material of each voxel
 
     std::map<G4int,G4double> fDensityDiffs;
-    // Density difference to distinguish material for each original material (by index)
+    // Density difference to distinguish material for each original
+    // material (by index)
 
     std::vector<DicomPhantomZSliceHeader*> fZSliceHeaders;
     // list of z slice header (one per DICOM files)
@@ -122,13 +150,30 @@ protected:
 
     G4int fNVoxelX, fNVoxelY, fNVoxelZ;
     G4double fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ;
+<<<<<<< HEAD
+=======
+    G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position wall)
+    G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position wall)
+
+    std::map<G4int,G4Material*> thePhantomMaterialsOriginal;
+    // map numberOfMaterial to G4Material. They are the list of materials as
+    // built from .geom file
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
     DicomPhantomZSliceMerged* fMergedSlices;
 
     std::set<G4LogicalVolume*> fScorers;
-    
-  G4bool fConstructed;
+
+    G4bool fConstructed;
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4int DicomDetectorConstruction::GetTotalVoxels() const
+{
+    return fNVoxelX * fNVoxelY * fNVoxelZ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif

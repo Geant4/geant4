@@ -30,33 +30,35 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef CCaloOrganization_h
-#define CCaloOrganization_h
+#define CCaloOrganization_h 1
 
 #include <map>
 #include "globals.hh"
 
-class CCaloOrganization{
-
+class CCaloOrganization
+{
 public:
-  CCaloOrganization(){};
-  virtual ~CCaloOrganization(){};
+  CCaloOrganization(){}
+  virtual ~CCaloOrganization(){}
 	 
 public:
-  unsigned int packindex(int det, int z, int eta, int phi) const;
-  unsigned int packindex(int det, int depth, int z, int eta, int phi) const;
-  void unpackindex(const unsigned int& idx, int& det, int& z, int& eta, int& phi) const;
-  void unpackindex(const unsigned int& idx, int& det, int& depth, int& z, int& eta, int& phi) const;
+  unsigned int packindex(G4int det, G4int z,
+                         G4int eta, G4int phi) const;
+  unsigned int packindex(G4int det, G4int depth, G4int z,
+                         G4int eta, G4int phi) const;
+  void unpackindex(const unsigned int& idx, G4int& det, G4int& z,
+                   G4int& eta, G4int& phi) const;
+  void unpackindex(const unsigned int& idx, G4int& det, G4int& depth, G4int& z,
+                   G4int& eta, G4int& phi) const;
     
 public:
       
   // additional tool:
-  int getUnitWithMaxEnergy(std::map<int,float,std::less<int> >& themap);
+  G4int getUnitWithMaxEnergy(std::map<G4int,G4float,std::less<G4int> >& themap);
 
-  float  energyInMatrix(int nCellInEta, int nCellInPhi, 
-			int crystalWithMaxEnergy, 
-			std::map<int,float,std::less<int> >& themap); 
-
-
+  G4float  energyInMatrix(G4int nCellInEta, G4int nCellInPhi, 
+			G4int crystalWithMaxEnergy, 
+			std::map<G4int,G4float,std::less<G4int> >& themap);
 };
 
 #endif

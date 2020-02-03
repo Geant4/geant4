@@ -32,7 +32,6 @@
 //
 // Author: Mathieu Karamitros
 //
-// $Id$
 //
 /// \file CommandLineParser
 /// \brief Implementation of the CommandLineParser class

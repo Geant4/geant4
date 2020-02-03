@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.cc 94218 2015-11-09 08:24:48Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -673,10 +672,22 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(cons
 
   }
   else
-    */
-  //{
+  {
     diffusionCoefficient = GetMolecule(track)->GetDiffusionCoefficient();
-  //}
+  }
+  */
+  
+  diffusionCoefficient = GetMolecule(track)->GetDiffusionCoefficient();
+  
+  // To avoid divide by zero of diffusionCoefficient  
+  if(diffusionCoefficient <= 0)
+  {
+    State(fGeometryLimitedStep) = false;
+    State(theInteractionTimeLeft) = DBL_MAX;
+    State(fTransportEndPosition) = track.GetPosition();
+    return 0;
+  }
+  
 
   State(fComputeLastPosition) = false;
   State(fTimeStepReachedLimit) = false;

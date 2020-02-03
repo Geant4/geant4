@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+<<<<<<< HEAD
 // $Id: RE05CalorimeterHit.cc 69764 2013-05-14 09:59:36Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 //
 /// \file RE05/src/RE05CalorimeterHit.cc
 /// \brief Implementation of the RE05CalorimeterHit class
@@ -75,7 +78,13 @@ const RE05CalorimeterHit& RE05CalorimeterHit::operator=(const RE05CalorimeterHit
   return *this;
 }
 
+<<<<<<< HEAD
 G4int RE05CalorimeterHit::operator==(const RE05CalorimeterHit &right) const
+=======
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool RE05CalorimeterHit::operator==(const RE05CalorimeterHit &right) const
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 {
   return ((ZCellID==right.ZCellID)&&(PhiCellID==right.PhiCellID));
 }

@@ -27,7 +27,6 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 89707 2015-04-28 07:38:57Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

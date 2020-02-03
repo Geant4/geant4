@@ -27,7 +27,6 @@
 /// \brief Definition of the RE02PSEnergyDeposit class
 //
 //
-// $Id: RE02PSEnergyDeposit.hh 66501 2012-12-19 09:25:23Z gcosmo $
 //
 
 #ifndef RE02PSEnergyDeposit_h

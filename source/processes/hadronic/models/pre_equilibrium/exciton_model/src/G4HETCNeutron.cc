@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCNeutron.cc 90337 2015-05-26 08:34:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -35,6 +34,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
+#include "G4NuclearLevelData.hh"
 
 G4HETCNeutron::G4HETCNeutron() 
   : G4HETCFragment(G4Neutron::Neutron(), &theNeutronCoulombBarrier)
@@ -85,7 +85,8 @@ G4double G4HETCNeutron::SampleKineticEnergy(const G4Fragment & aFragment)
   G4int H = aFragment.GetNumberOfHoles();
   G4int Pb = aFragment.GetNumberOfParticles();
   G4int Nb = Pb + H;
-  G4double g0 = (6.0/pi2)*theFragA*theParameters->GetLevelDensity();
+  G4double U = aFragment.GetExcitationEnergy();
+  G4double g0 = (6.0/pi2)*fNucData->GetLevelDensity(theFragZ,theFragA,U);
   
   G4double Ab = std::max(0.0,G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*g0));
   G4double Emax = theMaxKinEnergy - Ab;

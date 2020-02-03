@@ -30,15 +30,18 @@
 // by C. Dallapiccola (Nov 1998)
 //
 
-
 #include "G4ConstantLevelDensityParameter.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadronicException.hh"
 
 G4ConstantLevelDensityParameter::G4ConstantLevelDensityParameter() 
-  :  EvapLevelDensityParameter(0.125/MeV) 
+  :  EvapLevelDensityParameter(0.1/CLHEP::MeV) 
 {}
 
 G4ConstantLevelDensityParameter::~G4ConstantLevelDensityParameter()
 {}
 
+G4double G4ConstantLevelDensityParameter::LevelDensityParameter(
+         G4int A, G4int, G4double) const 
+{
+  return A * EvapLevelDensityParameter;
+}

@@ -1,5 +1,3 @@
-
-$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +13,56 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-October-2016 G.Folger
+15-Nov-2019, G. Cosmo (phys-ctor-limiters-V10-05-00)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+22-Nov-2017, V. Ivanchenko (phys-ctor-limiters-V10-03-02)
+- G4StepLimiterPhysics - fixed thread safety - removed possible 
+    race condition
+- G4NeutronTrackingCut - cosmetic change (removed commented code,
+    added explicit builder type)
+
+09-Feb-2017, M. Asai (phys-ctor-limiters-V10-03-00)
+- Print-out of G4NeutronTrackingCut is made only for the master thread.
+
+07-Nov-2016, M. Verderi (phys-ctor-limiters-V10-02-08)
+- restore G4FastSimulationPhysics utility.
+- requires param-V10-02-01
+- reintroduce granular dependence on G4parameterisation.
+
+04-Nov-2016, M. Verderi (phys-ctor-limiters-V10-02-07)
+- temporarily reverting changes related to G4FastSimulationPhysics
+  to complete removal of aParticleIterator.
+
+12-October-2016 G.Folger  (phys-ctor-limiters-V10-02-06)
 - replace remaining direct use of aParticleIterator by GetParticleIterator().
 
-27-Jan-2016, M. Asai (phys-ctor-limiters-V10-01-05)
+03-Nov-2016, M. Verderi (phys-ctor-limiters-V10-02-05)
+- Add G4FastSimulationPhysics to configure physics list for activating
+  fast simulation. It uses the G4FastSimulationHelper utility in
+  processes/parameterisation, introduced in param-V10-02-01.
+- Granular dependence on G4parameterisation is added.
+
+27-Oct-2016, M. Verderi (phys-ctor-limiters-V10-02-04)
+- G4GenericBiasingPhysics : add methods to configure physics lists
+  to activate the parallel geometry functionnality introduced in
+  the generic biasing (proc-biasgen-V10-02-04).
+- Add a README file to document the constructors (README did not look
+  present, despite Michel's tag, problem ?).
+
+16-October-2016 M.Maire   (phys-ctor-limiters-V10-02-03)
+- add README
+
+12-October-2016 G.Folger  (phys-ctor-limiters-V10-02-02)
+- replace direct use of aParticleIterator by GetParticleIterator().
+  fix required by clang39 on Windows and MAC
+
+18-Jul-2016, I. Hrivnacova (phys-ctor-limiters-V10-02-01)
+- G4StepLimiterPhysics: 
+  Added an option which allows to apply the step limit to all particles 
+  (by default the step limit is applied to charged particles only).
+
+27-Jan-2016, M. Asai (phys-ctor-limiters-V10-02-00)
 - G4ParallelWorldPhysics: change process order index of
   G4ParallelWorldProcess to 9900 to make sure it is registered
   prior to G4OpBoundaryProcess.

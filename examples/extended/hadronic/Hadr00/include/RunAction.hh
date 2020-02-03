@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr00/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 81073 2014-05-20 10:23:13Z gcosmo $
 //
 
 #ifndef RunAction_h

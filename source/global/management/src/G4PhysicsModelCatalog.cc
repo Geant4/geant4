@@ -24,22 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.cc 70004 2013-05-21 16:28:30Z adotti $
 //
 
 #include "G4PhysicsModelCatalog.hh"
 
-#ifdef G4MULTITHREADED
 #include "G4Threading.hh"
-#endif
 
 modelCatalog* G4PhysicsModelCatalog::catalog = 0;
 
 G4PhysicsModelCatalog::G4PhysicsModelCatalog()
-{ if(!catalog) { 
+{ if(!catalog) {
     static modelCatalog catal;
-    catalog = &catal; 
-  } 
+    catalog = &catal;
+  }
 }
 
 G4PhysicsModelCatalog::~G4PhysicsModelCatalog()
@@ -58,21 +55,21 @@ G4int G4PhysicsModelCatalog::Register(const G4String& name)
   return catalog->size()-1;
 }
 
-const G4String& G4PhysicsModelCatalog::GetModelName(G4int idx) 
+const G4String& G4PhysicsModelCatalog::GetModelName(G4int idx)
 {
   static const G4String undef = "Undefined";
   if(idx>=0 && idx<Entries()) return (*catalog)[idx];
   return undef;
 }
 
-G4int G4PhysicsModelCatalog::GetIndex(const G4String& name) 
+G4int G4PhysicsModelCatalog::GetIndex(const G4String& name)
 {
   for(G4int idx=0;idx<Entries();++idx)
   { if((*catalog)[idx]==name) return idx; }
   return -1;
 }
 
-G4int G4PhysicsModelCatalog::Entries() 
+G4int G4PhysicsModelCatalog::Entries()
 { return (catalog) ? G4int(catalog->size()) : -1; }
 
 void G4PhysicsModelCatalog::Destroy()

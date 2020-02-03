@@ -23,29 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ChordFinder.icc 69699 2013-05-13 08:50:30Z gcosmo $
-//
 // G4ChordFinder inline implementations
 //
+// Author: J.Apostolakis - Design and implementation - 25.02.1997
 // --------------------------------------------------------------------
 
 inline 
-void G4ChordFinder::SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver)
+void G4ChordFinder::SetIntegrationDriver(G4VIntegrationDriver* driver)
 {
-  fIntgrDriver=IntegrationDriver;
+  fIntgrDriver = driver;
 }
 
 inline
-G4MagInt_Driver* G4ChordFinder::GetIntegrationDriver()
+G4VIntegrationDriver* G4ChordFinder::GetIntegrationDriver()
 {
   return fIntgrDriver;
-}
-
-inline
-G4bool G4ChordFinder::AcceptableMissDist(G4double dChordStep) const
-{ 
-  return (dChordStep <= fDeltaChord) ;
 }
 
 inline
@@ -57,75 +49,55 @@ G4double G4ChordFinder::GetDeltaChord() const
 inline
 void G4ChordFinder::SetDeltaChord(G4double newval)
 {
-  fDeltaChord=newval;
+  fDeltaChord = newval;
 }
 
-// ......................................................................
-inline 
-G4double G4ChordFinder::GetLastStepEstimateUnc()
-{
-  return fLastStepEstimate_Unconstrained;   
-} 
-inline 
-void G4ChordFinder::SetLastStepEstimateUnc( G4double stepEst )
-{
-  fLastStepEstimate_Unconstrained = stepEst;    
-}
 inline
 void G4ChordFinder::ResetStepEstimate()
-{
-  fLastStepEstimate_Unconstrained = DBL_MAX;    
+{ 
+  fIntgrDriver->OnStartTracking();
 }
 
-// ......................................................................
-inline G4int G4ChordFinder::GetNoCalls()     { return fNoCalls_FNC; }
-inline G4int G4ChordFinder::GetNoTrials()    { return fTotalNoTrials_FNC; }
-inline G4int G4ChordFinder::GetNoMaxTrials() { return fmaxTrials_FNC; } 
-
-inline G4double G4ChordFinder::GetFirstFraction() { return fFirstFraction; } 
-inline G4double G4ChordFinder::GetFractionLast()  { return fFractionLast; } 
-inline G4double G4ChordFinder::GetFractionNextEstimate() 
-{ return fFractionNextEstimate; } 
-inline G4double G4ChordFinder::GetMultipleRadius()
-{ return fMultipleRadius; } 
-
-inline void G4ChordFinder::SetFirstFraction(G4double val){ fFirstFraction=val; }
-
-inline G4int G4ChordFinder::SetVerbose( G4int newvalue )
+inline
+G4int G4ChordFinder::SetVerbose( G4int newvalue )
 { 
-  G4int oldval= fStatsVerbose; 
+  G4int oldval = fStatsVerbose; 
   fStatsVerbose = newvalue;
   return oldval; 
 }
 
-inline  
-void    G4ChordFinder::AccumulateStatistics( G4int noTrials ) 
-{
-  // Statistics 
-  fTotalNoTrials_FNC += noTrials; 
-  fNoCalls_FNC++; 
-  // if( noTrials >= fmaxTrials_FNC ){
-    if (noTrials > fmaxTrials_FNC ) { 
-      fmaxTrials_FNC=noTrials; 
-      // fnoTimesMaxTrFNC=0; 
-    } else { 
-      // fnoTimesMaxTrFNC++; 
-    } 
-  // } 
-}
 // A  member that calculates the inverse parabolic through
 // the three points (x,y) and returns the value x that, for the
 // inverse parabolic, corresponds to y=0.
 //
-inline G4double G4ChordFinder::InvParabolic ( const G4double xa, const G4double ya,
-				    const G4double xb, const G4double yb,
-				    const G4double xc, const G4double yc )
-{   	const G4double R = yb/yc,
-	               S = yb/ya,
-		       T = ya/yc;
-        const G4double Q = (T-1)*(R-1)*(S-1);
-	if (std::fabs(Q) <DBL_MIN ) return  DBL_MAX;
-	
-	const G4double P = S*(T*(R-T)*(xc-xb) - (1-R)*(xb-xa));
-	return xb + P/Q;
+inline
+G4double G4ChordFinder::InvParabolic ( const G4double xa, const G4double ya,
+                                       const G4double xb, const G4double yb,
+                                       const G4double xc, const G4double yc )
+{
+  const G4double R = yb/yc,
+                 S = yb/ya,
+                 T = ya/yc;
+  const G4double Q = (T-1)*(R-1)*(S-1);
+  if (std::fabs(Q) <DBL_MIN ) return  DBL_MAX;
+        
+  const G4double P = S*(T*(R-T)*(xc-xb) - (1-R)*(xb-xa));
+  return xb + P/Q;
+}
+
+inline G4double
+G4ChordFinder::AdvanceChordLimited(G4FieldTrack& yCurrent,
+                                   G4double stepInitial,
+                                   G4double epsStep_Relative,
+                             const G4ThreeVector& /*latestSafetyOrigin*/,
+                                   G4double /*lasestSafetyRadius*/)
+{
+  return fIntgrDriver->AdvanceChordLimited(yCurrent, stepInitial,
+                                           epsStep_Relative, fDeltaChord);
+}
+
+inline
+void G4ChordFinder::OnComputeStep() 
+{ 
+  fIntgrDriver->OnComputeStep(); 
 }

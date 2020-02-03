@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.hh 69576 2013-05-08 13:48:13Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Definition
@@ -67,53 +66,34 @@
 // Class inherits publicly from G4VDiscreteProcess
 // Class Description - End:
 
-/////////////////////
-// Class Definition
-/////////////////////
-
-class G4OpAbsorption : public G4VDiscreteProcess 
+class G4OpAbsorption : public G4VDiscreteProcess
 {
 
 public:
 
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
+  explicit G4OpAbsorption(const G4String& processName = "OpAbsorption",
+                        G4ProcessType type = fOptical);
+	virtual ~G4OpAbsorption();
 
-        G4OpAbsorption(const G4String& processName = "OpAbsorption",
-                                G4ProcessType type = fOptical);
-	~G4OpAbsorption();
+
+  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
+  // Returns true -> 'is applicable' only for an optical photon.
+
+	virtual G4double GetMeanFreePath(const G4Track& aTrack,
+				 G4double ,
+				 G4ForceCondition*) override;
+        // Returns the absorption length for bulk absorption of optical
+        // photons in media with a specified attenuation length.
+
+	virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+ 				        const G4Step&  aStep) override;
+  // This is the method implementing bulk absorption of optical
+  // photons.
 
 private:
 
-        G4OpAbsorption(const G4OpAbsorption &right);
-
-        //////////////
-        // Operators
-        //////////////
-
-        G4OpAbsorption& operator=(const G4OpAbsorption &right);
-
-public:
-
-	////////////
-	// Methods
-        ////////////
-
-        G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-        // Returns true -> 'is applicable' only for an optical photon.
-
-	G4double GetMeanFreePath(const G4Track& aTrack,
-				 G4double ,
-				 G4ForceCondition* );
-        // Returns the absorption length for bulk absorption of optical
-        // photons in media with a specified attenuation length. 
-
-	G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
- 				        const G4Step&  aStep);
-        // This is the method implementing bulk absorption of optical 
-        // photons.
-
+  G4OpAbsorption(const G4OpAbsorption &right) = delete;
+  G4OpAbsorption& operator=(const G4OpAbsorption &right) = delete;
 };
 
 ////////////////////
@@ -123,7 +103,7 @@ public:
 inline
 G4bool G4OpAbsorption::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   return ( &aParticleType == G4OpticalPhoton::OpticalPhoton() );
+  return (&aParticleType == G4OpticalPhoton::OpticalPhoton());
 }
 
 #endif /* G4OpAbsorption_h */

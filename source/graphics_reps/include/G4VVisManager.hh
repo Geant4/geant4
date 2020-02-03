@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh 78306 2013-12-11 10:53:30Z gcosmo $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
@@ -100,6 +99,7 @@ public: // With description
 
 public:
 
+  G4VVisManager ();
   virtual ~G4VVisManager ();
 
 public: // With description
@@ -233,6 +233,7 @@ protected:
   static void SetConcreteInstance (G4VVisManager*);
 
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
+
 };
 
 #endif

@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04SteppingVerbose.cc
 /// \brief Implementation of the ExN04SteppingVerbose class
 //
-// $Id: ExN04SteppingVerbose.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +37,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04SteppingVerbose::ExN04SteppingVerbose()
+ : G4SteppingVerbose()
 {
 }
 

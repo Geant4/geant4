@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.cc 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -155,7 +154,7 @@ void G4PolarizationHelper::TestInteractionFrame()
 
   G4ThreeVector dir0=G4ThreeVector(0.,0.,1.);
   G4ThreeVector dir2=G4ThreeVector(std::sin(theta),0.,std::cos(theta));
-  
+
   G4StokesVector pol0=G4ThreeVector(0.,0.,1.);
   G4StokesVector pol1=G4ThreeVector(0.,0.,1.); 
 

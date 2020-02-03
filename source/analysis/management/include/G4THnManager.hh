@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4THnManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Template base class the histograms/profiles objects managers.
 

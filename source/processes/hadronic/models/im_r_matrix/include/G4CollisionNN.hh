@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNN.hh,v 1.2 2006-06-29 20:32:55 gunter Exp $ //
 
 #ifndef G4CollisionNN_h
 #define G4CollisionNN_h

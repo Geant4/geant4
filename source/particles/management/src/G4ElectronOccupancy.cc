@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.cc 79357 2014-02-25 10:06:54Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -40,7 +39,11 @@
 #include "G4ElectronOccupancy.hh"
 #include <sstream>
 
-G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator = 0;
+G4Allocator<G4ElectronOccupancy>*& aElectronOccupancyAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4ElectronOccupancy>* _instance = nullptr;
+    return _instance;
+}
 
 G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit )
   : theSizeOfOrbit(sizeOrbit)
@@ -101,7 +104,7 @@ G4ElectronOccupancy& G4ElectronOccupancy::operator=(const G4ElectronOccupancy& r
   return *this;
 }
 
-G4int G4ElectronOccupancy::operator==(const G4ElectronOccupancy& right) const
+G4bool G4ElectronOccupancy::operator==(const G4ElectronOccupancy& right) const
 {
   G4int index;
   G4bool value = true;
@@ -110,15 +113,15 @@ G4int G4ElectronOccupancy::operator==(const G4ElectronOccupancy& right) const
       value = value && 
          (theOccupancies[index] == right.theOccupancies[index]) ;
     } else if ((index < theSizeOfOrbit ) && ( index >= right.theSizeOfOrbit)) {
-      value = value && (theOccupancies[index] == 0);
+      value = value && (theOccupancies[index] == false);
     } else if ((index >= theSizeOfOrbit ) && ( index <right.theSizeOfOrbit)) {
-      value = value && (right.theOccupancies[index] == 0);
+      value = value && (right.theOccupancies[index] == false);
     }
   }
   return value;
 }
 
-G4int G4ElectronOccupancy::operator!=(const G4ElectronOccupancy& right) const
+G4bool G4ElectronOccupancy::operator!=(const G4ElectronOccupancy& right) const
 {
   return !(*this == right);
 }

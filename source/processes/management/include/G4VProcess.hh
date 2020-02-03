@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh 73928 2013-09-17 08:00:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -98,8 +97,8 @@ class G4VProcess
       virtual ~G4VProcess();
 
   // equal opperators
-      G4int operator==(const G4VProcess &right) const;
-      G4int operator!=(const G4VProcess &right) const;
+      G4bool operator==(const G4VProcess &right) const;
+      G4bool operator!=(const G4VProcess &right) const;
 
   public: // with description
   ////////////////////////////
@@ -354,6 +353,9 @@ class G4VProcess
  public: // with description
    virtual void  DumpInfo() const;
    // dump out process information    
+
+   virtual void ProcessDescription(std::ostream& outfile) const;
+   // write out to html file for automatic documentation
 
  public: // with description
    void  SetVerboseLevel(G4int value);

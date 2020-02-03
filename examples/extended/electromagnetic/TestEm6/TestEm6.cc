@@ -26,7 +26,10 @@
 /// \file electromagnetic/TestEm6/TestEm6.cc
 /// \brief Main program of the electromagnetic/TestEm6 example
 //
+<<<<<<< HEAD
 // $Id: TestEm6.cc 83428 2014-08-21 15:46:01Z gcosmo $
+=======
+>>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDeltastar.hh,v 1.3 2006-06-29 20:34:35 gunter Exp $ //
 
 #ifndef G4CollisionNNToNDeltastar_h
 #define G4CollisionNNToNDeltastar_h
