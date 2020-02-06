@@ -1,14 +1,5 @@
 #-----------------------------------------------------------------------
 # - Top Level CMakeLists.txt for Geant4 Build
-<<<<<<< HEAD
-#
-# 21st September 2010 Ben Morgan
-#
-# $Id: CMakeLists.txt 102302 2017-01-20 14:05:34Z gcosmo $
-#
-
-=======
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 #-----------------------------------------------------------------------
 # - Enforce an out-of-source builds before anything else
 #
@@ -36,20 +27,11 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
 # - Project definition and basic configuration
 #
 project(Geant4)
-<<<<<<< HEAD
 
-# - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "10.2.3")
-set(${PROJECT_NAME}_VERSION_MAJOR "10")
-set(${PROJECT_NAME}_VERSION_MINOR "2")
-set(${PROJECT_NAME}_VERSION_PATCH "3")
-
-=======
 set(${PROJECT_NAME}_VERSION_MAJOR 10)
 set(${PROJECT_NAME}_VERSION_MINOR  6)
 set(${PROJECT_NAME}_VERSION_PATCH  0)
 set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}")
->>>>>>> 5baee230e93612916bcea11ebf822756cfa7282c
 
 # - Prepend our own CMake Modules to the search path
 # NB: if our custom modules include others that we don't supply, those in
