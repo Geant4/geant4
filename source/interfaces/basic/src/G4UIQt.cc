@@ -1622,7 +1622,7 @@ void G4UIQt::CreateViewerWidget(){
   SetStartPage(std::string("<table width='100%'><tr><td width='30%'></td><td><div ")+
                              "style='color: rgb(140, 31, 31); font-size: xx-large; font-family: Garamond, serif; padding-bottom: 0px; font-weight: normal'>Geant4: "+
                              QApplication::applicationName ().toStdString()+
-                             "</div></td><td width='40%'>&nbsp;<br/><i>http://geant4.web.cern.ch/geant4/</i></td></tr></table>"+
+                             "</div></td><td width='40%'>&nbsp;<br/><i>http://cern.ch/geant4/</i></td></tr></table>"+
                              "<p>&nbsp;</p>"+
                              "<div style='background:#EEEEEE;'><b>Tooltips :</b><ul>"+
                              "<li><b>Start a new viewer :</b><br />"+
@@ -1633,15 +1633,13 @@ void G4UIQt::CreateViewerWidget(){
                              "</ul></div>"+
                              
                              "<div style='background:#EEEEEE;'><b>Documentation :</b><ul>"+
-                             "<li><b>Visualization tutorial :</b><br />"+
-                             "<i><a href='http://geant4.in2p3.fr/spip.php?article60&lang=en'>Geant4 Qt User Interface tutorial </a>: http://geant4.in2p3.fr/spip.php?article60&lang=en</i></li>"+
                              "<li><b>Visualisation publication :</b><br />"+
                              "<i><a href='http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011'>The Geant4 Visualization System - A Multi-Driver Graphics System</b><br />,  Allison, J. et al., International Journal of Modeling, Simulation, and Scientific Computing, Vol. 4, Suppl. 1 (2013) 1340001</a>:<br/> http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011</i></li>"+
                              "</ul></div>"+
 
                              "<div style='background:#EEEEEE;'><b>Getting Help :</b><ul>"+
-                             "<li><b>If problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to<br /> discuss Geant4 topics in general.</b> http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index"+
-                             "<li><b>Get a look at <a href='http://geant4.kek.jp/geant4/support/index.shtml'>Geant4 User support pages</a>: <i>http://geant4.kek.jp/geant4/support/index.shtml</i></b></li>"+
+                             "<li><b>If problems arise, try <a href='https://cern.ch/geant4-forum'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to<br /> discuss Geant4 topics in general.</b> https://cern.ch/geant4-forum"+
+                             "<li><b>Get a look at <a href='http://cern.ch/geant4/support'>Geant4 User support pages</a>: <i>http://cern.ch/geant4/support</i></b></li>"+
                              "</ul></div>"
                              );
 

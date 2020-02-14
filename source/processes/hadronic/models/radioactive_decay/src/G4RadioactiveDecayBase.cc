@@ -108,7 +108,7 @@ G4int& G4RadioactiveDecayBase::NumberOfInstances()
 G4RadioactiveDecayBase::G4RadioactiveDecayBase(const G4String& processName)
  : G4VRestDiscreteProcess(processName, fDecay), isInitialised(false),
    forceDecayDirection(0.,0.,0.), forceDecayHalfAngle(0.*deg), dirPath(""),
-   verboseLevel(0)
+   verboseLevel(1)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 1) {
@@ -255,9 +255,11 @@ void G4RadioactiveDecayBase::SelectAVolume(const G4String aVolume)
 	G4cout << " Radioactive decay applied to " << aVolume << G4endl; 
 
     } else if (i == theLogicalVolumes->size() ) {
-      G4cout << " G4RadioactiveDecay::SelectAVolume: " << aVolume
-             << " is not a valid logical volume name."
-             << " Decay not activated for it." << G4endl; 
+      G4ExceptionDescription ed;
+      ed << aVolume << " is not a valid logical volume name.  Decay not activated for it."
+         << G4endl;
+      G4Exception("G4RadioactiveDecayBase::SelectAVolume()", "HAD_RDM_300",
+                  JustWarning, ed);
     }
   }
 }
@@ -281,13 +283,17 @@ void G4RadioactiveDecayBase::DeselectAVolume(const G4String aVolume)
           G4cout << " G4RadioactiveDecay::DeselectAVolume: " << aVolume
                  << " is removed from list " << G4endl;
       } else {
-        G4cout << " G4RadioactiveDecay::DeselectAVolume: " << aVolume 
-               << " is not in the list.  No action taken. " << G4endl; 
+        G4ExceptionDescription ed;
+        ed << aVolume << " is not in the list.  No action taken." << G4endl;
+        G4Exception("G4RadioactiveDecayBase::DeselectAVolume()", "HAD_RDM_300",
+                    JustWarning, ed);
       }
     } else if (i ==  theLogicalVolumes->size()) {
-      G4cout << " G4RadioactiveDecay::DeselectVolume:" << aVolume
-             << " is not a valid logical volume name.  No action taken." 
-             << G4endl; 
+      G4ExceptionDescription ed;
+      ed << aVolume << " is not a valid logical volume name.  No action taken." 
+         << G4endl;
+      G4Exception("G4RadioactiveDecayBase::DeselectAVolume()", "HAD_RDM_300",
+                  JustWarning, ed);
     }
   }
 }
@@ -300,14 +306,14 @@ void G4RadioactiveDecayBase::SelectAllVolumes()
   theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
   ValidVolumes.clear();
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>0)
+  if (GetVerboseLevel()>1)
     G4cout << " RDM Applies to all Volumes"  << G4endl;
 #endif
   for (size_t i = 0; i < theLogicalVolumes->size(); i++){
     volume = (*theLogicalVolumes)[i];
     ValidVolumes.push_back(volume->GetName());    
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0)
+    if (GetVerboseLevel()>1)
       G4cout << "       RDM Applies to Volume " << volume->GetName() << G4endl;
 #endif
   }
@@ -322,7 +328,7 @@ void G4RadioactiveDecayBase::DeselectAllVolumes()
   ValidVolumes.clear();
   isAllVolumesMode=false;
 #ifdef G4VERBOSE
-  if (GetVerboseLevel() > 0) G4cout << "RDM removed from all volumes" << G4endl; 
+  if (GetVerboseLevel() > 1) G4cout << "RDM removed from all volumes" << G4endl; 
 #endif
 }
 
@@ -356,7 +362,7 @@ G4double G4RadioactiveDecayBase::GetMeanLifeTime(const G4Track& theTrack,
   if (((const G4Ions*)(theParticleDef))->GetExcitationEnergy() > 0. &&
                                         meanlife == DBL_MAX) {meanlife = 0.;}
 #ifdef G4VERBOSE
-  if (GetVerboseLevel() > 1)
+  if (GetVerboseLevel() > 2)
     G4cout << " mean life time: " << meanlife/s << " s " << G4endl;
 #endif
 
@@ -421,7 +427,7 @@ G4double G4RadioactiveDecayBase::GetMeanFreePath (const G4Track& aTrack, G4doubl
   }
 
 #ifdef G4VERBOSE
-  if (GetVerboseLevel() > 1) {
+  if (GetVerboseLevel() > 2) {
     G4cout << "mean free path: "<< pathlength/m << " m" << G4endl;
   }
 #endif
@@ -896,7 +902,10 @@ G4RadioactiveDecayBase::AddUserDecayDataFile(G4int Z, G4int A, G4String filename
     G4int ID_ion = A*1000 + Z;
     theUserRadioactiveDataFiles[ID_ion] = filename;
   } else {
-    G4cout << "The file " << filename << " does not exist!" << G4endl;
+    G4ExceptionDescription ed;
+    ed << filename << " does not exist! " << G4endl;
+    G4Exception("G4RadioactiveDecayBase::AddUserDecayDataFile()", "HAD_RDM_001",
+                FatalException, ed);
   }
 }
 
@@ -920,7 +929,7 @@ G4RadioactiveDecayBase::DecayIt(const G4Track& theTrack, const G4Step&)
     if (!std::binary_search(ValidVolumes.begin(), ValidVolumes.end(),
                      theTrack.GetVolume()->GetLogicalVolume()->GetName())) {
 #ifdef G4VERBOSE
-      if (GetVerboseLevel()>0) {
+      if (GetVerboseLevel()>1) {
         G4cout <<"G4RadioactiveDecay::DecayIt : "
                << theTrack.GetVolume()->GetLogicalVolume()->GetName()
                << " is not selected for the RDM"<< G4endl;
@@ -944,7 +953,7 @@ G4RadioactiveDecayBase::DecayIt(const G4Track& theTrack, const G4Step&)
   if (!(IsApplicable(*theParticleDef) ) ) { 
     // Particle is not an ion or is outside the nucleuslimits for decay
 
-    if (GetVerboseLevel() > 0) {
+    if (GetVerboseLevel() > 1) {
       G4cout << "G4RadioactiveDecay::DecayIt : "
              << theParticleDef->GetParticleName() 
              << " is not an ion or is outside (Z,A) limits set for the decay. " 
@@ -965,7 +974,7 @@ G4RadioactiveDecayBase::DecayIt(const G4Track& theTrack, const G4Step&)
   if (theDecayTable == 0 || theDecayTable->entries() == 0) {
     // No data in the decay table.  Set particle change parameters
     // to indicate this.
-    if (GetVerboseLevel() > 0) {
+    if (GetVerboseLevel() > 1) {
       G4cout << "G4RadioactiveDecay::DecayIt : "
              << "decay table not defined for "
              << theParticleDef->GetParticleName() 
@@ -1169,17 +1178,13 @@ G4RadioactiveDecayBase::DoDecay(const G4ParticleDefinition& theParticleDef)
 {
   G4DecayProducts* products = 0;
   G4DecayTable* theDecayTable = GetDecayTable(&theParticleDef);
-  // Choose a decay channel.
-#ifdef G4VERBOSE
-  if (GetVerboseLevel() > 0) G4cout << "Select a channel..." << G4endl;
-#endif
 
+  // Choose a decay channel.
   // G4DecayTable::SelectADecayChannel checks to see if sum of daughter masses
   // exceeds parent mass. Pass it the parent mass + maximum Q value to account
   // for difference in mass defect.
   G4double parentPlusQ = theParticleDef.GetPDGMass() + 30.*MeV;
   G4VDecayChannel* theDecayChannel = theDecayTable->SelectADecayChannel(parentPlusQ);
-  theRadDecayMode = (static_cast<G4NuclearDecay*>(theDecayChannel))->GetDecayMode();
 
   if (theDecayChannel == 0) {
     // Decay channel not found.
@@ -1195,6 +1200,7 @@ G4RadioactiveDecayBase::DoDecay(const G4ParticleDefinition& theParticleDef)
              << theDecayChannel << G4endl;
     }
 #endif
+    theRadDecayMode = (static_cast<G4NuclearDecay*>(theDecayChannel))->GetDecayMode();
     products = theDecayChannel->DecayIt(theParticleDef.GetPDGMass() );
 
     // Apply directional bias if requested by user
@@ -1213,7 +1219,7 @@ void G4RadioactiveDecayBase::CollimateDecay(G4DecayProducts* products) {
   if (0 == products || 0 == products->entries()) return;
 
 #ifdef G4VERBOSE
-  if (GetVerboseLevel() > 0) G4cout << "Begin of CollimateDecay..." << G4endl;
+  if (GetVerboseLevel() > 1) G4cout << "Begin of CollimateDecay..." << G4endl;
 #endif
 
   // Particles suitable for directional biasing (for if-blocks below)

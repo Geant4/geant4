@@ -110,6 +110,11 @@ public:
 
   inline void SetParticle(const G4ParticleDefinition*);
 
+  // hide assignment operator and copy constructor
+  G4MuPairProductionModel & operator=
+  (const G4MuPairProductionModel &right) = delete;
+  G4MuPairProductionModel(const  G4MuPairProductionModel&) = delete;
+
 protected:
 
   G4double ComputMuPairLoss(G4double Z, G4double tkin, G4double cut,
@@ -130,14 +135,14 @@ private:
 
   void MakeSamplingTables();
 
-  void DataCorrupted(G4int Z, G4double logTkin);
+  void StoreTables() const;
+
+  G4bool RetrieveTables();
+
+  void DataCorrupted(G4int Z, G4double logTkin) const;
 
   inline G4double FindScaledEnergy(G4int Z, G4double rand, G4double logTkin,
 				   G4double yymin, G4double yymax); 
-
-  // hide assignment operator
-  G4MuPairProductionModel & operator=(const G4MuPairProductionModel &right) = delete;
-  G4MuPairProductionModel(const  G4MuPairProductionModel&) = delete;
 
 protected:
 
@@ -171,6 +176,8 @@ protected:
   G4double dy;
   G4double emin;
   G4double emax;
+
+  G4bool fTableToFile;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

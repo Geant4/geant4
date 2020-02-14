@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -332,7 +332,8 @@ Enable angular generator interface                 0
 Factor of cut reduction for sub-cutoff method      1
 Max kinetic energy for CSDA tables                 1 GeV
 Max kinetic energy for NIEL computation            0 eV 
-Linear loss limit 0.01
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
@@ -363,6 +364,9 @@ Screening factor                                   1
 /run/initialize
 
  The Box is 10 m   of Aluminium
+ G4RadioactiveDecay is deprecated and will be removed in Geant4 version 11. 
+ Please replace it with G4RadioactiveDecayBase if you want the unbiased radioactive deacy process.
+ If you want the general process, with optional biasing, use G4Radioactivation. 
 
   GetProcess : RadioactiveDecay
 ##/globalField/setValue 0 0 5 tesla
@@ -421,7 +425,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.360000s Real=1.364241s Sys=0.000000s
+  User=1.450000s Real=1.449853s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -490,7 +494,7 @@ N=17 V[N]={2090744789413038816, 475879386275182165, 924531448196777844, 92377436
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.080000s Real=0.080563s Sys=0.000000s
+  User=0.080000s Real=0.085569s Sys=0.000000s
 
  ======================== run summary ======================
 

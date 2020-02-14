@@ -136,6 +136,7 @@ void G4EmParameters::Initialise()
   onIsolated = false;
   fSamplingTable = false;
   fPolarisation = false;
+  fMuDataFromFile = false;
   fDNA = false;
 
   minSubRange = 1.0;
@@ -414,6 +415,7 @@ G4bool G4EmParameters::BirksActive() const
 
 void G4EmParameters::SetUseICRU90Data(G4bool val)
 {
+  if(IsLocked()) { return; }
   fICRU90 = val;
 }
 
@@ -479,6 +481,16 @@ void G4EmParameters::SetEmSaturation(G4EmSaturation* ptr)
     emSaturation = ptr;
     SetBirksActive(true);
   }
+}
+
+G4bool G4EmParameters::RetrieveMuDataFromFile() const
+{
+  return fMuDataFromFile;
+}
+
+void G4EmParameters::SetRetrieveMuDataFromFile(G4bool v)
+{
+  fMuDataFromFile = v;
 }
 
 void G4EmParameters::SetOnIsolated(G4bool val)
@@ -1156,7 +1168,7 @@ void G4EmParameters::DefineRegParamForEM(G4VEmProcess* ptr) const
   fBParameters->DefineRegParamForEM(ptr);
 }
 
-G4bool G4EmParameters::QuantumEntanglement()
+G4bool G4EmParameters::QuantumEntanglement() const
 {
   return fBParameters->QuantumEntanglement(); 
 }
@@ -1167,7 +1179,7 @@ void G4EmParameters::SetQuantumEntanglement(G4bool v)
   fBParameters->SetQuantumEntanglement(v); 
 }
 
-G4bool G4EmParameters::GetDirectionalSplitting() { 
+G4bool G4EmParameters::GetDirectionalSplitting() const { 
   return fBParameters->GetDirectionalSplitting(); 
 }
 
@@ -1266,7 +1278,8 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      <<G4BestUnit(maxKinEnergyCSDA,"Energy") << "\n";
   os << "Max kinetic energy for NIEL computation            " 
      <<G4BestUnit(maxNIELEnergy,"Energy") << "\n";
-  os << "Linear loss limit " <<linLossLimit << "\n";
+  os << "Linear loss limit                                  " <<linLossLimit << "\n";
+  os << "Read data from file for e+e- pair production by mu " <<fMuDataFromFile << "\n";
 
   os << "=======================================================================" << "\n";
   os << "======                 Multiple Scattering Parameters          ========" << "\n";

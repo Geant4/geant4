@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -263,20 +263,12 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
-G4Integration Driver Stats: #QuickAdvance 0 - #AccurateAdvance 0 #good steps 0 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 0  No Calls: 0  Max-trial: 0
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
  F01FieldSetup::CreateStepperAndChordFinder() called. 
                  1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
 The minimal step is equal to 1 mm
                  2. Creating ChordFinder.
                  3. Updating Field Manager.
-G4Integration Driver Stats: #QuickAdvance 0 - #AccurateAdvance 0 #good steps 0 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 0  No Calls: 0  Max-trial: 0
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
  F01FieldSetup::CreateStepperAndChordFinder() called. 
                  1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
@@ -368,7 +360,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000172s Sys=0.000000s
+  User=0.000000s Real=0.000179s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -399,7 +391,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000138s Sys=0.000000s
+  User=0.000000s Real=0.000173s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -430,7 +422,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000205s Sys=0.000000s
+  User=0.000000s Real=0.000231s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -461,13 +453,9 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000136s Sys=0.000000s
+  User=0.000000s Real=0.000150s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
-G4Integration Driver Stats: #QuickAdvance 186 - #AccurateAdvance 30 #good steps 30 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 184  No Calls: 168  Max-trial: 5
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
  F01FieldSetup::CreateStepperAndChordFinder() called. 
                  1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
@@ -503,7 +491,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000160s Sys=0.000000s
+  User=0.000000s Real=0.000164s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -534,7 +522,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.007954s Sys=0.000000s
+  User=0.000000s Real=0.010809s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 #
@@ -601,7 +589,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.007430s Sys=0.000000s
+  User=0.000000s Real=0.008222s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 Graphics systems deleted.
@@ -612,7 +600,3 @@ Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.29 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-G4Integration Driver Stats: #QuickAdvance 19753 - #AccurateAdvance 209 #good steps 209 #bad steps 1
-G4ChordFinder statistics report: 
-  No trials: 19752  No Calls: 19404  Max-trial: 4
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

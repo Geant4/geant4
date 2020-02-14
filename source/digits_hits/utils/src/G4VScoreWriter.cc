@@ -37,7 +37,8 @@
 #include <fstream>
 
 G4VScoreWriter::G4VScoreWriter()
-  : fScoringMesh(nullptr), verboseLevel(0) {
+  : fScoringMesh(nullptr), verboseLevel(0), fact(1.0)
+{
   fNMeshSegments[0] = fNMeshSegments[1] = fNMeshSegments[2] = 0;
 }
 
@@ -90,7 +91,8 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
 
   std::map<G4int, G4StatDouble*> * score = msMapItr->second->GetMap();
   ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
-
+  if(fact!=1.0)
+  { ofile << "# multiplied factor : " << fact << std::endl; }
 
   G4double unitValue = fScoringMesh->GetPSUnitValue(psName);
   G4String unit = fScoringMesh->GetPSUnit(psName);
@@ -126,8 +128,8 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
 	if(value == score->end()) {
 	  ofile << 0. << "," << 0. << "," << 0;
 	} else {
-	  ofile << (value->second->sum_wx())/unitValue << ","
-                << (value->second->sum_wx2())/unitValue/unitValue << ","
+	  ofile << (value->second->sum_wx())/unitValue*fact << ","
+                << (value->second->sum_wx2())/unitValue/unitValue*fact*fact << ","
                 << value->second->n();
 	}
 
@@ -172,6 +174,8 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
     return;
   }
   ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
+  if(fact!=1.0)
+  { ofile << "# multiplied factor : " << fact << std::endl; }
 
   // retrieve the map
   using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
@@ -220,8 +224,8 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
   	  if(value == score->end()) {
 	    ofile << 0. << "," << 0. << "," << 0;
 	  } else {
-	    ofile << (value->second->sum_wx())/unitValue << ","
-                  << (value->second->sum_wx2())/unitValue/unitValue << ","
+	    ofile << (value->second->sum_wx())/unitValue*fact << ","
+                  << (value->second->sum_wx2())/unitValue/unitValue*fact*fact << ","
                   << value->second->n();
 	  }
 

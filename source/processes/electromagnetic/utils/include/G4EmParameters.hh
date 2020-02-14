@@ -168,11 +168,14 @@ public:
   void SetEnablePolarisation(G4bool val);
   G4bool EnablePolarisation() const;
 
-  G4bool GetDirectionalSplitting();
+  G4bool GetDirectionalSplitting() const;
   void SetDirectionalSplitting(G4bool v);
 
-  G4bool QuantumEntanglement();
+  G4bool QuantumEntanglement() const;
   void SetQuantumEntanglement(G4bool v);
+
+  G4bool RetrieveMuDataFromFile() const;
+  void SetRetrieveMuDataFromFile(G4bool v);
 
   // 5d
   void  SetOnIsolated(G4bool val);
@@ -378,6 +381,7 @@ private:
   G4bool gener;
   G4bool fSamplingTable;
   G4bool fPolarisation;
+  G4bool fMuDataFromFile;
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
   

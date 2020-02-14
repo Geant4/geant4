@@ -23,53 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// GEANT 4 class header file
 //
+// Class Description:
 //
+// This file includes protections from Windows declarations in the
+// global scope that may cause trouble in compilation.
 
-#ifndef G4VScoreWriter_h
-#define G4VScoreWriter_h 1
+// --------------------------------------------------------------------
+#ifndef windefs_hh
+#define windefs_hh
 
-#include "globals.hh"
-class G4VScoringMesh;
+#if defined(_WIN32)
+  #if defined (ABSOLUTE)
+    #undef ABSOLUTE
+    #undef RELATIVE
+  #endif
+#endif // _WIN32
 
-// class description:
-//
-//  This class represents storing the scored quantity into a file.
-//
-
-class G4VScoreWriter {
-
-public:
-  G4VScoreWriter();
-  virtual ~G4VScoreWriter();
-
-public:
-  // store a quantity into a file
-  virtual void DumpQuantityToFile(const G4String& psName,
-                                  const G4String& fileName,
-                                  const G4String& option);
-  // store all quantities into a file
-  virtual void DumpAllQuantitiesToFile(const G4String& fileName,
-                                       const G4String& option);
-
-  // set a socring mesh to retrieve its quantities
-  void SetScoringMesh(G4VScoringMesh * sm); 
-  // set a verbose level
-  inline void SetVerboseLevel(G4int vl) { verboseLevel = vl; }
-  inline void SetFactor(G4double val=1.0) { fact = val; }
-  inline G4double GetFactor() const { return fact; }
-
-protected:
-  // get an index from (x,y,z) 
-  G4int GetIndex(G4int x, G4int y, G4int z) const;
-
-protected:
-  G4int fNMeshSegments[3]; // number of segments of the mesh
-  G4VScoringMesh * fScoringMesh;
-  G4int verboseLevel;
-  G4double fact;
-
-};
-
-#endif
-
+#endif // windefs_hh

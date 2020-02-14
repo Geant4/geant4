@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -238,8 +238,8 @@ See commands in /vis/modeling/trajectories/ for other options.
 --> Event 9000 starts.
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1345
- Total dose in patient : 292.044 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1267
+ Total dose in patient : 310.719 picoGy 
 ------------------------------------------------------------
 
 ... write Root file : scoring.root - done

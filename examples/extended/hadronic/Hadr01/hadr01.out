@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -826,7 +826,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-RunAction::BeginOfRunAction:  User=0.910000s Real=0.975400s Sys=0.020000s
+RunAction::BeginOfRunAction:  User=0.840000s Real=1.223337s Sys=0.020000s
 NuclearData:  User=0.000000s Real=0.000004s Sys=0.000000s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
@@ -841,7 +841,7 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.090000s Real=0.107910s Sys=0.000000s
+  User=0.090000s Real=0.284320s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -863,11 +863,11 @@ Average number of muons              0
 Average number of deuterons+tritons  0.23
 Average number of He3+alpha          0.2
 Average number of ions               0.44
-Average number of forward neutrons   0.12
-Average number of reflected neutrons 0.62
+Average number of forward neutrons   0
+Average number of reflected neutrons 0.73
 Average number of leaked neutrons    0
 Average number of proton leak        0.36
-Average number of pion leak          0.21
+Average number of pion leak          0.2
 ========================================================
 
 #

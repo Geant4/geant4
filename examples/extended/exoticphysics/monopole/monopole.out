@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -933,11 +933,3 @@ Index : 1     used in the geometry : Yes
 ... close Root file : monopole.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
-G4Integration Driver Stats: #QuickAdvance 1519870 - #AccurateAdvance 8944 #good steps 14494 #bad steps 1
-G4ChordFinder statistics report: 
-  No trials: 1518812  No Calls: 1518280  Max-trial: 2
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
-G4Integration Driver Stats: #QuickAdvance 983295 - #AccurateAdvance 581 #good steps 5180 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 983186  No Calls: 983085  Max-trial: 3
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

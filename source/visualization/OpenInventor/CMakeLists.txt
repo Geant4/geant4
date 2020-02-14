@@ -17,3 +17,11 @@ else()
     GEANT4_GLOBAL_LIBRARY_TARGET(COMPONENTS sources.cmake)
 endif()
 
+# Fix for Inventor not yet supporting usage requirements
+if(TARGET G4OpenInventor)
+  target_include_directories(G4OpenInventor PUBLIC ${G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS})
+endif()
+
+if(TARGET G4OpenInventor-static)
+  target_include_directories(G4OpenInventor-static PUBLIC ${G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS})
+endif()

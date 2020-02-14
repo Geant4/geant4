@@ -99,6 +99,7 @@ private:
   G4UIcmdWithABool*          onIsolatedCmd;
   G4UIcmdWithABool*          sampleTCmd;
   G4UIcmdWithABool*          icru90Cmd;
+  G4UIcmdWithABool*          mudatCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;

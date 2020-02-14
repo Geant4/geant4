@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+7 January 2020 V. Ivanchenko (hadr-man-V10-05-10)
+---------------------------------------------------
+- G4HadronicProcess : for charge check assume, that all final electrons
+  come from internal conversion
+
 11 November 2019 A. Ribon (hadr-man-V10-05-07)
 ---------------------------------------------------
 - G4HadronicProcess : in the method CheckResult, a short-lived secondary

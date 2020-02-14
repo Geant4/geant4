@@ -12,10 +12,6 @@ include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -DG4PROCESSES_EXPORT
 
-ifeq ($(G4SYSTEM), WIN32-VC)
-CPPFLAGS += -I$(G4BASE)/externals/expat/include
-endif
-
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \

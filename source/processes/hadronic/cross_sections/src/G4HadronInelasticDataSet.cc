@@ -73,7 +73,7 @@ G4HadronInelasticDataSet::GetElementCrossSection(
     fKinEnergy = ekin;
     fParticle = pd;
     G4int A = G4lrint(fNIST->GetAtomicMassAmu(Z));
-    fInelasticXS = fGheishaXS->GetElasticCrossSection(aParticle, Z, A);
+    fInelasticXS = fGheishaXS->GetInelasticCrossSection(aParticle, Z, A);
   }
   return fInelasticXS;
 }

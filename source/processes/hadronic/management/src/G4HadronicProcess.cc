@@ -270,7 +270,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 
   G4HadFinalState* result = nullptr;
   G4int reentryCount = 0;
-  /*
+  /* 
   G4cout << "### " << aParticle->GetDefinition()->GetParticleName() 
 	 << "  Ekin(MeV)= " << aParticle->GetKineticEnergy()
 	 << "  Z= " << targetNucleus.GetZ_asInt() 
@@ -356,7 +356,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   if (epReportLevel != 0) {
     CheckEnergyMomentumConservation(aTrack, targetNucleus);
   }
-  //G4cout << "PostStepDoIt done " << G4endl;
+  //G4cout << "PostStepDoIt done nICelectrons= " << nICelectrons << G4endl;
   return theTotalResult;
 }
 
@@ -415,7 +415,7 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
   //G4cout << "FillResult: Efinal= " << efinal << " status= " 
   //	 << theTotalResult->GetTrackStatus() 
   //	 << "  fKill= " << fStopAndKill << G4endl;
-
+ 
   // check secondaries 
   nICelectrons = 0;
   if(idxIC == -1) { 
@@ -458,7 +458,8 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
       dynParticle->SetMass(mass);               
     }
     G4int idxModel = aR->GetSecondary(i)->GetCreatorModelType(); 
-    if(idxIC == idxModel) { ++nICelectrons; }
+    //if(idxIC == idxModel) { ++nICelectrons; }
+    if(part->GetPDGEncoding() == 11) { ++nICelectrons; }
       
     // time of interaction starts from zero + global time
     G4double time = std::max(aR->GetSecondary(i)->GetTime(), 0.0) + time0;
@@ -482,6 +483,7 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
     }
   }
   aR->Clear();
+  // G4cout << "FillResults done nICe= " << nICelectrons << G4endl;
 }
 
 void G4HadronicProcess::MultiplyCrossSectionBy(G4double factor)

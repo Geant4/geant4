@@ -3,7 +3,7 @@
 # To be run preferably in batch, without graphics:
 # % exampleB5 run2.mac
 #
-#/run/numberOfWorkers 4
+#/run/numberOfThreads 4
 /run/initialize
 #
 #  turn off randomization 

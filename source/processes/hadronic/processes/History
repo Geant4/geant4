@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 December 2019 Vladimir Ivanchenko (hadr-proc-V10-05-09)
+----------------------------------------------------------
+- G4HadronElasticProcess : removed forgotten try/catch pattern for
+    target isotope selection, which should be a part of 10.6
+
 11 July 2019 Alberto Ribon (hadr-proc-V10-05-06)
 -----------------------------------------------------
 - Created new inelastic processes for heavy hadron - nucleus interactions:

@@ -13,9 +13,6 @@ include $(G4INSTALL)/config/architecture.gmk
 CPPFLAGS += -DG4PROCESSES_EXPORT
 CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 
-ifeq ($(G4SYSTEM), WIN32-VC)
-CPPFLAGS += -I$(G4BASE)/externals/expat/include
-endif
 ifdef G4LIB_BUILD_EXPAT
 CPPFLAGS += -I$(G4BASE)/externals/expat/include
 endif

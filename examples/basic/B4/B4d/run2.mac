@@ -3,7 +3,7 @@
 # To be run preferably in batch, without graphics:
 # % exampleB4[a,b,c,d] run2.mac
 #
-#/run/numberOfWorkers 4
+#/run/numberOfThreads 4
 /run/initialize
 #
 # Default kinemtics: 

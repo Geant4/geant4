@@ -16,6 +16,18 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 03, 2019 Gabriele Cosmo (global-V10-05-27)
+- Updated tag IDs for release 10.6.p01.
+
+January 30, 2020 Gabriele Cosmo
+- Fixed symbol exporting problem in G4coutDestination on Windows; define
+  'masterG4coutDestination' static pointer as a normal pointer.
+  Addressing problem report #2217.
+
+January 14, 2020 Gabriele Cosmo
+- Added windefs.hh header, including protections for double definition
+  of global symbols from Windows Kits code.
+
 December 03, 2019 Gabriele Cosmo (global-V10-05-26)
 - Updated tag IDs for release 10.6.
 

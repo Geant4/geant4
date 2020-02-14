@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -345,7 +345,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=28.620000s Real=28.865649s Sys=0.010000s
+  User=28.550000s Real=28.673988s Sys=0.020000s
 Number and type of particles created outside region "Target" :
 N e- : 728
 _______________________

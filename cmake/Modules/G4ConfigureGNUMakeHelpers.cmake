@@ -284,7 +284,7 @@ function(_g4tc_setenv_ifnotset_command TEMPLATE_NAME SHELL_FAMILY VARIABLE_NAME 
     # Have to make this section verbatim to get correct formatting
     set(${TEMPLATE_NAME}
       "
-if test \"x\$${VARIABLE_NAME}\" = \"x\" ; then
+if [ -z \"\$\{${VARIABLE_NAME}-\}\" ] ; then
   export ${VARIABLE_NAME}=${VARIABLE_VALUE}
 fi
 "
@@ -317,7 +317,7 @@ function(_g4tc_prepend_path TEMPLATE_NAME SHELL_FAMILY PATH_VARIABLE
     # We have to make this section verbatim
     set(${TEMPLATE_NAME}
     "
-if test \"x\$${PATH_VARIABLE}\" = \"x\" ; then
+if [ -z \"\$\{${PATH_VARIABLE}-\}\" ] ; then
   export ${PATH_VARIABLE}=${APPEND_VARIABLE}
 else
   export ${PATH_VARIABLE}=${APPEND_VARIABLE}:\${${PATH_VARIABLE}}
@@ -354,7 +354,7 @@ function(_g4tc_append_path TEMPLATE_NAME SHELL_FAMILY PATH_VARIABLE
     # We have to make this section verbatim
     set(${TEMPLATE_NAME}
     "
-if test \"x\$${PATH_VARIABLE}\" = \"x\" ; then
+if [ -z \"\$\{${PATH_VARIABLE}-\}\" ] ; then
   export ${PATH_VARIABLE}=${APPEND_VARIABLE}
 else
   export ${PATH_VARIABLE}=\${${PATH_VARIABLE}}:${APPEND_VARIABLE}
@@ -805,14 +805,11 @@ install(DIRECTORY config
     PATTERN "scripts/" EXCLUDE
 )
 
-# Compatibility softlink to library directory, we do this on all
-# platforms, but it does nothing on Windows (well, at least the
-# attempted symlink creation does not)
-# Take care to quote the path names to avoid issues with spaces
-install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
-
-install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
-
+# Compatibility softlink to library directory on UNIX only
+if(UNIX)
+  install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
+  install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
+endif()
 
 #-----------------------------------------------------------------------
 # TEMPORARY

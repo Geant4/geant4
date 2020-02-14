@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -268,14 +268,6 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
-G4Integration Driver Stats: #QuickAdvance 0 - #AccurateAdvance 0 #good steps 0 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 0  No Calls: 0  Max-trial: 0
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
-G4Integration Driver Stats: #QuickAdvance 0 - #AccurateAdvance 0 #good steps 0 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 0  No Calls: 0  Max-trial: 0
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
 F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
                             Stepper Type chosen = 4
 G4ClassicalRK4 (default) is called
@@ -983,7 +975,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001146s Sys=0.000000s
+  User=0.000000s Real=0.001170s Sys=0.000000s
 
 ========= Table of registered couples ==============================
 
@@ -1002,7 +994,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.010395s Sys=0.000000s
+  User=0.010000s Real=0.010387s Sys=0.000000s
 Set global field value to (0,0,1000) Gauss 
 
 ========= Table of registered couples ==============================
@@ -1021,16 +1013,8 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001357s Sys=0.000000s
+  User=0.000000s Real=0.001382s Sys=0.000000s
 Set global field value to (33000,0,0) Gauss 
-G4Integration Driver Stats: #QuickAdvance 4741 - #AccurateAdvance 636 #good steps 636 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 4236  No Calls: 3913  Max-trial: 4
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
-G4Integration Driver Stats: #QuickAdvance 4967 - #AccurateAdvance 2655 #good steps 2655 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 3937  No Calls: 3604  Max-trial: 4
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
 F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
                             Stepper Type chosen = 4
 G4ClassicalRK4 (default) is called
@@ -1072,7 +1056,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000350s Sys=0.000000s
+  User=0.000000s Real=0.000410s Sys=0.000000s
 /tracking/verbose 0
 #
 /calor/setAbsMat Xe20CO2
@@ -1510,7 +1494,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.330000s Real=0.330828s Sys=0.000000s
+  User=0.340000s Real=0.342283s Sys=0.010000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -1519,7 +1503,3 @@ Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 1.5 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-G4Integration Driver Stats: #QuickAdvance 358763 - #AccurateAdvance 100318 #good steps 200708 #bad steps 350
-G4ChordFinder statistics report: 
-  No trials: 157705  No Calls: 149629  Max-trial: 22
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

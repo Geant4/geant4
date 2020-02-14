@@ -134,6 +134,26 @@ G4UTet& G4UTet::operator = (const G4UTet& rhs)
    return *this;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Dispatch to parameterisation for replication mechanism dimension
+// computation & modification.
+//
+void G4UTet::ComputeDimensions(G4VPVParameterisation*,
+                               const G4int,
+                               const G4VPhysicalVolume*)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4UTet::Clone() const
+{
+  return new G4UTet(*this);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Accessors

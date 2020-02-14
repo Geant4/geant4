@@ -82,21 +82,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   G4Nucleus* targNucleus = GetTargetNucleusPointer();
 
   // Select element
-  const G4Element* elm = nullptr;
-  try
-    {
-      elm = GetCrossSectionDataStore()->SampleZandA(dynParticle, material, 
-						    *targNucleus);
-    }
-  catch(G4HadronicException & aR)
-    {
-      G4ExceptionDescription ed;
-      aR.Report(ed);
-      DumpState(track,"SampleZandA",ed); 
-      ed << " PostStepDoIt failed on element selection" << G4endl;
-      G4Exception("G4HadronElasticProcess::PostStepDoIt", "had003", 
-		  FatalException, ed);
-    }
+  const G4Element* elm = 
+    GetCrossSectionDataStore()->SampleZandA(dynParticle, material, *targNucleus);
 
   // Initialize the hadronic projectile from the track
   G4HadProjectile theProj(track);

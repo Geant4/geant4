@@ -49,6 +49,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         globals.hh
         templates.hh
         tls.hh
+        windefs.hh
         G4Allocator.hh
         G4AutoDelete.hh
         G4ios.hh

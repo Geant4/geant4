@@ -59,6 +59,12 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 
    ~G4UTet();
 
+    void ComputeDimensions(      G4VPVParameterisation* p,
+                           const G4int n,
+                           const G4VPhysicalVolume* pRep);
+
+    G4VSolid* Clone() const;
+
     inline G4GeometryType GetEntityType() const;
 
   public:   // without description

@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 5, 2020 - P.Arce  (geomnav-V10-05-20)
+-------------------------
+- Fixed problem report #2196.
+  Avoid looping infinitely by pushing N times with increasing step size.
+
 November 29, 2019 - J.Apostolakis  (geomnav-V10-05-19)
 ---------------------------------
 - Added method to PropagatorInField to Get/Set new parameter that

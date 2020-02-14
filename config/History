@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12th Feb 2020 Gabriele Cosmo (config-V10-05-09)
+- Fixed and updated setup for DLL builds on Windows.
+
 20th Nov 2019 Gabriele Cosmo (config-V10-05-08)
 - interactivity.gmk: added -DQT_NO_DEPRECATED_WARNINGS to Qt compilation
   settings, to silence warnings from Qt for use of deprecated features.

@@ -16,12 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 January 19: V.Ivanchenko (emutils-V10-05-23)
+- G4EmParameters, G4EmParametersMessenger - added new parameter
+    to enable read of e+e- production table from file (CMS request)
+
 16 October 19: D.Sawkey (emutils-V10-05-22)
 - G4EmBiasingManager - delete non-tracked particles
 
 11 October 19: W.G.Shin, S.Incerti (emutils-V10-05-21)
-- G4DNAModelSubType.hh : added Kreipl and Meesungnoen amorphous 
-ice models
+- G4DNAModelSubType.hh : added Kreipl and Meesungnoen amorphous
+  ice models
 - G4EmLowEParametersMessenger.* : added corresponding commands
 
 10 October 19: V.Ivanchenko (emutils-V10-05-20)

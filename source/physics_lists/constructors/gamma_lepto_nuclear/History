@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 January 2020,  Dennis Wright (phys-ctor-glnuclear-V10-05-04)
+- Remove double delete in destructor of G4LENDBertiniGammaElectroNuclearBuilder
+  (Coverity errors 101609 and 101727).
+
 29 November 2019, A.Ribon (phys-ctor-glnuclear-V10-05-03)
 - Update of the only README file.
 

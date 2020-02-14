@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1046,7 +1046,7 @@ Event = 0 z0 = -779.999  Primary direction = (0,0,1)
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.570000s Real=0.584071s Sys=0.010000s
+  User=0.570000s Real=0.662627s Sys=0.000000s
 RunAction: End of run actions are started 1  Nevt=  100  Edep= 3722.43
  ====================================================
    Beam Particle: proton

@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-January-2020  Alberto Ribon (phys-lists-V10-05-05)
+ - LBE : updated cross sections to avoid crashes caused by the removal of
+   default Gheisha cross sections, and to have consistency between elastic
+   and inelastic cross sections.
+
 22-October-2019  Alberto Ribon (phys-lists-V10-05-04)
  - FTFP_BERT_HP, QGSP_BERT_HP, INCLXXPhysicsListHelper : added (consistently)
    RadioactiveDecay to all physics lists which use NeutronHP (the rationale

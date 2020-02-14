@@ -481,12 +481,12 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     const G4double LeptonEnergy2 = PairInvMass*0.5;
 
     // New way of calucaltion thePRecoil to avoid underflow
-    const G4double ap1 = 2.0*GammaEnergy*RecoilMass -
-      PairInvMass*PairInvMass + 2.0*PairInvMass*RecoilMass;
-    const G4double bp1 = 2.0*GammaEnergy*RecoilMass -
-      PairInvMass*PairInvMass - 2.0*PairInvMass*RecoilMass;
+    G4double abp = std::max((2.0*GammaEnergy*RecoilMass -
+			     PairInvMass*PairInvMass + 2.0*PairInvMass*RecoilMass)*
+                            (2.0*GammaEnergy*RecoilMass -
+			     PairInvMass*PairInvMass - 2.0*PairInvMass*RecoilMass),0.0);
 
-    const G4double thePRecoil = std::sqrt(ap1 * bp1) * isqrts2;
+    G4double thePRecoil = std::sqrt(abp) * isqrts2;
 
     // back to the center-of-mass frame
     Recoil.set( thePRecoil*sinTheta*cosPhi,

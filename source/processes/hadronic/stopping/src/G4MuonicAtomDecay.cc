@@ -256,6 +256,12 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
       }
 #endif
       products = decaychannel->DecayIt(aParticle->GetMass());
+      if(!products) {
+	G4ExceptionDescription ed;
+	ed << "No products are generated for "
+           << aParticleDef->GetParticleName();
+	G4Exception("G4MuonicAtomDecay::DecayIt","DECAY003",FatalException,ed);
+      }
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>1) {
 	decaychannel->SetVerboseLevel(temp);

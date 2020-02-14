@@ -377,7 +377,7 @@ void G4FTFParameters::InitForInteraction( const G4ParticleDefinition* particle,
     // Gaussian parametrization of elastic scattering amplitude assumed
     SetAvaragePt2ofElasticScattering( 1.0/( Xtotal*Xtotal/16.0/pi/Xelastic/0.3894 )*GeV*GeV );
   } else {
-    SetSlope(0.0);
+    SetSlope(1.0);
     SetAvaragePt2ofElasticScattering( 0.0);
   }
   SetGamma0( GetSlope()*Xtotal/10.0/2.0/pi );
