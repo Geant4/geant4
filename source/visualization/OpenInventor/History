@@ -18,6 +18,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+22 January 2020 B.Morgan (openinventor-V10-05-08)
+- Add include paths to Inventor et al to usage requirements on G4OpenInventor
+  Inventor does not yet support imported targets, and paths added by
+  include_directories are now explicitly removed.
+  Fixes Bugzilla 2215
 
 23rd October 2019 Ben Morgan (openinventor-V10-05-07)
 - Remove inclusion of QT_USE_FILE from CMake scripts.

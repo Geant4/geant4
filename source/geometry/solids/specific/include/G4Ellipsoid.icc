@@ -31,94 +31,58 @@
 inline
 G4double G4Ellipsoid::GetDx() const
 {
-  return xSemiAxis;
+  return fDx;
 }
 
 inline
 G4double G4Ellipsoid::GetDy() const
 {
-  return ySemiAxis;
+  return fDy;
 }
 
 inline
 G4double G4Ellipsoid::GetDz() const
 {
-  return zSemiAxis;
+  return fDz;
 }
 
 inline
 G4double G4Ellipsoid::GetSemiAxisMax (G4int i) const
 {
-  return (i==0) ? xSemiAxis
-       : (i==1) ? ySemiAxis
-       : zSemiAxis;
+  return (i==0) ? fDx : ((i==1) ? fDy : fDz);
 }
 
 inline
 G4double G4Ellipsoid::GetZBottomCut() const
 {
-  return zBottomCut;
+  return fZBottomCut;
 }
 
 inline
 G4double G4Ellipsoid::GetZTopCut() const
 {
-  return zTopCut;
+  return fZTopCut;
 }
 
 inline
-void G4Ellipsoid::SetSemiAxis (G4double newxSemiAxis,
-                               G4double newySemiAxis,
-                               G4double newzSemiAxis)
+void G4Ellipsoid::SetSemiAxis(G4double newxSemiAxis,
+                              G4double newySemiAxis,
+                              G4double newzSemiAxis)
 {
-  xSemiAxis= newxSemiAxis; ySemiAxis= newySemiAxis; zSemiAxis= newzSemiAxis;
-  semiAxisMax = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
-  if (zSemiAxis > semiAxisMax) { semiAxisMax= zSemiAxis; }
-  if (zBottomCut < -zSemiAxis) { zBottomCut = -zSemiAxis; }
-  if (zTopCut > +zSemiAxis) { zTopCut = +zSemiAxis; }
+  fDx = newxSemiAxis;
+  fDy = newySemiAxis;
+  fDz = newzSemiAxis;
+
+  CheckParameters();
   fRebuildPolyhedron = true;
 }
 
 inline
 void G4Ellipsoid::SetZCuts (G4double newzBottomCut, G4double newzTopCut)
 {
-  if (newzBottomCut < -zSemiAxis)
-    { zBottomCut = -zSemiAxis; }
-  else
-    { zBottomCut = newzBottomCut; }
+  fZBottomCut = newzBottomCut;
+  fZTopCut = newzTopCut;
 
-  if (newzTopCut > +zSemiAxis)
-    { zTopCut = +zSemiAxis; }
-  else
-    { zTopCut = newzTopCut; }
+  CheckParameters();
   fRebuildPolyhedron = true;
-}
-
-inline
-G4double G4Ellipsoid::GetCubicVolume()
-{
-  if(fCubicVolume != 0 ) {;}
-  else
-  {
-    if ((zTopCut > +zSemiAxis && zBottomCut < -zSemiAxis)
-     || (zTopCut == 0 && zBottomCut == 0) )
-    {
-      fCubicVolume = (4./3.)*CLHEP::pi*xSemiAxis*ySemiAxis*zSemiAxis;
-    }
-    else 
-    {   
-      fCubicVolume = CLHEP::pi*xSemiAxis*ySemiAxis
-                   * ((zTopCut-std::pow(zTopCut,3.)/(3.*sqr(zSemiAxis)))
-                   - (zBottomCut-std::pow(zBottomCut,3.)/(3.*sqr(zSemiAxis))));
-    }
-  }
-  return fCubicVolume;
-}
-
-inline
-G4double G4Ellipsoid::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
-  return fSurfaceArea;
 }

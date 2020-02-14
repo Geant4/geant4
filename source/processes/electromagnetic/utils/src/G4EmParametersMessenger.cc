@@ -174,6 +174,12 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   icru90Cmd->SetDefaultValue(false);
   icru90Cmd->AvailableForStates(G4State_PreInit);
 
+  mudatCmd = new G4UIcmdWithABool("/process/em/MuDataFromFile",this);
+  mudatCmd->SetGuidance("Enable usage of muon data from file");
+  mudatCmd->SetParameterName("mudat",true);
+  mudatCmd->SetDefaultValue(false);
+  mudatCmd->AvailableForStates(G4State_PreInit);
+
   minSubSecCmd = new G4UIcmdWithADouble("/process/eLoss/minsubsec",this);
   minSubSecCmd->SetGuidance("Set the ratio subcut/cut ");
   minSubSecCmd->SetParameterName("rcmin",true);
@@ -408,6 +414,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete onIsolatedCmd;
   delete sampleTCmd;
   delete icru90Cmd;
+  delete mudatCmd;
 
   delete minSubSecCmd;
   delete minEnCmd;
@@ -496,6 +503,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetGeneralProcessActive(sharkCmd->GetNewBoolValue(newValue));
   } else if (command == sampleTCmd) {
     theParameters->SetEnableSamplingTable(sampleTCmd->GetNewBoolValue(newValue));
+  } else if (command == mudatCmd) {
+    theParameters->SetRetrieveMuDataFromFile(mudatCmd->GetNewBoolValue(newValue));
 
   } else if (command == minSubSecCmd) {
     theParameters->SetMinSubRange(minSubSecCmd->GetNewDoubleValue(newValue));

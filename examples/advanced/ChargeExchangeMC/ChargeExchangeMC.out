@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1278,7 +1278,7 @@ Event 14455
 Run terminated.
 Run Summary
   Number of events processed : 14456, effectively: 10
-  User=8.780000s Real=9.096388s Sys=0.030000s
+  User=8.590000s Real=8.667211s Sys=0.010000s
 
  --- Setup acceptances (range | real (trg / mon) | rec (trg / mon / all)):
         1 [ 1.0000,  0.8000)  | 0.00254453 ( 1 / 393 )  | 0.00000000 ( 0 / 393 / 480 )

@@ -14,6 +14,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 February 2019  Vladimir Ivanchenko (hadr-casc-V10-05-03)
+-----------------------------------------------------------
+13 January 2020  Dennis Wright 
+----------------------------------------------------
+- G4CascadeInterface.cc: fix memory leak by deleting ltcollider in class
+  dtor
+
+10 January 2020  Michael Kelsey 
+-----------------------------------------------------
+- G4CascadeParamMessenger.cc: Ensure that Bertini-specific commands get
+  added to /process/had/cascade/ directory, instead of /process/had.
+  Requires resetting cmdDir=0 between CreateDirectory() calls.
+
+16 December 2019  Vladimir Ivanchenko 
+-----------------------------------------------------------
+- G4CascadeCheckBalance: fixed outstanding problem of the interface 
+  with native pre-compound model, which happens since in the 
+  default de-excitation internal electron conversion become 
+  enabled 
+
  7 November 2019  Dennis Wright (hadr-casc-V10-05-02)
 -----------------------------------------------------
 - G4LightTargetCollider: fix crash when gamma energy below deuteron

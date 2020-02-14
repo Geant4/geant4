@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 13, 2020 G.Cosmo                         - field-V10-05-18
+------------------------
+- Turn off verbosity flags by default in G4IntegratorDriver,
+  G4InterpolationDriver and G4MagIntegratorDriver.
+
 November 14, 2019 J.Apostolakis                  - field-V10-05-17
 -------------------------------
 - Added method / attribute to G4VIntegrationDriver DoesReIntegrate()

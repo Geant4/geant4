@@ -38,7 +38,7 @@ G4BetaDecayCorrections::G4BetaDecayCorrections(const G4int theZ, const G4int the
   // Nuclear radius in units of hbar/m_e/c
   Rnuc = 0.5*fine_structure_const*std::pow(A, 0.33333);
 
-  // Electron screening potential in units of electrom mass
+  // Electron screening potential in units of electron mass
   V0 = 1.13*fine_structure_const*fine_structure_const
            *std::pow(std::abs(Z), 1.33333);
 

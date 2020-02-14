@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th January 2020  Anna Zaborowska  (exam-ext-vis-UVA-V10-05-00)
+- Fix suggested in macros command /run/numberOfThreads
+
 3rd May 2017  John Allison  (exam-ext-vis-UVA-V10-03-04)
 - Copied exampleB1.in to userVisAction.in.
   All macros now include /run/initialize.

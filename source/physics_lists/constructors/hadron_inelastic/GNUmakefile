@@ -13,13 +13,9 @@ include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -DG4PROCESSES_EXPORT
 
-ifeq ($(G4SYSTEM), WIN32-VC)
-CPPFLAGS += -I$(G4BASE)/externals/expat/include
-endif
 ifdef G4LIB_BUILD_EXPAT
 CPPFLAGS += -I$(G4BASE)/externals/expat/include
 endif
-
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
@@ -39,9 +35,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/run/include \
-	    -I$(G4BASE)/physics_lists/builders/include \
-	    -I$(G4BASE)/physics_lists/util/include \
-	    -I$(G4BASE)/physics_lists/constructors/factory/include \
+            -I$(G4BASE)/physics_lists/builders/include \
+            -I$(G4BASE)/physics_lists/util/include \
+            -I$(G4BASE)/physics_lists/constructors/factory/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
@@ -55,7 +51,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-	    -I$(G4BASE)/processes/hadronic/models/qmd/include \
+            -I$(G4BASE)/processes/hadronic/models/qmd/include \
             -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \

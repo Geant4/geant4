@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -11006,51 +11006,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-14.676713(mm),0.87368791(mm),78.646228(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-
-*********************************************************************************************************
-* G4Track Information:   Particle = pi+,   Track ID = 5,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -1.42 cm    873 um   7.62 cm   38.9 MeV     0 eV      0 fm      0 fm     Target    initStep
-    1 -1.3192255 cm  582.02131 um  7.5379083 cm  33.709603 MeV 5.2163705 MeV 1.3887399 mm  1.3887399 mm     Target       hIoni
-    2 -1.3163422 cm  579.30207 um  7.5364053 cm  33.602565 MeV 107.03844 keV 32.650463 um  1.4213904 mm     Target  CoulombScat
-    3 -1.2167915 cm  534.90751 um    7.48624 cm  28.527407 MeV 5.0751576 MeV 1.1247499 mm  2.5461403 mm     Target       hIoni
-    4 -1.1352514 cm  444.16354 um  7.4525145 cm  23.704864 MeV 4.8225426 MeV 894.69134 um  3.4408316 mm     Target       hIoni
-    5 -1.0683975 cm  412.77512 um  7.4351673 cm  19.273609 MeV 4.4312555 MeV 697.81623 um  4.1386478 mm     Target       hIoni
-    6 -1.0169874 cm   293.1473 um  7.4285679 cm  15.909325 MeV 3.3642835 MeV 537.44018 um   4.676088 mm     Target       hIoni
-    7 -9.8317693 mm  58.735249 um  7.4179575 cm  12.585668 MeV 3.3236576 MeV 429.83456 um  5.1059226 mm     Target       hIoni
-    8 -9.5558649 mm -102.45994 um  7.4090927 cm  9.9159381 MeV 2.6697297 MeV   336.249 um  5.4421716 mm     Target       hIoni
-    9  -9.359966 mm -267.33791 um  7.4021429 cm  7.0782583 MeV 2.8376798 MeV 269.94181 um  5.7121134 mm     Target       hIoni
-   10 -9.2633349 mm -419.51379 um  7.3933449 cm  4.3961284 MeV   2.68213 MeV 205.59882 um  5.9177122 mm     Target       hIoni
-   11 -9.2140656 mm -529.34786 um  7.3876892 cm   939.6711 keV 3.4564573 MeV 138.49246 um  6.0562047 mm     Target       hIoni
-   12 -9.2124755 mm -536.06464 um  7.3870061 cm  112.83167 keV 826.83944 keV 12.374872 um  6.0685795 mm     Target       hIoni
-   13 -9.2124281 mm -536.29523 um   7.386983 cm          0 eV  112.83167 keV 665.31635 nm  6.0692448 mm     Target       hIoni
-   14 -9.2124281 mm -536.29523 um   7.386983 cm          0 eV          0 eV          0 fm  6.0692448 mm     Target  Scintillation
-Track (trackID 5, parentID 1) is processed with stopping code 2
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu+,   Track ID = 17,   Parent ID = 5
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -9.21 mm   -536 um   7.39 cm   4.12 MeV     0 eV      0 fm      0 fm     Target    initStep
-    1 -9.1456725 mm -592.12299 um  7.3958896 cm  1.4650641 MeV 2.6547486 MeV 143.92583 um  143.92583 um     Target      muIoni
-    2 -9.1287044 mm -590.17162 um  7.3974038 cm  132.84446 keV 1.3322196 MeV 29.335773 um  173.26161 um     Target      muIoni
-    3 -9.1286088 mm -589.82139 um  7.3974252 cm  64.359442 keV 68.485021 keV  874.5444 nm  174.13615 um     Target      muIoni
-    4 -9.1286158 mm -589.89891 um  7.3974367 cm          0 eV  64.359442 keV 359.00018 nm  174.49515 um     Target      muIoni
-    5 -9.1286158 mm -589.89891 um  7.3974367 cm          0 eV          0 eV          0 fm  174.49515 um     Target  Scintillation
-Track (trackID 17, parentID 5) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-17.061419(mm),-1.9046406(mm),78.225741(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-14.397027(mm),-1.040827(mm),78.695545(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11059,7 +11015,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-15.450563(mm),-0.25398401(mm),78.509778(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-15.625758(mm),-3.1224928(mm),78.478886(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11068,7 +11024,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-12.749889(mm),-2.7222276(mm),78.985979(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-12.432274(mm),-3.3379955(mm),79.041984(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11077,7 +11033,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-15.528645(mm),0.67764856(mm),78.49601(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-15.965519(mm),-1.9443827(mm),78.418977(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11086,7 +11042,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-15.372204(mm),-1.8981448(mm),78.523595(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-14.911962(mm),2.3811459(mm),78.604748(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11095,7 +11051,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-16.662445(mm),-0.81286577(mm),78.29609(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-14.478616(mm),-3.0532103(mm),78.681158(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11104,7 +11060,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-11.005841(mm),-0.54924459(mm),79.293502(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-12.269897(mm),0.7679733(mm),79.070615(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11113,7 +11069,16 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-10.384607(mm),0.25598394(mm),79.403043(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-16.599402(mm),-0.7409507(mm),78.307207(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-17.70718(mm),-0.13246843(mm),78.111875(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11136,12 +11101,12 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_W
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 159
- Current couple of seeds = 231192465, 497078173
+ Current couple of seeds = 1826779113, 332233375
 ----------------------------------------
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.635733(mm),-3.6166923(mm),78.829781(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-16.054606(mm),-3.1850447(mm),78.403269(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11152,7 +11117,3 @@ Visualization Manager deleting...
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Maximum number of tracks in the urgent stack : 576460752303423487
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-G4Integration Driver Stats: #QuickAdvance 13794 - #AccurateAdvance 5277 #good steps 43763 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 12796  No Calls: 9426  Max-trial: 5
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

@@ -25,10 +25,11 @@
 //
 // class G4Ellipsoid
 //
-// Implementation for G4Ellipsoid class
+// Implementation of G4Ellipsoid class
 //
 // 10.11.99 G.Horton-Smith: first writing, based on G4Sphere class
 // 25.02.05 G.Guerrieri: Revised
+// 15.12.19 E.Tcherniaev: Complete revision
 // --------------------------------------------------------------------
 
 #include "G4Ellipsoid.hh"
@@ -41,9 +42,8 @@
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4BoundingEnvelope.hh"
-
-#include "meshdefs.hh"
-#include "Randomize.hh"
+#include "G4RandomTools.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -54,73 +54,39 @@
 
 namespace
 {
-  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4Mutex polyhedronMutex  = G4MUTEX_INITIALIZER;
+  G4Mutex lateralareaMutex = G4MUTEX_INITIALIZER;
 }
 
 using namespace CLHEP;
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
-//             - note if pDPhi>2PI then reset to 2PI
+// Constructor
 
-G4Ellipsoid::G4Ellipsoid(const G4String& pName,
-                               G4double pxSemiAxis,
-                               G4double pySemiAxis,
-                               G4double pzSemiAxis,
-                               G4double pzBottomCut,
-                               G4double pzTopCut)
-  : G4VSolid(pName), zBottomCut(0.), zTopCut(0.)
+G4Ellipsoid::G4Ellipsoid(const G4String& name,
+                               G4double xSemiAxis,
+                               G4double ySemiAxis,
+                               G4double zSemiAxis,
+                               G4double zBottomCut,
+                               G4double zTopCut)
+  : G4VSolid(name), fDx(xSemiAxis), fDy(ySemiAxis), fDz(zSemiAxis),
+    fZBottomCut(zBottomCut), fZTopCut(zTopCut)
 {
-  // note: for users that want to use the full ellipsoid it is useful
-  // to include a default for the cuts 
-
-  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
-
-  halfCarTolerance = kCarTolerance*0.5;
-  halfRadTolerance = kRadTolerance*0.5;
-
-  // Check Semi-Axis
-  if ( (pxSemiAxis<=0.) || (pySemiAxis<=0.) || (pzSemiAxis<=0.) )
-  {
-     std::ostringstream message;
-     message << "Invalid semi-axis - " << GetName();
-     G4Exception("G4Ellipsoid::G4Ellipsoid()", "GeomSolids0002",
-                 FatalErrorInArgument, message);
-  }
-  SetSemiAxis(pxSemiAxis, pySemiAxis, pzSemiAxis);
-
-  if ( pzBottomCut == 0 && pzTopCut == 0 )
-  {
-     SetZCuts(-pzSemiAxis, pzSemiAxis);
-  }
-  else if ( (pzBottomCut < pzSemiAxis) && (pzTopCut > -pzSemiAxis)
-         && (pzBottomCut < pzTopCut) )
-  {
-     SetZCuts(pzBottomCut, pzTopCut);
-  }
-  else
-  {
-     std::ostringstream message;
-     message << "Invalid z-coordinate for cutting plane - " << GetName();
-     G4Exception("G4Ellipsoid::G4Ellipsoid()", "GeomSolids0002",
-                 FatalErrorInArgument, message);
-  }
+  CheckParameters();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
+//                            for usage restricted to object persistency
+
 G4Ellipsoid::G4Ellipsoid( __void__& a )
-  : G4VSolid(a), kRadTolerance(0.), halfCarTolerance(0.), halfRadTolerance(0.),
-    xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
-    semiAxisMax(0.), zBottomCut(0.), zTopCut(0.)
+  : G4VSolid(a), fDx(0.), fDy(0.), fDz(0.), fZBottomCut(0.), fZTopCut(0.)
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Destructor
 
@@ -129,27 +95,31 @@ G4Ellipsoid::~G4Ellipsoid()
   delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
 G4Ellipsoid::G4Ellipsoid(const G4Ellipsoid& rhs)
   : G4VSolid(rhs),
-    kRadTolerance(rhs.kRadTolerance),
-    halfCarTolerance(rhs.halfCarTolerance),
-    halfRadTolerance(rhs.halfRadTolerance),
-    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    xSemiAxis(rhs.xSemiAxis), ySemiAxis(rhs.ySemiAxis),
-    zSemiAxis(rhs.zSemiAxis), semiAxisMax(rhs.semiAxisMax),
-    zBottomCut(rhs.zBottomCut), zTopCut(rhs.zTopCut)
+   fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz),
+   fZBottomCut(rhs.fZBottomCut), fZTopCut(rhs.fZTopCut),
+   halfTolerance(rhs.halfTolerance),
+   fXmax(rhs.fXmax), fYmax(rhs.fYmax),
+   fRsph(rhs.fRsph), fR(rhs.fR),
+   fSx(rhs.fSx), fSy(rhs.fSy), fSz(rhs.fSz),
+   fZMidCut(rhs.fZMidCut), fZDimCut(rhs.fZDimCut),
+   fQ1(rhs.fQ1), fQ2(rhs.fQ2),
+   fCubicVolume(rhs.fCubicVolume),
+   fSurfaceArea(rhs.fSurfaceArea),
+   fLateralArea(rhs.fLateralArea)
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
 
-G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs) 
+G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
 {
    // Check assignment to self
    //
@@ -161,23 +131,124 @@ G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
 
    // Copy data
    //
-   kRadTolerance = rhs.kRadTolerance;
-   halfCarTolerance = rhs.halfCarTolerance;
-   halfRadTolerance = rhs.halfRadTolerance;
-   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
-   zSemiAxis = rhs.zSemiAxis; semiAxisMax = rhs.semiAxisMax;
-   zBottomCut = rhs.zBottomCut; zTopCut = rhs.zTopCut;
+   fDx = rhs.fDx;
+   fDy = rhs.fDy;
+   fDz = rhs.fDz;
+   fZBottomCut = rhs.fZBottomCut;
+   fZTopCut = rhs.fZTopCut;
+
+   halfTolerance = rhs.halfTolerance;
+   fXmax = rhs.fXmax;
+   fYmax = rhs.fYmax;
+   fRsph = rhs.fRsph;
+   fR = rhs.fR;
+   fSx = rhs.fSx;
+   fSy = rhs.fSy;
+   fSz = rhs.fSz;
+   fZMidCut = rhs.fZMidCut;
+   fZDimCut = rhs.fZDimCut;
+   fQ1 = rhs.fQ1;
+   fQ2 = rhs.fQ2;
+
+   fCubicVolume = rhs.fCubicVolume;
+   fSurfaceArea = rhs.fSurfaceArea;
+   fLateralArea = rhs.fLateralArea;
+
    fRebuildPolyhedron = false;
    delete fpPolyhedron; fpPolyhedron = nullptr;
 
    return *this;
 }
 
-////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//
+// Check parameters and make precalculation
+
+void G4Ellipsoid::CheckParameters()
+{
+  halfTolerance = 0.5 * kCarTolerance; // half tolerance
+  G4double dmin = 2. * kCarTolerance;
+
+  // Check dimensions
+  //
+  if (fDx < dmin || fDy < dmin || fDz < dmin)
+  {
+    std::ostringstream message;
+    message << "Invalid (too small or negative) dimensions for Solid: "
+            << GetName()  << "\n"
+            << "  semi-axis x: " << fDx << "\n"
+            << "  semi-axis y: " << fDy << "\n"
+            << "  semi-axis z: " << fDz;
+    G4Exception("G4Ellipsoid::CheckParameters()", "GeomSolids0002",
+                FatalException, message);
+  }
+  G4double A = fDx;
+  G4double B = fDy;
+  G4double C = fDz;
+
+  // Check cuts
+  //
+  if (fZBottomCut == 0. && fZTopCut == 0.)
+  {
+    fZBottomCut = -C;
+    fZTopCut = C;
+  }
+  if (fZBottomCut >= C || fZTopCut <= -C || fZBottomCut >= fZTopCut)
+  {
+    std::ostringstream message;
+    message << "Invalid Z cuts for Solid: "
+            << GetName() << "\n"
+            << "  bottom cut: " << fZBottomCut << "\n"
+            << "  top cut: " << fZTopCut;
+    G4Exception("G4Ellipsoid::CheckParameters()", "GeomSolids0002",
+                FatalException, message);
+
+  }
+  fZBottomCut = std::max(fZBottomCut, -C);
+  fZTopCut = std::min(fZTopCut, C);
+
+  // Set extent in x and y
+  fXmax = A;
+  fYmax = B;
+  if (fZBottomCut > 0.)
+  {
+    G4double ratio = fZBottomCut / C;
+    G4double scale = std::sqrt((1. - ratio) * (1 + ratio));
+    fXmax *= scale;
+    fYmax *= scale;
+  }
+  if (fZTopCut < 0.)
+  {
+    G4double ratio  = fZTopCut / C;
+    G4double scale  = std::sqrt((1. - ratio) * (1 + ratio));
+    fXmax *= scale;
+    fYmax *= scale;
+  }
+
+  // Set scale factors
+  fRsph = std::max(std::max(A, B), C); // bounding sphere
+  fR    = std::min(std::min(A, B), C); // radius of sphere after scaling
+  fSx   = fR / A; // X scale factor
+  fSy   = fR / B; // Y scale factor
+  fSz   = fR / C; // Z scale factor
+
+  // Scaled cuts
+  fZMidCut = 0.5 * (fZTopCut + fZBottomCut) * fSz; // middle position
+  fZDimCut = 0.5 * (fZTopCut - fZBottomCut) * fSz; // half distance
+
+  // Coefficients for approximation of distance: Q1 * (x^2 + y^2 + z^2) - Q2
+  fQ1 = 0.5 / fR;
+  fQ2 = 0.5 * fR + halfTolerance * halfTolerance * fQ1;
+
+  fCubicVolume = 0.; // volume
+  fSurfaceArea = 0.; // surface area
+  fLateralArea = 0.; // lateral surface area
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
-// computation & modification.
+// computation & modification
 
 void G4Ellipsoid::ComputeDimensions(G4VPVParameterisation* p,
                                     const G4int n,
@@ -186,38 +257,20 @@ void G4Ellipsoid::ComputeDimensions(G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Get bounding box
 
-void G4Ellipsoid::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Ellipsoid::BoundingLimits(G4ThreeVector& pMin,
+                                 G4ThreeVector& pMax) const
 {
-  G4double dx = GetDx();
-  G4double dy = GetDy();
-  G4double dz = GetDz();
-  G4double zmin = std::max(-dz,GetZBottomCut());
-  G4double zmax = std::min( dz,GetZTopCut());
-  pMin.set(-dx,-dy,zmin);
-  pMax.set( dx, dy,zmax);
-
-  // Check correctness of the bounding box
-  //
-  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
-  {
-    std::ostringstream message;
-    message << "Bad bounding box (min >= max) for solid: "
-            << GetName() << " !"
-            << "\npMin = " << pMin
-            << "\npMax = " << pMax;
-    G4Exception("G4Ellipsoid::BoundingLimits()", "GeomMgt0001",
-                JustWarning, message);
-    DumpInfo();
-  }
+  pMin.set(-fXmax,-fYmax, fZBottomCut);
+  pMax.set( fXmax, fYmax, fZTopCut);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Calculate extent under transform and specified limit
+// Calculate extent under transform and specified limits
 
 G4bool
 G4Ellipsoid::CalculateExtent(const EAxis pAxis,
@@ -235,223 +288,211 @@ G4Ellipsoid::CalculateExtent(const EAxis pAxis,
   return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Return whether point inside/outside/on surface
-// Split into radius, phi, theta checks
-// Each check modifies `in', or returns as approprate
+// Return position of point: inside/outside/on surface
 
 EInside G4Ellipsoid::Inside(const G4ThreeVector& p) const
 {
-  G4double rad2oo,  // outside surface outer tolerance
-           rad2oi;  // outside surface inner tolerance
-  EInside in;
+  G4double x     = p.x() * fSx;
+  G4double y     = p.y() * fSy;
+  G4double z     = p.z() * fSz;
+  G4double rr    = x * x + y * y + z * z;
+  G4double distZ = std::abs(z - fZMidCut) - fZDimCut;
+  G4double distR = fQ1 * rr - fQ2;
+  G4double dist  = std::max(distZ, distR);
 
-  // check this side of z cut first, because that's fast
-  //
-  if (p.z() < zBottomCut-halfRadTolerance) { return in=kOutside; }
-  if (p.z() > zTopCut+halfRadTolerance)    { return in=kOutside; }
-
-  rad2oo= sqr(p.x()/(xSemiAxis+halfRadTolerance))
-        + sqr(p.y()/(ySemiAxis+halfRadTolerance))
-        + sqr(p.z()/(zSemiAxis+halfRadTolerance));
-
-  if (rad2oo > 1.0)  { return in=kOutside; }
-    
-  rad2oi= sqr(p.x()*(1.0+halfRadTolerance/xSemiAxis)/xSemiAxis)
-      + sqr(p.y()*(1.0+halfRadTolerance/ySemiAxis)/ySemiAxis)
-      + sqr(p.z()*(1.0+halfRadTolerance/zSemiAxis)/zSemiAxis);
-
-  // Check radial surfaces
-  //  sets `in' (already checked for rad2oo > 1.0)
-  //
-  if (rad2oi < 1.0)
-  {
-    in = ( (p.z() < zBottomCut+halfRadTolerance)
-        || (p.z() > zTopCut-halfRadTolerance) ) ? kSurface : kInside;
-    if ( rad2oi > 1.0-halfRadTolerance )  { in=kSurface; }
-  }
-  else 
-  {
-    in = kSurface;
-  }
-  return in;
-
+  if (dist > halfTolerance) return kOutside;
+  return (dist > -halfTolerance) ? kSurface : kInside;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Return unit normal of surface closest to p not protected against p=0
+// Return unit normal to surface at p
 
 G4ThreeVector G4Ellipsoid::SurfaceNormal( const G4ThreeVector& p) const
 {
-  G4double distR, distZBottom, distZTop;
+  G4ThreeVector norm(0., 0., 0.);
+  G4int nsurf = 0;
 
-  // normal vector with special magnitude:  parallel to normal, units 1/length
-  // norm*p == 1.0 if on surface, >1.0 if outside, <1.0 if inside
-  //
-  G4ThreeVector norm(p.x()/(xSemiAxis*xSemiAxis),
-                     p.y()/(ySemiAxis*ySemiAxis),
-                     p.z()/(zSemiAxis*zSemiAxis));
-  G4double radius = 1.0/norm.mag();
-
-  // approximate distance to curved surface
-  //
-  distR = std::fabs( (p*norm - 1.0) * radius ) / 2.0;
-
-  // Distance to z-cut plane
-  //
-  distZBottom = std::fabs( p.z() - zBottomCut );
-  distZTop = std::fabs( p.z() - zTopCut );
-
-  if ( (distZBottom < distR) || (distZTop < distR) )
+  // Check cuts
+  G4double x = p.x() * fSx;
+  G4double y = p.y() * fSy;
+  G4double z = p.z() * fSz;
+  G4double distZ = std::abs(z - fZMidCut) - fZDimCut;
+  if (std::abs(distZ) <= halfTolerance)
   {
-    return G4ThreeVector(0.,0.,(distZBottom < distZTop) ? -1.0 : 1.0);
+    norm.setZ(std::copysign(1., z - fZMidCut));
+    ++nsurf;
   }
-  return ( norm *= radius );
+
+  // Check lateral surface
+  G4double distR = fQ1*(x*x + y*y + z*z) - fQ2;
+  if (std::abs(distR) <= halfTolerance)
+  {
+    // normal = (p.x/a^2, p.y/b^2, p.z/c^2)
+    norm += G4ThreeVector(x*fSx, y*fSy, z*fSz).unit();
+    ++nsurf;
+  }
+
+  // Return normal
+  if (nsurf == 1) return norm;
+  else if (nsurf > 1) return norm.unit(); // edge
+  else
+  {
+#ifdef G4SPECSDEBUG
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Point p is not on surface (!?) of solid: "
+            << GetName() << "\n";
+    message << "Position:\n";
+    message << "   p.x() = " << p.x()/mm << " mm\n";
+    message << "   p.y() = " << p.y()/mm << " mm\n";
+    message << "   p.z() = " << p.z()/mm << " mm";
+    G4cout.precision(oldprc);
+    G4Exception("G4Ellipsoid::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, message );
+    DumpInfo();
+#endif
+    return ApproxSurfaceNormal(p);
+  }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Calculate distance to shape from outside, along normalised vector
-// - return kInfinity if no intersection, or intersection distance <= tolerance
-//
+// Find surface nearest to point and return corresponding normal.
+// This method normally should not be called.
 
-G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
-                                    const G4ThreeVector& v  ) const
+G4ThreeVector G4Ellipsoid::ApproxSurfaceNormal(const G4ThreeVector& p) const
 {
-  G4double distMin = std::min(xSemiAxis,ySemiAxis);
-  const G4double dRmax = 100.*std::min(distMin,zSemiAxis);
-  distMin= kInfinity;
+  G4double x  = p.x() * fSx;
+  G4double y  = p.y() * fSy;
+  G4double z  = p.z() * fSz;
+  G4double rr = x * x + y * y + z * z;
+  G4double distZ = std::abs(z - fZMidCut) - fZDimCut;
+  G4double distR = std::sqrt(rr) - fR;
+  if  (distR > distZ && rr > 0.) // distR > distZ is correct!
+    return G4ThreeVector(x*fSx, y*fSy, z*fSz).unit();
+  else
+    return G4ThreeVector(0., 0., std::copysign(1., z - fZMidCut));
+}
 
-  // check to see if Z plane is relevant
-  if (p.z() <= zBottomCut+halfCarTolerance)
-  {
-    if (v.z() <= 0.0) { return distMin; }
-    G4double distZ = (zBottomCut - p.z()) / v.z();
-
-    if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
-    {
-      // early exit since can't intercept curved surface if we reach here
-      if ( std::fabs(distZ) < halfRadTolerance ) { distZ=0.; }
-      return distMin= distZ;
-    }
-  }
-  if (p.z() >= zTopCut-halfCarTolerance)
-  {
-    if (v.z() >= 0.0) { return distMin;}
-    G4double distZ = (zTopCut - p.z()) / v.z();
-    if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
-    {
-      // early exit since can't intercept curved surface if we reach here
-      if ( std::fabs(distZ) < halfRadTolerance ) { distZ=0.; }
-      return distMin= distZ;
-    }
-  }
-  // if fZCut1 <= p.z() <= fZCut2, then must hit curved surface
-
-  // now check curved surface intercept
-  G4double A,B,C;
-
-  A= sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) + sqr(v.z()/zSemiAxis);
-  C= sqr(p.x()/xSemiAxis) + sqr(p.y()/ySemiAxis) + sqr(p.z()/zSemiAxis) - 1.0;
-  B= 2.0 * ( p.x()*v.x()/(xSemiAxis*xSemiAxis)
-           + p.y()*v.y()/(ySemiAxis*ySemiAxis)
-           + p.z()*v.z()/(zSemiAxis*zSemiAxis) );
-
-  C= B*B - 4.0*A*C;
-  if (C > 0.0)
-  {    
-    G4double distR= (-B - std::sqrt(C)) / (2.0*A);
-    G4double intZ = p.z()+distR*v.z();
-    if ( (distR > halfRadTolerance)
-      && (intZ >= zBottomCut-halfRadTolerance)
-      && (intZ <= zTopCut+halfRadTolerance) )
-    { 
-      distMin = distR;
-    }
-    else if( (distR >- halfRadTolerance)
-            && (intZ >= zBottomCut-halfRadTolerance)
-            && (intZ <= zTopCut+halfRadTolerance) )
-    {
-      // p is on the curved surface, DistanceToIn returns 0 or kInfinity:
-      // DistanceToIn returns 0, if second root is positive (means going inside)
-      // If second root is negative, DistanceToIn returns kInfinity (outside)
-      //
-      distR = (-B + std::sqrt(C) ) / (2.0*A);
-      if(distR>0.) { distMin=0.; }
-    }
-    else
-    {
-      distR= (-B + std::sqrt(C)) / (2.0*A);
-      intZ = p.z()+distR*v.z();
-      if ( (distR > halfRadTolerance)
-        && (intZ >= zBottomCut-halfRadTolerance)
-        && (intZ <= zTopCut+halfRadTolerance) )
-      {
-        G4ThreeVector norm=SurfaceNormal(p);
-        if (norm.dot(v)<0.) { distMin = distR; }
-      }
-    }
-    if ( (distMin!=kInfinity) && (distMin>dRmax) ) 
-    {                    // Avoid rounding errors due to precision issues on
-                         // 64 bits systems. Split long distances and recompute
-      G4double fTerm = distMin-std::fmod(distMin,dRmax);
-      distMin = fTerm + DistanceToIn(p+fTerm*v,v);
-    }
-  }
-  
-  if (std::fabs(distMin)<halfRadTolerance) { distMin=0.; }
-  return distMin;
-} 
-
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Calculate distance (<= actual) to closest surface of shape from outside
-// - Return 0 if point inside
+// Calculate distance to shape from outside along normalised vector
+
+G4double G4Ellipsoid::DistanceToIn(const G4ThreeVector& p,
+                                   const G4ThreeVector& v) const
+{
+  G4double offset = 0.;
+  G4ThreeVector pcur = p;
+
+  // Check if point is flying away, relative to bounding box
+  //
+  G4double safex = std::abs(p.x()) - fXmax;
+  G4double safey = std::abs(p.y()) - fYmax;
+  G4double safet = p.z() - fZTopCut;
+  G4double safeb = fZBottomCut - p.z();
+
+  if (safex >= -halfTolerance && p.x() * v.x() >= 0.) return kInfinity;
+  if (safey >= -halfTolerance && p.y() * v.y() >= 0.) return kInfinity;
+  if (safet >= -halfTolerance && v.z() >= 0.) return kInfinity;
+  if (safeb >= -halfTolerance && v.z() <= 0.) return kInfinity;
+
+  // Relocate point, if required
+  //
+  G4double safe = std::max(std::max(std::max(safex, safey), safet), safeb);
+  if (safe > 32. * fRsph)
+  {
+    offset = (1. - 1.e-08) * safe - 2. * fRsph;
+    pcur += offset * v;
+    G4double dist = DistanceToIn(pcur, v);
+    return (dist == kInfinity) ? kInfinity : dist + offset;
+  }
+
+  // Scale ellipsoid to sphere
+  //
+  G4double px = pcur.x() * fSx;
+  G4double py = pcur.y() * fSy;
+  G4double pz = pcur.z() * fSz;
+  G4double vx = v.x() * fSx;
+  G4double vy = v.y() * fSy;
+  G4double vz = v.z() * fSz;
+
+  // Check if point is leaving the solid
+  //
+  G4double dzcut = fZDimCut;
+  G4double pzcut = pz - fZMidCut;
+  G4double distZ = std::abs(pzcut) - dzcut;
+  if (distZ >= -halfTolerance && pzcut * vz >= 0.) return kInfinity;
+
+  G4double rr = px * px + py * py + pz * pz;
+  G4double pv = px * vx + py * vy + pz * vz;
+  G4double distR = fQ1 * rr - fQ2;
+  if (distR >= -halfTolerance && pv >= 0.) return kInfinity;
+
+  G4double A = vx * vx + vy * vy + vz * vz;
+  G4double B = pv;
+  G4double C = rr - fR * fR;
+  G4double D = B * B - A * C;
+  // scratch^2 = R^2 - (R - halfTolerance)^2 = 2 * R * halfTolerance
+  G4double EPS = A * A * fR * kCarTolerance; // discriminant at scratching
+  if (D <= EPS) return kInfinity; // no intersection or scratching
+
+  // Find intersection with Z planes
+  //
+  G4double invz  = (vz == 0) ? DBL_MAX : -1./vz;
+  G4double dz    = std::copysign(dzcut, invz);
+  G4double tzmin = (pzcut - dz) * invz;
+  G4double tzmax = (pzcut + dz) * invz;
+
+  // Find intersection with lateral surface
+  //
+  G4double tmp = -B - std::copysign(std::sqrt(D), B);
+  G4double t1 = tmp / A;
+  G4double t2 = C / tmp;
+  G4double trmin = std::min(t1, t2);
+  G4double trmax = std::max(t1, t2);
+
+  // Return distance
+  //
+  G4double tmin = std::max(tzmin, trmin);
+  G4double tmax = std::min(tzmax, trmax);
+
+  if (tmax - tmin <= halfTolerance) return kInfinity; // touch or no hit
+  return (tmin < halfTolerance) ? offset : tmin + offset;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Estimate distance to surface from outside
 
 G4double G4Ellipsoid::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double distR, distZ;
+  G4double px = p.x();
+  G4double py = p.y();
+  G4double pz = p.z();
 
-  // normal vector:  parallel to normal, magnitude 1/(characteristic radius)
-  //
-  G4ThreeVector norm(p.x()/(xSemiAxis*xSemiAxis),
-                     p.y()/(ySemiAxis*ySemiAxis),
-                     p.z()/(zSemiAxis*zSemiAxis));
-  G4double radius= 1.0/norm.mag();
+  // Safety distance to bounding box
+  G4double distX = std::abs(px) - fXmax;
+  G4double distY = std::abs(py) - fYmax;
+  G4double distZ = std::max(pz - fZTopCut, fZBottomCut - pz);
+  G4double distB = std::max(std::max(distX, distY), distZ);
 
-  // approximate distance to curved surface ( <= actual distance )
-  //
-  distR= (p*norm - 1.0) * radius / 2.0;
+  // Safety distance to lateral surface
+  G4double x = px * fSx;
+  G4double y = py * fSy;
+  G4double z = pz * fSz;
+  G4double distR = std::sqrt(x*x + y*y + z*z) - fR;
 
-  // Distance to z-cut plane
-  //
-  distZ= zBottomCut - p.z();
-  if (distZ < 0.0)
-  {
-    distZ = p.z() - zTopCut;
-  }
-
-  // Distance to closest surface from outside
-  //
-  if (distZ < 0.0)
-  {
-    return (distR < 0.0) ? 0.0 : distR;
-  }
-  else if (distR < 0.0)
-  {
-    return distZ;
-  }
-  else
-  {
-    return (distZ < distR) ? distZ : distR;
-  }
+  // Return safety to in
+  G4double dist = std::max(distB, distR);
+  return (dist < 0.) ? 0. : dist;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Calculate distance to surface of shape from `inside', allowing for tolerance
+// Calculate distance to surface from inside along normalised vector
 
 G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
                                     const G4ThreeVector& v,
@@ -459,180 +500,144 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
                                           G4bool* validNorm,
                                           G4ThreeVector* n  ) const
 {
-  G4double distMin;
-  enum surface_e {kPlaneSurf, kCurvedSurf, kNoSurf} surface;
-  
-  distMin= kInfinity;
-  surface= kNoSurf;
-
-  // check to see if Z plane is relevant
+  // Check if point flying away relative to Z planes
   //
-  if (v.z() < 0.0)
+  G4double pz = p.z() * fSz;
+  G4double vz = v.z() * fSz;
+  G4double dzcut = fZDimCut;
+  G4double pzcut = pz - fZMidCut;
+  G4double distZ = std::abs(pzcut) - dzcut;
+  if (distZ >= -halfTolerance && pzcut * vz > 0.)
   {
-    G4double distZ = (zBottomCut - p.z()) / v.z();
-    if (distZ < 0.0)
+    if (calcNorm)
     {
-      distZ= 0.0;
-      if (!calcNorm) {return 0.0;}
+      *validNorm = true;
+      n->set(0., 0., std::copysign(1., pzcut));
     }
-    distMin= distZ;
-    surface= kPlaneSurf;
-  }
-  if (v.z() > 0.0)
-  {
-    G4double distZ = (zTopCut - p.z()) / v.z();
-    if (distZ < 0.0)
-    {
-      distZ= 0.0;
-      if (!calcNorm) {return 0.0;}
-    }
-    distMin= distZ;
-    surface= kPlaneSurf;
+    return 0.;
   }
 
-  // normal vector:  parallel to normal, magnitude 1/(characteristic radius)
+  // Check if point is flying away relative to lateral surface
   //
-  G4ThreeVector nearnorm(p.x()/(xSemiAxis*xSemiAxis),
-                         p.y()/(ySemiAxis*ySemiAxis),
-                         p.z()/(zSemiAxis*zSemiAxis));
-  
-  // now check curved surface intercept
-  //
-  G4double A,B,C;
-  
-  A= sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) + sqr(v.z()/zSemiAxis);
-  C= (p * nearnorm) - 1.0;
-  B= 2.0 * (v * nearnorm);
-
-  C= B*B - 4.0*A*C;
-  if (C > 0.0)
+  G4double px = p.x() * fSx;
+  G4double py = p.y() * fSy;
+  G4double vx = v.x() * fSx;
+  G4double vy = v.y() * fSy;
+  G4double rr = px * px + py * py + pz * pz;
+  G4double pv = px * vx + py * vy + pz * vz;
+  G4double distR = fQ1 * rr - fQ2;
+  if (distR >= -halfTolerance && pv > 0.)
   {
-    G4double distR= (-B + std::sqrt(C) ) / (2.0*A);
-    if (distR < 0.0)
+    if (calcNorm)
     {
-      distR= 0.0;
-      if (!calcNorm) {return 0.0;}
+      *validNorm = true;
+      *n = G4ThreeVector(px*fSx, py*fSy, pz*fSz).unit();
     }
-    if (distR < distMin)
-    {
-      distMin= distR;
-      surface= kCurvedSurf;
-    }
+    return 0.;
   }
 
-  // set normal if requested
+  // Just in case check if point is outside (normally it should never be)
   //
+  if (std::max(distZ, distR) > halfTolerance)
+  {
+#ifdef G4SPECSDEBUG
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Point p is outside (!?) of solid: "
+            << GetName() << G4endl;
+    message << "Position:  " << p << G4endl;;
+    message << "Direction: " << v;
+    G4cout.precision(oldprc);
+    G4Exception("G4Ellipsoid::DistanceToOut(p,v)", "GeomSolids1002",
+                JustWarning, message );
+    DumpInfo();
+#endif
+    if (calcNorm)
+    {
+      *validNorm = true;
+      *n = ApproxSurfaceNormal(p);
+    }
+    return 0.;
+  }
+
+  // Set coefficients of quadratic equation: A t^2 + 2B t + C = 0
+  //
+  G4double A  = vx * vx + vy * vy + vz * vz;
+  G4double B  = pv;
+  G4double C  = rr - fR * fR;
+  G4double D  = B * B - A * C;
+  // It is expected that the point is located inside the sphere, so
+  // max term in the expression for discriminant is A * R^2 and
+  // max calculation error can be derived as follows:
+  // A * (1 + 2e) * R^2 * (1 + 2e) = A * R^2 + (4 * A * R^2 * e)
+  G4double EPS = 4. * A * fR * fR * DBL_EPSILON; // calculation error
+
+  if (D <= EPS) // no intersection
+  {
+    if (calcNorm)
+    {
+      *validNorm = true;
+      *n = G4ThreeVector(px*fSx, py*fSy, pz*fSz).unit();
+    }
+    return 0.;
+  }
+
+  // Find intersection with Z cuts
+  //
+  G4double tzmax = (vz == 0.) ? DBL_MAX : (std::copysign(dzcut, vz) - pzcut) / vz;
+
+  // Find intersection with lateral surface
+  //
+  G4double tmp = -B - std::copysign(std::sqrt(D), B);
+  G4double trmax = (tmp < 0.) ? C/tmp : tmp/A;
+
+  // Find distance and set normal, if required
+  //
+  G4double tmax = std::min(tzmax, trmax);
+  //if (tmax < halfTolerance) tmax = 0.;
+
   if (calcNorm)
   {
-    if (surface == kNoSurf)
+    *validNorm = true;
+    if (tmax == tzmax)
     {
-      *validNorm = false;
+      G4double pznew = pz + tmax * vz;
+      n->set(0., 0., (pznew > fZMidCut) ? 1. : -1.);
     }
     else
     {
-      *validNorm = true;
-      switch (surface)
-      {
-        case kPlaneSurf:
-          *n= G4ThreeVector(0.,0.,(v.z() > 0.0 ? 1. : -1.));
-          break;
-        case kCurvedSurf:
-        {
-          G4ThreeVector pexit= p + distMin*v;
-          G4ThreeVector truenorm(pexit.x()/(xSemiAxis*xSemiAxis),
-                                 pexit.y()/(ySemiAxis*ySemiAxis),
-                                 pexit.z()/(zSemiAxis*zSemiAxis));
-          truenorm *= 1.0/truenorm.mag();
-          *n= truenorm;
-        } break;
-        default:           // Should never reach this case ...
-          DumpInfo();
-          std::ostringstream message;
-          G4int oldprc = message.precision(16);
-          message << "Undefined side for valid surface normal to solid."
-                  << G4endl
-                  << "Position:"  << G4endl
-                  << "   p.x() = "   << p.x()/mm << " mm" << G4endl
-                  << "   p.y() = "   << p.y()/mm << " mm" << G4endl
-                  << "   p.z() = "   << p.z()/mm << " mm" << G4endl
-                  << "Direction:" << G4endl << G4endl
-                  << "   v.x() = "   << v.x() << G4endl
-                  << "   v.y() = "   << v.y() << G4endl
-                  << "   v.z() = "   << v.z() << G4endl
-                  << "Proposed distance :" << G4endl
-                  << "   distMin = "    << distMin/mm << " mm";
-          message.precision(oldprc);
-          G4Exception("G4Ellipsoid::DistanceToOut(p,v,..)",
-                      "GeomSolids1002", JustWarning, message);
-          break;
-      }
+      G4double nx = (px + tmax * vx) * fSx;
+      G4double ny = (py + tmax * vy) * fSy;
+      G4double nz = (pz + tmax * vz) * fSz;
+      *n = G4ThreeVector(nx, ny, nz).unit();
     }
   }
-   
-  return distMin;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Calculate distance (<=actual) to closest surface of shape from inside
-
-G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p) const
-{
-  G4double distR, distZ;
-
-#ifdef G4SPECSDEBUG
-  if( Inside(p) == kOutside )
-  {
-     DumpInfo();
-     std::ostringstream message;
-     G4int oldprc = message.precision(16);
-     message << "Point p is outside !?" << G4endl
-             << "Position:"  << G4endl
-             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
-             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
-             << "   p.z() = "   << p.z()/mm << " mm";
-     message.precision(oldprc) ;
-     G4Exception("G4Ellipsoid::DistanceToOut(p)", "GeomSolids1002",
-                 JustWarning, message);
-  }
-#endif
-
-  // Normal vector:  parallel to normal, magnitude 1/(characteristic radius)
-  //
-  G4ThreeVector norm(p.x()/(xSemiAxis*xSemiAxis),
-                     p.y()/(ySemiAxis*ySemiAxis),
-                     p.z()/(zSemiAxis*zSemiAxis));
-
-  // the following is a safe inlined "radius= min(1.0/norm.mag(),p.mag())
-  //
-  G4double radius= p.mag();
-  G4double tmp= norm.mag();
-  if ( (tmp > 0.0) && (1.0 < radius*tmp) ) {radius = 1.0/tmp;}
-
-  // Approximate distance to curved surface ( <= actual distance )
-  //
-  distR = (1.0 - p*norm) * radius / 2.0;
-    
-  // Distance to z-cut plane
-  //
-  distZ = p.z() - zBottomCut;
-  if (distZ < 0.0) {distZ= zTopCut - p.z();}
-
-  // Distance to closest surface from inside
-  //
-  if ( (distZ < 0.0) || (distR < 0.0) )
-  {
-    return 0.0;
-  }
-  else
-  {
-    return (distZ < distR) ? distZ : distR;
-  }
+  return tmax;
 }
 
 //////////////////////////////////////////////////////////////////////////
 //
-// G4EntityType
+// Estimate distance to surface from inside
+
+G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p) const
+{
+  // Safety distance in z direction
+  G4double distZ = std::min(fZTopCut - p.z(), p.z() - fZBottomCut);
+
+  // Safety distance to lateral surface
+  G4double x = p.x() * fSx;
+  G4double y = p.y() * fSy;
+  G4double z = p.z() * fSz;
+  G4double distR = fR - std::sqrt(x*x + y*y + z*z);
+
+  // Return safety to out
+  G4double dist = std::min(distZ, distR);
+  return (dist < 0.) ? 0. : dist;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return entity type
 
 G4GeometryType G4Ellipsoid::GetEntityType() const
 {
@@ -650,7 +655,7 @@ G4VSolid* G4Ellipsoid::Clone() const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Stream object contents to an output stream
+// Stream object contents to output stream
 
 std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
 {
@@ -658,90 +663,196 @@ std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
-     << " Solid type: G4Ellipsoid\n"
+     << " Solid type: " << GetEntityType() << "\n"
      << " Parameters: \n"
-
-     << "    semi-axis x: " << xSemiAxis/mm << " mm \n"
-     << "    semi-axis y: " << ySemiAxis/mm << " mm \n"
-     << "    semi-axis z: " << zSemiAxis/mm << " mm \n"
-     << "    max semi-axis: " << semiAxisMax/mm << " mm \n"
-     << "    lower cut plane level z: " << zBottomCut/mm << " mm \n"
-     << "    upper cut plane level z: " << zTopCut/mm << " mm \n"
+     << "    semi-axis x: " << GetDx()/mm << " mm \n"
+     << "    semi-axis y: " << GetDy()/mm << " mm \n"
+     << "    semi-axis z: " << GetDz()/mm << " mm \n"
+     << "    lower cut in z: " << GetZBottomCut()/mm << " mm \n"
+     << "    upper cut in z: " << GetZTopCut()/mm << " mm \n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
-
   return os;
 }
 
-////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// GetPointOnSurface
+// Return volume
+
+G4double G4Ellipsoid::GetCubicVolume()
+{
+  if (fCubicVolume == 0.)
+  {
+    G4double piAB_3 = CLHEP::pi * fDx * fDy / 3.;
+    fCubicVolume = 4. * piAB_3 * fDz;
+    if (fZBottomCut > -fDz)
+    {
+      G4double hbot = 1. + fZBottomCut / fDz;
+      fCubicVolume -= piAB_3 * hbot * hbot * (2. * fDz - fZBottomCut);
+    }
+    if (fZTopCut < fDz)
+    {
+      G4double htop = 1. - fZTopCut / fDz;
+      fCubicVolume -= piAB_3 * htop * htop * (2. * fDz + fZTopCut);
+    }
+  }
+  return fCubicVolume;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate area of lateral surface
+
+G4double G4Ellipsoid::LateralSurfaceArea() const
+{
+  const G4int Nphi = 100;
+  const G4int Nz   = 200;
+  G4double rho[Nz + 1];
+
+  // Set array of rho
+  G4double zbot = fZBottomCut / fDz;
+  G4double ztop = fZTopCut / fDz;
+  G4double dz   = (ztop - zbot) / Nz;
+  for (G4int iz = 0; iz < Nz; ++iz)
+  {
+    G4double z = zbot + iz * dz;
+    rho[iz] = std::sqrt((1. + z) * (1. - z));
+  }
+  rho[Nz] = std::sqrt((1. + ztop) * (1. - ztop));
+
+  // Compute area
+  zbot = fZBottomCut;
+  ztop = fZTopCut;
+  dz   = (ztop - zbot) / Nz;
+  G4double area = 0.;
+  G4double dphi = CLHEP::halfpi / Nphi;
+  for (G4int iphi = 0; iphi < Nphi; ++iphi)
+  {
+    G4double phi1 = iphi * dphi;
+    G4double phi2 = (iphi == Nphi - 1) ? CLHEP::halfpi : phi1 + dphi;
+    G4double cos1 = std::cos(phi1) * fDx;
+    G4double cos2 = std::cos(phi2) * fDx;
+    G4double sin1 = std::sin(phi1) * fDy;
+    G4double sin2 = std::sin(phi2) * fDy;
+    for (G4int iz = 0; iz < Nz; ++iz)
+    {
+      G4double z1   = zbot + iz * dz;
+      G4double z2   = (iz == Nz - 1) ? ztop : z1 + dz;
+      G4double rho1 = rho[iz];
+      G4double rho2 = rho[iz + 1];
+      G4ThreeVector p1(rho1 * cos1, rho1 * sin1, z1);
+      G4ThreeVector p2(rho1 * cos2, rho1 * sin2, z1);
+      G4ThreeVector p3(rho2 * cos1, rho2 * sin1, z2);
+      G4ThreeVector p4(rho2 * cos2, rho2 * sin2, z2);
+      area += ((p4 - p1).cross(p3 - p2)).mag();
+    }
+  }
+  return 2. * area;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return surface area
+
+G4double G4Ellipsoid::GetSurfaceArea()
+{
+  if (fSurfaceArea == 0.)
+  {
+    G4double piAB = CLHEP::pi * fDx * fDy;
+    fSurfaceArea = LateralSurfaceArea();
+    if (fZBottomCut > -fDz)
+    {
+      G4double hbot = 1. + fZBottomCut / fDz;
+      fSurfaceArea += piAB * hbot * (2. - hbot);
+    }
+    if (fZTopCut < fDz)
+    {
+      G4double htop = 1. - fZTopCut / fDz;
+      fSurfaceArea += piAB * htop * (2. - htop);
+    }
+  }
+  return fSurfaceArea;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return random point on surface
 
 G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
 {
-  G4double aTop, aBottom, aCurved, chose, xRand, yRand, zRand, phi;
-  G4double cosphi, sinphi, costheta, sintheta, alpha, beta, max1, max2, max3;
+  G4double A    = GetDx();
+  G4double B    = GetDy();
+  G4double C    = GetDz();
+  G4double Zbot = GetZBottomCut();
+  G4double Ztop = GetZTopCut();
 
-  max1  = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
-  max1  = max1 > zSemiAxis ? max1 : zSemiAxis;
-  if (max1 == xSemiAxis)      { max2 = ySemiAxis; max3 = zSemiAxis; }
-  else if (max1 == ySemiAxis) { max2 = xSemiAxis; max3 = zSemiAxis; }
-  else                        { max2 = xSemiAxis; max3 = ySemiAxis; }
+  // Calculate cut areas
+  G4double Hbot = 1. + Zbot / C;
+  G4double Htop = 1. - Ztop / C;
+  G4double piAB = CLHEP::pi * A * B;
+  G4double Sbot = piAB * Hbot * (2. - Hbot);
+  G4double Stop = piAB * Htop * (2. - Htop);
 
-  phi = G4RandFlat::shoot(0.,twopi);
-  
-  cosphi = std::cos(phi);   sinphi = std::sin(phi);
-  costheta = G4RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;
-  sintheta = std::sqrt(1.-sqr(costheta));
-  
-  alpha = 1.-sqr(max2/max1); beta  = 1.-sqr(max3/max1);
-  
-  aTop    = pi*xSemiAxis*ySemiAxis*(1 - sqr(zTopCut/zSemiAxis));
-  aBottom = pi*xSemiAxis*ySemiAxis*(1 - sqr(zBottomCut/zSemiAxis));
-  
-  // approximation
-  // from:" http://www.citr.auckland.ac.nz/techreports/2004/CITR-TR-139.pdf"
-  aCurved = 4.*pi*max1*max2*(1.-1./6.*(alpha+beta)-
-                            1./120.*(3.*sqr(alpha)+2.*alpha*beta+3.*sqr(beta)));
+  // Get area of lateral surface
+  if (fLateralArea == 0.)
+  {
+    G4AutoLock l(&lateralareaMutex);
+    fLateralArea = LateralSurfaceArea();
+    l.unlock();
+  }
+  G4double Slat = fLateralArea;
 
-  aCurved *= 0.5*(1.2*zTopCut/zSemiAxis - 1.2*zBottomCut/zSemiAxis);
-  
-  if( ( zTopCut >= zSemiAxis && zBottomCut <= -1.*zSemiAxis )
-   || ( zTopCut == 0 && zBottomCut ==0 ) )
+  // Select surface (0 - bottom cut, 1 - lateral surface, 2 - top cut)
+  G4double select = (Sbot + Slat + Stop) * G4QuickRand();
+  G4int k = 0;
+  if (select > Sbot) k = 1;
+  if (select > Sbot + Slat) k = 2;
+
+  // Pick random point on selected surface (rejection sampling)
+  G4ThreeVector p;
+  switch (k)
   {
-    aTop = 0; aBottom = 0;
+    case 0: // bootom z-cut
+    {
+      G4double scale = std::sqrt(Hbot * (2. - Hbot));
+      G4TwoVector rho = G4RandomPointInEllipse(A * scale, B * scale);
+      p.set(rho.x(), rho.y(), Zbot);
+      break;
+    }
+    case 1: // lateral surface
+    {
+      G4double x, y, z;
+      G4double mu_max = std::max(std::max(A * B, A * C), B * C);
+      for (G4int i = 0; i < 1000; ++i)
+      {
+        // generate random point on unit sphere
+        z = (Zbot + (Ztop - Zbot) * G4QuickRand()) / C;
+        G4double rho = std::sqrt((1. + z) * (1. - z));
+        G4double phi = CLHEP::twopi * G4QuickRand();
+        x = rho * std::cos(phi);
+        y = rho * std::sin(phi);
+        // check  acceptance
+        G4double xbc = x * B * C;
+        G4double yac = y * A * C;
+        G4double zab = z * A * B;
+        G4double mu  = std::sqrt(xbc * xbc + yac * yac + zab * zab);
+        if (mu_max * G4QuickRand() <= mu) break;
+      }
+      p.set(A * x, B * y, C * z);
+      break;
+    }
+    case 2: // top z-cut
+    {
+      G4double scale  = std::sqrt(Htop * (2. - Htop));
+      G4TwoVector rho = G4RandomPointInEllipse(A * scale, B * scale);
+      p.set(rho.x(), rho.y(), Ztop);
+      break;
+    }
   }
-  
-  chose = G4RandFlat::shoot(0.,aTop + aBottom + aCurved); 
-  
-  if(chose < aCurved)
-  { 
-    xRand = xSemiAxis*sintheta*cosphi;
-    yRand = ySemiAxis*sintheta*sinphi;
-    zRand = zSemiAxis*costheta;
-    return G4ThreeVector (xRand,yRand,zRand); 
-  }
-  else if(chose >= aCurved && chose < aCurved + aTop)
-  {
-    xRand = G4RandFlat::shoot(-1.,1.)*xSemiAxis
-          * std::sqrt(1-sqr(zTopCut/zSemiAxis));
-    yRand = G4RandFlat::shoot(-1.,1.)*ySemiAxis
-          * std::sqrt(1.-sqr(zTopCut/zSemiAxis)-sqr(xRand/xSemiAxis));
-    zRand = zTopCut;
-    return G4ThreeVector (xRand,yRand,zRand);
-  }
-  else
-  {
-    xRand = G4RandFlat::shoot(-1.,1.)*xSemiAxis
-          * std::sqrt(1-sqr(zBottomCut/zSemiAxis));
-    yRand = G4RandFlat::shoot(-1.,1.)*ySemiAxis
-          * std::sqrt(1.-sqr(zBottomCut/zSemiAxis)-sqr(xRand/xSemiAxis)); 
-    zRand = zBottomCut;
-    return G4ThreeVector (xRand,yRand,zRand);
-  }
+  return p;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
 
@@ -750,20 +861,27 @@ void G4Ellipsoid::DescribeYourselfTo (G4VGraphicsScene& scene) const
   scene.AddSolid(*this);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Return vis extent
+
 G4VisExtent G4Ellipsoid::GetExtent() const
 {
-  // Define the sides of the box into which the G4Ellipsoid instance would fit.
-  //
-  return G4VisExtent (-semiAxisMax, semiAxisMax,
-                      -semiAxisMax, semiAxisMax,
-                      -semiAxisMax, semiAxisMax);
+  return G4VisExtent(-fXmax, fXmax, -fYmax, fYmax, fZBottomCut, fZTopCut);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron
 
 G4Polyhedron* G4Ellipsoid::CreatePolyhedron () const
 {
-  return new G4PolyhedronEllipsoid(xSemiAxis, ySemiAxis, zSemiAxis,
-                                   zBottomCut, zTopCut);
+  return new G4PolyhedronEllipsoid(fDx, fDy, fDz, fZBottomCut, fZTopCut);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return pointer to polyhedron
 
 G4Polyhedron* G4Ellipsoid::GetPolyhedron () const
 {

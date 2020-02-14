@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -805,7 +805,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.090000s Real=0.136506s Sys=0.010000s
+  User=0.090000s Real=0.098888s Sys=0.010000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -865,7 +865,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.150000s Real=0.155563s Sys=0.000000s
+  User=0.160000s Real=0.157271s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

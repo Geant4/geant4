@@ -71,6 +71,7 @@
 #include "G4MuPairProductionModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4EmParameters.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonMinus.hh"
@@ -84,6 +85,8 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include <iostream>
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -118,7 +121,8 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
     nbiny(1000),
     nbine(0),
     ymin(-5.),
-    dy(0.005)
+    dy(0.005),
+    fTableToFile(false)
 {
   nist = G4NistManager::Instance();
 
@@ -173,10 +177,12 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
   }
 
   if(IsMaster() && p == particle) { 
-    
     if(!fElementData) { 
       fElementData = new G4ElementData();
-      MakeSamplingTables(); 
+      G4bool dataFile = G4EmParameters::Instance()->RetrieveMuDataFromFile();
+      if(dataFile)  { dataFile = RetrieveTables(); }
+      if(!dataFile) { MakeSamplingTables(); }
+      if(fTableToFile) { StoreTables(); }
     }    
     InitialiseElementSelectors(p, cuts); 
   }
@@ -244,10 +250,8 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
   G4double hhh = (bbb-aaa)/(G4double)kkk;
   G4double x = aaa;
 
-  for (G4int l=0 ; l<kkk; l++)
-  {
-
-    for (G4int ll=0; ll<8; ll++)
+  for (G4int l=0 ; l<kkk; ++l) {
+    for (G4int ll=0; ll<8; ++ll)
     {
       G4double ep = G4Exp(x+xgi[ll]*hhh);
       loss += wgi[ll]*ep*ep*ComputeDMicroscopicCrossSection(tkin, Z, ep);
@@ -645,7 +649,7 @@ void G4MuPairProductionModel::SampleSecondaries(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuPairProductionModel::DataCorrupted(G4int Z, G4double logTkin)
+void G4MuPairProductionModel::DataCorrupted(G4int Z, G4double logTkin) const
 {
   G4ExceptionDescription ed;
   ed << "G4ElementData is not properly initialized Z= " << Z
@@ -654,6 +658,51 @@ void G4MuPairProductionModel::DataCorrupted(G4int Z, G4double logTkin)
      << " Model " << GetName();
   G4Exception("G4MuPairProductionModel::()","em0033",FatalException,
               ed,"");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuPairProductionModel::StoreTables() const
+{
+  for (G4int iz=0; iz<nzdat; ++iz) {
+    G4int Z = zdat[iz];
+    G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
+    if(!pv) { DataCorrupted(Z, 1.0); }
+    std::ostringstream ss;
+    ss << "mupair/" << particle->GetParticleName() << Z << ".dat";
+    std::ofstream outfile(ss.str());
+    pv->Store(outfile);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4MuPairProductionModel::RetrieveTables()
+{
+  char* path = std::getenv("G4LEDATA");
+  G4String dir("");
+  if (path) { 
+    std::ostringstream ost;
+    ost << path << "/mupair/";
+    dir = ost.str(); 
+  } else {
+    dir = "./mupair/";
+  }
+
+  for (G4int iz=0; iz<nzdat; ++iz) {
+    G4double Z = zdat[iz];
+    G4Physics2DVector* pv = new G4Physics2DVector(nbiny+1,nbine+1);
+    if(!pv) { 
+      DataCorrupted(Z, 2.0);
+      return false;
+    }
+    std::ostringstream ss;
+    ss << dir << particle->GetParticleName() << Z << ".dat";
+    std::ifstream infile(ss.str(), std::ios::in);
+    if(!pv->Retrieve(infile)) { return false; }
+    fElementData->InitialiseForElement(Z, pv);
+  }
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

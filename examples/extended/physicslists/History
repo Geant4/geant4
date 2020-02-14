@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24/01/20  A. Zaborowska
+- Fix suggested in macros command /run/numberOfThreads
+
 03/11/17 R. Hatcher
 - Addition of extensibleFactory example
 

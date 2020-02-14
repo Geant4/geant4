@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -965,7 +965,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.170000s Real=0.180699s Sys=0.000000s
+  User=0.180000s Real=0.177634s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,totalEDep
  Number of entries 85
  PrimitiveScorer RUN PhantomSD,protonEDep

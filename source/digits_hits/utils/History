@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 12th, 2020  T.Aso (detutils-V10-05-06)
+- In G4ScoreQuantityMessenger, changed SetDefaultUnit() in trackLength
+  scorer to SetDefaultValue() to support various unit category.
+  Addressing problem report #2216.
+
+December 29th, 2019  M.Asai (detutils-V10-05-05)
+- G4ScoringManager, G4VScoreWriter, G4ScoringMessenger:
+   Add missing setter/getter functions.
+  
 October 23rd, 2019  M.Asai (detutils-V10-05-04)
 - Revising utils/src/G4ScoringQuantiryMessenger.cc to better handle
   ther error cases.

@@ -12,8 +12,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
   CXXFLAGS += -GR -EHsc -Zm200 -nologo -std:c++17
   CXXFLAGS += -D_CONSOLE -D_WIN32 -DOS
-  CPPFLAGS += -DWIN32 -DXPNET -D_CRT_SECURE_NO_DEPRECATE
+  CPPFLAGS += -DWIN32 -DXPNET -D_CRT_SECURE_NO_DEPRECATE -D_NO_CRT_STDIO_INLINE
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll /STACK:12582912
+  LOADLIBS += legacy_stdio_definitions.lib
 
   SHEXT := dll
   AR := LIB
@@ -93,15 +94,15 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     $(ECHO) "Building lib$(name).exp and lib$(name).lib file ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
     $(RM) $(G4LIBDIR)/lib$(name).lib;\
-    lib.exe /nologo /machine:ix86 /def:$(name).def \
+    lib.exe /nologo /machine:x64 /def:$(name).def \
             /out:$(G4LIBDIR)/lib$(name).lib;\
     $(RM) $(G4LIBDIR)/$(name).dll;\
     $(ECHO) "Building $(name).dll file ...";\
-    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
+    link.exe /nologo /machine:x64 /dll /out:$(G4LIBDIR)/$(name).dll \
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
-             $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
+             $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS) $(LOADLIBS)
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
@@ -112,14 +113,14 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     $(ECHO) "Building lib$(name).exp and lib$(name).lib ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
     $(RM) $(G4LIBDIR)/lib$(name).lib;\
-    lib.exe /nologo /machine:ix86 /def:$(name).def \
+    lib.exe /nologo /machine:x64 /def:$(name).def \
             /out:$(G4LIBDIR)/lib$(name).lib;\
     $(RM) $(G4LIBDIR)/$(name).dll;\
     $(ECHO) "Building $(name).dll ...";\
-    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
+    link.exe /nologo /machine:x64 /dll /out:$(G4LIBDIR)/$(name).dll \
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
-             $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
+             $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS) $(LOADLIBS)
   endef
 endif

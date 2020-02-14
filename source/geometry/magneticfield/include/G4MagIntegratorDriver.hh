@@ -49,7 +49,7 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
     G4MagInt_Driver(G4double hminimum,
                     G4MagIntegratorStepper* pItsStepper,
                     G4int numberOfComponents = 6,
-                    G4int statisticsVerbosity = 1);
+                    G4int statisticsVerbosity = 0);
     virtual ~G4MagInt_Driver() override;
       // Constructor, destructor.
 

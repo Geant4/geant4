@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 January 2019 - V.Ivanchenko  (hadr-cohe-V10-05-12)
+---------------------------------------------------------------
+- G4ElasticHadrNucleusHE - for pi- and Z>1 reuse data structure 
+    computed for pi+ in order to reduce memory and CPU at 
+    initialisation; fixed false positive Coverity report
+
+17 December 2019 - V.Ivanchenko  (hadr-cohe-V10-05-11)
+---------------------------------------------------------------
+- G4ElasticHadrNucleusHE - switch to parameterized model by
+    cut on kinetic energy and not momentum 
+
 26 November 2019 - V.Ivanchenko  (hadr-cohe-V10-05-10)
 ---------------------------------------------------------------
 - G4HadronElastic : Added limit on number of warning printouts 

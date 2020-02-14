@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -902,7 +902,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18.970000s Real=19.354676s Sys=0.030000s
+  User=19.750000s Real=20.570038s Sys=0.040000s
 ### Run 0 end.
 ... write Root file : ccal.root - done
 ... close Root file : ccal.root - done
@@ -918,23 +918,23 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 47
+Total navigation history collections cleaned: 48
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0683 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0721 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0702 MB
-Pool ID '7G4Track', size : 0.139 MB
+Pool ID '17G4DynamicParticle', size : 0.0538 MB
+Pool ID '7G4Track', size : 0.108 MB
 Pool ID '18G4TouchableHistory', size : 0.00577 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '17G4ReactionProduct', size : 0.0125 MB
+Pool ID '17G4ReactionProduct', size : 0.0135 MB
 Pool ID '10G4Fragment', size : 0.00481 MB
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.31 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.26 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

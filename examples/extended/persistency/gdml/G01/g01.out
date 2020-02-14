@@ -41,7 +41,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1152,7 +1152,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.005574s Sys=0.000000s
+  User=0.010000s Real=0.009418s Sys=0.000000s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -1519,7 +1519,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.004949s Sys=0.000000s
+  User=0.000000s Real=0.004360s Sys=0.000000s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -1559,7 +1559,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.002244s Sys=0.000000s
+  User=0.000000s Real=0.002517s Sys=0.000000s
 /gun/direction 0.3 -0.2 1
 /run/beamOn 20
 
@@ -1598,7 +1598,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.002259s Sys=0.000000s
+  User=0.010000s Real=0.002205s Sys=0.000000s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -1637,7 +1637,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.002198s Sys=0.000000s
+  User=0.000000s Real=0.002361s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

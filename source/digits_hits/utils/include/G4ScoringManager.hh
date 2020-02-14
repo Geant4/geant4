@@ -153,6 +153,18 @@ class G4ScoringManager
         if(writer) writer->SetVerboseLevel(verboseLevel);
       }
       // Replace score writers.
+
+  public:
+    inline void SetFactor(G4double val=1.0)
+    { if(writer) writer->SetFactor(val); }
+    inline G4double GetFactor() const
+    {
+      if(writer) 
+      { return writer->GetFactor(); }
+      else
+      { return -1.0; }
+    }
+
 private:
     //Disable copy constructor and assignement operator
     G4ScoringManager(const G4ScoringManager&);

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 06 February 2020 Makoto Asai (particles-V10-05-11)
+  Fix broken if-block in G4DecayTableMessenger.cc.
+  Addressing to Bug report #2193.
+
 - 05 November 2019 Vladimir Ivanchenko (particles-V10-05-10)
   G4NucleiProperties - in some hadronic models a fragment may be
   produced consisting of only neutrons or only protons; 

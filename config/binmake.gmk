@@ -261,10 +261,6 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG4expat
   endif
 
-  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    LDLIBS2 += -lG4expat
-  endif
-
   ifdef G4LIB_USE_ZLIB
     LDLIBS2 += -lG4zlib
   endif

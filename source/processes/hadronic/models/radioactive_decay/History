@@ -14,6 +14,35 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 February 2020  Alberto Ribon  radioactive_decay-V10-05-11
+----------------------------------------------------------
+- G4RadioactiveDecayBase.cc , G4RadioactiveDecay.cc : forgotten change of
+  verbosity from 0 to 1, at lines: 309, 316, 331 and 932 for 
+  G4RadioactiveDecayBase.cc , and 340, 396, 403, 418 and 1676 for 
+  G4RadioactiveDecay.cc .
+
+5 February 2020  Alberto Ribon  radioactive_decay-V10-05-10
+----------------------------------------------------------
+(Including a set of fixes made by Dennis Wright on the master on the period
+ between 15 December 2019 and 22 January 2020)
+- G4BetaPlusDecay.cc, line 166: change sign of daughterZ argument in
+  G4BetaDecayCorrections according to bug report 2199.
+- G4RadioactiveDecay.cc, G4RadioactiveDecayBase.cc : change default verbosity 
+  from 0 to 1, and remove G4cerr wherever it occurs and replace it with 
+  G4Exception or G4cout.
+- Fix Coverity errors 102466 and 102470, "dereference before null test"
+  of ptr theDecayChannel in G4RadioactiveDecay.cc and G4RadioactiveDecayBase.cc,
+  respectively.
+- Fix Coverity error 98937, uninitialized boolean, in G4SFDecay by removing
+  boolean applyARM, which was unused.
+- G4Radioactivation::AddDeexcitationSpectrumForBiasMode : fix memory leak
+  by deleting pevap_products. Addresses bug report #2164.
+- Increased verbosity thresholds in G4RadioactiveDecay, G4RadioactiveDecayBase,
+  G4Radioctivation in order to reduce printout size.
+- G4RadioactiveDecayBase.cc , G4RadioactiveDecay.cc : forgotten change of
+  verbosity from 0 to 1, at line 977 and 1720 respectively.
+  (Only this fix has been made by A.R.).
+
 1 November 2019  Laurent Desorgher  radioactive_decay-V10-05-09
 ----------------------------------------------------------
 -Add passing of type of sub-models to secondary particles generated in

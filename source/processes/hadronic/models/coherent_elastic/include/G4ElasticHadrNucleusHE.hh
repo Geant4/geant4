@@ -149,7 +149,7 @@ private:
   static const G4int fHadronType1[NHADRONS];
 
   // momemtum limits
-  G4double plabLowLimit;
+  G4double ekinLowLimit;
   G4double dQ2;  
 
   // projectile kinematics in GeV

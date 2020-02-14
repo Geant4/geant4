@@ -167,6 +167,7 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
 G4CascadeInterface::~G4CascadeInterface() {
   clear();
   delete collider; collider=0;
+  delete ltcollider; ltcollider = 0;
   delete balance; balance=0;
   delete output; output=0;
 }

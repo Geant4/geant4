@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -586,17 +586,17 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=5.400000s Real=5.566863s Sys=0.070000s
+  User=5.280000s Real=5.353012s Sys=0.050000s
 ... write Csv file : Hadrontherapy_h1_Ekin.csv - done
 ... write Csv file : Hadrontherapy_h1_Edep.csv - done
 ... write Csv files :  - done
 Graphics systems deleted.
 Visualization Manager deleting...
-The simulation took: 9.47318 s to run (real time)
+The simulation took: 9.36765 s to run (real time)
 Dose is being written to Dose.out
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.45 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.39 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

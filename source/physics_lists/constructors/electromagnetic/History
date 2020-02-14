@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 December 2019, V.Ivanchenko (phys-ctor-em-V10-05-18)
+- G4EmModelActivator - fixed configuration of the default EM multiple
+  scattering on top of any other physics configuration (problem #2106)
+
 19 October 2019, W.G.Shin, S.Incerti (phys-ctor-em-V10-05-17)
 - added new ELSEPA elastic model for Geant4-DNA in G4EmDNAPhysics_option2 
 

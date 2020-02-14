@@ -10,9 +10,6 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-ifeq ($(G4SYSTEM), WIN32-VC)
-CPPFLAGS += -I$(G4BASE)/externals/expat/include
-endif
 ifdef G4LIB_BUILD_EXPAT
 CPPFLAGS += -I$(G4BASE)/externals/expat/include
 endif

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -438,7 +438,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.880000s Real=0.893367s Sys=0.000000s
+  User=1.370000s Real=1.377399s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -863,7 +863,7 @@ N=17 V[N]={487039142106637111, 268522011348262973, 30963757192920968, 2982170328
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.900000s Real=0.909986s Sys=0.000000s
+  User=0.920000s Real=0.922438s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -1293,7 +1293,7 @@ N=17 V[N]={757573894848696274, 400073108137045350, 2132458077966397313, 96621969
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.030000s Real=2.038365s Sys=0.000000s
+  User=2.520000s Real=2.530312s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -1729,7 +1729,7 @@ N=17 V[N]={2039908199796061254, 212154955260722024, 982286759211187269, 13649097
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.460000s Real=0.461907s Sys=0.000000s
+  User=0.700000s Real=0.699972s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -2166,7 +2166,7 @@ N=17 V[N]={981072211861672983, 1468495847380516116, 656071057052950235, 18853076
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=7.810000s Real=7.832620s Sys=0.000000s
+  User=7.940000s Real=8.012233s Sys=0.000000s
 
  ======================== run summary ======================
 

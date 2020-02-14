@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -236,7 +236,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=2.400000s Real=2.474618s Sys=0.000000s
+  User=2.710000s Real=2.726254s Sys=0.000000s
 
  Process calls frequency --->  msc= 644751  eIoni= 258361  Transportation= 22831
 

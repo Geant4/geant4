@@ -185,9 +185,15 @@ void G4EmModelActivator::ActivateEmOptions()
 
     if("G4EmStandard" == typesPhys[i]) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
+      msc->SetRangeFactor(0.04);
+      msc->SetSkin(1);
+      msc->SetStepLimitType(fUseSafety);
       AddStandardScattering(elec, em_config, msc, reg,  mscEnergyLimit, highEnergy);
       
       msc = new G4UrbanMscModel();
+      msc->SetRangeFactor(0.04);
+      msc->SetSkin(1);
+      msc->SetStepLimitType(fUseSafety);
       AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
     } else if("G4EmStandard_opt1" == typesPhys[i] || 

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -35,6 +35,9 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
+ G4RadioactiveDecay is deprecated and will be removed in Geant4 version 11. 
+ Please replace it with G4RadioactiveDecayBase if you want the unbiased radioactive deacy process.
+ If you want the general process, with optional biasing, use G4Radioactivation. 
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -471,7 +474,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=1.300000s Real=1.292872s Sys=0.000000s
+  User=1.330000s Real=1.340874s Sys=0.010000s
 
  ======================== run summary =====================
 

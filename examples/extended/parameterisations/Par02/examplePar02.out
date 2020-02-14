@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -25,27 +25,27 @@ G4GDML: Reading 'Par02FullDetector.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 Geometry loaded from  file .......Par02FullDetector.gdml 
 
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
 tracker !!!
 
 ecal !!!
 
 ecal !!!
 
-ecal !!!
+hcal !!!
 
-ecal !!!
-
-ecal !!!
+hcal !!!
 
 hcal !!!
 
 hcal !!!
+
+hcal !!!
+
+ecal !!!
+
+ecal !!!
+
+ecal !!!
 Warning : Region <MuonEndCap_1> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
@@ -1136,9 +1136,3 @@ See commands in /vis/modeling/trajectories/ for other options.
 ... close Root file : DefaultOutput.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
-G4Integration Driver Stats: #QuickAdvance 0 - #AccurateAdvance 0 #good steps 0 #bad steps 0
-G4ChordFinder statistics report: 
-  No trials: 0  No Calls: 0  Max-trial: 0
-  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
-G4ChordFinder statistics report: 
-  No trials: 7000  No Calls: 4000  Max-trial: 2

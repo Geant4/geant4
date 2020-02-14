@@ -248,7 +248,7 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE(const G4String& name)
   iHadrCode = iHadron = iHadron1 = 0;
 
   verboseLevel = 0;
-  plabLowLimit = 400.0*CLHEP::MeV;
+  ekinLowLimit = 400.0*CLHEP::MeV;
 
   BoundaryP[0]=9.0; BoundaryTG[0]=5.0;BoundaryTL[0]=0.;
   BoundaryP[1]=20.0;BoundaryTG[1]=1.5;BoundaryTL[1]=0.;
@@ -314,8 +314,14 @@ G4ElasticHadrNucleusHE::~G4ElasticHadrNucleusHE()
   if(isMaster) {
     for(G4int j = 0; j < NHADRONS; ++j) {
       for(G4int k = 0; k < ZMAX; ++k) {
-	delete fElasticData[j][k];
-	fElasticData[j][k]=nullptr;
+	G4ElasticData* ptr = fElasticData[j][k]; 
+	if(ptr) { 
+	  delete ptr;
+	  fElasticData[j][k] = nullptr;
+	  for(G4int l = j+1; l < NHADRONS; ++l) {
+	    if(ptr == fElasticData[l][k]) { fElasticData[l][k] = nullptr; }
+	  }
+	}
       }
     }
   }
@@ -344,7 +350,13 @@ void G4ElasticHadrNucleusHE::InitialiseModel()
       size_t numOfElem = mat->GetNumberOfElements();
       for(size_t k=0; k<numOfElem; ++k) {
 	G4int Z = std::min((*elmVec)[k]->GetZasInt(), ZMAX-1);
-	if(!fElasticData[i][Z]) { FillData(p, i, Z); }
+	if(!fElasticData[i][Z]) { 
+          if(1 == i && Z > 1) { 
+	    fElasticData[1][Z] = fElasticData[0][Z]; 
+	  } else {
+	    FillData(p, i, Z);
+	  } 
+	}
       }
     }
   }
@@ -357,7 +369,9 @@ G4ElasticHadrNucleusHE::SampleInvariantT(const G4ParticleDefinition* p,
 					 G4double inLabMom, 
 					 G4int iZ, G4int A)
 {
-  if(inLabMom <= plabLowLimit) {
+  G4double mass = p->GetPDGMass();
+  G4double kine = sqrt(inLabMom*inLabMom + mass*mass) - mass;
+  if(kine <= ekinLowLimit) {
     return G4HadronElastic::SampleInvariantT(p,inLabMom,iZ,A);
   }
   G4int Z = std::min(iZ,ZMAX-1);
@@ -365,7 +379,7 @@ G4ElasticHadrNucleusHE::SampleInvariantT(const G4ParticleDefinition* p,
   iHadrCode = p->GetPDGEncoding();
 
   // below computations in GeV/c
-  hMass  = p->GetPDGMass()*invGeV;
+  hMass  = mass*invGeV;
   hMass2 = hMass*hMass;
   G4double plab = inLabMom*invGeV;
   G4double tmax = pLocalTmax*invGeV2;
@@ -641,8 +655,9 @@ G4int G4ElasticHadrNucleusHE::FillFq2(G4int A)
 	    <<dQ2<<" Tot= "<<totSum << " dTot " <<curSum
 	    <<" curSec= " <<curSec<<G4endl;
     }
-    if(totSum*1.e-4 > curSum || Q2l >= Q2max || ii == ONQ2-2) { break; }
+    if(totSum*1.e-4 > curSum || Q2l >= Q2max) { break; }
   }
+  ii = std::min(ii, ONQ2-2);
   curQ2 = Q2l;
   G4double xx = R1*(Q2max - curQ2);
   if(xx > 0.0) {

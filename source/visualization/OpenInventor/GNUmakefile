@@ -6,7 +6,10 @@ ifndef G4INSTALL
 endif
 
 GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4gl2ps.lib
-GLOBLIBS += libG4zlib.lib libG4interfaces.lib libG4run.lib libG4event.lib
+ifdef G4LIB_BUILD_ZLIB
+  GLOBLIBS += libG4zlib.lib
+endif
+GLOBLIBS += libG4interfaces.lib libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib

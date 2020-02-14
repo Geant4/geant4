@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07-Dec-2019 V. Ivanchenko     (hadr-string-diff-V10-05-11)
+- G4FTFParameters:
+  o  Fixed division by zero (Coverity report) due to wrong protection
+     in previous MR 05-09
+
 28-Nov-2019 A. Ribon          (hadr-string-diff-V10-05-10)
 - G4FTFParameters: set parameters of a string kink in the constructor
   (instead of setting it at each interaction, causing memory leaks).

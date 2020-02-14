@@ -41,6 +41,7 @@
 #include <vector>
 
 #include "globals.hh"
+#include "windefs.hh"
 #include "G4ThreeVector.hh"
 #include "G4VSolid.hh"
 

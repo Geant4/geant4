@@ -467,11 +467,12 @@ void HistoManager::AddTargetStep(const G4Step* step)
 
 void HistoManager::AddLeakingParticle(const G4Track* track)
 {
-  const G4ParticleDefinition* pd = track->GetDefinition(); 
-  G4double e = std::log10(track->GetKineticEnergy()/MeV);
+  const G4ParticleDefinition* pd = track->GetDefinition();
+  const G4StepPoint* sp = track->GetStep()->GetPreStepPoint(); 
+  G4double e = std::log10(sp->GetKineticEnergy()/MeV);
 
-  G4ThreeVector pos = track->GetPosition();
-  G4ThreeVector dir = track->GetMomentumDirection();
+  G4ThreeVector pos = sp->GetPosition();
+  G4ThreeVector dir = sp->GetMomentumDirection();
   G4double x = pos.x();
   G4double y = pos.y();
   G4double z = pos.z();

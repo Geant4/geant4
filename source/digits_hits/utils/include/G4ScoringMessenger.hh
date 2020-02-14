@@ -129,6 +129,8 @@ class G4ScoringMessenger: public G4UImessenger
     // Dump scoring result to file
     G4UIcommand * dumpQtyToFileCmd;
     G4UIcommand * dumpAllQtsToFileCmd;
+    G4UIcommand * dumpQtyWithFactorCmd;
+    G4UIcommand * dumpAllQtsWithFactorCmd;
     //
 
 };

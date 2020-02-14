@@ -31,6 +31,7 @@
 // 20130703  M. Kelsey -- Add flag for USE_PHASESPACE
 // 20141030  M. Kelsey -- Add flag to enable direct pi-N absorption
 // 20141211  M. Kelsey -- Change PIN_ABSORPTION flag to double, for energy cut
+// 20200110  M. Kelsey -- Reset cmdDir to 0 before .../cascade/ directory.
 
 #include "G4CascadeParamMessenger.hh"
 #include "G4CascadeParameters.hh"
@@ -50,7 +51,7 @@
 G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
   : G4UImessenger(), theParams(params), cmdDir(0), localCmdDir(false) {
   // NOTE: Put under same top-level tree as EM
-  CreateDirectory("/process/had/","Hadronic processes");
+  CreateDirectory("/process/had/","Hadronic processes"); cmdDir=0;
   CreateDirectory("/process/had/cascade/","Bertini-esque cascade parameters");
 
   verboseCmd = CreateCommand<G4UIcmdWithAnInteger>("verbose",

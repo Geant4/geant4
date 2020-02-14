@@ -53,7 +53,7 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
     G4IntegrationDriver( G4double hminimum,
                          T*       stepper,
                          G4int    numberOfComponents = 6,
-                         G4int    statisticsVerbosity = 1 );
+                         G4int    statisticsVerbosity = 0 );
 
     virtual ~G4IntegrationDriver() override;
 

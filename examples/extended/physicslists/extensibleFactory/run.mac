@@ -4,7 +4,7 @@
 # % extensibleFactory -m run.mac
 #
 #
-#/run/numberOfWorkers 4
+#/run/numberOfThreads 4
 #
 /run/initialize
 #

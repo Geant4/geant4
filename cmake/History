@@ -30,6 +30,27 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+14th February 2020 - Ben Morgan (cmake-V10-05-34)
+- No longer create gnumake symlinks on Windows
+  Windows permissions may prevent creation of symlinks, leading to
+  errors at install time. As gnumake is no longer supported on
+  Windows, protect symlink creation with test on host platform.
+
+5th February 2020 - Ben Morgan (cmake-V10-05-33)
+- Apply patch from TXCorp to allow compilation on Windows using Clang
+
+4th February 2020 - Ben Morgan (cmake-V10-05-32)
+- BUGFIX 2221
+  Use "${FOO:-}" variable expansion and "-z" test to check for
+  undefined variables in Bourne Shell scripts. Prevents errors when
+  shell is in "set -u" mode. Report and patch supplied by Michael Reilly
+
+28th January 2020 - Gunter Folger (cmake-V10-05-31)
+- Switch to patched dataset for G4EMLOW 7.9.1
+
+15th January 2020 - Ben Morgan (cmake-V10-05-30)
+- Quote VECGEOM_COMPILE_DEFINITIONS to avoid incorrect argument errors
+
 25th November 2019 - Ben Morgan (cmake-V10-05-29)
 - Disable configuration of Wt UI/Vis driver due to it no longer
   compiling with recent Wt versions

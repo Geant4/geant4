@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -931,7 +931,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=4.780000s Real=6.211145s Sys=1.360000s
+  User=5.170000s Real=6.728280s Sys=1.340000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1579,7 +1579,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.260000s Real=1.651948s Sys=0.380000s
+  User=1.400000s Real=1.969286s Sys=0.370000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2258,7 +2258,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.300000s Real=0.379842s Sys=0.080000s
+  User=0.310000s Real=0.393709s Sys=0.080000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2966,7 +2966,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.650000s Real=0.839214s Sys=0.180000s
+  User=0.670000s Real=0.858924s Sys=0.180000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

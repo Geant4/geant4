@@ -287,6 +287,22 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   dumpQtyToFileCmd->SetParameter(param);
   dumpQtyToFileCmd->SetToBeBroadcasted(false);
 
+  dumpQtyWithFactorCmd = new G4UIcommand("/score/dumpQuantityWithFactor", this);
+  dumpQtyWithFactorCmd->SetGuidance("Dump one scored quantity to file.");
+  dumpQtyWithFactorCmd->SetGuidance("Each value is multiplied by the specified factor.");
+  param = new G4UIparameter("meshName", 's', false);
+  dumpQtyWithFactorCmd->SetParameter(param);
+  param = new G4UIparameter("psName", 's', false);
+  dumpQtyWithFactorCmd->SetParameter(param);
+  param = new G4UIparameter("fileName", 's', false);
+  dumpQtyWithFactorCmd->SetParameter(param);
+  param = new G4UIparameter("factor", 'd', false);
+  param->SetParameterRange("factor>0.");
+  dumpQtyWithFactorCmd->SetParameter(param);
+  param = new G4UIparameter("option", 's', true);
+  dumpQtyWithFactorCmd->SetParameter(param);
+  dumpQtyWithFactorCmd->SetToBeBroadcasted(false);
+
   // Dump all scored quantities
   dumpAllQtsToFileCmd = new G4UIcommand("/score/dumpAllQuantitiesToFile", this);
   dumpAllQtsToFileCmd->SetGuidance("Dump all quantities of the mesh to file.");
@@ -297,6 +313,20 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("option", 's', true);
   dumpAllQtsToFileCmd->SetParameter(param);
   dumpAllQtsToFileCmd->SetToBeBroadcasted(false);
+
+  dumpAllQtsWithFactorCmd = new G4UIcommand("/score/dumpAllQuantitiesWithFactor", this);
+  dumpAllQtsWithFactorCmd->SetGuidance("Dump all quantities of the mesh to file.");
+  dumpAllQtsWithFactorCmd->SetGuidance("Each value is multiplied by the specified factor.");
+  param = new G4UIparameter("meshName", 's', false);
+  dumpAllQtsWithFactorCmd->SetParameter(param);
+  param = new G4UIparameter("fileName", 's', false);
+  dumpAllQtsWithFactorCmd->SetParameter(param);
+  param = new G4UIparameter("factor", 'd', false);
+  param->SetParameterRange("factor>0.");
+  dumpAllQtsWithFactorCmd->SetParameter(param);
+  param = new G4UIparameter("option", 's', true);
+  dumpAllQtsWithFactorCmd->SetParameter(param);
+  dumpAllQtsWithFactorCmd->SetToBeBroadcasted(false);
 
 }
 
@@ -340,8 +370,10 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete     floatMinMaxCmd;
     delete     colorMapMinMaxCmd;
     delete     colorMapDir;
-    delete     dumpQtyToFileCmd;
+    delete     dumpQtyWithFactorCmd;
+    delete dumpQtyWithFactorCmd;
     delete     dumpAllQtsToFileCmd;
+    delete dumpAllQtsWithFactorCmd;
     //
     delete scoreDir;
 }
@@ -383,13 +415,64 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4String psName = next();
       G4String fileName = next();
       G4String option = next("\n");
+      auto mesh = fSMan->FindMesh(meshName);
+      if(!mesh)
+      {
+        G4ExceptionDescription ed;
+        ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
+        command->CommandFailed(ed);
+        return;
+      }
       fSMan->DumpQuantityToFile(meshName, psName, fileName, option);
+  } else if(command==dumpQtyWithFactorCmd) {
+      G4Tokenizer next(newVal);
+      G4String meshName = next();
+      G4String psName = next();
+      G4String fileName = next();
+      G4double fac = StoD(next());
+      G4String option = next("\n");
+      auto mesh = fSMan->FindMesh(meshName);
+      if(!mesh)
+      {
+        G4ExceptionDescription ed;
+        ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
+        command->CommandFailed(ed);
+        return;
+      }
+      fSMan->SetFactor(fac);
+      fSMan->DumpQuantityToFile(meshName, psName, fileName, option);
+      fSMan->SetFactor(1.0);
   } else if(command==dumpAllQtsToFileCmd) { 
       G4Tokenizer next(newVal);
       G4String meshName = next();
       G4String fileName = next();
       G4String option = next("\n");
+      auto mesh = fSMan->FindMesh(meshName);
+      if(!mesh)
+      {
+        G4ExceptionDescription ed;
+        ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
+        command->CommandFailed(ed);
+        return;
+      }
       fSMan->DumpAllQuantitiesToFile(meshName, fileName, option);
+  } else if(command==dumpAllQtsWithFactorCmd) {
+      G4Tokenizer next(newVal);
+      G4String meshName = next();
+      G4String fileName = next();
+      G4double fac = StoD(next());
+      G4String option = next("\n");
+      auto mesh = fSMan->FindMesh(meshName);
+      if(!mesh)
+      {
+        G4ExceptionDescription ed;
+        ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
+        command->CommandFailed(ed);
+        return;
+      }
+      fSMan->SetFactor(fac);
+      fSMan->DumpAllQuantitiesToFile(meshName, fileName, option);
+      fSMan->SetFactor(1.0);
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshBoxCreateCmd) {

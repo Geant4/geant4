@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 Jan 2020 Gabriele Cosmo (interfaces-V10-05-08)
+- Fixed obsolete URLs in UIQt splash screen.
+
 30 Nov 2019 Igor Semeniouk (interfaces-V10-05-07)
 -- G4UIQt.cc:
  o fix ui command not stored in callback for icon defined via /gui/addIcon command.

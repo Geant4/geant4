@@ -17,6 +17,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+07 December 19:  V.Ivanchenko (emstand-V10-05-27)
+- G4BetheHeitler5DModel - added protection against negative
+    argument of sqrt() due to precision lost 
+
 06 November 19:  V.Ivanchenko (emstand-V10-05-26)
 - G4ESTARStopping, G4GSMottCorrection, G4GSPWACorrections,
   G4GoudsmitSaundersonTable, G4SBBremTable, G4SeltzerBergerModel

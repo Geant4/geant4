@@ -33,7 +33,8 @@
 // 29-Mar-2013 T.Aso Support weighted options in the nOfTrack command.
 //                   Support a boundary flag option in the nOfStep command
 //                  for skipping stepLength=0 steps.
-// 
+// 13-Feb-2020 T.Aso Change SetDefaultUnit() in trackLength scorer to
+//                   SetDefaultValue() to support various unit category.
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -205,7 +206,7 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("false");
   qTrackLengthCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultUnit("mm");
+  param->SetDefaultValue("mm");
   qTrackLengthCmd->SetParameter(param);
   //
   qPassCellCurrCmd = new G4UIcommand("/score/quantity/passageCellCurrent",this);

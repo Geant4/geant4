@@ -167,17 +167,18 @@ G4ParticleDefinition* G4DecayTableMessenger::SetCurrentParticle()
     currentParticle = theParticleTable->FindParticle(particleName);
     idxCurrentChannel = -1;
     currentDecayTable = nullptr;
-    if (currentParticle != nullptr ){
-      currentDecayTable = currentParticle->GetDecayTable();
-      if ((currentDecayTable != nullptr ) && (idxCurrentChannel >0) ) {
-	currentChannel = currentDecayTable->GetDecayChannel(idxCurrentChannel);
-      } else {
-	idxCurrentChannel = -1;
-	currentChannel = nullptr;
-      }
-    }
-
   }
+
+  if (currentParticle != nullptr ){
+    currentDecayTable = currentParticle->GetDecayTable();
+    if ((currentDecayTable != nullptr ) && (idxCurrentChannel >0) ) {
+      currentChannel = currentDecayTable->GetDecayChannel(idxCurrentChannel);
+    } else {
+      idxCurrentChannel = -1;
+      currentChannel = nullptr;
+    }
+  }
+
   return currentParticle;
 }
 
