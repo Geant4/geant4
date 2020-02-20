@@ -16,7 +16,7 @@ endif()
 #-----------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 # - Any policy requirements should go here
 

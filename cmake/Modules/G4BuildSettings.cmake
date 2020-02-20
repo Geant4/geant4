@@ -349,6 +349,15 @@ if(NOT BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS)
   message(FATAL_ERROR "Neither static nor shared libraries will be built")
 endif()
 
+if(MSVC)
+    option(GEANT4_MSVC_STATIC_RUNTIME "Use statically-linked multithreaded runtime library" OFF)
+    mark_as_advanced(GEANT4_MSVC_STATIC_RUNTIME)
+
+    if(GEANT4_MSVC_STATIC_RUNTIME)
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "Multithreaded$<$CONFIG:Debug>:Debug>")
+    endif()
+endif()
+
 # Always build global libraries - always FATAL_ERROR if old
 # granular library switch is set, e.g. from command line
 if(GEANT4_BUILD_GRANULAR_LIBS)
