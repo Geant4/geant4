@@ -354,7 +354,7 @@ if(MSVC)
     mark_as_advanced(GEANT4_MSVC_STATIC_RUNTIME)
 
     if(GEANT4_MSVC_STATIC_RUNTIME)
-        set(CMAKE_MSVC_RUNTIME_LIBRARY "Multithreaded$<$CONFIG:Debug>:Debug>")
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     endif()
 endif()
 
