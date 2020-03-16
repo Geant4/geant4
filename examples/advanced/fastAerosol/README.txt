@@ -20,7 +20,7 @@
 
    It is recommended to run the test.mac script for a test/sample
    evaluation. This will simulate transport of 50 MeV through an
-   aeorosl (modelled as a fastAerosol object) and save the deposited
+   aerosol (modelled as a fastAerosol object) and save the deposited
    energy in a detector as a csv file.
 
    By default, droplets are dynamically populated in the aerosol. One
