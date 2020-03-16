@@ -15,9 +15,15 @@
 # -------------------------
 # geometry setup (changing)
 # ------------------------
+
+# choose only one build type out of the following 3:
+# 	smooth cloud - model aerosol as a single volume model with background and droplet material in proper mass fraction
+# 	fastAerosol cloud - model aerosol with the fastAerosol class
+# 	parameterised cloud - model aerosol with a parameterised solid
+
 /geometry/smoothCloud false			# build as a single volume
-/geometry/parameterisedCloud false	# build as droplets described by G4VPVParameterisation. Must first generate droplet centers in distribution_r1mm_n1E-3p7mm-3.csv
 /geometry/fastAerosolCloud true		# build as droplets described by fastAerosol and fastAerosolSolid
+/geometry/parameterisedCloud false	# build as droplets described by G4VPVParameterisation. Must first generate droplet centers in distribution_r1mm_n1E-3p7mm-3.csv
 
 /geometry/prePopulate false			# whether to populate all droplets at the beginning or not for fastAerosol
 
