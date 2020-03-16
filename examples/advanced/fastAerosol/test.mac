@@ -16,7 +16,7 @@
 # geometry setup (changing)
 # ------------------------
 /geometry/smoothCloud false			# build as a single volume
-/geometry/parameterisedCloud false	# build as droplets described by G4VPVParameterisation. Must first generate droplet centers in distribution_r?mm_n?mm-3.csv
+/geometry/parameterisedCloud false	# build as droplets described by G4VPVParameterisation. Must first generate droplet centers in distribution_r1mm_n1E-3p7mm-3.csv
 /geometry/fastAerosolCloud true		# build as droplets described by fastAerosol and fastAerosolSolid
 
 /geometry/prePopulate false			# whether to populate all droplets at the beginning or not for fastAerosol
