@@ -25,7 +25,7 @@
 //
 
 // (adapted from B1DetectorConstruction)
-// A.Knaian, N.MacFadden
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
 #include "FADetectorConstruction.hh"
 #include "FADetectorConstructionMessenger.hh"
@@ -46,8 +46,8 @@
 #include "G4Tubs.hh"
 #include "G4Ellipsoid.hh"
 
-// to build fastAerosol cloud
-#include "fastAerosolSolid.hh"
+// to build FastAerosol cloud
+#include "FastAerosolSolid.hh"
 
 // to build parameterised cloud
 #include "FACloudParameterisation.hh"
@@ -63,7 +63,7 @@
 
 // to save distribution
 #include <sys/stat.h>
-#include <ctime> 		// for measuring fastAerosol droplet center population time
+#include <ctime> 		// for measuring FastAerosol droplet center population time
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,21 +72,21 @@ DetectorConstruction::DetectorConstruction()
 : G4VUserDetectorConstruction(),
 fScoringVolume(0)
 { 
-messenger = new DetectorConstructionMessenger(this);
+fMessenger = new DetectorConstructionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
 {
-	delete messenger;
+	delete fMessenger;
 
-	delete stepLimits;
+	delete fStepLimits;
 
-	delete cloudShape;
-	delete dropletShape;
+	delete fCloudShape;
+	delete fDropletShape;
 
-	delete cloud;
+	delete fCloud;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,13 +96,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	// Check cloud build settings
 	//
-	if (fastAerosolCloud + parameterisedCloud + smoothCloud > 1)
+	if (fFastAerosolCloud + fParameterisedCloud + fSmoothCloud > 1)
 	{
 		std::ostringstream message;
 		message << "Must select at most one build type! Selections:" << G4endl
-				<< "     fastAerosolCloud = " << fastAerosolCloud << G4endl
-				<< "     parameterisedCloud = " << parameterisedCloud << G4endl
-				<< "     smoothCloud = " << smoothCloud << G4endl;
+				<< "     fFastAerosolCloud = " << fFastAerosolCloud << G4endl
+				<< "     fParameterisedCloud = " << fParameterisedCloud << G4endl
+				<< "     fSmoothCloud = " << fSmoothCloud << G4endl;
 		G4Exception("DetectorConstruction::Construct()", "GeomSolids0002",
 					FatalException, message);
 	}
@@ -133,30 +133,30 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	// Cloud shape
 	//
-	if (cloudShapeStr == "box")
+	if (fCloudShapeStr == "box")
 	{
 		G4cout << "Cloud shape = box" << G4endl;
-		cloudShape = new G4Box("cloudShape", 0.5*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ);
+		fCloudShape = new G4Box("cloudShape", 0.5*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ);
 	}
-	else if (cloudShapeStr == "ellipsoid")
+	else if (fCloudShapeStr == "ellipsoid")
 	{
 		G4cout << "Cloud shape = ellipsoid" << G4endl;
-		cloudShape = new G4Ellipsoid("cloudShape", 0.5*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 0);
+		fCloudShape = new G4Ellipsoid("cloudShape", 0.5*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 0);
 	}
-	else if (cloudShapeStr == "cylinder")
+	else if (fCloudShapeStr == "cylinder")
 	{
 		G4cout << "Cloud shape = cylinder" << G4endl;
-		cloudShape = new G4Tubs("cloudShape", 0.0, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 2*M_PI);
+		fCloudShape = new G4Tubs("cloudShape", 0.0, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 2*M_PI);
 	}
-	else if (cloudShapeStr == "pipe")
+	else if (fCloudShapeStr == "pipe")
 	{
 		G4cout << "Cloud shape = pipe" << G4endl;
-		cloudShape = new G4Tubs("cloudShape", 0.25*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 2*M_PI);
+		fCloudShape = new G4Tubs("cloudShape", 0.25*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 2*M_PI);
 	}
 	else
 	{
 		std::ostringstream message;
-		message << "Invalid cloud shape = " << cloudShapeStr << "!";
+		message << "Invalid cloud shape = " << fCloudShapeStr << "!";
 		G4Exception("DetectorConstruction::Construct()", "GeomSolids0002",
 					FatalException, message);
 	}
@@ -168,36 +168,36 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	// The difference in radii of the maximal sphere (centered at the origin) contained in the droplet and the minimal sphere (centered at the origin) containing the droplet
 	G4double sphericalUncertainty = 0.0;
 
-	if (dropletShapeStr == "sphere")
+	if (fDropletShapeStr == "sphere")
 	{
 		G4cout << "Droplet shape = sphere" << G4endl;
-		dropletShape = new G4Orb("dropletSV", dropletR);
+		fDropletShape = new G4Orb("dropletSV", fDropletR);
 		sphericalUncertainty = 0.0;
 	}
-	else if (dropletShapeStr == "halfSphere")
+	else if (fDropletShapeStr == "halfSphere")
 	{
 		G4cout << "Droplet shape = halfSphere" << G4endl;
-		dropletShape = new G4Sphere("dropletSV", 0.0, dropletR,
+		fDropletShape = new G4Sphere("dropletSV", 0.0, fDropletR,
 										0.0, 1.0*M_PI,
 										0.0, M_PI);
-		sphericalUncertainty = dropletR;
+		sphericalUncertainty = fDropletR;
 	}
-	else if (dropletShapeStr == "cylinder")
+	else if (fDropletShapeStr == "cylinder")
 	{
 		G4cout << "Droplet shape = cylinder" << G4endl;
-		dropletShape = new G4Tubs("dropletSV", 0, dropletR/sqrt(3), dropletR/sqrt(3), 0, 2.0*M_PI);
-		sphericalUncertainty = dropletR*(1-1/sqrt(3));
+		fDropletShape = new G4Tubs("dropletSV", 0, fDropletR/sqrt(3), fDropletR/sqrt(3), 0, 2.0*M_PI);
+		sphericalUncertainty = fDropletR*(1-1/sqrt(3));
 	}
-	else if (dropletShapeStr == "box")
+	else if (fDropletShapeStr == "box")
 	{
 		G4cout << "Droplet shape = box" << G4endl;
-		dropletShape = new G4Box("dropletSV", dropletR/sqrt(3), dropletR/sqrt(3), dropletR/sqrt(3));
-		sphericalUncertainty = dropletR*(1-1/sqrt(3));
+		fDropletShape = new G4Box("dropletSV", fDropletR/sqrt(3), fDropletR/sqrt(3), fDropletR/sqrt(3));
+		sphericalUncertainty = fDropletR*(1-1/sqrt(3));
 	}
 	else
 	{
 		std::ostringstream message;
-		message << "Invalid droplet shape = " << cloudShapeStr << "!";
+		message << "Invalid droplet shape = " << fCloudShapeStr << "!";
 		G4Exception("DetectorConstruction::Construct()", "GeomSolids0002",
 					FatalException, message);
 	}
@@ -237,9 +237,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double droplet_density = water_density;
 	G4Material* droplet_mat = water_mat;
 
-	G4double droplet_count = dropletNumDens*(cloudShape->GetCubicVolume());
+	G4double droplet_count = fDropletNumDens*(fCloudShape->GetCubicVolume());
 
-	G4double droplet_volume = dropletShape->GetCubicVolume();
+	G4double droplet_volume = fDropletShape->GetCubicVolume();
 	G4double droplet_total_volume = droplet_count*droplet_volume;
 
 	G4double droplet_total_mass =  droplet_total_volume*droplet_density;
@@ -248,7 +248,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	// Cloud macroscopic quantities
 	//
-	G4double cloud_volume = cloudShape->GetCubicVolume();
+	G4double cloud_volume = fCloudShape->GetCubicVolume();
 	G4double cloud_air_volume = cloud_volume - droplet_total_volume;
 	G4double cloud_air_mass = air_density*cloud_air_volume;
 
@@ -256,7 +256,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	// Step limit
 	//
-	stepLimits = new G4UserLimits(stepLim);
+	fStepLimits = new G4UserLimits(fStepLim);
 
 
 	//
@@ -273,7 +273,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 							air_mat,		//its material
 							"World");		//its name
 
-	logicWorld->SetUserLimits(stepLimits);
+	logicWorld->SetUserLimits(fStepLimits);
 									 
 	G4VPhysicalVolume* physWorld = 
 		new G4PVPlacement(0,				//no rotation
@@ -293,50 +293,50 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 	// **********************************************************
 	// 
-	// Build the cloud using the fastAerosol geometry class
+	// Build the cloud using the FastAerosol geometry class
 	// 
 	// ***********************************************************
-	if (fastAerosolCloud) {
-		G4cout << "\nfastAerosol geometry with n=" << dropletNumDens*mm3 << "/mm3, r=" << dropletR/mm << "mm spheres.\n" << G4endl;// " and grids of side length " << gridPitch/mm << "mm.\n" << G4endl;
+	if (fFastAerosolCloud) {
+		G4cout << "\nFastAerosol geometry with n=" << fDropletNumDens*mm3 << "/mm3, r=" << fDropletR/mm << "mm spheres.\n" << G4endl;
 		
-		cloud = new fastAerosol("cloud",
-								   cloudShape,					//cloud shape
-								   dropletR,					//bounding radius of droplets
-								   minSpacing,					//minimum spacing between droplets
-								   dropletNumDens,				//approximate number of droplets in cloud
+		fCloud = new FastAerosol("cloud",
+								   fCloudShape,					//cloud shape
+								   fDropletR,					//bounding radius of droplets
+								   fMinSpacing,					//minimum spacing between droplets
+								   fDropletNumDens,				//approximate number of droplets in cloud
 								   sphericalUncertainty);		//uncertainty in distance to droplet surface from outside using just droplet's origin as info
-		cloud->SetDropletsPerVoxel(4);
+		fCloud->SetDropletsPerVoxel(4);
 		
 		/*
-		cloud = new fastAerosol("cloud",
-								   cloudShape,					//cloud shape
-								   dropletR,					//bounding radius of droplets
-								   minSpacing,					//minimum spacing between droplets
-								   dropletNumDens,				//approximate number of droplets in cloud
+		fCloud = new FastAerosol("fCloud",
+								   fCloudShape,					//cloud shape
+								   fDropletR,					//bounding radius of droplets
+								   fMinSpacing,					//minimum spacing between droplets
+								   fDropletNumDens,				//approximate number of droplets in cloud
 								   sphericalUncertainty,		//uncertainty in distance to droplet surface from outside using just droplet's origin as info
 								   [](G4ThreeVector pos) {return pos.x();});					//number density distribution function
 		*/
 
-		fastAerosolSolid* solidCloud =
-			new fastAerosolSolid("cloudSV",						//its name
-									cloud,						//its shape
-									dropletShape);				//its droplets
+		FastAerosolSolid* solidCloud =
+			new FastAerosolSolid("cloudSV",						//its name
+									fCloud,						//its shape
+									fDropletShape);				//its droplets
 
 		/*
-		fastAerosolSolid* solidCloud =
-			new fastAerosolSolid("cloudSV",						//its name
-									cloud,						//its shape
-									dropletShape,				//its droplets
+		FastAerosolSolid* solidCloud =
+			new FastAerosolSolid("cloudSV",						//its name
+									fCloud,						//its shape
+									fDropletShape,				//its droplets
 									[](G4ThreeVector) {G4RotationMatrix rotm = G4RotationMatrix(); rotm.rotateY(90.0*deg); return rotm;});	//droplet rotation function
 		*/
 
-		solidCloud->SetStepLim(stepLim);						//fastAerosol can use step limit to speed calculations
+		solidCloud->SetStepLim(fStepLim);						//FastAerosol can use step limit to speed calculations
 
 		logicCloud =
 			new G4LogicalVolume(solidCloud,						//its solid
 								droplet_mat,					//its material
 								"cloudLV");						//its name
-		logicCloud->SetUserLimits(stepLimits);
+		logicCloud->SetUserLimits(fStepLimits);
 		logicCloud->SetVisAttributes(G4VisAttributes(G4Colour(0.0,0.0,1.0,0.4)));
 
 		new G4PVPlacement(0,									//no rotation
@@ -349,22 +349,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 						  checkOverlaps);						//overlaps checking
 
 
-		cloud->SetSeed(cloudSeed);
+		fCloud->SetSeed(fCloudSeed);
 
-		// prePopulate = whether to populate all voxels at the beginning or on the fly
-		if (prePopulate) {
+		// fPrePopulate = whether to populate all voxels at the beginning or on the fly
+		if (fPrePopulate) {
 			// populate (proving it to the user by printing population reports)
 			clock_t t;
 			t = clock();
 
 			G4cout << "\nBefore populating" << G4endl;
 			G4cout <<   "=================" << G4endl;
-			cloud->PrintPopulationReport();
+			fCloud->PrintPopulationReport();
 			G4cout << "\nPopulating..." << G4endl;
-			cloud->PopulateAllGrids();
+			fCloud->PopulateAllGrids();
 			G4cout << "\nAfter populating" << G4endl;
 			G4cout <<   "================" << G4endl;
-			cloud->PrintPopulationReport();
+			fCloud->PrintPopulationReport();
 			G4cout << G4endl;
 
 			t = clock() - t;
@@ -372,13 +372,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			G4cout << "\nThis took " << ((float)t)/CLOCKS_PER_SEC << "s\n" << G4endl;
 
 			// make filename variables to save data
-			G4String rStr = to_string(dropletR/mm);
+			G4String rStr = to_string(fDropletR/mm);
 			rStr.erase ( rStr.find_last_not_of('0') + 1, std::string::npos );	// drop trailing 0
 			replace( rStr.begin(), rStr.end(), '.', 'p');
 			if (rStr.back() == 'p') { rStr.pop_back(); }	// don't write "3p" for 3.0, just write "3"
 
 			// want to represent the number density as 1E-ApB for some A, B
-			G4int order10 = -round(10*log10(dropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
+			G4int order10 = -round(10*log10(fDropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
 			G4int leading = order10 / 10;	// first number
 			G4int trailing = order10 % 10;	// second number
 			G4String nStr = "1E-" + to_string(leading) + "p" + to_string(trailing);		
@@ -394,35 +394,35 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 			// save distribution
 			G4String fName = "distribution_r" + rStr + "mm_n" + nStr + "mm-3.csv";
-			cloud->SaveToFile(fName);
+			fCloud->SaveToFile(fName);
 		}
 	}
 	// **********************************************************
 	// 
-	// (For comparision/benchmarking) Build the cloud using G4VParameterized (does not use fastAerosol)
+	// (For comparision/benchmarking) Build the cloud using G4VParameterized (does not use FastAerosol)
 	// 
 	// ***********************************************************
 
 	// the droplet positions for this cloud are those saved in the "distribution" folder of our data
-	// this is to make comparable simulations between fastAerosol and parameterised clouds
-	// this requires that we first simulate fastAerosol (pre-populated) to generate the positions
+	// this is to make comparable simulations between FastAerosol and parameterised clouds
+	// this requires that we first simulate FastAerosol (pre-populated) to generate the positions
 	
-	else if (parameterisedCloud)
+	else if (fParameterisedCloud)
 	{
-		G4cout << "\nParameterised geometry with n=" << dropletNumDens*mm3 << "/mm3 and r=" << dropletR/mm << "mm spheres.\n" << G4endl;
+		G4cout << "\nParameterised geometry with n=" << fDropletNumDens*mm3 << "/mm3 and r=" << fDropletR/mm << "mm spheres.\n" << G4endl;
 		vector<G4ThreeVector> positions;
 		G4double x,y,z;
 
 		// load distribution file
 		G4String fName;
 
-		G4String rStr = to_string(dropletR/mm);
+		G4String rStr = to_string(fDropletR/mm);
 		rStr.erase ( rStr.find_last_not_of('0') + 1, std::string::npos );	// drop trailing 0
 		replace( rStr.begin(), rStr.end(), '.', 'p');
 		if (rStr.back() == 'p') { rStr.pop_back(); }	// don't write "3p" for 3.0, just write "3"
 
 		// want to represent the number density as 1E-ApB for some A, B
-		G4int order10 = -round(10*log10(dropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
+		G4int order10 = -round(10*log10(fDropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
 		G4int leading = order10 / 10;	// first number
 		G4int trailing = order10 % 10;	// second number
 		G4String nStr = "1E-" + to_string(leading) + "p" + to_string(trailing);
@@ -457,8 +457,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 								air_mat,			//its material
 								"cloudLV");			//its name
 
-		logicCloud->SetSmartless(smartless);
-		logicCloud->SetUserLimits(stepLimits);
+		logicCloud->SetSmartless(fSmartless);
+		logicCloud->SetUserLimits(fStepLimits);
 		logicCloud->SetVisAttributes(G4VisAttributes(false));
 
 		new G4PVPlacement(0,						//no rotation
@@ -471,11 +471,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 						  checkOverlaps);			//overlaps checking
 
 		G4LogicalVolume* logicDroplet = 
-			new G4LogicalVolume(dropletShape,		//its solid
+			new G4LogicalVolume(fDropletShape,		//its solid
 								droplet_mat,		//its material
 								"dropletLV");		//its name
 
-		logicDroplet->SetUserLimits(stepLimits);
+		logicDroplet->SetUserLimits(fStepLimits);
 
 		/*G4PVParameterised* paramDroplet =*/
 			new G4PVParameterised("droplets",		//its name
@@ -487,22 +487,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	}
 	// **********************************************************
 	// 
-	// (For comparision/benchmarking) Simulate the cloud by smearing droplets out into a single solid (does not use fastAerosol)
+	// (For comparision/benchmarking) Simulate the cloud by smearing droplets out into a single solid (does not use FastAerosol)
 	// 
 	// ***********************************************************
-	else if (smoothCloud)
+	else if (fSmoothCloud)
 	{
-		G4cout << "\nSmooth geometry based on a cloud of n=" << dropletNumDens*mm3 << "/mm3 and r=" << dropletR/mm << "mm spheres.\n" << G4endl;
-		// build cloud by smearing the droplets uniformly across the cloud volume, for comparison/benchmarking purposes (does not use fastAerosol)
+		G4cout << "\nSmooth geometry based on a cloud of n=" << fDropletNumDens*mm3 << "/mm3 and r=" << fDropletR/mm << "mm spheres.\n" << G4endl;
+		// build cloud by smearing the droplets uniformly across the cloud volume, for comparison/benchmarking purposes (does not use FastAerosol)
 		G4Material* cloud_mat = new G4Material("Cloud", (droplet_total_mass+cloud_air_mass)/cloud_volume, 2);
 		cloud_mat->AddMaterial(droplet_mat, droplet_total_mass/(cloud_air_mass+droplet_total_mass));
 		cloud_mat->AddMaterial(air_mat, cloud_air_mass/(cloud_air_mass+droplet_total_mass));
 							
 		logicCloud =						 
-			new G4LogicalVolume(cloudShape,	//its solid
+			new G4LogicalVolume(fCloudShape,	//its solid
 								cloud_mat,	//its material
 								"cloudLV");	//its name
-		logicCloud->SetUserLimits(stepLimits);
+		logicCloud->SetUserLimits(fStepLimits);
 		logicCloud->SetVisAttributes(G4VisAttributes(G4Colour(0.0,0.0,1.0,0.4)));
 					 
 		new G4PVPlacement(0,				//no rotation
@@ -538,7 +538,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 							detector_mat,	//its material
 							"detectorLV");	//its name
 
-	logicDetector->SetUserLimits(stepLimits);
+	logicDetector->SetUserLimits(fStepLimits);
 				 
 	new G4PVPlacement(0,					//no rotation
 						detector_pos,		//at position

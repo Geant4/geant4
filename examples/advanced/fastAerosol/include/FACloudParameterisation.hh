@@ -25,7 +25,7 @@
 //
 
 // (adapted from B2bChamberParameterisation)
-// A.Knaian, N.MacFadden
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
 #ifndef CloudParameterisation_h
 #define CloudParameterisation_h 1

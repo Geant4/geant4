@@ -25,7 +25,6 @@
 //
 
 // (copied from B1SteppingAction)
-// A.Knaian, N.MacFadden
 
 #ifndef SteppingAction_h
 #define SteppingAction_h 1

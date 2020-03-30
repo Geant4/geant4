@@ -25,7 +25,6 @@
 //
 
 // (copied from B1RunAction)
-// A.Knaian, N.MacFadden
 
 #ifndef RunAction_h
 #define RunAction_h 1

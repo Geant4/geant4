@@ -25,7 +25,7 @@
 //
 
 // (adapted from B1DetectorConstruction)
-// A.Knaian, N.MacFadden
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -33,7 +33,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-#include "fastAerosol.hh"
+#include "FastAerosol.hh"
 
 #include "G4UserLimits.hh"
 
@@ -54,39 +54,38 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 	G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
 
 	// Physics
-	G4double stepLim = DBL_MAX;			// global step limit
-	G4UserLimits* stepLimits;			// physics implementation of limit
+	G4double fStepLim = DBL_MAX;			// global step limit
+	G4UserLimits* fStepLimits;			// physics implementation of limit
 
 	// Cloud build choice
-	G4bool fastAerosolCloud = false;
-	G4bool parameterisedCloud = false;
-	G4bool smoothCloud = false;
+	G4bool fFastAerosolCloud = false;
+	G4bool fParameterisedCloud = false;
+	G4bool fSmoothCloud = false;
 
 	// Cloud droplet details
-	G4double dropletR = 1;
+	G4double fDropletR = 1;
 
-	// fastAerosol cloud details
-	fastAerosol* cloud = NULL;			// the cloud bulk and droplet positions
-	G4bool prePopulate = false;			// whether to pre-load droplet positions (true) or not (false)
-	G4double dropletNumDens = 0;		// numver density of droplets
-	G4double minSpacing = 0.0;			// minimum spacing between droplets
-	G4double gridPitch = 0.0;			// width of a voxel in the fastAerosol object
-	int cloudSeed = 0;					// random seed dictating droplet distribution
+	// FastAerosol cloud details
+	FastAerosol* fCloud = NULL;				// the cloud bulk and droplet positions
+	G4bool fPrePopulate = false;			// whether to pre-load droplet positions (true) or not (false)
+	G4double fDropletNumDens = 0;			// number density of droplets
+	G4double fMinSpacing = 0.0;				// minimum spacing between droplets
+	int fCloudSeed = 0;						// random seed dictating droplet distribution
 
 	// parameterised cloud details
-	G4double smartless = 2.0;			// control the 'smartless' property of parameterised solid. Roughly how many voxels the volume is split into for geometry optimization
+	G4double fSmartless = 2.0;				// control the 'fSmartless' property of parameterised solid. Roughly how many voxels the volume is split into for geometry optimization
 
-	G4String cloudShapeStr = "box";		// cloud bulk shape
-	G4String dropletShapeStr = "sphere";// droplet shape
+	G4String fCloudShapeStr = "box";		// cloud bulk shape
+	G4String fDropletShapeStr = "sphere";	// droplet shape
 
-	G4VSolid* cloudShape;				// actual cloud bulk shape
-	G4VSolid* dropletShape;				// actual droplet solid
+	G4VSolid* fCloudShape;					// actual cloud bulk shape
+	G4VSolid* fDropletShape;				// actual droplet solid
 
   protected:
 	G4LogicalVolume*  fScoringVolume;
 
   private:
-	DetectorConstructionMessenger* messenger;
+	DetectorConstructionMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,16 +27,15 @@
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
 //
-// fastAerosolSolid.icc
+// FastAerosolSolid.icc
 //
-// Implementation of inline methods of fastAerosolSolid
+// Implementation of inline methods of FastAerosolSolid
 //
-// History:
-// 12.02.19 A.Knaian, N.MacFadden: First writing
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 // --------------------------------------------------------------------
 
 inline
-G4double fastAerosolSolid::GetCubicVolume()
+G4double FastAerosolSolid::GetCubicVolume()
 {
   if(fCubicVolume != 0 ) {;}
   else
@@ -47,7 +46,7 @@ G4double fastAerosolSolid::GetCubicVolume()
 }
 
 inline
-G4double fastAerosolSolid::GetSurfaceArea()
+G4double FastAerosolSolid::GetSurfaceArea()
 {
   if(fSurfaceArea != 0.) {;}
   else
@@ -58,7 +57,7 @@ G4double fastAerosolSolid::GetSurfaceArea()
 }
 
 inline
-void fastAerosolSolid::SetStepLim(G4double newLim)
+void FastAerosolSolid::SetStepLim(G4double newLim)
 {
   fStepLim = newLim;
 }

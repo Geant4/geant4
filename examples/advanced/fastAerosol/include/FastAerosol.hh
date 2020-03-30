@@ -28,20 +28,19 @@
 // GEANT 4 class header file
 //
 // 
-// fastAerosol
+// FastAerosol
 //
 // Class description:
 //
-//   A fastAerosol is a collection of points in a voxelized 
-//   rectangular volume with methods implement population of
+//   A FastAerosol is a collection of points in a voxelized 
+//   arbitrarily-shaped volume with methods implementing population of
 //   grids/voxels and for efficiently finding the nearest point.
 //
-// History:
-// 12.02.19 A.Knaian, N.MacFadden: First writing
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 // --------------------------------------------------------------------
 
-#ifndef fastAerosol_h
-#define fastAerosol_h
+#ifndef FastAerosol_h
+#define FastAerosol_h
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -54,21 +53,21 @@
 
 using namespace std;
 
-class fastAerosol {
+class FastAerosol {
 	public:
 		// Constructor; creates a random cloud of droplets
-		fastAerosol(const G4String& pName, G4VSolid* pCloud,
+		FastAerosol(const G4String& pName, G4VSolid* pCloud,
 					   G4double pR, G4double pMinD, G4double pAvgNumDens, G4double pdR,
 					   std::function<G4double (G4ThreeVector)> pNumDensDistribution);
 
-		fastAerosol(const G4String& pName, G4VSolid* pCloud,
+		FastAerosol(const G4String& pName, G4VSolid* pCloud,
 					G4double pR, G4double pMinD, G4double pNumDens, G4double pdR);
 
-		fastAerosol(const G4String& pName, G4VSolid* pCloud,
+		FastAerosol(const G4String& pName, G4VSolid* pCloud,
 					G4double pR, G4double pMinD, G4double pNumDens);
 		
 		// Destructor; frees memory
-		~fastAerosol();
+		~FastAerosol();
 
 		// Populate all grids. Otherwise, they are populated on-the-fly
 		void PopulateAllGrids();
@@ -76,10 +75,10 @@ class fastAerosol {
 		// Save locations of droplets to a file for visualization/analysis purposes
 		void SaveToFile(const char *filename);
 
-		// Get absolutely nearest droplet - must be public as fastAerosolSolid uses it
+		// Get absolutely nearest droplet - must be public as FastAerosolSolid uses it
 		bool GetNearestDroplet(const G4ThreeVector &p, G4ThreeVector &center, G4double &closestDistance, G4double stepLim, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation);
 		
-		// Get nearest droplet along a vector - must be public as fastAerosolSolid uses it
+		// Get nearest droplet along a vector - must be public as FastAerosolSolid uses it
 		bool GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector &v, G4ThreeVector &center, G4double &closestDistance, G4double stepLim, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation);
 
 		// ======
@@ -112,7 +111,7 @@ class fastAerosol {
 		inline void SetNumPlacementTries(G4int numTries);
 
 		inline G4int GetPreSphereR();
-		inline void SetPreSphereR(G4int preSphereRIn);
+		inline void SetPreSphereR(G4int fPreSphereRIn);
 
 		inline std::function<G4double (G4ThreeVector)> GetDistribution(); // the droplet number density distribution
 
@@ -145,34 +144,34 @@ class fastAerosol {
 		G4double fGridPitch;				// Pitch of collision detection grid.  Must be greater than diameter of droplets for correctness of collision detection.
 
 		// Ramdom engine
-		CLHEP::HepJamesRandom cloudEngine;
-		long seed = 0;						// Global random seed
+		CLHEP::HepJamesRandom fCloudEngine;
+		long fSeed = 0;						// Global random seed
 
-		G4double dropletsPerVoxel = 4.0;	// Expected number of droplets per voxel
+		G4double fDropletsPerVoxel = 4.0;	// Expected number of droplets per voxel
 
 		// How far the voxel center must be inside the bulk order for there to be no risk of placing a droplet outside
-		G4double edgeDistance;
+		G4double fEdgeDistance;
 
 		// Grid variables
-		vector<vector<G4ThreeVector>> grid;	// Grid of lists of inidices to grid points, used for fast collsion checking
-		vector<G4double> gridMean;			// Array listing mean count for each voxel
-		std::atomic<bool> *gridValid;		// Array listing validity of each grid. uses atomic variables
+		vector<vector<G4ThreeVector>> fGrid;// Grid of lists of inidices to grid points, used for fast collsion checking
+		vector<G4double> fGridMean;			// Array listing mean count for each voxel
+		std::atomic<bool> *fGridValid;		// Array listing validity of each grid. uses atomic variables
 
-		G4int fNx, fNy, fNz;				// Number of x, y, and z elements in grid
+		G4int fNx, fNy, fNz;				// Number of x, y, and z elements in fGrid
 		G4int fNxy;							// Cached fNx*fNy
 		long int fNumGridCells;				// Cached fNx*fNy*fNz
 
 
-		G4double collisionLimit2;			// Threshold distance squared when checking for collsion
+		G4double fCollisionLimit2;			// Threshold distance squared when checking for collsion
 		G4int fNumNewPointTries = 100;		// How many times we try to place droplets
 		G4double fMaxDropPercent = 1.0;		// The maximal percentage of skipped droplets before crashing0
 		G4int fMaxDropCount;				// The maximal number of skipped droplets before crashing
-		G4int numDropped = 0;				// Number of skipped droplets due to collisions/out of bulk placement
+		G4int fNumDropped = 0;				// Number of skipped droplets due to collisions/out of bulk placement
 
-		G4int numCollisions = 0;			// How many collisions occured when attempting to place
+		G4int fNumCollisions = 0;			// How many collisions occured when attempting to place
 
 		// Droplet search variables
-		G4int vSR;							// maximum vector search radius
+		G4int fVectorSearchRadius;			// maximum vector search radius
 
 		// Droplet placement functions
 		// ===========================
@@ -196,7 +195,7 @@ class fastAerosol {
 		// Voxelized sphere methods
 		// ========================
 		// a collection of points as in {{x1,y1},{x2,y2},...}
-		typedef vector<vector<int>> circleType;
+		typedef vector<vector<int>> fCircleType;
 
 		// a collection of points describing a spherical shell
 		// with points (x,y,z)=(i-R,j-R,sphere[i][j][k])
@@ -207,17 +206,17 @@ class fastAerosol {
 		// if searching some x=i-R that is outside the
 		// aerosol's bounding box, immediately increment i
 		// (similar for y).
-		typedef vector<vector<vector<int>>> sphereType;
+		typedef vector<vector<vector<int>>> fSphereType;
 
-		G4int maxCircleR;
-		G4int maxSphereR;
-		G4int preSphereR = 20;
-		vector<circleType> circleCollection;
-		vector<sphereType> sphereCollection;
+		G4int fMaxCircleR;
+		G4int fMaxSphereR;
+		G4int fPreSphereR = 20;
+		vector<fCircleType> fCircleCollection;
+		vector<fSphereType> fSphereCollection;
 		
-		sphereType MakeSphere(G4int R);
-		circleType MakeCircle(G4int R);
-		circleType MakeHalfCircle(G4int R);
+		fSphereType MakeSphere(G4int R);
+		fCircleType MakeCircle(G4int R);
+		fCircleType MakeHalfCircle(G4int R);
 
 		void PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi, unsigned int& gi); 
 
@@ -233,6 +232,6 @@ class fastAerosol {
 		inline std::pair<G4int, G4int> GetMinMaxSide(G4int index, G4int numGrids);  
 };
 
-#include "fastAerosol.icc"
+#include "FastAerosol.icc"
 
 #endif

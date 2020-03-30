@@ -26,40 +26,39 @@
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
 //
-// fastAerosol.icc
+// FastAerosol.icc
 //
-// Implementation of inline methods of fastAerosol
+// Implementation of inline methods of FastAerosol
 //
-// History:
-// 12.02.19 A.Knaian, N.MacFadden: First writing
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 // --------------------------------------------------------------------
 
 inline
-G4String fastAerosol::GetName() const
+G4String FastAerosol::GetName() const
 {
 	return(fName);
 }
 
 inline
-G4VSolid* fastAerosol::GetBulk() const
+G4VSolid* FastAerosol::GetBulk() const
 {
 	return(fCloud);
 }
 
 inline
-G4double fastAerosol::GetRadius() const
+G4double FastAerosol::GetRadius() const
 {
 	return(fR);
 }
 
 inline
-G4double fastAerosol::GetAvgNumDens() const
+G4double FastAerosol::GetAvgNumDens() const
 {
 	return(fAvgNumDens);
 }
 
 inline
-G4int fastAerosol::GetNumDroplets() const
+G4int FastAerosol::GetNumDroplets() const
 {
 	return((int)(fAvgNumDens*GetCubicVolume()));
 }
@@ -67,25 +66,25 @@ G4int fastAerosol::GetNumDroplets() const
 
 
 inline
-G4double fastAerosol::GetXHalfLength() const
+G4double FastAerosol::GetXHalfLength() const
 {
   return(fDx);
 }
 
 inline    
-G4double fastAerosol::GetYHalfLength() const
+G4double FastAerosol::GetYHalfLength() const
 {
   return(fDy);
 }
 
 inline
-G4double fastAerosol::GetZHalfLength() const
+G4double FastAerosol::GetZHalfLength() const
 {
   return(fDz);
 }
 
 inline
-void fastAerosol::GetBoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const
+void FastAerosol::GetBoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const
 {
 	pMin.setX(-fDx); pMax.setX(fDx);
 	pMin.setY(-fDy); pMax.setY(fDy);
@@ -93,7 +92,7 @@ void fastAerosol::GetBoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) co
 }
 
 inline
-G4double fastAerosol::GetCubicVolume() const
+G4double FastAerosol::GetCubicVolume() const
 {
   return(fCloud->GetCubicVolume());
 }
@@ -101,7 +100,7 @@ G4double fastAerosol::GetCubicVolume() const
 
 // Find the absolute distance to the cloud bulk from p
 inline
-G4double fastAerosol::DistanceToCloud(const G4ThreeVector &p) {
+G4double FastAerosol::DistanceToCloud(const G4ThreeVector &p) {
 	if (fCloud->Inside(p)==kOutside)
 	{
 		return(fCloud->DistanceToIn(p));
@@ -114,7 +113,7 @@ G4double fastAerosol::DistanceToCloud(const G4ThreeVector &p) {
 
 // Find the distance to the cloud bulk from p along a vector v
 inline
-G4double fastAerosol::DistanceToCloud(const G4ThreeVector &p, const G4ThreeVector &v) {
+G4double FastAerosol::DistanceToCloud(const G4ThreeVector &p, const G4ThreeVector &v) {
 	if (fCloud->Inside(p)==kInside)
 	{
 		return(0);
@@ -129,31 +128,31 @@ G4double fastAerosol::DistanceToCloud(const G4ThreeVector &p, const G4ThreeVecto
 // Get and set the base of the random seed used to set droplet positions
 // For a given seed and a given geometry, the droplet positions are the same
 inline
-long fastAerosol::GetSeed() {
-	return(seed);
+long FastAerosol::GetSeed() {
+	return(fSeed);
 }
 
 inline
-void fastAerosol::SetSeed(long seedIn) {
-	seed = seedIn;
+void FastAerosol::SetSeed(long seedIn) {
+	fSeed = seedIn;
 }
 
 
 // Get and set the maximum radius of the voxelized spheres to pre-populate
 inline
-G4int fastAerosol::GetPreSphereR() {
-	return(preSphereR);
+G4int FastAerosol::GetPreSphereR() {
+	return(fPreSphereR);
 }
 
 inline
-void fastAerosol::SetPreSphereR(G4int preSphereRIn) {
-	preSphereR = preSphereRIn;
+void FastAerosol::SetPreSphereR(G4int preSphereRIn) {
+	fPreSphereR = preSphereRIn;
 }
 
 
 // Get the droplet distribution function
 inline
-std::function<G4double (G4ThreeVector)> fastAerosol::GetDistribution() {
+std::function<G4double (G4ThreeVector)> FastAerosol::GetDistribution() {
 	return(fDistribution);
 }
 
@@ -161,30 +160,30 @@ std::function<G4double (G4ThreeVector)> fastAerosol::GetDistribution() {
 // Get and set the maximum number of droplet placement tries in the solid
 // Skip placement if attempting to place a single droplet more than this
 inline
-G4int fastAerosol::GetNumPlacementTries()
+G4int FastAerosol::GetNumPlacementTries()
 {
 	return(fNumNewPointTries);
 }
 
 inline
-void fastAerosol::SetNumPlacementTries(G4int numTries)
+void FastAerosol::SetNumPlacementTries(G4int numTries)
 {
 	fNumNewPointTries = numTries;
 }
 
 // Get and set the expected number of droplets per voxel (on average)
 inline
-G4double fastAerosol::GetDropletsPerVoxel()
+G4double FastAerosol::GetDropletsPerVoxel()
 {
-  return(dropletsPerVoxel);
+  return(fDropletsPerVoxel);
 }
 
 inline
-void fastAerosol::SetDropletsPerVoxel(G4double newDropletsPerVoxel)
+void FastAerosol::SetDropletsPerVoxel(G4double newDropletsPerVoxel)
 {
   if (newDropletsPerVoxel >= pow(4.0*sqrt(2),-1.0))
   {
-  	dropletsPerVoxel = newDropletsPerVoxel;
+  	fDropletsPerVoxel = newDropletsPerVoxel;
   	InitializeGrid();
   }
   else
@@ -194,14 +193,14 @@ void fastAerosol::SetDropletsPerVoxel(G4double newDropletsPerVoxel)
 				<< "		For grid pitch to be larger than radius (currently assumed),"
 				<< "		droplets/voxel must be greater than or equal to 1/(4*sqrt(2))"
 				<< "        newDropletsPerVoxel = " << newDropletsPerVoxel;
-		G4Exception("fastAerosol::SetDropletsPerVoxel()", "GeomSolids0002",
+		G4Exception("FastAerosol::SetDropletsPerVoxel()", "GeomSolids0002",
 					FatalErrorInArgument, message);
   }
 }
 
 
 inline
-void fastAerosol::PrintPopulationReport() {
+void FastAerosol::PrintPopulationReport() {
 	G4cout << "Total grids: " << fNumGridCells << G4endl;
 	G4cout << "Droplets created: " << fNumDroplets << G4endl;
 	G4cout << "Average Number density: " << fAvgNumDens << G4endl;
@@ -215,7 +214,7 @@ void fastAerosol::PrintPopulationReport() {
 // Find the grid associated with a point.  Return true if that is a valid grid,
 // false if it is out of bounds.
 inline
-bool fastAerosol::GetGrid(const G4ThreeVector &p, int &xGrid, int &yGrid, int &zGrid) {
+bool FastAerosol::GetGrid(const G4ThreeVector &p, int &xGrid, int &yGrid, int &zGrid) {
 	xGrid = (int)floorl((p.x() + fDx) / fGridPitch);
 	yGrid = (int)floorl((p.y() + fDy) / fGridPitch);
 	zGrid = (int)floorl((p.z() + fDz) / fGridPitch);
@@ -224,7 +223,7 @@ bool fastAerosol::GetGrid(const G4ThreeVector &p, int &xGrid, int &yGrid, int &z
 
 // Return true if any grid index given is out of bounds, false otherwise
 inline
-bool fastAerosol::AnyIndexOutOfBounds(G4int xGrid, G4int yGrid, G4int zGrid) {
+bool FastAerosol::AnyIndexOutOfBounds(G4int xGrid, G4int yGrid, G4int zGrid) {
 	return ((xGrid < 0) || (xGrid >= fNx) ||
 			(yGrid < 0) || (yGrid >= fNy) ||
 			(zGrid < 0) || (zGrid >= fNz));
@@ -232,13 +231,13 @@ bool fastAerosol::AnyIndexOutOfBounds(G4int xGrid, G4int yGrid, G4int zGrid) {
 
 // Create index for grid 
 inline
-unsigned int fastAerosol::GetGridIndex(unsigned int xi, unsigned int yi, unsigned int zi) {
+unsigned int FastAerosol::GetGridIndex(unsigned int xi, unsigned int yi, unsigned int zi) {
 	return(zi*fNxy + yi*fNx + xi);
 }
 
 // Create get coordinates of index
 inline
-G4ThreeVector fastAerosol::GetIndexCoord(G4int index) {
+G4ThreeVector FastAerosol::GetIndexCoord(G4int index) {
 	G4int x = index % fNx;
 	G4int y = ( (index -x)/fNx ) % fNy;
 	G4int z = (index -x -fNx*y )/(fNx*fNy);
@@ -247,7 +246,7 @@ G4ThreeVector fastAerosol::GetIndexCoord(G4int index) {
 
 // find lower and upper grid boundary
 inline
-std::pair<G4int, G4int> fastAerosol::GetMinMaxSide(G4int i, G4int numGrids) {
+std::pair<G4int, G4int> FastAerosol::GetMinMaxSide(G4int i, G4int numGrids) {
 	return(std::make_pair((i == 0) ? 0 : (i-1),
 						   (i == (numGrids-1)) ? i : (i+1)));
 }

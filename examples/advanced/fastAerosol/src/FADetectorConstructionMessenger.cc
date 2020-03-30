@@ -25,7 +25,7 @@
 //
 
 // (adapted from B2aDetectorMessenger)
-// A.Knaian, N.MacFadden
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
 #include "FADetectorConstructionMessenger.hh"
 #include "FADetectorConstruction.hh"
@@ -41,7 +41,7 @@
 DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstruction* detectorIn)
  : G4UImessenger()
 {
-	detector = detectorIn;
+	fDetector = detectorIn;
 
 	// Directory
 	//
@@ -96,7 +96,7 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
 	// /geometry/smoothCloud
 	fSmoothCloudCmd = new G4UIcmdWithABool("/geometry/smoothCloud",this);
 	fSmoothCloudCmd->SetGuidance("Whether or not to build the smooth cloud.");
-	fSmoothCloudCmd->SetParameterName("parameterisedCloud",false);
+	fSmoothCloudCmd->SetParameterName("smoothCloud",false);
 	fSmoothCloudCmd->SetDefaultValue(false);
 	fSmoothCloudCmd->AvailableForStates(G4State_PreInit);
 
@@ -129,17 +129,6 @@ DetectorConstructionMessenger::DetectorConstructionMessenger(DetectorConstructio
 	fMinSpacingCmd->SetDefaultValue(10.);
 	fMinSpacingCmd->SetDefaultUnit("micrometer");
 	fMinSpacingCmd->AvailableForStates(G4State_PreInit);
-
-	/*
-	// /geometry/gridPitch
-	fGridPitchCmd = new G4UIcmdWithADoubleAndUnit("/geometry/gridPitch",this);
-	fGridPitchCmd->SetGuidance("Pitch of the collision detection grid, must be larger than the sphere size.");
-	fGridPitchCmd->SetParameterName("gridPitch",false);
-	fGridPitchCmd->SetRange("gridPitch>0.");
-	fGridPitchCmd->SetDefaultValue(0.5);
-	fGridPitchCmd->SetDefaultUnit("mm");
-	fGridPitchCmd->AvailableForStates(G4State_PreInit);
-	*/
 
 	// /geometry/setSmartless
 	fSmartlessCmd = new G4UIcmdWithADouble("/geometry/smartless", this);
@@ -190,47 +179,44 @@ void DetectorConstructionMessenger::SetNewValue( G4UIcommand* command, G4String 
 	// Geometry Commands
 
 	if( command == fFastAerosolCloudCmd ) {
-		detector->fastAerosolCloud = (fFastAerosolCloudCmd->GetNewBoolValue(newValue));
+		fDetector->fFastAerosolCloud = (fFastAerosolCloudCmd->GetNewBoolValue(newValue));
 	}
 
 	if( command == fStepLimCmd ) {
-		detector->stepLim = (fStepLimCmd->GetNewDoubleValue(newValue));
+		fDetector->fStepLim = (fStepLimCmd->GetNewDoubleValue(newValue));
 	}
 
 	if( command == fDropletRCmd ) {
-		detector->dropletR = (fDropletRCmd->GetNewDoubleValue(newValue));
+		fDetector->fDropletR = (fDropletRCmd->GetNewDoubleValue(newValue));
 	}
 	if( command == fDropletNumDensCmd ) {
-		detector->dropletNumDens = (fDropletNumDensCmd->GetNewDoubleValue(newValue));
+		fDetector->fDropletNumDens = (fDropletNumDensCmd->GetNewDoubleValue(newValue));
 	}
 
 	if( command == fParameterisedCloudCmd ) {
-		detector->parameterisedCloud = (fParameterisedCloudCmd->GetNewBoolValue(newValue));
+		fDetector->fParameterisedCloud = (fParameterisedCloudCmd->GetNewBoolValue(newValue));
 	}
 	if( command == fSmoothCloudCmd ) {
-		detector->smoothCloud = (fSmoothCloudCmd->GetNewBoolValue(newValue));
+		fDetector->fSmoothCloud = (fSmoothCloudCmd->GetNewBoolValue(newValue));
 	}
 	if( command == fPrePopulateCmd ) {
-		detector->prePopulate = (fPrePopulateCmd->GetNewBoolValue(newValue));
+		fDetector->fPrePopulate = (fPrePopulateCmd->GetNewBoolValue(newValue));
 	}
 
 	if( command == fCloudShapeCmd ) {
-		detector->cloudShapeStr = newValue;
+		fDetector->fCloudShapeStr = newValue;
 	}
 	if( command == fDropletShapeCmd ) {
-		detector->dropletShapeStr = newValue;
+		fDetector->fDropletShapeStr = newValue;
 	}
 	if( command == fMinSpacingCmd ) {
-		detector->minSpacing = (fMinSpacingCmd->GetNewDoubleValue(newValue));
+		fDetector->fMinSpacing = (fMinSpacingCmd->GetNewDoubleValue(newValue));
 	}
-	//if( command == fGridPitchCmd ) {
-	//	detector->gridPitch = (fGridPitchCmd->GetNewDoubleValue(newValue));
-	//}
 	if( command == fSmartlessCmd ) {
-		detector->smartless = (fSmartlessCmd->GetNewDoubleValue(newValue));
+		fDetector->fSmartless = (fSmartlessCmd->GetNewDoubleValue(newValue));
 	}
 	if( command == fCloudSeedCmd ) {
-		detector->cloudSeed = (fCloudSeedCmd->GetNewIntValue(newValue));
+		fDetector->fCloudSeed = (fCloudSeedCmd->GetNewIntValue(newValue));
 	}
 }
 

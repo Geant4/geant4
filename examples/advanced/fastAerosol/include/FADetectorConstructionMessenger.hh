@@ -25,7 +25,7 @@
 //
 
 // (adapted from B2aDetectorMessenger)
-// A.Knaian, N.MacFadden
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
 #ifndef DetectorConstructionMessenger_h
 #define DetectorConstructionMessenger_h 1
@@ -51,7 +51,7 @@ class DetectorConstructionMessenger: public G4UImessenger
 		virtual void SetNewValue(G4UIcommand*, G4String);
 
 	private:
-		DetectorConstruction* detector;
+		DetectorConstruction* 		fDetector;
 
 		G4UIdirectory*				fGeometryDirectory;
 
@@ -70,7 +70,6 @@ class DetectorConstructionMessenger: public G4UImessenger
 		G4UIcmdWithABool*			fPrePopulateCmd;
 
 		G4UIcmdWithADoubleAndUnit*	fMinSpacingCmd;
-		//G4UIcmdWithADoubleAndUnit*	fGridPitchCmd;
 
 		G4UIcmdWithADouble*			fSmartlessCmd;
 

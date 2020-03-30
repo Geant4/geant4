@@ -25,7 +25,6 @@
 //
 
 // (copied from B1ActionInitialization)
-// A.Knaian, N.MacFadden
 
 #ifndef ActionInitialization_h
 #define ActionInitialization_h 1

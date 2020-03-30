@@ -25,7 +25,6 @@
 //
 
 // (copied from B1ActionInitialization)
-// A.Knaian, N.MacFadden
 
 #include "FAActionInitialization.hh"
 #include "FAPrimaryGeneratorAction.hh"

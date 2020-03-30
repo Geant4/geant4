@@ -25,7 +25,6 @@
 //
 
 // (copied from B1EventAction)
-// A.Knaian, N.MacFadden
 
 #ifndef EventAction_h
 #define EventAction_h 1

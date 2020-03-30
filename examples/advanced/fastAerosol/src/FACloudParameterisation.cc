@@ -25,7 +25,7 @@
 //
 
 // (adapted from B2bChamberParameterisation)
-// A.Knaian, N.MacFadden
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
 #include "FACloudParameterisation.hh"
 
@@ -55,9 +55,5 @@ void CloudParameterisation::ComputeTransformation
 {
   physVol->SetTranslation(fPositions[copyNo]);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

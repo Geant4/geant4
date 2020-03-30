@@ -25,13 +25,11 @@
 //
 
 // --------------------------------------------------------------------
-// Implementation for fastAerosolSolid class
-//
-// History:
-// 12.02.19 A.Knaian, N.MacFadden: First writing
+// Implementation for FastAerosolSolid class
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 // --------------------------------------------------------------------
 
-#include "fastAerosolSolid.hh"
+#include "FastAerosolSolid.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -59,8 +57,8 @@ namespace
 //
 // Constructor
 //
-fastAerosolSolid::fastAerosolSolid(const G4String& pName,
-										 fastAerosol* pCloud,
+FastAerosolSolid::FastAerosolSolid(const G4String& pName,
+										 FastAerosol* pCloud,
 										 G4VSolid* pDroplet,
 										 std::function<G4RotationMatrix (G4ThreeVector)> pRotation)
 	: G4VSolid(pName), fCloud(pCloud), fDroplet(pDroplet), fRotation(pRotation), fRebuildPolyhedron(false), fpPolyhedron(0)
@@ -88,10 +86,10 @@ fastAerosolSolid::fastAerosolSolid(const G4String& pName,
 //
 // Alternative constructor (constant rotation function)
 //
-fastAerosolSolid::fastAerosolSolid(const G4String& pName,
-										 fastAerosol* pCloud,
+FastAerosolSolid::FastAerosolSolid(const G4String& pName,
+										 FastAerosol* pCloud,
 										 G4VSolid* pDroplet):
-	fastAerosolSolid(pName, pCloud, pDroplet,
+	FastAerosolSolid(pName, pCloud, pDroplet,
 					 [](G4ThreeVector) {return G4RotationMatrix();})
 {}
 
@@ -100,7 +98,7 @@ fastAerosolSolid::fastAerosolSolid(const G4String& pName,
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
-fastAerosolSolid::fastAerosolSolid( __void__& a )
+FastAerosolSolid::FastAerosolSolid( __void__& a )
 	: G4VSolid(a), fCloud(nullptr), fDroplet(nullptr),
 	fBulk(nullptr), fR(0.),
 	fVisDx(0.), fVisDy(0.), fVisDz(0.),
@@ -115,14 +113,14 @@ fastAerosolSolid::fastAerosolSolid( __void__& a )
 //
 // Destructor
 //
-fastAerosolSolid::~fastAerosolSolid() {
+FastAerosolSolid::~FastAerosolSolid() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 //
-fastAerosolSolid::fastAerosolSolid(const fastAerosolSolid &rhs)
+FastAerosolSolid::FastAerosolSolid(const FastAerosolSolid &rhs)
 	: G4VSolid(rhs), fCloud(rhs.fCloud), fDroplet(rhs.fDroplet),
 	fBulk(rhs.fBulk), fR(rhs.fR),
 	fVisDx(rhs.fVisDx), fVisDy(rhs.fVisDy), fVisDz(rhs.fVisDz),
@@ -137,7 +135,7 @@ fastAerosolSolid::fastAerosolSolid(const fastAerosolSolid &rhs)
 //
 // Assignment operator
 //
-fastAerosolSolid &fastAerosolSolid::operator = (const fastAerosolSolid &rhs)
+FastAerosolSolid &FastAerosolSolid::operator = (const FastAerosolSolid &rhs)
 {
 	// Check assignment to self
 	//
@@ -174,7 +172,7 @@ fastAerosolSolid &fastAerosolSolid::operator = (const fastAerosolSolid &rhs)
 //
 // Calculate extent under transform and specified limit
 //
-G4bool fastAerosolSolid::CalculateExtent(const EAxis pAxis,
+G4bool FastAerosolSolid::CalculateExtent(const EAxis pAxis,
 											const G4VoxelLimits &pVoxelLimit,
 											const G4AffineTransform &pTransform,
 											G4double &pMin, G4double &pMax) const
@@ -196,7 +194,7 @@ G4bool fastAerosolSolid::CalculateExtent(const EAxis pAxis,
 //
 // This function assumes the cloud has at least 1 droplet
 //
-EInside fastAerosolSolid::Inside(const G4ThreeVector &p) const
+EInside FastAerosolSolid::Inside(const G4ThreeVector &p) const
 {
 	G4ThreeVector center;
 	G4double closestDistance;
@@ -221,7 +219,7 @@ EInside fastAerosolSolid::Inside(const G4ThreeVector &p) const
 //
 // This function assumes the cloud has at least 1 droplet
 //
-G4ThreeVector fastAerosolSolid::SurfaceNormal(const G4ThreeVector &p) const
+G4ThreeVector FastAerosolSolid::SurfaceNormal(const G4ThreeVector &p) const
 {
 	G4ThreeVector center;
 	G4double closestDistance;
@@ -239,7 +237,7 @@ G4ThreeVector fastAerosolSolid::SurfaceNormal(const G4ThreeVector &p) const
 //
 // This CANNOT be an underestimate
 //
-G4double fastAerosolSolid::DistanceToIn(const G4ThreeVector &p, const G4ThreeVector &v) const
+G4double FastAerosolSolid::DistanceToIn(const G4ThreeVector &p, const G4ThreeVector &v) const
 {
 	G4ThreeVector center;
 	G4double closestDistance;
@@ -266,7 +264,7 @@ G4double fastAerosolSolid::DistanceToIn(const G4ThreeVector &p, const G4ThreeVec
 //
 // This can be an underestimate
 //
-G4double fastAerosolSolid::DistanceToIn(const G4ThreeVector &p) const
+G4double FastAerosolSolid::DistanceToIn(const G4ThreeVector &p) const
 {
 	G4ThreeVector center;
 	G4double closestDistance;
@@ -297,7 +295,7 @@ G4double fastAerosolSolid::DistanceToIn(const G4ThreeVector &p) const
 //
 // This CANNOT be an underestimate
 //
-G4double fastAerosolSolid::DistanceToOut(const G4ThreeVector &p,
+G4double FastAerosolSolid::DistanceToOut(const G4ThreeVector &p,
 										 const G4ThreeVector &v,
 										 const G4bool calcNorm,
 										 G4bool *validNorm,
@@ -319,7 +317,7 @@ G4double fastAerosolSolid::DistanceToOut(const G4ThreeVector &p,
 		message << setprecision(15) << "The particle at point p = " << p/mm << "mm"
 				<< setprecision(15) << " called DistanceToOut(p,v) and found the closest droplet to be at center = " << center/mm << "mm"
 				<< " but p is outside the droplet!";
-		G4Exception("fastAerosolSolid::DistanceToOut()", "GeomSolids0002",
+		G4Exception("FastAerosolSolid::DistanceToOut()", "GeomSolids0002",
 					FatalErrorInArgument, message);
 	}
 
@@ -336,7 +334,7 @@ G4double fastAerosolSolid::DistanceToOut(const G4ThreeVector &p,
 //
 // This can be an underestimate
 //
-G4double fastAerosolSolid::DistanceToOut(const G4ThreeVector &p) const
+G4double FastAerosolSolid::DistanceToOut(const G4ThreeVector &p) const
 {
 	G4ThreeVector center;
 	G4double distanceToIn; // should be 0
@@ -352,7 +350,7 @@ G4double fastAerosolSolid::DistanceToOut(const G4ThreeVector &p) const
 		message << "The particle at point p = " << p/mm << "mm"
 				<< " called DistanceToOut(p) and found the closest droplet to be at center = " << center/mm << "mm"
 				<< " but p is outside the droplet!";
-		G4Exception("fastAerosolSolid::DistanceToOut()", "GeomSolids0002", 
+		G4Exception("FastAerosolSolid::DistanceToOut()", "GeomSolids0002", 
 					FatalErrorInArgument, message);
 	}
 
@@ -363,31 +361,31 @@ G4double fastAerosolSolid::DistanceToOut(const G4ThreeVector &p) const
 //
 // G4EntityType
 //
-G4GeometryType fastAerosolSolid::GetEntityType() const
+G4GeometryType FastAerosolSolid::GetEntityType() const
 {
-	return G4String("fastAerosolSolid");
+	return G4String("FastAerosolSolid");
 }
 
 //////////////////////////////////////////////////////////////////////////
 //
 // G4EntityType
 //
-G4VSolid* fastAerosolSolid::Clone() const
+G4VSolid* FastAerosolSolid::Clone() const
 {
-	return new fastAerosolSolid(*this);
+	return new FastAerosolSolid(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Stream object contents to an output stream
 //
-std::ostream &fastAerosolSolid::StreamInfo(std::ostream &os) const
+std::ostream &FastAerosolSolid::StreamInfo(std::ostream &os) const
 {
 	G4int oldprc = os.precision(16);
 	os << "-----------------------------------------------------------\n"
 	   << "    *** Dump for solid - " << GetName() << " ***\n"
 	   << "    ===================================================\n"
-	   << " Solid type: fastAerosolSolid\n"
+	   << " Solid type: FastAerosolSolid\n"
 	   << " Parameters: \n"
 	   << "    numDroplets: " << fCloud->GetNumDroplets() << "\n"
 	   << "    fDroplet type: " << fDroplet->GetName() << "\n"
@@ -405,7 +403,7 @@ std::ostream &fastAerosolSolid::StreamInfo(std::ostream &os) const
 //
 // Currently hardcoded to look at all droplets, not just the populated ones
 //
-G4ThreeVector fastAerosolSolid::GetPointOnSurface() const
+G4ThreeVector FastAerosolSolid::GetPointOnSurface() const
 {
 	G4ThreeVector center;
 	G4double closestDistance;
@@ -427,24 +425,24 @@ G4ThreeVector fastAerosolSolid::GetPointOnSurface() const
 //
 // Methods for visualisation
 //
-void fastAerosolSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
+void FastAerosolSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
 	scene.AddSolid(*this);
 }
 
-G4VisExtent fastAerosolSolid::GetExtent() const
+G4VisExtent FastAerosolSolid::GetExtent() const
 {
 	return G4VisExtent (-fVisDx, fVisDx, -fVisDy, fVisDy, -fVisDz, fVisDz);
 }
 
-G4Polyhedron* fastAerosolSolid::CreatePolyhedron () const
+G4Polyhedron* FastAerosolSolid::CreatePolyhedron () const
 {
 	return fBulk->CreatePolyhedron();
 }
 
 
 // copied from G4Ellipsoid
-G4Polyhedron* fastAerosolSolid::GetPolyhedron () const
+G4Polyhedron* FastAerosolSolid::GetPolyhedron () const
 {
 	if (!fpPolyhedron ||
 		fRebuildPolyhedron ||

@@ -25,7 +25,7 @@
 //
 
 // (adapted from exampleB1)
-// A.Knaian, N.MacFadden
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -36,13 +36,8 @@
 #include "G4UImanager.hh"
 #include "G4ScoringManager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "Randomize.hh"
 

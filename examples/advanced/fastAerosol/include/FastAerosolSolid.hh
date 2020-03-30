@@ -28,27 +28,27 @@
 // GEANT 4 class header file
 //
 // 
-// fastAerosolSolid
+// FastAerosolSolid
 //
 // Class description:
 //
-//   A fastAerosolSolid is a collection of fDroplet solids
-//   with positions set randomly by fastAerosol in a
-//   volume given by a bulk shape given by fastAerosol member
+//   A FastAerosolSolid is a collection of fDroplet solids
+//   with positions set randomly by FastAerosol in a
+//   volume given by a bulk shape given by FastAerosol member
 //   
-//   The fastAerosol member fCloud handles the optimization
+//   The FastAerosol member fCloud handles the optimization
 //   (finding nearest droplet, populating the cloud) needed for
 //   efficient simulations.
 //
-// History:
-// 12.02.19 A.Knaian, N.MacFadden: First writing. Heavily based
-//								   on system solids
+//   This class is heavily based on system solids.
+//
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 // --------------------------------------------------------------------
 
-#ifndef fastAerosolSolid_HH
-#define fastAerosolSolid_HH
+#ifndef FastAerosolSolid_HH
+#define FastAerosolSolid_HH
 
-#include "fastAerosol.hh"
+#include "FastAerosol.hh"
 
 #include "G4Polyhedron.hh"
 
@@ -56,18 +56,18 @@
 #include <functional>
 #include "G4RotationMatrix.hh"
 
-class fastAerosolSolid : public G4VSolid
+class FastAerosolSolid : public G4VSolid
 {
 	public: 
-		fastAerosolSolid(const G4String& pName,
-							   fastAerosol* pCloud,
+		FastAerosolSolid(const G4String& pName,
+							   FastAerosol* pCloud,
 							   G4VSolid* pDroplet,
 							   std::function<G4RotationMatrix (G4ThreeVector)> pRotation);
 
-		fastAerosolSolid(const G4String& pName,
-							   fastAerosol* pCloud,
+		FastAerosolSolid(const G4String& pName,
+							   FastAerosol* pCloud,
 							   G4VSolid* pDroplet);
-		~fastAerosolSolid();
+		~FastAerosolSolid();
 
 		// Access functions
 		inline G4double GetCubicVolume();
@@ -106,14 +106,14 @@ class fastAerosolSolid : public G4VSolid
 
 	public:  // without description
 	 
-		fastAerosolSolid(__void__&);
+		FastAerosolSolid(__void__&);
 			//
 			// Fake default constructor for usage restricted to direct object
 			// persistency for clients requiring preallocation of memory for
 			// persistifiable objects.
 
-		fastAerosolSolid(const fastAerosolSolid& rhs);
-		fastAerosolSolid& operator=(const fastAerosolSolid& rhs); 
+		FastAerosolSolid(const FastAerosolSolid& rhs);
+		FastAerosolSolid& operator=(const FastAerosolSolid& rhs); 
 			// Copy constructor and assignment operator.
 
 		inline void SetStepLim(G4double newLim);
@@ -126,7 +126,7 @@ class fastAerosolSolid : public G4VSolid
 
 		G4double fStepLim = DBL_MAX;		// Maximum step length. Allows speed up in droplet search
 
-		fastAerosol* fCloud;				// fastAerosol which handles brunt of work
+		FastAerosol* fCloud;				// FastAerosol which handles brunt of work
 		G4VSolid* fDroplet;					// Droplet shape
 		G4VSolid* fBulk;					// Aerosol bulk
 
@@ -147,6 +147,6 @@ class fastAerosolSolid : public G4VSolid
 		mutable G4Polyhedron* fpPolyhedron;
 };
 
-#include "fastAerosolSolid.icc"
+#include "FastAerosolSolid.icc"
 
 #endif

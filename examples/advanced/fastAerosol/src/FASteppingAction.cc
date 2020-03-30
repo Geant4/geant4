@@ -25,7 +25,6 @@
 //
 
 // (copied from B1SteppingAction)
-// A.Knaian, N.MacFadden
 
 #include "FASteppingAction.hh"
 #include "FAEventAction.hh"

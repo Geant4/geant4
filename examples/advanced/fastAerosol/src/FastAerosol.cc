@@ -25,13 +25,11 @@
 //
 
 // --------------------------------------------------------------------
-// Implementation for fastAerosol class
-//
-// History:
-// 12.02.19 A.Knaian, N.MacFadden: First writing
+// Implementation for FastAerosol class
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 // --------------------------------------------------------------------
 
-#include "fastAerosol.hh"
+#include "FastAerosol.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4GeometryTolerance.hh"
@@ -53,7 +51,7 @@ namespace
 //             - initialize grid
 //             - cache values
 //
-fastAerosol::fastAerosol(const G4String& pName,
+FastAerosol::FastAerosol(const G4String& pName,
 							   G4VSolid* pCloud,
 							   G4double pR,
 							   G4double pMinD,
@@ -66,9 +64,9 @@ fastAerosol::fastAerosol(const G4String& pName,
 
 
 	// get and set bounding box dimensions
-	G4ThreeVector fMin, fMax;
-	fCloud->BoundingLimits(fMin, fMax);
-	G4ThreeVector halfSizeVec = 0.5*(fMax - fMin);
+	G4ThreeVector minBounding, maxBounding;
+	fCloud->BoundingLimits(minBounding, maxBounding);
+	G4ThreeVector halfSizeVec = 0.5*(maxBounding - minBounding);
 
 	G4double pX = halfSizeVec[0];
 	G4double pY = halfSizeVec[1];
@@ -81,7 +79,7 @@ fastAerosol::fastAerosol(const G4String& pName,
 		std::ostringstream message;
 		message << "Dimensions too small for cloud: " << GetName() << "!" << G4endl
 				<< "     fDx, fDy, fDz = " << pX << ", " << pY << ", " << pZ;
-		G4Exception("fastAerosol::fastAerosol()", "GeomSolids0002",
+		G4Exception("FastAerosol::FastAerosol()", "GeomSolids0002",
 					FatalException, message);
 	}
 	fDx = pX;
@@ -96,7 +94,7 @@ fastAerosol::fastAerosol(const G4String& pName,
 		message << "Invalid radius for cloud: " << GetName() << "!" << G4endl
 				<< "        Radius must be positive."
 				<< "        Inputs: pR = " << pR;
-		G4Exception("fastAerosol::fastAerosol()", "GeomSolids0002",
+		G4Exception("FastAerosol::FastAerosol()", "GeomSolids0002",
 					FatalErrorInArgument, message);
 	}
 	fR = pR;
@@ -111,7 +109,7 @@ fastAerosol::fastAerosol(const G4String& pName,
 				<< "        Radius uncertainty must be between 0 and fR."
 				<< "        Inputs: pdR = " << pdR
 				<< "        Inputs: pR = " << pR;
-		G4Exception("fastAerosol::fastAerosol()", "GeomSolids0002",
+		G4Exception("FastAerosol::FastAerosol()", "GeomSolids0002",
 					FatalErrorInArgument, message);
 	}
 	fdR = pdR;
@@ -123,7 +121,7 @@ fastAerosol::fastAerosol(const G4String& pName,
 		std::ostringstream message;
 		message << "Invalid average number density for cloud: " << GetName() << "!" << G4endl
 				<< "     pAvgNumDens = " << pAvgNumDens;
-		G4Exception("fastAerosol::fastAerosol()", "GeomSolids0002",
+		G4Exception("FastAerosol::FastAerosol()", "GeomSolids0002",
 					FatalException, message);
 	}
 	fAvgNumDens = pAvgNumDens;
@@ -131,7 +129,7 @@ fastAerosol::fastAerosol(const G4String& pName,
 
 	// Set collision limit for collsion between equal sized balls with fMinD between them
 	// no droplets will be placed closer than this distance forom each other
-	collisionLimit2 = (2*fR + fMinD)*(2*fR + fMinD);
+	fCollisionLimit2 = (2*fR + fMinD)*(2*fR + fMinD);
 
 	// set maximum number of droplet that we are allowed to skip before halting with an error
 	fMaxDropCount = floor(fAvgNumDens*(fCloud->GetCubicVolume())*(0.01*fMaxDropPercent)); 
@@ -144,19 +142,19 @@ fastAerosol::fastAerosol(const G4String& pName,
 	// see header for more details on these data structures
 	G4AutoLock lockSphere(&sphereMutex);	// lock for multithreaded safety. Likely not needed here, but doesn't hurt
 
-	circleCollection.push_back({{0, 0}});	// the R=0 circle only has one point {{x1,y1}} = {{0,0}}
-	sphereCollection.push_back({{{0}}});	// the R=0 sphere only has one point {{{z1}}}  = {{{0}}}
+	fCircleCollection.push_back({{0, 0}});	// the R=0 circle only has one point {{x1,y1}} = {{0,0}}
+	fSphereCollection.push_back({{{0}}});	// the R=0 sphere only has one point {{{z1}}}  = {{{0}}}
 	
-	maxCircleR = 0;
-	maxSphereR = 0;
+	fMaxCircleR = 0;
+	fMaxSphereR = 0;
 
-	MakeSphere(preSphereR);
+	MakeSphere(fPreSphereR);
 
 	lockSphere.unlock();					// unlock
 
 	// vector search radius. In terms of voxel width, how far do you search for droplets in vector search
 	// you need to search a larger area if fR is larger than one grid (currently disabled)
-	vSR = ceill(fR/fGridPitch);
+	fVectorSearchRadius = ceill(fR/fGridPitch);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,13 +163,13 @@ fastAerosol::fastAerosol(const G4String& pName,
 //
 // Same as standard constructor except with a uniform droplet distribution
 //
-fastAerosol::fastAerosol(const G4String& pName,
+FastAerosol::FastAerosol(const G4String& pName,
 							   G4VSolid* pCloud,
 							   G4double pR,
 							   G4double pMinD,
 							   G4double pNumDens,
 							   G4double pdR):
-	fastAerosol(pName, pCloud, pR, pMinD, pNumDens, pdR,
+	FastAerosol(pName, pCloud, pR, pMinD, pNumDens, pdR,
 				[](G4ThreeVector) {return 1.0;})
 {}
 
@@ -182,12 +180,12 @@ fastAerosol::fastAerosol(const G4String& pName,
 // Same as standard constructor except with a uniform droplet distribution and
 // assuming no uncertainty in sphericality
 //
-fastAerosol::fastAerosol(const G4String& pName,
+FastAerosol::FastAerosol(const G4String& pName,
 							   G4VSolid* pCloud,
 							   G4double pR,
 							   G4double pMinD,
 							   G4double pNumDens):
-	fastAerosol(pName, pCloud, pR, pMinD, pNumDens, 0.0,
+	FastAerosol(pName, pCloud, pR, pMinD, pNumDens, 0.0,
 				[](G4ThreeVector) {return 1.0;})
 {}
 
@@ -195,7 +193,7 @@ fastAerosol::fastAerosol(const G4String& pName,
 //
 // Destructor
 //
-fastAerosol::~fastAerosol() {
+FastAerosol::~FastAerosol() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,13 +203,13 @@ fastAerosol::~fastAerosol() {
 // Sets grids to initial values and calculates expected number of droplets
 // for each voxel
 //
-void fastAerosol::InitializeGrid() {
-	// set pitch so, on average, dropletsPerVoxel droplets are in each voxel
-	fGridPitch = pow(dropletsPerVoxel/fAvgNumDens,1.0/3.0);
+void FastAerosol::InitializeGrid() {
+	// set pitch so, on average, fDropletsPerVoxel droplets are in each voxel
+	fGridPitch = pow(fDropletsPerVoxel/fAvgNumDens,1.0/3.0);
 
 	// if a voxel has center farther than this distance from the bulk outside,
 	// we know it is fully contained in the bulk
-	edgeDistance = fGridPitch*sqrt(3.0)/2.0 + fR;
+	fEdgeDistance = fGridPitch*sqrt(3.0)/2.0 + fR;
 
 	// set number of grid cells
 	fNx = ceill(2*fDx / fGridPitch);
@@ -225,9 +223,9 @@ void fastAerosol::InitializeGrid() {
 	try
 	{
 		vector<G4ThreeVector> emptyVoxel{};
-		grid.resize(fNumGridCells, emptyVoxel);
-		gridMean.resize(fNumGridCells, 0);
-		gridValid = new std::atomic<bool>[fNumGridCells];
+		fGrid.resize(fNumGridCells, emptyVoxel);
+		fGridMean.resize(fNumGridCells, 0);
+		fGridValid = new std::atomic<bool>[fNumGridCells];
 	}
 	catch ( const std::bad_alloc& e )
 	{
@@ -236,8 +234,8 @@ void fastAerosol::InitializeGrid() {
 				<< "        Asked for fNumGridCells = " << fNumGridCells << G4endl
 				<< "        each with element of size " << sizeof(vector<G4ThreeVector>) << G4endl
 				<< "        each with element of size " << sizeof(bool) << G4endl
-				<< "        but the max size is " << grid.max_size() << "!";
-		G4Exception("fastAerosol::fastAerosol()", "GeomSolids0002",
+				<< "        but the max size is " << fGrid.max_size() << "!";
+		G4Exception("FastAerosol::FastAerosol()", "GeomSolids0002",
 					FatalErrorInArgument, message);
 	}
 	
@@ -251,36 +249,36 @@ void fastAerosol::InitializeGrid() {
 		voxelCenter -= G4ThreeVector(fDx,fDy,fDz);								// shift all voxels so that aerosol center is properly at the origin
 
 		// whether or not the grid is 'finished'
-		// gridValid[i] is true if we don't plan on populating more droplets in the voxel
+		// fGridValid[i] is true if we don't plan on populating more droplets in the voxel
 		// false if otherwise
-		valid = (fCloud->Inside(voxelCenter) != kInside && fCloud->DistanceToIn(voxelCenter) >= edgeDistance);
+		valid = (fCloud->Inside(voxelCenter) != kInside && fCloud->DistanceToIn(voxelCenter) >= fEdgeDistance);
 
 		if (valid)	// will not populate the voxel
 		{
 			// have to store 'valid' in this way so that the value is atomic and respects multithreadedness
-			gridValid[i].store(true, std::memory_order_release);
+			fGridValid[i].store(true, std::memory_order_release);
 		}
 		else		// might need to populate the voxel
 		{
-			gridValid[i].store(false, std::memory_order_release);
+			fGridValid[i].store(false, std::memory_order_release);
 
 			// find the overlap of the voxel with the bulk
 			G4double volScaling=1.0;
-			G4bool edgeVoxel =  ( kInside != fCloud->Inside(voxelCenter) || fCloud->DistanceToOut(voxelCenter) < edgeDistance );
+			G4bool edgeVoxel =  ( kInside != fCloud->Inside(voxelCenter) || fCloud->DistanceToOut(voxelCenter) < fEdgeDistance );
 			if (edgeVoxel)
 			{
 				volScaling = VoxelOverlap(voxelCenter, 100, 0.0);
 			}
 
 			// calculates number of droplets based off of voxel center - not ideal
-			gridMean[i] = max(0.0, volScaling*fDistribution(voxelCenter));
+			fGridMean[i] = max(0.0, volScaling*fDistribution(voxelCenter));
 		}
 	}
 
-	// must scale gridMean[i] so that the desired number densities are actualy achieved
+	// must scale fGridMean[i] so that the desired number densities are actualy achieved
 	// this is because no restrictions are applied to fDistribution
-	G4double tempScaling = (fCloud->GetCubicVolume())*fAvgNumDens/accumulate(gridMean.begin(), gridMean.end(), 0.0);
-	for (int i=0; i<fNumGridCells; i++) {gridMean[i] *= tempScaling;}
+	G4double tempScaling = (fCloud->GetCubicVolume())*fAvgNumDens/accumulate(fGridMean.begin(), fGridMean.end(), 0.0);
+	for (int i=0; i<fNumGridCells; i++) {fGridMean[i] *= tempScaling;}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -289,7 +287,7 @@ void fastAerosol::InitializeGrid() {
 //
 // The method is largely copied from G4VSolid::EstimateCubicVolume
 //
-G4double fastAerosol::VoxelOverlap(G4ThreeVector voxelCenter, G4int nStat, G4double epsilon) {
+G4double FastAerosol::VoxelOverlap(G4ThreeVector voxelCenter, G4int nStat, G4double epsilon) {
 	G4double cenX = voxelCenter.x();
 	G4double cenY = voxelCenter.y();
 	G4double cenZ = voxelCenter.z();
@@ -322,7 +320,7 @@ G4double fastAerosol::VoxelOverlap(G4ThreeVector voxelCenter, G4int nStat, G4dou
 //
 // Allows for partially populated clouds.
 //
-void fastAerosol::PopulateAllGrids() {
+void FastAerosol::PopulateAllGrids() {
 	unsigned int gi;
 
 	for (int xi=0; xi<fNx; xi++)
@@ -346,11 +344,11 @@ void fastAerosol::PopulateAllGrids() {
 //
 // If grid is already populated, does nothing.
 //
-void fastAerosol::PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi, unsigned int& gi) {
+void FastAerosol::PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi, unsigned int& gi) {
 	gi = GetGridIndex(xi,yi,zi);
 	
 	// Check if this grid needs update
-	bool tmpValid = gridValid[gi].load(std::memory_order_acquire);	// have to do this weirdly because we are using atomic variables so that multithreadedness is safe
+	bool tmpValid = fGridValid[gi].load(std::memory_order_acquire);	// have to do this weirdly because we are using atomic variables so that multithreadedness is safe
 	std::atomic_thread_fence(std::memory_order_acquire);
 	
 	if (!tmpValid) // if true then either outside the bulk or in a voxel that is already populated
@@ -358,21 +356,21 @@ void fastAerosol::PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi
 		G4AutoLock lockGrid(&gridMutex);
 
 		// Check again now that we have the lock - in case grid became valid after first check and before lock
-		tmpValid = gridValid[gi].load(std::memory_order_acquire);
+		tmpValid = fGridValid[gi].load(std::memory_order_acquire);
 
 		if (!tmpValid)
 		{
 			// uniquely set the seed to randomly place droplets
 			// changing global seed gaurantees a totally new batch of seeds
-			cloudEngine.setSeed((long)gi + (long)fNumGridCells*(long)seed);
+			fCloudEngine.setSeed((long)gi + (long)fNumGridCells*(long)fSeed);
 
 			// find if the voxel is near the bulk edge. In that case, we need to check whether a placed droplet is inside the bulk
 			// if not an edge voxel, we can place droplets by only considering interference between with other droplets
 			G4ThreeVector voxelCenter = fGridPitch*G4ThreeVector(xi+0.5,yi+0.5,zi+0.5)-G4ThreeVector(fDx,fDy,fDz);
-			G4bool edgeVoxel = ( kInside != fCloud->Inside(voxelCenter) || fCloud->DistanceToOut(voxelCenter) < edgeDistance );
+			G4bool edgeVoxel = ( kInside != fCloud->Inside(voxelCenter) || fCloud->DistanceToOut(voxelCenter) < fEdgeDistance );
 			
 			// number of droplets to place
-			unsigned int numDropletsToPlace = CLHEP::RandPoisson::shoot(&cloudEngine, gridMean[gi]);
+			unsigned int numDropletsToPlace = CLHEP::RandPoisson::shoot(&fCloudEngine, fGridMean[gi]);
 
 			// actually add the points
 			G4ThreeVector point;
@@ -382,7 +380,7 @@ void fastAerosol::PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi
 				// find a new point not overlapping with the others
 				if (FindNewPoint(edgeVoxel, fGridPitch, fGridPitch, fGridPitch, (G4double)xi*fGridPitch-fDx, (G4double)yi*fGridPitch-fDy, (G4double)zi*fGridPitch-fDz, point) )
 				{
-					grid[gi].push_back(point);
+					fGrid[gi].push_back(point);
 					fNumDroplets++;
 				}
 
@@ -391,11 +389,11 @@ void fastAerosol::PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi
 			}
 
 			// Memory fence to ensure sequential consistency,
-			// because gridValid is read without a lock
-			// Voxel data update must be complete before updating gridValid
+			// because fGridValid is read without a lock
+			// Voxel data update must be complete before updating fGridValid
 			std::atomic_thread_fence(std::memory_order_release);
 
-			gridValid[gi].store(true, std::memory_order_release);	// set the grid as populated
+			fGridValid[gi].store(true, std::memory_order_release);	// set the grid as populated
 		}
 
 		lockGrid.unlock();
@@ -414,7 +412,7 @@ void fastAerosol::PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi
 //                   (G4double)xi*fGridPitch-fDx, (G4double)yi*fGridPitch-fDy,
 //                   (G4double)zi*fGridPitch-fDz);
 //
-// 1) CLHEP::RandFlat::shoot(&cloudEngine)*fGridPitch shoots a point in range
+// 1) CLHEP::RandFlat::shoot(&fCloudEngine)*fGridPitch shoots a point in range
 //    [0, fGridPitch]
 //
 // 1.5) Note that the minimum x value of the (xi, yi, zi) grid is
@@ -427,12 +425,12 @@ void fastAerosol::PopulateGrid(unsigned int xi, unsigned int yi, unsigned int zi
 //
 // Ex: FindNewPoint(2.0*fDx, 2.0*fDy, 2.0*fDz, -fDx, -fDy, -fDz);
 //
-// 1) CLHEP::RandFlat::shoot(&cloudEngine)*2.0*fDx shoots a point in
+// 1) CLHEP::RandFlat::shoot(&fCloudEngine)*2.0*fDx shoots a point in
 //     range [0, 2.0*fDx]
 //
 // 2) add -fDx to change range into [-fDx, fDx]
 //
-G4bool fastAerosol::FindNewPoint(G4bool edgeVoxel, G4double dX, G4double dY, G4double dZ, G4double minX, G4double minY, G4double minZ, G4ThreeVector &foundPt) {
+G4bool FastAerosol::FindNewPoint(G4bool edgeVoxel, G4double dX, G4double dY, G4double dZ, G4double minX, G4double minY, G4double minZ, G4ThreeVector &foundPt) {
 	G4int tries = 0;	// counter of tries. Give up after fNumNewPointTries (you likely asked for too dense in this case)
 
 	G4double x, y, z;
@@ -446,8 +444,8 @@ G4bool fastAerosol::FindNewPoint(G4bool edgeVoxel, G4double dX, G4double dY, G4d
 
 		if (tries > fNumNewPointTries)		// skip if we tried more than fNumNewPointTries
 		{
-			numDropped++;
-			if (numDropped < fMaxDropCount)	// return error if we skipped more than fMaxDropCount droplets
+			fNumDropped++;
+			if (fNumDropped < fMaxDropCount)	// return error if we skipped more than fMaxDropCount droplets
 			{
 				return false;
 			}
@@ -456,13 +454,13 @@ G4bool fastAerosol::FindNewPoint(G4bool edgeVoxel, G4double dX, G4double dY, G4d
 			message << "Threw out too many droplets for cloud: " << GetName()  << G4endl
 					<< "        Tried to place individual droplest " << fNumNewPointTries << " times." << G4endl
 					<< "        This failed for " << fMaxDropCount << " droplets.";
-			G4Exception("fastAerosol::FindNewPoint()", "GeomSolids0002",
+			G4Exception("FastAerosol::FindNewPoint()", "GeomSolids0002",
 						FatalErrorInArgument, message);
 		}
 
-		x = minX + CLHEP::RandFlat::shoot(&cloudEngine)*dX;
-		y = minY + CLHEP::RandFlat::shoot(&cloudEngine)*dY;
-		z = minZ + CLHEP::RandFlat::shoot(&cloudEngine)*dZ;
+		x = minX + CLHEP::RandFlat::shoot(&fCloudEngine)*dX;
+		y = minY + CLHEP::RandFlat::shoot(&fCloudEngine)*dY;
+		z = minZ + CLHEP::RandFlat::shoot(&fCloudEngine)*dZ;
 
 		if (edgeVoxel)
 		{
@@ -488,7 +486,7 @@ G4bool fastAerosol::FindNewPoint(G4bool edgeVoxel, G4double dX, G4double dY, G4d
 // in general as you go out, you always need to check one more level out to make sure that
 // the one you have (at the closer level) is the actually the nearest one
 //
-bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, G4ThreeVector &center, G4double &minRealDistance, G4double maxSearch, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation)
+bool FastAerosol::GetNearestDroplet(const G4ThreeVector &p, G4ThreeVector &center, G4double &minRealDistance, G4double maxSearch, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation)
 {
 	G4double cloudDistance = fCloud->DistanceToIn(p);
 
@@ -570,36 +568,36 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, G4ThreeVector &cente
 //
 // Returns if minDistance<infinity (i.e., if we have yet found a droplet)
 //
-void fastAerosol::SearchSphere(G4int searchRad, G4double &minDistance, std::vector<G4ThreeVector> &candidates, std::vector<G4double> &distances, G4int xGrid, G4int yGrid, G4int zGrid, const G4ThreeVector &p)
+void FastAerosol::SearchSphere(G4int searchRad, G4double &minDistance, std::vector<G4ThreeVector> &candidates, std::vector<G4double> &distances, G4int xGrid, G4int yGrid, G4int zGrid, const G4ThreeVector &p)
 {
 	// search variables
 	G4int xSearch, ySearch, zSearch;		// x, y, and z coordinates of the currently searching voxel in the shell
 
 	// voxel layer variables
-	sphereType shell;						// the shell that we are searching for droplets
+	fSphereType shell;						// the shell that we are searching for droplets
 
-	// we pre-calculate spheres up to radius preSphereR to speed up calculations
+	// we pre-calculate spheres up to radius fPreSphereR to speed up calculations
 	// any sphere smaller than that does not need to use locks
-	if (searchRad > preSphereR)
+	if (searchRad > fPreSphereR)
 	{
 		// need to consider making a sphere
 		G4AutoLock lockSphere(&sphereMutex);
 
-		if (searchRad > maxSphereR) {
+		if (searchRad > fMaxSphereR) {
 			// actually need to make a sphere
 			shell = MakeSphere(searchRad);
 		}
 		else
 		{
 			// we have previously made a sphere large enough
-			shell = sphereCollection[searchRad];
+			shell = fSphereCollection[searchRad];
 		}
 	
 		lockSphere.unlock();
 	}
 	else
 	{
-		shell = sphereCollection[searchRad];
+		shell = fSphereCollection[searchRad];
 	}
 		
 	// search spherical voxel layer
@@ -629,7 +627,7 @@ void fastAerosol::SearchSphere(G4int searchRad, G4double &minDistance, std::vect
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Make voxelized spheres up to radius R for sphereCollection
+// Make voxelized spheres up to radius R for fSphereCollection
 //
 // These spheres are used for searching for droplets
 //
@@ -639,24 +637,24 @@ void fastAerosol::SearchSphere(G4int searchRad, G4double &minDistance, std::vect
 // layer's displacement from the origin along the z-axis (layers are perp to
 // z in our convention).
 //
-vector<vector<vector<int>>> fastAerosol::MakeSphere(G4int R) {
-	// inductively make smaller spheres since sphereCollection organizes by index
-	if (maxSphereR<(R-1)) {
+vector<vector<vector<int>>> FastAerosol::MakeSphere(G4int R) {
+	// inductively make smaller spheres since fSphereCollection organizes by index
+	if (fMaxSphereR<(R-1)) {
 		MakeSphere(R-1);
 	}
 
 	vector<int> z;								// z-coordinates of voxels in (x,y) of sphere
 	vector<vector<int>> y(2*R+1, z);			// plane YZ of sphere
-	sphereType x(2*R+1, y);						// entire sphere
+	fSphereType x(2*R+1, y);					// entire sphere
 
 	x[R][R].push_back(R);						// add (0,0,R)
 	x[R][R].push_back(-R);						// add (0,0,-R)
 
-	circleType zr = MakeHalfCircle(R);			// break sphere into a collection of circles centered at (0,0,z) for different -R<=z<=R
+	fCircleType zr = MakeHalfCircle(R);			// break sphere into a collection of circles centered at (0,0,z) for different -R<=z<=R
 
 	for (auto it1 = zr.begin(); it1 != zr.end(); ++it1) {
 		vector<int> pt1 = *it1;
-		circleType circ = MakeCircle(pt1[1]);	// make the circle
+		fCircleType circ = MakeCircle(pt1[1]);	// make the circle
 
 		for (auto it2 = circ.begin(); it2 != circ.end(); ++it2) {
 			vector<int> pt2 = *it2;
@@ -664,29 +662,29 @@ vector<vector<vector<int>>> fastAerosol::MakeSphere(G4int R) {
 		}
 	}
 
-	sphereCollection.push_back(x);
-	maxSphereR = R;
+	fSphereCollection.push_back(x);
+	fMaxSphereR = R;
 	return x;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Make voxelized circles up to radius R for circleCollection
+// Make voxelized circles up to radius R for fCircleCollection
 //
 // These circles are used to create voxelized spheres (these spheres are then
 // used for searching for droplets). This just ports the calculation to making
 // a half-circle, adding the points (R,0) and (0,R), and reflecting the half-
 // circle along the x-axis.
 //
-vector<vector<int>> fastAerosol::MakeCircle(G4int R) {
-	// inductively make smaller circles since circleCollection organizes by index
-	if (maxCircleR<R) {
-		if (maxCircleR<(R-1)) {
+vector<vector<int>> FastAerosol::MakeCircle(G4int R) {
+	// inductively make smaller circles since fCircleCollection organizes by index
+	if (fMaxCircleR<R) {
+		if (fMaxCircleR<(R-1)) {
 			MakeCircle(R-1);
 		}
 
-		circleType voxels = {{R, 0}, {-R, 0}};		// add (R,0) and (-R,0) since half circle excludes them
-		circleType halfVoxels = MakeHalfCircle(R);
+		fCircleType voxels = {{R, 0}, {-R, 0}};		// add (R,0) and (-R,0) since half circle excludes them
+		fCircleType halfVoxels = MakeHalfCircle(R);
 
 		// join the voxels, halfVoxels, and -halfVoxels
 		for (auto it = halfVoxels.begin(); it != halfVoxels.end(); ++it) {
@@ -695,11 +693,11 @@ vector<vector<int>> fastAerosol::MakeCircle(G4int R) {
 			voxels.push_back({-pt[0], -pt[1]});
 		}
 
-		circleCollection.push_back(voxels);
-		maxCircleR++;
+		fCircleCollection.push_back(voxels);
+		fMaxCircleR++;
 	}
 	
-	return circleCollection[R];
+	return fCircleCollection[R];
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -712,9 +710,9 @@ vector<vector<int>> fastAerosol::MakeCircle(G4int R) {
 // voxelized marching spheres," Journal of Computational Physics, Vol. 241,
 // May 2013, pp. 76-94, https://doi.org/10.1016/j.jcp.2013.01.035
 //
-vector<vector<int>> fastAerosol::MakeHalfCircle(G4int R) {
+vector<vector<int>> FastAerosol::MakeHalfCircle(G4int R) {
 	// makes an octant of a voxelized circle in the 1st quadrant starting at y-axis
-	circleType voxels = {{0, R}};	// hard code inclusion of (0,R)
+	fCircleType voxels = {{0, R}};	// hard code inclusion of (0,R)
 	int x = 1;
 	int y = R;
 
@@ -760,7 +758,7 @@ vector<vector<int>> fastAerosol::MakeHalfCircle(G4int R) {
 //
 // Get nearest droplet inside a voxel at (xGrid, yGrid, zGrid)
 //
-void fastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, std::vector<G4ThreeVector> &candidates, std::vector<G4double> &distances, unsigned int xGrid, unsigned int yGrid, unsigned int zGrid, const G4ThreeVector &p) {
+void FastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, std::vector<G4ThreeVector> &candidates, std::vector<G4double> &distances, unsigned int xGrid, unsigned int yGrid, unsigned int zGrid, const G4ThreeVector &p) {
 	unsigned int gi;
 	PopulateGrid(xGrid, yGrid, zGrid, gi);
 
@@ -769,7 +767,7 @@ void fastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, std::vector
 	std::vector<G4ThreeVector>::iterator bestPt;
 	
 	// find closest droplet
-	for (auto it = grid[gi].begin(); it != grid[gi].end(); ++it) {
+	for (auto it = fGrid[gi].begin(); it != fGrid[gi].end(); ++it) {
 		foundDistance = sqrt((p-*it).mag2());
 
 		if (foundDistance < minDistance+fdR) {
@@ -785,16 +783,16 @@ void fastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, std::vector
 //
 // Get nearest droplet along vector
 //
-// Maximum search radius is vSR
+// Maximum search radius is fVectorSearchRadius
 // Maximum distance travelled along vector is maxSearch
 //
 // 1) Find the closest voxel along v that is inside the bulk
-// 2) Search for droplets in a box width (2*vSR+1) around this voxel
+// 2) Search for droplets in a box width (2*fVectorSearchRadius+1) around this voxel
 // that our ray would  intersect
 // 3) If so, save the droplet that is closest along the ray to p and return true
 // 4) If not, step 0.99*fGridPitch along v until in a new voxel
 // 5) If outside bulk, jump until inside bulk and then start again from 2
-// 6) If inside bulk, search the new voxels in a box centered of width (2*vSR+1)
+// 6) If inside bulk, search the new voxels in a box centered of width (2*fVectorSearchRadius+1)
 // centered at our new point
 // 7) If we find a point, do as in (3). If not, do as in (4)
 //
@@ -802,7 +800,7 @@ void fastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, std::vector
 // for droplets which fit inside a voxel, which is one reason why the code checks
 // to make sure that fR < fGridPitch at initialization.
 //
-bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector &normalizedV, G4ThreeVector &center, G4double &minDistance, G4double maxSearch, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation)
+bool FastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector &normalizedV, G4ThreeVector &center, G4double &minDistance, G4double maxSearch, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation)
 {
 	// get the grid box this initial position is inside
 	int xGrid, yGrid, zGrid;
@@ -852,7 +850,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				GetGrid(currentP, xGrid, yGrid, zGrid);
 				GetNearestDropletInsideRegion(minDistance, center,
 											  xGrid, yGrid, zGrid,
-											  vSR, vSR, vSR,
+											  fVectorSearchRadius, fVectorSearchRadius, fVectorSearchRadius,
 											  p, normalizedV,
 											  droplet, rotation);
 			}
@@ -864,7 +862,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				{
 					GetNearestDropletInsideRegion(minDistance, center,
 												  edgeX, yGrid, zGrid,			
-												  0, vSR, vSR,
+												  0, fVectorSearchRadius, fVectorSearchRadius,
 												  p, normalizedV,
 												  droplet, rotation);
 				}
@@ -873,7 +871,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				{
 					GetNearestDropletInsideRegion(minDistance, center,
 												  xGrid, edgeY, zGrid,
-												  vSR, 0, vSR,
+												  fVectorSearchRadius, 0, fVectorSearchRadius,
 												  p, normalizedV,
 												  droplet, rotation);
 				}
@@ -882,7 +880,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				{
 					GetNearestDropletInsideRegion(minDistance, center,
 												  xGrid, yGrid, edgeZ,
-												  vSR, vSR, 0,
+												  fVectorSearchRadius, fVectorSearchRadius, 0,
 												  p, normalizedV,
 												  droplet, rotation);
 				}
@@ -894,7 +892,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				{
 					GetNearestDropletInsideRegion(minDistance, center,
 												  edgeX, edgeY, zGrid,
-												  0, 0, vSR,
+												  0, 0, fVectorSearchRadius,
 												  p, normalizedV,
 												  droplet, rotation);
 				}
@@ -903,7 +901,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				{
 					GetNearestDropletInsideRegion(minDistance, center,
 												  edgeX, yGrid, edgeZ,
-												  0, vSR, 0,
+												  0, fVectorSearchRadius, 0,
 												  p, normalizedV,
 												  droplet, rotation);
 				}
@@ -912,7 +910,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				{
 					GetNearestDropletInsideRegion(minDistance, center,
 												  xGrid, edgeY, edgeZ,
-												  vSR, 0, 0,
+												  fVectorSearchRadius, 0, 0,
 												  p, normalizedV,
 												  droplet, rotation);
 				}
@@ -954,9 +952,9 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				GetGrid(currentP, newXGrid, newYGrid, newZGrid);
 
 				if ((newXGrid != xGrid) or (newYGrid != yGrid) or (newZGrid != zGrid)) {
-					deltaX = newXGrid - xGrid; edgeX = xGrid+deltaX*(1+vSR);
-					deltaY = newYGrid - yGrid; edgeY = yGrid+deltaY*(1+vSR);
-					deltaZ = newZGrid - zGrid; edgeZ = zGrid+deltaZ*(1+vSR);
+					deltaX = newXGrid - xGrid; edgeX = xGrid+deltaX*(1+fVectorSearchRadius);
+					deltaY = newYGrid - yGrid; edgeY = yGrid+deltaY*(1+fVectorSearchRadius);
+					deltaZ = newZGrid - zGrid; edgeZ = zGrid+deltaZ*(1+fVectorSearchRadius);
 
 					break;
 				}
@@ -975,11 +973,7 @@ bool fastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 //
 // This searches box-shaped regions.
 //
-void fastAerosol::GetNearestDropletInsideRegion(G4double &minDistance, G4ThreeVector &center, int xGridCenter, int yGridCenter, int zGridCenter, int xWidth, int yWidth, int zWidth, const G4ThreeVector &p, const G4ThreeVector &normalizedV, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation) {
-	//G4ThreeVector thisCenter;
-
-	//G4double foundDistance;
-
+void FastAerosol::GetNearestDropletInsideRegion(G4double &minDistance, G4ThreeVector &center, int xGridCenter, int yGridCenter, int zGridCenter, int xWidth, int yWidth, int zWidth, const G4ThreeVector &p, const G4ThreeVector &normalizedV, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation) {
 	for (int xGrid = (xGridCenter-xWidth); xGrid<=(xGridCenter+xWidth); xGrid++)
 	{
 		if (0<=xGrid && xGrid<fNx)
@@ -1007,17 +1001,14 @@ void fastAerosol::GetNearestDropletInsideRegion(G4double &minDistance, G4ThreeVe
 //
 // Return the closest one, as measured along the line
 //
-void fastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, G4ThreeVector &center, unsigned int xGrid, unsigned int yGrid, unsigned int zGrid, const G4ThreeVector &p, const G4ThreeVector &normalizedV, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation) {
+void FastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, G4ThreeVector &center, unsigned int xGrid, unsigned int yGrid, unsigned int zGrid, const G4ThreeVector &p, const G4ThreeVector &normalizedV, G4VSolid* droplet, std::function<G4RotationMatrix (G4ThreeVector)> rotation) {
 	unsigned int gi;
 	PopulateGrid(xGrid, yGrid, zGrid, gi);
-
-	// initialize values
-	//G4ThreeVector deltaP;
 
 	G4double foundDistance;
 	
 	// find closest droplet
-	for (auto it = grid[gi].begin(); it != grid[gi].end(); ++it) {
+	for (auto it = fGrid[gi].begin(); it != fGrid[gi].end(); ++it) {
 		// could have the following check to see if the ray pierces the bounding sphere. Currently seems like unnecessary addition
 		/*
 		deltaP = *it-p;
@@ -1056,7 +1047,7 @@ void fastAerosol::GetNearestDropletInsideGrid(G4double &minDistance, G4ThreeVect
 //
 // Search neighboring voxels, too. Returns true if there is a collision
 //
-bool fastAerosol::CheckCollision(G4double x, G4double y, G4double z) {
+bool FastAerosol::CheckCollision(G4double x, G4double y, G4double z) {
 	G4ThreeVector p(x,y,z);
 	
 	pair<int, int> minMaxXGrid, minMaxYGrid, minMaxZGrid;
@@ -1072,7 +1063,7 @@ bool fastAerosol::CheckCollision(G4double x, G4double y, G4double z) {
 		for (int yi = minMaxYGrid.first; yi <= minMaxYGrid.second; yi++) {
 			for (int zi = minMaxZGrid.first; zi <= minMaxZGrid.second; zi++) {
 				if (CheckCollisionInsideGrid(x, y, z, (unsigned)xi, (unsigned)yi, (unsigned)zi)) {
-					numCollisions++;  // log number of collisions for statistics print
+					fNumCollisions++;  // log number of collisions for statistics print
 					return(true);
 				}
 			}
@@ -1089,8 +1080,8 @@ bool fastAerosol::CheckCollision(G4double x, G4double y, G4double z) {
 // Note that you don't need to lock the mutex since this is only called by code
 // that already has the mutex (always called by PopulateGrid).
 //
-bool fastAerosol::CheckCollisionInsideGrid(G4double x, G4double y, G4double z, unsigned int xi, unsigned int yi, unsigned int zi) {
-	std::vector<G4ThreeVector> *thisGrid = &(grid[GetGridIndex(xi, yi, zi)]);
+bool FastAerosol::CheckCollisionInsideGrid(G4double x, G4double y, G4double z, unsigned int xi, unsigned int yi, unsigned int zi) {
+	std::vector<G4ThreeVector> *thisGrid = &(fGrid[GetGridIndex(xi, yi, zi)]);
 	unsigned int numel = thisGrid->size();
 
 	for (unsigned int i=0; i < numel; i++) {
@@ -1105,15 +1096,15 @@ bool fastAerosol::CheckCollisionInsideGrid(G4double x, G4double y, G4double z, u
 //
 // Check for collsion with a specific droplet
 //
-bool fastAerosol::CheckCollisionWithDroplet(G4double x, G4double y, G4double z, G4ThreeVector p ) {
-	return( pow(x-p.x(), 2.0) + pow(y-p.y(), 2.0) + pow(z-p.z(), 2.0) < collisionLimit2 );
+bool FastAerosol::CheckCollisionWithDroplet(G4double x, G4double y, G4double z, G4ThreeVector p ) {
+	return( pow(x-p.x(), 2.0) + pow(y-p.y(), 2.0) + pow(z-p.z(), 2.0) < fCollisionLimit2 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Save droplet positions to a file for visualization and analysis
 //
-void fastAerosol::SaveToFile(const char* filename) {
+void FastAerosol::SaveToFile(const char* filename) {
 	G4cout << "Saving droplet positions to " << filename << "..." << G4endl;
 	ofstream file;
 	file.open(filename);
@@ -1121,7 +1112,7 @@ void fastAerosol::SaveToFile(const char* filename) {
 	vector<G4ThreeVector> voxel;
 	G4ThreeVector pt;
 
-	for (auto it1 = grid.begin(); it1 != grid.end(); ++it1) {
+	for (auto it1 = fGrid.begin(); it1 != fGrid.end(); ++it1) {
 		voxel = *it1;
 
 		for (auto it2 = voxel.begin(); it2 != voxel.end(); ++it2) {

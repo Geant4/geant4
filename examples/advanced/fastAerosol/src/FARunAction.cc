@@ -25,7 +25,6 @@
 //
 
 // (copied from B1RunAction)
-// A.Knaian, N.MacFadden
 
 #include "FARunAction.hh"
 #include "FAPrimaryGeneratorAction.hh"

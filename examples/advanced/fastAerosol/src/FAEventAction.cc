@@ -25,7 +25,6 @@
 //
 
 // (copied from B1EventAction)
-// A.Knaian, N.MacFadden
 
 #include "FAEventAction.hh"
 #include "FARunAction.hh"
