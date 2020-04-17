@@ -79,6 +79,8 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
     virtual ~G4PhysicalVolumeStore();
       // Destructor: takes care to delete allocated physical volumes.
 
+    G4PhysicalVolumeStore(const G4PhysicalVolumeStore&) = delete;
+    G4VPhysicalVolume& operator=(const G4PhysicalVolumeStore&) = delete;
   protected:
 
     G4PhysicalVolumeStore();
