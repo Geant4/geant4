@@ -7,6 +7,19 @@ ifeq ($(G4SYSTEM),Linux-g++)
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  G4USE_STD11 := 1
+  ifdef G4USE_STD14
+    CPPFLAGS  += -std=c++14
+    CXXFLAGS  += -std=c++14
+  else
+    ifdef G4USE_STD17
+      CPPFLAGS  += -std=c++17
+      CXXFLAGS  += -std=c++17
+    else
+      CXXFLAGS  += -std=c++11
+      CPPFLAGS  += -std=c++11
+    endif
+  endif
   ifdef G4MULTITHREADED
     CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
