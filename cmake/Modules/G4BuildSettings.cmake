@@ -157,32 +157,6 @@ endif() #NOT WIN32
 # The following options affect the compilation of the Geant4 libraries
 #
 
-#.rst
-
-# Require at least C++11 with no extensions and the following features
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(GEANT4_TARGET_COMPILE_FEATURES
-  cxx_alias_templates
-  cxx_auto_type
-  cxx_delegating_constructors
-  cxx_enum_forward_declarations
-  cxx_explicit_conversions
-  cxx_final
-  cxx_lambdas
-  cxx_nullptr
-  cxx_override
-  cxx_range_for
-  cxx_strong_enums
-  cxx_uniform_initialization
-  # Features that MSVC 18.0 cannot support but in list of Geant4 coding
-  # guidelines - to be required once support for that compiler is dropped.
-  # Version 10.2 is coded without these being required.
-  #cxx_deleted_functions
-  #cxx_generalized_initializers
-  #cxx_constexpr
-  #cxx_inheriting_constructors
-  )
-
 #-----------------------------------------------------------------------
 # Multithreading
 #-----------------------------------------------------------------------

@@ -238,7 +238,6 @@ macro(geant4_library_target)
     # - Common shared lib commands
     add_library(${G4LIBTARGET_NAME} SHARED ${G4LIBTARGET_SOURCES})
     target_compile_definitions(${G4LIBTARGET_NAME} PRIVATE GEANT4_DEVELOPER_$<CONFIG>)
-    target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
     target_link_libraries(${G4LIBTARGET_NAME}
       ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
       ${G4LIBTARGET_LINK_LIBRARIES})
@@ -292,7 +291,6 @@ macro(geant4_library_target)
     # libraries as well if we want a pure static build).
     add_library(${G4LIBTARGET_NAME}-static STATIC ${G4LIBTARGET_SOURCES})
     target_compile_definitions(${G4LIBTARGET_NAME}-static PRIVATE GEANT4_DEVELOPER_$<CONFIG>)
-    target_compile_features(${G4LIBTARGET_NAME}-static PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
     target_include_directories(${G4LIBTARGET_NAME}-static PUBLIC "$<BUILD_INTERFACE:${${G4LIBTARGET_NAME}_BUILDTREE_INCLUDES}>")
 
     set(G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC )
