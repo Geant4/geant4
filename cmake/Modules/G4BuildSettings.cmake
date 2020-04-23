@@ -59,6 +59,10 @@ include(CheckCXXSourceCompiles)
 include(IntelCompileFeatures)
 include(MSVCCompileFeatures)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 #-----------------------------------------------------------------------
 #.rst:
 # Build Modes
@@ -154,26 +158,6 @@ endif() #NOT WIN32
 #
 
 #.rst
-# - ``GEANT4_BUILD_CXXSTD`` (Allowed values: 11, 14, 17, c++11, c++14, c++17)
-#
-#   - Choose C++ Standard to build against from supported list.
-#   - Note that only C++17 is supported on Windows with MSVC
-#
-set(__g4_default_cxxstd 11 14 17 c++11 c++14 c++17)
-if(MSVC)
-  set(__g4_default_cxxstd 17 c++17)
-endif()
-
-enum_option(GEANT4_BUILD_CXXSTD
-  DOC "C++ Standard to compile against"
-  VALUES ${__g4_default_cxxstd}
-  CASE_INSENSITIVE
-  )
-
-string(REGEX REPLACE "^c\\+\\+" "" GEANT4_BUILD_CXXSTD "${GEANT4_BUILD_CXXSTD}")
-mark_as_advanced(GEANT4_BUILD_CXXSTD)
-geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
-
 
 # Require at least C++11 with no extensions and the following features
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -198,29 +182,6 @@ set(GEANT4_TARGET_COMPILE_FEATURES
   #cxx_constexpr
   #cxx_inheriting_constructors
   )
-
-# If a standard higher than 11 has been selected, check that compiler has
-# at least one feature from that standard and append these to the required
-# feature list
-if(GEANT4_BUILD_CXXSTD GREATER 11)
-  if(CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES)
-    list(APPEND GEANT4_TARGET_COMPILE_FEATURES ${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES})
-  else()
-    message(FATAL_ERROR "Geant4 requested to be compiled against C++ standard '${GEANT4_BUILD_CXXSTD}'\nbut detected compiler '${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\ndoes not support, or CMake (${CMAKE_VERSION}) is not aware of, any features of that standard.")
-  endif()
-endif()
-
-# - Check for Standard Library Implementation Features
-# Smart pointers are a library implementation feature
-# Hashed containers are a library implementation feature
-# Random numbers are a library implementation feature?
-# An example of where a workaround is needed
-# Rest of concurrency a library implementation feature
-
-# Hold any appropriate compile flag(s) in variable for later export to
-# config files. Needed to support clients using late CMake 2.8 where compile features
-# are not available.
-set(GEANT4_CXXSTD_FLAGS "${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_STANDARD_COMPILE_OPTION}")
 
 #-----------------------------------------------------------------------
 # Multithreading

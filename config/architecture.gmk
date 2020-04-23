@@ -131,11 +131,6 @@ ifndef G4BIN
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
 
-# Use C++11 standard constructs and compilation options ...
-#
-CPPFLAGS += -DG4USE_STD11
-G4USE_STD11 := 1
-
 # If G4DEBUG or G4NO_OPTIMISE are not specified,
 # the default compilation is optimised ...
 #

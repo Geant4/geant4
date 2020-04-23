@@ -72,11 +72,10 @@ vis_libs="-lG4Tree \
 #-----------------------------------------------------------------------
 # Core setup...
 #
-cflags="@CMAKE_CXX_FLAGS@ @GEANT4_CXXSTD_FLAGS@"
 feature_list=""
 
 # - CXX Standard
-geant4_cxx_std="c++@GEANT4_BUILD_CXXSTD@"
+geant4_cxx_std="c++@CMAKE_CXX_STANDARD@"
 
 # - static libs
 have_staticlibs="@G4_BUILTWITH_STATICLIBS@"

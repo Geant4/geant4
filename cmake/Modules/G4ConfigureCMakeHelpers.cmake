@@ -38,11 +38,11 @@
 
 # Compiler flags (because user apps are a bit dependent on them...)
 set(GEANT4_COMPILER_FLAG_HINTS "#
-set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS} ${GEANT4_CXXSTD_FLAGS}\")
+set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS}\")
 set(Geant4_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS}\")")
 
 foreach(_mode DEBUG MINSIZEREL RELEASE RELWITHDEBINFO)
-  set(GEANT4_COMPILER_FLAG_HINTS "${GEANT4_COMPILER_FLAG_HINTS}
+  set(GEANT4_COMPILER_FLAG_HINTS "
 set(Geant4_CXX_FLAGS_${_mode} \"${CMAKE_CXX_FLAGS_${_mode}}\")")
 endforeach()
 

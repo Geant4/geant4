@@ -41,11 +41,6 @@
 //! \brief Defined if Geant4 is built with additional verbosity in logging
 #cmakedefine G4VERBOSE
 
-//! \def G4USE_STD11
-//! \brief Defined if the C++11 standard or newer is in use
-//! \deprecated Geant4 requires C++11 or later, so this should no longer be used
-#define G4USE_STD11
-
 //! \def GEANT4_USE_TIMEMORY
 //! \brief Defined if Geant4 built with TiMemory support
 #cmakedefine GEANT4_USE_TIMEMORY

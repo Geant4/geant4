@@ -744,17 +744,10 @@ G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 G4String G4HadronicProcessStore::HtmlFileName(const G4String & in) const
 {
    G4String str(in);
-    // replace blanks by _  C++11 version:
-#ifdef G4USE_STD11
+    // replace blanks by _
 	std::transform(str.begin(), str.end(), str.begin(), [](char ch) {
      return ch == ' ' ? '_' : ch;
    });
-#else	
-	  // and now in ancient language
-	   for(std::string::iterator it = str.begin(); it != str.end(); ++it) {
-        if(*it == ' ') *it = '_';
-      }
-#endif
    str=str + ".html";		
    return str;
 }

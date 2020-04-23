@@ -179,7 +179,7 @@ get_filename_component(_geant4_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 @GEANT4_COMPILER_FLAG_HINTS@
 
 # - Provide variable indicating C++ Standard we were compiled against
-set(Geant4_CXXSTD "c++@GEANT4_BUILD_CXXSTD@")
+set(Geant4_CXXSTD "c++@CMAKE_CXX_STANDARD@")
 
 #-----------------------------------------------------------------------
 # Set the base compile definitions required to use Geant4 if the variable
