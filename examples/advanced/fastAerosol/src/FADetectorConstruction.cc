@@ -146,12 +146,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	else if (fCloudShapeStr == "cylinder")
 	{
 		G4cout << "Cloud shape = cylinder" << G4endl;
-		fCloudShape = new G4Tubs("cloudShape", 0.0, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 2*M_PI);
+		fCloudShape = new G4Tubs("cloudShape", 0.0, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 360.*deg);
 	}
 	else if (fCloudShapeStr == "pipe")
 	{
 		G4cout << "Cloud shape = pipe" << G4endl;
-		fCloudShape = new G4Tubs("cloudShape", 0.25*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 2*M_PI);
+		fCloudShape = new G4Tubs("cloudShape", 0.25*cloud_sizeXY, 0.5*cloud_sizeXY, 0.5*cloud_sizeZ, 0, 360.*deg);
 	}
 	else
 	{
@@ -378,7 +378,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 			if (rStr.back() == 'p') { rStr.pop_back(); }	// don't write "3p" for 3.0, just write "3"
 
 			// want to represent the number density as 1E-ApB for some A, B
-			G4int order10 = -round(10*log10(fDropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
+			G4int order10 = (G4int) -round(10*log10(fDropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
 			G4int leading = order10 / 10;	// first number
 			G4int trailing = order10 % 10;	// second number
 			G4String nStr = "1E-" + to_string(leading) + "p" + to_string(trailing);		
@@ -422,7 +422,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		if (rStr.back() == 'p') { rStr.pop_back(); }	// don't write "3p" for 3.0, just write "3"
 
 		// want to represent the number density as 1E-ApB for some A, B
-		G4int order10 = -round(10*log10(fDropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
+		G4int order10 = (G4int) -round(10*log10(fDropletNumDens*mm3));	// gives 10x the exponent rounded to the int (10x so we get two decimals)
 		G4int leading = order10 / 10;	// first number
 		G4int trailing = order10 % 10;	// second number
 		G4String nStr = "1E-" + to_string(leading) + "p" + to_string(trailing);
@@ -478,12 +478,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		logicDroplet->SetUserLimits(fStepLimits);
 
 		/*G4PVParameterised* paramDroplet =*/
-			new G4PVParameterised("droplets",		//its name
-								  logicDroplet,		//droplet logical volume
-								  logicCloud,		//mother logical volume
-								  kUndefined,		//droplets placed along this axis
-								  positions.size(),	//number of droplets
-								  cloudParam);		//the parametrisation 
+			new G4PVParameterised("droplets",				//its name
+								  logicDroplet,				//droplet logical volume
+								  logicCloud,				//mother logical volume
+								  kUndefined,				//droplets placed along this axis
+								  (G4int) positions.size(),	//number of droplets
+								  cloudParam);				//the parametrisation 
 	}
 	// **********************************************************
 	// 

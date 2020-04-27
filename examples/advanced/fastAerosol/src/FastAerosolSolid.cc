@@ -381,7 +381,6 @@ G4VSolid* FastAerosolSolid::Clone() const
 //
 std::ostream &FastAerosolSolid::StreamInfo(std::ostream &os) const
 {
-	G4int oldprc = os.precision(16);
 	os << "-----------------------------------------------------------\n"
 	   << "    *** Dump for solid - " << GetName() << " ***\n"
 	   << "    ===================================================\n"
@@ -389,11 +388,11 @@ std::ostream &FastAerosolSolid::StreamInfo(std::ostream &os) const
 	   << " Parameters: \n"
 	   << "    numDroplets: " << fCloud->GetNumDroplets() << "\n"
 	   << "    fDroplet type: " << fDroplet->GetName() << "\n"
-	   << "    fDroplet parameters: \n";
-	   fDroplet->StreamInfo(os);
-	os << "             \n"
-	   << "-----------------------------------------------------------\n";
-	os.precision(oldprc);
+	   << "    fDroplet parameters: \n"
+	   << "===========================================================\n";
+	fDroplet->StreamInfo(os);
+	os << "===========================================================\n";
+	
 	return os;
 }
 

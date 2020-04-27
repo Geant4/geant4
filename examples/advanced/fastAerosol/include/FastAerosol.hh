@@ -127,51 +127,51 @@ class FastAerosol {
 		// Parameters, set in constructor
 		G4String fName;
 
-		G4VSolid* fCloud;					// Solid volume of the cloud
-		G4double fDx, fDy, fDz;				// Half widths
+		G4VSolid* fCloud;								// Solid volume of the cloud
+		G4double fDx, fDy, fDz;							// Half widths
 
-		G4double fR;						// Bounding radius of each droplet
-		G4double fR2;						// Bounding radius squared of each droplet
+		G4double fR;									// Bounding radius of each droplet
+		G4double fR2;									// Bounding radius squared of each droplet
 
-		G4double fdR;						// Uncertainty in DistanceToIn droplet when just using knowledge of droplet center
+		G4double fdR;									// Uncertainty in DistanceToIn droplet when just using knowledge of droplet center
 
-		G4double fMinD;						// Minimum distance allowed between faces of droplets when constructing random array of droplets
+		G4double fMinD;									// Minimum distance allowed between faces of droplets when constructing random array of droplets
 
 		std::function<G4double (G4ThreeVector)> fDistribution;
-		G4double fAvgNumDens;				// Average droplet number density
-		long int fNumDroplets = 0;			// Number of droplets that have been created
+		G4double fAvgNumDens;							// Average droplet number density
+		long int fNumDroplets = 0;						// Number of droplets that have been created
 
-		G4double fGridPitch;				// Pitch of collision detection grid.  Must be greater than diameter of droplets for correctness of collision detection.
+		G4double fGridPitch;							// Pitch of collision detection grid.  Must be greater than diameter of droplets for correctness of collision detection.
 
 		// Ramdom engine
 		CLHEP::HepJamesRandom fCloudEngine;
-		long fSeed = 0;						// Global random seed
+		long fSeed = 0;									// Global random seed
 
-		G4double fDropletsPerVoxel = 4.0;	// Expected number of droplets per voxel
+		G4double fDropletsPerVoxel = 4.0;				// Expected number of droplets per voxel
 
 		// How far the voxel center must be inside the bulk order for there to be no risk of placing a droplet outside
 		G4double fEdgeDistance;
 
 		// Grid variables
-		vector<vector<G4ThreeVector>> fGrid;// Grid of lists of inidices to grid points, used for fast collsion checking
-		vector<G4double> fGridMean;			// Array listing mean count for each voxel
-		std::atomic<bool> *fGridValid;		// Array listing validity of each grid. uses atomic variables
+		std::vector<std::vector<G4ThreeVector>> fGrid;	// Grid of lists of indices to grid points, used for fast collsion checking
+		std::vector<G4double> fGridMean;				// Array listing mean count for each voxel
+		std::atomic<bool> *fGridValid;					// Array listing validity of each grid. uses atomic variables
 
-		G4int fNx, fNy, fNz;				// Number of x, y, and z elements in fGrid
-		G4int fNxy;							// Cached fNx*fNy
-		long int fNumGridCells;				// Cached fNx*fNy*fNz
+		G4int fNx, fNy, fNz;							// Number of x, y, and z elements in fGrid
+		G4int fNxy;										// Cached fNx*fNy
+		long int fNumGridCells;							// Cached fNx*fNy*fNz
 
 
-		G4double fCollisionLimit2;			// Threshold distance squared when checking for collsion
-		G4int fNumNewPointTries = 100;		// How many times we try to place droplets
-		G4double fMaxDropPercent = 1.0;		// The maximal percentage of skipped droplets before crashing0
-		G4int fMaxDropCount;				// The maximal number of skipped droplets before crashing
-		G4int fNumDropped = 0;				// Number of skipped droplets due to collisions/out of bulk placement
+		G4double fCollisionLimit2;						// Threshold distance squared when checking for collsion
+		G4int fNumNewPointTries = 100;					// How many times we try to place droplets
+		G4double fMaxDropPercent = 1.0;					// The maximal percentage of skipped droplets before crashing0
+		G4int fMaxDropCount;							// The maximal number of skipped droplets before crashing
+		G4int fNumDropped = 0;							// Number of skipped droplets due to collisions/out of bulk placement
 
-		G4int fNumCollisions = 0;			// How many collisions occured when attempting to place
+		G4int fNumCollisions = 0;						// How many collisions occured when attempting to place
 
 		// Droplet search variables
-		G4int fVectorSearchRadius;			// maximum vector search radius
+		G4int fVectorSearchRadius;						// maximum vector search radius
 
 		// Droplet placement functions
 		// ===========================
@@ -195,7 +195,7 @@ class FastAerosol {
 		// Voxelized sphere methods
 		// ========================
 		// a collection of points as in {{x1,y1},{x2,y2},...}
-		typedef vector<vector<int>> fCircleType;
+		typedef std::vector<std::vector<int>> fCircleType;
 
 		// a collection of points describing a spherical shell
 		// with points (x,y,z)=(i-R,j-R,sphere[i][j][k])
@@ -206,13 +206,13 @@ class FastAerosol {
 		// if searching some x=i-R that is outside the
 		// aerosol's bounding box, immediately increment i
 		// (similar for y).
-		typedef vector<vector<vector<int>>> fSphereType;
+		typedef std::vector<std::vector<std::vector<int>>> fSphereType;
 
 		G4int fMaxCircleR;
 		G4int fMaxSphereR;
 		G4int fPreSphereR = 20;
-		vector<fCircleType> fCircleCollection;
-		vector<fSphereType> fSphereCollection;
+		std::vector<fCircleType> fCircleCollection;
+		std::vector<fSphereType> fSphereCollection;
 		
 		fSphereType MakeSphere(G4int R);
 		fCircleType MakeCircle(G4int R);
