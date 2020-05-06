@@ -51,6 +51,9 @@
 #include <functional>
 #include "G4RotationMatrix.hh"
 
+// multithreaded safety
+#include <atomic>
+
 using namespace std;
 
 class FastAerosol {

@@ -37,7 +37,6 @@
 #include <numeric>	// for summing vectors with accumulate
 
 // multithreaded safety
-#include <atomic>
 #include "G4AutoLock.hh"
 namespace
 {
@@ -132,7 +131,7 @@ FastAerosol::FastAerosol(const G4String& pName,
 	fCollisionLimit2 = (2*fR + fMinD)*(2*fR + fMinD);
 
 	// set maximum number of droplet that we are allowed to skip before halting with an error
-	fMaxDropCount = floor(fAvgNumDens*(fCloud->GetCubicVolume())*(0.01*fMaxDropPercent)); 
+	fMaxDropCount = (G4int)floor(fAvgNumDens*(fCloud->GetCubicVolume())*(0.01*fMaxDropPercent)); 
 
 	// initialize grid variables
 	InitializeGrid(); 
@@ -154,7 +153,7 @@ FastAerosol::FastAerosol(const G4String& pName,
 
 	// vector search radius. In terms of voxel width, how far do you search for droplets in vector search
 	// you need to search a larger area if fR is larger than one grid (currently disabled)
-	fVectorSearchRadius = ceill(fR/fGridPitch);
+	fVectorSearchRadius = (G4int)ceill(fR/fGridPitch);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -212,9 +211,9 @@ void FastAerosol::InitializeGrid() {
 	fEdgeDistance = fGridPitch*sqrt(3.0)/2.0 + fR;
 
 	// set number of grid cells
-	fNx = ceill(2*fDx / fGridPitch);
-	fNy = ceill(2*fDy / fGridPitch);
-	fNz = ceill(2*fDz / fGridPitch);
+	fNx = (G4int)ceill(2*fDx / fGridPitch);
+	fNy = (G4int)ceill(2*fDy / fGridPitch);
+	fNz = (G4int)ceill(2*fDz / fGridPitch);
 	fNumGridCells = (long) fNx*fNy*fNz;
 	fNxy = fNx*fNy;
 
@@ -227,7 +226,7 @@ void FastAerosol::InitializeGrid() {
 		fGridMean.resize(fNumGridCells, 0);
 		fGridValid = new std::atomic<bool>[fNumGridCells];
 	}
-	catch ( const std::bad_alloc& e )
+	catch ( const std::bad_alloc& )
 	{
 		std::ostringstream message;
 		message << "Out of memory! Grid pitch too small for cloud: " << GetName() << "!" << G4endl
@@ -292,7 +291,7 @@ G4double FastAerosol::VoxelOverlap(G4ThreeVector voxelCenter, G4int nStat, G4dou
 	G4double cenY = voxelCenter.y();
 	G4double cenZ = voxelCenter.z();
 	
-	G4int iInside=0.0;
+	G4int iInside=0;
 	G4double px,py,pz;
 	G4ThreeVector p;
 	G4bool in;
@@ -491,7 +490,7 @@ bool FastAerosol::GetNearestDroplet(const G4ThreeVector &p, G4ThreeVector &cente
 	G4double cloudDistance = fCloud->DistanceToIn(p);
 
 	// starting radius/diam of voxel layer
-	G4int searchRad = floor(0.5+cloudDistance/fGridPitch);	// no reason to search shells totally outside cloud
+	G4int searchRad = (G4int)floor(0.5+cloudDistance/fGridPitch);	// no reason to search shells totally outside cloud
 
 	// find the voxel containing p
 	int xGrid, yGrid, zGrid;
@@ -746,7 +745,7 @@ vector<vector<int>> FastAerosol::MakeHalfCircle(G4int R) {
 	}
 
 	// add points on y=+-x
-	if (x==y or (x==y+1 and dxup<=0)) {
+	if ((x==y) || ((x==y+1) && (dxup<=0))) {
 		voxels.push_back({x,x});
 		voxels.push_back({-x,x});
 	}
@@ -951,7 +950,7 @@ bool FastAerosol::GetNearestDroplet(const G4ThreeVector &p, const G4ThreeVector 
 				currentP += deltaDistanceAlongVector*normalizedV;
 				GetGrid(currentP, newXGrid, newYGrid, newZGrid);
 
-				if ((newXGrid != xGrid) or (newYGrid != yGrid) or (newZGrid != zGrid)) {
+				if ((newXGrid != xGrid) || (newYGrid != yGrid) || (newZGrid != zGrid)) {
 					deltaX = newXGrid - xGrid; edgeX = xGrid+deltaX*(1+fVectorSearchRadius);
 					deltaY = newYGrid - yGrid; edgeY = yGrid+deltaY*(1+fVectorSearchRadius);
 					deltaZ = newZGrid - zGrid; edgeZ = zGrid+deltaZ*(1+fVectorSearchRadius);
@@ -1082,7 +1081,7 @@ bool FastAerosol::CheckCollision(G4double x, G4double y, G4double z) {
 //
 bool FastAerosol::CheckCollisionInsideGrid(G4double x, G4double y, G4double z, unsigned int xi, unsigned int yi, unsigned int zi) {
 	std::vector<G4ThreeVector> *thisGrid = &(fGrid[GetGridIndex(xi, yi, zi)]);
-	unsigned int numel = thisGrid->size();
+	unsigned int numel = (unsigned int)thisGrid->size();
 
 	for (unsigned int i=0; i < numel; i++) {
 		if (CheckCollisionWithDroplet(x, y, z, (*thisGrid)[i]))

@@ -178,14 +178,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	{
 		G4cout << "Droplet shape = halfSphere" << G4endl;
 		fDropletShape = new G4Sphere("dropletSV", 0.0, fDropletR,
-										0.0, 1.0*M_PI,
-										0.0, M_PI);
+										0.0, 180.*deg,
+										0.0, 180.*deg);
 		sphericalUncertainty = fDropletR;
 	}
 	else if (fDropletShapeStr == "cylinder")
 	{
 		G4cout << "Droplet shape = cylinder" << G4endl;
-		fDropletShape = new G4Tubs("dropletSV", 0, fDropletR/sqrt(3), fDropletR/sqrt(3), 0, 2.0*M_PI);
+		fDropletShape = new G4Tubs("dropletSV", 0, fDropletR/sqrt(3), fDropletR/sqrt(3), 0, 360.*deg);
 		sphericalUncertainty = fDropletR*(1-1/sqrt(3));
 	}
 	else if (fDropletShapeStr == "box")

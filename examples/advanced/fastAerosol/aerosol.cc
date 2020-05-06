@@ -27,6 +27,9 @@
 // (adapted from exampleB1)
 // Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
+#include "FADetectorConstruction.hh"
+#include "FAActionInitialization.hh"
+
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
@@ -34,18 +37,16 @@
 #endif
 
 #include "G4UImanager.hh"
-#include "G4ScoringManager.hh"
+#include "QGSP_BIC.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
+#include "G4ScoringManager.hh"
+
 #include "Randomize.hh"
 
-#include "QGSP_BIC.hh"
 #include "G4StepLimiterPhysics.hh"
-
-#include "FADetectorConstruction.hh"
-#include "FAActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
