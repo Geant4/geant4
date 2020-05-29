@@ -67,7 +67,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoHighEnergy = 30*CLHEP::MeV;
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
-  fMaxLifeTime = 1000*CLHEP::second;
+  fMaxLifeTime = 1.0*CLHEP::microsecond;
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;

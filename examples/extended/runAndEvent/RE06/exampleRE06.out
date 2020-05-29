@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
+ Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -863,7 +863,7 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1e+12
+Time limit for long lived isomeres (ns)             1000
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
@@ -931,7 +931,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=5.170000s Real=6.728280s Sys=1.340000s
+  User=4.840000s Real=6.334580s Sys=1.450000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1579,7 +1579,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.400000s Real=1.969286s Sys=0.370000s
+  User=1.260000s Real=1.708044s Sys=0.420000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2258,7 +2258,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.310000s Real=0.393709s Sys=0.080000s
+  User=0.310000s Real=0.400465s Sys=0.090000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2966,7 +2966,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.670000s Real=0.858924s Sys=0.180000s
+  User=0.830000s Real=1.062548s Sys=0.220000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

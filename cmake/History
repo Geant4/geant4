@@ -29,6 +29,24 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+21st April 2020 - Ben Morgan (cmake-V10-05-39)
+- BUGFIX: Only store variables in Geant4PackageCache if they have
+  a value.
+
+6th April 2020 - Ben Morgan (cmake-V10-05-38)
+- Activate build of geant4py when GEANT4_USE_PYTHON is set
+  Check that MT builds use global-dynamic TLS to allow Python
+  module loading of the Geant4 dynamic libraries.
+
+3rd April 2020 - Guilherme Amadio (cmake-V10-05-37)
+- Use full path to datasets if GEANT4_INSTALL_DATADIR is an absolute path
+
+2nd April 2020 - Guilherme Amadio (cmake-V10-05-36)
+- Customize CMAKE_INSTALL_DATADIR in a single location
+
+18th March 2020 - Gunter Folger (cmake-V10-05-35)
+- In Modules/G4CPack.cmake suppress warnings about icc libraries not existing
+  for Intel icc version 19.
 
 14th February 2020 - Ben Morgan (cmake-V10-05-34)
 - No longer create gnumake symlinks on Windows

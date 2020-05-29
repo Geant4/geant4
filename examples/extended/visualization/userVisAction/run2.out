@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
+ Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -737,7 +737,7 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1e+12
+Time limit for long lived isomeres (ns)             1000
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     0
@@ -822,7 +822,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.030000s Real=0.055962s Sys=0.000000s
+  User=0.040000s Real=0.035022s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
@@ -897,11 +897,11 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.290000s Real=0.355726s Sys=0.000000s
+  User=0.290000s Real=0.309659s Sys=0.010000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.02005 nanoGy  +- 145.635 picoGy 
+ Dose in scoring volume : 4.94027 nanoGy  +- 144.816 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
@@ -918,19 +918,19 @@ Units table cleared.
 TransportationManager deleted.
 Total navigation history collections cleaned: 12
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0163 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0173 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00385 MB
-Pool ID '7G4Track', size : 0.00769 MB
+Pool ID '17G4DynamicParticle', size : 0.00481 MB
+Pool ID '7G4Track', size : 0.00961 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00192 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.038 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.042 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

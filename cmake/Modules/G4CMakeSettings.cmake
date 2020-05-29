@@ -117,6 +117,16 @@ add_custom_target(validate_sources
 # General Installation Settings
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
+# Geant4 custom defaults
+
+set(CMAKE_INSTALL_DATAROOTDIR "share" CACHE PATH
+  "Read-only architecture-independent data root (share)")
+
+set(CMAKE_INSTALL_DATADIR
+  "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}" CACHE PATH
+  "Read-only architecture-independent data (DATAROOTDIR/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION})")
+
+#
 # CMake's builtin `GNUInstallDirs` module is used to set and provide variables
 # for the destinations to which for executables, libraries and other files
 # should be installed.

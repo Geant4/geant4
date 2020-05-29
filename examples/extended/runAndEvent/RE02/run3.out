@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
+ Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -852,7 +852,7 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1e+12
+Time limit for long lived isomeres (ns)             1000
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
@@ -963,74 +963,74 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.050000s Real=13.188433s Sys=0.040000s
+  User=13.010000s Real=13.248097s Sys=0.040000s
  PrimitiveScorer RUN PhantomSD,totalEDep
- Number of entries 50896
+ Number of entries 50886
  PrimitiveScorer RUN PhantomSD,protonEDep
- Number of entries 9
+ Number of entries 12
  PrimitiveScorer RUN PhantomSD,protonNStep
- Number of entries 9
+ Number of entries 12
  PrimitiveScorer RUN PhantomSD,chargedPassCellFlux
- Number of entries 20152
+ Number of entries 20144
  PrimitiveScorer RUN PhantomSD,chargedCellFlux
- Number of entries 50821
+ Number of entries 50806
  PrimitiveScorer RUN PhantomSD,chargedSurfFlux
- Number of entries 11770
+ Number of entries 11842
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr000
- Number of entries 49
+ Number of entries 43
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr001
- Number of entries 394
+ Number of entries 376
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr002
- Number of entries 50308
+ Number of entries 49889
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr003
- Number of entries 70393
+ Number of entries 70664
 =============================================================
  Number of event processed : 10000
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
-     0       33.5559 MeV           0 eV            0         2196.89 /cm2         2354.6 /cm2        2036.32 /cm2              0 /cm2             25 /cm2            500 /cm2            275 /cm2
-     1       470.289 MeV           0 eV            0         3089.15 /cm2        4435.64 /cm2        2488.92 /cm2              0 /cm2             25 /cm2            900 /cm2            625 /cm2
-     2       57.4733 MeV           0 eV            0         3557.39 /cm2        3868.27 /cm2        4799.14 /cm2              0 /cm2              0 /cm2           3625 /cm2           2850 /cm2
-     3       277.541 MeV           0 eV            0         1562.89 /cm2        2548.55 /cm2         3281.4 /cm2              0 /cm2             25 /cm2           3625 /cm2           3300 /cm2
-     4       18.1143 MeV           0 eV            0         1136.99 /cm2        1230.82 /cm2        1357.68 /cm2              0 /cm2              0 /cm2           2800 /cm2           3225 /cm2
-     5       149.838 MeV           0 eV            0         463.446 /cm2        1407.56 /cm2        963.097 /cm2              0 /cm2             50 /cm2           2425 /cm2           2775 /cm2
-     6       5.83359 MeV           0 eV            0         295.338 /cm2        326.732 /cm2        175.883 /cm2              0 /cm2              0 /cm2           1825 /cm2           2450 /cm2
-     7       48.1217 MeV           0 eV            0         70.3018 /cm2        411.707 /cm2        359.893 /cm2              0 /cm2              0 /cm2           1725 /cm2           2600 /cm2
-     8       1.27542 MeV           0 eV            0         53.5329 /cm2        70.7856 /cm2        32.8258 /cm2              0 /cm2              0 /cm2            950 /cm2           2425 /cm2
-     9       21.1316 MeV           0 eV            0         12.7232 /cm2        165.198 /cm2        59.7772 /cm2              0 /cm2              0 /cm2            975 /cm2           1950 /cm2
-    10       6.44016 MeV           0 eV            0         353.104 /cm2        394.077 /cm2          95.55 /cm2              0 /cm2              0 /cm2            975 /cm2           1975 /cm2
-    11        41.758 MeV           0 eV            0         53.3596 /cm2        379.377 /cm2        1865.14 /cm2              0 /cm2              0 /cm2            850 /cm2           1625 /cm2
-    12       2.50632 MeV           0 eV            0         116.739 /cm2         134.32 /cm2        92.9749 /cm2              0 /cm2              0 /cm2            400 /cm2           1375 /cm2
-    13       18.6406 MeV           0 eV            0          36.188 /cm2        159.682 /cm2        255.684 /cm2              0 /cm2              0 /cm2            425 /cm2           1050 /cm2
-    14       3.04584 MeV           0 eV            0         155.552 /cm2        183.436 /cm2        220.041 /cm2              0 /cm2              0 /cm2            425 /cm2            675 /cm2
-    15       24.3906 MeV           0 eV            0         75.1683 /cm2        228.664 /cm2        126.344 /cm2              0 /cm2              0 /cm2            400 /cm2            725 /cm2
-    16       3.05696 MeV           0 eV            0         236.983 /cm2        236.983 /cm2        205.327 /cm2              0 /cm2              0 /cm2            350 /cm2            750 /cm2
-    17       7.85837 MeV           0 eV            0         38.9716 /cm2        70.2239 /cm2        260.209 /cm2              0 /cm2              0 /cm2            250 /cm2            575 /cm2
-    18       1.55009 MeV           0 eV            0          114.77 /cm2         114.77 /cm2         72.746 /cm2              0 /cm2              0 /cm2            325 /cm2            425 /cm2
-    19       3.38335 MeV           0 eV            0         24.0245 /cm2        32.7765 /cm2         430.98 /cm2              0 /cm2              0 /cm2            325 /cm2            275 /cm2
-    20       244.082 keV           0 eV            0         14.8138 /cm2        15.9723 /cm2              0 /cm2              0 /cm2              0 /cm2            200 /cm2            325 /cm2
-    21       2.53215 MeV           0 eV            0         1.27352 /cm2        20.7947 /cm2              0 /cm2              0 /cm2              0 /cm2            125 /cm2            400 /cm2
-    22       449.642 keV           0 eV            0               0 /cm2        25.7242 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            300 /cm2
-    23       3.70248 MeV           0 eV            0         1.30839 /cm2        27.8177 /cm2        25.2694 /cm2              0 /cm2              0 /cm2            275 /cm2            325 /cm2
-    24             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2            250 /cm2
-    25       914.582 keV           0 eV            0               0 /cm2        4.54391 /cm2              0 /cm2              0 /cm2              0 /cm2            125 /cm2            275 /cm2
+     0       35.5476 MeV           0 eV            0         2329.42 /cm2        2487.13 /cm2        2161.37 /cm2              0 /cm2             25 /cm2            475 /cm2            275 /cm2
+     1        466.19 MeV           0 eV            0         3036.03 /cm2        4427.08 /cm2        2559.13 /cm2              0 /cm2             25 /cm2           1025 /cm2            625 /cm2
+     2       55.2818 MeV           0 eV            0         3538.91 /cm2        3790.29 /cm2        4240.08 /cm2              0 /cm2              0 /cm2           3400 /cm2           2900 /cm2
+     3       278.738 MeV           0 eV            0         1547.13 /cm2        2585.55 /cm2        2967.03 /cm2              0 /cm2             50 /cm2           3675 /cm2           3275 /cm2
+     4       21.8166 MeV           0 eV            0         1285.46 /cm2        1397.96 /cm2        1966.52 /cm2              0 /cm2              0 /cm2           2925 /cm2           2975 /cm2
+     5       133.284 MeV           0 eV            0         443.982 /cm2        1259.33 /cm2         2315.6 /cm2              0 /cm2             50 /cm2           2400 /cm2           2925 /cm2
+     6       5.85763 MeV           0 eV            0         273.226 /cm2        308.935 /cm2        112.034 /cm2              0 /cm2              0 /cm2           1500 /cm2           2500 /cm2
+     7       49.1862 MeV           0 eV            0         66.6068 /cm2        421.937 /cm2        365.287 /cm2              0 /cm2              0 /cm2           1550 /cm2           2525 /cm2
+     8       2.37441 MeV           0 eV            0         66.1909 /cm2        130.335 /cm2        743.667 /cm2              0 /cm2              0 /cm2            900 /cm2           2350 /cm2
+     9       25.8497 MeV           0 eV            0         47.7512 /cm2        207.143 /cm2        58.7129 /cm2              0 /cm2              0 /cm2            900 /cm2           1950 /cm2
+    10       6.97018 MeV           0 eV            0         369.868 /cm2        433.377 /cm2        125.423 /cm2              0 /cm2              0 /cm2            875 /cm2           2050 /cm2
+    11       39.9028 MeV           0 eV            0         63.4098 /cm2        367.711 /cm2        2147.38 /cm2              0 /cm2              0 /cm2            750 /cm2           1725 /cm2
+    12        3.9692 MeV           0 eV            0         196.202 /cm2        239.283 /cm2        155.953 /cm2              0 /cm2              0 /cm2            325 /cm2           1350 /cm2
+    13       15.0225 MeV           0 eV            0          35.795 /cm2        125.274 /cm2        255.684 /cm2              0 /cm2              0 /cm2            400 /cm2           1100 /cm2
+    14        3.3357 MeV           0 eV            0         174.412 /cm2        202.296 /cm2        220.041 /cm2              0 /cm2              0 /cm2            475 /cm2            725 /cm2
+    15       24.9305 MeV           0 eV            0         75.1683 /cm2        230.357 /cm2        126.344 /cm2              0 /cm2              0 /cm2            475 /cm2            725 /cm2
+    16       3.05696 MeV           0 eV            0         236.983 /cm2        236.983 /cm2        205.327 /cm2              0 /cm2              0 /cm2            400 /cm2            775 /cm2
+    17       7.46417 MeV           0 eV            0         38.9716 /cm2        68.6114 /cm2        260.209 /cm2              0 /cm2              0 /cm2            300 /cm2            575 /cm2
+    18       1.21217 MeV           0 eV            0         89.6428 /cm2        89.6428 /cm2         72.746 /cm2              0 /cm2              0 /cm2            325 /cm2            500 /cm2
+    19       3.04438 MeV           0 eV            0         17.0594 /cm2        27.7645 /cm2        129.661 /cm2              0 /cm2              0 /cm2            250 /cm2            375 /cm2
+    20        169.83 keV           0 eV            0         14.8138 /cm2        14.8903 /cm2              0 /cm2              0 /cm2              0 /cm2            200 /cm2            375 /cm2
+    21       3.07609 MeV           0 eV            0         1.27352 /cm2        25.2893 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2            400 /cm2
+    22       449.642 keV           0 eV            0               0 /cm2        25.7242 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            300 /cm2
+    23       4.26569 MeV           0 eV            0         1.30839 /cm2        31.3699 /cm2        25.2694 /cm2              0 /cm2              0 /cm2            300 /cm2            300 /cm2
+    24             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            250 /cm2
+    25       1.28483 MeV           0 eV            0               0 /cm2        7.07732 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2            275 /cm2
     26             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            175 /cm2
-    27       729.982 keV           0 eV            0               0 /cm2        5.23879 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            200 /cm2
-    28             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            275 /cm2
-    29       823.329 keV           0 eV            0               0 /cm2        6.30389 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            325 /cm2
-    30             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            175 /cm2
-    31       2.16885 MeV           0 eV            0         10.1891 /cm2        14.1259 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            125 /cm2
-    32             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            100 /cm2
-    33       137.195 keV           0 eV            0         1.64927 /cm2        1.64927 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2             50 /cm2
-    34       1.04243 MeV           0 eV            0         60.8218 /cm2        65.3963 /cm2        123.274 /cm2              0 /cm2              0 /cm2             50 /cm2             75 /cm2
-    35       1.48891 MeV           0 eV            0               0 /cm2         12.623 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
-    36       355.886 keV           0 eV            0               0 /cm2        14.4251 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            125 /cm2
-    37             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2
-    38             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2
+    27       1.28977 MeV           0 eV            0               0 /cm2         10.789 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            200 /cm2
+    28             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            250 /cm2
+    29       1.60581 MeV           0 eV            0         6.05734 /cm2        12.7824 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            300 /cm2
+    30             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            150 /cm2
+    31       320.432 keV           0 eV            0               0 /cm2        1.27545 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            150 /cm2
+    32             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            150 /cm2
+    33       137.195 keV           0 eV            0         1.64927 /cm2        1.64927 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2             75 /cm2
+    34       1.04243 MeV           0 eV            0         60.8218 /cm2        65.3963 /cm2        123.274 /cm2              0 /cm2              0 /cm2             50 /cm2            125 /cm2
+    35       1.99991 MeV           0 eV            0               0 /cm2        16.3809 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2
+    36       355.886 keV           0 eV            0               0 /cm2        14.4251 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2            175 /cm2
+    37             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            125 /cm2
+    38             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2
     39       510.999 keV           0 eV            0               0 /cm2        3.91095 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
     40             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     41             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    42             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    42             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     43             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     44             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     45             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -1041,19 +1041,19 @@ Run Summary
     50             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     51             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     52             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    53             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    53             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
     54             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     55             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     56             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     57             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     58             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     59             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    60             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    60             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
     61             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     62             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     63             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    64             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    65             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    64             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    65             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     66             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     67       829.866 keV           0 eV            0               0 /cm2        5.46262 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     68             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -1067,7 +1067,7 @@ Run Summary
     76             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     77             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     78             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    79             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    79       142.809 keV           0 eV            0               0 /cm2       0.603644 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     80             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     81             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     82             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -1212,14 +1212,14 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0115 MB
-Pool ID '7G4Track', size : 0.0221 MB
+Pool ID '17G4DynamicParticle', size : 0.00961 MB
+Pool ID '7G4Track', size : 0.0183 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.000961 MB
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.071 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.065 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -60,7 +60,9 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4LENDCaptureCrossSection.hh
         G4LENDCrossSection.hh
         G4LENDCombinedCrossSection.hh
+        G4LENDGammaCrossSection.hh
         G4LENDCombinedModel.hh
+        G4LENDGammaModel.hh
         G4LENDElastic.hh
         G4LENDElasticCrossSection.hh
         G4LENDFission.hh
@@ -102,7 +104,9 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4LENDCapture.cc
         G4LENDCaptureCrossSection.cc
         G4LENDCombinedCrossSection.cc
+        G4LENDGammaCrossSection.cc
         G4LENDCombinedModel.cc
+        G4LENDGammaModel.cc
         G4LENDCrossSection.cc
         G4LENDElastic.cc
         G4LENDElasticCrossSection.cc

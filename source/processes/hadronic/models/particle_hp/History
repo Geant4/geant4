@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 May 2020   Gunter Folger  (hadr-hpp-V10-05-10)
+-------------------------------------------------
+- fix for clang10: Correct copy ctor in G4ParticleHPDataPoint.hh
+   using default implementation
+
+18 February 2020  Dennis Wright
+----------------------------------------------------
+- fix (from Artem Zontikov) bug 1838:
+  G4ParticleHPInelasticBaseFS.cc, 
+    lines 412-413, 599-600: use QI[0]-QI[it] for excitation
+    line 442: add particle definition protection to iLevel calculation
+
+13 February 2020  Dennis Wright
+----------------------------------------------------
+- fix (from Artem Zontikov) bug 1824: 
+  change line 166 of G4ParticleHPInelasticBaseFS.cc to 
+  theFinalStatePhotons->InitPartials(theData, theXsection); 
+
+  change line 182 of G4ParticleHPInelasticCompFS.cc to  
+  theFinalStatePhotons[it]->InitPartials(theData, theXsection[50]);
+
+  remove line delete [] theReactionXsec; in ~G4ParticleHPPhotonDist() as memory 
+  allocation does not take place in this class
+
+15 January 2020  Dennis Wright
+---------------------------------------------------
+- G4ParticleHPThermalScvattering::create_E_isoAng_from_energy :
+  add fatal exception for case when pointers panEPM_T_EL or panEPM_T_EH
+  are null.  This fixes Coverity bugs 82418 and 82419.
+
  4 December 2019  Alberto Ribon (hadr-hpp-V10-05-09)
 ----------------------------------------------------
 - G4ParticleHPContAngularPar : set protection against unphysical interpolation

@@ -34,6 +34,7 @@ class G4UImessenger;
 
 using namespace boost::python;
 
+
 // ====================================================================
 // thin wrappers
 // ====================================================================
@@ -142,8 +143,8 @@ using namespace pyG4ProcessTable;
 // ====================================================================
 void export_G4ProcessTable()
 {
-  class_<G4ProcessTable, G4ProcessTable*, boost::noncopyable>
-    ("G4ProcessTable", "process table")
+  class_<G4ProcessTable, boost::noncopyable>
+    ("G4ProcessTable", "process table", no_init)
     // ---
     .def("GetProcessTable",  &G4ProcessTable::GetProcessTable,
          return_value_policy<reference_existing_object>())

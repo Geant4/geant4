@@ -787,14 +787,10 @@ Diquark_AntiDiquark_belowThreshold_lastSplitting(G4FragmentingString * & string,
 {
 	G4double StringMass   = string->Mass();
 
-	G4int cClusterInterrupt = 0;
+        G4bool isOK = false;
+ 	G4int cClusterInterrupt = 0;
 	do
 	{
-		if (cClusterInterrupt++ >= ClusterLoopInterrupt)
-		{
-			return false;
-		}
-
 		G4int LeftQuark1= string->GetLeftParton()->GetPDGEncoding()/1000;
 		G4int LeftQuark2=(string->GetLeftParton()->GetPDGEncoding()/100)%10;
 
@@ -805,24 +801,27 @@ Diquark_AntiDiquark_belowThreshold_lastSplitting(G4FragmentingString * & string,
 		{
 			LeftHadron =hadronizer->Build(FindParticle( LeftQuark1),
 						      FindParticle(RightQuark1));
-			RightHadron=hadronizer->Build(FindParticle( LeftQuark2),
-						      FindParticle(RightQuark2));
-		} else
-		{
-			LeftHadron =hadronizer->Build(FindParticle( LeftQuark1),
-						      FindParticle(RightQuark2));
-			RightHadron=hadronizer->Build(FindParticle( LeftQuark2),
-						      FindParticle(RightQuark1));
-		}
+		        RightHadron= (LeftHadron == nullptr) ? nullptr :
+		                    hadronizer->Build(FindParticle( LeftQuark2),
+				                      FindParticle(RightQuark2));
+	        } else
+	        {
+	                LeftHadron =hadronizer->Build(FindParticle( LeftQuark1),
+					              FindParticle(RightQuark2));
+	                RightHadron=(LeftHadron == nullptr) ? nullptr :
+		                    hadronizer->Build(FindParticle( LeftQuark2),
+				                      FindParticle(RightQuark1));
+	        }
 
-		if ( (LeftHadron == NULL) || (RightHadron == NULL) ) continue;
-
-		//... repeat procedure, if mass of cluster is too low to produce hadrons
-		//... ClusterMassCut = 0.15*GeV model parameter
-	}
-	while ((StringMass <= LeftHadron->GetPDGMass() + RightHadron->GetPDGMass()));
-
-  	return true;
+	        isOK = (LeftHadron != nullptr) && (RightHadron != nullptr);
+	        if(isOK) { isOK = (StringMass > LeftHadron->GetPDGMass() + RightHadron->GetPDGMass()); }
+	        ++cClusterInterrupt;
+	        //... repeat procedure, if mass of cluster is too low to produce hadrons
+	        //... ClusterMassCut = 0.15*GeV model parameter                                                                                                 
+        }
+        while (isOK == false || cClusterInterrupt < ClusterLoopInterrupt);
+        /* Loop checking, 07.08.2015, A.Ribon */
+  	return isOK;
 }
 
 //----------------------------------------------------------------------------------------

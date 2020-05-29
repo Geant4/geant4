@@ -195,9 +195,12 @@ function(geant4_save_package_variables _title)
   get_property(__exported_vars GLOBAL PROPERTY GEANT4_EXPORT_PACKAGE_${_title}_VARIABLES)
   foreach(__varname ${ARGN})
     if(NOT (${__varname} IN_LIST __exported_vars))
-      # TODO: Also check that the save variable is in the cache...
-      # if(CACHE ...) only available from 3.14
-      set_property(GLOBAL APPEND PROPERTY GEANT4_EXPORT_PACKAGE_${_title}_VARIABLES ${__varname})
+      # Some variables might be empty on certain systems. Only save those with a value
+      if(${__varname})
+        # TODO: Also check that the save variable is in the cache...
+        # if(CACHE ...) only available from 3.14
+        set_property(GLOBAL APPEND PROPERTY GEANT4_EXPORT_PACKAGE_${_title}_VARIABLES ${__varname})
+      endif()
     endif()
   endforeach()
 endfunction()

@@ -43,7 +43,7 @@ install(DIRECTORY include/
 # We also need to install the tools license
 #
 install(FILES tools.license
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
+  DESTINATION ${CMAKE_INSTALL_DATADIR}
   )
 
 #------------------------------------------------------------------------------

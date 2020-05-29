@@ -71,10 +71,12 @@ This example simulates a simplified fixed target experiment.
 \section B2_s4 PRIMARY GENERATOR
 
    The primary generator action class employs the G4ParticleGun. 
-   The primary kinematics consists of a single particle which hits the target 
-   perpendicular to the entrance face. The type of the particle 
+   The primary kinematics consists of a single particle which starts at the world boundary
+   and hits the target perpendicular to the entrance face. The type of the particle
    and its energy can be changed via the G4 built-in commands of 
-   the G4ParticleGun class. 
+   the G4ParticleGun class.
+   Note that this particular case of starting a primary particle on the world boundary
+   requires shooting in a direction towards inside the world.
   
 \section B2_s5 RUNS and EVENTS
  

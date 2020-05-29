@@ -104,7 +104,7 @@ public:
     if(0 == theData.size()%10 && 0!=theData.size())
     {
       if(0 == theUpper) theUpper = new G4ParticleHPHash();
-      theUpper->SetData(theData.size()-1, x, y);
+      theUpper->SetData( static_cast<G4int>(theData.size())-1, x, y);
     }
   }
     

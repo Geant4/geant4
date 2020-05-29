@@ -424,11 +424,10 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     command->ResetFailure();
     if(std::getenv(newValue))
     { 
-      G4String st = "/control/alias ";
-      st += newValue;
+      G4String st = newValue;
       st += " ";
       st += std::getenv(newValue);
-      UI->ApplyCommand(st);
+      UI->SetAlias(st.c_str());
     }
     else
     { 

@@ -63,15 +63,30 @@ include(Geant4OptionalComponents)
 #   there are many complex options to handle.
 include(Geant4InterfaceOptions)
 
-# - Provide options to enable wrapping of Geant4 by other languages
-include(Geant4Wrapping)
+# - Installation of optional read-only architecture independent data files.
+include(Geant4InstallData)
+
+# - Include testing up front so both source and environments can use it if required
+include(Geant4CTest)
+
 
 #-----------------------------------------------------------------------
 # Add the source and environments subdirectories
 # source       : Process all the Geant4 core targets
 # environments : Process optional wrappings of Geant4 (NOTYETIMPLEMENTED)
 add_subdirectory(source)
-#add_subdirectory(environments)
+
+option(GEANT4_USE_PYTHON "Build Python bindings for Geant4" OFF)
+if(GEANT4_USE_PYTHON)
+  # We can only build g4py with MT geant4 if TLS is global-dynamic (or auto?)
+  if(GEANT4_BUILD_MULTITHREADED AND (NOT GEANT4_BUILD_TLS_MODEL MATCHES "global-dynamic"))
+    message(FATAL_ERROR "Geant4Py only supports 'global-dynamic' thread local storage
+'${GEANT4_BUILD_TLS_MODEL}' selected by GEANT4_BUILD_TLS_MODEL option
+")
+  endif()
+
+  add_subdirectory(environments/g4py)
+endif()
 
 #-----------------------------------------------------------------------
 # - Perform all post build tasks
@@ -79,13 +94,6 @@ add_subdirectory(source)
 # and other properties processed in source and environments trees before
 # these tasks can be performed.
 #
-# - Installation of optional read-only architecture independent data files.
-# E.g. Examples, data libraries, documentation.
-# Done before toolchain generation because it may affect what we have to do
-# there!
-#
-include(Geant4InstallData)
-
 # - Generate any Use/Config/Support files here once everything else has
 # been processed e.g. "UseGeant4.cmake", "Geant4Config.cmake", library
 # dependencies etc.
@@ -101,7 +109,6 @@ include(G4ConfigureCMakeHelpers)
 #-----------------------------------------------------------------------
 # - Testing configuration.
 # Done here, as projects under 'tests' require Geant4Config.
-include(Geant4CTest)
 if(GEANT4_ENABLE_TESTING)
   add_subdirectory(tests)
   if(EXISTS ${CMAKE_SOURCE_DIR}/benchmarks)
@@ -121,7 +128,7 @@ mark_as_advanced(GEANT4_INSTALL_EXAMPLES)
 
 if(GEANT4_INSTALL_EXAMPLES)
   install(DIRECTORY examples
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
+    DESTINATION ${CMAKE_INSTALL_DATADIR}
     COMPONENT Examples
     PATTERN "CVS" EXCLUDE
     PATTERN ".svn" EXCLUDE

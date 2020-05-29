@@ -615,22 +615,18 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
           <<string->GetRightParton()->GetParticleName()<<G4endl;
     #endif
 
-    G4int cClusterInterrupt = 0;
     G4ParticleDefinition *LeftHadron = nullptr;
     G4ParticleDefinition *RightHadron = nullptr;
     const G4int maxNumberOfLoops = 1000;
     G4int loopCounter = 0;
+    G4bool isOK = false;
 
     G4double LeftHadronMass(0.); G4double RightHadronMass(0.);
     do
     {
-        if (cClusterInterrupt++ >= ClusterLoopInterrupt)
-        {
-          return false;
-        }
         LeftHadronMass = -MaxMass; RightHadronMass = -MaxMass;
 
-	G4ParticleDefinition * quark = NULL;
+	G4ParticleDefinition * quark = nullptr;
 	string->SetLeftPartonStable(); // to query quark contents..
 
 	if (string->DecayIsQuark() && string->StableIsQuark() ) 
@@ -663,20 +659,25 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
       	  LeftHadron=hadronizer->BuildLowSpin(QuarkPair.first, string->GetLeftParton());
         }
 
-        if ( LeftHadron == NULL ) continue;
+        if ( LeftHadron != nullptr ) {
+          RightHadron = hadronizer->BuildLowSpin(string->GetRightParton(), quark);
 
-        RightHadron = hadronizer->BuildLowSpin(string->GetRightParton(), quark);
+          if ( RightHadron != nullptr ) {
 
-        if ( RightHadron == NULL ) continue;
-
-        LeftHadronMass  = LeftHadron->GetPDGMass();
-        RightHadronMass = RightHadron->GetPDGMass();
-    } while ( ( ResidualMass <= LeftHadronMass + RightHadronMass )
-              && ++loopCounter < maxNumberOfLoops );  /* Loop checking, 07.08.2015, A.Ribon */
-
-    if ( loopCounter >= maxNumberOfLoops ) {
-      return false;
+            LeftHadronMass  = LeftHadron->GetPDGMass();
+            RightHadronMass = RightHadron->GetPDGMass();
+            isOK = (ResidualMass > LeftHadronMass + RightHadronMass);
+          }
+        }
+	++loopCounter;
+        if ( loopCounter >= maxNumberOfLoops ) {
+          return false;
+	}
+        //... repeat procedure, if mass of cluster is too low to produce hadrons                                                                               
+	//... ClusterMassCut = 0.15*GeV model parameter                                                                                                        
     }
+    while (isOK == false);
+    /* Loop checking, 07.08.2015, A.Ribon */
 
     //... compute hadron momenta and energies   
     G4LorentzVector  LeftMom, RightMom;

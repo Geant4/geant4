@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # ==================================================================
 # python script for Geant4Py test
 #
@@ -30,34 +30,34 @@ class MyRunAction(G4UserRunAction):
   "My Run Action"
 
   def BeginOfRunAction(self, run):
-    print "*** #event to be processed (BRA)=",
-    run.GetNumberOfEventToBeProcessed()
+    print("*** #event to be processed (BRA)=",
+    run.GetNumberOfEventToBeProcessed())
 
   def EndOfRunAction(self, run):
-    print "*** run end run(ERA)=", run.GetRunID()
+    print("*** run end run(ERA)=", run.GetRunID())
 
 # ------------------------------------------------------------------
 class MyEventAction(G4UserEventAction):
   "My Event Action"
 
   #def BeginOfEventAction(self, event):
-    #print "*** current event (BEA)=", event.GetEventID()
+    #print("*** current event (BEA)=", event.GetEventID())
   #  pass
 
   #def EndOfEventAction(self, event):
-  #  print "*** current event (EEA)=", event.GetEventID()
+    #print("*** current event (EEA)=", event.GetEventID())
 
 # ------------------------------------------------------------------
 class MySteppingAction(G4UserSteppingAction):
   "My Stepping Action"
 
   def UserSteppingAction(self, step):
-    #print "*** dE/dx in current step=", step.GetTotalEnergyDeposit()
+    #print("*** dE/dx in current step=", step.GetTotalEnergyDeposit())
     track= step.GetTrack()
     touchable= track.GetTouchable()
     pv= touchable.GetVolume()
-    #print pv.GetCopyNo()
-    #print touchable.GetReplicaNumber(0)
+    #print(pv.GetCopyNo())
+    #print(touchable.GetReplicaNumber(0))
 
 # ------------------------------------------------------------------
 class MyField(G4MagneticField):
@@ -115,3 +115,4 @@ gRunManager.Initialize()
 
 # beamOn
 gRunManager.BeamOn(10)
+gTerminate()

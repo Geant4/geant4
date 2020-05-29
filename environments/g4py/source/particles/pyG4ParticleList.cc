@@ -46,14 +46,13 @@ public:
 
   p_iterator p_begin() {
     G4ParticleTable* particleTable= G4ParticleTable::GetParticleTable();
-    if(particleTableCache.size() != particleTable-> size() ) {
+    if(particleTableCache.size() != static_cast<size_t>(particleTable-> size()) ) {
       particleTableCache.clear();
-      G4ParticleTable::G4PTblDicIterator* 
-	theParticleIterator= particleTable-> GetIterator();
+      G4ParticleTable::G4PTblDicIterator* theParticleIterator= particleTable-> GetIterator();
       theParticleIterator-> reset();
       while( (*theParticleIterator)() ){
-	G4ParticleDefinition* particle= theParticleIterator-> value();
-	particleTableCache.push_back(particle);
+        G4ParticleDefinition* particle= theParticleIterator-> value();
+        particleTableCache.push_back(particle);
       }
     }
     return particleTableCache.begin();
@@ -61,14 +60,13 @@ public:
 
   p_iterator p_end() {
     G4ParticleTable* particleTable= G4ParticleTable::GetParticleTable();
-    if(particleTableCache.size() != particleTable-> size() ) {
+    if(particleTableCache.size() != static_cast<size_t>(particleTable-> size()) ) {
       particleTableCache.clear();
-      G4ParticleTable::G4PTblDicIterator* 
-	theParticleIterator= particleTable-> GetIterator();
+      G4ParticleTable::G4PTblDicIterator* theParticleIterator= particleTable-> GetIterator();
       theParticleIterator-> reset();
       while( (*theParticleIterator)() ){
-	G4ParticleDefinition* particle= theParticleIterator-> value();
-	particleTableCache.push_back(particle);
+        G4ParticleDefinition* particle= theParticleIterator-> value();
+        particleTableCache.push_back(particle);
       }
     }
     return particleTableCache.end();
@@ -85,7 +83,7 @@ void export_PyG4ParticleList()
 {
   class_<PyG4ParticleList>("PyG4ParticleList", "particle list")
     .def("__iter__",  iterator<PyG4ParticleList::ParticleList>())
-    .add_property("particles", range(&PyG4ParticleList::p_begin, 
+    .add_property("particles", range(&PyG4ParticleList::p_begin,
 				     &PyG4ParticleList::p_end))
     ;
 }

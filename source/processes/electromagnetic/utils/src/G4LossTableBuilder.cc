@@ -91,11 +91,11 @@ G4LossTableBuilder::G4LossTableBuilder(G4bool master) : isMaster(master)
       theFlag = new std::vector<G4bool>;
     } else {
       isMaster = false;
-    }
 #ifdef G4MULTITHREADED
-  }
-  G4MUTEXUNLOCK(&ltbMutex);
+    }
+    G4MUTEXUNLOCK(&ltbMutex);
 #endif
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -7,6 +7,10 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+08.04.2020 - S. Guatelli, Tag ChargeExchangeMC-V10-05-00
+             Error removed from the main. CMakeList.txt updated. 
+             Dependence to Qt Libraries when using ROOT demoved as obsolete.
+
 02.09.2019 - S. Guatelli, Tag ChargeExchangeMC-V10-05-02
              G4VIS_USE and G4UI_USE deleted
 

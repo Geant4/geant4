@@ -1,11 +1,11 @@
-Seed used : 1581670617
+Seed used : 1590745177
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-01    (14-February-2020)
+ Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -260,17 +260,15 @@ Start event 2
 Start event 3
 Start event 4
 Start event 5
- * PrimaryKiller: aborts event 5, energy loss is too large. 
- * Energy loss by primary is: 2.1301 keV. Event is aborted if the Eloss is > 2 keV
 Start event 6
 Start event 7
 Start event 8
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 9 events 
-Number of events recorded by the species scorer = 9
- Total energy deposited in the world volume : 9210.8 eV
+  The run has 10 events 
+Number of events recorded by the species scorer = 10
+ Total energy deposited in the world volume : 10449 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

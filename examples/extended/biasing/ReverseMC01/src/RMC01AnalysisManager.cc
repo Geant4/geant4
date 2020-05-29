@@ -330,6 +330,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
   //We need to loop over the adjoint tracks that have reached the external
   //surface.
   for (std::size_t j=0;j<nb_adj_track;++j) {
+
     G4int pdg_nb =theAdjointSimManager
          ->GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(j);
     G4double prim_ekin=theAdjointSimManager
@@ -414,7 +415,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
 
          //Check if the edep is not wrongly too high
          //-----------------------------------------
-         G4double new_mean , new_error;
+         G4double new_mean(0.0), new_error(0.0);
          fAccumulated_edep +=edep;
          fAccumulated_edep2 +=edep*edep;
          fNentry += 1.0;
@@ -442,12 +443,13 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
            new_mean_computed=true;
          }
 
-     }
-    if (!new_mean_computed){
+       }
+
+       if (!new_mean_computed){
          ComputeMeanEdepAndError(anEvent,fMean_edep,fError_mean_edep);
-         if (fError_mean_edep>0) fRelative_error= fError_mean_edep/fMean_edep;
-    }
-   }
+         fRelative_error = (fMean_edep > 0.0) ? fError_mean_edep/fMean_edep : 0.0;
+       }
+     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -506,11 +508,11 @@ void  RMC01AnalysisManager::WriteHisto(G4H2* anHisto,
 void RMC01AnalysisManager::ComputeMeanEdepAndError(
                         const G4Event* anEvent,G4double& mean,G4double& error)
 {  
-   G4int nb_event=anEvent->GetEventID()+1;
+   G4int nb_event = anEvent->GetEventID()+1;
    G4double factor=1.;
    if (fAdjoint_sim_mode) {
-      nb_event /=fNb_evt_per_adj_evt;
-      factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
+     nb_event /= fNb_evt_per_adj_evt;
+     factor = 1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
    }
    
    // VI: error computation now is based on number of entries and not 
@@ -518,22 +520,24 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(
    // LD: This is wrong! With the use of fNentry the results were no longer
    //     correctly normalised. The mean and the error should be computed
    //     with nb_event. The old computation has been reset.
-   G4float nb_event_float = G4float(nb_event);
-   if (nb_event_float >1.) {
-      mean = fAccumulated_edep/nb_event_float;
-      G4double mean_x2 = fAccumulated_edep2/nb_event_float;
-      /*
+   // VI: OK, but let computations be double
+   if (nb_event > 0) {
+     G4double norm = 1.0/(G4double)nb_event;
+     mean = fAccumulated_edep*norm;
+     G4double mean_x2 = fAccumulated_edep2*norm;
+     G4double zz = mean_x2 - mean*mean;
+     /* 
       G4cout << "Nevt= " << nb_event <<  " mean= " << mean 
              << "  mean_x2= " <<  mean_x2 << " x2 - x*x= " 
-             << mean_x2-mean*mean << G4endl;
-      */
-      error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(nb_event_float);
-      mean *=factor;
+             << zz << G4endl;
+     */
+     error = factor*std::sqrt(std::max(zz, 0.)*norm);
+     mean *= factor;
+   } else {
+     mean=0;
+     error=0;
    }
-   else {
-      mean=0;
-      error=0;
-  }
+   //G4cout << "Aend: " << mean << " " << error << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
