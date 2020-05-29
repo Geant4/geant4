@@ -105,7 +105,7 @@ set(GEANT4_DATASETS_URL "https://cern.ch/geant4-data/datasets")
 set(GEANT4_BUILD_FULL_DATADIR ${PROJECT_BINARY_DIR}/data)
 
 # Where to install data in the install tree (a Default)
-set(GEANT4_INSTALL_DATADIR_DEFAULT "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}/data")
+set(GEANT4_INSTALL_DATADIR_DEFAULT "${CMAKE_INSTALL_DATADIR}/data")
 
 # File containing dataset list
 set(GEANT4_DATASETS_DEFINITIONS "Geant4DatasetDefinitions")
@@ -596,7 +596,7 @@ endfunction()
 # Choose Physics Data Install Dir
 # This follows the pattern for interface and setting as in GNUInstallDirs
 if(NOT GEANT4_INSTALL_DATADIR)
-  set(GEANT4_INSTALL_DATADIR "" CACHE PATH "read-only architecture independent Geant4 physics data (DATAROOTDIR/${GEANT4_INSTALL_DATADIR_DEFAULT}")
+  set(GEANT4_INSTALL_DATADIR "" CACHE PATH "read-only architecture independent Geant4 physics data (DATADIR/data")
   set(GEANT4_INSTALL_DATADIR "${GEANT4_INSTALL_DATADIR_DEFAULT}")
 endif()
 

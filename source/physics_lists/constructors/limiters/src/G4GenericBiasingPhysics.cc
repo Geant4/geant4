@@ -565,9 +565,45 @@ void G4GenericBiasingPhysics::AssociateParallelGeometries()
     }
 
 
-  // -- parallel geometries for all charged particles:
-  
+  // -- parallel geometries for all neutral / charged particles:
+  particleIterator->reset();
+  G4bool islAllNeutral = false;
+  for(auto isln : fAllNeutralParallelGeometriesISL)
+  { islAllNeutral |= isln; }
+  G4bool islAllCharged = false;
+  for(auto islc : fAllChargedParallelGeometriesISL)
+  { islAllCharged |= islc; }
 
-  
+  while((*particleIterator)())
+  {
+    G4ParticleDefinition*    particle = particleIterator->value();
+    G4ProcessManager*        pmanager = particle->GetProcessManager();
+    if(particle->GetPDGCharge() == 0.)
+    {
+      // Neutral particle
+      if(particle->IsShortLived() && !islAllNeutral) continue;
+      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+      G4int j = 0;
+      for(G4String wNameN : fParallelGeometriesForCharged)
+      {
+        if(!(particle->IsShortLived()) || fAllNeutralParallelGeometriesISL[j])
+        { limiter->AddParallelWorld(wNameN); }
+        j++;
+      }
+    }
+    else
+    {
+      // charged
+      if(particle->IsShortLived() && !islAllCharged) continue;
+      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
+      G4int j = 0;
+      for(G4String wNameC : fParallelGeometriesForCharged)
+      {
+        if(!(particle->IsShortLived()) || fAllChargedParallelGeometriesISL[j])
+        { limiter->AddParallelWorld(wNameC); }
+        j++;
+      }
+    }
+  }
   
 }

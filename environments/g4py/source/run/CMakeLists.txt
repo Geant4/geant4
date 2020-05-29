@@ -1,9 +1,7 @@
 # - build library
 
 # library
-set(_TARGET pyG4run)
-add_library(
-  ${_TARGET} SHARED
+geant4_add_pymodule(pyG4run
   pyG4Run.cc
   pyG4RunManager.cc
   pyG4RunManagerKernel.cc
@@ -16,17 +14,5 @@ add_library(
   pymodG4run.cc
 )
 
-set_target_properties(${_TARGET} PROPERTIES PREFIX "")
-set_target_properties(${_TARGET} PROPERTIES OUTPUT_NAME "G4run")
-set_target_properties(${_TARGET} PROPERTIES SUFFIX ".so")
-set_target_properties(${_TARGET}
-                      PROPERTIES INSTALL_RPATH
-                      ${GEANT4_LIBRARY_DIR}
-                      BUILD_WITH_INSTALL_RPATH TRUE)
-
-target_link_libraries (${_TARGET}
-                      ${GEANT4_LIBRARIES_WITH_VIS} ${BOOST_PYTHON_LIB}
-                      ${PYTHON_LIBRARIES})
-
-# install
-install(TARGETS ${_TARGET} LIBRARY DESTINATION ${G4MODULES_INSTALL_DIR})
+target_link_libraries(pyG4run PRIVATE G4run G4readout)
+install(TARGETS pyG4run DESTINATION "${CMAKE_INSTALL_PYTHONDIR}/Geant4")

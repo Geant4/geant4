@@ -6,6 +6,11 @@
 #-----------------------------------------------------------------------
 # Package up needed system libraries - only for WIN32?
 #
+# for Intel icc suppress warnings about icc libraries not existing for 19. 
+if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+   set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS True)
+endif()
+
 include(InstallRequiredSystemLibraries)
 
 #-----------------------------------------------------------------------

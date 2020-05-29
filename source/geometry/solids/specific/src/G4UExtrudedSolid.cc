@@ -44,8 +44,8 @@
 // Constructors
 //
 G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
-                                   std::vector<G4TwoVector> polygon,
-                                   std::vector<ZSection>    zsections)
+                                   const std::vector<G4TwoVector>& polygon,
+                                   const std::vector<ZSection>&    zsections)
   : Base_t(name)  // General constructor
 {
   unsigned int nVertices = polygon.size();
@@ -73,10 +73,10 @@ G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
 
 
 G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
-                                   std::vector<G4TwoVector> polygon,
+                                   const std::vector<G4TwoVector>& polygon,
                                    G4double                 halfZ,
-                                   G4TwoVector off1, G4double scale1,
-                                   G4TwoVector off2, G4double scale2)
+                                   const G4TwoVector& off1, G4double scale1,
+                                   const G4TwoVector& off2, G4double scale2)
   : Base_t(name)  // Special constructor for 2 sections
 {
   unsigned int nVertices = polygon.size();

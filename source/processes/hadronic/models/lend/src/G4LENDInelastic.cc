@@ -23,166 +23,244 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4LENDInelastic.hh"
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  File:   G4LENDInelastic.cc                                                //
+//  Date:   24 March 2020                                                     //
+//  Author: Dennis Wright                                                     //
+//                                                                            //
+//  Description: model for inelastic scattering of neutrons, light ions and   //
+//               gammas at energies of order 20 MeV and lower.                //
+//               This model uses GIDI particle data which are stored mostly   //
+//               in spectrum mode.  In this mode, spectra are reproduced      //
+//               for each possible particle type which can result from a      //
+//               given interaction.  Unlike Geant4, this is done without      //
+//               consideration of event-by-event conservation rules.          //
+//               Indeed, forcing such conservation on GIDI output products    //
+//               introduces correlations and distortions in the resulting     //
+//               spectra which are not present in the data.                   //
+//                                                                            //
+//               In order to use GIDI data within the Geant4 framework, a     //
+//               minimal event-by-event baryon number conservation is         //
+//               enforced which allows deviations of up to 1 GeV without      //
+//               giving warnings.  Neither charge, nor energy, nor momentum   //
+//               conservation is enforced.  Under this scheme, light          //
+//               fragment (n, p, d, t, alpha) spectra are well reproduced     //
+//               after a large number of events.  Charge and energy           //
+//               conservation also approach their event-by-event values in    //
+//               this limit.  The mass, charge and energy distributions of    //
+//               large fragments, however, are not expected to reproduce the  //
+//               data very well.  This is a result of forcing the crude       //
+//               baryon number conservation and ensuring that the light       //
+//               fragment spectra are correct.                                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
+#include "G4LENDInelastic.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4IonTable.hh"
+#include <algorithm>
+#include <random>
   
-G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTarg )
+G4HadFinalState* G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                                G4Nucleus& aTarg)
 {
-   //return preco->ApplyYourself( aTrack, aTarg );
+  G4ThreeVector projMom = aTrack.Get4Momentum().vect();
+  G4double temp = aTrack.GetMaterial()->GetTemperature();
 
-   G4ThreeVector proj_p = aTrack.Get4Momentum().vect();
+  G4int iZ = aTarg.GetZ_asInt();
+  G4int iA = aTarg.GetA_asInt();
+  G4int iM = 0;
+  if (aTarg.GetIsotope() != nullptr) iM = aTarg.GetIsotope()->Getm();
 
-   G4double temp = aTrack.GetMaterial()->GetTemperature();
+  G4double ke = aTrack.GetKineticEnergy();
 
-   //G4int iZ = int ( aTarg.GetZ() );
-   //G4int iA = int ( aTarg.GetN() );
-   //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
-   G4int iZ = aTarg.GetZ_asInt();
-   G4int iA = aTarg.GetA_asInt();
-   //G4int iM = aTarg.GetM_asInt();
-   G4int iM = 0;
-   if ( aTarg.GetIsotope() != NULL ) {
-      iM = aTarg.GetIsotope()->Getm();
-   }
-   //G4cout << "target: Z = " << iZ << " N = " << iA << G4endl;
+  G4HadFinalState* theResult = &theParticleChange;
+  theResult->Clear();
 
-   G4double ke = aTrack.GetKineticEnergy();
-   //G4cout << "projectile: KE = " << ke/MeV << " [MeV]" << G4endl;
+  G4GIDI_target* aGIDITarget =
+    get_target_from_map(lend_manager->GetNucleusEncoding(iZ, iA, iM) );
+  if (aGIDITarget == nullptr) {
+//    G4cout << " No target found " << G4endl; 
+    theParticleChange.Clear();
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theParticleChange;
+  }
+// return returnUnchanged(aTrack, theResult);
 
-   G4HadFinalState* theResult = &theParticleChange;
-   theResult->Clear();
+  // Get GIDI final state products for givern target and projectile
+  G4int loop(0);
+  G4int loopMax = 1000;
+  std::vector<G4GIDI_Product>* products;
+  do {
+    products = aGIDITarget->getOthersFinalState(ke*MeV, temp, MyRNG, NULL);
+    loop++;
+  } while (products == nullptr && loop < loopMax);
 
-   G4GIDI_target* aTarget = get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , iM ) );
-   if ( aTarget == NULL ) return returnUnchanged( aTrack , theResult );
+  // G4LENDInelastic accepts all light fragments and gammas from GIDI (A < 5)
+  // and removes any heavy fragments which cause large baryon number violation.
+  // Charge and energy non-conservation still occur, but over a large number 
+  // of events, this improves on average.
 
-   std::vector<G4GIDI_Product>* products; 
-   for ( G4int i = 0 ; i != 1024 ; i++ ) {
-      products = aTarget->getOthersFinalState( ke*MeV, temp, MyRNG, NULL );
-      if ( products != NULL ) break;
-   }
-   //return preco->ApplyYourself( aTrack, aTarg );
+  if (loop > loopMax - 1) {
+//    G4cout << " too many loops, return intial state " << G4endl;
 
-   G4int iTotZ = iZ + aTrack.GetDefinition()->GetAtomicNumber();
-   G4int iTotA = iA + aTrack.GetDefinition()->GetAtomicMass();
+    theParticleChange.Clear();
+    theParticleChange.SetStatusChange(isAlive);
+    theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theParticleChange;
 
-   if ( products != NULL ) 
-   {
-      //G4cout << "Using LENDModel" << G4endl;
+//    if (aTrack.GetDefinition() == G4Proton::Proton() ||
+//        aTrack.GetDefinition() == G4Neutron::Neutron() ) {
+//       theResult = preco->ApplyYourself(aTrack, aTarg);
+//     } else {
+//       theResult = returnUnchanged(aTrack, theResult);
+//     }
 
-      G4ThreeVector psum(0);
-      G4bool needResidual = true;
-      int totN = 0;
-      int totZ = 0;
-      for ( G4int j = 0; j < int( products->size() ); j++ ) 
-      {
+  } else {
+    G4int iTotZ = iZ + aTrack.GetDefinition()->GetAtomicNumber();
+    G4int iTotA = iA + aTrack.GetDefinition()->GetAtomicMass();
 
-         G4int jZ = (*products)[j].Z; 
-         G4int jA = (*products)[j].A; 
-         G4int jm = (*products)[j].m; 
-         //TK 
-         //We need coordination LEND *products)[j].m and G4IonTable(Z,A,m) 
-         //Excitation energy of isomer level is might (probably) different each other.
-         //
-
-         //G4cout << "ZA = " << 1000 * (*products)[j].Z + (*products)[j].A << "  EK = "
-         //     << (*products)[j].kineticEnergy
-         //     << " px  " <<  (*products)[j].px
-         //     << " py  " <<  (*products)[j].py
-         //     << " pz  " <<  (*products)[j].pz
-         //     << G4endl;
-
-         iTotZ -= jZ;
-         iTotA -= jA;
-
-         G4DynamicParticle* theSec = new G4DynamicParticle;
-
-         if ( jA == 1 && jZ == 1 )
-         {
-            theSec->SetDefinition( G4Proton::Proton() );
-            totN += 1;
-            totZ += 1;
-         }
-         else if ( jA == 1 && jZ == 0 )
-         {
-            theSec->SetDefinition( G4Neutron::Neutron() );
-            totN += 1;
-         } 
-         else if ( jZ > 0 )
-         {
-            if ( jA != 0 )
-            {
-               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , jA , jm ) );
-               totN += jA;
-               totZ += jZ;
-            }
-            else 
-            {
-               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , iA+aTrack.GetDefinition()->GetAtomicMass()-totN , jm ) );
-               iTotZ -= jZ;
-               iTotA -= iA+aTrack.GetDefinition()->GetAtomicMass()-totN;
-               needResidual=false;
-            }
-         } 
-         else
-         {
-            theSec->SetDefinition( G4Gamma::Gamma() );
-         } 
-
-         G4ThreeVector p( (*products)[j].px*MeV , (*products)[j].py*MeV , (*products)[j].pz*MeV ); 
-         psum += p; 
-         if ( p.mag() == 0 ) p = proj_p - psum;
-
-         theSec->SetMomentum( p );
-
-         theResult->AddSecondary( theSec );
-      } 
-
-      if ( !( iTotZ == 0 && iTotA == 0 ) ) {
-
-         if ( iTotZ >= 0 && iTotA > 0 ) {
-            if ( needResidual ) {
-               G4DynamicParticle* residual = new G4DynamicParticle;
-               if ( iTotZ > 0 ) {
-                  residual->SetDefinition( G4IonTable::GetIonTable()->GetIon( iTotZ , iTotA ) );
-               } else if ( iTotA == 1 ) {
-                  residual->SetDefinition( G4Neutron::Neutron() );
-               } else {
-                  //G4cout << "Charge or Baryon Number Error #3 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
-                  ;
-               }
-               residual->SetMomentum( proj_p - psum );
-               theResult->AddSecondary( residual );
-            } else { 
-               //G4cout << "Charge or Baryon Number Error #1 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
-               ;
-            }
-         } else {
-
-            if ( needResidual ) {
-               //G4cout << "Charge or Baryon Number Error #2 iTotZ = " << iTotZ << ", iTotA = " << iTotA << G4endl;
-               ;
-            }
-         }
-
-      }
-
-   } 
-   else {
-      //G4cout << "Using PreCompoundModel" << G4endl;
-      if ( aTrack.GetDefinition() == G4Proton::Proton() || 
-           aTrack.GetDefinition() == G4Neutron::Neutron() ) {
-         theResult = preco->ApplyYourself( aTrack, aTarg );
+    // Loop over GIDI products and separate light from heavy fragments
+    G4int GZtot(0);
+    G4int GAtot(0);
+    G4int productA(0);
+    G4int productZ(0);
+    std::vector<G4int> lightProductIndex;
+    std::vector<G4int> heavyProductIndex;
+    for (G4int i = 0; i < int( products->size() ); i++ ) {
+      productA = (*products)[i].A;
+      if (productA < 5) { 
+        lightProductIndex.push_back(i);
+        GZtot += (*products)[i].Z;
+        GAtot += productA;
       } else {
-         return theResult;
+        heavyProductIndex.push_back(i);
       }
-   }
-   delete products;
+    } 
 
-   theResult->SetStatusChange( stopAndKill );
+    // Randomize order of heavies to correct somewhat for sampling bias
+    // std::random_shuffle(heavyProductIndex.begin(), heavyProductIndex.end() );
+    // std::cout << " Heavy product index before shuffle : " ;
+    // for (G4int i = 0; i < int(heavyProductIndex.size() ); i++) std::cout << heavyProductIndex[i] << ", " ;
+    // std::cout << std::endl;
 
-   return theResult; 
+    auto rng = std::default_random_engine {};
+    std::shuffle(heavyProductIndex.begin(), heavyProductIndex.end(), rng);
 
+    // std::cout << " Heavy product index after shuffle : " ;
+    // for (G4int i = 0; i < int(heavyProductIndex.size() ); i++) std::cout << heavyProductIndex[i] << ", " ;
+    // std::cout << std::endl;
+
+    std::vector<G4int> savedHeavyIndex;    
+    G4int itest(0);
+    for (G4int i = 0; i < int(heavyProductIndex.size() ); i++) {
+      itest = heavyProductIndex[i];
+      productA = (*products)[itest].A;
+      productZ = (*products)[itest].Z;
+      if ((GAtot + productA <= iTotA) && (GZtot + productZ <= iTotZ) ) {
+        savedHeavyIndex.push_back(itest);
+        GZtot += productZ;
+        GAtot += productA;
+      }
+    }
+
+/*
+    G4cout << " saved light products = ";
+    for (G4int k = 0; k < int(lightProductIndex.size() ); k++ ) {
+      itest = lightProductIndex[k];
+      G4cout << "(" << (*products)[itest].Z << ", " << (*products)[itest].A << "),  ";
+    }
+    G4cout << G4endl;
+
+    G4cout << " saved heavy products = ";
+    for (G4int k = 0; k < int(savedHeavyIndex.size() ); k++ ) {
+      itest = savedHeavyIndex[k];
+      G4cout << "(" << (*products)[itest].Z << ", " << (*products)[itest].A << "),  ";
+    }
+    G4cout << G4endl;
+*/
+    // Now convert saved products to Geant4 particles
+    // Note that, at least for heavy fragments, GIDI masses and Geant4 masses
+    // have slightly different values.
+
+    G4DynamicParticle* theSec = nullptr;
+    G4ThreeVector Psum;
+    for (G4int i = 0; i < int(lightProductIndex.size() ); i++) {
+      itest = lightProductIndex[i];
+      productZ = (*products)[itest].Z;
+      productA = (*products)[itest].A;
+      theSec = new G4DynamicParticle();
+      if (productA == 1 && productZ == 0) {
+        theSec->SetDefinition(G4Neutron::Neutron() );
+      } else if (productA == 1 && productZ == 1) {
+        theSec->SetDefinition(G4Proton::Proton() );
+      } else if (productA == 2 && productZ == 1) {
+        theSec->SetDefinition(G4Deuteron::Deuteron() );
+      } else if (productA == 3 && productZ == 1) {
+        theSec->SetDefinition(G4Triton::Triton() );
+      } else if (productA == 4 && productZ == 2) {
+        theSec->SetDefinition(G4Alpha::Alpha() );
+      } else {
+        theSec->SetDefinition(G4Gamma::Gamma() );
+      }
+
+      G4ThreeVector momentum((*products)[itest].px*MeV, 
+                             (*products)[itest].py*MeV,
+                             (*products)[itest].pz*MeV );
+      Psum += momentum;
+      theSec->SetMomentum(momentum);
+//      theResult->AddSecondary(theSec);
+      theParticleChange.AddSecondary(theSec);
+    }
+
+    G4int productM(0);
+    for (G4int i = 0; i < int(savedHeavyIndex.size() ); i++) {
+      itest = savedHeavyIndex[i];
+      productZ = (*products)[itest].Z;
+      productA = (*products)[itest].A;
+      productM = (*products)[itest].m;
+      theSec = new G4DynamicParticle();
+      theSec->SetDefinition(G4IonTable::GetIonTable()->GetIon(productZ,
+                                                              productA,
+                                                              productM) );
+      G4ThreeVector momentum((*products)[itest].px*MeV,
+                             (*products)[itest].py*MeV,
+                             (*products)[itest].pz*MeV );
+      Psum += momentum;
+      theSec->SetMomentum(momentum);
+//      theResult->AddSecondary(theSec);
+      theParticleChange.AddSecondary(theSec);
+    }
+
+    // Create heavy fragment if necessary to try to balance A, Z
+    // Note: this step is only required to prevent warnings at the process level
+    //       where "catastrophic" non-conservation tolerances are set to 1 GeV.
+    //       The residual generated will not necessarily be the one that would 
+    //       occur in the actual reaction.
+    if (iTotA - GAtot > 1) {
+      theSec = new G4DynamicParticle();
+      if (iTotZ == GZtot) {
+        // Special case when a nucleus of only neutrons is requested
+        // Violate charge conservation and set Z = 1
+        // G4cout << " Z = 1, A = "<< iTotA - GAtot << " created " << G4endl;
+        theSec->SetDefinition(G4IonTable::GetIonTable()->GetIon(1, iTotA-GAtot, 0) );
+      } else {
+        theSec->SetDefinition(G4IonTable::GetIonTable()->GetIon(iTotZ-GZtot, iTotA-GAtot, 0) );
+      }
+      theSec->SetMomentum(projMom - Psum);
+//      theResult->AddSecondary(theSec);
+      theParticleChange.AddSecondary(theSec);
+    }
+  } // loop OK
+
+  delete products;
+//  theResult->SetStatusChange( stopAndKill );
+  theParticleChange.SetStatusChange( stopAndKill );
+//  return theResult; 
+  return &theParticleChange;
 }

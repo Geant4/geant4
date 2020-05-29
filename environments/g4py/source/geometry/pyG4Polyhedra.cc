@@ -29,6 +29,7 @@
 //                                         2007 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include <memory>
 #include "G4Polyhedra.hh"
 
 using namespace boost::python;
@@ -40,16 +41,16 @@ namespace pyG4Polyhedra {
 
 // create solid methods
 
-G4Polyhedra* f1_CreatePolyhedra(const G4String& name, 
-                                G4double phiStart, G4double phiTotal, 
+G4Polyhedra* f1_CreatePolyhedra(const G4String& name,
+                                G4double phiStart, G4double phiTotal,
                                 G4int numSide, G4int numZPlanes,
                                 const std::vector<G4double>& zPlane,
                                 const std::vector<G4double>& rInner,
                                 const std::vector<G4double>& rOuter)
 {
-  G4double zlist[numZPlanes];
-  G4double r0list[numZPlanes];
-  G4double r1list[numZPlanes];
+  std::unique_ptr<G4double[]> zlist(new G4double[numZPlanes]);
+  std::unique_ptr<G4double[]> r0list(new G4double[numZPlanes]);
+  std::unique_ptr<G4double[]> r1list(new G4double[numZPlanes]);
 
   for (G4int i=0; i< numZPlanes; i++) {
     zlist[i]= zPlane[i];
@@ -58,26 +59,26 @@ G4Polyhedra* f1_CreatePolyhedra(const G4String& name,
   }
 
   return new G4Polyhedra(name, phiStart, phiTotal, numSide, numZPlanes,
-                        zlist, r0list, r1list);
+                        zlist.get(), r0list.get(), r1list.get());
 }
 
 
 G4Polyhedra* f2_CreatePolyhedra(const G4String& name,
                                 G4double phiStart, G4double phiTotal,
                                 G4int numSide, G4int numRZ,
-                                const std::vector<G4double>& r, 
+                                const std::vector<G4double>& r,
                                 const std::vector<G4double>& z)
 {
-  G4double zlist[numRZ];
-  G4double rlist[numRZ];
+  std::unique_ptr<G4double[]> zlist(new G4double[numRZ]);
+  std::unique_ptr<G4double[]> rlist(new G4double[numRZ]);
 
   for (G4int i=0; i< numRZ; i++) {
     zlist[i]= z[i];
     rlist[i]= r[i];
   }
 
-  return new G4Polyhedra(name, phiStart, phiTotal, numSide, numRZ, 
-                         rlist, zlist);
+  return new G4Polyhedra(name, phiStart, phiTotal, numSide, numRZ,
+                         rlist.get(), zlist.get());
 
 }
 

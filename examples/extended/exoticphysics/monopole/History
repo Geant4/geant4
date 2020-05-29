@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 February 2020: V.Ivantchenko (monopole-V10-05-03)
+- G4MonopolePhysics - minor code clean-up for thread safety
+- monopole.cc - do not instantiate VisManager in the batch mode;
+    fixed typos
+- G4MonopoleTransportation - removed check on if monopole is
+    opticalphoton or not
+
 26 November 2019 I. Hrivnacova (monopole-V10-05-02)
 - Fixed Doxygen warnings
 

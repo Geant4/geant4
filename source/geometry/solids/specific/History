@@ -16,11 +16,15 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-May-2020 G.Lima                 (geom-specific-V10-05-23)
+- Fix constructor signatures in G4UExtrudedSolid wrapper.
+  There were missing const and reference qualifiers in non-POD parameters.
+
 17-January-2020 E.Tcherniaev       (geom-specific-V10-05-22)
 - Implemented G4Tet::SetVertices(), it addresses request made
   at Geant4 Technical Forum.
 
-14-January-2020 Gabriele Cosmo
+14-January-2020 G.Cosmo
 - Added protection in G4VFacet header for double definition of global
   symbols from Windows Kits code.
 

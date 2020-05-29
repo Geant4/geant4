@@ -179,7 +179,7 @@ void G4ParticleHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4Strin
     else if(dataType==13)
     {
       theFinalStatePhotons[it] = new G4ParticleHPPhotonDist;
-      theFinalStatePhotons[it]->InitPartials(theData);
+      theFinalStatePhotons[it]->InitPartials(theData, theXsection[50]);
     }
     else if(dataType==14)
     {
@@ -406,48 +406,48 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
         G4double dqi = QI[it]; 
         if ( dqi < 0 || 849 < dqi ) useQI = true; //Former libraies does not have values of this range
  
-        if ( useQI )
-        {
-           // QI introudced since G4NDL3.15
-           G4double QM=(incidReactionProduct.GetMass()+targetMass)-(aHadron.GetMass()+residualMass);
-           eExcitation = QM-QI[it];
-         if(eExcitation<20*CLHEP::keV){eExcitation=0;}
+        if (useQI) {
+          // QI introudced since G4NDL3.15
+          // G4double QM=(incidReactionProduct.GetMass()+targetMass)-(aHadron.GetMass()+residualMass);
+          // eExcitation = QM-QI[it];
+          eExcitation = QI[0] - QI[it];   // Bug fix #1838
+          if(eExcitation < 20*CLHEP::keV) eExcitation = 0;
 
-           //Re-evluate iLevel based on this eExcitation
-           iLevel = 0;
-           G4bool find = false;
-           G4int imaxEx = 0;
-           G4double level_tolerance = 1.0*CLHEP::keV;
+          // Re-evluate iLevel based on this eExcitation
+          iLevel = 0;
+          G4bool find = false;
+          G4int imaxEx = 0;
+          G4double level_tolerance = 1.0*CLHEP::keV;
 
-           while( theGammas.GetLevel(iLevel+1) != 0 ) // Loop checking, 11.05.2015, T. Koi
-           {
-              G4double maxEx = 0.0;
-              if ( maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() )
-              {
-                 maxEx = theGammas.GetLevel(iLevel)->GetLevelEnergy();
-                 imaxEx = iLevel;
+          while( theGammas.GetLevel(iLevel+1) != 0 ) { // Loop checking, 11.05.2015, T. Koi
+            G4double maxEx = 0.0;
+            if (maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) {
+              maxEx = theGammas.GetLevel(iLevel)->GetLevelEnergy();
+              imaxEx = iLevel;
+            }
+
+            // Fix bug 1789 DHW - first if-branch added because gamma data come from ENSDF
+            //                    and do not necessarily match the excitations used in ENDF-B.VII
+            //                    Compromise solution: use 1 keV tolerance suggested by T. Koi
+            if (std::abs(eExcitation - theGammas.GetLevel(iLevel)->GetLevelEnergy() ) < level_tolerance) {
+              find = true;
+              break;
+
+            } else if (eExcitation < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) {
+              find = true;
+              iLevel--;
+              // very small eExcitation, iLevel becomes -1, this is protected below
+              if (theTrack.GetDefinition() == aDefinition) { // this line added as part of fix #1838
+                if (iLevel == -1) iLevel = 0;
               }
+              break;
+            }
+            iLevel++;
+          }
 
-              // Fix bug 1789 DHW - first if-branch added because gamma data come from ENSDF
-              //                    and do not necessarily match the excitations used in ENDF-B.VII
-              //                    Compromise solution: use 1 keV tolerance suggested by T. Koi
-              if (std::abs(eExcitation - theGammas.GetLevel(iLevel)->GetLevelEnergy() ) < level_tolerance) {
-                find = true;
-                break;
-
-              } else if (eExcitation < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) {
-                 find = true;
-                 iLevel--;
-                 // very small eExcitation, iLevel becomes -1, this is protected below.
-                 if ( iLevel == -1 ) iLevel = 0; // But cause energy trouble.
-                 break;
-              }
-              iLevel++;
-           }
-           // In case, cannot find proper level, then use the maximum level.
-           if ( !find ) iLevel = imaxEx;
+          // If proper level cannot be found, use the maximum level
+          if (!find) iLevel = imaxEx;
         }
-        //110610TK END
 	
 	if(std::getenv("G4ParticleHPDebug") && eKinetic-eExcitation < 0) 
 	{
@@ -596,8 +596,9 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
     {
 //    In this case, hadron should be isotropic in CM
 // Next 12 lines are Emilio's replacement 
-      G4double QM=(incidReactionProduct.GetMass()+targetMass)-(aHadron.GetMass()+residualMass);
-      G4double eExcitation = QM-QI[it];
+      // G4double QM=(incidReactionProduct.GetMass()+targetMass)-(aHadron.GetMass()+residualMass);
+      // G4double eExcitation = QM-QI[it];
+      G4double eExcitation = QI[0] - QI[it];  // Fix of bug #1838
       if(eExcitation<20*CLHEP::keV){eExcitation=0;}
       two_body_reaction(&incidReactionProduct,&theTarget,&aHadron,eExcitation);
       if(thePhotons==0 && eExcitation>0){

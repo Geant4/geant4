@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26-Apr-2020 V. Ivanchenko    (had-hadronization-V10-05-05)
+- G4QGSMFragmentation, G4LundStringFragmentation - fixed Coverity warnings
+    if fragmentation at low energy is not possible always return flag 
+    "false"; initialise with nullptr and not NULL
+
 19-Nov-2019 A. Ribon         (had-hadronization-V10-05-04)
 -  G4ExcitedStringDecay : protection in the sampling of resonance masses
    against values below threshold.

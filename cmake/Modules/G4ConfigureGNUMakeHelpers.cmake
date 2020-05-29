@@ -729,7 +729,7 @@ _g4tc_configure_build_tree_scripts(geant4make)
 # +- CMAKE_INSTALL_PREFIX
 #    +- LIBDIR/Geant4-VERSION (G4LIB)
 #    +- INCLUDEDIR/Geant4     (G4INCLUDE)
-#    +- DATAROOTDIR/Geant4-VERSION/
+#    +- DATADIR/
 #       +- geant4make              (THIS IS G4INSTALL!)
 #          +- geant4make.(c)sh
 #          +- config/
@@ -742,7 +742,7 @@ set(G4INSTALL "\"\$geant4make_root\"")
 # - Include dir
 file(RELATIVE_PATH
   G4MAKE_TO_INCLUDEDIR
-  ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
+  ${CMAKE_INSTALL_FULL_DATADIR}/geant4make
   ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${PROJECT_NAME}
   )
 set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_INCLUDEDIR} > /dev/null \; pwd`\"")
@@ -750,7 +750,7 @@ set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_INCLUDEDIR} > /dev/null \; pw
 # - Bin dir
 file(RELATIVE_PATH
   G4MAKE_TO_BINDIR
-  ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
+  ${CMAKE_INSTALL_FULL_DATADIR}/geant4make
   ${CMAKE_INSTALL_FULL_BINDIR}
   )
 set(G4BIN_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_BINDIR} > /dev/null \; pwd`\"")
@@ -758,7 +758,7 @@ set(G4BIN_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_BINDIR} > /dev/null \; pwd`\"
 # - Lib dir
 file(RELATIVE_PATH
   G4MAKE_TO_LIBDIR
-  ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
+  ${CMAKE_INSTALL_FULL_DATADIR}/geant4make
   ${CMAKE_INSTALL_FULL_LIBDIR}
   )
 set(G4LIB "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR}/Geant4-${Geant4_VERSION} > /dev/null \; pwd`\"")
@@ -775,7 +775,7 @@ foreach(_ds ${GEANT4_EXPORTED_DATASETS})
 
   file(RELATIVE_PATH
     G4MAKE_TO_DATADIR
-    ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
+    ${CMAKE_INSTALL_FULL_DATADIR}/geant4make
     ${${_ds}_PATH}
     )
   set(${_ds}_PATH "\"`cd \$geant4make_root/${G4MAKE_TO_DATADIR} > /dev/null \; pwd`\"")
@@ -788,7 +788,7 @@ set(TOOLS_FONT_PATH "\"`cd \$geant4make_root/../fonts > /dev/null ; pwd`\"")
 _g4tc_configure_install_tree_scripts(
     ${CMAKE_BINARY_DIR}/InstallTreeFiles
     geant4make
-    ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
+    ${CMAKE_INSTALL_DATADIR}/geant4make
     )
 
 
@@ -797,7 +797,7 @@ _g4tc_configure_install_tree_scripts(
 #   softlink to the G4SYSTEM directory.
 #
 install(DIRECTORY config
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/geant4make
     COMPONENT Development
     FILES_MATCHING PATTERN "*.gmk"
     PATTERN "CVS" EXCLUDE
@@ -835,21 +835,25 @@ foreach(_ds ${GEANT4_EXPORTED_DATASETS})
   geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
   geant4_get_dataset_property(${_ds} INSTALL_DIR ${_ds}_PATH)
 
-  file(RELATIVE_PATH
-    G4ENV_BINDIR_TO_DATADIR
-    ${CMAKE_INSTALL_FULL_BINDIR}
-    ${${_ds}_PATH}
-    )
-  set(${_ds}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR} > /dev/null \; pwd`\"")
+  if(NOT IS_ABSOLUTE ${${_ds}_PATH})
+    file(RELATIVE_PATH
+      G4ENV_BINDIR_TO_DATADIR
+      ${CMAKE_INSTALL_FULL_BINDIR}
+      ${${_ds}_PATH}
+      )
+    set(${_ds}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR} > /dev/null \; pwd`\"")
+  else()
+    set(${_ds}_PATH "\"${${_ds}_PATH}\"")
+  endif()
 endforeach()
 
 # - Fonts
 file(RELATIVE_PATH
-  G4ENV_BINDIR_TO_DATAROOTDIR
+  G4ENV_BINDIR_TO_DATADIR
   "${CMAKE_INSTALL_FULL_BINDIR}"
-  "${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}"
+  "${CMAKE_INSTALL_FULL_DATADIR}"
   )
-set(TOOLS_FONT_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATAROOTDIR}/fonts > /dev/null ; pwd`\"")
+set(TOOLS_FONT_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR}/fonts > /dev/null ; pwd`\"")
 
 
 # - Configure for each shell

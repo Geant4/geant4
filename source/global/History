@@ -16,6 +16,12 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 29, 2020 Gabriele Cosmo (global-V10-05-29)
+- Updated tag IDs for release 10.6.p02.
+
+March 31, 2020 Ben Morgan (global-V10-05-28)
+- G4UnitsTable - add inheriting constructors for std::vector
+
 December 03, 2019 Gabriele Cosmo (global-V10-05-27)
 - Updated tag IDs for release 10.6.p01.
 

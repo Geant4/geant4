@@ -1,21 +1,19 @@
 # - build library
 
-if(GEANT4_HAS_OPENGL)
+if(GEANT4_USE_OPENGL_X11)
   add_definitions(-DG4VIS_USE_OPENGLX)
 endif()
 
-if(GEANT4_HAS_RAYTRACER_X11)
+if(GEANT4_USE_RAYTRACER_X11)
   add_definitions(-DG4VIS_USE_RAYTRACERX)
 endif()
 
-if(GEANT4_HAS_MOTIF)
+if(GEANT4_USE_XM)
   add_definitions(-DG4VIS_USE_OPENGLXM)
 endif()
 
 # library
-set(_TARGET pyG4visualization)
-add_library(
-  ${_TARGET} SHARED
+geant4_add_pymodule(pyG4visualization
   pyG4ASCIITree.cc
   pyG4DAWNFILE.cc
   pyG4HepRep.cc
@@ -33,17 +31,17 @@ add_library(
   pymodG4visualization.cc
 )
 
-set_target_properties(${_TARGET} PROPERTIES PREFIX "")
-set_target_properties(${_TARGET} PROPERTIES OUTPUT_NAME "G4visualization")
-set_target_properties(${_TARGET} PROPERTIES SUFFIX ".so")
-set_target_properties(${_TARGET}
-                      PROPERTIES INSTALL_RPATH
-                      ${GEANT4_LIBRARY_DIR}
-                      BUILD_WITH_INSTALL_RPATH TRUE)
+target_link_libraries(pyG4visualization PRIVATE
+  G4FR
+  G4Tree
+  G4RayTracer
+  G4VRML
+  G4visHepRep
+  G4vis_management  
+)
 
-target_link_libraries (${_TARGET}
-                      ${GEANT4_LIBRARIES_WITH_VIS} ${BOOST_PYTHON_LIB}
-                      ${PYTHON_LIBRARIES})
+if(GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM)
+  target_link_libraries(pyG4visualization PRIVATE G4OpenGL)
+endif()
 
-# install
-install(TARGETS ${_TARGET} LIBRARY DESTINATION ${G4MODULES_INSTALL_DIR})
+install(TARGETS pyG4visualization DESTINATION "${CMAKE_INSTALL_PYTHONDIR}/Geant4")

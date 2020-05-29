@@ -28,7 +28,6 @@
 //
 //                                         2007 Q
 // ====================================================================
-#ifdef ENABLE_GDML
 
 #include <boost/python.hpp>
 #include "G4GDMLParser.hh"
@@ -43,21 +42,21 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4GDMLParser {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetWorldVolume, 
-                                       GetWorldVolume, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetWorldVolume,
+                                       GetWorldVolume, 0, 1)
 
 void (G4GDMLParser::*f1_Write)
-  (const G4String&, const G4VPhysicalVolume*, G4bool, 
+  (const G4String&, const G4VPhysicalVolume*, G4bool,
    const G4String&) = &G4GDMLParser::Write;
 
 void (G4GDMLParser::*f2_Write)
   (const G4String&, const G4LogicalVolume*, G4bool,
    const G4String&) = &G4GDMLParser::Write;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(g_Write, Write, 2, 4);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Read, Read, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ReadModule, ReadModule, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Write, Write, 1, 4);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(g_Write, Write, 2, 4)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Read, Read, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ReadModule, ReadModule, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Write, Write, 1, 4)
 
 }
 
@@ -83,4 +82,3 @@ void export_G4GDMLParser()
     ;
 }
 
-#endif

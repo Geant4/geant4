@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 April 19: V.Ivanchenko (emutils-V10-05-24)
+- G4LossTableBuilder - fixed #2230 (typo in the code)
+
 13 January 19: V.Ivanchenko (emutils-V10-05-23)
 - G4EmParameters, G4EmParametersMessenger - added new parameter
     to enable read of e+e- production table from file (CMS request)

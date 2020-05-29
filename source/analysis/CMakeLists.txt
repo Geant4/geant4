@@ -67,7 +67,7 @@ endif()
 #
 if (GEANT4_USE_FREETYPE)
   install(DIRECTORY fonts/
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/fonts
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/fonts
     PATTERN ".svn" EXCLUDE
   )
 endif()

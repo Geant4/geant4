@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 February, 2020  M. Asai (intercoms-V10-05-10)
+- Accept null string as an alias value. Addressing bug report #2208.
+
 26 November, 2019  G. Cosmo (intercoms-V10-05-09)
 - Fixed more cases of implicit type conversions from size_t to G4int.
 

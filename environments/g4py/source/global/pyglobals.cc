@@ -40,15 +40,15 @@
 
 using namespace boost::python;
 
-extern G4strstreambuf G4coutbuf;
-extern G4strstreambuf G4cerrbuf;
+//extern G4strstreambuf G4coutbuf;
+//extern G4strstreambuf G4cerrbuf;
 
 namespace pyglobals {
 
 // G4cout/cerr are set to Python stdout
 void SetG4PyCoutDestination()
 {
-  G4UImanager* UImgr= G4UImanager::GetUIpointer();
+  G4UImanager::GetUIpointer();
   G4PyCoutDestination* pycout= new G4PyCoutDestination();
   G4coutbuf.SetDestination(pycout);
   G4cerrbuf.SetDestination(pycout);

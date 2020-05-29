@@ -100,7 +100,8 @@ public:
      delete [] energy;
      delete [] theYield;
      delete [] thePartialXsec;
-     delete [] theReactionXsec;
+//     delete [] theReactionXsec;   
+//     DHW: not created in this class 
      delete [] isPrimary;
      delete [] theShells;
      delete [] theGammas;

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # ==================================================================
 # python script for Geant4Py test
 #
@@ -6,7 +6,7 @@
 #   - test for checking overlapped geometries
 # ==================================================================
 from Geant4 import *
-import g4py.ExN01pl, g4py.ParticleGun
+import g4pytest.ExN01pl, g4pytest.ParticleGun
 
 # ==================================================================
 # user actions in python
@@ -69,10 +69,10 @@ myDC= MyDetectorConstruction()
 gRunManager.SetUserInitialization(myDC)
 
 # minimal physics list
-g4py.ExN01pl.Construct()
+g4pytest.ExN01pl.Construct()
 
 # set primary generator action
-g4py.ParticleGun.Construct()
+g4pytest.ParticleGun.Construct()
 
 # initialize
 gRunManager.Initialize() # overlap should be detected !!

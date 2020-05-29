@@ -1,0 +1,124 @@
+
+                 Geant4 10.6 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                             29 May 2020
+
+List of fixes included in this public patch since the public release 10.6.p01:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added activation of build of G4Py through GEANT4_USE_PYTHON flag.
+        Requires Boost.Python (only 1.72 tested so far) using Python 3 or
+        newer (only 3.7 tested).
+        Verify that MT builds use 'global-dynamic' TLS mode to allow Python
+        module loading of dynamic libraries.
+      o Fix to avoid configuration of applications failure due to variables
+        having empty values, and consequently no "type" argument. Only store
+        values in the package cache if they are set and have a valid value.
+      o Use full path to datasets if GEANT4_INSTALL_DATADIR is an absolute path.
+        Customize CMAKE_INSTALL_DATADIR in a single location.
+      o Suppress warnings about icc libraries not existing for Intel icc-19.
+
+  o Environments:
+    ------------
+    + G4Py: integrated build, test, and install of geant4py with core Geant4
+      CMake build system.
+
+  o Geometry:
+    --------
+    + solids/specific:
+      o Fixed mismatch in signature of constructors for the G4UExtrudedSolid
+        wrapper.
+
+  o Global:
+    ------
+    + G4UnitsTable: added inheriting constructors for std::vector.
+      Addressing problem report #2232.
+    + Updated date and version for 10.6.p02.
+
+  o Intercoms:
+    ---------
+    + Accept null string as an alias value. Addessing problem report #2208.
+
+  o Physics Lists
+    -------------
+    + constructors/limiters
+      o G4GenericBiasingPhysics: added missing code for parallel geometries
+        for all neutral and charged particles.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + utils:
+      o G4LossTableBuilder: fixed typo. Addressing problem report #2230.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/de_excitation:
+      o G4DeexPrecoParameters: set default time limit to 1 microsecond
+        for isomer production (now, in all cases, isomers with half-life time
+        above 1 microsecond are produced, whereas before this happened
+        only when Radioactive Decay was activated, else only above 1000 sec).
+        Addressing problem report #2226.
+    + models/lend:
+      o New class G4LENDGammaModel to sample GND gamma-nuclear reactions.
+        New class G4LENDGammaCrossSection to sample GND gamma-nuclear reactions.
+        Added documentation to MCGIDI_outputChannel.
+        Rewritten G4LENDInelastic to take care of large baryon number
+        violations. Addressing problem report #2174.
+    + models/particle_hp:
+      o In G4ParticleHPInelasticBaseFS, use QI[0]-QI[it] for excitation and
+        added particle definition protection to 'iLevel' calculation.
+        Addressing problem report #1838.
+      o Correction in G4ParticleHPInelasticBaseFS and
+        G4ParticleHPInelasticCompFS. Removed deletion of 'theReactionXsec'
+        in G4ParticleHPPhotonDist() destructor as memory allocation does
+        not take place in this class. Addressing problem report #1824.
+      o In G4ParticleHPThermalScattering::create_E_isoAng_from_energy(),
+        added fatal exception for case when pointers panEPM_T_EL or panEPM_T_EH
+        are null; fixing Coverity reports.
+      o Corrected copy constructor in G4ParticleHPDataPoint.
+    + models/parton_string/hadronization:
+      o G4QGSMFragmentation, G4LundStringFragmentation: fixed Coverity defects
+        warnings; if fragmentation at low energy is not possible, always return
+        flag "false"; use nullptr.
+    + models/radioactive_decay:
+      o G4RadioactiveDecayBase, G4RadioactiveDecay, G4Radioactivation:
+        use G4VERBOSE consistently; in G4Radioactivation, fixed forgotten
+        change of verbosity from 0 to 1.
+
+  o Examples:
+    --------
+    + advanced/ChargeExchangeMC
+      o Fixed compilation error on main().
+      o Fixed CMake build script for dependence on Qt libraries.
+    + basic/B2
+      o Updated READMEs and added a comment in B2PrimaryGeneratorAction
+        that starting a primary particle on the world boundary requires
+        shooting in a direction towards inside the world.
+    + extended/biasing/ReverseMC01
+      o RMC01AnalysisManager: use double for computation of mean and RMS;
+        added protection for sqrt() argument, to avoid a problem due to
+        precision loss in arithmetic computations.
+    + extended/exoticphysics/monopole
+      o G4MonopolePhysics: minor code clean-up for thread safety
+      o Do not instantiate VisManager in the batch mode in main();
+        fixed some typos.
+      o G4MonopoleTransportation: removed check if monopole is opticalphoton
+        or not as no longer necessary.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.6 or 10.6.p01.
+  o  Technical notes distributed for release 10.6 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.6.p02 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

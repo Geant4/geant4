@@ -952,7 +952,7 @@ G4RadioactiveDecayBase::DecayIt(const G4Track& theTrack, const G4Step&)
   // Now check if particle is valid for RDM
   if (!(IsApplicable(*theParticleDef) ) ) { 
     // Particle is not an ion or is outside the nucleuslimits for decay
-
+#ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
       G4cout << "G4RadioactiveDecay::DecayIt : "
              << theParticleDef->GetParticleName() 
@@ -960,6 +960,7 @@ G4RadioactiveDecayBase::DecayIt(const G4Track& theTrack, const G4Step&)
              << " Set particle change accordingly. "
              << G4endl;
     }
+#endif
     fParticleChangeForRadDecay.SetNumberOfSecondaries(0);
 
     // Kill the parent particle
@@ -974,6 +975,7 @@ G4RadioactiveDecayBase::DecayIt(const G4Track& theTrack, const G4Step&)
   if (theDecayTable == 0 || theDecayTable->entries() == 0) {
     // No data in the decay table.  Set particle change parameters
     // to indicate this.
+#ifdef G4VERBOSE
     if (GetVerboseLevel() > 1) {
       G4cout << "G4RadioactiveDecay::DecayIt : "
              << "decay table not defined for "
@@ -981,6 +983,7 @@ G4RadioactiveDecayBase::DecayIt(const G4Track& theTrack, const G4Step&)
              << ". Set particle change accordingly. "
              << G4endl;
     }
+#endif
     fParticleChangeForRadDecay.SetNumberOfSecondaries(0);
 
     // Kill the parent particle.

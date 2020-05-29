@@ -1,82 +1,24 @@
 # - Top-level CMakeLists.txt for Geant4Py
+# Note that we are assuming it is always part of Geant4, never separately
+# released. That's for later, if required at all.
+# In particular, Geant4Py must be matched exactly to a given Geant4 release
 
-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
-
-#------------------------------------------------------------------------------
-project(Geant4Py)
-#------------------------------------------------------------------------------
-# installation prefixes for libraries
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX  ${PROJECT_SOURCE_DIR} CACHE
-      STRING "Install prefix" FORCE)
-endif()
-
-# debug mode
-set(DEBUG FALSE CACHE BOOL "Debug Mode (Debug On)")
-
-enable_testing()
-
-#------------------------------------------------------------------------------
-# Do not edit below
-#------------------------------------------------------------------------------
-set(CMAKE_CXX_STANDARD 11)
-
-# cmake modules
-set(CMAKE_MODULE_PATH
-    ${PROJECT_SOURCE_DIR}/cmake/Modules
-    ${CMAKE_MODULE_PATH})
-
-include(SetInstallPath)
-
-# searching packages...
-find_package(Geant4 REQUIRED)
-find_package(PythonInterp REQUIRED)
+# Require Python 3 or newer, calling Interp before Libs to help find a consistent set
+# Boost python requirement is reliant on correct user config (not yet known how to check
+# which Python an install of Boost Python uses)...
+find_package(PythonInterp 3.0 REQUIRED)
 find_package(PythonLibs REQUIRED)
-find_package(Boost)
-find_package(XercesC)
-find_package(ROOT)
+find_package(Boost REQUIRED python)
 
-if(NOT GEANT4_FOUND)
-  message(FATAL_ERROR "NOT Found Geant4.")
-endif()
+# Variables and Functions to help build, organise, and install modules
+include(${CMAKE_CURRENT_SOURCE_DIR}/G4PythonHelpers.cmake)
 
-if(NOT DEFINED BOOST_PYTHON_LIB)
-  if (${PYTHON_VERSION_MAJOR} MATCHES "2")
-    set(BOOST_PYTHON_LIB boost_python)
-  elseif (${PYTHON_VERSION_MAJOR} MATCHES "3")
-    set(BOOST_PYTHON_LIB boost_python3)
-  endif()
-endif()
-
-#------------------------------------------------------------------------------
-# parameters for building
-message(STATUS "--------------------------------------------------------")
-message(STATUS "Parameters for building")
-
-# build options
-if(NOT CMAKE_BUILD_TYPE)
-  if(DEBUG)
-    set(CMAKE_BUILD_TYPE "Debug")
-  else()
-    set(CMAKE_BUILD_TYPE "RelWithDebInfo")
-  endif()
-endif()
-message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
-
-message(STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "--------------------------------------------------------")
-
-#------------------------------------------------------------------------------
-# add subdiretories...
-
-# adding sub directories to the project
-# libraries
+# - Build package/modules, tests if required
 add_subdirectory(source)
-add_subdirectory(site-modules)
+if(GEANT4_ENABLE_TESTING)
+  add_subdirectory(tests)
+endif()
 
-# examples
-add_subdirectory(examples)
+# Add the feature recording here so we can note the Python version
+geant4_add_feature(GEANT4_USE_PYTHON "Building bindings for Python ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
-# tests
-add_subdirectory(tests)

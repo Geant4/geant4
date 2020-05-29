@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-May-2020, M. Asai (phys-ctor-limiters-V10-05-01)
+- G4GenericBiasingPhysics.cc : add missing code for parallel geometries
+  for all neutral / charged particles.
+
 15-Nov-2019, G. Cosmo (phys-ctor-limiters-V10-05-00)
 - Fixed cases of implicit type conversions from size_t to G4int.
 

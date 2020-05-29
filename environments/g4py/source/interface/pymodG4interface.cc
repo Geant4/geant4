@@ -38,7 +38,7 @@ using namespace boost::python;
 
 void export_G4UIterminal();
 
-BOOST_PYTHON_MODULE(G4interface)
+BOOST_PYTHON_MODULE(G4interfaces)
 {
   export_G4UIterminal();
 }

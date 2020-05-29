@@ -805,74 +805,74 @@ G4double G4ParticleHPThermalScattering::get_linear_interpolated ( G4double x , s
 
 
 
-E_isoAng G4ParticleHPThermalScattering::create_E_isoAng_from_energy ( G4double energy ,  std::vector< E_isoAng* >* vEPM )
+E_isoAng
+G4ParticleHPThermalScattering::create_E_isoAng_from_energy(G4double energy,
+                                                           std::vector<E_isoAng*>* vEPM)
 {
    E_isoAng anEPM_T_E;
+   std::vector<E_isoAng*>::iterator iv;
 
-   std::vector< E_isoAng* >::iterator iv;
-
-   std::vector< G4double > v_e;
+   std::vector<G4double> v_e;
    v_e.clear();
-   for ( iv = vEPM->begin() ; iv != vEPM->end() ;  iv++ )
-      v_e.push_back ( (*iv)->energy );
+   for (iv = vEPM->begin(); iv != vEPM->end(); iv++) 
+     v_e.push_back( (*iv)->energy );
 
-   std::pair < G4double , G4double > energyLH = find_LH ( energy , &v_e );
+   std::pair<G4double, G4double> energyLH = find_LH(energy, &v_e);
    //G4cout << " " << energy/eV << " " << energyLH.first/eV  << " " << energyLH.second/eV << G4endl;
 
-   E_isoAng* panEPM_T_EL=0;
-   E_isoAng* panEPM_T_EH=0;
+   E_isoAng* panEPM_T_EL = 0;
+   E_isoAng* panEPM_T_EH = 0;
 
-   if ( energyLH.first != 0.0 && energyLH.second != 0.0 ) 
-   {
-      for ( iv = vEPM->begin() ; iv != vEPM->end() ;  iv++ )
-      {
-         if ( energyLH.first == (*iv)->energy ) {
-            panEPM_T_EL = *iv;
-            iv++;
-            panEPM_T_EH = *iv;
-            break;
-         }
-      }  
-   }
-   else if ( energyLH.first == 0.0 )
-   {
-      panEPM_T_EL = (*vEPM)[0];
-      panEPM_T_EH = (*vEPM)[1];
-   }
-   else if ( energyLH.second == 0.0 )
-   {
-      panEPM_T_EH = (*vEPM).back();
-      iv = vEPM->end();
-      iv--; 
-      iv--; 
-      panEPM_T_EL = *iv;
+   if (energyLH.first != 0.0 && energyLH.second != 0.0) {
+     for (iv = vEPM->begin(); iv != vEPM->end(); iv++) {
+       if (energyLH.first == (*iv)->energy) {
+         panEPM_T_EL = *iv;
+         iv++;
+         panEPM_T_EH = *iv;
+         break;
+       }
+     } 
+ 
+   } else if (energyLH.first == 0.0) {
+     panEPM_T_EL = (*vEPM)[0];
+     panEPM_T_EH = (*vEPM)[1];
+
+   } else if (energyLH.second == 0.0) {
+     panEPM_T_EH = (*vEPM).back();
+     iv = vEPM->end();
+     iv--; 
+     iv--; 
+     panEPM_T_EL = *iv;
    } 
 
-   //checking isoAng has proper values or not 
-   //   Inelastic/FS, the first and last entries of *vEPM has all zero values.
-   if ( ! ( check_E_isoAng (panEPM_T_EL) ) ) panEPM_T_EL= panEPM_T_EH;
-   if ( ! ( check_E_isoAng (panEPM_T_EH) ) ) panEPM_T_EH= panEPM_T_EL;
+   if (panEPM_T_EL != 0 && panEPM_T_EH != 0) {
+     //checking isoAng has proper values or not 
+     // Inelastic/FS, the first and last entries of *vEPM has all zero values.
+     if ( !(check_E_isoAng(panEPM_T_EL) ) ) panEPM_T_EL = panEPM_T_EH;
+     if ( !(check_E_isoAng(panEPM_T_EH) ) ) panEPM_T_EH = panEPM_T_EL;
 
-   if ( panEPM_T_EL->n == panEPM_T_EH->n ) 
-   {
-      anEPM_T_E.energy = energy; 
-      anEPM_T_E.n = panEPM_T_EL->n; 
+     if (panEPM_T_EL->n == panEPM_T_EH->n) {
+       anEPM_T_E.energy = energy; 
+       anEPM_T_E.n = panEPM_T_EL->n; 
 
-      for ( G4int i=0 ; i < panEPM_T_EL->n ; i++ )
-      { 
+       for (G4int i=0; i < panEPM_T_EL->n; i++) { 
          G4double angle;
-         angle = get_linear_interpolated ( energy , std::pair< G4double , G4double > ( energyLH.first , panEPM_T_EL->isoAngle[ i ] )
-                                                  , std::pair< G4double , G4double > ( energyLH.second , panEPM_T_EH->isoAngle[ i ] ) );  
-         anEPM_T_E.isoAngle.push_back( angle ); 
-      }
-   }
-   else
-   {
-      G4Exception("G4ParticleHPThermalScattering::create_E_isoAng_from_energy",
-                  "NotSupported", JustWarning,
-                  "G4ParticleHPThermalScattering does not support yet EL->n != EH->n."); 
-   }
+         angle = get_linear_interpolated(energy, std::pair<G4double,G4double>(energyLH.first, panEPM_T_EL->isoAngle[i] ),
+                                         std::pair<G4double,G4double>(energyLH.second, panEPM_T_EH->isoAngle[i] ) );  
+         anEPM_T_E.isoAngle.push_back(angle); 
+       }
 
+     } else {
+       G4Exception("G4ParticleHPThermalScattering::create_E_isoAng_from_energy",
+                   "NotSupported", JustWarning,
+                   "G4ParticleHPThermalScattering does not support yet EL->n != EH->n."); 
+     }
+
+   } else {
+     G4Exception("G4ParticleHPThermalScattering::create_E_isoAng_from_energy",
+                 "HAD_THERM_000", FatalException,
+                 "Pointer panEPM_T_EL or panEPM_T_EH is zero");
+   }
 
    return anEPM_T_E;
 }

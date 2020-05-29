@@ -1,4 +1,4 @@
-# -----------------------------------------------------------
+---------------------------------------------------------------------
 
           ==================================================
           Geant4 - an Object-Oriented Toolkit for Simulation
@@ -14,11 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-5 February 2020 Alberto Ribon (hadr-lend-V10-05-02)
+30 March 2020  Dennis Wright  (hadr-lend-V10-05-03)
 ---------------------------------------------------
-- MCGIDI_energy : (applied patch from Tech-X made by Ben Morgan on
-  6 January 2020 on the master) remove inclusion of amp_math on Windows
-  as it is not required.
+- fix of bug report #2174:
+   Create class G4LENDGammaModel to sample GND gamma-nuclear reactions
+   Create class G4LENDGammaCrossSection to sample GND gamma-nuclear reactions 
+   add documentation to MCGIDI_outputChannel.cc
+   rewrite T. Koi's version of G4LENDInelastic.cc to take care of large 
+   baryon number violations
+
+06 January 2020 Ben Morgan (hadr-lend-V10-05-02)
+------------------------------------------------
+- Patch from Tech-X:
+  Remove inclusion of amp_math on Windows as it is not required
 
 29 May 2019  Dennis Wright  (hadr-lend-V10-05-01)
 -------------------------------------------------

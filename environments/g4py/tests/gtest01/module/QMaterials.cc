@@ -71,7 +71,7 @@ void QMaterials::Construct()
   G4Element* elAr = new G4Element("Argon",   "Ar", Z=18., A= 39.948*g/mole);
   G4Element* elI  = new G4Element("Iodine",  "I",  Z=53., A= 126.90447*g/mole);
   G4Element* elCs = new G4Element("Cesium",  "Cs", Z=55., A= 132.90543*g/mole);
-  
+
   // ------------------------------------------------------------------------
   // Materials
   // ------------------------------------------------------------------------
@@ -79,7 +79,7 @@ void QMaterials::Construct()
   G4int natoms, nel;
 
   // temperature of experimental hall is controlled at 20 degree.
-  const G4double expTemp= STP_Temperature+20.*kelvin; 
+  const G4double expTemp= STP_Temperature+20.*kelvin;
 
   // vacuum
   density= universe_mean_density;
@@ -89,7 +89,7 @@ void QMaterials::Construct()
 
   // air
   density= 1.2929e-03 *g/cm3;  // at 20 degree
-  G4Material* Air= new G4Material("Air", density, nel=3, 
+  G4Material* Air= new G4Material("Air", density, nel=3,
 				  kStateGas, expTemp);
   G4double ttt= 75.47+23.20+1.28;
   Air-> AddElement(elN,  massfraction= 75.47/ttt);
@@ -112,29 +112,29 @@ void QMaterials::Construct()
   // Ar(50%) + ethane(50%) mixture
   density=  (denAr+denEthane)/2.;
   G4Material* ArEthane= new G4Material("ArEthane", density, nel=2,
-				       kStateGas, expTemp);  
+				       kStateGas, expTemp);
   ArEthane-> AddMaterial(Ar, massfraction= denAr/density/2.);
   ArEthane-> AddMaterial(Ethane, massfraction= denEthane/density/2.);
 
   // silicon
   A= 28.0855 *g/mole;
   density= 2.33 *g/cm3;
-  G4Material* Si= new G4Material("SiliconWafer", Z=14., A, density);
+  /*G4Material* Si=*/ new G4Material("SiliconWafer", Z=14., A, density);
 
   // alminium
   A= 26.98 *g/mole;
   density= 2.70 *g/cm3;
-  G4Material* Al= new G4Material("Al", Z=13., A, density);
+  /*G4Material* Al=*/ new G4Material("Al", Z=13., A, density);
 
   // iron
   A= 55.847 *g/mole;
   density= 7.87 *g/cm3;
-  G4Material* Fe= new G4Material("Iron", Z=26., A, density);
+  /*G4Material* Fe=*/ new G4Material("Iron", Z=26., A, density);
 
   // lead
   A= 207.2 *g/mole;
   density= 11.35 *g/cm3;
-  G4Material* Pb= new G4Material("Lead", Z=82., A, density);
+  /*G4Material* Pb=*/ new G4Material("Lead", Z=82., A, density);
 
   // scintillator (Polystyene(C6H5CH=CH2))
   density= 1.032 *g/cm3;
